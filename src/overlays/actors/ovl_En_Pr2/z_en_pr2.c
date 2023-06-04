@@ -108,7 +108,7 @@ s16 D_80A75C3C[] = {
 void EnPr2_Init(Actor* thisx, PlayState* play) {
     EnPr2* this = THIS;
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->unk_1EC = 255;
     this->actor.colChkInfo.health = 1;

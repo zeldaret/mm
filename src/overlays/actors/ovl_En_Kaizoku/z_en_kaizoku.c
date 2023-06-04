@@ -252,7 +252,7 @@ void EnKaizoku_Init(Actor* thisx, PlayState* play) {
     EffectBlureInit1 blureInit;
 
     this->picto.actor.hintId = TATL_HINT_ID_PIRATE;
-    this->picto.actor.targetMode = 3;
+    this->picto.actor.targetMode = TARGET_MODE_3;
     this->picto.actor.colChkInfo.mass = 80;
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawFeet, 0.0f);
     this->unk_2CA = this->picto.actor.world.rot.z;

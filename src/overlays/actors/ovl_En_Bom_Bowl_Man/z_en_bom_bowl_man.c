@@ -80,7 +80,7 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, 21);
     this->unk_2F6 = ENBOMBOWLMAN_GET_F0(&this->actor);
     this->unk_2F4 = ENBOMBOWLMAN_GET_F(&this->actor);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
 
     if (this->unk_2F6 == ENBOMBOWLMAN_F0_0) {

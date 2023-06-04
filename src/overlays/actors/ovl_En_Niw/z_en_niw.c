@@ -88,7 +88,7 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnNiw_Init(Actor* thisx, PlayState* play) {
     static InitChainEntry sInitChain[] = {
-        ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+        ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
         ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_CONTINUE),
         ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
     };

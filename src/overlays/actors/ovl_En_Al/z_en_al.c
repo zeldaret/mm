@@ -672,7 +672,7 @@ s32 func_80BDF390(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
 
     this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_4F0 = PLAYER_IA_NONE;
     this->unk_4C2 = 0;
     this->unk_4D4 = 40.0f;

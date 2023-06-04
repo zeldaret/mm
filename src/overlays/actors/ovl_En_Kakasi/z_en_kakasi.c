@@ -156,7 +156,7 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
     this->unkHeight = (this->picto.actor.world.rot.z * 20.0f) + 60.0f;
     this->picto.actor.world.rot.z = 0;
-    this->picto.actor.targetMode = 0;
+    this->picto.actor.targetMode = TARGET_MODE_0;
     if (this->picto.actor.world.rot.x > 0 && this->picto.actor.world.rot.x < 8) {
         this->picto.actor.targetMode = KAKASI_GET_TARGETMODE(thisx);
     }

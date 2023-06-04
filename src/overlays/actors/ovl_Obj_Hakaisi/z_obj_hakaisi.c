@@ -98,7 +98,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->dyna.actor.targetMode = 0;
+    this->dyna.actor.targetMode = TARGET_MODE_0;
     this->dyna.actor.colChkInfo.health = 30;
     if (OBJHAKAISI_GET_FF(&this->dyna.actor) == 3) {
         this->dyna.actor.draw = NULL;

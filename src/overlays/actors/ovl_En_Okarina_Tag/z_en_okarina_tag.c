@@ -56,7 +56,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     if (this->unk14A == 0xF) {
         this->unk14A = -1;
     }
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actionFunc = func_8093E518;
 }
 

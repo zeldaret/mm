@@ -75,7 +75,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
                        this->morphTable, 16);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     }

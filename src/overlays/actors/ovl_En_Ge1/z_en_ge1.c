@@ -86,7 +86,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, GERUDO_WHITE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->picto.actor.targetMode = 6;
+    this->picto.actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->picto.actor, 0.01f);
     this->animIndex = this->cueId = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;

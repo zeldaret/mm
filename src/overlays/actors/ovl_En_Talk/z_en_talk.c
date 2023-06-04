@@ -32,7 +32,7 @@ void EnTalk_Init(Actor* thisx, PlayState* play) {
     EnTalk* this = THIS;
     s8 targetMode = this->actor.home.rot.x - 0x1;
 
-    if (targetMode >= 0 && targetMode < 7) {
+    if (targetMode >= TARGET_MODE_0 && targetMode < TARGET_MODE_7) {
         this->actor.targetMode = targetMode;
     }
 

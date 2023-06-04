@@ -90,7 +90,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.velocity.y = 0.0f;
 

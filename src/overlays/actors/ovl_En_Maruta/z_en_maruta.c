@@ -214,7 +214,7 @@ void EnMaruta_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 50.0f;

@@ -1304,7 +1304,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
 
     this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), 0x3F);
     Actor_SetScale(&this->actor, 0.0075f);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.gravity = -3.0f;
     this->timer = Rand_S16Offset(60, 60);
     this->dogFlags = DOG_FLAG_NONE;

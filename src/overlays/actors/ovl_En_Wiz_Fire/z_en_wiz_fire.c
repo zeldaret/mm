@@ -74,7 +74,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->type = EN_WIZ_FIRE_GET_TYPE(&this->actor);
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->wallCheckTimer = 10;
     this->alpha = 255.0f;
     this->actor.flags &= ~ACTOR_FLAG_1;

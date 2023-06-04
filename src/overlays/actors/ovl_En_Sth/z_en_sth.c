@@ -161,7 +161,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnSth_MoonLookingIdle;
             this->sthFlags |= STH_FLAG_DISABLE_HEAD_TRACK;
-            this->actor.targetMode = 3;
+            this->actor.targetMode = TARGET_MODE_3;
             this->actor.uncullZoneForward = 800.0f;
             break;
 

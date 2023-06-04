@@ -134,7 +134,7 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
         this->collider.base.colType = COLTYPE_NONE;
         this->collider.info.bumperFlags |= (BUMP_NO_HITMARK | BUMP_NO_SWORD_SFX | BUMP_NO_DAMAGE | BUMP_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
     }
 
     func_808BD428(this);

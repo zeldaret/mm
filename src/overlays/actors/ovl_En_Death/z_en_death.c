@@ -133,7 +133,7 @@ static InitChainEntry D_808C9A60[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_GOMESS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
 #endif

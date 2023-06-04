@@ -709,7 +709,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            this->dyna.actor.targetMode = 6;
+            this->dyna.actor.targetMode = TARGET_MODE_6;
             this->unk_2B4 = 0;
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }

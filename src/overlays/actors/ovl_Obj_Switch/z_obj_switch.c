@@ -381,7 +381,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         ObjSwitch_InitJntSphCollider(this, play, &sJntSphInit);
     }
     if (type == OBJSWITCH_TYPE_CRYSTAL_TARGETABLE) {
-        this->dyna.actor.targetMode = 4;
+        this->dyna.actor.targetMode = TARGET_MODE_4;
         this->dyna.actor.flags |= 1;
     }
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;

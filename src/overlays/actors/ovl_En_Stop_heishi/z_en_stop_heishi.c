@@ -114,7 +114,7 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->rotYTarget = this->actor.world.rot.y;

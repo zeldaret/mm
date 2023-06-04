@@ -127,7 +127,7 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_2B8 = this->actor.world.pos.y;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;

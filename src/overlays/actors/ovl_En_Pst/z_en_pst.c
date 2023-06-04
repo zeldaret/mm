@@ -390,7 +390,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     SubS_UpdateFlags(&this->stateFlags, 3, 7);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

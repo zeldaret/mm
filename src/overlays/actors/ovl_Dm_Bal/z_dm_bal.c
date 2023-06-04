@@ -50,7 +50,7 @@ static AnimationInfo sAnimationInfo[] = {
 void DmBal_Init(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);

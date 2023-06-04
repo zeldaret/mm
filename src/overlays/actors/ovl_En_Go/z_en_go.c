@@ -1443,7 +1443,7 @@ void func_80A146CC(EnGo* this, PlayState* play) {
     this->unk_3A4 *= 5.0f;
     Actor_SetScale(&this->actor, this->unk_3A4);
     this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_390 = 0;
     this->actor.gravity = -1.0f;
     SubS_UpdateFlags(&this->unk_390, 3, 7);
@@ -1475,7 +1475,7 @@ void func_80A14798(EnGo* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         Effect_Add(play, &this->unk_3E8, EFFECT_TIRE_MARK, 0, 0, &sp38);
 
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
         this->unk_3A4 = 0.01f;
         this->unk_3D8 = NULL;
 

@@ -97,7 +97,7 @@ void EnBomjimb_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_2C6 = ENBOMJIMB_GET_F0(&this->actor);

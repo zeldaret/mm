@@ -1143,7 +1143,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
         this->unk_384 = 1;
     }
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 

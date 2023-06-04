@@ -109,7 +109,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);

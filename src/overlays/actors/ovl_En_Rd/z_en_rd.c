@@ -188,7 +188,7 @@ void EnRd_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     this->upperBodyYRotation = this->headYRotation = 0;
@@ -740,7 +740,7 @@ void EnRd_WalkToHome(EnRd* this, PlayState* play) {
         !(player->stateFlags2 & (0x4000 | 0x80)) && (player->transformation != PLAYER_FORM_GORON) &&
         (player->transformation != PLAYER_FORM_DEKU) &&
         (Actor_WorldDistXYZToPoint(&player->actor, &this->actor.home.pos) < 150.0f)) {
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
         EnRd_SetupWalkToPlayer(this, play);
     } else if (EN_RD_GET_TYPE(&this->actor) > EN_RD_TYPE_DOES_NOT_MOURN_IF_WALKING) {
         if (this->actor.parent != NULL) {
@@ -895,7 +895,7 @@ void EnRd_Grab(EnRd* this, PlayState* play) {
             if (player->transformation != PLAYER_FORM_FIERCE_DEITY) {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             this->actor.flags |= ACTOR_FLAG_1;
             this->playerStunWaitTimer = 10;
             this->grabWaitTimer = 15;

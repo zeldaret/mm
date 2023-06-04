@@ -732,7 +732,7 @@ void EnBaba_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.gravity = -4.0f;
     this->actionFunc = EnBaba_FinishInit;
 }

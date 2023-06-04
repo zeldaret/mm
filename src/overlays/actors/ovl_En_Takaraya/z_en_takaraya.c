@@ -30,7 +30,7 @@ ActorInit En_Takaraya_InitVars = {
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ADFB20[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 

@@ -83,7 +83,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 

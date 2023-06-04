@@ -355,7 +355,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     } else {
         func_80AE615C(this, 2);
     }
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;

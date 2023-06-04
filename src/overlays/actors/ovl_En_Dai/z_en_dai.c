@@ -519,7 +519,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->unk_A70 = -1;
     func_80B3E5DC(this, 0);
     Actor_SetScale(&this->actor, 0.2f);
-    this->actor.targetMode = 10;
+    this->actor.targetMode = TARGET_MODE_10;
     this->unk_1F0 = D_80B3FBF0;
     this->unk_1FC = D_80B3FBF0;
     this->unk_1CE = 0;

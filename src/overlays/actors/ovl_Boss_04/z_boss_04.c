@@ -163,7 +163,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.params = 0x64;
     Actor_SetScale(&this->actor, 0.1f);
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
     this->actor.hintId = TATL_HINT_ID_WART;
     this->actor.colChkInfo.health = 20;
     this->actor.colChkInfo.damageTable = &sDamageTable;

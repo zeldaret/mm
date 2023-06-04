@@ -109,7 +109,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
     thisx->focus.pos = thisx->world.pos;
     thisx->colChkInfo.cylRadius = 10;
     thisx->colChkInfo.cylHeight = 10;
-    thisx->targetMode = 0;
+    thisx->targetMode = TARGET_MODE_0;
 
     if (ENBOMBF_GET(thisx) == ENBOMBF_0) {
         this->timer = 140;

@@ -420,7 +420,7 @@ void func_80BB217C(EnGeg* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         func_80BB1C1C(this);
         this->actionFunc = func_80BB221C;
-        this->actor.targetMode = 3;
+        this->actor.targetMode = TARGET_MODE_3;
     }
 }
 

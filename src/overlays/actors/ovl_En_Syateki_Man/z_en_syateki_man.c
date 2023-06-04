@@ -186,7 +186,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Actor_SetScale(&this->actor, 0.01f);
     if (play->sceneId == SCENE_SYATEKI_MORI) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gSwampShootingGalleryManHeadScratchLoopAnim,

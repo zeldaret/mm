@@ -228,7 +228,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.hintId = TATL_HINT_ID_GIBDO;
     this->actor.textId = 0;
 

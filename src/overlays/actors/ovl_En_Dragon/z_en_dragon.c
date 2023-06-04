@@ -214,7 +214,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 0xA;
+    this->actor.targetMode = TARGET_MODE_10;
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     this->collider.elements[0].dim.scale = this->collider.elements[1].dim.scale = this->collider.elements[2].dim.scale =

@@ -600,7 +600,7 @@ s32 EnNb_ProcessScheduleOutput(EnNb* this, PlayState* play, ScheduleOutput* sche
     s32 success;
 
     this->actor.flags |= ACTOR_FLAG_1;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->stateFlags = EN_NB_FLAG_NONE;
     this->unk_274 = 40.0f;
 

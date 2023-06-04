@@ -147,7 +147,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_216 = 0;
     this->unk_218 = 0;
     this->unk_200 = 1.0f;

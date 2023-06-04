@@ -245,7 +245,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
     } else if (this->actor.room == 2) {
         Actor_Kill(&this->actor);
     } else {
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
         this->unk_18E = 1;
         this->unk_18C = 0;
         this->actionFunc = func_80C229AC;

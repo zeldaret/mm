@@ -112,7 +112,7 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BFC058;
     EnRz_SetupPath(this, play);
     this->animIndex = EN_RZ_ANIM_MAX;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 

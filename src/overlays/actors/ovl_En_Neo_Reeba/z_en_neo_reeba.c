@@ -133,7 +133,7 @@ void EnNeoReeba_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 2;
+    this->actor.targetMode = TARGET_MODE_2;
     this->actor.hintId = TATL_HINT_ID_LEEVER;
     this->actor.gravity = -0.5f;
 

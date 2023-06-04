@@ -47,7 +47,7 @@ ActorInit Obj_Nozoki_InitVars = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
 s16 D_80BA34B8[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };

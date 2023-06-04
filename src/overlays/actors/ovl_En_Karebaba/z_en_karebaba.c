@@ -137,7 +137,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 void EnKarebaba_Init(Actor* thisx, PlayState* play) {

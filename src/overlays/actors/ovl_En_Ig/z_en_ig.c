@@ -682,7 +682,7 @@ s32 func_80BF219C(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BF2368(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_3D0 = 0;
     this->actor.flags |= ACTOR_FLAG_1;
 

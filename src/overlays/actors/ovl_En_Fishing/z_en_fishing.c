@@ -791,7 +791,7 @@ FishingFishInit sFishInits[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
@@ -960,7 +960,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
     if (thisx->params == 200) {
         this->unk_150 = 100;
         func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
-        thisx->targetMode = 0;
+        thisx->targetMode = TARGET_MODE_0;
         thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     } else {

@@ -83,7 +83,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     this->actor.update = func_80AE0F84;
     this->actor.destroy = NULL;
     this->actor.draw = NULL;
-    this->actor.targetMode = 7;
+    this->actor.targetMode = TARGET_MODE_7;
 
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:

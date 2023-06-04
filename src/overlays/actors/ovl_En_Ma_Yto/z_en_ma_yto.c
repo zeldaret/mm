@@ -147,7 +147,7 @@ void EnMaYto_Init(Actor* thisx, PlayState* play) {
     EnMaYto* this = THIS;
     s32 pad;
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk200 = 0;
     this->unk310 = 0;
     this->unk320 = 0;
@@ -267,7 +267,7 @@ void EnMaYto_ChooseAction(EnMaYto* this, PlayState* play) {
             break;
 
         case MA_YTO_TYPE_DINNER:
-            this->actor.targetMode = 6;
+            this->actor.targetMode = TARGET_MODE_6;
             EnMaYto_SetupDinnerWait(this);
             break;
 

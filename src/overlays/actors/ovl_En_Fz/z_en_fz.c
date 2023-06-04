@@ -157,7 +157,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_FREEZARD, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 1400, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };

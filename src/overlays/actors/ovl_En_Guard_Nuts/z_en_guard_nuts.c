@@ -101,7 +101,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
                    this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.015f);
     Math_Vec3f_Copy(&this->guardPos, &this->actor.world.pos);

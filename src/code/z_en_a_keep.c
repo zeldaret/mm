@@ -46,7 +46,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
 void EnAObj_Init(Actor* thisx, PlayState* play) {

@@ -137,12 +137,12 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
         case MA_YTS_TYPE_SITTING:
-            this->actor.targetMode = 6;
+            this->actor.targetMode = TARGET_MODE_6;
             // Day 1 or "Winning" the alien invasion
             if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 EnMaYts_ChangeAnim(this, 14);
@@ -152,13 +152,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
             break;
 
         case MA_YTS_TYPE_SLEEPING:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 

@@ -203,7 +203,7 @@ static CollisionCheckInfoInit D_80B0EA80 = { 30, 80, 100, MASS_IMMOVABLE };
 static InitChainEntry D_80B0EAD8[] = {
     ICHAIN_S8(hintId, 27, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 27, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -2000, ICHAIN_STOP),
 };
 

@@ -56,7 +56,7 @@ void EnOnpuman_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_2A4 = 0;
     this->unk_2A0 = NULL;
     this->actionFunc = func_80B121D8;

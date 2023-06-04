@@ -98,7 +98,7 @@ void EnBee_Init(Actor* thisx, PlayState* play) {
                    OBJECT_BEE_LIMB_MAX);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->instanceId = sNumLoadedBees;
     sNumLoadedBees++;

@@ -432,7 +432,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), 0x3F);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
 
     Actor_SetScale(&this->actor, 0.008f);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

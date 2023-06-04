@@ -209,7 +209,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->dyna.actor.targetMode = 3;
+    this->dyna.actor.targetMode = TARGET_MODE_3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
                        this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);

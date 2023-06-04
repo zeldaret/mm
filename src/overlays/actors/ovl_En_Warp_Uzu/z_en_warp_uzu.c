@@ -65,7 +65,7 @@ void EnWarpUzu_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
-    thisx->targetMode = 0;
+    thisx->targetMode = TARGET_MODE_0;
     func_80A66208(this, play);
 }
 

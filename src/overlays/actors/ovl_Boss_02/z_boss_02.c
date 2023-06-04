@@ -556,7 +556,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, BHEART_PARAM_NORMAL);
     }
 
-    this->actor.targetMode = 10;
+    this->actor.targetMode = TARGET_MODE_10;
     this->subCamUp.z = this->subCamUp.x = 0.0f;
     this->subCamUp.y = 1.0f;
     if (this->actor.params == TWINMOLD_STATIC) {

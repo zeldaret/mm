@@ -95,7 +95,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80959E18;
     this->unk_27A = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
 
     if (func_80959524(play) < 7) {
         this->unk_27A |= 2;

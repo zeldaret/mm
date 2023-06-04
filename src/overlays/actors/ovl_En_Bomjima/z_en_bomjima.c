@@ -129,7 +129,7 @@ void EnBomjima_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, OBJECT_CS_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CLEAR_WEEKEVENTREG(WEEKEVENTREG_83_04);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_2E6 = ENBOMJIMA_GET_F0(&this->actor);
     this->unk_2E4 = ENBOMJIMA_GET_F(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);

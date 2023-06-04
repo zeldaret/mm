@@ -97,7 +97,7 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
                        this->morphtable, 21);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     Actor_SetScale(&this->actor, 0.01f);
 
     this->unk_2BC = ENBOMBERS_GET_F0(&this->actor);

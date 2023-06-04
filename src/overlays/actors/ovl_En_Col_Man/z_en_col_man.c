@@ -66,7 +66,7 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->scale = (BREG(55) / 1000.0f) + 0.01f;
 
     switch (this->actor.params) {

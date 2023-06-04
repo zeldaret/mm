@@ -107,7 +107,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 

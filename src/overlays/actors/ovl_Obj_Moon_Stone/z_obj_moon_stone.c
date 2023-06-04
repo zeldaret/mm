@@ -42,7 +42,7 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.3f);
     this->unk194 = (this->actor.params & 0xF000) >> 0xC;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.shape.yOffset = 25.0f;
     this->actor.focus.pos.y += 10.0f;
     if (this->unk194 == 0) {

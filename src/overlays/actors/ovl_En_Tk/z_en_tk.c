@@ -231,7 +231,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     this->unk_318 = 0;
     this->unk_2D4 = -1;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
 
     if (this->unk_2B0 == 2) {

@@ -374,7 +374,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1AF0);
         Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1AFC);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
         SubS_UpdateFlags(&this->unk_2FC, 3, 7);
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
@@ -391,7 +391,7 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1B10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     SubS_UpdateFlags(&this->unk_2FC, 3, 7);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;

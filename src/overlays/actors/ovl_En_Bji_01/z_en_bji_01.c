@@ -332,7 +332,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.child = NULL;
     this->animIndex = -1;
 

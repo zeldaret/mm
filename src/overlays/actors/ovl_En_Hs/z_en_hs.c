@@ -87,7 +87,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     }
 
     this->stateFlags = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     func_80952C50(this, play);
 }
 

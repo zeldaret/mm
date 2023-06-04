@@ -44,7 +44,7 @@ ActorInit Obj_Ocarinalift_InitVars = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),         ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),         ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };

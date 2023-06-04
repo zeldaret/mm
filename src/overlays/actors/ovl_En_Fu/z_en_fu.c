@@ -213,7 +213,7 @@ void EnFu_Init(Actor* thisx, PlayState* play) {
         this->unk_54E = 0;
         this->unk_550 = 0;
         func_809622FC(this);
-        this->actor.targetMode = 6;
+        this->actor.targetMode = TARGET_MODE_6;
         func_809619D0(this, play);
         if (CURRENT_DAY == 2) {
             Vec3f sp40 = this->actor.child->home.pos;

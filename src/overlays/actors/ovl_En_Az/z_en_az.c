@@ -204,7 +204,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_374 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     switch (BEAVER_GET_PARAM_F00(thisx)) {
         case 0:
             phi_v1 =

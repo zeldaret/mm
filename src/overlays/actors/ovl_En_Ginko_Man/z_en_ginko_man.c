@@ -61,7 +61,7 @@ static AnimationInfo sAnimationInfo[] = {
 void EnGinkoMan_Init(Actor* thisx, PlayState* play) {
     EnGinkoMan* this = THIS;
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.uncullZoneForward = 400.0f;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 100;

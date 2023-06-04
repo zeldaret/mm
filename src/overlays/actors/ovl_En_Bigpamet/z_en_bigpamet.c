@@ -125,7 +125,7 @@ TexturePtr D_80A29754[] = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, 1, ICHAIN_CONTINUE),    ICHAIN_VEC3F_DIV1000(scale, 15, ICHAIN_CONTINUE),
     ICHAIN_F32(gravity, -2, ICHAIN_CONTINUE), ICHAIN_F32(targetArrowOffset, 4333, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
 s32 D_80A29778 = 0;

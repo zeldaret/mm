@@ -138,7 +138,7 @@ void EnTanron2_Init(Actor* thisx, PlayState* play) {
     this->actor.draw = NULL;
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
 
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);

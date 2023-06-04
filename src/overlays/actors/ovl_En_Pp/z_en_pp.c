@@ -234,7 +234,7 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
     EnPp* this = THIS;
     EffectBlureInit1 blureInit;
 
-    this->actor.targetMode = 4;
+    this->actor.targetMode = TARGET_MODE_4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 3;
     this->actor.colChkInfo.damageTable = &sDamageTable;

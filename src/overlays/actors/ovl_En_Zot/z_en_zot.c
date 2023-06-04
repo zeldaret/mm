@@ -96,7 +96,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F4 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.world.rot.z = this->actor.shape.rot.z = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
 

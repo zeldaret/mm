@@ -82,7 +82,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
         }
     }
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->paramCopy == 0) {

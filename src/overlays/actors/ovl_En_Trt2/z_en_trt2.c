@@ -800,7 +800,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 3, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 

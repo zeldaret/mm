@@ -522,7 +522,7 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     func_80BD2B0C(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_1DC = 0;
     this->unk_2D8 = 0;

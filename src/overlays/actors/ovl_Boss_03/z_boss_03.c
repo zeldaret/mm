@@ -506,7 +506,7 @@ void Boss03_Init(Actor* thisx, PlayState* play2) {
         sGyorgEffects[i].type = GYORG_EFFECT_NONE;
     }
 
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
     this->actor.colChkInfo.mass = MASS_HEAVY;
     this->actor.colChkInfo.health = 10;
 

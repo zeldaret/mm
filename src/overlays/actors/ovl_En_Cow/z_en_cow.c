@@ -128,7 +128,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             this->animationCycle = 0;
-            this->actor.targetMode = 6;
+            this->actor.targetMode = TARGET_MODE_6;
 
             D_801BDAA4 = 0;
             func_801A5080(4);

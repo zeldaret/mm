@@ -97,7 +97,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.world.rot.x = this->picto.actor.shape.rot.x = 0;
     this->picto.actor.world.rot.z = this->picto.actor.shape.rot.z = 0;
 
-    this->picto.actor.targetMode = 6;
+    this->picto.actor.targetMode = TARGET_MODE_6;
     this->stateFlags = 0;
     this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
     this->cueId = -1;

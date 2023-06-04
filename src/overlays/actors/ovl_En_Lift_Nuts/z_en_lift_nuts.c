@@ -227,7 +227,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
             this->actor.home.pos = bgActor->actor.world.pos;
         }
     }
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_354 = 0;
     this->unk_34E = 0;
     this->unk_356 = 0;

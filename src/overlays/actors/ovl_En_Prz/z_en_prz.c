@@ -108,7 +108,7 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_1E8 = 255;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->actor.colChkInfo.damageTable = &sDamageTable;

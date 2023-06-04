@@ -1425,7 +1425,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
         this->actor.flags |= ACTOR_FLAG_1;
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
         this->animIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;
