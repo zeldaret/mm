@@ -345,13 +345,6 @@ typedef struct BlureColors {
     /* 0xC */ u8 p2EndColor[4];
 } BlureColors; // size = 0x10
 
-typedef union PlayerCsAnimEnum {
-    void* ptr; // Do not use, required in the absence of designated initialisors
-    PlayerAnimationHeader* anim;
-    CsCmdActorCue* cue;
-    AnimSfxEntry* entry;
-} PlayerCsAnimEnum;
-
 typedef void (*PlayerCsAnim)(PlayState*, Player*, void*);
 typedef void (*PlayerCsAction)(PlayState*, Player*, CsCmdActorCue*);
 
