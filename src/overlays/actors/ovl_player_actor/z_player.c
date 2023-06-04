@@ -7116,7 +7116,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     PlayerMask maskId = GET_MASK_FROM_IA(this->itemAction);
 
                     this->prevMask = this->currentMask;
-                    if (((maskId == this->currentMask) != 0) || (this->itemAction < PLAYER_IA_MASK_GIANT) ||
+                    if ((u32)(maskId == this->currentMask) || (this->itemAction < PLAYER_IA_MASK_GIANT) ||
                         ((this->itemAction == PLAYER_IA_MASK_GIANT) && (this->transformation != PLAYER_FORM_HUMAN))) {
                         if (maskId == this->currentMask) {
                             this->currentMask = PLAYER_MASK_NONE;
@@ -8468,8 +8468,7 @@ void func_8083C85C(Player* this) {
 }
 
 void func_8083C8E8(Player* this, PlayState* play) {
-    if ((func_800B7128(this) == 0) && (func_8082EF20(this) == 0) &&
-        ((this->linearVelocity > 5.0f) || (D_80862B3C != 0.0f))) {
+    if (!func_800B7128(this) && !func_8082EF20(this) && ((this->linearVelocity > 5.0f) || (D_80862B3C != 0.0f))) {
         s16 temp1;
         s16 temp2;
 
@@ -11393,7 +11392,7 @@ void func_80844784(PlayState* play, Player* this) {
             var_a3 += 0x8000;
         }
 
-        if ((Math_StepToF(&this->actor.speed, var_fv0, 0.35f) != 0) && (var_fv0 == 0.0f)) {
+        if (Math_StepToF(&this->actor.speed, var_fv0, 0.35f) && (var_fv0 == 0.0f)) {
             this->actor.world.rot.y = this->currentYaw;
         }
 
@@ -13854,7 +13853,7 @@ void func_8084B0EC(Player* this, PlayState* play) {
 
     func_80832F78(this, &sp2C, &sp2A, 0.0f, play);
     if (!func_8083A4A4(this, &sp2C, &sp2A, REG(43) / 100.0f)) {
-        if (((func_80123434(this) != 0) && (sp2C != 0) && (func_8083E514(this, &sp2C, &sp2A, play) <= 0)) ||
+        if ((func_80123434(this) && (sp2C != 0) && (func_8083E514(this, &sp2C, &sp2A, play) <= 0)) ||
             (!func_80123434(this) && (func_8083E404(this, sp2C, sp2A) <= 0))) {
             func_80836988(this, play);
         } else {
@@ -14008,7 +14007,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
                 this->unk_AE7 = 0;
             }
         } else if (!func_8083FE38(this, play)) {
-            if (func_8083A274(this, play) != 0) {
+            if (func_8083A274(this, play)) {
                 func_8083FD80(this, play);
             } else {
                 this->stateFlags1 &= ~PLAYER_STATE1_400000;
@@ -14212,7 +14211,7 @@ void func_8084C16C(Player* this, PlayState* play) {
     s16 sp42;
     Actor* heldActor;
 
-    if (func_80123420(this) != 0) {
+    if (func_80123420(this)) {
         this->actor.gravity = -1.2f;
     }
 
@@ -15021,9 +15020,6 @@ void func_8084E65C(Player* this, PlayState* play) {
 }
 
 void func_8084E724(Player* this, PlayState* play) {
-    u8 temp_v1;
-    u32 new_var;
-
     if (this->stateFlags1 & PLAYER_STATE1_8000000) {
         func_808475B4(this);
         func_8084748C(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
@@ -15037,21 +15033,16 @@ void func_8084E724(Player* this, PlayState* play) {
         }
     }
 
-    temp_v1 = this->unk_AA5;
-    new_var = temp_v1;
-
-    if (((temp_v1 == PLAYER_UNKAA5_2) && !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) ||
-        ((temp_v1 != PLAYER_UNKAA5_2) &&
-         (((((((((this->csMode != PLAYER_CSMODE_0) || (new_var == 0)) || (temp_v1 >= PLAYER_UNKAA5_5)) ||
-               (func_8082FB68(this) != 0)) ||
-              (this->targetedActor != NULL)) ||
-             (func_8083868C(play, this) == 0)) ||
+    if (((this->unk_AA5 == PLAYER_UNKAA5_2) && !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) ||
+        ((this->unk_AA5 != PLAYER_UNKAA5_2) &&
+         ((((this->csMode != PLAYER_CSMODE_0) || ((u32)this->unk_AA5 == PLAYER_UNKAA5_0) ||
+            (this->unk_AA5 >= PLAYER_UNKAA5_5) || func_8082FB68(this) || (this->targetedActor != NULL) ||
+            (func_8083868C(play, this) == CAM_MODE_NORMAL) ||
             ((this->unk_AA5 == PLAYER_UNKAA5_3) &&
-             (((((Player_ItemToItemAction(this, Inventory_GetBtnBItem(play)) != this->heldItemAction) &&
-                 CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_B)) ||
-                CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_R | BTN_A)) ||
-               (func_80123434(this) != 0)) ||
-              (!func_800B7128(this) && (func_8082EF20(this) == 0))))) ||
+             (((Player_ItemToItemAction(this, Inventory_GetBtnBItem(play)) != this->heldItemAction) &&
+               CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_B)) ||
+              CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_R | BTN_A) || func_80123434(this) ||
+              (!func_800B7128(this) && !func_8082EF20(this))))) ||
            ((this->unk_AA5 == PLAYER_UNKAA5_1) &&
             CHECK_BTN_ANY(sPlayerControlInput->press.button,
                           BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_R | BTN_B | BTN_A))) ||
@@ -18459,7 +18450,7 @@ void func_80857BE8(Player* this, PlayState* play) {
             if ((this->stateFlags3 & PLAYER_STATE3_80000) && (!CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A) ||
                                                               (gSaveContext.save.saveInfo.playerData.magic == 0) ||
                                                               ((this->unk_AE7 == 4) && (this->unk_B08 < 12.0f)))) {
-                if (Math_StepToS(&this->unk_B86[1], 0, 1) != 0) {
+                if (Math_StepToS(&this->unk_B86[1], 0, 1)) {
                     this->stateFlags3 &= ~PLAYER_STATE3_80000;
                     Magic_Reset(play);
                     Player_PlaySfx(this, NA_SE_PL_GORON_BALL_CHARGE_FAILED);
