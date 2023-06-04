@@ -4645,7 +4645,7 @@ void func_80832888(Player* this, PlayState* play) {
 
             if (this->targetedActor != NULL) {
                 if ((this == GET_PLAYER(play)) && (this->targetedActor != this->unk_A78) &&
-                    func_800B83F8(this->targetedActor, this, var_v1)) {
+                    Target_800B83F8(this->targetedActor, this, var_v1)) {
                     func_80123DA4(this);
                     this->stateFlags1 |= PLAYER_STATE1_40000000;
                 } else if (this->targetedActor != NULL) {

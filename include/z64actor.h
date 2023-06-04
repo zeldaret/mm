@@ -370,7 +370,6 @@ typedef struct TargetContext {
     /* 0x4A */ u8 unk4A;
     /* 0x4B */ u8 unk4B;
     /* 0x4C */ s8 unk4C;
-    /* 0x4D */ UNK_TYPE1 pad4D[0x3];
     /* 0x50 */ TargetContextEntry unk50[3];
     /* 0x8C */ Actor* unk8C;
     /* 0x90 */ Actor* bgmEnemy;

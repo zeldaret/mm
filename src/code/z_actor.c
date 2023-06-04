@@ -36,7 +36,7 @@ Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
-void func_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
+void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player);
 s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
@@ -421,7 +421,7 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },
 };
 
-void func_800B4F78(TargetContext* targetCtx, s32 type, PlayState* play) {
+void Target_800B4F78(TargetContext* targetCtx, s32 type, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
     TargetContextEntry* targetEntry;
@@ -456,7 +456,7 @@ void Target_SetColors(TargetContext* targetCtx, Actor* actor, s32 type, PlayStat
     targetCtx->fairyOuter.a = sTatlColorList[type].outer.a;
 }
 
-void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, PlayState* play) {
+void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->bgmEnemy = NULL;
     targetCtx->unk8C = NULL;
     targetCtx->targetedActor = NULL;
@@ -465,10 +465,10 @@ void Actor_TargetContextInit(TargetContext* targetCtx, Actor* actor, PlayState* 
     targetCtx->unk4C = 0;
     targetCtx->unk40 = 0.0f;
     Target_SetColors(targetCtx, actor, actor->category, play);
-    func_800B4F78(targetCtx, actor->category, play);
+    Target_800B4F78(targetCtx, actor->category, play);
 }
 
-void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
+void Target_Draw(TargetContext* targetCtx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 |
@@ -584,7 +584,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
 }
 
 // OoT: func_8002C7BC
-void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameState* gameState) {
+void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, GameState* gameState) {
     PlayState* play = (PlayState*)gameState;
     Actor* sp68 = NULL;
     s32 category;
@@ -594,7 +594,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
     if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->unk_94 = NULL;
     } else {
-        func_800BB8EC(play, &play->actorCtx, &sp68, &D_801ED920, player);
+        Target_800BB8EC(play, &play->actorCtx, &sp68, &D_801ED920, player);
         targetCtx->unk_94 = sp68;
     }
 
@@ -652,7 +652,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
         if (actor != targetCtx->targetedActor) {
             s32 sfxId;
 
-            func_800B4F78(targetCtx, actor->category, play);
+            Target_800B4F78(targetCtx, actor->category, play);
 
             targetCtx->targetedActor = actor;
 
@@ -1808,11 +1808,11 @@ TargetRangeParams gTargetRanges[] = {
     TARGET_RANGE(240, 576),  TARGET_RANGE(280, 280000), TARGET_RANGE(2500, 3750),
 };
 
-s32 Actor_IsInTargetableRange(Actor* actor, f32 distSq) {
+s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
     return distSq < gTargetRanges[actor->targetMode].rangeSq;
 }
 
-s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
+s32 Target_800B83F8(Actor* actor, Player* player, s32 flag) {
     if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_1) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
         return true;
     }
@@ -1827,7 +1827,7 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
             distSq = actor->xyzDistToPlayerSq;
         }
 
-        return !Actor_IsInTargetableRange(actor, gTargetRanges[actor->targetMode].leashScale * distSq);
+        return !Target_IsActorInRange(actor, gTargetRanges[actor->targetMode].leashScale * distSq);
     }
 
     return false;
@@ -2300,7 +2300,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->absoluteSpace = NULL;
 
     Actor_SpawnEntry(actorCtx, actorEntry, play);
-    Actor_TargetContextInit(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
+    Target_Init(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     Actor_InitHalfDaysBit(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
     func_800B722C(&play->state, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
@@ -2547,7 +2547,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     if (!(player->stateFlags1 & PLAYER_STATE1_2)) {
-        func_800B5814(&actorCtx->targetContext, player, actor, &play->state);
+        Target_Update(&actorCtx->targetContext, player, actor, &play->state);
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
@@ -3362,7 +3362,7 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
     return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
 }
 
-void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 actorCategory) {
+void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* targetedActor = player->targetedActor;
@@ -3399,7 +3399,7 @@ void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 
             continue;
         }
 
-        if (Actor_IsInTargetableRange(actor, distSq) && func_800BB59C(play, actor)) {
+        if (Target_IsActorInRange(actor, distSq) && func_800BB59C(play, actor)) {
             CollisionPoly* poly;
             s32 bgId;
             Vec3f posResult;
@@ -3439,7 +3439,7 @@ u8 D_801AED8C[] = {
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
-void func_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
+void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor** arg3, Player* player) {
     u8* actorCategories;
     s32 i;
 
@@ -3453,13 +3453,13 @@ void func_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Actor*
     actorCategories = D_801AED8C;
 
     for (i = 0; i < 3; i++) {
-        func_800BB604(play, actorCtx, player, *actorCategories);
+        Target_800BB604(play, actorCtx, player, *actorCategories);
         actorCategories++;
     }
 
     if (D_801ED8B8 == NULL) {
         for (; i < ARRAY_COUNT(D_801AED8C); i++) {
-            func_800BB604(play, actorCtx, player, *actorCategories);
+            Target_800BB604(play, actorCtx, player, *actorCategories);
             actorCategories++;
         }
     }
