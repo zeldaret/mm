@@ -372,7 +372,7 @@ typedef enum {
 } PlayerCsType;
 
 typedef struct PlayerCsModeEntry {
-    /* 0x0 */ s8 type;
+    /* 0x0 */ s8 type; // PlayerCsType enum
     /* 0x4 */ union {
         void* ptr; // Do not use, required in the absence of designated initialisors
         PlayerAnimationHeader* anim;
@@ -3702,7 +3702,8 @@ void func_808304BC(Player* this, PlayState* play) {
     if ((this->actor.id == ACTOR_PLAYER) && !(this->stateFlags3 & PLAYER_STATE3_40000000)) {
         if ((this->heldItemAction == this->itemAction) || (this->stateFlags1 & PLAYER_STATE1_400000)) {
             if ((gSaveContext.save.saveInfo.playerData.health != 0) && (play->csCtx.state == CS_STATE_IDLE)) {
-                if ((this->csMode == PLAYER_CSMODE_0) && (play->unk_1887C == 0) && (play->activeCamId == CAM_ID_MAIN)) {
+                if ((this->csMode == PLAYER_CSMODE_NONE) && (play->unk_1887C == 0) &&
+                    (play->activeCamId == CAM_ID_MAIN)) {
                     if (!func_8082DA90(play) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] != TIMER_STATE_STOP)) {
                         func_8082FE0C(this, play);
                     }
@@ -4591,7 +4592,7 @@ void func_80832888(Player* this, PlayState* play) {
         this->stateFlags1 &= ~PLAYER_STATE1_40000000;
     }
 
-    if ((play->csCtx.state != CS_STATE_IDLE) || (this->csMode != PLAYER_CSMODE_0) ||
+    if ((play->csCtx.state != CS_STATE_IDLE) || (this->csMode != PLAYER_CSMODE_NONE) ||
         (this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (this->stateFlags3 & PLAYER_STATE3_80)) {
         this->unk_738 = 0;
     } else if (heldZ || (this->stateFlags2 & PLAYER_STATE2_2000) || (this->unk_A78 != NULL)) {
@@ -5460,7 +5461,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
         return false;
     } else if ((this->unk_D6B != 0) || (this->invincibilityTimer > 0) || (this->stateFlags1 & PLAYER_STATE1_4000000) ||
-               (this->csMode != PLAYER_CSMODE_0) || (this->meleeWeaponQuads[0].base.atFlags & AT_HIT) ||
+               (this->csMode != PLAYER_CSMODE_NONE) || (this->meleeWeaponQuads[0].base.atFlags & AT_HIT) ||
                (this->meleeWeaponQuads[1].base.atFlags & AT_HIT) || (this->cylinder.base.atFlags & AT_HIT) ||
                (this->shieldCylinder.base.atFlags & AT_HIT)) {
         return false;
@@ -5759,7 +5760,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
     s32 sp30;
 
     if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & PLAYER_STATE1_80) && !func_8082DA90(play) &&
-        (this->csMode == PLAYER_CSMODE_0) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
+        (this->csMode == PLAYER_CSMODE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
         var_a3 = 0;
         if (((poly != NULL) && (var_a3 = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (var_a3 != 0)) &&
              (((play->sceneId != SCENE_GORONRACE) && (play->sceneId != SCENE_DEKU_KING)) || (var_a3 < 3)) &&
@@ -6341,7 +6342,7 @@ s32 func_80836F10(PlayState* play, Player* this) {
     s32 fallDistance;
 
     if ((sPlayerCurrentFloorType == FLOOR_TYPE_6) || (sPlayerCurrentFloorType == FLOOR_TYPE_9) ||
-        (this->csMode != PLAYER_CSMODE_0)) {
+        (this->csMode != PLAYER_CSMODE_NONE)) {
         fallDistance = 0;
     } else {
         fallDistance = this->fallDistance;
@@ -8729,7 +8730,7 @@ s32 func_8083D23C(Player* this, PlayState* play) {
                     func_8083D168(play, this, giEntry);
                     this->getItemId = GI_NONE;
                 }
-            } else if (this->csMode == PLAYER_CSMODE_0) {
+            } else if (this->csMode == PLAYER_CSMODE_NONE) {
                 if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
                     if (this->getItemId != GI_NONE) {
                         if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
@@ -11084,7 +11085,7 @@ void Player_UpdateCamAndSeqModes(PlayState* play, Player* this) {
         seqMode = SEQ_MODE_DEFAULT;
         if (this->stateFlags1 & PLAYER_STATE1_100000) {
             seqMode = SEQ_MODE_STILL;
-        } else if (this->csMode != PLAYER_CSMODE_0) {
+        } else if (this->csMode != PLAYER_CSMODE_NONE) {
             Camera_ChangeMode(Play_GetCamera(play, CAM_ID_MAIN), CAM_MODE_NORMAL);
         } else {
             camera = (this->actor.id == ACTOR_PLAYER) ? Play_GetCamera(play, CAM_ID_MAIN)
@@ -11268,98 +11269,98 @@ void Player_DetectSecrets(PlayState* play, Player* this) {
 #define DISABLE_PLAYER_CSMODE_START_POS -1
 
 s8 sPlayerCsModes[PLAYER_CUEID_MAX] = {
-    PLAYER_CSMODE_0,                                   // PLAYER_CUEID_0
-    PLAYER_CSMODE_2,                                   // PLAYER_CUEID_1
-    PLAYER_CSMODE_2,                                   // PLAYER_CUEID_2
-    PLAYER_CSMODE_4,                                   // PLAYER_CUEID_3
-    PLAYER_CSMODE_3,                                   // PLAYER_CUEID_4
-    PLAYER_CSMODE_56,                                  // PLAYER_CUEID_5
-    PLAYER_CSMODE_8,                                   // PLAYER_CUEID_6
-    PLAYER_CSMODE_0,                                   // PLAYER_CUEID_7
-    PLAYER_CSMODE_0,                                   // PLAYER_CUEID_8
-    PLAYER_CSMODE_135,                                 // PLAYER_CUEID_9
-    PLAYER_CSMODE_21,                                  // PLAYER_CUEID_10
-    PLAYER_CSMODE_61,                                  // PLAYER_CUEID_11
-    PLAYER_CSMODE_62,                                  // PLAYER_CUEID_12
-    PLAYER_CSMODE_60,                                  // PLAYER_CUEID_13
-    PLAYER_CSMODE_63,                                  // PLAYER_CUEID_14
-    PLAYER_CSMODE_64,                                  // PLAYER_CUEID_15
-    PLAYER_CSMODE_65,                                  // PLAYER_CUEID_16
-    PLAYER_CSMODE_66,                                  // PLAYER_CUEID_17
-    PLAYER_CSMODE_70,                                  // PLAYER_CUEID_18
-    PLAYER_CSMODE_19,                                  // PLAYER_CUEID_19
-    PLAYER_CSMODE_71,                                  // PLAYER_CUEID_20
-    PLAYER_CSMODE_72,                                  // PLAYER_CUEID_21
-    PLAYER_CSMODE_67,                                  // PLAYER_CUEID_22
-    PLAYER_CSMODE_73,                                  // PLAYER_CUEID_23
-    PLAYER_CSMODE_74,                                  // PLAYER_CUEID_24
-    PLAYER_CSMODE_75,                                  // PLAYER_CUEID_25
-    PLAYER_CSMODE_68,                                  // PLAYER_CUEID_26
-    PLAYER_CSMODE_69,                                  // PLAYER_CUEID_27
-    PLAYER_CSMODE_76,                                  // PLAYER_CUEID_28
-    PLAYER_CSMODE_116,                                 // PLAYER_CUEID_29
-    PLAYER_CSMODE_0,                                   // PLAYER_CUEID_30
-    PLAYER_CSMODE_40,                                  // PLAYER_CUEID_31
-    PLAYER_CSMODE_0,                                   // PLAYER_CUEID_32
-    PLAYER_CSMODE_52* DISABLE_PLAYER_CSMODE_START_POS, // PLAYER_CUEID_33
-    PLAYER_CSMODE_42,                                  // PLAYER_CUEID_34
-    PLAYER_CSMODE_43,                                  // PLAYER_CUEID_35
-    PLAYER_CSMODE_57,                                  // PLAYER_CUEID_36
-    PLAYER_CSMODE_81,                                  // PLAYER_CUEID_37
-    PLAYER_CSMODE_41,                                  // PLAYER_CUEID_38
-    PLAYER_CSMODE_53,                                  // PLAYER_CUEID_39
-    PLAYER_CSMODE_54,                                  // PLAYER_CUEID_40
-    PLAYER_CSMODE_44,                                  // PLAYER_CUEID_41
-    PLAYER_CSMODE_55,                                  // PLAYER_CUEID_42
-    PLAYER_CSMODE_45,                                  // PLAYER_CUEID_43
-    PLAYER_CSMODE_46,                                  // PLAYER_CUEID_44
-    PLAYER_CSMODE_47,                                  // PLAYER_CUEID_45
-    PLAYER_CSMODE_48,                                  // PLAYER_CUEID_46
-    PLAYER_CSMODE_49,                                  // PLAYER_CUEID_47
-    PLAYER_CSMODE_50,                                  // PLAYER_CUEID_48
-    PLAYER_CSMODE_51,                                  // PLAYER_CUEID_49
-    PLAYER_CSMODE_77,                                  // PLAYER_CUEID_50
-    PLAYER_CSMODE_78,                                  // PLAYER_CUEID_51
-    PLAYER_CSMODE_79,                                  // PLAYER_CUEID_52
-    PLAYER_CSMODE_80,                                  // PLAYER_CUEID_53
-    PLAYER_CSMODE_81,                                  // PLAYER_CUEID_54
-    PLAYER_CSMODE_82,                                  // PLAYER_CUEID_55
-    PLAYER_CSMODE_83,                                  // PLAYER_CUEID_56
-    PLAYER_CSMODE_84,                                  // PLAYER_CUEID_57
-    PLAYER_CSMODE_85,                                  // PLAYER_CUEID_58
-    PLAYER_CSMODE_86,                                  // PLAYER_CUEID_59
-    PLAYER_CSMODE_87,                                  // PLAYER_CUEID_60
-    PLAYER_CSMODE_88,                                  // PLAYER_CUEID_61
-    PLAYER_CSMODE_89,                                  // PLAYER_CUEID_62
-    PLAYER_CSMODE_90,                                  // PLAYER_CUEID_63
-    PLAYER_CSMODE_91,                                  // PLAYER_CUEID_64
-    PLAYER_CSMODE_92,                                  // PLAYER_CUEID_65
-    PLAYER_CSMODE_94,                                  // PLAYER_CUEID_66
-    PLAYER_CSMODE_95,                                  // PLAYER_CUEID_67
-    PLAYER_CSMODE_100,                                 // PLAYER_CUEID_68
-    PLAYER_CSMODE_101,                                 // PLAYER_CUEID_69
-    PLAYER_CSMODE_98,                                  // PLAYER_CUEID_70
-    PLAYER_CSMODE_99,                                  // PLAYER_CUEID_71
-    PLAYER_CSMODE_102,                                 // PLAYER_CUEID_72
-    PLAYER_CSMODE_103,                                 // PLAYER_CUEID_73
-    PLAYER_CSMODE_104,                                 // PLAYER_CUEID_74
-    PLAYER_CSMODE_112,                                 // PLAYER_CUEID_75
-    PLAYER_CSMODE_113,                                 // PLAYER_CUEID_76
-    PLAYER_CSMODE_117,                                 // PLAYER_CUEID_77
-    PLAYER_CSMODE_104,                                 // PLAYER_CUEID_78
-    PLAYER_CSMODE_104,                                 // PLAYER_CUEID_79
-    PLAYER_CSMODE_105,                                 // PLAYER_CUEID_80
-    PLAYER_CSMODE_106,                                 // PLAYER_CUEID_81
-    PLAYER_CSMODE_107,                                 // PLAYER_CUEID_82
-    PLAYER_CSMODE_108,                                 // PLAYER_CUEID_83
-    PLAYER_CSMODE_109,                                 // PLAYER_CUEID_84
-    PLAYER_CSMODE_110,                                 // PLAYER_CUEID_85
-    PLAYER_CSMODE_118,                                 // PLAYER_CUEID_86
-    PLAYER_CSMODE_119,                                 // PLAYER_CUEID_87
-    PLAYER_CSMODE_120,                                 // PLAYER_CUEID_88
-    PLAYER_CSMODE_114,                                 // PLAYER_CUEID_89
-    PLAYER_CSMODE_111,                                 // PLAYER_CUEID_90
-    PLAYER_CSMODE_122,                                 // PLAYER_CUEID_91
+    /* PLAYER_CUEID_NONE */ PLAYER_CSMODE_NONE,
+    /* PLAYER_CUEID_1 */ PLAYER_CSMODE_2,
+    /* PLAYER_CUEID_2 */ PLAYER_CSMODE_2,
+    /* PLAYER_CUEID_3 */ PLAYER_CSMODE_4,
+    /* PLAYER_CUEID_4 */ PLAYER_CSMODE_3,
+    /* PLAYER_CUEID_5 */ PLAYER_CSMODE_56,
+    /* PLAYER_CUEID_6 */ PLAYER_CSMODE_8,
+    /* PLAYER_CUEID_7 */ PLAYER_CSMODE_NONE,
+    /* PLAYER_CUEID_8 */ PLAYER_CSMODE_NONE,
+    /* PLAYER_CUEID_9 */ PLAYER_CSMODE_135,
+    /* PLAYER_CUEID_10 */ PLAYER_CSMODE_21,
+    /* PLAYER_CUEID_11 */ PLAYER_CSMODE_61,
+    /* PLAYER_CUEID_12 */ PLAYER_CSMODE_62,
+    /* PLAYER_CUEID_13 */ PLAYER_CSMODE_60,
+    /* PLAYER_CUEID_14 */ PLAYER_CSMODE_63,
+    /* PLAYER_CUEID_15 */ PLAYER_CSMODE_64,
+    /* PLAYER_CUEID_16 */ PLAYER_CSMODE_65,
+    /* PLAYER_CUEID_17 */ PLAYER_CSMODE_66,
+    /* PLAYER_CUEID_18 */ PLAYER_CSMODE_70,
+    /* PLAYER_CUEID_19 */ PLAYER_CSMODE_19,
+    /* PLAYER_CUEID_20 */ PLAYER_CSMODE_71,
+    /* PLAYER_CUEID_21 */ PLAYER_CSMODE_72,
+    /* PLAYER_CUEID_22 */ PLAYER_CSMODE_67,
+    /* PLAYER_CUEID_23 */ PLAYER_CSMODE_73,
+    /* PLAYER_CUEID_24 */ PLAYER_CSMODE_74,
+    /* PLAYER_CUEID_25 */ PLAYER_CSMODE_75,
+    /* PLAYER_CUEID_26 */ PLAYER_CSMODE_68,
+    /* PLAYER_CUEID_27 */ PLAYER_CSMODE_69,
+    /* PLAYER_CUEID_28 */ PLAYER_CSMODE_76,
+    /* PLAYER_CUEID_29 */ PLAYER_CSMODE_116,
+    /* PLAYER_CUEID_30 */ PLAYER_CSMODE_NONE,
+    /* PLAYER_CUEID_31 */ PLAYER_CSMODE_40,
+    /* PLAYER_CUEID_32 */ PLAYER_CSMODE_NONE,
+    /* PLAYER_CUEID_33 */ PLAYER_CSMODE_52* DISABLE_PLAYER_CSMODE_START_POS,
+    /* PLAYER_CUEID_34 */ PLAYER_CSMODE_42,
+    /* PLAYER_CUEID_35 */ PLAYER_CSMODE_43,
+    /* PLAYER_CUEID_36 */ PLAYER_CSMODE_57,
+    /* PLAYER_CUEID_37 */ PLAYER_CSMODE_81,
+    /* PLAYER_CUEID_38 */ PLAYER_CSMODE_41,
+    /* PLAYER_CUEID_39 */ PLAYER_CSMODE_53,
+    /* PLAYER_CUEID_40 */ PLAYER_CSMODE_54,
+    /* PLAYER_CUEID_41 */ PLAYER_CSMODE_44,
+    /* PLAYER_CUEID_42 */ PLAYER_CSMODE_55,
+    /* PLAYER_CUEID_43 */ PLAYER_CSMODE_45,
+    /* PLAYER_CUEID_44 */ PLAYER_CSMODE_46,
+    /* PLAYER_CUEID_45 */ PLAYER_CSMODE_47,
+    /* PLAYER_CUEID_46 */ PLAYER_CSMODE_48,
+    /* PLAYER_CUEID_47 */ PLAYER_CSMODE_49,
+    /* PLAYER_CUEID_48 */ PLAYER_CSMODE_50,
+    /* PLAYER_CUEID_49 */ PLAYER_CSMODE_51,
+    /* PLAYER_CUEID_50 */ PLAYER_CSMODE_77,
+    /* PLAYER_CUEID_51 */ PLAYER_CSMODE_78,
+    /* PLAYER_CUEID_52 */ PLAYER_CSMODE_79,
+    /* PLAYER_CUEID_53 */ PLAYER_CSMODE_80,
+    /* PLAYER_CUEID_54 */ PLAYER_CSMODE_81,
+    /* PLAYER_CUEID_55 */ PLAYER_CSMODE_82,
+    /* PLAYER_CUEID_56 */ PLAYER_CSMODE_83,
+    /* PLAYER_CUEID_57 */ PLAYER_CSMODE_84,
+    /* PLAYER_CUEID_58 */ PLAYER_CSMODE_85,
+    /* PLAYER_CUEID_59 */ PLAYER_CSMODE_86,
+    /* PLAYER_CUEID_60 */ PLAYER_CSMODE_87,
+    /* PLAYER_CUEID_61 */ PLAYER_CSMODE_88,
+    /* PLAYER_CUEID_62 */ PLAYER_CSMODE_89,
+    /* PLAYER_CUEID_63 */ PLAYER_CSMODE_90,
+    /* PLAYER_CUEID_64 */ PLAYER_CSMODE_91,
+    /* PLAYER_CUEID_65 */ PLAYER_CSMODE_92,
+    /* PLAYER_CUEID_66 */ PLAYER_CSMODE_94,
+    /* PLAYER_CUEID_67 */ PLAYER_CSMODE_95,
+    /* PLAYER_CUEID_68 */ PLAYER_CSMODE_100,
+    /* PLAYER_CUEID_69 */ PLAYER_CSMODE_101,
+    /* PLAYER_CUEID_70 */ PLAYER_CSMODE_98,
+    /* PLAYER_CUEID_71 */ PLAYER_CSMODE_99,
+    /* PLAYER_CUEID_72 */ PLAYER_CSMODE_102,
+    /* PLAYER_CUEID_73 */ PLAYER_CSMODE_103,
+    /* PLAYER_CUEID_74 */ PLAYER_CSMODE_104,
+    /* PLAYER_CUEID_75 */ PLAYER_CSMODE_112,
+    /* PLAYER_CUEID_76 */ PLAYER_CSMODE_113,
+    /* PLAYER_CUEID_77 */ PLAYER_CSMODE_117,
+    /* PLAYER_CUEID_78 */ PLAYER_CSMODE_104,
+    /* PLAYER_CUEID_79 */ PLAYER_CSMODE_104,
+    /* PLAYER_CUEID_80 */ PLAYER_CSMODE_105,
+    /* PLAYER_CUEID_81 */ PLAYER_CSMODE_106,
+    /* PLAYER_CUEID_82 */ PLAYER_CSMODE_107,
+    /* PLAYER_CUEID_83 */ PLAYER_CSMODE_108,
+    /* PLAYER_CUEID_84 */ PLAYER_CSMODE_109,
+    /* PLAYER_CUEID_85 */ PLAYER_CSMODE_110,
+    /* PLAYER_CUEID_86 */ PLAYER_CSMODE_118,
+    /* PLAYER_CUEID_87 */ PLAYER_CSMODE_119,
+    /* PLAYER_CUEID_88 */ PLAYER_CSMODE_120,
+    /* PLAYER_CUEID_89 */ PLAYER_CSMODE_114,
+    /* PLAYER_CUEID_90 */ PLAYER_CSMODE_111,
+    /* PLAYER_CUEID_91 */ PLAYER_CSMODE_122,
 };
 
 f32 D_8085D3E0[PLAYER_FORM_MAX] = {
@@ -11752,10 +11753,10 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             if ((this->csMode != PLAYER_CSMODE_5) && !(this->stateFlags1 & PLAYER_STATE1_800000)) {
                 if (!(this->stateFlags2 & PLAYER_STATE2_80) && (this->actor.id == ACTOR_PLAYER)) {
                     if ((play->csCtx.playerCue != NULL) &&
-                        (sPlayerCsModes[play->csCtx.playerCue->id] != PLAYER_CSMODE_0)) {
+                        (sPlayerCsModes[play->csCtx.playerCue->id] != PLAYER_CSMODE_NONE)) {
                         func_800B7298(play, NULL, PLAYER_CSMODE_5);
                         Player_StopHorizontalMovement(this);
-                    } else if (((u32)this->csMode == PLAYER_CSMODE_0) &&
+                    } else if (((u32)this->csMode == PLAYER_CSMODE_NONE) &&
                                !(this->stateFlags2 & (PLAYER_STATE2_400 | PLAYER_STATE2_8000000)) &&
                                (play->csCtx.state != CS_STATE_STOP)) {
                         func_800B7298(play, NULL, PLAYER_CSMODE_20);
@@ -11765,7 +11766,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             }
         }
 
-        if ((u32)this->csMode != PLAYER_CSMODE_0) {
+        if ((u32)this->csMode != PLAYER_CSMODE_NONE) {
             if ((this->csMode != PLAYER_CSMODE_END) ||
                 !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 |
                                        PLAYER_STATE1_200000 | PLAYER_STATE1_4000000))) {
@@ -11780,7 +11781,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 Player_Cutscene_End(play, this, NULL);
             }
         } else {
-            this->prevCsMode = PLAYER_CSMODE_0;
+            this->prevCsMode = PLAYER_CSMODE_NONE;
         }
 
         func_8083BF54(play, this);
@@ -12283,7 +12284,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                                   NULL, NULL, NULL);
         } else {
             OverrideLimbDrawFlex sp84 = Player_OverrideLimbDrawGameplayDefault;
-            s32 lod = ((this->csMode != PLAYER_CSMODE_0) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
+            s32 lod = ((this->csMode != PLAYER_CSMODE_NONE) || (this->actor.projectedPos.z < 320.0f)) ? 0 : 1;
             Vec3f sp74;
 
             //! FAKE
@@ -12499,7 +12500,7 @@ s32 func_80847880(PlayState* play, Player* this) {
         if (play->sceneId == SCENE_20SICHITAI) {
             Player_SetAction(play, this, func_80854430, 0);
             play->unk_1887C = 0;
-            this->csMode = PLAYER_CSMODE_0;
+            this->csMode = PLAYER_CSMODE_NONE;
             return true;
         }
 
@@ -12509,7 +12510,7 @@ s32 func_80847880(PlayState* play, Player* this) {
             func_80831990(play, this, ITEM_BOW);
         }
         Player_AnimationPlayOnce(play, this, func_8082ED20(this));
-        this->csMode = PLAYER_CSMODE_0;
+        this->csMode = PLAYER_CSMODE_NONE;
         this->stateFlags1 |= PLAYER_STATE1_100000;
         Player_StopHorizontalMovement(this);
         func_80836D8C(this);
@@ -15048,7 +15049,7 @@ void func_8084E724(Player* this, PlayState* play) {
 
     if (((temp_v1 == PLAYER_UNKAA5_2) && !(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) ||
         ((temp_v1 != PLAYER_UNKAA5_2) &&
-         (((((((((this->csMode != PLAYER_CSMODE_0) || (new_var == 0)) || (temp_v1 >= PLAYER_UNKAA5_5)) ||
+         (((((((((this->csMode != PLAYER_CSMODE_NONE) || (new_var == 0)) || (temp_v1 >= PLAYER_UNKAA5_5)) ||
                (func_8082FB68(this) != 0)) ||
               (this->targetedActor != NULL)) ||
              (func_8083868C(play, this) == 0)) ||
@@ -15682,7 +15683,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
         AnimationContext_SetCopyAll(play, this->skelAnime.limbCount, this->skelAnime.morphTable,
                                     this->skelAnime.jointTable);
 
-        if ((play->csCtx.state != CS_STATE_IDLE) || (this->csMode != PLAYER_CSMODE_0)) {
+        if ((play->csCtx.state != CS_STATE_IDLE) || (this->csMode != PLAYER_CSMODE_NONE)) {
             this->unk_AA5 = PLAYER_UNKAA5_0;
             this->unk_AE7 = 0;
         } else if ((this->unk_AE8 < 2) || (this->unk_AE8 >= 4)) {
@@ -15747,7 +15748,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
             } else {
                 func_8084FD7C(play, this, &rideActor->actor);
             }
-        } else if ((this->csMode != PLAYER_CSMODE_0) ||
+        } else if ((this->csMode != PLAYER_CSMODE_NONE) ||
                    (!func_8082DAFC(play) && ((rideActor->actor.speed != 0.0f) || !func_808391D8(this, play)) &&
                     !func_80847BF0(this, play) && !func_80838A90(this, play))) {
             if (this->targetedActor != NULL) {
@@ -15775,7 +15776,7 @@ void func_8084FE7C(Player* this, PlayState* play) {
     }
 
     if (this->csMode == PLAYER_CSMODE_END) {
-        this->csMode = PLAYER_CSMODE_0;
+        this->csMode = PLAYER_CSMODE_NONE;
     }
 }
 
@@ -16481,7 +16482,7 @@ void func_8085269C(Player* this, PlayState* play) {
                                         0, play->msgCtx.ocarinaMode);
                     if (actor != NULL) {
                         this->stateFlags1 &= ~PLAYER_STATE1_20000000;
-                        this->csMode = PLAYER_CSMODE_0;
+                        this->csMode = PLAYER_CSMODE_NONE;
                         func_8085B28C(play, NULL, PLAYER_CSMODE_19);
                         this->stateFlags1 |= PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000;
                     } else {
@@ -19265,7 +19266,7 @@ void Player_Cutscene_18(PlayState* play, Player* this, CsCmdActorCue* cue) {
 }
 
 PlayerCsModeEntry sPlayerCsModeInitFuncs[PLAYER_CSMODE_MAX] = {
-    /* PLAYER_CSMODE_0   */ { PLAYER_CSTYPE_NONE, { NULL } },
+    /* PLAYER_CSMODE_NONE   */ { PLAYER_CSTYPE_NONE, { NULL } },
     /* PLAYER_CSMODE_1   */ { PLAYER_CSTYPE_FUNC, { Player_Cutscene_1 } },
     /* PLAYER_CSMODE_2   */ { PLAYER_CSTYPE_NONE, { NULL } },
     /* PLAYER_CSMODE_3   */ { PLAYER_CSTYPE_NONE, { NULL } },
@@ -19408,7 +19409,7 @@ PlayerCsModeEntry sPlayerCsModeInitFuncs[PLAYER_CSMODE_MAX] = {
 };
 
 PlayerCsModeEntry sPlayerCsModeUpdateFuncs[PLAYER_CSMODE_MAX] = {
-    /* PLAYER_CSMODE_0   */ { PLAYER_CSTYPE_NONE, { NULL } },
+    /* PLAYER_CSMODE_NONE   */ { PLAYER_CSTYPE_NONE, { NULL } },
     /* PLAYER_CSMODE_1   */ { PLAYER_CSTYPE_FUNC, { Player_Cutscene_0 } },
     /* PLAYER_CSMODE_2   */ { PLAYER_CSTYPE_FUNC, { Player_Cutscene_11 } },
     /* PLAYER_CSMODE_3   */ { PLAYER_CSTYPE_FUNC, { Player_Cutscene_13 } },
@@ -19865,7 +19866,7 @@ void Player_Cutscene_End(PlayState* play, Player* this, CsCmdActorCue* cue) {
         }
     }
 
-    this->csMode = PLAYER_CSMODE_0;
+    this->csMode = PLAYER_CSMODE_NONE;
     this->unk_AA5 = PLAYER_UNKAA5_0;
 }
 
@@ -19930,19 +19931,19 @@ void Player_Cutscene_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
             this->unk_AA5 = PLAYER_UNKAA5_5;
 
             if (func_80838A90(this, play)) {
-                this->csMode = PLAYER_CSMODE_0;
+                this->csMode = PLAYER_CSMODE_NONE;
             }
             return;
-        } else {
-            var_a0 = true;
+        }
 
-            if (sPlayerCsModes[this->cueId] != PLAYER_CSMODE_16) {
-                this->csMode = PLAYER_CSMODE_END;
-                func_800B7298(play, NULL, PLAYER_CSMODE_END);
-                this->cueId = PLAYER_CUEID_0;
-                Player_StopHorizontalMovement(this);
-                return;
-            }
+        var_a0 = true;
+
+        if (sPlayerCsModes[this->cueId] != PLAYER_CSMODE_16) {
+            this->csMode = PLAYER_CSMODE_END;
+            func_800B7298(play, NULL, PLAYER_CSMODE_END);
+            this->cueId = PLAYER_CUEID_NONE;
+            Player_StopHorizontalMovement(this);
+            return;
         }
     }
 
@@ -20037,7 +20038,7 @@ s32 func_8085B28C(PlayState* play, Player* this, PlayerCsMode csMode) {
     Player* player = GET_PLAYER(play);
 
     if (this != NULL) {
-        if (csMode == PLAYER_CSMODE_0) {
+        if (csMode == PLAYER_CSMODE_NONE) {
             return func_8084E034 == this->actionFunc;
         }
 

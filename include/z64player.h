@@ -590,7 +590,7 @@ typedef struct struct_80122744_arg1 {
 } struct_80122744_arg1; // size = 0x8
 
 typedef enum PlayerCsMode {
-    /* 0x00 */ PLAYER_CSMODE_0,
+    /* 0x00 */ PLAYER_CSMODE_NONE,
     /* 0x01 */ PLAYER_CSMODE_1,
     /* 0x02 */ PLAYER_CSMODE_2,
     /* 0x03 */ PLAYER_CSMODE_3,
@@ -734,7 +734,7 @@ typedef enum PlayerCsMode {
 } PlayerCsMode;
 
 typedef enum PlayerCueId {
-    /* 0x00 */ PLAYER_CUEID_0,
+    /* 0x00 */ PLAYER_CUEID_NONE,
     /* 0x01 */ PLAYER_CUEID_1,
     /* 0x02 */ PLAYER_CUEID_2,
     /* 0x03 */ PLAYER_CUEID_3,
