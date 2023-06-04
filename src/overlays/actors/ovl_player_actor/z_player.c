@@ -304,6 +304,26 @@ void Player_CsAction_46(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_End(PlayState* play, Player* this, CsCmdActorCue* cue);
 void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue);
 
+void Player_CsAnim_1(PlayState* play, Player* this, void* arg2);   // void* arg2
+void Player_CsAnim_2(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_3(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_4(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_5(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_6(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_7(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_8(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_9(PlayState* play, Player* this, void* anim);   // PlayerAnimationHeader* anim
+void Player_CsAnim_10(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_11(PlayState* play, Player* this, void* cue);   // CsCmdActorCue* cue
+void Player_CsAnim_12(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_13(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_14(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_15(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_16(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_17(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+void Player_CsAnim_18(PlayState* play, Player* this, void* entry); // AnimSfxEntry* entry
+void Player_CsAnim_19(PlayState* play, Player* this, void* anim);  // PlayerAnimationHeader* anim
+
 // ItemActions
 void func_8082F594(PlayState* play, Player* this);
 void func_8082F5A4(PlayState* play, Player* this);
@@ -311,26 +331,6 @@ void func_8082F8A0(PlayState* play, Player* this);
 void func_8082F5C0(PlayState* play, Player* this);
 void func_8082F7F4(PlayState* play, Player* this);
 void Player_SpawnExplosive(PlayState* play, Player* this);
-
-void Player_CsAnim_1(PlayState* play, Player* this, void* arg2);
-void Player_CsAnim_2(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_3(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_4(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_5(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_6(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_7(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_8(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_9(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_10(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_11(PlayState* play, Player* this, CsCmdActorCue* cue);
-void Player_CsAnim_12(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_13(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_14(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_15(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_16(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_17(PlayState* play, Player* this, PlayerAnimationHeader* anim);
-void Player_CsAnim_18(PlayState* play, Player* this, AnimSfxEntry* entry);
-void Player_CsAnim_19(PlayState* play, Player* this, PlayerAnimationHeader* anim);
 
 typedef struct struct_8085C2A4 {
     /* 0x0 */ PlayerAnimationHeader* unk_0;
@@ -345,13 +345,12 @@ typedef struct BlureColors {
     /* 0xC */ u8 p2EndColor[4];
 } BlureColors; // size = 0x10
 
-// typedef union PlayerCsAnimEnum {
-//     void* ptr; // Do not use, required in the absence of designated initialisors
-//     PlayerAnimationHeader* anim;
-//     CsCmdActorCue* cue;
-//     AnimSfxEntry* entry;
-//     PlayerCsAction func;
-// } PlayerCsAnimEnum;
+typedef union PlayerCsAnimEnum {
+    void* ptr; // Do not use, required in the absence of designated initialisors
+    PlayerAnimationHeader* anim;
+    CsCmdActorCue* cue;
+    AnimSfxEntry* entry;
+} PlayerCsAnimEnum;
 
 typedef void (*PlayerCsAnim)(PlayState*, Player*, void*);
 typedef void (*PlayerCsAction)(PlayState*, Player*, CsCmdActorCue*);
@@ -384,9 +383,11 @@ typedef struct PlayerCsModeEntry {
     /* 0x0 */ s8 type; // PlayerCsType enum
     /* 0x4 */ union {
         void* ptr; // Do not use, required in the absence of designated initialisors
-        PlayerAnimationHeader* anim;
         PlayerCsAction func;
+        void* csAnimArg2; // Can point to any of the below in the union
+        PlayerAnimationHeader* anim;
         AnimSfxEntry* entry;
+        CsCmdActorCue* cue;
     };
 } PlayerCsModeEntry; // size = 0x8
 
@@ -18794,76 +18795,6 @@ void func_80858D48(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     Player_StopHorizontalMovement(this);
 }
 
-void Player_CsAnim_1(PlayState* play, Player* this, void* arg2) {
-    Player_StopHorizontalMovement(this);
-}
-
-void Player_CsAnim_2(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_80858C84(play, this, anim);
-}
-
-void Player_CsAnim_14(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082E784(this);
-    func_8082E5A8(play, this, anim);
-    Player_StopHorizontalMovement(this);
-}
-
-void Player_CsAnim_3(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_80858CC8(play, this, anim);
-}
-
-void Player_CsAnim_4(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_80858D48(play, this, anim);
-}
-
-void Player_CsAnim_5(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082EA60(play, this, anim);
-}
-
-void Player_CsAnim_6(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082EA10(play, this, anim, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
-}
-
-void Player_CsAnim_19(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    Player_AnimationPlayOnceReverse(play, this, anim);
-    func_8082E920(play, this, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
-}
-
-void Player_CsAnim_7(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082EB18(play, this, anim);
-}
-
-void Player_CsAnim_8(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082EAC8(play, this, anim, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
-}
-
-void Player_CsAnim_9(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    Player_AnimationPlayOnce(play, this, anim);
-}
-
-void Player_CsAnim_10(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    Player_AnimationPlayLoop(play, this, anim);
-}
-
-void Player_CsAnim_15(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082DB90(play, this, anim);
-}
-
-void Player_CsAnim_16(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082DB60(play, this, anim);
-}
-
-void Player_CsAnim_11(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    PlayerAnimation_Update(play, &this->skelAnime);
-}
-
-void func_80858FE8(Player* this) {
-    if (this->skelAnime.animation == &gPlayerAnim_lost_horse_wait) {
-        Player_AnimSfx_PlayFloor(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG);
-        Player_PlaySfx(this, NA_SE_VO_LK_DRAGGED_DAMAGE - SFX_FLAG);
-    }
-}
-
 PlayerCsAnim sPlayerCsModeAnimFuncs[] = {
     NULL,             // PLAYER_CSTYPE_NONE
     Player_CsAnim_1,  // PLAYER_CSTYPE_ANIM_1
@@ -18886,6 +18817,76 @@ PlayerCsAnim sPlayerCsModeAnimFuncs[] = {
     Player_CsAnim_18, // PLAYER_CSTYPE_ANIM_18
     Player_CsAnim_19, // PLAYER_CSTYPE_ANIM_19
 };
+
+void Player_CsAnim_1(PlayState* play, Player* this, void* arg2) {
+    Player_StopHorizontalMovement(this);
+}
+
+void Player_CsAnim_2(PlayState* play, Player* this, void* anim) {
+    func_80858C84(play, this, anim);
+}
+
+void Player_CsAnim_14(PlayState* play, Player* this, void* anim) {
+    func_8082E784(this);
+    func_8082E5A8(play, this, anim);
+    Player_StopHorizontalMovement(this);
+}
+
+void Player_CsAnim_3(PlayState* play, Player* this, void* anim) {
+    func_80858CC8(play, this, anim);
+}
+
+void Player_CsAnim_4(PlayState* play, Player* this, void* anim) {
+    func_80858D48(play, this, anim);
+}
+
+void Player_CsAnim_5(PlayState* play, Player* this, void* anim) {
+    func_8082EA60(play, this, anim);
+}
+
+void Player_CsAnim_6(PlayState* play, Player* this, void* anim) {
+    func_8082EA10(play, this, anim, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
+}
+
+void Player_CsAnim_19(PlayState* play, Player* this, void* anim) {
+    Player_AnimationPlayOnceReverse(play, this, anim);
+    func_8082E920(play, this, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
+}
+
+void Player_CsAnim_7(PlayState* play, Player* this, void* anim) {
+    func_8082EB18(play, this, anim);
+}
+
+void Player_CsAnim_8(PlayState* play, Player* this, void* anim) {
+    func_8082EAC8(play, this, anim, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE | ANIM_FLAG_80);
+}
+
+void Player_CsAnim_9(PlayState* play, Player* this, void* anim) {
+    Player_AnimationPlayOnce(play, this, anim);
+}
+
+void Player_CsAnim_10(PlayState* play, Player* this, void* anim) {
+    Player_AnimationPlayLoop(play, this, anim);
+}
+
+void Player_CsAnim_15(PlayState* play, Player* this, void* anim) {
+    func_8082DB90(play, this, anim);
+}
+
+void Player_CsAnim_16(PlayState* play, Player* this, void* anim) {
+    func_8082DB60(play, this, anim);
+}
+
+void Player_CsAnim_11(PlayState* play, Player* this, void* cue) {
+    PlayerAnimation_Update(play, &this->skelAnime);
+}
+
+void func_80858FE8(Player* this) {
+    if (this->skelAnime.animation == &gPlayerAnim_lost_horse_wait) {
+        Player_AnimSfx_PlayFloor(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG);
+        Player_PlaySfx(this, NA_SE_VO_LK_DRAGGED_DAMAGE - SFX_FLAG);
+    }
+}
 
 AnimSfxEntry D_8085D9E0[] = {
     ANIMSFX(ANIMSFX_TYPE_FLOOR_LAND, 34, NA_SE_NONE, CONTINUE),
@@ -18978,7 +18979,7 @@ AnimSfxEntry D_8085DA90[] = {
     ANIMSFX(ANIMSFX_TYPE_GENERAL, 18, NA_SE_PL_SIT_ON_HORSE, STOP),
 };
 
-void Player_CsAnim_12(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
+void Player_CsAnim_12(PlayState* play, Player* this, void* anim) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_80858D48(play, this, anim);
         this->unk_AE8 = 1;
@@ -19001,21 +19002,21 @@ void Player_CsAnim_12(PlayState* play, Player* this, PlayerAnimationHeader* anim
     }
 }
 
-void Player_CsAnim_17(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
+void Player_CsAnim_17(PlayState* play, Player* this, void* anim) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_8082E794(this);
         func_8082DB60(play, this, anim);
     }
 }
 
-void Player_CsAnim_13(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
+void Player_CsAnim_13(PlayState* play, Player* this, void* anim) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
         func_8082EB18(play, this, anim);
         this->unk_AE8 = 1;
     }
 }
 
-void Player_CsAnim_18(PlayState* play, Player* this, AnimSfxEntry* entry) {
+void Player_CsAnim_18(PlayState* play, Player* this, void* entry) {
     PlayerAnimation_Update(play, &this->skelAnime);
     Player_PlayAnimSfx(this, entry);
 }
@@ -19060,218 +19061,6 @@ void func_80859300(PlayState* play, Player* this, UNK_TYPE arg2) {
         func_808475B4(this);
         func_8084748C(this, &this->linearVelocity, 0.0f, this->actor.shape.rot.y);
     }
-}
-
-void Player_CsAction_0(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80859248(this);
-
-    if (func_801242B4(this)) {
-        func_80859300(play, this, 0);
-    } else {
-        PlayerAnimation_Update(play, &this->skelAnime);
-        if (func_801240DC(this) || (this->stateFlags1 & PLAYER_STATE1_800)) {
-            func_8083216C(this, play);
-        } else if ((this->interactRangeActor != NULL) && (this->interactRangeActor->textId == 0xFFFF)) {
-            func_8083D23C(this, play);
-        }
-    }
-}
-
-void Player_CsAction_1(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    if (this->stateFlags1 & PLAYER_STATE1_8000000) {
-        func_8085929C(play, this, 0);
-    } else {
-        PlayerAnimationHeader* anim = D_8085BE84[PLAYER_ANIMGROUP_43][this->modelAnimType];
-
-        if ((this->cueId == PLAYER_CUEID_6) || (this->cueId == PLAYER_CUEID_46)) {
-            Player_AnimationPlayOnce(play, this, anim);
-        } else {
-            func_8082E784(this);
-            PlayerAnimation_Change(play, &this->skelAnime, anim, 2.0f / 3.0f, 0.0f, Animation_GetLastFrame(anim),
-                                   ANIMMODE_LOOP, -4.0f);
-        }
-        Player_StopHorizontalMovement(this);
-    }
-}
-
-void Player_CsAction_2(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    if (func_80847880(play, this)) {
-        return;
-    }
-
-    if ((this->csMode == PLAYER_CSMODE_20) && (play->csCtx.state == CS_STATE_IDLE)) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_END);
-    } else if (this->stateFlags1 & PLAYER_STATE1_8000000) {
-        func_80859300(play, this, 0);
-        this->actor.velocity.y = 0.0f;
-    } else {
-        PlayerAnimation_Update(play, &this->skelAnime);
-        if (func_801240DC(this) || (this->stateFlags1 & PLAYER_STATE1_800)) {
-            func_8083216C(this, play);
-        }
-    }
-}
-
-void Player_CsAction_3(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    if (this->actor.id == ACTOR_EN_TEST3) {
-        func_80838830(this, OBJECT_GI_MSSA);
-        this->stateFlags1 |= PLAYER_STATE1_400;
-    }
-
-    func_8082DB90(play, this,
-                  (this->transformation == PLAYER_FORM_DEKU) ? &gPlayerAnim_pn_getA : &gPlayerAnim_link_demo_get_itemA);
-}
-
-void Player_CsAction_4(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    PlayerAnimation_Update(play, &this->skelAnime);
-    if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
-        func_80151BB4(play, 0x1B);
-        Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
-    }
-}
-
-void Player_CsAction_5(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    f32 linearVelocity;
-    s16 yaw;
-
-    this->stateFlags1 &= ~PLAYER_STATE1_2000000;
-
-    yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_3A0);
-    linearVelocity = this->linearVelocity;
-    this->actor.world.rot.y = yaw;
-    this->actor.shape.rot.y = yaw;
-    this->currentYaw = yaw;
-    if (linearVelocity <= 0.0f) {
-        this->linearVelocity = 0.1f;
-    } else if (linearVelocity > 2.5f) {
-        this->linearVelocity = 2.5f;
-    }
-
-    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5)) {
-        R_PLAY_FILL_SCREEN_ON = 45;
-        R_PLAY_FILL_SCREEN_R = 255;
-        R_PLAY_FILL_SCREEN_G = 255;
-        R_PLAY_FILL_SCREEN_B = 255;
-        R_PLAY_FILL_SCREEN_ALPHA = 0;
-        play_sound(NA_SE_SY_WHITE_OUT_T);
-    }
-}
-
-void Player_CsAction_6(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    f32 sp24;
-
-    if (R_PLAY_FILL_SCREEN_ON > 0) {
-        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
-        if (R_PLAY_FILL_SCREEN_ALPHA > 255) {
-            R_PLAY_FILL_SCREEN_ON = -64;
-            R_PLAY_FILL_SCREEN_ALPHA = 255;
-            gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-            this->actor.update = func_8012301C;
-            this->actor.draw = NULL;
-            this->unk_AE7 = 0;
-        }
-    } else if (R_PLAY_FILL_SCREEN_ON < 0) {
-        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
-        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
-            R_PLAY_FILL_SCREEN_ON = 0;
-            R_PLAY_FILL_SCREEN_ALPHA = 0;
-        }
-    } else {
-        sp24 = 2.5f;
-        func_808411D4(play, this, &sp24, 0xA);
-        this->unk_AE8++;
-        if (this->unk_AE8 >= 0x15) {
-            this->csMode = PLAYER_CSMODE_10;
-        }
-    }
-}
-
-void Player_CsAction_7(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    this->linearVelocity = 2.5f;
-    func_80835BF8(&this->actor.world.pos, this->actor.shape.rot.y, 180.0f, &this->unk_3A0);
-}
-
-void Player_CsAction_8(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    f32 sp1C = 2.5f;
-
-    func_808411D4(play, this, &sp1C, 0xA);
-}
-
-void Player_CsAction_9(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_8083B23C(this, play);
-}
-
-void Player_CsAction_10(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80859248(this);
-    if (this->unk_AE8 != 0) {
-        if (PlayerAnimation_Update(play, &this->skelAnime)) {
-            Player_AnimationPlayLoop(play, this, func_8082EF54(this));
-            this->unk_AE8 = 0;
-        }
-        func_8082FC60(this);
-    } else {
-        func_8083E958(play, this);
-    }
-}
-
-void Player_CsAction_11(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80840F90(play, this, cue, 0.0f, 0, 0);
-}
-
-void Player_CsAction_12(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    this->actor.shape.face = 0xF;
-    func_80840F90(play, this, cue, 0.0f, 0, 0);
-}
-
-void Player_CsAction_13(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80840F90(play, this, cue, 0.0f, 0, 1);
-}
-
-void Player_CsAction_14(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80858CC8(play, this, &gPlayerAnim_link_normal_okarina_start);
-    this->itemAction = PLAYER_IA_OCARINA;
-    Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
-}
-
-void Player_Cutscene_Translate(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    f32 startX = cue->startPos.x;
-    f32 startY = cue->startPos.y;
-    f32 startZ = cue->startPos.z;
-    f32 diffX = cue->endPos.x - startX;
-    f32 diffY = cue->endPos.y - startY;
-    f32 diffZ = cue->endPos.z - startZ;
-    f32 progress = (((f32)(play->csCtx.curFrame - cue->startFrame)) / ((f32)(cue->endFrame - cue->startFrame)));
-
-    this->actor.world.pos.x = (diffX * progress) + startX;
-    this->actor.world.pos.y = (diffY * progress) + startY;
-    this->actor.world.pos.z = (diffZ * progress) + startZ;
-}
-
-void Player_CsAction_15(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    if (cue != NULL) {
-        Player_Cutscene_Translate(play, this, cue);
-    }
-
-    PlayerAnimation_Update(play, &this->skelAnime);
-}
-
-void Player_CsAction_16(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_8082E514(play, this, D_8085BE84[PLAYER_ANIMGROUP_43][this->modelAnimType]);
-    Player_StopHorizontalMovement(this);
-}
-
-void func_80859CE0(PlayState* play, Player* this, s32 arg2) {
-    this->actor.draw = Player_Draw;
-}
-
-void Player_CsAction_17(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    func_80841358(play, this, false);
-    func_8082DB90(play, this, &gPlayerAnim_link_demo_return_to_past);
-}
-
-void Player_CsAction_18(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    PlayerAnimation_Update(play, &this->skelAnime);
 }
 
 PlayerCsModeEntry sPlayerCsModeInitFuncs[PLAYER_CSMODE_MAX] = {
@@ -19559,6 +19348,218 @@ PlayerCsModeEntry sPlayerCsModeUpdateFuncs[PLAYER_CSMODE_MAX] = {
     /* PLAYER_CSMODE_138 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_21 } },
     /* PLAYER_CSMODE_139 */ { PLAYER_CSTYPE_ACTION, { Player_CsAction_21 } },
 };
+
+void Player_CsAction_0(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_80859248(this);
+
+    if (func_801242B4(this)) {
+        func_80859300(play, this, 0);
+    } else {
+        PlayerAnimation_Update(play, &this->skelAnime);
+        if (func_801240DC(this) || (this->stateFlags1 & PLAYER_STATE1_800)) {
+            func_8083216C(this, play);
+        } else if ((this->interactRangeActor != NULL) && (this->interactRangeActor->textId == 0xFFFF)) {
+            func_8083D23C(this, play);
+        }
+    }
+}
+
+void Player_CsAction_1(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    if (this->stateFlags1 & PLAYER_STATE1_8000000) {
+        func_8085929C(play, this, 0);
+    } else {
+        PlayerAnimationHeader* anim = D_8085BE84[PLAYER_ANIMGROUP_43][this->modelAnimType];
+
+        if ((this->cueId == PLAYER_CUEID_6) || (this->cueId == PLAYER_CUEID_46)) {
+            Player_AnimationPlayOnce(play, this, anim);
+        } else {
+            func_8082E784(this);
+            PlayerAnimation_Change(play, &this->skelAnime, anim, 2.0f / 3.0f, 0.0f, Animation_GetLastFrame(anim),
+                                   ANIMMODE_LOOP, -4.0f);
+        }
+        Player_StopHorizontalMovement(this);
+    }
+}
+
+void Player_CsAction_2(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    if (func_80847880(play, this)) {
+        return;
+    }
+
+    if ((this->csMode == PLAYER_CSMODE_20) && (play->csCtx.state == CS_STATE_IDLE)) {
+        func_800B7298(play, NULL, PLAYER_CSMODE_END);
+    } else if (this->stateFlags1 & PLAYER_STATE1_8000000) {
+        func_80859300(play, this, 0);
+        this->actor.velocity.y = 0.0f;
+    } else {
+        PlayerAnimation_Update(play, &this->skelAnime);
+        if (func_801240DC(this) || (this->stateFlags1 & PLAYER_STATE1_800)) {
+            func_8083216C(this, play);
+        }
+    }
+}
+
+void Player_CsAction_3(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    if (this->actor.id == ACTOR_EN_TEST3) {
+        func_80838830(this, OBJECT_GI_MSSA);
+        this->stateFlags1 |= PLAYER_STATE1_400;
+    }
+
+    func_8082DB90(play, this,
+                  (this->transformation == PLAYER_FORM_DEKU) ? &gPlayerAnim_pn_getA : &gPlayerAnim_link_demo_get_itemA);
+}
+
+void Player_CsAction_4(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    PlayerAnimation_Update(play, &this->skelAnime);
+    if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
+        this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
+        func_80151BB4(play, 0x1B);
+        Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
+    }
+}
+
+void Player_CsAction_5(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    f32 linearVelocity;
+    s16 yaw;
+
+    this->stateFlags1 &= ~PLAYER_STATE1_2000000;
+
+    yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_3A0);
+    linearVelocity = this->linearVelocity;
+    this->actor.world.rot.y = yaw;
+    this->actor.shape.rot.y = yaw;
+    this->currentYaw = yaw;
+    if (linearVelocity <= 0.0f) {
+        this->linearVelocity = 0.1f;
+    } else if (linearVelocity > 2.5f) {
+        this->linearVelocity = 2.5f;
+    }
+
+    if ((this->transformation != PLAYER_FORM_HUMAN) && (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5)) {
+        R_PLAY_FILL_SCREEN_ON = 45;
+        R_PLAY_FILL_SCREEN_R = 255;
+        R_PLAY_FILL_SCREEN_G = 255;
+        R_PLAY_FILL_SCREEN_B = 255;
+        R_PLAY_FILL_SCREEN_ALPHA = 0;
+        play_sound(NA_SE_SY_WHITE_OUT_T);
+    }
+}
+
+void Player_CsAction_6(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    f32 sp24;
+
+    if (R_PLAY_FILL_SCREEN_ON > 0) {
+        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+        if (R_PLAY_FILL_SCREEN_ALPHA > 255) {
+            R_PLAY_FILL_SCREEN_ON = -64;
+            R_PLAY_FILL_SCREEN_ALPHA = 255;
+            gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
+            this->actor.update = func_8012301C;
+            this->actor.draw = NULL;
+            this->unk_AE7 = 0;
+        }
+    } else if (R_PLAY_FILL_SCREEN_ON < 0) {
+        R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
+        if (R_PLAY_FILL_SCREEN_ALPHA < 0) {
+            R_PLAY_FILL_SCREEN_ON = 0;
+            R_PLAY_FILL_SCREEN_ALPHA = 0;
+        }
+    } else {
+        sp24 = 2.5f;
+        func_808411D4(play, this, &sp24, 0xA);
+        this->unk_AE8++;
+        if (this->unk_AE8 >= 0x15) {
+            this->csMode = PLAYER_CSMODE_10;
+        }
+    }
+}
+
+void Player_CsAction_7(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    this->linearVelocity = 2.5f;
+    func_80835BF8(&this->actor.world.pos, this->actor.shape.rot.y, 180.0f, &this->unk_3A0);
+}
+
+void Player_CsAction_8(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    f32 sp1C = 2.5f;
+
+    func_808411D4(play, this, &sp1C, 0xA);
+}
+
+void Player_CsAction_9(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_8083B23C(this, play);
+}
+
+void Player_CsAction_10(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_80859248(this);
+    if (this->unk_AE8 != 0) {
+        if (PlayerAnimation_Update(play, &this->skelAnime)) {
+            Player_AnimationPlayLoop(play, this, func_8082EF54(this));
+            this->unk_AE8 = 0;
+        }
+        func_8082FC60(this);
+    } else {
+        func_8083E958(play, this);
+    }
+}
+
+void Player_CsAction_11(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_80840F90(play, this, cue, 0.0f, 0, 0);
+}
+
+void Player_CsAction_12(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    this->actor.shape.face = 0xF;
+    func_80840F90(play, this, cue, 0.0f, 0, 0);
+}
+
+void Player_CsAction_13(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_80840F90(play, this, cue, 0.0f, 0, 1);
+}
+
+void Player_CsAction_14(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_80858CC8(play, this, &gPlayerAnim_link_normal_okarina_start);
+    this->itemAction = PLAYER_IA_OCARINA;
+    Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
+}
+
+void Player_Cutscene_Translate(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    f32 startX = cue->startPos.x;
+    f32 startY = cue->startPos.y;
+    f32 startZ = cue->startPos.z;
+    f32 diffX = cue->endPos.x - startX;
+    f32 diffY = cue->endPos.y - startY;
+    f32 diffZ = cue->endPos.z - startZ;
+    f32 progress = (((f32)(play->csCtx.curFrame - cue->startFrame)) / ((f32)(cue->endFrame - cue->startFrame)));
+
+    this->actor.world.pos.x = (diffX * progress) + startX;
+    this->actor.world.pos.y = (diffY * progress) + startY;
+    this->actor.world.pos.z = (diffZ * progress) + startZ;
+}
+
+void Player_CsAction_15(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    if (cue != NULL) {
+        Player_Cutscene_Translate(play, this, cue);
+    }
+
+    PlayerAnimation_Update(play, &this->skelAnime);
+}
+
+void Player_CsAction_16(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_8082E514(play, this, D_8085BE84[PLAYER_ANIMGROUP_43][this->modelAnimType]);
+    Player_StopHorizontalMovement(this);
+}
+
+void func_80859CE0(PlayState* play, Player* this, s32 arg2) {
+    this->actor.draw = Player_Draw;
+}
+
+void Player_CsAction_17(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    func_80841358(play, this, false);
+    func_8082DB90(play, this, &gPlayerAnim_link_demo_return_to_past);
+}
+
+void Player_CsAction_18(PlayState* play, Player* this, CsCmdActorCue* cue) {
+    PlayerAnimation_Update(play, &this->skelAnime);
+}
 
 PlayerAnimationHeader* D_8085E354[PLAYER_FORM_MAX] = {
     &gPlayerAnim_L_okarina_get, // PLAYER_FORM_FIERCE_DEITY
@@ -19904,7 +19905,7 @@ void Player_Cutscene_8085ABA8(Player* this, CsCmdActorCue* cue) {
 
 void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsModeEntry* csEntry) {
     if (csEntry->type >= PLAYER_CSTYPE_ANIM_1) {
-        sPlayerCsModeAnimFuncs[csEntry->type](play, this, csEntry->anim);
+        sPlayerCsModeAnimFuncs[csEntry->type](play, this, csEntry->csAnimArg2);
     } else if (csEntry->type <= PLAYER_CSTYPE_ACTION) {
         csEntry->func(play, this, cue);
     }
