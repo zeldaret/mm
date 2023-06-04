@@ -901,6 +901,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfx = POLY_OPA_DISP;
 
         Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
