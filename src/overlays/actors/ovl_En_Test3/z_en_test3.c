@@ -677,7 +677,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             func_80A3F5A4(this, play);
         }
         this->player.actor.textId = this->unk_D78->textId;
-        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
     }
     return false;
 }
@@ -1025,7 +1025,7 @@ void func_80A40908(EnTest3* this, PlayState* play) {
         func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         this->unk_D78 = &D_80A41854[6];
         this->player.actor.textId = this->unk_D78->textId;
-        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
     }
 }
 
@@ -1055,7 +1055,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
     play->actorCtx.flags &= ~ACTORCTX_FLAG_7;
     this->player.actor.draw = EnTest3_Draw;
     D_80A41D48 = false;
-    this->player.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+    this->player.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_506) &&
         !((this->player.actor.category == ACTORCAT_PLAYER) &&
           ((play->actorCtx.flags & ACTORCTX_FLAG_5) || (play->actorCtx.flags & ACTORCTX_FLAG_4)))) {

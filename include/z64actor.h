@@ -510,12 +510,12 @@ typedef enum {
 
 // Targetability / ACTOR_FLAG_TARGETABLE?
 #define ACTOR_FLAG_1             (1 << 0)
-// 
+// Unused
 #define ACTOR_FLAG_2             (1 << 1)
-// 
-#define ACTOR_FLAG_4             (1 << 2)
-// 
-#define ACTOR_FLAG_8             (1 << 3)
+// Changes the targeting behaviour for unfriendly actors (sound effects, Player's stance, etc)
+#define ACTOR_FLAG_UNFRIENDLY    (1 << 2)
+// Opposite of the UNFRIENDLY flag. It is not checked in the original game.
+#define ACTOR_FLAG_FRIENDLY      (1 << 3)
 // 
 #define ACTOR_FLAG_10            (1 << 4)
 // 

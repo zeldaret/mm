@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 
-#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1)
 
 #define THIS ((EnAm*)thisx)
 

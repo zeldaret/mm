@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ikn_demo/object_ikn_demo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnOsk*)thisx)
 

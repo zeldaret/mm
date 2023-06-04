@@ -7,7 +7,7 @@
 #include "z_en_baguo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnBaguo*)thisx)
 

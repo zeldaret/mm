@@ -7,7 +7,7 @@
 #include "z_en_ending_hero2.h"
 #include "objects/object_bai/object_bai.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnEndingHero2*)thisx)
 

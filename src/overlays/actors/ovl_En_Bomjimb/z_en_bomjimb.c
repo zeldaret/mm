@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBomjimb*)thisx)
 

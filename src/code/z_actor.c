@@ -660,8 +660,8 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
                 targetCtx->unk48 = 0;
             }
 
-            sfxId =
-                CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
+            sfxId = CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON
+                                                                                       : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
@@ -3363,7 +3363,7 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
 }
 
 void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 actorCategory) {
-    f32 temp_f0_2;
+    f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* targetedActor = player->targetedActor;
     s32 phi_s2;
@@ -3378,7 +3378,8 @@ void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 
             continue;
         }
 
-        if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1)) {
+        // Determine the closest enemy actor to player within a range. Used for playing enemy background music.
+        if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1)) {
             if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
                 actorCtx->targetContext.bgmEnemy = actor;
                 sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
@@ -3389,43 +3390,44 @@ void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 
             continue;
         }
 
-        temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
+        distSq = func_800B82EC(actor, player, D_801ED8DC);
 
-        phi_s2 = (actor->flags & ACTOR_FLAG_1) && (temp_f0_2 < D_801ED8C8);
-        phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (temp_f0_2 < D_801ED8D0);
+        phi_s2 = (actor->flags & ACTOR_FLAG_1) && (distSq < D_801ED8C8);
+        phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
 
         if (!phi_s2 && !phi_s2_2) {
             continue;
         }
 
-        if (Actor_IsInTargetableRange(actor, temp_f0_2) && func_800BB59C(play, actor)) {
-            CollisionPoly* sp80;
-            s32 sp7C;
-            Vec3f sp70;
+        if (Actor_IsInTargetableRange(actor, distSq) && func_800BB59C(play, actor)) {
+            CollisionPoly* poly;
+            s32 bgId;
+            Vec3f posResult;
 
-            if (BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos, &sp70, &sp80, true,
-                                        true, true, true, &sp7C) &&
-                !SurfaceType_IsIgnoredByProjectiles(&play->colCtx, sp80, sp7C)) {
-                continue;
+            if (BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos, &posResult, &poly,
+                                        true, true, true, true, &bgId)) {
+                if (!SurfaceType_IsIgnoredByProjectiles(&play->colCtx, poly, bgId)) {
+                    continue;
+                }
             }
 
             if (actor->targetPriority != 0) {
-                if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {
+                if (phi_s2 && (actor->targetPriority < D_801ED8D4)) {
                     D_801ED8BC = actor;
                     D_801ED8D4 = actor->targetPriority;
                 }
-                if ((phi_s2_2 != 0) && (actor->targetPriority < D_801ED8D8)) {
+                if (phi_s2_2 && (actor->targetPriority < D_801ED8D8)) {
                     D_801ED8C4 = actor;
                     D_801ED8D8 = actor->targetPriority;
                 }
             } else {
-                if (phi_s2 != 0) {
+                if (phi_s2) {
                     D_801ED8B8 = actor;
-                    D_801ED8C8 = temp_f0_2;
+                    D_801ED8C8 = distSq;
                 }
-                if (phi_s2_2 != 0) {
+                if (phi_s2_2) {
                     D_801ED8C0 = actor;
-                    D_801ED8D0 = temp_f0_2;
+                    D_801ED8D0 = distSq;
                 }
             }
         }

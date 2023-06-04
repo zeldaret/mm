@@ -83,7 +83,7 @@ void func_80BD66AC(BgHakaTomb* this, PlayState* play) {
     s16 csId;
 
     if (Flags_GetClear(play, this->dyna.actor.room)) {
-        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
     }
     if (!func_80BD6638(&csId, this->csIdList, ARRAY_COUNT(this->csIdList)) && (csId < 0) &&
         Flags_GetClear(play, this->dyna.actor.room)) {

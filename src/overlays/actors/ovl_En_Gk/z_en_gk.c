@@ -7,7 +7,7 @@
 #include "z_en_gk.h"
 #include "objects/object_gk/object_gk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGk*)thisx)
 

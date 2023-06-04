@@ -9,7 +9,7 @@
 #include "z_en_kujiya.h"
 #include "objects/object_kujiya/object_kujiya.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKujiya*)thisx)
 

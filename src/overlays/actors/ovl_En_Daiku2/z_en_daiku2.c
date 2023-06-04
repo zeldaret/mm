@@ -9,7 +9,7 @@
 #include "objects/object_daiku/object_daiku.h"
 #include "objects/object_bombiwa/object_bombiwa.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDaiku2*)thisx)
 

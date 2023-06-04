@@ -8,7 +8,7 @@
 #include "z_en_shn.h"
 #include "z64snap.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnShn*)thisx)
 

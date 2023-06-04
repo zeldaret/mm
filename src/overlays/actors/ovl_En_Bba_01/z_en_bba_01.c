@@ -15,7 +15,7 @@
 #include "z_en_bba_01.h"
 #include "objects/object_bba/object_bba.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBba01*)thisx)
 

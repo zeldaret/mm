@@ -7,7 +7,7 @@
 #include "z_en_neo_reeba.h"
 #include "objects/object_rb/object_rb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 

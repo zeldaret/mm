@@ -7,7 +7,7 @@
 #include "z_en_ending_hero4.h"
 #include "objects/object_sdn/object_sdn.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnEndingHero4*)thisx)
 

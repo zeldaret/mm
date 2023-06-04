@@ -7,7 +7,7 @@
 #include "z_en_kame.h"
 #include "objects/object_tl/object_tl.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnKame*)thisx)
 

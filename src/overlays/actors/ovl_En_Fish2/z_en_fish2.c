@@ -10,7 +10,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_fb/object_fb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFish2*)thisx)
 

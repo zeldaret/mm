@@ -537,7 +537,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
         this->actor.flags |= ACTOR_FLAG_10;
         if (this->actor.home.rot.y == 1) {
-            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
         }
 
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {

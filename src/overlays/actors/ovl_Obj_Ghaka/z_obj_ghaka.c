@@ -7,7 +7,7 @@
 #include "z_obj_ghaka.h"
 #include "objects/object_ghaka/object_ghaka.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjGhaka*)thisx)
 

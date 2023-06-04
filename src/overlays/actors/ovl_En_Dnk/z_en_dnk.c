@@ -9,7 +9,7 @@
 #include "objects/object_hintnuts/object_hintnuts.h"
 #include "objects/object_dekunuts/object_dekunuts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnk*)thisx)
 

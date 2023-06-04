@@ -6,7 +6,7 @@
 
 #include "z_en_demo_heishi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDemoheishi*)thisx)
 
