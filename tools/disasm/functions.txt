@@ -766,7 +766,7 @@
     0x800B81E0:("Actor_GetFocus",),
     0x800B8214:("Actor_GetWorld",),
     0x800B8248:("Actor_GetWorldPosShapeRot",),
-    0x800B82EC:("func_800B82EC",),
+    0x800B82EC:("Target_800B82EC",),
     0x800B83BC:("Target_IsActorInRange",),
     0x800B83F8:("Target_800B83F8",),
     0x800B84D0:("Actor_ProcessTalkRequest",),

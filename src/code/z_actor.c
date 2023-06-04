@@ -1780,7 +1780,7 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
     return dest;
 }
 
-f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
+f32 Target_800B82EC(Actor* actor, Player* player, s16 angle) {
     f32 temp;
     s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle));
 
@@ -1829,7 +1829,7 @@ s32 Target_800B83F8(Actor* actor, Player* player, s32 flag) {
         s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
         f32 distSq;
 
-        if ((player->targetedActor == NULL) && (yaw >= 0x2AAB)) {
+        if ((player->targetedActor == NULL) && (yaw > (0x10000/6))) {
             distSq = FLT_MAX;
         } else {
             distSq = actor->xyzDistToPlayerSq;
@@ -3398,7 +3398,7 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
             continue;
         }
 
-        distSq = func_800B82EC(actor, player, D_801ED8DC);
+        distSq = Target_800B82EC(actor, player, D_801ED8DC);
 
         phi_s2 = (actor->flags & ACTOR_FLAG_1) && (distSq < D_801ED8C8);
         phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
