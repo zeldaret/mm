@@ -387,11 +387,13 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Push();
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         Matrix_Pop();
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
@@ -468,6 +470,7 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
     s16 firstDone = false;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 10; i++, dustEffect++) {

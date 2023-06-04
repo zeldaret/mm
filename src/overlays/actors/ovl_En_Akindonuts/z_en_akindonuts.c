@@ -232,8 +232,10 @@ s32 func_80BECFBC(EnAkindonuts* this) {
         case 3:
             Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             return GI_RUPEE_HUGE;
+
+        default:
+            return GI_NONE;
     }
-    return GI_NONE;
 }
 
 s32 func_80BED034(EnAkindonuts* this) {
@@ -249,8 +251,10 @@ s32 func_80BED034(EnAkindonuts* this) {
 
         case 3:
             return GI_POTION_BLUE;
+
+        default:
+            return GI_NONE;
     }
-    return GI_NONE;
 }
 
 void func_80BED090(PlayState* play) {

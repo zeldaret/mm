@@ -47,7 +47,7 @@ typedef struct EnGs {
     /* 0x200 */ f32 unk_200;
     /* 0x204 */ s32 unk_204;
     /* 0x208 */ s32 unk_208;
-    /* 0x20C */ s32 unk_20C;
+    /* 0x20C */ s32 getItemId;
     /* 0x210 */ u16 unk_210;
     /* 0x212 */ s16 csIdList[2];
     /* 0x216 */ s16 unk_216;
