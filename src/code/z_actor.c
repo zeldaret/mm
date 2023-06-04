@@ -3363,9 +3363,11 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
 }
 
 void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 actorCategory) {
-    s32 pad;
+    f32 temp_f0_2;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* targetedActor = player->targetedActor;
+    s32 phi_s2;
+    s32 phi_s2_2;
 
     for (; actor != NULL; actor = actor->next) {
         if ((actor->update == NULL) || ((Player*)actor == player)) {
@@ -3383,54 +3385,47 @@ void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 
             }
         }
 
-        if ((actor != targetedActor) || (actor->flags & ACTOR_FLAG_80000)) {
-            f32 temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
-            s32 phi_s2;
+        if ((actor == targetedActor) && !(actor->flags & ACTOR_FLAG_80000)) {
+            continue;
+        }
+
+        temp_f0_2 = func_800B82EC(actor, player, D_801ED8DC);
+
+        phi_s2 = (actor->flags & ACTOR_FLAG_1) && (temp_f0_2 < D_801ED8C8);
+        phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (temp_f0_2 < D_801ED8D0);
+
+        if (!phi_s2 && !phi_s2_2) {
+            continue;
+        }
+
+        if (Actor_IsInTargetableRange(actor, temp_f0_2) && func_800BB59C(play, actor)) {
             CollisionPoly* sp80;
             s32 sp7C;
             Vec3f sp70;
-            s32 phi_s2_2;
 
-            // Original:
-            phi_s2_2 = (actor->flags & ACTOR_FLAG_1) != 0;
-            if (phi_s2_2) {
-                phi_s2_2 = temp_f0_2 < D_801ED8C8;
+            if (BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos, &sp70, &sp80, true,
+                                        true, true, true, &sp7C) &&
+                !SurfaceType_IsIgnoredByProjectiles(&play->colCtx, sp80, sp7C)) {
+                continue;
             }
-            phi_s2 = phi_s2_2;
 
-            phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) != 0;
-            if (phi_s2_2) {
-                phi_s2_2 = temp_f0_2 < D_801ED8D0;
-            }
-            // desired:
-            //phi_s2 = (actor->flags & ACTOR_FLAG_1) && (temp_f0_2 < D_801ED8C8);
-            //phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (temp_f0_2 < D_801ED8D0);
-
-            if ((phi_s2 || phi_s2_2) && Actor_IsInTargetableRange(actor, temp_f0_2)) {
-                if (func_800BB59C(play, actor)) {
-                    if ((!BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos,
-                                                    &sp70, &sp80, true, true, true, true, &sp7C) ||
-                            SurfaceType_IsIgnoredByProjectiles(&play->colCtx, sp80, sp7C))) {
-                        if (actor->targetPriority != 0) {
-                            if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {
-                                D_801ED8BC = actor;
-                                D_801ED8D4 = actor->targetPriority;
-                            }
-                            if ((phi_s2_2 != 0) && (actor->targetPriority < D_801ED8D8)) {
-                                D_801ED8C4 = actor;
-                                D_801ED8D8 = actor->targetPriority;
-                            }
-                        } else {
-                            if (phi_s2 != 0) {
-                                D_801ED8B8 = actor;
-                                D_801ED8C8 = temp_f0_2;
-                            }
-                            if (phi_s2_2 != 0) {
-                                D_801ED8C0 = actor;
-                                D_801ED8D0 = temp_f0_2;
-                            }
-                        }
-                    }
+            if (actor->targetPriority != 0) {
+                if ((phi_s2 != 0) && (actor->targetPriority < D_801ED8D4)) {
+                    D_801ED8BC = actor;
+                    D_801ED8D4 = actor->targetPriority;
+                }
+                if ((phi_s2_2 != 0) && (actor->targetPriority < D_801ED8D8)) {
+                    D_801ED8C4 = actor;
+                    D_801ED8D8 = actor->targetPriority;
+                }
+            } else {
+                if (phi_s2 != 0) {
+                    D_801ED8B8 = actor;
+                    D_801ED8C8 = temp_f0_2;
+                }
+                if (phi_s2_2 != 0) {
+                    D_801ED8C0 = actor;
+                    D_801ED8D0 = temp_f0_2;
                 }
             }
         }
