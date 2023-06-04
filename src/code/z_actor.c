@@ -470,122 +470,122 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
 
 void Target_Draw(TargetContext* targetCtx, PlayState* play) {
     Player* player = GET_PLAYER(play);
+    Actor* actor;
 
-    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 |
-                                 PLAYER_STATE1_400 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
-        Actor* actor = targetCtx->targetedActor;
-
-        OPEN_DISPS(play->state.gfxCtx);
-        if (targetCtx->unk48 != 0) {
-            TargetContextEntry* entry;
-            s16 alpha = 255;
-            f32 var1 = 1.0f;
-            Vec3f projectedPos;
-            s32 spB8;
-            f32 invW;
-            s32 spB0;
-            s32 spAC;
-            f32 var2;
-            s32 i;
-
-            if (targetCtx->unk4B != 0) {
-                spB8 = 1;
-            } else {
-                spB8 = 3;
-            }
-
-            if (actor != NULL) {
-                Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
-                var1 = (500.0f - targetCtx->unk44) / 420.0f;
-            } else {
-                targetCtx->unk48 -= 120;
-                if (targetCtx->unk48 < 0) {
-                    targetCtx->unk48 = 0;
-                }
-                alpha = targetCtx->unk48;
-            }
-
-            Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
-
-            projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
-            projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
-
-            projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
-            projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
-
-            projectedPos.z = projectedPos.z * var1;
-
-            targetCtx->unk4C--;
-            if (targetCtx->unk4C < 0) {
-                targetCtx->unk4C = 2;
-            }
-
-            Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
-
-            if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
-                OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
-
-                for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
-                    entry = &targetCtx->unk50[spAC];
-
-                    if (entry->unkC < 500.0f) {
-                        if (entry->unkC <= 120.0f) {
-                            var2 = 0.15f;
-                        } else {
-                            var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
-                        }
-
-                        Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
-                        Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
-
-                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b,
-                                        (u8)alpha);
-
-                        Matrix_RotateZS((targetCtx->unk4B * 512), MTXMODE_APPLY);
-
-                        for (i = 0; i < 4; i++) {
-                            Matrix_RotateZS(0x4000, MTXMODE_APPLY);
-                            Matrix_Push();
-                            Matrix_Translate(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
-                            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-                            gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
-                            Matrix_Pop();
-                        }
-                    }
-
-                    alpha -= 255 / 3;
-                    if (alpha < 0) {
-                        alpha = 0;
-                    }
-                }
-            }
-        }
-
-        actor = targetCtx->unk_94;
-        if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
-            TatlColor* color = &sTatlColorList[actor->category];
-
-            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_7);
-
-            Matrix_Translate(actor->focus.pos.x,
-                             actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
-                             actor->focus.pos.z, MTXMODE_NEW);
-            Matrix_RotateYS((play->gameplayFrames * 3000), MTXMODE_APPLY);
-            Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f,
-                         MTXMODE_APPLY);
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
-            gSPDisplayList(POLY_XLU_DISP++, gZTargetArrowDL);
-        }
-
-        CLOSE_DISPS(play->state.gfxCtx);
+    if (player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_200 |
+                               PLAYER_STATE1_400 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000)) {
+        return;
     }
+
+    actor = targetCtx->targetedActor;
+
+    OPEN_DISPS(play->state.gfxCtx);
+    if (targetCtx->unk48 != 0) {
+        TargetContextEntry* entry;
+        s16 alpha = 255;
+        f32 var1 = 1.0f;
+        Vec3f projectedPos;
+        s32 spB8;
+        f32 invW;
+        s32 spB0;
+        s32 spAC;
+        f32 var2;
+        s32 i;
+
+        if (targetCtx->unk4B != 0) {
+            spB8 = 1;
+        } else {
+            spB8 = 3;
+        }
+
+        if (actor != NULL) {
+            Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
+            var1 = (500.0f - targetCtx->unk44) / 420.0f;
+        } else {
+            targetCtx->unk48 -= 120;
+            if (targetCtx->unk48 < 0) {
+                targetCtx->unk48 = 0;
+            }
+            alpha = targetCtx->unk48;
+        }
+
+        Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
+
+        projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
+        projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
+
+        projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
+        projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
+
+        projectedPos.z = projectedPos.z * var1;
+
+        targetCtx->unk4C--;
+        if (targetCtx->unk4C < 0) {
+            targetCtx->unk4C = 2;
+        }
+
+        Target_SetPos(targetCtx, targetCtx->unk4C, projectedPos.x, projectedPos.y, projectedPos.z);
+
+        if ((!(player->stateFlags1 & PLAYER_STATE1_40)) || (actor != player->targetedActor)) {
+            OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
+
+            for (spB0 = 0, spAC = targetCtx->unk4C; spB0 < spB8; spB0++, spAC = (spAC + 1) % 3) {
+                entry = &targetCtx->unk50[spAC];
+
+                if (entry->unkC < 500.0f) {
+                    if (entry->unkC <= 120.0f) {
+                        var2 = 0.15f;
+                    } else {
+                        var2 = ((entry->unkC - 120.0f) * 0.001f) + 0.15f;
+                    }
+
+                    Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
+                    Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
+
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)alpha);
+
+                    Matrix_RotateZS((targetCtx->unk4B * 512), MTXMODE_APPLY);
+
+                    for (i = 0; i < 4; i++) {
+                        Matrix_RotateZS(0x4000, MTXMODE_APPLY);
+                        Matrix_Push();
+                        Matrix_Translate(entry->unkC, entry->unkC, 0.0f, MTXMODE_APPLY);
+                        gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+                        gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
+                        Matrix_Pop();
+                    }
+                }
+
+                alpha -= 255 / 3;
+                if (alpha < 0) {
+                    alpha = 0;
+                }
+            }
+        }
+    }
+
+    actor = targetCtx->unk_94;
+    if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
+        TatlColor* color = &sTatlColorList[actor->category];
+
+        POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_7);
+
+        Matrix_Translate(actor->focus.pos.x, actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
+                         actor->focus.pos.z, MTXMODE_NEW);
+        Matrix_RotateYS((play->gameplayFrames * 3000), MTXMODE_APPLY);
+        Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
+        gSPDisplayList(POLY_XLU_DISP++, gZTargetArrowDL);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }
 
 // OoT: func_8002C7BC
-void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, GameState* gameState) {
-    PlayState* play = (PlayState*)gameState;
+void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, PlayState* play) {
+    s32 pad;
     Actor* sp68 = NULL;
     s32 category;
     Vec3f projectedPos;
@@ -2547,7 +2547,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     }
 
     if (!(player->stateFlags1 & PLAYER_STATE1_2)) {
-        Target_Update(&actorCtx->targetContext, player, actor, &play->state);
+        Target_Update(&actorCtx->targetContext, player, actor, play);
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
