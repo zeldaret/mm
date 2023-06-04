@@ -1126,7 +1126,7 @@ typedef struct Player {
     /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 csMode; // PlayerCsMode enum
     /* 0x395 */ u8 prevCsMode; // PlayerCsMode enum
-    /* 0x396 */ u8 cueId;
+    /* 0x396 */ u8 cueId; // PlayerCueId enum
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
     /* 0x398 */ Actor* unk_398; // csActor?
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
