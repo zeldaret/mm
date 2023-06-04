@@ -1781,6 +1781,7 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
 }
 
 f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
+    f32 temp;
     s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle));
 
     if (player->targetedActor != NULL) {
@@ -1788,7 +1789,8 @@ f32 func_800B82EC(Actor* actor, Player* player, s16 angle) {
             return FLT_MAX;
         }
 
-        return actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
+        temp = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
+        return temp;
     }
 
     if (yaw >= 0x2AAB) {
@@ -1806,8 +1808,8 @@ TargetRangeParams gTargetRanges[] = {
     TARGET_RANGE(240, 576),  TARGET_RANGE(280, 280000), TARGET_RANGE(2500, 3750),
 };
 
-s32 func_800B83BC(Actor* actor, f32 arg1) {
-    return arg1 < gTargetRanges[actor->targetMode].rangeSq;
+s32 Actor_IsInTargetableRange(Actor* actor, f32 distSq) {
+    return distSq < gTargetRanges[actor->targetMode].rangeSq;
 }
 
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
@@ -1816,17 +1818,16 @@ s32 func_800B83F8(Actor* actor, Player* player, s32 flag) {
     }
 
     if (!flag) {
-        s16 yaw = BINANG_SUB(actor->yawTowardsPlayer, 0x8000) - player->actor.shape.rot.y;
-        s16 phi_v1 = ABS_ALT(yaw);
-        f32 dist;
+        s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
+        f32 distSq;
 
-        if ((player->targetedActor == NULL) && (phi_v1 >= 0x2AAB)) {
-            dist = FLT_MAX;
+        if ((player->targetedActor == NULL) && (yaw >= 0x2AAB)) {
+            distSq = FLT_MAX;
         } else {
-            dist = actor->xyzDistToPlayerSq;
+            distSq = actor->xyzDistToPlayerSq;
         }
 
-        return !func_800B83BC(actor, gTargetRanges[actor->targetMode].leashScale * dist);
+        return !Actor_IsInTargetableRange(actor, gTargetRanges[actor->targetMode].leashScale * distSq);
     }
 
     return false;
@@ -3396,6 +3397,7 @@ void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 
                 phi_s2_2 = temp_f0_2 < D_801ED8C8;
             }
             phi_s2 = phi_s2_2;
+
             phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) != 0;
             if (phi_s2_2) {
                 phi_s2_2 = temp_f0_2 < D_801ED8D0;
@@ -3404,7 +3406,7 @@ void func_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 
             //phi_s2 = (actor->flags & ACTOR_FLAG_1) && (temp_f0_2 < D_801ED8C8);
             //phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (temp_f0_2 < D_801ED8D0);
 
-            if ((phi_s2 || phi_s2_2) && func_800B83BC(actor, temp_f0_2)) {
+            if ((phi_s2 || phi_s2_2) && Actor_IsInTargetableRange(actor, temp_f0_2)) {
                 if (func_800BB59C(play, actor)) {
                     if ((!BgCheck_CameraLineTest1(&play->colCtx, &player->actor.focus.pos, &actor->focus.pos,
                                                     &sp70, &sp80, true, true, true, true, &sp7C) ||
