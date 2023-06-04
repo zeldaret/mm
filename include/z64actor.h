@@ -367,7 +367,7 @@ typedef struct TargetContext {
     /* 0x40 */ f32 unk40;
     /* 0x44 */ f32 unk44;
     /* 0x48 */ s16 unk48; // alpha
-    /* 0x4A */ u8 unk4A;
+    /* 0x4A */ u8 arrowPointedActorCategory;
     /* 0x4B */ u8 unk4B;
     /* 0x4C */ s8 unk4C;
     /* 0x50 */ TargetContextEntry unk50[3];

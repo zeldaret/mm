@@ -19,14 +19,14 @@
 FaultClient sActorFaultClient; // 2 funcs
 CollisionPoly* D_801ED8B0;     // 1 func
 s32 D_801ED8B4;                // 2 funcs
-Actor* D_801ED8B8;             // 2 funcs
-Actor* D_801ED8BC;             // 2 funcs
+Actor* sTargetableNearestActor;             // 2 funcs
+Actor* sTargetableHighestPriorityActor;             // 2 funcs
 Actor* D_801ED8C0;             // 2 funcs
 Actor* D_801ED8C4;             // 2 funcs
-f32 D_801ED8C8;                // 2 funcs
+f32 sTargetableNearestActorDistanceSq;                // 2 funcs
 f32 sBgmEnemyDistSq;           // 2 funcs
 f32 D_801ED8D0;                // 2 funcs
-s32 D_801ED8D4;                // 2 funcs
+s32 sTargetableHighestPriorityPriority;                // 2 funcs
 s32 D_801ED8D8;                // 2 funcs
 s16 D_801ED8DC;                // 2 funcs
 Mtx sActorHiliteMtx;           // 1 func
@@ -584,7 +584,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 }
 
 // OoT: func_8002C7BC
-void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, PlayState* play) {
+void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActor, PlayState* play) {
     s32 pad;
     Actor* sp68 = NULL;
     s32 category;
@@ -598,11 +598,11 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, PlayS
         targetCtx->unk_94 = sp68;
     }
 
-    if (targetCtx->unk8C != 0) {
+    if (targetCtx->unk8C != NULL) {
         sp68 = targetCtx->unk8C;
         targetCtx->unk8C = NULL;
-    } else if (actor != 0) {
-        sp68 = actor;
+    } else if (targetedActor != NULL) {
+        sp68 = targetedActor;
     }
 
     if (sp68 != NULL) {
@@ -611,9 +611,9 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, PlayS
         category = player->actor.category;
     }
 
-    if ((sp68 != targetCtx->arrowPointedActor) || (category != targetCtx->unk4A)) {
+    if ((sp68 != targetCtx->arrowPointedActor) || (category != targetCtx->arrowPointedActorCategory)) {
         targetCtx->arrowPointedActor = sp68;
-        targetCtx->unk4A = category;
+        targetCtx->arrowPointedActorCategory = category;
         targetCtx->unk40 = 1.0f;
     }
 
@@ -622,16 +622,10 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, PlayS
     }
 
     if (!Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f)) {
-        f32 temp_f0;
-        f32 x;
-        f32 y;
-        f32 z;
-
-        temp_f0 = 0.25f / targetCtx->unk40;
-
-        x = sp68->focus.pos.x - targetCtx->unk0.x;
-        y = (sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.y)) - targetCtx->unk0.y;
-        z = sp68->focus.pos.z - targetCtx->unk0.z;
+        f32 temp_f0 = 0.25f / targetCtx->unk40;
+        f32 x = sp68->focus.pos.x - targetCtx->unk0.x;
+        f32 y = (sp68->focus.pos.y + (sp68->targetArrowOffset * sp68->scale.y)) - targetCtx->unk0.y;
+        f32 z = sp68->focus.pos.z - targetCtx->unk0.z;
 
         targetCtx->unk0.x += x * temp_f0;
         targetCtx->unk0.y += y * temp_f0;
@@ -640,34 +634,34 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* actor, PlayS
         Target_SetColors(targetCtx, sp68, category, play);
     }
 
-    if (actor != NULL && targetCtx->unk4B == 0) {
-        Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
+    if ((targetedActor != NULL) && (targetCtx->unk4B == 0)) {
+        Actor_GetProjectedPos(play, &targetedActor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
-            actor = NULL;
+            targetedActor = NULL;
         }
     }
 
-    if (actor != NULL) {
-        if (actor != targetCtx->targetedActor) {
+    if (targetedActor != NULL) {
+        if (targetedActor != targetCtx->targetedActor) {
             s32 sfxId;
 
-            Target_800B4F78(targetCtx, actor->category, play);
+            Target_800B4F78(targetCtx, targetedActor->category, play);
 
-            targetCtx->targetedActor = actor;
+            targetCtx->targetedActor = targetedActor;
 
-            if (actor->id == ACTOR_EN_BOOM) {
+            if (targetedActor->id == ACTOR_EN_BOOM) {
                 targetCtx->unk48 = 0;
             }
 
-            sfxId = CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON
+            sfxId = CHECK_FLAG_ALL(targetedActor->flags, ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON
                                                                                        : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
-        targetCtx->targetCenterPos.x = actor->world.pos.x;
-        targetCtx->targetCenterPos.y = actor->world.pos.y - (actor->shape.yOffset * actor->scale.y);
-        targetCtx->targetCenterPos.z = actor->world.pos.z;
+        targetCtx->targetCenterPos.x = targetedActor->world.pos.x;
+        targetCtx->targetCenterPos.y = targetedActor->world.pos.y - (targetedActor->shape.yOffset * targetedActor->scale.y);
+        targetCtx->targetCenterPos.z = targetedActor->world.pos.z;
 
         if (targetCtx->unk4B == 0) {
             f32 temp_f0_2;
@@ -1793,7 +1787,7 @@ f32 Target_800B82EC(Actor* actor, Player* player, s16 angle) {
         return temp;
     }
 
-    if (yaw >= 0x2AAB) {
+    if (yaw > (0x10000/6)) {
         return FLT_MAX;
     }
     return actor->xyzDistToPlayerSq;
@@ -3374,7 +3368,7 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* targetedActor = player->targetedActor;
-    s32 phi_s2;
+    s32 isNearestTargetableActor;
     s32 phi_s2_2;
 
     for (; actor != NULL; actor = actor->next) {
@@ -3382,6 +3376,7 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
             continue;
         }
 
+        // Actor must be at least targetable or ACTOR_FLAG_40000000
         if (!(actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1))) {
             continue;
         }
@@ -3394,16 +3389,17 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
             }
         }
 
+        // If this actor is the currently targeted one, then ignore it unless it has the ACTOR_FLAG_80000 flag
         if ((actor == targetedActor) && !(actor->flags & ACTOR_FLAG_80000)) {
             continue;
         }
 
         distSq = Target_800B82EC(actor, player, D_801ED8DC);
 
-        phi_s2 = (actor->flags & ACTOR_FLAG_1) && (distSq < D_801ED8C8);
+        isNearestTargetableActor = (actor->flags & ACTOR_FLAG_1) && (distSq < sTargetableNearestActorDistanceSq);
         phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
 
-        if (!phi_s2 && !phi_s2_2) {
+        if (!isNearestTargetableActor && !phi_s2_2) {
             continue;
         }
 
@@ -3420,18 +3416,18 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
             }
 
             if (actor->targetPriority != 0) {
-                if (phi_s2 && (actor->targetPriority < D_801ED8D4)) {
-                    D_801ED8BC = actor;
-                    D_801ED8D4 = actor->targetPriority;
+                if (isNearestTargetableActor && (actor->targetPriority < sTargetableHighestPriorityPriority)) {
+                    sTargetableHighestPriorityActor = actor;
+                    sTargetableHighestPriorityPriority = actor->targetPriority;
                 }
                 if (phi_s2_2 && (actor->targetPriority < D_801ED8D8)) {
                     D_801ED8C4 = actor;
                     D_801ED8D8 = actor->targetPriority;
                 }
             } else {
-                if (phi_s2) {
-                    D_801ED8B8 = actor;
-                    D_801ED8C8 = distSq;
+                if (isNearestTargetableActor) {
+                    sTargetableNearestActor = actor;
+                    sTargetableNearestActorDistanceSq = distSq;
                 }
                 if (phi_s2_2) {
                     D_801ED8C0 = actor;
@@ -3451,9 +3447,9 @@ void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Acto
     u8* actorCategories;
     s32 i;
 
-    D_801ED8B8 = D_801ED8BC = D_801ED8C0 = D_801ED8C4 = NULL;
-    D_801ED8C8 = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
-    D_801ED8D4 = D_801ED8D8 = INT32_MAX;
+    sTargetableNearestActor = sTargetableHighestPriorityActor = D_801ED8C0 = D_801ED8C4 = NULL;
+    sTargetableNearestActorDistanceSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
+    sTargetableHighestPriorityPriority = D_801ED8D8 = INT32_MAX;
 
     actorCtx->targetContext.bgmEnemy = NULL;
     D_801ED8DC = player->actor.shape.rot.y;
@@ -3465,17 +3461,17 @@ void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** arg2, Acto
         actorCategories++;
     }
 
-    if (D_801ED8B8 == NULL) {
+    if (sTargetableNearestActor == NULL) {
         for (; i < ARRAY_COUNT(D_801AED8C); i++) {
             Target_800BB604(play, actorCtx, player, *actorCategories);
             actorCategories++;
         }
     }
 
-    if (D_801ED8B8 == NULL) {
-        *arg2 = D_801ED8BC;
+    if (sTargetableNearestActor == NULL) {
+        *arg2 = sTargetableHighestPriorityActor;
     } else {
-        *arg2 = D_801ED8B8;
+        *arg2 = sTargetableNearestActor;
     }
 
     if (D_801ED8C0 == NULL) {
