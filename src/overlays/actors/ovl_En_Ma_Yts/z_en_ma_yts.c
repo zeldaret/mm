@@ -272,7 +272,8 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if ((CURRENT_DAY == 2) && (gSaveContext.save.isNight == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
+    } else if ((CURRENT_DAY == 2) && (gSaveContext.save.isNight == 1) &&
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
