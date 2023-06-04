@@ -441,6 +441,9 @@ void EnGe1_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             gSPDisplayList(POLY_OPA_DISP++, sHairstyleDLs[this->hairstyle]);
             Matrix_MultVec3f(&sInitialFocusPos, &this->picto.actor.focus.pos);
             break;
+
+        default:
+            break;
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

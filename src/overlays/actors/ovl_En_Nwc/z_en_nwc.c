@@ -164,7 +164,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if ((player->stateFlags3 & PLAYER_STATE3_20000000) && this->actor.xzDistToPlayer < 100.0f) {
+    if ((player->stateFlags3 & PLAYER_STATE3_20000000) && (this->actor.xzDistToPlayer < 100.0f)) {
         return true;
     }
 
@@ -178,25 +178,33 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
             this->stateTimer = 10;
             this->actionFunc = EnNwc_CheckForBreman;
             break;
+
         case NWC_STATE_TURNING:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_Turn;
-            this->fallingRotY = (s16)(s32)randPlusMinusPoint5Scaled(65536.0f);
+            this->fallingRotY = (s16)(s32)randPlusMinusPoint5Scaled(0x10000);
             break;
+
         case NWC_STATE_HOPPING_FORWARD:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_HopForward;
             break;
+
         case NWC_STATE_FOLLOWING:
             this->actionFunc = EnNwc_Follow;
             this->transformTimer = 0;
             this->randomRot = (s16)(s32)randPlusMinusPoint5Scaled(10000.0f);
             break;
+
         case NWC_STATE_RUNNING:
-            this->actor.world.rot.y = this->actor.home.rot.z * 0x3000 & 0xFFFF; // Fake Match?: & 0xFFFF
+            //! FAKE: & 0xFFFF
+            this->actor.world.rot.y = this->actor.home.rot.z * 0x3000 & 0xFFFF;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->stateTimer = Rand_ZeroFloat(40.0f) + 120.0f;
             this->actionFunc = EnNwc_RunAway;
+            break;
+
+        default:
             break;
     }
 
@@ -289,7 +297,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         Math_SmoothStepToS(&this->upperBodyRotY, targetUpperBodyRot, 2, 0x1B58, 0x3E8);
 
     } else { // NOT grown up
-        if ((this->stateTimer & 3) == 3 && this->stateTimer & 20) {
+        if (((this->stateTimer & 3) == 3) && ((this->stateTimer & 0x14) != 0)) {
             this->actor.velocity.y = 2.0f; // hop up and down
         }
         if ((this->stateTimer & 0x1B) == 24) {
@@ -473,7 +481,7 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
         this->blinkTimer = Rand_S16Offset(0x3C, 0x3C);
     }
 
-    if (this->blinkTimer == 1 || this->blinkTimer == 3) {
+    if ((this->blinkTimer == 1) || (this->blinkTimer == 3)) {
         this->blinkState = true;
     } else {
         this->blinkState = false;
@@ -508,7 +516,7 @@ s32 EnNwc_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
         rot->y += this->upperBodyRotY;
     }
-    if (limbIndex == NIW_LIMB_RIGHT_WING_ROOT || limbIndex == NIW_LIMB_LEFT_WING_ROOT) {
+    if ((limbIndex == NIW_LIMB_RIGHT_WING_ROOT) || (limbIndex == NIW_LIMB_LEFT_WING_ROOT)) {
         rot->y += this->footRotY;
         rot->z += this->footRotZ;
     }

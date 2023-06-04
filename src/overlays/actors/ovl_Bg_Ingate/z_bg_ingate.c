@@ -259,7 +259,7 @@ void func_809542A0(BgIngate* this, PlayState* play) {
 }
 
 void func_80954340(BgIngate* this, PlayState* play) {
-    if (!DECR(this->unk16A)) {
+    if (DECR(this->unk16A) == 0) {
         if (this->timePath != NULL) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
             this->timePath = &play->setupPathList[this->timePath->additionalPathIndex];

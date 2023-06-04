@@ -128,7 +128,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     newDlist = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if (overrideLimbDraw == NULL || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
@@ -1179,7 +1179,7 @@ Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, 
         actor = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actor != NULL && actorId != actor->id) {
+    while ((actor != NULL) && (actorId != actor->id)) {
         actor = actor->next;
     }
 
@@ -1503,10 +1503,10 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
         actorIter = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actorIter != NULL &&
-           (actorId != actorIter->id ||
-            (actorId == actorIter->id &&
-             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(play, actor, actorIter, verifyData)))))) {
+    while ((actorIter != NULL) &&
+           ((actorId != actorIter->id) ||
+            ((actorId == actorIter->id) &&
+             ((verifyActor == NULL) || ((verifyActor != NULL) && !verifyActor(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 

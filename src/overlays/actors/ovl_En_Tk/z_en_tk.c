@@ -1366,6 +1366,7 @@ void EnTk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 gSPDisplayList(POLY_OPA_DISP++, object_tk_DL_00B530);
 
                 CLOSE_DISPS(play->state.gfxCtx);
+
                 break;
         }
     }
