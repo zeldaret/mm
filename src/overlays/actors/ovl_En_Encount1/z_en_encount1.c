@@ -67,7 +67,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     }
     if (this->type == EN_ENCOUNT1_SKULLFISH_2) {
         this->pathIndex = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
-        this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
+        this->path = SubS_GetPathByIndex(play, this->pathIndex, ENENCOUNT1_PATH_INDEX_NONE);
         this->spawnTotalMax = -1;
         this->spawnDistanceMax = -1.0f;
     }
