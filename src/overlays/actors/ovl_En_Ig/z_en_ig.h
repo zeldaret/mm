@@ -9,7 +9,7 @@ typedef void (*EnIgActionFunc)(struct EnIg*, PlayState*);
 typedef s32 (*EnIgUnkFunc)(struct EnIg*, PlayState*);
 typedef void (*EnIgUnkFunc2)(struct EnIg*, PlayState*);
 
-#define ENIG_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENIG_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct EnIg {
     /* 0x000 */ Actor actor;

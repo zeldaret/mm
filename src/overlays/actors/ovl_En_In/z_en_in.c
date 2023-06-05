@@ -274,10 +274,10 @@ void EnIn_DoNothing(EnIn* this, PlayState* play) {
 }
 
 void func_808F3618(EnIn* this, PlayState* play) {
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_9);
     }
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -1517,7 +1517,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH_INDEX(&this->actor), ENIN_PATH_INDEX_NONE);
         this->unk23D = 0;
         if ((type == ENIN_YELLOW_SHIRT) || (type == ENIN_BLUE_SHIRT)) {
             if ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) ||
