@@ -1305,11 +1305,11 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry* entry) {
         if (((sampleBankId1 != 0xFF) && (entry->sampleBankId == sampleBankId1)) ||
             ((sampleBankId2 != 0xFF) && (entry->sampleBankId == sampleBankId2)) || (entry->sampleBankId == 0) ||
             (entry->sampleBankId == 0xFE)) {
-            if (AudioHeap_SearchCaches(FONT_TABLE, CACHE_EITHER, fontId) != NULL) {
-                if (1) {}
-                if (AudioLoad_IsFontLoadComplete(fontId) != 0) {
-                    AudioHeap_UnapplySampleCacheForFont(entry, fontId);
-                }
+            if (AudioHeap_SearchCaches(FONT_TABLE, CACHE_EITHER, fontId) == NULL) {
+                continue;
+            }
+            if (AudioLoad_IsFontLoadComplete(fontId) != 0) {
+                AudioHeap_UnapplySampleCacheForFont(entry, fontId);
             }
         }
     }
