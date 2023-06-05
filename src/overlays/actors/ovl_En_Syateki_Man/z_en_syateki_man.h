@@ -8,7 +8,7 @@ struct EnSyatekiMan;
 
 typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
-#define EN_SYATEKI_MAN_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_SYATEKI_MAN_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef enum {
     /* 0 */ SG_GAME_STATE_NONE,             // None of the states below apply.
@@ -33,6 +33,13 @@ typedef enum {
     /* 1 */ SG_OCTO_HIT_TYPE_RED,
     /* 2 */ SG_OCTO_HIT_TYPE_BLUE
 } ShootingGalleryoctorokHitType;
+
+typedef enum {
+    /* 0 */ SG_PATH_TYPE_CROW,
+    /* 1 */ SG_PATH_TYPE_SCRUB_NORMAL,
+    /* 2 */ SG_PATH_TYPE_WOLFOS,
+    /* 3 */ SG_PATH_TYPE_SCRUB_BONUS
+} ShootingGalleryPathType;
 
 typedef struct EnSyatekiMan {
     /* 0x000 */ Actor actor;

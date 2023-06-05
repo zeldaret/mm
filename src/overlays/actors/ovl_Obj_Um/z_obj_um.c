@@ -304,7 +304,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
         if (bandit1->unk_550 == D_80B7C164[i].unk_00) {
             if (bandit2->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
-                    if (D_80B7C164[i].unk_04 != 3 ||
+                    if ((D_80B7C164[i].unk_04 != 3) ||
                         ((mask = Player_GetMask(play)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
@@ -455,13 +455,13 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
             }
 
             if (this->potsLife[1] != 1) {
-                if ((potIndex == -1) || (potIndex == 0 && Rand_ZeroOne() < 0.3f)) {
+                if ((potIndex == -1) || ((potIndex == 0) && (Rand_ZeroOne() < 0.3f))) {
                     potIndex = 1;
                 }
             }
 
             if (this->potsLife[2] != 1) {
-                if ((potIndex == -1) || (potIndex != -1 && Rand_ZeroOne() < 0.3f)) {
+                if ((potIndex == -1) || ((potIndex != -1) && (Rand_ZeroOne() < 0.3f))) {
                     potIndex = 2;
                 }
             }
@@ -496,8 +496,6 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
     } else {
         phi_v1_5 = Math_Vec3f_Yaw(&bandit1->actor.prevPos, &bandit1->actor.world.pos);
     }
-
-    if (1) {}
 
     phi_v1_5 -= bandit1->actor.shape.rot.y;
     if (phi_v1_5 > 0x190) {
@@ -879,6 +877,9 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
             Actor_ContinueText(play, &this->dyna.actor, 0x33BC);
             phi_v1 = false;
             break;
+
+        default:
+            break;
     }
 
     return phi_v1;
@@ -899,6 +900,9 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
                 msgCtx->msgMode = 0x43;
                 ret = true;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -1095,8 +1099,6 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
     if (this->donkey != NULL) {
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp50);
         Horse_RotateToPoint(&this->donkey->actor, &sp50, 0x190);
-
-        if (1) {}
 
         yawDiff = this->donkey->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
         if (fabsf(yawDiff) < 2730.0f) {
@@ -1336,7 +1338,7 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_GALLOP);
 
-    if (ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
+    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3) && (this->unk_4DC == 0)) {
         this->unk_4DC = 1;
     } else if (this->unk_4DC > 0) {
         if (this->unk_4DC == 1) {
@@ -1471,7 +1473,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
         case 0x33BF:
             this->unk_4D8++;
-            if ((fabsf(this->skelAnime.morphWeight) < 0.008f) && this->unk_4D8 >= 6) {
+            if ((fabsf(this->skelAnime.morphWeight) < 0.008f) && (this->unk_4D8 >= 6)) {
                 this->unk_4CC = 0;
                 this->mouthTexIndex = 0;
             } else {
@@ -1701,7 +1703,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
         }
     }
 
-    if (this->wheelRot / 0x199A != this->unk_420) {
+    if ((this->wheelRot / 0x199A) != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
         if (sUmAnims[0].doesMove) {}
@@ -1768,18 +1770,23 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
         case 1:
             this->eyeTexIndex = 3;
             break;
+
         case 2:
             this->eyeTexIndex = 4;
             break;
+
         case 3:
             this->eyeTexIndex = 5;
             break;
+
         case 4:
             this->eyeTexIndex = 2;
             break;
+
         case 5:
             this->eyeTexIndex = 0;
             break;
+
         default:
             this->unk_4CC = 0;
             this->eyeTexIndex = 0;
@@ -1913,6 +1920,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         sp80.x = 0;
         sp80.z = 0;
         sp88.x = 6800.0f;
+
         OPEN_DISPS(gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->potsLife); i++) {

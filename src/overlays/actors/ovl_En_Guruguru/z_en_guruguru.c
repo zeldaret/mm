@@ -131,7 +131,7 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
+    if (((this->textIdIndex == 0) || (this->textIdIndex == 1)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04)) {
             this->actor.textId = 0x295F;
         } else {
@@ -175,7 +175,7 @@ void func_80BC701C(EnGuruguru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->unk268 != 0) &&
-        (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU)) {
+        ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_DEKU))) {
         this->headZRotTarget = 5000;
     }
 
@@ -324,7 +324,7 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
             return;
         }
-    } else if (this->actor.params == 0 || this->actor.params == 2) {
+    } else if ((this->actor.params == 0) || (this->actor.params == 2)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -352,10 +352,10 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
     this->headXRotTarget = 0;
     if (yaw < 0x2AF8) {
         this->headXRotTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-        if (this->headXRotTarget > 5000) {
-            this->headXRotTarget = 5000;
-        } else if (this->headXRotTarget < -5000) {
-            this->headXRotTarget = -5000;
+        if (this->headXRotTarget > 0x1388) {
+            this->headXRotTarget = 0x1388;
+        } else if (this->headXRotTarget < -0x1388) {
+            this->headXRotTarget = -0x1388;
         }
     }
     Actor_SetScale(&this->actor, 0.01f);

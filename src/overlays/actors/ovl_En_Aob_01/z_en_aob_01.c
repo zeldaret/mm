@@ -134,12 +134,12 @@ void EnAob01_InitializeDogPaths(EnAob01* this, PlayState* play) {
     s32 pathIndex = ENAOB01_GET_STARTING_DOG_PATH_INDEX(&this->actor);
     s16 i = 0;
 
-    if (pathIndex != 0x3F) {
+    if (pathIndex != ENAOB01_PATH_INDEX_NONE) {
         do {
-            this->dogPaths[i] = SubS_GetPathByIndex(play, pathIndex, 0x3F);
-            pathIndex = this->dogPaths[i]->unk1;
+            this->dogPaths[i] = SubS_GetPathByIndex(play, pathIndex, ENAOB01_PATH_INDEX_NONE);
+            pathIndex = this->dogPaths[i]->additionalPathIndex;
             i++;
-        } while (pathIndex != 0xFF);
+        } while (pathIndex != ADDITIONAL_PATH_INDEX_NONE);
     }
 }
 
@@ -153,7 +153,7 @@ void EnAob01_SpawnDogs(EnAob01* this, PlayState* play) {
     EnAob01_InitializeDogPaths(this, play);
 
     for (i = 0; i < RACEDOG_COUNT; i++) {
-        enDgParams = ENDG_PARAMS(this->dogPaths[sDogInfo[i].pathIndex]->unk1, i);
+        enDgParams = ENDG_PARAMS(this->dogPaths[sDogInfo[i].pathIndex]->additionalPathIndex, i);
 
         this->dogs[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, sDogInfo[i].pos.x, sDogInfo[i].pos.y, sDogInfo[i].pos.z, 0,

@@ -191,8 +191,8 @@ void EnGe1_SetupPath(EnGe1* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_WHITE_GET_PATH(&this->picto.actor) != 0x3F) {
-        this->path = &play->setupPathList[GERUDO_WHITE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_WHITE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_WHITE_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[GERUDO_WHITE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             point = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->picto.actor.world.pos, point);
@@ -440,6 +440,9 @@ void EnGe1_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         case GERUDO_WHITE_LIMB_HEAD:
             gSPDisplayList(POLY_OPA_DISP++, sHairstyleDLs[this->hairstyle]);
             Matrix_MultVec3f(&sInitialFocusPos, &this->picto.actor.focus.pos);
+            break;
+
+        default:
             break;
     }
 

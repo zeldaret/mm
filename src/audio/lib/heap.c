@@ -1303,8 +1303,8 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry* entry) {
         sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
         sampleBankId2 = gAudioCtx.soundFontList[fontId].sampleBankId2;
         if (((sampleBankId1 != 0xFF) && (entry->sampleBankId == sampleBankId1)) ||
-            ((sampleBankId2 != 0xFF) && (entry->sampleBankId == sampleBankId2)) || entry->sampleBankId == 0 ||
-            entry->sampleBankId == 0xFE) {
+            ((sampleBankId2 != 0xFF) && (entry->sampleBankId == sampleBankId2)) || (entry->sampleBankId == 0) ||
+            (entry->sampleBankId == 0xFE)) {
             if (AudioHeap_SearchCaches(FONT_TABLE, CACHE_EITHER, fontId) != NULL) {
                 if (1) {}
                 if (AudioLoad_IsFontLoadComplete(fontId) != 0) {
@@ -1369,7 +1369,7 @@ void AudioHeap_DiscardSampleCaches(void) {
         if ((sampleBankId1 == 0xFF) && (sampleBankId2 == 0xFF)) {
             continue;
         }
-        if (AudioHeap_SearchCaches(FONT_TABLE, CACHE_PERMANENT, fontId) == NULL ||
+        if ((AudioHeap_SearchCaches(FONT_TABLE, CACHE_PERMANENT, fontId) == NULL) ||
             !AudioLoad_IsFontLoadComplete(fontId)) {
             continue;
         }
@@ -1393,7 +1393,7 @@ typedef struct {
 } StorageChange; // size = 0x10
 
 void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
-    if (sample != NULL && ((sample->medium == change->newMedium) || (D_801FD120 != 1)) &&
+    if ((sample != NULL) && ((sample->medium == change->newMedium) || (D_801FD120 != 1)) &&
         ((sample->medium == MEDIUM_RAM) || (D_801FD120 != 0))) {
         uintptr_t startAddr = change->oldAddr;
         uintptr_t endAddr = change->oldAddr + change->size;

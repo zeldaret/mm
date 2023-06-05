@@ -8,7 +8,9 @@ struct EnDaiku;
 typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 
 #define ENDAIKU_GET_FF(thisx) ((thisx)->params & 0xFF)
-#define ENDAIKU_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
+#define ENDAIKU_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF)
+
+#define ENDAIKU_PATH_INDEX_NONE 0x3F
 
 typedef enum {
     /* 0 */ ENDAIKU_PARAMS_FF_0,
@@ -23,7 +25,7 @@ typedef struct EnDaiku {
     /* 0x188 */ Vec3s jointTable[17];
     /* 0x1EE */ Vec3s morphTable[17];
     /* 0x254 */ EnDaikuActionFunc actionFunc;
-    /* 0x258 */ Path* unk_258;
+    /* 0x258 */ Path* path;
     /* 0x25C */ s16 unk_25C;
     /* 0x25E */ s16 unk_25E;
     /* 0x260 */ s16 unk_260;
@@ -38,7 +40,7 @@ typedef struct EnDaiku {
     /* 0x280 */ s16 unk_280;
     /* 0x282 */ s16 unk_282;
     /* 0x284 */ f32 unk_284;
-    /* 0x288 */ s16 unk_288;
+    /* 0x288 */ s16 pathIndex;
     /* 0x28A */ s16 unk_28A;
     /* 0x28C */ s16 unk_28C;
     /* 0x28E */ UNK_TYPE1 unk_28E[0xE];

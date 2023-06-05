@@ -183,7 +183,7 @@ void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
-    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH(&this->actor)];
+    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = 1;

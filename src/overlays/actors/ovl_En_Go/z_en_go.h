@@ -11,8 +11,9 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENGO_GET_TYPE(thisx) (((thisx)->params & 0xF) & 0xFF)
 #define ENGO_GET_SUBTYPE(thisx) ((((thisx)->params & 0x70) >> 4) & 0xFF)
+#define ENGO_GET_PATH_INDEX(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
 
-#define ENGO_GET_PATH(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+#define ENGO_PATH_INDEX_NONE 0xFF
 
 #define ENGO_SNOW_EFFECT_COUNT 16
 #define ENGO_OTHER_EFFECT_COUNT 16

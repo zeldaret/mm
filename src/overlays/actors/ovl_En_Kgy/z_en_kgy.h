@@ -31,7 +31,7 @@ typedef struct EnKgy {
     /* 0x2E4 */ s16 unk_2E4;
     /* 0x2E6 */ s16 unk_2E6;
     /* 0x2E8 */ s16 unk_2E8;
-    /* 0x2EA */ s16 unk_2EA;
+    /* 0x2EA */ s16 getItemId;
     /* 0x2EC */ LightInfo lightInfo;
     /* 0x2FC */ LightNode* lightNode;
     /* 0x300 */ s16 unk_300;

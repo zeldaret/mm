@@ -196,7 +196,7 @@ void EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(EnRailgibud* this, Pl
     static s32 currentGibdoIndex = 0;
     s32 nextPoint;
     Vec3f targetPos;
-    Path* path = &play->setupPathList[ENRAILGIBUD_GET_PATH(&this->actor)];
+    Path* path = &play->setupPathList[ENRAILGIBUD_GET_PATH_INDEX(&this->actor)];
 
     this->points = Lib_SegmentedToVirtual(path->points);
     this->currentPoint = currentGibdoIndex;
