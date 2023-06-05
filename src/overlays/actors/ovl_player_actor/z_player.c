@@ -9414,7 +9414,7 @@ void func_8083F27C(PlayState* play, Player* this) {
 }
 
 void func_8083F358(Player* this, s32 arg1, PlayState* play) {
-    PlayerAnimationHeader* var_v0;
+    PlayerAnimationHeader* climbAnim;
     f32 var_fv1;
     s16 var_a1;
 
@@ -9448,18 +9448,18 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     }
 
     if (var_fv1 < 0.0f) {
-        var_v0 = &gPlayerAnim_link_normal_climb_down;
+        climbAnim = &gPlayerAnim_link_normal_climb_down;
         var_fv1 = -var_fv1;
     } else {
-        var_v0 = &gPlayerAnim_link_normal_climb_up;
+        climbAnim = &gPlayerAnim_link_normal_climb_up;
     }
 
     if (arg1 == 0) {
         PlayerAnimation_BlendToJoint(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_1][this->modelAnimType],
-                                     this->unk_B38, var_v0, this->unk_B38, var_fv1, this->blendTableBuffer);
+                                     this->unk_B38, climbAnim, this->unk_B38, var_fv1, this->blendTableBuffer);
     } else {
         PlayerAnimation_BlendToMorph(play, &this->skelAnime, D_8085BE84[PLAYER_ANIMGROUP_1][this->modelAnimType],
-                                     this->unk_B38, var_v0, this->unk_B38, var_fv1, this->blendTableBuffer);
+                                     this->unk_B38, climbAnim, this->unk_B38, var_fv1, this->blendTableBuffer);
     }
 }
 
