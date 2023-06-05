@@ -19,7 +19,7 @@ typedef struct EffLastday {
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
 
-typedef enum EffLastDayParams {
+typedef enum EffLastDayParam {
     /* 0 */ EFFLASTDAY_PARAM_0,
     /* 1 */ EFFLASTDAY_PARAM_1,
     /* 2 */ EFFLASTDAY_PARAM_2,
