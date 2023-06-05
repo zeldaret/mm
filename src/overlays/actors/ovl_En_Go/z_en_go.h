@@ -56,7 +56,7 @@ typedef enum EnGoType {
     /* 5 */ ENGO_ASIDE_STORE,      // Shrine Goron outside store
     /* 6 */ ENGO_ASIDE_ELDERSROOM, // Shrine Goron outside Elder's room
     /* 7 */ ENGO_ASIDE_ELDERSSON,  // Shrine Goron aside the Elder's Son
-    /* 8 */ ENGO_MEDIGORON,        // Medigoron selling Powder Kegs
+    /* 8 */ ENGO_MEDIGORON         // Medigoron selling Powder Kegs
 } EnGoType;
 
 /**
@@ -70,7 +70,7 @@ typedef enum EnGoRacetrackSubtype {
     /* 4 */ ENGO_ATHLETIC_HAMSTRINGSIT,
     /* 5 */ ENGO_ATHLETIC_HAMSTRINGSTAND,
     /* 6 */ ENGO_SPECTATOR_CHEER,
-    /* 7 */ ENGO_SPECTATOR_SHOUTING,
+    /* 7 */ ENGO_SPECTATOR_SHOUTING
 } EnGoRacetrackSubtype;
 
 /**
@@ -78,7 +78,7 @@ typedef enum EnGoRacetrackSubtype {
  */
 typedef enum EnGoGraveyardSubtype {
     /* 0 */ ENGO_GRAVEYARD_GRAVEMAKER,
-    /* 1 */ ENGO_GRAVEYARD_FROZEN,
+    /* 1 */ ENGO_GRAVEYARD_FROZEN
 } EnGoGraveyardSubtype;
 
 typedef struct EnGo {

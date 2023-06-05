@@ -33,7 +33,7 @@ typedef enum {
     /* 14 */ ENIN_ANIM_14,
     /* 15 */ ENIN_ANIM_15,
     /* 16 */ ENIN_ANIM_16,
-    /* 17 */ ENIN_ANIM_17,
+    /* 17 */ ENIN_ANIM_17
 } EnInAnimation;
 
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)

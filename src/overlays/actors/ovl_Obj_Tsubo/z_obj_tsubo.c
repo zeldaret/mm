@@ -63,8 +63,7 @@ typedef struct {
     /* 0x14 */ ObjTsuboUnkFunc breakPot1;
     /* 0x18 */ ObjTsuboUnkFunc breakPot2;
     /* 0x1C */ ObjTsuboUnkFunc breakPot3;
-
-} ObjTsuboData;
+} ObjTsuboData; // size = 0x20
 
 ObjTsuboData sPotTypeData[4] = {
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,

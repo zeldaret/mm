@@ -74,7 +74,7 @@ typedef enum {
     /* 2 */ GUAY_DMGEFF_FIRE,
     /* 3 */ GUAY_DMGEFF_ICE,
     /* 4 */ GUAY_DMGEFF_LIGHT,
-    /* 5 */ GUAY_DMGEFF_ELECTRIC,
+    /* 5 */ GUAY_DMGEFF_ELECTRIC
 } GuayDamageEffect;
 
 static DamageTable sDamageTable = {

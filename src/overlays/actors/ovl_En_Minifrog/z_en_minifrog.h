@@ -19,9 +19,9 @@ typedef enum {
 } MinifrogType;
 
 typedef enum {
-    /* 0x00 */ MINIFROG_STATE_JUMP,
-    /* 0x01 */ MINIFROG_STATE_AIR,
-    /* 0x02 */ MINIFROG_STATE_GROUND
+    /* 0 */ MINIFROG_STATE_JUMP,
+    /* 1 */ MINIFROG_STATE_AIR,
+    /* 2 */ MINIFROG_STATE_GROUND
 } MinifrogJumpState;
 
 typedef struct EnMinifrog {

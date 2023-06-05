@@ -80,7 +80,7 @@ typedef enum AnimSfxType {
     /*  7 */ ANIMSFX_TYPE_FLOOR_JUMP, // does not use sfxId
     /*  8 */ ANIMSFX_TYPE_8,          // FLOOR_WALK_Something2 // does not use sfxId
     /*  9 */ ANIMSFX_TYPE_9,          // Uses NA_SE_PL_WALK_LADDER // does not use sfxId, unused
-    /* 10 */ ANIMSFX_TYPE_SURFACE,
+    /* 10 */ ANIMSFX_TYPE_SURFACE
 } AnimSfxType;
 
 #define ANIMSFX_SHIFT_TYPE(type) ((type) << 11)

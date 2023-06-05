@@ -270,7 +270,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
 typedef struct {
     /* 0x0 */ Color_RGB8 color;
     /* 0x4 */ Gfx* dList;
-} struct_801BFDD0; // size = 0x08
+} struct_801BFDD0; // size = 0x8
 
 struct_801BFDD0 D_801BFDD0[] = {
     { { 180, 200, 255 }, gLinkGoronCurledDL },
@@ -1643,9 +1643,9 @@ TexturePtr sPlayerMouthTextures[PLAYER_MOUTH_MAX] = {
 };
 
 typedef struct PlayerFaceIndices {
-    /* 0x00 */ u8 eyeIndex;
-    /* 0x01 */ u8 mouthIndex;
-} PlayerFaceIndices; // size = 0x02
+    /* 0x0 */ u8 eyeIndex;
+    /* 0x1 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x2
 
 PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0

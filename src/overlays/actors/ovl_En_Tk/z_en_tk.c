@@ -130,9 +130,9 @@ static f32 D_80AEF8F0[] = {
 };
 
 typedef struct {
-    /* 0x00 */ Actor* unk_00;
-    /* 0x04 */ f32 unk_04;
-} EnTkStruct; // size = 0x8?
+    /* 0x0 */ Actor* unk_00;
+    /* 0x4 */ f32 unk_04;
+} EnTkStruct; // size = 0x8
 
 void func_80AEC460(EnTk* this) {
     if (DECR(this->unk_2C4) == 0) {

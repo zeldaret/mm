@@ -10,9 +10,9 @@
 #define EN_COW_FLAG_WONT_GIVE_MILK (1 << 2)
 
 typedef enum {
-    /*  0 */ EN_COW_TYPE_DEFAULT,
-    /*  1 */ EN_COW_TYPE_TAIL,
-    /*  2 */ EN_COW_TYPE_ABDUCTED,
+    /* 0 */ EN_COW_TYPE_DEFAULT,
+    /* 1 */ EN_COW_TYPE_TAIL,
+    /* 2 */ EN_COW_TYPE_ABDUCTED
 } EnCowType;
 
 struct EnCow;

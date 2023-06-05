@@ -13,12 +13,12 @@ typedef void (*EnFzUnkFunc)(struct EnFz*);
 #define ENFZ_GET_4000(thisx) ((thisx)->params & 0x4000)
 #define ENFZ_GET_8000(thisx) ((thisx)->params & 0x8000)
 
-enum {
+typedef enum {
     /* 0 */ ENFZ_F_0,
     /* 1 */ ENFZ_F_1,
     /* 2 */ ENFZ_F_2,
-    /* 3 */ ENFZ_F_3,
-};
+    /* 3 */ ENFZ_F_3
+} EnFzParam;
 
 typedef struct {
     /* 0x00 */ u8 unk_00;

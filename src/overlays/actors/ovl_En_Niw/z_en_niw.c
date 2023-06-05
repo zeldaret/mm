@@ -36,7 +36,7 @@ void EnNiw_SpawnFeather(EnNiw* this, Vec3f* pos, Vec3f* vel, Vec3f* accel, f32 s
 s16 sCuccoStormActive = false;
 
 // why wouldnt they just use actionFunc?
-enum EnNiwState {
+typedef enum EnNiwState {
     /* 0 */ NIW_STATE_IDLE,
     /* 1 */ NIW_STATE_ANGRY1, // 1/2/3 are stages of summoning cucco storm
     /* 2 */ NIW_STATE_ANGRY2,
@@ -45,8 +45,8 @@ enum EnNiwState {
     /* 5 */ NIW_STATE_FALLING,
     /* 6 */ NIW_STATE_SWIMMING,
     /* 7 */ NIW_STATE_RUNNING,
-    /* 8 */ NIW_STATE_HOPPING,
-};
+    /* 8 */ NIW_STATE_HOPPING
+} EnNiwState;
 
 ActorInit En_Niw_InitVars = {
     ACTOR_EN_NIW,

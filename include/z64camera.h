@@ -361,7 +361,7 @@ typedef enum {
     /* 0x12 */ CAM_DATA_18,
     /* 0x13 */ CAM_DATA_19,
     /* 0x14 */ CAM_DATA_20,
-    /* 0x15 */ CAM_DATA_21,
+    /* 0x15 */ CAM_DATA_21
 } CameraDataType;
 
 /*================================

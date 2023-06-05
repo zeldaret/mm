@@ -50,14 +50,14 @@ typedef struct EnElf {
 } EnElf; // size = 0x274
 
 typedef enum {
-    /* 0x00 */ ENELF_TYPE_0,
-    /* 0x01 */ ENELF_TYPE_1,
-    /* 0x02 */ ENELF_TYPE_2,
-    /* 0x03 */ ENELF_TYPE_3,
-    /* 0x04 */ ENELF_TYPE_4,
-    /* 0x05 */ ENELF_TYPE_5,
-    /* 0x06 */ ENELF_TYPE_6,
-    /* 0x07 */ ENELF_TYPE_7
+    /* 0 */ ENELF_TYPE_0,
+    /* 1 */ ENELF_TYPE_1,
+    /* 2 */ ENELF_TYPE_2,
+    /* 3 */ ENELF_TYPE_3,
+    /* 4 */ ENELF_TYPE_4,
+    /* 5 */ ENELF_TYPE_5,
+    /* 6 */ ENELF_TYPE_6,
+    /* 7 */ ENELF_TYPE_7
 } FairyType;
 
 #endif // Z_EN_ELF_H

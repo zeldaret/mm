@@ -80,7 +80,7 @@ typedef enum {
     /* 0x2 */ MINISLIME_DMGEFF_FIRE = 0x2,
     /* 0x3 */ MINISLIME_DMGEFF_ICE,
     /* 0xE */ MINISLIME_DMGEFF_HOOKSHOT = 0xE,
-    /* 0xF */ MINISLIME_DMGEFF_BREAK_ICE,
+    /* 0xF */ MINISLIME_DMGEFF_BREAK_ICE
 } MinislimeDamageEffect;
 
 static DamageTable sDamageTable = {

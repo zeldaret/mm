@@ -31,7 +31,7 @@ typedef enum {
     /* 5 */ SOLDIER_ANIM_5,
     /* 6 */ SOLDIER_ANIM_6,
     /* 7 */ SOLDIER_ANIM_STAND_HAND_ON_CHEST,
-    /* 8 */ SOLDIER_ANIM_MAX,
+    /* 8 */ SOLDIER_ANIM_MAX
 } SoldierAnimation;
 
 ActorInit En_Stop_heishi_InitVars = {
