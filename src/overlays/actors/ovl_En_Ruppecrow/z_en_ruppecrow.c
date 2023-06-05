@@ -153,14 +153,12 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
     if (currentPoint == 0) {
         diffX = points[1].x - points[0].x;
         diffZ = points[1].z - points[0].z;
+    } else if (currentPoint == (pathCount - 1)) {
+        diffX = points[pathCount - 1].x - points[pathCount - 2].x;
+        diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
     } else {
-        if (currentPoint == (pathCount - 1)) {
-            diffX = points[pathCount - 1].x - points[pathCount - 2].x;
-            diffZ = points[pathCount - 1].z - points[pathCount - 2].z;
-        } else {
-            diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
-            diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
-        }
+        diffX = points[currentPoint + 1].x - points[currentPoint - 1].x;
+        diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
     func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
@@ -188,14 +186,12 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
     if (currentPoint == 0) {
         diffX = points[0].x - points[1].x;
         diffZ = points[0].z - points[1].z;
+    } else if (currentPoint == (pathCount - 1)) {
+        diffX = points[pathCount - 2].x - points[pathCount - 1].x;
+        diffZ = points[pathCount - 2].z - points[pathCount - 1].z;
     } else {
-        if (currentPoint == (pathCount - 1)) {
-            diffX = points[pathCount - 2].x - points[pathCount - 1].x;
-            diffZ = points[pathCount - 2].z - points[pathCount - 1].z;
-        } else {
-            diffX = points[currentPoint - 1].x - points[currentPoint + 1].x;
-            diffZ = points[currentPoint - 1].z - points[currentPoint + 1].z;
-        }
+        diffX = points[currentPoint - 1].x - points[currentPoint + 1].x;
+        diffZ = points[currentPoint - 1].z - points[currentPoint + 1].z;
     }
 
     func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
@@ -236,19 +232,23 @@ s32 EnRuppecrow_CanSpawnBlueRupees(PlayState* play) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             return false;
+
         case PLAYER_FORM_GORON:
             return true;
+
         case PLAYER_FORM_ZORA:
             return false;
+
         case PLAYER_FORM_HUMAN:
             if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 return true;
             } else {
                 return false;
             }
-    }
 
-    return false;
+        default:
+            return false;
+    }
 }
 
 void EnRuppecrow_UpdateRupees(EnRuppecrow* this) {
@@ -257,7 +257,7 @@ void EnRuppecrow_UpdateRupees(EnRuppecrow* this) {
 
     for (rupeeIndex = 0; rupeeIndex < ENRUPPECROW_RUPEE_COUNT; rupeeIndex++) {
         rupee = this->rupees[rupeeIndex];
-        if (rupee != NULL && rupee->unk152 == 0) {
+        if ((rupee != NULL) && (rupee->unk152 == 0)) {
             Actor_Kill(&rupee->actor);
         }
     }
@@ -375,16 +375,19 @@ s32 EnRuppecrow_CheckPlayedMatchingSong(PlayState* play) {
                     return true;
                 }
                 break;
+
             case PLAYER_FORM_GORON:
                 if (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY) {
                     return true;
                 }
                 break;
+
             case PLAYER_FORM_ZORA:
                 if (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE) {
                     return true;
                 }
                 break;
+
             case PLAYER_FORM_HUMAN:
                 if (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA) {
                     return true;
@@ -393,6 +396,9 @@ s32 EnRuppecrow_CheckPlayedMatchingSong(PlayState* play) {
                 } else if (play->msgCtx.lastPlayedSong == OCARINA_SONG_NEW_WAVE) {
                     return true;
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -407,6 +413,7 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
         case PLAYER_FORM_DEKU:
             this->speedModifier = 7.0f;
             break;
+
         case PLAYER_FORM_GORON:
             if (player->stateFlags3 & PLAYER_STATE3_1000) { // Goron Link is curled
                 this->speedModifier = 19.0f;
@@ -414,15 +421,20 @@ void EnRuppecrow_UpdateSpeed(EnRuppecrow* this, PlayState* play) {
                 this->speedModifier = 7.0f;
             }
             break;
+
         case PLAYER_FORM_ZORA:
             this->speedModifier = 7.0f;
             break;
+
         case PLAYER_FORM_HUMAN:
             if (player->stateFlags1 & PLAYER_STATE1_800000) {
                 this->speedModifier = 16.0f;
             } else {
                 this->speedModifier = 7.0f;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -640,7 +652,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= ACTOR_FLAG_2000000;
 
-    this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH_INDEX(&this->actor), ENRUPPECROW_PATH_INDEX_NONE);
     if (this->path != NULL) {
         this->actionFunc = EnRuppecrow_HandleSong;
     } else {
@@ -668,7 +680,7 @@ void EnRuppecrow_Update(Actor* thisx, PlayState* play) {
 void EnRuppecrow_Draw(Actor* thisx, PlayState* play) {
     EnRuppecrow* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }

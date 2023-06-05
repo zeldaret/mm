@@ -394,7 +394,7 @@ void EnEgol_DestroyBlocks(EnEgol* this, PlayState* play, Vec3f pos1, Vec3f pos2)
 }
 
 void EnEgol_GetWaypoint(EnEgol* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL) &&
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL) &&
         !SubS_CopyPointFromPath(this->path, this->waypoint, &this->waypointPos)) {
         Actor_Kill(&this->actor);
     }
@@ -426,9 +426,9 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->eyeCollider, &this->actor, &sEyeJntSphInit, this->eyeElements);
     Collider_InitAndSetQuad(play, &this->laserCollider, &this->actor, &sLaserQuadInit);
 
-    this->pathIndex = EYEGORE_GET_PATH(&this->actor);
-    if (this->pathIndex == 0x3F) {
-        this->pathIndex = -1;
+    this->pathIndex = EYEGORE_GET_PATH_INDEX(&this->actor);
+    if (this->pathIndex == EYEGORE_PATH_INDEX_NONE) {
+        this->pathIndex = PATH_INDEX_NONE;
         Actor_Kill(&this->actor);
         return;
     }
@@ -445,7 +445,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
         this->minLaserRange = 200.0f;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, EYEGORE_PATH_INDEX_NONE);
 
     EYEGORE_SET_SPH_DIM(this->eyeCollider.elements[0], 500, 0, 0, 26, 1.0f);
 
@@ -1268,7 +1268,8 @@ void EnEgol_Update(Actor* thisx, PlayState* play) {
             // last argument is DMG_ZORA_BOOMERANG | DMG_HOOKSHOT | DMG_NORMAL_ARROW | DMG_FIRE_ARROW | DMG_ICE_ARROW |
             // DMG_LIGHT_ARROW | DMG_DEKU_BUBBLE
 
-            if ((projectile != NULL) && !((projectile->id == ACTOR_EN_ARROW) && (projectile->params == ENARROW_5))) {
+            if ((projectile != NULL) &&
+                !((projectile->id == ACTOR_EN_ARROW) && (projectile->params == ARROW_TYPE_LIGHT))) {
                 this->eyelidRotTarget = 0xFA0;
                 this->eyeShutTimer = 20;
                 if (this->action == EYEGORE_ACTION_LASER) {
@@ -1451,7 +1452,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->action != EYEGORE_ACTION_DEAD) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gEyegoreEyeLaserTexAnim));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -1476,7 +1477,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
         gSPDisplayList(POLY_OPA_DISP++, gEyegoreLaserDL);
     }
     if (((this->action == EYEGORE_ACTION_LASER) && (this->laserState >= EYEGORE_LASER_FIRE)) || this->chargingLaser) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, gLightOrbMaterial1DL);
         if (!this->chargingLaser) {
             s32 i;
@@ -1599,7 +1600,7 @@ void EnEgol_DrawEffects(EnEgol* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isActive) {
             Matrix_Push();

@@ -901,13 +901,13 @@ void func_808DA89C(EnSw* this, PlayState* play) {
 }
 
 void func_808DAA60(EnSw* this, PlayState* play) {
-    Vec3s* sp44;
+    Vec3s* points;
     s16 temp_v0;
     s16 sp40;
     Vec3f sp34;
     f32 temp_f16;
 
-    sp44 = Lib_SegmentedToVirtual(this->unk_1E4->points);
+    points = Lib_SegmentedToVirtual(this->path->points);
     sp40 = 0;
 
     if (DECR(this->unk_454) == 0) {
@@ -915,13 +915,13 @@ void func_808DAA60(EnSw* this, PlayState* play) {
             temp_f16 = this->skelAnime.endFrame - this->skelAnime.curFrame;
             sp40 = 80.0f * temp_f16;
             if (this->unk_45E == 0) {
-                Math_Vec3s_ToVec3f(&sp34, &sp44[this->unk_4A0]);
+                Math_Vec3s_ToVec3f(&sp34, &points[this->unk_4A0]);
                 func_808D9894(this, &sp34);
                 temp_v0 = Math_Atan2S_XY(sp34.z, sp34.x);
                 if (ABS_ALT(temp_v0) < sp40) {
                     this->skelAnime.curFrame = 0.0f;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STALWALL_DASH);
-                    Math_Vec3s_ToVec3f(&this->unk_374, &sp44[this->unk_4A0]);
+                    Math_Vec3s_ToVec3f(&this->unk_374, &points[this->unk_4A0]);
                     this->actionFunc = func_808DACF4;
                     this->unk_414 = 0.0f;
                     sp40 = ABS_ALT(temp_v0);
@@ -981,7 +981,7 @@ void func_808DACF4(EnSw* this, PlayState* play) {
     if (((s32)this->unk_414 != 0) && ((s32)this->unk_414 < (s32)sp4C)) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_374);
         this->unk_4A0 += this->unk_49C;
-        if ((this->unk_4A0 >= this->unk_1E4->count) || (this->unk_4A0 < 0)) {
+        if ((this->unk_4A0 >= this->path->count) || (this->unk_4A0 < 0)) {
             this->unk_49C = -this->unk_49C;
             this->unk_4A0 += this->unk_49C * 2;
         }
@@ -1154,8 +1154,9 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
             this->collider.info.toucher.damage = 16;
         }
 
-        this->unk_1E4 = SubS_GetDayDependentPath(play, ENSW_GET_FF00(&this->actor), 255, &this->unk_4A0);
-        if (this->unk_1E4 != NULL) {
+        this->path =
+            SubS_GetDayDependentPath(play, ENSW_GET_PATH_INDEX(&this->actor), ENSW_PATH_INDEX_NONE, &this->unk_4A0);
+        if (this->path != NULL) {
             this->unk_4A0 = 1;
         }
 
@@ -1201,7 +1202,7 @@ void EnSw_Init(Actor* thisx, PlayState* play) {
                 }
 
                 func_808D9F78(this, play, 1);
-                if (this->unk_1E4 != NULL) {
+                if (this->path != NULL) {
                     this->unk_49C = 1;
                     func_808D9F08(this);
                     this->actionFunc = func_808DAA60;
@@ -1296,7 +1297,7 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
         if (ENSW_GET_3(&this->actor)) {
             func_800B8050(&this->actor, play, MTXMODE_NEW);
         }
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSw_OverrideLimbDraw, NULL,
                           &this->actor);

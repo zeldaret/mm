@@ -22,7 +22,7 @@ void PreNMI_Draw(PreNMIState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C470(gfxCtx);
+    Gfx_SetupDL36_Opa(gfxCtx);
 
     gDPSetFillColor(POLY_OPA_DISP++, (GPACK_RGBA5551(255, 255, 255, 1) << 16) | GPACK_RGBA5551(255, 255, 255, 1));
     gDPFillRectangle(POLY_OPA_DISP++, 0, this->timer + 100, SCREEN_WIDTH - 1, this->timer + 100);

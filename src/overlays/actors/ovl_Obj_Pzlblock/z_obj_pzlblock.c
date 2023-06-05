@@ -114,20 +114,20 @@ s32 func_809A34E0(ObjPzlblock* this, s32 arg1) {
     }
 
     if (temp_v0 == 4) {
-        return arg1 == 0 || arg1 == 1;
+        return (arg1 == 0) || (arg1 == 1);
     }
 
     if (temp_v0 == 5) {
-        return arg1 == 2 || arg1 == 3;
+        return (arg1 == 2) || (arg1 == 3);
     }
 
     if (temp_v0 == 6) {
         if (this->unk_176 != 0) {
-            return arg1 == 0 || arg1 == 1;
+            return (arg1 == 0) || (arg1 == 1);
         }
 
         if (this->unk_178 != 0) {
-            return arg1 == 2 || arg1 == 3;
+            return (arg1 == 2) || (arg1 == 3);
         }
         return true;
     }
@@ -364,7 +364,7 @@ void func_809A3F0C(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sp28->r, sp28->g, sp28->b, 255);

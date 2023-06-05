@@ -170,7 +170,7 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 }
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
-    if (animIndex >= 0 && animIndex < 3) {
+    if ((animIndex >= 0) && (animIndex < 3)) {
         if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
             if (animIndex > 0) {
                 if (animMode == ANIMMODE_LOOP) {
@@ -198,7 +198,7 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
 }
 
 s32 EnYb_CanTalk(EnYb* this, PlayState* play) {
-    if (this->actor.xzDistToPlayer < 100.0f && Player_IsFacingActor(&this->actor, 0x3000, play) &&
+    if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
         Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
     } else {
@@ -296,6 +296,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
                 this->actionFunc = EnYb_Disappear;
                 SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
+
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
                     Message_CloseTextbox(play);
@@ -311,6 +312,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
                     EnYb_ReceiveMask(this, play);
                 }
                 break;
+
             default:
                 Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Idle;
@@ -353,9 +355,9 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnYb_UpdateAnimation(this, play);
-    if (this->actor.xzDistToPlayer < 180.0f && fabsf(this->actor.playerHeightRel) < 50.0f &&
-        play->msgCtx.ocarinaMode == 3 && play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
-        gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
+        (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+        (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
@@ -377,8 +379,8 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
         if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && this->actor.xzDistToPlayer < 180.0f &&
-               fabsf(this->actor.playerHeightRel) < 50.0f) {
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 180.0f) &&
+               (fabsf(this->actor.playerHeightRel) < 50.0f)) {
         this->playerOcarinaOut |= 1;
         Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
@@ -458,22 +460,20 @@ void EnYb_Draw(Actor* thisx, PlayState* play) {
     if (this->alpha != 0) {
         if (this->alpha < 255) {
             if (this->alpha > 128) {
-                func_8012C2B4(POLY_XLU_DISP++);
+                Gfx_SetupDL71(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 2, 2);
             } else {
-                func_8012C304(POLY_XLU_DISP++);
+                Gfx_SetupDL72(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 1, 2);
             }
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-
-            if (1) {}
 
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, EnYb_PostLimbDrawXlu, &this->actor, POLY_XLU_DISP);
 
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             Scene_SetRenderModeXlu(play, 0, 1);
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                   this->skelAnime.dListCount, NULL, EnYb_PostLimbDrawOpa, &this->actor);

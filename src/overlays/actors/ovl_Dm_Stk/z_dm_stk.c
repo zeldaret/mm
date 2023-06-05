@@ -843,9 +843,10 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         case 594:
             Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
-    }
 
-    if (1) {}
+        default:
+            break;
+    }
 
     if ((play->csCtx.curFrame >= 62) && (play->csCtx.curFrame < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
@@ -1128,8 +1129,8 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 
@@ -1825,8 +1826,8 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 
@@ -2033,10 +2034,10 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         this->alpha = this->alpha;
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->alpha < 255) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Scene_SetRenderModeXlu(play, 1, 2);
 
             gDPPipeSync(POLY_XLU_DISP++);

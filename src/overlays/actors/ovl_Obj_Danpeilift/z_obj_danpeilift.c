@@ -68,7 +68,7 @@ void ObjDanpeilift_Init(Actor* thisx, PlayState* play) {
     if (this->speed < 0.01f) {
         this->actionFunc = ObjDanpeilift_DoNothing;
     } else {
-        path = &play->setupPathList[OBJDANPEILIFT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJDANPEILIFT_GET_PATH_INDEX(thisx)];
         this->curPoint = OBJDANPEILIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;

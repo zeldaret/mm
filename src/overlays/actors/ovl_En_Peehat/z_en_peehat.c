@@ -660,8 +660,9 @@ void func_80898654(EnPeehat* this) {
 
 void func_808986A4(EnPeehat* this, PlayState* play) {
     if (this->unk_2B0 == 5) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0x602, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x602, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;
@@ -900,6 +901,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfx = POLY_OPA_DISP;
 
         Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -925,7 +927,7 @@ void EnPeehat_Draw(Actor* thisx, PlayState* play) {
     Vec3f sp40;
     s32 i;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPeehat_OverrideLimbDraw,
                       (this->actor.params == 0) ? EnPeehat_PostLimbDraw : NULL, &this->actor);

@@ -7,7 +7,7 @@
 #include "z64view.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gDbgCamEnabled = false;
@@ -358,10 +358,10 @@ void Play_Destroy(GameState* thisx) {
 
     if (sBombersNotebookOpen) {
         MsgEvent_SendNullTask();
-        func_80178750();
-        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
+        SysCfb_SetLoResMode();
+        gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
-        gfxCtx->viMode = D_801FBB88;
+        gfxCtx->viMode = gActiveViMode;
         gfxCtx->viConfigFeatures = gViConfigFeatures;
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
@@ -1036,9 +1036,9 @@ void Play_UpdateMain(PlayState* this) {
 
     if (this->sramCtx.status != 0) {
         if (gSaveContext.save.isOwlSave) {
-            func_80147198(&this->sramCtx);
+            Sram_UpdateWriteToFlashOwlSave(&this->sramCtx);
         } else {
-            func_80147068(&this->sramCtx);
+            Sram_UpdateWriteToFlashDefault(&this->sramCtx);
         }
     }
 }
@@ -1242,7 +1242,7 @@ void Play_DrawMain(PlayState* this) {
             goto PostWorldDraw;
         }
 
-        PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+        PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
 
         if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
             MsgEvent_SendNullTask();
@@ -1272,8 +1272,8 @@ void Play_DrawMain(PlayState* this) {
                     if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
-                                        this->view.eye.y, this->view.eye.z);
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.skyboxBlend,
+                                        this->view.eye.x, this->view.eye.y, this->view.eye.z);
                         } else if (!this->skyboxCtx.skyboxShouldDraw) {
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
                                         this->view.eye.z);
@@ -1442,24 +1442,24 @@ void Play_Draw(PlayState* this) {
         GraphicsContext* gfxCtx2 = this->state.gfxCtx;
 
         if (sBombersNotebookOpen) {
-            if (D_801FBBD4 != 1) {
+            if (gSysCfbHiResEnabled != 1) {
                 MsgEvent_SendNullTask();
-                func_80178818();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
+                SysCfb_SetHiResMode();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
-                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viMode = gActiveViMode;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
                 gfxCtx2->xScale = gViConfigXScale;
                 gfxCtx2->yScale = gViConfigYScale;
                 gfxCtx2->updateViMode = true;
             }
         } else {
-            if (D_801FBBD4 != 0) {
+            if (gSysCfbHiResEnabled != 0) {
                 MsgEvent_SendNullTask();
-                func_80178750();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
+                SysCfb_SetLoResMode();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
-                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viMode = gActiveViMode;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
                 gfxCtx2->xScale = gViConfigXScale;
                 gfxCtx2->yScale = gViConfigYScale;
@@ -1508,7 +1508,7 @@ void Play_Main(GameState* thisx) {
 }
 
 s32 Play_InCsMode(PlayState* this) {
-    return (this->csCtx.state != 0) || Player_InCsMode(this);
+    return (this->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(this);
 }
 
 f32 Play_GetFloorSurfaceImpl(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {
@@ -2217,7 +2217,7 @@ void Play_Init(GameState* thisx) {
 
     if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
-        gSaveContext.unk_3DC0 = 0;
+        gSaveContext.nayrusLoveTimer = 0;
         Magic_Reset(this);
         gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
 
@@ -2252,10 +2252,10 @@ void Play_Init(GameState* thisx) {
     R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
 
     PreRender_Init(&this->pauseBgPreRender);
-    PreRender_SetValuesSave(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL, NULL);
-    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL);
+    PreRender_SetValuesSave(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL, NULL);
+    PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL);
 
-    this->unk_18E64 = D_801FBB90;
+    this->unk_18E64 = gWorkBuffer;
     this->pictoPhotoI8 = gPictoPhotoI8;
     this->unk_18E68 = D_80784600;
     this->unk_18E58 = D_80784600;
@@ -2327,8 +2327,8 @@ void Play_Init(GameState* thisx) {
     Camera_InitFocalActorSettings(&this->mainCamera, &player->actor);
     gDbgCamEnabled = false;
 
-    if ((player->actor.params & 0xFF) != 0xFF) {
-        Camera_ChangeActorCsCamIndex(&this->mainCamera, player->actor.params & 0xFF);
+    if (PLAYER_GET_BG_CAM_INDEX(&player->actor) != 0xFF) {
+        Camera_ChangeActorCsCamIndex(&this->mainCamera, PLAYER_GET_BG_CAM_INDEX(&player->actor));
     }
 
     CutsceneManager_StoreCamera(&this->mainCamera);

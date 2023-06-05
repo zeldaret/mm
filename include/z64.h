@@ -69,6 +69,7 @@
 #define Z_THREAD_ID_MAIN     3
 #define Z_THREAD_ID_GRAPH    4
 #define Z_THREAD_ID_SCHED    5
+#define Z_THREAD_ID_FLASHROM 13
 #define Z_THREAD_ID_DMAMGR  18
 #define Z_THREAD_ID_IRQMGR  19
 
@@ -77,17 +78,19 @@
 #define Z_PRIORITY_AUDIOMGR 11
 #define Z_PRIORITY_IDLE     12
 #define Z_PRIORITY_MAIN     12
+#define Z_PRIORITY_FLASHROM 13
 #define Z_PRIORITY_PADMGR   15
 #define Z_PRIORITY_SCHED    16
 #define Z_PRIORITY_DMAMGR   17
 #define Z_PRIORITY_IRQMGR   18
 
 typedef enum {
-    /* 0 */ EQUIP_SLOT_B,
-    /* 1 */ EQUIP_SLOT_C_LEFT,
-    /* 2 */ EQUIP_SLOT_C_DOWN,
-    /* 3 */ EQUIP_SLOT_C_RIGHT,
-    /* 4 */ EQUIP_SLOT_A
+    /* -1 */ EQUIP_SLOT_NONE = -1,
+    /*  0 */ EQUIP_SLOT_B,
+    /*  1 */ EQUIP_SLOT_C_LEFT,
+    /*  2 */ EQUIP_SLOT_C_DOWN,
+    /*  3 */ EQUIP_SLOT_C_RIGHT,
+    /*  4 */ EQUIP_SLOT_A
 } EquipSlot;
 
 typedef struct {
@@ -118,13 +121,13 @@ typedef struct {
 } NmiBuff; // size >= 0x18
 
 typedef struct {
-    /* 0x00 */ int unk0;
-    /* 0x04 */ void* unk4;
-    /* 0x08 */ int unk8;
-    /* 0x0C */ int unkC;
-    /* 0x10 */ int unk10;
-    /* 0x14 */ OSMesgQueue unk14;
-} s80185D40; // size = 0x2C
+    /* 0x00 */ s32 requestType;
+    /* 0x04 */ OSMesg response;
+    /* 0x08 */ void* addr;
+    /* 0x0C */ s32 pageNum;
+    /* 0x10 */ s32 pageCount;
+    /* 0x14 */ OSMesgQueue messageQueue;
+} FlashromRequest; // size = 0x2C
 
 // End of RDRAM without the Expansion Pak installed
 #define NORMAL_RDRAM_END 0x80400000
@@ -200,7 +203,7 @@ typedef struct {
     /* 0x204 */ u16 pageIndex;
     /* 0x206 */ u16 switchPageTimer;
     /* 0x208 */ u16 savePromptState;
-    /* 0x20C */ f32 unk_20C;
+    /* 0x20C */ f32 unk_20C; // set to 936.0f, unused remnant from OoT
     /* 0x210 */ f32 itemPageRoll; // rotation (-z) of the item page into the screen
     /* 0x214 */ f32 mapPageRoll; // rotation (+x) of the map page into the screen
     /* 0x218 */ f32 questPageRoll; // rotation (+z) of the quest page into the screen
@@ -216,7 +219,7 @@ typedef struct {
     /* 0x24C */ s16 cursorYIndex[5];
     /* 0x256 */ s16 unk_256; // Uses DungeonItem enum
     /* 0x258 */ s16 cursorSpecialPos;
-    /* 0x25A */ s16 pageSwitchTimer;
+    /* 0x25A */ s16 pageSwitchInputTimer; // Used to introduce a delay before switching page when arriving on the "scroll left/right" positions while holding stick left/right.
     /* 0x25C */ u16 namedItem;
     /* 0x25E */ u16 cursorItem[5];
     /* 0x268 */ u16 cursorSlot[5];
@@ -227,15 +230,15 @@ typedef struct {
     /* 0x27A */ s16 equipAnimY;
     /* 0x27C */ s16 equipAnimAlpha;
     /* 0x27E */ s16 infoPanelOffsetY;
-    /* 0x280 */ u16 unk_280;
+    /* 0x280 */ u16 nameDisplayTimer;
     /* 0x282 */ u16 nameColorSet;
     /* 0x284 */ s16 cursorColorSet;
-    /* 0x286 */ s16 unk_286;
-    /* 0x288 */ f32 unk_288;
-    /* 0x28C */ f32 unk_28C;
-    /* 0x290 */ f32 unk_290;
-    /* 0x294 */ f32 unk_294;
-    /* 0x298 */ f32 unk_298;
+    /* 0x286 */ s16 cursorSpinPhase;
+    /* 0x288 */ f32 cursorX;
+    /* 0x28C */ f32 cursorY;
+    /* 0x290 */ f32 cursorWidth;
+    /* 0x294 */ f32 cursorHeight;
+    /* 0x298 */ f32 cursorShrinkRate;
     /* 0x29C */ s16 promptChoice; // save/continue choice: 0 = yes; 4 = no
     /* 0x29E */ s16 promptAlpha;
     /* 0x2A0 */ s16 ocarinaSongIndex;
@@ -271,45 +274,45 @@ typedef struct {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 sceneTimeSpeed;
     /* 0x04 */ Vec3f sunPos;
-    /* 0x10 */ u8 unk_10;
-    /* 0x11 */ u8 unk_11;
+    /* 0x10 */ u8 skybox1Index;
+    /* 0x11 */ u8 skybox2Index;
     /* 0x12 */ u8 unk_12;
-    /* 0x13 */ u8 unk_13;
+    /* 0x13 */ u8 skyboxBlend;
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 skyboxDisabled;
     /* 0x16 */ u8 sunMoonDisabled;
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u16 unk_1A;
+    /* 0x17 */ u8 skyboxConfig;
+    /* 0x18 */ u8 changeSkyboxNextConfig;
+    /* 0x19 */ u8 changeSkyboxState;
+    /* 0x1A */ u16 changeSkyboxTimer;
     /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ u8 unk_1F;
-    /* 0x20 */ u8 unk_20;
-    /* 0x21 */ u8 unk_21;
-    /* 0x22 */ u16 unk_22;
-    /* 0x24 */ u16 unk_24;
+    /* 0x1E */ u8 lightMode;
+    /* 0x1F */ u8 lightConfig;
+    /* 0x20 */ u8 changeLightNextConfig;
+    /* 0x21 */ u8 changeLightEnabled;
+    /* 0x22 */ u16 changeLightTimer;
+    /* 0x24 */ u16 changeDuration;
     /* 0x26 */ u8 unk_26;
     /* 0x28 */ LightInfo dirLight1; // sun 1
     /* 0x36 */ LightInfo unk_36; // sun 2
-    /* 0x44 */ s8 unk_44;
-    /* 0x48 */ DmaRequest unk_48;
-    /* 0x68 */ OSMesgQueue unk_68;
-    /* 0x80 */ OSMesg unk_80;
-    /* 0x84 */ f32 unk_84;
-    /* 0x88 */ f32 unk_88;
+    /* 0x44 */ s8 skyboxDmaState;
+    /* 0x48 */ DmaRequest dmaRequest;
+    /* 0x68 */ OSMesgQueue loadQueue;
+    /* 0x80 */ OSMesg loadMsg;
+    /* 0x84 */ f32 glareAlpha;
+    /* 0x88 */ f32 lensFlareAlphaScale;
     /* 0x8C */ EnvLightSettings lightSettings;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
     /* 0xB8 */ u8 numLightSettings;
     /* 0xBC */ LightSettings* lightSettingsList;
-    /* 0xC0 */ u8 unk_C0;
-    /* 0xC1 */ u8 unk_C1;
-    /* 0xC2 */ u8 unk_C2;
+    /* 0xC0 */ u8 lightBlendEnabled;
+    /* 0xC1 */ u8 lightSetting;
+    /* 0xC2 */ u8 prevLightSetting;
     /* 0xC3 */ u8 lightSettingOverride;
     /* 0xC4 */ LightSettings unk_C4;
-    /* 0xDA */ u16 unk_DA;
+    /* 0xDA */ u16 lightBlendRateOverride;
     /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
@@ -470,7 +473,7 @@ typedef struct PlayState {
     /* 0x18770 */ void (*unk_18770)(struct PlayState* play, Player* player);
     /* 0x18774 */ s32 (*startPlayerFishing)(struct PlayState* play);
     /* 0x18778 */ s32 (*grabPlayer)(struct PlayState* play, Player* player);
-    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, s32 mode);
+    /* 0x1877C */ s32 (*startPlayerCutscene)(struct PlayState* play, Player* player, PlayerCsMode csMode);
     /* 0x18780 */ void (*func_18780)(Player* player, struct PlayState* play);
     /* 0x18784 */ s32 (*damagePlayer)(struct PlayState* play, s32 damage);
     /* 0x18788 */ void (*talkWithPlayer)(struct PlayState* play, Actor* actor);
@@ -564,7 +567,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u32 type;
     /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8 color;
+    /* 0x8 */ Color_RGBA8_u32 color;
     /* 0xC */ Color_RGBA8 envColor;
 } struct_801F8010; // size = 0x10
 
@@ -593,6 +596,19 @@ typedef struct {
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
 #define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
 #define FRAM_COMMAND_REGISTER 0x10000          // Located at 0x08010000 on the Cart
+
+#define FLASH_VERSION_MX_PROTO_A 0x00C20000
+#define FLASH_VERSION_MX_A       0x00C20001
+#define FLASH_VERSION_MX_C       0x00C2001E
+#define FLASH_VERSION_MX_B_AND_D 0x00C2001D
+#define FLASH_VERSION_MEI        0x003200F1
+
+#define FLASH_TYPE_MAGIC 0x11118001
+
+#define FLASH_PAGE_SIZE 128
+
+#define FLASHROM_REQUEST_WRITE 1
+#define FLASHROM_REQUEST_READ 2
 
 enum fram_command {
     /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
@@ -627,5 +643,30 @@ enum fram_mode {
     FRAM_MODE_READ,
     FRAM_MODE_STATUS
 };
+
+typedef enum {
+    /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,
+    /* 1 */ VI_MODE_EDIT_STATE_ACTIVE,
+    /* 2 */ VI_MODE_EDIT_STATE_2, // active, more adjustments
+    /* 3 */ VI_MODE_EDIT_STATE_3  // active, more adjustments, print comparison with NTSC LAN1 mode
+} ViModeEditState;
+
+typedef struct {
+    /* 0x00 */ OSViMode customViMode;
+    /* 0x50 */ s32 viHeight;
+    /* 0x54 */ s32 viWidth;
+    /* 0x58 */ s32 rightAdjust;
+    /* 0x5C */ s32 leftAdjust;
+    /* 0x60 */ s32 lowerAdjust;
+    /* 0x64 */ s32 upperAdjust;
+    /* 0x68 */ s32 editState;
+    /* 0x6C */ s32 tvType;
+    /* 0x70 */ u32 loRes;
+    /* 0x74 */ u32 antialiasOff;
+    /* 0x78 */ u32 modeN;
+    /* 0x7C */ u32 fb16Bit;
+    /* 0x80 */ u32 viFeatures;
+    /* 0x84 */ u32 unk_84;
+} ViMode; // size = 0x88
 
 #endif

@@ -671,13 +671,14 @@ void func_80A24B74(ObjIceblock* this, PlayState* play) {
     s32 pad;
     Vec3f sp20;
 
-    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        if (1) {}
-        sp20.x = this->dyna.actor.world.pos.x;
-        sp20.y = this->unk_244;
-        sp20.z = this->dyna.actor.world.pos.z;
-        EffectSsGRipple_Spawn(play, &sp20, 480, 880, 0);
+    if (!(this->dyna.actor.flags & ACTOR_FLAG_40)) {
+        return;
     }
+
+    sp20.x = this->dyna.actor.world.pos.x;
+    sp20.y = this->unk_244;
+    sp20.z = this->dyna.actor.world.pos.z;
+    EffectSsGRipple_Spawn(play, &sp20, 480, 880, 0);
 }
 
 void func_80A24BDC(ObjIceblock* this, PlayState* play, f32 arg2, f32 arg3, s32 arg4) {
@@ -1527,7 +1528,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     sp70.z = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1B4); i++) {

@@ -403,7 +403,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
  * Applies filters to the framebuffer prerender to make it look smoother
  */
 void PreRender_ApplyFilters(PreRender* this) {
-    if (this->cvgSave == NULL || this->fbufSave == NULL) {
+    if ((this->cvgSave == NULL) || (this->fbufSave == NULL)) {
         this->unk_4D = 0;
     } else {
         this->unk_4D = 1;

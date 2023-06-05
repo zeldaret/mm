@@ -511,7 +511,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     } else if (play->sceneId == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
             (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
-            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
+            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != BOMB_SHOP_LADY_PATH_INDEX_NONE)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_Kill(&this->actor);
@@ -550,7 +550,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_SWAY;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_DoNothing;
-        } else if (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F) {
+        } else if (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != BOMB_SHOP_LADY_PATH_INDEX_NONE) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_Walk;
@@ -728,7 +728,7 @@ void EnBaba_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor), BOMB_SHOP_LADY_PATH_INDEX_NONE);
 
     Actor_SetScale(&this->actor, 0.01f);
 
@@ -810,7 +810,7 @@ void EnBaba_Draw(Actor* thisx, PlayState* play) {
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C5B0(play->state.gfxCtx);
+        Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBbaEyeTex));
 
@@ -821,7 +821,7 @@ void EnBaba_Draw(Actor* thisx, PlayState* play) {
         if (this->stateFlags & BOMB_SHOP_LADY_STATE_DRAW_SHADOW) {
             if ((this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) ||
                 (this->animIndex == BOMB_SHOP_LADY_ANIM_LYING_DOWN)) {
-                func_8012C2DC(play->state.gfxCtx);
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
                 pos.x = this->actor.world.pos.x + 20.0f;
                 pos.y = this->actor.world.pos.y;
                 pos.z = this->actor.world.pos.z + 20.0f;

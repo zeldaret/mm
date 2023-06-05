@@ -200,8 +200,8 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
  * @return true if path is set up in reverse
  */
 s32 EnGe2_SetupPath(EnGe2* this, PlayState* play) {
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_PRUPLE_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = Lib_SegmentedToVirtual(path->points);
@@ -228,14 +228,14 @@ void EnGe2_GetNextPath(EnGe2* this, PlayState* play) {
     Path* curPath;
     Path* nextPath;
     Vec3s* points;
-    u8 unk1;
+    u8 nextPathIndex;
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
-        unk1 = curPath->unk1;
-        nextPath = &play->setupPathList[unk1];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_PRUPLE_PATH_INDEX_NONE) {
+        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
+        nextPathIndex = curPath->additionalPathIndex;
+        nextPath = &play->setupPathList[nextPathIndex];
         this->path = nextPath;
         points = Lib_SegmentedToVirtual(nextPath->points);
         this->picto.actor.world.pos.x = points[0].x;
@@ -252,8 +252,8 @@ void EnGe2_SetupBlownAwayPath(EnGe2* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_PRUPLE_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->picto.actor.world.pos, points);
@@ -767,7 +767,7 @@ void EnGe2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
     func_800B8050(&this->picto.actor, play, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

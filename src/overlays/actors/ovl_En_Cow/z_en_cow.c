@@ -5,6 +5,7 @@
  */
 
 #include "z_en_cow.h"
+#include "z64horse.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -130,7 +131,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
             this->animationCycle = 0;
             this->actor.targetMode = 6;
 
-            D_801BDAA4 = 0;
+            gHorsePlayedEponasSong = false;
             func_801A5080(4);
             break;
         case EN_COW_TYPE_TAIL:
@@ -264,13 +265,13 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
 
 void EnCow_Idle(EnCow* this, PlayState* play) {
     if ((play->msgCtx.ocarinaMode == 0) || (play->msgCtx.ocarinaMode == 4)) {
-        if (D_801BDAA4 != 0) {
+        if (gHorsePlayedEponasSong) {
             if (this->flags & EN_COW_FLAG_WONT_GIVE_MILK) {
                 this->flags &= ~EN_COW_FLAG_WONT_GIVE_MILK;
-                D_801BDAA4 = 0;
+                gHorsePlayedEponasSong = false;
             } else if ((this->actor.xzDistToPlayer < 150.0f) &&
                        ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 25000) {
-                D_801BDAA4 = 0;
+                gHorsePlayedEponasSong = false;
                 this->actionFunc = EnCow_Talk;
                 this->actor.flags |= ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, play, 170.0f);
@@ -421,7 +422,7 @@ void EnCow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
 void EnCow_Draw(Actor* thisx, PlayState* play) {
     EnCow* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCow_OverrideLimbDraw, EnCow_PostLimbDraw, &this->actor);
 }
@@ -429,7 +430,7 @@ void EnCow_Draw(Actor* thisx, PlayState* play) {
 void EnCow_DrawTail(Actor* thisx, PlayState* play) {
     EnCow* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }

@@ -276,7 +276,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
     }
 
     if (func_80BCD09C(this->unk_260)) {
-        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH_INDEX(&this->actor), ENSCOPECROW_PATH_INDEX_NONE);
         this->unk_262 = ENSCOPECROW_GET_3E0(&this->actor);
 
         if (this->path != NULL) {
@@ -316,7 +316,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
         this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
         Actor_SetScale(&this->actor, 0.03f);
-        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH_INDEX(&this->actor), ENSCOPECROW_PATH_INDEX_NONE);
         this->unk_262 = ENSCOPECROW_GET_3E0(&this->actor);
 
         if (this->path != NULL) {
@@ -354,7 +354,7 @@ void EnScopecrow_Update(Actor* thisx, PlayState* play) {
 void EnScopecrow_Draw(Actor* thisx, PlayState* play) {
     EnScopecrow* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }

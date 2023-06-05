@@ -151,8 +151,8 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((EnEncount1*)parent)->pathIndex;
-                    this->path = SubS_GetPathByIndex(play, this->unk_1C8, 0x3F);
+                    this->pathIndex = ((EnEncount1*)parent)->pathIndex;
+                    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENPR2_PATH_INDEX_NONE);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
                         this->unk_208 = 20.0f;
@@ -272,7 +272,7 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
 
-    if (this->path->unk2 < this->unk_1D0) {
+    if (this->path->customValue < this->unk_1D0) {
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
     } else {
         Math_ApproachF(&this->actor.speed, 10.0f, 0.3f, 1.0f);
@@ -741,7 +741,7 @@ void EnPr2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_1F4 == 255) {
         gDPPipeSync(POLY_OPA_DISP++);

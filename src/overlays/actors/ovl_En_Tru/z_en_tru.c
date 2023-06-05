@@ -179,7 +179,7 @@ void func_80A85788(EnTruUnkStruct* arg0, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
         f32 alpha;
@@ -239,7 +239,7 @@ void func_80A85BCC(EnTruUnkStruct* arg0, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
         f32 alpha;
@@ -295,7 +295,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 30; i++, arg0++) {
         f32 alpha;
@@ -305,7 +305,7 @@ void func_80A85F84(EnTruUnkStruct* arg0, PlayState* play) {
         }
 
         if (!flag) {
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
             gSPDisplayList(POLY_XLU_DISP++, gKoumeDustMaterialDL);
             flag = true;
         }
@@ -494,7 +494,7 @@ s32 func_80A86B0C(EnTru* this, PlayState* play) {
 s32 func_80A86BAC(EnTru* this, PlayState* play) {
     if (this->unk_34E & 0x400) {
         Matrix_Push();
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -524,7 +524,7 @@ s32 func_80A86BAC(EnTru* this, PlayState* play) {
 
     if (this->unk_34E & 0x800) {
         Matrix_Push();
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -1138,7 +1138,8 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->animIndex = -1;
     EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
-    this->path = SubS_GetDayDependentPath(play, ENTRU_GET_PATH(&this->actor), 255, &this->unk_384);
+    this->path =
+        SubS_GetDayDependentPath(play, ENTRU_GET_PATH_INDEX(&this->actor), ENTRU_PATH_INDEX_NONE, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }
@@ -1265,7 +1266,7 @@ void EnTru_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));

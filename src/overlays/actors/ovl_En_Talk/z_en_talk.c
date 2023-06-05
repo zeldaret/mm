@@ -32,7 +32,7 @@ void EnTalk_Init(Actor* thisx, PlayState* play) {
     EnTalk* this = THIS;
     s8 targetMode = this->actor.home.rot.x - 0x1;
 
-    if (targetMode >= 0 && targetMode < 7) {
+    if ((targetMode >= 0) && (targetMode < 7)) {
         this->actor.targetMode = targetMode;
     }
 
@@ -56,7 +56,7 @@ void func_80BDE090(EnTalk* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.xzDistToPlayer < 40.0f && Player_IsFacingActor(&this->actor, 0x3000, play)) ||
+    if (((this->actor.xzDistToPlayer < 40.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) ||
         this->actor.isTargeted) {
         func_800B8614(&this->actor, play, 120.0f);
     }

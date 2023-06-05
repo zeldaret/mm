@@ -1033,6 +1033,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
         sp54 = 0;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfxOpa = POLY_OPA_DISP;
         gfxXlu = POLY_XLU_DISP;
 
@@ -1077,10 +1078,10 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);
     gfx = POLY_XLU_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_XLU_DISP = &gfx[1];
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gfxArmorType = sIronKnuckleArmorType[this->actor.params];
     gSPSegment(&gfx[1], 0x08, gfxArmorType[0]);
     gSPSegment(&gfx[2], 0x09, gfxArmorType[1]);

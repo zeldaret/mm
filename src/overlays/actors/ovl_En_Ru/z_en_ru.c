@@ -235,7 +235,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, RU_GET_PATH(thisx), 0x3F);
+    this->path = SubS_GetPathByIndex(play, RU_GET_PATH_INDEX(thisx), RU_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = EnRu_DoNothing;
     this->actor.gravity = -4.0f;
@@ -320,7 +320,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
