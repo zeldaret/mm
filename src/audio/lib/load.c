@@ -738,6 +738,7 @@ void* AudioLoad_SyncLoad(s32 tableType, u32 id, s32* didAllocate) {
         romAddr = table->entries[realId].romAddr;
         switch (cachePolicy) {
             case CACHE_LOAD_PERMANENT:
+                //! @bug UB: triggers an UB because this function is missing a return value.
                 ramAddr = AudioHeap_AllocPermanent(tableType, realId, size);
                 if (ramAddr == NULL) {
                     return ramAddr;
@@ -1105,6 +1106,7 @@ void* AudioLoad_AsyncLoadInner(s32 tableType, s32 id, s32 nChunks, s32 retData, 
 
         switch (cachePolicy) {
             case CACHE_LOAD_PERMANENT:
+                //! @bug UB: triggers an UB because this function is missing a return value.
                 ramAddr = AudioHeap_AllocPermanent(tableType, realId, size);
                 if (ramAddr == NULL) {
                     return ramAddr;
