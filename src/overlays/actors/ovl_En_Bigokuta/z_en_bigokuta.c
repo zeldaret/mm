@@ -657,6 +657,7 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actionFunc != EnBigokuta_PlayDeathEffects) || (this->timer != 0)) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gfx = POLY_OPA_DISP;

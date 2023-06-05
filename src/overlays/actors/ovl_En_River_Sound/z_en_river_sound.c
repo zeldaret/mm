@@ -35,7 +35,7 @@ void EnRiverSound_Init(Actor* thisx, PlayState* play) {
     this->playSound = false;
     pathIndex = RS_GET_PATH_INDEX(&this->actor);
     this->actor.params = RS_GET_TYPE(&this->actor);
-    if (pathIndex == 0xFF) {
+    if (pathIndex == RS_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }

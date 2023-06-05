@@ -93,17 +93,17 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
+        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
+        case STRAY_FAIRY_TYPE_BUBBLE:
+        case STRAY_FAIRY_TYPE_CHEST:
+        case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
+            break;
+
         default:
             if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(thisx))) {
                 Actor_Kill(thisx);
                 return;
             }
-            break;
-
-        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
-        case STRAY_FAIRY_TYPE_BUBBLE:
-        case STRAY_FAIRY_TYPE_CHEST:
-        case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             break;
     }
 
@@ -561,7 +561,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, PlayState* play) {
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play) {
     Actor* enemy = EnElforg_GetHoldingEnemy(this, play);
 
-    if (enemy != NULL && enemy->update != NULL) {
+    if ((enemy != NULL) && (enemy->update != NULL)) {
         this->actionFunc = EnElforg_TrappedByEnemy;
         this->enemy = enemy;
     }
@@ -587,7 +587,7 @@ void EnElforg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->timer == 0 && this->secondaryTimer > 0) {
+    if ((this->timer == 0) && (this->secondaryTimer > 0)) {
         this->secondaryTimer--;
     } else {
         this->timer++;

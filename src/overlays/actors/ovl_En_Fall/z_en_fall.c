@@ -890,6 +890,7 @@ void EnFall_FireRing_Draw(Actor* thisx, PlayState* play) {
         if (this->fireRingAlpha > 1.0f) {
             this->fireRingAlpha = 1.0f;
         }
+
         OPEN_DISPS(play->state.gfxCtx);
 
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(gMoonFireRingTexAnim));

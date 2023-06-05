@@ -103,7 +103,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     static s32 sDrawFlowers = true; // This makes it so only one EnSyatekiDekunuts draws all the flowers.
     EnSyatekiDekunuts* this = THIS;
     PlayState* play = play2;
-    s32 unkPathComparison;
+    s32 pathType;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s32 i;
@@ -115,18 +115,18 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) == EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
         Actor_SetScale(&this->actor, 0.01f);
         this->collider.dim = sBonusDekuScrubColliderDimensions[0];
-        unkPathComparison = 3;
+        pathType = SG_PATH_TYPE_SCRUB_BONUS;
     } else {
         Actor_SetScale(&this->actor, 0.02f);
-        unkPathComparison = 1;
+        pathType = SG_PATH_TYPE_SCRUB_NORMAL;
     }
 
-    while (path->unk2 != unkPathComparison) {
-        path = &play->setupPathList[path->unk1];
+    while (path->customValue != pathType) {
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     for (i = 0; i < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     if (sDrawFlowers == true) {

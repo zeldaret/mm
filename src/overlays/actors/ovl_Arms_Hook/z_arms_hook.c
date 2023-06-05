@@ -129,7 +129,7 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((this->actor.parent == NULL) || (!Player_IsHoldingHookshot(player))) {
+    if ((this->actor.parent == NULL) || !Player_IsHoldingHookshot(player)) {
         ArmsHook_DetachHookFromActor(this);
         Actor_Kill(&this->actor);
         return;
@@ -138,7 +138,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
-    if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
+    if ((this->timer != 0) && (this->collider.base.atFlags & AT_HIT) &&
         (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
 
@@ -191,12 +191,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             } else {
                 if (this->actor.child != NULL) {
                     velocity = 30.0f;
+                } else if (grabbed != NULL) {
+                    velocity = 50.0f;
                 } else {
-                    if (grabbed != NULL) {
-                        velocity = 50.0f;
-                    } else {
-                        velocity = 200.0f;
-                    }
+                    velocity = 200.0f;
                 }
                 phi_f16 = bodyDistDiff - velocity;
                 if (bodyDistDiff <= velocity) {
@@ -245,7 +243,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
         if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
                                     &bgId) &&
-            (func_800B90AC(play, &this->actor, poly, bgId, &posResult) == 0 ||
+            (!func_800B90AC(play, &this->actor, poly, bgId, &posResult) ||
              BgCheck_ProjectileLineTest(&play->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
                                         &bgId))) {
             f32 nx = COLPOLY_GET_NORMAL(poly->normal.x);

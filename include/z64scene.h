@@ -469,10 +469,13 @@ typedef struct {
     /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
 } ObjectContext; // size = 0x958
 
+#define PATH_INDEX_NONE -1
+#define ADDITIONAL_PATH_INDEX_NONE (u8)-1
+
 typedef struct {
-    /* 0x0 */ u8 count; // number of points in the path
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ s16 unk2;
+    /* 0x0 */ u8 count; // Number of points in the path
+    /* 0x1 */ u8 additionalPathIndex;
+    /* 0x2 */ s16 customValue; // Path specific to help distinguish different paths
     /* 0x4 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
 

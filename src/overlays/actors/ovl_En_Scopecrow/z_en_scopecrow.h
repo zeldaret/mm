@@ -10,7 +10,9 @@ typedef void (*EnScopecrowActionFunc)(struct EnScopecrow*, PlayState*);
 
 #define ENSCOPECROW_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENSCOPECROW_GET_3E0(thisx) (((thisx)->params & 0x3E0) >> 5)
-#define ENSCOPECROW_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENSCOPECROW_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+
+#define ENSCOPECROW_PATH_INDEX_NONE 0x3F
 
 typedef struct EnScopecrow {
     /* 0x000 */ Actor actor;

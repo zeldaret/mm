@@ -638,9 +638,9 @@ s32 func_8088DCA4(EnElf* this) {
 }
 
 void func_8088DD34(EnElf* this, PlayState* play) {
-    Player* refActor = GET_PLAYER(play);
+    Actor* playerActor = &GET_PLAYER(play)->actor;
     s32 pad;
-    Player* player2 = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     f32 heightDiff;
 
     SkelAnime_Update(&this->skelAnime);
@@ -652,7 +652,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     func_8088CBAC(this, play);
     if (this->fairyFlags & 0x800) {
-        this->unk_224.y = player2->bodyPartsPos[0].y;
+        this->unk_224.y = player->bodyPartsPos[0].y;
     }
 
     func_8088D8D0(this, &this->unk_224);
@@ -672,17 +672,17 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         return;
     }
 
-    heightDiff = this->actor.world.pos.y - refActor->actor.world.pos.y;
+    heightDiff = this->actor.world.pos.y - playerActor->world.pos.y;
 
     if ((this->fairyFlags & 0x1000) && (heightDiff > 0.0f) && (heightDiff < 60.0f) &&
-        !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
+        !func_8088C804(&this->actor.world.pos, &playerActor->world.pos, 10.0f)) {
         Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
-        this->unk_248 = refActor->actor.shape.rot.y;
+        this->unk_248 = playerActor->shape.rot.y;
         this->unk_24C = -0x1000;
         this->unk_224.y = 30.0f;
         this->unk_250 = 0.0f;

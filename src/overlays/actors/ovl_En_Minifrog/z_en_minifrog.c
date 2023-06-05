@@ -608,9 +608,11 @@ void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 

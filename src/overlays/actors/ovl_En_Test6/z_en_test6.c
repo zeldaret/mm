@@ -1194,6 +1194,7 @@ void func_80A9369C(Actor* thisx, PlayState* play2) {
     s32 pad;
 
     if (this) {}
+
     OPEN_DISPS(play->state.gfxCtx);
 
     this->unk_148 = POLY_OPA_DISP;

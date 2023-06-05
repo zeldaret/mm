@@ -615,24 +615,24 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10924(EnGb2* this, PlayState* play) {
-    s32 sp24;
+    s32 getItemId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
-        sp24 = 5;
+        getItemId = GI_RUPEE_PURPLE;
     } else {
-        sp24 = 12;
+        getItemId = GI_HEART_PIECE;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (sp24 == 12) {
+        if (getItemId == GI_HEART_PIECE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
         } else {
             Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 

@@ -111,8 +111,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++) {
                 this->unk_2D8[i] = NULL;
             }
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
                 this->unk_2D4 = 0;
                 func_80B965D0(this, play);
             } else {
@@ -124,8 +124,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 3:
         case 4:
             this->actionFunc = func_80B97B5C;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -134,8 +134,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 5:
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97FD0;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -167,8 +167,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 10:
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -211,8 +211,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 22:
             this->actionFunc = func_80B980FC;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }

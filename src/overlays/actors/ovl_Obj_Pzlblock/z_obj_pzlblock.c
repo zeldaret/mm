@@ -114,20 +114,20 @@ s32 func_809A34E0(ObjPzlblock* this, s32 arg1) {
     }
 
     if (temp_v0 == 4) {
-        return arg1 == 0 || arg1 == 1;
+        return (arg1 == 0) || (arg1 == 1);
     }
 
     if (temp_v0 == 5) {
-        return arg1 == 2 || arg1 == 3;
+        return (arg1 == 2) || (arg1 == 3);
     }
 
     if (temp_v0 == 6) {
         if (this->unk_176 != 0) {
-            return arg1 == 0 || arg1 == 1;
+            return (arg1 == 0) || (arg1 == 1);
         }
 
         if (this->unk_178 != 0) {
-            return arg1 == 2 || arg1 == 3;
+            return (arg1 == 2) || (arg1 == 3);
         }
         return true;
     }
