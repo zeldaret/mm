@@ -1809,7 +1809,8 @@ void EnGo_SetupSpectator(EnGo* this, PlayState* play) {
  */
 void EnGo_SetupGatekeeper(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
-        this->gatekeeperPath = SubS_GetDayDependentPath(play, ENGO_GET_PATH(&this->actor), 0xFF, &this->indexPathPoint);
+        this->gatekeeperPath = SubS_GetDayDependentPath(play, ENGO_GET_PATH_INDEX(&this->actor), ENGO_PATH_INDEX_NONE,
+                                                        &this->indexPathPoint);
         if (this->gatekeeperPath != NULL) {
             this->indexPathPoint = 1;
         }

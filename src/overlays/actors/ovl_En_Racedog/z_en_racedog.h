@@ -5,7 +5,10 @@
 #include "objects/object_dog/object_dog.h"
 
 #define ENRACEDOG_GET_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
-#define ENRACEDOG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+#define ENRACEDOG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)
+
+#define ENRACEDOG_PATH_INDEX_NONE 0x3F
+
 #define ENRACEDOG_PARAMS(index, path) ((index << 5) | (path))
 
 /**

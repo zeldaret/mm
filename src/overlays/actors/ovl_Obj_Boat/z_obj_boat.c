@@ -66,7 +66,7 @@ void ObjBoat_Init(Actor* thisx, PlayState* play) {
     if (thisx->params < 0) {
         this->dyna.actor.update = ObjBoat_UpdateCutscene;
     } else {
-        path = &play->setupPathList[OBJBOAT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJBOAT_GET_PATH_INDEX(thisx)];
         this->maxPointIndex = path->count - 1;
         this->points = Lib_SegmentedToVirtual(path->points);
         this->direction = 1;
@@ -157,10 +157,10 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
         if (this->cueId != cue->id) {
             this->dyna.actor.shape.rot.x = cue->rot.x;
             if (cue->id != 1) {
-                Path* path = &play->setupPathList[OBJBOAT_GET_PATH(&this->dyna.actor)];
+                Path* path = &play->setupPathList[OBJBOAT_GET_PATH_INDEX(&this->dyna.actor)];
 
                 if (cue->id == 3) {
-                    path = &play->setupPathList[path->unk1];
+                    path = &play->setupPathList[path->additionalPathIndex];
                 }
 
                 this->maxPointIndex = path->count;

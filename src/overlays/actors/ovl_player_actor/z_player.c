@@ -5734,7 +5734,7 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
             gSaveContext.respawnFlag = -2;
         }
 
-        gSaveContext.unk_3DBB = 1;
+        gSaveContext.retainWeatherMode = 1;
         Scene_SetExitFade(play);
     }
 
@@ -16445,7 +16445,7 @@ void func_8085269C(Player* this, PlayState* play) {
                 (play->msgCtx.ocarinaMode == 0x18) || (play->msgCtx.ocarinaMode == 0x19)) {
                 if (play->msgCtx.ocarinaMode == 0x16) {
                     if (!func_8082DA90(play)) {
-                        if (gSaveContext.save.saveInfo.playerData.deaths == 1) {
+                        if (gSaveContext.save.saveInfo.playerData.threeDayResetCount == 1) {
                             play->nextEntrance = ENTRANCE(CUTSCENE, 1);
                         } else {
                             play->nextEntrance = ENTRANCE(CUTSCENE, 0);
