@@ -1610,7 +1610,7 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
-        this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_PATH_INDEX(&this->actor), ENAKINDONUTS_PATH_INDEX_NONE);
         if (this->path == NULL) {
             Actor_Kill(&this->actor);
             return;

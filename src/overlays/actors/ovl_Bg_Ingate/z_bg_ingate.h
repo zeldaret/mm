@@ -7,7 +7,7 @@ struct BgIngate;
 
 typedef void (*BgIngateActionFunc)(struct BgIngate*, PlayState*);
 
-#define BGINGATE_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define BGINGATE_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct BgIngate {
     /* 0x000 */ DynaPolyActor dyna;

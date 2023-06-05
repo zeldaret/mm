@@ -503,12 +503,12 @@ s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp1E = SCHEDULE_TIME_NOW;
-    u8 params = ENTK_GET_F800(&this->actor);
+    u8 pathIndex = ENTK_GET_PATH_INDEX(&this->actor);
     u16 phi_a1;
     s32 index = scheduleOutput->result - 1;
     u16 tmp;
 
-    this->timePath = SubS_GetAdditionalPath(play, params, D_80AEF8E8[index + 1]);
+    this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AEF8E8[index + 1]);
     if (this->timePath == NULL) {
         return false;
     }

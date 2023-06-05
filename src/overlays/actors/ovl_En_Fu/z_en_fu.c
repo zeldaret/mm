@@ -171,7 +171,7 @@ void func_809619D0(EnFu* this, PlayState* play) {
     }
 
     for (i = 0; i < this->unk_542; i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     this->unk_520 = path->count;
