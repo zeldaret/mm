@@ -965,8 +965,8 @@ typedef enum PlayerUnkAA5 {
     /* 5 */ PLAYER_UNKAA5_5,
 } PlayerUnkAA5;
 
-typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
-typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
+typedef void (*PlayerMainActionFunc)(struct Player* this, struct PlayState* play);
+typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
 typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
 
 
@@ -1056,7 +1056,7 @@ typedef struct Player {
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
-    /* 0x748 */ PlayerActionFunc actionFunc;
+    /* 0x748 */ PlayerMainActionFunc mainActionFunc;
     /* 0x74C */ u8 jointTableBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0x7EB */ u8 morphTableBuffer[PLAYER_LIMB_BUF_SIZE];
     /* 0x88A */ u8 blendTableBuffer[PLAYER_LIMB_BUF_SIZE];
@@ -1089,7 +1089,7 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ PlayerFuncAC4 unk_AC4;
+    /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc;
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
