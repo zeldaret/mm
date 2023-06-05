@@ -538,7 +538,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
     f32 phi_f2;
 
     this->timer++;
-    if ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 13.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
     }
     if (((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 9.0f)) ||

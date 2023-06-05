@@ -271,7 +271,7 @@ void func_808B0208(EnAm* this, PlayState* play) {
         this->actor.world.pos.z += this->actor.speed * Math_CosS(this->actor.world.rot.y);
     }
     SkelAnime_Update(&this->skelAnime);
-    if (Animation_OnFrame(&this->skelAnime, 8.0f) != 0) {
+    if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
         this->actor.speed = this->speed;
         this->actor.velocity.y = 12.0f;
     } else if (this->skelAnime.curFrame > 11.0f) {

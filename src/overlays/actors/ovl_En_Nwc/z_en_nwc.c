@@ -305,8 +305,8 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
     }
 
-    if (this->grog->actor.home.rot.z >= 20 && // all 10 chicks have been found
-        (this->hasGrownUp & 1) == false) {
+    if ((this->grog->actor.home.rot.z >= 20) && // all 10 chicks have been found
+        !(this->hasGrownUp & 1)) {
         this->transformTimer += 2;
         if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
             // it is our turn to transform

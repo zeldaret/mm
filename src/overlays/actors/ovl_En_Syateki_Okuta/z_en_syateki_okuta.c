@@ -190,13 +190,12 @@ void func_80A36360(EnSyatekiOkuta* this) {
 }
 
 void func_80A363B4(EnSyatekiOkuta* this, PlayState* play) {
-    if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
         if (func_80A361F4(this)) {
             return;
-        } else {
-            func_80A361B0(this, play);
-            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         }
+        func_80A361B0(this, play);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {

@@ -296,10 +296,6 @@ void EnPp_Init(Actor* thisx, PlayState* play) {
             this->bodyCollider.elements[0].dim.modelSphere.center.y = -400;
             this->bodyColliderElements[0].info.bumperFlags |= BUMP_HOOKABLE;
             this->maskCollider.elements[0].info.toucher.damage = 0x10;
-            //! FAKE: Needed to fix some regs
-            //! https://decomp.me/scratch/6Yd1B
-            if (this->actor.world.rot.z) {}
-            if (this->actor.world.rot.z) {}
         }
 
         Collider_InitQuad(play, &this->hornCollider);

@@ -943,8 +943,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
-    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-        (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
         //! FAKE:
         if (1) {}
 

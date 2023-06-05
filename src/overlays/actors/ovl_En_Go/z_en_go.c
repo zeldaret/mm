@@ -110,77 +110,6 @@ typedef enum EnGoAnimationIndex {
     /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
 } EnGoAnimationIndex;
 
-EnGoEffect* EnGo_InitSteam(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale, f32 deltaScale,
-                           s32 maxFrames);
-void EnGo_DrawSteam(EnGoEffect effect[], PlayState* play2);
-
-void EnGo_InitDust(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 maxFrames,
-                   EnGoEffectType parentEffectType);
-void EnGo_DrawDust(EnGoEffect effect[], PlayState* play2);
-
-void EnGo_InitSnow(EnGoEffect effect[], Vec3f pos);
-void EnGo_UpdateSnow(EnGoEffect* effect, f32 dustConversionHeight);
-void EnGo_DrawSnow(EnGoEffect effect[], PlayState* play, Gfx* material, Gfx* model, u8 effectType);
-
-void EnGo_UpdateEffects(EnGo* this);
-void EnGo_DrawEffects(EnGo* this, PlayState* play);
-
-s32 EnGo_CanSnowballHurtPlayer(PlayState* play);
-s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play);
-
-s32 EnGo_UpdateFocus(EnGo* this);
-
-void EnGo_UpdateSnowballCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateMedigoronCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateRolledUpCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateFrozenCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateStandingCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateCollider(EnGo* this, PlayState* play);
-
-s32 EnGo_UpdateTalking(EnGo* this, PlayState* play);
-s32 EnGo_DetectCollisions(EnGo* this, PlayState* play);
-s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play);
-s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play);
-s32 EnGo_UpdateSfx(EnGo* this, PlayState* play);
-s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex);
-void EnGo_UpdateEyes(EnGo* this);
-
-void EnGo_UpdateShiverSurprisedAnimation(EnGo* this, PlayState* play);
-s32 EnGo_UpdateGraveyardAttentionTargetAndReactions(EnGo* this, PlayState* play);
-s32 EnGo_UpdateRotationToTarget(EnGo* this, PlayState* play);
-s32 EnGo_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* play);
-
-void EnGo_GravemakerIdle(EnGo* this, PlayState* play);
-void EnGo_FrozenIdle(EnGo* this, PlayState* play);
-Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
-
-void EnGo_UpdateMedigoronColliderRadius(EnGo* this, PlayState* play, s32 isGivenPowderKeg);
-s32 EnGo_ChangeCutscene(EnGo* this, s16 csId);
-
-s32 EnGo_HandleGatekeeperPoundCutscene(EnGo* this, f32 initialVelocity, f32 maxDistortion, s32 maxHangtime);
-void EnGo_AddGatekeeperPoundQuake(PlayState* play, s16 speed, s16 verticalMag, s16 countdown);
-void EnGo_CreateGatekeeperPoundEffects(EnGo* this, PlayState* play);
-void EnGo_DrawIceBlockWhenFrozen(EnGo* this, PlayState* play, f32 scale, f32 alpha);
-void EnGo_MakeSteam(EnGo* this);
-
-s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play);
-s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play);
-
-void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToSnowballAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play);
-
-void EnGo_SetupAthletic(EnGo* this, PlayState* play);
-void EnGo_SetupSpectator(EnGo* this, PlayState* play);
-void EnGo_SetupGatekeeper(EnGo* this, PlayState* play);
-void EnGo_SetupGraveyardGoron(EnGo* this, PlayState* play);
-void EnGo_SetupShrineGoron(EnGo* this, PlayState* play);
-void EnGo_SetupMedigoron(EnGo* this, PlayState* play);
-void EnGo_SetupInitialAction(EnGo* this, PlayState* play);
-
 void EnGo_Idle(EnGo* this, PlayState* play);
 void EnGo_Sleep(EnGo* this, PlayState* play);
 void EnGo_Frozen(EnGo* this, PlayState* play);
@@ -190,8 +119,6 @@ void EnGo_Thaw(EnGo* this, PlayState* play);
 void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play);
 
 void EnGo_Snowball(EnGo* this, PlayState* play);
-
-s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play);
 
 void EnGo_Talk(EnGo* this, PlayState* play);
 
@@ -426,8 +353,8 @@ static AnimationInfoS sAnimationInfo[] = {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be between 'maxFrames / 3' and
  * 'maxFrames'
  */
-EnGoEffect* EnGo_InitSteam(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f velocity,
-                           f32 scale, f32 deltaScale, s32 maxFrames) {
+EnGoEffect* EnGo_InitSteam(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale, f32 deltaScale,
+                           s32 maxFrames) {
     s32 i;
 
     // Steam effects are from the end of the snow effects to the end of all effects
@@ -454,7 +381,7 @@ EnGoEffect* EnGo_InitSteam(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos
  *
  * @param effect The EnGoEffect table
  */
-void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
+void EnGo_DrawSteam(EnGoEffect effect[], PlayState* play2) {
     PlayState* play = play2;
     s32 i;
     s32 isMaterialSet = false;
@@ -507,8 +434,8 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be 1/3 * maxFrames -> maxFrames
  * @param parentEffectType Type of the parent effect, determines which of the possible dust effects correspond
  */
-void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale,
-                   f32 deltaScale, s32 maxFrames, EnGoEffectType parentEffectType) {
+void EnGo_InitDust(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 maxFrames,
+                   EnGoEffectType parentEffectType) {
     s32 i;
 
     // Dust effects are from the end of the snow effects to the end of all effects.
@@ -534,7 +461,7 @@ void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f 
  *
  * @param effect The EnGoEffect table
  */
-void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
+void EnGo_DrawDust(EnGoEffect effect[], PlayState* play2) {
     static TexturePtr sDustTextures[] = {
         gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
     };
@@ -599,7 +526,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param effect The EnGoEffect table
  * @param pos Position around which the effects appear
  */
-void EnGo_InitSnow(EnGoEffect effect[ENGO_EFFECT_COUNT], Vec3f pos) {
+void EnGo_InitSnow(EnGoEffect effect[], Vec3f pos) {
     static u8 effectIndexToSnowEffectTable[] = {
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
@@ -716,8 +643,7 @@ void EnGo_UpdateSnow(EnGoEffect* effect, f32 dustConversionHeight) {
  * @param model Snow Model
  * @param type Snow Effect type to draw
  */
-void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, Gfx* material, Gfx* model,
-                   u8 effectType) {
+void EnGo_DrawSnow(EnGoEffect effect[], PlayState* play, Gfx* material, Gfx* model, u8 effectType) {
     s32 i;
     u8 isMaterialSet = false;
 
@@ -1021,7 +947,7 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEYARD) && (play->csCtx.state != CS_STATE_IDLE) &&
         (this->actor.draw != NULL) && (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.scriptIndex == 0)) {
-        if (this->springArrivalCutsceneActive == false) {
+        if (!this->springArrivalCutsceneActive) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->springArrivalCueId = 255;
             this->springArrivalCutsceneActive = true;

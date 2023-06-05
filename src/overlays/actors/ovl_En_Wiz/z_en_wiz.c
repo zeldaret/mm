@@ -824,7 +824,7 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
         }
     }
 
-    if ((this->animLoopCounter >= 3) && (!this->hasActiveProjectile)) {
+    if ((this->animLoopCounter >= 3) && !this->hasActiveProjectile) {
         this->targetPlatformLightAlpha = 0;
         EnWiz_SetupWindUp(this);
     }
@@ -962,7 +962,7 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
     }
 
     if (this->timer == 0) {
-        if ((Animation_OnFrame(&this->skelAnime, 6.0f)) && (!this->hasActiveProjectile)) {
+        if (Animation_OnFrame(&this->skelAnime, 6.0f) && !this->hasActiveProjectile) {
             Player* player = GET_PLAYER(play);
             Vec3f pos;
             s32 type = this->type;
