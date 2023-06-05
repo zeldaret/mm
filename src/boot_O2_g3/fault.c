@@ -448,7 +448,7 @@ void osSyncPrintfThreadContext(OSThread* t) {
 OSThread* Fault_FindFaultedThread() {
     OSThread* iter = __osGetActiveQueue();
     while (iter->priority != -1) {
-        if (iter->priority > 0 && iter->priority < 0x7F && (iter->flags & 3)) {
+        if ((iter->priority > 0) && (iter->priority < 0x7F) && (iter->flags & 3)) {
             return iter;
         }
         iter = iter->tlnext;

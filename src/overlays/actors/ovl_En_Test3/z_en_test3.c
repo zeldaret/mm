@@ -533,17 +533,17 @@ void func_80A3F114(EnTest3* this, PlayState* play) {
 }
 
 s32 func_80A3F15C(EnTest3* this, PlayState* play, struct_80A41828* arg2) {
-    s32 pathIndex;
+    s32 limit;
     Path* path;
     Vec3s* curPathPoint;
     Vec3s* nextPathPoint;
     Vec3f curPathPos;
     Vec3f nextPathPos;
 
-    pathIndex = ABS_ALT(arg2->unk_1_0) - 1;
+    limit = ABS_ALT(arg2->unk_1_0) - 1;
 
-    if (pathIndex >= 0) {
-        path = SubS_GetAdditionalPath(play, KAFEI_GET_PARAM_1F(&this->player.actor), pathIndex);
+    if (limit >= 0) {
+        path = SubS_GetAdditionalPath(play, KAFEI_GET_PATH_INDEX(&this->player.actor), limit);
 
         curPathPoint = Lib_SegmentedToVirtual(path->points);
         if (arg2->unk_1_0 > 0) {
@@ -868,7 +868,7 @@ s32 func_80A40098(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
     u16 numWaypoints;
 
     func_80A3F15C(this, play, arg2);
-    this->unk_D7C = SubS_GetAdditionalPath(play, KAFEI_GET_PARAM_1F(&this->player.actor), ABS_ALT(arg2->unk_1_0) - 1);
+    this->unk_D7C = SubS_GetAdditionalPath(play, KAFEI_GET_PATH_INDEX(&this->player.actor), ABS_ALT(arg2->unk_1_0) - 1);
     if ((this->unk_D88 < 7) && (this->unk_D88 != 0) && (this->unk_D80 >= 0)) {
         startTime = now;
     } else {
@@ -1164,7 +1164,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             func_80128640(play, &this->player, *dList1);
             if (this->player.stateFlags3 & PLAYER_STATE3_20000000) {
                 OPEN_DISPS(play->state.gfxCtx);
+
                 gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00EDD0);
+
                 CLOSE_DISPS(play->state.gfxCtx);
             }
         }
@@ -1200,7 +1202,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
                  (this->player.skelAnime.curFrame >= 12.0f))) {
                 if (func_80127438(play, &this->player, this->player.currentMask)) {
                     OPEN_DISPS(play->state.gfxCtx);
+
                     gSPDisplayList(POLY_OPA_DISP++, object_mask_ki_tan_DL_0004A0);
+
                     CLOSE_DISPS(play->state.gfxCtx);
                 }
             }
@@ -1219,7 +1223,9 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             D_80A41D60 = true;
         } else {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, object_test3_DL_00CB60);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     } else {

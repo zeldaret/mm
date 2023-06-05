@@ -100,7 +100,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
-    if ((room->enablePosLights != 0) || (MREG(93) != 0)) {
+    if (room->enablePosLights || (MREG(93) != 0)) {
         gSPSetGeometryMode(POLY_OPA_DISP++, G_LIGHTING_POSITIONAL);
         gSPSetGeometryMode(POLY_XLU_DISP++, G_LIGHTING_POSITIONAL);
     }

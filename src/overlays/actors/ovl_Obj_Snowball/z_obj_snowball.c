@@ -549,7 +549,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             this->unk_20A = 0;
         }
 
-        if (this->actor.csId < 0) {
+        if (this->actor.csId <= CS_ID_NONE) {
             func_80B03FF8(this, play);
             if (this->unk_20A == 0) {
                 func_80B04608(this, play);

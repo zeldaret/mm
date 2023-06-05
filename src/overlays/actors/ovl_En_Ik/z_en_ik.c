@@ -1033,6 +1033,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
         sp54 = 0;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfxOpa = POLY_OPA_DISP;
         gfxXlu = POLY_XLU_DISP;
 

@@ -478,7 +478,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
         Animation_PlayOnceSetSpeed(&this->knobDoor.skelAnime, sAnimations[this->knobDoor.animIndex],
                                    (player->stateFlags1 & PLAYER_STATE1_8000000) ? 0.75f : 1.5f);
         if (this->unk_1A6 != 0) {
-            gSaveContext.save.saveInfo.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+            DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
             Flags_SetSwitch(play, this->switchFlag);
             Actor_PlaySfx(&this->knobDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
         }
@@ -501,7 +501,7 @@ void func_80866B20(EnDoor* this, PlayState* play) {
                 player->doorDirection = playerPosRelToDoor.z >= 0.0f ? 1.0f : -1.0f;
                 player->doorActor = &this->knobDoor.dyna.actor;
                 if (this->unk_1A6 != 0) {
-                    if (gSaveContext.save.saveInfo.inventory.dungeonKeys[((void)0, gSaveContext.mapIndex)] <= 0) {
+                    if (DUNGEON_KEY_COUNT(gSaveContext.mapIndex) <= 0) {
                         player->doorType = PLAYER_DOORTYPE_TALKING;
                         this->knobDoor.dyna.actor.textId = 0x1802;
                     } else {
@@ -658,6 +658,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
 
     if (this->knobDoor.dyna.actor.objBankIndex == this->knobDoor.requiredObjBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
+
         if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
             Gfx_DrawDListOpa(play, gameplay_keep_DL_0221B8);
         } else {
@@ -675,6 +676,7 @@ void EnDoor_Draw(Actor* thisx, PlayState* play) {
         if (this->unk_1A6) {
             Actor_DrawDoorLock(play, this->unk_1A6, 0);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

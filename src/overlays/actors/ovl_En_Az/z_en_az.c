@@ -1795,13 +1795,16 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                               func_80A98DA4, func_80A98E48, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               func_80A98DA4, func_80A98E48, &this->actor);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actor.depthInWater >= 28.0f) && (this->actor.speed > 0.5f)) {
         Matrix_Translate(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -1856,6 +1859,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

@@ -10,6 +10,13 @@ struct GameState;
 struct PlayState;
 struct FileSelectState;
 
+typedef enum {
+    /* 0 */ SAVE_AUDIO_STEREO,
+    /* 1 */ SAVE_AUDIO_MONO,
+    /* 2 */ SAVE_AUDIO_HEADSET,
+    /* 3 */ SAVE_AUDIO_SURROUND
+} AudioOption;
+
 // TODO: properly name DOWN, RETURN and TOP
 typedef enum RespawnMode {
     /* 0 */ RESPAWN_MODE_DOWN,                          // "RESTART_MODE_DOWN"
@@ -157,13 +164,13 @@ typedef enum {
 #define PICTO_PHOTO_COMPRESSED_SIZE (PICTO_PHOTO_SIZE * 5 / 8)
 
 typedef struct SramContext {
-    /* 0x00 */ u8* readBuff;
-    /* 0x04 */ u8 *saveBuf;
+    /* 0x00 */ u8* noFlashSaveBuf; // Never allocated memory
+    /* 0x04 */ u8* saveBuf;
     /* 0x08 */ char unk_08[4];
     /* 0x0C */ s16 status;
     /* 0x10 */ u32 curPage;
     /* 0x14 */ u32 numPages;
-    /* 0x18 */ OSTime unk_18;
+    /* 0x18 */ OSTime startWriteOsTime;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
@@ -226,14 +233,14 @@ typedef struct CycleSceneFlags {
 typedef struct SaveOptions {
     /* 0x0 */ u16 optionId;                            // "option_id"
     /* 0x2 */ u8 language;                             // "j_n"
-    /* 0x3 */ s8 audioSetting;                         // "s_sound"
+    /* 0x3 */ u8 audioSetting;                         // "s_sound"
     /* 0x4 */ u8 languageSetting;                      // "language"
     /* 0x5 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
 } SaveOptions; // size = 0x6
 
 typedef struct SavePlayerData {
     /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x06 */ u16 deaths;                            // "savect"
+    /* 0x06 */ u16 threeDayResetCount;                // "savect"
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"
@@ -337,11 +344,11 @@ typedef struct SaveContext {
     /* 0x3DB4 */ f32 entranceSpeed;                     // "player_wipe_speedF"
     /* 0x3DB8 */ u16 entranceSound;                     // "player_wipe_door_SE"
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
-    /* 0x3DBB */ u8 unk_3DBB;                           // "next_walk"
+    /* 0x3DBB */ u8 retainWeatherMode;                  // "next_walk"
     /* 0x3DBC */ s16 dogParams;                         // OoT leftover. "dog_flag"
     /* 0x3DBE */ u8 envHazardTextTriggerFlags;          // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
-    /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
+    /* 0x3DC0 */ s16 nayrusLoveTimer;                   // remnant of OoT, "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
     /* 0x3DC8 */ OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
     /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX]; // See the `TimerState` enum. "event_fg"
@@ -374,13 +381,13 @@ typedef struct SaveContext {
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
     /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
     /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
-    /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
+    /* 0x3F3F */ u8 flashSaveAvailable;                 // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
-    /* 0x3F46 */ u16 unk_3F46;                          // "NottoriBgm"
+    /* 0x3F46 */ u16 forcedSeqId;                       // "NottoriBgm"
     /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
     /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
-    /* 0x3F4D */ u8 unk_3F4D;                           // "Kenjya_no"
+    /* 0x3F4D */ u8 chamberCutsceneNum;                 // remnant of OoT "Kenjya_no"
     /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
     /* 0x3F50 */ u8 transFadeDuration;                  // "fade_speed"
     /* 0x3F51 */ u8 transWipeSpeed;                     // "wipe_speed"           transition related
@@ -695,7 +702,9 @@ typedef enum {
 #define WEEKEVENTREG_18_10 PACK_WEEKEVENTREG_FLAG(18, 0x10)
 #define WEEKEVENTREG_18_20 PACK_WEEKEVENTREG_FLAG(18, 0x20)
 #define WEEKEVENTREG_18_40 PACK_WEEKEVENTREG_FLAG(18, 0x40)
-#define WEEKEVENTREG_18_80 PACK_WEEKEVENTREG_FLAG(18, 0x80)
+
+// Player has Powder Keg purchasing privileges.
+#define WEEKEVENTREG_HAS_POWDERKEG_PRIVILEGES PACK_WEEKEVENTREG_FLAG(18, 0x80)
 #define WEEKEVENTREG_19_01 PACK_WEEKEVENTREG_FLAG(19, 0x01)
 #define WEEKEVENTREG_19_02 PACK_WEEKEVENTREG_FLAG(19, 0x02)
 #define WEEKEVENTREG_19_04 PACK_WEEKEVENTREG_FLAG(19, 0x04)
@@ -717,8 +726,12 @@ typedef enum {
 #define WEEKEVENTREG_20_80 PACK_WEEKEVENTREG_FLAG(20, 0x80)
 #define WEEKEVENTREG_21_01 PACK_WEEKEVENTREG_FLAG(21, 0x01)
 #define WEEKEVENTREG_21_02 PACK_WEEKEVENTREG_FLAG(21, 0x02)
-#define WEEKEVENTREG_21_04 PACK_WEEKEVENTREG_FLAG(21, 0x04)
-#define WEEKEVENTREG_21_08 PACK_WEEKEVENTREG_FLAG(21, 0x08)
+
+// Player has spoken to Goron Graveyard's gravemaker while in Goron form.
+#define WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON PACK_WEEKEVENTREG_FLAG(21, 0x04)
+// Player has spoken to formerly frozen Goron outside Goron Graveyard.
+#define WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON PACK_WEEKEVENTREG_FLAG(21, 0x08)
+
 #define WEEKEVENTREG_21_10 PACK_WEEKEVENTREG_FLAG(21, 0x10)
 #define WEEKEVENTREG_21_20 PACK_WEEKEVENTREG_FLAG(21, 0x20)
 #define WEEKEVENTREG_21_40 PACK_WEEKEVENTREG_FLAG(21, 0x40)
@@ -729,7 +742,10 @@ typedef enum {
 #define WEEKEVENTREG_22_01 PACK_WEEKEVENTREG_FLAG(22, 0x01)
 
 #define WEEKEVENTREG_22_02 PACK_WEEKEVENTREG_FLAG(22, 0x02)
-#define WEEKEVENTREG_22_04 PACK_WEEKEVENTREG_FLAG(22, 0x04)
+
+// Goron Elder's son has been calmed from Goron's Lullaby.
+#define WEEKEVENTREG_CALMED_GORON_ELDERS_SON PACK_WEEKEVENTREG_FLAG(22, 0x04)
+
 #define WEEKEVENTREG_22_08 PACK_WEEKEVENTREG_FLAG(22, 0x08)
 #define WEEKEVENTREG_22_10 PACK_WEEKEVENTREG_FLAG(22, 0x10)
 #define WEEKEVENTREG_22_20 PACK_WEEKEVENTREG_FLAG(22, 0x20)
@@ -1293,11 +1309,17 @@ typedef enum {
 #define WEEKEVENTREG_88_08 PACK_WEEKEVENTREG_FLAG(88, 0x08)
 #define WEEKEVENTREG_88_10 PACK_WEEKEVENTREG_FLAG(88, 0x10)
 #define WEEKEVENTREG_88_20 PACK_WEEKEVENTREG_FLAG(88, 0x20)
-#define WEEKEVENTREG_88_40 PACK_WEEKEVENTREG_FLAG(88, 0x40)
-#define WEEKEVENTREG_88_80 PACK_WEEKEVENTREG_FLAG(88, 0x80)
-#define WEEKEVENTREG_89_01 PACK_WEEKEVENTREG_FLAG(89, 0x01)
-#define WEEKEVENTREG_89_02 PACK_WEEKEVENTREG_FLAG(89, 0x02)
-#define WEEKEVENTREG_89_04 PACK_WEEKEVENTREG_FLAG(89, 0x04)
+
+// Goron shrine Gatekeeper has opened shrine.
+#define WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE PACK_WEEKEVENTREG_FLAG(88, 0x40)
+// Goron shrine Gatekeeper has opened shrine for player in Human form.
+#define WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_HUMAN PACK_WEEKEVENTREG_FLAG(88, 0x80)
+// Goron shrine Gatekeeper has opened shrine for player in Deku form.
+#define WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_DEKU PACK_WEEKEVENTREG_FLAG(89, 0x01)
+// Goron shrine Gatekeeper has opened shrine for player in Zora form.
+#define WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_ZORA PACK_WEEKEVENTREG_FLAG(89, 0x02)
+// Goron shrine Gatekeeper has opened shrine for player in Goron form.
+#define WEEKEVENTREG_GATEKEEPER_OPENED_GORON_SHRINE_FOR_GORON PACK_WEEKEVENTREG_FLAG(89, 0x04)
 
 // Unconfirmed: "Postman has delivered priority mail"
 #define WEEKEVENTREG_89_08 PACK_WEEKEVENTREG_FLAG(89, 0x08)
@@ -1560,28 +1582,28 @@ void Sram_InitDebugSave(void);
 void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
-void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
-void func_80146580(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileSelectState* fileSelect2, SramContext* sramCtx);
+void func_801457CC(struct GameState* gameState, SramContext* sramCtx);
+void Sram_EraseSave(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
+void Sram_CopySave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
-void func_80146DF8(SramContext* sramCtx);
+void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
-void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
-void func_80147020(SramContext* sramCtx);
-void func_80147068(SramContext* sramCtx);
-void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages);
-void func_80147150(SramContext* sramCtx);
-void func_80147198(SramContext* sramCtx);
+void Sram_SetFlashPagesDefault(SramContext* sramCtx, u32 curPage, u32 numPages);
+void Sram_StartWriteToFlashDefault(SramContext* sramCtx);
+void Sram_UpdateWriteToFlashDefault(SramContext* sramCtx);
+void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages);
+void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx);
+void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx);
 
-extern s32 D_801C6798[];
+extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
-extern s32 D_801C67C8[];
-extern s32 D_801C67F0[];
-extern s32 D_801C6818[];
-extern s32 D_801C6840[];
-extern s32 D_801C6850[];
+extern s32 gFlashSaveStartPages[];
+extern s32 gFlashSaveNumPages[];
+extern s32 gFlashSpecialSaveNumPages[];
+extern s32 gFlashOwlSaveStartPages[];
+extern s32 gFlashOwlSaveNumPages[];
 
 #endif

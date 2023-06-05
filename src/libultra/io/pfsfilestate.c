@@ -34,7 +34,7 @@ s32 osPfsFileState(OSPfs* pfs, s32 fileNo, OSPfsState* state) {
         return ret;
     }
 
-    if (dir.company_code == 0 || dir.game_code == 0) {
+    if ((dir.company_code == 0) || (dir.game_code == 0)) {
         return PFS_ERR_INVALID;
     }
 

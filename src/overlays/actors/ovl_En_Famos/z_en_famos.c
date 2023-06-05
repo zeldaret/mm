@@ -166,13 +166,13 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (FAMOS_GET_PATH(thisx) != 0xFF) {
-        path = &play->setupPathList[this->actor.params];
+    if (FAMOS_GET_PATH_INDEX(&this->actor) != FAMOS_PATH_INDEX_NONE) {
+        path = &play->setupPathList[FAMOS_GET_PATH_INDEX(&this->actor)];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
-        this->pathNodeCount = path->count;
-        if (this->pathNodeCount == 1) {
+        this->pathCount = path->count;
+        if (this->pathCount == 1) {
             this->pathPoints = NULL;
-            this->pathNodeCount = 0;
+            this->pathCount = 0;
         }
     }
 
@@ -365,15 +365,15 @@ void EnFamos_StillIdle(EnFamos* this, PlayState* play) {
  */
 void EnFamos_SetupPathingIdle(EnFamos* this) {
     if (this->isCalm) {
-        this->currentPathNode++;
-        if (this->currentPathNode == this->pathNodeCount) {
-            this->currentPathNode = 0;
+        this->waypointIndex++;
+        if (this->waypointIndex == this->pathCount) {
+            this->waypointIndex = 0;
         }
     } else {
         this->isCalm = true;
     }
 
-    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->currentPathNode]);
+    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->waypointIndex]);
     this->targetYaw = Actor_WorldYawTowardPoint(&this->actor, &this->targetDest);
     this->actionFunc = EnFamos_PathingIdle;
     this->actor.speed = 0.0f;
@@ -502,7 +502,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
-        (surfaceType != FLOOR_PROPERTY_12 && surfaceType != FLOOR_PROPERTY_13)) {
+        ((surfaceType != FLOOR_PROPERTY_12) && (surfaceType != FLOOR_PROPERTY_13))) {
         EnFamos_SetupAttackAim(this);
 
     } else if ((Player_GetMask(play) == PLAYER_MASK_STONE) ||
@@ -545,7 +545,8 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     hitFloor = this->actor.bgCheckFlags & BGCHECKFLAG_GROUND;
-    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == 0xC) || (surfaceType == 0xD)) {
+    if (hitFloor || (this->actor.floorHeight == BGCHECK_Y_MIN) || (surfaceType == FLOOR_PROPERTY_12) ||
+        (surfaceType == FLOOR_PROPERTY_13)) {
         this->collider1.base.atFlags &= ~AT_ON;
         this->collider2.base.atFlags |= AT_ON;
         if (hitFloor) {
@@ -747,7 +748,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
     f32 oldHeight;
     s32 oldHoverTimer; // save old value to test if changed
 
-    if (this->debrisTimer <= 0 ||
+    if ((this->debrisTimer <= 0) ||
         (this->debrisTimer--, EnFamos_UpdateDebrisPosRot(this), (this->actionFunc != EnFamos_DeathFade))) {
         oldHoverTimer = this->hoverTimer;
         EnFamos_UpdateFlipStatus(this);

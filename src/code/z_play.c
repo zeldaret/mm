@@ -7,7 +7,7 @@
 #include "z64view.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "libc/assert.h"
 
@@ -1037,9 +1037,9 @@ void Play_UpdateMain(PlayState* this) {
 
     if (this->sramCtx.status != 0) {
         if (gSaveContext.save.isOwlSave) {
-            func_80147198(&this->sramCtx);
+            Sram_UpdateWriteToFlashOwlSave(&this->sramCtx);
         } else {
-            func_80147068(&this->sramCtx);
+            Sram_UpdateWriteToFlashDefault(&this->sramCtx);
         }
     }
 }
@@ -1273,8 +1273,8 @@ void Play_DrawMain(PlayState* this) {
                     if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
-                                        this->view.eye.y, this->view.eye.z);
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.skyboxBlend,
+                                        this->view.eye.x, this->view.eye.y, this->view.eye.z);
                         } else if (!this->skyboxCtx.skyboxShouldDraw) {
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
                                         this->view.eye.z);
@@ -1509,7 +1509,7 @@ void Play_Main(GameState* thisx) {
 }
 
 s32 Play_InCsMode(PlayState* this) {
-    return (this->csCtx.state != 0) || Player_InCsMode(this);
+    return (this->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(this);
 }
 
 f32 Play_GetFloorSurfaceImpl(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {
@@ -2218,7 +2218,7 @@ void Play_Init(GameState* thisx) {
 
     if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
-        gSaveContext.unk_3DC0 = 0;
+        gSaveContext.nayrusLoveTimer = 0;
         Magic_Reset(this);
         gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
 

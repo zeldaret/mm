@@ -6779,8 +6779,9 @@ s32 Camera_Special5(Camera* camera) {
             spA4 = BINANG_SUB(focalActorPosRot->rot.y, sp6C.yaw);
             sp74.r = roData->eyeDist;
             rand = Rand_ZeroOne();
-            sp74.yaw = BINANG_ROT180(focalActorPosRot->rot.y) +
-                       (s16)(spA4 < 0 ? -(s16)(0x1553 + (s16)(rand * 2730.0f)) : (s16)(0x1553 + (s16)(rand * 2730.0f)));
+            sp74.yaw =
+                BINANG_ROT180(focalActorPosRot->rot.y) +
+                (s16)((spA4 < 0) ? -(s16)(0x1553 + (s16)(rand * 2730.0f)) : (s16)(0x1553 + (s16)(rand * 2730.0f)));
             sp74.pitch = roData->pitch;
             OLib_AddVecGeoToVec3f(eyeNext, &spA8.pos, &sp74);
             *eye = *eyeNext;
@@ -7791,7 +7792,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
             break;
 
         case CAM_MODE_FOLLOWTARGET:
-            if (camera->target != NULL && camera->target->id != ACTOR_EN_BOOM) {
+            if ((camera->target != NULL) && (camera->target->id != ACTOR_EN_BOOM)) {
                 sModeChangeFlags = CAM_CHANGE_MODE_FOLLOW_TARGET;
             }
             break;
@@ -7807,6 +7808,9 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         case CAM_MODE_NORMAL:
         case CAM_MODE_HANG:
             sModeChangeFlags = CAM_CHANGE_MODE_4;
+            break;
+
+        default:
             break;
     }
 

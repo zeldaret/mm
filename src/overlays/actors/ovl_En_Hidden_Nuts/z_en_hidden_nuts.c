@@ -87,7 +87,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->unk_21E = ENHIDDENNUTS_GET_F80(&this->actor);
+    this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = ENHIDDENNUTS_GET_SWITCHFLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
@@ -99,12 +99,12 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (this->unk_21E == 0x1F) {
+    if (this->pathIndex == ENHIDDENNUTS_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->unk_21E, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENHIDDENNUTS_PATH_INDEX_NONE_ALT);
     this->csId = this->actor.csId;
     func_801A5080(2);
     func_80BDB268(this);
@@ -156,7 +156,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         this->unk_20A = 0;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BDB580(this);
         return;
     }

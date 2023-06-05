@@ -228,7 +228,8 @@ void func_8094702C(EnSda* this, u8* shadowTexture, Player* player, PlayState* pl
 
     if (BREG(57) != 0) {
         for (shadowTextureTemp = shadowTexture, i = 0; i < 0x1000; i++, shadowTextureTemp++) {
-            if ((i >= 0 && i < 0x40) || (i >= 0xFC0 && i < 0x1000) || ((i & 0x3F) == 0) || ((i & 0x3F) == 0x3F)) {
+            if (((i >= 0) && (i < 0x40)) || ((i >= 0xFC0) && (i < 0x1000)) || ((i & 0x3F) == 0) ||
+                ((i & 0x3F) == 0x3F)) {
                 *shadowTextureTemp = 255;
             } else {
                 *shadowTextureTemp = 0;
@@ -352,6 +353,4 @@ void func_80947668(u8* shadowTexture, Player* player, PlayState* play) {
     }
 
     CLOSE_DISPS(gfxCtx);
-
-    if (1) {}
 }

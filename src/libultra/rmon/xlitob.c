@@ -28,13 +28,13 @@ void _Litob(_Pft* args, u8 type) {
         num = -num;
     }
 
-    if (num != 0 || args->prec != 0) {
+    if ((num != 0) || (args->prec != 0)) {
         buff[--idx] = numMap[num % base];
     }
 
     args->v.ll = num / base;
 
-    while (args->v.ll > 0 && idx > 0) {
+    while ((args->v.ll > 0) && (idx > 0)) {
         quotrem = lldiv(args->v.ll, base);
         args->v.ll = quotrem.quot;
         buff[--idx] = numMap[quotrem.rem];
@@ -48,7 +48,7 @@ void _Litob(_Pft* args, u8 type) {
         args->nz0 = args->prec - args->n1;
     }
 
-    if (args->prec < 0 && (args->flags & (FLAGS_ZERO | FLAGS_MINUS)) == FLAGS_ZERO) {
+    if ((args->prec < 0) && (args->flags & (FLAGS_ZERO | FLAGS_MINUS)) == FLAGS_ZERO) {
         idx = args->width - args->n0 - args->nz0 - args->n1;
         if (idx > 0) {
             args->nz0 += idx;

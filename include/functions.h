@@ -1265,7 +1265,7 @@ void Interface_Update(PlayState* play);
 void Interface_Destroy(PlayState* play);
 void Interface_Init(PlayState* play);
 
-Path* Path_GetByIndex(PlayState* play, s16 index, s16 max);
+Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone);
 f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);
 
@@ -1980,7 +1980,7 @@ s32 SysFlashrom_IsBusy(void);
 s32 SysFlashrom_AwaitResult(void);
 void SysFlashrom_WriteDataSync(void* addr, u32 pageNum, u32 pageCount);
 
-s32 func_80185F90(u32 param_1);
+s32 func_80185F90(u32 arg0);
 
 Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 
