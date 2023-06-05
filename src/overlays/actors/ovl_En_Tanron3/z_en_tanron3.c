@@ -180,10 +180,10 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->skelAnime.curFrame = 4.0f;
-    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && player->actor.shape.feetPos[0].y >= 438.0f) {
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
         // Player is standing on the central platform, so stop chasing them
         this->isNonHostile = true;
-    } else if (this->isNonHostile && this->workTimer[WORK_TIMER_WAIT] == 0 && !(this->timer & 0x1F)) {
+    } else if (this->isNonHostile && (this->workTimer[WORK_TIMER_WAIT] == 0) && !(this->timer & 0x1F)) {
         xDistance = this->targetPos.x - player->actor.world.pos.x;
         zDistance = this->targetPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
@@ -204,20 +204,21 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
 
                 Math_Vec3f_Copy(&this->targetPos, &player->actor.world.pos);
                 if (!(this->timer & 0xF)) {
-                    if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
+                    if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
                 }
 
                 // If the player gets eaten by Gyorg, or if the attack timer ran out,
                 // stop chasing the player for a little bit.
-                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & PLAYER_STATE2_80)) {
+                if ((this->workTimer[WORK_TIMER_ATTACK] == 0) || (player->stateFlags2 & PLAYER_STATE2_80)) {
                     this->workTimer[WORK_TIMER_WAIT] = 150;
                     this->isNonHostile = true;
                 }
                 break;
+
             case true:
-                if (sGyorg->unk_324 != 0 && !(this->timer & 0x7)) {
+                if ((sGyorg->unk_324 != 0) && !(this->timer & 0x7)) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speed = 6.0f;
                 } else {
@@ -242,7 +243,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
         }
 
         if (this->workTimer[WORK_TIMER_OUT_OF_WATER] == 0) {
-            if (this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speed > 1.0f) {
+            if ((this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0) && (this->actor.speed > 1.0f)) {
                 this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
                 this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
                 this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
@@ -286,6 +287,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     this->isBeached = true;
                 }
                 break;
+
             case true:
                 this->nextRotationAngle = 0x3A98;
                 this->actor.gravity = -1.5f;
@@ -423,7 +425,7 @@ void EnTanron3_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->atCollider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->acCollider.base);
 
-    if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Die) {
+    if (((s8)sGyorg->actor.colChkInfo.health <= 0) && (this->actionFunc != EnTanron3_Die)) {
         EnTanron3_SetupDie(this, play);
         this->workTimer[WORK_TIMER_DIE] = 0;
     }

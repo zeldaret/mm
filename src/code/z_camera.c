@@ -7790,7 +7790,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
             break;
 
         case CAM_MODE_FOLLOWTARGET:
-            if (camera->target != NULL && camera->target->id != ACTOR_EN_BOOM) {
+            if ((camera->target != NULL) && (camera->target->id != ACTOR_EN_BOOM)) {
                 sModeChangeFlags = CAM_CHANGE_MODE_FOLLOW_TARGET;
             }
             break;
@@ -7806,6 +7806,9 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         case CAM_MODE_NORMAL:
         case CAM_MODE_HANG:
             sModeChangeFlags = CAM_CHANGE_MODE_4;
+            break;
+
+        default:
             break;
     }
 

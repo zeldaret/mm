@@ -16,14 +16,14 @@ s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-TexturePtr HeartTextures[] = {
+static TexturePtr sHeartTextures[] = {
     gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
     gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
     gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
     gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
 };
 
-TexturePtr HeartDDTextures[] = {
+static TexturePtr sHeartDDTextures[] = {
     gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,
@@ -283,7 +283,7 @@ void LifeMeter_Draw(PlayState* play) {
             if (i < fullHeartCount) {
                 heartTex = gHeartFullTex;
             } else if (i == fullHeartCount) {
-                heartTex = HeartTextures[fractionHeartCount];
+                heartTex = sHeartTextures[fractionHeartCount];
             } else {
                 heartTex = gHeartEmptyTex;
             }
@@ -323,7 +323,7 @@ void LifeMeter_Draw(PlayState* play) {
             if (i < fullHeartCount) {
                 heartTex = gDefenseHeartFullTex;
             } else if (i == fullHeartCount) {
-                heartTex = HeartDDTextures[fractionHeartCount];
+                heartTex = sHeartDDTextures[fractionHeartCount];
             } else {
                 heartTex = gDefenseHeartEmptyTex;
             }

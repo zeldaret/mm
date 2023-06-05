@@ -248,8 +248,8 @@ void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
 }
 
 s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
-    if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
-        this->path = &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
+    if (EN_RZ_GET_PATH_INDEX(&this->actor) != EN_RZ_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[EN_RZ_GET_PATH_INDEX(&this->actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);

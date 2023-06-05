@@ -61,7 +61,7 @@ void _Ldtob(_Pft* args, u8 type) {
 
     if (args->prec < 0) {
         args->prec = 6;
-    } else if (args->prec == 0 && (type == 'g' || type == 'G')) {
+    } else if ((args->prec == 0) && ((type == 'g') || (type == 'G'))) {
         args->prec = 1;
     }
     err = _Ldunscale(&exp, (_Pft*)args);
@@ -101,7 +101,7 @@ void _Ldtob(_Pft* args, u8 type) {
             gen = 0x13;
         }
         *ptr++ = '0';
-        while (gen > 0 && 0 < val) {
+        while ((gen > 0) && (0 < val)) {
             lo = val;
             if ((gen -= 8) > 0) {
                 val = (val - lo) * 1.0e8;
@@ -124,12 +124,12 @@ void _Ldtob(_Pft* args, u8 type) {
             --gen, --exp;
         }
 
-        nsig = ((type == 'f') ? exp + 1 : ((type == 'e' || type == 'E') ? 1 : 0)) + args->prec;
+        nsig = ((type == 'f') ? exp + 1 : (((type == 'e') || (type == 'E')) ? 1 : 0)) + args->prec;
         if (gen < nsig) {
             nsig = gen;
         }
         if (nsig > 0) {
-            if (nsig < gen && ptr[nsig] > '4') {
+            if ((nsig < gen) && (ptr[nsig] > '4')) {
                 drop = '9';
             } else {
                 drop = '0';
@@ -178,7 +178,7 @@ void _Genld(_Pft* px, u8 code, u8* p, s16 nsig, s16 xexp) {
         p = (u8*)"0";
     }
 
-    if (code == 'f' || ((code == 'g' || code == 'G') && (-4 <= xexp) && (xexp < px->prec))) { /* 'f' format */
+    if ((code == 'f') || (((code == 'g') || (code == 'G')) && (-4 <= xexp) && (xexp < px->prec))) { /* 'f' format */
         ++xexp;            /* change to leading digit count */
         if (code != 'f') { /* fixup for 'g' */
             if (!(px->flags & FLAGS_HASH) && nsig < px->prec) {
@@ -225,8 +225,8 @@ void _Genld(_Pft* px, u8 code, u8* p, s16 nsig, s16 xexp) {
             px->n1 += nsig;
             px->nz1 = px->prec - nsig;
         }
-    } else {                              /* 'e' format */
-        if (code == 'g' || code == 'G') { /* fixup for 'g' */
+    } else {                                  /* 'e' format */
+        if ((code == 'g') || (code == 'G')) { /* fixup for 'g' */
             if (nsig < px->prec) {
                 px->prec = nsig;
             }

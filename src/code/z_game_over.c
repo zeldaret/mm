@@ -49,7 +49,7 @@ void GameOver_Update(PlayState* play) {
                 }
             }
 
-            gSaveContext.unk_3DC0 = 2000;
+            gSaveContext.nayrusLoveTimer = 2000;
             gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             gSaveContext.seqId = (u8)NA_BGM_DISABLED;
             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
