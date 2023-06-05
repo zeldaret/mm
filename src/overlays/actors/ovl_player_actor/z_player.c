@@ -218,12 +218,12 @@ s32 Player_UpperAction_14(Player* this, PlayState* play);
 s32 Player_UpperAction_15(Player* this, PlayState* play);
 s32 Player_UpperAction_16(Player* this, PlayState* play);
 
-void Player_ItemActionInit_DoNothing(PlayState* play, Player* this);
-void Player_ItemActionInit_1(PlayState* play, Player* this);
-void Player_ItemActionInit_2(PlayState* play, Player* this);
-void Player_ItemActionInit_SpawnExplosive(PlayState* play, Player* this);
-void Player_ItemActionInit_SpawnHookshot(PlayState* play, Player* this);
-void Player_ItemActionInit_5(PlayState* play, Player* this);
+void Player_InitItemAction_DoNothing(PlayState* play, Player* this);
+void Player_InitItemAction_1(PlayState* play, Player* this);
+void Player_InitItemAction_2(PlayState* play, Player* this);
+void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this);
+void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this);
+void Player_InitItemAction_5(PlayState* play, Player* this);
 
 s32 func_80839518(Player* this, PlayState* play);
 s32 func_808365DC(Player* this, PlayState* play);
@@ -3052,100 +3052,100 @@ PlayerUpperActionFunc D_8085C9F0[PLAYER_IA_MAX] = {
 
 // sPlayerItemActionInits?
 void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_NONE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_LAST_USED
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_FISHING_ROD
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_SWORD_KOKIRI
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_SWORD_RAZOR
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_SWORD_GILDED
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_SWORD_TWO_HANDED
-    Player_ItemActionInit_1,              // PLAYER_IA_STICK
-    Player_ItemActionInit_5,              // PLAYER_IA_ZORA_FINS
-    Player_ItemActionInit_2,              // PLAYER_IA_BOW
-    Player_ItemActionInit_2,              // PLAYER_IA_BOW_FIRE
-    Player_ItemActionInit_2,              // PLAYER_IA_BOW_ICE
-    Player_ItemActionInit_2,              // PLAYER_IA_BOW_LIGHT
-    Player_ItemActionInit_SpawnHookshot,  // PLAYER_IA_HOOKSHOT
-    Player_ItemActionInit_SpawnExplosive, // PLAYER_IA_BOMB
-    Player_ItemActionInit_SpawnExplosive, // PLAYER_IA_POWDER_KEG
-    Player_ItemActionInit_SpawnExplosive, // PLAYER_IA_BOMBCHU
-    Player_ItemActionInit_5,              // PLAYER_IA_11
-    Player_ItemActionInit_2,              // PLAYER_IA_NUT
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_PICTO_BOX
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_OCARINA
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_EMPTY
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_FISH
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_SPRING_WATER
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_ZORA_EGG
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_DEKU_PRINCESS
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_GOLD_DUST
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_1C
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_SEA_HORSE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_MUSHROOM
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_HYLIAN_LOACH
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_BUG
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_POE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_BIG_POE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_POTION_RED
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_POTION_BLUE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_POTION_GREEN
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_MILK
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_MILK_HALF
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_CHATEAU
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_BOTTLE_FAIRY
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MOON_TEAR
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_DEED_LAND
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_ROOM_KEY
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_LETTER_TO_KAFEI
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MAGIC_BEANS
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_DEED_SWAMP
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_DEED_MOUNTAIN
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_DEED_OCEAN
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_32
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_LETTER_MAMA
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_34
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_35
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_PENDANT_MEMORIES
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_37
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_38
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_39
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_TRUTH
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_KAFEIS_MASK
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_ALL_NIGHT
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_BUNNY
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_KEATON
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_GARO
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_ROMANI
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_CIRCUS_LEADER
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_POSTMAN
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_COUPLE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_GREAT_FAIRY
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_GIBDO
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_DON_GERO
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_KAMARO
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_CAPTAIN
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_STONE
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_BREMEN
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_BLAST
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_SCENTS
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_GIANT
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_FIERCE_DEITY
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_GORON
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_ZORA
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_MASK_DEKU
-    Player_ItemActionInit_DoNothing,      // PLAYER_IA_LENS
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_NONE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_LAST_USED
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_FISHING_ROD
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_KOKIRI
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_RAZOR
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_GILDED
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_TWO_HANDED
+    Player_InitItemAction_1,              // PLAYER_IA_STICK
+    Player_InitItemAction_5,              // PLAYER_IA_ZORA_FINS
+    Player_InitItemAction_2,              // PLAYER_IA_BOW
+    Player_InitItemAction_2,              // PLAYER_IA_BOW_FIRE
+    Player_InitItemAction_2,              // PLAYER_IA_BOW_ICE
+    Player_InitItemAction_2,              // PLAYER_IA_BOW_LIGHT
+    Player_InitItemAction_SpawnHookshot,  // PLAYER_IA_HOOKSHOT
+    Player_InitItemAction_SpawnExplosive, // PLAYER_IA_BOMB
+    Player_InitItemAction_SpawnExplosive, // PLAYER_IA_POWDER_KEG
+    Player_InitItemAction_SpawnExplosive, // PLAYER_IA_BOMBCHU
+    Player_InitItemAction_5,              // PLAYER_IA_11
+    Player_InitItemAction_2,              // PLAYER_IA_NUT
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_PICTO_BOX
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_OCARINA
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_EMPTY
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_FISH
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_SPRING_WATER
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_HOT_SPRING_WATER
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_ZORA_EGG
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_DEKU_PRINCESS
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_GOLD_DUST
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_1C
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_SEA_HORSE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MUSHROOM
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_HYLIAN_LOACH
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_BUG
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_BIG_POE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POTION_RED
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POTION_BLUE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_POTION_GREEN
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MILK
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MILK_HALF
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_CHATEAU
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_FAIRY
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MOON_TEAR
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_LAND
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_ROOM_KEY
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_LETTER_TO_KAFEI
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MAGIC_BEANS
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_SWAMP
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_MOUNTAIN
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_OCEAN
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_32
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_LETTER_MAMA
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_34
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_35
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_PENDANT_MEMORIES
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_37
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_38
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_39
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_TRUTH
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_KAFEIS_MASK
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_ALL_NIGHT
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_BUNNY
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_KEATON
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GARO
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_ROMANI
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_CIRCUS_LEADER
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_POSTMAN
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_COUPLE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GREAT_FAIRY
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GIBDO
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_DON_GERO
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_KAMARO
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_CAPTAIN
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_STONE
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_BREMEN
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_BLAST
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_SCENTS
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GIANT
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_FIERCE_DEITY
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_GORON
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_ZORA
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MASK_DEKU
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_LENS
 };
 
-void Player_ItemActionInit_DoNothing(PlayState* play, Player* this) {
+void Player_InitItemAction_DoNothing(PlayState* play, Player* this) {
 }
 
-void Player_ItemActionInit_1(PlayState* play, Player* this) {
+void Player_InitItemAction_1(PlayState* play, Player* this) {
     this->unk_B28 = 0;
     this->unk_B0C = 1.0f;
 }
 
-void Player_ItemActionInit_2(PlayState* play, Player* this) {
+void Player_InitItemAction_2(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_8;
 
     if (this->heldItemAction == PLAYER_IA_NUT) {
@@ -3193,7 +3193,7 @@ ExplosiveInfo sPlayerExplosiveInfo[PLAYER_EXPLOSIVE_MAX] = {
     { ITEM_BOMBCHU, ACTOR_EN_BOM_CHU }, // PLAYER_EXPLOSIVE_BOMBCHU
 };
 
-void Player_ItemActionInit_SpawnExplosive(PlayState* play, Player* this) {
+void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this) {
     PlayerExplosive explosiveType;
     ExplosiveInfo* explosiveInfo;
     Actor* explosiveActor;
@@ -3234,7 +3234,7 @@ void Player_ItemActionInit_SpawnExplosive(PlayState* play, Player* this) {
     }
 }
 
-void Player_ItemActionInit_SpawnHookshot(PlayState* play, Player* this) {
+void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this) {
     ArmsHook* armsHook;
 
     this->stateFlags1 |= PLAYER_STATE1_8;
@@ -3254,7 +3254,7 @@ void Player_ItemActionInit_SpawnHookshot(PlayState* play, Player* this) {
     armsHook->unk_208 = this->transformation;
 }
 
-void Player_ItemActionInit_5(PlayState* play, Player* this) {
+void Player_InitItemAction_5(PlayState* play, Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_1000000;
 }
 
