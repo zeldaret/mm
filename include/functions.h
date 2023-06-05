@@ -1503,7 +1503,7 @@ void Interface_Update(PlayState* play);
 void Interface_Destroy(PlayState* play);
 void Interface_Init(PlayState* play);
 
-Path* Path_GetByIndex(PlayState* play, s16 index, s16 max);
+Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone);
 f32 Path_OrientAndGetDistSq(Actor* actor, Path* path, s16 waypoint, s16* yaw);
 void Path_CopyLastPoint(Path* path, Vec3f* dest);
 

@@ -123,7 +123,7 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 trackingMode = (this->unk_32C == 2) ? NPC_TRACKING_NONE : NPC_TRACKING_PLAYER_AUTO_TURN;
 
-    if (this->unk_32C == 0 || this->actor.parent == NULL) {
+    if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
         this->interactInfo.trackPos = player->actor.world.pos;
         this->interactInfo.trackPos.y -= -10.0f;
     } else {
@@ -144,7 +144,7 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
         case MA_YTS_TYPE_SITTING:
             this->actor.targetMode = 6;
             // Day 1 or "Winning" the alien invasion
-            if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 EnMaYts_ChangeAnim(this, 14);
             } else {
                 EnMaYts_ChangeAnim(this, 18);
@@ -188,6 +188,9 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
                         return false;
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
 
@@ -195,7 +198,7 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
             // Failing the alien invasion
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
                 return false;
-            } else if (gSaveContext.save.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
+            } else if ((gSaveContext.save.time >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
             }
             break;
@@ -208,6 +211,9 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
+            break;
+
+        default:
             break;
     }
 
@@ -266,7 +272,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    } else if ((CURRENT_DAY == 2) && (gSaveContext.save.isNight == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -406,6 +412,9 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 20);
                         break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -526,7 +535,9 @@ void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     } else if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         if (this->hasBow == true) {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }

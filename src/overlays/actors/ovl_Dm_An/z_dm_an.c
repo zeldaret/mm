@@ -160,7 +160,7 @@ Actor* func_80C1C8E8(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || false) {
+        if ((tempActor == NULL) || false) {
             foundActor = NULL;
             break;
         }
@@ -228,6 +228,9 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
                             func_80C1C4D8(this, play, this->unk_2C8 + 1);
                         }
                     }
+                    break;
+
+                default:
                     break;
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);

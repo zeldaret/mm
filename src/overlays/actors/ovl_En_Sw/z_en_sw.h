@@ -11,14 +11,16 @@ typedef void (*EnSwActionFunc)(struct EnSw*, PlayState*);
 #define ENSW_GET_3(thisx) (ENSW_GETS_3((thisx)->params))
 #define ENSW_GETS_3FC(params) (((params & 0x3FC) >> 2) & 0xFF)
 #define ENSW_GET_3FC(thisx) (ENSW_GETS_3FC((thisx)->params))
-#define ENSW_GET_FF00(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)
+#define ENSW_GET_PATH_INDEX(thisx) ((((thisx)->params & 0xFF00) >> 8) & 0xFF)
+
+#define ENSW_PATH_INDEX_NONE 0xFF
 
 typedef struct EnSw {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnSwActionFunc actionFunc;
     /* 0x18C */ ColliderSphere collider;
-    /* 0x1E4 */ Path* unk_1E4;
+    /* 0x1E4 */ Path* path;
     /* 0x1E8 */ Vec3s jointTable[30];
     /* 0x29C */ Vec3s morphTable[30];
     /* 0x350 */ Vec3f unk_350;
