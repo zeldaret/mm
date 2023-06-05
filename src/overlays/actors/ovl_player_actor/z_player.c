@@ -11212,7 +11212,7 @@ void func_808442D8(PlayState* play, Player* this) {
     if (var_fa0 > 0.0f) {
         func_800B0EB0(play, &this->meleeWeaponInfo[0].tip, &D_8085D364, &D_8085D370, &D_8085D37C, &D_8085D380,
                       (var_fa0 * 200.0f), 0, 8);
-        if (((play->roomCtx.curRoom.enablePosLights != 0)) || (MREG(93) != 0)) {
+        if (play->roomCtx.curRoom.enablePosLights || (MREG(93) != 0)) {
             temp_fv1 = (Rand_ZeroOne() * 30.0f) + 225.0f;
             Lights_PointSetColorAndRadius(&this->lightInfo, temp_fv1, temp_fv1 * 0.7f, 0, var_fa0 * 300.0f);
         }
@@ -11581,7 +11581,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         Math_StepToF(&this->unk_B10[0], var_v0, D_8085D3FC[var_v0]);
     }
     func_80832888(this, play);
-    if (play->roomCtx.curRoom.enablePosLights != 0) {
+    if (play->roomCtx.curRoom.enablePosLights) {
         Lights_PointSetColorAndRadius(&this->lightInfo, 255, 255, 255, 60);
     } else {
         this->lightInfo.params.point.radius = -1;
@@ -15553,7 +15553,7 @@ void func_8084FD7C(PlayState* play, Player* this, Actor* actor) {
 }
 
 s32 func_8084FE48(Player* this) {
-    return this->targetedActor == NULL && !func_8082FC24(this);
+    return (this->targetedActor == NULL) && !func_8082FC24(this);
 }
 
 PlayerAnimationHeader* D_8085D688[] = {

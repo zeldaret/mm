@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#define OBJLUPYGAMELIFT_GET_PATH(thisx) ((thisx)->params & 0x7F)
+#define OBJLUPYGAMELIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJLUPYGAMELIFT_GET_7(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJLUPYGAMELIFT_GET_C(thisx) (((thisx)->params >> 0xC) & 1)
 

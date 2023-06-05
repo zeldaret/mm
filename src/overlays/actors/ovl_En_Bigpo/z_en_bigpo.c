@@ -375,7 +375,6 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, PlayState* play) {
     this->actor.shape.rot.y += this->rotVelocity;
     EnBigpo_RotateSpawnCutsceneFires(this);
 
-    if (1) {}
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         this->fires[i].pos.y += this->actor.velocity.y;
     }
@@ -861,7 +860,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
 
     // count the number of possible fires we can find (4 in vanilla)
     for (enemyPtr = GET_FIRST_ENEMY(play); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
             fireCount++;
         }
     }
@@ -882,7 +881,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
         while (enemyPtr != NULL) {
-            if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+            if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
                 if (randomIndex == 0) {
                     randomFirePo = (EnBigpo*)enemyPtr;
                     randomFirePo->actor.params = ENBIGPO_CHOSENFIRE;
@@ -1225,8 +1224,8 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                              Gfx** gfx) {
     EnBigpo* this = THIS;
     // not fully invisible
-    if (!(this->mainColor.a != 0 && limbIndex != 7) ||
-        (this->actionFunc == EnBigpo_BurnAwayDeath && this->idleTimer >= 2)) {
+    if ((this->mainColor.a == 0) || (limbIndex == 7) ||
+        ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }
     return false;
@@ -1416,6 +1415,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
     s32 i;
 
     mtfxPtr = Matrix_GetCurrent();
+
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

@@ -63,6 +63,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dz = 1.0f;
             this->scalingFactor = 0.2f;
             break;
+
         case EFF_DUST_TYPE_1:
             this->actionFunc = func_80918FE4;
             this->actor.draw = func_80919768;
@@ -71,6 +72,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dz = 0.8f;
             this->scalingFactor = 0.5f;
             break;
+
         case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
         case EFF_DUST_TYPE_3:
             this->actionFunc = func_80919230;
@@ -79,6 +81,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dx = 0.5f;
             this->scalingFactor = 15.0f;
             break;
+
         case EFF_DUST_TYPE_4:
             this->actionFunc = func_80919230;
             this->actor.draw = func_809199FC;
@@ -86,6 +89,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dx = 0.5f;
             this->scalingFactor = 10.0f;
             break;
+
         case EFF_DUST_TYPE_5:
             this->actionFunc = func_80919230;
             this->actor.draw = func_809199FC;
@@ -93,6 +97,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dx = 0.5f;
             this->scalingFactor = 20.0f;
             break;
+
         default:
             SystemArena_Free(this);
             break;
@@ -171,7 +176,7 @@ void func_80919230(EffDust* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
+    if ((parent == NULL) || (parent->update == NULL) || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
         if (this->life != 0) {
             this->life--;
         } else {
@@ -234,6 +239,9 @@ void func_80919230(EffDust* this, PlayState* play) {
                         this->initialPositions[i].y = 4000.0f * Math_SinS(theta);
                         this->initialPositions[i].z = 4000.0f * Math_CosS(theta);
                     }
+                    break;
+
+                default:
                     break;
             }
 
@@ -319,6 +327,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
     Player* player = GET_PLAYER(play);
 
     OPEN_DISPS(gfxCtx);
+
     Gfx_SetupDL25_Opa(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);

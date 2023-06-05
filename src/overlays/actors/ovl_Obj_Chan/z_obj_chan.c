@@ -418,6 +418,7 @@ void ObjChan_DrawPot(Actor* thisx, PlayState* play) {
 void ObjChan_DrawFire(ObjChan* this, PlayState* play) {
     u32 sp4C;
     Gfx* dl;
+
     OPEN_DISPS(play->state.gfxCtx);
 
     sp4C = play->gameplayFrames;

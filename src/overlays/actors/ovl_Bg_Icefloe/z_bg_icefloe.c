@@ -121,7 +121,7 @@ void func_80AC4C34(BgIcefloe* this, PlayState* play) {
     WaterBox* water;
 
     this->timer--;
-    if (this->timer == 0 ||
+    if ((this->timer == 0) ||
         !WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
                                 &this->dyna.actor.home.pos.y, &water)) {
         func_80AC4CF0(this);
