@@ -1089,7 +1089,7 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc;
+    /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc; // Upper body/item action functions
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;
