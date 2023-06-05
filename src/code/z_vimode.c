@@ -158,7 +158,7 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
     } else {
         viMode->fldRegs[0].vStart += START((u16)-3, (u16)-2);
         if (tvType == OS_TV_MPAL) {
-            viMode->fldRegs[0].vBurst += BURST((u8)-2, (u8)-1, 12, -1);
+            viMode->fldRegs[0].vBurst += BURST((u8)-2, (u8)-1, 12, (u8)-1);
         } else if (tvType == OS_TV_PAL) {
             viMode->fldRegs[1].vBurst += BURST((u8)-2, (u8)-1, 2, 0);
         }
