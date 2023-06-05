@@ -19897,7 +19897,7 @@ void Player_Cutscene_8085ABA8(Player* this, CsCmdActorCue* cue) {
 }
 
 void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsModeEntry* csEntry) {
-    if (csEntry->type >= PLAYER_CSTYPE_ANIM_1) {
+    if (csEntry->type > PLAYER_CSTYPE_NONE) {
         sPlayerCsModeAnimFuncs[csEntry->type](play, this, csEntry->csAnimArg2);
     } else if (csEntry->type <= PLAYER_CSTYPE_ACTION) {
         csEntry->func(play, this, cue);
