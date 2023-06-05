@@ -20,9 +20,9 @@
     ((u8)(hsync_width) | ((u8)(color_width) << 8) | ((u8)(vsync_width) << 16) | ((u16)(color_start) << 20))
 #define WIDTH(v) v
 #define VSYNC(v) v
-#define HSYNC(duration, leap) (duration | (leap << 16))
-#define LEAP(upper, lower) (((u16)(upper) << 16) | (u16)(lower))
-#define START(start, end) (((u16)(start) << 16) | (u16)(end))
+#define HSYNC(duration, leap) (((u16)(leap) << 16) | ((u16)(duration) & 0xFFFF))
+#define LEAP(upper, lower) (((u16)(upper) << 16) | ((u16)(lower) & 0xFFFF))
+#define START(start, end) (((u16)(start) << 16) | ((u16)(end) & 0xFFFF))
 
 #define FTOFIX(val, i, f) ((u32)(val * (f32)(1 << f)) & ((1 << (i + f)) - 1))
 
