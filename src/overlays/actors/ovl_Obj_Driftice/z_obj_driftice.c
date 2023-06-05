@@ -195,8 +195,7 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
 
     temp_f22 *= arg0->unk_08;
 
-    //! FAKE:
-    *arg2 = arg0->unk_04 + (s32)((void)0, temp_f22);
+    *arg2 = (s32)temp_f22 + arg0->unk_04;
 }
 
 void func_80A66C4C(ObjDrifticeStruct4* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
