@@ -394,7 +394,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
 
-    this->switchFlag = ENDOOR_GET_PARAMS_7F(thisx);
+    this->switchFlag = ENDOOR_GET_PARAM_7F(thisx);
     if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);

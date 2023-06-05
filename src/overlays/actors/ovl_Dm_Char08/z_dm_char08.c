@@ -39,7 +39,7 @@ typedef enum {
     /* 3 */ TURTLE_EYEMODE_LOOK_STRAIGHT,
     /* 4 */ TURTLE_EYEMODE_UNUSED,
     /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT
-} EyeMode;
+} TurtleEyeMode;
 
 typedef enum {
     /* 0 */ TURTLE_ANIM_IDLE,

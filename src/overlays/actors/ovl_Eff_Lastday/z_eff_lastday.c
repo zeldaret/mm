@@ -46,7 +46,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.1f);
     switch (EFFLASTDAY_GET_F(&this->actor)) {
-        case EFFLASTDAY_PARAMS_1:
+        case EFFLASTDAY_PARAM_1:
             this->dList = object_lastday_DL_000510;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000608);
             this->cueType = CS_CMD_ACTOR_CUE_508;
@@ -54,7 +54,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
             Actor_SetScale(&this->actor, 1.0f);
             break;
 
-        case EFFLASTDAY_PARAMS_2:
+        case EFFLASTDAY_PARAM_2:
             this->dList = object_lastday_DL_000210;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000308);
             this->cueType = CS_CMD_ACTOR_CUE_509;
@@ -62,7 +62,7 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
             Actor_SetScale(&this->actor, 0.5f);
             break;
 
-        case EFFLASTDAY_PARAMS_3:
+        case EFFLASTDAY_PARAM_3:
             this->dList = object_lastday_DL_000060;
             this->matAnim = Lib_SegmentedToVirtual(object_lastday_Matanimheader_000148);
             this->cueType = CS_CMD_ACTOR_CUE_510;
@@ -79,13 +79,13 @@ void EffLastday_Init(Actor* thisx, PlayState* play2) {
             Actor_SetScale(&this->actor, 1.0f);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0,
-                               EFFLASTDAY_PARAMS_1);
+                               EFFLASTDAY_PARAM_1);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0,
-                               EFFLASTDAY_PARAMS_2);
+                               EFFLASTDAY_PARAM_2);
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_LASTDAY, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.world.rot.y, 0,
-                               EFFLASTDAY_PARAMS_3);
+                               EFFLASTDAY_PARAM_3);
             break;
     }
 }
@@ -238,10 +238,10 @@ void EffLastday_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (EFFLASTDAY_GET_F(thisx)) {
-        case EFFLASTDAY_PARAMS_1:
-        case EFFLASTDAY_PARAMS_2:
+        case EFFLASTDAY_PARAM_1:
+        case EFFLASTDAY_PARAM_2:
             break;
-        case EFFLASTDAY_PARAMS_3:
+        case EFFLASTDAY_PARAM_3:
             EffLastday_SetVtxAlpha(this->alpha);
             break;
         default:

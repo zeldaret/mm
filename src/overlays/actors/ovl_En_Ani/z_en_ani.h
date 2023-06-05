@@ -29,8 +29,8 @@ typedef struct EnAni {
 } EnAni; // size = 0x300
 
 typedef enum EnAniType {
-  /* 0 */ ANI_TYPE_STANDING, // unfinshed and unused. Never read as 0, only taken as the "else" case from `ANI_TYPE_TREE_HANGING`
-  /* 1 */ ANI_TYPE_TREE_HANGING = 1
+  /* 1 */ ANI_TYPE_TREE_HANGING = 1,
+  /* 2 */ ANI_TYPE_STANDING // unfinshed and unused. Never read as 0, only taken as the "else" case from `ANI_TYPE_TREE_HANGING`
 } EnAniType;
 
 #define ANI_GET_TYPE(thisx) ((thisx)->params & 0xFF) 

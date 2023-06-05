@@ -20,10 +20,10 @@ typedef struct EffLastday {
 } EffLastday; // size = 0x158
 
 typedef enum EffLastDayParams {
-    /* 0 */ EFFLASTDAY_PARAMS_0,
-    /* 1 */ EFFLASTDAY_PARAMS_1,
-    /* 2 */ EFFLASTDAY_PARAMS_2,
-    /* 3 */ EFFLASTDAY_PARAMS_3
-} EffLastDayParams;
+    /* 0 */ EFFLASTDAY_PARAM_0,
+    /* 1 */ EFFLASTDAY_PARAM_1,
+    /* 2 */ EFFLASTDAY_PARAM_2,
+    /* 3 */ EFFLASTDAY_PARAM_3
+} EffLastDayParam;
 
 #endif // Z_EFF_LASTDAY_H

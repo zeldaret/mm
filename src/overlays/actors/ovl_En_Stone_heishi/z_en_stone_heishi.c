@@ -101,7 +101,7 @@ typedef enum {
     /* 4 */ EN_STONE_HEISHI_ANIM_SIT_AND_REACH,
     /* 5 */ EN_STONE_HEISHI_ANIM_DRINK_2,
     /* 6 */ EN_STONE_HEISHI_ANIM_STAND_UP
-} EnStoneHeishiAnimations;
+} EnStoneHeishiAnimation;
 
 void EnStoneheishi_Init(Actor* thisx, PlayState* play) {
     EnStoneheishi* this = THIS;

@@ -13,10 +13,10 @@ typedef void (*EnDaikuActionFunc)(struct EnDaiku*, PlayState*);
 #define ENDAIKU_PATH_INDEX_NONE 0x3F
 
 typedef enum {
-    /* 0 */ ENDAIKU_PARAMS_FF_0,
-    /* 1 */ ENDAIKU_PARAMS_FF_1,
-    /* 2 */ ENDAIKU_PARAMS_FF_2,
-    /* 3 */ ENDAIKU_PARAMS_FF_3
+    /* 0 */ ENDAIKU_PARAM_FF_0,
+    /* 1 */ ENDAIKU_PARAM_FF_1,
+    /* 2 */ ENDAIKU_PARAM_FF_2,
+    /* 3 */ ENDAIKU_PARAM_FF_3
 } EnDaikuParam;
 
 typedef struct EnDaiku {

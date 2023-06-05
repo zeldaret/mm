@@ -29,7 +29,7 @@ typedef enum {
 typedef enum {
     /* 0 */ SEAGULL_TIMER_FLY_STATE,
     /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET
-} SeagullTimers;
+} SeagullTimer;
 
 ActorInit En_Tanron4_InitVars = {
     ACTOR_EN_TANRON4,

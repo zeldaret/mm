@@ -47,18 +47,18 @@ void EnViewer_Init(Actor* thisx, PlayState* play) {
     this->unk_154 = D_8089F3E0;
     D_8089F3E0++;
     switch (ENVIEWER_GET_3(&this->actor)) {
-        case ENVIEWER_PARAMS_0:
+        case ENVIEWER_PARAM_0:
             this->unk_148 = ENVIEWER_GET_8000(&this->actor) * 40.0f;
             this->unk_150 = (u8)ENVIEWER_GET_1FC(&this->actor) * 40.0f;
             EnViewer_SetupAction(this, func_8089F17C);
             break;
-        case ENVIEWER_PARAMS_1:
+        case ENVIEWER_PARAM_1:
             this->unk_148 = (u16)ENVIEWER_GET_FE00(&this->actor) * 40.0f;
             this->unk_150 = (u8)ENVIEWER_GET_1FC(&this->actor) * 40.0f;
             this->unk_14C = (u16)(this->actor.world.rot.y) * 40.0f;
             EnViewer_SetupAction(this, func_8089F218);
             break;
-        case ENVIEWER_PARAMS_2:
+        case ENVIEWER_PARAM_2:
             this->unk_148 = (u16)ENVIEWER_GET_FE00(&this->actor) * 40.0f;
             this->unk_14C = (u8)ENVIEWER_GET_1FC(&this->actor) * 40.0f;
             EnViewer_SetupAction(this, func_8089F2C4);

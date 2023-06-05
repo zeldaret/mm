@@ -17,8 +17,8 @@ typedef struct EffKamejimaWave {
 } EffKamejimaWave; // size = 0x150
 
 typedef enum params {
-    /* 0 */ EFFKAMEJIMAWAVE_PARAMS_0,
-    /* 1 */ EFFKAMEJIMAWAVE_PARAMS_1
+    /* 0 */ EFFKAMEJIMAWAVE_PARAM_0,
+    /* 1 */ EFFKAMEJIMAWAVE_PARAM_1
 } EffKamejimaWaveParams;
 
 #endif // Z_EFF_KAMEJIMA_WAVE_H

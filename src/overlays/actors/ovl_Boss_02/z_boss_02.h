@@ -35,7 +35,7 @@ typedef enum {
     /*  35 */ TWINMOLD_BLUE = 35,
     /* 100 */ TWINMOLD_TAIL = 100,
     /* 200 */ TWINMOLD_STATIC = 200
-} TwinmoldParams;
+} TwinmoldParam;
 
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;

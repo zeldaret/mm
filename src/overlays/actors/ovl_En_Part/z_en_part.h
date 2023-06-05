@@ -12,7 +12,7 @@ typedef enum {
     /* 0x1 */ ENPART_TYPE_1,
     /* 0x4 */ ENPART_TYPE_4 = 4,
     /* 0xF */ ENPART_TYPE_15 = 15
-} EnPartParams;
+} EnPartParam;
 
 typedef struct EnPart {
     /* 0x000 */ Actor actor;

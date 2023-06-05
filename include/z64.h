@@ -657,7 +657,7 @@ typedef struct {
 #define FLASHROM_REQUEST_WRITE 1
 #define FLASHROM_REQUEST_READ 2
 
-typedef enum fram_command {
+typedef enum framCommand {
     /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
        Initializes fram to 0xFF in FRAM_MODE_ERASE
        Writes Contents in FLASHRAM_MODE_WRITE
@@ -681,15 +681,15 @@ typedef enum fram_command {
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
-} fram_command;
+} framCommand;
 
-typedef enum fram_mode {
+typedef enum framMode {
     /* 0 */ FRAM_MODE_NOP,
     /* 1 */ FRAM_MODE_ERASE,
     /* 2 */ FRAM_MODE_WRITE,
     /* 3 */ FRAM_MODE_READ,
     /* 4 */ FRAM_MODE_STATUS
-} fram_mode;
+} framMode;
 
 typedef enum {
     /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,
