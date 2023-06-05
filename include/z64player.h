@@ -1135,7 +1135,7 @@ typedef struct Player {
     /* 0x3B8 */ u16 unk_3B8;
     /* 0x3BA */ union {
                     s16 doorBgCamIndex;
-                    s16 unk_3BA; // When in a cutscene, booloean to determine if `PLAYER_STATE1_20000000` is set
+                    s16 unk_3BA; // When in a cutscene, boolean to determine if `PLAYER_STATE1_20000000` is set
                 };
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
