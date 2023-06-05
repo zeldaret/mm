@@ -13,6 +13,6 @@ typedef struct EnTest2 {
 typedef enum {
     /* 0xB */ EN_TEST2_PARAM_B = 0xB,
     /* 0xC */ EN_TEST2_PARAM_C
-} EnTest2_Params;
+} EnTest2_Param;
 
 #endif // Z_EN_TEST2_H
