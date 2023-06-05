@@ -1,5 +1,6 @@
 #include "global.h"
 #include "vt.h"
+#include "fixed_point.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #define DYNA_RAYCAST_FLOORS 1
@@ -3047,7 +3048,7 @@ void DynaPoly_AddBgActorToLookup(PlayState* play, DynaCollisionContext* dyna, s3
                 newPoly->normal.z = COLPOLY_SNORMAL(newNormal.z);
             }
 
-            newPoly->dist = func_80086D24(-DOTXYZ(newNormal, vtxA));
+            newPoly->dist = nearbyint(-DOTXYZ(newNormal, vtxA));
             if (newNormal.y > 0.5f) {
                 s16 polyId = *polyStartIndex + i;
 

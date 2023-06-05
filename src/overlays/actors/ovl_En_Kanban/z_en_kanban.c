@@ -526,7 +526,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->actor.velocity.y = 0.0f;
                         } else {
                             this->actor.velocity.y *= -0.3f;
-                            this->actor.world.rot.y += (s16)Rand_CenteredFloat(0x4000);
+                            this->actor.world.rot.y += (s16)(s32)Rand_CenteredFloat(0x4000);
                         }
                         bounced = true;
                     } else {

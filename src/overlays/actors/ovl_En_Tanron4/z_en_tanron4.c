@@ -67,7 +67,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
             for (i = 0; i < thisx->params; i++) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON4, thisx->world.pos.x + Rand_CenteredFloat(500.0f),
                             thisx->world.pos.y + Rand_CenteredFloat(100.0f),
-                            thisx->world.pos.z + Rand_CenteredFloat(500.0f), 0, Rand_ZeroFloat(65536.0f), 0,
+                            thisx->world.pos.z + Rand_CenteredFloat(500.0f), 0, Rand_ZeroFloat(0x10000), 0,
                             SEAGULL_CLONE);
             }
         }

@@ -1232,7 +1232,7 @@ void func_8089D42C(EnDinofos* this, PlayState* play) {
     if ((this->actionFunc == func_8089B834) && (this->unk_290 != 0)) {
         Math_ScaledStepToS(&this->unk_28E, Math_SinS(this->unk_290 * 1400) * 0x2C00, 0x300);
     } else if (this->actionFunc == func_8089CA74) {
-        Math_ScaledStepToS(&this->unk_28E, Math_CosF(M_PI) * 0x2C00, 0x233);
+        Math_ScaledStepToS(&this->unk_28E, Math_CosF(M_PI) * 0x2C00, 0x2C00 / 20);
     } else if (this->actionFunc == func_8089CBEC) {
         this->unk_28E = Math_CosF(this->unk_290 * (M_PI / 20)) * 0x2C00;
     } else if (!Play_InCsMode(play)) {

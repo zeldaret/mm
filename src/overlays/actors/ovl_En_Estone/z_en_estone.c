@@ -67,7 +67,7 @@ void EnEstone_Init(Actor* thisx, PlayState* play) {
     this->rotVel.x = this->rotVel.y = this->rotVel.z = Rand_CenteredFloat(1.0f) * 20.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.world.rot.y += (s16)Rand_CenteredFloat(0x2710);
+    this->actor.world.rot.y += (s16)(s32)Rand_CenteredFloat(0x2710);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if (this->actor.params == ENESTONE_TYPE_LARGE) {

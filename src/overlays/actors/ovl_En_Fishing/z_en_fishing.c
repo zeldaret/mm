@@ -4067,7 +4067,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 func_80903C60(this, 1);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
-                this->unk_162 = Rand_CenteredFloat(32768.0f);
+                this->unk_162 = (s16)(s32)Rand_CenteredFloat(0x8000);
             } else if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
                        (this->actor.prevPos.y >= WATER_SURFACE_Y(play))) {
                 if (this->unk_17C < -5.0f) {
@@ -4128,10 +4128,10 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if (Rand_ZeroOne() < 0.5f) {
                         this->unk_15E = 0;
                     } else {
-                        this->unk_15E = (s16)Rand_CenteredFloat(32.0f) + 0x8000;
+                        this->unk_15E = (s16)(s32)Rand_CenteredFloat(0x20) + 0x8000;
                     }
 
-                    this->unk_160 = (s16)Rand_CenteredFloat(16384.0f);
+                    this->unk_160 = (s16)(s32)Rand_CenteredFloat(0x4000);
                     this->unk_188 = 1.0f;
                     this->unk_18C = 5000.0f;
                     this->unk_194 = 5000.0f;

@@ -289,7 +289,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
         sp34.y += Rand_CenteredFloat(300.0f);
         sp34.z += sp30 * Math_CosS(this->actor.home.rot.y);
 
-        if (this->actor.home.rot.x >= 0x259) {
+        if (this->actor.home.rot.x > 0x258) {
             sp28 = func_80B22C80(&sp34, this->unk_148, 2.0f);
         } else {
             sp28 = func_80B22C80(&sp34, this->unk_148, 1.0f);

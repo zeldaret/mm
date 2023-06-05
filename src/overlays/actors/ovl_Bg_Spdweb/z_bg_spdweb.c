@@ -240,7 +240,7 @@ void func_809CE234(BgSpdweb* this, PlayState* play) {
         spA8.y = this->dyna.actor.world.pos.y;
 
         for (i = 0; i < 6; i++) {
-            temp_s0 = (s32)Rand_CenteredFloat(10240.0f) + phi_s2;
+            temp_s0 = (s32)Rand_CenteredFloat(0x2800) + phi_s2;
             temp_f24 = Math_SinS(temp_s0);
             temp_f22 = Math_CosS(temp_s0);
 

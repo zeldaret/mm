@@ -438,9 +438,9 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
         this->heldTimer = (s32)(Rand_ZeroFloat(1.0f) * 10.0f) + 10;
     }
 
-    this->actor.shape.rot.x = (s16)Rand_CenteredFloat(5000.0f) + this->actor.world.rot.x;
-    this->actor.shape.rot.y = (s16)Rand_CenteredFloat(5000.0f) + this->actor.world.rot.y;
-    this->actor.shape.rot.z = (s16)Rand_CenteredFloat(5000.0f) + this->actor.world.rot.z;
+    this->actor.shape.rot.x = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.x;
+    this->actor.shape.rot.y = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.y;
+    this->actor.shape.rot.z = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.z;
     if (this->niwType == NIW_TYPE_REGULAR) {
         if (Actor_HasNoParent(&this->actor, play)) {
             this->actor.shape.rot.z = 0;

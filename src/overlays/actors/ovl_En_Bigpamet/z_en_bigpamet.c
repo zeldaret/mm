@@ -267,7 +267,7 @@ void func_80A27B58(EnBigpamet* this) {
     this->unk_2A2 = 40;
 
     for (ptr = &this->unk_2FC[0], i = 0; i < ARRAY_COUNT(this->unk_2FC); i++, ptr++) {
-        temp_s1 = (s32)Rand_CenteredFloat(20480.0f) + this->actor.wallYaw;
+        temp_s1 = (s32)Rand_CenteredFloat(0x5000) + this->actor.wallYaw;
         temp_s2 = Rand_S16Offset(0x1000, 0x3000);
 
         temp_fs2 = Math_SinS(temp_s2);

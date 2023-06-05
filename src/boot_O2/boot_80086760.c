@@ -5,12 +5,6 @@
 #include "global.h"
 #include "fixed_point.h"
 
-extern f32 func_80086C70(f32 x);
-extern f32 func_80086CA8(f32 x);
-extern f32 func_80086D50(f32 x);
-extern f32 func_80086CE0(f32 x);
-extern f32 func_80086D18(f32 x);
-
 s32 gUseAtanContFrac;
 
 /**
@@ -22,26 +16,26 @@ f32 Math_FTanF(f32 x) {
 
 // Unused
 f32 Math_FFloorF(f32 x) {
-    return func_80086C70(x);
+    return floorf(x);
 }
 
 // Unused
 f32 Math_FCeilF(f32 x) {
-    return func_80086CA8(x);
+    return ceilf(x);
 }
 
 // Unused
 f32 Math_FRoundF(f32 x) {
-    return func_80086D50(x);
+    return roundf(x);
 }
 
 // Unused
 f32 Math_FTruncF(f32 x) {
-    return func_80086CE0(x);
+    return truncf(x);
 }
 
 f32 Math_FNearbyIntF(f32 x) {
-    return func_80086D18(x);
+    return nearbyintf(x);
 }
 
 /**

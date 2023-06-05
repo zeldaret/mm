@@ -11,6 +11,8 @@ static f32 sFactorialTbl[] = {
 /**
  * Takes a float, returns the factorial of it(s trunctation), iteratively
  * Unused
+ *
+ * @remark original name: "ffact"
  */
 f32 Math_FactorialF(f32 n) {
     f32 ret = 1.0f;
@@ -26,6 +28,8 @@ f32 Math_FactorialF(f32 n) {
 /**
  * Takes an int and returns its factorial as a float. Uses the lookup table for n <= 12.
  * Unused
+ *
+ * @remark original name: "ifact"
  */
 f32 Math_Factorial(s32 n) {
     f32 ret;
@@ -47,6 +51,8 @@ f32 Math_Factorial(s32 n) {
 /**
  * Returns base^{exp} if exp is nonnegative and 1.0f otherwise.
  * Unused
+ *
+ * @remark original name: "powi"
  */
 f32 Math_PowF(f32 base, s32 exp) {
     f32 ret = 1.0f;
@@ -61,6 +67,8 @@ f32 Math_PowF(f32 base, s32 exp) {
 
 /**
  * Takes an angle in radians and returns the sine.
+ *
+ * @remark original name: "sinf_table"
  */
 f32 Math_SinF(f32 rad) {
     return sins(RAD_TO_BINANG(rad)) * SHT_MINV;
@@ -68,6 +76,8 @@ f32 Math_SinF(f32 rad) {
 
 /**
  * Takes an angle in radians and returns the cosine.
+ *
+ * @remark original name: "cosf_table"
  */
 f32 Math_CosF(f32 rad) {
     return coss(RAD_TO_BINANG(rad)) * SHT_MINV;

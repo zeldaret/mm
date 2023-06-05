@@ -1573,15 +1573,15 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->actor.speed = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetX = ((s16)Rand_CenteredFloat(500.0f) + this->shapeRotTargetX) + 0x8000;
+                        this->shapeRotTargetX = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetX) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetZ = ((s16)Rand_CenteredFloat(500.0f) + this->shapeRotTargetZ) + 0x8000;
+                        this->shapeRotTargetZ = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetZ) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetY = Rand_ZeroFloat(65536.0f);
+                        this->shapeRotTargetY = Rand_ZeroFloat(0x10000);
                     }
 
                     this->actor.world.rot.y = Math_Atan2S_XY(-this->actor.world.pos.z, -this->actor.world.pos.x);

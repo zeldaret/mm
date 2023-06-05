@@ -222,8 +222,8 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play) {
 
     if (this->unk_14A > 0) {
         this->unk_14A--;
-        this->actor.shape.rot.x = BINANG_ADD((s32)(Rand_CenteredFloat(1408.0f) * 0.02f * this->unk_14A), 0x4000);
-        this->actor.shape.rot.z = Rand_CenteredFloat(1408.0f) * 0.02f * this->unk_14A;
+        this->actor.shape.rot.x = BINANG_ADD((s32)(Rand_CenteredFloat(0x580) * 0.02f * this->unk_14A), 0x4000);
+        this->actor.shape.rot.z = Rand_CenteredFloat(0x580) * 0.02f * this->unk_14A;
     } else {
         this->actor.shape.rot.x = 0x4000;
         this->actor.shape.rot.z = 0;

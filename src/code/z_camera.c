@@ -6342,7 +6342,7 @@ s32 Camera_Demo4(Camera* camera) {
             // Camera fixed on human player as the mask moves from the pocket to the face
             // Camera rolls left and right
             if (rwData->timer >= 12) {
-                rwData->unk_0C = (rwData->timer - 12) * 10.384615f;
+                rwData->unk_0C = (rwData->timer - 12) * (135.0f / 13.0f);
                 sin = Math_SinF(DEG_TO_RAD(rwData->unk_0C));
                 rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
                 if (rwData->timer == 12) {

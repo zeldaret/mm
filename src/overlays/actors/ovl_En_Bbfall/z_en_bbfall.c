@@ -340,7 +340,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
-            this->actor.shape.rot.y += (s16)Rand_CenteredFloat(73728.0f);
+            this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x12000);
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;

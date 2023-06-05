@@ -223,7 +223,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             this->increaseLowestUsedIndexTimer = 10;
 
             Matrix_Push();
-            Matrix_RotateYS((s16)Rand_CenteredFloat(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            Matrix_RotateYS((s16)(s32)Rand_CenteredFloat(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
             velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
             Matrix_MultVec3f(&velocity, &this->actor.velocity);
             Matrix_Pop();
@@ -257,7 +257,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WIZ_FIRE, this->actor.world.pos.x,
                                     this->actor.world.pos.y, this->actor.world.pos.z, 0, arcingProjectileRotY, 0,
                                     EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE);
-                        arcingProjectileRotY += BINANG_ADD((s32)Rand_CenteredFloat(0x1000), 0x3333);
+                        arcingProjectileRotY += BINANG_ADD((s32)Rand_CenteredFloat(0x1000), 0x10000 / 5);
                     }
 
                     Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);

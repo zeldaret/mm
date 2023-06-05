@@ -130,27 +130,6 @@ void __assert(const char* file, u32 lineNum);
 // void func_800862B4(void);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 
-// void func_80086C70(void);
-f64 func_80086C7C(f64 param_1);
-s32 func_80086C88(f32 param_1);
-s32 func_80086C98(f64 param_1);
-// void func_80086CA8(void);
-f64 func_80086CB4(f64 param_1);
-s32 func_80086CC0(f32 param_1);
-s32 func_80086CD0(f64 param_1);
-// void func_80086CE0(void);
-f64 func_80086CEC(f64 param_1);
-s32 func_80086CF8(f32 param_1);
-s32 func_80086D08(f64 param_1);
-// void func_80086D18(void);
-f64 func_80086D24(f64);
-s32 func_80086D30(f32 param_1);
-s32 func_80086D40(f64 param_1);
-// void func_80086D50(void);
-f64 func_80086D6C(f64 param_1);
-s32 func_80086D8C(f32 param_1);
-s32 func_80086DAC(f64 param_1);
-
 u32 Rand_Next(void);
 void Rand_Seed(u32 seed);
 f32 Rand_ZeroOne(void);
