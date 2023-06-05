@@ -663,12 +663,15 @@ endseg
 beginseg
     name "ovl_file_choose"
     compress
+    include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_data.o"
+    include "build/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
-    include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_80807940.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.data.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.bss.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
+    #else 
+        include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
+    #endif
 endseg
 
 beginseg
@@ -8823,7 +8826,8 @@ beginseg
     name "title_static"
     compress
     romalign 0x1000
-    include "build/baserom/title_static.o"
+    include "build/assets/misc/title_static/title_static.o"
+    number 1
 endseg
 
 beginseg

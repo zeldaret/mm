@@ -1037,6 +1037,9 @@ wordReplace = {
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
     "play->playerActorCsIds": "play->playerCsIds",
     "play->envFlags": "play->cutsceneFlags",
     "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
@@ -1061,15 +1064,13 @@ wordReplace = {
     "gSaveContext.unk_3E50": "gSaveContext.timerStartOsTimes",
     "gSaveContext.unk_3E88": "gSaveContext.timerStopTimes",
     "gSaveContext.unk_3EC0": "gSaveContext.timerPausedOsTimes",
-
-    "play->sceneLoadFlag": "play->transitionTrigger",
-    "play->unk_18B4A": "play->transitionMode",
-    "play->unk_1887F": "play->transitionType",
-    "play->roomCtx.currRoom": "play->roomCtx.curRoom",
     "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
     "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
     "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
+
+    "path->unk1": "path->additionalPathIndex",
+    "path->unk2": "path->customValue",
 
     "D_801D15B0": "gZeroVec3f",
     "D_801D15BC": "gZeroVec3s",
