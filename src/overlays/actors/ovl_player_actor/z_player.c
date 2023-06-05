@@ -5496,13 +5496,13 @@ s32 func_80834600(Player* this, PlayState* play) {
         return false;
     } else {
         s32 sp58 = func_808340AC(sPlayerCurrentFloorType);
-        u32 sp54 = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        u32 isSurfaceWallDamage = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         s32 var_a1 = false;
         s32 var_v1_2;
         s32 pad48;
 
-        if ((sp58 < 0) ||
-            ((sp54 == 0) && (this->transformation == PLAYER_FORM_GORON) && !(this->actor.depthInWater > 0.0f))) {
+        if ((sp58 < 0) || (!isSurfaceWallDamage && (this->transformation == PLAYER_FORM_GORON) &&
+                           !(this->actor.depthInWater > 0.0f))) {
             var_a1 = (this->actor.wallPoly != NULL) &&
                      SurfaceType_IsWallDamage(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
             if (!var_a1) {
@@ -5512,7 +5512,7 @@ s32 func_80834600(Player* this, PlayState* play) {
         }
         var_v1_2 = var_a1 ? this->actor.wallBgId : this->actor.floorBgId;
         if (((this->transformation == PLAYER_FORM_DEKU) || (this->transformation == PLAYER_FORM_ZORA)) &&
-            ((sp58 >= 0) && (sp54 == 0) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
+            ((sp58 >= 0) && !isSurfaceWallDamage && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
              (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.depthInWater < -30.0f))) {
             func_80834534(play, this);
         } else {
