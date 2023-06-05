@@ -10,7 +10,7 @@ typedef void (*ObjRailliftActionFunc)(struct ObjRaillift*, PlayState*);
 #define OBJRAILLIFT_GET_TYPE(thisx) (((thisx)->params >> 0xF) & 1)
 #define OBJRAILLIFT_HAS_FLAG(thisx) (((thisx)->params >> 0xD) & 1)
 #define OBJRAILLIFT_GET_FLAG(thisx) ((thisx)->home.rot.x & 0x7F)
-#define OBJRAILLIFT_GET_PATH(thisx) ((thisx)->params & 0x7F)
+#define OBJRAILLIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJRAILLIFT_GET_STARTING_POINT(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJRAILLIFT_GET_SPEED(thisx) ((thisx)->home.rot.z * 0.1f)
 #define OBJRAILLIFT_SHOULD_TELEPORT(thisx) (((thisx)->params >> 0xC) & 1)

@@ -652,7 +652,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= ACTOR_FLAG_2000000;
 
-    this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH_INDEX(&this->actor), ENRUPPECROW_PATH_INDEX_NONE);
     if (this->path != NULL) {
         this->actionFunc = EnRuppecrow_HandleSong;
     } else {
