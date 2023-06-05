@@ -42,14 +42,14 @@ void Player_Destroy(Actor* thisx, PlayState* play);
 void Player_Update(Actor* thisx, PlayState* play);
 void Player_Draw(Actor* thisx, PlayState* play);
 
-s32 Player_GrabPlayer(PlayState* play, Player* player);
+s32 Player_GrabPlayer(PlayState* play, Player* this);
 s32 func_8085B28C(PlayState* play, Player* this, PlayerCsMode csMode);
 void func_8085B384(Player* this, PlayState* play);
 s32 Player_InflictDamage(PlayState* play, s32 damage);
 void Player_TalkWithPlayer(PlayState* play, Actor* actor);
 void func_8085B74C(PlayState* play);
 void func_8085B820(PlayState* play, s16 arg1);
-PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId);
+PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId);
 s32 func_8085B930(PlayState* play, PlayerAnimationHeader* talkAnim, AnimationMode animMode);
 
 void Player_UpdateCommon(Player* this, PlayState* play, Input* input);
@@ -5497,7 +5497,7 @@ s32 func_80834600(Player* this, PlayState* play) {
     } else {
         s32 sp58 = func_808340AC(sPlayerCurrentFloorType);
         u32 sp54 = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        s32 var_a1 = 0;
+        s32 var_a1 = false;
         s32 var_v1_2;
         s32 pad48;
 
@@ -5505,12 +5505,12 @@ s32 func_80834600(Player* this, PlayState* play) {
             ((sp54 == 0) && (this->transformation == PLAYER_FORM_GORON) && !(this->actor.depthInWater > 0.0f))) {
             var_a1 = (this->actor.wallPoly != NULL) &&
                      SurfaceType_IsWallDamage(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
-            if (var_a1 == 0) {
+            if (!var_a1) {
                 //! FAKE?
                 goto label;
             }
         }
-        var_v1_2 = (var_a1 != 0) ? this->actor.wallBgId : this->actor.floorBgId;
+        var_v1_2 = var_a1 ? this->actor.wallBgId : this->actor.floorBgId;
         if (((this->transformation == PLAYER_FORM_DEKU) || (this->transformation == PLAYER_FORM_ZORA)) &&
             ((sp58 >= 0) && (sp54 == 0) && !(this->stateFlags1 & PLAYER_STATE1_8000000) &&
              (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.depthInWater < -30.0f))) {
@@ -5518,7 +5518,7 @@ s32 func_80834600(Player* this, PlayState* play) {
         } else {
             this->actor.colChkInfo.damage = 4;
             func_80833B18(play, this, (var_v1_2 == BGCHECK_SCENE) ? 0 : 1, 4.0f, 5.0f,
-                          (var_a1 != 0) ? this->actor.wallYaw : this->actor.shape.rot.y, 20);
+                          var_a1 ? this->actor.wallYaw : this->actor.shape.rot.y, 20);
             return true;
         }
     }
@@ -8511,7 +8511,7 @@ s32 func_8083CBC4(Player* this, f32 arg1, s16 arg2, f32 arg3, f32 arg4, f32 arg5
     }
 
     if (ABS_ALT(temp_v0) > 0x6000) {
-        if (Math_StepToF(&this->linearVelocity, 0.0f, arg3) == 0) {
+        if (!Math_StepToF(&this->linearVelocity, 0.0f, arg3)) {
             return false;
         }
 
@@ -19995,12 +19995,12 @@ void func_8085B170(PlayState* play, Player* this) {
     Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_HELD);
 }
 
-s32 Player_GrabPlayer(PlayState* play, Player* player) {
-    if (!Player_InBlockingCsMode(play, player) && (player->invincibilityTimer >= 0) && !func_801240DC(player)) {
-        if (!(player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_100000 |
-                                     PLAYER_STATE1_200000 | PLAYER_STATE1_800000))) {
-            if (!(player->stateFlags2 & PLAYER_STATE2_80) && !(player->stateFlags3 & PLAYER_STATE3_80)) {
-                func_8085B170(play, player);
+s32 Player_GrabPlayer(PlayState* play, Player* this) {
+    if (!Player_InBlockingCsMode(play, this) && (this->invincibilityTimer >= 0) && !func_801240DC(this)) {
+        if (!(this->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_2000 | PLAYER_STATE1_4000 | PLAYER_STATE1_100000 |
+                                   PLAYER_STATE1_200000 | PLAYER_STATE1_800000))) {
+            if (!(this->stateFlags2 & PLAYER_STATE2_80) && !(this->stateFlags3 & PLAYER_STATE3_80)) {
+                func_8085B170(play, this);
                 return true;
             }
         }
@@ -20161,11 +20161,11 @@ void func_8085B820(PlayState* play, s16 arg1) {
     func_80836D8C(player);
 }
 
-PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
-    PlayerItemAction itemAction = Player_ItemToItemAction(player, itemId);
+PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId) {
+    PlayerItemAction itemAction = Player_ItemToItemAction(this, itemId);
 
     if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction <= PLAYER_IA_MASK_MAX) &&
-        (itemAction == GET_IA_FROM_MASK(player->currentMask))) {
+        (itemAction == GET_IA_FROM_MASK(this->currentMask))) {
         itemAction = PLAYER_IA_NONE;
     }
 
@@ -20173,15 +20173,15 @@ PlayerItemAction func_8085B854(PlayState* play, Player* player, ItemId itemId) {
         return PLAYER_IA_MINUS1;
     }
 
-    player->itemAction = PLAYER_IA_NONE;
-    player->actionFunc = NULL;
-    func_80831760(play, player, func_80853A5C, 0);
-    player->csId = CS_ID_GLOBAL_TALK;
-    player->itemAction = itemAction;
-    Player_AnimationPlayOnce(play, player, &gPlayerAnim_link_normal_give_other);
-    player->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
-    player->getItemDrawIdPlusOne = GID_NONE + 1;
-    player->exchangeItemId = itemAction;
+    this->itemAction = PLAYER_IA_NONE;
+    this->actionFunc = NULL;
+    func_80831760(play, this, func_80853A5C, 0);
+    this->csId = CS_ID_GLOBAL_TALK;
+    this->itemAction = itemAction;
+    Player_AnimationPlayOnce(play, this, &gPlayerAnim_link_normal_give_other);
+    this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
+    this->getItemDrawIdPlusOne = GID_NONE + 1;
+    this->exchangeItemId = itemAction;
 
     return itemAction;
 }
