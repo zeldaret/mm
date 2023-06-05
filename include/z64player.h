@@ -1128,12 +1128,15 @@ typedef struct Player {
     /* 0x395 */ u8 prevCsMode; // PlayerCsMode enum
     /* 0x396 */ u8 cueId; // PlayerCueId enum
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
-    /* 0x398 */ Actor* unk_398; // csActor?
+    /* 0x398 */ Actor* csActor;
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
-    /* 0x3BA */ s16 doorBgCamIndex;
+    /* 0x3BA */ union {
+                    s16 doorBgCamIndex;
+                    s16 unk_3BA; // When in a cutscene, booloean to determine if `PLAYER_STATE1_20000000` is set
+                };
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;

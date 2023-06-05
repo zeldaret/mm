@@ -1373,8 +1373,8 @@ s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     }
 
     player->csMode = csMode;
-    player->unk_398 = actor;
-    player->doorBgCamIndex = 0;
+    player->csActor = actor;
+    player->unk_3BA = false;
     return true;
 }
 
@@ -1382,7 +1382,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->doorBgCamIndex = 1;
+        player->unk_3BA = true;
         return true;
     }
     return false;

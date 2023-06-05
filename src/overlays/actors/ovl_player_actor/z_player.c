@@ -6934,7 +6934,7 @@ s32 func_808387A0(PlayState* play, Player* this) {
         Player_StopCutscene(this);
         this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
         Player_SetAction(play, this, func_8085B08C, 0);
-        if (this->doorBgCamIndex != 0) {
+        if (this->unk_3BA) {
             this->stateFlags1 |= PLAYER_STATE1_20000000;
         }
         func_8082DC38(this);
@@ -19015,11 +19015,11 @@ void Player_CsAnim_18(PlayState* play, Player* this, void* entry) {
 }
 
 void func_80859248(Player* this) {
-    if ((this->unk_398 == NULL) || (this->unk_398->update == NULL)) {
-        this->unk_398 = NULL;
+    if ((this->csActor == NULL) || (this->csActor->update == NULL)) {
+        this->csActor = NULL;
     }
-    this->targetedActor = this->unk_398;
-    if (this->unk_398 != NULL) {
+    this->targetedActor = this->csActor;
+    if (this->csActor != NULL) {
         this->actor.shape.rot.y = func_8083C62C(this, 0);
     }
 }
@@ -20055,7 +20055,7 @@ s32 func_8085B28C(PlayState* play, Player* this, PlayerCsMode csMode) {
         func_8082DE50(play, player);
         Player_SetAction(play, player, func_8085B08C, 0);
         player->csMode = csMode;
-        player->unk_398 = &this->actor;
+        player->csActor = &this->actor;
         func_8082DAD4(player);
 
         return true;
