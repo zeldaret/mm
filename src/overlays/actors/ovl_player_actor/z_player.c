@@ -376,7 +376,7 @@ typedef struct PlayerCsModeEntry {
     /* 0x0 */ s8 type; // PlayerCsType enum
     /* 0x4 */ union {
         void* ptr; // Do not use, required in the absence of designated initialisors
-        PlayerCsAction func;
+        PlayerCsAction csActionFunc;
         void* csAnimArg2; // Can point to any of the below in the union
         PlayerAnimationHeader* anim;
         AnimSfxEntry* entry;
@@ -19900,7 +19900,7 @@ void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsMo
     if (csEntry->type > PLAYER_CSTYPE_NONE) {
         sPlayerCsModeAnimFuncs[csEntry->type](play, this, csEntry->csAnimArg2);
     } else if (csEntry->type <= PLAYER_CSTYPE_ACTION) {
-        csEntry->func(play, this, cue);
+        csEntry->csActionFunc(play, this, cue);
     }
 
     if ((D_80862B6C & 4) && !(this->skelAnime.moveFlags & ANIM_FLAG_4)) {
