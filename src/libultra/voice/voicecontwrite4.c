@@ -35,6 +35,7 @@ s32 __osVoiceContWrite4(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[4]) {
             WRITE4FORMAT(ptr)->rxsize = CONT_CMD_WRITE4_VOICE_RX;
             WRITE4FORMAT(ptr)->cmd = CONT_CMD_WRITE4_VOICE;
             WRITE4FORMAT(ptr)->datacrc = 0xFF;
+
             ptr[sizeof(__OSVoiceWrite4Format)] = CONT_CMD_END;
         } else {
             ptr += channel;
