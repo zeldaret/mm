@@ -32,6 +32,7 @@
 #include "z64animation_legacy.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
+#include "z64bombers_notebook.h"
 #include "z64camera.h"
 #include "z64collision_check.h"
 #include "z64curve.h"
@@ -525,26 +526,6 @@ typedef struct PlayState {
     /* 0x18E68 */ void* unk_18E68; // framebuffer related to Lens of Truth
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 } PlayState; // size = 0x19258
-
-typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ char unk_01[0x3F];
-    /* 0x40 */ void* unk_40;
-    /* 0x44 */ u32 unk_44;
-    /* 0x48 */ u32 unk_48;
-    /* 0x4C */ DmaRequest unk_4C;
-    /* 0x6C */ OSMesgQueue unk_6C;
-    /* 0x84 */ OSMesg unk_84[1];
-    /* 0x88 */ void* unk_88;
-    /* 0x8C */ uintptr_t unk_8C;
-    /* 0x90 */ size_t unk_90;
-    /* 0x94 */ s32 unk_94;
-    /* 0x98 */ s32 unk_98;
-    /* 0x9C */ s32 unk_9C;
-    /* 0xA0 */ char unk_A0[0x4];
-    /* 0xA4 */ s32 unk_A4;
-    /* 0xA8 */ s32 unk_A8;
-} BombersNotebook; // size = 0xAC
 
 typedef enum {
     /* 0 */ PICTO_PHOTO_STATE_OFF,
