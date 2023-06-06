@@ -25,7 +25,7 @@ typedef struct {
     /* 0x14 */ u32 relocations[1];
 } OverlayRelocationSection; // size >= 0x18
 
-size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd, void* allocatedVRamAddr);
-void* Load2_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd);
+size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, void* ramStart, void* ramEnd, void* allocatedVRamAddr);
+void* Load2_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, void* vRamStart, void* vRamEnd);
 
 #endif

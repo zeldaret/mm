@@ -45,8 +45,8 @@ s32 TransitionOverlay_Load(TransitionOverlay* overlayEntry) {
         if (loadedRamAddr == NULL) {
             return -1;
         }
-        Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, (uintptr_t)overlayEntry->vramStart,
-                          (uintptr_t)overlayEntry->vramEnd, loadedRamAddr);
+        Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
+                          overlayEntry->vramEnd, loadedRamAddr);
         overlayEntry->loadInfo.addr = Lib_VirtualToPhysical(loadedRamAddr);
         overlayEntry->loadInfo.count = 1;
         return 0;

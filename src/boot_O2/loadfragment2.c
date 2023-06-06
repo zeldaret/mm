@@ -89,10 +89,11 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
     }
 }
 
-size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd,
+size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, void* ramStart, void* ramEnd,
                          void* allocatedVRamAddr) {
-    s32 pad[2];
-    s32 size = vRomEnd - vRomStart;
+    uintptr_t vRamStart = ramStart;
+    uintptr_t vRamEnd = ramEnd;
+    ptrdiff_t size = vRomEnd - vRomStart;
     uintptr_t end;
     OverlayRelocationSection* ovl;
 
@@ -124,8 +125,8 @@ size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamS
     return size;
 }
 
-void* Load2_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, uintptr_t vRamEnd) {
-    void* allocatedVRamAddr = SystemArena_MallocR(vRamEnd - vRamStart);
+void* Load2_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, void* vRamStart, void* vRamEnd) {
+    void* allocatedVRamAddr = SystemArena_MallocR((uintptr_t)vRamEnd - (uintptr_t)vRamStart);
 
     if (allocatedVRamAddr != NULL) {
         Load2_LoadOverlay(vRomStart, vRomEnd, vRamStart, vRamEnd, allocatedVRamAddr);

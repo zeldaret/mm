@@ -13,10 +13,11 @@ void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
         overlayEntry->unk_28 = 0;
         return;
     }
-    overlayEntry->loadedRamAddr = Load2_AllocateAndLoad(overlayEntry->vromStart, overlayEntry->vromEnd,
-                                                        (uintptr_t)vramStart, (uintptr_t)overlayEntry->vramEnd);
-    if (overlayEntry->loadedRamAddr != NULL) {
 
+    overlayEntry->loadedRamAddr =
+        Load2_AllocateAndLoad(overlayEntry->vromStart, overlayEntry->vromEnd, vramStart, overlayEntry->vramEnd);
+
+    if (overlayEntry->loadedRamAddr != NULL) {
         overlayEntry->unk_14 = (void*)(uintptr_t)(
             (overlayEntry->unk_14 != NULL)
                 ? (void*)((uintptr_t)overlayEntry->unk_14 - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))

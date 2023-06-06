@@ -102,7 +102,7 @@ void* THA_AllocTailAlign(TwoHeadArena* tha, size_t size, uintptr_t mask) {
  *
  * @return Remaining size. A negative number indicates an overflow.
  */
-s32 THA_GetRemaining(TwoHeadArena* tha) {
+ptrdiff_t THA_GetRemaining(TwoHeadArena* tha) {
     return (uintptr_t)tha->tail - (uintptr_t)tha->head;
 }
 

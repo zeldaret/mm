@@ -9,9 +9,9 @@ void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPr
     t->next = NULL;
     t->queue = NULL;
     t->context.pc = (u32)entry;
-    t->context.a0 = (uintptr_t)arg;
+    t->context.a0 = (intptr_t)arg;
     t->context.sp = (u64)(s32)sp - 16;
-    t->context.ra = (uintptr_t)__osCleanupThread;
+    t->context.ra = (intptr_t)__osCleanupThread;
 
     mask = 0x3FFF01;
     t->context.sr = 0xFF03;

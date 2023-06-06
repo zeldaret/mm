@@ -3151,8 +3151,8 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, (uintptr_t)overlayEntry->vramStart,
-                              (uintptr_t)overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
+                              overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 

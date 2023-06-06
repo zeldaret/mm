@@ -702,7 +702,7 @@ void* Lib_SegmentedToVirtual(void* ptr) {
 }
 
 void* Lib_SegmentedToVirtualNull(void* ptr) {
-    if ((((uintptr_t)ptr) >> 28) == 0) {
+    if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
     } else {
         return SEGMENTED_TO_VIRTUAL(ptr);
