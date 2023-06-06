@@ -11,12 +11,12 @@ typedef void (*EnGsActionFunc)(struct EnGs*, PlayState*);
 #define ENGS_GET_FE0(thisx) (((thisx)->params >> 5) & 0x7F)
 #define ENGS_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
 
-enum {
+typedef enum {
     /* 0 */ ENGS_0,
     /* 1 */ ENGS_1,
     /* 2 */ ENGS_2,
-    /* 3 */ ENGS_3,
-};
+    /* 3 */ ENGS_3
+} EnGsParam;
 
 typedef struct EnGs {
     /* 0x000 */ Actor actor;

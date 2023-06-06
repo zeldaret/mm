@@ -9,12 +9,12 @@ typedef void (*DmChar01ActionFunc)(struct DmChar01*, PlayState*);
 
 #define DMCHAR01_GET(thisx) ((thisx)->params)
 
-enum {
+typedef enum {
     /* 0 */ DMCHAR01_0,
     /* 1 */ DMCHAR01_1,
     /* 2 */ DMCHAR01_2,
-    /* 3 */ DMCHAR01_3,
-};
+    /* 3 */ DMCHAR01_3
+} DmChar01Param;
 
 typedef struct DmChar01 {
     /* 0x000 */ DynaPolyActor dyna;

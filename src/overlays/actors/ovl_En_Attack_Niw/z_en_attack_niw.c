@@ -54,9 +54,9 @@ void EnAttackNiw_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = 0.0f;
 
-    this->randomTargetCenterOffset.x = randPlusMinusPoint5Scaled(100.0f);
-    this->randomTargetCenterOffset.y = randPlusMinusPoint5Scaled(10.0f);
-    this->randomTargetCenterOffset.z = randPlusMinusPoint5Scaled(100.0f);
+    this->randomTargetCenterOffset.x = Rand_CenteredFloat(100.0f);
+    this->randomTargetCenterOffset.y = Rand_CenteredFloat(10.0f);
+    this->randomTargetCenterOffset.z = Rand_CenteredFloat(100.0f);
 
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags &= ~ACTOR_FLAG_1; // Unnecessary: this actor does not start with this flag
@@ -311,7 +311,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     }
 
     if (this->randomAngleChangeTimer == 50) {
-        this->targetRotY = randPlusMinusPoint5Scaled(200.0f) + this->actor.yawTowardsPlayer;
+        this->targetRotY = Rand_CenteredFloat(200.0f) + this->actor.yawTowardsPlayer;
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 2, this->rotStep, 0);
