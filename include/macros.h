@@ -28,21 +28,6 @@
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
-#define STOP_GAMESTATE(curState)     \
-    do {                             \
-        GameState* state = curState; \
-                                     \
-        state->running = false;      \
-    } while(0)
-
-#define SET_NEXT_GAMESTATE(curState, nextInit, nextSize) \
-    do {                                                 \
-        GameState* state = curState;                     \
-                                                         \
-        (state)->init = nextInit;                        \
-        (state)->size = nextSize;                        \
-    } while (0)
-
 #define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
 #define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)

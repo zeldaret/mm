@@ -44,6 +44,7 @@
 #include "z64effect.h"
 #include "z64frameadvance.h"
 #include "z64game_over.h"
+#include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -345,54 +346,6 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-struct GameState;
-
-typedef void (*GameStateFunc)(struct GameState* gameState);
-
-typedef struct {
-    /* 0x00 */ void*         loadedRamAddr;
-    /* 0x04 */ uintptr_t     vromStart; // if applicable
-    /* 0x08 */ uintptr_t     vromEnd;   // if applicable
-    /* 0x0C */ void*         vramStart; // if applicable
-    /* 0x10 */ void*         vramEnd;   // if applicable
-    /* 0x14 */ UNK_PTR       unk_14;
-    /* 0x18 */ GameStateFunc init;    // initializes and executes the given context
-    /* 0x1C */ GameStateFunc destroy; // deconstructs the context, and sets the next context to load
-    /* 0x20 */ UNK_PTR       unk_20;
-    /* 0x24 */ UNK_PTR       unk_24;
-    /* 0x28 */ UNK_TYPE      unk_28;
-    /* 0x2C */ size_t        instanceSize;
-} GameStateOverlay; // size = 0x30
-
-typedef struct GameAllocEntry {
-    /* 0x0 */ struct GameAllocEntry* next;
-    /* 0x4 */ struct GameAllocEntry* prev;
-    /* 0x8 */ size_t size;
-    /* 0xC */ u32 unk_0C;
-} GameAllocEntry; // size = 0x10
-
-typedef struct GameAlloc {
-    /* 0x00 */ GameAllocEntry base;
-    /* 0x10 */ GameAllocEntry* head;
-} GameAlloc; // size = 0x14
-
-typedef struct GameState {
-    /* 0x00 */ GraphicsContext* gfxCtx;
-    /* 0x04 */ GameStateFunc main;
-    /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
-    /* 0x10 */ size_t size;
-    /* 0x14 */ Input input[MAXCONTROLLERS];
-    /* 0x74 */ TwoHeadArena heap;
-    /* 0x84 */ GameAlloc alloc;
-    /* 0x98 */ UNK_TYPE1 pad98[0x3];
-    /* 0x9B */ u8 running; // If 0, switch to next game state
-    /* 0x9C */ u32 frames;
-    /* 0xA0 */ u8 padA0[0x2];
-    /* 0xA2 */ u8 framerateDivisor; // game speed?
-    /* 0xA3 */ u8 unk_A3;
-} GameState; // size = 0xA4
-
 struct PlayState;
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
@@ -595,7 +548,7 @@ typedef struct {
 #define FLASHROM_REQUEST_WRITE 1
 #define FLASHROM_REQUEST_READ 2
 
-typedef enum framCommand {
+typedef enum FramCommand {
     /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
        Initializes fram to 0xFF in FRAM_MODE_ERASE
        Writes Contents in FLASHRAM_MODE_WRITE
@@ -619,15 +572,15 @@ typedef enum framCommand {
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
-} framCommand;
+} FramCommand;
 
-typedef enum framMode {
+typedef enum FramMode {
     /* 0 */ FRAM_MODE_NOP,
     /* 1 */ FRAM_MODE_ERASE,
     /* 2 */ FRAM_MODE_WRITE,
     /* 3 */ FRAM_MODE_READ,
     /* 4 */ FRAM_MODE_STATUS
-} framMode;
+} FramMode;
 
 typedef enum {
     /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,

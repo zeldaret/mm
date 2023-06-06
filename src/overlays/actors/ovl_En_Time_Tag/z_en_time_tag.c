@@ -114,12 +114,12 @@ void EnTimeTag_RooftopOath_Cutscene(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_RooftopOath_Wait(EnTimeTag* this, PlayState* play) {
-    EnTimeTag* this2 = this;
+    Actor* thisx = &this->actor;
 
     if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
-        if (this->actor.csId != CS_ID_NONE) {
+        if (thisx->csId != CS_ID_NONE) {
             this->actionFunc = EnTimeTag_RooftopOath_Cutscene;
-            CutsceneManager_Queue(this2->actor.csId);
+            CutsceneManager_Queue(thisx->csId);
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
         play->msgCtx.ocarinaMode = 4;

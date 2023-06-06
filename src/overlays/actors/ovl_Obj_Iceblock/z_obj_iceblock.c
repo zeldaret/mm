@@ -239,12 +239,12 @@ void func_80A237A4(ObjIceblock* this) {
         ((this->unk_244 - ((600.0f * this->dyna.actor.scale.y) - 90.0f)) + (sp20 * ptr->unk_08)) + ptr->unk_00;
 }
 
-void func_80A23938(ObjIceblock* this2) {
-    ObjIceblock* this = this2;
+void func_80A23938(ObjIceblock* this) {
+    Actor* thisx = &this->dyna.actor;
 
     if (this->unk_1B0 & 0x80) {
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0, 400);
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.z, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.x, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.z, 0, 400);
     } else {
         ObjIceBlockUnkStruct4* ptr = &this->unk_27C;
         f32 phi_f0;
@@ -252,7 +252,7 @@ void func_80A23938(ObjIceblock* this2) {
 
         if (this->unk_1B0 & 0x20) {
             phi_f0 = 0.3f;
-            ptr->unk_14 = this->dyna.actor.yawTowardsPlayer;
+            ptr->unk_14 = thisx->yawTowardsPlayer;
         } else {
             phi_f0 = 0.08f;
         }
@@ -264,16 +264,15 @@ void func_80A23938(ObjIceblock* this2) {
 
         temp = ptr->unk_16 - ptr->unk_14;
 
-        ptr->unk_18 +=
-            (s16)(temp * -0.04f * this->dyna.actor.xzDistToPlayer * this->dyna.actor.scale.x * (1.0f / 600.0f));
+        ptr->unk_18 += (s16)(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
         ptr->unk_18 = func_80A23090(ptr->unk_18, 50, 800);
         ptr->unk_16 += ptr->unk_18;
 
-        this->dyna.actor.shape.rot.x = Math_CosS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
-        this->dyna.actor.shape.rot.x = CLAMP(this->dyna.actor.shape.rot.x, -2000, 2000);
+        thisx->shape.rot.x = Math_CosS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
+        thisx->shape.rot.x = CLAMP(thisx->shape.rot.x, -2000, 2000);
 
-        this->dyna.actor.shape.rot.z = -Math_SinS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
-        this->dyna.actor.shape.rot.z = CLAMP(this->dyna.actor.shape.rot.z, -2000, 2000);
+        thisx->shape.rot.z = -Math_SinS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
+        thisx->shape.rot.z = CLAMP(thisx->shape.rot.z, -2000, 2000);
     }
 }
 
