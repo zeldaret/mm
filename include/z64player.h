@@ -548,7 +548,7 @@ typedef struct PlayerAgeProperties {
     /* 0x28 */ f32 unk_28; // water stuff // depthInWater
     /* 0x2C */ f32 unk_2C; // water stuff // depthInWater
     /* 0x30 */ f32 unk_30; // water stuff // depthInWater
-    /* 0x34 */ f32 unk_34; // wallCheckHeight
+    /* 0x34 */ f32 unk_34; // height?
     /* 0x38 */ f32 wallCheckRadius;
     /* 0x3C */ f32 unk_3C;
     /* 0x40 */ f32 unk_40;

@@ -5890,10 +5890,10 @@ s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* pol
 /**
  * Gets a position relative to player's yaw.
  * An offset is applied to the provided base position in the direction of shape y rotation.
- * The resulting position is stored in `dest`
+ * The resulting position is stored in `dst`
  */
-void Player_TranslateAndRotateY(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dest) {
-    Lib_Vec3f_TranslateAndRotateY(translation, this->actor.shape.rot.y, src, dest);
+void Player_TranslateAndRotateY(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dst) {
+    Lib_Vec3f_TranslateAndRotateY(translation, this->actor.shape.rot.y, src, dst);
 }
 
 // Player_GetPosInACertainDirectionFromARadiusAway
