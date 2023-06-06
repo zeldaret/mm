@@ -5,6 +5,7 @@
  */
 
 #include "z_en_snowwd.h"
+#include "objects/object_snowwd/object_snowwd.h"
 
 #define FLAGS 0x00000000
 
@@ -17,7 +18,6 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play);
 
 void func_80AF76F0(EnSnowwd* this, PlayState* play);
 
-#if 0
 ActorInit En_Snowwd_InitVars = {
     ACTOR_EN_SNOWWD,
     ACTORCAT_PROP,
@@ -30,25 +30,109 @@ ActorInit En_Snowwd_InitVars = {
     (ActorFunc)EnSnowwd_Draw,
 };
 
-// static ColliderCylinderInit sCylinderInit = {
-static ColliderCylinderInit D_80AF7A90 = {
-    { COLTYPE_TREE, AT_NONE, AC_ON | AC_HARD | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_CYLINDER, },
-    { ELEMTYPE_UNK5, { 0x00000000, 0x00, 0x00 }, { 0x0100020A, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+ static ColliderCylinderInit sCylinderInit = {
+    {
+        COLTYPE_TREE,
+        AT_NONE,
+        AC_ON | AC_HARD | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK5,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x0100020A, 0x00, 0x00 },
+        TOUCH_NONE | TOUCH_SFX_NORMAL,
+        BUMP_ON,
+        OCELEM_ON,
+    },
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-#endif
+s32 D_80AF7ABC[] = { 0x00000000, 0x00000000, 0x00000000 };
 
-extern ColliderCylinderInit D_80AF7A90;
+s32 D_80AF7AC8[] = { 0x00000000, 0xC0800000, 0x00000000 };
+
+s32 D_80AF7AD4[] = { 0xFFFFFFFF };
+
+s32 D_80AF7AD8[] = { 0xC8C8DC00, 0x00000000 };
 
 extern UNK_TYPE D_06001AA0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Init.s")
+void EnSnowwd_Init(Actor* thisx, PlayState* play) {
+    EnSnowwd* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Destroy.s")
+    this->actor.home.rot.z = 0;
+    this->actor.home.rot.y = 0;
+    this->unk190 = 0;
+    this->actor.uncullZoneForward = 4000.0f;
+    this->actor.uncullZoneScale = 2000.0f;
+    this->actor.uncullZoneDownward = 2400.0f;
+    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Actor_SetScale(&this->actor, 1.0f);
+    this->actionFunc = func_80AF76F0;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/func_80AF76F0.s")
+void EnSnowwd_Destroy(Actor* thisx, PlayState* play) {
+    EnSnowwd* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Update.s")
+    Collider_DestroyCylinder(play, &this->collider);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Snowwd/EnSnowwd_Draw.s")
+void func_80AF76F0(EnSnowwd *this, PlayState *play) {
+    s32 pad;
+    Actor* thisx = &this->actor;
+    f32 sp54;
+    Vec3f sp48;
+
+    if (this->collider.base.acFlags & 2) {
+        this->collider.base.acFlags = this->collider.base.acFlags & 0xFFFD;
+        Actor_PlaySfx(thisx, 0x1837U);
+    }
+    if (thisx->home.rot.y != 0) {
+        this->unk190 = 0x15;
+        thisx->home.rot.y = 0;
+        if (thisx->home.rot.z == 0) {
+            if (((thisx->params & 0xF80) >> 7) < 0x10) {
+                sp48 = thisx->world.pos;
+                sp48.y += 200.0f;
+                Item_DropCollectibleRandom(play, NULL, &sp48, (s16) (((s32) (thisx->params & 0xF80) >> 7) * 0x10));
+            }
+            thisx->home.rot.z = 1;
+        }
+    }
+    if (thisx->xzDistToPlayer < 600.0f) {
+        Collider_UpdateCylinder(thisx, &this->collider);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+    }
+    if (this->unk190 > 0) {
+        this->unk190--;
+        sp54 = Math_SinS((s16) ((this->unk190 ^ 0xFFFF) * 0x3332)) * 250.0f;
+        thisx->shape.rot.x = (s16) (s32) (Math_CosS((s16) (thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
+        thisx->shape.rot.z = (s16) (s32) (Math_SinS((s16) (thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
+        sp48 = thisx->world.pos;
+        sp48.x += Rand_CenteredFloat(80.0f);
+        sp48.y += 100.0f + Rand_ZeroFloat(30.0f);
+        sp48.z += Rand_CenteredFloat(80.0f);
+        func_800B0EB0(play, &sp48, (Vec3f *) D_80AF7AC8, (Vec3f *) D_80AF7ABC, (Color_RGBA8 *) D_80AF7AD4, (Color_RGBA8 *) D_80AF7AD8, (s16) 0xC8, (s16) 0xA, (s16) 0x14);
+    }
+}
+
+void EnSnowwd_Update(Actor *thisx, PlayState *play) {
+    EnSnowwd *this = THIS;
+
+    this->actionFunc(this, play);
+}
+
+void EnSnowwd_Draw(Actor* thisx, PlayState* play) {
+    OPEN_DISPS(play->state.gfxCtx);
+
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_06001AA0));
+    gSPDisplayList(POLY_OPA_DISP++, object_snowwd_DL_000198);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
