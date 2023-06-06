@@ -129,7 +129,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     s32 i;
     s32 cueChannel;
     s32 max = 0;
-    s32 pathnum;
+    s32 pathIndex;
     u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
@@ -160,12 +160,12 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
             }
 
             if (play->csCtx.actorCues[cueChannel]->id >= 2) {
-                pathnum = DMCHAR09_GET_PATH(&this->actor);
-                path = &play->setupPathList[pathnum];
+                pathIndex = DMCHAR09_GET_PATH_INDEX(&this->actor);
+                path = &play->setupPathList[pathIndex];
 
                 for (i = 0; i < max; i++) {
-                    pathnum = path->unk1;
-                    path = &play->setupPathList[pathnum];
+                    pathIndex = path->additionalPathIndex;
+                    path = &play->setupPathList[pathIndex];
                 }
 
                 this->unk_224 = Lib_SegmentedToVirtual(path->points);
@@ -175,7 +175,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 this->unk_220 = 1;
                 this->unk_22E = true;
 
-                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * 0.00390625f;
+                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * (1.0f / 256.0f);
                 this->actionFunc = func_80AB1FDC;
             } else {
                 this->unk_22E = false;

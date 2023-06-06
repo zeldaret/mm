@@ -49,7 +49,7 @@ void EffKamejimaWave_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.2f);
     this->actor.scale.y = 0.0f;
-    if (EFFKAMEJIMAWAVE_GET_F(thisx) == EFFKAMEJIMAWAVE_PARAMS_1) {
+    if (EFFKAMEJIMAWAVE_GET_F(thisx) == EFFKAMEJIMAWAVE_PARAM_1) {
         this->actionFunc = func_80BCEDE0;
         sVtxAlpha = 255;
     } else {

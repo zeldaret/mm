@@ -139,8 +139,8 @@ void func_80977DB4(PlayState* play, u32 index, EffectSs* this) {
 void func_80977E6C(PlayState* play, u32 index, EffectSs* this) {
     this->velocity.x *= 0.95f;
     this->velocity.z *= 0.95f;
-    this->accel.x = randPlusMinusPoint5Scaled(0.2f);
-    this->accel.z = randPlusMinusPoint5Scaled(0.2f);
+    this->accel.x = Rand_CenteredFloat(0.2f);
+    this->accel.z = Rand_CenteredFloat(0.2f);
     this->rEnvColorA += this->rAlphaStep;
 
     if (this->rEnvColorA < 0) {

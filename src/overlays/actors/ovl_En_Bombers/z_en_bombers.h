@@ -10,13 +10,13 @@ typedef void (*EnBombersActionFunc)(struct EnBombers*, PlayState*);
 #define ENBOMBERS_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENBOMBERS_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 
-enum {
+typedef enum {
     /* 0 */ ENBOMBERS_F_0,
     /* 1 */ ENBOMBERS_F_1,
     /* 2 */ ENBOMBERS_F_2,
     /* 3 */ ENBOMBERS_F_3,
-    /* 4 */ ENBOMBERS_F_4,
-};
+    /* 4 */ ENBOMBERS_F_4
+} EnBombersParam;
 
 #define ENBOMBERS_F0_0 0
 

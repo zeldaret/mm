@@ -26,7 +26,7 @@ void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 reca
     for (i = 0; i < ARRAY_COUNT(channel->layers); i++) {
         SequenceLayer* layer = channel->layers[i];
 
-        if (layer != NULL && layer->enabled && layer->note != NULL) {
+        if ((layer != NULL) && layer->enabled && (layer->note != NULL)) {
             if (layer->notePropertiesNeedInit) {
                 layer->noteFreqScale = layer->freqScale * chanFreqScale;
                 layer->noteVelocity = layer->velocitySquare2 * channel->appliedVolume;

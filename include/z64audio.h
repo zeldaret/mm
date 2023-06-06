@@ -108,7 +108,7 @@ typedef enum {
     /* 1 */ SOUNDMODE_HEADSET,
     /* 2 */ SOUNDMODE_SURROUND_EXTERNAL,
     /* 3 */ SOUNDMODE_MONO,
-    /* 4 */ SOUNDMODE_SURROUND,
+    /* 4 */ SOUNDMODE_SURROUND
 } SoundMode;
 
 typedef enum {

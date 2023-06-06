@@ -43,7 +43,7 @@ typedef enum EnNbScheduleResult {
     /* 1 */ EN_NB_SCH_1,
     /* 2 */ EN_NB_SCH_2,
     /* 3 */ EN_NB_SCH_3,
-    /* 4 */ EN_NB_SCH_4,
+    /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
 static u8 sScheduleScript[] = {

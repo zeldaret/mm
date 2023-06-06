@@ -336,7 +336,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
-                    this->actor.world.rot.y += BINANG_ROT180((s16)randPlusMinusPoint5Scaled(8000.0f));
+                    this->actor.world.rot.y += BINANG_ROT180((s16)(s32)Rand_CenteredFloat(0x1F40));
                     this->actor.velocity.y = -this->actor.velocity.y;
                     this->bubble.unk_149 = -1;
                     return;
@@ -468,6 +468,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
         if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
                                                         &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8))) {
+            // `func_800B90AC` only returns a boolean, and does not process any code
             func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
             this->actor.wallBgId = spA8;

@@ -561,16 +561,16 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
         vtx[0].v = baseVtx;
         vtx[1].v = baseVtx;
 
-        vtx[0].v.ob[0] = func_80086814(sp158.x);
-        vtx[0].v.ob[1] = func_80086814(sp158.y);
-        vtx[0].v.ob[2] = func_80086814(sp158.z);
+        vtx[0].v.ob[0] = Math_FNearbyIntF(sp158.x);
+        vtx[0].v.ob[1] = Math_FNearbyIntF(sp158.y);
+        vtx[0].v.ob[2] = Math_FNearbyIntF(sp158.z);
         vtx[0].v.cn[0] = sp148.r;
         vtx[0].v.cn[1] = sp148.g;
         vtx[0].v.cn[2] = sp148.b;
         vtx[0].v.cn[3] = sp148.a;
-        vtx[1].v.ob[0] = func_80086814(sp14C.x);
-        vtx[1].v.ob[1] = func_80086814(sp14C.y);
-        vtx[1].v.ob[2] = func_80086814(sp14C.z);
+        vtx[1].v.ob[0] = Math_FNearbyIntF(sp14C.x);
+        vtx[1].v.ob[1] = Math_FNearbyIntF(sp14C.y);
+        vtx[1].v.ob[2] = Math_FNearbyIntF(sp14C.z);
         vtx[1].v.cn[0] = sp144.r;
         vtx[1].v.cn[1] = sp144.g;
         vtx[1].v.cn[2] = sp144.b;
@@ -606,17 +606,17 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
             vtx[j1].v = baseVtx;
             vtx[j2].v = baseVtx;
 
-            vtx[j1].v.ob[0] = func_80086814(sp158.x);
-            vtx[j1].v.ob[1] = func_80086814(sp158.y);
-            vtx[j1].v.ob[2] = func_80086814(sp158.z);
+            vtx[j1].v.ob[0] = Math_FNearbyIntF(sp158.x);
+            vtx[j1].v.ob[1] = Math_FNearbyIntF(sp158.y);
+            vtx[j1].v.ob[2] = Math_FNearbyIntF(sp158.z);
             vtx[j1].v.cn[0] = func_800B0A24(sp1A4.r, sp19C.r, temp_f28);
             vtx[j1].v.cn[1] = func_800B0A24(sp1A4.g, sp19C.g, temp_f28);
             vtx[j1].v.cn[2] = func_800B0A24(sp1A4.b, sp19C.b, temp_f28);
             vtx[j1].v.cn[3] = func_800B0A24(sp1A4.a, sp19C.a, temp_f28);
 
-            vtx[j2].v.ob[0] = func_80086814(sp14C.x);
-            vtx[j2].v.ob[1] = func_80086814(sp14C.y);
-            vtx[j2].v.ob[2] = func_80086814(sp14C.z);
+            vtx[j2].v.ob[0] = Math_FNearbyIntF(sp14C.x);
+            vtx[j2].v.ob[1] = Math_FNearbyIntF(sp14C.y);
+            vtx[j2].v.ob[2] = Math_FNearbyIntF(sp14C.z);
             vtx[j2].v.cn[0] = func_800B0A24(sp1A0.r, sp198.r, temp_f28);
             vtx[j2].v.cn[1] = func_800B0A24(sp1A0.g, sp198.g, temp_f28);
             vtx[j2].v.cn[2] = func_800B0A24(sp1A0.b, sp198.b, temp_f28);
@@ -753,7 +753,7 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
 
         j = 0;
 
-        for (i = 0; i < this->numElements - 1; i++) {
+        for (i = 0; i < this->numElements - 1; i++, j += 4) {
             if (this->drawMode == 1) {
                 alphaRatio = (f32)this->elements[i].timer / (f32)this->elemDuration;
                 gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, this->altPrimColor.r, this->altPrimColor.g,
@@ -761,45 +761,43 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
                 gDPPipeSync(POLY_XLU_DISP++);
             }
 
-            if (1) {} // Necessary to match
-
             gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
             gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
 
-            if (this->flags & 4) {
-                sp1B0.x = ((f32)vtx[4 * i + 0].v.ob[0] + (f32)vtx[4 * i + 1].v.ob[0]) * 0.5f;
-                sp1B0.y = ((f32)vtx[4 * i + 0].v.ob[1] + (f32)vtx[4 * i + 1].v.ob[1]) * 0.5f;
-                sp1B0.z = ((f32)vtx[4 * i + 0].v.ob[2] + (f32)vtx[4 * i + 1].v.ob[2]) * 0.5f;
-                sp1A4.x = ((f32)vtx[4 * i + 2].v.ob[0] + (f32)vtx[4 * i + 3].v.ob[0]) * 0.5f;
-                sp1A4.y = ((f32)vtx[4 * i + 2].v.ob[1] + (f32)vtx[4 * i + 3].v.ob[1]) * 0.5f;
-                sp1A4.z = ((f32)vtx[4 * i + 2].v.ob[2] + (f32)vtx[4 * i + 3].v.ob[2]) * 0.5f;
-
-                Math_Vec3f_Diff(&sp1A4, &sp1B0, &sp198);
-                scale = sqrtf(SQXYZ(sp198));
-
-                if (fabsf(scale) > 0.0005f) {
-                    scale = 1.0f / scale;
-                    Math_Vec3f_Scale(&sp198, scale);
-
-                    SkinMatrix_SetTranslate(&sp154, sp1B0.x, sp1B0.y, sp1B0.z);
-                    SkinMatrix_SetRotateAroundVec(&sp114, 0x3FFF, sp198.x, sp198.y, sp198.z);
-                    SkinMatrix_MtxFMtxFMult(&sp154, &sp114, &spD4);
-                    SkinMatrix_SetTranslate(&sp154, -sp1B0.x, -sp1B0.y, -sp1B0.z);
-                    SkinMatrix_MtxFMtxFMult(&spD4, &sp154, &sp94);
-
-                    mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp94);
-                    if (mtx == NULL) {
-                        break;
-                    }
-
-                    gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
-                    gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
-                    gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                }
+            if (!(this->flags & 4)) {
+                continue;
             }
 
-            j += 4;
+            sp1B0.x = ((f32)vtx[4 * i + 0].v.ob[0] + (f32)vtx[4 * i + 1].v.ob[0]) / 2.0f;
+            sp1B0.y = ((f32)vtx[4 * i + 0].v.ob[1] + (f32)vtx[4 * i + 1].v.ob[1]) / 2.0f;
+            sp1B0.z = ((f32)vtx[4 * i + 0].v.ob[2] + (f32)vtx[4 * i + 1].v.ob[2]) / 2.0f;
+            sp1A4.x = ((f32)vtx[4 * i + 2].v.ob[0] + (f32)vtx[4 * i + 3].v.ob[0]) / 2.0f;
+            sp1A4.y = ((f32)vtx[4 * i + 2].v.ob[1] + (f32)vtx[4 * i + 3].v.ob[1]) / 2.0f;
+            sp1A4.z = ((f32)vtx[4 * i + 2].v.ob[2] + (f32)vtx[4 * i + 3].v.ob[2]) / 2.0f;
+
+            Math_Vec3f_Diff(&sp1A4, &sp1B0, &sp198);
+            scale = sqrtf(SQXYZ(sp198));
+
+            if (fabsf(scale) > 0.0005f) {
+                scale = 1.0f / scale;
+                Math_Vec3f_Scale(&sp198, scale);
+
+                SkinMatrix_SetTranslate(&sp154, sp1B0.x, sp1B0.y, sp1B0.z);
+                SkinMatrix_SetRotateAroundVec(&sp114, 0x3FFF, sp198.x, sp198.y, sp198.z);
+                SkinMatrix_MtxFMtxFMult(&sp154, &sp114, &spD4);
+                SkinMatrix_SetTranslate(&sp154, -sp1B0.x, -sp1B0.y, -sp1B0.z);
+                SkinMatrix_MtxFMtxFMult(&spD4, &sp154, &sp94);
+
+                mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp94);
+                if (mtx == NULL) {
+                    break;
+                }
+
+                gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
+                gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
+                gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            }
         }
     }
 
