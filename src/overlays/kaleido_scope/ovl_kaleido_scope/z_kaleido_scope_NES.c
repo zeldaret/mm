@@ -3,7 +3,7 @@
  * Overlay: ovl_kaleido_scope
  * Description: Pause Menu
  */
-#include "prevent_bss_reordering.h"
+
 #include "z_kaleido_scope.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
