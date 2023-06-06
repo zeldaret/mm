@@ -53,10 +53,10 @@ typedef enum {
 } RoomCullableDebugMode;
 
 typedef struct RoomShapeCullableEntryLinked {
-    /* 0x00 */ RoomShapeCullableEntry* entry;
-    /* 0x04 */ f32 boundsNearZ;
-    /* 0x08 */ struct RoomShapeCullableEntryLinked* prev;
-    /* 0x0C */ struct RoomShapeCullableEntryLinked* next;
+    /* 0x0 */ RoomShapeCullableEntry* entry;
+    /* 0x4 */ f32 boundsNearZ;
+    /* 0x8 */ struct RoomShapeCullableEntryLinked* prev;
+    /* 0xC */ struct RoomShapeCullableEntryLinked* next;
 } RoomShapeCullableEntryLinked; // size = 0x10
 
 #define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 128
@@ -99,7 +99,7 @@ void Room_DrawCullable(PlayState* play, Room* room, u32 flags) {
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_MODELVIEW | G_MTX_LOAD);
     }
 
-    if ((room->enablePosLights != 0) || (MREG(93) != 0)) {
+    if (room->enablePosLights || (MREG(93) != 0)) {
         gSPSetGeometryMode(POLY_OPA_DISP++, G_LIGHTING_POSITIONAL);
         gSPSetGeometryMode(POLY_XLU_DISP++, G_LIGHTING_POSITIONAL);
     }

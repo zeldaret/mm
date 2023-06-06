@@ -68,7 +68,7 @@ u32 EffectSsSbn_Init(PlayState* play, u32 index, EffectSs* this, void* initParam
     this->rReg4 = 250;
     this->rReg4Step = 30;
 
-    this->rScale = randPlusMinusPoint5Scaled(100.0f) + (initParams->scale * 120.0f);
+    this->rScale = Rand_CenteredFloat(100.0f) + (initParams->scale * 120.0f);
     if (this->rScale < 600) {
         this->rScale = 600;
     } else if (this->rScale > 1500) {

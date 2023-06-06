@@ -606,9 +606,9 @@ void func_80AD8388(EnKame* this, PlayState* play) {
             this->actor.scale.y = this->actor.scale.x;
             this->actor.scale.z = this->actor.scale.x;
         }
-        sp34.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
+        sp34.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 15.0f;
-        sp34.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
+        sp34.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         func_800B3030(play, &sp34, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
     }
 }

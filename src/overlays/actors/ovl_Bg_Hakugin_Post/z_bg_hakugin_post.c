@@ -52,9 +52,9 @@ ActorInit Bg_Hakugin_Post_InitVars = {
 };
 
 typedef struct {
-    f32 unk_00;
-    u8 unk_04;
-} BgHakuginPostUnkStruct3;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ u8 unk_04;
+} BgHakuginPostUnkStruct3; // size = 0x8
 
 static BgHakuginPostUnkStruct3 D_80A9D880[] = {
     { 1200.0f, false }, { 600.0f, false }, { 900.0f, false }, { 870.0f, false },
@@ -1019,7 +1019,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < D_80A9E028.count; i++) {
         unkStruct1 = &D_80A9E028.unk_0000[i];
-        if (unkStruct1->unk_34 != 5 && unkStruct1->unk_34 != 4) {
+        if ((unkStruct1->unk_34 != 5) && (unkStruct1->unk_34 != 4)) {
             sp68.x = unkStruct1->unk_14.x + this->dyna.actor.home.pos.x;
             sp68.y = unkStruct1->unk_14.y + this->unk_16C;
             sp68.z = unkStruct1->unk_14.z + this->dyna.actor.home.pos.z;

@@ -374,7 +374,7 @@ s32 func_80B50C78(EnGk* this, Path* path, s32 arg2_) {
         phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -955,22 +955,22 @@ void func_80B52430(EnGk* this, PlayState* play) {
 }
 
 void func_80B5253C(EnGk* this, PlayState* play) {
-    s32 sp24;
+    s32 getItemId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_08)) {
-        sp24 = 0x93;
+        getItemId = GI_GOLD_DUST_2;
     } else {
-        sp24 = 0x6A;
+        getItemId = GI_GOLD_DUST;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (sp24 == 0x6A) {
+        if (getItemId == GI_GOLD_DUST) {
             SET_WEEKEVENTREG(WEEKEVENTREG_41_08);
         }
         this->actionFunc = func_80B525E0;
     } else {
-        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1025,7 +1025,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
                 Actor_Kill(&this->actor);
             } else {
                 this->csId = this->actor.csId;
-                this->path = SubS_GetPathByIndex(play, ENGK_GET_F0(&this->actor), 0xF);
+                this->path = SubS_GetPathByIndex(play, ENGK_GET_PATH_INDEX(&this->actor), ENGK_PATH_INDEX_NONE);
                 this->actionFunc = func_80B51760;
             }
         } else if (play->sceneId == SCENE_GORONRACE) {

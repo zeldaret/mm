@@ -233,9 +233,9 @@ void EnMinifrog_SpawnDust(EnMinifrog* this, PlayState* play) {
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
 
     for (i = 0; i < 5; i++) {
-        vel.x = randPlusMinusPoint5Scaled(4.0f);
-        vel.y = randPlusMinusPoint5Scaled(4.0f);
-        vel.z = randPlusMinusPoint5Scaled(4.0f);
+        vel.x = Rand_CenteredFloat(4.0f);
+        vel.y = Rand_CenteredFloat(4.0f);
+        vel.z = Rand_CenteredFloat(4.0f);
         accel.x = -vel.x * 0.1f;
         accel.y = -vel.y * 0.1f;
         accel.z = -vel.z * 0.1f;
@@ -608,9 +608,11 @@ void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 

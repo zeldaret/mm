@@ -257,9 +257,9 @@ void func_80897258(PlayState* play, EnPeehat* this, Vec3f* arg2, f32 arg3, f32 a
     sp44.x = (Math_SinS(sp42) * arg3) + arg2->x;
     sp44.z = (Math_CosS(sp42) * arg3) + arg2->z;
 
-    D_80899564.x = randPlusMinusPoint5Scaled(1.05f);
-    D_80899564.z = randPlusMinusPoint5Scaled(1.05f);
-    D_80899558.y = randPlusMinusPoint5Scaled(4.0f) + 8.0f;
+    D_80899564.x = Rand_CenteredFloat(1.05f);
+    D_80899564.z = Rand_CenteredFloat(1.05f);
+    D_80899558.y = Rand_CenteredFloat(4.0f) + 8.0f;
 
     EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4,
                         HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -506,7 +506,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
         this->actor.world.pos.y -= 1.0f;
     }
 
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->actor.world.pos.y += cos * 1.4f;
     this->unk_2B8 += fabsf(cos * 0.18f) + 0.07f;
     this->unk_2B0--;
@@ -514,7 +514,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
     if (this->unk_2B0 <= 0) {
         this->actor.speed = Rand_ZeroFloat(0.5f) + 2.5f;
         this->unk_2B0 = Rand_ZeroFloat(10.0f) + 10.0f;
-        this->unk_2B6 = randPlusMinusPoint5Scaled(1000.0f);
+        this->unk_2B6 = Rand_CenteredFloat(1000.0f);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -549,10 +549,10 @@ void func_80898144(EnPeehat* this, PlayState* play) {
     } else {
         this->actor.world.pos.y += 1.0f;
     }
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->actor.world.pos.y += cos * 1.4f;
 
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->unk_2B8 += fabsf(cos * 0.18f) + 0.07f;
 
     step = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
@@ -901,6 +901,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfx = POLY_OPA_DISP;
 
         Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);

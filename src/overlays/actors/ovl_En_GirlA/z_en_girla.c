@@ -234,7 +234,7 @@ s32 EnGirlA_CanBuyArrows(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyNuts(PlayState* play, EnGirlA* this) {
-    if (CUR_CAPACITY(UPG_NUTS) != 0 && CUR_CAPACITY(UPG_NUTS) <= AMMO(ITEM_NUT)) {
+    if ((CUR_CAPACITY(UPG_NUTS) != 0) && (CUR_CAPACITY(UPG_NUTS) <= AMMO(ITEM_NUT))) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
@@ -257,7 +257,7 @@ s32 EnGirlA_CanBuyShieldHero(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyStick(PlayState* play, EnGirlA* this) {
-    if (CUR_CAPACITY(UPG_STICKS) != 0 && AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS)) {
+    if ((CUR_CAPACITY(UPG_STICKS) != 0) && (AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS))) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
@@ -385,17 +385,23 @@ void EnGirlA_BuyBottleItem(PlayState* play, EnGirlA* this) {
         case SI_POTION_RED_6:
             Item_Give(play, ITEM_POTION_RED);
             break;
+
         case SI_POTION_GREEN_1:
         case SI_POTION_GREEN_2:
         case SI_POTION_GREEN_3:
             Item_Give(play, ITEM_POTION_GREEN);
             break;
+
         case SI_POTION_BLUE:
             Item_Give(play, ITEM_POTION_BLUE);
             break;
+
         case SI_FAIRY_1:
         case SI_FAIRY_2:
             Item_Give(play, ITEM_FAIRY);
+            break;
+
+        default:
             break;
     }
     Rupees_ChangeBy(-play->msgCtx.unk1206C);
@@ -411,8 +417,12 @@ void EnGirlA_BuyNuts(PlayState* play, EnGirlA* this) {
         case 5:
             Item_Give(play, ITEM_NUTS_5);
             break;
+
         case 10:
             Item_Give(play, ITEM_NUTS_10);
+            break;
+
+        default:
             break;
     }
     Rupees_ChangeBy(-play->msgCtx.unk1206C);
@@ -439,11 +449,16 @@ void EnGirlA_BuyBombBag(PlayState* play, EnGirlA* this) {
         case 20:
             Item_Give(play, ITEM_BOMB_BAG_20);
             break;
+
         case 21:
             Item_Give(play, ITEM_BOMB_BAG_30);
             break;
+
         case 22:
             Item_Give(play, ITEM_BOMB_BAG_40);
+            break;
+
+        default:
             break;
     }
     Rupees_ChangeBy(-play->msgCtx.unk1206C);
@@ -461,14 +476,20 @@ void EnGirlA_BuyBombs(PlayState* play, EnGirlA* this) {
         case 5:
             Item_Give(play, ITEM_BOMBS_5);
             break;
+
         case 10:
             Item_Give(play, ITEM_BOMBS_10);
             break;
+
         case 20:
             Item_Give(play, ITEM_BOMBS_20);
             break;
+
         case 30:
             Item_Give(play, ITEM_BOMBS_30);
+            break;
+
+        default:
             break;
     }
     Rupees_ChangeBy(-play->msgCtx.unk1206C);
@@ -484,14 +505,20 @@ void EnGirlA_BuySword(PlayState* play, EnGirlA* this) {
         case 1:
             Item_Give(play, ITEM_SWORD_KOKIRI);
             break;
+
         case 2:
             Item_Give(play, ITEM_SWORD_RAZOR);
             break;
+
         case 3:
             Item_Give(play, ITEM_SWORD_GILDED);
             break;
+
         case 4:
             Item_Give(play, ITEM_SWORD_GREAT_FAIRY);
+            break;
+
+        default:
             break;
     }
     Rupees_ChangeBy(-play->msgCtx.unk1206C);

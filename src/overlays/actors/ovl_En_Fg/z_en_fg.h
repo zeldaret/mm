@@ -9,21 +9,21 @@ typedef void (*EnFgActionFunc)(struct EnFg*, PlayState*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {
-    /* 0x0 */ FG_YELLOW,
-    /* 0x1 */ FG_CYAN,
-    /* 0x2 */ FG_PINK,
-    /* 0x3 */ FG_BLUE,
-    /* 0x4 */ FG_WHITE,
-    /* 0x5 */ FG_BLACK, // All frogs are blackened when hit by an explosion
+    /* 0 */ FG_YELLOW,
+    /* 1 */ FG_CYAN,
+    /* 2 */ FG_PINK,
+    /* 3 */ FG_BLUE,
+    /* 4 */ FG_WHITE,
+    /* 5 */ FG_BLACK // All frogs are blackened when hit by an explosion
 } FrogType;
 
 typedef enum {
-    /* 0x0 */ FG_DMGEFFECT_NONE,
-    /* 0x1 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
-    /* 0x2 */ FG_DMGEFFECT_DEKUSTICK,
-    /* 0x3 */ FG_DMGEFFECT_HOOKSHOT,
-    /* 0x4 */ FG_DMGEFFECT_ARROW,
-    /* 0x5 */ FG_DMGEFFECT_ICEARROW,
+    /* 0 */ FG_DMGEFFECT_NONE,
+    /* 1 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
+    /* 2 */ FG_DMGEFFECT_DEKUSTICK,
+    /* 3 */ FG_DMGEFFECT_HOOKSHOT,
+    /* 4 */ FG_DMGEFFECT_ARROW,
+    /* 5 */ FG_DMGEFFECT_ICEARROW
 } FrogDamageEffect;
 
 typedef struct {

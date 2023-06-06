@@ -8,10 +8,10 @@ struct EnBigpamet;
 
 typedef void (*EnBigpametActionFunc)(struct EnBigpamet*, PlayState*);
 
-enum {
+typedef enum {
     /* 0 */ ENBIGPAMET_0,    
-    /* 1 */ ENBIGPAMET_1,    
-};
+    /* 1 */ ENBIGPAMET_1
+} EnBigpametParam;
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;
