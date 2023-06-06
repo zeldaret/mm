@@ -17,7 +17,7 @@ typedef enum {
     /* 0x002 */ ENOWL_GET_TYPE_2,
     /* 0x003 */ ENOWL_GET_TYPE_3,
     /* 0x01E */ ENOWL_GET_TYPE_30 = 30,
-    /* 0x3E8 */ ENOWL_GET_TYPE_1000 = 1000,
+    /* 0x3E8 */ ENOWL_GET_TYPE_1000 = 1000
 } EnOwlType;
 
 typedef struct EnOwl {

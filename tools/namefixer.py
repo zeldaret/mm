@@ -18,10 +18,16 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    # "Math_FAtan2F": "Math_Atan2S_XY", // All old Math_FAtan2F should be renamed, so func_80086B30 can be renamed to Math_FAtan2F
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",
+    "sin_rad": "Math_SinF",
+    "cos_rad": "Math_CosF",
+    "randPlusMinusPoint5Scaled": "Rand_CenteredFloat",
+    # "Math_FAtan2F": "Math_Atan2S_XY", // Old Math_FAtan2F was renamed
+    "func_80086B30": "Math_FAtan2F",
+    "func_80086760": "Math_FTanF",
+    "func_80086C48": "Math_FAcosF",
 
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",

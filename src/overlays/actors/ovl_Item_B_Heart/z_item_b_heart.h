@@ -4,9 +4,9 @@
 #include "global.h"
 
 typedef enum {
-    /*  0 */ BHEART_PARAM_NORMAL,     // Spawn Parameter for Normal Scale.
-    /* 35 */ BHEART_PARAM_SMALL = 35, // Spawn Parameter for Small Scale.
-} ItemBHeartParams;
+    /*  0 */ BHEART_PARAM_NORMAL,    // Spawn Parameter for Normal Scale.
+    /* 35 */ BHEART_PARAM_SMALL = 35 // Spawn Parameter for Small Scale.
+} ItemBHeartParam;
 
 #define BHEART_SCALE_SMALL (0.1f)           // Scale value for Small Mode
 #define BHEART_SCALE_NORMAL (1.0f)          // Scale value for Normal Mode

@@ -265,7 +265,7 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
     if (this->counter > 0) {
         this->counter--;
         if ((this->counter & 1) == 0) {
-            this->actor.world.pos.y = (sin_rad(this->counter * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
+            this->actor.world.pos.y = (Math_SinF(this->counter * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }

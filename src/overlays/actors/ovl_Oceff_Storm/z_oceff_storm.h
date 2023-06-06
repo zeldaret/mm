@@ -19,6 +19,6 @@ typedef struct OceffStorm {
 
 typedef enum {
     /* 1 */ OCEFF_STORM_ACTION_PARAM_1 = 1
-} OceffStormActionParams;
+} OceffStormActionParam;
 
 #endif // Z_OCEFF_STORM_H

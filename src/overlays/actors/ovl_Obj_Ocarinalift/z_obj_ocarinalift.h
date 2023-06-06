@@ -24,9 +24,9 @@ typedef struct ObjOcarinalift {
     /* 0x176 */ s16 cutsceneTimer;
 } ObjOcarinalift; // size = 0x178
 
-typedef enum ObjOcarinaliftParams {
-    /* 0x0 */ OBJOCARINALIFT_PARAMSC_0,
-    /* 0x1 */ OBJOCARINALIFT_PARAMSC_1
-} ObjOcarinaliftParams;
+typedef enum ObjOcarinaliftParam {
+    /* 0 */ OBJOCARINALIFT_PARAM_0,
+    /* 1 */ OBJOCARINALIFT_PARAM_1
+} ObjOcarinaliftParam;
 
 #endif // Z_OBJ_OCARINALIFT_H

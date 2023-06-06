@@ -100,8 +100,8 @@ void EnTanron3_CreateEffect(PlayState* play, Vec3f* effectPos) {
             effectPtr->unk_34.y = 0.0f;
             effectPtr->unk_34.z = Rand_ZeroFloat(2 * M_PI);
             effectPtr->unk_02 = Rand_ZeroFloat(100.0f);
-            effectPtr->velocity.x = randPlusMinusPoint5Scaled(25.0f);
-            effectPtr->velocity.z = randPlusMinusPoint5Scaled(25.0f);
+            effectPtr->velocity.x = Rand_CenteredFloat(25.0f);
+            effectPtr->velocity.z = Rand_CenteredFloat(25.0f);
             break;
         }
     }
@@ -155,9 +155,9 @@ void EnTanron3_SetupLive(EnTanron3* this, PlayState* play) {
     this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = 50;
     this->actor.speed = 5.0f;
     this->speedMaxStep = 0.5f;
-    this->deviation.x = randPlusMinusPoint5Scaled(500.0f);
-    this->deviation.y = randPlusMinusPoint5Scaled(100.0f);
-    this->deviation.z = randPlusMinusPoint5Scaled(500.0f);
+    this->deviation.x = Rand_CenteredFloat(500.0f);
+    this->deviation.y = Rand_CenteredFloat(100.0f);
+    this->deviation.z = Rand_CenteredFloat(500.0f);
     Math_Vec3f_Copy(&this->targetPos, &this->actor.world.pos);
     this->timer = Rand_ZeroFloat(100.0f);
 }
@@ -245,9 +245,9 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
         if (this->workTimer[WORK_TIMER_OUT_OF_WATER] == 0) {
             if ((this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0) && (this->actor.speed > 1.0f)) {
                 this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
-                this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
-                this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
-                this->deviation.z = randPlusMinusPoint5Scaled(100.0f);
+                this->deviation.x = Rand_CenteredFloat(100.0f);
+                this->deviation.y = Rand_CenteredFloat(50.0f + extraScaleY);
+                this->deviation.z = Rand_CenteredFloat(100.0f);
             }
             this->targetPosWithDeviation.y = this->targetPos.y + this->deviation.y + 50.0f;
         }
@@ -297,17 +297,17 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     this->actor.speed = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.x =
-                            (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.x + 0x8000;
+                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.x + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.z =
-                            (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.z + 0x8000;
+                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.z + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
                     }
                     this->actor.world.rot.y = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x) +
-                                              (s16)randPlusMinusPoint5Scaled(0xCE20);
+                                              (s16)(s32)Rand_CenteredFloat(0xCE20);
                 }
 
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
@@ -316,9 +316,9 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                 if ((Rand_ZeroOne() < 0.5f) & !(this->timer & 0x3)) {
                     Vec3f effectPos;
 
-                    effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
+                    effectPos.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
                     effectPos.y = this->actor.world.pos.y;
-                    effectPos.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
+                    effectPos.z = Rand_CenteredFloat(30.0f) + this->actor.world.pos.z;
                     EnTanron3_CreateEffect(play, &effectPos);
                 }
                 break;

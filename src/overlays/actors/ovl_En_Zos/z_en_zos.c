@@ -420,8 +420,8 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
     switch (play->msgCtx.currentTextId) {
         case 0x1237:
-            player->exchangeItemId = 0;
-
+            player->exchangeItemId = PLAYER_IA_NONE;
+            // fallthrough
         case 0x1238:
         case 0x123A:
         case 0x123B:
@@ -439,8 +439,8 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
         case 0x1232:
         case 0x1241:
-            player->exchangeItemId = 0;
-
+            player->exchangeItemId = PLAYER_IA_NONE;
+            // fallthrough
         case 0x1239:
         case 0x1246:
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);

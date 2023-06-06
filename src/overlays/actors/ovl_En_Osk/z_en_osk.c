@@ -118,9 +118,9 @@ void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 index, f32 pla
 void func_80BF5EBC(EnOsk* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
-    sp2C.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.y;
+    sp2C.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
+    sp2C.z = Rand_CenteredFloat(30.0f) + this->actor.world.pos.z;
+    sp2C.y = Rand_CenteredFloat(30.0f) + this->actor.world.pos.y;
 
     func_800B3030(play, &sp2C, &D_80BF7018, &D_80BF7018, 100, 0, 2);
 }

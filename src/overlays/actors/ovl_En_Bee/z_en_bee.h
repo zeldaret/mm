@@ -9,8 +9,8 @@ struct EnBee;
 typedef void (*EnBeeActionFunc)(struct EnBee*, PlayState*);
 
 typedef enum {
-    /* 0 */ BEE_BEHAVIOR_IDLE = 0,
-    /* 1 */ BEE_BEHAVIOR_ATTACK,
+    /* 0 */ BEE_BEHAVIOR_IDLE,
+    /* 1 */ BEE_BEHAVIOR_ATTACK
 } BeeBehaviorType;
 
 typedef struct EnBee {

@@ -12,13 +12,13 @@
 
 typedef enum {
     /* 0 */ EN_STREAM_SIZE_NORMAL,
-    /* 1 */ EN_STREAM_SIZE_SMALL,
+    /* 1 */ EN_STREAM_SIZE_SMALL
 } EnStreamSize;
 
 typedef enum {
     /* 0 */ EN_STREAM_PLAYER_OUTSIDE_RANGE,
     /* 1 */ EN_STREAM_PLAYER_WITHIN_RANGE_INSIDE_VORTEX,
-    /* 2 */ EN_STREAM_PLAYER_WITHIN_RANGE_BELOW_VORTEX,
+    /* 2 */ EN_STREAM_PLAYER_WITHIN_RANGE_BELOW_VORTEX
 } EnStreamPlayerLocation;
 
 struct EnStream;
