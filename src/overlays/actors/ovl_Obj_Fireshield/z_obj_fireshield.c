@@ -55,8 +55,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef struct {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ f32 unk_04;
 } ObjFireshieldStruct; // size = 0x8
 
 ObjFireshieldStruct D_80A4D84C[] = {

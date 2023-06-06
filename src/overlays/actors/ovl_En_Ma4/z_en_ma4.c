@@ -44,14 +44,14 @@ void EnMa4_InitFaceExpression(EnMa4* this);
 typedef enum {
     /* 0 */ MA4_TYPE_DAY1,
     /* 1 */ MA4_TYPE_ALIENS_DEFEATED,
-    /* 2 */ MA4_TYPE_ALIENS_WON,
+    /* 2 */ MA4_TYPE_ALIENS_WON
 } EnMa4Type;
 
 typedef enum {
     /* 0 */ MA4_STATE_DEFAULT,
     /* 1 */ MA4_STATE_HORSEBACKGAME,
     /* 2 */ MA4_STATE_AFTERHORSEBACKGAME,
-    /* 3 */ MA4_STATE_AFTERDESCRIBETHEMCS,
+    /* 3 */ MA4_STATE_AFTERDESCRIBETHEMCS
 } EnMa4State;
 
 ActorInit En_Ma4_InitVars = {
@@ -163,9 +163,9 @@ void EnMa4_InitPath(EnMa4* this, PlayState* play) {
     Path* path;
     Vec3f nextPoint;
 
-    path = &play->setupPathList[(this->actor.params & 0xFF00) >> 8];
+    path = &play->setupPathList[ENMA_GET_PATH_INDEX(&this->actor)];
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
-    this->pathIndex = 0;
+    this->waypointIndex = 0;
     this->pathPointsCount = path->count;
 
     this->actor.home.pos.x = this->pathPoints[0].x;
@@ -272,9 +272,9 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ROMANI_BOW_FLICK);
     }
 
-    sp34.x = this->pathPoints[this->pathIndex].x;
-    sp34.y = this->pathPoints[this->pathIndex].y;
-    sp34.z = this->pathPoints[this->pathIndex].z;
+    sp34.x = this->pathPoints[this->waypointIndex].x;
+    sp34.y = this->pathPoints[this->waypointIndex].y;
+    sp34.z = this->pathPoints[this->waypointIndex].z;
     sp2E = Math_Vec3f_Yaw(&this->actor.world.pos, &sp34);
     if (Math_Vec3f_DistXZ(&this->actor.world.pos, &sp34) > 50.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, sp2E, 10, 0x3000, 0x100);
@@ -291,10 +291,10 @@ void EnMa4_RunInCircles(EnMa4* this, PlayState* play) {
             }
         }
 
-        if (this->pathIndex < (this->pathPointsCount - 1)) {
-            this->pathIndex++;
+        if (this->waypointIndex < (this->pathPointsCount - 1)) {
+            this->waypointIndex++;
         } else {
-            this->pathIndex = 0;
+            this->waypointIndex = 0;
         }
     }
 

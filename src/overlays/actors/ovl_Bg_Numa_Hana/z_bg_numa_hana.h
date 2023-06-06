@@ -9,7 +9,7 @@
 
 typedef enum {
     /* 0 */ BG_NUMA_HANA_TYPE_NORMAL,
-    /* 1 */ BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION,
+    /* 1 */ BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION
 } BgNumaHanaType;
 
 struct BgNumaHana;

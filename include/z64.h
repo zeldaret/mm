@@ -274,45 +274,45 @@ typedef struct {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 sceneTimeSpeed;
     /* 0x04 */ Vec3f sunPos;
-    /* 0x10 */ u8 unk_10;
-    /* 0x11 */ u8 unk_11;
+    /* 0x10 */ u8 skybox1Index;
+    /* 0x11 */ u8 skybox2Index;
     /* 0x12 */ u8 unk_12;
-    /* 0x13 */ u8 unk_13;
+    /* 0x13 */ u8 skyboxBlend;
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 skyboxDisabled;
     /* 0x16 */ u8 sunMoonDisabled;
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u16 unk_1A;
+    /* 0x17 */ u8 skyboxConfig;
+    /* 0x18 */ u8 changeSkyboxNextConfig;
+    /* 0x19 */ u8 changeSkyboxState;
+    /* 0x1A */ u16 changeSkyboxTimer;
     /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ u8 unk_1F;
-    /* 0x20 */ u8 unk_20;
-    /* 0x21 */ u8 unk_21;
-    /* 0x22 */ u16 unk_22;
-    /* 0x24 */ u16 unk_24;
+    /* 0x1E */ u8 lightMode;
+    /* 0x1F */ u8 lightConfig;
+    /* 0x20 */ u8 changeLightNextConfig;
+    /* 0x21 */ u8 changeLightEnabled;
+    /* 0x22 */ u16 changeLightTimer;
+    /* 0x24 */ u16 changeDuration;
     /* 0x26 */ u8 unk_26;
     /* 0x28 */ LightInfo dirLight1; // sun 1
     /* 0x36 */ LightInfo unk_36; // sun 2
-    /* 0x44 */ s8 unk_44;
-    /* 0x48 */ DmaRequest unk_48;
-    /* 0x68 */ OSMesgQueue unk_68;
-    /* 0x80 */ OSMesg unk_80;
-    /* 0x84 */ f32 unk_84;
-    /* 0x88 */ f32 unk_88;
+    /* 0x44 */ s8 skyboxDmaState;
+    /* 0x48 */ DmaRequest dmaRequest;
+    /* 0x68 */ OSMesgQueue loadQueue;
+    /* 0x80 */ OSMesg loadMsg;
+    /* 0x84 */ f32 glareAlpha;
+    /* 0x88 */ f32 lensFlareAlphaScale;
     /* 0x8C */ EnvLightSettings lightSettings;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
     /* 0xB8 */ u8 numLightSettings;
     /* 0xBC */ LightSettings* lightSettingsList;
-    /* 0xC0 */ u8 unk_C0;
-    /* 0xC1 */ u8 unk_C1;
-    /* 0xC2 */ u8 unk_C2;
+    /* 0xC0 */ u8 lightBlendEnabled;
+    /* 0xC1 */ u8 lightSetting;
+    /* 0xC2 */ u8 prevLightSetting;
     /* 0xC3 */ u8 lightSettingOverride;
     /* 0xC4 */ LightSettings unk_C4;
-    /* 0xDA */ u16 unk_DA;
+    /* 0xDA */ u16 lightBlendRateOverride;
     /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
@@ -638,7 +638,7 @@ typedef struct {
 #define FLASHROM_REQUEST_WRITE 1
 #define FLASHROM_REQUEST_READ 2
 
-enum fram_command {
+typedef enum framCommand {
     /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
        Initializes fram to 0xFF in FRAM_MODE_ERASE
        Writes Contents in FLASHRAM_MODE_WRITE
@@ -662,15 +662,15 @@ enum fram_command {
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
-};
+} framCommand;
 
-enum fram_mode {
-    FRAM_MODE_NOP = 0,
-    FRAM_MODE_ERASE,
-    FRAM_MODE_WRITE,
-    FRAM_MODE_READ,
-    FRAM_MODE_STATUS
-};
+typedef enum framMode {
+    /* 0 */ FRAM_MODE_NOP,
+    /* 1 */ FRAM_MODE_ERASE,
+    /* 2 */ FRAM_MODE_WRITE,
+    /* 3 */ FRAM_MODE_READ,
+    /* 4 */ FRAM_MODE_STATUS
+} framMode;
 
 typedef enum {
     /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,

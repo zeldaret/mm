@@ -26,7 +26,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ POSTBOX_BEHAVIOUR_WAIT_FOR_ITEM,
-    /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM,
+    /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
 static u8 D_80B2C200[] = {

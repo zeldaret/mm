@@ -25,24 +25,24 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2);
 void EnFishing_DrawOwner(Actor* thisx, PlayState* play);
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x02 */ Vec3s pos;
-    /* 0x08 */ u8 unk_08;
-    /* 0x0C */ f32 unk_0C;
+    /* 0x0 */ u8 unk_00;
+    /* 0x2 */ Vec3s pos;
+    /* 0x8 */ u8 unk_08;
+    /* 0xC */ f32 unk_0C;
 } FishingFishInit; // size = 0x10
 
 #define EFFECT_COUNT 130
 
 typedef enum {
-    /* 0x00 */ FS_EFF_NONE,
-    /* 0x01 */ FS_EFF_RIPPLE,
-    /* 0x02 */ FS_EFF_DUST_SPLASH,
-    /* 0x03 */ FS_EFF_WATER_DUST,
-    /* 0x04 */ FS_EFF_BUBBLE,
-    /* 0x05 */ FS_EFF_RAIN_DROP,
-    /* 0x06 */ FS_EFF_OWNER_HAT,
-    /* 0x07 */ FS_EFF_RAIN_RIPPLE,
-    /* 0x08 */ FS_EFF_RAIN_SPLASH
+    /* 0 */ FS_EFF_NONE,
+    /* 1 */ FS_EFF_RIPPLE,
+    /* 2 */ FS_EFF_DUST_SPLASH,
+    /* 3 */ FS_EFF_WATER_DUST,
+    /* 4 */ FS_EFF_BUBBLE,
+    /* 5 */ FS_EFF_RAIN_DROP,
+    /* 6 */ FS_EFF_OWNER_HAT,
+    /* 7 */ FS_EFF_RAIN_RIPPLE,
+    /* 8 */ FS_EFF_RAIN_SPLASH
 } FishingEffectType;
 
 typedef struct {
@@ -73,9 +73,9 @@ typedef enum {
 } FishingPropType;
 
 typedef struct {
-    /* 0x00 */ u8 type;
-    /* 0x02 */ Vec3s pos;
-} FishingPropInit; // size = 0x08
+    /* 0x0 */ u8 type;
+    /* 0x2 */ Vec3s pos;
+} FishingPropInit; // size = 0x8
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -93,8 +93,8 @@ typedef struct {
 } FishingProp; // size = 0x3C
 
 typedef enum {
-    /* 0x00 */ FS_GROUP_FISH_NONE,
-    /* 0x01 */ FS_GROUP_FISH_NORMAL
+    /* 0 */ FS_GROUP_FISH_NONE,
+    /* 1 */ FS_GROUP_FISH_NORMAL
 } FishingGroupFishType;
 
 #define GROUP_FISH_COUNT 60

@@ -27,7 +27,7 @@ typedef enum {
     /*  4 */ EN_RD_TYPE_FROZEN, // Unused in the final game
     /*  5 */ EN_RD_TYPE_SQUATTING_DANCE,
     /*  6 */ EN_RD_TYPE_CLAPPING_DANCE,
-    /*  7 */ EN_RD_TYPE_PIROUETTE,
+    /*  7 */ EN_RD_TYPE_PIROUETTE
 } EnRdType;
 
 typedef struct EnRd {

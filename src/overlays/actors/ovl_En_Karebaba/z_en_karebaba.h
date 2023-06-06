@@ -11,7 +11,7 @@ typedef void (*EnKarebabaActionFunc)(struct EnKarebaba*, PlayState*);
 typedef enum {
     /* 0 */ ENKAREBABA_0, // Unused, always shrinks and drops a Deku Nut
     /* 1 */ ENKAREBABA_1, // Drops sticks (Only type OoT has) 
-    /* 2 */ KAREBABA_MINI,
+    /* 2 */ KAREBABA_MINI
 } KarebabaType;
 
 typedef struct EnKarebaba {

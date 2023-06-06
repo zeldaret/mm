@@ -62,13 +62,13 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this);
  * Stores various information for each dog in the race, mostly related to speed.
  */
 typedef struct {
-    f32 sprintSpeedMultiplier;        // Target speed is multiplied by this when the dog is in the last 1/4 of the race
-    f32 goodConditionSpeedMultiplier; // Target speed is multiplied by this if the dog is in good condition
-    s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;                        // The dog's index within sDogInfo
-    s16 pointToUseSecondBaseSpeed;    // When the dog is at or after this point, the second value in sBaseSpeeds is used
-    s16 textId;                       // Used to determine the dog's condition
-} RaceDogInfo;
+    /* 0x0 */ f32 sprintSpeedMultiplier;        // Multiplies target speed when the dog is in the last 1/4 of the race
+    /* 0x4 */ f32 goodConditionSpeedMultiplier; // Multiplies target speed if the dog is in good condition
+    /* 0x8 */ s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
+    /* 0xA */ s16 index;                        // The dog's index within sDogInfo
+    /* 0xC */ s16 pointToUseSecondBaseSpeed; // When the dog is at or after this point, use the second sBaseSpeeds value
+    /* 0xE */ s16 textId;                    // Used to determine the dog's condition
+} RaceDogInfo;                               // size = 0x10
 
 ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
@@ -313,7 +313,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH_INDEX(&this->actor), ENRACEDOG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
     if (ENRACEDOG_GET_INDEX(&this->actor) < RACEDOG_COUNT) {

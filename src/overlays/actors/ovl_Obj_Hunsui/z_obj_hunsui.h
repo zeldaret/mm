@@ -12,15 +12,15 @@ typedef void (*ObjHunsuiActionFunc)(struct ObjHunsui*, PlayState*);
 #define OBJHUNSUI_GET_F80(thisx) (((thisx)->params >> 7) & 0x1F)
 #define OBJHUNSUI_GET_F000(thisx) (((thisx)->params >> 0xC) & 0xF)
 
-enum {
+typedef enum {
     /* 0 */ OBJHUNSUI_F000_0,
     /* 1 */ OBJHUNSUI_F000_1,
     /* 2 */ OBJHUNSUI_F000_2,
     /* 3 */ OBJHUNSUI_F000_3,
     /* 4 */ OBJHUNSUI_F000_4,
     /* 5 */ OBJHUNSUI_F000_5,
-    /* 6 */ OBJHUNSUI_F000_6,
-};
+    /* 6 */ OBJHUNSUI_F000_6
+} ObjHunsuiParam;
 
 typedef struct ObjHunsui {
     /* 0x000 */ DynaPolyActor dyna;

@@ -16,9 +16,9 @@ typedef enum {
     /* 2 */ STH_TYPE_SWAMP_SPIDER_HOUSE_CURED, // cursed is EnSsh
     /* 3 */ STH_TYPE_MOON_LOOKING, // South Clock Town, looking up at the moon
     /* 4 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_GREET, // looking for shelter
-    /* 5 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC, // shelter was not enough
+    /* 5 */ STH_TYPE_OCEANSIDE_SPIDER_HOUSE_PANIC // shelter was not enough
     // Other values: Actor will spawn and animate with arm waving, no further interaction.
-} EnSthTypes;
+} EnSthType;
 
 // Note: Vanilla types usually have 0xFEXX typing, but this upper section is unused by the code, reason unknown
 #define STH_GET_TYPE(thisx) ((thisx)->params & 0xF)

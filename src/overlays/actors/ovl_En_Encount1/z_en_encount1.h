@@ -18,7 +18,7 @@ typedef enum EnEncount1Enemy {
     /* 0 */ EN_ENCOUNT1_GRASSHOPPER,
     /* 1 */ EN_ENCOUNT1_WALLMASTER,
     /* 2 */ EN_ENCOUNT1_SKULLFISH,
-    /* 3 */ EN_ENCOUNT1_SKULLFISH_2,
+    /* 3 */ EN_ENCOUNT1_SKULLFISH_2
 } EnEncount1Enemy;
 
 struct EnEncount1;

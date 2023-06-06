@@ -3060,12 +3060,12 @@ void KaleidoScope_Update(PlayState* play) {
                             Play_SaveCycleSceneFlags(&play->state);
                             gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
-                            if (gSaveContext.unk_3F3F == 0) {
+                            if (!gSaveContext.flashSaveAvailable) {
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_5;
                             } else {
-                                func_80147008(sramCtx, D_801C67C8[gSaveContext.fileNum],
-                                              D_801C67F0[gSaveContext.fileNum]);
-                                func_80147020(sramCtx);
+                                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[gSaveContext.fileNum],
+                                                          gFlashSaveNumPages[gSaveContext.fileNum]);
+                                Sram_StartWriteToFlashDefault(sramCtx);
                                 pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_4;
                             }
                             sDelayTimer = 90;
@@ -3327,11 +3327,12 @@ void KaleidoScope_Update(PlayState* play) {
                     gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
                     gSaveContext.save.saveInfo.playerData.health = 0x30;
                     func_8014546C(sramCtx);
-                    if (gSaveContext.unk_3F3F == 0) {
+                    if (!gSaveContext.flashSaveAvailable) {
                         pauseCtx->state = PAUSE_STATE_GAMEOVER_8;
                     } else {
-                        func_80147008(sramCtx, D_801C67C8[gSaveContext.fileNum], D_801C67F0[gSaveContext.fileNum]);
-                        func_80147020(sramCtx);
+                        Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[gSaveContext.fileNum],
+                                                  gFlashSaveNumPages[gSaveContext.fileNum]);
+                        Sram_StartWriteToFlashDefault(sramCtx);
                         pauseCtx->state = PAUSE_STATE_GAMEOVER_7;
                     }
                     sDelayTimer = 90;

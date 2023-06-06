@@ -11,11 +11,11 @@
 
 #define THIS ((EnRuppecrow*)thisx)
 
-enum {
-    ENRUPPECROW_EFFECT_NONE = 0,
-    ENRUPPECROW_EFFECT_ICE = 10,
-    ENRUPPECROW_EFFECT_LIGHT = 20,
-};
+typedef enum {
+    /* 0x00 */ ENRUPPECROW_EFFECT_NONE = 0,
+    /* 0x0A */ ENRUPPECROW_EFFECT_ICE = 10,
+    /* 0x14 */ ENRUPPECROW_EFFECT_LIGHT = 20
+} EnRuppecrowEffect;
 
 void EnRuppecrow_Init(Actor* thisx, PlayState* play2);
 void EnRuppecrow_Destroy(Actor* thisx, PlayState* play);
@@ -652,7 +652,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags |= ACTOR_FLAG_2000000;
 
-    this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRUPPECROW_GET_PATH_INDEX(&this->actor), ENRUPPECROW_PATH_INDEX_NONE);
     if (this->path != NULL) {
         this->actionFunc = EnRuppecrow_HandleSong;
     } else {

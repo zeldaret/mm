@@ -229,7 +229,7 @@ typedef enum {
     /* 1 */ TOILET_HAND_BEHAVIOUR_TAKE_ITEM,     // take paper and disappear to use it
     /* 2 */ TOILET_HAND_BEHAVIOUR_USE_ITEM,      // using paper, flushing
     /* 3 */ TOILET_HAND_BEHAVIOUR_REAPPEAR,      // reappear with reward
-    /* 4 */ TOILET_HAND_BEHAVIOUR_REWARD_GIVEN,
+    /* 4 */ TOILET_HAND_BEHAVIOUR_REWARD_GIVEN
 } ToiletHandBehaviour;
 
 // msgevent callback/communication. Follow and choose parts of script to run

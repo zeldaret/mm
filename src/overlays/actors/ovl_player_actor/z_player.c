@@ -79,7 +79,7 @@ typedef enum AnimSfxType {
     /*  7 */ ANIMSFX_TYPE_FLOOR_JUMP, // does not use sfxId
     /*  8 */ ANIMSFX_TYPE_8,          // FLOOR_WALK_Something2 // does not use sfxId
     /*  9 */ ANIMSFX_TYPE_9,          // Uses NA_SE_PL_WALK_LADDER // does not use sfxId, unused
-    /* 10 */ ANIMSFX_TYPE_SURFACE,
+    /* 10 */ ANIMSFX_TYPE_SURFACE
 } AnimSfxType;
 
 #define ANIMSFX_SHIFT_TYPE(type) ((type) << 11)
@@ -5733,7 +5733,7 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
             gSaveContext.respawnFlag = -2;
         }
 
-        gSaveContext.unk_3DBB = 1;
+        gSaveContext.retainWeatherMode = 1;
         Scene_SetExitFade(play);
     }
 
@@ -16453,7 +16453,7 @@ void func_8085269C(Player* this, PlayState* play) {
                 (play->msgCtx.ocarinaMode == 0x18) || (play->msgCtx.ocarinaMode == 0x19)) {
                 if (play->msgCtx.ocarinaMode == 0x16) {
                     if (!func_8082DA90(play)) {
-                        if (gSaveContext.save.saveInfo.playerData.deaths == 1) {
+                        if (gSaveContext.save.saveInfo.playerData.threeDayResetCount == 1) {
                             play->nextEntrance = ENTRANCE(CUTSCENE, 1);
                         } else {
                             play->nextEntrance = ENTRANCE(CUTSCENE, 0);

@@ -497,7 +497,7 @@ s32 func_80BF1B40(EnIg* this, PlayState* play) {
 }
 
 s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s32 arg3, s32 arg4) {
-    u8 sp4F = ENIG_GET_FF(&this->actor);
+    u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
     Vec3f sp30;
@@ -509,7 +509,7 @@ s32 func_80BF1C44(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput, s
     this->timePath = NULL;
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80BF3318[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BF3318[scheduleOutput->result]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
@@ -541,7 +541,7 @@ s32 func_80BF1D78(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp56 = SCHEDULE_TIME_NOW;
-    u8 sp55 = ENIG_GET_FF(&this->actor);
+    u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
     Vec3f sp40;
@@ -553,7 +553,7 @@ s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     door = func_80BF1200(play, scheduleOutput->result);
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp55, D_80BF3318[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BF3318[scheduleOutput->result]);
     }
 
     if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
@@ -587,7 +587,7 @@ s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80BF1FA8(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
-    u8 sp2B = ENIG_GET_FF(&this->actor);
+    u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     u16 tmp;
     s16 pad;
     s32 ret = false;
@@ -595,7 +595,7 @@ s32 func_80BF1FA8(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->timePath = NULL;
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp2B, D_80BF3318[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BF3318[scheduleOutput->result]);
     }
 
     if ((this->timePath != NULL) && (this->timePath->count < 3)) {
@@ -635,7 +635,7 @@ s32 func_80BF1FA8(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80BF219C(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u8 sp4F = ENIG_GET_FF(&this->actor);
+    u8 pathIndex = ENIG_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
     Vec3s* sp30;
@@ -645,7 +645,7 @@ s32 func_80BF219C(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->timePath = NULL;
 
     if (D_80BF3318[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80BF3318[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BF3318[scheduleOutput->result]);
     }
 
     if ((this->timePath != 0) && (this->timePath->count >= 2)) {
