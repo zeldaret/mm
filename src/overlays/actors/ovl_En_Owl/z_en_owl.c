@@ -271,7 +271,7 @@ void func_8095AB1C(EnOwl* this, PlayState* play) {
 }
 
 void func_8095AB4C(EnOwl* this) {
-    if (randPlusMinusPoint5Scaled(1.0f) < 0.0f) {
+    if (Rand_CenteredFloat(1.0f) < 0.0f) {
         this->actionFlags |= 0x20;
     } else {
         this->actionFlags &= ~0x20;

@@ -130,8 +130,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 this->unk_18C = 0;
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
 
-                sp40.x += randPlusMinusPoint5Scaled(10.0f);
-                sp40.z += randPlusMinusPoint5Scaled(10.0f);
+                sp40.x += Rand_CenteredFloat(10.0f);
+                sp40.z += Rand_CenteredFloat(10.0f);
                 sp40.y += Rand_ZeroFloat(2.0f);
 
                 EffectSsGSplash_Spawn(play, &sp40, NULL, NULL, 2.0f * Rand_ZeroOne(), 1);
@@ -144,8 +144,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
                 this->unk_18C = 0;
 
-                sp40.x += randPlusMinusPoint5Scaled(10.0f);
-                sp40.z += randPlusMinusPoint5Scaled(10.0f);
+                sp40.x += Rand_CenteredFloat(10.0f);
+                sp40.z += Rand_CenteredFloat(10.0f);
                 sp40.y += Rand_ZeroFloat(45.0f);
 
                 EffectSsGSplash_Spawn(play, &sp40, NULL, NULL, 1, 1);

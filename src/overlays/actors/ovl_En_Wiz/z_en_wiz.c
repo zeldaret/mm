@@ -1297,7 +1297,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                         scaleStep = Rand_S16Offset(20, 10);
                         Math_Vec3f_Copy(&pos, &this->ghostPos[i]);
                         pos.x += (f32)Rand_S16Offset(20, 20) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1);
-                        pos.y += 70.0f + randPlusMinusPoint5Scaled(30.0f);
+                        pos.y += 70.0f + Rand_CenteredFloat(30.0f);
                         pos.z += (f32)Rand_S16Offset(20, 20) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1);
                         func_800B0DE0(play, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvTimer,
                                       Rand_S16Offset(350, 100), scaleStep);
@@ -1419,9 +1419,9 @@ void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
             Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_MultVec3f(&staffFlamePos, &flamePos);
-            flamePos.x += randPlusMinusPoint5Scaled(4.0f);
-            flamePos.y += randPlusMinusPoint5Scaled(7.0f);
-            flamePos.z += randPlusMinusPoint5Scaled(5.0f);
+            flamePos.x += Rand_CenteredFloat(4.0f);
+            flamePos.y += Rand_CenteredFloat(7.0f);
+            flamePos.z += Rand_CenteredFloat(5.0f);
             func_800B3030(play, &flamePos, &gZeroVec3f, &gZeroVec3f, ((Rand_ZeroFloat(1.0f) * 50.0f) + 70.0f), 10, 1);
             SoundSource_PlaySfxAtFixedWorldPos(play, &flamePos, 10, NA_SE_EN_EXTINCT);
         }

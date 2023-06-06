@@ -449,9 +449,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.x = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rotation.y = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rotation.z = (s16)(s32)Rand_CenteredFloat(0x7530);
             return;
         }
     }
