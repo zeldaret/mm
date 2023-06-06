@@ -4699,7 +4699,7 @@ _DW({									\
 
 /* like gSPTextureRectangle but accepts negative position arguments */
 #define gSPScisTextureRectangle(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
-{                                                                            \
+_DW({                                                                        \
     Gfx *_g = (Gfx *)(pkt);                                                  \
                                                                              \
     _g->words.w0 = (_SHIFTL(G_TEXRECT, 24, 8) |                              \
@@ -4723,7 +4723,7 @@ _DW({									\
 			 0, 16)));                                           \
     gImmp1(pkt, G_RDPHALF_2, (_SHIFTL((dsdx), 16, 16) |                      \
                               _SHIFTL((dtdy), 0, 16)));                      \
-}
+})
 
 #define gsSPTextureRectangleFlip(xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
     (_SHIFTL(G_TEXRECTFLIP, 24, 8) | _SHIFTL(xh, 12, 12) |		\
