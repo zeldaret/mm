@@ -91,8 +91,8 @@ void Load2_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uint
 
 size_t Load2_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, void* ramStart, void* ramEnd,
                          void* allocatedVRamAddr) {
-    uintptr_t vRamStart = ramStart;
-    uintptr_t vRamEnd = ramEnd;
+    uintptr_t vRamStart = (uintptr_t)ramStart;
+    uintptr_t vRamEnd = (uintptr_t)ramEnd;
     ptrdiff_t size = vRomEnd - vRomStart;
     uintptr_t end;
     OverlayRelocationSection* ovl;
