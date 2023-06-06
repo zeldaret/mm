@@ -2,9 +2,8 @@
 #define Z64_TITLE_H
 
 #include "global.h"
-
-void ConsoleLogo_Init(GameState* thisx);
-void ConsoleLogo_Destroy(GameState* thisx);
+#include "z64game.h"
+#include "z64view.h"
 
 typedef struct {
     /* 0x000 */ GameState state;
@@ -19,5 +18,8 @@ typedef struct {
     /* 0x242 */ s16 uls;
     /* 0x244 */ u8 exit;
 } ConsoleLogoState; // size = 0x248
+
+void ConsoleLogo_Init(GameState* thisx);
+void ConsoleLogo_Destroy(GameState* thisx);
 
 #endif

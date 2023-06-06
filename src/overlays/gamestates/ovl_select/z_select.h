@@ -1,7 +1,8 @@
-#ifndef _Z64_SELECT_H_
-#define _Z64_SELECT_H_
+#ifndef Z64_SELECT_H
+#define Z64_SELECT_H
 
-#include "global.h"
+#include "z64game.h"
+#include "z64view.h"
 
 struct MapSelectState;
 
