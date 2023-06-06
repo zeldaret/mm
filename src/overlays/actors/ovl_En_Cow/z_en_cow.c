@@ -117,7 +117,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->actionFunc = EnCow_Idle;
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01) && (CURRENT_DAY != 1) &&
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) && (CURRENT_DAY != 1) &&
                 (EN_COW_TYPE(thisx) == EN_COW_TYPE_ABDUCTED)) {
                 Actor_Kill(&this->actor);
                 return;
