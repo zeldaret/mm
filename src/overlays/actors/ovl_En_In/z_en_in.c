@@ -593,7 +593,7 @@ void func_808F4108(EnIn* this, PlayState* play, u16 textId) {
 }
 
 s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx) {
-    EnIn* this2 = this;
+    Actor* thisx = &this->actor;
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
@@ -604,15 +604,15 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
             } else if (this->unk4AC & 8) {
                 func_808F4108(this, play, 0x3475);
             } else {
-                Actor_ContinueText(play, &this->actor, 0x3475);
+                Actor_ContinueText(play, thisx, 0x3475);
             }
         } else {
             play_sound(NA_SE_SY_ERROR);
-            Actor_ContinueText(play, &this->actor, 0x3473);
+            Actor_ContinueText(play, thisx, 0x3473);
         }
     } else {
         func_8019F230();
-        Actor_ContinueText(play, &this->actor, 0x3472);
+        Actor_ContinueText(play, thisx, 0x3472);
     }
     return 0;
 }
