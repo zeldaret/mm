@@ -439,8 +439,8 @@ void func_809ECD18(Boss04* this, PlayState* play) {
         if (Rand_ZeroOne() < 0.1f) {
             Math_Vec3f_Copy(&this->unk_6C8, &player->actor.world.pos);
         } else {
-            this->unk_6C8.x = randPlusMinusPoint5Scaled(600.0f) + this->unk_6E8;
-            this->unk_6C8.z = randPlusMinusPoint5Scaled(600.0f) + this->unk_6F0;
+            this->unk_6C8.x = Rand_CenteredFloat(600.0f) + this->unk_6E8;
+            this->unk_6C8.z = Rand_CenteredFloat(600.0f) + this->unk_6F0;
         }
     }
 

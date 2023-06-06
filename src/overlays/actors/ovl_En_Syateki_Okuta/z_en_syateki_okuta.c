@@ -404,7 +404,7 @@ void func_80A36CB0(EnSyatekiOkuta* this) {
         }
     } else if (this->actionFunc == func_80A36488) {
         this->unk_1D8.x = this->unk_1D8.z = 1.0f;
-        this->unk_1D8.y = (sin_rad((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+        this->unk_1D8.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
     } else if (this->actionFunc == func_80A36504) {
         if (curFrame < 3.0f) {
             this->unk_1D8.y = 1.0f;
@@ -440,7 +440,7 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
     if (this->actionFunc == func_80A363B4) {
         arg2->y = 1.0f;
         arg2->z = 1.0f;
-        arg2->x = (sin_rad((M_PI / 16) * arg1) * 0.4f) + 1.0f;
+        arg2->x = (Math_SinF((M_PI / 16) * arg1) * 0.4f) + 1.0f;
     } else if (this->actionFunc == func_80A365EC) {
         if ((arg1 >= 35.0f) || (arg1 < 25.0f)) {
             return false;

@@ -394,9 +394,9 @@ void func_80B93D2C(EnZog* this, PlayState* play) {
 void func_80B93DE8(Vec3f* arg0, PlayState* play, s32 arg2) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + arg0->x;
+    sp2C.x = Rand_CenteredFloat(30.0f) + arg0->x;
     sp2C.y = arg0->y + 3.0f;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + arg0->z;
+    sp2C.z = Rand_CenteredFloat(30.0f) + arg0->z;
     EffectSsKirakira_SpawnDispersed(play, &sp2C, &D_80B9598C, &D_80B95998, &D_80B959A4, &D_80B959A8, 1000, arg2);
 }
 
@@ -865,9 +865,9 @@ void func_80B94E34(EnZog* this, PlayState* play) {
             Vec3f sp38;
 
             Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B959AC, &sp38);
-            sp38.x += randPlusMinusPoint5Scaled(30.0f);
+            sp38.x += Rand_CenteredFloat(30.0f);
             sp38.y += 20.0f;
-            sp38.z += randPlusMinusPoint5Scaled(30.0f);
+            sp38.z += Rand_CenteredFloat(30.0f);
             if (WaterBox_GetSurface1(play, &play->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
                 (this->actor.world.pos.y < sp38.y)) {
                 EffectSsGSplash_Spawn(play, &sp38, NULL, NULL, 1,

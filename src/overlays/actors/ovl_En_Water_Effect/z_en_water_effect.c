@@ -159,9 +159,9 @@ void EnWaterEffect_Update(Actor* thisx, PlayState* play2) {
         if ((this->unk_DC4 % 32) == 0) {
             if (Rand_ZeroOne() < 0.5f) {
                 Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
-                sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
                 sp88.y = this->actor.world.pos.y;
-                sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
                 if ((this->actor.world.pos.y + this->actor.depthInWater) <= this->actor.floorHeight) {
                     phi_v1 = 0;
                 } else {
@@ -367,9 +367,9 @@ void func_80A599E8(EnWaterEffect* this, Vec3f* arg1, u8 arg2) {
 
             if (arg2 >= 2) {
                 if (arg2 == 2) {
-                    ptr->unk_10.x = randPlusMinusPoint5Scaled(10.0f);
+                    ptr->unk_10.x = Rand_CenteredFloat(10.0f);
                     ptr->unk_10.y = Rand_ZeroFloat(3.0f) + 5.0f;
-                    ptr->unk_10.z = randPlusMinusPoint5Scaled(10.0f);
+                    ptr->unk_10.z = Rand_CenteredFloat(10.0f);
                 }
                 ptr->unk_2C.z = 0.0017f;
                 ptr->unk_2C.x = 0.003f;
@@ -421,9 +421,9 @@ void func_80A59C04(Actor* thisx, PlayState* play2) {
         if (this->unk_DC6 == 0) {
             this->unk_DC6 = Rand_ZeroFloat(150.0f) + 100.0f;
             Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
-            sp74.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+            sp74.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
             sp74.y = this->actor.world.pos.y;
-            sp74.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+            sp74.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
             func_80A599E8(this, &sp74, 0);
         }
     }

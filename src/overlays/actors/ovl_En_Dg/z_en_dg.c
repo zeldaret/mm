@@ -280,7 +280,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -358,9 +358,9 @@ void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
-        pos.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        pos.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y;
-        pos.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        pos.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
         Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
@@ -900,14 +900,14 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
     if (curFrame < 9) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = Rand_CenteredFloat(1.0f) + 3.0f;
         }
 
         EnDg_SpawnFloorDustRing(this, play);
     } else {
         this->dogFlags |= DOG_FLAG_JUMP_ATTACKING;
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            f32 rand = randPlusMinusPoint5Scaled(1.5f);
+            f32 rand = Rand_CenteredFloat(1.5f);
 
             sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;

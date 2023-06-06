@@ -895,9 +895,9 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.x = Rand_CenteredFloat(30000.0f);
+            effect->rotation.y = Rand_CenteredFloat(30000.0f);
+            effect->rotation.z = Rand_CenteredFloat(30000.0f);
             return;
         }
     }

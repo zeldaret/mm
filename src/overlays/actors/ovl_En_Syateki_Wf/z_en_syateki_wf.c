@@ -408,9 +408,9 @@ void EnSyatekiWf_Dead(EnSyatekiWf* this, PlayState* play) {
         s32 i;
 
         for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i--) {
-            firePos.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-            firePos.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-            firePos.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            firePos.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+            firePos.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+            firePos.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
             func_800B3030(play, &firePos, &sFireVelocityAndAccel, &sFireVelocityAndAccel, 100, 0, 2);
         }
     }

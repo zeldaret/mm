@@ -110,9 +110,9 @@ void EnNwc_SpawnDust(EnNwc* this, PlayState* play) {
     vec5.z = this->actor.world.pos.z - 5.0f * Math_CosS(yaw) * Math_CosS(pitch);
 
     for (i = 0; i < 5; i++) {
-        vel.x = randPlusMinusPoint5Scaled(4.0f);
-        vel.y = randPlusMinusPoint5Scaled(4.0f);
-        vel.z = randPlusMinusPoint5Scaled(4.0f);
+        vel.x = Rand_CenteredFloat(4.0f);
+        vel.y = Rand_CenteredFloat(4.0f);
+        vel.z = Rand_CenteredFloat(4.0f);
         accel.x = -vel.x * 0.1f;
         accel.y = -vel.y * 0.1f;
         accel.z = -vel.z * 0.1f;
@@ -182,7 +182,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
         case NWC_STATE_TURNING:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_Turn;
-            this->fallingRotY = (s16)(s32)randPlusMinusPoint5Scaled(0x10000);
+            this->fallingRotY = (s16)(s32)Rand_CenteredFloat(0x10000);
             break;
 
         case NWC_STATE_HOPPING_FORWARD:
@@ -193,7 +193,7 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
         case NWC_STATE_FOLLOWING:
             this->actionFunc = EnNwc_Follow;
             this->transformTimer = 0;
-            this->randomRot = (s16)(s32)randPlusMinusPoint5Scaled(10000.0f);
+            this->randomRot = (s16)(s32)Rand_CenteredFloat(0x2710);
             break;
 
         case NWC_STATE_RUNNING:
@@ -331,7 +331,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
 
     } else { // not too close: keep moving
-        this->randomRot += (s16)randPlusMinusPoint5Scaled(1500.0f);
+        this->randomRot += (s16)(s32)Rand_CenteredFloat(0x5DC);
         if (this->randomRot > 0x1388) {
             this->randomRot = 0x1388;
         } else if (this->randomRot < -0x1388) {

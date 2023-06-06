@@ -267,7 +267,7 @@ void func_80A27B58(EnBigpamet* this) {
     this->unk_2A2 = 40;
 
     for (ptr = &this->unk_2FC[0], i = 0; i < ARRAY_COUNT(this->unk_2FC); i++, ptr++) {
-        temp_s1 = (s32)randPlusMinusPoint5Scaled(20480.0f) + this->actor.wallYaw;
+        temp_s1 = (s32)Rand_CenteredFloat(0x5000) + this->actor.wallYaw;
         temp_s2 = Rand_S16Offset(0x1000, 0x3000);
 
         temp_fs2 = Math_SinS(temp_s2);
@@ -342,7 +342,7 @@ void func_80A27FE8(EnBigpamet* this, PlayState* play) {
         pos.y += 8.0f;
 
         if (this->actionFunc != func_80A28D0C) {
-            sp32 = (s32)randPlusMinusPoint5Scaled(0x8000) + this->actor.world.rot.y;
+            sp32 = (s32)Rand_CenteredFloat(0x8000) + this->actor.world.rot.y;
             pos.x -= 55.0f * Math_SinS(sp32);
             pos.z -= 55.0f * Math_CosS(sp32);
         }

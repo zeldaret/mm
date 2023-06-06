@@ -304,7 +304,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
         return false;
     }
 
-    sp4C = func_80086C48(temp_f12);
+    sp4C = Math_FAcosF(temp_f12);
     if (sp4C < 0.001f) {
         return false;
     }

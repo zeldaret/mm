@@ -1838,9 +1838,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         dy = sLurePos.y - sRodTipPos.y;
         dz = sLurePos.z - sRodTipPos.z;
 
-        ry = func_80086B30(dx, dz);
+        ry = Math_FAtan2F(dx, dz);
         dist = sqrtf(SQ(dx) + SQ(dz));
-        rx = -func_80086B30(dy, dist);
+        rx = -Math_FAtan2F(dy, dist);
 
         dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
@@ -1865,9 +1865,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
                 dy = D_80917218.y - (linePos + i)->y;
                 dz = D_80917218.z - (linePos + i)->z;
 
-                ry = func_80086B30(dx, dz);
+                ry = Math_FAtan2F(dx, dz);
                 dist = sqrtf(SQ(dx) + SQ(dz));
-                rx = -func_80086B30(dy, dist);
+                rx = -Math_FAtan2F(dy, dist);
 
                 dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
@@ -3003,9 +3003,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->actor.shape.rot.y = -0x8000;
 
             if ((this->actor.projectedPos.z < 200.0f) && (this->actor.projectedPos.z > 0.0f)) {
-                spC4.x = randPlusMinusPoint5Scaled(5.0f) + 130.0f;
+                spC4.x = Rand_CenteredFloat(5.0f) + 130.0f;
                 spC4.y = 40.0f;
-                spC4.z = randPlusMinusPoint5Scaled(5.0f) + 1280.0f;
+                spC4.z = Rand_CenteredFloat(5.0f) + 1280.0f;
                 EnFishing_SpawnBubble(NULL, play->specialEffects, &spC4, Rand_ZeroFloat(0.02f) + 0.03f, 1);
             }
 
@@ -3080,9 +3080,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 } else {
                     this->unk_150 = 1;
                     this->unk_172[0] = Rand_ZeroFloat(30.0f) + 10.0f;
-                    this->unk_1AC.x = randPlusMinusPoint5Scaled(300.0f);
+                    this->unk_1AC.x = Rand_CenteredFloat(300.0f);
                     this->unk_1AC.y = (WATER_SURFACE_Y(play) - 50.0f) - Rand_ZeroFloat(50.0f);
-                    this->unk_1AC.z = randPlusMinusPoint5Scaled(300.0f);
+                    this->unk_1AC.z = Rand_CenteredFloat(300.0f);
                     this->unk_188 = 1.0f;
                     this->unk_18C = 2000.0f;
                 }
@@ -3144,8 +3144,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 Math_ApproachF(&this->unk_1A8, 4096.0f, 1.0f, 256.0f);
 
                 if ((play->gameplayFrames % 32) == 0) {
-                    this->unk_1AC.x = randPlusMinusPoint5Scaled(600.0f);
-                    this->unk_1AC.z = randPlusMinusPoint5Scaled(600.0f);
+                    this->unk_1AC.x = Rand_CenteredFloat(600.0f);
+                    this->unk_1AC.z = Rand_CenteredFloat(600.0f);
                     this->unk_1AC.y = -120.0f;
                 }
             } else if (sp124 > 50.0f) {
@@ -3600,7 +3600,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                         for (spA2 = 0; spA2 < 100; spA2++) {
 
-                            Matrix_RotateYF(randPlusMinusPoint5Scaled(0.75f * M_PI) +
+                            Matrix_RotateYF(Rand_CenteredFloat(0.75f * M_PI) +
                                                 BINANG_TO_RAD_ALT(this->actor.yawTowardsPlayer + 0x8000),
                                             MTXMODE_NEW);
                             Matrix_MultVec3f(&sp10C, &sp100);
@@ -4067,7 +4067,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 func_80903C60(this, 1);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
-                this->unk_162 = randPlusMinusPoint5Scaled(32768.0f);
+                this->unk_162 = (s16)(s32)Rand_CenteredFloat(0x8000);
             } else if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
                        (this->actor.prevPos.y >= WATER_SURFACE_Y(play))) {
                 if (this->unk_17C < -5.0f) {
@@ -4128,10 +4128,10 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if (Rand_ZeroOne() < 0.5f) {
                         this->unk_15E = 0;
                     } else {
-                        this->unk_15E = (s16)randPlusMinusPoint5Scaled(32.0f) + 0x8000;
+                        this->unk_15E = (s16)(s32)Rand_CenteredFloat(0x20) + 0x8000;
                     }
 
-                    this->unk_160 = (s16)randPlusMinusPoint5Scaled(16384.0f);
+                    this->unk_160 = (s16)(s32)Rand_CenteredFloat(0x4000);
                     this->unk_188 = 1.0f;
                     this->unk_18C = 5000.0f;
                     this->unk_194 = 5000.0f;
@@ -4141,8 +4141,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if ((this->unk_150 == 5) && !(this->unk_154 & 1)) {
                         Vec3f pos;
 
-                        pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
-                        pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
+                        pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
+                        pos.z = Rand_CenteredFloat(10.0f) + this->actor.world.pos.z;
                         pos.y = this->actor.floorHeight + 5.0f;
                         EnFishing_SpawnWaterDust(&this->actor.projectedPos, play->specialEffects, &pos,
                                                  (this->unk_1A4 * 0.005f) + 0.15f);
@@ -4160,9 +4160,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         this->unk_1CA--;
 
         for (i = 0; i < 2; i++) {
-            pos.x = randPlusMinusPoint5Scaled(range) + this->actor.world.pos.x;
-            pos.y = randPlusMinusPoint5Scaled(range) + this->actor.world.pos.y;
-            pos.z = randPlusMinusPoint5Scaled(range) + this->actor.world.pos.z;
+            pos.x = Rand_CenteredFloat(range) + this->actor.world.pos.x;
+            pos.y = Rand_CenteredFloat(range) + this->actor.world.pos.y;
+            pos.z = Rand_CenteredFloat(range) + this->actor.world.pos.z;
             EnFishing_SpawnBubble(&this->actor.projectedPos, play->specialEffects, &pos, Rand_ZeroFloat(0.035f) + 0.04f,
                                   0);
         }
@@ -4568,14 +4568,14 @@ void EnFishing_UpdateGroupFishes(PlayState* play) {
             spD6 = Math_Atan2S_XY(dist, dy);
 
             if ((dist < 10.0f) || (((fish->timer % 32) == 0) && (Rand_ZeroOne() > 0.5f))) {
-                fish->unk_10.y = basePos[groupIndex].y + randPlusMinusPoint5Scaled(10.0f);
+                fish->unk_10.y = basePos[groupIndex].y + Rand_CenteredFloat(10.0f);
 
                 if (D_8090CF18 != 0) {
-                    fish->unk_10.x = basePos[groupIndex].x + randPlusMinusPoint5Scaled(200.0f);
-                    fish->unk_10.z = basePos[groupIndex].z + randPlusMinusPoint5Scaled(200.0f);
+                    fish->unk_10.x = basePos[groupIndex].x + Rand_CenteredFloat(200.0f);
+                    fish->unk_10.z = basePos[groupIndex].z + Rand_CenteredFloat(200.0f);
                 } else {
-                    fish->unk_10.x = basePos[groupIndex].x + randPlusMinusPoint5Scaled(100.0f);
-                    fish->unk_10.z = basePos[groupIndex].z + randPlusMinusPoint5Scaled(100.0f);
+                    fish->unk_10.x = basePos[groupIndex].x + Rand_CenteredFloat(100.0f);
+                    fish->unk_10.z = basePos[groupIndex].z + Rand_CenteredFloat(100.0f);
                 }
 
                 ripplePos = fish->pos;
@@ -5460,8 +5460,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         ((play->gameplayFrames % 2) == 0)) {
         Vec3f pos;
 
-        pos.x = randPlusMinusPoint5Scaled(20.0f) + player->actor.world.pos.x;
-        pos.z = randPlusMinusPoint5Scaled(20.0f) + player->actor.world.pos.z;
+        pos.x = Rand_CenteredFloat(20.0f) + player->actor.world.pos.x;
+        pos.z = Rand_CenteredFloat(20.0f) + player->actor.world.pos.z;
         pos.y = player->actor.floorHeight + 5.0f;
         EnFishing_SpawnWaterDust(NULL, play->specialEffects, &pos, 0.5f);
     }
@@ -5552,9 +5552,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         rot.z = (Camera_GetInputDirYaw(mainCam) * -(M_PI / 0x8000)) + rot.y;
 
         for (i = 0; i < (u8)D_8090CCD0; i++) {
-            pos.x = randPlusMinusPoint5Scaled(700.0f) + play->view.eye.x;
+            pos.x = Rand_CenteredFloat(700.0f) + play->view.eye.x;
             pos.y = (Rand_ZeroFloat(100.0f) + 150.0f) - 170.0f;
-            pos.z = randPlusMinusPoint5Scaled(700.0f) + play->view.eye.z;
+            pos.z = Rand_CenteredFloat(700.0f) + play->view.eye.z;
 
             if (pos.z < 1160.0f) {
                 SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &projectedPos, &sProjectedW);

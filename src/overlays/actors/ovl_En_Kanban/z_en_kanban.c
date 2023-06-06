@@ -135,8 +135,8 @@ void func_80954960(EnKanban* this) {
         ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        this->floorRot.x = -func_80086B30(-nz * ny, 1.0f);
-        this->floorRot.z = func_80086B30(-nx * ny, 1.0f);
+        this->floorRot.x = -Math_FAtan2F(-nz * ny, 1.0f);
+        this->floorRot.z = Math_FAtan2F(-nx * ny, 1.0f);
     }
 }
 
@@ -350,7 +350,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         piece->actionState = ENKANBAN_AIR;
                         piece->actor.gravity = -1.0f;
                         piece->actor.world.rot.y =
-                            BINANG_ROT180((s32)randPlusMinusPoint5Scaled(0x4000) + this->actor.yawTowardsPlayer);
+                            BINANG_ROT180((s32)Rand_CenteredFloat(0x4000) + this->actor.yawTowardsPlayer);
 
                         if ((hitItem->toucher.dmgFlags & 0x10) || (hitItem->toucher.dmgFlags & 8) ||
                             (hitItem->toucher.dmgFlags & 0x80000000)) {
@@ -369,7 +369,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             piece->bounceZ = Rand_ZeroFloat(7.0f) + 3.0f;
                         }
 
-                        piece->spinVel.y = randPlusMinusPoint5Scaled(0x1800);
+                        piece->spinVel.y = Rand_CenteredFloat(0x1800);
 
                         if (Rand_ZeroOne() < 0.5f) {
                             piece->direction = 1;
@@ -526,7 +526,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->actor.velocity.y = 0.0f;
                         } else {
                             this->actor.velocity.y *= -0.3f;
-                            this->actor.world.rot.y += (s16)randPlusMinusPoint5Scaled(0x4000);
+                            this->actor.world.rot.y += (s16)(s32)Rand_CenteredFloat(0x4000);
                         }
                         bounced = true;
                     } else {
@@ -653,8 +653,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                 dustCount = this->partCount * 0.5f;
 
                 for (j = 0; j < dustCount + 3; j++) {
-                    pos.x = randPlusMinusPoint5Scaled((this->partCount * 0.5f) + 20.0f) + this->actor.world.pos.x;
-                    pos.z = randPlusMinusPoint5Scaled((this->partCount * 0.5f) + 20.0f) + this->actor.world.pos.z;
+                    pos.x = Rand_CenteredFloat((this->partCount * 0.5f) + 20.0f) + this->actor.world.pos.x;
+                    pos.z = Rand_CenteredFloat((this->partCount * 0.5f) + 20.0f) + this->actor.world.pos.z;
                     func_800B0F18(play, &pos, &velocity, &accel, &primColor, &envColor, 100, 5,
                                   Rand_ZeroFloat(5.0f) + 14.0f);
                 }
@@ -750,7 +750,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 
                 this->actionState = ENKANBAN_AIR;
                 this->actor.gravity = -1.0f;
-                this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                this->actor.world.rot.y = Rand_CenteredFloat(0x10000);
                 if (this->partCount >= 4) {
                     this->bounceX = Rand_ZeroFloat(10.0f) + 6.0f;
                     this->bounceZ = Rand_ZeroFloat(10.0f) + 6.0f;
@@ -763,7 +763,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     this->actor.speed = Rand_ZeroFloat(1.5f);
                 }
 
-                this->spinVel.y = randPlusMinusPoint5Scaled(0x1800);
+                this->spinVel.y = Rand_CenteredFloat(0x1800);
 
                 if (Rand_ZeroOne() < 0.5f) {
                     this->direction = 1;
@@ -808,7 +808,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                             this->actor.speed = 4.0f + bombStrength;
                         }
 
-                        this->spinVel.y = randPlusMinusPoint5Scaled(0x1800);
+                        this->spinVel.y = Rand_CenteredFloat(0x1800);
 
                         if (Rand_ZeroOne() < 0.5f) {
                             this->direction = 1;

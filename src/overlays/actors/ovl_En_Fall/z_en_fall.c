@@ -662,16 +662,16 @@ s32 EnFall_RisingDebris_InitializeEffect(EnFall* this) {
             debrisEffects[i].pos.x = this->actor.world.pos.x;
             debrisEffects[i].pos.y = this->actor.world.pos.y;
             debrisEffects[i].pos.z = this->actor.world.pos.z;
-            angle = randPlusMinusPoint5Scaled(0x10000);
+            angle = Rand_CenteredFloat(0x10000);
             scale = (1.0f - (Rand_ZeroFloat(1.0f) * Rand_ZeroFloat(1.0f))) * 3000.0f;
             debrisEffects[i].pos.x += Math_SinS(angle) * scale;
             debrisEffects[i].pos.z += Math_CosS(angle) * scale;
             debrisEffects[i].velocity.x = 0.0f;
             debrisEffects[i].velocity.z = 0.0f;
             debrisEffects[i].velocity.y = 80.0f;
-            debrisEffects[i].rot.x = randPlusMinusPoint5Scaled(0x10000);
-            debrisEffects[i].rot.y = randPlusMinusPoint5Scaled(0x10000);
-            debrisEffects[i].rot.z = randPlusMinusPoint5Scaled(0x10000);
+            debrisEffects[i].rot.x = Rand_CenteredFloat(0x10000);
+            debrisEffects[i].rot.y = Rand_CenteredFloat(0x10000);
+            debrisEffects[i].rot.z = Rand_CenteredFloat(0x10000);
             this->activeDebrisEffectCount++;
             return true;
         }

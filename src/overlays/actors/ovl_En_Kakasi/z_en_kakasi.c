@@ -1006,11 +1006,11 @@ void EnKakasi_DiggingAway(EnKakasi* this, PlayState* play) {
     if ((play->gameplayFrames % 4) == 0) {
         Math_Vec3f_Copy(&tempWorldPos, &this->picto.actor.world.pos);
         tempWorldPos.y = this->picto.actor.floorHeight;
-        tempWorldPos.x += randPlusMinusPoint5Scaled(2.0f);
-        tempWorldPos.z += randPlusMinusPoint5Scaled(2.0f);
+        tempWorldPos.x += Rand_CenteredFloat(2.0f);
+        tempWorldPos.z += Rand_CenteredFloat(2.0f);
 
         if (play->sceneId == SCENE_8ITEMSHOP) {
-            EffectSsGSplash_Spawn(play, &tempWorldPos, 0, 0, 0, randPlusMinusPoint5Scaled(100.0f) + 200.0f);
+            EffectSsGSplash_Spawn(play, &tempWorldPos, 0, 0, 0, Rand_CenteredFloat(100.0f) + 200.0f);
             SoundSource_PlaySfxAtFixedWorldPos(play, &tempWorldPos, 0x32, NA_SE_EV_BOMB_DROP_WATER);
 
         } else {

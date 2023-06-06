@@ -475,18 +475,18 @@ void EnSnowman_ReadySnowball(EnSnowman* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && this->isHoldingSnowball &&
         ((play->gameplayFrames % 2) != 0)) {
-        pos.x = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.x;
-        pos.y = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.y;
-        pos.z = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.z;
+        pos.x = Rand_CenteredFloat(10.0f) + this->snowballPos.x;
+        pos.y = Rand_CenteredFloat(10.0f) + this->snowballPos.y;
+        pos.z = Rand_CenteredFloat(10.0f) + this->snowballPos.z;
         func_800B0DE0(play, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         if ((this->skelAnime.curFrame > 3.0f) && (this->skelAnime.curFrame < 14.0f) &&
             ((play->gameplayFrames % 2) != 0)) {
-            pos.x = (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) +
-                    randPlusMinusPoint5Scaled(40.0f);
-            pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
-            pos.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
-                    randPlusMinusPoint5Scaled(40.0f);
+            pos.x =
+                (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) + Rand_CenteredFloat(40.0f);
+            pos.y = this->actor.world.pos.y + Rand_CenteredFloat(20.0f);
+            pos.z =
+                (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) + Rand_CenteredFloat(40.0f);
             func_800B0DE0(play, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
         }
     }
@@ -619,8 +619,8 @@ void EnSnowman_Melt(EnSnowman* this, PlayState* play) {
     this->work.timer--;
     if ((this->work.timer >= 38) && (!(this->work.timer & 1))) {
         smokeVelocity.y = (this->work.timer - 38) * (1.0f / 12.0f);
-        smokeVelocity.x = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
-        smokeVelocity.z = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
+        smokeVelocity.x = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
+        smokeVelocity.z = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
         smokeVelocity.y += 0.8f;
         smokePos.x = ((smokeVelocity.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) +
                      this->actor.world.pos.x;

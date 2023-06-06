@@ -280,7 +280,7 @@ void EnNiw_SpawnAttackNiw(EnNiw* this, PlayState* play) {
         yView = play->view.at.y - play->view.eye.y;
         zView = play->view.at.z - play->view.eye.z;
         newNiwPos.x = ((Rand_ZeroOne() - 0.5f) * xView) + play->view.eye.x;
-        newNiwPos.y = randPlusMinusPoint5Scaled(0.3f) + (play->view.eye.y + 50.0f + (yView * 0.5f));
+        newNiwPos.y = Rand_CenteredFloat(0.3f) + (play->view.eye.y + 50.0f + (yView * 0.5f));
         newNiwPos.z = ((Rand_ZeroOne() - 0.5f) * zView) + play->view.eye.z;
         attackNiw = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ATTACK_NIW, newNiwPos.x,
                                        newNiwPos.y, newNiwPos.z, 0, 0, 0, ATTACK_NIW_REGULAR);
@@ -340,8 +340,8 @@ void EnNiw_SetupIdle(EnNiw* this) {
 void EnNiw_Idle(EnNiw* this, PlayState* play) {
     f32 posX2;
     f32 posZ2;
-    f32 posX1 = randPlusMinusPoint5Scaled(100.0f);
-    f32 posZ1 = randPlusMinusPoint5Scaled(100.0f);
+    f32 posX1 = Rand_CenteredFloat(100.0f);
+    f32 posZ1 = Rand_CenteredFloat(100.0f);
     s16 nextAnimIndex;
 
     if (this->niwType == NIW_TYPE_REGULAR) {
@@ -438,9 +438,9 @@ void EnNiw_Held(EnNiw* this, PlayState* play) {
         this->heldTimer = (s32)(Rand_ZeroFloat(1.0f) * 10.0f) + 10;
     }
 
-    this->actor.shape.rot.x = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.x;
-    this->actor.shape.rot.y = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.y;
-    this->actor.shape.rot.z = (s16)randPlusMinusPoint5Scaled(5000.0f) + this->actor.world.rot.z;
+    this->actor.shape.rot.x = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.x;
+    this->actor.shape.rot.y = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.y;
+    this->actor.shape.rot.z = (s16)(s32)Rand_CenteredFloat(0x1388) + this->actor.world.rot.z;
     if (this->niwType == NIW_TYPE_REGULAR) {
         if (Actor_HasNoParent(&this->actor, play)) {
             this->actor.shape.rot.z = 0;
@@ -773,9 +773,9 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
             featherCount = 4;
         }
         for (i = 0; i < featherCount; i++) {
-            pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
-            pos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + this->unk308);
-            pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
+            pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
+            pos.y = Rand_CenteredFloat(10.0f) + (this->actor.world.pos.y + this->unk308);
+            pos.z = Rand_CenteredFloat(10.0f) + this->actor.world.pos.z;
             featherScale = Rand_ZeroFloat(6.0f) + 6.0f;
 
             if ((this->unk29E == 2) && (this->unk308 != 0)) {
@@ -785,9 +785,9 @@ void EnNiw_Update(Actor* thisx, PlayState* play) {
             if (this->unk308 == 0) {
                 featherScale = Rand_ZeroFloat(2.0f) + 2.0f;
             }
-            vel.x = randPlusMinusPoint5Scaled(3.0f);
+            vel.x = Rand_CenteredFloat(3.0f);
             vel.y = Rand_ZeroFloat(2.0f) * 0.5f + 2.0f;
-            vel.z = randPlusMinusPoint5Scaled(3.0f);
+            vel.z = Rand_CenteredFloat(3.0f);
             accel.z = accel.x = 0.0f;
             accel.y = -0.15f;
 

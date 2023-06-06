@@ -755,7 +755,6 @@ extern s32 gScreenWidth;
 extern s32 gScreenHeight;
 extern u32 startHeapSize;
 extern UNK_PTR D_801D1540;
-// extern f32 sFactorialTbl[13];
 extern Vec3f gZeroVec3f;
 extern Vec3s gZeroVec3s;
 
