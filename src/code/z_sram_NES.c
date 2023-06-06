@@ -39,7 +39,7 @@ PersistentCycleSceneFlags sPersistentCycleSceneFlags[SCENE_MAX] = {
 // Only 1 of these bits need to be set to persist (Values 1, 2, 3).
 // Therefore, these two macros are functionally identical
 #define PERSISTENT_WEEKEVENTREG(flag) (3 << (2 * BIT_FLAG_TO_SHIFT(flag)))
-#define PERSISTENT_WEEKEVENTREG2(flag) (2 << (2 * BIT_FLAG_TO_SHIFT(flag)))
+#define PERSISTENT_WEEKEVENTREG_ALT(flag) (2 << (2 * BIT_FLAG_TO_SHIFT(flag)))
 
 // weekEventReg flags which will be not be cleared on a cycle reset
 //! @note The index of this array must manually be aligned with the index of the WeekeventReg
@@ -95,7 +95,7 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 21 */ 0,
     /* 22 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_22_80),
     /* 23 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_23_80),
-    /* 24 */ PERSISTENT_WEEKEVENTREG2(WEEKEVENTREG_24_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_24_80),
+    /* 24 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_24_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_24_80),
     /* 25 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_25_01),
     /* 26 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_26_40),
     /* 27 */ 0,
@@ -128,7 +128,7 @@ u16 sPersistentCycleWeekEventRegs[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEve
     /* 48 */ 0,
     /* 49 */ 0,
     /* 50 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_50_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_50_04),
-    /* 51 */ PERSISTENT_WEEKEVENTREG2(WEEKEVENTREG_51_04),
+    /* 51 */ PERSISTENT_WEEKEVENTREG_ALT(WEEKEVENTREG_51_04),
     /* 52 */ 0,
     /* 53 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_53_02) | PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_53_40),
     /* 54 */ PERSISTENT_WEEKEVENTREG(WEEKEVENTREG_54_40),
