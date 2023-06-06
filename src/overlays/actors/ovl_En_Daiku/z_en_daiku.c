@@ -77,8 +77,8 @@ void EnDaiku_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU_GET_FF(&this->actor);
     if (this->unk_278 == ENDAIKU_PARAMS_FF_3) {
-        this->unk_288 = ENDAIKU_GET_FF00(&this->actor);
-        this->unk_258 = SubS_GetPathByIndex(play, this->unk_288, 0x3F);
+        this->pathIndex = ENDAIKU_GET_PATH_INDEX(&this->actor);
+        this->path = SubS_GetPathByIndex(play, this->pathIndex, ENDAIKU_PATH_INDEX_NONE);
     } else if (this->unk_278 == ENDAIKU_PARAMS_FF_2) {
         this->unk_264 = -2000;
     }
@@ -134,8 +134,8 @@ void func_8094373C(EnDaiku* this, s32 arg1) {
 }
 
 void func_809437C8(EnDaiku* this) {
-    if ((this->unk_288 != -1) && (this->unk_258 != 0)) {
-        if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_26C)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
+        if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_26C)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -208,9 +208,9 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
         xzDist = sqrtf(SQ(this->actor.world.pos.x - this->unk_26C.x) + SQ(this->actor.world.pos.z - this->unk_26C.z));
         yawDiff = fabsf(this->actor.world.rot.y - this->unk_282);
-        if ((xzDist < 4.0f) && (this->unk_258 != NULL) && (yawDiff < 10.0f)) {
+        if ((xzDist < 4.0f) && (this->path != NULL) && (yawDiff < 10.0f)) {
             this->unk_25C++;
-            if (this->unk_25C >= this->unk_258->count) {
+            if (this->unk_25C >= this->path->count) {
                 this->unk_25C = 0;
             }
 
@@ -221,6 +221,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
     if (this->unk_278 != ENDAIKU_PARAMS_FF_0) {
         s16 angle = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y));
+
         this->unk_280 = this->actor.yawTowardsPlayer;
         if ((this->unk_278 == ENDAIKU_PARAMS_FF_1) || (this->unk_278 == ENDAIKU_PARAMS_FF_2) || (angle <= 0x2890)) {
             func_800B8614(&this->actor, play, 100.0f);

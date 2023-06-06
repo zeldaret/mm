@@ -2543,8 +2543,8 @@ void AudioOcarina_CheckSongsWithoutMusicStaff(void) {
             if ((u32)sOcarinaAvailableSongFlags & (1 << songIndex)) {
                 // Loops through all possible starting indices?
                 // Loops through the notes of the song?
-                for (j = 0, k = 0; j < gOcarinaSongButtons[songIndex].numButtons && k == 0 &&
-                                   sOcarinaWithoutMusicStaffPos >= gOcarinaSongButtons[songIndex].numButtons;) {
+                for (j = 0, k = 0; (j < gOcarinaSongButtons[songIndex].numButtons) && (k == 0) &&
+                                   (sOcarinaWithoutMusicStaffPos >= gOcarinaSongButtons[songIndex].numButtons);) {
 
                     pitch = sCurOcarinaSongWithoutMusicStaff[(sOcarinaWithoutMusicStaffPos -
                                                               gOcarinaSongButtons[songIndex].numButtons) +
@@ -2953,7 +2953,7 @@ void AudioOcarina_SetRecordingSong(u8 isRecordingComplete) {
 
     i = sRecordSongPos;
     pitch = OCARINA_PITCH_NONE;
-    while (i != 0 && pitch == OCARINA_PITCH_NONE) {
+    while ((i != 0) && (pitch == OCARINA_PITCH_NONE)) {
         i--;
         pitch = recordedSong[i].pitch;
     }

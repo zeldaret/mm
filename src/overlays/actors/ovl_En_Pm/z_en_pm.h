@@ -9,6 +9,8 @@ typedef void (*EnPmActionFunc)(struct EnPm*, PlayState*);
 typedef s32 (*EnPmFunc)(struct EnPm*, PlayState*);
 typedef s32 (*EnPmFunc2)(struct EnPm*, PlayState*);
 
+#define ENPM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+
 typedef struct EnPm {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
