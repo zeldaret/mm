@@ -742,17 +742,13 @@ extern Input* D_801D0D60;
 // extern UNK_TYPE2 D_801D14E4;
 // extern UNK_TYPE2 D_801D14E8;
 // extern UNK_TYPE4 D_801D14F0;
-extern s32 gFramerateDivisor;
-extern f32 gFramerateDivisorF;
-extern f32 gFramerateDivisorHalf;
-extern f32 gFramerateDivisorThird;
+
 extern u32 retryCount;
 extern u32 cfbIdx[3];
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
 extern u32 startHeapSize;
 extern UNK_PTR D_801D1540;
-// extern f32 sFactorialTbl[13];
 extern Vec3f gZeroVec3f;
 extern Vec3s gZeroVec3s;
 

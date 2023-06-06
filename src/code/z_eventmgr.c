@@ -38,7 +38,7 @@ ActorCutscene sGlobalCutsceneList[] = {
 typedef enum {
     /* 0 */ CS_START_0,
     /* 1 */ CS_START_1,
-    /* 2 */ CS_START_2,
+    /* 2 */ CS_START_2
 } ActorCutsceneStartMethod;
 
 typedef struct {

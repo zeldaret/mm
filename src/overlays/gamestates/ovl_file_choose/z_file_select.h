@@ -2,6 +2,11 @@
 #define FILE_SELECT_H
 
 #include "global.h"
+#include "z64game.h"
+#include "z64message.h"
+#include "z64skybox.h"
+#include "z64view.h"
+
 
 // `sramCtx->noFlashSaveBuf` is never allocated space, so should never be used
 // Slot offsets are also based on OoT SaveContext sizes, and contains incorrect sizes from MM

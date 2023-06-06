@@ -486,9 +486,9 @@ void Boss02_SpawnEffectSand(TwinmoldEffect* effects, Vec3f* pos, f32 scale) {
         if (effects->type == TWINMOLD_EFFECT_NONE) {
             effects->type = TWINMOLD_EFFECT_SAND;
             effects->pos = *pos;
-            effects->velocity.x = randPlusMinusPoint5Scaled(30.0f);
+            effects->velocity.x = Rand_CenteredFloat(30.0f);
             effects->velocity.y = Rand_ZeroFloat(7.0f) + 7.0f;
-            effects->velocity.z = randPlusMinusPoint5Scaled(30.0f);
+            effects->velocity.z = Rand_CenteredFloat(30.0f);
             effects->accel.y = -0.3f;
             effects->scale = scale;
             effects->alpha = 255;
@@ -508,9 +508,9 @@ void Boss02_SpawnEffectFragment(TwinmoldEffect* effects, Vec3f* pos) {
             effects->type = TWINMOLD_EFFECT_FRAGMENT;
             effects->pos = *pos;
             effects->timer = Rand_ZeroFloat(20.0f);
-            effects->velocity.x = randPlusMinusPoint5Scaled(50.0f);
-            effects->velocity.y = randPlusMinusPoint5Scaled(50.0f);
-            effects->velocity.z = randPlusMinusPoint5Scaled(50.0f);
+            effects->velocity.x = Rand_CenteredFloat(50.0f);
+            effects->velocity.y = Rand_CenteredFloat(50.0f);
+            effects->velocity.z = Rand_CenteredFloat(50.0f);
             effects->accel.z = 0.0f;
             effects->accel.x = 0.0f;
             effects->accel.y = -1.5f;
@@ -775,8 +775,8 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 this->actor.world.pos.z = player->actor.world.pos.z;
                 this->actor.world.pos.y = player->actor.world.pos.y - (600.0f * D_809DF5B0);
             } else {
-                this->actor.world.pos.x = randPlusMinusPoint5Scaled(5000.0f * D_809DF5B0);
-                this->actor.world.pos.z = randPlusMinusPoint5Scaled(5000.0f * D_809DF5B0);
+                this->actor.world.pos.x = Rand_CenteredFloat(5000.0f * D_809DF5B0);
+                this->actor.world.pos.z = Rand_CenteredFloat(5000.0f * D_809DF5B0);
                 this->actor.world.pos.y = -500.0f * D_809DF5B0;
                 if (sIsInGiantMode) {
                     this->actor.world.pos.y += 3150.0f;
@@ -803,8 +803,8 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     this->unk_0146[0] = 150;
                 } else {
                     this->unk_0144 = 2;
-                    this->unk_01B0.x = randPlusMinusPoint5Scaled(3000.0f * D_809DF5B0);
-                    this->unk_01B0.z = randPlusMinusPoint5Scaled(3000.0f * D_809DF5B0);
+                    this->unk_01B0.x = Rand_CenteredFloat(3000.0f * D_809DF5B0);
+                    this->unk_01B0.z = Rand_CenteredFloat(3000.0f * D_809DF5B0);
                     if ((fabsf(this->unk_01B0.x) < (500.0f * D_809DF5B0)) &&
                         (fabsf(this->unk_01B0.z) < (500.0f * D_809DF5B0))) {
                         this->unk_01B0.x = 500.0f;
@@ -848,12 +848,12 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_01B0.z = player->actor.world.pos.z;
             if (this->unk_0146[0] == 0) {
                 this->unk_0144 = 3;
-                this->unk_01B0.x = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + this->actor.world.pos.x;
+                this->unk_01B0.x = Rand_CenteredFloat(500.0f * D_809DF5B0) + this->actor.world.pos.x;
                 this->unk_01B0.y = -3000.0f * D_809DF5B0;
                 if (sIsInGiantMode) {
                     this->unk_01B0.y += 3150.0f;
                 }
-                this->unk_01B0.z = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + this->actor.world.pos.z;
+                this->unk_01B0.z = Rand_CenteredFloat(500.0f * D_809DF5B0) + this->actor.world.pos.z;
                 this->unk_0146[0] = 150;
                 this->unk_0164 = 0.0f;
             }
@@ -918,7 +918,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     Matrix_MultVecZ(1500.0f * D_809DF5B0, &spA4);
                     this->unk_0146[0] = 50;
                     this->unk_01B0.x = player->actor.world.pos.x + spA4.x;
-                    this->unk_01B0.y = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + (600.0f * D_809DF5B0);
+                    this->unk_01B0.y = Rand_CenteredFloat(500.0f * D_809DF5B0) + (600.0f * D_809DF5B0);
                     if (sIsInGiantMode) {
                         this->unk_01B0.y += 3150.0f;
                     }
@@ -964,7 +964,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     this->actor.gravity = -1.0f * D_809DF5B0;
                     this->actor.velocity.y = 0.0f;
                     this->actor.terminalVelocity = -1000.0f * D_809DF5B0;
-                    this->unk_0164 = randPlusMinusPoint5Scaled(0.05f);
+                    this->unk_0164 = Rand_CenteredFloat(0.05f);
 
                     spCC = player->actor.world.pos.x - this->actor.world.pos.x;
                     spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
@@ -1206,16 +1206,16 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
 
             if (this->unk_0144 > 20) {
-                sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;
-                sp3C.y = randPlusMinusPoint5Scaled(50.0f * D_809DF5B0) + this->unk_0170.y;
-                sp3C.z = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.z;
+                sp3C.x = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.x;
+                sp3C.y = Rand_CenteredFloat(50.0f * D_809DF5B0) + this->unk_0170.y;
+                sp3C.z = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.z;
                 Boss02_SpawnEffectSand(play->specialEffects, &sp3C, Rand_ZeroFloat(3.0f) + 6.0f);
             }
 
             if ((this->unk_014C % 2) == 0) {
-                sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;
-                sp3C.y = randPlusMinusPoint5Scaled(50.0f * D_809DF5B0) + this->unk_0170.y;
-                sp3C.z = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.z;
+                sp3C.x = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.x;
+                sp3C.y = Rand_CenteredFloat(50.0f * D_809DF5B0) + this->unk_0170.y;
+                sp3C.z = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.z;
                 Boss02_SpawnEffectSand(play->specialEffects, &sp3C, Rand_ZeroFloat(3.0f) + 6.0f);
             }
         }

@@ -13,9 +13,9 @@
 #define THIS ((ObjJgameLight*)thisx)
 
 typedef enum {
-    /* 0x0 */ OBJJGAMELIGHT_NONE,
-    /* 0x1 */ OBJJGAMELIGHT_CORRECT,
-    /* 0x2 */ OBJJGAMELIGHT_INCORRECT,
+    /* 0 */ OBJJGAMELIGHT_NONE,
+    /* 1 */ OBJJGAMELIGHT_CORRECT,
+    /* 2 */ OBJJGAMELIGHT_INCORRECT
 } ObjJgameLightSignal;
 
 void ObjJgameLight_Init(Actor* thisx, PlayState* play);
