@@ -2,8 +2,10 @@
 #define PADMGR_H
 
 #include "libc/stdbool.h"
-#include "ultra64/controller.h"
+#include "ultra64.h"
+#include "irqmgr.h"
 #include "padutils.h"
+#include "unk.h"
 
 typedef enum {
     /*  0 */ PADMGR_CONT_NONE,
