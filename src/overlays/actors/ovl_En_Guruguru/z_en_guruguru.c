@@ -211,7 +211,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         Message_CloseTextbox(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
-            func_80151BB4(play, 0x13);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             SET_WEEKEVENTREG(WEEKEVENTREG_79_04);
             func_80BC6E10(this);
             return;
@@ -223,7 +223,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             if (this->actor.textId == 0x292A) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_38_10);
             }
-            func_80151BB4(play, 0x13);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             func_80BC6E10(this);
             return;
         }
@@ -234,8 +234,8 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         if (this->textIdIndex == 12) {
             SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
             func_801A3B48(0);
-            func_80151BB4(play, 0x36);
-            func_80151BB4(play, 0x13);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BREMEN_MASK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             func_80BC6E10(this);
             return;
         }
@@ -275,7 +275,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             return;
         }
         func_801A3B48(0);
-        func_80151BB4(play, 0x13);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
         func_80BC6E10(this);
     }
 }
