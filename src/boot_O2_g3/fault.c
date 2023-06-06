@@ -1083,7 +1083,7 @@ void Fault_Init(void) {
     osCreateMesgQueue(&sFaultInstance->queue, sFaultInstance->msg, ARRAY_COUNT(sFaultInstance->msg));
     StackCheck_Init(&sFaultStackInfo, sFaultStack, STACK_TOP(sFaultStack), 0, 0x100, "fault");
     osCreateThread(&sFaultInstance->thread, Z_THREAD_ID_FAULT, Fault_ThreadEntry, NULL, STACK_TOP(sFaultStack),
-                   Z_THREAD_PRI_FAULT);
+                   Z_PRIORITY_FAULT);
     osStartThread(&sFaultInstance->thread);
 }
 

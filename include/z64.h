@@ -85,8 +85,7 @@
 #define Z_PRIORITY_SCHED          16
 #define Z_PRIORITY_DMAMGR         17
 #define Z_PRIORITY_IRQMGR         18
-#define Z_THREAD_PRI_FAULT_CLIENT (OS_PRIORITY_APPMAX - 1)
-#define Z_THREAD_PRI_FAULT        OS_PRIORITY_APPMAX
+#define Z_PRIORITY_FAULT          OS_PRIORITY_APPMAX
 
 typedef enum {
     /* -1 */ EQUIP_SLOT_NONE = -1,
