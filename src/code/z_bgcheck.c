@@ -99,7 +99,6 @@ Sphere16 D_801EDBA8; // sphere;
 TriNorm D_801EDBB0;  // tri;
 #endif
 
-
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
 s32 BgCheck_SphVsDynaWall(CollisionContext* colCtx, u16 xpFlags, f32* outX, f32* outZ, Vec3f* pos, f32 radius,
