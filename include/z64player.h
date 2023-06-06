@@ -548,7 +548,7 @@ typedef struct PlayerAgeProperties {
     /* 0x28 */ f32 unk_28; // water stuff // depthInWater
     /* 0x2C */ f32 unk_2C; // water stuff // depthInWater
     /* 0x30 */ f32 unk_30; // water stuff // depthInWater
-    /* 0x34 */ f32 unk_34; // height?
+    /* 0x34 */ f32 unk_34; // wallCheckHeight
     /* 0x38 */ f32 wallCheckRadius;
     /* 0x3C */ f32 unk_3C;
     /* 0x40 */ f32 unk_40;
@@ -829,7 +829,7 @@ typedef enum PlayerCsMode {
 // 
 #define PLAYER_STATE2_100        (1 << 8)
 // 
-#define PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND        (1 << 9)
+#define PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND (1 << 9)
 // 
 #define PLAYER_STATE2_400        (1 << 10)
 // Diving
