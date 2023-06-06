@@ -72,8 +72,8 @@
 #define Z_THREAD_ID_GRAPH    4
 #define Z_THREAD_ID_SCHED    5
 #define Z_THREAD_ID_FLASHROM 13
-#define Z_THREAD_ID_DMAMGR  18
-#define Z_THREAD_ID_IRQMGR  19
+#define Z_THREAD_ID_DMAMGR   18
+#define Z_THREAD_ID_IRQMGR   19
 
 #define Z_PRIORITY_SLOWLY          5
 #define Z_PRIORITY_GRAPH           9
