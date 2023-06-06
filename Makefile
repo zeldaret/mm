@@ -103,7 +103,7 @@ endif
 # Check code syntax with host compiler
 ifneq ($(RUN_CC_CHECK),0)
   CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-unused-but-set-variable -Wno-unused-label -Wno-sign-compare -Wno-tautological-compare
-  CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc
+  CC_CHECK   := gcc -fno-builtin -fsyntax-only -funsigned-char -fdiagnostics-color -std=gnu89 -D _LANGUAGE_C -D NON_MATCHING $(IINC) -nostdinc $(CHECK_WARNINGS)
   ifneq ($(WERROR), 0)
     CC_CHECK += -Werror
   endif
@@ -351,7 +351,7 @@ build/data/%.o: data/%.s
 	$(AS) $(ASFLAGS) $< -o $@
 
 build/src/overlays/%.o: src/overlays/%.c
-	$(CC_CHECK) $(CHECK_WARNINGS) $<
+	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	@$(OBJDUMP) -d $@ > $(@:.o=.s)
 	$(RM_MDEBUG)
@@ -361,20 +361,20 @@ build/src/overlays/%_reloc.o: build/$(SPEC)
 	$(AS) $(ASFLAGS) $(@:.o=.s) -o $@
 
 build/src/%.o: src/%.c
-	$(CC_CHECK) $(CHECK_WARNINGS) $<
+	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/ll.o: src/libultra/libc/ll.c
-	$(CC_CHECK) $(CHECK_WARNINGS) $<
+	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
 	$(RM_MDEBUG)
 
 build/src/libultra/libc/llcvt.o: src/libultra/libc/llcvt.c
-	$(CC_CHECK) $(CHECK_WARNINGS) $<
+	$(CC_CHECK) $<
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	python3 tools/set_o32abi_bit.py $@
 	$(OBJDUMP_CMD)
