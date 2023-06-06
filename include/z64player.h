@@ -1154,7 +1154,7 @@ typedef struct Player {
     /* 0xB67 */ u8 remainingHopsCounter; // Deku hopping on water
     /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
     /* 0xB6A */ s16 fallDistance; // truncated Y distance the player has fallen so far (positive is down)
-    /* 0xB6C */ s16 floorPitch; // angle of the flfloorPropertyoor slope in the direction of current world yaw (positive for ascending slope)
+    /* 0xB6C */ s16 floorPitch; // angle of the floor slope in the direction of current world yaw (positive for ascending slope)
     /* 0xB6E */ s16 floorPitchAlt; // the calculation for this value is bugged and doesn't represent anything meaningful
     /* 0xB70 */ s16 unk_B70;
     /* 0xB72 */ u16 floorSfxOffset;
