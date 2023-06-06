@@ -16,10 +16,10 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play);
 void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play);
 void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play);
 
-void func_80A36260(EnSyatekiOkuta* this);
-void func_80A362A8(EnSyatekiOkuta* this, PlayState* play);
-void func_80A362F8(EnSyatekiOkuta* this);
-void func_80A36350(EnSyatekiOkuta* this, PlayState* play);
+void EnSyatekiOkuta_SetupAttachToShootingGalleryMan(EnSyatekiOkuta* this);
+void EnSyatekiOkuta_AttachToShootingGalleryMan(EnSyatekiOkuta* this, PlayState* play);
+void EnSyatekiOkuta_SetupDoNothing(EnSyatekiOkuta* this);
+void EnSyatekiOkuta_DoNothing(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play);
 void EnSyatekiOkuta_SetupFloat(EnSyatekiOkuta* this);
 void EnSyatekiOkuta_Float(EnSyatekiOkuta* this, PlayState* play);
@@ -89,11 +89,11 @@ Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
 
 Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
 
-Vec3f D_80A37B98 = { 0.0f, -0.5, 0.0f };
+Vec3f sBubbleAccel = { 0.0f, -0.5, 0.0f };
 
-Color_RGBA8 D_80A37BA4 = { 255, 255, 255, 255 };
+Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
 
-Color_RGBA8 D_80A37BA8 = { 150, 150, 150, 0 };
+Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
 
 void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -121,7 +121,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
 
     this->deathTimer = 0;
     this->circleOrCrossAlpha = 0;
-    func_80A36260(this);
+    EnSyatekiOkuta_SetupAttachToShootingGalleryMan(this);
 }
 
 void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
@@ -167,19 +167,19 @@ s32 EnSyatekiOkuta_IsHiddenByAnotherOctorok(EnSyatekiOkuta* this) {
     return false;
 }
 
-void func_80A36260(EnSyatekiOkuta* this) {
+void EnSyatekiOkuta_SetupAttachToShootingGalleryMan(EnSyatekiOkuta* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gOctorokAppearAnim, 0.0f);
     this->actor.draw = NULL;
-    this->actionFunc = func_80A362A8;
+    this->actionFunc = EnSyatekiOkuta_AttachToShootingGalleryMan;
 }
 
-void func_80A362A8(EnSyatekiOkuta* this, PlayState* play) {
+void EnSyatekiOkuta_AttachToShootingGalleryMan(EnSyatekiOkuta* this, PlayState* play) {
     Actor* actorIt = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
     while (actorIt != NULL) {
         if (actorIt->id == ACTOR_EN_SYATEKI_MAN) {
             this->actor.parent = actorIt;
-            func_80A362F8(this);
+            EnSyatekiOkuta_SetupDoNothing(this);
             break;
         } else {
             actorIt = actorIt->next;
@@ -187,14 +187,14 @@ void func_80A362A8(EnSyatekiOkuta* this, PlayState* play) {
     }
 }
 
-void func_80A362F8(EnSyatekiOkuta* this) {
+void EnSyatekiOkuta_SetupDoNothing(EnSyatekiOkuta* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gOctorokAppearAnim, 0.0f);
     this->actor.draw = NULL;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_80A36350;
+    this->actionFunc = EnSyatekiOkuta_DoNothing;
 }
 
-void func_80A36350(EnSyatekiOkuta* this, PlayState* play) {
+void EnSyatekiOkuta_DoNothing(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
@@ -247,7 +247,7 @@ void EnSyatekiOkuta_Hide(EnSyatekiOkuta* this, PlayState* play) {
         EnSyatekiOkuta_SpawnSplash(this, play);
         Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_LAND);
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80A362F8(this);
+        EnSyatekiOkuta_SetupDoNothing(this);
     }
 }
 
@@ -304,11 +304,12 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
                 velocity.x = (Rand_ZeroOne() - 0.5f) * 7.0f;
                 velocity.y = Rand_ZeroOne() * 7.0f;
                 velocity.z = (Rand_ZeroOne() - 0.5f) * 7.0f;
-                EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &velocity, &D_80A37B98, &D_80A37BA4,
-                                                  &D_80A37BA8, Rand_S16Offset(100, 50), 25, false);
+                EffectSsDtBubble_SpawnCustomColor(play, &this->actor.world.pos, &velocity, &sBubbleAccel,
+                                                  &sBubblePrimColor, &sBubbleEnvColor, Rand_S16Offset(100, 50), 25,
+                                                  false);
             }
 
-            func_80A362F8(this);
+            EnSyatekiOkuta_SetupDoNothing(this);
         }
 
         this->actor.scale.y = this->actor.scale.x;
@@ -344,7 +345,7 @@ void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 s32 EnSyatekiOkuta_CheckCollision(EnSyatekiOkuta* this, PlayState* play) {
-    if ((this->actionFunc == EnSyatekiOkuta_Die) || (this->actionFunc == func_80A36350)) {
+    if ((this->actionFunc == EnSyatekiOkuta_Die) || (this->actionFunc == EnSyatekiOkuta_DoNothing)) {
         return false;
     }
 
@@ -380,7 +381,7 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->actionFunc != func_80A36350) {
+    if (this->actionFunc != EnSyatekiOkuta_DoNothing) {
         SkelAnime_Update(&this->skelAnime);
     }
 
