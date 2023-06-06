@@ -495,7 +495,7 @@ s16 D_80862B02; // analog stick yaw + camera yaw
 s32 D_80862B04; // boolean, set to the return value of func_8083216C
 FloorType sPlayerFloorType;
 u32 sPlayerTouchedWallFlags;
-ConveyorSpeed sPlayerConveyorSpeed;
+ConveyorSpeed sPlayerConveyorSpeedIndex;
 s16 sPlayerIsOnFloorConveyor;
 s16 sPlayerConveyorYaw;
 f32 sPlayerYDistToFloor;
@@ -5609,7 +5609,7 @@ s32 func_80834DFC(Player* this, PlayState* play) {
                 s32 bgId;
                 f32 wallPolyNormalX = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
                 f32 wallPolyNormalZ = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
-                f32 var_fv1 = this->distToInteractWall + 0.5f; // distToInteractWall
+                f32 var_fv1 = this->distToInteractWall + 0.5f;
                 f32 yIntersect;
                 s32 pad;
 
@@ -6717,8 +6717,8 @@ s32 func_80837DEC(Player* this, PlayState* play) {
         //! @bug `floorPitch` and `floorPitchAlt` are cleared to 0 before this function is called,
         //! because the player left the ground. The angles will always be zero and therefore will always
         //! pass these checks. The intention seems to be to prevent ledge hanging or vine grabbing when
-        // walking off of a steep enough slope.
-        if ((ABS_ALT(this->floorPitch)) < 0xAAA && (ABS_ALT(this->floorPitchAlt) < 0xAAA)) {
+        //! walking off of a steep enough slope.
+        if ((ABS_ALT(this->floorPitch) < 0xAAA) && (ABS_ALT(this->floorPitchAlt) < 0xAAA)) {
             CollisionPoly* entityPoly;
             CollisionPoly* sp90;
             s32 entityBgId;
@@ -8651,7 +8651,7 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
     return false;
 }
 
-PlayerAnimationHeader* sSlopeSlipAnims[] = {
+PlayerAnimationHeader* sPlayerSlopeSlipAnims[] = {
     &gPlayerAnim_link_normal_down_slope_slip,
     &gPlayerAnim_link_normal_up_slope_slip,
 };
@@ -8685,7 +8685,7 @@ s32 Player_HandleSlopes(PlayState* play, Player* this) {
             } else {
                 Player_SetAction(play, this, func_80853D68, 0);
                 func_8082DE50(play, this);
-                func_8082E514(play, this, sSlopeSlipAnims[this->unk_AE7]);
+                func_8082E514(play, this, sPlayerSlopeSlipAnims[this->unk_AE7]);
                 this->linearVelocity = sqrtf(SQXZ(this->actor.velocity));
                 this->currentYaw = downwardSlopeYaw;
                 if (sPlayerFloorPitchShape >= 0) {
@@ -10902,7 +10902,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
     }
 
     sPlayerYDistToFloor = this->actor.world.pos.y - this->actor.floorHeight;
-    sPlayerConveyorSpeed = CONVEYOR_SPEED_DISABLED;
+    sPlayerConveyorSpeedIndex = CONVEYOR_SPEED_DISABLED;
     floorPoly = this->actor.floorPoly;
 
     if ((floorPoly != NULL) && (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_4)) {
@@ -10918,9 +10918,9 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             }
         }
 
-        sPlayerConveyorSpeed = SurfaceType_GetConveyorSpeed(&play->colCtx, floorPoly, this->actor.floorBgId);
+        sPlayerConveyorSpeedIndex = SurfaceType_GetConveyorSpeed(&play->colCtx, floorPoly, this->actor.floorBgId);
 
-        if (sPlayerConveyorSpeed != CONVEYOR_SPEED_DISABLED) {
+        if (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) {
             sPlayerIsOnFloorConveyor = SurfaceType_IsFloorConveyor(&play->colCtx, floorPoly, this->actor.floorBgId);
 
             if ((!sPlayerIsOnFloorConveyor && (this->actor.depthInWater > 20.0f)) ||
@@ -10928,7 +10928,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
                 sPlayerConveyorYaw = CONVEYOR_DIRECTION_TO_BINANG(
                     SurfaceType_GetConveyorDirection(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
-                sPlayerConveyorSpeed = CONVEYOR_SPEED_DISABLED;
+                sPlayerConveyorSpeedIndex = CONVEYOR_SPEED_DISABLED;
             }
         }
     }
@@ -11070,8 +11070,8 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             if (this->actor.floorBgId != BGCHECK_SCENE) {
                 DynaPoly_SetPlayerOnTop(&play->colCtx, this->actor.floorBgId);
             } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) && (this->actor.depthInWater <= 24.0f) &&
-                       (sPlayerFloorEffect != FLOOR_EFFECT_1) && (sPlayerConveyorSpeed == CONVEYOR_SPEED_DISABLED) &&
-                       (floorPolyNormalY > 0.5f)) {
+                       (sPlayerFloorEffect != FLOOR_EFFECT_1) &&
+                       (sPlayerConveyorSpeedIndex == CONVEYOR_SPEED_DISABLED) && (floorPolyNormalY > 0.5f)) {
                 if (CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_SONG_WARP]) {
                     func_80841A50(play, this);
                 }
@@ -11740,23 +11740,23 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                 this->actor.floorPoly = this->rideActor->floorPoly;
                 this->actor.floorBgId = this->rideActor->floorBgId;
             }
-            sPlayerConveyorSpeed = CONVEYOR_SPEED_DISABLED;
+            sPlayerConveyorSpeedIndex = CONVEYOR_SPEED_DISABLED;
             this->pushedSpeed = 0.0f;
         }
 
         Player_HandleExitsAndVoids(play, this, this->actor.floorPoly, this->actor.floorBgId);
-        if (sPlayerConveyorSpeed != CONVEYOR_SPEED_DISABLED) {
+        if (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) {
             f32 conveyorSpeed;
             s32 pad2;
 
-            sPlayerConveyorSpeed--;
+            sPlayerConveyorSpeedIndex--;
             if (!sPlayerIsOnFloorConveyor) {
-                conveyorSpeed = sWaterConveyorSpeeds[sPlayerConveyorSpeed];
+                conveyorSpeed = sWaterConveyorSpeeds[sPlayerConveyorSpeedIndex];
                 if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                     conveyorSpeed /= 4.0f;
                 }
             } else {
-                conveyorSpeed = sFloorConveyorSpeeds[sPlayerConveyorSpeed];
+                conveyorSpeed = sFloorConveyorSpeeds[sPlayerConveyorSpeedIndex];
             }
 
             Math_StepToF(&this->pushedSpeed, conveyorSpeed, conveyorSpeed * 0.1f);
@@ -12631,7 +12631,9 @@ s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
         if (!Player_PosVsWallLineTest(play, this, &D_8085D5A0[arg2], &wallPoly, &wallBgId, &sp44)) {
             if (!Player_PosVsWallLineTest(play, this, &D_8085D5B8[arg2], &wallPoly, &wallBgId, &sp44)) {
                 this->actor.floorPoly = floorPoly;
-                this->actor.floorBgId = wallBgId; // @TODO: Test
+                //! @note: no poly is assigned to `wallBgId` when `Player_PosVsWallLineTest` fails.
+                //! Therefore, the default value `BGCHECK_SCENE` is assigned.
+                this->actor.floorBgId = wallBgId;
                 this->floorSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, floorPoly, floorBgId);
                 return true;
             }
@@ -14801,7 +14803,7 @@ void func_8084D820(Player* this, PlayState* play) {
 
             if (this->stateFlags1 & PLAYER_STATE1_1) {
                 sp5C = gSaveContext.entranceSpeed;
-                if (sPlayerConveyorSpeed != CONVEYOR_SPEED_DISABLED) {
+                if (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) {
                     this->unk_3A0.x = (Math_SinS(sPlayerConveyorYaw) * 400.0f) + this->actor.world.pos.x;
                     this->unk_3A0.z = (Math_CosS(sPlayerConveyorYaw) * 400.0f) + this->actor.world.pos.z;
                 }
@@ -18681,7 +18683,7 @@ void func_80857BE8(Player* this, PlayState* play) {
 
                 spB8 = sqrtf(SQ(spA4) + SQ(spA0));
                 if (this->unk_B86[1] != 0) {
-                    if ((ABS_ALT(sp8E) + ABS_ALT(this->floorPitch)) > 15000) {
+                    if ((ABS_ALT(sp8E) + ABS_ALT(this->floorPitch)) > 0x3A98) {
                         this->unk_B86[1] = 0;
                         this->unk_AE7 = 4;
                         this->unk_B8E = 0x14;
@@ -20221,7 +20223,8 @@ void func_8085B74C(PlayState* play) {
     }
 
     func_80835324(play, player, 400.0f,
-                  (sPlayerConveyorSpeed != CONVEYOR_SPEED_DISABLED) ? sPlayerConveyorYaw : player->actor.world.rot.y);
+                  (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) ? sPlayerConveyorYaw
+                                                                         : player->actor.world.rot.y);
     player->stateFlags1 |= (PLAYER_STATE1_1 | PLAYER_STATE1_20000000);
 }
 
