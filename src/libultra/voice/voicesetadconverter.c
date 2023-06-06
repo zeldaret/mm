@@ -29,10 +29,10 @@ s32 __osVoiceSetADConverter(OSMesgQueue* mq, s32 channel, u8 data) {
 
             __osPfsPifRam.status = CONT_CMD_EXE;
 
-            ptr[0] = CONT_CMD_SWRITE_VOICE_TX;
-            ptr[1] = CONT_CMD_SWRITE_VOICE_RX;
-            ptr[2] = CONT_CMD_SWRITE_VOICE;
-            ptr[5] = 0;
+            SWRITEFORMAT(ptr)->txsize = CONT_CMD_SWRITE_VOICE_TX;
+            SWRITEFORMAT(ptr)->rxsize = CONT_CMD_SWRITE_VOICE_RX;
+            SWRITEFORMAT(ptr)->cmd = CONT_CMD_SWRITE_VOICE;
+            SWRITEFORMAT(ptr)->datacrc = 0;
 
             ptr[sizeof(__OSVoiceSWriteFormat)] = CONT_CMD_END;
         } else {
