@@ -75,7 +75,7 @@ typedef enum EnHorseAction {
     /* 25 */ ENHORSE_ACTION_25
 } EnHorseAction;
 
-typedef enum {
+typedef enum EnHorsePlayerDir {
     /* 0 */ PLAYER_DIR_FRONT_R,
     /* 1 */ PLAYER_DIR_FRONT_L,
     /* 2 */ PLAYER_DIR_BACK_R,
@@ -84,7 +84,19 @@ typedef enum {
     /* 5 */ PLAYER_DIR_SIDE_L
 } EnHorsePlayerDir;
 
-typedef enum {
+typedef enum EnHorseAnimation {
+    /* 0 */ ENHORSE_ANIM_IDLE,
+    /* 1 */ ENHORSE_ANIM_WHINNY,
+    /* 2 */ ENHORSE_ANIM_STOPPING,
+    /* 3 */ ENHORSE_ANIM_REARING,
+    /* 4 */ ENHORSE_ANIM_WALK,
+    /* 5 */ ENHORSE_ANIM_TROT,
+    /* 6 */ ENHORSE_ANIM_GALLOP,
+    /* 7 */ ENHORSE_ANIM_LOW_JUMP,
+    /* 8 */ ENHORSE_ANIM_HIGH_JUMP
+} EnHorseAnimation;
+
+typedef enum HorseType {
     /* 0 */ HORSE_TYPE_EPONA,
     /* 1 */ HORSE_TYPE_HNI,
     /* 2 */ HORSE_TYPE_2,
@@ -100,7 +112,7 @@ typedef enum {
 #define ENHORSE_IS_4000_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_4000)
 #define ENHORSE_IS_DONKEY_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_DONKEY)
 
-typedef enum {
+typedef enum EnHorseParam {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -121,7 +133,7 @@ typedef enum {
     /* 17 */ ENHORSE_17,
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
-    /* 20 */ ENHORSE_20,
+    /* 20 */ ENHORSE_20
 } EnHorseParam;
 
 /**

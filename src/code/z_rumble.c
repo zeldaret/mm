@@ -68,11 +68,11 @@ void Rumble_Request(f32 distSq, u8 sourceIntensity, u8 decayTimer, u8 decayStep)
 
 void Rumble_Init(void) {
     RumbleManager_Init(&gRumbleMgr);
-    func_80174F24(Rumble_Update, NULL);
+    PadMgr_SetRumbleRetraceCallback(Rumble_Update, NULL);
 }
 
 void Rumble_Destroy(void) {
-    func_80174F44(Rumble_Update, NULL);
+    PadMgr_UnsetRumbleRetraceCallback(Rumble_Update, NULL);
     RumbleManager_Destroy(&gRumbleMgr);
 }
 

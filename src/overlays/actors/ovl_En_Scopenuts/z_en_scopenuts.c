@@ -654,7 +654,7 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
         phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
@@ -708,7 +708,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_Kill(&this->actor);
         } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
-            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
+            this->path =
+                SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
@@ -717,7 +718,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
-            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
+            this->path =
+                SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             if (this->path == NULL) {
                 Actor_Kill(&this->actor);
             } else {
@@ -823,7 +825,7 @@ void EnScopenuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx)
 void EnScopenuts_Draw(Actor* thisx, PlayState* play) {
     EnScopenuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnScopenuts_OverrideLimbDraw, EnScopenuts_PostLimbDraw,
                                    EnScopenuts_TransformLimbDraw, &this->actor);

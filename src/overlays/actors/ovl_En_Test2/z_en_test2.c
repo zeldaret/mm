@@ -72,7 +72,7 @@ void EnTest2_Init(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if ((this->actor.params == EN_TEST2_PARAMS_B) || (this->actor.params == EN_TEST2_PARAMS_C)) {
+    if ((this->actor.params == EN_TEST2_PARAM_B) || (this->actor.params == EN_TEST2_PARAM_C)) {
         this->actor.flags |= ACTOR_FLAG_20;
     }
 }
@@ -125,7 +125,7 @@ void EnTest2_Draw(Actor* thisx, PlayState* play) {
     if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         if (dList != NULL) {

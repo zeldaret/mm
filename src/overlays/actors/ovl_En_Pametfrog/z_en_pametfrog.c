@@ -80,12 +80,12 @@ ActorInit En_Pametfrog_InitVars = {
 };
 
 typedef enum {
-    /* 0x0 */ GEKKO_DMGEFF_NONE,
-    /* 0x1 */ GEKKO_DMGEFF_STUN,
-    /* 0x2 */ GEKKO_DMGEFF_FIRE,
-    /* 0x3 */ GEKKO_DMGEFF_ICE,
-    /* 0x4 */ GEKKO_DMGEFF_LIGHT,
-    /* 0x5 */ GEKKO_DMGEFF_ZORA_BARRIER,
+    /* 0 */ GEKKO_DMGEFF_NONE,
+    /* 1 */ GEKKO_DMGEFF_STUN,
+    /* 2 */ GEKKO_DMGEFF_FIRE,
+    /* 3 */ GEKKO_DMGEFF_ICE,
+    /* 4 */ GEKKO_DMGEFF_LIGHT,
+    /* 5 */ GEKKO_DMGEFF_ZORA_BARRIER
 } EnPametfrogDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -306,7 +306,7 @@ s32 func_8086A2CC(EnPametfrog* this, CollisionPoly* floorPoly) {
         return false;
     }
 
-    rotation = func_80086C48(arg0);
+    rotation = Math_FAcosF(arg0);
     if (rotation < 0.0001f) {
         return false;
     }
@@ -523,7 +523,7 @@ void EnPametfrog_FallOffSnapper(EnPametfrog* this, PlayState* play) {
         this->timer--;
     }
 
-    sin = sin_rad(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
+    sin = Math_SinF(this->timer * (M_PI / 3)) * ((0.02f * (this->timer * (1.0f / 6.0f))) + 0.005f) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 300.0f * sin, 100.0f * sin);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         EnPametfrog_StopCutscene(this, play);
@@ -966,9 +966,9 @@ void EnPametfrog_SetupSpawnFrog(EnPametfrog* this, PlayState* play) {
     Flags_SetClearTemp(play, play->roomCtx.curRoom.num);
 
     for (i = 0; i < 25; i++) {
-        vel.x = randPlusMinusPoint5Scaled(5.0f);
+        vel.x = Rand_CenteredFloat(5.0f);
         vel.y = Rand_ZeroFloat(3.0f) + 4.0f;
-        vel.z = randPlusMinusPoint5Scaled(5.0f);
+        vel.z = Rand_CenteredFloat(5.0f);
         EffectSsHahen_Spawn(play, &this->actor.world.pos, &vel, &sAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT,
                             10, 0);
     }
@@ -981,7 +981,7 @@ void EnPametfrog_SpawnFrog(EnPametfrog* this, PlayState* play) {
     f32 magShake;
 
     this->timer--;
-    magShake = (sin_rad(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
+    magShake = (Math_SinF(this->timer * (M_PI / 5)) * ((0.04f * (this->timer * 0.1f)) + 0.02f)) + 1.0f;
     EnPametfrog_ShakeCamera(this, play, 75.0f * magShake, 10.0f * magShake);
     if (this->timer == 0) {
         EnPametfrog_StopCutscene(this, play);
@@ -1224,10 +1224,10 @@ void EnPametfrog_SetupSnapperSpawn(EnPametfrog* this, PlayState* play) {
     // Zooms in on Snapper spawn point
     Play_SetCameraAtEye(play, this->subCamId, &subCamAt, &subCamEye);
 
-    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+    this->quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
     Quake_SetSpeed(this->quakeIndex, 18000);
-    Quake_SetQuakeValues(this->quakeIndex, 2, 0, 0, 0);
-    Quake_SetCountdown(this->quakeIndex, 15);
+    Quake_SetPerturbations(this->quakeIndex, 2, 0, 0, 0);
+    Quake_SetDuration(this->quakeIndex, 15);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 120, 20, 10);
 
@@ -1249,12 +1249,12 @@ void EnPametfrog_SnapperSpawn(EnPametfrog* this, PlayState* play) {
 void EnPametfrog_SetupTransitionGekkoSnapper(EnPametfrog* this, PlayState* play) {
     this->actor.params = GEKKO_GET_SNAPPER;
 
-    Quake_Remove(this->quakeIndex);
+    Quake_RemoveRequest(this->quakeIndex);
 
-    this->quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    this->quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
     Quake_SetSpeed(this->quakeIndex, 20000);
-    Quake_SetQuakeValues(this->quakeIndex, 17, 0, 0, 0);
-    Quake_SetCountdown(this->quakeIndex, 12);
+    Quake_SetPerturbations(this->quakeIndex, 17, 0, 0, 0);
+    Quake_SetDuration(this->quakeIndex, 12);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
 
@@ -1424,7 +1424,7 @@ void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
 void EnPametfrog_Draw(Actor* thisx, PlayState* play) {
     EnPametfrog* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->spinYaw, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnPametfrog_PostLimbDraw, &this->actor);

@@ -9,10 +9,10 @@ typedef void (*EnZobActionFunc)(struct EnZob*, PlayState*);
 
 #define ENZOB_GET_F(thisx) ((thisx)->params & 0xF)
 
-enum {
+typedef enum {
     /* 1 */ ENZOB_F_1 = 1,
-    /* 2 */ ENZOB_F_2,
-};
+    /* 2 */ ENZOB_F_2
+} EnZobParam;
 
 typedef struct EnZob {
     /* 0x000 */ Actor actor;

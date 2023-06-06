@@ -257,7 +257,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
     for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
         // Can't be `temp_v1->alpha != 0`
         if (temp_v1->alpha) {
-            phi_a1 = temp_v1->unk_00 == 3 ? (255 / 3) : (255 / 5);
+            phi_a1 = (temp_v1->unk_00 == 3) ? (255 / 3) : (255 / 5);
             if (phi_a1 >= temp_v1->alpha) {
                 temp_v1->alpha = 0;
             } else {
@@ -270,7 +270,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
 typedef struct {
     /* 0x0 */ Color_RGB8 color;
     /* 0x4 */ Gfx* dList;
-} struct_801BFDD0; // size = 0x08
+} struct_801BFDD0; // size = 0x8
 
 struct_801BFDD0 D_801BFDD0[] = {
     { { 180, 200, 255 }, gLinkGoronCurledDL },
@@ -369,13 +369,13 @@ void func_80122F28(Player* player) {
 s32 func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && player->unk_AE7 == 2;
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 2);
 }
 
 s32 func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->unk_AE7 == 1) || (player->unk_AE7 == 3));
 }
 
 void func_8012300C(PlayState* play, s32 arg1) {
@@ -472,7 +472,7 @@ void func_80123140(PlayState* play, Player* player) {
     REG(39) = bootRegs[8];
     REG(43) = bootRegs[9];
     R_RUN_SPEED_LIMIT = bootRegs[10];
-    REG(68) = bootRegs[11];
+    REG(68) = bootRegs[11]; // gravity
     REG(69) = bootRegs[12];
     IREG(66) = bootRegs[13];
     IREG(67) = bootRegs[14];
@@ -503,7 +503,7 @@ s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
 s32 Player_InCsMode(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return Player_InBlockingCsMode(play, player) || player->unk_AA5 == 5;
+    return Player_InBlockingCsMode(play, player) || (player->unk_AA5 == PLAYER_UNKAA5_5);
 }
 
 s32 func_80123420(Player* player) {
@@ -556,8 +556,8 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     Player* player = GET_PLAYER(play);
 
     if (player->stateFlags3 & PLAYER_STATE3_1000) {
-        player->unk_B08[0] = arg1;
-        player->unk_B08[1] += arg1 * 0.05f;
+        player->unk_B08 = arg1;
+        player->unk_B0C += arg1 * 0.05f;
         player->currentYaw = arg2;
         player->actor.home.rot.y = arg2;
         player->actor.shape.rot.y = arg2;
@@ -659,7 +659,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_KOKIRI
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_RAZOR
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_GILDED
-    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_GREAT_FAIRY
+    PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_TWO_HANDED
     PLAYER_MODELGROUP_STICK,          // PLAYER_IA_STICK
     PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_IA_ZORA_FINS
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW
@@ -1316,6 +1316,7 @@ void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, Pla
     player->itemAction = itemAction;
 }
 
+// Player_Untarget / Player_StopTargeting?
 void func_80123DA4(Player* player) {
     player->targetedActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
@@ -1362,12 +1363,12 @@ s32 func_80123F2C(PlayState* play, s32 ammo) {
 }
 
 s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
-    Player* this = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     Vec3f diff;
     s32 pad;
 
-    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
-        Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
+    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
 
@@ -1445,7 +1446,7 @@ PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player) {
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on the itemActions for two-handed weapons being contiguous.
-    if ((player->heldItemAction >= PLAYER_IA_SWORD_GREAT_FAIRY) && (player->heldItemAction <= PLAYER_IA_STICK)) {
+    if ((player->heldItemAction >= PLAYER_IA_SWORD_TWO_HANDED) && (player->heldItemAction <= PLAYER_IA_STICK)) {
         return true;
     }
 
@@ -1539,10 +1540,8 @@ void Player_UpdateBunnyEars(Player* player) {
     sBunnyEarKinematics.angVel.y += -sBunnyEarKinematics.rot.y >> 2;
 
     angle = player->actor.world.rot.y - player->actor.shape.rot.y;
-    force.x =
-        (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
-    force.y =
-        (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    force.x = (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (Rand_CenteredFloat(2.0f) + 10.0f)) & 0xFFFF;
+    force.y = (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (Rand_CenteredFloat(2.0f) + 10.0f)) & 0xFFFF;
 
     sBunnyEarKinematics.angVel.x += force.x >> 2;
     sBunnyEarKinematics.angVel.y += force.y >> 2;
@@ -1642,9 +1641,9 @@ TexturePtr sPlayerMouthTextures[PLAYER_MOUTH_MAX] = {
 };
 
 typedef struct PlayerFaceIndices {
-    /* 0x00 */ u8 eyeIndex;
-    /* 0x01 */ u8 mouthIndex;
-} PlayerFaceIndices; // size = 0x02
+    /* 0x0 */ u8 eyeIndex;
+    /* 0x1 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x2
 
 PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0
@@ -1800,7 +1799,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp4C = func_80086B30(temp_f20, sp58);
+        sp4C = Math_FAtan2F(temp_f20, sp58);
         distance = sqrtf(SQ(diffX) + SQ(yIntersect - sp90.y) + SQ(diffZ));
         sp58 = (SQ(distance) + sp70) / (2.0f * distance);
         sp54 = distance - sp58;
@@ -1808,8 +1807,8 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp48 = func_80086B30(temp_f20, sp58);
-        phi_t1 = (M_PI - (func_80086B30(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
+        sp48 = Math_FAtan2F(temp_f20, sp58);
+        phi_t1 = (M_PI - (Math_FAtan2F(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
         temp_f8 = (sp48 - sp4C) * (0x8000 / M_PI);
 
@@ -1854,7 +1853,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
+            OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_7);
 
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &sp58, &sp54);
 
@@ -2038,7 +2037,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 pos->x *= player->ageProperties->unk_08;
                 pos->z *= player->ageProperties->unk_08;
             }
-            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATEY)) {
+            if (!(player->skelAnime.moveFlags & ANIM_FLAG_4) || (player->skelAnime.moveFlags & ANIM_FLAG_UPDATE_Y)) {
                 pos->y *= player->ageProperties->unk_08;
             }
         }
@@ -2552,14 +2551,16 @@ void func_8012669C(PlayState* play, Player* player, Vec3f* arg2, Vec3f* arg3) {
     Matrix_MultVec3f(arg2, &sp3C);
     Matrix_MultVec3f(arg3, &sp30);
 
-    if (player->meleeWeaponState != 0) {
+    if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
         if (func_80126440(play, NULL, &player->meleeWeaponInfo[0], &sp3C, &sp30) &&
             (player->transformation != PLAYER_FORM_GORON) && (!(player->stateFlags1 & PLAYER_STATE1_400000))) {
             EffectBlure_AddVertex(Effect_GetByIndex(player->meleeWeaponEffectIndex[0]), &player->meleeWeaponInfo[0].tip,
                                   &player->meleeWeaponInfo[0].base);
         }
-        if ((player->meleeWeaponState > 0) && ((player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) ||
-                                               (player->stateFlags2 & PLAYER_STATE2_20000))) {
+
+        if ((player->meleeWeaponState >= PLAYER_MELEE_WEAPON_STATE_1) &&
+            ((player->meleeWeaponAnimation < PLAYER_MWA_SPIN_ATTACK_1H) ||
+             (player->stateFlags2 & PLAYER_STATE2_20000))) {
             Matrix_MultVec3f(&arg2[1], &sp3C);
             Matrix_MultVec3f(&arg3[1], &sp30);
             func_80126440(play, &player->meleeWeaponQuads[0], &player->meleeWeaponInfo[1], &sp3C, &sp30);
@@ -2714,7 +2715,7 @@ void func_80126BD0(PlayState* play, Player* player, s32 arg2) {
 
             gSPDisplayList(POLY_OPA_DISP++, D_801C0AB4[arg2]);
 
-            if (player->meleeWeaponState != 0) {
+            if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
                 if ((((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_LEFT)) && (arg2 == 0)) ||
                     ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_COMBO) && (arg2 != 0))) {
                     func_8012669C(play, player, D_801C0A00, D_801C09DC);
@@ -3296,7 +3297,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
         Matrix_Push();
         Matrix_Translate(-428.26f, 267.2f, -33.82f, MTXMODE_APPLY);
         Matrix_RotateZYX(-0x8000, 0, 0x4000, MTXMODE_APPLY);
-        Matrix_Scale(1.0f, player->unk_B08[1], 1.0f, MTXMODE_APPLY);
+        Matrix_Scale(1.0f, player->unk_B0C, 1.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuStickDL);
@@ -3413,7 +3414,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_KOKIRI
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
                     4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
-                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_GREAT_FAIRY
+                    5500.0f, // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
                     -1.0f,   // PLAYER_MELEEWEAPON_STICK
                     2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
                 };
@@ -3421,19 +3422,19 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
                      ((player->itemAction == PLAYER_IA_STICK) ||
-                      ((player->meleeWeaponState != 0) &&
+                      ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_RIGHT) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))))) {
                     if (player->itemAction == PLAYER_IA_STICK) {
-                        D_801C0994->x = player->unk_B08[1] * 5000.0f;
+                        D_801C0994->x = player->unk_B0C * 5000.0f;
                     } else {
                         D_801C0994->x = sMeleeWeaponLengths[Player_GetMeleeWeaponHeld(player)];
                     }
                     func_80126B8C(play, player);
                 }
 
-                Matrix_Get(&player->mf_CC4);
-                Matrix_MtxFToYXZRot(&player->mf_CC4, &player->leftHandWorld.rot, false);
+                Matrix_Get(&player->leftHandMf);
+                Matrix_MtxFToYXZRot(&player->leftHandMf, &player->leftHandWorld.rot, false);
             }
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_HAND) {
@@ -3458,18 +3459,18 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
 
                     Matrix_MultZero(&sp20C);
                     temp_fv0 = Math_Vec3f_DistXYZ(sPlayerCurBodyPartPos, &sp20C);
-                    player->unk_B08[0] = temp_fv0 - 3.0f;
+                    player->unk_B08 = temp_fv0 - 3.0f;
                     if (temp_fv0 < 3.0f) {
-                        player->unk_B08[0] = 0.0f;
+                        player->unk_B08 = 0.0f;
                     } else {
-                        player->unk_B08[0] *= 1.6f;
-                        if (player->unk_B08[0] > 1.0f) {
-                            player->unk_B08[0] = 1.0f;
+                        player->unk_B08 *= 1.6f;
+                        if (player->unk_B08 > 1.0f) {
+                            player->unk_B08 = 1.0f;
                         }
                     }
-                    player->unk_B08[1] = -0.5f;
+                    player->unk_B0C = -0.5f;
                 }
-                Matrix_Scale(1.0f, player->unk_B08[0], 1.0f, MTXMODE_APPLY);
+                Matrix_Scale(1.0f, player->unk_B08, 1.0f, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -3518,7 +3519,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                         Player_DrawHookshotReticle(play, player, 77600.0f);
                     }
                 }
-            } else if (player->meleeWeaponState != 0) {
+            } else if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
                 if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_RIGHT) {
                     func_80126B8C(play, player);
                 }
@@ -3590,6 +3591,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 for (i = 0; i < ARRAY_COUNT(sp178); i++) {
                     Matrix_Push();
                     Matrix_Scale(sp178[i].x, sp178[i].y, sp178[i].z, MTXMODE_APPLY);
+
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -3811,7 +3813,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                                   &player->meleeWeaponInfo[0].base);
         }
     } else if (limbIndex == PLAYER_LIMB_RIGHT_SHIN) {
-        if (player->meleeWeaponState != 0) {
+        if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
             if ((player->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK) ||
                 (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_START) ||
                 (player->meleeWeaponAnimation == PLAYER_MWA_ZORA_JUMPKICK_FINISH)) {
@@ -3819,7 +3821,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
     } else if (limbIndex == PLAYER_LIMB_WAIST) {
-        if (player->meleeWeaponState != 0) {
+        if (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) {
             if (player->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT) {
                 Math_Vec3f_Copy(&player->unk_AF0[1], &player->meleeWeaponInfo[0].base);
                 func_8012669C(play, player, D_801C0A90, D_801C0A6C);

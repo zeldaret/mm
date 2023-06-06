@@ -12,7 +12,7 @@ typedef enum {
     /* 1 */ EN_SNOWMAN_TYPE_LARGE,
     /* 2 */ EN_SNOWMAN_TYPE_SPLIT,
     /* 3 */ EN_SNOWMAN_TYPE_SMALL_SNOWBALL,
-    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL,
+    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL
 } EnSnowmanType;
 
 struct EnSnowman;

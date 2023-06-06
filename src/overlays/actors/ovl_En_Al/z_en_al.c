@@ -480,10 +480,10 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
 
     if ((this->unk_4C2 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_4C2 &= ~0x1800;
-        if (player->exchangeItemId == 0x33) {
+        if (player->exchangeItemId == PLAYER_IA_LETTER_MAMA) {
             this->unk_4C2 |= 0x800;
             this->unk_4F4 = player->exchangeItemId;
-        } else if (player->exchangeItemId != 0) {
+        } else if (player->exchangeItemId != PLAYER_IA_NONE) {
             this->unk_4C2 |= 0x1000;
             this->unk_4F4 = player->exchangeItemId;
         }
@@ -907,7 +907,7 @@ void EnAl_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_35C != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_Translate(0.0f, 0.0f, 850.0f, MTXMODE_APPLY);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnAl_OverrideLimbDraw, EnAl_PostLimbDraw,

@@ -57,7 +57,7 @@ typedef enum {
     /* 0xC */ EN_NEO_REEBA_DMGEFF_HOOKSHOT = 0xC, // No damage, used only for hookshot
     /* 0xD */ EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN,  // Electric effects, frozen in place
     /* 0xE */ EN_NEO_REEBA_DMGEFF_NONE,           // Normal hit
-    /* 0xF */ EN_NEO_REEBA_DMGEFF_SHATTER,        // Normal hit that can break ice if leever is frozen
+    /* 0xF */ EN_NEO_REEBA_DMGEFF_SHATTER         // Normal hit that can break ice if leever is frozen
 } EnNeoReebaDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -729,11 +729,14 @@ s32 EnNeoReeba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnNeoReeba_Draw(Actor* thisx, PlayState* play) {
     EnNeoReeba* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
+
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x01, 255, 255, 255, 255);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnNeoReeba_OverrideLimbDraw, NULL,
                       &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->stunTimer > 0) {

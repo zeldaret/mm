@@ -59,7 +59,7 @@ void EffectSsDeadDs_Draw(PlayState* play, u32 index, EffectSs* this) {
     OPEN_DISPS(play->state.gfxCtx);
 
     scale = this->rScale * 0.01f;
-    func_8012C974(play->state.gfxCtx);
+    Gfx_SetupDL60_XluNoCD(play->state.gfxCtx);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, this->rAlpha);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
     pos = this->pos;

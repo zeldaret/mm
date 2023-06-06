@@ -116,9 +116,9 @@ Vec3f D_80B8216C = { 225.0f, -280.0f, -210.0f };
 Vec3f D_80B82178 = { -255.0f, -280.0f, 210.0f };
 
 typedef struct {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x04 */ Vec3f unk_04;
+    /* 0x0 */ s8 unk_00;
+    /* 0x1 */ s8 unk_01;
+    /* 0x4 */ Vec3f unk_04;
 } BgIkanaRotaryroomStruct4; // size = 0x10
 
 BgIkanaRotaryroomStruct4 D_80B82184[2][2] = {
@@ -832,11 +832,11 @@ void func_80B81A80(Actor* thisx, PlayState* play) {
 
         func_80B81B84(this);
     } else if (this->unk_584 == 15) {
-        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
         Quake_SetSpeed(quakeIndex, 31536);
-        Quake_SetQuakeValues(quakeIndex, 6, 0, 100, 0);
-        Quake_SetCountdown(quakeIndex, 22);
+        Quake_SetPerturbations(quakeIndex, 6, 0, 100, 0);
+        Quake_SetDuration(quakeIndex, 22);
     }
 }
 
@@ -859,11 +859,11 @@ void func_80B81BA0(Actor* thisx, PlayState* play) {
     thisx->shape.rot.x += 0x1F4;
 
     if (!(this->unk_584 & 7)) {
-        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
         Quake_SetSpeed(quakeIndex, 31536);
-        Quake_SetQuakeValues(quakeIndex, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
-        Quake_SetCountdown(quakeIndex, 15);
+        Quake_SetPerturbations(quakeIndex, (s32)(Rand_ZeroOne() * 2.5f) + 3, 0, 10, 0);
+        Quake_SetDuration(quakeIndex, 15);
     }
 
     if (Flags_GetSwitch(play, BGIKANAROTARYROOM_GET_FE(&this->dyna.actor))) {
@@ -929,11 +929,11 @@ void func_80B81DC8(Actor* thisx, PlayState* play) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         func_80B818B4(this);
     } else if (this->unk_584 == 19) {
-        s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+        s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 5, 0, 40, 60);
-        Quake_SetCountdown(quakeIndex, 17);
+        Quake_SetPerturbations(quakeIndex, 5, 0, 40, 60);
+        Quake_SetDuration(quakeIndex, 17);
     }
 }
 

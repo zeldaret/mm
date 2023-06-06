@@ -20,7 +20,7 @@ typedef enum {
     /* 0x05 */ CLEAR_TAG_EFFECT_LIGHT_RAYS,
     /* 0x06 */ CLEAR_TAG_EFFECT_SHOCKWAVE,
     /* 0x07 */ CLEAR_TAG_EFFECT_SPLASH,
-    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
+    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE
 } ClearTagEffectType;
 
 void EnClearTag_Init(Actor* thisx, PlayState* play);
@@ -494,8 +494,8 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
                         vel.z = cosf(i * (33.0f / 40.0f)) * i * .5f;
                         vel.y = Rand_ZeroFloat(8.0f) + 7.0f;
 
-                        vel.x += randPlusMinusPoint5Scaled(0.5f);
-                        vel.z += randPlusMinusPoint5Scaled(0.5f);
+                        vel.x += Rand_CenteredFloat(0.5f);
+                        vel.z += Rand_CenteredFloat(0.5f);
 
                         accel.x = 0.0f;
                         accel.y = -1.0f;
@@ -807,8 +807,9 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
     EnClearTagEffect* firstEffect = this->effect;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     // Draw all Debris effects.
     for (i = 0; i < ARRAY_COUNT(this->effect); i++, effect++) {
@@ -981,7 +982,7 @@ void EnClearTag_DrawEffects(Actor* thisx, PlayState* play) {
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 200);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 200);
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sWaterSplashTextures[effect->actionTimer]));
-            func_8012C9BC(gfxCtx);
+            Gfx_SetupDL61_Xlu(gfxCtx);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK);
             isMaterialApplied++;
 

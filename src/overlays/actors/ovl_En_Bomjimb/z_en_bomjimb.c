@@ -275,8 +275,8 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
         case 0:
             if (this->unk_2AE == 0) {
                 Math_Vec3f_Copy(&sp48, &this->actor.home.pos);
-                sp48.x += randPlusMinusPoint5Scaled(150.0f);
-                sp48.z += randPlusMinusPoint5Scaled(150.0f);
+                sp48.x += Rand_CenteredFloat(150.0f);
+                sp48.z += Rand_CenteredFloat(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp48, &sp60,
@@ -912,8 +912,8 @@ void EnBomjimb_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C03274[this->unk_2C2]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C03280[this->unk_2C8]));

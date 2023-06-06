@@ -93,11 +93,11 @@ static ColliderCylinderInit sAttackCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 80, MASS_HEAVY };
 
 typedef enum {
-    /* 0x0 */ KAREBABA_DMGEFF_NONE,
-    /* 0x2 */ KAREBABA_DMGEFF_FIRE = 2,
-    /* 0x3 */ KAREBABA_DMGEFF_ICE,
-    /* 0x4 */ KAREBABA_DMGEFF_LIGHT,
-    /* 0x5 */ KAREBABA_DMGEFF_ELECTRIC,
+    /* 0 */ KAREBABA_DMGEFF_NONE,
+    /* 2 */ KAREBABA_DMGEFF_FIRE = 2,
+    /* 3 */ KAREBABA_DMGEFF_ICE,
+    /* 4 */ KAREBABA_DMGEFF_LIGHT,
+    /* 5 */ KAREBABA_DMGEFF_ELECTRIC
 } DekuBabaDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -634,7 +634,7 @@ void EnKarebaba_DrawShadow(EnKarebaba* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C448(play->state.gfxCtx);
+    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
@@ -658,7 +658,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Math_Vec3f_Copy(this->bodyPartsPos, &this->actor.world.pos);
 
     if (this->actionFunc == EnKarebaba_DeadItemDrop) {

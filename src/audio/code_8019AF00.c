@@ -9,7 +9,7 @@ typedef struct {
     /* 0x0 */ Vec3f* pos;
     /* 0x4 */ f32 freqScale;
     /* 0x8 */ s8 reverbAdd;
-} SfxSettings; // size = 0x9
+} SfxSettings; // size = 0xC
 
 typedef struct {
     /* 0x0 */ f32 volume;
@@ -20,7 +20,7 @@ typedef struct {
     /* 0xB */ u8 filter;
     /* 0xC */ u8 combFilterGain;
     /* 0xD */ u8 zVolume;
-} SfxChannelState; // size = 0xE
+} SfxChannelState; // size = 0x10
 
 typedef enum {
     /* 0x0 */ SFX_CHANNEL_PLAYER0, // SfxPlayerBank
@@ -50,7 +50,7 @@ typedef enum {
     /* 0x4 */ SEQ_PLAYER_IO_PORT_4,
     /* 0x5 */ SEQ_PLAYER_IO_PORT_5,
     /* 0x6 */ SEQ_PLAYER_IO_PORT_6,
-    /* 0x7 */ SEQ_PLAYER_IO_PORT_7,
+    /* 0x7 */ SEQ_PLAYER_IO_PORT_7
 } SeqPlayerIOPort;
 
 typedef struct {
@@ -2058,11 +2058,11 @@ const char sAudioOcarinaUnusedText6[] = "last key step is too short !!! %d:%d %d
 const char sAudioOcarinaUnusedText7[] = "check is over!!! %d %d %d\n";
 
 void AudioOcarina_ReadControllerInput(void) {
-    Input inputs[4];
+    Input inputs[MAXCONTROLLERS];
     Input* input = &inputs[0];
     u32 ocarinaInputButtonPrev = sOcarinaInputButtonCur;
 
-    Padmgr_GetInput2(inputs, 0);
+    PadMgr_GetInput2(inputs, false);
     sOcarinaInputButtonCur = input->cur.button;
     sOcarinaInputButtonPrev = ocarinaInputButtonPrev;
     sOcarinaInputStickRel.x = input->rel.stick_x;
@@ -2543,8 +2543,8 @@ void AudioOcarina_CheckSongsWithoutMusicStaff(void) {
             if ((u32)sOcarinaAvailableSongFlags & (1 << songIndex)) {
                 // Loops through all possible starting indices?
                 // Loops through the notes of the song?
-                for (j = 0, k = 0; j < gOcarinaSongButtons[songIndex].numButtons && k == 0 &&
-                                   sOcarinaWithoutMusicStaffPos >= gOcarinaSongButtons[songIndex].numButtons;) {
+                for (j = 0, k = 0; (j < gOcarinaSongButtons[songIndex].numButtons) && (k == 0) &&
+                                   (sOcarinaWithoutMusicStaffPos >= gOcarinaSongButtons[songIndex].numButtons);) {
 
                     pitch = sCurOcarinaSongWithoutMusicStaff[(sOcarinaWithoutMusicStaffPos -
                                                               gOcarinaSongButtons[songIndex].numButtons) +
@@ -2953,7 +2953,7 @@ void AudioOcarina_SetRecordingSong(u8 isRecordingComplete) {
 
     i = sRecordSongPos;
     pitch = OCARINA_PITCH_NONE;
-    while (i != 0 && pitch == OCARINA_PITCH_NONE) {
+    while ((i != 0) && (pitch == OCARINA_PITCH_NONE)) {
         i--;
         pitch = recordedSong[i].pitch;
     }

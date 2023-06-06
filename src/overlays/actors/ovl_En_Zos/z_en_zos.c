@@ -417,7 +417,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1237:
-                player->exchangeItemId = 0;
+                player->exchangeItemId = PLAYER_IA_NONE;
 
             case 0x1238:
             case 0x123A:
@@ -436,7 +436,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1232:
             case 0x1241:
-                player->exchangeItemId = 0;
+                player->exchangeItemId = PLAYER_IA_NONE;
 
             case 0x1239:
             case 0x1246:
@@ -582,7 +582,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     sp28.x = this->actor.projectedPos.x;
     sp28.y = this->actor.projectedPos.y;
     sp28.z = this->actor.projectedPos.z;
-    func_801A1FB4(3, &sp28, 110, 1000.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_PIANO_PLAY, 1000.0f);
 }
 
 void func_80BBBFBC(EnZos* this, PlayState* play) {
@@ -738,7 +738,7 @@ void EnZos_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_2B6 & 0x40) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->unk_2BC, 1000);

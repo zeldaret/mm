@@ -190,7 +190,7 @@ void func_80953F9C(BgIngate* this, PlayState* play) {
 
         if (this->unk160 & 2) {
 
-            if (this->timePath->unk1 != 0xFF) {
+            if (this->timePath->additionalPathIndex != ADDITIONAL_PATH_INDEX_NONE) {
                 func_80953E38(play);
                 func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
                 this->dyna.actor.textId = 0x9E4;
@@ -259,10 +259,10 @@ void func_809542A0(BgIngate* this, PlayState* play) {
 }
 
 void func_80954340(BgIngate* this, PlayState* play) {
-    if (!DECR(this->unk16A)) {
+    if (DECR(this->unk16A) == 0) {
         if (this->timePath != NULL) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
-            this->timePath = &play->setupPathList[this->timePath->unk1];
+            this->timePath = &play->setupPathList[this->timePath->additionalPathIndex];
             func_80953F14(this, play);
             Environment_StopTime();
         }
@@ -287,7 +287,7 @@ void func_809543D4(BgIngate* this, PlayState* play) {
                     func_8019F208();
                 } else {
                     if (this->timePath != NULL) {
-                        this->timePath = &play->setupPathList[this->timePath->unk1];
+                        this->timePath = &play->setupPathList[this->timePath->additionalPathIndex];
                     }
                     func_80953F14(this, play);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
@@ -328,7 +328,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
         this->unk160 |= 0x8;
         this->unk160 |= 0x10;
         Actor_SetScale(&this->dyna.actor, 1.0f);
-        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_PATH_INDEX(&this->dyna.actor), 0);
         this->dyna.actor.room = -1;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_40);
@@ -350,7 +350,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
                 this->actionFunc = func_80953F8C;
             }
         }
-        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), phi_a2);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_PATH_INDEX(&this->dyna.actor), phi_a2);
         if (this->timePath != NULL) {
             sp38 = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp2C, &sp38[0]);
@@ -361,7 +361,7 @@ void BgIngate_Init(Actor* thisx, PlayState* play2) {
             this->dyna.actor.world.pos.y = -15.0f;
             this->dyna.actor.world.pos.z = sp2C.z;
         }
-        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_FF(&this->dyna.actor), 0);
+        this->timePath = SubS_GetAdditionalPath(play, BGINGATE_GET_PATH_INDEX(&this->dyna.actor), 0);
     } else {
         Actor_Kill(&this->dyna.actor);
     }
@@ -384,7 +384,7 @@ void BgIngate_Update(Actor* thisx, PlayState* play) {
 void BgIngate_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gSichitaiBoat);
 

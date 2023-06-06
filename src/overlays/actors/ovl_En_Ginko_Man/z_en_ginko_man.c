@@ -47,7 +47,7 @@ typedef enum {
     /* 1 */ GINKO_ANIM_SITTING,
     /* 2 */ GINKO_ANIM_REACHING,
     /* 3 */ GINKO_ANIM_AMAZED,
-    /* 4 */ GINKO_ANIM_ADVERTISING,
+    /* 4 */ GINKO_ANIM_ADVERTISING
 } GinkoAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -668,7 +668,7 @@ void EnGinkoMan_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 50, 80, 0, 0));
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 50, 80, 0, 0));

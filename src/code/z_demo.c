@@ -1,4 +1,3 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -172,15 +171,15 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_CLOUDY_SKY:
             if (isFirstFrame) {
-                play->envCtx.unk_19 = 1;
-                play->envCtx.unk_17 = 1;
-                play->envCtx.unk_18 = 0;
-                play->envCtx.unk_1A = 0x3C;
-                play->envCtx.unk_21 = 1;
-                play->envCtx.unk_1F = 0;
-                play->envCtx.unk_20 = 1;
-                play->envCtx.unk_24 = 0x3C;
-                play->envCtx.unk_22 = play->envCtx.unk_24;
+                play->envCtx.changeSkyboxState = 1;
+                play->envCtx.skyboxConfig = 1;
+                play->envCtx.changeSkyboxNextConfig = 0;
+                play->envCtx.changeSkyboxTimer = 60;
+                play->envCtx.changeLightEnabled = true;
+                play->envCtx.lightConfig = 0;
+                play->envCtx.changeLightNextConfig = 1;
+                play->envCtx.changeDuration = 60;
+                play->envCtx.changeLightTimer = play->envCtx.changeDuration;
             }
             break;
 
@@ -202,10 +201,10 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
         case CS_MISC_EARTHQUAKE_MEDIUM:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isFirstFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+                sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
-                Quake_SetQuakeValues(sCutsceneQuakeIndex, 6, 4, 0, 0);
-                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
+                Quake_SetPerturbations(sCutsceneQuakeIndex, 6, 4, 0, 0);
+                Quake_SetDuration(sCutsceneQuakeIndex, 800);
             }
             break;
 
@@ -310,10 +309,10 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
         case CS_MISC_EARTHQUAKE_STRONG:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (isFirstFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+                sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
-                Quake_SetQuakeValues(sCutsceneQuakeIndex, 20, 10, 0, 0);
-                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
+                Quake_SetPerturbations(sCutsceneQuakeIndex, 20, 10, 0, 0);
+                Quake_SetDuration(sCutsceneQuakeIndex, 800);
             }
             break;
 
@@ -328,8 +327,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_MOON_CRASH_SKYBOX:
             if (isFirstFrame) {
-                // skyboxConfig
-                play->envCtx.unk_17 = 0xD;
+                play->envCtx.skyboxConfig = 0xD;
             }
             break;
 
@@ -372,10 +370,10 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
         case CS_MISC_EARTHQUAKE_WEAK:
             func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isFirstFrame) {
-                sCutsceneQuakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
+                sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
-                Quake_SetQuakeValues(sCutsceneQuakeIndex, 2, 1, 0, 0);
-                Quake_SetCountdown(sCutsceneQuakeIndex, 800);
+                Quake_SetPerturbations(sCutsceneQuakeIndex, 2, 1, 0, 0);
+                Quake_SetDuration(sCutsceneQuakeIndex, 800);
             }
             break;
 

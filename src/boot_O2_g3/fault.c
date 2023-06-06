@@ -204,7 +204,7 @@ void Fault_Sleep(u32 duration) {
 }
 
 void Fault_PadCallback(Input* input) {
-    Padmgr_GetInput2(input, 0);
+    PadMgr_GetInput2(input, false);
 }
 
 void Fault_UpdatePadImpl() {
@@ -447,7 +447,7 @@ void osSyncPrintfThreadContext(OSThread* t) {
 OSThread* Fault_FindFaultedThread() {
     OSThread* iter = __osGetActiveQueue();
     while (iter->priority != -1) {
-        if (iter->priority > 0 && iter->priority < 0x7F && (iter->flags & 3)) {
+        if ((iter->priority > 0) && (iter->priority < 0x7F) && (iter->flags & 3)) {
             return iter;
         }
         iter = iter->tlnext;
@@ -474,7 +474,7 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (!CHECK_BTN_ALL(input->press.button, 0x80));
+        } while (!CHECK_BTN_ALL(input->press.button, BTN_RESET));
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
@@ -763,7 +763,7 @@ void Fault_SetOptionsFromController3(void) {
     u32 graphRA;
     u32 graphSP;
 
-    if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
+    if (CHECK_BTN_ALL(input3->press.button, BTN_RESET)) {
         faultCustomOptions = !faultCustomOptions;
     }
 

@@ -247,8 +247,8 @@ void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
 }
 
 s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
-    if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
-        this->path = &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
+    if (EN_RZ_GET_PATH_INDEX(&this->actor) != EN_RZ_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[EN_RZ_GET_PATH_INDEX(&this->actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
@@ -347,9 +347,9 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 
 void func_80BFBDFC(PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
-        func_80151BB4(play, 0x27);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP);
     }
-    func_80151BB4(play, 0xC);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS);
 }
 
 void EnRz_Destroy(Actor* thisx, PlayState* play) {
@@ -446,7 +446,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
         sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(3, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -547,7 +547,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             bgmPos.x = this->actor.projectedPos.x;
             bgmPos.y = this->actor.projectedPos.y;
             bgmPos.z = this->actor.projectedPos.z;
-            func_801A1FB4(3, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
+            func_801A1FB4(SEQ_PLAYER_BGM_SUB, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }
@@ -686,7 +686,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 0);

@@ -72,7 +72,7 @@ typedef enum {
     /* 10 */ BEAVER_ANIM_TALK_TO_RIGHT,
     /* 11 */ BEAVER_ANIM_BOW,
     /* 12 */ BEAVER_ANIM_IDLE_FACE_LEFT,
-    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT,
+    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationInfo[] = {
@@ -1784,7 +1784,9 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->unk_374 & 2) {
@@ -1792,13 +1794,16 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                               func_80A98DA4, func_80A98E48, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               func_80A98DA4, func_80A98E48, &this->actor);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actor.depthInWater >= 28.0f) && (this->actor.speed > 0.5f)) {
         Matrix_Translate(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -1806,7 +1811,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_39E, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         if (this->unk_374 & 2) {
             s32 i;
             Vec3f sp98;
@@ -1853,6 +1858,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
