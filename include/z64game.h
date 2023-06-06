@@ -4,7 +4,7 @@
 #include "ultra64.h"
 #include "libc/stdbool.h"
 #include "libc/stdint.h"
-#include "io/controller.h"
+#include "padutils.h"
 #include "tha.h"
 #include "padmgr.h"
 
