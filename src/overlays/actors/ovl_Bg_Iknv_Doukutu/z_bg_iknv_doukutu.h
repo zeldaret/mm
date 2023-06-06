@@ -9,11 +9,11 @@ typedef void (*BgIknvDoukutuActionFunc)(struct BgIknvDoukutu*, PlayState*);
 
 #define BGIKNVDOUKUTU_GET_F(thisx) ((thisx)->params & 0xF)
 
-enum {
-    BGIKNVDOUKUTU_F_0,
-    BGIKNVDOUKUTU_F_1,
-    BGIKNVDOUKUTU_F_2,
-};
+typedef enum {
+    /* 0 */ BGIKNVDOUKUTU_F_0,
+    /* 1 */ BGIKNVDOUKUTU_F_1,
+    /* 2 */ BGIKNVDOUKUTU_F_2
+} BgIknvDoukutuParam;
 
 typedef struct BgIknvDoukutu {
     /* 0x000 */ DynaPolyActor dyna;

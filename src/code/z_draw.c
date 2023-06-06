@@ -115,9 +115,9 @@ void GetItem_DrawWallet(PlayState* play, s16 drawId);
 void GetItem_DrawRemains(PlayState* play, s16 drawId);
 
 typedef struct {
-    /* 0x00 */ void (*drawFunc)(PlayState*, s16);
-    /* 0x04 */ void* drawResources[8]; // Either display lists (Gfx*) or matrices (Mtx*)
-} DrawItemTableEntry;                  // size = 0x24
+    /* 0x0 */ void (*drawFunc)(PlayState*, s16);
+    /* 0x4 */ void* drawResources[8]; // Either display lists (Gfx*) or matrices (Mtx*)
+} DrawItemTableEntry;                 // size = 0x24
 
 static DrawItemTableEntry sDrawItemTable[] = {
     // GID_BOTTLE, OBJECT_GI_BOTTLE

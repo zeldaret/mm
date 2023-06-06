@@ -127,7 +127,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ITEM00_RECOVERY_HEART:
-            this->actor.home.rot.z = randPlusMinusPoint5Scaled(0xFFFF);
+            this->actor.home.rot.z = Rand_CenteredFloat(0xFFFF);
             shadowOffset = 430.0f;
             Actor_SetScale(&this->actor, 0.02f);
             this->unk154 = 0.02f;
@@ -381,9 +381,9 @@ void func_800A6650(EnItem00* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 1) != 0) {
-        pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
-        pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
-        pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(10.0f);
+        pos.y = this->actor.world.pos.y + Rand_CenteredFloat(10.0f);
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(10.0f);
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
@@ -956,7 +956,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 }
                 spawnedActor->speed = 2.0f;
                 spawnedActor->gravity = -0.9f;
-                spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
                 Actor_SetScale(spawnedActor, 0.0f);
                 ((EnItem00*)spawnedActor)->actionFunc = func_800A6780;
                 ((EnItem00*)spawnedActor)->unk152 = 0xDC;
@@ -1011,7 +1011,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
                     } else {
                         spawnedActor->gravity = -0.9f;
                     }
-                    spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                    spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
                     spawnedActor->flags |= 0x10;
                 }
             }

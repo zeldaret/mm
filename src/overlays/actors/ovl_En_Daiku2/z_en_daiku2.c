@@ -243,9 +243,9 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
             sp70.y += 40.0f;
             sp70.z += Math_CosS(this->actor.world.rot.y) * 70.0f;
 
-            sp70.x += randPlusMinusPoint5Scaled(5.0f);
-            sp70.y += randPlusMinusPoint5Scaled(5.0f);
-            sp70.z += randPlusMinusPoint5Scaled(5.0f);
+            sp70.x += Rand_CenteredFloat(5.0f);
+            sp70.y += Rand_CenteredFloat(5.0f);
+            sp70.z += Rand_CenteredFloat(5.0f);
 
             sp88.y = -1.0f;
 
@@ -507,9 +507,9 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
             effect->unk_1C = *arg3;
             effect->unk_30 = arg4;
             effect->unk_34 = arg5;
-            effect->unk_28.x = randPlusMinusPoint5Scaled(30000.0f);
-            effect->unk_28.y = randPlusMinusPoint5Scaled(30000.0f);
-            effect->unk_28.z = randPlusMinusPoint5Scaled(30000.0f);
+            effect->unk_28.x = Rand_CenteredFloat(30000.0f);
+            effect->unk_28.y = Rand_CenteredFloat(30000.0f);
+            effect->unk_28.z = Rand_CenteredFloat(30000.0f);
             break;
         }
     }

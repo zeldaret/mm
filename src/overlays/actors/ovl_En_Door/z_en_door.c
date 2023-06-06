@@ -289,10 +289,10 @@ ActorInit En_Door_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneId;
-    /* 0x02 */ u8 dListIndex;
-    /* 0x04 */ s16 objectId;
-} EnDoorInfo;
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ u8 dListIndex;
+    /* 0x4 */ s16 objectId;
+} EnDoorInfo; // size = 0x6
 
 static EnDoorInfo sObjInfo[] = {
     { SCENE_MITURIN, 0x01, OBJECT_NUMA_OBJ },
@@ -394,7 +394,7 @@ void EnDoor_Init(Actor* thisx, PlayState* play2) {
 
     this->doorType = ENDOOR_GET_TYPE(thisx);
 
-    this->switchFlag = ENDOOR_GET_PARAMS_7F(thisx);
+    this->switchFlag = ENDOOR_GET_PARAM_7F(thisx);
     if ((this->doorType == ENDOOR_TYPE_7) && (this->switchFlag == 0)) {
         DynaPolyActor_Init(&this->knobDoor.dyna, 0);
         DynaPolyActor_LoadMesh(play, &this->knobDoor.dyna, &gDoorCol);

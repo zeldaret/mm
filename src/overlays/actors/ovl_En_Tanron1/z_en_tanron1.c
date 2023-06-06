@@ -248,9 +248,9 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
                         ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
                         ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
                         if ((ptr->unk_26 & 0xF) == 0) {
-                            ptr->unk_30 = randPlusMinusPoint5Scaled(temp_f30);
-                            ptr->unk_34 = randPlusMinusPoint5Scaled(temp_f30 * 0.5f);
-                            ptr->unk_38 = randPlusMinusPoint5Scaled(temp_f30);
+                            ptr->unk_30 = Rand_CenteredFloat(temp_f30);
+                            ptr->unk_34 = Rand_CenteredFloat(temp_f30 * 0.5f);
+                            ptr->unk_38 = Rand_CenteredFloat(temp_f30);
                         }
 
                         temp.x = player->actor.world.pos.x - ptr->unk_00.x;
@@ -336,7 +336,7 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
                         Math_ApproachF(&ptr->unk_30, ptr->unk_34, 1.0f, 0.5f);
                         if ((ptr->unk_26 & 0xF) == 0) {
                             if (Rand_ZeroOne() < 0.5f) {
-                                ptr->unk_34 = randPlusMinusPoint5Scaled(12.0f);
+                                ptr->unk_34 = Rand_CenteredFloat(12.0f);
                             }
                             ptr->unk_3C = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp98, &ptr->unk_00);
                             sp9C = ptr->unk_00.y;

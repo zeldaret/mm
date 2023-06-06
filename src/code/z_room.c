@@ -53,10 +53,10 @@ typedef enum {
 } RoomCullableDebugMode;
 
 typedef struct RoomShapeCullableEntryLinked {
-    /* 0x00 */ RoomShapeCullableEntry* entry;
-    /* 0x04 */ f32 boundsNearZ;
-    /* 0x08 */ struct RoomShapeCullableEntryLinked* prev;
-    /* 0x0C */ struct RoomShapeCullableEntryLinked* next;
+    /* 0x0 */ RoomShapeCullableEntry* entry;
+    /* 0x4 */ f32 boundsNearZ;
+    /* 0x8 */ struct RoomShapeCullableEntryLinked* prev;
+    /* 0xC */ struct RoomShapeCullableEntryLinked* next;
 } RoomShapeCullableEntryLinked; // size = 0x10
 
 #define ROOM_SHAPE_CULLABLE_MAX_ENTRIES 128

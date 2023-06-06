@@ -10,13 +10,13 @@ typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, PlayState*);
 #define ENELFGRP_GET(thisx) ((thisx)->params & 0xF)
 #define ENELFGRP_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
 
-enum {
+typedef enum {
     /* 0 */ ENELFGRP_0,
     /* 2 */ ENELFGRP_1,
     /* 2 */ ENELFGRP_2,
     /* 3 */ ENELFGRP_3,
-    /* 4 */ ENELFGRP_4,
-};
+    /* 4 */ ENELFGRP_4
+} EnElfgrpParam;
 
 typedef struct EnElfgrp {
     /* 0x000 */ Actor actor;
