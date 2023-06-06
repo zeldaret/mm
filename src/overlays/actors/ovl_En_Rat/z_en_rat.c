@@ -32,7 +32,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play);
 
 typedef enum {
     /* -2 */ EN_RAT_HOOK_STARTED = -2,
-    /* -1 */ EN_RAT_HOOKED,
+    /* -1 */ EN_RAT_HOOKED
 } EnRatHookedState;
 
 ActorInit En_Rat_InitVars = {
@@ -70,7 +70,7 @@ static ColliderSphereInit sSphereInit = {
 typedef enum {
     /* 0x0 */ EN_RAT_DMGEFF_NONE,
     /* 0x1 */ EN_RAT_DMGEFF_STUN,
-    /* 0xF */ EN_RAT_DMGEFF_HOOKSHOT = 0xF, // Pulls the Real Bombchu towards the player
+    /* 0xF */ EN_RAT_DMGEFF_HOOKSHOT = 0xF // Pulls the Real Bombchu towards the player
 } EnRatDamageEffect;
 
 static DamageTable sDamageTable = {

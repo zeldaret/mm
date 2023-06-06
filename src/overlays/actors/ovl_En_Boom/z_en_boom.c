@@ -311,7 +311,7 @@ typedef struct {
     /* 0x00 */ Gfx* unk_00;
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
-} EnBoomStruct;
+} EnBoomStruct; // size = 0x1C
 
 EnBoomStruct D_808A3078[] = {
     { gameplay_keep_DL_06FE20, { -960.0f, 0.0f, 0.0f }, { 960.0f, 0.0f, 0.0f } },

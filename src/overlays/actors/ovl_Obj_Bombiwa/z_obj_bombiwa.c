@@ -77,11 +77,11 @@ static ColliderCylinderInit sCylinderInit2 = {
 };
 
 typedef struct {
-    /* 0x00 */ ColliderCylinderInit* collider;
-    /* 0x04 */ ActorShadowFunc unk_04;
-    /* 0x08 */ ActorFunc unk_08;
-    /* 0x0C */ s32 (*unk_0C)(Actor*);
-} ObjBombiwaStruct2;
+    /* 0x0 */ ColliderCylinderInit* collider;
+    /* 0x4 */ ActorShadowFunc unk_04;
+    /* 0x8 */ ActorFunc unk_08;
+    /* 0xC */ s32 (*unk_0C)(Actor*);
+} ObjBombiwaStruct2; // size = 0x10
 
 static ObjBombiwaStruct2 D_8093A998[] = {
     { &sCylinderInit1, ActorShadow_DrawCircle, func_8093A418, func_809393B0 },

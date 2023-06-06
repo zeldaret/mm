@@ -34,9 +34,9 @@ void func_80A2B308(Actor* thisx, PlayState* play);
 BgDblueMovebg* D_80A2BBF0;
 
 typedef struct {
-    u8 unk_00;
-    u8 unk_01;
-} BgDblueMovebgUnkStruct;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
+} BgDblueMovebgUnkStruct; // size = 0x2
 
 BgDblueMovebgUnkStruct D_80A2BBF4;
 

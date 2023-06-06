@@ -60,7 +60,7 @@ typedef struct {
     /* 0x14 */ BgBreakwallUnkFunc unk_14;
     /* 0x18 */ BgBreakwallUnkFunc2 unk_18;
     /* 0x1C */ ActorFunc unk_1C;
-} BgBreakwallStruct;
+} BgBreakwallStruct; // size = 0x20
 
 BgBreakwallStruct D_808B8140[] = {
     { OBJECT_OMOYA_OBJ, object_omoya_obj_DL_0001A0, NULL, NULL, NULL, func_808B7380, func_808B77D0, NULL },

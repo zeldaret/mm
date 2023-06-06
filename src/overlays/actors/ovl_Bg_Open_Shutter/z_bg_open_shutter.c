@@ -23,8 +23,8 @@ void func_80ACAE5C(BgOpenShutter* this, PlayState* play);
 void func_80ACAEF0(BgOpenShutter* this, PlayState* play);
 
 typedef enum {
-    /* 0x1 */ BGOPENSHUTTER_DOOR_OPEN = 1,
-    /* 0x2 */ BGOPENSHUTTER_DOOR_CLOSED,
+    /* 1 */ BGOPENSHUTTER_DOOR_OPEN = 1,
+    /* 2 */ BGOPENSHUTTER_DOOR_CLOSED
 } BGOpenShutterDoorState;
 
 ActorInit Bg_Open_Shutter_InitVars = {

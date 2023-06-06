@@ -80,12 +80,12 @@ ActorInit En_Pametfrog_InitVars = {
 };
 
 typedef enum {
-    /* 0x0 */ GEKKO_DMGEFF_NONE,
-    /* 0x1 */ GEKKO_DMGEFF_STUN,
-    /* 0x2 */ GEKKO_DMGEFF_FIRE,
-    /* 0x3 */ GEKKO_DMGEFF_ICE,
-    /* 0x4 */ GEKKO_DMGEFF_LIGHT,
-    /* 0x5 */ GEKKO_DMGEFF_ZORA_BARRIER,
+    /* 0 */ GEKKO_DMGEFF_NONE,
+    /* 1 */ GEKKO_DMGEFF_STUN,
+    /* 2 */ GEKKO_DMGEFF_FIRE,
+    /* 3 */ GEKKO_DMGEFF_ICE,
+    /* 4 */ GEKKO_DMGEFF_LIGHT,
+    /* 5 */ GEKKO_DMGEFF_ZORA_BARRIER
 } EnPametfrogDamageEffect;
 
 static DamageTable sDamageTable = {

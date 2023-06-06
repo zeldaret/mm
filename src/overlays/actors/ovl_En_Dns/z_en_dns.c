@@ -30,7 +30,7 @@ typedef enum {
     /*  7 */ EN_DNS_ANIM_RUN_LOOP,
     /*  8 */ EN_DNS_ANIM_DANCE,
     /*  9 */ EN_DNS_ANIM_FLIP,
-    /* 10 */ EN_DNS_ANIM_MAX,
+    /* 10 */ EN_DNS_ANIM_MAX
 } EnDnsAnimation;
 
 static s32 D_8092DCB0[] = {

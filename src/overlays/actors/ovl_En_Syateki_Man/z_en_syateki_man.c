@@ -74,7 +74,7 @@ ActorInit En_Syateki_Man_InitVars = {
 typedef enum {
     /* 0 */ EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END,
+    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
 } EnSyatekiManAnimation;
 
 static AnimationInfo sAnimationInfo[] = {

@@ -20,7 +20,7 @@ typedef enum {
     /* 0x05 */ CLEAR_TAG_EFFECT_LIGHT_RAYS,
     /* 0x06 */ CLEAR_TAG_EFFECT_SHOCKWAVE,
     /* 0x07 */ CLEAR_TAG_EFFECT_SPLASH,
-    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE,
+    /* 0x08 */ CLEAR_TAG_EFFECT_ISOLATED_SMOKE
 } ClearTagEffectType;
 
 void EnClearTag_Init(Actor* thisx, PlayState* play);

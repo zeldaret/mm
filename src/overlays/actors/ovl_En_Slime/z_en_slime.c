@@ -28,7 +28,7 @@ typedef enum EnSlimeDamageEffect {
     /* 0x4 */ EN_SLIME_DMGEFF_LIGHT,
     /* 0x5 */ EN_SLIME_DMGEFF_ELECTRIC,
     /* 0xE */ EN_SLIME_DMGEFF_HOOKSHOT = 0xE,
-    /* 0xF */ EN_SLIME_DMGEFF_BLUNT,
+    /* 0xF */ EN_SLIME_DMGEFF_BLUNT
 } EnSlimeDamageEffect;
 
 void EnSlime_Init(Actor* thisx, PlayState* play);

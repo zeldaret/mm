@@ -30,7 +30,7 @@ typedef enum {
     /* 2 */ ENZOD_ANIM_ARMS_FOLDED,
     /* 3 */ ENZOD_ANIM_PLAYING_LENTO,
     /* 4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
-    /* 5 */ ENZOD_ANIM_MAX,
+    /* 5 */ ENZOD_ANIM_MAX
 } EnZodAnimation;
 
 typedef enum {
@@ -42,7 +42,7 @@ typedef enum {
     /* 6 */ ENZOD_INSTRUMENT_DRUM_3,
     /* 7 */ ENZOD_INSTRUMENT_DRUM_4,
     /* 8 */ ENZOD_INSTRUMENT_DRUM_5,
-    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM,
+    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
 const ActorInit En_Zod_InitVars = {

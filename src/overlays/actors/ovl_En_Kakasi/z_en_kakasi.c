@@ -113,15 +113,15 @@ Vec3f D_80972030 = { -3.0f, 50.0f, 90.0f };
 Vec3f D_8097203C = { 10.0f, -15.0f, 2.0f };
 
 typedef enum {
-    /* 0x0 */ ENKAKASI_ANIM_ARMS_CROSSED_ROCKING, // arms crossed and rocking back and forth
-    /* 0x1 */ ENKAKASI_ANIM_SIDEWAYS_SHAKING,
-    /* 0x2 */ ENKAKASI_ANIM_HOPPING_REGULAR,    // bounce bounce bounce (repeat)
-    /* 0x3 */ ENKAKASI_ANIM_SPIN_REACH_OFFER,   // spin and then reaching toward player
-    /* 0x4 */ ENKAKASI_ANIM_TWIRL,              // slower cinimatic twirl
-    /* 0x5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL, // arms crossed but still, also some noise sfx
-    /* 0x6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
-    /* 0x7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
-    /* 0x8 */ ENKAKASI_ANIM_IDLE,               // slow stretching wiggle, ends in regular position
+    /* 0 */ ENKAKASI_ANIM_ARMS_CROSSED_ROCKING, // arms crossed and rocking back and forth
+    /* 1 */ ENKAKASI_ANIM_SIDEWAYS_SHAKING,
+    /* 2 */ ENKAKASI_ANIM_HOPPING_REGULAR,    // bounce bounce bounce (repeat)
+    /* 3 */ ENKAKASI_ANIM_SPIN_REACH_OFFER,   // spin and then reaching toward player
+    /* 4 */ ENKAKASI_ANIM_TWIRL,              // slower cinimatic twirl
+    /* 5 */ ENKAKASI_ANIM_ARMS_CROSSED_STILL, // arms crossed but still, also some noise sfx
+    /* 6 */ ENKAKASI_ANIM_WAVE,               // "wave" short sideways shake, stops early, partial? unused?
+    /* 7 */ ENKAKASI_ANIM_SLOWROLL,           // partial bounch, ends looking left, OFFER anim takes over
+    /* 8 */ ENKAKASI_ANIM_IDLE                // slow stretching wiggle, ends in regular position
 } EnKakasiAnimation;
 
 static AnimationHeader* sAnimations[] = {

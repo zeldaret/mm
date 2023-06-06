@@ -1386,11 +1386,11 @@ void AudioHeap_DiscardSampleCaches(void) {
 }
 
 typedef struct {
-    uintptr_t oldAddr;
-    uintptr_t newAddr;
-    size_t size;
-    u8 newMedium;
-} StorageChange;
+    /* 0x0 */ uintptr_t oldAddr;
+    /* 0x4 */ uintptr_t newAddr;
+    /* 0x8 */ size_t size;
+    /* 0xC */ u8 newMedium;
+} StorageChange; // size = 0x10
 
 void AudioHeap_ChangeStorage(StorageChange* change, Sample* sample) {
     if ((sample != NULL) && ((sample->medium == change->newMedium) || (D_801FD120 != 1)) &&

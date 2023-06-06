@@ -29,16 +29,16 @@ AnimatedMaterial* D_80B9DED0;
 AnimatedMaterial* D_80B9DED4;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
+    /* 0x2 */ u8 unk_02;
 } ObjHansuiBssStruct; // size = 0x3
 
 ObjHansuiBssStruct D_80B9DED8;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
 } ObjHansuiStruct; // size = 0x2
 
 ObjHansuiStruct D_80B9DC70[] = {

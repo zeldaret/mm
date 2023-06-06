@@ -63,7 +63,7 @@ typedef enum {
     /* 16 */ EN_DNO_ANIM_IMPLORE_START,
     /* 17 */ EN_DNO_ANIM_SHOCK_START,
     /* 18 */ EN_DNO_ANIM_SHOCK_LOOP,
-    /* 19 */ EN_DNO_ANIM_GRIEVE,
+    /* 19 */ EN_DNO_ANIM_GRIEVE
 } EnDnoAnimation;
 
 static AnimationSpeedInfo sAnimations[] = {

@@ -93,11 +93,11 @@ static ColliderCylinderInit sAttackCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 80, MASS_HEAVY };
 
 typedef enum {
-    /* 0x0 */ KAREBABA_DMGEFF_NONE,
-    /* 0x2 */ KAREBABA_DMGEFF_FIRE = 2,
-    /* 0x3 */ KAREBABA_DMGEFF_ICE,
-    /* 0x4 */ KAREBABA_DMGEFF_LIGHT,
-    /* 0x5 */ KAREBABA_DMGEFF_ELECTRIC,
+    /* 0 */ KAREBABA_DMGEFF_NONE,
+    /* 2 */ KAREBABA_DMGEFF_FIRE = 2,
+    /* 3 */ KAREBABA_DMGEFF_ICE,
+    /* 4 */ KAREBABA_DMGEFF_LIGHT,
+    /* 5 */ KAREBABA_DMGEFF_ELECTRIC
 } DekuBabaDamageEffect;
 
 static DamageTable sDamageTable = {

@@ -39,7 +39,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play);
 typedef enum {
     /* 0 */ EN_PP_COLLISION_RESULT_OK,
     /* 1 */ EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_INTO_WALL,
-    /* 2 */ EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE,
+    /* 2 */ EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE
 } EnPpCollisionResult;
 
 typedef enum {
@@ -56,13 +56,13 @@ typedef enum {
     /* 10 */ EN_PP_ACTION_MASK_DEAD,
     /* 11 */ EN_PP_ACTION_SPAWN_BODY_PARTS,
     /* 12 */ EN_PP_ACTION_DONE_SPAWNING_BODY_PARTS,
-    /* 13 */ EN_PP_ACTION_BODY_PART_MOVE,
+    /* 13 */ EN_PP_ACTION_BODY_PART_MOVE
 } EnPpAction;
 
 typedef enum {
     /* 0 */ EN_PP_MASK_DETACH_STATE_START,
     /* 1 */ EN_PP_MASK_DETACH_STATE_FALL,
-    /* 2 */ EN_PP_MASK_DETACH_STATE_DIE,
+    /* 2 */ EN_PP_MASK_DETACH_STATE_DIE
 } EnPpMaskDetachState;
 
 static s32 sCurrentDeadBodyPartIndex = 0;
@@ -77,7 +77,7 @@ typedef enum {
     /* 0xC */ EN_PP_DMGEFF_KNOCK_OFF_MASK = 0xC, // Knocks off the Hiploop's mask or deals regular damage
     /* 0xD */ EN_PP_DMGEFF_HOOKSHOT,             // Pulls the Hiploop's mask to the player or deals regular damage
     /* 0xE */ EN_PP_DMGEFF_GORON_POUND,          // Knocks off the Hiploop's mask or forces it to jump
-    /* 0xF */ EN_PP_DMGEFF_DAMAGE,               // Deals regular damage
+    /* 0xF */ EN_PP_DMGEFF_DAMAGE                // Deals regular damage
 } EnPpDamageEffect;
 
 static DamageTable sDamageTable = {

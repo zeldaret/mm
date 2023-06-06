@@ -16,14 +16,14 @@ s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-TexturePtr sHeartTextures[] = {
+static TexturePtr sHeartTextures[] = {
     gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
     gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
     gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
     gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
 };
 
-TexturePtr sHeartDDTextures[] = {
+static TexturePtr sHeartDDTextures[] = {
     gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,

@@ -9,10 +9,10 @@ typedef void (*ObjUsiyaneActionFunc)(struct ObjUsiyane*, PlayState*);
 
 #define OBJUSIYANE_GET_F(thisx) ((thisx)->params & 0xF)
 
-enum {
+typedef enum {
     /* 0 */ OBJUSIYANE_F_0,
-    /* 1 */ OBJUSIYANE_F_1,
-};
+    /* 1 */ OBJUSIYANE_F_1
+} ObjUsiyaneParam;
 
 typedef struct {
     /* 0x00 */ Vec3f unk_00;

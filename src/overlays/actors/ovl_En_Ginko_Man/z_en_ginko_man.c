@@ -47,7 +47,7 @@ typedef enum {
     /* 1 */ GINKO_ANIM_SITTING,
     /* 2 */ GINKO_ANIM_REACHING,
     /* 3 */ GINKO_ANIM_AMAZED,
-    /* 4 */ GINKO_ANIM_ADVERTISING,
+    /* 4 */ GINKO_ANIM_ADVERTISING
 } GinkoAnimation;
 
 static AnimationInfo sAnimationInfo[] = {

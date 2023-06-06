@@ -38,7 +38,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.1f);
     this->actionFunc = DemoMoonend_DoNothing;
 
-    if (DEMOMOONEND_GET_PARAMS_F(thisx) == 1) {
+    if (DEMOMOONEND_GET_PARAM_F(thisx) == 1) {
         Actor_SetScale(&this->actor, 0.05f);
         Actor_SetScale(&this->actor, 6.0f);
         this->actor.draw = NULL;
@@ -60,7 +60,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
 void DemoMoonend_Destroy(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
 
-    if (DEMOMOONEND_GET_PARAMS_F(thisx) != 1) {
+    if (DEMOMOONEND_GET_PARAM_F(thisx) != 1) {
         func_8018349C(&this->skeletonInfo);
     }
 }

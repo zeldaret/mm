@@ -27,18 +27,18 @@ void EnBaguo_UpdateEffects(EnBaguo* this, PlayState* play);
 void EnBaguo_DrawEffects(EnBaguo* this, PlayState* play);
 
 typedef enum {
-    /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
-    /* 0x1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
-    /* 0x2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
-    /* 0x3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
+    /* 0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
+    /* 1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
+    /* 2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
+    /* 3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
 } NejironAction;
 
 /**
  * These directions are relative to the Nejiron.
  */
 typedef enum {
-    /* 0x0 */ NEJIRON_DIRECTION_RIGHT,
-    /* 0x1 */ NEJIRON_DIRECTION_LEFT
+    /* 0 */ NEJIRON_DIRECTION_RIGHT,
+    /* 1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
 ActorInit En_Baguo_InitVars = {

@@ -245,14 +245,14 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play) {
     s32 collectableParams;
 
     if ((KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
-        if (!KUSA_GET_PARAMS_0C(&this->actor)) {
+        if (!KUSA_GET_PARAM_0C(&this->actor)) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos,
                                        KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }
     } else if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
         Item_DropCollectible(play, &this->actor.world.pos, 3);
     } else {
-        collectible = func_800A8150(KUSA_GET_PARAMS_3F(&this->actor));
+        collectible = func_800A8150(KUSA_GET_PARAM_3F(&this->actor));
         if (collectible >= 0) {
             collectableParams = KUSA_GET_COLLECTIBLE_ID(&this->actor);
             Item_DropCollectible(play, &this->actor.world.pos, (collectableParams << 8) | collectible);

@@ -44,8 +44,8 @@ void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc
                       AnimationHeader* animation, f32 morphFrames);
 
 typedef enum {
-    /* 0x00 */ OWL_REPEAT,
-    /* 0x01 */ OWL_OK
+    /* 0 */ OWL_REPEAT,
+    /* 1 */ OWL_OK
 } EnOwlMessageChoice;
 
 ActorInit En_Owl_InitVars = {

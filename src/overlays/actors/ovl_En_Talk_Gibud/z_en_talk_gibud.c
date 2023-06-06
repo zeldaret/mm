@@ -53,12 +53,12 @@ typedef struct {
     /* 0x4 */ ItemId item;
     /* 0x8 */ s32 amount;
     /* 0xC */ s16 isBottledItem;
-} EnTalkGibudRequestedItem;
+} EnTalkGibudRequestedItem; // size = 0x10
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_REQUESTED_ITEM_MET,
     /* 1 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO,
-    /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET,
+    /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET
 } EnTalkGibudRequestedItemState;
 
 typedef enum {
@@ -71,7 +71,7 @@ typedef enum {
     /*  6 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BOMBS,
     /*  7 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_HOT_SPRING_WATER,
     /*  8 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BIG_POE,
-    /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK,
+    /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK
 } EnTalkGibudRequestedItemIndex;
 
 typedef enum {
@@ -88,18 +88,18 @@ typedef enum {
     /* 10 */ EN_TALK_GIBUD_ANIM_WALK,
     /* 11 */ EN_TALK_GIBUD_ANIM_DANCE_SQUAT,
     /* 12 */ EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE,
-    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP,
+    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP
 } EnTalkGibudAnimation;
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
-    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD,
+    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD
 } EnTalkGibudType;
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_GRAB_START,
     /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
-    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
+    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE
 } EnTalkGibudGrabState;
 
 ActorInit En_Talk_Gibud_InitVars = {
@@ -159,7 +159,7 @@ typedef enum {
     /* 0xC */ EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_TALK_GIBUD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_TALK_GIBUD_DMGEFF_LIGHT_RAY,         // Instantly kills a Redead on contact
-    /* 0xF */ EN_TALK_GIBUD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+    /* 0xF */ EN_TALK_GIBUD_DMGEFF_DAMAGE             // Deals damage and plays the damage animation
 } EnTalkGibudDamageEffect;
 
 static DamageTable sDamageTable = {

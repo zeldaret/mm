@@ -130,8 +130,8 @@ typedef struct {
     /* 0x1 */ u8  data1;
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  skyboxId;
-    /* 0x5 */ u8  unk5;
-    /* 0x6 */ u8  unk6;
+    /* 0x5 */ u8  skyboxConfig;
+    /* 0x6 */ u8  envLightMode;
 } SCmdSkyboxSettings; // size = 0x7
 
 typedef struct {
@@ -718,6 +718,8 @@ typedef enum {
 * 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneLayer
 */
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
+
+#define ENTR_LOAD_OPENING -1
 
 /*
 * Entrances used in cutscene destination. Includes scene layer that's immediately applied to `nextCutsceneIndex` and removed.

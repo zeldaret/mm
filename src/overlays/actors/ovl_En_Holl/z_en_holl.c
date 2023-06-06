@@ -191,7 +191,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
                 }
             } else if (this->type == EN_HOLL_TYPE_SCENE_CHANGER) {
                 play->nextEntrance = play->setupExitList[EN_HOLL_GET_EXIT_LIST_INDEX(&this->actor)];
-                gSaveContext.unk_3DBB = 1;
+                gSaveContext.retainWeatherMode = true;
                 Scene_SetExitFade(play);
                 play->transitionTrigger = TRANS_TRIGGER_START;
                 play->unk_1878C(play);

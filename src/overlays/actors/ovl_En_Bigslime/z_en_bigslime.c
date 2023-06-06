@@ -254,7 +254,7 @@ typedef enum {
     /* 0x5 */ BIGSLIME_DMGEFF_ELECTRIC_STUN,
     /* 0xD */ BIGSLIME_DMGEFF_DEKU_STUN = 0xD,
     /* 0xE */ BIGSLIME_DMGEFF_HOOKSHOT,
-    /* 0xF */ BIGSLIME_DMGEFF_BREAK_ICE,
+    /* 0xF */ BIGSLIME_DMGEFF_BREAK_ICE
 } BigslimeDamageEffect;
 
 static DamageTable sDamageTable = {
