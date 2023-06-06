@@ -25,7 +25,7 @@ void CIC6105_AddRomInfoFaultPage(void) {
     Fault_AddClient(&sRomInfoFaultClient, CIC6105_PrintRomInfo, NULL, NULL);
 }
 
-void CIC6105_RemoveRomInfoFaultPage(void) {
+void CIC6105_Destroy(void) {
     Fault_RemoveClient(&sRomInfoFaultClient);
 }
 
