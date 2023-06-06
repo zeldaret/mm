@@ -753,7 +753,7 @@ extern u32 retryCount;
 extern u32 cfbIdx[3];
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
-extern uintptr_t startHeapSize;
+extern size_t startHeapSize;
 extern UNK_PTR D_801D1540;
 // extern f32 sFactorialTbl[13];
 extern Vec3f gZeroVec3f;
