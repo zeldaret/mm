@@ -1989,20 +1989,6 @@ extern f32 D_801ED8D0;
 extern Mtx D_801ED8E0;
 extern Actor* D_801ED920;
 
-extern char D_801ED950[80];
-extern char D_801ED9A0[80];
-extern Vec3f D_801ED9F0[3];
-extern Vec3f D_801EDA18[3];
-extern MtxF sModelToWorldMtxF;
-extern Vec3f D_801EDA80[3];
-extern char D_801EDAA8[80];
-extern char D_801EDAF8[80];
-extern Vec3f D_801EDB48[3];
-extern Vec3f D_801EDB70[3];
-extern Plane D_801EDB98;
-extern Sphere16 D_801EDBA8;
-extern TriNorm D_801EDBB0;
-
 extern Vec3f D_801EDE00;
 extern Vec3f D_801EDE10;
 extern Vec3f D_801EDE20;
