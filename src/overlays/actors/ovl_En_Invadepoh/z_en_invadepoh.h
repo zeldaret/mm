@@ -29,42 +29,74 @@ typedef struct {
 typedef struct {
     /* 0x0 */ s8* texIndex;
     /* 0x1 */ s8 count;
-} EnInvadepohFaceAnim; // size = 0x2
-
-typedef struct {
-    /* 0x0 */ s8 type;
-    /* 0x4 */ EnInvadepohFaceAnim* frames;
-} EnInvadepohFaceAnimFixed; // size = 0x8
+} EnInvadepohFaceFrames; // size = 0x2
 
 typedef struct {
     /* 0x0 */ s8 index;
     /* 0x4 */ f32 chance;
 } EnInvadepohFaceAnimNext; // size = 0x8
 
+#if 1
 typedef struct {
-    /* 0x0 */ EnInvadepohFaceAnimFixed anim;
+    /* 0x0 */ s8 type;
+    /* 0x4 */ EnInvadepohFaceFrames* frames;
+} EnInvadepohFaceAnim; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ EnInvadepohFaceAnim anim;
     /* 0x8 */ s8 nextCount;
     /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
-} EnInvadepohFaceAnimLoop; // size = 0x10
+} EnInvadepohFaceAnimBranched; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ EnInvadepohFaceAnimLoop loop;
+    /* 0x00 */ EnInvadepohFaceAnimBranched loop;
     /* 0x10 */ s16 minDelay;
     /* 0x12 */ s16 maxDelay;
-} EnInvadepohFaceAnimLoopDelayed; // size = 0x14
+} EnInvadepohFaceAnimDelayedBranched; // size = 0x14
+
+#else
 
 typedef struct {
-    /* 0x0 */ EnInvadepohFaceAnimFixed** animSet;
+    /* 0x0 */ s8 type;
+    /* 0x4 */ EnInvadepohFaceFrames* frames;
+} EnInvadepohFaceAnimOnce; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ s8 type;
+    /* 0x4 */ EnInvadepohFaceFrames* frames;
+    /* 0x8 */ s8 nextCount;
+    /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
+} EnInvadepohFaceAnimBranched; // size = 0x10
+
+typedef struct {
+    /* 0x0 */ s8 type;
+    /* 0x4 */ EnInvadepohFaceFrames* frames;
+    /* 0x8 */ s8 nextCount;
+    /* 0xC */ EnInvadepohFaceAnimNext* nextAnims;
+    /* 0x10 */ s16 minDelay;
+    /* 0x12 */ s16 maxDelay;
+} EnInvadepohFaceAnimDelayedBranched; // size = 0x14
+
+typedef union {
+    EnInvadepohFaceAnimOnce once;
+    EnInvadepohFaceAnimBranched branch;
+    EnInvadepohFaceAnimDelayedBranched delay;
+} EnInvadepohFaceAnim;
+
+#endif
+
+typedef struct {
+    /* 0x0 */ EnInvadepohFaceAnim** animSet;
     /* 0x4 */ s8 curAnimType;
-    /* 0x8 */ EnInvadepohFaceAnimFixed* curAnim;
+    /* 0x8 */ EnInvadepohFaceAnim* curAnim;
     /* 0xC */ s16 delayTimer;
     /* 0xE */ s8 curFrame;
     /* 0xF */ s8 curIndex;
-} EnInvadePohFaceInfo; // size = 0x10
+} EnInvadePohFaceAnimInfo; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ EnInvadePohFaceInfo eyeAnim;
-    /* 0x10 */ EnInvadePohFaceInfo mouthAnim;
+    /* 0x00 */ EnInvadePohFaceAnimInfo eyeAnim;
+    /* 0x10 */ EnInvadePohFaceAnimInfo mouthAnim;
     /* 0x20 */ Vec3s headRot;
     /* 0x26 */ Vec3s headRotTarget;
     /* 0x2C */ s16 maxTurnRate;
@@ -78,7 +110,7 @@ typedef struct {
     /* 0x48 */ s16 torsoMaxTurnStep;
 } EnInvadePohInteractInfo; // size = 0x4C
 
-typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceInfo*, EnInvadepohFaceAnimFixed**);
+typedef void (*EnInvadepohFaceFunc) (EnInvadePohFaceAnimInfo*, EnInvadepohFaceAnim**);
 
 #define EN_INVADEPOH_LIMB_MAX 23
 // #define EN_INVADEPOH_LIMB_MAX MAX(MAX(MAX(MAX(MAX(ALIEN_LIMB_MAX, ROMANI_LIMB_MAX), CREMIA_LIMB_MAX), DOG_LIMB_MAX), COW_LIMB_MAX), COW_TAIL_LIMB_MAX)
@@ -106,7 +138,7 @@ typedef struct EnInvadepoh {
     /* 0x310 */ f32 pathLength;
     /* 0x314 */ Vec3f unk_314;
     /* 0x320 */ f32 progress;
-    /* 0x324 */ EnInvadePohInteractInfo unk_324;
+    /* 0x324 */ EnInvadePohInteractInfo interactInfo;
     /* 0x370 */ s16 unk_370;
     /* 0x372 */ s16 unk_372;
     /* 0x374 */ s8 unk_374;
@@ -114,7 +146,7 @@ typedef struct EnInvadepoh {
     /* 0x378 */ s8 unk_378;
     /* 0x379 */ s8 spawnCount;
     /* 0x37C */ f32 checkpoints[3];
-    /* 0x388 */ char torsoRotXModTarget8; // unused?
+    /* 0x388 */ char unk_388; // unused?
     /* 0x389 */ u8 alpha;
     /* 0x38A */ s8 atBarn;
     /* 0x38B */ s8 present;
