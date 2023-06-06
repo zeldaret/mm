@@ -24,10 +24,10 @@
 #define LEAP(upper, lower) (((u16)(upper) << 16) | ((u16)(lower) & 0xFFFF))
 #define START(start, end) (((u16)(start) << 16) | ((u16)(end) & 0xFFFF))
 
-#define FTOFIX(val, i, f) ((u32)(val * (f32)(1 << f)) & ((1 << (i + f)) - 1))
+#define FTOFIX(val, i, f) ((u32)((val) * (f32)(1 << (f))) & ((1 << ((i) + (f))) - 1))
 
 #define F210(val) FTOFIX(val, 2, 10)
-#define SCALE(scaleup, off) (F210((1.0f / (f32)scaleup)) | (F210((f32)off) << 16))
+#define SCALE(scaleup, off) (F210((1.0f / (f32)(scaleup))) | (F210((f32)(off)) << 16))
 
 #define VCURRENT(v) v
 #define ORIGIN(v) v
