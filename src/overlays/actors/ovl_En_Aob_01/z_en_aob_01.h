@@ -29,6 +29,8 @@ typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 #define ENAOB01_FLAG_SURPRISE (1 << 7)
 #define ENAOB01_FLAG_PLAYER_CAN_TALK (1 << 8)
 
+#define ENAOB01_PATH_INDEX_NONE 0x3F
+
 typedef struct EnAob01 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnAob01ActionFunc actionFunc;

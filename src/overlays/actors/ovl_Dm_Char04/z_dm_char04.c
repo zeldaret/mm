@@ -136,7 +136,7 @@ void DmChar04_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C94C(play->state.gfxCtx);
+    Gfx_SetupDL27_Xlu(play->state.gfxCtx);
     alpha = (this->timer * 50) & 0x1FF;
     if (alpha > 255) {
         alpha = 511 - alpha;

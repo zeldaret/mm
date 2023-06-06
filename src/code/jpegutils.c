@@ -86,7 +86,7 @@ u32 JpegUtils_ProcessHuffmanTableImpl(u8* data, JpegHuffmanTable* ht, u8* codesL
     s32 temp;
 
     ret = count;
-    if (count == 0 || (isAc && count > 0x100) || (!isAc && count > 0x10)) {
+    if ((count == 0) || (isAc && (count > 0x100)) || (!isAc && (count > 0x10))) {
         return 0;
     }
     if (ret != JpegUtils_GetHuffmanCodes(codesLengths, codes)) {
@@ -141,7 +141,7 @@ u32 JpegUtils_ProcessHuffmanTableImplOld(u8* dht, JpegHuffmanTableOld* ht, u8* c
 
     count2 = count = JpegUtils_ParseHuffmanCodesLengths(dht, codesLengths);
 
-    if (count == 0 || (isAc && count > 0x100) || (!isAc && count > 0x10)) {
+    if ((count == 0) || (isAc && (count > 0x100)) || (!isAc && (count > 0x10))) {
         return true;
     }
 

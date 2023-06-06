@@ -118,9 +118,9 @@ void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 index, f32 pla
 void func_80BF5EBC(EnOsk* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
-    sp2C.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.y;
+    sp2C.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
+    sp2C.z = Rand_CenteredFloat(30.0f) + this->actor.world.pos.z;
+    sp2C.y = Rand_CenteredFloat(30.0f) + this->actor.world.pos.y;
 
     func_800B3030(play, &sp2C, &D_80BF7018, &D_80BF7018, 100, 0, 2);
 }
@@ -512,7 +512,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_PrimColor(play->state.gfxCtx, 0x80, 255, 255, 255, 255));
 
@@ -542,7 +542,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
                      MTXMODE_APPLY);
     }
 
-    gfx = func_8012C868(POLY_XLU_DISP);
+    gfx = Gfx_SetupDL20_NoCD(POLY_XLU_DISP);
 
     gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
     if (1) {}

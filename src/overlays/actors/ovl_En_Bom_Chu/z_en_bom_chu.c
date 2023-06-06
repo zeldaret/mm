@@ -120,7 +120,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, PlayState
         return false;
     }
 
-    angle = func_80086C48(normDotUp);
+    angle = Math_FAcosF(normDotUp);
     if (angle < 0.001f) {
         return false;
     }
@@ -542,7 +542,7 @@ void EnBomChu_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     if (this->timer >= 40) {

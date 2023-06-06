@@ -37,7 +37,7 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
         *status = header.status;
 
         if (ret == 0) {
-            if (header.typeh == 0 && header.typel == 1) {
+            if ((header.typeh == 0) && (header.typel == 1)) {
                 if (header.status & 4) {
                     ret = CONT_ERR_CONTRFAIL;
                 }

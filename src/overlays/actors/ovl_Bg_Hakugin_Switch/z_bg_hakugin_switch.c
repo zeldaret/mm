@@ -4,6 +4,7 @@
  * Description: Goron Link Switch
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_switch.h"
 #include "z64rumble.h"
 #include "objects/object_goronswitch/object_goronswitch.h"
@@ -77,7 +78,7 @@ typedef struct {
     /* 0x0C */ f32 unk_C;
     /* 0x10 */ Gfx* unk_10;
     /* 0x14 */ u8 unk_14;
-} BgHakuginSwitchStruct;
+} BgHakuginSwitchStruct; // size = 0x18
 
 BgHakuginSwitchStruct D_80B1688C[] = {
     { -156.0f, -178.0f, 6.0f, 10.0f, object_goronswitch_DL_000268, 0xB4 },

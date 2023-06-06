@@ -7,7 +7,7 @@
 
 typedef enum {
     /* 0 */ TURRET_TIER_BASE,
-    /* 1 */ TURRET_TIER_TOP,
+    /* 1 */ TURRET_TIER_TOP
 } TurretTierType;
 
 struct ObjTokeiTurret;

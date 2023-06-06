@@ -257,7 +257,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
     for (i = 0; i < ARRAY_COUNT(arg1->unk_04); i++, temp_v1++) {
         // Can't be `temp_v1->alpha != 0`
         if (temp_v1->alpha) {
-            phi_a1 = temp_v1->unk_00 == 3 ? (255 / 3) : (255 / 5);
+            phi_a1 = (temp_v1->unk_00 == 3) ? (255 / 3) : (255 / 5);
             if (phi_a1 >= temp_v1->alpha) {
                 temp_v1->alpha = 0;
             } else {
@@ -270,7 +270,7 @@ void func_80122C20(PlayState* play, struct_80122D44_arg1* arg1) {
 typedef struct {
     /* 0x0 */ Color_RGB8 color;
     /* 0x4 */ Gfx* dList;
-} struct_801BFDD0; // size = 0x08
+} struct_801BFDD0; // size = 0x8
 
 struct_801BFDD0 D_801BFDD0[] = {
     { { 180, 200, 255 }, gLinkGoronCurledDL },
@@ -369,13 +369,13 @@ void func_80122F28(Player* player) {
 s32 func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && player->unk_AE7 == 2;
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 2);
 }
 
 s32 func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 1 || player->unk_AE7 == 3);
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->unk_AE7 == 1) || (player->unk_AE7 == 3));
 }
 
 void func_8012300C(PlayState* play, s32 arg1) {
@@ -1363,12 +1363,12 @@ s32 func_80123F2C(PlayState* play, s32 ammo) {
 }
 
 s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 yRange) {
-    Player* this = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     Vec3f diff;
     s32 pad;
 
-    if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B28 != 0)) {
-        Math_Vec3f_Diff(&this->meleeWeaponInfo[0].tip, pos, &diff);
+    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+        Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
 
@@ -1540,10 +1540,8 @@ void Player_UpdateBunnyEars(Player* player) {
     sBunnyEarKinematics.angVel.y += -sBunnyEarKinematics.rot.y >> 2;
 
     angle = player->actor.world.rot.y - player->actor.shape.rot.y;
-    force.x =
-        (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
-    force.y =
-        (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (randPlusMinusPoint5Scaled(2.0f) + 10.0f)) & 0xFFFF;
+    force.x = (s32)(player->actor.speed * -200.0f * Math_CosS(angle) * (Rand_CenteredFloat(2.0f) + 10.0f)) & 0xFFFF;
+    force.y = (s32)(player->actor.speed * 100.0f * Math_SinS(angle) * (Rand_CenteredFloat(2.0f) + 10.0f)) & 0xFFFF;
 
     sBunnyEarKinematics.angVel.x += force.x >> 2;
     sBunnyEarKinematics.angVel.y += force.y >> 2;
@@ -1643,9 +1641,9 @@ TexturePtr sPlayerMouthTextures[PLAYER_MOUTH_MAX] = {
 };
 
 typedef struct PlayerFaceIndices {
-    /* 0x00 */ u8 eyeIndex;
-    /* 0x01 */ u8 mouthIndex;
-} PlayerFaceIndices; // size = 0x02
+    /* 0x0 */ u8 eyeIndex;
+    /* 0x1 */ u8 mouthIndex;
+} PlayerFaceIndices; // size = 0x2
 
 PlayerFaceIndices sPlayerFaces[] = {
     { PLAYER_EYES_OPEN, PLAYER_MOUTH_CLOSED },       // PLAYER_FACE_0
@@ -1801,7 +1799,7 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp4C = func_80086B30(temp_f20, sp58);
+        sp4C = Math_FAtan2F(temp_f20, sp58);
         distance = sqrtf(SQ(diffX) + SQ(yIntersect - sp90.y) + SQ(diffZ));
         sp58 = (SQ(distance) + sp70) / (2.0f * distance);
         sp54 = distance - sp58;
@@ -1809,8 +1807,8 @@ void Player_AdjustSingleLeg(PlayState* play, Player* player, SkelAnime* skelAnim
         temp_f20 = sp74 - SQ(sp58);
         temp_f20 = (temp_f20 < 0.0f) ? 0.0f : sqrtf(temp_f20);
 
-        sp48 = func_80086B30(temp_f20, sp58);
-        phi_t1 = (M_PI - (func_80086B30(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
+        sp48 = Math_FAtan2F(temp_f20, sp58);
+        phi_t1 = (M_PI - (Math_FAtan2F(sp54, temp_f20) + ((M_PI / 2.0f) - sp48))) * (0x8000 / M_PI);
         phi_t1 = -skelAnime->jointTable[shinLimbIndex].z + phi_t1;
         temp_f8 = (sp48 - sp4C) * (0x8000 / M_PI);
 
@@ -1855,7 +1853,7 @@ void Player_DrawHookshotReticle(PlayState* play, Player* player, f32 hookshotDis
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            OVERLAY_DISP = Gfx_CallSetupDL(OVERLAY_DISP, 7);
+            OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_7);
 
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &sp58, &sp54);
 

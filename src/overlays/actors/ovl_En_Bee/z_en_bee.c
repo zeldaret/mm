@@ -158,9 +158,9 @@ void EnBee_FlyIdle(EnBee* this, PlayState* play) {
     nextPos.z += Math_CosS(this->targetYaw) * 30.0f;
 
     if ((this->instanceId % 2) == 0) {
-        this->targetYaw += (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 4000);
+        this->targetYaw += (s16)((s32)Rand_CenteredFloat(1000.0f) + 4000);
     } else {
-        this->targetYaw -= (s16)((s32)randPlusMinusPoint5Scaled(1000.0f) + 4000);
+        this->targetYaw -= (s16)((s32)Rand_CenteredFloat(1000.0f) + 4000);
     }
 
     this->flightHoverOffset += 1000;
@@ -197,10 +197,10 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
     yawOffset = (this->instanceId * 0x700) + 0x2000;
 
     for (i = 0; i < 2; i++) {
-        rand = randPlusMinusPoint5Scaled(20.0f);
+        rand = Rand_CenteredFloat(20.0f);
         nextPos.x += Math_SinS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rand + 30.0f);
         nextPos.y = (Math_SinS(this->flightHoverOffset) * 10.0f) + (player->actor.floorHeight + 40.0f);
-        rand = randPlusMinusPoint5Scaled(20.0f);
+        rand = Rand_CenteredFloat(20.0f);
 
         nextPos.z += Math_CosS((f32)this->actor.yawTowardsPlayer + this->targetYaw + yawOffset) * (rand + 30.0f);
         Math_Vec3f_Copy(&this->targetPos[i], &nextPos);
@@ -210,14 +210,12 @@ void EnBee_Attack(EnBee* this, PlayState* play) {
     Math_Vec3f_Copy(&nextPos, &this->targetPos[this->posIndex]);
 
     if ((this->instanceId % 2) == 0) {
-        this->targetYaw +=
-            (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
+        this->targetYaw += (this->instanceId * 0x700) + (s32)Rand_CenteredFloat((this->instanceId * 0x700) * 0.5f);
     } else {
-        this->targetYaw -=
-            (this->instanceId * 0x700) + (s32)randPlusMinusPoint5Scaled((this->instanceId * 0x700) * 0.5f);
+        this->targetYaw -= (this->instanceId * 0x700) + (s32)Rand_CenteredFloat((this->instanceId * 0x700) * 0.5f);
     }
 
-    this->flightHoverOffset += (s32)randPlusMinusPoint5Scaled(500.0f) + 1000;
+    this->flightHoverOffset += (s32)Rand_CenteredFloat(500.0f) + 1000;
 
     if (this->targetYaw > 0x10000) {
         this->targetYaw = 0;
@@ -284,7 +282,7 @@ void EnBee_Update(Actor* thisx, PlayState* play) {
 void EnBee_Draw(Actor* thisx, PlayState* play) {
     EnBee* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }

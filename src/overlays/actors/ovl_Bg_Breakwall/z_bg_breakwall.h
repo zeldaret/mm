@@ -12,11 +12,11 @@ typedef void (*BgBreakwallUnkFunc2)(struct BgBreakwall*, PlayState*);
 #define BGBREAKWALL_GET_F(thisx) ((thisx)-> params & 0xF)
 #define BGBREAKWALL_SWITCHFLAG(thisx) (((thisx)-> params & 0xFE00) >> 9)
 
-enum {
+typedef enum {
     /*  7 */ BGBREAKWALL_F_7 = 7,
     /*  9 */ BGBREAKWALL_F_9 = 9,
-    /* 11 */ BGBREAKWALL_F_11 = 11,
-};
+    /* 11 */ BGBREAKWALL_F_11 = 11
+} BgBreakwallParam;
 
 typedef struct BgBreakwall {
     /* 0x000 */ DynaPolyActor dyna;

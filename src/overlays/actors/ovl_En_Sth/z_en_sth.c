@@ -70,7 +70,7 @@ typedef enum {
     /* 5 */ STH_ANIM_LOOK_AROUND, // checking out Oceanside Spider House
     /* 6 */ STH_ANIM_PLEAD,       // wants to buy Oceanside Spider House
     /* 7 */ STH_ANIM_PANIC,       // after buying Oceanside Spider House, can be found at bottom of slide,
-    /* 8 */ STH_ANIM_START,       // set in init, not an actual index to the array
+    /* 8 */ STH_ANIM_START        // set in init, not an actual index to the array
 } EnSthAnimation;
 
 static AnimationHeader* sAnimationInfo[] = {
@@ -758,7 +758,7 @@ void EnSth_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_EnvColor(play->state.gfxCtx, sShirtColors[1].r, sShirtColors[1].g, sShirtColors[1].b, 255));

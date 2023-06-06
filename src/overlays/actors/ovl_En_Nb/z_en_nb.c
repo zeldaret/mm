@@ -43,7 +43,7 @@ typedef enum EnNbScheduleResult {
     /* 1 */ EN_NB_SCH_1,
     /* 2 */ EN_NB_SCH_2,
     /* 3 */ EN_NB_SCH_3,
-    /* 4 */ EN_NB_SCH_4,
+    /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
 static u8 sScheduleScript[] = {
@@ -66,7 +66,7 @@ static u8 sScheduleScript[] = {
     /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
     /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
     /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_50_20, 0x57 - 0x4B),
+    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x57 - 0x4B),
     /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
     /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
@@ -789,7 +789,7 @@ void EnNb_Draw(Actor* thisx, PlayState* play) {
     EnNb* this = THIS;
 
     if (this->scheduleResult != EN_NB_SCH_NONE) {
-        func_8012C5B0(play->state.gfxCtx);
+        Gfx_SetupDL37_Opa(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, EnNb_OverrideLimbDraw, EnNb_PostLimbDraw,
                                        EnNb_TransformLimbDraw, &this->actor);

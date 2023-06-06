@@ -178,7 +178,7 @@ void OceffStorm_Draw2(Actor* thisx, PlayState* play) {
 
     gDPPipeSync(POLY_XLU_DISP++);
 
-    POLY_XLU_DISP = func_8012C3A4(POLY_XLU_DISP);
+    POLY_XLU_DISP = Gfx_SetupDL64(POLY_XLU_DISP);
 
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
@@ -201,7 +201,7 @@ void OceffStorm_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 255, 200, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 0, 128);

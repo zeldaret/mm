@@ -265,7 +265,7 @@ void func_80B22500(EnHakurock* this, PlayState* play) {
     if (this->counter > 0) {
         this->counter--;
         if ((this->counter & 1) == 0) {
-            this->actor.world.pos.y = (sin_rad(this->counter * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
+            this->actor.world.pos.y = (Math_SinF(this->counter * (M_PI / 20)) * 4.0f) + this->actor.floorHeight;
         } else {
             this->actor.world.pos.y = this->actor.floorHeight;
         }
@@ -342,19 +342,23 @@ void EnHakurock_Update(Actor* thisx, PlayState* play) {
 
 void func_80B228F4(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 185, 24, 255);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_06AB30);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void EnHakurock_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(-100.0f, 0.0f, 0.0f, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
     gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

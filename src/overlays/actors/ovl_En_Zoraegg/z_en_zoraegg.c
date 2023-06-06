@@ -697,8 +697,9 @@ void func_80B32F04(Actor* thisx, PlayState* play) {
                  this->actor.scale.z * (((sp7C + 1.0f) * 0.1f) + 9.0f), MTXMODE_APPLY);
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_XLU_DISP;
-    gfx = func_8012C868(gfx);
+    gfx = Gfx_SetupDL20_NoCD(gfx);
 
     gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
@@ -725,13 +726,13 @@ void func_80B331C8(Actor* thisx, PlayState* play) {
     Matrix_Scale(this->unk_1E0, this->unk_1E0, this->unk_1E0, MTXMODE_APPLY);
 
     if (this->unk_1ED >= 254) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
         gSPDisplayList(POLY_OPA_DISP++, object_zoraegg_DL_005250);
     } else {
-        func_8012C304(POLY_XLU_DISP++);
+        Gfx_SetupDL72(POLY_XLU_DISP++);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
@@ -862,7 +863,7 @@ void func_80B33818(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B33950[this->unk_1F2]));
 

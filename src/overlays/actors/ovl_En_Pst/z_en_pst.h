@@ -9,7 +9,7 @@ typedef enum {
     /* 1 */ POSTBOX_NORTH_CLOCKTOWN,
     /* 2 */ POSTBOX_EAST_UPPER_CLOCKTOWN,
     /* 3 */ POSTBOX_EAST_LOWER_CLOCKTOWN,
-    /* 4 */ POSTBOX_SOUTH_LOWER_CLOCKTOWN,
+    /* 4 */ POSTBOX_SOUTH_LOWER_CLOCKTOWN
 } PostboxType;
 
 struct EnPst;

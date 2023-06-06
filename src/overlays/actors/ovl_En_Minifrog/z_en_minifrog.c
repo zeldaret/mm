@@ -233,9 +233,9 @@ void EnMinifrog_SpawnDust(EnMinifrog* this, PlayState* play) {
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
 
     for (i = 0; i < 5; i++) {
-        vel.x = randPlusMinusPoint5Scaled(4.0f);
-        vel.y = randPlusMinusPoint5Scaled(4.0f);
-        vel.z = randPlusMinusPoint5Scaled(4.0f);
+        vel.x = Rand_CenteredFloat(4.0f);
+        vel.y = Rand_CenteredFloat(4.0f);
+        vel.z = Rand_CenteredFloat(4.0f);
         accel.x = -vel.x * 0.1f;
         accel.y = -vel.y * 0.1f;
         accel.z = -vel.z * 0.1f;
@@ -608,9 +608,11 @@ void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
@@ -628,12 +630,14 @@ void EnMinifrog_Draw(Actor* thisx, PlayState* play) {
     Color_RGBA8* envColor;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     envColor = &sEnMinifrogColor[this->frogIndex];
     gSPSegment(POLY_OPA_DISP++, 0x08, D_808A4D74[0]);
     gSPSegment(POLY_OPA_DISP++, 0x09, D_808A4D74[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, envColor->a);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMinifrog_OverrideLimbDraw, EnMinifrog_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

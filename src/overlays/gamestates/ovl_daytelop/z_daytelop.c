@@ -4,9 +4,10 @@
  * Description: "Dawn of ... day" screen
  */
 
+#include "global.h"
 #include "z_daytelop.h"
+#include "z64save.h"
 #include "z64shrink_window.h"
-#include "z64view.h"
 #include "misc/daytelop_static/daytelop_static.h"
 #include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
 
@@ -129,7 +130,8 @@ void DayTelop_Draw(DayTelopState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
-    func_8012C628(this->state.gfxCtx);
+
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     if (gSaveContext.save.day >= 9) {
         // Draw a white screen
@@ -139,7 +141,7 @@ void DayTelop_Draw(DayTelopState* this) {
         gDPFillRectangle(POLY_OPA_DISP++, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);

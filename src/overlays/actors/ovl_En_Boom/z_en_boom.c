@@ -203,7 +203,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 }
 
                 Math_ScaledStepToS(&this->actor.world.rot.y, sp72,
-                                   (this->unk_1CF > 0) ? 1000 : (s16)(((sp70 < 0) ? -sp70 : sp70) * sp64));
+                                   (this->unk_1CF > 0) ? 1000 : (s16)(ABS_ALT(sp70) * sp64));
             }
 
             Math_ScaledStepToS(&this->actor.world.rot.x, sp6E, ABS_ALT(sp6C) * sp64);
@@ -311,7 +311,7 @@ typedef struct {
     /* 0x00 */ Gfx* unk_00;
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
-} EnBoomStruct;
+} EnBoomStruct; // size = 0x1C
 
 EnBoomStruct D_808A3078[] = {
     { gameplay_keep_DL_06FE20, { -960.0f, 0.0f, 0.0f }, { 960.0f, 0.0f, 0.0f } },
@@ -336,7 +336,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play) {
         EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &sp4C, &sp40);
     }
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
