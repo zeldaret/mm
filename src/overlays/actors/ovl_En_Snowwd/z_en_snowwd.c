@@ -30,7 +30,7 @@ ActorInit En_Snowwd_InitVars = {
     (ActorFunc)EnSnowwd_Draw,
 };
 
- static ColliderCylinderInit sCylinderInit = {
+static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_TREE,
         AT_NONE,
@@ -80,7 +80,7 @@ void EnSnowwd_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80AF76F0(EnSnowwd *this, PlayState *play) {
+void func_80AF76F0(EnSnowwd* this, PlayState* play) {
     s32 pad;
     Actor* thisx = &this->actor;
     f32 sp54;
@@ -97,7 +97,7 @@ void func_80AF76F0(EnSnowwd *this, PlayState *play) {
             if (((thisx->params & 0xF80) >> 7) < 0x10) {
                 sp48 = thisx->world.pos;
                 sp48.y += 200.0f;
-                Item_DropCollectibleRandom(play, NULL, &sp48, (s16) (((s32) (thisx->params & 0xF80) >> 7) * 0x10));
+                Item_DropCollectibleRandom(play, NULL, &sp48, (s16)(((s32)(thisx->params & 0xF80) >> 7) * 0x10));
             }
             thisx->home.rot.z = 1;
         }
@@ -109,19 +109,20 @@ void func_80AF76F0(EnSnowwd *this, PlayState *play) {
     }
     if (this->unk190 > 0) {
         this->unk190--;
-        sp54 = Math_SinS((s16) ((this->unk190 ^ 0xFFFF) * 0x3332)) * 250.0f;
-        thisx->shape.rot.x = (s16) (s32) (Math_CosS((s16) (thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
-        thisx->shape.rot.z = (s16) (s32) (Math_SinS((s16) (thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
+        sp54 = Math_SinS((s16)((this->unk190 ^ 0xFFFF) * 0x3332)) * 250.0f;
+        thisx->shape.rot.x = (s16)(s32)(Math_CosS((s16)(thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
+        thisx->shape.rot.z = (s16)(s32)(Math_SinS((s16)(thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
         sp48 = thisx->world.pos;
         sp48.x += Rand_CenteredFloat(80.0f);
         sp48.y += 100.0f + Rand_ZeroFloat(30.0f);
         sp48.z += Rand_CenteredFloat(80.0f);
-        func_800B0EB0(play, &sp48, (Vec3f *) D_80AF7AC8, (Vec3f *) D_80AF7ABC, (Color_RGBA8 *) D_80AF7AD4, (Color_RGBA8 *) D_80AF7AD8, (s16) 0xC8, (s16) 0xA, (s16) 0x14);
+        func_800B0EB0(play, &sp48, (Vec3f*)D_80AF7AC8, (Vec3f*)D_80AF7ABC, (Color_RGBA8*)D_80AF7AD4,
+                      (Color_RGBA8*)D_80AF7AD8, (s16)0xC8, (s16)0xA, (s16)0x14);
     }
 }
 
-void EnSnowwd_Update(Actor *thisx, PlayState *play) {
-    EnSnowwd *this = THIS;
+void EnSnowwd_Update(Actor* thisx, PlayState* play) {
+    EnSnowwd* this = THIS;
 
     this->actionFunc(this, play);
 }
