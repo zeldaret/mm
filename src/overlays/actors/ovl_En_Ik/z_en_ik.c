@@ -169,8 +169,7 @@ typedef enum {
     /* 0x4 */ DMG_EFF_FIRE = 0x2,
     /* 0x0 */ DMG_EFF_ICE,
     /* 0x4 */ DMG_EFF_LIGHT_SPARKS,
-    /* 0xF */ DMG_EFF_IMMUNE = 0xF,
-
+    /* 0xF */ DMG_EFF_IMMUNE = 0xF
 } EnIkDmgEff;
 
 static DamageTable sDamageTableArmor = {
@@ -1033,6 +1032,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
         sp54 = 0;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfxOpa = POLY_OPA_DISP;
         gfxXlu = POLY_XLU_DISP;
 

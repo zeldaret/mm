@@ -32,7 +32,7 @@ void EnBbfall_Frozen(EnBbfall* this, PlayState* play);
 typedef enum {
     /* -1 */ BBFALL_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BBFALL_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD
 } EnBbfallBodyPartDrawStatus;
 
 ActorInit En_Bbfall_InitVars = {
@@ -102,7 +102,7 @@ typedef enum {
     /* 0x3 */ EN_BBFALL_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BBFALL_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BBFALL_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE
 } EnBbfallDamageEffect;
 
 static DamageTable sDamageTable = {

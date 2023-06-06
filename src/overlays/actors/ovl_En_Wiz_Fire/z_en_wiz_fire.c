@@ -32,7 +32,7 @@ typedef enum {
     /* 0 */ EN_WIZ_FIRE_ACTION_MOVE_MAGIC_PROJECTILE,
     /* 1 */ EN_WIZ_FIRE_ACTION_SMALL_FLAME,
     /* 2 */ EN_WIZ_FIRE_ACTION_POOL,
-    /* 3 */ EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE,
+    /* 3 */ EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE
 } EnWizFireAction;
 
 static s32 sPoolHitByIceArrow = false;

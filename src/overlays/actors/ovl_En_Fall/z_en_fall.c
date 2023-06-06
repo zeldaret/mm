@@ -52,11 +52,11 @@ void EnFall_FireRing_Draw(Actor* thisx, PlayState* play);
 void EnFall_MoonsTear_Draw(Actor* thisx, PlayState* play);
 
 typedef struct {
-    u8 modelIndex;
-    Vec3f pos;
-    Vec3f velocity;
-    Vec3s rot;
-} EnFallDebrisEffect;
+    /* 0x00 */ u8 modelIndex;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3s rot;
+} EnFallDebrisEffect; // size = 0x24
 
 #define EN_FALL_DEBRIS_EFFECT_COUNT 50
 
@@ -890,6 +890,7 @@ void EnFall_FireRing_Draw(Actor* thisx, PlayState* play) {
         if (this->fireRingAlpha > 1.0f) {
             this->fireRingAlpha = 1.0f;
         }
+
         OPEN_DISPS(play->state.gfxCtx);
 
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(gMoonFireRingTexAnim));

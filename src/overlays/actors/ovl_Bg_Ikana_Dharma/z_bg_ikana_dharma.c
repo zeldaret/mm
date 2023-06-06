@@ -151,7 +151,7 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
         this->collider.base.acFlags &= ~AC_HIT;
     }
 
-    if (wasHit && sFirstHitBgIkanaDharma == NULL) {
+    if (wasHit && (sFirstHitBgIkanaDharma == NULL)) {
         sFirstHitBgIkanaDharma = this2;
         Flags_SetSwitch(play, BGIKANADHARMA_GET_SWITCHFLAG(&this->dyna.actor));
         tempAngle1 = BINANG_ADD(this->dyna.actor.yawTowardsPlayer, 0x8000);
@@ -160,8 +160,8 @@ void BgIkanaDharma_WaitForHit(BgIkanaDharma* this, PlayState* play) {
         this->dyna.actor.speed = 20.0f;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_DARUMA_VANISH);
         BgIkanaDharma_SetupStartCutscene(this);
-    } else if ((this->dyna.actor.flags & ACTOR_FLAG_40) == ACTOR_FLAG_40 && sFirstHitBgIkanaDharma == NULL &&
-               this->dyna.actor.xzDistToPlayer < 420.0f) {
+    } else if (CHECK_FLAG_ALL(this->dyna.actor.flags, ACTOR_FLAG_40) && (sFirstHitBgIkanaDharma == NULL) &&
+               (this->dyna.actor.xzDistToPlayer < 420.0f)) {
         tempAngle1 = BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y);
         tempAngle1 = ABS_ALT(tempAngle1);
 

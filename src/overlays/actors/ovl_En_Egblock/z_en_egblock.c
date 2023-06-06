@@ -13,7 +13,7 @@
 
 typedef enum {
     /* 0 */ EGBLOCK_EFFECT_DEBRIS_SOLID,
-    /* 1 */ EGBLOCK_EFFECT_DEBRIS_FLAT,
+    /* 1 */ EGBLOCK_EFFECT_DEBRIS_FLAT
 } EnEgblockEffectType;
 
 void EnEgblock_Init(Actor* thisx, PlayState* play);

@@ -13,8 +13,8 @@ typedef struct ObjY2shutter {
 } ObjY2shutter; // size = 0x160
 
 typedef enum {
-    /* 0x0 */ SHUTTER_BARRED,
-    /* 0x1 */ SHUTTER_GRATED,
+    /* 0 */ SHUTTER_BARRED,
+    /* 1 */ SHUTTER_GRATED
 } ShutterType;
 
 #define OBJY2SHUTTER_GET_TYPE(thisx) (((thisx)->params >> 7) & 1)

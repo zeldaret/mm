@@ -37,7 +37,7 @@ typedef enum {
     /* 0 */ EYEGORE_EFFECT_IMPACT,
     /* 1 */ EYEGORE_EFFECT_PIECE_LARGE,
     /* 2 */ EYEGORE_EFFECT_PIECE_SMALL,
-    /* 3 */ EYEGORE_EFFECT_DEBRIS,
+    /* 3 */ EYEGORE_EFFECT_DEBRIS
 } EnEgolEffectType;
 
 typedef enum {
@@ -56,7 +56,7 @@ typedef enum {
     /* 12 */ EYEGORE_ANIM_SIT,
     /* 13 */ EYEGORE_ANIM_LEFT_PUNCH,
     /* 14 */ EYEGORE_ANIM_RIGHT_PUNCH,
-    /* 15 */ EYEGORE_ANIM_MAX,
+    /* 15 */ EYEGORE_ANIM_MAX
 } EnEgolAnimation;
 
 typedef enum {
@@ -64,7 +64,7 @@ typedef enum {
     /* 1 */ EYEGORE_LASER_START,
     /* 2 */ EYEGORE_LASER_CHARGING,
     /* 3 */ EYEGORE_LASER_FIRE,
-    /* 7 */ EYEGORE_LASER_ON = 7,
+    /* 7 */ EYEGORE_LASER_ON = 7
 } EnEgolLaserState;
 
 void EnEgol_Init(Actor* thisx, PlayState* play);
@@ -238,7 +238,7 @@ typedef enum {
     /* 0x0 */ EYEGORE_DMGEFF_IMMUNE_0,
     /* 0x4 */ EYEGORE_DMGEFF_LIGHT_ARROW = 4,
     /* 0xE */ EYEGORE_DMGEFF_NONE = 0xE,
-    /* 0xF */ EYEGORE_DMGEFF_IMMUNE_F,
+    /* 0xF */ EYEGORE_DMGEFF_IMMUNE_F
 } EnEgolDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -394,7 +394,7 @@ void EnEgol_DestroyBlocks(EnEgol* this, PlayState* play, Vec3f pos1, Vec3f pos2)
 }
 
 void EnEgol_GetWaypoint(EnEgol* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL) &&
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL) &&
         !SubS_CopyPointFromPath(this->path, this->waypoint, &this->waypointPos)) {
         Actor_Kill(&this->actor);
     }
@@ -426,9 +426,9 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->eyeCollider, &this->actor, &sEyeJntSphInit, this->eyeElements);
     Collider_InitAndSetQuad(play, &this->laserCollider, &this->actor, &sLaserQuadInit);
 
-    this->pathIndex = EYEGORE_GET_PATH(&this->actor);
-    if (this->pathIndex == 0x3F) {
-        this->pathIndex = -1;
+    this->pathIndex = EYEGORE_GET_PATH_INDEX(&this->actor);
+    if (this->pathIndex == EYEGORE_PATH_INDEX_NONE) {
+        this->pathIndex = PATH_INDEX_NONE;
         Actor_Kill(&this->actor);
         return;
     }
@@ -445,7 +445,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
         this->minLaserRange = 200.0f;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, EYEGORE_PATH_INDEX_NONE);
 
     EYEGORE_SET_SPH_DIM(this->eyeCollider.elements[0], 500, 0, 0, 26, 1.0f);
 
@@ -1101,7 +1101,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
 typedef enum {
     /* 0 */ EYEGORE_HIT_NONE,
     /* 1 */ EYEGORE_HIT_DAMAGE,
-    /* 2 */ EYEGORE_HIT_IMMUNE, // Makes hitmarks, but no reaction
+    /* 2 */ EYEGORE_HIT_IMMUNE // Makes hitmarks, but no reaction
 } EyegoreHitReaction;
 
 void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {

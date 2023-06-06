@@ -50,7 +50,7 @@ typedef enum {
     /* 6 */ EN_WIZ_ACTION_BURST_INTO_FLAMES,
     /* 7 */ EN_WIZ_ACTION_RUN_IN_CIRCLES,
     /* 8 */ EN_WIZ_ACTION_ATTACK,
-    /* 9 */ EN_WIZ_ACTION_DANCE,
+    /* 9 */ EN_WIZ_ACTION_DANCE
 } EnWizAction;
 
 typedef enum {
@@ -68,7 +68,7 @@ typedef enum {
     /* 0 */ EN_WIZ_FIGHT_STATE_FIRST_PHASE,
     /* 1 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE,
     /* 2 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE,
-    /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND,
+    /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND
 } EnWizFightState;
 
 typedef enum {
@@ -77,7 +77,7 @@ typedef enum {
     /* 2 */ EN_WIZ_ANIM_DANCE,
     /* 3 */ EN_WIZ_ANIM_WIND_UP,
     /* 4 */ EN_WIZ_ANIM_ATTACK,
-    /* 5 */ EN_WIZ_ANIM_DAMAGE,
+    /* 5 */ EN_WIZ_ANIM_DAMAGE
 } EnWizAnimation;
 
 ActorInit En_Wiz_InitVars = {
@@ -239,12 +239,12 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
-    /* 0x0 */ EN_WIZ_DMGEFF_IMMUNE,     // Deals no damage
-    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,       // Deals no damage. Was probably originally intended for destroying ghosts.
-    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,       // Damages and sets Ice Wizrobes on fire
-    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,     // Damages and surrounds Fire Wizrobes with ice
-    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,  // Damages and surrounds the Wizrobe with light orbs
-    /* 0xF */ EN_WIZ_DMGEFF_NONE = 0xF, // Deals regular damage and has no special effect
+    /* 0x0 */ EN_WIZ_DMGEFF_IMMUNE,    // Deals no damage
+    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,      // Deals no damage. Was probably originally intended for destroying ghosts.
+    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,      // Damages and sets Ice Wizrobes on fire
+    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,    // Damages and surrounds Fire Wizrobes with ice
+    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB, // Damages and surrounds the Wizrobe with light orbs
+    /* 0xF */ EN_WIZ_DMGEFF_NONE = 0xF // Deals regular damage and has no special effect
 } EnWizDamageEffect;
 
 static DamageTable sFireWizrobeDamageTable = {

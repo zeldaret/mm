@@ -2,7 +2,7 @@
 
 typedef enum {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
-    /* 1 */ TRANS_CIRCLE_DIR_OUT,
+    /* 1 */ TRANS_CIRCLE_DIR_OUT
 } TransitionCircleDirection;
 
 Gfx sTransCircleSetupDL[] = {
