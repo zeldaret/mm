@@ -106,7 +106,7 @@ typedef enum {
     /* 2 */ NIW_ANIM_PECKING_AND_WAVING, // wings move along their axis, like human hand waving
     /* 3 */ NIW_ANIM_PECKING_AND_FORFLAPPING, // (unused) low (yaw based) flapping, forward and back
     /* 4 */ NIW_ANIM_FREEZE, // used during Cucco Storm
-    /* 5 */ NIW_ANIM_PECKING_SLOW_FORFLAPPING, // wing speed half that of 3
+    /* 5 */ NIW_ANIM_PECKING_SLOW_FORFLAPPING // wing speed half that of 3
 } EnNiwHeadAndWingAnimationState;
 
 

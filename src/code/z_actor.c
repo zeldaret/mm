@@ -477,6 +477,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
         Actor* actor = targetCtx->targetedActor;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         if (targetCtx->unk48 != 0) {
             TargetContextEntry* entry;
             s16 alpha = 255;
@@ -599,10 +600,10 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
         targetCtx->unk_94 = sp68;
     }
 
-    if (targetCtx->unk8C != 0) {
+    if (targetCtx->unk8C != NULL) {
         sp68 = targetCtx->unk8C;
         targetCtx->unk8C = NULL;
-    } else if (actor != 0) {
+    } else if (actor != NULL) {
         sp68 = actor;
     }
 
@@ -641,7 +642,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
         Target_SetColors(targetCtx, sp68, category, play);
     }
 
-    if (actor != NULL && targetCtx->unk4B == 0) {
+    if ((actor != NULL) && (targetCtx->unk4B == 0)) {
         Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
@@ -696,7 +697,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
  * Tests if current scene switch flag is set.
  */
 s32 Flags_GetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -706,7 +707,7 @@ s32 Flags_GetSwitch(PlayState* play, s32 flag) {
  * Sets current scene switch flag.
  */
 void Flags_SetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -715,7 +716,7 @@ void Flags_SetSwitch(PlayState* play, s32 flag) {
  * Unsets current scene switch flag.
  */
 void Flags_UnsetSwitch(PlayState* play, s32 flag) {
-    if (flag >= 0 && flag < 0x80) {
+    if ((flag >= 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.switches[(flag & ~0x1F) >> 5] &= ~(1 << (flag & 0x1F));
     }
 }
@@ -794,7 +795,7 @@ void Flags_UnsetClearTemp(PlayState* play, s32 roomNumber) {
  * Tests if current scene collectible flag is set.
  */
 s32 Flags_GetCollectible(PlayState* play, s32 flag) {
-    if (flag > 0 && flag < 0x80) {
+    if ((flag > 0) && (flag < 0x80)) {
         return play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] & (1 << (flag & 0x1F));
     }
     return 0;
@@ -804,7 +805,7 @@ s32 Flags_GetCollectible(PlayState* play, s32 flag) {
  * Sets current scene collectible flag.
  */
 void Flags_SetCollectible(PlayState* play, s32 flag) {
-    if (flag > 0 && flag < 0x80) {
+    if ((flag > 0) && (flag < 0x80)) {
         play->actorCtx.sceneFlags.collectible[(flag & ~0x1F) >> 5] |= 1 << (flag & 0x1F);
     }
 }
@@ -2029,10 +2030,10 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
            PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
-            if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
-                 getItemId == GI_DEED_LAND ||
-                 ((player->heldActor != NULL || actor == player->talkActor) &&
-                  (getItemId > GI_NONE && getItemId < GI_MAX))) ||
+            if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
+                 (getItemId == GI_DEED_LAND) ||
+                 (((player->heldActor != NULL) || (actor == player->talkActor)) &&
+                  ((getItemId > GI_NONE) && (getItemId < GI_MAX)))) ||
                 !(player->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000))) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
                 s32 absYawDiff = ABS_ALT(yawDiff);
@@ -2387,12 +2388,12 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     } else {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
             Actor_Kill(actor);
-        } else if (((params->requiredActorFlag) && !(actor->flags & params->requiredActorFlag)) ||
-                   ((((!params->requiredActorFlag) != 0)) &&
+        } else if ((params->requiredActorFlag && !(actor->flags & params->requiredActorFlag)) ||
+                   (((!params->requiredActorFlag) != 0) &&
                     (!(actor->flags & ACTOR_FLAG_100000) ||
                      ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
-                    params->canFreezeCategory && (actor != params->talkActor) &&
-                    ((actor != params->player->heldActor)) && (actor->parent != &params->player->actor))) {
+                    params->canFreezeCategory && (actor != params->talkActor) && (actor != params->player->heldActor) &&
+                    (actor->parent != &params->player->actor))) {
             CollisionCheck_ResetDamage(&actor->colChkInfo);
         } else {
             Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
@@ -3196,7 +3197,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     }
 
     overlayEntry = &gActorOverlayTable[index];
-    if (overlayEntry->vramStart != 0) {
+    if (overlayEntry->vramStart != NULL) {
         overlayEntry->numLoaded++;
     }
 
@@ -3269,12 +3270,12 @@ void Actor_SpawnTransitionActors(PlayState* play, ActorContext* actorCtx) {
 
     for (i = 0; i < numTransitionActors; transitionActorList++, i++) {
         if (transitionActorList->id >= 0) {
-            if ((transitionActorList->sides[0].room >= 0 &&
-                 (play->roomCtx.curRoom.num == transitionActorList->sides[0].room ||
-                  play->roomCtx.prevRoom.num == transitionActorList->sides[0].room)) ||
-                (transitionActorList->sides[1].room >= 0 &&
-                 (play->roomCtx.curRoom.num == transitionActorList->sides[1].room ||
-                  play->roomCtx.prevRoom.num == transitionActorList->sides[1].room))) {
+            if (((transitionActorList->sides[0].room >= 0) &&
+                 ((play->roomCtx.curRoom.num == transitionActorList->sides[0].room) ||
+                  (play->roomCtx.prevRoom.num == transitionActorList->sides[0].room))) ||
+                ((transitionActorList->sides[1].room >= 0) &&
+                 ((play->roomCtx.curRoom.num == transitionActorList->sides[1].room) ||
+                  (play->roomCtx.prevRoom.num == transitionActorList->sides[1].room)))) {
                 s16 rotY = DEG_TO_BINANG((transitionActorList->rotY >> 7) & 0x1FF);
 
                 if (Actor_SpawnAsChildAndCutscene(actorCtx, play, transitionActorList->id & 0x1FFF,
@@ -3567,8 +3568,8 @@ void Actor_SpawnFloorDustRing(PlayState* play, Actor* actor, Vec3f* posXZ, f32 r
     accel.y += (Rand_ZeroOne() - 0.5f) * 0.2f;
 
     for (i = countMinusOne; i >= 0; i--) {
-        pos.x = (sin_rad(angle) * radius) + posXZ->x;
-        pos.z = (cos_rad(angle) * radius) + posXZ->z;
+        pos.x = (Math_SinF(angle) * radius) + posXZ->x;
+        pos.z = (Math_CosF(angle) * radius) + posXZ->z;
         accel.x = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
         accel.z = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
 
@@ -4816,7 +4817,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 // Apply and draw a light orb over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
-                    Matrix_RotateZF(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateZF(Rand_CenteredFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
                     currentMatrix->mf[3][1] = limbPos->y;
                     currentMatrix->mf[3][2] = limbPos->z;
@@ -4857,9 +4858,9 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     // first electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
                     Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
-                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    currentMatrix->mf[3][0] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4869,9 +4870,9 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     // second electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
                     Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
-                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    currentMatrix->mf[3][0] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

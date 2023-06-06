@@ -130,8 +130,8 @@ typedef struct {
     /* 0x1 */ u8  data1;
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  skyboxId;
-    /* 0x5 */ u8  unk5;
-    /* 0x6 */ u8  unk6;
+    /* 0x5 */ u8  skyboxConfig;
+    /* 0x6 */ u8  envLightMode;
 } SCmdSkyboxSettings; // size = 0x7
 
 typedef struct {
@@ -469,10 +469,13 @@ typedef struct {
     /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
 } ObjectContext; // size = 0x958
 
+#define PATH_INDEX_NONE -1
+#define ADDITIONAL_PATH_INDEX_NONE (u8)-1
+
 typedef struct {
-    /* 0x0 */ u8 count; // number of points in the path
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ s16 unk2;
+    /* 0x0 */ u8 count; // Number of points in the path
+    /* 0x1 */ u8 additionalPathIndex;
+    /* 0x2 */ s16 customValue; // Path specific to help distinguish different paths
     /* 0x4 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
 
@@ -715,6 +718,8 @@ typedef enum {
 * 0x000F:  Index into the specific entrance table (Layer), stored seperately in sceneLayer
 */
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
+
+#define ENTR_LOAD_OPENING -1
 
 /*
 * Entrances used in cutscene destination. Includes scene layer that's immediately applied to `nextCutsceneIndex` and removed.

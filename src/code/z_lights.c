@@ -191,12 +191,12 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
-    static LightsPosBindFunc posBindFuncs[] = {
+    static LightsPosBindFunc sPosBindFuncs[] = {
         Lights_BindPoint,
         (LightsPosBindFunc)Lights_BindDirectional,
         Lights_BindPoint,
     };
-    static LightsBindFunc dirBindFuncs[] = {
+    static LightsBindFunc sDirBindFuncs[] = {
         Lights_BindPointWithReference,
         (LightsBindFunc)Lights_BindDirectional,
         Lights_BindPointWithReference,
@@ -205,12 +205,12 @@ void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayStat
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
             do {
-                posBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
+                sPosBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
                 listHead = listHead->next;
             } while (listHead != NULL);
         } else {
             do {
-                dirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
+                sDirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
                 listHead = listHead->next;
             } while (listHead != NULL);
         }
@@ -339,7 +339,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
     lights->l.a.l.col[2] = lights->l.a.l.colc[2] = ambientB;
-    lights->enablePosLights = 0;
+    lights->enablePosLights = false;
     lights->numLights = numLights;
 
     for (i = 0; i < numLights; i++) {
@@ -364,7 +364,7 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
     lights->l.a.l.col[2] = lights->l.a.l.colc[2] = ambientB;
-    lights->enablePosLights = 0;
+    lights->enablePosLights = false;
     lights->numLights = 0;
 
     return lights;

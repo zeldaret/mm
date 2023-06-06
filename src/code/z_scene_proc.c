@@ -401,7 +401,7 @@ void AnimatedMat_DrawMain(PlayState* play, AnimatedMaterial* matAnim, f32 alphaR
     if ((matAnim != NULL) && (matAnim->segment != 0)) {
         do {
             segment = matAnim->segment;
-            segmentAbs = ((segment < 0) ? -segment : segment) + 7;
+            segmentAbs = ABS_ALT(segment) + 7;
             matAnimDrawHandlers[matAnim->type](play, segmentAbs, Lib_SegmentedToVirtual(matAnim->params));
             matAnim++;
         } while (segment >= 0);

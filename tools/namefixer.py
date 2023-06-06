@@ -18,10 +18,16 @@ simpleReplace = {
 wordReplace = {
     # Functions
     "Actor_GetSwitchFlag": "Flags_GetSwitch",
-    # "Math_FAtan2F": "Math_Atan2S_XY", // All old Math_FAtan2F should be renamed, so func_80086B30 can be renamed to Math_FAtan2F
     "Math_Acot2F": "Math_Atan2F_XY",
     "atan_flip": "Math_Atan2F_XY",
     "atans": "Math_Atan2S",
+    "sin_rad": "Math_SinF",
+    "cos_rad": "Math_CosF",
+    "randPlusMinusPoint5Scaled": "Rand_CenteredFloat",
+    # "Math_FAtan2F": "Math_Atan2S_XY", // Old Math_FAtan2F was renamed
+    "func_80086B30": "Math_FAtan2F",
+    "func_80086760": "Math_FTanF",
+    "func_80086C48": "Math_FAcosF",
 
     # "SysMatrix_StateAlloc":                         "Matrix_StateAlloc",
     # "SysMatrix_StatePush":                          "Matrix_StatePush",
@@ -707,6 +713,7 @@ wordReplace = {
     "func_80158FB0": "Message_LoadTimeNES",
     "func_8015926C": "Message_LoadOwlWarpTextNES",
     "func_8015E750": "Message_FindCreditsMessage",
+    "func_80151BB4": "Message_BombersNotebookQueueEvent",
     "func_80133038": "Schedule_RunScript",
 
     "EffectSsKiraKira_SpawnSmallYellow": "EffectSsKirakira_SpawnSmallYellow",
@@ -1037,6 +1044,9 @@ wordReplace = {
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
+    "play->sceneLoadFlag": "play->transitionTrigger",
+    "play->unk_18B4A": "play->transitionMode",
+    "play->unk_1887F": "play->transitionType",
     "play->playerActorCsIds": "play->playerCsIds",
     "play->envFlags": "play->cutsceneFlags",
     "play->roomCtx.curRoom.unk3": "play->roomCtx.curRoom.behaviorType1",
@@ -1061,15 +1071,13 @@ wordReplace = {
     "gSaveContext.unk_3E50": "gSaveContext.timerStartOsTimes",
     "gSaveContext.unk_3E88": "gSaveContext.timerStopTimes",
     "gSaveContext.unk_3EC0": "gSaveContext.timerPausedOsTimes",
-
-    "play->sceneLoadFlag": "play->transitionTrigger",
-    "play->unk_18B4A": "play->transitionMode",
-    "play->unk_1887F": "play->transitionType",
-    "play->roomCtx.currRoom": "play->roomCtx.curRoom",
     "gSaveContext.nextTransition": "gSaveContext.nextTransitionType",
     "gSaveContext.unk_3F48": "gSaveContext.cutsceneTransitionControl",
     "gSaveContext.fadeDuration": "gSaveContext.transFadeDuration",
     "gSaveContext.fadeSpeed": "gSaveContext.transWipeSpeed",
+
+    "path->unk1": "path->additionalPathIndex",
+    "path->unk2": "path->customValue",
 
     "D_801D15B0": "gZeroVec3f",
     "D_801D15BC": "gZeroVec3s",

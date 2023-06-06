@@ -1,9 +1,9 @@
 #include "global.h"
 
-Path* Path_GetByIndex(PlayState* play, s16 index, s16 max) {
+Path* Path_GetByIndex(PlayState* play, s16 index, s16 indexNone) {
     Path* path;
 
-    if (index != max) {
+    if (index != indexNone) {
         path = &play->setupPathList[index];
     } else {
         path = NULL;
