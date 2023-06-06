@@ -274,10 +274,10 @@ void EnIn_DoNothing(EnIn* this, PlayState* play) {
 }
 
 void func_808F3618(EnIn* this, PlayState* play) {
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_9);
     }
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -593,7 +593,7 @@ void func_808F4108(EnIn* this, PlayState* play, u16 textId) {
 }
 
 s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx) {
-    EnIn* this2 = this;
+    Actor* thisx = &this->actor;
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
@@ -604,15 +604,15 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
             } else if (this->unk4AC & 8) {
                 func_808F4108(this, play, 0x3475);
             } else {
-                Actor_ContinueText(play, &this->actor, 0x3475);
+                Actor_ContinueText(play, thisx, 0x3475);
             }
         } else {
             play_sound(NA_SE_SY_ERROR);
-            Actor_ContinueText(play, &this->actor, 0x3473);
+            Actor_ContinueText(play, thisx, 0x3473);
         }
     } else {
         func_8019F230();
-        Actor_ContinueText(play, &this->actor, 0x3472);
+        Actor_ContinueText(play, thisx, 0x3472);
     }
     return 0;
 }
@@ -1517,7 +1517,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH_INDEX(&this->actor), ENIN_PATH_INDEX_NONE);
         this->unk23D = 0;
         if ((type == ENIN_YELLOW_SHIRT) || (type == ENIN_BLUE_SHIRT)) {
             if ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) ||

@@ -166,13 +166,13 @@ void EnFamos_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (FAMOS_GET_PATH(thisx) != 0xFF) {
-        path = &play->setupPathList[this->actor.params];
+    if (FAMOS_GET_PATH_INDEX(&this->actor) != FAMOS_PATH_INDEX_NONE) {
+        path = &play->setupPathList[FAMOS_GET_PATH_INDEX(&this->actor)];
         this->pathPoints = Lib_SegmentedToVirtual(path->points);
-        this->pathNodeCount = path->count;
-        if (this->pathNodeCount == 1) {
+        this->pathCount = path->count;
+        if (this->pathCount == 1) {
             this->pathPoints = NULL;
-            this->pathNodeCount = 0;
+            this->pathCount = 0;
         }
     }
 
@@ -265,7 +265,7 @@ void EnFamos_SetupDeathDebris(EnFamos* this) {
         rock->rotation.y = (s32)Rand_Next() >> 0x10;
         rock->rotation.z = (s32)Rand_Next() >> 0x10;
         rock->pos.x = Math_SinS(randVelDirection) * 20.0f + this->actor.world.pos.x;
-        rock->pos.y = randPlusMinusPoint5Scaled(60.0f) + (this->actor.world.pos.y + 40.0f);
+        rock->pos.y = Rand_CenteredFloat(60.0f) + (this->actor.world.pos.y + 40.0f);
         rock->pos.z = Math_CosS(randVelDirection) * 20.0f + this->actor.world.pos.z;
         rock->scale = Rand_ZeroFloat(0.002f) + (2.5f * 0.001f);
     }
@@ -365,15 +365,15 @@ void EnFamos_StillIdle(EnFamos* this, PlayState* play) {
  */
 void EnFamos_SetupPathingIdle(EnFamos* this) {
     if (this->isCalm) {
-        this->currentPathNode++;
-        if (this->currentPathNode == this->pathNodeCount) {
-            this->currentPathNode = 0;
+        this->waypointIndex++;
+        if (this->waypointIndex == this->pathCount) {
+            this->waypointIndex = 0;
         }
     } else {
         this->isCalm = true;
     }
 
-    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->currentPathNode]);
+    Math_Vec3s_ToVec3f(&this->targetDest, &this->pathPoints[this->waypointIndex]);
     this->targetYaw = Actor_WorldYawTowardPoint(&this->actor, &this->targetDest);
     this->actionFunc = EnFamos_PathingIdle;
     this->actor.speed = 0.0f;
@@ -687,8 +687,8 @@ void EnFamos_DeathExplosion(EnFamos* this, PlayState* play) {
         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 4);
     }
 
-    this->actor.world.pos.x = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.x;
-    this->actor.world.pos.z = randPlusMinusPoint5Scaled(5.0f) + this->targetDest.z;
+    this->actor.world.pos.x = Rand_CenteredFloat(5.0f) + this->targetDest.x;
+    this->actor.world.pos.z = Rand_CenteredFloat(5.0f) + this->targetDest.z;
     if (this->stateTimer == 1) {
         EnBom* explosion = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
                                                this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,

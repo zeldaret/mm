@@ -10,12 +10,12 @@ typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, PlayState*);
 
 #define ENDEKUNUTS_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
-enum {
+typedef enum {
     /* 0x00 */ ENDEKUNUTS_GET_FF00_0,
     /* 0x01 */ ENDEKUNUTS_GET_FF00_1,
     /* 0x02 */ ENDEKUNUTS_GET_FF00_2,
     /* 0xFF */ ENDEKUNUTS_GET_FF00_FF = 0xFF
-};
+} EnDekunutsParam;
 
 typedef struct EnDekunuts {
     /* 0x000 */ Actor actor;

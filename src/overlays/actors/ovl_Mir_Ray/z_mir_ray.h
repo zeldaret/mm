@@ -19,8 +19,8 @@ typedef enum {
     /* 0x7 */ MIRRAY_SPIRIT_TOPROOM_COBRA1,
     /* 0x8 */ MIRRAY_SPIRIT_TOPROOM_COBRA2,
     /* 0x9 */ MIRRAY_GANONSCASTLE_SPIRITTRIAL_DOWNLIGHT,
-    /* 0xA */ MIRRAY_MAX,
-} MirRayBeamLocations;
+    /* 0xA */ MIRRAY_MAX
+} MirRayBeamLocation;
 
 typedef struct MirRay {
     /* 0x000 */ Actor actor;

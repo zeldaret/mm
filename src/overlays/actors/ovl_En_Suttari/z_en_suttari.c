@@ -536,9 +536,9 @@ void func_80BAB374(EnSuttari* this, PlayState* play) {
     Vec3f sp38;
 
     if ((curFrame % 3) == 0) {
-        sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        sp38.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
-        sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        sp38.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
         Actor_SpawnFloorDustRing(play, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, 0);
     }
 }
@@ -549,8 +549,9 @@ void func_80BAB434(EnSuttari* this) {
 }
 
 void EnSuttari_GetPaths(EnSuttari* this, PlayState* play) {
-    this->paths[0] = SubS_GetPathByIndex(play, ENSUTTARI_GET_PATH(&this->actor), 0x3F);
-    this->paths[1] = SubS_GetPathByIndex(play, this->paths[0]->unk1, 0x3F);
+    this->paths[0] = SubS_GetPathByIndex(play, ENSUTTARI_GET_PATH_INDEX(&this->actor), ENSUTTARI_PATH_INDEX_NONE);
+    //! @bug: the additional path shouldn't use `ENSUTTARI_PATH_INDEX_NONE`, but `ADDITIONAL_PATH_INDEX_NONE`
+    this->paths[1] = SubS_GetPathByIndex(play, this->paths[0]->additionalPathIndex, ENSUTTARI_PATH_INDEX_NONE);
 }
 
 void func_80BAB4F0(EnSuttari* this, PlayState* play) {
@@ -622,7 +623,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
         sp54 = sp5C[index + 1].x - sp5C[index - 1].x;
         sp48 = sp5C[index + 1].z - sp5C[index - 1].z;
     }
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -652,7 +653,7 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
         sp54 = sp5C[index - 1].x - sp5C[index + 1].x;
         sp48 = sp5C[index - 1].z - sp5C[index + 1].z;
     }
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -712,11 +713,11 @@ void func_80BABB90(EnSuttari* this, s32 arg1) {
 s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp26 = SCHEDULE_TIME_NOW;
     u16 phi_a0;
-    u8 sp23 = ENSUTTARI_GET_PATH(&this->actor);
+    u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 tmp;
 
     if (D_80BAE8F8[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp23, D_80BAE8F8[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80BAE8F8[scheduleOutput->result]);
     }
     if (this->timePath == NULL) {
         return 0;
@@ -743,7 +744,7 @@ s32 func_80BABC48(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
 s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 pad;
     EnDoor* sp48;
-    u8 sp47 = ENSUTTARI_GET_PATH(&this->actor);
+    u8 pathIndex = ENSUTTARI_GET_PATH_INDEX(&this->actor);
     u16 sp44 = SCHEDULE_TIME_NOW;
     Vec3f sp38;
     Vec3f sp2C;
@@ -756,7 +757,7 @@ s32 func_80BABDD8(EnSuttari* this, PlayState* play, ScheduleOutput* scheduleOutp
     sp48 = (EnDoor*)SubS_FindNearestActor(&this->actor, play, ACTORCAT_DOOR, ACTOR_EN_DOOR);
     sp24 = D_80BAE8F8[scheduleOutput->result];
     if ((sp48 != NULL) && (sp24 >= 0)) {
-        this->timePath = SubS_GetAdditionalPath(play, sp47, sp24);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, sp24);
     }
     if ((sp48 == NULL) || (this->timePath == NULL)) {
         return false;
@@ -1313,7 +1314,7 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
     }
     this->unk428 = scheduleOutput.result;
     func_80BAC2FC(this, play);
-    if ((this->unk430 == 1) && (this->timePath->unk1 == 0xFF)) {
+    if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1351,7 +1352,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
         }
         this->unk428 = scheduleOutput.result;
         func_80BAC2FC(this, play);
-        if ((this->unk430 == 1) && (this->timePath->unk1 == 0xFF)) {
+        if ((this->unk430 == 1) && (this->timePath->additionalPathIndex == ADDITIONAL_PATH_INDEX_NONE)) {
             Actor_Kill(&this->actor);
             return;
         }

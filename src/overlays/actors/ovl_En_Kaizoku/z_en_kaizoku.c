@@ -1461,7 +1461,7 @@ void func_80B88964(EnKaizoku* this, PlayState* play) {
 
 void func_80B88CD8(EnKaizoku* this) {
     EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_3);
-    this->picto.actor.speed = randPlusMinusPoint5Scaled(12.0f);
+    this->picto.actor.speed = Rand_CenteredFloat(12.0f);
     this->skelAnime.playSpeed = 1.0f;
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
     this->unk_2B2 = Rand_ZeroOne() * 30.0f + 30.0f;

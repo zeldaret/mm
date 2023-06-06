@@ -973,7 +973,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
 }
 
 s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 arg3, s16 arg4) {
-    u8 sp4F = ENGM_GET_FF(&this->actor);
+    u8 pathIndex = ENGM_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
     Vec3f sp30;
@@ -985,7 +985,7 @@ s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     actor = func_8094DEE0(this, play, arg3, arg4);
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80951A0C[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
     }
 
     if ((actor != NULL) && (actor->update != NULL)) {
@@ -1004,7 +1004,7 @@ s32 func_8094F7D0(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
 
 s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp56 = SCHEDULE_TIME_NOW;
-    u8 sp55 = ENGM_GET_FF(&this->actor);
+    u8 pathIndex = ENGM_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
     Vec3f sp40;
@@ -1016,7 +1016,7 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     door = func_8094DF90(play, scheduleOutput->result);
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp55, D_80951A0C[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
     }
 
     if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
@@ -1051,14 +1051,14 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_8094FAC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
-    u8 sp2B = ENGM_GET_FF(&this->actor);
+    u8 pathIndex = ENGM_GET_PATH_INDEX(&this->actor);
     u16 tmp;
     s16 pad;
     s32 ret = false;
 
     this->timePath = NULL;
     if (D_80951A0C[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp2B, D_80951A0C[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
     }
 
     if ((this->timePath != NULL) && (this->timePath->count < 3)) {
@@ -1152,7 +1152,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     static Vec3f D_80951D9C = { 64.0f, 0.0f, -122.0f };
-    u8 sp4F = ENGM_GET_FF(&this->actor);
+    u8 pathIndex = ENGM_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
     Vec3f sp30;
@@ -1162,7 +1162,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->timePath = NULL;
 
     if (D_80951A0C[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80951A0C[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80951A0C[scheduleOutput->result]);
     }
 
     if (this->timePath != NULL) {

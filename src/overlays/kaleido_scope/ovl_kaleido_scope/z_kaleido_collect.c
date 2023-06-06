@@ -563,7 +563,7 @@ typedef struct {
     /* 0x2 */ s16 down;
     /* 0x4 */ s16 left;
     /* 0x6 */ s16 right;
-} CursorPointDirection;
+} CursorPointDirection; // size = 0x8
 
 void KaleidoScope_UpdateQuestCursor(PlayState* play) {
     static s16 sQuestSongPlaybackDelayTimer = 0;

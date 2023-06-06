@@ -11,19 +11,19 @@ typedef void (*EnBomjimbActionFunc)(struct EnBomjimb*, PlayState*);
 #define ENBOMJIMB_GET_F0(thisx) (((thisx)->params >> 4) & 0xF)
 #define ENBOMJIMB_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
-enum {
+typedef enum {
     /* 0 */ ENBOMJIMB_F_0,
     /* 1 */ ENBOMJIMB_F_1,
     /* 2 */ ENBOMJIMB_F_2,
     /* 3 */ ENBOMJIMB_F_3,
-    /* 4 */ ENBOMJIMB_F_4,
-};
+    /* 4 */ ENBOMJIMB_F_4
+} EnBomjimbParamF;
 
-enum {
+typedef enum {
     /* 0 */ ENBOMJIMB_F0_0,
     /* 1 */ ENBOMJIMB_F0_1,
-    /* 2 */ ENBOMJIMB_F0_2,
-};
+    /* 2 */ ENBOMJIMB_F0_2
+} EnBomjimbParamF0;
 
 typedef struct EnBomjimb {
     /* 0x000 */ Actor actor;

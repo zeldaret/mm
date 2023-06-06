@@ -105,13 +105,13 @@ typedef VecSphGeo VecGeo;
 typedef enum {
     /* 0 */ OLIB_ADD_COPY, // Copy `b` to dest
     /* 1 */ OLIB_ADD_OFFSET, // Add `a` and `b` to dest, and also add the yaw of `a` to the dest
-    /* 2 */ OLIB_ADD, // Add `a` and `b` to dest
+    /* 2 */ OLIB_ADD // Add `a` and `b` to dest
 } OlibVec3fAdd;
 
 typedef enum {
     /* 0 */ OLIB_DIFF_COPY, // Copy `b` to dest
     /* 1 */ OLIB_DIFF_OFFSET, // Sub `a` and `b` to dest, and also subs the yaw of `a` to the dest
-    /* 2 */ OLIB_DIFF, // Sub `a` and `b` to dest
+    /* 2 */ OLIB_DIFF // Sub `a` and `b` to dest
 } OlibVec3fDiff;
 
 #define LERPIMP(v0, v1, t) ((v0) + (((v1) - (v0)) * (t)))
@@ -167,5 +167,76 @@ typedef enum {
 #define DOTXZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.z) * (vec2.z))
 #define SQXYZ(vec) ((vec.x) * (vec.x) + (vec.y) * (vec.y) + (vec.z) * (vec.z))
 #define DOTXYZ(vec1, vec2) ((vec1.x) * (vec2.x) + (vec1.y) * (vec2.y) + (vec1.z) * (vec2.z))
+
+f32 Math_CosS(s16 angle);
+f32 Math_SinS(s16 angle);
+s32 Math_StepToIImpl(s32 start, s32 target, s32 step);
+void Math_StepToIGet(s32* pValue, s32 target, s32 step);
+s32 Math_StepToI(s32* pValue, s32 target, s32 step);
+s32 Math_ScaledStepToS(s16* pValue, s16 target, s16 step);
+s32 Math_StepToS(s16* pValue, s16 target, s16 step);
+s32 Math_StepToC(s8* pValue, s8 target, s8 step);
+s32 Math_StepToF(f32* pValue, f32 target, f32 step);
+s32 Math_StepUntilAngleS(s16* pValue, s16 target, s16 step);
+s32 Math_StepToAngleS(s16* pValue, s16 target, s16 step);
+s32 Math_AsymStepToS(s16* pValue, s16 target, s16 incrStep, s16 decrStep);
+s32 Math_StepUntilF(f32* pValue, f32 limit, f32 step);
+s32 Math_AsymStepToF(f32* pValue, f32 target, f32 incrStep, f32 decrStep);
+s16 Rand_S16Offset(s16 base, s16 range);
+s16 Rand_S16OffsetStride(s16 base, s16 stride, s16 range);
+void Math_Vec3f_Copy(Vec3f* dest, Vec3f* src);
+void Math_Vec3s_Copy(Vec3s* dest, Vec3s* src);
+void Math_Vec3s_ToVec3f(Vec3f* dest, Vec3s* src);
+void Math_Vec3f_ToVec3s(Vec3s* dest, Vec3f* src);
+void Math_Vec3f_Sum(Vec3f* l, Vec3f* r, Vec3f* dest);
+void Math_Vec3f_Diff(Vec3f* l, Vec3f* r, Vec3f* dest);
+void Math_Vec3s_DiffToVec3f(Vec3f* dest, Vec3s* l, Vec3s* r);
+void Math_Vec3f_Scale(Vec3f* vec, f32 scale);
+void Math_Vec3f_ScaleAndStore(Vec3f* vec, f32 scale, Vec3f* dest);
+void Math_Vec3f_Lerp(Vec3f* a, Vec3f* b, f32 t, Vec3f* dest);
+void Math_Vec3f_SumScaled(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest);
+void Math_Vec3f_AddRand(Vec3f* orig, f32 scale, Vec3f* dest);
+void Math_Vec3f_DistXYZAndStoreNormDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest);
+f32 Math_Vec3f_DistXYZ(Vec3f* a, Vec3f* b);
+f32 Math_Vec3f_DistXYZAndStoreDiff(Vec3f* a, Vec3f* b, Vec3f* dest);
+f32 Math_Vec3f_DistXZ(Vec3f* a, Vec3f* b);
+f32 Math_Vec3f_DistXZAndStore(Vec3f* a, Vec3f* b, f32* dx, f32* dz);
+f32 Math_Vec3f_StepToXZ(Vec3f* start, Vec3f* target, f32 speed);
+f32 Math_Vec3f_DiffY(Vec3f* a, Vec3f* b);
+s16 Math_Vec3f_Yaw(Vec3f* a, Vec3f* b);
+s16 Math_Vec3f_Pitch(Vec3f* a, Vec3f* b);
+f32 Math_SmoothStepToF(f32* pValue, f32 target, f32 fraction, f32 step, f32 minStep);
+void Math_ApproachF(f32* pValue, f32 target, f32 scale, f32 maxStep);
+void Math_ApproachZeroF(f32* pValue, f32 scale, f32 maxStep);
+s16 Math_SmoothStepToS(s16* pValue, s16 target, s16 scale, s16 step, s16 minStep);
+void Math_ApproachS(s16* pValue, s16 target, s16 scale, s16 maxStep);
+f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed);
+
+f32 Math_FactorialF(f32 n);
+f32 Math_Factorial(s32 n);
+f32 Math_PowF(f32 base, s32 exp);
+f32 Math_SinF(f32 rad);
+f32 Math_CosF(f32 rad);
+f32 Rand_ZeroFloat(f32 scale);
+f32 Rand_CenteredFloat(f32 scale);
+
+f32 Math_FTanF(f32 x);
+f32 Math_FFloorF(f32 x);
+f32 Math_FCeilF(f32 x);
+f32 Math_FRoundF(f32 x);
+f32 Math_FTruncF(f32 x);
+f32 Math_FNearbyIntF(f32 x);
+f32 Math_FAtanTaylorQF(f32 x);
+f32 Math_FAtanTaylorF(f32 x);
+f32 Math_FAtanContFracF(f32 x);
+f32 Math_FAtanF(f32 x);
+f32 Math_FAtan2F(f32 y, f32 x);
+f32 Math_FAsinF(f32 x);
+f32 Math_FAcosF(f32 x);
+
+s16 Math_Atan2S(f32 y, f32 x);
+f32 Math_Atan2F(f32 y, f32 x);
+s16 Math_Atan2S_XY(f32 x, f32 y);
+f32 Math_Atan2F_XY(f32 x, f32 y);
 
 #endif

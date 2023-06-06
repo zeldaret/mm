@@ -8,17 +8,19 @@ struct EnGk;
 typedef void (*EnGkActionFunc)(struct EnGk*, PlayState*);
 
 #define ENGK_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENGK_GET_F0(thisx) (((thisx)->params & 0xF0) >> 4)
+#define ENGK_GET_PATH_INDEX(thisx) (((thisx)->params & 0xF0) >> 4)
 #define ENGK_GET_3F00(thisx) (((thisx)->params & 0x3F00) >> 8)
 
-enum {
+#define ENGK_PATH_INDEX_NONE 0xF
+
+typedef enum {
     /* 0 */ ENGK_F_0,
     /* 1 */ ENGK_F_1,
     /* 2 */ ENGK_F_2,
     /* 3 */ ENGK_F_3,
     /* 4 */ ENGK_F_4,
-    /* 5 */ ENGK_F_5,
-};
+    /* 5 */ ENGK_F_5
+} EnGkParam;
 
 typedef struct EnGk {
     /* 0x000 */ Actor actor;
