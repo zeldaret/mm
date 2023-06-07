@@ -2928,30 +2928,27 @@ void Message_Decode(PlayState* play);
 
 void func_80150A84(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
-    u8 offset = msgCtx->textBoxType;
-    u8 t;
+    s32 textBoxType = msgCtx->textBoxType;
 
-    if (D_801CFC78[offset] != 14) {
+    if (D_801CFC78[textBoxType] != 14) {
         DmaMgr_SendRequest0(msgCtx->textboxSegment,
-                            &((u8*)SEGMENT_ROM_START(message_static))[D_801CFC78[offset] * 0x1000], 0x1000);
+                            &((u8*)SEGMENT_ROM_START(message_static))[D_801CFC78[textBoxType] * 0x1000], 0x1000);
 
-        // TODO: I think there's an optimization here:
-        // `(offset == 0)` instead of `(&D_801CFC78[offset] == &D_801CFC78[t = 0])`
         if (!play->pauseCtx.bombersNotebookOpen) {
-            if ((&D_801CFC78[offset] == &D_801CFC78[t = 0]) || (&D_801CFC78[offset] == &D_801CFC78[t = 6]) ||
-                (&D_801CFC78[offset] == &D_801CFC78[t = 10]) || (&D_801CFC78[offset] == &D_801CFC78[t = 11])) {
+            if ((textBoxType == TEXTBOX_TYPE_0) || (textBoxType == TEXTBOX_TYPE_6) || (textBoxType == TEXTBOX_TYPE_A) ||
+                (textBoxType == TEXTBOX_TYPE_B)) {
                 msgCtx->textboxColorRed = 0;
                 msgCtx->textboxColorGreen = 0;
                 msgCtx->textboxColorBlue = 0;
-            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 1]) {
+            } else if (textBoxType == TEXTBOX_TYPE_1) {
                 msgCtx->textboxColorRed = 70;
                 msgCtx->textboxColorGreen = 50;
                 msgCtx->textboxColorBlue = 30;
-            } else if ((&D_801CFC78[offset] == &D_801CFC78[t = 2]) || (&D_801CFC78[offset] == &D_801CFC78[t = 8])) {
+            } else if ((textBoxType == TEXTBOX_TYPE_2) || (textBoxType == TEXTBOX_TYPE_8)) {
                 msgCtx->textboxColorRed = 0;
                 msgCtx->textboxColorGreen = 10;
                 msgCtx->textboxColorBlue = 50;
-            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 13]) {
+            } else if (textBoxType == TEXTBOX_TYPE_D) {
                 msgCtx->textboxColorRed = 255;
                 msgCtx->textboxColorGreen = 255;
                 msgCtx->textboxColorBlue = 195;
@@ -2960,11 +2957,12 @@ void func_80150A84(PlayState* play) {
                 msgCtx->textboxColorGreen = 0;
                 msgCtx->textboxColorBlue = 0;
             }
-            if (&D_801CFC78[offset] == &D_801CFC78[t = 1]) {
+
+            if (textBoxType == TEXTBOX_TYPE_1) {
                 msgCtx->textboxColorAlphaTarget = 230;
-            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 3]) {
+            } else if (textBoxType == TEXTBOX_TYPE_3) {
                 msgCtx->textboxColorAlphaTarget = 180;
-            } else if (&D_801CFC78[offset] == &D_801CFC78[t = 13]) {
+            } else if (textBoxType == TEXTBOX_TYPE_D) {
                 msgCtx->textboxColorAlphaTarget = 220;
             } else {
                 msgCtx->textboxColorAlphaTarget = 170;
