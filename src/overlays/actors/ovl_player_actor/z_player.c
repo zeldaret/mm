@@ -3,7 +3,6 @@
  * Overlay: ovl_player_actor
  * Description: Player
  */
-
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
@@ -19110,7 +19109,7 @@ void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
     PlayerAnimation_Update(play, &this->skelAnime);
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
-        func_80151BB4(play, 0x1B);
+        Message_BombersNotebookQueueEvent(play, 0x1B);
         Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
     }
 }
@@ -19786,7 +19785,7 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
             }
         }
     } else if (PlayerAnimation_OnFrame(&this->skelAnime, 4.0f)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_50_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PENDANT_OF_MEMORIES);
     }
 }
 
