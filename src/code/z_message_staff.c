@@ -194,7 +194,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
         msgCtx->textPosY = 48;
     }
 
-    if (msgCtx->textBoxType == 5) {
+    if (msgCtx->textBoxType == TEXTBOX_TYPE_5) {
         msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
     } else {
         msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 255;
@@ -497,7 +497,7 @@ void Message_DecodeCredits(PlayState* play) {
             msgCtx->textDrawPos = 1;
             msgCtx->unk11FFA = msgCtx->textboxY + 8;
 
-            if (msgCtx->textBoxType != 4) {
+            if (msgCtx->textBoxType != TEXTBOX_TYPE_4) {
                 if (numLines == 0) {
                     msgCtx->unk11FFA = msgCtx->textboxY + 26;
                 } else if (numLines == 1) {

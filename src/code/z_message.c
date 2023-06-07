@@ -704,7 +704,7 @@ void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP) {
     gDPLoadTextureBlock_4b(gfx++, texture, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    if ((msgCtx->textBoxType != 5) && (msgCtx->textBoxType != 0xD) && !play->pauseCtx.bombersNotebookOpen) {
+    if ((msgCtx->textBoxType != TEXTBOX_TYPE_5) && (msgCtx->textBoxType != TEXTBOX_TYPE_D) && !play->pauseCtx.bombersNotebookOpen) {
         gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, msgCtx->textColorAlpha);
         gSPTextureRectangle(gfx++, (x + 1) << 2, (y + 1) << 2, ((x + sCharTexSize + 1)) << 2,
                             ((y + sCharTexSize + 1)) << 2, G_TX_RENDERTILE, 0, 0, sCharTexScale, sCharTexScale);
@@ -1018,9 +1018,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
 
         switch (character) {
             case 0x2000:
-                if (play->pauseCtx.bombersNotebookOpen || (msgCtx->textBoxType == 0xD)) {
+                if (play->pauseCtx.bombersNotebookOpen || (msgCtx->textBoxType == TEXTBOX_TYPE_D)) {
                     msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
-                } else if (msgCtx->textBoxType == 5) {
+                } else if (msgCtx->textBoxType == TEXTBOX_TYPE_5) {
                     msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 0;
                 } else {
                     msgCtx->textColorR = msgCtx->textColorG = msgCtx->textColorB = 255;
@@ -1072,11 +1072,11 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     msgCtx->textColorR = D_801CFF34[(s16)(character - 0x2001)][0];
                     msgCtx->textColorG = D_801CFF34[(s16)(character - 0x2001)][1];
                     msgCtx->textColorB = D_801CFF34[(s16)(character - 0x2001)][2];
-                } else if (msgCtx->textBoxType == 1) {
+                } else if (msgCtx->textBoxType == TEXTBOX_TYPE_1) {
                     msgCtx->textColorR = D_801CFE74[(s16)(character - 0x2001)][0];
                     msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)][1];
                     msgCtx->textColorB = D_801CFE74[(s16)(character - 0x2001)][2];
-                } else if (msgCtx->textBoxType == 0xD) {
+                } else if (msgCtx->textBoxType == TEXTBOX_TYPE_D) {
                     msgCtx->textColorR = D_801CFF04[(s16)(character - 0x2001)][0];
                     msgCtx->textColorG = D_801CFF04[(s16)(character - 0x2001)][1];
                     msgCtx->textColorB = D_801CFF04[(s16)(character - 0x2001)][2];
@@ -1335,7 +1335,7 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
             case 0x240:
             case 0x500:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    if (msgCtx->textBoxType == 3) {
+                    if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
                         Message_HandleOcarina(play);
                         *gfxP = gfx;
                         return;
@@ -2096,7 +2096,7 @@ void Message_Decode(PlayState* play) {
                 }
                 spC0 = 0.0f;
                 if (curChar == 0xB) {
-                    if ((msgCtx->textBoxType != 3) && (msgCtx->textBoxType != 4)) {
+                    if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                         if (spE0 < 2) {
                             msgCtx->unk11FFA = msgCtx->textboxY + 0x16;
                         } else if (spE0 == 2) {
@@ -2104,7 +2104,7 @@ void Message_Decode(PlayState* play) {
                         }
                     }
                 } else {
-                    if ((msgCtx->textBoxType != 3) && (msgCtx->textBoxType != 4)) {
+                    if ((msgCtx->textBoxType != TEXTBOX_TYPE_3) && (msgCtx->textBoxType != TEXTBOX_TYPE_4)) {
                         if (spE0 == 0) {
                             msgCtx->unk11FFA = msgCtx->textboxY + 0x16;
                         } else if (spE0 == 1) {
@@ -2119,9 +2119,9 @@ void Message_Decode(PlayState* play) {
                     msgCtx->msgBufPos += 2;
                 }
                 msgCtx->decodedTextLen = decodedBufPos;
-                if (msgCtx->textboxSkipped || (msgCtx->textBoxType == 1) || (msgCtx->textBoxType == 3) ||
-                    (msgCtx->textBoxType == 6) || (msgCtx->textBoxType == 8) || (msgCtx->textBoxType == 9) ||
-                    (msgCtx->textBoxType == 11) || (msgCtx->unk11F0C == 3)) {
+                if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_1) || (msgCtx->textBoxType == TEXTBOX_TYPE_3) ||
+                    (msgCtx->textBoxType == TEXTBOX_TYPE_6) || (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
+                    (msgCtx->textBoxType == TEXTBOX_TYPE_B) || (msgCtx->unk11F0C == 3)) {
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
                 }
                 msgCtx->unk120C8 = msgCtx->unk120CE;
@@ -2880,9 +2880,9 @@ void Message_Decode(PlayState* play) {
                 msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos] & 0xFF;
             } else if (curChar == 0x120) {
                 msgCtx->decodedBuffer.wchar[++decodedBufPos] = font->msgBuf.wchar[++msgCtx->msgBufPos];
-                if (msgCtx->textboxSkipped || (msgCtx->textBoxType == 1) || (msgCtx->textBoxType == 3) ||
-                    (msgCtx->textBoxType == 6) || (msgCtx->textBoxType == 8) || (msgCtx->textBoxType == 9) ||
-                    (msgCtx->textBoxType == 0xB) || (msgCtx->unk11F0C == 3)) {
+                if (msgCtx->textboxSkipped || (msgCtx->textBoxType == TEXTBOX_TYPE_1) || (msgCtx->textBoxType == TEXTBOX_TYPE_3) ||
+                    (msgCtx->textBoxType == TEXTBOX_TYPE_6) || (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
+                    (msgCtx->textBoxType == TEXTBOX_TYPE_B) || (msgCtx->unk11F0C == 3)) {
                     play_sound(msgCtx->decodedBuffer.wchar[decodedBufPos]);
                 }
             } else if (curChar == 0x128) {
@@ -3090,7 +3090,7 @@ void Message_OpenText(PlayState* play, u16 textId) {
     }
     msgCtx->itemId = 0xFE;
 
-    if ((msgCtx->textBoxType == 5) || (msgCtx->textBoxType == 0xD) || (play->pauseCtx.bombersNotebookOpen)) {
+    if ((msgCtx->textBoxType == TEXTBOX_TYPE_5) || (msgCtx->textBoxType == TEXTBOX_TYPE_D) || (play->pauseCtx.bombersNotebookOpen)) {
         msgCtx->unk120CE = msgCtx->unk120D0 = msgCtx->unk120D2 = 0;
     } else {
         msgCtx->unk120CE = msgCtx->unk120D0 = msgCtx->unk120D2 = 0xFF;
@@ -3170,7 +3170,7 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     msgCtx->decodedTextLen = 0;
     msgCtx->unk11F08 = font->msgBuf.wchar[msgCtx->msgBufPos];
     msgCtx->unk11F18 = (msgCtx->unk11F08 & 0xF000) >> 0xC;
-    msgCtx->textBoxType = 9;
+    msgCtx->textBoxType = TEXTBOX_TYPE_9;
     msgCtx->textBoxPos = arg2;
     msgCtx->unk11F0C = msgCtx->unk11F08 & 0xF;
     msgCtx->textUnskippable = true;
@@ -3427,12 +3427,12 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
 
     if ((ocarinaAction == OCARINA_ACTION_FREE_PLAY) || (ocarinaAction == OCARINA_ACTION_CHECK_NOTIME)) {
         msgCtx->msgMode = MSGMODE_OCARINA_STARTING;
-        msgCtx->textBoxType = 0xE;
+        msgCtx->textBoxType = TEXTBOX_TYPE_E;
     } else if (ocarinaAction == OCARINA_ACTION_3A) {
         msgCtx->msgMode = MSGMODE_32;
     } else if (ocarinaAction == OCARINA_ACTION_37) {
         msgCtx->msgMode = MSGMODE_2F;
-        msgCtx->textBoxType = 2;
+        msgCtx->textBoxType = TEXTBOX_TYPE_2;
     } else if (ocarinaAction == OCARINA_ACTION_SCARECROW_LONG_DEMONSTRATION) {
         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
         AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_DEFAULT);
@@ -3540,10 +3540,10 @@ void Message_DrawTextBox(PlayState* play, Gfx** gfxP) {
 
     gDPPipeSync(gfx++);
 
-    if (((u32)msgCtx->textBoxType == 0) || (msgCtx->textBoxType == 2) || (msgCtx->textBoxType == 9) ||
-        (msgCtx->textBoxType == 0xA)) {
+    if (((u32)msgCtx->textBoxType == TEXTBOX_TYPE_0) || (msgCtx->textBoxType == TEXTBOX_TYPE_2) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
+        (msgCtx->textBoxType == TEXTBOX_TYPE_A)) {
         gDPSetRenderMode(gfx++, G_RM_CLD_SURF, G_RM_CLD_SURF2);
-    } else if (msgCtx->textBoxType == 3) {
+    } else if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
         gDPSetAlphaCompare(gfx++, G_AC_THRESHOLD);
         gDPSetRenderMode(gfx++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     }
@@ -3551,16 +3551,16 @@ void Message_DrawTextBox(PlayState* play, Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, msgCtx->textboxColorRed, msgCtx->textboxColorGreen, msgCtx->textboxColorBlue,
                     msgCtx->textboxColorAlphaCurrent);
 
-    if (((u32)msgCtx->textBoxType == 0) || (msgCtx->textBoxType == 2) || (msgCtx->textBoxType == 6) ||
-        (msgCtx->textBoxType == 8) || (msgCtx->textBoxType == 9) || (msgCtx->textBoxType == 0xA)) {
+    if (((u32)msgCtx->textBoxType == TEXTBOX_TYPE_0) || (msgCtx->textBoxType == TEXTBOX_TYPE_2) || (msgCtx->textBoxType == TEXTBOX_TYPE_6) ||
+        (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) || (msgCtx->textBoxType == TEXTBOX_TYPE_A)) {
         gDPLoadTextureBlock_4b(gfx++, msgCtx->textboxSegment, G_IM_FMT_I, 128, 64, 0, G_TX_MIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, 7, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     } else {
         gDPPipeSync(gfx++);
 
-        if (msgCtx->textBoxType == 3) {
+        if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
             gDPSetEnvColor(gfx++, 0, 0, 0, 255);
-        } else if (msgCtx->textBoxType == 0xD) {
+        } else if (msgCtx->textBoxType == TEXTBOX_TYPE_D) {
             gDPSetEnvColor(gfx++, 20, 0, 10, 255);
         } else {
             gDPSetEnvColor(gfx++, 50, 20, 0, 255);
@@ -3569,7 +3569,7 @@ void Message_DrawTextBox(PlayState* play, Gfx** gfxP) {
                                G_TX_MIRROR | G_TX_WRAP, 7, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     }
 
-    if (msgCtx->textBoxType == 0xA) {
+    if (msgCtx->textBoxType == TEXTBOX_TYPE_A) {
         gSPTextureRectangle(gfx++, (msgCtx->textboxX << 2), ((msgCtx->textboxY + 22) << 2),
                             ((msgCtx->textboxX + msgCtx->unk12008) << 2), ((msgCtx->textboxY + 0x36) << 2),
                             G_TX_RENDERTILE, 0, 0x0006, msgCtx->unk1200C << 1, 0x800);
@@ -3580,7 +3580,7 @@ void Message_DrawTextBox(PlayState* play, Gfx** gfxP) {
     }
 
     // Draw treble clef
-    if (msgCtx->textBoxType == 3) {
+    if (msgCtx->textBoxType == TEXTBOX_TYPE_3) {
         gDPPipeSync(gfx++);
         gDPSetCombineLERP(gfx++, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE, 0, 1, 0, PRIMITIVE, 0, TEXEL0, 0, PRIMITIVE,
                           0);
@@ -4221,7 +4221,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                             } else {
                                 Message_ContinueTextbox(play, 0x1B5B);
                                 msgCtx->msgMode = MSGMODE_SONG_PLAYED;
-                                msgCtx->textBoxType = 3;
+                                msgCtx->textBoxType = TEXTBOX_TYPE_3;
                                 msgCtx->stateTimer = 10;
                                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                                 Interface_SetHudVisibility(1);
@@ -4235,7 +4235,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                             } else {
                                 Message_ContinueTextbox(play, 0x1B5B);
                                 msgCtx->msgMode = MSGMODE_SONG_PLAYED;
-                                msgCtx->textBoxType = 3;
+                                msgCtx->textBoxType = TEXTBOX_TYPE_3;
                                 msgCtx->stateTimer = 10;
                                 play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                                 Interface_SetHudVisibility(1);
@@ -4243,7 +4243,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         } else if (msgCtx->ocarinaAction == OCARINA_ACTION_FREE_PLAY) {
                             Message_ContinueTextbox(play, 0x1B5B);
                             msgCtx->msgMode = MSGMODE_SONG_PLAYED;
-                            msgCtx->textBoxType = 3;
+                            msgCtx->textBoxType = TEXTBOX_TYPE_3;
                             msgCtx->stateTimer = 10;
                             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
                         } else {
@@ -4292,17 +4292,17 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     if (msgCtx->msgMode == MSGMODE_E) {
                         Message_ContinueTextbox(play, 0x1B5B);
                         msgCtx->msgMode = MSGMODE_SONG_PLAYED;
-                        msgCtx->textBoxType = 3;
+                        msgCtx->textBoxType = TEXTBOX_TYPE_3;
                         msgCtx->stateTimer = 1;
                     } else if (msgCtx->msgMode == MSGMODE_SONG_PROMPT_SUCCESS) {
                         Message_ContinueTextbox(play, 0x1B5B);
                         msgCtx->msgMode = MSGMODE_SONG_PLAYED;
-                        msgCtx->textBoxType = 3;
+                        msgCtx->textBoxType = TEXTBOX_TYPE_3;
                         msgCtx->stateTimer = 1;
                     } else if (msgCtx->msgMode == MSGMODE_22) {
                         msgCtx->msgMode = MSGMODE_23;
                         play->msgCtx.ocarinaMode = OCARINA_MODE_EVENT;
-                        msgCtx->textBoxType = 0;
+                        msgCtx->textBoxType = TEXTBOX_TYPE_0;
                     } else if (msgCtx->msgMode == MSGMODE_34) {
                         if (msgCtx->songPlayed == OCARINA_SONG_TERMINA_WALL) {
                             Message_CloseTextbox(play);
@@ -4573,7 +4573,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer--;
                     if (msgCtx->stateTimer == 0) {
                         msgCtx->msgMode = MSGMODE_21;
-                        msgCtx->textBoxType = 0;
+                        msgCtx->textBoxType = TEXTBOX_TYPE_0;
                     }
                 }
                 break;
@@ -4782,7 +4782,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 D_801C6A94 += D_801C6A94;
                 if (D_801C6A94 >= 0x226) {
                     Message_ResetOcarinaButtonAlphas();
-                    msgCtx->textBoxType = 0;
+                    msgCtx->textBoxType = TEXTBOX_TYPE_0;
                     msgCtx->textboxColorRed = msgCtx->textboxColorGreen = msgCtx->textboxColorBlue = 0;
                     msgCtx->stateTimer = 3;
                     msgCtx->msgMode++;
