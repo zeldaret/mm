@@ -7,7 +7,7 @@
  * The program expects an .o elf file and outputs a raw yar binary file and a
  * "symbols" elf.
  *
- * A yar file consists in multiple Yaz0 files compressed individually. The
+ * A yar file consists of multiple Yaz0 files compressed individually. The
  * archive begins with a header of non-fixed size, which describes the
  * location of each individual Yaz0 block within the archive itself. This
  * header is followed by each Yaz0 file.
