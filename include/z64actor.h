@@ -350,12 +350,12 @@ typedef enum {
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
-
-typedef struct {
+// A Lock On entry is a set of 4 triangles which appear around an actor when the player Z-Targets it
+typedef struct TargetLockOnEntry {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ f32 unkC;
+    /* 0x0C */ f32 distance; // distance towards the center of the locked on
     /* 0x10 */ Color_RGBA8 color;
-} TargetContextEntry; // size = 0x14
+} TargetLockOnEntry; // size = 0x14
 
 typedef struct TargetContext {
     /* 0x00 */ Vec3f unk0;
@@ -366,12 +366,12 @@ typedef struct TargetContext {
     /* 0x3C */ Actor* targetedActor;
     /* 0x40 */ f32 unk40;
     /* 0x44 */ f32 unk44;
-    /* 0x48 */ s16 unk48; // alpha
+    /* 0x48 */ s16 lockOnAlpha;
     /* 0x4A */ u8 arrowPointedActorCategory;
     /* 0x4B */ u8 unk4B;
-    /* 0x4C */ s8 unk4C;
-    /* 0x50 */ TargetContextEntry unk50[3];
-    /* 0x8C */ Actor* unk8C;
+    /* 0x4C */ s8 currentLockOnIndex;
+    /* 0x50 */ TargetLockOnEntry lockOnEntries[3];
+    /* 0x8C */ Actor* unk_8C; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* targetableOption;
 } TargetContext; // size = 0x98

@@ -435,7 +435,7 @@
     0x801AED48:("D_801AED48","s16","[8]",0x10),
     0x801AED58:("sCategoryFreezeMasks","UNK_TYPE4","",0x4),
     0x801AED88:("actorDefaultHitColor","Color_RGBA8","",0x4),
-    0x801AED8C:("D_801AED8C","UNK_TYPE1","",0x1),
+    0x801AED8C:("sTargetableActorCategories","UNK_TYPE1","",0x1),
     0x801AED98:("D_801AED98","Vec3f","",0xC),
     0x801AEDA4:("D_801AEDA4","UNK_TYPE4","",0x4),
     0x801AEDB0:("sArrowDmgFlags","UNK_TYPE1","",0x1),

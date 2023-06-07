@@ -4621,7 +4621,7 @@ void func_80832888(Player* this, PlayState* play) {
                     !(var_v1_2->flags & ACTOR_FLAG_CANT_LOCK_ON) &&
                     !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
                     if ((var_v1_2 == this->targetedActor) && (this == GET_PLAYER(play))) {
-                        var_v1_2 = play->actorCtx.targetContext.unk_94;
+                        var_v1_2 = play->actorCtx.targetContext.targetableOption;
                     }
 
                     if ((var_v1_2 != NULL) &&
