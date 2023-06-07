@@ -137,7 +137,7 @@ TexturePtr gItemIcons[] = {
     gBottledSeahorseIconTex,     // ITEM_SEAHORSE
     gChateauRomaniIconTex,       // ITEM_CHATEAU
     gBottledHylianLoachIconTex,  // ITEM_HYLIAN_LOACH
-    gEmptyBottleIcon2Tex,          // ITEM_OBABA_DRINK
+    gEmptyBottleIcon2Tex,        // ITEM_OBABA_DRINK
     gMoonTearIconTex,            // ITEM_MOON_TEAR
     gLandDeedIconTex,            // ITEM_DEED_LAND
     gSwampDeedIconTex,           // ITEM_DEED_SWAMP
