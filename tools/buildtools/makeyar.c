@@ -26,7 +26,7 @@
  * its own Yaz0 compressed file, appending them in order for the generated
  * archive. Other elf sections are ignored for the resulting yar file.
  *
- * The program also outputs an elf file that's identically to the elf input,
+ * The program also outputs an elf file that's identical to the elf input,
  * but with its .data section zero'ed out completely. This "symbols" elf can be
  * used for referencing each symbol as the whole file were completely
  * uncompressed.
