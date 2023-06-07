@@ -9,9 +9,8 @@ typedef void (*EnSnowwdActionFunc)(struct EnSnowwd*, PlayState*);
 
 typedef struct EnSnowwd {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ColliderCylinder collider;            /* inferred */
-    /* 0x190 */ s16 unk190;                         /* inferred */
-    /* 0x192 */ char pad192[2];
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ s16 unk190;
     /* 0x194 */ EnSnowwdActionFunc actionFunc;
 } EnSnowwd; // size = 0x198
 

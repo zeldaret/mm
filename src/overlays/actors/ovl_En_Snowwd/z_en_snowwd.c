@@ -86,9 +86,9 @@ void func_80AF76F0(EnSnowwd* this, PlayState* play) {
     f32 sp54;
     Vec3f sp48;
 
-    if (this->collider.base.acFlags & 2) {
-        this->collider.base.acFlags = this->collider.base.acFlags & 0xFFFD;
-        Actor_PlaySfx(thisx, 0x1837U);
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
+        Actor_PlaySfx(thisx, NA_SE_IT_REFLECTION_WOOD);
     }
     if (thisx->home.rot.y != 0) {
         this->unk190 = 0x15;
