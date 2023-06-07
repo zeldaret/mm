@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "objects/object_bombf/object_bombf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 
 #define THIS ((EnBombf*)thisx)
 
@@ -117,7 +117,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
         thisx->gravity = -1.5f;
         func_800BC154(play, &play->actorCtx, thisx, 3);
         thisx->colChkInfo.mass = 200;
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
         EnBombf_SetupAction(this, func_808AEE3C);
     } else {
         thisx->colChkInfo.mass = MASS_IMMOVABLE;
@@ -157,7 +157,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 this->timer = 180;
                 this->unk_204 = 0.0f;
                 Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             } else {
                 player->actor.child = NULL;
                 player->heldActor = NULL;
@@ -177,7 +177,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                     bombf->unk_1F8 = 1;
                     bombf->timer = 0;
                     this->timer = 180;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     this->unk_204 = 0.0f;
                 }
             }
@@ -188,7 +188,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 if (bombf != NULL) {
                     bombf->timer = 100;
                     this->timer = 180;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     this->unk_204 = 0.0f;
                 }
             } else {
@@ -208,7 +208,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
         if (this->timer == 0) {
             this->unk_204 += 0.05f;
             if (this->unk_204 >= 1.0f) {
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             }
         }
 

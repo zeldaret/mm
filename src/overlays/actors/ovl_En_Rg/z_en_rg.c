@@ -746,7 +746,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
             this->unk_33C = 1;
         }
 
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
         SubS_UpdateFlags(&this->unk_310, 3, 7);

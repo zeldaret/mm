@@ -8,7 +8,7 @@
 #include "z64rumble.h"
 #include "objects/object_rr/object_rr.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnRr*)thisx)
 
@@ -268,7 +268,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     this->unk_1EA = 100;
     this->unk_1FC = 20;
     this->collider1.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_1F0 = 8;
     this->unk_1E1 = 0;
     this->actor.speed = 0.0f;
@@ -299,7 +299,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
     if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->unk_1F0 = 110;
         this->unk_1F6 = 2500;
         this->unk_210 = 0.0f;
@@ -416,7 +416,7 @@ void func_808FA910(EnRr* this) {
 
     this->actionFunc = func_808FB42C;
     Actor_PlaySfx(&this->actor, NA_SE_EN_LIKE_DEAD);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void func_808FA9CC(EnRr* this) {

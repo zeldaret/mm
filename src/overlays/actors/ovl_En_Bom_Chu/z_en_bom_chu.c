@@ -180,7 +180,7 @@ void EnBomChu_WaitForRelease(EnBomChu* this, PlayState* play) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
         this->actor.shape.rot.y = player->actor.shape.rot.y;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         func_800B8EF4(play, &this->actor);
 
         this->isMoving = true;

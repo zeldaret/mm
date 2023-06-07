@@ -7,7 +7,7 @@
 #include "z_en_cne_01.h"
 #include "objects/object_cne/object_cne.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnCne01*)thisx)
 
@@ -149,7 +149,7 @@ s32 func_809CB4A0(EnCne01* this, PlayState* play) {
 
 void EnCne01_FinishInit(EnHy* this, PlayState* play) {
     if (EnHy_Init(this, play, &gCneSkel, ENHY_ANIM_OS_ANIME_11)) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;
         if (ENCNE01_GET_PATH(&this->actor) == 0x3F) {
@@ -216,7 +216,7 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->enHy.collider);
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->enHy.actor.flags &= ~ACTOR_FLAG_1;
+    this->enHy.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->enHy.path = SubS_GetPathByIndex(play, ENCNE01_GET_PATH(&this->enHy.actor), 0x3F);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);

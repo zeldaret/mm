@@ -361,7 +361,7 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                     play_sound(NA_SE_SY_FOUND);
                     func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {

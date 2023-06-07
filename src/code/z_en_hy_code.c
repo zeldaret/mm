@@ -182,7 +182,7 @@ s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
             enHy->actor.shape.rot.y = Math_Vec3f_Yaw(&enHy->actor.world.pos, &door->knobDoor.dyna.actor.world.pos);
             enHy->actor.world.rot.y = enHy->actor.shape.rot.y;
             enHy->actor.gravity = 0.0f;
-            enHy->actor.flags &= ~ACTOR_FLAG_1;
+            enHy->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     }
     return ret;
@@ -190,7 +190,7 @@ s32 func_800F0DD4(EnHy* enHy, PlayState* play, s16 arg2, s16 arg3) {
 
 s32 EnHy_SetPointFowards(EnHy* enHy, PlayState* play, f32 gravity, s16 animIndex) {
     enHy->actor.gravity = gravity;
-    enHy->actor.flags |= ACTOR_FLAG_1;
+    enHy->actor.flags |= ACTOR_FLAG_TARGETABLE;
     EnHy_ChangeObjectAndAnim(enHy, play, animIndex);
     enHy->curPoint++;
     return false;

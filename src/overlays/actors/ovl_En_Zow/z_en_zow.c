@@ -7,7 +7,7 @@
 #include "z_en_zow.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZow*)thisx)
 
@@ -321,7 +321,7 @@ void EnZow_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.textId = 0;
     this->actor.world.rot.z = this->actor.shape.rot.z;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnZow_Destroy(Actor* thisx, PlayState* play) {
@@ -407,7 +407,7 @@ void func_80BDD350(EnZow* this, PlayState* play) {
     if (this->unk_2CA & 2) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_WATER);
         func_80BDCDA8(this, this->unk_2D0);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->skelAnime.playSpeed = 0.0f;
         this->actor.velocity.y = -4.0f;
     }
@@ -514,7 +514,7 @@ void func_80BDD6BC(EnZow* this, PlayState* play) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_OUT_OF_WATER);
         func_80BDCDA8(this, this->unk_2D0);
         func_80BDD04C(this, 1, ANIMMODE_ONCE);
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.velocity.y = 0.0f;
         this->actionFunc = func_80BDD634;
     } else if (this->actor.depthInWater < 80.0f) {

@@ -522,13 +522,13 @@ typedef enum {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Targetability / ACTOR_FLAG_TARGETABLE?
-#define ACTOR_FLAG_1             (1 << 0)
+// Allows Tatl to fly over the actor and Z-targeting it
+#define ACTOR_FLAG_TARGETABLE    (1 << 0)
 // Unused
 #define ACTOR_FLAG_2             (1 << 1)
 // Changes the targeting behaviour for unfriendly actors (sound effects, Player's stance, etc)
 #define ACTOR_FLAG_UNFRIENDLY    (1 << 2)
-// Opposite of the UNFRIENDLY flag. It is not checked in the original game.
+// Opposite of the UNFRIENDLY flag. It is not checked explictly in the original game.
 #define ACTOR_FLAG_FRIENDLY      (1 << 3)
 // 
 #define ACTOR_FLAG_10            (1 << 4)

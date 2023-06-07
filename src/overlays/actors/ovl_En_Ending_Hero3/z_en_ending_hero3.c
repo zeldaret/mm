@@ -7,7 +7,7 @@
 #include "z_en_ending_hero3.h"
 #include "objects/object_toryo/object_toryo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnEndingHero3*)thisx)
 

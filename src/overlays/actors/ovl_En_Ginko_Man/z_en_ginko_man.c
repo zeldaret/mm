@@ -7,7 +7,7 @@
 #include "z_en_ginko_man.h"
 #include "objects/object_boj/object_boj.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGinkoMan*)thisx)
 
@@ -79,7 +79,7 @@ void EnGinkoMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
-    this->actor.flags |= ACTOR_FLAG_1; // targetable
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE; // targetable
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
     this->actionFunc = EnGinkoMan_Idle;
 }

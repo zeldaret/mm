@@ -478,7 +478,7 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
 
     if (sp34) {
         this->actor.textId = 0x238;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.targetArrowOffset = 1400.0f / 3.0f;
         Actor_SetFocus(&this->actor, 24.0f);
         this->actor.targetMode = TARGET_MODE_3;
@@ -537,7 +537,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
         this->actor.flags |= ACTOR_FLAG_10;
         if (this->actor.home.rot.y == 1) {
-            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         }
 
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {

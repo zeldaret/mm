@@ -3477,7 +3477,7 @@ void func_8082FA5C(PlayState* play, Player* this, PlayerMeleeWeaponState meleeWe
 
 s32 func_8082FB68(Player* this) {
     if ((this->targetedActor != NULL) &&
-        CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY)) {
+        CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)) {
         this->stateFlags3 |= PLAYER_STATE3_80000000;
         return true;
     }
@@ -4659,7 +4659,7 @@ void func_80832888(Player* this, PlayState* play) {
         if ((this->targetedActor != NULL) && !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
             this->stateFlags1 &= ~(PLAYER_STATE1_10000 | PLAYER_STATE1_20000);
             if ((this->stateFlags1 & PLAYER_STATE1_800) ||
-                !CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY)) {
+                !CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)) {
                 this->stateFlags1 |= PLAYER_STATE1_10000;
             }
         } else if (this->stateFlags1 & PLAYER_STATE1_20000) {
@@ -7285,9 +7285,9 @@ s32 func_808391D8(Player* this, PlayState* play) {
         s32 var_t2 = false;
 
         if (this->tatlActor != NULL) {
-            var_t2 =
-                (targetedActor != NULL) && (CHECK_FLAG_ALL(targetedActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000) ||
-                                            (targetedActor->hintId != TATL_HINT_ID_NONE));
+            var_t2 = (targetedActor != NULL) &&
+                     (CHECK_FLAG_ALL(targetedActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
+                      (targetedActor->hintId != TATL_HINT_ID_NONE));
 
             if (var_t2 || (this->tatlTextId != 0)) {
                 //! @bug The comparison `((ABS_ALT(this->tatlTextId) & 0xFF00) != 0x10000)` always evaluates to `true`
@@ -7367,7 +7367,7 @@ s32 func_80839518(Player* this, PlayState* play) {
         func_80838A90(this, play);
         return true;
     } else if ((this->targetedActor != NULL) &&
-               (CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000) ||
+               (CHECK_FLAG_ALL(this->targetedActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000) ||
                 (this->targetedActor->hintId != TATL_HINT_ID_NONE))) {
         this->stateFlags2 |= PLAYER_STATE2_200000;
     } else if ((this->tatlTextId == 0) && !func_80123420(this) &&
@@ -15076,7 +15076,7 @@ void func_8084E980(Player* this, PlayState* play) {
     func_8083216C(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
-        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY)) {
+        if (!CHECK_FLAG_ALL(this->talkActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)) {
             this->stateFlags2 &= ~PLAYER_STATE2_2000;
         }
 
@@ -20078,7 +20078,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
 
     func_808323C0(player, CS_ID_GLOBAL_TALK);
     if ((player->talkActor != NULL) || (actor == player->tatlActor) ||
-        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_1 | ACTOR_FLAG_40000)) {
+        CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000)) {
         actor->flags |= ACTOR_FLAG_TALK_REQUESTED;
     }
 

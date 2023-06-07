@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPamera*)thisx)
 
@@ -235,7 +235,7 @@ void EnPamera_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BD8700(EnPamera* this) {
     this->hideInisdeTimer = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80BD8758;
 }
@@ -277,7 +277,7 @@ void func_80BD8758(EnPamera* this, PlayState* play) {
 
 void func_80BD8908(EnPamera* this) {
     this->actor.draw = EnPamera_Draw;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80BD8964;
 }
@@ -587,7 +587,7 @@ void func_80BD9840(EnPamera* this, PlayState* play) {
 }
 
 void func_80BD9904(EnPamera* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = &func_80BD9928;
 }
 
@@ -712,7 +712,7 @@ s32 func_80BD9CB8(EnPamera* this, PlayState* play) {
                 case 2:
                     if (this->actor.draw == NULL) {
                         this->actor.draw = EnPamera_Draw;
-                        this->actor.flags |= ACTOR_FLAG_1;
+                        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
                     }
                     func_80BD9EE0(this);
                     break;

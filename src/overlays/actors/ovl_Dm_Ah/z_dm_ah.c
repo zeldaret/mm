@@ -6,7 +6,7 @@
 
 #include "z_dm_ah.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAh*)thisx)
 
@@ -159,7 +159,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
                        OBJECT_AH_LIMB_MAX);
     this->animationIndex = -1;
     func_80C1D410(this, 0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_27C |= 1;
     if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {

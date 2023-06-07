@@ -6,7 +6,7 @@
 
 #include "z_en_pst.h"
 
-#define FLAGS (ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_TARGETABLE)
 
 #define THIS ((EnPst*)thisx)
 
@@ -342,11 +342,11 @@ void EnPst_FollowSchedule(EnPst* this, PlayState* play) {
         ((this->scheduleResult != scheduleOutput.result) &&
          !EnPst_ProcessScheduleOutput(this, play, &scheduleOutput))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         scheduleOutput.result = POSTBOX_SCH_NONE;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->scheduleResult = scheduleOutput.result;
     EnPst_HandleSchedule(this, play);

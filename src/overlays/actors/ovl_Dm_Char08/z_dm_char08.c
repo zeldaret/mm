@@ -202,7 +202,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->eyeMode = TURTLE_EYEMODE_BLINK_STRAIGHT;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
-                thisx->flags |= ACTOR_FLAG_1;
+                thisx->flags |= ACTOR_FLAG_TARGETABLE;
                 if (gSaveContext.save.entrance == ENTRANCE(ZORA_CAPE, 8)) {
                     this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
                     this->actionFunc = func_80AAFAC4;
@@ -221,7 +221,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
-            thisx->flags |= ACTOR_FLAG_1;
+            thisx->flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = func_80AAFAE4;
             this->unk_1F0 = 1.0f;
             break;
@@ -298,7 +298,7 @@ void func_80AAF884(DmChar08* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
-        this->dyna.actor.flags |= ACTOR_FLAG_1;
+        this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc = func_80AAF8F4;
     }
 }

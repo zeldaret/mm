@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -77,7 +77,7 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_3;
     this->wallCheckTimer = 10;
     this->alpha = 255.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     if (!Player_HasMirrorShieldEquipped(play)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 #include "objects/object_pr/object_pr.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPr*)thisx)
 

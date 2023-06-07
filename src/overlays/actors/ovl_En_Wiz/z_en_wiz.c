@@ -8,8 +8,8 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
-#define FLAGS                                                                                         \
-    (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
+#define FLAGS                                                                                                  \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | \
      ACTOR_FLAG_100000 | ACTOR_FLAG_CANT_LOCK_ON | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
@@ -1010,7 +1010,7 @@ void EnWiz_SetupDisappear(EnWiz* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);
     Math_SmoothStepToS(&this->rotationalVelocity, 0x1388, 0x64, 0x3E8, 0x3E8);
     this->actor.world.rot.y += this->rotationalVelocity;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnWiz_Disappear;
 }
 
@@ -1050,7 +1050,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
                 this->ghostColliders.elements[0].info.bumper.dmgFlags = 0x1000202;
             }
 
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnWiz_SetupAppear;
         }
     }
@@ -1065,7 +1065,7 @@ void EnWiz_SetupDamaged(EnWiz* this, PlayState* play) {
         Enemy_StartFinishingBlow(play, &this->actor);
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DEAD);
         this->timer = 0;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DAMAGE);
     }

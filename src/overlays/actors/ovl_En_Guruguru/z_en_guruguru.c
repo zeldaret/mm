@@ -7,7 +7,7 @@
 #include "z_en_guruguru.h"
 #include "objects/object_fu/object_fu.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGuruguru*)thisx)
 
@@ -85,7 +85,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
         } else if (this->actor.params == 2) {
             this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
             Actor_Kill(&this->actor);

@@ -1,8 +1,8 @@
 #include "global.h"
 
-#define FLAGS                                                                                                      \
-    (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | ACTOR_FLAG_2000000 | \
-     ACTOR_FLAG_CAN_PRESS_SWITCH | ACTOR_FLAG_80000000)
+#define FLAGS                                                                                          \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_200000 | \
+     ACTOR_FLAG_2000000 | ACTOR_FLAG_CAN_PRESS_SWITCH | ACTOR_FLAG_80000000)
 
 ActorFunc sPlayerCallInitFunc;
 ActorFunc sPlayerCallDestroyFunc;

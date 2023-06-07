@@ -6,7 +6,7 @@
 
 #include "z_en_cow.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnCow*)thisx)
 
@@ -144,7 +144,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             EnCow_SetTailPos(this);
 
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
             break;
     }

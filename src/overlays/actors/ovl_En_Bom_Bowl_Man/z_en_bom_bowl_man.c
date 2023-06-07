@@ -7,7 +7,7 @@
 #include "z_en_bom_bowl_man.h"
 #include "objects/object_cs/object_cs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBomBowlMan*)thisx)
 
@@ -352,7 +352,7 @@ void func_809C52B4(EnBomBowlMan* this) {
     this->actor.draw = NULL;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.world.pos.x = 1340.0f;
     this->actor.world.pos.z = -1795.0f;
     this->unk_29C = 3;

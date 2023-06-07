@@ -214,7 +214,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
 
 void func_80C229AC(DmTag* this, PlayState* play) {
     SubS_UpdateFlags(&this->unk_18C, 3, 7);
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 }
 
 void func_80C229EC(DmTag* this, PlayState* play) {
@@ -240,7 +240,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         this->unk_18E = 2;
         this->unk_18C = 0;
         SubS_UpdateFlags(&this->unk_18C, 4, 7);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = func_80C229EC;
     } else if (this->actor.room == 2) {
         Actor_Kill(&this->actor);

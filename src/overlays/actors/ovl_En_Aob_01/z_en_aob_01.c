@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Racedog/z_en_racedog.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnAob01*)thisx)
 
@@ -1113,7 +1113,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
         case EVENTINF_DOG_RACE_STATE_NOT_STARTED:
             EnAob01_InitializeDogTextOffsets();
             EnAob01_SpawnDogs(this, play);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnAob01_BeforeRace_Idle;
             break;
 
@@ -1124,7 +1124,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
             this->csId = this->actor.csId;
             EnAob01_Race_FollowSelectedDog(this, play);
             CutsceneManager_Queue(this->csId);
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             EnAob01_Race_HidePlayer(this, play);
             this->actionFunc = EnAob01_Race_StartCutscene;
             break;
@@ -1132,7 +1132,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
         case EVENTINF_DOG_RACE_STATE_ENDED:
             EnAob01_InitializeDogTextOffsets();
             EnAob01_SpawnDogs(this, play);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_10000;
             this->actionFunc = EnAob01_AfterRace_GiveRaceResult;
             break;

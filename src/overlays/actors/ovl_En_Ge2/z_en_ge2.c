@@ -6,7 +6,7 @@
 
 #include "z_en_ge2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe2*)thisx)
 
@@ -463,7 +463,7 @@ void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
-        this->picto.actor.flags |= ACTOR_FLAG_1;
+        this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 }
 
@@ -514,7 +514,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_KnockedOut;
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-            this->picto.actor.flags &= ~ACTOR_FLAG_1;
+            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->stateFlags |= GERUDO_PURPLE_STATE_KO;
         }
     } else if (this->picto.actor.home.rot.x == 0) {

@@ -6,7 +6,7 @@
 
 #include "z_en_lift_nuts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnLiftNuts*)thisx)
 
@@ -979,7 +979,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     func_80AE9BCC(this, play);
 
     if (func_80AE9B4C(0, 2)) {
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
     }
 }
 

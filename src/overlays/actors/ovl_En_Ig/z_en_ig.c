@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "objects/object_dai/object_dai.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnIg*)thisx)
 
@@ -574,7 +574,7 @@ s32 func_80BF1DF4(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
             this->unk_3E0 = scheduleOutput->time1 - scheduleOutput->time0;
             this->unk_3E2 = sp56 - scheduleOutput->time0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->unk_3D0 |= 0x100;
             func_80BF1284(this, 3);
             this->actor.gravity = 0.0f;
@@ -684,7 +684,7 @@ s32 func_80BF2368(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->actor.targetMode = TARGET_MODE_0;
     this->unk_3D0 = 0;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
     switch (scheduleOutput->result) {
         case 5:
@@ -881,11 +881,11 @@ void func_80BF2AF8(EnIg* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80BF3260, &sp20) ||
         ((this->scheduleResult != sp20.result) && !func_80BF2368(this, play, &sp20))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp20.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_2A8 = func_80BF146C(this, play);
     this->scheduleResult = sp20.result;

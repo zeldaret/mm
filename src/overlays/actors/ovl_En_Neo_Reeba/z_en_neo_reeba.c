@@ -7,7 +7,7 @@
 #include "z_en_neo_reeba.h"
 #include "objects/object_rb/object_rb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 
 #define THIS ((EnNeoReeba*)thisx)
 
@@ -160,7 +160,7 @@ void EnNeoReeba_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnNeoReeba_SetupWaitUnderground(EnNeoReeba* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.draw = NULL;
     this->actionTimer = 10;
     this->actionFunc = EnNeoReeba_WaitUnderground;
@@ -248,7 +248,7 @@ void EnNeoReeba_SetupRise(EnNeoReeba* this) {
     this->sinkRiseRate = 300.0f;
     this->skelAnime.playSpeed = 2.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnNeoReeba_RiseOutOfGround;
 }
 
@@ -446,7 +446,7 @@ void EnNeoReeba_SetupDeathEffects(EnNeoReeba* this) {
     this->rotationSpeed = 3640.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 25);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIVA_DEAD);
     this->actionFunc = EnNeoReeba_PlayDeathEffects;

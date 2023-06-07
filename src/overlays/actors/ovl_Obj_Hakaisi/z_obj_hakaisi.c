@@ -7,7 +7,7 @@
 #include "z_obj_hakaisi.h"
 #include "objects/object_hakaisi/object_hakaisi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjHakaisi*)thisx)
 
@@ -208,7 +208,7 @@ void func_80B1456C(ObjHakaisi* this, PlayState* play) {
 void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
     this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;
 }
@@ -375,7 +375,7 @@ void func_80B151E0(ObjHakaisi* this, PlayState* play) {
     this->dyna.actor.destroy = func_80B15254;
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->dyna.actor.shape.yOffset = 100.0f;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_80B15264(this);
 }
 

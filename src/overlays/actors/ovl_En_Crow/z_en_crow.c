@@ -6,7 +6,7 @@
 
 #include "z_en_crow.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnCrow*)thisx)
 
@@ -137,7 +137,7 @@ void EnCrow_Init(Actor* thisx, PlayState* play) {
     sDeadCount = 0;
 
     if (this->actor.parent != NULL) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
     EnCrow_SetupFlyIdle(this);
 }
@@ -171,7 +171,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         dist = Actor_WorldDistXZToPoint(&this->actor, &this->actor.parent->world.pos);
     } else {
         dist = 450.0f;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
@@ -455,7 +455,7 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
             scaleTarget = 0.01f;
         }
         if (Math_StepToF(&this->actor.scale.x, scaleTarget, scaleTarget * 0.1f)) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.flags &= ~ACTOR_FLAG_10;
             this->actor.colChkInfo.health = 1;
             EnCrow_SetupFlyIdle(this);
@@ -480,7 +480,7 @@ void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
 
         } else {
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             Enemy_StartFinishingBlow(play, &this->actor);
             EnCrow_SetupDamaged(this, play);
         }

@@ -37,7 +37,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     f32 zRot = 0.0f;
     s32 i = 0;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk148 = ENOKARINATAG_GET_F800(thisx);
     this->unk14A = ENOKARINATAG_GET_780(thisx);
     this->switchFlags = ENOKARINATAG_GET_SWITCHFLAGS(thisx);

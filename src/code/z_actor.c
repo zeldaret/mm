@@ -536,7 +536,8 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->targetedActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
-            for (i = 0, index = targetCtx->currentLockOnIndex; i < totalEntries; i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnEntries)) {
+            for (i = 0, index = targetCtx->currentLockOnIndex; i < totalEntries;
+                 i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnEntries)) {
                 entry = &targetCtx->lockOnEntries[index];
 
                 if (entry->distance < 500.0f) {
@@ -666,8 +667,9 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
                 targetCtx->lockOnAlpha = 0;
             }
 
-            sfxId = CHECK_FLAG_ALL(targetedActor->flags, ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON
-                                                                                               : NA_SE_SY_LOCK_ON_HUMAN;
+            sfxId = CHECK_FLAG_ALL(targetedActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+                        ? NA_SE_SY_LOCK_ON
+                        : NA_SE_SY_LOCK_ON_HUMAN;
             play_sound(sfxId);
         }
 
@@ -1034,7 +1036,7 @@ void* func_800B6680(PlayState* play, s16 id) {
 void Actor_Kill(Actor* actor) {
     actor->draw = NULL;
     actor->update = NULL;
-    actor->flags &= ~ACTOR_FLAG_1;
+    actor->flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void Actor_SetWorldToHome(Actor* actor) {
@@ -1828,7 +1830,8 @@ s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
 }
 
 s32 Target_800B83F8(Actor* actor, Player* player, s32 flag) {
-    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_1) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
+    if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_TARGETABLE) ||
+        (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
         return true;
     }
 
@@ -3390,12 +3393,13 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
         }
 
         // Actor must be at least targetable or ACTOR_FLAG_40000000
-        if (!(actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_1))) {
+        if (!(actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_TARGETABLE))) {
             continue;
         }
 
         // Determine the closest enemy actor to player within a range. Used for playing enemy background music.
-        if ((actorCategory == ACTORCAT_ENEMY) && CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_1)) {
+        if ((actorCategory == ACTORCAT_ENEMY) &&
+            CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)) {
             if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
                 actorCtx->targetContext.bgmEnemy = actor;
                 sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
@@ -3409,7 +3413,8 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
 
         distSq = Target_800B82EC(actor, player, D_801ED8DC);
 
-        isNearestTargetableActor = (actor->flags & ACTOR_FLAG_1) && (distSq < sTargetableNearestActorDistanceSq);
+        isNearestTargetableActor =
+            (actor->flags & ACTOR_FLAG_TARGETABLE) && (distSq < sTargetableNearestActorDistanceSq);
         phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
 
         if (!isNearestTargetableActor && !phi_s2_2) {
@@ -4429,10 +4434,10 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     }
 
     if (arg3 < phi_f2) {
-        actor->flags &= ~ACTOR_FLAG_1;
+        actor->flags &= ~ACTOR_FLAG_TARGETABLE;
         Math_SmoothStepToS(&arg2, 0, 6, 0x14, 1);
     } else {
-        actor->flags |= ACTOR_FLAG_1;
+        actor->flags |= ACTOR_FLAG_TARGETABLE;
         Math_SmoothStepToS(&arg2, 0xFF, 6, 0x14, 1);
     }
 
