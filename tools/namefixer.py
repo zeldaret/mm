@@ -1028,6 +1028,7 @@ wordReplace = {
     "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
     "play->actorCtx.unk3": "play->actorCtx.lensActive",
     "play->actorCtx.unk4": "play->actorCtx.lensMaskSize",
+    "play->actorCtx.targetContext.unk4B": "play->actorCtx.targetContext.rotation",
     "play->actorCtx.targetContext.unk_94": "play->actorCtx.targetContext.targetableOption",
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",

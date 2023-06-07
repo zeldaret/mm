@@ -468,7 +468,7 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->unk_8C = NULL;
     targetCtx->targetedActor = NULL;
     targetCtx->arrowPointedActor = NULL;
-    targetCtx->unk4B = 0;
+    targetCtx->rotation = 0;
     targetCtx->currentLockOnIndex = 0;
     targetCtx->unk40 = 0.0f;
     Target_SetColors(targetCtx, actor, actor->category, play);
@@ -499,7 +499,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         s32 index;
         f32 var2;
 
-        if (targetCtx->unk4B != 0) {
+        if (targetCtx->rotation != 0) {
             totalEntries = 1;
         } else {
             totalEntries = ARRAY_COUNT(targetCtx->lockOnEntries);
@@ -553,7 +553,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)alpha);
 
-                    Matrix_RotateZS(targetCtx->unk4B * 512, MTXMODE_APPLY);
+                    Matrix_RotateZS(targetCtx->rotation * 512, MTXMODE_APPLY);
 
                     // Draw the 4 lock-on triangles
                     for (lockOnIndex = 0; lockOnIndex < 4; lockOnIndex++) {
@@ -644,7 +644,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         Target_SetColors(targetCtx, actor, category, play);
     }
 
-    if ((targetedActor != NULL) && (targetCtx->unk4B == 0)) {
+    if ((targetedActor != NULL) && (targetCtx->rotation == 0)) {
         Actor_GetProjectedPos(play, &targetedActor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
@@ -676,17 +676,18 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
             targetedActor->world.pos.y - (targetedActor->shape.yOffset * targetedActor->scale.y);
         targetCtx->targetCenterPos.z = targetedActor->world.pos.z;
 
-        if (targetCtx->unk4B == 0) {
+        if (targetCtx->rotation == 0) {
             f32 temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
             f32 clampedFloat;
 
             clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
 
             if (Math_StepToF(&targetCtx->unk44, 80.0f, clampedFloat)) {
-                targetCtx->unk4B++;
+                targetCtx->rotation++;
             }
         } else {
-            targetCtx->unk4B = (targetCtx->unk4B + 3) | 0x80;
+            // 0x80 is or'd to avoid getting this value be set to zero
+            targetCtx->rotation = (targetCtx->rotation + 3) | 0x80;
             targetCtx->unk44 = 120.0f;
         }
     } else {
@@ -2554,8 +2555,8 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
 
     if ((actor == NULL) || (player->unk_738 < 5)) {
         actor = NULL;
-        if (actorCtx->targetContext.unk4B != 0) {
-            actorCtx->targetContext.unk4B = 0;
+        if (actorCtx->targetContext.rotation != 0) {
+            actorCtx->targetContext.rotation = 0;
             play_sound(NA_SE_SY_LOCK_OFF);
         }
     }

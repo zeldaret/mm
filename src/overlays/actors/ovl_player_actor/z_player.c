@@ -4517,7 +4517,7 @@ void func_80832578(Player* this, PlayState* play) {
     if (!(this->stateFlags2 & (PLAYER_STATE2_20 | PLAYER_STATE2_40))) {
         Actor* targetedActor = this->targetedActor;
 
-        if ((targetedActor != NULL) && ((play->actorCtx.targetContext.unk4B != 0) || (this != GET_PLAYER(play))) &&
+        if ((targetedActor != NULL) && ((play->actorCtx.targetContext.rotation != 0) || (this != GET_PLAYER(play))) &&
             (targetedActor->id != ACTOR_OBJ_NOZOKI)) {
             Math_ScaledStepToS(&this->actor.shape.rot.y,
                                Math_Vec3f_Yaw(&this->actor.world.pos, &targetedActor->focus.pos), 0xFA0);
@@ -4727,7 +4727,7 @@ s32 func_80832F78(Player* this, f32* arg1, s16* outYaw, f32 arg3, PlayState* pla
         *outYaw = this->actor.shape.rot.y;
 
         if (this->targetedActor != NULL) {
-            if ((play->actorCtx.targetContext.unk4B != 0) && !(this->stateFlags2 & PLAYER_STATE2_40)) {
+            if ((play->actorCtx.targetContext.rotation != 0) && !(this->stateFlags2 & PLAYER_STATE2_40)) {
                 *outYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->targetedActor->focus.pos);
             }
         } else if (func_80123434(this)) {
