@@ -9,9 +9,6 @@ struct Actor;
 struct MessageTableEntry;
 struct OcarinaStaff;
 
-extern u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX];
-extern u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX];
-
 typedef enum {
     /* 0x0 */ TEXTBOX_TYPE_0,
     /* 0x1 */ TEXTBOX_TYPE_1,
@@ -309,6 +306,7 @@ typedef struct MessageContext {
 } MessageContext; // size = 0x120E0
 
 extern u8 gPageSwitchNextButtonStatus[6][5];
+extern u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX];
 extern s16 gOcarinaSongItemMap[];
 
 #endif

@@ -522,7 +522,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     }
 
     gSaveContext.save.saveInfo.playerData.rupees = 0;
-    gSaveContext.save.saveInfo.scarecrowSpawnSongSet = 0;
+    gSaveContext.save.saveInfo.scarecrowSpawnSongSet = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;

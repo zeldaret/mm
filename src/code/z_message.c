@@ -5683,7 +5683,8 @@ void Message_Update(PlayState* play) {
             gSaveContext.save.cutsceneIndex = sp44;
 
             if (gSaveContext.fileNum != 0xFF) {
-                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[gSaveContext.fileNum * 2], gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
+                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[gSaveContext.fileNum * 2],
+                                          gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
                 Sram_StartWriteToFlashDefault(sramCtx);
             }
             msgCtx->msgMode = MSGMODE_NEW_CYCLE_1;
@@ -5709,7 +5710,8 @@ void Message_Update(PlayState* play) {
             func_8014546C(sramCtx);
 
             if (gSaveContext.fileNum != 0xFF) {
-                Sram_SetFlashPagesOwlSave(sramCtx, gFlashOwlSaveStartPages[gSaveContext.fileNum * 2], gFlashOwlSaveNumPages[gSaveContext.fileNum * 2]);
+                Sram_SetFlashPagesOwlSave(sramCtx, gFlashOwlSaveStartPages[gSaveContext.fileNum * 2],
+                                          gFlashOwlSaveNumPages[gSaveContext.fileNum * 2]);
                 Sram_StartWriteToFlashOwlSave(sramCtx);
             }
             msgCtx->msgMode = MSGMODE_OWL_SAVE_1;

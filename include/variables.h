@@ -2147,7 +2147,6 @@ extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F6B20;
 // extern UNK_TYPE1 D_801F6B22;
 // extern UNK_TYPE4 sCurCsCamera;
-// extern UNK_TYPE4 D_801F6B50;
 // extern UNK_TYPE1 D_801F6B58;
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
