@@ -358,7 +358,7 @@ typedef struct TargetLockOnEntry {
 } TargetLockOnEntry; // size = 0x14
 
 typedef struct TargetContext {
-    /* 0x00 */ Vec3f unk0;
+    /* 0x00 */ Vec3f fairyHintPos; // Used by Tatl to indicate a targetable actor or general hint
     /* 0x0C */ Vec3f targetCenterPos;
     /* 0x18 */ Color_RGBAf fairyInner;
     /* 0x28 */ Color_RGBAf fairyOuter;

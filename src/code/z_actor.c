@@ -428,7 +428,7 @@ TatlColor sTatlColorList[] = {
     { { 0, 255, 0, 255 }, { 0, 255, 0, 0 } },         // ACTORCAT_MAX
 };
 
-void Target_InitLockOnEntries(TargetContext* targetCtx, ActorType type, PlayState* play) {
+void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
     TargetLockOnEntry* targetEntry;
@@ -449,9 +449,9 @@ void Target_InitLockOnEntries(TargetContext* targetCtx, ActorType type, PlayStat
 }
 
 void Target_SetColors(TargetContext* targetCtx, Actor* actor, s32 type, PlayState* play) {
-    targetCtx->unk0.x = actor->focus.pos.x;
-    targetCtx->unk0.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
-    targetCtx->unk0.z = actor->focus.pos.z;
+    targetCtx->fairyHintPos.x = actor->focus.pos.x;
+    targetCtx->fairyHintPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
+    targetCtx->fairyHintPos.z = actor->focus.pos.z;
 
     targetCtx->fairyInner.r = sTatlColorList[type].inner.r;
     targetCtx->fairyInner.g = sTatlColorList[type].inner.g;
@@ -472,7 +472,7 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->currentLockOnIndex = 0;
     targetCtx->unk40 = 0.0f;
     Target_SetColors(targetCtx, actor, actor->category, play);
-    Target_InitLockOnEntries(targetCtx, actor->category, play);
+    Target_InitLockOn(targetCtx, actor->category, play);
 }
 
 void Target_Draw(TargetContext* targetCtx, PlayState* play) {
@@ -633,13 +633,13 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
 
     if (!Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f)) {
         f32 temp_f0 = 0.25f / targetCtx->unk40;
-        f32 x = actor->focus.pos.x - targetCtx->unk0.x;
-        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->unk0.y;
-        f32 z = actor->focus.pos.z - targetCtx->unk0.z;
+        f32 x = actor->focus.pos.x - targetCtx->fairyHintPos.x;
+        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->fairyHintPos.y;
+        f32 z = actor->focus.pos.z - targetCtx->fairyHintPos.z;
 
-        targetCtx->unk0.x += x * temp_f0;
-        targetCtx->unk0.y += y * temp_f0;
-        targetCtx->unk0.z += z * temp_f0;
+        targetCtx->fairyHintPos.x += x * temp_f0;
+        targetCtx->fairyHintPos.y += y * temp_f0;
+        targetCtx->fairyHintPos.z += z * temp_f0;
     } else {
         Target_SetColors(targetCtx, actor, category, play);
     }
@@ -657,12 +657,12 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
             s32 sfxId;
 
             // Lock On entries need to be re-initialized when changing the targeted actor
-            Target_InitLockOnEntries(targetCtx, targetedActor->category, play);
+            Target_InitLockOn(targetCtx, targetedActor->category, play);
 
             targetCtx->targetedActor = targetedActor;
 
             if (targetedActor->id == ACTOR_EN_BOOM) {
-                // Avoid locking on a zora boomerang
+                // Avoid drawing the lock on triangles on a zora boomerang
                 targetCtx->lockOnAlpha = 0;
             }
 

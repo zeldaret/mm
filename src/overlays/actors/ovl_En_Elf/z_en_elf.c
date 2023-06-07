@@ -970,7 +970,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
-                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.unk0);
+                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetContext.fairyHintPos);
                 }
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
@@ -1068,7 +1068,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
         }
     } else if (this->unk_268 == 0) {
         if ((arrayPointerActor == NULL) ||
-            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetContext.unk0) < 50.0f)) {
+            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetContext.fairyHintPos) < 50.0f)) {
             this->unk_268 = 1;
         }
     } else if (this->unk_238 != 0.0f) {
@@ -1276,7 +1276,7 @@ void func_8088FA38(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->fairyFlags & 0x10) {
-        refPos = play->actorCtx.targetContext.unk0;
+        refPos = play->actorCtx.targetContext.fairyHintPos;
 
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;

@@ -670,7 +670,7 @@
     0x800B4B50:("func_800B4B50",),
     0x800B4EDC:("Actor_GetProjectedPos",),
     0x800B4F40:("Target_SetLockOnPos",),
-    0x800B4F78:("Target_InitLockOnEntries",),
+    0x800B4F78:("Target_InitLockOn",),
     0x800B5040:("Target_SetColors",),
     0x800B51A4:("Target_Init",),
     0x800B5208:("Target_Draw",),
