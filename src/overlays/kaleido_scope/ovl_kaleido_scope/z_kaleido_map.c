@@ -9,8 +9,7 @@
 #include "interface/icon_item_field_static/icon_item_field_static.h"
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
-
-extern TexturePtr D_09007500; // gPlayerFaceIcon
+#include "archives/icon_item_24_static/icon_item_24_static_yar.h"
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -76,9 +75,9 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
 }
 
 TexturePtr sDungeonItemTextures[] = {
-    0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
-    0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
-    0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
+    gBossKeyIconTex,    // DUNGEON_BOSS_KEY
+    gCompassIconTex,    // DUNGEON_COMPASS
+    gDungeonMapIconTex, // DUNGEON_MAP
 };
 
 TexturePtr sDungeonTitleTextures[] = {
@@ -283,7 +282,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             // Draw Player's face next to the dungeon floor icon currently in.
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gPlayerFaceIconTex, 16, 16, 62,
                                       sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
@@ -813,8 +812,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
-                                                  sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP =
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gPlayerFaceIconTex, 16, 16, sWorldMapCursorsRectLeft[n],
+                                      sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
 
