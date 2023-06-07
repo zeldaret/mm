@@ -28,27 +28,13 @@
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
-#define STOP_GAMESTATE(curState)     \
-    do {                             \
-        GameState* state = curState; \
-                                     \
-        state->running = false;      \
-    } while(0)
-
-#define SET_NEXT_GAMESTATE(curState, nextInit, nextSize) \
-    do {                                                 \
-        GameState* state = curState;                     \
-                                                         \
-        (state)->init = nextInit;                        \
-        (state)->size = nextSize;                        \
-    } while (0)
-
 #define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
 #define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
 
 #define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
+#define CLOCK_TIME_HOUR (CLOCK_TIME(1, 0))
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
 #define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
@@ -60,6 +46,7 @@
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
 #define CLOCK_TIME_ALT_F(hr, min) (((hr) * 60.0f + (min)) / (24.0f * 60.0f / 0x10000))
 #define CLOCK_TIME_ALT2_F(hr, min) ((((hr) + (min) / 60.0f) * 60.0f) / (24.0f * 60.0f / 0x10000))
+#define CLOCK_TIME_HOUR_F (CLOCK_TIME_F(1, 0))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))

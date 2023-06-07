@@ -58,7 +58,7 @@ void EnElforg_InitializeParams(EnElforg* this) {
     this->actor.speed = 1.0f;
     this->targetSpeedXZ = 1.0f;
     this->actor.velocity.y = 0.0f;
-    this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+    this->actor.world.rot.y = Rand_CenteredFloat(0x10000);
     this->timer = 0;
     this->secondaryTimer = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
@@ -93,17 +93,17 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
+        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
+        case STRAY_FAIRY_TYPE_BUBBLE:
+        case STRAY_FAIRY_TYPE_CHEST:
+        case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
+            break;
+
         default:
             if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(thisx))) {
                 Actor_Kill(thisx);
                 return;
             }
-            break;
-
-        case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
-        case STRAY_FAIRY_TYPE_BUBBLE:
-        case STRAY_FAIRY_TYPE_CHEST:
-        case STRAY_FAIRY_TYPE_TURN_IN_TO_FAIRY_FOUNTAIN:
             break;
     }
 
@@ -176,9 +176,9 @@ void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     s32 pad;
     s32 index;
 
-    pos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
+    pos.x = Rand_CenteredFloat(6.0f) + this->actor.world.pos.x;
     pos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
-    pos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
+    pos.z = Rand_CenteredFloat(6.0f) + this->actor.world.pos.z;
     index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
                 ? STRAY_FAIRY_AREA_CLOCK_TOWN
                 : this->area;
@@ -561,7 +561,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, PlayState* play) {
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play) {
     Actor* enemy = EnElforg_GetHoldingEnemy(this, play);
 
-    if (enemy != NULL && enemy->update != NULL) {
+    if ((enemy != NULL) && (enemy->update != NULL)) {
         this->actionFunc = EnElforg_TrappedByEnemy;
         this->enemy = enemy;
     }
@@ -587,7 +587,7 @@ void EnElforg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->timer == 0 && this->secondaryTimer > 0) {
+    if ((this->timer == 0) && (this->secondaryTimer > 0)) {
         this->secondaryTimer--;
     } else {
         this->timer++;

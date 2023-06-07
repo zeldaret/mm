@@ -93,8 +93,8 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
+    this->pathIndex = ENBOMBOWLMAN_GET_PATH_INDEX(&this->actor);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENBOMBOWLMAN_PATH_INDEX_NONE);
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
@@ -156,7 +156,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 }
 
 void func_809C4B6C(EnBomBowlMan* this) {
-    if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
             Actor_Kill(&this->actor);
         }
@@ -330,7 +330,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->msgCtx.bombersNotebookNewEventQueueSize == 0) &&
+    if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
         ((play->msgCtx.msgMode == MSGMODE_NONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
@@ -448,7 +448,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((play->msgCtx.bombersNotebookNewEventQueueSize == 0) &&
+        if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
             ((play->msgCtx.msgMode == MSGMODE_NONE) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);

@@ -35,7 +35,7 @@ typedef enum {
     /* 0 */ DMCHAR02_ANIM_HIT_GROUND,
     /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
     /* 2 */ DMCHAR02_ANIM_JUGGLE,
-    /* 3 */ DMCHAR02_ANIM_FALL,
+    /* 3 */ DMCHAR02_ANIM_FALL
 } DmChar02Animation;
 
 static AnimationInfo sAnimationInfo[] = {

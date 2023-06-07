@@ -216,7 +216,7 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = SubS_GetPathByIndex(play, this->path->unk1, -1);
+                this->path = SubS_GetPathByIndex(play, this->path->additionalPathIndex, PATH_INDEX_NONE);
                 CutsceneManager_Stop(this->csId);
                 this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
                 CutsceneManager_Queue(this->csId);
@@ -450,7 +450,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
-                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
@@ -499,9 +499,9 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
             Vec3f sp5C = { 0.0f, 0.5f, 0.0f };
 
             for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i -= 2) {
-                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                sp68.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                sp68.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+                sp68.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &sp68, &sp5C, &sp5C, 100, 0, 3);
             }
 
@@ -592,7 +592,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
         phi_f14 = points[arg + 1].z - points[arg - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -639,9 +639,9 @@ f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 void func_80AD4A78(EnTrt2* this, PlayState* play) {
     Vec3f sp34;
 
-    sp34.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+    sp34.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
-    sp34.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+    sp34.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
     Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
 }
 
@@ -722,7 +722,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;

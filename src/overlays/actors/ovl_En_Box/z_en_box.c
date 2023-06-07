@@ -73,7 +73,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    f32 data[5];
+    /* 0x0 */ f32 data[5];
 } EnBox_PlaybackSpeed; // 0x14
 
 static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
@@ -122,6 +122,7 @@ void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
 
     if (temp_s6 > 0) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Push();
         for (i = 0; i < temp_s6; i++) {
             f32 temp_f0 = (f32)i / temp_s6;
@@ -150,6 +151,7 @@ void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
         }
         Matrix_Pop();
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -694,6 +696,7 @@ void EnBox_Draw(Actor* thisx, PlayState* play) {
     EnBox* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (this->unk_1F4.unk_10 != NULL) {
         this->unk_1F4.unk_10(&this->unk_1F4, play);
     }
@@ -719,5 +722,6 @@ void EnBox_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL,
                                        EnBox_PostLimbDraw, &this->dyna.actor, POLY_XLU_DISP);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

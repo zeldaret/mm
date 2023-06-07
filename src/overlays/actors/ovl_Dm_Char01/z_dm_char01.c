@@ -74,8 +74,8 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             }
 
             if (gSaveContext.sceneLayer == 0) {
-                play->envCtx.unk_1F = 5;
-                play->envCtx.unk_20 = 5;
+                play->envCtx.lightConfig = 5;
+                play->envCtx.changeLightNextConfig = 5;
             }
             this->unk_348 = 255.0f;
 

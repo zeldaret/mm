@@ -151,8 +151,8 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     u8 playerForm;
     s16 playerParams;
 
-    if (play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON] >= 0 &&
-        CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]) {
+    if ((play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON] >= 0) &&
+        (CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
         if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
             CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]);
 
@@ -247,7 +247,6 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
-        if (1) {}
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }

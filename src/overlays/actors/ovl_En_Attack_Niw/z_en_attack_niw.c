@@ -54,9 +54,9 @@ void EnAttackNiw_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.gravity = 0.0f;
 
-    this->randomTargetCenterOffset.x = randPlusMinusPoint5Scaled(100.0f);
-    this->randomTargetCenterOffset.y = randPlusMinusPoint5Scaled(10.0f);
-    this->randomTargetCenterOffset.z = randPlusMinusPoint5Scaled(100.0f);
+    this->randomTargetCenterOffset.x = Rand_CenteredFloat(100.0f);
+    this->randomTargetCenterOffset.y = Rand_CenteredFloat(10.0f);
+    this->randomTargetCenterOffset.z = Rand_CenteredFloat(100.0f);
 
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags &= ~ACTOR_FLAG_1; // Unnecessary: this actor does not start with this flag
@@ -68,7 +68,7 @@ void EnAttackNiw_Destroy(Actor* thisx, PlayState* play) {
     EnAttackNiw* this = THIS;
     EnNiw* parent = (EnNiw*)this->actor.parent;
 
-    if (this->actor.parent != NULL && this->actor.parent->update != NULL) {
+    if ((this->actor.parent != NULL) && (this->actor.parent->update != NULL)) {
         if (parent->attackNiwCount > 0) {
             parent->attackNiwCount--;
         }
@@ -78,11 +78,11 @@ void EnAttackNiw_Destroy(Actor* thisx, PlayState* play) {
 /**
  * Summary: instead of using SkelAnime animations AttackNiw modifies head+wings directly to create animations
  *
- * EnNiw has its own version of this function, probably copy paste since AttackNiw only uses two animationState (2/5)
+ * EnNiw has its own version of this function, probably copy paste since AttackNiw only uses two animIndex (2/5)
  */
-void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animationState) {
+void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animIndex) {
     if (this->unkTimer24C == 0) {
-        if (animationState == 0) {
+        if (animIndex == 0) {
             this->targetBodyRotY = 0.0f;
         } else {
             this->targetBodyRotY = -10000.0f;
@@ -92,7 +92,7 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
         this->unkTimer24C = 3;
         if ((this->clearRotYToggleTimer % 2) == 0) {
             this->targetBodyRotY = 0.0f;
-            if (animationState == 0) {
+            if (animIndex == 0) {
                 this->unkTimer24C = Rand_ZeroFloat(30.0f);
             }
         }
@@ -102,7 +102,7 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
         this->unkToggle28A++;
         this->unkToggle28A &= 1;
 
-        switch (animationState) { // only case 2 and 5 are ever called in AttackNiw
+        switch (animIndex) { // only case 2 and 5 are ever called in AttackNiw
             case NIW_ANIM_STILL:
                 this->targetLeftWingRotZ = 0.0f;
                 this->targetRightWingRotZ = 0.0f;
@@ -155,6 +155,9 @@ void EnAttackNiw_AnimateWingHead(EnAttackNiw* this, PlayState* play, s16 animati
                     this->targetRightWingRotY = 10000.0f;
                     this->targetLeftWingRotY = 10000.0f;
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -308,7 +311,7 @@ void EnAttackNiw_AimAtPlayer(EnAttackNiw* this, PlayState* play) {
     }
 
     if (this->randomAngleChangeTimer == 50) {
-        this->targetRotY = randPlusMinusPoint5Scaled(200.0f) + this->actor.yawTowardsPlayer;
+        this->targetRotY = Rand_CenteredFloat(200.0f) + this->actor.yawTowardsPlayer;
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 2, this->rotStep, 0);

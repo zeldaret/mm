@@ -37,14 +37,14 @@ typedef enum {
     /* 4 */ HG_ANIM_REACH_FORWARD,
     /* 5 */ HG_ANIM_CURL_UP,
     /* 6 */ HG_ANIM_CROUCHED_PANIC,
-    /* 7 */ HG_ANIM_PANIC,
+    /* 7 */ HG_ANIM_PANIC
 } HgAnimation;
 
 typedef enum {
     /* 0 */ HG_CS_FIRST_ENCOUNTER,
     /* 1 */ HG_CS_GET_MASK,
     /* 2 */ HG_CS_SUBSEQUENT_ENCOUNTER,
-    /* 3 */ HG_CS_SONG_OF_HEALING,
+    /* 3 */ HG_CS_SONG_OF_HEALING
 } HgCsIndex;
 
 ActorInit En_Hg_InitVars = {

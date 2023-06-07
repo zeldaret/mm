@@ -108,7 +108,7 @@ typedef enum {
     /* 68 */ SK_ANIM_LOOK_LEFT_START,
     /* 69 */ SK_ANIM_LOOK_LEFT_LOOP,
     /* 70 */ SK_ANIM_SNIFF,
-    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF,
+    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF
 } SkullKidAnimation;
 
 typedef enum {
@@ -116,7 +116,7 @@ typedef enum {
     /* 1 */ SK_MASK_TYPE_NORMAL,
     /* 2 */ SK_MASK_TYPE_GLOWING_EYES,
     /* 3 */ SK_MASK_TYPE_FADING_OUT,
-    /* 9 */ SK_MASK_TYPE_RAISED = 9,
+    /* 9 */ SK_MASK_TYPE_RAISED = 9
 } SkullKidMaskType;
 
 typedef enum {
@@ -127,19 +127,19 @@ typedef enum {
     /* 4 */ SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
     /* 5 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
     /* 6 */ SK_HAND_TYPE_HOLDING_FLUTE,
-    /* 9 */ SK_HAND_TYPE_DEFAULT = 9,
+    /* 9 */ SK_HAND_TYPE_DEFAULT = 9
 } SkullKidHandType;
 
 typedef enum {
     /* 0 */ SK_FADE_IN_STATE_NONE,
     /* 1 */ SK_FADE_IN_STATE_START,
     /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG,
-    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA,
+    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA
 } SkullKidFadeInState;
 
 typedef enum {
     /* 0 */ SK_FADE_OUT_STATE_NONE,
-    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT,
+    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT
 } SkullKidFadeOutState;
 
 typedef enum {
@@ -843,9 +843,10 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         case 594:
             Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
-    }
 
-    if (1) {}
+        default:
+            break;
+    }
 
     if ((play->csCtx.curFrame >= 62) && (play->csCtx.curFrame < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
@@ -1128,8 +1129,8 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 
@@ -1825,8 +1826,8 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 

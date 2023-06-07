@@ -55,11 +55,11 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef struct {
-    /* 0x00 */ f32 scale;
-    /* 0x04 */ s16 radius;
-    /* 0x06 */ s16 height;
-    /* 0x08 */ s16 yShift;
-    /* 0x0C */ s32 params;
+    /* 0x0 */ f32 scale;
+    /* 0x4 */ s16 radius;
+    /* 0x6 */ s16 height;
+    /* 0x8 */ s16 yShift;
+    /* 0xC */ s32 params;
 } LightblockTypeVars; // size = 0x10
 
 static LightblockTypeVars sLightblockTypeVars[] = {

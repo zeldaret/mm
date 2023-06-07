@@ -11,9 +11,9 @@ typedef void (*EnDnpActionFunc)(struct EnDnp*, PlayState*);
 #define EN_DNP_GET_TYPE(thisx) ((thisx)->params & 7)
 
 typedef enum {
-    /* 0x0 */ EN_DNP_TYPE_WOODFALL_TEMPLE,
-    /* 0x1 */ EN_DNP_TYPE_RELEASED_FROM_BOTTLE,
-    /* 0x2 */ EN_DNP_TYPE_DEKU_KINGS_CHAMBER,
+    /* 0 */ EN_DNP_TYPE_WOODFALL_TEMPLE,
+    /* 1 */ EN_DNP_TYPE_RELEASED_FROM_BOTTLE,
+    /* 2 */ EN_DNP_TYPE_DEKU_KINGS_CHAMBER
 } EnDnpType;
 
 typedef struct EnDnp {

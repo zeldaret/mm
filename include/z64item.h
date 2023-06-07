@@ -19,7 +19,7 @@ typedef enum {
     /* 2 */ EQUIP_VALUE_SWORD_RAZOR,
     /* 3 */ EQUIP_VALUE_SWORD_GILDED,
     /* 4 */ EQUIP_VALUE_SWORD_DIETY,
-    /* 5 */ EQUIP_VALUE_SWORD_MAX,
+    /* 5 */ EQUIP_VALUE_SWORD_MAX
 } EquipValueSword;
 
 typedef enum {

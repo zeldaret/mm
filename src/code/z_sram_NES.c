@@ -1,8 +1,9 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "z64horse.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 
-void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages);
+void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages);
 void func_80147314(SramContext* sramCtx, s32 fileNum);
 void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
 
@@ -10,127 +11,29 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2);
     ((newf)[0] != 'Z' || (newf)[1] != 'E' || (newf)[2] != 'L' || (newf)[3] != 'D' || (newf)[4] != 'A' || \
      (newf)[5] != '3')
 
-// default scene flags (?)
-// indices of subarray:
-// - 0: switch0
-// - 1: switch1
-// - 2: chest
-// - 3: collectible
-u32 D_801C5FC0[SCENE_MAX][4] = {
-    { 0xC00, 0, 0, 0x40000000 },    // SCENE_20SICHITAI2
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_1
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_2
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_3
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_4
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_5
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_6
-    { 0, 0, 0, 0xC04 },             // SCENE_KAKUSIANA
-    { 0, 0, 0, 0 },                 // SCENE_SPOT00
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_9
-    { 0, 0, 0, 0 },                 // SCENE_WITCH_SHOP
-    { 0, 0, 0, 0x80000000 },        // SCENE_LAST_BS
-    { 0, 0, 0, 0x80000000 },        // SCENE_HAKASHITA
-    { 0, 0, 0, 0 },                 // SCENE_AYASHIISHOP
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_E
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_F
-    { 0, 0, 0, 0 },                 // SCENE_OMOYA
-    { 0, 0, 0, 0 },                 // SCENE_BOWLING
-    { 0, 0, 0, 0 },                 // SCENE_SONCHONOIE
-    { 0x100000, 0, 0, 0x40000002 }, // SCENE_IKANA
-    { 0, 0, 0, 0 },                 // SCENE_KAIZOKU
-    { 0, 0, 0, 0 },                 // SCENE_MILK_BAR
-    { 0x4000000, 0, 0, 0 },         // SCENE_INISIE_N
-    { 2, 0, 0, 0 },                 // SCENE_TAKARAYA
-    { 0x4000000, 0, 0, 0 },         // SCENE_INISIE_R
-    { 0, 0, 0, 0 },                 // SCENE_OKUJOU
-    { 0xF, 0, 0, 0 },               // SCENE_OPENINGDAN
-    { 0x70B000, 0, 0, 0 },          // SCENE_MITURIN
-    { 0, 0, 0, 0 },                 // SCENE_13HUBUKINOMITI
-    { 0, 0x80000000, 0, 0x400 },    // SCENE_CASTLE
-    { 0, 0, 0, 0 },                 // SCENE_DEKUTES
-    { 0, 0, 0, 0x80000000 },        // SCENE_MITURIN_BS
-    { 0, 0, 0, 0 },                 // SCENE_SYATEKI_MIZU
-    { 0x1A00020, 0, 0, 0 },         // SCENE_HAKUGIN
-    { 0x400, 0, 0, 0 },             // SCENE_ROMANYMAE
-    { 0, 0, 0, 0x1000 },            // SCENE_PIRATE
-    { 0, 0, 0, 0 },                 // SCENE_SYATEKI_MORI
-    { 0, 0, 0, 2 },                 // SCENE_SINKAI
-    { 0x400, 0, 0, 0 },             // SCENE_YOUSEI_IZUMI
-    { 0, 0, 0, 0 },                 // SCENE_KINSTA1
-    { 0, 0, 0, 0x80000000 },        // SCENE_KINDAN2
-    { 0, 0, 0, 0 },                 // SCENE_TENMON_DAI
-    { 0, 0, 0, 2 },                 // SCENE_LAST_DEKU
-    { 0, 0, 0, 0x40000000 },        // SCENE_22DEKUCITY
-    { 0, 0, 0, 0 },                 // SCENE_KAJIYA
-    { 0x10, 0, 0, 0 },              // SCENE_00KEIKOKU
-    { 3, 0, 0, 0 },                 // SCENE_POSTHOUSE
-    { 0, 0, 0, 0 },                 // SCENE_LABO
-    { 0, 0, 0, 0x80000000 },        // SCENE_DANPEI2TEST
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_31
-    { 0, 0, 0, 0 },                 // SCENE_16GORON_HOUSE
-    { 0, 0, 0, 0 },                 // SCENE_33ZORACITY
-    { 0, 0, 0, 0 },                 // SCENE_8ITEMSHOP
-    { 0, 0, 0, 0 },                 // SCENE_F01
-    { 0, 0, 0, 0x80000000 },        // SCENE_INISIE_BS
-    { 0x100400, 0, 0, 0x22 },       // SCENE_30GYOSON
-    { 0x400, 0, 0, 0x80 },          // SCENE_31MISAKI
-    { 0, 0, 0, 0 },                 // SCENE_TAKARAKUJI
-    { 0, 0, 0, 0 },                 // SCENE_UNSET_3A
-    { 0x400, 0, 0, 0 },             // SCENE_TORIDE
-    { 0, 0, 0, 0 },                 // SCENE_FISHERMAN
-    { 0, 0, 0, 0 },                 // SCENE_GORONSHOP
-    { 0, 0, 0, 0 },                 // SCENE_DEKU_KING
-    { 0, 0, 0, 2 },                 // SCENE_LAST_GORON
-    { 0, 0, 0, 0x80000002 },        // SCENE_24KEMONOMITI
-    { 0, 0, 0, 0 },                 // SCENE_F01_B
-    { 0, 0, 0, 0 },                 // SCENE_F01C
-    { 0, 0, 0, 0 },                 // SCENE_BOTI
-    { 0, 0, 0, 0x80000000 },        // SCENE_HAKUGIN_BS
-    { 0xC00, 0, 0, 0x40000000 },    // SCENE_20SICHITAI
-    { 0x102, 0, 0, 0x400 },         // SCENE_21MITURINMAE
-    { 0, 0, 0, 2 },                 // SCENE_LAST_ZORA
-    { 0, 0, 0, 0x40000000 },        // SCENE_11GORONNOSATO2
-    { 0x70, 0, 0, 0 },              // SCENE_SEA
-    { 0, 0, 0, 0 },                 // SCENE_35TAKI
-    { 0, 0, 0, 0 },                 // SCENE_REDEAD
-    { 0, 0, 0, 0x40000000 },        // SCENE_BANDROOM
-    { 0, 0, 0, 0x40000000 },        // SCENE_11GORONNOSATO
-    { 0, 0, 0, 0 },                 // SCENE_GORON_HAKA
-    { 0, 0, 0, 0 },                 // SCENE_SECOM
-    { 0x100000, 0, 0, 0x80000000 }, // SCENE_10YUKIYAMANOMURA
-    { 0, 0, 0, 0 },                 // SCENE_TOUGITES
-    { 0, 0, 0, 0 },                 // SCENE_DANPEI
-    { 0, 0, 0, 0 },                 // SCENE_IKANAMAE
-    { 0, 0, 0, 0 },                 // SCENE_DOUJOU
-    { 0, 0, 0, 0 },                 // SCENE_MUSICHOUSE
-    { 0, 0, 0, 0 },                 // SCENE_IKNINSIDE
-    { 0, 0, 0, 0 },                 // SCENE_MAP_SHOP
-    { 0x400, 0, 0, 0 },             // SCENE_F40
-    { 0x400, 0, 0, 0 },             // SCENE_F41
-    { 0x100000, 0, 0, 0x80000000 }, // SCENE_10YUKIYAMANOMURA2
-    { 0, 0, 0, 0x100 },             // SCENE_14YUKIDAMANOMITI
-    { 0x400, 0, 0, 0 },             // SCENE_12HAKUGINMAE
-    { 0, 0, 0, 0x80 },              // SCENE_17SETUGEN
-    { 0, 0, 0, 0x80 },              // SCENE_17SETUGEN2
-    { 0, 0, 0, 0x80000000 },        // SCENE_SEA_BS
-    { 0, 0, 0, 0x400 },             // SCENE_RANDOM
-    { 0, 0, 0, 0 },                 // SCENE_YADOYA
-    { 0, 0, 0, 0 },                 // SCENE_KONPEKI_ENT
-    { 1, 0, 0, 0 },                 // SCENE_INSIDETOWER
-    { 0, 0, 0, 0 },                 // SCENE_26SARUNOMORI
-    { 0, 0, 0, 0 },                 // SCENE_LOST_WOODS
-    { 0, 0, 0, 2 },                 // SCENE_LAST_LINK
-    { 0, 0, 0, 0 },                 // SCENE_SOUGEN
-    { 0, 0, 0, 0 },                 // SCENE_BOMYA
-    { 0, 0, 0, 0 },                 // SCENE_KYOJINNOMA
-    { 0, 0, 0, 0 },                 // SCENE_KOEPONARACE
-    { 0, 0, 0, 0 },                 // SCENE_GORONRACE
-    { 1, 0, 0, 0 },                 // SCENE_TOWN
-    { 0, 0, 0, 0 },                 // SCENE_ICHIBA
-    { 0, 0, 0, 0x400 },             // SCENE_BACKTOWN
-    { 0x100000, 0, 0, 0x400 },      // SCENE_CLOCKTOWER
-    { 0, 0, 1, 0 },                 // SCENE_ALLEY
+typedef struct PersistentCycleFlags {
+    /* 0x0 */ u32 switch0;
+    /* 0x4 */ u32 switch1;
+    /* 0x8 */ u32 chest;
+    /* 0xC */ u32 collectible;
+} PersistentCycleFlags; // size = 0x10
+
+#define PERSISTENT_CYCLE_FLAGS_SET(switch0, switch1, chest, collectible) { switch0, switch1, chest, collectible },
+#define PERSISTENT_CYCLE_FLAGS_NONE PERSISTENT_CYCLE_FLAGS_SET(0, 0, 0, 0)
+
+#define DEFINE_SCENE(_name, _enumValue, _textId, _drawConfig, _restrictionFlags, persistentCycleFlags) \
+    persistentCycleFlags
+#define DEFINE_SCENE_UNSET(_enumValue) PERSISTENT_CYCLE_FLAGS_NONE
+
+/**
+ * Array of bitwise flags which won't be turned off on a cycle reset (will persist between cycles)
+ */
+PersistentCycleFlags sPersistentCycleFlags[SCENE_MAX] = {
+#include "tables/scene_table.h"
 };
+
+#undef DEFINE_SCENE
+#undef DEFINE_SCENE_UNSET
 
 // TODO: figure out a way to use the WEEKEVENTREG defines here
 // weekEventReg flags which will be not be cleared on a cycle reset
@@ -237,9 +140,21 @@ u16 D_801C66D0[ARRAY_COUNT(gSaveContext.save.saveInfo.weekEventReg)] = {
     /* 99 */ 0,
 };
 
+// Unused remnant values from OoT. Not the correct sizes in MM.
+#define OOT_SAVECONTEXT_SIZE 0x1428
+#define OOT_SLOT_SIZE (OOT_SAVECONTEXT_SIZE + 0x28)
+#define OOT_SRAM_HEADER_SIZE 0x10
+#define OOT_SLOT_OFFSET(index) (OOT_SRAM_HEADER_SIZE + 0x10 + (index * OOT_SLOT_SIZE))
+
 // used in other files
-s32 D_801C6798[] = {
-    0x00000020, 0x00001470, 0x000028C0, 0x00003D10, 0x00005160, 0x000065B0,
+u32 gSramSlotOffsets[] = {
+    OOT_SLOT_OFFSET(0),
+    OOT_SLOT_OFFSET(1),
+    OOT_SLOT_OFFSET(2),
+    // the latter three saves are backup saves for the former saves (in OoT)
+    OOT_SLOT_OFFSET(3),
+    OOT_SLOT_OFFSET(4),
+    OOT_SLOT_OFFSET(5),
 };
 
 u8 gAmmoItems[] = {
@@ -269,28 +184,89 @@ u8 gAmmoItems[] = {
     ITEM_NONE,        // SLOT_BOTTLE_6
 };
 
-s32 D_801C67C8[] = { 0, 0x40, 0x80, 0xC0, 0x100, 0x180, 0x200, 0x280, 0x300, 0x380 };
-
-s32 D_801C67F0[] = { 0x40, 0x40, 0x40, 0x40, 0x80, 0x80, 0x80, 0x80, 1, 1 };
-
-s32 D_801C6818[] = { 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 1, 1 };
-
-s32 D_801C6840[] = { 0x100, 0x180, 0x200, 0x280 };
-
-s32 D_801C6850[] = { 0x80, 0x80, 0x80, 0x80, 0x300, 0x380, 1, 1 };
-
-s32 D_801C6870[] = {
-    sizeof(Save),
-    sizeof(Save),
-    sizeof(Save),
-    sizeof(Save),
-    offsetof(SaveContext, fileNum),
-    offsetof(SaveContext, fileNum),
-    offsetof(SaveContext, fileNum),
-    offsetof(SaveContext, fileNum),
+// Stores flash start page number
+s32 gFlashSaveStartPages[] = {
+    0,     // File 1 New Cycle Save
+    0x40,  // File 1 New Cycle Save Backup
+    0x80,  // File 2 New Cycle Save
+    0xC0,  // File 2 New Cycle Save Backup
+    0x100, // File 1 Owl Save
+    0x180, // File 1 Owl Save Backup
+    0x200, // File 2 Owl Save
+    0x280, // File 2 Owl Save Backup
+    0x300, // Sram Header (SaveOptions)
+    0x380, // Sram Header Backup (SaveOptions)
 };
 
-u8 D_801C6890[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 };
+// Flash rom number of pages
+s32 gFlashSaveNumPages[] = {
+    0x40, // File 1 New Cycle Save
+    0x40, // File 1 New Cycle Save Backup
+    0x40, // File 2 New Cycle Save
+    0x40, // File 2 New Cycle Save Backup
+    0x80, // File 1 Owl Save
+    0x80, // File 1 Owl Save Backup
+    0x80, // File 2 Owl Save
+    0x80, // File 2 Owl Save Backup
+    1,    // Sram Header (SaveOptions)
+    1,    // Sram Header Backup (SaveOptions)
+};
+
+// Flash rom number of pages on very first time Player enters South Clock Town from the Clock Tower
+s32 gFlashSpecialSaveNumPages[] = {
+    0x80, // File 1 New Cycle Save
+    0x80, // File 1 New Cycle Save Backup
+    0x80, // File 2 New Cycle Save
+    0x80, // File 2 New Cycle Save Backup
+    0x80, // File 1 Owl Save
+    0x80, // File 1 Owl Save Backup
+    0x80, // File 2 Owl Save
+    0x80, // File 2 Owl Save Backup
+    1,    // Sram Header (SaveOptions)
+    1,    // Sram Header Backup (SaveOptions)
+};
+
+// Owl Save flash rom start page number
+s32 gFlashOwlSaveStartPages[] = {
+    0x100, // File 1 Owl Save
+    0x180, // File 1 Owl Save Backup
+    0x200, // File 2 Owl Save
+    0x280, // File 2 Owl Save Backup
+};
+
+// Owl Save flash rom number of pages
+s32 gFlashOwlSaveNumPages[] = {
+    0x80, // File 1 Owl Save
+    0x80, // File 1 Owl Save Backup
+    0x80, // File 2 Owl Save
+    0x80, // File 2 Owl Save Backup
+};
+
+// Save Options Sram Header flash rom start page number
+s32 gFlashOptionsSaveStartPages[] = {
+    0x300, // Sram Header (SaveOptions)
+    0x380, // Sram Header Backup (SaveOptions)
+};
+
+// Save Options Sram Header flash rom number of pages
+s32 gFlashOptionsSaveNumPages[] = {
+    1, // Sram Header (SaveOptions)
+    1, // Sram Header Backup (SaveOptions)
+};
+
+// Flash rom actual size needed
+s32 gFlashSaveSizes[] = {
+    sizeof(Save),                   // size = 0x100C - File 1 New Cycle Save
+    sizeof(Save),                   // size = 0x100C - File 1 New Cycle Save Backup
+    sizeof(Save),                   // size = 0x100C - File 2 New Cycle Save
+    sizeof(Save),                   // size = 0x100C - File 2 New Cycle Save Backup
+    offsetof(SaveContext, fileNum), // size = 0x3CA0 - File 1 Owl Save
+    offsetof(SaveContext, fileNum), // size = 0x3CA0 - File 1 Owl Save Backup
+    offsetof(SaveContext, fileNum), // size = 0x3CA0 - File 2 Owl Save
+    offsetof(SaveContext, fileNum), // size = 0x3CA0 - File 2 Owl Save Backup
+};
+
+u8 D_801C6890[8] = { 1 << 0, 1 << 1, 1 << 2, 1 << 3, 1 << 4, 1 << 5, 1 << 6, 1 << 7 };
 
 u16 D_801F6AF0;
 u8 D_801F6AF2;
@@ -342,26 +318,29 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
 
-    gSaveContext.save.saveInfo.playerData.deaths++;
-    if (gSaveContext.save.saveInfo.playerData.deaths > 999) {
-        gSaveContext.save.saveInfo.playerData.deaths = 999;
+    gSaveContext.save.saveInfo.playerData.threeDayResetCount++;
+    if (gSaveContext.save.saveInfo.playerData.threeDayResetCount > 999) {
+        gSaveContext.save.saveInfo.playerData.threeDayResetCount = 999;
     }
 
     sceneId = Play_GetOriginalSceneId(play->sceneId);
     Play_SaveCycleSceneFlags(&play->state);
 
-    play->actorCtx.sceneFlags.chest &= D_801C5FC0[sceneId][2];
-    play->actorCtx.sceneFlags.switches[0] &= D_801C5FC0[sceneId][0];
-    play->actorCtx.sceneFlags.switches[1] &= D_801C5FC0[sceneId][1];
-    play->actorCtx.sceneFlags.collectible[0] &= D_801C5FC0[sceneId][3];
+    play->actorCtx.sceneFlags.chest &= sPersistentCycleFlags[sceneId].chest;
+    play->actorCtx.sceneFlags.switches[0] &= sPersistentCycleFlags[sceneId].switch0;
+    play->actorCtx.sceneFlags.switches[1] &= sPersistentCycleFlags[sceneId].switch1;
+    play->actorCtx.sceneFlags.collectible[0] &= sPersistentCycleFlags[sceneId].collectible;
     play->actorCtx.sceneFlags.clearedRoom = 0;
 
     for (i = 0; i < SCENE_MAX; i++) {
-        gSaveContext.cycleSceneFlags[i].switch0 = ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & D_801C5FC0[i][0];
-        gSaveContext.cycleSceneFlags[i].switch1 = ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & D_801C5FC0[i][1];
-        gSaveContext.cycleSceneFlags[i].chest = ((void)0, gSaveContext.cycleSceneFlags[i].chest) & D_801C5FC0[i][2];
+        gSaveContext.cycleSceneFlags[i].switch0 =
+            ((void)0, gSaveContext.cycleSceneFlags[i].switch0) & sPersistentCycleFlags[i].switch0;
+        gSaveContext.cycleSceneFlags[i].switch1 =
+            ((void)0, gSaveContext.cycleSceneFlags[i].switch1) & sPersistentCycleFlags[i].switch1;
+        gSaveContext.cycleSceneFlags[i].chest =
+            ((void)0, gSaveContext.cycleSceneFlags[i].chest) & sPersistentCycleFlags[i].chest;
         gSaveContext.cycleSceneFlags[i].collectible =
-            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & D_801C5FC0[i][3];
+            ((void)0, gSaveContext.cycleSceneFlags[i].collectible) & sPersistentCycleFlags[i].collectible;
         gSaveContext.cycleSceneFlags[i].clearedRoom = 0;
         gSaveContext.save.saveInfo.permanentSceneFlags[i].unk_14 = 0;
         gSaveContext.save.saveInfo.permanentSceneFlags[i].rooms = 0;
@@ -549,7 +528,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     gSaveContext.jinxTimer = 0;
     gSaveContext.rupeeAccumulator = 0;
 
-    func_800F3B2C(play);
+    Horse_ResetHorseData(play);
 }
 
 void Sram_IncrementDay(void) {
@@ -642,7 +621,7 @@ void Sram_GenerateRandomSaveFields(void) {
 
     do {
         randBombers = Rand_S16Offset(0, 6);
-    } while (randBombers <= 0 || randBombers >= 6);
+    } while ((randBombers <= 0) || (randBombers >= 6));
 
     gSaveContext.save.saveInfo.bomberCode[0] = randBombers;
 
@@ -652,7 +631,7 @@ void Sram_GenerateRandomSaveFields(void) {
 
         do {
             randBombers = Rand_S16Offset(0, 6);
-        } while (randBombers <= 0 || randBombers >= 6);
+        } while ((randBombers <= 0) || (randBombers >= 6));
 
         sp2A = 0;
         do {
@@ -671,7 +650,7 @@ void Sram_GenerateRandomSaveFields(void) {
 
 SavePlayerData sSaveDefaultPlayerData = {
     { '\0', '\0', '\0', '\0', '\0', '\0' },             // newf
-    0,                                                  // deaths
+    0,                                                  // threeDayResetCount
     { 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "        "
     0x30,                                               // healthCapacity
     0x30,                                               // health
@@ -772,7 +751,7 @@ void Sram_InitNewSave(void) {
 
 SavePlayerData sSaveDebugPlayerData = {
     { 'Z', 'E', 'L', 'D', 'A', '3' },                   // newf
-    0x0000,                                             // deaths
+    0,                                                  // threeDayResetCount
     { 0x15, 0x12, 0x17, 0x14, 0x3E, 0x3E, 0x3E, 0x3E }, // playerName "LINK    "
     0x80,                                               // healthCapacity
     0x80,                                               // health
@@ -869,7 +848,18 @@ Inventory sSaveDebugInventory = {
         (1 << QUEST_SONG_SOARING) | (1 << QUEST_SONG_STORMS) | (1 << QUEST_BOMBERS_NOTEBOOK) |
         (1 << QUEST_SONG_LULLABY_INTRO),
     // dungeonItems
-    { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 },
+    {
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+        (1 << DUNGEON_BOSS_KEY) | (1 << DUNGEON_COMPASS) | (1 << DUNGEON_MAP),
+    },
     // dungeonKeys
     { 8, 8, 8, 8, 8, 8, 8, 8, 8 },
     // defenseHearts
@@ -945,15 +935,15 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
 
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
-    if (func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]) !=
-        0) {
-        func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
-                      D_801C67F0[gSaveContext.fileNum * 2 + 1]);
+    if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2],
+                             gFlashSaveNumPages[gSaveContext.fileNum * 2]) != 0) {
+        SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2 + 1],
+                             gFlashSaveNumPages[gSaveContext.fileNum * 2 + 1]);
     }
     Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
     if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf)) {
-        func_80185968(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2 + 1],
-                      D_801C67F0[gSaveContext.fileNum * 2 + 1]);
+        SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2 + 1],
+                             gFlashSaveNumPages[gSaveContext.fileNum * 2 + 1]);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
@@ -979,8 +969,8 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx) {
         gSaveContext.timerPausedOsTimes[i] = 0;
     }
 
-    D_801BDAA0 = 1;
-    D_801BDA9C = 0;
+    D_801BDAA0 = true;
+    gHorseIsMounted = false;
     gSaveContext.powderKegTimer = 0;
     gSaveContext.unk_1014 = 0;
     gSaveContext.jinxTimer = 0;
@@ -1001,32 +991,34 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
     s32 pad1;
     s32 fileNum;
 
-    if (gSaveContext.unk_3F3F) {
+    if (gSaveContext.flashSaveAvailable) {
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
         if (gSaveContext.fileNum == 0xFF) {
-            func_80185968(sramCtx->saveBuf, D_801C67C8[0], D_801C67F0[0]);
-        } else if (fileSelect->unk_2446A[gSaveContext.fileNum] != 0) {
+            SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[0], gFlashSaveNumPages[0]);
+        } else if (fileSelect->isOwlSave[gSaveContext.fileNum + 2]) {
             phi_t1 = gSaveContext.fileNum + 2;
             phi_t1 *= 2;
 
-            if (func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
-                func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1], gFlashSaveNumPages[phi_t1]) != 0) {
+                SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1],
+                                     gFlashSaveNumPages[phi_t1 + 1]);
             }
         } else {
             phi_t1 = gSaveContext.fileNum;
             phi_t1 *= 2;
 
-            if (func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1], D_801C67F0[phi_t1]) != 0) {
-                func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
+            if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1], gFlashSaveNumPages[phi_t1]) != 0) {
+                SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1],
+                                     gFlashSaveNumPages[phi_t1 + 1]);
             }
         }
 
-        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1]);
+        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[phi_t1]);
 
         if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf)) {
-            func_80185968(sramCtx->saveBuf, D_801C67C8[phi_t1 + 1], D_801C67F0[phi_t1 + 1]);
-            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[phi_t1]);
+            SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[phi_t1 + 1], gFlashSaveNumPages[phi_t1 + 1]);
+            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[phi_t1]);
         }
     }
 
@@ -1057,7 +1049,7 @@ void Sram_OpenSave(FileSelectState* fileSelect, SramContext* sramCtx) {
         if (gSaveContext.save.isFirstCycle) {
             gSaveContext.save.entrance = ENTRANCE(SOUTH_CLOCK_TOWN, 0);
             gSaveContext.save.day = 0;
-            gSaveContext.save.time = 0x3FFF;
+            gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
         } else {
             gSaveContext.save.entrance = ENTRANCE(CUTSCENE, 0);
             gSaveContext.nextCutsceneIndex = 0;
@@ -1122,7 +1114,7 @@ void func_8014546C(SramContext* sramCtx) {
         gSaveContext.save.saveInfo.checksum = 0;
         gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
 
-        if (gSaveContext.unk_3F3F) {
+        if (gSaveContext.flashSaveAvailable) {
             Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, sizeof(Save));
             Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
         }
@@ -1145,7 +1137,7 @@ void func_80145698(SramContext* sramCtx) {
 
     gSaveContext.save.saveInfo.checksum = 0;
     gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
-    if (gSaveContext.unk_3F3F) {
+    if (gSaveContext.flashSaveAvailable) {
         Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, sizeof(Save));
         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
     }
@@ -1153,31 +1145,21 @@ void func_80145698(SramContext* sramCtx) {
 
 // Verifies save and use backup if corrupted?
 #ifdef NON_EQUIVALENT
-void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
-    FileSelectState* fileSelect = fileSelect2;
+void func_801457CC(GameState* gameState, SramContext* sramCtx) {
+    FileSelectState* fileSelect = (FileSelectState*)gameState;
     u16 sp7A;
-    // u16 sp78;
+    u16 oldCheckSum; // s2
     u16 sp76;
-    // u16 sp74;
-    u16 sp6E; //!
-    // s32 sp68;
-    // u16 sp66;
-    u16 phi_s2; //!
-    u16 sp64;
-    // s32 sp60;
-    // s32 sp5C;
-    // s32 sp58;
-    // u32 new_var;
-    u16 phi_s2_3;
-    // s16 fakevar;
+    u16 sp64; // sp74?
+    u16 phi_s2;
+    u16 phi_s7;
+    u16 sp6E;
+    u16 newCheckSum; // v0
+    u16 phi_a0;      // maskCount
 
-    u16 temp_s2;
-    u16 temp_v0_2;
-    u16 phi_a0; // maskCount
-
-    if (gSaveContext.unk_3F3F) {
+    if (gSaveContext.flashSaveAvailable) {
         D_801F6AF0 = gSaveContext.save.time;
-        D_801F6AF2 = gSaveContext.unk_3F3F;
+        D_801F6AF2 = gSaveContext.flashSaveAvailable;
         sp64 = 0;
 
         for (sp76 = 0; sp76 < 5; sp76++, sp64 += 2) {
@@ -1185,40 +1167,65 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 
             phi_s2 = false;
             sp6E = 0;
-            if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64])) {
+            // read main save from flash
+            if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]) != 0) {
+                // main save didn't work
                 sp6E = 1;
-                if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                // read backup save from flash
+                if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
+                                         gFlashSaveNumPages[sp64 + 1]) != 0) {
+                    // backup save didn't work
                     phi_s2 = true;
                 }
             }
 
             if (sp76 < 2) {
-                fileSelect->unk_24468[sp76] = 0;
+                // Non-owl save
+                // sp76 = 0: main save
+                // sp76 = 1: backup save
+
+                fileSelect->isOwlSave[sp76] = 0;
                 if (phi_s2) {
+                    // both main save and backup save failed
                     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
-                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
+                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
                 } else {
-                    // Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                    temp_s2 = gSaveContext.save.saveInfo.checksum;
+                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+
+                    // test checksum of main save
+                    oldCheckSum = gSaveContext.save.saveInfo.checksum;
                     gSaveContext.save.saveInfo.checksum = 0;
-                    temp_v0_2 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
-                    gSaveContext.save.saveInfo.checksum = temp_s2;
+                    newCheckSum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]);
+                    gSaveContext.save.saveInfo.checksum = oldCheckSum;
 
-                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (temp_s2 != temp_v0_2)) {
+                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != newCheckSum)) {
+                        // checksum didnt match, try backup save
                         sp6E = 1;
-                        if (CHECK_NEWF2(gSaveContext.save.saveInfo.playerData.newf)) {}
 
-                        phi_s2 = false;
-                        if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                        if ((gSaveContext.save.saveInfo.playerData.newf[0] == 'Z') &&
+                            (gSaveContext.save.saveInfo.playerData.newf[1] == 'E')) {
+                            phi_s2 = false;
+                        }
+
+                        // phi_s2 = false;
+
+                        // read backup save from flash
+                        if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
+                                                 gFlashSaveNumPages[sp64 + 1]) != 0) {
+                            // backup save didn't work
                             phi_s2 = true;
                         }
 
-                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                        temp_s2 = gSaveContext.save.saveInfo.checksum;
+                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+
+                        // test checksum of backup save
+                        oldCheckSum = gSaveContext.save.saveInfo.checksum;
                         gSaveContext.save.saveInfo.checksum = 0;
+
+                        //! FAKE: (s32)sp64
                         if (phi_s2 || CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) ||
-                            (temp_s2 != Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]))) {
+                            (oldCheckSum != Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[(s32)sp64]))) {
+                            // backup save didn't work
                             bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
                             Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                             sp6E = 999;
@@ -1227,29 +1234,30 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                 }
 
                 gSaveContext.save.saveInfo.checksum = 0;
+                // FAKE: Needed?
                 gSaveContext.save.saveInfo.checksum =
-                    Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64 & 0xFFFFFFFF]); // TODO: Needed?
+                    Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 & 0xFFFFFFFF]);
 
                 for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); sp7A++) {
                     fileSelect->newf[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.newf[sp7A];
                 }
 
                 if (!CHECK_NEWF(fileSelect->newf[sp76])) {
-                    fileSelect->unk_2440C[sp76] = gSaveContext.save.saveInfo.playerData.deaths;
+                    fileSelect->threeDayResetCount[sp76] = gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); sp7A++) {
-                        fileSelect->unk_24414[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
+                        fileSelect->fileNames[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
                     }
 
                     fileSelect->healthCapacity[sp76] = gSaveContext.save.saveInfo.playerData.healthCapacity;
                     fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
-                    fileSelect->unk_24454[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
-                    fileSelect->unk_24444[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                    fileSelect->unk_24458[sp76] = gSaveContext.save.time;
-                    fileSelect->unk_24460[sp76] = gSaveContext.save.day;
-                    fileSelect->unk_24468[sp76] = gSaveContext.save.isOwlSave;
+                    fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
+                    fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
+                    fileSelect->time[sp76] = gSaveContext.save.time;
+                    fileSelect->day[sp76] = gSaveContext.save.day;
+                    fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                     fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
-                    fileSelect->unk_24474[sp76] = CUR_UPG_VALUE(4);
+                    fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
                     for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
                         if (gSaveContext.save.saveInfo.inventory.items[sp7A + 24] != 0xFF) {
@@ -1262,90 +1270,106 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                 }
 
                 if (sp6E == 1) {
+                    // backup save
                     Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
-                    func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
-                } else if (sp6E == 0) { // TODO: == 0?
-                    temp_s2 = gSaveContext.save.saveInfo.checksum;
-                    if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
-                        phi_s2_3 = 1;
+                    Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSpecialSaveNumPages[sp64]);
+                } else if (!sp6E) {
+                    // main save
+                    phi_s7 = gSaveContext.save.saveInfo.checksum;
+
+                    if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
+                                             gFlashSaveNumPages[sp64 + 1]) != 0) {
+                        oldCheckSum = 1;
                     } else {
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
-                        phi_s2_3 = gSaveContext.save.saveInfo.checksum;
+                        oldCheckSum = gSaveContext.save.saveInfo.checksum;
                         gSaveContext.save.saveInfo.checksum = 0;
                         sp7A = Sram_CalcChecksum(&gSaveContext.save, sizeof(Save));
                     }
 
-                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (phi_s2_3 != sp7A) ||
-                        (phi_s2_3 != temp_s2)) {
-                        func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
+                    if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != sp7A) ||
+                        (oldCheckSum != phi_s7)) {
+                        SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
                         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
                         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
-                        func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C6818[sp64]);
+                        Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSpecialSaveNumPages[sp64]);
                     }
                 }
             } else if (sp76 < 4) {
-                fileSelect->unk_24468[sp76] = 0;
+                // Owl Save:
+                // sp76 = 3: main owl save
+                // sp76 = 4: backup owl save
+                fileSelect->isOwlSave[sp76] = 0;
 
-                if (!CHECK_NEWF(fileSelect->newf2[(s32)sp76])) { // TODO: Needed?
+                if (!CHECK_NEWF(fileSelect->newf[sp76 - 2])) {
                     if (phi_s2) {
+                        // both main save and backup save failed
                         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
-                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf,
-                                   D_801C6870[sp64]); // TODO: Needed?
+                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
                     } else {
-                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                        temp_s2 = gSaveContext.save.saveInfo.checksum;
+                        Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+                        oldCheckSum = gSaveContext.save.saveInfo.checksum;
 
+                        // test checksum of main save
                         gSaveContext.save.saveInfo.checksum = 0;
-                        temp_v0_2 = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
-                        gSaveContext.save.saveInfo.checksum = temp_s2;
-                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (temp_s2 != temp_v0_2)) {
+                        newCheckSum = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]);
+                        gSaveContext.save.saveInfo.checksum = oldCheckSum;
+
+                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != newCheckSum)) {
+                            // checksum didnt match, try backup save
                             sp6E = 1;
                             if ((gSaveContext.save.saveInfo.playerData.newf[0] == 'Z') &&
                                 (gSaveContext.save.saveInfo.playerData.newf[1] == 'E')) {
                                 phi_s2 = false;
                             }
 
-                            if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
+                            // read backup save from flash
+                            if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
+                                                     gFlashSaveNumPages[sp64 + 1])) {
+                                // backup save didn't work
                                 phi_s2 = true;
                             }
 
-                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                            temp_s2 = gSaveContext.save.saveInfo.checksum;
+                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+
+                            // test checksum of backup save
+                            oldCheckSum = gSaveContext.save.saveInfo.checksum;
                             gSaveContext.save.saveInfo.checksum = 0;
+
                             if (phi_s2 || CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) ||
-                                (temp_s2 != Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]))) {
+                                (oldCheckSum != Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]))) {
                                 bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
-                                Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
+                                Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
                                 sp6E = 999;
                             }
                         }
                     }
 
                     gSaveContext.save.saveInfo.checksum = 0;
+                    // FAKE: Needed?
                     gSaveContext.save.saveInfo.checksum =
-                        Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64 & 0xFFFFFFFF]); // TODO: Needed?
+                        Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64 & 0xFFFFFFFF]);
 
                     for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); sp7A++) {
                         fileSelect->newf[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.newf[sp7A];
                     }
 
                     if (!CHECK_NEWF(fileSelect->newf[sp76])) {
-                        fileSelect->unk_2440C[sp76] = gSaveContext.save.saveInfo.playerData.deaths;
+                        fileSelect->threeDayResetCount[sp76] = gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
                         for (sp7A = 0; sp7A < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); sp7A++) {
-                            phi_s2 += 0; // TODO: Needed?
-                            fileSelect->unk_24414[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
+                            fileSelect->fileNames[sp76][sp7A] = gSaveContext.save.saveInfo.playerData.playerName[sp7A];
                         }
 
                         fileSelect->healthCapacity[sp76] = gSaveContext.save.saveInfo.playerData.healthCapacity;
                         fileSelect->health[sp76] = gSaveContext.save.saveInfo.playerData.health;
-                        fileSelect->unk_24454[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
-                        fileSelect->unk_24444[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
-                        fileSelect->unk_24458[sp76] = gSaveContext.save.time;
-                        fileSelect->unk_24460[sp76] = gSaveContext.save.day;
-                        fileSelect->unk_24468[sp76] = gSaveContext.save.isOwlSave;
+                        fileSelect->defenseHearts[sp76] = gSaveContext.save.saveInfo.inventory.defenseHearts;
+                        fileSelect->questItems[sp76] = gSaveContext.save.saveInfo.inventory.questItems;
+                        fileSelect->time[sp76] = gSaveContext.save.time;
+                        fileSelect->day[sp76] = gSaveContext.save.day;
+                        fileSelect->isOwlSave[sp76] = gSaveContext.save.isOwlSave;
                         fileSelect->rupees[sp76] = gSaveContext.save.saveInfo.playerData.rupees;
-                        fileSelect->unk_24474[sp76] = CUR_UPG_VALUE(4);
+                        fileSelect->walletUpgrades[sp76] = CUR_UPG_VALUE(UPG_WALLET);
 
                         for (sp7A = 0, phi_a0 = 0; sp7A < 24; sp7A++) {
                             if (gSaveContext.save.saveInfo.inventory.items[sp7A + 24] != 0xFF) {
@@ -1358,39 +1382,44 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                     }
 
                     if (sp6E == 1) {
-                        func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
-                        func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
-                    } else if (!sp6E) { // TODO: == 0?
-                        temp_s2 = gSaveContext.save.saveInfo.checksum;
-                        if (func_80185968(sramCtx->saveBuf, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1])) {
-                            phi_s2_3 = 1;
+                        // backup save
+                        Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
+                        Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64 + 1], gFlashSaveNumPages[sp64 + 1]);
+                    } else if (!sp6E) {
+                        // main save
+                        phi_s7 = gSaveContext.save.saveInfo.checksum;
+
+                        if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64 + 1],
+                                                 gFlashSaveNumPages[sp64 + 1])) {
+                            oldCheckSum = 1;
                         } else {
-                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                            phi_s2_3 = gSaveContext.save.saveInfo.checksum;
+                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+                            oldCheckSum = gSaveContext.save.saveInfo.checksum;
                             gSaveContext.save.saveInfo.checksum = 0;
-                            // phi_s2_3 = gSaveContext.save.saveInfo.checksum;
-                            sp7A = Sram_CalcChecksum(&gSaveContext, D_801C6870[sp64]);
+                            sp7A = Sram_CalcChecksum(&gSaveContext, gFlashSaveSizes[sp64]);
                         }
 
-                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (phi_s2_3 != sp7A) ||
-                            (phi_s2_3 != temp_s2)) {
-                            func_80185968(sramCtx->saveBuf, D_801C67C8[sp64], D_801C67F0[sp64]);
-                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                            func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
-                            func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
+                        if (CHECK_NEWF(gSaveContext.save.saveInfo.playerData.newf) || (oldCheckSum != sp7A) ||
+                            (oldCheckSum != phi_s7)) {
+                            SysFlashrom_ReadData(sramCtx->saveBuf, gFlashSaveStartPages[sp64],
+                                                 gFlashSaveNumPages[sp64]);
+                            Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+                            Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
+                            Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64 + 1],
+                                                  gFlashSaveNumPages[sp64 + 1]);
                         }
                     }
                 } else {
                     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
-                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, D_801C6870[sp64]);
-                    func_80146EBC(sramCtx, D_801C67C8[sp64], D_801C67F0[sp64]);
-                    func_80146EBC(sramCtx, D_801C67C8[sp64 + 1], D_801C67F0[sp64 + 1]);
+                    Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, gFlashSaveSizes[sp64]);
+                    Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64], gFlashSaveNumPages[sp64]);
+                    Sram_SyncWriteToFlash(sramCtx, gFlashSaveStartPages[sp64 + 1], gFlashSaveNumPages[sp64 + 1]);
                 }
             } else {
                 if (phi_s2) {
                     gSaveContext.options.optionId = 0xA51D;
                     gSaveContext.options.language = LANGUAGE_ENG;
-                    gSaveContext.options.audioSetting = 0;
+                    gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                     gSaveContext.options.languageSetting = 0;
                     gSaveContext.options.zTargetSetting = 0;
                 } else {
@@ -1398,7 +1427,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
                     if (gSaveContext.options.optionId != 0xA51D) {
                         gSaveContext.options.optionId = 0xA51D;
                         gSaveContext.options.language = LANGUAGE_ENG;
-                        gSaveContext.options.audioSetting = 0;
+                        gSaveContext.options.audioSetting = SAVE_AUDIO_STEREO;
                         gSaveContext.options.languageSetting = 0;
                         gSaveContext.options.zTargetSetting = 0;
                     }
@@ -1408,7 +1437,7 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
         }
 
         gSaveContext.save.time = D_801F6AF0;
-        gSaveContext.unk_3F3F = D_801F6AF2;
+        gSaveContext.flashSaveAvailable = D_801F6AF2;
     }
 
     gSaveContext.options.language = LANGUAGE_ENG;
@@ -1417,50 +1446,52 @@ void func_801457CC(FileSelectState* fileSelect2, SramContext* sramCtx) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_801457CC.s")
 #endif
 
-void func_80146580(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum) {
+void Sram_EraseSave(FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum) {
     FileSelectState* fileSelect = fileSelect2;
     s32 pad;
 
-    if (gSaveContext.unk_3F3F) {
-        if (fileSelect->unk_2446A[fileNum]) {
+    if (gSaveContext.flashSaveAvailable) {
+        if (fileSelect->isOwlSave[fileNum + 2]) {
             func_80147314(sramCtx, fileNum);
-            fileSelect->unk_2446A[fileNum] = 0;
+            fileSelect->isOwlSave[fileNum + 2] = false;
         }
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, sizeof(Save));
     }
 
     gSaveContext.save.time = D_801F6AF0;
-    gSaveContext.unk_3F3F = D_801F6AF2;
+    gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 
 #ifdef NON_MATCHING
 // v0/v1
-void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
+void Sram_CopySave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     FileSelectState* fileSelect = fileSelect2;
     u16 i;
     s16 maskCount;
 
-    if (gSaveContext.unk_3F3F) {
-        if (fileSelect->unk_2446A[fileSelect->unk_2448E]) {
-            func_80147414(sramCtx, fileSelect->unk_2448E, fileSelect->fileNum);
-            fileSelect->unk_24410[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.deaths;
+    if (gSaveContext.flashSaveAvailable) {
+        if (fileSelect->isOwlSave[fileSelect->selectedFileIndex + 2]) {
+            func_80147414(sramCtx, fileSelect->selectedFileIndex, fileSelect->copyDestFileIndex);
+            fileSelect->threeDayResetCount[fileSelect->copyDestFileIndex + 2] =
+                gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
             for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
-                fileSelect->unk_24424[fileSelect->fileNum][i] = gSaveContext.save.saveInfo.playerData.playerName[i];
+                fileSelect->fileNames[fileSelect->copyDestFileIndex + 2][i] =
+                    gSaveContext.save.saveInfo.playerData.playerName[i];
             }
 
-            fileSelect->unk_24438[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.healthCapacity;
-            fileSelect->unk_24440[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.health;
-            fileSelect->unk_24456[fileSelect->fileNum] = gSaveContext.save.saveInfo.inventory.defenseHearts;
-            fileSelect->unk_2444C[fileSelect->fileNum] = gSaveContext.save.saveInfo.inventory.questItems;
-            fileSelect->unk_2445C[fileSelect->fileNum] = gSaveContext.save.time;
-            fileSelect->unk_24464[fileSelect->fileNum] = gSaveContext.save.day;
-            fileSelect->unk_2446A[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
-            fileSelect->unk_24470[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.rupees;
-            // = CUR_UPG_VALUE(UPG_WALLET);
-            fileSelect->unk_24476[fileSelect->fileNum] =
-                (gSaveContext.save.saveInfo.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
+            fileSelect->healthCapacity[fileSelect->copyDestFileIndex + 2] =
+                gSaveContext.save.saveInfo.playerData.healthCapacity;
+            fileSelect->health[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.health;
+            fileSelect->defenseHearts[fileSelect->copyDestFileIndex + 2] =
+                gSaveContext.save.saveInfo.inventory.defenseHearts;
+            fileSelect->questItems[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.inventory.questItems;
+            fileSelect->time[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.time;
+            fileSelect->day[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.day;
+            fileSelect->isOwlSave[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.isOwlSave;
+            fileSelect->rupees[fileSelect->copyDestFileIndex + 2] = gSaveContext.save.saveInfo.playerData.rupees;
+            fileSelect->walletUpgrades[fileSelect->copyDestFileIndex + 2] = CUR_UPG_VALUE(UPG_WALLET);
 
             for (i = 0, maskCount = 0; i < 24; i++) {
                 if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
@@ -1468,41 +1499,42 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
                 }
             }
 
-            fileSelect->unk_2447A[fileSelect->fileNum] = maskCount;
-            fileSelect->unk_2447E[fileSelect->fileNum] =
-                (gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C;
+            fileSelect->maskCount[fileSelect->copyDestFileIndex + 2] = maskCount;
+            fileSelect->heartPieceCount[fileSelect->copyDestFileIndex + 2] = GET_QUEST_HEART_PIECE_COUNT;
         }
 
         // clear buffer
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         // read to buffer
-        func_80185968(sramCtx->saveBuf, D_801C67C8[fileSelect->unk_2448E * 2], D_801C67F0[fileSelect->unk_2448E * 2]);
-
+        SysFlashrom_ReadData(&sramCtx->saveBuf[0], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2],
+                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2]);
         if (1) {}
-        func_80185968(&sramCtx->saveBuf[0x2000], D_801C67C8[fileSelect->unk_2448E * 2 + 1],
-                      D_801C67F0[fileSelect->unk_2448E * 2 + 1]);
+
+        SysFlashrom_ReadData(&sramCtx->saveBuf[0x2000], gFlashSaveStartPages[fileSelect->selectedFileIndex * 2 + 1],
+                             gFlashSaveNumPages[fileSelect->selectedFileIndex * 2 + 1]);
         if (1) {}
 
         // copy buffer to save context
         Lib_MemCpy(&gSaveContext.save, sramCtx->saveBuf, sizeof(Save));
 
-        fileSelect->unk_2440C[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.deaths;
+        fileSelect->threeDayResetCount[fileSelect->copyDestFileIndex] =
+            gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
-            fileSelect->unk_24414[fileSelect->fileNum][i] = gSaveContext.save.saveInfo.playerData.playerName[i];
+            fileSelect->fileNames[fileSelect->copyDestFileIndex][i] =
+                gSaveContext.save.saveInfo.playerData.playerName[i];
         }
 
-        fileSelect->healthCapacity[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.healthCapacity;
-        fileSelect->health[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.health;
-        fileSelect->unk_24454[fileSelect->fileNum] = gSaveContext.save.saveInfo.inventory.defenseHearts;
-        fileSelect->unk_24444[fileSelect->fileNum] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->unk_24458[fileSelect->fileNum] = gSaveContext.save.time;
-        fileSelect->unk_24460[fileSelect->fileNum] = gSaveContext.save.day;
-        fileSelect->unk_24468[fileSelect->fileNum] = gSaveContext.save.isOwlSave;
-        fileSelect->rupees[fileSelect->fileNum] = gSaveContext.save.saveInfo.playerData.rupees;
-        // = CUR_UPG_VALUE(UPG_WALLET);
-        fileSelect->unk_24474[fileSelect->fileNum] =
-            (gSaveContext.save.saveInfo.inventory.upgrades & gUpgradeMasks[4]) >> gUpgradeShifts[4];
+        fileSelect->healthCapacity[fileSelect->copyDestFileIndex] =
+            gSaveContext.save.saveInfo.playerData.healthCapacity;
+        fileSelect->health[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.health;
+        fileSelect->defenseHearts[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
+        fileSelect->questItems[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.inventory.questItems;
+        fileSelect->time[fileSelect->copyDestFileIndex] = gSaveContext.save.time;
+        fileSelect->day[fileSelect->copyDestFileIndex] = gSaveContext.save.day;
+        fileSelect->isOwlSave[fileSelect->copyDestFileIndex] = gSaveContext.save.isOwlSave;
+        fileSelect->rupees[fileSelect->copyDestFileIndex] = gSaveContext.save.saveInfo.playerData.rupees;
+        fileSelect->walletUpgrades[fileSelect->copyDestFileIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, maskCount = 0; i < 24; i++) {
             if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
@@ -1510,16 +1542,15 @@ void func_80146628(FileSelectState* fileSelect2, SramContext* sramCtx) {
             }
         }
 
-        fileSelect->maskCount[fileSelect->fileNum] = maskCount;
-        fileSelect->heartPieceCount[fileSelect->fileNum] =
-            (gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C;
+        fileSelect->maskCount[fileSelect->copyDestFileIndex] = maskCount;
+        fileSelect->heartPieceCount[fileSelect->copyDestFileIndex] = GET_QUEST_HEART_PIECE_COUNT;
     }
 
     gSaveContext.save.time = D_801F6AF0;
-    gSaveContext.unk_3F3F = D_801F6AF2;
+    gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/func_80146628.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_sram_NES/Sram_CopySave.s")
 #endif
 
 void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
@@ -1528,15 +1559,15 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
     FileSelectState* fileSelect = fileSelect2;
     s16 maskCount;
 
-    if (gSaveContext.unk_3F3F) {
+    if (gSaveContext.flashSaveAvailable) {
         Sram_InitNewSave();
-        if (fileSelect->unk_24480 == 0) {
+        if (fileSelect->buttonIndex == 0) {
             gSaveContext.save.cutsceneIndex = 0xFFF0;
         }
 
         for (phi_v0 = 0; phi_v0 < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); phi_v0++) {
             gSaveContext.save.saveInfo.playerData.playerName[phi_v0] =
-                fileSelect->unk_24414[fileSelect->unk_24480][phi_v0];
+                fileSelect->fileNames[fileSelect->buttonIndex][phi_v0];
         }
 
         gSaveContext.save.saveInfo.playerData.newf[0] = 'Z';
@@ -1552,24 +1583,25 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
         Lib_MemCpy(&sramCtx->saveBuf[0x2000], &gSaveContext.save, sizeof(Save));
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.newf); i++) {
-            fileSelect->newf[fileSelect->unk_24480][i] = gSaveContext.save.saveInfo.playerData.newf[i];
+            fileSelect->newf[fileSelect->buttonIndex][i] = gSaveContext.save.saveInfo.playerData.newf[i];
         }
 
-        fileSelect->unk_2440C[fileSelect->unk_24480] = gSaveContext.save.saveInfo.playerData.deaths;
+        fileSelect->threeDayResetCount[fileSelect->buttonIndex] =
+            gSaveContext.save.saveInfo.playerData.threeDayResetCount;
 
         for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.playerData.playerName); i++) {
-            fileSelect->unk_24414[fileSelect->unk_24480][i] = gSaveContext.save.saveInfo.playerData.playerName[i];
+            fileSelect->fileNames[fileSelect->buttonIndex][i] = gSaveContext.save.saveInfo.playerData.playerName[i];
         }
 
-        fileSelect->healthCapacity[fileSelect->unk_24480] = gSaveContext.save.saveInfo.playerData.healthCapacity;
-        fileSelect->health[fileSelect->unk_24480] = gSaveContext.save.saveInfo.playerData.health;
-        fileSelect->unk_24454[fileSelect->unk_24480] = gSaveContext.save.saveInfo.inventory.defenseHearts;
-        fileSelect->unk_24444[fileSelect->unk_24480] = gSaveContext.save.saveInfo.inventory.questItems;
-        fileSelect->unk_24458[fileSelect->unk_24480] = gSaveContext.save.time;
-        fileSelect->unk_24460[fileSelect->unk_24480] = gSaveContext.save.day;
-        fileSelect->unk_24468[fileSelect->unk_24480] = gSaveContext.save.isOwlSave;
-        fileSelect->rupees[fileSelect->unk_24480] = gSaveContext.save.saveInfo.playerData.rupees;
-        fileSelect->unk_24474[fileSelect->unk_24480] = CUR_UPG_VALUE(UPG_WALLET);
+        fileSelect->healthCapacity[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.healthCapacity;
+        fileSelect->health[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.health;
+        fileSelect->defenseHearts[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.defenseHearts;
+        fileSelect->questItems[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.inventory.questItems;
+        fileSelect->time[fileSelect->buttonIndex] = gSaveContext.save.time;
+        fileSelect->day[fileSelect->buttonIndex] = gSaveContext.save.day;
+        fileSelect->isOwlSave[fileSelect->buttonIndex] = gSaveContext.save.isOwlSave;
+        fileSelect->rupees[fileSelect->buttonIndex] = gSaveContext.save.saveInfo.playerData.rupees;
+        fileSelect->walletUpgrades[fileSelect->buttonIndex] = CUR_UPG_VALUE(UPG_WALLET);
 
         for (i = 0, maskCount = 0; i < 24; i++) {
             if (gSaveContext.save.saveInfo.inventory.items[i + 24] != ITEM_NONE) {
@@ -1577,17 +1609,19 @@ void Sram_InitSave(FileSelectState* fileSelect2, SramContext* sramCtx) {
             }
         }
 
-        fileSelect->maskCount[fileSelect->unk_24480] = maskCount;
-        fileSelect->heartPieceCount[fileSelect->unk_24480] =
-            (gSaveContext.save.saveInfo.inventory.questItems & 0xF0000000) >> 0x1C;
+        fileSelect->maskCount[fileSelect->buttonIndex] = maskCount;
+        fileSelect->heartPieceCount[fileSelect->buttonIndex] = GET_QUEST_HEART_PIECE_COUNT;
     }
 
     gSaveContext.save.time = D_801F6AF0;
-    gSaveContext.unk_3F3F = D_801F6AF2;
+    gSaveContext.flashSaveAvailable = D_801F6AF2;
 }
 
-void func_80146DF8(SramContext* sramCtx) {
-    if (gSaveContext.unk_3F3F) {
+/**
+ *  Write the SaveOptions of SaveContext to the save buffer
+ */
+void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx) {
+    if (gSaveContext.flashSaveAvailable) {
         gSaveContext.options.language = LANGUAGE_ENG;
         Lib_MemCpy(sramCtx->saveBuf, &gSaveContext.options, sizeof(SaveOptions));
     }
@@ -1600,7 +1634,7 @@ void Sram_InitSram(GameState* gameState, SramContext* sramCtx) {
 }
 
 void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
-    if (gSaveContext.unk_3F3F) {
+    if (gSaveContext.flashSaveAvailable) {
         sramCtx->saveBuf = THA_AllocTailAlign16(&gameState->heap, SAVE_BUFFER_SIZE);
         sramCtx->status = 0;
     }
@@ -1609,10 +1643,10 @@ void Sram_Alloc(GameState* gameState, SramContext* sramCtx) {
 /**
  * Synchronous flash write
  */
-void func_80146EBC(SramContext* sramCtx, s32 curPage, s32 numPages) {
+void Sram_SyncWriteToFlash(SramContext* sramCtx, s32 curPage, s32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
-    func_80185F64(sramCtx->saveBuf, curPage, numPages);
+    SysFlashrom_WriteDataSync(sramCtx->saveBuf, curPage, numPages);
 }
 
 /**
@@ -1625,7 +1659,8 @@ void Sram_SaveSpecialEnterClockTown(PlayState* play) {
     gSaveContext.save.isFirstCycle = true;
     gSaveContext.save.isOwlSave = false;
     func_80145698(sramCtx);
-    func_80185F64(sramCtx->saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C6818[gSaveContext.fileNum * 2]);
+    SysFlashrom_WriteDataSync(sramCtx->saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2],
+                              gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
 }
 
 /**
@@ -1646,27 +1681,28 @@ void Sram_SaveSpecialNewDay(PlayState* play) {
     gSaveContext.save.day = day;
     gSaveContext.save.time = time;
     gSaveContext.save.cutsceneIndex = cutsceneIndex;
-    func_80185F64(play->sramCtx.saveBuf, D_801C67C8[gSaveContext.fileNum * 2], D_801C67F0[gSaveContext.fileNum * 2]);
+    SysFlashrom_WriteDataSync(play->sramCtx.saveBuf, gFlashSaveStartPages[gSaveContext.fileNum * 2],
+                              gFlashSaveNumPages[gSaveContext.fileNum * 2]);
 }
 
-void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages) {
+void Sram_SetFlashPagesDefault(SramContext* sramCtx, u32 curPage, u32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
     sramCtx->status = 1;
 }
 
-void func_80147020(SramContext* sramCtx) {
+void Sram_StartWriteToFlashDefault(SramContext* sramCtx) {
     // async flash write
-    func_80185DDC(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+    SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
-    sramCtx->unk_18 = osGetTime();
+    sramCtx->startWriteOsTime = osGetTime();
     sramCtx->status = 2;
 }
 
-void func_80147068(SramContext* sramCtx) {
+void Sram_UpdateWriteToFlashDefault(SramContext* sramCtx) {
     if (sramCtx->status == 2) {
-        if (func_80185EC4() != 0) {     // if task running
-            if (func_80185F04() == 0) { // wait for task done
+        if (SysFlashrom_IsBusy() != 0) {          // if task running
+            if (SysFlashrom_AwaitResult() == 0) { // wait for task done
                 // task success
                 sramCtx->status = 4;
             } else {
@@ -1674,50 +1710,52 @@ void func_80147068(SramContext* sramCtx) {
                 sramCtx->status = 4;
             }
         }
-    } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->unk_18) >= SECONDS_TO_TIMER(2)) {
+    } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->startWriteOsTime) >= SECONDS_TO_TIMER(2)) {
+        // Finished status is hardcoded to 2 seconds instead of when the task finishes
         sramCtx->status = 0;
     }
 }
 
-void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages) {
+void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages) {
     sramCtx->curPage = curPage;
     sramCtx->numPages = numPages;
     sramCtx->status = 6;
 }
 
-void func_80147150(SramContext* sramCtx) {
-    func_80185DDC(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx) {
+    SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
 
-    sramCtx->unk_18 = osGetTime();
+    sramCtx->startWriteOsTime = osGetTime();
     sramCtx->status = 7;
 }
 
-void func_80147198(SramContext* sramCtx) {
+void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx) {
     if (sramCtx->status == 7) {
-        if (func_80185EC4() != 0) {     // Is task running
-            if (func_80185F04() == 0) { // Wait for task done
-                func_80185DDC(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+        if (SysFlashrom_IsBusy() != 0) {          // Is task running
+            if (SysFlashrom_AwaitResult() == 0) { // Wait for task done
+                SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             } else {
-                func_80185DDC(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
+                SysFlashrom_WriteDataAsync(sramCtx->saveBuf, sramCtx->curPage + 0x80, sramCtx->numPages);
                 sramCtx->status = 8;
             }
         }
     } else if (sramCtx->status == 8) {
-        if (func_80185EC4() != 0) {     // Is task running
-            if (func_80185F04() == 0) { // Wait for task done
+        if (SysFlashrom_IsBusy() != 0) {          // Is task running
+            if (SysFlashrom_AwaitResult() == 0) { // Wait for task done
                 sramCtx->status = 4;
             } else {
                 sramCtx->status = 4;
             }
         }
-    } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->unk_18) >= SECONDS_TO_TIMER(2)) {
+    } else if (OSTIME_TO_TIMER(osGetTime() - sramCtx->startWriteOsTime) >= SECONDS_TO_TIMER(2)) {
+        // Finished status is hardcoded to 2 seconds instead of when the task finishes
         sramCtx->status = 0;
         bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
         gSaveContext.save.isOwlSave = false;
         gSaveContext.save.saveInfo.checksum = 0;
         // flash read to buffer then copy to save context
-        func_80185968(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
+        SysFlashrom_ReadData(sramCtx->saveBuf, sramCtx->curPage, sramCtx->numPages);
         Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, offsetof(SaveContext, fileNum));
     }
 }
@@ -1738,8 +1776,9 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.saveInfo.checksum = Sram_CalcChecksum(&gSaveContext, offsetof(SaveContext, fileNum));
 
     Lib_MemCpy(sramCtx->saveBuf, &gSaveContext, offsetof(SaveContext, fileNum));
-    func_80146EBC(sramCtx, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]);
-    func_80146EBC(sramCtx, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2]);
+    Sram_SyncWriteToFlash(sramCtx, gFlashOwlSaveStartPages[fileNum * 2], gFlashOwlSaveNumPages[fileNum * 2]);
+    //! Note: should be `gFlashOwlSaveNumPages[fileNum * 2 + 1]`?
+    Sram_SyncWriteToFlash(sramCtx, gFlashOwlSaveStartPages[fileNum * 2 + 1], gFlashOwlSaveNumPages[fileNum * 2]);
 
     gSaveContext.save.isOwlSave = true;
 
@@ -1751,6 +1790,7 @@ void func_80147314(SramContext* sramCtx, s32 fileNum) {
     gSaveContext.save.saveInfo.playerData.newf[5] = '3';
 }
 
+// Used by `Sram_CopySave` with `isOwlSave` set
 void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     s32 pad;
 
@@ -1758,16 +1798,18 @@ void func_80147414(SramContext* sramCtx, s32 fileNum, s32 arg2) {
     bzero(sramCtx->saveBuf, SAVE_BUFFER_SIZE);
 
     // Read save file
-    if (func_80185968(sramCtx->saveBuf, D_801C6840[fileNum * 2], D_801C6850[fileNum * 2]) != 0) {
+    if (SysFlashrom_ReadData(sramCtx->saveBuf, gFlashOwlSaveStartPages[fileNum * 2],
+                             gFlashOwlSaveNumPages[fileNum * 2]) != 0) {
         // If failed, read backup save file
-        func_80185968(sramCtx->saveBuf, D_801C6840[fileNum * 2 + 1], D_801C6850[fileNum * 2 + 1]);
+        SysFlashrom_ReadData(sramCtx->saveBuf, gFlashOwlSaveStartPages[fileNum * 2 + 1],
+                             gFlashOwlSaveNumPages[fileNum * 2 + 1]);
     }
 
     // Copy buffer to save context
     Lib_MemCpy(&gSaveContext, sramCtx->saveBuf, offsetof(SaveContext, fileNum));
 
-    func_80146EBC(sramCtx, D_801C6840[arg2 * 2], D_801C6850[arg2 * 2]);
-    func_80146EBC(sramCtx, D_801C6840[arg2 * 2 + 1], D_801C6850[arg2 * 2]);
+    Sram_SyncWriteToFlash(sramCtx, gFlashOwlSaveStartPages[arg2 * 2], gFlashOwlSaveNumPages[arg2 * 2]);
+    Sram_SyncWriteToFlash(sramCtx, gFlashOwlSaveStartPages[arg2 * 2 + 1], gFlashOwlSaveNumPages[arg2 * 2]);
 }
 
 void Sram_nop8014750C(UNK_TYPE4 arg0) {
