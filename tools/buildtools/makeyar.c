@@ -15,7 +15,7 @@
  * The first word (a 4 byte group) of the header indicates the size in bytes of
  * the header itself (also describes the offset of the first Yaz0 block). The
  * rest of the header consists of words describing the offsets of each Yaz0
- * block relative to the end of the header, because of this the first Yaz0
+ * block relative to the end of the header, because the first Yaz0
  * block is omitted from the offsets in the header.
  *
  * Each Yaz0 block is 0xFF-padded to a multiple of 0x10 in size.
