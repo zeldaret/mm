@@ -77,22 +77,26 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 AnimationHeader* sTiedUpMonkeyAnims[] = { &object_mnk_Anim_00D1C8, &object_mnk_Anim_00CD4C, &object_mnk_Anim_00C23C,
-                                  &object_mnk_Anim_00F248, &object_mnk_Anim_00F9A4, &object_mnk_Anim_00FE34,
-                                  &object_mnk_Anim_00EC44, &object_mnk_Anim_010298, &object_mnk_Anim_00CAE8 };
+                                          &object_mnk_Anim_00F248, &object_mnk_Anim_00F9A4, &object_mnk_Anim_00FE34,
+                                          &object_mnk_Anim_00EC44, &object_mnk_Anim_010298, &object_mnk_Anim_00CAE8 };
 
-AnimationHeader* sTiedUpMonkeyPoleAnims[] = { &object_mnk_Anim_003584, &object_mnk_Anim_005194, &object_mnk_Anim_0052C4,
-                                  &object_mnk_Anim_003854, &object_mnk_Anim_005390, &object_mnk_Anim_005414,
-                                  &object_mnk_Anim_0037E8, &object_mnk_Anim_0054B4, &object_mnk_Anim_003504 };
+AnimationHeader* sTiedUpMonkeyPoleAnims[] = {
+    &object_mnk_Anim_003584, &object_mnk_Anim_005194, &object_mnk_Anim_0052C4,
+    &object_mnk_Anim_003854, &object_mnk_Anim_005390, &object_mnk_Anim_005414,
+    &object_mnk_Anim_0037E8, &object_mnk_Anim_0054B4, &object_mnk_Anim_003504
+};
 
-AnimationHeader* sHangingMonkeyAnims[] = { &object_mnk_Anim_0062D8, &object_mnk_Anim_007380, &gHangingMonkeyStruggleAnim };
+AnimationHeader* sHangingMonkeyAnims[] = { &object_mnk_Anim_0062D8, &object_mnk_Anim_007380,
+                                           &gHangingMonkeyStruggleAnim };
 
-AnimationHeader* sHangingMonkeyRopeAnims[] = { &object_mnk_Anim_01C1B8, &object_mnk_Anim_01C1F8, &gHangingMonkeyRopeStruggleAnim };
+AnimationHeader* sHangingMonkeyRopeAnims[] = { &object_mnk_Anim_01C1B8, &object_mnk_Anim_01C1F8,
+                                               &gHangingMonkeyRopeStruggleAnim };
 
 AnimationHeader* sMonkeyAnims[] = { &object_mnk_Anim_0105DC, &object_mnk_Anim_009FE0, &object_mnk_Anim_0099B0,
-                                  &object_mnk_Anim_0095B4, &object_mnk_Anim_0095B4, &object_mnk_Anim_00B864,
-                                  &object_mnk_Anim_00B864, &object_mnk_Anim_009CC0, &object_mnk_Anim_009CC0,
-                                  &object_mnk_Anim_008814, &object_mnk_Anim_005A08, &object_mnk_Anim_01A4F8,
-                                  &object_mnk_Anim_01B468, &object_mnk_Anim_01BB0C, &object_mnk_Anim_01C17C };
+                                    &object_mnk_Anim_0095B4, &object_mnk_Anim_0095B4, &object_mnk_Anim_00B864,
+                                    &object_mnk_Anim_00B864, &object_mnk_Anim_009CC0, &object_mnk_Anim_009CC0,
+                                    &object_mnk_Anim_008814, &object_mnk_Anim_005A08, &object_mnk_Anim_01A4F8,
+                                    &object_mnk_Anim_01B468, &object_mnk_Anim_01BB0C, &object_mnk_Anim_01C17C };
 
 u32 D_80AB9DD8[] = { 2, 2, 3, 4, 5, 6, 100 };
 
@@ -101,13 +105,22 @@ Color_RGBA8 sHangingMonkeySplashEnvColor = { 255, 100, 0, 255 };
 
 Vec3f focusPosOffset = { 300.0f, 400.0f, 0.0f };
 
-u64* sMonkeyFaceTextures[] = { object_mnk_Tex_015020, object_mnk_Tex_015920, object_mnk_Tex_016120, object_mnk_Tex_016920, object_mnk_Tex_017120, object_mnk_Tex_017920, object_mnk_Tex_018120, NULL, NULL, NULL };
+u64* sMonkeyFaceTextures[] = { object_mnk_Tex_015020,
+                               object_mnk_Tex_015920,
+                               object_mnk_Tex_016120,
+                               object_mnk_Tex_016920,
+                               object_mnk_Tex_017120,
+                               object_mnk_Tex_017920,
+                               object_mnk_Tex_018120,
+                               NULL,
+                               NULL,
+                               NULL };
 
 void EnMnk_TiedUpMonkey_ChangeAnims(EnMnk* this, s32 animNum, u8 mode, f32 transitionRate) {
-    Animation_Change(&this->skelAnime, sTiedUpMonkeyAnims[animNum], 1.0f, 0.0f, Animation_GetLastFrame(&sTiedUpMonkeyAnims[animNum]->common),
-                     mode, transitionRate);
-    Animation_Change(&this->propSkelAnime, sTiedUpMonkeyPoleAnims[animNum], 1.0f, 0.0f, Animation_GetLastFrame(&sTiedUpMonkeyPoleAnims[animNum]->common),
-                     mode, transitionRate);
+    Animation_Change(&this->skelAnime, sTiedUpMonkeyAnims[animNum], 1.0f, 0.0f,
+                     Animation_GetLastFrame(&sTiedUpMonkeyAnims[animNum]->common), mode, transitionRate);
+    Animation_Change(&this->propSkelAnime, sTiedUpMonkeyPoleAnims[animNum], 1.0f, 0.0f,
+                     Animation_GetLastFrame(&sTiedUpMonkeyPoleAnims[animNum]->common), mode, transitionRate);
 
     switch (animNum) {
         case 0:
@@ -138,10 +151,10 @@ void EnMnk_TiedUpMonkey_SetNewAnim(EnMnk* this, s32 animNum) {
 }
 
 void EnMnk_HangingMonkey_ChangeAnims(EnMnk* this, s32 animNum, u8 mode, f32 transitionRate) {
-    Animation_Change(&this->skelAnime, sHangingMonkeyAnims[animNum], 1.0f, 0.0f, Animation_GetLastFrame(&sHangingMonkeyAnims[animNum]->common),
-                     mode, transitionRate);
-    Animation_Change(&this->propSkelAnime, sHangingMonkeyRopeAnims[animNum], 1.0f, 0.0f, Animation_GetLastFrame(&sHangingMonkeyRopeAnims[animNum]->common),
-                     mode, transitionRate);
+    Animation_Change(&this->skelAnime, sHangingMonkeyAnims[animNum], 1.0f, 0.0f,
+                     Animation_GetLastFrame(&sHangingMonkeyAnims[animNum]->common), mode, transitionRate);
+    Animation_Change(&this->propSkelAnime, sHangingMonkeyRopeAnims[animNum], 1.0f, 0.0f,
+                     Animation_GetLastFrame(&sHangingMonkeyRopeAnims[animNum]->common), mode, transitionRate);
     this->curAnim = animNum;
 }
 
@@ -156,8 +169,8 @@ void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animNum, u8 mode, f32 morphFrames)
         animNum = (s32)Rand_ZeroFloat(3.99f) + 7;
     }
     if ((animNum == 4) || (animNum == 6)) {
-        Animation_Change(&this->skelAnime, sMonkeyAnims[animNum], -1.0f, Animation_GetLastFrame(&sMonkeyAnims[animNum]->common),
-                         0.0f, mode, morphFrames);
+        Animation_Change(&this->skelAnime, sMonkeyAnims[animNum], -1.0f,
+                         Animation_GetLastFrame(&sMonkeyAnims[animNum]->common), 0.0f, mode, morphFrames);
     } else {
         Animation_Change(&this->skelAnime, sMonkeyAnims[animNum], 1.0f, 0.0f,
                          Animation_GetLastFrame(&sMonkeyAnims[animNum]->common), mode, morphFrames);
@@ -200,8 +213,8 @@ void EnMnk_TiedUpMonkey_Init(EnMnk* this, PlayState* play) {
 
     this2->actionFunc = EnMnk_TiedUpMonkey_Wait;
     this2->picto.actor.flags |= ACTOR_FLAG_2000000;
-    SkelAnime_InitFlex(play, &this2->propSkelAnime, &gTiedUpMonkeyPoleSkeleton, &object_mnk_Anim_003584, this2->propJointTable,
-                       this2->propMorphTable, 5);
+    SkelAnime_InitFlex(play, &this2->propSkelAnime, &gTiedUpMonkeyPoleSkeleton, &object_mnk_Anim_003584,
+                       this2->propJointTable, this2->propMorphTable, 5);
     this2->unk_3D0 = 4;
     this2->curAnim = -1;
     EnMnk_TiedUpMonkey_ChangeAnims(this2, TIEDUPMONKEY_ANIM_KICKAROUND, ANIMMODE_ONCE, 0.0f);
@@ -226,8 +239,8 @@ void EnMnk_HangingMonkey_Init(EnMnk* this, PlayState* play) {
     func_800BC154(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
     this->actionFunc = EnMnk_HangingMonkey_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8; // "Ooh! Hot! Hot! St-stop it! Please!!!"
-    SkelAnime_InitFlex(play, &this->propSkelAnime, &gHangingMonkeyRopeSkeleton, &gHangingMonkeyStruggleAnim, this->propJointTable,
-                       this->propMorphTable, 4);
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gHangingMonkeyRopeSkeleton, &gHangingMonkeyStruggleAnim,
+                       this->propJointTable, this->propMorphTable, 4);
     EnMnk_HangingMonkey_ChangeAnims(this, HANGINGMONKEY_ANIM_STRUGGLE, ANIMMODE_LOOP, 0.0f);
     this->unk_3E0 = 5;
     this->picto.actor.draw = EnMnk_HangingMonkey_Draw;
@@ -270,8 +283,8 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
 
     switch (GET_MONKEY_TYPE(thisx)) {
         case MONKEY_0:
-            if (!Flags_GetSwitch(play, GET_MONKEY_7F(this)) ||
-                Flags_GetSwitch(play, GET_MONKEY_7F(this) + 1) || (gSaveContext.save.saveInfo.weekEventReg[9] & 0x80)) {
+            if (!Flags_GetSwitch(play, GET_MONKEY_7F(this)) || Flags_GetSwitch(play, GET_MONKEY_7F(this) + 1) ||
+                (gSaveContext.save.saveInfo.weekEventReg[9] & 0x80)) {
                 Actor_Kill(&this->picto.actor);
                 return;
             }
@@ -290,19 +303,22 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             }
             break;
         case MONKEY_TIED_UP:
-            if ((gSaveContext.save.saveInfo.weekEventReg[9] & 0x80) || (gSaveContext.save.saveInfo.weekEventReg[23] & 0x20)) {
+            if ((gSaveContext.save.saveInfo.weekEventReg[9] & 0x80) ||
+                (gSaveContext.save.saveInfo.weekEventReg[23] & 0x20)) {
                 Actor_Kill(thisx);
                 return;
             }
             break;
         case MONKEY_HANGING:
-            if (!(gSaveContext.save.saveInfo.weekEventReg[9] & 0x80) || (gSaveContext.save.saveInfo.weekEventReg[23] & 0x20)) {
+            if (!(gSaveContext.save.saveInfo.weekEventReg[9] & 0x80) ||
+                (gSaveContext.save.saveInfo.weekEventReg[23] & 0x20)) {
                 Actor_Kill(thisx);
                 return;
             }
             break;
         case MONKEY_8:
-            if (!(gSaveContext.save.saveInfo.weekEventReg[23] & 0x20) || (gSaveContext.save.saveInfo.weekEventReg[29] & 0x80)) {
+            if (!(gSaveContext.save.saveInfo.weekEventReg[23] & 0x20) ||
+                (gSaveContext.save.saveInfo.weekEventReg[29] & 0x80)) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -314,14 +330,15 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             }
             break;
         case MONKEY_BY_WITCH:
-            if ((gSaveContext.save.saveInfo.weekEventReg[79] & 0x2) || (gSaveContext.save.saveInfo.weekEventReg[12] & 0x8) ||
-                Flags_GetSwitch(play, GET_MONKEY_7F(this))) {
+            if ((gSaveContext.save.saveInfo.weekEventReg[79] & 0x2) ||
+                (gSaveContext.save.saveInfo.weekEventReg[12] & 0x8) || Flags_GetSwitch(play, GET_MONKEY_7F(this))) {
                 Actor_Kill(thisx);
                 return;
             }
             break;
         case MONKEY_WOODS_GUIDE:
-            if ((gSaveContext.save.saveInfo.weekEventReg[79] & 0x2) || (gSaveContext.save.saveInfo.weekEventReg[12] & 0x8)) {
+            if ((gSaveContext.save.saveInfo.weekEventReg[79] & 0x2) ||
+                (gSaveContext.save.saveInfo.weekEventReg[12] & 0x8)) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -451,7 +468,8 @@ s32 EnMnk_AlreadyExists(EnMnk* this, PlayState* play) {
 }
 
 s32 EnMnk_ValidatePictograph(PlayState* play, Actor* thisx) {
-    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_MONKEY, &thisx->focus.pos, &thisx->shape.rot, 50.0f, 500.0f, -1);
+    return Snap_ValidatePictograph(play, thisx, PICTO_VALID_MONKEY, &thisx->focus.pos, &thisx->shape.rot, 50.0f, 500.0f,
+                                   -1);
 }
 
 void EnMnk_PlayWalkSfx(EnMnk* this) {
@@ -698,7 +716,8 @@ void EnMnk_Monkey_RunAndWaitAtEachPoint(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     temp_v0 = EnMnk_FollowPath(this, FOLLOWPATH_FLAGS_REACHNEXTPOINT | FOLLOWPATH_FLAGS_LONGRANGE);
     if (temp_v0 != FOLLOWPATH_RESULT_FOLLOWING) {
-        if ((temp_v0 == FOLLOWPATH_RESULT_SHORTRANGE_FINISHEDPATH) || (temp_v0 == FOLLOWPATH_RESULT_LONGRANGE_FINISHEDPATH)) {
+        if ((temp_v0 == FOLLOWPATH_RESULT_SHORTRANGE_FINISHEDPATH) ||
+            (temp_v0 == FOLLOWPATH_RESULT_LONGRANGE_FINISHEDPATH)) {
             this->nextPathIndex = this->path->additionalPathIndex;
             if (this->nextPathIndex == 0xFF) {
                 this->nextPathIndex = -1;
@@ -910,14 +929,16 @@ void EnMnk_Monkey_MoveRelativeToPlayer(EnMnk* this, PlayState* play) {
 
     player = GET_PLAYER(play);
     angleToPlayer = Math_Atan2S_XY(player->actor.world.pos.z - this->picto.actor.home.pos.z,
-                             player->actor.world.pos.x - this->picto.actor.home.pos.x);
+                                   player->actor.world.pos.x - this->picto.actor.home.pos.x);
     this->picto.actor.shape.rot.y = angleToPlayer;
     if (this->unk_3E4 & 0x10) {
         this->picto.actor.shape.rot.y = (this->picto.actor.shape.rot.y + 0x8000) & 0xFFFF;
     }
     this->picto.actor.world.rot.y = this->picto.actor.shape.rot.y;
-    this->picto.actor.world.pos.x = (Math_SinS(angleToPlayer) * this->approachPlayerRadius) + this->picto.actor.home.pos.x;
-    this->picto.actor.world.pos.z = (Math_CosS(angleToPlayer) * this->approachPlayerRadius) + this->picto.actor.home.pos.z;
+    this->picto.actor.world.pos.x =
+        (Math_SinS(angleToPlayer) * this->approachPlayerRadius) + this->picto.actor.home.pos.x;
+    this->picto.actor.world.pos.z =
+        (Math_CosS(angleToPlayer) * this->approachPlayerRadius) + this->picto.actor.home.pos.z;
 }
 
 void EnMnk_Monkey_UnapproachPlayer(EnMnk* this, PlayState* play) {
@@ -1000,7 +1021,8 @@ void EnMnk_Monkey_WaitForPlayerApproach(EnMnk* this, PlayState* play) {
 }
 
 void EnMnk_Monkey_Drop(EnMnk* this, PlayState* play) {
-    if (((this->picto.actor.world.pos.y - this->picto.actor.home.pos.y) < 40.0f) && SkelAnime_Update(&this->skelAnime)) {
+    if (((this->picto.actor.world.pos.y - this->picto.actor.home.pos.y) < 40.0f) &&
+        SkelAnime_Update(&this->skelAnime)) {
         EnMnk_Monkey_SetAnim(this, 0);
         this->actionFunc = EnMnk_Monkey_WaitForPlayerApproach;
         if (GET_MONKEY_TYPE(this) == MONKEY_OUTSIDEWOODS) {
@@ -1101,7 +1123,7 @@ void EnMnk_TiedUpMonkey_TeachSong(EnMnk* this, PlayState* play) {
         case 0x8DE: // "Do you understand my plight?"
             EnMnk_TiedUpMonkey_SetNewAnim(this, TIEDUPMONKEY_ANIM_CONFUSED);
             break;
-        case 0x8E0: // "So then, that means..."
+        case 0x8E0:  // "So then, that means..."
         case 0x1B66: // "Keep this song in your heart..."
             EnMnk_TiedUpMonkey_SetNewAnim(this, TIEDUPMONKEY_ANIM_LARGECLAPFEET);
             break;
@@ -1119,8 +1141,7 @@ void EnMnk_TiedUpMonkey_TeachSong(EnMnk* this, PlayState* play) {
             break;
     }
 
-    if ((Message_GetState(&play->msgCtx) == 4) && (!(this->unk_3E4 & 0x4000)) &&
-        Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == 4) && (!(this->unk_3E4 & 0x4000)) && Message_ShouldAdvance(play)) {
 
         switch (play->msgCtx.choiceIndex) {
             case 1:
@@ -1368,7 +1389,8 @@ void EnMnk_TiedUpMonkey_WaitForCutRope(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     SkelAnime_Update(&this->propSkelAnime);
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
-        if ((gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) || (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) ||
+            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
             EnMnk_TiedUpMonkey_SetAnim(this, TIEDUPMONKEY_ANIM_SHH);
             this->unk_3E0 = 5;
         } else {
@@ -1381,7 +1403,8 @@ void EnMnk_TiedUpMonkey_WaitForCutRope(EnMnk* this, PlayState* play) {
         EnMnk_TiedUpMonkey_SetAnim(this, TIEDUPMONKEY_ANIM_SHAKEHEAD);
         this->picto.actor.flags |= ACTOR_FLAG_10000;
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
-        if ((gSaveContext.save.playerForm != PLAYER_FORM_FIERCE_DEITY) && (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
+        if ((gSaveContext.save.playerForm != PLAYER_FORM_FIERCE_DEITY) &&
+            (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
             this->picto.actor.textId = 0x8D1; // "Huh? That guy... Where did he go???"
         } else {
             this->picto.actor.textId = 0x8D0; // "What are you doing? Quick--cut this rope!"
@@ -1692,11 +1715,11 @@ void EnMnk_Monkey_TalkAfterSaved(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
-            case 0x8E5: // "I'm sorry for all that trouble."
+            case 0x8E5:                               // "I'm sorry for all that trouble."
                 Message_ContinueTextbox(play, 0x8E6); // "...You know, the swamp may be back to normal..."
                 EnMnk_Monkey_SetAnim(this, 3);
                 break;
-            case 0x8E6: // "...You know, the swamp may be back to normal..."
+            case 0x8E6:                               // "...You know, the swamp may be back to normal..."
                 Message_ContinueTextbox(play, 0x8E7); // "I wonder what it could be..."
                 EnMnk_Monkey_SetAnim(this, 5);
                 break;
@@ -1891,14 +1914,16 @@ s32 EnMnk_Monkey_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
     return 0;
 }
 
-s32 EnMnk_TiedUpMonkey_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnMnk_TiedUpMonkey_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                            Actor* thisx) {
     if (limbIndex == 1) {
         *dList = NULL;
     }
     return 0;
 }
 
-s32 EnMnk_HangingMonkey_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnMnk_HangingMonkey_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                             Actor* thisx) {
     if ((limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3)) {
         *dList = NULL;
     }
@@ -1996,7 +2021,8 @@ void EnMnk_TiedUpMonkey_Draw(Actor* thisx, PlayState* play) {
     EnMnk* this = THIS;
 
     SkelAnime_DrawFlexOpa(play, this->propSkelAnime.skeleton, this->propSkelAnime.jointTable,
-                          this->propSkelAnime.dListCount, EnMnk_TiedUpMonkey_PropOverrideLimbDraw, EnMnk_TiedUpMonkey_PropPostLimbDraw, &this->picto.actor);
+                          this->propSkelAnime.dListCount, EnMnk_TiedUpMonkey_PropOverrideLimbDraw,
+                          EnMnk_TiedUpMonkey_PropPostLimbDraw, &this->picto.actor);
     EnMnk_Monkey_DrawFace(this, play);
     Matrix_Mult(&this->unk_36C, MTXMODE_NEW);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -2007,7 +2033,8 @@ void EnMnk_HangingMonkey_Draw(Actor* thisx, PlayState* play) {
     EnMnk* this = THIS;
 
     SkelAnime_DrawFlexOpa(play, this->propSkelAnime.skeleton, this->propSkelAnime.jointTable,
-                          this->propSkelAnime.dListCount, EnMnk_HangingMonkey_PropOverrideLimbDraw, EnMnk_HangingMonkey_PropPostLimbDraw, &this->picto.actor);
+                          this->propSkelAnime.dListCount, EnMnk_HangingMonkey_PropOverrideLimbDraw,
+                          EnMnk_HangingMonkey_PropPostLimbDraw, &this->picto.actor);
     EnMnk_Monkey_DrawFace(this, play);
     Matrix_Mult(&this->unk_36C, MTXMODE_NEW);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

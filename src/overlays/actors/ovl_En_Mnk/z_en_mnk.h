@@ -73,8 +73,8 @@ typedef struct EnMnk {
     /* 0x3C0 */ s32 destPointIndex;
     /* 0x3C4 */ s32 nextPathIndex;
     /* 0x3C8 */ s32 unk_3C8;
-    /* 0x3CC */ s16 unk_3CC; //beard x rot?
-    /* 0x3CE */ s16 unk_3CE; //beard y rot?
+    /* 0x3CC */ s16 unk_3CC; // beard x rot?
+    /* 0x3CE */ s16 unk_3CE; // beard y rot?
     /* 0x3D0 */ s16 unk_3D0;
     /* 0x3D2 */ char unk_3D2[0x2];
     /* 0x3D4 */ u32 unk_3D4;
