@@ -36,7 +36,7 @@ typedef enum {
     /* 5 */ TIEDUPMONKEY_ANIM_LARGECLAPFEET,
     /* 6 */ TIEDUPMONKEY_ANIM_SHAKEHEAD,
     /* 7 */ TIEDUPMONKEY_ANIM_WAIT,
-    /* 8 */ TIEDUPMONKEY_ANIM_CONFUSED,
+    /* 8 */ TIEDUPMONKEY_ANIM_CONFUSED
 } TiedUpMonkeyAnim;
 
 typedef enum {
