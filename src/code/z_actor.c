@@ -449,7 +449,7 @@ void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play
     }
 }
 
-void Target_SetColors(TargetContext* targetCtx, Actor* actor, s32 type, PlayState* play) {
+void Target_SetColors(TargetContext* targetCtx, Actor* actor, ActorType type, PlayState* play) {
     targetCtx->fairyHintPos.x = actor->focus.pos.x;
     targetCtx->fairyHintPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
     targetCtx->fairyHintPos.z = actor->focus.pos.z;
