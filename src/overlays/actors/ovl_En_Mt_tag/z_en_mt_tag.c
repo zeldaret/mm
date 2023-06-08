@@ -23,9 +23,9 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play);
 void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play);
 
 typedef enum {
-    GORON_RACE_CHEAT_NO_CHEATING,
-    GORON_RACE_CHEAT_FALSE_START,
-    GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND,
+    /* 0 */ GORON_RACE_CHEAT_NO_CHEATING,
+    /* 1 */ GORON_RACE_CHEAT_FALSE_START,
+    /* 2 */ GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND
 } PlayerCheatStatus;
 
 ActorInit En_Mt_tag_InitVars = {
@@ -235,7 +235,7 @@ s32 EnMttag_UpdateCheckpoints(EnMttag* this, PlayState* play) {
 s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType) {
     CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_KOKIRI;
     play->nextEntrance = ENTRANCE(GORON_RACETRACK, 2);
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         // Spring
         gSaveContext.nextCutsceneIndex = 0xFFF0;
     } else {
@@ -256,7 +256,7 @@ s32 EnMttag_ExitRace(PlayState* play, s32 transitionType, s32 nextTransitionType
 void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
     gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
     Message_StartTextbox(play, 0xE95, NULL); // An entrant made a false start
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
     SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     this->actionFunc = EnMttag_PotentiallyRestartRace;
 }
@@ -267,7 +267,7 @@ void EnMttag_ShowFalseStartMessage(EnMttag* this, PlayState* play) {
  */
 void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
     Message_StartTextbox(play, 0xE97, NULL); // You can't win now...
-    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
     this->actionFunc = EnMttag_HandleCantWinChoice;
 }
 
@@ -275,11 +275,11 @@ void EnMttag_ShowCantWinMessage(EnMttag* this, PlayState* play) {
  * Shows the cutscene that pans over the race track and shows all five race entrants.
  */
 void EnMttag_ShowIntroCutscene(EnMttag* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = EnMttag_WaitForIntroCutsceneToEnd;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -288,7 +288,7 @@ void EnMttag_ShowIntroCutscene(EnMttag* this, PlayState* play) {
  * from showing again and starts the race.
  */
 void EnMttag_WaitForIntroCutsceneToEnd(EnMttag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         SET_WEEKEVENTREG(WEEKEVENTREG_12_02);
         this->actionFunc = EnMttag_RaceStart;
     }
@@ -421,7 +421,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
         if (this->shouldRestartRace) {
             play->nextEntrance = ENTRANCE(GORON_RACETRACK, 1);
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
                 // Spring
                 gSaveContext.nextCutsceneIndex = 0xFFF0;
             } else {
@@ -433,7 +433,7 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play) {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
             Message_CloseTextbox(play);
-            func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
 
             CLEAR_EVENTINF(EVENTINF_10);
@@ -468,7 +468,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
         // Keep racing
         func_8019F208();
         Message_CloseTextbox(play);
-        func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
         CLEAR_EVENTINF(EVENTINF_13);
         this->timer = 100;
         this->actionFunc = EnMttag_Race;

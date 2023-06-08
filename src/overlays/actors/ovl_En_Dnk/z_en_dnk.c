@@ -213,8 +213,8 @@ void func_80A51648(EnDnk* this, PlayState* play) {
 }
 
 void func_80A51890(EnDnk* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 126)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 126));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_126)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_126));
     }
 }
 
@@ -334,7 +334,7 @@ void func_80A51CB8(EnDnk* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5245C[this->unk_2A0]));
     gDPPipeSync(POLY_OPA_DISP++);
@@ -402,7 +402,7 @@ void func_80A51DA4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 }
 
 void func_80A51FC0(EnDnk* this, PlayState* play) {
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51D78, func_80A51DA4,
                       &this->actor);
 }
@@ -423,7 +423,7 @@ void func_80A52018(Actor* thisx, PlayState* play) {
 }
 
 void func_80A52074(EnDnk* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 80:
             func_8019F128(NA_SE_EN_DEKNUTS_DANCE1);
             break;
@@ -441,13 +441,13 @@ void func_80A52074(EnDnk* this, PlayState* play) {
             break;
     }
 
-    if ((play->csCtx.frames >= 198) && (play->csCtx.frames < 438)) {
+    if ((play->csCtx.curFrame >= 198) && (play->csCtx.curFrame < 438)) {
         func_8019F128(NA_SE_EN_DEKNUTS_DANCE - SFX_FLAG);
     }
 }
 
 void func_80A52134(EnDnk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (ENDNK_GET_3C(&this->actor) == 4) && (play->sceneId == SCENE_SPOT00) &&
         (gSaveContext.sceneLayer == 2)) {
         func_80A52074(this, play);
     }

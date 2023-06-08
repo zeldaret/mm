@@ -63,6 +63,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dz = 1.0f;
             this->scalingFactor = 0.2f;
             break;
+
         case EFF_DUST_TYPE_1:
             this->actionFunc = func_80918FE4;
             this->actor.draw = func_80919768;
@@ -71,6 +72,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dz = 0.8f;
             this->scalingFactor = 0.5f;
             break;
+
         case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
         case EFF_DUST_TYPE_3:
             this->actionFunc = func_80919230;
@@ -79,6 +81,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dx = 0.5f;
             this->scalingFactor = 15.0f;
             break;
+
         case EFF_DUST_TYPE_4:
             this->actionFunc = func_80919230;
             this->actor.draw = func_809199FC;
@@ -86,6 +89,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dx = 0.5f;
             this->scalingFactor = 10.0f;
             break;
+
         case EFF_DUST_TYPE_5:
             this->actionFunc = func_80919230;
             this->actor.draw = func_809199FC;
@@ -93,6 +97,7 @@ void EffDust_Init(Actor* thisx, PlayState* play) {
             this->dx = 0.5f;
             this->scalingFactor = 20.0f;
             break;
+
         default:
             SystemArena_Free(this);
             break;
@@ -105,7 +110,7 @@ void EffDust_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80918D64(EffDust* this, PlayState* play) {
     s16 theta;
-    s16 fi;
+    s16 phi;
     s32 i;
     s32 j;
     f32* distanceTraveled = this->distanceTraveled;
@@ -122,10 +127,10 @@ void func_80918D64(EffDust* this, PlayState* play) {
             i = this->index & 0x3F;
             if (this->distanceTraveled[i] >= 1.0f) {
                 // Spherical coordinate system.
-                fi = randPlusMinusPoint5Scaled(0x10000);
+                phi = Rand_CenteredFloat(0x10000);
                 theta = Rand_ZeroFloat(0x1000);
-                this->initialPositions[i].x = -(f32)this->actor.home.rot.z * Math_CosS(fi) * Math_CosS(theta);
-                this->initialPositions[i].y = -(f32)this->actor.home.rot.z * Math_SinS(fi) * Math_CosS(theta);
+                this->initialPositions[i].x = -(f32)this->actor.home.rot.z * Math_CosS(phi) * Math_CosS(theta);
+                this->initialPositions[i].y = -(f32)this->actor.home.rot.z * Math_SinS(phi) * Math_CosS(theta);
                 this->initialPositions[i].z = -(f32)this->actor.home.rot.z * Math_SinS(theta);
                 this->distanceTraveled[i] = 0.0f;
                 this->index++;
@@ -136,7 +141,7 @@ void func_80918D64(EffDust* this, PlayState* play) {
 
 void func_80918FE4(EffDust* this, PlayState* play) {
     s16 theta;
-    s16 fi;
+    s16 phi;
     f32* distanceTraveled = this->distanceTraveled;
     s32 i;
     s32 j;
@@ -152,11 +157,11 @@ void func_80918FE4(EffDust* this, PlayState* play) {
         i = this->index & 0x3F;
         if (this->distanceTraveled[i] >= 1.0f) {
             // Spherical coordinate system.
-            fi = randPlusMinusPoint5Scaled(0x10000);
+            phi = Rand_CenteredFloat(0x10000);
             theta = Rand_ZeroFloat(0x2000);
-            this->initialPositions[i].x = 400.0f * Math_CosS(fi) * Math_CosS(theta);
+            this->initialPositions[i].x = 400.0f * Math_CosS(phi) * Math_CosS(theta);
             this->initialPositions[i].y = 400.0f * Math_SinS(theta);
-            this->initialPositions[i].z = 400.0f * Math_SinS(fi) * Math_CosS(theta);
+            this->initialPositions[i].z = 400.0f * Math_SinS(phi) * Math_CosS(theta);
             this->distanceTraveled[i] = 0.0f;
             this->index++;
         }
@@ -171,7 +176,7 @@ void func_80919230(EffDust* this, PlayState* play) {
     s32 i;
     s32 j;
 
-    if (parent == NULL || parent->update == NULL || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
+    if ((parent == NULL) || (parent->update == NULL) || !(player->stateFlags1 & PLAYER_STATE1_1000)) {
         if (this->life != 0) {
             this->life--;
         } else {
@@ -201,7 +206,7 @@ void func_80919230(EffDust* this, PlayState* play) {
         i = this->index & 0x3F;
 
         if (this->distanceTraveled[i] >= 1.0f) {
-            theta = randPlusMinusPoint5Scaled(0x10000);
+            theta = Rand_CenteredFloat(0x10000);
             switch (this->actor.params) {
                 case EFF_DUST_TYPE_SPIN_ATTACK_CHARGE:
                     this->initialPositions[i].x = (Rand_ZeroOne() * 4500.0f) + 700.0f;
@@ -234,6 +239,9 @@ void func_80919230(EffDust* this, PlayState* play) {
                         this->initialPositions[i].y = 4000.0f * Math_SinS(theta);
                         this->initialPositions[i].z = 4000.0f * Math_CosS(theta);
                     }
+                    break;
+
+                default:
                     break;
             }
 
@@ -268,7 +276,8 @@ void func_80919768(Actor* thisx, PlayState* play2) {
     sp92 = Math_Vec3f_Yaw(&activeCamEye, &thisx->world.pos);
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(gfxCtx);
+
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
 
@@ -318,7 +327,8 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
     Player* player = GET_PLAYER(play);
 
     OPEN_DISPS(gfxCtx);
-    func_8012C28C(gfxCtx);
+
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
 
@@ -326,7 +336,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
     distanceTraveled = this->distanceTraveled;
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-    if (player->unk_B08[0] >= 0.85f) {
+    if (player->unk_B08 >= 0.85f) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 0);
     } else {
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 0);
@@ -339,7 +349,7 @@ void func_809199FC(Actor* thisx, PlayState* play2) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (*distanceTraveled * 255.0f));
 
             aux = 1.0f - SQ(*distanceTraveled);
-            Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+            Matrix_Mult(&player->leftHandMf, MTXMODE_NEW);
             Matrix_Translate(initialPositions->x * ((this->dx * aux) + (1.0f - this->dx)),
                              (initialPositions->y * (1.0f - *distanceTraveled)) + 320.0f,
                              (initialPositions->z * (1.0f - *distanceTraveled)) + -20.0f, MTXMODE_APPLY);

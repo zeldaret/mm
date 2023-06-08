@@ -66,7 +66,7 @@ typedef struct EnBigslime {
     /* 0x02B4 */ u8 shockwaveAlpha;
     /* 0x02B5 */ u8 gekkoDrawDmgEffType;
     /* 0x02B6 */ s16 gekkoYaw;
-    /* 0x02B8 */ s16 cutscene;
+    /* 0x02B8 */ s16 csId;
     /* 0x02BA */ union { // multi-use timer
                     s16 idleTimer;
                     s16 noticeTimer;
@@ -87,7 +87,7 @@ typedef struct EnBigslime {
                     s16 isDespawned;
                     s16 isInitJump;
                 };
-    /* 0x02BC */ s16 wavySurfaceTimer; // decrements from 24, used in sin_rad for currData2
+    /* 0x02BC */ s16 wavySurfaceTimer; // decrements from 24, used in Math_SinF for currData2
     /* 0x02BE */ s16 stunTimer;
     /* 0x02C0 */ union {
                     s16 freezeTimer;

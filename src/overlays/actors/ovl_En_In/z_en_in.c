@@ -5,6 +5,7 @@
  */
 
 #include "z_en_in.h"
+#include "z64horse.h"
 #include "objects/object_in/object_in.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
@@ -150,7 +151,7 @@ s32 EnIn_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret = false;
 
-    if (animIndex >= 0 && animIndex < 18) {
+    if ((animIndex >= 0) && (animIndex < 18)) {
         ret = true;
         frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
@@ -224,7 +225,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01);
+              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
 
     return ret;
 }
@@ -273,10 +274,10 @@ void EnIn_DoNothing(EnIn* this, PlayState* play) {
 }
 
 void func_808F3618(EnIn* this, PlayState* play) {
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_9);
     }
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -328,7 +329,7 @@ void func_808F38F8(EnIn* this, PlayState* play) {
     while (true) {
         //! @bug: Infinite loop if there is only one ACTOR_EN_IN
         this->unk4A4 = (EnIn*)SubS_FindActor(play, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
-        if (this->unk4A4 != NULL && this->unk4A4 != this) {
+        if ((this->unk4A4 != NULL) && (this->unk4A4 != this)) {
             break;
         }
         this->unk4A4 = (EnIn*)this->unk4A4->actor.next;
@@ -336,7 +337,7 @@ void func_808F38F8(EnIn* this, PlayState* play) {
 }
 
 void func_808F395C(EnIn* this, PlayState* play) {
-    if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_END) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5A94;
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -352,30 +353,38 @@ void func_808F39DC(EnIn* this, PlayState* play) {
     u16 textId = 0;
 
     if (gSaveContext.save.day != 3) {
-        switch (GET_WEEKEVENTREG_RACE_FLAGS) {
-            case WEEKEVENTREG_RACE_FLAG_2:
+        switch (GET_WEEKEVENTREG_HORSE_RACE_STATE) {
+            case WEEKEVENTREG_HORSE_RACE_STATE_2:
                 textId = 0x347A;
                 break;
-            case WEEKEVENTREG_RACE_FLAG_3:
+
+            case WEEKEVENTREG_HORSE_RACE_STATE_3:
                 textId = 0x3476;
                 break;
+
+            default:
+                break;
         }
-        SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
+        SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     } else {
-        switch (GET_WEEKEVENTREG_RACE_FLAGS) {
-            case WEEKEVENTREG_RACE_FLAG_2:
+        switch (GET_WEEKEVENTREG_HORSE_RACE_STATE) {
+            case WEEKEVENTREG_HORSE_RACE_STATE_2:
                 textId = 0x349D;
                 break;
-            case WEEKEVENTREG_RACE_FLAG_3:
+
+            case WEEKEVENTREG_HORSE_RACE_STATE_3:
                 textId = 0x3499;
                 break;
+
+            default:
+                break;
         }
-        SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
+        SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     }
     this->actor.flags |= ACTOR_FLAG_10000;
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
-    if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
         Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
     } else {
         Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
@@ -481,6 +490,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x345B;
             }
             break;
+
         case 1:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_10)) {
                 textId = 0x3463;
@@ -488,11 +498,12 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x346B;
             }
             break;
+
         case 3:
             if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                 textId = 0x3485;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
+                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                 textId = 0x3484;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_04)) {
                 textId = 0x346D;
@@ -500,8 +511,10 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x3482;
             }
             break;
+
         case 4:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA || gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
+                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                 textId = 0x348A;
             } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                 textId = 0x348B;
@@ -511,6 +524,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x3489;
             }
             break;
+
         case 5:
             if (func_808F33B8()) {
                 textId = 0x34B3;
@@ -520,17 +534,22 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
                 textId = 0x3493;
             }
             break;
+
         case 7:
             if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
                 textId = 0x34A8;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
+                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
                 textId = 0x34A7;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_04)) {
                 textId = 0x3495;
             } else {
                 textId = 0x34A5;
             }
+            break;
+
+        default:
+            break;
     }
     if (textId == 0) {
         textId = 1;
@@ -539,12 +558,12 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
 }
 
 void func_808F4054(PlayState* play, EnIn* this, s32 arg2, u16 textId) {
-    s32 unused;
+    s32 pad;
 
-    if (textId == 0x34AE || textId == 0x34B0 || textId == 0x34B2) {
-        unused = textId;
-        func_80151BB4(play, 0x11);
+    if ((textId == 0x34AE) || (textId == 0x34B0) || (textId == 0x34B2)) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
     }
+
     switch (arg2) {
         case 1:
         case 5:
@@ -553,12 +572,15 @@ void func_808F4054(PlayState* play, EnIn* this, s32 arg2, u16 textId) {
                 func_808F35D8(this, play);
             }
             break;
+
         case 2:
             if (textId == 0x3473) {
                 func_808F35D8(this, play);
             }
             break;
+
         case 0:
+        default:
             break;
     }
 }
@@ -572,7 +594,7 @@ void func_808F4108(EnIn* this, PlayState* play, u16 textId) {
 }
 
 s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx) {
-    EnIn* this2 = this;
+    Actor* thisx = &this->actor;
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
@@ -583,22 +605,22 @@ s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx)
             } else if (this->unk4AC & 8) {
                 func_808F4108(this, play, 0x3475);
             } else {
-                Actor_ContinueText(play, &this->actor, 0x3475);
+                Actor_ContinueText(play, thisx, 0x3475);
             }
         } else {
             play_sound(NA_SE_SY_ERROR);
-            Actor_ContinueText(play, &this->actor, 0x3473);
+            Actor_ContinueText(play, thisx, 0x3473);
         }
     } else {
         func_8019F230();
-        Actor_ContinueText(play, &this->actor, 0x3472);
+        Actor_ContinueText(play, thisx, 0x3472);
     }
     return 0;
 }
 
 s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx, s32 arg4) {
     s32 pad;
-    s32 fee = play->msgCtx.unk1206C != 0xFFFF ? play->msgCtx.unk1206C : 10;
+    s32 fee = (play->msgCtx.unk1206C != 0xFFFF) ? play->msgCtx.unk1206C : 10;
 
     if (msgCtx->choiceIndex == 0) {
         func_8019F208();
@@ -635,7 +657,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
 s32 func_808F43E0(EnIn* this) {
     this->unk48C = 0;
     this->actor.textId = 0;
-    SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_END);
+    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     return 0;
 }
 
@@ -650,31 +672,38 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
             Actor_ContinueText(play, &this->actor, 0x34B0);
             ret = false;
             break;
+
         case 0x34A9:
             func_808F4108(this, play, 0x34AA);
             SET_WEEKEVENTREG(WEEKEVENTREG_63_40);
             ret = false;
             break;
+
         case 0x34AA:
             func_808F4108(this, play, 0x34AB);
             ret = false;
             break;
+
         case 0x34AB:
             func_808F4108(this, play, 0x34AC);
             ret = false;
             break;
+
         case 0x34AC:
             func_808F4108(this, play, 0x34AD);
             ret = false;
             break;
+
         case 0x34AD:
             Actor_ContinueText(play, &this->actor, 0x34AE);
             ret = false;
             break;
+
         case 0x34B1:
             Actor_ContinueText(play, &this->actor, 0x34B2);
             ret = false;
             break;
+
         default:
             break;
     }
@@ -687,48 +716,62 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     Actor_ContinueText(play, &this->actor, 0x3459);
                     ret = false;
                     break;
+
                 case 0x3459:
                     Actor_ContinueText(play, &this->actor, 0x345A);
                     ret = false;
                     break;
+
                 case 0x345A:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x345B:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x345C:
                     Actor_ContinueText(play, &this->actor, 0x345D);
                     ret = false;
                     break;
+
                 case 0x345D:
                     Actor_ContinueText(play, &this->actor, 0x345E);
                     ret = false;
                     break;
+
                 case 0x345E:
                     Actor_ContinueText(play, &this->actor, 0x345F);
                     ret = false;
                     break;
+
                 case 0x345F:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3460:
                     Actor_ContinueText(play, &this->actor, 0x3461);
                     ret = false;
                     break;
+
                 case 0x3461:
                     Actor_ContinueText(play, &this->actor, 0x3462);
                     ret = false;
                     break;
+
                 case 0x3462:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 1:
             switch (textId) {
                 case 0x3463:
@@ -736,14 +779,17 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     Actor_ContinueText(play, &this->actor, 0x3464);
                     ret = false;
                     break;
+
                 case 0x3464:
                     Actor_ContinueText(play, &this->actor, 0x3465);
                     ret = false;
                     break;
+
                 case 0x3465:
                     Actor_ContinueText(play, &this->actor, 0x3466);
                     ret = false;
                     break;
+
                 case 0x3466:
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
@@ -768,62 +814,74 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x3467:
                 case 0x3468:
                 case 0x3469:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x346B:
                     Actor_ContinueText(play, &this->actor, 0x346C);
                     ret = false;
                     break;
+
                 case 0x346C:
                     Actor_ContinueText(play, &this->actor, 0x3466);
                     ret = false;
                     break;
+
                 case 0x346A:
                     this->actionFunc = func_808F5A94;
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
             }
             break;
+
         case 2:
             switch (textId) {
                 case 0x346E:
                     func_808F4108(this, play, 0x346F);
                     ret = false;
                     break;
+
                 case 0x3470:
                     Actor_ContinueText(play, &this->actor, 0x3471);
                     ret = false;
                     break;
+
                 case 0x3483:
                     Actor_ContinueText(play, &this->actor, 0x3471);
                     ret = false;
                     break;
+
                 case 0x3471:
                     func_808F4150(play, this, arg2, msgCtx);
                     ret = false;
                     break;
+
                 case 0x3472:
                     func_808F43E0(this);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3473:
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3475:
-                    SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_START);
+                    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_57_01);
                     break;
+
                 case 0x3478:
                     if (msgCtx->choiceIndex == 0) {
                         func_808F4150(play, this, arg2, msgCtx);
@@ -835,13 +893,18 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x347B:
                     func_808F4108(this, play, 0x347C);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
+                default:
+                    break;
             }
             break;
+
         case 3:
             switch (textId) {
                 case 0x346D:
@@ -850,36 +913,44 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x346F:
                     func_808F4108(this, play, 0x3470);
                     ret = false;
                     break;
+
                 case 0x3482:
                     func_808F4108(this, play, 0x3483);
                     SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x3484:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3485:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3474:
                     func_808F4108(this, play, 0x3475);
                     ret = false;
                     break;
+
                 case 0x3476:
                     Actor_ContinueText(play, &this->actor, 0x3477);
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     ret = false;
                     break;
+
                 case 0x3477:
                     SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     func_808F4108(this, play, 0x3478);
                     ret = false;
                     break;
+
                 case 0x347A:
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
@@ -903,42 +974,52 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x347F:
                     Actor_ContinueText(play, &this->actor, 0x3480);
                     ret = false;
                     break;
+
                 case 0x3480:
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3479:
                     func_808F43E0(this);
                     func_808F35D8(this, play);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
                     Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, play);
                     ret = true;
                     break;
+
                 case 0x3481:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x347D:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
-                    func_80151BB4(play, 0x2F);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 4:
             switch (textId) {
                 case 0x3486:
@@ -946,56 +1027,71 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_16_01);
                     ret = false;
                     break;
+
                 case 0x3487:
                     Actor_ContinueText(play, &this->actor, 0x3488);
                     ret = false;
                     break;
+
                 case 0x3488:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3489:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x348A:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x348B:
                     Actor_ContinueText(play, &this->actor, 0x348C);
                     ret = false;
                     break;
+
                 case 0x348C:
                     Actor_ContinueText(play, &this->actor, 0x348D);
                     ret = false;
                     break;
+
                 case 0x348D:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 5:
             switch (textId) {
                 case 0x3468:
                 case 0x3469:
                 case 0x3491:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x348E:
                 case 0x34B3:
                     Actor_ContinueText(play, &this->actor, 0x348F);
                     SET_WEEKEVENTREG(WEEKEVENTREG_16_02);
                     ret = false;
                     break;
+
                 case 0x3493:
                     Actor_ContinueText(play, &this->actor, 0x3494);
                     ret = false;
                     break;
+
                 case 0x348F:
                 case 0x3494:
                     Actor_ContinueText(play, &this->actor, 0x3490);
                     ret = false;
                     break;
+
                 case 0x3490:
                     if (msgCtx->choiceIndex == 0) {
                         func_8019F208();
@@ -1020,57 +1116,68 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x3492:
                     this->actionFunc = func_808F5A94;
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
             }
             break;
+
         case 7:
             switch (textId) {
                 case 0x34A8:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x34A7:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3495:
                     func_808F4108(this, play, 0x3496);
                     SET_WEEKEVENTREG(WEEKEVENTREG_16_04);
                     SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x3497:
                     func_808F4108(this, play, 0x3498);
                     ret = false;
                     break;
+
                 case 0x34A4:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x34A5:
                     func_808F4108(this, play, 0x34A6);
                     SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x3473:
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3474:
                     Actor_ContinueText(play, &this->actor, 0x3475);
                     ret = false;
                     break;
+
                 case 0x3475:
-                    SET_WEEKEVENTREG_RACE_FLAGS(WEEKEVENTREG_RACE_FLAG_START);
+                    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
                     play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_57_01);
                     break;
+
                 case 0x349D:
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
@@ -1083,19 +1190,22 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
                     Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, play);
                     ret = true;
                     break;
+
                 case 0x34A0:
                     this->actionFunc = func_808F5A34;
-                    func_80151BB4(play, 0x11);
-                    func_80151BB4(play, 0x2F);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK);
                     func_808F43E0(this);
                     ret = true;
                     break;
+
                 case 0x34A1:
                     func_808F35D8(this, play);
                     if (Inventory_HasEmptyBottle()) {
@@ -1107,25 +1217,30 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x34A2:
                     Actor_ContinueText(play, &this->actor, 0x34A3);
                     ret = false;
                     break;
+
                 case 0x34A3:
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3499:
                     Actor_ContinueText(play, &this->actor, 0x349A);
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     ret = false;
                     break;
+
                 case 0x349A:
                     Actor_ContinueText(play, &this->actor, 0x349B);
                     ret = false;
                     break;
+
                 case 0x349B:
                     if (msgCtx->choiceIndex == 0) {
                         func_808F4270(play, this, arg2, msgCtx, 1);
@@ -1136,41 +1251,56 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         ret = false;
                     }
                     break;
+
                 case 0x349C:
                     func_808F43E0(this);
                     func_808F35D8(this, play);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 6:
             switch (textId) {
                 case 0x3496:
                     func_808F4108(this, play, 0x3497);
                     ret = false;
                     break;
+
                 case 0x3498:
                 case 0x34A6:
                     Actor_ContinueText(play, &this->actor, 0x3471);
                     ret = false;
                     break;
+
                 case 0x3471:
                     func_808F4270(play, this, arg2, msgCtx, 0);
                     ret = false;
                     break;
+
                 case 0x3472:
                     func_808F43E0(this);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x349E:
                     func_808F4108(this, play, 0x349F);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -1185,12 +1315,16 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
             func_808F4054(play, this, arg2, this->actor.textId);
             ret = true;
             break;
+
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
                 Message_CloseTextbox(play);
                 ret = true;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -1286,7 +1420,7 @@ void func_808F5A34(EnIn* this, PlayState* play) {
 }
 
 void func_808F5A94(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsActive(play, &play->actorCtx)) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 7, &this->unk48C);
         } else {
@@ -1302,7 +1436,7 @@ void func_808F5A94(EnIn* this, PlayState* play) {
 }
 
 void func_808F5B58(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsActive(play, &play->actorCtx)) {
         if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
             CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
             if (gSaveContext.save.day == 3) {
@@ -1322,7 +1456,7 @@ void func_808F5B58(EnIn* this, PlayState* play) {
 }
 
 void func_808F5C98(EnIn* this, PlayState* play) {
-    if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_END) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5B58;
     }
     if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
@@ -1334,7 +1468,7 @@ void func_808F5C98(EnIn* this, PlayState* play) {
         }
     }
     if (this->unk4A8 == 2) {
-        if (this->unk4B0 == WEEKEVENTREG_RACE_FLAG_2) {
+        if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
             Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
         } else {
             Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
@@ -1366,11 +1500,11 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
     this->unk48C = 0;
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
-    this->unk4B0 = GET_WEEKEVENTREG_RACE_FLAGS;
-    if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == ENIN_BLUE_SHIRT) {
+    this->unk4B0 = GET_WEEKEVENTREG_HORSE_RACE_STATE;
+    if ((type == ENIN_HORSE_RIDER_BLUE_SHIRT) || (type == ENIN_BLUE_SHIRT)) {
         this->unk4AC |= 8;
     }
-    if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
+    if ((type == ENIN_HORSE_RIDER_YELLOW_SHIRT) || (type == ENIN_HORSE_RIDER_BLUE_SHIRT)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
@@ -1384,24 +1518,24 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH_INDEX(&this->actor), ENIN_PATH_INDEX_NONE);
         this->unk23D = 0;
-        if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if ((GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) ||
-                (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_3)) {
+        if ((type == ENIN_YELLOW_SHIRT) || (type == ENIN_BLUE_SHIRT)) {
+            if ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) ||
+                (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
                 func_808F35AC(this, play);
                 this->unk23C = 0;
-                D_801BDAA0 = 0;
+                D_801BDAA0 = false;
 
-                if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_6);
                 } else {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_4);
                 }
-                if (GET_WEEKEVENTREG_RACE_FLAGS == WEEKEVENTREG_RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
@@ -1410,7 +1544,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                     this->actionFunc = func_808F5C98;
                 }
             } else {
-                if (GET_WEEKEVENTREG_RACE_FLAGS != WEEKEVENTREG_RACE_FLAG_START) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE != WEEKEVENTREG_HORSE_RACE_STATE_START) {
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     this->unk23C = 0;
                     this->unk4AC |= 2;
@@ -1419,7 +1553,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                             this->actionFunc = func_808F5A94;
                         } else {
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
@@ -1430,7 +1564,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             }
                         }
                     } else {
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                             Actor_Kill(&this->actor);
                         } else {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_7);
@@ -1477,15 +1611,15 @@ void func_808F6334(EnIn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 talkState = Message_GetState(&play->msgCtx);
 
-    this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
+    this->unk4C4 += (this->unk4C0 != 0.0f) ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
     if ((&this->actor == player->talkActor) &&
-        !((play->msgCtx.currentTextId >= 0xFF) && (play->msgCtx.currentTextId <= 0x200)) &&
-        (talkState == TEXT_STATE_3) && (this->prevTalkState == TEXT_STATE_3)) {
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if (!(play->state.frames & 1)) {
-            this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
+            this->unk4C0 = (this->unk4C0 != 0.0f) ? 0.0f : 1.0f;
         }
     } else {
         this->unk4C0 = 0.0f;
@@ -1519,16 +1653,17 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         object_in_DL_013440,
     };
 
-    if (this->unk23C != 0 && limbIndex != 16) {
+    if ((this->unk23C != 0) && (limbIndex != 16)) {
         if (sp50[limbIndex] != NULL) {
             *dList = sp50[limbIndex];
         }
     }
-    if (this->unk4AC & 4 && limbIndex == 16) {
+    if ((this->unk4AC & 4) && (limbIndex == 16)) {
         *dList = object_in_DL_01C528;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (limbIndex == 16) {
         TexturePtr sp38[] = { object_in_Tex_0035E0, object_in_Tex_004820, object_in_Tex_004C20, object_in_Tex_0043E0 };
 
@@ -1537,6 +1672,7 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     } else {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(object_in_Matanimheader_001C30), this->unk4AC & 8 ? 1 : 0);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 16) {
@@ -1550,7 +1686,7 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         Matrix_RotateYS(this->torsoRot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->torsoRot.x, MTXMODE_APPLY);
     }
-    if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
+    if ((limbIndex == 9) || (limbIndex == 10) || (limbIndex == 13)) {
         rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->unk39E[limbIndex]) * 200.0f);
     }
@@ -1592,21 +1728,25 @@ void EnIn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         if (this->unk23C == 0) {
             if (!(this->unk4AC & 8)) {
                 OPEN_DISPS(play->state.gfxCtx);
+
                 if (limbIndex == 12) {
                     gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007A70);
                 }
                 if (limbIndex == 15) {
                     gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007C48);
                 }
+
                 CLOSE_DISPS(play->state.gfxCtx);
             }
         }
     }
     if (this->unk4AC & 0x20) {
         OPEN_DISPS(play->state.gfxCtx);
+
         if (limbIndex == 12) {
             gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007C48);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -1615,9 +1755,11 @@ void EnIn_Draw(Actor* thisx, PlayState* play) {
     EnIn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

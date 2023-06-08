@@ -101,6 +101,6 @@
         <Animation Name="gGohtGetUpFromSideAnim" Offset="0x14024" /> <!-- Unused. Original name is "iceb_up" -->
 
         <!-- Goht Title Card -->
-        <Texture Name="gGohtTitleCardTex" OutName="goht_title_card" Format="i8" Width="128" Height="40" Offset="0x14040" />
+        <Texture Name="gGohtTitleCardTex" OutName="goht_title_card" Format="ia8" Width="128" Height="40" Offset="0x14040" />
     </File>
 </Root>

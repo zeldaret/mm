@@ -354,7 +354,7 @@ void func_8095E204(EnIshi* this, PlayState* play) {
     for (i = 0; i < 3; i++) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
                                           this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                          this->actor.cutscene, this->actor.halfDaysBits, NULL) == NULL) {
+                                          this->actor.csId, this->actor.halfDaysBits, NULL) == NULL) {
             break;
         }
     }
@@ -386,7 +386,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain[sp34]);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
@@ -597,11 +597,11 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         }
 
         if (sp70 == 1) {
-            s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+            s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
             Quake_SetSpeed(quakeIndex, 17232);
-            Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
-            Quake_SetCountdown(quakeIndex, 7);
+            Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+            Quake_SetDuration(quakeIndex, 7);
 
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
@@ -660,7 +660,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 
 void func_8095F060(EnIshi* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8095F0A4;
 }
 
@@ -668,15 +668,15 @@ void func_8095F0A4(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 sp28 = ENISHI_GET_1(&this->actor);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp28], D_8095F6D0[sp28]);
         D_8095F6D8[sp28](&this->actor, play);
         D_8095F6E0[sp28](this, play);
         this->actor.draw = NULL;
         func_8095F180(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -685,9 +685,9 @@ void func_8095F180(EnIshi* this) {
 }
 
 void func_8095F194(EnIshi* this, PlayState* play) {
-    if (this->actor.cutscene < 0) {
+    if (this->actor.csId <= CS_ID_NONE) {
         Actor_Kill(&this->actor);
-    } else if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
+    } else if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         Actor_Kill(&this->actor);
     }
 }
@@ -710,7 +710,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
     if (this->actor.projectedPos.z < 1300.0f) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
 
@@ -730,7 +730,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
     if ((this->actor.projectedPos.z <= 2150.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 2250.0f))) {
         this->actor.shape.shadowAlpha = 160;
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -741,7 +741,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 
         this->actor.shape.shadowAlpha = sp20 * 0.627451f;
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

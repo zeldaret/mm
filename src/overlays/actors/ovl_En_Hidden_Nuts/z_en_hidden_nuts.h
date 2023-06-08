@@ -8,7 +8,10 @@ struct EnHiddenNuts;
 typedef void (*EnHiddenNutsActionFunc)(struct EnHiddenNuts*, PlayState*);
 
 #define ENHIDDENNUTS_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
-#define ENHIDDENNUTS_GET_F80(thisx) (((thisx)->params >> 7) & 0x1F)
+#define ENHIDDENNUTS_GET_PATH_INDEX(thisx) (((thisx)->params >> 7) & 0x1F)
+
+#define ENHIDDENNUTS_PATH_INDEX_NONE 0x1F
+#define ENHIDDENNUTS_PATH_INDEX_NONE_ALT 0x3F
 
 typedef struct EnHiddenNuts {
     /* 0x000 */ Actor actor;
@@ -23,10 +26,10 @@ typedef struct EnHiddenNuts {
     /* 0x218 */ s16 unk_218;
     /* 0x21A */ s16 unk_21A;
     /* 0x21C */ s16 switchFlag;
-    /* 0x21E */ s16 unk_21E;
+    /* 0x21E */ s16 pathIndex;
     /* 0x220 */ s32 unk_220;
     /* 0x224 */ s16 unk_224;
-    /* 0x226 */ s16 unk_226;
+    /* 0x226 */ s16 csId;
     /* 0x228 */ f32 unk_228;
     /* 0x22C */ f32 unk_22C;
     /* 0x230 */ UNK_TYPE1 unk230[4];

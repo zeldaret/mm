@@ -68,7 +68,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
     this->unk_3E6 = 0;
     this->unk_3DC = NULL;
     this->unk_3E0 = NULL;
-    this->unk_3F2 = 0;
+    this->cueId = 0;
     this->unk_3D8 = 1.0f;
 
     switch (DEMOSYOTEN_GET_F(&this->actor)) {
@@ -81,7 +81,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
             this->actor.child =
                 Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EFF_DUST, this->actor.world.pos.x,
                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, 0);
-            this->unk_3F0 = 0x215;
+            this->cueType = CS_CMD_ACTOR_CUE_533;
             Actor_SetScale(&this->actor, 0.05f);
             break;
 
@@ -91,14 +91,14 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
             this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_001448);
             this->unk_3E4 |= 1;
             this->actionFunc = func_80C16BD4;
-            this->unk_3F0 = 0x215;
+            this->cueType = CS_CMD_ACTOR_CUE_533;
             Actor_SetScale(&this->actor, 0.05f);
             break;
 
         case DEMOSYOTEN_F_2:
             this->unk_3DC = object_syoten_DL_001730;
             this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_0018B8);
-            this->unk_3F0 = 0x216;
+            this->cueType = CS_CMD_ACTOR_CUE_534;
             this->actionFunc = func_80C16DD4;
             this->unk_3E4 |= 2;
             Actor_SetScale(&this->actor, 4.0f);
@@ -107,7 +107,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
         case DEMOSYOTEN_F_3:
             this->unk_3DC = object_syoten_DL_001DD0;
             this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_002B98);
-            this->unk_3F0 = 0x218;
+            this->cueType = CS_CMD_ACTOR_CUE_536;
             this->unk_3E4 |= 8;
             this->actionFunc = func_80C16EAC;
             Actor_SetScale(&this->actor, 0.5f);
@@ -118,7 +118,7 @@ void DemoSyoten_Init(Actor* thisx, PlayState* play) {
             this->unk_3E0 = Lib_SegmentedToVirtual(&object_syoten_Matanimheader_002B88);
             this->unk_3E4 |= 2;
             this->actionFunc = func_80C17008;
-            this->unk_3F0 = 0x217;
+            this->cueType = CS_CMD_ACTOR_CUE_535;
             this->unk_3E4 |= 1;
             this->unk_3E4 |= 8;
             this->actor.draw = func_80C17690;
@@ -219,20 +219,20 @@ void func_80C16A64(DemoSyoten* this, PlayState* play) {
 }
 
 void func_80C16A74(DemoSyoten* this, PlayState* play) {
-    u16 temp_a0;
+    u16 cueId;
 
     func_80183DE0(&this->unk_144);
-    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
-        if ((play->csCtx.frames >= 160) && (play->csCtx.frames < 322)) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        if ((play->csCtx.curFrame >= 160) && (play->csCtx.curFrame < 322)) {
             func_800B9010(&this->actor, NA_SE_EV_IKANA_SOUL_LV - SFX_FLAG);
-        } else if (play->csCtx.frames == 322) {
+        } else if (play->csCtx.curFrame == 322) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_IKANA_SOUL_TRANSFORM);
         }
 
-        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
-        if (this->unk_3F2 != temp_a0) {
-            this->unk_3F2 = temp_a0;
-            switch (temp_a0) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 case 1:
                     this->actor.draw = NULL;
                     break;
@@ -251,7 +251,7 @@ void func_80C16A74(DemoSyoten* this, PlayState* play) {
             }
         }
 
-        if (temp_a0 == 3) {
+        if (cueId == 3) {
             if (this->unk_3D8 > 0.0125f) {
                 this->unk_3D8 -= 0.0125f;
                 if (this->actor.child != NULL) {
@@ -271,13 +271,13 @@ void func_80C16A74(DemoSyoten* this, PlayState* play) {
 
 void func_80C16BD4(DemoSyoten* this, PlayState* play) {
     s32 pad;
-    u16 temp_a0;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
-        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
-        if (this->unk_3F2 != temp_a0) {
-            this->unk_3F2 = temp_a0;
-            switch (temp_a0) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 default:
                     this->actor.draw = NULL;
                     break;
@@ -304,7 +304,7 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
             }
         }
 
-        switch (temp_a0) {
+        switch (cueId) {
             case 3:
                 if (this->actor.scale.x < 0.05f) {
                     this->actor.scale.x += 0.000625f;
@@ -314,7 +314,7 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
 
             case 4:
                 this->actor.speed =
-                    play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->urot.z * 0.005493164f;
+                    play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->rot.z * 0.005493164f;
                 if (this->unk_3EC < this->unk_3E8->count) {
                     if (func_80C16818(this)) {
                         this->unk_3EC++;
@@ -330,13 +330,13 @@ void func_80C16BD4(DemoSyoten* this, PlayState* play) {
 
 void func_80C16DD4(DemoSyoten* this, PlayState* play) {
     s32 pad;
-    u16 temp_a0;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
-        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
-        if (this->unk_3F2 != temp_a0) {
-            this->unk_3F2 = temp_a0;
-            switch (temp_a0) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 case 1:
                     this->actor.draw = NULL;
                     break;
@@ -349,7 +349,7 @@ void func_80C16DD4(DemoSyoten* this, PlayState* play) {
             }
         }
 
-        if ((temp_a0 == 2) && (this->unk_3E6 < 40)) {
+        if ((cueId == 2) && (this->unk_3E6 < 40)) {
             this->unk_3E6++;
         }
     } else {
@@ -359,13 +359,13 @@ void func_80C16DD4(DemoSyoten* this, PlayState* play) {
 
 void func_80C16EAC(DemoSyoten* this, PlayState* play) {
     s32 pad;
-    u16 temp_a0;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
-        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
-        if (this->unk_3F2 != temp_a0) {
-            this->unk_3F2 = temp_a0;
-            switch (temp_a0) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 case 1:
                     this->actor.draw = NULL;
                     this->unk_3D8 = 0.0f;
@@ -378,7 +378,7 @@ void func_80C16EAC(DemoSyoten* this, PlayState* play) {
             }
         }
 
-        if (temp_a0 == 2) {
+        if (cueId == 2) {
             if (this->actor.scale.x < 8.0f) {
                 this->actor.scale.x += 0.1875f;
             }
@@ -401,13 +401,13 @@ void func_80C16EAC(DemoSyoten* this, PlayState* play) {
 }
 
 void func_80C17008(DemoSyoten* this, PlayState* play) {
-    u16 temp_a0;
+    u16 cueId;
 
-    if (Cutscene_CheckActorAction(play, this->unk_3F0)) {
-        temp_a0 = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->unk_3F0)]->action;
-        if (this->unk_3F2 != temp_a0) {
-            this->unk_3F2 = temp_a0;
-            switch (temp_a0) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 case 1:
                     this->actor.draw = NULL;
                     break;
@@ -419,7 +419,7 @@ void func_80C17008(DemoSyoten* this, PlayState* play) {
             }
         }
 
-        if ((temp_a0 == 2) && (this->unk_3E6 < 15)) {
+        if ((cueId == 2) && (this->unk_3E6 < 15)) {
             this->unk_3E6++;
         }
     } else {
@@ -487,7 +487,7 @@ void func_80C173B4(Actor* thisx, PlayState* play) {
     mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_144.unk_18->unk_1 * sizeof(Mtx));
 
     if (mtx != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
         func_8018450C(play, &this->unk_144, mtx, (void*)func_80C170F8, 0, &this->actor);
     }
@@ -514,7 +514,7 @@ void DemoSyoten_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->unk_3E4 & 4) {
         Matrix_RotateZS(-this->actor.shape.rot.z, MTXMODE_APPLY);
@@ -553,7 +553,7 @@ void func_80C17690(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
 
     if (this->unk_3E4 & 8) {

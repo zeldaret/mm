@@ -101,8 +101,8 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
         this->unk_2AC = 1;
         this->actor.world.pos.z += cos;
     }
-    this->cutscene = this->actor.cutscene;
-    if (this->cutscene == 0) {
+    this->csId = this->actor.csId;
+    if (this->csId == 0) {
         Actor_Kill(&this->actor);
     }
     func_80C04B40(this);
@@ -309,13 +309,13 @@ void func_80C050B8(EnBombers2* this, PlayState* play) {
 
 void func_80C0520C(EnBombers2* this, PlayState* play) {
     if (this->unk_2A8 == 0) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->cutscene) == 0) {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csId);
+        } else if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Queue(this->csId);
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_2A8 = 1;
         }
     } else {
@@ -332,7 +332,7 @@ void func_80C0520C(EnBombers2* this, PlayState* play) {
                 this->unk_2A8 = 0;
                 this->unk_2C0 = 1;
                 SET_WEEKEVENTREG(WEEKEVENTREG_73_80);
-                ActorCutscene_Stop(this->cutscene);
+                CutsceneManager_Stop(this->csId);
                 this->unk_2AC = 1;
                 this->actor.textId = sTextIds[this->textIdIndex];
                 Message_StartTextbox(play, this->actor.textId, &this->actor);
@@ -425,12 +425,12 @@ s32 func_80C056D4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
 }
 
 void EnBombers2_Draw(Actor* thisx, PlayState* play) {
-
     EnBombers2* this = THIS;
+
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C05920));
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sSetPrimColorDlPtr));

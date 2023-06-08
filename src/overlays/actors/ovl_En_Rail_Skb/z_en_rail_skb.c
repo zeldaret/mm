@@ -296,7 +296,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
         this->unk_3F8 = 0;
     }
 
-    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -1143,7 +1143,7 @@ void EnRailSkb_Draw(Actor* thisx, PlayState* play) {
     EnRailSkb* this = THIS;
 
     this->limbCount = 0;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnRailSkb_OverrideLimbDraw,
                       EnRailSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {

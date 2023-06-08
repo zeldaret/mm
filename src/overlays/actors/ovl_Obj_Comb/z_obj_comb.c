@@ -493,8 +493,8 @@ void func_8098E0B8(ObjComb* this, PlayState* play) {
         return;
     }
 
-    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.cutscene >= 0)) {
-        if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
+    if ((this->unk_1B4 == 10) && (this->unk_1B6 != 0) && (this->unk_1B5 == 2) && (this->actor.csId >= 0)) {
+        if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
             func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
         }
     }
@@ -518,17 +518,17 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->actor.update == NULL) {
-        if ((this->unk_1B5 == 2) && (func_800F2138(this->actor.cutscene) == -1)) {
-            ActorCutscene_Stop(this->actor.cutscene);
+        if ((this->unk_1B5 == 2) && (CutsceneManager_GetCutsceneScriptIndex(this->actor.csId) == -1)) {
+            CutsceneManager_Stop(this->actor.csId);
             this->unk_1B5 = 0;
         }
     } else {
         if (this->unk_1B5 != 0) {
             Actor_SetFocus(&this->actor, 0.0f);
             if (this->unk_1B5 == 1) {
-                if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                    ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-                    if (this->actor.cutscene >= 0) {
+                if (CutsceneManager_IsNext(this->actor.csId)) {
+                    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+                    if (this->actor.csId >= 0) {
                         func_800B7298(play, &this->actor, PLAYER_CSMODE_1);
                     }
 
@@ -539,7 +539,7 @@ void ObjComb_Update(Actor* thisx, PlayState* play) {
 
                     this->unk_1B5 = 2;
                 } else {
-                    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                    CutsceneManager_Queue(this->actor.csId);
                 }
             }
         }
@@ -556,7 +556,7 @@ void ObjComb_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + (118.0f * this->actor.scale.y),
                      this->actor.world.pos.z, MTXMODE_NEW);
     Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);

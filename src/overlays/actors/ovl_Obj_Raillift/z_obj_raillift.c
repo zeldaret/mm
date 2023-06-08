@@ -86,7 +86,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     if (this->speed < 0.01f) {
         this->actionFunc = ObjRaillift_DoNothing;
     } else {
-        path = &play->setupPathList[OBJRAILLIFT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJRAILLIFT_GET_PATH_INDEX(thisx)];
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
@@ -198,18 +198,18 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
     if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speed = 0.0f;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;
     }
 }
 
 void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->cutsceneTimer = 50;
         this->actionFunc = ObjRaillift_Move;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -223,7 +223,7 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
     if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
@@ -259,12 +259,14 @@ void ObjRaillift_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScrollEnvColor(play->state.gfxCtx, 0, play->gameplayFrames, 0, 32, 32, 1, 0, 0, 32, 32, 0, 0,
                                         0, 160));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_raillift_DL_004BF0);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

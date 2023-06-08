@@ -301,7 +301,7 @@ s32 func_80B76600(EnTruMt* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -431,7 +431,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
 
     this->collider.dim.worldSphere.radius = 22;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FF(&this->actor), ENTRUMT_PATH_INDEX_NONE);
     this->actor.targetMode = 0;
 
     Actor_SetScale(&this->actor, 0.008f);
@@ -439,7 +439,7 @@ void EnTruMt_Init(Actor* thisx, PlayState* play) {
 
     this->unk_328 = 0;
     this->actor.room = -1;
-    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRUMT_GET_FC00(&this->actor), ENTRUMT_PATH_INDEX_NONE);
     EnTruMt_ChangeAnim(&this->skelAnime, KOUME_MT_ANIM_FLY);
     this->actionFunc = func_80B76A64;
 }
@@ -527,7 +527,7 @@ void EnTruMt_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     }
 
     if (limbIndex == KOUME_LIMB_BROOM) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -583,7 +583,7 @@ void EnTruMt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));

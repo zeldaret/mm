@@ -239,12 +239,12 @@ void func_80A237A4(ObjIceblock* this) {
         ((this->unk_244 - ((600.0f * this->dyna.actor.scale.y) - 90.0f)) + (sp20 * ptr->unk_08)) + ptr->unk_00;
 }
 
-void func_80A23938(ObjIceblock* this2) {
-    ObjIceblock* this = this2;
+void func_80A23938(ObjIceblock* this) {
+    Actor* thisx = &this->dyna.actor;
 
     if (this->unk_1B0 & 0x80) {
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.x, 0, 400);
-        Math_ScaledStepToS(&this->dyna.actor.shape.rot.z, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.x, 0, 400);
+        Math_ScaledStepToS(&thisx->shape.rot.z, 0, 400);
     } else {
         ObjIceBlockUnkStruct4* ptr = &this->unk_27C;
         f32 phi_f0;
@@ -252,7 +252,7 @@ void func_80A23938(ObjIceblock* this2) {
 
         if (this->unk_1B0 & 0x20) {
             phi_f0 = 0.3f;
-            ptr->unk_14 = this->dyna.actor.yawTowardsPlayer;
+            ptr->unk_14 = thisx->yawTowardsPlayer;
         } else {
             phi_f0 = 0.08f;
         }
@@ -264,16 +264,15 @@ void func_80A23938(ObjIceblock* this2) {
 
         temp = ptr->unk_16 - ptr->unk_14;
 
-        ptr->unk_18 +=
-            (s16)(temp * -0.04f * this->dyna.actor.xzDistToPlayer * this->dyna.actor.scale.x * (1.0f / 600.0f));
+        ptr->unk_18 += (s16)(temp * -0.04f * thisx->xzDistToPlayer * thisx->scale.x * (1.0f / 600.0f));
         ptr->unk_18 = func_80A23090(ptr->unk_18, 50, 800);
         ptr->unk_16 += ptr->unk_18;
 
-        this->dyna.actor.shape.rot.x = Math_CosS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
-        this->dyna.actor.shape.rot.x = CLAMP(this->dyna.actor.shape.rot.x, -2000, 2000);
+        thisx->shape.rot.x = Math_CosS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
+        thisx->shape.rot.x = CLAMP(thisx->shape.rot.x, -2000, 2000);
 
-        this->dyna.actor.shape.rot.z = -Math_SinS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
-        this->dyna.actor.shape.rot.z = CLAMP(this->dyna.actor.shape.rot.z, -2000, 2000);
+        thisx->shape.rot.z = -Math_SinS(ptr->unk_16) * ptr->unk_20 * ptr->unk_1C;
+        thisx->shape.rot.z = CLAMP(thisx->shape.rot.z, -2000, 2000);
     }
 }
 
@@ -671,13 +670,14 @@ void func_80A24B74(ObjIceblock* this, PlayState* play) {
     s32 pad;
     Vec3f sp20;
 
-    if (this->dyna.actor.flags & ACTOR_FLAG_40) {
-        if (1) {}
-        sp20.x = this->dyna.actor.world.pos.x;
-        sp20.y = this->unk_244;
-        sp20.z = this->dyna.actor.world.pos.z;
-        EffectSsGRipple_Spawn(play, &sp20, 480, 880, 0);
+    if (!(this->dyna.actor.flags & ACTOR_FLAG_40)) {
+        return;
     }
+
+    sp20.x = this->dyna.actor.world.pos.x;
+    sp20.y = this->unk_244;
+    sp20.z = this->dyna.actor.world.pos.z;
+    EffectSsGRipple_Spawn(play, &sp20, 480, 880, 0);
 }
 
 void func_80A24BDC(ObjIceblock* this, PlayState* play, f32 arg2, f32 arg3, s32 arg4) {
@@ -971,13 +971,13 @@ void ObjIceBlock_SetupAttemptSpawnCutscene(ObjIceblock* this) {
 }
 
 void ObjIceBlock_AttemptSpawnCutscene(ObjIceblock* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->extendedDrawFunc = func_80A26BF8;
         this->spawnCutsceneTimer = 80;
         func_80A25824(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -1209,7 +1209,7 @@ void func_80A25FD4(ObjIceblock* this, PlayState* play) {
         func_80A23370(this, sp2C);
         func_80A260E8(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         this->unk_1B0 |= 1;
     }
 
@@ -1255,7 +1255,7 @@ void func_80A26144(ObjIceblock* this, PlayState* play) {
 
     if ((this->unk_1B0 & 1) && (isBool || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1B0 &= ~1;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
     }
 
     if (isBool) {
@@ -1454,7 +1454,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
         this->unk_1B0 &= ~0x100;
         if (this->unk_1B0 & 1) {
             this->unk_1B0 &= ~1;
-            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
         }
         func_80A266C4(this);
     }
@@ -1463,7 +1463,7 @@ void ObjIceblock_Update(Actor* thisx, PlayState* play) {
     if (this->spawnCutsceneTimer > 0) {
         this->spawnCutsceneTimer--;
         if (this->spawnCutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
 
@@ -1527,7 +1527,7 @@ void func_80A26BF8(ObjIceblock* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     sp70.z = 0;
 
     for (i = 0; i < ARRAY_COUNT(this->unk_1B4); i++) {

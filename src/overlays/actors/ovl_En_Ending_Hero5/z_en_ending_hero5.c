@@ -85,25 +85,33 @@ void EnEndingHero5_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnEndingHero5_Draw(Actor* thisx, PlayState* play) {
     EnEndingHero5* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
     OPEN_DISPS(play->state.gfxCtx);
 
     switch (this->unk25C) {
         case 0:
             gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
             break;
+
         case 1:
             gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
             break;
+
         case 2:
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
             break;
+
         case 3:
             gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
             break;
+
         case 4:
             gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
+            break;
+
+        default:
             break;
     }
 

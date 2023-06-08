@@ -100,7 +100,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.targetMode = 6;
     this->stateFlags = 0;
     this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
-    this->csAction = -1;
+    this->cueId = -1;
 
     this->picto.actor.terminalVelocity = -9.0f;
     this->picto.actor.gravity = -1.0f;
@@ -200,8 +200,8 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
  * @return true if path is set up in reverse
  */
 s32 EnGe2_SetupPath(EnGe2* this, PlayState* play) {
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_PRUPLE_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = Lib_SegmentedToVirtual(path->points);
@@ -228,14 +228,14 @@ void EnGe2_GetNextPath(EnGe2* this, PlayState* play) {
     Path* curPath;
     Path* nextPath;
     Vec3s* points;
-    u8 unk1;
+    u8 nextPathIndex;
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
-        unk1 = curPath->unk1;
-        nextPath = &play->setupPathList[unk1];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_PRUPLE_PATH_INDEX_NONE) {
+        curPath = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
+        nextPathIndex = curPath->additionalPathIndex;
+        nextPath = &play->setupPathList[nextPathIndex];
         this->path = nextPath;
         points = Lib_SegmentedToVirtual(nextPath->points);
         this->picto.actor.world.pos.x = points[0].x;
@@ -252,8 +252,8 @@ void EnGe2_SetupBlownAwayPath(EnGe2* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_PURPLE_GET_PATH(&this->picto.actor) != GERUDO_PURPLE_PATH_NONE) {
-        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_PRUPLE_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[GERUDO_PURPLE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->picto.actor.world.pos, points);
@@ -592,33 +592,34 @@ void EnGe2_Walk(EnGe2* this, PlayState* play) {
 
 void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (Cutscene_CheckActorAction(play, 476)) {
-        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 476)]->action;
-        if (this->csAction != csAction) {
-            this->csAction = csAction;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_476)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_476)]->id;
 
-            switch (csAction) {
-                case ENGE2_CSACTION_BEEHIVE_PATROL:
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+
+            switch (cueId) {
+                case ENGE2_CUEID_BEEHIVE_PATROL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
                     EnGe2_GetNextPath(this, play);
                     break;
 
-                case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
+                case ENGE2_CUEID_BEEHIVE_RUN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleRunningAwayCutsceneAnim, 1.0f, 0.0f,
                                      Animation_GetLastFrame(&gGerudoPurpleRunningAwayCutsceneAnim), 0, -5.0f);
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
-                case ENGE2_CSACTION_BEEHIVE_EXIT:
+                case ENGE2_CUEID_BEEHIVE_EXIT:
                     Actor_Kill(&this->picto.actor);
                     break;
 
-                case ENGE2_CSACTION_GBT_ENTR_STAND_STILL:
+                case ENGE2_CUEID_GBT_ENTR_STAND_STILL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 0.0f, 0.0f, 2, 0.0f);
                     break;
 
-                case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
+                case ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f, 2, 0.0f);
                     EnGe2_SetupBlownAwayPath(this, play);
                     this->stateFlags |= GERUDO_PURPLE_STATE_DISABLE_MOVEMENT;
@@ -631,8 +632,8 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
         }
     }
 
-    switch (this->csAction) {
-        case ENGE2_CSACTION_BEEHIVE_RUN_AWAY:
+    switch (this->cueId) {
+        case ENGE2_CUEID_BEEHIVE_RUN_AWAY:
             EnGe2_FollowPath(this);
             this->picto.actor.speed = 5.0f;
 
@@ -648,7 +649,7 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
             }
             break;
 
-        case ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY:
+        case ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY:
             if ((this->curPointIndex < this->path->count) && EnGe2_FollowPathWithoutGravity(this)) {
                 this->curPointIndex++;
             }
@@ -704,7 +705,7 @@ void EnGe2_Update(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
-    if (Cutscene_CheckActorAction(play, 476)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_476)) {
         this->actionFunc = EnGe2_PerformCutsceneActions;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
         this->stateFlags &= ~GERUDO_PURPLE_STATE_PATH_REVERSE;
@@ -766,7 +767,7 @@ void EnGe2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
     func_800B8050(&this->picto.actor, play, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

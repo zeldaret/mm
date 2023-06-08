@@ -4,6 +4,7 @@
  * Description: Seahorse
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_ot.h"
 #include "objects/object_ot/object_ot.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -161,7 +162,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.z = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
@@ -300,20 +301,20 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 
 void func_80B5BDA8(EnOt* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     this->actionFunc = func_80B5BE04;
 }
 
 void func_80B5BE04(EnOt* this, PlayState* play) {
     switch (this->unk_388) {
         case 0:
-            if (SubS_StartActorCutscene(&this->actor, this->cutscenes[2], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+            if (SubS_StartCutscene(&this->actor, this->csIdList[2], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
 
         case 1:
-            if (SubS_StartActorCutscene(&this->actor, this->cutscenes[3], -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+            if (SubS_StartCutscene(&this->actor, this->csIdList[3], CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
                 func_80B5BF60(this, play);
             }
             break;
@@ -508,11 +509,11 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_84_10);
             switch (this->unk_388) {
                 case 0:
-                    ActorCutscene_Stop(this->cutscenes[2]);
+                    CutsceneManager_Stop(this->csIdList[2]);
                     break;
 
                 case 1:
-                    ActorCutscene_Stop(this->cutscenes[3]);
+                    CutsceneManager_Stop(this->csIdList[3]);
                     break;
             }
             this->unk_73C = -1;
@@ -591,7 +592,7 @@ void func_80B5CA30(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CAD0(EnOt* this, PlayState* play) {
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes) / 2);
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList) / 2);
     this->actionFunc = func_80B5CB0C;
 }
 
@@ -626,7 +627,7 @@ void func_80B5CC88(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CCA0(EnOt* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_NORMAL)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_NORMAL)) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags2 |= PLAYER_STATE2_20000000;
@@ -665,10 +666,13 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1069)) {
                 this->unk_32C |= 4;
-                ActorCutscene_Stop(this->cutscenes[0]);
+                CutsceneManager_Stop(this->csIdList[0]);
                 player->stateFlags2 &= ~PLAYER_STATE2_20000000;
                 func_80B5CE6C(this, play);
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -993,7 +997,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
             func_80B5B2E0(play, &this->actor.world.pos, ENOT_GET_7F(&this->actor), &sp50, &this->unk_340);
             if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, sp50.x, sp50.y, sp50.z, 0,
                                               this->actor.shape.rot.y, 1, ENOT_GET_3FFF(&this->actor) | 0x8000,
-                                              this->actor.cutscene, this->actor.halfDaysBits, NULL) != NULL) {
+                                              this->actor.csId, this->actor.halfDaysBits, NULL) != NULL) {
                 this->unk_32C |= 8;
             }
         } else if (D_80B5E888 != NULL) {
@@ -1011,7 +1015,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
                 temp->unk_32C |= 8;
                 temp->unk_346 = ENOT_GET_7F(&this->actor);
                 temp->actor.params = this->actor.params;
-                temp->actor.cutscene = this->actor.cutscene;
+                temp->actor.csId = this->actor.csId;
                 this->unk_32C |= 8;
             }
         } else if (SurfaceType_IsHorseBlocked(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId)) {
@@ -1031,8 +1035,8 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 25);
-    POLY_XLU_DISP = func_8012C2B4(POLY_XLU_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
+    POLY_XLU_DISP = Gfx_SetupDL71(POLY_XLU_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 
@@ -1044,7 +1048,7 @@ void EnOt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gfx = func_8012C7FC(POLY_XLU_DISP);
+    gfx = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
     gDPSetDither(&gfx[0], G_CD_NOISE);
     gDPSetCombineLERP(&gfx[1], 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
@@ -1139,7 +1143,7 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     for (i = 0; i < arg2; i++, arg1++) {
         if (arg1->unk_00) {

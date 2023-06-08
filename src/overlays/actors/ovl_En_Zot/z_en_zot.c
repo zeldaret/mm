@@ -111,8 +111,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++) {
                 this->unk_2D8[i] = NULL;
             }
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
                 this->unk_2D4 = 0;
                 func_80B965D0(this, play);
             } else {
@@ -124,8 +124,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 3:
         case 4:
             this->actionFunc = func_80B97B5C;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -134,8 +134,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 5:
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97FD0;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -167,8 +167,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 10:
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -185,14 +185,14 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             func_80B96BEC(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             break;
@@ -211,8 +211,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 22:
             this->actionFunc = func_80B980FC;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -220,7 +220,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
     }
 
-    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) &&
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -488,8 +489,8 @@ void func_80B973BC(EnZot* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
-                if ((this->actor.cutscene != -1) && !(this->unk_2F2 & 1)) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if ((this->actor.csId != CS_ID_NONE) && !(this->unk_2F2 & 1)) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 this->unk_2F2 &= ~1;
                 break;
@@ -497,16 +498,16 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     }
 
     if (this->unk_2F2 & 1) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->unk_2F2 &= ~1;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->unk_2F2 &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -756,8 +757,6 @@ void func_80B97E0C(EnZot* this, PlayState* play) {
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
-    if (1) {}
-
     if (this->unk_2F2 & 0x40) {
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     }
@@ -767,33 +766,38 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        switch (play->msgCtx.currentTextId) {
-            case 0x128C:
-                this->unk_2F2 &= ~4;
-                func_80B96BEC(this, 6, ANIMMODE_ONCE);
-                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                break;
+    if ((Message_GetState(&play->msgCtx) != TEXT_STATE_5) || !Message_ShouldAdvance(play)) {
+        return;
+    }
 
-            case 0x128D:
-            case 0x128E:
-            case 0x128F:
-                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                break;
+    switch (play->msgCtx.currentTextId) {
+        case 0x128C:
+            this->unk_2F2 &= ~4;
+            func_80B96BEC(this, 6, ANIMMODE_ONCE);
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x1290:
-                Message_CloseTextbox(play);
-                this->actionFunc = func_80B97D6C;
-                this->unk_2F2 |= 4;
-                func_80B96BEC(this, 3, ANIMMODE_LOOP);
-                SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
-                break;
+        case 0x128D:
+        case 0x128E:
+        case 0x128F:
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x128B:
-                Message_CloseTextbox(play);
-                this->actionFunc = func_80B97FD0;
-                break;
-        }
+        case 0x1290:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97D6C;
+            this->unk_2F2 |= 4;
+            func_80B96BEC(this, 3, ANIMMODE_LOOP);
+            SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
+            break;
+
+        case 0x128B:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97FD0;
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -1397,7 +1401,7 @@ void EnZot_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk_2EC]));

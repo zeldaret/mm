@@ -72,7 +72,7 @@ typedef enum {
     /* 10 */ BEAVER_ANIM_TALK_TO_RIGHT,
     /* 11 */ BEAVER_ANIM_BOW,
     /* 12 */ BEAVER_ANIM_IDLE_FACE_LEFT,
-    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT,
+    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationInfo[] = {
@@ -253,7 +253,7 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
     if (this->unk_2F8 == 0) {
         this->unk_374 |= 2;
     }
-    SubS_FillCutscenesList(&this->actor, this->unk_3D0, ARRAY_COUNT(this->unk_3D0));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     if (D_80A9913C == NULL) {
         D_80A9913C = THIS;
         this->unk_374 |= 1;
@@ -595,7 +595,7 @@ void func_80A95CEC(EnAz* this, PlayState* play) {
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
             }
-            if (SubS_StartActorCutscene(&this->actor, 0x7C, this->unk_3D0[0], SUBS_CUTSCENE_NORMAL)) {
+            if (SubS_StartCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_NORMAL)) {
                 func_80A97C0C(this, play);
             }
         }
@@ -649,10 +649,10 @@ void func_80A95F94(EnAz* this, PlayState* play) {
 
 void func_80A95FE8(EnAz* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
-    if (ActorCutscene_GetCanPlayNext(this->unk_3D0[0])) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3D0[0], &this->actor);
+    if (CutsceneManager_IsNext(this->csIdList[0])) {
+        CutsceneManager_StartWithPlayerCs(this->csIdList[0], &this->actor);
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_3D0[0]);
+        CutsceneManager_Queue(this->csIdList[0]);
     }
     if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
         func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
@@ -672,7 +672,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
             this->actor.shape.rot.x = 0;
             this->actor.gravity = 0.0f;
             func_80A97C0C(this, play);
-            ActorCutscene_Stop(this->unk_3D0[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
         }
         Actor_MoveWithGravity(&this->actor);
     }
@@ -688,7 +688,8 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
         case TEXT_STATE_5:
         case TEXT_STATE_DONE:
             if ((play->msgCtx.currentTextId == 0x10DD) && (this->unk_374 & 0x8000)) {
-                if (SubS_StartActorCutscene(&brother->actor, brother->unk_3D0[0], 0x7C, SUBS_CUTSCENE_NORMAL)) {
+                if (SubS_StartCutscene(&brother->actor, brother->csIdList[0], CS_ID_GLOBAL_TALK,
+                                       SUBS_CUTSCENE_NORMAL)) {
                     brother->unk_374 |= 0x8000;
                     play->msgCtx.msgMode = 0x44;
                     ret = 0;
@@ -1398,7 +1399,7 @@ void func_80A97A28(EnAz* this, PlayState* play) {
 }
 
 void func_80A97A40(EnAz* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, 0, -1, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->actor, 0, CS_ID_NONE, SUBS_CUTSCENE_WITH_PLAYER)) {
         play->msgCtx.msgMode = 0;
         play->msgCtx.msgLength = 0;
         func_80A97A9C(this, play);
@@ -1783,7 +1784,9 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
     EnAz* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x19);
+
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->unk_374 & 2) {
@@ -1791,13 +1794,16 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                               func_80A98DA4, func_80A98E48, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               func_80A98DA4, func_80A98E48, &this->actor);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actor.depthInWater >= 28.0f) && (this->actor.speed > 0.5f)) {
         Matrix_Translate(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -1805,7 +1811,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
         Matrix_RotateZS(this->actor.shape.rot.z, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_39E, MTXMODE_APPLY);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         if (this->unk_374 & 2) {
             s32 i;
             Vec3f sp98;
@@ -1852,6 +1858,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

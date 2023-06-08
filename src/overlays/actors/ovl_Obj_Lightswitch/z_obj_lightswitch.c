@@ -189,13 +189,13 @@ void ObjLightswitch_SetAction(ObjLightswitch* this, ObjLightswitchSetupFunc setu
 }
 
 void ObjLightswitch_PlayCinema(ObjLightswitch* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         ObjLightswitch_UpdateSwitchFlags(this, play, this->switchFlagSetType);
         this->cutsceneTimer = 50;
         this->setupFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -351,7 +351,7 @@ void ObjLightswitch_Update(Actor* thisx, PlayState* play) {
     if ((this->cutsceneTimer > 0) && ((s32)this->actionFunc != (s32)ObjLightswitch_PlayCinema)) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
     }
 
@@ -370,7 +370,7 @@ void ObjLightSwitch_DrawOpa(ObjLightswitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
@@ -406,7 +406,7 @@ void ObjLightSwitch_DrawXlu(ObjLightswitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, (u8)(this->colorR >> 6), (u8)(this->colorG >> 6),
                    ((void)0, (u8)(this->colorB >> 6)), (u8)(this->colorAlpha >> 6));
     gSPSegment(POLY_XLU_DISP++, 0x09, D_801AEF88);

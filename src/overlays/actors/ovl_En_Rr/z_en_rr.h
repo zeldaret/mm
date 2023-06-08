@@ -7,12 +7,12 @@ struct EnRr;
 
 typedef void (*EnRrActionFunc)(struct EnRr*, PlayState*);
 
-enum {
+typedef enum {
     /* 0 */ ENRR_0,
     /* 1 */ ENRR_1,
     /* 2 */ ENRR_2,
-    /* 3 */ ENRR_3,
-};
+    /* 3 */ ENRR_3
+} EnRrParam;
 
 typedef struct {
     /* 0x00 */ f32 unk_00;

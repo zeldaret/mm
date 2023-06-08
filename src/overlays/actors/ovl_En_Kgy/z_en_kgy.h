@@ -25,13 +25,13 @@ typedef struct EnKgy {
     /* 0x2C0 */ Vec3f unk_2C0;
     /* 0x2CC */ Vec3s unk_2CC;
     /* 0x2D2 */ s16 unk_2D2;
-    /* 0x2D4 */ s16 unk_2D4[6];
-    /* 0x2E0 */ s16 unk_2E0;
+    /* 0x2D4 */ s16 csIdList[6];
+    /* 0x2E0 */ s16 csIdIndex;
     /* 0x2E2 */ s16 unk_2E2;
     /* 0x2E4 */ s16 unk_2E4;
     /* 0x2E6 */ s16 unk_2E6;
     /* 0x2E8 */ s16 unk_2E8;
-    /* 0x2EA */ s16 unk_2EA;
+    /* 0x2EA */ s16 getItemId;
     /* 0x2EC */ LightInfo lightInfo;
     /* 0x2FC */ LightNode* lightNode;
     /* 0x300 */ s16 unk_300;

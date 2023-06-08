@@ -63,7 +63,7 @@ typedef enum {
     /* 16 */ EN_DNO_ANIM_IMPLORE_START,
     /* 17 */ EN_DNO_ANIM_SHOCK_START,
     /* 18 */ EN_DNO_ANIM_SHOCK_LOOP,
-    /* 19 */ EN_DNO_ANIM_GRIEVE,
+    /* 19 */ EN_DNO_ANIM_GRIEVE
 } EnDnoAnimation;
 
 static AnimationSpeedInfo sAnimations[] = {
@@ -243,7 +243,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;
             this->unk_3B0 = 0;
-            this->unk_468 = 99;
+            this->cueId = 99;
             this->skelAnime.playSpeed = 0.0f;
 
             switch (EN_DNO_GET_C000(thisx)) {
@@ -916,12 +916,12 @@ void func_80A732C8(EnDno* this, PlayState* play) {
 void func_80A73408(EnDno* this, PlayState* play) {
     s32 phi_a2;
     u8 sp33 = true;
-    s32 temp_v0;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 475)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 475);
-        if (this->unk_468 != play->csCtx.actorActions[temp_v0]->action) {
-            switch (play->csCtx.actorActions[temp_v0]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_475)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_475);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     phi_a2 = 13;
                     break;
@@ -940,7 +940,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
                 SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, phi_a2, &this->animIndex);
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
     if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
@@ -1032,7 +1032,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     if (phi_v0 == true) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if (limbIndex == 13) {
             Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
             Matrix_RotateXS(this->unk_45C, MTXMODE_APPLY);
@@ -1058,7 +1058,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
-        gfxXlu = func_8012C2B4(POLY_XLU_DISP);
+        gfxXlu = Gfx_SetupDL71(POLY_XLU_DISP);
 
         gSPMatrix(gfxXlu, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(&gfxXlu[1], 0x08,

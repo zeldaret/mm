@@ -126,9 +126,9 @@ void EnWarpTag_Unused809C09A0(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 9) {
-        func_800B7298(play, NULL, PLAYER_CSMODE_7);
+        func_800B7298(play, NULL, PLAYER_CSMODE_WAIT);
         this->actionFunc = EnWarpTag_RespawnPlayer;
-        ActorCutscene_Stop(ActorCutscene_GetCurrentIndex());
+        CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
 
     } else if (play->msgCtx.ocarinaMode >= 2) {
         play->msgCtx.ocarinaMode = 4;
@@ -141,7 +141,7 @@ void EnWarpTag_Unused809C0A20(EnWarptag* this, PlayState* play) {
  */
 void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     ActorEntry* playerActorEntry;
-    Player* player;
+    Player* player = GET_PLAYER(play);
     s32 playerSpawnIndex;
     s32 new15E;
     s32 entrance;
@@ -149,13 +149,13 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
     u8 playerForm;
     s16 playerParams;
 
-    player = GET_PLAYER(play);
-    if (play->playerActorCsIds[4] >= 0 && ActorCutscene_GetCurrentIndex() != play->playerActorCsIds[4]) {
-        if (ActorCutscene_GetCanPlayNext(play->playerActorCsIds[4]) == 0) {
-            ActorCutscene_SetIntentToPlay(play->playerActorCsIds[4]);
+    if ((play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON] >= 0) &&
+        (CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
+        if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON])) {
+            CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON]);
 
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(play->playerActorCsIds[4], &this->dyna.actor);
+            CutsceneManager_StartWithPlayerCs(play->playerCsIds[PLAYER_CS_ID_WARP_PAD_MOON], &this->dyna.actor);
             Player_PlaySfx(player, NA_SE_PL_WARP_PLATE);
             Play_EnableMotionBlur(0);
         }
@@ -231,11 +231,11 @@ void EnWarpTag_RespawnPlayer(EnWarptag* this, PlayState* play) {
  * ActionFunc: Deku Playground, return to North Clock Town.
  */
 void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
-    if (ActorCutscene_GetCurrentIndex() != this->dyna.actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_GetCurrentCsId() != this->dyna.actor.csId) {
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
 
@@ -245,7 +245,6 @@ void EnWarpTag_GrottoReturn(EnWarptag* this, PlayState* play) {
         play->transitionTrigger = TRANS_TRIGGER_START;
         func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
         func_801A4058(5);
-        if (1) {}
         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     }
@@ -262,7 +261,7 @@ void EnWarptag_Update(Actor* thisx, PlayState* play) {
 void EnWarpTag_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gWarpTagRainbowTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

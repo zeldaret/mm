@@ -87,7 +87,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
         func_80965BBC(this);
         return;
     }
-    if (this->actor.cutscene >= 0) {
+    if (this->actor.csId >= 0) {
         action = func_80965D3C;
     } else {
         action = func_80965DB4;
@@ -102,13 +102,13 @@ void EnMm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80965D3C(EnMm* this, PlayState* play) {
-    s16 cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    s16 csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (ActorCutscene_GetCanPlayNext(cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         EnMm_SetupAction(this, func_80965DB4);
     } else {
-        ActorCutscene_SetIntentToPlay(cutscene);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -211,7 +211,8 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 
@@ -221,5 +222,6 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

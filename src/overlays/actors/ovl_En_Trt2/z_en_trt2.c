@@ -189,15 +189,15 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3664(EnTrt2* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         if (this->unk_3D9 == 0) {
             this->unk_3B2 = 1;
         } else {
             this->unk_3B2 = 2;
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_3DA);
+        CutsceneManager_Queue(this->csId);
         return;
     }
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
@@ -216,10 +216,10 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = SubS_GetPathByIndex(play, this->path->unk1, -1);
-                ActorCutscene_Stop(this->unk_3DA);
-                this->unk_3DA = ActorCutscene_GetAdditionalCutscene(this->unk_3DA);
-                ActorCutscene_SetIntentToPlay(this->unk_3DA);
+                this->path = SubS_GetPathByIndex(play, this->path->additionalPathIndex, PATH_INDEX_NONE);
+                CutsceneManager_Stop(this->csId);
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+                CutsceneManager_Queue(this->csId);
                 this->unk_3B2 = 0;
             } else {
                 this->unk_1E4++;
@@ -262,7 +262,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
         this->actor.world.rot.x = -this->actor.shape.rot.x;
         if (func_80AD475C(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_3DA);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
             } else {
                 this->unk_1E4++;
@@ -271,7 +271,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_3DA);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
             } else {
                 sp30.y = this->actor.wallYaw;
@@ -450,7 +450,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
-                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
@@ -466,15 +466,15 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
 void func_80AD4298(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_3B2 = 6;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->unk_3DA);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -492,16 +492,16 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y > 200.0f) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_3B2 = 0x13;
-            ActorCutscene_Stop(this->unk_3DA);
+            CutsceneManager_Stop(this->csId);
         } else {
             s32 i;
             Vec3f sp68;
             Vec3f sp5C = { 0.0f, 0.5f, 0.0f };
 
             for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i -= 2) {
-                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                sp68.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                sp68.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+                sp68.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &sp68, &sp5C, &sp5C, 100, 0, 3);
             }
 
@@ -592,7 +592,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
         phi_f14 = points[arg + 1].z - points[arg - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -639,9 +639,9 @@ f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 void func_80AD4A78(EnTrt2* this, PlayState* play) {
     Vec3f sp34;
 
-    sp34.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+    sp34.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
-    sp34.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+    sp34.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
     Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
 }
 
@@ -722,7 +722,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;
@@ -738,7 +738,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
 
     this->unk_3C0 = 0;
     this->unk_3D8 = false;
-    this->unk_3DA = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->unk_3B6 = 20;
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
@@ -941,7 +941,7 @@ void func_80AD56E8(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));

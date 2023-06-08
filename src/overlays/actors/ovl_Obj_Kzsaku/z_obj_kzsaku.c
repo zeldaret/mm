@@ -78,11 +78,11 @@ void func_80C08BBC(ObjKzsaku* this) {
 }
 
 void ObjKzsaku_Rise(ObjKzsaku* this, PlayState* play) {
-    if (this->dyna.actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (this->dyna.actor.csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
     if (this->raisedAmount < 450.0f) {
@@ -103,8 +103,8 @@ void func_80C08C84(ObjKzsaku* this) {
 void func_80C08CB0(ObjKzsaku* this, PlayState* play) {
     if (this->timer <= 20) {
         if (this->timer == 20) {
-            if (ActorCutscene_GetCurrentIndex() == this->dyna.actor.cutscene) {
-                ActorCutscene_Stop(this->dyna.actor.cutscene);
+            if (CutsceneManager_GetCurrentCsId() == this->dyna.actor.csId) {
+                CutsceneManager_Stop(this->dyna.actor.csId);
             }
             this->timer = 21;
         } else {
@@ -122,7 +122,7 @@ void ObjKzsaku_Update(Actor* thisx, PlayState* play) {
 void ObjKzsaku_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_kzsaku_DL_000040);
 

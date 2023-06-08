@@ -4,9 +4,12 @@
  * Description: Initializes the game into the title screen
  */
 
+#include "global.h"
 #include "z_opening.h"
+#include "z64save.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+#include "regs.h"
 
 void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
     static s32 sOpeningEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };
@@ -17,8 +20,8 @@ void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
 
     Sram_InitNewSave();
 
-    gSaveContext.save.entrance = sOpeningEntrances[D_801BB12C];
-    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutscene = sOpeningCutscenes[D_801BB12C];
+    gSaveContext.save.entrance = sOpeningEntrances[gOpeningEntranceIndex];
+    gSaveContext.nextCutsceneIndex = gSaveContext.save.cutsceneIndex = sOpeningCutscenes[gOpeningEntranceIndex];
     gSaveContext.sceneLayer = 0;
 
     gSaveContext.save.time = CLOCK_TIME(8, 0);

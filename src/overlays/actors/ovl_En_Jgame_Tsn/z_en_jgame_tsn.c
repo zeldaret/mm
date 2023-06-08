@@ -119,7 +119,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
         this->unk_1D8[i].points = Lib_SegmentedToVirtual(path->points);
         this->unk_1D8[i].count = path->count;
 
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
         if (path == NULL) {
             Actor_Kill(&this->actor);
         }
@@ -128,7 +128,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     this->unk_1F8.points = Lib_SegmentedToVirtual(path->points);
     this->unk_1F8.count = path->count;
 
-    path = &play->setupPathList[path->unk1];
+    path = &play->setupPathList[path->additionalPathIndex];
     if (path == NULL) {
         Actor_Kill(&this->actor);
     }
@@ -231,15 +231,15 @@ void func_80C13F88(EnJgameTsn* this) {
 }
 
 void func_80C13F9C(EnJgameTsn* this, PlayState* play) {
-    if (this->actor.cutscene != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (this->actor.csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             func_80C14030(this);
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     } else {
         func_80C14030(this);
@@ -268,8 +268,8 @@ void func_80C14044(EnJgameTsn* this, PlayState* play) {
 
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
-                if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 func_80C13B74(this);
             }
@@ -284,7 +284,7 @@ void func_80C1410C(EnJgameTsn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     player->stateFlags1 |= PLAYER_STATE1_20;
-    Audio_PlaySubBgm(0x25);
+    Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
     play->interfaceCtx.minigameState = MINIGAME_STATE_COUNTDOWN_SETUP_3;
     Interface_InitMinigame(play);
     SET_WEEKEVENTREG(WEEKEVENTREG_90_20);
@@ -468,8 +468,8 @@ void func_80C147B4(EnJgameTsn* this, PlayState* play) {
                 break;
 
             case 0x109E:
-                if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 Message_CloseTextbox(play);
                 func_80C1476C(this, play);
@@ -636,7 +636,7 @@ void EnJgameTsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));

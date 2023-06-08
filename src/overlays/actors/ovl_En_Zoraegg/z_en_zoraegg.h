@@ -10,7 +10,7 @@ typedef void (*EnZoraeggActionFunc)(struct EnZoraegg*, PlayState*);
 #define ENZORAEGG_GET_1F(thisx) ((thisx)->params & 0x1F)
 #define ENZORAEGG_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
 
-enum {
+typedef enum {
     /* 0x00 */ ENZORAEGG_1F_00,
     /* 0x01 */ ENZORAEGG_1F_01,
     /* 0x02 */ ENZORAEGG_1F_02,
@@ -36,8 +36,8 @@ enum {
     /* 0x16 */ ENZORAEGG_1F_16,
     /* 0x17 */ ENZORAEGG_1F_17,
     /* 0x18 */ ENZORAEGG_1F_18,
-    /* 0x19 */ ENZORAEGG_1F_19,
-};
+    /* 0x19 */ ENZORAEGG_1F_19
+} EnZoraeggParam;
 
 typedef struct EnZoraegg {
     /* 0x000 */ Actor actor;
@@ -53,7 +53,7 @@ typedef struct EnZoraegg {
     /* 0x1ED */ u8 unk_1ED;
     /* 0x1EE */ u8 unk_1EE;
     /* 0x1EF */ u8 unk_1EF;
-    /* 0x1F0 */ u16 actorActionCmd;
+    /* 0x1F0 */ u16 cueType;
     /* 0x1F2 */ s16 unk_1F2;
     /* 0x1F4 */ s16 unk_1F4;
     /* 0x1F8 */ EnZoraeggActionFunc actionFunc;

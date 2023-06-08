@@ -66,7 +66,7 @@ void EnBombal_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 6;
     this->actor.colChkInfo.health = 1;
     this->scale = 0.1f;
-    this->cutscene = this->actor.cutscene;
+    this->csId = this->actor.csId;
     func_80C05B24(this);
 }
 
@@ -109,16 +109,16 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csId);
             return;
         }
 
-        if (!ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+        if (!CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_Queue(this->csId);
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             phi_s0 = true;
         }
     } else {
@@ -147,7 +147,7 @@ void func_80C05DE8(EnBombal* this, PlayState* play) {
     if (this->timer == 0) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
-            ActorCutscene_Stop(this->cutscene);
+            CutsceneManager_Stop(this->csId);
         }
         Actor_Kill(&this->actor);
         return;
@@ -249,15 +249,15 @@ void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
         if (sPtr->isEnabled != 0) {
             Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
             Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
 
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(&gSun1Tex));
 

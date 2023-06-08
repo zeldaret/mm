@@ -627,16 +627,16 @@ void func_80B83518(Actor* thisx, PlayState* play) {
     if (this->unk_17F == 2) {
         this->unk_17E--;
         if (this->unk_17E <= 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             this->unk_17F = 0;
         }
     } else if ((this->unk_17F != 0) && (this->unk_17F == 1)) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_17F = 2;
             this->unk_17E = 0x50;
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
     this->unk_16C = this->unk_170;
@@ -663,7 +663,7 @@ void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
 
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(gfx++, 0, 0, 0, this->unk_183);
         gSPDisplayList(gfx++, gGreatBayTempleObjectSeesawSplashDL);
@@ -705,7 +705,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
 
             gfx = POLY_XLU_DISP;
 
-            gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+            gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
 
             for (i = 0, ptr = &this->unk_188[0]; i < ARRAY_COUNT(this->unk_188); i++, ptr++) {
                 if (ptr->unk_0E != 0) {

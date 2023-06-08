@@ -105,7 +105,7 @@ void EffFootmark_Draw(PlayState* play) {
     s32 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
-    func_8012C448(play->state.gfxCtx);
+    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
     gSPDisplayList(gfxCtx->polyXlu.p++, gEffFootprintMaterialDL);
 

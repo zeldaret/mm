@@ -54,14 +54,14 @@ typedef enum {
     /* 16 */ EN_JG_ANIM_DEPRESSED,
     /* 17 */ EN_JG_ANIM_CUTSCENE_IDLE,
     /* 18 */ EN_JG_ANIM_CRADLE,
-    /* 19 */ EN_JG_ANIM_MAX,
+    /* 19 */ EN_JG_ANIM_MAX
 } EnJgAnimation;
 
 typedef enum {
-    /* 0x0 */ EN_JG_ACTION_FIRST_THAW,
-    /* 0x1 */ EN_JG_ACTION_SPAWNING,
-    /* 0x2 */ EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW,
-    /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
+    /* 0 */ EN_JG_ACTION_FIRST_THAW,
+    /* 1 */ EN_JG_ACTION_SPAWNING,
+    /* 2 */ EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW,
+    /* 3 */ EN_JG_ACTION_LULLABY_INTRO_CS
 } EnJgAction;
 
 ActorInit En_Jg_InitVars = {
@@ -242,7 +242,7 @@ s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -251,32 +251,32 @@ s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
     return reached;
 }
 
-s16 EnJg_GetCutsceneForTeachingLullabyIntro(EnJg* this) {
+s16 EnJg_GetCsIdForTeachingLullabyIntro(EnJg* this) {
     s16 temp = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     if (temp > 0) {
-        return this->actor.cutscene;
+        return this->actor.csId;
     }
 
-    return ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    return CutsceneManager_GetAdditionalCsId(this->actor.csId);
 }
 
 void EnJg_SetupGoronShrineCheer(EnJg* this) {
-    ActorCutscene_Stop(this->cutscene);
+    CutsceneManager_Stop(this->csId);
     if (this->focusedShrineGoronParam == 10) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             this->actionFunc = EnJg_GoronShrineTalk;
         } else {
-            this->cutscene = 0x7C;
+            this->csId = CS_ID_GLOBAL_TALK;
         }
     } else {
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
     }
 
-    ActorCutscene_SetIntentToPlay(this->cutscene);
+    CutsceneManager_Queue(this->csId);
     this->actionFunc = EnJg_GoronShrineCheer;
 
     switch (this->textId) {
@@ -374,7 +374,7 @@ void EnJg_GoronShrineTalk(EnJg* this, PlayState* play) {
 }
 
 void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
+    if (CutsceneManager_IsNext(this->csId)) {
         switch (this->textId) {
             case 0xDD0: // The greatest Goron hero of all?
             case 0xDD2: // The immortal Goron?
@@ -383,26 +383,26 @@ void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
             case 0xDD6: // Darmani, greatest in the world!
                 // Focus on a specifc Goron for these lines
                 this->shrineGoron = EnJg_GetShrineGoronToFocusOn(play, this->focusedShrineGoronParam);
-                ActorCutscene_Start(this->cutscene, this->shrineGoron);
+                CutsceneManager_Start(this->csId, this->shrineGoron);
                 Camera_SetTargetActor(play->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
 
             default:
                 // Focus on the whole group for these lines
-                ActorCutscene_Start(this->cutscene, &this->actor);
+                CutsceneManager_Start(this->csId, &this->actor);
                 Camera_SetTargetActor(play->cameraPtrs[CAM_ID_MAIN], this->shrineGoron);
                 break;
         }
         this->actionFunc = EnJg_GoronShrineTalk;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
             if (this->focusedShrineGoronParam == 10) {
                 this->actionFunc = EnJg_GoronShrineTalk;
             } else {
-                ActorCutscene_Stop(0x7C);
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
         }
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -514,11 +514,11 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 play->msgCtx.msgMode = 0x43;
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
-                this->cutscene = EnJg_GetCutsceneForTeachingLullabyIntro(this);
-                if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                    ActorCutscene_Stop(0x7C);
+                this->csId = EnJg_GetCsIdForTeachingLullabyIntro(this);
+                if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                    CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
                 }
-                ActorCutscene_SetIntentToPlay(this->cutscene);
+                CutsceneManager_Queue(this->csId);
                 this->actionFunc = EnJg_TeachLullabyIntro;
             }
         } else {
@@ -609,27 +609,27 @@ void EnJg_EndFrozenInteraction(EnJg* this, PlayState* play) {
 }
 
 void EnJg_TeachLullabyIntro(EnJg* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->actor);
         this->actionFunc = EnJg_LullabyIntroCutsceneAction;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
     s32 pad;
 
-    if (Cutscene_CheckActorAction(play, 470)) {
-        s32 actionIndex = Cutscene_GetActorActionIndex(play, 470);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_470)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_470);
 
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
@@ -688,7 +688,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
             this->drum = Actor_SpawnAsChildAndCutscene(
                 &play->actorCtx, play, ACTOR_OBJ_JG_GAKKI, this->actor.world.pos.x, this->actor.world.pos.y,
                 this->actor.world.pos.z, this->actor.shape.rot.x, this->actor.shape.rot.y, this->actor.shape.rot.z,
-                this->actor.params, this->actor.cutscene, this->actor.halfDaysBits, NULL);
+                this->actor.params, this->actor.csId, this->actor.halfDaysBits, NULL);
         }
 
         if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {
@@ -699,7 +699,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
             }
         }
     } else {
-        this->csAction = 99;
+        this->cueId = 99;
         this->freezeTimer = 1000;
         SET_WEEKEVENTREG(WEEKEVENTREG_24_40);
         this->actionFunc = EnJg_Idle;
@@ -758,10 +758,10 @@ s32 EnJg_GetNextTextId(EnJg* this) {
 
         case 0xDCF: // Spring has come thanks to you
             this->focusedShrineGoronParam = 3;
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             this->actionFunc = EnJg_GoronShrineCheer;
             return 0xDD0; // The greatest Goron hero of all?
 
@@ -949,7 +949,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if (!EN_JG_IS_IN_GORON_SHRINE(thisx)) {
-        if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0)) {
+        if ((play->sceneId == SCENE_SPOT00) && (gSaveContext.sceneLayer == 7) && (play->csCtx.scriptIndex == 0)) {
             // This is the elder that appears in the cutscene for learning the full Goron Lullaby.
             this->animIndex = EN_JG_ANIM_IDLE;
             this->action = EN_JG_ACTION_LULLABY_INTRO_CS;
@@ -957,7 +957,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnJg_LullabyIntroCutsceneAction;
         } else {
             // This is the elder that appears in Mountain Village or the Path to Goron Village in winter.
-            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH(thisx), 0x3F);
+            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH_INDEX(thisx), EN_JG_PATH_INDEX_NONE);
             this->animIndex = EN_JG_ANIM_SURPRISE_START;
             this->action = EN_JG_ACTION_SPAWNING;
             this->freezeTimer = 1000;
@@ -968,7 +968,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
     } else {
         // This is the elder that appears in Goron Shrine in spring.
         this->animIndex = EN_JG_ANIM_IDLE;
-        this->cutscene = this->actor.cutscene;
+        this->csId = this->actor.csId;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnJg_GoronShrineIdle;
     }

@@ -124,11 +124,11 @@ void EnBombers_Init(Actor* thisx, PlayState* play) {
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
 
                 if (bomBowlMan != NULL) {
-                    s32 cs = this->actor.cutscene;
+                    s32 csId = this->actor.csId;
                     s32 i = 0;
 
                     // clang-format off
-                    while (cs != -1) { bomBowlMan->unk_2CC[i] = cs; cs = ActorCutscene_GetAdditionalCutscene(cs); i++; }
+                    while (csId != CS_ID_NONE) { bomBowlMan->csIdList[i] = csId; csId = CutsceneManager_GetAdditionalCsId(csId); i++; }
                     // clang-format on
 
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_76_01);
@@ -236,8 +236,8 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
             if (this->unk_2A8 == 0) {
                 Math_Vec3f_Copy(&sp60, &this->actor.home.pos);
 
-                sp60.x += randPlusMinusPoint5Scaled(150.0f);
-                sp60.z += randPlusMinusPoint5Scaled(150.0f);
+                sp60.x += Rand_CenteredFloat(150.0f);
+                sp60.z += Rand_CenteredFloat(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp60)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C,
@@ -519,8 +519,8 @@ void EnBombers_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C0482C[this->unk_2B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C04838[this->unk_2BE]));

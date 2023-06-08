@@ -38,8 +38,8 @@ typedef enum {
     /* 2 */ TURTLE_EYEMODE_CLOSED,
     /* 3 */ TURTLE_EYEMODE_LOOK_STRAIGHT,
     /* 4 */ TURTLE_EYEMODE_UNUSED,
-    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT,
-} EyeMode;
+    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT
+} TurtleEyeMode;
 
 typedef enum {
     /* 0 */ TURTLE_ANIM_IDLE,
@@ -48,7 +48,7 @@ typedef enum {
     /* 3 */ TURTLE_ANIM_SPEAK1,
     /* 4 */ TURTLE_ANIM_COUGH,
     /* 5 */ TURTLE_ANIM_SPEAK2,
-    /* 6 */ TURTLE_ANIM_YAWN,
+    /* 6 */ TURTLE_ANIM_YAWN
 } TurtleAnimation;
 
 ActorInit Dm_Char08_InitVars = {
@@ -275,27 +275,27 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
 }
 
 void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play) {
-    s16 cs1 = this->dyna.actor.cutscene;
-    s16 cs = ActorCutscene_GetAdditionalCutscene(
-        ActorCutscene_GetAdditionalCutscene(ActorCutscene_GetAdditionalCutscene(cs1)));
+    s16 csId = this->dyna.actor.csId;
+    s16 additionalCsId =
+        CutsceneManager_GetAdditionalCsId(CutsceneManager_GetAdditionalCsId(CutsceneManager_GetAdditionalCsId(csId)));
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_93_08)) {
-        cs1 = cs;
+        csId = additionalCsId;
     }
 
-    if (ActorCutscene_GetCanPlayNext(cs1)) {
-        ActorCutscene_Start(cs1, &this->dyna.actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_Start(csId, &this->dyna.actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_53_20);
         SET_WEEKEVENTREG(WEEKEVENTREG_93_08);
         DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80AAF884;
     } else {
-        ActorCutscene_SetIntentToPlay(cs1);
+        CutsceneManager_Queue(csId);
     }
 }
 
 void func_80AAF884(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == CS_STATE_0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gTurtleZoraCapeAwakeCol);
         this->dyna.actor.flags |= ACTOR_FLAG_1;
@@ -321,33 +321,33 @@ void func_80AAF8F4(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFA18(DmChar08* this, PlayState* play) {
-    s16 nextCs;
-    s16 nextCs2;
-    s16 nextCs1;
+    s16 nextCsId;
+    s16 nextCsId2;
+    s16 nextCsId1;
 
-    nextCs1 = ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene);
-    nextCs2 = nextCs1;
-    nextCs1 = ActorCutscene_GetAdditionalCutscene(nextCs1);
+    nextCsId1 = CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId);
+    nextCsId2 = nextCsId1;
+    nextCsId1 = CutsceneManager_GetAdditionalCsId(nextCsId1);
 
-    nextCs = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCs1 : nextCs2;
+    nextCsId = CHECK_WEEKEVENTREG(WEEKEVENTREG_53_40) ? nextCsId1 : nextCsId2;
 
-    if (ActorCutscene_GetCanPlayNext(nextCs) != 0) {
+    if (CutsceneManager_IsNext(nextCsId)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_53_40);
-        ActorCutscene_Start(nextCs, &this->dyna.actor);
+        CutsceneManager_Start(nextCsId, &this->dyna.actor);
         this->actionFunc = DmChar08_DoNothing;
     } else {
-        ActorCutscene_SetIntentToPlay(nextCs);
+        CutsceneManager_Queue(nextCsId);
     }
 }
 
 void func_80AAFAC4(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->actionFunc = func_80AAF8F4;
     }
 }
 
 void func_80AAFAE4(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->actionFunc = func_80AAFB04;
     }
 }
@@ -390,7 +390,7 @@ void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play) {
 void func_80AAFCCC(DmChar08* this, PlayState* play) {
     switch (play->sceneId) {
         case SCENE_31MISAKI:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 switch (this->unk_206) {
                     case 0:
                         break;
@@ -455,15 +455,15 @@ void DmChar08_DoNothing(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFE88(DmChar08* this, PlayState* play) {
-    s32 actorActionIndex;
-    CsCmdActorAction* csAction;
+    s32 cueChannel;
+    s32 pad;
     f32 phi_f12;
 
-    if (Cutscene_CheckActorAction(play, 474)) {
-        actorActionIndex = Cutscene_GetActorActionIndex(play, 474);
-        if (this->unk_1F6 != play->csCtx.actorActions[actorActionIndex]->action) {
-            this->unk_1F6 = play->csCtx.actorActions[actorActionIndex]->action;
-            switch (play->csCtx.actorActions[actorActionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_474)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_474);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = TURTLE_ANIM_IDLE;
                     break;
@@ -514,12 +514,12 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     break;
             }
         }
-        switch (play->csCtx.actorActions[actorActionIndex]->action) {
+        switch (play->csCtx.actorCues[cueChannel]->id) {
             case 2:
                 this->unk_1FF = 1;
-                phi_f12 = 2.0f * Environment_LerpWeight(play->csCtx.actorActions[actorActionIndex]->endFrame,
-                                                        play->csCtx.actorActions[actorActionIndex]->startFrame,
-                                                        play->csCtx.frames);
+                phi_f12 =
+                    2.0f * Environment_LerpWeight(play->csCtx.actorCues[cueChannel]->endFrame,
+                                                  play->csCtx.actorCues[cueChannel]->startFrame, play->csCtx.curFrame);
                 if (phi_f12 > 1.0f) {
                     phi_f12 = 1.0f;
                 }
@@ -529,30 +529,30 @@ void func_80AAFE88(DmChar08* this, PlayState* play) {
                     this->unk_1FF = 2;
                 }
 
-                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, actorActionIndex);
+                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, cueChannel);
                 break;
 
             case 5:
-                Cutscene_ActorTranslateAndYawSmooth(&this->dyna.actor, play, actorActionIndex);
+                Cutscene_ActorTranslateAndYawSmooth(&this->dyna.actor, play, cueChannel);
                 break;
 
             case 14:
-                Cutscene_ActorTranslate(&this->dyna.actor, play, actorActionIndex);
-                Math_SmoothStepToS(&this->dyna.actor.world.rot.y, play->csCtx.actorActions[actorActionIndex]->rot.y,
-                                   0xA, 0xDC, 1);
+                Cutscene_ActorTranslate(&this->dyna.actor, play, cueChannel);
+                Math_SmoothStepToS(&this->dyna.actor.world.rot.y, play->csCtx.actorCues[cueChannel]->rot.y, 0xA, 0xDC,
+                                   1);
                 this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
                 break;
 
             default:
-                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, actorActionIndex);
+                Cutscene_ActorTranslateAndYaw(&this->dyna.actor, play, cueChannel);
                 break;
         }
         this->targetYPos = this->dyna.actor.world.pos.y;
-        if ((this->unk_1FF >= 2) || (play->csCtx.actorActions[actorActionIndex]->action == 2)) {
+        if ((this->unk_1FF >= 2) || (play->csCtx.actorCues[cueChannel]->id == 2)) {
             Math_SmoothStepToF(&this->unk_1F0, 1.0f, 0.02f, 0.1f, 0.00001f);
         }
     } else {
-        this->unk_1F6 = 99;
+        this->cueId = 99;
     }
 }
 
@@ -893,9 +893,9 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
 }
 
 void func_80AB096C(DmChar08* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
-        (play->csCtx.currentCsIndex == 0)) {
-        if ((play->csCtx.frames >= 890) && (play->csCtx.frames < 922)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
+        (play->csCtx.scriptIndex == 0)) {
+        if ((play->csCtx.curFrame >= 890) && (play->csCtx.curFrame < 922)) {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     }
@@ -1002,7 +1002,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if ((play->csCtx.state == 0) && (play->sceneId == SCENE_31MISAKI) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) && (play->sceneId == SCENE_31MISAKI) &&
         (limbIndex == TURTLE_LIMB_FRONT_RIGHT_UPPER_FLIPPER)) {
         rot->z = -0x5E24;
     }
@@ -1093,11 +1093,12 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
     DmChar08* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
-    if ((this->unk_1FF > 0) || (play->csCtx.state != CS_STATE_0)) {
+    if ((this->unk_1FF > 0) || (play->csCtx.state != CS_STATE_IDLE)) {
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar08_OverrideLimbDraw, DmChar08_PostLimbDraw,
                                        DmChar08_TransformLimbDraw, &this->dyna.actor);
@@ -1113,11 +1114,12 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gTurtleAsleepDL);
     } else if (this->unk_1FF == 1) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gTurtleAsleepDL);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -217,13 +217,13 @@ void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
 void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
     if (this->fire.state != FIRE_STATE_NOT_LIT) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
             Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupUnfoldInnerPetals(this);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
 }
@@ -327,7 +327,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
         this->flowerRotationalVelocity = 0x147;
         this->settleScale = 0.0f;
 
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         BgNumaHana_SetupOpenedIdle(this);
     }
 
@@ -383,7 +383,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 

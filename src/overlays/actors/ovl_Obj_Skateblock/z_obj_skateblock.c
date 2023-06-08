@@ -535,7 +535,7 @@ void func_80A22334(ObjSkateblock* this, PlayState* play) {
         func_80A21C88(this, sp2C);
         func_80A2244C(this);
         sp30 = false;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_7);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_WAIT);
         this->unk_1C1 |= 1;
     }
 
@@ -591,7 +591,7 @@ void func_80A224A4(ObjSkateblock* this, PlayState* play) {
 
     if ((this->unk_1C1 & 1) && (sp24 || sp28 || (this->dyna.actor.xzDistToPlayer > 400.0f))) {
         this->unk_1C1 &= ~1;
-        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_6);
+        func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
     }
 
     func_80A21F74(this, play);
@@ -684,7 +684,7 @@ void ObjSkateblock_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     AnimatedMat_DrawStep(play, D_80A22A18, 0);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

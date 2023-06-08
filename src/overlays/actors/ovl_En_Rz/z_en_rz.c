@@ -87,14 +87,14 @@ static ColliderCylinderInit sCylinderInit = {
 
 void EnRz_Init(Actor* thisx, PlayState* play) {
     EnRz* this = THIS;
-    s16 tempCutscene = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        this->cutscenes[i] = tempCutscene;
-        if (tempCutscene != -1) {
-            this->actor.cutscene = tempCutscene;
-            tempCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
@@ -156,12 +156,12 @@ void EnRz_Init(Actor* thisx, PlayState* play) {
     }
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
-        this->csAction = 0x226;
+        this->cueType = CS_CMD_ACTOR_CUE_550;
     } else { // EN_RZ_MARILLA
-        this->csAction = 0x227;
+        this->cueType = CS_CMD_ACTOR_CUE_551;
     }
 
-    this->actionIndex = 0;
+    this->cueId = 0;
 }
 
 /**
@@ -247,8 +247,8 @@ void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
 }
 
 s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
-    if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
-        this->path = &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
+    if (EN_RZ_GET_PATH_INDEX(&this->actor) != EN_RZ_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[EN_RZ_GET_PATH_INDEX(&this->actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
@@ -347,9 +347,9 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 
 void func_80BFBDFC(PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
-        func_80151BB4(play, 0x27);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP);
     }
-    func_80151BB4(play, 0xC);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS);
 }
 
 void EnRz_Destroy(Actor* thisx, PlayState* play) {
@@ -359,18 +359,18 @@ void EnRz_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80BFBE70(EnRz* this, PlayState* play) {
-    u16 action;
+    u16 cueId;
 
     if ((EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) && (this->animIndex == EN_RZ_ANIM_APPLAUDING)) {
         func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
 
-    if (Cutscene_CheckActorAction(play, this->csAction)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
-        action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action;
-        if (this->actionIndex != action) {
-            this->actionIndex = action;
-            switch (this->actionIndex) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     func_80BFBA1C(play, this, EN_RZ_ANIM_STANDING);
                     break;
@@ -395,18 +395,18 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
 }
 
 s32 func_80BFBFAC(EnRz* this, PlayState* play) {
-    if (this->actor.cutscene == -1) {
+    if (this->actor.csId == CS_ID_NONE) {
         Message_StartTextbox(play, 0x2925, &this->actor);
         this->actionFunc = func_80BFC078;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->actor.csId);
         return false;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         return true;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
     return false;
 }
@@ -446,7 +446,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
         sp28.x = this->actor.projectedPos.x;
         sp28.y = this->actor.projectedPos.y;
         sp28.z = this->actor.projectedPos.z;
-        func_801A1FB4(3, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
+        func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_ROSA_SISTERS, 900.0f);
     }
 }
 
@@ -498,7 +498,7 @@ void func_80BFC36C(EnRz* this, PlayState* play) {
             this->actionFunc = func_80BFC2F4;
             SET_WEEKEVENTREG(WEEKEVENTREG_75_80);
         }
-        this->actor.cutscene = this->cutscenes[1];
+        this->actor.csId = this->csIdList[1];
     }
 }
 
@@ -518,7 +518,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 
             if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
                 this->actionFunc = func_80BFC36C;
-                this->actor.cutscene = this->cutscenes[0];
+                this->actor.csId = this->csIdList[0];
                 this->actor.flags &= ~ACTOR_FLAG_10000;
             } else if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
@@ -547,7 +547,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
             bgmPos.x = this->actor.projectedPos.x;
             bgmPos.y = this->actor.projectedPos.y;
             bgmPos.z = this->actor.projectedPos.z;
-            func_801A1FB4(3, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
+            func_801A1FB4(SEQ_PLAYER_BGM_SUB, &bgmPos, NA_BGM_ROSA_SISTERS, 900.0f);
         }
     }
 }
@@ -686,7 +686,7 @@ void EnRz_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) {
         AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(&object_rz_Matanimheader_00D768), 0);

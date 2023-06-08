@@ -35,7 +35,7 @@ typedef enum {
     /* 0 */ DMCHAR02_ANIM_HIT_GROUND,
     /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
     /* 2 */ DMCHAR02_ANIM_JUGGLE,
-    /* 3 */ DMCHAR02_ANIM_FALL,
+    /* 3 */ DMCHAR02_ANIM_FALL
 } DmChar02Animation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -61,7 +61,7 @@ void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16
 }
 
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 95:
             Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
             break;
@@ -75,7 +75,7 @@ void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play)
 }
 
 void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.scriptIndex == 1)) {
         DmChar02_PlaySfxForDroppingOcarinaCutscene(this, play);
     }
 }
@@ -101,12 +101,12 @@ void DmChar02_Destroy(Actor* thisx, PlayState* play) {
 
 void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
     u8 shouldChangeAnimation = true;
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x83)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x83);
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_131)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_131);
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 default:
                     this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
                     shouldChangeAnimation = false;
@@ -130,7 +130,7 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -172,10 +172,10 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
     s32 shouldDraw = false;
 
-    if ((play->csCtx.state == 0) && (this->actor.world.pos.y < 100.0f)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->actor.world.pos.y < 100.0f)) {
         shouldDraw = true;
-    } else if (Cutscene_CheckActorAction(play, 0x6B)) {
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x6B)]->action) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_107)) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_107)]->id) {
             case 0x17:
             case 0x1C:
             case 0x26:
@@ -185,7 +185,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (shouldDraw) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar02_OverrideLimbDraw, DmChar02_PostLimbDraw,
                                        DmChar02_TransformLimbDraw, &this->actor);

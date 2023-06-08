@@ -11,9 +11,9 @@ extern Vec3f gOneVec3f;
 #define SUBS_TIME_PATHING_ORDER 3
 
 typedef enum {
-    /* 0 */ SUBS_CUTSCENE_SET_UNK_LINK_FIELDS,
+    /* 0 */ SUBS_CUTSCENE_WITH_PLAYER,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
-    /* 2 */ SUBS_CUTSCENE_SET_FLAG
+    /* 2 */ SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG
 } SubSCutsceneType;
 
 //! TODO: rename based on func_8013E748 and func_800B8500
@@ -108,7 +108,7 @@ s32 SubS_ChangeAnimationByInfoS(SkelAnime* skelAnime, AnimationInfoS* animationI
 
 s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex);
 
-Path* SubS_GetDayDependentPath(struct PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex);
+Path* SubS_GetDayDependentPath(struct PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex);
 
 s32 SubS_WeightPathing_ComputePoint(Path* path, s32 waypoint, Vec3f* point, f32 progress, s32 direction);
 s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progress, s32 direction, s32 returnStart);
@@ -126,7 +126,7 @@ s32 SubS_TrackPoint(Vec3f* target, Vec3f* focusPos, Vec3s* shapeRot, Vec3s* trac
 
 s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB);
 
-Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 max);
+Path* SubS_GetPathByIndex(struct PlayState* play, s16 pathIndex, s16 pathIndexNone);
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst);
 s16 SubS_GetDistSqAndOrientPoints(Vec3f* vecA, Vec3f* vecB, f32* distSq);
 s32 SubS_MoveActorToPoint(Actor* actor, Vec3f* point, s16 rotStep);
@@ -153,8 +153,8 @@ s32 SubS_ActorPathing_SetNextPoint(struct PlayState* play, ActorPathing* actorPa
 
 void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* animationInfo, s32 nextAnimIndex, s32* curAnimIndex);
 
-s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type);
-s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes);
+s32 SubS_StartCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type);
+s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes);
 
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane);
 s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect);

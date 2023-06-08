@@ -30,7 +30,7 @@ typedef enum {
     /* 2 */ ENZOD_ANIM_ARMS_FOLDED,
     /* 3 */ ENZOD_ANIM_PLAYING_LENTO,
     /* 4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
-    /* 5 */ ENZOD_ANIM_MAX,
+    /* 5 */ ENZOD_ANIM_MAX
 } EnZodAnimation;
 
 typedef enum {
@@ -42,7 +42,7 @@ typedef enum {
     /* 6 */ ENZOD_INSTRUMENT_DRUM_3,
     /* 7 */ ENZOD_INSTRUMENT_DRUM_4,
     /* 8 */ ENZOD_INSTRUMENT_DRUM_5,
-    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM,
+    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
 const ActorInit En_Zod_InitVars = {
@@ -119,12 +119,12 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
                 this->actionFunc = func_80BAFDB4;
                 EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_VIVACE, ANIMMODE_ONCE);
                 this->actor.flags |= ACTOR_FLAG_10;
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                CutsceneManager_Queue(this->actor.csId);
                 break;
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80))) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE))) {
                 Actor_Kill(&this->actor);
                 break;
             }
@@ -137,7 +137,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
@@ -387,7 +387,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(3, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
@@ -445,20 +445,20 @@ void EnZod_DoNothing(EnZod* this, PlayState* play) {
 
 void EnZod_Rehearse(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        if (this->actor.cutscene == -1) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
+        this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+        if (this->actor.csId == CS_ID_NONE) {
             this->actionFunc = EnZod_DoNothing;
             play->nextEntrance = play->setupExitList[ENZOD_GET_ENTRANCE_INDEX(&this->actor)];
             play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
             play->transitionTrigger = TRANS_TRIGGER_START;
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_78_01);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -468,9 +468,9 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
         Message_CloseTextbox(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
         this->actionFunc = EnZod_Rehearse;
-        ActorCutscene_Stop(this->actor.cutscene);
-        this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
+        this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
+        CutsceneManager_Queue(this->actor.csId);
         SET_WEEKEVENTREG(WEEKEVENTREG_79_01);
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_INDIGO_GO_SESSION | SEQ_FLAG_ASYNC);
     }
@@ -478,13 +478,13 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
 
 void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         func_800B7298(play, NULL, 0x44);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -500,8 +500,8 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
         this->fogNear = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 0x203)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 1) {
             this->actionFunc = func_80BAFF14;
             this->fogNear = -1;
         }
@@ -513,8 +513,8 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
 
 void func_80BAFF14(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
-    if (Cutscene_CheckActorAction(play, 0x203) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x203)]->action == 4)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 4)) {
         this->actionFunc = func_80BAFE34;
     }
 }
@@ -628,7 +628,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->stateFlags & TIJO_STATE_2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->fogNear, 1000);

@@ -76,7 +76,7 @@ Vec3f D_8096AC30 = { 500.0f, -500.0f, 0.0f };
 
 void EnJs_Init(Actor* thisx, PlayState* play) {
     s32 pad;
-    s16 cs;
+    s16 csId;
     s32 i;
     EnJs* this = THIS;
 
@@ -92,17 +92,17 @@ void EnJs_Init(Actor* thisx, PlayState* play) {
     this->actor.terminalVelocity = -9.0f;
     this->actor.gravity = -1.0f;
 
-    cs = this->actor.cutscene;
+    csId = this->actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this->cutscenes); i++) {
-        this->cutscenes[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->cutsceneIndex = -1;
+    this->csIdIndex = -1;
 
     switch (ENJS_GET_TYPE(&this->actor)) {
         case 0:
@@ -194,7 +194,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     f32 sp18 = 0.0f;
     Vec3s* points;
 
-    if (pathIndex != 0x3F) {
+    if (pathIndex != ENJS_PATH_INDEX_NONE) {
         this->path = &play->setupPathList[pathIndex];
         if (this->path != NULL) {
             path = this->path;
@@ -377,7 +377,7 @@ void EnJs_TakeMask(s32 itemActions, s32 childType) {
     s32 temp = 0;
 
     if ((childType >= 0) && (childType < 9)) {
-        itemActions -= PLAYER_IA_MASK_TRUTH;
+        itemActions -= PLAYER_IA_MASK_MIN;
         childType *= 3;
         if (itemActions < 8) {
             masksGivenOnMoon[childType] |= 1 << itemActions;
@@ -511,17 +511,17 @@ s32 func_809695FC(EnJs* this, PlayState* play) {
 }
 
 void func_80969688(EnJs* this) {
-    if (this->cutsceneIndex != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->cutscenes[this->cutsceneIndex]) {
-            ActorCutscene_Stop(this->cutscenes[this->cutsceneIndex]);
+    if (this->csIdIndex != -1) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->cutsceneIndex = -1;
+        this->csIdIndex = -1;
     }
 }
 
-void func_809696EC(EnJs* this, s16 arg1) {
+void func_809696EC(EnJs* this, s16 csIdIndex) {
     func_80969688(this);
-    this->cutsceneIndex = arg1;
+    this->csIdIndex = csIdIndex;
 }
 
 void func_8096971C(EnJs* this, PlayState* play) {
@@ -543,7 +543,7 @@ void func_80969748(EnJs* this, PlayState* play) {
         }
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+            if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction < PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
                 EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -551,7 +551,7 @@ void func_80969748(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((itemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemAction <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemAction >= PLAYER_IA_MASK_TRANSFORMATION_MIN) && (itemAction <= PLAYER_IA_MASK_MAX)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
@@ -692,7 +692,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+            if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction < PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
                 EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -700,7 +700,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((itemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemAction <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemAction >= PLAYER_IA_MASK_TRANSFORMATION_MIN) && (itemAction <= PLAYER_IA_MASK_MAX)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
@@ -1019,14 +1019,14 @@ void EnJs_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if ((this->cutsceneIndex != -1) && (ActorCutscene_GetCurrentIndex() != this->cutscenes[this->cutsceneIndex])) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
-        } else if (ActorCutscene_GetCanPlayNext(this->cutscenes[this->cutsceneIndex])) {
-            ActorCutscene_Start(this->cutscenes[this->cutsceneIndex], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscenes[this->cutsceneIndex]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }
@@ -1058,7 +1058,7 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 void EnJs_Draw(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           func_8096A9F4, &this->actor);
 }

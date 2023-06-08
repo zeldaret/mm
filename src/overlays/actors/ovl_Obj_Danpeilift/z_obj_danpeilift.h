@@ -10,7 +10,7 @@ typedef void (*ObjDanpeiliftActionFunc)(struct ObjDanpeilift*, PlayState*);
 
 #define OBJDANPEILIFT_GET_TYPE(thisx) (((thisx)->params >> 0xF) & 1)
 #define OBJDANPEILIFT_GET_STARTING_POINT(thisx) (((thisx)->params >> 7) & 0x1F)
-#define OBJDANPEILIFT_GET_PATH(thisx) ((thisx)->params & 0x7F)
+#define OBJDANPEILIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJDANPEILIFT_SHOULD_TELEPORT(thisx) (((thisx)->params >> 0xC) & 1)
 #define OBJDANPEILIFT_GET_SPEED(thisx) ((thisx)->home.rot.z * 0.1f)
 #define OBJDANPEILIFT_REACT_TO_PLAYER_ON_TOP(thisx) (((thisx)->params >> 0xE) & 1)

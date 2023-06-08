@@ -34,7 +34,7 @@ static s16 sObjectBankIndices[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
 
 static s16 sGetItemDraws[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
 
-static u16 sCsActionIndices[] = { 0x6E, 0x236 };
+static u16 sCueTypes[] = { CS_CMD_ACTOR_CUE_110, CS_CMD_ACTOR_CUE_566 };
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     s32 pad;
@@ -49,7 +49,7 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.25f);
     this->actionFunc = func_80A4FB10;
     this->item = sGetItemDraws[itemIndex];
-    this->csAction = sCsActionIndices[itemIndex];
+    this->cueType = sCueTypes[itemIndex];
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
     if (objectIndex < 0) {
         Actor_Kill(&this->actor);
@@ -74,14 +74,14 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
     PlayState* play = play2;
     u16 sp22 = (play->gameplayFrames * 1000) & 0xFFFF;
 
-    if (Cutscene_CheckActorAction(play, this->csAction)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action != 4) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id != 4) {
             this->actor.shape.yOffset = 0.0f;
         }
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csAction)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
             case 2:
                 this->actor.draw = DemoGetitem_Draw;
-                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
+                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
                 this->actor.shape.rot.y += 0x3E8;
                 break;
 
@@ -91,7 +91,7 @@ void func_80A4FB68(DemoGetitem* this, PlayState* play2) {
 
             case 4:
                 this->actor.draw = DemoGetitem_Draw;
-                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csAction));
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
                 this->actor.shape.yOffset = Math_SinS(sp22) * 15.0f;
                 break;
 

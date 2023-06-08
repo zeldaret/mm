@@ -165,10 +165,10 @@ void func_809947B0(PlayState* play, EnSkb* this, Vec3f* inPos) {
     s32 pad;
 
     pos.y = this->actor.floorHeight;
-    pos.x = (sin_rad(sp40) * 15.0f) + inPos->x;
-    pos.z = (cos_rad(sp40) * 15.0f) + inPos->z;
-    accel.x = randPlusMinusPoint5Scaled(1.0f);
-    accel.z = randPlusMinusPoint5Scaled(1.0f);
+    pos.x = (Math_SinF(sp40) * 15.0f) + inPos->x;
+    pos.z = (Math_CosF(sp40) * 15.0f) + inPos->z;
+    accel.x = Rand_CenteredFloat(1.0f);
+    accel.z = Rand_CenteredFloat(1.0f);
     velocity.y += (Rand_ZeroOne() - 0.5f) * 4.0f;
     EffectSsHahen_Spawn(play, &pos, &velocity, &accel, 0, ((Rand_ZeroOne() * 5.0f) + 12.0f) * 0.8f,
                         HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -230,7 +230,7 @@ void EnSkb_Init(Actor* thisx, PlayState* play) {
     this->unk_3D6 = ENSKB_GET_F0(&this->actor);
     this->actor.floorHeight = this->actor.world.pos.y;
 
-    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -579,7 +579,7 @@ void func_80995A8C(EnSkb* this, PlayState* play) {
     }
 
     if ((this->unk_3D8 != 0) && ((play->gameplayFrames % 16) == 0)) {
-        this->unk_3DA = randPlusMinusPoint5Scaled(50000.0f);
+        this->unk_3DA = Rand_CenteredFloat(50000.0f);
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer + this->unk_3DA, 1, 0x2EE, 0);
@@ -742,11 +742,11 @@ void func_809961E4(EnSkb* this, PlayState* play) {
 }
 
 void func_80996284(EnSkb* this, PlayState* play) {
-    if (this->unk_3D8 & 0x80) {
-        if (1) {}
-        Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x10);
-        func_80996474(this);
+    if (!(this->unk_3D8 & 0x80)) {
+        return;
     }
+    Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x10);
+    func_80996474(this);
 }
 
 void func_809962D4(EnSkb* this) {
@@ -982,22 +982,22 @@ void func_8099672C(EnSkb* this, PlayState* play) {
 }
 
 void func_80996AD0(EnSkb* this, PlayState* play) {
-    if (1) {}
+    if ((this->actionFunc == func_80996284) || (this->unk_3E2 == 1)) {
+        return;
+    }
 
-    if ((this->actionFunc != func_80996284) && (this->unk_3E2 != 1)) {
-        if (this->unk_3E4 != 0) {
-            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-        }
+    if (this->unk_3E4 != 0) {
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+    }
 
-        if (((this->unk_3DE != 0) || (this->unk_3D0 >= 11)) && (this->unk_3DE != 1) && (this->unk_3DE != 4) &&
-            (this->unk_3DE != 6) && (this->unk_3DE != 7) &&
-            ((this->actor.colorFilterTimer == 0) || !(this->actor.colorFilterParams & 0x4000))) {
-            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        }
+    if (((this->unk_3DE != 0) || (this->unk_3D0 >= 11)) && (this->unk_3DE != 1) && (this->unk_3DE != 4) &&
+        (this->unk_3DE != 6) && (this->unk_3DE != 7) &&
+        ((this->actor.colorFilterTimer == 0) || !(this->actor.colorFilterParams & 0x4000))) {
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    }
 
-        if ((this->actionFunc != func_80996284) && (this->actionFunc != func_809964A0)) {
-            CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-        }
+    if ((this->actionFunc != func_80996284) && (this->actionFunc != func_809964A0)) {
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
@@ -1131,7 +1131,7 @@ void EnSkb_Draw(Actor* thisx, PlayState* play) {
     EnSkb* this = THIS;
 
     this->limbCount = 0;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
                       EnSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {

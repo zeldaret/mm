@@ -182,26 +182,27 @@ void func_80BDC830(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
-        if (ptr->unk_00 == 1) {
-            if (!flag) {
-                gDPPipeSync(POLY_XLU_DISP++);
-                gSPDisplayList(POLY_XLU_DISP++, gZoraRippleMaterialDL);
-                gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
-                if (1) {}
-                flag = true;
-            }
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr->unk_0F);
-
-            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gZoraRippleModelDL);
+        if (ptr->unk_00 != 1) {
+            continue;
         }
+
+        if (!flag) {
+            gDPPipeSync(POLY_XLU_DISP++);
+            gSPDisplayList(POLY_XLU_DISP++, gZoraRippleMaterialDL);
+            gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
+            flag = true;
+        }
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, ptr->unk_0F);
+
+        Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+        Matrix_Scale(ptr->unk_04, 1.0f, ptr->unk_04, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraRippleModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -213,26 +214,27 @@ void func_80BDC9DC(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
-        if (ptr->unk_00 == 3) {
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleMaterialDL);
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 150, 0);
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-                if (1) {}
-                flag = true;
-            }
-
-            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleModelDL);
+        if (ptr->unk_00 != 3) {
+            continue;
         }
+
+        if (!flag) {
+            gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleMaterialDL);
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 150, 0);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
+            flag = true;
+        }
+
+        Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraBubbleModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -244,27 +246,28 @@ void func_80BDCB84(EnZowStruct* ptr, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     u8 flag = false;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 15; i++, ptr++) {
-        if (ptr->unk_00 == 2) {
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, gZoraSplashMaterialDL);
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 0);
-                if (1) {}
-                flag = true;
-            }
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
-
-            Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gZoraSplashModelDL);
+        if (ptr->unk_00 != 2) {
+            continue;
         }
+
+        if (!flag) {
+            gSPDisplayList(POLY_XLU_DISP++, gZoraSplashMaterialDL);
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 0);
+            flag = true;
+        }
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 180, 180, 180, ptr->unk_0F);
+
+        Matrix_Translate(ptr->unk_14.x, ptr->unk_14.y, ptr->unk_14.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(ptr->unk_04, ptr->unk_04, 1.0f, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gZoraSplashModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -357,7 +360,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
     u16 phi_a1;
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
             if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
@@ -384,7 +387,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
             phi_a1 = 0x12FF;
         }
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_80)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
@@ -629,7 +632,7 @@ void EnZow_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->unk_2CE >= 255) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp54[this->unk_2C4]));

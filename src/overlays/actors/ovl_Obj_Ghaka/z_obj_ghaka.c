@@ -61,10 +61,10 @@ void func_80B3C2B0(ObjGhaka* this) {
 void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
-                                      this->dyna.actor.cutscene, this->dyna.actor.halfDaysBits, 0);
+                                      this->dyna.actor.csId, this->dyna.actor.halfDaysBits, 0);
     } else {
-        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1, -1,
-                                      this->dyna.actor.halfDaysBits, 0);
+        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1,
+                                      CS_ID_NONE, this->dyna.actor.halfDaysBits, 0);
     }
 }
 
@@ -184,11 +184,13 @@ void ObjGhaka_Update(Actor* thisx, PlayState* play) {
 
 void ObjGhaka_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_ghaka_DL_001A20);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_ghaka_DL_001980);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

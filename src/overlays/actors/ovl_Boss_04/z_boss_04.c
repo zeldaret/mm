@@ -254,16 +254,16 @@ void func_809EC568(Boss04* this, PlayState* play) {
             this->unk_2D0 = 2000.0f;
             if ((player->stateFlags1 & PLAYER_STATE1_100000) && (this->actor.projectedPos.z > 0.0f) &&
                 (fabsf(this->actor.projectedPos.x) < 300.0f) && (fabsf(this->actor.projectedPos.y) < 300.0f)) {
-                if ((this->unk_704 >= 15) && (ActorCutscene_GetCurrentIndex() == -1)) {
+                if ((this->unk_704 >= 15) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE)) {
                     Actor* boss;
 
                     this->unk_708 = 10;
                     this->unk_704 = 0;
-                    Cutscene_Start(play, &play->csCtx);
+                    Cutscene_StartManual(play, &play->csCtx);
                     this->subCamId = Play_CreateSubCamera(play);
                     Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                     Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
-                    func_800B7298(play, &this->actor, PLAYER_CSMODE_7);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
                     player->actor.world.pos.x = this->unk_6E8;
                     player->actor.world.pos.z = this->unk_6F0 + 410.0f;
                     player->actor.shape.rot.y = 0x7FFF;
@@ -389,8 +389,8 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 mainCam->at = this->subCamAt;
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 Play_DisableMotionBlur();
                 SET_EVENTINF(EVENTINF_60);
             }
@@ -439,8 +439,8 @@ void func_809ECD18(Boss04* this, PlayState* play) {
         if (Rand_ZeroOne() < 0.1f) {
             Math_Vec3f_Copy(&this->unk_6C8, &player->actor.world.pos);
         } else {
-            this->unk_6C8.x = randPlusMinusPoint5Scaled(600.0f) + this->unk_6E8;
-            this->unk_6C8.z = randPlusMinusPoint5Scaled(600.0f) + this->unk_6F0;
+            this->unk_6C8.x = Rand_CenteredFloat(600.0f) + this->unk_6E8;
+            this->unk_6C8.z = Rand_CenteredFloat(600.0f) + this->unk_6F0;
         }
     }
 
@@ -481,7 +481,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
-            func_800BC848(&this->actor, play, 15, 10);
+            Actor_RequestQuakeAndRumble(&this->actor, play, 15, 10);
             this->unk_6F4 = 15;
             sp3C.x = this->actor.focus.pos.x;
             sp3C.y = this->actor.focus.pos.y;
@@ -818,7 +818,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_200 & 1) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
@@ -832,7 +832,7 @@ void Boss04_Draw(Actor* thisx, PlayState* play) {
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     if (this->actionFunc != func_809EC568) {
-        func_8012C448(play->state.gfxCtx);
+        Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
         gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);

@@ -532,14 +532,14 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 
     func_80ADAE64(this);
     if (this->unk_366 == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 1;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     }
@@ -659,31 +659,31 @@ void func_80ADC37C(EnSellnuts* this, PlayState* play) {
         this->actor.world.rot.x = -sp30.x;
         if (func_80ADCE4C(this, this->path, this->unk_334) && (sp2C < 500.0f)) {
             if (this->unk_334 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->cutscene);
+                CutsceneManager_Stop(this->csId);
                 this->actionFunc = func_80ADC580;
             } else {
                 this->unk_334++;
             }
         }
     } else if (this->actor.playerHeightRel > 500.0f) {
-        ActorCutscene_Stop(this->cutscene);
+        CutsceneManager_Stop(this->csId);
         this->actionFunc = func_80ADC580;
     }
 
     Math_ApproachF(&this->actor.speed, 2.0f, 0.2f, 1.0f);
     Actor_MoveWithoutGravity(&this->actor);
     if (this->unk_366 == 2) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 3;
         } else {
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     } else if ((this->unk_366 == 1) && (this->unk_368 == 20)) {
-        ActorCutscene_Stop(this->cutscene);
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Stop(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->unk_366 = 2;
     }
 
@@ -741,22 +741,22 @@ void func_80ADC7B4(EnSellnuts* this, PlayState* play) {
     s32 talkState = Message_GetState(&play->msgCtx);
 
     if (this->unk_366 == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 1;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
         }
     } else if ((this->unk_366 == 1) && (talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
         this->unk_366 = 0;
-        ActorCutscene_Stop(this->cutscene);
-        this->cutscene = ActorCutscene_GetAdditionalCutscene(this->cutscene);
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Stop(this->csId);
+        this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+        CutsceneManager_Queue(this->csId);
         this->unk_338 |= 8;
         this->actionFunc = func_80ADC8C4;
     }
@@ -766,14 +766,14 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
     Vec3s sp30;
 
     if (this->unk_366 == 0) {
-        if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->cutscene, &this->actor);
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
             this->unk_366 = 1;
         } else {
-            if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-                ActorCutscene_Stop(0x7C);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
             }
-            ActorCutscene_SetIntentToPlay(this->cutscene);
+            CutsceneManager_Queue(this->csId);
             return;
         }
     }
@@ -816,7 +816,7 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
         this->actor.shape.rot.y += 0x4000;
         this->unk_360 *= 0.93f;
         if (this->actor.world.pos.y < -50.0f) {
-            ActorCutscene_Stop(this->cutscene);
+            CutsceneManager_Stop(this->csId);
             this->unk_338 &= ~8;
             this->unk_34E = 20;
             this->unk_350 = 4;
@@ -835,7 +835,7 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
             this->collider.dim.height = 0;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
         } else if (this->unk_34C == 17) {
-            ActorCutscene_Stop(this->cutscene);
+            CutsceneManager_Stop(this->csId);
             SET_WEEKEVENTREG(WEEKEVENTREG_73_04);
             Actor_Kill(&this->actor);
         }
@@ -916,7 +916,7 @@ s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
         pointY = points[var + 1].z - points[var - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(pointX, pointY)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -958,8 +958,8 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
-    this->cutscene = this->actor.cutscene;
+    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_PATH_INDEX(&this->actor), ENSELLNUTS_PATH_INDEX_NONE);
+    this->csId = this->actor.csId;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -1138,7 +1138,7 @@ void EnSellnuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) 
 void EnSellnuts_Draw(Actor* thisx, PlayState* play) {
     EnSellnuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw,
                                    EnSellnuts_TransformLimbDraw, &this->actor);

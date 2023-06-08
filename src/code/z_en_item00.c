@@ -127,7 +127,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
 
         case ITEM00_RECOVERY_HEART:
-            this->actor.home.rot.z = randPlusMinusPoint5Scaled(0xFFFF);
+            this->actor.home.rot.z = Rand_CenteredFloat(0xFFFF);
             shadowOffset = 430.0f;
             Actor_SetScale(&this->actor, 0.02f);
             this->unk154 = 0.02f;
@@ -381,9 +381,9 @@ void func_800A6650(EnItem00* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 1) != 0) {
-        pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
-        pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
-        pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(10.0f);
+        pos.y = this->actor.world.pos.y + Rand_CenteredFloat(10.0f);
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(10.0f);
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
@@ -783,7 +783,7 @@ void EnItem00_DrawRupee(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
@@ -834,7 +834,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
         }
     }
 
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sItemDropTextures[texIndex]));
 
@@ -851,7 +851,7 @@ void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -868,7 +868,7 @@ void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -956,7 +956,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 }
                 spawnedActor->speed = 2.0f;
                 spawnedActor->gravity = -0.9f;
-                spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
                 Actor_SetScale(spawnedActor, 0.0f);
                 ((EnItem00*)spawnedActor)->actionFunc = func_800A6780;
                 ((EnItem00*)spawnedActor)->unk152 = 0xDC;
@@ -1011,7 +1011,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
                     } else {
                         spawnedActor->gravity = -0.9f;
                     }
-                    spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                    spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
                     spawnedActor->flags |= 0x10;
                 }
             }

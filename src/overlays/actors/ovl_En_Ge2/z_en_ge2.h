@@ -11,12 +11,12 @@ typedef void (*EnGe2ActionFunc)(struct EnGe2*, PlayState*);
 
 #define GERUDO_PURPLE_GET_EXIT(thisx) (((thisx)->params) & 0x1F) //!< Exit to send Player to when caught
 #define GERUDO_PURPLE_GET_TYPE(thisx) (((thisx)->params & 0xE0) >> 5)
-#define GERUDO_PURPLE_GET_PATH(thisx) ((((thisx)->params) & 0xFC00) >> 10)
+#define GERUDO_PURPLE_GET_PATH_INDEX(thisx) ((((thisx)->params) & 0xFC00) >> 10)
 
-#define GERUDO_PURPLE_PARAMS(path, type, exit) (((path) & 0x1F) | (((type) & 7) << 5) | (((exit) & 0x3F) << 10))
+#define GERUDO_PURPLE_PARAMS(exit, type, pathIndex) (((exit) & 0x1F) | (((type) & 7) << 5) | (((pathIndex) & 0x3F) << 10))
 
 #define GERUDO_PURPLE_EXIT_NONE 0x1F
-#define GERUDO_PURPLE_PATH_NONE 0x3F
+#define GERUDO_PRUPLE_PATH_INDEX_NONE 0x3F
 
 typedef enum {
     /* 0 */ GERUDO_PURPLE_TYPE_CUTSCENE,
@@ -27,11 +27,11 @@ typedef enum {
 
 //! TODO: work out where to put this
 typedef enum {
-    /* 1 */ ENGE2_CSACTION_BEEHIVE_PATROL = 1,
-    /* 2 */ ENGE2_CSACTION_BEEHIVE_RUN_AWAY,
-    /* 3 */ ENGE2_CSACTION_BEEHIVE_EXIT,
-    /* 4 */ ENGE2_CSACTION_GBT_ENTR_STAND_STILL,
-    /* 5 */ ENGE2_CSACTION_GBT_ENTR_BLOWN_AWAY
+    /* 1 */ ENGE2_CUEID_BEEHIVE_PATROL = 1,
+    /* 2 */ ENGE2_CUEID_BEEHIVE_RUN_AWAY,
+    /* 3 */ ENGE2_CUEID_BEEHIVE_EXIT,
+    /* 4 */ ENGE2_CUEID_GBT_ENTR_STAND_STILL,
+    /* 5 */ ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY
 } EnGe2CsAction;
 
 typedef struct EnGe2 {
@@ -51,7 +51,7 @@ typedef struct EnGe2 {
     /* 0x2FC */ f32 verticalDetectRange; //!< vertical range to look for the player within
     /* 0x300 */ u8 timer;
     /* 0x301 */ u8 detectedStatus;
-    /* 0x302 */ s16 csAction;
+    /* 0x302 */ s16 cueId;
     /* 0x304 */ s16 unk304; // unused
     /* 0x306 */ s16 screamTimer;
     /* 0x308 */ EnGe2ActionFunc actionFunc;

@@ -130,9 +130,9 @@ static f32 D_80AEF8F0[] = {
 };
 
 typedef struct {
-    /* 0x00 */ Actor* unk_00;
-    /* 0x04 */ f32 unk_04;
-} EnTkStruct; // size = 0x8?
+    /* 0x0 */ Actor* unk_00;
+    /* 0x4 */ f32 unk_04;
+} EnTkStruct; // size = 0x8
 
 void func_80AEC460(EnTk* this) {
     if (DECR(this->unk_2C4) == 0) {
@@ -247,7 +247,7 @@ void EnTk_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     this->actor.flags |= ACTOR_FLAG_10;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 0, &this->unk_2D4);
-    SubS_FillCutscenesList(&this->actor, this->cutscenes, ARRAY_COUNT(this->cutscenes));
+    SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
 
     switch (this->unk_2B0) {
         case 4:
@@ -471,7 +471,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     if ((door != NULL) && (this->unk_2CA & 0x400)) {
         Vec3f sp5C;
 
-        Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &door->dyna.actor.world.pos);
+        Actor_OffsetOfPointInActorCoords(&this->actor, &sp5C, &door->knobDoor.dyna.actor.world.pos);
         door->unk_1A7 = 2;
         if (sp5C.z < -20.0f) {
             this->unk_2CA &= ~0x400;
@@ -503,12 +503,12 @@ s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp1E = SCHEDULE_TIME_NOW;
-    u8 params = ENTK_GET_F800(&this->actor);
+    u8 pathIndex = ENTK_GET_PATH_INDEX(&this->actor);
     u16 phi_a1;
     s32 index = scheduleOutput->result - 1;
     u16 tmp;
 
-    this->timePath = SubS_GetAdditionalPath(play, params, D_80AEF8E8[index + 1]);
+    this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AEF8E8[index + 1]);
     if (this->timePath == NULL) {
         return false;
     }
@@ -705,16 +705,16 @@ void func_80AED940(EnTk* this, PlayState* play) {
 
 void func_80AEDBEC(EnTk* this, PlayState* play) {
     this->actor.params = -1;
-    this->unk_2E8 = 0;
+    this->csLength = 0;
     this->actor.speed = 0.0f;
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, D_80AEF868, 2, &this->unk_2D4);
     this->actionFunc = func_80AEDC4C;
 }
 
 void func_80AEDC4C(EnTk* this, PlayState* play) {
-    if ((this->actor.params >= 0) && SubS_StartActorCutscene(&this->actor, this->cutscenes[1], this->actor.params,
-                                                             SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
-        this->unk_2E8 = ActorCutscene_GetLength(this->cutscenes[1]);
+    if ((this->actor.params >= 0) &&
+        SubS_StartCutscene(&this->actor, this->csIdList[1], this->actor.params, SUBS_CUTSCENE_WITH_PLAYER)) {
+        this->csLength = CutsceneManager_GetLength(this->csIdList[1]);
         Message_ContinueTextbox(play, 0x1411);
         func_80AEDCBC(this, play);
     }
@@ -731,9 +731,9 @@ void func_80AEDCBC(EnTk* this, PlayState* play) {
 }
 
 void func_80AEDD4C(EnTk* this, PlayState* play) {
-    this->unk_2E8--;
-    if (this->unk_2E8 <= 0) {
-        ActorCutscene_Stop(this->cutscenes[1]);
+    this->csLength--;
+    if (this->csLength <= 0) {
+        CutsceneManager_Stop(this->csIdList[1]);
         Message_CloseTextbox(play);
         Actor_Kill(&this->actor);
     }
@@ -901,7 +901,7 @@ void func_80AEE2A8(EnTk* this, PlayState* play) {
 }
 
 void func_80AEE2C0(EnTk* this, PlayState* play) {
-    if (SubS_StartActorCutscene(&this->actor, this->cutscenes[0], 0x7C, SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    if (SubS_StartCutscene(&this->actor, this->csIdList[0], CS_ID_GLOBAL_TALK, SUBS_CUTSCENE_WITH_PLAYER)) {
         func_80AEE374(this, play);
     }
 }
@@ -995,15 +995,15 @@ void func_80AEE650(EnTk* this, PlayState* play) {
 void func_80AEE6B8(EnTk* this, PlayState* play) {
     if (this->unk_2CA & 0x20) {
         if (this->unk_2E4 >= 3) {
-            ActorCutscene_Stop(this->cutscenes[0]);
+            CutsceneManager_Stop(this->csIdList[0]);
             Message_CloseTextbox(play);
             func_80AEDBEC(this, play);
-        } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+        } else if (SubS_StartCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_WITH_PLAYER)) {
             this->unk_310 = 3;
             func_80AEDE10(this, play);
             this->unk_2CA &= ~0x20;
         }
-    } else if (SubS_StartActorCutscene(&this->actor, 0x7C, this->cutscenes[0], SUBS_CUTSCENE_SET_UNK_LINK_FIELDS)) {
+    } else if (SubS_StartCutscene(&this->actor, CS_ID_GLOBAL_TALK, this->csIdList[0], SUBS_CUTSCENE_WITH_PLAYER)) {
         this->unk_310 = 4;
         func_80AEDE10(this, play);
     }
@@ -1366,6 +1366,7 @@ void EnTk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 gSPDisplayList(POLY_OPA_DISP++, object_tk_DL_00B530);
 
                 CLOSE_DISPS(play->state.gfxCtx);
+
                 break;
         }
     }
@@ -1382,7 +1383,7 @@ void EnTk_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 25);
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_25);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AEFA90[this->unk_2C2]));
 

@@ -169,8 +169,7 @@ typedef enum {
     /* 0x4 */ DMG_EFF_FIRE = 0x2,
     /* 0x0 */ DMG_EFF_ICE,
     /* 0x4 */ DMG_EFF_LIGHT_SPARKS,
-    /* 0xF */ DMG_EFF_IMMUNE = 0xF,
-
+    /* 0xF */ DMG_EFF_IMMUNE = 0xF
 } EnIkDmgEff;
 
 static DamageTable sDamageTableArmor = {
@@ -488,7 +487,7 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
         if ((this->skelAnime.curFrame > 13.0f) && (this->skelAnime.curFrame < 23.0f)) {
             this->colliderQuad.base.atFlags |= AT_ON;
             if (this->drawArmorFlags) {
-                this->actor.speed = sin_rad((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
+                this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
             }
         } else {
             this->colliderQuad.base.atFlags &= ~AT_ON;
@@ -551,7 +550,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
             } else {
                 phi_f2 = this->skelAnime.curFrame - 1.0f;
             }
-            this->actor.speed = sin_rad((M_PI / 8) * phi_f2) * 4.5f;
+            this->actor.speed = Math_SinF((M_PI / 8) * phi_f2) * 4.5f;
         }
         this->colliderQuad.base.atFlags |= AT_ON;
     } else {
@@ -651,7 +650,7 @@ void EnIk_ReactToAttack(EnIk* this, PlayState* play) {
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->subCamId != SUB_CAM_ID_DONE) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
             this->subCamId = SUB_CAM_ID_DONE;
             EnIk_SetupIdle(this);
         } else {
@@ -686,14 +685,14 @@ void EnIk_Die(EnIk* this, PlayState* play) {
         if (this->timer != 0) {
             this->timer--;
             for (i = 6 - (this->timer >> 2); i >= 0; i--) {
-                effectPos.x = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.x;
-                effectPos.z = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.z;
-                effectPos.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                effectPos.x = Rand_CenteredFloat(80.0f) + this->actor.world.pos.x;
+                effectPos.z = Rand_CenteredFloat(80.0f) + this->actor.world.pos.z;
+                effectPos.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &effectPos, &sEffectVelAndAccel, &sEffectVelAndAccel, 100, 0, 2);
             }
             if (this->timer == 0) {
                 Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
-                ActorCutscene_Stop(this->actor.cutscene);
+                CutsceneManager_Stop(this->actor.csId);
                 Actor_Kill(&this->actor);
             }
         }
@@ -723,7 +722,7 @@ void EnIk_Frozen(EnIk* this, PlayState* play) {
 }
 
 void EnIk_SetupCutscene(EnIk* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actor.speed = 0.0f;
     if (this->actor.colChkInfo.health != 0) {
         func_800BE504(&this->actor, &this->colliderCylinder);
@@ -735,10 +734,10 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
     Vec3f subCamEye;
 
     this->invincibilityFrames = 12;
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        if (this->actor.cutscene != -1) {
-            ActorCutscene_StartAndSetFlag(this->actor.cutscene, &this->actor);
-            this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        if (this->actor.csId != CS_ID_NONE) {
+            CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
+            this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
             subCamEye.x = (Math_SinS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y + 20.0f;
             subCamEye.z = (Math_CosS((this->actor.shape.rot.y - 0x2000)) * 120.0f) + this->actor.focus.pos.z;
@@ -750,7 +749,7 @@ void EnIk_PlayCutscene(EnIk* this, PlayState* play) {
             EnIk_SetupDie(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -846,9 +845,9 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
                 ikEffect->pos.y = this->actor.floorHeight;
 
                 for (i = 0; i < 4; i++) {
-                    effectPos.x = randPlusMinusPoint5Scaled(20.0f) + ikEffect->pos.x;
+                    effectPos.x = Rand_CenteredFloat(20.0f) + ikEffect->pos.x;
                     effectPos.y = Rand_ZeroFloat(20.0f) + ikEffect->pos.y;
-                    effectPos.z = randPlusMinusPoint5Scaled(20.0f) + ikEffect->pos.z;
+                    effectPos.z = Rand_CenteredFloat(20.0f) + ikEffect->pos.z;
                     func_800B3030(play, &effectPos, &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
                 }
 
@@ -1033,6 +1032,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
         sp54 = 0;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfxOpa = POLY_OPA_DISP;
         gfxXlu = POLY_XLU_DISP;
 
@@ -1077,10 +1077,10 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);
     gfx = POLY_XLU_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_XLU_DISP = &gfx[1];
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gfxArmorType = sIronKnuckleArmorType[this->actor.params];
     gSPSegment(&gfx[1], 0x08, gfxArmorType[0]);
     gSPSegment(&gfx[2], 0x09, gfxArmorType[1]);

@@ -47,14 +47,14 @@ ActorInit En_Elfgrp_InitVars = {
     (ActorFunc)NULL,
 };
 
-void func_80A396B0(EnElfgrp* this, s32 arg1) {
-    while (arg1 > 0) {
-        if (this->actor.cutscene == -1) {
+void func_80A396B0(EnElfgrp* this, s32 numCutscenes) {
+    while (numCutscenes > 0) {
+        if (this->actor.csId == CS_ID_NONE) {
             break;
         }
-        this->actor.cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+        this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-        arg1--;
+        numCutscenes--;
     }
 }
 
@@ -262,8 +262,8 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
     }
 
     for (i = 0; i < arg2; i++) {
-        elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, randPlusMinusPoint5Scaled(20.0f) + sp6C.x, sp6C.y,
-                             randPlusMinusPoint5Scaled(20.0f) + sp6C.z, 0, 0, 0, params);
+        elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, Rand_CenteredFloat(20.0f) + sp6C.x, sp6C.y,
+                             Rand_CenteredFloat(20.0f) + sp6C.z, 0, 0, 0, params);
         if (elforg == NULL) {
             continue;
         }
@@ -345,9 +345,9 @@ void func_80A3A044(PlayState* play) {
 }
 
 void func_80A3A0AC(EnElfgrp* this, PlayState* play) {
-    if (!Cutscene_CheckActorAction(play, 0x64)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
         this->actionFunc = func_80A3A600;
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
     }
 }
 
@@ -386,12 +386,12 @@ void func_80A3A210(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A274(EnElfgrp* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x64)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
         if (this->unk_14A & 1) {
             func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
         }
 
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x64)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_100)]->id) {
             case 2:
                 if (!(this->unk_14A & 1)) {
                     if (this->unk_147 == ENELFGRP_0) {
@@ -414,8 +414,8 @@ void func_80A3A274(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A398(EnElfgrp* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80A3A274;
         Flags_UnsetSwitch(play, ENELFGRP_GET_FE00(&this->actor));
         if (this->unk_14A & 2) {
@@ -431,7 +431,7 @@ void func_80A3A398(EnElfgrp* this, PlayState* play) {
         }
         this->unk_14A &= ~8;
     } else if (this->actor.xzDistToPlayer < 350.0f) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -443,9 +443,10 @@ void func_80A3A484(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A4AC(EnElfgrp* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x64)) {
-        s32 temp = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x64)]->action;
-        if (temp == 3) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
+        s32 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_100)]->id;
+
+        if (cueId == 3) {
             this->actionFunc = func_80A3A484;
             this->unk_144 = 90;
         }
@@ -453,10 +454,10 @@ void func_80A3A4AC(EnElfgrp* this, PlayState* play) {
 }
 
 void func_80A3A520(EnElfgrp* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x67)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103)) {
         this->actionFunc = func_80A3A600;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = func_80A3A4AC;
         Flags_SetSwitch(play, ENELFGRP_GET_FE00(&this->actor));
 
@@ -468,7 +469,7 @@ void func_80A3A520(EnElfgrp* this, PlayState* play) {
             Flags_SetSwitch(play, this->actor.home.rot.z);
         }
     } else if (this->actor.xzDistToPlayer < 350.0f) {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 

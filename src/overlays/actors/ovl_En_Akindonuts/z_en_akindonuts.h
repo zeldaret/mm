@@ -10,12 +10,14 @@ typedef void (*EnAkindonutsUnkFunc)(struct EnAkindonuts*, PlayState*);
 
 #define ENAKINDONUTS_GET_3(thisx) ((thisx)->params & 3)
 #define ENAKINDONUTS_GET_4(thisx) (((thisx)->params & 4) >> 2)
-#define ENAKINDONUTS_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENAKINDONUTS_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
-enum {
+#define ENAKINDONUTS_PATH_INDEX_NONE 0x3F
+
+typedef enum {
     /* 1 */ ENAKINDONUTS_3_1 = 1,
-    /* 2 */ ENAKINDONUTS_3_2,
-};
+    /* 2 */ ENAKINDONUTS_3_2
+} EnAkindonutsParam;
 
 typedef struct EnAkindonuts {
     /* 0x000 */ Actor actor;
@@ -43,7 +45,7 @@ typedef struct EnAkindonuts {
     /* 0x358 */ f32 unk_358;
     /* 0x35C */ s16 unk_35C;
     /* 0x35E */ s16 unk_35E;
-    /* 0x360 */ s16 cutscene;
+    /* 0x360 */ s16 csId;
     /* 0x362 */ s16 unk_362;
     /* 0x364 */ s16 unk_364;
     /* 0x366 */ s8 unk_366;

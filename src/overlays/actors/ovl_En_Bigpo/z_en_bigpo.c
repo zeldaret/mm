@@ -8,7 +8,7 @@
 #include "objects/object_bigpo/object_bigpo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnBigpo*)thisx)
 
@@ -293,22 +293,22 @@ void EnBigpo_WellWaitForProximity(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupSpawnCutscene(EnBigpo* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = EnBigpo_WaitCutsceneQueue;
 }
 
 void EnBigpo_WaitCutsceneQueue(EnBigpo* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.params == ENBIGPO_REGULAR) { // and SUMMONED, got switched earlier
             EnBigpo_SpawnCutsceneStage1(this, play);
         } else { // ENBIGPO_REVEALEDFIRE
             EnBigpo_SetupFlameCirclePositions(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -375,7 +375,6 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, PlayState* play) {
     this->actor.shape.rot.y += this->rotVelocity;
     EnBigpo_RotateSpawnCutsceneFires(this);
 
-    if (1) {}
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         this->fires[i].pos.y += this->actor.velocity.y;
     }
@@ -464,14 +463,14 @@ void EnBigpo_SpawnCutsceneStage8(EnBigpo* this, PlayState* play) {
             dampe = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_TK);
             if (dampe != NULL) {
                 // if dampe exists, switch to viewing his running away cutscene
-                dampe->params = this->actor.cutscene;
+                dampe->params = this->actor.csId;
             } else {
-                ActorCutscene_Stop(this->actor.cutscene);
+                CutsceneManager_Stop(this->actor.csId);
             }
         } else { // ENBIGPO_REGULAR
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
-        func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+        func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         EnBigpo_SetupIdleFlying(this); // setup idle flying
     }
 }
@@ -555,7 +554,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     // flight position calculations
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
-    this->actor.world.pos.y = (sin_rad(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
+    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
@@ -828,7 +827,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
-        this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
+        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }
 
@@ -861,7 +860,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
 
     // count the number of possible fires we can find (4 in vanilla)
     for (enemyPtr = GET_FIRST_ENEMY(play); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
             fireCount++;
         }
     }
@@ -882,7 +881,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
         while (enemyPtr != NULL) {
-            if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+            if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
                 if (randomIndex == 0) {
                     randomFirePo = (EnBigpo*)enemyPtr;
                     randomFirePo->actor.params = ENBIGPO_CHOSENFIRE;
@@ -1225,8 +1224,8 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                              Gfx** gfx) {
     EnBigpo* this = THIS;
     // not fully invisible
-    if (!(this->mainColor.a != 0 && limbIndex != 7) ||
-        (this->actionFunc == EnBigpo_BurnAwayDeath && this->idleTimer >= 2)) {
+    if ((this->mainColor.a == 0) || (limbIndex == 7) ||
+        ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }
     return false;
@@ -1291,7 +1290,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
     if ((this->mainColor.a == 255) || (this->mainColor.a == 0)) {
         // fully visible OR fully transparent
         dispHead = POLY_OPA_DISP;
-        gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
+        gSPDisplayList(dispHead, gSetupDLs[SETUPDL_25]);
         gSPSegment(&dispHead[1], 0x0C, &D_801AEFA0); // empty display list for no transparency
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
@@ -1301,7 +1300,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
 
     } else {
         dispHead = POLY_XLU_DISP;
-        gSPDisplayList(dispHead, &sSetupDL[6 * 0x19]);
+        gSPDisplayList(dispHead, gSetupDLs[SETUPDL_25]);
         gSPSegment(&dispHead[1], 0x0C, &D_801AEF88); // transparency display list
         gSPSegment(&dispHead[2], 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, this->mainColor.r, this->mainColor.g, this->mainColor.b,
@@ -1330,7 +1329,7 @@ void EnBigpo_DrawScoopSoul(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -15) % 512, 0x20,
@@ -1382,7 +1381,7 @@ void EnBigpo_DrawLantern(Actor* thisx, PlayState* play) {
         dispHead = POLY_XLU_DISP;
     }
 
-    gSPDisplayList(&dispHead[0], &sSetupDL[6 * 0x19]);
+    gSPDisplayList(&dispHead[0], gSetupDLs[SETUPDL_25]);
 
     gSPSegment(&dispHead[1], 0x0A, Gfx_EnvColor(play->state.gfxCtx, 160, 0, 255, this->mainColor.a));
 
@@ -1416,9 +1415,10 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
     s32 i;
 
     mtfxPtr = Matrix_GetCurrent();
+
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_NEW);
     if (this->actionFunc == EnBigpo_SpawnCutsceneStage6) {
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
@@ -1458,7 +1458,7 @@ void EnBigpo_RevealedFire(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, (play->gameplayFrames * -20) % 512, 0x20,
