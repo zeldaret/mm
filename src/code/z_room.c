@@ -583,7 +583,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
                 play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_NONE;
             }
             func_800FEAB0();
-            if (func_800FE4B8(play) == STORM_STATE_OFF) {
+            if (Environment_GetStormState(play) == STORM_STATE_OFF) {
                 Environment_StopStormNatureAmbience(play);
             }
         } else {

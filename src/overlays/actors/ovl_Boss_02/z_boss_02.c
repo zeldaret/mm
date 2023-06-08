@@ -1765,7 +1765,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         Actor_SetScale(&player->actor, this->unk_1D70);
     }
 
-    play->envCtx.lightSettings.fogNear = this->unk_1D74;
+    play->envCtx.adjLightSettings.fogNear = this->unk_1D74;
 
     if (sp57) {
         sIsInGiantMode = 1 - sIsInGiantMode;

@@ -1771,7 +1771,7 @@
     0x800FE484:("Environment_StopTime",),
     0x800FE498:("Environment_StartTime",),
     0x800FE4A8:("Environment_IsTimeStopped",),
-    0x800FE4B8:("func_800FE4B8",),
+    0x800FE4B8:("Environment_GetStormState",),
     0x800FE590:("Environment_IsFinalHours",),
     0x800FE5D0:("func_800FE5D0",),
     0x800FE610:("func_800FE610",),

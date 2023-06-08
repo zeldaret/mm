@@ -165,8 +165,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_LIFT_FOG:
-            if (play->envCtx.lightSettings.zFar < 12800) {
-                play->envCtx.lightSettings.zFar += 35;
+            if (play->envCtx.adjLightSettings.zFar < 12800) {
+                play->envCtx.adjLightSettings.zFar += 35;
             }
             break;
 
@@ -235,16 +235,16 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_RED_PULSATING_LIGHTS:
             if (play->state.frames & 8) {
-                if (play->envCtx.lightSettings.ambientColor[0] < 40) {
-                    play->envCtx.lightSettings.ambientColor[0] += 2;
-                    play->envCtx.lightSettings.diffuseColor1[1] -= 3;
-                    play->envCtx.lightSettings.diffuseColor1[2] -= 3;
+                if (play->envCtx.adjLightSettings.ambientColor[0] < 40) {
+                    play->envCtx.adjLightSettings.ambientColor[0] += 2;
+                    play->envCtx.adjLightSettings.diffuseColor1[1] -= 3;
+                    play->envCtx.adjLightSettings.diffuseColor1[2] -= 3;
                 }
             } else {
-                if (play->envCtx.lightSettings.ambientColor[0] > 2) {
-                    play->envCtx.lightSettings.ambientColor[0] -= 2;
-                    play->envCtx.lightSettings.diffuseColor1[1] += 3;
-                    play->envCtx.lightSettings.diffuseColor1[2] += 3;
+                if (play->envCtx.adjLightSettings.ambientColor[0] > 2) {
+                    play->envCtx.adjLightSettings.ambientColor[0] -= 2;
+                    play->envCtx.adjLightSettings.diffuseColor1[1] += 3;
+                    play->envCtx.adjLightSettings.diffuseColor1[2] += 3;
                 }
             }
             break;

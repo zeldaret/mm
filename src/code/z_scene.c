@@ -423,9 +423,9 @@ void Scene_CommandWindSettings(PlayState* play, SceneCmd* cmd) {
     s8 temp2 = cmd->windSettings.vertical;
     s8 temp3 = cmd->windSettings.south;
 
-    play->envCtx.windDir.x = temp1;
-    play->envCtx.windDir.y = temp2;
-    play->envCtx.windDir.z = temp3;
+    play->envCtx.windDirection.x = temp1;
+    play->envCtx.windDirection.y = temp2;
+    play->envCtx.windDirection.z = temp3;
     play->envCtx.windSpeed = cmd->windSettings.clothIntensity;
 }
 

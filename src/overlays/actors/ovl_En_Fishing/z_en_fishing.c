@@ -5282,7 +5282,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             D_8090CD4C = 0;
             sSubCamId = SUB_CAM_ID_DONE;
             Environment_EnableUnderwaterLights(play, 0);
-            play->envCtx.lightSettings.fogNear = 0;
+            play->envCtx.adjLightSettings.fogNear = 0;
             player->unk_B28 = -5;
             D_80917200 = 5;
             break;
@@ -5324,7 +5324,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                 sSubCamId = SUB_CAM_ID_DONE;
                 D_8090CD50 = 30;
                 Environment_EnableUnderwaterLights(play, 0);
-                play->envCtx.lightSettings.fogNear = 0;
+                play->envCtx.adjLightSettings.fogNear = 0;
             }
             break;
 
@@ -5428,7 +5428,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                         D_8090CD54 = 0;
                         D_809171F6 = 20;
                         Environment_EnableUnderwaterLights(play, 0);
-                        play->envCtx.lightSettings.fogNear = 0;
+                        play->envCtx.adjLightSettings.fogNear = 0;
                     }
                 }
             }
@@ -5445,13 +5445,13 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         if (sSubCamEye.y <= (WATER_SURFACE_Y(play) + 1.0f)) {
             Environment_EnableUnderwaterLights(play, 1);
             if (D_809171CA != 0) {
-                play->envCtx.lightSettings.fogNear = -0xB2;
+                play->envCtx.adjLightSettings.fogNear = -0xB2;
             } else {
-                play->envCtx.lightSettings.fogNear = -0x2E;
+                play->envCtx.adjLightSettings.fogNear = -0x2E;
             }
         } else {
             Environment_EnableUnderwaterLights(play, 0);
-            play->envCtx.lightSettings.fogNear = 0;
+            play->envCtx.adjLightSettings.fogNear = 0;
         }
     }
 
@@ -5535,8 +5535,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&D_8090CCD8, 1.0f, 2.0f);
     }
 
-    play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
-        play->envCtx.lightSettings.diffuseColor1[2] = D_8090CCD8;
+    play->envCtx.adjLightSettings.diffuseColor1[0] = play->envCtx.adjLightSettings.diffuseColor1[1] =
+        play->envCtx.adjLightSettings.diffuseColor1[2] = D_8090CCD8;
 
     if ((u8)D_8090CCD0 > 0) {
         s32 pad;

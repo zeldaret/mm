@@ -449,7 +449,7 @@ void func_809672DC(EnWeatherTag* this, PlayState* play) {
         }
     }
 
-    Math_SmoothStepToS(&play->envCtx.lightSettings.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
+    Math_SmoothStepToS(&play->envCtx.adjLightSettings.fogNear, (s16)(-40.0f * strength), 1, 1, 1);
 }
 
 // WEATHERTAG_TYPE_LOCALDAY2RAIN: rain proximity as approaching rainy scene

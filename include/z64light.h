@@ -8,18 +8,6 @@
 
 struct PlayState;
 
-
-typedef struct {
-    /* 0x00 */ u8 ambientColor[3];
-    /* 0x03 */ s8 diffuseDir1[3];
-    /* 0x06 */ u8 diffuseColor1[3];
-    /* 0x09 */ s8 diffusePos2[3];
-    /* 0x0C */ u8 diffuseColor[3];
-    /* 0x0F */ u8 fogColor[3];
-    /* 0x12 */ s16 fogNear;
-    /* 0x14 */ s16 zFar;
-} LightSettings; // size = 0x16
-
 typedef struct {
     /* 0x00 */ s16 ambientColor[3];
     /* 0x06 */ s16 diffuseColor1[3];
@@ -27,7 +15,7 @@ typedef struct {
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
     /* 0x1A */ s16 zFar;
-} EnvLightSettings; // size = 0x1C
+} AdjLightSettings; // size = 0x1C
 
 typedef struct {
     /* 0x0 */ s16 x;

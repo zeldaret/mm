@@ -135,6 +135,41 @@ typedef struct {
     /* 0x08 */ f32 delayTimer;
 } LightningStrike; // size = 0xC
 
+typedef struct {
+    /* 0x00 */ u8 ambientColor[3];
+    /* 0x03 */ s8 diffuseDir1[3];
+    /* 0x06 */ u8 diffuseColor1[3];
+    /* 0x09 */ s8 diffusePos2[3];
+    /* 0x0C */ u8 diffuseColor[3];
+    /* 0x0F */ u8 fogColor[3];
+    /* 0x12 */ s16 fogNear;
+    /* 0x14 */ s16 zFar;
+} CurrentEnvLightSettings; // size = 0x16
+
+// `EnvLightSettings` is very similar to `CurrentEnvLightSettings` with one key difference.
+// The light settings data in the scene packs blend rate information with the fog near value.
+// The blendRate determines how fast the current light settings fade to the next one 
+// (under LIGHT_MODE_SETTINGS, otherwise unused). 
+
+// Get blend rate from `EnvLightSettings.blendRateAndFogNear` in 0-255 range
+#define ENV_LIGHT_SETTINGS_BLEND_RATE_U8(blendRateAndFogNear) (((blendRateAndFogNear) >> 10) * 4)
+#define ENV_LIGHT_SETTINGS_FOG_NEAR(blendRateAndFogNear) ((blendRateAndFogNear) & 0x3FF)
+
+typedef struct {
+    /* 0x00 */ u8 ambientColor[3];
+    /* 0x03 */ s8 diffuseDir1[3];
+    /* 0x06 */ u8 diffuseColor1[3];
+    /* 0x09 */ s8 diffusePos2[3];
+    /* 0x0C */ u8 diffuseColor[3];
+    /* 0x0F */ u8 fogColor[3];
+    /* 0x12 */ s16 blendRateAndFogNear; 
+    /* 0x14 */ s16 zFar;
+} EnvLightSettings; // size = 0x16
+
+// ZAPD compatibility typedefs
+// TODO: Remove when ZAPD adds support for them
+typedef CurrentEnvLightSettings LightSettings;
+
 typedef struct EnvironmentContext {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 sceneTimeSpeed;
@@ -166,17 +201,17 @@ typedef struct EnvironmentContext {
     /* 0x80 */ OSMesg loadMsg;
     /* 0x84 */ f32 glareAlpha;
     /* 0x88 */ f32 lensFlareAlphaScale;
-    /* 0x8C */ EnvLightSettings lightSettings;
+    /* 0x8C */ AdjLightSettings adjLightSettings;
     /* 0xA8 */ f32 unk_A8;
-    /* 0xAC */ Vec3s windDir;
+    /* 0xAC */ Vec3s windDirection;
     /* 0xB4 */ f32 windSpeed;
     /* 0xB8 */ u8 numLightSettings;
-    /* 0xBC */ LightSettings* lightSettingsList;
-    /* 0xC0 */ u8 lightBlendEnabled;
-    /* 0xC1 */ u8 lightSetting;
+    /* 0xBC */ EnvLightSettings* lightSettingsList; // list of light settings from the scene file
+    /* 0xC0 */ u8 lightBlendEnabled; // only used with `LIGHT_MODE_SETTINGS` or on override
+    /* 0xC1 */ u8 lightSetting; // only used with `LIGHT_MODE_SETTINGS` or on override
     /* 0xC2 */ u8 prevLightSetting;
     /* 0xC3 */ u8 lightSettingOverride;
-    /* 0xC4 */ LightSettings unk_C4;
+    /* 0xC4 */ CurrentEnvLightSettings lightSettings; // settings for the currently "live" lights
     /* 0xDA */ u16 lightBlendRateOverride;
     /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 lightBlendOverride;
@@ -232,16 +267,15 @@ void Environment_DrawSkyboxStars(struct PlayState* play);
 void Environment_StopTime(void);
 void Environment_StartTime(void);
 u8 Environment_IsTimeStopped(void);
-u32 func_800FE4B8(struct PlayState* play);
+u32 Environment_GetStormState(struct PlayState* play);
 u8 Environment_IsFinalHours(struct PlayState* play);
 u16 Environment_GetTimeSpeed(struct PlayState* play);
 void Environment_SetTimeJump(f32 minutes);
-u8 func_800FE6F8(struct PlayState* play, s16 arg1, s16 arg2);
+u8 func_800FE6F8(struct PlayState* play, s16 timeAdvanceScaling, s16 nextTimeLimit);
 void Environment_LerpSandstormColors(Color_RGBA8* colorSrc, Color_RGBA8* colorDst);
 u8 func_800FE9B4(struct PlayState* play);
 void func_800FEA50(struct PlayState* play);
 void func_800FEAB0(void);
-void Environment_JumpForwardInTime(void);
 void func_800FEAF4(EnvironmentContext* envCtx);
 
 // Data to import

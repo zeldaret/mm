@@ -199,28 +199,28 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     gSaveContext.cutsceneTransitionControl = 0;
 
-    envCtx->lightSettings.ambientColor[0] = 0;
-    envCtx->lightSettings.ambientColor[1] = 0;
-    envCtx->lightSettings.ambientColor[2] = 0;
-    envCtx->lightSettings.diffuseColor1[0] = 0;
-    envCtx->lightSettings.diffuseColor1[1] = 0;
-    envCtx->lightSettings.diffuseColor1[2] = 0;
-    envCtx->lightSettings.diffuseColor2[0] = 0;
-    envCtx->lightSettings.diffuseColor2[1] = 0;
-    envCtx->lightSettings.diffuseColor2[2] = 0;
-    envCtx->lightSettings.fogColor[0] = 0;
-    envCtx->lightSettings.fogColor[1] = 0;
-    envCtx->lightSettings.fogColor[2] = 0;
-    envCtx->lightSettings.fogNear = 0;
-    envCtx->lightSettings.zFar = 0;
+    envCtx->adjLightSettings.ambientColor[0] = 0;
+    envCtx->adjLightSettings.ambientColor[1] = 0;
+    envCtx->adjLightSettings.ambientColor[2] = 0;
+    envCtx->adjLightSettings.diffuseColor1[0] = 0;
+    envCtx->adjLightSettings.diffuseColor1[1] = 0;
+    envCtx->adjLightSettings.diffuseColor1[2] = 0;
+    envCtx->adjLightSettings.diffuseColor2[0] = 0;
+    envCtx->adjLightSettings.diffuseColor2[1] = 0;
+    envCtx->adjLightSettings.diffuseColor2[2] = 0;
+    envCtx->adjLightSettings.fogColor[0] = 0;
+    envCtx->adjLightSettings.fogColor[1] = 0;
+    envCtx->adjLightSettings.fogColor[2] = 0;
+    envCtx->adjLightSettings.fogNear = 0;
+    envCtx->adjLightSettings.zFar = 0;
 
     envCtx->sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
     envCtx->sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
     envCtx->sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
 
-    envCtx->windDir.x = 80;
-    envCtx->windDir.y = 80;
-    envCtx->windDir.z = 80;
+    envCtx->windDirection.x = 80;
+    envCtx->windDirection.y = 80;
+    envCtx->windDirection.z = 80;
     envCtx->windSpeed = 20.0f;
 
     envCtx->lightBlendEnabled = false;
@@ -300,7 +300,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     if ((play->sceneId == SCENE_IKANA) &&
         ((((void)0, gSaveContext.sceneLayer) == 0) || (((void)0, gSaveContext.sceneLayer) == 1)) &&
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-        play->skyboxId = 3;
+        play->skyboxId = SKYBOX_3;
         envCtx->lightConfig = 5;
         envCtx->changeLightNextConfig = 5;
         D_801F4E74 = 1.0f;
@@ -309,7 +309,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
         if (gWeatherMode == WEATHER_MODE_2) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-                play->skyboxId = 3;
+                play->skyboxId = SKYBOX_3;
                 envCtx->lightConfig = 5;
                 envCtx->changeLightNextConfig = 5;
                 D_801F4E74 = 1.0f;
@@ -324,7 +324,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         if (gWeatherMode == WEATHER_MODE_1) {
             if ((CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
-                if (func_800FE4B8(play) != STORM_STATE_OFF) {
+                if (Environment_GetStormState(play) != STORM_STATE_OFF) {
                     play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
                 }
                 play->envCtx.precipitation[PRECIP_RAIN_CUR] = 60;
@@ -624,7 +624,8 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
     }
 }
 
-void func_800F6CEC(PlayState* play, u8 arg1, EnvLightSettings* arg2, LightSettings* arg3) {
+void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
+                   CurrentEnvLightSettings* lightSettings) {
     s32 phi_t1;
     s32 temp_v1_2;
     s32 temp_v1 = (arg1 % 4);
@@ -632,32 +633,34 @@ void func_800F6CEC(PlayState* play, u8 arg1, EnvLightSettings* arg2, LightSettin
     if ((((void)0, gSaveContext.save.day) >= 2) && (arg1 >= 4) && (arg1 < 8)) {
         temp_v1_2 = (((void)0, gSaveContext.save.day) * 4) + 4;
         for (phi_t1 = 0; phi_t1 != 3; phi_t1++) {
-            arg2->ambientColor[phi_t1] =
-                arg3[temp_v1_2 + temp_v1].ambientColor[phi_t1] - arg3[temp_v1].ambientColor[phi_t1];
-            arg2->diffuseColor1[phi_t1] =
-                arg3[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] - arg3[temp_v1].diffuseColor1[phi_t1];
-            arg2->diffuseColor2[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor[phi_t1] -
-                                          arg3[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2
-            arg2->fogColor[phi_t1] = arg3[temp_v1_2 + temp_v1].fogColor[phi_t1] - arg3[temp_v1].fogColor[phi_t1];
+            adjLightSettings->ambientColor[phi_t1] =
+                lightSettings[temp_v1_2 + temp_v1].ambientColor[phi_t1] - lightSettings[temp_v1].ambientColor[phi_t1];
+            adjLightSettings->diffuseColor1[phi_t1] =
+                lightSettings[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] - lightSettings[temp_v1].diffuseColor1[phi_t1];
+            adjLightSettings->diffuseColor2[phi_t1] =
+                lightSettings[temp_v1_2 + temp_v1].diffuseColor[phi_t1] -
+                lightSettings[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2
+            adjLightSettings->fogColor[phi_t1] =
+                lightSettings[temp_v1_2 + temp_v1].fogColor[phi_t1] - lightSettings[temp_v1].fogColor[phi_t1];
         }
-        arg2->fogNear = arg3[temp_v1_2 + temp_v1].fogNear - arg3[temp_v1].fogNear;
+        adjLightSettings->fogNear = lightSettings[temp_v1_2 + temp_v1].fogNear - lightSettings[temp_v1].fogNear;
     }
 
     if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
-        arg2->ambientColor[0] = -50;
-        arg2->ambientColor[1] = -100;
-        arg2->ambientColor[2] = -100;
-        arg2->diffuseColor1[0] = -100;
-        arg2->diffuseColor1[1] = -100;
-        arg2->diffuseColor1[2] = -100;
-        arg2->diffuseColor2[0] = -100;
-        arg2->diffuseColor2[1] = -100;
-        arg2->diffuseColor2[2] = -100;
+        adjLightSettings->ambientColor[0] = -50;
+        adjLightSettings->ambientColor[1] = -100;
+        adjLightSettings->ambientColor[2] = -100;
+        adjLightSettings->diffuseColor1[0] = -100;
+        adjLightSettings->diffuseColor1[1] = -100;
+        adjLightSettings->diffuseColor1[2] = -100;
+        adjLightSettings->diffuseColor2[0] = -100;
+        adjLightSettings->diffuseColor2[1] = -100;
+        adjLightSettings->diffuseColor2[2] = -100;
 
         temp_v1 = arg1;
-        arg2->fogColor[0] = -arg3[temp_v1].fogColor[0] + 30;
-        arg2->fogColor[1] = -arg3[temp_v1].fogColor[1] + 30;
-        arg2->fogColor[2] = -arg3[temp_v1].fogColor[2] + 45;
+        adjLightSettings->fogColor[0] = -lightSettings[temp_v1].fogColor[0] + 30;
+        adjLightSettings->fogColor[1] = -lightSettings[temp_v1].fogColor[1] + 30;
+        adjLightSettings->fogColor[2] = -lightSettings[temp_v1].fogColor[2] + 45;
     }
 }
 
@@ -917,7 +920,8 @@ void Environment_DrawRain(PlayState* play, View* view, GraphicsContext* gfxCtx) 
                 Environment_DrawRainImpl(play, view, gfxCtx);
             }
         } else if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
-            if ((func_800FE4B8(play) != STORM_STATE_OFF) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
+            if ((Environment_GetStormState(play) != STORM_STATE_OFF) &&
+                (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
                 Environment_DrawRainImpl(play, view, gfxCtx);
             }
         }
@@ -964,7 +968,7 @@ void Environment_DrawSkyboxFilters(PlayState* play) {
 
         alpha = (1000 - play->lightCtx.fogNear) * 0.02f;
 
-        if (play->skyboxId == 2) {
+        if (play->skyboxId == SKYBOX_2) {
             alpha = 1.0f;
         }
 
@@ -1036,9 +1040,9 @@ void Environment_UpdateLightningStrike(PlayState* play) {
                 gLightningStrike.flashGreen = 200;
                 gLightningStrike.flashBlue = 255;
 
-                play->envCtx.lightSettings.ambientColor[0] += 80;
-                play->envCtx.lightSettings.ambientColor[1] += 80;
-                play->envCtx.lightSettings.ambientColor[2] += 100;
+                play->envCtx.adjLightSettings.ambientColor[0] += 80;
+                play->envCtx.adjLightSettings.ambientColor[1] += 80;
+                play->envCtx.adjLightSettings.ambientColor[2] += 100;
 
                 sLightningFlashAlpha += 100;
 
@@ -1050,21 +1054,21 @@ void Environment_UpdateLightningStrike(PlayState* play) {
                 break;
 
             case LIGHTNING_STRIKE_END:
-                if (play->envCtx.lightSettings.ambientColor[0] > 0) {
-                    play->envCtx.lightSettings.ambientColor[0] -= 10;
-                    play->envCtx.lightSettings.ambientColor[1] -= 10;
+                if (play->envCtx.adjLightSettings.ambientColor[0] > 0) {
+                    play->envCtx.adjLightSettings.ambientColor[0] -= 10;
+                    play->envCtx.adjLightSettings.ambientColor[1] -= 10;
                 }
 
-                if (play->envCtx.lightSettings.ambientColor[2] > 0) {
-                    play->envCtx.lightSettings.ambientColor[2] -= 10;
+                if (play->envCtx.adjLightSettings.ambientColor[2] > 0) {
+                    play->envCtx.adjLightSettings.ambientColor[2] -= 10;
                 }
 
                 sLightningFlashAlpha -= 10;
 
                 if (sLightningFlashAlpha <= gLightningStrike.flashAlphaTarget) {
-                    play->envCtx.lightSettings.ambientColor[0] = 0;
-                    play->envCtx.lightSettings.ambientColor[1] = 0;
-                    play->envCtx.lightSettings.ambientColor[2] = 0;
+                    play->envCtx.adjLightSettings.ambientColor[0] = 0;
+                    play->envCtx.adjLightSettings.ambientColor[1] = 0;
+                    play->envCtx.adjLightSettings.ambientColor[2] = 0;
 
                     gLightningStrike.state = LIGHTNING_STRIKE_WAIT;
 
@@ -1072,6 +1076,9 @@ void Environment_UpdateLightningStrike(PlayState* play) {
                         play->envCtx.lightningState = LIGHTNING_OFF;
                     }
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -1156,6 +1163,9 @@ void Environment_DrawLightning(PlayState* play, s32 unused) {
                 } else {
                     sLightningBolts[i].state = LIGHTNING_BOLT_INACTIVE;
                 }
+                break;
+
+            default:
                 break;
         }
 
@@ -1365,19 +1375,19 @@ void Environment_FadeInGameOverLights(PlayState* play) {
 
     if (Play_CamIsNotFixed(&play->state)) {
         for (i = 0; i < 3; i++) {
-            if (play->envCtx.lightSettings.ambientColor[i] > -255) {
-                play->envCtx.lightSettings.ambientColor[i] -= 12;
-                play->envCtx.lightSettings.diffuseColor1[i] -= 12;
+            if (play->envCtx.adjLightSettings.ambientColor[i] > -255) {
+                play->envCtx.adjLightSettings.ambientColor[i] -= 12;
+                play->envCtx.adjLightSettings.diffuseColor1[i] -= 12;
             }
-            play->envCtx.lightSettings.fogColor[i] = -255;
+            play->envCtx.adjLightSettings.fogColor[i] = -255;
         }
 
-        if (play->envCtx.unk_C4.zFar + play->envCtx.lightSettings.zFar > 900) {
-            play->envCtx.lightSettings.zFar -= 100;
+        if (play->envCtx.lightSettings.zFar + play->envCtx.adjLightSettings.zFar > 900) {
+            play->envCtx.adjLightSettings.zFar -= 100;
         }
 
-        if (play->envCtx.unk_C4.fogNear + play->envCtx.lightSettings.fogNear > 950) {
-            play->envCtx.lightSettings.fogNear -= 10;
+        if (play->envCtx.lightSettings.fogNear + play->envCtx.adjLightSettings.fogNear > 950) {
+            play->envCtx.adjLightSettings.fogNear -= 10;
         }
     } else {
         play->envCtx.fillScreen = true;
@@ -1412,12 +1422,12 @@ void Environment_FadeOutGameOverLights(PlayState* play) {
 
     if (Play_CamIsNotFixed(&play->state)) {
         for (i = 0; i < 3; i++) {
-            Math_SmoothStepToS(&play->envCtx.lightSettings.ambientColor[i], 0, 5, 12, 1);
-            Math_SmoothStepToS(&play->envCtx.lightSettings.diffuseColor1[i], 0, 5, 12, 1);
-            play->envCtx.lightSettings.fogColor[i] = 0;
+            Math_SmoothStepToS(&play->envCtx.adjLightSettings.ambientColor[i], 0, 5, 12, 1);
+            Math_SmoothStepToS(&play->envCtx.adjLightSettings.diffuseColor1[i], 0, 5, 12, 1);
+            play->envCtx.adjLightSettings.fogColor[i] = 0;
         }
-        play->envCtx.lightSettings.zFar = 0;
-        play->envCtx.lightSettings.fogNear = 0;
+        play->envCtx.adjLightSettings.zFar = 0;
+        play->envCtx.adjLightSettings.fogNear = 0;
     } else {
         play->envCtx.fillScreen = true;
         play->envCtx.screenFillColor[0] = 0;
@@ -1720,18 +1730,18 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
         temp = 0.0f;
     }
 
-    play->envCtx.lightSettings.fogNear = (arg2 - play->envCtx.unk_C4.fogNear) * temp;
+    play->envCtx.adjLightSettings.fogNear = (arg2 - play->envCtx.lightSettings.fogNear) * temp;
 
     if (arg1 == 0.0f) {
         for (i = 0; i < 3; i++) {
-            play->envCtx.lightSettings.fogColor[i] = 0;
+            play->envCtx.adjLightSettings.fogColor[i] = 0;
         }
     } else {
         temp = arg1 * 5.0f;
         temp = CLAMP_MAX(temp, 1.0f);
 
         for (i = 0; i < 3; i++) {
-            play->envCtx.lightSettings.fogColor[i] = -(f32)play->envCtx.unk_C4.fogColor[i] * temp;
+            play->envCtx.adjLightSettings.fogColor[i] = -(f32)play->envCtx.lightSettings.fogColor[i] * temp;
         }
     }
 
@@ -1742,8 +1752,8 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
     arg1 *= arg4;
 
     for (i = 0; i < 3; i++) {
-        play->envCtx.lightSettings.ambientColor[i] = -(f32)play->envCtx.unk_C4.ambientColor[i] * arg1;
-        play->envCtx.lightSettings.diffuseColor1[i] = -(f32)play->envCtx.unk_C4.diffuseColor1[i] * arg1;
+        play->envCtx.adjLightSettings.ambientColor[i] = -(f32)play->envCtx.lightSettings.ambientColor[i] * arg1;
+        play->envCtx.adjLightSettings.diffuseColor1[i] = -(f32)play->envCtx.lightSettings.diffuseColor1[i] * arg1;
     }
 
     return 1;
@@ -1761,25 +1771,25 @@ void Environment_LerpRGB8(Color_RGB8* from, Color_RGB8* to, f32 lerp, Vec3s* dst
 }
 
 void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.ambientColor, to, lerp,
-                         (Vec3s*)&play->envCtx.lightSettings.ambientColor);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.ambientColor, to, lerp,
+                         (Vec3s*)&play->envCtx.adjLightSettings.ambientColor);
 }
 
 void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.diffuseColor1, to, lerp,
-                         (Vec3s*)play->envCtx.lightSettings.diffuseColor1);
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.diffuseColor, to, lerp,
-                         (Vec3s*)play->envCtx.lightSettings.diffuseColor2);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.diffuseColor1, to, lerp,
+                         (Vec3s*)play->envCtx.adjLightSettings.diffuseColor1);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.diffuseColor, to, lerp,
+                         (Vec3s*)play->envCtx.adjLightSettings.diffuseColor2);
 }
 
 void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.fogColor, to, lerp,
-                         (Vec3s*)play->envCtx.lightSettings.fogColor);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.fogColor, to, lerp,
+                         (Vec3s*)play->envCtx.adjLightSettings.fogColor);
 }
 
 void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f32 lerp) {
-    play->envCtx.lightSettings.fogNear = (fogNearTarget - (s16)play->envCtx.unk_C4.fogNear) * lerp;
-    play->envCtx.lightSettings.zFar = (fogFarTarget - (s16)play->envCtx.unk_C4.zFar) * lerp;
+    play->envCtx.adjLightSettings.fogNear = (fogNearTarget - (s16)play->envCtx.lightSettings.fogNear) * lerp;
+    play->envCtx.adjLightSettings.zFar = (fogFarTarget - (s16)play->envCtx.lightSettings.zFar) * lerp;
 }
 
 // Repurposed from OoT to be more general
@@ -2122,7 +2132,7 @@ u8 Environment_IsTimeStopped(void) {
     return sEnvIsTimeStopped;
 }
 
-u32 func_800FE4B8(PlayState* play) {
+u32 Environment_GetStormState(PlayState* play) {
     u32 stormState = play->envCtx.stormState;
 
     if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
@@ -2143,10 +2153,14 @@ u32 func_800FE4B8(PlayState* play) {
                 stormState = STORM_STATE_OFF;
             }
             break;
+
         case SCENE_10YUKIYAMANOMURA2:
             if (gSaveContext.sceneLayer == 1) {
                 stormState = STORM_STATE_OFF;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -2191,14 +2205,14 @@ void Environment_SetTimeJump(f32 minutes) {
     sTimeJump = CLOCK_TIME_F(0, minutes);
 }
 
-u8 func_800FE6F8(PlayState* play, s16 arg1, s16 arg2) {
-    u16 temp_v0;
+u8 func_800FE6F8(PlayState* play, s16 timeAdvanceScaling, s16 nextTimeLimit) {
+    u16 nextTime;
     u8 ret = false;
 
     if (R_TIME_SPEED != 0) {
-        temp_v0 = ((void)0, gSaveContext.save.time) +
-                  (R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset)) * arg1 * 20;
-        if (arg2 < temp_v0) {
+        nextTime = ((void)0, gSaveContext.save.time) +
+                   (R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset)) * timeAdvanceScaling * 20;
+        if (nextTime > nextTimeLimit) {
             ret = true;
         }
     }
@@ -2251,7 +2265,8 @@ u8 func_800FE9B4(PlayState* play) {
 
     if ((play->envCtx.precipitation[PRECIP_RAIN_MAX] == 60) &&
         !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
-        if ((func_800FE4B8(play) != STORM_STATE_OFF) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
+        if ((Environment_GetStormState(play) != STORM_STATE_OFF) &&
+            (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
             ret = true;
         }
     }
@@ -2268,9 +2283,11 @@ void func_800FEA50(PlayState* play) {
         case 1:
             phi_v0 = 0;
             break;
+
         case 2:
             phi_v0 = 3;
             break;
+
         case 3:
             phi_v0 = 4;
             break;
@@ -2352,10 +2369,12 @@ void func_800FEAF4(EnvironmentContext* envCtx) {
             envCtx->lightConfig = 0;
             envCtx->changeLightNextConfig = 0;
             break;
+
         case 2:
             envCtx->lightConfig = 3;
             envCtx->changeLightNextConfig = 3;
             break;
+
         case 3:
             envCtx->lightConfig = 4;
             envCtx->changeLightNextConfig = 4;

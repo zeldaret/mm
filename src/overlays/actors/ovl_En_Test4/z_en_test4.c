@@ -568,7 +568,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play) {
     if (!(player->stateFlags1 & PLAYER_STATE1_2)) {
         this->actionFunc(this, play);
 
-        if (func_800FE4B8(play) != STORM_STATE_OFF) {
+        if (Environment_GetStormState(play) != STORM_STATE_OFF) {
             switch (this->state) {
                 case TEST4_STATE_0:
                     func_80A430C8(this, play);

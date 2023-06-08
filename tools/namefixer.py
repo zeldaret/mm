@@ -1016,7 +1016,7 @@ wordReplace = {
     "globalCtx->mf_187FC": "play->billboardMtxF",
     "globalCtx->projectionMatrix": "play->viewProjectionMtxF",
     "globalCtx->actorCtx.actorList[": "play->actorCtx.actorLists[",
-    "globalCtx->envCtx.unk_8C": "play->envCtx.lightSettings",
+    "globalCtx->envCtx.unk_8C": "play->envCtx.adjLightSettings",
     "globalCtx->envCtx.unk_E5": "play->envCtx.fillScreen",
     "globalCtx->envCtx.unk_E6": "play->envCtx.screenFillColor",
     "globalCtx->envCtx.unk_C3": "play->envCtx.lightSettingOverride",

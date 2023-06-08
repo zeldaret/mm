@@ -180,9 +180,9 @@ void func_808DC18C(ObjectKankyo* this, PlayState* play) {
     magnitude = play->envCtx.windSpeed / 60.0f;
     magnitude = CLAMP(magnitude, 0.0f, 1.0f);
 
-    sp30.x = play->envCtx.windDir.x * magnitude;
-    sp30.y = play->envCtx.windDir.y + 100.0f;
-    sp30.z = play->envCtx.windDir.z * magnitude;
+    sp30.x = play->envCtx.windDirection.x * magnitude;
+    sp30.y = play->envCtx.windDirection.y + 100.0f;
+    sp30.z = play->envCtx.windDirection.z * magnitude;
     this->unk_14C[2].unk_00 = 0x4000 - Math_Vec3f_Pitch(&gZeroVec3f, &sp30);
     this->unk_14C[2].unk_04 = Math_Vec3f_Yaw(&gZeroVec3f, &sp30) + 0x8000;
 }
@@ -251,14 +251,14 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                 temp_f28 = play->view.eye.y + (spCC * 120.0f);
                 temp_f30 = play->view.eye.z + (spC8 * 120.0f);
 
-                magnitude =
-                    sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) + SQ(play->envCtx.windDir.z));
+                magnitude = sqrtf((f32)SQ(play->envCtx.windDirection.x) + SQ(play->envCtx.windDirection.y) +
+                                  SQ(play->envCtx.windDirection.z));
                 if (magnitude == 0.0f) {
                     magnitude = 0.001f;
                 }
-                spC4 = -play->envCtx.windDir.x / magnitude;
-                spC0 = -play->envCtx.windDir.y / magnitude;
-                spBC = -play->envCtx.windDir.z / magnitude;
+                spC4 = -play->envCtx.windDirection.x / magnitude;
+                spC0 = -play->envCtx.windDirection.y / magnitude;
+                spBC = -play->envCtx.windDirection.z / magnitude;
 
                 if (i == 0) {
                     this->unk_144 += 0.049999997f * Rand_ZeroOne();
@@ -413,14 +413,14 @@ void func_808DCDB4(ObjectKankyo* this, PlayState* play) {
                 temp_f28 = play->view.eye.y + (spA8 * 120.0f);
                 temp_f18 = play->view.eye.z + (spA4 * 120.0f);
 
-                magnitude =
-                    sqrtf((f32)SQ(play->envCtx.windDir.x) + SQ(play->envCtx.windDir.y) + SQ(play->envCtx.windDir.z));
+                magnitude = sqrtf((f32)SQ(play->envCtx.windDirection.x) + SQ(play->envCtx.windDirection.y) +
+                                  SQ(play->envCtx.windDirection.z));
                 if (magnitude == 0.0f) {
                     magnitude = 0.001f;
                 }
 
-                spA0 = -play->envCtx.windDir.x / magnitude;
-                sp9C = -play->envCtx.windDir.z / magnitude;
+                spA0 = -play->envCtx.windDirection.x / magnitude;
+                sp9C = -play->envCtx.windDirection.z / magnitude;
 
                 if (i == 0) {
                     this->unk_144 += 0.049999997f * Rand_ZeroOne();
