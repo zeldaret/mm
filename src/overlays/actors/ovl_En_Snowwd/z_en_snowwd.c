@@ -50,9 +50,9 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-Vec3f D_80AF7ABC = { 0, 0, 0 };
+Vec3f D_80AF7ABC = { 0.0f, 0.0f, 0.0f };
 
-s32 D_80AF7AC8[] = { 0x00000000, 0xC0800000, 0x00000000 };
+Vec3f D_80AF7AC8 = { 0.0f, -4.0f, 0.0f };
 
 Color_RGBA8 D_80AF7AD4 = { 255, 255, 255, 255 };
 
@@ -116,7 +116,7 @@ void func_80AF76F0(EnSnowwd* this, PlayState* play) {
         sp48.x += Rand_CenteredFloat(80.0f);
         sp48.y += 100.0f + Rand_ZeroFloat(30.0f);
         sp48.z += Rand_CenteredFloat(80.0f);
-        func_800B0EB0(play, &sp48, (Vec3f*)D_80AF7AC8, &D_80AF7ABC, &D_80AF7AD4, &D_80AF7AD8, 200, 10, 20);
+        func_800B0EB0(play, &sp48, &D_80AF7AC8, &D_80AF7ABC, &D_80AF7AD4, &D_80AF7AD8, 200, 10, 20);
     }
 }
 
