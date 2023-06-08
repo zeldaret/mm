@@ -4,15 +4,17 @@
  */
 #include "global.h"
 
-static f32 sFactorialTbl[] = { 1.0f,    1.0f,     2.0f,      6.0f,       24.0f,       120.0f,      720.0f,
-                               5040.0f, 40320.0f, 362880.0f, 3628800.0f, 39916800.0f, 479001600.0f };
+static f32 sFactorialTbl[] = {
+    1.0f, 1.0f, 2.0f, 6.0f, 24.0f, 120.0f, 720.0f, 5040.0f, 40320.0f, 362880.0f, 3628800.0f, 39916800.0f, 479001600.0f,
+};
 
-// Rename to Math_FactorialF
 /**
  * Takes a float, returns the factorial of it(s trunctation), iteratively
  * Unused
+ *
+ * @remark original name: "ffact"
  */
-f32 func_80179300(f32 n) {
+f32 Math_FactorialF(f32 n) {
     f32 ret = 1.0f;
     s32 i;
 
@@ -23,12 +25,13 @@ f32 func_80179300(f32 n) {
     return ret;
 }
 
-// Rename to Math_Factorial
 /**
  * Takes an int and returns its factorial as a float. Uses the lookup table for n <= 12.
  * Unused
+ *
+ * @remark original name: "ifact"
  */
-f32 func_80179400(s32 n) {
+f32 Math_Factorial(s32 n) {
     f32 ret;
     s32 i;
 
@@ -45,12 +48,13 @@ f32 func_80179400(s32 n) {
     return ret;
 }
 
-// Rename to Math_PowF
 /**
  * Returns base^{exp} if exp is nonnegative and 1.0f otherwise.
  * Unused
+ *
+ * @remark original name: "powi"
  */
-f32 pow_int(f32 base, s32 exp) {
+f32 Math_PowF(f32 base, s32 exp) {
     f32 ret = 1.0f;
 
     while (exp > 0) {
@@ -61,20 +65,22 @@ f32 pow_int(f32 base, s32 exp) {
     return ret;
 }
 
-// Rename to Math_SinF
 /**
  * Takes an angle in radians and returns the sine.
+ *
+ * @remark original name: "sinf_table"
  */
-f32 sin_rad(f32 rad) {
-    return sins(RADF_TO_BINANG(rad)) * SHT_MINV;
+f32 Math_SinF(f32 rad) {
+    return sins(RAD_TO_BINANG(rad)) * SHT_MINV;
 }
 
-// Rename to Math_CosF
 /**
  * Takes an angle in radians and returns the cosine.
+ *
+ * @remark original name: "cosf_table"
  */
-f32 cos_rad(f32 rad) {
-    return coss(RADF_TO_BINANG(rad)) * SHT_MINV;
+f32 Math_CosF(f32 rad) {
+    return coss(RAD_TO_BINANG(rad)) * SHT_MINV;
 }
 
 /**
@@ -84,10 +90,9 @@ f32 Rand_ZeroFloat(f32 scale) {
     return Rand_ZeroOne() * scale;
 }
 
-// Rename to Rand_CenteredFloat
 /**
  * Returns a pseudo-random floating-point number between (- scale / 2) and (scale / 2). Originally in z_actor in OoT.
  */
-f32 randPlusMinusPoint5Scaled(f32 scale) {
+f32 Rand_CenteredFloat(f32 scale) {
     return Rand_Centered() * scale;
 }

@@ -171,7 +171,7 @@ void func_809619D0(EnFu* this, PlayState* play) {
     }
 
     for (i = 0; i < this->unk_542; i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     this->unk_520 = path->count;
@@ -426,23 +426,24 @@ void func_80962340(EnFu* this, PlayState* play) {
 }
 
 void func_80962588(EnFu* this, PlayState* play) {
-    if (Message_ShouldAdvance(play) && (this->unk_552 == 0x2871)) {
-        if (1) {}
-        if (play->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.save.playerData.rupees >= 10) {
-                func_8019F208();
-                Rupees_ChangeBy(-10);
-                func_80963DE4(this, play);
-            } else {
-                play_sound(NA_SE_SY_ERROR);
-                Message_StartTextbox(play, 0x2873, &this->actor);
-                this->unk_552 = 0x2873;
-            }
+    if (!Message_ShouldAdvance(play) || (this->unk_552 != 0x2871)) {
+        return;
+    }
+
+    if (play->msgCtx.choiceIndex == 0) {
+        if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
+            func_8019F208();
+            Rupees_ChangeBy(-10);
+            func_80963DE4(this, play);
         } else {
-            func_8019F230();
-            Message_StartTextbox(play, 0x2872, &this->actor);
-            this->unk_552 = 0x2872;
+            play_sound(NA_SE_SY_ERROR);
+            Message_StartTextbox(play, 0x2873, &this->actor);
+            this->unk_552 = 0x2873;
         }
+    } else {
+        func_8019F230();
+        Message_StartTextbox(play, 0x2872, &this->actor);
+        this->unk_552 = 0x2872;
     }
 }
 
@@ -652,7 +653,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.playerData.isMagicAcquired) {
+    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
@@ -727,9 +728,9 @@ void func_80962D60(EnFu* this, PlayState* play) {
 
 void func_80962EBC(EnFu* this, PlayState* play) {
     if (this->unk_542 != 0) {
-        if (this->actor.cutscene != -1) {
-            Camera_ChangeDataIdx(play->cameraPtrs[CAM_ID_MAIN],
-                                 ActorCutscene_GetCutscene(this->actor.cutscene)->csCamSceneDataId);
+        if (this->actor.csId != CS_ID_NONE) {
+            Camera_ChangeActorCsCamIndex(play->cameraPtrs[CAM_ID_MAIN],
+                                         CutsceneManager_GetCutsceneEntry(this->actor.csId)->csCamId);
         }
     }
 }
@@ -775,7 +776,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
         Message_StartTextbox(play, 0x288B, &this->actor);
     }
 
-    if ((!DynaPolyActor_IsInRidingRotatingState((DynaPolyActor*)this->actor.child) &&
+    if ((!DynaPolyActor_IsPlayerAbove((DynaPolyActor*)this->actor.child) &&
          (player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) ||
         (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] <= SECONDS_TO_TIMER(0)) || (this->unk_548 == this->unk_54C)) {
         player->stateFlags3 &= ~PLAYER_STATE3_400000;
@@ -1139,7 +1140,7 @@ void func_80963DE4(EnFu* this, PlayState* play) {
 }
 
 void func_80963EAC(EnFu* this, PlayState* play) {
-    if (gSaveContext.save.playerData.isMagicAcquired) {
+    if (gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         if (this->unk_540 == 1) {
             Message_StartTextbox(play, 0x2847, &this->actor);
             this->unk_552 = 0x2847;
@@ -1337,7 +1338,7 @@ void EnFu_Update(Actor* thisx, PlayState* play) {
     func_809642E0(this, play);
     Actor_MoveWithGravity(&this->actor);
     func_8096209C(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     SkelAnime_Update(&this->skelAnime);
     func_80961D7C(play);
     func_809640D8(this, play);
@@ -1385,7 +1386,7 @@ void EnFu_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 0, 50, 160, 0));
@@ -1449,7 +1450,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
     OPEN_DISPS(play->state.gfxCtx);
 
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {

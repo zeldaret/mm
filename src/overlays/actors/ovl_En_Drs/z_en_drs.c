@@ -110,9 +110,11 @@ void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
     // after that it will no longer be rendered.
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_02) && (limbIndex == WEDDING_DRESS_MANNEQUIN_LIMB_MASK)) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp].segment);
         gSPDisplayList(POLY_OPA_DISP++, &gMoonMaskDL);
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp2].segment);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -120,7 +122,7 @@ void EnDrs_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
 void EnDrs_Draw(Actor* thisx, PlayState* play) {
     EnDrs* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnDrs_PostLimbDraw, &this->actor);
 }

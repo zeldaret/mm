@@ -643,7 +643,9 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
     func_808BE73C(this, play);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
     if (this->collider.base.acFlags & AC_ON) {
@@ -665,7 +667,9 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
 
 s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDekunuts* this = THIS;
-    f32 arg1, arg2, arg3;
+    f32 arg1;
+    f32 arg2;
+    f32 arg3;
     f32 currentFrame;
 
     if (this->actionFunc == func_808BDA4C) {

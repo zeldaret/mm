@@ -26,7 +26,7 @@ typedef enum {
 
 typedef enum {
     /* 0 */ POSTBOX_BEHAVIOUR_WAIT_FOR_ITEM,
-    /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM,
+    /* 1 */ POSTBOX_BEHAVIOUR_TAKE_ITEM
 } PostboxBehaviour;
 
 static u8 D_80B2C200[] = {
@@ -162,15 +162,15 @@ void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
 s32 EnPst_HandleLetterDay1(EnPst* this) {
     switch (this->actor.params) {
         case POSTBOX_SOUTH_UPPER_CLOCKTOWN:
-            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_02);
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
         case POSTBOX_NORTH_CLOCKTOWN:
-            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_04);
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
         case POSTBOX_EAST_UPPER_CLOCKTOWN:
-            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_08);
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
         case POSTBOX_EAST_LOWER_CLOCKTOWN:
-            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_10);
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
         case POSTBOX_SOUTH_LOWER_CLOCKTOWN:
-            return CHECK_WEEKEVENTREG(WEEKEVENTREG_27_20);
+            return CHECK_WEEKEVENTREG(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
         default:
             return false;
     }
@@ -393,7 +393,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
     Actor_SetScale(&this->actor, 0.02f);
     this->actionFunc = EnPst_FollowSchedule;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnPst_Destroy(Actor* thisx, PlayState* play) {
@@ -436,7 +436,7 @@ void EnPst_Draw(Actor* thisx, PlayState* play) {
     EnPst* this = THIS;
 
     if (this->scheduleResult != POSTBOX_SCH_NONE) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnPst_OverrideLimbDraw, NULL, &this->actor);
     }

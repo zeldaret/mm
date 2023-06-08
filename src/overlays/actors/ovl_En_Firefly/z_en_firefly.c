@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_Obj_Syokudai/z_obj_syokudai.h"
 #include "objects/object_firefly/object_firefly.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnFirefly*)thisx)
 
@@ -301,7 +301,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y,
                                    Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x300);
             } else if (rand < 0.8f) {
-                this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(1536.0f);
+                this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x600);
             }
 
             // Climb if too close to ground
@@ -703,7 +703,8 @@ void EnFirefly_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 15.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 15.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
     this->collider.dim.worldSphere.center.y = (s32)this->actor.world.pos.y + 10;
     this->collider.dim.worldSphere.center.z = this->actor.world.pos.z;
@@ -827,7 +828,7 @@ void EnFirefly_Draw(Actor* thisx, PlayState* play) {
         gfx = POLY_OPA_DISP;
     }
 
-    gSPDisplayList(gfx, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx, gSetupDLs[SETUPDL_25]);
 
     if (this->currentType == KEESE_FIRE) {
         gDPSetEnvColor(&gfx[1], 0, 0, 0, 0);

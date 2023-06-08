@@ -22,12 +22,12 @@ typedef struct EffDust {
 } EffDust; // size = 0x560
 
 typedef enum {
-    /* 0x0 */ EFF_DUST_TYPE_0,
-    /* 0x1 */ EFF_DUST_TYPE_1,
-    /* 0x2 */ EFF_DUST_TYPE_SPIN_ATTACK_CHARGE,
-    /* 0x3 */ EFF_DUST_TYPE_3,
-    /* 0x4 */ EFF_DUST_TYPE_4,
-    /* 0x5 */ EFF_DUST_TYPE_5
+    /* 0 */ EFF_DUST_TYPE_0,
+    /* 1 */ EFF_DUST_TYPE_1,
+    /* 2 */ EFF_DUST_TYPE_SPIN_ATTACK_CHARGE,
+    /* 3 */ EFF_DUST_TYPE_3,
+    /* 4 */ EFF_DUST_TYPE_4,
+    /* 5 */ EFF_DUST_TYPE_5
 } EffDustType;
 
 #endif // Z_EFF_DUST_H

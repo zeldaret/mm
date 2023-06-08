@@ -21,7 +21,7 @@ void func_80BD6B18(EnScRuppe* this, PlayState* play);
 typedef struct {
     /* 0x0 */ TexturePtr tex;
     /* 0x4 */ s16 amount;
-} RuppeInfo;
+} RuppeInfo; // size = 0x8
 
 ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,
@@ -67,7 +67,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnScRuppe_UpdateCollision(EnScRuppe* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 func_80BD697C(s16 ruppeIndex) {
@@ -181,7 +181,7 @@ void EnScRuppe_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeInfo[this->ruppeIndex].tex));

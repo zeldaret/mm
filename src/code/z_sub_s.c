@@ -15,7 +15,7 @@ Vec3f gOneVec3f = { 1.0f, 1.0f, 1.0f };
 s32 D_801C5DBC[] = { 0, 1 }; // Unused
 
 /**
- * Finds the first EnDoor instance with unk_1A4 == 5 and the specified switchFlag.
+ * Finds the first EnDoor instance with doorType == ENDOOR_TYPE_5 and the specified switchFlag.
  */
 EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
     Actor* actor = NULL;
@@ -29,7 +29,7 @@ EnDoor* SubS_FindDoor(PlayState* play, s32 switchFlag) {
             break;
         }
 
-        if ((door->unk_1A4 == 5) && (door->switchFlag == (u8)switchFlag)) {
+        if ((door->doorType == ENDOOR_TYPE_5) && (door->switchFlag == (u8)switchFlag)) {
             break;
         }
 
@@ -128,7 +128,7 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     newDlist = rootLimb->dList;
     limbDList = rootLimb->dList;
 
-    if (overrideLimbDraw == NULL || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
+    if ((overrideLimbDraw == NULL) || !overrideLimbDraw(play, 1, &newDlist, &pos, &rot, actor, &gfx)) {
         Matrix_TranslateRotateZYX(&pos, &rot);
         Matrix_Push();
 
@@ -489,9 +489,9 @@ Path* SubS_GetAdditionalPath(PlayState* play, u8 pathIndex, s32 limit) {
         if (i >= limit) {
             break;
         }
-        pathIndex = path->unk1;
+        pathIndex = path->additionalPathIndex;
         i++;
-    } while (pathIndex != 0xFF);
+    } while (pathIndex != ADDITIONAL_PATH_INDEX_NONE);
 
     return path;
 }
@@ -577,7 +577,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -585,7 +585,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
     return reached;
 }
 
-Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* startPointIndex) {
+Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 pathIndexNone, s32* startPointIndex) {
     Path* path = NULL;
     s32 found = false;
     s32 time = (((s16)TIME_TO_MINUTES_F(gSaveContext.save.time) % 60) +
@@ -593,17 +593,17 @@ Path* SubS_GetDayDependentPath(PlayState* play, u8 pathIndex, u8 max, s32* start
                30;
     s32 day = CURRENT_DAY;
 
-    if (pathIndex == max) {
+    if (pathIndex == pathIndexNone) {
         return NULL;
     }
 
-    while (pathIndex != 0xFF) {
+    while (pathIndex != ADDITIONAL_PATH_INDEX_NONE) {
         path = &play->setupPathList[pathIndex];
-        if (sPathDayFlags[day] & path->unk2) {
+        if (path->customValue & sPathDayFlags[day]) {
             found = true;
             break;
         }
-        pathIndex = path->unk1;
+        pathIndex = path->additionalPathIndex;
     }
 
     if (found == true) {
@@ -994,7 +994,7 @@ void SubS_DrawShadowTex(Actor* actor, GameState* gameState, u8* tex) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 100);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
     Matrix_Translate(actor->world.pos.x, 0.0f, actor->world.pos.z, MTXMODE_NEW);
@@ -1023,13 +1023,13 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
     f32 step;
     f32 prevRotStep;
 
-    step = (f32)(target - *rot) * (360.0f / (f32)0x10000);
+    step = BINANG_TO_DEG(target - *rot);
     step *= gFramerateDivisorHalf;
     prevRotStep = step;
     if (step >= 0.0f) {
         step /= slowness;
         step = CLAMP(step, stepMin, stepMax);
-        *rot += (s16)((step * (f32)0x10000) / 360.0f);
+        *rot += DEG_TO_BINANG_ALT2(step);
         if (prevRotStep < stepMin) {
             *rot = target;
         }
@@ -1039,7 +1039,7 @@ s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f3
     } else {
         step = (step / slowness) * -1.0f;
         step = CLAMP(step, stepMin, stepMax);
-        *rot -= (s16)((step * (f32)0x10000) / 360.0f);
+        *rot -= DEG_TO_BINANG_ALT2(step);
         if (-stepMin < prevRotStep) {
             *rot = target;
         }
@@ -1098,8 +1098,8 @@ s32 SubS_AngleDiffLessEqual(s16 angleA, s16 threshold, s16 angleB) {
     return (ABS_ALT(BINANG_SUB(angleB, angleA)) <= threshold) ? true : false;
 }
 
-Path* SubS_GetPathByIndex(PlayState* play, s16 pathIndex, s16 max) {
-    return (pathIndex != max) ? &play->setupPathList[pathIndex] : NULL;
+Path* SubS_GetPathByIndex(PlayState* play, s16 pathIndex, s16 pathIndexNone) {
+    return (pathIndex != pathIndexNone) ? &play->setupPathList[pathIndex] : NULL;
 }
 
 s32 SubS_CopyPointFromPath(Path* path, s32 pointIndex, Vec3f* dst) {
@@ -1179,7 +1179,7 @@ Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, 
         actor = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actor != NULL && actorId != actor->id) {
+    while ((actor != NULL) && (actorId != actor->id)) {
         actor = actor->next;
     }
 
@@ -1386,48 +1386,53 @@ void SubS_ChangeAnimationBySpeedInfo(SkelAnime* skelAnime, AnimationSpeedInfo* a
     *curAnimIndex = nextAnimIndex;
 }
 
-s32 SubS_StartActorCutscene(Actor* actor, s16 nextCutscene, s16 curCutscene, s32 type) {
+s32 SubS_StartCutscene(Actor* actor, s16 nextCsId, s16 curCsId, s32 type) {
     s32 isStarted = false;
 
-    if ((curCutscene != -1) && (ActorCutscene_GetCurrentIndex() == curCutscene)) {
-        ActorCutscene_Stop(curCutscene);
-        ActorCutscene_SetIntentToPlay(nextCutscene);
-    } else if (ActorCutscene_GetCanPlayNext(nextCutscene)) {
+    if ((curCsId != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == curCsId)) {
+        CutsceneManager_Stop(curCsId);
+        CutsceneManager_Queue(nextCsId);
+    } else if (CutsceneManager_IsNext(nextCsId)) {
         switch (type) {
-            case SUBS_CUTSCENE_SET_UNK_LINK_FIELDS:
-                ActorCutscene_StartAndSetUnkLinkFields(nextCutscene, actor);
+            case SUBS_CUTSCENE_WITH_PLAYER:
+                CutsceneManager_StartWithPlayerCs(nextCsId, actor);
                 break;
+
             case SUBS_CUTSCENE_NORMAL:
-                ActorCutscene_Start(nextCutscene, actor);
+                CutsceneManager_Start(nextCsId, actor);
                 break;
-            case SUBS_CUTSCENE_SET_FLAG:
-                ActorCutscene_StartAndSetFlag(nextCutscene, actor);
+
+            case SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG:
+                CutsceneManager_StartWithPlayerCsAndSetFlag(nextCsId, actor);
+                break;
+
+            default:
                 break;
         }
         isStarted = true;
     } else {
-        ActorCutscene_SetIntentToPlay(nextCutscene);
+        CutsceneManager_Queue(nextCsId);
     }
 
     return isStarted;
 }
 
-s32 SubS_FillCutscenesList(Actor* actor, s16 cutscenes[], s16 numCutscenes) {
-    s16 cs;
+s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes) {
+    s16 csId;
     s32 i;
 
     for (i = 0; i < numCutscenes; i++) {
-        cutscenes[i] = -1;
+        csIdList[i] = CS_ID_NONE;
     }
 
-    cs = actor->cutscene;
+    csId = actor->csId;
     i = 0;
 
-    while (cs != -1) {
-        // Note: Infinite loop if numCutscenes is less than possible additional cutscenes
+    while (csId != CS_ID_NONE) {
+        // Note: Infinite loop if numCutscenes is less than possible additional csIdList
         if (i < numCutscenes) {
-            cutscenes[i] = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(cs);
+            csIdList[i] = csId;
+            csId = CutsceneManager_GetAdditionalCsId(csId);
             i++;
         }
     }
@@ -1498,10 +1503,10 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
         actorIter = play->actorCtx.actorLists[actorCategory].first;
     }
 
-    while (actorIter != NULL &&
-           (actorId != actorIter->id ||
-            (actorId == actorIter->id &&
-             (verifyActor == NULL || (verifyActor != NULL && !verifyActor(play, actor, actorIter, verifyData)))))) {
+    while ((actorIter != NULL) &&
+           ((actorId != actorIter->id) ||
+            ((actorId == actorIter->id) &&
+             ((verifyActor == NULL) || ((verifyActor != NULL) && !verifyActor(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 

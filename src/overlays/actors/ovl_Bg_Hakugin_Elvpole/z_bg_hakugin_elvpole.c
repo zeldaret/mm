@@ -104,15 +104,15 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         this->unk_15C = 0;
     }
     if (this->unk_160) {
-        if (this->dyna.actor.cutscene == -1) {
+        if (this->dyna.actor.csId == CS_ID_NONE) {
             this->unk_160 = false;
             return;
-        } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_160 = false;
             return;
         }
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -126,7 +126,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_hakugin_obj_DL_00ACB8);
 
     CLOSE_DISPS(play->state.gfxCtx);

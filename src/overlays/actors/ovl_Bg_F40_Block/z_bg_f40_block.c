@@ -56,8 +56,8 @@ s32 func_80BC3980(BgF40Block* this, PlayState* play) {
     this->unk_160 = 0;
     this->unk_164 = 0;
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
-        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
+    if (BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor) != BGF40BLOCK_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
 
@@ -78,8 +78,8 @@ s32 func_80BC3A2C(BgF40Block* this, PlayState* play) {
     this->unk_160 = this->path->count - 1;
     this->unk_164 = this->path->count - 1;
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
-        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
+    if (BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor) != BGF40BLOCK_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
             points += this->unk_164;
@@ -157,16 +157,16 @@ s32 func_80BC3B00(BgF40Block* this) {
 }
 
 s32 func_80BC3CA4(BgF40Block* this) {
-    if (this->dyna.actor.cutscene == -1) {
+    if (this->dyna.actor.csId == CS_ID_NONE) {
         return true;
     }
 
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         return true;
     }
 
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
     return false;
 }
 
@@ -228,11 +228,11 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
     BgF40Block* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_f40_obj_Colheader_004640);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerBlockCol);
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
-        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
+    if (BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor) != BGF40BLOCK_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor)];
     } else {
         this->path = NULL;
     }
@@ -277,13 +277,13 @@ void func_80BC4228(BgF40Block* this, PlayState* play) {
             this->unk_164 = this->unk_160 + 1;
         } else {
             this->actionFunc = func_80BC4530;
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC41AC;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
         return;
@@ -337,13 +337,13 @@ void func_80BC4448(BgF40Block* this, PlayState* play) {
             this->unk_164 = this->unk_160 - 1;
         } else {
             this->actionFunc = func_80BC4380;
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_C);
         }
     }
 
     if (func_80BC3D08(this, play, 0)) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->actionFunc = func_80BC43CC;
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_STOP_F);
     }
@@ -373,5 +373,5 @@ void BgF40Block_Update(Actor* thisx, PlayState* play) {
 }
 
 void BgF40Block_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_f40_obj_DL_0043D0);
+    Gfx_DrawDListOpa(play, gStoneTowerBlockDL);
 }

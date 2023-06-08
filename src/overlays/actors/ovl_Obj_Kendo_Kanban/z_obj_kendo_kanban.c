@@ -28,7 +28,7 @@
 typedef enum {
     /* -1 */ OBJKENDOKANBAN_DIR_DOWN = -1,
     /*  0 */ OBJKENDOKANBAN_DIR_UNDETERMINED,
-    /*  1 */ OBJKENDOKANBAN_DIR_UP,
+    /*  1 */ OBJKENDOKANBAN_DIR_UP
 } ObjKendoKanbanDirection;
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
@@ -211,7 +211,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
         Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->boardFragments = OBJKENDOKANBAN_GET_BOARD_FRAGMENTS(&this->actor);
     this->actor.gravity = -2.0f;
@@ -380,7 +380,7 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
         Matrix_Pop();
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         // When on the ground, apply some friction.
@@ -499,7 +499,7 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->boardFragments == OBJKENDOKANBAN_PART_FULL) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

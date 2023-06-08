@@ -4,10 +4,11 @@
  * Description: Poe
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_poh.h"
 #include "objects/object_po/object_po.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnPoh*)thisx)
 
@@ -588,7 +589,7 @@ void func_80B2DD2C(EnPoh* this, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B2DDF8(EnPoh* this, s32 arg1) {
@@ -925,7 +926,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     if ((this->unk_197 == 255) || (this->unk_197 == 0)) {
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], this->unk_194, this->unk_195, this->unk_196, this->unk_197);
         gSPSegment(&gfx[2], 0x08, D_801AEFA0);
 
@@ -936,7 +937,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     } else {
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, this->unk_197);
         gSPSegment(&gfx[2], 0x08, D_801AEF88);
 
@@ -944,7 +945,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
                                        EnPoh_OverrideLimbDraw, EnPoh_PostLimbDraw, &this->actor, &gfx[3]);
 
         gfx = POLY_OPA_DISP;
-        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
     }
 
     gDPPipeSync(&gfx[0]);
@@ -985,7 +986,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
     if (this->actionFunc == func_80B2DD2C) {
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], this->unk_198, this->unk_199, this->unk_19A, 255);
 
         func_80B2C910(&sp7C, play);
@@ -997,7 +998,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
 
         POLY_OPA_DISP = &gfx[4];
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(
             POLY_XLU_DISP++, 0x08,
@@ -1005,7 +1006,7 @@ void func_80B2F37C(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 170, 255, this->unk_197);
         gDPSetEnvColor(POLY_XLU_DISP++, this->unk_194, this->unk_195, this->unk_196, 255);
 
-        Matrix_RotateYF((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000) * (M_PI / 32768), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, object_po_DL_003850);

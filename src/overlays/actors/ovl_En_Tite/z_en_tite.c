@@ -147,7 +147,8 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     this->collider.dim.worldSphere.radius = sSphereInit.dim.modelSphere.radius;
-    this->unk_2C0 = 0x1D;
+    this->updBgCheckInfoFlags =
+        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10;
 
     if (!D_80896B60) {
         for (i = 0; i < ARRAY_COUNT(D_80896B24); i++) {
@@ -178,7 +179,7 @@ void EnTite_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.params == ENTITE_MINUS_2) {
-        this->unk_2C0 |= 0x40;
+        this->updBgCheckInfoFlags |= UPDBGCHECKINFO_FLAG_40;
         this->actor.colChkInfo.health = 3;
     }
 }
@@ -196,7 +197,7 @@ void func_80893A18(EnTite* this) {
 
 s32 func_80893A34(EnTite* this, PlayState* play) {
     if ((this->actor.params == ENTITE_MINUS_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-        (func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 5)) {
+        (SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == FLOOR_TYPE_5)) {
         return true;
     }
     return false;
@@ -239,21 +240,22 @@ void func_80893BCC(EnTite* this, PlayState* play) {
     s32 j;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-        u32 surface = func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        SurfaceMaterial surfaceMaterial =
+            SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-        if ((surface == COLPOLY_SURFACE_GROUND) || (surface == COLPOLY_SURFACE_SAND)) {
+        if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 func_800BBFB0(play, &this->limbPos[i], 1.0f, 2, 80, 15, 1);
             }
-        } else if (surface == COLPOLY_SURFACE_SNOW) {
+        } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
             Vec3f* ptr;
 
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 for (j = 0; j < 2; j++) {
                     ptr = &this->limbPos[i];
-                    sp7C.x = ptr->x + randPlusMinusPoint5Scaled(1.0f);
-                    sp7C.y = ptr->y + randPlusMinusPoint5Scaled(1.0f);
-                    sp7C.z = ptr->z + randPlusMinusPoint5Scaled(1.0f);
+                    sp7C.x = ptr->x + Rand_CenteredFloat(1.0f);
+                    sp7C.y = ptr->y + Rand_CenteredFloat(1.0f);
+                    sp7C.z = ptr->z + Rand_CenteredFloat(1.0f);
                     func_800B0DE0(play, &sp7C, &gZeroVec3f, &D_80896B64, &D_80896B3C, &D_80896B40,
                                   (s32)Rand_ZeroFloat(16.0f) + 80, 15);
                 }
@@ -806,9 +808,9 @@ void func_80895738(EnTite* this, PlayState* play) {
 void func_8089595C(EnTite* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.x;
+    sp2C.x = Rand_CenteredFloat(20.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 15.0f;
-    sp2C.z = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.z;
+    sp2C.z = Rand_CenteredFloat(20.0f) + this->actor.world.pos.z;
     func_800B0DE0(play, &sp2C, &gZeroVec3f, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 }
 
@@ -1062,7 +1064,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
 
     if (this->actionFunc != func_808951B8) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->unk_2C0);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 40.0f, 20.0f, this->updBgCheckInfoFlags);
         func_808963B4(this, play);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             func_800BE3D0(&this->actor, this->actor.shape.rot.y, &this->actor.shape.rot);
@@ -1159,9 +1161,10 @@ void EnTite_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
     if (this->actor.params == ENTITE_MINUS_2) {
         gSPSegment(&gfx[1], 0x08, D_80896B24[0][0]);

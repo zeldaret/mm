@@ -319,7 +319,7 @@ void func_80A32A40(EnPr* this, PlayState* play) {
     WaterBox* sp30;
 
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    sp34.y = randPlusMinusPoint5Scaled(50.0f) + this->actor.home.pos.y;
+    sp34.y = Rand_CenteredFloat(50.0f) + this->actor.home.pos.y;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_2B4,
                              &sp30)) {
@@ -536,7 +536,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 30.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
 
     if (this->unk_206 != 7) {
@@ -549,9 +551,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
 
             Math_Vec3f_Copy(&sp40, &this->unk_2D4);
             this->unk_204 = 0;
-            sp40.x += randPlusMinusPoint5Scaled(20.0f);
-            sp40.y += randPlusMinusPoint5Scaled(5.0f);
-            sp40.z += randPlusMinusPoint5Scaled(20.0f);
+            sp40.x += Rand_CenteredFloat(20.0f);
+            sp40.y += Rand_CenteredFloat(5.0f);
+            sp40.z += Rand_CenteredFloat(20.0f);
 
             for (i = 0; i < (s32)Rand_ZeroFloat(5.0f) + 5; i++) {
                 EffectSsBubble_Spawn(play, &sp40, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);
@@ -593,8 +595,8 @@ void EnPr_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->unk_2D2 == 0) {
         gDPPipeSync(POLY_OPA_DISP++);

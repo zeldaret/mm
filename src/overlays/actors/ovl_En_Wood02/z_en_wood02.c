@@ -202,7 +202,7 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ANI, this->actor.world.pos.x,
                                this->actor.world.pos.y + 120.0f, this->actor.world.pos.z - 15.0f, 0, 0, 0, 1);
         if (this->actor.child != NULL) {
-            this->actor.child->cutscene = this->actor.cutscene;
+            this->actor.child->csId = this->actor.csId;
         }
         this->unk_151 = 1;
     } else {
@@ -264,8 +264,8 @@ void EnWood02_Init(Actor* thisx, PlayState* play) {
         case WOOD_LEAF_YELLOW:
             this->unk_14A[0] = 75;
             actorScale = 0.02f;
-            this->actor.velocity.x = randPlusMinusPoint5Scaled(6.0f);
-            this->actor.velocity.z = randPlusMinusPoint5Scaled(6.0f);
+            this->actor.velocity.x = Rand_CenteredFloat(6.0f);
+            this->actor.velocity.z = Rand_CenteredFloat(6.0f);
             this->actor.velocity.y = (Rand_ZeroOne() * 1.25f) + -3.1f;
             break;
     }
@@ -409,7 +409,7 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
 
                 for (i = 3; i >= 0; i--) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WOOD02, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z,
-                                0, randPlusMinusPoint5Scaled(0xFFFF), 0, leavesParams);
+                                0, Rand_CenteredFloat(0xFFFF), 0, leavesParams);
                 }
             }
 
@@ -486,10 +486,10 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         red = green = blue = 255;
     }
 
-    func_8012C2DC(gfxCtx);
+    Gfx_SetupDL25_Xlu(gfxCtx);
 
     if ((thisx->params == WOOD_LEAF_GREEN) || (thisx->params == WOOD_LEAF_YELLOW)) {
-        func_8012C28C(gfxCtx);
+        Gfx_SetupDL25_Opa(gfxCtx);
 
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, 127);
 
@@ -501,7 +501,7 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D70[this->drawType & 0xF]);
     } else {
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, D_808C4D54[this->drawType & 0xF]);

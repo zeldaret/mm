@@ -74,7 +74,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
             this->textIdIndex = 3;
         }
 
-        if (gSaveContext.save.day != 3 || !gSaveContext.save.isNight) {
+        if ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight) {
             Actor_Kill(&this->actor);
         }
     } else {
@@ -113,7 +113,7 @@ void EnMuto_SetHeadRotation(EnMuto* this) {
     s32 yawRotToTarget = ABS_ALT(BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y));
 
     this->headRotTarget.y = 0;
-    if (this->actor.xzDistToPlayer < 200.0f && yawRotToTarget < 0x4E20) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (yawRotToTarget < 0x4E20)) {
         this->headRotTarget.y = BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y);
         if (this->headRotTarget.y > 0x2710) {
             this->headRotTarget.y = 0x2710;
@@ -146,7 +146,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
 
     if (1) {} // Needed to match
 
-    if (!this->isInMayorsRoom && Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+    if (!this->isInMayorsRoom && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2363;
     }
 
@@ -229,8 +229,8 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
         }
     }
 
-    if (play->msgCtx.currentTextId == 0x2AC6 || play->msgCtx.currentTextId == 0x2AC7 ||
-        play->msgCtx.currentTextId == 0x2AC8) {
+    if ((play->msgCtx.currentTextId == 0x2AC6) || (play->msgCtx.currentTextId == 0x2AC7) ||
+        (play->msgCtx.currentTextId == 0x2AC8)) {
         this->skelAnime.playSpeed = 0.0f;
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         this->skelAnime.curFrame = 30.0f;
@@ -254,7 +254,7 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
         EnMuto_SetHeadRotation(this);
     }
 
-    if (this->isInMayorsRoom && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
+    if (this->isInMayorsRoom && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -272,7 +272,9 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
     Math_SmoothStepToS(&this->headRot.x, this->headRotTarget.x, 1, 0x3E8, 0);
     Math_SmoothStepToS(&this->waistRot.y, this->waistRotTarget.y, 1, 0xBB8, 0);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     this->actor.uncullZoneForward = 500.0f;
 
@@ -298,7 +300,7 @@ s32 EnMuto_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnMuto_Draw(Actor* thisx, PlayState* play) {
     EnMuto* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMuto_OverrideLimbDraw, NULL, &this->actor);
 }

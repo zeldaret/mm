@@ -122,6 +122,7 @@ def decompress_rom(dmadata_addr, dmadata):
     # re-calculate crc
     return update_crc(decompressed)
 
+correct_compressed_str_hash = "2a0a8acb61538235bc1094d297fb6556"
 correct_str_hash = "f46493eaa0628827dbd6ad3ecd8d65d6"
 
 def get_str_hash(byte_array):
@@ -178,6 +179,13 @@ elif fileContent[0] == 0x37:
     struct.pack_into(big_byte_format, fileContent, 0, *tmp)
 
     print("Byte swapping done.")
+
+# Check to see if the ROM is a compressed "vanilla" ROM
+compressed_str_hash = get_str_hash(bytearray(fileContent))
+if compressed_str_hash != correct_compressed_str_hash:
+    print("Error: Expected a hash of " + correct_compressed_str_hash + " but got " + compressed_str_hash + ". " +
+          "The baserom has probably been tampered, find a new one")
+    sys.exit(1)
 
 # Decompress
 FILE_TABLE_OFFSET = 0x1A500 # 0x1C110 for JP1.0, 0x1C050 for JP1.1, 0x24F60 for debug

@@ -9,7 +9,9 @@ typedef void (*EnTrt2ActionFunc)(struct EnTrt2*, PlayState*);
 typedef void (*EnTrt2UnkFunc)(struct EnTrt2*);
 typedef void (*EnTrt2UnkFunc2)(struct EnTrt2*, PlayState*);
 
-#define ENTRT2_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENTRT2_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+
+#define ENTRT2_PATH_INDEX_NONE 0x3F
 
 typedef struct EnTrt2 {
     /* 0x000 */ Actor actor;
@@ -38,7 +40,7 @@ typedef struct EnTrt2 {
     /* 0x3D6 */ s16 unk_3D6;
     /* 0x3D8 */ u8 unk_3D8;
     /* 0x3D9 */ u8 unk_3D9;
-    /* 0x3DA */ s16 unk_3DA;
+    /* 0x3DA */ s16 csId;
 } EnTrt2; // size = 0x3DC
 
 #endif // Z_EN_TRT2_H

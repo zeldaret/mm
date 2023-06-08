@@ -39,7 +39,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play);
 typedef enum {
     /* 0 */ EN_PP_COLLISION_RESULT_OK,
     /* 1 */ EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_INTO_WALL,
-    /* 2 */ EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE,
+    /* 2 */ EN_PP_COLLISION_RESULT_ABOUT_TO_RUN_OFF_LEDGE
 } EnPpCollisionResult;
 
 typedef enum {
@@ -56,13 +56,13 @@ typedef enum {
     /* 10 */ EN_PP_ACTION_MASK_DEAD,
     /* 11 */ EN_PP_ACTION_SPAWN_BODY_PARTS,
     /* 12 */ EN_PP_ACTION_DONE_SPAWNING_BODY_PARTS,
-    /* 13 */ EN_PP_ACTION_BODY_PART_MOVE,
+    /* 13 */ EN_PP_ACTION_BODY_PART_MOVE
 } EnPpAction;
 
 typedef enum {
     /* 0 */ EN_PP_MASK_DETACH_STATE_START,
     /* 1 */ EN_PP_MASK_DETACH_STATE_FALL,
-    /* 2 */ EN_PP_MASK_DETACH_STATE_DIE,
+    /* 2 */ EN_PP_MASK_DETACH_STATE_DIE
 } EnPpMaskDetachState;
 
 static s32 sCurrentDeadBodyPartIndex = 0;
@@ -77,7 +77,7 @@ typedef enum {
     /* 0xC */ EN_PP_DMGEFF_KNOCK_OFF_MASK = 0xC, // Knocks off the Hiploop's mask or deals regular damage
     /* 0xD */ EN_PP_DMGEFF_HOOKSHOT,             // Pulls the Hiploop's mask to the player or deals regular damage
     /* 0xE */ EN_PP_DMGEFF_GORON_POUND,          // Knocks off the Hiploop's mask or forces it to jump
-    /* 0xF */ EN_PP_DMGEFF_DAMAGE,               // Deals regular damage
+    /* 0xF */ EN_PP_DMGEFF_DAMAGE                // Deals regular damage
 } EnPpDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -397,17 +397,17 @@ void EnPp_SpawnDust(EnPp* this, PlayState* play) {
     Vec3f accel;
 
     for (i = 0; i < ARRAY_COUNT(this->backFootPos); i++) {
-        velocity.x = randPlusMinusPoint5Scaled(2.0f);
+        velocity.x = Rand_CenteredFloat(2.0f);
         velocity.y = Rand_ZeroFloat(2.0f) + 1.0f;
-        velocity.z = randPlusMinusPoint5Scaled(2.0f);
+        velocity.z = Rand_CenteredFloat(2.0f);
 
         accel.y = -0.1f;
         accel.z = 0.0f;
         accel.x = 0.0f;
 
-        pos.x = this->backFootPos[i].x + randPlusMinusPoint5Scaled(10.0f);
+        pos.x = this->backFootPos[i].x + Rand_CenteredFloat(10.0f);
         pos.y = Rand_ZeroFloat(3.0f) + this->actor.floorHeight + 1.0f;
-        pos.z = this->backFootPos[i].z + randPlusMinusPoint5Scaled(10.0f);
+        pos.z = this->backFootPos[i].z + Rand_CenteredFloat(10.0f);
 
         func_800B0EB0(play, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvColor, (Rand_ZeroFloat(50.0f) + 60.0f),
                       30, (Rand_ZeroFloat(5.0f) + 20.0f));
@@ -534,8 +534,8 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
         if ((this->timer == 0) && (this->secondaryTimer == 0)) {
             this->secondaryTimer = Rand_ZeroFloat(20.0f) + 20.0f;
             Math_Vec3f_Copy(&posToLookAt, &this->actor.home.pos);
-            posToLookAt.x += randPlusMinusPoint5Scaled(50.0f);
-            posToLookAt.z += randPlusMinusPoint5Scaled(50.0f);
+            posToLookAt.x += Rand_CenteredFloat(50.0f);
+            posToLookAt.z += Rand_CenteredFloat(50.0f);
             this->targetRotY = Math_Vec3f_Yaw(&this->actor.world.pos, &posToLookAt);
             this->actor.speed = 0.0f;
             if (this->animIndex != EN_PP_ANIM_IDLE) {
@@ -1046,8 +1046,8 @@ void EnPp_Dead(EnPp* this, PlayState* play) {
         if (this->actor.world.pos.y < waterSurface) {
             for (i = 0; i < 5; i++) {
                 Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
-                splashPos.x += randPlusMinusPoint5Scaled(10 + (5 * i));
-                splashPos.z += randPlusMinusPoint5Scaled(40 + (5 * i));
+                splashPos.x += Rand_CenteredFloat(10 + (5 * i));
+                splashPos.z += Rand_CenteredFloat(40 + (5 * i));
                 EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, (Rand_ZeroOne() * 100.0f) + 400.0f);
             }
 
@@ -1143,9 +1143,9 @@ void EnPp_Mask_Detach(EnPp* this, PlayState* play) {
 
                         for (i = 0; i < ARRAY_COUNT(sMaskFireVelocityAndAccel); i++) {
                             Math_Vec3f_Copy(&maskFirePos, &this->maskFlamesBasePos);
-                            maskFirePos.x += randPlusMinusPoint5Scaled(20.0f);
+                            maskFirePos.x += Rand_CenteredFloat(20.0f);
                             maskFirePos.y = this->actor.floorHeight;
-                            maskFirePos.z += randPlusMinusPoint5Scaled(20.0f);
+                            maskFirePos.z += Rand_CenteredFloat(20.0f);
                             func_800B3030(play, &maskFirePos, &sMaskFireVelocityAndAccel[i],
                                           &sMaskFireVelocityAndAccel[i], 70, 0, 2);
                         }
@@ -1173,7 +1173,7 @@ void EnPp_BodyPart_SetupMove(EnPp* this) {
     this->deadBodyPartRotationalVelocity.z = (this->deadBodyPartIndex * 0x2E) + 0xFF00;
     if (EN_PP_GET_TYPE(&this->actor) != EN_PP_TYPE_BODY_PART_BODY) {
         this->actor.speed = Rand_ZeroFloat(4.0f) + 4.0f;
-        this->actor.world.rot.y = ((s32)randPlusMinusPoint5Scaled(223.0f) + 0x1999) * this->deadBodyPartIndex;
+        this->actor.world.rot.y = ((s32)Rand_CenteredFloat(223.0f) + 0x1999) * this->deadBodyPartIndex;
     }
 
     this->action = EN_PP_ACTION_BODY_PART_MOVE;
@@ -1213,8 +1213,8 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
         if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
             for (i = 0; i < 6; i++) {
                 Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
-                splashPos.x += randPlusMinusPoint5Scaled(10 + (5 * i));
-                splashPos.z += randPlusMinusPoint5Scaled(40 + (5 * i));
+                splashPos.x += Rand_CenteredFloat(10 + (5 * i));
+                splashPos.z += Rand_CenteredFloat(40 + (5 * i));
                 EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, (Rand_ZeroOne() * 100.0f) + 400.0f);
             }
         } else {
@@ -1424,7 +1424,9 @@ void EnPp_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     if (this->action != EN_PP_ACTION_BODY_PART_MOVE) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
@@ -1571,8 +1573,8 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
     f32 scale;
     f32 alpha;
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPp_OverrideLimbDraw, EnPp_PostLimbDraw, &this->actor);
 
@@ -1609,7 +1611,7 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
         if ((this->action != EN_PP_ACTION_MASK_DETACH) && (this->action < EN_PP_ACTION_DEAD)) {
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C448(play->state.gfxCtx);
+            Gfx_SetupDL44_Xlu(play->state.gfxCtx);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 255);
 
             Math_Vec3f_Copy(&pos, &this->actor.world.pos);

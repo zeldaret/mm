@@ -66,7 +66,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     thisx->world.rot.x = 0;
     thisx->shape.rot.z = 0;
     thisx->world.rot.z = 0;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, sColHeaders[type]);
     this->speed = OBJRAILLIFT_GET_SPEED(thisx);
     if (this->speed < 0.0f) {
@@ -86,7 +86,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     if (this->speed < 0.01f) {
         this->actionFunc = ObjRaillift_DoNothing;
     } else {
-        path = &play->setupPathList[OBJRAILLIFT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJRAILLIFT_GET_PATH_INDEX(thisx)];
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
@@ -164,7 +164,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
                 if ((this->points[0].x != endPoint->x) || (this->points[0].y != endPoint->y) ||
                     (this->points[0].z != endPoint->z)) {
                     this->actionFunc = ObjRaillift_Teleport;
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     isPosUpdated = false;
                 }
             }
@@ -180,9 +180,9 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
 Will teleport to what ever curpoint is set to
 */
 void ObjRaillift_Teleport(ObjRaillift* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         ObjRaillift_UpdatePosition(this, this->curPoint);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = ObjRaillift_Move;
     }
 }
@@ -198,18 +198,18 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
     if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speed = 0.0f;
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;
     }
 }
 
 void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->cutsceneTimer = 50;
         this->actionFunc = ObjRaillift_Move;
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -223,27 +223,23 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
-    if (OBJRAILLIFT_SHOULD_REACT_TO_WEIGHT(thisx)) {
+    if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
         s32 requiredScopeTemp;
 
-        this->isWeightOnPrev = this->isWeightOn;
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
-            this->isWeightOn = true;
-        } else {
-            this->isWeightOn = false;
-        }
-        if ((this->isWeightOn != this->isWeightOnPrev) && (this->maxHeight < 1.0f)) {
+        this->isPlayerOnTopPrev = this->isPlayerOnTop;
+        this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;
+        if ((this->isPlayerOnTop != this->isPlayerOnTopPrev) && (this->maxHeight < 1.0f)) {
             this->cycle = -0x8000;
             this->maxHeight = 6.0f;
         }
         this->cycle += 0xCE4;
         Math_StepToF(&this->maxHeight, 0.0f, 0.12f);
-        step = this->isWeightOn ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f
-                                : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
-        target = this->isWeightOn ? -8.0f : 0.0f;
+        step = this->isPlayerOnTop ? Math_CosS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f
+                                   : Math_SinS(fabsf(this->cycleSpeed) * 2048.0f) + 0.02f;
+        target = this->isPlayerOnTop ? -8.0f : 0.0f;
         Math_StepToF(&this->cycleSpeed, target, step);
         this->dyna.actor.shape.yOffset = ((Math_SinS(this->cycle) * this->maxHeight) + this->cycleSpeed) * 10.0f;
     }
@@ -263,12 +259,14 @@ void ObjRaillift_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScrollEnvColor(play->state.gfxCtx, 0, play->gameplayFrames, 0, 32, 32, 1, 0, 0, 32, 32, 0, 0,
                                         0, 160));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_raillift_DL_004BF0);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

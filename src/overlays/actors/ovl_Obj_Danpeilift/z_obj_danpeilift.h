@@ -10,10 +10,10 @@ typedef void (*ObjDanpeiliftActionFunc)(struct ObjDanpeilift*, PlayState*);
 
 #define OBJDANPEILIFT_GET_TYPE(thisx) (((thisx)->params >> 0xF) & 1)
 #define OBJDANPEILIFT_GET_STARTING_POINT(thisx) (((thisx)->params >> 7) & 0x1F)
-#define OBJDANPEILIFT_GET_PATH(thisx) ((thisx)->params & 0x7F)
+#define OBJDANPEILIFT_GET_PATH_INDEX(thisx) ((thisx)->params & 0x7F)
 #define OBJDANPEILIFT_SHOULD_TELEPORT(thisx) (((thisx)->params >> 0xC) & 1)
 #define OBJDANPEILIFT_GET_SPEED(thisx) ((thisx)->home.rot.z * 0.1f)
-#define OBJDANPEILIFT_SHOULD_REACT_TO_WEIGHT(thisx) (((thisx)->params >> 0xE) & 1)
+#define OBJDANPEILIFT_REACT_TO_PLAYER_ON_TOP(thisx) (((thisx)->params >> 0xE) & 1)
 
 typedef struct ObjDanpeilift {
     /* 0x000 */ DynaPolyActor dyna;
@@ -23,8 +23,8 @@ typedef struct ObjDanpeilift {
     /* 0x168 */ s32 curPoint;
     /* 0x16C */ s32 direction;
     /* 0x170 */ Vec3s* points;
-    /* 0x174 */ s32 isWeightOn;
-    /* 0x178 */ s32 isWeightOnPrev;
+    /* 0x174 */ s32 isPlayerOnTop;
+    /* 0x178 */ s32 isPlayerOnTopPrev;
     /* 0x17C */ f32 cycleSpeed;
     /* 0x180 */ f32 maxHeight;
     /* 0x184 */ s16 cycle;

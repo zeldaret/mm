@@ -87,7 +87,7 @@ void EnMm_Init(Actor* thisx, PlayState* play) {
         func_80965BBC(this);
         return;
     }
-    if (this->actor.cutscene >= 0) {
+    if (this->actor.csId >= 0) {
         action = func_80965D3C;
     } else {
         action = func_80965DB4;
@@ -102,13 +102,13 @@ void EnMm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80965D3C(EnMm* this, PlayState* play) {
-    s16 cutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    s16 csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (ActorCutscene_GetCanPlayNext(cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(cutscene, &this->actor);
+    if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         EnMm_SetupAction(this, func_80965DB4);
     } else {
-        ActorCutscene_SetIntentToPlay(cutscene);
+        CutsceneManager_Queue(csId);
     }
 }
 
@@ -149,7 +149,8 @@ void func_80965DB4(EnMm* this, PlayState* play) {
             temp_f2 = sqrtf(SQ(temp_f14) + SQ(temp_f12));
 
             if ((temp_f2 < this->actor.speed) ||
-                (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+                (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) ==
+                 FLOOR_EFFECT_1)) {
                 this->actor.speed = CLAMP_MAX(temp_f2, 16.0f);
                 this->actor.world.rot.y = Math_Atan2S_XY(temp_f12, temp_f14);
             }
@@ -200,7 +201,9 @@ void EnMm_Update(Actor* thisx, PlayState* play) {
 
     Collider_ResetCylinderAC(play, &this->collider.base);
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f, 31);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Actor_SetFocus(&this->actor, 20.0f);
 }
 
@@ -208,7 +211,8 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     EnMm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_190 != 0) {
         s16 rotY = this->actor.world.rot.y - this->actor.shape.rot.y;
 
@@ -218,5 +222,6 @@ void EnMm_Draw(Actor* thisx, PlayState* play) {
     }
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_055628);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

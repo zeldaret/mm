@@ -134,6 +134,7 @@ typedef struct {
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
+// Flags for bgCheckFlags
 #define BGCHECKFLAG_GROUND (1 << 0) // Standing on the ground
 #define BGCHECKFLAG_GROUND_TOUCH (1 << 1) // Has touched the ground (only active for 1 frame)
 #define BGCHECKFLAG_GROUND_LEAVE (1 << 2) // Has left the ground (only active for 1 frame)
@@ -148,6 +149,20 @@ typedef struct {
 #define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
 #define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
 
+// Flags for Actor_UpdateBgCheckInfo
+#define UPDBGCHECKINFO_FLAG_1 (1 << 0) // check wall
+#define UPDBGCHECKINFO_FLAG_2 (1 << 1) // check ceiling
+#define UPDBGCHECKINFO_FLAG_4 (1 << 2) // check floor and water
+#define UPDBGCHECKINFO_FLAG_8 (1 << 3)
+#define UPDBGCHECKINFO_FLAG_10 (1 << 4)
+#define UPDBGCHECKINFO_FLAG_20 (1 << 5) // unused
+#define UPDBGCHECKINFO_FLAG_40 (1 << 6) // disable water ripples
+#define UPDBGCHECKINFO_FLAG_80 (1 << 7)
+#define UPDBGCHECKINFO_FLAG_100 (1 << 8)
+#define UPDBGCHECKINFO_FLAG_200 (1 << 9)
+#define UPDBGCHECKINFO_FLAG_400 (1 << 10) // check water
+#define UPDBGCHECKINFO_FLAG_800 (1 << 11)
+
 typedef struct Actor {
     /* 0x000 */ s16 id; // Actor ID
     /* 0x002 */ u8 category; // Actor category. Refer to the corresponding enum for values
@@ -159,7 +174,7 @@ typedef struct Actor {
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
     /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
-    /* 0x038 */ s8 cutscene;
+    /* 0x038 */ s8 csId; // ActorCutscene index, see `CutsceneId`
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
@@ -214,15 +229,23 @@ typedef enum {
     /* 1 */ FOOT_RIGHT
 } ActorFootIndex;
 
+#define DYNA_TRANSFORM_POS (1 << 0) // Position of the actors on top follows the dynapoly actor's movement.
+#define DYNA_TRANSFORM_ROT_Y (1 << 1) // The Y rotation of the actors on top follows the dynapoly actor's Y rotation.
+
+#define DYNA_INTERACT_ACTOR_ON_TOP (1 << 0) // There is an actor standing on the collision of the dynapoly actor
+#define DYNA_INTERACT_PLAYER_ON_TOP (1 << 1) // The player actor is standing on the collision of the dynapoly actor
+#define DYNA_INTERACT_PLAYER_ABOVE (1 << 2) // The player is directly above the collision of the dynapoly actor (any distance above)
+#define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
+#define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
+
 typedef struct {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 bgId;
     /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 yRotation;
-    /* 0x154 */ u32 flags;
-    /* 0x158 */ u8 stateFlags;
-    /* 0x15A */ s16 pad15A;
+    /* 0x154 */ u32 transformFlags;
+    /* 0x158 */ u8 interactFlags;
 } DynaPolyActor; // size = 0x15C
 
 
@@ -294,7 +317,7 @@ typedef struct EnAObj {
 
 typedef enum {
     /* 0 */ AOBJ_SIGNPOST_OBLONG,
-    /* 1 */ AOBJ_SIGNPOST_ARROW,
+    /* 1 */ AOBJ_SIGNPOST_ARROW
 } AObjType;
 
 #define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
@@ -366,12 +389,18 @@ typedef struct {
     /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
-typedef struct ActorContext_unk_1F4 {
-    /* 0x00 */ u8 unk_00;
+typedef enum {
+    /* 0 */ PLAYER_IMPACT_GORON_GROUND_POUND,
+    /* 1 */ PLAYER_IMPACT_ZORA_BARRIER,
+    /* 2 */ PLAYER_IMPACT_BONK // also activated by goron attack
+} PlayerImpactType;
+
+typedef struct PlayerImpact {
+    /* 0x00 */ u8 type;
     /* 0x01 */ u8 timer;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ Vec3f unk_08;
-} ActorContext_unk_1F4; // size = 0x14
+    /* 0x04 */ f32 dist;
+    /* 0x08 */ Vec3f pos;
+} PlayerImpact; // size = 0x14
 
 typedef struct ActorContext_unk_20C {
     /* 0x0 */ s16 id;
@@ -435,7 +464,7 @@ typedef struct ActorContext {
     /* 0x120 */ TargetContext targetContext;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
-    /* 0x1F4 */ ActorContext_unk_1F4 unk_1F4;
+    /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
     /* 0x20C */ ActorContext_unk_20C unk_20C[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
@@ -503,8 +532,8 @@ typedef enum {
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
-// 
-#define ACTOR_FLAG_1000          (1 << 12)
+// Actor will not shake when a quake occurs
+#define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
@@ -513,8 +542,8 @@ typedef enum {
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)
-// 
-#define ACTOR_FLAG_20000         (1 << 17)
+// actor can press and hold down heavy switches
+#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
 // 
 #define ACTOR_FLAG_40000         (1 << 18)
 // 
@@ -531,8 +560,8 @@ typedef enum {
 #define ACTOR_FLAG_1000000       (1 << 24)
 // 
 #define ACTOR_FLAG_2000000       (1 << 25)
-// 
-#define ACTOR_FLAG_4000000       (1 << 26)
+// actor can press and hold down switches
+#define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
 // Prevents locking on with Z targeting an actor even if Tatl is floating over it
 #define ACTOR_FLAG_CANT_LOCK_ON  (1 << 27)
 // 
@@ -709,6 +738,11 @@ typedef struct NpcInteractInfo {
     /* 0x18 */ Vec3f trackPos;
     /* 0x24 */ UNK_TYPE1 unk_24[0x4];
 } NpcInteractInfo; // size = 0x28
+
+typedef struct BlinkInfo {
+    /* 0x0 */ s16 eyeTexIndex;
+    /* 0x2 */ s16 blinkTimer;
+} BlinkInfo; // size = 0x4
 
 extern TargetRangeParams gTargetRanges[];
 extern s16 D_801AED48[8];

@@ -246,7 +246,7 @@ void func_808A54B0(EnSt* this, PlayState* play) {
 
         gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[this->unk_2C0].segment);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
         Matrix_Scale(0.06f, 0.12f, 0.06f, MTXMODE_APPLY);
@@ -546,7 +546,7 @@ void func_808A650C(EnSt* this) {
 }
 
 s32 func_808A6580(EnSt* this, PlayState* play) {
-    Player* sp3C = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s32 ret = false;
     s32 i;
 
@@ -666,7 +666,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         if ((this->unk_316 == 0) && (this->unk_314 == 0) && (this->unk_312 == 0) &&
             !(this->collider1.base.atFlags & AT_BOUNCED) && (this->actor.colChkInfo.health != 0)) {
             play->damagePlayer(play, -8);
-            Actor_PlaySfx(&sp3C->actor, NA_SE_PL_BODY_HIT);
+            Actor_PlaySfx(&player->actor, NA_SE_PL_BODY_HIT);
             func_800B8D98(play, &this->actor, 4.0f, this->actor.yawTowardsPlayer, 6.0f);
             this->unk_316 = 10;
             this->unk_18C |= 1;
@@ -878,7 +878,7 @@ void EnSt_Update(Actor* thisx, PlayState* play) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             SkelAnime_Update(&this->skelAnime);
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     } else if (this->unk_312 < 20) {
         s16 idx = (this->unk_312 % 2) ? -1 : 1;
 
@@ -924,11 +924,11 @@ void func_808A7478(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (func_808A6A3C(this)) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            EnSt_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             POLY_OPA_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                            EnSt_OverrideLimbDraw, NULL, &this->actor, POLY_OPA_DISP);
         }

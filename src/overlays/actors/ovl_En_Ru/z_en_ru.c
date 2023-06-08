@@ -138,7 +138,7 @@ s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
 s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
     u8 leftWasGrounded;
     u8 rightWasGrounded;
-    s32 waterSfxId;
+    SurfaceSfxOffset surfaceSfxOffset;
     s16 sfxId;
     u8 isFootGrounded;
 
@@ -147,15 +147,16 @@ s32 EnRu_PlayWalkingSound(EnRu* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (this->actor.depthInWater < 20.0f) {
-            waterSfxId = NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_SHALLOW;
         } else {
-            waterSfxId = NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+            surfaceSfxOffset = SURFACE_SFX_OFFSET_WATER_DEEP;
         }
 
-        sfxId = waterSfxId + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND + surfaceSfxOffset;
 
     } else {
-        sfxId = SurfaceType_GetSfx(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) + SFX_FLAG;
+        sfxId = NA_SE_PL_WALK_GROUND +
+                SurfaceType_GetSfxOffset(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
     }
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
@@ -234,7 +235,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, RU_GET_PATH(thisx), 0x3F);
+    this->path = SubS_GetPathByIndex(play, RU_GET_PATH_INDEX(thisx), RU_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = EnRu_DoNothing;
     this->actor.gravity = -4.0f;
@@ -250,7 +251,7 @@ void EnRu_Update(Actor* thisx, PlayState* play) {
     EnRu* this = THIS;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     EnRu_UpdateModel(this, play);
     EnRu_UpdateCollider(this, play);
 }
@@ -319,7 +320,7 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 

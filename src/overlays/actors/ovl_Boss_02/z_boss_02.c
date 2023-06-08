@@ -485,9 +485,9 @@ void Boss02_SpawnEffectSand(TwinmoldEffect* effects, Vec3f* pos, f32 scale) {
         if (effects->type == TWINMOLD_EFFECT_NONE) {
             effects->type = TWINMOLD_EFFECT_SAND;
             effects->pos = *pos;
-            effects->velocity.x = randPlusMinusPoint5Scaled(30.0f);
+            effects->velocity.x = Rand_CenteredFloat(30.0f);
             effects->velocity.y = Rand_ZeroFloat(7.0f) + 7.0f;
-            effects->velocity.z = randPlusMinusPoint5Scaled(30.0f);
+            effects->velocity.z = Rand_CenteredFloat(30.0f);
             effects->accel.y = -0.3f;
             effects->scale = scale;
             effects->alpha = 255;
@@ -507,9 +507,9 @@ void Boss02_SpawnEffectFragment(TwinmoldEffect* effects, Vec3f* pos) {
             effects->type = TWINMOLD_EFFECT_FRAGMENT;
             effects->pos = *pos;
             effects->timer = Rand_ZeroFloat(20.0f);
-            effects->velocity.x = randPlusMinusPoint5Scaled(50.0f);
-            effects->velocity.y = randPlusMinusPoint5Scaled(50.0f);
-            effects->velocity.z = randPlusMinusPoint5Scaled(50.0f);
+            effects->velocity.x = Rand_CenteredFloat(50.0f);
+            effects->velocity.y = Rand_CenteredFloat(50.0f);
+            effects->velocity.z = Rand_CenteredFloat(50.0f);
             effects->accel.z = 0.0f;
             effects->accel.x = 0.0f;
             effects->accel.y = -1.5f;
@@ -550,10 +550,10 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad[2];
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) && (this->actor.params == TWINMOLD_RED)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) && (this->actor.params == TWINMOLD_RED)) {
         sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1, 0.0f, 60.0f,
                                                    0.0f, 0, 0, 0, 1);
-        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, BHEART_PARAM_NORMAL);
     }
 
     this->actor.targetMode = 10;
@@ -774,8 +774,8 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 this->actor.world.pos.z = player->actor.world.pos.z;
                 this->actor.world.pos.y = player->actor.world.pos.y - (600.0f * D_809DF5B0);
             } else {
-                this->actor.world.pos.x = randPlusMinusPoint5Scaled(5000.0f * D_809DF5B0);
-                this->actor.world.pos.z = randPlusMinusPoint5Scaled(5000.0f * D_809DF5B0);
+                this->actor.world.pos.x = Rand_CenteredFloat(5000.0f * D_809DF5B0);
+                this->actor.world.pos.z = Rand_CenteredFloat(5000.0f * D_809DF5B0);
                 this->actor.world.pos.y = -500.0f * D_809DF5B0;
                 if (sIsInGiantMode) {
                     this->actor.world.pos.y += 3150.0f;
@@ -802,8 +802,8 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     this->unk_0146[0] = 150;
                 } else {
                     this->unk_0144 = 2;
-                    this->unk_01B0.x = randPlusMinusPoint5Scaled(3000.0f * D_809DF5B0);
-                    this->unk_01B0.z = randPlusMinusPoint5Scaled(3000.0f * D_809DF5B0);
+                    this->unk_01B0.x = Rand_CenteredFloat(3000.0f * D_809DF5B0);
+                    this->unk_01B0.z = Rand_CenteredFloat(3000.0f * D_809DF5B0);
                     if ((fabsf(this->unk_01B0.x) < (500.0f * D_809DF5B0)) &&
                         (fabsf(this->unk_01B0.z) < (500.0f * D_809DF5B0))) {
                         this->unk_01B0.x = 500.0f;
@@ -847,12 +847,12 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_01B0.z = player->actor.world.pos.z;
             if (this->unk_0146[0] == 0) {
                 this->unk_0144 = 3;
-                this->unk_01B0.x = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + this->actor.world.pos.x;
+                this->unk_01B0.x = Rand_CenteredFloat(500.0f * D_809DF5B0) + this->actor.world.pos.x;
                 this->unk_01B0.y = -3000.0f * D_809DF5B0;
                 if (sIsInGiantMode) {
                     this->unk_01B0.y += 3150.0f;
                 }
-                this->unk_01B0.z = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + this->actor.world.pos.z;
+                this->unk_01B0.z = Rand_CenteredFloat(500.0f * D_809DF5B0) + this->actor.world.pos.z;
                 this->unk_0146[0] = 150;
                 this->unk_0164 = 0.0f;
             }
@@ -917,7 +917,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     Matrix_MultVecZ(1500.0f * D_809DF5B0, &spA4);
                     this->unk_0146[0] = 50;
                     this->unk_01B0.x = player->actor.world.pos.x + spA4.x;
-                    this->unk_01B0.y = randPlusMinusPoint5Scaled(500.0f * D_809DF5B0) + (600.0f * D_809DF5B0);
+                    this->unk_01B0.y = Rand_CenteredFloat(500.0f * D_809DF5B0) + (600.0f * D_809DF5B0);
                     if (sIsInGiantMode) {
                         this->unk_01B0.y += 3150.0f;
                     }
@@ -963,7 +963,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                     this->actor.gravity = -1.0f * D_809DF5B0;
                     this->actor.velocity.y = 0.0f;
                     this->actor.terminalVelocity = -1000.0f * D_809DF5B0;
-                    this->unk_0164 = randPlusMinusPoint5Scaled(0.05f);
+                    this->unk_0164 = Rand_CenteredFloat(0.05f);
 
                     spCC = player->actor.world.pos.x - this->actor.world.pos.x;
                     spC4 = player->actor.world.pos.z - this->actor.world.pos.z;
@@ -993,7 +993,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
             this->unk_0B1C[i].y += this->unk_0164;
             Math_ApproachF(&this->unk_0B1C[i].x, -(M_PI / 2), 0.1f, 0.07f);
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
 
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->unk_0144 = 23;
@@ -1205,16 +1205,16 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_SAND_OLD - SFX_FLAG);
 
             if (this->unk_0144 > 20) {
-                sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;
-                sp3C.y = randPlusMinusPoint5Scaled(50.0f * D_809DF5B0) + this->unk_0170.y;
-                sp3C.z = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.z;
+                sp3C.x = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.x;
+                sp3C.y = Rand_CenteredFloat(50.0f * D_809DF5B0) + this->unk_0170.y;
+                sp3C.z = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.z;
                 Boss02_SpawnEffectSand(play->specialEffects, &sp3C, Rand_ZeroFloat(3.0f) + 6.0f);
             }
 
             if ((this->unk_014C % 2) == 0) {
-                sp3C.x = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.x;
-                sp3C.y = randPlusMinusPoint5Scaled(50.0f * D_809DF5B0) + this->unk_0170.y;
-                sp3C.z = randPlusMinusPoint5Scaled(100.0f * D_809DF5B0) + this->unk_0170.z;
+                sp3C.x = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.x;
+                sp3C.y = Rand_CenteredFloat(50.0f * D_809DF5B0) + this->unk_0170.y;
+                sp3C.z = Rand_CenteredFloat(100.0f * D_809DF5B0) + this->unk_0170.z;
                 Boss02_SpawnEffectSand(play->specialEffects, &sp3C, Rand_ZeroFloat(3.0f) + 6.0f);
             }
         }
@@ -1349,7 +1349,7 @@ void Boss02_Twinmold_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->actor.params == 0) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gTwinmoldRedSkinTex));
@@ -1521,8 +1521,8 @@ void Boss02_DrawEffects(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(sEffects); i++, effect++) {
         if (effect->type == TWINMOLD_EFFECT_SAND) {
@@ -1631,7 +1631,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
     switch (this->unk_1D18) {
         case 0:
             if (player->stateFlags1 & PLAYER_STATE1_100) {
-                Cutscene_Start(play, &play->csCtx);
+                Cutscene_StartManual(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -1751,7 +1751,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->unk_1D18 = 0;
             func_80169AFC(play, this->subCamId, 0);
             this->subCamId = SUB_CAM_ID_DONE;
-            Cutscene_End(play, &play->csCtx);
+            Cutscene_StopManual(play, &play->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
             player->stateFlags1 &= ~PLAYER_STATE1_100;
             this->unk_1D70 = 0.01f;
@@ -1971,7 +1971,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
                 temp_a0_5->scale.z *= phi_f0_2;
 
                 if (temp_a0_5->id == ACTOR_ITEM_B_HEART) {
-                    ((ItemBHeart*)temp_a0_5)->unk_168 *= phi_f0_2;
+                    ((ItemBHeart*)temp_a0_5)->baseScale *= phi_f0_2;
                 }
             }
             temp_a0_5 = temp_a0_5->next;
@@ -2050,10 +2050,11 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 1:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20) || ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) ||
+                ((u32)(KREG(13) + 15) >= this->unk_1D1C)) {
                 break;
             }
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             this->subCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -2138,8 +2139,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             if (this->unk_1D1C == (u32)(BREG(27) + 335)) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->unk_1D20 = 0;
                 sRedTwinmold->unk_0144 = sBlueTwinmold->unk_0144 = 3;
@@ -2149,8 +2150,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             break;
 
         case 100:
-            if (ActorCutscene_GetCurrentIndex() == -1) {
-                Cutscene_Start(play, &play->csCtx);
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
+                Cutscene_StartManual(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
@@ -2199,8 +2200,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
             if (this->unk_1D1C == 30) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, PLAYER_CSMODE_6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 this->unk_1D20 = 0;
                 this->actor.flags |= ACTOR_FLAG_1;
                 sp68->unk_0144 = 10;
@@ -2209,10 +2210,12 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
 
                     this->unk_1D7E = 0;
                     if (!sIsInGiantMode) {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0, 0);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 30.0f, -150.0f, 0, 1, 0,
+                                    BHEART_PARAM_NORMAL);
                         phi_f0 = 60.0f;
                     } else {
-                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0, 35);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_B_HEART, 0.0f, 3153.0f, -15.0f, 0, 1, 0,
+                                    BHEART_PARAM_SMALL);
                         phi_f0 = 3155.0f;
                     }
                     sBlueWarp = (DoorWarp1*)Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_DOOR_WARP1,

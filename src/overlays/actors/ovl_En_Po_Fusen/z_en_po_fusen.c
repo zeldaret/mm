@@ -58,7 +58,7 @@ static ColliderSphereInit sSphereInit = {
 
 typedef enum {
     /* 0x0 */ POE_BALLOON_DMGEFF_NONE,
-    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF,
+    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF
 } PoeBalloonDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -111,7 +111,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->anime, &gPoeBalloonSkel, &gPoeBalloonEmptyAnim, this->jointTable, this->morphTable,
                        POE_BALLOON_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (!EnPoFusen_CheckParent(this, play)) {
         Actor_Kill(&this->actor);
@@ -316,7 +316,7 @@ void EnPoFusen_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnPoFusen_Draw(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
                                    EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_TransformLimbDraw,
                                    &this->actor);

@@ -230,7 +230,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
         Math_StepToF(&this->actor.speed, 0.0f, 0.08f);
     } else {
         Vec3f* sp58;
-        u32 sp54 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+        FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         Vec3f slopeNormal;
         s16 downwardSlopeYaw;
         f32 sp40;
@@ -239,11 +239,11 @@ void EnBom_Move(EnBom* this, PlayState* play) {
 
         sp58 = &D_80872E68[this->isPowderKeg];
 
-        if (sp54 == 5) {
+        if (floorType == FLOOR_TYPE_5) {
             sp58 = &D_80872E68[2];
         }
 
-        if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
+        if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
             s16 sp36;
 
             Math_ApproachF(&this->actor.shape.yOffset, 0.0f, 0.1f, 50.0f);
@@ -262,8 +262,8 @@ void EnBom_Move(EnBom* this, PlayState* play) {
         sp3C += 3.0f * slopeNormal.z;
         sp38 = sqrtf(SQ(sp40) + SQ(sp3C));
 
-        if ((sp38 < this->actor.speed) ||
-            (SurfaceType_GetSlope(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId) == 1)) {
+        if ((sp38 < this->actor.speed) || (SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly,
+                                                                      this->actor.floorBgId) == FLOOR_EFFECT_1)) {
             if (sp38 > 16.0f) {
                 this->actor.speed = 16.0f;
             } else {
@@ -286,7 +286,7 @@ void EnBom_Move(EnBom* this, PlayState* play) {
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, this->isPowderKeg ? NA_SE_EV_TRE_BOX_BOUND : NA_SE_EV_BOMB_BOUND);
             if (this->actor.velocity.y < sp58->y) {
-                if ((sp54 == 4) || (sp54 == 14) || (sp54 == 15)) {
+                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                     this->actor.velocity.y = 0.0f;
                 } else {
                     this->actor.velocity.y = this->actor.velocity.y * sp58->z;
@@ -327,7 +327,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     static Color_RGBA8 D_80872E90 = { 185, 140, 70, 255 };
     static Color_RGBA8 D_80872E94 = { 255, 255, 255, 255 };
     s32 i;
-    s32 temp_s0;
+    FloorType floorType;
     f32 temp_f20;
     s32 pad;
     f32 spCC;
@@ -348,7 +348,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
-        this->collider2.base.atFlags &= ~OC1_TYPE_1;
+        this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }
 
     if (this->actor.params == BOMB_TYPE_EXPLOSION) {
@@ -394,11 +394,11 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
             spB4.y = this->actor.world.pos.y + 500.0f;
             spB4.z = this->actor.world.pos.z + spC0.z;
             if (BgCheck_EntityRaycastFloor3(&play->colCtx, &spB0, &spAC, &spB4) != BGCHECK_Y_MIN) {
-                temp_s0 = func_800C99D4(&play->colCtx, spB0, spAC);
+                floorType = SurfaceType_GetFloorType(&play->colCtx, spB0, spAC);
                 temp_f20 = BgCheck_EntityRaycastFloor1(&play->colCtx, &spB0, &spB4);
 
-                if ((temp_s0 == 4) || (temp_s0 == 15) || (temp_s0 == 14)) {
-                    if (temp_s0 == 4) {
+                if ((floorType == FLOOR_TYPE_4) || (floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
+                    if (floorType == FLOOR_TYPE_4) {
                         sp84 = D_80872E90;
                         sp80 = D_80872E90;
                     } else {
@@ -423,8 +423,8 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     }
 }
 
-static s16 D_80872E98[] = { 3, 5 };
-static s16 D_80872E9C[] = { 10, 15 };
+static s16 sQuakeY[] = { 3, 5 };
+static s16 sQuakeDurations[] = { 10, 15 };
 
 void EnBom_Update(Actor* thisx, PlayState* play) {
     Vec3f effVelocity = { 0.0f, 0.0f, 0.0f };
@@ -450,7 +450,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
         this->unk_1FC--;
         Math_ApproachZeroF(&thisx->speed, 1.0f, 1.0f);
         Actor_MoveWithGravity(thisx);
-        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 4);
+        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, UPDBGCHECKINFO_FLAG_4);
         if (this->unk_1FC == 0) {
             if (this->isPowderKeg) {
                 gSaveContext.powderKegTimer = 0;
@@ -476,7 +476,9 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
         this->actionFunc(this, play);
 
-        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f, 0x1F);
+        Actor_UpdateBgCheckInfo(play, thisx, 35.0f, 10.0f, 36.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                    UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
         if (thisx->params == BOMB_TYPE_BODY) {
             static Vec3us D_80872ED4[] = {
                 { 40, 20, 100 },
@@ -543,7 +545,8 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 }
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
                             this->isPowderKeg);
-                func_800BC848(thisx, play, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
+                Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
+                                            sQuakeDurations[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
@@ -613,7 +616,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actor.params == BOMB_TYPE_BODY) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);
 

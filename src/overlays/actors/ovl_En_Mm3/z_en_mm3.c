@@ -92,7 +92,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.parent = NULL;
     this->actor.targetMode = 0;
     this->unk_1DC = 1;
@@ -148,7 +148,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
             case 0x278E:
                 if (play->msgCtx.choiceIndex == 0) {
                     if (this->unk_2B2 & 0x20) {
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             func_8019F208();
                             Message_StartTextbox(play, 0x2790, &this->actor);
                             this->unk_2B4 = 0x2790;
@@ -157,7 +157,7 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                             play_sound(NA_SE_SY_ERROR);
                             Message_StartTextbox(play, 0x279C, &this->actor);
                             this->unk_2B4 = 0x279C;
-                            func_80151BB4(play, 0xB);
+                            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                         }
                     } else {
                         func_8019F208();
@@ -168,13 +168,13 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                     func_8019F230();
                     Message_StartTextbox(play, 0x278F, &this->actor);
                     this->unk_2B4 = 0x278F;
-                    func_80151BB4(play, 0xB);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                 }
                 break;
 
             case 0x279A:
                 if (play->msgCtx.choiceIndex == 0) {
-                    if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;
@@ -183,13 +183,13 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
                         play_sound(NA_SE_SY_ERROR);
                         Message_StartTextbox(play, 0x279C, &this->actor);
                         this->unk_2B4 = 0x279C;
-                        func_80151BB4(play, 0xB);
+                        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                     }
                 } else {
                     func_8019F230();
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
-                    func_80151BB4(play, 0xB);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                 }
                 break;
         }
@@ -282,7 +282,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
-                    func_80151BB4(play, 0xB);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                 } else {
                     Message_StartTextbox(play, 0x2798, &this->actor);
                     this->unk_2B4 = 0x2798;
@@ -448,8 +448,8 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
-        func_80151BB4(play, 0xB);
-        func_80151BB4(play, 0x2B);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMAN_HP);
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80A6F9C8(this);
     } else {
@@ -561,7 +561,7 @@ void EnMm3_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A704FC[this->unk_1DC]));
     gSPSegment(POLY_OPA_DISP++, 0x0C, sEnMm3DL);

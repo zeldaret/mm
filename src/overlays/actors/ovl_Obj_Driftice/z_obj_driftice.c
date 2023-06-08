@@ -389,7 +389,7 @@ void func_80A671E0(ObjDriftice* this, PlayState* play) {
                 if ((this->unk_16C[0].x != points->x) || (this->unk_16C[0].y != points->y) ||
                     (this->unk_16C[0].z != points->z)) {
                     func_80A6743C(this);
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp30 = false;
                 }
             }
@@ -408,7 +408,7 @@ void func_80A6743C(ObjDriftice* this) {
 void func_80A67450(ObjDriftice* this, PlayState* play) {
     if (this->unk_248 < 0) {
         func_80A66570(this, this->unk_164);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         func_80A671CC(this);
     }
 }
@@ -429,7 +429,7 @@ void func_80A674C4(ObjDriftice* this, PlayState* play) {
 void ObjDriftice_Update(Actor* thisx, PlayState* play) {
     ObjDriftice* this = THIS;
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->unk_248 < 0) {
             this->unk_248 = 1;
         } else {

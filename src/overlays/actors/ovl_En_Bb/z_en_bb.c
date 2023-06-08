@@ -32,7 +32,7 @@ void EnBb_Revive(EnBb* this, PlayState* play);
 typedef enum {
     /* -1 */ BB_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BB_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD
 } EnBbBodyPartDrawStatus;
 
 ActorInit En_Bb_InitVars = {
@@ -73,7 +73,7 @@ typedef enum {
     /* 0x3 */ EN_BB_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BB_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BB_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE
 } EnBbDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -585,7 +585,8 @@ void EnBb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     if ((this->actionFunc != EnBb_Dead) && (this->actionFunc != EnBb_WaitForRevive)) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 40.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 25.0f, 40.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
         this->collider.dim.worldSphere.center.x = this->actor.world.pos.x;
         this->collider.dim.worldSphere.center.y = this->actor.world.pos.y + 15.0f;
@@ -681,14 +682,14 @@ void EnBb_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_OPA_DISP = &gfx[1];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBb_OverrideLimbDraw,
                       EnBb_PostLimbDraw, &this->actor);
 
     if (this->flameScaleX > 0.0f) {
         currentMatrixState = Matrix_GetCurrent();
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
                         MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);

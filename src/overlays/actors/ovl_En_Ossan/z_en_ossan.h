@@ -43,11 +43,11 @@ typedef struct EnOssan {
     /* 0x2B0 */ u8 arrowAnimState;
     /* 0x2B1 */ u8 stickAnimState;
     /* 0x2B4 */ f32 shopItemSelectedTween;
-    /* 0x2B8 */ s16 lookToShopkeeperCutscene;
-    /* 0x2BA */ s16 lookToLeftShelfCutscene;
-    /* 0x2BC */ s16 lookToRightShelfCutscene;
-    /* 0x2BE */ s16 lookToShopKeeperFromShelfCutscene;
-    /* 0x2C0 */ s16 cutscene;
+    /* 0x2B8 */ s16 lookToShopkeeperCsId;
+    /* 0x2BA */ s16 lookToLeftShelfCsId;
+    /* 0x2BC */ s16 lookToRightShelfCsId;
+    /* 0x2BE */ s16 lookToShopKeeperFromShelfCsId;
+    /* 0x2C0 */ s16 csId;
     /* 0x2C2 */ s16 cutsceneState;
     /* 0x2C4 */ u16 textId;
     /* 0x2C6 */ Vec3s headRot;

@@ -814,11 +814,11 @@ void func_80C215E4(PlayState* play, EnHintSkb* this, Vec3f* arg2) {
     s32 pad;
 
     sp5C.y = this->actor.floorHeight;
-    sp5C.x = (sin_rad(sp40) * 15.0f) + arg2->x;
-    sp5C.z = (cos_rad(sp40) * 15.0f) + arg2->z;
+    sp5C.x = (Math_SinF(sp40) * 15.0f) + arg2->x;
+    sp5C.z = (Math_CosF(sp40) * 15.0f) + arg2->z;
 
-    sp44.x = randPlusMinusPoint5Scaled(1.0f);
-    sp44.z = randPlusMinusPoint5Scaled(1.0f);
+    sp44.x = Rand_CenteredFloat(1.0f);
+    sp44.z = Rand_CenteredFloat(1.0f);
 
     sp50.y += (Rand_ZeroOne() - 0.5f) * 4.0f;
 
@@ -838,7 +838,9 @@ void EnHintSkb_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_80C21250(this, play);
     func_80C20D64(this, play);
     func_80C21320(this, play);
@@ -903,7 +905,7 @@ void EnHintSkb_Draw(Actor* thisx, PlayState* play) {
     EnHintSkb* this = THIS;
 
     this->limbCount = 0;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnHintSkb_OverrideLimbDraw,
                       EnHintSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {

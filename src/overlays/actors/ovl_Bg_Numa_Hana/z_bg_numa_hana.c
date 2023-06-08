@@ -144,7 +144,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
 
     type = BG_NUMA_HANA_GET_TYPE(&this->dyna.actor);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
 
     if (type == BG_NUMA_HANA_TYPE_OPEN_FLOWER_COLLISION) {
         DynaPolyActor_LoadMesh(play, &this->dyna, &gWoodenFlowerOpenedFlowerCol);
@@ -162,7 +162,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
         }
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
             this->petalZRotation = 0x2000;
             this->innerPetalZRotation = 0x2000;
@@ -180,7 +180,7 @@ void BgNumaHana_Init(Actor* thisx, PlayState* play) {
             BgNumaHana_SetupOpenedIdle(this);
         } else {
             child = (DynaPolyActor*)this->dyna.actor.child;
-            func_800C62BC(play, &play->colCtx.dyna, child->bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, child->bgId);
             Flags_UnsetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupClosedIdle(this);
         }
@@ -217,13 +217,13 @@ void BgNumaHana_SetupClosedIdle(BgNumaHana* this) {
 void BgNumaHana_ClosedIdle(BgNumaHana* this, PlayState* play) {
     if (this->fire.state != FIRE_STATE_NOT_LIT) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_FLAME_IGNITION);
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             SET_WEEKEVENTREG(WEEKEVENTREG_12_01);
             Flags_SetSwitch(play, BG_NUMA_HANA_SWITCH_FLAG(&this->dyna.actor));
             BgNumaHana_SetupUnfoldInnerPetals(this);
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
 }
@@ -314,8 +314,8 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
         child = (DynaPolyActor*)this->dyna.actor.child;
 
         // Swaps out the "closed" flower collision for the "opened" collision.
-        func_800C6314(play, &play->colCtx.dyna, child->bgId);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, child->bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
 
         this->petalZRotation = 0x2000;
         this->innerPetalZRotation = 0x2000;
@@ -327,7 +327,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
         this->flowerRotationalVelocity = 0x147;
         this->settleScale = 0.0f;
 
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         BgNumaHana_SetupOpenedIdle(this);
     }
 
@@ -383,7 +383,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 

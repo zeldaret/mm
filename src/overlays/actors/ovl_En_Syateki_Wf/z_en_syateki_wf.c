@@ -120,7 +120,7 @@ typedef enum {
     /* 3 */ EN_SYATEKI_WF_ANIM_LAND,
     /* 4 */ EN_SYATEKI_WF_ANIM_BACKFLIP, // unused
     /* 5 */ EN_SYATEKI_WF_ANIM_DAMAGED,
-    /* 6 */ EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER,
+    /* 6 */ EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER
 } EnSyatekiWfAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -146,12 +146,12 @@ void EnSyatekiWf_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     path = syatekiMan->path;
-    while (path->unk2 != 2) {
-        path = &play->setupPathList[path->unk1];
+    while (path->customValue != SG_PATH_TYPE_WOLFOS) {
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     for (i = 0; i < EN_SYATEKI_WF_GET_INDEX(&this->actor); i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     if (path == NULL) {
@@ -408,9 +408,9 @@ void EnSyatekiWf_Dead(EnSyatekiWf* this, PlayState* play) {
         s32 i;
 
         for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i--) {
-            firePos.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-            firePos.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-            firePos.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            firePos.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+            firePos.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+            firePos.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
             func_800B3030(play, &firePos, &sFireVelocityAndAccel, &sFireVelocityAndAccel, 100, 0, 2);
         }
     }
@@ -425,7 +425,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
 
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
@@ -505,7 +505,7 @@ void EnSyatekiWf_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnSyatekiWf_OverrideLimbDraw, EnSyatekiWf_PostLimbDraw, &this->actor);

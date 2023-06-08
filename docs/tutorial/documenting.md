@@ -185,7 +185,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
         if (this->actor.textId == 0x2AD9) {
             Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
-            if ((gSaveContext.save.weekEventReg[63] & 0x80)) {
+            if ((gSaveContext.save.saveInfo.weekEventReg[63] & 0x80)) {
                 this->actor.textId = 0x2ADF;
             } else {
                 this->actor.textId = 0x2ADA;
@@ -244,7 +244,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
@@ -516,7 +516,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
         if (this->actor.textId == 0x2AD9) { // "Welcome..."
             Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
-            if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
+            if (gSaveContext.save.saveInfo.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
                 this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)

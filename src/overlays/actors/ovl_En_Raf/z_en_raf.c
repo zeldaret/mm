@@ -40,7 +40,7 @@ typedef enum {
     /* 2 */ EN_RAF_ANIM_CHEW,
     /* 3 */ EN_RAF_ANIM_SPIT,
     /* 4 */ EN_RAF_ANIM_CONVULSE,
-    /* 5 */ EN_RAF_ANIM_DEATH,
+    /* 5 */ EN_RAF_ANIM_DEATH
 } EnRafAnimation;
 
 typedef enum {
@@ -51,7 +51,7 @@ typedef enum {
     /* 4 */ EN_RAF_ACTION_EXPLODE,
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
-    /* 7 */ EN_RAF_ACTION_DORMANT,
+    /* 7 */ EN_RAF_ACTION_DORMANT
 } EnRafAction;
 
 typedef enum {
@@ -310,7 +310,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
-             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
+             DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
@@ -710,7 +710,7 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if ((this->heightDiffFromPlayer > -0.1f) && !this->isCurrentlyInRidingMovingState) {
             this->heightDiffFromPlayer = -20.0f;
             this->isCurrentlyInRidingMovingState = true;
@@ -873,8 +873,8 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
 void EnRaf_Draw(Actor* thisx, PlayState* play) {
     EnRaf* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
 
@@ -895,9 +895,9 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.x = Rand_CenteredFloat(30000.0f);
+            effect->rotation.y = Rand_CenteredFloat(30000.0f);
+            effect->rotation.z = Rand_CenteredFloat(30000.0f);
             return;
         }
     }
@@ -948,7 +948,7 @@ void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);

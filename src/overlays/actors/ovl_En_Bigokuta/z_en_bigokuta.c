@@ -102,9 +102,9 @@ void EnBigokuta_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->shellCollider, &this->picto.actor, &sShellCylinderInit);
     Collider_InitAndSetCylinder(play, &this->bodyCollider, &this->picto.actor, &sBodyCylinderInit);
     CollisionCheck_SetInfo(&this->picto.actor.colChkInfo, NULL, &sColChkInfoInit);
-    this->cutscene = ActorCutscene_GetAdditionalCutscene(this->picto.actor.cutscene);
+    this->csId = CutsceneManager_GetAdditionalCsId(this->picto.actor.csId);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_02) ||
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE) ||
         ((this->picto.actor.params != 0xFF) && Flags_GetSwitch(play, this->picto.actor.params))) {
         Actor_Kill(&this->picto.actor);
     } else {
@@ -129,8 +129,8 @@ void EnBigokuta_Destroy(Actor* thisx, PlayState* play) {
 void EnBigokuta_SetupCutsceneCamera(EnBigokuta* this, PlayState* play, Vec3f* subCamAt, Vec3f* subCamEye) {
     s16 angle;
 
-    ActorCutscene_Start(this->picto.actor.cutscene, &this->picto.actor);
-    this->subCamId = ActorCutscene_GetCurrentSubCamId(this->picto.actor.cutscene);
+    CutsceneManager_Start(this->picto.actor.csId, &this->picto.actor);
+    this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
     Play_SetCameraAtEye(play, this->subCamId, subCamAt, subCamEye);
 
     angle = BINANG_SUB(Actor_WorldYawTowardPoint(&this->picto.actor, subCamEye), this->picto.actor.home.rot.y);
@@ -160,7 +160,7 @@ void EnBigokuta_ResetCamera(EnBigokuta* this, PlayState* play) {
         subCam = Play_GetCamera(play, this->subCamId);
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->picto.actor.cutscene);
+        CutsceneManager_Stop(this->picto.actor.csId);
     }
 }
 
@@ -267,15 +267,15 @@ void EnBigokuta_IdleAboveWater(EnBigokuta* this, PlayState* play) {
 }
 
 void EnBigokuta_UpdateOrSetupCam(EnBigokuta* this, PlayState* play) {
-    if (this->picto.actor.cutscene != -1) {
+    if (this->picto.actor.csId != CS_ID_NONE) {
         if (this->subCamId != SUB_CAM_ID_DONE) {
             EnBigokuta_MoveCamera(this, play);
-        } else if (ActorCutscene_GetCanPlayNext(this->picto.actor.cutscene)) {
+        } else if (CutsceneManager_IsNext(this->picto.actor.csId)) {
             Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
             EnBigokuta_SetupCutsceneCamera(this, play, &mainCam->at, &mainCam->eye);
         } else {
-            ActorCutscene_SetIntentToPlay(this->picto.actor.cutscene);
+            CutsceneManager_Queue(this->picto.actor.csId);
         }
     }
 }
@@ -289,7 +289,7 @@ void EnBigokuta_SetupSuckInPlayer(EnBigokuta* this, PlayState* play) {
     this->timer = 0;
 
     Animation_Change(&this->skelAnime, &gBigOctoIdleAnim, 1.0f, 12.0f, 12.0f, ANIMMODE_ONCE, -3.0f);
-    ActorCutscene_SetIntentToPlay(this->picto.actor.cutscene);
+    CutsceneManager_Queue(this->picto.actor.csId);
 
     this->playerHoldPos.x = (Math_SinS(this->picto.actor.shape.rot.y) * 66.0f) + this->picto.actor.world.pos.x;
     this->playerHoldPos.y = (this->picto.actor.home.pos.y - 49.5f) + 42.899998f;
@@ -355,7 +355,7 @@ void EnBigokuta_HoldPlayer(EnBigokuta* this, PlayState* play) {
 }
 
 void EnBigokuta_SetupDeathCutscene(EnBigokuta* this) {
-    ActorCutscene_SetIntentToPlay(this->cutscene);
+    CutsceneManager_Queue(this->csId);
     this->timer = 0;
     this->bodyCollider.base.acFlags &= ~AC_ON;
     this->actionFunc = EnBigokuta_PlayDeathCutscene;
@@ -374,11 +374,11 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
             Actor_SpawnIceEffects(play, &this->picto.actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
             EnBigokuta_SetupDeathEffects(this);
         }
-    } else if (ActorCutscene_GetCanPlayNext(this->cutscene)) {
-        ActorCutscene_Start(this->cutscene, &this->picto.actor);
+    } else if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Start(this->csId, &this->picto.actor);
 
         if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
-            func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_7);
+            func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_WAIT);
         } else {
             player = GET_PLAYER(play);
             player->stateFlags1 |= PLAYER_STATE1_20;
@@ -390,7 +390,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
             EnBigokuta_SetupDeathEffects(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->cutscene);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -436,9 +436,9 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 bubblePos.y = this->picto.actor.world.pos.y;
 
                 for (i = 0; i < 20; i++) {
-                    bubbleVel.x = randPlusMinusPoint5Scaled(10.0f);
+                    bubbleVel.x = Rand_CenteredFloat(10.0f);
                     bubbleVel.y = Rand_ZeroFloat(5.5f) + 5.5f;
-                    bubbleVel.z = randPlusMinusPoint5Scaled(10.0f);
+                    bubbleVel.z = Rand_CenteredFloat(10.0f);
                     bubblePos.x = this->picto.actor.world.pos.x + (2.0f * bubbleVel.x);
                     bubblePos.z = this->picto.actor.world.pos.z + (2.0f * bubbleVel.z);
 
@@ -450,11 +450,11 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                     Flags_SetSwitch(play, this->picto.actor.params);
                 }
 
-                ActorCutscene_Stop(this->cutscene);
+                CutsceneManager_Stop(this->csId);
                 Actor_Kill(&this->picto.actor);
 
                 if (!CHECK_EVENTINF(EVENTINF_41) && !CHECK_EVENTINF(EVENTINF_35)) {
-                    func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_6);
+                    func_800B724C(play, &this->picto.actor, PLAYER_CSMODE_END);
                 } else {
                     Player* player = GET_PLAYER(play);
 
@@ -604,7 +604,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                              MTXMODE_APPLY);
             }
         } else if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            f32 sin = sin_rad(this->timer * (M_PI / 3.0f)) * 0.5f;
+            f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
 
             Matrix_Scale(((this->timer * (2 / 90.0f)) * (0.5f + sin)) + 1.0f,
                          ((this->timer * (2 / 90.0f)) * (0.5f - sin)) + 1.0f, 1.0f - ((this->timer * 0.3f) / 9.0f),
@@ -613,7 +613,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             if (this->timer == 0) {
                 Matrix_Scale(0.9f, 0.9f, 1.15f, MTXMODE_APPLY);
             } else if (this->timer > 0) {
-                f32 sin = sin_rad(this->timer * (M_PI / 3.0f)) * 0.5f;
+                f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
 
                 Matrix_Scale(((0.5f + sin) * 0.2f) + 1.0f, ((0.5f - sin) * 0.2f) + 1.0f, 0.7f, MTXMODE_APPLY);
             } else {
@@ -657,10 +657,11 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actionFunc != EnBigokuta_PlayDeathEffects) || (this->timer != 0)) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gfx = POLY_OPA_DISP;
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, 255);
         POLY_OPA_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -668,7 +669,7 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     } else {
         Scene_SetRenderModeXlu(play, 1, 2);
         gfx = POLY_XLU_DISP;
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 0, 0, 0, (this->picto.actor.scale.y * 7727.273f));
         POLY_XLU_DISP =
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,

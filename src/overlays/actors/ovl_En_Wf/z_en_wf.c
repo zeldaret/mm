@@ -471,14 +471,15 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
     static Color_RGBA8 D_809942EC = { 255, 255, 255, 255 };
     s32 i;
     Vec3f sp88;
-    u32 temp_v0;
+    FloorType floorType;
     Color_RGBA8* phi_s1;
     s16 phi_s6;
 
     if (this->actor.floorPoly != NULL) {
-        temp_v0 = func_800C99D4(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        if (temp_v0 != 5) {
-            if ((temp_v0 == 15) || (temp_v0 == 14)) {
+        floorType = SurfaceType_GetFloorType(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+        if (floorType != FLOOR_TYPE_5) {
+            if ((floorType == FLOOR_TYPE_15) || (floorType == FLOOR_TYPE_14)) {
                 phi_s1 = &D_809942EC;
                 phi_s6 = Rand_ZeroFloat(150.0f) + 350.0f;
                 arg2 += 2;
@@ -488,9 +489,9 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
             }
 
             for (i = 0; i < arg2; i++) {
-                sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
                 sp88.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
-                sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
                 func_800B0F18(play, &sp88, &gZeroVec3f, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
                               Rand_ZeroFloat(5.0f) + 14.0f);
             }
@@ -615,7 +616,8 @@ void func_80991280(EnWf* this, PlayState* play) {
 
     if (!func_8099408C(play, this) && !func_80990948(play, this, 0)) {
         phi_v1 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
-        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != 0) && (phi_v1 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < 80.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+            (phi_v1 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             func_80991948(this);
@@ -665,7 +667,8 @@ void func_8099149C(EnWf* this, PlayState* play) {
 
         sp28 = ABS_ALT(BINANG_SUB(player->actor.shape.rot.y, this->actor.shape.rot.y));
 
-        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) && (player->meleeWeaponState != 0) && (sp28 >= 0x1F40)) {
+        if ((this->actor.xzDistToPlayer < (150.0f + sp2C)) &&
+            (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) && (sp28 >= 0x1F40)) {
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             if (Rand_ZeroOne() > 0.7f) {
@@ -1196,9 +1199,9 @@ void func_80992E0C(EnWf* this, PlayState* play) {
         this->unk_2A0--;
 
         for (i = (25 - this->unk_2A0) >> 1; i >= 0; i--) {
-            sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-            sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-            sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            sp60.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+            sp60.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+            sp60.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
             func_800B3030(play, &sp60, &D_809942F0, &D_809942F0, 100, 0, 2);
         }
 
@@ -1485,7 +1488,9 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     func_80993738(this, play);
 
     if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
@@ -1570,7 +1575,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
     if (this->actionFunc != func_80990F50) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->actor.params == 0) {
             gSPSegment(POLY_OPA_DISP++, 0x08, sNormalEyeTextures[this->eyeIndex]);

@@ -101,7 +101,9 @@ void EnEndingHero6_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -112,7 +114,7 @@ void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->npcIndex >= 4 && limbIndex == 15) {
+    if ((this->npcIndex >= 4) && (limbIndex == 15)) {
         index = this->npcIndex - 4;
         gSPDisplayList(POLY_OPA_DISP++, D_80C2426C[index]);
     }
@@ -131,27 +133,34 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
     if (this->isIdle == 1) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        if (this->objectIndex >= 0 && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
+        if ((this->objectIndex >= 0) && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);
 
             switch (this->npcIndex) {
                 case 4:
                     gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
                     break;
+
                 case 5:
                     gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
                     break;
+
                 case 6:
                     gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
                     break;
+
                 case 7:
                     gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
                     break;
+
                 case 8:
                     gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
+                    break;
+
+                default:
                     break;
             }
 

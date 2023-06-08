@@ -131,12 +131,12 @@ void ObjToge_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
 
-    if (OBJTOGE_GET_PATH(thisx) == 0xFF) {
+    if (OBJTOGE_GET_PATH_INDEX(thisx) == OBJTOGE_PATH_INDEX_NONE) {
         Actor_Kill(thisx);
         return;
     }
 
-    path = &play->setupPathList[OBJTOGE_GET_PATH(thisx)];
+    path = &play->setupPathList[OBJTOGE_GET_PATH_INDEX(thisx)];
     if (path->count != 2) {
         Actor_Kill(thisx);
         return;
@@ -244,7 +244,8 @@ void func_809A48AC(ObjToge* this, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, D_809A4D0C[OBJTOGE_GET_4000(&this->actor)] * 30.0f, 0.0f, 0x81);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, D_809A4D0C[OBJTOGE_GET_4000(&this->actor)] * 30.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_80);
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_198[this->unk_194]);

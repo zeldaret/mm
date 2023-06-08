@@ -69,8 +69,8 @@ typedef enum {
     /*  6 */ GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
     /*  7 */ GERUDO_WHITE_ANIM_SALUTE,
     /*  8 */ GERUDO_WHITE_ANIM_LEADING_BOAT,
-    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY,
-} GerudoWhiteAnimations;
+    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY
+} GerudoWhiteAnimation;
 
 void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
 void EnGe1_ShadowDraw(Actor* thisx, Lights* lights, PlayState* play);
@@ -88,7 +88,7 @@ void EnGe1_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->picto.actor.targetMode = 6;
     Actor_SetScale(&this->picto.actor, 0.01f);
-    this->animIndex = this->csAction = -1; // GERUDO_WHITE_ANIM_NONE
+    this->animIndex = this->cueId = -1; // GERUDO_WHITE_ANIM_NONE
     this->stateFlags = 0;
     EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
     this->actionFunc = EnGe1_Wait;
@@ -191,8 +191,8 @@ void EnGe1_SetupPath(EnGe1* this, PlayState* play) {
 
     this->curPointIndex = 0;
 
-    if (GERUDO_WHITE_GET_PATH(&this->picto.actor) != 0x3F) {
-        this->path = &play->setupPathList[GERUDO_WHITE_GET_PATH(&this->picto.actor)];
+    if (GERUDO_WHITE_GET_PATH_INDEX(&this->picto.actor) != GERUDO_WHITE_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[GERUDO_WHITE_GET_PATH_INDEX(&this->picto.actor)];
         if (this->path != NULL) {
             point = Lib_SegmentedToVirtual(this->path->points);
             Math_Vec3s_ToVec3f(&this->picto.actor.world.pos, point);
@@ -255,16 +255,16 @@ void EnGe1_Wait(EnGe1* this, PlayState* play) {
 }
 
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
-    s16 csAction;
+    s16 cueId;
 
-    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == 3)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->cueId == 3)) {
         EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_STIFF_SHIVERING, ANIMMODE_LOOP, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 121)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_121)) {
         this->picto.actor.draw = EnGe1_Draw;
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 121)]->action;
-        switch (csAction) {
+        cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_121)]->id;
+        switch (cueId) {
             case 8:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
                 break;
@@ -275,14 +275,15 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
 
             default:
                 this->stateFlags &= ~GERUDO_WHITE_STATE_DISABLE_MOVEMENT;
-                Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 0x79));
+                Cutscene_ActorTranslateAndYaw(&this->picto.actor, play,
+                                              Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_121));
                 break;
         }
 
-        if (this->csAction != csAction) {
-            this->csAction = csAction;
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
 
-            switch (this->csAction) {
+            switch (this->cueId) {
                 // Aveil cutscene
                 case 1:
                     EnGe1_ChangeAnim(this, GERUDO_WHITE_ANIM_ARMS_FOLDED, ANIMMODE_LOOP, 0.0f);
@@ -340,7 +341,7 @@ void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play) {
         this->picto.actor.draw = NULL;
     }
 
-    switch (this->csAction) {
+    switch (this->cueId) {
         case 9:
             if ((this->curPointIndex < this->path->count) && EnGe1_FollowPath(this)) {
                 this->curPointIndex++;
@@ -375,7 +376,8 @@ void EnGe1_Update(Actor* thisx, PlayState* play) {
     if (!(this->stateFlags & GERUDO_WHITE_STATE_DISABLE_MOVEMENT)) {
         Actor_MoveWithGravity(&this->picto.actor);
     }
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     this->actionFunc(this, play);
     this->torsoRot.x = this->torsoRot.y = this->torsoRot.z = 0;
 
@@ -439,6 +441,9 @@ void EnGe1_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             gSPDisplayList(POLY_OPA_DISP++, sHairstyleDLs[this->hairstyle]);
             Matrix_MultVec3f(&sInitialFocusPos, &this->picto.actor.focus.pos);
             break;
+
+        default:
+            break;
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -455,7 +460,7 @@ void EnGe1_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnGe1_OverrideLimbDraw, EnGe1_PostLimbDraw, &this->picto.actor);

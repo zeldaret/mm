@@ -100,8 +100,8 @@ void EnTanron3_CreateEffect(PlayState* play, Vec3f* effectPos) {
             effectPtr->unk_34.y = 0.0f;
             effectPtr->unk_34.z = Rand_ZeroFloat(2 * M_PI);
             effectPtr->unk_02 = Rand_ZeroFloat(100.0f);
-            effectPtr->velocity.x = randPlusMinusPoint5Scaled(25.0f);
-            effectPtr->velocity.z = randPlusMinusPoint5Scaled(25.0f);
+            effectPtr->velocity.x = Rand_CenteredFloat(25.0f);
+            effectPtr->velocity.z = Rand_CenteredFloat(25.0f);
             break;
         }
     }
@@ -155,9 +155,9 @@ void EnTanron3_SetupLive(EnTanron3* this, PlayState* play) {
     this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = 50;
     this->actor.speed = 5.0f;
     this->speedMaxStep = 0.5f;
-    this->deviation.x = randPlusMinusPoint5Scaled(500.0f);
-    this->deviation.y = randPlusMinusPoint5Scaled(100.0f);
-    this->deviation.z = randPlusMinusPoint5Scaled(500.0f);
+    this->deviation.x = Rand_CenteredFloat(500.0f);
+    this->deviation.y = Rand_CenteredFloat(100.0f);
+    this->deviation.z = Rand_CenteredFloat(500.0f);
     Math_Vec3f_Copy(&this->targetPos, &this->actor.world.pos);
     this->timer = Rand_ZeroFloat(100.0f);
 }
@@ -180,10 +180,10 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->skelAnime.curFrame = 4.0f;
-    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && player->actor.shape.feetPos[0].y >= 438.0f) {
+    if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.shape.feetPos[0].y >= 438.0f)) {
         // Player is standing on the central platform, so stop chasing them
         this->isNonHostile = true;
-    } else if (this->isNonHostile && this->workTimer[WORK_TIMER_WAIT] == 0 && !(this->timer & 0x1F)) {
+    } else if (this->isNonHostile && (this->workTimer[WORK_TIMER_WAIT] == 0) && !(this->timer & 0x1F)) {
         xDistance = this->targetPos.x - player->actor.world.pos.x;
         zDistance = this->targetPos.z - player->actor.world.pos.z;
         if (sqrtf(SQ(xDistance) + SQ(zDistance)) < 500.0f) {
@@ -204,20 +204,21 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
 
                 Math_Vec3f_Copy(&this->targetPos, &player->actor.world.pos);
                 if (!(this->timer & 0xF)) {
-                    if (Rand_ZeroOne() < 0.5f && this->actor.xzDistToPlayer <= 200.0f) {
+                    if ((Rand_ZeroOne() < 0.5f) && (this->actor.xzDistToPlayer <= 200.0f)) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
                     }
                 }
 
                 // If the player gets eaten by Gyorg, or if the attack timer ran out,
                 // stop chasing the player for a little bit.
-                if (this->workTimer[WORK_TIMER_ATTACK] == 0 || (player->stateFlags2 & PLAYER_STATE2_80)) {
+                if ((this->workTimer[WORK_TIMER_ATTACK] == 0) || (player->stateFlags2 & PLAYER_STATE2_80)) {
                     this->workTimer[WORK_TIMER_WAIT] = 150;
                     this->isNonHostile = true;
                 }
                 break;
+
             case true:
-                if (sGyorg->unk_324 != 0 && !(this->timer & 0x7)) {
+                if ((sGyorg->unk_324 != 0) && !(this->timer & 0x7)) {
                     this->nextRotationAngle = 0x4E20;
                     this->actor.speed = 6.0f;
                 } else {
@@ -242,11 +243,11 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
         }
 
         if (this->workTimer[WORK_TIMER_OUT_OF_WATER] == 0) {
-            if (this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0 && this->actor.speed > 1.0f) {
+            if ((this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] == 0) && (this->actor.speed > 1.0f)) {
                 this->workTimer[WORK_TIMER_PICK_NEW_DEVIATION] = Rand_ZeroFloat(20.0f);
-                this->deviation.x = randPlusMinusPoint5Scaled(100.0f);
-                this->deviation.y = randPlusMinusPoint5Scaled(50.0f + extraScaleY);
-                this->deviation.z = randPlusMinusPoint5Scaled(100.0f);
+                this->deviation.x = Rand_CenteredFloat(100.0f);
+                this->deviation.y = Rand_CenteredFloat(50.0f + extraScaleY);
+                this->deviation.z = Rand_CenteredFloat(100.0f);
             }
             this->targetPosWithDeviation.y = this->targetPos.y + this->deviation.y + 50.0f;
         }
@@ -286,6 +287,7 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     this->isBeached = true;
                 }
                 break;
+
             case true:
                 this->nextRotationAngle = 0x3A98;
                 this->actor.gravity = -1.5f;
@@ -295,17 +297,17 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                     this->actor.speed = Rand_ZeroFloat(2.0f) + 2.0f;
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.x =
-                            (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.x + 0x8000;
+                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.x + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.z =
-                            (s16)randPlusMinusPoint5Scaled(500.0f) + this->targetShapeRotation.z + 0x8000;
+                            (s16)(s32)Rand_CenteredFloat(0x1F4) + this->targetShapeRotation.z + 0x8000;
                     }
                     if (Rand_ZeroOne() < 0.5f) {
                         this->targetShapeRotation.y = (s16)Rand_ZeroFloat(0x10000);
                     }
                     this->actor.world.rot.y = Math_Atan2S_XY(this->actor.world.pos.z, this->actor.world.pos.x) +
-                                              (s16)randPlusMinusPoint5Scaled(0xCE20);
+                                              (s16)(s32)Rand_CenteredFloat(0xCE20);
                 }
 
                 Math_ApproachS(&this->actor.shape.rot.y, this->targetShapeRotation.y, 3, 0x500);
@@ -314,9 +316,9 @@ void EnTanron3_Live(EnTanron3* this, PlayState* play) {
                 if ((Rand_ZeroOne() < 0.5f) & !(this->timer & 0x3)) {
                     Vec3f effectPos;
 
-                    effectPos.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
+                    effectPos.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
                     effectPos.y = this->actor.world.pos.y;
-                    effectPos.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
+                    effectPos.z = Rand_CenteredFloat(30.0f) + this->actor.world.pos.z;
                     EnTanron3_CreateEffect(play, &effectPos);
                 }
                 break;
@@ -404,7 +406,7 @@ void EnTanron3_Update(Actor* thisx, PlayState* play) {
         }
 
         this->actionFunc(this, play);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 20.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
         // The fish has either just entered or just exited the water, so create a splash effect
         if (((this->actor.prevPos.y < this->waterSurfaceYPos) && (this->waterSurfaceYPos <= this->actor.world.pos.y)) ||
@@ -423,7 +425,7 @@ void EnTanron3_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->atCollider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->acCollider.base);
 
-    if ((s8)sGyorg->actor.colChkInfo.health <= 0 && this->actionFunc != EnTanron3_Die) {
+    if (((s8)sGyorg->actor.colChkInfo.health <= 0) && (this->actionFunc != EnTanron3_Die)) {
         EnTanron3_SetupDie(this, play);
         this->workTimer[WORK_TIMER_DIE] = 0;
     }
@@ -452,7 +454,7 @@ void EnTanron3_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if ((this->fogTimer % 2) != 0) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 255, 0, 0, 255, 900, 1099);
     }

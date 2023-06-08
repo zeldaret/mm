@@ -7,7 +7,7 @@ struct EnTest3;
 
 typedef void (*EnTest3ActionFunc)(struct EnTest3*, PlayState*);
 
-#define KAFEI_GET_PARAM_1F(thisx) ((thisx)->params & 0x1F)
+#define KAFEI_GET_PATH_INDEX(thisx) ((thisx)->params & 0x1F)
 #define KAFEI_GET_PARAM_1E0(thisx) (((thisx)->params >> 5) & 0xF)
 
 typedef struct {
@@ -26,7 +26,7 @@ typedef struct EnTest3 {
     /* 0xD89 */ u8 unk_D89;
     /* 0xD8A */ s16 unk_D8A;
     /* 0xD8C */ u8 unk_D8C;
-    /* 0xD8D */ s8 unk_D8D;
+    /* 0xD8D */ s8 csId;
     /* 0xD8E */ s16 subCamId;
     /* 0xD90 */ Player* unk_D90;
     /* 0xD94 */ EnTest3ActionFunc unk_D94;

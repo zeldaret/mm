@@ -248,7 +248,7 @@ static TexturePtr D_8089E33C[] = {
     object_dinofos_Tex_009030,
 };
 
-static s16 D_8089E34C = -1;
+static s16 sCsId = CS_ID_NONE;
 static s32 D_8089E350 = 0;
 
 static InitChainEntry sInitChain[] = {
@@ -291,13 +291,13 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk_28B = 0;
-    if (thisx->cutscene == -1) {
+    if (thisx->csId == CS_ID_NONE) {
         func_8089B7B0(this);
     } else {
         this->actor.flags |= ACTOR_FLAG_100000;
         this->actor.gravity = 0.0f;
         this->actor.velocity.y = 0.0f;
-        D_8089E34C = thisx->cutscene;
+        sCsId = thisx->csId;
         func_8089D2E0(this);
     }
 
@@ -367,9 +367,9 @@ void func_8089ABF4(EnDinofos* this, PlayState* play) {
 
         Play_SetCameraAtEye(play, CAM_ID_MAIN, &subCam->at, &subCam->eye);
         this->subCamId = SUB_CAM_ID_DONE;
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_6);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_END);
         }
     }
 }
@@ -438,8 +438,9 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != 0) && this->actor.isTargeted &&
-        (Rand_ZeroOne() < 0.5f) && func_8089A968(this) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
+    if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
+        this->actor.isTargeted && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
+        Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
         } else {
@@ -584,7 +585,7 @@ void func_8089B72C(EnDinofos* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         func_8089ABF4(this, play);
         this->actor.flags &= ~ACTOR_FLAG_100000;
-        this->actor.cutscene = -1;
+        this->actor.csId = CS_ID_NONE;
         func_8089B7B0(this);
     }
 }
@@ -972,7 +973,7 @@ void func_8089C7B8(EnDinofos* this, PlayState* play) {
     if (this->unk_290 == 0) {
         func_8089ACEC(this, play);
         if (this->actor.colChkInfo.health == 0) {
-            if (this->actor.cutscene == -1) {
+            if (this->actor.csId == CS_ID_NONE) {
                 func_8089CFAC(this);
             } else {
                 func_8089D2E0(this);
@@ -1004,7 +1005,7 @@ void func_8089C938(EnDinofos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     if (SkelAnime_Update(&this->skelAnime) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (this->actor.colChkInfo.health == 0) {
-            if (this->actor.cutscene == -1) {
+            if (this->actor.csId == CS_ID_NONE) {
                 func_8089CFAC(this);
             } else {
                 func_8089D2E0(this);
@@ -1061,7 +1062,7 @@ void func_8089CB10(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089CBEC(EnDinofos* this, PlayState* play) {
-    s16 temp_s3 = ((s32)randPlusMinusPoint5Scaled(0x1000) + this->actor.shape.rot.y) + this->unk_28E;
+    s16 temp_s3 = ((s32)Rand_CenteredFloat(0x1000) + this->actor.shape.rot.y) + this->unk_28E;
     Vec3f sp88;
     Vec3f sp7C;
     ColliderJntSphElementDim* dim;
@@ -1080,10 +1081,10 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
     temp_s0 = CLAMP_MIN(temp_s0, 0);
 
     sp88.x = 11.0f * temp_f20;
-    sp88.y = randPlusMinusPoint5Scaled(2.0f) + -5.4f;
+    sp88.y = Rand_CenteredFloat(2.0f) + -5.4f;
     sp88.z = 11.0f * temp_f22;
     sp7C.x = 0.9f * temp_f20;
-    sp7C.y = randPlusMinusPoint5Scaled(0.6f) + 1.4f;
+    sp7C.y = Rand_CenteredFloat(0.6f) + 1.4f;
     sp7C.z = 0.9f * temp_f22;
     func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
     EffectSsDFire_Spawn(play, &this->limbPos[10], &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20, 3, 8);
@@ -1097,7 +1098,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
 
     for (i = 6; i < end; i++) {
         dim = &this->colliderJntSph.elements[i].dim;
-        temp_s3 = (s32)(cos_rad((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
+        temp_s3 = (s32)(Math_CosF((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
 
         dim->worldSphere.center.x = (s32)this->limbPos[10].x + (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z);
         dim->worldSphere.center.y = (s32)this->limbPos[10].y + (s32)dim->modelSphere.center.y;
@@ -1196,21 +1197,21 @@ void func_8089D1E0(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089D2E0(EnDinofos* this) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8089D318;
 }
 
 void func_8089D318(EnDinofos* this, PlayState* play) {
     Vec3f subCamEye;
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         if (this->actor.colChkInfo.health == 0) {
-            ActorCutscene_Start(this->actor.cutscene, &this->actor);
-            func_800B724C(play, &this->actor, PLAYER_CSMODE_7);
+            CutsceneManager_Start(this->actor.csId, &this->actor);
+            func_800B724C(play, &this->actor, PLAYER_CSMODE_WAIT);
         } else {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         if (this->actor.colChkInfo.health == 0) {
             subCamEye.x = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + this->actor.focus.pos.x;
             subCamEye.y = this->actor.focus.pos.y;
@@ -1221,7 +1222,7 @@ void func_8089D318(EnDinofos* this, PlayState* play) {
             func_8089B100(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -1231,9 +1232,9 @@ void func_8089D42C(EnDinofos* this, PlayState* play) {
     if ((this->actionFunc == func_8089B834) && (this->unk_290 != 0)) {
         Math_ScaledStepToS(&this->unk_28E, Math_SinS(this->unk_290 * 1400) * 0x2C00, 0x300);
     } else if (this->actionFunc == func_8089CA74) {
-        Math_ScaledStepToS(&this->unk_28E, cos_rad(M_PI) * 0x2C00, 0x233);
+        Math_ScaledStepToS(&this->unk_28E, Math_CosF(M_PI) * 0x2C00, 0x2C00 / 20);
     } else if (this->actionFunc == func_8089CBEC) {
-        this->unk_28E = cos_rad(this->unk_290 * (M_PI / 20)) * 0x2C00;
+        this->unk_28E = Math_CosF(this->unk_290 * (M_PI / 20)) * 0x2C00;
     } else if (!Play_InCsMode(play)) {
         temp_v0_2 = this->unk_28E + this->actor.shape.rot.y;
         temp_v0_2 = BINANG_SUB(this->actor.yawTowardsPlayer, temp_v0_2);
@@ -1273,12 +1274,12 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             Enemy_StartFinishingBlow(play, &this->actor);
             D_8089E350--;
             if (D_8089E350 == 0) {
-                if (D_8089E34C != -1) {
-                    this->actor.cutscene = D_8089E34C;
+                if (sCsId != CS_ID_NONE) {
+                    this->actor.csId = sCsId;
                 }
             }
 
-            if (this->actor.cutscene != -1) {
+            if (this->actor.csId != CS_ID_NONE) {
                 Audio_RestorePrevBgm();
             }
         }
@@ -1356,7 +1357,9 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 30.0f, 60.0f, 0x5D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 30.0f, 60.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_40);
     if (this->actionFunc != func_8089C7B8) {
         if ((this->actor.depthInWater > 0.0f) && (this->actor.depthInWater < 10.0f)) {
             if (!((play->gameplayFrames % 4) & 1)) {
@@ -1472,7 +1475,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->unk_288 == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_800B8050(&this->actor, play, 0);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_8089E33C[this->unk_289]);
@@ -1483,7 +1486,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                func_8089DC4C, func_8089DC84, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&this->actor, play, 0);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_8089E33C[this->unk_289]);

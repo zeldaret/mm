@@ -23,13 +23,13 @@ typedef enum {
 #define DO_ACTION_TEX_SIZE ((DO_ACTION_TEX_WIDTH * DO_ACTION_TEX_HEIGHT) / 2) // (sizeof(gCheckDoActionENGTex))
 
 typedef struct {
-    /* 0x00 */ u8 scene;
-    /* 0x01 */ u8 flags1;
-    /* 0x02 */ u8 flags2;
-    /* 0x03 */ u8 flags3;
-} RestrictionFlags;
+    /* 0x0 */ u8 scene;
+    /* 0x1 */ u8 flags1;
+    /* 0x2 */ u8 flags2;
+    /* 0x3 */ u8 flags3;
+} RestrictionFlags; // size = 0x4
 
-Input sPostmanTimerInput[4];
+Input sPostmanTimerInput[MAXCONTROLLERS];
 
 #define RESTRICTIONS_TABLE_END 0xFF
 
@@ -73,124 +73,20 @@ Input sPostmanTimerInput[4];
 #define RESTRICTIONS_MOON RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0)
 #define RESTRICTIONS_NO_DOUBLE_TIME RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0)
 
+#define DEFINE_SCENE(_name, enumValue, _textId, _drawConfig, restrictionFlags, _persistentCycleFlags) \
+    { enumValue, restrictionFlags },
+
+#define DEFINE_SCENE_UNSET(enumValue) { enumValue, RESTRICTIONS_NONE },
+
 RestrictionFlags sRestrictionFlags[] = {
-    { SCENE_20SICHITAI2, RESTRICTIONS_NONE },
-    { SCENE_UNSET_1, RESTRICTIONS_NONE },
-    { SCENE_UNSET_2, RESTRICTIONS_NONE },
-    { SCENE_UNSET_3, RESTRICTIONS_NONE },
-    { SCENE_UNSET_4, RESTRICTIONS_NONE },
-    { SCENE_UNSET_5, RESTRICTIONS_NONE },
-    { SCENE_UNSET_6, RESTRICTIONS_NONE },
-    { SCENE_KAKUSIANA, RESTRICTIONS_NONE },
-    { SCENE_SPOT00, RESTRICTIONS_NONE },
-    { SCENE_UNSET_9, RESTRICTIONS_NONE },
-    { SCENE_WITCH_SHOP, RESTRICTIONS_INDOORS },
-    { SCENE_LAST_BS, RESTRICTIONS_MOON },
-    { SCENE_HAKASHITA, RESTRICTIONS_NONE },
-    { SCENE_AYASHIISHOP, RESTRICTIONS_INDOORS },
-    { SCENE_UNSET_E, RESTRICTIONS_NONE },
-    { SCENE_UNSET_F, RESTRICTIONS_NONE },
-    { SCENE_OMOYA, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0) },
-    { SCENE_BOWLING, RESTRICTIONS_INDOORS },
-    { SCENE_SONCHONOIE, RESTRICTIONS_INDOORS },
-    { SCENE_IKANA, RESTRICTIONS_NONE },
-    { SCENE_KAIZOKU, RESTRICTIONS_NONE },
-    { SCENE_MILK_BAR, RESTRICTIONS_INDOORS },
-    { SCENE_INISIE_N, RESTRICTIONS_NONE },
-    { SCENE_TAKARAYA, RESTRICTIONS_INDOORS },
-    { SCENE_INISIE_R, RESTRICTIONS_NONE },
-    { SCENE_OKUJOU, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0) },
-    { SCENE_OPENINGDAN, RESTRICTIONS_NONE },
-    { SCENE_MITURIN, RESTRICTIONS_NONE },
-    { SCENE_13HUBUKINOMITI, RESTRICTIONS_NONE },
-    { SCENE_CASTLE, RESTRICTIONS_NONE },
-    { SCENE_DEKUTES, RESTRICTIONS_SET(0, 1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1) },
-    { SCENE_MITURIN_BS, RESTRICTIONS_NONE },
-    { SCENE_SYATEKI_MIZU, RESTRICTIONS_INDOORS },
-    { SCENE_HAKUGIN, RESTRICTIONS_NONE },
-    { SCENE_ROMANYMAE, RESTRICTIONS_NONE },
-    { SCENE_PIRATE, RESTRICTIONS_NONE },
-    { SCENE_SYATEKI_MORI, RESTRICTIONS_INDOORS },
-    { SCENE_SINKAI, RESTRICTIONS_NONE },
-    { SCENE_YOUSEI_IZUMI, RESTRICTIONS_NONE },
-    { SCENE_KINSTA1, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_KINDAN2, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_TENMON_DAI, RESTRICTIONS_SET(0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0) },
-    { SCENE_LAST_DEKU, RESTRICTIONS_MOON },
-    { SCENE_22DEKUCITY, RESTRICTIONS_NONE },
-    { SCENE_KAJIYA, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0) },
-    { SCENE_00KEIKOKU, RESTRICTIONS_NONE },
-    { SCENE_POSTHOUSE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_LABO, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_DANPEI2TEST, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_UNSET_31, RESTRICTIONS_NONE },
-    { SCENE_16GORON_HOUSE, RESTRICTIONS_NONE },
-    { SCENE_33ZORACITY, RESTRICTIONS_SET(0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0) },
-    { SCENE_8ITEMSHOP, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_F01, RESTRICTIONS_NONE },
-    { SCENE_INISIE_BS, RESTRICTIONS_NONE },
-    { SCENE_30GYOSON, RESTRICTIONS_NONE },
-    { SCENE_31MISAKI, RESTRICTIONS_NONE },
-    { SCENE_TAKARAKUJI, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_UNSET_3A, RESTRICTIONS_NONE },
-    { SCENE_TORIDE, RESTRICTIONS_NONE },
-    { SCENE_FISHERMAN, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_GORONSHOP, RESTRICTIONS_INDOORS },
-    { SCENE_DEKU_KING, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0) },
-    { SCENE_LAST_GORON, RESTRICTIONS_MOON },
-    { SCENE_24KEMONOMITI, RESTRICTIONS_NONE },
-    { SCENE_F01_B, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_F01C, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_BOTI, RESTRICTIONS_NONE },
-    { SCENE_HAKUGIN_BS, RESTRICTIONS_NONE },
-    { SCENE_20SICHITAI, RESTRICTIONS_NONE },
-    { SCENE_21MITURINMAE, RESTRICTIONS_NONE },
-    { SCENE_LAST_ZORA, RESTRICTIONS_MOON },
-    { SCENE_11GORONNOSATO2, RESTRICTIONS_NONE },
-    { SCENE_SEA, RESTRICTIONS_NONE },
-    { SCENE_35TAKI, RESTRICTIONS_NONE },
-    { SCENE_REDEAD, RESTRICTIONS_NONE },
-    { SCENE_BANDROOM, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0) },
-    { SCENE_11GORONNOSATO, RESTRICTIONS_NONE },
-    { SCENE_GORON_HAKA, RESTRICTIONS_NONE },
-    { SCENE_SECOM, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 0, 3, 0, 0, 0) },
-    { SCENE_10YUKIYAMANOMURA, RESTRICTIONS_NONE },
-    { SCENE_TOUGITES, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0) },
-    { SCENE_DANPEI, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_IKANAMAE, RESTRICTIONS_NONE },
-    { SCENE_DOUJOU, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 1) },
-    { SCENE_MUSICHOUSE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 0, 0) },
-    { SCENE_IKNINSIDE, RESTRICTIONS_SET(0, 0, 0, 0, 0, 3, 3, 3, 3, 0, 0, 0) },
-    { SCENE_MAP_SHOP, RESTRICTIONS_INDOORS },
-    { SCENE_F40, RESTRICTIONS_NONE },
-    { SCENE_F41, RESTRICTIONS_NONE },
-    { SCENE_10YUKIYAMANOMURA2, RESTRICTIONS_NONE },
-    { SCENE_14YUKIDAMANOMITI, RESTRICTIONS_NONE },
-    { SCENE_12HAKUGINMAE, RESTRICTIONS_NONE },
-    { SCENE_17SETUGEN, RESTRICTIONS_NONE },
-    { SCENE_17SETUGEN2, RESTRICTIONS_NONE },
-    { SCENE_SEA_BS, RESTRICTIONS_NONE },
-    { SCENE_RANDOM, RESTRICTIONS_NONE },
-    { SCENE_YADOYA, RESTRICTIONS_INDOORS },
-    { SCENE_KONPEKI_ENT, RESTRICTIONS_NONE },
-    { SCENE_INSIDETOWER, RESTRICTIONS_SET(0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0) },
-    { SCENE_26SARUNOMORI, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_LOST_WOODS, RESTRICTIONS_NONE },
-    { SCENE_LAST_LINK, RESTRICTIONS_MOON },
-    { SCENE_SOUGEN, RESTRICTIONS_MOON },
-    { SCENE_BOMYA, RESTRICTIONS_INDOORS },
-    { SCENE_KYOJINNOMA, RESTRICTIONS_NONE },
-    { SCENE_KOEPONARACE, RESTRICTIONS_NO_DOUBLE_TIME },
-    { SCENE_GORONRACE, RESTRICTIONS_NONE },
-    { SCENE_TOWN, RESTRICTIONS_NONE },
-    { SCENE_ICHIBA, RESTRICTIONS_NONE },
-    { SCENE_BACKTOWN, RESTRICTIONS_NONE },
-    { SCENE_CLOCKTOWER, RESTRICTIONS_NONE },
-    { SCENE_ALLEY, RESTRICTIONS_NONE },
+#include "tables/scene_table.h"
     // { RESTRICTIONS_TABLE_END, RESTRICTIONS_NONE }, // See note below
 };
 //! @note: in `Interface_SetSceneRestrictions`, `RESTRICTIONS_TABLE_END` act as a terminating value to
 // stop looping through the array. If a scene is missing, then this will cause issues.
+
+#undef DEFINE_SCENE
+#undef DEFINE_SCENE_UNSET
 
 s16 sPictoState = PICTO_BOX_STATE_OFF;
 s16 sPictoPhotoBeingTaken = false;
@@ -251,7 +147,7 @@ s16 D_801BF97C = 255;
 f32 D_801BF980 = 1.0f;
 s32 D_801BF984 = 0;
 
-Gfx sScreenFillSetupDL[] = {
+static Gfx sScreenFillSetupDL[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
                           G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
@@ -887,10 +783,10 @@ void Interface_SetVertices(PlayState* play) {
 
 s32 sPostmanTimerInputBtnAPressed = false;
 
-void Interface_PostmanTimerCallback(s32 arg0) {
+void Interface_PostmanTimerCallback(void* arg) {
     s32 btnAPressed;
 
-    func_80175E68(&sPostmanTimerInput[0], 0);
+    PadMgr_GetInputNoLock(sPostmanTimerInput, false);
     btnAPressed = CHECK_BTN_ALL(sPostmanTimerInput[0].cur.button, BTN_A);
     if ((btnAPressed != sPostmanTimerInputBtnAPressed) && btnAPressed) {
         gSaveContext.postmanTimerStopOsTime = osGetTime();
@@ -1006,12 +902,12 @@ void Interface_NewDay(PlayState* play, s32 day) {
                         (u32)SEGMENT_ROM_START(week_static) + i * 0x510, 0x510);
 
     // i is used to store sceneId
-    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.permanentSceneFlags); i++) {
-        gSaveContext.save.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
-        gSaveContext.save.permanentSceneFlags[i].switch0 = gSaveContext.cycleSceneFlags[i].switch0;
-        gSaveContext.save.permanentSceneFlags[i].switch1 = gSaveContext.cycleSceneFlags[i].switch1;
-        gSaveContext.save.permanentSceneFlags[i].clearedRoom = gSaveContext.cycleSceneFlags[i].clearedRoom;
-        gSaveContext.save.permanentSceneFlags[i].collectible = gSaveContext.cycleSceneFlags[i].collectible;
+    for (i = 0; i < ARRAY_COUNT(gSaveContext.save.saveInfo.permanentSceneFlags); i++) {
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].chest = gSaveContext.cycleSceneFlags[i].chest;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].switch0 = gSaveContext.cycleSceneFlags[i].switch0;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].switch1 = gSaveContext.cycleSceneFlags[i].switch1;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].clearedRoom = gSaveContext.cycleSceneFlags[i].clearedRoom;
+        gSaveContext.save.saveInfo.permanentSceneFlags[i].collectible = gSaveContext.cycleSceneFlags[i].collectible;
     }
 }
 
@@ -1880,7 +1776,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     } else if (CHECK_EVENTINF(EVENTINF_34)) {
         // Deku playground minigame
         if (player->stateFlags3 & PLAYER_STATE3_1000000) {
-            if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+            if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
             } else {
@@ -1908,7 +1804,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
     } else if (player->stateFlags3 & PLAYER_STATE3_1000000) {
         // Nuts on B (from flying as Deku Link)
-        if (gSaveContext.save.inventory.items[SLOT_NUT] == ITEM_NUT) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
             if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT) {
                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -1925,7 +1821,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_DISABLED;
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
         }
-    } else if (!gSaveContext.save.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
+    } else if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NUT)) {
         // Nuts on B (as Deku Link)
         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_FD;
@@ -1990,7 +1886,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
 
         if ((play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF)) {
-            if (ActorCutscene_GetCurrentIndex() == -1) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
                 Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
             }
         }
@@ -2267,7 +2163,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
     s32 pad;
     s32 restoreHudVisibility = false;
 
-    if (gSaveContext.save.cutscene < 0xFFF0) {
+    if (gSaveContext.save.cutsceneIndex < 0xFFF0) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
             (!(CHECK_EVENTINF(EVENTINF_41)) && (play->unk_1887C >= 2))) {
@@ -2324,7 +2220,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
 
                             if (play->unk_1887C >= 2) {
                                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-                            } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                            } else if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOW] == ITEM_NONE) {
                                 BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                             } else {
                                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -2382,7 +2278,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
 
                 if (play->unk_1887C >= 2) {
                     Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
-                } else if (gSaveContext.save.inventory.items[SLOT_BOW] == ITEM_NONE) {
+                } else if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOW] == ITEM_NONE) {
                     BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NONE;
                 } else {
                     Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
@@ -2421,7 +2317,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
             // Related to pictograph
             if (sPictoState == PICTO_BOX_STATE_LENS) {
                 if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                    Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                         (u8*)((void)0, gSaveContext.pictoPhotoI5),
                                         PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
@@ -2434,7 +2330,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     sPictoState = PICTO_BOX_STATE_OFF;
                 } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
                     if (!(CHECK_EVENTINF(EVENTINF_41)) ||
-                        ((CHECK_EVENTINF(EVENTINF_41)) && (ActorCutscene_GetCurrentIndex() == -1))) {
+                        ((CHECK_EVENTINF(EVENTINF_41)) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         play_sound(NA_SE_SY_CAMERA_SHUTTER);
                         SREG(89) = 1;
                         play->haltAllActors = true;
@@ -2460,7 +2356,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
                     sPictoState = PICTO_BOX_STATE_OFF;
                     if (sPictoPhotoBeingTaken) {
-                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                        Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                             (u8*)((void)0, gSaveContext.pictoPhotoI5),
                                             PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                         Snap_RecordPictographedActors(play);
@@ -2493,7 +2389,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                 sPictoState = PICTO_BOX_STATE_LENS;
             } else {
                 Play_DecompressI5ToI8((u8*)((void)0, gSaveContext.pictoPhotoI5),
-                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+                                      (play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                       PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
                 play->haltAllActors = true;
                 sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
@@ -2627,14 +2523,14 @@ u8 Item_Give(PlayState* play, u8 item) {
         INCREMENT_QUEST_HEART_PIECE_COUNT;
         if (EQ_MAX_QUEST_HEART_PIECE_COUNT) {
             RESET_HEART_PIECE_COUNT;
-            gSaveContext.save.playerData.healthCapacity += 0x10;
-            gSaveContext.save.playerData.health += 0x10;
+            gSaveContext.save.saveInfo.playerData.healthCapacity += 0x10;
+            gSaveContext.save.saveInfo.playerData.health += 0x10;
         }
         return ITEM_NONE;
 
     } else if (item == ITEM_HEART_CONTAINER) {
-        gSaveContext.save.playerData.healthCapacity += 0x10;
-        gSaveContext.save.playerData.health += 0x10;
+        gSaveContext.save.saveInfo.playerData.healthCapacity += 0x10;
+        gSaveContext.save.saveInfo.playerData.health += 0x10;
         return ITEM_NONE;
 
     } else if ((item >= ITEM_SONG_SONATA) && (item <= ITEM_SONG_LULLABY_INTRO)) {
@@ -2646,7 +2542,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         CUR_FORM_EQUIP(EQUIP_SLOT_B) = item;
         Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
         if (item == ITEM_SWORD_RAZOR) {
-            gSaveContext.save.playerData.swordHealth = 100;
+            gSaveContext.save.saveInfo.playerData.swordHealth = 100;
         }
         return ITEM_NONE;
 
@@ -2824,7 +2720,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_BOMBS_5) && (item <= ITEM_BOMBS_30)) {
-        if (gSaveContext.save.inventory.items[SLOT_BOMB] != ITEM_BOMB) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOMB] != ITEM_BOMB) {
             INV_CONTENT(ITEM_BOMB) = ITEM_BOMB;
             AMMO(ITEM_BOMB) += sAmmoRefillCounts[item - ITEM_BOMBS_5];
             return ITEM_NONE;
@@ -2847,7 +2743,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_BOMBCHUS_20) && (item <= ITEM_BOMBCHUS_5)) {
-        if (gSaveContext.save.inventory.items[SLOT_BOMBCHU] != ITEM_BOMBCHU) {
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_BOMBCHU] != ITEM_BOMBCHU) {
             INV_CONTENT(ITEM_BOMBCHU) = ITEM_BOMBCHU;
             AMMO(ITEM_BOMBCHU) += sBombchuRefillCounts[item - ITEM_BOMBCHUS_20];
 
@@ -2917,8 +2813,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         slot = SLOT(item);
 
         for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[slot + i] = ITEM_POTION_RED;
+            if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.saveInfo.inventory.items[slot + i] = ITEM_POTION_RED;
                 return ITEM_NONE;
             }
         }
@@ -2929,8 +2825,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         slot = SLOT(item);
 
         for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[slot + i] = item;
+            if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                 return ITEM_NONE;
             }
         }
@@ -2940,8 +2836,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         slot = SLOT(item);
 
         for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-            if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                gSaveContext.save.inventory.items[slot + i] = item;
+            if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                 return ITEM_NONE;
             }
         }
@@ -2971,7 +2867,7 @@ u8 Item_Give(PlayState* play, u8 item) {
             slot = SLOT(item);
 
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[slot + i] == ITEM_BOTTLE) {
+                if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_BOTTLE) {
                     if (item == ITEM_HOT_SPRING_WATER) {
                         Interface_StartBottleTimer(60, i);
                     }
@@ -2990,14 +2886,14 @@ u8 Item_Give(PlayState* play, u8 item) {
                         gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
                     }
 
-                    gSaveContext.save.inventory.items[slot + i] = item;
+                    gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[slot + i] == ITEM_NONE) {
-                    gSaveContext.save.inventory.items[slot + i] = item;
+                if (gSaveContext.save.saveInfo.inventory.items[slot + i] == ITEM_NONE) {
+                    gSaveContext.save.saveInfo.inventory.items[slot + i] = item;
                     return ITEM_NONE;
                 }
             }
@@ -3018,7 +2914,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         return ITEM_NONE;
     }
 
-    temp = gSaveContext.save.inventory.items[slot];
+    temp = gSaveContext.save.saveInfo.inventory.items[slot];
     INV_CONTENT(item) = item;
     return temp;
 }
@@ -3159,13 +3055,13 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
             bottleSlot = SLOT(item);
 
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
+                if (gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] == ITEM_BOTTLE) {
                     return ITEM_NONE;
                 }
             }
         } else {
             for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-                if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_NONE) {
+                if (gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] == ITEM_NONE) {
                     return ITEM_NONE;
                 }
             }
@@ -3174,7 +3070,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
         return ITEM_NONE;
     }
 
-    return gSaveContext.save.inventory.items[slot];
+    return gSaveContext.save.saveInfo.inventory.items[slot];
 }
 
 u8 Item_CheckObtainability(u8 item) {
@@ -3184,7 +3080,7 @@ u8 Item_CheckObtainability(u8 item) {
 void Inventory_DeleteItem(s16 item, s16 slot) {
     s16 btn;
 
-    gSaveContext.save.inventory.items[slot] = ITEM_NONE;
+    gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_NONE;
 
     for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_ITEM(btn) == item) {
@@ -3209,8 +3105,8 @@ s32 Inventory_ReplaceItem(PlayState* play, u8 oldItem, u8 newItem) {
     u8 i;
 
     for (i = 0; i < 24; i++) {
-        if (gSaveContext.save.inventory.items[i] == oldItem) {
-            gSaveContext.save.inventory.items[i] = newItem;
+        if (gSaveContext.save.saveInfo.inventory.items[i] == oldItem) {
+            gSaveContext.save.saveInfo.inventory.items[i] = newItem;
 
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (GET_CUR_FORM_BTN_ITEM(i) == oldItem) {
@@ -3259,7 +3155,7 @@ s32 Inventory_HasEmptyBottle(void) {
     s32 slot;
 
     for (slot = SLOT_BOTTLE_1; slot <= SLOT_BOTTLE_6; slot++) {
-        if (gSaveContext.save.inventory.items[slot] == ITEM_BOTTLE) {
+        if (gSaveContext.save.saveInfo.inventory.items[slot] == ITEM_BOTTLE) {
             return true;
         }
     }
@@ -3270,7 +3166,7 @@ s32 Inventory_HasItemInBottle(u8 item) {
     s32 slot;
 
     for (slot = SLOT_BOTTLE_1; slot <= SLOT_BOTTLE_6; slot++) {
-        if (gSaveContext.save.inventory.items[slot] == item) {
+        if (gSaveContext.save.saveInfo.inventory.items[slot] == item) {
             return true;
         }
     }
@@ -3278,7 +3174,7 @@ s32 Inventory_HasItemInBottle(u8 item) {
 }
 
 void Inventory_UpdateBottleItem(PlayState* play, u8 item, u8 btn) {
-    gSaveContext.save.inventory.items[GET_CUR_FORM_BTN_SLOT(btn)] = item;
+    gSaveContext.save.saveInfo.inventory.items[GET_CUR_FORM_BTN_SLOT(btn)] = item;
     SET_CUR_FORM_BTN_ITEM(btn, item);
 
     Interface_LoadItemIconImpl(play, btn);
@@ -3297,7 +3193,7 @@ s32 Inventory_ConsumeFairy(PlayState* play) {
     u8 i;
 
     for (i = BOTTLE_FIRST; i < BOTTLE_MAX; i++) {
-        if (gSaveContext.save.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
+        if (gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] == ITEM_FAIRY) {
             for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
                 if (GET_CUR_FORM_BTN_ITEM(btn) == ITEM_FAIRY) {
                     SET_CUR_FORM_BTN_ITEM(btn, ITEM_BOTTLE);
@@ -3307,7 +3203,7 @@ s32 Inventory_ConsumeFairy(PlayState* play) {
                     break;
                 }
             }
-            gSaveContext.save.inventory.items[bottleSlot + i] = ITEM_BOTTLE;
+            gSaveContext.save.saveInfo.inventory.items[bottleSlot + i] = ITEM_BOTTLE;
             return true;
         }
     }
@@ -3321,7 +3217,7 @@ s32 Inventory_ConsumeFairy(PlayState* play) {
 void Inventory_UpdateItem(PlayState* play, s16 slot, s16 item) {
     s16 btn;
 
-    gSaveContext.save.inventory.items[slot] = item;
+    gSaveContext.save.saveInfo.inventory.items[slot] = item;
 
     for (btn = EQUIP_SLOT_C_LEFT; btn <= EQUIP_SLOT_C_RIGHT; btn++) {
         if (GET_CUR_FORM_BTN_SLOT(btn) == slot) {
@@ -3355,18 +3251,19 @@ void func_80115428(InterfaceContext* interfaceCtx, u16 doAction, s16 loadOffset)
 s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
     if (healthChange > 0) {
         play_sound(NA_SE_SY_HP_RECOVER);
-    } else if (gSaveContext.save.playerData.doubleDefense && (healthChange < 0)) {
+    } else if (gSaveContext.save.saveInfo.playerData.doubleDefense && (healthChange < 0)) {
         healthChange >>= 1;
     }
 
-    gSaveContext.save.playerData.health += healthChange;
+    gSaveContext.save.saveInfo.playerData.health += healthChange;
 
-    if (((void)0, gSaveContext.save.playerData.health) > ((void)0, gSaveContext.save.playerData.healthCapacity)) {
-        gSaveContext.save.playerData.health = gSaveContext.save.playerData.healthCapacity;
+    if (((void)0, gSaveContext.save.saveInfo.playerData.health) >
+        ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
+        gSaveContext.save.saveInfo.playerData.health = gSaveContext.save.saveInfo.playerData.healthCapacity;
     }
 
-    if (gSaveContext.save.playerData.health <= 0) {
-        gSaveContext.save.playerData.health = 0;
+    if (gSaveContext.save.saveInfo.playerData.health <= 0) {
+        gSaveContext.save.saveInfo.playerData.health = 0;
         return false;
     } else {
         return true;
@@ -3374,7 +3271,7 @@ s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
 }
 
 void Health_GiveHearts(s16 hearts) {
-    gSaveContext.save.playerData.healthCapacity += hearts * 0x10;
+    gSaveContext.save.saveInfo.playerData.healthCapacity += hearts * 0x10;
 }
 
 void Rupees_ChangeBy(s16 rupeeChange) {
@@ -3441,7 +3338,7 @@ void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
 }
 
 void Magic_Add(PlayState* play, s16 magicToAdd) {
-    if (((void)0, gSaveContext.save.playerData.magic) < ((void)0, gSaveContext.magicCapacity)) {
+    if (((void)0, gSaveContext.save.saveInfo.playerData.magic) < ((void)0, gSaveContext.magicCapacity)) {
         gSaveContext.magicToAdd += magicToAdd;
         gSaveContext.isMagicRequested = true;
     }
@@ -3465,12 +3362,12 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
 
     // Magic is not acquired yet
-    if (!gSaveContext.save.playerData.isMagicAcquired) {
+    if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         return false;
     }
 
     // Not enough magic available to consume
-    if ((gSaveContext.save.playerData.magic - magicToConsume) < 0) {
+    if ((gSaveContext.save.saveInfo.playerData.magic - magicToConsume) < 0) {
         if (gSaveContext.magicCapacity != 0) {
             play_sound(NA_SE_SY_ERROR);
         }
@@ -3518,7 +3415,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
         case MAGIC_CONSUME_LENS:
             if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
-                if (gSaveContext.save.playerData.magic != 0) {
+                if (gSaveContext.save.saveInfo.playerData.magic != 0) {
                     interfaceCtx->magicConsumptionTimer = 80;
                     gSaveContext.magicState = MAGIC_STATE_CONSUME_LENS;
                     return true;
@@ -3549,7 +3446,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
         case MAGIC_CONSUME_GORON_ZORA:
             // Goron spiked rolling or Zora electric barrier
-            if (gSaveContext.save.playerData.magic != 0) {
+            if (gSaveContext.save.saveInfo.playerData.magic != 0) {
                 interfaceCtx->magicConsumptionTimer = 10;
                 gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA_SETUP;
                 return true;
@@ -3560,7 +3457,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
         case MAGIC_CONSUME_GIANTS_MASK:
             // Wearing Giant's Mask
             if (gSaveContext.magicState == MAGIC_STATE_IDLE) {
-                if (gSaveContext.save.playerData.magic != 0) {
+                if (gSaveContext.save.saveInfo.playerData.magic != 0) {
                     interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
                     gSaveContext.magicState = MAGIC_STATE_CONSUME_GIANTS_MASK;
                     return true;
@@ -3584,7 +3481,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
                     magicToConsume = 0;
                 }
-                gSaveContext.save.playerData.magic -= magicToConsume;
+                gSaveContext.save.saveInfo.playerData.magic -= magicToConsume;
                 return true;
             } else {
                 play_sound(NA_SE_SY_ERROR);
@@ -3597,11 +3494,11 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 
 void Magic_UpdateAddRequest(void) {
     if (gSaveContext.isMagicRequested) {
-        gSaveContext.save.playerData.magic += 4;
+        gSaveContext.save.saveInfo.playerData.magic += 4;
         play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
 
-        if (((void)0, gSaveContext.save.playerData.magic) >= ((void)0, gSaveContext.magicCapacity)) {
-            gSaveContext.save.playerData.magic = gSaveContext.magicCapacity;
+        if (((void)0, gSaveContext.save.saveInfo.playerData.magic) >= ((void)0, gSaveContext.magicCapacity)) {
+            gSaveContext.save.saveInfo.playerData.magic = gSaveContext.magicCapacity;
             gSaveContext.magicToAdd = 0;
             gSaveContext.isMagicRequested = false;
         } else {
@@ -3677,7 +3574,7 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_STEP_CAPACITY:
             // Step magicCapacity to the capacity determined by magicLevel
             // This changes the width of the magic meter drawn
-            magicCapacityTarget = gSaveContext.save.playerData.magicLevel * MAGIC_NORMAL_METER;
+            magicCapacityTarget = gSaveContext.save.saveInfo.playerData.magicLevel * MAGIC_NORMAL_METER;
             if (gSaveContext.magicCapacity != magicCapacityTarget) {
                 if (gSaveContext.magicCapacity < magicCapacityTarget) {
                     gSaveContext.magicCapacity += 0x10;
@@ -3699,14 +3596,14 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_FILL:
             // Add magic until magicFillTarget is reached
-            gSaveContext.save.playerData.magic += 0x10;
+            gSaveContext.save.saveInfo.playerData.magic += 0x10;
 
             if ((gSaveContext.gameMode == GAMEMODE_NORMAL) && (gSaveContext.sceneLayer < 4)) {
                 play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
             }
 
-            if (((void)0, gSaveContext.save.playerData.magic) >= ((void)0, gSaveContext.magicFillTarget)) {
-                gSaveContext.save.playerData.magic = gSaveContext.magicFillTarget;
+            if (((void)0, gSaveContext.save.saveInfo.playerData.magic) >= ((void)0, gSaveContext.magicFillTarget)) {
+                gSaveContext.save.saveInfo.playerData.magic = gSaveContext.magicFillTarget;
                 gSaveContext.magicState = MAGIC_STATE_IDLE;
             }
             break;
@@ -3720,10 +3617,10 @@ void Magic_Update(PlayState* play) {
         case MAGIC_STATE_CONSUME:
             // Consume magic until target is reached or no more magic is available
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                gSaveContext.save.playerData.magic =
-                    ((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
-                if (gSaveContext.save.playerData.magic <= 0) {
-                    gSaveContext.save.playerData.magic = 0;
+                gSaveContext.save.saveInfo.playerData.magic =
+                    ((void)0, gSaveContext.save.saveInfo.playerData.magic) - ((void)0, gSaveContext.magicToConsume);
+                if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                    gSaveContext.save.saveInfo.playerData.magic = 0;
                 }
                 gSaveContext.magicState = MAGIC_STATE_METER_FLASH_1;
                 sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
@@ -3749,7 +3646,7 @@ void Magic_Update(PlayState* play) {
                 (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
                 !Play_InCsMode(play)) {
 
-                if ((gSaveContext.save.playerData.magic == 0) ||
+                if ((gSaveContext.save.saveInfo.playerData.magic == 0) ||
                     ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
                      (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE)) ||
                     ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_LENS) &&
@@ -3767,7 +3664,7 @@ void Magic_Update(PlayState* play) {
                 interfaceCtx->magicConsumptionTimer--;
                 if (interfaceCtx->magicConsumptionTimer == 0) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                        gSaveContext.save.playerData.magic--;
+                        gSaveContext.save.saveInfo.playerData.magic--;
                     }
                     interfaceCtx->magicConsumptionTimer = 80;
                 }
@@ -3779,10 +3676,10 @@ void Magic_Update(PlayState* play) {
 
         case MAGIC_STATE_CONSUME_GORON_ZORA_SETUP:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                gSaveContext.save.playerData.magic -= 2;
+                gSaveContext.save.saveInfo.playerData.magic -= 2;
             }
-            if (gSaveContext.save.playerData.magic <= 0) {
-                gSaveContext.save.playerData.magic = 0;
+            if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                gSaveContext.save.saveInfo.playerData.magic = 0;
             }
             gSaveContext.magicState = MAGIC_STATE_CONSUME_GORON_ZORA;
             // fallthrough
@@ -3794,10 +3691,10 @@ void Magic_Update(PlayState* play) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                            gSaveContext.save.playerData.magic--;
+                            gSaveContext.save.saveInfo.playerData.magic--;
                         }
-                        if (gSaveContext.save.playerData.magic <= 0) {
-                            gSaveContext.save.playerData.magic = 0;
+                        if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                            gSaveContext.save.saveInfo.playerData.magic = 0;
                         }
                         interfaceCtx->magicConsumptionTimer = 10;
                     }
@@ -3816,10 +3713,10 @@ void Magic_Update(PlayState* play) {
                     interfaceCtx->magicConsumptionTimer--;
                     if (interfaceCtx->magicConsumptionTimer == 0) {
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DRANK_CHATEAU_ROMANI)) {
-                            gSaveContext.save.playerData.magic--;
+                            gSaveContext.save.saveInfo.playerData.magic--;
                         }
-                        if (gSaveContext.save.playerData.magic <= 0) {
-                            gSaveContext.save.playerData.magic = 0;
+                        if (gSaveContext.save.saveInfo.playerData.magic <= 0) {
+                            gSaveContext.save.saveInfo.playerData.magic = 0;
                         }
                         interfaceCtx->magicConsumptionTimer = R_MAGIC_CONSUME_TIMER_GIANTS_MASK;
                     }
@@ -3842,14 +3739,14 @@ void Magic_DrawMeter(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (gSaveContext.save.playerData.magicLevel != 0) {
-        if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+    if (gSaveContext.save.saveInfo.playerData.magicLevel != 0) {
+        if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
             magicBarY = 42; // two rows of hearts
         } else {
             magicBarY = 34; // one row of hearts
         }
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         gDPSetEnvColor(OVERLAY_DISP++, 100, 50, 50, 255);
 
@@ -3876,8 +3773,8 @@ void Magic_DrawMeter(PlayState* play) {
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                                (((void)0, gSaveContext.save.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2,
+                                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
 
             // Fill the rest of the meter with the normal magic color
             gDPPipeSync(OVERLAY_DISP++);
@@ -3891,7 +3788,8 @@ void Magic_DrawMeter(PlayState* play) {
 
             gSPTextureRectangle(
                 OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                ((((void)0, gSaveContext.save.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26) << 2,
+                ((((void)0, gSaveContext.save.saveInfo.playerData.magic) - ((void)0, gSaveContext.magicToConsume)) + 26)
+                    << 2,
                 (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         } else {
             // Fill the whole meter with the normal magic color
@@ -3906,8 +3804,8 @@ void Magic_DrawMeter(PlayState* play) {
             gDPLoadTextureBlock_4b(OVERLAY_DISP++, gMagicMeterFillTex, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                    G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(OVERLAY_DISP++, 104, (magicBarY + 3) << 2,
-                                (((void)0, gSaveContext.save.playerData.magic) + 26) << 2, (magicBarY + 10) << 2,
-                                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+                                (((void)0, gSaveContext.save.saveInfo.playerData.magic) + 26) << 2,
+                                (magicBarY + 10) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
     }
 
@@ -3969,7 +3867,6 @@ void Interface_DrawItemButtons(PlayState* play) {
     OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[0],
                                                  D_801BF9DC[0], D_801BFAF4[0], D_801BFAF4[0], D_801BF9E4[0] * 2,
                                                  D_801BF9E4[0] * 2, 100, 255, 120, interfaceCtx->bAlpha);
-    if (1) {}
     gDPPipeSync(OVERLAY_DISP++);
 
     // C-Left Button Color & Texture
@@ -4001,7 +3898,7 @@ void Interface_DrawItemButtons(PlayState* play) {
     }
 
     if (interfaceCtx->tatlCalling && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
-        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == 0) &&
+        (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && (play->csCtx.state == CS_STATE_IDLE) &&
         (sPictoState == PICTO_BOX_STATE_OFF)) {
         if (sCUpInvisible == 0) {
             // C-Up Button Texture, Color & Label (Tatl Text)
@@ -4285,7 +4182,7 @@ void Interface_DrawAButton(PlayState* play) {
         aAlpha = 100;
     }
 
-    func_8012C8D4(play->state.gfxCtx);
+    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
     Interface_SetPerspectiveView(play, 25 + R_A_BTN_Y_OFFSET, 70 + R_A_BTN_Y_OFFSET, 192, 237);
 
@@ -4360,7 +4257,7 @@ void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
                                                   (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK))) {
         // Inventory Equip Effects
         gSPSegment(OVERLAY_DISP++, 0x08, pauseCtx->iconItemSegment);
-        func_8012C8D4(play->state.gfxCtx);
+        Gfx_SetupDL42_Overlay(play->state.gfxCtx);
         gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
         gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4412,11 +4309,10 @@ void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
 /**
  * Draws either the analog three-day clock or the digital final-hours clock
  */
-#ifdef NON_MATCHING
 void Interface_DrawClock(PlayState* play) {
     static s16 sThreeDayClockAlpha = 255;
-    static s16 D_801BFB30 = 0; // sClockAlphaTimer1
-    static s16 D_801BFB34 = 0; // sClockAlphaTimer2
+    static s16 sClockAlphaTimer1 = 0;
+    static s16 sClockAlphaTimer2 = 0;
     static u16 sThreeDayClockHours[] = {
         CLOCK_TIME(0, 0),  CLOCK_TIME(1, 0),  CLOCK_TIME(2, 0),  CLOCK_TIME(3, 0),  CLOCK_TIME(4, 0),
         CLOCK_TIME(5, 0),  CLOCK_TIME(6, 0),  CLOCK_TIME(7, 0),  CLOCK_TIME(8, 0),  CLOCK_TIME(9, 0),
@@ -4432,31 +4328,30 @@ void Interface_DrawClock(PlayState* play) {
         gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
         gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
     };
-    static s16 D_801BFBCC = 0;              // sClockInvDiamondPrimRed
-    static s16 D_801BFBD0 = 0;              // sClockInvDiamondPrimGreen
-    static s16 D_801BFBD4 = 255;            // sClockInvDiamondPrimBlue
-    static s16 D_801BFBD8 = 0;              // sClockInvDiamondEnvRed
-    static s16 D_801BFBDC = 0;              // sClockInvDiamondEnvGreen
-    static s16 D_801BFBE0 = 0;              // sClockInvDiamondEnvBlue
-    static s16 D_801BFBE4 = 15;             // sClockInvDiamondTimer
-    static s16 D_801BFBE8 = 0;              // sClockInvDiamondTargetIndex
-    static s16 D_801BFBEC[] = { 100, 0 };   // sClockInvDiamondPrimRedTargets
-    static s16 D_801BFBF0[] = { 205, 155 }; // sClockInvDiamondPrimGreenTargets
-    static s16 D_801BFBF4[] = { 255, 255 }; // sClockInvDiamondPrimBlueTargets
-    static s16 D_801BFBF8[] = { 30, 0 };    // sClockInvDiamondEnvRedTargets
-    static s16 D_801BFBFC[] = { 30, 0 };    // sClockInvDiamondEnvGreenTargets
-    static s16 D_801BFC00[] = { 100, 0 };   // sClockInvDiamondEnvBlueTargets
-    static s16 D_801BFC04[] = { 255, 0 };   // sFinalHoursClockDigitsRed
-    static s16 D_801BFC08[] = { 100, 0 };   // sFinalHoursClockFrameEnvRedTargets
-    static s16 D_801BFC0C[] = { 30, 0 };    // sFinalHoursClockFrameEnvGreenTargets
-    static s16 D_801BFC10[] = { 100, 0 };   // sFinalHoursClockFrameEnvBlueTargets
+    static s16 sClockInvDiamondPrimRed = 0;
+    static s16 sClockInvDiamondPrimGreen = 155;
+    static s16 sClockInvDiamondPrimBlue = 255;
+    static s16 sClockInvDiamondEnvRed = 0;
+    static s16 sClockInvDiamondEnvGreen = 0;
+    static s16 sClockInvDiamondEnvBlue = 0;
+    static s16 sClockInvDiamondTimer = 15;
+    static s16 sClockInvDiamondTargetIndex = 0;
+    static s16 sClockInvDiamondPrimRedTargets[] = { 100, 0 };
+    static s16 sClockInvDiamondPrimGreenTargets[] = { 205, 155 };
+    static s16 sClockInvDiamondPrimBlueTargets[] = { 255, 255 };
+    static s16 sClockInvDiamondEnvRedTargets[] = { 30, 0 };
+    static s16 sClockInvDiamondEnvGreenTargets[] = { 30, 0 };
+    static s16 sClockInvDiamondEnvBlueTargets[] = { 100, 0 };
+    static s16 sFinalHoursClockDigitsRedTargets[] = { 255, 0 };
+    static s16 sFinalHoursClockFrameEnvRedTargets[] = { 100, 0 };
+    static s16 sFinalHoursClockFrameEnvGreenTargets[] = { 30, 0 };
+    static s16 sFinalHoursClockFrameEnvBlueTargets[] = { 100, 0 };
     static TexturePtr sFinalHoursDigitTextures[] = {
         gFinalHoursClockDigit0Tex, gFinalHoursClockDigit1Tex, gFinalHoursClockDigit2Tex, gFinalHoursClockDigit3Tex,
         gFinalHoursClockDigit4Tex, gFinalHoursClockDigit5Tex, gFinalHoursClockDigit6Tex, gFinalHoursClockDigit7Tex,
         gFinalHoursClockDigit8Tex, gFinalHoursClockDigit9Tex, gFinalHoursClockColonTex,
     };
-    // sFinalHoursDigitSlotPosXOffset
-    static s16 D_801BFC40[] = {
+    static s16 sFinalHoursDigitSlotPosXOffset[] = {
         127, 136, 144, 151, 160, 168, 175, 184,
     };
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
@@ -4468,527 +4363,492 @@ void Interface_DrawClock(PlayState* play) {
     f32 timeInMinutes;
     f32 timeInSeconds;
     f32 sp1CC;
-    s32 new_var;
+    s32 pad1;
     s16 sp1C6;
     s16 currentHour;
     u16 time;
-    s16 temp;
+    s16 pad2;
     s16 colorStep;
-    s16 finalHoursClockSlots[8]; // sp1AC
+    s16 finalHoursClockSlots[8];
     s16 index;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (R_TIME_SPEED != 0) {
-        if ((msgCtx->msgMode == 0) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
-            (msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
-            (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) {
-            if (!FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day < 4)) {
-                /**
-                 * Changes Clock's transparancy depending if Player is moving or not and possibly other things
-                 */
-                if (gSaveContext.hudVisibility == HUD_VISIBILITY_ALL) {
-                    if (func_801234D4(play)) {
-                        sThreeDayClockAlpha = 80;
-                        D_801BFB30 = 5;
-                        D_801BFB34 = 20;
-                    } else if (D_801BFB34 != 0) {
-                        D_801BFB34--;
-                    } else if (D_801BFB30 != 0) {
-                        colorStep = ABS_ALT(sThreeDayClockAlpha - 255) / D_801BFB30;
-                        sThreeDayClockAlpha += colorStep;
+    if ((R_TIME_SPEED != 0) &&
+        ((msgCtx->msgMode == 0) || ((play->actorCtx.flags & ACTORCTX_FLAG_1) && !Play_InCsMode(play)) ||
+         (msgCtx->msgMode == 0) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+         (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
+        !FrameAdvance_IsEnabled(&play->state) && !Environment_IsTimeStopped() && (gSaveContext.save.day <= 3)) {
+        /**
+         * Section: Changes Clock's transparancy depending if Player is moving or not and possibly other things
+         */
+        if (gSaveContext.hudVisibility == HUD_VISIBILITY_ALL) {
+            if (func_801234D4(play)) {
+                sThreeDayClockAlpha = 80;
+                sClockAlphaTimer1 = 5;
+                sClockAlphaTimer2 = 20;
+            } else if (sClockAlphaTimer2 != 0) {
+                sClockAlphaTimer2--;
+            } else if (sClockAlphaTimer1 != 0) {
+                colorStep = ABS_ALT(sThreeDayClockAlpha - 255) / sClockAlphaTimer1;
+                sThreeDayClockAlpha += colorStep;
 
-                        if (sThreeDayClockAlpha >= 255) {
-                            sThreeDayClockAlpha = 255;
-                            D_801BFB30 = 0;
-                        }
-                    } else {
-                        if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
-                            sThreeDayClockAlpha = 255;
-                        } else {
-                            sThreeDayClockAlpha = interfaceCtx->bAlpha;
-                        }
-                        D_801BFB34 = 0;
-                        D_801BFB30 = 0;
-                    }
+                if (sThreeDayClockAlpha >= 255) {
+                    sThreeDayClockAlpha = 255;
+                    sClockAlphaTimer1 = 0;
+                }
+            } else {
+                if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                    sThreeDayClockAlpha = 255;
                 } else {
-                    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
-                        sThreeDayClockAlpha = 255;
+                    sThreeDayClockAlpha = interfaceCtx->bAlpha;
+                }
+                sClockAlphaTimer2 = 0;
+                sClockAlphaTimer1 = 0;
+            }
+        } else {
+            if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
+                sThreeDayClockAlpha = 255;
+            } else {
+                sThreeDayClockAlpha = interfaceCtx->bAlpha;
+            }
+            sClockAlphaTimer2 = 0;
+            sClockAlphaTimer1 = 0;
+        }
+
+        if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
+
+            /**
+             * Section: Draw Clock's Hour Lines
+             */
+            gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+            gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 130, 130, 130, sThreeDayClockAlpha);
+            gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
+                              0, PRIMITIVE, 0);
+
+            OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockHourLinesTex, 4, 64, 35, 96, 180, 128, 35, 1,
+                                             6, 0, 1 << 10, 1 << 10);
+
+            /**
+             * Section: Draw Clock's Border
+             */
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, sThreeDayClockAlpha);
+            gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
+                              0, PRIMITIVE, 0);
+
+            //! @bug A texture height of 50 is given below. The texture is only 48 units height
+            //!      resulting in this reading into the next texture. This results in a white
+            //!      dot in the bottom center of the clock. For the three-day clock, this is
+            //!      covered by the diamond. However, it can be seen by the final-hours clock.
+            OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockBorderTex, 4, 64, 50, 96, 168, 128, 50, 1, 6,
+                                             0, 1 << 10, 1 << 10);
+
+            if (((CURRENT_DAY >= 4) ||
+                 ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
+                  (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
+                Gfx_SetupDL42_Overlay(play->state.gfxCtx);
+                gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            } else {
+                /**
+                 * Section: Draw Three-Day Clock's Diamond
+                 */
+                gDPPipeSync(OVERLAY_DISP++);
+
+                // Time is slowed down to half speed with inverted song of time
+                if (gSaveContext.save.timeSpeedOffset == -2) {
+                    // Clock diamond is blue and flashes white
+                    colorStep =
+                        ABS_ALT(sClockInvDiamondPrimRed - sClockInvDiamondPrimRedTargets[sClockInvDiamondTargetIndex]) /
+                        sClockInvDiamondTimer;
+                    if (sClockInvDiamondPrimRed >= sClockInvDiamondPrimRedTargets[sClockInvDiamondTargetIndex]) {
+                        sClockInvDiamondPrimRed -= colorStep;
                     } else {
-                        sThreeDayClockAlpha = interfaceCtx->bAlpha;
+                        sClockInvDiamondPrimRed += colorStep;
                     }
-                    D_801BFB34 = 0;
-                    D_801BFB30 = 0;
+
+                    colorStep = ABS_ALT(sClockInvDiamondPrimGreen -
+                                        sClockInvDiamondPrimGreenTargets[sClockInvDiamondTargetIndex]) /
+                                sClockInvDiamondTimer;
+                    if (sClockInvDiamondPrimGreen >= sClockInvDiamondPrimGreenTargets[sClockInvDiamondTargetIndex]) {
+                        sClockInvDiamondPrimGreen -= colorStep;
+                    } else {
+                        sClockInvDiamondPrimGreen += colorStep;
+                    }
+
+                    colorStep = ABS_ALT(sClockInvDiamondPrimBlue -
+                                        sClockInvDiamondPrimBlueTargets[sClockInvDiamondTargetIndex]) /
+                                sClockInvDiamondTimer;
+                    if (sClockInvDiamondPrimBlue >= sClockInvDiamondPrimBlueTargets[sClockInvDiamondTargetIndex]) {
+                        sClockInvDiamondPrimBlue -= colorStep;
+                    } else {
+                        sClockInvDiamondPrimBlue += colorStep;
+                    }
+
+                    colorStep =
+                        ABS_ALT(sClockInvDiamondEnvRed - sClockInvDiamondEnvRedTargets[sClockInvDiamondTargetIndex]) /
+                        sClockInvDiamondTimer;
+                    if (sClockInvDiamondEnvRed >= sClockInvDiamondEnvRedTargets[sClockInvDiamondTargetIndex]) {
+                        sClockInvDiamondEnvRed -= colorStep;
+                    } else {
+                        sClockInvDiamondEnvRed += colorStep;
+                    }
+
+                    colorStep = ABS_ALT(sClockInvDiamondEnvGreen -
+                                        sClockInvDiamondEnvGreenTargets[sClockInvDiamondTargetIndex]) /
+                                sClockInvDiamondTimer;
+                    if (sClockInvDiamondEnvGreen >= sClockInvDiamondEnvGreenTargets[sClockInvDiamondTargetIndex]) {
+                        sClockInvDiamondEnvGreen -= colorStep;
+                    } else {
+                        sClockInvDiamondEnvGreen += colorStep;
+                    }
+
+                    colorStep =
+                        ABS_ALT(sClockInvDiamondEnvBlue - sClockInvDiamondEnvBlueTargets[sClockInvDiamondTargetIndex]) /
+                        sClockInvDiamondTimer;
+                    if (sClockInvDiamondEnvBlue >= sClockInvDiamondEnvBlueTargets[sClockInvDiamondTargetIndex]) {
+                        sClockInvDiamondEnvBlue -= colorStep;
+                    } else {
+                        sClockInvDiamondEnvBlue += colorStep;
+                    }
+
+                    sClockInvDiamondTimer--;
+
+                    if (sClockInvDiamondTimer == 0) {
+                        sClockInvDiamondPrimRed = sClockInvDiamondPrimRedTargets[sClockInvDiamondTargetIndex];
+                        sClockInvDiamondPrimGreen = sClockInvDiamondPrimGreenTargets[sClockInvDiamondTargetIndex];
+                        sClockInvDiamondPrimBlue = sClockInvDiamondPrimBlueTargets[sClockInvDiamondTargetIndex];
+                        sClockInvDiamondEnvRed = sClockInvDiamondEnvRedTargets[sClockInvDiamondTargetIndex];
+                        sClockInvDiamondEnvGreen = sClockInvDiamondEnvGreenTargets[sClockInvDiamondTargetIndex];
+                        sClockInvDiamondEnvBlue = sClockInvDiamondEnvBlueTargets[sClockInvDiamondTargetIndex];
+                        sClockInvDiamondTimer = 15;
+                        sClockInvDiamondTargetIndex ^= 1;
+                    }
+
+                    gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
+                                      0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sClockInvDiamondPrimRed, sClockInvDiamondPrimGreen, 255,
+                                    sThreeDayClockAlpha);
+                    gDPSetEnvColor(OVERLAY_DISP++, sClockInvDiamondEnvRed, sClockInvDiamondEnvGreen,
+                                   sClockInvDiamondEnvBlue, 0);
+                } else {
+                    // Clock diamond is green for regular timeSpeedOffset
+                    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 170, 100, sThreeDayClockAlpha);
                 }
 
-                if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+                OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, gThreeDayClockDiamondTex, 40, 32, 140, 190, 40, 32,
+                                                  1 << 10, 1 << 10);
 
-                    func_8012C654(play->state.gfxCtx);
+                /**
+                 * Section: Draw Three-Day Clock's Day-Number over Diamond
+                 */
+                gDPPipeSync(OVERLAY_DISP++);
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
 
-                    /**
-                     * Draw Clock's Hour Lines
-                     */
-                    gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
-                    gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 130, 130, 130, sThreeDayClockAlpha);
-                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
-                                      TEXEL0, 0, PRIMITIVE, 0);
+                OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, interfaceCtx->doActionSegment + 0x780, 48, 27, 137, 192,
+                                                  48, 27, 1 << 10, 1 << 10);
 
-                    OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockHourLinesTex, 4, 64, 35, 96, 180, 128,
-                                                     35, 1, 6, 0, 1 << 10, 1 << 10);
+                /**
+                 * Section: Draw Three-Day Clock's Star (for the Minute Tracker)
+                 */
+                gDPPipeSync(OVERLAY_DISP++);
 
-                    /**
-                     * Draw Clock's Border
-                     */
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, sThreeDayClockAlpha);
-                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
-                                      TEXEL0, 0, PRIMITIVE, 0);
+                if (D_801BF974 != 0) {
+                    D_801BF980 += 0.02f;
+                    D_801BF97C += 11;
+                } else {
+                    D_801BF980 -= 0.02f;
+                    D_801BF97C -= 11;
+                }
 
-                    //! @bug A texture height of 50 is given below. The texture is only 48 units height
-                    //!      resulting in this reading into the next texture. This results in a white
-                    //!      dot in the bottom center of the clock. For the three-day clock, this is
-                    //!      covered by the diamond. However, it can be seen by the final-hours clock.
-                    OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gThreeDayClockBorderTex, 4, 64, 50, 96, 168, 128, 50,
-                                                     1, 6, 0, 1 << 10, 1 << 10);
+                D_801BF978--;
+                if (D_801BF978 == 0) {
+                    D_801BF978 = 10;
+                    D_801BF974 ^= 1;
+                }
 
-                    if (((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
-                                                (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))))) {
-                        func_8012C8D4(play->state.gfxCtx);
-                        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
+                timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
+
+                Gfx_SetupDL42_Overlay(play->state.gfxCtx);
+
+                gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+                if (sThreeDayClockAlpha != 255) {
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 110, sThreeDayClockAlpha);
+                } else {
+                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 110, D_801BF97C);
+                }
+
+                gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+                gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+                gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+
+                Matrix_Translate(0.0f, -86.0f, 0.0f, MTXMODE_NEW);
+                Matrix_Scale(1.0f, 1.0f, D_801BF980, MTXMODE_APPLY);
+                Matrix_RotateZF(-(timeInSeconds * 0.0175f) / 10.0f, MTXMODE_APPLY);
+
+                gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[12], 4, 0);
+                gDPLoadTextureBlock_4b(OVERLAY_DISP++, gThreeDayClockStarMinuteTex, G_IM_FMT_I, 16, 16, 0,
+                                       G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                       G_TX_NOLOD, G_TX_NOLOD);
+                gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
+            }
+
+            /**
+             * Section: Cuts off Three-Day Clock's Sun and Moon when they dip below the clock
+             */
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
+                              R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF * 4.0f);
+
+            // determines the current hour
+            for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
+                if (((void)0, gSaveContext.save.time) < sThreeDayClockHours[sp1C6 + 1]) {
+                    break;
+                }
+            }
+
+            /**
+             * Section: Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
+             */
+            time = gSaveContext.save.time;
+            sp1D8 = Math_SinS(time) * -40.0f;
+            temp_f14 = Math_CosS(time) * -34.0f;
+
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 100, 110, sThreeDayClockAlpha);
+
+            Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
+            Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[16], 4, 0);
+
+            OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockSunHourTex, 24, 24, 0);
+
+            /**
+             * Section: Draw Three-Day Clock's Moon (for the Night-Time Hours Tracker)
+             */
+            sp1D8 = Math_SinS(time) * 40.0f;
+            temp_f14 = Math_CosS(time) * 34.0f;
+
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 55, sThreeDayClockAlpha);
+
+            Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
+            Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[20], 4, 0);
+
+            OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockMoonHourTex, 24, 24, 0);
+
+            /**
+             * Section: Cuts off Three-Day Clock's Hour Digits when they dip below the clock
+             */
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
+                              R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF * 4.0f);
+
+            /**
+             * Section: Draws Three-Day Clock's Hour Digit Above the Sun
+             */
+            sp1CC = gSaveContext.save.time * 0.000096131f; // (2.0f * 3.15f / 0x10000)
+
+            // Rotates Three-Day Clock's Hour Digit To Above the Sun
+            Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
+            Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+            Matrix_RotateZF(-(sp1CC - 3.15f), MTXMODE_APPLY);
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            // Draws Three-Day Clock's Hour Digit Above the Sun
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
+                              0, PRIMITIVE, 0);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
+            gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[24], 8, 0);
+
+            OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], 4, 16, 11, 0);
+
+            // Colours the Three-Day Clocks's Hour Digit Above the Sun
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
+            gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
+
+            /**
+             * Section: Draws Three-Day Clock's Hour Digit Above the Moon
+             */
+
+            // Rotates Three-Day Clock's Hour Digit To Above the Moon
+            Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
+            Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
+            Matrix_RotateZF(-sp1CC, MTXMODE_APPLY);
+            gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+            // Draws Three-Day Clock's Hour Digit Above the Moon
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
+                              0, PRIMITIVE, 0);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
+            gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[32], 8, 0);
+
+            OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], 4, 16, 11, 0);
+
+            // Colours the Three-Day Clocks's Hour Digit Above the Moon
+            gDPPipeSync(OVERLAY_DISP++);
+            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
+            gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
+
+            gSPDisplayList(OVERLAY_DISP++, D_0E000000.setScissor);
+
+            // Final Hours
+            if ((CURRENT_DAY >= 4) ||
+                ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(0, 0) + 5)) &&
+                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
+                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0)) {
+                    // The Final Hours clock will flash red
+
+                    colorStep = ABS_ALT(sFinalHoursClockDigitsRed -
+                                        sFinalHoursClockDigitsRedTargets[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                    if (sFinalHoursClockDigitsRed >=
+                        sFinalHoursClockDigitsRedTargets[sFinalHoursClockColorTargetIndex]) {
+                        sFinalHoursClockDigitsRed -= colorStep;
                     } else {
-                        /**
-                         * Draw Three-Day Clock's Diamond
-                         */
-                        gDPPipeSync(OVERLAY_DISP++);
-
-                        // Time is slowed down to half speed with inverted song of time
-                        if (gSaveContext.save.timeSpeedOffset == -2) {
-                            // Clock diamond is blue and flashes white
-                            colorStep = ABS_ALT(D_801BFBCC - D_801BFBEC[D_801BFBE8]) / D_801BFBE4;
-                            if (D_801BFBCC >= D_801BFBEC[D_801BFBE8]) {
-                                D_801BFBCC -= colorStep;
-                            } else {
-                                D_801BFBCC += colorStep;
-                            }
-
-                            colorStep = ABS_ALT(D_801BFBD0 - D_801BFBF0[D_801BFBE8]) / D_801BFBE4;
-                            if (D_801BFBD0 >= D_801BFBF0[D_801BFBE8]) {
-                                D_801BFBD0 -= colorStep;
-                            } else {
-                                D_801BFBD0 += colorStep;
-                            }
-
-                            colorStep = ABS_ALT(D_801BFBD4 - D_801BFBF4[D_801BFBE8]) / D_801BFBE4;
-                            if (D_801BFBD4 >= D_801BFBF4[D_801BFBE8]) {
-                                D_801BFBD4 -= colorStep;
-                            } else {
-                                D_801BFBD4 += colorStep;
-                            }
-
-                            colorStep = ABS_ALT(D_801BFBD8 - D_801BFBF8[D_801BFBE8]) / D_801BFBE4;
-                            if (D_801BFBD8 >= D_801BFBF8[D_801BFBE8]) {
-                                D_801BFBD8 -= colorStep;
-                            } else {
-                                D_801BFBD8 += colorStep;
-                            }
-
-                            colorStep = ABS_ALT(D_801BFBDC - D_801BFBFC[D_801BFBE8]) / D_801BFBE4;
-                            if (D_801BFBDC >= D_801BFBFC[D_801BFBE8]) {
-                                D_801BFBDC -= colorStep;
-                            } else {
-                                D_801BFBDC += colorStep;
-                            }
-
-                            colorStep = ABS_ALT(D_801BFBE0 - D_801BFC00[D_801BFBE8]) / D_801BFBE4;
-                            if (D_801BFBE0 >= D_801BFC00[D_801BFBE8]) {
-                                D_801BFBE0 -= colorStep;
-                            } else {
-                                D_801BFBE0 += colorStep;
-                            }
-
-                            D_801BFBE4--;
-
-                            if (D_801BFBE4 == 0) {
-                                D_801BFBCC = D_801BFBEC[D_801BFBE8];
-                                D_801BFBD0 = D_801BFBF0[D_801BFBE8];
-                                D_801BFBD4 = D_801BFBF4[D_801BFBE8];
-                                D_801BFBD8 = D_801BFBF8[D_801BFBE8];
-                                D_801BFBDC = D_801BFBFC[D_801BFBE8];
-                                D_801BFBE0 = D_801BFC00[D_801BFBE8];
-                                D_801BFBE4 = 15;
-                                D_801BFBE8 ^= 1;
-                            }
-
-                            gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
-                                              PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
-                                              PRIMITIVE, 0);
-                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BFBCC, D_801BFBD0, 255, sThreeDayClockAlpha);
-                            gDPSetEnvColor(OVERLAY_DISP++, D_801BFBD8, D_801BFBDC, D_801BFBE0, 0);
-                        } else {
-                            // Clock diamond is green for regular timeSpeedOffset
-                            gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 170, 100, sThreeDayClockAlpha);
-                        }
-
-                        OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, gThreeDayClockDiamondTex, 40, 32, 140, 190, 40,
-                                                          32, 1 << 10, 1 << 10);
-
-                        /**
-                         * Draw Three-Day Clock's Day-Number over Diamond
-                         */
-                        gDPPipeSync(OVERLAY_DISP++);
-                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
-
-                        OVERLAY_DISP = Gfx_DrawTexRectIA8(OVERLAY_DISP, interfaceCtx->doActionSegment + 0x780, 48, 27,
-                                                          137, 192, 48, 27, 1 << 10, 1 << 10);
-
-                        /**
-                         * Draw Three-Day Clock's Star (for the Minute Tracker)
-                         */
-                        gDPPipeSync(OVERLAY_DISP++);
-
-                        if (D_801BF974 != 0) {
-                            D_801BF980 += 0.02f;
-                            D_801BF97C += 11;
-                        } else {
-                            D_801BF980 -= 0.02f;
-                            D_801BF97C -= 11;
-                        }
-
-                        D_801BF978--;
-                        if (D_801BF978 == 0) {
-                            D_801BF978 = 10;
-                            D_801BF974 ^= 1;
-                        }
-
-                        timeInSeconds = TIME_TO_SECONDS_F(gSaveContext.save.time);
-                        timeInSeconds -= ((s16)(timeInSeconds / 3600.0f)) * 3600.0f;
-
-                        func_8012C8D4(play->state.gfxCtx);
-
-                        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-                        if (sThreeDayClockAlpha != 255) {
-                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 110, sThreeDayClockAlpha);
-                        } else {
-                            gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 110, D_801BF97C);
-                        }
-
-                        gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                        gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
-                        gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-
-                        Matrix_Translate(0.0f, -86.0f, 0.0f, MTXMODE_NEW);
-                        Matrix_Scale(1.0f, 1.0f, D_801BF980, MTXMODE_APPLY);
-                        Matrix_RotateZF(-(timeInSeconds * 0.0175f) / 10.0f, MTXMODE_APPLY);
-
-                        gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[12], 4, 0);
-                        gDPLoadTextureBlock_4b(OVERLAY_DISP++, gThreeDayClockStarMinuteTex, G_IM_FMT_I, 16, 16, 0,
-                                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
-                                               G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                        gSP1Quadrangle(OVERLAY_DISP++, 0, 2, 3, 1, 0);
+                        sFinalHoursClockDigitsRed += colorStep;
                     }
 
-                    /**
-                     * Cuts off Three-Day Clock's Sun and Moon when they dip below the clock
-                     */
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
-                                      R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF * 4.0f);
-
-                    // determines the current hour
-                    for (sp1C6 = 0; sp1C6 <= 24; sp1C6++) {
-                        if (((void)0, gSaveContext.save.time) < sThreeDayClockHours[sp1C6 + 1]) {
-                            break;
-                        }
+                    colorStep = ABS_ALT(sFinalHoursClockFrameEnvRed -
+                                        sFinalHoursClockFrameEnvRedTargets[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                    if (sFinalHoursClockFrameEnvRed >=
+                        sFinalHoursClockFrameEnvRedTargets[sFinalHoursClockColorTargetIndex]) {
+                        sFinalHoursClockFrameEnvRed -= colorStep;
+                    } else {
+                        sFinalHoursClockFrameEnvRed += colorStep;
                     }
 
-                    /**
-                     * Draw Three-Day Clock's Sun (for the Day-Time Hours Tracker)
-                     */
-                    time = gSaveContext.save.time;
-                    sp1D8 = Math_SinS(time) * -40.0f;
-                    temp_f14 = Math_CosS(time) * -34.0f;
-
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 100, 110, sThreeDayClockAlpha);
-
-                    Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
-                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-
-                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[16], 4, 0);
-
-                    OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockSunHourTex, 24, 24, 0);
-
-                    /**
-                     * Draw Three-Day Clock's Moon (for the Night-Time Hours Tracker)
-                     */
-                    sp1D8 = Math_SinS(time) * 40.0f;
-                    temp_f14 = Math_CosS(time) * 34.0f;
-
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 55, sThreeDayClockAlpha);
-
-                    Matrix_Translate(sp1D8, temp_f14, 0.0f, MTXMODE_NEW);
-                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[20], 4, 0);
-
-                    OVERLAY_DISP = Gfx_DrawTexQuadIA8(OVERLAY_DISP, gThreeDayClockMoonHourTex, 24, 24, 0);
-
-                    /**
-                     * Cuts off Three-Day Clock's Hour Digits when they dip below the clock
-                     */
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetScissorFrac(OVERLAY_DISP++, G_SC_NON_INTERLACE, 400, 620, 880,
-                                      R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF * 4.0f);
-
-                    /**
-                     * Draws Three-Day Clock's Hour Digit Above the Sun
-                     */
-                    sp1CC = gSaveContext.save.time * 0.000096131f;
-
-                    // Rotates Three-Day Clock's Hour Digit To Above the Sun
-                    Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
-                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                    Matrix_RotateZF(-(sp1CC - 3.15f), MTXMODE_APPLY);
-                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-                    // Draws Three-Day Clock's Hour Digit Above the Sun
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
-                                      TEXEL0, 0, PRIMITIVE, 0);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
-                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[24], 8, 0);
-
-                    OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], 4, 16, 11, 0);
-
-                    // Colours the Three-Day Clocks's Hour Digit Above the Sun
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
-                    gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
-
-                    /**
-                     * Draws Three-Day Clock's Hour Digit Above the Moon
-                     */
-                    // Rotates Three-Day Clock's Hour Digit To Above the Moon
-                    Matrix_Translate(0.0f, R_THREE_DAY_CLOCK_Y_POS / 10.0f, 0.0f, MTXMODE_NEW);
-                    Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-                    Matrix_RotateZF(-sp1CC, MTXMODE_APPLY);
-                    gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-                    // Draws Three-Day Clock's Hour Digit Above the Moon
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
-                                      TEXEL0, 0, PRIMITIVE, 0);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 0, 0, 0, sThreeDayClockAlpha);
-                    gSPVertex(OVERLAY_DISP++, &interfaceCtx->actionVtx[32], 8, 0);
-
-                    OVERLAY_DISP = Gfx_DrawTexQuad4b(OVERLAY_DISP, sThreeDayClockHourTextures[sp1C6], 4, 16, 11, 0);
-
-                    // Colours the Three-Day Clocks's Hour Digit Above the Moon
-                    gDPPipeSync(OVERLAY_DISP++);
-                    gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 155, sThreeDayClockAlpha);
-                    gSP1Quadrangle(OVERLAY_DISP++, 4, 6, 7, 5, 0);
-
-                    gSPDisplayList(OVERLAY_DISP++, D_0E000000.setScissor);
-
-                    // Final Hours
-                    if ((CURRENT_DAY >= 4) || ((CURRENT_DAY == 3) && (((void)0, gSaveContext.save.time) >= 5) &&
-                                               (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)))) {
-                        if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0)) {
-                            // The Final Hours clock will flash red
-
-                            colorStep =
-                                ABS_ALT(sFinalHoursClockDigitsRed - D_801BFC04[sFinalHoursClockColorTargetIndex]) /
+                    colorStep = ABS_ALT(sFinalHoursClockFrameEnvGreen -
+                                        sFinalHoursClockFrameEnvGreenTargets[sFinalHoursClockColorTargetIndex]) /
                                 sFinalHoursClockColorTimer;
-                            if (sFinalHoursClockDigitsRed >= D_801BFC04[sFinalHoursClockColorTargetIndex]) {
-                                sFinalHoursClockDigitsRed -= colorStep;
-                            } else {
-                                sFinalHoursClockDigitsRed += colorStep;
-                            }
-
-                            colorStep =
-                                ABS_ALT(sFinalHoursClockFrameEnvRed - D_801BFC08[sFinalHoursClockColorTargetIndex]) /
-                                sFinalHoursClockColorTimer;
-                            if (sFinalHoursClockFrameEnvRed >= D_801BFC08[sFinalHoursClockColorTargetIndex]) {
-                                sFinalHoursClockFrameEnvRed -= colorStep;
-                            } else {
-                                sFinalHoursClockFrameEnvRed += colorStep;
-                            }
-
-                            colorStep =
-                                ABS_ALT(sFinalHoursClockFrameEnvGreen - D_801BFC0C[sFinalHoursClockColorTargetIndex]) /
-                                sFinalHoursClockColorTimer;
-                            if (sFinalHoursClockFrameEnvGreen >= D_801BFC0C[sFinalHoursClockColorTargetIndex]) {
-                                sFinalHoursClockFrameEnvGreen -= colorStep;
-                            } else {
-                                sFinalHoursClockFrameEnvGreen += colorStep;
-                            }
-
-                            colorStep =
-                                ABS_ALT(sFinalHoursClockFrameEnvBlue - D_801BFC10[sFinalHoursClockColorTargetIndex]) /
-                                sFinalHoursClockColorTimer;
-                            if (sFinalHoursClockFrameEnvBlue >= D_801BFC10[sFinalHoursClockColorTargetIndex]) {
-                                sFinalHoursClockFrameEnvBlue -= colorStep;
-                            } else {
-                                sFinalHoursClockFrameEnvBlue += colorStep;
-                            }
-
-                            sFinalHoursClockColorTimer--;
-
-                            if (sFinalHoursClockColorTimer == 0) {
-                                sFinalHoursClockDigitsRed = D_801BFC04[sFinalHoursClockColorTargetIndex];
-                                sFinalHoursClockFrameEnvRed = D_801BFC08[sFinalHoursClockColorTargetIndex];
-                                sFinalHoursClockFrameEnvGreen = D_801BFC0C[sFinalHoursClockColorTargetIndex];
-                                sFinalHoursClockFrameEnvBlue = D_801BFC10[sFinalHoursClockColorTargetIndex];
-                                sFinalHoursClockColorTimer = 6;
-                                sFinalHoursClockColorTargetIndex ^= 1;
-                            }
-                        }
-
-                        sp1E6 = sThreeDayClockAlpha;
-                        if (sp1E6 != 0) {
-                            sp1E6 = 255;
-                        }
-
-                        func_8012C654(play->state.gfxCtx);
-
-                        /**
-                         * Draws Final-Hours Clock's Frame
-                         */
-                        gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                        gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
-                        gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
-                        gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
-                                          PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
-                                          PRIMITIVE, 0);
-                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 195, sp1E6);
-                        gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockFrameEnvRed, sFinalHoursClockFrameEnvGreen,
-                                       sFinalHoursClockFrameEnvBlue, 0);
-
-                        OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gFinalHoursClockFrameTex, 3, 80, 13, 119, 202,
-                                                         80, 13, 0, 0, 0, 1 << 10, 1 << 10);
-
-                        finalHoursClockSlots[0] = 0;
-
-                        timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
-
-                        timeInMinutes = TIME_TO_MINUTES_F(timeUntilMoonCrash);
-
-                        // digits for hours
-                        finalHoursClockSlots[1] = timeInMinutes / 60.0f;
-                        finalHoursClockSlots[2] = timeInMinutes / 60.0f;
-
-                        temp = (s32)timeInMinutes % 60;
-
-                        while (finalHoursClockSlots[1] >= 10) {
-                            finalHoursClockSlots[0]++;
-                            finalHoursClockSlots[1] -= 10;
-                        }
-
-                        // digits for minutes
-                        finalHoursClockSlots[3] = 0;
-                        finalHoursClockSlots[4] = temp;
-
-                        while (finalHoursClockSlots[4] >= 10) {
-                            finalHoursClockSlots[3]++;
-                            finalHoursClockSlots[4] -= 10;
-                        }
-
-                        // digits for seconds
-                        finalHoursClockSlots[6] = 0;
-                        finalHoursClockSlots[7] =
-                            timeUntilMoonCrash - (u32)((finalHoursClockSlots[2] * ((f32)0x10000 / 24)) +
-                                                       (((void)0, temp) * ((f32)0x10000 / (24 * 60))));
-
-                        while (finalHoursClockSlots[7] >= 10) {
-                            finalHoursClockSlots[6]++;
-                            finalHoursClockSlots[7] -= 10;
-                        }
-
-                        // Colon separating hours from minutes and minutes from seconds
-                        finalHoursClockSlots[2] = finalHoursClockSlots[5] = 10;
-
-                        /**
-                         * Draws Final-Hours Clock's Digits
-                         */
-                        gDPPipeSync(OVERLAY_DISP++);
-                        gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sFinalHoursClockDigitsRed, 0, 0, sp1E6);
-                        gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockDigitsRed, 0, 0, 0);
-
-                        for (sp1C6 = 0; sp1C6 < 8; sp1C6++) {
-                            index = D_801BFC40[sp1C6];
-
-                            OVERLAY_DISP =
-                                Gfx_DrawTexRectI8(OVERLAY_DISP, sFinalHoursDigitTextures[finalHoursClockSlots[sp1C6]],
-                                                  8, 8, index, 205, 8, 8, 1 << 10, 1 << 10);
-                        }
+                    if (sFinalHoursClockFrameEnvGreen >=
+                        sFinalHoursClockFrameEnvGreenTargets[sFinalHoursClockColorTargetIndex]) {
+                        sFinalHoursClockFrameEnvGreen -= colorStep;
+                    } else {
+                        sFinalHoursClockFrameEnvGreen += colorStep;
                     }
+
+                    colorStep = ABS_ALT(sFinalHoursClockFrameEnvBlue -
+                                        sFinalHoursClockFrameEnvBlueTargets[sFinalHoursClockColorTargetIndex]) /
+                                sFinalHoursClockColorTimer;
+                    if (sFinalHoursClockFrameEnvBlue >=
+                        sFinalHoursClockFrameEnvBlueTargets[sFinalHoursClockColorTargetIndex]) {
+                        sFinalHoursClockFrameEnvBlue -= colorStep;
+                    } else {
+                        sFinalHoursClockFrameEnvBlue += colorStep;
+                    }
+
+                    sFinalHoursClockColorTimer--;
+
+                    if (sFinalHoursClockColorTimer == 0) {
+                        sFinalHoursClockDigitsRed = sFinalHoursClockDigitsRedTargets[sFinalHoursClockColorTargetIndex];
+                        sFinalHoursClockFrameEnvRed =
+                            sFinalHoursClockFrameEnvRedTargets[sFinalHoursClockColorTargetIndex];
+                        sFinalHoursClockFrameEnvGreen =
+                            sFinalHoursClockFrameEnvGreenTargets[sFinalHoursClockColorTargetIndex];
+                        sFinalHoursClockFrameEnvBlue =
+                            sFinalHoursClockFrameEnvBlueTargets[sFinalHoursClockColorTargetIndex];
+                        sFinalHoursClockColorTimer = 6;
+                        sFinalHoursClockColorTargetIndex ^= 1;
+                    }
+                }
+
+                sp1E6 = sThreeDayClockAlpha;
+                if (sp1E6 != 0) {
+                    sp1E6 = 255;
+                }
+
+                Gfx_SetupDL39_Overlay(play->state.gfxCtx);
+
+                /**
+                 * Section: Draws Final-Hours Clock's Frame
+                 */
+                gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
+                gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
+                gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
+                                  PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 195, sp1E6);
+                gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockFrameEnvRed, sFinalHoursClockFrameEnvGreen,
+                               sFinalHoursClockFrameEnvBlue, 0);
+
+                OVERLAY_DISP = Gfx_DrawTexRect4b(OVERLAY_DISP, gFinalHoursClockFrameTex, 3, 80, 13, 119, 202, 80, 13, 0,
+                                                 0, 0, 1 << 10, 1 << 10);
+
+                timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
+                timeInMinutes = TIME_TO_MINUTES_F(timeUntilMoonCrash);
+
+                // digits for hours
+                finalHoursClockSlots[0] = 0;
+                finalHoursClockSlots[1] = timeInMinutes / 60.0f;
+                finalHoursClockSlots[2] = timeInMinutes / 60.0f;
+
+                while (finalHoursClockSlots[1] >= 10) {
+                    finalHoursClockSlots[0]++;
+                    finalHoursClockSlots[1] -= 10;
+                }
+
+                // digits for minutes
+                finalHoursClockSlots[3] = 0;
+                finalHoursClockSlots[4] = (s32)timeInMinutes % 60;
+                finalHoursClockSlots[5] = (s32)timeInMinutes % 60;
+
+                while (finalHoursClockSlots[4] >= 10) {
+                    finalHoursClockSlots[3]++;
+                    finalHoursClockSlots[4] -= 10;
+                }
+
+                // digits for seconds
+                finalHoursClockSlots[6] = 0;
+                finalHoursClockSlots[7] =
+                    timeUntilMoonCrash - (u32)((finalHoursClockSlots[2] * ((f32)0x10000 / 24)) +
+                                               (finalHoursClockSlots[5] * ((f32)0x10000 / (24 * 60))));
+
+                while (finalHoursClockSlots[7] >= 10) {
+                    finalHoursClockSlots[6]++;
+                    finalHoursClockSlots[7] -= 10;
+                }
+
+                // Colon separating hours from minutes and minutes from seconds
+                finalHoursClockSlots[2] = finalHoursClockSlots[5] = 10;
+
+                /**
+                 * Section: Draws Final-Hours Clock's Digits
+                 */
+                gDPPipeSync(OVERLAY_DISP++);
+                gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sFinalHoursClockDigitsRed, 0, 0, sp1E6);
+                gDPSetEnvColor(OVERLAY_DISP++, sFinalHoursClockDigitsRed, 0, 0, 0);
+
+                for (sp1C6 = 0; sp1C6 < 8; sp1C6++) {
+                    index = sFinalHoursDigitSlotPosXOffset[sp1C6];
+
+                    OVERLAY_DISP =
+                        Gfx_DrawTexRectI8(OVERLAY_DISP, sFinalHoursDigitTextures[finalHoursClockSlots[sp1C6]], 8, 8,
+                                          index, 205, 8, 8, 1 << 10, 1 << 10);
                 }
             }
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-s16 sThreeDayClockAlpha = 255;
-s16 D_801BFB30 = 0;
-s16 D_801BFB34 = 0;
-u16 sThreeDayClockHours[] = {
-    CLOCK_TIME(0, 0),  CLOCK_TIME(1, 0),  CLOCK_TIME(2, 0),  CLOCK_TIME(3, 0),  CLOCK_TIME(4, 0),
-    CLOCK_TIME(5, 0),  CLOCK_TIME(6, 0),  CLOCK_TIME(7, 0),  CLOCK_TIME(8, 0),  CLOCK_TIME(9, 0),
-    CLOCK_TIME(10, 0), CLOCK_TIME(11, 0), CLOCK_TIME(12, 0), CLOCK_TIME(13, 0), CLOCK_TIME(14, 0),
-    CLOCK_TIME(15, 0), CLOCK_TIME(16, 0), CLOCK_TIME(17, 0), CLOCK_TIME(18, 0), CLOCK_TIME(19, 0),
-    CLOCK_TIME(20, 0), CLOCK_TIME(21, 0), CLOCK_TIME(22, 0), CLOCK_TIME(23, 0), CLOCK_TIME(24, 0) - 1,
-};
-TexturePtr sThreeDayClockHourTextures[] = {
-    gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
-    gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
-    gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
-    gThreeDayClockHour12Tex, gThreeDayClockHour1Tex, gThreeDayClockHour2Tex,  gThreeDayClockHour3Tex,
-    gThreeDayClockHour4Tex,  gThreeDayClockHour5Tex, gThreeDayClockHour6Tex,  gThreeDayClockHour7Tex,
-    gThreeDayClockHour8Tex,  gThreeDayClockHour9Tex, gThreeDayClockHour10Tex, gThreeDayClockHour11Tex,
-};
-s16 D_801BFBCC = 0;   // color R
-s16 D_801BFBD0 = 155; // color G
-s16 D_801BFBD4 = 255;
-s16 D_801BFBD8 = 0;
-s16 D_801BFBDC = 0;
-s16 D_801BFBE0 = 0;
-s16 D_801BFBE4 = 0xF;
-u32 D_801BFBE8 = 0;
-s16 D_801BFBEC[] = { 100, 0 };
-s16 D_801BFBF0[] = { 205, 155 };
-s16 D_801BFBF4[] = { 255, 255 };
-s16 D_801BFBF8[] = { 30, 0 };
-s16 D_801BFBFC[] = { 30, 0 };
-s16 D_801BFC00[] = { 100, 0 };
-s16 D_801BFC04[] = { 255, 0 };
-s16 D_801BFC08[] = { 100, 0 };
-s16 D_801BFC0C[] = { 30, 0 };
-s16 D_801BFC10[] = { 100, 0 };
-TexturePtr sFinalHoursDigitTextures[] = {
-    gFinalHoursClockDigit0Tex, gFinalHoursClockDigit1Tex, gFinalHoursClockDigit2Tex, gFinalHoursClockDigit3Tex,
-    gFinalHoursClockDigit4Tex, gFinalHoursClockDigit5Tex, gFinalHoursClockDigit6Tex, gFinalHoursClockDigit7Tex,
-    gFinalHoursClockDigit8Tex, gFinalHoursClockDigit9Tex, gFinalHoursClockColonTex,
-};
-s16 D_801BFC40[] = {
-    127, 136, 144, 151, 160, 168, 175, 184,
-};
-void Interface_DrawClock(PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_parameter/Interface_DrawClock.s")
-#endif
 
 void Interface_SetPerfectLetters(PlayState* play, s16 perfectLettersType) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
@@ -5497,7 +5357,7 @@ void Interface_DrawPerfectLetters(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C8D4(play->state.gfxCtx);
+    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
     gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetCombineLERP(OVERLAY_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
@@ -5652,7 +5512,7 @@ void Interface_DrawTimers(PlayState* play) {
                         }
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_COUNTING;
                         sPostmanTimerInputBtnAPressed = true;
-                        func_80174F7C(Interface_PostmanTimerCallback, NULL);
+                        PadMgr_SetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
                         break;
 
                     case TIMER_STATE_POSTMAN_STOP:
@@ -5661,7 +5521,7 @@ void Interface_DrawTimers(PlayState* play) {
                             postmanTimerStopOsTime - ((void)0, gSaveContext.timerStartOsTimes[TIMER_ID_POSTMAN]) -
                             ((void)0, gSaveContext.timerPausedOsTimes[TIMER_ID_POSTMAN]));
                         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_POSTMAN_END;
-                        func_80174F9C(Interface_PostmanTimerCallback, NULL);
+                        PadMgr_UnsetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
                         break;
 
                     case TIMER_STATE_POSTMAN_COUNTING:
@@ -5683,7 +5543,7 @@ void Interface_DrawTimers(PlayState* play) {
 
                         if (interfaceCtx->magicAlpha != 255) {
                             gSaveContext.timerY[sTimerId] = 22;
-                        } else if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+                        } else if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                             gSaveContext.timerY[sTimerId] = 54;
                         } else {
                             gSaveContext.timerY[sTimerId] = 46;
@@ -5727,7 +5587,7 @@ void Interface_DrawTimers(PlayState* play) {
                         j = ((((void)0, gSaveContext.timerX[sTimerId]) - 26) / sTimerStateTimer);
                         gSaveContext.timerX[sTimerId] = ((void)0, gSaveContext.timerX[sTimerId]) - j;
 
-                        j = (gSaveContext.save.playerData.healthCapacity > 0xA0)
+                        j = (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0)
                                 ? ((((void)0, gSaveContext.timerY[sTimerId]) - 54) / sTimerStateTimer)
                                 : ((((void)0, gSaveContext.timerY[sTimerId]) - 46) / sTimerStateTimer);
                         gSaveContext.timerY[sTimerId] = ((void)0, gSaveContext.timerY[sTimerId]) - j;
@@ -5741,7 +5601,7 @@ void Interface_DrawTimers(PlayState* play) {
                             gSaveContext.timerY[sTimerId] = R_MOON_CRASH_TIMER_Y;
                         } else {
                             gSaveContext.timerX[sTimerId] = 26;
-                            if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+                            if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                                 gSaveContext.timerY[sTimerId] = 54;
                             } else {
                                 gSaveContext.timerY[sTimerId] = 46;
@@ -5781,7 +5641,8 @@ void Interface_DrawTimers(PlayState* play) {
                     break;
 
                 case TIMER_STATE_ENV_HAZARD_START:
-                    gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(gSaveContext.save.playerData.health >> 1);
+                    gSaveContext.timerCurTimes[sTimerId] =
+                        SECONDS_TO_TIMER(gSaveContext.save.saveInfo.playerData.health >> 1);
                     gSaveContext.timerDirections[sTimerId] = TIMER_COUNT_DOWN;
                     gSaveContext.timerTimeLimits[sTimerId] = gSaveContext.timerCurTimes[sTimerId];
                     sTimerStateTimer = 20;
@@ -5889,8 +5750,8 @@ void Interface_DrawTimers(PlayState* play) {
                     gSaveContext.timerCurTimes[sTimerId] = SECONDS_TO_TIMER(0);
                     gSaveContext.timerStates[sTimerId] = TIMER_STATE_STOP;
                     if (sEnvTimerActive) {
-                        gSaveContext.save.playerData.health = 0;
-                        play->damagePlayer(play, -(((void)0, gSaveContext.save.playerData.health) + 2));
+                        gSaveContext.save.saveInfo.playerData.health = 0;
+                        play->damagePlayer(play, -(((void)0, gSaveContext.save.saveInfo.playerData.health) + 2));
                     }
                     sEnvTimerActive = false;
                 }
@@ -5958,7 +5819,8 @@ void Interface_DrawTimers(PlayState* play) {
                     }
                 } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                     if ((((void)0, gSaveContext.timerCurTimes[sTimerId]) >
-                         (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] - SECONDS_TO_TIMER(9))) &&
+                         (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
+                          SECONDS_TO_TIMER(9))) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
                         play_sound(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
@@ -5996,10 +5858,10 @@ void Interface_DrawTimers(PlayState* play) {
                         }
                     } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
                         if (((void)0, gSaveContext.timerCurTimes[sTimerId]) >=
-                            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+                            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 50, 0, 255);
                         } else if (((void)0, gSaveContext.timerCurTimes[sTimerId]) >=
-                                   (gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
+                                   (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
                                     SECONDS_TO_TIMER(9))) {
                             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 0, 255);
                         } else {
@@ -6107,7 +5969,7 @@ void Interface_UpdateBottleTimers(PlayState* play) {
                     // Time has passed, and the time limit has been exceeded.
                     gSaveContext.bottleTimerCurTimes[i] = SECONDS_TO_TIMER(0);
 
-                    if (gSaveContext.save.inventory.items[i + SLOT_BOTTLE_1] == ITEM_HOT_SPRING_WATER) {
+                    if (gSaveContext.save.saveInfo.inventory.items[i + SLOT_BOTTLE_1] == ITEM_HOT_SPRING_WATER) {
                         Inventory_UpdateItem(play, i + SLOT_BOTTLE_1, ITEM_SPRING_WATER);
                         Message_StartTextbox(play, 0xFA, NULL);
                     }
@@ -6132,7 +5994,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C654(play->state.gfxCtx);
+    Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         // Carrots rendering if the action corresponds to riding a horse
@@ -6166,7 +6028,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
             width = 24;
             height = 16;
             rectX = 20;
-            if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+            if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                 rectY = 75; // two rows of hearts
             } else {
                 rectY = 67; // one row of hearts
@@ -6210,7 +6072,7 @@ void Interface_DrawMinigameIcons(PlayState* play) {
 
             if (play->sceneId == SCENE_30GYOSON) {
                 rectX += 20;
-                if (gSaveContext.save.playerData.healthCapacity > 0xA0) {
+                if (gSaveContext.save.saveInfo.playerData.healthCapacity > 0xA0) {
                     rectY = 87; // two rows of hearts
                 } else {
                     rectY = 79; // one row of hearts
@@ -6307,7 +6169,7 @@ void Interface_Draw(PlayState* play) {
         // Draw Grandma's Story
         if (interfaceCtx->storyDmaStatus == STORY_DMA_DONE) {
             gSPSegment(OVERLAY_DISP++, 0x07, interfaceCtx->storySegment);
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
@@ -6332,7 +6194,7 @@ void Interface_Draw(PlayState* play) {
 
         LifeMeter_Draw(play);
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         // Draw Rupee Icon
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, sRupeeCounterIconPrimColors[CUR_UPG_VALUE(UPG_WALLET)].r,
@@ -6465,7 +6327,7 @@ void Interface_Draw(PlayState* play) {
                           PRIMITIVE, 0);
 
         counterDigits[0] = counterDigits[1] = 0;
-        counterDigits[2] = gSaveContext.save.playerData.rupees;
+        counterDigits[2] = gSaveContext.save.saveInfo.playerData.rupees;
 
         if ((counterDigits[2] > 9999) || (counterDigits[2] < 0)) {
             counterDigits[2] &= 0xDDD;
@@ -6498,9 +6360,9 @@ void Interface_Draw(PlayState* play) {
 
             gDPPipeSync(OVERLAY_DISP++);
 
-            if (gSaveContext.save.playerData.rupees == CUR_CAPACITY(UPG_WALLET)) {
+            if (gSaveContext.save.saveInfo.playerData.rupees == CUR_CAPACITY(UPG_WALLET)) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 120, 255, 0, interfaceCtx->magicAlpha);
-            } else if (gSaveContext.save.playerData.rupees != 0) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees != 0) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, interfaceCtx->magicAlpha);
             } else {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 100, 100, 100, interfaceCtx->magicAlpha);
@@ -6517,7 +6379,7 @@ void Interface_Draw(PlayState* play) {
             Actor_DrawZTarget(&play->actorCtx.targetContext, play);
         }
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         Interface_DrawItemButtons(play);
 
@@ -6549,7 +6411,7 @@ void Interface_Draw(PlayState* play) {
 
                     interfaceCtx->actionVtx[40 + 2].v.tc[1] = interfaceCtx->actionVtx[40 + 3].v.tc[1] = 32 << 5;
 
-                    func_8012C8D4(play->state.gfxCtx);
+                    Gfx_SetupDL42_Overlay(play->state.gfxCtx);
 
                     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
                     gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
@@ -6584,7 +6446,7 @@ void Interface_Draw(PlayState* play) {
     // Draw pictograph focus icons
     if (sPictoState == PICTO_BOX_STATE_LENS) {
 
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
         gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
         gDPSetRenderMode(OVERLAY_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
@@ -6627,7 +6489,7 @@ void Interface_Draw(PlayState* play) {
     // Draw pictograph photo
     if (sPictoState >= PICTO_BOX_STATE_SETUP_PHOTO) {
         if (!(play->actorCtx.flags & ACTORCTX_FLAG_PICTO_BOX_ON)) {
-            Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90,
+            Play_CompressI8ToI5((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer,
                                 (u8*)gSaveContext.pictoPhotoI5, PICTO_PHOTO_WIDTH * PICTO_PHOTO_HEIGHT);
 
             interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
@@ -6652,7 +6514,7 @@ void Interface_Draw(PlayState* play) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 200, 200, 200, 250);
             gDPFillRectangle(OVERLAY_DISP++, 70, 22, 251, 151);
 
-            func_8012C654(play->state.gfxCtx);
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
 
             gDPSetRenderMode(OVERLAY_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEI_PRIM, G_CC_MODULATEI_PRIM);
@@ -6663,7 +6525,7 @@ void Interface_Draw(PlayState* play) {
             for (sp2CC = 0; sp2CC < (PICTO_PHOTO_HEIGHT / 8); sp2CC++, pictoRectTop += 8) {
                 pictoRectLeft = PICTO_PHOTO_TOPLEFT_X;
                 gDPLoadTextureBlock(OVERLAY_DISP++,
-                                    (u8*)((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : D_801FBB90) +
+                                    (u8*)((play->pictoPhotoI8 != NULL) ? play->pictoPhotoI8 : gWorkBuffer) +
                                         (0x500 * sp2CC),
                                     G_IM_FMT_I, G_IM_SIZ_8b, PICTO_PHOTO_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                     G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -6851,14 +6713,15 @@ void Interface_Update(PlayState* play) {
     // Update health
     if (gSaveContext.healthAccumulator != 0) {
         gSaveContext.healthAccumulator -= 4;
-        gSaveContext.save.playerData.health += 4;
+        gSaveContext.save.saveInfo.playerData.health += 4;
 
-        if ((gSaveContext.save.playerData.health & 0xF) < 4) {
+        if ((gSaveContext.save.saveInfo.playerData.health & 0xF) < 4) {
             play_sound(NA_SE_SY_HP_RECOVER);
         }
 
-        if (((void)0, gSaveContext.save.playerData.health) >= ((void)0, gSaveContext.save.playerData.healthCapacity)) {
-            gSaveContext.save.playerData.health = gSaveContext.save.playerData.healthCapacity;
+        if (((void)0, gSaveContext.save.saveInfo.playerData.health) >=
+            ((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity)) {
+            gSaveContext.save.saveInfo.playerData.health = gSaveContext.save.saveInfo.playerData.healthCapacity;
             gSaveContext.healthAccumulator = 0;
         }
     }
@@ -6883,26 +6746,26 @@ void Interface_Update(PlayState* play) {
     // Update rupees
     if (gSaveContext.rupeeAccumulator != 0) {
         if (gSaveContext.rupeeAccumulator > 0) {
-            if (gSaveContext.save.playerData.rupees < CUR_CAPACITY(UPG_WALLET)) {
+            if (gSaveContext.save.saveInfo.playerData.rupees < CUR_CAPACITY(UPG_WALLET)) {
                 gSaveContext.rupeeAccumulator--;
-                gSaveContext.save.playerData.rupees++;
+                gSaveContext.save.saveInfo.playerData.rupees++;
                 play_sound(NA_SE_SY_RUPY_COUNT);
             } else {
                 // Max rupees
-                gSaveContext.save.playerData.rupees = CUR_CAPACITY(UPG_WALLET);
+                gSaveContext.save.saveInfo.playerData.rupees = CUR_CAPACITY(UPG_WALLET);
                 gSaveContext.rupeeAccumulator = 0;
             }
-        } else if (gSaveContext.save.playerData.rupees != 0) {
+        } else if (gSaveContext.save.saveInfo.playerData.rupees != 0) {
             if (gSaveContext.rupeeAccumulator <= -50) {
                 gSaveContext.rupeeAccumulator += 10;
-                gSaveContext.save.playerData.rupees -= 10;
-                if (gSaveContext.save.playerData.rupees < 0) {
-                    gSaveContext.save.playerData.rupees = 0;
+                gSaveContext.save.saveInfo.playerData.rupees -= 10;
+                if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
+                    gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
                 play_sound(NA_SE_SY_RUPY_COUNT);
             } else {
                 gSaveContext.rupeeAccumulator++;
-                gSaveContext.save.playerData.rupees--;
+                gSaveContext.save.saveInfo.playerData.rupees--;
                 play_sound(NA_SE_SY_RUPY_COUNT);
             }
         } else {
@@ -7035,29 +6898,31 @@ void Interface_Update(PlayState* play) {
     if (!(player->stateFlags1 & PLAYER_STATE1_200)) {
         if (R_MAGIC_DBG_SET_UPGRADE == MAGIC_DBG_SET_UPGRADE_DOUBLE_METER) {
             // Upgrade to double magic
-            if (!gSaveContext.save.playerData.isMagicAcquired) {
-                gSaveContext.save.playerData.isMagicAcquired = true;
+            if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
+                gSaveContext.save.saveInfo.playerData.isMagicAcquired = true;
             }
-            gSaveContext.save.playerData.isDoubleMagicAcquired = true;
-            gSaveContext.save.playerData.magic = MAGIC_DOUBLE_METER;
-            gSaveContext.save.playerData.magicLevel = 0;
+            gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired = true;
+            gSaveContext.save.saveInfo.playerData.magic = MAGIC_DOUBLE_METER;
+            gSaveContext.save.saveInfo.playerData.magicLevel = 0;
             R_MAGIC_DBG_SET_UPGRADE = MAGIC_DBG_SET_UPGRADE_NO_ACTION;
         } else if (R_MAGIC_DBG_SET_UPGRADE == MAGIC_DBG_SET_UPGRADE_NORMAL_METER) {
             // Upgrade to normal magic
-            if (!gSaveContext.save.playerData.isMagicAcquired) {
-                gSaveContext.save.playerData.isMagicAcquired = true;
+            if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
+                gSaveContext.save.saveInfo.playerData.isMagicAcquired = true;
             }
-            gSaveContext.save.playerData.isDoubleMagicAcquired = false;
-            gSaveContext.save.playerData.magic = MAGIC_NORMAL_METER;
-            gSaveContext.save.playerData.magicLevel = 0;
+            gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired = false;
+            gSaveContext.save.saveInfo.playerData.magic = MAGIC_NORMAL_METER;
+            gSaveContext.save.saveInfo.playerData.magicLevel = 0;
             R_MAGIC_DBG_SET_UPGRADE = MAGIC_DBG_SET_UPGRADE_NO_ACTION;
         }
 
-        if ((gSaveContext.save.playerData.isMagicAcquired) && (gSaveContext.save.playerData.magicLevel == 0)) {
+        if ((gSaveContext.save.saveInfo.playerData.isMagicAcquired) &&
+            (gSaveContext.save.saveInfo.playerData.magicLevel == 0)) {
             // Prepare to step `magicCapacity` to full capacity
-            gSaveContext.save.playerData.magicLevel = gSaveContext.save.playerData.isDoubleMagicAcquired + 1;
-            gSaveContext.magicFillTarget = gSaveContext.save.playerData.magic;
-            gSaveContext.save.playerData.magic = 0;
+            gSaveContext.save.saveInfo.playerData.magicLevel =
+                gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1;
+            gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
+            gSaveContext.save.saveInfo.playerData.magic = 0;
             gSaveContext.magicState = MAGIC_STATE_STEP_CAPACITY;
             BUTTON_ITEM_EQUIP(PLAYER_FORM_DEKU, EQUIP_SLOT_B) = ITEM_NUT;
         }
@@ -7071,7 +6936,7 @@ void Interface_Update(PlayState* play) {
         if ((sEnvHazard == PLAYER_ENV_HAZARD_HOTROOM) || (sEnvHazard == PLAYER_ENV_HAZARD_UNDERWATER_FREE)) {
             if (CUR_FORM != PLAYER_FORM_ZORA) {
                 if (play->gameOverCtx.state == GAMEOVER_INACTIVE) {
-                    if ((gSaveContext.save.playerData.health >> 1) != 0) {
+                    if ((gSaveContext.save.saveInfo.playerData.health >> 1) != 0) {
                         gSaveContext.timerStates[TIMER_ID_ENV_HAZARD] = TIMER_STATE_ENV_HAZARD_START;
                         gSaveContext.timerX[TIMER_ID_ENV_HAZARD] = 115;
                         gSaveContext.timerY[TIMER_ID_ENV_HAZARD] = 80;
@@ -7204,7 +7069,7 @@ void Interface_Update(PlayState* play) {
 
 void Interface_Destroy(PlayState* play) {
     Map_Destroy(play);
-    func_80174F9C(Interface_PostmanTimerCallback, NULL);
+    PadMgr_UnsetInputRetraceCallback(Interface_PostmanTimerCallback, NULL);
 }
 
 void Interface_Init(PlayState* play) {

@@ -167,8 +167,8 @@ void func_80B12A88(Actor* thisx) {
     }
 }
 
-void func_80B12B38(ObjDhouse* this2, PlayState* play) {
-    ObjDhouse* this = this2;
+void func_80B12B38(ObjDhouse* this, PlayState* play) {
+    Actor* thisx = &this->dyna.actor;
     s32 i;
     f32 temp_f0;
     CollisionPoly* sp90;
@@ -201,7 +201,7 @@ void func_80B12B38(ObjDhouse* this2, PlayState* play) {
             phi_s3 = false;
             if (ptr->unk_0C.y < 0.0f) {
                 func_80B12A50(ptr, ptr3, &sp80);
-                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp7C, &this->dyna.actor, &sp80);
+                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp7C, thisx, &sp80);
                 if (((sp80.y - 35.0f) < temp_f0) && (temp_f0 > (BGCHECK_Y_MIN + 1.0f))) {
                     phi_s3 = true;
                 }
@@ -441,7 +441,7 @@ void func_80B13940(ObjDhouse* this, PlayState* play2) {
 
     if (sp20) {
         func_80B12A88(&this->dyna.actor);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->dyna.actor.draw = func_80B13C08;
         this->dyna.actor.flags |= ACTOR_FLAG_20;
         func_80B139D8(this);
@@ -458,20 +458,20 @@ void func_80B139F4(ObjDhouse* this, PlayState* play) {
     s16 quakeIndex;
 
     if (this->unk_1370 == 117) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 8, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 17);
+        Quake_SetPerturbations(quakeIndex, 8, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 17);
     } else if (this->unk_1370 == 105) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 7, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 20);
+        Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 20);
     } else if (this->unk_1370 == 90) {
-        quakeIndex = Quake_Add(camera, QUAKE_TYPE_3);
+        quakeIndex = Quake_Request(camera, QUAKE_TYPE_3);
         Quake_SetSpeed(quakeIndex, 20000);
-        Quake_SetQuakeValues(quakeIndex, 5, 0, 0, 0);
-        Quake_SetCountdown(quakeIndex, 62);
+        Quake_SetPerturbations(quakeIndex, 5, 0, 0, 0);
+        Quake_SetDuration(quakeIndex, 62);
     }
 
     this->unk_1370--;
@@ -505,7 +505,7 @@ void func_80B13C08(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_dhouse_DL_004928);

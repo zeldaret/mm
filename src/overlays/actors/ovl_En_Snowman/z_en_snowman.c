@@ -58,7 +58,7 @@ typedef enum {
     // Indicates that either this Eeno is shrinking having been absorbed by another Eeno, or that
     // this Eeno is a fully-combined large Eeno and is done trying to combine with other split
     // Eenos. In both cases, this Eeno cannot be absorbed by any other Eeno.
-    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE,
+    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE
 } EnSnowmanCombineState;
 
 ActorInit En_Snowman_InitVars = {
@@ -119,7 +119,7 @@ typedef enum {
     /* 0x2 */ EN_SNOWMAN_DMGEFF_MELT,
     /* 0x4 */ EN_SNOWMAN_DMGEFF_LIGHT_ORB = 0x4,
     /* 0x5 */ EN_SNOWMAN_DMGEFF_ELECTRIC_STUN,
-    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF, // Damages small Eenos, pulls the player towards large Eenos
+    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF // Damages small Eenos, pulls the player towards large Eenos
 } EnTalkGibudDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -208,7 +208,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
                                thisx->world.pos.z, 0, 0, 0, EN_SNOWMAN_TYPE_SPLIT);
             thisx->parent = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SNOWMAN, thisx->world.pos.x,
                                                           thisx->world.pos.y, thisx->world.pos.z, 0, 0, 0,
-                                                          EN_SNOWMAN_TYPE_SPLIT, -1, thisx->halfDaysBits, NULL);
+                                                          EN_SNOWMAN_TYPE_SPLIT, CS_ID_NONE, thisx->halfDaysBits, NULL);
             if ((thisx->child == NULL) || (thisx->parent == NULL)) {
                 if (thisx->child != NULL) {
                     Actor_Kill(thisx->child);
@@ -475,18 +475,18 @@ void EnSnowman_ReadySnowball(EnSnowman* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && this->isHoldingSnowball &&
         ((play->gameplayFrames % 2) != 0)) {
-        pos.x = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.x;
-        pos.y = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.y;
-        pos.z = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.z;
+        pos.x = Rand_CenteredFloat(10.0f) + this->snowballPos.x;
+        pos.y = Rand_CenteredFloat(10.0f) + this->snowballPos.y;
+        pos.z = Rand_CenteredFloat(10.0f) + this->snowballPos.z;
         func_800B0DE0(play, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         if ((this->skelAnime.curFrame > 3.0f) && (this->skelAnime.curFrame < 14.0f) &&
             ((play->gameplayFrames % 2) != 0)) {
-            pos.x = (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) +
-                    randPlusMinusPoint5Scaled(40.0f);
-            pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
-            pos.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
-                    randPlusMinusPoint5Scaled(40.0f);
+            pos.x =
+                (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) + Rand_CenteredFloat(40.0f);
+            pos.y = this->actor.world.pos.y + Rand_CenteredFloat(20.0f);
+            pos.z =
+                (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) + Rand_CenteredFloat(40.0f);
             func_800B0DE0(play, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
         }
     }
@@ -619,8 +619,8 @@ void EnSnowman_Melt(EnSnowman* this, PlayState* play) {
     this->work.timer--;
     if ((this->work.timer >= 38) && (!(this->work.timer & 1))) {
         smokeVelocity.y = (this->work.timer - 38) * (1.0f / 12.0f);
-        smokeVelocity.x = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
-        smokeVelocity.z = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
+        smokeVelocity.x = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
+        smokeVelocity.z = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
         smokeVelocity.y += 0.8f;
         smokePos.x = ((smokeVelocity.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) +
                      this->actor.world.pos.x;
@@ -1037,7 +1037,9 @@ void EnSnowman_Update(Actor* thisx, PlayState* play) {
                 wallCheckRadius = this->collider.dim.radius;
             }
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, wallCheckRadius, 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
             if ((this->actor.floorPoly != NULL) && ((this->actor.floorPoly->normal.y * SHT_MINV) < 0.7f)) {
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
                 if (!this->turningOnSteepSlope) {
@@ -1111,7 +1113,9 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.x += 0xF00;
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, this->collider.dim.radius * 0.6f,
-                            this->collider.dim.height - this->collider.dim.yShift, 0x1F);
+                            this->collider.dim.height - this->collider.dim.yShift,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -1178,7 +1182,7 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnSnowman_Draw(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnSnowman_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
@@ -1188,7 +1192,7 @@ void EnSnowman_Draw(Actor* thisx, PlayState* play) {
 void EnSnowman_DrawSnowPile(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->snowPileSkelAnime.skeleton, this->snowPileSkelAnime.jointTable,
                           this->snowPileSkelAnime.dListCount, NULL, NULL, &this->actor);
 }

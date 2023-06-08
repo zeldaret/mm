@@ -62,8 +62,10 @@ static Color_RGBAf sOuterColors[] = {
 };
 
 typedef struct {
-    u8 r, g, b;
-} FairyColorFlags;
+    /* 0x0 */ u8 r;
+    /* 0x1 */ u8 g;
+    /* 0x2 */ u8 b;
+} FairyColorFlags; // size = 0x3
 
 static FairyColorFlags sColorFlags[] = {
     { 0, 0, 0 }, { 1, 0, 0 }, { 1, 2, 0 }, { 1, 0, 2 }, { 0, 1, 0 }, { 2, 1, 0 }, { 0, 1, 2 },
@@ -199,7 +201,7 @@ void func_8088C858(EnElf* this, PlayState* play) {
         this->unk_244 = 1;
         this->unk_248 = 128;
         this->unk_254 = Rand_ZeroFloat(1.0f) + 0.5f;
-        this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+        this->unk_24C = Rand_CenteredFloat(0x7FFF);
         this->unk_26C = func_8088C9CC;
     }
 }
@@ -214,7 +216,7 @@ void func_8088C920(EnElf* this, PlayState* play) {
             this->unk_244 = 1;
             this->unk_248 = 128;
             this->unk_254 = Rand_ZeroFloat(1.0f) + 0.5f;
-            this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+            this->unk_24C = Rand_CenteredFloat(0x7FFF);
             this->unk_26C = func_8088C9CC;
         }
     }
@@ -262,7 +264,7 @@ void func_8088C9CC(EnElf* this, PlayState* play) {
         this->unk_244 = 1;
         this->unk_248 = 128;
         this->unk_254 = Rand_ZeroFloat(0.5f) + 0.5f;
-        this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+        this->unk_24C = Rand_CenteredFloat(0x7FFF);
     }
 }
 
@@ -291,7 +293,7 @@ void func_8088CC48(EnElf* this, PlayState* play) {
     this->unk_246 = 0;
     this->unk_24A = (s32)Rand_ZeroFloat(1048.0f) + 0x200;
     this->unk_224 = this->actor.world.pos;
-    this->unk_258 = randPlusMinusPoint5Scaled(0x7FFF);
+    this->unk_258 = Rand_CenteredFloat(0x7FFF);
     this->unk_26C = func_8088C9CC;
     func_8088CBAC(this, play);
     this->unk_25C = 0;
@@ -355,8 +357,9 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->elfMsg = NULL;
             this->unk_234 = NULL;
             this->unk_269 = 20;
-            if ((gSaveContext.save.playerData.tatlTimer >= 25800) || (gSaveContext.save.playerData.tatlTimer < 3000)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+            if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 25800) ||
+                (gSaveContext.save.saveInfo.playerData.tatlTimer < 3000)) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
@@ -635,9 +638,9 @@ s32 func_8088DCA4(EnElf* this) {
 }
 
 void func_8088DD34(EnElf* this, PlayState* play) {
-    Player* refActor = GET_PLAYER(play);
+    Actor* playerActor = &GET_PLAYER(play)->actor;
     s32 pad;
-    Player* player2 = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     f32 heightDiff;
 
     SkelAnime_Update(&this->skelAnime);
@@ -649,7 +652,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     func_8088CBAC(this, play);
     if (this->fairyFlags & 0x800) {
-        this->unk_224.y = player2->bodyPartsPos[0].y;
+        this->unk_224.y = player->bodyPartsPos[0].y;
     }
 
     func_8088D8D0(this, &this->unk_224);
@@ -669,17 +672,17 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         return;
     }
 
-    heightDiff = this->actor.world.pos.y - refActor->actor.world.pos.y;
+    heightDiff = this->actor.world.pos.y - playerActor->world.pos.y;
 
     if ((this->fairyFlags & 0x1000) && (heightDiff > 0.0f) && (heightDiff < 60.0f) &&
-        !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
+        !func_8088C804(&this->actor.world.pos, &playerActor->world.pos, 10.0f)) {
         Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
-        this->unk_248 = refActor->actor.shape.rot.y;
+        this->unk_248 = playerActor->shape.rot.y;
         this->unk_24C = -0x1000;
         this->unk_224.y = 30.0f;
         this->unk_250 = 0.0f;
@@ -854,8 +857,8 @@ void func_8088E60C(EnElf* this, PlayState* play) {
         glowLightRadius = 0;
     }
 
-    if (Cutscene_CheckActorAction(play, 201)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action == 6) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id == 6) {
             glowLightRadius = 0;
         }
     }
@@ -882,18 +885,18 @@ void func_8088E850(EnElf* this, PlayState* play) {
     Actor* arrowPointedActor;
     f32 xScale;
     f32 distFromLinksHead;
-    u32 sp38;
+    u32 cueChannel;
 
     func_8088F214(this, play);
     func_8088E5A8(this, play);
     xScale = 0.0f;
 
-    if (Cutscene_CheckActorAction(play, 201)) {
-        sp38 = Cutscene_GetActorActionIndex(play, 201);
-        func_808908D0(&nextPos, play, sp38);
-        this->actor.shape.rot.y = play->csCtx.actorActions[sp38]->urot.y;
-        this->actor.shape.rot.x = play->csCtx.actorActions[sp38]->urot.x;
-        if (play->csCtx.actorActions[sp38]->action == 5) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201);
+        func_808908D0(&nextPos, play, cueChannel);
+        this->actor.shape.rot.y = play->csCtx.actorCues[cueChannel]->rot.y;
+        this->actor.shape.rot.x = play->csCtx.actorCues[cueChannel]->rot.x;
+        if (play->csCtx.actorCues[cueChannel]->id == 5) {
             func_8088F5F4(this, play, 16);
         }
 
@@ -903,14 +906,13 @@ void func_8088E850(EnElf* this, PlayState* play) {
             func_8088D660(this, &nextPos, 0.2f);
         }
 
-        if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) &&
-            (play->csCtx.currentCsIndex == 0) &&
-            ((play->csCtx.frames == 149) || (play->csCtx.frames == 381) || (play->csCtx.frames == 591))) {
+        if ((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 0) &&
+            ((play->csCtx.curFrame == 149) || (play->csCtx.curFrame == 381) || (play->csCtx.curFrame == 591))) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
 
-        if ((play->sceneId == SCENE_SECOM) && (gSaveContext.sceneLayer == 0) && (play->csCtx.currentCsIndex == 4) &&
-            (play->csCtx.frames == 95)) {
+        if ((play->sceneId == SCENE_SECOM) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 4) &&
+            (play->csCtx.curFrame == 95)) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_WHITE_FAIRY_DASH);
         }
     } else {
@@ -1015,7 +1017,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
 
     func_8088E60C(this, play);
 
-    if (!Cutscene_CheckActorAction(play, 0xC9)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
         this->actor.shape.rot.y = this->unk_258;
     }
 }
@@ -1090,7 +1092,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
         }
     } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
-        u16 targetSfxId = this->unk_269 == 0 ? NA_SE_PL_WALK_GROUND - SFX_FLAG : NA_SE_PL_WALK_GROUND - SFX_FLAG;
+        u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
         if (!temp) {
             Actor_PlaySfx(&this->actor, targetSfxId);
@@ -1105,9 +1107,9 @@ void func_8088F214(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 pad;
 
-    if (play->csCtx.state != 0) {
-        if (Cutscene_CheckActorAction(play, 201)) {
-            switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201)) {
+            switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id) {
                 case 4:
                     sp34 = 7;
                     break;
@@ -1245,9 +1247,9 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
     Color_RGBA8 envColor;
 
     if (!(this->fairyFlags & 8)) {
-        sparklePos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
+        sparklePos.x = Rand_CenteredFloat(6.0f) + this->actor.world.pos.x;
         sparklePos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y;
-        sparklePos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
+        sparklePos.z = Rand_CenteredFloat(6.0f) + this->actor.world.pos.z;
 
         primColor.r = this->innerColor.r;
         primColor.g = this->innerColor.g;
@@ -1324,19 +1326,19 @@ void func_8088FC34(EnElf* this, PlayState* play) {
 }
 
 void func_8088FD04(EnElf* this) {
-    if (ActorCutscene_GetCurrentIndex() == this->actor.cutscene) {
+    if (CutsceneManager_GetCurrentCsId() == this->actor.csId) {
         this->unk_264 &= ~1;
         this->unk_264 |= 2;
-    } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->actor.csId);
         this->unk_264 |= 1;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_Start(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_Start(this->actor.csId, &this->actor);
         this->unk_264 &= ~1;
         this->unk_264 |= 2;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         this->unk_264 |= 1;
     }
 }
@@ -1347,8 +1349,8 @@ void func_8088FDCC(EnElf* this) {
     this->fairyFlags &= ~0x20;
     this->actor.focus.pos = this->actor.world.pos;
     this->unk_234 = NULL;
-    if ((this->unk_264 & 2) && (this->actor.cutscene != 0x7C)) {
-        ActorCutscene_Stop(this->actor.cutscene);
+    if ((this->unk_264 & 2) && (this->actor.csId != CS_ID_GLOBAL_TALK)) {
+        CutsceneManager_Stop(this->actor.csId);
     }
     this->unk_264 &= ~0x20;
 }
@@ -1455,11 +1457,12 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
     if (temp_v0 != this->unk_266) {
         this->unk_266 = temp_v0;
-        gSaveContext.save.playerData.tatlTimer = 0;
+        gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
     if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
-        if ((gSaveContext.save.playerData.tatlTimer >= 600) && (gSaveContext.save.playerData.tatlTimer <= 3000)) {
+        if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
+            (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);
         }
     }
@@ -1474,7 +1477,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
 
         if (thisx->textId == QuestHint_GetTatlTextId(play)) {
             this->fairyFlags |= 0x80;
-            gSaveContext.save.playerData.tatlTimer = 3001;
+            gSaveContext.save.saveInfo.playerData.tatlTimer = 3001;
         }
 
         this->fairyFlags |= 0x10;
@@ -1483,8 +1486,8 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         func_8088C51C(this, 3);
         if (this->elfMsg != NULL) {
             this->elfMsg->flags |= ACTOR_FLAG_TALK_REQUESTED;
-            thisx->cutscene = this->elfMsg->cutscene;
-            if (thisx->cutscene != -1) {
+            thisx->csId = this->elfMsg->csId;
+            if (thisx->csId != CS_ID_NONE) {
                 func_8088FD04(this);
             }
             if (this->elfMsg->home.rot.x == -0x961) {
@@ -1492,7 +1495,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
                 Actor_ChangeFocus(thisx, play, this->elfMsg);
             }
         } else {
-            thisx->cutscene = -1;
+            thisx->csId = CS_ID_NONE;
         }
         thisx->flags &= ~ACTOR_FLAG_10000;
     } else if (this->unk_264 & 4) {
@@ -1505,10 +1508,10 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         this->actionFunc(this, play);
 
         if (!Play_InCsMode(play)) {
-            if (gSaveContext.save.playerData.tatlTimer < 25800) {
-                gSaveContext.save.playerData.tatlTimer++;
+            if (gSaveContext.save.saveInfo.playerData.tatlTimer < 25800) {
+                gSaveContext.save.saveInfo.playerData.tatlTimer++;
             } else if (!(this->fairyFlags & 0x80)) {
-                gSaveContext.save.playerData.tatlTimer = 0;
+                gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
             }
         }
     }
@@ -1525,7 +1528,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         this->unk_269--;
     }
 
-    if (!this->unk_269 && (play->csCtx.state != 0)) {
+    if (!this->unk_269 && (play->csCtx.state != CS_STATE_IDLE)) {
         this->unk_269 = 1;
     }
 }
@@ -1578,8 +1581,8 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 
     if (player->currentMask != PLAYER_MASK_GIANT) {
         if (!(this->fairyFlags & 8) &&
-            (!Cutscene_CheckActorAction(play, 201) ||
-             (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 201)]->action != 6)) &&
+            (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_201) ||
+             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_201)]->id != 6)) &&
             (!(player->stateFlags1 & PLAYER_STATE1_100000) || (kREG(90) < this->actor.projectedPos.z))) {
             Gfx* gfx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Gfx));
             f32 alphaScale;
@@ -1587,7 +1590,7 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C94C(play->state.gfxCtx);
+            Gfx_SetupDL27_Xlu(play->state.gfxCtx);
 
             envAlpha = (this->timer * 50) & 0x1FF;
             envAlpha = (envAlpha >= 0x100) ? 511 - envAlpha : envAlpha;
@@ -1622,17 +1625,17 @@ void EnElf_Draw(Actor* thisx, PlayState* play) {
 void func_808908D0(Vec3f* vec, PlayState* play, u32 action) {
     Vec3f startPos;
     Vec3f endPos;
-    CsCmdActorAction* npcAction = play->csCtx.actorActions[action];
+    CsCmdActorCue* cue = play->csCtx.actorCues[action];
     f32 lerp;
 
-    startPos.x = npcAction->startPos.x;
-    startPos.y = npcAction->startPos.y;
-    startPos.z = npcAction->startPos.z;
+    startPos.x = cue->startPos.x;
+    startPos.y = cue->startPos.y;
+    startPos.z = cue->startPos.z;
 
-    endPos.x = npcAction->endPos.x;
-    endPos.y = npcAction->endPos.y;
-    endPos.z = npcAction->endPos.z;
+    endPos.x = cue->endPos.x;
+    endPos.y = cue->endPos.y;
+    endPos.z = cue->endPos.z;
 
-    lerp = Environment_LerpWeight(npcAction->endFrame, npcAction->startFrame, play->csCtx.frames);
+    lerp = Environment_LerpWeight(cue->endFrame, cue->startFrame, play->csCtx.curFrame);
     VEC3F_LERPIMPDST(vec, &startPos, &endPos, lerp);
 }

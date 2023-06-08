@@ -6,7 +6,9 @@
 
 #define EN_RZ_GET_SISTER(thisx) ((thisx)->params & 0x8000)
 #define EN_RZ_GET_TYPE(thisx) ((thisx)->params & 0xF)
-#define EN_RZ_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
+#define EN_RZ_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
+
+#define EN_RZ_PATH_INDEX_NONE 0x3F
 
 typedef enum {
     /* 0 */ EN_RZ_JUDO, // in red
@@ -40,9 +42,9 @@ typedef struct EnRz {
     /* 0x420 */ u16 stateFlags;
     /* 0x422 */ s16 animIndex;
     /* 0x424 */ s16 timer;
-    /* 0x426 */ u16 csAction;
-    /* 0x428 */ u16 actionIndex;
-    /* 0x42A */ s16 cutscenes[2];
+    /* 0x426 */ u16 cueType;
+    /* 0x428 */ u16 cueId;
+    /* 0x42A */ s16 csIdList[2];
     /* 0x430 */ EnRzActionFunc actionFunc;
 } EnRz; // size = 0x434
 

@@ -45,7 +45,7 @@ typedef enum {
     /* 3 */ HGO_ANIM_CONSOLE,
     /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
     /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
-    /* 6 */ HGO_ANIM_TOSS,
+    /* 6 */ HGO_ANIM_TOSS
 } HgoAnimation;
 
 ActorInit En_Hgo_InitVars = {
@@ -109,7 +109,7 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     this->textId = 0;
     this->talkFlags = TALK_FLAG_NONE;
     this->isInCutscene = false;
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_20)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         EnHgo_SetupTalk(this);
     } else {
         thisx->draw = NULL;
@@ -276,13 +276,13 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
 }
 
 s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 486)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 486);
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_486)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_486);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = HGO_ANIM_ARMS_FOLDED;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
@@ -321,7 +321,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
                         (this->isInCutscene == false)) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
-                            ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
+                            ((play->csCtx.scriptIndex == 2) || (play->csCtx.scriptIndex == 4))) {
                             Actor_PlaySfx(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
@@ -338,11 +338,11 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         return true;
     }
 
-    if ((play->csCtx.state == CS_STATE_0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
         (this->actionFunc == EnHgo_DoNothing)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
@@ -350,7 +350,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         EnHgo_SetupInitCollision(this);
     }
 
-    this->csAction = 0x63;
+    this->cueId = 99;
     return false;
 }
 
@@ -416,12 +416,14 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mf);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherHumanEyebrowsDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

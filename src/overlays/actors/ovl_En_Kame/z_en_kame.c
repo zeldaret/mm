@@ -289,11 +289,12 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.speed >= 3.0f)) {
         if ((play->gameplayFrames % 2) == 0) {
-            u32 temp_v0 = func_800C9BB8(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+            SurfaceMaterial surfaceMaterial =
+                SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
-            if ((temp_v0 == 0) || (temp_v0 == 1)) {
+            if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
                 func_800B1210(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, 550, 100);
-            } else if (temp_v0 == 14) {
+            } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
                 func_800B0DE0(play, &this->actor.world.pos, &D_80AD8E5C, &gZeroVec3f, &D_80AD8E54, &D_80AD8E58, 550,
                               100);
             }
@@ -605,9 +606,9 @@ void func_80AD8388(EnKame* this, PlayState* play) {
             this->actor.scale.y = this->actor.scale.x;
             this->actor.scale.z = this->actor.scale.x;
         }
-        sp34.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
+        sp34.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 15.0f;
-        sp34.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
+        sp34.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         func_800B3030(play, &sp34, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
     }
 }
@@ -716,7 +717,9 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 60.0f, 40.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 40.0f, 60.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->actor.shape.shadowDraw != NULL) {
         Actor_SetFocus(&this->actor, 25.0f);
@@ -802,7 +805,7 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80AD8E34[this->unk_29C]);
 
@@ -837,7 +840,7 @@ s32 Enkame_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void func_80AD8D64(Actor* thisx, PlayState* play) {
     EnKame* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime2.skeleton, this->skelAnime2.jointTable, this->skelAnime2.dListCount,
                           Enkame_OverrideLimbDraw, NULL, &this->actor);
 }

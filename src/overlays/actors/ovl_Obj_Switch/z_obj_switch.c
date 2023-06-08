@@ -266,7 +266,7 @@ void ObjSwitch_CrystalUpdateTimer(ObjSwitch* this) {
 
 void ObjSwitch_StopCutscene(ObjSwitch* this) {
     if (this->isPlayingCutscene) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         this->isPlayingCutscene = false;
     }
 }
@@ -284,7 +284,7 @@ void ObjSwitch_PlayDiamondSwitchSfx(ObjSwitch* this) {
 }
 
 void ObjSwitch_SetFloorSwitchSnapPlayerState(ObjSwitch* this, s32 state) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->floorSwitchPlayerSnapState = state;
     }
 }
@@ -344,7 +344,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         } else {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + 1.0f;
         }
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         DynaPolyActor_LoadMesh(play, &this->dyna, &gFloorSwitchCol);
     }
     if (type == OBJSWITCH_TYPE_FLOOR) {
@@ -486,8 +486,8 @@ void ObjSwitch_TryPlayCutsceneInit(ObjSwitch* this, PlayState* play, ObjSwitchSe
 }
 
 void ObjSwitch_TryPlayCutscene(ObjSwitch* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         ObjSwitch_SetSwitchFlagState(this, play, this->nextSwitchFlagState);
         if (this->floorSwitchPlayerSnapState == 1) {
             this->floorSwitchPlayerSnapState = 2;
@@ -495,7 +495,7 @@ void ObjSwitch_TryPlayCutscene(ObjSwitch* this, PlayState* play) {
         this->isPlayingCutscene = true;
         this->setupFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -517,13 +517,13 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
     } else {
         switch (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor)) {
             case OBJSWITCH_SUBTYPE_ONCE:
-                if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
                     ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, true);
                 }
                 break;
             case OBJSWITCH_SUBTYPE_SYNC:
-                if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
                     ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, true);
                 } else if (Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
@@ -531,7 +531,7 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
                 }
                 break;
             case OBJSWITCH_SUBTYPE_TOGGLE:
-                if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     s32 isSwitchFlagNotSet =
                         Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor)) ? false : true;
 
@@ -540,13 +540,13 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
                 }
                 break;
             case OBJSWITCH_SUBTYPE_RESET:
-                if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
                     ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, true);
                 }
                 break;
             case OBJSWITCH_SUBTYPE_RESET_INVERTED:
-                if (DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if (DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetFloorSwitchSnapPlayerState(this, 2);
                     ObjSwitch_SetSwitchFlagState(this, play, false);
                     ObjSwitch_FloorSwitchPushDownInit(this);
@@ -584,7 +584,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_ONCE:
         case OBJSWITCH_SUBTYPE_SYNC:
             if (!Flags_GetSwitch(play, OBJ_SWITCH_GET_SWITCH_FLAG(&this->dyna.actor))) {
-                if ((play->sceneId == SCENE_SECOM) && DynaPolyActor_IsInSwitchPressedState(&this->dyna)) {
+                if ((play->sceneId == SCENE_SECOM) && DynaPolyActor_IsSwitchPressed(&this->dyna)) {
                     ObjSwitch_SetSwitchFlagState(this, play, true);
                 } else {
                     ObjSwitch_FloorSwitchRiseUpInit(this);
@@ -594,7 +594,7 @@ void ObjSwitch_FloorSwitchDown(ObjSwitch* this, PlayState* play) {
         case OBJSWITCH_SUBTYPE_TOGGLE:
         case OBJSWITCH_SUBTYPE_RESET:
         case OBJSWITCH_SUBTYPE_RESET_INVERTED:
-            if (!DynaPolyActor_IsInSwitchPressedState(&this->dyna) &&
+            if (!DynaPolyActor_IsSwitchPressed(&this->dyna) &&
                 (!Player_InCsMode(play) || (play->sceneId == SCENE_SECOM))) {
                 if (this->floorSwitchReleaseTimer <= 0) {
                     if (subType == OBJSWITCH_SUBTYPE_RESET) {
@@ -841,16 +841,16 @@ void ObjSwitch_LargeFloorSwitchUp(ObjSwitch* this, PlayState* play) {
     s32 subType = OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor);
 
     if (subType == OBJSWITCH_SUBTYPE_ONCE) {
-        if (DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
+        if (DynaPolyActor_IsHeavySwitchPressed(&this->dyna)) {
             ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
             ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_LargeFloorSwitchPushDownInit, true);
         }
     } else if (subType == OBJSWITCH_SUBTYPE_RESET) {
-        if (DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
+        if (DynaPolyActor_IsHeavySwitchPressed(&this->dyna)) {
             ObjSwitch_SetFloorSwitchSnapPlayerState(this, 1);
             ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_LargeFloorSwitchPushDownInit, true);
         }
-    } else if (subType == OBJSWITCH_SUBTYPE_RESET_INVERTED && DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna)) {
+    } else if (subType == OBJSWITCH_SUBTYPE_RESET_INVERTED && DynaPolyActor_IsHeavySwitchPressed(&this->dyna)) {
         ObjSwitch_SetFloorSwitchSnapPlayerState(this, 2);
         ObjSwitch_SetSwitchFlagState(this, play, false);
         ObjSwitch_LargeFloorSwitchPushDownInit(this);
@@ -885,7 +885,7 @@ void ObjSwitch_LargeFloorSwitchDown(ObjSwitch* this, PlayState* play) {
             ObjSwitch_LargeFloorSwitchRiseUpInit(this);
         }
     } else if (subType == OBJSWITCH_SUBTYPE_RESET || subType == OBJSWITCH_SUBTYPE_RESET_INVERTED) {
-        if (!DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna) && !Player_InCsMode(play)) {
+        if (!DynaPolyActor_IsHeavySwitchPressed(&this->dyna) && !Player_InCsMode(play)) {
             if (this->floorSwitchReleaseTimer <= 0) {
                 if (OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor) == OBJSWITCH_SUBTYPE_RESET) {
                     ObjSwitch_SetSwitchFlagState(this, play, false);
@@ -936,7 +936,7 @@ void ObjSwitch_Update(Actor* thisx, PlayState* play) {
         case OBJSWITCH_TYPE_FLOOR:
         case OBJSWITCH_TYPE_FLOOR_RUSTY:
         case OBJSWITCH_TYPE_FLOOR_LARGE:
-            this->collisionFlags = this->dyna.stateFlags;
+            this->collisionFlags = this->dyna.interactFlags;
             break;
         case OBJSWITCH_TYPE_EYE:
             this->collisionFlags = this->colliderTris.base.acFlags;
@@ -968,12 +968,14 @@ void ObjSwitch_DrawFloorSwitch(ObjSwitch* this, PlayState* play) {
         Gfx* opa;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         opa = POLY_OPA_DISP;
-        gSPDisplayList(opa++, &sSetupDL[6 * 25]);
+        gSPDisplayList(opa++, gSetupDLs[SETUPDL_25]);
         gSPMatrix(opa++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(opa++, 0, 0x80, this->color.r, this->color.g, this->color.b, 255);
         gSPDisplayList(opa++, gFloorSwitch1DL);
         POLY_OPA_DISP = opa;
+
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
         Gfx_DrawDListOpa(play, sFloorSwitchDL[OBJ_SWITCH_GET_SUBTYPE(&this->dyna.actor)]);
@@ -990,7 +992,7 @@ void ObjSwitch_DrawVisibleEyeSwitch(ObjSwitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_OPA_DISP++, sEyeSwitchDL[subType]);
@@ -1004,7 +1006,7 @@ void ObjSwitch_DrawInvisibleEyeSwitch(ObjSwitch* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPSegment(POLY_XLU_DISP++, 0x08, sEyeSwitchTextures[subType][this->eyeTexIndex]);
     gSPDisplayList(POLY_XLU_DISP++, sEyeSwitchDL[subType]);
@@ -1027,8 +1029,8 @@ void ObjSwitch_DrawCrystalSwitch(ObjSwitch* this, PlayState* play) {
 
     func_800B8118(&this->dyna.actor, play, 0);
     AnimatedMat_DrawStep(play, sCrystalSwitchAnimatedMat, this->crystalAnimTimer);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gCrystalSwitchBaseDL);

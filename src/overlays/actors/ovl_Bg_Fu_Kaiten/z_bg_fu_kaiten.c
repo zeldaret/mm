@@ -34,7 +34,7 @@ void BgFuKaiten_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* header = NULL;
 
     Actor_SetScale(thisx, 1.0);
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     CollisionHeader_GetVirtual(&object_fu_kaiten_Colheader_002D30, &header);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, header);
 
@@ -77,7 +77,7 @@ void BgFuKaiten_Update(Actor* thisx, PlayState* play) {
 void BgFuKaiten_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_fu_kaiten_DL_0005D0);

@@ -7,7 +7,7 @@
 #include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_1000 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
 
 #define THIS ((EnThiefbird*)thisx)
 
@@ -193,12 +193,12 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
     for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
         if (ptr->unk_22 == 0) {
             ptr->unk_22 = (s32)Rand_ZeroFloat(20.0f) + 40;
-            ptr->unk_00.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.x;
-            ptr->unk_00.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.y;
-            ptr->unk_00.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.z;
-            ptr->unk_0C.x = randPlusMinusPoint5Scaled(5.0f);
+            ptr->unk_00.x = Rand_CenteredFloat(30.0f) + this->actor.focus.pos.x;
+            ptr->unk_00.y = Rand_CenteredFloat(30.0f) + this->actor.focus.pos.y;
+            ptr->unk_00.z = Rand_CenteredFloat(30.0f) + this->actor.focus.pos.z;
+            ptr->unk_0C.x = Rand_CenteredFloat(5.0f);
             ptr->unk_0C.y = Rand_ZeroOne() + 2.0f;
-            ptr->unk_0C.z = randPlusMinusPoint5Scaled(5.0f);
+            ptr->unk_0C.z = Rand_CenteredFloat(5.0f);
             ptr->unk_1C = Rand_ZeroFloat(1000.0f);
             ptr->unk_18 = (Rand_ZeroFloat(20.0f) + 40.0f) * 0.0001f;
             ptr->unk_1E = (s32)Rand_Next() >> 0x10;
@@ -223,10 +223,10 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
     s16 itemId2 = 0;
 
     for (; slotId < 24; slotId++) {
-        if ((gSaveContext.save.inventory.items[slotId] >= ITEM_BOTTLE) &&
-            (gSaveContext.save.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
+        if ((gSaveContext.save.saveInfo.inventory.items[slotId] >= ITEM_BOTTLE) &&
+            (gSaveContext.save.saveInfo.inventory.items[slotId] <= ITEM_POTION_BLUE)) {
             isItemFound = true;
-            itemId2 = gSaveContext.save.inventory.items[slotId];
+            itemId2 = gSaveContext.save.saveInfo.inventory.items[slotId];
             break;
         }
     }
@@ -343,7 +343,7 @@ s32 func_80C10E98(PlayState* play) {
         spAC = 0;
     }
 
-    sp98 = (gSaveContext.save.playerData.rupees / 4) * 3;
+    sp98 = (gSaveContext.save.saveInfo.playerData.rupees / 4) * 3;
     phi_s0_2 = sp98 / 50;
     sp5C = (-spB0 - spAC);
     sp5C += 8;
@@ -1020,7 +1020,8 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 25.0f, 50.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 25.0f, 25.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     if (this->actionFunc == func_80C1193C) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
@@ -1127,7 +1128,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gSPDisplayList(&gfx[1], gTakkuriFeatherMaterialDL);
     gfx = &gfx[2];
 
@@ -1153,7 +1154,7 @@ void func_80C13354(EnThiefbird* this, PlayState* play2) {
 void EnThiefbird_Draw(Actor* thisx, PlayState* play) {
     EnThiefbird* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnThiefbird_OverrideLimbDraw, EnThiefbird_PostLimbDraw, &this->actor);
     if (this->actor.colorFilterTimer > 0) {

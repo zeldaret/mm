@@ -9,7 +9,7 @@ typedef void (*EnGmActionFunc)(struct EnGm*, PlayState*);
 typedef s32 (*EnGmUnkFunc)(struct EnGm*, PlayState*);
 typedef void (*EnGmUnkFunc2)(struct EnGm*, PlayState*);
 
-#define ENGM_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENGM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct EnGm {
     /* 0x000 */ Actor actor;
@@ -26,7 +26,7 @@ typedef struct EnGm {
     /* 0x250 */ s32 timePathWaypoint;
     /* 0x254 */ s32 timePathElapsedTime;
     /* 0x258 */ u8 unk_258;
-    /* 0x259 */ u8 unk_259;
+    /* 0x259 */ u8 cueId;
     /* 0x25C */ s32 unk_25C;
     /* 0x260 */ s8 unk_260;
     /* 0x261 */ s8 unk_261;

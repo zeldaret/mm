@@ -94,7 +94,7 @@ typedef enum {
     /* 1 */ EN_RD_GRAB_INITIAL_DAMAGE,
     /* 2 */ EN_RD_GRAB_ATTACK,
     /* 3 */ EN_RD_GRAB_RELEASE,
-    /* 4 */ EN_RD_GRAB_END,
+    /* 4 */ EN_RD_GRAB_END
 } EnRdGrabState;
 
 ActorInit En_Rd_InitVars = {
@@ -139,7 +139,7 @@ typedef enum {
     /* 0xC */ EN_RD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_RD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_RD_DMGEFF_LIGHT_RAY,         // Instantly kills on contact
-    /* 0xF */ EN_RD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+    /* 0xF */ EN_RD_DMGEFF_DAMAGE             // Deals damage and plays the damage animation
 } EnRdDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -1280,7 +1280,9 @@ void EnRd_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->actor.shape.rot.x == 0) && (this->action != EN_RD_ACTION_GRABBING) && (this->actor.speed != 0.0f)) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f, 0x1D);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                        UPDBGCHECKINFO_FLAG_10);
         }
 
         if (this->action == EN_RD_ACTION_ATTEMPTING_PLAYER_STUN) {
@@ -1336,7 +1338,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
     this->limbIndex = 0;
 
     if (this->alpha == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, this->alpha);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
@@ -1347,7 +1349,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
 
         func_800BC620(&pos, &sScale, 255, play);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);

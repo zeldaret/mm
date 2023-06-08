@@ -5,12 +5,11 @@
  */
 
 #include "z_en_dg.h"
+#include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
-
-//! TODO: this file require macros for its uses of weekEventReg
 
 void EnDg_Init(Actor* thisx, PlayState* play);
 void EnDg_Destroy(Actor* thisx, PlayState* play);
@@ -63,7 +62,7 @@ ActorInit En_Dg_InitVars = {
 typedef enum {
     /* 0 */ DOG_GRAB_STATE_NONE,
     /* 1 */ DOG_GRAB_STATE_HELD,
-    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW,
+    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW
 } DogGrabState;
 
 typedef enum {
@@ -75,7 +74,7 @@ typedef enum {
     /* 5 */ DOG_BEHAVIOR_ZORA_WAIT,
     /* 6 */ DOG_BEHAVIOR_DEKU,
     /* 7 */ DOG_BEHAVIOR_DEKU_WAIT,
-    /* 8 */ DOG_BEHAVIOR_DEFAULT,
+    /* 8 */ DOG_BEHAVIOR_DEFAULT
 } DogBehavior;
 
 static u8 sIsAnyDogHeld = false;
@@ -86,10 +85,10 @@ static s16 sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
  * Stores the state for the dogs milling about at the Doggy Racetrack.
  */
 typedef struct {
-    s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;  // The dog's index within sDogInfo
-    s16 textId; // The ID of the text to display when the dog is picked up
-} RacetrackDogInfo;
+    /* 0x0 */ s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
+    /* 0x2 */ s16 index;  // The dog's index within sDogInfo
+    /* 0x4 */ s16 textId; // The ID of the text to display when the dog is picked up
+} RacetrackDogInfo;       // size = 0x6
 
 /**
  * A table of RacetrackDogInfo for every dog at the Doggy Racetrack. Note that the textId values
@@ -237,7 +236,7 @@ void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
         Collider_ResetCylinderOC(play, &this->collider.base);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnDg_GetFloorRot(EnDg* this, Vec3f* floorRot) {
@@ -281,7 +280,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RADF_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -310,7 +309,7 @@ s16 EnDg_GetYRotation(Path* path, s32 index, Vec3f* pos, f32* distSq) {
 
     *distSq = SQ(diffX) + SQ(diffZ);
 
-    return RADF_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZ, diffX));
 }
 
 /**
@@ -359,9 +358,9 @@ void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
-        pos.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        pos.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y;
-        pos.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        pos.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
         Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
@@ -417,20 +416,13 @@ void EnDg_SetupIdleMove(EnDg* this, PlayState* play) {
 
 /**
  * Updates the text ID in sRacetrackDogInfo based on what was set in the weekEventRegs by
- * En_Aob_01. This makes it sp the proper message can be displayed when the player picks up
+ * En_Aob_01. This makes it so the proper message can be displayed when the player picks up
  * the dog with the Mask of Truth equipped.
  */
 void EnDg_UpdateTextId(EnDg* this) {
-    if (this->index < 14) {
-        // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in
-        // the range of 0x3538 to 0x3545.
-        if (this->index % 2) {
-            sRacetrackDogInfo[this->index].textId =
-                0x3538 + ((gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0xF0) >> 4);
-        } else {
-            sRacetrackDogInfo[this->index].textId =
-                0x3538 + (gSaveContext.save.weekEventReg[42 + (this->index / 2)] & 0x0F);
-        }
+    if (this->index < RACEDOG_COUNT) {
+        // This will produce a text ID in the range of 0x3538 to 0x3545.
+        sRacetrackDogInfo[this->index].textId = GET_WEEKEVENTREG_DOG_RACE_TEXT(this->index, 0x3538);
     } else {
         Actor_Kill(&this->actor);
     }
@@ -908,14 +900,14 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
     if (curFrame < 9) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = Rand_CenteredFloat(1.0f) + 3.0f;
         }
 
         EnDg_SpawnFloorDustRing(this, play);
     } else {
         this->dogFlags |= DOG_FLAG_JUMP_ATTACKING;
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            f32 rand = randPlusMinusPoint5Scaled(1.5f);
+            f32 rand = Rand_CenteredFloat(1.5f);
 
             sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
@@ -1310,7 +1302,7 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH_INDEX(&this->actor), ENDG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.targetMode = 1;
     this->actor.gravity = -3.0f;
@@ -1387,7 +1379,7 @@ void EnDg_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 

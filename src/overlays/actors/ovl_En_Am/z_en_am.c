@@ -193,9 +193,9 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
 
     // Dust Clouds that spawn from the hop
     for (i = 4; i > 0; i--) {
-        effectPos.x = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.x;
-        effectPos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + 40.0f);
-        effectPos.z = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.z;
+        effectPos.x = Rand_CenteredFloat(65.0f) + this->actor.world.pos.x;
+        effectPos.y = Rand_CenteredFloat(10.0f) + (this->actor.world.pos.y + 40.0f);
+        effectPos.z = Rand_CenteredFloat(65.0f) + this->actor.world.pos.z;
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
@@ -254,7 +254,7 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
         func_808B0358(this);
     } else {
         tempTextureBlend = this->textureBlend + 20;
-        rand = randPlusMinusPoint5Scaled(10.0f);
+        rand = Rand_CenteredFloat(10.0f);
         cos = Math_CosS(this->actor.shape.rot.y) * rand;
         sin = Math_SinS(this->actor.shape.rot.y) * rand;
         this->actor.world.pos.x = this->actor.home.pos.x + cos;
@@ -422,8 +422,9 @@ void func_808B0894(EnAm* this, PlayState* play) {
     this->armosYaw = this->actor.yawTowardsPlayer;
     func_808B0208(this, play);
     if (this->explodeTimer == 1) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 2, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 2, BOMB_TYPE_BODY);
         if (bomb != NULL) {
             bomb->timer = 0;
         }
@@ -432,7 +433,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
 
         for (i = 0; i < 8; i++) {
             dustPos.x = (Math_SinS(0) * 7.0f) + this->actor.world.pos.x;
-            dustPos.y = (randPlusMinusPoint5Scaled(10.0f) * 6.0f) + (this->actor.world.pos.y + 40.0f);
+            dustPos.y = (Rand_CenteredFloat(10.0f) * 6.0f) + (this->actor.world.pos.y + 40.0f);
             dustPos.z = (Math_CosS(0) * 7.0f) + this->actor.world.pos.z;
 
             func_800B0EB0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
@@ -509,7 +510,9 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
     }
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Actor_SetFocus(&this->actor, 64.0f);
     Collider_UpdateCylinder(&this->actor, &this->enemyCollider);
     Collider_UpdateCylinder(&this->actor, &this->interactCollider);
@@ -561,13 +564,15 @@ void EnAm_Draw(Actor* thisx, PlayState* play) {
     EnAm* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 0, 0, 0, this->textureBlend);
     POLY_OPA_DISP = &gfx[2];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnAm_PostLimbDraw,
                       &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale, 0.0f,
                             this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -8,8 +8,8 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
-#define FLAGS                                                                                            \
-    (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000 | ACTOR_FLAG_100000 | \
+#define FLAGS                                                                                                    \
+    (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_100000 | \
      ACTOR_FLAG_CANT_LOCK_ON | ACTOR_FLAG_80000000)
 
 #define THIS ((EnWiz*)thisx)
@@ -37,8 +37,8 @@ void EnWiz_SetupDead(EnWiz* this);
 void EnWiz_Dead(EnWiz* this, PlayState* play);
 
 // This number is almost-entirely arbirary, with the only requirement being
-// that cannot be a valid curPlatformIndex. Any negative number, or any number
-// larger than 10, would work just as well.
+// that it cannot be a valid curPlatformIndex. Any negative number, or any
+// number larger than 10, would work just as well.
 #define INITIAL_PLATFORM_INDEX 777
 
 typedef enum {
@@ -50,7 +50,7 @@ typedef enum {
     /* 6 */ EN_WIZ_ACTION_BURST_INTO_FLAMES,
     /* 7 */ EN_WIZ_ACTION_RUN_IN_CIRCLES,
     /* 8 */ EN_WIZ_ACTION_ATTACK,
-    /* 9 */ EN_WIZ_ACTION_DANCE,
+    /* 9 */ EN_WIZ_ACTION_DANCE
 } EnWizAction;
 
 typedef enum {
@@ -68,7 +68,7 @@ typedef enum {
     /* 0 */ EN_WIZ_FIGHT_STATE_FIRST_PHASE,
     /* 1 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE,
     /* 2 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE,
-    /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND,
+    /* 3 */ EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_RUN_AROUND
 } EnWizFightState;
 
 typedef enum {
@@ -77,7 +77,7 @@ typedef enum {
     /* 2 */ EN_WIZ_ANIM_DANCE,
     /* 3 */ EN_WIZ_ANIM_WIND_UP,
     /* 4 */ EN_WIZ_ANIM_ATTACK,
-    /* 5 */ EN_WIZ_ANIM_DAMAGE,
+    /* 5 */ EN_WIZ_ANIM_DAMAGE
 } EnWizAnimation;
 
 ActorInit En_Wiz_InitVars = {
@@ -239,12 +239,12 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
-    /* 0x0 */ EN_WIZ_DMGEFF_IMMUNE,     // Deals no damage
-    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,       // Deals no damage. Was probably originally intended for destroying ghosts.
-    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,       // Damages and sets Ice Wizrobes on fire
-    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,     // Damages and surrounds Fire Wizrobes with ice
-    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB,  // Damages and surrounds the Wizrobe with light orbs
-    /* 0xF */ EN_WIZ_DMGEFF_NONE = 0xF, // Deals regular damage and has no special effect
+    /* 0x0 */ EN_WIZ_DMGEFF_IMMUNE,    // Deals no damage
+    /* 0x1 */ EN_WIZ_DMGEFF_UNK1,      // Deals no damage. Was probably originally intended for destroying ghosts.
+    /* 0x2 */ EN_WIZ_DMGEFF_FIRE,      // Damages and sets Ice Wizrobes on fire
+    /* 0x3 */ EN_WIZ_DMGEFF_FREEZE,    // Damages and surrounds Fire Wizrobes with ice
+    /* 0x4 */ EN_WIZ_DMGEFF_LIGHT_ORB, // Damages and surrounds the Wizrobe with light orbs
+    /* 0xF */ EN_WIZ_DMGEFF_NONE = 0xF // Deals regular damage and has no special effect
 } EnWizDamageEffect;
 
 static DamageTable sFireWizrobeDamageTable = {
@@ -601,6 +601,9 @@ void EnWiz_SelectPlatform(EnWiz* this, PlayState* play) {
                 break;
 
             case EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE:
+                //! @bug: Setting the Wizrobe's position to the first platform *without* updating
+                //! this->curPlatformIndex can cause a bug later in EnWiz_Damaged. One way to fix
+                //! this is to set this->curPlatformIndex to 0 here.
                 Math_Vec3f_Copy(&this->actor.world.pos, &this->platforms[0]->world.pos);
                 for (i = 0, ghostAlpha = 128; i < this->platformCount; i++, ghostAlpha -= 10) {
                     Math_Vec3f_Copy(&this->ghostPos[i], &this->actor.world.pos);
@@ -668,13 +671,13 @@ void EnWiz_MoveGhosts(EnWiz* this) {
 }
 
 void EnWiz_StartIntroCutscene(EnWiz* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetFlag(this->actor.cutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(this->actor.cutscene);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCsAndSetFlag(this->actor.csId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_SetupAppear(this, play);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -828,13 +831,13 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
 }
 
 void EnWiz_SetupSecondPhaseCutscene(EnWiz* this, PlayState* play) {
-    s16 secondPhaseCutscene = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    s16 secondPhaseCsId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
 
-    if (!ActorCutscene_GetCanPlayNext(secondPhaseCutscene)) {
-        ActorCutscene_SetIntentToPlay(secondPhaseCutscene);
+    if (!CutsceneManager_IsNext(secondPhaseCsId)) {
+        CutsceneManager_Queue(secondPhaseCsId);
     } else {
-        ActorCutscene_StartAndSetFlag(secondPhaseCutscene, &this->actor);
-        this->subCamId = ActorCutscene_GetCurrentSubCamId(secondPhaseCutscene);
+        CutsceneManager_StartWithPlayerCsAndSetFlag(secondPhaseCsId, &this->actor);
+        this->subCamId = CutsceneManager_GetCurrentSubCamId(secondPhaseCsId);
         this->actor.flags |= ACTOR_FLAG_100000;
         EnWiz_ChangeAnim(this, EN_WIZ_ANIM_DANCE, false);
         this->action = EN_WIZ_ACTION_RUN_BETWEEN_PLATFORMS;
@@ -885,7 +888,7 @@ void EnWiz_SecondPhaseCutscene(EnWiz* this, PlayState* play) {
                     this->platformCount = 0;
                     this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
                     this->timer = 0;
-                    ActorCutscene_Stop(ActorCutscene_GetAdditionalCutscene(this->actor.cutscene));
+                    CutsceneManager_Stop(CutsceneManager_GetAdditionalCsId(this->actor.csId));
                     this->actor.flags &= ~ACTOR_FLAG_100000;
                     EnWiz_SetupDisappear(this);
                     return;
@@ -1037,7 +1040,7 @@ void EnWiz_Disappear(EnWiz* this, PlayState* play) {
 
         if ((this->introCutsceneState == EN_WIZ_INTRO_CS_DISAPPEAR) && (this->introCutsceneTimer == 0)) {
             this->introCutsceneState = EN_WIZ_INTRO_CS_END;
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
             this->actor.flags &= ~ACTOR_FLAG_100000;
         }
 
@@ -1120,6 +1123,17 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
         this->ghostRot[i].y += this->rotationalVelocity;
     }
 
+    //! @bug: When the Wizrobe is defeated, it is launched into the air by the code above, and the
+    //! last check in this conditional is intended to check that the Wizrobe is standing on its
+    //! platform before transitioning to a different state. However, when the fight is in the
+    //! EN_WIZ_FIGHT_STATE_SECOND_PHASE_CUTSCENE state, the Wizrobe will always appear on top of
+    //! the first platform, while its curPlatformIndex is allowed to randomly choose any other
+    //! platform in the room. If the Wizrobe is defeated in this state (which is possible with a
+    //! well-timed attack before the cutscene starts), and if the first platform is elevated above
+    //! other platforms in the room (as it is in the Secret Shrine), then it is possible for
+    //! this->platforms[this->curPlatformIndex]->world.pos.y to be under the floor compared to the
+    //! Wizrobe's current position, causing it to get stuck here and never actually die. This can
+    //! be fixed by addressing the bug in EnWiz_SelectPlatform.
     if ((this->timer == 1) ||
         ((this->actor.velocity.y < 0.0f) &&
          (this->actor.world.pos.y < (this->platforms[this->curPlatformIndex]->world.pos.y + 11.0f)))) {
@@ -1151,7 +1165,9 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->platformLightAlpha, this->targetPlatformLightAlpha, 20, 50, 10);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 35.0f, 40.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnWiz_SetupDead(EnWiz* this) {
@@ -1281,7 +1297,7 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                         scaleStep = Rand_S16Offset(20, 10);
                         Math_Vec3f_Copy(&pos, &this->ghostPos[i]);
                         pos.x += (f32)Rand_S16Offset(20, 20) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1);
-                        pos.y += 70.0f + randPlusMinusPoint5Scaled(30.0f);
+                        pos.y += 70.0f + Rand_CenteredFloat(30.0f);
                         pos.z += (f32)Rand_S16Offset(20, 20) * ((Rand_ZeroOne() < 0.5f) ? -1 : 1);
                         func_800B0DE0(play, &pos, &velocity, &accel, &sDustPrimColor, &sDustEnvTimer,
                                       Rand_S16Offset(350, 100), scaleStep);
@@ -1403,9 +1419,9 @@ void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
             Matrix_Translate(0.0f, 0.0f, 0.0f, MTXMODE_APPLY);
             Matrix_MultVec3f(&staffFlamePos, &flamePos);
-            flamePos.x += randPlusMinusPoint5Scaled(4.0f);
-            flamePos.y += randPlusMinusPoint5Scaled(7.0f);
-            flamePos.z += randPlusMinusPoint5Scaled(5.0f);
+            flamePos.x += Rand_CenteredFloat(4.0f);
+            flamePos.y += Rand_CenteredFloat(7.0f);
+            flamePos.z += Rand_CenteredFloat(5.0f);
             func_800B3030(play, &flamePos, &gZeroVec3f, &gZeroVec3f, ((Rand_ZeroFloat(1.0f) * 50.0f) + 70.0f), 10, 1);
             SoundSource_PlaySfxAtFixedWorldPos(play, &flamePos, 10, NA_SE_EN_EXTINCT);
         }
@@ -1435,8 +1451,8 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if ((this->action == EN_WIZ_ACTION_BURST_INTO_FLAMES) || (this->alpha != 255)) {
         Scene_SetRenderModeXlu(play, 1, 2);
@@ -1486,8 +1502,8 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
         }
 
         for (i = 0; i < platformCount; i++) {
-            func_8012C28C(play->state.gfxCtx);
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
             if ((this->ghostPos[i].x != 0.0f) && (this->ghostPos[i].z != 0.0f)) {
                 Matrix_Translate(this->ghostPos[i].x, this->ghostPos[i].y + 10.0f, this->ghostPos[i].z, MTXMODE_NEW);
@@ -1513,8 +1529,8 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
         Matrix_Pop();
     }
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     // Draw the light emanating from the Wizrobe's platform
     if (this->fightState == EN_WIZ_FIGHT_STATE_FIRST_PHASE) {

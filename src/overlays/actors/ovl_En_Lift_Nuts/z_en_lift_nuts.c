@@ -218,7 +218,7 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->actor.floorBgId != BGCHECK_SCENE) {
         DynaPolyActor* bgActor = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId);
 
@@ -316,7 +316,7 @@ void func_80AEA128(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
-    if ((func_80AE9B4C(0, 3) || func_80AE9B4C(0, 1)) && this->unk_34E == 1) {
+    if ((func_80AE9B4C(0, 3) || func_80AE9B4C(0, 1)) && (this->unk_34E == 1)) {
         this->actor.flags |= ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         func_80AE9FC8(this);
@@ -326,7 +326,8 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
             if (func_80AE9B4C(0, 0)) {
                 switch (CURRENT_DAY) {
                     case 1:
-                        if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
+                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
+                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10)) {
@@ -339,7 +340,8 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         break;
 
                     case 2:
-                        if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
+                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
+                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else {
@@ -360,7 +362,8 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         break;
 
                     case 3:
-                        if (gSaveContext.save.time > CLOCK_TIME(23, 30) || gSaveContext.save.time <= CLOCK_TIME(6, 0)) {
+                        if ((gSaveContext.save.time > CLOCK_TIME(23, 30)) ||
+                            (gSaveContext.save.time <= CLOCK_TIME(6, 0))) {
                             Message_StartTextbox(play, 0x27F7, &this->actor);
                             this->textId = 0x27F7;
                         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_40)) {
@@ -383,7 +386,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                     Flags_UnsetSwitch(play, 0x40);
                     Inventory_SaveDekuPlaygroundHighScore(4);
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) &&
-                        CURRENT_DAY == 3) {
+                        (CURRENT_DAY == 3)) {
                         this->unk_354 = 0;
                         Message_StartTextbox(play, 0x27F4, &this->actor);
                         this->textId = 0x27F4;
@@ -393,8 +396,8 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                     }
                 } else {
                     if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >=
-                        gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
-                        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < 0x2EE0) {
+                        gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+                        if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(120)) {
                             Message_StartTextbox(play, 0x27F9, &this->actor);
                             this->textId = 0x27F9;
                         } else {
@@ -428,6 +431,9 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
                         Message_StartTextbox(play, 0x27E9, &this->actor);
                         this->textId = 0x27E9;
                         break;
+
+                    default:
+                        break;
                 }
             }
         } else {
@@ -435,7 +441,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
             this->textId = 0x27D8;
         }
         func_80AEABF0(this);
-    } else if (func_80AE9AC4(this, 0) || this->unk_34E == 1) {
+    } else if (func_80AE9AC4(this, 0) || (this->unk_34E == 1)) {
         if (this->unk_34E == 1) {
             func_800B8614(&this->actor, play, 200.0f);
         } else if (this->actor.playerHeightRel >= -13.0f) {
@@ -452,7 +458,7 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
         switch (this->textId) {
             case 0x27E2:
                 if (play->msgCtx.choiceIndex == 0) { // Yes
-                    if (gSaveContext.save.playerData.rupees >= 10) {
+                    if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
                         func_8019F208();
                         Message_StartTextbox(play, 0x27E5, &this->actor);
                         this->textId = 0x27E5;
@@ -533,6 +539,9 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                         Message_StartTextbox(play, 0x27E9, &this->actor);
                         this->textId = 0x27E9;
                         break;
+
+                    default:
+                        break;
                 }
                 break;
 
@@ -589,6 +598,9 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 Message_StartTextbox(play, 0x27ED, &this->actor);
                 this->textId = 0x27ED;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -644,6 +656,9 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
                 }
             }
             break;
+
+        default:
+            break;
     }
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x2000, 0x500);
@@ -667,6 +682,9 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
                 } else {
                     this->unk_354++;
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -759,7 +777,7 @@ void func_80AEB1C8(EnLiftNuts* this) {
 void func_80AEB230(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > 0) {
+    if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] > SECONDS_TO_TIMER(0)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         func_80AEB280(this);
     }
@@ -773,8 +791,8 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (player->actor.floorBgId == BG_ACTOR_MAX) &&
-         player->actor.world.pos.y < 20.0f) ||
-        gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= 0x2EE0) {
+         (player->actor.world.pos.y < 20.0f)) ||
+        (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] >= SECONDS_TO_TIMER(120))) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         Flags_SetSwitch(play, 0x41);
         func_80AEB3E0(this, play);
@@ -784,7 +802,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
 
         if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) <
-            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Flags_SetSwitch(play, 0x40);
         }
         Flags_SetSwitch(play, 0x41);
@@ -804,7 +822,7 @@ void func_80AEB428(EnLiftNuts* this, PlayState* play) {
 
     if (this->unk_354 == 10) {
         if (((void)0, gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2]) >
-            gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
+            gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1]) {
             Message_StartTextbox(play, 0x27EA, &this->actor);
             this->textId = 0x27EA;
         } else if (*this->ptr_1EC == 300) {
@@ -975,7 +993,7 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->actionFunc(this, play);
     func_80AEBB30(this, play);
-    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     func_80AE9BCC(this, play);
 
     if (func_80AE9B4C(0, 2)) {
@@ -986,9 +1004,9 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
 s32 EnLiftNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnLiftNuts* this = THIS;
 
-    if (limbIndex == OBJECT_DNT_LIMB_0F || limbIndex == OBJECT_DNT_LIMB_10 || limbIndex == OBJECT_DNT_LIMB_15 ||
-        limbIndex == OBJECT_DNT_LIMB_17 || limbIndex == OBJECT_DNT_LIMB_18 || limbIndex == OBJECT_DNT_LIMB_15 ||
-        limbIndex == OBJECT_DNT_LIMB_1B) {
+    if ((limbIndex == OBJECT_DNT_LIMB_0F) || (limbIndex == OBJECT_DNT_LIMB_10) || (limbIndex == OBJECT_DNT_LIMB_15) ||
+        (limbIndex == OBJECT_DNT_LIMB_17) || (limbIndex == OBJECT_DNT_LIMB_18) || (limbIndex == OBJECT_DNT_LIMB_15) ||
+        (limbIndex == OBJECT_DNT_LIMB_1B)) {
         *dList = NULL;
     }
 
@@ -1009,7 +1027,7 @@ void EnLiftNuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
 void EnLiftNuts_Draw(Actor* thisx, PlayState* play) {
     EnLiftNuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnLiftNuts_OverrideLimbDraw, EnLiftNuts_PostLimbDraw, thisx);
 }

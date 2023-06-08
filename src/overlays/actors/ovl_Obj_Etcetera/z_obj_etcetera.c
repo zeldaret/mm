@@ -154,7 +154,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
             this->oscillationTimer = minOscillationTimer;
         }
     } else {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
@@ -187,7 +187,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
 }
 
 void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -209,11 +209,11 @@ void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
 void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, PlayState* play) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
-    // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
+    // it's more likely they used dyna given that DynaPolyActor_IsPlayerOnTop takes a DynaPolyActor.
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (DynaPolyActor_IsInRidingMovingState(dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -260,7 +260,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != NULL) {
             CollisionHeader_GetVirtual(thisCollisionHeader, &colHeader);
@@ -283,6 +283,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 SkelAnime_Init(play, &this->skelAnime, &gGoldDekuFlowerSkel.sh, &gDekuFlowerBounceAnim,
                                this->jointTable, this->morphTable, GOLD_DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
+                break;
+
+            default:
                 break;
         }
 
@@ -310,6 +313,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = 3;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -321,7 +327,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
 
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
-        if (floorPoly != NULL && this->burrowFlag & 1) {
+        if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
             func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }
@@ -341,7 +347,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->dList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -355,6 +361,6 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play) {
     ObjEtcetera* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
 }

@@ -56,7 +56,7 @@ void DmBal_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->jointTable,
                        this->morphTable, OBJECT_BAL_LIMB_MAX);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->timer = 60;
     this->eyeIndex = 0;
     this->keepEyesShut = false;
@@ -74,15 +74,15 @@ void DmBal_DoNothing(DmBal* this, PlayState* play) {
 }
 
 void func_80C1EAE8(DmBal* this, PlayState* play) {
-    static u16 D_80C1F2C0 = 0x63;
-    s32 actionIndex;
+    static u16 sCueId = 99;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x238)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x238);
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_568)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_568);
 
-        if (D_80C1F2C0 != play->csCtx.actorActions[actionIndex]->action) {
-            D_80C1F2C0 = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+        if (sCueId != play->csCtx.actorCues[cueChannel]->id) {
+            sCueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->keepEyesShut = false;
                     this->eyeIndex = 0;
@@ -96,7 +96,7 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 13);
                     break;
             }
-        } else if (D_80C1F2C0 == 3) {
+        } else if (sCueId == 3) {
             if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
                 this->keepEyesShut = true;
             } else if (Animation_OnFrame(&this->skelAnime, 29.0f)) {
@@ -104,12 +104,12 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                 this->eyeIndex = 0;
             }
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         this->actor.home.pos = this->actor.world.pos;
     } else {
         this->keepEyesShut = false;
         this->eyeIndex = 0;
-        D_80C1F2C0 = 0x63;
+        sCueId = 99;
     }
 }
 
@@ -195,9 +195,11 @@ void DmBal_Draw(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           DmBal_OverrideLimbDraw, DmBal_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

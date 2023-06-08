@@ -114,23 +114,17 @@ void EffectBlure_Init1(void* thisx, void* initParamsx) {
     EffectBlureInit1* initParams = (EffectBlureInit1*)initParamsx;
 
     if ((this != NULL) && (initParams != NULL)) {
+        s32 i;
+
         EffectBlure_InitElements(this);
-        this->p1StartColor.r = initParams->p1StartColor[0];
-        this->p2StartColor.r = initParams->p2StartColor[0];
-        this->p1EndColor.r = initParams->p1EndColor[0];
-        this->p2EndColor.r = initParams->p2EndColor[0];
-        this->p1StartColor.g = initParams->p1StartColor[1];
-        this->p2StartColor.g = initParams->p2StartColor[1];
-        this->p1EndColor.g = initParams->p1EndColor[1];
-        this->p2EndColor.g = initParams->p2EndColor[1];
-        this->p1StartColor.b = initParams->p1StartColor[2];
-        this->p2StartColor.b = initParams->p2StartColor[2];
-        this->p1EndColor.b = initParams->p1EndColor[2];
-        this->p2EndColor.b = initParams->p2EndColor[2];
-        this->p1StartColor.a = initParams->p1StartColor[3];
-        this->p2StartColor.a = initParams->p2StartColor[3];
-        this->p1EndColor.a = initParams->p1EndColor[3];
-        this->p2EndColor.a = initParams->p2EndColor[3];
+
+        for (i = 0; i < 4; i++) {
+            this->p1StartColor[i] = initParams->p1StartColor[i];
+            this->p2StartColor[i] = initParams->p2StartColor[i];
+            this->p1EndColor[i] = initParams->p1EndColor[i];
+            this->p2EndColor[i] = initParams->p2EndColor[i];
+        }
+
         this->elemDuration = initParams->elemDuration;
         this->unkFlag = initParams->unkFlag;
         this->calcMode = initParams->calcMode;
@@ -155,23 +149,17 @@ void EffectBlure_Init2(void* thisx, void* initParamsx) {
     EffectBlureInit2* initParams = (EffectBlureInit2*)initParamsx;
 
     if ((this != NULL) && (initParams != NULL)) {
+        s32 i;
+
         EffectBlure_InitElements(this);
-        this->p1StartColor.r = initParams->p1StartColor[0];
-        this->p2StartColor.r = initParams->p2StartColor[0];
-        this->p1EndColor.r = initParams->p1EndColor[0];
-        this->p2EndColor.r = initParams->p2EndColor[0];
-        this->p1StartColor.g = initParams->p1StartColor[1];
-        this->p2StartColor.g = initParams->p2StartColor[1];
-        this->p1EndColor.g = initParams->p1EndColor[1];
-        this->p2EndColor.g = initParams->p2EndColor[1];
-        this->p1StartColor.b = initParams->p1StartColor[2];
-        this->p2StartColor.b = initParams->p2StartColor[2];
-        this->p1EndColor.b = initParams->p1EndColor[2];
-        this->p2EndColor.b = initParams->p2EndColor[2];
-        this->p1StartColor.a = initParams->p1StartColor[3];
-        this->p2StartColor.a = initParams->p2StartColor[3];
-        this->p1EndColor.a = initParams->p1EndColor[3];
-        this->p2EndColor.a = initParams->p2EndColor[3];
+
+        for (i = 0; i < 4; i++) {
+            this->p1StartColor[i] = initParams->p1StartColor[i];
+            this->p2StartColor[i] = initParams->p2StartColor[i];
+            this->p1EndColor[i] = initParams->p1EndColor[i];
+            this->p2EndColor[i] = initParams->p2EndColor[i];
+        }
+
         this->elemDuration = initParams->elemDuration;
         this->unkFlag = initParams->unkFlag;
         this->calcMode = initParams->calcMode;
@@ -372,21 +360,21 @@ void EffectBlure_GetComputedValues(EffectBlure* this, s32 index, f32 ratio, Vec3
         color1->r = color1->g = color1->b = color1->a = 255;
         color2->r = color2->g = color2->b = color2->a = 255;
     } else {
-        color1->r = func_800B0A24(this->p1StartColor.r, this->p1EndColor.r, ratio);
-        color1->g = func_800B0A24(this->p1StartColor.g, this->p1EndColor.g, ratio);
-        color1->b = func_800B0A24(this->p1StartColor.b, this->p1EndColor.b, ratio);
-        color1->a = func_800B0A24(this->p1StartColor.a, this->p1EndColor.a, ratio);
-        color2->r = func_800B0A24(this->p2StartColor.r, this->p2EndColor.r, ratio);
-        color2->g = func_800B0A24(this->p2StartColor.g, this->p2EndColor.g, ratio);
-        color2->b = func_800B0A24(this->p2StartColor.b, this->p2EndColor.b, ratio);
-        color2->a = func_800B0A24(this->p2StartColor.a, this->p2EndColor.a, ratio);
+        color1->r = func_800B0A24(this->p1StartColor[0], this->p1EndColor[0], ratio);
+        color1->g = func_800B0A24(this->p1StartColor[1], this->p1EndColor[1], ratio);
+        color1->b = func_800B0A24(this->p1StartColor[2], this->p1EndColor[2], ratio);
+        color1->a = func_800B0A24(this->p1StartColor[3], this->p1EndColor[3], ratio);
+        color2->r = func_800B0A24(this->p2StartColor[0], this->p2EndColor[0], ratio);
+        color2->g = func_800B0A24(this->p2StartColor[1], this->p2EndColor[1], ratio);
+        color2->b = func_800B0A24(this->p2StartColor[2], this->p2EndColor[2], ratio);
+        color2->a = func_800B0A24(this->p2StartColor[3], this->p2EndColor[3], ratio);
     }
 }
 
 void EffectBlure_SetupSmooth(EffectBlure* this, GraphicsContext* gfxCtx) {
     OPEN_DISPS(gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x26);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_38);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -573,16 +561,16 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
         vtx[0].v = baseVtx;
         vtx[1].v = baseVtx;
 
-        vtx[0].v.ob[0] = func_80086814(sp158.x);
-        vtx[0].v.ob[1] = func_80086814(sp158.y);
-        vtx[0].v.ob[2] = func_80086814(sp158.z);
+        vtx[0].v.ob[0] = Math_FNearbyIntF(sp158.x);
+        vtx[0].v.ob[1] = Math_FNearbyIntF(sp158.y);
+        vtx[0].v.ob[2] = Math_FNearbyIntF(sp158.z);
         vtx[0].v.cn[0] = sp148.r;
         vtx[0].v.cn[1] = sp148.g;
         vtx[0].v.cn[2] = sp148.b;
         vtx[0].v.cn[3] = sp148.a;
-        vtx[1].v.ob[0] = func_80086814(sp14C.x);
-        vtx[1].v.ob[1] = func_80086814(sp14C.y);
-        vtx[1].v.ob[2] = func_80086814(sp14C.z);
+        vtx[1].v.ob[0] = Math_FNearbyIntF(sp14C.x);
+        vtx[1].v.ob[1] = Math_FNearbyIntF(sp14C.y);
+        vtx[1].v.ob[2] = Math_FNearbyIntF(sp14C.z);
         vtx[1].v.cn[0] = sp144.r;
         vtx[1].v.cn[1] = sp144.g;
         vtx[1].v.cn[2] = sp144.b;
@@ -618,17 +606,17 @@ void EffectBlure_DrawElemHermiteInterpolation(EffectBlure* this, EffectBlureElem
             vtx[j1].v = baseVtx;
             vtx[j2].v = baseVtx;
 
-            vtx[j1].v.ob[0] = func_80086814(sp158.x);
-            vtx[j1].v.ob[1] = func_80086814(sp158.y);
-            vtx[j1].v.ob[2] = func_80086814(sp158.z);
+            vtx[j1].v.ob[0] = Math_FNearbyIntF(sp158.x);
+            vtx[j1].v.ob[1] = Math_FNearbyIntF(sp158.y);
+            vtx[j1].v.ob[2] = Math_FNearbyIntF(sp158.z);
             vtx[j1].v.cn[0] = func_800B0A24(sp1A4.r, sp19C.r, temp_f28);
             vtx[j1].v.cn[1] = func_800B0A24(sp1A4.g, sp19C.g, temp_f28);
             vtx[j1].v.cn[2] = func_800B0A24(sp1A4.b, sp19C.b, temp_f28);
             vtx[j1].v.cn[3] = func_800B0A24(sp1A4.a, sp19C.a, temp_f28);
 
-            vtx[j2].v.ob[0] = func_80086814(sp14C.x);
-            vtx[j2].v.ob[1] = func_80086814(sp14C.y);
-            vtx[j2].v.ob[2] = func_80086814(sp14C.z);
+            vtx[j2].v.ob[0] = Math_FNearbyIntF(sp14C.x);
+            vtx[j2].v.ob[1] = Math_FNearbyIntF(sp14C.y);
+            vtx[j2].v.ob[2] = Math_FNearbyIntF(sp14C.z);
             vtx[j2].v.cn[0] = func_800B0A24(sp1A0.r, sp198.r, temp_f28);
             vtx[j2].v.cn[1] = func_800B0A24(sp1A0.g, sp198.g, temp_f28);
             vtx[j2].v.cn[2] = func_800B0A24(sp1A0.b, sp198.b, temp_f28);
@@ -705,7 +693,7 @@ void EffectBlure_DrawSmooth(EffectBlure* this2, GraphicsContext* gfxCtx) {
 void EffectBlure_SetupSimple(GraphicsContext* gfxCtx, EffectBlure* this, Vtx* vtx) {
     OPEN_DISPS(gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x26);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_38);
 
     CLOSE_DISPS(gfxCtx);
 }
@@ -714,7 +702,7 @@ void EffectBlure_SetupSimpleAlt(GraphicsContext* gfxCtx, EffectBlure* this, Vtx*
     OPEN_DISPS(gfxCtx);
 
     gDPPipeSync(POLY_XLU_DISP++);
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x26);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_38);
 
     gDPSetCycleType(POLY_XLU_DISP++, G_CYC_2CYCLE);
     gDPSetTextureLUT(POLY_XLU_DISP++, G_TT_NONE);
@@ -765,7 +753,7 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
 
         j = 0;
 
-        for (i = 0; i < this->numElements - 1; i++) {
+        for (i = 0; i < this->numElements - 1; i++, j += 4) {
             if (this->drawMode == 1) {
                 alphaRatio = (f32)this->elements[i].timer / (f32)this->elemDuration;
                 gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x80, this->altPrimColor.r, this->altPrimColor.g,
@@ -773,45 +761,43 @@ void EffectBlure_DrawSimpleVertices(GraphicsContext* gfxCtx, EffectBlure* this, 
                 gDPPipeSync(POLY_XLU_DISP++);
             }
 
-            if (1) {} // Necessary to match
-
             gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
             gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
 
-            if (this->flags & 4) {
-                sp1B0.x = ((f32)vtx[4 * i + 0].v.ob[0] + (f32)vtx[4 * i + 1].v.ob[0]) * 0.5f;
-                sp1B0.y = ((f32)vtx[4 * i + 0].v.ob[1] + (f32)vtx[4 * i + 1].v.ob[1]) * 0.5f;
-                sp1B0.z = ((f32)vtx[4 * i + 0].v.ob[2] + (f32)vtx[4 * i + 1].v.ob[2]) * 0.5f;
-                sp1A4.x = ((f32)vtx[4 * i + 2].v.ob[0] + (f32)vtx[4 * i + 3].v.ob[0]) * 0.5f;
-                sp1A4.y = ((f32)vtx[4 * i + 2].v.ob[1] + (f32)vtx[4 * i + 3].v.ob[1]) * 0.5f;
-                sp1A4.z = ((f32)vtx[4 * i + 2].v.ob[2] + (f32)vtx[4 * i + 3].v.ob[2]) * 0.5f;
-
-                Math_Vec3f_Diff(&sp1A4, &sp1B0, &sp198);
-                scale = sqrtf(SQXYZ(sp198));
-
-                if (fabsf(scale) > 0.0005f) {
-                    scale = 1.0f / scale;
-                    Math_Vec3f_Scale(&sp198, scale);
-
-                    SkinMatrix_SetTranslate(&sp154, sp1B0.x, sp1B0.y, sp1B0.z);
-                    SkinMatrix_SetRotateAroundVec(&sp114, 0x3FFF, sp198.x, sp198.y, sp198.z);
-                    SkinMatrix_MtxFMtxFMult(&sp154, &sp114, &spD4);
-                    SkinMatrix_SetTranslate(&sp154, -sp1B0.x, -sp1B0.y, -sp1B0.z);
-                    SkinMatrix_MtxFMtxFMult(&spD4, &sp154, &sp94);
-
-                    mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp94);
-                    if (mtx == NULL) {
-                        break;
-                    }
-
-                    gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                    gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
-                    gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
-                    gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                }
+            if (!(this->flags & 4)) {
+                continue;
             }
 
-            j += 4;
+            sp1B0.x = ((f32)vtx[4 * i + 0].v.ob[0] + (f32)vtx[4 * i + 1].v.ob[0]) / 2.0f;
+            sp1B0.y = ((f32)vtx[4 * i + 0].v.ob[1] + (f32)vtx[4 * i + 1].v.ob[1]) / 2.0f;
+            sp1B0.z = ((f32)vtx[4 * i + 0].v.ob[2] + (f32)vtx[4 * i + 1].v.ob[2]) / 2.0f;
+            sp1A4.x = ((f32)vtx[4 * i + 2].v.ob[0] + (f32)vtx[4 * i + 3].v.ob[0]) / 2.0f;
+            sp1A4.y = ((f32)vtx[4 * i + 2].v.ob[1] + (f32)vtx[4 * i + 3].v.ob[1]) / 2.0f;
+            sp1A4.z = ((f32)vtx[4 * i + 2].v.ob[2] + (f32)vtx[4 * i + 3].v.ob[2]) / 2.0f;
+
+            Math_Vec3f_Diff(&sp1A4, &sp1B0, &sp198);
+            scale = sqrtf(SQXYZ(sp198));
+
+            if (fabsf(scale) > 0.0005f) {
+                scale = 1.0f / scale;
+                Math_Vec3f_Scale(&sp198, scale);
+
+                SkinMatrix_SetTranslate(&sp154, sp1B0.x, sp1B0.y, sp1B0.z);
+                SkinMatrix_SetRotateAroundVec(&sp114, 0x3FFF, sp198.x, sp198.y, sp198.z);
+                SkinMatrix_MtxFMtxFMult(&sp154, &sp114, &spD4);
+                SkinMatrix_SetTranslate(&sp154, -sp1B0.x, -sp1B0.y, -sp1B0.z);
+                SkinMatrix_MtxFMtxFMult(&spD4, &sp154, &sp94);
+
+                mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &sp94);
+                if (mtx == NULL) {
+                    break;
+                }
+
+                gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPVertex(POLY_XLU_DISP++, &vtx[j], 4, 0);
+                gSP2Triangles(POLY_XLU_DISP++, 0, 1, 3, 0, 0, 3, 2, 0);
+                gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            }
         }
     }
 
@@ -938,7 +924,7 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
 
     if (this->numElements != 0) {
         if (this->flags == 0) {
-            func_8012C560(gfxCtx);
+            Gfx_SetupDL38_Xlu(gfxCtx);
             gDPPipeSync(POLY_XLU_DISP++);
 
             vtx = GRAPH_ALLOC(gfxCtx, 32 * sizeof(Vtx));
@@ -992,19 +978,19 @@ void EffectBlure_Draw(void* thisx, GraphicsContext* gfxCtx) {
                         vtx[j].v.flag = 0;
                         vtx[j].v.tc[0] = 0;
                         vtx[j].v.tc[1] = 0;
-                        vtx[j].v.cn[0] = func_800B0A24(this->p1StartColor.r, this->p1EndColor.r, ratio);
-                        vtx[j].v.cn[1] = func_800B0A24(this->p1StartColor.g, this->p1EndColor.g, ratio);
-                        vtx[j].v.cn[2] = func_800B0A24(this->p1StartColor.b, this->p1EndColor.b, ratio);
-                        vtx[j].v.cn[3] = func_800B0A24(this->p1StartColor.a, this->p1EndColor.a, ratio);
+                        vtx[j].v.cn[0] = func_800B0A24(this->p1StartColor[0], this->p1EndColor[0], ratio);
+                        vtx[j].v.cn[1] = func_800B0A24(this->p1StartColor[1], this->p1EndColor[1], ratio);
+                        vtx[j].v.cn[2] = func_800B0A24(this->p1StartColor[2], this->p1EndColor[2], ratio);
+                        vtx[j].v.cn[3] = func_800B0A24(this->p1StartColor[3], this->p1EndColor[3], ratio);
                         j++;
 
                         vtx[j].v.flag = 0;
                         vtx[j].v.tc[0] = 0;
                         vtx[j].v.tc[1] = 0;
-                        vtx[j].v.cn[0] = func_800B0A24(this->p2StartColor.r, this->p2EndColor.r, ratio);
-                        vtx[j].v.cn[1] = func_800B0A24(this->p2StartColor.g, this->p2EndColor.g, ratio);
-                        vtx[j].v.cn[2] = func_800B0A24(this->p2StartColor.b, this->p2EndColor.b, ratio);
-                        vtx[j].v.cn[3] = func_800B0A24(this->p2StartColor.a, this->p2EndColor.a, ratio);
+                        vtx[j].v.cn[0] = func_800B0A24(this->p2StartColor[0], this->p2EndColor[0], ratio);
+                        vtx[j].v.cn[1] = func_800B0A24(this->p2StartColor[1], this->p2EndColor[1], ratio);
+                        vtx[j].v.cn[2] = func_800B0A24(this->p2StartColor[2], this->p2EndColor[2], ratio);
+                        vtx[j].v.cn[3] = func_800B0A24(this->p2StartColor[3], this->p2EndColor[3], ratio);
                         j++;
                     }
                 }

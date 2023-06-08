@@ -74,7 +74,7 @@ ActorInit En_Syateki_Man_InitVars = {
 typedef enum {
     /* 0 */ EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END,
+    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
 } EnSyatekiManAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -183,7 +183,7 @@ void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
-    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH(&this->actor)];
+    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = 1;
@@ -327,7 +327,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 // You don't have a bow!
                 Message_StartTextbox(play, 0xA30, &this->actor);
                 this->prevTextId = 0xA30;
-            } else if (gSaveContext.save.playerData.rupees < 20) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
 
                 // You don't have enough rupees!
@@ -627,7 +627,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     Message_StartTextbox(play, 0x3FA, &this->actor);
                     this->prevTextId = 0x3FA;
                 }
-            } else if (gSaveContext.save.playerData.rupees < 20) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees < 20) {
                 play_sound(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
                     // You don't have a enough rupees!
@@ -1502,7 +1502,7 @@ void EnSyatekiMan_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));

@@ -27,18 +27,18 @@ void EnBaguo_UpdateEffects(EnBaguo* this, PlayState* play);
 void EnBaguo_DrawEffects(EnBaguo* this, PlayState* play);
 
 typedef enum {
-    /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
-    /* 0x1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
-    /* 0x2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
-    /* 0x3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
+    /* 0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
+    /* 1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
+    /* 2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
+    /* 3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
 } NejironAction;
 
 /**
  * These directions are relative to the Nejiron.
  */
 typedef enum {
-    /* 0x0 */ NEJIRON_DIRECTION_RIGHT,
-    /* 0x1 */ NEJIRON_DIRECTION_LEFT
+    /* 0 */ NEJIRON_DIRECTION_RIGHT,
+    /* 1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
 ActorInit En_Baguo_InitVars = {
@@ -392,7 +392,9 @@ void EnBaguo_Update(Actor* thisx, PlayState* play) {
         }
 
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
         if (this->action != NEJIRON_ACTION_INACTIVE) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
@@ -417,7 +419,7 @@ void EnBaguo_DrawBody(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
 
@@ -447,9 +449,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.x = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rotation.y = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rotation.z = (s16)(s32)Rand_CenteredFloat(0x7530);
             return;
         }
     }
@@ -494,7 +496,7 @@ void EnBaguo_DrawEffects(EnBaguo* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);

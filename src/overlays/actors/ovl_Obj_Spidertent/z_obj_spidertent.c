@@ -234,7 +234,7 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-} ObjSpidertentStruct;
+} ObjSpidertentStruct; // size = 0x28
 
 ObjSpidertentStruct D_80B31350[] = {
     {
@@ -272,7 +272,7 @@ typedef struct {
     /* 0x0F */ s8 unk_0F;
     /* 0x10 */ Color_RGBA8 unk_10;
     /* 0x14 */ Color_RGBA8 unk_14;
-} ObjSpidertentStruct2;
+} ObjSpidertentStruct2; // size = 0x18
 
 ObjSpidertentStruct2 D_80B313A0[] = {
     {
@@ -676,15 +676,15 @@ void func_80B30A2C(ObjSpidertent* this) {
 }
 
 void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -755,7 +755,7 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
 
     this->unk_3C1--;
     if (this->unk_3C1 == 40) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
     if (this->unk_3C1 >= 32) {
@@ -791,7 +791,7 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
             }
         }
     } else if (this->unk_3C1 <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
+        CutsceneManager_Stop(this->dyna.actor.csId);
         Actor_Kill(&this->dyna.actor);
     }
 }
@@ -812,7 +812,7 @@ void ObjSpidertent_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_XLU_DISP;
 
-    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(gfx++, 0, 0xFF, this->unk_3C2, this->unk_3C3, this->unk_3C4, temp_f18);
     gSPDisplayList(gfx++, D_80B31350[params].unk_00);
