@@ -167,8 +167,8 @@ void func_80B12A88(Actor* thisx) {
     }
 }
 
-void func_80B12B38(ObjDhouse* this2, PlayState* play) {
-    ObjDhouse* this = this2;
+void func_80B12B38(ObjDhouse* this, PlayState* play) {
+    Actor* thisx = &this->dyna.actor;
     s32 i;
     f32 temp_f0;
     CollisionPoly* sp90;
@@ -201,7 +201,7 @@ void func_80B12B38(ObjDhouse* this2, PlayState* play) {
             phi_s3 = false;
             if (ptr->unk_0C.y < 0.0f) {
                 func_80B12A50(ptr, ptr3, &sp80);
-                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp7C, &this->dyna.actor, &sp80);
+                temp_f0 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp7C, thisx, &sp80);
                 if (((sp80.y - 35.0f) < temp_f0) && (temp_f0 > (BGCHECK_Y_MIN + 1.0f))) {
                     phi_s3 = true;
                 }

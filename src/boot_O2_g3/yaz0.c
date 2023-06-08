@@ -58,11 +58,11 @@ void* Yaz0_NextDMA(void* curSrcPos) {
 }
 
 typedef struct {
-    /* 0x00 */ u32 magic; // Yaz0
-    /* 0x04 */ u32 decSize;
-    /* 0x08 */ u32 compInfoOffset;   // only used in mio0
-    /* 0x0C */ u32 uncompDataOffset; // only used in mio0
-} Yaz0Header;                        // size = 0x10
+    /* 0x0 */ u32 magic; // Yaz0
+    /* 0x4 */ u32 decSize;
+    /* 0x8 */ u32 compInfoOffset;   // only used in mio0
+    /* 0xC */ u32 uncompDataOffset; // only used in mio0
+} Yaz0Header;                       // size = 0x10
 
 #define YAZ0_MAGIC 0x59617A30 // "Yaz0"
 

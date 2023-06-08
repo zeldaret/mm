@@ -480,10 +480,10 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
 
     if ((this->unk_4C2 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_4C2 &= ~0x1800;
-        if (player->exchangeItemId == 0x33) {
+        if (player->exchangeItemId == PLAYER_IA_LETTER_MAMA) {
             this->unk_4C2 |= 0x800;
             this->unk_4F4 = player->exchangeItemId;
-        } else if (player->exchangeItemId != 0) {
+        } else if (player->exchangeItemId != PLAYER_IA_NONE) {
             this->unk_4C2 |= 0x1000;
             this->unk_4F4 = player->exchangeItemId;
         }

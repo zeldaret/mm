@@ -15,7 +15,9 @@ typedef void (*EnSob1ActionFunc)(struct EnSob1*, PlayState*);
 typedef void (*EnSob1BlinkFunc)(struct EnSob1*);
 
 #define ENSOB1_GET_SHOPTYPE(thisx) ((thisx)->params & 0x1F)
-#define ENSOB1_GET_PATH(thisx) (((thisx)->params & 0x3E0) >> 5)
+#define ENSOB1_GET_PATH_INDEX(thisx) (((thisx)->params & 0x3E0) >> 5)
+
+#define ENSOB1_PATH_INDEX_NONE 0x1F
 
 typedef struct EnSob1XZRange {
     /* 0x0 */ f32 xMin;

@@ -262,8 +262,8 @@ void func_80A39DC8(EnElfgrp* this, PlayState* play, s32 arg2, s32 arg3) {
     }
 
     for (i = 0; i < arg2; i++) {
-        elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, randPlusMinusPoint5Scaled(20.0f) + sp6C.x, sp6C.y,
-                             randPlusMinusPoint5Scaled(20.0f) + sp6C.z, 0, 0, 0, params);
+        elforg = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, Rand_CenteredFloat(20.0f) + sp6C.x, sp6C.y,
+                             Rand_CenteredFloat(20.0f) + sp6C.z, 0, 0, 0, params);
         if (elforg == NULL) {
             continue;
         }

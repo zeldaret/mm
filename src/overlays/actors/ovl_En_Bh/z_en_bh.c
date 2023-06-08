@@ -59,9 +59,9 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     xzDist = sqrtf(SQ(xDiff) + SQ(zDiff));
 
     if ((this->timer2 == 0) || (xzDist < 100.0f)) {
-        this->pos.x = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.x;
-        this->pos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.home.pos.y;
-        this->pos.z = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.z;
+        this->pos.x = Rand_CenteredFloat(300.0f) + this->actor.home.pos.x;
+        this->pos.y = Rand_CenteredFloat(100.0f) + this->actor.home.pos.y;
+        this->pos.z = Rand_CenteredFloat(300.0f) + this->actor.home.pos.z;
         this->timer2 = Rand_ZeroFloat(50.0f) + 30.0f;
         this->step = 0;
     }
@@ -85,7 +85,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
             this->skelanime.playSpeed = 1.0f;
             this->timer = Rand_ZeroFloat(70.0f) + 50.0f;
         } else if (((this->timer & 7) == 7) && (Rand_ZeroOne() < 0.5f)) {
-            this->unk1E4 = randPlusMinusPoint5Scaled(3000.0f);
+            this->unk1E4 = Rand_CenteredFloat(3000.0f);
         }
     } else {
         SkelAnime_Update(&this->skelanime);

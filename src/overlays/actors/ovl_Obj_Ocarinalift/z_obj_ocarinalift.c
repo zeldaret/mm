@@ -74,7 +74,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
         this->unk16C = 1;
         this->unk170 = Lib_SegmentedToVirtual(path->points);
         func_80AC94C0(this, this->unk168);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) &&
             (Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor)))) {
             func_80AC96B4(this);
         } else {
@@ -137,7 +137,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         this->unk168 += this->unk16C;
         thisx->speed *= 0.4f;
         if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
-            if (paramsC == OBJOCARINALIFT_PARAMSC_0) {
+            if (paramsC == OBJOCARINALIFT_PARAM_0) {
                 this->unk16C = -this->unk16C;
                 this->timer = 10;
                 func_80AC9A68(this);
@@ -155,11 +155,11 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     func_80AC99C0(this);
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;
-                } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+                } else if ((paramsC == OBJOCARINALIFT_PARAM_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
                     func_80AC9AB8(this);
                 }
             }
-        } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+        } else if ((paramsC == OBJOCARINALIFT_PARAM_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
             func_80AC9AB8(this);
         }
         if (sp34) {
@@ -176,7 +176,7 @@ void func_80AC99D4(ObjOcarinalift* this, PlayState* play) {
     if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80AC94C0(this, this->unk168);
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAMSC_1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAM_1) &&
             (this->unk168 == OBJOCARINALIFT_GET_1F(&this->dyna.actor))) {
             func_80AC9AB8(this);
         } else {
@@ -218,7 +218,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
     if (func_800B886C(&this->dyna.actor, play)) {
         if (play->msgCtx.ocarinaMode == 4) {
             if (play->msgCtx.lastPlayedSong == 0) {
-                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) {
+                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) {
                     Flags_SetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor));
                 }
                 CutsceneManager_Queue(this->dyna.actor.csId);

@@ -667,7 +667,9 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
 
 s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDekunuts* this = THIS;
-    f32 arg1, arg2, arg3;
+    f32 arg1;
+    f32 arg2;
+    f32 arg3;
     f32 currentFrame;
 
     if (this->actionFunc == func_808BDA4C) {

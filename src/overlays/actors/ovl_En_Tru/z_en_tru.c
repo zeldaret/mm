@@ -692,10 +692,11 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
             }
             this->unk_34E &= ~(0x4000 | 0x2000);
 
-            if ((player->exchangeItemId == 35) || (player->exchangeItemId == 36)) {
+            if ((player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_RED) ||
+                (player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_BLUE)) {
                 this->unk_34E |= 0x2000;
                 this->unk_38C = player->exchangeItemId;
-            } else if (player->exchangeItemId != 0) {
+            } else if (player->exchangeItemId != PLAYER_IA_NONE) {
                 this->unk_34E |= 0x4000;
             }
 
@@ -972,8 +973,8 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                     this->actor.shape.shadowDraw = NULL;
                     this->unk_34E |= (0x200 | 0x8);
                     this->unk_34E &= ~0x800;
-                    if (player->exchangeItemId != 0) {
-                        player->exchangeItemId = 0;
+                    if (player->exchangeItemId != PLAYER_IA_NONE) {
+                        player->exchangeItemId = PLAYER_IA_NONE;
                     }
                     EnTru_ChangeAnim(this, KOUME_ANIM_HOVER1);
                 }
@@ -1138,7 +1139,8 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->animIndex = -1;
     EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
-    this->path = SubS_GetDayDependentPath(play, ENTRU_GET_PATH(&this->actor), 255, &this->unk_384);
+    this->path =
+        SubS_GetDayDependentPath(play, ENTRU_GET_PATH_INDEX(&this->actor), ENTRU_PATH_INDEX_NONE, &this->unk_384);
     if (this->path != NULL) {
         this->unk_384 = 1;
     }

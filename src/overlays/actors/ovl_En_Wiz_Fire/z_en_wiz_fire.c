@@ -32,7 +32,7 @@ typedef enum {
     /* 0 */ EN_WIZ_FIRE_ACTION_MOVE_MAGIC_PROJECTILE,
     /* 1 */ EN_WIZ_FIRE_ACTION_SMALL_FLAME,
     /* 2 */ EN_WIZ_FIRE_ACTION_POOL,
-    /* 3 */ EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE,
+    /* 3 */ EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE
 } EnWizFireAction;
 
 static s32 sPoolHitByIceArrow = false;
@@ -152,7 +152,7 @@ void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play) {
     Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
 
     if (this->type != EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
-        velocity.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
+        velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
     } else {
         velocity.z = 12.0f;
     }
@@ -223,8 +223,8 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
             this->increaseLowestUsedIndexTimer = 10;
 
             Matrix_Push();
-            Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
-            velocity.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
+            Matrix_RotateYS((s16)(s32)Rand_CenteredFloat(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
             Matrix_MultVec3f(&velocity, &this->actor.velocity);
             Matrix_Pop();
 
@@ -257,7 +257,7 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WIZ_FIRE, this->actor.world.pos.x,
                                     this->actor.world.pos.y, this->actor.world.pos.z, 0, arcingProjectileRotY, 0,
                                     EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE);
-                        arcingProjectileRotY += BINANG_ADD((s32)randPlusMinusPoint5Scaled(0x1000), 0x3333);
+                        arcingProjectileRotY += BINANG_ADD((s32)Rand_CenteredFloat(0x1000), 0x10000 / 5);
                     }
 
                     Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
@@ -313,9 +313,9 @@ void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
 void EnWiz_SetupSmallFlame(EnWizFire* this, PlayState* play) {
     this->targetScale = 0.02f;
     this->timer = Rand_S16Offset(50, 50);
-    this->scaleMod.x = randPlusMinusPoint5Scaled(1.0f) * 0.007f;
-    this->scaleMod.y = randPlusMinusPoint5Scaled(1.0f) * 0.005f;
-    this->scaleMod.z = randPlusMinusPoint5Scaled(1.0f) * 0.007f;
+    this->scaleMod.x = Rand_CenteredFloat(1.0f) * 0.007f;
+    this->scaleMod.y = Rand_CenteredFloat(1.0f) * 0.005f;
+    this->scaleMod.z = Rand_CenteredFloat(1.0f) * 0.007f;
     this->actionFunc = EnWiz_SmallFlame;
 }
 
@@ -379,13 +379,13 @@ void EnWiz_Pool(EnWizFire* this, PlayState* play) {
             Vec3f accel = { 0.0f, 0.0f, 0.0f };
             Vec3f pos;
 
-            accel.x = randPlusMinusPoint5Scaled(3.0f) / 10.0f;
+            accel.x = Rand_CenteredFloat(3.0f) / 10.0f;
             accel.y = 0.23f;
-            accel.z = randPlusMinusPoint5Scaled(3.0f) / 10.0f;
+            accel.z = Rand_CenteredFloat(3.0f) / 10.0f;
 
             Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-            pos.x += randPlusMinusPoint5Scaled(150.0f);
-            pos.z += randPlusMinusPoint5Scaled(150.0f);
+            pos.x += Rand_CenteredFloat(150.0f);
+            pos.z += Rand_CenteredFloat(150.0f);
 
             Math_ApproachF(&this->poolScale, 0.022f, 0.3f, 0.01f);
             this->collider.dim.radius = this->poolScale * 4300.0f;

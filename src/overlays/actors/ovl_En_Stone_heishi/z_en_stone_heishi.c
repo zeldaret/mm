@@ -90,7 +90,7 @@ typedef enum {
     /* 0 */ EN_STONE_BOTTLE_NONE,
     /* 1 */ EN_STONE_BOTTLE_RED_POTION,
     /* 2 */ EN_STONE_BOTTLE_EMPTY,
-    /* 3 */ EN_STONE_BOTTLE_BLUE_POTION,
+    /* 3 */ EN_STONE_BOTTLE_BLUE_POTION
 } EnStoneHeishiBottle;
 
 typedef enum {
@@ -100,8 +100,8 @@ typedef enum {
     /* 3 */ EN_STONE_HEISHI_ANIM_WAVE,
     /* 4 */ EN_STONE_HEISHI_ANIM_SIT_AND_REACH,
     /* 5 */ EN_STONE_HEISHI_ANIM_DRINK_2,
-    /* 6 */ EN_STONE_HEISHI_ANIM_STAND_UP,
-} EnStoneHeishiAnimations;
+    /* 6 */ EN_STONE_HEISHI_ANIM_STAND_UP
+} EnStoneHeishiAnimation;
 
 void EnStoneheishi_Init(Actor* thisx, PlayState* play) {
     EnStoneheishi* this = THIS;
@@ -230,7 +230,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
             player->actor.textId = sEnStoneHeishiTextIds[this->textIdIndex];
 
             Message_ContinueTextbox(play, sEnStoneHeishiTextIds[this->textIdIndex]);
-            func_80151BB4(play, 0x12);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_SHIRO);
         }
     }
 
@@ -250,7 +250,7 @@ void func_80BC9680(EnStoneheishi* this, PlayState* play) {
             if (this->textIdIndex < 7) {
                 this->textIdIndex++;
             } else {
-                func_80151BB4(play, 0x12);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_SHIRO);
                 func_80BC94B0(this);
                 return;
             }
@@ -293,7 +293,7 @@ void EnStoneheishi_CheckGivenItem(EnStoneheishi* this, PlayState* play) {
             }
         } else if (itemAction <= PLAYER_IA_MINUS1) {
             Message_CloseTextbox(play);
-            func_80151BB4(play, 0x12);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_SHIRO);
             func_80BC94B0(this);
         }
     }
@@ -411,8 +411,8 @@ void func_80BC9E50(EnStoneheishi* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        func_80151BB4(play, 0x35);
-        func_80151BB4(play, 0x12);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_STONE_MASK);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_SHIRO);
         this->action = EN_STONE_ACTION_1;
         this->actionFunc = func_80BC9680;
     } else {

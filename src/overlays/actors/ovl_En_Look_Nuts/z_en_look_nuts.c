@@ -112,7 +112,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
+    this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
@@ -123,7 +123,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (this->pathLocation == 0x1F) {
+    if (this->pathIndex == LOOKNUTS_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -165,17 +165,17 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathLocation, 0x1F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, LOOKNUTS_PATH_INDEX_NONE);
     if (this->path != NULL) {
-        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
+        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->waypointIndex, &this->actor.world.pos, &sp30);
     }
 
     //! @bug sp30 is uninitialised if path == NULL. Fix by enclosing everything in the path NULL check.
     if (sp30 < 10.0f) {
         if (this->path != NULL) {
-            this->currentPathIndex++;
-            if (this->currentPathIndex >= this->path->count) {
-                this->currentPathIndex = 0;
+            this->waypointIndex++;
+            if (this->waypointIndex >= this->path->count) {
+                this->waypointIndex = 0;
             }
             if (Rand_ZeroOne() < 0.6f) {
                 EnLookNuts_SetupStandAndWait(this);

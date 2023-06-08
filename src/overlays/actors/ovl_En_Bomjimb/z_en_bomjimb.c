@@ -275,8 +275,8 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
         case 0:
             if (this->unk_2AE == 0) {
                 Math_Vec3f_Copy(&sp48, &this->actor.home.pos);
-                sp48.x += randPlusMinusPoint5Scaled(150.0f);
-                sp48.z += randPlusMinusPoint5Scaled(150.0f);
+                sp48.x += Rand_CenteredFloat(150.0f);
+                sp48.z += Rand_CenteredFloat(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp48, &sp60,

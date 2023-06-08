@@ -236,8 +236,8 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
             if (this->unk_2A8 == 0) {
                 Math_Vec3f_Copy(&sp60, &this->actor.home.pos);
 
-                sp60.x += randPlusMinusPoint5Scaled(150.0f);
-                sp60.z += randPlusMinusPoint5Scaled(150.0f);
+                sp60.x += Rand_CenteredFloat(150.0f);
+                sp60.z += Rand_CenteredFloat(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp60)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C,

@@ -29,7 +29,7 @@ typedef enum {
     /* 1 */ EN_DNP_EYE_HALF,
     /* 2 */ EN_DNP_EYE_CLOSED,
     /* 3 */ EN_DNP_EYE_ANGRY,
-    /* 4 */ EN_DNP_EYE_MAX,
+    /* 4 */ EN_DNP_EYE_MAX
 } EnDnpEyeIndex;
 
 ActorInit En_Dnp_InitVars = {

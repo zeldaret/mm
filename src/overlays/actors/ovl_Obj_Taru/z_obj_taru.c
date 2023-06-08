@@ -141,10 +141,10 @@ void func_80B9B9C8(ObjTaru* this, PlayState* play) {
 
     for (i = 0; i < 4; i++) {
         for (j = phi_fp; j < phi_s5; j++) {
-            temp_fs0 = randPlusMinusPoint5Scaled(10.0f) + -105.0f + (j * 30.0f);
-            temp_fs1 = randPlusMinusPoint5Scaled(4.0f);
+            temp_fs0 = Rand_CenteredFloat(10.0f) + -105.0f + (j * 30.0f);
+            temp_fs1 = Rand_CenteredFloat(4.0f);
             spD8.x = temp_fs0 * cos;
-            spD8.y = randPlusMinusPoint5Scaled(10.0f) + 15.0f + (i * 30.0f);
+            spD8.y = Rand_CenteredFloat(10.0f) + 15.0f + (i * 30.0f);
             spD8.z = temp_fs0 * sin;
             spCC.x = (spD8.x * 0.05f) + (temp_fs1 * sin);
             spCC.y = Rand_ZeroFloat(5.0f) + 2.0f;

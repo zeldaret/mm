@@ -79,12 +79,12 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     path = syatekiMan->path;
-    while (path->unk2 != 0) {
-        path = &play->setupPathList[path->unk1];
+    while (path->customValue != SG_PATH_TYPE_CROW) {
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     for (i = 0; i < EN_SYATEKI_CROW_GET_INDEX(&this->actor); i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
@@ -292,9 +292,9 @@ s32 EnSyatekiCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     EnSyatekiCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-        rot->y += (s16)(0xC00 * sin_rad(this->skelAnime.curFrame * (M_PI / 4)));
+        rot->y += (s16)(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
     } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-        rot->y += (s16)(0x1400 * sin_rad((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+        rot->y += (s16)(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
     }
 
     return false;

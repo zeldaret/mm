@@ -284,6 +284,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                                this->jointTable, this->morphTable, GOLD_DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
                 break;
+
+            default:
+                break;
         }
 
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
@@ -310,6 +313,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
                 this->dyna.actor.targetMode = TARGET_MODE_3;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -321,7 +327,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
 
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
-        if (floorPoly != NULL && this->burrowFlag & 1) {
+        if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
             func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }

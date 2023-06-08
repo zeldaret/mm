@@ -417,7 +417,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x1237:
-                player->exchangeItemId = 0;
+                player->exchangeItemId = PLAYER_IA_NONE;
 
             case 0x1238:
             case 0x123A:
@@ -436,7 +436,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
             case 0x1232:
             case 0x1241:
-                player->exchangeItemId = 0;
+                player->exchangeItemId = PLAYER_IA_NONE;
 
             case 0x1239:
             case 0x1246:

@@ -84,7 +84,7 @@ typedef enum {
     /* 0 */ WAIT_HEAD_TILT_ANIM,
     /* 1 */ WALK_ANIM,
     /* 2 */ DIG_ANIM,
-    /* 3 */ WALK_ANIM_2,
+    /* 3 */ WALK_ANIM_2
 } EnGuardNutsAnim;
 
 typedef enum {

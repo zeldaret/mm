@@ -64,6 +64,7 @@ void BgOpenSpot_Draw(Actor* thisx, PlayState* play) {
     BgOpenSpot* this = (BgOpenSpot*)thisx;
 
     AnimatedMat_Draw(play, this->texScrolls);
+
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

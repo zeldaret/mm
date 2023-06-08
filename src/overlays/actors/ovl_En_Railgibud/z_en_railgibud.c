@@ -70,18 +70,18 @@ typedef enum {
     /* 16 */ EN_RAILGIBUD_ANIM_SLUMP_LOOP,
     /* 17 */ EN_RAILGIBUD_ANIM_CONVULSION,
     /* 18 */ EN_RAILGIBUD_ANIM_ARMS_UP_START,
-    /* 19 */ EN_RAILGIBUD_ANIM_ARMS_UP_LOOP,
+    /* 19 */ EN_RAILGIBUD_ANIM_ARMS_UP_LOOP
 } EnRailgibudAnimation;
 
 typedef enum {
     /* 0 */ EN_RAILGIBUD_TYPE_GIBDO,
-    /* 1 */ EN_RAILGIBUD_TYPE_REDEAD,
+    /* 1 */ EN_RAILGIBUD_TYPE_REDEAD
 } EnRailgibudType;
 
 typedef enum {
     /* 0 */ EN_RAILGIBUD_GRAB_START,
     /* 1 */ EN_RAILGIBUD_GRAB_ATTACK,
-    /* 2 */ EN_RAILGIBUD_GRAB_RELEASE,
+    /* 2 */ EN_RAILGIBUD_GRAB_RELEASE
 } EnRailgibudGrabState;
 
 ActorInit En_Railgibud_InitVars = {
@@ -147,7 +147,7 @@ typedef enum {
     /* 0xC */ EN_RAILGIBUD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_RAILGIBUD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_RAILGIBUD_DMGEFF_LIGHT_RAY,         // Instantly kills a Redead on contact
-    /* 0xF */ EN_RAILGIBUD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+    /* 0xF */ EN_RAILGIBUD_DMGEFF_DAMAGE             // Deals damage and plays the damage animation
 } EnRailgibudDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -196,7 +196,7 @@ void EnRailgibud_SpawnOtherGibdosAndSetPositionAndRotation(EnRailgibud* this, Pl
     static s32 currentGibdoIndex = 0;
     s32 nextPoint;
     Vec3f targetPos;
-    Path* path = &play->setupPathList[ENRAILGIBUD_GET_PATH(&this->actor)];
+    Path* path = &play->setupPathList[ENRAILGIBUD_GET_PATH_INDEX(&this->actor)];
 
     this->points = Lib_SegmentedToVirtual(path->points);
     this->currentPoint = currentGibdoIndex;

@@ -74,7 +74,7 @@ void EnMuto_Init(Actor* thisx, PlayState* play) {
             this->textIdIndex = 3;
         }
 
-        if (gSaveContext.save.day != 3 || !gSaveContext.save.isNight) {
+        if ((gSaveContext.save.day != 3) || !gSaveContext.save.isNight) {
             Actor_Kill(&this->actor);
         }
     } else {
@@ -113,7 +113,7 @@ void EnMuto_SetHeadRotation(EnMuto* this) {
     s32 yawRotToTarget = ABS_ALT(BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y));
 
     this->headRotTarget.y = 0;
-    if (this->actor.xzDistToPlayer < 200.0f && yawRotToTarget < 0x4E20) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (yawRotToTarget < 0x4E20)) {
         this->headRotTarget.y = BINANG_SUB(this->yawTowardsTarget, this->actor.world.rot.y);
         if (this->headRotTarget.y > 0x2710) {
             this->headRotTarget.y = 0x2710;
@@ -146,7 +146,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
 
     if (1) {} // Needed to match
 
-    if (!this->isInMayorsRoom && Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+    if (!this->isInMayorsRoom && (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK)) {
         this->actor.textId = 0x2363;
     }
 
@@ -229,8 +229,8 @@ void EnMuto_InDialogue(EnMuto* this, PlayState* play) {
         }
     }
 
-    if (play->msgCtx.currentTextId == 0x2AC6 || play->msgCtx.currentTextId == 0x2AC7 ||
-        play->msgCtx.currentTextId == 0x2AC8) {
+    if ((play->msgCtx.currentTextId == 0x2AC6) || (play->msgCtx.currentTextId == 0x2AC7) ||
+        (play->msgCtx.currentTextId == 0x2AC8)) {
         this->skelAnime.playSpeed = 0.0f;
         this->yawTowardsTarget = this->actor.yawTowardsPlayer;
         this->skelAnime.curFrame = 30.0f;
@@ -254,7 +254,7 @@ void EnMuto_Update(Actor* thisx, PlayState* play2) {
         EnMuto_SetHeadRotation(this);
     }
 
-    if (this->isInMayorsRoom && gSaveContext.save.day == 3 && gSaveContext.save.isNight) {
+    if (this->isInMayorsRoom && (gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
         Actor_Kill(&this->actor);
         return;
     }

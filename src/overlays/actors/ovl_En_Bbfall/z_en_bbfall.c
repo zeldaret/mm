@@ -32,7 +32,7 @@ void EnBbfall_Frozen(EnBbfall* this, PlayState* play);
 typedef enum {
     /* -1 */ BBFALL_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BBFALL_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD
 } EnBbfallBodyPartDrawStatus;
 
 ActorInit En_Bbfall_InitVars = {
@@ -102,7 +102,7 @@ typedef enum {
     /* 0x3 */ EN_BBFALL_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BBFALL_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BBFALL_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE
 } EnBbfallDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -340,7 +340,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
-            this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(73728.0f);
+            this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x12000);
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;

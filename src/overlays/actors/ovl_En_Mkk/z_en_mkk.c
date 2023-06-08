@@ -274,7 +274,7 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer, 0x400);
     }
     this->actor.shape.rot.y =
-        (s32)(sin_rad(this->unk_14E * ((2 * M_PI) / 15)) * (614.4f * this->actor.speed)) + this->unk_150;
+        (s32)(Math_SinF(this->unk_14E * ((2 * M_PI) / 15)) * (614.4f * this->actor.speed)) + this->unk_150;
     func_800B9010(&this->actor, NA_SE_EN_KUROSUKE_MOVE - SFX_FLAG);
     if (sp20) {
         this->unk_14B &= ~2;
@@ -379,16 +379,16 @@ void func_80A4E84C(EnMkk* this) {
         this->unk_154.y = this->actor.world.pos.y;
         this->unk_154.x = this->actor.world.pos.x -
                           10.0f * Math_SinS(this->actor.shape.rot.y +
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
         this->unk_154.z = this->actor.world.pos.z -
                           10.0f * Math_CosS(this->actor.shape.rot.y +
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
         this->unk_160.x = this->unk_154.x -
                           12.0f * Math_SinS(this->actor.shape.rot.y -
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
         this->unk_160.z = this->unk_154.z -
                           12.0f * Math_CosS(this->actor.shape.rot.y -
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
     }
 }
 

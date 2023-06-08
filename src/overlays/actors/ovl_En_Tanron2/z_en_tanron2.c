@@ -236,7 +236,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
             switch (this->unk_158) {
                 case 0:
                     if (Rand_ZeroOne() > 0.2f) {
-                        sp32 = Rand_ZeroFloat(65536.0f);
+                        sp32 = Rand_ZeroFloat(0x10000);
                     } else {
                         sp32 = Math_Atan2S(sp2C, sp28);
                     }
