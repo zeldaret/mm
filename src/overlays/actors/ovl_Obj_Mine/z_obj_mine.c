@@ -561,7 +561,7 @@ void ObjMine_Water_ApplyForces(ObjMine* this) {
             tension.y += sLastLinkAccel[index].y * 0.15f;
             tension.z += sLastLinkAccel[index].z * 0.15f;
         }
-    
+
         index = i + 2;
         if (index < linkCount) {
             tension.x += sLastLinkAccel[index].x * 0.075f;
