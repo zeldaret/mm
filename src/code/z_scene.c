@@ -373,7 +373,7 @@ void Scene_CommandSkyboxSettings(PlayState* play, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x12: Skybox Disables
 void Scene_CommandSkyboxDisables(PlayState* play, SceneCmd* cmd) {
     play->envCtx.skyboxDisabled = cmd->skyboxDisables.unk4;
-    play->envCtx.sunMoonDisabled = cmd->skyboxDisables.unk5;
+    play->envCtx.sunDisabled = cmd->skyboxDisables.unk5;
 }
 
 // SceneTableEntry Header Command 0x10: Time Settings

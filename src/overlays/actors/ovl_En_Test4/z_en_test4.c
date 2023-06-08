@@ -522,7 +522,7 @@ void func_80A430C8(EnTest4* this, PlayState* play) {
 
         gWeatherMode = 1;
         Environment_PlayStormNatureAmbience(play);
-        play->envCtx.unk_E3 = 1;
+        play->envCtx.lightningState = 1;
         play->envCtx.precipitation[0] = 0x3C;
     } else {
         if (play->envCtx.precipitation[0] != 0) {
@@ -545,7 +545,7 @@ void func_80A431C8(EnTest4* this, PlayState* play) {
          (play->envCtx.precipitation[0] != 0)) ||
         (play->envCtx.precipitation[2] != 0)) {
         gWeatherMode = 0;
-        play->envCtx.unk_E3 = 2;
+        play->envCtx.lightningState = 2;
     }
 
     if (gWeatherMode == 0) {

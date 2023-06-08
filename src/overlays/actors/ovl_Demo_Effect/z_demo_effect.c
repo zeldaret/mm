@@ -319,7 +319,7 @@ void func_808CE078(Actor* thisx, PlayState* play2) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    gCustomLensFlare1On = 1;
+    gCustomLensFlare1On = true;
     gCustomLensFlare1Pos.x = thisx->world.pos.x;
     gCustomLensFlare1Pos.y = thisx->world.pos.y;
     gCustomLensFlare1Pos.z = thisx->world.pos.z;

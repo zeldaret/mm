@@ -174,7 +174,7 @@ typedef struct {
 
 typedef void(*fault_update_input_func)(Input* input);
 
-typedef struct {
+typedef struct PauseContext {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;

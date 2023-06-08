@@ -31,6 +31,10 @@
 #define SCHEDULE_CONVERT_TIME(time) ((u16)((time) - 0x10000 / 360 * 90))
 #define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
 
+// No (u16) cast
+#define SCHEDULE_CONVERT_TIME_ALT(time) ((time) - 0x10000 / 360 * 90)
+#define SCHEDULE_TIME_NOW_ALT SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time)
+
 typedef enum {
     /* 0x00 */ SCHEDULE_CMD_ID_CHECK_FLAG_S,         // Checks if a weekEventReg flag is set and branches if so, short range branch
     /* 0x01 */ SCHEDULE_CMD_ID_CHECK_FLAG_L,         // Checks if a weekEventReg flag is set and branches if so, long range branch

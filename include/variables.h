@@ -2172,51 +2172,7 @@ extern u8 sWaitingCutsceneList[16];
 // extern UNK_TYPE1 D_801F4E08;
 extern u8 sNextCutsceneList[16];
 // extern UNK_TYPE1 D_801F4E20;
-extern u8 D_801F4E30;
-// extern UNK_TYPE1 D_801F4E31;
 
-// structs?
-extern u8 gCustomLensFlare1On;
-extern Vec3f gCustomLensFlare1Pos;
-extern f32 D_801F4E44;
-extern f32 D_801F4E48;
-extern s16 D_801F4E4C;
-
-extern u8 gCustomLensFlare2On;
-extern Vec3f gCustomLensFlare2Pos;
-extern f32 D_801F4E5C;
-extern f32 D_801F4E60;
-extern s16 D_801F4E64;
-
-extern LightningStrike gLightningStrike;
-//extern f32 D_801F4E70; gLightningStrike.delayTimer
-extern f32 D_801F4E74;
-extern u16 D_801F4E78;
-extern u16 gSkyboxNumStars;
-extern LightningBolt sLightningBolts[3];
-
-// structs?
-extern LightNode* sNGameOverLightNode;
-extern LightInfo sNGameOverLightInfo;
-
-extern LightNode* sSGameOverLightNode;
-extern LightInfo sSGameOverLightInfo;
-
-extern f32 sSunEnvAlpha;
-extern f32 sSunColor;
-extern f32 sSunScale;
-extern f32 sSunPrimAlpha;
-extern s32 sSunDepthTestX;
-extern s32 sSunDepthTestY;
-extern f32 D_801F4F28;
-extern s16 sLightningFlashAlpha;
-// extern UNK_TYPE1 D_801F4F2E;
-extern u8 D_801F4F30;
-extern u8 D_801F4F31;
-extern u8 sEnvIsTimeStopped;
-extern u8 D_801F4F33;
-extern u8 sGameOverLightsIntensity;
-extern Gfx* D_801F4F38;
 // extern UNK_TYPE1 sBeatingHeartsDDPrim;
 // extern UNK_TYPE1 sBeatingHeartsDDEnv;
 // extern UNK_TYPE1 sHeartsDDPrim;

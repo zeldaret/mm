@@ -1540,9 +1540,11 @@ typedef enum {
 #define EVENTINF_72 0x72
 #define EVENTINF_73 0x73
 #define EVENTINF_74 0x74
-#define EVENTINF_75 0x75
-#define EVENTINF_76 0x76
-#define EVENTINF_77 0x77
+
+// Checked in Kankyo as one: gSaveContext.eventInf[7] & 0xE0
+// #define EVENTINF_75 0x75
+// #define EVENTINF_76 0x76
+// #define EVENTINF_77 0x77
 
 #define CHECK_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] & (1 << ((flag) & 0xF)))
 #define SET_EVENTINF(flag) (gSaveContext.eventInf[(flag) >> 4] |= (1 << ((flag) & 0xF)))

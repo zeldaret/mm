@@ -47,11 +47,6 @@ ActorInit En_Weather_Tag_InitVars = {
     (ActorFunc)EnWeatherTag_Draw,
 };
 
-extern f32 D_801F4E74;
-extern u8 D_801BDBB8;
-extern u8 D_801F4E30;
-extern u16 gSkyboxNumStars;
-
 void EnWeatherTag_SetupAction(EnWeatherTag* this, EnWeatherTagActionFunc func) {
     this->actionFunc = func;
 }
@@ -130,11 +125,11 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
 
     if (WEATHER_TAG_RANGE100(&this->actor) > Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
-            D_801BDBB8 = 1;
+            gInterruptSongOfStorms = 1;
             if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
                 ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
-                D_801BDBB8 = 0;
+                gInterruptSongOfStorms = 0;
                 if (gWeatherMode != weatherMode) {
                     gWeatherMode = weatherMode;
                     play->envCtx.changeLightEnabled = true;
@@ -160,11 +155,11 @@ u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
 
     if (WEATHER_TAG_RANGE100(&this->actor) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
-            D_801BDBB8 = 1;
+            gInterruptSongOfStorms = 1;
             if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
                 ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
-                D_801BDBB8 = 0;
+                gInterruptSongOfStorms = 0;
                 gWeatherMode = 0;
                 play->envCtx.changeLightEnabled = true;
                 play->envCtx.lightConfig = lightConfig;
@@ -410,7 +405,7 @@ void EnWeatherTag_DoNothing(EnWeatherTag* this, PlayState* play) {
 void EnWeatherTag_Unused_809671B8(EnWeatherTag* this, PlayState* play) {
     if (func_80966608(this, play, 0, 1, 0, 4, 100, 5)) {
         Environment_PlayStormNatureAmbience(play);
-        play->envCtx.unk_E3 = 1;
+        play->envCtx.lightningState = 1;
         play->envCtx.precipitation[0] = 60;
         EnWeatherTag_SetupAction(this, EnWeatherTag_Unused_80967250);
     }
@@ -420,7 +415,7 @@ void EnWeatherTag_Unused_809671B8(EnWeatherTag* this, PlayState* play) {
 void EnWeatherTag_Unused_80967250(EnWeatherTag* this, PlayState* play) {
     if (func_80966758(this, play, 1, 0, 4, 0, 100)) {
         Environment_StopStormNatureAmbience(play);
-        play->envCtx.unk_E3 = 2;
+        play->envCtx.lightningState = 2;
         play->envCtx.precipitation[0] = 0;
         EnWeatherTag_SetupAction(this, EnWeatherTag_Unused_809671B8);
     }

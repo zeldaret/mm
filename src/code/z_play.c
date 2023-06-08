@@ -1327,7 +1327,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (1) {
-                if (!this->envCtx.sunMoonDisabled) {
+                if (!this->envCtx.sunDisabled) {
                     sp25C.x = this->view.eye.x + this->envCtx.sunPos.x;
                     sp25C.y = this->view.eye.y + this->envCtx.sunPos.y;
                     sp25C.z = this->view.eye.z + this->envCtx.sunPos.z;

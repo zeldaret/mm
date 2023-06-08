@@ -1,7 +1,10 @@
 #include "global.h"
 #include "z64environment.h"
+#include "z64rumble.h"
 #include "z64save.h"
 #include "z64skybox.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 void Environment_GraphCallback(GraphicsContext* gfxCtx, PlayState* play) {
@@ -35,7 +38,307 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     return ret;
 }
 
+extern s16 sLightningFlashAlpha;
+extern u8 gSkyboxIsChanging;
+extern u8 D_801F4E31;
+extern u8 D_801BDBA8;
+
+#ifdef NON_EQUIVALENT
+void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
+    PlayState* play = play2;
+    f32 temp_ft4;
+    u8 var_a0;
+    u8 temp_t6;
+    u8 temp_t7;
+    u8 temp_t8;
+    u8 temp_t9;
+    u8 var_v0;
+    s16 i;
+
+    CREG(1) = 0;
+
+    gSaveContext.sunsSongState = SUNSSONG_INACTIVE;
+
+    gSaveContext.skyboxTime = ((void)0, gSaveContext.save.time);
+
+    Environment_JumpForwardInTime();
+
+    if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(18, 0)) ||
+        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0))) {
+        gSaveContext.save.isNight = 1;
+    } else {
+        gSaveContext.save.isNight = 0;
+    }
+
+    play->state.gfxCtx->callback = Environment_GraphCallback;
+    play->state.gfxCtx->callbackArg = play;
+
+    Lights_DirectionalSetInfo(&envCtx->dirLight1, 80, 80, 80, 80, 80, 80);
+    LightContext_InsertLight(play, &play->lightCtx, &envCtx->dirLight1);
+
+    Lights_DirectionalSetInfo(&envCtx->dirLight2, 80, 80, 80, 80, 80, 80);
+    LightContext_InsertLight(play, &play->lightCtx, &envCtx->dirLight2);
+
+    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxTimer = 0;
+    envCtx->changeLightEnabled = 0;
+    envCtx->changeLightTimer = 0;
+    envCtx->skyboxDmaState = 0;
+    envCtx->skybox1Index = 99;
+    envCtx->skybox2Index = 99;
+
+    envCtx->glareAlpha = 0.0f;
+    envCtx->lensFlareAlphaScale = 0.0f;
+
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 8)) {
+        gSaveContext.save.day = 1;
+    }
+
+    switch (gSaveContext.save.day) {
+        default:
+        case 0:
+        case 1:
+            envCtx->lightConfig = 0;
+            envCtx->changeLightNextConfig = 0;
+            break;
+        case 2:
+            envCtx->lightConfig = 3;
+            envCtx->changeLightNextConfig = 3;
+            break;
+        case 3:
+            envCtx->lightConfig = 4;
+            envCtx->changeLightNextConfig = 4;
+            break;
+    }
+
+    envCtx->lightSetting = 0;
+    envCtx->prevLightSetting = 0;
+    envCtx->unk_E0 = 0;
+    envCtx->unk_E1 = 0;
+    envCtx->unk_E2 = 0;
+    envCtx->lightningState = 0;
+    envCtx->timeSeqState = 0;
+    envCtx->fillScreen = 0;
+    envCtx->screenFillColor[0] = 0;
+    envCtx->screenFillColor[1] = 0;
+    envCtx->screenFillColor[2] = 0;
+    envCtx->screenFillColor[3] = 0;
+    envCtx->customSkyboxFilter = false;
+    envCtx->skyboxFilterColor[0] = 0;
+    envCtx->skyboxFilterColor[1] = 0;
+    envCtx->skyboxFilterColor[2] = 0;
+    envCtx->skyboxFilterColor[3] = 0;
+    envCtx->sandstormState = 0;
+    envCtx->sandstormPrimA = 0;
+    envCtx->sandstormEnvA = 0;
+    envCtx->lightBlend = 1.0f;
+
+    gLightningStrike.state = 0;
+    gLightningStrike.flashRed = 0;
+    gLightningStrike.flashGreen = 0;
+    gLightningStrike.flashBlue = 0;
+
+    sLightningFlashAlpha = 0;
+
+    D_801F4F30 = 0xFF;
+    D_801F4F31 = 0;
+    D_801F4E30 = 0;
+    D_801F4F33 = 0;
+
+    gSaveContext.cutsceneTransitionControl = 0;
+
+    envCtx->lightSettings.ambientColor[0] = 0;
+    envCtx->lightSettings.ambientColor[1] = 0;
+    envCtx->lightSettings.ambientColor[2] = 0;
+    envCtx->lightSettings.diffuseColor1[0] = 0;
+    envCtx->lightSettings.diffuseColor1[1] = 0;
+    envCtx->lightSettings.diffuseColor1[2] = 0;
+    envCtx->lightSettings.diffuseColor2[0] = 0;
+    envCtx->lightSettings.diffuseColor2[1] = 0;
+    envCtx->lightSettings.diffuseColor2[2] = 0;
+    envCtx->lightSettings.fogColor[0] = 0;
+    envCtx->lightSettings.fogColor[1] = 0;
+    envCtx->lightSettings.fogColor[2] = 0;
+    envCtx->lightSettings.fogNear = 0;
+    envCtx->lightSettings.zFar = 0;
+
+    envCtx->sunPos.x = -(Math_SinS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    envCtx->sunPos.y = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 120.0f) * 25.0f;
+    envCtx->sunPos.z = (Math_CosS(((void)0, gSaveContext.save.time) - CLOCK_TIME(12, 0)) * 20.0f) * 25.0f;
+
+    envCtx->windDir.x = 80;
+    envCtx->windDir.y = 80;
+    envCtx->windDir.z = 80;
+    envCtx->windSpeed = 20.0f;
+
+    envCtx->lightBlendEnabled = false;
+    envCtx->lightSettingOverride = 0xFF;
+    envCtx->lightBlendRateOverride = 0xFFFF;
+
+    envCtx->sceneTimeSpeed = 0;
+    R_TIME_SPEED = R_TIME_SPEED = 0;
+    R_ENV_DISABLE_DBG = false;
+
+    CREG(64) = 0;
+
+    play->envCtx.precipitation[0] = 0;
+    play->envCtx.precipitation[2] = 0;
+    play->envCtx.precipitation[3] = 0;
+    play->envCtx.precipitation[4] = 0;
+
+    D_801F4E31 = envCtx->skyboxConfig;
+
+    var_a0 = 0;
+    if (((void)0, gSaveContext.save.day) != 0) {
+        var_a0 = (((void)0, gSaveContext.save.day) - 1);
+    }
+
+    temp_t8 = var_a0 + (D_801F4E31 * 3);
+    var_v0 = temp_t8 & 0xFF;
+
+    envCtx->skyboxConfig = temp_t8;
+    envCtx->changeSkyboxNextConfig = var_v0;
+
+    // TODO: Solve `func_800FEAF4` first for the pattern here
+    if (D_801F4E31 == 4) {
+        var_v0 = 0xE & 0xFF;
+        envCtx->skyboxConfig = 0xE;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    } else if (D_801F4E31 == 5) {
+        var_v0 = 0x10U & 0xFF;
+        envCtx->skyboxConfig = 0x10;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    } else if (D_801F4E31 == 6) {
+        var_v0 = 0x11U & 0xFF;
+        envCtx->skyboxConfig = 0x11;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    } else if (D_801F4E31 == 7) {
+        temp_t6 = var_a0 + 0x12;
+        var_v0 = temp_t6 & 0xFF;
+        envCtx->skyboxConfig = temp_t6;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    } else if (D_801F4E31 == 8) {
+        temp_t7 = var_a0 + 0x15;
+        var_v0 = temp_t7 & 0xFF;
+        envCtx->skyboxConfig = var_a0 + 0x15;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    } else if (D_801F4E31 == 9) {
+        var_v0 = 0x18U & 0xFF;
+        envCtx->skyboxConfig = 0x18;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    } else if (D_801F4E31 == 0xA) {
+        temp_t9 = var_a0 + 0x19;
+        var_v0 = temp_t9 & 0xFF;
+        envCtx->skyboxConfig = temp_t9;
+        envCtx->changeSkyboxNextConfig = var_v0;
+    }
+
+    if (var_a0 >= 3) {
+        envCtx->skyboxConfig = 0xD;
+        envCtx->changeSkyboxNextConfig = 0xD;
+    }
+
+    if (envCtx->changeSkyboxNextConfig >= 0x1C) {
+        envCtx->skyboxConfig = 0;
+        envCtx->changeSkyboxNextConfig = 0;
+    }
+
+    D_801F4E74 = 0.0f;
+
+    if ((play->sceneId == SCENE_IKANA) &&
+        ((((void)0, gSaveContext.sceneLayer) == 0) || (((void)0, gSaveContext.sceneLayer) == 1)) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+        play->skyboxId = 3;
+        envCtx->lightConfig = 5;
+        envCtx->changeLightNextConfig = 5;
+        D_801F4E74 = 1.0f;
+    }
+
+    if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
+        if (gWeatherMode == 2) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+                play->skyboxId = 3;
+                envCtx->lightConfig = 5;
+                envCtx->changeLightNextConfig = 5;
+                D_801F4E74 = 1.0f;
+            } else {
+                gWeatherMode = 0;
+            }
+        }
+
+        play->envCtx.precipitation[2] = 0;
+        play->envCtx.precipitation[3] = 0;
+
+        if (gWeatherMode == 1) {
+            if ((CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
+                (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
+                if (func_800FE4B8(play)) {
+                    play->envCtx.precipitation[0] = 60;
+                }
+                play->envCtx.precipitation[1] = 60;
+            } else {
+                gWeatherMode = 0;
+                Environment_StopStormNatureAmbience(play);
+            }
+        } else if (gWeatherMode == 3) {
+            play->envCtx.precipitation[2] = 128;
+            play->envCtx.precipitation[3] = 128;
+            Environment_StopStormNatureAmbience(play);
+        } else {
+            Environment_StopStormNatureAmbience(play);
+        }
+    } else {
+        gWeatherMode = 0;
+        Environment_StopStormNatureAmbience(play);
+    }
+
+    gInterruptSongOfStorms = false;
+    gLightConfigAfterUnderwater = 0;
+    gSkyboxIsChanging = false;
+    gSaveContext.retainWeatherMode = false;
+
+    R_ENV_LIGHT1_DIR(0) = 80;
+    R_ENV_LIGHT1_DIR(1) = 80;
+    R_ENV_LIGHT1_DIR(2) = 80;
+
+    R_ENV_LIGHT2_DIR(0) = -80;
+    R_ENV_LIGHT2_DIR(1) = -80;
+    R_ENV_LIGHT2_DIR(2) = -80;
+
+    cREG(9) = 10;
+    cREG(10) = 0;
+    cREG(11) = 0;
+    cREG(12) = 0;
+    cREG(13) = 0;
+    cREG(14) = 0;
+    D_801F4DDC = 1; // should be u8, breaks bss
+
+    for (i = 0; i < ARRAY_COUNT(sLightningBolts); i++) {
+        sLightningBolts[i].state = LIGHTNING_BOLT_INACTIVE;
+    }
+
+    play->roomCtx.unk7A[0] = 0;
+    play->roomCtx.unk7A[1] = 0;
+
+    for (i = 0; i < ARRAY_COUNT(play->csCtx.actorCues); i++) {
+        play->csCtx.actorCues[i] = NULL;
+    }
+
+    gCustomLensFlare1On = false;
+    gCustomLensFlare2On = false;
+    Rumble_StateReset();
+
+    sEnvSkyboxNumStars = 0;
+    gSkyboxNumStars = 0;
+    D_801BDBA8 = 0;
+    sEnvIsTimeStopped = 0;
+    sSunPrimAlpha = 255.0f;
+
+    func_800F88C4(play);
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
+#endif
 
 u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
     s16 stepSize = 0;
@@ -212,10 +515,10 @@ void func_800F6AB8(void) {
     if ((gSaveContext.nextDayTime >= 0xFF00) && (gSaveContext.nextDayTime != 0xFFFF)) {
         gSaveContext.nextDayTime -= 0x10;
         if (gSaveContext.nextDayTime == 0xFF0E) {
-            play_sound(0x2813); // TODO document sound name
+            play_sound(NA_SE_EV_CHICKEN_CRY_M);
             gSaveContext.nextDayTime = 0xFFFF;
         } else if (gSaveContext.nextDayTime == 0xFF0D) {
-            func_8019F128(0x28AE); // TODO document sound name
+            func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
             gSaveContext.nextDayTime = 0xFFFF;
         }
     }
@@ -261,29 +564,26 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F6CEC.s")
-
-// TODO permuter - regalloc issues
-/*
-void func_800F6CEC(PlayState* arg0, u8 arg1, EnvLightSettings* arg2, LightSettings* arg3) {
+void func_800F6CEC(PlayState* play, u8 arg1, EnvLightSettings* arg2, LightSettings* arg3) {
     s32 phi_t1;
     s32 temp_v1_2;
-    s32 temp_v1;
+    s32 temp_v1 = (arg1 % 4);
 
-    if ((((void)0, gSaveContext.day) >= 2) && (arg1 >= 4) && (arg1 < 8)) {
-        temp_v1 = (arg1 % 4);
-        temp_v1_2 = (((void)0, gSaveContext.day) * 4) + 4;
+    if ((((void)0, gSaveContext.save.day) >= 2) && (arg1 >= 4) && (arg1 < 8)) {
+        temp_v1_2 = (((void)0, gSaveContext.save.day) * 4) + 4;
         for (phi_t1 = 0; phi_t1 != 3; phi_t1++) {
-            arg2->ambientColor[phi_t1] = arg3[temp_v1_2 + temp_v1].ambientColor[phi_t1] -
-arg3[temp_v1].ambientColor[phi_t1]; arg2->diffuseColor1[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] -
-arg3[temp_v1].diffuseColor1[phi_t1]; arg2->diffuseColor2[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor[phi_t1] -
-arg3[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2 arg2->fogColor[phi_t1] = arg3[temp_v1_2 +
-temp_v1].fogColor[phi_t1] - arg3[temp_v1].fogColor[phi_t1];
+            arg2->ambientColor[phi_t1] =
+                arg3[temp_v1_2 + temp_v1].ambientColor[phi_t1] - arg3[temp_v1].ambientColor[phi_t1];
+            arg2->diffuseColor1[phi_t1] =
+                arg3[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] - arg3[temp_v1].diffuseColor1[phi_t1];
+            arg2->diffuseColor2[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor[phi_t1] -
+                                          arg3[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2
+            arg2->fogColor[phi_t1] = arg3[temp_v1_2 + temp_v1].fogColor[phi_t1] - arg3[temp_v1].fogColor[phi_t1];
         }
         arg2->fogNear = arg3[temp_v1_2 + temp_v1].fogNear - arg3[temp_v1].fogNear;
     }
 
-    if ((arg1 >= 4) && (arg1 < 8) && (D_801BDBB0 == 1)) {
+    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == 1)) {
         arg2->ambientColor[0] = -50;
         arg2->ambientColor[1] = -100;
         arg2->ambientColor[2] = -100;
@@ -293,12 +593,13 @@ temp_v1].fogColor[phi_t1] - arg3[temp_v1].fogColor[phi_t1];
         arg2->diffuseColor2[0] = -100;
         arg2->diffuseColor2[1] = -100;
         arg2->diffuseColor2[2] = -100;
-        arg2->fogColor[0] = -arg3[arg1].fogColor[0] + 30;
-        arg2->fogColor[1] = -arg3[arg1].fogColor[1] + 30;
-        arg2->fogColor[2] = -arg3[arg1].fogColor[2] + 45;
+
+        temp_v1 = arg1;
+        arg2->fogColor[0] = -arg3[temp_v1].fogColor[0] + 30;
+        arg2->fogColor[1] = -arg3[temp_v1].fogColor[1] + 30;
+        arg2->fogColor[2] = -arg3[temp_v1].fogColor[2] + 45;
     }
 }
-*/
 
 u8 func_800F6EA4(f32 arg0, f32 arg1, f32 arg2) {
     arg0 = CLAMP(arg0, 0.0f, 255.0f);
@@ -316,14 +617,14 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F6FF8.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
 
-void func_800F8554(PlayState* play) {
+void Environment_UpdateSun(PlayState* play) {
     f32 temp_f0;
     s16 temp_a0;
     u16 phi_v0;
 
-    if (!play->envCtx.sunMoonDisabled) {
+    if (!play->envCtx.sunDisabled) {
         if (play->envCtx.precipitation[1] != 0) {
             Math_SmoothStepToF(&sSunPrimAlpha, 0.0f, 0.5f, 4.0f, 0.01f);
         } else {
@@ -393,95 +694,92 @@ void func_800F88C4(u16 arg0) {
 }
 
 void func_800F8970(void) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && ((gSaveContext.save.time - 0x3FFC) >= 0x2580)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && (SCHEDULE_TIME_NOW_ALT >= 0x2580)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && ((gSaveContext.save.time - 0x3FFC) >= 0x2B30)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && (SCHEDULE_TIME_NOW_ALT >= 0x2B30)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && ((gSaveContext.save.time - 0x3FFC) >= 0x30E0)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && (SCHEDULE_TIME_NOW_ALT >= 0x30E0)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && ((gSaveContext.save.time - 0x3FFC) >= 0x3413)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && (SCHEDULE_TIME_NOW_ALT >= 0x3413)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_02);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && ((gSaveContext.save.time - 0x3FFC) >= 0x39C3)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && (SCHEDULE_TIME_NOW_ALT >= 0x39C3)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_28_04);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8A9C.s")
-
-// TODO permuter - regalloc issues, minor reordering
-/*
-void func_800F8A9C(s32 arg0) {
-    u8 temp_a1;
+#ifdef NON_MATCHING
+void func_800F8A9C(PlayState* play) {
     u8 v1;
     u16 temp_a2_2;
 
-    temp_a1 = (gSaveContext.eventInf[7] & 0xE0) >> 5;
-
-    if (temp_a1 != (u8)((void)0, gSaveContext.day)) {
-        v1 = gSaveContext.eventInf[7] & 0x1F;
-        v1 |= ((void)0, gSaveContext.day) << 5;
+    if ((u8)((void)0, ((gSaveContext.eventInf[7] & 0xE0) >> 5)) != (u8)((void)0, gSaveContext.save.day)) {
+        v1 = ((void)0, (gSaveContext.eventInf[7] & (u8)~0xE0)) | (((void)0, gSaveContext.save.day) << 5);
         gSaveContext.eventInf[7] = v1;
+        SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
+        SET_WEEKEVENTREG(WEEKEVENTREG_28_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_28_04);
 
-        gSaveContext.weekEventReg[27] |= 0x40;
-        gSaveContext.weekEventReg[27] |= 0x80;
-        gSaveContext.weekEventReg[28] |= 1;
-        gSaveContext.weekEventReg[28] |= 2;
-        gSaveContext.weekEventReg[28] |= 4;
+        func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
+        func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
+        func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
+        func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
+        func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
 
-        func_800F88C4(0x1B02);
-        func_800F88C4(0x1B04);
-        func_800F88C4(0x1B08);
-        func_800F88C4(0x1B10);
-        func_800F88C4(0x1B20);
-
-        gSaveContext.weekEventReg[27] &= (u8)~0x40;
-        gSaveContext.weekEventReg[27] &= (u8)~0x80;
-        gSaveContext.weekEventReg[28] &= (u8)~1;
-        gSaveContext.weekEventReg[28] &= (u8)~2;
-        gSaveContext.weekEventReg[28] &= (u8)~4;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_27_40);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_27_80);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_28_01);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_28_02);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_28_04);
     }
 
-    if (((((void)0, gSaveContext.time) - 0x3FFC) < 0x1FFE) || ((((void)0, gSaveContext.time) - 0x3FFC) >= 0x3FFD)) {
-        gSaveContext.weekEventReg[90] &= (u8)~8;
+    if ((SCHEDULE_TIME_NOW_ALT < 0x1FFE) || (SCHEDULE_TIME_NOW_ALT >= 0x3FFD)) {
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_90_08);
     }
 
     func_800F8970();
 
-    if (((gSaveContext.weekEventReg[75] & 0x10) == 0) && ((gSaveContext.weekEventReg[55] & 2) == 0)) {
-        if (((void)0, gSaveContext.day) >= 2) {
-            gSaveContext.weekEventReg[55] |= 2;
-        } else if ((((void)0, gSaveContext.day) == 1) && ((((void)0, gSaveContext.time) - 0x3FFC) >= 0x6FF9)) {
-            gSaveContext.weekEventReg[55] |= 2;
+    if (((CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY)) == 0) &&
+        ((CHECK_WEEKEVENTREG(WEEKEVENTREG_55_02)) == 0)) {
+        if (((void)0, gSaveContext.save.day) >= 2) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
+        } else if ((((void)0, gSaveContext.save.day) == 1) && (SCHEDULE_TIME_NOW_ALT >= 0x6FF9)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
         }
     }
 
-    if ((gSaveContext.weekEventReg[90] & 1) == 0) {
-        temp_a2_2 = ((void)0, gSaveContext.time) - D_801F4E78;
-
-        if (((gSaveContext.weekEventReg[89] & 0x40) != 0) && (((((void)0, gSaveContext.time) - 0x3FFC) & 0xFFFF) >=
-0xF556)) { gSaveContext.weekEventReg[90] |= 1; } else if (((gSaveContext.weekEventReg[89] & 8) != 0) && (temp_a2_2 >=
-0x416)) { gSaveContext.weekEventReg[89] |= 0x40; D_801F4E78 = 0; } else if (((gSaveContext.weekEventReg[85] & 0x80) !=
-0) && (temp_a2_2 >= 0x1198)) { gSaveContext.weekEventReg[89] |= 8; D_801F4E78 = gSaveContext.time; } else if
-(((gSaveContext.weekEventReg[86] & 1) != 0) && (temp_a2_2 >= 0xC43)) { gSaveContext.weekEventReg[85] |= 0x80;
+    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) == 0) {
+        temp_a2_2 = ((void)0, gSaveContext.save.time) - D_801F4E78;
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((SCHEDULE_TIME_NOW_ALT & 0xFFFF) >= 0xF556)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_08) && (temp_a2_2 >= 0x416)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_89_40);
+            D_801F4E78 = 0;
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_80) && (temp_a2_2 >= 0x1198)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_89_08);
+            D_801F4E78 = gSaveContext.save.time;
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_86_01) && (temp_a2_2 >= 0xC43)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_85_80);
         }
     }
 }
-*/
-
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Update.s")
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8A9C.s")
+#endif
 
 void Environment_UpdateRain(PlayState*);
 void func_800F8A9C(PlayState*);
@@ -500,16 +798,14 @@ void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContex
         Environment_UpdateTimeBasedSequence(play);
         func_800F6AB8();
         Environment_UpdateTime(play, envCtx, pauseCtx, msgCtx, gameOverCtx);
-        func_800F8554(play);
-        func_800F6FF8(play, envCtx, lightCtx);
+        Environment_UpdateSun(play);
+        Environment_UpdateLights(play, envCtx, lightCtx);
         func_800F8A9C(play);
     }
 }
 
-extern Gfx* D_0407AB70; // gSunDL
-
 void Environment_DrawSun(PlayState* play) {
-    if (!play->envCtx.sunMoonDisabled) {
+    if (!play->envCtx.sunDisabled) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if ((play->envCtx.sunPos.y > -800.0f) || Environment_IsSceneUpsideDown(play)) {
@@ -526,10 +822,10 @@ void Environment_DrawSun(PlayState* play) {
                                 (u8)((u8)(sSunColor * 100.0f) + 100), (u8)sSunPrimAlpha);
                 gDPSetEnvColor(POLY_OPA_DISP++, 180, (u8)(sSunColor * 255.0f), (u8)(sSunColor * 200.0f), sSunEnvAlpha);
             }
-            Matrix_Scale(sSunScale, sSunScale, sSunScale, 1);
+            Matrix_Scale(sSunScale, sSunScale, sSunScale, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
             Gfx_SetupDL54_Opa(play->state.gfxCtx);
-            gSPDisplayList(POLY_OPA_DISP++, &D_0407AB70);
+            gSPDisplayList(POLY_OPA_DISP++, gSunDL);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -653,7 +949,7 @@ void Environment_DrawLightningFlash(PlayState* play, u8 red, u8 green, u8 blue, 
 }
 
 void Environment_UpdateLightningStrike(PlayState* play) {
-    if (play->envCtx.unk_E3 != LIGHTNING_MODE_OFF) {
+    if (play->envCtx.lightningState != LIGHTNING_MODE_OFF) {
         switch (gLightningStrike.state) {
             case LIGHTNING_STRIKE_WAIT:
                 // every frame theres a 10% chance of the timer advancing 10 units
@@ -714,8 +1010,8 @@ void Environment_UpdateLightningStrike(PlayState* play) {
 
                     gLightningStrike.state = LIGHTNING_STRIKE_WAIT;
 
-                    if (play->envCtx.unk_E3 == LIGHTNING_MODE_LAST) {
-                        play->envCtx.unk_E3 = LIGHTNING_MODE_OFF;
+                    if (play->envCtx.lightningState == LIGHTNING_MODE_LAST) {
+                        play->envCtx.lightningState = LIGHTNING_MODE_OFF;
                     }
                 }
                 break;
@@ -744,19 +1040,17 @@ void Environment_AddLightningBolts(PlayState* play, u8 num) {
     }
 }
 
-extern Gfx D_0403F230[];
 extern void* sLightningTextures[8]; // TODO static
+// static void* sLightningTextures[] = {
+// gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex,
+// gEffLightning4Tex, gEffLightning5Tex, gEffLightning6Tex,
+// gEffLightning7Tex, gEffLightning8Tex, NULL,
+// };
 
 /**
  * Draw any active lightning bolt entries contained in `sLightningBolts`
  */
 void Environment_DrawLightning(PlayState* play, s32 unused) {
-    // TODO
-    // static void* sLightningTextures[] = {
-    // gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex,
-    // gEffLightning4Tex, gEffLightning5Tex, gEffLightning6Tex,
-    // gEffLightning7Tex, gEffLightning8Tex, NULL,
-    // };
     s16 i;
     f32 dx;
     f32 dz;
@@ -821,7 +1115,7 @@ void Environment_DrawLightning(PlayState* play, s32 unused) {
                        Lib_SegmentedToVirtual(sLightningTextures[sLightningBolts[i].textureIndex]));
             Gfx_SetupDL61_Xlu(play->state.gfxCtx);
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, D_0403F230);
+            gSPDisplayList(POLY_XLU_DISP++, gEffLightningDL);
         }
     }
 
@@ -1122,7 +1416,227 @@ void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, 
     }
 }
 
+extern Color_RGB8 sSandstormPrimColors[8];
+extern Color_RGB8 sSandstormEnvColors[8];
+extern u16 sSandstormScroll;
+
+// Color_RGB8 sSandstormPrimColors[] = {
+//     { 255, 255, 255},
+//     { 255, 255, 255},
+//     { 255, 255, 255},
+//     { 255, 255, 255},
+//     { 210, 156, 85},
+//     { 255, 200, 100},
+//     { 225, 160, 50},
+//     { 105, 90, 40},
+// };
+
+// Color_RGB8 sSandstormEnvColors[] = {
+// { 100, 100, 100 },
+// { 100, 100, 100 },
+// { 100, 100, 100 },
+// { 100, 100, 100 },
+// { 155, 106, 35 },
+// { 200, 150, 50 },
+// { 170, 110, 0 },
+// { 50, 40, 0 },
+// };
+
+#ifdef NON_EQUIVALENT
+void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
+    s32 primA1;
+    s32 envA1;
+    s32 primA = play->envCtx.sandstormPrimA;
+    s32 envA = play->envCtx.sandstormEnvA;
+    Color_RGBA8 primColor;
+    Color_RGBA8 envColor;
+    s32 index;
+    f32 sp98;
+    u16 sp96;
+    u16 sp94;
+    u16 sp92;
+
+    switch (sandstormState) {
+        case SANDSTORM_ACTIVE:
+            envA1 = 128; // TODO: Bottom?
+            primA1 = play->state.frames % 128;
+            if (primA1 > 128) {
+                primA1 = 255 - primA1;
+            }
+            primA1 += 73;
+            break;
+
+        case SANDSTORM_FILL:
+            primA1 = 255;
+            envA1 = (play->envCtx.sandstormPrimA >= 255) ? 255 : 128;
+            break;
+
+        case SANDSTORM_UNFILL:
+        case SANDSTORM_UNK5:
+            envA1 = 128;
+            if (play->envCtx.sandstormEnvA > 128) {
+                primA1 = 255;
+            } else {
+                primA1 = play->state.frames % 128;
+                if (primA1 > 64) {
+                    primA1 = 128 - primA1;
+                }
+                primA1 += 73;
+            }
+            if ((primA1 >= primA) && (primA1 != 255)) {
+                play->envCtx.sandstormState++;
+            }
+            break;
+
+        case SANDSTORM_DISSIPATE:
+            envA1 = 0;
+            primA1 = (play->envCtx.sandstormEnvA > 128) ? 255 : play->envCtx.sandstormEnvA >> 1;
+
+            if (primA == 0) {
+                play->envCtx.sandstormState = SANDSTORM_OFF;
+            }
+            break;
+
+        case 6:
+        case 8:
+            envA1 = 1;
+            primA1 = D_801F4E30;
+            if (sandstormState == 8) {
+                envA1 = 0xA;
+            }
+            break;
+
+        case 7:
+        case 9:
+            envA1 = 1;
+            if (play->envCtx.sandstormPrimA == 0) {
+                play->envCtx.sandstormState = 0;
+            }
+            if (sandstormState == 9) {
+                envA1 = 0xA;
+            }
+            break;
+
+        case 10:
+            envA1 = 0xFF;
+            primA1 = D_801F4E30;
+            if (play->envCtx.sandstormPrimA == 0) {
+                play->envCtx.sandstormState = 0;
+            }
+            break;
+
+        case 11:
+            envA1 = 0x80;
+            primA1 = play->state.frames & 0x7F;
+            if (primA1 >= 0x41) {
+                primA1 = 0x80 - primA1;
+            }
+            primA1 = primA1 + 0x49;
+            break;
+
+        case 12:
+            if (play->envCtx.sandstormPrimA == 0) {
+                play->envCtx.sandstormState = 0;
+            }
+            break;
+
+        case 13:
+            envA1 = 0xA;
+            primA1 = D_801F4E30;
+            break;
+    }
+
+    if (ABS_ALT(primA - primA1) < 9) {
+        primA = primA1;
+    } else if (primA1 < primA) {
+        primA = primA - 9;
+    } else {
+        primA = primA + 9;
+    }
+
+    if (ABS_ALT(envA - envA1) < 9) {
+        envA = envA1;
+    } else if (envA1 < envA) {
+        envA = envA - 9;
+    } else {
+        envA = envA + 9;
+    }
+
+    play->envCtx.sandstormPrimA = primA;
+    play->envCtx.sandstormEnvA = envA;
+
+    sp98 = (512.0f - (primA + envA)) * (3.0f / 128.0f);
+
+    if (sp98 > 6.0f) {
+        sp98 = 6.0f;
+    }
+
+    if (play->envCtx.sandstormPrimA != 0) {
+        index = 0;
+        if (sandstormState >= 0xB) {
+            index = 0xC;
+        }
+
+        if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
+            (play->envCtx.lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE)) {
+            primColor.r = sSandstormPrimColors[1 + index].r;
+            primColor.g = sSandstormPrimColors[1 + index].g;
+            primColor.b = sSandstormPrimColors[1 + index].b;
+            envColor.r = sSandstormEnvColors[1 + index].r;
+            envColor.g = sSandstormEnvColors[1 + index].g;
+            envColor.b = sSandstormEnvColors[1 + index].b;
+        } else if (sSandstormColorIndex == sNextSandstormColorIndex) {
+            primColor.r = sSandstormPrimColors[sSandstormColorIndex + index].r;
+            primColor.g = sSandstormPrimColors[sSandstormColorIndex + index].g;
+            primColor.b = sSandstormPrimColors[sSandstormColorIndex + index].b;
+            envColor.r = sSandstormEnvColors[sSandstormColorIndex + index].r;
+            envColor.g = sSandstormEnvColors[sSandstormColorIndex + index].g;
+            envColor.b = sSandstormEnvColors[sSandstormColorIndex + index].b;
+        } else {
+            primColor.r = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].r,
+                                        sSandstormPrimColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
+            primColor.g = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].g,
+                                        sSandstormPrimColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
+            primColor.b = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].b,
+                                        sSandstormPrimColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
+            envColor.r = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].r,
+                                       sSandstormEnvColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
+            envColor.g = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].g,
+                                       sSandstormEnvColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
+            envColor.b = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].b,
+                                       sSandstormEnvColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
+        }
+
+        envColor.r = ((envColor.r * sp98) + ((6.0f - sp98) * primColor.r)) * (1.0f / 6.0f);
+        envColor.g = ((envColor.g * sp98) + ((6.0f - sp98) * primColor.g)) * (1.0f / 6.0f);
+        envColor.b = ((envColor.b * sp98) + ((6.0f - sp98) * primColor.b)) * (1.0f / 6.0f);
+
+        sp96 = (u32)(sSandstormScroll * (11.0f / 6.0f));
+        sp94 = (u32)(sSandstormScroll * (9.0f / 6.0f));
+        sp92 = (u32)(sSandstormScroll * (6.0f / 6.0f));
+
+        OPEN_DISPS(play->state.gfxCtx);
+
+        POLY_XLU_DISP = func_8012C3A4(POLY_XLU_DISP);
+
+        gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
+        gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, primColor.r, primColor.g, primColor.b, play->envCtx.sandstormPrimA);
+        gDPSetEnvColor(POLY_XLU_DISP++, envColor.r, envColor.g, envColor.b, play->envCtx.sandstormEnvA);
+        gSPSegment(POLY_XLU_DISP++, 0x08,
+                   Gfx_TwoTexScroll(play->state.gfxCtx, G_TX_RENDERTILE, (u32)sp96 % 4096, 0, 512, 32, 1,
+                                    (u32)sp94 % 4096, 4095 - ((u32)sp92 % 4096), 256, 64));
+        gDPSetTextureLUT(POLY_XLU_DISP++, G_TT_NONE);
+        gSPDisplayList(POLY_XLU_DISP++, gFieldSandstormDL);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+
+    sSandstormScroll += (s32)sp98;
+}
+#else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSandstorm.s")
+#endif
 
 s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
     f32 temp;
@@ -1332,134 +1846,182 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStars.s")
+extern Vec3s D_801DD880[16];
+extern u32 D_801DD8E0[8];
+extern u32 D_801DD900[16];
 
-// This funcion is a wreck
-/*
-void Environment_DrawSkyboxStars(PlayState* arg0, Gfx** arg1) {
-    f32 sp104;
-    f32 sp100;
-    f32 spFC;
-    f32 spF4;
-    f32 spF0;
-    s32 spE4;
-    Gfx *spD8;
-    Gfx *temp_s5;
-    MtxF *temp_s3;
-    f32 temp_f0;
+// Vec3s D_801DD880[] = {
+//     { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
+//     { 0x1C84, 0x28A0, 0xCBA8 }, { 0x1F40, 0x2134, 0xD8F0 }, { 0x1F40, 0x28A0, 0xDAE4 }, { 0xE4A8, 0x4A38, 0x4A38 },
+//     { 0xD058, 0x4C2C, 0x3A98 }, { 0xD8F0, 0x36B0, 0x47E0 }, { 0xD954, 0x3264, 0x3E1C }, { 0xD8F0, 0x3070, 0x37DC },
+//     { 0xD8F0, 0x1F40, 0x5208 }, { 0xD760, 0x1838, 0x27D8 }, { 0x0000, 0x4E20, 0x4A38 }, { 0x076C, 0x2328, 0xDCD8 },
+// };
+// u32 D_801DD8E0[] = {
+//     0x41A4FFFF, 0x83A4E6FF, 0x62CDFFFF, 0x5252FFFF, 0x7BA4A4FF, 0x62CDFFFF, 0x62A4E6FF, 0xFF5A00FF,
+// };
+// u32 D_801DD900[] = {
+//     0x405070FF, 0x606080FF, 0x807090FF, 0xA080A0FF, 0xC090A8FF, 0xE0A0B0FF, 0xE0A0B0FF, 0x686888FF,
+//     0x887898FF, 0xA888A8FF, 0xC898B8FF, 0xE8A8B8FF, 0xE0B0B8FF, 0xF0C0C0FF, 0xE8B8C0FF, 0xF8C8C0FF,
+// };
+
+#ifdef NON_EQUIVALENT
+void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP) {
+    Vec3f pos;
+    f32 imgY;
+    f32 imgX;
+    s32 negateY;
+    Gfx* gfx;
+    Gfx* gfxTemp;
+    MtxF* viewProjectionMtxF;
+    f32 invScale;
     f32 temp_f20;
+    f32 temp_f22;
     f32 temp_f2;
-    f32 temp_f2_2;
+    f32 scale;
     f32 temp_f4;
-    s32 phi_s2;
-    u32 seed;
-    s32 phi_v1;
-    u32 phi_a3;
+    s32 i;
+    u32 randInt;
+    s32 phi_v1; // spE8
+    u32 imgWidth;
+    f32* imgXPtr;
+    f32* imgYPtr;
+    s32 pad[4];
 
-    temp_s5 = *arg1;
-    spE4 = Environment_IsSceneUpsideDown(arg0);
-    Matrix_FromRSPMatrix(arg0->view.viewingPtr, &arg0->billboardMtxF);
-    Matrix_FromRSPMatrix(&arg0->view.projection, &arg0->viewProjectionMtxF);
-    SkinMatrix_MtxFMtxFMult(&arg0->viewProjectionMtxF, &arg0->billboardMtxF, &arg0->viewProjectionMtxF);
+    gfx = *gfxP;
+    viewProjectionMtxF = &play->viewProjectionMtxF;
+
+    //! FAKE:
+    if (1) {}
+    if (1) {}
+
+    negateY = Environment_IsSceneUpsideDown(play);
+
+    Matrix_MtxToMtxF(play->view.viewingPtr, &play->billboardMtxF);
+    Matrix_MtxToMtxF(&play->view.projection, viewProjectionMtxF);
+    SkinMatrix_MtxFMtxFMult(viewProjectionMtxF, &play->billboardMtxF, viewProjectionMtxF);
 
     phi_v1 = 0;
 
-    gDPPipeSync(temp_s5++);
+    gDPPipeSync(gfx++);
+    gDPSetEnvColor(gfx++, 255, 255, 255, 255 * D_801F4F28);
+    gDPSetCombineLERP(gfx++, PRIMITIVE, 0, ENVIRONMENT, 0, PRIMITIVE, 0, ENVIRONMENT, 0, PRIMITIVE, 0, ENVIRONMENT, 0,
+                      PRIMITIVE, 0, ENVIRONMENT, 0);
+    gDPSetOtherMode(gfx++,
+                    G_AD_DISABLE | G_CD_DISABLE | G_CK_NONE | G_TC_FILT | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_NONE | G_CYC_1CYCLE | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PRIM | G_RM_AA_XLU_LINE | G_RM_AA_XLU_LINE2);
 
-    gDPSetEnvColor(temp_s5++, 255, 255, 255, (u8)(255.0f * D_801F4F28));
+    randInt = ((gSaveContext.save.saveInfo.playerData.playerName[7]) << 0x1C);
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[0]) << 0x18);
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[1]) << 0x14);
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[2]) << 0x10);
+    randInt ^= (0, (gSaveContext.save.saveInfo.playerData.playerName[3]) << 0xC); //! FAKE:
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[4]) << 8);
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[5]) << 4);
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[6]) << 0);
+    randInt ^= ((gSaveContext.save.saveInfo.playerData.playerName[7]) >> 4);
 
-    _DW({
-        Gfx* _g = temp_s5++;
-        _g->words.w0 = 0xFC32BA65;
-        _g->words.w1 = 0xFF77FFFF;
-    });
+    // randInt = ((gSaveContext.save.saveInfo.playerData.playerName[7]) << 0x1C) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[0]) << 0x18) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[1]) << 0x14) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[2]) << 0x10) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[3]) << 0xC) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[4]) << 8) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[5]) << 4) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[6]) << 0) ^
+    //           ((gSaveContext.save.saveInfo.playerData.playerName[7]) >> 4);
 
-    _DW({
-        Gfx* _g = temp_s5++;
-        _g->words.w0 = 0xEF000CF0;
-        _g->words.w1 = 0x50704C;
-    });
+    //! FAKE:
+    if (&gSaveContext && &gSaveContext && &gSaveContext) {}
 
-    seed = (gSaveContext.playerName[7] << 0x1C) ^
-           ((gSaveContext.playerName[0] << 0x18) ^
-            (gSaveContext.playerName[1] << 0x14) ^
-            (gSaveContext.playerName[2] << 0x10) ^
-            (gSaveContext.playerName[3] << 0xC) ^
-            (gSaveContext.playerName[4] << 8) ^
-            (gSaveContext.playerName[5] << 4) ^
-             gSaveContext.playerName[6] ^
-            (gSaveContext.playerName[7] >> 4));
-
-    for (phi_s2 = 0; phi_s2 < sEnvSkyboxNumStars; phi_s2++) {
-        if (phi_s2 < 0x10) {
-            spFC = D_801DD880[phi_s2].x + arg0->view.eye.x;
-            sp100 = D_801DD880[phi_s2].y + arg0->view.eye.y;
-            sp104 = D_801DD880[phi_s2].z + arg0->view.eye.z;
-            phi_a3 = 8;
+    for (i = 0; i < sEnvSkyboxNumStars; i++) {
+        if (i < 16) {
+            pos.x = play->view.eye.x + D_801DD880[i].x;
+            pos.y = play->view.eye.y + D_801DD880[i].y;
+            pos.z = play->view.eye.z + D_801DD880[i].z;
+            imgWidth = 8;
         } else {
-            seed = (seed * 0x19660D) + 0x3C6EF35F;
-            sRandFloat = (seed >> 9) | 0x3F800000;
-            temp_f4 = *((f32*)&sRandFloat) - 1.0f;
+            // temp_f4 = Rand_ZeroOne_Variable(&randInt);
+            randInt = (randInt * 1664525) + 1013904223;
+            sRandFloat = (randInt >> 9) | 0x3F800000;
+            temp_f4 = *((f32*)&sRandFloat) - 1; //! FAKE:
 
-            seed = (seed * 0x19660D) + 0x3C6EF35F;
-            sRandFloat = (seed >> 9) | 0x3F800000;
-            temp_f20 = ((*((f32*)&sRandFloat) - 1.0f) + temp_f4) * 0.5f;
+            // temp_f20 = Rand_ZeroOne_Variable(&randInt);
+            randInt = (randInt * 1664525) + 1013904223;
+            sRandFloat = (randInt >> 9) | 0x3F800000;
+            temp_f20 = *((f32*)&sRandFloat) - 1.0f;
 
-            seed = (seed * 0x19660D) + 0x3C6EF35F;
-            sp100 = (arg0->view.eye.y + (temp_f20 * temp_f20 * 16384.0f)) - 1000.0f;
-            spFC = Math_SinS(seed) * (D_801DD9FC - temp_f20) * 16384.0f + arg0->view.eye.x;
-            sp104 = Math_CosS(seed) * (D_801DD9FC - temp_f20) * 16384.0f + arg0->view.eye.z;
+            // average
+            temp_f20 = (temp_f20 + temp_f4) * 0.5f;
 
-            seed = (seed * 0x19660D) + 0x3C6EF35F;
-            sRandFloat = (seed >> 9) | 0x3F800000;
+            // randInt = Rand_Next_Variable(&randInt);
+            randInt = (randInt * 1664525) + 1013904223;
+
+            // Set random position
+            pos.y = play->view.eye.y + (SQ(temp_f20) * SQ(128.0f)) - 1000.0f;
+            pos.x = play->view.eye.x + (Math_SinS(randInt) * (1.2f - temp_f20) * SQ(128.0f));
+            pos.z = play->view.eye.z + (Math_CosS(randInt) * (1.2f - temp_f20) * SQ(128.0f));
+
+            // temp_f2 = Rand_ZeroOne_Variable(&randInt);
+            randInt = (randInt * 1664525) + 1013904223;
+            sRandFloat = ((randInt >> 9) | 0x3F800000);
             temp_f2 = *((f32*)&sRandFloat) - 1.0f;
 
-            phi_a3 = (temp_f2 * temp_f2 * 8.0f) + 2.0f;
+            // Set random width
+            imgWidth = (u32)((SQ(temp_f2) * 8.0f) + 2.0f);
         }
 
-        if (spE4 != 0) {
-            sp100 = -sp100;
+        if (negateY) {
+            pos.y = -pos.y;
         }
 
-        if ((phi_s2 < 0xF) || ((phi_s2 == 0xF) && ((gSaveContext.day % 7) == 0))) {
-            _DW({
-                Gfx* _g = temp_s5++;
-                _g->words.w0 = 0xFA000000;
-                _g->words.w1 = D_801DD8E0[phi_s2 & 7];
-            });
-        } else if (((phi_s2 & 0x3F) == 0) || (phi_s2 == 0x10)) {
-            _DW({
-                Gfx* _g = temp_s5++;
-                _g->words.w0 = 0xFA000000;
-                _g->words.w1 = D_801DD900[phi_v1 & 0xF].rgba;
-            });
+        if ((i < 15) || ((i == 15) && ((((void)0, gSaveContext.save.day) % 7) == 0))) {
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD8E0[i & 7]);
+        } else if (((i & 0x3F) == 0) || (i == 16)) {
+            gDPSetColor(gfx++, G_SETPRIMCOLOR, D_801DD900[phi_v1 & 0xF]);
             phi_v1++;
         }
 
-        if (phi_a3 >= 2) {
-            temp_f2_2 = arg0->viewProjectionMtxF.mf[3][3] + ((spFC * arg0->viewProjectionMtxF.mf[0][3]) + (sp100 *
-arg0->viewProjectionMtxF.mf[1][3]) + (sp104 * arg0->viewProjectionMtxF.mf[2][3])); if (temp_f2_2 >= 1.0f) { temp_f0
-= 1.0f / temp_f2_2; temp_s3 = &arg0->viewProjectionMtxF; spF0 = (temp_s3->mf[3][0] + ((spFC * temp_s3->mf[0][0]) +
-(sp100 * temp_s3->mf[1][0]) + (sp104 * temp_s3->mf[2][0]))) * temp_f0; spF4 = (temp_s3->mf[3][1] + ((spFC *
-temp_s3->mf[0][1]) + (sp100 * temp_s3->mf[1][1]) + (sp104 * temp_s3->mf[2][1]))) * temp_f0;
+        //! FAKE:
+        if ((&pos && &pos && &pos) != 0) {}
+        imgXPtr = &imgX;
+        imgYPtr = &imgY;
+
+        if (imgWidth >= 2) {
+            // w component
+            scale = pos.x * play->viewProjectionMtxF.mf[0][3] + pos.y * play->viewProjectionMtxF.mf[1][3] +
+                    pos.z * play->viewProjectionMtxF.mf[2][3] + play->viewProjectionMtxF.mf[3][3];
+            if (scale >= 1.0f) {
+                invScale = 1.0f / scale;
+                // x component
+                imgX = (pos.x * viewProjectionMtxF->mf[0][0] + pos.y * viewProjectionMtxF->mf[1][0] +
+                        pos.z * viewProjectionMtxF->mf[2][0] + viewProjectionMtxF->mf[3][0]) *
+                       invScale;
+                // y component
+                imgY = (((pos.x * viewProjectionMtxF->mf[0][1]) + (pos.y * viewProjectionMtxF->mf[1][1]) +
+                         (pos.z * viewProjectionMtxF->mf[2][1])) +
+                        viewProjectionMtxF->mf[3][1]) *
+                       invScale;
             }
 
-            if ((temp_f2_2 >= 1.0f) && (spF0 > -1.0f) && (spF0 < 1.0f) && (spF4 > -1.0f) && (spF4 < 1.0f)) {
-                spD8 = temp_s5;
-                spF0 = (spF0 * 160.0f) + 160.0f;
-                spF4 = (spF4 * -120.0f) + 120.0f;
-                Environment_DrawSkyboxStar(&spD8, spF0, spF4, phi_a3, 4);
-                temp_s5 = spD8;
+            if ((scale >= 1.0f) && (imgX > -1.0f) && (imgX < 1.0f) && (imgY > -1.0f) && (imgY < 1.0f)) {
+                imgX = (imgX * (SCREEN_WIDTH / 2)) + (SCREEN_WIDTH / 2);
+                imgY = (imgY * -(SCREEN_HEIGHT / 2)) + (SCREEN_HEIGHT / 2);
+
+                gfxTemp = gfx;
+                Environment_DrawSkyboxStar(&gfxTemp, imgX, imgY, imgWidth, 4);
+                gfx = gfxTemp;
             }
         }
     }
 
-    gDPPipeSync(temp_s5++);
-
-    *arg1 = temp_s5;
+    gDPPipeSync(gfx++);
+    *gfxP = gfx;
 }
-*/
+#else
+void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStars.s")
+#endif
 
 void Environment_Draw(PlayState* play) {
     func_800FD980(play);
@@ -1671,80 +2233,77 @@ void Environment_JumpForwardInTime(void) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FEAF4.s")
-
-// TODO permuter - regalloc, reordering issues
-/*
-void func_800FEAF4(EnvironmentContext *envCtx) {
+#ifdef NON_EQUIVALENT
+void func_800FEAF4(EnvironmentContext* envCtx) {
     u8 temp_t8;
     u8 phi_v1;
 
     phi_v1 = 0;
-    if (((void)0, gSaveContext.day) != 0) {
-        phi_v1 = ((void)0, gSaveContext.day) - 1;
+    if (((void)0, gSaveContext.save.day) != 0) {
+        phi_v1 = ((void)0, gSaveContext.save.day) - 1;
     }
+
     temp_t8 = phi_v1 + (D_801F4E31 * 3);
-    envCtx->unk_17 = temp_t8;
-    envCtx->unk_18 = temp_t8;
+    envCtx->skyboxConfig = temp_t8;
+    envCtx->changeSkyboxNextConfig = temp_t8;
 
     if (D_801F4E31 == 4) {
         temp_t8 = 0xE;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     } else if (D_801F4E31 == 5) {
         temp_t8 = 0x10;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     } else if (D_801F4E31 == 6) {
         temp_t8 = 0x11;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     } else if (D_801F4E31 == 7) {
         temp_t8 = phi_v1 + 0x12;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     } else if (D_801F4E31 == 8) {
         temp_t8 = phi_v1 + 0x15;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     } else if (D_801F4E31 == 9) {
         temp_t8 = 0x18;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     } else if (D_801F4E31 == 0xA) {
         temp_t8 = phi_v1 + 0x19;
-        envCtx->unk_17 = temp_t8;
-        envCtx->unk_18 = temp_t8;
+        envCtx->skyboxConfig = temp_t8;
+        envCtx->changeSkyboxNextConfig = temp_t8;
     }
 
     if (phi_v1 >= 3) {
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig = 0xD;
         temp_t8 = 0xD;
-        envCtx->unk_17 = 0xD;
-        envCtx->unk_18 = 0xD;
     }
 
     if (temp_t8 >= 0x1C) {
-        envCtx->unk_17 = 0;
-        envCtx->unk_18 = 0;
+        envCtx->skyboxConfig = 0;
+        envCtx->changeSkyboxNextConfig = 0;
     }
 
-    switch (((void)0, gSaveContext.day)) {
-    default:
-    case 0:
-    case 1:
-        envCtx->unk_1F = 0;
-        envCtx->unk_20 = 0;
-        break;
-    case 2:
-        envCtx->unk_1F = 3;
-        envCtx->unk_20 = 3;
-        break;
-    case 3:
-        envCtx->unk_1F = 4;
-        envCtx->unk_20 = 4;
-        break;
+    switch (((void)0, gSaveContext.save.day)) {
+        default:
+        case 0:
+        case 1:
+            envCtx->lightConfig = 0;
+            envCtx->changeLightNextConfig = 0;
+            break;
+        case 2:
+            envCtx->lightConfig = 3;
+            envCtx->changeLightNextConfig = 3;
+            break;
+        case 3:
+            envCtx->lightConfig = 4;
+            envCtx->changeLightNextConfig = 4;
+            break;
     }
-
-    return;
 }
-*/
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FEAF4.s")
+#endif
