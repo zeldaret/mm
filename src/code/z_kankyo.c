@@ -2308,56 +2308,45 @@ void Environment_JumpForwardInTime(void) {
     }
 }
 
-#ifdef NON_EQUIVALENT
-void func_800FEAF4(EnvironmentContext* envCtx) {
-    u8 temp_t8;
+void func_800FEAF4(EnvironmentContext *envCtx) {
     u8 phi_v1;
 
     phi_v1 = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
         phi_v1 = ((void)0, gSaveContext.save.day) - 1;
     }
-
-    temp_t8 = phi_v1 + (D_801F4E31 * 3);
-    envCtx->skyboxConfig = temp_t8;
-    envCtx->changeSkyboxNextConfig = temp_t8;
+     envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
+     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
     if (D_801F4E31 == 4) {
-        temp_t8 = 0xE;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = 0xE;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 5) {
-        temp_t8 = 0x10;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = 0x10;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 6) {
-        temp_t8 = 0x11;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = 0x11;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 7) {
-        temp_t8 = phi_v1 + 0x12;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = phi_v1 + 0x12;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 8) {
-        temp_t8 = phi_v1 + 0x15;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = phi_v1 + 0x15;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 9) {
-        temp_t8 = 0x18;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = 0x18;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 0xA) {
-        temp_t8 = phi_v1 + 0x19;
-        envCtx->skyboxConfig = temp_t8;
-        envCtx->changeSkyboxNextConfig = temp_t8;
+        envCtx->skyboxConfig = phi_v1 + 0x19;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
     if (phi_v1 >= 3) {
-        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig = 0xD;
-        temp_t8 = 0xD;
+        envCtx->skyboxConfig = 0xD;
+        envCtx->changeSkyboxNextConfig = 0xD;
     }
 
-    if (temp_t8 >= 0x1C) {
+    if (envCtx->skyboxConfig >= 0x1C) {
         envCtx->skyboxConfig = 0;
         envCtx->changeSkyboxNextConfig = 0;
     }
@@ -2380,7 +2369,6 @@ void func_800FEAF4(EnvironmentContext* envCtx) {
             envCtx->changeLightNextConfig = 4;
             break;
     }
+
+    return;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FEAF4.s")
-#endif
