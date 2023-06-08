@@ -42,7 +42,7 @@ Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
 Actor* Actor_SpawnEntry(ActorContext* actorCtx, ActorEntry* actorEntry, PlayState* play);
 Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play);
-void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player);
+void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player);
 s32 func_800BA2FC(PlayState* play, Actor* actor, Vec3f* projectedPos, f32 projectedW);
 void Actor_AddToCategory(ActorContext* actorCtx, Actor* actor, u8 actorCategory);
 Actor* Actor_RemoveFromCategory(PlayState* play, ActorContext* actorCtx, Actor* actorToRemove);
@@ -608,10 +608,11 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
     Vec3f projectedPos;
     f32 invW;
 
+    // If no actor is currently targeted, then try to find a
     if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->targetableOption = NULL;
     } else {
-        Target_800BB8EC(play, &play->actorCtx, &actor, &D_801ED920, player);
+        Target_GetTargetActor(play, &play->actorCtx, &actor, &D_801ED920, player);
         targetCtx->targetableOption = actor;
     }
 
@@ -3380,7 +3381,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     return newHead;
 }
 
-s32 func_800BB59C(PlayState* play, Actor* actor) {
+s32 Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
     s16 x;
     s16 y;
 
@@ -3392,10 +3393,10 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
 /**
  * Search for targetable actors of the `actorCategory` category.
  *
- * Looks for the actor of said category with higher category and the one that is nearest to player. This actor must be
- * within the range (relative to player) speicified by its targetMode.
+ * Looks for the actor of said category with higher targetPriority and the one that is nearest to player. This actor
+ * must be within the range (relative to player) speicified by its targetMode.
  *
- * The actor must be on-screen (more or less, not sure what's going on in func_800BB59C)
+ * The actor must be on-screen (more or less, not sure what's going on in Target_InTargetableScreenRegion)
  *
  * The highest priority actor is stored in `sTargetableHighestPriorityActor`, while the nearest actor is stored in
  * `sTargetableNearestActor`. The higher priority / smaller distance of those actors are stored in
@@ -3418,7 +3419,8 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
  * This function is expected to be called with almost every actor category in each cycle. On a new cycle its global
  * variables must be reset by the caller, otherwise the information of the previous cycle will be retained on this one.
  */
-void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, ActorType actorCategory) {
+void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorCtx, Player* player,
+                                           ActorType actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* targetedActor = player->targetedActor;
@@ -3459,7 +3461,7 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, Ac
             continue;
         }
 
-        if (Target_IsActorInRange(actor, distSq) && func_800BB59C(play, actor)) {
+        if (Target_IsActorInRange(actor, distSq) && Target_InTargetableScreenRegion(play, actor)) {
             CollisionPoly* poly;
             s32 bgId;
             Vec3f posResult;
@@ -3499,8 +3501,15 @@ u8 sTargetableActorCategories[] = {
     ACTORCAT_CHEST, ACTORCAT_SWITCH, ACTORCAT_PROP, ACTORCAT_MISC,       ACTORCAT_DOOR, ACTORCAT_SWITCH,
 };
 
-// Target_FindTargets?
-void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player) {
+/**
+ * Search for the nearest targetable actor.
+ *
+ * The specific criteria is specified in Target_FindTargetableActorForCategory.
+ *
+ * The actor found is stored in the targetableP parameter. It may be NULL if no actor that fulfills the criteria is
+ * found.
+ */
+void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targetableP, Actor** arg3, Player* player) {
     u8* actorCategories;
     s32 i;
 
@@ -3515,14 +3524,14 @@ void Target_800BB8EC(PlayState* play, ActorContext* actorCtx, Actor** targetable
 
     // Try to search for a targetable actor that's a Boss, Enemy or Bg first
     for (i = 0; i < 3; i++) {
-        Target_800BB604(play, actorCtx, player, *actorCategories);
+        Target_FindTargetableActorForCategory(play, actorCtx, player, *actorCategories);
         actorCategories++;
     }
 
     // If no actor in the above categories was found then try to search for one in every other category
     if (sTargetableNearestActor == NULL) {
         for (; i < ARRAY_COUNT(sTargetableActorCategories); i++) {
-            Target_800BB604(play, actorCtx, player, *actorCategories);
+            Target_FindTargetableActorForCategory(play, actorCtx, player, *actorCategories);
             actorCategories++;
         }
     }

@@ -354,9 +354,9 @@ asm/non_matchings/code/z_actor/Actor_SpawnAsChild.s,Actor_SpawnAsChild,0x800BB0C
 asm/non_matchings/code/z_actor/Actor_SpawnTransitionActors.s,Actor_SpawnTransitionActors,0x800BB140,0x64
 asm/non_matchings/code/z_actor/Actor_SpawnEntry.s,Actor_SpawnEntry,0x800BB2D0,0x72
 asm/non_matchings/code/z_actor/Actor_Delete.s,Actor_Delete,0x800BB498,0x41
-asm/non_matchings/code/z_actor/func_800BB59C.s,func_800BB59C,0x800BB59C,0x1A
-asm/non_matchings/code/z_actor/Target_800BB604.s,Target_800BB604,0x800BB604,0xBA
-asm/non_matchings/code/z_actor/Target_800BB8EC.s,Target_800BB8EC,0x800BB8EC,0x67
+asm/non_matchings/code/z_actor/Target_InTargetableScreenRegion.s,Target_InTargetableScreenRegion,0x800BB59C,0x1A
+asm/non_matchings/code/z_actor/Target_FindTargetableActorForCategory.s,Target_FindTargetableActorForCategory,0x800BB604,0xBA
+asm/non_matchings/code/z_actor/Target_GetTargetActor.s,Target_GetTargetActor,0x800BB8EC,0x67
 asm/non_matchings/code/z_actor/Enemy_StartFinishingBlow.s,Enemy_StartFinishingBlow,0x800BBA88,0xE
 asm/non_matchings/code/z_actor/func_800BBAC0.s,func_800BBAC0,0x800BBAC0,0x2D
 asm/non_matchings/code/z_actor/func_800BBB74.s,func_800BBB74,0x800BBB74,0x2B
