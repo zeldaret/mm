@@ -293,9 +293,9 @@ void func_800F8554(PlayState* play) {
 
     if (play->envCtx.sunMoonDisabled == 0) {
         if (play->envCtx.unk_F2[1] != 0) {
-            Math_SmoothStepToF(&D_801F4F1C, 0.0f, 0.5f, 4.0f, D_801DD944);
+            Math_SmoothStepToF(&D_801F4F1C, 0.0f, 0.5f, 4.0f, 0.01f);
         } else {
-            Math_SmoothStepToF(&D_801F4F1C, 255.0f, 0.5f, 4.0f, D_801DD948);
+            Math_SmoothStepToF(&D_801F4F1C, 255.0f, 0.5f, 4.0f, 0.01f);
         }
 
         if (Environment_IsSceneUpsideDown(play)) {
@@ -488,7 +488,7 @@ void func_800F8D84(PlayState *play) {
     if (play->envCtx.unk_16 == 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        if ((play->envCtx.unk_8 > -800.0f) || Kankyo_IsSceneUpsideDown(play)) {
+        if ((play->envCtx.unk_8 > -800.0f) || Environment_IsSceneUpsideDown(play)) {
             Matrix_InsertTranslation(play->view.eye.x + play->envCtx.unk_4,
                                      play->view.eye.y + play->envCtx.unk_8,
                                      play->view.eye.z + play->envCtx.unk_C, MTXMODE_NEW);
@@ -1085,7 +1085,7 @@ void func_800FDAF8(Gfx** arg0, f32 arg1, f32 arg2, s32 arg3, s32 arg4) {
     *arg0 = g;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FDC94.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FDC94.s")
 
 void func_800FDC94(PlayState*, Gfx **);
 
@@ -1112,7 +1112,7 @@ void func_800FDC94(PlayState* arg0, Gfx** arg1) {
     u32 phi_a3;
 
     temp_s5 = *arg1;
-    spE4 = Kankyo_IsSceneUpsideDown(arg0);
+    spE4 = Environment_IsSceneUpsideDown(arg0);
     Matrix_FromRSPMatrix(arg0->view.viewingPtr, &arg0->billboardMtxF);
     Matrix_FromRSPMatrix(&arg0->view.projection, &arg0->viewProjectionMtxF);
     SkinMatrix_MtxFMtxFMult(&arg0->viewProjectionMtxF, &arg0->billboardMtxF, &arg0->viewProjectionMtxF);
@@ -1327,7 +1327,7 @@ u16 func_800FE620(PlayState *play) {
 }
 
 void func_800FE658(f32 arg0) {
-    D_801BDB9C = arg0 * D_801DDA7C;
+    D_801BDB9C = arg0 * 45.511112f;
 }
 
 u8 func_800FE6F8(PlayState* play, s16 arg1, s16 arg2) {
@@ -1344,15 +1344,15 @@ u8 func_800FE6F8(PlayState* play, s16 arg1, s16 arg2) {
     return phi_v1;
 }
 
-u8 func_800FE778() {
+u8 func_800FE778(void) {
     return D_801BDBA0;
 }
 
-u8 func_800FE788() {
+u8 func_800FE788(void) {
     return D_801BDBA4;
 }
 
-f32 func_800FE798() {
+f32 func_800FE798(void) {
     return D_801BDB90;
 }
 

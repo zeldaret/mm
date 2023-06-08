@@ -51,7 +51,7 @@ extern f32 D_801F4E74;
 extern u8 D_801BDBB8;
 extern u8 D_801BDBB4;
 extern u8 D_801F4E30;
-extern s16 D_801F4E7A;
+extern u16 D_801F4E7A;
 
 void EnWeatherTag_SetupAction(EnWeatherTag* this, EnWeatherTagActionFunc func) {
     this->actionFunc = func;

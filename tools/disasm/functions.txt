@@ -1721,7 +1721,7 @@
     0x800F6B44:("func_800F6B44",),
     0x800F6CEC:("func_800F6CEC",),
     0x800F6EA4:("func_800F6EA4",),
-    0x800F6FCC:("Kankyo_IsSceneUpsideDown",),
+    0x800F6FCC:("Environment_IsSceneUpsideDown",),
     0x800F6FF8:("func_800F6FF8",),
     0x800F8554:("func_800F8554",),
     0x800F88C4:("func_800F88C4",),
