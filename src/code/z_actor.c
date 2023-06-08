@@ -17,21 +17,26 @@
 #include "objects/object_bdoor/object_bdoor.h"
 
 // bss
-FaultClient sActorFaultClient;          // 2 funcs
-CollisionPoly* D_801ED8B0;              // 1 func
-s32 D_801ED8B4;                         // 2 funcs
+FaultClient sActorFaultClient; // 2 funcs
+
+CollisionPoly* D_801ED8B0; // 1 func
+s32 D_801ED8B4;            // 2 funcs
+
 Actor* sTargetableNearestActor;         // 2 funcs
 Actor* sTargetableHighestPriorityActor; // 2 funcs
 Actor* D_801ED8C0;                      // 2 funcs
 Actor* D_801ED8C4;                      // 2 funcs
+
 f32 sTargetableNearestActorDistanceSq;  // 2 funcs
 f32 sBgmEnemyDistSq;                    // 2 funcs
 f32 D_801ED8D0;                         // 2 funcs
 s32 sTargetableHighestPriorityPriority; // 2 funcs
 s32 D_801ED8D8;                         // 2 funcs
 s16 D_801ED8DC;                         // 2 funcs
-Mtx sActorHiliteMtx;                    // 1 func
-Actor* D_801ED920;                      // 2 funcs. 1 out of z_actor
+
+Mtx sActorHiliteMtx; // 1 func
+
+Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 
 // Internal forward declarations
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
@@ -1810,7 +1815,7 @@ f32 Target_800B82EC(Actor* actor, Player* player, s16 angle) {
 }
 
 #define TARGET_RANGE(range, leash) \
-    { SQ(range), (f32)range / leash }
+    { SQ(range), (f32)(range) / (leash) }
 
 TargetRangeParams gTargetRanges[TARGET_MODE_MAX] = {
     TARGET_RANGE(70, 140),        // TARGET_MODE_0
@@ -1826,6 +1831,9 @@ TargetRangeParams gTargetRanges[TARGET_MODE_MAX] = {
     TARGET_RANGE(2500, 3750),     // TARGET_MODE_10
 };
 
+/**
+ * Checks if an actor at distance `distSq` is inside the range specified by its targetMode
+ */
 s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
     return distSq < gTargetRanges[actor->targetMode].rangeSq;
 }
@@ -3381,7 +3389,36 @@ s32 func_800BB59C(PlayState* play, Actor* actor) {
     return (x > -20) && (x < gScreenWidth + 20) && (y > -160) && (y < gScreenHeight + 160);
 }
 
-void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s32 actorCategory) {
+/**
+ * Search for targetable actors of the `actorCategory` category.
+ *
+ * Looks for the actor of said category with higher category and the one that is nearest to player. This actor must be
+ * within the range (relative to player) speicified by its targetMode.
+ *
+ * The actor must be on-screen (more or less, not sure what's going on in func_800BB59C)
+ *
+ * The highest priority actor is stored in `sTargetableHighestPriorityActor`, while the nearest actor is stored in
+ * `sTargetableNearestActor`. The higher priority / smaller distance of those actors are stored in
+ * `sTargetableHighestPriorityPriority` and `sTargetableNearestActorDistanceSq`.
+ *
+ * Something something, ACTOR_FLAG_40000000, D_801ED8C4/D_801ED8C0, D_801ED8D8/D_801ED8D0.
+ *
+ * For an actor to be taken in consideration by this function it needs:
+ * - Non-NULL update function (maybe obvious?)
+ * - Not be Player itself.
+ * - It must be targetable or ACTOR_FLAG_40000000
+ * - Not be the already targeted actor, unless it has the ACTOR_FLAG_80000 flag
+ * - Be withing the range specified by its targetMode.
+ * - It must be on-screen (within a margin)
+ * - Must not be blocked by a surface (?)
+ *
+ * This function also checks for the nearest enemy actor, which allows determining if enemy background music should be
+ * played. This actor is stored in `targetContext.bgmEnemy` and its distance is stored in `sBgmEnemyDistSq`
+ *
+ * This function is expected to be called with almost every actor category in each cycle. On a new cycle its global
+ * variables must be reset by the caller, otherwise the information of the previous cycle will be retained on this one.
+ */
+void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, ActorType actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
     Actor* targetedActor = player->targetedActor;
@@ -3393,8 +3430,8 @@ void Target_800BB604(PlayState* play, ActorContext* actorCtx, Player* player, s3
             continue;
         }
 
-        // Actor must be at least targetable or ACTOR_FLAG_40000000
-        if (!(actor->flags & (ACTOR_FLAG_40000000 | ACTOR_FLAG_TARGETABLE))) {
+        // Actor must be at least either targetable or ACTOR_FLAG_40000000
+        if (!(actor->flags & (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_40000000))) {
             continue;
         }
 
