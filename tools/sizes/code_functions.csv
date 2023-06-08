@@ -1240,7 +1240,7 @@ asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s,Environment_UpdateLig
 asm/non_matchings/code/z_kankyo/Environment_UpdateSun.s,Environment_UpdateSun,0x800F8554,0xDC
 asm/non_matchings/code/z_kankyo/func_800F88C4.s,func_800F88C4,0x800F88C4,0x2B
 asm/non_matchings/code/z_kankyo/func_800F8970.s,func_800F8970,0x800F8970,0x4B
-asm/non_matchings/code/z_kankyo/Environment_UpdateSaveFlags.s,Environment_UpdateSaveFlags,0x800F8A9C,0x8E
+asm/non_matchings/code/z_kankyo/Environment_UpdatePostmanEvents.s,Environment_UpdatePostmanEvents,0x800F8A9C,0x8E
 asm/non_matchings/code/z_kankyo/Environment_Update.s,Environment_Update,0x800F8CD4,0x2C
 asm/non_matchings/code/z_kankyo/Environment_DrawSun.s,Environment_DrawSun,0x800F8D84,0x269
 asm/non_matchings/code/z_kankyo/Environment_DrawSunLensFlare.s,Environment_DrawSunLensFlare,0x800F9728,0x3F

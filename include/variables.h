@@ -2162,7 +2162,7 @@ extern SaveContext gSaveContext;
 // extern UNK_TYPE1 D_801F3F83;
 // extern UNK_TYPE1 D_801F48C8;
 
-extern UNK_TYPE D_801F4DDC;
+extern UNK_TYPE D_801F4DDC; // should be u8, breaks bss
 extern u8 gDisablePlayerCsModeStartPos;
 extern s16 gDungeonBossWarpSceneId;
 

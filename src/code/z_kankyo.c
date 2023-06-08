@@ -8,7 +8,7 @@
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-void Environment_UpdateSaveFlags(PlayState* play);
+void Environment_UpdatePostmanEvents(PlayState* play);
 void Environment_UpdateRain(PlayState* play);
 void Environment_UpdateTimeBasedSequence(PlayState* play);
 u8 func_800FE5D0(struct PlayState* play);
@@ -386,7 +386,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     sEnvIsTimeStopped = 0;
     sSunPrimAlpha = 255.0f;
 
-    Environment_UpdateSaveFlags(play);
+    Environment_UpdatePostmanEvents(play);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
@@ -568,7 +568,7 @@ void Environment_UpdateNextDayTime(void) {
         gSaveContext.nextDayTime -= 0x10;
 
         // nextDayTime is used as both a time of day value and a timer to delay sfx when changing days.
-        // When Sun's Song is played, nextDayTime is set to 0x8001 or 0 for day and night respectively.
+        // When Sun's Song is played, nextDayTime is set to 0x8000 or 0 for day and night respectively.
         // These values will actually get used as a time of day value.
         // After this, nextDayTime is assigned magic values of 0xFFFE or 0xFFFD for day and night respectively.
         // From here, 0x10 is decremented from nextDayTime until it reaches either 0xFF0E or 0xFF0D, effectively
@@ -785,7 +785,7 @@ void func_800F8970(void) {
 }
 
 #ifdef NON_MATCHING
-void Environment_UpdateSaveFlags(PlayState* play) {
+void Environment_UpdatePostmanEvents(PlayState* play) {
     u8 v1;
     u16 temp_a2_2;
 
@@ -817,8 +817,7 @@ void Environment_UpdateSaveFlags(PlayState* play) {
 
     func_800F8970();
 
-    if (((CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY)) == 0) &&
-        ((CHECK_WEEKEVENTREG(WEEKEVENTREG_55_02)) == 0)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_55_02)) {
         if (((void)0, gSaveContext.save.day) >= 2) {
             SET_WEEKEVENTREG(WEEKEVENTREG_55_02);
         } else if ((((void)0, gSaveContext.save.day) == 1) && (SCHEDULE_TIME_NOW_ALT >= 0x6FF9)) {
@@ -826,7 +825,7 @@ void Environment_UpdateSaveFlags(PlayState* play) {
         }
     }
 
-    if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) == 0) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_01)) {
         temp_a2_2 = ((void)0, gSaveContext.save.time) - D_801F4E78;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_89_40) && ((SCHEDULE_TIME_NOW_ALT & 0xFFFF) >= 0xF556)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_90_01);
@@ -842,7 +841,7 @@ void Environment_UpdateSaveFlags(PlayState* play) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateSaveFlags.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdatePostmanEvents.s")
 #endif
 
 void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx, PauseContext* pauseCtx,
@@ -860,7 +859,7 @@ void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContex
         Environment_UpdateTime(play, envCtx, pauseCtx, msgCtx, gameOverCtx);
         Environment_UpdateSun(play);
         Environment_UpdateLights(play, envCtx, lightCtx);
-        Environment_UpdateSaveFlags(play);
+        Environment_UpdatePostmanEvents(play);
     }
 }
 
@@ -1512,13 +1511,14 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
     s32 envA1;
     s32 primA = play->envCtx.sandstormPrimA;
     s32 envA = play->envCtx.sandstormEnvA;
-    Color_RGBA8 primColor;
-    Color_RGBA8 envColor;
-    s32 index;
     f32 sp98;
     u16 sp96;
     u16 sp94;
     u16 sp92;
+    Color_RGBA8 primColor;
+    Color_RGBA8 envColor;
+    s32 index;
+    s32 pad[2];
 
     switch (sandstormState) {
         case SANDSTORM_ACTIVE:
@@ -1649,25 +1649,25 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             envColor.r = sSandstormEnvColors[1 + index].r;
             envColor.g = sSandstormEnvColors[1 + index].g;
             envColor.b = sSandstormEnvColors[1 + index].b;
-        } else if (sandstormLerpScale == sNextSandstormColorIndex) {
-            primColor.r = sSandstormPrimColors[sandstormLerpScale + index].r;
-            primColor.g = sSandstormPrimColors[sandstormLerpScale + index].g;
-            primColor.b = sSandstormPrimColors[sandstormLerpScale + index].b;
-            envColor.r = sSandstormEnvColors[sandstormLerpScale + index].r;
-            envColor.g = sSandstormEnvColors[sandstormLerpScale + index].g;
-            envColor.b = sSandstormEnvColors[sandstormLerpScale + index].b;
+        } else if (sSandstormColorIndex == sNextSandstormColorIndex) {
+            primColor.r = sSandstormPrimColors[sSandstormColorIndex + index].r;
+            primColor.g = sSandstormPrimColors[sSandstormColorIndex + index].g;
+            primColor.b = sSandstormPrimColors[sSandstormColorIndex + index].b;
+            envColor.r = sSandstormEnvColors[sSandstormColorIndex + index].r;
+            envColor.g = sSandstormEnvColors[sSandstormColorIndex + index].g;
+            envColor.b = sSandstormEnvColors[sSandstormColorIndex + index].b;
         } else {
-            primColor.r = (s32)F32_LERP(sSandstormPrimColors[sandstormLerpScale + index].r,
+            primColor.r = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].r,
                                         sSandstormPrimColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
-            primColor.g = (s32)F32_LERP(sSandstormPrimColors[sandstormLerpScale + index].g,
+            primColor.g = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].g,
                                         sSandstormPrimColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
-            primColor.b = (s32)F32_LERP(sSandstormPrimColors[sandstormLerpScale + index].b,
+            primColor.b = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].b,
                                         sSandstormPrimColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
-            envColor.r = (s32)F32_LERP(sSandstormEnvColors[sandstormLerpScale + index].r,
+            envColor.r = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].r,
                                        sSandstormEnvColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
-            envColor.g = (s32)F32_LERP(sSandstormEnvColors[sandstormLerpScale + index].g,
+            envColor.g = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].g,
                                        sSandstormEnvColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
-            envColor.b = (s32)F32_LERP(sSandstormEnvColors[sandstormLerpScale + index].b,
+            envColor.b = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].b,
                                        sSandstormEnvColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
         }
 
@@ -1681,7 +1681,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        POLY_XLU_DISP = func_8012C3A4(POLY_XLU_DISP);
+        POLY_XLU_DISP = Gfx_SetupDL64(POLY_XLU_DISP);
 
         gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_NOISE);
         gDPSetColorDither(POLY_XLU_DISP++, G_CD_NOISE);

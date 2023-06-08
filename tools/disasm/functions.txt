@@ -1726,7 +1726,7 @@
     0x800F8554:("Environment_UpdateSun",),
     0x800F88C4:("func_800F88C4",),
     0x800F8970:("func_800F8970",),
-    0x800F8A9C:("Environment_UpdateSaveFlags",),
+    0x800F8A9C:("Environment_UpdatePostmanEvents",),
     0x800F8CD4:("Environment_Update",),
     0x800F8D84:("Environment_DrawSun",),
     0x800F9728:("Environment_DrawSunLensFlare",),

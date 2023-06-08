@@ -27,7 +27,7 @@ static u16 sSeqId;
 s16 sCutsceneQuakeIndex;
 CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
-UNK_TYPE D_801F4DDC;
+UNK_TYPE D_801F4DDC; // should be u8, breaks bss
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
 
