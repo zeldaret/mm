@@ -813,10 +813,10 @@ void Play_UpdateTransition(PlayState* this) {
 
         case TRANS_MODE_SANDSTORM_INIT:
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
-                this->envCtx.sandstormState = 1;
+                this->envCtx.sandstormState = SANDSTORM_FILL;
                 this->transitionMode = TRANS_MODE_SANDSTORM;
             } else {
-                this->envCtx.sandstormState = 2;
+                this->envCtx.sandstormState = SANDSTORM_UNFILL;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
                 this->transitionMode = TRANS_MODE_SANDSTORM;
@@ -845,7 +845,7 @@ void Play_UpdateTransition(PlayState* this) {
 
         case TRANS_MODE_SANDSTORM_END_INIT:
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
-                this->envCtx.sandstormState = 4;
+                this->envCtx.sandstormState = SANDSTORM_DISSIPATE;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
 
@@ -1313,13 +1313,13 @@ void Play_DrawMain(PlayState* this) {
                 }
 
                 // envCtx.precipitation[PRECIP_RAIN_CUR]
-                if (this->envCtx.precipitation[1] != 0) {
+                if (this->envCtx.precipitation[PRECIP_RAIN_CUR] != 0) {
                     Environment_DrawRain(this, &this->view, gfxCtx);
                 }
             }
 
             if (1) {
-                Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, 1);
+                Environment_FillScreen(gfxCtx, 0, 0, 0, this->bgCoverAlpha, FILL_SCREEN_OPA);
             }
 
             if (1) {
@@ -1340,13 +1340,14 @@ void Play_DrawMain(PlayState* this) {
             if (1) {
                 if (R_PLAY_FILL_SCREEN_ON) {
                     Environment_FillScreen(gfxCtx, R_PLAY_FILL_SCREEN_R, R_PLAY_FILL_SCREEN_G, R_PLAY_FILL_SCREEN_B,
-                                           R_PLAY_FILL_SCREEN_ALPHA, 3);
+                                           R_PLAY_FILL_SCREEN_ALPHA, FILL_SCREEN_OPA | FILL_SCREEN_XLU);
                 }
 
                 switch (this->envCtx.fillScreen) {
                     case 1:
                         Environment_FillScreen(gfxCtx, this->envCtx.screenFillColor[0], this->envCtx.screenFillColor[1],
-                                               this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3], 3);
+                                               this->envCtx.screenFillColor[2], this->envCtx.screenFillColor[3],
+                                               FILL_SCREEN_OPA | FILL_SCREEN_XLU);
                         break;
 
                     default:
@@ -1355,13 +1356,13 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (1) {
-                if (this->envCtx.sandstormState != 0) {
+                if (this->envCtx.sandstormState != SANDSTORM_OFF) {
                     Environment_DrawSandstorm(this, this->envCtx.sandstormState);
                 }
             }
 
             if (this->worldCoverAlpha != 0) {
-                Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, 3);
+                Environment_FillScreen(gfxCtx, 0, 0, 0, this->worldCoverAlpha, FILL_SCREEN_OPA | FILL_SCREEN_XLU);
             }
 
             if (1) {
@@ -1426,7 +1427,7 @@ void Play_DrawMain(PlayState* this) {
     }
 
     if (!sp25B) {
-        func_800FE3E0(this);
+        Environment_DrawSkyboxStars(this);
     }
 
     CLOSE_DISPS(this->state.gfxCtx);
@@ -2203,7 +2204,7 @@ void Play_Init(GameState* thisx) {
         gSaveContext.save.cutsceneIndex = 0;
     }
 
-    if (gSaveContext.nextDayTime != 0xFFFF) {
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
         gSaveContext.save.time = gSaveContext.nextDayTime;
         gSaveContext.skyboxTime = gSaveContext.nextDayTime;
     }
@@ -2236,14 +2237,14 @@ void Play_Init(GameState* thisx) {
     KaleidoScopeCall_Init(this);
     Interface_Init(this);
 
-    if (gSaveContext.nextDayTime != 0xFFFF) {
-        if (gSaveContext.nextDayTime == 0x8000) {
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
+        if (gSaveContext.nextDayTime == NEXT_TIME_DAY) {
             gSaveContext.save.day++;
             gSaveContext.save.daysElapsed++;
             gSaveContext.dogIsLost = true;
-            gSaveContext.nextDayTime = -2;
+            gSaveContext.nextDayTime = NEXT_TIME_DAY_SET;
         } else {
-            gSaveContext.nextDayTime = -3;
+            gSaveContext.nextDayTime = NEXT_TIME_NIGHT_SET;
         }
     }
 

@@ -338,8 +338,8 @@ void func_808B7A90(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_800FE7A8(D_808B82F0, &sp2C);
-    func_800FE7A8(D_808B8300, &sp28);
+    Environment_LerpSandstormColors(D_808B82F0, &sp2C);
+    Environment_LerpSandstormColors(D_808B8300, &sp28);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp2C.r, sp2C.g, sp2C.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp28.r, sp28.g, sp28.b, 255);
@@ -358,15 +358,15 @@ void func_808B7B54(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_800FE7A8(D_808B8310, &sp50);
-    func_800FE7A8(D_808B8330, &sp4C);
+    Environment_LerpSandstormColors(D_808B8310, &sp50);
+    Environment_LerpSandstormColors(D_808B8330, &sp4C);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp50.r, sp50.g, sp50.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);
     gSPDisplayList(POLY_XLU_DISP++, object_posthouse_obj_DL_000A50);
 
-    func_800FE7A8(D_808B8320, &sp50);
-    func_800FE7A8(D_808B8340, &sp4C);
+    Environment_LerpSandstormColors(D_808B8320, &sp50);
+    Environment_LerpSandstormColors(D_808B8340, &sp4C);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, sp50.r, sp50.g, sp50.b, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, sp4C.r, sp4C.g, sp4C.b, 255);

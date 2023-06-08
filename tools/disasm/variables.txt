@@ -3947,7 +3947,7 @@
     0x801F4F32:("sEnvIsTimeStopped","UNK_TYPE1","",0x1),
     0x801F4F33:("D_801F4F33","UNK_TYPE1","",0x1),
     0x801F4F34:("sGameOverLightsIntensity","UNK_TYPE1","",0x1),
-    0x801F4F38:("D_801F4F38","UNK_TYPE1","",0x1),
+    0x801F4F38:("sSkyboxStarsDList","UNK_TYPE1","",0x1),
     0x801F4F40:("sBeatingHeartsDDPrim","s32","[3]",0x6),
     0x801F4F48:("sBeatingHeartsDDEnv","s32","[3]",0x6),
     0x801F4F50:("sHeartsDDPrim","s32","[2][3]",0xC),

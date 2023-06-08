@@ -5501,10 +5501,10 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         if (Rand_ZeroOne() < 0.5f) {
             D_8090CCD4 = Rand_ZeroFloat(10.0f) + 5.0f;
-            play->envCtx.unk_E1 = 1;
+            play->envCtx.stormRequest = STORM_REQUEST_START;
         } else {
             D_8090CCD4 = 0;
-            play->envCtx.unk_E1 = 2;
+            play->envCtx.stormRequest = STORM_REQUEST_STOP;
         }
     }
 

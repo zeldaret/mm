@@ -1281,7 +1281,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
     Boss02* this = THIS;
 
     this->unk_01AC = D_809DF5B0;
-    play->envCtx.sandstormState = 0xD;
+    play->envCtx.sandstormState = SANDSTORM_D;
 
     if (sBlueWarp != NULL) {
         this->unk_1D74 = KREG(23) + -15.0f;

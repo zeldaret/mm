@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64environment.h"
 #include "z64rumble.h"
@@ -6,6 +7,57 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+
+void Environment_UpdateSaveFlags(PlayState* play);
+void Environment_UpdateRain(PlayState* play);
+void Environment_UpdateTimeBasedSequence(PlayState* play);
+u8 func_800FE5D0(struct PlayState* play);
+void Environment_JumpForwardInTime(void);
+
+typedef enum {
+    /* 0x00 */ LIGHTNING_BOLT_START,
+    /* 0x01 */ LIGHTNING_BOLT_WAIT,
+    /* 0x02 */ LIGHTNING_BOLT_DRAW,
+    /* 0xFF */ LIGHTNING_BOLT_INACTIVE = 0xFF
+} LightningBoltState;
+
+// Bss to import
+u8 D_801F4E30;
+u8 D_801F4E31;
+u8 gCustomLensFlare1On;
+Vec3f gCustomLensFlare1Pos;
+f32 D_801F4E44;
+f32 D_801F4E48;
+s16 D_801F4E4C;
+u8 gCustomLensFlare2On;
+Vec3f gCustomLensFlare2Pos;
+f32 D_801F4E5C;
+f32 D_801F4E60;
+s16 D_801F4E64;
+LightningStrike gLightningStrike;
+f32 D_801F4E74;
+u16 D_801F4E78;
+u16 gSkyboxNumStars;
+LightningBolt sLightningBolts[3];
+LightNode* sNGameOverLightNode;
+LightInfo sNGameOverLightInfo;
+LightNode* sSGameOverLightNode;
+LightInfo sSGameOverLightInfo;
+f32 sSunEnvAlpha;
+f32 sSunColor;
+f32 sSunScale;
+f32 sSunPrimAlpha;
+s32 sSunDepthTestX;
+s32 sSunDepthTestY;
+f32 D_801F4F28;
+s16 sLightningFlashAlpha;
+u16 sSandstormScroll;
+u8 D_801F4F30;
+u8 D_801F4F31;
+u8 sEnvIsTimeStopped;
+u8 D_801F4F33;
+u8 sGameOverLightsIntensity;
+Gfx* sSkyboxStarsDList;
 
 void Environment_GraphCallback(GraphicsContext* gfxCtx, PlayState* play) {
     sSunScreenDepth = SysCfb_GetZBufferPixel(sSunDepthTestX, sSunDepthTestY);
@@ -38,9 +90,7 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     return ret;
 }
 
-extern s16 sLightningFlashAlpha;
 extern u8 gSkyboxIsChanging;
-extern u8 D_801F4E31;
 extern u8 D_801BDBA8;
 
 #ifdef NON_EQUIVALENT
@@ -79,9 +129,9 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     Lights_DirectionalSetInfo(&envCtx->dirLight2, 80, 80, 80, 80, 80, 80);
     LightContext_InsertLight(play, &play->lightCtx, &envCtx->dirLight2);
 
-    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
     envCtx->changeSkyboxTimer = 0;
-    envCtx->changeLightEnabled = 0;
+    envCtx->changeLightEnabled = false;
     envCtx->changeLightTimer = 0;
     envCtx->skyboxDmaState = 0;
     envCtx->skybox1Index = 99;
@@ -101,10 +151,12 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
             envCtx->lightConfig = 0;
             envCtx->changeLightNextConfig = 0;
             break;
+
         case 2:
             envCtx->lightConfig = 3;
             envCtx->changeLightNextConfig = 3;
             break;
+
         case 3:
             envCtx->lightConfig = 4;
             envCtx->changeLightNextConfig = 4;
@@ -113,11 +165,11 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     envCtx->lightSetting = 0;
     envCtx->prevLightSetting = 0;
-    envCtx->unk_E0 = 0;
-    envCtx->unk_E1 = 0;
-    envCtx->unk_E2 = 0;
-    envCtx->lightningState = 0;
-    envCtx->timeSeqState = 0;
+    envCtx->lightBlendOverride = LIGHT_BLEND_OVERRIDE_NONE;
+    envCtx->stormRequest = STORM_REQUEST_NONE;
+    envCtx->stormState = STORM_STATE_OFF;
+    envCtx->lightningState = LIGHTNING_OFF;
+    envCtx->timeSeqState = TIMESEQ_DAY_BGM;
     envCtx->fillScreen = 0;
     envCtx->screenFillColor[0] = 0;
     envCtx->screenFillColor[1] = 0;
@@ -128,12 +180,12 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->skyboxFilterColor[1] = 0;
     envCtx->skyboxFilterColor[2] = 0;
     envCtx->skyboxFilterColor[3] = 0;
-    envCtx->sandstormState = 0;
+    envCtx->sandstormState = SANDSTORM_OFF;
     envCtx->sandstormPrimA = 0;
     envCtx->sandstormEnvA = 0;
     envCtx->lightBlend = 1.0f;
 
-    gLightningStrike.state = 0;
+    gLightningStrike.state = LIGHTNING_STRIKE_WAIT;
     gLightningStrike.flashRed = 0;
     gLightningStrike.flashGreen = 0;
     gLightningStrike.flashBlue = 0;
@@ -172,8 +224,8 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->windSpeed = 20.0f;
 
     envCtx->lightBlendEnabled = false;
-    envCtx->lightSettingOverride = 0xFF;
-    envCtx->lightBlendRateOverride = 0xFFFF;
+    envCtx->lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
+    envCtx->lightBlendRateOverride = LIGHT_BLENDRATE_OVERRIDE_NONE;
 
     envCtx->sceneTimeSpeed = 0;
     R_TIME_SPEED = R_TIME_SPEED = 0;
@@ -181,10 +233,10 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     CREG(64) = 0;
 
-    play->envCtx.precipitation[0] = 0;
-    play->envCtx.precipitation[2] = 0;
-    play->envCtx.precipitation[3] = 0;
-    play->envCtx.precipitation[4] = 0;
+    play->envCtx.precipitation[PRECIP_RAIN_MAX] = 0;
+    play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
+    play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
+    play->envCtx.precipitation[PRECIP_SOS_MAX] = 0;
 
     D_801F4E31 = envCtx->skyboxConfig;
 
@@ -255,40 +307,40 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        if (gWeatherMode == 2) {
+        if (gWeatherMode == WEATHER_MODE_2) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 play->skyboxId = 3;
                 envCtx->lightConfig = 5;
                 envCtx->changeLightNextConfig = 5;
                 D_801F4E74 = 1.0f;
             } else {
-                gWeatherMode = 0;
+                gWeatherMode = WEATHER_MODE_CLEAR;
             }
         }
 
-        play->envCtx.precipitation[2] = 0;
-        play->envCtx.precipitation[3] = 0;
+        play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
+        play->envCtx.precipitation[PRECIP_SNOW_MAX] = 0;
 
-        if (gWeatherMode == 1) {
+        if (gWeatherMode == WEATHER_MODE_1) {
             if ((CURRENT_DAY == 2) && (((void)0, gSaveContext.save.time) >= CLOCK_TIME(7, 0)) &&
                 (((void)0, gSaveContext.save.time) < CLOCK_TIME(17, 30))) {
-                if (func_800FE4B8(play)) {
-                    play->envCtx.precipitation[0] = 60;
+                if (func_800FE4B8(play) != STORM_STATE_OFF) {
+                    play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
                 }
-                play->envCtx.precipitation[1] = 60;
+                play->envCtx.precipitation[PRECIP_RAIN_CUR] = 60;
             } else {
-                gWeatherMode = 0;
+                gWeatherMode = WEATHER_MODE_CLEAR;
                 Environment_StopStormNatureAmbience(play);
             }
-        } else if (gWeatherMode == 3) {
-            play->envCtx.precipitation[2] = 128;
-            play->envCtx.precipitation[3] = 128;
+        } else if (gWeatherMode == WEATHER_MODE_SNOW) {
+            play->envCtx.precipitation[PRECIP_SNOW_CUR] = 128;
+            play->envCtx.precipitation[PRECIP_SNOW_MAX] = 128;
             Environment_StopStormNatureAmbience(play);
         } else {
             Environment_StopStormNatureAmbience(play);
         }
     } else {
-        gWeatherMode = 0;
+        gWeatherMode = WEATHER_MODE_CLEAR;
         Environment_StopStormNatureAmbience(play);
     }
 
@@ -334,7 +386,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     sEnvIsTimeStopped = 0;
     sSunPrimAlpha = 255.0f;
 
-    func_800F88C4(play);
+    Environment_UpdateSaveFlags(play);
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
@@ -472,7 +524,7 @@ void Environment_EnableUnderwaterLights(PlayState* play, s32 waterLightsIndex) {
             play->envCtx.changeDuration = 20;
             play->envCtx.changeLightTimer = play->envCtx.changeDuration;
         }
-    } else if (play->envCtx.lightSettingOverride == 0xFF) {
+    } else if (play->envCtx.lightSettingOverride == LIGHT_SETTING_OVERRIDE_NONE) {
         if (!D_801F4F31) {
             D_801F4F31 = true;
             gLightConfigAfterUnderwater = play->envCtx.lightSetting;
@@ -493,7 +545,7 @@ void Environment_DisableUnderwaterLights(PlayState* play) {
         D_801F4F31 = false;
         play->envCtx.lightSetting = gLightConfigAfterUnderwater;
         play->envCtx.lightBlendEnabled = false; // instantly switch to previous lights
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         play->envCtx.lightBlend = 1.0f;
     }
 }
@@ -504,22 +556,30 @@ void func_800F6A04(void) {
     }
 }
 
-void func_800F6A40(PlayState* play) {
+void Environment_UpdateSkyboxRotY(PlayState* play) {
     if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
         ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
         play->skyboxCtx.rot.y -= R_TIME_SPEED * 1.0e-4f;
     }
 }
 
-void func_800F6AB8(void) {
-    if ((gSaveContext.nextDayTime >= 0xFF00) && (gSaveContext.nextDayTime != 0xFFFF)) {
+void Environment_UpdateNextDayTime(void) {
+    if ((gSaveContext.nextDayTime >= 0xFF00) && (gSaveContext.nextDayTime != NEXT_TIME_NONE)) {
         gSaveContext.nextDayTime -= 0x10;
-        if (gSaveContext.nextDayTime == 0xFF0E) {
+
+        // nextDayTime is used as both a time of day value and a timer to delay sfx when changing days.
+        // When Sun's Song is played, nextDayTime is set to 0x8001 or 0 for day and night respectively.
+        // These values will actually get used as a time of day value.
+        // After this, nextDayTime is assigned magic values of 0xFFFE or 0xFFFD for day and night respectively.
+        // From here, 0x10 is decremented from nextDayTime until it reaches either 0xFF0E or 0xFF0D, effectively
+        // delaying the chicken crow or dog howl sfx by 15 frames when loading the new area.
+
+        if (gSaveContext.nextDayTime == (NEXT_TIME_DAY_SET - (15 * 0x10))) {
             play_sound(NA_SE_EV_CHICKEN_CRY_M);
-            gSaveContext.nextDayTime = 0xFFFF;
-        } else if (gSaveContext.nextDayTime == 0xFF0D) {
+            gSaveContext.nextDayTime = NEXT_TIME_NONE;
+        } else if (gSaveContext.nextDayTime == (NEXT_TIME_NIGHT_SET - (15 * 0x10))) {
             func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
-            gSaveContext.nextDayTime = 0xFFFF;
+            gSaveContext.nextDayTime = NEXT_TIME_NONE;
         }
     }
 }
@@ -583,7 +643,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, EnvLightSettings* arg2, LightSettin
         arg2->fogNear = arg3[temp_v1_2 + temp_v1].fogNear - arg3[temp_v1].fogNear;
     }
 
-    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == 1)) {
+    if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
         arg2->ambientColor[0] = -50;
         arg2->ambientColor[1] = -100;
         arg2->ambientColor[2] = -100;
@@ -617,6 +677,7 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     return ret;
 }
 
+void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
 
 void Environment_UpdateSun(PlayState* play) {
@@ -625,7 +686,7 @@ void Environment_UpdateSun(PlayState* play) {
     u16 phi_v0;
 
     if (!play->envCtx.sunDisabled) {
-        if (play->envCtx.precipitation[1] != 0) {
+        if (play->envCtx.precipitation[PRECIP_RAIN_CUR] != 0) {
             Math_SmoothStepToF(&sSunPrimAlpha, 0.0f, 0.5f, 4.0f, 0.01f);
         } else {
             Math_SmoothStepToF(&sSunPrimAlpha, 255.0f, 0.5f, 4.0f, 0.01f);
@@ -676,9 +737,9 @@ void Environment_UpdateSun(PlayState* play) {
     }
 }
 
-void func_800F88C4(u16 arg0) {
+void func_800F88C4(u16 weekEventFlag) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_28_10) &&
-        CHECK_WEEKEVENTREG(arg0)) {
+        CHECK_WEEKEVENTREG(weekEventFlag)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_04)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
             SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
@@ -721,7 +782,7 @@ void func_800F8970(void) {
 }
 
 #ifdef NON_MATCHING
-void func_800F8A9C(PlayState* play) {
+void Environment_UpdateSaveFlags(PlayState* play) {
     u8 v1;
     u16 temp_a2_2;
 
@@ -778,12 +839,8 @@ void func_800F8A9C(PlayState* play) {
     }
 }
 #else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8A9C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateSaveFlags.s")
 #endif
-
-void Environment_UpdateRain(PlayState*);
-void func_800F8A9C(PlayState*);
-void Environment_UpdateTimeBasedSequence(PlayState*);
 
 void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx, PauseContext* pauseCtx,
                         MessageContext* msgCtx, GameOverContext* gameOverCtx, GraphicsContext* gfxCtx) {
@@ -793,14 +850,14 @@ void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContex
     func_800F6A04();
 
     if (pauseCtx->state == PAUSE_STATE_OFF) {
-        func_800F6A40(play);
+        Environment_UpdateSkyboxRotY(play);
         Environment_UpdateRain(play);
         Environment_UpdateTimeBasedSequence(play);
-        func_800F6AB8();
+        Environment_UpdateNextDayTime();
         Environment_UpdateTime(play, envCtx, pauseCtx, msgCtx, gameOverCtx);
         Environment_UpdateSun(play);
         Environment_UpdateLights(play, envCtx, lightCtx);
-        func_800F8A9C(play);
+        Environment_UpdateSaveFlags(play);
     }
 }
 
@@ -834,8 +891,8 @@ void Environment_DrawSun(PlayState* play) {
 
 void Environment_DrawSunLensFlare(PlayState* play, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx,
                                   Vec3f vec) {
-    if ((play->envCtx.precipitation[1] == 0) && !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) &&
-        (play->skyboxId == SKYBOX_NORMAL_SKY)) {
+    if ((play->envCtx.precipitation[PRECIP_RAIN_CUR] == 0) &&
+        !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->skyboxId == SKYBOX_NORMAL_SKY)) {
         f32 v0 = Math_CosS(((void)0, gSaveContext.save.time) - 0x8000);
 
         Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, vec, 370.0f, v0 * 120.0f, 0x190,
@@ -853,22 +910,23 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawRainImpl.s")
 
 void Environment_DrawRain(PlayState* play, View* view, GraphicsContext* gfxCtx) {
-    if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->envCtx.precipitation[2] == 0)) {
-        if (play->envCtx.precipitation[4] != 0) {
-            if (play->envCtx.precipitation[2] == 0) {
+    if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) &&
+        (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
+        if (play->envCtx.precipitation[PRECIP_SOS_MAX] != 0) {
+            if (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0) {
                 Environment_DrawRainImpl(play, view, gfxCtx);
             }
         } else if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
-            if ((func_800FE4B8(play) != 0) && (play->envCtx.precipitation[2] == 0)) {
+            if ((func_800FE4B8(play) != STORM_STATE_OFF) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
                 Environment_DrawRainImpl(play, view, gfxCtx);
             }
         }
     }
 }
 
-void Environment_ChangeLightSetting(PlayState* play, u8 lightConfig) {
+void Environment_ChangeLightSetting(PlayState* play, u8 lightSetting) {
     if (play->envCtx.lightMode == LIGHT_MODE_TIME) {
-        if ((lightConfig == 31) || D_801F4F33) {
+        if ((lightSetting == LIGHT_SETTING_MAX) || D_801F4F33) {
             if (D_801F4F30 != 0xFF) {
                 play->envCtx.changeLightEnabled = true;
                 play->envCtx.changeLightNextConfig = D_801F4F30;
@@ -876,22 +934,22 @@ void Environment_ChangeLightSetting(PlayState* play, u8 lightConfig) {
                 play->envCtx.changeLightTimer = play->envCtx.changeDuration;
                 D_801F4F30 = 0xFF;
             }
-        } else if (play->envCtx.changeLightNextConfig != lightConfig) {
+        } else if (play->envCtx.changeLightNextConfig != lightSetting) {
             D_801F4F30 = play->envCtx.lightConfig;
             play->envCtx.changeLightEnabled = true;
-            play->envCtx.changeLightNextConfig = lightConfig;
+            play->envCtx.changeLightNextConfig = lightSetting;
             play->envCtx.changeDuration = 20;
             play->envCtx.changeLightTimer = play->envCtx.changeDuration;
         }
-    } else if ((play->envCtx.lightSetting != lightConfig) && (play->envCtx.lightBlend >= 1.0f) &&
-               (play->envCtx.lightSettingOverride == 0xFF)) {
-        if (lightConfig > 30) {
-            lightConfig = 0;
+    } else if ((play->envCtx.lightSetting != lightSetting) && (play->envCtx.lightBlend >= 1.0f) &&
+               (play->envCtx.lightSettingOverride == LIGHT_SETTING_OVERRIDE_NONE)) {
+        if (lightSetting >= LIGHT_SETTING_MAX) {
+            lightSetting = 0;
         }
 
         play->envCtx.lightBlend = 0.0f;
         play->envCtx.prevLightSetting = play->envCtx.lightSetting;
-        play->envCtx.lightSetting = lightConfig;
+        play->envCtx.lightSetting = lightSetting;
     }
 }
 
@@ -949,7 +1007,7 @@ void Environment_DrawLightningFlash(PlayState* play, u8 red, u8 green, u8 blue, 
 }
 
 void Environment_UpdateLightningStrike(PlayState* play) {
-    if (play->envCtx.lightningState != LIGHTNING_MODE_OFF) {
+    if (play->envCtx.lightningState != LIGHTNING_OFF) {
         switch (gLightningStrike.state) {
             case LIGHTNING_STRIKE_WAIT:
                 // every frame theres a 10% chance of the timer advancing 10 units
@@ -1010,8 +1068,8 @@ void Environment_UpdateLightningStrike(PlayState* play) {
 
                     gLightningStrike.state = LIGHTNING_STRIKE_WAIT;
 
-                    if (play->envCtx.lightningState == LIGHTNING_MODE_LAST) {
-                        play->envCtx.lightningState = LIGHTNING_MODE_OFF;
+                    if (play->envCtx.lightningState == LIGHTNING_LAST) {
+                        play->envCtx.lightningState = LIGHTNING_OFF;
                     }
                 }
                 break;
@@ -1202,7 +1260,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
                 break;
 
             case TIMESEQ_EARLY_NIGHT_CRITTERS:
-                if (play->envCtx.precipitation[1] < 9) {
+                if (play->envCtx.precipitation[PRECIP_RAIN_CUR] < 9) {
                     Audio_PlayAmbience(play->sequenceCtx.ambienceId);
                     Audio_SetAmbienceChannelIO(1, 1, 1);
                 }
@@ -1242,7 +1300,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
         }
     }
 
-    if ((play->envCtx.timeSeqState != 0xFE) && (((void)0, gSaveContext.save.day) == 3) &&
+    if ((play->envCtx.timeSeqState != TIMESEQ_REQUEST) && (((void)0, gSaveContext.save.day) == 3) &&
         (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
         (play->csCtx.state == 0) && ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
@@ -1274,7 +1332,7 @@ void Environment_DrawCustomLensFlare(PlayState* play) {
     }
 }
 
-void Kankyo_InitGameOverLights(PlayState* play) {
+void Environment_InitGameOverLights(PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
@@ -1373,19 +1431,16 @@ void Environment_FadeOutGameOverLights(PlayState* play) {
 }
 
 void Environment_UpdateRain(PlayState* play) {
-    u8 max = MAX(play->envCtx.precipitation[0], play->envCtx.precipitation[4]);
+    u8 max = MAX(play->envCtx.precipitation[PRECIP_RAIN_MAX], play->envCtx.precipitation[PRECIP_SOS_MAX]);
 
-    if ((play->envCtx.precipitation[1] != max) && ((play->state.frames % 8) == 0)) {
-        if (play->envCtx.precipitation[1] < max) {
-            play->envCtx.precipitation[1] += 2;
+    if ((play->envCtx.precipitation[PRECIP_RAIN_CUR] != max) && ((play->state.frames % 8) == 0)) {
+        if (play->envCtx.precipitation[PRECIP_RAIN_CUR] < max) {
+            play->envCtx.precipitation[PRECIP_RAIN_CUR] += 2;
         } else {
-            play->envCtx.precipitation[1] -= 2;
+            play->envCtx.precipitation[PRECIP_RAIN_CUR] -= 2;
         }
     }
 }
-
-#define FILL_SCREEN_OPA (1 << 0)
-#define FILL_SCREEN_XLU (1 << 1)
 
 void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, u8 alpha, u8 drawFlags) {
     if (alpha != 0) {
@@ -1418,7 +1473,6 @@ void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, 
 
 extern Color_RGB8 sSandstormPrimColors[8];
 extern Color_RGB8 sSandstormEnvColors[8];
-extern u16 sSandstormScroll;
 
 // Color_RGB8 sSandstormPrimColors[] = {
 //     { 255, 255, 255},
@@ -1472,7 +1526,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             break;
 
         case SANDSTORM_UNFILL:
-        case SANDSTORM_UNK5:
+        case SANDSTORM_5:
             envA1 = 128;
             if (play->envCtx.sandstormEnvA > 128) {
                 primA1 = 255;
@@ -1497,35 +1551,35 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             }
             break;
 
-        case 6:
-        case 8:
+        case SANDSTORM_6:
+        case SANDSTORM_8:
             envA1 = 1;
             primA1 = D_801F4E30;
-            if (sandstormState == 8) {
+            if (sandstormState == SANDSTORM_8) {
                 envA1 = 0xA;
             }
             break;
 
-        case 7:
-        case 9:
+        case SANDSTORM_7:
+        case SANDSTORM_9:
             envA1 = 1;
             if (play->envCtx.sandstormPrimA == 0) {
-                play->envCtx.sandstormState = 0;
+                play->envCtx.sandstormState = SANDSTORM_OFF;
             }
-            if (sandstormState == 9) {
+            if (sandstormState == SANDSTORM_9) {
                 envA1 = 0xA;
             }
             break;
 
-        case 10:
+        case SANDSTORM_A:
             envA1 = 0xFF;
             primA1 = D_801F4E30;
             if (play->envCtx.sandstormPrimA == 0) {
-                play->envCtx.sandstormState = 0;
+                play->envCtx.sandstormState = SANDSTORM_OFF;
             }
             break;
 
-        case 11:
+        case SANDSTORM_B:
             envA1 = 0x80;
             primA1 = play->state.frames & 0x7F;
             if (primA1 >= 0x41) {
@@ -1534,13 +1588,13 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             primA1 = primA1 + 0x49;
             break;
 
-        case 12:
+        case SANDSTORM_C:
             if (play->envCtx.sandstormPrimA == 0) {
-                play->envCtx.sandstormState = 0;
+                play->envCtx.sandstormState = SANDSTORM_OFF;
             }
             break;
 
-        case 13:
+        case SANDSTORM_D:
             envA1 = 0xA;
             primA1 = D_801F4E30;
             break;
@@ -1573,7 +1627,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
     if (play->envCtx.sandstormPrimA != 0) {
         index = 0;
-        if (sandstormState >= 0xB) {
+        if (sandstormState >= SANDSTORM_B) {
             index = 0xC;
         }
 
@@ -1585,25 +1639,25 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             envColor.r = sSandstormEnvColors[1 + index].r;
             envColor.g = sSandstormEnvColors[1 + index].g;
             envColor.b = sSandstormEnvColors[1 + index].b;
-        } else if (sSandstormColorIndex == sNextSandstormColorIndex) {
-            primColor.r = sSandstormPrimColors[sSandstormColorIndex + index].r;
-            primColor.g = sSandstormPrimColors[sSandstormColorIndex + index].g;
-            primColor.b = sSandstormPrimColors[sSandstormColorIndex + index].b;
-            envColor.r = sSandstormEnvColors[sSandstormColorIndex + index].r;
-            envColor.g = sSandstormEnvColors[sSandstormColorIndex + index].g;
-            envColor.b = sSandstormEnvColors[sSandstormColorIndex + index].b;
+        } else if (sandstormLerpScale == sNextSandstormColorIndex) {
+            primColor.r = sSandstormPrimColors[sandstormLerpScale + index].r;
+            primColor.g = sSandstormPrimColors[sandstormLerpScale + index].g;
+            primColor.b = sSandstormPrimColors[sandstormLerpScale + index].b;
+            envColor.r = sSandstormEnvColors[sandstormLerpScale + index].r;
+            envColor.g = sSandstormEnvColors[sandstormLerpScale + index].g;
+            envColor.b = sSandstormEnvColors[sandstormLerpScale + index].b;
         } else {
-            primColor.r = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].r,
+            primColor.r = (s32)F32_LERP(sSandstormPrimColors[sandstormLerpScale + index].r,
                                         sSandstormPrimColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
-            primColor.g = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].g,
+            primColor.g = (s32)F32_LERP(sSandstormPrimColors[sandstormLerpScale + index].g,
                                         sSandstormPrimColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
-            primColor.b = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].b,
+            primColor.b = (s32)F32_LERP(sSandstormPrimColors[sandstormLerpScale + index].b,
                                         sSandstormPrimColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
-            envColor.r = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].r,
+            envColor.r = (s32)F32_LERP(sSandstormEnvColors[sandstormLerpScale + index].r,
                                        sSandstormEnvColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
-            envColor.g = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].g,
+            envColor.g = (s32)F32_LERP(sSandstormEnvColors[sandstormLerpScale + index].g,
                                        sSandstormEnvColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
-            envColor.b = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].b,
+            envColor.b = (s32)F32_LERP(sSandstormEnvColors[sandstormLerpScale + index].b,
                                        sSandstormEnvColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
         }
 
@@ -1788,7 +1842,7 @@ void Environment_StopStormNatureAmbience(PlayState* play) {
 }
 
 void Environment_WarpSongLeave(PlayState* play) {
-    gWeatherMode = 0;
+    gWeatherMode = WEATHER_MODE_CLEAR;
     gSaveContext.save.cutsceneIndex = 0;
     gSaveContext.respawnFlag = -3;
     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
@@ -1797,7 +1851,7 @@ void Environment_WarpSongLeave(PlayState* play) {
     gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void func_800FD980(PlayState* play) {
+void Environment_SetupSkyboxStars(PlayState* play) {
     f32 phi_f0;
 
     if ((play->envCtx.skybox1Index == 0) && (play->skyboxId == SKYBOX_NORMAL_SKY)) {
@@ -1824,13 +1878,13 @@ void func_800FD980(PlayState* play) {
     if ((sEnvSkyboxNumStars != 0) && (D_801F4F28 != 0.0f)) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        D_801F4F38 = POLY_OPA_DISP;
+        sSkyboxStarsDList = POLY_OPA_DISP;
 
         gSPNoOp(POLY_OPA_DISP++);
 
         CLOSE_DISPS(play->state.gfxCtx);
     } else {
-        D_801F4F38 = NULL;
+        sSkyboxStarsDList = NULL;
     }
 }
 
@@ -1865,7 +1919,7 @@ extern u32 D_801DD900[16];
 // };
 
 #ifdef NON_EQUIVALENT
-void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP) {
+void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     Vec3f pos;
     f32 imgY;
     f32 imgX;
@@ -2019,38 +2073,38 @@ void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP) {
     *gfxP = gfx;
 }
 #else
-void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStars.s")
+void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStarsImpl.s")
 #endif
 
 void Environment_Draw(PlayState* play) {
-    func_800FD980(play);
+    Environment_SetupSkyboxStars(play);
     Environment_DrawSun(play);
     Environment_UpdateLightningStrike(play);
     Environment_DrawLightning(play, 0);
     Environment_DrawSkyboxFilters(play);
 }
 
-void func_800FE3E0(PlayState* play) {
-    Gfx* sp2C;
-    Gfx* sp28;
+void Environment_DrawSkyboxStars(PlayState* play) {
+    Gfx* nextOpa;
+    Gfx* opa;
 
-    if (D_801F4F38 != NULL) {
+    if (sSkyboxStarsDList != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        sp28 = POLY_OPA_DISP;
-        sp2C = Graph_GfxPlusOne(sp28);
+        opa = POLY_OPA_DISP;
+        nextOpa = Graph_GfxPlusOne(opa);
 
-        gSPDisplayList(D_801F4F38, sp2C);
+        gSPDisplayList(sSkyboxStarsDList, nextOpa);
 
-        Environment_DrawSkyboxStars(play, &sp2C);
+        Environment_DrawSkyboxStarsImpl(play, &nextOpa);
 
-        gSPEndDisplayList(sp2C++);
+        gSPEndDisplayList(nextOpa++);
 
-        Graph_BranchDlist(sp28, sp2C);
+        Graph_BranchDlist(opa, nextOpa);
 
-        POLY_OPA_DISP = sp2C;
-        D_801F4F38 = NULL;
+        POLY_OPA_DISP = nextOpa;
+        sSkyboxStarsDList = NULL;
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -2069,10 +2123,12 @@ u8 Environment_IsTimeStopped(void) {
 }
 
 u32 func_800FE4B8(PlayState* play) {
-    u32 ret = play->envCtx.unk_E2;
+    u32 stormState = play->envCtx.stormState;
 
     if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
-        ret = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) ? true : false;
+        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM))
+                         ? STORM_STATE_ON
+                         : STORM_STATE_OFF;
     }
 
     switch (play->sceneId) {
@@ -2084,17 +2140,17 @@ u32 func_800FE4B8(PlayState* play) {
         case SCENE_17SETUGEN:
         case SCENE_GORONRACE:
             if (gSaveContext.sceneLayer == 0) {
-                ret = false;
+                stormState = STORM_STATE_OFF;
             }
             break;
         case SCENE_10YUKIYAMANOMURA2:
             if (gSaveContext.sceneLayer == 1) {
-                ret = false;
+                stormState = STORM_STATE_OFF;
             }
             break;
     }
 
-    return ret;
+    return stormState;
 }
 
 u8 Environment_IsFinalHours(PlayState* play) {
@@ -2150,37 +2206,38 @@ u8 func_800FE6F8(PlayState* play, s16 arg1, s16 arg2) {
     return ret;
 }
 
-u8 func_800FE778(void) {
+u8 Environment_GetSandstormColorIndex(void) {
     return sSandstormColorIndex;
 }
 
-u8 func_800FE788(void) {
+u8 Environment_GetNextSandstormColorIndex(void) {
     return sNextSandstormColorIndex;
 }
 
-f32 func_800FE798(void) {
+f32 Environment_GetSandstormLerpScale(void) {
     return sSandstormLerpScale;
 }
 
-void func_800FE7A8(Color_RGBA8* arg0, Color_RGBA8* arg1) {
-    f32 sp24;
-    u32 pad;
-    u32 index;
-    u32 index2;
+void Environment_LerpSandstormColors(Color_RGBA8* colorSrc, Color_RGBA8* colorDst) {
+    f32 sandstormLerpScale = Environment_GetSandstormLerpScale();
+    s32 pad;
+    u32 sandstormColorIndex = Environment_GetSandstormColorIndex();
+    u32 nextSandstormColorIndex = Environment_GetNextSandstormColorIndex();
 
-    sp24 = func_800FE798();
-    index = func_800FE778();
-    index2 = func_800FE788();
-    if (sp24 <= 0.0f) {
-        arg1->r = arg0[index].r;
-        arg1->g = arg0[index].g;
-        arg1->b = arg0[index].b;
-        arg1->a = arg0[index].a;
+    if (sandstormLerpScale <= 0.0f) {
+        colorDst->r = colorSrc[sandstormColorIndex].r;
+        colorDst->g = colorSrc[sandstormColorIndex].g;
+        colorDst->b = colorSrc[sandstormColorIndex].b;
+        colorDst->a = colorSrc[sandstormColorIndex].a;
     } else {
-        arg1->r = (s32)F32_LERP(arg0[index].r, arg0[index2].r, sp24);
-        arg1->g = (s32)F32_LERP(arg0[index].g, arg0[index2].g, sp24);
-        arg1->b = (s32)F32_LERP(arg0[index].b, arg0[index2].b, sp24);
-        arg1->a = (s32)F32_LERP(arg0[index].a, arg0[index2].a, sp24);
+        colorDst->r =
+            (s32)F32_LERP(colorSrc[sandstormColorIndex].r, colorSrc[nextSandstormColorIndex].r, sandstormLerpScale);
+        colorDst->g =
+            (s32)F32_LERP(colorSrc[sandstormColorIndex].g, colorSrc[nextSandstormColorIndex].g, sandstormLerpScale);
+        colorDst->b =
+            (s32)F32_LERP(colorSrc[sandstormColorIndex].b, colorSrc[nextSandstormColorIndex].b, sandstormLerpScale);
+        colorDst->a =
+            (s32)F32_LERP(colorSrc[sandstormColorIndex].a, colorSrc[nextSandstormColorIndex].a, sandstormLerpScale);
     }
 }
 
@@ -2188,12 +2245,13 @@ u8 func_800FE9B4(PlayState* play) {
     u8 ret;
 
     ret = false;
-    if ((play->envCtx.precipitation[4] == 60) && (play->envCtx.precipitation[2] == 0)) {
+    if ((play->envCtx.precipitation[PRECIP_SOS_MAX] == 60) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
         ret = true;
     }
 
-    if ((play->envCtx.precipitation[0] == 60) && !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
-        if (func_800FE4B8(play) && (play->envCtx.precipitation[2] == 0)) {
+    if ((play->envCtx.precipitation[PRECIP_RAIN_MAX] == 60) &&
+        !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
+        if ((func_800FE4B8(play) != STORM_STATE_OFF) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
             ret = true;
         }
     }
