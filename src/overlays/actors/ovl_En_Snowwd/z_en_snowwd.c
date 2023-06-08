@@ -50,13 +50,13 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 60, 0, { 0, 0, 0 } },
 };
 
-s32 D_80AF7ABC[] = { 0x00000000, 0x00000000, 0x00000000 };
+Vec3f D_80AF7ABC = { 0, 0, 0 };
 
 s32 D_80AF7AC8[] = { 0x00000000, 0xC0800000, 0x00000000 };
 
-s32 D_80AF7AD4[] = { 0xFFFFFFFF };
+Color_RGBA8 D_80AF7AD4 = { 255, 255, 255, 255 };
 
-s32 D_80AF7AD8[] = { 0xC8C8DC00, 0x00000000 };
+Color_RGBA8 D_80AF7AD8 = { 200, 200, 220, 0 };
 
 extern UNK_TYPE D_06001AA0;
 
@@ -110,14 +110,13 @@ void func_80AF76F0(EnSnowwd* this, PlayState* play) {
     if (this->unk190 > 0) {
         this->unk190--;
         sp54 = Math_SinS((s16)((this->unk190 ^ 0xFFFF) * 0x3332)) * 250.0f;
-        thisx->shape.rot.x = (s16)(s32)(Math_CosS((s16)(thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
-        thisx->shape.rot.z = (s16)(s32)(Math_SinS((s16)(thisx->yawTowardsPlayer - thisx->shape.rot.y)) * sp54);
+        thisx->shape.rot.x = (s16)(Math_CosS(thisx->yawTowardsPlayer - thisx->shape.rot.y) * sp54);
+        thisx->shape.rot.z = (s16)(Math_SinS(thisx->yawTowardsPlayer - thisx->shape.rot.y) * sp54);
         sp48 = thisx->world.pos;
         sp48.x += Rand_CenteredFloat(80.0f);
         sp48.y += 100.0f + Rand_ZeroFloat(30.0f);
         sp48.z += Rand_CenteredFloat(80.0f);
-        func_800B0EB0(play, &sp48, (Vec3f*)D_80AF7AC8, (Vec3f*)D_80AF7ABC, (Color_RGBA8*)D_80AF7AD4,
-                      (Color_RGBA8*)D_80AF7AD8, (s16)0xC8, (s16)0xA, (s16)0x14);
+        func_800B0EB0(play, &sp48, (Vec3f*)D_80AF7AC8, &D_80AF7ABC, &D_80AF7AD4, &D_80AF7AD8, 200, 10, 20);
     }
 }
 
