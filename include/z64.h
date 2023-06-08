@@ -61,6 +61,7 @@
 #include "z64skin.h"
 #include "z64skybox.h"
 #include "z64subs.h"
+#include "z64rumble.h"
 #include "z64transition.h"
 #include "z64view.h"
 #include "regs.h"
@@ -317,7 +318,7 @@ typedef struct {
     /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
-    /* 0xE2 */ s8 unk_E2;
+    /* 0xE2 */ u8 unk_E2;
     /* 0xE3 */ u8 unk_E3; // modified by unused func in EnWeatherTag
     /* 0xE4 */ u8 unk_E4;
     /* 0xE5 */ u8 fillScreen;
@@ -572,6 +573,64 @@ typedef struct {
     /* 0x0 */ u8* value;
     /* 0x4 */ const char* name;
 } FlagSetEntry; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ u32 unk_0;
+    /* 0x4 */ u32 unk_4;
+} s800F50D4; // size = 0x8
+
+typedef struct {
+    s16 ambientColor[3];
+    s16 diffuseColor1[3];
+    s16 diffuseColor2[3];
+    s16 fogColor[3];
+    s16 fogNear;
+} s800F6CEC;
+
+typedef enum {
+    /* 0 */ LIGHTNING_MODE_OFF, // no lightning
+    /* 1 */ LIGHTNING_MODE_ON, // request ligtning strikes at random intervals
+    /* 2 */ LIGHTNING_MODE_LAST // request one lightning strike before turning off
+} LightningMode;
+
+typedef enum {
+    /* 0 */ LIGHTNING_STRIKE_WAIT, // wait between lightning strikes. request bolts when timer hits 0
+    /* 1 */ LIGHTNING_STRIKE_START, // fade in the flash. note: bolts are requested in the previous state
+    /* 2 */ LIGHTNING_STRIKE_END // fade out the flash and go back to wait
+} LightningStrikeState;
+
+typedef enum {
+    /* 0x00 */ LIGHTNING_BOLT_START,
+    /* 0x01 */ LIGHTNING_BOLT_WAIT,
+    /* 0x02 */ LIGHTNING_BOLT_DRAW,
+    /* 0xFF */ LIGHTNING_BOLT_INACTIVE = 0xFF
+} LightningBoltState;
+
+typedef struct {
+    /* 0x00 */ u16 startTime;
+    /* 0x02 */ u16 endTime;
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 unk_05;
+} struct_8011FB48; // size = 0x6
+
+typedef struct {
+    /* 0x00 */ u8 state;
+    /* 0x04 */ Vec3f offset;
+    /* 0x10 */ Vec3f pos;
+    /* 0x1C */ s8 pitch;
+    /* 0x1D */ s8 roll;
+    /* 0x1E */ u8 textureIndex;
+    /* 0x1F */ u8 delayTimer;
+} LightningBolt; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ u8 state;
+    /* 0x01 */ u8 flashRed;
+    /* 0x02 */ u8 flashGreen;
+    /* 0x03 */ u8 flashBlue;
+    /* 0x04 */ u8 flashAlphaTarget;
+    /* 0x08 */ f32 delayTimer;
+} LightningStrike; // size = 0xC
 
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory

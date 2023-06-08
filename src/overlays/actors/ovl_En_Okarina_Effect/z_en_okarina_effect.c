@@ -50,7 +50,7 @@ void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
 void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
     this->unk144 = 0x50;
     play->envCtx.unk_F2[4] = 0x3C;
-    D_801F4E70 = 501.0f;
+    D_801F4E68.delayTimer = 501.0f;
     play->envCtx.unk_E3 = 2;
     func_800FD78C(play);
     EnOkarinaEffect_SetupAction(this, func_8096B174);
