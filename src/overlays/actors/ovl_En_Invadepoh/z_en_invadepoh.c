@@ -1,4 +1,5 @@
 #include "z_en_invadepoh.h"
+#include "z64horse.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "assets/objects/gameplay_keep/gameplay_keep.h"
 
@@ -921,7 +922,7 @@ void EnInvadepoh_Event_CheckState(EnInvadepoh* this, PlayState* play) {
             }
         }
         if (sEventState == ENINVADEPOH_EVENT_UNSET) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 sEventState = ENINVADEPOH_EVENT_CLEAR;
             } else {
                 sEventState = ENINVADEPOH_EVENT_FAILED;
@@ -941,7 +942,7 @@ void EnInvadepoh_Event_SpawnInvaders(EnInvadepoh* this, PlayState* play) {
         if (pathIndex != 0xFF) {
             Path* path = &play->setupPathList[pathIndex];
 
-            pathIndex = path->unk1;
+            pathIndex = path->additionalPathIndex;
         }
     }
 }
@@ -980,8 +981,8 @@ s32 EnInvadepoh_Romani_OpenDoor(EnInvadepoh* this, PlayState* play, f32 range, s
     while (doorActor != NULL) {
         if ((doorActor->id == ACTOR_EN_DOOR) && (doorActor->update != NULL)) {
             door = (EnDoor*)doorActor;
-            if ((door->dyna.actor.room == this->actor.room) &&
-                (Math3D_Vec3fDistSq(&door->dyna.actor.world.pos, &this->actor.world.pos) < range)) {
+            if ((door->knobDoor.dyna.actor.room == this->actor.room) &&
+                (Math3D_Vec3fDistSq(&door->knobDoor.dyna.actor.world.pos, &this->actor.world.pos) < range)) {
 
                 door->unk_1A7 = doorTimer;
                 doorOpened = true;
@@ -1018,7 +1019,7 @@ s32 EnInvadepoh_Alien_LensFlareDepthCheck(PlayState* play, Vec3f* pos) {
         f32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
         s32 wZ = (s32)(projectedPos.z * invW * 16352.0f) + 16352;
 
-        if (wZ < func_80178A94(screenPosX, screenPosY)) {
+        if (wZ < SysCfb_GetZBufferInt(screenPosX, screenPosY)) {
             return true;
         }
     }
@@ -1382,7 +1383,7 @@ void EnInvadepoh_Event_Init(Actor* thisx, PlayState* play) {
     for (spawnCount = 1; spawnCount < 8; spawnCount++) {
         Path* path = &play->setupPathList[pathIndex];
 
-        pathIndex = path->unk1;
+        pathIndex = path->additionalPathIndex;
         if (pathIndex == 0xFF) {
             break;
         }
@@ -1429,7 +1430,7 @@ void EnInvadepoh_Alien_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     ActorShape_Init(&this->actor.shape, 6800.0f, ActorShadow_DrawWhiteCircle, 150.0f);
     this->actor.shape.shadowAlpha = 140;
-    this->actor.flags = ACTOR_FLAG_80000000 | ACTOR_FLAG_1000 | ACTOR_FLAG_10;
+    this->actor.flags = ACTOR_FLAG_80000000 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_10;
     if (ENINVADEPOH_GET_TYPE(&this->actor) == ENINVADEPOH_ALIEN_ABDUCTOR) {
         this->actor.update = EnInvadepoh_Abuductor_WaitForObject;
         this->actor.world.pos.y = this->actor.home.pos.y + 150.0f;
@@ -1524,7 +1525,7 @@ void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
     }
     if (romaniType == ENINVADEPOH_ROMANI_CONFUSED) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
             Actor_Kill(&this->actor);
         }
     } else if (romaniType == ENINVADEPOH_ROMANI_NIGHT_1) {
@@ -1538,7 +1539,7 @@ void EnInvadepoh_Romani_Init(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
         }
     } else if (romaniType == ENINVADEPOH_ROMANI_NIGHT_3) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
             Actor_Kill(&this->actor);
         }
         sRomani = this;
@@ -1618,7 +1619,7 @@ void EnInvadepoh_Cremia_Init(Actor* thisx, PlayState* play) {
     if (this->bankIndex < 0) {
         Actor_Kill(&this->actor);
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         Actor_Kill(&this->actor);
     }
     sCremia = this;
@@ -1803,7 +1804,7 @@ void EnInvadepoh_Event_SetupInvasion(EnInvadepoh* this) {
 
 void EnInvadepoh_Event_Invasion(EnInvadepoh* this, PlayState* play) {
     if ((CLOCK_TIME(6, 00) > gSaveContext.save.time) && (gSaveContext.save.time >= CLOCK_TIME(5, 15))) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_22_01);
+        SET_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
         EnInvadepoh_Event_SetupQueueVictoryCs(this);
     } else {
         s32 i;
@@ -1850,7 +1851,7 @@ void EnInvadepoh_Event_VictoryCs(EnInvadepoh* this, PlayState* play) {
         play->transitionType = TRANS_TYPE_73;
         gSaveContext.nextTransitionType = TRANS_TYPE_72;
         D_801BDAA0 = 1;
-        D_801BDA9C = 0;
+        gHorseIsMounted = 0;
         EnInvadepoh_Event_SetupGoodEnd(this);
     }
 }
@@ -2596,7 +2597,7 @@ void EnInvadepoh_ConfusedRomani_Update(Actor* thisx, PlayState* play2) {
     s32 talkRequested = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (talkRequested) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, 5);
         EnInvadepoh_ConfusedRomani_SetupTalk(this);
     }
     this->actionFunc(this, play);
@@ -2933,7 +2934,7 @@ void EnInvadepoh_Night1Romani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_Night1Romani_MoveAlongPathTimed(this, play);
         EnInvadepoh_SetYawAlongPath(this);
         EnInvadepoh_SnapToFloor(this);
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E; // If you run out of arrows...
             } else {
@@ -2974,7 +2975,7 @@ void EnInvadepoh_Night1Romani_Update(Actor* thisx, PlayState* play2) {
     s32 talkRequested = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (talkRequested) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, 5);
         EnInvadepoh_Night1Romani_SetupTalk(this);
     }
     this->actionFunc(this, play);
@@ -3167,7 +3168,7 @@ void EnInvadepoh_BarnRomani_WaitForObject(Actor* thisx, PlayState* play2) {
         EnInvadepoh_SetYawAlongPath(this);
         func_800B4AEC(play, &this->actor, 50.0f);
         EnInvadepoh_SnapToFloor(this);
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_10)) {
                 this->actor.textId = 0x332E; // If you run out of arrows...
             } else {
@@ -3197,7 +3198,7 @@ void EnInvadepoh_BarnRomani_Update(Actor* thisx, PlayState* play2) {
     s32 talkRequested = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (talkRequested) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, 5);
         EnInvadepoh_BarnRomani_SetupTalk(this);
     }
     this->actionFunc(this, play);
@@ -3217,7 +3218,7 @@ void EnInvadepoh_RewardRomani_SetupClearCheck(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_RewardRomani_ClearCheck(EnInvadepoh* this, PlayState* play) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         this->actor.draw = EnInvadepoh_Romani_Draw;
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         EnInvadepoh_RewardRomani_SetupStartCs(this);
@@ -3247,8 +3248,8 @@ void EnInvadepoh_RewardRomani_Talk(EnInvadepoh* this, PlayState* play) {
         if (this->textId == 0x3331) { // We did it...We won.
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_02)) {
                 EnInvadepoh_Romani_StartTextBox(this, play, 0x3334); // I have to get back to bed...
-                func_80151BB4(play, 0x1D);
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, 0x1D);
+                Message_BombersNotebookQueueEvent(play, 5);
             } else {
                 EnInvadepoh_Romani_StartTextBox(this, play, 0x3333); // Here's Romani's thanks
             }
@@ -3289,9 +3290,9 @@ void EnInvadepoh_RewardRomani_SetupAfterGiveBottle(EnInvadepoh* this) {
 void EnInvadepoh_RewardRomani_AfterGiveBottle(EnInvadepoh* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnInvadepoh_Romani_StartTextBox(this, play, 0x3334); // I have to get back to bed..
-        func_80151BB4(play, 0x1E);
-        func_80151BB4(play, 0x1D);
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, 0x1E);
+        Message_BombersNotebookQueueEvent(play, 0x1D);
+        Message_BombersNotebookQueueEvent(play, 5);
         EnInvadepoh_RewardRomani_SetupTalk(this);
     } else {
         func_800B85E0(&this->actor, play, 2000.0f, PLAYER_IA_MINUS1);
@@ -3304,7 +3305,7 @@ void EnInvadepoh_RewardRomani_SetupFinished(EnInvadepoh* this) {
 }
 
 void EnInvadepoh_RewardRomani_Finished(EnInvadepoh* this, PlayState* play) {
-    if (play->msgCtx.unk120B1 == 0) {
+    if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
         if (play->msgCtx.msgMode == 0) {
             sRewardFinished = true;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) ||
@@ -3734,7 +3735,7 @@ void EnInvadepoh_Cremia_Update(Actor* thisx, PlayState* play2) {
     s32 talkRequested = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (talkRequested) {
-        func_80151BB4(play, 6);
+        Message_BombersNotebookQueueEvent(play, 6);
         EnInvadepoh_Cremia_SetupTalk(this);
     }
     this->actionFunc(this, play2);
@@ -3927,7 +3928,7 @@ void EnInvadepoh_Night3Romani_Update(Actor* thisx, PlayState* play2) {
     s32 talkRequested = Actor_ProcessTalkRequest(&this->actor, &play->state);
 
     if (talkRequested) {
-        func_80151BB4(play, 5);
+        Message_BombersNotebookQueueEvent(play, 5);
         EnInvadepoh_Night3Romani_SetupTalk(this);
     }
     this->actionFunc(this, play);
@@ -4104,7 +4105,7 @@ void EnInvadepoh_Event_DrawWarps(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0, warpEffect = sWarpEffects; i < 10; i++, warpEffect++) {
         if (warpEffect->timer > 0) {
@@ -4165,11 +4166,11 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Push();
     if (this->present) {
         if (this->alpha == 255) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             AnimatedMat_Draw(play, sAlienEmptyTexAnim);
             Scene_SetRenderModeXlu(play, 0, 1);
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
@@ -4224,7 +4225,7 @@ void EnInvadepoh_Alien_Draw(Actor* thisx, PlayState* play2) {
         OPEN_DISPS(play->state.gfxCtx);
         ptr = POLY_XLU_DISP;
 
-        ptr = func_8012C868(ptr);
+        ptr = Gfx_SetupDL20_NoCD(ptr);
 
         gDPSetDither(ptr++, G_CD_NOISE);
         gDPSetCombineLERP(ptr++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
@@ -4274,7 +4275,7 @@ void EnInvadepoh_Cow_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, (s32)this->skelAnime.dListCount,
                           EnInvadepoh_Cow_OverrideLimbDraw, NULL, &this->actor);
 }
@@ -4283,7 +4284,7 @@ void EnInvadepoh_CowTail_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnInvadepoh* this = (EnInvadepoh*)thisx;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }
@@ -4325,7 +4326,7 @@ void EnInvadepoh_Romani_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x09, sRomaniMouthTextures[this->interactInfo.mouthAnim.curIndex]);
     gSPSegment(POLY_OPA_DISP++, 0x08, sRomaniEyeTextures[this->interactInfo.eyeAnim.curIndex]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
@@ -4352,7 +4353,7 @@ void EnInvadepoh_LightBall_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0x80, 255, 255, 0, 180);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 50, 0, 0);
@@ -4391,7 +4392,7 @@ void EnInvadepoh_Dog_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 200, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnInvadepoh_Dog_OverrideLimbDraw, EnInvadepoh_Dog_PostLimbDraw, &this->actor);
@@ -4428,7 +4429,7 @@ void EnInvadepoh_Cremia_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x09, sCremiaMouthTextures[this->interactInfo.mouthAnim.curIndex]);
     gSPSegment(POLY_OPA_DISP++, 0x08, sCremiaEyeTextures[this->interactInfo.eyeAnim.curIndex]);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
