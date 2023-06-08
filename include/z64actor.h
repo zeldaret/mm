@@ -388,7 +388,7 @@ typedef enum TargetMode {
     /*  8 */ TARGET_MODE_8,
     /*  9 */ TARGET_MODE_9,
     /* 10 */ TARGET_MODE_10,
-    /* 11 */ TARGET_MODE_MAX,
+    /* 11 */ TARGET_MODE_MAX
 } TargetMode;
 
 typedef struct {
