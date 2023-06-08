@@ -231,7 +231,7 @@ typedef struct EnvironmentContext {
 } EnvironmentContext; // size = 0x100
 
 s32 Environment_ZBufValToFixedPoint(s32 zBufferVal);
-void Environment_Init(struct PlayState* play, EnvironmentContext* envCtx, s32 arg2);
+void Environment_Init(struct PlayState* play2, EnvironmentContext* envCtx, s32 arg2);
 u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep);
 f32 Environment_LerpWeight(u16 max, u16 min, u16 val);
 f32 Environment_LerpWeightAccelDecel(u16 endFrame, u16 startFrame, u16 curFrame, u16 accelDuration, u16 decelDuration);

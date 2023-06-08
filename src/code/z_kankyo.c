@@ -93,16 +93,12 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
 extern u8 gSkyboxIsChanging;
 extern u8 D_801BDBA8;
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     PlayState* play = play2;
     f32 temp_ft4;
     u8 var_a0;
-    u8 temp_t6;
-    u8 temp_t7;
-    u8 temp_t8;
-    u8 temp_t9;
-    u8 var_v0;
+    u8 temp;
     s16 i;
 
     CREG(1) = 0;
@@ -227,8 +223,8 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     envCtx->lightBlendRateOverride = LIGHT_BLENDRATE_OVERRIDE_NONE;
 
-    envCtx->sceneTimeSpeed = 0;
-    R_TIME_SPEED = R_TIME_SPEED = 0;
+    R_TIME_SPEED = envCtx->sceneTimeSpeed = 0;
+    R_TIME_SPEED = R_TIME_SPEED;
     R_ENV_DISABLE_DBG = false;
 
     CREG(64) = 0;
@@ -242,47 +238,33 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     var_a0 = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
-        var_a0 = (((void)0, gSaveContext.save.day) - 1);
+        //! FAKE: temp
+        var_a0 = ((void)0, temp = gSaveContext.save.day) - 1;
     }
+    envCtx->skyboxConfig = var_a0 + (D_801F4E31 * 3);
+    envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
-    temp_t8 = var_a0 + (D_801F4E31 * 3);
-    var_v0 = temp_t8 & 0xFF;
-
-    envCtx->skyboxConfig = temp_t8;
-    envCtx->changeSkyboxNextConfig = var_v0;
-
-    // TODO: Solve `func_800FEAF4` first for the pattern here
     if (D_801F4E31 == 4) {
-        var_v0 = 0xE & 0xFF;
         envCtx->skyboxConfig = 0xE;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 5) {
-        var_v0 = 0x10U & 0xFF;
         envCtx->skyboxConfig = 0x10;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 6) {
-        var_v0 = 0x11U & 0xFF;
         envCtx->skyboxConfig = 0x11;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 7) {
-        temp_t6 = var_a0 + 0x12;
-        var_v0 = temp_t6 & 0xFF;
-        envCtx->skyboxConfig = temp_t6;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->skyboxConfig = var_a0 + 0x12;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 8) {
-        temp_t7 = var_a0 + 0x15;
-        var_v0 = temp_t7 & 0xFF;
         envCtx->skyboxConfig = var_a0 + 0x15;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 9) {
-        var_v0 = 0x18U & 0xFF;
         envCtx->skyboxConfig = 0x18;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     } else if (D_801F4E31 == 0xA) {
-        temp_t9 = var_a0 + 0x19;
-        var_v0 = temp_t9 & 0xFF;
-        envCtx->skyboxConfig = temp_t9;
-        envCtx->changeSkyboxNextConfig = var_v0;
+        envCtx->skyboxConfig = var_a0 + 0x19;
+        envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
     }
 
     if (var_a0 >= 3) {
@@ -290,7 +272,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
         envCtx->changeSkyboxNextConfig = 0xD;
     }
 
-    if (envCtx->changeSkyboxNextConfig >= 0x1C) {
+    if (envCtx->skyboxConfig >= 0x1C) {
         envCtx->skyboxConfig = 0;
         envCtx->changeSkyboxNextConfig = 0;
     }
@@ -307,15 +289,31 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     }
 
     if (gSaveContext.retainWeatherMode || (gSaveContext.respawnFlag != 0)) {
-        if (gWeatherMode == WEATHER_MODE_2) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
-                play->skyboxId = SKYBOX_3;
-                envCtx->lightConfig = 5;
-                envCtx->changeLightNextConfig = 5;
-                D_801F4E74 = 1.0f;
-            } else {
-                gWeatherMode = WEATHER_MODE_CLEAR;
-            }
+        // if (gWeatherMode == 2) {
+        //     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+        //         play->skyboxId = SKYBOX_3;
+        //         envCtx->lightConfig = 5;
+        //         envCtx->changeLightNextConfig = 5;
+        //         D_801F4E74 = 1.0f;
+        //     } else {
+        //         gWeatherMode = WEATHER_MODE_CLEAR;
+        //     }
+        // }
+
+        switch (gWeatherMode) {
+            case WEATHER_MODE_2:
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
+                    play->skyboxId = SKYBOX_3;
+                    envCtx->lightConfig = 5;
+                    envCtx->changeLightNextConfig = 5;
+                    D_801F4E74 = 1.0f;
+                } else {
+                    gWeatherMode = WEATHER_MODE_CLEAR;
+                }
+                break;
+
+            default:
+                break;
         }
 
         play->envCtx.precipitation[PRECIP_SNOW_CUR] = 0;
@@ -2308,15 +2306,15 @@ void Environment_JumpForwardInTime(void) {
     }
 }
 
-void func_800FEAF4(EnvironmentContext *envCtx) {
+void func_800FEAF4(EnvironmentContext* envCtx) {
     u8 phi_v1;
 
     phi_v1 = 0;
     if (((void)0, gSaveContext.save.day) != 0) {
         phi_v1 = ((void)0, gSaveContext.save.day) - 1;
     }
-     envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
-     envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
+    envCtx->skyboxConfig = phi_v1 + (D_801F4E31 * 3);
+    envCtx->changeSkyboxNextConfig = envCtx->skyboxConfig;
 
     if (D_801F4E31 == 4) {
         envCtx->skyboxConfig = 0xE;
