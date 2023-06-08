@@ -203,7 +203,7 @@ void EnMThunder_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnMThunder_AdjustLights(PlayState* play, f32 arg1) {
-    func_800FD2B4(play, arg1, 850.0f, 0.2f, 0.0f);
+    Environment_AdjustLights(play, arg1, 850.0f, 0.2f, 0.0f);
 }
 
 void EnMThunder_Spin_AttackNoMagic(EnMThunder* this, PlayState* play) {

@@ -150,8 +150,8 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
     switch (cmd->type) {
         case CS_MISC_RAIN:
             if (isFirstFrame) {
-                func_800FD78C(play);
-                play->envCtx.unk_F2[0] = 60;
+                Environment_PlayStormNatureAmbience(play);
+                play->envCtx.precipitation[0] = 60;
             }
             break;
 
@@ -159,7 +159,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
-                D_801F4E68.state = LIGHTNING_STRIKE_START;
+                gLightningStrike.state = LIGHTNING_STRIKE_START;
             }
             break;
 

@@ -448,9 +448,9 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
     Color_RGB8 sp30 = { 220, 220, 255 };
     f32 sp2C = this->unk_1E54 / 10.0f;
 
-    func_800FD59C(play, &sp30, sp2C);
-    func_800FD654(play, &sp34, sp2C);
-    func_800FD698(play, 2000, 4000, sp2C);
+    Environment_LerpAmbientColor(play, &sp30, sp2C);
+    Environment_LerpFogColor(play, &sp34, sp2C);
+    Environment_LerpFog(play, 2000, 4000, sp2C);
 
     if (this->unk_1E54 >= 10) {
         Camera* subCam =
@@ -625,9 +625,9 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
     }
 
     sp1C = 1.0f - (sp2C / 10.0f);
-    func_800FD59C(play, &sp20, sp1C);
-    func_800FD654(play, &sp24, sp1C);
-    func_800FD698(play, 2000, 4000, sp1C);
+    Environment_LerpAmbientColor(play, &sp20, sp1C);
+    Environment_LerpFogColor(play, &sp24, sp1C);
+    Environment_LerpFog(play, 2000, 4000, sp1C);
 
     if (this->unk_1E54 >= 110) {
         func_80AF082C(this, func_80AF2318);
@@ -988,6 +988,7 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     func_80AF14FC(play, this->unk_15C);
 
     if (this->unk_144 & 4) {
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f, 5.0f, 0, 0);
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f,
+                                  5.0f, 0, 0);
     }
 }

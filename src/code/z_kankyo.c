@@ -1,19 +1,43 @@
 #include "global.h"
+#include "z64environment.h"
+#include "z64save.h"
+#include "z64skybox.h"
+#include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-void func_800F5090(s32 arg0, PlayState* play) {
-    D_801BDB94 = SysCfb_GetZBufferPixel(D_801F4F20, D_801F4F24);
+void Environment_GraphCallback(GraphicsContext* gfxCtx, PlayState* play) {
+    sSunScreenDepth = SysCfb_GetZBufferPixel(sSunDepthTestX, sSunDepthTestY);
     Lights_GlowCheck(play);
 }
 
+typedef struct {
+    /* 0x0 */ s32 mantissa;
+    /* 0x4 */ s32 exponent;
+} ZBufValConversionEntry; // size = 0x8
+
+extern ZBufValConversionEntry sZBufValConversionTable[8];
+
+#define ZBUFVAL_EXPONENT(v) (((v) >> 15) & 7)
+#define ZBUFVAL_MANTISSA(v) (((v) >> 4) & 0x7FF)
+
+/**
+ * Convert an 18-bits Z buffer value to a fixed point 15.3 value
+ *
+ * zBufferVal is 18 bits:
+ *   3: Exponent of z value
+ *  11: Mantissa of z value
+ *   4: dz value (unused)
+ */
 s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
-    s32 ret = ((zBufferVal >> 4 & 0x7FF) << D_801BE4F4[zBufferVal >> 15 & 7].unk_0) + D_801BE4F4[zBufferVal >> 15 & 7].unk_4;
+    // base[exp] + mantissa << shift[exp]
+    s32 ret = (ZBUFVAL_MANTISSA(zBufferVal) << sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].mantissa) +
+              sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].exponent;
 
     return ret;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
 
-u8 func_800F5954(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
+u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
     s16 stepSize = 0;
     s16 diff = target - *pvalue;
 
@@ -61,7 +85,7 @@ f32 Environment_LerpWeight(u16 max, u16 min, u16 val) {
     return 1.0f;
 }
 
-f32 func_800F5B10(u16 endFrame, u16 startFrame, u16 curFrame, u16 accelDuration, u16 decelDuration) {
+f32 Environment_LerpWeightAccelDecel(u16 endFrame, u16 startFrame, u16 curFrame, u16 accelDuration, u16 decelDuration) {
     f32 endFrameF;
     f32 startFrameF;
     f32 curFrameF;
@@ -90,8 +114,8 @@ f32 func_800F5B10(u16 endFrame, u16 startFrame, u16 curFrame, u16 accelDuration,
 
     if ((startFrameF >= endFrameF) || (accelDurationF + decelDurationF > totalFrames)) {
         // "The frame relation between end_frame and start_frame is wrong!!!"
-        //osSyncPrintf(VT_COL(RED, WHITE) "\nend_frameとstart_frameのフレーム関係がおかしい!!!" VT_RST);
-        //osSyncPrintf(VT_COL(RED, WHITE) "\nby get_parcent_forAccelBrake!!!!!!!!!" VT_RST);
+        // osSyncPrintf(VT_COL(RED, WHITE) "\nend_frameとstart_frameのフレーム関係がおかしい!!!" VT_RST);
+        // osSyncPrintf(VT_COL(RED, WHITE) "\nby get_parcent_forAccelBrake!!!!!!!!!" VT_RST);
 
         return 0.0f;
     }
@@ -126,45 +150,45 @@ f32 func_800F5B10(u16 endFrame, u16 startFrame, u16 curFrame, u16 accelDuration,
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateSkybox.s")
 
-void func_800F6834(PlayState* play, s32 waterLightsIndex) {
+void Environment_EnableUnderwaterLights(PlayState* play, s32 waterLightsIndex) {
     if (waterLightsIndex == 0x1F) {
         waterLightsIndex = 0;
     }
 
-    if (!play->envCtx.lightMode) {
-        if (D_801F4F31 == 0) {
-            D_801F4F31 = 1;
-            D_801BDBB4 = play->envCtx.changeLightNextConfig;
-            if (waterLightsIndex != play->envCtx.lightConfig) {
+    if (play->envCtx.lightMode == LIGHT_MODE_TIME) {
+        if (!D_801F4F31) {
+            D_801F4F31 = true;
+            gLightConfigAfterUnderwater = play->envCtx.changeLightNextConfig;
+            if (play->envCtx.lightConfig != waterLightsIndex) {
                 play->envCtx.lightConfig = waterLightsIndex;
                 play->envCtx.changeLightNextConfig = waterLightsIndex;
             }
         } else if ((play->envCtx.lightConfig != waterLightsIndex) && (play->envCtx.changeLightTimer == 0)) {
-            play->envCtx.changeLightEnabled = 1;
+            play->envCtx.changeLightEnabled = true;
             play->envCtx.changeLightNextConfig = waterLightsIndex;
-            play->envCtx.changeDuration = 0x14;
+            play->envCtx.changeDuration = 20;
             play->envCtx.changeLightTimer = play->envCtx.changeDuration;
         }
     } else if (play->envCtx.lightSettingOverride == 0xFF) {
-        if (D_801F4F31 == 0) {
-            D_801F4F31 = 1;
-            D_801BDBB4 = play->envCtx.lightSetting;
+        if (!D_801F4F31) {
+            D_801F4F31 = true;
+            gLightConfigAfterUnderwater = play->envCtx.lightSetting;
         }
         play->envCtx.lightBlendEnabled = false; // instantly switch to water lights
         play->envCtx.lightSettingOverride = waterLightsIndex;
     }
 }
 
-void func_800F694C(PlayState* play) {
-    if (!play->envCtx.lightMode) {
-        if (D_801F4F31 != 0) {
-            D_801F4F31 = 0;
-            play->envCtx.lightConfig = D_801BDBB4;
-            play->envCtx.changeLightNextConfig = D_801BDBB4;
+void Environment_DisableUnderwaterLights(PlayState* play) {
+    if (play->envCtx.lightMode == LIGHT_MODE_TIME) {
+        if (D_801F4F31) {
+            D_801F4F31 = false;
+            play->envCtx.lightConfig = gLightConfigAfterUnderwater;
+            play->envCtx.changeLightNextConfig = gLightConfigAfterUnderwater;
         }
-    } else if (D_801F4F31 != 0) {
-        D_801F4F31 = 0;
-        play->envCtx.lightSetting = D_801BDBB4;
+    } else if (D_801F4F31) {
+        D_801F4F31 = false;
+        play->envCtx.lightSetting = gLightConfigAfterUnderwater;
         play->envCtx.lightBlendEnabled = false; // instantly switch to previous lights
         play->envCtx.lightSettingOverride = 0xFF;
         play->envCtx.lightBlend = 1.0f;
@@ -172,14 +196,15 @@ void func_800F694C(PlayState* play) {
 }
 
 void func_800F6A04(void) {
-    if ((gSaveContext.gameMode != 0) && (gSaveContext.gameMode != 3)) {
+    if ((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_END_CREDITS)) {
         Rumble_StateWipeRequests();
     }
 }
 
 void func_800F6A40(PlayState* play) {
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == 0) && ((play->skyboxId == 1) || (play->skyboxId == 3))) {
-        play->skyboxCtx.rot.y -= gRegEditor->data[0xF] * 1.0e-4f;
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) &&
+        ((play->skyboxId == SKYBOX_NORMAL_SKY) || (play->skyboxId == SKYBOX_3))) {
+        play->skyboxCtx.rot.y -= R_TIME_SPEED * 1.0e-4f;
     }
 }
 
@@ -196,19 +221,24 @@ void func_800F6AB8(void) {
     }
 }
 
-void func_800F6B44(PlayState* play, EnvironmentContext* envCtx, PauseContext* pauseCtx, MessageContext* msgCtx, GameOverContext* gameOverCtx) {
+void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseContext* pauseCtx, MessageContext* msgCtx,
+                            GameOverContext* gameOverCtx) {
     u16 time;
 
-    if ((D_801F4F32 == 0) && (pauseCtx->state == 0) && (gameOverCtx->state == GAMEOVER_INACTIVE)) {
-        if ((msgCtx->msgMode == 0) || (msgCtx->currentTextId == 0xF7) || (msgCtx->currentTextId == 0x20D2) || (msgCtx->currentTextId == 0x140C) || ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId < 0x201)) || (((void)0, gSaveContext.gameMode) == 3)) {
-            if (!FrameAdvance_IsEnabled(&play->state) && ((play->transitionMode == 0) || (((void)0, gSaveContext.gameMode) != 0))) {
-                if (play->transitionTrigger == 0) {
-                    if (CutsceneManager_GetCurrentCsId() == -1) {
-                        if (Play_InCsMode(play) == 0) {
-                            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)gRegEditor->data[0xF];
-                            if (gRegEditor->data[0xF] != 0) {
-                                // TODO figure out gSaveContext.unk_16
-                                gSaveContext.save.time = ((void)0, gSaveContext.save.time) + ((void)0, *(u16*)((u8*)&gSaveContext + 0x16));
+    if ((sEnvIsTimeStopped == 0) && (pauseCtx->state == PAUSE_STATE_OFF) && (gameOverCtx->state == GAMEOVER_INACTIVE)) {
+        if ((msgCtx->msgMode == 0) || (msgCtx->currentTextId == 0xF7) || (msgCtx->currentTextId == 0x20D2) ||
+            (msgCtx->currentTextId == 0x140C) ||
+            ((msgCtx->currentTextId >= 0x100) && (msgCtx->currentTextId <= 0x200)) ||
+            (((void)0, gSaveContext.gameMode) == GAMEMODE_END_CREDITS)) {
+            if (!FrameAdvance_IsEnabled(&play->state) &&
+                ((play->transitionMode == TRANS_MODE_OFF) || (((void)0, gSaveContext.gameMode) != GAMEMODE_NORMAL))) {
+                if (play->transitionTrigger == TRANS_TRIGGER_OFF) {
+                    if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
+                        if (!Play_InCsMode(play)) {
+                            gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
+                            if (R_TIME_SPEED != 0) {
+                                gSaveContext.save.time = ((void)0, gSaveContext.save.time) +
+                                                         (u16)((void)0, gSaveContext.save.timeSpeedOffset);
                             }
                         }
                     }
@@ -216,15 +246,15 @@ void func_800F6B44(PlayState* play, EnvironmentContext* envCtx, PauseContext* pa
             }
         }
     }
-    if ((((void)0, gSaveContext.skyboxTime) >= 0x4000) ||
-        (((void)0, gSaveContext.save.time) < 0x4000) ||
-        (((void)0, gSaveContext.save.time) >= 0x4010)) {
+    if ((((void)0, gSaveContext.skyboxTime) >= CLOCK_TIME(6, 0)) ||
+        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)) ||
+        (((void)0, gSaveContext.save.time) >= (CLOCK_TIME(6, 0) + 0x10))) {
         gSaveContext.skyboxTime = gSaveContext.save.time;
     }
 
     time = ((void)0, gSaveContext.save.time);
 
-    if ((time >= 0xC000) || (time < 0x4000)) {
+    if ((time >= CLOCK_TIME(18, 0)) || (time < CLOCK_TIME(6, 0))) {
         gSaveContext.save.isNight = 1;
     } else {
         gSaveContext.save.isNight = 0;
@@ -235,7 +265,7 @@ void func_800F6B44(PlayState* play, EnvironmentContext* envCtx, PauseContext* pa
 
 // TODO permuter - regalloc issues
 /*
-void func_800F6CEC(PlayState* arg0, u8 arg1, s800F6CEC* arg2, LightSettings* arg3) {
+void func_800F6CEC(PlayState* arg0, u8 arg1, EnvLightSettings* arg2, LightSettings* arg3) {
     s32 phi_t1;
     s32 temp_v1_2;
     s32 temp_v1;
@@ -244,10 +274,11 @@ void func_800F6CEC(PlayState* arg0, u8 arg1, s800F6CEC* arg2, LightSettings* arg
         temp_v1 = (arg1 % 4);
         temp_v1_2 = (((void)0, gSaveContext.day) * 4) + 4;
         for (phi_t1 = 0; phi_t1 != 3; phi_t1++) {
-            arg2->ambientColor[phi_t1] = arg3[temp_v1_2 + temp_v1].ambientColor[phi_t1] - arg3[temp_v1].ambientColor[phi_t1];
-            arg2->diffuseColor1[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] - arg3[temp_v1].diffuseColor1[phi_t1];
-            arg2->diffuseColor2[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor[phi_t1] - arg3[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2
-            arg2->fogColor[phi_t1] = arg3[temp_v1_2 + temp_v1].fogColor[phi_t1] - arg3[temp_v1].fogColor[phi_t1];
+            arg2->ambientColor[phi_t1] = arg3[temp_v1_2 + temp_v1].ambientColor[phi_t1] -
+arg3[temp_v1].ambientColor[phi_t1]; arg2->diffuseColor1[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] -
+arg3[temp_v1].diffuseColor1[phi_t1]; arg2->diffuseColor2[phi_t1] = arg3[temp_v1_2 + temp_v1].diffuseColor[phi_t1] -
+arg3[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2 arg2->fogColor[phi_t1] = arg3[temp_v1_2 +
+temp_v1].fogColor[phi_t1] - arg3[temp_v1].fogColor[phi_t1];
         }
         arg2->fogNear = arg3[temp_v1_2 + temp_v1].fogNear - arg3[temp_v1].fogNear;
     }
@@ -278,6 +309,7 @@ u8 func_800F6EA4(f32 arg0, f32 arg1, f32 arg2) {
 
 s32 Environment_IsSceneUpsideDown(PlayState* play) {
     s32 ret = false;
+
     if ((play->sceneId == SCENE_F41) || (play->sceneId == SCENE_INISIE_R)) {
         ret = true;
     }
@@ -291,11 +323,11 @@ void func_800F8554(PlayState* play) {
     s16 temp_a0;
     u16 phi_v0;
 
-    if (play->envCtx.sunMoonDisabled == 0) {
-        if (play->envCtx.unk_F2[1] != 0) {
-            Math_SmoothStepToF(&D_801F4F1C, 0.0f, 0.5f, 4.0f, 0.01f);
+    if (!play->envCtx.sunMoonDisabled) {
+        if (play->envCtx.precipitation[1] != 0) {
+            Math_SmoothStepToF(&sSunPrimAlpha, 0.0f, 0.5f, 4.0f, 0.01f);
         } else {
-            Math_SmoothStepToF(&D_801F4F1C, 255.0f, 0.5f, 4.0f, 0.01f);
+            Math_SmoothStepToF(&sSunPrimAlpha, 255.0f, 0.5f, 4.0f, 0.01f);
         }
 
         if (Environment_IsSceneUpsideDown(play)) {
@@ -306,7 +338,7 @@ void func_800F8554(PlayState* play) {
 
         temp_a0 = phi_v0 - 0x8000;
 
-        if (play->csCtx.state != 0) {
+        if (play->csCtx.state != CS_STATE_IDLE) {
             // TODO bug?
             Math_SmoothStepToF(&play->envCtx.sunPos.x, -(Math_SinS(temp_a0) * 120.0f) * 25.0f, 1.0f, 0.8f, 0.8f);
             Math_SmoothStepToF(&play->envCtx.sunPos.y, Math_CosS(temp_a0) * 120.0f * 25.0f, 1.0f, 0.8f, 0.8f);
@@ -322,72 +354,72 @@ void func_800F8554(PlayState* play) {
             temp_f0 = -temp_f0;
         }
 
-        D_801F4F10 = temp_f0 / 80.0f * 255.0f;
-        if (D_801F4F10 < 0.0f) {
-            D_801F4F10 = 0.0f;
+        sSunEnvAlpha = temp_f0 / 80.0f * 255.0f;
+        if (sSunEnvAlpha < 0.0f) {
+            sSunEnvAlpha = 0.0f;
         }
-        if (D_801F4F10 > 255.0f) {
-            D_801F4F10 = 255.0f;
+        if (sSunEnvAlpha > 255.0f) {
+            sSunEnvAlpha = 255.0f;
         }
-        D_801F4F10 = 255.0f - D_801F4F10;
+        sSunEnvAlpha = 255.0f - sSunEnvAlpha;
 
-        D_801F4F14 = temp_f0 / 80.0f;
-        if (D_801F4F14 < 0.0f) {
-            D_801F4F14 = 0.0f;
+        sSunColor = temp_f0 / 80.0f;
+        if (sSunColor < 0.0f) {
+            sSunColor = 0.0f;
         }
-        if (D_801F4F14 > 1.0f) {
-            D_801F4F14 = 1.0f;
+        if (sSunColor > 1.0f) {
+            sSunColor = 1.0f;
         }
 
-        D_801F4F18 = (2.0f * D_801F4F14) + 12.0f;
+        sSunScale = (2.0f * sSunColor) + 12.0f;
     }
 }
 
 void func_800F88C4(u16 arg0) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_28_10) && CHECK_WEEKEVENTREG(arg0)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_28_10) &&
+        CHECK_WEEKEVENTREG(arg0)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_04)) {
-			SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
-			SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
-			SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_28_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
         }
 
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_91_08)) {
-			SET_WEEKEVENTREG(WEEKEVENTREG_28_10);
-			SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
-			SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_28_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_90_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_02);
         }
     }
 }
 
 void func_800F8970(void) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_40) && ((gSaveContext.save.time - 0x3FFC) >= 0x2580)) {
-		SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_27_40);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN);
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_27_80) && ((gSaveContext.save.time - 0x3FFC) >= 0x2B30)) {
-		SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_27_80);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN);
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_01) && ((gSaveContext.save.time - 0x3FFC) >= 0x30E0)) {
-		SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
+        SET_WEEKEVENTREG(WEEKEVENTREG_28_01);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN);
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_02) && ((gSaveContext.save.time - 0x3FFC) >= 0x3413)) {
-		SET_WEEKEVENTREG(WEEKEVENTREG_28_02);
+        SET_WEEKEVENTREG(WEEKEVENTREG_28_02);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN);
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_28_04) && ((gSaveContext.save.time - 0x3FFC) >= 0x39C3)) {
-		SET_WEEKEVENTREG(WEEKEVENTREG_28_04);
+        SET_WEEKEVENTREG(WEEKEVENTREG_28_04);
         func_800F88C4(WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN);
     }
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8A9C.s")
-
 
 // TODO permuter - regalloc issues, minor reordering
 /*
@@ -439,16 +471,11 @@ void func_800F8A9C(s32 arg0) {
     if ((gSaveContext.weekEventReg[90] & 1) == 0) {
         temp_a2_2 = ((void)0, gSaveContext.time) - D_801F4E78;
 
-        if (((gSaveContext.weekEventReg[89] & 0x40) != 0) && (((((void)0, gSaveContext.time) - 0x3FFC) & 0xFFFF) >= 0xF556)) {
-            gSaveContext.weekEventReg[90] |= 1;
-        } else if (((gSaveContext.weekEventReg[89] & 8) != 0) && (temp_a2_2 >= 0x416)) {
-            gSaveContext.weekEventReg[89] |= 0x40;
-            D_801F4E78 = 0;
-        } else if (((gSaveContext.weekEventReg[85] & 0x80) != 0) && (temp_a2_2 >= 0x1198)) {
-            gSaveContext.weekEventReg[89] |= 8;
-            D_801F4E78 = gSaveContext.time;
-        } else if (((gSaveContext.weekEventReg[86] & 1) != 0) && (temp_a2_2 >= 0xC43)) {
-            gSaveContext.weekEventReg[85] |= 0x80;
+        if (((gSaveContext.weekEventReg[89] & 0x40) != 0) && (((((void)0, gSaveContext.time) - 0x3FFC) & 0xFFFF) >=
+0xF556)) { gSaveContext.weekEventReg[90] |= 1; } else if (((gSaveContext.weekEventReg[89] & 8) != 0) && (temp_a2_2 >=
+0x416)) { gSaveContext.weekEventReg[89] |= 0x40; D_801F4E78 = 0; } else if (((gSaveContext.weekEventReg[85] & 0x80) !=
+0) && (temp_a2_2 >= 0x1198)) { gSaveContext.weekEventReg[89] |= 8; D_801F4E78 = gSaveContext.time; } else if
+(((gSaveContext.weekEventReg[86] & 1) != 0) && (temp_a2_2 >= 0xC43)) { gSaveContext.weekEventReg[85] |= 0x80;
         }
     }
 }
@@ -456,193 +483,218 @@ void func_800F8A9C(s32 arg0) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Update.s")
 
-void func_800FC3DC(PlayState*);
+void Environment_UpdateRain(PlayState*);
 void func_800F8A9C(PlayState*);
-void func_800FB9B4(PlayState*);
+void Environment_UpdateTimeBasedSequence(PlayState*);
 
-void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx, PauseContext* pauseCtx, MessageContext* msgCtx, GameOverContext* gameOverCtx, GraphicsContext* gfxCtx) {
+void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx, PauseContext* pauseCtx,
+                        MessageContext* msgCtx, GameOverContext* gameOverCtx, GraphicsContext* gfxCtx) {
     D_801BDBC0 = 0;
     D_801BDBC4 = 0;
 
     func_800F6A04();
 
-    if (pauseCtx->state == 0) {
+    if (pauseCtx->state == PAUSE_STATE_OFF) {
         func_800F6A40(play);
-        func_800FC3DC(play);
-        func_800FB9B4(play);
+        Environment_UpdateRain(play);
+        Environment_UpdateTimeBasedSequence(play);
         func_800F6AB8();
-        func_800F6B44(play, envCtx, pauseCtx, msgCtx, gameOverCtx);
+        Environment_UpdateTime(play, envCtx, pauseCtx, msgCtx, gameOverCtx);
         func_800F8554(play);
         func_800F6FF8(play, envCtx, lightCtx);
         func_800F8A9C(play);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F8D84.s")
+extern Gfx* D_0407AB70; // gSunDL
 
-extern Gfx D_0407AB70[];
-
-// TODO permuter - regalloc issues, minor reordering
-/*
-void func_800F8D84(PlayState *play) {
-    if (play->envCtx.unk_16 == 0) {
+void Environment_DrawSun(PlayState* play) {
+    if (!play->envCtx.sunMoonDisabled) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        if ((play->envCtx.unk_8 > -800.0f) || Environment_IsSceneUpsideDown(play)) {
-            Matrix_InsertTranslation(play->view.eye.x + play->envCtx.unk_4,
-                                     play->view.eye.y + play->envCtx.unk_8,
-                                     play->view.eye.z + play->envCtx.unk_C, MTXMODE_NEW);
-
-            if (((void)0, gSaveContext.time) < 0x8000) {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0,
-                                255,
-                                (u8)(D_801F4F14 * 52.0f) + 203,
-                                (u8)(D_801F4F14 * 19.0f) + 181,
-                                D_801F4F1C);
-                gDPSetEnvColor(POLY_OPA_DISP++,
-                               -(u8)(D_801F4F14 * 5.0f) + 175,
-                               (u8)(D_801F4F14 * 135.0f) + 120,
-                               (u8)(D_801F4F14 * 100.0f) + 100,
-                               D_801F4F10);
+        if ((play->envCtx.sunPos.y > -800.0f) || Environment_IsSceneUpsideDown(play)) {
+            Matrix_Translate(play->view.eye.x + play->envCtx.sunPos.x, play->view.eye.y + play->envCtx.sunPos.y,
+                             play->view.eye.z + play->envCtx.sunPos.z, MTXMODE_NEW);
+            if (((void)0, gSaveContext.save.time) < 0x8000) {
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, (u8)((u8)(sSunColor * 52.0f) + 203),
+                                (u8)((u8)(sSunColor * 19.0f) + 181), (u8)sSunPrimAlpha);
+                gDPSetEnvColor(POLY_OPA_DISP++, (u8)(-(u8)(sSunColor * 5.0f) + 175),
+                               (u8)((u8)(sSunColor * 135.0f) + 120), (u8)((u8)(sSunColor * 100.0f) + 100),
+                               sSunEnvAlpha);
             } else {
-                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0,
-                                255,
-                                (u8)(D_801F4F14 * 75.0f) + 180,
-                                (u8)(D_801F4F14 * 100.0f) + 100,
-                                D_801F4F1C);
-                gDPSetEnvColor(POLY_OPA_DISP++,
-                               180,
-                               (u8)(D_801F4F14 * 255.0f),
-                               (u8)(D_801F4F14 * 200.0f),
-                               D_801F4F10);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, (u8)((u8)(sSunColor * 75.0f) + 180),
+                                (u8)((u8)(sSunColor * 100.0f) + 100), (u8)sSunPrimAlpha);
+                gDPSetEnvColor(POLY_OPA_DISP++, 180, (u8)(sSunColor * 255.0f), (u8)(sSunColor * 200.0f), sSunEnvAlpha);
             }
-
-            Matrix_Scale(D_801F4F18, D_801F4F18, D_801F4F18, 1);
-
+            Matrix_Scale(sSunScale, sSunScale, sSunScale, 1);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_LOAD);
-
-            func_8012C148(play->state.gfxCtx);
-
-            gSPDisplayList(POLY_OPA_DISP++, D_0407AB70);
-
+            Gfx_SetupDL54_Opa(play->state.gfxCtx);
+            gSPDisplayList(POLY_OPA_DISP++, &D_0407AB70);
         }
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
-*/
 
-void Environment_DrawSunLensFlare(PlayState* play, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec) {
-    if ((play->envCtx.unk_F2[1] == 0) && !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->skyboxId == 1)) {
+void Environment_DrawSunLensFlare(PlayState* play, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx,
+                                  Vec3f vec) {
+    if ((play->envCtx.precipitation[1] == 0) && !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) &&
+        (play->skyboxId == SKYBOX_NORMAL_SKY)) {
         f32 v0 = Math_CosS(((void)0, gSaveContext.save.time) - 0x8000);
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, vec, 370.0f, v0 * 120.0f, 0x190, 1);
+
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, vec, 370.0f, v0 * 120.0f, 0x190,
+                                  true);
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F9824.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawLensFlare.s")
 
-f32 func_800FA39C(void) {
+f32 Environment_RandCentered(void) {
     return Rand_ZeroOne() - 0.5f;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FA3C4.s")
+void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxCtx);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawRainImpl.s")
 
 void Environment_DrawRain(PlayState* play, View* view, GraphicsContext* gfxCtx) {
-    if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->envCtx.unk_F2[2] == 0)) {
-        if (play->envCtx.unk_F2[4] != 0) {
-            if (play->envCtx.unk_F2[2] == 0) {
-                func_800FA3C4(play, view, gfxCtx);
+    if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) && (play->envCtx.precipitation[2] == 0)) {
+        if (play->envCtx.precipitation[4] != 0) {
+            if (play->envCtx.precipitation[2] == 0) {
+                Environment_DrawRainImpl(play, view, gfxCtx);
             }
         } else if (!(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
-            if ((func_800FE4B8(play) != 0) && (play->envCtx.unk_F2[2] == 0)) {
-                func_800FA3C4(play, view, gfxCtx);
+            if ((func_800FE4B8(play) != 0) && (play->envCtx.precipitation[2] == 0)) {
+                Environment_DrawRainImpl(play, view, gfxCtx);
             }
         }
     }
 }
 
-void func_800FAAB4(PlayState* play, u8 arg1) {
-    if (!play->envCtx.lightMode) {
-        if ((arg1 == 31) || (D_801F4F33 != 0)) {
+void Environment_ChangeLightSetting(PlayState* play, u8 lightConfig) {
+    if (play->envCtx.lightMode == LIGHT_MODE_TIME) {
+        if ((lightConfig == 31) || D_801F4F33) {
             if (D_801F4F30 != 0xFF) {
-                play->envCtx.changeLightEnabled = 1;
+                play->envCtx.changeLightEnabled = true;
                 play->envCtx.changeLightNextConfig = D_801F4F30;
                 play->envCtx.changeDuration = 20;
                 play->envCtx.changeLightTimer = play->envCtx.changeDuration;
                 D_801F4F30 = 0xFF;
             }
-        } else if (play->envCtx.changeLightNextConfig != arg1) {
+        } else if (play->envCtx.changeLightNextConfig != lightConfig) {
             D_801F4F30 = play->envCtx.lightConfig;
-            play->envCtx.changeLightEnabled = 1;
-            play->envCtx.changeLightNextConfig = arg1;
+            play->envCtx.changeLightEnabled = true;
+            play->envCtx.changeLightNextConfig = lightConfig;
             play->envCtx.changeDuration = 20;
             play->envCtx.changeLightTimer = play->envCtx.changeDuration;
         }
-    } else if ((play->envCtx.lightSetting != arg1) && (play->envCtx.lightBlend >= 1.0f) && (play->envCtx.lightSettingOverride == 0xFF)) {
-        if (arg1 > 30) {
-            arg1 = 0;
+    } else if ((play->envCtx.lightSetting != lightConfig) && (play->envCtx.lightBlend >= 1.0f) &&
+               (play->envCtx.lightSettingOverride == 0xFF)) {
+        if (lightConfig > 30) {
+            lightConfig = 0;
         }
 
         play->envCtx.lightBlend = 0.0f;
         play->envCtx.prevLightSetting = play->envCtx.lightSetting;
-        play->envCtx.lightSetting = arg1;
+        play->envCtx.lightSetting = lightConfig;
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FAC20.s")
+void Environment_DrawSkyboxFilters(PlayState* play) {
+    if ((((play->skyboxId != SKYBOX_NONE) && (play->lightCtx.fogNear < 980)) || (play->skyboxId >= SKYBOX_2)) &&
+        ((play->skyboxId != SKYBOX_3) || (D_801F4E74 != 0.0f))) {
+        f32 alpha;
 
-extern Gfx D_0E0002C8[];
+        OPEN_DISPS(play->state.gfxCtx);
 
-void func_800FAF74(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
+        Gfx_SetupDL57_Opa(play->state.gfxCtx);
+
+        alpha = (1000 - play->lightCtx.fogNear) * 0.02f;
+
+        if (play->skyboxId == 2) {
+            alpha = 1.0f;
+        }
+
+        if (alpha > 1.0f) {
+            alpha = 1.0f;
+        }
+
+        if (play->skyboxId != SKYBOX_3) {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, play->lightCtx.fogColor[0], play->lightCtx.fogColor[1],
+                            play->lightCtx.fogColor[2], 255.0f * alpha);
+        } else {
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, play->lightCtx.fogColor[0] + 16, play->lightCtx.fogColor[1] + 16,
+                            play->lightCtx.fogColor[2] + 16, 255.0f * D_801F4E74);
+        }
+        gSPDisplayList(POLY_OPA_DISP++, D_0E000000.clearFillRect);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+
+    if (play->envCtx.customSkyboxFilter) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        Gfx_SetupDL57_Opa(play->state.gfxCtx);
+        gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, play->envCtx.skyboxFilterColor[0], play->envCtx.skyboxFilterColor[1],
+                        play->envCtx.skyboxFilterColor[2], play->envCtx.skyboxFilterColor[3]);
+        gSPDisplayList(POLY_OPA_DISP++, D_0E000000.clearFillRect);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}
+
+void Environment_DrawLightningFlash(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL57_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, alpha);
-    gSPDisplayList(POLY_OPA_DISP++, D_0E0002C8);
+    gSPDisplayList(POLY_OPA_DISP++, D_0E000000.clearFillRect);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_800FB010(PlayState* play) {
+void Environment_UpdateLightningStrike(PlayState* play) {
     if (play->envCtx.unk_E3 != LIGHTNING_MODE_OFF) {
-        switch (D_801F4E68.state) {
+        switch (gLightningStrike.state) {
             case LIGHTNING_STRIKE_WAIT:
                 // every frame theres a 10% chance of the timer advancing 10 units
                 if (Rand_ZeroOne() < 0.1f) {
-                    D_801F4E68.delayTimer += 10.0f;
+                    gLightningStrike.delayTimer += 10.0f;
                 }
 
-                D_801F4E68.delayTimer += Rand_ZeroOne();
+                gLightningStrike.delayTimer += Rand_ZeroOne();
 
-                if (D_801F4E68.delayTimer > 500.0f) {
-                    D_801F4E68.flashRed = 200;
-                    D_801F4E68.flashGreen = 200;
-                    D_801F4E68.flashBlue = 255;
-                    D_801F4E68.flashAlphaTarget = 200;
+                if (gLightningStrike.delayTimer > 500.0f) {
+                    gLightningStrike.flashRed = 200;
+                    gLightningStrike.flashGreen = 200;
+                    gLightningStrike.flashBlue = 255;
+                    gLightningStrike.flashAlphaTarget = 200;
 
-                    D_801F4E68.delayTimer = 0.0f;
-                    Environment_AddLightningBolts(play, (u8)((Rand_ZeroOne() * (ARRAY_COUNT(D_801F4E80) - 0.1f)) + 1.0f));
-                    D_801F4F2C = 0;
-                    D_801F4E68.state++;
+                    gLightningStrike.delayTimer = 0.0f;
+                    Environment_AddLightningBolts(
+                        play, (u8)((Rand_ZeroOne() * (ARRAY_COUNT(sLightningBolts) - 0.1f)) + 1.0f));
+                    sLightningFlashAlpha = 0;
+                    gLightningStrike.state++;
                 }
                 break;
+
             case LIGHTNING_STRIKE_START:
-                D_801F4E68.flashRed = 200;
-                D_801F4E68.flashGreen = 200;
-                D_801F4E68.flashBlue = 255;
+                gLightningStrike.flashRed = 200;
+                gLightningStrike.flashGreen = 200;
+                gLightningStrike.flashBlue = 255;
 
                 play->envCtx.lightSettings.ambientColor[0] += 80;
                 play->envCtx.lightSettings.ambientColor[1] += 80;
                 play->envCtx.lightSettings.ambientColor[2] += 100;
 
-                D_801F4F2C += 100;
+                sLightningFlashAlpha += 100;
 
-                if (D_801F4F2C >= D_801F4E68.flashAlphaTarget) {
+                if (sLightningFlashAlpha >= gLightningStrike.flashAlphaTarget) {
                     Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
-                    D_801F4E68.state++;
-                    D_801F4E68.flashAlphaTarget = 0;
+                    gLightningStrike.state++;
+                    gLightningStrike.flashAlphaTarget = 0;
                 }
                 break;
+
             case LIGHTNING_STRIKE_END:
                 if (play->envCtx.lightSettings.ambientColor[0] > 0) {
                     play->envCtx.lightSettings.ambientColor[0] -= 10;
@@ -653,14 +705,14 @@ void func_800FB010(PlayState* play) {
                     play->envCtx.lightSettings.ambientColor[2] -= 10;
                 }
 
-                D_801F4F2C -= 10;
+                sLightningFlashAlpha -= 10;
 
-                if (D_801F4F2C <= D_801F4E68.flashAlphaTarget) {
+                if (sLightningFlashAlpha <= gLightningStrike.flashAlphaTarget) {
                     play->envCtx.lightSettings.ambientColor[0] = 0;
                     play->envCtx.lightSettings.ambientColor[1] = 0;
                     play->envCtx.lightSettings.ambientColor[2] = 0;
 
-                    D_801F4E68.state = LIGHTNING_STRIKE_WAIT;
+                    gLightningStrike.state = LIGHTNING_STRIKE_WAIT;
 
                     if (play->envCtx.unk_E3 == LIGHTNING_MODE_LAST) {
                         play->envCtx.unk_E3 = LIGHTNING_MODE_OFF;
@@ -670,9 +722,9 @@ void func_800FB010(PlayState* play) {
         }
     }
 
-    if (D_801F4E68.state != LIGHTNING_STRIKE_WAIT) {
-        func_800FAF74(play, D_801F4E68.flashRed, D_801F4E68.flashGreen,
-                                       D_801F4E68.flashBlue, D_801F4F2C);
+    if (gLightningStrike.state != LIGHTNING_STRIKE_WAIT) {
+        Environment_DrawLightningFlash(play, gLightningStrike.flashRed, gLightningStrike.flashGreen,
+                                       gLightningStrike.flashBlue, sLightningFlashAlpha);
     }
 }
 
@@ -680,9 +732,9 @@ void Environment_AddLightningBolts(PlayState* play, u8 num) {
     s16 boltsAdded = 0;
     s16 i;
 
-    for (i = 0; i < ARRAY_COUNT(D_801F4E80); i++) {
-        if (D_801F4E80[i].state == LIGHTNING_BOLT_INACTIVE) {
-            D_801F4E80[i].state = LIGHTNING_BOLT_START;
+    for (i = 0; i < ARRAY_COUNT(sLightningBolts); i++) {
+        if (sLightningBolts[i].state == LIGHTNING_BOLT_INACTIVE) {
+            sLightningBolts[i].state = LIGHTNING_BOLT_START;
             boltsAdded++;
 
             if (boltsAdded >= num) {
@@ -692,15 +744,18 @@ void Environment_AddLightningBolts(PlayState* play, u8 num) {
     }
 }
 
-
 extern Gfx D_0403F230[];
+extern void* sLightningTextures[8]; // TODO static
 
-void func_800FB388(PlayState* play, s32 unused) {
+/**
+ * Draw any active lightning bolt entries contained in `sLightningBolts`
+ */
+void Environment_DrawLightning(PlayState* play, s32 unused) {
     // TODO
-    // static void* D_801BE90C[] = {
-        // gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex,
-        // gEffLightning4Tex, gEffLightning5Tex, gEffLightning6Tex,
-        // gEffLightning7Tex, gEffLightning8Tex, NULL,
+    // static void* sLightningTextures[] = {
+    // gEffLightning1Tex, gEffLightning2Tex, gEffLightning3Tex,
+    // gEffLightning4Tex, gEffLightning5Tex, gEffLightning6Tex,
+    // gEffLightning7Tex, gEffLightning8Tex, NULL,
     // };
     s16 i;
     f32 dx;
@@ -711,8 +766,8 @@ void func_800FB388(PlayState* play, s32 unused) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(D_801F4E80); i++) {
-        switch (D_801F4E80[i].state) {
+    for (i = 0; i < ARRAY_COUNT(sLightningBolts); i++) {
+        switch (sLightningBolts[i].state) {
             case LIGHTNING_BOLT_START:
                 dx = play->view.at.x - play->view.eye.x;
                 dz = play->view.at.z - play->view.eye.z;
@@ -720,48 +775,50 @@ void func_800FB388(PlayState* play, s32 unused) {
                 x = dx / sqrtf(SQ(dx) + SQ(dz));
                 z = dz / sqrtf(SQ(dx) + SQ(dz));
 
-                D_801F4E80[i].pos.x = play->view.eye.x + x * 9500.0f;
-                D_801F4E80[i].pos.y = Rand_ZeroOne() * 1000.0f + 4000.0f;
-                D_801F4E80[i].pos.z = play->view.eye.z + z * 9500.0f;
+                sLightningBolts[i].pos.x = play->view.eye.x + x * 9500.0f;
+                sLightningBolts[i].pos.y = Rand_ZeroOne() * 1000.0f + 4000.0f;
+                sLightningBolts[i].pos.z = play->view.eye.z + z * 9500.0f;
 
-                D_801F4E80[i].offset.x = (Rand_ZeroOne() - 0.5f) * 5000.0f;
-                D_801F4E80[i].offset.y = 0.0f;
-                D_801F4E80[i].offset.z = (Rand_ZeroOne() - 0.5f) * 5000.0f;
+                sLightningBolts[i].offset.x = (Rand_ZeroOne() - 0.5f) * 5000.0f;
+                sLightningBolts[i].offset.y = 0.0f;
+                sLightningBolts[i].offset.z = (Rand_ZeroOne() - 0.5f) * 5000.0f;
 
-                D_801F4E80[i].textureIndex = 0;
-                D_801F4E80[i].pitch = (Rand_ZeroOne() - 0.5f) * 40.0f;
-                D_801F4E80[i].roll = (Rand_ZeroOne() - 0.5f) * 40.0f;
-                D_801F4E80[i].delayTimer = 3 * (i + 1);
-                D_801F4E80[i].state++;
+                sLightningBolts[i].textureIndex = 0;
+                sLightningBolts[i].pitch = (Rand_ZeroOne() - 0.5f) * 40.0f;
+                sLightningBolts[i].roll = (Rand_ZeroOne() - 0.5f) * 40.0f;
+                sLightningBolts[i].delayTimer = 3 * (i + 1);
+                sLightningBolts[i].state++;
                 break;
-            case LIGHTNING_BOLT_WAIT:
-                D_801F4E80[i].delayTimer--;
 
-                if (D_801F4E80[i].delayTimer <= 0) {
-                    D_801F4E80[i].state++;
+            case LIGHTNING_BOLT_WAIT:
+                sLightningBolts[i].delayTimer--;
+
+                if (sLightningBolts[i].delayTimer <= 0) {
+                    sLightningBolts[i].state++;
                 }
                 break;
+
             case LIGHTNING_BOLT_DRAW:
-                if (D_801F4E80[i].textureIndex < 7) {
-                    D_801F4E80[i].textureIndex++;
+                if (sLightningBolts[i].textureIndex < 7) {
+                    sLightningBolts[i].textureIndex++;
                 } else {
-                    D_801F4E80[i].state = LIGHTNING_BOLT_INACTIVE;
+                    sLightningBolts[i].state = LIGHTNING_BOLT_INACTIVE;
                 }
                 break;
         }
 
-        if (D_801F4E80[i].state == LIGHTNING_BOLT_DRAW) {
-            Matrix_Translate(D_801F4E80[i].pos.x + D_801F4E80[i].offset.x,
-                             D_801F4E80[i].pos.y + D_801F4E80[i].offset.y,
-                             D_801F4E80[i].pos.z + D_801F4E80[i].offset.z, MTXMODE_NEW);
-            Matrix_RotateXFApply(D_801F4E80[i].pitch * (M_PI / 180.0f));
-            Matrix_RotateZF(D_801F4E80[i].roll * (M_PI / 180.0f), MTXMODE_APPLY);
+        if (sLightningBolts[i].state == LIGHTNING_BOLT_DRAW) {
+            Matrix_Translate(sLightningBolts[i].pos.x + sLightningBolts[i].offset.x,
+                             sLightningBolts[i].pos.y + sLightningBolts[i].offset.y,
+                             sLightningBolts[i].pos.z + sLightningBolts[i].offset.z, MTXMODE_NEW);
+            Matrix_RotateXFApply(DEG_TO_RAD(sLightningBolts[i].pitch));
+            Matrix_RotateZF(DEG_TO_RAD(sLightningBolts[i].roll), MTXMODE_APPLY);
             Matrix_Scale(22.0f, 100.0f, 22.0f, MTXMODE_APPLY);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 128);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 255, 255, 128);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
-                      G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(D_801BE90C[D_801F4E80[i].textureIndex]));
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPSegment(POLY_XLU_DISP++, 0x08,
+                       Lib_SegmentedToVirtual(sLightningTextures[sLightningBolts[i].textureIndex]));
             Gfx_SetupDL61_Xlu(play->state.gfxCtx);
             gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, D_0403F230);
@@ -771,116 +828,187 @@ void func_800FB388(PlayState* play, s32 unused) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB758.s")
+void Environment_PlaySceneSequence(PlayState* play) {
+    u8 dayMinusOne = ((void)0, gSaveContext.save.day) - 1;
 
-// needs a lot of work
-/*
-void func_800FB758(PlayState *play) {
-    u8 phi_v0;
-
-    phi_v0 = ((void)0, gSaveContext.day) - 1;
-    if (phi_v0 >= 3) {
-        phi_v0 = 0;
+    if (dayMinusOne >= 3) {
+        dayMinusOne = 0;
     }
-    if (play->envCtx.unk_E4 != 0xFE) {
-        play->envCtx.unk_E4 = 0xFF;
-        if (((void)0, gSaveContext.unk_3F46) != 0) {
-            play->envCtx.unk_E4 = 0xFE;
-            Audio_QueueSeqCmd(((void)0, gSaveContext.unk_3F46) + 0x8000);
-            gSaveContext.unk_3F46 = 0;
-        } else if ((func_800FE590(play) == 0) || (func_800FE5D0(play) != 0) || (func_801A8A50(0) != 0x57)) {
-            if (play->soundCtx.seqIndex == 0x7F) {
-                if (play->soundCtx.nightSeqIndex != 0x13) {
-                    if (play->soundCtx.nightSeqIndex != ((void)0, gSaveContext.nightSeqIndex)) {
-                        func_801A4A28(play->soundCtx.nightSeqIndex);
-                    }
+
+    if (play->envCtx.timeSeqState != TIMESEQ_REQUEST) {
+        play->envCtx.timeSeqState = TIMESEQ_DISABLED;
+        if (((void)0, gSaveContext.forcedSeqId) != NA_BGM_GENERAL_SFX) {
+            play->envCtx.timeSeqState = TIMESEQ_REQUEST;
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, ((void)0, gSaveContext.forcedSeqId) + SEQ_FLAG_ASYNC);
+            gSaveContext.forcedSeqId = NA_BGM_GENERAL_SFX;
+        } else if (!Environment_IsFinalHours(play) || func_800FE5D0(play) ||
+                   (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS)) {
+            if (play->sequenceCtx.seqId == NA_BGM_NO_MUSIC) {
+                if (play->sequenceCtx.ambienceId == AMBIENCE_ID_13) {
+                    return;
                 }
+                if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
+                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                }
+            } else if (play->sequenceCtx.ambienceId == AMBIENCE_ID_13) {
+                if (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId)) {
+                    Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                }
+            } else if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
+                       (((void)0, gSaveContext.save.time) <= CLOCK_TIME(17, 10))) {
+                if (sSceneSeqState != SCENESEQ_DEFAULT) {
+                    Audio_PlayMorningSceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                } else if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 1)) &&
+                           (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId))) {
+                    Audio_PlaySceneSequence(play->sequenceCtx.seqId, dayMinusOne);
+                }
+                play->envCtx.timeSeqState = TIMESEQ_FADE_DAY_BGM;
             } else {
-                if (play->soundCtx.nightSeqIndex == 0x13) {
-                    if (play->soundCtx.seqIndex != ((void)0, gSaveContext.seqIndex)) {
-                        func_801A25E4(play->soundCtx.seqIndex, phi_v0);
-                    }
+                if (play->sequenceCtx.ambienceId != ((void)0, gSaveContext.ambienceId)) {
+                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                }
+                if ((((void)0, gSaveContext.save.time) > CLOCK_TIME(17, 10)) &&
+                    (((void)0, gSaveContext.save.time) < CLOCK_TIME(19, 0))) {
+                    play->envCtx.timeSeqState = TIMESEQ_EARLY_NIGHT_CRITTERS;
+                } else if ((((void)0, gSaveContext.save.time) > CLOCK_TIME(19, 0)) ||
+                           (((void)0, gSaveContext.save.time) < CLOCK_TIME(5, 0))) {
+                    play->envCtx.timeSeqState = TIMESEQ_NIGHT_CRITTERS;
                 } else {
-                    if ((((void)0, gSaveContext.time) >= 0x4000) && (((void)0, gSaveContext.time) < 0xB71D)) {
-                        if (D_801BDBC8 != 0) {
-                            func_801A2544(play->soundCtx.seqIndex, phi_v0);
-                        } else if ((((void)0, gSaveContext.time) >= 0x402D) && (play->soundCtx.seqIndex != ((void)0, gSaveContext.seqIndex))) {
-                            func_801A25E4(play->soundCtx.seqIndex, phi_v0);
-                        }
-                        play->envCtx.unk_E4 = 1;
-                    } else {
-                        if (play->soundCtx.nightSeqIndex != gSaveContext.nightSeqIndex) {
-                            func_801A4A28(play->soundCtx.nightSeqIndex);
-                        }
-                        if ((((void)0, gSaveContext.time) >= 0xB71D) && (((void)0, gSaveContext.time) < 0xCAAA)) {
-                            play->envCtx.unk_E4 = 3;
-                        } else if ((((void)0, gSaveContext.time) >= 0xCAAB) || (((void)0, gSaveContext.time) < 0x3555)) {
-                            play->envCtx.unk_E4 = 5;
-                        } else {
-                            play->envCtx.unk_E4 = 7;
-                        }
-                    }
+                    play->envCtx.timeSeqState = TIMESEQ_MORNING_CRITTERS;
                 }
             }
         }
-
-        func_801A3CD8(play->roomCtx.currRoom.echo);
-        D_801BDBC8 = 0;
+        func_801A3CD8(play->roomCtx.curRoom.echo);
+        sSceneSeqState = SCENESEQ_DEFAULT;
     }
 }
-*/
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FB9B4.s")
+void Environment_UpdateTimeBasedSequence(PlayState* play) {
+    s32 pad;
+
+    //! FAKE:
+    if (&gSaveContext.save) {}
+
+    if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
+        switch (play->envCtx.timeSeqState) {
+            case TIMESEQ_DAY_BGM:
+                break;
+
+            case TIMESEQ_FADE_DAY_BGM:
+                if (((void)0, gSaveContext.save.time) > CLOCK_TIME(17, 10)) {
+                    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 240);
+                    play->envCtx.timeSeqState++;
+                }
+                break;
+
+            case TIMESEQ_NIGHT_BEGIN_SFX:
+                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(18, 0)) {
+                    play->envCtx.timeSeqState++;
+                }
+                break;
+
+            case TIMESEQ_EARLY_NIGHT_CRITTERS:
+                if (play->envCtx.precipitation[1] < 9) {
+                    Audio_PlayAmbience(play->sequenceCtx.ambienceId);
+                    Audio_SetAmbienceChannelIO(1, 1, 1);
+                }
+                play->envCtx.timeSeqState++;
+                break;
+
+            case TIMESEQ_NIGHT_DELAY:
+                if (((void)0, gSaveContext.save.time) >= CLOCK_TIME(19, 0)) {
+                    play->envCtx.timeSeqState++;
+                }
+                break;
+
+            case TIMESEQ_NIGHT_CRITTERS:
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_0, 1, 0);
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_1 << 4 | AMBIENCE_CHANNEL_CRITTER_3, 1, 1);
+                play->envCtx.timeSeqState++;
+                break;
+
+            case TIMESEQ_DAY_BEGIN_SFX:
+                if ((((void)0, gSaveContext.save.time) < CLOCK_TIME(19, 0)) &&
+                    (((void)0, gSaveContext.save.time) >= CLOCK_TIME(5, 0))) {
+                    play->envCtx.timeSeqState++;
+                }
+                break;
+
+            case TIMESEQ_MORNING_CRITTERS:
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_1 << 4 | AMBIENCE_CHANNEL_CRITTER_3, 1, 0);
+                Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_4 << 4 | AMBIENCE_CHANNEL_CRITTER_5, 1, 1);
+                play->envCtx.timeSeqState++;
+                break;
+
+            case TIMESEQ_DAY_DELAY:
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if ((play->envCtx.timeSeqState != 0xFE) && (((void)0, gSaveContext.save.day) == 3) &&
+        (((void)0, gSaveContext.save.time) < CLOCK_TIME(6, 0)) && !func_800FE5D0(play) &&
+        (play->transitionTrigger == TRANS_TRIGGER_OFF) && (play->transitionMode == TRANS_MODE_OFF) &&
+        (play->csCtx.state == 0) && ((play->sceneId != SCENE_00KEIKOKU) || (((void)0, gSaveContext.sceneLayer) != 1)) &&
+        (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
+        (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_FINAL_HOURS) &&
+        (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) != NA_BGM_SONG_OF_SOARING)) {
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 0);
+        Audio_PlaySceneSequence(NA_BGM_FINAL_HOURS, 3 - 1);
+    }
+}
 
 void Environment_DrawCustomLensFlare(PlayState* play) {
     Vec3f pos;
 
-    if (D_801F4E32 != 0) {
-        pos.x = D_801F4E38.x;
-        pos.y = D_801F4E38.y;
-        pos.z = D_801F4E38.z;
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, pos, D_801F4E44, D_801F4E48, D_801F4E4C, 0);
+    if (gCustomLensFlare1On) {
+        pos.x = gCustomLensFlare1Pos.x;
+        pos.y = gCustomLensFlare1Pos.y;
+        pos.z = gCustomLensFlare1Pos.z;
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, pos, D_801F4E44, D_801F4E48,
+                                  D_801F4E4C, 0);
     }
 
-    if (D_801F4E4E != 0) {
-        pos.x = D_801F4E50.x;
-        pos.y = D_801F4E50.y;
-        pos.z = D_801F4E50.z;
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, pos, D_801F4E5C, D_801F4E60, D_801F4E64, 0);
+    if (gCustomLensFlare2On) {
+        pos.x = gCustomLensFlare2Pos.x;
+        pos.y = gCustomLensFlare2Pos.y;
+        pos.z = gCustomLensFlare2Pos.z;
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, pos, D_801F4E5C, D_801F4E60,
+                                  D_801F4E64, 0);
     }
 }
 
-void Kankyo_InitGameOverLights(PlayState *play) {
+void Kankyo_InitGameOverLights(PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    D_801F4F34 = 0;
+    sGameOverLightsIntensity = 0;
 
-    Lights_PointNoGlowSetInfo(&D_801F4EE8, player->actor.world.pos.x - 10.0f,
-                              player->actor.world.pos.y + 10.0f, player->actor.world.pos.z - 10.0f, 0, 0, 0,
-                              255);
-    D_801F4EE0 = LightContext_InsertLight(play, &play->lightCtx, &D_801F4EE8);
+    Lights_PointNoGlowSetInfo(&sNGameOverLightInfo, player->actor.world.pos.x - 10.0f,
+                              player->actor.world.pos.y + 10.0f, player->actor.world.pos.z - 10.0f, 0, 0, 0, 255);
+    sNGameOverLightNode = LightContext_InsertLight(play, &play->lightCtx, &sNGameOverLightInfo);
 
-    Lights_PointNoGlowSetInfo(&D_801F4F00, player->actor.world.pos.x + 10.0f,
-                              player->actor.world.pos.y + 10.0f, player->actor.world.pos.z + 10.0f, 0, 0, 0,
-                              255);
+    Lights_PointNoGlowSetInfo(&sSGameOverLightInfo, player->actor.world.pos.x + 10.0f,
+                              player->actor.world.pos.y + 10.0f, player->actor.world.pos.z + 10.0f, 0, 0, 0, 255);
 
-    D_801F4EF8 = LightContext_InsertLight(play, &play->lightCtx, &D_801F4F00);
+    sSGameOverLightNode = LightContext_InsertLight(play, &play->lightCtx, &sSGameOverLightInfo);
 }
 
-void Kankyo_FadeInGameOverLights(PlayState* play) {
+void Environment_FadeInGameOverLights(PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 i;
 
-    Lights_PointNoGlowSetInfo(&D_801F4EE8, player->actor.world.pos.x - 10.0f,
+    Lights_PointNoGlowSetInfo(&sNGameOverLightInfo, player->actor.world.pos.x - 10.0f,
                               player->actor.world.pos.y + 10.0f, player->actor.world.pos.z - 10.0f,
-                              D_801F4F34, D_801F4F34, D_801F4F34, 255);
-    Lights_PointNoGlowSetInfo(&D_801F4F00, player->actor.world.pos.x + 10.0f,
+                              sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
+    Lights_PointNoGlowSetInfo(&sSGameOverLightInfo, player->actor.world.pos.x + 10.0f,
                               player->actor.world.pos.y + 10.0f, player->actor.world.pos.z + 10.0f,
-                              D_801F4F34, D_801F4F34, D_801F4F34, 255);
+                              sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
 
-    if (D_801F4F34 < 254) {
-        D_801F4F34 += 2;
+    if (sGameOverLightsIntensity < 254) {
+        sGameOverLightsIntensity += 2;
     }
 
     if (Play_CamIsNotFixed(&play->state)) {
@@ -904,30 +1032,30 @@ void Kankyo_FadeInGameOverLights(PlayState* play) {
         play->envCtx.screenFillColor[0] = 0;
         play->envCtx.screenFillColor[1] = 0;
         play->envCtx.screenFillColor[2] = 0;
-        play->envCtx.screenFillColor[3] = D_801F4F34;
+        play->envCtx.screenFillColor[3] = sGameOverLightsIntensity;
     }
 }
 
-void Kankyo_FadeOutGameOverLights(PlayState* play) {
+void Environment_FadeOutGameOverLights(PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
 
-    if (D_801F4F34 >= 3) {
-        D_801F4F34 -= 3;
+    if (sGameOverLightsIntensity >= 3) {
+        sGameOverLightsIntensity -= 3;
     } else {
-        D_801F4F34 = 0;
+        sGameOverLightsIntensity = 0;
     }
 
-    if (D_801F4F34 == 1) {
-        LightContext_RemoveLight(play, &play->lightCtx, D_801F4EE0);
-        LightContext_RemoveLight(play, &play->lightCtx, D_801F4EF8);
-    } else if (D_801F4F34 >= 2) {
-        Lights_PointNoGlowSetInfo(&D_801F4EE8, player->actor.world.pos.x - 10.0f,
+    if (sGameOverLightsIntensity == 1) {
+        LightContext_RemoveLight(play, &play->lightCtx, sNGameOverLightNode);
+        LightContext_RemoveLight(play, &play->lightCtx, sSGameOverLightNode);
+    } else if (sGameOverLightsIntensity >= 2) {
+        Lights_PointNoGlowSetInfo(&sNGameOverLightInfo, player->actor.world.pos.x - 10.0f,
                                   player->actor.world.pos.y + 10.0f, player->actor.world.pos.z - 10.0f,
-                                  D_801F4F34, D_801F4F34, D_801F4F34, 255);
-        Lights_PointNoGlowSetInfo(&D_801F4F00, player->actor.world.pos.x + 10.0f,
+                                  sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
+        Lights_PointNoGlowSetInfo(&sSGameOverLightInfo, player->actor.world.pos.x + 10.0f,
                                   player->actor.world.pos.y + 10.0f, player->actor.world.pos.z + 10.0f,
-                                  D_801F4F34, D_801F4F34, D_801F4F34, 255);
+                                  sGameOverLightsIntensity, sGameOverLightsIntensity, sGameOverLightsIntensity, 255);
     }
 
     if (Play_CamIsNotFixed(&play->state)) {
@@ -943,64 +1071,186 @@ void Kankyo_FadeOutGameOverLights(PlayState* play) {
         play->envCtx.screenFillColor[0] = 0;
         play->envCtx.screenFillColor[1] = 0;
         play->envCtx.screenFillColor[2] = 0;
-        play->envCtx.screenFillColor[3] = D_801F4F34;
-        if (D_801F4F34 == 0) {
+        play->envCtx.screenFillColor[3] = sGameOverLightsIntensity;
+        if (sGameOverLightsIntensity == 0) {
             play->envCtx.fillScreen = false;
         }
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FC3DC.s")
+void Environment_UpdateRain(PlayState* play) {
+    u8 max = MAX(play->envCtx.precipitation[0], play->envCtx.precipitation[4]);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_FillScreen.s")
+    if ((play->envCtx.precipitation[1] != max) && ((play->state.frames % 8) == 0)) {
+        if (play->envCtx.precipitation[1] < max) {
+            play->envCtx.precipitation[1] += 2;
+        } else {
+            play->envCtx.precipitation[1] -= 2;
+        }
+    }
+}
+
+#define FILL_SCREEN_OPA (1 << 0)
+#define FILL_SCREEN_XLU (1 << 1)
+
+void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, u8 alpha, u8 drawFlags) {
+    if (alpha != 0) {
+        OPEN_DISPS(gfxCtx);
+
+        if (drawFlags & FILL_SCREEN_OPA) {
+            POLY_OPA_DISP = Gfx_SetupDL57(POLY_OPA_DISP);
+            gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, alpha);
+            gDPSetAlphaDither(POLY_OPA_DISP++, G_AD_DISABLE);
+            gDPSetColorDither(POLY_OPA_DISP++, G_CD_DISABLE);
+            gSPDisplayList(POLY_OPA_DISP++, D_0E000000.clearFillRect);
+        }
+
+        if (drawFlags & FILL_SCREEN_XLU) {
+            POLY_XLU_DISP = Gfx_SetupDL57(POLY_XLU_DISP);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, red, green, blue, alpha);
+
+            if ((u32)alpha == 255) {
+                gDPSetRenderMode(POLY_XLU_DISP++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+            }
+
+            gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
+            gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
+            gSPDisplayList(POLY_XLU_DISP++, D_0E000000.clearFillRect);
+        }
+
+        CLOSE_DISPS(gfxCtx);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSandstorm.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD2B4.s")
+s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
+    f32 temp;
+    s32 i;
+    Player* player = GET_PLAYER(play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD538.s")
+    if (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_5) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD59C.s")
+    if (!Play_CamIsNotFixed(&play->state)) {
+        return 0;
+    }
+    if (play->unk_18880 != 0) {
+        return 0;
+    }
+    if ((player != NULL) && (player->stateFlags1 & PLAYER_STATE1_2)) {
+        return 0;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD5E0.s")
+    arg1 = CLAMP_MIN(arg1, 0.0f);
+    arg1 = CLAMP_MAX(arg1, 1.0f);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD654.s")
+    temp = arg1 - arg3;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD698.s")
+    if (arg1 < arg3) {
+        temp = 0.0f;
+    }
 
-u32 get_days_elapsed(void) {
+    play->envCtx.lightSettings.fogNear = (arg2 - play->envCtx.unk_C4.fogNear) * temp;
+
+    if (arg1 == 0.0f) {
+        for (i = 0; i < 3; i++) {
+            play->envCtx.lightSettings.fogColor[i] = 0;
+        }
+    } else {
+        temp = arg1 * 5.0f;
+        temp = CLAMP_MAX(temp, 1.0f);
+
+        for (i = 0; i < 3; i++) {
+            play->envCtx.lightSettings.fogColor[i] = -(f32)play->envCtx.unk_C4.fogColor[i] * temp;
+        }
+    }
+
+    if (arg4 <= 0.0f) {
+        return 1;
+    }
+
+    arg1 *= arg4;
+
+    for (i = 0; i < 3; i++) {
+        play->envCtx.lightSettings.ambientColor[i] = -(f32)play->envCtx.unk_C4.ambientColor[i] * arg1;
+        play->envCtx.lightSettings.diffuseColor1[i] = -(f32)play->envCtx.unk_C4.diffuseColor1[i] * arg1;
+    }
+
+    return 1;
+}
+
+// Get ((to - from) * lerp)
+void Environment_LerpRGB8(Color_RGB8* from, Color_RGB8* to, f32 lerp, Vec3s* dst) {
+    Color_RGB8 result;
+
+    Color_RGB8_Lerp(from, to, lerp, &result);
+
+    dst->x = result.r - from->r;
+    dst->y = result.g - from->g;
+    dst->z = result.b - from->b;
+}
+
+void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp) {
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.ambientColor, to, lerp,
+                         (Vec3s*)&play->envCtx.lightSettings.ambientColor);
+}
+
+void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp) {
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.diffuseColor1, to, lerp,
+                         (Vec3s*)play->envCtx.lightSettings.diffuseColor1);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.diffuseColor, to, lerp,
+                         (Vec3s*)play->envCtx.lightSettings.diffuseColor2);
+}
+
+void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp) {
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.unk_C4.fogColor, to, lerp,
+                         (Vec3s*)play->envCtx.lightSettings.fogColor);
+}
+
+void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f32 lerp) {
+    play->envCtx.lightSettings.fogNear = (fogNearTarget - (s16)play->envCtx.unk_C4.fogNear) * lerp;
+    play->envCtx.lightSettings.zFar = (fogFarTarget - (s16)play->envCtx.unk_C4.zFar) * lerp;
+}
+
+// Repurposed from OoT to be more general
+u32 Environment_GetBgsDayCount(void) {
     return gSaveContext.save.daysElapsed;
 }
 
-void reset_days_elapsed(void) {
+// Repurposed from OoT to be more general
+void Environment_ClearBgsDayCount(void) {
     gSaveContext.save.daysElapsed = 0;
 }
 
-u32 get_current_day(void) {
+// Repurposed from OoT to be more general
+u32 Environment_GetTotalDays(void) {
     return gSaveContext.save.day;
 }
 
-void func_800FD750(u16 seqId) {
+void Environment_ForcePlaySequence(u16 seqId) {
     gSaveContext.forcedSeqId = seqId;
 }
 
-s32 func_800FD768(void) {
+s32 Environment_IsForcedSequenceDisabled(void) {
     s32 isDisabled = false;
-    if (gSaveContext.forcedSeqId != 0) {
+
+    if (gSaveContext.forcedSeqId != NA_BGM_GENERAL_SFX) {
         isDisabled = true;
     }
 
     return isDisabled;
 }
 
-void func_800FD78C(PlayState* play) {
-    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) || (play = play, (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS))) {
+void Environment_PlayStormNatureAmbience(PlayState* play) {
+    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) ||
+        (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
         Audio_PlayAmbience(AMBIENCE_ID_07);
-    } else if (play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) {
-        if (play->sequenceCtx.ambienceId != AMBIENCE_ID_13) {
-            if ((((void)0, gSaveContext.save.time) >= 0x4000) && (((void)0, gSaveContext.save.time) < 0xC000)) {
-                Audio_PlayAmbience(play->sequenceCtx.ambienceId);
-            }
+    } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
+        if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
+            (((void)0, gSaveContext.save.time) < CLOCK_TIME(18, 0))) {
+            Audio_PlayAmbience(play->sequenceCtx.ambienceId);
         }
     }
 
@@ -1008,14 +1258,14 @@ void func_800FD78C(PlayState* play) {
     Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_1, 1);
 }
 
-void func_800FD858(PlayState* play) {
-    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) || (play = play, (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS))) {
-		SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
-    } else if (play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) {
-        if (play->sequenceCtx.ambienceId != AMBIENCE_ID_13) {
-            if ((((void)0, gSaveContext.save.time) >= 0x4000) && (((void)0, gSaveContext.save.time) < 0xC000)) {
-                SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
-            }
+void Environment_StopStormNatureAmbience(PlayState* play) {
+    if (((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId == AMBIENCE_ID_13)) ||
+        (AudioSeq_GetActiveSeqId(SEQ_PLAYER_BGM_MAIN) == NA_BGM_FINAL_HOURS)) {
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
+    } else if ((play->sequenceCtx.seqId != NA_BGM_NO_MUSIC) && (play->sequenceCtx.ambienceId != AMBIENCE_ID_13)) {
+        if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
+            (((void)0, gSaveContext.save.time) < CLOCK_TIME(18, 0))) {
+            SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_AMBIENCE, 20);
         }
     }
 
@@ -1023,31 +1273,27 @@ void func_800FD858(PlayState* play) {
     Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_1, 0);
 }
 
-
-void func_800FD928(PlayState* play) {
+void Environment_WarpSongLeave(PlayState* play) {
     gWeatherMode = 0;
     gSaveContext.save.cutsceneIndex = 0;
     gSaveContext.respawnFlag = -3;
     play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
-    play->transitionTrigger = 0x14;
+    play->transitionTrigger = TRANS_TRIGGER_START;
     play->transitionType = TRANS_TYPE_FADE_WHITE;
     gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD980.s")
-
-//#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FDAF8.s")
-
 void func_800FD980(PlayState* play) {
     f32 phi_f0;
 
-    if ((play->envCtx.skybox1Index == 0) && (play->skyboxId == 1)) {
-        if ((((void)0, gSaveContext.save.time) >= 0xE000) || (((void)0, gSaveContext.save.time) < 0x1555)) {
+    if ((play->envCtx.skybox1Index == 0) && (play->skyboxId == SKYBOX_NORMAL_SKY)) {
+        if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(21, 0)) ||
+            (((void)0, gSaveContext.save.time) < CLOCK_TIME(2, 0))) {
             phi_f0 = 1.0f;
-        } else if (((void)0, gSaveContext.save.time) >= 0xCAAB) {
-            phi_f0 = 1.0f - ((0xE000 - ((void)0, gSaveContext.save.time)) * 1.8308312e-4f); // TODO find thing
-        } else if (((void)0, gSaveContext.save.time) < 0x2000) {
-            phi_f0 = (0x2000 - ((void)0, gSaveContext.save.time)) * 3.6616623e-4f; // TODO find thing
+        } else if (((void)0, gSaveContext.save.time) > CLOCK_TIME(19, 0)) {
+            phi_f0 = 1.0f - ((CLOCK_TIME(21, 0) - ((void)0, gSaveContext.save.time)) * (1.0f / (CLOCK_TIME(2, 0) + 1)));
+        } else if (((void)0, gSaveContext.save.time) < CLOCK_TIME(3, 0)) {
+            phi_f0 = (CLOCK_TIME(3, 0) - ((void)0, gSaveContext.save.time)) * (1.0f / (CLOCK_TIME(1, 0) + 1));
         } else {
             phi_f0 = 0.0f;
         }
@@ -1055,13 +1301,13 @@ void func_800FD980(PlayState* play) {
         phi_f0 = (play->envCtx.skyboxConfig == 0x18) ? 1.0f : phi_f0;
 
         D_801F4F28 = phi_f0;
-        D_801BDB98 = D_801F4E7A;
+        sEnvSkyboxNumStars = gSkyboxNumStars;
     } else {
         D_801F4F28 = 0.0f;
-        D_801BDB98 = 0;
+        sEnvSkyboxNumStars = 0;
     }
 
-    if ((D_801BDB98 != 0) && (D_801F4F28 != 0.0f)) {
+    if ((sEnvSkyboxNumStars != 0) && (D_801F4F28 != 0.0f)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         D_801F4F38 = POLY_OPA_DISP;
@@ -1074,24 +1320,24 @@ void func_800FD980(PlayState* play) {
     }
 }
 
-void func_800FDAF8(Gfx** arg0, f32 arg1, f32 arg2, s32 arg3, s32 arg4) {
-    Gfx* g = *arg0;
-    u32 xl = arg1 * 4.0f;
-    u32 yl = arg2 * 4.0f;
-    u32 xd = arg3;
-    u32 yd = arg4;
+void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height) {
+    Gfx* gfx = *gfxp;
+    u32 xl = x * 4.0f;
+    u32 yl = y * 4.0f;
+    u32 xd = width;
+    u32 yd = height;
 
-    gSPTextureRectangle(g++, xl, yl, xl + xd, yl + yd, 0, 0, 0, 0, 0);
-    *arg0 = g;
+    gSPTextureRectangle(gfx++, xl, yl, xl + xd, yl + yd, 0, 0, 0, 0, 0);
+
+    *gfxp = gfx;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FDC94.s")
-
-void func_800FDC94(PlayState*, Gfx **);
+void Environment_DrawSkyboxStars(PlayState* play, Gfx** gfxP);
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStars.s")
 
 // This funcion is a wreck
 /*
-void func_800FDC94(PlayState* arg0, Gfx** arg1) {
+void Environment_DrawSkyboxStars(PlayState* arg0, Gfx** arg1) {
     f32 sp104;
     f32 sp100;
     f32 spFC;
@@ -1145,7 +1391,7 @@ void func_800FDC94(PlayState* arg0, Gfx** arg1) {
              gSaveContext.playerName[6] ^
             (gSaveContext.playerName[7] >> 4));
 
-    for (phi_s2 = 0; phi_s2 < D_801BDB98; phi_s2++) {
+    for (phi_s2 = 0; phi_s2 < sEnvSkyboxNumStars; phi_s2++) {
         if (phi_s2 < 0x10) {
             spFC = D_801DD880[phi_s2].x + arg0->view.eye.x;
             sp100 = D_801DD880[phi_s2].y + arg0->view.eye.y;
@@ -1192,19 +1438,18 @@ void func_800FDC94(PlayState* arg0, Gfx** arg1) {
         }
 
         if (phi_a3 >= 2) {
-            temp_f2_2 = arg0->viewProjectionMtxF.mf[3][3] + ((spFC * arg0->viewProjectionMtxF.mf[0][3]) + (sp100 * arg0->viewProjectionMtxF.mf[1][3]) + (sp104 * arg0->viewProjectionMtxF.mf[2][3]));
-            if (temp_f2_2 >= 1.0f) {
-                temp_f0 = 1.0f / temp_f2_2;
-                temp_s3 = &arg0->viewProjectionMtxF;
-                spF0 = (temp_s3->mf[3][0] + ((spFC * temp_s3->mf[0][0]) + (sp100 * temp_s3->mf[1][0]) + (sp104 * temp_s3->mf[2][0]))) * temp_f0;
-                spF4 = (temp_s3->mf[3][1] + ((spFC * temp_s3->mf[0][1]) + (sp100 * temp_s3->mf[1][1]) + (sp104 * temp_s3->mf[2][1]))) * temp_f0;
+            temp_f2_2 = arg0->viewProjectionMtxF.mf[3][3] + ((spFC * arg0->viewProjectionMtxF.mf[0][3]) + (sp100 *
+arg0->viewProjectionMtxF.mf[1][3]) + (sp104 * arg0->viewProjectionMtxF.mf[2][3])); if (temp_f2_2 >= 1.0f) { temp_f0
+= 1.0f / temp_f2_2; temp_s3 = &arg0->viewProjectionMtxF; spF0 = (temp_s3->mf[3][0] + ((spFC * temp_s3->mf[0][0]) +
+(sp100 * temp_s3->mf[1][0]) + (sp104 * temp_s3->mf[2][0]))) * temp_f0; spF4 = (temp_s3->mf[3][1] + ((spFC *
+temp_s3->mf[0][1]) + (sp100 * temp_s3->mf[1][1]) + (sp104 * temp_s3->mf[2][1]))) * temp_f0;
             }
 
             if ((temp_f2_2 >= 1.0f) && (spF0 > -1.0f) && (spF0 < 1.0f) && (spF4 > -1.0f) && (spF4 < 1.0f)) {
                 spD8 = temp_s5;
                 spF0 = (spF0 * 160.0f) + 160.0f;
                 spF4 = (spF4 * -120.0f) + 120.0f;
-                func_800FDAF8(&spD8, spF0, spF4, phi_a3, 4);
+                Environment_DrawSkyboxStar(&spD8, spF0, spF4, phi_a3, 4);
                 temp_s5 = spD8;
             }
         }
@@ -1216,12 +1461,12 @@ void func_800FDC94(PlayState* arg0, Gfx** arg1) {
 }
 */
 
-void func_800FE390(PlayState* play) {
+void Environment_Draw(PlayState* play) {
     func_800FD980(play);
-    func_800F8D84(play);
-    func_800FB010(play);
-    func_800FB388(play, 0);
-    func_800FAC20(play);
+    Environment_DrawSun(play);
+    Environment_UpdateLightningStrike(play);
+    Environment_DrawLightning(play, 0);
+    Environment_DrawSkyboxFilters(play);
 }
 
 void func_800FE3E0(PlayState* play) {
@@ -1236,7 +1481,7 @@ void func_800FE3E0(PlayState* play) {
 
         gSPDisplayList(D_801F4F38, sp2C);
 
-        func_800FDC94(play, &sp2C);
+        Environment_DrawSkyboxStars(play, &sp2C);
 
         gSPEndDisplayList(sp2C++);
 
@@ -1250,113 +1495,112 @@ void func_800FE3E0(PlayState* play) {
 }
 
 void Environment_StopTime(void) {
-    D_801F4F32 = 1;
+    sEnvIsTimeStopped = true;
 }
 
 void Environment_StartTime(void) {
-    D_801F4F32 = 0;
+    sEnvIsTimeStopped = false;
 }
 
 u8 Environment_IsTimeStopped(void) {
-    return D_801F4F32;
+    return sEnvIsTimeStopped;
 }
 
 u32 func_800FE4B8(PlayState* play) {
-    u32 ret;
+    u32 ret = play->envCtx.unk_E2;
 
-    ret = play->envCtx.unk_E2;
     if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
-        ret = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) ? 1 : 0;
+        ret = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) ? true : false;
     }
 
     switch (play->sceneId) {
-    case SCENE_13HUBUKINOMITI:
-    case SCENE_11GORONNOSATO:
-    case SCENE_10YUKIYAMANOMURA:
-    case SCENE_14YUKIDAMANOMITI:
-    case SCENE_12HAKUGINMAE:
-    case SCENE_17SETUGEN:
-    case SCENE_GORONRACE:
-        if (gSaveContext.sceneLayer == 0) {
-            ret = 0;
-        }
-        break;
-    case SCENE_10YUKIYAMANOMURA2:
-        if (gSaveContext.sceneLayer == 1) {
-            ret = 0;
-        }
-        break;
+        case SCENE_13HUBUKINOMITI:
+        case SCENE_11GORONNOSATO:
+        case SCENE_10YUKIYAMANOMURA:
+        case SCENE_14YUKIDAMANOMITI:
+        case SCENE_12HAKUGINMAE:
+        case SCENE_17SETUGEN:
+        case SCENE_GORONRACE:
+            if (gSaveContext.sceneLayer == 0) {
+                ret = false;
+            }
+            break;
+        case SCENE_10YUKIYAMANOMURA2:
+            if (gSaveContext.sceneLayer == 1) {
+                ret = false;
+            }
+            break;
     }
 
     return ret;
 }
 
-u8 func_800FE590(PlayState* play) {
-    u8 phi_v1 = 0;
+u8 Environment_IsFinalHours(PlayState* play) {
+    u8 ret = false;
 
-    if ((gSaveContext.save.day == 3) && (gSaveContext.save.time < 0x4000)) {
-        phi_v1 = 1;
+    if ((gSaveContext.save.day == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+        ret = true;
     }
 
-    return phi_v1;
+    return ret;
 }
 
 u8 func_800FE5D0(PlayState* play) {
-    u8 phi_v1 = 0;
+    u8 ret = false;
 
     if (Entrance_GetSceneId(((void)0, gSaveContext.save.entrance)) < 0) {
-        phi_v1 = 1;
+        ret = true;
     }
 
-    return phi_v1;
+    return ret;
 }
 
 u32 func_800FE610(PlayState* play) {
     return 0;
 }
 
-u16 func_800FE620(PlayState *play) {
-    u16 phi_v1 = 0;
+u16 Environment_GetTimeSpeed(PlayState* play) {
+    u16 timeSpeed = 0;
 
-    if (gRegEditor->data[0xF] != 0) {
-		// TODO figure out gSaveContext.unk_16
-        phi_v1 =  gRegEditor->data[0xF] + ((void)0, *(u16*)((u8*)&gSaveContext + 0x16));
+    if (R_TIME_SPEED != 0) {
+        timeSpeed = R_TIME_SPEED + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
     }
 
-    return phi_v1;
+    return timeSpeed;
 }
 
-void func_800FE658(f32 arg0) {
-    D_801BDB9C = arg0 * 45.511112f;
+void Environment_SetTimeJump(f32 minutes) {
+    sTimeJump = CLOCK_TIME_F(0, minutes);
 }
 
 u8 func_800FE6F8(PlayState* play, s16 arg1, s16 arg2) {
     u16 temp_v0;
-    u8 phi_v1 = 0;
+    u8 ret = false;
 
-    if (gRegEditor->data[0xF] != 0) {
-        temp_v0 = ((void)0, gSaveContext.save.time) + (gRegEditor->data[0xF] + ((void)0, gSaveContext.save.timeSpeedOffset)) * arg1 * 20;
+    if (R_TIME_SPEED != 0) {
+        temp_v0 = ((void)0, gSaveContext.save.time) +
+                  (R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset)) * arg1 * 20;
         if (arg2 < temp_v0) {
-            phi_v1 = 1;
+            ret = true;
         }
     }
 
-    return phi_v1;
+    return ret;
 }
 
 u8 func_800FE778(void) {
-    return D_801BDBA0;
+    return sSandstormColorIndex;
 }
 
 u8 func_800FE788(void) {
-    return D_801BDBA4;
+    return sNextSandstormColorIndex;
 }
 
 f32 func_800FE798(void) {
-    return D_801BDB90;
+    return sSandstormLerpScale;
 }
 
-void func_800FE7A8(Color_RGBA8 *arg0, Color_RGBA8 *arg1) {
+void func_800FE7A8(Color_RGBA8* arg0, Color_RGBA8* arg1) {
     f32 sp24;
     u32 pad;
     u32 index;
@@ -1379,51 +1623,51 @@ void func_800FE7A8(Color_RGBA8 *arg0, Color_RGBA8 *arg1) {
 }
 
 u8 func_800FE9B4(PlayState* play) {
-    u8 phi_a1;
+    u8 ret;
 
-    phi_a1 = 0;
-    if ((play->envCtx.unk_F2[4] == 0x3C) && (play->envCtx.unk_F2[2] == 0)) {
-        phi_a1 = 1;
+    ret = false;
+    if ((play->envCtx.precipitation[4] == 60) && (play->envCtx.precipitation[2] == 0)) {
+        ret = true;
     }
 
-    if ((play->envCtx.unk_F2[0] == 0x3C) && ((GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER) == 0)) {
-        if ((func_800FE4B8(play) != 0) && (play->envCtx.unk_F2[2] == 0)) {
-            phi_a1 = 1;
+    if ((play->envCtx.precipitation[0] == 60) && !(GET_ACTIVE_CAM(play)->stateFlags & CAM_STATE_UNDERWATER)) {
+        if (func_800FE4B8(play) && (play->envCtx.precipitation[2] == 0)) {
+            ret = true;
         }
     }
 
-    return phi_a1;
+    return ret;
 }
 
 void func_800FEA50(PlayState* play) {
     s8 phi_v0;
 
     switch (gSaveContext.save.day) {
-    default:
-    case 0:
-    case 1:
-        phi_v0 = 0;
-        break;
-    case 2:
-        phi_v0 = 3;
-        break;
-    case 3:
-        phi_v0 = 4;
-        break;
+        default:
+        case 0:
+        case 1:
+            phi_v0 = 0;
+            break;
+        case 2:
+            phi_v0 = 3;
+            break;
+        case 3:
+            phi_v0 = 4;
+            break;
     }
 
     D_801F4F30 = phi_v0;
-    D_801F4F33 = 1;
+    D_801F4F33 = true;
 }
 
 void func_800FEAB0() {
-    D_801F4F33 = 0;
+    D_801F4F33 = false;
 }
 
-void func_800FEAC0(void) {
-    if (D_801BDB9C != 0) {
-        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + D_801BDB9C;
-        D_801BDB9C = 0;
+void Environment_JumpForwardInTime(void) {
+    if (sTimeJump != 0) {
+        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + sTimeJump;
+        sTimeJump = 0;
     }
 }
 

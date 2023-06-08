@@ -584,7 +584,7 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
             }
             func_800FEAB0();
             if (!func_800FE4B8(play)) {
-                func_800FD858(play);
+                Environment_StopStormNatureAmbience(play);
             }
         } else {
             return 0;

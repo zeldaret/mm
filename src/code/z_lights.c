@@ -262,9 +262,9 @@ void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b) {
 }
 
 void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far) {
-    lightCtx->fogColor.r = r;
-    lightCtx->fogColor.g = g;
-    lightCtx->fogColor.b = b;
+    lightCtx->fogColor[0] = r;
+    lightCtx->fogColor[1] = g;
+    lightCtx->fogColor[2] = b;
     lightCtx->fogNear = near;
     lightCtx->zFar = far;
 }

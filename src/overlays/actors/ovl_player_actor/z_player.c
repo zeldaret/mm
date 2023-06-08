@@ -2714,10 +2714,10 @@ PlayerAnimationHeader* func_8082EFE4(Player* this) {
 }
 
 void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
-    func_800FD59C(play, &arg1->unk_0, arg2);
-    func_800FD5E0(play, &arg1->unk_3, arg2);
-    func_800FD654(play, &arg1->unk_6, arg2);
-    func_800FD698(play, arg1->unk_A, arg1->unk_C, arg2);
+    Environment_LerpAmbientColor(play, &arg1->unk_0, arg2);
+    Environment_LerpDiffuseColor(play, &arg1->unk_3, arg2);
+    Environment_LerpFogColor(play, &arg1->unk_6, arg2);
+    Environment_LerpFog(play, arg1->unk_A, arg1->unk_C, arg2);
 }
 
 /**
@@ -5926,7 +5926,7 @@ s32 func_80835DF8(PlayState* play, Player* this, CollisionPoly** outPoly, s32* o
     f32 yIntersect = func_80835CD8(play, this, &D_8085D100, &pos, outPoly, outBgId);
 
     if ((*outBgId == BGCHECK_SCENE) && (fabsf(this->actor.world.pos.y - yIntersect) < 10.0f)) {
-        func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, *outPoly, *outBgId));
+        Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, *outPoly, *outBgId));
         return true;
     }
     return false;
@@ -10869,7 +10869,8 @@ void func_80843178(PlayState* play, Player* this) {
         if (this == GET_PLAYER(play)) {
             func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
             if (this->actor.floorBgId == BGCHECK_SCENE) {
-                func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
+                Environment_ChangeLightSetting(
+                    play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
                 DynaPoly_SetPlayerAbove(&play->colCtx, this->actor.floorBgId);
             }
@@ -12218,7 +12219,7 @@ void Player_Draw(Actor* thisx, PlayState* play) {
                          CLAMP_MIN(spB8, spB4) * this->actor.scale.z * 1.15f, MTXMODE_APPLY);
             Matrix_RotateXS(this->actor.shape.rot.x, MTXMODE_APPLY);
             Scene_SetRenderModeXlu(play, 0, 1);
-            Lib_LerpRGB(&D_8085D580, &D_8085D584, this->unk_B10[0], &spBC);
+            Color_RGB8_Lerp(&D_8085D580, &D_8085D584, this->unk_B10[0], &spBC);
 
             gDPSetEnvColor(POLY_OPA_DISP++, spBC.r, spBC.g, spBC.b, 255);
 

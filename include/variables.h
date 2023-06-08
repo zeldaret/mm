@@ -428,36 +428,7 @@ extern s32 gGraphNumGameStates;
 // extern UNK_TYPE4 D_801BDAF8;
 
 extern u8 kanfontOrdering[92];
-extern f32 D_801BDB90;
-extern s32 D_801BDB94;
-extern s32 D_801BDB98;
-extern u16 D_801BDB9C;
-extern u8 D_801BDBA0;
-extern u8 D_801BDBA4;
-// extern UNK_TYPE1 D_801BDBA8;
-extern u8 gWeatherMode;
-extern u8 D_801BDBB4;
-// extern UNK_TYPE1 D_801BDBB8;
-// extern UNK_TYPE1 D_801BDBBC;
-extern u8 D_801BDBC0;
-extern u8 D_801BDBC4;
-extern u8 D_801BDBC8;
-// extern UNK_TYPE1 D_801BDBCC;
-// extern UNK_TYPE1 D_801BDCF4;
-// extern UNK_TYPE1 D_801BE38E;
-// extern UNK_TYPE1 D_801BE38F;
-// extern UNK_TYPE1 D_801BE390;
-// extern UNK_TYPE1 D_801BE4D4;
-extern s800F50D4 D_801BE4F4[8];
-// extern UNK_TYPE1 D_801BE534;
-// extern UNK_TYPE1 D_801BE6D4;
-// extern UNK_TYPE1 D_801BE874;
-// extern UNK_TYPE4 D_801BE894;
-// extern UNK_TYPE4 D_801BE8BC;
-// extern UNK_TYPE4 D_801BE8E4;
-extern void* D_801BE90C[8]; // TODO static
-// extern UNK_TYPE1 D_801BE92C;
-// extern UNK_TYPE1 D_801BE944;
+
 // extern actor_init_var_func sInitChainHandlers[11];
 // extern UNK_TYPE4 D_801BEAD4;
 // extern UNK_TYPE4 D_801BEAD8;
@@ -2205,46 +2176,46 @@ extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E31;
 
 // structs?
-extern u8 D_801F4E32;
-extern Vec3f D_801F4E38;
+extern u8 gCustomLensFlare1On;
+extern Vec3f gCustomLensFlare1Pos;
 extern f32 D_801F4E44;
 extern f32 D_801F4E48;
 extern s16 D_801F4E4C;
 
-extern u8 D_801F4E4E;
-extern Vec3f D_801F4E50;
+extern u8 gCustomLensFlare2On;
+extern Vec3f gCustomLensFlare2Pos;
 extern f32 D_801F4E5C;
 extern f32 D_801F4E60;
 extern s16 D_801F4E64;
 
-extern LightningStrike D_801F4E68;
-//extern f32 D_801F4E70; D_801F4E68.delayTimer
-// extern UNK_TYPE1 D_801F4E74;
+extern LightningStrike gLightningStrike;
+//extern f32 D_801F4E70; gLightningStrike.delayTimer
+extern f32 D_801F4E74;
 extern u16 D_801F4E78;
-extern u16 D_801F4E7A;
-extern LightningBolt D_801F4E80[3];
+extern u16 gSkyboxNumStars;
+extern LightningBolt sLightningBolts[3];
 
 // structs?
-extern LightNode* D_801F4EE0;
-extern LightInfo D_801F4EE8;
+extern LightNode* sNGameOverLightNode;
+extern LightInfo sNGameOverLightInfo;
 
-extern LightNode* D_801F4EF8;
-extern LightInfo D_801F4F00;
+extern LightNode* sSGameOverLightNode;
+extern LightInfo sSGameOverLightInfo;
 
-extern f32 D_801F4F10;
-extern f32 D_801F4F14;
-extern f32 D_801F4F18;
-extern f32 D_801F4F1C;
-extern s32 D_801F4F20;
-extern s32 D_801F4F24;
+extern f32 sSunEnvAlpha;
+extern f32 sSunColor;
+extern f32 sSunScale;
+extern f32 sSunPrimAlpha;
+extern s32 sSunDepthTestX;
+extern s32 sSunDepthTestY;
 extern f32 D_801F4F28;
-extern s16 D_801F4F2C;
+extern s16 sLightningFlashAlpha;
 // extern UNK_TYPE1 D_801F4F2E;
 extern u8 D_801F4F30;
 extern u8 D_801F4F31;
-extern u8 D_801F4F32;
+extern u8 sEnvIsTimeStopped;
 extern u8 D_801F4F33;
-extern u8 D_801F4F34;
+extern u8 sGameOverLightsIntensity;
 extern Gfx* D_801F4F38;
 // extern UNK_TYPE1 sBeatingHeartsDDPrim;
 // extern UNK_TYPE1 sBeatingHeartsDDEnv;

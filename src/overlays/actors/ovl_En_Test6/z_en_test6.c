@@ -455,10 +455,10 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
         case 91:
             this->unk_15C += this->unk_14C;
-            func_800FD59C(play, &D_80A9404C, this->unk_15C);
-            func_800FD5E0(play, &D_80A94050, this->unk_15C);
-            func_800FD654(play, &D_80A94048, this->unk_15C);
-            func_800FD698(play, D_80A94054, D_80A94058, this->unk_15C);
+            Environment_LerpAmbientColor(play, &D_80A9404C, this->unk_15C);
+            Environment_LerpDiffuseColor(play, &D_80A94050, this->unk_15C);
+            Environment_LerpFogColor(play, &D_80A94048, this->unk_15C);
+            Environment_LerpFog(play, D_80A94054, D_80A94058, this->unk_15C);
 
             if (this->unk_27A == 90) {
                 this->unk_282 = 0;
@@ -507,10 +507,10 @@ void func_80A91760(EnTest6* this, PlayState* play) {
                 this->unk_282 -= 25;
             }
 
-            func_800FD59C(play, &D_80A9404C, this->unk_15C);
-            func_800FD5E0(play, &D_80A94050, this->unk_15C);
-            func_800FD654(play, &D_80A94048, this->unk_15C);
-            func_800FD698(play, D_80A94054 + this->unk_282, D_80A94058 + this->unk_282, this->unk_15C);
+            Environment_LerpAmbientColor(play, &D_80A9404C, this->unk_15C);
+            Environment_LerpDiffuseColor(play, &D_80A94050, this->unk_15C);
+            Environment_LerpFogColor(play, &D_80A94048, this->unk_15C);
+            Environment_LerpFog(play, D_80A94054 + this->unk_282, D_80A94058 + this->unk_282, this->unk_15C);
 
             this->unk_278 -= this->unk_27C;
             temp_s0 = this->unk_278;
@@ -557,10 +557,10 @@ void func_80A91760(EnTest6* this, PlayState* play) {
 
         case 99:
             this->unk_15C -= this->unk_14C;
-            func_800FD59C(play, &D_80A9404C, this->unk_15C);
-            func_800FD5E0(play, &D_80A94050, this->unk_15C);
-            func_800FD654(play, &D_80A94048, this->unk_15C);
-            func_800FD698(play, D_80A94054, D_80A94058, this->unk_15C);
+            Environment_LerpAmbientColor(play, &D_80A9404C, this->unk_15C);
+            Environment_LerpDiffuseColor(play, &D_80A94050, this->unk_15C);
+            Environment_LerpFogColor(play, &D_80A94048, this->unk_15C);
+            Environment_LerpFog(play, D_80A94054, D_80A94058, this->unk_15C);
             break;
     }
 
@@ -681,26 +681,26 @@ void func_80A92188(EnTest6* this, PlayState* play) {
     }
 
     if (this->unk_27A == 115) {
-        func_800FD59C(play, &D_80A9406C, 1.0f);
-        func_800FD5E0(play, &D_80A94070, 1.0f);
-        func_800FD654(play, &D_80A94068, 1.0f);
-        func_800FD698(play, D_80A94074, D_80A94078, 1.0f);
+        Environment_LerpAmbientColor(play, &D_80A9406C, 1.0f);
+        Environment_LerpDiffuseColor(play, &D_80A94070, 1.0f);
+        Environment_LerpFogColor(play, &D_80A94068, 1.0f);
+        Environment_LerpFog(play, D_80A94074, D_80A94078, 1.0f);
         play->unk_18844 = true;
     }
 
     if (this->unk_27A == 15) {
-        func_800FD59C(play, &D_80A9406C, 0.0f);
-        func_800FD5E0(play, &D_80A94070, 0.0f);
-        func_800FD654(play, &D_80A94068, 0.0f);
-        func_800FD698(play, D_80A94074, D_80A94078, 0.0f);
+        Environment_LerpAmbientColor(play, &D_80A9406C, 0.0f);
+        Environment_LerpDiffuseColor(play, &D_80A94070, 0.0f);
+        Environment_LerpFogColor(play, &D_80A94068, 0.0f);
+        Environment_LerpFog(play, D_80A94074, D_80A94078, 0.0f);
         play->unk_18844 = false;
     }
 
     if (this->unk_286 >= 20) {
-        func_800FD59C(play, &D_80A9406C, this->unk_160);
-        func_800FD5E0(play, &D_80A94070, this->unk_160);
-        func_800FD654(play, &D_80A94068, this->unk_160);
-        func_800FD698(play, D_80A94074, D_80A94078, this->unk_160);
+        Environment_LerpAmbientColor(play, &D_80A9406C, this->unk_160);
+        Environment_LerpDiffuseColor(play, &D_80A94070, this->unk_160);
+        Environment_LerpFogColor(play, &D_80A94068, this->unk_160);
+        Environment_LerpFog(play, D_80A94074, D_80A94078, this->unk_160);
         play->unk_18844 = false;
     }
 

@@ -324,7 +324,7 @@ void func_80AECB6C(EnTk* this, PlayState* play) {
     }
 
     if (R_TIME_SPEED != 0.0f) {
-        this->skelAnime.playSpeed = (f32)func_800FE620(play) / R_TIME_SPEED;
+        this->skelAnime.playSpeed = (f32)Environment_GetTimeSpeed(play) / R_TIME_SPEED;
     } else {
         this->skelAnime.playSpeed = 0.0f;
     }

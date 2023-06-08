@@ -662,15 +662,15 @@ void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 rotAngle, Vec3f* src,
     dst->z = translation->z + (src->z * cos - src->x * sin);
 }
 
-void Lib_LerpRGB(Color_RGB8* a, Color_RGB8* b, f32 t, Color_RGB8* dst) {
+void Color_RGB8_Lerp(Color_RGB8* from, Color_RGB8* to, f32 lerp, Color_RGB8* dst) {
     f32 aF;
 
-    aF = a->r;
-    dst->r = aF + (b->r - aF) * t;
-    aF = a->g;
-    dst->g = aF + (b->g - aF) * t;
-    aF = a->b;
-    dst->b = aF + (b->b - aF) * t;
+    aF = from->r;
+    dst->r = aF + (to->r - aF) * lerp;
+    aF = from->g;
+    dst->g = aF + (to->g - aF) * lerp;
+    aF = from->b;
+    dst->b = aF + (to->b - aF) * lerp;
 }
 
 f32 Math_Vec3f_StepTo(Vec3f* start, Vec3f* target, f32 speed) {

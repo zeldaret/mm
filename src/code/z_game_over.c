@@ -15,7 +15,7 @@ void GameOver_FadeLights(PlayState* play) {
 
     if ((gameOverCtx->state >= GAMEOVER_DEATH_WAIT_GROUND && gameOverCtx->state < GAMEOVER_REVIVE_START) ||
         (gameOverCtx->state >= GAMEOVER_REVIVE_RUMBLE && gameOverCtx->state < GAMEOVER_REVIVE_FADE_OUT)) {
-        Kankyo_FadeInGameOverLights(play);
+        Environment_FadeInGameOverLights(play);
     }
 }
 
@@ -119,7 +119,7 @@ void GameOver_Update(PlayState* play) {
             break;
 
         case GAMEOVER_REVIVE_FADE_OUT:
-            Kankyo_FadeOutGameOverLights(play);
+            Environment_FadeOutGameOverLights(play);
             sGameOverTimer--;
             if (sGameOverTimer == 0) {
                 gameOverCtx->state = GAMEOVER_INACTIVE;

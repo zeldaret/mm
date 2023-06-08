@@ -91,7 +91,7 @@ void func_8089F0A0(EnViewer* this, PlayState* play) {
         play->envCtx.lightSettingOverride = 255;
         play->envCtx.unk_E0 = 0;
         play->envCtx.lightBlend = 1.0f;
-        func_800FAAB4(
+        Environment_ChangeLightSetting(
             play, SurfaceType_GetLightSettingIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId));
         play->envCtx.lightBlend = 1.0f;
         play->envCtx.prevLightSetting = play->envCtx.lightSetting;

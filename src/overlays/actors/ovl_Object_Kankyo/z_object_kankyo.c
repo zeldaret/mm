@@ -55,11 +55,11 @@ void func_808DBEB0(ObjectKankyo* this, PlayState* play) {
     D_808DE5B0 = 0.0f;
     this->unk_144 = Rand_ZeroOne() * 360.0f;
     this->unk_148 = Rand_ZeroOne() * 360.0f;
-    if (play->envCtx.unk_F2[2] == 128) {
+    if (play->envCtx.precipitation[2] == 128) {
         D_808DE5B0 = 1.0f;
         this->unk_114E = 1;
 
-        for (i = 0; i < play->envCtx.unk_F2[2]; i++) {
+        for (i = 0; i < play->envCtx.precipitation[2]; i++) {
             this->unk_14C[i].unk_10 = Rand_ZeroOne() * -200.0f;
         }
     } else {
@@ -107,7 +107,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            play->envCtx.unk_F2[2] = 0x80;
+            play->envCtx.precipitation[2] = 0x80;
             func_808DBFB0(this, play);
             break;
 
@@ -214,7 +214,7 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
     spCC = y / magnitude;
     spC8 = z / magnitude;
 
-    for (i = 0; i < play->envCtx.unk_F2[2]; i++) {
+    for (i = 0; i < play->envCtx.precipitation[2]; i++) {
         switch (this->unk_14C[i].unk_1C) {
             case 0:
                 this->unk_14C[i].unk_00 = play->view.eye.x + (spD0 * 120.0f);
@@ -232,13 +232,13 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
                 } else {
                     this->unk_14C[i].unk_10 += temp_f22;
                     tempI = i;
-                    if (play->envCtx.unk_F2[2] == (tempI + 1)) {
+                    if (play->envCtx.precipitation[2] == (tempI + 1)) {
                         this->unk_114E = 0;
                     }
                 }
 
                 this->unk_14C[i].unk_14 = (Rand_ZeroOne() - 0.5f) * (2.0f * temp_120);
-                if (play->envCtx.unk_F2[4] == 0) {
+                if (play->envCtx.precipitation[4] == 0) {
                     this->unk_14C[i].unk_18 = (Rand_ZeroOne() * 3.0f) + 1.0f;
                 } else {
                     this->unk_14C[i].unk_18 = (Rand_ZeroOne() * 3.0f) + 8.0f;
@@ -318,13 +318,13 @@ void func_808DC454(ObjectKankyo* this, PlayState* play) {
 }
 
 void func_808DCB7C(ObjectKankyo* this, PlayState* play) {
-    if (play->envCtx.unk_F2[2] < play->envCtx.unk_F2[3]) {
+    if (play->envCtx.precipitation[2] < play->envCtx.precipitation[3]) {
         if ((play->state.frames % 16) == 0) {
-            play->envCtx.unk_F2[2] += 2;
+            play->envCtx.precipitation[2] += 2;
         }
-    } else if (play->envCtx.unk_F2[3] < play->envCtx.unk_F2[2]) {
+    } else if (play->envCtx.precipitation[3] < play->envCtx.precipitation[2]) {
         if ((play->state.frames % 16) == 0) {
-            play->envCtx.unk_F2[2] -= 2;
+            play->envCtx.precipitation[2] -= 2;
         }
     }
     func_808DC454(this, play);
@@ -333,16 +333,16 @@ void func_808DCB7C(ObjectKankyo* this, PlayState* play) {
 void func_808DCBF8(ObjectKankyo* this, PlayState* play) {
     f32 temp_f0;
 
-    if ((play->envCtx.unk_F2[2] > 0) && (this->unk_114C == 0)) {
+    if ((play->envCtx.precipitation[2] > 0) && (this->unk_114C == 0)) {
         if ((play->state.frames % 16) == 0) {
-            play->envCtx.unk_F2[2] -= 9;
-            if ((s8)play->envCtx.unk_F2[2] < 0) {
-                play->envCtx.unk_F2[2] = 0;
+            play->envCtx.precipitation[2] -= 9;
+            if ((s8)play->envCtx.precipitation[2] < 0) {
+                play->envCtx.precipitation[2] = 0;
             }
         }
     }
 
-    temp_f0 = (f32)play->envCtx.unk_F2[2] / 128;
+    temp_f0 = (f32)play->envCtx.precipitation[2] / 128;
     temp_f0 = CLAMP(temp_f0, 0.0f, 1.0f);
 
     if (temp_f0 > 0.01f) {
@@ -525,14 +525,14 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
         temp_f0 = CLAMP(temp_f0, 0.0f, 1.0f);
         Math_SmoothStepToF(&D_808DE5B0, temp_f0, 0.2f, 0.1f, 0.001f);
 
-        sp68 = play->envCtx.unk_F2[2];
+        sp68 = play->envCtx.precipitation[2];
         sp68 *= D_808DE5B0;
 
-        if ((play->envCtx.unk_F2[2] >= 32) && (sp68 < 32)) {
+        if ((play->envCtx.precipitation[2] >= 32) && (sp68 < 32)) {
             sp68 = 32;
         }
     } else {
-        sp68 = play->envCtx.unk_F2[2];
+        sp68 = play->envCtx.precipitation[2];
     }
 
     for (i = 0; i < sp68; i++) {
@@ -654,7 +654,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
     Player* player = GET_PLAYER(play);
     s32 i;
     u8 phi_s5;
-    u16 end = play->envCtx.unk_F2[1];
+    u16 end = play->envCtx.precipitation[1];
     f32 temp_f12;
     f32 temp_f20;
     f32 temp_f22;

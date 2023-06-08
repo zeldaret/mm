@@ -782,7 +782,7 @@ s32 func_80A3FBE8(EnTest3* this, PlayState* play) {
         CutsceneManager_SetReturnCamera(CAM_ID_MAIN);
         Environment_StartTime();
         if (((void)0, gSaveContext.save.time) > CLOCK_TIME(6, 0)) {
-            func_800FE658(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
+            Environment_SetTimeJump(TIME_TO_MINUTES_ALT_F(fabsf((s16) - ((void)0, gSaveContext.save.time))));
         }
         if (play->actorCtx.flags & ACTORCTX_FLAG_6) {
             SET_WEEKEVENTREG(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT);
