@@ -260,7 +260,7 @@ s32 ObjMine_StepUntilParallel(Vec3f* value, Vec3f* target, f32 angleStep) {
     Vec3f perpNormal;
     f32 cosAngle = Math3D_Parallel(value, target);
 
-    if (cos_rad(angleStep) <= cosAngle) {
+    if (Math_CosF(angleStep) <= cosAngle) {
         Math_Vec3f_Copy(value, target);
         return true;
     }
@@ -1103,7 +1103,7 @@ void ObjMine_Path_Draw(Actor* thisx, PlayState* play) {
     }
 
     func_800B8050(&this->actor, play, true);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_AA_ZB_OPA_SURF2);
@@ -1120,7 +1120,7 @@ void ObjMine_DrawExplosion(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     func_800B8118(thisx, play, true);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 75);
@@ -1146,7 +1146,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
@@ -1201,7 +1201,7 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, object_ny_DL_000030);
 
