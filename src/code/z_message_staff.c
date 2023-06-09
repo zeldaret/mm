@@ -470,26 +470,26 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DrawTextCredits.s")
 #endif
 
-#ifdef NON_EQUIVALENT
 void Message_DecodeCredits(PlayState* play) {
-    u32 curChar; // s0
-    u16 curChar2;
-    s16 i;                 // s2
-    s16 playerNameLen;     // s3
-    s16 decodedBufPos = 0; // s5
+    u16 curChar;
     s16 loadChar;
+    s16 i;
+    s16 playerNameLen;
+    s16 decodedBufPos = 0;
+    s16 charOffset;
     f32 timeInSeconds;
     s16 numLines = 0;
     s16 value;
     s16 digits[4];
-    s32 charTexIdx = 0;                     // s4
-    MessageContext* msgCtx = &play->msgCtx; // s6
+    s32 charTexIdx = 0;
+    MessageContext* msgCtx = &play->msgCtx;
     Font* font = &play->msgCtx.font;
 
     msgCtx->nextTextId = 0xFFFF;
 
     while (true) {
-        curChar = msgCtx->decodedBuffer.schar[decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos];
+        curChar = font->msgBuf.schar[msgCtx->msgBufPos];
+        msgCtx->decodedBuffer.schar[decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos];
 
         if ((curChar == 4) || (curChar == 7) || (curChar == 0xC) || (curChar == 0xB) || (curChar == 2)) {
             // Textbox decoding ends with any of the above text control characters
@@ -508,9 +508,10 @@ void Message_DecodeCredits(PlayState* play) {
             }
 
             if (curChar == 7) {
-                curChar2 = msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 1];
+                value = font->msgBuf.schar[msgCtx->msgBufPos + 1];
+                msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 1];
                 msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[msgCtx->msgBufPos + 2];
-                value = curChar2 << 8;
+                value <<= 8;
                 msgCtx->nextTextId = msgCtx->decodedBuffer.schar[decodedBufPos] | value;
             }
 
@@ -535,26 +536,29 @@ void Message_DecodeCredits(PlayState* play) {
             }
 
             for (i = 0; i < playerNameLen; i++) {
-                curChar2 = gSaveContext.save.saveInfo.playerData.playerName[i];
-                if (curChar2 == 0x3E) {
-                    curChar2 = ' ';
-                } else if (curChar2 == 0x40) {
-                    curChar2 = '.';
-                } else if (curChar2 == 0x3F) {
-                    curChar2 = '-';
-                } else if (curChar2 < 0xA) {
-                    curChar2 += '0';
-                } else if (curChar2 < 0x24) {
-                    curChar2 += '7';
-                } else if (curChar2 < 0x3E) {
-                    curChar2 += '=';
+                curChar = gSaveContext.save.saveInfo.playerData.playerName[i];
+                if (curChar == 0x3E) {
+                    curChar = ' ';
+                } else if (curChar == 0x40) {
+                    curChar = '.';
+                } else if (curChar == 0x3F) {
+                    curChar = '-';
+                } else if (curChar < 0xA) {
+                    charOffset = curChar;
+                    curChar = '0' + charOffset;
+                } else if (curChar < 0x24) {
+                    charOffset = curChar;
+                    curChar = 'A' - 0xA + charOffset;
+                } else if (curChar < 0x3E) {
+                    charOffset = curChar;
+                    curChar = 'a' - 0x24 + charOffset;
                 }
 
-                if (curChar2 != ' ') {
-                    Font_LoadCharNES(play, curChar2 - ' ', charTexIdx);
+                if (curChar != ' ') {
+                    Font_LoadCharNES(play, curChar - ' ', charTexIdx);
                     charTexIdx += FONT_CHAR_TEX_SIZE;
                 }
-                msgCtx->decodedBuffer.schar[decodedBufPos] = curChar2;
+                msgCtx->decodedBuffer.schar[decodedBufPos] = curChar;
                 decodedBufPos++;
             }
             decodedBufPos--;
@@ -640,8 +644,8 @@ void Message_DecodeCredits(PlayState* play) {
                 for (i = 0; i < 2; i++) {
                     if ((i == 1) || (digits[i] != 0)) {
                         Font_LoadCharNES(play, digits[i] + '0' - ' ', charTexIdx);
-                        msgCtx->decodedBuffer.schar[decodedBufPos] = digits[i] + '0';
                         charTexIdx += FONT_CHAR_TEX_SIZE;
+                        msgCtx->decodedBuffer.schar[decodedBufPos] = digits[i] + '0';
                         decodedBufPos++;
                     }
                 }
@@ -678,7 +682,6 @@ void Message_DecodeCredits(PlayState* play) {
                             digits[2]++;
                             digits[3] -= 10;
                         }
-                        if (curChar) {}
 
                         loadChar = false;
                         for (i = 0; i < 4; i++) {
@@ -810,6 +813,3 @@ void Message_DecodeCredits(PlayState* play) {
         msgCtx->msgBufPos++;
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_staff/Message_DecodeCredits.s")
-#endif

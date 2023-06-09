@@ -683,22 +683,24 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 return;
 
             case 0x17: // MESSAGE_QUICKTEXT_ENABLE
-                if (((i + 1) == msgCtx->textDrawPos) &&
-                    ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) ||
-                     ((msgCtx->msgMode >= MSGMODE_OCARINA_STARTING) && (msgCtx->msgMode <= MSGMODE_26)))) {
+                if ((i + 1) == msgCtx->textDrawPos) {
                     j = i;
-                    while (true) {
-                        if ((msgCtx->decodedBuffer.schar[j] != 0x18) && (msgCtx->decodedBuffer.schar[j] != 0x1A) &&
-                            (msgCtx->decodedBuffer.schar[j] != 0x19) && (msgCtx->decodedBuffer.schar[j] != 0xE0) &&
-                            (msgCtx->decodedBuffer.schar[j] != 0x10) && (msgCtx->decodedBuffer.schar[j] != 0x12)) {
-                            j++;
-                            continue;
+                    if ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) ||
+                        ((msgCtx->msgMode >= MSGMODE_OCARINA_STARTING) && (msgCtx->msgMode <= MSGMODE_26))) {
+                        //! FAKE:
+                    dummy:;
+                        while (true) {
+                            if ((msgCtx->decodedBuffer.schar[j] != 0x18) && (msgCtx->decodedBuffer.schar[j] != 0x1A) &&
+                                (msgCtx->decodedBuffer.schar[j] != 0x19) && (msgCtx->decodedBuffer.schar[j] != 0xE0) &&
+                                (msgCtx->decodedBuffer.schar[j] != 0x10) && (msgCtx->decodedBuffer.schar[j] != 0x12)) {
+                                j++;
+                                continue;
+                            }
+                            break;
                         }
-                        break;
+                        i = j - 1;
+                        msgCtx->textDrawPos = i + 1;
                     }
-
-                    i = j - 1;
-                    msgCtx->textDrawPos = i + 1;
                 }
                 break;
 
