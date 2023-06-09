@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#define SNOWWD_GET_PARAM_F80(thisx) (((thisx)->params & 0xF80) >> 7)
+
 struct EnSnowwd;
 
 typedef void (*EnSnowwdActionFunc)(struct EnSnowwd*, PlayState*);
