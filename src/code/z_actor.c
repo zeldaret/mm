@@ -1796,15 +1796,22 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
     return dest;
 }
 
-f32 Target_800B82EC(Actor* actor, Player* player, s16 angle) {
+/**
+ * Returns the squared xyz distance from the actor to Player.
+ *
+ * This distance will be adjusted if Player is already targeting an actor in a way that the more Player is facing this
+ * actor the nearer it will be considered, within a 90 degree range.
+ */
+f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 angle) {
     f32 temp;
     s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle));
 
     if (player->targetedActor != NULL) {
-        if ((yaw > 0x4000) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
+        if ((yaw > (0x10000 / 4)) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             return FLT_MAX;
         }
 
+        // Linear scaling, yaw being 90 degree means it will return the original distance, 0 degree will adjust to 60% of the distance
         temp = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
         return temp;
     }
@@ -3451,7 +3458,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
             continue;
         }
 
-        distSq = Target_800B82EC(actor, player, sTargetPlayerYRot);
+        distSq = Target_GetAdjustedDistSq(actor, player, sTargetPlayerYRot);
 
         isNearestTargetableActor =
             (actor->flags & ACTOR_FLAG_TARGETABLE) && (distSq < sTargetableNearestActorDistanceSq);
