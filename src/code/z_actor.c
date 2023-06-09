@@ -22,19 +22,19 @@ FaultClient sActorFaultClient; // 2 funcs
 CollisionPoly* D_801ED8B0; // 1 func
 s32 D_801ED8B4;            // 2 funcs
 
-Actor* sTargetableNearestActor;         // 2 funcs
-Actor* sTargetableHighestPriorityActor; // 2 funcs
-Actor* D_801ED8C0;                      // 2 funcs
-Actor* D_801ED8C4;                      // 2 funcs
+Actor* sTargetableNearestActor;
+Actor* sTargetableHighestPriorityActor;
+Actor* D_801ED8C0;
+Actor* D_801ED8C4;
 
-f32 sTargetableNearestActorDistanceSq;  // 2 funcs
-f32 sBgmEnemyDistSq;                    // 2 funcs
-f32 D_801ED8D0;                         // 2 funcs
-s32 sTargetableHighestPriorityPriority; // 2 funcs
-s32 D_801ED8D8;                         // 2 funcs
-s16 D_801ED8DC;                         // 2 funcs
+f32 sTargetableNearestActorDistanceSq;
+f32 sBgmEnemyDistSq;
+f32 D_801ED8D0;
+s32 sTargetableHighestPriorityPriority;
+s32 D_801ED8D8;
+s16 sTargetPlayerYRot;
 
-Mtx sActorHiliteMtx; // 1 func
+Mtx sActorHiliteMtx;
 
 Actor* D_801ED920; // 2 funcs. 1 out of z_actor
 
@@ -3451,7 +3451,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
             continue;
         }
 
-        distSq = Target_800B82EC(actor, player, D_801ED8DC);
+        distSq = Target_800B82EC(actor, player, sTargetPlayerYRot);
 
         isNearestTargetableActor =
             (actor->flags & ACTOR_FLAG_TARGETABLE) && (distSq < sTargetableNearestActorDistanceSq);
@@ -3518,7 +3518,7 @@ void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targ
     sTargetableHighestPriorityPriority = D_801ED8D8 = INT32_MAX;
 
     actorCtx->targetContext.bgmEnemy = NULL;
-    D_801ED8DC = player->actor.shape.rot.y;
+    sTargetPlayerYRot = player->actor.shape.rot.y;
 
     actorCategories = sTargetableActorCategories;
 

@@ -576,84 +576,10 @@ void EnStopheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     }
 }
 
-#if 0
-f32 Target_800B82EC(Actor* actor, Player* player, s16 angle);
-
-void PrintToScreen(EnStopheishi* this, PlayState* play, GfxPrint* printer) {
-    Player* player = GET_PLAYER(play);
-    f32 distSq;
-    s32 x = 2;
-    s32 y = 7;
-    s32 i;
-    s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(this->actor.yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
-
-    GfxPrint_SetColor(printer, 255, 255, 255, 255);
-
-    distSq = Target_800B82EC(&this->actor, player,  player->actor.shape.rot.y);
-
-    GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "distSq:%f", distSq);
-
-    GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "dist:%f", sqrtf(distSq));
-
-    GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "player rot.y:%X", player->actor.shape.rot.y);
-
-    GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "yaw to player:%X", this->actor.yawTowardsPlayer);
-
-    GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "yaw:%X", yaw);
-
-    GfxPrint_SetPos(printer, x, y++);
-    GfxPrint_Printf(printer, "targetedActor:%X", player->targetedActor);
-}
-
-void DrawToScreen(EnStopheishi* this, PlayState* play) {
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    GfxPrint printer;
-    Gfx* gfxRef;
-    Gfx* gfx;
-
-    OPEN_DISPS(gfxCtx);
-
-    Gfx_SetupDL28_Opa(gfxCtx);
-
-    GfxPrint_Init(&printer);
-
-    gfxRef = POLY_OPA_DISP;
-    gfx = Graph_GfxPlusOne(gfxRef);
-    gSPDisplayList(OVERLAY_DISP++, gfx);
-
-    GfxPrint_Open(&printer, gfx);
-
-    PrintToScreen(this, play, &printer);
-
-    gfx = GfxPrint_Close(&printer);
-
-    gSPEndDisplayList(gfx++);
-    Graph_BranchDlist(gfxRef, gfx);
-    POLY_OPA_DISP = gfx;
-
-    GfxPrint_Destroy(&printer);
-
-    CLOSE_DISPS(gfxCtx);
-}
-
-#define DRAW_TO_SCREEN DrawToScreen(this, play)
-#endif
-
-#ifndef DRAW_TO_SCREEN
-#define DRAW_TO_SCREEN
-#endif
-
 void EnStopheishi_Draw(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnStopheishi_OverrideLimbDraw, EnStopheishi_PostLimbDraw, &this->actor);
-
-    DRAW_TO_SCREEN;
 }
