@@ -59,7 +59,9 @@ u8 D_801F4F33;
 u8 sGameOverLightsIntensity;
 Gfx* sSkyboxStarsDList;
 
-void Environment_GraphCallback(GraphicsContext* gfxCtx, PlayState* play) {
+void Environment_GraphCallback(GraphicsContext* gfxCtx, void* arg) {
+    PlayState* play = (PlayState*)arg;
+
     sSunScreenDepth = SysCfb_GetZBufferPixel(sSunDepthTestX, sSunDepthTestY);
     Lights_GlowCheck(play);
 }
@@ -1246,7 +1248,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
     s32 pad;
 
     //! FAKE:
-    if (&gSaveContext.save) {}
+    if (!gSaveContext.sceneLayer) {}
 
     if ((play->csCtx.state == 0) && !(play->actorCtx.flags & ACTORCTX_FLAG_1)) {
         switch (play->envCtx.timeSeqState) {
@@ -1269,7 +1271,7 @@ void Environment_UpdateTimeBasedSequence(PlayState* play) {
             case TIMESEQ_EARLY_NIGHT_CRITTERS:
                 if (play->envCtx.precipitation[PRECIP_RAIN_CUR] < 9) {
                     Audio_PlayAmbience(play->sequenceCtx.ambienceId);
-                    Audio_SetAmbienceChannelIO(1, 1, 1);
+                    Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_CRITTER_0, 1, 1);
                 }
                 play->envCtx.timeSeqState++;
                 break;
@@ -2367,6 +2369,4 @@ void func_800FEAF4(EnvironmentContext* envCtx) {
             envCtx->changeLightNextConfig = 4;
             break;
     }
-
-    return;
 }

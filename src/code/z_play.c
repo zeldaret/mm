@@ -372,7 +372,7 @@ void Play_Destroy(GameState* thisx) {
 
     BombersNotebook_Destroy(&sBombersNotebook);
     this->state.gfxCtx->callback = NULL;
-    this->state.gfxCtx->callbackArg = 0;
+    this->state.gfxCtx->callbackArg = NULL;
     Play_DestroyMotionBlur();
 
     if (R_PAUSE_BG_PRERENDER_STATE != PAUSE_BG_PRERENDER_OFF) {

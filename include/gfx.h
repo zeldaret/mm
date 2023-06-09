@@ -145,8 +145,8 @@ typedef struct GraphicsContext {
     /* 0x2E8 */ char unk_2E8[0x2];
     /* 0x2EA */ u8 updateViMode;
     /* 0x2EB */ u8 framebufferIndex;
-    /* 0x2EC */ void (*callback)(struct GraphicsContext*, u32);
-    /* 0x2F0 */ u32 callbackArg;
+    /* 0x2EC */ void (*callback)(struct GraphicsContext*, void*);
+    /* 0x2F0 */ void* callbackArg;
     /* 0x2F4 */ f32 xScale;
     /* 0x2F8 */ f32 yScale;
     /* 0x2FC */ GfxMasterList* masterList;
