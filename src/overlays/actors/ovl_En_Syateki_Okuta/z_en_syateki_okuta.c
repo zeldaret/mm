@@ -66,7 +66,7 @@ typedef enum {
     /* 2 */ SG_OCTO_ANIM_HIDE,
     /* 3 */ SG_OCTO_ANIM_FLOAT,
     /* 4 */ SG_OCTO_ANIM_APPEAR,
-    /* 5 */ SG_OCTO_ANIM_HIT, // unused
+    /* 5 */ SG_OCTO_ANIM_HIT // unused
 } ShootingGalleryOctorokAnimation;
 
 static AnimationInfo sAnimationInfo[] = {

@@ -8,24 +8,35 @@ typedef enum {
     /* 0 */ SG_OCTO_TYPE_NONE,
     /* 1 */ SG_OCTO_TYPE_RED,
     /* 2 */ SG_OCTO_TYPE_BLUE,
+    /* 3 */ SG_OCTO_TYPE_MAX
 } ShootingGalleryOctorokType;
 
 typedef enum {
     /* 0 */ SG_OCTO_ROW_BACK,
     /* 1 */ SG_OCTO_ROW_CENTER,
     /* 2 */ SG_OCTO_ROW_FRONT,
+    /* 3 */ SG_OCTO_ROW_MAX
 } ShootingGalleryOctorokRow;
 
 typedef enum {
     /* 0 */ SG_OCTO_COL_LEFT,
     /* 1 */ SG_OCTO_COL_CENTER,
     /* 2 */ SG_OCTO_COL_RIGHT,
+    /* 3 */ SG_OCTO_COL_MAX
 } ShootingGalleryOctorokColumn;
 
 #define SG_OCTO_GET_INDEX(thisx) ((thisx)->params & 0xF)
-#define SG_OCTO_GET_TYPE(octorokFlags, index) (((octorokFlags) >> ((index) * 2)) & 3)
-#define SG_OCTO_INDEX_FOR_POS(row, column) (((row) * 3) + (column))
-#define SG_OCTO_INDEX_DIRECTLY_IN_FRONT(index) ((index) + 3)
+#define SG_OCTO_INDEX_FOR_POS(row, column) (((row) * SG_OCTO_COL_MAX) + (column))
+
+// This returns the index of the Octorok directly in front of the Octorok at the given index. In other words, it
+// returns the index of the Octorok in the same column as the one with the given index, but one row ahead. It's
+// assumed that this will only be used for Octoroks in the back or center row; it returns an invalid index for
+// Octoroks in the front row.
+#define SG_OCTO_INDEX_DIRECTLY_IN_FRONT(index) ((index) + SG_OCTO_COL_MAX)
+
+// Both of these macros assume that the Octorok types can fit in two bits, hence why the index is multiplied by 2.
+#define SG_OCTO_GET_TYPE(octorokFlags, index) (((octorokFlags) >> ((index) * 2)) & SG_OCTO_TYPE_MAX)
+#define SG_OCTO_SET_FLAG(type, index) ((type & SG_OCTO_TYPE_MAX) << ((index) * 2))
 
 struct EnSyatekiOkuta;
 
