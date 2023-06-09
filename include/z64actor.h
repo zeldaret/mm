@@ -758,7 +758,7 @@ typedef struct BlinkInfo {
     /* 0x2 */ s16 blinkTimer;
 } BlinkInfo; // size = 0x4
 
-extern TargetRangeParams gTargetRanges[];
+extern TargetRangeParams gTargetRanges[TARGET_MODE_MAX];
 extern s16 D_801AED48[8];
 extern Gfx D_801AEF88[];
 extern Gfx D_801AEFA0[];

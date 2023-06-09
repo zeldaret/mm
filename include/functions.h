@@ -633,7 +633,7 @@ PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 
-s32 Target_800B83F8(Actor* actor, Player* player, s32 flag);
+s32 Target_NotInLeashRange(Actor* actor, Player* player, s32 flag);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
 s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId);
 s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId);
@@ -1456,7 +1456,7 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
 void Player_SetEquipmentData(PlayState* play, Player* player);
 void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
-void func_80123DA4(Player* player);
+void Player_StopTargeting(Player* player);
 void func_80123DC0(Player* player);
 void func_80123E90(PlayState* play, Actor* actor);
 s32 func_80123F2C(PlayState* play, s32 ammo);

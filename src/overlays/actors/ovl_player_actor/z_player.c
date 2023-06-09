@@ -4578,7 +4578,7 @@ s16 func_80832754(Player* this, s32 arg1) {
 }
 
 void func_80832888(Player* this, PlayState* play) {
-    s32 var_v1 = 0;
+    s32 skipLeashCheck = false;
     Actor* var_v1_2;
     s32 heldZ = CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_Z);
     s32 temp_v0_3;
@@ -4604,7 +4604,7 @@ void func_80832888(Player* this, PlayState* play) {
     }
 
     if (this->unk_738 > 5) {
-        var_v1 = 1;
+        skipLeashCheck = true;
     }
 
     temp_v0_3 = func_8082DAFC(play);
@@ -4634,7 +4634,7 @@ void func_80832888(Player* this, PlayState* play) {
                         this->unk_738 = 0xF;
                         this->stateFlags2 &= ~(PLAYER_STATE2_2 | PLAYER_STATE2_200000);
                     } else if (!var_a1) {
-                        func_80123DA4(this);
+                        Player_StopTargeting(this);
                     }
                     this->stateFlags1 &= ~PLAYER_STATE1_40000000;
                 } else if (!(this->stateFlags1 & (PLAYER_STATE1_20000 | PLAYER_STATE1_40000000)) &&
@@ -4645,8 +4645,8 @@ void func_80832888(Player* this, PlayState* play) {
 
             if (this->targetedActor != NULL) {
                 if ((this == GET_PLAYER(play)) && (this->targetedActor != this->unk_A78) &&
-                    Target_800B83F8(this->targetedActor, this, var_v1)) {
-                    func_80123DA4(this);
+                    Target_NotInLeashRange(this->targetedActor, this, skipLeashCheck)) {
+                    Player_StopTargeting(this);
                     this->stateFlags1 |= PLAYER_STATE1_40000000;
                 } else if (this->targetedActor != NULL) {
                     this->targetedActor->targetPriority = 0x28;

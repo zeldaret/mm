@@ -1846,13 +1846,13 @@ s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
     return distSq < gTargetRanges[actor->targetMode].rangeSq;
 }
 
-s32 Target_800B83F8(Actor* actor, Player* player, s32 flag) {
+s32 Target_NotInLeashRange(Actor* actor, Player* player, s32 skipChecks) {
     if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_TARGETABLE) ||
         (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
         return true;
     }
 
-    if (!flag) {
+    if (!skipChecks) {
         s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
         f32 distSq;
 
@@ -2570,7 +2570,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     actor = player->targetedActor;
     if ((actor != NULL) && (actor->update == NULL)) {
         actor = NULL;
-        func_80123DA4(player);
+        Player_StopTargeting(player);
     }
 
     if ((actor == NULL) || (player->unk_738 < 5)) {
@@ -3358,7 +3358,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     ActorOverlay* overlayEntry = actor->overlayEntry;
 
     if ((player != NULL) && (actor == player->targetedActor)) {
-        func_80123DA4(player);
+        Player_StopTargeting(player);
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
