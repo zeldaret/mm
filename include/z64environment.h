@@ -144,6 +144,9 @@ typedef struct {
     /* 0x7 */ u8 skybox2Index;
 } TimeBasedSkyboxEntry; // size = 0x8
 
+#define ENV_FOGNEAR_MAX 996
+#define ENV_ZFAR_MAX 12800
+
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];
     /* 0x03 */ s8 diffuseDir1[3];
@@ -251,7 +254,7 @@ void Environment_Update(struct PlayState* play, EnvironmentContext* envCtx, stru
                         struct PauseContext* pauseCtx, struct MessageContext* msgCtx, struct GameOverContext* gameOverCtx,
                         GraphicsContext* gfxCtx);
 void Environment_DrawSunLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f vec);
-void Environment_DrawLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f vec, f32 arg5, f32 arg6, s16 arg7, s8 arg8);
+void Environment_DrawLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f pos, f32 scale, f32 colorIntensity, s16 glareStrength, u8 isSun);
 void Environment_DrawRain(struct PlayState* play, struct View* view, GraphicsContext* gfxCtx);
 void Environment_ChangeLightSetting(struct PlayState* play, u8 lightSetting);
 void Environment_AddLightningBolts(struct PlayState* play, u8 num);
