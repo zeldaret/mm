@@ -95,7 +95,7 @@ void func_80AF76F0(EnSnowwd* this, PlayState* play) {
             if (SNOWWD_GET_PARAM_F80(&this->actor) < 0x10) {
                 sp48 = thisx->world.pos;
                 sp48.y += 200.0f;
-                Item_DropCollectibleRandom(play, NULL, &sp48, (SNOWWD_GET_PARAM_F80(&this->actor) * 0x10));
+                Item_DropCollectibleRandom(play, NULL, &sp48, SNOWWD_GET_PARAM_F80(&this->actor) * 0x10);
             }
             thisx->home.rot.z = 1;
         }
