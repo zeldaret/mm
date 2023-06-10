@@ -134,7 +134,7 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_firefly_Skel_0018B8, &object_firefly_Anim_00017C, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &object_firefly_Anim_00017C, this->jointTable,
                    this->morphTable, 28);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -769,7 +769,7 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     EnFirefly* this = THIS;
 
     if ((this->currentType != KEESE_FIRE) && (limbIndex == 27)) {
-        gSPDisplayList((*gfx)++, object_firefly_DL_001678);
+        gSPDisplayList((*gfx)++, gFireKeeseRedEyesDL);
     } else if ((this->lastDrawnFrame != play->gameplayFrames) &&
                ((this->auraType == KEESE_AURA_FIRE) || (this->auraType == KEESE_AURA_ICE)) &&
                ((limbIndex == 15) || (limbIndex == 21))) {
