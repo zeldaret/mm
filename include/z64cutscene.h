@@ -580,17 +580,6 @@ typedef union CutsceneData {
     s8  b[4];
 } CutsceneData;
 
-#define BIT_FLAG_TO_SHIFT(flag) \
-    ((flag & 0x80) ? 7 : \
-    (flag & 0x40) ? 6 : \
-    (flag & 0x20) ? 5 : \
-    (flag & 0x10) ? 4 : \
-    (flag & 0x8) ? 3 : \
-    (flag & 0x4) ? 2 : \
-    (flag & 0x2) ? 1 : \
-    (flag & 0x1) ? 0 : \
-    0)
-
 // Do not trigger the scripted cutscene upon any spawn
 #define CS_SPAWN_FLAG_NONE 0xFF
 // Always trigger the scripted cutscene upon the specified spawn
