@@ -152,7 +152,7 @@ s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32
  */
 s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f* lineBPointA, Vec3f* lineBPointB,
                                   Vec3f* lineAClosestToB, Vec3f* lineBClosestToA) {
-    f32 sqMag;
+    f32 magSq;
     f32 scaleB;
     f32 lineAx = lineAPointB->x - lineAPointA->x;
     f32 lineAy = lineAPointB->y - lineAPointA->y;
@@ -167,12 +167,12 @@ s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f*
     f32 tA;
     f32 tB;
 
-    sqMag = SQ(lineBx) + SQ(lineBy) + SQ(lineBz);
-    if (IS_ZERO(sqMag)) {
+    magSq = SQ(lineBx) + SQ(lineBy) + SQ(lineBz);
+    if (IS_ZERO(magSq)) {
         return false;
     }
 
-    scaleB = 1.0f / sqMag;
+    scaleB = 1.0f / magSq;
 
     compAAlongB = ((lineAx * lineBx) + (lineAy * lineBy) + (lineAz * lineBz)) * scaleB;
 
@@ -184,8 +184,8 @@ s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f*
     lineAPerpB.y = lineAy - (lineBy * compAAlongB);
     lineAPerpB.z = lineAz - (lineBz * compAAlongB);
 
-    sqMag = SQXYZ(lineAPerpB);
-    if (IS_ZERO(sqMag)) {
+    magSq = SQXYZ(lineAPerpB);
+    if (IS_ZERO(magSq)) {
         return false;
     }
 
@@ -193,7 +193,7 @@ s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f*
     lineBAPerpB.y = (lineAPointA->y - lineBPointA->y) - (lineBy * compBAAlongB);
     lineBAPerpB.z = (lineAPointA->z - lineBPointA->z) - (lineBz * compBAAlongB);
 
-    tA = -DOTXYZ(lineAPerpB, lineBAPerpB) / sqMag;
+    tA = -DOTXYZ(lineAPerpB, lineBAPerpB) / magSq;
     lineAClosestToB->x = (lineAx * tA) + lineAPointA->x;
     lineAClosestToB->y = (lineAy * tA) + lineAPointA->y;
     lineAClosestToB->z = (lineAz * tA) + lineAPointA->z;
@@ -211,17 +211,17 @@ s32 Math3D_LineSegMakePerpLineSeg(Vec3f* lineAPointA, Vec3f* lineAPointB, Vec3f*
  * `point` to `line` closest point is placed in `closestPoint`
  */
 f32 Math3D_LineClosestToPoint(InfiniteLine* line, Vec3f* pos, Vec3f* closestPoint) {
-    f32 dirVectorSize = Math3D_Vec3fMagnitudeSq(&line->dir);
+    f32 dirMagnitudeSq = Math3D_Vec3fMagnitudeSq(&line->dir);
     f32 t;
 
-    if (IS_ZERO(dirVectorSize)) {
+    if (IS_ZERO(dirMagnitudeSq)) {
         Math_Vec3f_Copy(closestPoint, pos);
         //! @bug Missing early return
     }
 
     t = (((pos->x - line->point.x) * line->dir.x) + ((pos->y - line->point.y) * line->dir.y) +
          ((pos->z - line->point.z) * line->dir.z)) /
-        dirVectorSize;
+        dirMagnitudeSq;
     closestPoint->x = (line->dir.x * t) + line->point.x;
     closestPoint->y = (line->dir.y * t) + line->point.y;
     closestPoint->z = (line->dir.z * t) + line->point.z;
@@ -2432,7 +2432,6 @@ s32 Math3D_CircleLineIntersections(f32 centreX, f32 centerY, f32 radius, f32 poi
     return ret;
 }
 
-#ifdef NON_MATCHING
 void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
     Vec3f sp2C;
     s16 sp2A;
@@ -2450,6 +2449,3 @@ void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
     dst->x = Math_SinS(TRUNCF_BINANG(0x7FFF * arg3) + sp2A) * sp24 + sp2C.x;
     dst->z = Math_CosS(TRUNCF_BINANG(0x7FFF * arg3) + sp2A) * sp24 + sp2C.z;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017FD44.s")
-#endif
