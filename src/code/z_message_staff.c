@@ -537,21 +537,21 @@ void Message_DecodeCredits(PlayState* play) {
 
             for (i = 0; i < playerNameLen; i++) {
                 curChar = gSaveContext.save.saveInfo.playerData.playerName[i];
-                if (curChar == 0x3E) {
+                if (curChar == 62) {
                     curChar = ' ';
-                } else if (curChar == 0x40) {
+                } else if (curChar == 64) {
                     curChar = '.';
-                } else if (curChar == 0x3F) {
+                } else if (curChar == 63) {
                     curChar = '-';
-                } else if (curChar < 0xA) {
+                } else if (curChar < 10) {
                     charOffset = curChar;
                     curChar = '0' + charOffset;
-                } else if (curChar < 0x24) {
+                } else if (curChar < 36) {
                     charOffset = curChar;
-                    curChar = 'A' - 0xA + charOffset;
-                } else if (curChar < 0x3E) {
+                    curChar = 'A' - 10 + charOffset;
+                } else if (curChar < 62) {
                     charOffset = curChar;
-                    curChar = 'a' - 0x24 + charOffset;
+                    curChar = 'a' - 36 + charOffset;
                 }
 
                 if (curChar != ' ') {
@@ -651,6 +651,9 @@ void Message_DecodeCredits(PlayState* play) {
                 }
                 decodedBufPos--;
             } else if (curChar == 0x1E) {
+                //! TODO: `bankRupees` was originally part of a u32 array, along with surrounding struct members in
+                //! `SaveInfo`. This is likely accessing many components of that array with a single line. Need to
+                //! figure out what's expected to be accessed here.
                 value = (&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[++msgCtx->msgBufPos]];
                 if ((font->msgBuf.schar[msgCtx->msgBufPos] & 0xFF) == 2) {
                     if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
