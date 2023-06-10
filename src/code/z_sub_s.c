@@ -188,7 +188,7 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
 
     Matrix_MultVec3f(&zeroVec, &newPos);
     Matrix_Get(&curState);
-    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
+    Matrix_MtxFToYXZRot(&curState, &newRot, false);
     *pos = newPos;
 
     if (!stepRot && !overrideRot) {
@@ -577,7 +577,7 @@ s32 SubS_HasReachedPoint(Actor* actor, Path* path, s32 pointIndex) {
         diffZ = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
     if (((px * actor->world.pos.x) + (pz * actor->world.pos.z) + d) > 0.0f) {
         reached = true;
     }

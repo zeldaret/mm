@@ -1,7 +1,10 @@
 #ifndef Z64AUDIO_H
 #define Z64AUDIO_H
 
+#include "PR/ultratypes.h"
+#include "ultra64/os_voice.h"
 #include "audiothread_cmd.h"
+#include "libc/stddef.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
 
@@ -105,7 +108,7 @@ typedef enum {
     /* 1 */ SOUNDMODE_HEADSET,
     /* 2 */ SOUNDMODE_SURROUND_EXTERNAL,
     /* 3 */ SOUNDMODE_MONO,
-    /* 4 */ SOUNDMODE_SURROUND,
+    /* 4 */ SOUNDMODE_SURROUND
 } SoundMode;
 
 typedef enum {
@@ -1278,5 +1281,7 @@ typedef void (*AudioCustomUpdateFunction)(void);
 typedef u32 (*AudioCustomSeqFunction)(s8 value, SequenceChannel* channel);
 typedef s32 (*AudioCustomReverbFunction)(Sample*, s32, s8, s32);
 typedef Acmd* (*AudioCustomSynthFunction)(Acmd*, s32, s32);
+
+extern OSVoiceHandle gVoiceHandle;
 
 #endif

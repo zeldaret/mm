@@ -31,7 +31,7 @@ typedef enum {
     /* 1 */ GYORG_EFFECT_BUBBLE,
     /* 2 */ GYORG_EFFECT_DROPLET,
     /* 3 */ GYORG_EFFECT_SPLASH,
-    /* 4 */ GYORG_EFFECT_WET_SPOT,
+    /* 4 */ GYORG_EFFECT_WET_SPOT
 } GyorgEffectType;
 
 typedef struct Boss03 {

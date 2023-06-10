@@ -304,7 +304,7 @@ s32 func_808D91C4(EnSw* this, CollisionPoly* arg1) {
         return false;
     }
 
-    sp4C = func_80086C48(temp_f12);
+    sp4C = Math_FAcosF(temp_f12);
     if (sp4C < 0.001f) {
         return false;
     }
@@ -1295,7 +1295,7 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_410 & 4) {
         if (ENSW_GET_3(&this->actor)) {
-            func_800B8050(&this->actor, play, MTXMODE_NEW);
+            func_800B8050(&this->actor, play, 0);
         }
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         Matrix_RotateXS(-0x3C72, MTXMODE_APPLY);

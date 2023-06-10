@@ -7,13 +7,13 @@ struct EnTite;
 
 typedef void (*EnTiteActionFunc)(struct EnTite*, PlayState*);
 
-enum {
+typedef enum {
     /* -4 */ ENTITE_MINUS_4 = -4,
     /* -3 */ ENTITE_MINUS_3,
     /* -2 */ ENTITE_MINUS_2,
     /* -1 */ ENTITE_MINUS_1,
-    /*  0 */ ENTITE_MINUS_0,
-};
+    /*  0 */ ENTITE_MINUS_0
+} EnTiteParam;
 
 typedef struct EnTite {
     /* 0x000 */ Actor actor;

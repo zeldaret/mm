@@ -120,7 +120,7 @@ s32 EnBomChu_UpdateFloorPoly(EnBomChu* this, CollisionPoly* floorPoly, PlayState
         return false;
     }
 
-    angle = func_80086C48(normDotUp);
+    angle = Math_FAcosF(normDotUp);
     if (angle < 0.001f) {
         return false;
     }

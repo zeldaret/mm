@@ -13,12 +13,12 @@ typedef s32 (*EnDnsFunc)(struct EnDns*, PlayState*);
 #define ENDNS_GET_4000(thisx) ((thisx)->params & 0x4000)
 #define ENDNS_GET_8000(thisx) ((thisx)->params & 0x8000)
 
-enum {
-    /* 0x0 */ ENDNS_GET_7_0,
-    /* 0x1 */ ENDNS_GET_7_1,
-    /* 0x2 */ ENDNS_GET_7_2,
-    /* 0x3 */ ENDNS_GET_7_3,
-};
+typedef enum {
+    /* 0 */ ENDNS_GET_7_0,
+    /* 1 */ ENDNS_GET_7_1,
+    /* 2 */ ENDNS_GET_7_2,
+    /* 3 */ ENDNS_GET_7_3
+} EnDnsParam;
 
 typedef struct EnDns {
     /* 0x000 */ Actor actor;

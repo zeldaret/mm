@@ -348,9 +348,9 @@ void Math_Vec3f_SumScaled(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest) {
 }
 
 void Math_Vec3f_AddRand(Vec3f* orig, f32 scale, Vec3f* dest) {
-    dest->x = randPlusMinusPoint5Scaled(scale) + orig->x;
-    dest->y = randPlusMinusPoint5Scaled(scale) + orig->y;
-    dest->z = randPlusMinusPoint5Scaled(scale) + orig->z;
+    dest->x = Rand_CenteredFloat(scale) + orig->x;
+    dest->y = Rand_CenteredFloat(scale) + orig->y;
+    dest->z = Rand_CenteredFloat(scale) + orig->z;
 }
 
 void Math_Vec3f_DistXYZAndStoreNormDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest) {

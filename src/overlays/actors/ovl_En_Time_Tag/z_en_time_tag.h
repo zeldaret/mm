@@ -56,7 +56,7 @@ typedef enum {
     /* 13 */ TIMETAG_KICKOUT_TEXT_TOWN_SHOOTING_GALLERY_2, // quick, it's closing time
     /* 14 */ TIMETAG_KICKOUT_TEXT_SWORDSMANS_SCHOOL, // need to cut the moon, must leave
     /* 15 */ TIMETAG_KICKOUT_TEXT_TREASURE_CHEST_SHOP, // already time to close shop
-    /* 16 */ TIMETAG_KICKOUT_TEXT_DOGGY_RACETRACK, // no more for today
+    /* 16 */ TIMETAG_KICKOUT_TEXT_DOGGY_RACETRACK // no more for today
 } TimeTagKickOutText;
 
 typedef struct EnTimeTag {

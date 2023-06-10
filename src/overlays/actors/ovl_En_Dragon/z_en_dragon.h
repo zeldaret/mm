@@ -13,7 +13,7 @@ typedef enum {
     /* 3 */ DEEP_PYTHON_ACTION_DAMAGE,
     /* 4 */ DEEP_PYTHON_ACTION_RETREAT,
     /* 5 */ DEEP_PYTHON_ACTION_SETUP_DEAD,
-    /* 6 */ DEEP_PYTHON_ACTION_DEAD,
+    /* 6 */ DEEP_PYTHON_ACTION_DEAD
 } DeepPythonAction;
 
 struct EnDragon;

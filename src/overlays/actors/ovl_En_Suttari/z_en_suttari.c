@@ -536,9 +536,9 @@ void func_80BAB374(EnSuttari* this, PlayState* play) {
     Vec3f sp38;
 
     if ((curFrame % 3) == 0) {
-        sp38.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        sp38.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         sp38.y = this->actor.world.pos.y;
-        sp38.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        sp38.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
         Actor_SpawnFloorDustRing(play, &this->actor, &sp38, 10.0f, 0, 2.0f, 0, 0, 0);
     }
 }
@@ -623,7 +623,7 @@ s32 func_80BAB758(EnSuttari* this, Path* path, s32 arg2) {
         sp54 = sp5C[index + 1].x - sp5C[index - 1].x;
         sp48 = sp5C[index + 1].z - sp5C[index - 1].z;
     }
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -653,7 +653,7 @@ s32 func_80BAB8F4(EnSuttari* this, Path* path, s32 arg2) {
         sp54 = sp5C[index - 1].x - sp5C[index + 1].x;
         sp48 = sp5C[index - 1].z - sp5C[index + 1].z;
     }
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(sp54, sp48)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(sp54, sp48)), &sp44, &sp40, &sp3C);
     if (((sp44 * this->actor.world.pos.x) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }

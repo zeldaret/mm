@@ -201,7 +201,7 @@ void func_8088C858(EnElf* this, PlayState* play) {
         this->unk_244 = 1;
         this->unk_248 = 128;
         this->unk_254 = Rand_ZeroFloat(1.0f) + 0.5f;
-        this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+        this->unk_24C = Rand_CenteredFloat(0x7FFF);
         this->unk_26C = func_8088C9CC;
     }
 }
@@ -216,7 +216,7 @@ void func_8088C920(EnElf* this, PlayState* play) {
             this->unk_244 = 1;
             this->unk_248 = 128;
             this->unk_254 = Rand_ZeroFloat(1.0f) + 0.5f;
-            this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+            this->unk_24C = Rand_CenteredFloat(0x7FFF);
             this->unk_26C = func_8088C9CC;
         }
     }
@@ -264,7 +264,7 @@ void func_8088C9CC(EnElf* this, PlayState* play) {
         this->unk_244 = 1;
         this->unk_248 = 128;
         this->unk_254 = Rand_ZeroFloat(0.5f) + 0.5f;
-        this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+        this->unk_24C = Rand_CenteredFloat(0x7FFF);
     }
 }
 
@@ -293,7 +293,7 @@ void func_8088CC48(EnElf* this, PlayState* play) {
     this->unk_246 = 0;
     this->unk_24A = (s32)Rand_ZeroFloat(1048.0f) + 0x200;
     this->unk_224 = this->actor.world.pos;
-    this->unk_258 = randPlusMinusPoint5Scaled(0x7FFF);
+    this->unk_258 = Rand_CenteredFloat(0x7FFF);
     this->unk_26C = func_8088C9CC;
     func_8088CBAC(this, play);
     this->unk_25C = 0;
@@ -1247,9 +1247,9 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
     Color_RGBA8 envColor;
 
     if (!(this->fairyFlags & 8)) {
-        sparklePos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
+        sparklePos.x = Rand_CenteredFloat(6.0f) + this->actor.world.pos.x;
         sparklePos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y;
-        sparklePos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
+        sparklePos.z = Rand_CenteredFloat(6.0f) + this->actor.world.pos.z;
 
         primColor.r = this->innerColor.r;
         primColor.g = this->innerColor.g;

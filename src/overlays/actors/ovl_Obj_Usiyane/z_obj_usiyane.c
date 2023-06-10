@@ -80,7 +80,7 @@ s32 func_80C07CD0(void) {
         }
     }
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         return false;
     }
     return true;

@@ -336,7 +336,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
-                    this->actor.world.rot.y += BINANG_ROT180((s16)randPlusMinusPoint5Scaled(8000.0f));
+                    this->actor.world.rot.y += BINANG_ROT180((s16)(s32)Rand_CenteredFloat(0x1F40));
                     this->actor.velocity.y = -this->actor.velocity.y;
                     this->bubble.unk_149 = -1;
                     return;
@@ -667,7 +667,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
 
         if (this->actor.speed == 0.0f) {
-            func_800B8118(&this->actor, play, MTXMODE_NEW);
+            func_800B8118(&this->actor, play, 0);
 
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F380);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
