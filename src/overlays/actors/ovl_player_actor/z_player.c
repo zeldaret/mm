@@ -11268,7 +11268,7 @@ void Player_DetectSecrets(PlayState* play, Player* this) {
 
 // Making a player csMode negative will behave as its positive counterpart
 // except will disable setting the start position
-#define DISABLE_PLAYER_CSMODE_START_POS -1
+#define DISABLE_PLAYER_CSMODE_START_POS(csMode) -(csMode)
 
 s8 sPlayerCsModes[PLAYER_CUEID_MAX] = {
     /* PLAYER_CUEID_NONE */ PLAYER_CSMODE_NONE,
@@ -11304,7 +11304,7 @@ s8 sPlayerCsModes[PLAYER_CUEID_MAX] = {
     /* PLAYER_CUEID_30 */ PLAYER_CSMODE_NONE,
     /* PLAYER_CUEID_31 */ PLAYER_CSMODE_40,
     /* PLAYER_CUEID_32 */ PLAYER_CSMODE_NONE,
-    /* PLAYER_CUEID_33 */ PLAYER_CSMODE_52* DISABLE_PLAYER_CSMODE_START_POS,
+    /* PLAYER_CUEID_33 */ DISABLE_PLAYER_CSMODE_START_POS(PLAYER_CSMODE_52),
     /* PLAYER_CUEID_34 */ PLAYER_CSMODE_42,
     /* PLAYER_CUEID_35 */ PLAYER_CSMODE_43,
     /* PLAYER_CUEID_36 */ PLAYER_CSMODE_57,
@@ -19953,7 +19953,8 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
     if (!var_a0 && (this->cueId != playerCue->id)) {
         csMode = sPlayerCsModes[playerCue->id];
 
-        if ((csMode > DISABLE_PLAYER_CSMODE_START_POS) && !gDisablePlayerCsModeStartPos) {
+        // Negative csModes will skip this block
+        if ((csMode >= PLAYER_CSMODE_NONE) && !gDisablePlayerCsModeStartPos) {
             if ((csMode == PLAYER_CSMODE_2) || (csMode == PLAYER_CSMODE_3)) {
                 Player_Cutscene_8085ABA8(this, playerCue);
             } else {
