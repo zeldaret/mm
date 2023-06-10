@@ -529,7 +529,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
 
     Actor_SetFocus(&this->actor, height);
 
-    if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
+    if ((this->actor.colChkInfo.health != 0) && Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
     if (this->drawDmgEffAlpha > 0.0f) {

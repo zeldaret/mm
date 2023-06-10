@@ -266,8 +266,6 @@ s32 __osGetId(OSPfs* pfs) {
 
     bcopy(id, pfs->id, BLOCKSIZE);
 
-    if (0) {}
-
     pfs->version = id->version;
 
     pfs->banks = id->banks;
