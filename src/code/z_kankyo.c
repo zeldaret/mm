@@ -68,13 +68,13 @@ u8 sSandstormColorIndex = 0;
 u8 sNextSandstormColorIndex = 0;
 u8 D_801BDBA8 = 0;
 u8 D_801BDBAC = 0;
-u8 gWeatherMode = 0;
+u8 gWeatherMode = WEATHER_MODE_CLEAR;
 u8 gLightConfigAfterUnderwater = 0;
-u8 gInterruptSongOfStorms = 0;
-u8 gSkyboxIsChanging = 0;
+u8 gInterruptSongOfStorms = false;
+u8 sSkyboxIsChanging = false;
 u8 D_801BDBC0 = 0;
 u8 D_801BDBC4 = 0;
-u8 sSceneSeqState = 0;
+u8 gSceneSeqState = SCENESEQ_DEFAULT;
 
 typedef struct {
     /* 0x0 */ u16 startTime;
@@ -149,7 +149,7 @@ TimeBasedLightEntry sTimeBasedLightConfigs[][7] = {
     },
 };
 
-TimeBasedSkyboxEntry gTimeBasedSkyboxConfigs[][9] = {
+TimeBasedSkyboxEntry sTimeBasedSkyboxConfigs[][9] = {
     {
         { CLOCK_TIME(0, 0), CLOCK_TIME(4, 0), 0, 0, 3, 3 },
         { CLOCK_TIME(4, 0), CLOCK_TIME(5, 0), 0, 1, 3, 4 },
@@ -465,7 +465,7 @@ typedef struct {
     /* 0x8 */ RomFile palette;
 } SkyboxFile; // size = 0x10
 
-SkyboxFile gNormalSkyFiles[] = {
+SkyboxFile sNormalSkyFiles[] = {
     {
         ROM_FILE(d2_fine_static),
         ROM_FILE_UNSET,
@@ -763,7 +763,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
 
     gInterruptSongOfStorms = false;
     gLightConfigAfterUnderwater = 0;
-    gSkyboxIsChanging = false;
+    sSkyboxIsChanging = false;
     gSaveContext.retainWeatherMode = false;
 
     R_ENV_LIGHT1_DIR(0) = 80;
@@ -1697,7 +1697,7 @@ void Environment_PlaySceneSequence(PlayState* play) {
                 }
             } else if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 0)) &&
                        (((void)0, gSaveContext.save.time) <= CLOCK_TIME(17, 10))) {
-                if (sSceneSeqState != SCENESEQ_DEFAULT) {
+                if (gSceneSeqState != SCENESEQ_DEFAULT) {
                     Audio_PlayMorningSceneSequence(play->sequenceCtx.seqId, dayMinusOne);
                 } else if ((((void)0, gSaveContext.save.time) >= CLOCK_TIME(6, 1)) &&
                            (play->sequenceCtx.seqId != ((void)0, gSaveContext.seqId))) {
@@ -1720,7 +1720,7 @@ void Environment_PlaySceneSequence(PlayState* play) {
             }
         }
         func_801A3CD8(play->roomCtx.curRoom.echo);
-        sSceneSeqState = SCENESEQ_DEFAULT;
+        gSceneSeqState = SCENESEQ_DEFAULT;
     }
 }
 

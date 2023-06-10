@@ -125,11 +125,11 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
 
     if (WEATHER_TAG_RANGE100(&this->actor) > Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
-            gInterruptSongOfStorms = 1;
+            gInterruptSongOfStorms = true;
             if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
                 ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
-                gInterruptSongOfStorms = 0;
+                gInterruptSongOfStorms = false;
                 if (gWeatherMode != weatherMode) {
                     gWeatherMode = weatherMode;
                     play->envCtx.changeLightEnabled = true;
@@ -155,11 +155,11 @@ u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
 
     if (WEATHER_TAG_RANGE100(&this->actor) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
         if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
-            gInterruptSongOfStorms = 1;
+            gInterruptSongOfStorms = true;
             if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
                 ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
-                gInterruptSongOfStorms = 0;
+                gInterruptSongOfStorms = false;
                 gWeatherMode = WEATHER_MODE_CLEAR;
                 play->envCtx.changeLightEnabled = true;
                 play->envCtx.lightConfig = lightConfig;

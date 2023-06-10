@@ -60,7 +60,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
         }
 
         Interface_NewDay(play, CURRENT_DAY);
-        sSceneSeqState = 0xFE;
+        gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
         func_800FEAF4(&play->envCtx);
         this->actionFunc = func_80A42AB8;
@@ -97,7 +97,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         Interface_NewDay(play, CURRENT_DAY);
         func_80151A68(play, sDayMessages2[CURRENT_DAY - 1]);
-        sSceneSeqState = 0xFE;
+        gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
         func_800FEAF4(&play->envCtx);
         this->actionFunc = func_80A42AB8;

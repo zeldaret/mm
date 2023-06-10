@@ -287,36 +287,11 @@ void func_800FEA50(struct PlayState* play);
 void func_800FEAB0(void);
 void func_800FEAF4(EnvironmentContext* envCtx);
 
-// Data to import
-extern f32 sSandstormLerpScale;
-extern s32 sSunScreenDepth;
-extern s32 sEnvSkyboxNumStars;
-extern u16 sTimeJump;
-extern u8 sSandstormColorIndex;
-extern u8 sNextSandstormColorIndex;
-// extern UNK_TYPE1 D_801BDBA8;
+// Data
 extern u8 gWeatherMode;
 extern u8 gLightConfigAfterUnderwater;
 extern u8 gInterruptSongOfStorms;
-// extern UNK_TYPE1 gSkyboxIsChanging;
-extern u8 D_801BDBC0;
-extern u8 D_801BDBC4;
-extern u8 sSceneSeqState;
-// extern UNK_TYPE1 sTimeBasedLightConfigs;
-// extern UNK_TYPE1 gTimeBasedSkyboxConfigs;
-// extern UNK_TYPE1 D_801BE38E;
-// extern UNK_TYPE1 D_801BE38F;
-// extern UNK_TYPE1 D_801BE390;
-// extern UNK_TYPE1 gNormalSkyFiles;
-// extern UNK_TYPE1 D_801BE534;
-// extern UNK_TYPE1 D_801BE6D4;
-// extern UNK_TYPE1 D_801BE874;
-// extern UNK_TYPE4 D_801BE894;
-// extern UNK_TYPE4 D_801BE8BC;
-// extern UNK_TYPE4 D_801BE8E4;
-// extern UNK_TYPE1 sSandstormPrimColors;
-// extern UNK_TYPE1 sSandstormEnvColors;
-
+extern u8 gSceneSeqState;
 
 //! @TODO: actual extern'd bss
 /*
