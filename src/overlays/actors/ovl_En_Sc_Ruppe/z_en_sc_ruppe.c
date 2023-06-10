@@ -21,7 +21,7 @@ void func_80BD6B18(EnScRuppe* this, PlayState* play);
 typedef struct {
     /* 0x0 */ TexturePtr tex;
     /* 0x4 */ s16 amount;
-} RuppeInfo;
+} RuppeInfo; // size = 0x8
 
 ActorInit En_Sc_Ruppe_InitVars = {
     ACTOR_EN_SC_RUPPE,

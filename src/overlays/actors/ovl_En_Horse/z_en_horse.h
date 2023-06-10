@@ -133,7 +133,7 @@ typedef enum EnHorseParam {
     /* 17 */ ENHORSE_17,
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
-    /* 20 */ ENHORSE_20,
+    /* 20 */ ENHORSE_20
 } EnHorseParam;
 
 /**

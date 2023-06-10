@@ -373,7 +373,8 @@ endseg
 beginseg
     name "schedule_static"
     compress
-    include "build/baserom/schedule_static.o"
+    include "build/assets/interface/schedule_static/schedule_static.o"
+    number 8
 endseg
 
 beginseg
@@ -548,7 +549,6 @@ beginseg
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
     include "build/src/code/z_play_hireso.o"
-    include "build/data/code/z_play_hireso.data.o"
     include "build/src/code/PreRender.o"
     include "build/data/code/PreRender.bss.o"
     include "build/src/code/TwoHeadGfxArena.o"

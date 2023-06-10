@@ -9,7 +9,7 @@ typedef struct {
     /* 0x0 */ Vec3f* pos;
     /* 0x4 */ f32 freqScale;
     /* 0x8 */ s8 reverbAdd;
-} SfxSettings; // size = 0x9
+} SfxSettings; // size = 0xC
 
 typedef struct {
     /* 0x0 */ f32 volume;
@@ -20,7 +20,7 @@ typedef struct {
     /* 0xB */ u8 filter;
     /* 0xC */ u8 combFilterGain;
     /* 0xD */ u8 zVolume;
-} SfxChannelState; // size = 0xE
+} SfxChannelState; // size = 0x10
 
 typedef enum {
     /* 0x0 */ SFX_CHANNEL_PLAYER0, // SfxPlayerBank
@@ -50,7 +50,7 @@ typedef enum {
     /* 0x4 */ SEQ_PLAYER_IO_PORT_4,
     /* 0x5 */ SEQ_PLAYER_IO_PORT_5,
     /* 0x6 */ SEQ_PLAYER_IO_PORT_6,
-    /* 0x7 */ SEQ_PLAYER_IO_PORT_7,
+    /* 0x7 */ SEQ_PLAYER_IO_PORT_7
 } SeqPlayerIOPort;
 
 typedef struct {

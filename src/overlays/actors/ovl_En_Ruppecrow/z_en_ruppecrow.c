@@ -11,11 +11,11 @@
 
 #define THIS ((EnRuppecrow*)thisx)
 
-enum {
-    ENRUPPECROW_EFFECT_NONE = 0,
-    ENRUPPECROW_EFFECT_ICE = 10,
-    ENRUPPECROW_EFFECT_LIGHT = 20,
-};
+typedef enum {
+    /* 0x00 */ ENRUPPECROW_EFFECT_NONE = 0,
+    /* 0x0A */ ENRUPPECROW_EFFECT_ICE = 10,
+    /* 0x14 */ ENRUPPECROW_EFFECT_LIGHT = 20
+} EnRuppecrowEffect;
 
 void EnRuppecrow_Init(Actor* thisx, PlayState* play2);
 void EnRuppecrow_Destroy(Actor* thisx, PlayState* play);
@@ -161,7 +161,7 @@ s32 EnRuppecrow_ReachedPointClockwise(EnRuppecrow* this, Path* path, s32 pointIn
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }
@@ -194,7 +194,7 @@ s32 EnRuppecrow_ReachedPointCounterClockwise(EnRuppecrow* this, Path* path, s32 
         diffZ = points[currentPoint - 1].z - points[currentPoint + 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
     }

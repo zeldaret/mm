@@ -11,7 +11,7 @@ typedef void (*EnEstoneActionFunc)(struct EnEstone*, PlayState*);
 
 typedef enum {
     /* 0 */ ENESTONE_TYPE_LARGE,
-    /* 1 */ ENESTONE_TYPE_SMALL,
+    /* 1 */ ENESTONE_TYPE_SMALL
 } EnEstoneType;
 
 typedef struct {

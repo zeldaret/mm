@@ -9,7 +9,7 @@ typedef void (*DmChar05ActionFunc)(struct DmChar05*, PlayState*);
 
 #define DMCHAR05_GET(thisx) ((thisx)->params)
 
-enum {
+typedef enum {
     /* 0 */ DMCHAR05_0,
     /* 1 */ DMCHAR05_1,
     /* 2 */ DMCHAR05_2,
@@ -22,8 +22,8 @@ enum {
     /* 9 */ DMCHAR05_9,
     /* 10 */ DMCHAR05_10,
     /* 11 */ DMCHAR05_11,
-    /* 12 */ DMCHAR05_12,
-};
+    /* 12 */ DMCHAR05_12
+} DmChar05Param;
 
 typedef struct DmChar05 {
     /* 0x000 */ Actor actor;

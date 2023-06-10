@@ -14,10 +14,10 @@ typedef void (*EnAkindonutsUnkFunc)(struct EnAkindonuts*, PlayState*);
 
 #define ENAKINDONUTS_PATH_INDEX_NONE 0x3F
 
-enum {
+typedef enum {
     /* 1 */ ENAKINDONUTS_3_1 = 1,
-    /* 2 */ ENAKINDONUTS_3_2,
-};
+    /* 2 */ ENAKINDONUTS_3_2
+} EnAkindonutsParam;
 
 typedef struct EnAkindonuts {
     /* 0x000 */ Actor actor;
