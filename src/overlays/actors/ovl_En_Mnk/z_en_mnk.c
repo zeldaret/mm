@@ -235,42 +235,45 @@ void EnMnk_Monkey_StartInvisible(EnMnk* this, PlayState* play) {
     this->collider.dim.radius = 100;
     this->unk_3E4 |= 0x8;
     this->unk_3E4 |= 0x20;
-    if ((MONKEY_GET_SWITCHFLAG(this) != 0x7F) && Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+    if ((MONKEY_GET_SWITCHFLAG(&this->picto.actor) != 0x7F) &&
+        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
         Actor_Kill(&this->picto.actor);
         return;
     }
 }
 
-void EnMnk_MonkeyTiedUp_Init(EnMnk* this, PlayState* play) {
-    EnMnk* this2 = this;
+void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
+    EnMnk* this = THIS;
     s16 csId;
     s32 i;
 
-    this2->actionFunc = EnMnk_MonkeyTiedUp_Wait;
-    this2->picto.actor.flags |= ACTOR_FLAG_2000000;
-    SkelAnime_InitFlex(play, &this2->propSkelAnime, &gMonkeyTiedUpPoleSkeleton, &object_mnk_Anim_003584,
-                       this2->propJointTable, this2->propMorphTable, 5);
-    this2->cueId = 4;
-    this2->animIndex = -1;
-    EnMnk_MonkeyTiedUp_ChangeAnim(this2, MONKEY_TIEDUP_ANIM_KICKAROUND, ANIMMODE_ONCE, 0.0f);
-    this2->picto.actor.draw = EnMnk_MonkeyTiedUp_Draw;
-    this2->picto.actor.shape.shadowDraw = NULL;
-    this2->unk_3E4 |= 0x223;
-    csId = this2->picto.actor.csId;
+    this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
+    this->picto.actor.flags |= ACTOR_FLAG_2000000;
+    SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkeleton, &object_mnk_Anim_003584,
+                       this->propJointTable, this->propMorphTable, 5);
+    this->cueId = 4;
+    this->animIndex = -1;
+    EnMnk_MonkeyTiedUp_ChangeAnim(this, MONKEY_TIEDUP_ANIM_KICKAROUND, ANIMMODE_ONCE, 0.0f);
+    this->picto.actor.draw = EnMnk_MonkeyTiedUp_Draw;
+    this->picto.actor.shape.shadowDraw = NULL;
+    this->unk_3E4 |= 0x223;
+    csId = this->picto.actor.csId;
 
-    for (i = 0; i < ARRAY_COUNT(this2->csIdList); i++) {
-        this2->csIdList[i] = csId;
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
         if (csId != CS_ID_NONE) {
-            this2->picto.actor.csId = csId;
-            csId = CutsceneManager_GetAdditionalCsId(this2->picto.actor.csId);
+            this->picto.actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->picto.actor.csId);
         }
     }
 
-    this2->csId = CS_ID_NONE;
-    this2->picto.actor.csId = this2->csIdList[0];
+    this->csId = CS_ID_NONE;
+    this->picto.actor.csId = this->csIdList[0];
 }
 
-void EnMnk_MonkeyHanging_Init(EnMnk* this, PlayState* play) {
+void EnMnk_MonkeyHanging_Init(Actor* thisx, PlayState* play) {
+    EnMnk* this = THIS;
+
     func_800BC154(play, &play->actorCtx, &this->picto.actor, ACTORCAT_PROP);
     this->actionFunc = EnMnk_MonkeyHanging_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8;
@@ -288,7 +291,7 @@ void EnMnk_MonkeyHanging_Init(EnMnk* this, PlayState* play) {
 }
 
 void EnMnk_Init(Actor* thisx, PlayState* play) {
-    EnMnk* this = (EnMnk*)thisx;
+    EnMnk* this = THIS;
     s32 pad;
 
     Actor_SetScale(&this->picto.actor, 0.012f);
@@ -318,8 +321,9 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
 
     switch (MONKEY_GET_TYPE(thisx)) {
         case MONKEY_0:
-            if (!Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this)) ||
-                Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this) + 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
+            if (!Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor)) ||
+                Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor) + 1) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
                 Actor_Kill(&this->picto.actor);
                 return;
             }
@@ -327,14 +331,15 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
 
         case MONKEY_OUTSIDEWOODS:
         case MONKEY_OUTSIDEPALACE:
-            if (Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+            if (Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
                 Actor_Kill(thisx);
                 return;
             }
             break;
 
         case MONKEY_OUTSIDECHAMBER:
-            if (Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_29_80)) {
+            if (Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor)) ||
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_29_80)) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -370,7 +375,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
 
         case MONKEY_BY_WITCH:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08) ||
-                Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+                Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -429,11 +434,11 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             break;
 
         case MONKEY_TIED_UP:
-            EnMnk_MonkeyTiedUp_Init(this, play);
+            EnMnk_MonkeyTiedUp_Init(thisx, play);
             break;
 
         case MONKEY_HANGING:
-            EnMnk_MonkeyHanging_Init(this, play);
+            EnMnk_MonkeyHanging_Init(thisx, play);
             break;
 
         case MONKEY_WOODS_GUIDE:
@@ -489,7 +494,7 @@ void EnMnk_Destroy(Actor* thisx, PlayState* play) {
     EnMnk* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    if ((MONKEY_GET_TYPE(this) == MONKEY_TIED_UP) && (this->unk_3E4 & 0x2000)) {
+    if ((MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_TIED_UP) && (this->unk_3E4 & 0x2000)) {
         Item_Give(play, ITEM_SONG_SONATA);
         CLEAR_EVENTINF(EVENTINF_24);
     }
@@ -564,7 +569,7 @@ s32 EnMnk_FollowPath(EnMnk* this, u16 flags) {
     Vec3s* destPoint;
     f32 dx;
     f32 dz;
-    f32 distSquared;
+    f32 distSq;
     s16 arcTan;
 
     if (this->path == NULL) {
@@ -592,8 +597,8 @@ s32 EnMnk_FollowPath(EnMnk* this, u16 flags) {
         }
     }
 
-    distSquared = SQ(dx) + SQ(dz);
-    if (distSquared < 64.0f) {
+    distSq = SQ(dx) + SQ(dz);
+    if (distSq < SQ(8.0f)) {
         this->destPointIndex++;
         this->picto.actor.world.pos.x = destPoint->x;
         this->picto.actor.world.pos.z = destPoint->z;
@@ -603,7 +608,7 @@ s32 EnMnk_FollowPath(EnMnk* this, u16 flags) {
         if (flags & MONKEY_FOLLOWPATH_FLAGS_REACHNEXTPOINT) {
             return MONKEY_FOLLOWPATH_RESULT_SHORTRANGE_REACHEDPOINT;
         }
-    } else if ((flags & MONKEY_FOLLOWPATH_FLAGS_LONGRANGE) && (distSquared < 400.0f)) {
+    } else if ((flags & MONKEY_FOLLOWPATH_FLAGS_LONGRANGE) && (distSq < SQ(20.0f))) {
         this->destPointIndex++;
         if (this->destPointIndex >= path->count) {
             return MONKEY_FOLLOWPATH_RESULT_LONGRANGE_FINISHEDPATH;
@@ -661,8 +666,8 @@ void func_80AB60FC(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (EnMnk_FollowPath(this, 0) != MONKEY_FOLLOWPATH_RESULT_FOLLOWING) {
         this->pathIndex = this->path->additionalPathIndex;
-        if (this->pathIndex == 0xFF) {
-            Flags_SetSwitch(play, MONKEY_GET_SWITCHFLAG(this) + 1);
+        if (this->pathIndex == ADDITIONAL_PATH_INDEX_NONE) {
+            Flags_SetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor) + 1);
             Actor_Kill(&this->picto.actor);
             return;
         }
@@ -789,7 +794,7 @@ void EnMnk_Monkey_RunAndWaitAtEachPoint(EnMnk* this, PlayState* play) {
         if ((followPathResult == MONKEY_FOLLOWPATH_RESULT_SHORTRANGE_FINISHEDPATH) ||
             (followPathResult == MONKEY_FOLLOWPATH_RESULT_LONGRANGE_FINISHEDPATH)) {
             this->pathIndex = this->path->additionalPathIndex;
-            if (this->pathIndex == 0xFF) {
+            if (this->pathIndex == ADDITIONAL_PATH_INDEX_NONE) {
                 this->pathIndex = PATH_INDEX_NONE;
             }
             this->path = &play->setupPathList[this->pathIndex];
@@ -889,8 +894,8 @@ void EnMnk_Monkey_Run(EnMnk* this, PlayState* play) {
         this->picto.actor.terminalVelocity = -9.0f;
         this->picto.actor.gravity = -1.0f;
         this->picto.actor.speed = 0.0f;
-        if (MONKEY_GET_TYPE(this) == MONKEY_OUTSIDECHAMBER) {
-            switchFlag = MONKEY_GET_SWITCHFLAG(this);
+        if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
+            switchFlag = MONKEY_GET_SWITCHFLAG(&this->picto.actor);
             if (switchFlag != 0x7F) {
                 Flags_SetSwitch(play, switchFlag + 1);
             }
@@ -1039,8 +1044,9 @@ void EnMnk_Monkey_UnapproachPlayer(EnMnk* this, PlayState* play) {
         this->approachPlayerRadius = 0.0f;
     }
     EnMnk_PlayWalkSfx(this);
-    if ((MONKEY_GET_TYPE(this) == MONKEY_OUTSIDEWOODS) && (MONKEY_GET_SWITCHFLAG(this) != 0x7F) &&
-        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+    if ((MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDEWOODS) &&
+        (MONKEY_GET_SWITCHFLAG(&this->picto.actor) != 0x7F) &&
+        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
         EnMnk_Monkey_SetAnim(this, 2);
         this->actionFunc = EnMnk_Monkey_WaitToRun;
     }
@@ -1051,18 +1057,19 @@ void EnMnk_Monkey_WaitToTalkAfterApproach(EnMnk* this, PlayState* play) {
     EnMnk_Monkey_MoveRelativeToPlayer(this, play);
 
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
-        if (MONKEY_GET_TYPE(this) == MONKEY_OUTSIDECHAMBER) {
+        if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
             EnMnk_Monkey_SetAnim(this, 2);
         } else {
             EnMnk_Monkey_SetAnim(this, 5);
         }
         this->unk_3E0 = 6;
         this->actionFunc = EnMnk_Monkey_TalkAfterApproach;
-        if (MONKEY_GET_SWITCHFLAG(this) != 0x7F) {
-            Flags_SetSwitch(play, MONKEY_GET_SWITCHFLAG(this));
+        if (MONKEY_GET_SWITCHFLAG(&this->picto.actor) != 0x7F) {
+            Flags_SetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor));
         }
-    } else if ((MONKEY_GET_TYPE(this) == MONKEY_OUTSIDEWOODS) && (MONKEY_GET_SWITCHFLAG(this) != 0x7F) &&
-               Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+    } else if ((MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDEWOODS) &&
+               (MONKEY_GET_SWITCHFLAG(&this->picto.actor) != 0x7F) &&
+               Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
         EnMnk_Monkey_SetAnim(this, 2);
         this->actionFunc = EnMnk_Monkey_WaitToRun;
     } else if (this->picto.actor.xzDistToPlayer > 150.0f) {
@@ -1080,7 +1087,7 @@ void EnMnk_Monkey_ApproachPlayer(EnMnk* this, PlayState* play) {
     EnMnk_Monkey_MoveRelativeToPlayer(this, play);
 
     if (this->approachPlayerRadius > 84.0f) {
-        if (MONKEY_GET_TYPE(this) == MONKEY_OUTSIDECHAMBER) {
+        if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDECHAMBER) {
             EnMnk_Monkey_SetAnim(this, 7);
         } else {
             EnMnk_Monkey_SetAnim(this, 2);
@@ -1090,8 +1097,9 @@ void EnMnk_Monkey_ApproachPlayer(EnMnk* this, PlayState* play) {
 
     EnMnk_PlayWalkSfx(this);
 
-    if ((MONKEY_GET_TYPE(this) == MONKEY_OUTSIDEWOODS) && (MONKEY_GET_SWITCHFLAG(this) != 0x7F) &&
-        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+    if ((MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDEWOODS) &&
+        (MONKEY_GET_SWITCHFLAG(&this->picto.actor) != 0x7F) &&
+        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
         EnMnk_Monkey_SetAnim(this, 2);
         this->actionFunc = EnMnk_Monkey_WaitToRun;
     }
@@ -1106,8 +1114,9 @@ void EnMnk_Monkey_WaitForPlayerApproach(EnMnk* this, PlayState* play) {
         this->actionFunc = EnMnk_Monkey_ApproachPlayer;
     }
 
-    if ((MONKEY_GET_TYPE(this) == MONKEY_OUTSIDEWOODS) && (MONKEY_GET_SWITCHFLAG(this) != 0x7F) &&
-        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(this))) {
+    if ((MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDEWOODS) &&
+        (MONKEY_GET_SWITCHFLAG(&this->picto.actor) != 0x7F) &&
+        Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
         EnMnk_Monkey_SetAnim(this, 2);
         this->actionFunc = EnMnk_Monkey_WaitToRun;
     }
@@ -1119,7 +1128,7 @@ void EnMnk_Monkey_Drop(EnMnk* this, PlayState* play) {
         EnMnk_Monkey_SetAnim(this, 0);
         this->actionFunc = EnMnk_Monkey_WaitForPlayerApproach;
 
-        if (MONKEY_GET_TYPE(this) == MONKEY_OUTSIDEWOODS) {
+        if (MONKEY_GET_TYPE(&this->picto.actor) == MONKEY_OUTSIDEWOODS) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EV_MONKEY_WALK);
         }
     }
@@ -1161,8 +1170,8 @@ void EnMnk_Monkey_FollowPathAndWait(EnMnk* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (EnMnk_FollowPath(this, MONKEY_FOLLOWPATH_FLAGS_LONGRANGE) != MONKEY_FOLLOWPATH_RESULT_FOLLOWING) {
         this->pathIndex = this->path->additionalPathIndex;
-        if (this->pathIndex == 0xFF) {
-            Flags_SetSwitch(play, MONKEY_GET_SWITCHFLAG(this));
+        if (this->pathIndex == ADDITIONAL_PATH_INDEX_NONE) {
+            Flags_SetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor));
             Actor_Kill(&this->picto.actor);
             return;
         }
@@ -1189,10 +1198,10 @@ s32 EnMnk_PlayerIsInTalkRange(EnMnk* this, PlayState* play) {
     if ((this->picto.actor.xzDistToPlayer < 100.0f) && (this->picto.actor.xzDistToPlayer > 20.0f)) {
         absYawTowardsPlayer = ABS_ALT(this->picto.actor.yawTowardsPlayer);
         if ((absYawTowardsPlayer > 0x4000) && Player_IsFacingActor(&this->picto.actor, 0x3000, play)) {
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 void EnMnk_MonkeyTiedUp_TeachSong(EnMnk* this, PlayState* play) {
@@ -1798,7 +1807,7 @@ void EnMnk_Monkey_GuideThroughWoods(EnMnk* this, PlayState* play) {
 
     if (EnMnk_FollowPath(this, 0) != MONKEY_FOLLOWPATH_RESULT_FOLLOWING) {
         this->pathIndex = this->path->additionalPathIndex;
-        if (this->pathIndex == 0xFF) {
+        if (this->pathIndex == ADDITIONAL_PATH_INDEX_NONE) {
             Actor_Kill(&this->picto.actor);
             return;
         }
@@ -2090,7 +2099,7 @@ s32 EnMnk_Monkey_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
         rot->x += this->unk_3CC;
         rot->z += this->unk_3CE;
     }
-    return 0;
+    return false;
 }
 
 s32 EnMnk_MonkeyTiedUp_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -2098,7 +2107,7 @@ s32 EnMnk_MonkeyTiedUp_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx*
     if (limbIndex == 1) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 s32 EnMnk_MonkeyHanging_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
@@ -2106,7 +2115,7 @@ s32 EnMnk_MonkeyHanging_PropOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx
     if ((limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3)) {
         *dList = NULL;
     }
-    return 0;
+    return false;
 }
 
 void EnMnk_Monkey_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -2126,11 +2135,11 @@ void EnMnk_MonkeyTiedUp_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** d
 }
 
 void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnMnk* this = (EnMnk*)thisx;
+    EnMnk* this = THIS;
 
     switch (limbIndex) {
         case 1:
-            if (*dList != 0) {
+            if (*dList != NULL) {
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Push();
@@ -2145,7 +2154,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
             break;
 
         case 2:
-            if (*dList != 0) {
+            if (*dList != NULL) {
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Scale(this->approachPlayerRadius + 1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
@@ -2158,7 +2167,7 @@ void EnMnk_MonkeyHanging_PropPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** 
             break;
 
         case 3:
-            if (*dList != 0) {
+            if (*dList != NULL) {
                 OPEN_DISPS(play->state.gfxCtx);
 
                 Matrix_Scale(1.0f, 1.0f / (this->approachPlayerRadius + 1.0f), 1.0f, MTXMODE_APPLY);
