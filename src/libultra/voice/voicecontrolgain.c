@@ -6,7 +6,7 @@
 
 #include "ultra64/controller_voice.h"
 #include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "ultra64/controller.h"
 #include "macros.h"
 
 u8 sDigitalTable[] = { 0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0 };

@@ -3,7 +3,7 @@
  */
 
 #include "ultra64/controller_voice.h"
-#include "io/controller.h"
+#include "ultra64/controller.h"
 #include "functions.h"
 
 s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 channel, u8* status) {

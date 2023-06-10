@@ -6,7 +6,7 @@
 
 #include "ultra64/controller_voice.h"
 #include "ultra64/os_voice.h"
-#include "io/controller.h"
+#include "ultra64/controller.h"
 
 s32 osVoiceGetReadData(OSVoiceHandle* hd, OSVoiceData* result) {
     static u8 sHandleStatus;

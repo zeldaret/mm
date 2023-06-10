@@ -1,9 +1,10 @@
 /**
  * File: voicecheckresult.c
  */
+
 #include "ultra64/controller_voice.h"
+#include "ultra64/controller.h"
 #include "ultra64/os_voice.h"
-#include "io/controller.h"
 
 s32 __osVoiceCheckResult(OSVoiceHandle* hd, u8* status) {
     s32 errorCode = __osVoiceGetStatus(hd->mq, hd->channel, status);
