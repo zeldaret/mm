@@ -3,7 +3,6 @@
  * Overlay: ovl_player_actor
  * Description: Player
  */
-
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
@@ -6280,9 +6279,9 @@ void func_80836C70(PlayState* play, Player* this, PlayerBodyPart bodyPartIndex) 
     for (i = 0; i < 4; i++) {
         Vec3f velocity;
 
-        velocity.x = randPlusMinusPoint5Scaled(4.0f);
+        velocity.x = Rand_CenteredFloat(4.0f);
         velocity.y = Rand_ZeroFloat(2.0f);
-        velocity.z = randPlusMinusPoint5Scaled(4.0f);
+        velocity.z = Rand_CenteredFloat(4.0f);
         D_8085D130.y = -0.2f;
         EffectSsHahen_Spawn(play, &this->bodyPartsPos[bodyPartIndex], &velocity, &D_8085D130, 0, 10, OBJECT_LINK_NUTS,
                             16, object_link_nuts_DL_008860);
@@ -9507,9 +9506,9 @@ void func_8083F57C(Player* this, PlayState* play) {
 }
 
 void func_8083F828(Vec3f* arg0, Vec3f* arg1, f32 arg2, f32 arg3, f32 arg4) {
-    arg1->x = randPlusMinusPoint5Scaled(arg3) + arg0->x;
-    arg1->y = randPlusMinusPoint5Scaled(arg4) + (arg0->y + arg2);
-    arg1->z = randPlusMinusPoint5Scaled(arg3) + arg0->z;
+    arg1->x = Rand_CenteredFloat(arg3) + arg0->x;
+    arg1->y = Rand_CenteredFloat(arg4) + (arg0->y + arg2);
+    arg1->z = Rand_CenteredFloat(arg3) + arg0->z;
 }
 
 Color_RGBA8 D_8085D26C = { 255, 255, 255, 255 };
@@ -9528,8 +9527,8 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
         count = (count >= ABS_ALT(countMax)) ? ABS_ALT(countMax) : count;
         for (i = 0; i < count; i++) {
             func_8083F828(&this->actor.world.pos, &pos, 0.0f, 40.0f, 10.0f);
-            D_8085D27C.x = randPlusMinusPoint5Scaled(3.0f);
-            D_8085D27C.z = randPlusMinusPoint5Scaled(3.0f);
+            D_8085D27C.x = Rand_CenteredFloat(3.0f);
+            D_8085D27C.z = Rand_CenteredFloat(3.0f);
             EffectSsDust_Spawn(play, 0, &pos, &D_8085D27C, &D_8085D270, &D_8085D26C, &D_8085D26C, scale, scaleStep, 42,
                                0);
         }
@@ -9555,9 +9554,9 @@ s32 func_8083F8A8(PlayState* play, Player* this, f32 radius, s32 countMax, f32 r
         count = (count >= countMax) ? countMax : count;
         for (i = 0; i < count; i++) {
             func_8083F828(&this->actor.world.pos, &pos, 0.0f, 20.0f, 20.0f);
-            velocity.x = randPlusMinusPoint5Scaled(3.0f);
+            velocity.x = Rand_CenteredFloat(3.0f);
             velocity.y = Rand_ZeroFloat(2.0f);
-            velocity.z = randPlusMinusPoint5Scaled(3.0f);
+            velocity.z = Rand_CenteredFloat(3.0f);
             D_8085D288.y = -0.1f;
             EffectSsHahen_Spawn(play, &pos, &velocity, &D_8085D288, 0, 0x96, 1, 0x10, gKakeraLeafTip);
         }
@@ -11237,9 +11236,9 @@ void func_808445C4(PlayState* play, Player* this) {
         randIndex = Rand_ZeroFloat(PLAYER_BODYPART_MAX - 0.1f);
         bodyPartsPos = randIndex + this->bodyPartsPos;
 
-        pos.x = (randPlusMinusPoint5Scaled(5.0f) + bodyPartsPos->x) - this->actor.world.pos.x;
-        pos.y = (randPlusMinusPoint5Scaled(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
-        pos.z = (randPlusMinusPoint5Scaled(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
+        pos.x = (Rand_CenteredFloat(5.0f) + bodyPartsPos->x) - this->actor.world.pos.x;
+        pos.y = (Rand_CenteredFloat(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
+        pos.z = (Rand_CenteredFloat(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
         EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, 1);
         func_800B8F98(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
     }
@@ -19110,7 +19109,7 @@ void func_80859708(PlayState* play, Player* this, UNK_TYPE arg2) {
     PlayerAnimation_Update(play, &this->skelAnime);
     if ((this->actor.id == ACTOR_EN_TEST3) && Animation_OnFrame(&this->skelAnime, 20.0f)) {
         this->getItemDrawIdPlusOne = GID_MASK_SUN + 1;
-        func_80151BB4(play, 0x1B);
+        Message_BombersNotebookQueueEvent(play, 0x1B);
         Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
     }
 }
@@ -19575,9 +19574,9 @@ void func_80859D70(PlayState* play, Player* this, UNK_TYPE arg2) {
         this->rightHandType = 0xFF;
     } else {
         posInfo = &D_8085E368[this->transformation];
-        randPos.x = randPlusMinusPoint5Scaled(posInfo->range.x) + posInfo->base.x;
-        randPos.y = randPlusMinusPoint5Scaled(posInfo->range.y) + posInfo->base.y;
-        randPos.z = randPlusMinusPoint5Scaled(posInfo->range.z) + posInfo->base.z;
+        randPos.x = Rand_CenteredFloat(posInfo->range.x) + posInfo->base.x;
+        randPos.y = Rand_CenteredFloat(posInfo->range.y) + posInfo->base.y;
+        randPos.z = Rand_CenteredFloat(posInfo->range.z) + posInfo->base.z;
         SkinMatrix_Vec3fMtxFMultXYZ(&this->shieldMf, &randPos, &effectPos);
         EffectSsKirakira_SpawnDispersed(play, &effectPos, &gZeroVec3f, &gZeroVec3f, &D_8085E3A4, &D_8085E3A8, 600, -10);
     }
@@ -19786,7 +19785,7 @@ void func_8085A7C0(PlayState* play, Player* this, UNK_TYPE arg2) {
             }
         }
     } else if (PlayerAnimation_OnFrame(&this->skelAnime, 4.0f)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_50_80);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PENDANT_OF_MEMORIES);
     }
 }
 

@@ -10,6 +10,8 @@
 #define ENENCOUNT1_GET_SPAWN_TOTAL_MAX(thisx) ((thisx)->params & 0x3F)
 #define ENENCOUNT1_GET_PATH_INDEX(thisx) ((thisx)->params & 0x3F) // Used only by EN_ENCOUNT1_SKULLFISH_2 which doesn't use SpawnTotalMax
 
+#define ENENCOUNT1_PATH_INDEX_NONE 0x3F
+
 #define ENENCOUNT1_GET_SPAWN_TIME_MIN(thisx) ((thisx)->world.rot.x) // Time to wait between spawning
 #define ENENCOUNT1_GET_SPAWN_UNUSED_PROP(thisx) ((thisx)->world.rot.y) // Unused spawn property
 #define ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(thisx) ((thisx)->world.rot.z) // Negative means infinite distance

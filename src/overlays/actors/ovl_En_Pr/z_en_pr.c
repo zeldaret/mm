@@ -319,7 +319,7 @@ void func_80A32A40(EnPr* this, PlayState* play) {
     WaterBox* sp30;
 
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    sp34.y = randPlusMinusPoint5Scaled(50.0f) + this->actor.home.pos.y;
+    sp34.y = Rand_CenteredFloat(50.0f) + this->actor.home.pos.y;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_2B4,
                              &sp30)) {
@@ -551,9 +551,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
 
             Math_Vec3f_Copy(&sp40, &this->unk_2D4);
             this->unk_204 = 0;
-            sp40.x += randPlusMinusPoint5Scaled(20.0f);
-            sp40.y += randPlusMinusPoint5Scaled(5.0f);
-            sp40.z += randPlusMinusPoint5Scaled(20.0f);
+            sp40.x += Rand_CenteredFloat(20.0f);
+            sp40.y += Rand_CenteredFloat(5.0f);
+            sp40.z += Rand_CenteredFloat(20.0f);
 
             for (i = 0; i < (s32)Rand_ZeroFloat(5.0f) + 5; i++) {
                 EffectSsBubble_Spawn(play, &sp40, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);

@@ -136,9 +136,9 @@ void EnYb_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BFA2FC(PlayState* play) {
     if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-        func_80151BB4(play, 0x34);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAMAROS_MASK);
     }
-    func_80151BB4(play, 0xF);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAMARO);
 }
 
 /**
@@ -242,9 +242,9 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 
     EnYb_UpdateAnimation(this, play);
     for (i = 3; i >= 0; i--) {
-        sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-        sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-        sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+        sp60.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+        sp60.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+        sp60.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
         func_800B3030(play, &sp60, &D_80BFB2E8, &D_80BFB2E8, 100, 0, 2);
     }
 

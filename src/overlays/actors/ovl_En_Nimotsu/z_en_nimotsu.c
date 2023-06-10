@@ -87,9 +87,9 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((play->state.frames % 3) == 0) {
-            dustPosition.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+            dustPosition.x = this->actor.world.pos.x + Rand_CenteredFloat(15.0f);
             dustPosition.y = this->actor.world.pos.y;
-            dustPosition.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+            dustPosition.z = this->actor.world.pos.z + Rand_CenteredFloat(15.0f);
             Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, 0, 0, 0);
         }
     }

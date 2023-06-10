@@ -156,9 +156,9 @@ void func_80931828(ObjIcePoly* this, PlayState* play) {
     temp = spA0.y - sp90;
 
     for (i = 0; i < 30; i++) {
-        sp94.x = randPlusMinusPoint5Scaled(12.0f);
+        sp94.x = Rand_CenteredFloat(12.0f);
         sp94.y = Rand_ZeroFloat(15.0f);
-        sp94.z = randPlusMinusPoint5Scaled(12.0f);
+        sp94.z = Rand_CenteredFloat(12.0f);
 
         spA0.x = (this->colliders1[0].dim.radius * (sp94.x * (1.0f / 12))) + this->actor.world.pos.x;
         spA0.z = (this->colliders1[0].dim.radius * (sp94.z * (1.0f / 12))) + this->actor.world.pos.z;

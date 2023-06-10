@@ -173,8 +173,8 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
-            sp74.x += randPlusMinusPoint5Scaled(15.0f);
-            sp74.z += randPlusMinusPoint5Scaled(15.0f);
+            sp74.x += Rand_CenteredFloat(15.0f);
+            sp74.z += Rand_CenteredFloat(15.0f);
 
             EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
                                               true);
@@ -216,8 +216,8 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp78, &this->actor.world.pos);
 
-            sp78.x += randPlusMinusPoint5Scaled(15.0f);
-            sp78.z += randPlusMinusPoint5Scaled(15.0f);
+            sp78.x += Rand_CenteredFloat(15.0f);
+            sp78.z += Rand_CenteredFloat(15.0f);
 
             EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
                                               true);

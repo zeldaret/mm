@@ -67,7 +67,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
     }
     if (this->type == EN_ENCOUNT1_SKULLFISH_2) {
         this->pathIndex = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
-        this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
+        this->path = SubS_GetPathByIndex(play, this->pathIndex, ENENCOUNT1_PATH_INDEX_NONE);
         this->spawnTotalMax = -1;
         this->spawnDistanceMax = -1.0f;
     }
@@ -102,15 +102,15 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
     this->timer = 0;
     switch (this->type) {
         case EN_ENCOUNT1_GRASSHOPPER:
-            scale = randPlusMinusPoint5Scaled(40.0f) + 200.0f;
+            scale = Rand_CenteredFloat(40.0f) + 200.0f;
             rotY = player->actor.shape.rot.y;
             if (this->spawnActiveCount & 1) {
                 rotY = -rotY;
-                scale = randPlusMinusPoint5Scaled(20.0f) + 100.0f;
+                scale = Rand_CenteredFloat(20.0f) + 100.0f;
             }
-            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
+            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + Rand_CenteredFloat(40.0f);
             spawnPos.y = player->actor.floorHeight + 120.0f;
-            spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
+            spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + Rand_CenteredFloat(40.0f);
             floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &floorPoly, &bgId, &this->actor, &spawnPos);
             if ((floorHeight <= BGCHECK_Y_MIN) ||
                 ((player->actor.depthInWater != BGCHECK_Y_MIN) &&
@@ -125,11 +125,11 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
             break;
 
         case EN_ENCOUNT1_SKULLFISH:
-            scale = randPlusMinusPoint5Scaled(250.0f) + 500.0f;
+            scale = Rand_CenteredFloat(250.0f) + 500.0f;
             rotY = player->actor.shape.rot.y;
-            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
+            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + Rand_CenteredFloat(40.0f);
             spawnPos.y = player->actor.world.pos.y - Rand_ZeroFloat(20.0f);
-            spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + randPlusMinusPoint5Scaled(40.0f);
+            spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + Rand_CenteredFloat(40.0f);
             floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &floorPoly, &bgId, &this->actor, &spawnPos);
             if (!(player->stateFlags1 & PLAYER_STATE1_8000000) || (floorHeight <= BGCHECK_Y_MIN) ||
                 (player->actor.depthInWater < floorHeight)) {

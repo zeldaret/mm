@@ -266,8 +266,8 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
             if (this->unk_2C0 == 0) {
                 Math_Vec3f_Copy(&sp54, &this->actor.home.pos);
 
-                sp54.x += randPlusMinusPoint5Scaled(150.0f);
-                sp54.z += randPlusMinusPoint5Scaled(150.0f);
+                sp54.x += Rand_CenteredFloat(150.0f);
+                sp54.z += Rand_CenteredFloat(150.0f);
 
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp6C,
@@ -422,7 +422,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                 }
 
                 sp40.x = (Math_SinS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->bombal->actor.world.pos.x;
-                sp40.y = this->bombal->actor.world.pos.y - randPlusMinusPoint5Scaled(40.0f);
+                sp40.y = this->bombal->actor.world.pos.y - Rand_CenteredFloat(40.0f);
                 sp40.z = (Math_CosS(sp3E) * (Rand_ZeroFloat(20.0f) + 40.0f)) + this->bombal->actor.world.pos.z;
 
                 SoundSource_PlaySfxAtFixedWorldPos(play, &sp40, 50, NA_SE_EV_BOMBERS_SHOT_EXPLOSUIN);
@@ -433,8 +433,8 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                     func_80BFE494(this, 5, 1.0f);
                     this->unk_29A = 0;
                     Math_Vec3f_Copy(&this->unk_2A4, &this->actor.home.pos);
-                    this->unk_2A4.x += randPlusMinusPoint5Scaled(150.0f);
-                    this->unk_2A4.z += randPlusMinusPoint5Scaled(150.0f);
+                    this->unk_2A4.x += Rand_CenteredFloat(150.0f);
+                    this->unk_2A4.z += Rand_CenteredFloat(150.0f);
                     this->unk_2A2++;
                 }
             }
