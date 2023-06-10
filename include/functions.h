@@ -633,7 +633,7 @@ PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 
-s32 Target_NotInLeashRange(Actor* actor, Player* player, s32 flag);
+s32 Target_NotInLeashRange(Actor* actor, Player* player, s32 skipChecks);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
 s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId);
 s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId);

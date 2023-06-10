@@ -1799,24 +1799,29 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor) {
 /**
  * Returns the squared xyz distance from the actor to Player.
  *
- * This distance will be adjusted if Player is already targeting an actor in a way that the more Player is facing this
- * actor the nearer it will be considered, within a 90 degree range.
+ * This distance will be adjusted smaller if Player is already targeting an actor. The more Player is facing the actor,
+ * the smaller the distance is adjusted.
  */
-f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 angle) {
-    f32 temp;
-    s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), angle));
+f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw) {
+    f32 adjDistSq;
+    s16 yawDiff;
+
+    // The yaw, with player as the origin, from where player is facing to where the actor is positioned
+    yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), playerShapeYaw));
 
     if (player->targetedActor != NULL) {
-        if ((yaw > (0x10000 / 4)) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
+        if ((yawDiff > (0x10000 / 4)) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             return FLT_MAX;
         }
 
-        // Linear scaling, yaw being 90 degree means it will return the original distance, 0 degree will adjust to 60% of the distance
-        temp = actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yaw) * (1.0f / 0x8000)));
-        return temp;
+        // Linear scaling, yaw being 90 degree means it will return the original distance, 0 degree will adjust to 60%
+        // of the distance
+        adjDistSq =
+            actor->xyzDistToPlayerSq - ((actor->xyzDistToPlayerSq * 0.8f) * ((0x4000 - yawDiff) * (1.0f / 0x8000)));
+        return adjDistSq;
     }
 
-    if (yaw > (0x10000 / 6)) {
+    if (yawDiff > (0x10000 / 6)) {
         return FLT_MAX;
     }
     return actor->xyzDistToPlayerSq;
@@ -1853,10 +1858,13 @@ s32 Target_NotInLeashRange(Actor* actor, Player* player, s32 skipChecks) {
     }
 
     if (!skipChecks) {
-        s16 yaw = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
+        s16 yawDiff;
         f32 distSq;
 
-        if ((player->targetedActor == NULL) && (yaw > (0x10000 / 6))) {
+        // The yaw, with player as the origin, from where player is facing to where the actor is positioned
+        yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
+
+        if ((player->targetedActor == NULL) && (yawDiff > (0x10000 / 6))) {
             distSq = FLT_MAX;
         } else {
             distSq = actor->xyzDistToPlayerSq;
