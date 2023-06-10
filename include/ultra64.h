@@ -5,6 +5,7 @@
 #include "ultra64/gbi.h"
 
 #include "ultra64/gu.h"
+#include "ultra64/controller_voice.h"
 #include "ultra64/hardware.h"
 #include "ultra64/os.h"
 #include "ultra64/osint.h"

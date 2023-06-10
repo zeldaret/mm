@@ -5,6 +5,8 @@
 #include "os_cont.h"
 #include "os_pfs.h"
 
+#define CHNL_ERR(format) (((format).rxsize & CHNL_ERR_MASK) >> 4)
+
 #define SIAccessQueueSize 2
 #define BLOCKSIZE 32
 #define PFS_ONE_PAGE 8

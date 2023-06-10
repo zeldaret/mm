@@ -71,6 +71,7 @@ typedef struct {
 } OSDevMgr; // size = 0x1C
 
 
+
 #define OS_READ     0
 #define OS_WRITE    1
 
@@ -101,6 +102,5 @@ s32 osEPiWriteIo(OSPiHandle* handle, uintptr_t devAddr, u32 data);
 s32 osEPiReadIo(OSPiHandle* handle, uintptr_t devAddr, u32* data);
 s32 osEPiStartDma(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
 s32 osEPiLinkHandle(OSPiHandle* handle);
-
 
 #endif
