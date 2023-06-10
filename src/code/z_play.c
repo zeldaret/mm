@@ -1118,7 +1118,7 @@ void Play_PostWorldDraw(PlayState* this) {
 }
 
 #ifdef NON_MATCHING
-// Stack issues and 1 small issue around Play_PostWorldDraw
+// Something weird going on with the stack of the unused arg0 of `Camera_Update`
 void Play_DrawMain(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     Lights* sp268;
@@ -1271,7 +1271,7 @@ void Play_DrawMain(PlayState* this) {
 
             if (!this->unk_18844) {
                 if (1) {
-                    if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
+                    if (((u32)this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.skyboxBlend,
@@ -1307,10 +1307,11 @@ void Play_DrawMain(PlayState* this) {
                 if (this->skyboxCtx.skyboxShouldDraw) {
                     Vec3f sp78;
 
-                    if (1) {}
-                    Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
-                    Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
-                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                    if (1) {
+                        Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                        Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                                    this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                    }
                 }
 
                 // envCtx.precipitation[PRECIP_RAIN_CUR]
@@ -1371,9 +1372,8 @@ void Play_DrawMain(PlayState* this) {
 
             Play_DrawMotionBlur(this);
 
-            if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
-                 (gTransitionTileState == TRANS_TILE_SETUP)) ||
-                (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
+            if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
+                (gTransitionTileState == TRANS_TILE_SETUP) || (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
 
@@ -1406,14 +1406,17 @@ void Play_DrawMain(PlayState* this) {
                 POLY_OPA_DISP = sp74;
                 this->unk_18B49 = 2;
                 SREG(33) |= 1;
-            } else {
-            PostWorldDraw:
-                if (1) {
-                    Play_PostWorldDraw(this);
-                }
+                goto SkipPostWorldDraw;
+            }
+
+        PostWorldDraw:
+            if (1) {
+                Play_PostWorldDraw(this);
             }
         }
     }
+
+SkipPostWorldDraw:
 
     if ((this->view.unk164 != 0) && !gDbgCamEnabled) {
         Vec3s sp4C;
@@ -1430,7 +1433,7 @@ void Play_DrawMain(PlayState* this) {
         func_800FE3E0(this);
     }
 
-    CLOSE_DISPS(this->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
 #else
 void Play_DrawMain(PlayState* this);
