@@ -58,8 +58,6 @@ Color_RGBA8 D_80AF7AD4 = { 255, 255, 255, 255 };
 
 Color_RGBA8 D_80AF7AD8 = { 200, 200, 220, 0 };
 
-extern UNK_TYPE D_06001AA0;
-
 void EnSnowwd_Init(Actor* thisx, PlayState* play) {
     EnSnowwd* this = THIS;
 
@@ -131,7 +129,7 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(&D_06001AA0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_snowwd_Tex_001AA0));
     gSPDisplayList(POLY_OPA_DISP++, object_snowwd_DL_000198);
 
     CLOSE_DISPS(play->state.gfxCtx);
