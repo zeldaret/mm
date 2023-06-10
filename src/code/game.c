@@ -11,9 +11,9 @@ f32 gFramerateDivisorThird = 1.0f / 3.0f;
 
 void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisor = divisor;
-    gFramerateDivisorF = (f32)divisor;
-    gFramerateDivisorHalf = (f32)(divisor * 0.5f);
-    gFramerateDivisorThird = (f32)(divisor / 3.0f);
+    gFramerateDivisorF = divisor;
+    gFramerateDivisorHalf = divisor / 2.0f;
+    gFramerateDivisorThird = divisor / 3.0f;
 }
 
 void Game_SetFramerateDivisor(GameState* gameState, s32 divisor) {
