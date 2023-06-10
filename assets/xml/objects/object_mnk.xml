@@ -23,7 +23,7 @@
         <Limb Name="object_mnk_Standardlimb_00511C" Type="Standard" EnumName="OBJECT_MNK_1_LIMB_02" Offset="0x511C" />
         <Limb Name="object_mnk_Standardlimb_005128" Type="Standard" EnumName="OBJECT_MNK_1_LIMB_03" Offset="0x5128" />
         <Limb Name="object_mnk_Standardlimb_005134" Type="Standard" EnumName="OBJECT_MNK_1_LIMB_04" Offset="0x5134" />
-        <Skeleton Name="gTiedUpMonkeyPoleSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_1_LIMB_NONE" LimbMax="OBJECT_MNK_1_LIMB_MAX" EnumName="ObjectMnk1Limb" Offset="0x5150" />
+        <Skeleton Name="gMonkeyTiedUpPoleSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_1_LIMB_NONE" LimbMax="OBJECT_MNK_1_LIMB_MAX" EnumName="ObjectMnk1Limb" Offset="0x5150" />
         <Animation Name="object_mnk_Anim_005194" Offset="0x5194" />
         <Animation Name="object_mnk_Anim_0052C4" Offset="0x52C4" />
         <Animation Name="object_mnk_Anim_005390" Offset="0x5390" />
@@ -32,7 +32,7 @@
         <Animation Name="object_mnk_Anim_005A08" Offset="0x5A08" />
         <Animation Name="object_mnk_Anim_0062D8" Offset="0x62D8" />
         <Animation Name="object_mnk_Anim_007380" Offset="0x7380" />
-        <Animation Name="gHangingMonkeyStruggleAnim" Offset="0x82C8" />
+        <Animation Name="gMonkeyHangingStruggleAnim" Offset="0x82C8" />
         <Animation Name="object_mnk_Anim_008814" Offset="0x8814" />
         <Animation Name="object_mnk_Anim_0095B4" Offset="0x95B4" />
         <Animation Name="object_mnk_Anim_0099B0" Offset="0x99B0" />
@@ -116,7 +116,7 @@
         <Animation Name="object_mnk_Anim_01C17C" Offset="0x1C17C" />
         <Animation Name="object_mnk_Anim_01C1B8" Offset="0x1C1B8" />
         <Animation Name="object_mnk_Anim_01C1F8" Offset="0x1C1F8" />
-        <Animation Name="gHangingMonkeyRopeStruggleAnim" Offset="0x1C3B4" />
+        <Animation Name="gMonkeyHangingRopeStruggleAnim" Offset="0x1C3B4" />
         <DList Name="object_mnk_DL_01C660" Offset="0x1C660" />
         <DList Name="object_mnk_DL_01C770" Offset="0x1C770" />
         <DList Name="object_mnk_DL_01C818" Offset="0x1C818" />
@@ -126,6 +126,6 @@
         <Limb Name="object_mnk_Standardlimb_01D4E8" Type="Standard" EnumName="OBJECT_MNK_3_LIMB_01" Offset="0x1D4E8" />
         <Limb Name="object_mnk_Standardlimb_01D4F4" Type="Standard" EnumName="OBJECT_MNK_3_LIMB_02" Offset="0x1D4F4" />
         <Limb Name="object_mnk_Standardlimb_01D500" Type="Standard" EnumName="OBJECT_MNK_3_LIMB_03" Offset="0x1D500" />
-        <Skeleton Name="gHangingMonkeyRopeSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_3_LIMB_NONE" LimbMax="OBJECT_MNK_3_LIMB_MAX" EnumName="ObjectMnk3Limb" Offset="0x1D518" />
+        <Skeleton Name="gMonkeyHangingRopeSkeleton" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MNK_3_LIMB_NONE" LimbMax="OBJECT_MNK_3_LIMB_MAX" EnumName="ObjectMnk3Limb" Offset="0x1D518" />
     </File>
 </Root>
