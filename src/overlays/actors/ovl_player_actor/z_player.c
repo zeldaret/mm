@@ -10822,7 +10822,7 @@ s32 func_808430E0(Player* this) {
 }
 
 /**
- * Performs various tasks related to scene collision.
+ * Performs the following tasks related to scene collision:
  *
  * This includes:
  * - Update BgCheckInfo, parameters adjusted due to various state flags
