@@ -21,7 +21,7 @@
  */
 typedef enum {
     /* 0 */ EN_RAT_TYPE_DUNGEON,
-    /* 1 */ EN_RAT_TYPE_OVERWORLD,
+    /* 1 */ EN_RAT_TYPE_OVERWORLD
 } EnRatType;
 
 struct EnRat;

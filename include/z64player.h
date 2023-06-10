@@ -962,7 +962,7 @@ typedef enum PlayerUnkAA5 {
     /* 2 */ PLAYER_UNKAA5_2,
     /* 3 */ PLAYER_UNKAA5_3,
     /* 4 */ PLAYER_UNKAA5_4,
-    /* 5 */ PLAYER_UNKAA5_5,
+    /* 5 */ PLAYER_UNKAA5_5
 } PlayerUnkAA5;
 
 typedef void (*PlayerMainActionFunc)(struct Player* this, struct PlayState* play);

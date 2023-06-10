@@ -58,7 +58,7 @@ static ColliderSphereInit sSphereInit = {
 
 typedef enum {
     /* 0x0 */ POE_BALLOON_DMGEFF_NONE,
-    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF,
+    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF
 } PoeBalloonDamageEffect;
 
 static DamageTable sDamageTable = {

@@ -58,7 +58,7 @@ void ObjMilkBin_Init(Actor* thisx, PlayState* play) {
     this->disableDraw = 0;
     this->type = thisx->params;
 
-    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+    if ((this->type == OBJ_MILK_BIN_TYPE_2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
         this->disableDraw |= 1;
     }
 }
@@ -74,14 +74,14 @@ void ObjMilkBin_Update(Actor* thisx, PlayState* play2) {
     ObjMilkBin* this = THIS;
 
     if (this->type == OBJ_MILK_BIN_TYPE_1) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
             if (((gSaveContext.save.day == 2) && (gSaveContext.save.isNight == 1)) || (gSaveContext.save.day >= 3)) {
                 Actor_Kill(&this->actor);
                 return;
             }
         }
     } else if (this->type == OBJ_MILK_BIN_TYPE_2) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
             this->disableDraw &= ~1;
         } else {
             this->disableDraw |= 1;

@@ -21,7 +21,7 @@ typedef struct EnGgStruct {
     /* 0x40 */ s32 unk_40;
     /* 0x44 */ s32 unk_44;
     /* 0x48 */ u8 unk_48;
-} EnGgStruct; // size == 0x4C
+} EnGgStruct; // size = 0x4C
 
 typedef struct EnGg {
     /* 0x000 */ Actor actor;

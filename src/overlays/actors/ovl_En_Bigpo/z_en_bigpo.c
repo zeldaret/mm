@@ -554,7 +554,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     // flight position calculations
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
-    this->actor.world.pos.y = (sin_rad(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
+    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
@@ -827,7 +827,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
-        this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
+        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }
 

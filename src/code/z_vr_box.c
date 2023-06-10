@@ -239,7 +239,7 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
         case SKYBOX_NORMAL_SKY:
             osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-            if (play->envCtx.unk_10 == 0) {
+            if (play->envCtx.skybox1Index == 0) {
                 // Send a DMA request for the clear sky texture
                 size = SEGMENT_ROM_SIZE(d2_fine_static);
 
@@ -256,7 +256,7 @@ void func_80143324(PlayState* play, SkyboxContext* skyboxCtx, s16 skyboxId) {
             osRecvMesg(&skyboxCtx->loadQueue, NULL, OS_MESG_BLOCK);
             osCreateMesgQueue(&skyboxCtx->loadQueue, &skyboxCtx->loadMsg, 1);
 
-            if (play->envCtx.unk_11 == 0) {
+            if (play->envCtx.skybox2Index == 0) {
                 // Send a DMA request for the clear sky texture
                 size = SEGMENT_ROM_SIZE(d2_fine_static);
 

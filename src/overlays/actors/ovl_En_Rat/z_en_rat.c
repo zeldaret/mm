@@ -32,7 +32,7 @@ void EnRat_PostDetonation(EnRat* this, PlayState* play);
 
 typedef enum {
     /* -2 */ EN_RAT_HOOK_STARTED = -2,
-    /* -1 */ EN_RAT_HOOKED,
+    /* -1 */ EN_RAT_HOOKED
 } EnRatHookedState;
 
 ActorInit En_Rat_InitVars = {
@@ -70,7 +70,7 @@ static ColliderSphereInit sSphereInit = {
 typedef enum {
     /* 0x0 */ EN_RAT_DMGEFF_NONE,
     /* 0x1 */ EN_RAT_DMGEFF_STUN,
-    /* 0xF */ EN_RAT_DMGEFF_HOOKSHOT = 0xF, // Pulls the Real Bombchu towards the player
+    /* 0xF */ EN_RAT_DMGEFF_HOOKSHOT = 0xF // Pulls the Real Bombchu towards the player
 } EnRatDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -230,7 +230,7 @@ s32 EnRat_UpdateFloorPoly(EnRat* this, CollisionPoly* floorPoly, PlayState* play
         return false;
     }
 
-    angle = func_80086C48(normDotUp);
+    angle = Math_FAcosF(normDotUp);
     if (angle < 0.001f) {
         return false;
     }
@@ -324,9 +324,9 @@ void EnRat_ChooseDirection(EnRat* this) {
                 angle -= 0x8000;
             }
 
-            angle += (s16)randPlusMinusPoint5Scaled(0x800);
+            angle += (s16)(s32)Rand_CenteredFloat(0x800);
         } else {
-            angle = (Rand_ZeroOne() < 0.1f) ? (s16)randPlusMinusPoint5Scaled(0x800) : 0;
+            angle = (Rand_ZeroOne() < 0.1f) ? (s16)(s32)Rand_CenteredFloat(0x800) : 0;
         }
     }
 
@@ -633,9 +633,9 @@ void EnRat_UpdateSparkOffsets(EnRat* this) {
 
     for (i = 0; i < ARRAY_COUNT(this->sparkOffsets); i++) {
         ptr = &this->sparkOffsets[i];
-        ptr->x = randPlusMinusPoint5Scaled(6.0f);
-        ptr->y = randPlusMinusPoint5Scaled(6.0f);
-        ptr->z = randPlusMinusPoint5Scaled(6.0f);
+        ptr->x = Rand_CenteredFloat(6.0f);
+        ptr->y = Rand_CenteredFloat(6.0f);
+        ptr->z = Rand_CenteredFloat(6.0f);
     }
 }
 
@@ -937,14 +937,14 @@ void EnRat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gBombCapDL);
         if (EN_RAT_GET_TYPE(&this->actor) == EN_RAT_TYPE_DUNGEON) {
-            redModifier = fabsf(cos_rad(this->timer * (M_PI / 30.f)));
+            redModifier = fabsf(Math_CosF(this->timer * (M_PI / 30.f)));
         } else {
             if (this->timer >= 120) {
-                redModifier = fabsf(cos_rad((this->timer % 30) * (M_PI / 30.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 30) * (M_PI / 30.0f)));
             } else if (this->timer >= 30) {
-                redModifier = fabsf(cos_rad((this->timer % 6) * (M_PI / 6.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 6) * (M_PI / 6.0f)));
             } else {
-                redModifier = fabsf(cos_rad((this->timer % 3) * (M_PI / 3.0f)));
+                redModifier = fabsf(Math_CosF((this->timer % 3) * (M_PI / 3.0f)));
             }
         }
 

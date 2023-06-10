@@ -1,5 +1,6 @@
 #include "global.h"
 #include "buffers.h"
+#include "z64bombers_notebook.h"
 #include "z64debug_display.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -7,7 +8,7 @@
 #include "z64view.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gDbgCamEnabled = false;
@@ -1036,9 +1037,9 @@ void Play_UpdateMain(PlayState* this) {
 
     if (this->sramCtx.status != 0) {
         if (gSaveContext.save.isOwlSave) {
-            func_80147198(&this->sramCtx);
+            Sram_UpdateWriteToFlashOwlSave(&this->sramCtx);
         } else {
-            func_80147068(&this->sramCtx);
+            Sram_UpdateWriteToFlashDefault(&this->sramCtx);
         }
     }
 }
@@ -1051,14 +1052,14 @@ void Play_Update(PlayState* this) {
     if (!sBombersNotebookOpen) {
         if (this->pauseCtx.bombersNotebookOpen) {
             sBombersNotebookOpen = true;
-            sBombersNotebook.unk_00 = 0;
+            sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
-        sBombersNotebook.unk_00 = 0;
+        sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         this->msgCtx.msgLength = 0;
         this->msgCtx.msgMode = 0;
         this->msgCtx.currentTextId = 0;
@@ -1116,7 +1117,7 @@ void Play_PostWorldDraw(PlayState* this) {
 }
 
 #ifdef NON_MATCHING
-// Stack issues and 1 small issue around Play_PostWorldDraw
+// Something weird going on with the stack of the unused arg0 of `Camera_Update`
 void Play_DrawMain(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     Lights* sp268;
@@ -1269,11 +1270,11 @@ void Play_DrawMain(PlayState* this) {
 
             if (!this->unk_18844) {
                 if (1) {
-                    if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
+                    if (((u32)this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
-                                        this->view.eye.y, this->view.eye.z);
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.skyboxBlend,
+                                        this->view.eye.x, this->view.eye.y, this->view.eye.z);
                         } else if (!this->skyboxCtx.skyboxShouldDraw) {
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
                                         this->view.eye.z);
@@ -1305,10 +1306,11 @@ void Play_DrawMain(PlayState* this) {
                 if (this->skyboxCtx.skyboxShouldDraw) {
                     Vec3f sp78;
 
-                    if (1) {}
-                    Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
-                    Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
-                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                    if (1) {
+                        Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                        Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                                    this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                    }
                 }
 
                 // envCtx.precipitation[PRECIP_RAIN_CUR]
@@ -1369,9 +1371,8 @@ void Play_DrawMain(PlayState* this) {
 
             Play_DrawMotionBlur(this);
 
-            if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
-                 (gTransitionTileState == TRANS_TILE_SETUP)) ||
-                (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
+            if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
+                (gTransitionTileState == TRANS_TILE_SETUP) || (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
 
@@ -1404,14 +1405,17 @@ void Play_DrawMain(PlayState* this) {
                 POLY_OPA_DISP = sp74;
                 this->unk_18B49 = 2;
                 SREG(33) |= 1;
-            } else {
-            PostWorldDraw:
-                if (1) {
-                    Play_PostWorldDraw(this);
-                }
+                goto SkipPostWorldDraw;
+            }
+
+        PostWorldDraw:
+            if (1) {
+                Play_PostWorldDraw(this);
             }
         }
     }
+
+SkipPostWorldDraw:
 
     if ((this->view.unk164 != 0) && !gDbgCamEnabled) {
         Vec3s sp4C;
@@ -1428,7 +1432,7 @@ void Play_DrawMain(PlayState* this) {
         func_800FE3E0(this);
     }
 
-    CLOSE_DISPS(this->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
 #else
 void Play_DrawMain(PlayState* this);
@@ -2217,7 +2221,7 @@ void Play_Init(GameState* thisx) {
 
     if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
-        gSaveContext.unk_3DC0 = 0;
+        gSaveContext.nayrusLoveTimer = 0;
         Magic_Reset(this);
         gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
 

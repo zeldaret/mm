@@ -317,7 +317,7 @@ typedef struct EnAObj {
 
 typedef enum {
     /* 0 */ AOBJ_SIGNPOST_OBLONG,
-    /* 1 */ AOBJ_SIGNPOST_ARROW,
+    /* 1 */ AOBJ_SIGNPOST_ARROW
 } AObjType;
 
 #define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)

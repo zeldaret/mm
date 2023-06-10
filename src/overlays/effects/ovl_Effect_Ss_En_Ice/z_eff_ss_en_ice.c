@@ -60,7 +60,7 @@ u32 EffectSsEnIce_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->rEnvColorG = initParams->envColor.g;
         this->rEnvColorB = initParams->envColor.b;
         this->rAlphaMode = 1;
-        this->rPitch = randPlusMinusPoint5Scaled(0x10000);
+        this->rPitch = Rand_CenteredFloat(0x10000);
     } else if (initParams->type == ENICE_TYPE_NORMAL) {
         Math_Vec3f_Copy(&this->pos, &initParams->pos);
         Math_Vec3f_Copy(&this->vec, &initParams->pos);
@@ -142,7 +142,7 @@ void EffectSsEnIce_UpdateFlying(PlayState* play, u32 index, EffectSs* this) {
     } else {
         this->actor = NULL;
         if (this->life >= 9) {
-            rand = randPlusMinusPoint5Scaled(0xFFFF);
+            rand = Rand_CenteredFloat(0xFFFF);
             this->accel.x = Math_SinS(rand) * (Rand_ZeroOne() + 1.0f);
             this->accel.z = Math_CosS(rand) * (Rand_ZeroOne() + 1.0f);
             this->life = 8;
