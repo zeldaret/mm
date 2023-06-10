@@ -1844,8 +1844,6 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
 
     if (swing->unk_64 == 1) {
         if (arg3 < (sp88 = OLib_Vec3fDist(at, &swing->collisionClosePoint))) {
-            //! FAKE:
-        dummy:;
             swing->unk_64 = 0;
         } else if ((sp88 = Math3D_SignedDistanceFromPlane(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
                                                           swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist,
@@ -6325,8 +6323,9 @@ s32 Camera_Demo4(Camera* camera) {
     sCameraInterfaceFlags = roData->interfaceFlags;
 
     switch (camera->animState) {
-        //! FAKE:
-        if (1) {}
+        default:
+            break;
+
         case 0:
             camera->animState++;
             rwData->timer = 0;

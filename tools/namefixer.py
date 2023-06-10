@@ -755,6 +755,7 @@ wordReplace = {
     "func_80158FB0": "Message_LoadTimeNES",
     "func_8015926C": "Message_LoadOwlWarpTextNES",
     "func_8015E750": "Message_FindCreditsMessage",
+    "func_80151BB4": "Message_BombersNotebookQueueEvent",
     "func_80133038": "Schedule_RunScript",
 
     "EffectSsKiraKira_SpawnSmallYellow": "EffectSsKirakira_SpawnSmallYellow",

@@ -157,7 +157,7 @@ u16 EnFsn_GetWelcome(PlayState* play) {
 void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
     switch (this->textId) {
         case 0:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_10)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PRIORITY_MAIL)) {
                 this->textId = 0x29E0;
                 break;
             } else {
@@ -171,7 +171,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
                 this->flags |= ENFSN_GIVE_ITEM;
                 this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
                 this->getItemId = GI_LETTER_TO_MAMA;
-                SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PRIORITY_MAIL);
                 this->textId = 0x29F1;
                 break;
             } else {
@@ -194,7 +194,7 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
             this->flags |= ENFSN_GIVE_ITEM;
             this->flags |= ENFSN_GAVE_LETTER_TO_MAMA;
             this->getItemId = GI_LETTER_TO_MAMA;
-            SET_WEEKEVENTREG(WEEKEVENTREG_80_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_PRIORITY_MAIL);
             this->textId = 0x29F1;
             break;
 
@@ -210,13 +210,13 @@ void EnFsn_HandleConversationBackroom(EnFsn* this, PlayState* play) {
     if (this->flags & ENFSN_END_CONVERSATION) {
         if (this->flags & ENFSN_GAVE_LETTER_TO_MAMA) {
             this->flags &= ~ENFSN_GAVE_LETTER_TO_MAMA;
-            func_80151BB4(play, 34);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_PRIORITY_MAIL);
         }
         if (this->flags & ENFSN_GAVE_KEATONS_MASK) {
             this->flags &= ~ENFSN_GAVE_KEATONS_MASK;
-            func_80151BB4(play, 33);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_KEATON_MASK);
         }
-        func_80151BB4(play, 3);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
     }
 }
 
@@ -425,7 +425,7 @@ s32 EnFsn_TestEndInteraction(EnFsn* this, PlayState* play, Input* input) {
     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
         this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
         Message_StartTextbox(play, this->actor.textId, &this->actor);
-        func_80151BB4(play, 3);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
         this->actionFunc = EnFsn_SetupEndInteraction;
         return true;
     }
@@ -473,7 +473,7 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
             Audio_PlaySfx_MessageCancel();
             this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
             Message_StartTextbox(play, this->actor.textId, &this->actor);
-            func_80151BB4(play, 3);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
             this->actionFunc = EnFsn_SetupEndInteraction;
             return true;
 
@@ -977,7 +977,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
                 this->actor.textId = 0x29D1;
             }
             Message_StartTextbox(play, this->actor.textId, &this->actor);
-            func_80151BB4(play, 3);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
             this->actionFunc = EnFsn_SetupEndInteraction;
         }
     }
@@ -1036,8 +1036,8 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
 void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         if ((this->isSelling == true) && (this->items[this->cursorIndex]->getItemId == GI_MASK_ALL_NIGHT)) {
-            func_80151BB4(play, 45);
-            func_80151BB4(play, 3);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALL_NIGHT_MASK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
         }
         this->actor.parent = NULL;
         if (ENFSN_IS_SHOP(&this->actor) && !this->isSelling) {
@@ -1053,7 +1053,7 @@ void EnFsn_GiveItem(EnFsn* this, PlayState* play) {
 
 void EnFsn_SetupResumeInteraction(EnFsn* this, PlayState* play) {
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if (play->msgCtx.unk120B1 == 0) {
+        if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
             EnFsn_HandleSetupResumeInteraction(this, play);
         }
     } else {
@@ -1239,7 +1239,7 @@ void EnFsn_SetupEndInteraction(EnFsn* this, PlayState* play) {
 
     if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-            if (play->msgCtx.unk120B1 == 0) {
+            if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
@@ -1311,7 +1311,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
                     Audio_PlaySfx_MessageCancel();
                     this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
-                    func_80151BB4(play, 3);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
                     break;
 
                 default:
@@ -1320,7 +1320,7 @@ void EnFsn_AskCanBuyMore(EnFsn* this, PlayState* play) {
         }
     } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-            if (play->msgCtx.unk120B1 == 0) {
+            if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;
@@ -1362,7 +1362,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
                     Audio_PlaySfx_MessageCancel();
                     this->actor.textId = (CURRENT_DAY == 3) ? 0x29DF : 0x29D1;
                     Message_StartTextbox(play, this->actor.textId, &this->actor);
-                    func_80151BB4(play, 3);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN);
                     break;
 
                 default:
@@ -1371,7 +1371,7 @@ void EnFsn_AskCanBuyAterRunningOutOfItems(EnFsn* this, PlayState* play) {
         }
     } else if (((talkState == TEXT_STATE_5) || (talkState == TEXT_STATE_DONE)) && Message_ShouldAdvance(play)) {
         if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-            if (play->msgCtx.unk120B1 == 0) {
+            if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                 EnFsn_EndInteraction(this, play);
             } else {
                 play->msgCtx.msgMode = 0x43;

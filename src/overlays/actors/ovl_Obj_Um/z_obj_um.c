@@ -15,7 +15,7 @@
 
 /**
  * weekEventReg flags checked by this actor:
- * - WEEKEVENTREG_22_01: Aliens defeated
+ * - WEEKEVENTREG_DEFENDED_AGAINST_THEM: Aliens defeated
  *     If false: The actor doesn't spawn
  * - WEEKEVENTREG_31_40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
@@ -23,7 +23,7 @@
  *     If true: Triggers cutscene on Romani's Ranch
  * - WEEKEVENTREG_34_80
  *     If true: Doesn't spawn on Romani's Ranch
- * - WEEKEVENTREG_52_01
+ * - WEEKEVENTREG_ESCORTED_CREMIA
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
  * - WEEKEVENTREG_52_02
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
@@ -37,7 +37,7 @@
  *     Player accepts the ride and is with Cremia during the Milk Run
  * - WEEKEVENTREG_34_80: Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
- * - WEEKEVENTREG_52_01: Won Milk Run minigame
+ * - WEEKEVENTREG_ESCORTED_CREMIA: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
  * - WEEKEVENTREG_52_02: Lose Milk Run minigame
  *     Every pot was broken by bandits. Turns off the "Win Milk Run minigame"
@@ -47,7 +47,7 @@
  * weekEventReg flags unset by this actor:
  * - WEEKEVENTREG_31_80
  *     Turned off when the Milk Run finishes
- * - WEEKEVENTREG_52_01
+ * - WEEKEVENTREG_ESCORTED_CREMIA
  *     Turned off if Player lose the Milk Run
  * - WEEKEVENTREG_52_02
  *     Turned off if Player wins the Milk Run
@@ -682,7 +682,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->initialPathIndex = OBJ_UM_GET_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -702,7 +702,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             // Waiting for player
 
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
-                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) ||
+                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 Actor_Kill(&this->dyna.actor);
                 return;
@@ -713,7 +713,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
             Actor_Kill(&this->dyna.actor);
             return;
         }
@@ -739,7 +739,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
             Actor_Kill(&this->dyna.actor);
             return;
         }
@@ -843,7 +843,7 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33B5);
                 Audio_PlaySfx_MessageCancel();
-                func_80151BB4(play, 6);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 phi_v1 = false;
             }
             break;
@@ -1302,13 +1302,13 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80);
             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    SET_WEEKEVENTREG(WEEKEVENTREG_52_01);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02);
                 } else {
                     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
@@ -1316,7 +1316,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
                     gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_02);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA);
                 }
             }
             break;

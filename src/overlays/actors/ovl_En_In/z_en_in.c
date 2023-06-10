@@ -225,7 +225,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01);
+              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
 
     return ret;
 }
@@ -561,8 +561,9 @@ void func_808F4054(PlayState* play, EnIn* this, s32 arg2, u16 textId) {
     s32 pad;
 
     if ((textId == 0x34AE) || (textId == 0x34B0) || (textId == 0x34B2)) {
-        func_80151BB4(play, 0x11);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
     }
+
     switch (arg2) {
         case 1:
         case 5:
@@ -722,12 +723,12 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x345A:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
                 case 0x345B:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -747,7 +748,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x345F:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -762,7 +763,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x3462:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -817,7 +818,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3467:
                 case 0x3468:
                 case 0x3469:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -833,7 +834,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x346A:
                     this->actionFunc = func_808F5A94;
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
             }
             break;
@@ -863,13 +864,13 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3472:
                     func_808F43E0(this);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
                 case 0x3473:
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x3475:
@@ -925,11 +926,11 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x3484:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x3485:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x3474:
@@ -981,14 +982,14 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3480:
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
                 case 0x3479:
                     func_808F43E0(this);
                     func_808F35D8(this, play);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -1002,15 +1003,15 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3481:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
                 case 0x347D:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
-                    func_80151BB4(play, 0x2F);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK);
                     ret = true;
                     break;
 
@@ -1033,16 +1034,16 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x3488:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
                 case 0x3489:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x348A:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x348B:
@@ -1056,7 +1057,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     break;
 
                 case 0x348D:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -1070,7 +1071,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3468:
                 case 0x3469:
                 case 0x3491:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x348E:
@@ -1118,7 +1119,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3492:
                     this->actionFunc = func_808F5A94;
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
             }
             break;
@@ -1126,11 +1127,11 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
         case 7:
             switch (textId) {
                 case 0x34A8:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x34A7:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x3495:
@@ -1148,7 +1149,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x34A4:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -1160,7 +1161,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x3473:
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
 
                 case 0x3474:
@@ -1199,8 +1200,8 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x34A0:
                     this->actionFunc = func_808F5A34;
-                    func_80151BB4(play, 0x11);
-                    func_80151BB4(play, 0x2F);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK);
                     func_808F43E0(this);
                     ret = true;
                     break;
@@ -1224,7 +1225,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
 
                 case 0x34A3:
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -1254,7 +1255,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x349C:
                     func_808F43E0(this);
                     func_808F35D8(this, play);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -1284,7 +1285,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                 case 0x3472:
                     func_808F43E0(this);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
 
@@ -1552,7 +1553,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                             this->actionFunc = func_808F5A94;
                         } else {
-                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
@@ -1563,7 +1564,7 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             }
                         }
                     } else {
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                             Actor_Kill(&this->actor);
                         } else {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_7);
