@@ -136,6 +136,15 @@ typedef struct {
 } LightningStrike; // size = 0xC
 
 typedef struct {
+    /* 0x0 */ u16 startTime;
+    /* 0x2 */ u16 endTime;
+    /* 0x4 */ u8 changeSkybox; // TODO: Verify
+    /* 0x5 */ u8 changeSkybox2; // TODO: Verify
+    /* 0x6 */ u8 skybox1Index;
+    /* 0x7 */ u8 skybox2Index;
+} TimeBasedSkyboxEntry; // size = 0x8
+
+typedef struct {
     /* 0x00 */ u8 ambientColor[3];
     /* 0x03 */ s8 diffuseDir1[3];
     /* 0x06 */ u8 diffuseColor1[3];
@@ -293,12 +302,12 @@ extern u8 gInterruptSongOfStorms;
 extern u8 D_801BDBC0;
 extern u8 D_801BDBC4;
 extern u8 sSceneSeqState;
-// extern UNK_TYPE1 D_801BDBCC;
-// extern UNK_TYPE1 D_801BDCF4;
+// extern UNK_TYPE1 sTimeBasedLightConfigs;
+// extern UNK_TYPE1 gTimeBasedSkyboxConfigs;
 // extern UNK_TYPE1 D_801BE38E;
 // extern UNK_TYPE1 D_801BE38F;
 // extern UNK_TYPE1 D_801BE390;
-// extern UNK_TYPE1 D_801BE4D4;
+// extern UNK_TYPE1 gNormalSkyFiles;
 // extern UNK_TYPE1 D_801BE534;
 // extern UNK_TYPE1 D_801BE6D4;
 // extern UNK_TYPE1 D_801BE874;
