@@ -170,6 +170,8 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 }
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
+    s32 pad;
+
     if ((animIndex < 0) || (animIndex > 2)) {
         return;
     }
@@ -191,10 +193,8 @@ void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f3
         }
     } else {
         // unused case, (only called once with animIndex = 2)
-        AnimationHeader* animationPtr = gYbUnusedAnimations[animIndex];
-
         Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
-                         Animation_GetLastFrame(animationPtr), animMode, morphFrames);
+                         Animation_GetLastFrame(gYbUnusedAnimations[animIndex]), animMode, morphFrames);
     }
     this->animIndex = animIndex;
 }
