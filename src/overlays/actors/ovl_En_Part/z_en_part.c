@@ -90,10 +90,10 @@ void func_808654C4(EnPart* this, PlayState* play) {
                 break;
             case ENPART_TYPE_4:
                 for (i = 7; i >= 0; i--) {
-                    effectPos.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                    effectPos.y = randPlusMinusPoint5Scaled(50.0f) +
+                    effectPos.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                    effectPos.y = Rand_CenteredFloat(50.0f) +
                                   (this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y));
-                    effectPos.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
+                    effectPos.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
                     effectVelocity.y = Rand_ZeroOne() + 1.0f;
                     effectScale = Rand_S16Offset(80, 100);
                     EffectSsDtBubble_SpawnColorProfile(play, &effectPos, &effectVelocity, &gZeroVec3f, effectScale, 25,
@@ -125,7 +125,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params > ENPART_TYPE_0) {
         Matrix_RotateZF(this->zRot, MTXMODE_APPLY);
     }
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     if (this->actor.params == ENPART_TYPE_15) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_gs.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -457,25 +458,25 @@ void func_8099874C(EnGs* this, PlayState* play) {
             }
 
             if (phi_v0 != 0) {
-                this->unk_20C = -1;
+                this->getItemId = -1;
                 switch (this->unk_194) {
                     case 1:
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_08)) {
-                            this->unk_20C = 6;
+                            this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_08);
                         }
                         break;
 
                     case 3:
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_10)) {
-                            this->unk_20C = 6;
+                            this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_10);
                         }
                         break;
 
                     case 2:
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_20)) {
-                            this->unk_20C = 6;
+                            this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_20);
                         }
                         break;
@@ -483,10 +484,10 @@ void func_8099874C(EnGs* this, PlayState* play) {
 
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
-                    this->unk_20C = 12;
+                    this->getItemId = GI_HEART_PIECE;
                 }
 
-                if (this->unk_20C > 0) {
+                if (this->getItemId > GI_NONE) {
                     func_809989B4(this, play);
                 } else {
                     func_80997D14(this, play);
@@ -501,7 +502,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
 }
 
 void func_809989B4(EnGs* this, PlayState* play) {
-    Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809989F4;
 }
 
@@ -510,7 +511,8 @@ void func_809989F4(EnGs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80997D14(this, play);
     } else {
-        Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                           this->actor.playerHeightRel);
     }
 }
 
@@ -813,9 +815,9 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         Vec3f sp60;
 
         for (i = 0; i < 3; i++) {
-            sp60.x = randPlusMinusPoint5Scaled(15.0f);
+            sp60.x = Rand_CenteredFloat(15.0f);
             sp60.y = Rand_ZeroFloat(-1.0f);
-            sp60.z = randPlusMinusPoint5Scaled(15.0f);
+            sp60.z = Rand_CenteredFloat(15.0f);
 
             sp6C.x = this->actor.world.pos.x + (2.0f * sp60.x);
             sp6C.y = this->actor.world.pos.y + 7.0f;
@@ -871,7 +873,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
 
         if (this->actor.playerHeightRel < -12000.0f) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 0);
+                        this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, this->actor.world.rot.y, 0, BOMB_TYPE_BODY);
             Actor_Kill(&this->actor);
             sp7C = 0;
         }
@@ -1069,7 +1071,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
 
     frames = play->gameplayFrames;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Push();
 
     if (this->unk_19A & 1) {
@@ -1091,7 +1093,7 @@ void EnGs_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     if (this->unk_19A & 2) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(0.05f, -0.05f, 1.0f, MTXMODE_APPLY);
 

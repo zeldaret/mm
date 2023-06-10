@@ -11,9 +11,9 @@ f32 gFramerateDivisorThird = 1.0f / 3.0f;
 
 void Game_UpdateFramerateVariables(s32 divisor) {
     gFramerateDivisor = divisor;
-    gFramerateDivisorF = (f32)divisor;
-    gFramerateDivisorHalf = (f32)(divisor * 0.5f);
-    gFramerateDivisorThird = (f32)(divisor / 3.0f);
+    gFramerateDivisorF = divisor;
+    gFramerateDivisorHalf = divisor / 2.0f;
+    gFramerateDivisorThird = divisor / 3.0f;
 }
 
 void Game_SetFramerateDivisor(GameState* gameState, s32 divisor) {
@@ -31,7 +31,7 @@ void GameState_SetFBFilter(Gfx** gfx, void* zbuffer) {
         D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
         D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
         D_801F8010.color.a = R_FB_FILTER_A;
-        func_80140D10(&D_801F8010, &dlist, zbuffer);
+        VisCvg_Draw(&D_801F8010, &dlist);
     } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
         sVisZbuf.useRgba = (R_FB_FILTER_TYPE == 6);
         sVisZbuf.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
@@ -128,7 +128,7 @@ void func_801736DC(GraphicsContext* gfxCtx) {
 }
 
 void Game_UpdateInput(GameState* gameState) {
-    Padmgr_GetInput(gameState->input, 1);
+    PadMgr_GetInput(gameState->input, true);
 }
 
 void Game_Update(GameState* gameState) {
@@ -194,7 +194,7 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
     gameState->main = NULL;
     gameState->destroy = NULL;
     gameState->running = 1;
-    gfxCtx->viMode = D_801FBB88;
+    gfxCtx->viMode = gActiveViMode;
     gfxCtx->viConfigFeatures = gViConfigFeatures;
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
@@ -210,10 +210,10 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
         init(gameState);
 
-        func_80140CE0(&D_801F8010);
+        VisCvg_Init(&D_801F8010);
         VisZbuf_Init(&sVisZbuf);
         VisMono_Init(&sMonoColors);
-        func_80140898(&D_801F8048);
+        ViMode_Init(&D_801F8048);
         func_801773A0(&D_801F7FF0);
         Rumble_Init();
 
@@ -232,10 +232,10 @@ void GameState_Destroy(GameState* gameState) {
 
     Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
-    func_80140D04(&D_801F8010);
+    VisCvg_Destroy(&D_801F8010);
     VisZbuf_Destroy(&sVisZbuf);
     VisMono_Destroy(&sMonoColors);
-    func_80140900(&D_801F8048);
+    ViMode_Destroy(&D_801F8048);
     THA_Destroy(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);
 }

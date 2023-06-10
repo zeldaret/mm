@@ -58,7 +58,7 @@ static ColliderSphereInit sSphereInit = {
 
 typedef enum {
     /* 0x0 */ POE_BALLOON_DMGEFF_NONE,
-    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF,
+    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF
 } PoeBalloonDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -316,7 +316,7 @@ void EnPoFusen_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void EnPoFusen_Draw(Actor* thisx, PlayState* play) {
     EnPoFusen* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->anime.skeleton, this->anime.jointTable, this->anime.dListCount,
                                    EnPoFusen_OverrideLimbDraw, EnPoFusen_PostLimbDraw, EnPoFusen_TransformLimbDraw,
                                    &this->actor);

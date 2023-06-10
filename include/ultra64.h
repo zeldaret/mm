@@ -6,6 +6,7 @@
 
 #include "unk.h"
 
+#include "ultra64/controller_voice.h"
 #include "ultra64/hardware.h"
 #include "ultra64/message.h"
 #include "ultra64/sptask.h"

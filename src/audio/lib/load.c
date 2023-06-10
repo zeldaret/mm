@@ -80,10 +80,10 @@ typedef enum {
 #define OS_MESG_PRI_HIGH 1
 
 typedef struct {
-    u16 numInstruments;
-    u16 numDrums;
-    u16 numSfx;
-} UnloadedFonts;
+    /* 0x0 */ u16 numInstruments;
+    /* 0x2 */ u16 numDrums;
+    /* 0x4 */ u16 numSfx;
+} UnloadedFonts; // size = 0x6
 
 OSMesgQueue sScriptLoadQueue;
 OSMesg sScriptLoadMesgBuf[0x10];
@@ -138,13 +138,13 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
     s32 bufferPos;
     u32 i;
 
-    if (arg2 != 0 || *dmaIndexRef >= gAudioCtx.sampleDmaListSize1) {
+    if ((arg2 != 0) || (*dmaIndexRef >= gAudioCtx.sampleDmaListSize1)) {
         for (i = gAudioCtx.sampleDmaListSize1; i < gAudioCtx.sampleDmaCount; i++) {
             dma = &gAudioCtx.sampleDmas[i];
             bufferPos = devAddr - dma->devAddr;
-            if (0 <= bufferPos && ((u32)bufferPos <= dma->size - size)) {
+            if ((0 <= bufferPos) && ((u32)bufferPos <= (dma->size - size))) {
                 // We already have a DMA request for this memory range.
-                if (dma->ttl == 0 && gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos) {
+                if ((dma->ttl == 0) && (gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos)) {
                     // Move the DMA out of the reuse queue, by swapping it with the
                     // read pos, and then incrementing the read pos.
                     if (dma->reuseIndex != gAudioCtx.sampleDmaReuseQueue2RdPos) {
@@ -1905,7 +1905,7 @@ void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, SoundFontData* fontData
     }
     gAudioCtx.numUsedSamples = 0;
 
-    if (gAudioCtx.preloadSampleStackTop != 0 && !preloadInProgress) {
+    if ((gAudioCtx.preloadSampleStackTop != 0) && !preloadInProgress) {
         topPreload = &gAudioCtx.preloadSampleStack[gAudioCtx.preloadSampleStackTop - 1];
         sample = topPreload->sample;
         nChunks = (sample->size >> 12) + 1;
@@ -2160,7 +2160,7 @@ void AudioLoad_PreloadSamplesForFont(s32 fontId, s32 async, SampleBankRelocInfo*
     }
     gAudioCtx.numUsedSamples = 0;
 
-    if (gAudioCtx.preloadSampleStackTop != 0 && !preloadInProgress) {
+    if ((gAudioCtx.preloadSampleStackTop != 0) && !preloadInProgress) {
         topPreload = &gAudioCtx.preloadSampleStack[gAudioCtx.preloadSampleStackTop - 1];
         sample = topPreload->sample;
         nChunks = (sample->size >> 12) + 1;

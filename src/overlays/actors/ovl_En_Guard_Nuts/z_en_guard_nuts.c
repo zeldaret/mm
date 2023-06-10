@@ -84,7 +84,7 @@ typedef enum {
     /* 0 */ WAIT_HEAD_TILT_ANIM,
     /* 1 */ WALK_ANIM,
     /* 2 */ DIG_ANIM,
-    /* 3 */ WALK_ANIM_2,
+    /* 3 */ WALK_ANIM_2
 } EnGuardNutsAnim;
 
 typedef enum {
@@ -328,7 +328,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
         }
     }
     if ((this->animIndex == WALK_ANIM) &&
-        ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f)))) {
+        (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
@@ -370,7 +370,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 

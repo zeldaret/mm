@@ -107,9 +107,9 @@ void func_80B22E0C(EnHanabiStruct* arg0) {
             arg0->unk_20.y *= arg0->unk_14.x;
             arg0->unk_20.y -= 1.0f;
 
-            arg0->unk_20.x += randPlusMinusPoint5Scaled(0.8f);
-            arg0->unk_20.y += randPlusMinusPoint5Scaled(0.8f);
-            arg0->unk_20.z += randPlusMinusPoint5Scaled(0.8f);
+            arg0->unk_20.x += Rand_CenteredFloat(0.8f);
+            arg0->unk_20.y += Rand_CenteredFloat(0.8f);
+            arg0->unk_20.z += Rand_CenteredFloat(0.8f);
 
             if (arg0->unk_01 > 0) {
                 arg0->unk_01--;
@@ -141,9 +141,9 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
@@ -286,10 +286,10 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
         }
 
         sp34.x += sp30 * Math_SinS(this->actor.home.rot.y);
-        sp34.y += randPlusMinusPoint5Scaled(300.0f);
+        sp34.y += Rand_CenteredFloat(300.0f);
         sp34.z += sp30 * Math_CosS(this->actor.home.rot.y);
 
-        if (this->actor.home.rot.x >= 0x259) {
+        if (this->actor.home.rot.x > 0x258) {
             sp28 = func_80B22C80(&sp34, this->unk_148, 2.0f);
         } else {
             sp28 = func_80B22C80(&sp34, this->unk_148, 1.0f);

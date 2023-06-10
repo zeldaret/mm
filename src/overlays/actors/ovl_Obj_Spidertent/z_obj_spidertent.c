@@ -234,7 +234,7 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-} ObjSpidertentStruct;
+} ObjSpidertentStruct; // size = 0x28
 
 ObjSpidertentStruct D_80B31350[] = {
     {
@@ -272,7 +272,7 @@ typedef struct {
     /* 0x0F */ s8 unk_0F;
     /* 0x10 */ Color_RGBA8 unk_10;
     /* 0x14 */ Color_RGBA8 unk_14;
-} ObjSpidertentStruct2;
+} ObjSpidertentStruct2; // size = 0x18
 
 ObjSpidertentStruct2 D_80B313A0[] = {
     {
@@ -812,7 +812,7 @@ void ObjSpidertent_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_XLU_DISP;
 
-    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(gfx++, 0, 0xFF, this->unk_3C2, this->unk_3C3, this->unk_3C4, temp_f18);
     gSPDisplayList(gfx++, D_80B31350[params].unk_00);

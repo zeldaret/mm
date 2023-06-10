@@ -43,7 +43,6 @@
  *
  */
 
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64shrink_window.h"
@@ -467,13 +466,13 @@ s32 func_800CBA7C(Camera* camera) {
     }
 }
 
-s32 func_800CBAAC(Camera* camera) {
+PlayerMeleeWeaponState func_800CBAAC(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
         return ((Player*)focalActor)->meleeWeaponState;
     } else {
-        return 0;
+        return PLAYER_MELEE_WEAPON_STATE_0;
     }
 }
 
@@ -508,13 +507,13 @@ s32 func_800CBB88(Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        if ((((Player*)focalActor)->meleeWeaponState != 0) &&
+        if ((((Player*)focalActor)->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
             (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_GORON_PUNCH_BUTT)) {
             return 3;
         }
 
         if ((((Player*)focalActor)->stateFlags2 & PLAYER_STATE2_20000) ||
-            ((((Player*)focalActor)->meleeWeaponState != 0) &&
+            ((((Player*)focalActor)->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
              (((Player*)focalActor)->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_KICK))) {
             return 1;
         }
@@ -876,7 +875,7 @@ void func_800CC938(Camera* camera) {
  * Calculates the angle between points `from` and `to`
  */
 s16 Camera_CalcXZAngle(Vec3f* to, Vec3f* from) {
-    return CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(from->x - to->x, from->z - to->z)));
+    return CAM_DEG_TO_BINANG(RAD_TO_DEG(Math_FAtan2F(from->x - to->x, from->z - to->z)));
 }
 
 // BSS
@@ -965,8 +964,8 @@ s16 Camera_GetPitchAdjFromFloorHeightDiffs(Camera* camera, s16 viewYaw, s16 shou
     floorYDiffNear = (sFloorYNear - camera->focalActorFloorHeight) * 0.8f;
     floorYDiffFar = (sFloorYFar - camera->focalActorFloorHeight) * (20.0f * 0.01f);
 
-    pitchNear = CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(floorYDiffNear, nearDist)));
-    pitchFar = CAM_DEG_TO_BINANG(RAD_TO_DEG(func_80086B30(floorYDiffFar, farDist)));
+    pitchNear = CAM_DEG_TO_BINANG(RAD_TO_DEG(Math_FAtan2F(floorYDiffNear, nearDist)));
+    pitchFar = CAM_DEG_TO_BINANG(RAD_TO_DEG(Math_FAtan2F(floorYDiffFar, farDist)));
 
     return pitchNear + pitchFar;
 }
@@ -1458,9 +1457,8 @@ s32 Camera_CalcAtForParallel(Camera* camera, VecGeo* arg1, f32 yOffset, f32 xzOf
         deltaY = focalActorPosRot->pos.y - *focalActorPosY;
         eyeAtDistXZ = OLib_Vec3fDistXZ(at, &camera->eye);
 
-        // Math_FTanF
         // Get the height based on 80% of the fov
-        fovHeight = func_80086760(DEG_TO_RAD(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
+        fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * (0.8f * 0.5f))) * eyeAtDistXZ;
 
         if (deltaY > fovHeight) {
             //! FAKE
@@ -1540,8 +1538,8 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             deltaY = focalActorPosRot->pos.y - *yPosOffset;
             sp50 = OLib_Vec3fDistXZ(at, &camera->eye);
             phi_f16 = sp50;
-            func_80086B30(deltaY, sp50);
-            fovHeight = func_80086760(DEG_TO_RAD(camera->fov * 0.4f)) * phi_f16;
+            Math_FAtan2F(deltaY, sp50);
+            fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * 0.4f)) * phi_f16;
 
             if (fovHeight < deltaY) {
                 *yPosOffset += deltaY - fovHeight;
@@ -1553,12 +1551,12 @@ s32 Camera_CalcAtForFriendlyLockOn(Camera* camera, VecGeo* eyeAtDir, Vec3f* targ
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
             deltaY = focalActorPosRot->pos.y - *yPosOffset;
-            temp_f0_6 = func_80086B30(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
+            temp_f0_6 = Math_FAtan2F(deltaY, OLib_Vec3fDistXZ(at, &camera->eye));
 
             if (temp_f0_6 > 0.34906584f) { // (M_PI / 9)
-                phi_f16 = 1.0f - sin_rad(temp_f0_6 - 0.34906584f);
+                phi_f16 = 1.0f - Math_SinF(temp_f0_6 - 0.34906584f);
             } else if (temp_f0_6 < -0.17453292f) { // (M_PI / 18)
-                phi_f16 = 1.0f - sin_rad(-0.17453292f - temp_f0_6);
+                phi_f16 = 1.0f - Math_SinF(-0.17453292f - temp_f0_6);
             } else {
                 phi_f16 = 1.0f;
             }
@@ -1626,10 +1624,10 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
         new_var2 = *arg1;
         sp4C = new_var2;
         deltaY = focalActorPosRot->pos.y - *arg6;
-        temp_f0_3 = func_80086B30(deltaY, sp4C);
+        temp_f0_3 = Math_FAtan2F(deltaY, sp4C);
 
         if (!(flags & 0x80)) {
-            fovHeight = func_80086760(DEG_TO_RAD(camera->fov * 0.4f)) * sp4C;
+            fovHeight = Math_FTanF(DEG_TO_RAD(camera->fov * 0.4f)) * sp4C;
 
             if (fovHeight < deltaY) {
                 *arg6 += deltaY - fovHeight;
@@ -1642,9 +1640,9 @@ s32 Camera_CalcAtForEnemyLockOn(Camera* camera, f32* arg1, s32 arg2, f32 yOffset
             focalActorAtOffsetTarget.y -= deltaY;
         } else {
             if (temp_f0_3 > 0.34906584f) { // (M_PI / 9)
-                phi_f14 = 1.0f - sin_rad(temp_f0_3 - 0.34906584f);
+                phi_f14 = 1.0f - Math_SinF(temp_f0_3 - 0.34906584f);
             } else if (temp_f0_3 < -0.17453292f) { // (M_PI / 18)
-                phi_f14 = 1.0f - sin_rad(-0.17453292f - temp_f0_3);
+                phi_f14 = 1.0f - Math_SinF(-0.17453292f - temp_f0_3);
             } else {
                 phi_f14 = 1.0f;
             }
@@ -1846,8 +1844,6 @@ void Camera_CalcDefaultSwing(Camera* camera, VecGeo* arg1, VecGeo* arg2, f32 arg
 
     if (swing->unk_64 == 1) {
         if (arg3 < (sp88 = OLib_Vec3fDist(at, &swing->collisionClosePoint))) {
-            //! FAKE:
-        dummy:;
             swing->unk_64 = 0;
         } else if ((sp88 = Math3D_PlaneF(swing->eyeAtColChk.norm.x, swing->eyeAtColChk.norm.y,
                                          swing->eyeAtColChk.norm.z, swing->eyeAtColChk.poly->dist, at)) > 0.0f) {
@@ -3958,7 +3954,7 @@ s32 Camera_Battle1(Camera* camera) {
     }
 
     camera->roll = Camera_ScaledStepToCeilS(sp88, camera->roll, 0.06f, 5);
-    if (func_800CBAAC(camera) != 0) {
+    if (func_800CBAAC(camera) != PLAYER_MELEE_WEAPON_STATE_0) {
         phi_f12 = ((camera->play->state.frames & 8) != 0) ? roData->unk_20 - (roData->unk_20 * 0.5f) : roData->unk_20;
     } else {
         phi_f12 = ((gSaveContext.save.saveInfo.playerData.health <= 16) ? 0.8f : 1.0f) * (sp78 - (sp78 * 0.05f * spEC));
@@ -6325,8 +6321,9 @@ s32 Camera_Demo4(Camera* camera) {
     sCameraInterfaceFlags = roData->interfaceFlags;
 
     switch (camera->animState) {
-        //! FAKE:
-        if (1) {}
+        default:
+            break;
+
         case 0:
             camera->animState++;
             rwData->timer = 0;
@@ -6342,8 +6339,8 @@ s32 Camera_Demo4(Camera* camera) {
             // Camera fixed on human player as the mask moves from the pocket to the face
             // Camera rolls left and right
             if (rwData->timer >= 12) {
-                rwData->unk_0C = (rwData->timer - 12) * 10.384615f;
-                sin = sin_rad(DEG_TO_RAD(rwData->unk_0C));
+                rwData->unk_0C = (rwData->timer - 12) * (135.0f / 13.0f);
+                sin = Math_SinF(DEG_TO_RAD(rwData->unk_0C));
                 rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
                 if (rwData->timer == 12) {
                     Distortion_Request(DISTORTION_TYPE_MASK_TRANSFORM_1);
@@ -6515,7 +6512,7 @@ s32 Camera_Demo5(Camera* camera) {
             // Camera zooms out while rolling back and forth
             rwData->unk_0C = rwData->timer * (180.0f / 23.0f);
             sp58 = DEG_TO_RAD(rwData->unk_0C);
-            sin = sin_rad(sp58);
+            sin = Math_SinF(sp58);
             rwData->unk_0C = ((rwData->unk_10 < 0.0f) ? -1.0f : 1.0f) * sin;
             new_var = (46 - rwData->timer) * (5.0f / 46.0f);
             focalActorFocus.pos.x = (Math_SinS(rwData->unk_24) * new_var * rwData->unk_0C) + focalActorPosRot->pos.x;
@@ -6776,8 +6773,9 @@ s32 Camera_Special5(Camera* camera) {
             spA4 = BINANG_SUB(focalActorPosRot->rot.y, sp6C.yaw);
             sp74.r = roData->eyeDist;
             rand = Rand_ZeroOne();
-            sp74.yaw = BINANG_ROT180(focalActorPosRot->rot.y) +
-                       (s16)(spA4 < 0 ? -(s16)(0x1553 + (s16)(rand * 2730.0f)) : (s16)(0x1553 + (s16)(rand * 2730.0f)));
+            sp74.yaw =
+                BINANG_ROT180(focalActorPosRot->rot.y) +
+                (s16)((spA4 < 0) ? -(s16)(0x1553 + (s16)(rand * 2730.0f)) : (s16)(0x1553 + (s16)(rand * 2730.0f)));
             sp74.pitch = roData->pitch;
             OLib_AddVecGeoToVec3f(eyeNext, &spA8.pos, &sp74);
             *eye = *eyeNext;
@@ -7788,7 +7786,7 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
             break;
 
         case CAM_MODE_FOLLOWTARGET:
-            if (camera->target != NULL && camera->target->id != ACTOR_EN_BOOM) {
+            if ((camera->target != NULL) && (camera->target->id != ACTOR_EN_BOOM)) {
                 sModeChangeFlags = CAM_CHANGE_MODE_FOLLOW_TARGET;
             }
             break;
@@ -7804,6 +7802,9 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
         case CAM_MODE_NORMAL:
         case CAM_MODE_HANG:
             sModeChangeFlags = CAM_CHANGE_MODE_4;
+            break;
+
+        default:
             break;
     }
 

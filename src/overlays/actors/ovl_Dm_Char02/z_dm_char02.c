@@ -35,7 +35,7 @@ typedef enum {
     /* 0 */ DMCHAR02_ANIM_HIT_GROUND,
     /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
     /* 2 */ DMCHAR02_ANIM_JUGGLE,
-    /* 3 */ DMCHAR02_ANIM_FALL,
+    /* 3 */ DMCHAR02_ANIM_FALL
 } DmChar02Animation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -185,7 +185,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (shouldDraw) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar02_OverrideLimbDraw, DmChar02_PostLimbDraw,
                                        DmChar02_TransformLimbDraw, &this->actor);

@@ -47,7 +47,7 @@ typedef enum {
     /* 4 */ ZELDA_ANIM_GIVING_OCARINA,
     /* 5 */ ZELDA_ANIM_PLAYING_OCARINA_START,
     /* 6 */ ZELDA_ANIM_PLAYING_OCARINA,
-    /* 7 */ ZELDA_ANIM_MAX,
+    /* 7 */ ZELDA_ANIM_MAX
 } DmZlAnimation;
 
 static TexturePtr sMouthTextures[] = {
@@ -61,7 +61,7 @@ typedef enum {
     /* 0 */ ZELDA_MOUTH_NEUTRAL,
     /* 1 */ ZELDA_MOUTH_SMILING,
     /* 2 */ ZELDA_MOUTH_FROWNING,
-    /* 3 */ ZELDA_MOUTH_OPEN,
+    /* 3 */ ZELDA_MOUTH_OPEN
 } DmZlMouthTextures;
 
 static TexturePtr sEyeTextures[] = {
@@ -81,7 +81,7 @@ typedef enum {
     /* 3 */ ZELDA_EYE_WIDE,
     /* 4 */ ZELDA_EYE_HAPPY,
     /* 5 */ ZELDA_EYE_OPEN_LOOKING_LEFT,
-    /* 6 */ ZELDA_EYE_OPEN_LOOKING_RIGHT,
+    /* 6 */ ZELDA_EYE_OPEN_LOOKING_RIGHT
 } DmZlEyeTextures;
 
 // Unused in MM
@@ -92,7 +92,7 @@ typedef enum {
     /* 3 */ ZELDA_EYE_STATE_LOOKING_RIGHT,
     /* 4 */ ZELDA_EYE_STATE_WIDE,
     /* 5 */ ZELDA_EYE_STATE_HAPPY,
-    /* 6 */ ZELDA_EYE_STATE_CLOSED2,
+    /* 6 */ ZELDA_EYE_STATE_CLOSED2
 } DmZlEyeStates;
 
 /**
@@ -289,7 +289,7 @@ void DmZl_Draw(Actor* thisx, PlayState* play) {
 
     gSPSegment(POLY_OPA_DISP++, 0x0A, Lib_SegmentedToVirtual(sMouthTextures[this->mouthTextureIndex]));
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           DmZl_OverrideLimbDraw, DmZl_PostLimbDraw, &this->actor);
 

@@ -371,11 +371,11 @@ void func_80876930(EnDodongo* this, PlayState* play, Vec3f* arg2) {
     temp3 = this->unk_334 * 30.0f;
 
     for (i = 0; i < 3; i++) {
-        sp88.x = randPlusMinusPoint5Scaled(temp3) + arg2->x;
+        sp88.x = Rand_CenteredFloat(temp3) + arg2->x;
         sp88.y = Rand_ZeroFloat(5.0f) + this->actor.floorHeight;
-        sp88.z = randPlusMinusPoint5Scaled(temp3) + arg2->z;
-        D_8087933C.x = randPlusMinusPoint5Scaled(2.0f);
-        D_8087933C.z = randPlusMinusPoint5Scaled(2.0f);
+        sp88.z = Rand_CenteredFloat(temp3) + arg2->z;
+        D_8087933C.x = Rand_CenteredFloat(2.0f);
+        D_8087933C.z = Rand_CenteredFloat(2.0f);
         func_800B0DE0(play, &sp88, &gZeroVec3f, &D_8087933C, sp80, sp7C, temp1, temp2);
     }
 }
@@ -738,9 +738,9 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
         this->timer--;
         if (this->timer == 10) {
             for (i = 10; i >= 0; i--) {
-                sp84.x = randPlusMinusPoint5Scaled(10.0f);
-                sp84.y = randPlusMinusPoint5Scaled(10.0f);
-                sp84.z = randPlusMinusPoint5Scaled(10.0f);
+                sp84.x = Rand_CenteredFloat(10.0f);
+                sp84.y = Rand_CenteredFloat(10.0f);
+                sp84.z = Rand_CenteredFloat(10.0f);
                 sp78.x = sp84.x * -0.1f;
                 sp78.y = sp84.y * -0.1f;
                 sp78.z = sp84.z * -0.1f;
@@ -914,7 +914,8 @@ void func_808787B0(EnDodongo* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->timer == 0) {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                              this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+                                              this->actor.world.pos.y, this->actor.world.pos.z,
+                                              BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0, BOMB_TYPE_BODY);
             if (bomb != NULL) {
                 bomb->timer = 0;
             }
@@ -1102,7 +1103,7 @@ void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnDodongo_Draw(Actor* thisx, PlayState* play) {
     EnDodongo* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDodongo_OverrideLimbDraw,
                       EnDodongo_PostLimbDraw, &this->actor);
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),

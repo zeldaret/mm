@@ -15,17 +15,17 @@ typedef void (*EnPoSistersActionFunc)(struct EnPoSisters*, PlayState*);
 #define POE_SISTERS_PARAMS(observerFlag, megClone, type) (((observerFlag) << 0xC) | ((megClone & 3) << 0xA) | ((type & 3) << 8))
 
 typedef enum {
-    /* 0 */ POE_SISTERS_TYPE_MEG,   // purple
-    /* 1 */ POE_SISTERS_TYPE_JO,    // red
-    /* 2 */ POE_SISTERS_TYPE_BETH,  // blue
-    /* 3 */ POE_SISTERS_TYPE_AMY,   // green
+    /* 0 */ POE_SISTERS_TYPE_MEG,  // purple
+    /* 1 */ POE_SISTERS_TYPE_JO,   // red
+    /* 2 */ POE_SISTERS_TYPE_BETH, // blue
+    /* 3 */ POE_SISTERS_TYPE_AMY   // green
 } EnPoSisterType;
 
 typedef enum {
     /* 0 */ POE_SISTERS_MEG_REAL,
     /* 1 */ POE_SISTERS_MEG_CLONE1,
     /* 2 */ POE_SISTERS_MEG_CLONE2,
-    /* 3 */ POE_SISTERS_MEG_CLONE3,
+    /* 3 */ POE_SISTERS_MEG_CLONE3
 } EnPoSisterMegCloneID;
 
 typedef struct EnPoSisters {

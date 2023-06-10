@@ -86,9 +86,11 @@ void EnRsn_Draw(Actor* thisx, PlayState* play) {
     EnRsn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C5B0(play->state.gfxCtx);
+
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBombShopkeeperEyeTex));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

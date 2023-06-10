@@ -1,4 +1,4 @@
-// #include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering.h"
 #include "z64math.h"
 #include "libc/stdbool.h"
 #include "libc/math.h"
@@ -36,126 +36,72 @@
 // extern Vec3f D_801FBDE8;
 
 // Partial structs taken from "prevent_bss_reordering.h"
-struct Dummy100 {
-    int x;
-};
-struct Dummy101 {
-    int x;
-};
-struct Dummy102 {
-    int x;
-};
-struct Dummy103 {
-    int x;
-};
-struct Dummy104 {
-    int x;
-};
-struct Dummy105 {
-    int x;
-};
-struct Dummy106 {
-    int x;
-};
-struct Dummy107 {
-    int x;
-};
-struct Dummy108 {
-    int x;
-};
-struct Dummy109 {
-    int x;
-};
-struct Dummy110 {
-    int x;
-};
-struct Dummy111 {
-    int x;
-};
-struct Dummy112 {
-    int x;
-};
-struct Dummy113 {
-    int x;
-};
-struct Dummy114 {
-    int x;
-};
-struct Dummy115 {
-    int x;
-};
-struct Dummy116 {
-    int x;
-};
-struct Dummy117 {
-    int x;
-};
-struct Dummy118 {
-    int x;
-};
-struct Dummy119 {
-    int x;
-};
-struct Dummy120 {
-    int x;
-};
-struct Dummy121 {
-    int x;
-};
-struct Dummy122 {
-    int x;
-};
-struct Dummy123 {
-    int x;
-};
-struct Dummy124 {
-    int x;
-};
-struct Dummy125 {
-    int x;
-};
-struct Dummy126 {
-    int x;
-};
-struct Dummy127 {
-    int x;
-};
-// struct Dummy128 { int x; };
-// struct Dummy129 { int x; };
-// struct Dummy130 { int x; };
-// struct Dummy131 { int x; };
-// struct Dummy132 { int x; };
-// struct Dummy133 { int x; };
-// struct Dummy134 { int x; };
-// struct Dummy135 { int x; };
-// struct Dummy136 { int x; };
-// struct Dummy137 { int x; };
-// struct Dummy138 { int x; };
-// struct Dummy139 { int x; };
-// struct Dummy140 { int x; };
-// struct Dummy141 { int x; };
-// struct Dummy142 { int x; };
-// struct Dummy143 { int x; };
-// struct Dummy144 { int x; };
-// struct Dummy145 { int x; };
-// struct Dummy146 { int x; };
-// struct Dummy147 { int x; };
-// struct Dummy148 { int x; };
-// struct Dummy149 { int x; };
-// struct Dummy150 { int x; };
-// struct Dummy151 { int x; };
-// struct Dummy152 { int x; };
-// struct Dummy153 { int x; };
-// struct Dummy154 { int x; };
-// struct Dummy155 { int x; };
-// struct Dummy156 { int x; };
-// struct Dummy157 { int x; };
+// clang-format off
+struct Dummy100 { int x; };
+struct Dummy101 { int x; };
+struct Dummy102 { int x; };
+struct Dummy103 { int x; };
+struct Dummy104 { int x; };
+struct Dummy105 { int x; };
+struct Dummy106 { int x; };
+struct Dummy107 { int x; };
+struct Dummy108 { int x; };
+struct Dummy109 { int x; };
+struct Dummy110 { int x; };
+struct Dummy111 { int x; };
+struct Dummy112 { int x; };
+struct Dummy113 { int x; };
+struct Dummy114 { int x; };
+struct Dummy115 { int x; };
+struct Dummy116 { int x; };
+struct Dummy117 { int x; };
+struct Dummy118 { int x; };
+struct Dummy119 { int x; };
+struct Dummy120 { int x; };
+struct Dummy121 { int x; };
+struct Dummy122 { int x; };
+struct Dummy123 { int x; };
+struct Dummy124 { int x; };
+struct Dummy125 { int x; };
+struct Dummy126 { int x; };
+struct Dummy127 { int x; };
+struct Dummy128 { int x; };
+struct Dummy129 { int x; };
+struct Dummy130 { int x; };
+struct Dummy131 { int x; };
+struct Dummy132 { int x; };
+struct Dummy133 { int x; };
+struct Dummy134 { int x; };
+struct Dummy135 { int x; };
+struct Dummy136 { int x; };
+struct Dummy137 { int x; };
+struct Dummy138 { int x; };
+struct Dummy139 { int x; };
+struct Dummy140 { int x; };
+struct Dummy141 { int x; };
+struct Dummy142 { int x; };
+struct Dummy143 { int x; };
+struct Dummy144 { int x; };
+struct Dummy145 { int x; };
+struct Dummy146 { int x; };
+struct Dummy147 { int x; };
+struct Dummy148 { int x; };
+struct Dummy149 { int x; };
+struct Dummy150 { int x; };
+struct Dummy151 { int x; };
+struct Dummy152 { int x; };
+struct Dummy153 { int x; };
+struct Dummy154 { int x; };
+struct Dummy155 { int x; };
+struct Dummy156 { int x; };
+struct Dummy157 { int x; };
 // struct Dummy158 { int x; };
 // struct Dummy159 { int x; };
 // struct Dummy160 { int x; };
 // struct Dummy161 { int x; };
 // struct Dummy162 { int x; };
-typedef int Dummy163;
+// typedef int Dummy163;
+// clang-format on
 
 f32 Math3D_Normalize(Vec3f* vec) {
     f32 magnitude = Math3D_Vec3fMagnitude(vec);
@@ -2486,6 +2432,7 @@ s32 Math3D_CircleLineIntersections(f32 centreX, f32 centerY, f32 radius, f32 poi
     return ret;
 }
 
+#ifdef NON_MATCHING
 void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
     Vec3f sp2C;
     s16 sp2A;
@@ -2503,3 +2450,6 @@ void func_8017FD44(Vec3f* arg0, Vec3f* arg1, Vec3f* dst, f32 arg3) {
     dst->x = Math_SinS(TRUNCF_BINANG(0x7FFF * arg3) + sp2A) * sp24 + sp2C.x;
     dst->z = Math_CosS(TRUNCF_BINANG(0x7FFF * arg3) + sp2A) * sp24 + sp2C.z;
 }
+#else
+#pragma GLOBAL_ASM("asm/non_matchings/code/sys_math3d/func_8017FD44.s")
+#endif

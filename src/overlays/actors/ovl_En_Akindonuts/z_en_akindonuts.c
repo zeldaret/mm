@@ -179,7 +179,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    Math3D_RotateXZPlane(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    Math3D_RotateXZPlane(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -232,8 +232,10 @@ s32 func_80BECFBC(EnAkindonuts* this) {
         case 3:
             Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             return GI_RUPEE_HUGE;
+
+        default:
+            return GI_NONE;
     }
-    return GI_NONE;
 }
 
 s32 func_80BED034(EnAkindonuts* this) {
@@ -249,8 +251,10 @@ s32 func_80BED034(EnAkindonuts* this) {
 
         case 3:
             return GI_POTION_BLUE;
+
+        default:
+            return GI_NONE;
     }
-    return GI_NONE;
 }
 
 void func_80BED090(PlayState* play) {
@@ -1606,7 +1610,7 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
-        this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_PATH_INDEX(&this->actor), ENAKINDONUTS_PATH_INDEX_NONE);
         if (this->path == NULL) {
             Actor_Kill(&this->actor);
             return;
@@ -1705,7 +1709,7 @@ void EnAkindonuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx
 void EnAkindonuts_Draw(Actor* thisx, PlayState* play) {
     EnAkindonuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnAkindonuts_OverrideLimbDraw, EnAkindonuts_PostLimbDraw,
                                    EnAkindonuts_TransformLimbDraw, &this->actor);

@@ -2,7 +2,7 @@
 
 typedef enum {
     /* 0 */ TRANS_CIRCLE_DIR_IN,
-    /* 1 */ TRANS_CIRCLE_DIR_OUT,
+    /* 1 */ TRANS_CIRCLE_DIR_OUT
 } TransitionCircleDirection;
 
 Gfx sTransCircleSetupDL[] = {
@@ -82,8 +82,8 @@ void TransitionCircle_SetType(void* thisx, s32 type) {
 void TransitionCircle_LoadAndSetTexture(Gfx** gfxp, TexturePtr texture, s32 fmt, s32 arg3, s32 masks, s32 maskt,
                                         f32 arg6) {
     Gfx* gfx = *gfxp;
-    s32 xh = D_801FBBCC;
-    s32 yh = D_801FBBCE;
+    s32 xh = gCfbWidth;
+    s32 yh = gCfbHeight;
     s32 width = 1 << masks;
     s32 height = 1 << maskt;
     f32 s;

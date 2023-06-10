@@ -205,16 +205,16 @@ void EnToto_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BA383C(EnToto* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && this->actionFuncIndex == 1 &&
-        this->skelAnime.animation != &object_zm_Anim_000C80) {
-        if (play->msgCtx.currentTextId != 0x2A98 && play->msgCtx.currentTextId != 0x2A99) {
-            if (this->unk2B4 & 1 || Rand_ZeroOne() > 0.5f) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&
+        (this->skelAnime.animation != &object_zm_Anim_000C80)) {
+        if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) {
+            if ((this->unk2B4 & 1) || (Rand_ZeroOne() > 0.5f)) {
                 this->unk2B4 = (this->unk2B4 + 1) & 3;
             }
         }
         Animation_PlayOnce(&this->skelAnime, D_80BA5078[this->unk2B4]);
     }
-    func_800BBB74(this->unk260, 0x14, 0x50, 3);
+    func_800BBB74(&this->blinkInfo, 20, 80, 3);
 }
 
 void func_80BA3930(EnToto* this, PlayState* play) {
@@ -251,9 +251,8 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         return;
     }
 
-    //! TODO: Neither 0xED02 nor 0xED01 match CLOCK_TIME macro
     if (((play->sceneId == SCENE_MILK_BAR) &&
-         !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time < 0xED02))) ||
+         !((gSaveContext.save.time >= CLOCK_TIME(6, 0)) && (gSaveContext.save.time <= (CLOCK_TIME(22, 13) + 7)))) ||
         ((play->sceneId != SCENE_MILK_BAR) && func_80BA397C(this, 0x2000))) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
@@ -291,7 +290,7 @@ void func_80BA3BFC(EnToto* this, PlayState* play) {
         this->unk2B4 = 0;
     } else {
         if (this->text->unk0 == 4) {
-            func_80151BB4(play, 9);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
         }
         Animation_MorphToLoop(&this->skelAnime, &object_zm_Anim_00B3E0, -4.0f);
     }
@@ -316,7 +315,7 @@ void func_80BA3D38(EnToto* this, PlayState* play) {
     this->text = ENTOTO_WEEK_EVENT_FLAGS ? D_80BA50BC : D_80BA5088;
     func_80BA4C0C(this, play);
     play->actorCtx.flags |= ACTORCTX_FLAG_5;
-    this->unk260[0] = 0;
+    this->blinkInfo.eyeTexIndex = 0;
 }
 
 void func_80BA3DBC(EnToto* this, PlayState* play) {
@@ -327,16 +326,16 @@ void func_80BA3DBC(EnToto* this, PlayState* play) {
         if (!func_80BA4C44(this, play)) {
             return;
         }
-        if (this->text->unk1 != 0 && ENTOTO_WEEK_EVENT_FLAGS) {
+        if ((this->text->unk1 != 0) && ENTOTO_WEEK_EVENT_FLAGS) {
             this->unk2B7 = 1;
             return;
         }
     } else {
         player = GET_PLAYER(play);
         if ((player->stateFlags1 & PLAYER_STATE1_400) && player->unk_AE7 != 0) {
-            func_80151BB4(play, 48);
-            func_80151BB4(play, 9);
-            func_80151BB4(play, 10);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
         } else {
             return;
         }
@@ -370,7 +369,7 @@ s32 func_80BA3F2C(EnToto* this, PlayState* play) {
         func_80BA3EE8(this, play);
     }
     if (this->text->unk0 == 4) {
-        func_80151BB4(play, 9);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
     }
     return 0;
 }
@@ -428,7 +427,7 @@ s32 func_80BA415C(EnToto* this, PlayState* play) {
         } else {
             func_8019F208();
         }
-        return (play->msgCtx.choiceIndex != 0 ? 0 : this->text->unk1) + 1; // Possible msg MACRO
+        return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1;
     }
     return 0;
 }
@@ -584,8 +583,9 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
-        if (gSaveContext.save.playerForm != (i + 1) && (D_80BA5128[i] & this->unk2B3)) {
+        if ((gSaveContext.save.playerForm != (i + 1)) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
+
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,
                         PLAYER_PARAMS(0xFF, PLAYER_INITMODE_F) | 0xFFFFF000);
         }
@@ -686,8 +686,8 @@ void func_80BA4CB4(EnToto* this, PlayState* play) {
                 Animation_PlayOnce(&this->skelAnime,
                                    (this->cueId == 1) ? &object_zm_Anim_0016A4 : &object_zm_Anim_0022C8);
                 if ((this->cueId == 2) && (this->unk2B3 != 0xF)) {
-                    func_80151BB4(play, 9);
-                    func_80151BB4(play, 10);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN);
                 }
             }
         }
@@ -727,8 +727,8 @@ void EnToto_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk260[0]]));
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->blinkInfo.eyeTexIndex]));
     Scene_SetRenderModeXlu(play, 0, 1);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);

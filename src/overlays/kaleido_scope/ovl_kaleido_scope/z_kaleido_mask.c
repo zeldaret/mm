@@ -198,7 +198,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
 
     KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_MASK] * 4, pauseCtx->maskVtx);
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     // Draw a white box around the items that are equipped on the C buttons
     // Loop over c-buttons (i) and vtx offset (j)
@@ -309,7 +309,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                 while (moveCursorResult == PAUSE_CURSOR_RESULT_NONE) {
                     if (pauseCtx->stickAdjX < -30) {
                         // move cursor left
-                        pauseCtx->unk_298 = 4.0f;
+                        pauseCtx->cursorShrinkRate = 4.0f;
                         if (pauseCtx->cursorXIndex[PAUSE_MASK] != 0) {
                             pauseCtx->cursorXIndex[PAUSE_MASK]--;
                             pauseCtx->cursorPoint[PAUSE_MASK]--;
@@ -339,7 +339,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         }
                     } else if (pauseCtx->stickAdjX > 30) {
                         // move cursor right
-                        pauseCtx->unk_298 = 4.0f;
+                        pauseCtx->cursorShrinkRate = 4.0f;
                         if (pauseCtx->cursorXIndex[PAUSE_MASK] <= 4) {
                             pauseCtx->cursorXIndex[PAUSE_MASK]++;
                             pauseCtx->cursorPoint[PAUSE_MASK]++;
@@ -380,7 +380,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             }
         } else if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
             if (pauseCtx->stickAdjX > 30) {
-                func_80821A04(play);
+                KaleidoScope_MoveCursorFromSpecialPos(play);
                 cursorYIndex = 0;
                 cursorXIndex = 0;
                 cursorPoint = 0; // top row, left column (SLOT_MASK_POSTMAN)
@@ -421,7 +421,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
             //! FAKE:
             if (1) {}
             if (pauseCtx->stickAdjX < -30) {
-                func_80821A04(play);
+                KaleidoScope_MoveCursorFromSpecialPos(play);
                 cursorXIndex = 5;
                 cursorPoint = 5; // top row, right column (SLOT_MASK_DEKU)
                 cursorYIndex = 0;
@@ -473,7 +473,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         // move cursor up
                         moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                         if (pauseCtx->cursorYIndex[PAUSE_MASK] != 0) {
-                            pauseCtx->unk_298 = 4.0f;
+                            pauseCtx->cursorShrinkRate = 4.0f;
                             pauseCtx->cursorYIndex[PAUSE_MASK]--;
                             pauseCtx->cursorPoint[PAUSE_MASK] -= 6;
                             moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;
@@ -485,7 +485,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         // move cursor down
                         moveCursorResult = PAUSE_CURSOR_RESULT_SPECIAL_POS;
                         if (pauseCtx->cursorYIndex[PAUSE_MASK] < 3) {
-                            pauseCtx->unk_298 = 4.0f;
+                            pauseCtx->cursorShrinkRate = 4.0f;
                             pauseCtx->cursorYIndex[PAUSE_MASK]++;
                             pauseCtx->cursorPoint[PAUSE_MASK] += 6;
                             moveCursorResult = PAUSE_CURSOR_RESULT_SLOT;

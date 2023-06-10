@@ -36,7 +36,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play);
 
 typedef enum {
     /* 0 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_NORMAL,
-    /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP,
+    /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP
 } EnSyatekiDekunutsHeaddressType;
 
 ActorInit En_Syateki_Dekunuts_InitVars = {
@@ -80,7 +80,7 @@ typedef enum {
     /* 3 */ EN_SYATEKI_DEKUNUTS_ANIM_LOOK_AROUND,
     /* 4 */ EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE,
     /* 5 */ EN_SYATEKI_DEKUNUTS_ANIM_DIE,
-    /* 6 */ EN_SYATEKI_DEKUNUTS_ANIM_UNBURROW, // unused
+    /* 6 */ EN_SYATEKI_DEKUNUTS_ANIM_UNBURROW // unused
 } EnSyatekiDekunutsAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -103,7 +103,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     static s32 sDrawFlowers = true; // This makes it so only one EnSyatekiDekunuts draws all the flowers.
     EnSyatekiDekunuts* this = THIS;
     PlayState* play = play2;
-    s32 unkPathComparison;
+    s32 pathType;
     Path* path;
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s32 i;
@@ -115,18 +115,18 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) == EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
         Actor_SetScale(&this->actor, 0.01f);
         this->collider.dim = sBonusDekuScrubColliderDimensions[0];
-        unkPathComparison = 3;
+        pathType = SG_PATH_TYPE_SCRUB_BONUS;
     } else {
         Actor_SetScale(&this->actor, 0.02f);
-        unkPathComparison = 1;
+        pathType = SG_PATH_TYPE_SCRUB_NORMAL;
     }
 
-    while (path->unk2 != unkPathComparison) {
-        path = &play->setupPathList[path->unk1];
+    while (path->customValue != pathType) {
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     for (i = 0; i < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     if (sDrawFlowers == true) {
@@ -476,7 +476,7 @@ void EnSyatekiDekunuts_Draw(Actor* thisx, PlayState* play) {
 
             OPEN_DISPS(play->state.gfxCtx);
 
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             Matrix_Translate(flowerPos.x, flowerPos.y, flowerPos.z, MTXMODE_NEW);
             Matrix_Scale(0.02f, 0.02f, 0.02f, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
