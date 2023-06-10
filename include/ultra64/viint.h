@@ -17,12 +17,12 @@
 // For use in initializing OSViMode structures
 
 #define BURST(hsync_width, color_width, vsync_width, color_start) \
-    ((u8)(hsync_width) | ((u8)(color_width) << 8) | ((u8)(vsync_width) << 16) | ((u16)(color_start) << 20))
-#define WIDTH(v) v
-#define VSYNC(v) v
-#define HSYNC(duration, leap) (((u16)(leap) << 16) | ((u16)(duration) & 0xFFFF))
-#define LEAP(upper, lower) (((u16)(upper) << 16) | ((u16)(lower) & 0xFFFF))
-#define START(start, end) (((u16)(start) << 16) | ((u16)(end) & 0xFFFF))
+    (((u32)(hsync_width) & 0xFF) | (((u32)(color_width) & 0xFF) << 8) | (((u32)(vsync_width) & 0xF) << 16) | (((u32)(color_start) 0xFFFF) << 20))
+#define WIDTH(v) (v)
+#define VSYNC(v) (v)
+#define HSYNC(duration, leap) (((u32)(leap) << 16) | ((u32)(duration) & 0xFFFF))
+#define LEAP(upper, lower) (((u32)(upper) << 16) | ((u32)(lower) & 0xFFFF))
+#define START(start, end) (((u32)(start) << 16) | ((u32)(end) & 0xFFFF))
 
 #define FTOFIX(val, i, f) ((u32)((val) * (f32)(1 << (f))) & ((1 << ((i) + (f))) - 1))
 
