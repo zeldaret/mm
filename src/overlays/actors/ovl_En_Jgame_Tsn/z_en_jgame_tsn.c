@@ -119,7 +119,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
         this->unk_1D8[i].points = Lib_SegmentedToVirtual(path->points);
         this->unk_1D8[i].count = path->count;
 
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
         if (path == NULL) {
             Actor_Kill(&this->actor);
         }
@@ -128,7 +128,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     this->unk_1F8.points = Lib_SegmentedToVirtual(path->points);
     this->unk_1F8.count = path->count;
 
-    path = &play->setupPathList[path->unk1];
+    path = &play->setupPathList[path->additionalPathIndex];
     if (path == NULL) {
         Actor_Kill(&this->actor);
     }
@@ -636,7 +636,7 @@ void EnJgameTsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));

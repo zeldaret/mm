@@ -7,15 +7,19 @@
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH_HIRES 640
+#define SCREEN_HEIGHT_HIRES 480
 
-#define SCREEN_WIDTH_HIGH_RES  576
-#define SCREEN_HEIGHT_HIGH_RES 454
+#define HIRES_BUFFER_WIDTH  576
+#define HIRES_BUFFER_HEIGHT 454
 
 #define PROJECTED_TO_SCREEN_X(projectedPos, invW) ((projectedPos).x * (invW) * (SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 2))
 #define PROJECTED_TO_SCREEN_Y(projectedPos, invW) ((projectedPos).y * (invW) * (-SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 2))
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
+
+#define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
 
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
 #define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
@@ -24,27 +28,13 @@
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
-#define STOP_GAMESTATE(curState)     \
-    do {                             \
-        GameState* state = curState; \
-                                     \
-        state->running = false;      \
-    } while(0)
-
-#define SET_NEXT_GAMESTATE(curState, nextInit, nextSize) \
-    do {                                                 \
-        GameState* state = curState;                     \
-                                                         \
-        (state)->init = nextInit;                        \
-        (state)->size = nextSize;                        \
-    } while (0)
-
 #define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
 #define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
 
 #define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
+#define CLOCK_TIME_HOUR (CLOCK_TIME(1, 0))
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
 #define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
@@ -55,6 +45,7 @@
 #define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
 #define CLOCK_TIME_ALT_F(hr, min) (((hr) * 60.0f + (min)) / (24.0f * 60.0f / 0x10000))
 #define CLOCK_TIME_ALT2_F(hr, min) ((((hr) + (min) / 60.0f) * 60.0f) / (24.0f * 60.0f / 0x10000))
+#define CLOCK_TIME_HOUR_F (CLOCK_TIME_F(1, 0))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
@@ -76,6 +67,17 @@
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 #define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 #define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
+
+#define BIT_FLAG_TO_SHIFT(flag) \
+    ((flag & 0x80) ? 7 : \
+    (flag & 0x40) ? 6 : \
+    (flag & 0x20) ? 5 : \
+    (flag & 0x10) ? 4 : \
+    (flag & 0x8) ? 3 : \
+    (flag & 0x4) ? 2 : \
+    (flag & 0x2) ? 1 : \
+    (flag & 0x1) ? 0 : \
+    0)
 
 /**
  * `x` vertex x

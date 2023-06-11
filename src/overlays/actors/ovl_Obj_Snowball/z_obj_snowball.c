@@ -73,10 +73,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ ObjSnowballActionFunc unk_04;
-} ObjSnowballStruct2;
+    /* 0x0 */ s16 unk_00;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ ObjSnowballActionFunc unk_04;
+} ObjSnowballStruct2; // size = 0x8
 
 static ObjSnowballStruct2 D_80B04F84[] = {
     { -1, 0, func_80B02D58 },
@@ -549,7 +549,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             this->unk_20A = 0;
         }
 
-        if (this->actor.csId < 0) {
+        if (this->actor.csId <= CS_ID_NONE) {
             func_80B03FF8(this, play);
             if (this->unk_20A == 0) {
                 func_80B04608(this, play);
@@ -818,7 +818,7 @@ void func_80B04D34(Actor* thisx, PlayState* play) {
             if ((ptr->unk_28 != NULL) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(play->state.gfxCtx);
+                Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);

@@ -31,9 +31,9 @@ ActorInit En_Light_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ Color_RGBA8 unk_00;
-    /* 0x04 */ Color_RGB8 unk_04;
-    /* 0x07 */ u8 unk_07;
+    /* 0x0 */ Color_RGBA8 unk_00;
+    /* 0x4 */ Color_RGB8 unk_04;
+    /* 0x7 */ u8 unk_07;
 } EnLightStruct; // size = 0x8
 
 EnLightStruct D_808666D0[] = {
@@ -168,7 +168,7 @@ void EnLight_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if (this->actor.params >= 0) {
         gSPSegment(

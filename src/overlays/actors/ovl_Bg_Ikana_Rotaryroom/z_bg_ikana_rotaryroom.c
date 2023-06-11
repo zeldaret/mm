@@ -116,9 +116,9 @@ Vec3f D_80B8216C = { 225.0f, -280.0f, -210.0f };
 Vec3f D_80B82178 = { -255.0f, -280.0f, 210.0f };
 
 typedef struct {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x04 */ Vec3f unk_04;
+    /* 0x0 */ s8 unk_00;
+    /* 0x1 */ s8 unk_01;
+    /* 0x4 */ Vec3f unk_04;
 } BgIkanaRotaryroomStruct4; // size = 0x10
 
 BgIkanaRotaryroomStruct4 D_80B82184[2][2] = {

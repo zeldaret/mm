@@ -885,7 +885,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x0C, mtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,

@@ -2,7 +2,7 @@
 #include "system_malloc.h"
 
 typedef struct {
-    union {
+    /* 0x0 */ union {
         u32 dmaWord[2];
         u32 dataStart;
         u32 dataSize;
@@ -11,7 +11,7 @@ typedef struct {
             u32 end;
         } offset;
     };
-} CmpDmaBuffer;
+} CmpDmaBuffer; // size = 0x8
 
 CmpDmaBuffer sDmaBuffer;
 

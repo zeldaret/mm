@@ -1,6 +1,6 @@
 #include "global.h"
 
-#define VISZBUF_ZBUFFRAG_HEIGHT (TMEM_SIZE / (D_801FBBCC * G_IM_SIZ_16b_BYTES))
+#define VISZBUF_ZBUFFRAG_HEIGHT (TMEM_SIZE / (gCfbWidth * G_IM_SIZ_16b_BYTES))
 
 void VisZbuf_Init(VisZbuf* this) {
     this->useRgba = false;
@@ -42,12 +42,12 @@ void VisZbuf_Draw(VisZbuf* this, Gfx** gfxP, void* zbuffer) {
     gDPSetColor(gfx++, G_SETPRIMCOLOR, this->primColor.rgba);
     gDPSetColor(gfx++, G_SETENVCOLOR, this->envColor.rgba);
 
-    for (y = 0; y < (D_801FBBCE - height) + 1; y += height) {
-        gDPLoadTextureTile(gfx++, zbuffer, fmt, G_IM_SIZ_16b, D_801FBBCC, 0, 0, y, D_801FBBCC - 1, (y + height) - 1, 0,
+    for (y = 0; y < (gCfbHeight - height) + 1; y += height) {
+        gDPLoadTextureTile(gfx++, zbuffer, fmt, G_IM_SIZ_16b, gCfbWidth, 0, 0, y, gCfbWidth - 1, (y + height) - 1, 0,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                            G_TX_NOLOD);
 
-        gSPTextureRectangle(gfx++, 0, y << 2, D_801FBBCC << 2, (y + height) << 2, G_TX_RENDERTILE, 0, y << 5, 1 << 10,
+        gSPTextureRectangle(gfx++, 0, y << 2, gCfbWidth << 2, (y + height) << 2, G_TX_RENDERTILE, 0, y << 5, 1 << 10,
                             1 << 10);
     }
 

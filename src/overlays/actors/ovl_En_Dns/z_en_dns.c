@@ -30,7 +30,7 @@ typedef enum {
     /*  7 */ EN_DNS_ANIM_RUN_LOOP,
     /*  8 */ EN_DNS_ANIM_DANCE,
     /*  9 */ EN_DNS_ANIM_FLIP,
-    /* 10 */ EN_DNS_ANIM_MAX,
+    /* 10 */ EN_DNS_ANIM_MAX
 } EnDnsAnimation;
 
 static s32 D_8092DCB0[] = {
@@ -377,7 +377,7 @@ s32 func_8092D068(EnDns* this) {
 void func_8092D108(EnDns* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_SetTranslateRotateYXZ(this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                                  &this->actor.home.rot);
@@ -640,7 +640,7 @@ void EnDns_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     gDPPipeSync(POLY_OPA_DISP++);

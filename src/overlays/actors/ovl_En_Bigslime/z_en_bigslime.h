@@ -87,7 +87,7 @@ typedef struct EnBigslime {
                     s16 isDespawned;
                     s16 isInitJump;
                 };
-    /* 0x02BC */ s16 wavySurfaceTimer; // decrements from 24, used in sin_rad for currData2
+    /* 0x02BC */ s16 wavySurfaceTimer; // decrements from 24, used in Math_SinF for currData2
     /* 0x02BE */ s16 stunTimer;
     /* 0x02C0 */ union {
                     s16 freezeTimer;

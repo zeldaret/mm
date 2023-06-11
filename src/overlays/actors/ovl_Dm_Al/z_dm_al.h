@@ -22,8 +22,8 @@ typedef struct DmAl {
 } DmAl; // size = 0x460
 
 typedef enum {
-    /* 0x0 */ MADAME_AROMA_ANIMATION_0,
-    /* 0x1 */ MADAME_AROMA_ANIMATION_1
+    /* 0 */ MADAME_AROMA_ANIMATION_0,
+    /* 1 */ MADAME_AROMA_ANIMATION_1
 } DmAlAnimations;
 
 #endif // Z_DM_AL_H

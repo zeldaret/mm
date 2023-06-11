@@ -187,33 +187,31 @@ void Effect_DrawAll(GraphicsContext* gfxCtx) {
     s32 i;
 
     for (i = 0; i < SPARK_COUNT; i++) {
-        if (1) {} // necessary to match
-        if (sEffectContext.sparks[i].status.active) {
-            sEffectInfoTable[EFFECT_SPARK].draw(&sEffectContext.sparks[i].effect, gfxCtx);
+        if (!sEffectContext.sparks[i].status.active) {
+            continue;
         }
+        sEffectInfoTable[EFFECT_SPARK].draw(&sEffectContext.sparks[i].effect, gfxCtx);
     }
 
     for (i = 0; i < BLURE_COUNT; i++) {
-        if (1) {
-            if (gfxCtx) {}
-        } // necessary to match
-        if (sEffectContext.blures[i].status.active) {
-            sEffectInfoTable[EFFECT_BLURE1].draw(&sEffectContext.blures[i].effect, gfxCtx);
+        if (!sEffectContext.blures[i].status.active) {
+            continue;
         }
+        sEffectInfoTable[EFFECT_BLURE1].draw(&sEffectContext.blures[i].effect, gfxCtx);
     }
 
     for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
-        if (1) {} // necessary to match
-        if (sEffectContext.shieldParticles[i].status.active) {
-            sEffectInfoTable[EFFECT_SHIELD_PARTICLE].draw(&sEffectContext.shieldParticles[i].effect, gfxCtx);
+        if (!sEffectContext.shieldParticles[i].status.active) {
+            continue;
         }
+        sEffectInfoTable[EFFECT_SHIELD_PARTICLE].draw(&sEffectContext.shieldParticles[i].effect, gfxCtx);
     }
 
-    if (1) {} // necessary to match
     for (i = 0; i < TIRE_MARK_COUNT; i++) {
-        if (sEffectContext.tireMarks[i].status.active) {
-            sEffectInfoTable[EFFECT_TIRE_MARK].draw(&sEffectContext.tireMarks[i].effect, gfxCtx);
+        if (!sEffectContext.tireMarks[i].status.active) {
+            continue;
         }
+        sEffectInfoTable[EFFECT_TIRE_MARK].draw(&sEffectContext.tireMarks[i].effect, gfxCtx);
     }
 }
 
@@ -221,38 +219,38 @@ void Effect_UpdateAll(PlayState* play) {
     s32 i;
 
     for (i = 0; i < SPARK_COUNT; i++) {
-        if (1) {} // necessary to match
-        if (sEffectContext.sparks[i].status.active) {
-            if (sEffectInfoTable[EFFECT_SPARK].update(&sEffectContext.sparks[i].effect) == 1) {
-                Effect_Destroy(play, i);
-            }
+        if (!sEffectContext.sparks[i].status.active) {
+            continue;
+        }
+        if (sEffectInfoTable[EFFECT_SPARK].update(&sEffectContext.sparks[i].effect) == 1) {
+            Effect_Destroy(play, i);
         }
     }
 
     for (i = 0; i < BLURE_COUNT; i++) {
-        if (1) {} // necessary to match
-        if (sEffectContext.blures[i].status.active) {
-            if (sEffectInfoTable[EFFECT_BLURE1].update(&sEffectContext.blures[i].effect) == 1) {
-                Effect_Destroy(play, i + SPARK_COUNT);
-            }
+        if (!sEffectContext.blures[i].status.active) {
+            continue;
+        }
+        if (sEffectInfoTable[EFFECT_BLURE1].update(&sEffectContext.blures[i].effect) == 1) {
+            Effect_Destroy(play, i + SPARK_COUNT);
         }
     }
 
     for (i = 0; i < SHIELD_PARTICLE_COUNT; i++) {
-        if (1) {} // necessary to match
-        if (sEffectContext.shieldParticles[i].status.active) {
-            if (sEffectInfoTable[EFFECT_SHIELD_PARTICLE].update(&sEffectContext.shieldParticles[i].effect) == 1) {
-                Effect_Destroy(play, i + SPARK_COUNT + BLURE_COUNT);
-            }
+        if (!sEffectContext.shieldParticles[i].status.active) {
+            continue;
+        }
+        if (sEffectInfoTable[EFFECT_SHIELD_PARTICLE].update(&sEffectContext.shieldParticles[i].effect) == 1) {
+            Effect_Destroy(play, i + SPARK_COUNT + BLURE_COUNT);
         }
     }
 
     for (i = 0; i < TIRE_MARK_COUNT; i++) {
-        if (1) {} // necessary to match
-        if (sEffectContext.tireMarks[i].status.active) {
-            if (sEffectInfoTable[EFFECT_TIRE_MARK].update(&sEffectContext.tireMarks[i].effect) == 1) {
-                Effect_Destroy(play, i + SPARK_COUNT + BLURE_COUNT + SHIELD_PARTICLE_COUNT);
-            }
+        if (!sEffectContext.tireMarks[i].status.active) {
+            continue;
+        }
+        if (sEffectInfoTable[EFFECT_TIRE_MARK].update(&sEffectContext.tireMarks[i].effect) == 1) {
+            Effect_Destroy(play, i + SPARK_COUNT + BLURE_COUNT + SHIELD_PARTICLE_COUNT);
         }
     }
 }

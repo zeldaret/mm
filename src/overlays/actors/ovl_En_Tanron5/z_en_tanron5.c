@@ -101,9 +101,9 @@ void func_80BE4930(EnTanron5Effect* effect, Vec3f* arg1, f32 arg2) {
 
             effect->unk_00 = *arg1;
 
-            effect->unk_0C = randPlusMinusPoint5Scaled(10.0f);
+            effect->unk_0C = Rand_CenteredFloat(10.0f);
             effect->unk_10 = Rand_ZeroFloat(2.0f) + 3.0f;
-            effect->unk_14 = randPlusMinusPoint5Scaled(10.0f);
+            effect->unk_14 = Rand_CenteredFloat(10.0f);
 
             effect->unk_18.y = -0.15f;
             effect->unk_18.x = 0.0f;
@@ -127,9 +127,9 @@ void func_80BE4A2C(EnTanron5Effect* effect, Vec3f* arg1, f32 arg2) {
 
             effect->unk_00 = *arg1;
 
-            effect->unk_0C = randPlusMinusPoint5Scaled(30.0f);
+            effect->unk_0C = Rand_CenteredFloat(30.0f);
             effect->unk_10 = Rand_ZeroFloat(7.0f);
-            effect->unk_14 = randPlusMinusPoint5Scaled(30.0f);
+            effect->unk_14 = Rand_CenteredFloat(30.0f);
 
             effect->unk_18.y = -0.3f;
             effect->unk_18.x = 0.0f;
@@ -154,8 +154,8 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        this->unk_198 = randPlusMinusPoint5Scaled(0x2000);
-        this->unk_19A = randPlusMinusPoint5Scaled(0x2000);
+        this->unk_198 = Rand_CenteredFloat(0x2000);
+        this->unk_19A = Rand_CenteredFloat(0x2000);
 
         if (ENTANRON5_GET(&this->actor) < ENTANRON5_107) {
             Actor_SetScale(&this->actor, (Rand_ZeroFloat(0.025f) + 0.085f) * D_80BE5DD0);
@@ -327,8 +327,8 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                             spAC = 50.0f;
                         }
 
-                        sp9C.x = (randPlusMinusPoint5Scaled(spA8) * D_80BE5DD0) + spB8.x;
-                        sp9C.z = (randPlusMinusPoint5Scaled(spA8) * D_80BE5DD0) + spB8.z;
+                        sp9C.x = (Rand_CenteredFloat(spA8) * D_80BE5DD0) + spB8.x;
+                        sp9C.z = (Rand_CenteredFloat(spA8) * D_80BE5DD0) + spB8.z;
                         sp9C.y = this->actor.floorHeight + (spAC * D_80BE5DD0);
 
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, sp9C.x, sp9C.y, sp9C.z,
@@ -483,7 +483,7 @@ void EnTanron5_Draw(Actor* thisx, PlayState* play) {
     if ((-500.0f * D_80BE5DD0) < this->actor.projectedPos.z) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, this->unk_148);
@@ -506,14 +506,14 @@ void func_80BE5C10(Actor* thisx, PlayState* play) {
     if (((-500.0f * D_80BE5DD0) < this->actor.projectedPos.z) && phi_v0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if (this->unk_1A0 == 0) {
             texture = gDropArrows1Tex;
         } else {
             texture = gDropMagicLargeTex;
         }
 
-        POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+        POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
 

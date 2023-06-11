@@ -75,8 +75,8 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             }
 
             if (gSaveContext.sceneLayer == 0) {
-                play->envCtx.unk_1F = 5;
-                play->envCtx.unk_20 = 5;
+                play->envCtx.lightConfig = 5;
+                play->envCtx.changeLightNextConfig = 5;
             }
             this->unk_348 = 255.0f;
 
@@ -424,7 +424,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                     OPEN_DISPS(play->state.gfxCtx);
 
                     if ((u8)this->unk_348 == 255) {
-                        func_8012C28C(play->state.gfxCtx);
+                        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
                         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2);
                         gDPPipeSync(POLY_OPA_DISP++);
@@ -436,7 +436,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
                                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                         gSPDisplayList(POLY_OPA_DISP++, gWoodfallSceneryDynamicPoisonWaterDL);
                     } else {
-                        func_8012C2DC(play->state.gfxCtx);
+                        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
                         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
                         gDPPipeSync(POLY_XLU_DISP++);
@@ -483,7 +483,7 @@ void DmChar01_Draw(Actor* thisx, PlayState* play) {
 
                 OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C2DC(play->state.gfxCtx);
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
                 gDPPipeSync(POLY_XLU_DISP++);
                 gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (u8)this->unk_348);

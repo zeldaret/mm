@@ -1105,7 +1105,11 @@ void func_80AF8AC8(EnPm* this) {
 
 void func_80AF8BA8(s32 arg0) {
     static u16 D_80AFB8D4[] = {
-        WEEKEVENTREG_27_02, WEEKEVENTREG_27_04, WEEKEVENTREG_27_08, WEEKEVENTREG_27_10, WEEKEVENTREG_27_20,
+        WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN,
+        WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN,
+        WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN,
+        WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN,
+        WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN,
     };
     static u16 D_80AFB8E0[] = {
         WEEKEVENTREG_27_40, WEEKEVENTREG_27_80, WEEKEVENTREG_28_01, WEEKEVENTREG_28_02, WEEKEVENTREG_28_04,
@@ -1197,7 +1201,7 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
 }
 
 s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCat, s16 actorId) {
-    u8 sp4F = this->actor.params & 0xFF;
+    u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     Vec3s* sp48;
     Vec3f sp3C;
     Vec3f sp30;
@@ -1208,7 +1212,7 @@ s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     this->timePath = NULL;
     sp2C = func_80AF7CB0(this, play, actorCat, actorId);
     if (D_80AFB430[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80AFB430[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((sp2C != NULL) && (sp2C->update != NULL)) {
@@ -1228,7 +1232,7 @@ s32 func_80AF8ED4(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput, u
 
 s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp56 = SCHEDULE_TIME_NOW;
-    u8 sp55 = this->actor.params & 0xFF;
+    u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     EnDoor* door;
     Vec3s* sp4C;
     Vec3f sp40;
@@ -1239,10 +1243,10 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->timePath = NULL;
     door = func_80AF7D60(play, scheduleOutput->result);
     if (D_80AFB430[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp55, D_80AFB430[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AFB430[scheduleOutput->result]);
     }
 
-    if ((door != NULL) && (door->dyna.actor.update != NULL)) {
+    if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
         if (this->timePath != 0) {
             sp4C = Lib_SegmentedToVirtual(this->timePath->points);
             Math_Vec3s_ToVec3f(&sp40, &sp4C[0]);
@@ -1251,7 +1255,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Math_Vec3f_Copy(&this->unk_278, &sp34);
             this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
-            temp = this->actor.world.rot.y - door->dyna.actor.shape.rot.y;
+            temp = this->actor.world.rot.y - door->knobDoor.dyna.actor.shape.rot.y;
             if (ABS_ALT(temp) <= 0x4000) {
                 this->unk_260 = -0x4B;
             } else {
@@ -1277,7 +1281,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp2E = SCHEDULE_TIME_NOW;
     u16 phi_v1;
-    u8 sp2B = this->actor.params & 0xFF;
+    u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     u16 tmp;
     s16 pad;
     s32 ret = false;
@@ -1285,7 +1289,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->timePath = NULL;
 
     if (D_80AFB430[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp2B, D_80AFB430[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((this->timePath != NULL) && (this->timePath->count < 3)) {
@@ -1357,7 +1361,7 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u8 sp4F = this->actor.params & 0xFF;
+    u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
     Vec3s* sp30;
@@ -1366,7 +1370,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     this->timePath = NULL;
     if (D_80AFB430[scheduleOutput->result] >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, D_80AFB430[scheduleOutput->result]);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AFB430[scheduleOutput->result]);
     }
 
     if ((this->timePath != 0) && (this->timePath->count >= 2)) {
@@ -1390,7 +1394,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    u8 sp4F = this->actor.params & 0xFF;
+    u8 pathIndex = ENPM_GET_PATH_INDEX(&this->actor);
     Vec3f sp40;
     Vec3f sp34;
     Vec3s* sp30;
@@ -1419,7 +1423,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->timePath = NULL;
     phi_a3 = D_80AFB430[scheduleOutput->result];
     if (phi_a3 >= 0) {
-        this->timePath = SubS_GetAdditionalPath(play, sp4F, phi_a3);
+        this->timePath = SubS_GetAdditionalPath(play, pathIndex, phi_a3);
     }
 
     if ((this->timePath != 0) && (this->timePath->count >= 2)) {
@@ -1704,7 +1708,7 @@ s32 func_80AF9D04(EnPm* this, PlayState* play) {
     f32 temp;
 
     if (!SubS_InCsMode(play) && (this->timePathTimeSpeed != 0)) {
-        if ((door != NULL) && (door->dyna.actor.update != NULL)) {
+        if ((door != NULL) && (door->knobDoor.dyna.actor.update != NULL)) {
             if (((f32)this->unk_36E / this->unk_36C) <= 0.9f) {
                 door->unk_1A7 = this->unk_260;
             } else {
@@ -2181,7 +2185,7 @@ void EnPm_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (this->unk_258 != 0) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         OPEN_DISPS(play->state.gfxCtx);
 

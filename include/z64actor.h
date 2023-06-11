@@ -317,7 +317,7 @@ typedef struct EnAObj {
 
 typedef enum {
     /* 0 */ AOBJ_SIGNPOST_OBLONG,
-    /* 1 */ AOBJ_SIGNPOST_ARROW,
+    /* 1 */ AOBJ_SIGNPOST_ARROW
 } AObjType;
 
 #define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
@@ -738,6 +738,11 @@ typedef struct NpcInteractInfo {
     /* 0x18 */ Vec3f trackPos;
     /* 0x24 */ UNK_TYPE1 unk_24[0x4];
 } NpcInteractInfo; // size = 0x28
+
+typedef struct BlinkInfo {
+    /* 0x0 */ s16 eyeTexIndex;
+    /* 0x2 */ s16 blinkTimer;
+} BlinkInfo; // size = 0x4
 
 extern TargetRangeParams gTargetRanges[];
 extern s16 D_801AED48[8];

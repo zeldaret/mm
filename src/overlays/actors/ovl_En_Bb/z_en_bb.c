@@ -32,7 +32,7 @@ void EnBb_Revive(EnBb* this, PlayState* play);
 typedef enum {
     /* -1 */ BB_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BB_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD
 } EnBbBodyPartDrawStatus;
 
 ActorInit En_Bb_InitVars = {
@@ -73,7 +73,7 @@ typedef enum {
     /* 0x3 */ EN_BB_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BB_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BB_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE
 } EnBbDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -256,7 +256,7 @@ void EnBb_FlyIdle(EnBb* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -287,11 +287,11 @@ void EnBb_Attack(EnBb* this, PlayState* play) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
     EnBb_UpdateStateForFlying(this);
 
-    if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
-    } else if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 7.0f))) {
+    } else if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -682,14 +682,14 @@ void EnBb_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_OPA_DISP = &gfx[1];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBb_OverrideLimbDraw,
                       EnBb_PostLimbDraw, &this->actor);
 
     if (this->flameScaleX > 0.0f) {
         currentMatrixState = Matrix_GetCurrent();
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
                         MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);

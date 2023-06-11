@@ -63,7 +63,7 @@ typedef enum {
     /* 16 */ EN_DNO_ANIM_IMPLORE_START,
     /* 17 */ EN_DNO_ANIM_SHOCK_START,
     /* 18 */ EN_DNO_ANIM_SHOCK_LOOP,
-    /* 19 */ EN_DNO_ANIM_GRIEVE,
+    /* 19 */ EN_DNO_ANIM_GRIEVE
 } EnDnoAnimation;
 
 static AnimationSpeedInfo sAnimations[] = {
@@ -943,12 +943,16 @@ void func_80A73408(EnDno* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
-    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-        (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
-        //! FAKE:
-        if (1) {}
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        switch (this->animIndex) {
+            case EN_DNO_ANIM_SHOCK_START:
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP,
+                                                &this->animIndex);
+                break;
 
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP, &this->animIndex);
+            default:
+                break;
+        }
     }
 }
 
@@ -1032,7 +1036,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     if (phi_v0 == true) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if (limbIndex == 13) {
             Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
             Matrix_RotateXS(this->unk_45C, MTXMODE_APPLY);
@@ -1058,7 +1062,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         Matrix_ReplaceRotation(&play->billboardMtxF);
         Matrix_Scale(0.15f, 0.15f, 1.0f, MTXMODE_APPLY);
         Matrix_Translate(0.0f, -3200.0f, 0.0f, MTXMODE_APPLY);
-        gfxXlu = func_8012C2B4(POLY_XLU_DISP);
+        gfxXlu = Gfx_SetupDL71(POLY_XLU_DISP);
 
         gSPMatrix(gfxXlu, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPSegment(&gfxXlu[1], 0x08,

@@ -169,7 +169,6 @@ variable_addrs = None
 
 files_text = {}
 
-
 def proper_name(symbol, in_data=False, is_symbol=True):
     # hacks
     # ovl_En_Encount4 fake symbol at the very end of the data section
@@ -181,14 +180,18 @@ def proper_name(symbol, in_data=False, is_symbol=True):
         return variables_ast[0x801EF670][0] + f" - 0x{0x801EF670 - 0x801EF51D:X}"
     elif symbol == 0x801D0D7A:  # play_hireso constant-folding D_801D0D80 array
         return variables_ast[0x801D0D80][0] + f" - 0x{0x801D0D80 - 0x801D0D7A:X}"
+    elif symbol == 0x801D11F4:  # play_hireso constant-folding D_801D1244 array
+        return variables_ast[0x801D1244][0] + f" - 0x{0x801D1244 - 0x801D11F4:X}"
+    elif symbol == 0x801D12C0:  # play_hireso constant-folding D_801D12E8 array
+        return variables_ast[0x801D12E8][0] + f" - 0x{0x801D12E8 - 0x801D12C0:X}"
     elif symbol == 0x80A09740:  # boss_07 symbol with large addend folded into %lo
         return variables_ast[0x80A09A60][0] + f" - 0x{0x80A09A60 - 0x80A09740:X}"
     # bg_ikana_mirror symbol with large addend folded into %lo
     elif symbol == 0x80B80248:
         return variables_ast[0x80B801A8][0] + f" + 0x{0x80B80248 - 0x80B801A8:X}"
-    # player symbol with very large addend folded into %lo, since we don't know the real symbol just use the first data symbol for now
+    # player symbol with very large addend folded into %lo
     elif symbol == 0x8084D2FC:
-        return variables_ast[0x8085B9F0][0] + f" - 0x{0x8085B9F0 - 0x8084D2FC:X}"
+        return variables_ast[0x8085D0FA][0] + f" - 0x{0x8085D0FA - 0x8084D2FC:X}"
     # OS_K0_TO_PHYSICAL on rspS2DEX text and data symbols
     elif symbol == 0x001ABAB0 or symbol == 0x001E3BB0:
         return variables_ast[symbol + 0x80000000][0] + " - 0x80000000"
