@@ -3481,8 +3481,7 @@ beginseg
     name "ovl_En_Snowwd"
     compress
     include "build/src/overlays/actors/ovl_En_Snowwd/z_en_snowwd.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.data.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Snowwd/ovl_En_Snowwd_reloc.o"
 endseg
 
 beginseg
