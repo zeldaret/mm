@@ -77,7 +77,6 @@ beginseg
     include "build/src/libultra/os/createthread.o"
     include "build/src/libultra/io/contreaddata.o"
     include "build/src/libultra/voice/voicegetreaddata.o"
-    include "build/data/boot/voicegetreaddata.bss.o"
     include "build/src/libultra/os/virtualtophysical.o"
     include "build/asm/boot/getsr.text.o"
     include "build/asm/boot/setsr.text.o"
@@ -155,7 +154,6 @@ beginseg
     include "build/src/libultra/gu/rotate.o"
     include "build/src/libultra/os/setglobalintmask.o"
     include "build/src/libultra/voice/voiceinit.o"
-    include "build/data/boot/voiceinit.data.o"
     include "build/src/libultra/io/contchannelreset.o"
     include "build/src/libultra/voice/voicesetadconverter.o"
     include "build/src/libultra/io/aisetfreq.o"
@@ -3482,8 +3480,7 @@ beginseg
     name "ovl_En_Snowwd"
     compress
     include "build/src/overlays/actors/ovl_En_Snowwd/z_en_snowwd.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.data.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Snowwd/ovl_En_Snowwd_reloc.o"
 endseg
 
 beginseg

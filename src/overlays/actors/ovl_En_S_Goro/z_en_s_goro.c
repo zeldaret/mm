@@ -1350,7 +1350,7 @@ s32 EnSGoro_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 ste
 
     Matrix_MultVec3f(&zeroVec, &newPos);
     Matrix_Get(&curState);
-    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
+    Matrix_MtxFToYXZRot(&curState, &newRot, false);
 
     *pos = newPos;
 

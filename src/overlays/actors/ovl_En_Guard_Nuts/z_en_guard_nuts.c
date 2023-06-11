@@ -328,7 +328,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
         }
     }
     if ((this->animIndex == WALK_ANIM) &&
-        ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f)))) {
+        (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 

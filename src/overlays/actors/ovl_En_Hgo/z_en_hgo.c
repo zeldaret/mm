@@ -317,8 +317,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
                 case HGO_ANIM_ASTONISHED:
-                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-                        (this->isInCutscene == false)) {
+                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && !this->isInCutscene) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.scriptIndex == 2) || (play->csCtx.scriptIndex == 4))) {

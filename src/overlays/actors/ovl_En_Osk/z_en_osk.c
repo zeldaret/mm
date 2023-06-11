@@ -423,7 +423,7 @@ void func_80BF68E0(EnOsk* this) {
                 break;
 
             case 5:
-                if ((Animation_OnFrame(&this->skelAnime, 6.0f)) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
+                if (Animation_OnFrame(&this->skelAnime, 6.0f) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;

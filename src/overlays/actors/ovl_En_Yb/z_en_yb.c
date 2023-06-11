@@ -170,31 +170,33 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 }
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
-    if ((animIndex >= 0) && (animIndex < 3)) {
-        if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
-            if (animIndex > 0) {
-                if (animMode == ANIMMODE_LOOP) {
-                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
-                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                           morphFrames);
-                } else {
-                    // unused case, (only called once with animMode = ANIMMODE_LOOP)
-                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
-                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                           morphFrames);
-                }
-            } else {
-                // unused case, (only called once with animIndex = 2)
-                AnimationHeader* animationPtr = gYbUnusedAnimations[animIndex];
+    s32 pad;
 
-                if (1) {}
-
-                Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(animationPtr), animMode, morphFrames);
-            }
-            this->animIndex = animIndex;
-        }
+    if ((animIndex < 0) || (animIndex > 2)) {
+        return;
     }
+
+    if ((animIndex == this->animIndex) && (animMode == ANIMMODE_LOOP)) {
+        return;
+    }
+
+    if (animIndex > 0) {
+        if (animMode == ANIMMODE_LOOP) {
+            PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                   Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                   morphFrames);
+        } else {
+            // unused case, (only called once with animMode = ANIMMODE_LOOP)
+            PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                   Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                   morphFrames);
+        }
+    } else {
+        // unused case, (only called once with animIndex = 2)
+        Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(gYbUnusedAnimations[animIndex]), animMode, morphFrames);
+    }
+    this->animIndex = animIndex;
 }
 
 s32 EnYb_CanTalk(EnYb* this, PlayState* play) {

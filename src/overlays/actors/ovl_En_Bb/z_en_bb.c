@@ -256,7 +256,7 @@ void EnBb_FlyIdle(EnBb* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -287,11 +287,11 @@ void EnBb_Attack(EnBb* this, PlayState* play) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
     EnBb_UpdateStateForFlying(this);
 
-    if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
-    } else if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 7.0f))) {
+    } else if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 

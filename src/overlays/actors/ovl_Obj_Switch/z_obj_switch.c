@@ -397,7 +397,7 @@ void ObjSwitch_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= 0x80;
     }
     if (type == OBJSWITCH_TYPE_EYE) {
-        if (sIsSegmentTableInit == false) {
+        if (!sIsSegmentTableInit) {
             s32 i;
             s32 j;
 
