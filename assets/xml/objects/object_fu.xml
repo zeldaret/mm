@@ -55,7 +55,7 @@
         <Texture Name="gWindmillManHairTex" OutName="hair" Format="ci8" Width="8" Height="16" Offset="0x6B20" TlutOffset="0x4E60"/>
 
         <!-- Animations -->
-        <Animation Name="gWindmillManPlayAndMoveHeadAnim" Offset="0x57C"/>
-        <Animation Name="gWindmillManPlayStillAnim" Offset="0xB04"/>
+        <Animation Name="gWindmillManPlayAndMoveHeadAnim" Offset="0x57C"/> <!-- Original name is "are_are" -->
+        <Animation Name="gWindmillManPlayStillAnim" Offset="0xB04"/> <!-- Original name is "fu_mawasu" -->
     </File>
 </Root>
