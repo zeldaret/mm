@@ -358,7 +358,6 @@ s32 func_808D9440(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, C
     return ret;
 }
 
-#ifdef NON_MATCHING
 void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
     CollisionPoly* spA4;
     CollisionPoly* spA0;
@@ -412,7 +411,6 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
 
         for (i = 0; i < 3; i++) {
             if (i == 0) {
-                if (this && this && this) {}
                 sp84.x = sp90.x - (this->unk_350.x * temp_f20);
                 sp84.y = sp90.y - (this->unk_350.y * temp_f20);
                 sp84.z = sp90.z - (this->unk_350.z * temp_f20);
@@ -433,6 +431,8 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
                 break;
             }
         }
+
+        if (i == 3) {}
     }
 
     func_808D93BC(this);
@@ -448,10 +448,6 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
         Actor_MoveWithoutGravity(&this->actor);
     }
 }
-#else
-void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D94D0.s")
-#endif
 
 void func_808D9894(EnSw* this, Vec3f* vec) {
     Vec3f sp5C;
