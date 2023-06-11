@@ -432,6 +432,7 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
             }
         }
 
+        //! FAKE
         if (i == 3) {}
     }
 
