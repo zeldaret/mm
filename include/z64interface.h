@@ -258,13 +258,13 @@ void Health_GiveHearts(s16 hearts);
 void Rupees_ChangeBy(s16 rupeeChange);
 void Inventory_ChangeAmmo(s16 item, s16 ammoChange);
 void Magic_Add(struct PlayState* play, s16 magicToAdd);
-void Magic_Reset(PlayState* play);
-s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type);
-void Interface_SetPerfectLetters(PlayState* play, s16 perfectLettersType);
-void Interface_StartMoonCrash(PlayState* play);
-void Interface_Draw(PlayState* play);
-void Interface_Update(PlayState* play);
-void Interface_Destroy(PlayState* play);
-void Interface_Init(PlayState* play);
+void Magic_Reset(struct PlayState* play);
+s32 Magic_Consume(struct PlayState* play, s16 magicToConsume, s16 type);
+void Interface_SetPerfectLetters(struct PlayState* play, s16 perfectLettersType);
+void Interface_StartMoonCrash(struct PlayState* play);
+void Interface_Draw(struct PlayState* play);
+void Interface_Update(struct PlayState* play);
+void Interface_Destroy(struct PlayState* play);
+void Interface_Init(struct PlayState* play);
 
 #endif
