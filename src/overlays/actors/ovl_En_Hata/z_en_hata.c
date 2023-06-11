@@ -33,13 +33,13 @@ void EnHata_Init(Actor* thisx, PlayState* play) {
     s32 rand;
     f32 endFrame;
 
-    SkelAnime_Init(play, &this->skelAnime, &object_hata_Skel_002FD0, NULL, this->jointTable, this->morphTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFlagpoleSkel, NULL, this->jointTable, this->morphTable,
                    OBJECT_HATA_LIMB_MAX);
-    endFrame = Animation_GetLastFrame(&object_hata_Anim_000444);
-    Animation_Change(&this->skelAnime, &object_hata_Anim_000444, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, 0.0f);
+    endFrame = Animation_GetLastFrame(&gFlagpoleFlapAnim);
+    Animation_Change(&this->skelAnime, &gFlagpoleFlapAnim, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, 0.0f);
     rand = Rand_ZeroFloat(endFrame);
     this->skelAnime.curFrame = rand;
-    DynaPolyActor_LoadMesh(play, &this->dyna, &object_hata_Colheader_0000C0);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gFlagpoleCol);
     Actor_SetScale(&this->dyna.actor, 0.013f);
     this->dyna.actor.uncullZoneScale = 500.0f;
     this->dyna.actor.uncullZoneDownward = 500.0f;
