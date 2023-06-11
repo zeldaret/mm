@@ -66,13 +66,6 @@
 #include "regs.h"
 
 typedef struct {
-    /* 0x00 */ u32 resetting;
-    /* 0x04 */ u32 resetCount;
-    /* 0x08 */ OSTime duration;
-    /* 0x10 */ OSTime resetTime;
-} NmiBuff; // size >= 0x18
-
-typedef struct {
     /* 0x00 */ s32 requestType;
     /* 0x04 */ OSMesg response;
     /* 0x08 */ void* addr;
@@ -362,12 +355,6 @@ typedef struct {
 
 struct PlayState;
 
-typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
-typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
 typedef struct {
     /* 0x000 */ IrqMgr* irqMgr;
     /* 0x004 */ SchedContext* sched;
@@ -518,11 +505,6 @@ typedef struct {
     /* 0x10 */ u16* tlut;
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
-
-typedef struct {
-    /* 0x0 */ u8* value;
-    /* 0x4 */ const char* name;
-} FlagSetEntry; // size = 0x8
 
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
