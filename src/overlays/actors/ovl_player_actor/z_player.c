@@ -2835,7 +2835,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
     }
 }
 
-void Player_SetUpperAction(PlayState* play, Player* this, PlayerUpperActionFunc upperActionFunc) {
+void Player_SetupUpperAction(PlayState* play, Player* this, PlayerUpperActionFunc upperActionFunc) {
     this->upperActionFunc = upperActionFunc;
     this->unk_ACE = 0;
     this->unk_AC8 = 0.0f;
@@ -3653,7 +3653,7 @@ void func_808302CC(Player* this, PlayState* play) {
     f32 endFrame;
     f32 frameSpeed;
 
-    Player_SetUpperAction(play, this, Player_UpperAction_2);
+    Player_SetupUpperAction(play, this, Player_UpperAction_2);
 
     nextModelAnimType = gPlayerModelTypes[this->nextModelGroup].modelAnimType;
     var_v1 = D_8085CD00[gPlayerModelTypes[this->modelGroup].modelAnimType][nextModelAnimType];
@@ -3759,7 +3759,7 @@ s32 func_808306F8(Player* this, PlayState* play) {
         (gSaveContext.magicState != MAGIC_STATE_IDLE)) {
         play_sound(NA_SE_SY_ERROR);
     } else {
-        Player_SetUpperAction(play, this, Player_UpperAction_7);
+        Player_SetupUpperAction(play, this, Player_UpperAction_7);
 
         this->stateFlags3 |= PLAYER_STATE3_40;
         this->unk_ACC = 14;
@@ -3836,7 +3836,7 @@ void func_808309CC(PlayState* play, Player* this) {
         func_808308DC(play, this);
     }
 
-    Player_SetUpperAction(play, this, D_8085C9F0[this->heldItemAction]);
+    Player_SetupUpperAction(play, this, D_8085C9F0[this->heldItemAction]);
     this->unk_ACC = 0;
     this->unk_AA4 = 0;
     func_8082DCA0(play, this);
@@ -3865,7 +3865,7 @@ PlayerAnimationHeader* D_8085CFDC[2] = {
 };
 
 PlayerAnimationHeader* func_80830A58(PlayState* play, Player* this) {
-    Player_SetUpperAction(play, this, Player_UpperAction_3);
+    Player_SetupUpperAction(play, this, Player_UpperAction_3);
     func_8082DCA0(play, this);
 
     if (this->unk_B40 < 0.5f) {
@@ -3921,7 +3921,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
 }
 
 void func_80830CE8(PlayState* play, Player* this) {
-    Player_SetUpperAction(play, this, Player_UpperAction_5);
+    Player_SetupUpperAction(play, this, Player_UpperAction_5);
 
     if (this->itemAction <= PLAYER_IA_MINUS1) {
         func_80123C58(this);
@@ -3955,7 +3955,7 @@ s32 func_80830DF0(Player* this, PlayState* play) {
 
 s32 func_80830E30(Player* this, PlayState* play) {
     if ((this->heldItemAction == PLAYER_IA_11) || (this->transformation == PLAYER_FORM_ZORA)) {
-        Player_SetUpperAction(play, this, Player_UpperAction_12);
+        Player_SetupUpperAction(play, this, Player_UpperAction_12);
 
         PlayerAnimation_PlayOnce(play, &this->unk_284,
                                  (this->meleeWeaponAnimation == PLAYER_MWA_ZORA_PUNCH_LEFT)
@@ -4093,7 +4093,7 @@ s32 func_808313A8(PlayState* play, Player* this, Actor* actor) {
 
 void func_808313F0(Player* this, PlayState* play) {
     if (!func_808313A8(play, this, this->heldActor)) {
-        Player_SetUpperAction(play, this, Player_UpperAction_10);
+        Player_SetupUpperAction(play, this, Player_UpperAction_10);
         PlayerAnimation_PlayLoop(play, &this->unk_284, &gPlayerAnim_link_normal_carryB_wait);
     }
 }
@@ -5437,7 +5437,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
             this->unk_AE7 = sp64;
             if ((s8)sp64 == 0) {
-                Player_SetUpperAction(play, this, Player_UpperAction_4);
+                Player_SetupUpperAction(play, this, Player_UpperAction_4);
                 var_a2 = (this->unk_B40 < 0.5f) ? D_8085CFD4[Player_IsHoldingTwoHandedWeapon(this)]
                                                 : D_8085CFCC[Player_IsHoldingTwoHandedWeapon(this)];
                 PlayerAnimation_PlayOnce(play, &this->unk_284, var_a2);
@@ -12885,7 +12885,7 @@ s32 Player_UpperAction_2(Player* this, PlayState* play) {
         ((Player_ItemToItemAction(this, this->heldItemId) == this->heldItemAction) &&
          (D_80862B48 = D_80862B48 || ((this->modelAnimType != PLAYER_ANIMTYPE_3) &&
                                       (this->heldItemAction != PLAYER_IA_STICK) && (play->unk_1887C == 0))))) {
-        Player_SetUpperAction(play, this, D_8085C9F0[this->heldItemAction]);
+        Player_SetupUpperAction(play, this, D_8085C9F0[this->heldItemAction]);
         this->unk_ACC = 0;
         this->unk_AA4 = 0;
         D_80862B4C = D_80862B48;
@@ -12935,7 +12935,7 @@ s32 Player_UpperAction_5(Player* this, PlayState* play) {
     // possibly a case of if ((D_80862B48 = D_80862B4C) || PlayerAnimation_Update(play, &this->unk_284))
     D_80862B48 = D_80862B4C;
     if ((D_80862B48 != 0) || PlayerAnimation_Update(play, &this->unk_284)) {
-        Player_SetUpperAction(play, this, D_8085C9F0[this->heldItemAction]);
+        Player_SetupUpperAction(play, this, D_8085C9F0[this->heldItemAction]);
         PlayerAnimation_PlayLoop(play, &this->unk_284, D_8085BE84[PLAYER_ANIMGROUP_0][this->modelAnimType]);
         this->unk_AA4 = 0;
         this->upperActionFunc(this, play);
@@ -13009,7 +13009,7 @@ s32 Player_UpperAction_7(Player* this, PlayState* play) {
 
     func_80831010(this, play);
     if ((this->unk_ACE > 0) && ((this->unk_B28 < 0) || ((D_80862B4C == 0) && !func_80830FD4(play)))) {
-        Player_SetUpperAction(play, this, Player_UpperAction_8);
+        Player_SetupUpperAction(play, this, Player_UpperAction_8);
         if (this->unk_B28 >= 0) {
             if (index != 0) {
                 if (!func_80831194(play, this)) {
@@ -13068,9 +13068,9 @@ s32 Player_UpperAction_8(Player* this, PlayState* play) {
         }
 
         if (Player_IsHoldingHookshot(this)) {
-            Player_SetUpperAction(play, this, Player_UpperAction_6);
+            Player_SetupUpperAction(play, this, Player_UpperAction_6);
         } else {
-            Player_SetUpperAction(play, this, Player_UpperAction_9);
+            Player_SetupUpperAction(play, this, Player_UpperAction_9);
             PlayerAnimation_PlayOnce(play, &this->unk_284,
                                      (this->transformation == PLAYER_FORM_DEKU) ? &gPlayerAnim_pn_tamahakidf
                                                                                 : &gPlayerAnim_link_bow_bow_shoot_end);
@@ -13083,7 +13083,7 @@ s32 Player_UpperAction_8(Player* this, PlayState* play) {
 
 s32 Player_UpperAction_9(Player* this, PlayState* play) {
     if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || PlayerAnimation_Update(play, &this->unk_284)) {
-        Player_SetUpperAction(play, this, Player_UpperAction_6);
+        Player_SetupUpperAction(play, this, Player_UpperAction_6);
     }
     return true;
 }
@@ -13120,7 +13120,7 @@ s32 Player_UpperAction_11(Player* this, PlayState* play) {
     }
 
     if (this->stateFlags1 & PLAYER_STATE1_2000000) {
-        Player_SetUpperAction(play, this, Player_UpperAction_15);
+        Player_SetupUpperAction(play, this, Player_UpperAction_15);
     } else if (func_80831094(this, play)) {
         return true;
     }
@@ -13130,7 +13130,7 @@ s32 Player_UpperAction_11(Player* this, PlayState* play) {
 
 s32 Player_UpperAction_12(Player* this, PlayState* play) {
     if (PlayerAnimation_Update(play, &this->unk_284)) {
-        Player_SetUpperAction(play, this, Player_UpperAction_13);
+        Player_SetupUpperAction(play, this, Player_UpperAction_13);
         PlayerAnimation_PlayLoop(play, &this->unk_284, &gPlayerAnim_pz_cutterwaitanim);
     }
     if (this->unk_284.animation == &gPlayerAnim_pz_cutterwaitanim) {
@@ -13143,7 +13143,7 @@ s32 Player_UpperAction_13(Player* this, PlayState* play) {
     PlayerAnimation_Update(play, &this->unk_284);
     func_80831010(this, play);
     if (D_80862B4C == 0) {
-        Player_SetUpperAction(play, this, Player_UpperAction_14);
+        Player_SetupUpperAction(play, this, Player_UpperAction_14);
         PlayerAnimation_PlayOnce(play, &this->unk_284, &gPlayerAnim_pz_cutterattack);
     }
     return true;
@@ -13151,7 +13151,7 @@ s32 Player_UpperAction_13(Player* this, PlayState* play) {
 
 s32 Player_UpperAction_14(Player* this, PlayState* play) {
     if (PlayerAnimation_Update(play, &this->unk_284)) {
-        Player_SetUpperAction(play, this, Player_UpperAction_15);
+        Player_SetupUpperAction(play, this, Player_UpperAction_15);
         this->unk_ACC = 0;
     } else if (PlayerAnimation_OnFrame(&this->unk_284, 6.0f)) {
         Vec3f pos;
@@ -13216,7 +13216,7 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
     }
 
     if (this->stateFlags3 & PLAYER_STATE3_800000) {
-        Player_SetUpperAction(play, this, Player_UpperAction_16);
+        Player_SetupUpperAction(play, this, Player_UpperAction_16);
         PlayerAnimation_PlayOnce(play, &this->unk_284, &gPlayerAnim_pz_cuttercatch);
         this->stateFlags3 &= ~PLAYER_STATE3_800000;
         Player_PlaySfx(this, NA_SE_PL_CATCH_BOOMERANG);
@@ -13230,10 +13230,10 @@ s32 Player_UpperAction_15(Player* this, PlayState* play) {
 s32 Player_UpperAction_16(Player* this, PlayState* play) {
     if (!Player_UpperAction_11(this, play) && PlayerAnimation_Update(play, &this->unk_284)) {
         if (this->stateFlags1 & PLAYER_STATE1_2000000) {
-            Player_SetUpperAction(play, this, Player_UpperAction_15);
+            Player_SetupUpperAction(play, this, Player_UpperAction_15);
             this->unk_ACC = 0;
         } else {
-            Player_SetUpperAction(play, this, Player_UpperAction_0);
+            Player_SetupUpperAction(play, this, Player_UpperAction_0);
         }
     }
     return true;
