@@ -134,7 +134,7 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &object_firefly_Anim_00017C, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &gFireKeeseFlyAnim, this->jointTable,
                    this->morphTable, 28);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -340,7 +340,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
 void EnFirefly_SetupFall(EnFirefly* this, PlayState* play) {
     this->timer = 40;
     this->actor.velocity.y = 0.0f;
-    Animation_Change(&this->skelAnime, &object_firefly_Anim_00017C, 0.0f, 6.0f, 6.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gFireKeeseFlyAnim, 0.0f, 6.0f, 6.0f, ANIMMODE_ONCE, 0.0f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_FFLY_DEAD);
     this->actor.flags |= ACTOR_FLAG_10;
 
