@@ -625,6 +625,9 @@ u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
 
 #ifdef NON_EQUIVALENT
 void PreRender_DivotFilter(PreRender* this) {
+    u16 width = this->width;
+    u16 height = this->height;
+
     u8* redRow2;
     u8* redRow1;
     u8* redRow0;
@@ -634,17 +637,13 @@ void PreRender_DivotFilter(PreRender* this) {
     u8* blueRow2;
     u8* blueRow1;
     u8* blueRow0;
-
     u8* cvgFull;
 
     Color_RGBA16 inPx;
     Color_RGBA16 outPx;
 
-    s32 x;
-    s32 y;
-
-    u16 width = this->width;
-    u16 height = this->height;
+    u32 x;
+    u32 y;
 
     u8* buffer = alloca(width * 10);
 
@@ -652,6 +651,8 @@ void PreRender_DivotFilter(PreRender* this) {
     // if (width > 320) {
     //     __assert("wd <= 320", "../PreRender.c");
     // }
+
+    if (1) { }
 
     redRow0 = &buffer[width * 0];
     redRow1 = &buffer[width * 1];
@@ -731,6 +732,8 @@ void PreRender_DivotFilter(PreRender* this) {
         greenRow1 = greenRow2;
         blueRow1 = blueRow2;
     }
+
+    if (1) {}
 }
 #else
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/PreRender_DivotFilter.s")
