@@ -218,7 +218,7 @@ s32 Player_UpperAction_15(Player* this, PlayState* play);
 s32 Player_UpperAction_16(Player* this, PlayState* play);
 
 void Player_InitItemAction_DoNothing(PlayState* play, Player* this);
-void Player_InitItemAction_1(PlayState* play, Player* this);
+void Player_InitItemAction_DekuStick(PlayState* play, Player* this);
 void Player_InitItemAction_2(PlayState* play, Player* this);
 void Player_InitItemAction_SpawnExplosive(PlayState* play, Player* this);
 void Player_InitItemAction_SpawnHookshot(PlayState* play, Player* this);
@@ -3058,7 +3058,7 @@ void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
     Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_RAZOR
     Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_GILDED
     Player_InitItemAction_DoNothing,      // PLAYER_IA_SWORD_TWO_HANDED
-    Player_InitItemAction_1,              // PLAYER_IA_STICK
+    Player_InitItemAction_DekuStick,      // PLAYER_IA_STICK
     Player_InitItemAction_5,              // PLAYER_IA_ZORA_FINS
     Player_InitItemAction_2,              // PLAYER_IA_BOW
     Player_InitItemAction_2,              // PLAYER_IA_BOW_FIRE
@@ -3139,7 +3139,7 @@ void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
 void Player_InitItemAction_DoNothing(PlayState* play, Player* this) {
 }
 
-void Player_InitItemAction_1(PlayState* play, Player* this) {
+void Player_InitItemAction_DekuStick(PlayState* play, Player* this) {
     this->unk_B28 = 0;
     this->unk_B0C = 1.0f;
 }
