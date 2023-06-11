@@ -65,55 +65,6 @@
 #include "z64view.h"
 #include "regs.h"
 
-#define Z_THREAD_ID_IDLE     1
-#define Z_THREAD_ID_SLOWLY   2
-#define Z_THREAD_ID_MAIN     3
-#define Z_THREAD_ID_GRAPH    4
-#define Z_THREAD_ID_SCHED    5
-#define Z_THREAD_ID_FLASHROM 13
-#define Z_THREAD_ID_DMAMGR  18
-#define Z_THREAD_ID_IRQMGR  19
-
-#define Z_PRIORITY_SLOWLY    5
-#define Z_PRIORITY_GRAPH     9
-#define Z_PRIORITY_AUDIOMGR 11
-#define Z_PRIORITY_IDLE     12
-#define Z_PRIORITY_MAIN     12
-#define Z_PRIORITY_FLASHROM 13
-#define Z_PRIORITY_PADMGR   15
-#define Z_PRIORITY_SCHED    16
-#define Z_PRIORITY_DMAMGR   17
-#define Z_PRIORITY_IRQMGR   18
-
-typedef enum {
-    /* -1 */ EQUIP_SLOT_NONE = -1,
-    /*  0 */ EQUIP_SLOT_B,
-    /*  1 */ EQUIP_SLOT_C_LEFT,
-    /*  2 */ EQUIP_SLOT_C_DOWN,
-    /*  3 */ EQUIP_SLOT_C_RIGHT,
-    /*  4 */ EQUIP_SLOT_A
-} EquipSlot;
-
-typedef struct {
-    /* 0x0 */ s8 segment;
-    /* 0x2 */ s16 type;
-    /* 0x4 */ void* params;
-} AnimatedMaterial; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-    /* 0x6 */ s16   unk_06;
-    /* 0x8 */ Gfx*  opa;
-    /* 0xC */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u8    type;
-    /* 0x1 */ u8    num; // number of dlist entries
-    /* 0x4 */ void* start;
-    /* 0x8 */ void* end;
-} PolygonType2; // size = 0xC
-
 typedef struct {
     /* 0x00 */ u32 resetting;
     /* 0x04 */ u32 resetCount;

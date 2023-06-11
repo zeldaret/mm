@@ -885,4 +885,109 @@ typedef enum {
 #define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
 #define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
 
+typedef struct {
+    /* 0x0 */ s8 segment;
+    /* 0x2 */ s16 type;
+    /* 0x4 */ void* params;
+} AnimatedMaterial; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ Vec3s pos;
+    /* 0x6 */ s16   unk_06;
+    /* 0x8 */ Gfx*  opa;
+    /* 0xC */ Gfx*  xlu;
+} PolygonDlist2; // size = 0x10
+
+typedef struct {
+    /* 0x0 */ u8    type;
+    /* 0x1 */ u8    num; // number of dlist entries
+    /* 0x4 */ void* start;
+    /* 0x8 */ void* end;
+} PolygonType2; // size = 0xC
+
+s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
+void Object_InitBank(GameState* gameState, ObjectContext* objectCtx);
+void Object_UpdateBank(ObjectContext* objectCtx);
+s32 Object_GetIndex(ObjectContext* objectCtx, s16 objectId);
+s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index);
+void Object_LoadAll(ObjectContext* objectCtx);
+void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id);
+void Scene_CommandSpawnList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandActorList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandActorCutsceneCamList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandCollisionHeader(PlayState* play, SceneCmd* cmd);
+void Scene_CommandRoomList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandEntranceList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd);
+void Scene_CommandRoomBehavior(PlayState* play, SceneCmd* cmd);
+void Scene_CommandMesh(PlayState* play, SceneCmd* cmd);
+void Scene_CommandObjectList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandLightList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandPathList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandTransiActorList(PlayState* play, SceneCmd* cmd);
+void Door_InitContext(GameState* gameState, DoorContext* doorCtx);
+void Scene_CommandEnvLightSettings(PlayState* play, SceneCmd* cmd);
+void Scene_LoadAreaTextures(PlayState* play, s32 fileIndex);
+void Scene_CommandSkyboxSettings(PlayState* play, SceneCmd* cmd);
+void Scene_CommandSkyboxDisables(PlayState* play, SceneCmd* cmd);
+void Scene_CommandTimeSettings(PlayState* play, SceneCmd* cmd);
+void Scene_CommandWindSettings(PlayState* play, SceneCmd* cmd);
+void Scene_CommandExitList(PlayState* play, SceneCmd* cmd);
+void Scene_Command09(PlayState* play, SceneCmd* cmd);
+void Scene_CommandSoundSettings(PlayState* play, SceneCmd* cmd);
+void Scene_CommandEchoSetting(PlayState* play, SceneCmd* cmd);
+void Scene_CommandAltHeaderList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandCutsceneScriptList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandCutsceneList(PlayState* play, SceneCmd* cmd);
+void Scene_CommandMiniMap(PlayState* play, SceneCmd* cmd);
+void Scene_Command1D(PlayState* play, SceneCmd* cmd);
+void Scene_CommandMiniMapCompassInfo(PlayState* play, SceneCmd* cmd);
+void Scene_CommandSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd);
+void Scene_CommandAnimatedMaterials(PlayState* play, SceneCmd* cmd);
+void Scene_SetExitFade(PlayState* play);
+s32 Scene_ExecuteCommands(PlayState* play, SceneCmd* sceneCmd);
+u16 Entrance_Create(s32 scene, s32 spawn, s32 layer);
+u16 Entrance_CreateFromSpawn(s32 spawn);
+void Scene_Draw(PlayState* play);
+void Scene_DrawConfigDefault(PlayState* play);
+Gfx* AnimatedMat_TexScroll(PlayState* play, AnimatedMatTexScrollParams* params);
+void AnimatedMat_DrawTexScroll(PlayState* play, s32 segment, void* params);
+Gfx* AnimatedMat_TwoLayerTexScroll(PlayState* play, AnimatedMatTexScrollParams* params);
+void AnimatedMat_DrawTwoTexScroll(PlayState* play, s32 segment, void* params);
+void AnimatedMat_SetColor(PlayState* play, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor);
+void AnimatedMat_DrawColor(PlayState* play, s32 segment, void* params);
+s32 AnimatedMat_Lerp(s32 min, s32 max, f32 norm);
+void AnimatedMat_DrawColorLerp(PlayState* play, s32 segment, void* params);
+f32 Scene_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp);
+u8 Scene_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp);
+void AnimatedMat_DrawColorNonLinearInterp(PlayState* play, s32 segment, void* params);
+void AnimatedMat_DrawTexCycle(PlayState* play, s32 segment, void* params);
+void AnimatedMat_DrawMain(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step, u32 flags);
+void AnimatedMat_Draw(PlayState* play, AnimatedMaterial* matAnim);
+void AnimatedMat_DrawOpa(PlayState* play, AnimatedMaterial* matAnim);
+void AnimatedMat_DrawXlu(PlayState* play, AnimatedMaterial* matAnim);
+void AnimatedMat_DrawAlpha(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
+void AnimatedMat_DrawAlphaOpa(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
+void AnimatedMat_DrawAlphaXlu(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
+void AnimatedMat_DrawStep(PlayState* play, AnimatedMaterial* matAnim, u32 step);
+void AnimatedMat_DrawStepOpa(PlayState* play, AnimatedMaterial* matAnim, u32 step);
+void AnimatedMat_DrawStepXlu(PlayState* play, AnimatedMaterial* matAnim, u32 step);
+void AnimatedMat_DrawAlphaStep(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
+void AnimatedMat_DrawAlphaStepOpa(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
+void AnimatedMat_DrawAlphaStepXlu(PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
+void Scene_DrawConfigMatAnim(PlayState* play);
+void Scene_DrawConfig3(PlayState* play);
+void Scene_DrawConfig4(PlayState* play);
+void Scene_DrawConfigDoNothing(PlayState* play);
+void Scene_SetRenderModeXlu(PlayState* play, s32 index, u32 flags);
+void Scene_SetCullFlag(PlayState* play, s32 index, u32 flags);
+void Scene_DrawConfig5(PlayState* play);
+void Scene_DrawConfigMatAnimManualStep(PlayState* play);
+void Scene_DrawConfigGreatBayTemple(PlayState* play);
+EntranceTableEntry* Entrance_GetTableEntry(u16 entrance);
+s32 Entrance_GetSceneId(u16 entrance);
+s32 Entrance_GetSceneIdAbsolute(u16 entrance);
+s32 Entrance_GetSpawnNum(u16 entrance);
+s32 Entrance_GetTransitionFlags(u16 entrance);
+
 #endif
