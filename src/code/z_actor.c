@@ -508,6 +508,8 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         if (targetCtx->rotation != 0) {
             totalEntries = 1;
         } else {
+            // Use multiple entries for movement effect when the are getting closer to the actor from the margin of the
+            // screen
             totalEntries = ARRAY_COUNT(targetCtx->lockOnEntries);
         }
 
