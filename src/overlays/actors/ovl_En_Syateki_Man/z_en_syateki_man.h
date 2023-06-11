@@ -22,8 +22,8 @@ typedef enum {
 } ShootingGalleryGameState;
 
 typedef enum {
-    /*  0 */ SG_OCTO_STATE_SPAWNING,
-    /*  1 */ SG_OCTO_STATE_SPAWNED,
+    /*  0 */ SG_OCTO_STATE_APPEARING,
+    /*  1 */ SG_OCTO_STATE_APPEARED,
     /* 70 */ SG_OCTO_STATE_INITIAL = 70,
     /* 80 */ SG_OCTO_STATE_HIDING = 80
 } ShootingGalleryOctorokState;

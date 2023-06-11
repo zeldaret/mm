@@ -1333,7 +1333,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->perGameVar2.octorokHitType = SG_OCTO_TYPE_NONE;
         }
 
-        if (this->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING) {
+        if (this->perGameVar1.octorokState == SG_OCTO_STATE_APPEARING) {
             this->perGameVar1.octorokState++;
         }
 
@@ -1344,7 +1344,7 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             if (this->flagsIndex < ARRAY_COUNT(sOctorokFlagsPerWave)) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
                 Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
-                this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;
+                this->perGameVar1.octorokState = SG_OCTO_STATE_APPEARING;
             }
         }
 

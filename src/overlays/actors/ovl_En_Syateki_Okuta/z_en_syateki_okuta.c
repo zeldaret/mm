@@ -130,10 +130,16 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
+/**
+ * Spawns the puff of smoke that appears when the Octorok disappears when it dies.
+ */
 void EnSyatekiOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
     func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
 }
 
+/**
+ * Spawns the splash that appears when the Octorok appears from underwater, hides underwater, or dies.
+ */
 void EnSyatekiOkuta_SpawnSplash(EnSyatekiOkuta* this, PlayState* play) {
     EffectSsGSplash_Spawn(play, &this->actor.home.pos, NULL, NULL, 0, 800);
 }
@@ -173,6 +179,14 @@ void EnSyatekiOkuta_SetupAttachToShootingGalleryMan(EnSyatekiOkuta* this) {
     this->actionFunc = EnSyatekiOkuta_AttachToShootingGalleryMan;
 }
 
+/**
+ * Checks every NPC actor in the scene to find the Shooting Gallery Man. Once it finds him, this will
+ * make him the parent to the Octorok. This is required because the Octoroks are normally spawned as
+ * part of the Town Shooting Gallery scene, so they don't have anything that links them to the Shooting
+ * Gallery Man, and the Octoroks need a pointer to him in order to access his Octorok flags. If this
+ * actor is spawned in a scene *without* the Shooting Gallery Man, its action function will never change
+ * from this function, and the Octorok will effectively do nothing.
+ */
 void EnSyatekiOkuta_AttachToShootingGalleryMan(EnSyatekiOkuta* this, PlayState* play) {
     Actor* actorIt = play->actorCtx.actorLists[ACTORCAT_NPC].first;
 
@@ -187,6 +201,11 @@ void EnSyatekiOkuta_AttachToShootingGalleryMan(EnSyatekiOkuta* this, PlayState* 
     }
 }
 
+/**
+ * Stops the Octorok's animation, prevents it from drawing, and sets its action function to do nothing.
+ * The intention here is to stay in this action function doing nothing until the Shooting Gallery Man
+ * tells it to appear in EnSyatekiOkuta_CheckForSignal, at which point the action function will be changed.
+ */
 void EnSyatekiOkuta_SetupDoNothing(EnSyatekiOkuta* this) {
     Animation_PlayOnceSetSpeed(&this->skelAnime, &gOctorokAppearAnim, 0.0f);
     this->actor.draw = NULL;
@@ -204,6 +223,9 @@ void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
     this->actionFunc = EnSyatekiOkuta_Appear;
 }
 
+/**
+ * Jumps out of the water and starts floating.
+ */
 void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
     if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
         if (!EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
@@ -226,10 +248,13 @@ void EnSyatekiOkuta_SetupFloat(EnSyatekiOkuta* this) {
     this->actionFunc = EnSyatekiOkuta_Float;
 }
 
+/**
+ * Floats in place until the Shooting Gallery Man tells it to hide.
+ */
 void EnSyatekiOkuta_Float(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    // In practice, if the Octorok is floating, then the octorokState is either SG_OCTO_STATE_SPAWNED or
+    // In practice, if the Octorok is floating, then the octorokState is either SG_OCTO_STATE_APPEARED or
     // SG_OCTO_STATE_HIDING. Only the latter state is greater than SG_OCTO_STATE_INITIAL, so that's what
     // this check is looking for.
     if (syatekiMan->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL) {
@@ -242,6 +267,9 @@ void EnSyatekiOkuta_SetupHide(EnSyatekiOkuta* this) {
     this->actionFunc = EnSyatekiOkuta_Hide;
 }
 
+/**
+ * Retreats underwater, then makes the Octorok do nothing until the Shooting Gallery Man tells it to appear again.
+ */
 void EnSyatekiOkuta_Hide(EnSyatekiOkuta* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 4.0f)) {
         EnSyatekiOkuta_SpawnSplash(this, play);
@@ -262,6 +290,11 @@ void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
     this->actionFunc = EnSyatekiOkuta_Die;
 }
 
+/**
+ * Plays the death animation and slowly shrinks the Octorok. Also spawns various bubble and dust
+ * effects as it dies. Once the Octorok is finished with its death animation, this function will
+ * make it do nothing until the Shooting Gallery Man tells it to appear again.
+ */
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
     Vec3f velocity;
     Vec3f pos;
@@ -317,6 +350,10 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
     }
 }
 
+/**
+ * Adjust's the collider's dimensions and position based on a few different factors, like the Octorok's
+ * type, current scale and head scale, and current action.
+ */
 void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
     this->collider.dim.height =
         (sCylinderInit.dim.height - this->collider.dim.yShift) * this->headScale.y * this->actor.scale.y * 100.0f;
@@ -344,6 +381,9 @@ void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
 }
 
+/**
+ * Returns true if the Octorok has been hit, false otherwise.
+ */
 s32 EnSyatekiOkuta_CheckCollision(EnSyatekiOkuta* this, PlayState* play) {
     if ((this->actionFunc == EnSyatekiOkuta_Die) || (this->actionFunc == EnSyatekiOkuta_DoNothing)) {
         return false;
@@ -358,13 +398,19 @@ s32 EnSyatekiOkuta_CheckCollision(EnSyatekiOkuta* this, PlayState* play) {
     return false;
 }
 
+/**
+ * Checks to see if both the archery game and this Octorok are in the appropriate state to consider
+ * appearing. If the conditions are right, then the Shooting Gallery Man's Octorok flags determine
+ * what type this Octorok should be for the current wave; if the type is *not* SG_OCTO_TYPE_NONE,
+ * then this Octorok will set itself to the appropriate type and get ready to jump out of the water.
+ */
 void EnSyatekiOkuta_CheckForSignal(EnSyatekiOkuta* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
     s16 type;
 
     if ((this->actionFunc != EnSyatekiOkuta_Float) && (this->actionFunc != EnSyatekiOkuta_Appear) &&
         (syatekiMan->shootingGameState == SG_GAME_STATE_RUNNING) &&
-        (syatekiMan->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING)) {
+        (syatekiMan->perGameVar1.octorokState == SG_OCTO_STATE_APPEARING)) {
         type = SG_OCTO_GET_TYPE(syatekiMan->octorokFlags, SG_OCTO_GET_INDEX(&this->actor));
         if (type > SG_OCTO_TYPE_NONE) {
             Actor_SetScale(&this->actor, 0.01f);
@@ -407,6 +453,9 @@ void EnSyatekiOkuta_Update(Actor* thisx, PlayState* play) {
     EnSyatekiOkuta_UpdateHeadScale(this);
 }
 
+/**
+ * Adjusts the scale of the Octorok's head based on their current action and their current animation frame.
+ */
 void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
     f32 curFrame = this->skelAnime.curFrame;
 
@@ -458,7 +507,8 @@ void EnSyatekiOkuta_UpdateHeadScale(EnSyatekiOkuta* this) {
 }
 
 /**
- * Returns true if the snout scale should be updated, false otherwise.
+ * Returns true if the snout scale should be updated, false otherwise. The snout scale is returned via the scale
+ * parameter.
  */
 s32 EnSyatekiOkuta_GetSnoutScale(EnSyatekiOkuta* this, f32 curFrame, Vec3f* scale) {
     if (this->actionFunc == EnSyatekiOkuta_Appear) {
@@ -523,6 +573,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw, NULL,
                       &this->actor);
 
+    // Draw the circle or cross that appears when the player hits an Octorok
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     if (this->actionFunc == EnSyatekiOkuta_Die) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f,
