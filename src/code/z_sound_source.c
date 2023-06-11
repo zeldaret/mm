@@ -1,3 +1,4 @@
+#include "z64sound_source.h"
 #include "global.h"
 
 void SoundSource_InitAll(PlayState* play) {
@@ -5,7 +6,7 @@ void SoundSource_InitAll(PlayState* play) {
     s32 i;
 
     // clang-format off
-    for (i = 0; i < ARRAY_COUNT(play->soundSources); i++) { sources[i].countdown = 0; }
+    for (i = 0; i < SOUND_SOURCE_COUNT; i++) { sources[i].countdown = 0; }
     // clang-format on
 }
 
@@ -13,7 +14,7 @@ void SoundSource_UpdateAll(PlayState* play) {
     SoundSource* source = &play->soundSources[0];
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->soundSources); i++) {
+    for (i = 0; i < SOUND_SOURCE_COUNT; i++) {
         if (source->countdown != 0) {
             if (DECR(source->countdown) == 0) {
                 AudioSfx_StopByPos(&source->projectedPos);
@@ -37,7 +38,7 @@ void SoundSource_Add(PlayState* play, Vec3f* worldPos, u32 duration, u16 sfxId, 
     s32 i;
 
     source = &play->soundSources[0];
-    for (i = 0; i < ARRAY_COUNT(play->soundSources); i++) {
+    for (i = 0; i < SOUND_SOURCE_COUNT; i++) {
         if (source->countdown == 0) {
             break;
         }
@@ -52,7 +53,7 @@ void SoundSource_Add(PlayState* play, Vec3f* worldPos, u32 duration, u16 sfxId, 
     }
 
     // If no sound source is available, replace the sound source with the smallest remaining countdown
-    if (i >= ARRAY_COUNT(play->soundSources)) {
+    if (i >= SOUND_SOURCE_COUNT) {
         source = backupSource;
         AudioSfx_StopByPos(&source->projectedPos);
     }

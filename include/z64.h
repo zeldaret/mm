@@ -60,6 +60,7 @@
 #include "z64schedule.h"
 #include "z64skin.h"
 #include "z64skybox.h"
+#include "z64sound_source.h"
 #include "z64subs.h"
 #include "z64transition.h"
 #include "z64view.h"
@@ -105,14 +106,6 @@ typedef struct {
     /* 0x35 */ u8 osSyncPrintfEnabled;
     /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
-
-typedef struct {
-    /* 0x00 */ u8 countdown;
-    /* 0x01 */ u8 playSfxEachFrame;
-    /* 0x02 */ u16 sfxId;
-    /* 0x04 */ Vec3f worldPos;
-    /* 0x10 */ Vec3f projectedPos;
-} SoundSource; // size = 0x1C
 
 typedef void(*fault_update_input_func)(Input* input);
 
@@ -394,7 +387,7 @@ typedef struct PlayState {
     /* 0x00830 */ CollisionContext colCtx;
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
-    /* 0x01F78 */ SoundSource soundSources[16];
+    /* 0x01F78 */ SoundSource soundSources[SOUND_SOURCE_COUNT];
     /* 0x02138 */ EffFootmark footprintInfo[100];
     /* 0x046B8 */ SramContext sramCtx;
     /* 0x046E0 */ SkyboxContext skyboxCtx;
