@@ -1,3 +1,4 @@
+#include "z64collision_check.h"
 #include "global.h"
 
 typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
