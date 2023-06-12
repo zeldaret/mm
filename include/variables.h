@@ -377,8 +377,6 @@ extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
 // extern UNK_TYPE1 D_801B4708;
 
-extern DamageTable sDamageTablePresets[23];
-
 extern u8 gOpeningEntranceIndex;
 
 extern ActorCutscene sGlobalCutsceneList[8];

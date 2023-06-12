@@ -463,6 +463,16 @@ typedef struct {
 } AnimatedMatTexCycleParams; // size = 0xC
 
 typedef struct {
+    /* 0x0 */ s8 segment;
+    /* 0x2 */ s16 type;
+    /* 0x4 */ void* params;
+} AnimatedMaterial; // size = 0x8
+
+// TODO: ZAPD
+typedef RoomShapeCullableEntry PolygonDlist2;
+typedef RoomShapeCullable PolygonType2;
+
+typedef struct {
     /* 0x000 */ void* spaceStart;
     /* 0x004 */ void* spaceEnd;
     /* 0x008 */ u8 num;
@@ -887,15 +897,6 @@ typedef enum {
  // TODO: ZAPD Capatability
 #define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
 #define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
-
-typedef struct {
-    /* 0x0 */ s8 segment;
-    /* 0x2 */ s16 type;
-    /* 0x4 */ void* params;
-} AnimatedMaterial; // size = 0x8
-
-typedef RoomShapeCullableEntry PolygonDlist2;
-typedef RoomShapeCullable PolygonType2;
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
 void Object_InitBank(struct GameState* gameState, ObjectContext* objectCtx);
