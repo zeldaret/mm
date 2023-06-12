@@ -1,5 +1,5 @@
-#ifndef Z64_SOUND_SOURCE_H
-#define Z64_SOUND_SOURCE_H
+#ifndef Z64SOUND_SOURCE_H
+#define Z64SOUND_SOURCE_H
 
 #include "ultra64.h"
 #include "z64math.h"
