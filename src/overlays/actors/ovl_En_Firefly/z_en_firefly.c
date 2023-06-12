@@ -769,7 +769,7 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     EnFirefly* this = THIS;
 
     if ((this->currentType != KEESE_FIRE) && (limbIndex == 27)) {
-        gSPDisplayList((*gfx)++, gFireKeeseRedEyesDL);
+        gSPDisplayList((*gfx)++, gKeeseRedEyesDL);
     } else if ((this->lastDrawnFrame != play->gameplayFrames) &&
                ((this->auraType == KEESE_AURA_FIRE) || (this->auraType == KEESE_AURA_ICE)) &&
                ((limbIndex == 15) || (limbIndex == 21))) {
