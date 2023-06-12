@@ -894,19 +894,8 @@ typedef struct {
     /* 0x4 */ void* params;
 } AnimatedMaterial; // size = 0x8
 
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-    /* 0x6 */ s16   unk_06;
-    /* 0x8 */ Gfx*  opa;
-    /* 0xC */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u8    type;
-    /* 0x1 */ u8    num; // number of dlist entries
-    /* 0x4 */ void* start;
-    /* 0x8 */ void* end;
-} PolygonType2; // size = 0xC
+typedef RoomShapeCullableEntry PolygonDlist2;
+typedef RoomShapeCullable PolygonType2;
 
 s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
 void Object_InitBank(struct GameState* gameState, ObjectContext* objectCtx);
