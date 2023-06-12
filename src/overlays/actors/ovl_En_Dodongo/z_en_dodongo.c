@@ -798,20 +798,20 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
 
 void func_80878354(EnDodongo* this) {
     s32 pad;
-    AnimationHeader* sp18;
+    AnimationHeader* anim;
     s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     this->unk_306 = (0xFFFF - ABS_ALT(yDiff)) / 15;
 
     if (yDiff >= 0) {
-        sp18 = &object_dodongo_Anim_0042C4;
+        anim = &object_dodongo_Anim_0042C4;
         this->unk_306 = -this->unk_306;
     } else {
-        sp18 = &object_dodongo_Anim_003B14;
+        anim = &object_dodongo_Anim_003B14;
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_TAIL);
-    Animation_PlayOnceSetSpeed(&this->skelAnime, sp18, 2.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, anim, 2.0f);
     this->timer = 0;
     this->collider1.base.atFlags |= AT_ON;
     this->unk_304 = -1;

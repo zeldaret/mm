@@ -23,7 +23,7 @@ typedef struct EnAh {
     /* 0x272 */ Vec3s morphTable[17];
     /* 0x2D8 */ u16 unk_2D8;
     /* 0x2DA */ u16 unk_2DA;
-    /* 0x2DC */ f32 unk_2DC;
+    /* 0x2DC */ f32 animPlaySpeed;
     /* 0x2E0 */ UNK_TYPE1 unk2E0[0xC];
     /* 0x2EC */ s16 unk_2EC;
     /* 0x2EE */ s16 unk_2EE;
@@ -35,7 +35,7 @@ typedef struct EnAh {
     /* 0x2FA */ s16 unk_2FA;
     /* 0x2FC */ s16 unk_2FC;
     /* 0x2FE */ s16 unk_2FE;
-    /* 0x300 */ s32 unk_300;
+    /* 0x300 */ s32 animIndex;
 } EnAh; // size = 0x304
 
 #endif // Z_EN_AH_H

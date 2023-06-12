@@ -40,7 +40,7 @@ typedef struct EnJa {
     /* 0x280 */ Vec3s jointTable[16];
     /* 0x2E0 */ Vec3s morphTable[16];
     /* 0x340 */ u16 unk_340;
-    /* 0x344 */ f32 unk_344;
+    /* 0x344 */ f32 animPlaySpeed;
     /* 0x348 */ f32 unk_348;
     /* 0x34C */ f32 unk_34C;
     /* 0x350 */ UNK_TYPE1 unk350[0x4];
@@ -55,7 +55,7 @@ typedef struct EnJa {
     /* 0x364 */ s16 unk_364;
     /* 0x366 */ s16 unk_366;
     /* 0x368 */ void* unk_368;
-    /* 0x36C */ s32 unk_36C;
+    /* 0x36C */ s32 animIndex;
     /* 0x370 */ UNK_TYPE1 unk_370[4];
     /* 0x374 */ s32 prevTalkState;
 } EnJa; // size = 0x378

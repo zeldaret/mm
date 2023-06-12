@@ -31,7 +31,7 @@ typedef struct EnPrz {
     /* 0x1FE */ s16 unk_1FE;
     /* 0x200 */ UNK_TYPE1 unk200[2];
     /* 0x202 */ s16 unk_202;
-    /* 0x204 */ s32 unk_204;
+    /* 0x204 */ s32 animIndex;
     /* 0x208 */ f32 unk_208;
     /* 0x20C */ f32 unk_20C;
     /* 0x210 */ f32 unk_210;

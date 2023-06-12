@@ -29,7 +29,7 @@ typedef struct EnPr {
     /* 0x214 */ s16 unk_214;
     /* 0x216 */ s16 unk_216;
     /* 0x218 */ UNK_TYPE1 unk218[4];
-    /* 0x21C */ s32 unk_21C;
+    /* 0x21C */ s32 animIndex;
     /* 0x220 */ UNK_TYPE1 unk220[0x8];
     /* 0x228 */ s32 unk_228;
     /* 0x22C */ s16 unk_22C;

@@ -111,7 +111,7 @@ void EnMa4_UpdateEyes(EnMa4* this) {
     }
 }
 
-static AnimationSpeedInfo sAnimationInfo[] = {
+static AnimationSpeedInfo sAnimationSpeedInfo[] = {
     { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
     { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
     { &gRomaniLookAroundAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
@@ -135,9 +135,9 @@ static AnimationSpeedInfo sAnimationInfo[] = {
 };
 
 void EnMa4_ChangeAnim(EnMa4* this, s32 animIndex) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
-                     sAnimationInfo[animIndex].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationSpeedInfo[animIndex].animation),
+                     sAnimationSpeedInfo[animIndex].mode, sAnimationSpeedInfo[animIndex].morphFrames);
 }
 
 void func_80ABDD9C(EnMa4* this, PlayState* play) {

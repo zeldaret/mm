@@ -116,12 +116,12 @@ static TrackOptionsSet sTrackOptions = {
 
 s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 lastFrame;
-    s32 ret = false;
+    s32 didAnimChanged = false;
 
     if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo))) {
         lastFrame = sAnimationInfo[animIndex].frameCount;
 
-        ret = true;
+        didAnimChanged = true;
         if (lastFrame < 0) {
             lastFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
@@ -131,7 +131,7 @@ s32 EnRu_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
                          sAnimationInfo[animIndex].morphFrames);
     }
 
-    return ret;
+    return didAnimChanged;
 }
 
 // En_Zo has a copy of this function

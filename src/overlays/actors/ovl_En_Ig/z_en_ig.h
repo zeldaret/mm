@@ -42,7 +42,7 @@ typedef struct EnIg {
     /* 0x35E */ Vec3s morphTable[19];
     /* 0x3D0 */ u16 unk_3D0;
     /* 0x3D2 */ u16 unk_3D2;
-    /* 0x3D4 */ f32 unk_3D4;
+    /* 0x3D4 */ f32 animPlaySpeed;
     /* 0x3D8 */ UNK_TYPE1 unk3D8[0x8];
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
@@ -57,7 +57,7 @@ typedef struct EnIg {
     /* 0x3F4 */ s16 unk_3F4;
     /* 0x3F6 */ s16 unk_3F6;
     /* 0x3F8 */ EnIgUnkFunc unk_3F8;
-    /* 0x3FC */ s32 unk_3FC;
+    /* 0x3FC */ s32 animIndex;
     /* 0x400 */ UNK_TYPE1 unk400[0x8];
     /* 0x408 */ s32 unk_408;
 } EnIg; // size = 0x40C

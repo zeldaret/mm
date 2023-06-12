@@ -41,13 +41,13 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s32 EnAnd_ChangeAnim(EnAnd* this, s32 animIndex) {
-    s32 ret = false;
+    s32 didAnimChange = false;
 
     if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
-    return ret;
+    return didAnimChange;
 }
 
 void EnAnd_Blink(EnAnd* this) {

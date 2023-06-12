@@ -698,7 +698,7 @@ s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interac
 void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex, s16 trackingMode);
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex);
+void Actor_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
 void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist);

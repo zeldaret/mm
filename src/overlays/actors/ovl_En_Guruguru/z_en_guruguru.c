@@ -62,8 +62,12 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
+static AnimationHeader* sAnimations[] = {
+    &object_fu_Anim_000B04,
+    &object_fu_Anim_00057C,
+};
 static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+
 static f32 sPlaySpeeds[] = { 1.0f, 1.0f };
 static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
 static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };

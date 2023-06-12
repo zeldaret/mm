@@ -263,7 +263,7 @@ void EnSyatekiWf_WaitToMove(EnSyatekiWf* this, PlayState* play) {
 }
 
 void EnSyatekiWf_SetupRun(EnSyatekiWf* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_RUN);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_RUN);
     this->actor.speed = 10.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.draw = EnSyatekiWf_Draw;
@@ -340,7 +340,7 @@ void EnSyatekiWf_SetupJump(EnSyatekiWf* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_TEKU_JUMP);
     this->actor.velocity.y = 20.0f;
     this->actor.speed = 5.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_JUMP);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_JUMP);
     this->actionFunc = EnSyatekiWf_Jump;
 }
 
@@ -352,7 +352,7 @@ void EnSyatekiWf_Jump(EnSyatekiWf* this, PlayState* play) {
 
 void EnSyatekiWf_SetupLand(EnSyatekiWf* this) {
     this->actor.speed = 0.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_LAND);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_LAND);
     this->actionFunc = EnSyatekiWf_Land;
 }
 
@@ -369,7 +369,7 @@ void EnSyatekiWf_SetupHowl(EnSyatekiWf* this) {
     this->timer = 40;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_APPEAR);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_DAMAGED);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_DAMAGED);
     this->actionFunc = EnSyatekiWf_Howl;
 }
 
@@ -392,7 +392,7 @@ void EnSyatekiWf_SetupDead(EnSyatekiWf* this, PlayState* play) {
     this->actor.speed = 0.0f;
     EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
     Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_WF_ANIM_REAR_UP_FALL_OVER);
     syatekiMan->score += 100;
     this->actionFunc = EnSyatekiWf_Dead;
 }

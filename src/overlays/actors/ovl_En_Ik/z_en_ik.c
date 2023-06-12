@@ -460,7 +460,7 @@ void EnIk_SetupVerticalAttack(EnIk* this) {
         playbackSpeed = 1.2f;
     }
     Animation_Change(&this->skelAnime, &gIronKnuckleVerticalAttackAnim, playbackSpeed, 0.0f,
-                     Animation_GetLastFrame(&gIronKnuckleVerticalAttackAnim.common), 3, -4.0f);
+                     Animation_GetLastFrame(&gIronKnuckleVerticalAttackAnim.common), ANIMMODE_ONCE_INTERP, -4.0f);
     this->timer = 0;
     this->blurEffectSpawnLock = -1;
     this->actionFunc = EnIk_VerticalAttack;

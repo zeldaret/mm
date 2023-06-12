@@ -50,12 +50,12 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 func_80C1C410(DmAn* this, PlayState* play) {
+s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
-    s32 ret = false;
+    s32 didAnimUpdate = false;
 
-    if (this->unk_2C8 < 2) {
+    if (this->animIndex < 2) {
         objectIndex2 = this->actor.objBankIndex;
     } else {
         objectIndex2 = this->unk_2AC;
@@ -63,30 +63,31 @@ s32 func_80C1C410(DmAn* this, PlayState* play) {
 
     if (objectIndex2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        ret = SkelAnime_Update(&this->skelAnime);
+        didAnimUpdate = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
-    return ret;
+
+    return didAnimUpdate;
 }
 
-s32 func_80C1C4D8(DmAn* this, PlayState* play, s32 arg2) {
+s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, s32 animIndex) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
-    s32 ret = false;
+    s32 didAnimChange = false;
 
-    if (arg2 < 2) {
+    if (animIndex < 2) {
         objectIndex2 = this->actor.objBankIndex;
     } else {
         objectIndex2 = this->unk_2AC;
     }
 
-    if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
+    if ((objectIndex2 >= 0) && (this->animIndex != animIndex)) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        this->unk_2C8 = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80C1C5B4(DmAn* this) {
@@ -176,8 +177,8 @@ void func_80C1C958(DmAn* this, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
                            OBJECT_AN1_LIMB_MAX);
 
-        this->unk_2C8 = -1;
-        func_80C1C4D8(this, play, 0);
+        this->animIndex = -1;
+        DmAn_ChangeAnim(this, play, 0);
         this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
@@ -185,7 +186,7 @@ void func_80C1C958(DmAn* this, PlayState* play) {
 
         if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C1C8E8(play);
-            func_80C1C4D8(this, play, 1);
+            DmAn_ChangeAnim(this, play, 1);
             this->actionFunc = func_80C1CC80;
         } else {
             this->actionFunc = func_80C1CAB0;
@@ -203,7 +204,7 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
             this->cueId = 255;
             this->unk_2D0 = 1;
             this->unk_2D4 = 0;
-            this->unk_2CC = this->unk_2C8;
+            this->unk_2CC = this->animIndex;
         }
 
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_557)) {
@@ -213,7 +214,7 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
             if (this->cueId != (u8)cueId) {
                 this->cueId = cueId;
                 this->unk_2D4 = 1;
-                func_80C1C4D8(this, play, sp28[cueId]);
+                DmAn_ChangeAnim(this, play, sp28[cueId]);
             }
 
             switch (this->cueId) {
@@ -223,9 +224,10 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
                 case 6:
                 case 7:
                 case 8:
-                    if ((this->unk_2C8 == 12) || (this->unk_2C8 == 4) || (this->unk_2C8 == 6) || (this->unk_2C8 == 8)) {
+                    if ((this->animIndex == 12) || (this->animIndex == 4) || (this->animIndex == 6) ||
+                        (this->animIndex == 8)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                            func_80C1C4D8(this, play, this->unk_2C8 + 1);
+                            DmAn_ChangeAnim(this, play, this->animIndex + 1);
                         }
                     }
                     break;
@@ -238,7 +240,7 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
     } else if (this->unk_2D0 != 0) {
         this->unk_2D0 = 0;
         this->unk_2D4 = 0;
-        func_80C1C4D8(this, play, this->unk_2CC);
+        DmAn_ChangeAnim(this, play, this->unk_2CC);
     }
 }
 
@@ -264,7 +266,7 @@ void DmAn_Update(Actor* thisx, PlayState* play) {
     func_80C1C83C(this, play);
 
     if (this->actor.draw != NULL) {
-        func_80C1C410(this, play);
+        DmAn_UpdateSkelAnime(this, play);
         func_80C1C5B4(this);
     }
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

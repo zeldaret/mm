@@ -23,7 +23,7 @@ typedef struct EnFish2 {
     /* 0x0188 */ Vec3s jointTable[24];
     /* 0x0218 */ Vec3s morphTable[24];
     /* 0x02A8 */ EnFish2ActionFunc actionFunc;
-    /* 0x02AC */ s32 unk_2AC;
+    /* 0x02AC */ s32 animIndex;
     /* 0x02B0 */ s32 unk_2B0;
     /* 0x02B4 */ s16 unk_2B4;
     /* 0x02B6 */ s16 unk_2B6;

@@ -134,11 +134,13 @@ void DmChar08_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16
     f32 endFrame;
 
     animationInfo += animIndex;
+
     if (animationInfo->frameCount < 0.0f) {
         endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
         endFrame = animationInfo->frameCount;
     }
+
     Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
                      animationInfo->mode, animationInfo->morphFrames);
 }

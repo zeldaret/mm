@@ -106,10 +106,10 @@ void EnBjt_UpdateSkelAnime(EnBjt* this) {
 
 s32 EnBjt_ChangeAnim(EnBjt* this, s32 animIndex) {
     s32 changeAnim = false;
-    s32 changed = false;
+    s32 didAnimChange = false;
 
     if ((animIndex == TOILET_HAND_ANIM_WAITING) || (animIndex == TOILET_HAND_ANIM_WAITING_MORPH)) {
-        if (!((this->animIndex == TOILET_HAND_ANIM_WAITING) || (this->animIndex == TOILET_HAND_ANIM_WAITING_MORPH))) {
+        if ((this->animIndex != TOILET_HAND_ANIM_WAITING) && (this->animIndex != TOILET_HAND_ANIM_WAITING_MORPH)) {
             changeAnim = true;
         }
     } else if (this->animIndex != animIndex) {
@@ -118,11 +118,11 @@ s32 EnBjt_ChangeAnim(EnBjt* this, s32 animIndex) {
 
     if (changeAnim) {
         this->animIndex = animIndex;
-        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return changed;
+    return didAnimChange;
 }
 
 void EnBjt_UpdateCollision(EnBjt* this, PlayState* play) {

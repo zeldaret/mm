@@ -94,9 +94,9 @@ ActorInit En_Prz_InitVars = {
     (ActorFunc)EnPrz_Draw,
 };
 
-AnimationHeader* D_80A77240[] = { &object_pr_Anim_004340, &object_pr_Anim_004274 };
+static AnimationHeader* sAnimations[] = { &object_pr_Anim_004340, &object_pr_Anim_004274 };
 
-u8 D_80A77248[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 
 Vec3f D_80A7724C = { 0.0f, 0.0f, 0.0f };
 
@@ -135,10 +135,10 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 void EnPrz_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80A75F18(EnPrz* this, s32 arg1) {
-    this->unk_204 = arg1;
-    Animation_Change(&this->skelAnime, D_80A77240[arg1], 1.0f, 0.0f, Animation_GetLastFrame(D_80A77240[arg1]),
-                     D_80A77248[arg1], -2.0f);
+void EnPrz_ChangeAnim(EnPrz* this, s32 animIndex) {
+    this->animIndex = animIndex;
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimations[animIndex]), sAnimationModes[animIndex], -2.0f);
 }
 
 s32 func_80A75FA4(EnPrz* this, PlayState* play) {
@@ -219,7 +219,7 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
 
 void func_80A76388(EnPrz* this) {
     this->actor.speed = Rand_CenteredFloat(1.0f) + 4.0f;
-    func_80A75F18(this, 0);
+    EnPrz_ChangeAnim(this, 0);
     this->unk_1EA = 1;
     this->actionFunc = func_80A763E8;
 }
@@ -316,7 +316,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
     s32 pad[2];
 
     if (func_80A762C0(this, play)) {
-        func_80A75F18(this, 0);
+        EnPrz_ChangeAnim(this, 0);
         this->actor.speed = Rand_CenteredFloat(1.0f) + 4.0f;
         func_80A76604(this, play);
         return;
@@ -333,13 +333,13 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer < 200.0f) && (fabsf(player->actor.world.pos.y - this->actor.world.pos.y) < 80.0f)) {
-        if (this->unk_204 != 1) {
-            func_80A75F18(this, 1);
+        if (this->animIndex != 1) {
+            EnPrz_ChangeAnim(this, 1);
         }
         this->skelAnime.playSpeed = 1.0f;
     } else {
-        if (this->unk_204 != 0) {
-            func_80A75F18(this, 0);
+        if (this->animIndex != 0) {
+            EnPrz_ChangeAnim(this, 0);
         }
         this->skelAnime.playSpeed = 2.0f;
     }
@@ -378,7 +378,7 @@ void func_80A76A1C(EnPrz* this) {
 
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 30);
     this->unk_1EE = 50;
-    func_80A75F18(this, 0);
+    EnPrz_ChangeAnim(this, 0);
     this->unk_1EA = 7;
     this->actionFunc = func_80A76B14;
 }

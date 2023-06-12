@@ -12,8 +12,8 @@ typedef void (*EnBombers2ActionFunc)(struct EnBombers2*, PlayState*);
 typedef struct EnBombers2 {
     /* 0x000 */ Actor actor;
     /* 0x14C */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
-    /* 0x206 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
     /* 0x284 */ EnBombers2ActionFunc actionFunc;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;

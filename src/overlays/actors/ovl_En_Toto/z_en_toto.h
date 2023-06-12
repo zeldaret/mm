@@ -32,7 +32,7 @@ typedef struct EnToto {
     /* 0x2B1 */ u8 unk2B1;
     /* 0x2B2 */ s8 csId;
     /* 0x2B3 */ u8 unk2B3;
-    /* 0x2B4 */ u8 unk2B4;
+    /* 0x2B4 */ u8 animIndex;
     /* 0x2B5 */ u8 cueId;
     /* 0x2B6 */ u8 unk2B6;
     /* 0x2B7 */ u8 unk2B7;

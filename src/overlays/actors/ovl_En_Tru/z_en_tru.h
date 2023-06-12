@@ -39,7 +39,7 @@ typedef struct EnTru {
     /* 0x34E */ u16 unk_34E;
     /* 0x350 */ UNK_TYPE1 unk350[0x4];
     /* 0x354 */ s32* unk_354;
-    /* 0x358 */ f32 playSpeed;
+    /* 0x358 */ f32 animPlaySpeed;
     /* 0x35C */ f32 unk_35C;
     /* 0x360 */ s16 unk_360;
     /* 0x362 */ s16 unk_362;

@@ -63,30 +63,32 @@ ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-void func_80AE6130(EnShn* this) {
-    this->skelAnime.playSpeed = this->playSpeed;
+void EnShn_UpdateSkelAnime(EnShn* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80AE615C(EnShn* this, s32 animIndex) {
+s32 EnShn_ChangeAnim(EnShn* this, s32 animIndex) {
     static AnimationInfoS sAnimationInfo[] = {
-        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
-        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
-        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     };
-    s32 phi_v0 = 0;
-    s32 phi_v1 = 0;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->unk_2E8) {
-        phi_v0 = 1;
+    if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
-    if (phi_v0 != 0) {
-        this->unk_2E8 = animIndex;
-        phi_v1 = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->playSpeed = this->skelAnime.playSpeed;
+
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return phi_v1;
+
+    return didAnimChange;
 }
 
 s32 EnShn_IsFacingPlayer(EnShn* this) {
@@ -205,19 +207,19 @@ s32 func_80AE65F4(EnShn* this, PlayState* play) {
         if (this->unk_1DA != temp) {
             if ((this->unk_1D8 & 0x80) || (this->unk_1D8 & 0x100)) {
                 this->unk_1D8 |= 8;
-                func_80AE615C(this, 1);
+                EnShn_ChangeAnim(this, 1);
             }
             if (temp == 0x9C5) {
                 if (1) {}
                 this->unk_1D8 |= 8;
-                func_80AE615C(this, 1);
+                EnShn_ChangeAnim(this, 1);
             }
         }
         this->unk_1DA = temp;
         this->unk_1D8 |= 0x40;
     } else if (this->unk_1D8 & 0x40) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
-            func_80AE615C(this, 3);
+            EnShn_ChangeAnim(this, 3);
         }
         this->unk_1DA = 0;
         this->unk_1D8 &= ~0x40;
@@ -349,11 +351,11 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, NULL, this->jointTable, this->morphTable,
                        BURLY_GUY_LIMB_MAX);
-    this->unk_2E8 = -1;
+    this->animIndex = -1;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
-        func_80AE615C(this, 0);
+        EnShn_ChangeAnim(this, 0);
     } else {
-        func_80AE615C(this, 2);
+        EnShn_ChangeAnim(this, 2);
     }
     this->actor.targetMode = 6;
     Actor_SetScale(&this->actor, 0.01f);
@@ -379,7 +381,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE68F0(this, play);
     this->actionFunc(this, play);
     func_80AE65F4(this, play);
-    func_80AE6130(this);
+    EnShn_UpdateSkelAnime(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
     func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & 7);

@@ -17,7 +17,7 @@ typedef struct EnOsk {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[17];
     /* 0x1EE */ Vec3s morphTable[17];
-    /* 0x254 */ s16 unk_254;
+    /* 0x254 */ s16 animIndex;
     /* 0x256 */ s16 cueId;
     /* 0x258 */ u16 cueType;
     /* 0x25C */ f32 unk_25C;

@@ -27,7 +27,7 @@ typedef struct EnHiddenNuts {
     /* 0x21A */ s16 unk_21A;
     /* 0x21C */ s16 switchFlag;
     /* 0x21E */ s16 pathIndex;
-    /* 0x220 */ s32 unk_220;
+    /* 0x220 */ s32 animIndex;
     /* 0x224 */ s16 unk_224;
     /* 0x226 */ s16 csId;
     /* 0x228 */ f32 unk_228;

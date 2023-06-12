@@ -269,7 +269,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
         faceReactionTextId = Text_GetFaceReaction(play, 0x31);
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
@@ -488,7 +488,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
 
     if (this->skelAnime.animation == &gSwampShootingGalleryManHeadScratchEndAnim) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE);
         }
     }
 }

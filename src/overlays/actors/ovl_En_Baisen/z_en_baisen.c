@@ -57,9 +57,17 @@ static ColliderCylinderInit sCylinderInit = {
 
 static u16 sTextIds[] = { 0x2ABD, 0x2ABB, 0x2AD5, 0x2AD6, 0x2AD7, 0x2AD8, 0x2AC6 };
 
-static AnimationHeader* sAnimations[] = { &object_bai_Anim_0011C0, &object_bai_Anim_0008B4, &object_bai_Anim_008198 };
+static AnimationHeader* sAnimations[] = {
+    &object_bai_Anim_0011C0,
+    &object_bai_Anim_0008B4,
+    &object_bai_Anim_008198,
+};
 
-static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
+static u8 sAnimationModes[] = {
+    ANIMMODE_LOOP,
+    ANIMMODE_LOOP,
+    ANIMMODE_LOOP,
+};
 
 void EnBaisen_Init(Actor* thisx, PlayState* play) {
     EnBaisen* this = THIS;

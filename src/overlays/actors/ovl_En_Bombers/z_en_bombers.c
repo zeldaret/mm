@@ -57,7 +57,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 30, 0, { 0, 0, 0 } },
 };
 
-AnimationHeader* D_80C0479C[] = {
+static AnimationHeader* sAnimations[] = {
     &gBomberIdleAnim,       &object_cs_Anim_0053F4, &object_cs_Anim_01007C, &object_cs_Anim_00349C,
     &object_cs_Anim_004960, &object_cs_Anim_005128, &object_cs_Anim_004C1C, &object_cs_Anim_001A1C,
     &object_cs_Anim_003EE4, &object_cs_Anim_00478C, &object_cs_Anim_00433C, &object_cs_Anim_0060E8,
@@ -65,10 +65,10 @@ AnimationHeader* D_80C0479C[] = {
     &object_cs_Anim_0031C4,
 };
 
-u8 D_80C047E0[] = {
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
-    ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
-    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+static u8 sAnimationModes[] = {
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
+    ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
 };
 
 #include "overlays/ovl_En_Bombers/ovl_En_Bombers.c"
@@ -154,21 +154,21 @@ void EnBombers_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80C03824(EnBombers* this, s32 arg1, f32 arg2) {
-    this->unk_2C4 = arg1;
-    this->unk_2B0 = Animation_GetLastFrame(D_80C0479C[arg1]);
-    Animation_Change(&this->skelAnime, D_80C0479C[this->unk_2C4], arg2, 0.0f, this->unk_2B0, D_80C047E0[this->unk_2C4],
-                     -10.0f);
+void EnBombers_ChangeAnim(EnBombers* this, s32 animIndex, f32 playSpeed) {
+    this->animIndex = animIndex;
+    this->unk_2B0 = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->unk_2B0,
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 void func_80C038B4(EnBombers* this) {
-    if ((this->unk_2C4 == 2) &&
+    if ((this->animIndex == 2) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->unk_2C4 == 15) &&
+    if ((this->animIndex == 15) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 2.0f) ||
          Animation_OnFrame(&this->skelAnime, 4.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
@@ -242,7 +242,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp60)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp60, &sp6C,
                                                                &colPoly, true, false, false, true, &sp48)) {
-                    func_80C03824(this, 2, 1.0f);
+                    EnBombers_ChangeAnim(this, 2, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp60);
                     this->unk_2AA = Rand_S16Offset(30, 50);
                     this->unk_2A0++;
@@ -265,9 +265,9 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
                                             false, true, &sp48)) {
                     this->unk_2A8 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
-                        func_80C03824(this, 16, 1.0f);
+                        EnBombers_ChangeAnim(this, 16, 1.0f);
                     } else {
-                        func_80C03824(this, 0, 1.0f);
+                        EnBombers_ChangeAnim(this, 0, 1.0f);
                     }
                     this->unk_2A0 = 0;
                     this->unk_2B4 = 0.0f;
@@ -281,9 +281,9 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
             if ((this->unk_2AA == 0) || (sqrtf(SQ(x) + SQ(z)) < 4.0f)) {
                 this->unk_2A8 = Rand_S16Offset(20, 20);
                 if (!(this->unk_2A8 & 1)) {
-                    func_80C03824(this, 16, 1.0f);
+                    EnBombers_ChangeAnim(this, 16, 1.0f);
                 } else {
-                    func_80C03824(this, 0, 1.0f);
+                    EnBombers_ChangeAnim(this, 0, 1.0f);
                 }
                 this->unk_2A0 = 0;
                 this->unk_2B4 = 0.0f;
@@ -314,7 +314,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
 
 void func_80C03F64(EnBombers* this) {
     this->unk_2A4 = this->actor.yawTowardsPlayer;
-    func_80C03824(this, 1, 1.0f);
+    EnBombers_ChangeAnim(this, 1, 1.0f);
     this->unk_2C0 = 1;
     this->actionFunc = func_80C03FAC;
 }
@@ -373,7 +373,7 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
             } else {
                 func_8019F208();
                 this->actor.textId = 0x74D;
-                func_80C03824(this, 14, 1.0f);
+                EnBombers_ChangeAnim(this, 14, 1.0f);
                 sp2A = 1;
             }
         } else if (this->actor.textId == 0x744) {
@@ -427,8 +427,8 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
 }
 
 void func_80C042F8(EnBombers* this) {
-    if (this->unk_2C4 != 6) {
-        func_80C03824(this, 6, 1.0f);
+    if (this->animIndex != 6) {
+        EnBombers_ChangeAnim(this, 6, 1.0f);
     }
     this->actor.textId = 0x72D;
     this->unk_28E = 0x1F40;

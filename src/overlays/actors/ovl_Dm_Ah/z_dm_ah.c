@@ -27,19 +27,19 @@ ActorInit Dm_Ah_InitVars = {
     (ActorFunc)DmAh_Draw,
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_ah_Anim_000DDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 func_80C1D410(DmAh* this, s32 animationIndex) {
-    s32 ret = false;
+s32 DmAh_ChangeAnim(DmAh* this, s32 animIndex) {
+    s32 didAnimChange = false;
 
-    if (animationIndex != this->animationIndex) {
-        this->animationIndex = animationIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, animationIndex);
+    if (this->animIndex != animIndex) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80C1D458(DmAh* this) {
@@ -131,20 +131,20 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
         if (!this->unk_29C) {
             this->cueId = 255;
             this->unk_29C = true;
-            this->animationIndex2 = this->animationIndex;
+            this->animIndex2 = this->animIndex;
         }
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
             cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
             cueId = play->csCtx.actorCues[cueChannel]->id;
             if (this->cueId != (u8)cueId) {
                 this->cueId = cueId;
-                func_80C1D410(this, D_80C1DE00[cueId]);
+                DmAh_ChangeAnim(this, D_80C1DE00[cueId]);
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk_29C) {
         this->unk_29C = false;
-        func_80C1D410(this, this->animationIndex2);
+        DmAh_ChangeAnim(this, this->animIndex2);
     }
 }
 
@@ -155,16 +155,16 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
     DmAh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->morphTable, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable,
                        OBJECT_AH_LIMB_MAX);
-    this->animationIndex = -1;
-    func_80C1D410(this, 0);
+    this->animIndex = -1;
+    DmAh_ChangeAnim(this, 0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_27C |= 1;
     if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
         this->unk_280 = func_80C1D78C(play);
-        func_80C1D410(this, 1);
+        DmAh_ChangeAnim(this, 1);
         this->actionFunc = func_80C1D92C;
     } else {
         this->actionFunc = func_80C1D7FC;

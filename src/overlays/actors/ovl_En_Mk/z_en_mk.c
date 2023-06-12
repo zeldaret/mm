@@ -55,22 +55,22 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 40, 0, { 0, 0, 0 } },
 };
 
-s32 func_809592E0(EnMk* this, s16 index) {
+s32 EnMk_ChangeAnim(EnMk* this, s16 animIndex) {
     AnimationHeader* sAnimations[] = {
         &object_mk_Anim_001C38, &object_mk_Anim_000438, &object_mk_Anim_0007D8,
         &object_mk_Anim_0010F4, &object_mk_Anim_001964,
     };
 
-    if (index == this->unk_27C) {
+    if (this->animIndex == animIndex) {
         return false;
     }
 
-    if ((index < 0) || (index >= 5)) {
+    if ((animIndex < 0) || (animIndex >= 5)) {
         return false;
     }
 
-    Animation_PlayLoop(&this->skelAnime, sAnimations[index]);
-    this->unk_27C = index;
+    Animation_PlayLoop(&this->skelAnime, sAnimations[animIndex]);
+    this->animIndex = animIndex;
     return true;
 }
 
@@ -85,8 +85,8 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_mk_Skel_006CA0, &object_mk_Anim_001C38, this->jointTable,
                        this->morphTable, OBJECT_MK_LIMB_MAX);
 
-    this->unk_27C = -1;
-    func_809592E0(this, 0);
+    this->animIndex = -1;
+    EnMk_ChangeAnim(this, 0);
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -133,11 +133,12 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 3:
             case 4:
             case 5:
-                func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
+                EnMk_ChangeAnim(this,
+                                play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
         }
     } else {
-        func_809592E0(this, 0);
+        EnMk_ChangeAnim(this, 0);
     }
 }
 

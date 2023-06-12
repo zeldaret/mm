@@ -17,7 +17,7 @@ void EnZot_Destroy(Actor* thisx, PlayState* play);
 void EnZot_Update(Actor* thisx, PlayState* play);
 void EnZot_Draw(Actor* thisx, PlayState* play);
 
-void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2);
+void EnZot_ChangeAnim(EnZot* this, s16 animIndex, u8 animMode);
 void func_80B97100(EnZot* this, PlayState* play);
 void func_80B97240(EnZot* this, PlayState* play);
 void func_80B97708(EnZot* this, PlayState* play);
@@ -89,7 +89,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     this->actionFunc = func_80B97100;
     SkelAnime_InitFlex(play, &this->skelAnime, &gZoraSkel, &gZoraIdleAnim, this->jointTable, this->morphTable, 20);
     Animation_PlayLoop(&this->skelAnime, &gZoraStandAnim);
-    this->unk_2F0 = 0;
+    this->animIndex = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     this->unk_2F2 = 0;
@@ -139,25 +139,25 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             } else {
                 this->path = NULL;
             }
-            func_80B96BEC(this, 5, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 5, ANIMMODE_LOOP);
             break;
 
         case 6:
             this->actionFunc = func_80B98998;
-            func_80B96BEC(this, 2, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             break;
 
         case 7:
             this->actionFunc = func_80B98998;
-            func_80B96BEC(this, 0, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 0, ANIMMODE_LOOP);
             break;
 
         case 8:
             this->actor.flags |= ACTOR_FLAG_2000000;
             this->actionFunc = func_80B98CA8;
-            func_80B96BEC(this, 5, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 5, ANIMMODE_LOOP);
             break;
 
         case 9:
@@ -166,7 +166,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 10:
             this->actionFunc = func_80B992C0;
-            func_80B96BEC(this, 1, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 1, ANIMMODE_LOOP);
             if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
                 this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
@@ -182,7 +182,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 16:
         case 17:
             this->actionFunc = func_80B98998;
-            func_80B96BEC(this, 2, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -198,15 +198,15 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
 
         case 19:
-            func_80B96BEC(this, 7, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 7, ANIMMODE_LOOP);
             break;
 
         case 20:
-            func_80B96BEC(this, 8, ANIMMODE_ONCE);
+            EnZot_ChangeAnim(this, 8, ANIMMODE_ONCE);
             break;
 
         case 21:
-            func_80B96BEC(this, 9, ANIMMODE_ONCE);
+            EnZot_ChangeAnim(this, 9, ANIMMODE_ONCE);
             break;
 
         case 22:
@@ -235,21 +235,22 @@ void EnZot_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80B96BEC(EnZot* this, s16 arg1, u8 arg2) {
+void EnZot_ChangeAnim(EnZot* this, s16 animIndex, u8 animMode) {
     static AnimationHeader* sAnimations[] = {
         &gZoraStandAnim,           &gZoraWalkAnim,           &gZoraSitAnim,           &gZoraRunAnim,
         &gZoraFixSpeakerStartAnim, &gZoraFixSpeakerLoopAnim, &gZoraFixSpeakerEndAnim, &gZoraBobHandAnim,
         &gZoraListenAnim,          &gZoraListenAnim,
     };
 
-    if ((arg1 >= 0) && (arg1 < 10)) {
-        if (arg1 >= 8) {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], 0.0f, arg1 - 8, arg1 - 8, arg2, 0.0f);
+    if ((animIndex >= 0) && (animIndex < 10)) {
+        if (animIndex >= 8) {
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], 0.0f, animIndex - 8, animIndex - 8, animMode,
+                             0.0f);
         } else {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]),
-                             arg2, -5.0f);
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimations[animIndex]), animMode, -5.0f);
         }
-        this->unk_2F0 = arg1;
+        this->animIndex = animIndex;
     }
 }
 
@@ -652,7 +653,7 @@ void func_80B9787C(EnZot* this, PlayState* play) {
 void func_80B979DC(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97B5C;
-        func_80B96BEC(this, 0, ANIMMODE_LOOP);
+        EnZot_ChangeAnim(this, 0, ANIMMODE_LOOP);
         this->actor.speed = 0.0f;
     } else {
         this->actor.speed = 1.5f;
@@ -681,7 +682,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
                 if (!(this->unk_2F2 & 2)) {
                     this->unk_2F2 |= 2;
                     this->actionFunc = func_80B979DC;
-                    func_80B96BEC(this, 1, ANIMMODE_LOOP);
+                    EnZot_ChangeAnim(this, 1, ANIMMODE_LOOP);
                 } else {
                     this->actionFunc = func_80B97B5C;
                 }
@@ -739,7 +740,7 @@ void func_80B97D6C(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97CC8;
         this->actor.speed = 0.0f;
-        func_80B96BEC(this, 0, ANIMMODE_LOOP);
+        EnZot_ChangeAnim(this, 0, ANIMMODE_LOOP);
     } else {
         this->actor.speed = 8.0f;
     }
@@ -752,13 +753,13 @@ void func_80B97D6C(EnZot* this, PlayState* play) {
 void func_80B97E0C(EnZot* this, PlayState* play) {
     if (this->unk_2F2 & 0x40) {
         this->actionFunc = func_80B97D6C;
-        func_80B96BEC(this, 3, ANIMMODE_LOOP);
+        EnZot_ChangeAnim(this, 3, ANIMMODE_LOOP);
     }
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
     if (this->unk_2F2 & 0x40) {
-        func_80B96BEC(this, 0, ANIMMODE_LOOP);
+        EnZot_ChangeAnim(this, 0, ANIMMODE_LOOP);
     }
 
     if (!(this->unk_2F2 & 4)) {
@@ -773,7 +774,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
     switch (play->msgCtx.currentTextId) {
         case 0x128C:
             this->unk_2F2 &= ~4;
-            func_80B96BEC(this, 6, ANIMMODE_ONCE);
+            EnZot_ChangeAnim(this, 6, ANIMMODE_ONCE);
             Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
             break;
 
@@ -787,7 +788,7 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80B97D6C;
             this->unk_2F2 |= 4;
-            func_80B96BEC(this, 3, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 3, ANIMMODE_LOOP);
             SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
             break;
 
@@ -811,7 +812,7 @@ void func_80B97FD0(EnZot* this, PlayState* play) {
         if ((this->actor.xzDistToPlayer < 120.0f) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97E0C;
-            func_80B96BEC(this, 6, ANIMMODE_ONCE);
+            EnZot_ChangeAnim(this, 6, ANIMMODE_ONCE);
         }
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
         func_800B8614(&this->actor, play, 120.0f);
@@ -826,8 +827,8 @@ void func_80B980FC(EnZot* this, PlayState* play) {
         this->actor.speed = 0.0f;
     } else {
         this->actor.speed = 8.0f;
-        if (this->unk_2F0 != 3) {
-            func_80B96BEC(this, 3, ANIMMODE_LOOP);
+        if (this->animIndex != 3) {
+            EnZot_ChangeAnim(this, 3, ANIMMODE_LOOP);
         }
     }
 }
@@ -1289,7 +1290,7 @@ void func_80B991E4(EnZot* this, PlayState* play) {
         } else {
             Message_CloseTextbox(play);
             this->actionFunc = func_80B992C0;
-            func_80B96BEC(this, 1, ANIMMODE_LOOP);
+            EnZot_ChangeAnim(this, 1, ANIMMODE_LOOP);
         }
     }
 }
@@ -1299,7 +1300,7 @@ void func_80B992C0(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B991E4;
         func_80B99160(this, play);
         this->actor.speed = 0.0f;
-        func_80B96BEC(this, 0, ANIMMODE_LOOP);
+        EnZot_ChangeAnim(this, 0, ANIMMODE_LOOP);
     } else {
         if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
             func_800B8614(&this->actor, play, 120.0f);
@@ -1322,7 +1323,7 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_2F2 &= ~0x40;
-    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2F0 != 0)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->animIndex != 0)) {
         this->unk_2F2 |= 0x40;
     }
 
@@ -1373,7 +1374,7 @@ s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         Matrix_RotateZS(this->unk_2CA.x * -1, MTXMODE_APPLY);
     }
 
-    if (((this->unk_2F0 == 8) || (this->unk_2F0 == 9)) &&
+    if (((this->animIndex == 8) || (this->animIndex == 9)) &&
         ((limbIndex == 8) || (limbIndex == 10) || (limbIndex == 13))) {
         rot->y += (s16)(Math_SinS(play->state.frames * ((limbIndex * 50) + 0x814)) * 200.0f);
         rot->z += (s16)(Math_CosS(play->state.frames * ((limbIndex * 50) + 0x940)) * 200.0f);

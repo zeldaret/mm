@@ -36,7 +36,7 @@ typedef struct EnGeg {
     /* 0x498 */ s16 csId;
     /* 0x49A */ s16 nextCsId;
     /* 0x49C */ s16 csIdList[8];
-    /* 0x4AC */ s32 unk_4AC;
+    /* 0x4AC */ s32 animIndex;
     /* 0x4B0 */ s16 unk_4B0;
     /* 0x4B4 */ Vec3f unk_4B4;
     /* 0x4C0 */ Vec3f unk_4C0[2];

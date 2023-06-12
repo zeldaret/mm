@@ -25,7 +25,7 @@ typedef struct EnZot {
     /* 0x2D8 */ Actor* unk_2D8[5];
     /* 0x2EC */ s16 unk_2EC;
     /* 0x2EE */ s16 unk_2EE;
-    /* 0x2F0 */ s16 unk_2F0;
+    /* 0x2F0 */ s16 animIndex;
     /* 0x2F2 */ u16 unk_2F2;
     /* 0x2F4 */ s16 unk_2F4;
     /* 0x2F8 */ EnZotActionFunc actionFunc;

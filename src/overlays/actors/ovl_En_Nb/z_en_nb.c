@@ -185,24 +185,24 @@ void EnNb_UpdateSkelAnime(EnNb* this) {
 }
 
 s32 EnNb_ChangeAnim(EnNb* this, EnNbAnimation animIndex) {
-    s32 shouldChange = false;
-    s32 didAnimationChange = false;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
     if ((animIndex == EN_NB_ANIM_0) || (animIndex == EN_NB_ANIM_1)) {
         if ((this->animIndex != EN_NB_ANIM_0) && (this->animIndex != EN_NB_ANIM_1)) {
-            shouldChange = true;
+            changeAnim = true;
         }
-    } else if (animIndex != this->animIndex) {
-        shouldChange = true;
+    } else if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (shouldChange) {
+    if (changeAnim) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return didAnimationChange;
+    return didAnimChange;
 }
 
 void func_80BBFF24(EnNb* this, PlayState* play) {

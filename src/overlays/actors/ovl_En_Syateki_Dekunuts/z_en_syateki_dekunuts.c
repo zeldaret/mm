@@ -259,7 +259,7 @@ void EnSyatekiDekunuts_WaitToEmerge(EnSyatekiDekunuts* this, PlayState* play) {
 
 void EnSyatekiDekunuts_SetupEmerge(EnSyatekiDekunuts* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_UP);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_UP);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = EnSyatekiDekunuts_Emerge;
@@ -283,7 +283,7 @@ void EnSyatekiDekunuts_Emerge(EnSyatekiDekunuts* this, PlayState* play) {
 }
 
 void EnSyatekiDekunuts_SetupLookAround(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_LOOK_AROUND);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_LOOK_AROUND);
     if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
         this->actionFunc = EnSyatekiDekunuts_LookAround;
     } else {
@@ -325,7 +325,7 @@ void EnSyatekiDekunuts_BonusLookAround(EnSyatekiDekunuts* this, PlayState* play)
 }
 
 void EnSyatekiDekunuts_SetupBurrow(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_BURROW);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_BURROW);
     this->actionFunc = EnSyatekiDekunuts_Burrow;
 }
 
@@ -381,7 +381,7 @@ void EnSyatekiDekunuts_SetupDead(EnSyatekiDekunuts* this, PlayState* play) {
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->isAlive = false;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE);
     this->timer = 160;
     this->actionFunc = EnSyatekiDekunuts_Dead;
 }
@@ -393,7 +393,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->timer == 160) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DIE);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DIE);
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->timer--;
         } else if (this->timer < 160) {

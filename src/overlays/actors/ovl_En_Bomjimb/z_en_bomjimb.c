@@ -174,30 +174,30 @@ void EnBomjimb_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80C0113C(EnBomjimb* this, s32 arg1, f32 arg2) {
-    this->unk_2DC = arg1;
-    this->unk_2B8 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_2DC], arg2, 0.0f, this->unk_2B8,
-                     sAnimationModes[this->unk_2DC], -4.0f);
+void EnBomjimb_ChangeAnim(EnBomjimb* this, s32 animIndex, f32 playSpeed) {
+    this->animIndex = animIndex;
+    this->unk_2B8 = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->unk_2B8,
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 void func_80C011CC(EnBomjimb* this) {
-    if ((this->unk_2DC == 5) &&
+    if ((this->animIndex == 5) &&
         (Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 10.0f) ||
          Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 18.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->unk_2DC == 19) &&
+    if ((this->animIndex == 19) &&
         (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_WALK);
     }
 
-    if ((this->unk_2DC == 18) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
+    if ((this->animIndex == 18) && Animation_OnFrame(&this->skelAnime, 15.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 
-    if ((this->unk_2DC == 7) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
+    if ((this->animIndex == 7) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BOMBERS_LAND);
     }
 }
@@ -281,7 +281,7 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp48)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp48, &sp60,
                                                                &colPoly, true, false, false, true, &sp44)) {
-                    func_80C0113C(this, 5, 1.0f);
+                    EnBomjimb_ChangeAnim(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_294, &sp48);
                     this->unk_2B0 = Rand_S16Offset(30, 50);
                     this->unk_2CC++;
@@ -303,9 +303,9 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
                                             false, true, &sp44)) {
                     this->unk_2AE = 0;
                     if (Rand_ZeroOne() < 0.5f) {
-                        func_80C0113C(this, 20, 1.0f);
+                        EnBomjimb_ChangeAnim(this, 20, 1.0f);
                     } else {
-                        func_80C0113C(this, 0, 1.0f);
+                        EnBomjimb_ChangeAnim(this, 0, 1.0f);
                     }
                     this->unk_2CC = 0;
                     this->unk_2B4 = 0.0f;
@@ -319,9 +319,9 @@ void func_80C014E4(EnBomjimb* this, PlayState* play) {
             if ((this->unk_2B0 == 0) || (sqrtf(SQ(x) + SQ(z)) < 4.0f)) {
                 this->unk_2AE = Rand_S16Offset(20, 20);
                 if (!(this->unk_2AE & 1)) {
-                    func_80C0113C(this, 20, 1.0f);
+                    EnBomjimb_ChangeAnim(this, 20, 1.0f);
                 } else {
-                    func_80C0113C(this, 0, 1.0f);
+                    EnBomjimb_ChangeAnim(this, 0, 1.0f);
                 }
                 this->unk_2CC = 0;
                 this->unk_2B4 = 0.0f;
@@ -353,7 +353,7 @@ void func_80C01984(EnBomjimb* this, PlayState* play) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NIW, this->actor.world.pos.x, this->actor.world.pos.y + 30.0f,
                     this->actor.world.pos.z, 0, this->actor.world.rot.y, 0, 2);
     if (this->unk_2E4 != NULL) {
-        func_80C0113C(this, 11, 1.0f);
+        EnBomjimb_ChangeAnim(this, 11, 1.0f);
     }
     this->unk_2CA = 0;
     this->actionFunc = func_80C01A24;
@@ -436,14 +436,14 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (this->unk_2DC != 7) {
+    if (this->animIndex != 7) {
         Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_294), 1, 3000,
                            0);
         Math_ApproachF(&this->actor.world.pos.x, this->unk_294.x, 0.3f, 2.0f);
         Math_ApproachF(&this->actor.world.pos.z, this->unk_294.z, 0.3f, 2.0f);
         if (sqrtf(SQ(this->actor.world.pos.x - this->unk_294.x) + SQ(this->actor.world.pos.z - this->unk_294.z)) <
             3.0f) {
-            func_80C0113C(this, 7, 1.0f);
+            EnBomjimb_ChangeAnim(this, 7, 1.0f);
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_294);
         }
     } else if (this->unk_2B8 <= sp3C) {
@@ -487,7 +487,7 @@ void func_80C01CD0(EnBomjimb* this, PlayState* play) {
 
 void func_80C01FD4(EnBomjimb* this) {
     this->actor.textId = 0x72D;
-    func_80C0113C(this, 9, 1.0f);
+    EnBomjimb_ChangeAnim(this, 9, 1.0f);
     this->unk_2CA = 4;
     this->actionFunc = func_80C0201C;
 }
@@ -514,7 +514,7 @@ void func_80C0201C(EnBomjimb* this, PlayState* play) {
 }
 
 void func_80C02108(EnBomjimb* this) {
-    func_80C0113C(this, 6, 1.0f);
+    EnBomjimb_ChangeAnim(this, 6, 1.0f);
     this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     func_80C012E0(this);
@@ -544,11 +544,11 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
         return;
     }
 
-    if (this->unk_2DC == 6) {
+    if (this->animIndex == 6) {
         f32 curFrame = this->skelAnime.curFrame;
 
         if (this->unk_2B8 <= curFrame) {
-            func_80C0113C(this, 19, 2.0f);
+            EnBomjimb_ChangeAnim(this, 19, 2.0f);
         }
         return;
     }
@@ -609,7 +609,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 }
 
 void func_80C0250C(EnBomjimb* this) {
-    func_80C0113C(this, 15, 1.0f);
+    EnBomjimb_ChangeAnim(this, 15, 1.0f);
     this->unk_2D4 = 0;
     this->actor.speed = 0.0f;
     this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
@@ -629,7 +629,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 200.0f) {
         this->unk_2D6 = BINANG_ROT180(this->actor.yawTowardsPlayer);
-        func_80C0113C(this, 19, 2.0f);
+        EnBomjimb_ChangeAnim(this, 19, 2.0f);
         this->actionFunc = func_80C0217C;
     } else if ((player->stateFlags3 == PLAYER_STATE3_1000000) || (this->actor.xzDistToPlayer > 410.0f)) {
         Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 3000, 0);
@@ -639,7 +639,7 @@ void func_80C02570(EnBomjimb* this, PlayState* play) {
 
 void func_80C0267C(EnBomjimb* this) {
     func_80C012E0(this);
-    func_80C0113C(this, 8, 1.0f);
+    EnBomjimb_ChangeAnim(this, 8, 1.0f);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->unk_2AE = 40;
@@ -662,9 +662,9 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     func_80C012E0(this);
-    func_80C0113C(this, 21, 1.0f);
+    EnBomjimb_ChangeAnim(this, 21, 1.0f);
     if ((player->transformation != PLAYER_FORM_DEKU) && (player->transformation != PLAYER_FORM_HUMAN)) {
-        func_80C0113C(this, 17, 1.0f);
+        EnBomjimb_ChangeAnim(this, 17, 1.0f);
         Message_StartTextbox(play, 0x72E, &this->actor);
         player->stateFlags1 |= PLAYER_STATE1_10000000;
         player->actor.freezeTimer = 3;
@@ -676,7 +676,7 @@ void func_80C02740(EnBomjimb* this, PlayState* play) {
 
     if (((player->transformation == PLAYER_FORM_DEKU) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10)) ||
         ((player->transformation == PLAYER_FORM_HUMAN) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02))) {
-        func_80C0113C(this, 17, 1.0f);
+        EnBomjimb_ChangeAnim(this, 17, 1.0f);
         Message_StartTextbox(play, 0x72E, &this->actor);
         player->stateFlags1 |= PLAYER_STATE1_10000000;
         player->actor.freezeTimer = 3;
@@ -738,15 +738,15 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if (this->unk_2DC == 21) {
+    if (this->animIndex == 21) {
         player->actor.freezeTimer = 3;
         if (this->unk_2B8 <= curFrame) {
-            func_80C0113C(this, 9, 1.0f);
+            EnBomjimb_ChangeAnim(this, 9, 1.0f);
         }
         return;
     }
 
-    if ((this->unk_2CA == 8) && (this->unk_2DC == 9)) {
+    if ((this->unk_2CA == 8) && (this->animIndex == 9)) {
         player->actor.freezeTimer = 3;
         if (this->unk_2E0 == 0) {
             if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
@@ -756,7 +756,7 @@ void func_80C02A14(EnBomjimb* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2DC == 15) && (this->unk_2CA == 8)) {
+    if ((this->animIndex == 15) && (this->unk_2CA == 8)) {
         player->actor.freezeTimer = 3;
     }
 

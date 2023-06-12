@@ -35,18 +35,18 @@ static AnimationInfo sAnimationInfo[] = {
 };
 
 void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frameCount;
+    f32 endFrame;
 
     animationInfo += animIndex;
 
     if (animationInfo->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animationInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void DmChar09_Init(Actor* thisx, PlayState* play) {

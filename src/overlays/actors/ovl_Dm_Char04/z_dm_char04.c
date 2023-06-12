@@ -30,18 +30,19 @@ ActorInit Dm_Char04_InitVars = {
     (ActorFunc)DmChar04_Draw,
 };
 
-void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 animIndex) {
+void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
     f32 endFrame;
 
-    animation += animIndex;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0.0f) {
-        endFrame = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        endFrame = animation->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
-                     animation->mode, animation->morphFrames);
+
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 static AnimationInfo sAnimationInfo[] = {

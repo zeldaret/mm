@@ -433,20 +433,20 @@ s32 func_80A86770(EnTru* this) {
 }
 
 void EnTru_UpdateSkelAnime(EnTru* this) {
-    this->skelAnime.playSpeed = this->playSpeed;
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
 s32 EnTru_ChangeAnim(EnTru* this, s32 animIndex) {
-    s32 didChange = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->animIndex) {
+    if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        didChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->playSpeed = this->skelAnime.playSpeed;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return didChange;
+    return didAnimChange;
 }
 
 void func_80A8697C(EnTru* this, PlayState* play) {

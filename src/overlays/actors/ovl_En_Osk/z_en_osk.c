@@ -65,7 +65,7 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
 
     this->actionFunc = func_80BF5F60;
-    this->unk_254 = -1;
+    this->animIndex = -1;
     this->cueId = -1;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
@@ -102,17 +102,17 @@ void EnOsk_Init(Actor* thisx, PlayState* play) {
 void EnOsk_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80BF5E00(EnOsk* this, AnimationHeader** animations, s16 index, f32 morphFrame) {
-    if (index == this->unk_254) {
+void func_80BF5E00(EnOsk* this, AnimationHeader** animations, s16 animIndex, f32 morphFrame) {
+    if (this->animIndex == animIndex) {
         return;
     }
-    Animation_MorphToLoop(&this->skelAnime, animations[index], morphFrame);
-    this->unk_254 = index;
+    Animation_MorphToLoop(&this->skelAnime, animations[animIndex], morphFrame);
+    this->animIndex = animIndex;
 }
 
-void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 index, f32 playSpeed) {
-    Animation_MorphToPlayOnce(&this->skelAnime, animations[index], playSpeed);
-    this->unk_254 = index;
+void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 animIndex, f32 playSpeed) {
+    Animation_MorphToPlayOnce(&this->skelAnime, animations[animIndex], playSpeed);
+    this->animIndex = animIndex;
 }
 
 void func_80BF5EBC(EnOsk* this, PlayState* play) {
@@ -177,7 +177,7 @@ void func_80BF609C(EnOsk* this, PlayState* play) {
                 this->unk_25C = Rand_ZeroFloat(3.0f);
             }
 
-            switch (this->unk_254) {
+            switch (this->animIndex) {
                 case 0:
                     if (Animation_OnFrame(&this->skelAnime, this->unk_25C) ||
                         Animation_OnFrame(&this->skelAnime, this->unk_25C + 8.0f)) {
@@ -276,7 +276,7 @@ void func_80BF6314(EnOsk* this) {
 
 void func_80BF6478(EnOsk* this) {
     if (this->actor.draw != NULL) {
-        switch (this->unk_254) {
+        switch (this->animIndex) {
             case 1:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
                     Animation_OnFrame(&this->skelAnime, 11.0f)) {
@@ -306,7 +306,7 @@ void func_80BF6478(EnOsk* this) {
 
 void func_80BF656C(EnOsk* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch (this->unk_254) {
+        switch (this->animIndex) {
             case 2:
                 func_80BF5E00(this, D_80BF6FB4, 1, 0.0f);
                 break;
@@ -401,7 +401,7 @@ void func_80BF67A8(EnOsk* this) {
 
 void func_80BF68E0(EnOsk* this) {
     if (this->actor.draw != NULL) {
-        switch (this->unk_254) {
+        switch (this->animIndex) {
             case 1:
             case 7:
                 if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 6.0f) ||
@@ -439,7 +439,7 @@ void func_80BF68E0(EnOsk* this) {
 
 void func_80BF6A20(EnOsk* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch (this->unk_254) {
+        switch (this->animIndex) {
             case 2:
                 func_80BF5E00(this, D_80BF6FE4, 1, -5.0f);
                 break;

@@ -685,44 +685,44 @@ Actor* func_80AF7DC4(EnPm* this, PlayState* play, s32 arg2) {
     return phi_s0;
 }
 
-void func_80AF7E6C(EnPm* this) {
-    this->skelAnime.playSpeed = this->unk_35C;
+void EnPm_UpdateSkelAnime(EnPm* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80AF7E98(EnPm* this, s32 arg1) {
-    s32 phi_v1 = false;
-    s32 ret = false;
+s32 EnPm_ChangeAnim(EnPm* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    switch (arg1) {
+    switch (animIndex) {
         case 0:
         case 1:
-            if ((this->unk_384 != 0) && (this->unk_384 != 1)) {
-                phi_v1 = true;
+            if ((this->animIndex != 0) && (this->animIndex != 1)) {
+                changeAnim = true;
             }
             break;
 
         case 3:
         case 4:
-            if ((this->unk_384 != 3) && (this->unk_384 != 4)) {
-                phi_v1 = true;
+            if ((this->animIndex != 3) && (this->animIndex != 4)) {
+                changeAnim = true;
             }
             break;
 
         default:
-            if (arg1 != this->unk_384) {
-                phi_v1 = true;
+            if (this->animIndex != animIndex) {
+                changeAnim = true;
             }
             break;
     }
 
-    if (phi_v1) {
-        this->unk_384 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
-        this->unk_35C = this->skelAnime.playSpeed;
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80AF7F68(EnPm* this, PlayState* play) {
@@ -909,7 +909,7 @@ s32 func_80AF8478(EnPm* this, PlayState* play) {
 
     switch (this->unk_378) {
         case 0:
-            func_80AF7E98(this, 2);
+            EnPm_ChangeAnim(this, 2);
             this->unk_356 &= ~0x20;
             this->unk_356 |= 0x200;
             this->unk_378++;
@@ -917,7 +917,7 @@ s32 func_80AF8478(EnPm* this, PlayState* play) {
 
         case 1:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_80AF7E98(this, 4);
+                EnPm_ChangeAnim(this, 4);
                 this->unk_356 &= ~0x200;
                 this->unk_356 |= 0x20;
                 this->unk_378++;
@@ -1022,7 +1022,7 @@ s32 func_80AF87C4(EnPm* this, PlayState* play) {
     if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 9) &&
         (play->curSpawn == 1)) {
         if (!this->unk_380) {
-            func_80AF7E98(this, 0);
+            EnPm_ChangeAnim(this, 0);
             this->unk_258 = 255;
             this->unk_380 = true;
             this->actor.speed = 4.0f;
@@ -1157,13 +1157,13 @@ void func_80AF8C68(EnPm* this, PlayState* play) {
 }
 
 s32 func_80AF8D84(EnPm* this, PlayState* play) {
-    switch (this->unk_384) {
+    switch (this->animIndex) {
         case 10:
-            func_80AF7E98(this, 9);
+            EnPm_ChangeAnim(this, 9);
             break;
 
         case 7:
-            func_80AF7E98(this, 0);
+            EnPm_ChangeAnim(this, 0);
             break;
     }
     return true;
@@ -1177,11 +1177,11 @@ s32 func_80AF8DD4(EnPm* this, PlayState* play) {
     if (player->stateFlags1 & (PLAYER_STATE1_40 | PLAYER_STATE1_400)) {
         this->unk_356 |= 0x400;
         if (this->unk_358 != textId) {
-            if ((this->unk_384 == 0) || (this->unk_384 == 1)) {
-                func_80AF7E98(this, 7);
+            if ((this->animIndex == 0) || (this->animIndex == 1)) {
+                EnPm_ChangeAnim(this, 7);
             }
             if ((textId == 0x277C) || (textId == 0x277D)) {
-                func_80AF7E98(this, 10);
+                EnPm_ChangeAnim(this, 10);
             }
         }
         this->unk_358 = textId;
@@ -1270,7 +1270,7 @@ s32 func_80AF9008(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             }
             this->unk_356 |= 0x9000;
             this->unk_356 |= 0x200;
-            func_80AF7E98(this, 0);
+            EnPm_ChangeAnim(this, 0);
             this->actor.gravity = 0.0f;
             ret = true;
         }
@@ -1334,17 +1334,17 @@ s32 func_80AF91E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->unk_356 |= 0x200;
 
             case 82:
-                func_80AF7E98(this, 0);
+                EnPm_ChangeAnim(this, 0);
                 break;
 
             case 91:
                 this->unk_356 |= 0x9000;
-                func_80AF7E98(this, 12);
+                EnPm_ChangeAnim(this, 12);
                 break;
 
             default:
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
-                func_80AF7E98(this, 0);
+                EnPm_ChangeAnim(this, 0);
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_90_08)) {
                     this->unk_356 |= 0x800;
                 }
@@ -1386,7 +1386,7 @@ s32 func_80AF94AC(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Flags_UnsetSwitch(play, 1);
             this->unk_394 = PLAYER_IA_NONE;
             this->unk_368 = 60.0f;
-            func_80AF7E98(this, 9);
+            EnPm_ChangeAnim(this, 9);
         }
         ret = true;
     }
@@ -1441,7 +1441,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 Flags_SetSwitch(play, 0);
                 this->unk_36C = 20;
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
-                func_80AF7E98(this, 3);
+                EnPm_ChangeAnim(this, 3);
                 break;
 
             case 3:
@@ -1451,13 +1451,13 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case 7:
             case 19:
                 this->unk_356 |= 0x9000;
-                func_80AF7E98(this, 11);
+                EnPm_ChangeAnim(this, 11);
                 break;
 
             case 18:
                 this->unk_356 |= 0x9000;
                 this->unk_356 |= 0x800;
-                func_80AF7E98(this, 5);
+                EnPm_ChangeAnim(this, 5);
                 break;
 
             case 23:
@@ -1472,7 +1472,7 @@ s32 func_80AF95E8(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 }
                 SubS_UpdateFlags(&this->unk_356, 3, 7);
                 this->unk_356 |= 0x9000;
-                func_80AF7E98(this, 3);
+                EnPm_ChangeAnim(this, 3);
                 break;
         }
         ret = true;
@@ -1505,10 +1505,10 @@ s32 func_80AF992C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->unk_368 = 80.0f;
     if (scheduleOutput->result == 14) {
         this->unk_356 &= ~0x200;
-        func_80AF7E98(this, 13);
+        EnPm_ChangeAnim(this, 13);
     } else {
         this->unk_356 &= ~0x200;
-        func_80AF7E98(this, 8);
+        EnPm_ChangeAnim(this, 8);
     }
     return true;
 }
@@ -1522,9 +1522,9 @@ s32 func_80AF9A0C(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_356 |= 0x9000;
         if (this->unk_258 != 0) {
             this->unk_356 |= 0x800;
-            func_80AF7E98(this, 5);
+            EnPm_ChangeAnim(this, 5);
         } else {
-            func_80AF7E98(this, 3);
+            EnPm_ChangeAnim(this, 3);
         }
         ret = true;
     }
@@ -1540,9 +1540,9 @@ s32 func_80AF9AB0(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_356 |= 0x9000;
         if (this->unk_258 != 0) {
             this->unk_356 |= 0x800;
-            func_80AF7E98(this, 5);
+            EnPm_ChangeAnim(this, 5);
         } else {
-            func_80AF7E98(this, 3);
+            EnPm_ChangeAnim(this, 3);
         }
         ret = true;
     }
@@ -1558,9 +1558,9 @@ s32 func_80AF9B54(EnPm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_356 |= 0x20;
         if (this->unk_258 != 0) {
             this->unk_356 |= 0x800;
-            func_80AF7E98(this, 5);
+            EnPm_ChangeAnim(this, 5);
         } else {
-            func_80AF7E98(this, 3);
+            EnPm_ChangeAnim(this, 3);
         }
         ret = true;
     }
@@ -1806,12 +1806,12 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
         case 16:
         case 17:
         case 18:
-            if ((this->unk_384 == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_80AF7E98(this, 6);
+            if ((this->animIndex == 5) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+                EnPm_ChangeAnim(this, 6);
                 this->unk_36C = 40;
-            } else if ((this->unk_384 == 6) && (DECR(this->unk_36C) == 0)) {
+            } else if ((this->animIndex == 6) && (DECR(this->unk_36C) == 0)) {
                 this->unk_356 &= ~0x800;
-                func_80AF7E98(this, 4);
+                EnPm_ChangeAnim(this, 4);
             }
             break;
 
@@ -1821,11 +1821,11 @@ s32 func_80AFA170(EnPm* this, PlayState* play) {
         case 6:
         case 7:
         case 19:
-            if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_80AF7E98(this, 4);
+            if ((this->animIndex == 11) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+                EnPm_ChangeAnim(this, 4);
             }
 
-            if ((this->unk_384 == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
+            if ((this->animIndex == 11) && Animation_OnFrame(&this->skelAnime, 8.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMACHINE_HIT_OPEN);
             }
 
@@ -2059,8 +2059,8 @@ void EnPm_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_mm_Skel_0096E8, NULL, this->jointTable, this->morphTable, 16);
-    this->unk_384 = -1;
-    func_80AF7E98(this, 0);
+    this->animIndex = -1;
+    EnPm_ChangeAnim(this, 0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
@@ -2084,14 +2084,14 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
 
     if (!func_80AF86F0(this, play) && func_80AF87C4(this, play)) {
         func_80AFA724(this, play);
-        func_80AF7E6C(this);
+        EnPm_UpdateSkelAnime(this);
         func_80AF8AC8(this);
     } else {
         this->actionFunc(this, play);
         func_80AF7BAC(this);
         if (this->unk_258 != 0) {
             func_80AF8DD4(this, play);
-            func_80AF7E6C(this);
+            EnPm_UpdateSkelAnime(this);
             func_80AF8AC8(this);
             func_8013C964(&this->actor, play, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
             Actor_MoveWithGravity(&this->actor);

@@ -129,20 +129,20 @@ void EnStopheishi_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnStopHeishi_ChangeAnim(EnStopheishi* this, s32 animIndex) {
-    s32 mode;
+    s32 animMode;
     f32 morphFrames;
 
     this->currentAnim = animIndex;
     this->currentAnimFrameCount = Animation_GetLastFrame(sAnimations[animIndex]);
-    mode = ANIMMODE_ONCE;
+    animMode = ANIMMODE_ONCE;
     morphFrames = -10.0f;
     if ((animIndex >= SOLDIER_ANIM_STAND_HAND_ON_HIP) && (animIndex != SOLDIER_ANIM_4)) {
-        mode = ANIMMODE_LOOP;
+        animMode = ANIMMODE_LOOP;
     }
     if (animIndex == SOLDIER_ANIM_5) {
         morphFrames = 0.0f;
     }
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->currentAnimFrameCount, mode,
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->currentAnimFrameCount, animMode,
                      morphFrames);
 }
 

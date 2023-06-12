@@ -86,14 +86,14 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                 case 1:
                     this->keepEyesShut = false;
                     this->eyeIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                     break;
                 case 2:
                     this->keepEyesShut = true;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 12);
                     break;
                 case 3:
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 13);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 13);
                     break;
             }
         } else if (sCueId == 3) {

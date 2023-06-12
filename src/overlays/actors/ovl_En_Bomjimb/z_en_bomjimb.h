@@ -55,7 +55,7 @@ typedef struct EnBomjimb {
     /* 0x2D4 */ s16 unk_2D4;
     /* 0x2D6 */ s16 unk_2D6;
     /* 0x2D8 */ UNK_TYPE1 unk2D8[4];
-    /* 0x2DC */ s32 unk_2DC;
+    /* 0x2DC */ s32 animIndex;
     /* 0x2E0 */ u8 unk_2E0;
     /* 0x2E4 */ Actor* unk_2E4;
     /* 0x2E8 */ ColliderCylinder collider;

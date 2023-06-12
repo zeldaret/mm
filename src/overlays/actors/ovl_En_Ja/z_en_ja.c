@@ -90,26 +90,26 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_boj_Anim_002734, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
-    { &object_boj_Anim_002734, 1.0f, 0, -1, 0, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
-    { &object_boj_Anim_004078, 1.0f, 0, -1, 0, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
+    { &object_boj_Anim_002734, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, 0 },
+    { &object_boj_Anim_002734, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, { &object_boj_Anim_0033B0, 1.0f, 0, -1, 0, -4 },
+    { &object_boj_Anim_004078, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
 };
 
-void func_80BC1900(EnJa* this) {
-    this->skelAnime.playSpeed = this->unk_344;
+void EnJa_UpdateSkelAnime(EnJa* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BC192C(EnJa* this, s32 arg1) {
-    s32 ret = false;
+s32 EnJa_ChangeAnim(EnJa* this, s32 animIndex) {
+    s32 didAnimChange = false;
 
-    if (arg1 != this->unk_36C) {
-        this->unk_36C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
-        this->unk_344 = this->skelAnime.playSpeed;
+    if (this->animIndex != animIndex) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BC1984(EnJa* this, PlayState* play) {
@@ -245,7 +245,7 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (func_80BC1AE0(this, play)) {
         SubS_UpdateFlags(&this->unk_340, 3, 7);
         this->unk_340 |= 0x10;
-        func_80BC192C(this, 5);
+        EnJa_ChangeAnim(this, 5);
         func_80BC2EA4(this);
         ret = true;
     }
@@ -257,9 +257,9 @@ s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_80BC1AE0(this, play)) {
         if (ENJA_GET_3(&this->actor) == 0) {
-            func_80BC192C(this, 1);
+            EnJa_ChangeAnim(this, 1);
         } else {
-            func_80BC192C(this, 4);
+            EnJa_ChangeAnim(this, 4);
         }
         SubS_UpdateFlags(&this->unk_340, 3, 7);
         this->actor.shape.shadowDraw = NULL;
@@ -348,8 +348,8 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, NULL, this->jointTable, this->morphTable, 16);
-    this->unk_36C = -1;
-    func_80BC192C(this, 0);
+    this->animIndex = -1;
+    EnJa_ChangeAnim(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
@@ -379,7 +379,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_1D8.unk_00 != 0) {
-        func_80BC1900(this);
+        EnJa_UpdateSkelAnime(this);
         func_80BC1A68(this);
         func_80BC1D70(this, play);
 

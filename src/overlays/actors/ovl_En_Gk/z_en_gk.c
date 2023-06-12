@@ -260,7 +260,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
         this->unk_2E4 = 3;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
         this->actionFunc = func_80B521E8;
         return true;
     }
@@ -488,7 +488,7 @@ void func_80B51308(EnGk* this, PlayState* play) {
 
     if ((this->unk_2E4 == 7) && (sp1E == lastFrame)) {
         this->unk_2E4 = 8;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 8);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 8);
     }
 }
 
@@ -498,7 +498,7 @@ void func_80B51398(EnGk* this, PlayState* play) {
 
     if ((this->unk_2E4 == 9) && (sp1E == lastFrame)) {
         this->unk_2E4 = 10;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 10);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 10);
     }
 }
 
@@ -578,7 +578,7 @@ void func_80B51510(EnGk* this, PlayState* play) {
                     Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
                     break;
             }
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_31A);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_31A);
         }
 
         if (this->unk_31A == 7) {
@@ -600,13 +600,13 @@ void func_80B51698(EnGk* this, PlayState* play) {
         switch (this->unk_2E4) {
             case 0:
                 this->unk_2E4 = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
                 this->actionFunc = func_80B5216C;
                 break;
 
             case 2:
                 this->unk_2E4 = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                 this->actionFunc = func_80B5202C;
                 break;
         }
@@ -621,13 +621,13 @@ void func_80B51760(EnGk* this, PlayState* play) {
         lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
         if (sp2E == lastFrame) {
             this->unk_2E4 = 5;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_2E4);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_2E4);
         }
     } else if (this->unk_2E4 == 10) {
         lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
         if (sp2E == lastFrame) {
             this->unk_2E4 = 11;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_2E4);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_2E4);
         }
     } else {
         if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
@@ -693,7 +693,7 @@ void func_80B51970(EnGk* this, PlayState* play) {
         if (this->unk_2E4 != 10) {
             if (this->unk_2E4 != 9) {
                 this->unk_2E4 = 9;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 9);
             } else {
                 func_80B51398(this, play);
             }
@@ -759,7 +759,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
         if (this->unk_2E4 != 10) {
             if (this->unk_2E4 != 9) {
                 this->unk_2E4 = 9;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 9);
             } else {
                 func_80B51398(this, play);
             }
@@ -778,7 +778,7 @@ void func_80B51D9C(EnGk* this, PlayState* play) {
         if (this->unk_1E4 & 4) {
             this->unk_1E4 &= ~4;
             this->unk_2E4 = 6;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 6);
             this->actionFunc = func_80B51EA4;
         } else {
             this->unk_1E4 |= 4;
@@ -884,7 +884,7 @@ void func_80B521E8(EnGk* this, PlayState* play) {
 
     if (sp1E == lastFrame) {
         this->unk_2E4 = 1;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
         this->actionFunc = func_80B5227C;
     }
 }
@@ -1019,7 +1019,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
 
     if (ENGK_GET_F(&this->actor) == ENGK_F_1) {
         this->unk_2E4 = 5;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
         if (play->sceneId == SCENE_17SETUGEN2) {
             if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
                 Actor_Kill(&this->actor);
@@ -1057,7 +1057,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
         this->csId = this->actor.csId;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
         this->actionFunc = func_80B5202C;
     } else {
         this->actionFunc = func_80B52654;

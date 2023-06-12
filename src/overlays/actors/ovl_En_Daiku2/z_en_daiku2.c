@@ -120,25 +120,25 @@ void EnDaiku2_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BE6408(EnDaiku2* this, s32 arg1) {
+void EnDaiku2_ChangeAnim(EnDaiku2* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &object_daiku_Anim_002FA0, &object_daiku_Anim_00ACD0, &object_daiku_Anim_00C92C, &object_daiku_Anim_000C44,
         &object_daiku_Anim_00C234, &object_daiku_Anim_000600, &object_daiku_Anim_001114, &object_daiku_Anim_00B690,
         &object_daiku_Anim_001A24, &object_daiku_Anim_002134, &object_daiku_Anim_00D328,
     };
-    static u8 D_80BE7958[] = {
+    static u8 sAnimationModes[] = {
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
     };
-    f32 sp34 = 1.0f;
+    f32 playSpeed = 1.0f;
 
-    this->unk_276 = arg1;
-    this->unk_284 = Animation_GetLastFrame(sAnimations[this->unk_276]);
-    if (this->unk_276 == 3) {
-        sp34 = 2.0f;
+    this->animIndex = animIndex;
+    this->unk_284 = Animation_GetLastFrame(sAnimations[this->animIndex]);
+    if (this->animIndex == 3) {
+        playSpeed = 2.0f;
     }
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_276], sp34, 0.0f, this->unk_284, D_80BE7958[this->unk_276],
-                     -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->unk_284,
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 s32 func_80BE64C0(EnDaiku2* this, PlayState* play) {
@@ -170,7 +170,7 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_02)) {
                 this->unk_28A = 6;
             }
-            func_80BE6408(this, 8);
+            EnDaiku2_ChangeAnim(this, 8);
             break;
 
         case 1:
@@ -178,21 +178,21 @@ void func_80BE65B4(EnDaiku2* this, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_04)) {
                 this->unk_28A = 7;
             }
-            func_80BE6408(this, 8);
+            EnDaiku2_ChangeAnim(this, 8);
             break;
 
         case 2:
             this->unk_28A = 4;
             this->unk_264 = 1.0f;
-            func_80BE6408(this, 10);
+            EnDaiku2_ChangeAnim(this, 10);
             break;
     }
 
     this->unk_264 = 1.0f;
     if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(play, this->unk_278)) {
         this->unk_28A = 5;
-        if (this->unk_276 != 10) {
-            func_80BE6408(this, 10);
+        if (this->animIndex != 10) {
+            EnDaiku2_ChangeAnim(this, 10);
         }
     }
 
@@ -214,8 +214,8 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
     if (sp98 != 2) {
         if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(play, this->unk_278)) {
             this->unk_28A = 5;
-            if (this->unk_276 != 10) {
-                func_80BE6408(this, 10);
+            if (this->animIndex != 10) {
+                EnDaiku2_ChangeAnim(this, 10);
             }
         }
     }
@@ -233,7 +233,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
     }
 
     func_800B8614(&this->actor, play, 80.0f);
-    if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
+    if ((this->animIndex == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
         for (i = 0; i < 10; i++) {
@@ -260,22 +260,22 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
     temp_v0 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.home.rot.y));
     if (temp_v0 > 0x2890) {
         if (sp98 != 2) {
-            if ((this->unk_276 == 5) || (this->unk_276 == 9)) {
-                func_80BE6408(this, 10);
-            } else if ((this->unk_276 == 10) && (this->unk_284 <= sp9C)) {
+            if ((this->animIndex == 5) || (this->animIndex == 9)) {
+                EnDaiku2_ChangeAnim(this, 10);
+            } else if ((this->animIndex == 10) && (this->unk_284 <= sp9C)) {
                 this->unk_284 = Animation_GetLastFrame(&object_daiku_Anim_002134);
                 Animation_Change(&this->skelAnime, &object_daiku_Anim_002134, -1.0f, this->unk_284, 0.0f, ANIMMODE_ONCE,
                                  -4.0f);
-                this->unk_276 = 11;
-            } else if ((this->unk_276 == 11) && (sp9C <= 0.0f)) {
-                func_80BE6408(this, 8);
+                this->animIndex = 11;
+            } else if ((this->animIndex == 11) && (sp9C <= 0.0f)) {
+                EnDaiku2_ChangeAnim(this, 8);
             }
         }
     } else if (sp98 != 2) {
-        if ((this->unk_276 != 9) && (this->unk_276 != 10)) {
-            func_80BE6408(this, 9);
-        } else if ((this->unk_276 == 9) && (this->unk_284 <= sp9C)) {
-            func_80BE6408(this, 10);
+        if ((this->animIndex != 9) && (this->animIndex != 10)) {
+            EnDaiku2_ChangeAnim(this, 9);
+        } else if ((this->animIndex == 9) && (this->unk_284 <= sp9C)) {
+            EnDaiku2_ChangeAnim(this, 10);
         }
     }
 }
@@ -287,7 +287,7 @@ void func_80BE6B40(EnDaiku2* this, PlayState* play) {
     if ((day != 3) && Flags_GetSwitch(play, this->unk_278)) {
         this->actionFunc = func_80BE6BC0;
     } else {
-        func_80BE6408(this, 5);
+        EnDaiku2_ChangeAnim(this, 5);
         this->actionFunc = func_80BE6BC0;
     }
 }
@@ -322,7 +322,7 @@ void func_80BE6BC0(EnDaiku2* this, PlayState* play) {
 }
 
 void func_80BE6CFC(EnDaiku2* this) {
-    func_80BE6408(this, 3);
+    EnDaiku2_ChangeAnim(this, 3);
     this->unk_288 = 2;
     this->actionFunc = func_80BE6D40;
     this->unk_264 = 0.0f;
@@ -354,7 +354,7 @@ void func_80BE6D40(EnDaiku2* this, PlayState* play) {
 }
 
 void func_80BE6EB0(EnDaiku2* this) {
-    func_80BE6408(this, 2);
+    EnDaiku2_ChangeAnim(this, 2);
     this->unk_274 = 0;
     this->unk_288 = 3;
     this->actionFunc = func_80BE6EF0;
@@ -387,14 +387,14 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
              4.0f) &&
             (this->path != NULL)) {
             if (!func_80BE64C0(this, play)) {
-                if (this->unk_276 != 3) {
-                    func_80BE6408(this, 3);
+                if (this->animIndex != 3) {
+                    EnDaiku2_ChangeAnim(this, 3);
                 }
 
                 if ((this->unk_278 >= ENDAIKU2_GET_7F_0) && Flags_GetSwitch(play, this->unk_278)) {
                     this->unk_28A = 5;
-                    if (this->unk_276 != 10) {
-                        func_80BE6408(this, 10);
+                    if (this->animIndex != 10) {
+                        EnDaiku2_ChangeAnim(this, 10);
                     }
                     func_80BE65B4(this, play);
                     return;
@@ -425,7 +425,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
 }
 
 void func_80BE71A0(EnDaiku2* this) {
-    func_80BE6408(this, 9);
+    EnDaiku2_ChangeAnim(this, 9);
     this->actionFunc = func_80BE71D8;
 }
 
@@ -434,11 +434,11 @@ void func_80BE71D8(EnDaiku2* this, PlayState* play) {
 
     if (func_80BE64C0(this, play)) {
         func_80BE6CFC(this);
-    } else if ((this->unk_276 == 9) && (this->unk_284 <= currentFrame)) {
-        func_80BE6408(this, 0);
-    } else if ((this->unk_276 == 0) && (this->unk_284 <= currentFrame)) {
-        func_80BE6408(this, 5);
-    } else if ((this->unk_276 == 5) && (this->unk_284 <= currentFrame)) {
+    } else if ((this->animIndex == 9) && (this->unk_284 <= currentFrame)) {
+        EnDaiku2_ChangeAnim(this, 0);
+    } else if ((this->animIndex == 0) && (this->unk_284 <= currentFrame)) {
+        EnDaiku2_ChangeAnim(this, 5);
+    } else if ((this->animIndex == 5) && (this->unk_284 <= currentFrame)) {
         func_80BE65B4(this, play);
     }
 }

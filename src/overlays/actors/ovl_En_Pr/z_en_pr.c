@@ -105,7 +105,7 @@ static AnimationHeader* sAnimations[] = {
     &object_pr_Anim_000740, &object_pr_Anim_000268,
 };
 
-u8 D_80A33934[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
 };
 
@@ -175,19 +175,19 @@ void EnPr_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80A3242C(EnPr* this, s32 arg0) {
-    f32 sp34;
+void EnPr_ChangeAnim(EnPr* this, s32 animIndex) {
+    f32 playSpeed;
 
-    this->unk_21C = arg0;
-    sp34 = 1.0f;
-    this->unk_2BC = Animation_GetLastFrame(sAnimations[arg0]);
+    this->animIndex = animIndex;
+    playSpeed = 1.0f;
+    this->unk_2BC = Animation_GetLastFrame(sAnimations[animIndex]);
 
-    if (this->unk_21C == 2) {
-        sp34 = 2.0f;
+    if (this->animIndex == 2) {
+        playSpeed = 2.0f;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[this->unk_21C], sp34, 0.0f, this->unk_2BC, D_80A33934[this->unk_21C],
-                     -2.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->unk_2BC,
+                     sAnimationModes[this->animIndex], -2.0f);
 }
 
 s32 func_80A324E0(EnPr* this, PlayState* play) {
@@ -237,8 +237,8 @@ s32 func_80A325E4(EnPr* this) {
 }
 
 void func_80A326F0(EnPr* this) {
-    if (this->unk_21C != 0) {
-        func_80A3242C(this, 0);
+    if (this->animIndex != 0) {
+        EnPr_ChangeAnim(this, 0);
     }
     this->unk_206 = 0;
     this->actor.speed = 1.0f;
@@ -271,8 +271,8 @@ void func_80A32740(EnPr* this, PlayState* play) {
 }
 
 void func_80A32854(EnPr* this) {
-    if (this->unk_21C != 0) {
-        func_80A3242C(this, 0);
+    if (this->animIndex != 0) {
+        EnPr_ChangeAnim(this, 0);
     }
     this->unk_206 = 1;
     this->actionFunc = func_80A3289C;
@@ -305,8 +305,8 @@ void func_80A32984(EnPr* this, PlayState* play) {
         if (func_80A324E0(this, play)) {
             this->unk_22C += 0x1000;
         } else {
-            if (this->unk_21C != 0) {
-                func_80A3242C(this, 0);
+            if (this->animIndex != 0) {
+                EnPr_ChangeAnim(this, 0);
             }
             this->unk_206 = 3;
             this->actionFunc = func_80A32A40;
@@ -365,7 +365,7 @@ void func_80A32B20(EnPr* this, PlayState* play) {
 }
 
 void func_80A32CDC(EnPr* this) {
-    func_80A3242C(this, 3);
+    EnPr_ChangeAnim(this, 3);
     this->unk_206 = 5;
     this->unk_20A = 400;
     this->unk_2C0 = 0.0f;
@@ -394,7 +394,7 @@ void func_80A32D28(EnPr* this, PlayState* play) {
 }
 
 void func_80A32E60(EnPr* this) {
-    func_80A3242C(this, 4);
+    EnPr_ChangeAnim(this, 4);
     this->unk_206 = 6;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A32EA4;

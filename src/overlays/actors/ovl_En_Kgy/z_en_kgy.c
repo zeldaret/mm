@@ -17,7 +17,7 @@ void EnKgy_Destroy(Actor* thisx, PlayState* play);
 void EnKgy_Update(Actor* thisx, PlayState* play);
 void EnKgy_Draw(Actor* thisx, PlayState* play);
 
-void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 morphFrames);
+void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 animMode, f32 morphFrames);
 EnKbt* EnKgy_FindZubora(PlayState* play);
 ObjIcePoly* EnKgy_FindIceBlock(PlayState* play);
 void func_80B40D30(PlayState* play);
@@ -51,7 +51,7 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_kgy_Skel_00F910, &object_kgy_Anim_004B98, this->jointTable,
                        this->morphTable, 23);
-    this->unk_2D2 = -1;
+    this->animIndex = -1;
     this->unk_29C = 0;
     this->unk_2E4 = 0;
     this->unk_2E2 = -1;
@@ -109,7 +109,7 @@ void EnKgy_Destroy(Actor* thisx, PlayState* play) {
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
 
-void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 morphFrames) {
+void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     static AnimationHeader* sAnimations[] = {
         &object_kgy_Anim_004B98, &object_kgy_Anim_0008FC, &object_kgy_Anim_00292C, &object_kgy_Anim_0042E4,
         &object_kgy_Anim_0101F0, &object_kgy_Anim_001764, &object_kgy_Anim_003334, &object_kgy_Anim_010B84,
@@ -117,13 +117,13 @@ void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 morphFrames) {
     };
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimations[animIndex]), mode, morphFrames);
-    this->unk_2D2 = animIndex;
+                     Animation_GetLastFrame(sAnimations[animIndex]), animMode, morphFrames);
+    this->animIndex = animIndex;
 }
 
-void func_80B40BC0(EnKgy* this, s16 arg1) {
-    if (arg1 != this->unk_2D2) {
-        EnKgy_ChangeAnim(this, arg1, ANIMMODE_LOOP, -5.0f);
+void func_80B40BC0(EnKgy* this, s16 animIndex) {
+    if (this->animIndex != animIndex) {
+        EnKgy_ChangeAnim(this, animIndex, ANIMMODE_LOOP, -5.0f);
     }
 }
 
@@ -419,7 +419,7 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
     this->actor.focus.pos = this->unk_2A8;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_2D2 == 6) {
+        if (this->animIndex == 6) {
             if (this->getItemId > GI_NONE) {
                 EnKgy_ChangeAnim(this, 6, ANIMMODE_ONCE, 0.0f);
                 this->getItemId--;
@@ -608,7 +608,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2D2 == 3)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->animIndex == 3)) {
         func_80B40BC0(this, 4);
     }
 
@@ -887,10 +887,10 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
     u16 textId;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_2D2 == 5) {
+        if (this->animIndex == 5) {
             func_80B40BC0(this, 7);
         }
-        if (this->unk_2D2 == 3) {
+        if (this->animIndex == 3) {
             func_80B40BC0(this, 4);
         }
     }
@@ -932,14 +932,14 @@ void func_80B427C8(EnKgy* this, PlayState* play) {
 }
 
 void func_80B4296C(EnKgy* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2D2 == 8)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->animIndex == 8)) {
         func_80B40BC0(this, 2);
     }
 
     this->actor.focus.pos = this->unk_2A8;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B427C8;
-        if (this->unk_2D2 == 4) {
+        if (this->animIndex == 4) {
             func_80B40BC0(this, 7);
         } else {
             EnKgy_ChangeAnim(this, 5, ANIMMODE_ONCE, -5.0f);
@@ -958,11 +958,11 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
     s32 pad;
 
     if (SkelAnime_Update(&this->skelAnime)) {
-        if (this->unk_2D2 == 5) {
+        if (this->animIndex == 5) {
             func_80B40BC0(this, 1);
         }
 
-        if (this->unk_2D2 == 3) {
+        if (this->animIndex == 3) {
             func_80B40BC0(this, 4);
         }
     }
@@ -1044,7 +1044,7 @@ void func_80B42A8C(EnKgy* this, PlayState* play) {
 }
 
 void func_80B42D28(EnKgy* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->unk_2D2 == 8)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->animIndex == 8)) {
         func_80B40BC0(this, 2);
     }
 
@@ -1065,7 +1065,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
             this->actionFunc = func_80B4296C;
             SET_WEEKEVENTREG(WEEKEVENTREG_21_01);
         } else if (this->actor.xzDistToPlayer < 200.0f) {
-            if (this->unk_2D2 == 4) {
+            if (this->animIndex == 4) {
                 this->actor.textId = 0xC2D;
             } else {
                 this->actor.textId = 0xC1D;
@@ -1073,7 +1073,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
             func_800B8614(&this->actor, play, 210.0f);
         }
 
-        if ((this->unk_2D2 == 0) && (this->actor.xzDistToPlayer < 200.0f)) {
+        if ((this->animIndex == 0) && (this->actor.xzDistToPlayer < 200.0f)) {
             EnKgy_ChangeAnim(this, 8, ANIMMODE_ONCE, 5.0f);
         }
     }
@@ -1085,7 +1085,7 @@ void EnKgy_Update(Actor* thisx, PlayState* play) {
     Vec3s sp30;
 
     this->actionFunc(this, play);
-    if (this->unk_2D2 == 2) {
+    if (this->animIndex == 2) {
         sp30.z = 0;
         sp30.y = 0;
         sp30.x = 0;

@@ -32,7 +32,7 @@ typedef struct EnSellnuts {
     /* 0x344 */ s16 unk_344;
     /* 0x346 */ UNK_TYPE1 unk346[0x4];
     /* 0x34A */ s16 unk_34A;
-    /* 0x34C */ s16 unk_34C;
+    /* 0x34C */ s16 animIndex;
     /* 0x34E */ s16 unk_34E;
     /* 0x350 */ s16 unk_350;
     /* 0x354 */ f32 unk_354;

@@ -107,7 +107,7 @@ static AnimationHeader* sAnimations[] = {
     &object_cs_Anim_005DC4, &object_cs_Anim_0026B0, &object_cs_Anim_0036B0, &object_cs_Anim_0031C4,
 };
 
-u8 D_80C00AE4[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE,
     ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
     ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
@@ -208,11 +208,11 @@ void func_80BFE32C(EnBomjima* this, PlayState* play, s32 arg2) {
     }
 }
 
-void func_80BFE494(EnBomjima* this, s32 animIndex, f32 playSpeed) {
+void EnBomjima_ChangeAnim(EnBomjima* this, s32 animIndex, f32 playSpeed) {
     this->animIndex = animIndex;
     this->animLastFrame = Animation_GetLastFrame(sAnimations[animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], playSpeed, 0.0f, this->animLastFrame,
-                     D_80C00AE4[this->animIndex], -4.0f);
+                     sAnimationModes[this->animIndex], -4.0f);
 }
 
 void func_80BFE524(EnBomjima* this) {
@@ -272,7 +272,7 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
                 abs = ABS_ALT(BINANG_SUB(this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &sp54)));
                 if ((abs < 0x4000) && !BgCheck_EntityLineTest1(&play->colCtx, &this->actor.world.pos, &sp54, &sp6C,
                                                                &sp50, true, false, false, true, &sp4C)) {
-                    func_80BFE494(this, 5, 1.0f);
+                    EnBomjima_ChangeAnim(this, 5, 1.0f);
                     Math_Vec3f_Copy(&this->unk_2A4, &sp54);
                     this->unk_2BE = Rand_S16Offset(30, 50);
                     this->unk_2A2++;
@@ -297,9 +297,9 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
                                             false, true, &sp4C)) {
                     this->unk_2C0 = 0;
                     if (Rand_ZeroOne() < 0.5f) {
-                        func_80BFE494(this, 19, 1.0f);
+                        EnBomjima_ChangeAnim(this, 19, 1.0f);
                     } else {
-                        func_80BFE494(this, 0, 1.0f);
+                        EnBomjima_ChangeAnim(this, 0, 1.0f);
                     }
                     this->unk_2A2 = 0;
                     this->unk_2D0 = 0.0f;
@@ -313,9 +313,9 @@ void func_80BFE67C(EnBomjima* this, PlayState* play) {
             if ((this->unk_2BE == 0) || (sqrtf(SQ(x) + SQ(z)) < 4.0f)) {
                 this->unk_2C0 = Rand_S16Offset(20, 20);
                 if (!(this->unk_2C0 & 1)) {
-                    func_80BFE494(this, 19, 1.0f);
+                    EnBomjima_ChangeAnim(this, 19, 1.0f);
                 } else {
-                    func_80BFE494(this, 0, 1.0f);
+                    EnBomjima_ChangeAnim(this, 0, 1.0f);
                 }
                 this->unk_2A2 = 0;
                 this->unk_2D0 = 0.0f;
@@ -349,7 +349,7 @@ void func_80BFEA94(EnBomjima* this, PlayState* play) {
 }
 
 void func_80BFEB1C(EnBomjima* this) {
-    func_80BFE494(this, 1, 1.0f);
+    EnBomjima_ChangeAnim(this, 1, 1.0f);
     func_80BFE65C(this);
     this->action = EN_BOMJIMA_ACTION_0;
     this->actionFunc = func_80BFEB64;
@@ -400,7 +400,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
 
     switch (this->unk_2A2) {
         case 0:
-            func_80BFE494(this, 4, 1.0f);
+            EnBomjima_ChangeAnim(this, 4, 1.0f);
             this->unk_29A = -7000;
             this->unk_2A2++;
             break;
@@ -430,7 +430,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
                 this->unk_2BC++;
 
                 if (((s16)Rand_ZeroFloat(2.0f) + 3) < this->unk_2BC) {
-                    func_80BFE494(this, 5, 1.0f);
+                    EnBomjima_ChangeAnim(this, 5, 1.0f);
                     this->unk_29A = 0;
                     Math_Vec3f_Copy(&this->unk_2A4, &this->actor.home.pos);
                     this->unk_2A4.x += Rand_CenteredFloat(150.0f);
@@ -456,7 +456,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
 
 void func_80BFEFF0(EnBomjima* this) {
     this->bombal = NULL;
-    func_80BFE494(this, 19, 1.0f);
+    EnBomjima_ChangeAnim(this, 19, 1.0f);
     func_80BFE65C(this);
     this->action = EN_BOMJIMA_ACTION_1;
     this->actionFunc = func_80BFF03C;
@@ -483,7 +483,7 @@ void func_80BFF03C(EnBomjima* this, PlayState* play) {
 void func_80BFF120(EnBomjima* this) {
     func_80BFE65C(this);
     this->cutsceneTimer = 30;
-    func_80BFE494(this, 6, 1.0f);
+    EnBomjima_ChangeAnim(this, 6, 1.0f);
     this->cutsceneEnded = false;
     this->action = EN_BOMJIMA_ACTION_2;
     this->actionFunc = func_80BFF174;
@@ -513,7 +513,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
     if ((this->animLastFrame <= sp2C) && (this->unk_2BC < 5)) {
         this->unk_2BC++;
         if (this->animIndex != 19) {
-            func_80BFE494(this, 19, 1.0f);
+            EnBomjima_ChangeAnim(this, 19, 1.0f);
         }
     }
 
@@ -562,7 +562,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
 }
 
 void func_80BFF3F0(EnBomjima* this) {
-    func_80BFE494(this, 15, 1.0f);
+    EnBomjima_ChangeAnim(this, 15, 1.0f);
     this->action = EN_BOMJIMA_ACTION_3;
     this->actionFunc = func_80BFF430;
 }
@@ -610,7 +610,7 @@ void func_80BFF52C(EnBomjima* this, PlayState* play) {
             }
             Message_ContinueTextbox(play, this->actor.textId);
             play_sound(NA_SE_SY_FOUND);
-            func_80BFE494(this, 15, 1.0f);
+            EnBomjima_ChangeAnim(this, 15, 1.0f);
             this->action = EN_BOMJIMA_ACTION_5;
             this->actionFunc = func_80BFF6CC;
         } else {
@@ -638,7 +638,7 @@ void func_80BFF6CC(EnBomjima* this, PlayState* play) {
     if (this->animLastFrame <= curFrame) {
         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
             Message_CloseTextbox(play);
-            func_80BFE494(this, 1, 1.0f);
+            EnBomjima_ChangeAnim(this, 1, 1.0f);
             this->actionFunc = func_80BFF754;
         }
     }
@@ -727,7 +727,7 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
         gSaveContext.save.saveInfo.bombersCaughtOrder[3] = 0;
         gSaveContext.save.saveInfo.bombersCaughtOrder[4] = 0;
 
-        func_80BFE494(this, 3, 1.0f);
+        EnBomjima_ChangeAnim(this, 3, 1.0f);
         this->unk_2C8 = 9;
 
         if (player->transformation == PLAYER_FORM_DEKU) {
@@ -743,7 +743,7 @@ void func_80BFF9B0(EnBomjima* this, PlayState* play) {
 void func_80BFFB40(EnBomjima* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
-        func_80BFE494(this, 15, 1.0f);
+        EnBomjima_ChangeAnim(this, 15, 1.0f);
         D_80C009F0 = 100;
         this->unk_2DC = 0;
         this->actionFunc = func_80BFFBC4;
@@ -754,7 +754,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
     f32 curFrame = this->skelAnime.curFrame;
 
     if ((this->animIndex != 1) && (this->animLastFrame <= curFrame)) {
-        func_80BFE494(this, 1, 1.0f);
+        EnBomjima_ChangeAnim(this, 1, 1.0f);
     }
 
     if ((D_80C009F4 != 0) && (this->unk_2C2 == 0)) {
@@ -780,7 +780,7 @@ void func_80BFFBC4(EnBomjima* this, PlayState* play) {
 
 void func_80BFFCFC(EnBomjima* this) {
     func_80BFE65C(this);
-    func_80BFE494(this, 18, 1.0f);
+    EnBomjima_ChangeAnim(this, 18, 1.0f);
     this->action = EN_BOMJIMA_ACTION_6;
     this->actionFunc = func_80BFFD48;
 }
@@ -795,7 +795,7 @@ void func_80BFFD48(EnBomjima* this, PlayState* play) {
     if (sqrtf(SQ(this->actor.world.pos.x - this->unk_2A4.x) + SQ(this->actor.world.pos.z - this->unk_2A4.z)) < 4.0f) {
         D_80C009F0++;
         this->unk_2DC = this->actor.parent->world.rot.y;
-        func_80BFE494(this, 0, 1.0f);
+        EnBomjima_ChangeAnim(this, 0, 1.0f);
         this->actionFunc = func_80BFFE48;
     }
 }
@@ -807,7 +807,7 @@ void func_80BFFE48(EnBomjima* this, PlayState* play) {
 
     if (D_80C009F0 >= 100) {
         if (this->unk_2E4 != 4) {
-            func_80BFE494(this, 15, 1.0f);
+            EnBomjima_ChangeAnim(this, 15, 1.0f);
             this->unk_2DC = 0;
             func_80BFE65C(this);
             this->actionFunc = func_80BFFF54;
@@ -815,7 +815,7 @@ void func_80BFFE48(EnBomjima* this, PlayState* play) {
             Math_SmoothStepToS(&this->unk_290, 10000, 1, 5000, 0);
             if (D_80C009F0 >= 103) {
                 this->unk_2DC = 0;
-                func_80BFE494(this, 15, 1.0f);
+                EnBomjima_ChangeAnim(this, 15, 1.0f);
                 func_80BFE65C(this);
                 this->actionFunc = func_80BFFF54;
             }
@@ -839,10 +839,10 @@ void func_80BFFF54(EnBomjima* this, PlayState* play) {
     if (this->unk_2E4 != 4) {
         if ((this->animIndex != 0) && (this->animLastFrame <= curFrame)) {
             D_80C009F0++;
-            func_80BFE494(this, 0, 1.0f);
+            EnBomjima_ChangeAnim(this, 0, 1.0f);
         }
     } else if ((this->animIndex != 8) && (this->animLastFrame <= curFrame)) {
-        func_80BFE494(this, 8, 1.0f);
+        EnBomjima_ChangeAnim(this, 8, 1.0f);
         D_80C009F4 = 1;
     }
 
@@ -864,7 +864,7 @@ void func_80BFFF54(EnBomjima* this, PlayState* play) {
 
 void func_80C0011C(EnBomjima* this) {
     func_80BFE65C(this);
-    func_80BFE494(this, 0, 1.0f);
+    EnBomjima_ChangeAnim(this, 0, 1.0f);
     this->action = EN_BOMJIMA_ACTION_7;
     this->actionFunc = func_80C00168;
 }
@@ -894,7 +894,7 @@ void func_80C00168(EnBomjima* this, PlayState* play) {
 }
 
 void func_80C00234(EnBomjima* this) {
-    func_80BFE494(this, 3, 1.0f);
+    EnBomjima_ChangeAnim(this, 3, 1.0f);
     this->collider.dim.radius = 15;
     this->collider.dim.height = 40;
     func_80BFE65C(this);
@@ -910,9 +910,9 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
          (this->unk_2CA == 1)) &&
         (this->animLastFrame <= sp28)) {
         if (!(this->unk_2BC & 1)) {
-            func_80BFE494(this, 3, 1.0f);
+            EnBomjima_ChangeAnim(this, 3, 1.0f);
         } else {
-            func_80BFE494(this, 16, 1.0f);
+            EnBomjima_ChangeAnim(this, 16, 1.0f);
         }
         this->unk_2BC++;
         this->unk_2BC &= 1;
@@ -966,7 +966,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
                 if (this->unk_2C8 == 10) {
                     func_80BFE65C(this);
                     this->unk_28E = 0;
-                    func_80BFE494(this, 1, 1.0f);
+                    EnBomjima_ChangeAnim(this, 1, 1.0f);
                     this->action = EN_BOMJIMA_ACTION_2;
                     this->actionFunc = func_80BFF174;
                     return;
@@ -995,7 +995,7 @@ void func_80C00284(EnBomjima* this, PlayState* play) {
                 this->actor.textId = D_80C00A8C[this->unk_2C8];
                 Message_ContinueTextbox(play, this->actor.textId);
                 if (this->unk_2C8 >= 2) {
-                    func_80BFE494(this, 17, 1.0f);
+                    EnBomjima_ChangeAnim(this, 17, 1.0f);
                 }
                 break;
         }

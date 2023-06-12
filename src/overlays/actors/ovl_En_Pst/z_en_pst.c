@@ -152,7 +152,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = { { &gPostboxOpenSlotAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 } };
+static AnimationInfoS sAnimationInfo[] = {
+    { &gPostboxOpenSlotAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+};
 
 void EnPst_UpdateCollision(EnPst* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);

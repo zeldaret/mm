@@ -119,7 +119,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     switch (GERUDO_PURPLE_GET_TYPE(&this->picto.actor)) {
         case GERUDO_PURPLE_TYPE_BOAT_SENTRY:
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, 0.0f);
+                             Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, 0.0f);
             this->actionFunc = EnGe2_GuardStationary;
             this->picto.actor.speed = 0.0f;
             this->picto.actor.uncullZoneForward = 4000.0f;
@@ -395,7 +395,7 @@ void EnGe2_SetupCapturePlayer(EnGe2* this) {
     this->picto.actor.speed = 0.0f;
     this->actionFunc = EnGe2_CapturePlayer;
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
 }
 
 void EnGe2_Charge(EnGe2* this, PlayState* play) {
@@ -428,7 +428,7 @@ void EnGe2_SetupCharge(EnGe2* this, PlayState* play) {
 
     if (this->picto.actor.shape.rot.y == this->picto.actor.yawTowardsPlayer) {
         Animation_Change(&this->skelAnime, &gGerudoPurpleChargingAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gGerudoPurpleChargingAnim), 0, -8.0f);
+                         Animation_GetLastFrame(&gGerudoPurpleChargingAnim), ANIMMODE_LOOP, -8.0f);
         this->timer = 50;
         this->picto.actor.speed = 4.0f;
         this->actionFunc = EnGe2_Charge;
@@ -437,7 +437,7 @@ void EnGe2_SetupCharge(EnGe2* this, PlayState* play) {
 
 void EnGe2_SetupLookAround(EnGe2* this) {
     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
     this->timer = 60;
     this->picto.actor.speed = 0.0f;
     this->actionFunc = EnGe2_LookAround;
@@ -482,13 +482,13 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
         this->picto.actor.speed = 0.0f;
         this->actionFunc = EnGe2_SetupCharge;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+                         Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
         this->stateFlags |= GERUDO_PURPLE_STATE_CAPTURING;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_80_08)) {
         this->picto.actor.speed = 0.0f;
         this->actionFunc = EnGe2_TurnToPlayerFast;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+                         Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
     } else if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos,
                                    this->picto.actor.shape.rot.y, 0x1800, visionRange, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
@@ -498,7 +498,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->actionFunc = EnGe2_SetupCharge;
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+                             Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
         }
     } else if (this->collider.base.acFlags & AC_HIT) {
         if ((this->collider.info.acHitInfo != NULL) &&
@@ -509,7 +509,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
             this->stateFlags |= GERUDO_PURPLE_STATE_STUNNED;
         } else {
             Animation_Change(&this->skelAnime, &gGerudoPurpleFallingToGroundAnim, 1.0f, 0.0f,
-                             Animation_GetLastFrame(&gGerudoPurpleFallingToGroundAnim), 2, -8.0f);
+                             Animation_GetLastFrame(&gGerudoPurpleFallingToGroundAnim), ANIMMODE_ONCE, -8.0f);
             this->timer = 200;
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_KnockedOut;
@@ -542,7 +542,7 @@ void EnGe2_LookAround(EnGe2* this, PlayState* play) {
     } else {
         this->actionFunc = EnGe2_Walk;
         Animation_Change(&this->skelAnime, &gGerudoPurpleWalkingAnim, 1.0f, 0.0f,
-                         Animation_GetLastFrame(&gGerudoPurpleWalkingAnim), 0, -8.0f);
+                         Animation_GetLastFrame(&gGerudoPurpleWalkingAnim), ANIMMODE_LOOP, -8.0f);
         this->headRot.y = 0;
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
     }
@@ -601,13 +601,14 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
             switch (cueId) {
                 case ENGE2_CUEID_BEEHIVE_PATROL:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
-                                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), 0, -8.0f);
+                                     Animation_GetLastFrame(&gGerudoPurpleLookingAboutAnim), ANIMMODE_LOOP, -8.0f);
                     EnGe2_GetNextPath(this, play);
                     break;
 
                 case ENGE2_CUEID_BEEHIVE_RUN_AWAY:
                     Animation_Change(&this->skelAnime, &gGerudoPurpleRunningAwayCutsceneAnim, 1.0f, 0.0f,
-                                     Animation_GetLastFrame(&gGerudoPurpleRunningAwayCutsceneAnim), 0, -5.0f);
+                                     Animation_GetLastFrame(&gGerudoPurpleRunningAwayCutsceneAnim), ANIMMODE_LOOP,
+                                     -5.0f);
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
@@ -616,11 +617,13 @@ void EnGe2_PerformCutsceneActions(EnGe2* this, PlayState* play) {
                     break;
 
                 case ENGE2_CUEID_GBT_ENTR_STAND_STILL:
-                    Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 0.0f, 0.0f, 2, 0.0f);
+                    Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 0.0f, 0.0f,
+                                     ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case ENGE2_CUEID_GBT_ENTR_BLOWN_AWAY:
-                    Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f, 2, 0.0f);
+                    Animation_Change(&this->skelAnime, &gGerudoPurpleGreatBayCutsceneAnim, 0.0f, 1.0f, 1.0f,
+                                     ANIMMODE_ONCE, 0.0f);
                     EnGe2_SetupBlownAwayPath(this, play);
                     this->stateFlags |= GERUDO_PURPLE_STATE_DISABLE_MOVEMENT;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);

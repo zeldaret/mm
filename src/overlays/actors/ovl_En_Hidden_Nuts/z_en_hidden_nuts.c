@@ -63,15 +63,15 @@ static ColliderCylinderInit sCylinderInit = {
     { 30, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BDC0FC[] = {
+static AnimationHeader* sAnimations[] = {
     &object_hintnuts_Anim_000168, &object_hintnuts_Anim_0024CC, &object_hintnuts_Anim_0026C4,
     &object_hintnuts_Anim_002894, &object_hintnuts_Anim_002B90, &object_hintnuts_Anim_002F7C,
     &object_hintnuts_Anim_003128, &object_hintnuts_Anim_0029BC, &object_hintnuts_Anim_0024CC,
 };
 
-u8 D_80BDC120[] = {
+static u8 sAnimationModes[] = {
     ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE,
-    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_LOOP,
+    ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
 };
 
 void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
@@ -116,27 +116,27 @@ void EnHiddenNuts_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80BDB1B4(EnHiddenNuts* this, s32 arg1) {
+void EnHiddenNuts_ChangeAnim(EnHiddenNuts* this, s32 animIndex) {
     f32 sp34;
     f32 sp30;
 
-    this->unk_220 = arg1;
+    this->animIndex = animIndex;
     sp34 = 0.0f;
     sp30 = -4.0f;
-    this->unk_22C = Animation_GetLastFrame(D_80BDC0FC[arg1]);
-    if (this->unk_220 == 1) {
+    this->unk_22C = Animation_GetLastFrame(sAnimations[animIndex]);
+    if (this->animIndex == 1) {
         sp34 = this->unk_22C;
         sp30 = 0.0f;
     }
-    Animation_Change(&this->skelAnime, D_80BDC0FC[this->unk_220], 1.0f, sp34, this->unk_22C, D_80BDC120[this->unk_220],
-                     sp30);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, sp34, this->unk_22C,
+                     sAnimationModes[this->animIndex], sp30);
 }
 
 void func_80BDB268(EnHiddenNuts* this) {
     this->actor.textId = 0x234;
     this->unk_228 = 1600.0f;
     this->actor.shape.yOffset = 1600.0f;
-    func_80BDB1B4(this, 1);
+    EnHiddenNuts_ChangeAnim(this, 1);
     this->unk_21A = 0;
     this->actionFunc = func_80BDB2B8;
 }
@@ -263,7 +263,7 @@ void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     EffectSsHahen_SpawnBurst(play, &sp3C, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
-    func_80BDB1B4(this, 7);
+    EnHiddenNuts_ChangeAnim(this, 7);
     this->actionFunc = func_80BDB8F4;
 }
 
@@ -276,7 +276,7 @@ void func_80BDB8F4(EnHiddenNuts* this, PlayState* play) {
 }
 
 void func_80BDB930(EnHiddenNuts* this) {
-    func_80BDB1B4(this, 3);
+    EnHiddenNuts_ChangeAnim(this, 3);
     this->unk_21A = 3;
     this->unk_228 = 500.0f;
     this->actionFunc = func_80BDB978;
@@ -301,7 +301,7 @@ void func_80BDB978(EnHiddenNuts* this, PlayState* play) {
 void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
     Vec3f sp44;
 
-    func_80BDB1B4(this, 2);
+    EnHiddenNuts_ChangeAnim(this, 2);
     this->unk_228 = 0.0f;
 
     Math_Vec3f_Copy(&sp44, &this->actor.world.pos);
@@ -358,11 +358,11 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_20C), 1, 0x1388, 0);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 1, 0x3E8, 0);
 
-    if (this->unk_220 == 2) {
+    if (this->animIndex == 2) {
         if (this->unk_22C <= sp58) {
             this->actor.speed = 0.0f;
             this->actor.velocity.y = 0.0f;
-            func_80BDB1B4(this, 6);
+            EnHiddenNuts_ChangeAnim(this, 6);
         }
     } else {
         Math_ApproachF(&this->actor.world.pos.x, this->unk_20C.x, 0.5f,
@@ -387,7 +387,7 @@ void func_80BDBE70(EnHiddenNuts* this, PlayState* play) {
     if (this->switchFlag >= 0) {
         Flags_SetSwitch(play, this->switchFlag);
     }
-    func_80BDB1B4(this, 8);
+    EnHiddenNuts_ChangeAnim(this, 8);
     this->unk_21A = 5;
     this->actionFunc = func_80BDBED4;
 }

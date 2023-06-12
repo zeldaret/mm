@@ -172,14 +172,14 @@ s32 func_80B3CA20(EnDnp* this) {
 }
 
 s32 EnDnp_ChangeAnim(EnDnp* this, s32 animIndex) {
-    s32 ret = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->animIndex) {
+    if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80B3CC80(EnDnp* this, PlayState* play) {

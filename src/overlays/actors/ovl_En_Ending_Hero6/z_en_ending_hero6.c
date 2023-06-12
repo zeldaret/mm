@@ -20,7 +20,7 @@ void EnEndingHero6_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero6_Update(Actor* thisx, PlayState* play);
 void EnEndingHero6_Draw(Actor* thisx, PlayState* play);
 
-void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
+void EnEndingHero6_ChangeAnim(EnEndingHero6* this, s32 animIndex);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
@@ -66,14 +66,14 @@ void EnEndingHero6_Init(Actor* thisx, PlayState* play) {
 void EnEndingHero6_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
-    this->animIndex = npcIndex;
-    this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
+void EnEndingHero6_ChangeAnim(EnEndingHero6* this, s32 animIndex) {
+    this->animIndex = animIndex;
+    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
     Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, ANIMMODE_LOOP, 0.0f);
 }
 
 void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
-    EnEndingHero6_InitSkelAnime(this, this->npcIndex);
+    EnEndingHero6_ChangeAnim(this, this->npcIndex);
     this->isIdle = 1;
     this->actionFunc = EnEndingHero6_Idle;
 }

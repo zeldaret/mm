@@ -56,18 +56,19 @@ static AnimationInfo sAnimationInfo[] = {
     { &object_dmask_Anim_0013A4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
-void func_80AAC5A0(SkelAnime* skelAnime, AnimationInfo* animation, u16 arg2) {
-    f32 phi_f2;
+void DmChar05_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animation += arg2;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0.0f) {
-        phi_f2 = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        phi_f2 = animation->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f2,
-                     animation->mode, animation->morphFrames);
+
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void func_80AAC63C(Actor* thisx, PlayState* play) {
@@ -76,9 +77,9 @@ void func_80AAC63C(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_010B0, NULL, NULL, NULL, 0);
     if (DMCHAR05_GET(&this->actor) == DMCHAR05_0) {
-        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[0], 0);
+        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[0], 0);
     } else {
-        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
+        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[1], 0);
     }
     this->actionFunc = func_80AACC48;
 }
@@ -88,7 +89,7 @@ void func_80AAC6E4(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_042B0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[1], 0);
+    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[1], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -97,7 +98,7 @@ void func_80AAC770(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dmask_Skel_001D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[3], 0);
+    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[3], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -106,7 +107,7 @@ void func_80AAC7FC(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dmask_Skel_013D0, NULL, NULL, NULL, 0);
-    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[4], 0);
+    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[4], 0);
     this->actionFunc = func_80AACC48;
 }
 
@@ -347,7 +348,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -391,7 +392,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -434,7 +435,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -470,7 +471,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                     }
                 }
 
@@ -484,7 +485,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 if (this->unk_18C == 4) {
                     this->unk_18C++;
-                    func_80AAC5A0(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
                 }
             }
             break;

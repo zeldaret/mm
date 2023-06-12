@@ -99,7 +99,7 @@ static AnimationHeader* sAnimations[] = {
     &object_pr_Anim_003904,
 };
 
-u8 D_80A75C38[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP };
+static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE };
 
 s16 D_80A75C3C[] = {
     0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
@@ -242,19 +242,20 @@ void func_80A7436C(EnPr2* this, s16 arg1) {
     Math_SmoothStepToS(&this->actor.world.rot.y, arg1, 1, 2000, 300);
 }
 
-void func_80A74510(EnPr2* this, s32 arg0) {
-    f32 sp34 = 1.0f;
+void EnPr2_ChangeAnim(EnPr2* this, s32 animIndex) {
+    f32 playSpeed = 1.0f;
 
-    this->unk_210 = arg0;
-    this->unk_1F8 = Animation_GetLastFrame(sAnimations[arg0]);
-    if (this->unk_210 == 3) {
-        sp34 = 0.0f;
+    this->animIndex = animIndex;
+    this->unk_1F8 = Animation_GetLastFrame(sAnimations[animIndex]);
+    if (this->animIndex == 3) {
+        playSpeed = 0.0f;
     }
-    Animation_Change(&this->skelAnime, sAnimations[arg0], sp34, 0.0f, this->unk_1F8, D_80A75C38[arg0], 0.0f);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, 0.0f, this->unk_1F8,
+                     sAnimationModes[animIndex], 0.0f);
 }
 
 void func_80A745C4(EnPr2* this) {
-    func_80A74510(this, 0);
+    EnPr2_ChangeAnim(this, 0);
     this->unk_1D4 = 0;
     this->actionFunc = func_80A745FC;
 }
@@ -310,7 +311,7 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
 }
 
 void func_80A74888(EnPr2* this) {
-    func_80A74510(this, 0);
+    EnPr2_ChangeAnim(this, 0);
     this->unk_1DA = 2;
     this->unk_1D8 = 0;
     Math_Vec3f_Copy(&this->unk_21C, &this->unk_228);
@@ -432,7 +433,7 @@ void func_80A74DEC(EnPr2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->unk_1F0 = 0;
-    func_80A74510(this, 1);
+    EnPr2_ChangeAnim(this, 1);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
 
@@ -520,7 +521,7 @@ void func_80A751B4(EnPr2* this) {
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     if (this->unk_1E0 < 10) {
-        func_80A74510(this, 2);
+        EnPr2_ChangeAnim(this, 2);
     } else {
         this->unk_1F8 = Animation_GetLastFrame(&object_pr_Anim_003904);
         Animation_Change(&this->skelAnime, &object_pr_Anim_003904, 1.0f, this->unk_1F8, this->unk_1F8, ANIMMODE_ONCE,

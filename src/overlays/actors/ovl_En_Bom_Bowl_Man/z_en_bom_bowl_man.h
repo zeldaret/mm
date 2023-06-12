@@ -54,7 +54,7 @@ typedef struct EnBomBowlMan {
     /* 0x2F2 */ s16 unk_2F2;
     /* 0x2F4 */ s16 unk_2F4;
     /* 0x2F6 */ s16 unk_2F6;
-    /* 0x2F8 */ s32 unk_2F8;
+    /* 0x2F8 */ s32 animIndex;
 } EnBomBowlMan; // size = 0x2FC
 
 #endif // Z_EN_BOM_BOWL_MAN_H

@@ -38,7 +38,7 @@ typedef struct EnPm {
     /* 0x2F6 */ Vec3s morphTable[16];
     /* 0x356 */ u16 unk_356;
     /* 0x358 */ u16 unk_358;
-    /* 0x35C */ f32 unk_35C;
+    /* 0x35C */ f32 animPlaySpeed;
     /* 0x360 */ f32 unk_360;
     /* 0x364 */ f32 unk_364;
     /* 0x368 */ f32 unk_368;
@@ -51,7 +51,7 @@ typedef struct EnPm {
     /* 0x378 */ s16 unk_378;
     /* 0x37C */ EnPmFunc unk_37C;
     /* 0x380 */ s32 unk_380;
-    /* 0x384 */ s32 unk_384;
+    /* 0x384 */ s32 animIndex;
     /* 0x388 */ s32 prevTalkState;
     /* 0x38C */ s32 unk_38C;
     /* 0x390 */ UNK_TYPE1 unk_390[0x4];

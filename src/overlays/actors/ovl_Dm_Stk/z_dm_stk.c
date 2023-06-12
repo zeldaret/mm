@@ -315,18 +315,20 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
     }
 }
 
-/**
- * This function is always called with unusedExtraOffset = 0.
- */
-void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animationInfo,
-                      u16 unusedExtraOffset) {
+void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
+    f32 endFrame;
+
     DmStk_LoadObjectForAnimation(this, play);
 
-    animationInfo += unusedExtraOffset;
+    animationInfo += animIndex;
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     (animationInfo->frameCount < 0.0f) ? Animation_GetLastFrame(animationInfo->animation)
-                                                        : animationInfo->frameCount,
+    if (animationInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
+    } else {
+        endFrame = animationInfo->frameCount;
+    }
+
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
                      animationInfo->mode, animationInfo->morphFrames);
 }
 

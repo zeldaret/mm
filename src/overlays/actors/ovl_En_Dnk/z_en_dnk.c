@@ -132,14 +132,14 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gDekuScrubStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
+s32 EnDnk_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frame;
     s16 frameCount;
-    s32 sp30 = false;
+    s32 didAnimChange = false;
 
     if (animIndex >= 0) {
         if (animIndex < ARRAY_COUNT(sAnimationInfo)) {
-            sp30 = true;
+            didAnimChange = true;
             frameCount = sAnimationInfo[animIndex].frameCount;
             if (frameCount < 0) {
                 frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
@@ -152,7 +152,7 @@ s32 func_80A514F0(SkelAnime* skelAnime, s16 animIndex) {
                              frameCount, sAnimationInfo[animIndex].mode, sAnimationInfo[animIndex].morphFrames);
         }
     }
-    return sp30;
+    return didAnimChange;
 }
 
 s32 func_80A515C4(EnDnk* this) {
@@ -180,19 +180,19 @@ void func_80A51648(EnDnk* this, PlayState* play) {
             case ENDNK_GET_3_0:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_PALACE_GUARD_LIMB_MAX);
-                func_80A514F0(&this->skelAnime, 7);
+                EnDnk_ChangeAnim(&this->skelAnime, 7);
                 break;
 
             case ENDNK_GET_3_1:
                 SkelAnime_Init(play, &this->skelAnime, &object_hintnuts_Skel_0023B8.sh, NULL, this->jointTable,
                                this->morphTable, 10);
-                func_80A514F0(&this->skelAnime, 18);
+                EnDnk_ChangeAnim(&this->skelAnime, 18);
                 break;
 
             case ENDNK_GET_3_2:
                 SkelAnime_Init(play, &this->skelAnime, &gDekuScrubSkel, NULL, this->jointTable, this->morphTable,
                                DEKU_SCRUB_LIMB_MAX);
-                func_80A514F0(&this->skelAnime, 35);
+                EnDnk_ChangeAnim(&this->skelAnime, 35);
                 break;
         }
 

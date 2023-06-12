@@ -287,7 +287,7 @@ void func_80994DA8(EnSkb* this, PlayState* play) {
 }
 
 void func_80994E2C(EnSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->unk_3D0 = 0;
@@ -342,7 +342,7 @@ void func_80995068(EnSkb* this, PlayState* play) {
         if (this->unk_3E0 == 1) {
             Message_StartTextbox(play, 0x13F8, &this->actor);
             if (this->unk_3DE == 2) {
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 11);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 11);
             }
         } else {
             Message_StartTextbox(play, 0x13F6, &this->actor);
@@ -374,7 +374,7 @@ void func_80995190(EnSkb* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 Message_StartTextbox(play, 0x13F7, &this->actor);
                 if (this->unk_3DE == 2) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 11);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 11);
                 }
             }
             break;
@@ -412,7 +412,7 @@ void func_80995244(EnSkb* this, PlayState* play) {
 }
 
 void func_809952D8(EnSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_3DE = 9;
     this->actionFunc = func_8099533C;
@@ -434,7 +434,7 @@ void func_8099533C(EnSkb* this, PlayState* play) {
 }
 
 void func_809953E8(EnSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 6);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_3DE = 10;
     this->actionFunc = func_8099544C;
@@ -456,7 +456,7 @@ void func_8099544C(EnSkb* this, PlayState* play) {
 }
 
 void func_809954F8(EnSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 7);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 7);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->unk_3DE = 11;
     this->actionFunc = func_8099556C;
@@ -499,14 +499,14 @@ void func_8099571C(EnSkb* this) {
     this->unk_3DC = 0;
     this->actor.shape.shadowScale = 0.0f;
     if (this->unk_3DE == 9) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 8);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 8);
         this->actor.speed = 2.4f;
         this->actor.gravity = -1.0f;
         this->actor.velocity.y = 3.0f;
     } else if (this->unk_3DE == 0xA) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 8);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 8);
     } else if (this->unk_3DE == 0xB) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 9);
         this->actor.speed = 3.2f;
         this->actor.gravity = -1.0f;
         this->actor.velocity.y = 2.0f;
@@ -560,7 +560,7 @@ void func_8099599C(EnSkb* this, PlayState* play) {
 }
 
 void func_80995A30(EnSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     this->actor.speed = 1.6f;
     this->unk_3DA = 0;
     this->unk_3DE = 2;
@@ -573,7 +573,7 @@ void func_80995A8C(EnSkb* this, PlayState* play) {
         this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->actor.hintId = TATL_HINT_ID_NONE;
         this->actor.colChkInfo.mass = MASS_HEAVY;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 12);
         func_8099504C(this);
         return;
     }
@@ -596,7 +596,7 @@ void func_80995A8C(EnSkb* this, PlayState* play) {
 }
 
 void func_80995C24(EnSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
     this->collider.base.atFlags &= ~AT_BOUNCED;
     this->actor.speed = 0.0f;
     this->unk_3DE = 3;
@@ -682,17 +682,17 @@ void func_80995E64(EnSkb* this, PlayState* play) {
 void func_80995F98(EnSkb* this) {
     if ((this->unk_3DE == 9) || (this->unk_3DE == 0xA)) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 8);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 8);
         this->actor.gravity = -1.0f;
         this->actor.speed = 1.0f;
     } else if (this->unk_3DE == 0xB) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 9);
         this->actor.speed = 3.2f;
         this->actor.velocity.y = 2.0f;
         this->actor.gravity = -1.0f;
     } else {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->actor.speed = -4.0f;
         }
@@ -729,7 +729,7 @@ void func_809960AC(EnSkb* this, PlayState* play) {
 }
 
 void func_809961E4(EnSkb* this, PlayState* play) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
     this->unk_3D8 |= 0x40;
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
@@ -761,7 +761,7 @@ void func_8099630C(EnSkb* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
         } else {
@@ -783,7 +783,7 @@ void func_809963D8(EnSkb* this, PlayState* play) {
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
             Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
             this->unk_3D8 |= 1;
             func_80995F98(this);
         } else {
@@ -955,7 +955,7 @@ void func_8099672C(EnSkb* this, PlayState* play) {
                     this->drawDmgEffScale = 0.5f;
                     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
                     func_809963C4(this);
                     break;
 
@@ -973,7 +973,7 @@ void func_8099672C(EnSkb* this, PlayState* play) {
 
                 case 13:
                     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
                     func_80995F98(this);
                     break;
             }

@@ -187,7 +187,7 @@ s32 EnAob01_ProcessLaughAnim(EnAob01* this) {
     if (this->animIndex == EN_AOB01_ANIM_LAUGH_START) {
         if (curFrame == lastFrame) {
             this->animIndex = EN_AOB01_ANIM_LAUGH_LOOP;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_LOOP);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_LOOP);
             return true;
         }
     } else if (this->animIndex == EN_AOB01_ANIM_LAUGH_LOOP) {
@@ -211,13 +211,13 @@ s32 EnAob01_ProcessSurpriseAnim(EnAob01* this) {
     if ((this->animIndex == EN_AOB01_ANIM_IDLE_1) || (this->animIndex == EN_AOB01_ANIM_IDLE_2)) {
         if (curFrame == lastFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_START;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_START);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_START);
             return true;
         }
     } else if (this->animIndex == EN_AOB01_ANIM_SURPRISE_START) {
         if (curFrame == lastFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_LOOP;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_LOOP);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_LOOP);
             return true;
         }
     } else if (this->animIndex == EN_AOB01_ANIM_SURPRISE_LOOP) {
@@ -239,7 +239,7 @@ s32 EnAob01_ProcessIdleAnim(EnAob01* this) {
     if ((this->animIndex != EN_AOB01_ANIM_IDLE_1) && (this->animIndex != EN_AOB01_ANIM_IDLE_2)) {
         if (curFrame == lastFrame) {
             this->animIndex = EN_AOB01_ANIM_IDLE_2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_2);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_2);
             return true;
         }
     } else {
@@ -384,7 +384,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             this->stateFlags |= ENAOB01_FLAG_LAUGH;
             this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
             this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
             break;
 
         case 0x3525: // Is that dog okay?
@@ -399,7 +399,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_LAUGH;
                 this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
                 this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
                 break;
             }
 
@@ -414,7 +414,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
             this->stateFlags |= ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG;
             this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
             this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
             break;
 
         case 0x3527:               // If you win, you'll get more than you bet.
@@ -426,7 +426,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
                 this->textId = 0x3536; // You don't have enough rupees for that bet.
                 this->stateFlags |= ENAOB01_FLAG_LAUGH;
                 this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
                 break;
             }
 
@@ -434,7 +434,7 @@ void EnAob01_BeforeRace_HandleConversation(EnAob01* this, PlayState* play) {
                 this->textId = 0x3537; // You can't race if you don't bet.
                 this->stateFlags |= ENAOB01_FLAG_LAUGH;
                 this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
                 break;
             }
 
@@ -643,7 +643,7 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
                 this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
                 this->stateFlags |= ENAOB01_FLAG_LAUGH;
                 this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
                 // Put my dog down!
                 Message_StartTextbox(play, 0x354B, &this->actor);
             }
@@ -875,7 +875,7 @@ void EnAob01_AfterRace_GiveRaceResult(EnAob01* this, PlayState* play) {
                 this->textId = 0x352D; // Bad choice!
                 this->stateFlags |= ENAOB01_FLAG_LAUGH;
                 this->animIndex = EN_AOB01_ANIM_LAUGH_START;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_START);
                 break;
         }
 
@@ -1106,7 +1106,7 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->animIndex = EN_AOB01_ANIM_IDLE_1;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_1);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_1);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (GET_EVENTINF_DOG_RACE_STATE) {

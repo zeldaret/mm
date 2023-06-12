@@ -37,16 +37,16 @@ AnimationInfo sAnimationInfo[] = {
 };
 
 void DmChar03_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frame;
+    f32 endFrame;
 
     animationInfo += animIndex;
 
     if (animationInfo->frameCount < 0.0f) {
-        frame = Animation_GetLastFrame(animationInfo->animation);
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        frame = animationInfo->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, frame,
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
                      animationInfo->mode, animationInfo->morphFrames);
 }
 

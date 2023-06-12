@@ -165,7 +165,7 @@ void EnHg_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHg_SetupWait(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
     this->actionFunc = EnHg_Wait;
 }
 
@@ -183,7 +183,7 @@ void EnHg_Wait(EnHg* this, PlayState* play) {
 }
 
 void EnHg_SetupChasePlayer(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
     this->actionFunc = EnHg_ChasePlayer;
 }
 
@@ -207,7 +207,7 @@ void EnHg_ChasePlayer(EnHg* this, PlayState* play) {
 }
 
 void EnHg_SetupChasePlayerWait(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
     this->actionFunc = EnHg_ChasePlayerWait;
 }
 
@@ -220,7 +220,7 @@ void EnHg_ChasePlayerWait(EnHg* this, PlayState* play) {
 }
 
 void EnHg_SetupReactToHit(EnHg* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_RECOIL);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_RECOIL);
     this->actionFunc = EnHg_ReactToHit;
 }
 
@@ -296,19 +296,19 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_IDLE);
                     break;
 
                 case 2:
                     this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_LEAN_FORWARD;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LEAN_FORWARD);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_LEAN_FORWARD);
                     break;
 
                 case 3:
                     this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_CURL_UP;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CURL_UP);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_CURL_UP);
                     break;
 
                 case 4:
@@ -317,12 +317,12 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     if ((this->csIdIndex == HG_CS_GET_MASK) || (this->csIdIndex == HG_CS_SONG_OF_HEALING)) {
                         func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
                     break;
 
                 case 5:
                     this->animIndex = HG_ANIM_LURCH_FORWARD;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_LURCH_FORWARD);
                     break;
 
                 case 6:
@@ -334,12 +334,12 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
             switch (this->animIndex) {
                 case HG_ANIM_LEAN_FORWARD:
                     this->animIndex = HG_ANIM_REACH_FORWARD;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_REACH_FORWARD);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_REACH_FORWARD);
                     break;
 
                 case HG_ANIM_CURL_UP:
                     this->animIndex = HG_ANIM_CROUCHED_PANIC;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_CROUCHED_PANIC);
+                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, HG_ANIM_CROUCHED_PANIC);
                     break;
             }
         }

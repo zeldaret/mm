@@ -286,7 +286,7 @@ EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
     return SubS_FindDoor(play, phi_a1);
 }
 
-s32 func_8094DFF8(EnGm* this, PlayState* play) {
+s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
     s32 ret = false;
 
     if (this->unk_262 < 0) {
@@ -294,35 +294,35 @@ s32 func_8094DFF8(EnGm* this, PlayState* play) {
     }
 
     if (this->unk_262 >= 0) {
-        this->skelAnime.playSpeed = this->unk_3A8;
+        this->skelAnime.playSpeed = this->animPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
     }
 
     return ret;
 }
 
-s32 func_8094E054(EnGm* this, PlayState* play, s32 arg2) {
+s32 EnGm_ChangeAnim(EnGm* this, PlayState* play, s32 animIndex) {
     s8 tmp = this->unk_262;
-    s32 phi_v1 = false;
-    s32 ret = false;
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if ((arg2 == 0) || (arg2 == 1)) {
-        if ((this->unk_3E8 != 0) && (this->unk_3E8 != 1)) {
-            phi_v1 = true;
+    if ((animIndex == 0) || (animIndex == 1)) {
+        if ((this->animIndex != 0) && (this->animIndex != 1)) {
+            changeAnim = true;
         }
-    } else if (arg2 != this->unk_3E8) {
-        phi_v1 = true;
+    } else if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v1) {
+    if (changeAnim) {
         if (tmp >= 0) {
-            this->unk_3E8 = arg2;
-            ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg2);
-            this->unk_3A8 = this->skelAnime.playSpeed;
+            this->animIndex = animIndex;
+            didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+            this->animPlaySpeed = this->skelAnime.playSpeed;
         }
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 s32 func_8094E0F8(EnGm* this, PlayState* play) {
@@ -502,7 +502,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
     switch (this->unk_3E0) {
         case 0:
             Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
-            func_8094E054(this, play, 2);
+            EnGm_ChangeAnim(this, play, 2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
             break;
@@ -565,7 +565,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
                 Math_ApproachS(&this->actor.shape.rot.y, sp48, 3, 0x2AA8);
                 this->unk_3A4 &= ~0x20;
             } else {
-                func_8094E054(this, play, 1);
+                EnGm_ChangeAnim(this, play, 1);
                 this->actor.shape.rot.y = sp48;
                 this->unk_3E0++;
                 this->unk_3E2 = 0;
@@ -639,7 +639,7 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
                 break;
             }
             Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
-            func_8094E054(this, play, 2);
+            EnGm_ChangeAnim(this, play, 2);
             this->unk_3E2 = 0;
             this->unk_3E0++;
 
@@ -669,7 +669,7 @@ s32 func_8094EB1C(EnGm* this, PlayState* play) {
                 Math_ApproachS(&this->actor.shape.rot.y, oldYaw, 3, 0x2AA8);
                 this->unk_3A4 &= ~0x20;
             } else {
-                func_8094E054(this, play, 1);
+                EnGm_ChangeAnim(this, play, 1);
                 this->actor.shape.rot.y = oldYaw;
                 this->unk_3E2 = 0;
                 this->unk_3E0++;
@@ -764,7 +764,7 @@ s32 func_8094EFC4(EnGm* this, PlayState* play) {
     if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk_3F8 == 0) {
             if ((play->sceneId == SCENE_MILK_BAR) && (gSaveContext.sceneLayer == 2)) {
-                func_8094E054(this, play, 0);
+                EnGm_ChangeAnim(this, play, 0);
                 this->unk_258 = 255;
             }
             this->cueId = 255;
@@ -880,9 +880,9 @@ void func_8094F3D0(EnGm* this, PlayState* play) {
 }
 
 s32 func_8094F4EC(EnGm* this, PlayState* play) {
-    if ((this->unk_258 != 6) && (this->unk_3E8 == 12)) {
+    if ((this->unk_258 != 6) && (this->animIndex == 12)) {
         this->unk_3A4 &= ~0x2000;
-        func_8094E054(this, play, 8);
+        EnGm_ChangeAnim(this, play, 8);
     }
     return true;
 }
@@ -898,30 +898,30 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         if (this->unk_3A6 != sp32) {
             switch (sp32) {
                 case 0x2B13:
-                    func_8094E054(this, play, 2);
+                    EnGm_ChangeAnim(this, play, 2);
                     break;
 
                 case 0x2B14:
                 case 0x2B18:
-                    func_8094E054(this, play, 0);
+                    EnGm_ChangeAnim(this, play, 0);
                     break;
 
                 case 0x2B16:
-                    func_8094E054(this, play, 1);
+                    EnGm_ChangeAnim(this, play, 1);
                     break;
 
                 case 0x2B15:
-                    func_8094E054(this, play, 5);
+                    EnGm_ChangeAnim(this, play, 5);
                     break;
 
                 case 0x2B17:
-                    func_8094E054(this, play, 6);
+                    EnGm_ChangeAnim(this, play, 6);
                     break;
 
                 default:
-                    if ((this->unk_3E8 == 7) || (this->unk_3E8 == 8)) {
+                    if ((this->animIndex == 7) || (this->animIndex == 8)) {
                         this->unk_3A4 |= 0x2000;
-                        func_8094E054(this, play, 12);
+                        EnGm_ChangeAnim(this, play, 12);
                     }
                     break;
             }
@@ -964,7 +964,7 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
         this->unk_18C(this, play);
     }
 
-    if ((this->unk_3E8 == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
+    if ((this->animIndex == 6) && !(play->actorCtx.flags & ACTORCTX_FLAG_5) &&
         Animation_OnFrame(&this->skelAnime, 20.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_HANKO);
     }
@@ -1040,7 +1040,7 @@ s32 func_8094F904(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->unk_3A4 |= 0x100;
             this->unk_3A4 |= 0x200;
-            func_8094E054(this, play, 7);
+            EnGm_ChangeAnim(this, play, 7);
             this->actor.gravity = 0.0f;
             ret = true;
         }
@@ -1088,7 +1088,7 @@ s32 func_8094FAC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
-        func_8094E054(this, play, 7);
+        EnGm_ChangeAnim(this, play, 7);
         this->actor.gravity = -1.0f;
         ret = true;
     }
@@ -1103,9 +1103,9 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D90);
             SubS_UpdateFlags(&this->unk_3A4, 3, 7);
-            func_8094E054(this, play, 0);
+            EnGm_ChangeAnim(this, play, 0);
         } else {
-            func_8094E054(this, play, 9);
+            EnGm_ChangeAnim(this, play, 9);
             this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_3A4 |= 0x100;
@@ -1119,7 +1119,7 @@ s32 func_8094FD88(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
-        func_8094E054(this, play, 11);
+        EnGm_ChangeAnim(this, play, 11);
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
@@ -1135,7 +1135,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) &&
         (al->update != NULL)) {
-        func_8094E054(this, play, 11);
+        EnGm_ChangeAnim(this, play, 11);
         SubS_UpdateFlags(&this->unk_3A4, 3, 7);
         this->unk_268 = al;
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
@@ -1177,11 +1177,11 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_3C8 = 4;
             this->unk_3CA = 4;
             this->unk_3CC = 8;
-            func_8094E054(this, play, 0);
+            EnGm_ChangeAnim(this, play, 0);
             func_8094E278(play);
         } else {
             Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
-            func_8094E054(this, play, 9);
+            EnGm_ChangeAnim(this, play, 9);
             this->skelAnime.moveFlags = ANIM_FLAG_NOMOVE;
         }
         this->unk_400 = 0;
@@ -1203,7 +1203,7 @@ s32 func_80950088(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     SubS_UpdateFlags(&this->unk_3A4, 3, 7);
     this->unk_3A4 |= (0x2000 | 0x100);
     this->unk_3A4 |= 0x200;
-    func_8094E054(this, play, 12);
+    EnGm_ChangeAnim(this, play, 12);
     return true;
 }
 
@@ -1218,7 +1218,7 @@ s32 func_80950120(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     SubS_UpdateFlags(&this->unk_3A4, 3, 7);
     this->unk_3A4 |= (0x800 | 0x100);
     this->unk_3A4 |= 0x200;
-    func_8094E054(this, play, 4);
+    EnGm_ChangeAnim(this, play, 4);
     return true;
 }
 
@@ -1239,7 +1239,7 @@ s32 func_809501B8(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->unk_3CC = 8;
     this->actor.targetMode = 6;
     this->unk_3B4 = 60.0f;
-    func_8094E054(this, play, 10);
+    EnGm_ChangeAnim(this, play, 10);
     return true;
 }
 
@@ -1335,11 +1335,11 @@ s32 func_80950388(EnGm* this, PlayState* play) {
 s32 func_809503F8(EnGm* this, PlayState* play) {
     s32 pad;
 
-    if (this->unk_3E8 == 9) {
+    if (this->animIndex == 9) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
             SubS_UpdateFlags(&this->unk_3A4, 3, 7);
-            func_8094E054(this, play, 0);
+            EnGm_ChangeAnim(this, play, 0);
         } else {
             AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
         }
@@ -1359,14 +1359,14 @@ s32 func_80950490(EnGm* this, PlayState* play) {
             this->unk_3CA = 1;
             this->unk_3CC = 8;
             this->unk_400 = 1;
-            func_8094E054(this, play, 3);
+            EnGm_ChangeAnim(this, play, 3);
         }
         return false;
     }
 
     this->unk_400 = 0;
 
-    switch (this->unk_3E8) {
+    switch (this->animIndex) {
         case 9:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
@@ -1374,7 +1374,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
                 this->unk_3C8 = 4;
                 this->unk_3CA = 4;
                 this->unk_3CC = 8;
-                func_8094E054(this, play, 0);
+                EnGm_ChangeAnim(this, play, 0);
                 func_8094E278(play);
             } else {
                 AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
@@ -1384,7 +1384,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
         case 5:
         case 6:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                func_8094E054(this, play, D_80951DE4[this->unk_3F4]);
+                EnGm_ChangeAnim(this, play, D_80951DE4[this->unk_3F4]);
                 this->unk_3F4++;
                 this->unk_3F4 %= 12;
                 this->unk_3DE = Rand_S16Offset(30, 30);
@@ -1393,7 +1393,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
 
         default:
             if (DECR(this->unk_3DE) == 0) {
-                func_8094E054(this, play, D_80951DE4[this->unk_3F4]);
+                EnGm_ChangeAnim(this, play, D_80951DE4[this->unk_3F4]);
                 this->unk_3F4++;
                 this->unk_3F4 %= 12;
                 this->unk_3DE = Rand_S16Offset(30, 30);
@@ -1645,7 +1645,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             }
             this->cueId = cueId;
-            func_8094E054(this, play, sp50[cueId]);
+            EnGm_ChangeAnim(this, play, sp50[cueId]);
         }
 
         if ((this->cueId == 3) && (this->unk_268 != NULL) && (this->unk_268->update != NULL)) {
@@ -1672,8 +1672,8 @@ void EnGm_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 22.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_in2_Skel_0078B0, NULL, this->jointTable, this->morphTable, 20);
-    this->unk_3E8 = -1;
-    func_8094E054(this, play, 0);
+    this->animIndex = -1;
+    EnGm_ChangeAnim(this, play, 0);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     Collider_InitAndSetSphere(play, &this->colliderSphere, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
@@ -1699,7 +1699,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
     if (!func_8094E0F8(this, play)) {
         if (!func_8094EE84(this, play) && func_8094EFC4(this, play)) {
             func_80950F2C(this, play);
-            func_8094DFF8(this, play);
+            EnGm_UpdateSkelAnime(this, play);
             func_8094E2D0(this);
             return;
         }
@@ -1709,7 +1709,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
         func_8094F53C(this, play);
 
         if (this->unk_258 != 0) {
-            func_8094DFF8(this, play);
+            EnGm_UpdateSkelAnime(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
             func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);

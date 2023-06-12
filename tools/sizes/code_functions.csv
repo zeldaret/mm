@@ -391,7 +391,7 @@ asm/non_matchings/code/z_actor/func_800BD9A0.s,func_800BD9A0,0x800BD9A0,0x10
 asm/non_matchings/code/z_actor/func_800BD9E0.s,func_800BD9E0,0x800BD9E0,0x30
 asm/non_matchings/code/z_actor/func_800BDAA0.s,func_800BDAA0,0x800BDAA0,0x33
 asm/non_matchings/code/z_actor/func_800BDB6C.s,func_800BDB6C,0x800BDB6C,0x3C
-asm/non_matchings/code/z_actor/Actor_ChangeAnimationByInfo.s,Actor_ChangeAnimationByInfo,0x800BDC5C,0x26
+asm/non_matchings/code/z_actor/Actor_ChangeAnim.s,Actor_ChangeAnim,0x800BDC5C,0x26
 asm/non_matchings/code/z_actor/func_800BDCF4.s,func_800BDCF4,0x800BDCF4,0xAF
 asm/non_matchings/code/z_actor/Actor_Noop.s,Actor_Noop,0x800BDFB0,0x4
 asm/non_matchings/code/z_actor/Gfx_DrawDListOpa.s,Gfx_DrawDListOpa,0x800BDFC0,0x1F

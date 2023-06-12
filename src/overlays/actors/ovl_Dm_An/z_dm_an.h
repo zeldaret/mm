@@ -30,7 +30,7 @@ typedef struct DmAn {
     /* 0x2C0 */ s16 unk_2C0;
     /* 0x2C2 */ s16 unk_2C2;
     /* 0x2C4 */ s16 unk_2C4;
-    /* 0x2C8 */ s32 unk_2C8;
+    /* 0x2C8 */ s32 animIndex;
     /* 0x2CC */ s32 unk_2CC;
     /* 0x2D0 */ s32 unk_2D0;
     /* 0x2D4 */ s32 unk_2D4;

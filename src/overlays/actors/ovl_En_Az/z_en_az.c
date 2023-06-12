@@ -75,7 +75,7 @@ typedef enum {
     /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT
 } BeaverAnimation;
 
-static AnimationSpeedInfo sAnimationInfo[] = {
+static AnimationSpeedInfo sAnimationSpeedInfo[] = {
     { &gBeaverIdleAnim, 1.0f, ANIMMODE_LOOP, -10.0f },
     { &gBeaverWalkAnim, 1.0f, ANIMMODE_LOOP, -5.0f },
     { &gBeaverSwimWithSpinningTail, 1.0f, ANIMMODE_LOOP, -5.0f },
@@ -278,16 +278,16 @@ void EnAz_Init(Actor* thisx, PlayState* play2) {
         this->unk_374 |= 0x100;
         this->unk_376 |= 0x100;
     }
-    Animation_Change(&this->skelAnime, sAnimationInfo[BEAVER_ANIM_IDLE].animation, 1.0f,
-                     Animation_GetLastFrame(sAnimationInfo[BEAVER_ANIM_IDLE].animation) * Rand_ZeroOne(),
-                     Animation_GetLastFrame(sAnimationInfo[BEAVER_ANIM_IDLE].animation),
-                     sAnimationInfo[BEAVER_ANIM_IDLE].mode, sAnimationInfo[BEAVER_ANIM_IDLE].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[BEAVER_ANIM_IDLE].animation, 1.0f,
+                     Animation_GetLastFrame(sAnimationSpeedInfo[BEAVER_ANIM_IDLE].animation) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(sAnimationSpeedInfo[BEAVER_ANIM_IDLE].animation),
+                     sAnimationSpeedInfo[BEAVER_ANIM_IDLE].mode, sAnimationSpeedInfo[BEAVER_ANIM_IDLE].morphFrames);
     this->unk_37E = 0;
     this->unk_380 = 0;
     this->unk_384 = 0;
     this->actor.gravity = -1.0f;
     this->unk_376 = this->unk_374;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
 
     switch (gSaveContext.save.entrance) {
@@ -548,10 +548,11 @@ s32 func_80A95B34(PlayState* play, ActorPathing* actorPathing) {
     if (this->unk_374 & 0x100) {
         if (!(this->unk_374 & 8)) {
             if (this->unk_374 & 2) {
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM, &this->animIndex);
-            } else {
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM,
                                                 &this->animIndex);
+            } else {
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL, &this->animIndex);
             }
             this->unk_374 |= 8;
         }
@@ -562,7 +563,7 @@ s32 func_80A95B34(PlayState* play, ActorPathing* actorPathing) {
         }
     } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->unk_374 & 8) {
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_WALK, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_WALK, &this->animIndex);
             this->unk_374 &= ~8;
         }
         ret = func_80A95534(play, actorPathing);
@@ -576,7 +577,7 @@ void func_80A95C5C(EnAz* this, PlayState* play) {
     this->actor.draw = NULL;
     this->actor.world.pos.y = this->actor.home.pos.y + 120.0f;
     this->actor.gravity = -1.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE, &this->animIndex);
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
     this->unk_3C0 = 0;
@@ -610,7 +611,7 @@ void func_80A95DA0(EnAz* this, PlayState* play) {
     this->unk_36C = 4.0f;
     this->actor.speed = 4.0f;
     this->actor.gravity = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->actor.bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_WATER);
@@ -662,7 +663,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
         this->actor.shape.rot.z = 0;
         Actor_MoveWithoutGravityReverse(&this->actor);
     } else {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE, &this->animIndex);
         this->unk_374 &= ~0x1000;
         this->actor.gravity = -1.0f;
         this->actor.speed = 0.0f;
@@ -701,9 +702,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0xCD:
                         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_01);
                         this->actor.textId = 0x10F2;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                         &brother->animIndex);
                         break;
                     case 0x10CE:
@@ -716,40 +717,40 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10D0:
                         this->actor.textId = 0x10D1;
                         ret = 3;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_WAVE_ARMS,
-                                                        &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                        BEAVER_ANIM_TALK_WAVE_ARMS, &this->animIndex);
                         break;
                     case 0x10D1:
                         this->actor.textId = 0x10D2;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
                         break;
                     case 0x10D2:
                         if (play->msgCtx.choiceIndex == 0) {
                             func_8019F208();
                             this->actor.textId = 0x10D6;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
                                                             BEAVER_ANIM_TALK_WAVE_ARMS, &this->animIndex);
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10D3;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                             &this->animIndex);
                         }
                         break;
                     case 0x10D3:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
                         this->unk_374 |= 0x20;
                         ret = 0;
                         break;
                     case 0x10D4:
                         this->actor.textId = 0x10D2;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
                         break;
                     case 0x10D6:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
                         func_80A979DC(this, play);
                         this->unk_2FA = 1;
@@ -791,7 +792,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10DA:
                         this->actor.textId = 0x10DB;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
                         break;
                     case 0x10DB:
@@ -803,7 +804,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10DC;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                             &this->animIndex);
                         }
                         break;
@@ -837,7 +838,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10E2:
                         this->actor.textId = 0x10E3;
                         ret = 3;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
                         break;
                     case 0x10E3:
@@ -855,9 +856,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10E6;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_TO_LEFT,
-                                                            &this->animIndex);
-                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                            BEAVER_ANIM_TALK_TO_LEFT, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo,
                                                             BEAVER_ANIM_IDLE_FACE_RIGHT, &brother->animIndex);
                         }
                         break;
@@ -869,17 +870,17 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10E7:
                         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                         func_80A94AB8(this, play, 0);
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         func_80A979DC(this, play);
                         ret = 0;
                         break;
                     case 0x10E8:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         this->unk_2FA = 3;
                         ret = 0;
@@ -913,9 +914,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10EC;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_LAUGH_LEFT,
-                                                            &this->animIndex);
-                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                            BEAVER_ANIM_LAUGH_LEFT, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo,
                                                             BEAVER_ANIM_IDLE_FACE_RIGHT, &brother->animIndex);
                         }
                         break;
@@ -951,18 +952,18 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             this->getItemId = GI_BOTTLE;
                             SET_WEEKEVENTREG(WEEKEVENTREG_23_80);
                         }
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         ret = 7;
                         break;
                     case 0x10F2:
                     case 0x1109:
                         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -987,7 +988,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10F7:
                         this->actor.textId = 0x10F8;
                         ret = 3;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
                         break;
                     case 0x10F8:
@@ -998,30 +999,30 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             } else {
                                 this->actor.textId = 0x10FA;
                             }
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
                                                             BEAVER_ANIM_TALK_WAVE_ARMS, &this->animIndex);
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10F9;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                             &this->animIndex);
-                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                             &brother->animIndex);
                         }
                         break;
                     case 0x10F9:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         this->unk_374 |= 0x20;
                         ret = 0;
                         break;
                     case 0x10FA:
                     case 0x1107:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         this->unk_2FA = 6;
                         ret = 0;
@@ -1037,9 +1038,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10FD:
                         this->actor.textId = 0x10FE;
                         ret = 3;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         break;
                     case 0x10FE:
@@ -1050,14 +1051,14 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             } else {
                                 this->actor.textId = 0x1101;
                             }
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                             &this->animIndex);
                         } else {
                             func_8019F230();
                             this->actor.textId = 0x10FF;
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_TO_LEFT,
-                                                            &this->animIndex);
-                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                            BEAVER_ANIM_TALK_TO_LEFT, &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo,
                                                             BEAVER_ANIM_IDLE_FACE_RIGHT, &brother->animIndex);
                         }
                         break;
@@ -1067,9 +1068,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x1100:
                         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -1077,9 +1078,9 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x1101:
                     case 0x1108:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         this->unk_2FA = 8;
                         ret = 0;
@@ -1103,17 +1104,17 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             this->getItemId = GI_HEART_PIECE;
                             SET_WEEKEVENTREG(WEEKEVENTREG_25_01);
                         }
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         ret = 7;
                         break;
                     case 0x1106:
                         CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
-                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &brother->animIndex);
                         func_80A94AB8(this, play, 0);
                         func_80A979DC(this, play);
@@ -1121,7 +1122,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10D5:
                     default:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE,
                                                         &this->animIndex);
                         this->unk_374 |= 0x20;
                         ret = 0;
@@ -1147,32 +1148,32 @@ void func_80A97114(EnAz* this, PlayState* play) {
         case 0x10DA:
         case 0x10DD:
         case 0x10E9:
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK, &this->animIndex);
             break;
         case 0x10EE:
         case 0x10F3:
         case 0x10FB:
         case 0x1102:
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_TO_LEFT,
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK_TO_LEFT,
                                             &this->animIndex);
             sp20 = true;
             break;
         case 0x10F2:
         case 0x1106:
         case 0x1109:
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW, &this->animIndex);
             if (brother != NULL) {
-                SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
+                SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_BOW,
                                                 &brother->animIndex);
             }
             break;
     }
     if ((brother != NULL) && sp20) {
         if (this->unk_374 & 2) {
-            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE_FACE_RIGHT,
+            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE_FACE_RIGHT,
                                             &brother->animIndex);
         } else {
-            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE_FACE_LEFT,
+            SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE_FACE_LEFT,
                                             &brother->animIndex);
         }
     }
@@ -1320,12 +1321,12 @@ void func_80A97410(EnAz* this, PlayState* play) {
             if (temp_a0 == 0) {
                 switch (this->unk_3D2) {
                     case 0x10CE:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_TALK,
                                                         &this->animIndex);
                         break;
                     case 0x10D4:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_WAVE_ARMS,
-                                                        &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                        BEAVER_ANIM_TALK_WAVE_ARMS, &this->animIndex);
                         break;
                 }
                 Message_StartTextbox(play, this->unk_3D2, &this->actor);
@@ -1462,7 +1463,7 @@ void func_80A97C24(EnAz* this, PlayState* play) {
 
 void func_80A97C4C(EnAz* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && (this->animIndex == BEAVER_ANIM_BOW)) {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_IDLE, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_IDLE, &this->animIndex);
     }
     func_80A97410(this, play);
     if ((this->unk_2FA == 1) || (this->unk_2FA == 3) || (this->unk_2FA == 6) || (this->unk_2FA == 8)) {
@@ -1514,7 +1515,7 @@ void func_80A97EAC(EnAz* this, PlayState* play) {
     this->actor.speed = 8.0f;
     this->actor.gravity = 0.0f;
     this->actor.velocity.y = 6.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, BEAVER_ANIM_SWIM_WITH_SPINNING_TAIL,
                                     &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
@@ -1907,13 +1908,14 @@ void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 animIndex, s32 b
 
     Actor_ChangeFocus(&this->actor, play, &brother->actor);
     if (animIndex >= 0) {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, animIndex, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, animIndex, &this->animIndex);
     }
     this->actor.textId = 0;
     brother->actor.textId = textId;
     brother->unk_378 = 5;
     if ((brotherAnimIndex >= 0) && (brotherAnimIndex != brother->animIndex)) {
-        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationInfo, brotherAnimIndex, &brother->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, brotherAnimIndex,
+                                        &brother->animIndex);
     }
     this->unk_378 = 0;
 }

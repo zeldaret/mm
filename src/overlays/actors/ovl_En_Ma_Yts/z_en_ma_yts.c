@@ -77,7 +77,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static AnimationSpeedInfo sAnimationInfo[] = {
+static AnimationSpeedInfo sAnimationSpeedInfo[] = {
     { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
     { &gRomaniIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
     { &gRomaniSingStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
@@ -114,9 +114,9 @@ static TexturePtr sEyeTextures[] = {
 };
 
 void EnMaYts_ChangeAnim(EnMaYts* this, s32 animIndex) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
-                     sAnimationInfo[animIndex].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationSpeedInfo[animIndex].animation),
+                     sAnimationSpeedInfo[animIndex].mode, sAnimationSpeedInfo[animIndex].morphFrames);
 }
 
 void func_80B8D12C(EnMaYts* this, PlayState* play) {

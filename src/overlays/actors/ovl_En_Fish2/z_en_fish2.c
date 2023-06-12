@@ -102,29 +102,29 @@ static ColliderJntSphInit sJntSphInit = {
 static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f };
 static f32 D_80B2B380[] = { 0.019f, 0.033f };
 
-void func_80B28370(EnFish2* this, s32 arg0) {
-    static AnimationHeader* D_80B2B388[] = {
+void EnFish2_ChangeAnim(EnFish2* this, s32 animIndex) {
+    static AnimationHeader* sAnimations[] = {
         &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
         &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
     };
-    static u8 D_80B2B3A0[] = {
+    static u8 sAnimationModes[] = {
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
     };
     f32 sp34;
 
-    this->unk_2AC = arg0;
-    this->unk_2CC = Animation_GetLastFrame(&D_80B2B388[arg0]->common);
+    this->animIndex = animIndex;
+    this->unk_2CC = Animation_GetLastFrame(&sAnimations[animIndex]->common);
     sp34 = 0.0f;
-    if (this->unk_2AC == 3) {
-        sp34 = Animation_GetLastFrame(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
+    if (this->animIndex == 3) {
+        sp34 = Animation_GetLastFrame(&sAnimations[this->animIndex]->common) - 21.0f;
     }
 
-    if (this->unk_2AC == 2) {
-        this->unk_2CC = Animation_GetLastFrame(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
+    if (this->animIndex == 2) {
+        this->unk_2CC = Animation_GetLastFrame(&sAnimations[this->animIndex]->common) - 21.0f;
     }
 
-    Animation_Change(&this->skelAnime, D_80B2B388[this->unk_2AC], 1.0f, sp34, this->unk_2CC, D_80B2B3A0[this->unk_2AC],
-                     -10.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, sp34, this->unk_2CC,
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 s32 func_80B28478(EnFish2* this) {
@@ -309,7 +309,7 @@ void func_80B289DC(EnFish2* this, PlayState* play) {
 }
 
 void func_80B28B5C(EnFish2* this) {
-    func_80B28370(this, 0);
+    EnFish2_ChangeAnim(this, 0);
     this->unk_2B4 = 0;
     this->unk_348 = 0;
     this->unk_2C4 = 0;
@@ -457,7 +457,7 @@ void func_80B29194(EnFish2* this) {
 
     this->unk_34A = 0;
     this->unk_340 = (s32)Rand_ZeroOne() & 1;
-    func_80B28370(this, 1);
+    EnFish2_ChangeAnim(this, 1);
     this->actionFunc = func_80B29250;
 }
 
@@ -482,7 +482,7 @@ void func_80B29250(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2938C(EnFish2* this) {
-    func_80B28370(this, 5);
+    EnFish2_ChangeAnim(this, 5);
     this->unk_348 = 0;
     this->actionFunc = func_80B293C4;
 }
@@ -501,7 +501,7 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
         }
 
         if (this->unk_2CC <= currentFrame) {
-            func_80B28370(this, 1);
+            EnFish2_ChangeAnim(this, 1);
             if (this->unk_2B0 == 0) {
                 this->actionFunc = func_80B29250;
             } else {
@@ -552,8 +552,8 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
             EffectSsBubble_Spawn(play, &sp60, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(this->unk_330 * 4.0f) + 0.1f);
         }
     } else if (this->unk_2CC <= currentFrame) {
-        if (this->unk_2AC != 5) {
-            func_80B28370(this, 5);
+        if (this->animIndex != 5) {
+            EnFish2_ChangeAnim(this, 5);
         } else if (this->unk_2C8 == 0) {
             func_80B29778(this);
         } else {
@@ -566,7 +566,7 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
 }
 
 void func_80B29778(EnFish2* this) {
-    func_80B28370(this, 0);
+    EnFish2_ChangeAnim(this, 0);
     this->unk_2B4 = 0;
     this->unk_2C4 = 0;
     this->unk_2B6 = this->unk_2B4;
@@ -754,7 +754,7 @@ void func_80B29E5C(EnFish2* this, PlayState* play) {
         if (&this->actor != prop) {
             this->unk_350 = prop;
             this->unk_2B0 = D_80B2B2E8 = 1;
-            func_80B28370(this, 0);
+            EnFish2_ChangeAnim(this, 0);
             this->actionFunc = func_80B29EE4;
             break;
         }
@@ -868,7 +868,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2A448(EnFish2* this) {
-    func_80B28370(this, 4);
+    EnFish2_ChangeAnim(this, 4);
     this->unk_2B4 = 0;
     this->unk_2C4 = 0;
     this->unk_2B6 = this->unk_2B4;
@@ -880,7 +880,7 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
     f32 currentFrame = this->skelAnime.curFrame;
     Vec3f sp80;
 
-    if ((this->unk_2AC == 4) && Animation_OnFrame(&this->skelAnime, 13.0f)) {
+    if ((this->animIndex == 4) && Animation_OnFrame(&this->skelAnime, 13.0f)) {
         Actor* temp_v0;
 
         Math_Vec3f_Copy(&sp80, &this->unk_318);
@@ -899,7 +899,7 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2AC == 4) &&
+    if ((this->animIndex == 4) &&
         (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
         WaterBox* sp78;
 
@@ -920,12 +920,12 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2CC <= currentFrame) && (this->unk_2AC == 4)) {
+    if ((this->unk_2CC <= currentFrame) && (this->animIndex == 4)) {
         D_80B2B2E0 = 0;
         D_80B2B2E4 = 3;
         this->actor.world.pos.x = this->unk_324.x;
         this->actor.world.pos.z = this->unk_324.z;
-        func_80B28370(this, 0);
+        EnFish2_ChangeAnim(this, 0);
     }
 }
 

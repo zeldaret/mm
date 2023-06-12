@@ -17,7 +17,7 @@ void EnZov_Destroy(Actor* thisx, PlayState* play);
 void EnZov_Update(Actor* thisx, PlayState* play);
 void EnZov_Draw(Actor* thisx, PlayState* play);
 
-void func_80BD1570(EnZov* this, s16 index, u8 mode);
+void func_80BD1570(EnZov* this, s16 animIndex, u8 animMode);
 void func_80BD187C(EnZov* this, PlayState* play);
 void func_80BD19FC(EnZov* this, PlayState* play);
 void func_80BD1BF0(EnZov* this, PlayState* play);
@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BD270C[] = {
+static AnimationHeader* sAnimations[] = {
     &object_zov_Anim_00D3EC, &object_zov_Anim_008120, &object_zov_Anim_00B4CC, &object_zov_Anim_00A888,
     &object_zov_Anim_00C510, &object_zov_Anim_00CAA8, &object_zov_Anim_008120, &object_zov_Anim_00A888,
     &object_zov_Anim_002B5C, &object_zov_Anim_00418C, &object_zov_Anim_005A6C, &object_zov_Anim_0066A4,
@@ -95,7 +95,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     this->cueId = -1;
     this->csIdList[0] = this->picto.actor.csId;
     this->csIdList[1] = CS_ID_GLOBAL_TALK;
-    this->unk_322 = 0;
+    this->animIndex = 0;
     this->actionFunc = func_80BD1C84;
     this->picto.validationFunc = EnZov_ValidatePictograph;
 
@@ -142,16 +142,17 @@ void func_80BD13DC(EnZov* this) {
     }
 }
 
-void func_80BD1440(EnZov* this, s16 arg1) {
+void func_80BD1440(EnZov* this, s16 csIdIndex) {
     func_80BD13DC(this);
-    this->csIdIndex = arg1;
+    this->csIdIndex = csIdIndex;
 }
 
-void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
+void EnZov_ChangeAnim(EnZov* this, s16 animIndex, u8 animMode, f32 transitionRate) {
     f32 frame;
 
-    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
-        switch (index) {
+    if (((this->animIndex != animIndex) || (animMode != ANIMMODE_LOOP)) && (animIndex >= 0) &&
+        (animIndex < ARRAY_COUNT(sAnimations))) {
+        switch (animIndex) {
             case 6:
                 frame = 30.0f;
                 break;
@@ -164,14 +165,14 @@ void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
                 frame = 0.0f;
                 break;
         }
-        Animation_Change(&this->skelAnime, D_80BD270C[index], 1.0f, frame, Animation_GetLastFrame(D_80BD270C[index]),
-                         mode, transitionRate);
-        this->unk_322 = index;
+        Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, frame,
+                         Animation_GetLastFrame(sAnimations[animIndex]), animMode, transitionRate);
+        this->animIndex = animIndex;
     }
 }
 
-void func_80BD1570(EnZov* this, s16 index, u8 mode) {
-    func_80BD1470(this, index, mode, 5.0f);
+void func_80BD1570(EnZov* this, s16 animIndex, u8 animMode) {
+    EnZov_ChangeAnim(this, animIndex, animMode, 5.0f);
 }
 
 s32 func_80BD15A4(EnZov* this, PlayState* play) {
@@ -189,7 +190,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
         this->unk_320 &= ~2;
         if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
             textId = 0x1024;
-            if ((this->unk_322 == 0) || (this->unk_322 == 4)) {
+            if ((this->animIndex == 0) || (this->animIndex == 4)) {
                 func_80BD1570(this, 4, ANIMMODE_ONCE);
             } else {
                 func_80BD1570(this, 6, ANIMMODE_ONCE);
@@ -219,7 +220,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
 
 void func_80BD1764(EnZov* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
-        switch (this->unk_322) {
+        switch (this->animIndex) {
             case 1:
             case 6:
                 func_80BD1570(this, 6, ANIMMODE_ONCE);
@@ -268,7 +269,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
                         break;
 
                     case 0x1023:
-                        if ((this->unk_322 != 6) && (this->unk_322 != 1)) {
+                        if ((this->animIndex != 6) && (this->animIndex != 1)) {
                             func_80BD1570(this, 1, ANIMMODE_ONCE);
                         }
                         Message_CloseTextbox(play);
@@ -276,7 +277,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
                         break;
 
                     case 0x1024:
-                        if (this->unk_322 != 6) {
+                        if (this->animIndex != 6) {
                             func_80BD1570(this, 0, ANIMMODE_LOOP);
                         }
                         Message_CloseTextbox(play);
@@ -304,7 +305,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
 
 void func_80BD19FC(EnZov* this, PlayState* play) {
     func_80BD1764(this);
-    if (this->unk_322 == 0) {
+    if (this->animIndex == 0) {
         if (!(this->unk_320 & 2)) {
             this->unk_320 |= 2;
             this->unk_2EE = 3;
@@ -344,7 +345,7 @@ s32 func_80BD1AE0(EnZov* this, PlayState* play) {
                     break;
 
                 case 3:
-                    func_80BD1470(this, 10, ANIMMODE_ONCE, 0.0f);
+                    EnZov_ChangeAnim(this, 10, ANIMMODE_ONCE, 0.0f);
                     break;
 
                 case 4:
@@ -487,7 +488,7 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
     if ((this->unk_320 & 1) && func_80BD15A4(this, play)) {
         Actor_TrackPlayer(play, &this->picto.actor, &this->unk_2F0, &this->unk_2F6, this->picto.actor.focus.pos);
     } else {
-        if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
+        if ((this->unk_320 & 0x10) && (this->animIndex == 0)) {
             Math_SmoothStepToS(&this->unk_2F0.x, -0x1B58, 6, 0x1838, 0x64);
         } else {
             Math_SmoothStepToS(&this->unk_2F0.x, 0, 6, 0x1838, 0x64);
@@ -523,7 +524,7 @@ s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 
     if (limbIndex == 12) {
         rot->x += this->unk_2F0.y;
-        if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
+        if ((this->unk_320 & 0x10) && (this->animIndex == 0)) {
             rot->z += this->unk_2F0.x;
         }
     }
@@ -568,7 +569,7 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
     curFrame = this->skelAnime.curFrame;
     phi_v1 = this->unk_2EC;
 
-    switch (this->unk_322) {
+    switch (this->animIndex) {
         case 0:
             if ((this->unk_2EC == 0) && !(this->unk_320 & 0x10)) {
                 phi_v1 = 1;

@@ -44,7 +44,7 @@ typedef struct EnPr2 {
     /* 0x204 */ f32 unk_204;
     /* 0x208 */ f32 unk_208;
     /* 0x20C */ f32 unk_20C;
-    /* 0x210 */ s32 unk_210;
+    /* 0x210 */ s32 animIndex;
     /* 0x214 */ UNK_TYPE1 unk214[4];
     /* 0x218 */ s32 unk_218;
     /* 0x21C */ Vec3f unk_21C;

@@ -128,9 +128,10 @@ void EnDaiku_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_8094373C(EnDaiku* this, s32 arg1) {
-    this->unk_284 = Animation_GetLastFrame(sAnimations[arg1]);
-    Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, this->unk_284, sAnimationModes[arg1], -4.0f);
+void EnDaiku_ChangeAnim(EnDaiku* this, s32 animIndex) {
+    this->unk_284 = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, this->unk_284, sAnimationModes[animIndex],
+                     -4.0f);
 }
 
 void func_809437C8(EnDaiku* this) {
@@ -147,15 +148,15 @@ void func_80943820(EnDaiku* this) {
     switch (this->unk_278) {
         case 0:
         case 1:
-            func_8094373C(this, 0);
+            EnDaiku_ChangeAnim(this, 0);
             break;
 
         case 2:
-            func_8094373C(this, 7);
+            EnDaiku_ChangeAnim(this, 7);
             break;
 
         case 3:
-            func_8094373C(this, 6);
+            EnDaiku_ChangeAnim(this, 6);
             break;
     }
 
@@ -190,9 +191,9 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
     if ((this->unk_278 == ENDAIKU_PARAM_FF_2) && (this->unk_284 <= currentFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
-            func_8094373C(this, 7);
+            EnDaiku_ChangeAnim(this, 7);
         } else {
-            func_8094373C(this, 8);
+            EnDaiku_ChangeAnim(this, 8);
         }
     }
 
@@ -239,9 +240,9 @@ void func_80943BDC(EnDaiku* this, PlayState* play) {
 
     if ((this->unk_278 == ENDAIKU_PARAM_FF_2) && (this->unk_284 <= currentFrame)) {
         if (Rand_ZeroOne() < 0.5f) {
-            func_8094373C(this, 7);
+            EnDaiku_ChangeAnim(this, 7);
         } else {
-            func_8094373C(this, 8);
+            EnDaiku_ChangeAnim(this, 8);
         }
     }
 

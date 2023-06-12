@@ -46,7 +46,7 @@ typedef struct EnBombers {
     /* 0x2BC */ s16 unk_2BC;
     /* 0x2BE */ s16 unk_2BE;
     /* 0x2C0 */ s16 unk_2C0;
-    /* 0x2C4 */ s32 unk_2C4;
+    /* 0x2C4 */ s32 animIndex;
     /* 0x2C8 */ ColliderCylinder collider;
 } EnBombers; // size = 0x314
 

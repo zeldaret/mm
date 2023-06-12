@@ -43,7 +43,7 @@ typedef struct EnDai {
     /* 0x27A */ Vec3s morphTable[19];
     /* 0x2EC */ EnDaiEffect effects[EN_DAI_EFFECT_COUNT];
     /* 0xA6C */ s32 unk_A6C;
-    /* 0xA70 */ s32 unk_A70;
+    /* 0xA70 */ s32 animIndex;
 } EnDai; // size = 0xA74
 
 #endif // Z_EN_DAI_H

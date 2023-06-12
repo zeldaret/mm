@@ -17,7 +17,7 @@ void EnKbt_Draw(Actor* thisx, PlayState* play);
 
 s32 func_80B33E64(PlayState* play);
 s32 func_80B33E8C(PlayState* play);
-void func_80B33EF0(EnKbt* this, s16 arg1);
+void EnKbt_ChangeAnim(EnKbt* this, s16 animIndex);
 Actor* func_80B3403C(PlayState* play);
 void func_80B34314(EnKbt* this, PlayState* play);
 void func_80B34598(EnKbt* this, PlayState* play);
@@ -44,13 +44,13 @@ void EnKbt_Init(Actor* thisx, PlayState* play) {
     this->actor.home.rot.z = 0;
     this->unk_27E = 4;
     this->unk_27F = 0;
-    this->unk_280 = 13;
+    this->animIndex = 13;
     this->unk_282 = 13;
     this->unk_278 = func_80B3403C(play);
     this->unk_284 = 0;
     this->actor.textId = 0;
     if (func_80B33E64(play)) {
-        func_80B33EF0(this, 6);
+        EnKbt_ChangeAnim(this, 6);
         this->unk_282 = 11;
         if (func_80B33E8C(play)) {
             this->actor.textId = 0xC50;
@@ -60,7 +60,7 @@ void EnKbt_Init(Actor* thisx, PlayState* play) {
         }
         this->actionFunc = func_80B34314;
     } else {
-        func_80B33EF0(this, 0);
+        EnKbt_ChangeAnim(this, 0);
         this->unk_282 = 0;
         this->actionFunc = func_80B34598;
     }
@@ -82,27 +82,28 @@ s32 func_80B33E8C(PlayState* play) {
     return false;
 }
 
-void func_80B33EF0(EnKbt* this, s16 arg1) {
+void EnKbt_ChangeAnim(EnKbt* this, s16 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &object_kbt_Anim_000670, &object_kbt_Anim_001674, &object_kbt_Anim_002084, &object_kbt_Anim_000FE8,
         &object_kbt_Anim_001940, &object_kbt_Anim_00E7BC, &object_kbt_Anim_00F0C8, &object_kbt_Anim_002710,
         &object_kbt_Anim_002DE0, &object_kbt_Anim_003414, &object_kbt_Anim_003D24, &object_kbt_Anim_001BF4,
         &object_kbt_Anim_002084,
     };
-    u8 sp38[] = {
+    u8 animationModes[] = {
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_LOOP,
         ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE,
     };
 
-    if (arg1 != this->unk_280) {
-        if (arg1 >= 12) {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], -1.0f,
-                             Animation_GetLastFrame(sAnimations[arg1]) - 1.0f, 0.0f, sp38[arg1], -5.0f);
+    if (this->animIndex != animIndex) {
+        if (animIndex >= 12) {
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], -1.0f,
+                             Animation_GetLastFrame(sAnimations[animIndex]) - 1.0f, 0.0f, animationModes[animIndex],
+                             -5.0f);
         } else {
-            Animation_Change(&this->skelAnime, sAnimations[arg1], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[arg1]),
-                             sp38[arg1], -5.0f);
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimations[animIndex]), animationModes[animIndex], -5.0f);
         }
-        this->unk_280 = arg1;
+        this->animIndex = animIndex;
     }
 }
 
@@ -124,11 +125,11 @@ void func_80B34078(EnKbt* this) {
         if (this->unk_284 > 0) {
             this->unk_284--;
         } else {
-            switch (this->unk_280) {
+            switch (this->animIndex) {
                 case 2:
                     switch (this->unk_282) {
                         case 0:
-                            func_80B33EF0(this, 12);
+                            EnKbt_ChangeAnim(this, 12);
                             break;
 
                         case 5:
@@ -136,18 +137,18 @@ void func_80B34078(EnKbt* this) {
                             break;
 
                         default:
-                            func_80B33EF0(this, 5);
+                            EnKbt_ChangeAnim(this, 5);
                             break;
                     }
                     break;
 
                 case 12:
-                    func_80B33EF0(this, 0);
+                    EnKbt_ChangeAnim(this, 0);
                     this->actor.home.rot.z = 0;
                     break;
 
                 case 4:
-                    func_80B33EF0(this, 1);
+                    EnKbt_ChangeAnim(this, 1);
                     this->unk_27E = 2;
                     this->actor.home.rot.z = 0;
                     break;
@@ -169,67 +170,67 @@ void func_80B3415C(EnKbt* this) {
 
     switch (this->unk_282) {
         case 0:
-            if ((this->unk_280 != 2) && (this->unk_280 != 12)) {
-                func_80B33EF0(this, 0);
+            if ((this->animIndex != 2) && (this->animIndex != 12)) {
+                EnKbt_ChangeAnim(this, 0);
             }
             break;
 
         case 1:
-            func_80B33EF0(this, 2);
+            EnKbt_ChangeAnim(this, 2);
             this->unk_282 = 0;
             break;
 
         case 2:
-            if (this->unk_280 != 12) {
-                func_80B33EF0(this, 3);
+            if (this->animIndex != 12) {
+                EnKbt_ChangeAnim(this, 3);
             }
             break;
 
         case 3:
-            if (this->unk_280 != 1) {
-                func_80B33EF0(this, 4);
+            if (this->animIndex != 1) {
+                EnKbt_ChangeAnim(this, 4);
             }
             break;
 
         case 10:
-            func_80B33EF0(this, 11);
+            EnKbt_ChangeAnim(this, 11);
             break;
 
         case 4:
-            func_80B33EF0(this, 2);
+            EnKbt_ChangeAnim(this, 2);
             this->unk_282 = 6;
             break;
 
         case 6:
-            if (this->unk_280 != 2) {
-                func_80B33EF0(this, 5);
+            if (this->animIndex != 2) {
+                EnKbt_ChangeAnim(this, 5);
             }
             break;
 
         case 11:
-            func_80B33EF0(this, 6);
+            EnKbt_ChangeAnim(this, 6);
             break;
 
         case 7:
-            if (this->unk_280 != 2) {
-                func_80B33EF0(this, 7);
+            if (this->animIndex != 2) {
+                EnKbt_ChangeAnim(this, 7);
             }
             break;
 
         case 8:
-            if (this->unk_280 != 2) {
-                func_80B33EF0(this, 8);
+            if (this->animIndex != 2) {
+                EnKbt_ChangeAnim(this, 8);
             }
             break;
 
         case 9:
-            if (this->unk_280 != 2) {
-                func_80B33EF0(this, 9);
+            if (this->animIndex != 2) {
+                EnKbt_ChangeAnim(this, 9);
             }
             break;
 
         case 12:
-            func_80B33EF0(this, 10);
+            EnKbt_ChangeAnim(this, 10);
             break;
     }
 }
@@ -320,7 +321,7 @@ void func_80B34598(EnKbt* this, PlayState* play) {
             this->unk_27E = 4;
             this->unk_27F = 0;
             this->unk_282 = 0;
-            func_80B33EF0(this, 12);
+            EnKbt_ChangeAnim(this, 12);
             break;
 
         case 0x6:
@@ -404,26 +405,26 @@ void func_80B34598(EnKbt* this, PlayState* play) {
         case 0xC35:
             this->unk_27E = 4;
             this->unk_27F = 0;
-            func_80B33EF0(this, 2);
+            EnKbt_ChangeAnim(this, 2);
             this->unk_282 = 5;
             break;
 
         case 0xC36:
             this->unk_27E = 1;
             this->unk_27F = 1;
-            func_80B33EF0(this, 7);
+            EnKbt_ChangeAnim(this, 7);
             this->unk_282 = 7;
             break;
 
         case 0xC37:
-            func_80B33EF0(this, 10);
+            EnKbt_ChangeAnim(this, 10);
             this->unk_27E = 0;
             this->unk_27F = 1;
             break;
 
         case 0xC38:
         case 0xC39:
-            func_80B33EF0(this, 7);
+            EnKbt_ChangeAnim(this, 7);
             this->unk_27E = 0;
             this->unk_27F = 1;
             break;

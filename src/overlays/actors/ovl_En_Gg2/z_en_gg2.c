@@ -122,7 +122,7 @@ void func_80B3AE60(EnGg2* this, PlayState* play) {
         switch (this->unk_2EE) {
             case 0:
                 this->unk_2EE = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 1);
+                Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 1);
                 this->actionFunc = func_80B3B0A0;
                 break;
 
@@ -130,24 +130,24 @@ void func_80B3AE60(EnGg2* this, PlayState* play) {
             case 8:
                 this->unk_2EE = 5;
                 this->actor.flags &= ~ACTOR_FLAG_1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 5);
+                Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 5);
                 this->actionFunc = func_80B3B120;
                 break;
 
             case 5:
                 this->unk_2EE = 6;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+                Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 0);
                 this->actionFunc = func_80B3B21C;
                 break;
 
             case 6:
                 this->unk_2EE = 7;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 5);
+                Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 5);
                 this->actionFunc = func_80B3B294;
                 break;
 
             default:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+                Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 0);
                 this->actionFunc = func_80B3AFB0;
                 break;
         }
@@ -385,14 +385,14 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
         CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_10);
         this->unk_2EE = 0;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+        Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 0);
         this->actionFunc = func_80B3AFB0;
     } else if (play->sceneId == SCENE_17SETUGEN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_04) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_08) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_04);
             this->unk_2EE = 8;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+            Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
         } else {
             Actor_Kill(&this->actor);
@@ -402,7 +402,7 @@ void EnGg2_Init(Actor* thisx, PlayState* play2) {
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_10)) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_20_08);
             this->unk_2EE = 8;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, D_80B3BF00, 0);
+            Actor_ChangeAnim(&this->skelAnime, D_80B3BF00, 0);
             this->actionFunc = func_80B3B05C;
         } else {
             Actor_Kill(&this->actor);

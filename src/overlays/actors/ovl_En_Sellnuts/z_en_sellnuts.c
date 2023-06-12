@@ -235,24 +235,24 @@ f32 func_80ADB08C(PlayState* play) {
 
 void func_80ADB0D8(EnSellnuts* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (currentFrame == frameCount) {
         switch (this->unk_340) {
             case 0x611:
             case 0x62A:
-                this->unk_34C = 0;
+                this->animIndex = 0;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
                 this->actionFunc = func_80ADBFA0;
                 break;
 
             case 0x618:
-                if (this->unk_34C == 1) {
-                    this->unk_34C = 0;
+                if (this->animIndex == 1) {
+                    this->animIndex = 0;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
                     this->actionFunc = func_80ADB544;
                 } else {
-                    this->unk_34C = 1;
+                    this->animIndex = 1;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                     this->actionFunc = func_80ADBFA0;
                 }
@@ -263,7 +263,7 @@ void func_80ADB0D8(EnSellnuts* this, PlayState* play) {
             case 0x60F:
             case 0x614:
             case 0x628:
-                this->unk_34C = 0;
+                this->animIndex = 0;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
                 this->actionFunc = func_80ADB924;
                 break;
@@ -272,14 +272,14 @@ void func_80ADB0D8(EnSellnuts* this, PlayState* play) {
             case 0x615:
             case 0x616:
             case 0x629:
-                this->unk_34C = 1;
+                this->animIndex = 1;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 1);
                 this->actionFunc = func_80ADB924;
                 break;
 
             case 0x613:
             case 0x619:
-                this->unk_34C = 7;
+                this->animIndex = 7;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 7);
                 this->actionFunc = func_80ADBD64;
                 break;
@@ -289,38 +289,38 @@ void func_80ADB0D8(EnSellnuts* this, PlayState* play) {
 
 void func_80ADB254(EnSellnuts* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     if (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f) ? true : false) &&
         ((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80ADB4F4;
-        this->unk_34C = 3;
+        this->animIndex = 3;
         this->collider.dim.height = 64;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
     } else if (currentFrame == frameCount) {
-        if ((this->unk_34C == 4) || (this->unk_34C == 18)) {
-            this->unk_34C = 17;
+        if ((this->animIndex == 4) || (this->animIndex == 18)) {
+            this->animIndex = 17;
             this->collider.dim.height = 0;
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
-        } else if (this->unk_34C == 2) {
-            this->unk_34C = 16;
+        } else if (this->animIndex == 2) {
+            this->animIndex = 16;
             this->collider.dim.height = 32;
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
-        } else if (this->unk_34C == 17) {
+        } else if (this->animIndex == 17) {
             if (DECR(this->unk_34E) == 0) {
                 this->unk_34E = Rand_ZeroOne() * 10.0f;
-                this->unk_34C = 2;
+                this->animIndex = 2;
                 this->collider.dim.height = 32;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 2);
             }
-        } else if (this->unk_34C == 16) {
+        } else if (this->animIndex == 16) {
             if (DECR(this->unk_34E) == 0) {
                 this->unk_34E = Rand_S16Offset(40, 40);
-                this->unk_34C = 18;
+                this->animIndex = 18;
                 this->collider.dim.height = 32;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 18);
             }
@@ -408,7 +408,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
 
     if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
         !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
-        this->unk_34C = 4;
+        this->animIndex = 4;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
         this->actionFunc = func_80ADB254;
     }
@@ -455,17 +455,17 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
 void func_80ADBAB8(EnSellnuts* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->unk_368 == 0x28) {
-        this->unk_34C = 5;
+        this->animIndex = 5;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 5);
     }
 
     this->unk_368++;
 
-    if ((currentFrame == frameCount) && (this->unk_34C == 5)) {
-        this->unk_34C = 6;
+    if ((currentFrame == frameCount) && (this->animIndex == 5)) {
+        this->animIndex = 6;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 6);
     }
 
@@ -508,10 +508,10 @@ void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
 void func_80ADBD64(EnSellnuts* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((currentFrame == frameCount) && (this->unk_34C == 7)) {
-        this->unk_34C = 0;
+    if ((currentFrame == frameCount) && (this->animIndex == 7)) {
+        this->animIndex = 0;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     }
 
@@ -520,7 +520,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        this->unk_34C = 8;
+        this->animIndex = 8;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
         this->actionFunc = func_80ADBE80;
     }
@@ -528,7 +528,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
 
 void func_80ADBE80(EnSellnuts* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     func_80ADAE64(this);
     if (this->unk_366 == 0) {
@@ -546,7 +546,7 @@ void func_80ADBE80(EnSellnuts* this, PlayState* play) {
 
     if (currentFrame == frameCount) {
         this->unk_350 = 4;
-        this->unk_34C = 19;
+        this->animIndex = 19;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 19);
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_338 &= ~1;
@@ -560,7 +560,7 @@ void func_80ADBFA0(EnSellnuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
-        if (this->unk_34C == 0) {
+        if (this->animIndex == 0) {
             this->actionFunc = func_80ADB544;
         } else {
             this->actionFunc = func_80ADB0D8;
@@ -580,7 +580,7 @@ void func_80ADC034(EnSellnuts* this, PlayState* play) {
 
     if ((this->actor.home.pos.y + 200.0f) < this->actor.world.pos.y) {
         Math_ApproachF(&this->actor.velocity.y, 0.0f, 0.2f, 1.0f);
-        this->unk_34C = 10;
+        this->animIndex = 10;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
         this->unk_368 = 0;
         this->actionFunc = func_80ADC37C;
@@ -590,7 +590,7 @@ void func_80ADC034(EnSellnuts* this, PlayState* play) {
 void func_80ADC118(EnSellnuts* this, PlayState* play) {
     Vec3f sp34;
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (currentFrame == frameCount) {
         Math_SmoothStepToS(&this->unk_364, 0x1C71, 3, 0x100, 0);
@@ -614,7 +614,7 @@ void func_80ADC118(EnSellnuts* this, PlayState* play) {
     }
 
     if ((this->actor.home.pos.y + 22.5f) < this->actor.world.pos.y) {
-        this->unk_34C = 9;
+        this->animIndex = 9;
         this->unk_360 = 0.3f;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 9);
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
@@ -790,11 +790,11 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
         this->actor.world.rot.x = -sp30.x;
         if (func_80ADCE4C(this, this->path, this->unk_334)) {
             if (this->unk_334 >= (this->path->count - 1)) {
-                this->unk_34C = 22;
+                this->animIndex = 22;
                 this->actor.gravity = -1.0f;
                 this->actor.velocity.y = -1.0f;
                 this->actor.speed = 0.0f;
-                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+                SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                 this->unk_338 &= ~1;
                 this->unk_338 &= ~2;
                 this->actionFunc = func_80ADCA64;
@@ -809,9 +809,9 @@ void func_80ADC8C4(EnSellnuts* this, PlayState* play) {
 
 void func_80ADCA64(EnSellnuts* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->unk_34C == 22) {
+    if (this->animIndex == 22) {
         Math_SmoothStepToS(&this->unk_364, 0, 3, 0x100, 0);
         this->actor.shape.rot.y += 0x4000;
         this->unk_360 *= 0.93f;
@@ -820,9 +820,9 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
             this->unk_338 &= ~8;
             this->unk_34E = 20;
             this->unk_350 = 4;
-            this->unk_34C = 19;
+            this->animIndex = 19;
             this->actor.velocity.y = 0.0f;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         }
         return;
@@ -830,11 +830,11 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
     if (currentFrame == frameCount) {
-        if (this->unk_34C == 19) {
-            this->unk_34C = 17;
+        if (this->animIndex == 19) {
+            this->animIndex = 17;
             this->collider.dim.height = 0;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
-        } else if (this->unk_34C == 17) {
+        } else if (this->animIndex == 17) {
             CutsceneManager_Stop(this->csId);
             SET_WEEKEVENTREG(WEEKEVENTREG_73_04);
             Actor_Kill(&this->actor);
@@ -844,18 +844,18 @@ void func_80ADCA64(EnSellnuts* this, PlayState* play) {
 
 void func_80ADCC04(EnSellnuts* this, PlayState* play) {
     s16 currentFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->unk_34C].animation);
+    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->unk_34C == 3) {
+    if (this->animIndex == 3) {
         if (currentFrame == frameCount) {
             this->unk_350 = 4;
-            this->unk_34C = 21;
+            this->animIndex = 21;
             this->unk_354 = 1.0f;
             this->unk_358 = 1.0f;
             this->unk_35C = 1.0f;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
-    } else if (this->unk_34C == 21) {
+    } else if (this->animIndex == 21) {
         func_80ADAFC0(this);
         if (currentFrame == 0) {
             if (func_80ADB08C(play) < 9999.0f) {
@@ -863,8 +863,8 @@ void func_80ADCC04(EnSellnuts* this, PlayState* play) {
                 func_800B8614(&this->actor, play, 9999.0f);
             }
             this->unk_340 = 0x626;
-            this->unk_34C = 0;
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+            this->animIndex = 0;
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = func_80ADC5A4;
         }
     }
@@ -882,10 +882,10 @@ void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
         this->unk_34A = 50;
         this->unk_34E = Rand_ZeroOne() * 10.0f;
         this->collider.dim.height = 64;
-        this->unk_34C = 3;
+        this->animIndex = 3;
         this->unk_350 = 4;
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = func_80ADCC04;
     } else if (D_80ADD940 != 0) {
         this->collider.dim.height = 64;
@@ -989,8 +989,8 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
         this->unk_340 = D_80ADD910[this->unk_33A];
         this->actor.gravity = -1.0f;
         this->unk_34A = 50;
-        this->unk_34C = 4;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+        this->animIndex = 4;
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = func_80ADB254;
         return;
     }
@@ -1002,13 +1002,13 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
         this->unk_340 = 0x625;
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
-        this->unk_34C = 20;
+        this->animIndex = 20;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_35C = 1.0f;
         this->unk_358 = 1.0f;
         this->unk_354 = 1.0f;
         this->unk_360 = 1.0f;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = func_80ADC5A4;
     } else {
         this->unk_338 |= 2;
@@ -1016,10 +1016,10 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
-        this->unk_34C = 4;
+        this->animIndex = 4;
         this->unk_34E = 20;
         this->collider.dim.height = 64;
-        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_34C);
+        SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = func_80ADCD3C;
     }
 }
@@ -1059,17 +1059,17 @@ void EnSellnuts_Update(Actor* thisx, PlayState* play) {
 s32 EnSellnuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnSellnuts* this = THIS;
 
-    if (((this->unk_34C == 4) && (this->unk_350 == 0)) || ((this->unk_34C == 8) && (this->unk_350 == 0)) ||
-        ((this->unk_34C == 21) && (this->unk_350 == 0)) || (this->unk_34C == 18) || (this->unk_34C == 2) ||
-        ((this->unk_34C == 3) && (this->unk_350 == 0)) || ((this->unk_34C == 17) && (this->unk_350 == 0)) ||
-        (this->unk_34C == 5) || (this->unk_34C == 6) || (this->unk_34C == 7) || (this->unk_34C == 1) ||
-        (this->unk_34C == 0) || (this->unk_34C == 16)) {
+    if (((this->animIndex == 4) && (this->unk_350 == 0)) || ((this->animIndex == 8) && (this->unk_350 == 0)) ||
+        ((this->animIndex == 21) && (this->unk_350 == 0)) || (this->animIndex == 18) || (this->animIndex == 2) ||
+        ((this->animIndex == 3) && (this->unk_350 == 0)) || ((this->animIndex == 17) && (this->unk_350 == 0)) ||
+        (this->animIndex == 5) || (this->animIndex == 6) || (this->animIndex == 7) || (this->animIndex == 1) ||
+        (this->animIndex == 0) || (this->animIndex == 16)) {
         if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 23) || (limbIndex == 24) ||
             (limbIndex == 15)) {
             *dList = NULL;
         }
-    } else if ((this->unk_34C == 8) || (this->unk_34C == 21) || (this->unk_34C == 19) ||
-               ((this->unk_34C == 3) && (this->unk_350 == 4)) || ((this->unk_34C == 17) && (this->unk_350 == 4))) {
+    } else if ((this->animIndex == 8) || (this->animIndex == 21) || (this->animIndex == 19) ||
+               ((this->animIndex == 3) && (this->unk_350 == 4)) || ((this->animIndex == 17) && (this->unk_350 == 4))) {
         switch (this->unk_350) {
             case 1:
                 if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 25)) {
@@ -1091,11 +1091,11 @@ s32 EnSellnuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                 }
                 break;
         }
-    } else if ((this->unk_34C == 9) || (this->unk_34C == 10)) {
+    } else if ((this->animIndex == 9) || (this->animIndex == 10)) {
         if ((limbIndex == 15) || (limbIndex == 25)) {
             *dList = NULL;
         }
-    } else if (((this->unk_34C == 22) || (this->unk_34C == 20)) &&
+    } else if (((this->animIndex == 22) || (this->animIndex == 20)) &&
                ((limbIndex == 15) || (limbIndex == 25) || (limbIndex == 27))) {
         *dList = NULL;
     }
@@ -1105,7 +1105,7 @@ s32 EnSellnuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     }
 
     if (limbIndex == 26) {
-        if ((this->unk_34C == 6) || (this->unk_34C == 5) || (this->unk_34C == 7)) {
+        if ((this->animIndex == 6) || (this->animIndex == 5) || (this->animIndex == 7)) {
             *dList = object_dnt_DL_001350;
         } else {
             *dList = object_dnt_DL_008290;
@@ -1125,7 +1125,7 @@ void EnSellnuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) 
         Matrix_Scale(this->unk_354, this->unk_358, this->unk_35C, MTXMODE_APPLY);
     }
 
-    if (((this->unk_34C == 9) || (this->unk_34C == 20) || (this->unk_34C == 22)) &&
+    if (((this->animIndex == 9) || (this->animIndex == 20) || (this->animIndex == 22)) &&
         ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27))) {
         Matrix_Scale(this->unk_360, this->unk_360, this->unk_360, MTXMODE_APPLY);
     }

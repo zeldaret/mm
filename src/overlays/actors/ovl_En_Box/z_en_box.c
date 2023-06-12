@@ -78,7 +78,7 @@ typedef struct {
 
 static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
 
-static AnimationHeader* sBigChestAnimations[5] = {
+static AnimationHeader* sBigChestAnimations[] = {
     &gBoxBigChestOpenAdultAnim, &gBoxBigChestOpenGoronAnim, &gBoxBigChestOpenAdultAnim,
     &gBoxBigChestOpenDekuAnim,  &gBoxBigChestOpenChildAnim,
 };
@@ -453,7 +453,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
 
 void EnBox_WaitOpen(EnBox* this, PlayState* play) {
     s32 pad;
-    AnimationHeader* animHeader;
+    AnimationHeader* anim;
     f32 frameCount;
     f32 playbackSpeed;
     EnBox_PlaybackSpeed playbackSpeedTable;
@@ -465,19 +465,19 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
     if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (CutsceneManager_GetCurrentCsId() == this->csId2) ||
                                  (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
-            animHeader = &gBoxChestOpenAnim;
+            anim = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;
         } else {
             u8 playerForm;
 
             playbackSpeedTable = sPlaybackSpeed;
             playerForm = gSaveContext.save.playerForm;
-            animHeader = sBigChestAnimations[playerForm];
+            anim = sBigChestAnimations[playerForm];
             playbackSpeed = playbackSpeedTable.data[playerForm];
         }
 
-        frameCount = Animation_GetLastFrame(animHeader);
-        Animation_Change(&this->skelAnime, animHeader, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
+        frameCount = Animation_GetLastFrame(anim);
+        Animation_Change(&this->skelAnime, anim, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
         EnBox_SetupAction(this, EnBox_Open);
         if (this->unk_1EC > 0) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DEMO_TRE_LGT,

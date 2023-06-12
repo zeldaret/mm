@@ -37,13 +37,13 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s32 DmAl_ChangeAnim(DmAl* this, s32 animIndex) {
-    s32 didAnimationChange = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->animIndex) {
+    if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
-    return didAnimationChange;
+    return didAnimChange;
 }
 
 void func_80C1BDD8(DmAl* this, PlayState* play) {

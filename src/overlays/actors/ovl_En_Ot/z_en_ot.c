@@ -95,7 +95,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 5, 33, -20, { 0, 0, 0 } },
 };
 
-static AnimationSpeedInfo sAnimations[] = {
+static AnimationSpeedInfo sAnimationSpeedInfo[] = {
     { &object_ot_Anim_004B30, 1.0f, ANIMMODE_LOOP, -5.0f },
     { &object_ot_Anim_0008D8, 1.0f, ANIMMODE_LOOP, -5.0f },
     { &object_ot_Anim_000420, 1.0f, ANIMMODE_LOOP, 0.0f },
@@ -152,10 +152,10 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &object_ot_Skel_004800, &object_ot_Anim_0008D8, this->jointTable,
                        this->morphTable, 19);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    Animation_Change(&this->skelAnime, sAnimations[0].animation, 1.0f,
-                     Animation_GetLastFrame(&sAnimations[0].animation->common) * Rand_ZeroOne(),
-                     Animation_GetLastFrame(&sAnimations[0].animation->common), sAnimations[0].mode,
-                     sAnimations[0].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[0].animation, 1.0f,
+                     Animation_GetLastFrame(&sAnimationSpeedInfo[0].animation->common) * Rand_ZeroOne(),
+                     Animation_GetLastFrame(&sAnimationSpeedInfo[0].animation->common), sAnimationSpeedInfo[0].mode,
+                     sAnimationSpeedInfo[0].morphFrames);
     this->unk_346 = ENOT_GET_7F(&this->actor);
     this->unk_344 = this->actor.world.rot.z;
     this->actor.world.rot.z = 0;
@@ -163,7 +163,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.gravity = 0.0f;
     SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 0, &this->animIndex);
     this->skelAnime.curFrame = Rand_ZeroOne() * this->skelAnime.endFrame;
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     this->unk_744.r = 255;
@@ -300,7 +300,7 @@ void func_80B5BB38(Color_RGB8* arg0, Color_RGB8* arg1, f32 arg2) {
 }
 
 void func_80B5BDA8(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 1, &this->animIndex);
     SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
     this->actionFunc = func_80B5BE04;
 }
@@ -322,7 +322,7 @@ void func_80B5BE04(EnOt* this, PlayState* play) {
 }
 
 void func_80B5BE88(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 1, &this->animIndex);
     this->actionFunc = func_80B5BED4;
 }
 
@@ -337,7 +337,7 @@ void func_80B5BED4(EnOt* this, PlayState* play) {
 
 void func_80B5BF60(EnOt* this, PlayState* play) {
     this->unk_32C |= 0x40;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 0, &this->animIndex);
     this->actionFunc = func_80B5BFB8;
 }
 
@@ -411,8 +411,8 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
     if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIndex);
-        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimations, 2, &this->unk_360->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 2, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->unk_360->skelAnime, sAnimationSpeedInfo, 2, &this->unk_360->animIndex);
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
         this->unk_360->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -490,7 +490,7 @@ void func_80B5C64C(EnOt* this, PlayState* play) {
 
 void func_80B5C684(EnOt* this, PlayState* play) {
     this->actor.speed = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 0, &this->animIndex);
     this->actionFunc = func_80B5C6DC;
 }
 
@@ -636,7 +636,7 @@ void func_80B5CCA0(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CCF4(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 0, &this->animIndex);
     this->actionFunc = func_80B5CD40;
 }
 
@@ -680,7 +680,7 @@ void func_80B5CD40(EnOt* this, PlayState* play) {
 void func_80B5CE6C(EnOt* this, PlayState* play) {
     this->unk_384 = 0;
     this->unk_32C |= 0x20;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 0, &this->animIndex);
     this->actionFunc = func_80B5CEC8;
 }
 
@@ -736,7 +736,7 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
 }
 
 void func_80B5D114(EnOt* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 0, &this->animIndex);
     this->actionFunc = func_80B5D160;
 }
 
@@ -891,7 +891,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     this->actorPath.pointOffset.z = 0.0f;
     this->actor.gravity = 0.0f;
     this->actor.speed = 0.0f;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, 1, &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));

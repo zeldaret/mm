@@ -171,7 +171,7 @@ void func_80B35250(EnGg* this) {
     this->unk_2E4 = 20;
     this->unk_2E2 = 0;
     this->unk_2E6 = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80B35450;
 }
 
@@ -183,34 +183,34 @@ void func_80B352A4(EnGg* this, PlayState* play) {
         switch (this->actor.textId) {
             case 0xCE5:
                 this->unk_2E6 = 1;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0xCE6:
             case 0xCEC:
                 this->unk_2E6 = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                 break;
 
             case 0xCE8:
                 this->unk_2E6 = 2;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
                 break;
 
             case 0xCE9:
                 this->unk_2E6 = 3;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
                 break;
 
             case 0xCED:
             case 0xCEE:
                 this->unk_2E6 = 4;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
                 break;
 
             default:
                 this->unk_2E6 = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                 break;
         }
         SET_WEEKEVENTREG(WEEKEVENTREG_19_80);
@@ -220,7 +220,7 @@ void func_80B352A4(EnGg* this, PlayState* play) {
             this->skelAnime.playSpeed = 2.0f;
         } else {
             this->unk_2E6 = 4;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
         }
     }
 }
@@ -327,7 +327,7 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     this->unk_2DA = 0;
                     break;
             }
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_2DA);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_2DA);
         }
 
         if (this->unk_2DA == 14) {
@@ -371,7 +371,7 @@ void func_80B358D8(EnGg* this, PlayState* play) {
 
     if ((this->unk_2E6 == 14) && (sp1E == lastFrame)) {
         this->unk_2E6 = 15;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 15);
+        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 15);
     }
 }
 

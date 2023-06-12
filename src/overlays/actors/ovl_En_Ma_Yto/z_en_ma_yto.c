@@ -105,7 +105,7 @@ static CollisionCheckInfoInit2 sColChkInfoInit2 = {
     0, 0, 0, 0, MASS_IMMOVABLE,
 };
 
-static AnimationSpeedInfo sAnimationInfo[] = {
+static AnimationSpeedInfo sAnimationSpeedInfo[] = {
     { &gCremiaIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
     { &gCremiaIdleAnim, 1.0f, ANIMMODE_LOOP, -6.0f },
     { &gCremiaSpreadArmsStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
@@ -1277,9 +1277,9 @@ void EnMaYto_BarnStartDialogue(EnMaYto* this, PlayState* play) {
 }
 
 void EnMaYto_ChangeAnim(EnMaYto* this, s32 animIndex) {
-    Animation_Change(&this->skelAnime, sAnimationInfo[animIndex].animation, 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimationInfo[animIndex].animation), sAnimationInfo[animIndex].mode,
-                     sAnimationInfo[animIndex].morphFrames);
+    Animation_Change(&this->skelAnime, sAnimationSpeedInfo[animIndex].animation, 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimationSpeedInfo[animIndex].animation),
+                     sAnimationSpeedInfo[animIndex].mode, sAnimationSpeedInfo[animIndex].morphFrames);
 }
 
 void func_80B90C78(EnMaYto* this, PlayState* play) {

@@ -21,7 +21,7 @@ typedef struct EnRuppecrow {
     /* 0x194 */ SkelAnime skelAnime;
     /* 0x1D8 */ EnRuppecrowActionFunc actionFunc;
     /* 0x1DC */ UNK_TYPE4 unk_1DC; // unused
-    /* 0x1E0 */ Vec3s joinTable[OBJECT_CROW_LIMB_MAX];
+    /* 0x1E0 */ Vec3s jointTable[OBJECT_CROW_LIMB_MAX];
     /* 0x216 */ Vec3s morphTable[OBJECT_CROW_LIMB_MAX];
     /* 0x24C */ Path* path;
     /* 0x250 */ s32 currentPoint;

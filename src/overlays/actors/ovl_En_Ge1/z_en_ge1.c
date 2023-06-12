@@ -72,7 +72,7 @@ typedef enum {
     /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY
 } GerudoWhiteAnimation;
 
-void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
+void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 animMode, f32 morphFrames);
 void EnGe1_ShadowDraw(Actor* thisx, Lights* lights, PlayState* play);
 void EnGe1_Wait(EnGe1* this, PlayState* play);
 void EnGe1_PerformCutsceneActions(EnGe1* this, PlayState* play);
@@ -127,7 +127,7 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames) {
+void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     static AnimationHeader* sAnimations[] = {
         &gGerudoWhiteArmsFoldedAnim,        // GERUDO_WHITE_ANIM_ARMS_FOLDED,
         &gGerudoWhiteUnfoldingArmsAnim,     // GERUDO_WHITE_ANIM_UNFOLDING_ARMS
@@ -154,7 +154,7 @@ void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames) {
 
         default:
             Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimations[animIndex]), mode, morphFrames);
+                             Animation_GetLastFrame(sAnimations[animIndex]), animMode, morphFrames);
             break;
     }
 

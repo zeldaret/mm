@@ -126,8 +126,12 @@ static EnTotoText D_80BA5074[] = {
     { 4, 0, 0x2AE4 },
 };
 
-static AnimationHeader* D_80BA5078[] = { &object_zm_Anim_0028B8, &object_zm_Anim_00B894, &object_zm_Anim_002F20,
-                                         &object_zm_Anim_00BC08 };
+static AnimationHeader* sAnimations[] = {
+    &object_zm_Anim_0028B8,
+    &object_zm_Anim_00B894,
+    &object_zm_Anim_002F20,
+    &object_zm_Anim_00BC08,
+};
 
 static EnTotoText D_80BA5088[] = {
     { 5, 0, 0 },  { 6, 20, 0 }, { 7, 0, 0 },  { 8, 9, 0 },  { 9, 10, 0 }, { 1, 0, 0 },  { 10, 0, 0 },
@@ -208,22 +212,22 @@ void func_80BA383C(EnToto* this, PlayState* play) {
     if (SkelAnime_Update(&this->skelAnime) && (this->actionFuncIndex == 1) &&
         (this->skelAnime.animation != &object_zm_Anim_000C80)) {
         if ((play->msgCtx.currentTextId != 0x2A98) && (play->msgCtx.currentTextId != 0x2A99)) {
-            if ((this->unk2B4 & 1) || (Rand_ZeroOne() > 0.5f)) {
-                this->unk2B4 = (this->unk2B4 + 1) & 3;
+            if ((this->animIndex & 1) || (Rand_ZeroOne() > 0.5f)) {
+                this->animIndex = (this->animIndex + 1) & 3;
             }
         }
-        Animation_PlayOnce(&this->skelAnime, D_80BA5078[this->unk2B4]);
+        Animation_PlayOnce(&this->skelAnime, sAnimations[this->animIndex]);
     }
     func_800BBB74(&this->blinkInfo, 20, 80, 3);
 }
 
 void func_80BA3930(EnToto* this, PlayState* play) {
-    AnimationHeader* animationHeader = &object_zm_Anim_00C880;
+    AnimationHeader* animation = &object_zm_Anim_00C880;
 
     if (play->sceneId == SCENE_SONCHONOIE) {
-        animationHeader = &object_zm_Anim_003AA8;
+        animation = &object_zm_Anim_003AA8;
     }
-    Animation_MorphToLoop(&this->skelAnime, animationHeader, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, animation, -4.0f);
 }
 
 s32 func_80BA397C(EnToto* this, s16 arg1) {
@@ -287,7 +291,7 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
 void func_80BA3BFC(EnToto* this, PlayState* play) {
     if (play->sceneId == SCENE_SONCHONOIE) {
         Animation_MorphToPlayOnce(&this->skelAnime, &object_zm_Anim_000C80, -4.0f);
-        this->unk2B4 = 0;
+        this->animIndex = 0;
     } else {
         if (this->text->unk0 == 4) {
             Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_TOTO);

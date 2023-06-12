@@ -118,7 +118,7 @@ s32 D_80BF57E4[][4] = {
     { 56, 34, 44, 41 }, { 60, 38, 50, 45 }, { 67, 42, 55, 49 }, { 74, 47, 61, 54 },
 };
 
-AnimationInfoS D_80BF5914[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &gGoronUnrollAnim, 2.0f, 0, -1, ANIMMODE_ONCE, 0 },
     { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, 0 },
 };
@@ -277,13 +277,13 @@ s32 func_80BF3F14(EnRg* this, PlayState* play) {
     return false;
 }
 
-void func_80BF3FF8(EnRg* this) {
-    this->skelAnime.playSpeed = this->unk_314;
+void EnRg_UpdateSkelAnime(EnRg* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
 s32 func_80BF4024(EnRg* this, PlayState* play) {
-    if ((play->csCtx.state == CS_STATE_IDLE) && (this->unk_334 == 1)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->animIndex == 1)) {
         if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
         }
@@ -296,15 +296,15 @@ s32 func_80BF4024(EnRg* this, PlayState* play) {
     return false;
 }
 
-s32 func_80BF409C(EnRg* this, s32 arg1) {
-    s32 ret = false;
+s32 EnRg_ChangeAnim(EnRg* this, s32 animIndex) {
+    s32 didAnimChange = false;
 
-    if (arg1 != this->unk_334) {
-        this->unk_334 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BF5914, arg1);
-        this->unk_314 = this->skelAnime.playSpeed;
+    if (this->animIndex != animIndex) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BF40F4(EnRg* this) {
@@ -661,7 +661,7 @@ void func_80BF4EBC(EnRg* this, PlayState* play) {
         }
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
         if (DECR(this->unk_318) == 0) {
-            func_80BF409C(this, 1);
+            EnRg_ChangeAnim(this, 1);
             this->unk_310 &= ~8;
             this->unk_310 &= ~0x10;
             this->unk_310 |= 0x100;
@@ -730,8 +730,8 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->unk_334 = -1;
-        func_80BF409C(this, 0);
+        this->animIndex = -1;
+        EnRg_ChangeAnim(this, 0);
         this->skelAnime.curFrame = this->skelAnime.endFrame;
 
         Collider_InitAndSetSphere(play, &this->collider2, &this->actor, &sSphereInit);
@@ -783,7 +783,7 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->unk_310 & 0x10)) {
         func_80BF40F4(this);
-        func_80BF3FF8(this);
+        EnRg_UpdateSkelAnime(this);
         func_80BF4024(this, play);
     }
 

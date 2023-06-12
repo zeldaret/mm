@@ -372,14 +372,14 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
     return true;
 }
 
-void func_80BB1FCC(EnGeg* this, PlayState* play) {
+void EnGeg_UpdateAnim(EnGeg* this, PlayState* play) {
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
-void func_80BB2020(EnGeg* this, PlayState* play) {
+void EnGeg_ChangeAnim(EnGeg* this, PlayState* play) {
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_4AC);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
 }
 
 s32 func_80BB2088(EnGeg* this, PlayState* play) {
@@ -393,7 +393,7 @@ s32 func_80BB2088(EnGeg* this, PlayState* play) {
     }
 
     if (Actor_IsFacingAndNearPlayer(&this->actor, 300.0f, 0x7FF8) &&
-        ((this->unk_4AC == 5) || ((this->unk_4AC == 13) && (this->unk_496 == 0xD69)))) {
+        ((this->animIndex == 5) || ((this->animIndex == 13) && (this->unk_496 == 0xD69)))) {
         this->unk_230 |= 2;
         func_80BB1D64(this, play);
     } else {
@@ -412,8 +412,8 @@ s32 func_80BB2088(EnGeg* this, PlayState* play) {
 
 void func_80BB217C(EnGeg* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->unk_248)) {
-        this->unk_4AC = 5;
-        func_80BB2020(this, play);
+        this->animIndex = 5;
+        EnGeg_ChangeAnim(this, play);
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_230 = 0;
         this->actor.shape.shadowScale = 20.0f;
@@ -509,8 +509,8 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
             case 0xD66:
                 this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
                 if (this->unk_248 >= 0) {
-                    this->unk_4AC = 19;
-                    func_80BB2020(this, play);
+                    this->animIndex = 19;
+                    EnGeg_ChangeAnim(this, play);
                 }
                 this->unk_230 |= 0x20;
                 this->actionFunc = func_80BB2944;
@@ -527,8 +527,8 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
             case 0xD8B:
                 this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
                 if (this->unk_248 >= 0) {
-                    this->unk_4AC = 4;
-                    func_80BB2020(this, play);
+                    this->animIndex = 4;
+                    EnGeg_ChangeAnim(this, play);
                 }
                 this->actionFunc = func_80BB2E00;
                 break;
@@ -609,12 +609,12 @@ void func_80BB27D4(EnGeg* this, PlayState* play) {
 void func_80BB2944(EnGeg* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_4AC].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->unk_4AC == 19) {
+    if (this->animIndex == 19) {
         if (curFrame == lastFrame) {
-            this->unk_4AC = 6;
-            func_80BB2020(this, play);
+            this->animIndex = 6;
+            EnGeg_ChangeAnim(this, play);
         }
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->unk_496 == 0xD67) {
@@ -666,8 +666,8 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
             Message_ContinueTextbox(play, this->unk_496);
             this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
             if (this->unk_248 >= 0) {
-                this->unk_4AC = 13;
-                func_80BB2020(this, play);
+                this->animIndex = 13;
+                EnGeg_ChangeAnim(this, play);
             }
             this->actionFunc = func_80BB27D4;
         } else {
@@ -705,20 +705,20 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
 
 void func_80BB2E00(EnGeg* this, PlayState* play) {
     s16 sp2E = this->skelAnime.curFrame;
-    s16 sp2C = Animation_GetLastFrame(sAnimationInfo[this->unk_4AC].animation);
+    s16 sp2C = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if (this->unk_4AC == 2) {
+    if (this->animIndex == 2) {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
         if (sp2E == sp2C) {
             CutsceneManager_Stop(this->csId);
-            this->unk_4AC = 20;
-            func_80BB2020(this, play);
+            this->animIndex = 20;
+            EnGeg_ChangeAnim(this, play);
             this->actionFunc = func_80BB30B4;
         } else if (Animation_OnFrame(&this->skelAnime, 24.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_STAND_IMT);
         }
-    } else if (this->unk_4AC == 4) {
+    } else if (this->animIndex == 4) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
             this->unk_230 |= 1;
             this->actor.shape.yOffset = 14.0f;
@@ -740,11 +740,11 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
 
     if ((this->actor.xzDistToPlayer < 150.0f) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
         (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        this->unk_4AC = 2;
+        this->animIndex = 2;
         this->actor.speed = 0.0f;
         this->unk_230 &= ~1;
         this->actor.shape.yOffset = 0.0f;
-        func_80BB2020(this, play);
+        EnGeg_ChangeAnim(this, play);
         this->actionFunc = func_80BB2E00;
     } else {
         this->actor.speed = 5.0f;
@@ -902,7 +902,7 @@ void EnGeg_Update(Actor* thisx, PlayState* play) {
     EnGeg* this = THIS;
 
     this->actionFunc(this, play);
-    func_80BB1FCC(this, play);
+    EnGeg_UpdateAnim(this, play);
     func_80BB2088(this, play);
     func_80BB1C8C(this);
     SubS_FillLimbRotTables(play, this->unk_238, this->unk_232, ARRAY_COUNT(this->unk_238));

@@ -30,10 +30,12 @@ ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
+static AnimationInfo sAnimationInfo[] = {
+    { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+};
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80C25D84;
 }
 

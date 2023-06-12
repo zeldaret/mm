@@ -11,7 +11,7 @@ typedef void (*EnHorseLinkChildUnkFunc)(struct EnHorseLinkChild*, PlayState*);
 typedef struct EnHorseLinkChild {
     /* 0x000 */ Actor actor;
     /* 0x144 */ s32 unk_144;
-    /* 0x148 */ s32 unk_148;
+    /* 0x148 */ s32 animIndex;
     /* 0x14C */ Skin skin;
     /* 0x1DC */ s32 unk_1DC;
     /* 0x1DC */ s32 unk_1E0;

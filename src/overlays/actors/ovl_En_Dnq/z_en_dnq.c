@@ -87,30 +87,30 @@ s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
                                    480.0f, 0x38E3);
 }
 
-s32 func_80A5257C(EnDnq* this, s32 arg1) {
-    s32 phi_v1 = false;
-    s32 ret = false;
+s32 EnDnq_ChangeAnim(EnDnq* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if ((arg1 == 0) || (arg1 == 1)) {
-        switch (this->unk_398) {
+    if ((animIndex == 0) || (animIndex == 1)) {
+        switch (this->animIndex) {
             case 0:
             case 1:
                 break;
 
             default:
-                phi_v1 = true;
+                changeAnim = true;
                 break;
         }
-    } else if (arg1 != this->unk_398) {
-        phi_v1 = true;
+    } else if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v1) {
-        this->unk_398 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80A52604(EnDnq* this, PlayState* play) {
@@ -143,20 +143,20 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
 
 s32 func_80A526F8(EnDnq* this) {
     if (this->unk_386 == 0) {
-        func_80A5257C(this, 8);
+        EnDnq_ChangeAnim(this, 8);
         this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 4) + 3;
         this->unk_388 = 0;
         this->unk_386 = 1;
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        switch (this->unk_398) {
+        switch (this->animIndex) {
             case 8:
                 if (DECR(this->unk_38C) == 0) {
-                    func_80A5257C(this, 9);
+                    EnDnq_ChangeAnim(this, 9);
                 }
                 break;
 
             case 9:
-                func_80A5257C(this, 10);
+                EnDnq_ChangeAnim(this, 10);
                 this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 3) + 2;
                 break;
 
@@ -164,16 +164,16 @@ s32 func_80A526F8(EnDnq* this) {
                 if (DECR(this->unk_38C) == 0) {
                     this->unk_388++;
                     if ((this->unk_38C != 0) || (this->unk_388 < 2)) {
-                        func_80A5257C(this, 11);
+                        EnDnq_ChangeAnim(this, 11);
                     } else {
-                        func_80A5257C(this, 17);
+                        EnDnq_ChangeAnim(this, 17);
                         this->unk_38C = 4;
                     }
                 }
                 break;
 
             case 11:
-                func_80A5257C(this, 8);
+                EnDnq_ChangeAnim(this, 8);
                 this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 4) + 3;
                 break;
 
@@ -197,7 +197,7 @@ s32 func_80A52944(EnDnq* this) {
     s16 phi_v1 = 0;
 
     if (this->unk_386 == 0) {
-        func_80A5257C(this, 12);
+        EnDnq_ChangeAnim(this, 12);
         this->unk_38C = 1;
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
         this->unk_386 = 1;
@@ -206,7 +206,7 @@ s32 func_80A52944(EnDnq* this) {
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_386++;
         if (this->unk_386 >= 6) {
-            func_80A5257C(this, 12);
+            EnDnq_ChangeAnim(this, 12);
             this->unk_386 = 1;
             phi_v1 = this->unk_38C * 0x2000;
         } else if (this->unk_386 <= 3) {
@@ -214,7 +214,7 @@ s32 func_80A52944(EnDnq* this) {
             this->skelAnime.curFrame = 0.0f;
             phi_v1 = this->unk_38C * 0x2000;
         } else {
-            func_80A5257C(this, 13);
+            EnDnq_ChangeAnim(this, 13);
             this->skelAnime.curFrame = 0.0f;
         }
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
@@ -247,7 +247,7 @@ s32 func_80A52A78(EnDnq* this, PlayState* play) {
             this->unk_388 += 3;
             this->unk_388 %= 5;
         }
-        func_80A5257C(this, D_80A535DC[this->unk_388]);
+        EnDnq_ChangeAnim(this, D_80A535DC[this->unk_388]);
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -262,31 +262,31 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
         switch (temp) {
             case 0x89B:
-                func_80A5257C(this, 18);
+                EnDnq_ChangeAnim(this, 18);
                 break;
 
             case 0x89E:
-                func_80A5257C(this, 19);
+                EnDnq_ChangeAnim(this, 19);
                 break;
 
             case 0x898:
             case 0x89F:
-                func_80A5257C(this, 16);
+                EnDnq_ChangeAnim(this, 16);
                 break;
 
             case 0x899:
             case 0x89D:
-                func_80A5257C(this, 14);
+                EnDnq_ChangeAnim(this, 14);
                 break;
 
             case 0x89A:
             case 0x89C:
-                func_80A5257C(this, 15);
+                EnDnq_ChangeAnim(this, 15);
                 break;
         }
         this->unk_39C = 1;
     } else if (this->unk_39C != 0) {
-        func_80A5257C(this, 0);
+        EnDnq_ChangeAnim(this, 0);
         this->unk_39C = 0;
         this->unk_37E = 0;
         this->unk_386 = 0;
@@ -398,17 +398,17 @@ void func_80A53038(EnDnq* this, PlayState* play) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_105);
         cueId = play->csCtx.actorCues[cueChannel]->id;
         if (this->cueId != (u8)cueId) {
-            func_80A5257C(this, D_80A535FC[cueId]);
+            EnDnq_ChangeAnim(this, D_80A535FC[cueId]);
             this->cueId = cueId;
         }
 
-        if ((this->unk_398 == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
+        if ((this->animIndex == 4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
-        if (((this->unk_398 == 3) || (this->unk_398 == 6)) &&
+        if (((this->animIndex == 3) || (this->animIndex == 6)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            func_80A5257C(this, this->unk_398 + 1);
+            EnDnq_ChangeAnim(this, this->animIndex + 1);
         }
 
         Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, cueChannel);
@@ -421,8 +421,8 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
                        DEKU_KING_LIMB_MAX);
-    this->unk_398 = -1;
-    func_80A5257C(this, 0);
+    this->animIndex = -1;
+    EnDnq_ChangeAnim(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->picto.actor, 0.02f);

@@ -127,29 +127,29 @@ Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     return foundActor;
 }
 
-void func_80BD2AE0(EnAh* this) {
-    this->skelAnime.playSpeed = this->unk_2DC;
+void EnAh_UpdateSkelAnime(EnAh* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BD2B0C(EnAh* this, s32 arg1) {
-    s32 phi_v1 = false;
-    s32 ret = false;
+s32 EnAh_ChangeAnim(EnAh* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if ((arg1 == 0) || (arg1 == 1)) {
-        if ((this->unk_300 != 0) && (this->unk_300 != 1)) {
-            phi_v1 = true;
+    if ((animIndex == 0) || (animIndex == 1)) {
+        if ((this->animIndex != 0) && (this->animIndex != 1)) {
+            changeAnim = true;
         }
-    } else if (arg1 != this->unk_300) {
-        phi_v1 = true;
+    } else if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v1) {
-        this->unk_300 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
-        this->unk_2DC = this->skelAnime.playSpeed;
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BD2BA4(EnAh* this, PlayState* play) {
@@ -283,11 +283,11 @@ void func_80BD2FD0(EnAh* this, PlayState* play) {
 s32 func_80BD30C0(EnAh* this, PlayState* play) {
     switch (this->unk_1DC) {
         case 1:
-            func_80BD2B0C(this, 0);
+            EnAh_ChangeAnim(this, 0);
             break;
 
         case 2:
-            func_80BD2B0C(this, 4);
+            EnAh_ChangeAnim(this, 4);
             break;
     }
     return false;
@@ -295,10 +295,10 @@ s32 func_80BD30C0(EnAh* this, PlayState* play) {
 
 void func_80BD3118(EnAh* this, PlayState* play) {
     if (this->unk_2FE == 0) {
-        func_80BD2B0C(this, 2);
+        EnAh_ChangeAnim(this, 2);
         this->unk_2FE++;
     } else if ((this->unk_2FE == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80BD2B0C(this, 3);
+        EnAh_ChangeAnim(this, 3);
         this->unk_2FE++;
     }
 }
@@ -382,7 +382,7 @@ s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3EC4.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_80BD2B0C(this, 0);
+    EnAh_ChangeAnim(this, 0);
     SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= 0x40;
     return true;
@@ -394,7 +394,7 @@ s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3ED8.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_80BD2B0C(this, 4);
+    EnAh_ChangeAnim(this, 4);
     SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= (0x40 | 0x10);
     return true;
@@ -409,7 +409,7 @@ s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3EEC.rot);
             Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         }
-        func_80BD2B0C(this, 4);
+        EnAh_ChangeAnim(this, 4);
         this->unk_2D8 |= (0x40 | 0x8);
         this->unk_2D8 |= 0x10;
         this->unk_2D8 |= 0x80;
@@ -518,8 +518,8 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable, 17);
-    this->unk_300 = -1;
-    func_80BD2B0C(this, 0);
+    this->animIndex = -1;
+    EnAh_ChangeAnim(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.targetMode = 6;
@@ -548,7 +548,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1DC != 0) {
         func_80BD3198(this, play);
-        func_80BD2AE0(this);
+        EnAh_UpdateSkelAnime(this);
         func_80BD2C6C(this);
         func_80BD2FD0(this, play);
         radius = this->collider.dim.radius + 60;

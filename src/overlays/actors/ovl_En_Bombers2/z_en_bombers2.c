@@ -90,8 +90,8 @@ void EnBombers2_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->morphTable,
-                       this->jointTable, OBJECT_CS_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_cs_Skel_00F82C, &gBomberIdleAnim, this->jointTable,
+                       this->morphTable, OBJECT_CS_LIMB_MAX);
     this->actor.targetMode = 6;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 

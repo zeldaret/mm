@@ -313,7 +313,7 @@ void EnEgol_ChangeAnim(EnEgol* this, s32 animation) {
         &gEyegoreStunnedAnim,  &gEyegoreStunEndAnim,   &gEyegoreRetreatAnim,
         &gEyegoreSitAnim,      &gEyegoreLeftPunchAnim, &gEyegoreRightPunchAnim,
     };
-    static u8 sAnimModes[EYEGORE_ANIM_MAX] = {
+    static u8 sAnimationModes[EYEGORE_ANIM_MAX] = {
         ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
         ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
         ANIMMODE_ONCE, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
@@ -321,7 +321,7 @@ void EnEgol_ChangeAnim(EnEgol* this, s32 animation) {
     this->animation = animation;
     this->animEndFrame = Animation_GetLastFrame(sAnimations[this->animation]);
     Animation_Change(&this->skelAnime, sAnimations[this->animation], 1.0f, 0.0f, this->animEndFrame,
-                     sAnimModes[this->animation], 0.0f);
+                     sAnimationModes[this->animation], 0.0f);
 }
 
 void EnEgol_FootstepEffects(EnEgol* this, PlayState* play, f32 leftFootFrame, f32 rightFootFrame) {

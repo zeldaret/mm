@@ -100,9 +100,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-AnimationInfoS D_80BE1AD0[] = {
-    { &object_tab_Anim_000758, 1.0f, 0, -1, 0, 0 },
-    { &object_tab_Anim_0086AC, 1.0f, 0, -1, 0, 0 },
+static AnimationInfoS sAnimationInfo[] = {
+    { &object_tab_Anim_000758, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &object_tab_Anim_0086AC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 Vec3f D_80BE1AF0 = { -28.0f, -8.0f, -195.0f };
@@ -143,25 +143,25 @@ EnGm* func_80BE04E0(EnTab* this, PlayState* play, u8 actorCat, s16 actorId) {
     return (EnGm*)foundActor;
 }
 
-void func_80BE0590(EnTab* this) {
-    this->skelAnime.playSpeed = this->unk_300;
+void EnTab_UpdateSkelAnime(EnTab* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BE05BC(EnTab* this, s32 arg1) {
-    s32 phi_v0 = false;
-    s32 ret = false;
+s32 EnTab_ChangeAnim(EnTab* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if (arg1 != this->unk_32C) {
-        phi_v0 = true;
+    if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v0) {
-        this->unk_32C = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, D_80BE1AD0, arg1);
-        this->unk_300 = this->skelAnime.playSpeed;
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80BE0620(EnTab* this, PlayState* play) {
@@ -379,7 +379,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
         this->unk_1E4 = sp28;
-        func_80BE05BC(this, 0);
+        EnTab_ChangeAnim(this, 0);
         ret = true;
     }
     return ret;
@@ -395,7 +395,7 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     SubS_UpdateFlags(&this->unk_2FC, 3, 7);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;
-    func_80BE05BC(this, 1);
+    EnTab_ChangeAnim(this, 1);
     return true;
 }
 
@@ -512,8 +512,8 @@ void EnTab_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_tab_Skel_007F78, NULL, this->jointTable, this->morphTable, 20);
-    this->unk_32C = -1;
-    func_80BE05BC(this, 0);
+    this->animIndex = -1;
+    EnTab_ChangeAnim(this, 0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
@@ -544,7 +544,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_1D8 != 0) {
-        func_80BE0590(this);
+        EnTab_UpdateSkelAnime(this);
         func_80BE0664(this);
         func_80BE09A8(this, play);
 
@@ -565,7 +565,7 @@ s32 EnTab_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         func_80BE0A98(this, play);
     }
 
-    if ((this->unk_32C == 1) && (limbIndex == 18)) {
+    if ((this->animIndex == 1) && (limbIndex == 18)) {
         *dList = NULL;
     }
     return false;

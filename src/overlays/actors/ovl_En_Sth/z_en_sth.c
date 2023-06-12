@@ -73,7 +73,7 @@ typedef enum {
     /* 8 */ STH_ANIM_START        // set in init, not an actual index to the array
 } EnSthAnimation;
 
-static AnimationHeader* sAnimationInfo[] = {
+static AnimationHeader* sAnimations[] = {
     &gEnSthSignalAnim, &gEnSthBendDownAnim,   &gEnSthTalkWithHandUpAnim, &gEnSthWaitAnim,
     &gEnSthLookUpAnim, &gEnSthLookAroundAnim, &gEnSthPleadAnim,          &gEnSthPanicAnim,
 };
@@ -212,9 +212,9 @@ s32 EnSth_CanSpeakToPlayer(EnSth* this, PlayState* play) {
 }
 
 void EnSth_ChangeAnim(EnSth* this, s16 animIndex) {
-    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimationInfo)) && (animIndex != this->animIndex)) {
-        Animation_Change(&this->skelAnime, sAnimationInfo[animIndex], 1.0f, 0.0f,
-                         Animation_GetLastFrame(sAnimationInfo[animIndex]), ANIMMODE_LOOP, -5.0f);
+    if ((animIndex >= 0) && (animIndex < ARRAY_COUNT(sAnimations)) && (animIndex != this->animIndex)) {
+        Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(sAnimations[animIndex]), ANIMMODE_LOOP, -5.0f);
         this->animIndex = animIndex;
     }
 }

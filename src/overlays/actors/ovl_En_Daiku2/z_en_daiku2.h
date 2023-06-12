@@ -43,7 +43,7 @@ typedef struct EnDaiku2 {
     /* 0x264 */ f32 unk_264;
     /* 0x268 */ Vec3f unk_268;
     /* 0x274 */ s16 unk_274;
-    /* 0x276 */ s16 unk_276;
+    /* 0x276 */ s16 animIndex;
     /* 0x278 */ s16 unk_278;
     /* 0x27A */ s16 pathIndex;
     /* 0x27C */ UNK_TYPE1 unk_27C[0x4];

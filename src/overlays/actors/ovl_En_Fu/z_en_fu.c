@@ -371,7 +371,7 @@ void func_8096209C(EnFu* this, PlayState* play) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80962340;
 }
 
@@ -538,7 +538,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -1215,7 +1215,7 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0x2840:
@@ -1241,21 +1241,21 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 6);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
                 break;
         }
     }

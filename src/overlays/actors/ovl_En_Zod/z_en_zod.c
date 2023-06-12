@@ -91,7 +91,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 60.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &gTijoPlayingLentoAnim, this->morphTable, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTijoSkel, &gTijoPlayingLentoAnim, this->jointTable, this->morphTable,
                        TIJO_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &gTijoPlayingLentoAnim);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -196,7 +196,7 @@ void EnZod_ChangeAnim(EnZod* this, s16 nextAnimIndex, u8 mode) {
     this->nextAnimIndex = nextAnimIndex;
 }
 
-void EnZod_UpdateAnimation(EnZod* this) {
+void EnZod_UpdateAnim(EnZod* this) {
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->nextAnimIndex == this->curAnimIndex) {
             EnZod_ChangeAnim(this, this->curAnimIndex, ANIMMODE_ONCE);
@@ -309,7 +309,7 @@ void EnZod_UpdateInstruments(EnZod* this) {
 }
 
 void func_80BAF7CC(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x121F)) {
@@ -374,7 +374,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     s32 pad;
     Vec3f seqPos;
 
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnZod_HandleRoomConversation(this, play);
@@ -415,7 +415,7 @@ void func_80BAFA44(EnZod* this, PlayState* play) {
 void func_80BAFADC(EnZod* this, PlayState* play) {
     u8 talkState;
 
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     talkState = Message_GetState(&play->msgCtx);
     if (talkState != TEXT_STATE_CLOSING) {
         if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
@@ -430,7 +430,7 @@ void func_80BAFADC(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFB84(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BAFA44(this, play);
@@ -444,7 +444,7 @@ void EnZod_DoNothing(EnZod* this, PlayState* play) {
 }
 
 void EnZod_Rehearse(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
         this->actor.csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
@@ -463,7 +463,7 @@ void EnZod_Rehearse(EnZod* this, PlayState* play) {
 }
 
 void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         EnZod_ChangeAnim(this, ENZOD_ANIM_PLAYING_LENTO, ANIMMODE_ONCE);
@@ -477,7 +477,7 @@ void EnZod_SetupRehearse(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFDB4(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
         func_800B7298(play, NULL, 0x44);
@@ -489,7 +489,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFE34(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     if (this->fogNear < 799) {
         this->fogNear += 200;
     } else {
@@ -512,7 +512,7 @@ void func_80BAFE34(EnZod* this, PlayState* play) {
 }
 
 void func_80BAFF14(EnZod* this, PlayState* play) {
-    EnZod_UpdateAnimation(this);
+    EnZod_UpdateAnim(this);
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 4)) {
         this->actionFunc = func_80BAFE34;

@@ -30,7 +30,7 @@ typedef struct EnAkindonuts {
     /* 0x32C */ u16 unk_32C;
     /* 0x330 */ Path* path;
     /* 0x334 */ s32 unk_334;
-    /* 0x338 */ s16 unk_338;
+    /* 0x338 */ s16 animIndex;
     /* 0x33A */ s16 unk_33A;
     /* 0x33C */ u16 unk_33C;
     /* 0x33E */ s16 unk_33E;
