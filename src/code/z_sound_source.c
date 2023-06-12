@@ -1,5 +1,5 @@
-#include "z64sound_source.h"
 #include "global.h"
+#include "z64sound_source.h"
 
 void SoundSource_InitAll(PlayState* play) {
     SoundSource* sources = &play->soundSources[0];
