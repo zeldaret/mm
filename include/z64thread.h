@@ -1,5 +1,5 @@
-#ifndef Z64_THREAD_H
-#define Z64_THREAD_H
+#ifndef Z64THREAD_H
+#define Z64THREAD_H
 
 #define Z_THREAD_ID_IDLE     1
 #define Z_THREAD_ID_SLOWLY   2
