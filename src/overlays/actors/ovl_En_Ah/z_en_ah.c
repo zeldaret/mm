@@ -127,7 +127,7 @@ Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     return foundActor;
 }
 
-void EnAh_UpdateSkelAnime(EnAh* this) {
+void EnAh_UpdateAnim(EnAh* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -548,7 +548,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1DC != 0) {
         func_80BD3198(this, play);
-        EnAh_UpdateSkelAnime(this);
+        EnAh_UpdateAnim(this);
         func_80BD2C6C(this);
         func_80BD2FD0(this, play);
         radius = this->collider.dim.radius + 60;

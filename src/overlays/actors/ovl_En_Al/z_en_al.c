@@ -163,7 +163,7 @@ Actor* func_80BDE1A0(EnAl* this, PlayState* play, u8 arg0, s16 arg1) {
     return foundActor;
 }
 
-void EnAl_UpdateSkelAnime(EnAl* this) {
+void EnAl_UpdateAnim(EnAl* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -815,7 +815,7 @@ void EnAl_Update(Actor* thisx, PlayState* play) {
     func_80BDF064(this, play);
 
     if (this->unk_35C != 0) {
-        EnAl_UpdateSkelAnime(this);
+        EnAl_UpdateAnim(this);
         func_80BDEE5C(this);
         func_8013C964(&this->actor, play, this->unk_4D4, 30.0f, this->unk_4F0, this->unk_4C2 & 7);
         func_80BDE318(this, play);

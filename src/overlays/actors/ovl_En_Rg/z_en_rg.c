@@ -277,7 +277,7 @@ s32 func_80BF3F14(EnRg* this, PlayState* play) {
     return false;
 }
 
-void EnRg_UpdateSkelAnime(EnRg* this) {
+void EnRg_UpdateAnim(EnRg* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -783,7 +783,7 @@ void EnRg_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->unk_310 & 0x10)) {
         func_80BF40F4(this);
-        EnRg_UpdateSkelAnime(this);
+        EnRg_UpdateAnim(this);
         func_80BF4024(this, play);
     }
 

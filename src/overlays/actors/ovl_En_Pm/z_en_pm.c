@@ -685,7 +685,7 @@ Actor* func_80AF7DC4(EnPm* this, PlayState* play, s32 arg2) {
     return phi_s0;
 }
 
-void EnPm_UpdateSkelAnime(EnPm* this) {
+void EnPm_UpdateAnim(EnPm* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -2084,14 +2084,14 @@ void EnPm_Update(Actor* thisx, PlayState* play) {
 
     if (!func_80AF86F0(this, play) && func_80AF87C4(this, play)) {
         func_80AFA724(this, play);
-        EnPm_UpdateSkelAnime(this);
+        EnPm_UpdateAnim(this);
         func_80AF8AC8(this);
     } else {
         this->actionFunc(this, play);
         func_80AF7BAC(this);
         if (this->unk_258 != 0) {
             func_80AF8DD4(this, play);
-            EnPm_UpdateSkelAnime(this);
+            EnPm_UpdateAnim(this);
             func_80AF8AC8(this);
             func_8013C964(&this->actor, play, this->unk_368, 30.0f, this->unk_394, this->unk_356 & 7);
             Actor_MoveWithGravity(&this->actor);

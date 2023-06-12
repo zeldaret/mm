@@ -286,7 +286,7 @@ EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
     return SubS_FindDoor(play, phi_a1);
 }
 
-s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
+s32 EnGm_UpdateAnim(EnGm* this, PlayState* play) {
     s32 isAnimFinished = false;
 
     if (this->unk_262 < 0) {
@@ -1699,7 +1699,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
     if (!func_8094E0F8(this, play)) {
         if (!func_8094EE84(this, play) && func_8094EFC4(this, play)) {
             func_80950F2C(this, play);
-            EnGm_UpdateSkelAnime(this, play);
+            EnGm_UpdateAnim(this, play);
             func_8094E2D0(this);
             return;
         }
@@ -1709,7 +1709,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
         func_8094F53C(this, play);
 
         if (this->unk_258 != 0) {
-            EnGm_UpdateSkelAnime(this, play);
+            EnGm_UpdateAnim(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
             func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);

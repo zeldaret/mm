@@ -95,7 +95,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_boj_Anim_004078, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  { &object_boj_Anim_005CE4, 1.0f, 0, -1, 0, 0 },
 };
 
-void EnJa_UpdateSkelAnime(EnJa* this) {
+void EnJa_UpdateAnim(EnJa* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -379,7 +379,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_1D8.unk_00 != 0) {
-        EnJa_UpdateSkelAnime(this);
+        EnJa_UpdateAnim(this);
         func_80BC1A68(this);
         func_80BC1D70(this, play);
 

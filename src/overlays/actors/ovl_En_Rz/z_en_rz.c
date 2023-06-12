@@ -323,7 +323,7 @@ s32 func_80BFBCEC(EnRz* this, PlayState* play) {
     return false;
 }
 
-s32 EnRz_UpdateSkelAnime(EnRz* this, PlayState* play) {
+s32 EnRz_UpdateAnim(EnRz* this, PlayState* play) {
     if (this->animIndex < EN_RZ_ANIM_LINK_NORMAL_WAIT_FREE) {
         return SkelAnime_Update(&this->skelAnime);
     } else {
@@ -412,14 +412,14 @@ s32 func_80BFBFAC(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC058(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 }
 
 void func_80BFC078(EnRz* this, PlayState* play) {
     s32 pad;
     Vec3f sp28;
 
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
@@ -451,7 +451,7 @@ void func_80BFC078(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC19C(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
     if (!func_80BFBE70(this, play)) {
         this->actionFunc = func_80BFC3F8;
         func_80BFBA1C(play, this, EN_RZ_ANIM_LINK_DANCE);
@@ -462,14 +462,14 @@ void func_80BFC19C(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC214(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
     if (!func_80BFBE70(this, play) && func_80BFBFAC(this, play)) {
         this->actionFunc = func_80BFC19C;
     }
 }
 
 void func_80BFC270(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
         this->actionFunc = func_80BFC214;
@@ -480,7 +480,7 @@ void func_80BFC270(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC2F4(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
     if (!func_80BFBE70(this, play)) {
         Message_CloseTextbox(play);
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 2000.0f, 1000.0f);
@@ -489,7 +489,7 @@ void func_80BFC2F4(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC36C(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
     if (func_80BFBFAC(this, play)) {
         SET_WEEKEVENTREG(WEEKEVENTREG_77_04);
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
@@ -506,7 +506,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
     s32 pad;
     Vec3f bgmPos;
 
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 
     if (this->sister == NULL) {
         this->sister = EnRz_FindSister(this, play);
@@ -553,7 +553,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC608(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
@@ -562,7 +562,7 @@ void func_80BFC608(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC674(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BFC608;
@@ -577,7 +577,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC728(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
@@ -594,7 +594,7 @@ void func_80BFC728(EnRz* this, PlayState* play) {
 }
 
 void func_80BFC7E0(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
 
     if (this->timer > 0) {
         this->timer--;
@@ -621,7 +621,7 @@ void EnRz_StopToThink(EnRz* this, PlayState* play) {
 }
 
 void EnRz_Walk(EnRz* this, PlayState* play) {
-    EnRz_UpdateSkelAnime(this, play);
+    EnRz_UpdateAnim(this, play);
     this->actor.speed = 1.5f;
 
     switch (EnRz_GetPathStatus(this)) {

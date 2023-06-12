@@ -78,7 +78,7 @@ extern u8 gEnHyShadowSizes[];
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex);
 EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play);
 void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex);
-s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play);
+s32 EnHy_UpdateAnim(EnHy* enHy, PlayState* play);
 void EnHy_Blink(EnHy* enHy, s32 eyeTexMaxIndex);
 s32 EnHy_Init(EnHy* enHy, PlayState* play, FlexSkeletonHeader* skeletonHeaderSeg, s16 animIndex);
 void func_800F0BB4(EnHy* enHy, PlayState* play, EnDoor* door, s16 arg3, s16 arg4);

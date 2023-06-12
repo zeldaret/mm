@@ -88,7 +88,7 @@ void EnHy_ChangeObjectAndAnim(EnHy* enHy, PlayState* play, s16 animIndex) {
     EnHy_ChangeAnim(&enHy->skelAnime, animIndex);
 }
 
-s32 EnHy_UpdateSkelAnime(EnHy* enHy, PlayState* play) {
+s32 EnHy_UpdateAnim(EnHy* enHy, PlayState* play) {
     s32 isUpdated = false;
 
     if (enHy->actor.draw != NULL) {

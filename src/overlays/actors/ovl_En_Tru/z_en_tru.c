@@ -432,7 +432,7 @@ s32 func_80A86770(EnTru* this) {
     return false;
 }
 
-void EnTru_UpdateSkelAnime(EnTru* this) {
+void EnTru_UpdateAnim(EnTru* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -1173,7 +1173,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    EnTru_UpdateSkelAnime(this);
+    EnTru_UpdateAnim(this);
     func_80A86B0C(this, play);
     func_80A86DB8(this);
 
