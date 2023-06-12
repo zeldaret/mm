@@ -57,7 +57,7 @@ typedef struct EnBigslime {
     /* 0x0220 */ Vec3s morphTable[GEKKO_LIMB_MAX];
     /* 0x02B0 */ u8 minislimeState;
     /* 0x02B1 */ u8 dynamicVtxState; // Toggles between two states of dynamic Vtx
-    /* 0x02B2 */ u8 didAnimUpdate;
+    /* 0x02B2 */ u8 isAnimFinished;
     /* 0x02B3 */ union {
                     u8 formBigslimeTimer; // Bigslime will start forming when timer reaches 0
                     u8 minislimeCounter;

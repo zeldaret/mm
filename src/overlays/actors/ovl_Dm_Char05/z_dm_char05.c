@@ -120,7 +120,7 @@ void func_80AAC888(Actor* thisx, PlayState* play) {
 void DmChar05_Init(Actor* thisx, PlayState* play) {
     DmChar05* this = THIS;
 
-    this->unk_18C = 0;
+    this->animIndex = 0;
     this->unk_18E = 0;
     this->unk_19C = 0;
     this->unk_1A0 = 0;
@@ -328,7 +328,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                             break;
 
                         case 3:
-                            this->unk_18C = 0;
+                            this->animIndex = 0;
                             break;
 
                         case 4:
@@ -348,7 +348,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -367,12 +367,12 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                             break;
 
                         case 2:
-                            this->unk_18C = 1;
+                            this->animIndex = 1;
                             this->unk_1B4 = 1;
                             break;
 
                         case 3:
-                            this->unk_18C = 1;
+                            this->animIndex = 1;
                             break;
 
                         case 4:
@@ -392,7 +392,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -411,11 +411,11 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                             break;
 
                         case 2:
-                            this->unk_18C = 3;
+                            this->animIndex = 3;
                             break;
 
                         case 3:
-                            this->unk_18C = 2;
+                            this->animIndex = 2;
                             break;
 
                         case 4:
@@ -435,7 +435,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                     }
 
                     if (sp2F) {
-                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -458,20 +458,20 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
                             break;
 
                         case 2:
-                            this->unk_18C = 4;
+                            this->animIndex = 4;
                             break;
 
                         case 3:
-                            this->unk_18C = 5;
+                            this->animIndex = 5;
                             break;
 
                         case 4:
-                            this->unk_18C = 5;
+                            this->animIndex = 5;
                             break;
                     }
 
                     if (sp2F) {
-                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                        DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                     }
                 }
 
@@ -483,9 +483,9 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
             }
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                if (this->unk_18C == 4) {
-                    this->unk_18C++;
-                    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_18C], 0);
+                if (this->animIndex == 4) {
+                    this->animIndex++;
+                    DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 }
             }
             break;

@@ -36,13 +36,13 @@ typedef struct EnGk {
     /* 0x1F0 */ Vec3s morphTable[20];
     /* 0x2E0 */ s16 unk_2E0;
     /* 0x2E2 */ s16 unk_2E2;
-    /* 0x2E4 */ s16 unk_2E4;
+    /* 0x2E4 */ s16 animIndex;
     /* 0x2E8 */ Vec3f unk_2E8;
     /* 0x2F4 */ Vec3f unk_2F4;
     /* 0x300 */ Vec3f unk_300;
     /* 0x30C */ Vec3f unk_30C;
     /* 0x318 */ s16 csId;
-    /* 0x31A */ u8 unk_31A;
+    /* 0x31A */ u8 animIndex2;
     /* 0x31B */ u8 cueId;
     /* 0x31C */ u16 unk_31C;
     /* 0x31E */ s16 unk_31E;

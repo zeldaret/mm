@@ -259,7 +259,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
         Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
-        this->unk_2E4 = 3;
+        this->animIndex = 3;
         Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
         this->actionFunc = func_80B521E8;
         return true;
@@ -285,12 +285,12 @@ void func_80B509A8(EnGk* this, PlayState* play) {
     this->unk_30C.y += Rand_ZeroOne();
     this->unk_30C.z += 2.0f * Rand_Centered();
 
-    if (this->unk_2E4 == 0) {
+    if (this->animIndex == 0) {
         sp4C.x = 0.0f;
         sp4C.z = 0.0f;
         sp4C.y = -1.2f;
         phi_s1 = 25;
-    } else if ((this->unk_2E4 == 2) || (this->unk_2E4 == 9) || (this->unk_2E4 == 10) || (this->unk_2E4 == 11)) {
+    } else if ((this->animIndex == 2) || (this->animIndex == 9) || (this->animIndex == 10) || (this->animIndex == 11)) {
         sp4C.x = 0.0f;
         sp4C.z = 0.0f;
         sp4C.y = -0.5f;
@@ -307,7 +307,7 @@ void func_80B50B38(EnGk* this, PlayState* play) {
     s16 i;
     s16 temp;
 
-    switch (this->unk_2E4) {
+    switch (this->animIndex) {
         case 0:
             this->unk_2E0 = 3;
             for (i = 0; i < 2; i++) {
@@ -484,10 +484,10 @@ s32 func_80B5123C(EnGk* this, PlayState* play) {
 
 void func_80B51308(EnGk* this, PlayState* play) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_31A].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex2].animation);
 
-    if ((this->unk_2E4 == 7) && (sp1E == lastFrame)) {
-        this->unk_2E4 = 8;
+    if ((this->animIndex == 7) && (sp1E == lastFrame)) {
+        this->animIndex = 8;
         Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 8);
     }
 }
@@ -496,8 +496,8 @@ void func_80B51398(EnGk* this, PlayState* play) {
     s16 sp1E = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[9].animation);
 
-    if ((this->unk_2E4 == 9) && (sp1E == lastFrame)) {
-        this->unk_2E4 = 10;
+    if ((this->animIndex == 9) && (sp1E == lastFrame)) {
+        this->animIndex = 10;
         Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 10);
     }
 }
@@ -543,45 +543,45 @@ void func_80B51510(EnGk* this, PlayState* play) {
             this->cueId = play->csCtx.actorCues[cueChannel]->id;
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    this->unk_31A = 0;
-                    this->unk_2E4 = 0;
+                    this->animIndex2 = 0;
+                    this->animIndex = 0;
                     break;
 
                 case 2:
-                    this->unk_31A = 2;
-                    this->unk_2E4 = 2;
+                    this->animIndex2 = 2;
+                    this->animIndex = 2;
                     break;
 
                 case 3:
-                    this->unk_31A = 7;
-                    this->unk_2E4 = 7;
+                    this->animIndex2 = 7;
+                    this->animIndex = 7;
                     break;
 
                 case 4:
-                    this->unk_31A = 3;
-                    this->unk_2E4 = 3;
+                    this->animIndex2 = 3;
+                    this->animIndex = 3;
                     break;
 
                 case 5:
-                    this->unk_31A = 1;
-                    this->unk_2E4 = 1;
+                    this->animIndex2 = 1;
+                    this->animIndex = 1;
                     this->unk_1E4 |= 0x80;
                     this->actionFunc = func_80B5227C;
                     break;
 
                 case 6:
-                    this->unk_31A = 12;
-                    this->unk_2E4 = 12;
+                    this->animIndex2 = 12;
+                    this->animIndex = 12;
                     break;
 
                 case 7:
                     Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
                     break;
             }
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_31A);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex2);
         }
 
-        if (this->unk_31A == 7) {
+        if (this->animIndex2 == 7) {
             func_80B51308(this, play);
         }
 
@@ -594,18 +594,18 @@ void func_80B51510(EnGk* this, PlayState* play) {
 
 void func_80B51698(EnGk* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (sp26 == lastFrame) {
-        switch (this->unk_2E4) {
+        switch (this->animIndex) {
             case 0:
-                this->unk_2E4 = 2;
+                this->animIndex = 2;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
                 this->actionFunc = func_80B5216C;
                 break;
 
             case 2:
-                this->unk_2E4 = 0;
+                this->animIndex = 0;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                 this->actionFunc = func_80B5202C;
                 break;
@@ -617,17 +617,17 @@ void func_80B51760(EnGk* this, PlayState* play) {
     s16 sp2E = this->skelAnime.curFrame;
     s16 lastFrame;
 
-    if (this->unk_2E4 == 11) {
-        lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
+    if (this->animIndex == 11) {
+        lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
         if (sp2E == lastFrame) {
-            this->unk_2E4 = 5;
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_2E4);
+            this->animIndex = 5;
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
-    } else if (this->unk_2E4 == 10) {
-        lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
+    } else if (this->animIndex == 10) {
+        lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
         if (sp2E == lastFrame) {
-            this->unk_2E4 = 11;
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_2E4);
+            this->animIndex = 11;
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else {
         if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
@@ -642,7 +642,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
             Message_StartTextbox(play, this->unk_31C, &this->actor);
             this->actionFunc = func_80B51970;
             if (this->unk_31C == 0xE81) {
-                this->unk_2E4 = 0;
+                this->animIndex = 0;
                 this->unk_1E4 |= 2;
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
@@ -672,7 +672,7 @@ void func_80B51970(EnGk* this, PlayState* play) {
         if (this->unk_1E4 & 1) {
             this->unk_1E4 &= ~1;
             this->unk_1E4 &= ~4;
-            if (this->unk_2E4 == 10) {
+            if (this->animIndex == 10) {
                 this->unk_1E4 &= ~2;
             }
             this->actionFunc = func_80B51760;
@@ -690,9 +690,9 @@ void func_80B51970(EnGk* this, PlayState* play) {
 
     if (this->unk_1E4 & 2) {
         func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
-        if (this->unk_2E4 != 10) {
-            if (this->unk_2E4 != 9) {
-                this->unk_2E4 = 9;
+        if (this->animIndex != 10) {
+            if (this->animIndex != 9) {
+                this->animIndex = 9;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 9);
             } else {
                 func_80B51398(this, play);
@@ -702,7 +702,7 @@ void func_80B51970(EnGk* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (this->unk_2E4 == 6) {
+    if (this->animIndex == 6) {
         func_80B50954(this);
     }
 }
@@ -716,7 +716,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
                 this->unk_1E4 &= ~1;
                 this->unk_1E4 &= ~4;
 
-                if (this->unk_2E4 == 10) {
+                if (this->animIndex == 10) {
                     this->unk_1E4 &= ~2;
                 }
 
@@ -756,9 +756,9 @@ void func_80B51B40(EnGk* this, PlayState* play) {
 
     if (this->unk_1E4 & 2) {
         func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
-        if (this->unk_2E4 != 10) {
-            if (this->unk_2E4 != 9) {
-                this->unk_2E4 = 9;
+        if (this->animIndex != 10) {
+            if (this->animIndex != 9) {
+                this->animIndex = 9;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 9);
             } else {
                 func_80B51398(this, play);
@@ -777,7 +777,7 @@ void func_80B51D9C(EnGk* this, PlayState* play) {
         CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
         if (this->unk_1E4 & 4) {
             this->unk_1E4 &= ~4;
-            this->unk_2E4 = 6;
+            this->animIndex = 6;
             Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 6);
             this->actionFunc = func_80B51EA4;
         } else {
@@ -880,10 +880,10 @@ void func_80B5216C(EnGk* this, PlayState* play) {
 
 void func_80B521E8(EnGk* this, PlayState* play) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (sp1E == lastFrame) {
-        this->unk_2E4 = 1;
+        this->animIndex = 1;
         Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
         this->actionFunc = func_80B5227C;
     }
@@ -891,7 +891,7 @@ void func_80B521E8(EnGk* this, PlayState* play) {
 
 void func_80B5227C(EnGk* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E4].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if ((sp26 + 1) == lastFrame) {
         func_800B14D4(play, 20.0f, &this->actor.home.pos);
@@ -1018,7 +1018,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     if (ENGK_GET_F(&this->actor) == ENGK_F_1) {
-        this->unk_2E4 = 5;
+        this->animIndex = 5;
         Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
         if (play->sceneId == SCENE_17SETUGEN2) {
             if (Flags_GetSwitch(play, ENGK_GET_3F00(&this->actor))) {
@@ -1053,7 +1053,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
         }
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
-        this->unk_2E4 = 0;
+        this->animIndex = 0;
         this->csId = this->actor.csId;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
@@ -1110,7 +1110,7 @@ void EnGk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     sp28.x = 1100.0f;
     sp28.z = -500.0f;
 
-    if (this->unk_2E4 == 0) {
+    if (this->animIndex == 0) {
         sp34.y = -100.0f;
         sp28.y = -100.0f;
 
@@ -1120,7 +1120,7 @@ void EnGk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
         sp4C = sp40;
         sp4C.x *= -1.0f;
-    } else if ((this->unk_2E4 == 2) || (this->unk_2E4 == 9) || (this->unk_2E4 == 10) || (this->unk_2E4 == 11)) {
+    } else if ((this->animIndex == 2) || (this->animIndex == 9) || (this->animIndex == 10) || (this->animIndex == 11)) {
         sp34.y = 400.0f;
         sp28.y = 400.0f;
 
@@ -1259,8 +1259,8 @@ void EnGk_Draw(Actor* thisx, PlayState* play) {
 
         if (ENGK_GET_F(&this->actor) != ENGK_F_2) {
             Gfx_SetupDL25_Xlu(play->state.gfxCtx);
-            if ((this->unk_2E4 == 0) || (this->unk_2E4 == 1) || (this->unk_2E4 == 2) || (this->unk_2E4 == 3) ||
-                (this->unk_2E4 == 4)) {
+            if ((this->animIndex == 0) || (this->animIndex == 1) || (this->animIndex == 2) || (this->animIndex == 3) ||
+                (this->animIndex == 4)) {
                 pos.x = this->actor.world.pos.x - 15.0f;
                 pos.y = this->actor.world.pos.y;
                 pos.z = this->actor.world.pos.z;

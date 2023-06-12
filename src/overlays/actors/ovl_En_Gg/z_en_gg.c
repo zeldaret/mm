@@ -149,7 +149,7 @@ void func_80B35108(EnGg* this, PlayState* play) {
 }
 
 void func_80B351A4(EnGg* this) {
-    if ((this->unk_2E6 == 2) || (this->unk_2E6 == 3)) {
+    if ((this->animIndex2 == 2) || (this->animIndex2 == 3)) {
         this->unk_2E2 = 3;
     } else {
         s16 temp = this->unk_2E4 - 1;
@@ -170,56 +170,56 @@ void func_80B351A4(EnGg* this) {
 void func_80B35250(EnGg* this) {
     this->unk_2E4 = 20;
     this->unk_2E2 = 0;
-    this->unk_2E6 = 0;
+    this->animIndex2 = 0;
     Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80B35450;
 }
 
 void func_80B352A4(EnGg* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2E6].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex2].animation);
 
     if (sp26 == lastFrame) {
         switch (this->actor.textId) {
             case 0xCE5:
-                this->unk_2E6 = 1;
+                this->animIndex2 = 1;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0xCE6:
             case 0xCEC:
-                this->unk_2E6 = 0;
+                this->animIndex2 = 0;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                 break;
 
             case 0xCE8:
-                this->unk_2E6 = 2;
+                this->animIndex2 = 2;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
                 break;
 
             case 0xCE9:
-                this->unk_2E6 = 3;
+                this->animIndex2 = 3;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
                 break;
 
             case 0xCED:
             case 0xCEE:
-                this->unk_2E6 = 4;
+                this->animIndex2 = 4;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
                 break;
 
             default:
-                this->unk_2E6 = 0;
+                this->animIndex2 = 0;
                 Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
                 break;
         }
         SET_WEEKEVENTREG(WEEKEVENTREG_19_80);
         this->actionFunc = func_80B3556C;
-    } else if ((this->unk_2E6 == 0) && ((this->actor.textId == 0xCED) || (this->actor.textId == 0xCEE))) {
+    } else if ((this->animIndex2 == 0) && ((this->actor.textId == 0xCED) || (this->actor.textId == 0xCEE))) {
         if (sp26 < (lastFrame - 1)) {
             this->skelAnime.playSpeed = 2.0f;
         } else {
-            this->unk_2E6 = 4;
+            this->animIndex2 = 4;
             Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
         }
     }
@@ -249,7 +249,7 @@ void func_80B35450(EnGg* this, PlayState* play) {
 
 void func_80B3556C(EnGg* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        if (this->unk_2E6 == 4) {
+        if (this->animIndex2 == 4) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             this->unk_308 = 0;
@@ -275,47 +275,47 @@ void func_80B35634(EnGg* this, PlayState* play) {
 
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    this->unk_2DA = 0;
-                    this->unk_2E6 = 0;
+                    this->animIndex = 0;
+                    this->animIndex2 = 0;
                     break;
 
                 case 2:
-                    this->unk_2DA = 9;
-                    this->unk_2E6 = 9;
+                    this->animIndex = 9;
+                    this->animIndex2 = 9;
                     break;
 
                 case 3:
-                    this->unk_2DA = 10;
-                    this->unk_2E6 = 10;
+                    this->animIndex = 10;
+                    this->animIndex2 = 10;
                     break;
 
                 case 4:
                     do {
-                        this->unk_344.unk_30 = this->unk_2DA = 11;
+                        this->unk_344.unk_30 = this->animIndex = 11;
                     } while (0);
-                    this->unk_2E6 = 11;
+                    this->animIndex2 = 11;
                     func_80B364D4(&this->unk_344, play);
                     break;
 
                 case 5:
                     do {
-                        this->unk_344.unk_30 = this->unk_2DA = 12;
+                        this->unk_344.unk_30 = this->animIndex = 12;
                     } while (0);
-                    this->unk_2E6 = 12;
+                    this->animIndex2 = 12;
                     break;
 
                 case 6:
                     do {
-                        this->unk_344.unk_30 = this->unk_2DA = 13;
+                        this->unk_344.unk_30 = this->animIndex = 13;
                     } while (0);
-                    this->unk_2E6 = 13;
+                    this->animIndex2 = 13;
                     break;
 
                 case 7:
                     do {
-                        this->unk_344.unk_30 = this->unk_2DA = 14;
+                        this->unk_344.unk_30 = this->animIndex = 14;
                     } while (0);
-                    this->unk_2E6 = 14;
+                    this->animIndex2 = 14;
                     func_80B364D4(&this->unk_344, play);
                     break;
 
@@ -324,13 +324,13 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     return;
 
                 default:
-                    this->unk_2DA = 0;
+                    this->animIndex = 0;
                     break;
             }
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->unk_2DA);
+            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
 
-        if (this->unk_2DA == 14) {
+        if (this->animIndex == 14) {
             func_80B358D8(this, play);
         }
 
@@ -367,10 +367,10 @@ void func_80B3584C(EnGg* this) {
 
 void func_80B358D8(EnGg* this, PlayState* play) {
     s16 sp1E = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->unk_2DA].animation);
+    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->unk_2E6 == 14) && (sp1E == lastFrame)) {
-        this->unk_2E6 = 15;
+    if ((this->animIndex2 == 14) && (sp1E == lastFrame)) {
+        this->animIndex2 = 15;
         Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 15);
     }
 }
@@ -379,8 +379,8 @@ void func_80B35968(EnGg* this, PlayState* play) {
     if (this->unk_344.unk_34 != NULL) {
         this->unk_344.unk_34(&this->unk_344, play);
     } else {
-        if ((this->unk_2DA == 11) || (this->unk_2DA == 14)) {
-            this->unk_344.unk_30 = this->unk_2DA;
+        if ((this->animIndex == 11) || (this->animIndex == 14)) {
+            this->unk_344.unk_30 = this->animIndex;
         }
         func_80B363E8(&this->unk_344, play, &this->unk_320, &this->unk_32C, &this->unk_338);
     }
@@ -700,11 +700,11 @@ void EnGg_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((play->csCtx.state == CS_STATE_IDLE) &&
-        ((this->unk_2DA != 14) && (this->unk_2DA != 11) && (this->unk_2DA != 12) && (this->unk_2DA != 13))) {
+        ((this->animIndex != 14) && (this->animIndex != 11) && (this->animIndex != 12) && (this->animIndex != 13))) {
         func_80B364D4(&this->unk_344, play);
     }
 
-    if (((this->unk_2DA == 14) || (this->unk_2DA == 11) || (this->unk_2DA == 12) || (this->unk_2DA == 13)) &&
+    if (((this->animIndex == 14) || (this->animIndex == 11) || (this->animIndex == 12) || (this->animIndex == 13)) &&
         (this->unk_309 == 1)) {
         func_80B35968(this, play);
     }
@@ -750,12 +750,12 @@ void EnGg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp30 = { 0.0f, 0.0f, 0.0f };
     Vec3f sp24 = { 0.0f, 0.0f, 0.0f };
 
-    if (this->unk_2DA == 14) {
+    if (this->animIndex == 14) {
         sp30.y = 3.0f;
         sp30.z = -1.0f;
         sp24.y = -0.07f;
         this->unk_309 = 1;
-    } else if ((this->unk_2DA == 11) || (this->unk_2DA == 12) || (this->unk_2DA == 13)) {
+    } else if ((this->animIndex == 11) || (this->animIndex == 12) || (this->animIndex == 13)) {
         sp30.x = 3.0f;
         sp24.x = 0.5f;
         this->unk_309 = 1;

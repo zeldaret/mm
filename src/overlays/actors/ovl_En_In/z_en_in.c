@@ -235,7 +235,7 @@ void func_808F3414(EnIn* this, PlayState* play) {
     Vec3f point;
 
     if (this->unk23D == 0) {
-        this->unk494 = SkelAnime_Update(&this->skelAnime);
+        this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
     }
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;

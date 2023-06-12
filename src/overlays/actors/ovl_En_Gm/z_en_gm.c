@@ -287,7 +287,7 @@ EnDoor* func_8094DF90(PlayState* play, s32 arg1) {
 }
 
 s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
-    s32 ret = false;
+    s32 isAnimFinished = false;
 
     if (this->unk_262 < 0) {
         return false;
@@ -295,10 +295,10 @@ s32 EnGm_UpdateSkelAnime(EnGm* this, PlayState* play) {
 
     if (this->unk_262 >= 0) {
         this->skelAnime.playSpeed = this->animPlaySpeed;
-        ret = SkelAnime_Update(&this->skelAnime);
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
     }
 
-    return ret;
+    return isAnimFinished;
 }
 
 s32 EnGm_ChangeAnim(EnGm* this, PlayState* play, s32 animIndex) {

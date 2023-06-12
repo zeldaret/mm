@@ -978,7 +978,7 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
 s32 EnGo_UpdateAnim(EnGo* this, PlayState* play) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 isAnimFinished = false;
 
     if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
         extraObjIndex = this->hakuginDemoObjIndex;
@@ -991,11 +991,11 @@ s32 EnGo_UpdateAnim(EnGo* this, PlayState* play) {
     if (extraObjIndex >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
-        ret = SkelAnime_Update(&this->skelAnime);
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
 
-    return ret;
+    return isAnimFinished;
 }
 
 /**

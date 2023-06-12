@@ -73,7 +73,7 @@ typedef struct EnIn {
     /* 0x48A */ u16 unk48A;
     /* 0x48C */ s32 unk48C;
     /* 0x490 */ UNK_TYPE1 unk490[0x4];
-    /* 0x494 */ s32 unk494;
+    /* 0x494 */ s32 isAnimFinished;
     /* 0x498 */ UNK_TYPE1 unk498[0xC];
     /* 0x4A4 */ struct EnIn* unk4A4;
     /* 0x4A8 */ s32 unk4A8;

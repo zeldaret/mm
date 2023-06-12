@@ -33,13 +33,13 @@ typedef struct EnGg {
     /* 0x1E4 */ Vec3s jointTable[20];
     /* 0x25C */ Vec3s morphTable[20];
     /* 0x2D4 */ UNK_TYPE1 unk_2D4[0x6];
-    /* 0x2DA */ u8 unk_2DA;
+    /* 0x2DA */ u8 animIndex;
     /* 0x2DB */ u8 cueId;
     /* 0x2DC */ s16 csId;
     /* 0x2DE */ UNK_TYPE1 unk2DE[4];
     /* 0x2E2 */ s16 unk_2E2;
     /* 0x2E4 */ s16 unk_2E4;
-    /* 0x2E6 */ s16 unk_2E6;
+    /* 0x2E6 */ s16 animIndex2;
     /* 0x2E8 */ s16 unk_2E8;
     /* 0x2EA */ UNK_TYPE1 unk2EA[0x1A];
     /* 0x304 */ s16 unk_304;

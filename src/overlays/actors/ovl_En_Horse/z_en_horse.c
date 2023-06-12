@@ -2281,7 +2281,7 @@ void func_80881290(EnHorse* this, PlayState* play) {
 void func_80881398(EnHorse* this, PlayState* play) {
     Vec3s* jointTable;
     f32 y;
-    s32 animeUpdated;
+    s32 isAnimFinished;
     f32 curFrame;
 
     this->stateFlags |= ENHORSE_JUMPING;
@@ -2289,7 +2289,7 @@ void func_80881398(EnHorse* this, PlayState* play) {
         this->actor.speed = 14.0f;
     }
 
-    animeUpdated = SkelAnime_Update(&this->skin.skelAnime);
+    isAnimFinished = SkelAnime_Update(&this->skin.skelAnime);
     curFrame = this->skin.skelAnime.curFrame;
 
     if (curFrame > 23.0f) {
@@ -2308,8 +2308,8 @@ void func_80881398(EnHorse* this, PlayState* play) {
         this->actor.world.pos.y = this->jumpStartY + (y * 0.01f * this->unk_528 * 0.01f);
     }
 
-    if (animeUpdated || ((curFrame > 17.0f) &&
-                         (this->actor.world.pos.y < ((this->actor.floorHeight - this->actor.velocity.y) + 80.0f)))) {
+    if (isAnimFinished || ((curFrame > 17.0f) &&
+                           (this->actor.world.pos.y < ((this->actor.floorHeight - this->actor.velocity.y) + 80.0f)))) {
         if (this->type == HORSE_TYPE_2) {
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_HORSE_LAND);
         } else {
@@ -2957,7 +2957,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
     f32 playerDistToHome;
     f32 distToPlayer;
     s32 nextAnimIndex = this->animIndex;
-    s32 animFinished;
+    s32 isAnimFinished;
     s16 yaw;
 
     if (gHorsePlayedEponasSong || (this->type == HORSE_TYPE_HNI)) {
@@ -3036,7 +3036,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    animFinished = SkelAnime_Update(&this->skin.skelAnime);
+    isAnimFinished = SkelAnime_Update(&this->skin.skelAnime);
 
     if (((this->animIndex == ENHORSE_ANIM_IDLE) || (this->animIndex == ENHORSE_ANIM_WHINNY)) &&
         ((nextAnimIndex == ENHORSE_ANIM_GALLOP) || (nextAnimIndex == ENHORSE_ANIM_TROT) ||
@@ -3049,7 +3049,7 @@ void EnHorse_FleePlayer(EnHorse* this, PlayState* play) {
         } else if (this->animIndex == ENHORSE_ANIM_TROT) {
             func_8087C178(this);
         }
-    } else if (animFinished) {
+    } else if (isAnimFinished) {
         if (nextAnimIndex == ENHORSE_ANIM_GALLOP) {
             func_8087C1C0(this);
         } else if (nextAnimIndex == ENHORSE_ANIM_TROT) {

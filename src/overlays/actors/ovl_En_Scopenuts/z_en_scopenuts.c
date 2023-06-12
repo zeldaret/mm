@@ -196,7 +196,7 @@ void func_80BCAFA8(EnScopenuts* this, PlayState* play) {
     if ((screenPos.x >= 130.0f) && (screenPos.x < (SCREEN_WIDTH - 130.0f)) && (screenPos.y >= 90.0f)) {
         if (screenPos.y < (SCREEN_HEIGHT - 90.0f)) {
             this->actor.draw = EnScopenuts_Draw;
-            this->unk_348 = 10;
+            this->animIndex = 10;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
             this->actionFunc = func_80BCB078;
         }
@@ -246,7 +246,7 @@ void func_80BCB1C8(EnScopenuts* this, PlayState* play) {
 
 void func_80BCB230(EnScopenuts* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
+    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0xE38);
 
@@ -254,31 +254,31 @@ void func_80BCB230(EnScopenuts* this, PlayState* play) {
         ((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80BCB4DC;
-        this->unk_348 = 3;
+        this->animIndex = 3;
         this->collider.dim.height = 64;
         func_80BCAC40(this, play);
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 3);
     } else if (sp26 == sp24) {
-        if ((this->unk_348 == 4) || (this->unk_348 == 18)) {
-            this->unk_348 = 17;
+        if ((this->animIndex == 4) || (this->animIndex == 18)) {
+            this->animIndex = 17;
             this->collider.dim.height = 0;
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 17);
-        } else if (this->unk_348 == 2) {
-            this->unk_348 = 16;
+        } else if (this->animIndex == 2) {
+            this->animIndex = 16;
             this->collider.dim.height = 32;
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 16);
-        } else if (this->unk_348 == 17) {
+        } else if (this->animIndex == 17) {
             if (DECR(this->unk_34E) == 0) {
                 this->unk_34E = Rand_ZeroOne() * 10.0f;
-                this->unk_348 = 2;
+                this->animIndex = 2;
                 this->collider.dim.height = 32;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 2);
             }
-        } else if ((this->unk_348 == 16) && (DECR(this->unk_34E) == 0)) {
+        } else if ((this->animIndex == 16) && (DECR(this->unk_34E) == 0)) {
             this->unk_34E = Rand_S16Offset(40, 40);
-            this->unk_348 = 18;
+            this->animIndex = 18;
             this->collider.dim.height = 32;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 18);
         }
@@ -305,7 +305,7 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
         func_800B8614(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
-        this->unk_348 = 4;
+        this->animIndex = 4;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
         this->actionFunc = func_80BCB230;
     }
@@ -322,7 +322,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 this->unk_328 &= ~4;
-                this->unk_348 = 8;
+                this->animIndex = 8;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
                 this->actionFunc = func_80BCBA00;
             } else {
@@ -388,7 +388,7 @@ void func_80BCB980(EnScopenuts* this, PlayState* play) {
 
 void func_80BCBA00(EnScopenuts* this, PlayState* play) {
     s16 sp26 = this->skelAnime.curFrame;
-    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
+    s16 sp24 = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     switch (sp26) {
         case 10:
@@ -462,7 +462,7 @@ void func_80BCBA00(EnScopenuts* this, PlayState* play) {
 
     if (sp26 == sp24) {
         this->unk_35A = 3;
-        this->unk_348 = 19;
+        this->animIndex = 19;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 19);
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         this->unk_328 &= ~2;
@@ -498,7 +498,7 @@ void func_80BCBC60(EnScopenuts* this, PlayState* play) {
 void func_80BCBD28(EnScopenuts* this, PlayState* play) {
     Vec3f sp44;
     s16 sp42 = this->skelAnime.curFrame;
-    s16 sp40 = Animation_GetLastFrame(sAnimationInfo[this->unk_348].animation);
+    s16 sp40 = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
     Vec3s sp38;
 
     func_80BCC448(this->path, this->unk_334, &this->actor.world.pos, &sp38);
@@ -526,7 +526,7 @@ void func_80BCBD28(EnScopenuts* this, PlayState* play) {
 
     if ((this->actor.home.pos.y + 22.5f) < this->actor.world.pos.y) {
         this->unk_368 = 0.3f;
-        this->unk_348 = 9;
+        this->animIndex = 9;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 9);
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         func_80BCAC40(this, play);
@@ -546,7 +546,7 @@ void func_80BCBF0C(EnScopenuts* this, PlayState* play) {
 
     if ((this->actor.home.pos.y + 50.0f) < this->actor.world.pos.y) {
         Math_ApproachF(&this->actor.velocity.y, 0.0f, 0.2f, 1.0f);
-        this->unk_348 = 10;
+        this->animIndex = 10;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 10);
         this->unk_328 |= 2;
         this->unk_36E = 0;
@@ -728,7 +728,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
                 this->csId = this->actor.csId;
                 this->unk_33C = 0;
                 this->unk_358 = 150;
-                this->unk_348 = 4;
+                this->animIndex = 4;
                 this->unk_35A = 0;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 4);
                 this->actionFunc = func_80BCB230;
@@ -765,14 +765,14 @@ void EnScopenuts_Update(Actor* thisx, PlayState* play) {
 s32 EnScopenuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnScopenuts* this = THIS;
 
-    if (((this->unk_348 == 4) && (this->unk_35A == 0)) || ((this->unk_348 == 8) && (this->unk_35A == 0)) ||
-        (this->unk_348 == 18) || (this->unk_348 == 2) || (this->unk_348 == 3) || (this->unk_348 == 17) ||
-        (this->unk_348 == 16)) {
+    if (((this->animIndex == 4) && (this->unk_35A == 0)) || ((this->animIndex == 8) && (this->unk_35A == 0)) ||
+        (this->animIndex == 18) || (this->animIndex == 2) || (this->animIndex == 3) || (this->animIndex == 17) ||
+        (this->animIndex == 16)) {
         if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 23) || (limbIndex == 24) ||
             (limbIndex == 15)) {
             *dList = NULL;
         }
-    } else if ((this->unk_348 == 8) || (this->unk_348 == 19)) {
+    } else if ((this->animIndex == 8) || (this->animIndex == 19)) {
         switch (this->unk_35A) {
             case 1:
                 if ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27) || (limbIndex == 25)) {
@@ -788,7 +788,7 @@ s32 EnScopenuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
                 }
                 break;
         }
-    } else if (((this->unk_348 == 9) || (this->unk_348 == 10)) && ((limbIndex == 15) || (limbIndex == 25))) {
+    } else if (((this->animIndex == 9) || (this->animIndex == 10)) && ((limbIndex == 15) || (limbIndex == 25))) {
         *dList = NULL;
     }
 
@@ -813,7 +813,7 @@ void EnScopenuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx)
         Matrix_Scale(this->unk_35C, this->unk_360, this->unk_364, MTXMODE_APPLY);
     }
 
-    if ((this->unk_348 == 9) && ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27))) {
+    if ((this->animIndex == 9) && ((limbIndex == 16) || (limbIndex == 21) || (limbIndex == 27))) {
         Matrix_Scale(this->unk_368, this->unk_368, this->unk_368, MTXMODE_APPLY);
     }
 

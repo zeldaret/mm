@@ -335,7 +335,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
 void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
     Player* player;
     f32 sp50;
-    s32 sp4C;
+    s32 isAnimFinished;
     s32 animIndex;
 
     func_808DF088(this, play);
@@ -343,9 +343,9 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
     player = GET_PLAYER(play);
     sp50 = Actor_WorldDistXZToActor(&this->actor, &player->actor);
     animIndex = this->animIndex;
-    sp4C = SkelAnime_Update(&this->skin.skelAnime);
+    isAnimFinished = SkelAnime_Update(&this->skin.skelAnime);
 
-    if ((sp4C != 0) || (this->animIndex == 1) || (this->animIndex == 0)) {
+    if (isAnimFinished || (this->animIndex == 1) || (this->animIndex == 0)) {
         // The carry-over of this flag from OoT was not done correctly
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_ZORA_HALL)) {
             f32 sp44 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
@@ -365,9 +365,9 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
                 } else {
                     this->actor.speed = 0.0f;
                     if (this->animIndex == 0) {
-                        animIndex = (sp4C == 1) ? 1 : 0;
+                        animIndex = (isAnimFinished == true) ? 1 : 0;
                     } else {
-                        animIndex = (sp4C == 1) ? 0 : 1;
+                        animIndex = (isAnimFinished == true) ? 0 : 1;
                     }
                 }
             } else if (sp50 < 200.0f) {
@@ -383,22 +383,22 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
             } else {
                 this->actor.speed = 0.0f;
                 if (this->animIndex == 0) {
-                    animIndex = (sp4C == 1) ? 1 : 0;
+                    animIndex = (isAnimFinished == true) ? 1 : 0;
                 } else {
-                    animIndex = (sp4C == 1) ? 0 : 1;
+                    animIndex = (isAnimFinished == true) ? 0 : 1;
                 }
             }
         } else {
             this->actor.speed = 0.0f;
             if (this->animIndex == 0) {
-                animIndex = (sp4C == 1) ? 1 : 0;
+                animIndex = (isAnimFinished == true) ? 1 : 0;
             } else {
-                animIndex = (sp4C == 1) ? 0 : 1;
+                animIndex = (isAnimFinished == true) ? 0 : 1;
             }
         }
     }
 
-    if ((this->animIndex != animIndex) || (sp4C == 1)) {
+    if ((this->animIndex != animIndex) || (isAnimFinished == true)) {
         this->animIndex = animIndex;
         Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
                          Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);

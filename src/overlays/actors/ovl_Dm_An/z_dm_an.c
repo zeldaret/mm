@@ -53,7 +53,7 @@ static AnimationInfoS sAnimationInfo[] = {
 s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
-    s32 didAnimUpdate = false;
+    s32 isAnimFinished = false;
 
     if (this->animIndex < 2) {
         objectIndex2 = this->actor.objBankIndex;
@@ -63,11 +63,11 @@ s32 DmAn_UpdateSkelAnime(DmAn* this, PlayState* play) {
 
     if (objectIndex2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        didAnimUpdate = SkelAnime_Update(&this->skelAnime);
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
 
-    return didAnimUpdate;
+    return isAnimFinished;
 }
 
 s32 DmAn_ChangeAnim(DmAn* this, PlayState* play, s32 animIndex) {

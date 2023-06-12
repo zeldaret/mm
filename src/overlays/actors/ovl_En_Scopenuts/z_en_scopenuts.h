@@ -32,7 +32,7 @@ typedef struct EnScopenuts {
     /* 0x33E */ s16 unk_33E;
     /* 0x340 */ s16 unk_340;
     /* 0x342 */ UNK_TYPE1 unk342[0x6];
-    /* 0x348 */ s32 unk_348;
+    /* 0x348 */ s32 animIndex;
     /* 0x34C */ s16 unk_34C;
     /* 0x34E */ s16 unk_34E;
     /* 0x350 */ f32 unk_350;

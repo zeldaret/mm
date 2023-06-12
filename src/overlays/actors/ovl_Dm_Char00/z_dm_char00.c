@@ -33,91 +33,91 @@ ActorInit Dm_Char00_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_0053A4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_005B68, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_006328, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00FB30, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_010590, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_005B68, 1.0f, 37.0f, 56.0f, 4, 0.0f },
-    { &object_delf_Anim_006328, 1.0f, 37.0f, 56.0f, 4, 0.0f },
-    { &object_delf_Anim_00E024, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00F0D0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_011C70, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_011FE0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_011088, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_0118FC, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_012388, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_012738, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_013BE0, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_013E80, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_007B04, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_0080A4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00859C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_008A44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00EB18, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00EBB0, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00EE30, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_012BBC, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_012EF8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00C248, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00C588, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00BDFC, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00C0BC, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_013040, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_013378, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_0091BC, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_0094B0, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_009C4C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_009F40, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_009010, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_0097C4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00A7B4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00C588, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, 2, -10.0f },
-    { &object_delf_Anim_011C70, 1.0f, 0.0f, -1.0f, 0, -10.0f },
-    { &object_delf_Anim_006B28, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_014190, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_01447C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_003FAC, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_004798, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_0042E8, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_004C44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_01088C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_01498C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_014E9C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00CEE0, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00D260, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00C690, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00C790, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00AF78, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00B2B8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00BCD8, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_006D74, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00706C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_0072B0, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_007570, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00A2A4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00A4B4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_006614, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_015114, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00CCD4, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00046C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_00065C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00377C, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_003148, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_001410, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_0010F8, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_00199C, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_003BB4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_001754, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_0008E0, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_000A94, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_001ED4, 1.0f, 0.0f, -1.0f, 0, 0.0f },
-    { &object_delf_Anim_001B28, 1.0f, 0.0f, -1.0f, 2, 0.0f },
-    { &object_delf_Anim_000E44, 1.0f, 0.0f, -1.0f, 0, 0.0f },
+    { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_0053A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_005B68, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_006328, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00FB30, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_010590, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_005B68, 1.0f, 37.0f, 56.0f, ANIMMODE_LOOP_PARTIAL, 0.0f },
+    { &object_delf_Anim_006328, 1.0f, 37.0f, 56.0f, ANIMMODE_LOOP_PARTIAL, 0.0f },
+    { &object_delf_Anim_00E024, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00F0D0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_011C70, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_011FE0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_011088, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_0118FC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_012388, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_012738, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_013BE0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_013E80, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_007B04, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_0080A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00859C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_008A44, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00EB18, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00EBB0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00EE30, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_012BBC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_012EF8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00C248, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00C588, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00BDFC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00C0BC, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_013040, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_013378, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_0091BC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_0094B0, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_009C4C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_009F40, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_009010, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_0097C4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00A7B4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00C588, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
+    { &object_delf_Anim_004FF4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -10.0f },
+    { &object_delf_Anim_011C70, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
+    { &object_delf_Anim_006B28, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_014190, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_01447C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_003FAC, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_004798, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_0042E8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_004C44, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_01088C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_01498C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_014E9C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00CEE0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00D260, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00C690, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00C790, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00AF78, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00B2B8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00BCD8, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_006D74, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00706C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_0072B0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_007570, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00A2A4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00A4B4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_006614, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_015114, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00CCD4, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00046C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_00065C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00377C, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_003148, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_001410, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_0010F8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_00199C, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_003BB4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_001754, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_0008E0, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_000A94, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_001ED4, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &object_delf_Anim_001B28, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &object_delf_Anim_000E44, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 Color_RGBAf D_80AA77A8[] = {
@@ -369,7 +369,7 @@ void func_80AA5BF8(DmChar00* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_261 == 53) && Animation_OnFrame(&this->skelAnime, 16.0f)) {
+    if ((this->animIndex == 53) && Animation_OnFrame(&this->skelAnime, 16.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_BLACK_FAIRY_DASH);
     }
 }
@@ -564,87 +564,87 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
 
                 switch (play->csCtx.actorCues[cueChannel]->id) {
                     case 0x1:
-                        this->unk_261 = 0;
+                        this->animIndex = 0;
                         break;
 
                     case 0x2:
-                        this->unk_261 = 2;
+                        this->animIndex = 2;
                         break;
 
                     case 0x3:
-                        this->unk_261 = 3;
+                        this->animIndex = 3;
                         break;
 
                     case 0x4:
-                        this->unk_261 = 4;
+                        this->animIndex = 4;
                         break;
 
                     case 0x5:
-                        this->unk_261 = 5;
+                        this->animIndex = 5;
                         break;
 
                     case 0x6:
-                        this->unk_261 = 6;
+                        this->animIndex = 6;
                         break;
 
                     case 0x7:
-                        this->unk_261 = 7;
+                        this->animIndex = 7;
                         break;
 
                     case 0x8:
-                        this->unk_261 = 20;
+                        this->animIndex = 20;
                         break;
 
                     case 0x9:
-                        this->unk_261 = 21;
+                        this->animIndex = 21;
                         break;
 
                     case 0xA:
-                        this->unk_261 = 14;
+                        this->animIndex = 14;
                         break;
 
                     case 0xB:
-                        this->unk_261 = 15;
+                        this->animIndex = 15;
                         break;
 
                     case 0xC:
-                        this->unk_261 = 18;
+                        this->animIndex = 18;
                         break;
 
                     case 0xD:
-                        this->unk_261 = 25;
+                        this->animIndex = 25;
                         break;
 
                     case 0xE:
-                        this->unk_261 = 27;
+                        this->animIndex = 27;
                         break;
 
                     case 0xF:
-                        this->unk_261 = 24;
+                        this->animIndex = 24;
                         break;
 
                     case 0x10:
-                        this->unk_261 = 10;
+                        this->animIndex = 10;
                         break;
 
                     case 0x11:
-                        this->unk_261 = 12;
+                        this->animIndex = 12;
                         break;
 
                     case 0x12:
-                        this->unk_261 = 13;
+                        this->animIndex = 13;
                         break;
 
                     case 0x13:
-                        this->unk_261 = 29;
+                        this->animIndex = 29;
                         break;
 
                     case 0x14:
-                        this->unk_261 = 31;
+                        this->animIndex = 31;
                         break;
 
                     case 0x15:
-                        this->unk_261 = 33;
+                        this->animIndex = 33;
                         break;
 
                     case 0x16:
@@ -652,138 +652,138 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
                         break;
 
                     case 0x17:
-                        this->unk_261 = 35;
+                        this->animIndex = 35;
                         break;
 
                     case 0x18:
-                        this->unk_261 = 37;
+                        this->animIndex = 37;
                         break;
 
                     case 0x19:
-                        this->unk_261 = 39;
+                        this->animIndex = 39;
                         break;
 
                     case 0x1A:
-                        this->unk_261 = 41;
+                        this->animIndex = 41;
                         break;
 
                     case 0x1B:
-                        this->unk_261 = 45;
+                        this->animIndex = 45;
                         break;
 
                     case 0x1C:
-                        this->unk_261 = 46;
+                        this->animIndex = 46;
                         break;
 
                     case 0x1E:
-                        this->unk_261 = 48;
+                        this->animIndex = 48;
                         break;
 
                     case 0x1F:
-                        this->unk_261 = 50;
+                        this->animIndex = 50;
                         break;
 
                     case 0x20:
-                        this->unk_261 = 52;
+                        this->animIndex = 52;
                         break;
 
                     case 0x21:
-                        this->unk_261 = 53;
+                        this->animIndex = 53;
                         break;
 
                     case 0x23:
-                        this->unk_261 = 55;
+                        this->animIndex = 55;
                         break;
 
                     case 0x24:
-                        this->unk_261 = 57;
+                        this->animIndex = 57;
                         break;
 
                     case 0x25:
-                        this->unk_261 = 58;
+                        this->animIndex = 58;
                         break;
 
                     case 0x26:
-                        this->unk_261 = 59;
+                        this->animIndex = 59;
                         break;
 
                     case 0x27:
-                        this->unk_261 = 61;
+                        this->animIndex = 61;
                         break;
 
                     case 0x28:
-                        this->unk_261 = 62;
+                        this->animIndex = 62;
                         break;
 
                     case 0x29:
-                        this->unk_261 = 64;
+                        this->animIndex = 64;
                         break;
 
                     case 0x2A:
-                        this->unk_261 = 66;
+                        this->animIndex = 66;
                         break;
 
                     case 0x2B:
-                        this->unk_261 = 68;
+                        this->animIndex = 68;
                         break;
 
                     case 0x2C:
-                        this->unk_261 = 69;
+                        this->animIndex = 69;
                         break;
 
                     case 0x2D:
-                        this->unk_261 = 70;
+                        this->animIndex = 70;
                         break;
 
                     case 0x2E:
-                        this->unk_261 = 67;
+                        this->animIndex = 67;
                         break;
 
                     case 0x2F:
-                        this->unk_261 = 71;
+                        this->animIndex = 71;
                         break;
 
                     case 0x30:
-                        this->unk_261 = 73;
+                        this->animIndex = 73;
                         break;
 
                     case 0x31:
-                        this->unk_261 = 74;
+                        this->animIndex = 74;
                         break;
 
                     case 0x32:
-                        this->unk_261 = 75;
+                        this->animIndex = 75;
                         break;
 
                     case 0x33:
-                        this->unk_261 = 77;
+                        this->animIndex = 77;
                         break;
 
                     case 0x34:
-                        this->unk_261 = 78;
+                        this->animIndex = 78;
                         break;
 
                     case 0x35:
-                        this->unk_261 = 79;
+                        this->animIndex = 79;
                         break;
 
                     case 0x36:
-                        this->unk_261 = 80;
+                        this->animIndex = 80;
                         break;
 
                     case 0x37:
-                        this->unk_261 = 82;
+                        this->animIndex = 82;
                         break;
 
                     case 0x38:
-                        this->unk_261 = 83;
+                        this->animIndex = 83;
                         break;
 
                     default:
-                        this->unk_261 = 0;
+                        this->animIndex = 0;
                         break;
                 }
-                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
@@ -792,11 +792,11 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        switch (this->unk_261) {
+        switch (this->animIndex) {
             case 0x4:
             case 0x5:
-                this->unk_261 += 4;
-                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+                this->animIndex += 4;
+                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 this->skelAnime.curFrame = 37.0f;
                 break;
 
@@ -804,8 +804,8 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0xF:
             case 0x14:
             case 0x15:
-                this->unk_261 += 2;
-                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+                this->animIndex += 2;
+                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
 
             case 0xA:
@@ -832,19 +832,19 @@ void func_80AA62FC(DmChar00* this, PlayState* play) {
             case 0x4B:
             case 0x50:
             case 0x53:
-                this->unk_261 += 1;
-                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+                this->animIndex += 1;
+                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
 
             case 0x2D:
-                this->unk_261 = 19;
-                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+                this->animIndex = 19;
+                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
 
             case 0x46:
             case 0x4D:
-                this->unk_261 = 0;
-                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+                this->animIndex = 0;
+                DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
         }
     }
@@ -854,9 +854,9 @@ void func_80AA67F8(DmChar00* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((play->csCtx.state == CS_STATE_IDLE) && (gSaveContext.sceneLayer == 0) && (play->csCtx.scriptIndex == 1)) {
-        if (this->unk_261 != 42) {
-            this->unk_261 = 42;
-            DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+        if (this->animIndex != 42) {
+            this->animIndex = 42;
+            DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         }
 
         Math_SmoothStepToF(&this->actor.world.pos.x, 0.0f, 0.5f, 0.5f, 0.001f);
@@ -864,8 +864,8 @@ void func_80AA67F8(DmChar00* this, PlayState* play) {
         Math_SmoothStepToF(&this->actor.world.pos.z, -560.0f, 0.5f, 20.0f, 0.001f);
 
         if (player->actor.world.pos.z < -625.0f) {
-            this->unk_261 = 43;
-            DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->unk_261], 0);
+            this->animIndex = 43;
+            DmChar00_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             this->actionFunc = func_80AA695C;
             this->skelAnime.playSpeed = 1.5f;
         }
@@ -873,7 +873,7 @@ void func_80AA67F8(DmChar00* this, PlayState* play) {
 }
 
 void func_80AA695C(DmChar00* this, PlayState* play) {
-    if (this->unk_261 == 44) {
+    if (this->animIndex == 44) {
         Math_SmoothStepToF(&this->actor.world.pos.x, 0.0f, 0.5f, 0.5f, 0.001f);
         Math_SmoothStepToF(&this->actor.world.pos.y, 30.0f, 0.5f, 0.5f, 0.001f);
         Math_SmoothStepToF(&this->actor.world.pos.z, -680.0f, 0.5f, 10.0f, 0.001f);
