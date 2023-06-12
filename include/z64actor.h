@@ -368,7 +368,7 @@ typedef struct TargetContext {
     /* 0x44 */ f32 unk44;
     /* 0x48 */ s16 lockOnAlpha;
     /* 0x4A */ u8 arrowPointedActorCategory;
-    /* 0x4B */ u8 rotZIndex;
+    /* 0x4B */ u8 rotZTick;
     /* 0x4C */ s8 lockOnIndex;
     /* 0x50 */ TargetLockOnEntry lockOnEntries[3];
     /* 0x8C */ Actor* unk_8C; // Never set to non-NULL
