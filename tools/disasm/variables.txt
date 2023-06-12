@@ -4952,7 +4952,7 @@
     0x8085C98C:("D_8085C98C","UNK_TYPE1","",0x1),
     0x8085C99C:("sItemActionParams","UNK_TYPE1","",0x1),
     0x8085C9F0:("D_8085C9F0","UNK_PTR","",0x4),
-    0x8085CB3C:("D_8085CB3C","UNK_PTR","",0x4),
+    0x8085CB3C:("sPlayerInitItemActionFuncs","UNK_PTR","",0x4),
     0x8085CC88:("D_8085CC88","UNK_TYPE1","",0x1),
     0x8085CD00:("D_8085CD00","s8","[36]",0x24),
     0x8085CD24:("sPlayerExplosiveInfo","UNK_TYPE1","",0x1),
