@@ -1316,7 +1316,7 @@ void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, Pla
     player->itemAction = itemAction;
 }
 
-void Player_StopTargeting(Player* player) {
+void Player_Untarget(Player* player) {
     player->targetedActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
@@ -1335,7 +1335,7 @@ void func_80123DC0(Player* player) {
             ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
     }
 
-    Player_StopTargeting(player);
+    Player_Untarget(player);
 }
 
 void func_80123E90(PlayState* play, Actor* actor) {

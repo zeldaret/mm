@@ -353,7 +353,7 @@ typedef enum {
 // A Lock On entry is a set of 4 triangles which appear around an actor when the player Z-Targets it
 typedef struct TargetLockOnEntry {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ f32 distance; // distance towards the center of the locked on
+    /* 0x0C */ f32 radius; // distance towards the center of the locked on
     /* 0x10 */ Color_RGBA8 color;
 } TargetLockOnEntry; // size = 0x14
 
@@ -368,8 +368,8 @@ typedef struct TargetContext {
     /* 0x44 */ f32 unk44;
     /* 0x48 */ s16 lockOnAlpha;
     /* 0x4A */ u8 arrowPointedActorCategory;
-    /* 0x4B */ u8 rotation;
-    /* 0x4C */ s8 currentLockOnIndex;
+    /* 0x4B */ u8 rotZIndex;
+    /* 0x4C */ s8 lockOnIndex;
     /* 0x50 */ TargetLockOnEntry lockOnEntries[3];
     /* 0x8C */ Actor* unk_8C; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;

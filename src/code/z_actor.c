@@ -409,7 +409,7 @@ void Target_SetLockOnPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 
     targetCtx->lockOnEntries[index].pos.x = x;
     targetCtx->lockOnEntries[index].pos.y = y;
     targetCtx->lockOnEntries[index].pos.z = z;
-    targetCtx->lockOnEntries[index].distance = targetCtx->unk44;
+    targetCtx->lockOnEntries[index].radius = targetCtx->unk44;
 }
 
 typedef struct {
@@ -437,20 +437,20 @@ TatlColor sTatlColorList[] = {
 void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
-    TargetLockOnEntry* targetEntry;
+    TargetLockOnEntry* lockOnEntry;
 
     Math_Vec3f_Copy(&targetCtx->targetCenterPos, &play->view.eye);
     targetCtx->lockOnAlpha = 256;
     tatlColorEntry = &sTatlColorList[type];
     targetCtx->unk44 = 500.0f;
 
-    targetEntry = targetCtx->lockOnEntries;
-    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnEntries); i++, targetEntry++) {
+    lockOnEntry = targetCtx->lockOnEntries;
+    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnEntries); i++, lockOnEntry++) {
         Target_SetLockOnPos(targetCtx, i, 0.0f, 0.0f, 0.0f);
 
-        targetEntry->color.r = tatlColorEntry->inner.r;
-        targetEntry->color.g = tatlColorEntry->inner.g;
-        targetEntry->color.b = tatlColorEntry->inner.b;
+        lockOnEntry->color.r = tatlColorEntry->inner.r;
+        lockOnEntry->color.g = tatlColorEntry->inner.g;
+        lockOnEntry->color.b = tatlColorEntry->inner.b;
     }
 }
 
@@ -474,8 +474,8 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->unk_8C = NULL;
     targetCtx->targetedActor = NULL;
     targetCtx->arrowPointedActor = NULL;
-    targetCtx->rotation = 0;
-    targetCtx->currentLockOnIndex = 0;
+    targetCtx->rotZIndex = 0;
+    targetCtx->lockOnIndex = 0;
     targetCtx->unk40 = 0.0f;
     Target_SetColors(targetCtx, actor, actor->category, play);
     Target_InitLockOn(targetCtx, actor->category, play);
@@ -503,13 +503,13 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         f32 invW;
         s32 i;
         s32 index;
-        f32 var2;
+        f32 lockOnScaleX;
 
-        if (targetCtx->rotation != 0) {
+        if (targetCtx->rotZIndex != 0) {
             totalEntries = 1;
         } else {
-            // Use multiple entries for movement effect when the are getting closer to the actor from the margin of the
-            // screen
+            // Use multiple entries for the movement effect when the triangles are getting closer to the actor from the
+            // margin of the screen
             totalEntries = ARRAY_COUNT(targetCtx->lockOnEntries);
         }
 
@@ -532,43 +532,43 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
         projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
-        projectedPos.z = projectedPos.z * var1;
+        projectedPos.z *= var1;
 
-        targetCtx->currentLockOnIndex--;
-        if (targetCtx->currentLockOnIndex < 0) {
-            targetCtx->currentLockOnIndex = ARRAY_COUNT(targetCtx->lockOnEntries) - 1;
+        targetCtx->lockOnIndex--;
+        if (targetCtx->lockOnIndex < 0) {
+            targetCtx->lockOnIndex = ARRAY_COUNT(targetCtx->lockOnEntries) - 1;
         }
 
-        Target_SetLockOnPos(targetCtx, targetCtx->currentLockOnIndex, projectedPos.x, projectedPos.y, projectedPos.z);
+        Target_SetLockOnPos(targetCtx, targetCtx->lockOnIndex, projectedPos.x, projectedPos.y, projectedPos.z);
 
         if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->targetedActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
-            for (i = 0, index = targetCtx->currentLockOnIndex; i < totalEntries;
+            for (i = 0, index = targetCtx->lockOnIndex; i < totalEntries;
                  i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnEntries)) {
                 entry = &targetCtx->lockOnEntries[index];
 
-                if (entry->distance < 500.0f) {
-                    s32 lockOnIndex;
+                if (entry->radius < 500.0f) {
+                    s32 triangleIndex;
 
-                    if (entry->distance <= 120.0f) {
-                        var2 = 0.15f;
+                    if (entry->radius <= 120.0f) {
+                        lockOnScaleX = 0.15f;
                     } else {
-                        var2 = ((entry->distance - 120.0f) * 0.001f) + 0.15f;
+                        lockOnScaleX = ((entry->radius - 120.0f) * 0.001f) + 0.15f;
                     }
 
                     Matrix_Translate(entry->pos.x, entry->pos.y, 0.0f, MTXMODE_NEW);
-                    Matrix_Scale(var2, 0.15f, 1.0f, MTXMODE_APPLY);
+                    Matrix_Scale(lockOnScaleX, 0.15f, 1.0f, MTXMODE_APPLY);
 
                     gDPSetPrimColor(OVERLAY_DISP++, 0, 0, entry->color.r, entry->color.g, entry->color.b, (u8)alpha);
 
-                    Matrix_RotateZS(targetCtx->rotation * 512, MTXMODE_APPLY);
+                    Matrix_RotateZS(targetCtx->rotZIndex * 0x200, MTXMODE_APPLY);
 
                     // Draw the 4 lock-on triangles
-                    for (lockOnIndex = 0; lockOnIndex < 4; lockOnIndex++) {
+                    for (triangleIndex = 0; triangleIndex < 4; triangleIndex++) {
                         Matrix_RotateZS(0x10000 / 4, MTXMODE_APPLY);
                         Matrix_Push();
-                        Matrix_Translate(entry->distance, entry->distance, 0.0f, MTXMODE_APPLY);
+                        Matrix_Translate(entry->radius, entry->radius, 0.0f, MTXMODE_APPLY);
                         gSPMatrix(OVERLAY_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
                         gSPDisplayList(OVERLAY_DISP++, gZTargetLockOnTriangleDL);
                         Matrix_Pop();
@@ -591,7 +591,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         Matrix_Translate(actor->focus.pos.x, actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y) + 17.0f,
                          actor->focus.pos.z, MTXMODE_NEW);
-        Matrix_RotateYS(play->gameplayFrames * 3000, MTXMODE_APPLY);
+        Matrix_RotateYS(play->gameplayFrames * 0xBB8, MTXMODE_APPLY);
         Matrix_Scale((iREG(27) + 35) / 1000.0f, (iREG(28) + 60) / 1000.0f, (iREG(29) + 50) / 1000.0f, MTXMODE_APPLY);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, color->inner.r, color->inner.g, color->inner.b, 255);
@@ -610,7 +610,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
     Vec3f projectedPos;
     f32 invW;
 
-    // If no actor is currently targeted, then try to find a
+    // If no actor is currently targeted, then try to find a targetable actor
     if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->targetableOption = NULL;
     } else {
@@ -654,7 +654,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         Target_SetColors(targetCtx, actor, category, play);
     }
 
-    if ((targetedActor != NULL) && (targetCtx->rotation == 0)) {
+    if ((targetedActor != NULL) && (targetCtx->rotZIndex == 0)) {
         Actor_GetProjectedPos(play, &targetedActor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
@@ -687,18 +687,19 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
             targetedActor->world.pos.y - (targetedActor->shape.yOffset * targetedActor->scale.y);
         targetCtx->targetCenterPos.z = targetedActor->world.pos.z;
 
-        if (targetCtx->rotation == 0) {
+        if (targetCtx->rotZIndex == 0) {
             f32 temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
             f32 clampedFloat;
 
             clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
 
             if (Math_StepToF(&targetCtx->unk44, 80.0f, clampedFloat)) {
-                targetCtx->rotation++;
+                targetCtx->rotZIndex++;
             }
         } else {
             // 0x80 is or'd to avoid getting this value be set to zero
-            targetCtx->rotation = (targetCtx->rotation + 3) | 0x80;
+            // This rotation value gets multiplied by 0x200, which multiplied by 0x80 gives a full turn (0x10000)
+            targetCtx->rotZIndex = (targetCtx->rotZIndex + 3) | 0x80;
             targetCtx->unk44 = 120.0f;
         }
     } else {
@@ -1812,7 +1813,7 @@ f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw) {
     yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), playerShapeYaw));
 
     if (player->targetedActor != NULL) {
-        if ((yawDiff > (0x10000 / 4)) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
+        if ((yawDiff > 0x4000) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             return FLT_MAX;
         }
 
@@ -1853,13 +1854,13 @@ s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
     return distSq < gTargetRanges[actor->targetMode].rangeSq;
 }
 
-s32 Target_NotInLeashRange(Actor* actor, Player* player, s32 skipChecks) {
+s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
     if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_TARGETABLE) ||
         (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
         return true;
     }
 
-    if (!skipChecks) {
+    if (!ignoreLeash) {
         s16 yawDiff;
         f32 distSq;
 
@@ -2580,13 +2581,13 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
     actor = player->targetedActor;
     if ((actor != NULL) && (actor->update == NULL)) {
         actor = NULL;
-        Player_StopTargeting(player);
+        Player_Untarget(player);
     }
 
     if ((actor == NULL) || (player->unk_738 < 5)) {
         actor = NULL;
-        if (actorCtx->targetContext.rotation != 0) {
-            actorCtx->targetContext.rotation = 0;
+        if (actorCtx->targetContext.rotZIndex != 0) {
+            actorCtx->targetContext.rotZIndex = 0;
             play_sound(NA_SE_SY_LOCK_OFF);
         }
     }
@@ -3368,7 +3369,7 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     ActorOverlay* overlayEntry = actor->overlayEntry;
 
     if ((player != NULL) && (actor == player->targetedActor)) {
-        Player_StopTargeting(player);
+        Player_Untarget(player);
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
