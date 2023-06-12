@@ -3049,8 +3049,6 @@ PlayerUpperActionFunc D_8085C9F0[PLAYER_IA_MAX] = {
     Player_UpperAction_0,  // PLAYER_IA_LENS
 };
 
-// sPlayerItemActionInits?
-
 typedef void (*PlayerInitItemActionFunc)(PlayState*, Player*);
 
 PlayerInitItemActionFunc sPlayerInitItemActionFuncs[PLAYER_IA_MAX] = {
