@@ -371,7 +371,7 @@ typedef struct TargetContext {
     /* 0x4B */ u8 rotZTick;
     /* 0x4C */ s8 lockOnIndex;
     /* 0x50 */ TargetLockOnEntry lockOnEntries[3];
-    /* 0x8C */ Actor* unk_8C; // Never set to non-NULL
+    /* 0x8C */ Actor* nextTarget; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* targetableOption;
 } TargetContext; // size = 0x98
@@ -475,7 +475,7 @@ typedef struct ActorContext {
     /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
     /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
-    /* 0x120 */ TargetContext targetContext;
+    /* 0x120 */ TargetContext targetCtx;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ PlayerImpact playerImpact;

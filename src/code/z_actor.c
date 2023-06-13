@@ -471,7 +471,7 @@ void Target_SetColors(TargetContext* targetCtx, Actor* actor, ActorType type, Pl
 
 void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->bgmEnemy = NULL;
-    targetCtx->unk_8C = NULL;
+    targetCtx->nextTarget = NULL;
     targetCtx->targetedActor = NULL;
     targetCtx->arrowPointedActor = NULL;
     targetCtx->rotZTick = 0;
@@ -618,9 +618,9 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         targetCtx->targetableOption = actor;
     }
 
-    if (targetCtx->unk_8C != NULL) {
-        actor = targetCtx->unk_8C;
-        targetCtx->unk_8C = NULL;
+    if (targetCtx->nextTarget != NULL) {
+        actor = targetCtx->nextTarget;
+        targetCtx->nextTarget = NULL;
     } else if (targetedActor != NULL) {
         actor = targetedActor;
     }
@@ -2346,7 +2346,7 @@ void Actor_InitContext(PlayState* play, ActorContext* actorCtx, ActorEntry* acto
     actorCtx->absoluteSpace = NULL;
 
     Actor_SpawnEntry(actorCtx, actorEntry, play);
-    Target_Init(&actorCtx->targetContext, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
+    Target_Init(&actorCtx->targetCtx, actorCtx->actorLists[ACTORCAT_PLAYER].first, play);
     Actor_InitHalfDaysBit(actorCtx);
     Fault_AddClient(&sActorFaultClient, (void*)Actor_PrintLists, actorCtx, NULL);
     Actor_SpawnHorse(play, (Player*)actorCtx->actorLists[ACTORCAT_PLAYER].first);
@@ -2586,14 +2586,14 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
 
     if ((actor == NULL) || (player->unk_738 < 5)) {
         actor = NULL;
-        if (actorCtx->targetContext.rotZTick != 0) {
-            actorCtx->targetContext.rotZTick = 0;
+        if (actorCtx->targetCtx.rotZTick != 0) {
+            actorCtx->targetCtx.rotZTick = 0;
             play_sound(NA_SE_SY_LOCK_OFF);
         }
     }
 
     if (!(player->stateFlags1 & PLAYER_STATE1_2)) {
-        Target_Update(&actorCtx->targetContext, player, actor, play);
+        Target_Update(&actorCtx->targetCtx, player, actor, play);
     }
 
     TitleCard_Update(&play->state, &actorCtx->titleCtxt);
@@ -3373,16 +3373,16 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
-    if (actor == actorCtx->targetContext.arrowPointedActor) {
-        actorCtx->targetContext.arrowPointedActor = NULL;
+    if (actor == actorCtx->targetCtx.arrowPointedActor) {
+        actorCtx->targetCtx.arrowPointedActor = NULL;
     }
 
-    if (actor == actorCtx->targetContext.unk_8C) {
-        actorCtx->targetContext.unk_8C = NULL;
+    if (actor == actorCtx->targetCtx.nextTarget) {
+        actorCtx->targetCtx.nextTarget = NULL;
     }
 
-    if (actor == actorCtx->targetContext.bgmEnemy) {
-        actorCtx->targetContext.bgmEnemy = NULL;
+    if (actor == actorCtx->targetCtx.bgmEnemy) {
+        actorCtx->targetCtx.bgmEnemy = NULL;
     }
 
     AudioSfx_StopByPos(&actor->projectedPos);
@@ -3459,7 +3459,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
         if ((actorCategory == ACTORCAT_ENEMY) &&
             CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)) {
             if ((actor->xyzDistToPlayerSq < SQ(500.0f)) && (actor->xyzDistToPlayerSq < sBgmEnemyDistSq)) {
-                actorCtx->targetContext.bgmEnemy = actor;
+                actorCtx->targetCtx.bgmEnemy = actor;
                 sBgmEnemyDistSq = actor->xyzDistToPlayerSq;
             }
         }
@@ -3535,7 +3535,7 @@ void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targ
     sTargetableNearestActorDistanceSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
     sTargetableHighestPriorityPriority = D_801ED8D8 = INT32_MAX;
 
-    actorCtx->targetContext.bgmEnemy = NULL;
+    actorCtx->targetCtx.bgmEnemy = NULL;
     sTargetPlayerYRot = player->actor.shape.rot.y;
 
     actorCategories = sTargetableActorCategories;

@@ -430,8 +430,8 @@ void func_80BB7578(EnTanron2* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IKURA_DAMAGE);
                 if ((player->targetedActor != NULL) && (&this->actor != player->targetedActor)) {
                     player->targetedActor = &this->actor;
-                    play->actorCtx.targetContext.arrowPointedActor = &this->actor;
-                    play->actorCtx.targetContext.targetedActor = &this->actor;
+                    play->actorCtx.targetCtx.arrowPointedActor = &this->actor;
+                    play->actorCtx.targetCtx.targetedActor = &this->actor;
                 }
             } else {
                 this->unk_154 = 15;
