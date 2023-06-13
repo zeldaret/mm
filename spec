@@ -2735,8 +2735,7 @@ beginseg
     name "ovl_En_Dnh"
     compress
     include "build/src/overlays/actors/ovl_En_Dnh/z_en_dnh.o"
-    include "build/data/ovl_En_Dnh/ovl_En_Dnh.data.o"
-    include "build/data/ovl_En_Dnh/ovl_En_Dnh.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Dnh/ovl_En_Dnh_reloc.o"
 endseg
 
 beginseg
