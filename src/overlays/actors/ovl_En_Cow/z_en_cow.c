@@ -292,8 +292,8 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
         }
     }
 
-    if (this->actor.xzDistToPlayer < 150.0f &&
-        ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
+    if ((this->actor.xzDistToPlayer < 150.0f) &&
+        (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 0x61A8)) {
         if (AudioVoice_GetWord() == VOICE_WORD_ID_MILK) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
@@ -323,8 +323,8 @@ void EnCow_DoTail(EnCow* this, PlayState* play) {
                          Animation_GetLastFrame(&gCowTailIdleAnim), ANIMMODE_ONCE, 1.0f);
     }
 
-    if (this->actor.xzDistToPlayer < 150.0f &&
-        ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) > 25000) {
+    if ((this->actor.xzDistToPlayer < 150.0f) &&
+        (ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) > 0x61A8)) {
         if (!(this->flags & EN_COW_FLAG_PLAYER_HAS_APPROACHED)) {
             this->flags |= EN_COW_FLAG_PLAYER_HAS_APPROACHED;
             if (this->skelAnime.animation == &gCowTailIdleAnim) {
@@ -361,8 +361,8 @@ void EnCow_Update(Actor* thisx, PlayState* play2) {
 
     this->actionFunc(this, play);
 
-    if (this->actor.xzDistToPlayer < 150.0f &&
-        ABS_ALT(Math_Vec3f_Yaw(&thisx->world.pos, &player->actor.world.pos)) < 0xC000) {
+    if ((this->actor.xzDistToPlayer < 150.0f) &&
+        (ABS_ALT(Math_Vec3f_Yaw(&thisx->world.pos, &player->actor.world.pos)) < 0xC000)) {
         targetX = Math_Vec3f_Pitch(&thisx->focus.pos, &player->actor.focus.pos);
         targetY = Math_Vec3f_Yaw(&thisx->focus.pos, &player->actor.focus.pos) - this->actor.shape.rot.y;
 
