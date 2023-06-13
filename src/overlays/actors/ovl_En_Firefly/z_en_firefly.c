@@ -134,7 +134,8 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &gFireKeeseFlyAnim, this->jointTable, this->morphTable, FIRE_KEESE_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &gFireKeeseFlyAnim, this->jointTable, this->morphTable,
+                   FIRE_KEESE_LIMB_MAX);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
