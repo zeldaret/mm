@@ -159,7 +159,7 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->flags = 0;
 
-    CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
 }
 
 void EnCow_Destroy(Actor* thisx, PlayState* play) {
@@ -295,8 +295,8 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
         if (AudioVoice_GetWord() == VOICE_WORD_ID_MILK) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_01)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_87_01);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
                 if (Inventory_HasEmptyBottle()) {
                     this->actor.textId = 0x32C9; // Text to give milk.
                 } else {
@@ -307,7 +307,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 this->actionFunc = EnCow_Talk;
             }
         } else {
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_87_01);
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKING_TO_COW_WITH_VOICE);
         }
     }
 
