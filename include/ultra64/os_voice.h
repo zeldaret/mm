@@ -29,18 +29,6 @@ typedef struct {
     /* 0x14 */ u16 distance[5];   // Distance value
 } OSVoiceData; // size = 0x20
 
-
-typedef enum {
-    /* 0  */ VOICE_WORD_ID_HOURS,
-    /* 1  */ VOICE_WORD_ID_CHEESE,
-    /* 2  */ VOICE_WORD_ID_WAKE_UP,
-    /* 3  */ VOICE_WORD_ID_SIT,
-    /* 4  */ VOICE_WORD_ID_MILK,
-    /* 5  */ VOICE_WORD_ID_HIYA,
-    /* 6  */ VOICE_WORD_ID_MAX,
-    /* -1 */ VOICE_WORD_ID_NONE = 0xFFFF
-} OSVoiceWordId;
-
 #define VOICE_STATUS_READY 0 /* stop/end */
 #define VOICE_STATUS_START 1 /* Voice Undetected (no voice input) */
 #define VOICE_STATUS_CANCEL 3 /* Cancel (cancel extraneous noise) */

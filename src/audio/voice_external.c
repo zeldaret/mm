@@ -1,13 +1,5 @@
 #include "global.h"
-
-void func_801A5080(u16 arg0);
-s32 func_801A5228(OSVoiceDictionary* dict);
-void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16 voiceRelLevel);
-s32 func_801A5808(void);
-OSVoiceData* func_801A5390(void);
-s32 func_801A5680(u16 wordId);
-s32 func_801A54D0(u16 wordId);
-u8* func_801A54C4(void);
+#include "z64voice.h"
 
 extern OSVoiceHandle gVoiceHandle;
 
@@ -93,8 +85,8 @@ void func_801A4FD8(void) {
             D_801D8E3C = 1;
         }
 
-        func_801A5080(5);
-        func_801A5080(1);
+        func_801A5080(VOICE_WORD_ID_HIYA);
+        func_801A5080(VOICE_WORD_ID_CHEESE);
     }
 }
 
@@ -112,7 +104,7 @@ void func_801A50C0(u16 wordId) {
 }
 
 // Used externally in many files
-u16 func_801A5100(void) {
+u16 AudioVoice_GetWord(void) {
     return sTopScoreWordId;
 }
 

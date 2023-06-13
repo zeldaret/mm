@@ -6,6 +6,7 @@
 
 #include "z_en_cow.h"
 #include "z64horse.h"
+#include "z64voice.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -132,8 +133,9 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
             this->actor.targetMode = 6;
 
             gHorsePlayedEponasSong = false;
-            func_801A5080(4);
+            func_801A5080(VOICE_WORD_ID_MILK);
             break;
+
         case EN_COW_TYPE_TAIL:
             SkelAnime_InitFlex(play, &this->skelAnime, &gCowTailSkel, NULL, this->jointTable, this->morphTable,
                                COW_TAIL_LIMB_MAX);
@@ -147,6 +149,9 @@ void EnCow_Init(Actor* thisx, PlayState* play) {
 
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->animationTimer = Rand_ZeroFloat(1000.0f) + 40.0f;
+            break;
+
+        default:
             break;
     }
 
@@ -289,7 +294,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
 
     if (this->actor.xzDistToPlayer < 150.0f &&
         ABS_ALT((s16)(this->actor.yawTowardsPlayer - this->actor.shape.rot.y)) < 25000) {
-        if (func_801A5100() == 4) {
+        if (AudioVoice_GetWord() == VOICE_WORD_ID_MILK) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_87_01)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_87_01);
                 if (Inventory_HasEmptyBottle()) {

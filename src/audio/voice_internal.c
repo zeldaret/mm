@@ -1,4 +1,5 @@
 #include "global.h"
+#include "z64voice.h"
 
 // internal voice functions
 u8* func_801A5A1C(s8* word);
@@ -265,6 +266,7 @@ s32 func_801A5808(void) {
                     case VOICE_STATUS_READY:
                         D_801FD5A0.mode = 2;
                         break;
+
                     case VOICE_STATUS_START:
                     case 2:
                     case VOICE_STATUS_CANCEL:
@@ -272,6 +274,7 @@ s32 func_801A5808(void) {
                     case VOICE_STATUS_BUSY:
                     case 6:
                         break;
+
                     case VOICE_STATUS_END:
                         D_801FD5A0.mode = 2;
                         break;

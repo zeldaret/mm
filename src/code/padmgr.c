@@ -31,6 +31,7 @@
  * done while waiting for this operation to complete.
  */
 #include "global.h"
+#include "z64voice.h"
 #include "io/controller.h"
 #include "ultra64/motor.h"
 

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_hidden_nuts.h"
+#include "z64voice.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_hintnuts/object_hintnuts.h"
 
@@ -106,7 +107,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 
     this->path = SubS_GetPathByIndex(play, this->pathIndex, ENHIDDENNUTS_PATH_INDEX_NONE_ALT);
     this->csId = this->actor.csId;
-    func_801A5080(2);
+    func_801A5080(VOICE_WORD_ID_WAKE_UP);
     func_80BDB268(this);
 }
 
@@ -186,7 +187,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_SONATA)) {
             play->msgCtx.ocarinaMode = 4;
             func_80BDB788(this);
-        } else if (func_801A5100() == 2) {
+        } else if (AudioVoice_GetWord() == VOICE_WORD_ID_WAKE_UP) {
             func_80BDB788(this);
         } else {
             func_800B8614(&this->actor, play, BREG(13) + 100.0f);
