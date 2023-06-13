@@ -220,7 +220,7 @@ void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
  * Jumps out of the water and starts floating.
  */
 void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
-    if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 2.0f) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
         if (EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
             return;
         }
@@ -345,7 +345,7 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
 }
 
 /**
- * Adjust's the collider's dimensions and position based on a few different factors, like the Octorok's
+ * Adjusts the collider's dimensions and position based on a few different factors, like the Octorok's
  * type, current scale and head scale, and current action.
  */
 void EnSyatekiOkuta_UpdateCollision(EnSyatekiOkuta* this, PlayState* play) {
