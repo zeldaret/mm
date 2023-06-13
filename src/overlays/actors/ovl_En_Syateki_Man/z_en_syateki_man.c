@@ -1034,7 +1034,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->perGameVar1.guaySpawnTimer = 0;
         Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
-        if (this->flagsIndex == ARRAY_COUNT(sGuayFlagsPerWave) - 1) {
+        if (this->flagsIndex == 3) {
             this->flagsIndex = 0;
         } else {
             this->flagsIndex++;
