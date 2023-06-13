@@ -2,7 +2,7 @@
 #include "z64voice.h"
 
 // internal voice functions
-u8* func_801A5A1C(s8* word);
+u8* func_801A5A1C(s8* words);
 
 // BSS
 OSVoiceUnk D_801FD5A0;
@@ -50,13 +50,14 @@ s32 func_801A51F0(s32 errorCode) {
         case CONT_ERR_VOICE_WORD:
         case CONT_ERR_VOICE_NO_RESPONSE:
             return -1;
+
         default:
             return 0;
     }
 }
 
 s32 func_801A5228(OSVoiceDictionary* dict) {
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
     s32 errorCode;
     u8 numWords;
     u8 i;
@@ -70,9 +71,9 @@ s32 func_801A5228(OSVoiceDictionary* dict) {
 
     numWords = dict->numWords;
 
-    msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+    serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
     errorCode = osVoiceClearDictionary(&gVoiceHandle, numWords);
-    PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+    PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
     if (errorCode != 0) {
         return errorCode;
@@ -83,9 +84,9 @@ s32 func_801A5228(OSVoiceDictionary* dict) {
     }
 
     for (i = 0; i < numWords; i++) {
-        msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+        serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         errorCode = osVoiceSetWord(&gVoiceHandle, &dict->words[i]);
-        PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+        PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
         if (func_801A51F0(errorCode) != 0) {
             func_801A5A1C(&dict->words[i]);
@@ -97,14 +98,14 @@ s32 func_801A5228(OSVoiceDictionary* dict) {
 
 OSVoiceData* func_801A5390(void) {
     OSVoiceData* voiceData;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
 
     voiceData = D_801FD5A0.data;
     D_801FD5A0.data = NULL;
 
-    msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+    serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
     osVoiceStartReadData(&gVoiceHandle);
-    PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+    PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
     return voiceData;
 }
@@ -126,12 +127,12 @@ void func_801A53E8(u16 distance, u16 answerNum, u16 warning, u16 voiceLevel, u16
 // Could have a return? or be void return?
 s32 func_801A541C(s32 analog, s32 digital) {
     s32 errorCode;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
 
     if (D_801FD5A0.dict != NULL) {
-        msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+        serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         errorCode = osVoiceControlGain(&gVoiceHandle, analog, digital);
-        PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+        PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
         if (errorCode != 0) {
             func_801A51F0(errorCode);
@@ -142,11 +143,11 @@ s32 func_801A541C(s32 analog, s32 digital) {
 // Unused
 s32 func_801A5488(u8* word) {
     s32 errorCode;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
 
-    msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+    serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
     errorCode = osVoiceCheckWord(word);
-    PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+    PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
     return errorCode;
 }
@@ -160,7 +161,7 @@ s32 func_801A54D0(u16 wordId) {
     u8 phi_t0 = true;
     u8 numWords;
     u8 i;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
 
     if (D_801FD5A0.dict != NULL) {
         numWords = D_801FD5A0.dict->numWords;
@@ -182,14 +183,14 @@ s32 func_801A54D0(u16 wordId) {
     }
 
     if (phi_t0) {
-        msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+        serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         errorCode = osVoiceStopReadData(&gVoiceHandle);
-        PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+        PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
         if ((errorCode == 0) || (D_801FD5A0.mode == 0)) {
-            msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+            serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
             errorCode = osVoiceMaskDictionary(&gVoiceHandle, sVoiceMaskPattern, ((numWords - 1) / 8) + 1);
-            PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+            PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
         }
 
         D_801FD5A0.mode = 0;
@@ -203,7 +204,7 @@ s32 func_801A5680(u16 wordId) {
     u8 phi_a3 = true;
     u8 numWords;
     u8 i;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
 
     if (D_801FD5A0.dict != NULL) {
         numWords = D_801FD5A0.dict->numWords;
@@ -225,14 +226,14 @@ s32 func_801A5680(u16 wordId) {
     }
 
     if (phi_a3) {
-        msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+        serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         errorCode = osVoiceStopReadData(&gVoiceHandle);
-        PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+        PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
         if ((errorCode == 0) || (D_801FD5A0.mode == 0)) {
-            msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+            serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
             errorCode = osVoiceMaskDictionary(&gVoiceHandle, sVoiceMaskPattern, ((numWords - 1) / 8) + 1);
-            PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+            PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
         }
 
         D_801FD5A0.mode = 0;
@@ -244,22 +245,21 @@ s32 func_801A5680(u16 wordId) {
 s32 func_801A5808(void) {
     s32 errorCode = 0;
     s32 ret;
-    OSMesgQueue* msgQ;
-
-    if (1) {}
+    OSMesgQueue* serialEventQueue;
 
     switch (D_801FD5A0.mode) {
         case 0:
-            msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+            serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
             errorCode = osVoiceStartReadData(&gVoiceHandle);
-            PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+            PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
             D_801FD5A0.mode = 1;
             break;
+
         case 1:
-            msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+            serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
             errorCode = osVoiceGetReadData(&gVoiceHandle, &D_801FD5C8);
-            PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+            PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
             if (func_801A51F0(errorCode) == 0) {
                 switch (gVoiceHandle.status) {
@@ -278,9 +278,13 @@ s32 func_801A5808(void) {
                     case VOICE_STATUS_END:
                         D_801FD5A0.mode = 2;
                         break;
+
+                    default:
+                        break;
                 }
             }
             break;
+
         case 2:
             if (((D_801FD5C8.warning & D_801FD5A0.warning) == 0) && (D_801FD5A0.answerNum >= D_801FD5C8.answerNum) &&
                 (D_801FD5A0.distance >= D_801FD5C8.distance[0]) && (D_801FD5C8.voiceLevel >= D_801FD5A0.voiceLevel) &&
@@ -289,15 +293,18 @@ s32 func_801A5808(void) {
                 D_801FD5A0.data = &D_801FD5E8;
             }
 
-            msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+            serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
             osVoiceStopReadData(&gVoiceHandle);
-            PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+            PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
-            msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+            serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
             errorCode = osVoiceStartReadData(&gVoiceHandle);
-            PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+            PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
             D_801FD5A0.mode = 1;
+            break;
+
+        default:
             break;
     }
 
@@ -311,15 +318,15 @@ void AudioVoice_ResetData(void) {
     D_801FD5A0.dict = NULL;
 }
 
-u8* func_801A5A1C(s8* word) {
+u8* func_801A5A1C(s8* words) {
     u8 i;
     u8 j;
-    u8 numSyllables = strlen(word); // technically twice the num of syllables
+    u8 numSyllables = strlen(words); // technically twice the num of syllables
     u8 syllable[2];
 
     for (j = 0, i = 0; i < numSyllables; i += 2) {
-        syllable[0] = word[i];
-        syllable[1] = word[i + 1];
+        syllable[0] = words[i];
+        syllable[1] = words[i + 1];
 
         if (syllable[0] == 0x83) {
             D_801FD610[j++] = D_801D8F70[syllable[1] - 0x40][0];
@@ -327,7 +334,7 @@ u8* func_801A5A1C(s8* word) {
         } else if (syllable[0] == 0x82) {
             D_801FD610[j++] = D_801D8E50[syllable[1] - 0x9F][0];
             D_801FD610[j++] = D_801D8E50[syllable[1] - 0x9F][1];
-        } else if (syllable[0] == 0x81 && syllable[1] == 0x5B) {
+        } else if ((syllable[0] == 0x81) && (syllable[1] == 0x5B)) {
             D_801FD610[j++] = '-';
             D_801FD610[j++] = '-';
         } else {

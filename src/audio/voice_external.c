@@ -37,15 +37,15 @@ void func_801A4EB0(void) {
 
 void func_801A4EB8(void) {
     u8* new_var;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
     s32 index;
     u8 sp38[1];
     u8 i;
 
     if (D_801D8E3C != 0) {
-        msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+        serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         osVoiceStopReadData(&gVoiceHandle);
-        PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+        PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
     }
 
     new_var = func_801A54C4();
@@ -70,13 +70,13 @@ void func_801A4EB8(void) {
 // Used externally in code_8019AF00
 void func_801A4FD8(void) {
     s32 errorCode;
-    OSMesgQueue* msgQ;
+    OSMesgQueue* serialEventQueue;
 
     func_801A54D0(VOICE_WORD_ID_NONE);
     if (D_801D8E3C != 0) {
-        msgQ = PadMgr_VoiceAcquireSerialEventQueue();
+        serialEventQueue = PadMgr_VoiceAcquireSerialEventQueue();
         osVoiceStopReadData(&gVoiceHandle);
-        PadMgr_VoiceReleaseSerialEventQueue(msgQ);
+        PadMgr_VoiceReleaseSerialEventQueue(serialEventQueue);
 
         errorCode = func_801A5228(&D_801D8BE0);
         func_801A54D0(VOICE_WORD_ID_NONE);
