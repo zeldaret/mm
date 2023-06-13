@@ -409,7 +409,7 @@ void Target_SetLockOnPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 
     targetCtx->lockOnEntries[index].pos.x = x;
     targetCtx->lockOnEntries[index].pos.y = y;
     targetCtx->lockOnEntries[index].pos.z = z;
-    targetCtx->lockOnEntries[index].radius = targetCtx->unk44;
+    targetCtx->lockOnEntries[index].radius = targetCtx->lockOnRadius;
 }
 
 typedef struct {
@@ -442,7 +442,7 @@ void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play
     Math_Vec3f_Copy(&targetCtx->targetCenterPos, &play->view.eye);
     targetCtx->lockOnAlpha = 256;
     tatlColorEntry = &sTatlColorList[type];
-    targetCtx->unk44 = 500.0f;
+    targetCtx->lockOnRadius = 500.0f;
 
     lockOnEntry = targetCtx->lockOnEntries;
     for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnEntries); i++, lockOnEntry++) {
@@ -476,7 +476,7 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->arrowPointedActor = NULL;
     targetCtx->rotZTick = 0;
     targetCtx->lockOnIndex = 0;
-    targetCtx->unk40 = 0.0f;
+    targetCtx->fairyMoveProgressFactor = 0.0f;
     Target_SetColors(targetCtx, actor, actor->category, play);
     Target_InitLockOn(targetCtx, actor->category, play);
 }
@@ -515,7 +515,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         if (actor != NULL) {
             Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
-            var1 = (500.0f - targetCtx->unk44) / 420.0f;
+            var1 = (500.0f - targetCtx->lockOnRadius) / 420.0f;
         } else {
             targetCtx->lockOnAlpha -= 120;
             if (targetCtx->lockOnAlpha < 0) {
@@ -634,15 +634,15 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
     if ((actor != targetCtx->arrowPointedActor) || (category != targetCtx->arrowPointedActorCategory)) {
         targetCtx->arrowPointedActor = actor;
         targetCtx->arrowPointedActorCategory = category;
-        targetCtx->unk40 = 1.0f;
+        targetCtx->fairyMoveProgressFactor = 1.0f;
     }
 
     if (actor == NULL) {
         actor = &player->actor;
     }
 
-    if (!Math_StepToF(&targetCtx->unk40, 0.0f, 0.25f)) {
-        f32 temp_f0 = 0.25f / targetCtx->unk40;
+    if (!Math_StepToF(&targetCtx->fairyMoveProgressFactor, 0.0f, 0.25f)) {
+        f32 temp_f0 = 0.25f / targetCtx->fairyMoveProgressFactor;
         f32 x = actor->focus.pos.x - targetCtx->fairyHintPos.x;
         f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->fairyHintPos.y;
         f32 z = actor->focus.pos.z - targetCtx->fairyHintPos.z;
@@ -688,23 +688,23 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         targetCtx->targetCenterPos.z = targetedActor->world.pos.z;
 
         if (targetCtx->rotZTick == 0) {
-            f32 temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
+            f32 temp_f0_2 = (500.0f - targetCtx->lockOnRadius) * 3.0f;
             f32 clampedFloat;
 
             clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
 
-            if (Math_StepToF(&targetCtx->unk44, 80.0f, clampedFloat)) {
+            if (Math_StepToF(&targetCtx->lockOnRadius, 80.0f, clampedFloat)) {
                 targetCtx->rotZTick++;
             }
         } else {
             // 0x80 is or'd to avoid getting this value be set to zero
             // This rotation value gets multiplied by 0x200, which multiplied by 0x80 gives a full turn (0x10000)
             targetCtx->rotZTick = (targetCtx->rotZTick + 3) | 0x80;
-            targetCtx->unk44 = 120.0f;
+            targetCtx->lockOnRadius = 120.0f;
         }
     } else {
         targetCtx->targetedActor = NULL;
-        Math_StepToF(&targetCtx->unk44, 500.0f, 80.0f);
+        Math_StepToF(&targetCtx->lockOnRadius, 500.0f, 80.0f);
     }
 }
 
