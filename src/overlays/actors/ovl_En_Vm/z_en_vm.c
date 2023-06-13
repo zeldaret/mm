@@ -461,10 +461,10 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
 s32 EnVm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnVm* this = THIS;
 
-    if (limbIndex == OBJECT_VM_LIMB_02) {
+    if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         rot->x += this->unk_216;
         rot->y += this->unk_218;
-    } else if ((limbIndex == OBJECT_VM_LIMB_0A) && (this->actionFunc == func_808CCCF0)) {
+    } else if ((limbIndex == BEAMOS_LIMB_BODY) && (this->actionFunc == func_808CCCF0)) {
         *dList = NULL;
     }
     return false;
@@ -480,7 +480,7 @@ void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
 
-    if (limbIndex == OBJECT_VM_LIMB_02) {
+    if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         sp4C = NULL;
 
         Matrix_MultZero(&this->actor.focus.pos);
