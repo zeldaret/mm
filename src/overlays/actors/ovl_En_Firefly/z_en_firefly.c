@@ -747,7 +747,7 @@ s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
     if (this->isInvisible && (play->actorCtx.lensMaskSize != LENS_MASK_ACTIVE_SIZE)) {
         *dList = NULL;
-    } else if (limbIndex = FIRE_KEESE_LIMB_ROOT) {
+    } else if (limbIndex == FIRE_KEESE_LIMB_ROOT) {
         pos->y += 2300.0f;
     }
     return false;
