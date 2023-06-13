@@ -85,16 +85,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 6500, ICHAIN_STOP),
 };
 
-Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
-
-Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
-
-Vec3f sBubbleAccel = { 0.0f, -0.5, 0.0f };
-
-Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
-
-Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
-
 void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnSyatekiOkuta* this = THIS;
@@ -134,6 +124,9 @@ void EnSyatekiOkuta_Destroy(Actor* thisx, PlayState* play) {
  * Spawns the puff of smoke that appears when the Octorok disappears when it dies.
  */
 void EnSyatekiOkuta_SpawnDust(Vec3f* pos, Vec3f* velocity, s16 scaleStep, PlayState* play) {
+    static Color_RGBA8 sDustPrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sDustEnvColor = { 150, 150, 150, 255 };
+
     func_800B0DE0(play, pos, velocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 400, scaleStep);
 }
 
@@ -294,6 +287,9 @@ void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
  * make it do nothing until the Shooting Gallery Man tells it to appear again.
  */
 void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
+    static Vec3f sBubbleAccel = { 0.0f, -0.5, 0.0f };
+    static Color_RGBA8 sBubblePrimColor = { 255, 255, 255, 255 };
+    static Color_RGBA8 sBubbleEnvColor = { 150, 150, 150, 0 };
     Vec3f velocity;
     Vec3f pos;
     s32 pad;
