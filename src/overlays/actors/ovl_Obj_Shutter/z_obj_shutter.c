@@ -16,7 +16,7 @@ void ObjShutter_Destroy(Actor* thisx, PlayState* play);
 void ObjShutter_Update(Actor* thisx, PlayState* play2);
 void ObjShutter_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Shutter_InitVars = {
+ActorInit Obj_Shutter_InitVars = {
     ACTOR_OBJ_SHUTTER,
     ACTORCAT_PROP,
     FLAGS,
@@ -85,7 +85,7 @@ void ObjShutter_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gBankShutterDL);
 

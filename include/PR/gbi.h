@@ -2599,11 +2599,11 @@ _DW({									\
         gsSPLoadUcodeEx((uc_start), (uc_dstart), SP_UCODE_DATA_SIZE)
 
 #define	gSPLoadUcodeL(pkt, ucode)					\
-        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&##ucode##TextStart),	\
-		            OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gSPLoadUcode((pkt), OS_K0_TO_PHYSICAL(&ucode##TextStart),	\
+		            OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #define	gsSPLoadUcodeL(ucode)						\
-        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&##ucode##TextStart),		\
-		      OS_K0_TO_PHYSICAL(&##ucode##DataStart))
+        gsSPLoadUcode(OS_K0_TO_PHYSICAL(&ucode##TextStart),		\
+		      OS_K0_TO_PHYSICAL(&ucode##DataStart))
 #endif
 
 #ifdef	F3DEX_GBI_2
@@ -3572,7 +3572,7 @@ _DW({									\
 
 #define	gDPLoadTextureBlock(pkt, timg, fmt, siz, width, height,		\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz##_LOAD_BLOCK, 1, timg);	\
 	gDPSetTile(pkt, fmt, siz##_LOAD_BLOCK, 0, 0, G_TX_LOADTILE, 	\
 		0 , cmt, maskt, shiftt, cms, masks, shifts);		\
@@ -3588,7 +3588,7 @@ _DW({									\
 	gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0,			\
 		((width)-1) << G_TEXTURE_IMAGE_FRAC,			\
 		((height)-1) << G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 #define	gDPLoadTextureBlockYuv(pkt, timg, fmt, siz, width, height,	\
 		pal, cms, cmt, masks, maskt, shifts, shiftt)		\
@@ -4082,7 +4082,7 @@ _DW({									\
 #define	gDPLoadTextureTile(pkt, timg, fmt, siz, width, height,		\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz, width, timg);			\
 	gDPSetTile(pkt, fmt, siz,					\
 		(((((lrs)-(uls)+1) * siz##_TILE_BYTES)+7)>>3), 0,	\
@@ -4104,7 +4104,7 @@ _DW({									\
 			(ult)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrs)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrt)<<G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 #else /******** WORKAROUND hw 1 load tile bug ********/
 
@@ -4112,7 +4112,7 @@ _DW({									\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
 									\
-{									\
+_DW({									\
 	int _loadtile_i, _loadtile_nw; Gfx *_loadtile_temp = pkt; 	\
 	guDPLoadTextureTile(_loadtile_temp, timg, fmt, siz, 		\
 		width, height,        					\
@@ -4121,7 +4121,7 @@ _DW({									\
 	_loadtile_nw = guGetDPLoadTextureTileSz(ult, lrt) - 1;		\
 	for(_loadtile_i = 0; _loadtile_i < _loadtile_nw; _loadtile_i++)	\
 	  pkt;								\
-}
+})
 
 #endif /* HW_VERSION_1 */
 
@@ -4132,7 +4132,7 @@ _DW({									\
 #define	gDPLoadMultiTile(pkt, timg, tmem, rtile, fmt, siz, width, height,\
 		uls, ult, lrs, lrt, pal,				\
 		cms, cmt, masks, maskt, shifts, shiftt)			\
-{									\
+_DW({									\
 	gDPSetTextureImage(pkt, fmt, siz, width, timg);			\
 	gDPSetTile(pkt, fmt, siz,					\
 		(((((lrs)-(uls)+1) * siz##_TILE_BYTES)+7)>>3), tmem,	\
@@ -4154,7 +4154,7 @@ _DW({									\
 			(ult)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrs)<<G_TEXTURE_IMAGE_FRAC,			\
 			(lrt)<<G_TEXTURE_IMAGE_FRAC);			\
-}
+})
 
 
 #define	gsDPLoadTextureTile(timg, fmt, siz, width, height,		\
@@ -4699,7 +4699,7 @@ _DW({									\
 
 /* like gSPTextureRectangle but accepts negative position arguments */
 #define gSPScisTextureRectangle(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
-{                                                                            \
+_DW({                                                                        \
     Gfx *_g = (Gfx *)(pkt);                                                  \
                                                                              \
     _g->words.w0 = (_SHIFTL(G_TEXRECT, 24, 8) |                              \
@@ -4723,7 +4723,7 @@ _DW({									\
 			 0, 16)));                                           \
     gImmp1(pkt, G_RDPHALF_2, (_SHIFTL((dsdx), 16, 16) |                      \
                               _SHIFTL((dtdy), 0, 16)));                      \
-}
+})
 
 #define gsSPTextureRectangleFlip(xl, yl, xh, yh, tile, s, t, dsdx, dtdy) \
     (_SHIFTL(G_TEXRECTFLIP, 24, 8) | _SHIFTL(xh, 12, 12) |		\

@@ -1,4 +1,7 @@
 #include "global.h"
+#include "slowly.h"
+#include "stack.h"
+#include "stackcheck.h"
 
 /**
  * Assigns the "save" values in PreRender
@@ -51,8 +54,8 @@ void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 ar
         flags = 0x1C;
     }
 
-    func_80172758(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f,
-                  1.0f, 1.0f, flags);
+    Prerender_DrawBackground2D(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0,
+                               0.0f, 0.0f, 1.0f, 1.0f, flags);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -87,8 +90,8 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
 
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    func_80172758(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f, 0.0f, 1.0f,
-                  1.0f, 0xB);
+    Prerender_DrawBackground2D(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f,
+                               0.0f, 1.0f, 1.0f, 0xB);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -229,13 +232,10 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             gDPLoadMultiTile(gfx++, this->fbufSave, 0x0000, G_TX_RENDERTILE, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width,
                              this->height, uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
                              G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            if (1) {}
             gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
                              uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                              G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             //! FAKE
-            if (1) {}
-            // The two if (1) {}'s above can be removed with do {} while(0) around macros
             if (1) {}
             if (1) {}
             gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
@@ -403,7 +403,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
  * Applies filters to the framebuffer prerender to make it look smoother
  */
 void PreRender_ApplyFilters(PreRender* this) {
-    if (this->cvgSave == NULL || this->fbufSave == NULL) {
+    if ((this->cvgSave == NULL) || (this->fbufSave == NULL)) {
         this->unk_4D = 0;
     } else {
         this->unk_4D = 1;
@@ -413,19 +413,24 @@ void PreRender_ApplyFilters(PreRender* this) {
     }
 }
 
+extern SlowlyMgr sSlowlyMgr;
+extern s32 D_801F6FC0;
+extern StackEntry sSlowlyStackInfo;
+extern STACK(sSlowlyStack, 0x1000);
+
 /**
  * Initializes `PreRender_ApplyFilters` onto a new "slowly" thread
  */
 void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
         if (D_801F6FC0) {
-            StackCheck_Cleanup(&slowlyStackEntry);
-            Slowly_Stop(&D_801F6E00);
+            StackCheck_Cleanup(&sSlowlyStackInfo);
+            Slowly_Destroy(&sSlowlyMgr);
         }
 
         this->unk_4D = 1;
-        StackCheck_Init(&slowlyStackEntry, slowlyStack, &slowlyStack[4096], 0, 0x100, "slowly");
-        Slowly_Start(&D_801F6E00, &D_801F7FE8, PreRender_ApplyFilters, this, NULL);
+        StackCheck_Init(&sSlowlyStackInfo, sSlowlyStack, STACK_TOP(sSlowlyStack), 0, 0x100, "slowly");
+        Slowly_Init(&sSlowlyMgr, STACK_TOP(sSlowlyStack), (void*)PreRender_ApplyFilters, this, NULL);
         D_801F6FC0 = true;
     }
 }
@@ -435,8 +440,8 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
  */
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this) {
     if (D_801F6FC0) {
-        StackCheck_Cleanup(&slowlyStackEntry);
-        Slowly_Stop(&D_801F6E00);
+        StackCheck_Cleanup(&sSlowlyStackInfo);
+        Slowly_Destroy(&sSlowlyMgr);
         D_801F6FC0 = false;
     }
 }
@@ -450,8 +455,8 @@ void func_801720C4(PreRender* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/func_801720FC.s")
 
-void func_80172758(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x,
-                   f32 y, f32 xScale, f32 yScale, u32 flags) {
+void Prerender_DrawBackground2D(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt,
+                                u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags) {
     PreRenderParams params;
     PreRenderParams* paramsp = &params;
 

@@ -7,10 +7,12 @@ struct ObjToge;
 
 typedef void (*ObjTogeActionFunc)(struct ObjToge*, PlayState*);
 
-#define OBJTOGE_GET_PATH(thisx) ((thisx)->params & 0xFF)
+#define OBJTOGE_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 #define OBJTOGE_GET_700(thisx) (((thisx)->params >> 8) & 7)
 #define OBJTOGE_GET_3800(thisx) (((thisx)->params >> 0xB) & 7)
 #define OBJTOGE_GET_4000(thisx) (((thisx)->params >> 0xE) & 1)
+
+#define OBJTOGE_PATH_INDEX_NONE 0xFF
 
 typedef struct ObjToge {
     /* 0x000 */ Actor actor;
@@ -28,7 +30,5 @@ typedef struct ObjToge {
     /* 0x1C8 */ f32 unk_1C8;
     /* 0x1CC */ f32 unk_1CC;
 } ObjToge; // size = 0x1D0
-
-extern const ActorInit Obj_Toge_InitVars;
 
 #endif // Z_OBJ_TOGE_H

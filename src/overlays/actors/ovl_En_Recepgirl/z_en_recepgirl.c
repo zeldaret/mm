@@ -21,7 +21,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play);
 void EnRecepgirl_SetupTalk(EnRecepgirl* this);
 void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play);
 
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -149,8 +149,8 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
             Flags_SetSwitch(play, this->actor.params);
             Animation_MorphToPlayOnce(&this->skelAnime, &object_bg_Anim_00AD98, 10.0f);
 
-            if (gSaveContext.save.weekEventReg[63] & 0x80) { // showed Couple's Mask to meeting
-                this->actor.textId = 0x2ADF;                 // Mayor's office is on the left (meeting ended)
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_63_80)) {
+                this->actor.textId = 0x2ADF; // Mayor's office is on the left (meeting ended)
             } else {
                 this->actor.textId = 0x2ADA; // Mayor's office is on the left (meeting ongoing)
             }
@@ -168,7 +168,7 @@ void EnRecepgirl_Talk(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0; // drawing room on the right, don't go in without an appointment
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 
@@ -205,7 +205,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[this->eyeTexIndex]);
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

@@ -10,7 +10,7 @@
 
 typedef enum {
     /* 0 */ OBJROTLIFT_TYPE_PLATFORMS,
-    /* 1 */ OBJROTLIFT_TYPE_SPIKES,
+    /* 1 */ OBJROTLIFT_TYPE_SPIKES
 } ObjRotliftType;
 
 struct ObjRotlift;
@@ -19,7 +19,5 @@ typedef struct ObjRotlift {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ ObjEtcetera* dekuFlowers[2];
 } ObjRotlift; // size = 0x164
-
-extern const ActorInit Obj_Rotlift_InitVars;
 
 #endif // Z_OBJ_ROTLIFT_H

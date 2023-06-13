@@ -16,7 +16,7 @@ void EnBal_Update(Actor* thisx, PlayState* play);
 void EnBal_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Bal_InitVars = {
+ActorInit En_Bal_InitVars = {
     ACTOR_EN_BAL,
     ACTORCAT_NPC,
     FLAGS,
@@ -100,7 +100,7 @@ extern UNK_TYPE D_0600D530;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61A44.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61A6C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/EnBal_ValidatePictograph.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Bal/func_80A61ADC.s")
 

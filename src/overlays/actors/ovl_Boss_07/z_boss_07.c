@@ -5,6 +5,7 @@
  */
 
 #include "z_boss_07.h"
+#include "z64shrink_window.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -233,7 +234,7 @@ static DamageTable D_80A07A00 = {
     /* Powder Keg     */ DMG_ENTRY(2, 0xB),
 };
 
-const ActorInit Boss_07_InitVars = {
+ActorInit Boss_07_InitVars = {
     ACTOR_BOSS_07,
     ACTORCAT_BOSS,
     FLAGS,

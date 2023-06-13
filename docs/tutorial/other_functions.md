@@ -334,7 +334,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0;
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 ```
@@ -392,7 +392,7 @@ void func_80C102D4(EnRecepgirl* this, PlayState* play) {
                 this->actor.textId = 0x2AE0;
             }
         }
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
     }
 }
 ```
@@ -401,10 +401,10 @@ There remains one thing we need to fix before trying to compile it, namely `*(&g
 
 ```C
     /* 0x0EF8 */ u8 weekEventReg[100];       // "week_event_reg"
-    /* 0x0F5C */ u32 mapsVisited;            // "area_arrival"
+    /* 0x0F5C */ u32 regionsVisited;         // "area_arrival"
 ```
 
-so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.save.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.save.weekEventReg[63] & 0x80)` will do.
+so it's somewhere in `weekEventReg`. `0xF37 - 0xEF8 = 0x3F = 63`, and it's a byte array, so the access is actually `gSaveContext.save.saveInfo.weekEventReg[63] & 0x80`. Now it will compile. We also don't use `!= 0` for flag comparisons: just `if (gSaveContext.save.saveInfo.weekEventReg[63] & 0x80)` will do.
 
 Running `./diff.py -mwo3 func_80C102D4` and scrolling down, we discover that this doesn't match!
 

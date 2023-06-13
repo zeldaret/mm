@@ -1,6 +1,6 @@
 ﻿<Root>
     <File Name="object_firefly" Segment="6">
-        <Animation Name="object_firefly_Anim_00017C" Offset="0x17C" />
+        <Animation Name="object_firefly_Anim_00017C" Offset="0x17C" /> <!-- Original name is "firefly_foot_fly" -->
         <Texture Name="object_firefly_Tex_000190" OutName="tex_000190" Format="rgba16" Width="8" Height="8" Offset="0x190" />
         <Texture Name="object_firefly_Tex_000210" OutName="tex_000210" Format="rgba16" Width="8" Height="8" Offset="0x210" />
         <Texture Name="object_firefly_Tex_000290" OutName="tex_000290" Format="rgba16" Width="8" Height="8" Offset="0x290" />
@@ -49,6 +49,6 @@
         <Limb Name="object_firefly_Standardlimb_001828" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_19" Offset="0x1828" />
         <Limb Name="object_firefly_Standardlimb_001834" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_1A" Offset="0x1834" />
         <Limb Name="object_firefly_Standardlimb_001840" Type="Standard" EnumName="OBJECT_FIREFLY_LIMB_1B" Offset="0x1840" />
-        <Skeleton Name="object_firefly_Skel_0018B8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_FIREFLY_LIMB_NONE" LimbMax="OBJECT_FIREFLY_LIMB_MAX" EnumName="object_firefly_Limbs" Offset="0x18B8" />
+        <Skeleton Name="object_firefly_Skel_0018B8" Type="Normal" LimbType="Standard" LimbNone="OBJECT_FIREFLY_LIMB_NONE" LimbMax="OBJECT_FIREFLY_LIMB_MAX" EnumName="ObjectFireflyLimb" Offset="0x18B8" />
     </File>
 </Root>

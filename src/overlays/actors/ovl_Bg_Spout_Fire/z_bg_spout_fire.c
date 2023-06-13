@@ -22,7 +22,7 @@ void func_80A60CDC(BgSpoutFire* this, PlayState* play);
 void func_80A60D10(BgSpoutFire* this, PlayState* play);
 void func_80A60E08(BgSpoutFire* this, PlayState* play);
 
-const ActorInit Bg_Spout_Fire_InitVars = {
+ActorInit Bg_Spout_Fire_InitVars = {
     ACTOR_BG_SPOUT_FIRE,
     ACTORCAT_BG,
     FLAGS,
@@ -189,7 +189,7 @@ void BgSpoutFire_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gfx = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
+    gfx = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
     POLY_XLU_DISP = gfx;
     gSPSegment(&gfx[0], 0x08, sFlameTextures[this->flameTexIndex]);
     gDPSetPrimColor(&gfx[1], 0, 1, 255, 255, 0, 150);

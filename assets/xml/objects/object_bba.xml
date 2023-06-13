@@ -18,10 +18,10 @@
         <DList Name="gBbaFeetDL" Offset="0x4180" />
 
         <!-- Animations -->
-        <Animation Name="gBbaSwayAnim" Offset="0x4910" />
-        <Animation Name="gBbaKnockedOverAnim" Offset="0x5154" />
-        <Animation Name="gBbaLyingDownAnim" Offset="0x58B8" />
-        <Animation Name="gBbaIdleHoldingBagAnim" Offset="0x5DC4" />
+        <Animation Name="gBbaSwayAnim" Offset="0x4910" /> <!-- Original name is "sb_ending" -->
+        <Animation Name="gBbaKnockedOverAnim" Offset="0x5154" /> <!-- Original name is "sb_taore" ("to fall (over, down); to collapse; to take a fall") -->
+        <Animation Name="gBbaLyingDownAnim" Offset="0x58B8" /> <!-- Original name is "sb_taorewait" -->
+        <Animation Name="gBbaIdleHoldingBagAnim" Offset="0x5DC4" /> <!-- Original name is "sb_wait01" -->
 
         <!-- Skeleton -->
         <Limb Name="gBbaUpperLegsLimb" Type="Standard" EnumName="BBA_LIMB_UPPER_LEGS" Offset="0x5DE0" />
@@ -41,11 +41,11 @@
         <Limb Name="gBbaRightLowerArmRootLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_LOWER_ARM_ROOT" Offset="0x5E88" />
         <Limb Name="gBbaRightForearmLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_FOREARM" Offset="0x5E94" />
         <Limb Name="gBbaRightHandLimb" Type="Standard" EnumName="BBA_LIMB_RIGHT_HAND" Offset="0x5EA0" />
-        <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimbs" Offset="0x5EF0" />
+        <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimb" Offset="0x5EF0" />
 
          <!-- Animations -->
-        <Animation Name="gBbaIdleAnim" Offset="0x6550" />
-        <Animation Name="gBbaWalkingHoldingBagAnim" Offset="0x6B10" />
+        <Animation Name="gBbaIdleAnim" Offset="0x6550" /> <!-- Original name is "sb_wait02" -->
+        <Animation Name="gBbaWalkingHoldingBagAnim" Offset="0x6B10" /> <!-- Original name is "sb_walk01" -->
 
         <!-- TLUT -->
         <Texture Name="gBbaTLUT" OutName="bba_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6B20" />

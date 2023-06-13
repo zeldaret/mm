@@ -47,16 +47,16 @@
         <Texture Name="gGoronDonGeroMaskFrillsTex" OutName="goron_don_gero_mask_frills" Format="rgba16" Width="32" Height="32" Offset="0x6440" />
         <Texture Name="gGoronDonGeroMaskEyeTex" OutName="goron_don_gero_mask_eye" Format="rgba16" Width="16" Height="16" Offset="0x6C40" />
 
-        <!-- Rolled Up Half -->
-        <!-- Note: Seems broken -->
+        <!-- Scared -->
+        <!-- Unused leftover from OoT -->
         <DList Name="gGoronEmptyDL" Offset="0x7A60" />
-        <DList Name="gGoronRolledUpHalfDL" Offset="0x7A68" />
-        <Texture Name="gGoronRolledUpHalfTLUT" OutName="goron_rolled_up_half_tlut" Format="rgba16" Width="16" Height="16" Offset="0x7EF0" />
-        <Texture Name="gGoronRolledUpHalfSkinTex" OutName="goron_rolled_up_half_skin" Format="ci8" Width="16" Height="16" Offset="0x80F0" />
-        <Texture Name="gGoronRolledUpHalfBellyButtonTex" OutName="goron_rolled_up_half_belly_button" Format="ci8" Width="8" Height="8" Offset="0x81F0" />
-        <Texture Name="gGoronRolledUpHalfBottomTex" OutName="goron_rolled_up_half_bottom" Format="ci8" Width="8" Height="16" Offset="0x8230" />
-        <Texture Name="gGoronRolledUpHalfRocksTex" OutName="goron_rolled_up_half_rocks" Format="ci8" Width="32" Height="64" Offset="0x82B0" />
-        <Texture Name="gGoronRolledUpHalfHairTex" OutName="goron_rolled_up_half_hair" Format="ci8" Width="16" Height="16" Offset="0x8AB0" />
+        <DList Name="gGoronScaredDL" Offset="0x7A68" />
+        <Texture Name="gGoronScaredTLUT" OutName="goron_scared_tlut" Format="rgba16" Width="16" Height="16" Offset="0x7EF0" />
+        <Texture Name="gGoronScaredSkinTex" OutName="goron_scared_skin" Format="ci8" Width="16" Height="16" Offset="0x80F0" />
+        <Texture Name="gGoronScaredBellyButtonTex" OutName="goron_scared_belly_button" Format="ci8" Width="8" Height="8" Offset="0x81F0" />
+        <Texture Name="gGoronScaredBottomTex" OutName="goron_scared_bottom" Format="ci8" Width="8" Height="16" Offset="0x8230" />
+        <Texture Name="gGoronScaredRocksTex" OutName="goron_scared_rocks" Format="ci8" Width="32" Height="64" Offset="0x82B0" />
+        <Texture Name="gGoronScaredHairTex" OutName="goron_scared_hair" Format="ci8" Width="16" Height="16" Offset="0x8AB0" />
 
         <!-- Rolled Up -->
         <DList Name="gGoronEmpty2DL" Offset="0x91A0" />
@@ -125,7 +125,7 @@
         <Limb Name="gGoronRightForearmLimb" Type="Standard" EnumName="GORON_LIMB_RIGHT_FOREARM" Offset="0x11A60" />
         <Limb Name="gGoronRightHandLimb" Type="Standard" EnumName="GORON_LIMB_RIGHT_HAND" Offset="0x11A6C" />
         <Limb Name="gGoronHeadLimb" Type="Standard" EnumName="GORON_LIMB_HEAD" Offset="0x11A78" />
-        <Skeleton Name="gGoronSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_LIMB_NONE" LimbMax="GORON_LIMB_MAX" EnumName="GoronLimbs" Offset="0x11AC8" />
+        <Skeleton Name="gGoronSkel" Type="Flex" LimbType="Standard" LimbNone="GORON_LIMB_NONE" LimbMax="GORON_LIMB_MAX" EnumName="GoronLimb" Offset="0x11AC8" />
 
         <!-- Animations -->
         <Animation Name="gGoronLyingDownIdleAnim" Offset="0x11D98" />

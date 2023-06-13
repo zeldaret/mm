@@ -19,7 +19,7 @@ typedef struct EnTalkGibud {
     /* 0x1D8 */ Vec3f limbPos[15];
     /* 0x28C */ s32 limbIndex;
     /* 0x290 */ s32 requestedItemIndex;
-    /* 0x294 */ s32 itemActionParam;
+    /* 0x294 */ PlayerItemAction itemAction;
     /* 0x298 */ s32 switchFlag;
     /* 0x29C */ f32 drawDmgEffAlpha;
     /* 0x2A0 */ f32 drawDmgEffScale;
@@ -44,7 +44,5 @@ typedef struct EnTalkGibud {
     /* 0x3F6 */ u8 drawDmgEffType;
     /* 0x3F7 */ s8 unk_3F7; // related to player->unk_ADD
 } EnTalkGibud; // size = 0x3F8
-
-extern const ActorInit En_Talk_Gibud_InitVars;
 
 #endif // Z_EN_TALK_GIBUD_H

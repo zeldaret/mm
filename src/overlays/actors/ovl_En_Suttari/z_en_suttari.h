@@ -8,7 +8,9 @@ struct EnSuttari;
 
 typedef void (*EnSuttariActionFunc)(struct EnSuttari*, PlayState*);
 
-#define ENSUTTARI_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
+#define ENSUTTARI_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
+
+#define ENSUTTARI_PATH_INDEX_NONE 0x3F
 
 typedef struct EnSuttari {
     /* 0x000 */ Actor actor;
@@ -34,7 +36,7 @@ typedef struct EnSuttari {
     /* 0x2FA */ s16 unk2FA[16];
     /* 0x31A */ s16 unk31A[16];
     /* 0x33A */ UNK_TYPE1 unk_33A[0xB6];
-    /* 0x3F0 */ s16 unk3F0;
+    /* 0x3F0 */ s16 playerDetected;
     /* 0x3F2 */ s16 unk3F2;
     /* 0x3F4 */ s16 unk3F4;
     /* 0x3F6 */ s16 unk3F6;
@@ -54,12 +56,10 @@ typedef struct EnSuttari {
     /* 0x436 */ s16 unk436;
     /* 0x438 */ Vec3f unk438;
     /* 0x444 */ Vec3f unk444;
-    /* 0x450 */ s32 animationIndex;
+    /* 0x450 */ s32 animIndex;
     /* 0x454 */ UNK_TYPE1 unk_454[0x2];
-    /* 0x456 */ s16 cutscenes[2];
-    /* 0x45A */ s16 cutsceneIdx;
+    /* 0x456 */ s16 csIdList[2];
+    /* 0x45A */ s16 csIdIndex;
 } EnSuttari; // size = 0x45C
-
-extern const ActorInit En_Suttari_InitVars;
 
 #endif // Z_EN_SUTTARI_H

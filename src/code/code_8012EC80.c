@@ -96,7 +96,7 @@ u32 gGsFlagsShift[] = {
 };
 
 // TODO: use symbols for these icon textures once textures are properly in C
-void* gItemIcons[] = {
+TexturePtr gItemIcons[] = {
     0x08000000,        // ITEM_OCARINA
     0x08001000,        // ITEM_BOW
     0x08002000,        // ITEM_ARROW_FIRE
@@ -189,7 +189,7 @@ void* gItemIcons[] = {
     0x08059000,        // ITEM_WALLET_DEFAULT
     0x0805A000,        // ITEM_WALLET_ADULT
     0x0805B000,        // ITEM_WALLET_GIANT
-    0x0805C000,        // ITEM_FISHING_POLE
+    0x0805C000,        // ITEM_FISHING_ROD
     0x0805D000,        // ITEM_REMAINS_ODOLWA
     0x0805E000,        // ITEM_REMAINS_GOHT
     0x0805F000,        // ITEM_REMAINS_GYORG
@@ -249,7 +249,7 @@ u8 gItemSlots[] = {
     SLOT_LENS,               // ITEM_LENS
     SLOT_HOOKSHOT,           // ITEM_HOOKSHOT
     SLOT_SWORD_GREAT_FAIRY,  // ITEM_SWORD_GREAT_FAIRY
-    SLOT_BOTTLE_1,           //
+    SLOT_BOTTLE_1,           // ITEM_LONGSHOT
     SLOT_BOTTLE_1,           // ITEM_BOTTLE
     SLOT_BOTTLE_1,           // ITEM_POTION_RED
     SLOT_BOTTLE_1,           // ITEM_POTION_GREEN
@@ -365,8 +365,8 @@ s16 gItemPrices[] = {
 };
 
 // Used to map scene indexes to their region in Termina
-u16 gScenesPerRegion[11][27] = {
-    // Great Bay
+u16 gSceneIdsPerRegion[REGION_MAX][27] = {
+    // REGION_GREAT_BAY
     {
         SCENE_30GYOSON,
         SCENE_LABO,
@@ -378,15 +378,15 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_PIRATE,
         SCENE_35TAKI,
         SCENE_KINDAN2,
-        -1,
+        0xFFFF,
     },
-    // Zora Hall
+    // REGION_ZORA_HALL
     {
         SCENE_33ZORACITY,
         SCENE_BANDROOM,
-        -1,
+        0xFFFF,
     },
-    // Romani Ranch
+    // REGION_ROMANI_RANCH
     {
         SCENE_F01,
         SCENE_ROMANYMAE,
@@ -394,17 +394,17 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_F01C,
         SCENE_F01_B,
         SCENE_KOEPONARACE,
-        -1,
+        0xFFFF,
     },
-    // Deku Palace
+    // REGION_DEKU_PALACE
     {
         SCENE_22DEKUCITY,
         SCENE_DEKU_KING,
         SCENE_26SARUNOMORI,
         SCENE_DANPEI,
-        -1,
+        0xFFFF,
     },
-    // Southern Swamp
+    // REGION_WOODFALL
     {
         SCENE_20SICHITAI,
         SCENE_20SICHITAI2,
@@ -412,21 +412,18 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_WITCH_SHOP,
         SCENE_21MITURINMAE,
         SCENE_KINSTA1,
-        -1,
+        0xFFFF,
     },
-    // Clock Town
+    // REGION_CLOCK_TOWN
     {
-        SCENE_00KEIKOKU,    SCENE_TENMON_DAI,   SCENE_13HUBUKINOMITI,
-        SCENE_24KEMONOMITI, SCENE_SYATEKI_MORI, SCENE_IKANAMAE,
-        SCENE_TOWN,         SCENE_SYATEKI_MIZU, SCENE_BOWLING,
-        SCENE_TAKARAYA,     SCENE_YADOYA,       SCENE_SONCHONOIE,
-        SCENE_MILK_BAR,     SCENE_ICHIBA,       SCENE_BOMYA,
-        SCENE_AYASHIISHOP,  SCENE_8ITEMSHOP,    SCENE_DOUJOU,
-        SCENE_POSTHOUSE,    SCENE_TAKARAKUJI,   SCENE_BACKTOWN,
-        SCENE_CLOCKTOWER,   SCENE_INSIDETOWER,  SCENE_OKUJOU,
-        SCENE_ALLEY,        SCENE_DEKUTES,      -1,
+        SCENE_00KEIKOKU,   SCENE_TENMON_DAI, SCENE_13HUBUKINOMITI, SCENE_24KEMONOMITI, SCENE_SYATEKI_MORI,
+        SCENE_IKANAMAE,    SCENE_TOWN,       SCENE_SYATEKI_MIZU,   SCENE_BOWLING,      SCENE_TAKARAYA,
+        SCENE_YADOYA,      SCENE_SONCHONOIE, SCENE_MILK_BAR,       SCENE_ICHIBA,       SCENE_BOMYA,
+        SCENE_AYASHIISHOP, SCENE_8ITEMSHOP,  SCENE_DOUJOU,         SCENE_POSTHOUSE,    SCENE_TAKARAKUJI,
+        SCENE_BACKTOWN,    SCENE_CLOCKTOWER, SCENE_INSIDETOWER,    SCENE_OKUJOU,       SCENE_ALLEY,
+        SCENE_DEKUTES,     0xFFFF,
     },
-    // Snowhead
+    // REGION_SNOWHEAD
     {
         SCENE_10YUKIYAMANOMURA,
         SCENE_10YUKIYAMANOMURA2,
@@ -437,15 +434,15 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_GORON_HAKA,
         SCENE_17SETUGEN,
         SCENE_17SETUGEN2,
-        -1,
+        0xFFFF,
     },
-    // Ikana Graveyard
+    // REGION_IKANA_GRAVEYARD
     {
         SCENE_BOTI,
         SCENE_DANPEI2TEST,
-        -1,
+        0xFFFF,
     },
-    // Ikana Canyon
+    // REGION_IKANA_CANYON
     {
         SCENE_CASTLE,
         SCENE_IKNINSIDE,
@@ -456,28 +453,28 @@ u16 gScenesPerRegion[11][27] = {
         SCENE_REDEAD,
         SCENE_TOUGITES,
         SCENE_HAKASHITA,
-        -1,
+        0xFFFF,
     },
-    // Goron Village
+    // REGION_GORON_VILLAGE
     {
         SCENE_11GORONNOSATO,
         SCENE_11GORONNOSATO2,
         SCENE_16GORON_HOUSE,
         SCENE_GORONSHOP,
-        -1,
+        0xFFFF,
     },
-    // Stone Tower
+    // REGION_STONE_TOWER
     {
         SCENE_F40,
         SCENE_F41,
-        -1,
+        0xFFFF,
     },
 };
 
 s32 Inventory_GetBtnBItem(PlayState* play) {
-    if (gSaveContext.buttonStatus[0] == BTN_DISABLED) {
+    if (gSaveContext.buttonStatus[EQUIP_SLOT_B] == BTN_DISABLED) {
         return ITEM_NONE;
-    } else if (gSaveContext.unk_1015 == ITEM_NONE) {
+    } else if (gSaveContext.bButtonStatus == BTN_DISABLED) {
         return ITEM_NONE;
     } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_NONE) {
         if (play->interfaceCtx.unk_21C != 0) {
@@ -514,15 +511,15 @@ u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
 }
 
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
-    u32 upgrades = gSaveContext.save.inventory.upgrades;
+    u32 upgrades = gSaveContext.save.saveInfo.inventory.upgrades;
 
     upgrades &= gUpgradeNegMasks[upgrade];
     upgrades |= value << gUpgradeShifts[upgrade];
 
-    gSaveContext.save.inventory.upgrades = upgrades;
+    gSaveContext.save.saveInfo.inventory.upgrades = upgrades;
 }
 
-s32 Inventory_IsMapVisible(s16 sceneNum) {
+s32 Inventory_IsMapVisible(s16 sceneId) {
     s16 index = 0;
 
     /**
@@ -530,32 +527,32 @@ s32 Inventory_IsMapVisible(s16 sceneNum) {
      * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
      * 224 bits were allocated to this although there are only 112 scenes
      */
-    if (sceneNum >= 0x20) {
-        if (sceneNum < 0x40) {
+    if (sceneId >= 0x20) {
+        if (sceneId < 0x40) {
             index = 1;
-        } else if (sceneNum < 0x60) {
+        } else if (sceneId < 0x60) {
             index = 2;
-        } else if (sceneNum < 0x80) {
+        } else if (sceneId < 0x80) {
             index = 3;
-        } else if (sceneNum < 0xA0) {
+        } else if (sceneId < 0xA0) {
             index = 4;
-        } else if (sceneNum < 0xC0) {
+        } else if (sceneId < 0xC0) {
             index = 5;
-        } else if (sceneNum < 0xE0) {
+        } else if (sceneId < 0xE0) {
             index = 6;
         }
     }
 
-    if (gSaveContext.save.scenesVisible[index] & gBitFlags[sceneNum - (index << 5)]) {
+    if (gSaveContext.save.saveInfo.scenesVisible[index] & gBitFlags[sceneId - (index << 5)]) {
         return true;
     }
 
     return false;
 }
 
-static u16 sScenesPerTingleMap[6][12] = {
+static u16 sSceneIdsPerTingleMap[TINGLE_MAP_MAX][12] = {
     {
-        // Clock Town Tingle Map
+        // TINGLE_MAP_CLOCK_TOWN
         SCENE_00KEIKOKU,
         SCENE_BOTI,
         SCENE_13HUBUKINOMITI,
@@ -566,20 +563,20 @@ static u16 sScenesPerTingleMap[6][12] = {
         SCENE_BACKTOWN,
         SCENE_CLOCKTOWER,
         SCENE_ALLEY,
-        -1,
+        0xFFFF,
     },
     {
-        // Woodfall Tingle Map
+        // TINGLE_MAP_WOODFALL
         SCENE_20SICHITAI,
         SCENE_20SICHITAI2,
         SCENE_21MITURINMAE,
         SCENE_22DEKUCITY,
         SCENE_DEKU_KING,
         SCENE_KINSTA1,
-        -1,
+        0xFFFF,
     },
     {
-        // Snowhead Tingle Map
+        // TINGLE_MAP_SNOWHEAD
         SCENE_10YUKIYAMANOMURA,
         SCENE_10YUKIYAMANOMURA2,
         SCENE_11GORONNOSATO,
@@ -590,20 +587,20 @@ static u16 sScenesPerTingleMap[6][12] = {
         SCENE_GORONRACE,
         SCENE_17SETUGEN,
         SCENE_17SETUGEN2,
-        -1,
+        0xFFFF,
     },
     {
-        // Romani Ranch Tingle Map
+        // TINGLE_MAP_ROMANI_RANCH
         SCENE_F01,
         SCENE_ROMANYMAE,
         SCENE_OMOYA,
         SCENE_F01C,
         SCENE_F01_B,
         SCENE_KOEPONARACE,
-        -1,
+        0xFFFF,
     },
     {
-        // Great Bay Tingle Map
+        // TINGLE_MAP_GREAT_BAY
         SCENE_30GYOSON,
         SCENE_SINKAI,
         SCENE_31MISAKI,
@@ -611,30 +608,30 @@ static u16 sScenesPerTingleMap[6][12] = {
         SCENE_KAIZOKU,
         SCENE_33ZORACITY,
         SCENE_35TAKI,
-        -1,
+        0xFFFF,
     },
     {
-        // Stone Tower Tingle Map
+        // TINGLE_MAP_STONE_TOWER
         SCENE_F40,
         SCENE_F41,
         SCENE_CASTLE,
         SCENE_IKANA,
         SCENE_REDEAD,
-        -1,
+        0xFFFF,
     },
 };
 
 /**
- * Map visibility is achieved by purchasing a tingle map
+ * Removing clouds from the World Map is achieved by purchasing a tingle map
  */
-void Inventory_SetMapVisibility(s16 tingleIndex) {
+void Inventory_SetWorldMapCloudVisibility(s16 tingleIndex) {
     s16 i = 0;
     s16 index = 0;
-    u16(*tingleMapSceneIndices)[] = &sScenesPerTingleMap[tingleIndex];
+    u16(*tingleMapSceneIds)[] = &sSceneIdsPerTingleMap[tingleIndex];
 
-    if ((tingleIndex >= 0) && (tingleIndex < 6)) {
+    if ((tingleIndex >= 0) && (tingleIndex < TINGLE_MAP_MAX)) {
         while (true) {
-            if ((*tingleMapSceneIndices)[i] == 0xFFFF) {
+            if ((*tingleMapSceneIds)[i] == 0xFFFF) {
                 break;
             }
 
@@ -643,43 +640,43 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
              * increment to the next index of scenesVisible so that every scene gets a unique flag in scenesVisible,
              * 224 bits were allocated to this although there are only 112 scenes
              */
-            if (((s16)(*tingleMapSceneIndices)[i]) < 0x20) {
+            if (((s16)(*tingleMapSceneIds)[i]) < 0x20) {
                 index = 0;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x40) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x40) {
                 index = 1;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x60) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x60) {
                 index = 2;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0x80) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0x80) {
                 index = 3;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xA0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xA0) {
                 index = 4;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xC0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xC0) {
                 index = 5;
-            } else if (((s16)(*tingleMapSceneIndices)[i]) < 0xE0) {
+            } else if (((s16)(*tingleMapSceneIds)[i]) < 0xE0) {
                 index = 6;
             }
 
-            gSaveContext.save.scenesVisible[index] =
-                gSaveContext.save.scenesVisible[index] | gBitFlags[(s16)(*tingleMapSceneIndices)[i] - (index << 5)];
+            gSaveContext.save.saveInfo.scenesVisible[index] = gSaveContext.save.saveInfo.scenesVisible[index] |
+                                                              gBitFlags[(s16)(*tingleMapSceneIds)[i] - (index << 5)];
             i++;
         }
 
-        if ((*tingleMapSceneIndices) == sScenesPerTingleMap[0]) {
-            gSaveContext.save.mapsVisible |= 3;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[1]) {
-            gSaveContext.save.mapsVisible |= 0x1C;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[2]) {
-            gSaveContext.save.mapsVisible |= 0xE0;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[3]) {
-            gSaveContext.save.mapsVisible |= 0x100;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[4]) {
-            gSaveContext.save.mapsVisible |= 0x1E00;
-        } else if ((*tingleMapSceneIndices) == sScenesPerTingleMap[5]) {
-            gSaveContext.save.mapsVisible |= 0x6000;
+        if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_CLOCK_TOWN]) {
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 3;
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_WOODFALL]) {
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x1C;
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_SNOWHEAD]) {
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0xE0;
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_ROMANI_RANCH]) {
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x100;
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_GREAT_BAY]) {
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x1E00;
+        } else if (*tingleMapSceneIds == sSceneIdsPerTingleMap[TINGLE_MAP_STONE_TOWER]) {
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= 0x6000;
         }
     }
 
-    XREG(95) = 0;
+    R_MINIMAP_DISABLED = false;
 }
 
 /**
@@ -688,34 +685,34 @@ void Inventory_SetMapVisibility(s16 tingleIndex) {
 void Inventory_SaveDekuPlaygroundHighScore(s16 timerId) {
     s16 i;
 
-    gSaveContext.save.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.unk_3DE0[timerId];
+    gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] = gSaveContext.timerCurTimes[timerId];
 
     for (i = 0; i < 8; i++) {
-        gSaveContext.save.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =
-            gSaveContext.save.playerData.playerName[i];
+        gSaveContext.save.saveInfo.inventory.dekuPlaygroundPlayerName[CURRENT_DAY - 1][i] =
+            gSaveContext.save.saveInfo.playerData.playerName[i];
     }
 }
 
 void Inventory_IncrementSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House (increment high bits of skullTokenCount)
-        gSaveContext.save.skullTokenCount =
-            ((u16)(((gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
-            (gSaveContext.save.skullTokenCount & 0xFFFF);
+        gSaveContext.save.saveInfo.skullTokenCount =
+            ((u16)(((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10) + 1) << 0x10) |
+            (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF);
     } else {
         // Ocean Spider House (increment low bits of skullTokenCount)
-        gSaveContext.save.skullTokenCount =
-            (((u16)gSaveContext.save.skullTokenCount + 1) & 0xFFFF) | (gSaveContext.save.skullTokenCount & 0xFFFF0000);
+        gSaveContext.save.saveInfo.skullTokenCount = (((u16)gSaveContext.save.saveInfo.skullTokenCount + 1) & 0xFFFF) |
+                                                     (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000);
     }
 }
 
 s16 Inventory_GetSkullTokenCount(s16 sceneIndex) {
     if (sceneIndex == SCENE_KINSTA1) {
         // Swamp Spider House
-        return (gSaveContext.save.skullTokenCount & 0xFFFF0000) >> 0x10;
+        return (gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF0000) >> 0x10;
     } else {
         // Ocean Spider House
-        return gSaveContext.save.skullTokenCount & 0xFFFF;
+        return gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF;
     }
 }
 
@@ -725,6 +722,6 @@ void Inventory_SaveLotteryCodeGuess(PlayState* play) {
     lotteryCodeGuess = ((play->msgCtx.unk12054[0] & 0xF) << 8);  // First Digit
     lotteryCodeGuess |= ((play->msgCtx.unk12054[1] & 0xF) << 4); // Second Digit
     lotteryCodeGuess |= (play->msgCtx.unk12054[2] & 0xF);        // Third Digit
-    gSaveContext.save.lotteryCodeGuess =
-        (gSaveContext.save.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
+    gSaveContext.save.saveInfo.lotteryCodeGuess =
+        (gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF0000) | (lotteryCodeGuess & 0xFFFF);
 }

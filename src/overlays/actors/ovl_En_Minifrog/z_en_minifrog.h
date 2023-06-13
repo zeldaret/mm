@@ -19,9 +19,9 @@ typedef enum {
 } MinifrogType;
 
 typedef enum {
-    /* 0x00 */ MINIFROG_STATE_JUMP,
-    /* 0x01 */ MINIFROG_STATE_AIR,
-    /* 0x02 */ MINIFROG_STATE_GROUND
+    /* 0 */ MINIFROG_STATE_JUMP,
+    /* 1 */ MINIFROG_STATE_AIR,
+    /* 2 */ MINIFROG_STATE_GROUND
 } MinifrogJumpState;
 
 typedef struct EnMinifrog {
@@ -37,7 +37,5 @@ typedef struct EnMinifrog {
     /* 0x2B6 */ u16 flags;
     /* 0x2B8 */ ColliderCylinder collider;
 } EnMinifrog; // size = 0x304
-
-extern const ActorInit En_Minifrog_InitVars;
 
 #endif // Z_EN_MINIFROG_H

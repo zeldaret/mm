@@ -11,10 +11,8 @@ typedef struct {
     /* 0x28 */ Color_RGBA8 envColor;
     /* 0x2C */ s16 scale;
     /* 0x2E */ s16 scaleStep;
-    /* 0x30 */ s16 sclaeStepDecay;
+    /* 0x30 */ s16 scaleStepDecay;
     /* 0x32 */ s16 life;
 } EffectSsBlastInitParams; // size = 0x34
-
-extern const EffectSsInit Effect_Ss_Blast_InitVars;
 
 #endif

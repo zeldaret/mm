@@ -7,13 +7,13 @@
         <Texture Name="object_kaizoku_obj_Tex_0019E0" OutName="tex_0019E0" Format="rgba16" Width="64" Height="32" Offset="0x19E0" />
         <Texture Name="object_kaizoku_obj_Tex_0029E0" OutName="tex_0029E0" Format="rgba16" Width="16" Height="32" Offset="0x29E0" />
         <Texture Name="object_kaizoku_obj_Tex_002DE0" OutName="tex_002DE0" Format="rgba16" Width="16" Height="16" Offset="0x2DE0" />
-        <DList Name="object_kaizoku_obj_DL_0032A0" Offset="0x32A0" />
-        <Collision Name="object_kaizoku_obj_Colheader_0035B0" Offset="0x35B0" />
+        <DList Name="gPirateBarredShutterDL" Offset="0x32A0" />
+        <Collision Name="gPirateBarredShutterCol" Offset="0x35B0" />
         <Texture Name="object_kaizoku_obj_Tex_0035E0" OutName="tex_0035E0" Format="rgba16" Width="32" Height="64" Offset="0x35E0" />
         <Texture Name="object_kaizoku_obj_Tex_0045E0" OutName="tex_0045E0" Format="rgba16" Width="32" Height="32" Offset="0x45E0" />
         <Texture Name="object_kaizoku_obj_Tex_004DE0" OutName="tex_004DE0" Format="rgba16" Width="32" Height="16" Offset="0x4DE0" />
-        <DList Name="object_kaizoku_obj_DL_005720" Offset="0x5720" />
-        <Collision Name="object_kaizoku_obj_Colheader_005EC8" Offset="0x5EC8" />
+        <DList Name="gPirateGratedShutterDL" Offset="0x5720" />
+        <Collision Name="gPirateGratedShutterCol" Offset="0x5EC8" />
         <Texture Name="object_kaizoku_obj_TLUT_005F00" OutName="tlut_005F00" Format="rgba16" Width="4" Height="4" Offset="0x5F00" />
         <Texture Name="object_kaizoku_obj_Tex_005F20" OutName="tex_005F20" Format="ci4" Width="64" Height="64" Offset="0x5F20" />
         <DList Name="object_kaizoku_obj_DL_007630" Offset="0x7630" />

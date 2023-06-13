@@ -49,6 +49,6 @@
         <Limb Name="object_kitan_Standardlimb_007F34" Type="Standard" EnumName="OBJECT_KITAN_LIMB_12" Offset="0x7F34" />
         <Limb Name="object_kitan_Standardlimb_007F40" Type="Standard" EnumName="OBJECT_KITAN_LIMB_13" Offset="0x7F40" />
         <Limb Name="object_kitan_Standardlimb_007F4C" Type="Standard" EnumName="OBJECT_KITAN_LIMB_14" Offset="0x7F4C" />
-        <Skeleton Name="object_kitan_Skel_007FA8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KITAN_LIMB_NONE" LimbMax="OBJECT_KITAN_LIMB_MAX" EnumName="object_kitan_Limbs" Offset="0x7FA8" />
+        <Skeleton Name="object_kitan_Skel_007FA8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KITAN_LIMB_NONE" LimbMax="OBJECT_KITAN_LIMB_MAX" EnumName="ObjectKitanLimb" Offset="0x7FA8" />
     </File>
 </Root>

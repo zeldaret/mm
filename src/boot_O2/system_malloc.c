@@ -38,7 +38,7 @@ u32 SystemArena_CheckArena(void) {
     return __osCheckArena(&gSystemArena);
 }
 
-void SystemArena_InitArena(void* start, size_t size) {
+void SystemArena_Init(void* start, size_t size) {
     __osMallocInit(&gSystemArena, start, size);
 }
 

@@ -50,7 +50,7 @@ void func_80B726B4(EnRailSkb* this, PlayState* play);
 void func_80B72830(EnRailSkb* this, s16 arg1);
 s32 func_80B7285C(EnRailSkb* this);
 
-const ActorInit En_Rail_Skb_InitVars = {
+ActorInit En_Rail_Skb_InitVars = {
     ACTOR_EN_RAIL_SKB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -62,7 +62,7 @@ const ActorInit En_Rail_Skb_InitVars = {
     (ActorFunc)EnRailSkb_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &object_skb_Anim_0064E0, 0.96f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
     { &object_skb_Anim_003584, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
     { &object_skb_Anim_002190, 0.6f, 0.0f, 0.0f, ANIMMODE_ONCE_INTERP, 4.0f },
@@ -248,7 +248,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
     while (actor != NULL) {
         if ((actor->id == ACTOR_OBJ_HAKAISI) && func_80B70B04(this, actor->world.pos)) {
             if (Flags_GetSwitch(play, (actor->params & 0xFF00) >> 8)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             this->unk_22C = (ObjHakaisi*)actor;
@@ -256,7 +256,7 @@ void func_80B70D24(EnRailSkb* this, PlayState* play) {
         }
         actor = actor->next;
     }
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 static InitChainEntry sInitChain[] = {
@@ -277,12 +277,12 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (Flags_GetSwitch(play, ENRAILSKB_GET_FF(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->actor.speedXZ = 1.6f;
-    this->actor.hintId = 0x55;
+    this->actor.speed = 1.6f;
+    this->actor.hintId = TATL_HINT_ID_STALCHILD;
     this->unk_3F2 = 0;
     this->unk_2E4 = -1;
     this->unk_3FC = 0;
@@ -296,7 +296,7 @@ void EnRailSkb_Init(Actor* thisx, PlayState* play) {
         this->unk_3F8 = 0;
     }
 
-    if ((play->sceneNum == SCENE_BOTI) && (gSaveContext.sceneSetupIndex == 1) && (play->csCtx.currentCsIndex == 0)) {
+    if ((play->sceneId == SCENE_BOTI) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 0)) {
         this->actor.flags |= ACTOR_FLAG_100000;
     }
 
@@ -312,7 +312,7 @@ void EnRailSkb_Destroy(Actor* thisx, PlayState* play) {
 void func_80B70FA0(EnRailSkb* this) {
     this->unk_3F2 = 0;
     if (this->actionFunc != func_80B716A8) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     }
     this->actionFunc = func_80B70FF8;
 }
@@ -334,7 +334,7 @@ void func_80B70FF8(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B710AC(EnRailSkb* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80B710E4;
 }
 
@@ -345,7 +345,7 @@ void func_80B710E4(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B71114(EnRailSkb* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_80B7114C;
 }
 
@@ -355,9 +355,9 @@ void func_80B7114C(EnRailSkb* this, PlayState* play) {
         this->drawDmgEffScale = 0.0f;
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_402 |= 1;
             func_80B712FC(this);
         } else {
@@ -379,9 +379,9 @@ void func_80B7123C(EnRailSkb* this, PlayState* play) {
         this->drawDmgEffScale = 0.0f;
         this->drawDmgEffAlpha = 0.0f;
         if (this->actor.colChkInfo.health != 0) {
-            Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+            Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
             this->unk_402 |= 1;
             func_80B712FC(this);
         } else {
@@ -405,8 +405,8 @@ void func_80B71314(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B71354(EnRailSkb* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80B713A4;
 }
 
@@ -415,7 +415,7 @@ void func_80B713A4(EnRailSkb* this, PlayState* play) {
         if ((this->actor.xzDistToPlayer > 65.0f) || (Player_GetMask(play) == PLAYER_MASK_CAPTAIN)) {
             func_80B70FA0(this);
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         }
     }
 
@@ -452,11 +452,11 @@ void func_80B7151C(EnRailSkb* this) {
     this->actor.colChkInfo.health = 2;
     this->unk_402 = 0;
     this->actor.flags |= ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->actor.draw = EnRailSkb_Draw;
     this->actor.shape.shadowAlpha = 0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
     this->actionFunc = func_80B715AC;
 }
 
@@ -479,7 +479,7 @@ void func_80B715AC(EnRailSkb* this, PlayState* play) {
 void func_80B71650(EnRailSkb* this) {
     this->unk_3FE = 0;
     if (this->actionFunc != func_80B70FF8) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     }
     this->actionFunc = func_80B716A8;
 }
@@ -496,7 +496,7 @@ void func_80B716A8(EnRailSkb* this, PlayState* play) {
             Message_StartTextbox(play, 0x13F5, &this->actor);
             this->unk_400 = 0x13F5;
         }
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 12);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
         func_80B717C8(this);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && !(this->collider.base.acFlags & AC_HIT)) {
         func_800B8614(&this->actor, play, 100.0f);
@@ -558,7 +558,7 @@ void func_80B718C4(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B71910(EnRailSkb* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80B71954;
 }
 
@@ -575,8 +575,8 @@ void func_80B71954(EnRailSkb* this, PlayState* play) {
 }
 
 void func_80B71A08(EnRailSkb* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
     this->actionFunc = func_80B71A58;
 }
 
@@ -584,8 +584,8 @@ void func_80B71A58(EnRailSkb* this, PlayState* play) {
     s16 sp36 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos);
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
         if (this->unk_2E8 < this->unk_22C->dyna.actor.colChkInfo.health) {
             this->unk_22C->dyna.actor.colChkInfo.health--;
         } else {
@@ -608,7 +608,7 @@ void func_80B71A58(EnRailSkb* this, PlayState* play) {
 
 void func_80B71B6C(EnRailSkb* this) {
     this->unk_3F2 = 10;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80B71BB8;
 }
 
@@ -625,7 +625,7 @@ void func_80B71BB8(EnRailSkb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y,
                        Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_22C->dyna.actor.world.pos), 1, 0x71C, 0xB6);
 
-    if ((this->actor.bgCheckFlags & 1) && (this->unk_22C->dyna.actor.colChkInfo.health == 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->unk_22C->dyna.actor.colChkInfo.health == 0)) {
         Actor_MoveWithGravity(&this->actor);
     } else {
         this->actor.velocity.y += this->actor.gravity;
@@ -634,14 +634,14 @@ void func_80B71BB8(EnRailSkb* this, PlayState* play) {
         Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_22C->dyna.actor.world.pos.z, 0.6f, 1.6f, 0.1f);
     }
 
-    if (this->actor.bgCheckFlags & 2) {
-        Actor_MarkForDeath(&this->actor);
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if ((sp34 < 50.0f) && (this->actor.bgCheckFlags & 1)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_ATTACK);
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 9);
+    if ((sp34 < 50.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_ATTACK);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 9);
         this->actor.velocity.y = 10.0f;
 
         for (i = 0; i < 4; i++) {
@@ -674,7 +674,7 @@ void func_80B71DF0(EnRailSkb* this) {
         this->drawDmgEffTimer = 0;
     }
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 11);
     this->actionFunc = func_80B71EA8;
 }
 
@@ -732,7 +732,7 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                     Message_StartTextbox(play, 0x13F4, &this->actor);
                     this->unk_400 = 0x13F4;
                 } else {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                     func_80B71D8C(this, play, func_80B71650);
                 }
                 break;
@@ -744,7 +744,7 @@ void func_80B71F3C(EnRailSkb* this, PlayState* play) {
                 break;
 
             case 0x13F4:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80B71D8C(this, play, func_80B718B0);
                 break;
         }
@@ -773,7 +773,7 @@ void func_80B72190(EnRailSkb* this, PlayState* play) {
 
     if ((this->actionFunc != func_80B714D8) &&
         (Animation_OnFrame(&this->skelAnime, 8.0f) || Animation_OnFrame(&this->skelAnime, 15.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_WALK);
     }
 
     if (this->actor.parent == NULL) {
@@ -825,7 +825,7 @@ void func_80B723F8(EnRailSkb* this) {
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
     this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
     this->actor.flags |= ACTOR_FLAG_100000;
-    this->actor.hintId = 0xFF;
+    this->actor.hintId = TATL_HINT_ID_NONE;
     this->actor.textId = 0;
 }
 
@@ -926,7 +926,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
                 this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
                 this->actor.flags |= ACTOR_FLAG_100000;
-                this->actor.hintId = 0xFF;
+                this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 func_80B71650(this);
             }
@@ -934,7 +934,7 @@ void func_80B72880(EnRailSkb* this, PlayState* play) {
             this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
             this->actor.flags &= ~ACTOR_FLAG_100000;
             this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
-            this->actor.hintId = 0x55;
+            this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             func_80B70FA0(this);
         }
@@ -984,12 +984,12 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;
-                Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                 func_80B710AC(this);
                 break;
 
             case 1:
-                Actor_SetColorFilter(&this->actor, 0, 120, 0, 40);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 120, COLORFILTER_BUFFLAG_OPA, 40);
                 func_80B710AC(this);
                 break;
 
@@ -998,16 +998,16 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.0f;
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 this->unk_402 |= 1;
                 func_80B712FC(this);
                 break;
 
             case 3:
                 if (this->actor.colChkInfo.health != 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
                     this->drawDmgEffTimer = 80;
                 } else {
                     this->drawDmgEffTimer = 3;
@@ -1015,7 +1015,7 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.5f;
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 func_80B71114(this);
                 break;
 
@@ -1024,9 +1024,9 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 this->drawDmgEffAlpha = 1.0f;
                 this->drawDmgEffScale = 0.5f;
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_80B71228(this);
                 break;
 
@@ -1043,9 +1043,9 @@ void func_80B72970(EnRailSkb* this, PlayState* play) {
                 }
 
             case 13:
-                Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 8);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALKID_DAMAGE);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_DAMAGE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
                 func_80B712FC(this);
                 break;
 
@@ -1071,7 +1071,7 @@ void EnRailSkb_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     func_80B72190(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 60.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     func_80B72970(this, play);
 
     if ((this->actionFunc != func_80B710E4) && (this->actionFunc != func_80B7114C) &&
@@ -1143,7 +1143,7 @@ void EnRailSkb_Draw(Actor* thisx, PlayState* play) {
     EnRailSkb* this = THIS;
 
     this->limbCount = 0;
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnRailSkb_OverrideLimbDraw,
                       EnRailSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {

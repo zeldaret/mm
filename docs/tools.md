@@ -23,7 +23,7 @@
     - [`tools/warnings_count/check_new_warnings.sh`](#toolswarnings_countcheck_new_warningssh)
     - [`tools/warnings_count/update_current_warnings.sh`](#toolswarnings_countupdate_current_warningssh)
     - [`fixle.sh`](#fixlesh)
-    - [`format.sh`](#formatsh)
+    - [`format.py`](#formatpy)
   - [External tools](#external-tools)
     - [mips_to_c](#mips_to_c)
     - [Permuter](#permuter)
@@ -127,7 +127,7 @@ Gives the progress output that the website uses. Run for that warm glow.
 
 ### `tools/regconvert.py`
 
-Convert `mips2c`'s `gGameInfo->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
+Convert `mips2c`'s `gRegEditor->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
 
 ### `tools/rename_global_asm.py`
 
@@ -196,9 +196,31 @@ If you have to add new warnings, **and have permission from the leads**, run thi
 
 Fixes line endings in the repo to Linux style (LF), which is required for the build process to work. (You may be better off creating a new clone directly in Linux/WSL, though)
 
-### `format.sh`
+### `format.py`
 
-Formats all C files in the repo using `clang-format-11` (instructions on how to install this version are pinned in Discord if you can't get it from your package manager in the usual way). This will touch all files in the repo, so the next `make` will take longer.
+Formats all C files in the repo using `clang-format-11`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
+
+You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (i.e. `-j1`).
+
+`clang-11` is available in many native package managers, but if not try:
+
+Linux:
+Download llvm's setup script, run it, than install normally
+```bash
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh 11
+rm llvm.sh
+sudo apt install clang-format-11 clang-tidy-11 clang-apply-replacements-11
+```
+
+Mac:
+Install with brew, than create symlinks for `clang-tidy` and `clang-apply-replacements` to use properly
+```bash
+brew install llvm clang-format-11
+ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
+```
 
 ## External tools
 

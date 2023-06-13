@@ -20,7 +20,7 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play);
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
-const ActorInit En_Ds2n_InitVars = {
+ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,
     ACTORCAT_NPC,
     FLAGS,
@@ -32,7 +32,7 @@ const ActorInit En_Ds2n_InitVars = {
     (ActorFunc)EnDs2n_Draw,
 };
 
-static AnimationInfo sAnimations[] = {
+static AnimationInfo sAnimationInfo[] = {
     { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
@@ -43,7 +43,7 @@ static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeC
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
     this->blinkState = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = EnDs2n_Idle;
 }
 
@@ -121,7 +121,7 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->blinkState]));
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->blinkState]));

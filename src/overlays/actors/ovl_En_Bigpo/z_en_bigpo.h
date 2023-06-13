@@ -30,7 +30,7 @@ typedef struct EnBigpo {
     /* 0x188 */ Vec3s jointTable[ENBIGPO_LIMBCOUNT];
     /* 0x1C4 */ Vec3s morphTable[ENBIGPO_LIMBCOUNT];
     /* 0x200 */ EnBigPoActionFunc actionFunc;
-    /* 0x204 */ u8 unkBool204; // need to know what func_801A2E54 does to know what this is
+    /* 0x204 */ u8 storePrevBgm;
     /* 0x206 */ s16 idleTimer; // frame counter
     /* 0x208 */ s16 unk208; // facing rotY?
     /* 0x20A */ s16 rotVelocity;
@@ -53,17 +53,17 @@ typedef struct EnBigpo {
     /* 0x338 */ EnBigpoFireEffect fires[3];
 } EnBigpo; // size = 0x398
 
-// well ver is regular, dampe basement ver is summoned
-// on spawn, 3/possible fires are turned into chosenfire
-enum EnBigpoType {
+// well version is "regular" (spawns automatically), dampe basement version is "summoned"
+// on room enter, 3 "possiblefire" are turned into "chosenfire" at random
+typedef enum EnBigpoType {
   /* 0 */ ENBIGPO_REGULAR,
   /* 1 */ ENBIGPO_SUMMONED,
   /* 2 */ ENBIGPO_POSSIBLEFIRE,
   /* 3 */ ENBIGPO_CHOSENFIRE,
   /* 4 */ ENBIGPO_REVEALEDFIRE,
-  /* 5 */ ENBIGPO_UNK5,
-};
+  /* 5 */ ENBIGPO_UNK5
+} EnBigpoType;
 
-#define GET_BIGPO_SWITCHFLAGS(thisx) ((u8)(thisx->params >> 0x8)) 
+#define BIGPO_GET_SWITCHFLAGS(thisx) (u8)((thisx)->params >> 0x8) 
 
 #endif // Z_EN_BIGPO_H

@@ -53,7 +53,7 @@ static ColliderJntSphInit sJntSphInit = {
     sJntSphElementsInit,
 };
 
-const ActorInit En_Butte_InitVars = {
+ActorInit En_Butte_InitVars = {
     ACTOR_EN_BUTTE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -139,7 +139,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C240(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu2(play->state.gfxCtx);
     sp48 = Math_SinS(D_8091D3A0) * 250.0f;
     sp48 = CLAMP(sp48, 0, 255);
 
@@ -155,7 +155,7 @@ void func_8091C178(EnButte* this, PlayState* play) {
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 200, 200, 180, sp48);
     gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 210, 255);
-    gSPDisplayList(POLY_XLU_DISP++, gOwlStatueWhiteFlashDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFlash1DL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -241,7 +241,7 @@ void func_8091C794(EnButte* this, PlayState* play) {
     s16 yaw;
 
     func_8091C524(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, sp4C->unk_04, sp4C->unk_08, sp4C->unk_0C, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, sp4C->unk_04, sp4C->unk_08, sp4C->unk_0C, 0.0f);
 
     if (this->unk_24F == 1) {
         distSq = SQ(100.0f);
@@ -276,9 +276,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
 
     func_8091C6B4(this);
 
-    playSpeed =
-        (((this->actor.speedXZ * 0.5f) + (Rand_ZeroOne() * 0.2f)) + ((1.0f - Math_SinS(this->unk_258)) * 0.15f)) +
-        ((1.0f - Math_SinS(this->unk_256)) * 0.3f) + sp38;
+    playSpeed = (((this->actor.speed * 0.5f) + (Rand_ZeroOne() * 0.2f)) + ((1.0f - Math_SinS(this->unk_258)) * 0.15f)) +
+                ((1.0f - Math_SinS(this->unk_256)) * 0.3f) + sp38;
     this->skelAnime.playSpeed = CLAMP(playSpeed, 0.2f, 1.5f);
 
     SkelAnime_Update(&this->skelAnime);
@@ -287,7 +286,8 @@ void func_8091C794(EnButte* this, PlayState* play) {
         func_8091C0A0(this, &D_8091D324[this->unk_24E]);
     }
 
-    if ((ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) && (player->itemActionParam == 7) && (this->unk_252 <= 0) &&
+    if ((ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) && (player->heldItemAction == PLAYER_IA_STICK) &&
+        (this->unk_252 <= 0) &&
         ((Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
                                    this->actor.home.pos.z) < SQ(120.0f)) ||
          (this->actor.xzDistToPlayer < 60.0f))) {
@@ -317,7 +317,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
     s16 yaw;
 
     func_8091C5EC(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, sp5C->unk_04, sp5C->unk_08, sp5C->unk_0C, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, sp5C->unk_04, sp5C->unk_08, sp5C->unk_0C, 0.0f);
     sp40 = 0.0f;
 
     if ((this->unk_24E != 0) && (this->unk_24C < 12)) {
@@ -343,7 +343,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
 
     func_8091C6B4(this);
 
-    playSpeed = ((this->actor.speedXZ * 0.5f) + (Rand_ZeroOne() * 0.2f) + ((1.0f - Math_SinS(this->unk_258)) * 0.15f)) +
+    playSpeed = ((this->actor.speed * 0.5f) + (Rand_ZeroOne() * 0.2f) + ((1.0f - Math_SinS(this->unk_258)) * 0.15f)) +
                 ((1.0f - Math_SinS(this->unk_256)) * 0.3f) + sp40;
     this->skelAnime.playSpeed = CLAMP(playSpeed, 0.2f, 1.5f);
     SkelAnime_Update(&this->skelAnime);
@@ -355,7 +355,7 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
 
     distSq = Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
                                       this->actor.home.pos.z);
-    if ((player->itemActionParam != 7) || !(fabsf(player->actor.speedXZ) < 1.8f) || (this->unk_252 > 0) ||
+    if ((player->heldItemAction != PLAYER_IA_STICK) || !(fabsf(player->actor.speed) < 1.8f) || (this->unk_252 > 0) ||
         !(distSq < SQ(320.0f))) {
         func_8091C748(this);
     } else if ((distSq > SQ(240.0f)) &&
@@ -396,7 +396,7 @@ void func_8091D070(EnButte* this) {
 
 void func_8091D090(EnButte* this, PlayState* play) {
     if (this->unk_24C <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -416,7 +416,7 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
     this->unk_258 += 0x600;
 
     if (ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) {
-        if (GET_PLAYER(play)->meleeWeaponState == 0) {
+        if (GET_PLAYER(play)->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0) {
             if (this->unk_252 > 0) {
                 this->unk_252--;
             }
@@ -446,7 +446,7 @@ void EnButte_Draw(Actor* thisx, PlayState* play) {
     EnButte* this = THIS;
 
     if (this->unk_250 != 0) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
     }
 

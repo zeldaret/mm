@@ -15,7 +15,7 @@ void DmAl_Destroy(Actor* thisx, PlayState* play);
 void DmAl_Update(Actor* thisx, PlayState* play);
 void DmAl_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Al_InitVars = {
+ActorInit Dm_Al_InitVars = {
     ACTOR_EN_AL,
     ACTORCAT_NPC,
     FLAGS,
@@ -27,43 +27,48 @@ const ActorInit Dm_Al_InitVars = {
     (ActorFunc)DmAl_Draw,
 };
 
-static AnimationInfoS sAnimationInfos[] = {
+typedef enum {
+    /* 0 */ MADAME_AROMA_ANIM_0,
+    /* 1 */ MADAME_AROMA_ANIM_1
+} DmAlAnimation;
+
+static AnimationInfoS sAnimationInfo[] = {
     { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 DmAl_ChangeAnimation(DmAl* this, s32 animationIndex) {
+s32 DmAl_ChangeAnim(DmAl* this, s32 animIndex) {
     s32 didAnimationChange = false;
 
-    if (animationIndex != this->animationIndex) {
-        this->animationIndex = animationIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfos, animationIndex);
+    if (animIndex != this->animIndex) {
+        this->animIndex = animIndex;
+        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
     return didAnimationChange;
 }
 
 void func_80C1BDD8(DmAl* this, PlayState* play) {
     s32 D_80C1C280[] = { 0, 0, 0, 0, 0 };
-    u16 csAction;
-    s32 actionIndex;
+    u16 cueId;
+    s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!this->unk_45C) {
-            this->action = 0xFF;
+            this->cueId = 255;
             this->unk_45C = true;
-            this->animationIndex2 = this->animationIndex;
+            this->animIndex2 = this->animIndex;
         }
-        if (Cutscene_CheckActorAction(play, 0x232)) {
-            actionIndex = Cutscene_GetActorActionIndex(play, 0x232);
-            csAction = play->csCtx.actorActions[actionIndex]->action;
-            if (this->action != (u8)csAction) {
-                this->action = csAction;
-                DmAl_ChangeAnimation(this, D_80C1C280[csAction]);
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                DmAl_ChangeAnim(this, D_80C1C280[cueId]);
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     } else if (this->unk_45C) {
         this->unk_45C = false;
-        DmAl_ChangeAnimation(this, this->animationIndex2);
+        DmAl_ChangeAnim(this, this->animIndex2);
     }
 }
 
@@ -73,8 +78,8 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
                        MADAME_AROMA_LIMB_MAX);
-    this->animationIndex = -1;
-    DmAl_ChangeAnimation(this, MADAME_AROMA_ANIMATION_0);
+    this->animIndex = -1;
+    DmAl_ChangeAnim(this, MADAME_AROMA_ANIM_0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = func_80C1BDD8;
@@ -88,7 +93,7 @@ void DmAl_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     SkelAnime_Update(&this->skelAnime);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 s32 DmAl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* rot, Vec3s* pos, Actor* thisx) {
@@ -147,7 +152,7 @@ void DmAl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, DmAl_OverrideLimbDraw, DmAl_PostLimbDraw,
                                    DmAl_TransformLimbDraw, &this->actor);

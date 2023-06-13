@@ -21,7 +21,7 @@ void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play);
 void EnNnh_SetupDialogue(EnNnh* this);
 void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
-const ActorInit En_Nnh_InitVars = {
+ActorInit En_Nnh_InitVars = {
     ACTOR_EN_NNH,
     ACTORCAT_PROP,
     FLAGS,
@@ -107,7 +107,7 @@ void EnNnh_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
     s32 pad;
 
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
     gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfxCtx->polyOpa.p++, gButlerSonMainBodyDL);
 }

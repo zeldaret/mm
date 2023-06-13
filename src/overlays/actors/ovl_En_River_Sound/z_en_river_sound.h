@@ -8,6 +8,8 @@ struct EnRiverSound;
 #define RS_GET_TYPE(thisx) ((thisx)->params & 0xFF);
 #define RS_GET_PATH_INDEX(thisx) (((thisx)->params >> 8) & 0xFF);
 
+#define RS_PATH_INDEX_NONE 0xFF
+
 // Any param not as one of these values will result in UB
 typedef enum {
     /* 0x00 */ RS_RIVER_STREAM,   
@@ -44,7 +46,5 @@ typedef struct EnRiverSound {
     /* 0x146 */ u8 numPoints;
     /* 0x148 */ Vec3s* pathPoints;
 } EnRiverSound; // size = 0x14C
-
-extern const ActorInit En_River_Sound_InitVars;
 
 #endif // Z_EN_RIVER_SOUND_H

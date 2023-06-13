@@ -49,6 +49,15 @@ typedef struct EnElf {
     /* 0x270 */ EnElfActionFunc actionFunc;
 } EnElf; // size = 0x274
 
-extern const ActorInit En_Elf_InitVars;
+typedef enum {
+    /* 0 */ ENELF_TYPE_0,
+    /* 1 */ ENELF_TYPE_1,
+    /* 2 */ ENELF_TYPE_2,
+    /* 3 */ ENELF_TYPE_3,
+    /* 4 */ ENELF_TYPE_4,
+    /* 5 */ ENELF_TYPE_5,
+    /* 6 */ ENELF_TYPE_6,
+    /* 7 */ ENELF_TYPE_7
+} FairyType;
 
 #endif // Z_EN_ELF_H

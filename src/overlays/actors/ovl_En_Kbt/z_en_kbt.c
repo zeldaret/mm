@@ -22,7 +22,7 @@ Actor* func_80B3403C(PlayState* play);
 void func_80B34314(EnKbt* this, PlayState* play);
 void func_80B34598(EnKbt* this, PlayState* play);
 
-const ActorInit En_Kbt_InitVars = {
+ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
     ACTORCAT_NPC,
     FLAGS,
@@ -71,12 +71,12 @@ void EnKbt_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B33E64(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 1;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 1;
 }
 
 s32 func_80B33E8C(PlayState* play) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneNum].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -557,7 +557,7 @@ void EnKbt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
 

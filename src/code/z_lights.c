@@ -190,12 +190,12 @@ void Lights_BindDirectional(Lights* lights, LightParams* params, void* unused) {
  * available in the Lights group. This is at most 7 slots for a new group, but could be less.
  */
 void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayState* play) {
-    static LightsPosBindFunc posBindFuncs[] = {
+    static LightsPosBindFunc sPosBindFuncs[] = {
         Lights_BindPoint,
         (LightsPosBindFunc)Lights_BindDirectional,
         Lights_BindPoint,
     };
-    static LightsBindFunc dirBindFuncs[] = {
+    static LightsBindFunc sDirBindFuncs[] = {
         Lights_BindPointWithReference,
         (LightsBindFunc)Lights_BindDirectional,
         Lights_BindPointWithReference,
@@ -204,12 +204,12 @@ void Lights_BindAll(Lights* lights, LightNode* listHead, Vec3f* refPos, PlayStat
     if (listHead != NULL) {
         if ((refPos == NULL) && (lights->enablePosLights == 1)) {
             do {
-                posBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
+                sPosBindFuncs[listHead->info->type](lights, &listHead->info->params, play);
                 listHead = listHead->next;
             } while (listHead != NULL);
         } else {
             do {
-                dirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
+                sDirBindFuncs[listHead->info->type](lights, &listHead->info->params, refPos);
                 listHead = listHead->next;
             } while (listHead != NULL);
         }
@@ -251,7 +251,7 @@ void Lights_FreeNode(LightNode* light) {
 void LightContext_Init(PlayState* play, LightContext* lightCtx) {
     LightContext_InitList(play, lightCtx);
     LightContext_SetAmbientColor(lightCtx, 80, 80, 80);
-    func_80102544(lightCtx, 0, 0, 0, 0x3E4, 0x3200);
+    LightContext_SetFog(lightCtx, 0, 0, 0, 996, 12800);
     bzero(&sLightsBuffer, sizeof(LightsBuffer));
 }
 
@@ -261,12 +261,12 @@ void LightContext_SetAmbientColor(LightContext* lightCtx, u8 r, u8 g, u8 b) {
     lightCtx->ambient.b = b;
 }
 
-void func_80102544(LightContext* lightCtx, u8 a1, u8 a2, u8 a3, s16 numLights, s16 sp16) {
-    lightCtx->unk7 = a1;
-    lightCtx->unk8 = a2;
-    lightCtx->unk9 = a3;
-    lightCtx->unkA = numLights;
-    lightCtx->unkC = sp16;
+void LightContext_SetFog(LightContext* lightCtx, u8 r, u8 g, u8 b, s16 near, s16 far) {
+    lightCtx->fogColor.r = r;
+    lightCtx->fogColor.g = g;
+    lightCtx->fogColor.b = b;
+    lightCtx->fogNear = near;
+    lightCtx->zFar = far;
 }
 
 /**
@@ -338,7 +338,7 @@ Lights* Lights_NewAndDraw(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 
     lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
     lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
     lights->l.a.l.col[2] = lights->l.a.l.colc[2] = ambientB;
-    lights->enablePosLights = 0;
+    lights->enablePosLights = false;
     lights->numLights = numLights;
 
     for (i = 0; i < numLights; i++) {
@@ -360,13 +360,10 @@ Lights* Lights_New(GraphicsContext* gfxCtx, u8 ambientR, u8 ambientG, u8 ambient
 
     lights = GRAPH_ALLOC(gfxCtx, sizeof(Lights));
 
-    lights->l.a.l.col[0] = ambientR;
-    lights->l.a.l.colc[0] = ambientR;
-    lights->l.a.l.col[1] = ambientG;
-    lights->l.a.l.colc[1] = ambientG;
-    lights->l.a.l.col[2] = ambientB;
-    lights->l.a.l.colc[2] = ambientB;
-    lights->enablePosLights = 0;
+    lights->l.a.l.col[0] = lights->l.a.l.colc[0] = ambientR;
+    lights->l.a.l.col[1] = lights->l.a.l.colc[1] = ambientG;
+    lights->l.a.l.col[2] = lights->l.a.l.colc[2] = ambientB;
+    lights->enablePosLights = false;
     lights->numLights = 0;
 
     return lights;
@@ -379,22 +376,22 @@ void Lights_GlowCheck(PlayState* play) {
         LightPoint* params = &light->info->params.point;
 
         if (light->info->type == LIGHT_POINT_GLOW) {
-            Vec3f pos;
-            Vec3f multDest;
-            f32 wDest;
+            Vec3f worldPos;
+            Vec3f projectedPos;
+            f32 invW;
 
-            pos.x = params->x;
-            pos.y = params->y;
-            pos.z = params->z;
-            Actor_GetProjectedPos(play, &pos, &multDest, &wDest);
+            worldPos.x = params->x;
+            worldPos.y = params->y;
+            worldPos.z = params->z;
+            Actor_GetProjectedPos(play, &worldPos, &projectedPos, &invW);
 
             params->drawGlow = 0;
 
-            if ((multDest.z > 1) && (fabsf(multDest.x * wDest) < 1) && (fabsf(multDest.y * wDest) < 1)) {
-                s32 wX = multDest.x * wDest * 160 + 160;
-                s32 wY = multDest.y * wDest * -120 + 120;
-                s32 wZ = (s32)((multDest.z * wDest) * 16352) + 16352;
-                s32 zBuf = func_80178A94(wX, wY);
+            if ((projectedPos.z > 1) && (fabsf(projectedPos.x * invW) < 1) && (fabsf(projectedPos.y * invW) < 1)) {
+                s32 screenPosX = PROJECTED_TO_SCREEN_X(projectedPos, invW);
+                s32 screenPosY = PROJECTED_TO_SCREEN_Y(projectedPos, invW);
+                s32 wZ = (s32)((projectedPos.z * invW) * 16352.0f) + 16352;
+                s32 zBuf = SysCfb_GetZBufferInt(screenPosX, screenPosY);
 
                 if (wZ < zBuf) {
                     params->drawGlow = 1;
@@ -414,7 +411,7 @@ void Lights_DrawGlow(PlayState* play) {
     if (light != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        dl = func_8012C7FC(POLY_XLU_DISP);
+        dl = Gfx_SetupDL65_NoCD(POLY_XLU_DISP);
 
         gDPSetDither(dl++, G_CD_NOISE);
 

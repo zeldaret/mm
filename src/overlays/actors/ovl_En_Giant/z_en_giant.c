@@ -32,47 +32,47 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play);
  * These values are used to index into sAnimations to pick the appropriate animation.
  */
 typedef enum {
-    /*  0 */ GIANT_ANIMATION_LOOK_UP_START,
-    /*  1 */ GIANT_ANIMATION_LOOK_UP_LOOP,
-    /*  2 */ GIANT_ANIMATION_FALLING_OVER,
-    /*  3 */ GIANT_ANIMATION_RAISED_ARMS_START,
-    /*  4 */ GIANT_ANIMATION_RAISED_ARMS_LOOP,
-    /*  5 */ GIANT_ANIMATION_STRUGGLE_START,
-    /*  6 */ GIANT_ANIMATION_STRUGGLE_LOOP,
-    /*  7 */ GIANT_ANIMATION_IDLE_LOOP,
-    /*  8 */ GIANT_ANIMATION_WALKING_LOOP,
-    /*  9 */ GIANT_ANIMATION_BIG_CALL_START,
-    /* 10 */ GIANT_ANIMATION_BIG_CALL_LOOP,
-    /* 11 */ GIANT_ANIMATION_BIG_CALL_END,
-    /* 12 */ GIANT_ANIMATION_SMALL_CALL_START,
-    /* 13 */ GIANT_ANIMATION_SMALL_CALL_LOOP,
-    /* 14 */ GIANT_ANIMATION_SMALL_CALL_END,
-    /* 15 */ GIANT_ANIMATION_MAX
-} GiantAnimationIndex;
+    /*  0 */ GIANT_ANIM_LOOK_UP_START,
+    /*  1 */ GIANT_ANIM_LOOK_UP_LOOP,
+    /*  2 */ GIANT_ANIM_FALLING_OVER,
+    /*  3 */ GIANT_ANIM_RAISED_ARMS_START,
+    /*  4 */ GIANT_ANIM_RAISED_ARMS_LOOP,
+    /*  5 */ GIANT_ANIM_STRUGGLE_START,
+    /*  6 */ GIANT_ANIM_STRUGGLE_LOOP,
+    /*  7 */ GIANT_ANIM_IDLE_LOOP,
+    /*  8 */ GIANT_ANIM_WALKING_LOOP,
+    /*  9 */ GIANT_ANIM_BIG_CALL_START,
+    /* 10 */ GIANT_ANIM_BIG_CALL_LOOP,
+    /* 11 */ GIANT_ANIM_BIG_CALL_END,
+    /* 12 */ GIANT_ANIM_SMALL_CALL_START,
+    /* 13 */ GIANT_ANIM_SMALL_CALL_LOOP,
+    /* 14 */ GIANT_ANIM_SMALL_CALL_END,
+    /* 15 */ GIANT_ANIM_MAX
+} GiantAnimation;
 
 /**
- * Used as values for csAction. The UNKNOWN ones are never used in-game.
+ * Used as values for cueId. The UNKNOWN ones are never used in-game.
  */
 typedef enum {
-    /*  0 */ GIANT_CS_ACTION_NONE,
-    /*  1 */ GIANT_CS_ACTION_IDLE,
-    /*  2 */ GIANT_CS_ACTION_WALKING,
-    /*  3 */ GIANT_CS_ACTION_LOOKING_UP,
-    /*  4 */ GIANT_CS_ACTION_RAISING_ARMS,
-    /*  5 */ GIANT_CS_ACTION_STRUGGLING,
-    /*  6 */ GIANT_CS_ACTION_FALLING_OVER,
-    /*  7 */ GIANT_CS_ACTION_IDLE_FADE_IN,
-    /*  8 */ GIANT_CS_ACTION_TALKING,
-    /*  9 */ GIANT_CS_ACTION_DONE_TALKING,
-    /* 10 */ GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER,
-    /* 11 */ GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER,
-    /* 12 */ GIANT_CS_ACTION_UNKNOWN_12,
-    /* 13 */ GIANT_CS_ACTION_UNKNOWN_13,
-    /* 14 */ GIANT_CS_ACTION_UNKNOWN_14,
-    /* 15 */ GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER
-} GiantCsActionIndex;
+    /*  0 */ GIANT_CUE_ID_NONE,
+    /*  1 */ GIANT_CUE_ID_IDLE,
+    /*  2 */ GIANT_CUE_ID_WALKING,
+    /*  3 */ GIANT_CUE_ID_LOOKING_UP,
+    /*  4 */ GIANT_CUE_ID_RAISING_ARMS,
+    /*  5 */ GIANT_CUE_ID_STRUGGLING,
+    /*  6 */ GIANT_CUE_ID_FALLING_OVER,
+    /*  7 */ GIANT_CUE_ID_IDLE_FADE_IN,
+    /*  8 */ GIANT_CUE_ID_TALKING,
+    /*  9 */ GIANT_CUE_ID_DONE_TALKING,
+    /* 10 */ GIANT_CUE_ID_TEACHING_OATH_TO_ORDER,
+    /* 11 */ GIANT_CUE_ID_PLAYER_LEARNED_OATH_TO_ORDER,
+    /* 12 */ GIANT_CUE_ID_UNKNOWN_12,
+    /* 13 */ GIANT_CUE_ID_UNKNOWN_13,
+    /* 14 */ GIANT_CUE_ID_UNKNOWN_14,
+    /* 15 */ GIANT_CUE_ID_HOLDING_UP_MOON_IN_CLOCK_TOWER
+} GiantCueId;
 
-const ActorInit En_Giant_InitVars = {
+ActorInit En_Giant_InitVars = {
     ACTOR_EN_GIANT,
     ACTORCAT_NPC,
     FLAGS,
@@ -91,16 +91,16 @@ static AnimationHeader* sAnimations[] = {
     &gGiantSmallCallStartAnim, &gGiantSmallCallLoopAnim, &gGiantSmallCallEndAnim,
 };
 
-void EnGiant_ChangeAnimation(EnGiant* this, s16 newAnimationId) {
-    if (newAnimationId >= GIANT_ANIMATION_LOOK_UP_START && newAnimationId < GIANT_ANIMATION_MAX) {
-        if ((this->animationId == GIANT_ANIMATION_WALKING_LOOP && newAnimationId != GIANT_ANIMATION_WALKING_LOOP) ||
-            (newAnimationId == GIANT_ANIMATION_WALKING_LOOP && this->animationId != GIANT_ANIMATION_WALKING_LOOP)) {
-            Animation_Change(&this->skelAnime, sAnimations[newAnimationId], 1.0f, 0.0f,
-                             Animation_GetLastFrame(&sAnimations[newAnimationId]->common), ANIMMODE_ONCE, 10.0f);
+void EnGiant_ChangeAnim(EnGiant* this, s16 animIndex) {
+    if (animIndex >= GIANT_ANIM_LOOK_UP_START && animIndex < GIANT_ANIM_MAX) {
+        if (((this->animIndex == GIANT_ANIM_WALKING_LOOP) && (animIndex != GIANT_ANIM_WALKING_LOOP)) ||
+            ((animIndex == GIANT_ANIM_WALKING_LOOP) && (this->animIndex != GIANT_ANIM_WALKING_LOOP))) {
+            Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                             Animation_GetLastFrame(&sAnimations[animIndex]->common), ANIMMODE_ONCE, 10.0f);
         } else {
-            Animation_PlayOnce(&this->skelAnime, sAnimations[newAnimationId]);
+            Animation_PlayOnce(&this->skelAnime, sAnimations[animIndex]);
         }
-        this->animationId = newAnimationId;
+        this->animIndex = animIndex;
     }
 }
 
@@ -110,10 +110,11 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_FAILURE:
-            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOWLA)) {
+            if (!CHECK_QUEST_ITEM(QUEST_REMAINS_ODOLWA)) {
                 return true;
             }
             break;
+
         case GIANT_TYPE_MOUNTAIN_TERMINA_FIELD:
         case GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_MOUNTAIN_GIANTS_CHAMBER_AND_ENDING:
@@ -122,6 +123,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
                 return true;
             }
             break;
+
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
@@ -130,6 +132,7 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
                 return true;
             }
             break;
+
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
@@ -137,6 +140,9 @@ s32 EnGiant_IsImprisoned(EnGiant* this) {
             if (!CHECK_QUEST_ITEM(QUEST_REMAINS_TWINMOLD)) {
                 return true;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -153,42 +159,46 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.32f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGiantSkel, &gGiantLargeStrideAnim, this->jointTable, this->morphTable,
                        GIANT_LIMB_MAX);
-    EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
-    this->csAction = GIANT_CS_ACTION_NONE;
+    EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
+    this->cueId = GIANT_CUE_ID_NONE;
     this->actionFunc = EnGiant_PerformCutsceneActions;
     this->actor.draw = NULL;
     this->alpha = 0;
     this->actor.velocity.y = -10.0f;
     this->actor.terminalVelocity = -10.0f;
     this->actor.gravity = -5.0f;
+
     switch (type) {
         case GIANT_TYPE_CANYON_TERMINA_FIELD:
         case GIANT_TYPE_CANYON_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_CANYON_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 454;
+            this->cueType = CS_CMD_ACTOR_CUE_454;
             break;
+
         case GIANT_TYPE_SWAMP_TERMINA_FIELD:
         case GIANT_TYPE_SWAMP_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_SWAMP_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 455;
+            this->cueType = CS_CMD_ACTOR_CUE_455;
             break;
+
         case GIANT_TYPE_OCEAN_TERMINA_FIELD:
         case GIANT_TYPE_OCEAN_CLOCK_TOWER_SUCCESS:
         case GIANT_TYPE_OCEAN_GIANTS_CHAMBER_AND_ENDING:
-            this->actorActionCommand = 456;
+            this->cueType = CS_CMD_ACTOR_CUE_456;
             break;
+
         default:
-            this->actorActionCommand = 453;
+            this->cueType = CS_CMD_ACTOR_CUE_453;
             break;
     }
 
     if (GIANT_TYPE_IS_CLOCK_TOWER_SUCCESS(type)) {
-        if (!(gSaveContext.save.weekEventReg[25] & 2)) {
-            Actor_MarkForDeath(&this->actor);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_25_02)) {
+            Actor_Kill(&this->actor);
             return;
         }
 
-        this->actorActionCommand = 0x1C5;
+        this->cueType = CS_CMD_ACTOR_CUE_453;
         Actor_SetScale(&this->actor, 0.32f);
         this->actionFunc = EnGiant_PerformClockTowerSuccessActions;
         Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
@@ -210,7 +220,7 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
         this->actor.terminalVelocity = 0.0f;
         this->actor.gravity = 0.0f;
         if (EnGiant_IsImprisoned(this)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
@@ -220,16 +230,18 @@ void EnGiant_Init(Actor* thisx, PlayState* play) {
 
     this->sfxId = 0xFFFF;
     if (GIANT_TYPE_IS_CHAMBER_OR_ENDING(type)) {
-        switch (gSaveContext.sceneSetupIndex) {
+        switch (gSaveContext.sceneLayer) {
             case 0:
             case 10:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE2 - SFX_FLAG;
                 break;
+
             case 1:
             case 2:
             case 3:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE1 - SFX_FLAG;
                 break;
+
             default:
                 this->sfxId = NA_SE_EV_KYOJIN_GRATITUDE0 - SFX_FLAG;
                 break;
@@ -246,78 +258,93 @@ void EnGiant_Destroy(Actor* thisx, PlayState* play) {
  * this function is to play the requested start animation if it has not been
  * played yet and play the respetive looping animation otherwise.
  */
-void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimationId) {
-    s16 nextAnimationId = requestedAnimationId + 1;
+void EnGiant_ChangeToStartOrLoopAnimation(EnGiant* this, s16 requestedAnimIndex) {
+    s16 nextAnimIndex = requestedAnimIndex + 1;
 
-    if (this->animationId != nextAnimationId) {
-        if (this->animationId != requestedAnimationId) {
-            EnGiant_ChangeAnimation(this, requestedAnimationId);
+    if (this->animIndex != nextAnimIndex) {
+        if (this->animIndex != requestedAnimIndex) {
+            EnGiant_ChangeAnim(this, requestedAnimIndex);
         } else {
-            EnGiant_ChangeAnimation(this, nextAnimationId);
+            EnGiant_ChangeAnim(this, nextAnimIndex);
         }
     }
 }
 
 /**
- * Immediately switches to the specified animation for this cutscene action.
+ * Immediately switches to the specified animation for this cueId.
  */
-void EnGiant_ChangeAnimationBasedOnCsAction(EnGiant* this) {
-    switch (this->csAction) {
-        case GIANT_CS_ACTION_IDLE:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
+void EnGiant_ChangeAnimBasedOnCueId(EnGiant* this) {
+    switch (this->cueId) {
+        case GIANT_CUE_ID_IDLE:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
             break;
-        case GIANT_CS_ACTION_WALKING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
+
+        case GIANT_CUE_ID_WALKING:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_WALKING_LOOP);
             break;
-        case GIANT_CS_ACTION_STRUGGLING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
+
+        case GIANT_CUE_ID_STRUGGLING:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_STRUGGLE_START);
             break;
-        case GIANT_CS_ACTION_FALLING_OVER:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_FALLING_OVER);
+
+        case GIANT_CUE_ID_FALLING_OVER:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_FALLING_OVER);
             break;
-        case GIANT_CS_ACTION_IDLE_FADE_IN:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
+
+        case GIANT_CUE_ID_IDLE_FADE_IN:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
             this->alpha = 0;
             break;
-        case GIANT_CS_ACTION_TALKING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_START);
+
+        case GIANT_CUE_ID_TALKING:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_START);
             break;
-        case GIANT_CS_ACTION_DONE_TALKING:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_END);
+
+        case GIANT_CUE_ID_DONE_TALKING:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_END);
             break;
-        case GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_START);
+
+        case GIANT_CUE_ID_TEACHING_OATH_TO_ORDER:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_START);
             break;
-        case GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_END);
+
+        case GIANT_CUE_ID_PLAYER_LEARNED_OATH_TO_ORDER:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_END);
             break;
-        case GIANT_CS_ACTION_UNKNOWN_12:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
+
+        case GIANT_CUE_ID_UNKNOWN_12:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
             break;
-        case GIANT_CS_ACTION_UNKNOWN_13:
-            EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
+
+        case GIANT_CUE_ID_UNKNOWN_13:
+            EnGiant_ChangeAnim(this, GIANT_ANIM_WALKING_LOOP);
             break;
-        case GIANT_CS_ACTION_UNKNOWN_14:
-            if (this->animationId != GIANT_ANIMATION_WALKING_LOOP) {
-                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_WALKING_LOOP);
+
+        case GIANT_CUE_ID_UNKNOWN_14:
+            if (this->animIndex != GIANT_ANIM_WALKING_LOOP) {
+                EnGiant_ChangeAnim(this, GIANT_ANIM_WALKING_LOOP);
             }
             break;
-        case GIANT_CS_ACTION_HOLDING_UP_MOON_IN_CLOCK_TOWER:
+
+        case GIANT_CUE_ID_HOLDING_UP_MOON_IN_CLOCK_TOWER:
             Animation_Change(&this->skelAnime, &gGiantRaisedArmsStartAnim, 0.0f,
                              Animation_GetLastFrame(&gGiantRaisedArmsStartAnim) - 1.0f,
                              Animation_GetLastFrame(&gGiantRaisedArmsStartAnim), ANIMMODE_ONCE, 0.0f);
+            break;
+
+        default:
             break;
     }
 }
 
 void EnGiant_UpdateAlpha(EnGiant* this) {
-    switch (this->csAction) {
-        case GIANT_CS_ACTION_FALLING_OVER:
+    switch (this->cueId) {
+        case GIANT_CUE_ID_FALLING_OVER:
             if (this->skelAnime.curFrame >= 90.0f && this->alpha > 0) {
                 this->alpha -= 12;
             }
             break;
-        case GIANT_CS_ACTION_UNKNOWN_14:
+        case GIANT_CUE_ID_UNKNOWN_14:
             this->alpha -= 12;
             break;
         default:
@@ -336,31 +363,40 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
  */
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_Update(&this->skelAnime) &&
-        (this->animationId != GIANT_ANIMATION_FALLING_OVER || this->csAction != GIANT_CS_ACTION_FALLING_OVER)) {
-        EnGiant_ChangeAnimation(this, this->animationId);
-        switch (this->csAction) {
-            case GIANT_CS_ACTION_LOOKING_UP:
-                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_LOOK_UP_START);
+        (this->animIndex != GIANT_ANIM_FALLING_OVER || this->cueId != GIANT_CUE_ID_FALLING_OVER)) {
+        EnGiant_ChangeAnim(this, this->animIndex);
+        switch (this->cueId) {
+            case GIANT_CUE_ID_LOOKING_UP:
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_LOOK_UP_START);
                 break;
-            case GIANT_CS_ACTION_RAISING_ARMS:
-                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_RAISED_ARMS_START);
+
+            case GIANT_CUE_ID_RAISING_ARMS:
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_RAISED_ARMS_START);
                 break;
-            case GIANT_CS_ACTION_STRUGGLING:
-                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_STRUGGLE_START);
+
+            case GIANT_CUE_ID_STRUGGLING:
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_STRUGGLE_START);
                 break;
-            case GIANT_CS_ACTION_FALLING_OVER:
+
+            case GIANT_CUE_ID_FALLING_OVER:
                 // Unused
-                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIMATION_FALLING_OVER);
+                EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_FALLING_OVER);
                 break;
-            case GIANT_CS_ACTION_TALKING:
-                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_BIG_CALL_LOOP);
+
+            case GIANT_CUE_ID_TALKING:
+                EnGiant_ChangeAnim(this, GIANT_ANIM_BIG_CALL_LOOP);
                 break;
-            case GIANT_CS_ACTION_DONE_TALKING:
-            case GIANT_CS_ACTION_PLAYER_LEARNED_OATH_TO_ORDER:
-                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_IDLE_LOOP);
+
+            case GIANT_CUE_ID_DONE_TALKING:
+            case GIANT_CUE_ID_PLAYER_LEARNED_OATH_TO_ORDER:
+                EnGiant_ChangeAnim(this, GIANT_ANIM_IDLE_LOOP);
                 break;
-            case GIANT_CS_ACTION_TEACHING_OATH_TO_ORDER:
-                EnGiant_ChangeAnimation(this, GIANT_ANIMATION_SMALL_CALL_LOOP);
+
+            case GIANT_CUE_ID_TEACHING_OATH_TO_ORDER:
+                EnGiant_ChangeAnim(this, GIANT_ANIM_SMALL_CALL_LOOP);
+                break;
+
+            default:
                 break;
         }
         SkelAnime_Update(&this->skelAnime);
@@ -368,50 +404,48 @@ void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
 }
 
 void EnGiant_PlaySound(EnGiant* this) {
-    if (this->actor.draw != NULL && this->alpha > 0) {
-        if (this->animationId == GIANT_ANIMATION_WALKING_LOOP &&
+    if ((this->actor.draw != NULL) && (this->alpha > 0)) {
+        if ((this->animIndex == GIANT_ANIM_WALKING_LOOP) &&
             (Animation_OnFrame(&this->skelAnime, 40.0f) || Animation_OnFrame(&this->skelAnime, 100.0f))) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_WALK);
         }
-        if (this->animationId == GIANT_ANIMATION_FALLING_OVER && Animation_OnFrame(&this->skelAnime, 40.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
+        if ((this->animIndex == GIANT_ANIM_FALLING_OVER) && Animation_OnFrame(&this->skelAnime, 40.0f)) {
+            Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_VOICE_FAIL);
         }
-        if (this->sfxId != 0xFFFF &&
-            ((this->animationId == GIANT_ANIMATION_BIG_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
-             this->animationId == GIANT_ANIMATION_BIG_CALL_LOOP)) {
+        if ((this->sfxId != 0xFFFF) &&
+            (((this->animIndex == GIANT_ANIM_BIG_CALL_START) && (this->skelAnime.curFrame >= 18.0f)) ||
+             (this->animIndex == GIANT_ANIM_BIG_CALL_LOOP))) {
             func_800B9010(&this->actor, this->sfxId);
         }
-        if ((this->animationId == GIANT_ANIMATION_SMALL_CALL_START && this->skelAnime.curFrame >= 18.0f) ||
-            this->animationId == GIANT_ANIMATION_SMALL_CALL_LOOP) {
+        if (((this->animIndex == GIANT_ANIM_SMALL_CALL_START) && (this->skelAnime.curFrame >= 18.0f)) ||
+            (this->animIndex == GIANT_ANIM_SMALL_CALL_LOOP)) {
             func_800B9010(&this->actor, NA_SE_EV_KYOJIN_SIGN - SFX_FLAG);
         }
     }
 }
 
-void EnGiant_UpdatePosition(EnGiant* this, PlayState* play, u32 actionIndex) {
-    CsCmdActorAction* actorAction = play->csCtx.actorActions[actionIndex];
-    f32 startPosY = actorAction->startPos.y;
+void EnGiant_UpdatePosition(EnGiant* this, PlayState* play, u32 cueChannel) {
+    CsCmdActorCue* cue = play->csCtx.actorCues[cueChannel];
+    f32 startPosY = cue->startPos.y;
     s32 pad[2];
-    f32 endPosY = actorAction->endPos.y;
-    f32 scale = Environment_LerpWeight(actorAction->endFrame, actorAction->startFrame, play->csCtx.frames);
+    f32 endPosY = cue->endPos.y;
+    f32 scale = Environment_LerpWeight(cue->endFrame, cue->startFrame, play->csCtx.curFrame);
 
     this->actor.world.pos.y = ((endPosY - startPosY) * scale) + startPosY;
 }
 
 void EnGiant_PerformClockTowerSuccessActions(EnGiant* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, this->actorActionCommand)) {
-        EnGiant_UpdatePosition(this, play, Cutscene_GetActorActionIndex(play, this->actorActionCommand));
-        if (this->csAction !=
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
-            this->csAction =
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
-            EnGiant_ChangeAnimationBasedOnCsAction(this);
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        EnGiant_UpdatePosition(this, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
+            this->cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+            EnGiant_ChangeAnimBasedOnCueId(this);
         }
         EnGiant_UpdateAlpha(this);
     }
 
     EnGiant_PlaySound(this);
-    if (this->csAction == GIANT_CS_ACTION_STRUGGLING) {
+    if (this->cueId == GIANT_CUE_ID_STRUGGLING) {
         func_800B9010(&this->actor, NA_SE_IT_KYOJIN_BEARING - SFX_FLAG);
     }
     EnGiant_PlayAndUpdateAnimation(this);
@@ -424,13 +458,11 @@ void EnGiant_PlayClockTowerFailureAnimation(EnGiant* this, PlayState* play) {
 void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play) {
     this->actor.draw = EnGiant_Draw;
 
-    if (Cutscene_CheckActorAction(play, this->actorActionCommand)) {
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->actorActionCommand));
-        if (this->csAction !=
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action) {
-            this->csAction =
-                play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->actorActionCommand)]->action;
-            EnGiant_ChangeAnimationBasedOnCsAction(this);
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
+        if (this->cueId != play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
+            this->cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id;
+            EnGiant_ChangeAnimBasedOnCueId(this);
         }
         EnGiant_UpdateAlpha(this);
     }
@@ -449,7 +481,7 @@ void EnGiant_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->blinkTimer == 0) {
         blinkTimerTemp = 0;
@@ -494,7 +526,7 @@ void EnGiant_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         if (this->alpha >= 255) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));
             gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
             Scene_SetRenderModeXlu(play, 0, 1);
@@ -502,10 +534,10 @@ void EnGiant_Draw(Actor* thisx, PlayState* play) {
                                   this->skelAnime.dListCount, NULL, EnGiant_PostLimbDrawOpa, thisx);
         } else if (this->alpha > 0) {
             if (this->alpha >= 129) {
-                func_8012C2B4(POLY_XLU_DISP++);
+                Gfx_SetupDL71(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 2, 2);
             } else {
-                func_8012C304(POLY_XLU_DISP++);
+                Gfx_SetupDL72(POLY_XLU_DISP++);
                 Scene_SetRenderModeXlu(play, 1, 2);
             }
             gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sFaceTextures[this->faceIndex]));

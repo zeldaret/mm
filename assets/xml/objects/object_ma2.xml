@@ -93,7 +93,7 @@
         <Limb Name="gCremiaDress4Limb" Type="Standard" EnumName="CREMIA_LIMB_DRESS_4" Offset="0x15BC8" />
         
         <!-- Cremia Skeleton -->
-        <Skeleton Name="gCremiaSkel" Type="Flex" LimbType="Standard" LimbNone="CREMIA_LIMB_NONE" LimbMax="CREMIA_LIMB_MAX" EnumName="CremiaLimbs" Offset="0x15C28" />
+        <Skeleton Name="gCremiaSkel" Type="Flex" LimbType="Standard" LimbNone="CREMIA_LIMB_NONE" LimbMax="CREMIA_LIMB_MAX" EnumName="CremiaLimb" Offset="0x15C28" />
 
         <!-- Cremia Animation -->
         <Animation Name="gCremiaWalkAnim" Offset="0x16720" /> <!-- Original name is "kl_walk" -->

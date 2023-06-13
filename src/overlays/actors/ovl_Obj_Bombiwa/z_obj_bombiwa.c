@@ -24,7 +24,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play);
 void func_8093A418(Actor* thisx, PlayState* play);
 void func_8093A608(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Bombiwa_InitVars = {
+ActorInit Obj_Bombiwa_InitVars = {
     ACTOR_OBJ_BOMBIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -77,11 +77,11 @@ static ColliderCylinderInit sCylinderInit2 = {
 };
 
 typedef struct {
-    /* 0x00 */ ColliderCylinderInit* collider;
-    /* 0x04 */ ActorShadowFunc unk_04;
-    /* 0x08 */ ActorFunc unk_08;
-    /* 0x0C */ s32 (*unk_0C)(Actor*);
-} ObjBombiwaStruct2;
+    /* 0x0 */ ColliderCylinderInit* collider;
+    /* 0x4 */ ActorShadowFunc unk_04;
+    /* 0x8 */ ActorFunc unk_08;
+    /* 0xC */ s32 (*unk_0C)(Actor*);
+} ObjBombiwaStruct2; // size = 0x10
 
 static ObjBombiwaStruct2 D_8093A998[] = {
     { &sCylinderInit1, ActorShadow_DrawCircle, func_8093A418, func_809393B0 },
@@ -183,7 +183,7 @@ void ObjBombiwa_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
 
     if (Flags_GetSwitch(play, OBJBOMBIWA_GET_7F(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -350,7 +350,7 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
 
         if (params == OBJBOMBIWA_100_0) {
             func_80939794(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_80939994(play, &this->actor.world.pos);
             this->actor.flags |= ACTOR_FLAG_10;
@@ -439,7 +439,7 @@ void func_8093A1F0(ObjBombiwa* this, PlayState* play) {
 
     this->unk_201--;
     if ((this->unk_200 >= 4) || (this->unk_201 <= 0)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -465,7 +465,7 @@ void func_8093A418(Actor* thisx, PlayState* play) {
         sp28 = (2300.0f - this->actor.projectedPos.z) * 2.55f;
 
         this->actor.shape.shadowAlpha = sp28 * (32.0f / 51);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s32)sp28);
@@ -489,20 +489,20 @@ void func_8093A608(Actor* thisx, PlayState* play) {
     if (this->actionFunc == func_80939EF4) {
         if ((this->actor.projectedPos.z <= 2200.0f) ||
             ((this->unk_203 & 1) && (this->actor.projectedPos.z < 2300.0f))) {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
             gSPDisplayList(POLY_OPA_DISP++, object_bombiwa_DL_004560);
 
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_004688);
         } else if (this->actor.projectedPos.z < 2300.0f) {
             sp38 = (2300.0f - this->actor.projectedPos.z) * 2.55f;
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
             gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -510,7 +510,7 @@ void func_8093A608(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, object_bombiwa_DL_004560);
         }
     } else {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->unk_190); i++) {
             ptr = &this->unk_190[i];

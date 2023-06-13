@@ -23,7 +23,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 s32 unused; // Needed for bss
 
-const ActorInit Arrow_Ice_InitVars = {
+ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -57,7 +57,7 @@ void ArrowIce_Init(Actor* thisx, PlayState* play) {
 }
 
 void ArrowIce_Destroy(Actor* thisx, PlayState* play) {
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     (void)"消滅"; // Unreferenced in retail, means "Disappearance"
 }
 
@@ -65,7 +65,7 @@ void ArrowIce_Charge(ArrowIce* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -136,7 +136,7 @@ void ArrowIce_Hit(ArrowIce* this, PlayState* play) {
 
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -146,7 +146,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     s32 pad;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     // copy position and rotation from arrow
@@ -160,13 +160,13 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play) {
     ArrowIce_LerpFiredPosition(&this->firedPos, &this->actor.world.pos, 0.05f);
 
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_ICE);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_ICE);
         ArrowIce_SetupAction(this, ArrowIce_Hit);
         this->timer = 32;
         this->alpha = 255;
     } else if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             this->alpha -= 25;
         }
@@ -177,7 +177,7 @@ void ArrowIce_Update(Actor* thisx, PlayState* play) {
     ArrowIce* this = THIS;
 
     if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     } else {
         this->actionFunc(this, play);
@@ -204,7 +204,7 @@ void ArrowIce_Draw(Actor* thisx, PlayState* play) {
 
         // Draw blue effect over the screen when arrow hits
         if (this->blueingEffectMagnitude > 0.0f) {
-            POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
+            POLY_XLU_DISP = Gfx_SetupDL57(POLY_XLU_DISP);
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, (s32)(this->blueingEffectMagnitude * 10.0f) & 0xFF,
                             (s32)(50.0f * this->blueingEffectMagnitude) & 0xFF,
                             (s32)(150.0f * this->blueingEffectMagnitude) & 0xFF);
@@ -214,7 +214,7 @@ void ArrowIce_Draw(Actor* thisx, PlayState* play) {
         }
 
         // Draw ice on the arrow
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 170, 255, 255, (s32)(this->alpha * 0.5f) & 0xFF);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, 128);
         Matrix_RotateZYX(0x4000, 0, 0, MTXMODE_APPLY);

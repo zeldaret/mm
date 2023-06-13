@@ -12,7 +12,7 @@
 #define THIS ((EnFish*)thisx)
 
 void EnFish_Init(Actor* thisx, PlayState* play);
-void EnFish_Destroy(Actor* thisx, PlayState* play);
+void EnFish_Destroy(Actor* thisx, PlayState* play2);
 void EnFish_Update(Actor* thisx, PlayState* play);
 void EnFish_Draw(Actor* thisx, PlayState* play);
 
@@ -68,7 +68,7 @@ static Color_RGB8 D_8091FA94[] = {
     { 215, 97, 7 },
 };
 
-const ActorInit En_Fish_InitVars = {
+ActorInit En_Fish_InitVars = {
     ACTOR_EN_FISH,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -167,7 +167,7 @@ Actor* func_8091D944(EnFish* this, PlayState* play) {
 }
 
 s32 func_8091DA14(EnFish* this, PlayState* play) {
-    return play->sceneNum == SCENE_LABO && func_8091D944(this, play);
+    return (play->sceneId == SCENE_LABO) && func_8091D944(this, play);
 }
 
 void EnFish_Init(Actor* thisx, PlayState* play) {
@@ -264,7 +264,7 @@ void func_8091DEE4(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(5, D_8091FACC[this->unk_278]);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_268 = 0;
@@ -278,12 +278,12 @@ void func_8091DF68(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 0.0f, 0.05f, 0.3f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 0.0f, 0.05f, 0.3f, 0.0f);
 
-    if ((thisx->speedXZ * 1.4f) + 0.8f > 2.0f) {
+    if ((thisx->speed * 1.4f) + 0.8f > 2.0f) {
         this->skelAnime.playSpeed = 2.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.4f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.4f) + 0.8f;
     }
 
     this->unk_270 >>= 1;
@@ -314,7 +314,7 @@ void func_8091E070(EnFish* this) {
         phi_a1 = D_8091FAD4[this->unk_278];
     }
     this->unk_240 = Rand_S16Offset(15, phi_a1);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_26C = 0;
@@ -327,7 +327,7 @@ void func_8091E128(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 1.8f, 0.08f, 0.4f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 1.8f, 0.08f, 0.4f, 0.0f);
 
     if ((func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(80.0f)) || (this->unk_240 < 4)) {
         this->unk_270 = this->unk_264;
@@ -342,10 +342,10 @@ void func_8091E128(Actor* thisx, PlayState* play) {
         this->unk_24C = 0.0f;
     }
 
-    if ((thisx->speedXZ * 1.5f) + 0.8f > 4.0f) {
+    if ((thisx->speed * 1.5f) + 0.8f > 4.0f) {
         this->skelAnime.playSpeed = 4.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 0.8f;
     }
 
     if (this->unk_240 <= 0) {
@@ -361,7 +361,7 @@ void func_8091E2E0(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(10, 40);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unk_26E = 400;
     this->unk_272 = 400;
     this->unk_268 = 0;
@@ -378,7 +378,7 @@ void func_8091E34C(Actor* thisx, PlayState* play2) {
     s32 pad;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 4.2f, 0.08f, 1.4f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 4.2f, 0.08f, 1.4f, 0.0f);
 
     if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(160.0f)) {
         this->unk_270 = this->unk_264;
@@ -418,10 +418,10 @@ void func_8091E34C(Actor* thisx, PlayState* play2) {
         this->unk_24C = 0.0f;
     }
 
-    if ((thisx->speedXZ * 1.5f) + 0.8f > 4.0f) {
+    if ((thisx->speed * 1.5f) + 0.8f > 4.0f) {
         this->skelAnime.playSpeed = 4.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 0.8f;
     }
 
     if ((this->unk_240 <= 0) || (!sp3C && (sp38 == 0))) {
@@ -440,7 +440,7 @@ void func_8091E5EC(EnFish* this) {
     this->unk_26C = 0;
     func_8091D660(this);
     this->unk_240 = Rand_S16Offset(10, 30);
-    this->unk_248 = 0;
+    this->updBgCheckInfoFlags = 0;
     this->unkFunc = func_8091E658;
 }
 
@@ -453,7 +453,7 @@ void func_8091E658(Actor* thisx, PlayState* play) {
     s16 sp32;
 
     func_8091DD48(this);
-    Math_SmoothStepToF(&thisx->speedXZ, 1.8f, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 1.8f, 0.1f, 0.5f, 0.0f);
 
     if (func_8091D630(&thisx->world.pos, &thisx->home.pos) > SQ(80.0f)) {
         this->unk_270 = this->unk_264;
@@ -475,10 +475,10 @@ void func_8091E658(Actor* thisx, PlayState* play) {
         this->unk_24C = 1.2f;
     }
 
-    if ((thisx->speedXZ * 1.5f) + 0.8f > 4.0f) {
+    if ((thisx->speed * 1.5f) + 0.8f > 4.0f) {
         this->skelAnime.playSpeed = 4.0f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 0.8f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 0.8f;
     }
 
     if (this->unk_240 <= 0) {
@@ -493,7 +493,7 @@ void func_8091E810(EnFish* this) {
     this->actor.terminalVelocity = -10.0f;
     this->actor.shape.yOffset = 0.0f;
     func_8091D6C4(this);
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unkFunc = func_8091E880;
     this->unk_24C = 0.0f;
     this->unk_240 = 300;
@@ -502,16 +502,16 @@ void func_8091E810(EnFish* this) {
 void func_8091E880(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.1f, 0.1f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.1f, 0.1f, 0.0f);
     this->unk_26E = 0x43;
     this->unk_272 = 0x43;
     this->unk_268 = 0x4000;
     this->unk_26C = -0x4000;
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->unk_240 = 400;
         func_8091E9A4(this);
-    } else if (this->actor.bgCheckFlags & 0x20) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
         func_8091D840(thisx, play, 10, 15.0f);
         if (func_8091DA14(this, play)) {
             func_8091EF30(this);
@@ -520,7 +520,7 @@ void func_8091E880(Actor* thisx, PlayState* play) {
         }
     } else if ((this->unk_240 <= 0) && (this->actor.params == ENFISH_0) &&
                (this->actor.floorHeight < BGCHECK_Y_MIN + 10)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -551,10 +551,10 @@ void func_8091E9A4(EnFish* this) {
     this->actor.shape.yOffset = 300.0f;
     func_8091D6C4(this);
     this->unkFunc = func_8091EAF0;
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unk_24C = 0.0f;
     if (sp24 && (this->actor.draw != NULL)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
     }
 }
 
@@ -563,7 +563,7 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
     s32 sp40 = play->state.frames;
     s16 phi_v1;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, Rand_ZeroOne() * 0.2f, 0.1f, 0.1f, 0.0f);
     phi_v1 = (s16)((((sp40 >> 5) & 2) | ((sp40 >> 2) & 1)) << 0xB) * 0.3f;
     if (sp40 & 4) {
         phi_v1 *= -1;
@@ -582,20 +582,23 @@ void func_8091EAF0(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_240 <= 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_240 <= 60) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_240 <= 60) {
         if (sp40 & 4) {
             this->actor.draw = EnFish_Draw;
         } else {
             this->actor.draw = NULL;
         }
-    } else if (this->actor.bgCheckFlags & 0x20) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         if (func_8091DA14(this, play)) {
             func_8091EF30(this);
         } else {
             func_8091ECF4(this);
         }
-    } else if (this->actor.bgCheckFlags & 1) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         func_8091E9A4(this);
     }
 }
@@ -609,7 +612,7 @@ void func_8091ECF4(EnFish* this) {
     this->unk_240 = 200;
     func_8091D660(this);
     this->unkFunc = func_8091ED70;
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unk_24C = 0.0f;
 }
 
@@ -622,12 +625,12 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
         func_8091D840(thisx, play, 2, 25.0f);
     }
 
-    Math_SmoothStepToF(&thisx->speedXZ, 2.8f, 0.1f, 0.4f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, 2.8f, 0.1f, 0.4f, 0.0f);
 
-    if ((thisx->bgCheckFlags & 8) || !(thisx->bgCheckFlags & 0x20)) {
+    if ((thisx->bgCheckFlags & BGCHECKFLAG_WALL) || !(thisx->bgCheckFlags & BGCHECKFLAG_WATER)) {
         sp2E = Math_Vec3f_Yaw(&thisx->world.pos, &thisx->home.pos);
         thisx->home.rot.y = Rand_S16Offset(-100, 100) + sp2E;
-        thisx->speedXZ *= 0.5f;
+        thisx->speed *= 0.5f;
     }
 
     this->unk_268 = 0;
@@ -637,7 +640,7 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
     this->unk_270 = 2000;
     this->unk_272 = 0x29B;
 
-    if (thisx->bgCheckFlags & 1) {
+    if (thisx->bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y - 4.0f, 2.0f);
     } else {
         Math_StepToF(&thisx->world.pos.y, thisx->home.pos.y - 10.0f, 2.0f);
@@ -648,14 +651,14 @@ void func_8091ED70(Actor* thisx, PlayState* play) {
         func_8091D728(this);
     }
 
-    if ((thisx->speedXZ * 1.5f) + 1.0f > 4.8f) {
+    if ((thisx->speed * 1.5f) + 1.0f > 4.8f) {
         this->skelAnime.playSpeed = 4.8f;
     } else {
-        this->skelAnime.playSpeed = (thisx->speedXZ * 1.5f) + 1.0f;
+        this->skelAnime.playSpeed = (thisx->speed * 1.5f) + 1.0f;
     }
 
     if (this->unk_240 <= 0) {
-        Actor_MarkForDeath(thisx);
+        Actor_Kill(thisx);
     }
 }
 
@@ -674,7 +677,7 @@ void func_8091EF30(EnFish* this) {
     this->unk_240 = 15;
     this->unk_279 = 10;
     this->unkFunc = func_8091EFE8;
-    this->unk_248 = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
     this->unk_24C = 0.0f;
 }
 
@@ -688,7 +691,7 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     s16 sp2E;
 
     if (sp3C == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -697,18 +700,19 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_277 == 0) {
-        Math_SmoothStepToF(&this->actor.speedXZ, 2.8f, 0.1f, 0.4f, 0.0f);
+        Math_SmoothStepToF(&this->actor.speed, 2.8f, 0.1f, 0.4f, 0.0f);
         if (this->unk_240 < 6) {
-            this->actor.speedXZ *= 0.75f;
+            this->actor.speed *= 0.75f;
         }
     }
 
-    if ((this->actor.bgCheckFlags & 8) && !(this->actor.bgCheckFlags & 0x20)) {
-        this->actor.speedXZ *= 0.5f;
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
+        this->actor.speed *= 0.5f;
     }
 
-    if (((Rand_Next() >> 0x1B) == 0) || ((this->actor.bgCheckFlags & 8) && ((Rand_Next() >> 0x1E) == 0)) ||
-        !(this->actor.bgCheckFlags & 0x20)) {
+    if (((Rand_Next() >> 0x1B) == 0) ||
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && ((Rand_Next() >> 0x1E) == 0)) ||
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         temp_f0 = Rand_ZeroOne();
         sp34 = (1.0f - SQ(temp_f0)) * sp3C->home.rot.x;
         sp30 = Rand_ZeroOne() * sp3C->home.rot.z;
@@ -757,10 +761,10 @@ void func_8091EFE8(Actor* thisx, PlayState* play) {
     }
 
     this->actor.velocity.y *= 0.8f;
-    if ((this->actor.speedXZ * 1.5f) + 1.0f > 4.8f) {
+    if ((this->actor.speed * 1.5f) + 1.0f > 4.8f) {
         this->skelAnime.playSpeed = 4.8f;
     } else {
-        this->skelAnime.playSpeed = (this->actor.speedXZ * 1.5f) + 1.0f;
+        this->skelAnime.playSpeed = (this->actor.speed * 1.5f) + 1.0f;
     }
 }
 
@@ -768,7 +772,7 @@ void func_8091F344(EnFish* this) {
     this->actor.gravity = 0.0f;
     this->actor.terminalVelocity = 0.0f;
     this->unk_240 = Rand_S16Offset(5, 35);
-    this->unk_248 = 1;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1;
     this->unk_268 = 0;
     this->unk_26C = 0;
     this->unk_26E = 1500;
@@ -801,7 +805,7 @@ void func_8091F3BC(Actor* thisx, PlayState* play) {
 
     func_8091DD48(this);
     Math_StepToF(&this->actor.world.pos.y, this->actor.home.pos.y, 2.0f);
-    Math_SmoothStepToF(&this->actor.speedXZ, sp3C->x, sp3C->y, sp3C->z, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, sp3C->x, sp3C->y, sp3C->z, 0.0f);
     this->unk_24C = 0.0f;
 
     if (func_8091D630(&this->actor.world.pos, &this->actor.home.pos) > SQ(15.0f)) {
@@ -817,7 +821,7 @@ void func_8091F3BC(Actor* thisx, PlayState* play) {
         phi_f0 = 0.0f;
     }
 
-    temp_f2 = this->actor.speedXZ + 0.4f + phi_f0;
+    temp_f2 = this->actor.speed + 0.4f + phi_f0;
     this->skelAnime.playSpeed = CLAMP(temp_f2, 0.5f, 1.6f);
 
     if (this->unk_240 <= 0) {
@@ -852,14 +856,15 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
         func_8091D7C4(this);
         Actor_MoveWithGravity(&this->actor);
-        if (this->unk_248 != 0) {
-            u32 temp = (play->sceneNum ^ SCENE_LABO) != 0;
+        if (this->updBgCheckInfoFlags != 0) {
+            u32 temp = (play->sceneId != SCENE_LABO);
+
             phi_f0 = BREG(1) + 10.0f;
 
             if (temp) {
                 phi_f0 = 6.0f;
             }
-            Actor_UpdateBgCheckInfo(play, &this->actor, 17.5f, phi_f0, 0.0f, this->unk_248);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 17.5f, phi_f0, 0.0f, this->updBgCheckInfoFlags);
         }
 
         if ((this->actor.xzDistToPlayer < 70.0f) && (this->unkFunc != func_8091EFE8)) {
@@ -877,12 +882,13 @@ void func_8091F5A4(Actor* thisx, PlayState* play) {
         if (Actor_HasParent(&this->actor, play)) {
             this->actor.parent = NULL;
             if (this->actor.params == ENFISH_0) {
-                Actor_MarkForDeath(&this->actor);
-            } else {
-                func_8091D904(this);
+                Actor_Kill(&this->actor);
+                return;
             }
+
+            func_8091D904(this);
         } else if (func_8091DDF4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 80.0f, 25.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 25.0f);
         }
     }
 }
@@ -891,7 +897,7 @@ void func_8091F830(Actor* thisx, PlayState* play) {
     EnFish* this = THIS;
 
     if (this->actor.params == ENFISH_1) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -942,7 +948,7 @@ void EnFish_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, colour->r, colour->g, colour->b, 255);
 

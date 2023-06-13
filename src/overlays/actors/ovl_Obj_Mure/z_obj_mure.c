@@ -20,7 +20,7 @@ void ObjMure_ActiveState(ObjMure* this, PlayState* play);
 void ObjMure_KillActors(ObjMure* this, PlayState* play);
 void ObjMure_CheckChildren(ObjMure* this, PlayState* play);
 
-const ActorInit Obj_Mure_InitVars = {
+ActorInit Obj_Mure_InitVars = {
     ACTOR_OBJ_MURE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -73,7 +73,8 @@ typedef enum {
 } ObjMureChildState;
 
 s32 func_808D78D0(ObjMure* this, PlayState* play) {
-    if (this->type == OBJMURE_TYPE_FISH || this->type == OBJMURE_TYPE_BUGS || this->type == OBJMURE_TYPE_BUTTERFLY) {
+    if ((this->type == OBJMURE_TYPE_FISH) || (this->type == OBJMURE_TYPE_BUGS) ||
+        (this->type == OBJMURE_TYPE_BUTTERFLY)) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
     } else {
         return false;
@@ -91,20 +92,20 @@ s32 func_808D7928(ObjMure* this, PlayState* play) {
 void ObjMure_Init(Actor* thisx, PlayState* play) {
     ObjMure* this = THIS;
 
-    this->chNum = OBJ_MURE_GET_CHNUM(this->actor.params);
-    this->ptn = OBJ_MURE_GET_PTN(this->actor.params);
-    this->svNum = OBJ_MURE_GET_SVNUM(this->actor.params);
-    this->type = OBJ_MURE_GET_TYPE(this->actor.params);
+    this->chNum = OBJ_MURE_GET_CHNUM(&this->actor);
+    this->ptn = OBJ_MURE_GET_PTN(&this->actor);
+    this->svNum = OBJ_MURE_GET_SVNUM(&this->actor);
+    this->type = OBJ_MURE_GET_TYPE(&this->actor);
     if (this->ptn >= 4) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->type >= OBJMURE_TYPE_MAX) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (!func_808D7928(this, play)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc = ObjMure_InitialAction;
@@ -135,12 +136,13 @@ void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
         switch (this->childrenStates[i]) {
             case OBJMURE_CHILD_STATE_DEAD:
                 break;
+
             case OBJMURE_CHILD_STATE_2:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
                     &play->actorCtx, play, sSpawnActorIds[this->type], pos.x, pos.y, pos.z, this->actor.world.rot.x,
-                    this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.cutscene,
-                    this->actor.unk20, NULL);
+                    this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.csId,
+                    this->actor.halfDaysBits, NULL);
                 if (this->children[i] != NULL) {
                     if (this->type == 0x90) {
                         ((ObjMureChild*)this->children[i])->unk_197 = 1;
@@ -148,12 +150,13 @@ void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
                     this->children[i]->room = this->actor.room;
                 }
                 break;
+
             default:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
                     &play->actorCtx, play, sSpawnActorIds[this->type], pos.x, pos.y, pos.z, this->actor.world.rot.x,
-                    this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.cutscene,
-                    this->actor.unk20, NULL);
+                    this->actor.world.rot.y, this->actor.world.rot.z, sSpawnParams[this->type], this->actor.csId,
+                    this->actor.halfDaysBits, NULL);
                 if (this->children[i] != NULL) {
                     this->children[i]->room = this->actor.room;
                 }
@@ -174,8 +177,8 @@ void ObjMure_SpawnActors1(ObjMure* this, PlayState* play2) {
         this->children[i] = Actor_SpawnAsChildAndCutscene(
             &play2->actorCtx, play, sSpawnActorIds[this->type], spawnPos.x, spawnPos.y, spawnPos.z, actor->world.rot.x,
             actor->world.rot.y, actor->world.rot.z,
-            (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.cutscene,
-            this->actor.unk20, NULL);
+            (this->type == OBJMURE_TYPE_BUTTERFLY && i == 0) ? 1 : sSpawnParams[this->type], this->actor.csId,
+            this->actor.halfDaysBits, NULL);
         if (this->children[i] != NULL) {
             this->childrenStates[i] = OBJMURE_CHILD_STATE_0;
             this->children[i]->room = actor->room;
@@ -190,8 +193,12 @@ void ObjMure_SpawnActors(ObjMure* this, PlayState* play) {
         case 0:
             ObjMure_SpawnActors0(&this->actor, play);
             break;
+
         case 1:
             ObjMure_SpawnActors1(this, play);
+            break;
+
+        default:
             break;
     }
 }
@@ -205,18 +212,20 @@ void ObjMure_KillActorsImpl(ObjMure* this, PlayState* play) {
             case OBJMURE_CHILD_STATE_DEAD:
                 this->children[i] = NULL;
                 break;
+
             case OBJMURE_CHILD_STATE_2:
                 if (this->children[i] != NULL) {
-                    Actor_MarkForDeath(this->children[i]);
+                    Actor_Kill(this->children[i]);
                     this->children[i] = NULL;
                 }
                 break;
+
             default:
                 if (this->children[i] != NULL) {
                     if (Actor_HasParent(this->children[i], play)) {
                         this->children[i] = NULL;
                     } else {
-                        Actor_MarkForDeath(this->children[i]);
+                        Actor_Kill(this->children[i]);
                         this->children[i] = NULL;
                     }
                 }
@@ -244,7 +253,7 @@ void ObjMure_CheckChildren(ObjMure* this, PlayState* play) {
                     this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
                     this->children[i] = NULL;
                 }
-            } else if (this->childrenStates[i] == OBJMURE_CHILD_STATE_2 && this->children[i]->update == NULL) {
+            } else if ((this->childrenStates[i] == OBJMURE_CHILD_STATE_2) && (this->children[i]->update == NULL)) {
                 this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
                 this->children[i] = NULL;
             }
@@ -367,7 +376,7 @@ void ObjMure_GroupBehavior1(ObjMure* this, PlayState* play) {
     maxChildren = ObjMure_GetMaxChildSpawns(this);
     for (i = 0; i < maxChildren; i++) {
         if (this->children[i] != NULL) {
-            if (this->children[i]->child != NULL && this->children[i]->child->update == NULL) {
+            if ((this->children[i]->child != NULL) && (this->children[i]->child->update == NULL)) {
                 this->children[i]->child = NULL;
             }
         }
@@ -380,7 +389,7 @@ static ObjMureActionFunc sTypeGroupBehaviorFunc[] = {
 
 void ObjMure_ActiveState(ObjMure* this, PlayState* play) {
     ObjMure_CheckChildren(this, play);
-    if (sZClip[this->type] + 40.0f <= fabsf(this->actor.projectedPos.z)) {
+    if ((sZClip[this->type] + 40.0f) <= fabsf(this->actor.projectedPos.z)) {
         this->actionFunc = ObjMure_CulledState;
         this->actor.flags &= ~ACTOR_FLAG_10;
         ObjMure_KillActors(this, play);

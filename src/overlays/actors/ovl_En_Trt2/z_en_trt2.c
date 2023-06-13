@@ -26,20 +26,33 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play);
 void func_80AD5234(EnTrt2* this, PlayState* play);
 void func_80AD56E8(Actor* thisx, PlayState* play);
 
-static AnimationInfoS sAnimations[] = {
-    { &object_trt_Anim_00DE68, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00EE98, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00FD34, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_0030EC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_003D78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_trt_Anim_00D52C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_000A44, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_001EF4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_002224, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_trt_Anim_002CB0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum {
+    /* 0 */ TRT2_ANIM_IDLE,
+    /* 1 */ TRT2_ANIM_HALF_AWAKE,
+    /* 2 */ TRT2_ANIM_SLEEPING,
+    /* 3 */ TRT2_ANIM_WAKE_UP,
+    /* 4 */ TRT2_ANIM_SURPRISED,
+    /* 5 */ TRT2_ANIM_HANDS_ON_COUNTER,
+    /* 6 */ TRT2_ANIM_HOVER,
+    /* 7 */ TRT2_ANIM_FLY_LOOK_AROUND,
+    /* 8 */ TRT2_ANIM_FLY_DOWN,
+    /* 9 */ TRT2_ANIM_FLY
+} Trt2Animation;
+
+static AnimationInfoS sAnimationInfo[] = {
+    { &gKotakeIdleAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeHalfAwakeAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeSleepingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeWakeUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeSurprisedAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+    { &gKotakeHandsOnCounterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeHoverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyLookAroundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyDownAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-const ActorInit En_Trt2_InitVars = {
+ActorInit En_Trt2_InitVars = {
     ACTOR_EN_TRT2,
     ACTORCAT_NPC,
     FLAGS,
@@ -108,18 +121,18 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0x0),
 };
 
-void func_80AD3380(SkelAnime* skelAnime, AnimationInfoS* animation, s32 arg2) {
-    f32 phi_f0;
+void EnTrt2_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
+    f32 endFrame;
 
-    animation += arg2;
+    animationInfo += animIndex;
 
-    if (animation->frameCount < 0) {
-        phi_f0 = Animation_GetLastFrame(animation->animation);
+    if (animationInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(animationInfo->animation);
     } else {
-        phi_f0 = animation->frameCount;
+        endFrame = animationInfo->frameCount;
     }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, phi_f0,
-                     animation->mode, animation->morphFrames);
+    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame, endFrame,
+                     animationInfo->mode, animationInfo->morphFrames);
 }
 
 void func_80AD341C(EnTrt2* this, PlayState* play) {
@@ -131,13 +144,13 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((gSaveContext.save.weekEventReg[85] & 0x10) && !(gSaveContext.save.weekEventReg[84] & 0x40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
         this->unk_3A8 = 0x838;
-    } else if (gSaveContext.save.weekEventReg[17] & 1) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -151,7 +164,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
     if (this->path != NULL) {
         phi_a1 = func_80AD48F8(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             phi_a1 = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
@@ -163,28 +176,28 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
                 this->unk_1E4++;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithGravity(&this->actor);
 
     if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(20, 20);
-        func_80AD3380(&this->skelAnime, sAnimations, 7);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_LOOK_AROUND);
         this->unk_3B2 = 5;
     }
 }
 
 void func_80AD3664(EnTrt2* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         if (this->unk_3D9 == 0) {
             this->unk_3B2 = 1;
         } else {
             this->unk_3B2 = 2;
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_3DA);
+        CutsceneManager_Queue(this->csId);
         return;
     }
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
@@ -203,10 +216,10 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = SubS_GetPathByIndex(play, this->path->unk1, -1);
-                ActorCutscene_Stop(this->unk_3DA);
-                this->unk_3DA = ActorCutscene_GetAdditionalCutscene(this->unk_3DA);
-                ActorCutscene_SetIntentToPlay(this->unk_3DA);
+                this->path = SubS_GetPathByIndex(play, this->path->additionalPathIndex, PATH_INDEX_NONE);
+                CutsceneManager_Stop(this->csId);
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+                CutsceneManager_Queue(this->csId);
                 this->unk_3B2 = 0;
             } else {
                 this->unk_1E4++;
@@ -216,7 +229,7 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -230,7 +243,7 @@ void func_80AD381C(EnTrt2* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_10;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -238,7 +251,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
     Vec3s sp30;
 
     if (this->unk_3D9 == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->path != NULL) {
@@ -249,22 +262,22 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
         this->actor.world.rot.x = -this->actor.shape.rot.x;
         if (func_80AD475C(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_3DA);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
             } else {
                 this->unk_1E4++;
             }
         }
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_3DA);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
             } else {
                 sp30.y = this->actor.wallYaw;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
@@ -273,11 +286,11 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
 
 void func_80AD3A24(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
-    if (this->actor.speedXZ > 0.05f) {
-        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
+    if (this->actor.speed > 0.05f) {
+        Math_ApproachF(&this->actor.speed, 0.0f, 0.2f, 1.0f);
     } else if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(100, 50);
-        func_80AD3380(&this->skelAnime, sAnimations, 6);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -288,7 +301,7 @@ void func_80AD3AE4(EnTrt2* this, PlayState* play) {
         Math_ApproachF(&this->actor.velocity.y, 0.5f, 0.2f, 0.1f);
     } else {
         this->actor.velocity.y = 0.0f;
-        func_80AD3380(&this->skelAnime, sAnimations, 6);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
     Actor_MoveWithGravity(&this->actor);
@@ -298,7 +311,7 @@ void func_80AD3B6C(EnTrt2* this, PlayState* play) {
     if (DECR(this->unk_3B0) == 0) {
         this->unk_3B0 = 10;
         this->actor.velocity.y = -1.0f;
-        func_80AD3380(&this->skelAnime, sAnimations, 8);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_DOWN);
         this->unk_3B2 = 8;
     }
 }
@@ -311,7 +324,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
     this->actor.world.rot.y += this->unk_3C0;
     this->actor.shape.rot.y = this->actor.world.rot.y;
     if (this->actor.world.pos.y < 5.0f) {
-        func_80AD3380(&this->skelAnime, sAnimations, 9);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY);
         this->unk_3B2 = 9;
     }
 }
@@ -319,7 +332,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
 void func_80AD3C94(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, play);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk_3B2 = 0xF;
         }
     }
@@ -335,7 +348,7 @@ void func_80AD3CEC(EnTrt2* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         play->msgCtx.msgMode = 0x43;
         play->msgCtx.stateTimer = 4;
-        func_80AD3380(&this->skelAnime, sAnimations, 6);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
         this->unk_3B2 = 4;
     }
 }
@@ -365,7 +378,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
-            gSaveContext.save.weekEventReg[85] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
             this->unk_3A8 = 0x88E;
             Message_StartTextbox(play, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -378,11 +391,11 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
-                !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) ||
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
                 this->unk_3B2 = 12;
             } else {
-                gSaveContext.save.weekEventReg[85] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
                 this->unk_3A8 = 0x88E;
                 Message_StartTextbox(play, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
@@ -397,22 +410,22 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[12] & 0x10)) {
-            gSaveContext.save.weekEventReg[12] |= 0x10;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
         }
-        gSaveContext.save.weekEventReg[84] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_3B2 = 13;
     }
 }
@@ -420,10 +433,10 @@ void func_80AD40AC(EnTrt2* this, PlayState* play) {
 void func_80AD4110(EnTrt2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_3A8 = 0x84C;
-        func_80151938(play, this->unk_3A8);
+        Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -436,8 +449,8 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
-                func_80AD3380(&this->skelAnime, sAnimations, 6);
-                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+                EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
+                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
@@ -453,23 +466,23 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
 void func_80AD4298(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
-        player->stateFlags1 |= 0x20;
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_3B2 = 6;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->unk_3DA);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void func_80AD431C(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 &= ~0x20;
-    Actor_MarkForDeath(&this->actor);
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
+    Actor_Kill(&this->actor);
 }
 
 void func_80AD434C(EnTrt2* this, PlayState* play) {
@@ -479,16 +492,16 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y > 200.0f) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_3B2 = 0x13;
-            ActorCutscene_Stop(this->unk_3DA);
+            CutsceneManager_Stop(this->csId);
         } else {
             s32 i;
             Vec3f sp68;
             Vec3f sp5C = { 0.0f, 0.5f, 0.0f };
 
             for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i -= 2) {
-                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                sp68.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                sp68.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+                sp68.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &sp68, &sp5C, &sp5C, 100, 0, 3);
             }
 
@@ -501,7 +514,7 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -510,7 +523,7 @@ void func_80AD4550(EnTrt2* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
 
     if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
-        func_80AD3380(&this->skelAnime, sAnimations, 7);
+        EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_LOOK_AROUND);
         this->unk_3B2 = 17;
     }
 
@@ -539,7 +552,7 @@ void func_80AD4608(EnTrt2* this) {
 }
 
 void func_80AD469C(EnTrt2* this, PlayState* play) {
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_trt_Skel_00FEF0, &object_trt_Anim_000A44, NULL, NULL, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &gKotakeHoverAnim, NULL, NULL, 0);
     this->actor.draw = func_80AD56E8;
 }
 
@@ -579,7 +592,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
         phi_f14 = points[arg + 1].z - points[arg - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -602,7 +615,7 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
         phi_f12 = 0.0f;
     }
     *arg3 = SQ(phi_f14) + SQ(phi_f12);
-    return RADF_TO_BINANG(Math_Acot2F(phi_f12, phi_f14));
+    return RAD_TO_BINANG(Math_Atan2F_XY(phi_f12, phi_f14));
 }
 
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -626,9 +639,9 @@ f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 void func_80AD4A78(EnTrt2* this, PlayState* play) {
     Vec3f sp34;
 
-    sp34.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+    sp34.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
-    sp34.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+    sp34.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
     Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
 }
 
@@ -650,10 +663,10 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         sp24 = true;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80AD349C(this);
         this->unk_3B4 = this->unk_3B2;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 this->unk_3A8 = 0x84F;
             }
@@ -665,7 +678,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
         } else {
             this->unk_3A8 = 0x84F;
             this->unk_3D8 = true;
-            func_80AD3380(&this->skelAnime, sAnimations, 7);
+            EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_FLY_LOOK_AROUND);
             this->unk_3B2 = 7;
         }
     }
@@ -673,7 +686,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 }
 
 s32 func_80AD4C4C(EnTrt2* this) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             return true;
         }
@@ -687,9 +700,10 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted && !(this->actor.bgCheckFlags & 1) &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted &&
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.velocity.y = 1.5f;
         this->unk_3B2 = 16;
         return true;
@@ -708,7 +722,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;
@@ -724,39 +738,39 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
 
     this->unk_3C0 = 0;
     this->unk_3D8 = false;
-    this->unk_3DA = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->unk_3B6 = 20;
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (gSaveContext.save.weekEventReg[12] & 8) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[84] & 0x40) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if ((play->sceneNum == SCENE_20SICHITAI) || (play->sceneNum == SCENE_20SICHITAI2)) {
+    if ((play->sceneId == SCENE_20SICHITAI) || (play->sceneId == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
-            if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
-                gSaveContext.save.weekEventReg[15] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_15_80);
                 this->unk_3B2 = 3;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (gSaveContext.save.day == 2) {
-        if (gSaveContext.save.weekEventReg[15] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
             this->unk_3B2 = 4;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (gSaveContext.save.day == 3) {
@@ -777,8 +791,8 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
     D_80AD5910[this->unk_3B2](this, play);
     Actor_MoveWithGravity(&this->actor);
 
-    if (play->sceneNum != SCENE_20SICHITAI) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    if (play->sceneId != SCENE_20SICHITAI) {
+        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     Actor_SetFocus(&this->actor, 90.0f);
@@ -837,9 +851,9 @@ void func_80AD5234(EnTrt2* this, PlayState* play) {
     sp40 = player->actor.world.pos;
 
     if (this->unk_3B2 == 8) {
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        sp40.y = player->bodyPartsPos[7].y + 45.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 45.0f;
     }
 
     sp34 = this->actor.world.pos;
@@ -876,7 +890,8 @@ void func_80AD5394(s16 arg0, s16 arg1, Vec3f* arg2, Vec3s* arg3, s32 arg4) {
 s32 EnTrt2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnTrt2* this = THIS;
 
-    if ((limbIndex == 8) || (limbIndex == 13) || (limbIndex == 19)) {
+    if ((limbIndex == KOTAKE_LIMB_TORSO_LIMB) || (limbIndex == KOTAKE_LIMB_LEFT_HAND) ||
+        (limbIndex == KOTAKE_LIMB_RIGHT_HAND)) {
         rot->y += (s16)Math_SinS(this->unk_33C[limbIndex]) * 200;
         rot->z += (s16)Math_CosS(this->unk_372[limbIndex]) * 200;
     }
@@ -892,7 +907,7 @@ void EnTrt2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         phi_v0 = true;
     }
 
-    if (limbIndex == 21) {
+    if (limbIndex == KOTAKE_LIMB_HEAD) {
         func_80AD5394(this->unk_3D4, this->unk_3D6, &this->unk_3C8, &this->unk_3C2, phi_v0);
         Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
@@ -906,7 +921,7 @@ void EnTrt2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 void EnTrt2_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnTrt2* this = THIS;
 
-    if (limbIndex == 21) {
+    if (limbIndex == KOTAKE_LIMB_HEAD) {
         Matrix_Translate(this->unk_3C8.x, this->unk_3C8.y, this->unk_3C8.z, MTXMODE_NEW);
         Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
         Matrix_RotateYS(this->unk_3C2.y, MTXMODE_APPLY);
@@ -917,16 +932,16 @@ void EnTrt2_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 
 void func_80AD56E8(Actor* thisx, PlayState* play) {
     static TexturePtr D_80AD5978[] = {
-        object_trt_Tex_00B0B8,
-        object_trt_Tex_00B8B8,
-        object_trt_Tex_00C0B8,
+        gKotakeEyeOpenTex,
+        gKotakeEyeHalfTex,
+        gKotakeEyeClosedTex,
     };
     s32 pad;
     EnTrt2* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));

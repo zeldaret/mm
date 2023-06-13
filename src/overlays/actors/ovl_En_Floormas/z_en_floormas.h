@@ -11,12 +11,12 @@ typedef void (*EnFloormasActionFunc)(struct EnFloormas*, PlayState*);
 #define ENFLOORMAS_GET_7FFF(thisx) ((thisx)->params & 0x7FFF)
 #define ENFLOORMAS_GET_8000(thisx) ((thisx)->params & 0x8000)
 
-enum {
+typedef enum {
     /* 0x00 */ ENFLOORMAS_GET_7FFF_0,
     /* 0x10 */ ENFLOORMAS_GET_7FFF_10 = 0x10,
     /* 0x20 */ ENFLOORMAS_GET_7FFF_20 = 0x20,
-    /* 0x40 */ ENFLOORMAS_GET_7FFF_40 = 0x40,
-};
+    /* 0x40 */ ENFLOORMAS_GET_7FFF_40 = 0x40
+} EnFloormasParam;
 
 typedef struct EnFloormas {
     /* 0x000 */ Actor actor;
@@ -35,7 +35,5 @@ typedef struct EnFloormas {
     /* 0x2D0 */ Vec3f limbPos[11];
     /* 0x354 */ ColliderCylinder collider;
 } EnFloormas; // size = 0x3A0
-
-extern const ActorInit En_Floormas_InitVars;
 
 #endif // Z_EN_FLOORMAS_H

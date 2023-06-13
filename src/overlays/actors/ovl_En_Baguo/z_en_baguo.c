@@ -27,21 +27,21 @@ void EnBaguo_UpdateEffects(EnBaguo* this, PlayState* play);
 void EnBaguo_DrawEffects(EnBaguo* this, PlayState* play);
 
 typedef enum {
-    /* 0x0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
-    /* 0x1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
-    /* 0x2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
-    /* 0x3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
+    /* 0 */ NEJIRON_ACTION_INACTIVE,   // The Nejiron is either underground or emerging from underground
+    /* 1 */ NEJIRON_ACTION_ACTIVE,     // The Nejiron is above ground and actively chasing the player
+    /* 2 */ NEJIRON_ACTION_RETREATING, // The Nejiron is burrowing back underground
+    /* 3 */ NEJIRON_ACTION_EXPLODING   // The Nejiron has detonated
 } NejironAction;
 
 /**
  * These directions are relative to the Nejiron.
  */
 typedef enum {
-    /* 0x0 */ NEJIRON_DIRECTION_RIGHT,
-    /* 0x1 */ NEJIRON_DIRECTION_LEFT
+    /* 0 */ NEJIRON_DIRECTION_RIGHT,
+    /* 1 */ NEJIRON_DIRECTION_LEFT
 } NejironRollDirection;
 
-const ActorInit En_Baguo_InitVars = {
+ActorInit En_Baguo_InitVars = {
     ACTOR_EN_BAGUO,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -126,7 +126,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gNejironSkel, NULL, this->jointTable, this->morphTable, NEJIRON_LIMB_MAX);
-    this->actor.hintId = 0xB;
+    this->actor.hintId = TATL_HINT_ID_NEJIRON;
     this->maxDistanceFromHome = 240.0f;
     this->maxDistanceFromHome += this->actor.world.rot.z * 40.0f;
     this->actor.world.rot.z = 0;
@@ -144,7 +144,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = -3000.0f;
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.flags |= ACTOR_FLAG_8000000;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
@@ -160,10 +160,10 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
     this->action = NEJIRON_ACTION_INACTIVE;
     if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(play) != PLAYER_MASK_STONE) {
         this->actor.draw = EnBaguo_DrawBody;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
-        this->actor.flags &= ~ACTOR_FLAG_8000000;
+        this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags |= ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
@@ -205,7 +205,7 @@ void EnBaguo_Idle(EnBaguo* this, PlayState* play) {
                 if ((play->gameplayFrames % 8) == 0) {
                     Actor_SpawnFloorDustRing(play, &this->actor, &this->actor.world.pos,
                                              this->actor.shape.shadowScale - 20.0f, 10, 8.0f, 500, 10, 1);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_VOICE);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_VOICE);
                 }
             }
         }
@@ -244,17 +244,17 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
         this->timer = 100;
         this->actor.world.rot.y = this->actor.shape.rot.y;
         this->actionFunc = EnBaguo_Idle;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
         if (!this->bouncedFlag && this->collider.base.atFlags & AT_BOUNCED) {
             this->zRollDirection ^= 1;
             this->bouncedFlag = 1;
-            this->actor.speedXZ = -7.0f;
+            this->actor.speed = -7.0f;
         }
 
         Math_ApproachF(&this->currentRotation.x, this->targetRotation.x, 0.2f, 1000.0f);
         Math_ApproachF(&this->currentRotation.z, this->targetRotation.z, 0.2f, 1000.0f);
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 0.5f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 0.5f);
         this->actor.world.rot.x += (s16)this->currentRotation.x;
 
         if (this->currentRotation.z != 0.0f) {
@@ -265,14 +265,14 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
             }
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_ROLL - SFX_FLAG);
     }
 }
 
 void EnBaguo_SetupRetreatUnderground(EnBaguo* this) {
     this->action = NEJIRON_ACTION_RETREATING;
     this->actionFunc = EnBaguo_RetreatUnderground;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
 }
 
 void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
@@ -290,8 +290,8 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         this->actor.shape.yOffset = -3000.0f;
         this->actor.draw = EnBaguo_DrawBody;
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_APPEAR);
-        this->actor.flags |= ACTOR_FLAG_8000000;
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
+        this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
@@ -299,7 +299,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
 
 void EnBaguo_PostDetonation(EnBaguo* this, PlayState* play) {
     if (this->timer == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->timer >= 26) {
@@ -316,21 +316,23 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
     // the Nejiron should forcibly explode and as a loop index.
     i = false;
     if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_RETREATING) {
-        if (!(this->actor.bgCheckFlags & 1) && this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
             // Force a detonation if we're off the ground and have fallen
             // below our home position (e.g., we rolled off a ledge).
             i = true;
         }
-        if (this->actor.bgCheckFlags & 0x60 && this->actor.depthInWater >= 40.0f) {
+        if ((this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH)) &&
+            (this->actor.depthInWater >= 40.0f)) {
             // Force a detonation if we're too far below the water's surface.
             i = true;
         }
         if ((this->collider.base.acFlags & AC_HIT || i)) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (i || this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL) {
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0, 8);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->action = NEJIRON_ACTION_EXPLODING;
-                this->actor.speedXZ = 0.0f;
+                this->actor.speed = 0.0f;
                 this->actor.shape.shadowScale = 0.0f;
 
                 for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
@@ -346,11 +348,11 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
                             this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BAKUO_DEAD);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
                 this->timer = 30;
-                this->actor.flags |= ACTOR_FLAG_8000000;
+                this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~ACTOR_FLAG_1;
                 Actor_SetScale(&this->actor, 0.0f);
                 this->collider.elements->dim.scale = 3.0f;
@@ -390,7 +392,9 @@ void EnBaguo_Update(Actor* thisx, PlayState* play) {
         }
 
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 60.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
         if (this->action != NEJIRON_ACTION_INACTIVE) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         }
@@ -415,7 +419,7 @@ void EnBaguo_DrawBody(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
 
@@ -445,9 +449,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = (s16)randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = (s16)randPlusMinusPoint5Scaled(30000.0f);
+            effect->rotation.x = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rotation.y = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rotation.z = (s16)(s32)Rand_CenteredFloat(0x7530);
             return;
         }
     }
@@ -492,7 +496,7 @@ void EnBaguo_DrawEffects(EnBaguo* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);

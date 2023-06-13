@@ -11,7 +11,7 @@ struct EnIn;
 
 typedef void (*EnHorseActionFunc)(struct EnHorse*, PlayState*);
 typedef void (*EnHorsePostdrawFunc)(struct EnHorse*, PlayState*);
-typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorAction*);
+typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorCue*);
 
 #define ENHORSE_BOOST (1 << 0)                 /*         0x1 */
 #define ENHORSE_BOOST_DECEL (1 << 1)           /*         0x2 */
@@ -46,36 +46,36 @@ typedef void (*EnHorseCsFunc)(struct EnHorse*, PlayState*, CsCmdActorAction*);
 #define ENHORSE_FLAG_30 (1 << 30)              /*  0x40000000 */
 #define ENHORSE_FLAG_31 (1 << 31)              /*  0x80000000 */
 
-typedef enum {
-    /* 0  */ ENHORSE_ACT_FROZEN,
-    /* 1  */ ENHORSE_ACT_INACTIVE,
-    /* 2  */ ENHORSE_ACT_IDLE,
-    /* 3  */ ENHORSE_ACT_FOLLOW_PLAYER,
-    /* 4  */ ENHORSE_ACT_INGO_RACE,
-    /* 5  */ ENHORSE_ACT_MOUNTED_IDLE,
-    /* 6  */ ENHORSE_ACT_MOUNTED_IDLE_WHINNEYING,
-    /* 7  */ ENHORSE_ACT_MOUNTED_TURN,
-    /* 8  */ ENHORSE_ACT_MOUNTED_WALK,
-    /* 9  */ ENHORSE_ACT_MOUNTED_TROT,
-    /* 10 */ ENHORSE_ACT_MOUNTED_GALLOP,
-    /* 11 */ ENHORSE_ACT_MOUNTED_REARING,
-    /* 12 */ ENHORSE_ACT_STOPPING,
-    /* 13 */ ENHORSE_ACT_REVERSE,
-    /* 14 */ ENHORSE_ACT_LOW_JUMP,
-    /* 15 */ ENHORSE_ACT_HIGH_JUMP,
-    /* 16 */ ENHORSE_ACT_BRIDGE_JUMP,
-    /* 17 */ ENHORSE_ACT_CS_UPDATE,
-    /* 18 */ ENHORSE_ACT_HBA,
-    /* 19 */ ENHORSE_ACT_FLEE_PLAYER,
-    /* 20 */ ENHORSE_ACT_20,
-    /* 21 */ ENHORSE_ACT_21,
-    /* 22 */ ENHORSE_ACT_22,
-    /* 23 */ ENHORSE_ACT_23,
-    /* 24 */ ENHORSE_ACT_24,
-    /* 25 */ ENHORSE_ACT_25,
+typedef enum EnHorseAction {
+    /*  0 */ ENHORSE_ACTION_FROZEN,
+    /*  1 */ ENHORSE_ACTION_INACTIVE,
+    /*  2 */ ENHORSE_ACTION_IDLE,
+    /*  3 */ ENHORSE_ACTION_FOLLOW_PLAYER,
+    /*  4 */ ENHORSE_ACTION_INGO_RACE,
+    /*  5 */ ENHORSE_ACTION_5,
+    /*  6 */ ENHORSE_ACTION_6,
+    /*  7 */ ENHORSE_ACTION_MOUNTED_IDLE,
+    /*  8 */ ENHORSE_ACTION_MOUNTED_IDLE_WHINNYING,
+    /*  9 */ ENHORSE_ACTION_MOUNTED_TURN,
+    /* 10 */ ENHORSE_ACTION_MOUNTED_WALK,
+    /* 11 */ ENHORSE_ACTION_MOUNTED_TROT,
+    /* 12 */ ENHORSE_ACTION_MOUNTED_GALLOP,
+    /* 13 */ ENHORSE_ACTION_MOUNTED_REARING,
+    /* 14 */ ENHORSE_ACTION_STOPPING,
+    /* 15 */ ENHORSE_ACTION_REVERSE,
+    /* 16 */ ENHORSE_ACTION_LOW_JUMP,
+    /* 17 */ ENHORSE_ACTION_HIGH_JUMP,
+    /* 18 */ ENHORSE_ACTION_CS_UPDATE,
+    /* 19 */ ENHORSE_ACTION_HBA,
+    /* 20 */ ENHORSE_ACTION_FLEE_PLAYER,
+    /* 21 */ ENHORSE_ACTION_21,
+    /* 22 */ ENHORSE_ACTION_22,
+    /* 23 */ ENHORSE_ACTION_23,
+    /* 24 */ ENHORSE_ACTION_24,
+    /* 25 */ ENHORSE_ACTION_25
 } EnHorseAction;
 
-typedef enum {
+typedef enum EnHorsePlayerDir {
     /* 0 */ PLAYER_DIR_FRONT_R,
     /* 1 */ PLAYER_DIR_FRONT_L,
     /* 2 */ PLAYER_DIR_BACK_R,
@@ -84,9 +84,9 @@ typedef enum {
     /* 5 */ PLAYER_DIR_SIDE_L
 } EnHorsePlayerDir;
 
-typedef enum {
+typedef enum EnHorseAnimation {
     /* 0 */ ENHORSE_ANIM_IDLE,
-    /* 1 */ ENHORSE_ANIM_WHINNEY,
+    /* 1 */ ENHORSE_ANIM_WHINNY,
     /* 2 */ ENHORSE_ANIM_STOPPING,
     /* 3 */ ENHORSE_ANIM_REARING,
     /* 4 */ ENHORSE_ANIM_WALK,
@@ -94,9 +94,9 @@ typedef enum {
     /* 6 */ ENHORSE_ANIM_GALLOP,
     /* 7 */ ENHORSE_ANIM_LOW_JUMP,
     /* 8 */ ENHORSE_ANIM_HIGH_JUMP
-} EnHorseAnimationIndex;
+} EnHorseAnimation;
 
-typedef enum {
+typedef enum HorseType {
     /* 0 */ HORSE_TYPE_EPONA,
     /* 1 */ HORSE_TYPE_HNI,
     /* 2 */ HORSE_TYPE_2,
@@ -112,7 +112,7 @@ typedef enum {
 #define ENHORSE_IS_4000_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_4000)
 #define ENHORSE_IS_DONKEY_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_DONKEY)
 
-typedef enum {
+typedef enum EnHorseParam {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -133,7 +133,7 @@ typedef enum {
     /* 17 */ ENHORSE_17,
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
-    /* 20 */ ENHORSE_20,
+    /* 20 */ ENHORSE_20
 } EnHorseParam;
 
 /**
@@ -144,7 +144,7 @@ typedef enum {
 
 typedef struct EnHorse {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ s32 action;
+    /* 0x144 */ EnHorseAction action;
     /* 0x148 */ s32 noInputTimer;
     /* 0x14C */ s32 noInputTimerMax;
     /* 0x150 */ s32 type;
@@ -157,7 +157,7 @@ typedef struct EnHorse {
     /* 0x200 */ s32 curRaceWaypoint;
     /* 0x204 */ s32 boostSpeed;
     /* 0x208 */ s32 playerControlled;
-    /* 0x20C */ s32 animationIdx;
+    /* 0x20C */ s32 animIndex;
     /* 0x210 */ f32 curFrame;
     /* 0x214 */ s32 soundTimer;
     /* 0x218 */ Vec3f unk_218;
@@ -202,7 +202,7 @@ typedef struct EnHorse {
     /* 0x3BC */ Vec3f frontLeftHoof;
     /* 0x3C8 */ Vec3f backRightHoof;
     /* 0x3D4 */ Vec3f backLeftHoof;
-    /* 0x3E0 */ s32 unk_3E0;
+    /* 0x3E0 */ s32 cueId;
     /* 0x3E4 */ UNK_TYPE1 unk_3E4[0x4];
     /* 0x3E8 */ f32 unk_3E8;
     /* 0x3EC */ s16 unk_3EC;
@@ -210,7 +210,7 @@ typedef struct EnHorse {
     /* 0x48A */ Vec3s morphTable[OBJECT_HA_1_LIMB_MAX];
     /* 0x528 */ f32 unk_528;
     /* 0x52C */ s32 unk_52C;
-    /* 0x530 */ s32 unk_530;
+    /* 0x530 */ s32 cueChannel;
     /* 0x534 */ s32 unk_534;
     /* 0x538 */ s32 unk_538;
     /* 0x53C */ s32 unk_53C;
@@ -232,6 +232,19 @@ typedef struct EnHorse {
     /* 0x590 */ s32 unk_590;
 } EnHorse; // size = 0x594
 
-extern const ActorInit En_Horse_InitVars;
+#define EN_HORSE_CHECK_1(horseActor) (((horseActor)->stateFlags & ENHORSE_FLAG_6) ? true : false)
+
+#define EN_HORSE_CHECK_2(horseActor) (((horseActor)->stateFlags & ENHORSE_FLAG_8) ? true : false)
+
+#define EN_HORSE_CHECK_3(horseActor) (((horseActor)->stateFlags & ENHORSE_FLAG_9) ? true : false)
+
+#define EN_HORSE_CHECK_4(horseActor)                                                                               \
+    (((((horseActor)->action == ENHORSE_ACTION_MOUNTED_IDLE) || ((horseActor)->action == ENHORSE_ACTION_FROZEN) || \
+       ((horseActor)->action == ENHORSE_ACTION_MOUNTED_IDLE_WHINNYING)) &&                                         \
+      !((horseActor)->stateFlags & ENHORSE_FLAG_19) && !((horseActor)->stateFlags & ENHORSE_FLAG_25))              \
+         ? true                                                                                                    \
+         : false)
+
+#define EN_HORSE_CHECK_JUMPING(horseActor) (((horseActor)->stateFlags & ENHORSE_JUMPING) ? true : false)
 
 #endif // Z_EN_HORSE_H

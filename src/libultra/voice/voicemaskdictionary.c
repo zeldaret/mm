@@ -1,14 +1,23 @@
-#include "global.h"
+/**
+ * File: voicemaskdictionary.c
+ *
+ * Mask words registered in the voice recognition system
+ */
 
-// Mask words registered in the voice recognition system
+#include "ultra64/controller_voice.h"
+#include "ultra64/os_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "macros.h"
+
 s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, s32 size) {
     s32 errorCode;
     s32 i;
-    s32 sp3C;
+    s32 j;
     u8 status;
     u8 data[20];
 
-    errorCode = __osVoiceGetStatus(hd->mq, hd->port, &status);
+    errorCode = __osVoiceGetStatus(hd->mq, hd->channel, &status);
     if (errorCode != 0) {
         return errorCode;
     }
@@ -18,25 +27,25 @@ s32 osVoiceMaskDictionary(OSVoiceHandle* hd, u8* maskPattern, s32 size) {
     }
 
     if (size & 1) {
-        sp3C = size + 1;
+        j = size + 1;
     } else {
-        sp3C = size;
+        j = size;
     }
 
-    bzero(&data, 20);
+    bzero(&data, ARRAY_COUNT(data));
 
-    data[18 - sp3C] = 4;
+    data[ARRAY_COUNT(data) - 2 - j] = 4;
 
-    for (i = 0; i < sp3C; i += 2) {
-        data[i + 20 - sp3C] = maskPattern[i];
-        data[i + 21 - sp3C] = maskPattern[i + 1];
+    for (i = 0; i < j; i += 2) {
+        data[i + ARRAY_COUNT(data) - j] = maskPattern[i];
+        data[i + ARRAY_COUNT(data) - j + 1] = maskPattern[i + 1];
     }
 
     if (size & 1) {
-        data[19] = 0;
+        data[ARRAY_COUNT(data) - 1] = 0;
     }
 
-    errorCode = __osVoiceContWrite20(hd->mq, hd->port, 0, &data);
+    errorCode = __osVoiceContWrite20(hd->mq, hd->channel, 0, data);
     if (errorCode == 0) {
         errorCode = __osVoiceCheckResult(hd, &status);
         if (errorCode & 0xFF00) {

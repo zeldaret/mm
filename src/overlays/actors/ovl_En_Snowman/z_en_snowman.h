@@ -12,7 +12,7 @@ typedef enum {
     /* 1 */ EN_SNOWMAN_TYPE_LARGE,
     /* 2 */ EN_SNOWMAN_TYPE_SPLIT,
     /* 3 */ EN_SNOWMAN_TYPE_SMALL_SNOWBALL,
-    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL,
+    /* 4 */ EN_SNOWMAN_TYPE_LARGE_SNOWBALL
 } EnSnowmanType;
 
 struct EnSnowman;
@@ -53,7 +53,5 @@ typedef struct EnSnowman {
     /* 0x2C0 */ Vec3f bodyPartsPos[9];
     /* 0x32C */ ColliderCylinder collider;
 } EnSnowman; // size = 0x378
-
-extern const ActorInit En_Snowman_InitVars;
 
 #endif // Z_EN_SNOWMAN_H

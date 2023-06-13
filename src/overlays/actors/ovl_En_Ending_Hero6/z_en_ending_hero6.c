@@ -24,7 +24,7 @@ void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
-const ActorInit En_Ending_Hero6_InitVars = {
+ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
     ACTORCAT_NPC,
     FLAGS,
@@ -101,7 +101,9 @@ void EnEndingHero6_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -112,7 +114,7 @@ void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->npcIndex >= 4 && limbIndex == 15) {
+    if ((this->npcIndex >= 4) && (limbIndex == 15)) {
         index = this->npcIndex - 4;
         gSPDisplayList(POLY_OPA_DISP++, D_80C2426C[index]);
     }
@@ -121,9 +123,9 @@ void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80C24280[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90,
-                                       object_dt_Tex_00A790, object_dt_Tex_00AB90 };
-    static TexturePtr D_80C24294[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
+    static TexturePtr sEyeTextures[] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex,
+                                         gDotourEyeLookDownTex, gDotourEyeSquintTex };
+    static TexturePtr sEyebrowTextures[] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
     s32 pad;
     EnEndingHero6* this = THIS;
     s32 index = 0;
@@ -131,38 +133,45 @@ void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
     if (this->isIdle == 1) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        if (this->objectIndex >= 0 && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
+        if ((this->objectIndex >= 0) && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);
 
             switch (this->npcIndex) {
                 case 4:
                     gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
                     break;
+
                 case 5:
                     gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
                     break;
+
                 case 6:
                     gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
                     break;
+
                 case 7:
                     gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
                     break;
+
                 case 8:
                     gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
+                    break;
+
+                default:
                     break;
             }
 
             if (this->npcIndex == 0) {
-                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C24280[this->eyeState]));
+                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 
                 if (this->eyeState < 3) {
                     index = this->eyeState;
                 }
 
-                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
+                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyebrowTextures[index]));
             }
 
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

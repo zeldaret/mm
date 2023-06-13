@@ -16,11 +16,11 @@ typedef void (*ObjBeanUnkFunc)(struct ObjBean*);
 
 #define OBJBEAN_GET_3(thisx) ((thisx)->home.rot.z & 3)
 
-enum {
-    /* 0x0 */ ENOBJBEAN_GET_C000_0,
-    /* 0x1 */ ENOBJBEAN_GET_C000_1,
-    /* 0x2 */ ENOBJBEAN_GET_C000_2,
-};
+typedef enum {
+    /* 0 */ ENOBJBEAN_GET_C000_0,
+    /* 1 */ ENOBJBEAN_GET_C000_1,
+    /* 2 */ ENOBJBEAN_GET_C000_2
+} ObjBeanParam;
 
 typedef struct ObjBean {
     /* 0x000 */ DynaPolyActor dyna;
@@ -58,7 +58,5 @@ typedef struct ObjBean {
     /* 0x1FF */ u8 unk_1FF;
     /* 0x200 */ u8 unk_200;
 } ObjBean; // size = 0x204
-
-extern const ActorInit Obj_Bean_InitVars;
 
 #endif // Z_OBJ_BEAN_H

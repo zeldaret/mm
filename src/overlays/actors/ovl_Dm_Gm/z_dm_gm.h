@@ -21,7 +21,7 @@ typedef struct DmGm {
     /* 0x2AC */ s8 unk_2AC;
     /* 0x2AD */ s8 unk_2AD;
     /* 0x2AE */ u16 unk_2AE;
-    /* 0x2B0 */ u8 unk_2B0;
+    /* 0x2B0 */ u8 cueId;
     /* 0x2B4 */ Actor* unk_2B4;
     /* 0x2B8 */ s16 unk_2B8;
     /* 0x2BA */ s16 unk_2BA;
@@ -35,7 +35,5 @@ typedef struct DmGm {
     /* 0x2D0 */ s32 unk_2D0;
     /* 0x2D4 */ s32 unk_2D4;
 } DmGm; // size = 0x2D8
-
-extern const ActorInit Dm_Gm_InitVars;
 
 #endif // Z_DM_GM_H

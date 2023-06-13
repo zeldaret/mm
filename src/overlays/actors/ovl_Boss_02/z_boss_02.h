@@ -27,15 +27,15 @@ typedef enum {
     /* 1 */ TWINMOLD_EFFECT_SAND,       // The sand kicked up when Twinmold touches the ground
     /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // Unused
     /* 3 */ TWINMOLD_EFFECT_FRAGMENT,   // The fragments that fly off when the parts of Twinmold explode
-    /* 4 */ TWINMOLD_EFFECT_FLASH,      // The flashes of light that appear when the parts of Twinmold explode
+    /* 4 */ TWINMOLD_EFFECT_FLASH       // The flashes of light that appear when the parts of Twinmold explode
 } TwinmoldEffectType;
 
 typedef enum {
     /*   0 */ TWINMOLD_RED,
     /*  35 */ TWINMOLD_BLUE = 35,
     /* 100 */ TWINMOLD_TAIL = 100,
-    /* 200 */ TWINMOLD_STATIC = 200,
-} TwinmoldParams;
+    /* 200 */ TWINMOLD_STATIC = 200
+} TwinmoldParam;
 
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;
@@ -107,7 +107,5 @@ typedef struct Boss02 {
     /* 0x1D7C */ s16 unk_1D7C;
     /* 0x1D7E */ s16 unk_1D7E;
 } Boss02; // size = 0x1D80
-
-extern const ActorInit Boss_02_InitVars;
 
 #endif // Z_BOSS_02_H

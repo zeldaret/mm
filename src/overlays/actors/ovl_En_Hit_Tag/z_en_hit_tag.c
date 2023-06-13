@@ -16,7 +16,7 @@ void EnHitTag_Update(Actor* thisx, PlayState* play);
 
 void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play);
 
-const ActorInit En_Hit_Tag_InitVars = {
+ActorInit En_Hit_Tag_InitVars = {
     ACTOR_EN_HIT_TAG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -57,7 +57,7 @@ void EnHitTag_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     if (Flags_GetSwitch(play, ENHITTAG_GET_SWITCHFLAG(thisx))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -73,7 +73,7 @@ void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play) {
 
     if (this->collider.base.acFlags & AC_HIT) {
         play_sound(NA_SE_SY_GET_RUPY);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         dropLocation.x = this->actor.world.pos.x;
         dropLocation.y = this->actor.world.pos.y;
         dropLocation.z = this->actor.world.pos.z;

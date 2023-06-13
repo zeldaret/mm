@@ -20,7 +20,7 @@ void func_80A5389C(BgKeikokuSaku* this, PlayState* play);
 void func_80A538E0(BgKeikokuSaku* this, PlayState* play);
 void func_80A53994(BgKeikokuSaku* this, PlayState* play);
 
-const ActorInit Bg_Keikoku_Saku_InitVars = {
+ActorInit Bg_Keikoku_Saku_InitVars = {
     ACTOR_BG_KEIKOKU_SAKU,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -61,10 +61,10 @@ void func_80A5389C(BgKeikokuSaku* this, PlayState* play) {
 }
 
 void func_80A538E0(BgKeikokuSaku* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_METALGATE_OPEN - SFX_FLAG);
     this->dyna.actor.world.pos.z -= 2.0f + BREG(8);
     if (this->dyna.actor.world.pos.z < (BREG(9) + 2660.0f)) {
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BRIDGE_OPEN_STOP);
         this->timer = 30;
         this->actionFunc = func_80A53994;
     }
@@ -94,7 +94,7 @@ void BgKeikokuSaku_Update(Actor* thisx, PlayState* play) {
 void BgKeikokuSaku_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_keikoku_obj_DL_001640);
 

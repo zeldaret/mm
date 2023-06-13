@@ -37,7 +37,7 @@ void func_80BA0BB4(EnZob* this, PlayState* play);
 void func_80BA0C14(EnZob* this, PlayState* play);
 void func_80BA0CF4(EnZob* this, PlayState* play);
 
-const ActorInit En_Zob_InitVars = {
+ActorInit En_Zob_InitVars = {
     ACTOR_EN_ZOB,
     ACTORCAT_NPC,
     FLAGS,
@@ -80,7 +80,7 @@ Vec3f D_80BA1120 = { 300.0f, 900.0f, 0.0f };
 void EnZob_Init(Actor* thisx, PlayState* play) {
     EnZob* this = THIS;
     s32 i;
-    s16 cs;
+    s16 csId;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
@@ -90,8 +90,8 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
     Animation_PlayLoop(&this->skelAnime, &object_zob_Anim_006998);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_2F4 = 0;
-    this->unk_30E = -1;
-    this->unk_310 = 0;
+    this->csIdIndex = -1;
+    this->cueId = 0;
     this->unk_302 = 9;
     this->unk_304 = 0;
     this->actor.terminalVelocity = -4.0f;
@@ -100,28 +100,28 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = func_80BA0728;
     this->actor.textId = 0;
 
-    cs = this->actor.cutscene;
-    for (i = 0; i < ARRAY_COUNT(this->unk_306); i++) {
-        this->unk_306[i] = cs;
-        if (cs != -1) {
-            this->actor.cutscene = cs;
-            cs = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+    csId = this->actor.csId;
+    for (i = 0; i < ARRAY_COUNT(this->csIdList); i++) {
+        this->csIdList[i] = csId;
+        if (csId != CS_ID_NONE) {
+            this->actor.csId = csId;
+            csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
         }
     }
 
-    this->actor.cutscene = this->unk_306[0];
+    this->actor.csId = this->csIdList[0];
     this->actor.flags |= ACTOR_FLAG_2000000;
 
     switch (ENZOB_GET_F(&this->actor)) {
         case ENZOB_F_1:
-            if (gSaveContext.save.weekEventReg[78] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_01)) {
                 this->actionFunc = func_80BA0BB4;
             } else {
                 this->actionFunc = func_80BA0AD8;
             }
 
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
+                Actor_Kill(&this->actor);
                 return;
             }
             break;
@@ -135,8 +135,8 @@ void EnZob_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            if (gSaveContext.save.weekEventReg[55] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
+                Actor_Kill(&this->actor);
             }
             this->actor.flags |= ACTOR_FLAG_10;
             break;
@@ -211,7 +211,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
     this->unk_2F4 |= 1;
 
     if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[30] & 2) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_02)) {
             textId = 0x11F9;
         } else {
             textId = 0x11F8;
@@ -222,7 +222,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
         textId = 0x1210;
         this->unk_304 = 3;
         func_80B9F7E4(this, 5, ANIMMODE_ONCE);
-    } else if (gSaveContext.save.weekEventReg[31] & 8) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_08)) {
         textId = 0x1205;
         this->unk_304 = 1;
         func_80B9F7E4(this, 3, ANIMMODE_LOOP);
@@ -234,12 +234,12 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
         textId = 0x1203;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
-    } else if (gSaveContext.save.weekEventReg[30] & 8) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_08)) {
         textId = 0x11FA;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
-    } else if (!(gSaveContext.save.weekEventReg[30] & 4)) {
-        gSaveContext.save.weekEventReg[30] |= 4;
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_30_04)) {
+        SET_WEEKEVENTREG(WEEKEVENTREG_30_04);
         textId = 0x11FB;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
@@ -253,21 +253,21 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
 }
 
 void func_80B9FC0C(EnZob* this) {
-    if (this->unk_30E != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->unk_306[this->unk_30E]) {
-            ActorCutscene_Stop(this->unk_306[this->unk_30E]);
+    if (this->csIdIndex != -1) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->unk_30E = -1;
+        this->csIdIndex = -1;
     }
 }
 
-void func_80B9FC70(EnZob* this, s16 arg1) {
+void func_80B9FC70(EnZob* this, s16 csIdIndex) {
     func_80B9FC0C(this);
-    this->unk_30E = arg1;
+    this->csIdIndex = csIdIndex;
 }
 
 void func_80B9FCA0(EnZob* this, PlayState* play) {
-    func_801477B4(play);
+    Message_CloseTextbox(play);
     play->msgCtx.ocarinaMode = 4;
     func_80B9FC0C(this);
     this->unk_2F4 &= ~1;
@@ -278,19 +278,19 @@ void func_80B9FCA0(EnZob* this, PlayState* play) {
 }
 
 void func_80B9FD24(EnZob* this, PlayState* play) {
-    s32 actionIndex;
-    s16 action;
+    s32 cueChannel;
+    s16 cueId;
 
     func_80B9F86C(this);
 
-    if (Cutscene_CheckActorAction(play, 500)) {
-        this->unk_30E = -1;
-        actionIndex = Cutscene_GetActorActionIndex(play, 500);
-        action = play->csCtx.actorActions[actionIndex]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
+        this->csIdIndex = -1;
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_500);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
 
-        if (action != this->unk_310) {
-            this->unk_310 = action;
-            switch (action) {
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (cueId) {
                 case 1:
                     func_80B9F7E4(this, 8, ANIMMODE_LOOP);
                     break;
@@ -372,14 +372,14 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 1:
                         func_8019F208();
-                        func_80151938(play, 0x1209);
+                        Message_ContinueTextbox(play, 0x1209);
                         this->unk_304 = 1;
                         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
                         break;
 
                     case 0:
                         func_8019F230();
-                        func_80151938(play, 0x1213);
+                        Message_ContinueTextbox(play, 0x1213);
                         break;
                 }
             }
@@ -391,7 +391,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                     case 0x1208:
                     case 0x120E:
                     case 0x1216:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x120C:
@@ -405,7 +405,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                     case 0x1211:
                     case 0x1213:
                     case 0x1217:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         this->unk_304 = 3;
                         func_80B9F7E4(this, 4, ANIMMODE_ONCE);
                         break;
@@ -420,7 +420,7 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x120F:
-                        gSaveContext.save.weekEventReg[31] |= 8;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_31_08);
                         this->unk_2F4 |= 0x10;
                         func_80B9FCA0(this, play);
                         break;
@@ -457,13 +457,13 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         func_8019F208();
-                        func_80151938(play, 0x1207);
+                        Message_ContinueTextbox(play, 0x1207);
                         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
                         break;
 
                     case 1:
                         func_8019F230();
-                        func_80151938(play, 0x1206);
+                        Message_ContinueTextbox(play, 0x1206);
                         break;
                 }
             }
@@ -473,12 +473,12 @@ void func_80BA0374(EnZob* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x11F8:
-                        gSaveContext.save.weekEventReg[30] |= 2;
-                        func_80151938(play, 0x11F9);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_30_02);
+                        Message_ContinueTextbox(play, 0x11F9);
                         break;
 
                     case 0x11F9:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0728;
                         this->unk_304 = 0;
                         func_80B9F7E4(this, 6, ANIMMODE_ONCE);
@@ -490,19 +490,19 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                     case 0x11FF:
                     case 0x1201:
                     case 0x1203:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x11FD:
                         this->unk_304 = 3;
                         func_80B9F7E4(this, 4, ANIMMODE_ONCE);
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x11FE:
                         this->unk_304 = 1;
                         func_80B9F7E4(this, 3, ANIMMODE_LOOP);
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x11FA:
@@ -513,7 +513,7 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                     case 0x120F:
                     case 0x1210:
                     case 0x1215:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0728;
                         this->unk_304 = 0;
                         func_80B9F7E4(this, 6, ANIMMODE_ONCE);
@@ -522,10 +522,10 @@ void func_80BA0374(EnZob* this, PlayState* play) {
                         break;
 
                     case 0x1207:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BA0318;
                         player->unk_A90 = &this->actor;
-                        player->stateFlags3 |= 0x20;
+                        player->stateFlags3 |= PLAYER_STATE3_20;
                         break;
                 }
             }
@@ -549,7 +549,7 @@ void func_80BA0610(EnZob* this, PlayState* play) {
 
 void func_80BA06BC(EnZob* this, PlayState* play) {
     func_80B9FD24(this, play);
-    if (!Cutscene_CheckActorAction(play, 500)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
         this->actionFunc = func_80BA0610;
         this->actor.flags |= ACTOR_FLAG_10000;
         func_80BA0610(this, play);
@@ -565,19 +565,19 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     if (func_800B8718(&this->actor, &play->state)) {
         if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1208, NULL);
-            gSaveContext.save.weekEventReg[30] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_30_08);
         } else {
             Message_StartTextbox(play, 0x1216, NULL);
         }
         this->actionFunc = func_80BA00BC;
         this->unk_304 = 1;
         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
-        this->unk_30E = 0;
+        this->csIdIndex = 0;
         this->unk_2F4 |= 1;
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BA0374;
         func_80B9FA3C(this, play);
-    } else if (Cutscene_CheckActorAction(play, 500)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_500)) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
@@ -588,24 +588,24 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     sp28.x = this->actor.projectedPos.x;
     sp28.y = this->actor.projectedPos.y;
     sp28.z = this->actor.projectedPos.z;
-    func_801A1FB4(3, &sp28, 0x6C, 1000.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_BASS_PLAY, 1000.0f);
 }
 
 void func_80BA08E8(EnZob* this, PlayState* play) {
     s32 textId;
 
     if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[79] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1257;
             this->unk_304 = 3;
             func_80B9F7E4(this, 4, ANIMMODE_ONCE);
-        } else if (gSaveContext.save.weekEventReg[78] & 0x40) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_40)) {
             textId = 0x1256;
             this->unk_304 = 1;
             func_80B9F7E4(this, 2, ANIMMODE_ONCE);
         } else {
             textId = 0x1255;
-            gSaveContext.save.weekEventReg[78] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_78_40);
             this->unk_304 = 1;
             func_80B9F7E4(this, 2, ANIMMODE_ONCE);
         }
@@ -630,7 +630,7 @@ void func_80BA0A04(EnZob* this, PlayState* play) {
     switch (Message_GetState(&play->msgCtx)) {
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BA0AD8;
                 this->unk_304 = 0;
                 func_80B9F7E4(this, 6, ANIMMODE_ONCE);
@@ -664,7 +664,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
 
 void func_80BA0BB4(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (gSaveContext.save.weekEventReg[79] & 1) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
         this->actionFunc = func_80BA09E0;
         func_80B9F7E4(this, 0, ANIMMODE_ONCE);
         this->unk_304 = 5;
@@ -684,8 +684,8 @@ void func_80BA0C14(EnZob* this, PlayState* play) {
         this->unk_312 = 999;
     }
 
-    if (Cutscene_CheckActorAction(play, 515)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 1) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 1) {
             this->actionFunc = func_80BA0CF4;
             this->unk_312 = -1;
         }
@@ -697,8 +697,8 @@ void func_80BA0C14(EnZob* this, PlayState* play) {
 
 void func_80BA0CF4(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
-    if (Cutscene_CheckActorAction(play, 515) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 515)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_515) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_515)]->id == 2)) {
         this->actionFunc = func_80BA0C14;
     }
 }
@@ -711,18 +711,18 @@ void EnZob_Update(Actor* thisx, PlayState* play) {
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 
-    if ((this->unk_30E != -1) && (ActorCutscene_GetCurrentIndex() != this->unk_306[this->unk_30E])) {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_306[this->unk_30E]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_306[this->unk_30E])) {
-            ActorCutscene_Start(this->unk_306[this->unk_30E], &this->actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_306[this->unk_30E]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 
@@ -759,7 +759,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_2F4 & 0x20) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->unk_312, 1000);
@@ -769,7 +769,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
                           func_80BA0F64, func_80BA0FAC, &this->actor);
 
     if (this->unk_2F4 & 0x20) {
-        POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+        POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

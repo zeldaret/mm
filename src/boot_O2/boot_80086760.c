@@ -5,57 +5,44 @@
 #include "global.h"
 #include "fixed_point.h"
 
-extern f32 func_80086C70(f32 x);
-extern f32 func_80086CA8(f32 x);
-extern f32 func_80086D50(f32 x);
-extern f32 func_80086CE0(f32 x);
-extern f32 func_80086D18(f32 x);
-
 s32 gUseAtanContFrac;
 
 /**
  * Tangent function computed using libultra sinf and cosf
  */
-// Math_FTanF
-f32 func_80086760(f32 x) {
+f32 Math_FTanF(f32 x) {
     return sinf(x) / cosf(x);
 }
 
 // Unused
-// Math_FFloorF
-f32 func_80086794(f32 x) {
-    return func_80086C70(x);
+f32 Math_FFloorF(f32 x) {
+    return floorf(x);
 }
 
 // Unused
-// Math_FCeilF
-f32 func_800867B4(f32 x) {
-    return func_80086CA8(x);
+f32 Math_FCeilF(f32 x) {
+    return ceilf(x);
 }
 
 // Unused
-// Math_FRoundF
-f32 func_800867D4(f32 x) {
-    return func_80086D50(x);
+f32 Math_FRoundF(f32 x) {
+    return roundf(x);
 }
 
 // Unused
-// Math_FTruncF
-f32 func_800867F4(f32 x) {
-    return func_80086CE0(x);
+f32 Math_FTruncF(f32 x) {
+    return truncf(x);
 }
 
-// Math_FNearbyIntF
-f32 func_80086814(f32 x) {
-    return func_80086D18(x);
+f32 Math_FNearbyIntF(f32 x) {
+    return nearbyintf(x);
 }
 
 /**
  * Arctangent approximation using a Maclaurin series [https://mathworld.wolfram.com/MaclaurinSeries.html]
  * (one quadrant, i.e. |x| < 1)
  */
-// Math_FAtanTaylorQF
-f32 func_80086834(f32 x) {
+f32 Math_FAtanTaylorQF(f32 x) {
     // Coefficients of Maclaurin series of arctangent
     static const f32 coeffs[] = {
         -1.0f / 3, +1.0f / 5, -1.0f / 7, +1.0f / 9, -1.0f / 11, +1.0f / 13, -1.0f / 15, +1.0f / 17, 0.0f,
@@ -84,10 +71,9 @@ f32 func_80086834(f32 x) {
  * Extends previous arctangent function to the rest of the real numbers.
  * Uses the formulae arctan(x) = pi/2 - arctan(1/x)
  * and arctan(x) = pi/4 - arctan( (1-x)/(1+x) )
- * to extend the range in which the series computed by func_80086834 is a good approximation
+ * to extend the range in which the series computed by Math_FAtanTaylorQF is a good approximation
  */
-// Math_FAtanTaylorF
-f32 func_80086880(f32 x) {
+f32 Math_FAtanTaylorF(f32 x) {
     f32 t;
     f32 q;
 
@@ -102,13 +88,13 @@ f32 func_80086880(f32 x) {
     }
 
     if (t <= M_SQRT2 - 1.0f) {
-        return func_80086834(x);
+        return Math_FAtanTaylorQF(x);
     }
 
     if (t >= M_SQRT2 + 1.0f) {
-        q = M_PI / 2 - func_80086834(1.0f / t);
+        q = M_PI / 2 - Math_FAtanTaylorQF(1.0f / t);
     } else { // in the interval (\sqrt{2} - 1, \sqrt{2} + 1)
-        q = M_PI / 4 - func_80086834((1.0f - t) / (1.0f + t));
+        q = M_PI / 4 - Math_FAtanTaylorQF((1.0f - t) / (1.0f + t));
     }
 
     if (x > 0.0f) {
@@ -123,8 +109,7 @@ f32 func_80086880(f32 x) {
  * Cf. https://en.wikipedia.org/wiki/Gauss%27s_continued_fraction#The_series_2F1_2 ,
  * https://dlmf.nist.gov/4.25#E4
  */
-// Math_FAtanContFracF
-f32 func_800869A4(f32 x) {
+f32 Math_FAtanContFracF(f32 x) {
     s32 sector;
     f32 z;
     f32 conv;
@@ -162,24 +147,22 @@ f32 func_800869A4(f32 x) {
     }
 }
 
-// Math_FAtanF
 /**
  * Single-argument arctangent, only used by the two-argument function.
  * Nothing else sets the bss variable gUseAtanContFrac, so the Maclaurin series is always used
  */
-f32 func_80086AF0(f32 x) {
+f32 Math_FAtanF(f32 x) {
     if (!gUseAtanContFrac) {
-        return func_80086880(x);
+        return Math_FAtanTaylorF(x);
     } else {
-        return func_800869A4(x);
+        return Math_FAtanContFracF(x);
     }
 }
 
-// Math_FAtan2F
 /**
  * Main two-argument arctangent function
  */
-f32 func_80086B30(f32 y, f32 x) {
+f32 Math_FAtan2F(f32 y, f32 x) {
     if (x == 0.0f) {
         if (y == 0.0f) {
             return 0.0f;
@@ -191,20 +174,18 @@ f32 func_80086B30(f32 y, f32 x) {
             return qNaN0x10000;
         }
     } else if (x >= 0.0f) {
-        return func_80086AF0(y / x);
+        return Math_FAtanF(y / x);
     } else if (y < 0.0f) {
-        return func_80086AF0(y / x) - M_PI;
+        return Math_FAtanF(y / x) - M_PI;
     } else {
-        return M_PI - func_80086AF0(-(y / x));
+        return M_PI - Math_FAtanF(-(y / x));
     }
 }
 
-// Math_FAsinF
-f32 func_80086C18(f32 x) {
-    return func_80086B30(x, sqrtf(1.0f - SQ(x)));
+f32 Math_FAsinF(f32 x) {
+    return Math_FAtan2F(x, sqrtf(1.0f - SQ(x)));
 }
 
-// Math_FAcosF
-f32 func_80086C48(f32 x) {
-    return M_PI / 2 - func_80086C18(x);
+f32 Math_FAcosF(f32 x) {
+    return M_PI / 2 - Math_FAsinF(x);
 }

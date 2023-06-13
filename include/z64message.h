@@ -9,6 +9,9 @@ struct Actor;
 struct MessageTableEntry;
 struct OcarinaStaff;
 
+extern u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX];
+extern u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX];
+
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
     /*  1 */ TEXT_STATE_1,
@@ -34,7 +37,7 @@ typedef enum TextState {
 
 #define FONT_CHAR_TEX_WIDTH 16
 #define FONT_CHAR_TEX_HEIGHT 16
-//! @TODO: Make this use `sizeof(AnyFontTextureSymbol)`
+//! TODO: Make this use `sizeof(AnyFontTextureSymbol)`
 #define FONT_CHAR_TEX_SIZE ((16 * 16) / 2) // 16x16 I4 texture
 
 // TODO: should Font be in its own header or is it fine to have it here?
@@ -67,7 +70,7 @@ typedef struct MessageContext {
     /* 0x00168 */ Font font;
     /* 0x11EF8 */ UNK_PTR unk11EF8;
     /* 0x11EFC */ UNK_TYPE1 unk11EFC[0x4];
-    /* 0x11F00 */ struct OcarinaStaff* unk11F00;
+    /* 0x11F00 */ struct OcarinaStaff* ocarinaStaff;
     /* 0x11F04 */ u16 currentTextId;
     /* 0x11F06 */ UNK_TYPE1 unk11F06[0x2];
     /* 0x11F08 */ u16 unk11F08;
@@ -121,7 +124,7 @@ typedef struct MessageContext {
     /* 0x12028 */ u16 songPlayed;
     /* 0x1202A */ u16 ocarinaMode;
     /* 0x1202C */ u16 ocarinaAction;
-    /* 0x1202E */ u16 unk1202E;
+    /* 0x1202E */ u16 lastPlayedSong;
     /* 0x12030 */ s16 unk_12030;
     /* 0x12032 */ UNK_TYPE1 unk_12032[0x2];
     /* 0x12034 */ s16 unk12034;
@@ -159,8 +162,9 @@ typedef struct MessageContext {
     /* 0x120A0 */ s32 unk120A0;
     /* 0x120A4 */ s16 unk120A4[6];
     /* 0x120B0 */ u8 unk120B0;
-    /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xC];
+    /* 0x120B1 */ u8 bombersNotebookEventQueueCount;
+    /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
+    /* 0x120BC */ u16 unk_120BC;
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;
     /* 0x120C2 */ s16 unk120C2;

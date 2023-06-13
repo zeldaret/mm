@@ -8,7 +8,9 @@ struct EnZot;
 typedef void (*EnZotActionFunc)(struct EnZot*, PlayState*);
 
 #define ENZOT_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define ENZOT_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENZOT_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+
+#define ENZOT_PATH_INDEX_NONE 0x3F
 
 typedef struct EnZot {
     /* 0x000 */ Actor actor;
@@ -28,7 +30,5 @@ typedef struct EnZot {
     /* 0x2F4 */ s16 unk_2F4;
     /* 0x2F8 */ EnZotActionFunc actionFunc;
 } EnZot; // size = 0x2FC
-
-extern const ActorInit En_Zot_InitVars;
 
 #endif // Z_EN_ZOT_H

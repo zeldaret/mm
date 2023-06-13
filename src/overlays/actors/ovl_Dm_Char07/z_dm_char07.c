@@ -18,7 +18,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play);
 
 void DmChar07_DoNothing(DmChar07* this, PlayState* play);
 
-const ActorInit Dm_Char07_InitVars = {
+ActorInit Dm_Char07_InitVars = {
     ACTOR_DM_CHAR07,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -75,7 +75,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:
@@ -112,7 +112,7 @@ void DmChar07_Draw(Actor* thisx, PlayState* play) {
             break;
     }
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     switch (this->dyna.actor.params) {
         case DMCHAR07_STAGE:

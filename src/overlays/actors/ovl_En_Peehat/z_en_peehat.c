@@ -15,7 +15,7 @@
 
 void EnPeehat_Init(Actor* thisx, PlayState* play);
 void EnPeehat_Destroy(Actor* thisx, PlayState* play);
-void EnPeehat_Update(Actor* thisx, PlayState* play);
+void EnPeehat_Update(Actor* thisx, PlayState* play2);
 void EnPeehat_Draw(Actor* thisx, PlayState* play);
 
 void func_80897498(EnPeehat* this);
@@ -38,7 +38,7 @@ void func_80898594(EnPeehat* this, PlayState* play);
 void func_80898654(EnPeehat* this);
 void func_808986A4(EnPeehat* this, PlayState* play);
 
-const ActorInit En_Peehat_InitVars = {
+ActorInit En_Peehat_InitVars = {
     ACTOR_EN_PEEHAT,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -194,7 +194,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
             this->actor.shape.yOffset = -1000.0f;
         }
         Actor_SetScale(&this->actor, 0.036f);
-        this->actor.hintId = 0x48;
+        this->actor.hintId = TATL_HINT_ID_PEAHAT;
         func_80897498(this);
     } else {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -205,7 +205,7 @@ void EnPeehat_Init(Actor* thisx, PlayState* play) {
         this->colliderCylinder.dim.radius = 20;
         this->colliderCylinder.dim.height = 15;
         this->colliderCylinder.dim.yShift = -5;
-        this->actor.hintId = 0x49;
+        this->actor.hintId = TATL_HINT_ID_PEAHAT_LARVA;
         this->colliderCylinder.base.ocFlags1 &= ~OC1_ON;
 
         func_80897A34(this);
@@ -234,7 +234,7 @@ void func_80897170(EnPeehat* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->colliderSphere.base.colType = COLTYPE_HIT3;
     this->unk_2B0 = 80;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808971DC(EnPeehat* this, PlayState* play) {
@@ -257,9 +257,9 @@ void func_80897258(PlayState* play, EnPeehat* this, Vec3f* arg2, f32 arg3, f32 a
     sp44.x = (Math_SinS(sp42) * arg3) + arg2->x;
     sp44.z = (Math_CosS(sp42) * arg3) + arg2->z;
 
-    D_80899564.x = randPlusMinusPoint5Scaled(1.05f);
-    D_80899564.z = randPlusMinusPoint5Scaled(1.05f);
-    D_80899558.y = randPlusMinusPoint5Scaled(4.0f) + 8.0f;
+    D_80899564.x = Rand_CenteredFloat(1.05f);
+    D_80899564.z = Rand_CenteredFloat(1.05f);
+    D_80899558.y = Rand_CenteredFloat(4.0f) + 8.0f;
 
     EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4,
                         HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -283,7 +283,7 @@ void func_80897390(EnPeehat* this, PlayState* play) {
     }
 
     this->unk_2B0 = 8;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
 }
 
 void func_80897498(EnPeehat* this) {
@@ -327,7 +327,7 @@ void func_80897648(EnPeehat* this) {
                          Animation_GetLastFrame(&object_ph_Anim_0009C4), ANIMMODE_ONCE, 0.0f);
     }
     this->unk_2B0 = 16;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_UP);
     this->actionFunc = func_808976DC;
 }
 
@@ -378,7 +378,7 @@ void func_80897864(EnPeehat* this) {
 void func_80897910(EnPeehat* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    Math_StepToF(&this->actor.speedXZ, 3.0f, 0.25f);
+    Math_StepToF(&this->actor.speed, 3.0f, 0.25f);
     Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + 80.0f, 3.0f);
     SkelAnime_Update(&this->skelAnime);
     if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
@@ -396,7 +396,7 @@ void func_80897910(EnPeehat* this, PlayState* play) {
 void func_80897A34(EnPeehat* this) {
     Animation_PlayLoop(&this->skelAnime, &object_ph_Anim_0005C4);
     this->unk_2B0 = 30;
-    this->actor.speedXZ = 5.3f;
+    this->actor.speed = 5.3f;
     this->colliderTris.base.atFlags |= AT_ON;
     this->actionFunc = func_80897A94;
 }
@@ -432,13 +432,13 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
         this->colliderTris.base.atFlags &= ~(AT_BOUNCED | AT_ON);
         this->actor.colChkInfo.health = 0;
         func_808982E0(this);
-    } else if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & 1)) {
+    } else if ((this->colliderCylinder.base.acFlags & AC_HIT) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 40, 7, 0);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
-        if (!(this->actor.bgCheckFlags & 1)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else if (this->colliderTris.base.atFlags & AT_HIT) {
         this->colliderTris.base.atFlags &= ~AT_HIT;
         if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.world.rot.y) > 0) {
@@ -449,7 +449,7 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
         this->unk_2B0 = 40;
     } else if (this->colliderCylinder.base.ocFlags1 & OC1_HIT) {
         this->colliderCylinder.base.ocFlags1 &= ~OC1_HIT;
-        if ((BINANG_SUB(Actor_YawBetweenActors(&this->actor, this->colliderCylinder.base.oc),
+        if ((BINANG_SUB(Actor_WorldYawTowardActor(&this->actor, this->colliderCylinder.base.oc),
                         this->actor.world.rot.y)) > 0) {
             this->actor.world.rot.y -= 0x2000;
         } else {
@@ -469,12 +469,12 @@ void func_80897D48(EnPeehat* this, PlayState* play) {
     Vec3f sp34;
 
     Math_StepToF(&this->actor.shape.yOffset, -1000.0f, 50.0f);
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0, 50);
     if (SkelAnime_Update(&this->skelAnime)) {
         func_80897498(this);
         this->actor.world.pos.y = this->actor.floorHeight;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_LAND);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_LAND);
     } else if (this->actor.floorHeight < this->actor.world.pos.y) {
         Math_SmoothStepToF(&this->actor.world.pos.y, this->actor.floorHeight, 0.3f, 3.5f, 0.25f);
         if ((this->actor.world.pos.y - this->actor.floorHeight) < 60.0f) {
@@ -490,7 +490,7 @@ void func_80897D48(EnPeehat* this, PlayState* play) {
 
 void func_80897EAC(EnPeehat* this) {
     Animation_PlayLoop(&this->skelAnime, &object_ph_Anim_0005C4);
-    this->actor.speedXZ = Rand_ZeroFloat(0.5f) + 2.5f;
+    this->actor.speed = Rand_ZeroFloat(0.5f) + 2.5f;
     this->unk_2B0 = Rand_ZeroFloat(10.0f) + 10.0f;
     this->colliderTris.base.atFlags |= AT_ON;
     this->colliderSphere.base.acFlags |= AC_ON;
@@ -506,15 +506,15 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
         this->actor.world.pos.y -= 1.0f;
     }
 
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->actor.world.pos.y += cos * 1.4f;
     this->unk_2B8 += fabsf(cos * 0.18f) + 0.07f;
     this->unk_2B0--;
 
     if (this->unk_2B0 <= 0) {
-        this->actor.speedXZ = Rand_ZeroFloat(0.5f) + 2.5f;
+        this->actor.speed = Rand_ZeroFloat(0.5f) + 2.5f;
         this->unk_2B0 = Rand_ZeroFloat(10.0f) + 10.0f;
-        this->unk_2B6 = randPlusMinusPoint5Scaled(1000.0f);
+        this->unk_2B6 = Rand_CenteredFloat(1000.0f);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -536,7 +536,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
 
 void func_80898124(EnPeehat* this) {
     this->actionFunc = func_80898144;
-    this->actor.speedXZ = 2.5f;
+    this->actor.speed = 2.5f;
 }
 
 void func_80898144(EnPeehat* this, PlayState* play) {
@@ -549,10 +549,10 @@ void func_80898144(EnPeehat* this, PlayState* play) {
     } else {
         this->actor.world.pos.y += 1.0f;
     }
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->actor.world.pos.y += cos * 1.4f;
 
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->unk_2B8 += fabsf(cos * 0.18f) + 0.07f;
 
     step = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
@@ -574,7 +574,7 @@ void func_80898144(EnPeehat* this, PlayState* play) {
 
 void func_808982E0(EnPeehat* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &object_ph_Anim_000844, -4.0f);
-    this->actor.speedXZ = -9.0f;
+    this->actor.speed = -9.0f;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = func_80898338;
 }
@@ -583,12 +583,12 @@ void func_80898338(EnPeehat* this, PlayState* play) {
     this->unk_2B4 += this->unk_2B2;
     SkelAnime_Update(&this->skelAnime);
 
-    if (Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f)) {
+    if (Math_StepToF(&this->actor.speed, 0.0f, 0.5f)) {
         if (this->actor.params != 0) {
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, 40, 7, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EN_EXTINCT);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_PIHAT_SM_DEAD);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         } else {
             func_80897864(this);
         }
@@ -599,7 +599,7 @@ void func_80898338(EnPeehat* this, PlayState* play) {
 void func_80898414(EnPeehat* this) {
     func_800BE568(&this->actor, &this->colliderSphere);
     this->unk_2B2 = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actionFunc = func_80898454;
 }
 
@@ -622,11 +622,11 @@ void func_80898454(EnPeehat* this, PlayState* play) {
 
 void func_808984E0(EnPeehat* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &object_ph_Anim_000844, -4.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIHAT_DAMAGE);
     this->unk_2B2 = 4000;
     this->unk_2B0 = 14;
-    this->actor.speedXZ = 10.0f;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 14);
+    this->actor.speed = 10.0f;
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 14);
     this->colliderSphere.base.acFlags &= ~AC_ON;
     this->unk_2C4 = 0.0f;
     if (this->actor.colChkInfo.health == 0) {
@@ -640,7 +640,7 @@ void func_80898594(EnPeehat* this, PlayState* play) {
     this->unk_2B4 += this->unk_2B2;
     Math_ScaledStepToS(&this->unk_2B2, 4000, 250);
     Math_StepToF(&this->actor.world.pos.y, this->actor.floorHeight + 88.5f, 3.0f);
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     this->unk_2B0--;
     if (this->unk_2B0 <= 0) {
         if (this->actor.colChkInfo.health == 0) {
@@ -660,8 +660,9 @@ void func_80898654(EnPeehat* this) {
 
 void func_808986A4(EnPeehat* this, PlayState* play) {
     if (this->unk_2B0 == 5) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0x602, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x602, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;
@@ -672,7 +673,7 @@ void func_808986A4(EnPeehat* this, PlayState* play) {
 
     if (this->unk_2B0 == 0) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xE0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -697,16 +698,16 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
 
             if (this->actor.colChkInfo.damageEffect == 5) {
                 this->unk_2B0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 this->drawDmgEffScale = 1.1f;
                 this->drawDmgEffAlpha = 2.0f;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 1) {
                 this->unk_2B0 = 40;
-                Actor_SetColorFilter(&this->actor, 0, 200, 0, 40);
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 200, COLORFILTER_BUFFLAG_OPA, 40);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                 func_80898414(this);
             } else if (this->actor.colChkInfo.damageEffect == 3) {
                 func_80897170(this);
@@ -750,7 +751,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
         func_8089874C(this, play);
     }
     Actor_MoveWithGravity(thisx);
-    Actor_UpdateBgCheckInfo(play, thisx, 25.0f, 30.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, thisx, 25.0f, 30.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 
@@ -788,7 +789,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (this->colliderTris.base.atFlags & AT_ON) {
-        thisx->flags |= 0x1000000;
+        thisx->flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderTris.base);
         if (thisx->params == 0) {
             Vec3f sp74;
@@ -900,6 +901,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfx = POLY_OPA_DISP;
 
         Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);
@@ -925,12 +927,12 @@ void EnPeehat_Draw(Actor* thisx, PlayState* play) {
     Vec3f sp40;
     s32 i;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnPeehat_OverrideLimbDraw,
                       (this->actor.params == 0) ? EnPeehat_PostLimbDraw : NULL, &this->actor);
 
-    if ((this->actor.speedXZ != 0.0f) || (this->actor.velocity.y != 0.0f)) {
+    if ((this->actor.speed != 0.0f) || (this->actor.velocity.y != 0.0f)) {
         Matrix_MultVecZ(4500.0f, &sp40);
         Matrix_MultVecZ(-4500.0f, &sp4C);
         Matrix_MultVecX(4500.0f, &sp58);

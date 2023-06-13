@@ -18,7 +18,7 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 
 void func_80C25D84(EnRsn* this, PlayState* play);
 
-const ActorInit En_Rsn_InitVars = {
+ActorInit En_Rsn_InitVars = {
     ACTOR_EN_RSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -30,10 +30,10 @@ const ActorInit En_Rsn_InitVars = {
     (ActorFunc)EnRsn_Draw,
 };
 
-static AnimationInfo sAnimations[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
+static AnimationInfo sAnimationInfo[] = { { &gBombShopkeeperSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f } };
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80C25D84;
 }
 
@@ -86,9 +86,11 @@ void EnRsn_Draw(Actor* thisx, PlayState* play) {
     EnRsn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C5B0(play->state.gfxCtx);
+
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBombShopkeeperEyeTex));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

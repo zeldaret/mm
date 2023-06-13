@@ -24,7 +24,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play);
 void func_80B3C4E0(ObjGhaka* this, PlayState* play);
 void func_80B3C624(ObjGhaka* this, PlayState* play);
 
-const ActorInit Obj_Ghaka_InitVars = {
+ActorInit Obj_Ghaka_InitVars = {
     ACTOR_OBJ_GHAKA,
     ACTORCAT_PROP,
     FLAGS,
@@ -44,7 +44,7 @@ static InitChainEntry D_80B3C96C[] = {
 };
 
 void func_80B3C260(ObjGhaka* this) {
-    if (gSaveContext.save.weekEventReg[20] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + 100.0f;
     }
     this->actionFunc = func_80B3C39C;
@@ -59,12 +59,12 @@ void func_80B3C2B0(ObjGhaka* this) {
 }
 
 void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
-    if (!(gSaveContext.save.weekEventReg[20] & 0x20)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 0,
-                                      this->dyna.actor.cutscene, this->dyna.actor.unk20, 0);
+                                      this->dyna.actor.csId, this->dyna.actor.halfDaysBits, 0);
     } else {
-        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1, -1,
-                                      this->dyna.actor.unk20, 0);
+        Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_BG_GORON_OYU, 0.0f, 25.0f, 261.0f, 0, 0, 0, 1,
+                                      CS_ID_NONE, this->dyna.actor.halfDaysBits, 0);
     }
 }
 
@@ -85,11 +85,11 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         }
     }
 
-    if (this->dyna.pushForce < 0.0f && !(gSaveContext.save.weekEventReg[20] & 0x20) &&
+    if (this->dyna.pushForce < 0.0f && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20) &&
         player->transformation == PLAYER_FORM_GORON) {
         func_80B3C2B0(this);
     } else {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
     }
 }
@@ -136,10 +136,10 @@ void func_80B3C624(ObjGhaka* this, PlayState* play) {
     this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + this->unk_168;
 
     if (stepTemp) {
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
         func_80B3C2C4(this, play);
-        gSaveContext.save.weekEventReg[20] |= 0x20;
+        SET_WEEKEVENTREG(WEEKEVENTREG_20_20);
         func_80B3C260(this);
         Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
@@ -154,14 +154,14 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80B3C96C);
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_ghaka_Colheader_003CD0, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     if (this->dyna.actor.floorPoly == 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
-    if (gSaveContext.save.weekEventReg[20] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
         func_80B3C2C4(this, play);
     }
     func_80B3C260(this);
@@ -184,11 +184,13 @@ void ObjGhaka_Update(Actor* thisx, PlayState* play) {
 
 void ObjGhaka_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_ghaka_DL_001A20);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, object_ghaka_DL_001980);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

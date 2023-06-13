@@ -24,18 +24,18 @@ void DemoTreLgt_SetupAnimate(DemoTreLgt* this, PlayState* play, f32 frame);
 void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play);
 
 typedef struct {
-    f32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-} DemoTreLgtInfo;
+    /* 0x0 */ f32 unk0;
+    /* 0x4 */ f32 unk4;
+    /* 0x8 */ f32 unk8;
+    /* 0xC */ f32 unkC;
+} DemoTreLgtInfo; // size = 0x10
 
 static DemoTreLgtInfo D_808E1490[2] = {
     { 1.0f, 136.0f, 190.0f, 40.0f },
     { 1.0f, 136.0f, 220.0f, 50.0f },
 };
 
-const ActorInit Demo_Tre_Lgt_InitVars = {
+ActorInit Demo_Tre_Lgt_InitVars = {
     ACTOR_DEMO_TRE_LGT,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -53,8 +53,8 @@ static TransformUpdateIndex* sBoxLightAnimations[] = {
 };
 
 typedef enum {
-    /* 0x00 */ DEMO_TRE_LGT_ACTION_WAIT, // wait until animation is needed
-    /* 0x01 */ DEMO_TRE_LGT_ACTION_ANIMATE
+    /* 0 */ DEMO_TRE_LGT_ACTION_WAIT, // wait until animation is needed
+    /* 1 */ DEMO_TRE_LGT_ACTION_ANIMATE
 } DemoTreLgtAction;
 
 static DemoTreLgtActionFunc sActionFuncs[] = {
@@ -131,7 +131,7 @@ void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
         }
     }
     if (SkelCurve_Update(play, &this->skelCurve)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -168,10 +168,12 @@ void DemoTreLgt_Draw(Actor* thisx, PlayState* play) {
     DemoTreLgt* this = THIS;
 
     OPEN_DISPS(gfxCtx);
+
     if (this->action == DEMO_TRE_LGT_ACTION_ANIMATE) {
-        func_8012C2DC(gfxCtx);
+        Gfx_SetupDL25_Xlu(gfxCtx);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 255, 0, 0);
         SkelCurve_Draw(&this->actor, play, &this->skelCurve, DemoTreLgt_OverrideLimbDraw, NULL, 1, &this->actor);
     }
+
     CLOSE_DISPS(gfxCtx);
 }

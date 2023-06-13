@@ -17,7 +17,7 @@ void EnBh_Draw(Actor* thisx, PlayState* play);
 
 void func_80C22DEC(EnBh* this, PlayState* play);
 
-const ActorInit En_Bh_InitVars = {
+ActorInit En_Bh_InitVars = {
     ACTOR_EN_BH,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,16 +52,16 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     s16 yRot;
     s16 zRot;
 
-    this->actor.speedXZ = 3.0f;
+    this->actor.speed = 3.0f;
     xDiff = this->pos.x - this->actor.world.pos.x;
     yDiff = this->pos.y - this->actor.world.pos.y;
     zDiff = this->pos.z - this->actor.world.pos.z;
     xzDist = sqrtf(SQ(xDiff) + SQ(zDiff));
 
     if ((this->timer2 == 0) || (xzDist < 100.0f)) {
-        this->pos.x = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.x;
-        this->pos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.home.pos.y;
-        this->pos.z = randPlusMinusPoint5Scaled(300.0f) + this->actor.home.pos.z;
+        this->pos.x = Rand_CenteredFloat(300.0f) + this->actor.home.pos.x;
+        this->pos.y = Rand_CenteredFloat(100.0f) + this->actor.home.pos.y;
+        this->pos.z = Rand_CenteredFloat(300.0f) + this->actor.home.pos.z;
         this->timer2 = Rand_ZeroFloat(50.0f) + 30.0f;
         this->step = 0;
     }
@@ -85,7 +85,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
             this->skelanime.playSpeed = 1.0f;
             this->timer = Rand_ZeroFloat(70.0f) + 50.0f;
         } else if (((this->timer & 7) == 7) && (Rand_ZeroOne() < 0.5f)) {
-            this->unk1E4 = randPlusMinusPoint5Scaled(3000.0f);
+            this->unk1E4 = Rand_CenteredFloat(3000.0f);
         }
     } else {
         SkelAnime_Update(&this->skelanime);
@@ -114,7 +114,7 @@ void EnBh_Update(Actor* thisx, PlayState* play) {
 void EnBh_Draw(Actor* thisx, PlayState* play) {
     EnBh* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateZS(this->unk1E2, MTXMODE_APPLY);
     SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
                           NULL, &this->actor);

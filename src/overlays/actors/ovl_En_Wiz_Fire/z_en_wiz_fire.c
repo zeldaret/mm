@@ -1,36 +1,43 @@
 /*
  * File: z_en_wiz_fire.c
  * Overlay: ovl_En_Wiz_Fire
- * Description: Wizzrobe Fire/Ice Attack
+ * Description: Wizrobe Fire/Ice Attack
  */
 
 #include "z_en_wiz_fire.h"
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWizFire*)thisx)
 
 void EnWizFire_Init(Actor* thisx, PlayState* play);
 void EnWizFire_Destroy(Actor* thisx, PlayState* play);
-void EnWizFire_Update(Actor* thisx, PlayState* play);
-void EnWizFire_Draw(Actor* thisx, PlayState* play);
+void EnWizFire_Update(Actor* thisx, PlayState* play2);
+void EnWizFire_Draw(Actor* thisx, PlayState* play2);
 
-void func_80A4984C(EnWizFire* this, PlayState* play);
-void func_80A49A44(EnWizFire* this, PlayState* play);
-void func_80A49F38(EnWizFire* this, PlayState* play);
-void func_80A49FD8(EnWizFire* this, PlayState* play);
-void func_80A4A11C(EnWizFire* this, PlayState* play);
-void func_80A4A608(EnWizFire* this, PlayState* play);
-void func_80A4BAB4(Actor* thisx, PlayState* play);
-void func_80A4BC74(EnWizFire* this, Vec3f* arg1, Vec3f* arg2);
-void func_80A4BDDC(EnWizFire* this, PlayState* play);
-void func_80A4BF78(EnWizFire* this, PlayState* play);
+void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play);
+void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play);
+void EnWiz_SetupSmallFlame(EnWizFire* this, PlayState* play);
+void EnWiz_SmallFlame(EnWizFire* this, PlayState* play);
+void EnWiz_Pool(EnWizFire* this, PlayState* play);
+void EnWiz_KillMagicProjectile(EnWizFire* this, PlayState* play);
+void EnWizFire_DrawSmallFlame(Actor* thisx, PlayState* play);
+void EnWizFire_InitializeEffect(EnWizFire* this, Vec3f* pos, Vec3f* accel);
+void EnWizFire_UpdateEffects(EnWizFire* this, PlayState* play);
+void EnWizFire_DrawEffects(EnWizFire* this, PlayState* play);
 
-static s32 D_80A4C1C0 = 0;
+typedef enum {
+    /* 0 */ EN_WIZ_FIRE_ACTION_MOVE_MAGIC_PROJECTILE,
+    /* 1 */ EN_WIZ_FIRE_ACTION_SMALL_FLAME,
+    /* 2 */ EN_WIZ_FIRE_ACTION_POOL,
+    /* 3 */ EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE
+} EnWizFireAction;
 
-const ActorInit En_Wiz_Fire_InitVars = {
+static s32 sPoolHitByIceArrow = false;
+
+ActorInit En_Wiz_Fire_InitVars = {
     ACTOR_EN_WIZ_FIRE,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -66,48 +73,52 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
     EnWizFire* this = THIS;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->unk_162 = this->actor.params;
+    this->type = EN_WIZ_FIRE_GET_TYPE(&this->actor);
     this->actor.targetMode = 3;
-    this->unk_172 = 10;
-    this->unk_1FC = 255.0f;
+    this->wallCheckTimer = 10;
+    this->alpha = 255.0f;
     this->actor.flags &= ~ACTOR_FLAG_1;
 
     if (!Player_HasMirrorShieldEquipped(play)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;
     }
 
-    switch (this->unk_162) {
-        case 4:
-            this->unk_166 = 1;
+    switch (this->type) {
+        case EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE:
+            this->isIceType = true;
             this->collider.info.toucher.damage = 8;
             this->collider.info.toucher.effect = 2;
             this->collider.info.bumper.dmgFlags = (0x1000000 | 0x800 | 0x200 | 0x2);
-            this->unk_162 = 0;
-
-        case 0:
-            if (this->unk_162 == 4) {
-                this->unk_162 = 0;
+            this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
+            // fallthrough
+        case EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE:
+            if (this->type == EN_WIZ_FIRE_TYPE_ICE_MAGIC_PROJECTILE) {
+                this->type = EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE;
                 this->collider.info.toucher.damage = 8;
             }
-
-        case 1:
-        case 3:
-            this->actionFunc = func_80A4984C;
+            // fallthrough
+        case EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE:
+        case EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE:
+            this->actionFunc = EnWiz_SetupMoveMagicProjectile;
             break;
 
-        case 2:
-            this->actor.draw = func_80A4BAB4;
-            this->unk_170 = Rand_S16Offset(0, 10000);
-            this->unk_160 = 1;
+        case EN_WIZ_FIRE_TYPE_SMALL_FLAME:
+            this->actor.draw = EnWizFire_DrawSmallFlame;
+            this->smallFlameScroll = Rand_S16Offset(0, 10000);
+            this->action = EN_WIZ_FIRE_ACTION_SMALL_FLAME;
             this->collider.info.toucher.damage = 2;
-            this->actionFunc = func_80A49F38;
+            this->actionFunc = EnWiz_SetupSmallFlame;
+            break;
+
+        default:
+            break;
     }
 }
 
 void EnWizFire_Destroy(Actor* thisx, PlayState* play) {
     EnWizFire* this = THIS;
 
-    if (this->unk_162 == 0) {
+    if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
         play->envCtx.lightSettings.fogColor[2] = 0;
         play->envCtx.lightSettings.fogColor[1] = play->envCtx.lightSettings.fogColor[2];
         play->envCtx.lightSettings.fogColor[0] = play->envCtx.lightSettings.fogColor[2];
@@ -122,254 +133,274 @@ void EnWizFire_Destroy(Actor* thisx, PlayState* play) {
         play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.fogColor[2];
         play->envCtx.lightSettings.fogNear = play->envCtx.lightSettings.fogColor[2];
     }
+
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80A4984C(EnWizFire* this, PlayState* play) {
-    Vec3f sp44 = { 0.0f, 0.0f, 0.0f };
+void EnWiz_SetupMoveMagicProjectile(EnWizFire* this, PlayState* play) {
+    Vec3f velocity = { 0.0f, 0.0f, 0.0f };
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_178); i++) {
-        this->unk_178[i] = this->actor.world.pos;
+    for (i = 0; i < ARRAY_COUNT(this->magicProjectilePos); i++) {
+        this->magicProjectilePos[i] = this->actor.world.pos;
     }
 
-    this->unk_16E = 0;
+    this->lowestUsedIndex = 0;
+
     Matrix_Push();
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_NEW);
     Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
 
-    if (this->unk_162 != 0) {
-        sp44.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
+    if (this->type != EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
+        velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
     } else {
-        sp44.z = 12.0f;
+        velocity.z = 12.0f;
     }
 
-    Matrix_MultVec3f(&sp44, &this->actor.velocity);
+    Matrix_MultVec3f(&velocity, &this->actor.velocity);
     Matrix_Pop();
+
     this->actor.world.rot.x = this->actor.world.rot.y = this->actor.world.rot.z = 0;
-    this->unk_168 = 50;
-    if (this->unk_162 != 0) {
+    this->timer = 50;
+
+    if (this->type != EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
         this->actor.velocity.y = 10.0f;
         this->actor.gravity = -1.0f;
-        this->unk_150 = 0.01f;
+        this->targetScale = 0.01f;
     } else {
-        this->unk_150 = 0.02f;
-        this->unk_168 = 100;
+        this->targetScale = 0.02f;
+        this->timer = 100;
     }
-    this->unk_160 = 0;
-    this->actionFunc = func_80A49A44;
+
+    this->action = EN_WIZ_FIRE_ACTION_MOVE_MAGIC_PROJECTILE;
+    this->actionFunc = EnWiz_MoveMagicProjectile;
 }
 
-void func_80A49A44(EnWizFire* this, PlayState* play) {
-    Vec3f sp54 = { 0.0f, 0.0f, 0.0f };
+/**
+ * Moves all types of magic projectiles around, including arcing ones created by the
+ * Fire Wizrobe's attack or ones reflected by the Mirror Shield.
+ */
+void EnWiz_MoveMagicProjectile(EnWizFire* this, PlayState* play) {
+    Vec3f velocity = { 0.0f, 0.0f, 0.0f };
 
     this->actor.world.rot.z += 5000;
 
-    if (this->unk_162 != 0) {
-        this->unk_150 = 0.01f;
+    if (this->type != EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
+        this->targetScale = 0.01f;
     } else {
-        this->unk_150 = 0.02f;
+        this->targetScale = 0.02f;
     }
 
-    if ((this->unk_168 == 0) && (this->unk_14C < 0.001f)) {
+    if ((this->timer == 0) && (this->scale < 0.001f)) {
         Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
-        this->unk_160 = 3;
-        this->unk_16A = 0;
-        this->actionFunc = func_80A4A608;
+        this->action = EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE;
+        this->increaseLowestUsedIndexTimer = 0;
+        this->actionFunc = EnWiz_KillMagicProjectile;
         return;
     }
 
-    if (this->unk_168 == 0) {
-        this->unk_150 = 0.0f;
+    if (this->timer == 0) {
+        this->targetScale = 0.0f;
     }
 
-    Math_ApproachF(&this->unk_14C, this->unk_150, 0.2f, 0.01f);
+    Math_ApproachF(&this->scale, this->targetScale, 0.2f, 0.01f);
 
-    if (this->unk_172 == 0) {
-        if ((this->actor.bgCheckFlags & 8) && (this->unk_162 == 0) && (this->unk_168 != 0) &&
-            (this->actor.bgCheckFlags & 8)) {
-            D_80A4C1C0 = 0;
-            this->unk_168 = 0;
-            this->unk_150 = 0.0f;
+    if (this->wallCheckTimer == 0) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
+            (this->timer != 0) && (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
+            sPoolHitByIceArrow = false;
+            this->timer = 0;
+            this->targetScale = 0.0f;
         }
     }
 
-    if ((this->actor.bgCheckFlags & 1) && (this->unk_16A == 0)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->poolTimer == 0)) {
         s32 i;
-        s16 phi_s0;
-        s32 temp;
+        s16 arcingProjectileRotY;
+        s32 pad;
 
-        if (this->unk_162 == 1) {
-            this->unk_16A = 10;
+        if (this->type == EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE) {
+            this->increaseLowestUsedIndexTimer = 10;
 
             Matrix_Push();
-            Matrix_RotateYS((s16)randPlusMinusPoint5Scaled(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
-            sp54.z = randPlusMinusPoint5Scaled(2.0f) + 8.0f;
-            Matrix_MultVec3f(&sp54, &this->actor.velocity);
+            Matrix_RotateYS((s16)(s32)Rand_CenteredFloat(0x100) + this->actor.world.rot.y, MTXMODE_NEW);
+            velocity.z = Rand_CenteredFloat(2.0f) + 8.0f;
+            Matrix_MultVec3f(&velocity, &this->actor.velocity);
             Matrix_Pop();
 
             this->actor.velocity.y = 6.0f;
             this->actor.gravity = -0.7f;
 
-            if (this->unk_164 == 0) {
+            if (!this->hasSpawnedSmallFlame) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WIZ_FIRE, this->actor.world.pos.x,
-                            this->actor.world.pos.y - 10.0f, this->actor.world.pos.z, 0, 0, 0, 2);
-                this->unk_164 = 1;
+                            this->actor.world.pos.y - 10.0f, this->actor.world.pos.z, 0, 0, 0,
+                            EN_WIZ_FIRE_TYPE_SMALL_FLAME);
+                this->hasSpawnedSmallFlame = true;
             }
 
-            this->unk_168 = 0;
-            this->unk_14C = 0.0f;
+            this->timer = 0;
+            this->scale = 0.0f;
             Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
-            this->unk_160 = 3;
-            this->unk_16A = 0;
-            this->actionFunc = func_80A4A608;
+            this->action = EN_WIZ_FIRE_ACTION_KILL_MAGIC_PROJECTILE;
+            this->increaseLowestUsedIndexTimer = 0;
+            this->actionFunc = EnWiz_KillMagicProjectile;
             return;
         }
 
-        if ((this->unk_162 == 0) && (this->unk_168 != 0)) {
+        if ((this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->timer != 0)) {
             if (this->actor.floorBgId == BGCHECK_SCENE) {
-                this->unk_16A = 100;
-                if (this->unk_166 == 0) {
-                    phi_s0 = 0;
+                this->poolTimer = 100;
+                if (!this->isIceType) {
+                    arcingProjectileRotY = 0;
 
                     for (i = 0; i < 5; i++) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WIZ_FIRE, this->actor.world.pos.x,
-                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, phi_s0, 0, 1);
-                        phi_s0 += BINANG_ADD((s32)randPlusMinusPoint5Scaled(0x1000), 0x3333);
+                                    this->actor.world.pos.y, this->actor.world.pos.z, 0, arcingProjectileRotY, 0,
+                                    EN_WIZ_FIRE_TYPE_ARCING_MAGIC_PROJECTILE);
+                        arcingProjectileRotY += BINANG_ADD((s32)Rand_CenteredFloat(0x1000), 0x10000 / 5);
                     }
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-                    this->unk_16A = Rand_S16Offset(70, 30);
-                    if (this->unk_16A != 0) {
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_EXP - SFX_FLAG);
+                    Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
+                    this->poolTimer = Rand_S16Offset(70, 30);
+                    if (this->poolTimer != 0) {
+                        Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_EXP - SFX_FLAG);
                     }
-                } else if (this->unk_16A != 0) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                } else if (this->poolTimer != 0) {
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
+
                 Math_Vec3f_Copy(&this->actor.velocity, &gZeroVec3f);
-                this->unk_168 = 0;
-                this->unk_160 = 2;
-                this->unk_14C = 0.0f;
-                this->actionFunc = func_80A4A11C;
+                this->timer = 0;
+                this->action = EN_WIZ_FIRE_ACTION_POOL;
+                this->scale = 0.0f;
+                this->actionFunc = EnWiz_Pool;
             }
+
             return;
         }
     }
 
-    if ((this->unk_162 != 3) && (this->unk_168 != 0)) {
+    if ((this->type != EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE) && (this->timer != 0)) {
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
-                this->unk_168 = 0;
-                this->unk_148 = 1;
+                this->timer = 0;
+                this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
 
         if (Player_HasMirrorShieldEquipped(play) && (this->collider.base.atFlags & AT_BOUNCED)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_MG);
             this->collider.base.atFlags &= ~(AT_TYPE_ENEMY | AT_BOUNCED | AT_HIT);
             this->collider.base.atFlags |= AT_TYPE_PLAYER;
             this->collider.info.toucher.dmgFlags = 0x20;
             this->collider.info.toucher.damage = 2;
-            this->unk_168 = 100;
-            this->unk_162 = 3;
+            this->timer = 100;
+            this->type = EN_WIZ_FIRE_TYPE_REFLECTED_MAGIC_PROJECTILE;
             this->actor.velocity.x *= -1.0f;
             this->actor.velocity.y *= -0.5f;
             this->actor.velocity.z *= -1.0f;
 
             if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
                 (this->actor.parent->update != NULL)) {
-                ((EnWiz*)this->actor.parent)->unk_3BA = 0;
+                ((EnWiz*)this->actor.parent)->hasActiveProjectile = false;
             }
         }
     }
 }
 
-void func_80A49F38(EnWizFire* this, PlayState* play) {
-    this->unk_150 = 0.02f;
-    this->unk_168 = Rand_S16Offset(50, 50);
-    this->unk_154 = randPlusMinusPoint5Scaled(1.0f) * 0.007f;
-    this->unk_158 = randPlusMinusPoint5Scaled(1.0f) * 0.005f;
-    this->unk_15C = randPlusMinusPoint5Scaled(1.0f) * 0.007f;
-    this->actionFunc = func_80A49FD8;
+void EnWiz_SetupSmallFlame(EnWizFire* this, PlayState* play) {
+    this->targetScale = 0.02f;
+    this->timer = Rand_S16Offset(50, 50);
+    this->scaleMod.x = Rand_CenteredFloat(1.0f) * 0.007f;
+    this->scaleMod.y = Rand_CenteredFloat(1.0f) * 0.005f;
+    this->scaleMod.z = Rand_CenteredFloat(1.0f) * 0.007f;
+    this->actionFunc = EnWiz_SmallFlame;
 }
 
-void func_80A49FD8(EnWizFire* this, PlayState* play) {
-    if (this->unk_168 > 10) {
-        Math_ApproachF(&this->unk_14C, this->unk_150, 0.3f, 0.01f);
+/**
+ * Manages the small flame that is created when the arcing projectiles from the Fire Wizrobe's
+ * attack hit the floor.
+ */
+void EnWiz_SmallFlame(EnWizFire* this, PlayState* play) {
+    if (this->timer > 10) {
+        Math_ApproachF(&this->scale, this->targetScale, 0.3f, 0.01f);
     } else {
-        Math_ApproachF(&this->unk_14C, 2.0f * this->unk_150, 0.2f, 0.002f);
-        Math_ApproachZeroF(&this->unk_1FC, 1.0f, 35.0f);
-        if ((this->unk_168 == 0) && (this->unk_1FC < 2.0f)) {
-            Actor_MarkForDeath(&this->actor);
+        Math_ApproachF(&this->scale, 2.0f * this->targetScale, 0.2f, 0.002f);
+        Math_ApproachZeroF(&this->alpha, 1.0f, 35.0f);
+        if ((this->timer == 0) && (this->alpha < 2.0f)) {
+            Actor_Kill(&this->actor);
         }
         return;
     }
 
     if (this->collider.base.acFlags & AC_HIT) {
-        if (this->unk_168 != 0) {
+        if (this->timer != 0) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (this->unk_168 > 10) {
-                this->unk_168 -= 10;
+            if (this->timer > 10) {
+                this->timer -= 10;
             }
 
             if (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000) {
-                this->unk_168 = 0;
-                this->unk_148 = 1;
+                this->timer = 0;
+                this->hitByIceArrow = true;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
     }
 
-    if (this->unk_168 != 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
+    if (this->timer != 0) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_BURN_OUT - SFX_FLAG);
     }
 }
 
-void func_80A4A11C(EnWizFire* this, PlayState* play) {
+/**
+ * Manages the pool of fire or ice that is created when a magic projectile hits the floor.
+ */
+void EnWiz_Pool(EnWizFire* this, PlayState* play) {
     s32 pad;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
         (this->actor.parent->update != NULL) && (this->actor.parent->colChkInfo.health == 0)) {
-        this->unk_16A = 0;
-        this->unk_174 = 1;
+        this->poolTimer = 0;
+        this->playerHitByIceProjectile = true;
     }
 
-    this->unk_16E++;
+    this->lowestUsedIndex++;
 
-    if (this->unk_16E > 10) {
-        this->unk_16E = 10;
+    if (this->lowestUsedIndex > 10) {
+        this->lowestUsedIndex = 10;
     }
 
-    if (this->unk_16A != 0) {
-        Math_ApproachF(&this->unk_200, 60.0f, 0.5f, 10.0f);
-        if (this->unk_166 == 1) {
-            Vec3f sp40 = { 0.0f, 0.0f, 0.0f };
-            Vec3f sp34;
+    if (this->poolTimer != 0) {
+        Math_ApproachF(&this->blendScale, 60.0f, 0.5f, 10.0f);
+        if (this->isIceType == true) {
+            Vec3f accel = { 0.0f, 0.0f, 0.0f };
+            Vec3f pos;
 
-            sp40.x = randPlusMinusPoint5Scaled(3.0f) / 10.0f;
-            sp40.y = 0.23f;
-            sp40.z = randPlusMinusPoint5Scaled(3.0f) / 10.0f;
+            accel.x = Rand_CenteredFloat(3.0f) / 10.0f;
+            accel.y = 0.23f;
+            accel.z = Rand_CenteredFloat(3.0f) / 10.0f;
 
-            Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-            sp34.x += randPlusMinusPoint5Scaled(150.0f);
-            sp34.z += randPlusMinusPoint5Scaled(150.0f);
+            Math_Vec3f_Copy(&pos, &this->actor.world.pos);
+            pos.x += Rand_CenteredFloat(150.0f);
+            pos.z += Rand_CenteredFloat(150.0f);
 
-            Math_ApproachF(&this->unk_1F0, 0.022f, 0.3f, 0.01f);
-            this->collider.dim.radius = this->unk_1F0 * 4300.0f;
+            Math_ApproachF(&this->poolScale, 0.022f, 0.3f, 0.01f);
+            this->collider.dim.radius = this->poolScale * 4300.0f;
             this->collider.dim.height = 30;
             this->collider.dim.yShift = 15;
-            func_80A4BC74(this, &sp34, &sp40);
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            EnWizFire_InitializeEffect(this, &pos, &accel);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             return;
         }
 
-        Math_ApproachF(&this->unk_1F0, 0.02f, 0.3f, 0.002f);
-        Math_ApproachF(&this->unk_1F8, 0.02f, 0.3f, 0.002f);
-        Math_ApproachF(&this->unk_1F4, 0.02f, 0.3f, 0.2f);
-        this->collider.dim.radius = this->unk_1F0 * 4000.0f;
-        this->collider.dim.height = this->unk_1F4 * 1850.0f;
+        Math_ApproachF(&this->poolScale, 0.02f, 0.3f, 0.002f);
+        Math_ApproachF(&this->fireSmokeScale, 0.02f, 0.3f, 0.002f);
+        Math_ApproachF(&this->bigFlameScale, 0.02f, 0.3f, 0.2f);
+        this->collider.dim.radius = this->poolScale * 4000.0f;
+        this->collider.dim.height = this->bigFlameScale * 1850.0f;
         this->collider.dim.yShift = -15;
 
         if (this->collider.dim.height < 2) {
@@ -378,241 +409,241 @@ void func_80A4A11C(EnWizFire* this, PlayState* play) {
 
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if ((D_80A4C1C0 == 0) && (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000)) {
-                D_80A4C1C0 = 1;
-                this->unk_148 = 1;
-                this->unk_16A = 0;
+            if (!sPoolHitByIceArrow && (this->collider.info.acHitInfo->toucher.dmgFlags == 0x1000)) {
+                sPoolHitByIceArrow = true;
+                this->hitByIceArrow = true;
+                this->poolTimer = 0;
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_ICE_MELT);
             }
         }
+
         this->actor.world.pos.y = this->actor.floorHeight + 10.0f;
         Actor_SetFocus(&this->actor, 0.0f);
         return;
     }
 
-    Math_ApproachZeroF(&this->unk_200, 0.2f, 3.0f);
+    Math_ApproachZeroF(&this->blendScale, 0.2f, 3.0f);
 
-    if (this->unk_166 == 1) {
-        Math_ApproachZeroF(&this->unk_1F0, 0.046f, 0.001f);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+    if (this->isIceType == true) {
+        Math_ApproachZeroF(&this->poolScale, 0.046f, 0.001f);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
 
-        if (this->unk_164 == 0) {
-            if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) && (this->unk_1F0 < 0.05f)) {
+        if (!this->shouldPoolFadeOut) {
+            if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_WIZ) && (this->poolScale < 0.05f)) {
                 EnWiz* wiz = (EnWiz*)this->actor.parent;
 
                 this->collider.dim.yShift = -15;
-                this->unk_164 = 1;
-                wiz->unk_3BA = 0;
+                this->shouldPoolFadeOut = true;
+                wiz->hasActiveProjectile = false;
             }
         }
 
-        if ((this->unk_164 != 0) && (this->unk_1F0 < 0.05f)) {
-            Math_ApproachZeroF(&this->unk_1FC, 1.0f, 5.0f);
+        if (this->shouldPoolFadeOut && (this->poolScale < 0.05f)) {
+            Math_ApproachZeroF(&this->alpha, 1.0f, 5.0f);
         }
 
-        if ((this->unk_1F0 < 0.001f) && (this->unk_204 < 0.001f)) {
-            D_80A4C1C0 = 0;
-            Actor_MarkForDeath(&this->actor);
+        if ((this->poolScale < 0.001f) && (this->blendScaleFrac < 0.001f)) {
+            sPoolHitByIceArrow = false;
+            Actor_Kill(&this->actor);
         }
+
         return;
     }
 
-    Math_ApproachZeroF(&this->unk_1F4, 0.1f, 0.01f);
+    Math_ApproachZeroF(&this->bigFlameScale, 0.1f, 0.01f);
 
-    if (this->unk_1F4 < 0.01f) {
-        Math_ApproachZeroF(&this->unk_1FC, 1.0f, 10.0f);
-        if ((this->unk_1FC < 10.0f) && (this->unk_204 < 0.001f)) {
-            D_80A4C1C0 = 0;
-            if ((this->actor.parent != NULL) && (this->unk_162 == 0) && (this->actor.parent->id == ACTOR_EN_WIZ) &&
-                (this->actor.parent->update != NULL)) {
+    if (this->bigFlameScale < 0.01f) {
+        Math_ApproachZeroF(&this->alpha, 1.0f, 10.0f);
+        if ((this->alpha < 10.0f) && (this->blendScaleFrac < 0.001f)) {
+            sPoolHitByIceArrow = false;
+            if ((this->actor.parent != NULL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
+                (this->actor.parent->id == ACTOR_EN_WIZ) && (this->actor.parent->update != NULL)) {
                 EnWiz* wiz = (EnWiz*)this->actor.parent;
 
-                wiz->unk_3BA = 0;
+                wiz->hasActiveProjectile = false;
             }
-            Actor_MarkForDeath(&this->actor);
+
+            Actor_Kill(&this->actor);
         }
     }
 }
 
-void func_80A4A608(EnWizFire* this, PlayState* play) {
-    if (this->unk_16A == 0) {
-        this->unk_16A = 2;
-        this->unk_16E++;
-        if (this->unk_16E >= 6) {
-            if ((this->actor.parent != NULL) && (this->unk_162 == 0) && (this->actor.parent->id == ACTOR_EN_WIZ)) {
+void EnWiz_KillMagicProjectile(EnWizFire* this, PlayState* play) {
+    if (this->increaseLowestUsedIndexTimer == 0) {
+        this->increaseLowestUsedIndexTimer = 2;
+        this->lowestUsedIndex++;
+        if (this->lowestUsedIndex >= 6) {
+            if ((this->actor.parent != NULL) && (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) &&
+                (this->actor.parent->id == ACTOR_EN_WIZ)) {
                 EnWiz* wiz = (EnWiz*)this->actor.parent;
 
-                D_80A4C1C0 = 0;
+                sPoolHitByIceArrow = false;
                 if (wiz->actor.update != NULL) {
-                    wiz->unk_3BA = 0;
+                    wiz->hasActiveProjectile = false;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+
+            Actor_Kill(&this->actor);
         }
     }
 }
 
 void EnWizFire_Update(Actor* thisx, PlayState* play2) {
-    static Color_RGB8 D_80A4C234[] = {
-        { 100, 40, 40 }, { 180, 0x78, 80 }, { 155, 80, 80 },   { 125, 20, 0 },
-        { 0, 0, 0 },     { 200, 250, 250 }, { 100, 250, 250 }, { 225, 255, 235 },
+    // These are AmbientColor, DiffuseColor1, DiffuseColor2, and fogColor
+    static Color_RGB8 lightSettingsColors[] = {
+        { 100, 40, 40 }, { 180, 120, 80 },  { 155, 80, 80 },   { 125, 20, 0 },    // Fire
+        { 0, 0, 0 },     { 200, 250, 250 }, { 100, 250, 250 }, { 225, 255, 235 }, // Ice
     };
-    static Color_RGBA8 D_80A4C24C = { 250, 250, 250, 255 };
-    static Color_RGBA8 D_80A4C250 = { 180, 180, 180, 255 };
     PlayState* play = play2;
     EnWizFire* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 j;
-    s16 temp_s0;
-    s16 idx;
+    s16 randomScale;
+    s16 index;
 
-    Actor_SetScale(&this->actor, this->unk_14C);
-    func_80A4BDDC(this, play);
-    this->unk_204 = this->unk_200 / 60.0f;
+    Actor_SetScale(&this->actor, this->scale);
+    EnWizFire_UpdateEffects(this, play);
+    this->blendScaleFrac = this->blendScale / 60.0f;
 
-    if (this->unk_162 == 0) {
+    if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
         Actor* wiz = this->actor.parent;
 
-        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) && (((EnWiz*)wiz)->unk_74A != 2)) {
-            f32 phi_f0;
+        if ((wiz != NULL) && (wiz->id == ACTOR_EN_WIZ) && (wiz->update != NULL) &&
+            (((EnWiz*)wiz)->type != EN_WIZ_TYPE_FIRE_NO_BGM)) {
+            f32 fogNear;
 
-            idx = this->unk_166 * 4;
-
-            phi_f0 = 970.0f;
-            if (this->unk_166 == 0) {
-                phi_f0 = 968.0f;
+            index = this->isIceType * 4;
+            fogNear = 970.0f;
+            if (!this->isIceType) {
+                fogNear = 968.0f;
             }
 
-            play->envCtx.lightSettings.fogNear = (phi_f0 - (s16)play->envCtx.unk_C4.fogNear) * this->unk_204;
+            play->envCtx.lightSettings.fogNear = (fogNear - (s16)play->envCtx.unk_C4.fogNear) * this->blendScaleFrac;
 
             play->envCtx.lightSettings.ambientColor[0] =
-                ((f32)D_80A4C234[idx].r - play->envCtx.unk_C4.ambientColor[0]) * this->unk_204;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.ambientColor[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.ambientColor[1] =
-                ((f32)D_80A4C234[idx].g - play->envCtx.unk_C4.ambientColor[1]) * this->unk_204;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.ambientColor[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.ambientColor[2] =
-                ((f32)D_80A4C234[idx].b - play->envCtx.unk_C4.ambientColor[2]) * this->unk_204;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.ambientColor[2]) * this->blendScaleFrac;
 
-            idx++;
+            index++;
             play->envCtx.lightSettings.diffuseColor1[0] =
-                ((f32)D_80A4C234[idx].r - play->envCtx.unk_C4.diffuseColor1[0]) * this->unk_204;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor1[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor1[1] =
-                ((f32)D_80A4C234[idx].g - play->envCtx.unk_C4.diffuseColor1[1]) * this->unk_204;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor1[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor1[2] =
-                ((f32)D_80A4C234[idx].b - play->envCtx.unk_C4.diffuseColor1[2]) * this->unk_204;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor1[2]) * this->blendScaleFrac;
 
-            idx++;
+            index++;
             play->envCtx.lightSettings.diffuseColor2[0] =
-                ((f32)D_80A4C234[idx].r - play->envCtx.unk_C4.diffuseColor[0]) * this->unk_204;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.diffuseColor[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor2[1] =
-                ((f32)D_80A4C234[idx].g - play->envCtx.unk_C4.diffuseColor[1]) * this->unk_204;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.diffuseColor[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.diffuseColor2[2] =
-                ((f32)D_80A4C234[idx].b - play->envCtx.unk_C4.diffuseColor[2]) * this->unk_204;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.diffuseColor[2]) * this->blendScaleFrac;
 
-            idx++;
+            index++;
             play->envCtx.lightSettings.fogColor[0] =
-                ((f32)D_80A4C234[idx].r - play->envCtx.unk_C4.fogColor[0]) * this->unk_204;
+                ((f32)lightSettingsColors[index].r - play->envCtx.unk_C4.fogColor[0]) * this->blendScaleFrac;
             play->envCtx.lightSettings.fogColor[1] =
-                ((f32)D_80A4C234[idx].g - play->envCtx.unk_C4.fogColor[1]) * this->unk_204;
+                ((f32)lightSettingsColors[index].g - play->envCtx.unk_C4.fogColor[1]) * this->blendScaleFrac;
             play->envCtx.lightSettings.fogColor[2] =
-                ((f32)D_80A4C234[idx].b - play->envCtx.unk_C4.fogColor[2]) * this->unk_204;
+                ((f32)lightSettingsColors[index].b - play->envCtx.unk_C4.fogColor[2]) * this->blendScaleFrac;
         }
     }
 
-    this->unk_170++;
+    this->smallFlameScroll++;
 
     this->actionFunc(this, play);
 
     this->actor.shape.yOffset = 10.0f;
     Actor_UpdatePos(&this->actor);
 
-    this->unk_178[0] = this->actor.world.pos;
+    this->magicProjectilePos[0] = this->actor.world.pos;
 
-    for (j = 8; j >= 0; j--) {
-        this->unk_178[j + 1] = this->unk_178[j];
+    for (j = ARRAY_COUNT(this->magicProjectilePos) - 2; j >= 0; j--) {
+        this->magicProjectilePos[j + 1] = this->magicProjectilePos[j];
     }
 
     this->actor.velocity.y += this->actor.gravity;
 
-    if (this->unk_172 != 0) {
-        this->unk_172--;
-    }
+    DECR(this->wallCheckTimer);
+    DECR(this->timer);
+    DECR(this->steamSpawnTimer);
+    DECR(this->poolTimer);
 
-    if (this->unk_168 != 0) {
-        this->unk_168--;
-    }
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
-    if (this->unk_16C != 0) {
-        this->unk_16C--;
-    }
-
-    if (this->unk_16A != 0) {
-        this->unk_16A--;
-    }
-
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10, 0x1D);
-
-    if (((this->unk_148 != 0) || (D_80A4C1C0 != 0)) && (this->unk_16C == 0)) {
-        Vec3f sp70;
-        Vec3f sp64;
-        Vec3f sp58;
-        f32 sp54;
+    if ((this->hitByIceArrow || sPoolHitByIceArrow) && (this->steamSpawnTimer == 0)) {
+        Vec3f accel;
+        Vec3f velocity;
+        Vec3f pos;
+        f32 scaleStep;
         s32 i;
 
-        sp70.x = 0.0f;
-        sp70.y = 1.0f;
-        sp70.z = 0.0f;
-        sp64.x = 0.0f;
-        sp64.y = 1.0f;
-        sp64.z = 0.0f;
+        accel.x = 0.0f;
+        accel.y = 1.0f;
+        accel.z = 0.0f;
+        velocity.x = 0.0f;
+        velocity.y = 1.0f;
+        velocity.z = 0.0f;
 
-        sp54 = Rand_S16Offset(20, 10);
-        if (this->unk_162 == 0) {
-            sp54 = Rand_S16Offset(40, 20);
+        scaleStep = Rand_S16Offset(20, 10);
+        if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
+            scaleStep = Rand_S16Offset(40, 20);
         }
 
-        this->unk_16C = Rand_S16Offset(2, 2);
+        this->steamSpawnTimer = Rand_S16Offset(2, 2);
 
         for (i = 0; i < 2; i++) {
-            temp_s0 = Rand_S16Offset(20, 20);
-            sp58.x = ((f32)((Rand_ZeroOne() < 0.5f) ? -1 : 1) * temp_s0) + this->actor.world.pos.x;
-            sp58.y = (Rand_ZeroOne() * 20.0f) + this->actor.floorHeight;
-            temp_s0 = Rand_S16Offset(20, 20);
-            sp58.z = ((f32)((Rand_ZeroOne() < .5f) ? -1 : 1) * temp_s0) + this->actor.world.pos.z;
-            func_800B0DE0(play, &sp58, &sp64, &sp70, &D_80A4C24C, &D_80A4C250, Rand_S16Offset(350, 100), sp54);
+            static Color_RGBA8 sSteamPrimColor = { 250, 250, 250, 255 };
+            static Color_RGBA8 sSteamEnvColor = { 180, 180, 180, 255 };
+
+            randomScale = Rand_S16Offset(20, 20);
+            pos.x = ((f32)((Rand_ZeroOne() < 0.5f) ? -1 : 1) * randomScale) + this->actor.world.pos.x;
+            pos.y = (Rand_ZeroOne() * 20.0f) + this->actor.floorHeight;
+            randomScale = Rand_S16Offset(20, 20);
+            pos.z = ((f32)((Rand_ZeroOne() < .5f) ? -1 : 1) * randomScale) + this->actor.world.pos.z;
+            func_800B0DE0(play, &pos, &velocity, &accel, &sSteamPrimColor, &sSteamEnvColor, Rand_S16Offset(350, 100),
+                          scaleStep);
         }
     }
 
-    if (this->unk_160 < 2) {
-        this->collider.dim.radius = (this->unk_14C * 15.0f) + 25.0f;
-        this->collider.dim.height = (this->unk_14C * 15.0f) + 25.0f;
-        this->collider.dim.yShift = (this->unk_14C * -0.75f) - 5.0f;
+    if (this->action < EN_WIZ_FIRE_ACTION_POOL) {
+        this->collider.dim.radius = (this->scale * 15.0f) + 25.0f;
+        this->collider.dim.height = (this->scale * 15.0f) + 25.0f;
+        this->collider.dim.yShift = (this->scale * -0.75f) - 5.0f;
     }
 
-    if (this->unk_162 == 2) {
+    if (this->type == EN_WIZ_FIRE_TYPE_SMALL_FLAME) {
         this->collider.dim.radius = 10;
-        this->collider.dim.height = this->unk_14C * 5000.0f;
+        this->collider.dim.height = this->scale * 5000.0f;
         this->collider.dim.yShift = 0;
     }
 
     if (this->collider.base.atFlags & AT_HIT) {
         this->collider.base.atFlags &= ~AT_HIT;
-        if (this->unk_162 == 0) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_WIZ_LAUGH2);
+        if (this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) {
+            Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_LAUGH2);
             if (player->invincibilityTimer > 0) {
                 player->invincibilityTimer += 40;
-                if (this->unk_166 != 0) {
+                if (this->isIceType) {
                     player->invincibilityTimer += 50;
-                    this->unk_174 = 1;
+                    this->playerHitByIceProjectile = true;
                 }
             }
         }
     }
 
-    if ((player->stateFlags2 & 0x4000) && (player->unk_AE8 < 90)) {
+    if ((player->stateFlags2 & PLAYER_STATE2_4000) && (player->unk_AE8 < 90)) {
         player->unk_AE8 = 90;
     }
 
-    if ((this->unk_148 == 0) && (D_80A4C1C0 == 0) && ((this->unk_162 != 0) || (this->unk_1FC > 200.0f))) {
+    if (!this->hitByIceArrow && !sPoolHitByIceArrow &&
+        ((this->type != EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) || (this->alpha > 200.0f))) {
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         if (player->invincibilityTimer == 0) {
@@ -621,61 +652,63 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-void func_80A4B0C8(EnWizFire* this, PlayState* play) {
+void EnWizFire_DrawIcePool(EnWizFire* this, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+    if ((this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->action == EN_WIZ_FIRE_ACTION_POOL)) {
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
+        Matrix_Scale(this->poolScale, this->poolScale, this->poolScale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)this->unk_1FC);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (s8)this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 40, 30, 80);
-        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_005190);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 215, 215, 215, (s8)this->unk_1FC);
+        gSPDisplayList(POLY_XLU_DISP++, gWizrobeIcePoolDL);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 215, 215, 215, (s8)this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 128);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, -play->state.frames & 0x7F, -play->state.frames & 0x7F, 0x20,
-                                    0x40, 1, play->state.frames & 0xFF, play->state.frames & 0xFF, 0x10, 0x10));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, -play->state.frames & 0x7F, -play->state.frames & 0x7F, 32,
+                                    64, 1, play->state.frames & 0xFF, play->state.frames & 0xFF, 16, 16));
 
         Matrix_RotateYS(0, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_005750);
+        gSPDisplayList(POLY_XLU_DISP++, gWizrobeIcePoolShineDL);
     }
 
-    func_80A4BF78(this, play);
+    EnWizFire_DrawEffects(this, play);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A4B33C(EnWizFire* this, PlayState* play2) {
+void EnWizFire_DrawFirePoolAndFlame(EnWizFire* this, PlayState* play2) {
     PlayState* play = play2;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if ((this->unk_162 == 0) && (this->unk_160 == 2)) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+    if ((this->type == EN_WIZ_FIRE_TYPE_MAGIC_PROJECTILE) && (this->action == EN_WIZ_FIRE_ACTION_POOL)) {
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
         Matrix_Push();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
-        Matrix_Scale(this->unk_1F0, this->unk_1F0, this->unk_1F0, MTXMODE_APPLY);
+        Matrix_Scale(this->poolScale, this->poolScale, this->poolScale, MTXMODE_APPLY);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, -play->state.frames % 128, 0, 0x20, 0x20, 1,
                                     (play->state.frames * 2) % 128, 0, 0x20, 0x20));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPPipeSync(POLY_XLU_DISP++);
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 100, 40, 0, (s8)this->unk_1FC);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 100, 40, 0, (s8)this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 245, 255, 128);
-        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003120);
+        gSPDisplayList(POLY_XLU_DISP++, gWizrobeFirePoolDL);
 
         Matrix_Pop();
+
         Matrix_Push();
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -684,16 +717,17 @@ void func_80A4B33C(EnWizFire* this, PlayState* play2) {
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames % 128, (-play->state.frames * 6) % 256,
                                     0x20, 0x40, 1, (play->state.frames * 2) % 128, (-play->state.frames * 6) % 256,
                                     0x20, 0x40));
-        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 80, 0, 0, (s8)this->unk_1FC);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 80, 0, 0, (s8)this->alpha);
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 100);
 
-        Matrix_Scale(this->unk_1F8, this->unk_1F8, this->unk_1F8, MTXMODE_APPLY);
+        Matrix_Scale(this->fireSmokeScale, this->fireSmokeScale, this->fireSmokeScale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003640);
+        gSPDisplayList(POLY_XLU_DISP++, gWizrobeFireSmokeDL);
 
         Matrix_Pop();
+
         Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_ReplaceRotation(&play->billboardMtxF);
 
@@ -704,10 +738,10 @@ void func_80A4B33C(EnWizFire* this, PlayState* play2) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetEnvColor(POLY_XLU_DISP++, 200, 235, 240, 128);
 
-        Matrix_Scale(this->unk_1F4, this->unk_1F4, this->unk_1F4, MTXMODE_APPLY);
+        Matrix_Scale(this->bigFlameScale, this->bigFlameScale, this->bigFlameScale, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_003FC0);
+        gSPDisplayList(POLY_XLU_DISP++, gWizrobeBigFlameDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -720,15 +754,15 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Push();
 
-    for (i = 9; i >= this->unk_16E; i--) {
-        f32 temp_f20 = this->actor.scale.x - (i * -0.0019f);
+    for (i = ARRAY_COUNT(this->magicProjectilePos) - 1; i >= this->lowestUsedIndex; i--) {
+        f32 scale = this->actor.scale.x - (i * -0.0019f);
 
-        if (temp_f20 > 0.0f) {
-            if (this->unk_166 == 0) {
+        if (scale > 0.0f) {
+            if (!this->isIceType) {
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255 - (i * 25), 0, 255 - (i * 25));
                 gDPSetEnvColor(POLY_XLU_DISP++, 255 - (i * 25), 0, 0, 0);
             } else {
@@ -736,14 +770,14 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 220, 255, 235, 0);
             }
 
-            Matrix_Translate(this->unk_178[i].x, this->unk_178[i].y + this->actor.shape.yOffset, this->unk_178[i].z,
-                             MTXMODE_NEW);
-            Matrix_Scale(temp_f20, temp_f20, temp_f20, MTXMODE_APPLY);
+            Matrix_Translate(this->magicProjectilePos[i].x, this->magicProjectilePos[i].y + this->actor.shape.yOffset,
+                             this->magicProjectilePos[i].z, MTXMODE_NEW);
+            Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             Matrix_ReplaceRotation(&play->billboardMtxF);
             Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002B40);
+            gSPDisplayList(POLY_XLU_DISP++, gWizrobeMagicProjectileDL);
         }
     }
 
@@ -751,120 +785,120 @@ void EnWizFire_Draw(Actor* thisx, PlayState* play2) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    if (this->unk_166 == 0) {
-        func_80A4B33C(this, play);
+    if (!this->isIceType) {
+        EnWizFire_DrawFirePoolAndFlame(this, play);
     } else {
-        func_80A4B0C8(this, play);
+        EnWizFire_DrawIcePool(this, play);
     }
 }
 
-void func_80A4BAB4(Actor* thisx, PlayState* play) {
+void EnWizFire_DrawSmallFlame(Actor* thisx, PlayState* play) {
     s32 pad;
     EnWizFire* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.floorHeight + 20.0f, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_Scale(this->unk_14C + this->unk_154, this->unk_14C + this->unk_158, this->unk_14C + this->unk_15C,
+    Matrix_Scale(this->scale + this->scaleMod.x, this->scale + this->scaleMod.y, this->scale + this->scaleMod.z,
                  MTXMODE_APPLY);
 
     gSPSegment(POLY_XLU_DISP++, 0x08,
-               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x20, 1, this->unk_170 & 0x7F,
-                                (-this->unk_170 * 10) & 0x7F, 0x20, 0x20));
-    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 100, 50, 0, (s8)this->unk_1FC);
+               Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 32, 1, this->smallFlameScroll & 0x7F,
+                                (-this->smallFlameScroll * 10) & 0x7F, 32, 32));
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 100, 50, 0, (s8)this->alpha);
     gDPSetEnvColor(POLY_XLU_DISP++, 200, 235, 245, 255);
 
     Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_002630);
+    gSPDisplayList(POLY_XLU_DISP++, gWizrobeSmallFlameDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80A4BC74(EnWizFire* this, Vec3f* arg1, Vec3f* arg2) {
+void EnWizFire_InitializeEffect(EnWizFire* this, Vec3f* pos, Vec3f* accel) {
     s16 i;
-    EnWizFireStruct* ptr = this->unk_254;
+    EnWizFireEffect* effect = &this->effects[0];
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_254); i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            ptr->unk_00 = 1;
-            Math_Vec3f_Copy(&ptr->unk_1C, &gZeroVec3f);
-            ptr->unk_01 = Rand_ZeroFloat(100.0f);
-            ptr->unk_10 = *arg1;
-            ptr->unk_28 = *arg2;
-            ptr->unk_0C = (Rand_ZeroFloat(5.0f) + 20.0f) * 0.001f;
-            ptr->unk_08 = 0;
-            ptr->unk_06 = 0;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            Math_Vec3f_Copy(&effect->velocity, &gZeroVec3f);
+            effect->smokeScroll = Rand_ZeroFloat(100.0f);
+            effect->pos = *pos;
+            effect->accel = *accel;
+            effect->scale = (Rand_ZeroFloat(5.0f) + 20.0f) * 0.001f;
+            effect->shouldDecreaseAlpha = 0;
+            effect->alpha = 0;
             break;
         }
     }
 }
 
-void func_80A4BDDC(EnWizFire* this, PlayState* play) {
+void EnWizFire_UpdateEffects(EnWizFire* this, PlayState* play) {
     s32 i;
-    EnWizFireStruct* ptr = &this->unk_254[0];
+    EnWizFireEffect* effect = &this->effects[0];
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_254); i++, ptr++) {
-        if (ptr->unk_00 != 0) {
-            ptr->unk_01++;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            effect->smokeScroll++;
 
-            ptr->unk_10.x += ptr->unk_1C.x;
-            ptr->unk_10.y += ptr->unk_1C.y;
-            ptr->unk_10.z += ptr->unk_1C.z;
+            effect->pos.x += effect->velocity.x;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
 
-            ptr->unk_1C.x += ptr->unk_28.x;
-            ptr->unk_1C.y += ptr->unk_28.y;
-            ptr->unk_1C.z += ptr->unk_28.z;
+            effect->velocity.x += effect->accel.x;
+            effect->velocity.y += effect->accel.y;
+            effect->velocity.z += effect->accel.z;
 
-            if (ptr->unk_08 == 0) {
-                ptr->unk_06 += 10;
-                if (ptr->unk_06 >= 100) {
-                    ptr->unk_08 = 1;
+            if (!effect->shouldDecreaseAlpha) {
+                effect->alpha += 10;
+                if (effect->alpha >= 100) {
+                    effect->shouldDecreaseAlpha = true;
                 }
             } else {
-                ptr->unk_06 -= 8;
-                if (ptr->unk_06 <= 0) {
-                    ptr->unk_06 = 0;
-                    ptr->unk_00 = 0;
+                effect->alpha -= 8;
+                if (effect->alpha <= 0) {
+                    effect->alpha = 0;
+                    effect->isEnabled = false;
                 }
             }
         }
     }
 }
 
-void func_80A4BF78(EnWizFire* this, PlayState* play) {
+void EnWizFire_DrawEffects(EnWizFire* this, PlayState* play) {
     s16 i;
-    u8 flag;
-    EnWizFireStruct* ptr = &this->unk_254[0];
+    u8 materialFlag;
+    EnWizFireEffect* effect = &this->effects[0];
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    flag = false;
-    for (i = 0; i < ARRAY_COUNT(this->unk_254); i++, ptr++) {
-        if (ptr->unk_00 != 0) {
-            if (!flag) {
-                gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_000E70);
-                flag++;
+    materialFlag = false;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            if (!materialFlag) {
+                gSPDisplayList(POLY_XLU_DISP++, gWizrobeIceSmokeMaterialDL);
+                materialFlag++;
             }
 
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, ptr->unk_06);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, effect->alpha);
             gSPSegment(POLY_XLU_DISP++, 0x08,
-                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (ptr->unk_01 * 3) & 0x7F, (ptr->unk_01 * 0xF) & 0xFF,
-                                        0x20, 0x40, 1, 0, 0, 0x20, 0x20));
+                       Gfx_TwoTexScroll(play->state.gfxCtx, 0, (effect->smokeScroll * 3) & 0x7F,
+                                        (effect->smokeScroll * 0xF) & 0xFF, 32, 64, 1, 0, 0, 32, 32));
 
-            Matrix_Translate(ptr->unk_10.x, ptr->unk_10.y, ptr->unk_10.z, MTXMODE_NEW);
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(ptr->unk_0C, ptr->unk_0C, 1.0f, MTXMODE_APPLY);
+            Matrix_Scale(effect->scale, effect->scale, 1.0f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
             gSPClearGeometryMode(POLY_XLU_DISP++, G_CULL_BACK | G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, object_wiz_DL_000FD8);
+            gSPDisplayList(POLY_XLU_DISP++, gWizrobeIceSmokeModelDL);
         }
     }
 

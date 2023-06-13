@@ -63,7 +63,7 @@
         <Limb Name="gPamelaBackDressLimb" Type="Standard" EnumName="PAMELA_LIMB_BACK_DRESS" Offset="0x83CC" />
         <Limb Name="gPamelaAbdomenLimb" Type="Standard" EnumName="PAMELA_LIMB_ABDOMEN" Offset="0x83D8" />
         <Limb Name="gPamelaPelvisLimb" Type="Standard" EnumName="PAMELA_LIMB_PELVIS" Offset="0x83E4" />
-        <Skeleton Name="gPamelaSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELA_LIMB_NONE" LimbMax="PAMELA_LIMB_MAX" EnumName="PamelaLimbs" Offset="0x8448" />
+        <Skeleton Name="gPamelaSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELA_LIMB_NONE" LimbMax="PAMELA_LIMB_MAX" EnumName="PamelaLimb" Offset="0x8448" />
         
         <Animation Name="object_pamera_Anim_008AE0" Offset="0x8AE0" /> <!-- Pamela Walking -->
         <Animation Name="object_pamera_Anim_008E38" Offset="0x8E38" />

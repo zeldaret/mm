@@ -1,11 +1,16 @@
-#include "global.h"
-#include "io/controller.h"
+/**
+ * File: voicegetstatus.c
+ */
 
-s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+
+s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 channel, u8* status) {
     __OSContRequestHeaderAligned header;
     s32 errorCode = 0;
     s32 i;
-    u8* ptr = (u8*)&__osContPifRam;
+    u8* ptr = (u8*)&__osContPifRam.ramarray;
     s32 retryCount = 2;
 
     __osSiGetAccess();
@@ -14,12 +19,10 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
         if (errorCode != CONT_ERR_CONTRFAIL) {
             __osContPifRam.status = CONT_CMD_READ_BUTTON;
 
-            for (i = 0; i < port; i++, *ptr++ = 0) {
-                ;
-            }
+            for (i = 0; i < channel; i++, *ptr++ = 0) {}
 
-            *ptr++ = 1;
-            *ptr++ = 3;
+            *ptr++ = CONT_CMD_REQUEST_STATUS_TX;
+            *ptr++ = CONT_CMD_REQUEST_STATUS_RX;
             *ptr = CONT_CMD_REQUEST_STATUS;
             ptr += 4;
             *ptr = CONT_CMD_END;
@@ -31,15 +34,15 @@ s32 __osVoiceGetStatus(OSMesgQueue* mq, s32 port, u8* status) {
         errorCode = __osSiRawStartDma(OS_READ, &__osContPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
 
-        ptr = (u8*)&__osContPifRam + port;
+        ptr = (u8*)&__osContPifRam.ramarray + channel;
 
         header = *((__OSContRequestHeaderAligned*)ptr);
 
-        errorCode = (u8)((header.rxsize & 0xC0) >> 4);
+        errorCode = (u8)CHNL_ERR(header);
         *status = header.status;
 
         if (errorCode == 0) {
-            if (header.typeh == 0 && header.typel == 1) {
+            if ((header.typeh == 0) && (header.typel == 1)) {
                 if (header.status & 4) {
                     errorCode = CONT_ERR_CONTRFAIL;
                 }

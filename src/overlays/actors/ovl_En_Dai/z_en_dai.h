@@ -26,7 +26,7 @@ typedef struct EnDai {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnDaiActionFunc actionFunc;
     /* 0x18C */ MtxF unk_18C;
-    /* 0x1CC */ u8 unk_1CC;
+    /* 0x1CC */ u8 cueId;
     /* 0x1CD */ u8 unk_1CD;
     /* 0x1CE */ u16 unk_1CE;
     /* 0x1D0 */ s32 unk_1D0;
@@ -45,7 +45,5 @@ typedef struct EnDai {
     /* 0xA6C */ s32 unk_A6C;
     /* 0xA70 */ s32 unk_A70;
 } EnDai; // size = 0xA74
-
-extern const ActorInit En_Dai_InitVars;
 
 #endif // Z_EN_DAI_H

@@ -5,14 +5,16 @@
 
 struct BgHakuginElvpole;
 
+#define BGHAKUGINELVPOLE_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+
 typedef void (*BgHakuginElvpoleActionFunc)(struct BgHakuginElvpole*, PlayState*);
 
 typedef struct BgHakuginElvpole {
-    /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x20];
+    /* 0x000 */ DynaPolyActor dyna;
+    /* 0x15C */ s16 unk_15C;
+    /* 0x15E */ s16 unk_15E;
+    /* 0x160 */ u16 unk_160;
     /* 0x164 */ BgHakuginElvpoleActionFunc actionFunc;
 } BgHakuginElvpole; // size = 0x168
-
-extern const ActorInit Bg_Hakugin_Elvpole_InitVars;
 
 #endif // Z_BG_HAKUGIN_ELVPOLE_H

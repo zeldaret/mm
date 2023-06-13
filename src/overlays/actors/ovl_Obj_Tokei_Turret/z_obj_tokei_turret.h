@@ -7,7 +7,7 @@
 
 typedef enum {
     /* 0 */ TURRET_TIER_BASE,
-    /* 1 */ TURRET_TIER_TOP,
+    /* 1 */ TURRET_TIER_TOP
 } TurretTierType;
 
 struct ObjTokeiTurret;
@@ -15,7 +15,5 @@ struct ObjTokeiTurret;
 typedef struct ObjTokeiTurret {
     /* 0x000 */ DynaPolyActor dyna;
 } ObjTokeiTurret; // size = 0x15C
-
-extern const ActorInit Obj_Tokei_Turret_InitVars;
 
 #endif // Z_OBJ_TOKEI_TURRET_H

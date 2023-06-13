@@ -10,7 +10,7 @@ typedef void (*EnRailgibudActionFunc)(struct EnRailgibud*, PlayState*);
 
 #define ENRAILGIBUD_GET_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x7F)
 #define ENRAILGIBUD_IS_CUTSCENE_TYPE(thisx) ((thisx)->params & 0x80)
-#define ENRAILGIBUD_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define ENRAILGIBUD_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef struct EnRailgibud {
     /* 0x000 */ Actor actor;
@@ -33,7 +33,7 @@ typedef struct EnRailgibud {
     /* 0x3EE */ s16 shouldWalkForwardNextFrame; // Only used by the "main" Gibdo
     /* 0x3F0 */ union {
                     s16 grabState;
-                    s16 cutsceneAnimationIndex;
+                    s16 cutsceneAnimIndex;
                 };
     /* 0x3F2 */ union {
                     s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero
@@ -47,14 +47,12 @@ typedef struct EnRailgibud {
     /* 0x3F6 */ s16 drawDmgEffTimer;
     /* 0x3F8 */ s16 type;
     /* 0x3FA */ s16 isInvincible;
-    /* 0x3FC */ u16 actorActionCommand;
-    /* 0x3FE */ u16 csAction;
+    /* 0x3FC */ u16 cueType;
+    /* 0x3FE */ u16 cueId;
     /* 0x400 */ u16 textId;
     /* 0x402 */ s16 timeInitialized; // unused other than setting it
     /* 0x404 */ u8 drawDmgEffType;
     /* 0x405 */ s8 unk_405; // related to player->unk_ADD
 } EnRailgibud; // size = 0x408
-
-extern const ActorInit En_Railgibud_InitVars;
 
 #endif // Z_EN_RAILGIBUD_H

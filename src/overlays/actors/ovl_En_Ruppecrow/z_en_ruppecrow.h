@@ -4,7 +4,9 @@
 #include "global.h"
 #include "objects/object_crow/object_crow.h"
 
-#define ENRUPPECROW_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+#define ENRUPPECROW_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 0xA)
+
+#define ENRUPPECROW_PATH_INDEX_NONE 0x3F
 
 #define ENRUPPECROW_RUPEE_COUNT 20
 #define ENRUPPECROW_LIMB_POS_COUNT 4
@@ -36,7 +38,5 @@ typedef struct EnRuppecrow {
     /* 0x2D0 */ f32 iceSfxTimer;
     /* 0x2D4 */ Vec3f limbPos[ENRUPPECROW_LIMB_POS_COUNT];
 } EnRuppecrow; // size = 0x304
-
-extern const ActorInit En_Ruppecrow_InitVars;
 
 #endif // Z_EN_RUPPECROW_H

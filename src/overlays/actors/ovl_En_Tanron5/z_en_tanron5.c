@@ -15,15 +15,15 @@
 
 void EnTanron5_Init(Actor* thisx, PlayState* play);
 void EnTanron5_Destroy(Actor* thisx, PlayState* play);
-void EnTanron5_Update(Actor* thisx, PlayState* play);
+void EnTanron5_Update(Actor* thisx, PlayState* play2);
 void EnTanron5_Draw(Actor* thisx, PlayState* play);
 
-void func_80BE5818(Actor* thisx, PlayState* play);
+void func_80BE5818(Actor* thisx, PlayState* play2);
 void func_80BE5C10(Actor* thisx, PlayState* play);
 
 s32 D_80BE5D80 = 0;
 
-const ActorInit En_Tanron5_InitVars = {
+ActorInit En_Tanron5_InitVars = {
     ACTOR_EN_TANRON5,
     ACTORCAT_BOSS,
     FLAGS,
@@ -101,9 +101,9 @@ void func_80BE4930(EnTanron5Effect* effect, Vec3f* arg1, f32 arg2) {
 
             effect->unk_00 = *arg1;
 
-            effect->unk_0C = randPlusMinusPoint5Scaled(10.0f);
+            effect->unk_0C = Rand_CenteredFloat(10.0f);
             effect->unk_10 = Rand_ZeroFloat(2.0f) + 3.0f;
-            effect->unk_14 = randPlusMinusPoint5Scaled(10.0f);
+            effect->unk_14 = Rand_CenteredFloat(10.0f);
 
             effect->unk_18.y = -0.15f;
             effect->unk_18.x = 0.0f;
@@ -127,9 +127,9 @@ void func_80BE4A2C(EnTanron5Effect* effect, Vec3f* arg1, f32 arg2) {
 
             effect->unk_00 = *arg1;
 
-            effect->unk_0C = randPlusMinusPoint5Scaled(30.0f);
+            effect->unk_0C = Rand_CenteredFloat(30.0f);
             effect->unk_10 = Rand_ZeroFloat(7.0f);
-            effect->unk_14 = randPlusMinusPoint5Scaled(30.0f);
+            effect->unk_14 = Rand_CenteredFloat(30.0f);
 
             effect->unk_18.y = -0.3f;
             effect->unk_18.x = 0.0f;
@@ -150,12 +150,12 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
     if (ENTANRON5_GET(&this->actor) >= ENTANRON5_100) {
         D_80BE5D80++;
         if (D_80BE5D80 > 60) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
-        this->unk_198 = randPlusMinusPoint5Scaled(0x2000);
-        this->unk_19A = randPlusMinusPoint5Scaled(0x2000);
+        this->unk_198 = Rand_CenteredFloat(0x2000);
+        this->unk_19A = Rand_CenteredFloat(0x2000);
 
         if (ENTANRON5_GET(&this->actor) < ENTANRON5_107) {
             Actor_SetScale(&this->actor, (Rand_ZeroFloat(0.025f) + 0.085f) * D_80BE5DD0);
@@ -163,7 +163,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             Actor_SetScale(&this->actor, (Rand_ZeroFloat(0.015f) + 0.01f) * D_80BE5DD0);
         }
 
-        this->actor.speedXZ = (Rand_ZeroFloat(10.0f) + 10.0f) * D_80BE5DD0;
+        this->actor.speed = (Rand_ZeroFloat(10.0f) + 10.0f) * D_80BE5DD0;
         this->actor.velocity.y = (Rand_ZeroFloat(10.0f) + 15.0f) * D_80BE5DD0;
         this->actor.gravity = -2.5f * D_80BE5DD0;
         this->actor.terminalVelocity = -1000.0f * D_80BE5DD0;
@@ -201,9 +201,9 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             Collider_InitAndSetCylinder(play, &child->collider, &child->actor, &sCylinderInit);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
         this->actor.world.pos.y = this->actor.floorHeight + -20.0f;
     }
 }
@@ -230,7 +230,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
         this->unk_1A0++;
         Actor_SetScale(&this->actor, 0.0f);
         if (this->unk_1A0 >= 40) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     } else {
@@ -327,8 +327,8 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                             spAC = 50.0f;
                         }
 
-                        sp9C.x = (randPlusMinusPoint5Scaled(spA8) * D_80BE5DD0) + spB8.x;
-                        sp9C.z = (randPlusMinusPoint5Scaled(spA8) * D_80BE5DD0) + spB8.z;
+                        sp9C.x = (Rand_CenteredFloat(spA8) * D_80BE5DD0) + spB8.x;
+                        sp9C.z = (Rand_CenteredFloat(spA8) * D_80BE5DD0) + spB8.z;
                         sp9C.y = this->actor.floorHeight + (spAC * D_80BE5DD0);
 
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, sp9C.x, sp9C.y, sp9C.z,
@@ -349,8 +349,8 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 }
 
                 this->actor.shape.rot.y += phi_v0;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_BIG_BOMB_EXPLOSION);
-                func_800BC848(&this->actor, play, 4, 4);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_BIG_BOMB_EXPLOSION);
+                Actor_RequestQuakeAndRumble(&this->actor, play, 4, 4);
                 this->unk_1A0++;
             } else {
                 Vec3f sp90;
@@ -360,7 +360,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 sp90.y = info->bumper.hitPos.y;
                 sp90.z = info->bumper.hitPos.z;
 
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
+                Actor_PlaySfx(&this->actor, NA_SE_IT_SHIELD_REFLECT_SW);
                 CollisionCheck_SpawnShieldParticlesMetal(play, &sp90);
             }
         }
@@ -406,18 +406,18 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
         this->unk_1A0++;
         this->actor.world.pos.y -= 2.0f * D_80BE5DD0;
         if (this->unk_1A0 == 40) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     }
 
     if (DECR(this->unk_144) == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
-    if (this->actor.speedXZ > 0.02f) {
+    if (this->actor.speed > 0.02f) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
     if (ENTANRON5_GET(&this->actor) < ENTANRON5_110) {
@@ -425,7 +425,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
         this->actor.shape.rot.y += this->unk_19A;
         sp6C = 1225.0f;
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             if (ENTANRON5_GET(&this->actor) < ENTANRON5_108) {
                 Math_Vec3f_Copy(&sp5C, &this->actor.world.pos);
                 sp5C.y = this->actor.floorHeight;
@@ -435,15 +435,15 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
                 }
                 this->unk_1A0++;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     } else {
         sp6C = 400.0f;
         this->unk_198 += 0x2000;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk_198 = 0;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     }
 
@@ -464,7 +464,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
                     } else {
                         Item_Give(play, ITEM_MAGIC_LARGE);
                     }
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                     play_sound(NA_SE_SY_GET_ITEM);
                 } else {
                     this->unk_1A1 = 20;
@@ -483,7 +483,7 @@ void EnTanron5_Draw(Actor* thisx, PlayState* play) {
     if ((-500.0f * D_80BE5DD0) < this->actor.projectedPos.z) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, this->unk_148);
@@ -506,14 +506,14 @@ void func_80BE5C10(Actor* thisx, PlayState* play) {
     if (((-500.0f * D_80BE5DD0) < this->actor.projectedPos.z) && phi_v0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if (this->unk_1A0 == 0) {
-            texture = gameplay_keep_Tex_05BEF0;
+            texture = gDropArrows1Tex;
         } else {
-            texture = gameplay_keep_Tex_0617C0;
+            texture = gDropMagicLargeTex;
         }
 
-        POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+        POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(texture));
 
@@ -521,7 +521,7 @@ void func_80BE5C10(Actor* thisx, PlayState* play) {
         Matrix_RotateZS(this->unk_198, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_05F6F0);
+        gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

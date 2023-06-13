@@ -8,7 +8,7 @@ void EffectSS_Init(PlayState* play, s32 numEntries) {
     EffectSs* effectsSs;
     EffectSsOverlay* overlay;
 
-    sEffectSsInfo.data_table = (EffectSs*)THA_AllocEndAlign16(&play->state.heap, numEntries * sizeof(EffectSs));
+    sEffectSsInfo.data_table = (EffectSs*)THA_AllocTailAlign16(&play->state.heap, numEntries * sizeof(EffectSs));
     sEffectSsInfo.searchIndex = 0;
     sEffectSsInfo.size = numEntries;
 
@@ -59,11 +59,11 @@ EffectSs* EffectSS_GetTable() {
 
 void EffectSS_Delete(EffectSs* effectSs) {
     if (effectSs->flags & 2) {
-        Audio_StopSfxByPos(&effectSs->pos);
+        AudioSfx_StopByPos(&effectSs->pos);
     }
 
     if (effectSs->flags & 4) {
-        Audio_StopSfxByPos(&effectSs->vec);
+        AudioSfx_StopByPos(&effectSs->vec);
     }
 
     EffectSS_ResetEntry(effectSs);
@@ -188,8 +188,9 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
             Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
         }
 
-        initInfo = (uintptr_t)(
-            (entry->initInfo != NULL) ? (void*)(-OVERLAY_RELOCATION_OFFSET(entry) + (uintptr_t)entry->initInfo) : NULL);
+        initInfo = (uintptr_t)((entry->initInfo != NULL)
+                                   ? (void*)((uintptr_t)entry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(entry))
+                                   : NULL);
     }
 
     if (initInfo->init != NULL) {
@@ -272,6 +273,7 @@ void EffectSS_DrawAllParticles(PlayState* play) {
 
 s16 func_800B096C(s16 arg0, s16 arg1, s32 arg2) {
     s16 ret = (arg2 == 0) ? arg1 : arg0 + (s32)((arg1 - arg0) / (f32)arg2);
+
     return ret;
 }
 

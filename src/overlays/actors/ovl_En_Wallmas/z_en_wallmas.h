@@ -8,6 +8,8 @@
 #define WALLMASTER_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 #define WALLMASTER_IS_FROZEN(thisx) ((thisx)->params & 0x80)
 
+#define WALLMASTER_PARAMS(type, switchFlag, isFrozen) ((type) | (((switchFlag) << 8) & 0xFF) | (((isFrozen) << 7) & 0x80))
+
 /**
  * This type determines under what conditions the Wallmaster will drop from the ceiling.
  * - WALLMASTER_TYPE_TIMER_ONLY: These Wallmasters don't check for anything to determine
@@ -25,9 +27,9 @@
  * the timer to 130 frames if the player strays too far from the Wallmaster's current position.
  */
 typedef enum {
-    /* 0x0 */ WALLMASTER_TYPE_TIMER_ONLY,
-    /* 0x1 */ WALLMASTER_TYPE_PROXIMITY,
-    /* 0x2 */ WALLMASTER_TYPE_FLAG
+    /* 0 */ WALLMASTER_TYPE_TIMER_ONLY,
+    /* 1 */ WALLMASTER_TYPE_PROXIMITY,
+    /* 2 */ WALLMASTER_TYPE_FLAG
 } WallmasterType;
 
 struct EnWallmas;
@@ -51,7 +53,5 @@ typedef struct EnWallmas {
     /* 0x2D4 */ Vec3f limbPos[11];
     /* 0x358 */ ColliderCylinder collider;
 } EnWallmas; // size = 0x3A4
-
-extern const ActorInit En_Wallmas_InitVars;
 
 #endif // Z_EN_WALLMAS_H

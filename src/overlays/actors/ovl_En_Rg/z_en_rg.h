@@ -7,7 +7,9 @@ struct EnRg;
 
 typedef void (*EnRgActionFunc)(struct EnRg*, PlayState*);
 
-#define ENRG_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+#define ENRG_GET_PATH_INDEX(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+
+#define ENRG_PATH_INDEX_NONE 0xFF
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
@@ -51,7 +53,5 @@ typedef struct EnRg {
     /* 0x348 */ s32 numCheckpointsAheadOfPlayer;
     /* 0x34C */ EnRgStruct unk_34C[32];
 } EnRg; // size = 0xACC
-
-extern const ActorInit En_Rg_InitVars;
 
 #endif // Z_EN_RG_H

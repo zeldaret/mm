@@ -1,20 +1,20 @@
 ﻿<Root>
     <File Name="object_boj" Segment="6">
-        <Animation Name="object_boj_Anim_00041C" Offset="0x41C" />
-        <Animation Name="object_boj_Anim_0004D0" Offset="0x4D0" />
-        <Animation Name="object_boj_Anim_00071C" Offset="0x71C" />
-        <Animation Name="object_boj_Anim_0008C0" Offset="0x8C0" /> <!-- object_ginko_floorsmacking_anim -->
-        <Animation Name="object_boj_Anim_000AC4" Offset="0xAC4" /> <!-- object_ginko_advertising_anim -->
-        <Animation Name="object_boj_Anim_001494" Offset="0x1494" />
-        <Animation Name="object_boj_Anim_001908" Offset="0x1908" />
-        <Animation Name="object_boj_Anim_002734" Offset="0x2734" />
-        <Animation Name="object_boj_Anim_0033B0" Offset="0x33B0" />
-        <Animation Name="object_boj_Anim_004078" Offset="0x4078" />
-        <Animation Name="object_boj_Anim_0043F0" Offset="0x43F0" /> <!-- object_ginko_sitting_anim -->
-        <Animation Name="object_boj_Anim_004A7C" Offset="0x4A7C" /> <!-- object_ginko_amazed_anim -->
-        <Animation Name="object_boj_Anim_004F40" Offset="0x4F40" /> <!-- object_ginko_stamp_reach_anim -->
-        <Animation Name="object_boj_Anim_005CE4" Offset="0x5CE4" />
-        <Animation Name="object_boj_Anim_005D9C" Offset="0x5D9C" />
+        <Animation Name="object_boj_Anim_00041C" Offset="0x41C" /> <!-- Original name is "Boj2_17" -->
+        <Animation Name="object_boj_Anim_0004D0" Offset="0x4D0" /> <!-- Original name is "Boj2_19" -->
+        <Animation Name="object_boj_Anim_00071C" Offset="0x71C" /> <!-- Original name is "Boj2_5" -->
+        <Animation Name="object_boj_Anim_0008C0" Offset="0x8C0" /> <!-- Original name is "Boj2_9" -->
+        <Animation Name="object_boj_Anim_000AC4" Offset="0xAC4" /> <!-- Original name is "Boj2_9_2" -->
+        <Animation Name="object_boj_Anim_001494" Offset="0x1494" /> <!-- Original name is "Boj_13" -->
+        <Animation Name="object_boj_Anim_001908" Offset="0x1908" /> <!-- Original name is "Boj_14" -->
+        <Animation Name="object_boj_Anim_002734" Offset="0x2734" /> <!-- Original name is "Boj_card_aka_talk" ("aka" = "red") -->
+        <Animation Name="object_boj_Anim_0033B0" Offset="0x33B0" /> <!-- Original name is "Boj_card_aka_wait" -->
+        <Animation Name="object_boj_Anim_004078" Offset="0x4078" /> <!-- Original name is "Boj_card_ao_wait" ("ao" = "blue") -->
+        <Animation Name="object_boj_Anim_0043F0" Offset="0x43F0" /> <!-- Original name is "Boj_ginkowait" ("ginko" = "bank") -->
+        <Animation Name="object_boj_Anim_004A7C" Offset="0x4A7C" /> <!-- Original name is "Boj_ginkoyobi" ("yobi" = "call; invitation") -->
+        <Animation Name="object_boj_Anim_004F40" Offset="0x4F40" /> <!-- Original name is "Boj_hanko" ("seal; stamp") -->
+        <Animation Name="object_boj_Anim_005CE4" Offset="0x5CE4" /> <!-- Original name is "Boj_juggling" -->
+        <Animation Name="object_boj_Anim_005D9C" Offset="0x5D9C" /> <!-- Original name is "Boj_matsu" ("to wait​") -->
         <Texture Name="object_boj_TLUT_005DB0" OutName="tlut_005DB0" Format="rgba16" Width="16" Height="16" Offset="0x5DB0" />
         <Texture Name="object_boj_Tex_005FB0" OutName="tex_005FB0" Format="ci8" Width="8" Height="16" Offset="0x5FB0" />
         <Texture Name="object_boj_Tex_006030" OutName="tex_006030" Format="ci8" Width="8" Height="8" Offset="0x6030" />
@@ -58,7 +58,7 @@
         <DList Name="object_boj_DL_00BA28" Offset="0xBA28" />
         <DList Name="object_boj_DL_00BA30" Offset="0xBA30" />
         <Texture Name="object_boj_Tex_00BB88" OutName="tex_00BB88" Format="i8" Width="16" Height="16" Offset="0xBB88" />
-        <DList Name="object_boj_DL_00BCC8" Offset="0xBCC8" />
+        <DList Name="object_boj_DL_00BCC8" Offset="0xBCC8" /> <!-- Original name is "jug_ball_model" -->
         <Texture Name="object_boj_Tex_00BD50" OutName="tex_00BD50" Format="i8" Width="32" Height="32" Offset="0xBD50" />
         <Limb Name="object_boj_Standardlimb_00C150" Type="Standard" EnumName="OBJECT_BOJ_LIMB_01" Offset="0xC150" />
         <Limb Name="object_boj_Standardlimb_00C15C" Type="Standard" EnumName="OBJECT_BOJ_LIMB_02" Offset="0xC15C" />
@@ -75,20 +75,20 @@
         <Limb Name="object_boj_Standardlimb_00C1E0" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0D" Offset="0xC1E0" />
         <Limb Name="object_boj_Standardlimb_00C1EC" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0E" Offset="0xC1EC" />
         <Limb Name="object_boj_Standardlimb_00C1F8" Type="Standard" EnumName="OBJECT_BOJ_LIMB_0F" Offset="0xC1F8" />
-        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOJ_LIMB_NONE" LimbMax="OBJECT_BOJ_LIMB_MAX" EnumName="object_boj_Limbs" Offset="0xC240" /> <!-- object_ginko_skeleton -->
-        <Animation Name="object_boj_Anim_00DED8" Offset="0xDED8" />
-        <Animation Name="object_boj_Anim_00F920" Offset="0xF920" />
-        <Animation Name="object_boj_Anim_00FC1C" Offset="0xFC1C" />
-        <Animation Name="object_boj_Anim_00FEE4" Offset="0xFEE4" />
-        <Animation Name="object_boj_Anim_010330" Offset="0x10330" />
-        <Animation Name="object_boj_Anim_010BDC" Offset="0x10BDC" />
-        <Animation Name="object_boj_Anim_01139C" Offset="0x1139C" />
-        <Animation Name="object_boj_Anim_011C38" Offset="0x11C38" />
-        <Animation Name="object_boj_Anim_011F84" Offset="0x11F84" />
-        <Animation Name="object_boj_Anim_0128F4" Offset="0x128F4" />
-        <Animation Name="object_boj_Anim_012E84" Offset="0x12E84" />
-        <DList Name="object_boj_DL_013380" Offset="0x13380" />
-        <Texture Name="object_boj_TLUT_0134C0" OutName="tlut_0134C0" Format="rgba16" Width="16" Height="16" Offset="0x134C0" />
-        <Texture Name="object_boj_Tex_0136C0" OutName="tex_0136C0" Format="ci8" Width="16" Height="16" Offset="0x136C0" />
+        <Skeleton Name="object_boj_Skel_00C240" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BOJ_LIMB_NONE" LimbMax="OBJECT_BOJ_LIMB_MAX" EnumName="ObjectBojLimb" Offset="0xC240" /> <!-- object_ginko_skeleton -->
+        <Animation Name="object_boj_Anim_00DED8" Offset="0xDED8" /> <!-- Original name is "boj_door1" -->
+        <Animation Name="object_boj_Anim_00F920" Offset="0xF920" /> <!-- Original name is "boj_door2" -->
+        <Animation Name="object_boj_Anim_00FC1C" Offset="0xFC1C" /> <!-- Original name is "boj_walk1" -->
+        <Animation Name="object_boj_Anim_00FEE4" Offset="0xFEE4" /> <!-- Original name is "boj_walk2" -->
+        <Animation Name="object_boj_Anim_010330" Offset="0x10330" /> <!-- Original name is "boj_walk3" -->
+        <Animation Name="object_boj_Anim_010BDC" Offset="0x10BDC" /> <!-- Original name is "scm_harau" ("to drive away") -->
+        <Animation Name="object_boj_Anim_01139C" Offset="0x1139C" /> <!-- Original name is "scm_niwait" -->
+        <Animation Name="object_boj_Anim_011C38" Offset="0x11C38" /> <!-- Original name is "scm_odoroku" ("surprise") -->
+        <Animation Name="object_boj_Anim_011F84" Offset="0x11F84" /> <!-- Original name is "scm_teburarun" ("tebura" = "empty-handed​") -->
+        <Animation Name="object_boj_Anim_0128F4" Offset="0x128F4" /> <!-- Original name is "scm_teburawait" -->
+        <Animation Name="object_boj_Anim_012E84" Offset="0x12E84" /> <!-- Original name is "scm_yarare" ("to suffer damage") -->
+        <DList Name="gBombShopBagDL" Offset="0x13380" /> <!-- Original name is "seb_model" -->
+        <Texture Name="gBombShopBagTLUT" OutName="bomb_shop_bag_tlut" Format="rgba16" Width="16" Height="16" Offset="0x134C0" />
+        <Texture Name="gBombShopBagTex" OutName="bomb_shop_bag" Format="ci8" Width="16" Height="16" Offset="0x136C0" />
     </File>
 </Root>

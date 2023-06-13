@@ -1,6 +1,15 @@
 #include "ultra64.h"
 #include "global.h"
+#include "stack.h"
 #include "vt.h"
+#include "stackcheck.h"
+
+extern FaultThreadStruct* sFaultContext;
+extern f32 D_8009BE54;
+extern u32 faultCustomOptions;
+extern u32 faultCopyToLog;
+extern STACK(sFaultStack, 0x600);
+extern StackEntry sFaultStackInfo;
 
 // data
 const char* sCpuExceptions[] = {
@@ -195,7 +204,7 @@ void Fault_Sleep(u32 duration) {
 }
 
 void Fault_PadCallback(Input* input) {
-    Padmgr_GetInput2(input, 0);
+    PadMgr_GetInput2(input, false);
 }
 
 void Fault_UpdatePadImpl() {
@@ -438,7 +447,7 @@ void osSyncPrintfThreadContext(OSThread* t) {
 OSThread* Fault_FindFaultedThread() {
     OSThread* iter = __osGetActiveQueue();
     while (iter->priority != -1) {
-        if (iter->priority > 0 && iter->priority < 0x7F && (iter->flags & 3)) {
+        if ((iter->priority > 0) && (iter->priority < 0x7F) && (iter->flags & 3)) {
             return iter;
         }
         iter = iter->tlnext;
@@ -465,7 +474,7 @@ void Fault_WaitForButtonCombo(void) {
         do {
             Fault_Sleep(0x10);
             Fault_UpdatePadImpl();
-        } while (!CHECK_BTN_ALL(input->press.button, 0x80));
+        } while (!CHECK_BTN_ALL(input->press.button, BTN_RESET));
     } while (!CHECK_BTN_ALL(input->cur.button, BTN_DLEFT | BTN_L | BTN_R | BTN_CRIGHT));
 }
 
@@ -754,14 +763,14 @@ void Fault_SetOptionsFromController3(void) {
     u32 graphRA;
     u32 graphSP;
 
-    if (CHECK_BTN_ALL(input3->press.button, 0x80)) {
+    if (CHECK_BTN_ALL(input3->press.button, BTN_RESET)) {
         faultCustomOptions = !faultCustomOptions;
     }
 
     if (faultCustomOptions) {
-        graphPC = sGraphThread.context.pc;
-        graphRA = sGraphThread.context.ra;
-        graphSP = sGraphThread.context.sp;
+        graphPC = gGraphThread.context.pc;
+        graphRA = gGraphThread.context.ra;
+        graphSP = gGraphThread.context.sp;
         if (CHECK_BTN_ALL(input3->cur.button, BTN_R)) {
             static u32 faultCopyToLog;
 
@@ -793,8 +802,8 @@ void Fault_ThreadEntry(void* arg) {
     u32 pad;
     OSThread* faultedThread;
 
-    osSetEventMesg(10, &sFaultContext->queue, (OSMesg)1);
-    osSetEventMesg(12, &sFaultContext->queue, (OSMesg)2);
+    osSetEventMesg(OS_EVENT_CPU_BREAK, &sFaultContext->queue, (OSMesg)1);
+    osSetEventMesg(OS_EVENT_FAULT, &sFaultContext->queue, (OSMesg)2);
     while (1) {
         do {
             osRecvMesg(&sFaultContext->queue, &msg, OS_MESG_BLOCK);
@@ -889,8 +898,8 @@ void Fault_Start(void) {
     sFaultContext->faultActive = 0;
     gFaultStruct.faultHandlerEnabled = 1;
     osCreateMesgQueue(&sFaultContext->queue, sFaultContext->msg, ARRAY_COUNT(sFaultContext->msg));
-    StackCheck_Init(&sFaultThreadInfo, sFaultStack, sFaultStack + sizeof(sFaultStack), 0, 0x100, "fault");
-    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, sFaultStack + sizeof(sFaultStack), 0x7F);
+    StackCheck_Init(&sFaultStackInfo, sFaultStack, STACK_TOP(sFaultStack), 0, 0x100, "fault");
+    osCreateThread(&sFaultContext->thread, 2, Fault_ThreadEntry, NULL, STACK_TOP(sFaultStack), 0x7F);
     osStartThread(&sFaultContext->thread);
 }
 

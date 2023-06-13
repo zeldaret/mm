@@ -24,7 +24,7 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
 void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect);
 
-const ActorInit En_Fg_InitVars = {
+ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
     ACTORCAT_NPC,
     FLAGS,
@@ -95,27 +95,27 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimations[] = {
+static AnimationInfoS sAnimationInfo[] = {
     { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
-s32 EnFg_UpdateAnimation(SkelAnime* skelAnime, s16 animIndex) {
+s32 EnFg_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret;
 
     ret = false;
-    if (animIndex >= 0 && animIndex < 4) {
+    if ((animIndex >= 0) && (animIndex < 4)) {
         ret = true;
-        frameCount = sAnimations[animIndex].frameCount;
+        frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimations[animIndex].animation);
+            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
-        Animation_Change(skelAnime, sAnimations[animIndex].animation, sAnimations[animIndex].playSpeed,
-                         sAnimations[animIndex].startFrame, frameCount, sAnimations[animIndex].mode,
-                         sAnimations[animIndex].morphFrames);
+        Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
+                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].morphFrames);
     }
     return ret;
 }
@@ -151,15 +151,19 @@ s32 EnFg_GetDamageEffect(EnFg* this) {
             case 1:
                 ret = FG_DMGEFFECT_DEKUSTICK;
                 break;
+
             case 15:
                 ret = FG_DMGEFFECT_HOOKSHOT;
                 break;
+
             case 14:
                 ret = FG_DMGEFFECT_ARROW;
                 break;
+
             case 3:
                 ret = FG_DMGEFFECT_ICEARROW;
                 break;
+
             default:
                 ret = FG_DMGEFFECT_EXPLOSION;
                 break;
@@ -178,7 +182,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
     switch (EnFg_GetDamageEffect(this)) {
         case FG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
             this->actor.shape.shadowDraw = NULL;
             this->actor.scale.x *= 1.5f;
@@ -187,8 +191,10 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actor.world.pos.y = this->actor.floorHeight + 2.0f;
             this->actionFunc = EnFg_DoNothing;
             break;
+
         case FG_DMGEFFECT_HOOKSHOT:
             break;
+
         case FG_DMGEFFECT_ARROW:
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
@@ -202,26 +208,27 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actor.scale.z = CLAMP_MIN(this->actor.scale.z, 0.001f);
             this->actionFunc = EnFg_DoNothing;
             break;
+
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
-            if (1) {}
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;
             this->actionFunc = EnFg_Knockback;
             break;
+
         default:
             if (DECR(this->timer) == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_JUMP);
-                EnFg_UpdateAnimation(&this->skelAnime, 3);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
+                EnFg_ChangeAnim(&this->skelAnime, 3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
@@ -251,32 +258,35 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             this->actor.scale.z = CLAMP_MIN(this->actor.scale.z, 0.001f);
             this->actionFunc = EnFg_DoNothing;
             break;
+
         case FG_DMGEFFECT_HOOKSHOT:
             break;
+
         case FG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FROG_CRY_0);
-            EnFg_UpdateAnimation(&this->skelAnime, 0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
+            EnFg_ChangeAnim(&this->skelAnime, 0);
             this->actor.params = FG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
             this->actor.shape.rot = this->actor.world.rot;
             this->actor.velocity.y = 10.0f;
-            this->actor.speedXZ = 3.0f;
+            this->actor.speed = 3.0f;
             this->actor.gravity = -0.8f;
             this->bounceCounter = 1;
             this->timer = 0;
             this->actionFunc = EnFg_Knockback;
             break;
+
         default:
             if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
                 this->skelAnime.curFrame = 8.0f;
                 this->skelAnime.playSpeed = 0.0f;
             }
 
-            if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
-                EnFg_UpdateAnimation(&this->skelAnime, 0);
+            if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+                EnFg_ChangeAnim(&this->skelAnime, 0);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
@@ -289,7 +299,7 @@ void EnFg_DoNothing(EnFg* this, PlayState* play) {
 }
 
 void EnFg_Knockback(EnFg* this, PlayState* play) {
-    if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->bounceCounter++;
         if (this->bounceCounter < 4) {
             this->actor.shape.rot.x += 0x1000;
@@ -298,7 +308,7 @@ void EnFg_Knockback(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
         }
     } else {
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->actor.world.rot.y = this->actor.wallYaw;
             this->actor.shape.rot = this->actor.world.rot;
         }
@@ -316,7 +326,7 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable, 24);
-    EnFg_UpdateAnimation(&this->skelAnime, 0);
+    EnFg_ChangeAnim(&this->skelAnime, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -338,14 +348,15 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
     s32 flagSet;
 
     flag = this->actor.flags;
-    flagSet = ((flag & 0x2000) == 0x2000);
+    flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_2000);
     if (1) {}
     if (!flagSet) {
-        flagSet = ((flag & 0x8000) == 0x8000);
+        flagSet = CHECK_FLAG_ALL(flag, ACTOR_FLAG_8000);
         if (1) {}
         if (!flagSet) {
             this->actionFunc(this, play);
-            Actor_UpdateBgCheckInfo(play, &this->actor, BASE_REG(16, 0), BASE_REG(16, 1), 0.0f, 0x5);
+            Actor_UpdateBgCheckInfo(play, &this->actor, sREG(0), sREG(1), 0.0f,
+                                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
         }
     }
 
@@ -376,11 +387,13 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if ((limbIndex == 7) || (limbIndex == 8)) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Push();
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, *dList);
         Matrix_Pop();
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
@@ -402,7 +415,8 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     Matrix_Pop();
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g,
                    envColor[this->actor.params].b, envColor[this->actor.params].a);
@@ -410,6 +424,7 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(object_fr_Tex_0059A0));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -444,8 +459,8 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
     }
 }
 
-TexturePtr sDustTex[] = {
-    gDust8Tex, gDust7Tex, gDust6Tex, gDust5Tex, gDust4Tex, gDust3Tex, gDust2Tex, gDust1Tex,
+static TexturePtr sDustTextures[] = {
+    gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
@@ -455,29 +470,32 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
     s16 firstDone = false;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 10; i++, dustEffect++) {
-        if (dustEffect->type) {
-            if (!firstDone) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B328);
-                gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
-                firstDone = true;
-            }
-
-            if (1) {}
-            alpha = (255.0f / 16.0f) * dustEffect->timer;
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
-            gDPPipeSync(POLY_XLU_DISP++);
-            Matrix_Translate(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            index = 0.5f * dustEffect->timer;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTex[index]));
-            gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B338);
+        if (dustEffect->type == 0) {
+            continue;
         }
+
+        if (!firstDone) {
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
+            gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B328);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
+            firstDone = true;
+        }
+
+        alpha = (255.0f / 16.0f) * dustEffect->timer;
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, alpha);
+        gDPPipeSync(POLY_XLU_DISP++);
+        Matrix_Translate(dustEffect->pos.x, dustEffect->pos.y, dustEffect->pos.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(dustEffect->xyScale, dustEffect->xyScale, 1.0f, MTXMODE_APPLY);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        index = 0.5f * dustEffect->timer;
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
+        gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B338);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

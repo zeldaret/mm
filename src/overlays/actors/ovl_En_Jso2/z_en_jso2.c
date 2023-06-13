@@ -71,7 +71,7 @@ static DamageTable D_80A7B4F0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Jso2_InitVars = {
+ActorInit En_Jso2_InitVars = {
     ACTOR_EN_JSO2,
     ACTORCAT_ENEMY,
     FLAGS,

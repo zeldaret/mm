@@ -47,7 +47,7 @@ typedef struct {
     /* 0x04 */ u16 transferMode;
     /* 0x06 */ u16 blockNum;
     /* 0x08 */ s32 sectorNum;
-    /* 0x0C */ u32 devAddr;
+    /* 0x0C */ uintptr_t devAddr;
     /* 0x10 */ u32 bmCtlShadow;
     /* 0x14 */ u32 seqCtlShadow;
     /* 0x18 */ __OSBlockInfo block[2];
@@ -62,7 +62,7 @@ typedef struct OSPiHandle {
     /* 0x07 */ u8 relDuration;
     /* 0x08 */ u8 pulse;
     /* 0x09 */ u8 domain;
-    /* 0x0C */ u32 baseAddress;
+    /* 0x0C */ uintptr_t baseAddress;
     /* 0x10 */ u32 speed;
     /* 0x14 */ __OSTranxInfo transferInfo;
 } OSPiHandle; // size = 0x74
@@ -70,7 +70,7 @@ typedef struct OSPiHandle {
 
 typedef struct {
     /* 0x0 */ u8 type;
-    /* 0x4 */ u32 address;
+    /* 0x4 */ uintptr_t address;
 } OSPiInfo; // size = 0x8
 
 
@@ -97,8 +97,8 @@ typedef struct {
     /* 0x08 */ OSMesgQueue* cmdQueue;
     /* 0x0C */ OSMesgQueue* evtQueue;
     /* 0x10 */ OSMesgQueue* acsQueue;
-    /* 0x14 */ s32 (*piDmaCallback)(s32, u32, void*, size_t);
-    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, u32, void*, size_t);
+    /* 0x14 */ s32 (*piDmaCallback)(s32, uintptr_t, void*, size_t);
+    /* 0x18 */ s32 (*epiDmaCallback)(OSPiHandle*, s32, uintptr_t, void*, size_t);
 } OSDevMgr; // size = 0x1C
 
 typedef u64 OSTime;
@@ -141,60 +141,5 @@ typedef struct {
     /* 0x8 */ u32* text_start;
     /* 0xC */ u32* text_end;
 } OSProf; // size = 0x10
-
-typedef enum {
-    /* 0  */ VOICE_WORD_ID_HOURS,
-    /* 1  */ VOICE_WORD_ID_CHEESE,
-    /* 2  */ VOICE_WORD_ID_WAKE_UP,
-    /* 3  */ VOICE_WORD_ID_SIT,
-    /* 4  */ VOICE_WORD_ID_MILK,
-    /* 5  */ VOICE_WORD_ID_HIYA,
-    /* 6  */ VOICE_WORD_ID_MAX,
-    /* -1 */ VOICE_WORD_ID_NONE = 0xFFFF
-} OSVoiceWordId;
-
-#define VOICE_STATUS_READY 0 /* stop/end */
-#define VOICE_STATUS_START 1 /* Voice Undetected (no voice input) */
-#define VOICE_STATUS_CANCEL 3 /* Cancel (cancel extraneous noise) */
-#define VOICE_STATUS_BUSY 5 /* Detected/Detecting (voice being input, recognition processing under way) */
-#define VOICE_STATUS_END 7 /* End recognition processing (enable execution of Get Recognition Results command) */
-
-#define VOICE_WARN_TOO_SMALL 0x400 /* Voice level is too low (100 < Voice Level < 150) */
-#define VOICE_WARN_TOO_LARGE 0x800 /* Voice level is too high (Voice Level > 3500) */
-#define VOICE_WARN_NOT_FIT 0x4000 /* No words match recognition word (No. 1 Candidate Distance Value > 1600) */
-#define VOICE_WARN_TOO_NOISY 0x8000 /* Too much ambient noise (Relative Voice Level =< 400) */
-
-typedef struct {
-    /* 0x0 */ OSMesgQueue* mq;
-    /* 0x4 */ s32 port; /* Controller port */
-    /* 0x8 */ s32 mode;
-    /* 0xC */ u8 status;
-} OSVoiceHandle; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u16 warning;     /* Warning */
-    /* 0x02 */ u16 answerNum;  /* Candidate number (0~5) */
-    /* 0x04 */ u16 voiceLevel; /* Voice input level */
-    /* 0x06 */ u16 voiceRelLevel;   /* Relative voice level "voice_sn" */
-    /* 0x08 */ u16 voiceTime;  /* Voice input time */
-    /* 0x0A */ u16 answer[5];   /* Candidate word number */
-    /* 0x14 */ u16 distance[5]; /* Distance value */
-} OSVoiceData; // size = 0x20
-
-typedef struct {
-    /* 0x000 */ u16 words[20][15]; // 20 words, each with up to 15 syllables
-    /* 0x258 */ u8 numWords;
-} OSVoiceDictionary; // size = 0x25C
-
-typedef struct {
-    /* 0x00 */ OSVoiceDictionary* dict;
-    /* 0x04 */ s8 mode;
-    /* 0x08 */ OSVoiceData* data;
-    /* 0x0C */ u16 distance;
-    /* 0x0E */ u16 answerNum;
-    /* 0x10 */ u16 warning;
-    /* 0x12 */ u16 voiceLevel;
-    /* 0x14 */ u16 voiceRelLevel;
-} OSVoiceUnk; // size = 0x18
 
 #endif

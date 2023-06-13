@@ -48,16 +48,16 @@ typedef struct EnGirlA {
 } EnGirlA; // size = 0x1CC
 
 typedef enum {
-    /* 0x0 */ CANBUY_RESULT_SUCCESS_1,
-    /* 0x1 */ CANBUY_RESULT_SUCCESS_2,
-    /* 0x2 */ CANBUY_RESULT_NO_ROOM,
-    /* 0x3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
-    /* 0x4 */ CANBUY_RESULT_NEED_RUPEES,
-    /* 0x5 */ CANBUY_RESULT_CANNOT_GET_NOW,
-    /* 0x6 */ CANBUY_RESULT_CANNOT_GET_NOW_2,
-    /* 0x7 */ CANBUY_RESULT_NO_ROOM_2,
-    /* 0x8 */ CANBUY_RESULT_ALREADY_HAVE,
-    /* 0x9 */ CANBUY_RESULT_HAVE_BETTER
+    /* 0 */ CANBUY_RESULT_SUCCESS_1,
+    /* 1 */ CANBUY_RESULT_SUCCESS_2,
+    /* 2 */ CANBUY_RESULT_NO_ROOM,
+    /* 3 */ CANBUY_RESULT_NEED_EMPTY_BOTTLE,
+    /* 4 */ CANBUY_RESULT_NEED_RUPEES,
+    /* 5 */ CANBUY_RESULT_CANNOT_GET_NOW,
+    /* 6 */ CANBUY_RESULT_CANNOT_GET_NOW_2,
+    /* 7 */ CANBUY_RESULT_NO_ROOM_2,
+    /* 8 */ CANBUY_RESULT_ALREADY_HAVE,
+    /* 9 */ CANBUY_RESULT_HAVE_BETTER
 } EnGirlACanBuyResult;
 
 typedef enum {
@@ -106,8 +106,6 @@ typedef enum {
     /* 0x2A */ SI_SHIELD_MIRROR,
     /* 0x2B */ SI_MAX
 } EnGirlAShopItemId;
-
-extern const ActorInit En_GirlA_InitVars;
 
 /* 
 * Shopkeeper Common Defines 

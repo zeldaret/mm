@@ -27,7 +27,7 @@ typedef enum {
     /*  4 */ EN_RD_TYPE_FROZEN, // Unused in the final game
     /*  5 */ EN_RD_TYPE_SQUATTING_DANCE,
     /*  6 */ EN_RD_TYPE_CLAPPING_DANCE,
-    /*  7 */ EN_RD_TYPE_PIROUETTE,
+    /*  7 */ EN_RD_TYPE_PIROUETTE
 } EnRdType;
 
 typedef struct EnRd {
@@ -71,7 +71,5 @@ typedef struct EnRd {
     /* 0x3F0 */ u8 damageEffect;
     /* 0x3F1 */ s8 unk_3F1; // related to player->unk_ADD
 } EnRd; // size = 0x3F4
-
-extern const ActorInit En_Rd_InitVars;
 
 #endif // Z_EN_RD_H

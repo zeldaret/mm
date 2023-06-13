@@ -1,55 +1,62 @@
-#include "global.h"
+/**
+ * File: voicecontwrite20.c
+ */
 
-s32 __osVoiceContWrite20(OSMesgQueue* mq, s32 port, u16 arg2, u8 dst[20]) {
+#include "ultra64/controller_voice.h"
+#include "io/controller.h"
+#include "functions.h"
+#include "variables.h"
+
+#define WRITE20FORMAT(ptr) ((__OSVoiceWrite20Format*)(ptr))
+
+s32 __osVoiceContWrite20(OSMesgQueue* mq, s32 channel, u16 address, u8 dst[20]) {
     s32 errorCode;
     u8 status;
     u8* ptr;
     s32 retryCount = 2;
     s32 i;
-    u8 temp_s2;
+    u8 crc;
 
     __osSiGetAccess();
 
     do {
+        ptr = (u8*)&__osPfsPifRam.ramarray;
 
-        ptr = (u8*)&__osPfsPifRam;
+        if ((__osContLastPoll != CONT_CMD_WRITE20_VOICE) || (channel != __osPfsLastChannel)) {
+            __osContLastPoll = CONT_CMD_WRITE20_VOICE;
+            __osPfsLastChannel = channel;
 
-        if ((__osContLastPoll != 0xA) || (port != __osPfsLastChannel)) {
-            __osContLastPoll = 0xA;
-            __osPfsLastChannel = port;
+            for (i = 0; i < channel; i++, *ptr++ = 0) {}
 
-            for (i = 0; i < port; i++, *ptr++ = 0) {
-                ;
-            }
+            __osPfsPifRam.status = CONT_CMD_EXE;
 
-            __osPfsPifRam.status = CONT_CMD_READ_BUTTON;
+            WRITE20FORMAT(ptr)->dummy = CONT_CMD_NOP;
+            WRITE20FORMAT(ptr)->txsize = CONT_CMD_WRITE20_VOICE_TX;
+            WRITE20FORMAT(ptr)->rxsize = CONT_CMD_WRITE20_VOICE_RX;
+            WRITE20FORMAT(ptr)->cmd = CONT_CMD_WRITE20_VOICE;
+            WRITE20FORMAT(ptr)->datacrc = 0xFF;
 
-            ptr[0] = 0xFF;
-            ptr[1] = 0x17;
-            ptr[2] = 1;
-            ptr[3] = 0xA;
-            ptr[0x1A] = 0xFF;
-            ptr[0x1B] = 0xFE;
+            ptr[sizeof(__OSVoiceWrite20Format)] = CONT_CMD_END;
         } else {
-            ptr = (u8*)&__osPfsPifRam + port;
+            ptr += channel;
         }
 
-        ptr[4] = arg2 >> 3;
-        ptr[5] = __osContAddressCrc(arg2) | (arg2 << 5);
+        WRITE20FORMAT(ptr)->addrh = address >> 3;
+        WRITE20FORMAT(ptr)->addrl = (address << 5) | __osContAddressCrc(address);
 
-        bcopy(dst, &ptr[6], 20);
+        bcopy(dst, WRITE20FORMAT(ptr)->data, ARRAY_COUNT(WRITE20FORMAT(ptr)->data));
 
         __osSiRawStartDma(OS_WRITE, &__osPfsPifRam);
-        temp_s2 = __osVoiceContDataCrc(dst, 20);
+        crc = __osVoiceContDataCrc(dst, ARRAY_COUNT(WRITE20FORMAT(ptr)->data));
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
         __osSiRawStartDma(OS_READ, &__osPfsPifRam);
         osRecvMesg(mq, NULL, OS_MESG_BLOCK);
 
-        errorCode = (ptr[2] & 0xC0) >> 4;
+        errorCode = CHNL_ERR(*WRITE20FORMAT(ptr));
 
         if (errorCode == 0) {
-            if (ptr[0x1A] != ((void)0, temp_s2)) {
-                errorCode = __osVoiceGetStatus(mq, port, &status);
+            if (crc != WRITE20FORMAT(ptr)->datacrc) {
+                errorCode = __osVoiceGetStatus(mq, channel, &status);
                 if (errorCode != 0) {
                     break;
                 }
