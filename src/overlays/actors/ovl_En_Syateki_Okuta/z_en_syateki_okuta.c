@@ -228,12 +228,12 @@ void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
  */
 void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
     if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
-        if (!EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
-            EnSyatekiOkuta_SpawnSplash(this, play);
-            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
-        } else {
+        if (EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
             return;
         }
+
+        EnSyatekiOkuta_SpawnSplash(this, play);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
