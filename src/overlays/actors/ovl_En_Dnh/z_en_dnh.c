@@ -36,7 +36,22 @@ ActorInit En_Dnh_InitVars = {
 
 extern UNK_TYPE D_06002950;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/func_80A50D40.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/func_80A50D40.s")
+void* func_80A50D40(Actor *arg0, PlayState *arg1) {
+    func_800B7298(arg1, arg0, 7U);
+    if (gSaveContext.eventInf[3] & 0x20) {
+        arg1->nextEntrance = 0xC60;
+    } else {
+        arg1->nextEntrance = 0x8460;
+    }
+    gSaveContext.nextCutsceneIndex = 0;
+    arg1->transitionTrigger = 0x14;
+    arg1->transitionType = 3;
+    gSaveContext.nextTransitionType = 7;
+    gSaveContext.save.saveInfo.weekEventReg[0x5A] &= 0xBF;
+    gSaveContext.eventInf[5] &= 0xFE;
+    return 1;
+}
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/func_80A50DF8.s")
 extern s32 D_80A51250;
@@ -101,7 +116,6 @@ void func_80A50F9C(EnDnh* this, PlayState* play) {
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/EnDnh_Init.s")
 extern AnimationInfoS D_80A5142C;
-extern s32 func_80A50D40;
 
 void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
@@ -130,11 +144,9 @@ void EnDnh_Destroy(Actor* thisx, PlayState* play) {
 }
 
 //#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Dnh/EnDnh_Update.s")
-s32 func_80A50E40(EnDnh*, PlayState*); /* extern */
-s32 func_80A50EC0(EnDnh*);             /* extern */
-
 void EnDnh_Update(Actor* thisx, PlayState* play) {
-    EnDnh* this = (EnDnh*)thisx;
+    EnDnh* this = THIS;
+
     func_80A50E40(this, play);
     this->actionFunc(this, play);
     func_80A50EC0(this);
