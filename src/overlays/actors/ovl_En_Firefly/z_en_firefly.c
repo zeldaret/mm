@@ -747,7 +747,7 @@ s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
     if (this->isInvisible && (play->actorCtx.lensMaskSize != LENS_MASK_ACTIVE_SIZE)) {
         *dList = NULL;
-    } else if (limbIndex = 1) {
+    } else if (limbIndex = FIRE_KEESE_LIMB_ROOT) {
         pos->y += 2300.0f;
     }
     return false;
@@ -781,7 +781,7 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             auraScaleStep = -40;
             auraLife = 3;
         } else {
-            if (limbIndex == 14) {
+            if (limbIndex == FIRE_KEESE_LIMB_LEFT_WING_END) {
                 auraPos.x = Math_SinS(9100 * this->timer) * this->timer + this->actor.world.pos.x;
                 auraPos.z = Math_CosS(9100 * this->timer) * this->timer + this->actor.world.pos.z;
             } else {
