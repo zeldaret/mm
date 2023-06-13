@@ -234,8 +234,6 @@ void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
         } else {
             return;
         }
-        func_80A361B0(this, play);
-        Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
