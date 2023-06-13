@@ -33,8 +33,8 @@
         <DList Name="gKeeseRedEyesDL" Offset="0x1678" />
 
         <!--Limbs for the whole thing-->
-        <Limb Name="gFireKeeseWholeRootLimb" Type="Standard" EnumName="FIRE_KEESE_LIMB_WHOLE_ROOT" Offset="0x1708" />
-        <Limb Name="gFireKeeseWholeWrapperLimb" Type="Standard" EnumName="FIRE_KEESE_LIMB_WHOLE_WRAPPER" Offset="0x1714" />
+        <Limb Name="gFireKeeseRootLimb" Type="Standard" EnumName="FIRE_KEESE_LIMB_ROOT" Offset="0x1708" />
+        <Limb Name="gFireKeeseRootWrapperLimb" Type="Standard" EnumName="FIRE_KEESE_LIMB_ROOT_WRAPPER" Offset="0x1714" />
 
         <!--Root Limb for all feet-->
         <Limb Name="gFireKeeseFeetRootLimb" Type="Standard" EnumName="FIRE_KEESE_LIMB_FEET_ROOT" Offset="0x1720" />
@@ -76,6 +76,6 @@
         <Limb Name="gFireKeeseHeadLimb" Type="Standard" EnumName="FIRE_KEESE_LIMB_HEAD" Offset="0x1840" />
 
         <!--Skeleton-->
-        <Skeleton Name="gFireKeeseSkel" Type="Normal" LimbType="Standard" LimbNone="FIRE_KEESE_LIMB_NONE" LimbMax="FIRE_KEESE_LIMB_MAX" EnumName="FireKeeseLimbs" Offset="0x18B8" />
+        <Skeleton Name="gFireKeeseSkel" Type="Normal" LimbType="Standard" LimbNone="FIRE_KEESE_LIMB_NONE" LimbMax="FIRE_KEESE_LIMB_MAX" EnumName="FireKeeseLimb" Offset="0x18B8" />
     </File>
 </Root>

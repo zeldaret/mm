@@ -134,8 +134,7 @@ void EnFirefly_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &gFireKeeseFlyAnim, this->jointTable,
-                   this->morphTable, 28);
+    SkelAnime_Init(play, &this->skelAnime, &gFireKeeseSkel, &gFireKeeseFlyAnim, this->jointTable, this->morphTable, 28);
     Collider_InitAndSetSphere(play, &this->collider, &this->actor, &sSphereInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
@@ -747,7 +746,7 @@ s32 EnFirefly_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
     if (this->isInvisible && (play->actorCtx.lensMaskSize != LENS_MASK_ACTIVE_SIZE)) {
         *dList = NULL;
-    } else if (limbIndex == 1) {
+    } else if (limbIndex == gFireKeeseRootLimb) {
         pos->y += 2300.0f;
     }
     return false;
@@ -768,11 +767,11 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     s32 pad;
     EnFirefly* this = THIS;
 
-    if ((this->currentType != KEESE_FIRE) && (limbIndex == 27)) {
+    if ((this->currentType != KEESE_FIRE) && (limbIndex == FIRE_KEESE_LIMB_HEAD)) {
         gSPDisplayList((*gfx)++, gKeeseRedEyesDL);
     } else if ((this->lastDrawnFrame != play->gameplayFrames) &&
                ((this->auraType == KEESE_AURA_FIRE) || (this->auraType == KEESE_AURA_ICE)) &&
-               ((limbIndex == 15) || (limbIndex == 21))) {
+               ((limbIndex == FIRE_KEESE_LIMB_LEFT_WING_END) || (limbIndex == FIRE_KEESE_LIMB_RIGHT_WING_END))) {
         if (this->actionFunc != EnFirefly_Die) {
             Matrix_MultZero(&auraPos);
             auraPos.x += Rand_ZeroFloat(5.0f);
@@ -781,7 +780,7 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             auraScaleStep = -40;
             auraLife = 3;
         } else {
-            if (limbIndex == 15) {
+            if (limbIndex == gFireKeeseLeftWingEndLimb) {
                 auraPos.x = Math_SinS(9100 * this->timer) * this->timer + this->actor.world.pos.x;
                 auraPos.z = Math_CosS(9100 * this->timer) * this->timer + this->actor.world.pos.z;
             } else {
@@ -806,11 +805,11 @@ void EnFirefly_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
                       auraLife);
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == FIRE_KEESE_LIMB_LEFT_WING_END) {
         Matrix_MultZero(&this->limbPos[0]);
-    } else if (limbIndex == 21) {
+    } else if (limbIndex == FIRE_KEESE_LIMB_RIGHT_WING_END) {
         Matrix_MultZero(&this->limbPos[1]);
-    } else if (limbIndex == 10) {
+    } else if (limbIndex == FIRE_KEESE_LIMB_BODY) {
         Matrix_MultZero(&this->limbPos[2]);
     }
 }
