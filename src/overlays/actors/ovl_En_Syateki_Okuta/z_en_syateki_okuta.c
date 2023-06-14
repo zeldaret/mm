@@ -110,7 +110,7 @@ void EnSyatekiOkuta_Init(Actor* thisx, PlayState* play) {
     }
 
     this->deathTimer = 0;
-    this->circleOrCrossAlpha = 0;
+    this->hitResultAlpha = 0;
     EnSyatekiOkuta_SetupAttachToShootingGalleryMan(this);
 }
 
@@ -211,7 +211,7 @@ void EnSyatekiOkuta_DoNothing(EnSyatekiOkuta* this, PlayState* play) {
 
 void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
     this->actor.draw = EnSyatekiOkuta_Draw;
-    this->circleOrCrossAlpha = 0;
+    this->hitResultAlpha = 0;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_OCTO_ANIM_APPEAR);
     this->actionFunc = EnSyatekiOkuta_Appear;
 }
@@ -272,7 +272,7 @@ void EnSyatekiOkuta_Hide(EnSyatekiOkuta* this, PlayState* play) {
 
 void EnSyatekiOkuta_SetupDie(EnSyatekiOkuta* this) {
     this->deathTimer = 0;
-    this->circleOrCrossAlpha = 300;
+    this->hitResultAlpha = 300;
     if (this->type == SG_OCTO_TYPE_RED) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_DEAD1);
     }
@@ -295,8 +295,8 @@ void EnSyatekiOkuta_Die(EnSyatekiOkuta* this, PlayState* play) {
     s32 pad;
     s32 i;
 
-    if (this->circleOrCrossAlpha > 0) {
-        this->circleOrCrossAlpha -= 15;
+    if (this->hitResultAlpha > 0) {
+        this->hitResultAlpha -= 15;
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -573,10 +573,10 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f,
                          MTXMODE_NEW);
 
-        if (this->circleOrCrossAlpha > 255) {
+        if (this->hitResultAlpha > 255) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, 255);
         } else {
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->circleOrCrossAlpha);
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 210, 64, 32, this->hitResultAlpha);
         }
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

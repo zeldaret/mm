@@ -53,7 +53,7 @@ typedef struct EnSyatekiOkuta {
     /* 0x2A4 */ s16 deathTimer;
     /* 0x2A6 */ s16 type;
     /* 0x2A8 */ UNK_TYPE1 unk_2A8[0x2];
-    /* 0x2AA */ s16 circleOrCrossAlpha;
+    /* 0x2AA */ s16 hitResultAlpha;
 } EnSyatekiOkuta; // size = 0x2AC
 
 #endif // Z_EN_SYATEKI_OKUTA_H
