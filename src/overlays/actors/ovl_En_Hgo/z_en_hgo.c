@@ -143,7 +143,7 @@ void EnHgo_UpdateCollision(EnHgo* this, PlayState* play) {
 }
 
 void EnHgo_SetupTalk(EnHgo* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = EnHgo_Talk;
 }
 
@@ -285,33 +285,33 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = HGO_ANIM_ARMS_FOLDED;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 0);
                     break;
 
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->animIndex = HGO_ANIM_ASTONISHED;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
                     break;
 
                 case 3:
                     this->animIndex = HGO_ANIM_KNEEL_DOWN_AND_HUG;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 2);
                     break;
 
                 case 4:
                     this->animIndex = HGO_ANIM_CONSOLE;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
 
                 case 5:
                     this->animIndex = HGO_ANIM_CONSOLE_HEAD_UP;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 4);
                     break;
 
                 case 6:
                     this->animIndex = HGO_ANIM_REACH_DOWN_TO_LIFT;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 5);
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -328,12 +328,12 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
 
                 case HGO_ANIM_KNEEL_DOWN_AND_HUG:
                     this->animIndex = HGO_ANIM_CONSOLE;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 3);
                     break;
 
                 case HGO_ANIM_REACH_DOWN_TO_LIFT:
                     this->animIndex = HGO_ANIM_TOSS;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 6);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 6);
             }
         }
 

@@ -198,7 +198,7 @@ s32 EnYb_CanTalk(EnYb* this, PlayState* play) {
     }
 }
 
-void EnYb_UpdateAnim(EnYb* this, PlayState* play) {
+void EnYb_UpdateSkelAnime(EnYb* this, PlayState* play) {
     if (this->animIndex <= 0) {
         SkelAnime_Update(&this->skelAnime);
     } else {
@@ -232,7 +232,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
     Vec3f sp60;
     s32 i;
 
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
     for (i = 3; i >= 0; i--) {
         sp60.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
         sp60.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
@@ -249,7 +249,7 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 }
 
 void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         this->actionFunc = EnYb_Talk;
@@ -263,7 +263,7 @@ void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
 }
 
 void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
     // Player is parent: receiving the Kamaro mask
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
@@ -279,7 +279,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
 void EnYb_Talk(EnYb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x1000, 0x200);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
@@ -315,7 +315,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
 }
 
 void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = EnYb_Talk;
         // Spread my dance across the world
@@ -329,7 +329,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
 
 // dancing countdown
 void EnYb_TeachingDance(EnYb* this, PlayState* play) {
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
 
     if (this->teachingCutsceneTimer > 0) {
         this->teachingCutsceneTimer--;
@@ -346,7 +346,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
 
-    EnYb_UpdateAnim(this, play);
+    EnYb_UpdateSkelAnime(this, play);
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
         (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
         (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
@@ -382,7 +382,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
 
 void EnYb_WaitForMidnight(EnYb* this, PlayState* play) {
     if (gSaveContext.save.time < CLOCK_TIME(6, 0)) {
-        EnYb_UpdateAnim(this, play);
+        EnYb_UpdateSkelAnime(this, play);
         this->alpha += 5;
         if (this->alpha > 250) {
             this->alpha = 255;

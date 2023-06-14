@@ -119,7 +119,7 @@ void EnKendoJs_Init(Actor* thisx, PlayState* play) {
                         this->actor.home.rot.z, 0x10);
             Actor_Kill(&this->actor);
         } else {
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 4);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 4);
         }
     } else if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
         Actor_Kill(&this->actor);
@@ -223,7 +223,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 2);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
@@ -241,7 +241,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 2);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
                     play_sound(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
@@ -331,7 +331,7 @@ void func_80B26AFC(EnKendoJs* this, PlayState* play) {
         case TEXT_STATE_DONE:
             if (Message_ShouldAdvance(play)) {
                 if (this->unk_288 == 0x272C) {
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 3);
                 }
 
                 if ((this->unk_288 == 0x272E) || (this->unk_288 == 0x272F) || (this->unk_288 == 0x2730)) {
@@ -522,7 +522,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
             func_80B26F14(this, play);
         } else if (!func_80B26F6C(this, play)) {
             if (this->skelAnime.animation == &object_js_Anim_00016C) {
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 3);
             }
             this->unk_286 = 2;
             Message_CloseTextbox(play);
@@ -547,7 +547,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 Message_StartTextbox(play, 0x2729, &this->actor);
                 this->unk_288 = 0x2729;
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 2);
                 break;
 
             default:
@@ -563,7 +563,7 @@ void func_80B27188(EnKendoJs* this, PlayState* play) {
 
         if ((this->skelAnime.animation == &object_js_Anim_0003DC) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
         }
 
         if (this->unk_284 == 7) {

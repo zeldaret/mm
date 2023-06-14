@@ -63,7 +63,7 @@ ActorInit En_Shn_InitVars = {
     (ActorFunc)EnShn_Draw,
 };
 
-void EnShn_UpdateAnim(EnShn* this) {
+void EnShn_UpdateSkelAnime(EnShn* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -381,7 +381,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE68F0(this, play);
     this->actionFunc(this, play);
     func_80AE65F4(this, play);
-    EnShn_UpdateAnim(this);
+    EnShn_UpdateSkelAnime(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
     func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & 7);

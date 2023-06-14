@@ -975,7 +975,7 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  *
  * @return True if non-repeating animation has finished
  */
-s32 EnGo_UpdateAnim(EnGo* this, PlayState* play) {
+s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
     s32 isAnimFinished = false;
@@ -2436,7 +2436,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->actionFlags & ENGO_FLAG_FROZEN)) {
         EnGo_UpdateEyes(this);
-        EnGo_UpdateAnim(this, play);
+        EnGo_UpdateSkelAnime(this, play);
         EnGo_UpdateAttentionTargetAndReactions(this, play);
         EnGo_UpdateSfx(this, play);
     }

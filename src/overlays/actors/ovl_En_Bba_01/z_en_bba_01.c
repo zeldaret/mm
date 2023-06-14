@@ -108,7 +108,7 @@ void EnBba01_UpdateModel(EnBba01* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f point;
 
-    EnHy_UpdateAnim(&this->enHy, play);
+    EnHy_UpdateSkelAnime(&this->enHy, play);
     if (SubS_AngleDiffLessEqual(this->enHy.actor.shape.rot.y, 0x36B0, this->enHy.actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
         point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;

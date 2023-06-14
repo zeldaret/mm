@@ -282,7 +282,7 @@ void EnTalkGibud_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnTalkGibud_SetupIdle(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
     this->actionFunc = EnTalkGibud_Idle;
 }
 
@@ -300,7 +300,7 @@ void EnTalkGibud_Idle(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupAttemptPlayerFreeze(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
     this->actionFunc = EnTalkGibud_AttemptPlayerFreeze;
 }
 
@@ -321,7 +321,7 @@ void EnTalkGibud_AttemptPlayerFreeze(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupWalkToPlayer(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
     this->actor.speed = 0.4f;
 
     if (this->actionFunc == EnTalkGibud_AttemptPlayerFreeze) {
@@ -382,7 +382,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_START);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_START);
     this->grabDamageTimer = 0;
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->grabState = EN_TALK_GIBUD_GRAB_START;
@@ -400,7 +400,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
             inPositionToAttack = EnTalkGibud_MoveToIdealGrabPositionAndRotation(this, play);
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && (inPositionToAttack == true)) {
                 this->grabState = EN_TALK_GIBUD_GRAB_ATTACK;
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_ATTACK);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_ATTACK);
             }
             break;
 
@@ -427,7 +427,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
                     player->unk_AE8 = 100;
                 }
 
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_END);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_GRAB_END);
                 this->actor.flags |= ACTOR_FLAG_1;
                 this->grabState = EN_TALK_GIBUD_GRAB_RELEASE;
                 this->grabDamageTimer = 0;
@@ -450,7 +450,7 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupGrabFail(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DAMAGE);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DAMAGE);
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->actor.speed = -2.0f;
     this->actionFunc = EnTalkGibud_GrabFail;
@@ -472,7 +472,7 @@ void EnTalkGibud_GrabFail(EnTalkGibud* this, PlayState* play) {
 
 void EnTalkGibud_SetupTurnAwayAndShakeHead(EnTalkGibud* this) {
     this->headShakeTimer = 0;
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
     this->actionFunc = EnTalkGibud_TurnAwayAndShakeHead;
 }
 
@@ -490,7 +490,7 @@ void EnTalkGibud_TurnAwayAndShakeHead(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupWalkToHome(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_WALK);
     this->actor.speed = 0.4f;
     this->actionFunc = EnTalkGibud_WalkToHome;
 }
@@ -552,7 +552,7 @@ void EnTalkGibud_Stunned(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupDamage(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DAMAGE);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DAMAGE);
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DAMAGE);
     this->stunTimer = 0;
     this->grabWaitTimer = 0;
@@ -588,7 +588,7 @@ void EnTalkGibud_Damage(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupDead(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DEATH);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_DEATH);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfx(&this->actor, NA_SE_EN_REDEAD_DEAD);
     this->deathTimer = 0;
@@ -773,7 +773,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
 void EnTalkGibud_SetupPassiveIdle(EnTalkGibud* this) {
     this->isTalking = false;
     if (this->actionFunc != EnTalkGibud_Talk) {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
     }
     this->actionFunc = EnTalkGibud_PassiveIdle;
 }
@@ -854,7 +854,7 @@ void EnTalkGibud_Talk(EnTalkGibud* this, PlayState* play) {
 }
 
 void EnTalkGibud_SetupDisappear(EnTalkGibud* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, EN_TALK_GIBUD_ANIM_IDLE);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->disappearanceTimer = 40;
     this->actionFunc = EnTalkGibud_Disappear;

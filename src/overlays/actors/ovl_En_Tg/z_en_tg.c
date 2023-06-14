@@ -116,7 +116,7 @@ void EnTg_UpdateCollider(EnTg* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
-void EnTg_UpdateAnim(EnTg* this, PlayState* play) {
+void EnTg_UpdateSkelAnime(EnTg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -163,7 +163,7 @@ void EnTg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-    EnTg_UpdateAnim(this, play);
+    EnTg_UpdateSkelAnime(this, play);
     EnTg_UpdateHearts(play, this->effects, ARRAY_COUNT(this->effects));
     EnTg_UpdateCollider(this, play);
 }

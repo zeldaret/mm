@@ -260,7 +260,7 @@ void EnOsn_TurnAround(EnOsn* this) {
 
     if ((this->animIndex == OSN_ANIM_TURN_AROUND_START) && (curFrame == lastFrame)) {
         this->animIndex = OSN_ANIM_TURN_AROUND_LOOP;
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, OSN_ANIM_TURN_AROUND_LOOP);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_TURN_AROUND_LOOP);
     }
 }
 
@@ -270,7 +270,7 @@ void EnOsn_LookFromMask(EnOsn* this) {
 
     if ((this->animIndex == OSN_ANIM_MASK_LOOK_FROM_START) && (curFrame == lastFrame)) {
         this->animIndex = OSN_ANIM_MASK_LOOK_FROM_LOOP;
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, OSN_ANIM_MASK_LOOK_FROM_LOOP);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_MASK_LOOK_FROM_LOOP);
     }
 }
 
@@ -709,7 +709,7 @@ void EnOsn_ChooseAction(EnOsn* this, PlayState* play) {
 
     this->csId = this->actor.csId;
 
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, OSN_ANIM_IDLE);
     if (!isFlagSet) {
         this->actionFunc = EnOsn_HandleCsAction;
     } else {
@@ -848,7 +848,7 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
                     this->animIndex = OSN_ANIM_IDLE;
                     break;
             }
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
 
         if ((this->animIndex == OSN_ANIM_BELIEVE) && (play->sceneId == SCENE_SPOT00) &&
@@ -937,13 +937,13 @@ void EnOsn_Init(Actor* thisx, PlayState* play) {
 
         case OSN_TYPE_LIE_FACE_DOWN:
             this->animIndex = OSN_ANIM_LYING_DOWN_FACE_UP;
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnOsn_DoNothing;
             break;
 
         case OSN_TYPE_LIE_FACE_UP:
             this->animIndex = OSN_ANIM_LYING_DOWN_FACE_DOWN;
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, this->animIndex);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnOsn_DoNothing;
             break;
 

@@ -264,7 +264,7 @@ void EnLiftNuts_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80AE9F28(EnLiftNuts* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 18);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 18);
     this->actionFunc = func_80AE9F70;
     this->unk_354 = 0;
 }
@@ -279,9 +279,9 @@ void func_80AE9F70(EnLiftNuts* this, PlayState* play) {
 
 void func_80AE9FC8(EnLiftNuts* this) {
     if (this->actionFunc == func_80AEA1A0) {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 17);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 17);
     } else {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 3);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 3);
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
@@ -300,7 +300,7 @@ void func_80AEA0B4(EnLiftNuts* this) {
     if (func_80AE9B4C(0, 1)) {
         this->actionFunc = func_80AEA1A0;
     } else {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 2);
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = func_80AEA128;
     }
@@ -308,7 +308,7 @@ void func_80AEA0B4(EnLiftNuts* this) {
 
 void func_80AEA128(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 15);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 15);
         this->actionFunc = func_80AEA1A0;
     } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
         func_80AEB9E0(this, play);
@@ -465,13 +465,13 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
                         Rupees_ChangeBy(-10);
                     } else {
                         play_sound(NA_SE_SY_ERROR);
-                        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+                        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
                         Message_StartTextbox(play, 0x27E4, &this->actor);
                         this->textId = 0x27E4;
                     }
                 } else {
                     func_8019F230();
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
                     Message_StartTextbox(play, 0x27E3, &this->actor);
                     this->textId = 0x27E3;
                 }
@@ -523,7 +523,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27E6:
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
                 switch (CURRENT_DAY) {
                     case 1:
                         Message_StartTextbox(play, 0x27E7, &this->actor);
@@ -559,7 +559,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27EE:
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0x10);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 0x10);
                 Message_StartTextbox(play, 0x27EF, &this->actor);
                 this->textId = 0x27EF;
                 break;
@@ -576,7 +576,7 @@ void func_80AEA910(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27F2:
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
                 Message_StartTextbox(play, 0x27F3, &this->actor);
                 this->textId = 0x27F3;
                 break;
@@ -612,7 +612,7 @@ void func_80AEABF0(EnLiftNuts* this) {
         if (func_80AE9B4C(0, 0)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 16);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 16);
     }
     this->actionFunc = func_80AEAC64;
 }
@@ -620,9 +620,9 @@ void func_80AEABF0(EnLiftNuts* this) {
 void func_80AEAC64(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if ((this->textId == 0x27EE) || (this->textId == 0x27F4) || (this->textId == 0x27F5)) {
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 10);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 10);
         } else {
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 0);
         }
         this->actionFunc = func_80AEACF8;
     }
@@ -665,19 +665,19 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->textId) {
             case 0x27EE:
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 11);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 11);
                 break;
 
             case 0x27EF:
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
                 break;
 
             case 0x27F4:
                 if (this->unk_354 == 0) {
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 11);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 11);
                     this->unk_354++;
                 } else if (this->unk_354 == 4) {
-                    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 12);
+                    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 12);
                     this->unk_354 = 0;
                 } else {
                     this->unk_354++;
@@ -693,7 +693,7 @@ void func_80AEACF8(EnLiftNuts* this, PlayState* play) {
 
 void func_80AEAEAC(EnLiftNuts* this) {
     this->actor.speed = 2.0f;
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
     func_80AE9AC4(this, 1);
     func_80AE9B4C(1, 1);
     this->actionFunc = func_80AEAF14;
@@ -870,11 +870,11 @@ void func_80AEB684(EnLiftNuts* this) {
 void func_80AEB698(EnLiftNuts* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_14_20) && (CURRENT_DAY == 3)) {
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 13);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 13);
             Message_StartTextbox(play, 0x27F5, &this->actor);
             this->textId = 0x27F5;
         } else if (func_80AE9B8C() > 0) {
-            Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 1);
+            Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 1);
             Message_StartTextbox(play, 0x27F0, &this->actor);
             this->textId = 0x27F0;
         } else {
@@ -910,7 +910,7 @@ void func_80AEB828(EnLiftNuts* this) {
         this->unk_356 = 1;
     }
     if (this->actionFunc == func_80AE9F70) {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 15);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 15);
     }
     this->unk_354 = 0;
     this->actionFunc = func_80AEB8A4;
@@ -922,7 +922,7 @@ void func_80AEB8A4(EnLiftNuts* this, PlayState* play) {
             Message_StartTextbox(play, 0x27F6, &this->actor);
             this->textId = 0x27F6;
         }
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 17);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 17);
         this->actionFunc = func_80AEB934;
     }
     this->unk_354++;

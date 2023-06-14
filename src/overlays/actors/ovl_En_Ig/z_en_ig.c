@@ -204,7 +204,7 @@ EnDoor* func_80BF1200(PlayState* play, s32 arg1) {
     return SubS_FindDoor(play, phi_a1);
 }
 
-void EnIg_UpdateAnim(EnIg* this) {
+void EnIg_UpdateSkelAnime(EnIg* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -947,7 +947,7 @@ void EnIg_Update(Actor* thisx, PlayState* play) {
     func_80BF1B40(this, play);
 
     if (this->scheduleResult != 0) {
-        EnIg_UpdateAnim(this);
+        EnIg_UpdateSkelAnime(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
         func_8013C964(&this->actor, play, 60.0f, 30.0f, PLAYER_IA_NONE, this->unk_3D0 & 7);

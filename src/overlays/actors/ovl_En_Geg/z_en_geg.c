@@ -372,7 +372,7 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
     return true;
 }
 
-void EnGeg_UpdateAnim(EnGeg* this, PlayState* play) {
+void EnGeg_UpdateSkelAnime(EnGeg* this, PlayState* play) {
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
     SkelAnime_Update(&this->skelAnime);
 }
@@ -902,7 +902,7 @@ void EnGeg_Update(Actor* thisx, PlayState* play) {
     EnGeg* this = THIS;
 
     this->actionFunc(this, play);
-    EnGeg_UpdateAnim(this, play);
+    EnGeg_UpdateSkelAnime(this, play);
     func_80BB2088(this, play);
     func_80BB1C8C(this);
     SubS_FillLimbRotTables(play, this->unk_238, this->unk_232, ARRAY_COUNT(this->unk_238));

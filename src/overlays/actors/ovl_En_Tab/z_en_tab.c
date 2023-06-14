@@ -143,7 +143,7 @@ EnGm* func_80BE04E0(EnTab* this, PlayState* play, u8 actorCat, s16 actorId) {
     return (EnGm*)foundActor;
 }
 
-void EnTab_UpdateAnim(EnTab* this) {
+void EnTab_UpdateSkelAnime(EnTab* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -544,7 +544,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_1D8 != 0) {
-        EnTab_UpdateAnim(this);
+        EnTab_UpdateSkelAnime(this);
         func_80BE0664(this);
         func_80BE09A8(this, play);
 

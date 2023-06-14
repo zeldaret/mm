@@ -4420,7 +4420,7 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
+void Actor_ChangeAnimByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
     f32 endFrame;
 
     animationInfo += animIndex;

@@ -43,7 +43,7 @@ static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeC
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
     this->blinkState = 0;
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = EnDs2n_Idle;
 }
 

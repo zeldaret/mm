@@ -99,7 +99,7 @@ static AnimationInfoS sAnimationInfo[] = {
     /* 5 */ { &gToiletHandFistAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-void EnBjt_UpdateAnim(EnBjt* this) {
+void EnBjt_UpdateSkelAnime(EnBjt* this) {
     this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
@@ -445,7 +445,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
     EnBjt_ChooseAnimation(this, play);
 
     if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
-        EnBjt_UpdateAnim(this);
+        EnBjt_UpdateSkelAnime(this);
         func_8013C964(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE, this->stateFlags & 7);
         Actor_SetFocus(&this->actor, 26.0f);
         EnBjt_UpdateCollision(this, play);

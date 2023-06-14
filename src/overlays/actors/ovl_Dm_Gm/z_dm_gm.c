@@ -50,7 +50,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-s32 DmGm_UpdateAnim(DmGm* this, PlayState* play) {
+s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
     s32 isAnimFinished = false;
@@ -266,7 +266,7 @@ void DmGm_Update(Actor* thisx, PlayState* play) {
     func_80C2478C(this, play);
 
     if (this->actor.draw != NULL) {
-        DmGm_UpdateAnim(this, play);
+        DmGm_UpdateSkelAnime(this, play);
         func_80C24504(this);
     }
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

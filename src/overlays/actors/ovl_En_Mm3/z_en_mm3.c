@@ -123,7 +123,7 @@ s32 func_80A6F22C(EnMm3* this) {
 void func_80A6F270(EnMm3* this) {
     this->unk_1DC = 1;
     this->unk_2B0 &= ~1;
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 5);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 5);
     this->actionFunc = func_80A6F2C8;
 }
 
@@ -215,7 +215,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 }
                 this->unk_1DC = 0;
                 this->unk_2B0 |= 1;
-                Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 7);
+                Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 7);
                 break;
 
             case 0x278B:
@@ -360,7 +360,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
     }
 
     if ((this->skelAnime.mode == 2) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 2);
+        Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 2);
     }
 
     if (((this->unk_2B4 == 0x279D) || (this->unk_2B4 == 0x27A0) || (this->unk_2B4 == 0x278B)) &&

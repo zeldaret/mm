@@ -35,7 +35,7 @@ static AnimationInfo sAnimationInfo[] = {
 };
 
 void func_80C25D40(EnRsn* this) {
-    Actor_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimByInfo(&this->skelAnime, sAnimationInfo, 0);
     this->actionFunc = func_80C25D84;
 }
 
