@@ -123,8 +123,7 @@ void EnBba01_UpdateModel(EnBba01* this, PlayState* play) {
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.y, 0, 4, 0x3E8, 1);
     }
-    SubS_FillLimbRotTables(play, this->enHy.limbRotTableY, this->enHy.limbRotTableZ,
-                           ARRAY_COUNT(this->enHy.limbRotTableY));
+    SubS_FillLimbRotTables(play, this->enHy.limbRotTableY, this->enHy.limbRotTableZ, ENHY_LIMB_MAX);
     EnHy_UpdateCollider(&this->enHy, play);
 }
 
@@ -205,6 +204,9 @@ void EnBba01_Talk(EnHy* this, PlayState* play) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->actionFunc = this->prevActionFunc;
             this->prevActionFunc = NULL;
+            break;
+
+        default:
             break;
     }
 }

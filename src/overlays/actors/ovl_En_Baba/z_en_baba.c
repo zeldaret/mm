@@ -355,7 +355,7 @@ void EnBaba_UpdateModel(EnBaba* this, PlayState* play) {
         Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
 
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, BBA_LIMB_MAX);
 
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
         EnBaba_UpdateCollider(this, play);
