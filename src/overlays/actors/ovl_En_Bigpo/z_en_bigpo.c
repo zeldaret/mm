@@ -231,10 +231,9 @@ void EnBigpo_Destroy(Actor* thisx, PlayState* play2) {
     EnBigpo* this = THIS;
     s32 fireCount;
 
-    if ((this->actor.params != BIG_POE_POSSIBLEFIRE) && (this->actor.params != BIG_POE_CHOSENFIRE) &&
-        (this->actor.params != BIG_POE_REVEALEDFIRE) && (this->actor.params != BIG_POE_UNK5)) {
+    if ((thisx->params != BIG_POE_POSSIBLEFIRE) && (thisx->params != BIG_POE_CHOSENFIRE) &&
+        (thisx->params != BIG_POE_REVEALEDFIRE) && (thisx->params != BIG_POE_UNK5)) {
         // if NOT a fire type, *BIG_POE_REGULAR and BIG_POE_SUMMONED (combat types only)
-        if (1) {}
         for (fireCount = 0; fireCount < ARRAY_COUNT(this->fires); fireCount++) {
             LightContext_RemoveLight(play, &play->lightCtx, this->fires[fireCount].light);
         }
