@@ -129,11 +129,13 @@ void func_80A50F38(EnDnh* this, PlayState* play) {
 void EnDnh_DoNothing(EnDnh* this, PlayState* play) {
 }
 
+extern SkeletonHeader D_06002950;
+
 void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, (SkeletonHeader*)object_mm_Tex_002950, NULL, this->jointTable,
+    SkelAnime_Init(play, &this->skelAnime, &D_06002950, NULL, this->jointTable,
                    this->morphTable, 2);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
