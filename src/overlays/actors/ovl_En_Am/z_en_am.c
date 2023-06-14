@@ -539,16 +539,16 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     phi_s2 = 0;
     phi_s1 = 0;
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_AM_LIMB_04) {
         phi_s2 = &this->limbPos[0];
         phi_s1 = D_808B1128;
         phi_s3 = 5;
-    } else if (limbIndex == 13) {
+    } else if (limbIndex == OBJECT_AM_LIMB_0D) {
         phi_s2 = &this->limbPos[9];
         phi_s1 = D_808B117C;
         phi_s3 = 4;
-    } else if ((limbIndex == 7) || (limbIndex == 10)) {
-        phi_s2 = (limbIndex == 7) ? &this->limbPos[5] : &this->limbPos[7];
+    } else if ((limbIndex == OBJECT_AM_LIMB_07) || (limbIndex == OBJECT_AM_LIMB_0A)) {
+        phi_s2 = (limbIndex == OBJECT_AM_LIMB_07) ? &this->limbPos[5] : &this->limbPos[7];
         phi_s1 = D_808B1164;
         phi_s3 = 2;
     } else {

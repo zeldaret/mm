@@ -50,7 +50,8 @@ typedef enum {
     /* 2 */ EN_AOB01_ANIM_LAUGH_LOOP,
     /* 3 */ EN_AOB01_ANIM_SURPRISE_START,
     /* 4 */ EN_AOB01_ANIM_SURPRISE_LOOP,
-    /* 5 */ EN_AOB01_ANIM_IDLE_2
+    /* 5 */ EN_AOB01_ANIM_IDLE_2,
+    /* 6 */ EN_AOB01_ANIM_IDLE_MAX
 } EnAob01Animation;
 
 typedef enum {
@@ -60,13 +61,13 @@ typedef enum {
     /* 3 */ EN_AOB01_EYE_MAX
 } EnAob01EyeTexture;
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+static AnimationInfo sAnimationInfo[EN_AOB01_ANIM_IDLE_MAX] = {
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },          // EN_AOB01_ANIM_IDLE_1
+    { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },    // EN_AOB01_ANIM_LAUGH_START
+    { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },     // EN_AOB01_ANIM_LAUGH_LOOP
+    { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // EN_AOB01_ANIM_SURPRISE_START
+    { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  // EN_AOB01_ANIM_SURPRISE_LOOP
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },         // EN_AOB01_ANIM_IDLE_2
 };
 
 static ColliderCylinderInit sCylinderInit = {

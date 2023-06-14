@@ -85,7 +85,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
 
     if (ARROW_IS_ARROW(this->actor.params)) {
         SkelAnime_Init(play, &this->arrow.skelAnime, &gameplay_keep_Skel_014560, &gameplay_keep_Anim_0128BC,
-                       this->arrow.jointTable, this->arrow.jointTable, 5);
+                       this->arrow.jointTable, this->arrow.jointTable, ARROW_LIMB_MAX);
         if (this->actor.params < ARROW_TYPE_FIRE) {
             if (this->actor.params == ARROW_TYPE_NORMAL_HORSE) {
                 D_8088C234.elemDuration = 4;
