@@ -6,6 +6,7 @@
 
 #include "global.h"
 #include "buffers.h"
+#include "idle.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_heap.h"
@@ -57,7 +58,7 @@ void Main(void* arg) {
     osCreateMesgQueue(&irqMgrMsgQ, irqMgrMsgBuf, ARRAY_COUNT(irqMgrMsgBuf));
 
     StackCheck_Init(&sSchedStackInfo, sSchedStack, STACK_TOP(sSchedStack), 0, 0x100, "sched");
-    Sched_Init(&gSchedContext, STACK_TOP(sSchedStack), Z_PRIORITY_SCHED, D_8009B290, 1, &gIrqMgr);
+    Sched_Init(&gSchedContext, STACK_TOP(sSchedStack), Z_PRIORITY_SCHED, gViConfigModeType, 1, &gIrqMgr);
 
     CIC6105_AddRomInfoFaultPage();
 

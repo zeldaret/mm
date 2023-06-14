@@ -18,15 +18,8 @@ extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
-extern u64 rspbootTextStart[];
-extern u8 D_80096B20;
-extern vu8 gViConfigUseDefault;
-extern u8 gViConfigAdditionalScanLines;
-extern u32 gViConfigFeatures;
-extern f32 gViConfigXScale;
-extern f32 gViConfigYScale;
 extern OSPiHandle* gCartHandle;
-extern u32 sDmaMgrDmaBuffSize;
+extern u32 gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;
 extern volatile OSTime sIrqMgrRetraceTime;
@@ -276,11 +269,6 @@ extern f64 D_800994C8;
 extern char gBuildTeam[];
 extern char gBuildDate[];
 extern char gBuildMakeOption[];
-
-extern IrqMgr gIrqMgr;
-
-extern OSViMode gViConfigMode;
-extern u8 D_8009B290;
 
 extern u8 sYaz0DataBuffer[0x400];
 extern u8* sYaz0CurDataEnd;

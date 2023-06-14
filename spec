@@ -16,7 +16,6 @@ beginseg
     include "build/src/boot_O2_g3/boot_main.o"
     include "build/data/boot/rspboot.data.o"
     include "build/src/boot_O2_g3/idle.o"
-    include "build/src/boot_O2_g3/idle_extra_bss.o"
     include "build/src/boot_O2_g3/viconfig.o"
     include "build/data/boot/viconfig.data.o"
     include "build/src/boot_O2_g3/z_std_dma.o"

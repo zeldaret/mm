@@ -3,7 +3,7 @@
 #include "stack.h"
 #include "stackcheck.h"
 
-u32 sDmaMgrDmaBuffSize = 0x2000;
+u32 gDmaMgrDmaBuffSize = 0x2000;
 
 StackEntry sDmaMgrStackInfo;
 u16 numDmaEntries;
@@ -17,7 +17,7 @@ s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size) {
     OSMesgQueue queue;
     OSMesg msg[1];
     s32 ret;
-    size_t buffSize = sDmaMgrDmaBuffSize;
+    size_t buffSize = gDmaMgrDmaBuffSize;
 
     osInvalDCache(ram, size);
     osCreateMesgQueue(&queue, msg, ARRAY_COUNT(msg));
