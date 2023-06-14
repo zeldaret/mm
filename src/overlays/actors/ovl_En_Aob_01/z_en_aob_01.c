@@ -557,7 +557,7 @@ void EnAob01_UpdateCommon(EnAob01* this, PlayState* play) {
     }
 
     EnAob01_Blink(this, EN_AOB01_EYE_MAX);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, MAMAMU_YAN_LIMB_MAX);
     EnAob01_UpdateCollision(this, play);
 
     // This specific code ensures that in-game time passes during the race.

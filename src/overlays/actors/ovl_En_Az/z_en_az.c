@@ -5,7 +5,6 @@
  */
 
 #include "z_en_az.h"
-#include "objects/object_az/object_az.h"
 #include "overlays/actors/ovl_En_Twig/z_en_twig.h"
 #include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 
