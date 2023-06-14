@@ -95,7 +95,7 @@ typedef enum {
     /* 6 */ ZELDA_EYE_STATE_CLOSED2
 } DmZlEyeStates;
 
-void DmZl_ChangeAnim(SkelAnime* skelAnime, AnimationInfo animInfo[], u16 animIndex) {
+void DmZl_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
     f32 endFrame;
 
     animInfo += animIndex;
