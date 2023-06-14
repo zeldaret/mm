@@ -12,18 +12,15 @@ typedef struct EnDnh {
     /* 0x144 */ EnDnhActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ u16 unk18C;
-    /* 0x18E */ char pad18E[2];
-    /* 0x190 */ s32 unk190;
+    /* 0x190 */ s32 msgEventScript;
     /* 0x194 */ s32 unk194;
     /* 0x198 */ s16 unk198;
-    /* 0x19A */ char pad19A[2];
-    /* 0x19C */ s16 unk19C;
+    /* 0x19A */ UNK_TYPE1 pad19A[2];
+    /* 0x19C */ s16 timer;
     /* 0x19E */ s16 unk19E;
     /* 0x1A0 */ s32 unk1A0;
-    /* 0x1A4 */ Vec3s unk1A4;
-    /* 0x1AA */ char pad1AA[6];
-    /* 0x1B0 */ Vec3s unk1B0;
-    /* 0x1B6 */ char pad1B6[6];
+    /* 0x1A4 */ Vec3s jointTable[2];
+    /* 0x1B0 */ Vec3s morphTable[2];
 } EnDnh; // size = 0x1BC
 
 #endif // Z_EN_DNH_H
