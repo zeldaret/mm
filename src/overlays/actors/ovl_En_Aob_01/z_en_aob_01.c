@@ -183,10 +183,10 @@ void EnAob01_SpawnRacedogs(EnAob01* this, PlayState* play) {
  */
 s32 EnAob01_ProcessLaughAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->animIndex == EN_AOB01_ANIM_LAUGH_START) {
-        if (curFrame == lastFrame) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_LAUGH_LOOP;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_LOOP);
             return true;
@@ -207,16 +207,16 @@ s32 EnAob01_ProcessLaughAnim(EnAob01* this) {
  */
 s32 EnAob01_ProcessSurpriseAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if ((this->animIndex == EN_AOB01_ANIM_IDLE_1) || (this->animIndex == EN_AOB01_ANIM_IDLE_2)) {
-        if (curFrame == lastFrame) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_START;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_START);
             return true;
         }
     } else if (this->animIndex == EN_AOB01_ANIM_SURPRISE_START) {
-        if (curFrame == lastFrame) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_LOOP;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_LOOP);
             return true;
@@ -235,10 +235,10 @@ s32 EnAob01_ProcessSurpriseAnim(EnAob01* this) {
  */
 s32 EnAob01_ProcessIdleAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if ((this->animIndex != EN_AOB01_ANIM_IDLE_1) && (this->animIndex != EN_AOB01_ANIM_IDLE_2)) {
-        if (curFrame == lastFrame) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_IDLE_2;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_2);
             return true;

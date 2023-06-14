@@ -203,9 +203,9 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
 }
 
 void func_808AFF9C(EnAm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
+    f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, ANIMMODE_LOOP, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_LOOP, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
     this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
