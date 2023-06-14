@@ -57,7 +57,8 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
 
     switch ((DmRavineState)this->state) {
         case DM_RAVINE_STATE_INITIALIZED:
-            return;
+            break;
+
         case DM_RAVINE_STATE_ACTIVE:
             this->isActive = true;
             play->roomCtx.unk7A[1]++;
@@ -70,8 +71,12 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
                 }
             }
             break;
+
         case DM_RAVINE_STATE_PENDING_DEATH:
             Actor_Kill(&this->actor);
+            break;
+
+        default:
             break;
     }
 }

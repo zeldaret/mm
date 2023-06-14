@@ -16,7 +16,7 @@ void DmOpstage_Destroy(Actor* thisx, PlayState* play);
 void DmOpstage_Update(Actor* thisx, PlayState* play);
 void DmOpstage_Draw(Actor* thisx, PlayState* play);
 
-void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play);
+void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play);
 
 ActorInit Dm_Opstage_InitVars = {
     ACTOR_DM_OPSTAGE,
@@ -42,7 +42,7 @@ void DmOpstage_Init(Actor* thisx, PlayState* play) {
     DmOpstage* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DmOpstage_SetupAction(this, DmOpstage_FollowCutsceneScript);
+    DmOpstage_SetupAction(this, DmOpstage_HandleCutscene);
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
@@ -69,7 +69,7 @@ void DmOpstage_Destroy(Actor* thisx, PlayState* play) {
     }
 }
 
-void DmOpstage_FollowCutsceneScript(DmOpstage* this, PlayState* play) {
+void DmOpstage_HandleCutscene(DmOpstage* this, PlayState* play) {
     s32 cueChannel;
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
@@ -133,6 +133,9 @@ void DmOpstage_Draw(Actor* thisx, PlayState* play) {
         case DMOPSTAGE_TYPE_STRAIGHT_TREE:
             Gfx_DrawDListOpa(play, gKeikokuDemoTallTreeStraightDL);
             Gfx_DrawDListXlu(play, gKeikokuDemoTallTreeStraightEmptyDL);
+            break;
+
+        default:
             break;
     }
 }

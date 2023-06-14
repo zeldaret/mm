@@ -4420,18 +4420,19 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
-    f32 frameCount;
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
-    if (animationInfo->frameCount > 0.0f) {
-        frameCount = animationInfo->frameCount;
+    animInfo += animIndex;
+
+    if (animInfo->frameCount > 0.0f) {
+        endFrame = animInfo->frameCount;
     } else {
-        frameCount = Animation_GetLastFrame(&animationInfo->animation->common);
+        endFrame = Animation_GetLastFrame(&animInfo->animation->common);
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 // Unused

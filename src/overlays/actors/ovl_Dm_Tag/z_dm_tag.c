@@ -15,7 +15,7 @@ void DmTag_Destroy(Actor* thisx, PlayState* play);
 void DmTag_Update(Actor* thisx, PlayState* play);
 
 void func_80C229AC(DmTag* this, PlayState* play);
-void func_80C229EC(DmTag* this, PlayState* play);
+void DmTag_DoNothing(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
 ActorInit Dm_Tag_InitVars = {
@@ -162,6 +162,9 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             this->unk_1A4++;
             break;
+
+        default:
+            break;
     }
     return ret;
 }
@@ -190,9 +193,13 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
                 return D_80C22BF0;
             }
             return D_80C22C30;
+
         case 2:
             this->msgEventCallback = func_80C224D8;
             return D_80C22BFC;
+
+        default:
+            break;
     }
     return NULL;
 }
@@ -217,7 +224,7 @@ void func_80C229AC(DmTag* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_1;
 }
 
-void func_80C229EC(DmTag* this, PlayState* play) {
+void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
@@ -241,7 +248,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         this->unk_18C = 0;
         SubS_UpdateFlags(&this->unk_18C, 4, 7);
         this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actionFunc = func_80C229EC;
+        this->actionFunc = DmTag_DoNothing;
     } else if (this->actor.room == 2) {
         Actor_Kill(&this->actor);
     } else {
