@@ -44,6 +44,7 @@ s32 DmAl_ChangeAnim(DmAl* this, s32 animIndex) {
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
+
     return didAnimChange;
 }
 

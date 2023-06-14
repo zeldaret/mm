@@ -33,7 +33,7 @@ typedef struct DmGm {
     /* 0x2C8 */ s32 animIndex;
     /* 0x2CC */ s32 prevAnimIndex;
     /* 0x2D0 */ s32 isCutscenePlaying;
-    /* 0x2D4 */ s32 csDidAnimChange;
+    /* 0x2D4 */ s32 didAnimChangeInCs;
 } DmGm; // size = 0x2D8
 
 #endif // Z_DM_GM_H

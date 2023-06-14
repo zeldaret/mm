@@ -226,7 +226,7 @@ void DmAn_HandleCutscene(DmAn* this, PlayState* play) {
         if (!this->isCutscenePlaying) {
             this->cueId = 255;
             this->isCutscenePlaying = true;
-            this->csDidAnimChange = false;
+            this->didAnimChangeInCs = false;
             this->prevAnimIndex = this->animIndex;
         }
 
@@ -236,7 +236,7 @@ void DmAn_HandleCutscene(DmAn* this, PlayState* play) {
 
             if (this->cueId != (u8)cueId) {
                 this->cueId = cueId;
-                this->csDidAnimChange = true;
+                this->didAnimChangeInCs = true;
                 DmAn_ChangeAnim(this, play, csAnimIndex[cueId]);
             }
 
@@ -262,7 +262,7 @@ void DmAn_HandleCutscene(DmAn* this, PlayState* play) {
         }
     } else if (this->isCutscenePlaying) {
         this->isCutscenePlaying = false;
-        this->csDidAnimChange = false;
+        this->didAnimChangeInCs = false;
         DmAn_ChangeAnim(this, play, this->prevAnimIndex);
     }
 }
@@ -305,7 +305,7 @@ void func_80C1CD80(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     s8 sp2B = this->actor.objBankIndex;
     s8 sp2A = this->unk_2AD;
 
-    if ((limbIndex == OBJECT_AN1_LIMB_05) && this->csDidAnimChange) {
+    if ((limbIndex == OBJECT_AN1_LIMB_05) && this->didAnimChangeInCs) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();

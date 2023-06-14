@@ -234,6 +234,7 @@ void DmChar00_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 anim
     } else {
         endFrame = animInfo->frameCount;
     }
+
     Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
                      animInfo->mode, animInfo->morphFrames);
 }

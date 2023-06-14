@@ -31,12 +31,12 @@ ActorInit Dm_Char09_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ DMCHAR05_ANIM_FLYING,
-    /* 1 */ DMCHAR05_ANIM_MAX
+    /* 0 */ DMCHAR09_ANIM_FLYING,
+    /* 1 */ DMCHAR09_ANIM_MAX
 } DmChar09Animation;
 
-static AnimationInfo sAnimationInfo[DMCHAR05_ANIM_MAX] = {
-    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR05_ANIM_FLYING
+static AnimationInfo sAnimationInfo[DMCHAR09_ANIM_MAX] = {
+    { &gBeeFlyingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR09_ANIM_FLYING
 };
 
 void DmChar09_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
@@ -60,7 +60,7 @@ void DmChar09_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_Init(play, &this->skelAnime, &gBeeSkel, &gBeeFlyingAnim, this->jointTable, this->morphTable,
                    OBJECT_BEE_LIMB_MAX);
-    DmChar09_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR05_ANIM_FLYING], 0);
+    DmChar09_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR09_ANIM_FLYING], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_228 = Rand_ZeroOne() * 65535.0f;
     this->unk_22A = Rand_ZeroOne() * 65535.0f;
