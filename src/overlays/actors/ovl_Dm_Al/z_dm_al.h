@@ -21,9 +21,4 @@ typedef struct DmAl {
     /* 0x45C */ s32 isCutscenePlaying;
 } DmAl; // size = 0x460
 
-typedef enum {
-    /* 0 */ MADAME_AROMA_ANIMATION_0,
-    /* 1 */ MADAME_AROMA_ANIMATION_1
-} DmAlAnimations;
-
 #endif // Z_DM_AL_H
