@@ -54,7 +54,7 @@
         <!--- won't draw, uses gPoeSisters_DL_002870 -->
         <Limb Name="gPoeSisters_limb_006530" Type="Standard" EnumName="POE_SISTERS_LIMB_UNK3" Offset="0x6530" />
         <Limb Name="gPoeSistersRightUpperArmLimb" Type="Standard" EnumName="POE_SISTERS_LIMB_RIGHT_UPPER_ARM" Offset="0x653C" />
-        <Limb Name="gPoeSistersRightForArmLimb" Type="Standard" EnumName="POE_SISTERS_LIMB_RIGHT_FORARM" Offset="0x6548" />
+        <Limb Name="gPoeSistersRightForearmLimb" Type="Standard" EnumName="POE_SISTERS_LIMB_RIGHT_FOREARM" Offset="0x6548" />
         <!--- no DL -->
         <Limb Name="gPoeSisters_limb_006554" Type="Standard" EnumName="POE_SISTERS_LIMB_UNK6" Offset="0x6554" />
         <!--- won't draw, uses gPoeSisters_DL_002570 -->

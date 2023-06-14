@@ -123,7 +123,7 @@ static InitChainEntry sInitChain[] = {
  * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
  * limb is not part of the bodyParts arrays.
  */
-static s8 sLimbIndexToBodyPartsIndex[] = {
+static s8 sLimbIndexToBodyPartsIndex[BUBBLE_LIMB_MAX] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 

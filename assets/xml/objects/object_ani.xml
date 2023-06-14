@@ -15,18 +15,18 @@
         <Limb Name="gAniRightFootLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_FOOT" Offset="0x27F8" />
         <Limb Name="gAniTorsoLimb" Type="Standard" EnumName="ANI_LIMB_TORSO" Offset="0x2804" />
         <Limb Name="gAniLeftUpperArmLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_UPPER_ARM" Offset="0x2810" />
-        <Limb Name="gAniLeftForArmLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_FORARM" Offset="0x281C" />
+        <Limb Name="gAniLeftForearmLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_FOREARM" Offset="0x281C" />
         <Limb Name="gAniLeftHandLimb" Type="Standard" EnumName="ANI_LIMB_LEFT_HAND" Offset="0x2828" />
         <Limb Name="gAniRightUpperArmLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_UPPER_ARM" Offset="0x2834" />
-        <Limb Name="gAniRightForArmLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_FORARM" Offset="0x2840" />
+        <Limb Name="gAniRightForearmLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_FOREARM" Offset="0x2840" />
         <Limb Name="gAniRightHandLimb" Type="Standard" EnumName="ANI_LIMB_RIGHT_HAND" Offset="0x284C" />
         <Limb Name="gAniHeadLimb" Type="Standard" EnumName="ANI_LIMB_HEAD" Offset="0x2858" />
         <Skeleton Name="gAniSkeleton" Type="Flex" LimbType="Standard" LimbNone="ANI_LIMB_NONE" LimbMax="ANI_LIMB_MAX" EnumName="ObjectAniLimb" Offset="0x28A0" />
         <DList Name="gAniRightHandDL" Offset="0x4860" />
-        <DList Name="gAniRightForArmDL" Offset="0x4A50" />
+        <DList Name="gAniRightForearmDL" Offset="0x4A50" />
         <DList Name="gAniRightUpperArmDL" Offset="0x4B38" />
         <DList Name="gAniLeftHandDL" Offset="0x4C30" />
-        <DList Name="gAniLeftForArmDL" Offset="0x4E20" />
+        <DList Name="gAniLeftForearmDL" Offset="0x4E20" />
         <DList Name="gAniLeftUpperArmDL" Offset="0x4F08" />
         <DList Name="gAniTorsoDL" Offset="0x5000" />
         <DList Name="gAniRightFootDL" Offset="0x5270" />

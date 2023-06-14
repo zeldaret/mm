@@ -73,14 +73,25 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x0 */ f32 data[5];
+    /* 0x0 */ f32 data[PLAYER_FORM_MAX];
 } EnBox_PlaybackSpeed; // 0x14
 
-static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
+static EnBox_PlaybackSpeed sPlaybackSpeed = {
+    {
+        1.5f, // PLAYER_FORM_FIERCE_DEITY
+        1.0f, // PLAYER_FORM_GORON
+        1.5f, // PLAYER_FORM_ZORA
+        1.0f, // PLAYER_FORM_DEKU
+        1.5f, // PLAYER_FORM_HUMAN
+    },
+};
 
-static AnimationHeader* sBigChestAnimations[5] = {
-    &gBoxBigChestOpenAdultAnim, &gBoxBigChestOpenGoronAnim, &gBoxBigChestOpenAdultAnim,
-    &gBoxBigChestOpenDekuAnim,  &gBoxBigChestOpenChildAnim,
+static AnimationHeader* sBigChestAnimations[PLAYER_FORM_MAX] = {
+    &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_FIERCE_DEITY
+    &gBoxBigChestOpenGoronAnim, // PLAYER_FORM_GORON
+    &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_ZORA
+    &gBoxBigChestOpenDekuAnim,  // PLAYER_FORM_DEKU
+    &gBoxBigChestOpenChildAnim, // PLAYER_FORM_HUMAN
 };
 
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
@@ -191,12 +202,12 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     EnBox* this = THIS;
     s16 csId;
     CollisionHeader* colHeader;
-    f32 animFrame;
-    f32 animFrameEnd;
+    f32 startFrame;
+    f32 endFrame;
 
     colHeader = NULL;
-    animFrame = 0.0f;
-    animFrameEnd = Animation_GetLastFrame(&gBoxChestOpenAnim);
+    startFrame = 0.0f;
+    endFrame = Animation_GetLastFrame(&gBoxChestOpenAnim);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&gBoxChestCol, &colHeader);
@@ -227,7 +238,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->iceSmokeTimer = 100;
         EnBox_SetupAction(this, EnBox_Open);
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
-        animFrame = animFrameEnd;
+        startFrame = endFrame;
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -283,7 +294,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
 
     SkelAnime_Init(play, &this->skelAnime, &gBoxChestSkel, &gBoxChestOpenAnim, this->jointTable, this->morphTable,
                    OBJECT_BOX_CHEST_LIMB_MAX);
-    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, animFrame, animFrameEnd, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, startFrame, endFrame, ANIMMODE_ONCE, 0.0f);
     if (Actor_IsSmallChest(this)) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
         Actor_SetFocus(&this->dyna.actor, 20.0f);
@@ -453,9 +464,9 @@ void func_80868B74(EnBox* this, PlayState* play) {
 
 void EnBox_WaitOpen(EnBox* this, PlayState* play) {
     s32 pad;
-    AnimationHeader* animHeader;
-    f32 frameCount;
-    f32 playbackSpeed;
+    AnimationHeader* anim;
+    f32 endFrame;
+    f32 playSpeed;
     EnBox_PlaybackSpeed playbackSpeedTable;
     Player* player;
     Vec3f offset;
@@ -465,19 +476,19 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
     if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (CutsceneManager_GetCurrentCsId() == this->csId2) ||
                                  (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
-            animHeader = &gBoxChestOpenAnim;
-            playbackSpeed = 1.5f;
+            anim = &gBoxChestOpenAnim;
+            playSpeed = 1.5f;
         } else {
             u8 playerForm;
 
             playbackSpeedTable = sPlaybackSpeed;
             playerForm = gSaveContext.save.playerForm;
-            animHeader = sBigChestAnimations[playerForm];
-            playbackSpeed = playbackSpeedTable.data[playerForm];
+            anim = sBigChestAnimations[playerForm];
+            playSpeed = playbackSpeedTable.data[playerForm];
         }
 
-        frameCount = Animation_GetLastFrame(animHeader);
-        Animation_Change(&this->skelAnime, animHeader, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
+        endFrame = Animation_GetLastFrame(anim);
+        Animation_Change(&this->skelAnime, anim, playSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0.0f);
         EnBox_SetupAction(this, EnBox_Open);
         if (this->unk_1EC > 0) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DEMO_TRE_LGT,

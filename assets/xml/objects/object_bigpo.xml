@@ -1,47 +1,47 @@
 ﻿<Root>
     <!-- Assets for Big Poes -->
     <File Name="object_bigpo" Segment="6">
-        <Animation Name="gBigpoSwingLampAttackAnim" Offset="0x158" /> <!-- Original name is "pog_atack" -->
-        <Animation Name="gBigpoShockAnim" Offset="0x454" /> <!-- Original name is "pog_damage" -->
-        <Animation Name="gBigpoBackpeddleAnim" Offset="0x608" /> <!-- Original name is "pog_escape" -->
-        <Animation Name="gBigpoFloatAnim" Offset="0x924" /> <!-- Original name is "pog_fly" -->
-        <Animation Name="gBigpoAwakenSpawnAnim" Offset="0xF9C" /> <!-- Original name is "pog_start" -->
-        <Animation Name="gBigpoAwakenStretchAnim" Offset="0x1360" /> <!-- Original name is "pog_wait" -->
-        <Texture Name="gBigpoSoulFace" OutName="bigpo_soul_face" Format="i8" Width="32" Height="64" Offset="0x1370" />
-        <DList Name="gBigpoDrawSoulDL" Offset="0x1BB0" /> <!-- Original name is "bigpo_soul_modelT" -->
-        <Texture Name="gBigpoNecklaceSkullHalfTex" OutName="bigpo_skull_necklace" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
-        <Texture Name="gBigpoLanternGlassTex" OutName="bigpo_lantern_glass" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
-        <Texture Name="gBigpoTornRobeTex" OutName="bigpo_torn_robe" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
-        <Texture Name="gBigpoArmSectionTex" OutName="bigpo_arm_section" Format="rgba16" Width="16" Height="16" Offset="0x2870" />
-        <Texture Name="gBigpoHoodEdge" OutName="bigpo_hood_edge" Format="rgba16" Width="8" Height="8" Offset="0x2A70" />
-        <Texture Name="gBigpoNecklaceBeadsTex" OutName="bigpo_necklace_beads" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
-        <Texture Name="gBigpoShawlTex" OutName="bigpo_shawl" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
-        <Texture Name="gBigpoGlowingEyeTex" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
+        <Animation Name="gBigPoeSwingLampAttackAnim" Offset="0x158" /> <!-- Original name is "pog_atack" -->
+        <Animation Name="gBigPoeShockAnim" Offset="0x454" /> <!-- Original name is "pog_damage" -->
+        <Animation Name="gBigPoeBackpeddleAnim" Offset="0x608" /> <!-- Original name is "pog_escape" -->
+        <Animation Name="gBigPoeFloatAnim" Offset="0x924" /> <!-- Original name is "pog_fly" -->
+        <Animation Name="gBigPoeAwakenSpawnAnim" Offset="0xF9C" /> <!-- Original name is "pog_start" -->
+        <Animation Name="gBigPoeAwakenStretchAnim" Offset="0x1360" /> <!-- Original name is "pog_wait" -->
+        <Texture Name="gBigPoeSoulFace" OutName="bigpo_soul_face" Format="i8" Width="32" Height="64" Offset="0x1370" />
+        <DList Name="gBigPoeDrawSoulDL" Offset="0x1BB0" /> <!-- Original name is "bigpo_soul_modelT" -->
+        <Texture Name="gBigPoeNecklaceSkullHalfTex" OutName="bigpo_skull_necklace" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
+        <Texture Name="gBigPoeLanternGlassTex" OutName="bigpo_lantern_glass" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
+        <Texture Name="gBigPoeTornRobeTex" OutName="bigpo_torn_robe" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
+        <Texture Name="gBigPoeArmSectionTex" OutName="bigpo_arm_section" Format="rgba16" Width="16" Height="16" Offset="0x2870" />
+        <Texture Name="gBigPoeHoodEdge" OutName="bigpo_hood_edge" Format="rgba16" Width="8" Height="8" Offset="0x2A70" />
+        <Texture Name="gBigPoeNecklaceBeadsTex" OutName="bigpo_necklace_beads" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
+        <Texture Name="gBigPoeShawlTex" OutName="bigpo_shawl" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
+        <Texture Name="gBigPoeGlowingEyeTex" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
         <!-- <Blob Name="object_bigpo_Blob_003200" Size="0x350" Offset="0x3200" /> -->
         <!-- <Blob Name="object_bigpo_Blob_003790" Size="0x370" Offset="0x3790" /> -->
-        <DList Name="gBigpoDrawLanternFallingDL" Offset="0x41A0" /> <!-- Original name is "pog_kantera_hahen_model" ("kantera" = "lantern", "hahen" = "fragment") -->
-        <DList Name="gBigpoDrawLanternMainDL" Offset="0x42C8" /> <!-- Original name is "poh_big_cantera" -->
-        <DList Name="gBigpoDrawLanternPurpleTopDL" Offset="0x43F8" />
-        <DList Name="gBigpoDrawHandDL" Offset="0x4488" />
-        <DList Name="gBigpoDrawSmallArmDL" Offset="0x4538" />
-        <DList Name="gBigpoDrawBigArmDL" Offset="0x45D8" />
-        <DList Name="gBigpoDrawArmAndGrowthDL" Offset="0x4680" />
-        <DList Name="gBigpoDrawMediumArmDL" Offset="0x4768" />
-        <DList Name="gBigpoDrawNecklaceHoodShawlDL" Offset="0x4808" />
-        <DList Name="gBigpoDrawFaceDL" Offset="0x4AE8" />
-        <DList Name="gBigpoDrawLowerRobeDL" Offset="0x4BD8" />
-        <Texture Name="gBigpoCrispyPiecesTex" OutName="bigpo_crispy_pieces" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
-        <Texture Name="gBigpoCrispyEyesTex" OutName="bigpo_crispy_eyes" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
-        <DList Name="gBigpoDrawCrispyBodyDL" Offset="0x58B8" />
-        <Limb Name="gBigpoFaceLimb" Type="Standard" Offset="0x5B88" />
-        <Limb Name="gBigpoLeftArmUpperLimb" Type="Standard" Offset="0x5B94" />
-        <Limb Name="gBigpoLeftForarmLimb" Type="Standard" Offset="0x5BA0" />
-        <Limb Name="gBigpoRightArmUpperLimb" Type="Standard" Offset="0x5BAC" />
-        <Limb Name="gBigpoRightForarmLimb" Type="Standard" Offset="0x5BB8" />
-        <Limb Name="gBigpoRightHandLimb" Type="Standard" Offset="0x5BC4" />
-        <Limb Name="gBigpoLanternLimb" Type="Standard" Offset="0x5BD0" />
-        <Limb Name="gBigpoHatAndCloakLimb" Type="Standard" Offset="0x5BDC" />
-        <Limb Name="gBigpoLowerRobe" Type="Standard" Offset="0x5BE8" />
-        <Skeleton Name="gBigpoSkeleton" Type="Normal" LimbType="Standard" Offset="0x5C18" />
+        <DList Name="gBigPoeDrawLanternFallingDL" Offset="0x41A0" /> <!-- Original name is "pog_kantera_hahen_model" ("kantera" = "lantern", "hahen" = "fragment") -->
+        <DList Name="gBigPoeDrawLanternMainDL" Offset="0x42C8" /> <!-- Original name is "poh_big_cantera" -->
+        <DList Name="gBigPoeDrawLanternPurpleTopDL" Offset="0x43F8" />
+        <DList Name="gBigPoeDrawHandDL" Offset="0x4488" />
+        <DList Name="gBigPoeDrawSmallArmDL" Offset="0x4538" />
+        <DList Name="gBigPoeDrawBigArmDL" Offset="0x45D8" />
+        <DList Name="gBigPoeDrawArmAndGrowthDL" Offset="0x4680" />
+        <DList Name="gBigPoeDrawMediumArmDL" Offset="0x4768" />
+        <DList Name="gBigPoeDrawNecklaceHoodShawlDL" Offset="0x4808" />
+        <DList Name="gBigPoeDrawFaceDL" Offset="0x4AE8" />
+        <DList Name="gBigPoeDrawLowerRobeDL" Offset="0x4BD8" />
+        <Texture Name="gBigPoeCrispyPiecesTex" OutName="bigpo_crispy_pieces" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
+        <Texture Name="gBigPoeCrispyEyesTex" OutName="bigpo_crispy_eyes" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
+        <DList Name="gBigPoeDrawCrispyBodyDL" Offset="0x58B8" />
+        <Limb Name="gBigPoeFaceLimb" Type="Standard" EnumName="BIG_POE_LIMB_FACE" Offset="0x5B88" />
+        <Limb Name="gBigPoeLeftUpperArmLimb" Type="Standard" EnumName="BIG_POE_LIMB_LEFT_UPPER_ARM" Offset="0x5B94" />
+        <Limb Name="gBigPoeLeftForearmLimb" Type="Standard" EnumName="BIG_POE_LIMB_LEFT_FOREARM" Offset="0x5BA0" />
+        <Limb Name="gBigPoeRightUpperArmLimb" Type="Standard" EnumName="BIG_POE_LIMB_RIGHT_UPPER_ARM" Offset="0x5BAC" />
+        <Limb Name="gBigPoeRightForearmLimb" Type="Standard" EnumName="BIG_POE_LIMB_RIGHT_FOREARM" Offset="0x5BB8" />
+        <Limb Name="gBigPoeRightHandLimb" Type="Standard" EnumName="BIG_POE_LIMB_RIGHT_HAND" Offset="0x5BC4" />
+        <Limb Name="gBigPoeLanternLimb" Type="Standard" EnumName="BIG_POE_LIMB_LANTERN" Offset="0x5BD0" />
+        <Limb Name="gBigPoeHatAndCloakLimb" Type="Standard" EnumName="BIG_POE_LIMB_HAT_AND_CLOAK" Offset="0x5BDC" />
+        <Limb Name="gBigPoeLowerRobe" Type="Standard" EnumName="BIG_POE_LIMB_LOWER_ROBE" Offset="0x5BE8" />
+        <Skeleton Name="gBigPoeSkeleton" Type="Normal" LimbType="Standard" LimbNone="BIG_POE_LIMB_NONE" LimbMax="BIG_POE_LIMB_MAX" EnumName="BigPoeLimb" Offset="0x5C18" />
     </File>
 </Root>

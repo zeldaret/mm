@@ -87,16 +87,17 @@ typedef enum {
     /*  2 */ TOILET_HAND_ANIM_WAGGING_FINGER, // Wrong
     /*  3 */ TOILET_HAND_ANIM_THUMBS_UP,      // Right
     /*  4 */ TOILET_HAND_ANIM_OPEN_HAND,
-    /*  5 */ TOILET_HAND_ANIM_FIST // i.e. holding the reward
+    /*  5 */ TOILET_HAND_ANIM_FIST, // i.e. holding the reward
+    /*  6 */ TOILET_HAND_ANIM_MAX
 } ToiletHandAnimation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    /* 0 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    /* 1 */ { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    /* 2 */ { &gToiletHandWaggingFingerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    /* 3 */ { &gToiletHandThumbsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    /* 4 */ { &gToiletHandOpenHandAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    /* 5 */ { &gToiletHandFistAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+static AnimationInfoS sAnimationInfo[TOILET_HAND_ANIM_MAX] = {
+    { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        // TOILET_HAND_ANIM_WAITING
+    { &gToiletHandWaitingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },       // TOILET_HAND_ANIM_WAITING_MORPH
+    { &gToiletHandWaggingFingerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // TOILET_HAND_ANIM_WAGGING_FINGER
+    { &gToiletHandThumbsUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // TOILET_HAND_ANIM_THUMBS_UP
+    { &gToiletHandOpenHandAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // TOILET_HAND_ANIM_OPEN_HAND
+    { &gToiletHandFistAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },          // TOILET_HAND_ANIM_FIST
 };
 
 void EnBjt_UpdateSkelAnime(EnBjt* this) {
@@ -106,10 +107,10 @@ void EnBjt_UpdateSkelAnime(EnBjt* this) {
 
 s32 EnBjt_ChangeAnim(EnBjt* this, s32 animIndex) {
     s32 changeAnim = false;
-    s32 changed = false;
+    s32 didAnimChange = false;
 
     if ((animIndex == TOILET_HAND_ANIM_WAITING) || (animIndex == TOILET_HAND_ANIM_WAITING_MORPH)) {
-        if (!((this->animIndex == TOILET_HAND_ANIM_WAITING) || (this->animIndex == TOILET_HAND_ANIM_WAITING_MORPH))) {
+        if ((this->animIndex != TOILET_HAND_ANIM_WAITING) && (this->animIndex != TOILET_HAND_ANIM_WAITING_MORPH)) {
             changeAnim = true;
         }
     } else if (this->animIndex != animIndex) {
@@ -118,11 +119,11 @@ s32 EnBjt_ChangeAnim(EnBjt* this, s32 animIndex) {
 
     if (changeAnim) {
         this->animIndex = animIndex;
-        changed = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
     }
 
-    return changed;
+    return didAnimChange;
 }
 
 void EnBjt_UpdateCollision(EnBjt* this, PlayState* play) {
