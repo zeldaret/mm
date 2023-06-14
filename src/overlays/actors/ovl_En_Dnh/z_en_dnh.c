@@ -6,7 +6,6 @@
 
 #include "z_en_dnh.h"
 #include "objects/object_tro/object_tro.h"
-#include "objects/object_mm/object_mm.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
