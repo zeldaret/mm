@@ -636,11 +636,11 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     //  Bottom
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
-    //! @bug If the dog is *precisely* on top of the line formed by the front points, then frontPointsCrossProduct
-    //! will be zero. This will cause this multiplication (and all future multiplications) to be zero, which will
-    //! make this function think the dog has crossed the finish line. The line formed by the front points extends
-    //! throughout the entire racetrack, so a dog can trigger this when they're not even close to the actual finish
-    //! line, causing them to finish the race incredibly early.
+    //! @bug If any dog is precisely (with floating-point precision) on top of the line formed by the front points,
+    //! then frontPointsCrossProduct will be zero. This will cause this multiplication (and all future multiplications)
+    //! to be zero, which will make this function think the dog has crossed the finish line. The line formed by the
+    //! front points extends throughout the entire racetrack, so a dog can trigger this when they're not even close to
+    //! the actual finish line, causing them to finish the race incredibly early.
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
         return false;
     }
