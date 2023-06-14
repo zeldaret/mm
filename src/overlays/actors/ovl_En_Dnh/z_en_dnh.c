@@ -135,8 +135,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &D_06002950, NULL, this->jointTable,
-                   this->morphTable, 2);
+    SkelAnime_Init(play, &this->skelAnime, &D_06002950, NULL, this->jointTable, this->morphTable, 2);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
     if (gSaveContext.save.entrance != 0xA810) {
