@@ -672,11 +672,12 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
 
         if (targetCtx->unk4B == 0) {
             f32 temp_f0_2;
+            f32 clampedFloat;
 
             temp_f0_2 = (500.0f - targetCtx->unk44) * 3.0f;
-            temp_f0_2 = CLAMP(temp_f0_2, 30.0f, 100.0f);
+            clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
 
-            if (Math_StepToF(&targetCtx->unk44, 80.0f, temp_f0_2)) {
+            if (Math_StepToF(&targetCtx->unk44, 80.0f, clampedFloat)) {
                 targetCtx->unk4B++;
             }
         } else {
