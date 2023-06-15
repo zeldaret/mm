@@ -63,7 +63,7 @@ typedef enum {
     /*  4 */ TURTLE_ANIM_COUGH,
     /*  5 */ TURTLE_ANIM_SPEAK2,
     /*  6 */ TURTLE_ANIM_YAWN,
-    /* 7  */ TURTLE_ANIM_MAX,
+    /*  7 */ TURTLE_ANIM_MAX,
     /* 99 */ TURTLE_ANIM_NONE = 99
 } TurtleAnimation;
 
