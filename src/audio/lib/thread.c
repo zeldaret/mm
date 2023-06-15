@@ -296,16 +296,16 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
             break;
 
         case AUDIOCMD_OP_GLOBAL_SET_CUSTOM_UPDATE_FUNCTION:
-            gAudioCustomUpdateFunction = cmd->data;
+            gAudioCustomUpdateFunction = (AudioCustomUpdateFunction)cmd->asUInt;
             break;
 
         case AUDIOCMD_OP_GLOBAL_SET_CUSTOM_FUNCTION:
             if (cmd->arg2 == AUDIO_CUSTOM_FUNCTION_REVERB) {
-                gAudioCustomReverbFunction = cmd->data;
+                gAudioCustomReverbFunction = (AudioCustomReverbFunction)cmd->asUInt;
             } else if (cmd->arg2 == AUDIO_CUSTOM_FUNCTION_SYNTH) {
-                gAudioCustomSynthFunction = cmd->data;
+                gAudioCustomSynthFunction = (AudioCustomSynthFunction)cmd->asUInt;
             } else {
-                gAudioCtx.customSeqFunctions[cmd->arg2] = cmd->data;
+                gAudioCtx.customSeqFunctions[cmd->arg2] = (void*)cmd->asUInt;
             }
             break;
 
@@ -313,7 +313,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
         case AUDIOCMD_OP_GLOBAL_SET_SFX_FONT:
         case AUDIOCMD_OP_GLOBAL_SET_INSTRUMENT_FONT:
             if (AudioPlayback_SetFontInstrument(cmd->op - AUDIOCMD_OP_GLOBAL_SET_DRUM_FONT, cmd->arg1, cmd->arg2,
-                                                cmd->data)) {}
+                                                (void*)cmd->asUInt)) {}
             break;
 
         case AUDIOCMD_OP_GLOBAL_DISABLE_ALL_SEQPLAYERS: {
@@ -790,13 +790,13 @@ void AudioThread_ProcessChannelCmd(SequenceChannel* channel, AudioCmd* cmd) {
             break;
 
         case AUDIOCMD_OP_CHANNEL_SET_SFX_STATE:
-            channel->sfxState = cmd->data;
+            channel->sfxState = (u8*)cmd->asUInt;
             break;
 
         case AUDIOCMD_OP_CHANNEL_SET_FILTER:
             filterCutoff = cmd->arg2;
-            if (cmd->data != 0) {
-                channel->filter = cmd->data;
+            if (cmd->asUInt != 0) {
+                channel->filter = (s16*)cmd->asUInt;
             }
             if (channel->filter != NULL) {
                 AudioHeap_LoadFilter(channel->filter, filterCutoff >> 4, filterCutoff & 0xF);
