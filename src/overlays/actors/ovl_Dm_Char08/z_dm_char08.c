@@ -56,13 +56,13 @@ ActorInit Dm_Char08_InitVars = {
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
 
 typedef enum {
-    /* 0  */ TURTLE_ANIM_IDLE,
-    /* 1  */ TURTLE_ANIM_SWIM,
-    /* 2  */ TURTLE_ANIM_FLOAT,
-    /* 3  */ TURTLE_ANIM_SPEAK1,
-    /* 4  */ TURTLE_ANIM_COUGH,
-    /* 5  */ TURTLE_ANIM_SPEAK2,
-    /* 6  */ TURTLE_ANIM_YAWN,
+    /*  0 */ TURTLE_ANIM_IDLE,
+    /*  1 */ TURTLE_ANIM_SWIM,
+    /*  2 */ TURTLE_ANIM_FLOAT,
+    /*  3 */ TURTLE_ANIM_SPEAK1,
+    /*  4 */ TURTLE_ANIM_COUGH,
+    /*  5 */ TURTLE_ANIM_SPEAK2,
+    /*  6 */ TURTLE_ANIM_YAWN,
     /* 7  */ TURTLE_ANIM_MAX,
     /* 99 */ TURTLE_ANIM_NONE = 99
 } TurtleAnimation;
