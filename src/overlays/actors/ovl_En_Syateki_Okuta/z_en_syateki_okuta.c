@@ -66,16 +66,17 @@ typedef enum {
     /* 2 */ SG_OCTO_ANIM_HIDE,
     /* 3 */ SG_OCTO_ANIM_FLOAT,
     /* 4 */ SG_OCTO_ANIM_APPEAR,
-    /* 5 */ SG_OCTO_ANIM_HIT // unused
+    /* 5 */ SG_OCTO_ANIM_HIT, // unused
+    /* 6 */ SG_OCTO_ANIM_MAX
 } ShootingGalleryOctorokAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gOctorokFloatAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &gOctorokAppearAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gOctorokHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gOctorokShootAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },  // SG_OCTO_ANIM_SHOOT
+    { &gOctorokDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },    // SG_OCTO_ANIM_DIE
+    { &gOctorokHideAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },   // SG_OCTO_ANIM_HIDE
+    { &gOctorokFloatAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },  // SG_OCTO_ANIM_FLOAT
+    { &gOctorokAppearAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, // SG_OCTO_ANIM_APPEAR
+    { &gOctorokHitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },    // SG_OCTO_ANIM_HIT
 };
 
 #include "assets/overlays/ovl_En_Syateki_Okuta/ovl_En_Syateki_Okuta.c"
