@@ -55,10 +55,16 @@ ActorInit En_Dnh_InitVars = {
     (ActorFunc)EnDnh_Draw,
 };
 
-static AnimationInfoS sAnimationInfo[] = { &object_tro_Anim_0000A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
+static AnimationInfoS sAnimationInfo[] = {
+    { &object_tro_Anim_0000A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+};
 
-static TexturePtr sEyeTextures[] = { object_tro_Tex_001140, object_tro_Tex_001940, object_tro_Tex_002140,
-                                     object_tro_Tex_001940 };
+static TexturePtr sEyeTextures[] = {
+    object_tro_Tex_001140,
+    object_tro_Tex_001940,
+    object_tro_Tex_002140,
+    object_tro_Tex_001940,
+};
 
 s32 func_80A50D40(Actor* actor, PlayState* play) {
     func_800B7298(play, actor, PLAYER_CSMODE_WAIT);
@@ -100,10 +106,10 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
 }
 
 s32 func_80A50EC0(EnDnh* this) {
-    if (DECR(this->timer) == 0) {
+    if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
         if (this->eyeTexIndex >= 4) {
-            this->timer = Rand_S16Offset(30, 30);
+            this->blinkTimer = Rand_S16Offset(30, 30);
             this->eyeTexIndex = 0;
         }
     }
