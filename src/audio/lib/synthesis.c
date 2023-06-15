@@ -1111,7 +1111,7 @@ Acmd* AudioSynth_ProcessSample(s32 noteIndex, NoteSampleState* sampleState, Note
                         reverbAddrSrc = (void*)0xFFFFFFFF;
                         if (gAudioCustomReverbFunction != NULL) {
                             reverbAddrSrc =
-                                (void*)gAudioCustomReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
+                                gAudioCustomReverbFunction(sample, numSamplesToLoadAdj, flags, noteIndex);
                         }
 
                         if (reverbAddrSrc == (void*)0xFFFFFFFF) {
