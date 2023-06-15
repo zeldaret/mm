@@ -6,6 +6,7 @@
 struct EnDnh;
 
 typedef void (*EnDnhActionFunc)(struct EnDnh*, PlayState*);
+typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 typedef struct EnDnh {
     /* 0x000 */ Actor actor;
@@ -17,8 +18,8 @@ typedef struct EnDnh {
     /* 0x198 */ s16 unk198;
     /* 0x19A */ UNK_TYPE1 pad19A[2];
     /* 0x19C */ s16 timer;
-    /* 0x19E */ s16 unk19E;
-    /* 0x1A0 */ s32 unk1A0;
+    /* 0x19E */ s16 eyeTexIndex;
+    /* 0x1A0 */ MsgEventFunc msgEventCallback;
     /* 0x1A4 */ Vec3s jointTable[2];
     /* 0x1B0 */ Vec3s morphTable[2];
 } EnDnh; // size = 0x1BC

@@ -57,11 +57,10 @@ ActorInit En_Dnh_InitVars = {
 
 static AnimationInfoS sAnimationInfo[] = { &object_tro_Anim_0000A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 };
 
-UNK_TYPE D_80A5143C[] = {
-    0x06001140, 0x06001940, 0x06002140, 0x06001940, 0x00000000,
-};
+static TexturePtr sEyeTextures[] = { object_tro_Tex_001140, object_tro_Tex_001940, object_tro_Tex_002140,
+                                     object_tro_Tex_001940 };
 
-void* func_80A50D40(Actor* actor, PlayState* play) {
+s32 func_80A50D40(Actor* actor, PlayState* play) {
     func_800B7298(play, actor, PLAYER_CSMODE_WAIT);
     if (CHECK_EVENTINF(EVENTINF_35)) {
         play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 6);
@@ -80,11 +79,13 @@ void* func_80A50D40(Actor* actor, PlayState* play) {
 void* func_80A50DF8(EnDnh* this, PlayState* play) {
     switch (this->unk198) {
         case 1:
-            return &D_80A51384;
+            return D_80A51384;
+
         case 2:
-            return &D_80A5138C;
+            return D_80A5138C;
+
         default:
-            return &D_80A51250;
+            return D_80A51250;
     }
 }
 
@@ -99,26 +100,18 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
 }
 
 s32 func_80A50EC0(EnDnh* this) {
-    s16 var_v1;
-
-    if (this->timer == 0) {
-        var_v1 = 0;
-    } else {
-        this->timer--;
-        var_v1 = this->timer;
-    }
-    if (var_v1 == 0) {
-        this->unk19E++;
-        if (this->unk19E >= 4) {
+    if (DECR(this->timer) == 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex >= 4) {
             this->timer = Rand_S16Offset(30, 30);
-            this->unk19E = 0;
+            this->eyeTexIndex = 0;
         }
     }
 }
 
 void func_80A50F38(EnDnh* this, PlayState* play) {
-    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->unk1A0, &this->unk194)) {
-        SubS_UpdateFlags(&this->unk18C, 3U, 7U);
+    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->unk194)) {
+        SubS_UpdateFlags(&this->unk18C, 3, 7);
         this->unk194 = 0;
         this->unk198 = 0;
         this->actionFunc = EnDnh_DoNothing;
@@ -128,26 +121,24 @@ void func_80A50F38(EnDnh* this, PlayState* play) {
 void EnDnh_DoNothing(EnDnh* this, PlayState* play) {
 }
 
-extern SkeletonHeader D_06002950;
-
 void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &D_06002950, NULL, this->jointTable, this->morphTable, 2);
+    SkelAnime_Init(play, &this->skelAnime, &object_tro_Skel_002950, NULL, this->jointTable, this->morphTable, 2);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
-    if (gSaveContext.save.entrance != 0xA810) {
-        SubS_UpdateFlags(&this->unk18C, 3U, 7U);
+    if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
+        SubS_UpdateFlags(&this->unk18C, 3, 7);
         this->unk198 = 0;
     } else {
-        SubS_UpdateFlags(&this->unk18C, 4U, 7U);
+        SubS_UpdateFlags(&this->unk18C, 4, 7);
         this->unk198 = CHECK_EVENTINF(EVENTINF_35) ? 2 : 1;
     }
-    if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08))) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
         this->actor.draw = NULL;
     }
-    this->unk1A0 = func_80A50D40;
+    this->msgEventCallback = func_80A50D40;
     this->unk194 = 0;
     this->actionFunc = EnDnh_DoNothing;
 }
@@ -166,11 +157,11 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 26.0f);
 }
 
-s32 func_80A51168(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     if (limbIndex == 1) {
         Matrix_Translate(0.0f, thisx->shape.yOffset, 0.0f, MTXMODE_APPLY);
     }
-    return 0;
+    return false;
 }
 
 void EnDnh_Draw(Actor* thisx, PlayState* play) {
@@ -179,8 +170,9 @@ void EnDnh_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A5143C[this->unk19E]));
-    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, func_80A51168, NULL, &this->actor);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
+    SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnDnh_OverrideLimbDraw, NULL,
+                      &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
