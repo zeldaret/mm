@@ -56,7 +56,7 @@ typedef struct EnSyatekiMan {
                } perGameVar1;
     /* 0x26E */ union {
                    s16 bonusDekuScrubHitCounter;
-                   s16 octorokHitType;
+                   s16 lastHitOctorokType;
                } perGameVar2;
     /* 0x270 */ s16 talkWaitTimer;
     /* 0x272 */ s16 dekuScrubFlags;
