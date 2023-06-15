@@ -94,9 +94,6 @@
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
-#define RAND_BITS(n) ((s32)Rand_Next() >> (0x20 - n))
-#define RANDU_BITS(n) (Rand_Next() >> (0x20 - n))
-
 #define RGBA16_GET_R(pixel) (((pixel) >> 11) & 0x1F)
 #define RGBA16_GET_G(pixel) (((pixel) >> 6) & 0x1F)
 #define RGBA16_GET_B(pixel) (((pixel) >> 1) & 0x1F)

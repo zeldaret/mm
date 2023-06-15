@@ -374,7 +374,7 @@ void ObjMine_Water_InitChain(ObjMine* this, s32 linkCount) {
     waterChain->drag = 0.9f;
     waterChain->swayMax = 0.003f;
 
-    waterChain->swayPhaseVel = RANDU_BITS(13);
+    waterChain->swayPhaseVel = Rand_Next() >> (0x20 - 13);
     waterChain->restoreXZ = -0.0002f;
     waterChain->restoreY = -0.0002f;
 
@@ -895,9 +895,9 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
     }
 
     // Applies chain sway, choosing a new sway randomly about every 32 frames
-    if (RANDU_BITS(5) == 0) {
+    if ((Rand_Next() >> (0x20 - 5)) == 0) {
         airChain->swaySize = Rand_ZeroOne() * airChain->swayMax;
-        airChain->swayPhase = RANDU_BITS(16);
+        airChain->swayPhase = Rand_Next() >> (0x20 - 16);
     }
     xAccel = Math_SinS(airChain->swayPhase) * airChain->swaySize;
     zAccel = Math_CosS(airChain->swayPhase) * airChain->swaySize;
@@ -1032,12 +1032,12 @@ void ObjMine_Water_Chained(ObjMine* this, PlayState* play) {
     waterChain->swayMax = 0.003f;
 
     // Chooses a new sway randomly about every 32 frames.
-    if (RANDU_BITS(5) == 0) {
-        s16 randAngle = RANDU_BITS(16);
+    if (Rand_Next() >> (0x20 - 5) == 0) {
+        s16 randAngle = Rand_Next() >> (0x20 - 16);
 
         waterChain->swayXZ = Math_SinS(randAngle) * 1.8f * waterChain->swayMax;
         waterChain->swayY = Math_CosS(randAngle) * 0.2f * waterChain->swayMax;
-        waterChain->swayPhaseVel = RANDU_BITS(13);
+        waterChain->swayPhaseVel = Rand_Next() >> (0x20 - 13);
     }
 
     ObjMine_Water_UpdateChain(this, play);
