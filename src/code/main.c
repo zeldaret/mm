@@ -25,7 +25,7 @@ StackEntry sSchedStackInfo;
 StackEntry sAudioStackInfo;
 StackEntry sPadMgrStackInfo;
 AudioMgr sAudioMgr;
-static s32 pad; // TODO: Possibly a part of sAudioMgr
+static s32 pad;
 PadMgr gPadMgr;
 
 #include "main.h"
