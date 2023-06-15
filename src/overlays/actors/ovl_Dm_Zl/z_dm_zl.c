@@ -128,11 +128,12 @@ void DmZl_DoNothing(DmZl* this, PlayState* play) {
 
 void DmZl_HandleCutscene(DmZl* this, PlayState* play) {
     s32 cueChannel; // reused as animIndex
+    s32 animIndex;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_102)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_102);
         if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
-            s16 animIndex = ZELDA_ANIM_FACING_AWAY;
+            animIndex = ZELDA_ANIM_FACING_AWAY;
 
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 default:
@@ -162,10 +163,10 @@ void DmZl_HandleCutscene(DmZl* this, PlayState* play) {
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        cueChannel = this->animIndex;
+        animIndex = cueChannel = this->animIndex;
 
-        if ((cueChannel == ZELDA_ANIM_TURNING_TOWARD_PLAYER) || (cueChannel == ZELDA_ANIM_GIVING_OCARINA_START) ||
-            (cueChannel == ZELDA_ANIM_PLAYING_OCARINA_START)) {
+        if ((animIndex == ZELDA_ANIM_TURNING_TOWARD_PLAYER) || (animIndex == ZELDA_ANIM_GIVING_OCARINA_START) ||
+            (animIndex == ZELDA_ANIM_PLAYING_OCARINA_START)) {
             // these animations don't loop at the end, they lead into the next animation
             this->animIndex++;
             DmZl_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);

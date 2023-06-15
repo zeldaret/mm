@@ -28,7 +28,7 @@ void func_80AAFB04(DmChar08* this, PlayState* play);
 void func_80AAFB94(DmChar08* this, PlayState* play);
 void DmChar08_HandleCutscene(DmChar08* this, PlayState* play);
 void func_80AB023C(DmChar08* this, PlayState* play);
-void func_80AB01E8(DmChar08* this, PlayState* play);
+void DmChar08_UpdateAnim(DmChar08* this, PlayState* play);
 void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play);
 void func_80AAFCCC(DmChar08* this, PlayState* play);
 
@@ -56,14 +56,15 @@ ActorInit Dm_Char08_InitVars = {
 #include "overlays/ovl_Dm_Char08/ovl_Dm_Char08.c"
 
 typedef enum {
-    /* 0 */ TURTLE_ANIM_IDLE,
-    /* 1 */ TURTLE_ANIM_SWIM,
-    /* 2 */ TURTLE_ANIM_FLOAT,
-    /* 3 */ TURTLE_ANIM_SPEAK1,
-    /* 4 */ TURTLE_ANIM_COUGH,
-    /* 5 */ TURTLE_ANIM_SPEAK2,
-    /* 6 */ TURTLE_ANIM_YAWN,
-    /* 7 */ TURTLE_ANIM_MAX
+    /* 0  */ TURTLE_ANIM_IDLE,
+    /* 1  */ TURTLE_ANIM_SWIM,
+    /* 2  */ TURTLE_ANIM_FLOAT,
+    /* 3  */ TURTLE_ANIM_SPEAK1,
+    /* 4  */ TURTLE_ANIM_COUGH,
+    /* 5  */ TURTLE_ANIM_SPEAK2,
+    /* 6  */ TURTLE_ANIM_YAWN,
+    /* 7  */ TURTLE_ANIM_MAX,
+    /* 99 */ TURTLE_ANIM_NONE = 99
 } TurtleAnimation;
 
 static AnimationInfo sAnimationInfo[TURTLE_ANIM_MAX] = {
@@ -201,7 +202,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
                 this->unk_1F0 = 1.0f;
                 this->unk_1FF = 2;
                 this->animIndex = TURTLE_ANIM_FLOAT;
-                this->unk_203 = 99;
+                this->prevAnimIndex = TURTLE_ANIM_NONE;
                 this->eyeMode = TURTLE_EYEMODE_BLINK_STRAIGHT;
                 this->unk_207 = 0;
                 this->unk_208 = 0;
@@ -220,7 +221,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
         case SCENE_SEA:
             this->unk_1FF = 2;
             this->animIndex = TURTLE_ANIM_FLOAT;
-            this->unk_203 = 99;
+            this->prevAnimIndex = TURTLE_ANIM_NONE;
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
@@ -232,7 +233,7 @@ void DmChar08_Init(Actor* thisx, PlayState* play2) {
         case SCENE_KONPEKI_ENT:
             this->unk_1FF = 2;
             this->animIndex = TURTLE_ANIM_FLOAT;
-            this->unk_203 = 99;
+            this->prevAnimIndex = TURTLE_ANIM_NONE;
             this->eyeMode = TURTLE_EYEMODE_BLINK_LEFT;
             this->unk_207 = 0;
             this->unk_208 = 0;
@@ -565,9 +566,9 @@ void DmChar08_HandleCutscene(DmChar08* this, PlayState* play) {
     }
 }
 
-void func_80AB01E8(DmChar08* this, PlayState* play) {
-    if (this->animIndex != this->unk_203) {
-        this->unk_203 = this->animIndex;
+void DmChar08_UpdateAnim(DmChar08* this, PlayState* play) {
+    if (this->animIndex != this->prevAnimIndex) {
+        this->prevAnimIndex = this->animIndex;
         DmChar08_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
     }
 }
@@ -627,6 +628,9 @@ void func_80AB023C(DmChar08* this, PlayState* play) {
                 break;
             case 0x1030: // Return to sleep
                 this->unk_207 = 4;
+                break;
+
+            default:
                 break;
         }
     }
@@ -1022,7 +1026,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     DmChar08_HandleCutscene(this, play);
     func_80AB023C(this, play);
     func_80AB032C(this, play);
-    func_80AB01E8(this, play);
+    DmChar08_UpdateAnim(this, play);
     SkelAnime_Update(&this->skelAnime);
     DmChar08_SpawnBubbles(this, play);
     this->dyna.actor.world.pos.y = this->targetYPos;

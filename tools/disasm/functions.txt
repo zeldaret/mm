@@ -11646,7 +11646,7 @@
     0x80AAFCCC:("func_80AAFCCC",),
     0x80AAFE78:("DmChar08_DoNothing",),
     0x80AAFE88:("DmChar08_HandleCutscene",),
-    0x80AB01E8:("func_80AB01E8",),
+    0x80AB01E8:("DmChar08_UpdateAnim",),
     0x80AB023C:("func_80AB023C",),
     0x80AB032C:("func_80AB032C",),
     0x80AB096C:("func_80AB096C",),

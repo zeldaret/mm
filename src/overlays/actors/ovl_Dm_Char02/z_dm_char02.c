@@ -136,7 +136,7 @@ void DmChar02_HandleCutscene(DmChar02* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->animIndex == DMCHAR02_ANIM_TURN_AROUND) {
-            this->animIndex += DMCHAR02_ANIM_JUGGLE - DMCHAR02_ANIM_TURN_AROUND;
+            this->animIndex++;
             DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         }
     }

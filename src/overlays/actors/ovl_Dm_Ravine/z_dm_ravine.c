@@ -55,7 +55,7 @@ void DmRavine_Update(Actor* thisx, PlayState* play) {
     DmRavine* this = THIS;
     RoomContext* roomCtx;
 
-    switch ((DmRavineState)this->state) {
+    switch (this->state) {
         case DM_RAVINE_STATE_INITIALIZED:
             break;
 
