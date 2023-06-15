@@ -188,9 +188,9 @@ void EnSyatekiOkuta_AttachToShootingGalleryMan(EnSyatekiOkuta* this, PlayState* 
             this->actor.parent = actorIt;
             EnSyatekiOkuta_SetupDoNothing(this);
             break;
-        } else {
-            actorIt = actorIt->next;
         }
+
+        actorIt = actorIt->next;
     }
 }
 
@@ -220,7 +220,7 @@ void EnSyatekiOkuta_SetupAppear(EnSyatekiOkuta* this) {
  * Jumps out of the water and starts floating.
  */
 void EnSyatekiOkuta_Appear(EnSyatekiOkuta* this, PlayState* play) {
-    if (Animation_OnFrame(&this->skelAnime, 2.0f) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
         if (EnSyatekiOkuta_IsHiddenByAnotherOctorok(this)) {
             return;
         }
