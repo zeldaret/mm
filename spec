@@ -560,8 +560,6 @@ beginseg
     include "build/src/code/graphalloc.o"
     include "build/src/code/listalloc.o"
     include "build/src/code/main.o"
-    include "build/data/code/main.data.o"
-    include "build/data/code/main.bss.o"
     include "build/src/code/padmgr.o"
     include "build/src/code/sched.o"
     include "build/src/code/speed_meter.o"

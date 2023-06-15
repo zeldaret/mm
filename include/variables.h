@@ -680,9 +680,7 @@ extern Input* D_801D0D60;
 
 extern u32 retryCount;
 extern u32 cfbIdx[3];
-extern s32 gScreenWidth;
-extern s32 gScreenHeight;
-extern u32 startHeapSize;
+
 extern UNK_PTR D_801D1540;
 extern Vec3f gZeroVec3f;
 extern Vec3s gZeroVec3s;
@@ -2285,11 +2283,6 @@ extern FaultClient sGraphFaultClient;
 extern GfxMasterList* gGfxMasterDL;
 extern CfbInfo sGraphCfbInfos[3];
 extern OSTime sGraphTaskStartTime;
-
-extern u32 gSegments[NUM_SEGMENTS];
-extern SchedContext gSchedContext;
-
-extern OSThread gGraphThread;
 
 extern FaultClient sSchedFaultClient;
 extern OSTime sRSPGFXStartTime;

@@ -1867,7 +1867,7 @@ ListAlloc* ListAlloc_Init(ListAlloc* this);
 // void ListAlloc_Alloc(void);
 // void ListAlloc_Free(void);
 void ListAlloc_FreeAll(ListAlloc* this);
-void Main(void* arg);
+
 void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
 void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
 void Sched_HandleReset(SchedContext* sched);

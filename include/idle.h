@@ -2,6 +2,7 @@
 #define IDLE_H
 
 #include "ultra64.h"
+#include "irqmgr.h"
 
 extern IrqMgr gIrqMgr;
 extern OSMesgQueue gPiMgrCmdQueue;
