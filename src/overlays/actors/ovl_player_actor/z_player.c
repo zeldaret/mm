@@ -305,8 +305,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue);
 
 // Mostly PlayerAnimationHeader* anim
 
-// void* arg2
-void Player_CsAnim_StopHorizontalMovement(PlayState* play, Player* this, void* arg2);
+void Player_CsAnim_StopHorizontalMovement(PlayState* play, Player* this, void* arg2); // void* arg2
 void Player_CsAnim_PlayOnceWithMorphReset(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayOnceSlowWithLongMorphReset(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayLoopSlowWithLongMorphReset(PlayState* play, Player* this, void* anim);
@@ -316,16 +315,14 @@ void Player_CsAnim_ReplacePlayLoopSlowUnkFlags(PlayState* play, Player* this, vo
 void Player_CsAnim_ReplacePlayLoop(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayOnce(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayLoop(PlayState* play, Player* this, void* anim);
-// CsCmdActorCue* cue
-void Player_CsAnim_Update(PlayState* play, Player* this, void* cue);
+void Player_CsAnim_Update(PlayState* play, Player* this, void* cue); // CsCmdActorCue* cue
 void Player_CsAnim_PlayLoopSlowWithLongMorphResetAfterAnimSfx(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayLoopSlowUnkFlagsOnceFinished(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayOnceForOneFrameReset(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayOnceSlow(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayLoopSlow(PlayState* play, Player* this, void* anim);
 void Player_CsAnim_PlayLoopSlowOnceFinished(PlayState* play, Player* this, void* anim);
-// AnimSfxEntry* entry
-void Player_CsAnim_PlayAnimSfx(PlayState* play, Player* this, void* entry);
+void Player_CsAnim_PlayAnimSfx(PlayState* play, Player* this, void* entry); // AnimSfxEntry* entry
 void Player_CsAnim_ReplacePlayOnceReverseSlow(PlayState* play, Player* this, void* anim);
 
 // ItemActions

@@ -1925,7 +1925,6 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
     f32 sin;
     f32 cos;
 
-    // Move actor in the x-z plane
     if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
         diff->z = 0.0f;
         diff->x = 0.0f;
