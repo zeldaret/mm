@@ -7,12 +7,12 @@ struct EnFish;
 
 typedef void (*EnFishUnkFunc)(Actor*, PlayState*);
 
-enum {
+typedef enum {
     /* -1 */ ENFISH_MINUS1 = -1,
     /*  0 */ ENFISH_0,
     /*  1 */ ENFISH_1,
-    /*  2 */ ENFISH_2,
-};
+    /*  2 */ ENFISH_2
+} EnFishParam;
 
 typedef struct EnFish {
     /* 0x000 */ Actor actor;

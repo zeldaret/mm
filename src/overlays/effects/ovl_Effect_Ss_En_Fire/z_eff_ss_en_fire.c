@@ -52,7 +52,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 
     this->rScaleMax = initParams->scale;
 
-    if (initParams->params & ENFIRE_PARAMS_USE_SCALE) {
+    if (initParams->params & ENFIRE_PARAM_USE_SCALE) {
         this->rScale = initParams->scale;
     } else {
         this->rScale = 0;
@@ -88,7 +88,7 @@ void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this) {
         redGreen = 0;
     }
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, redGreen * 12.7f, 0, 0, 0);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x0, 0x80, redGreen * 12.7f, redGreen * 12.7f, 0, 255);
     gSPSegment(

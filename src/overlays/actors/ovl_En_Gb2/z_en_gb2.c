@@ -355,7 +355,7 @@ void func_80B0FD8C(EnGb2* this, PlayState* play) {
 }
 
 void func_80B0FE18(PlayState* play) {
-    func_800FD750(0x38);
+    func_800FD750(NA_BGM_MINI_BOSS);
     play->nextEntrance = ENTRANCE(GHOST_HUT, 1);
     play->transitionType = TRANS_TYPE_64;
     gSaveContext.nextTransitionType = TRANS_TYPE_64;
@@ -615,24 +615,24 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10924(EnGb2* this, PlayState* play) {
-    s32 sp24;
+    s32 getItemId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
-        sp24 = 5;
+        getItemId = GI_RUPEE_PURPLE;
     } else {
-        sp24 = 12;
+        getItemId = GI_HEART_PIECE;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (sp24 == 12) {
+        if (getItemId == GI_HEART_PIECE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
         } else {
             Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -1007,7 +1007,7 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->unk_28A == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
@@ -1016,7 +1016,7 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->unk_28A);
 

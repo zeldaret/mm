@@ -7,7 +7,7 @@ typedef enum {
     /* 0 */ EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE,
     /* 1 */ EN_WIZ_BROCK_PLATFORM_TYPE_FIRE,
     /* 2 */ EN_WIZ_BROCK_PLATFORM_TYPE_ICE,
-    /* 3 */ EN_WIZ_BROCK_PLATFORM_TYPE_MAX,
+    /* 3 */ EN_WIZ_BROCK_PLATFORM_TYPE_MAX
 } EnWizBrockPlatformType;
 
 struct EnWizBrock;

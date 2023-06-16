@@ -29,7 +29,7 @@ typedef enum {
     /* 1 */ EN_DNP_EYE_HALF,
     /* 2 */ EN_DNP_EYE_CLOSED,
     /* 3 */ EN_DNP_EYE_ANGRY,
-    /* 4 */ EN_DNP_EYE_MAX,
+    /* 4 */ EN_DNP_EYE_MAX
 } EnDnpEyeIndex;
 
 ActorInit En_Dnp_InitVars = {
@@ -265,7 +265,7 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
 s32 func_80B3D044(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -542,7 +542,7 @@ void EnDnp_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_322 & 0x100) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 

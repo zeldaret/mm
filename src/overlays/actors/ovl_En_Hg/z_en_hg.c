@@ -37,14 +37,14 @@ typedef enum {
     /* 4 */ HG_ANIM_REACH_FORWARD,
     /* 5 */ HG_ANIM_CURL_UP,
     /* 6 */ HG_ANIM_CROUCHED_PANIC,
-    /* 7 */ HG_ANIM_PANIC,
+    /* 7 */ HG_ANIM_PANIC
 } HgAnimation;
 
 typedef enum {
     /* 0 */ HG_CS_FIRST_ENCOUNTER,
     /* 1 */ HG_CS_GET_MASK,
     /* 2 */ HG_CS_SUBSEQUENT_ENCOUNTER,
-    /* 3 */ HG_CS_SONG_OF_HEALING,
+    /* 3 */ HG_CS_SONG_OF_HEALING
 } HgCsIndex;
 
 ActorInit En_Hg_InitVars = {
@@ -365,7 +365,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         return;
 
-    } else if (play->csCtx.state == 0) {
+    } else if (play->csCtx.state == CS_STATE_IDLE) {
         EnHg_SetupWait(this);
     }
 
@@ -448,11 +448,13 @@ void EnHg_Draw(Actor* thisx, PlayState* play) {
     EnHg* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHg_OverrideLimbDraw, EnHg_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mf);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherGibdoEyebrowsDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

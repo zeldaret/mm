@@ -6,6 +6,8 @@
 
 #define EN_GRASSHOPPER_GET_TYPE(thisx) ((thisx)->params)
 
+#define EN_GRASSHOPPER_PARAMS(type) (type)
+
 struct EnGrasshopper;
 
 typedef void (*EnGrasshopperActionFunc)(struct EnGrasshopper*, PlayState*);
@@ -15,7 +17,7 @@ typedef enum EnGrasshopperType {
     /*  0 */ EN_GRASSHOPPER_TYPE_NORMAL,
     /*  1 */ EN_GRASSHOPPER_TYPE_GROWS_WHEN_SPAWNED, // Spawned by EnEncount1
     /*  2 */ EN_GRASSHOPPER_TYPE_WOODFALL_TEMPLE_FINAL_ROOM,
-    /*  3 */ EN_GRASSHOPPER_TYPE_WOODFALL,
+    /*  3 */ EN_GRASSHOPPER_TYPE_WOODFALL
 } EnGrasshopperType;
 
 typedef struct EnGrasshopperEffect {

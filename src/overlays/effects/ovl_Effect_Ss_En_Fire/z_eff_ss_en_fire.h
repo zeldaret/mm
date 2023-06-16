@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define ENFIRE_FLAGS_BODYPART_POS_VEC3S (1 << 15)
-#define ENFIRE_PARAMS_USE_SCALE (1 << 15)
+#define ENFIRE_PARAM_USE_SCALE (1 << 15)
 
 typedef struct {
     /* 0x00 */ Actor* actor;

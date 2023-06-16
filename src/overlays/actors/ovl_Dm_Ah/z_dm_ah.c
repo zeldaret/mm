@@ -113,7 +113,7 @@ Actor* func_80C1D78C(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || false) {
+        if ((tempActor == NULL) || false) {
             foundActor = NULL;
             break;
         }
@@ -127,7 +127,7 @@ void func_80C1D7FC(DmAh* this, PlayState* play) {
     u16 cueId;
     s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!this->unk_29C) {
             this->cueId = 255;
             this->unk_29C = true;
@@ -245,7 +245,7 @@ void DmAh_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1DE28[this->unk_284]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1DE20[0]));

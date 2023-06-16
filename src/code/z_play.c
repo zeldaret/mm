@@ -1,6 +1,6 @@
-#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
+#include "z64bombers_notebook.h"
 #include "z64debug_display.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -8,7 +8,7 @@
 #include "z64view.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 s32 gDbgCamEnabled = false;
@@ -359,10 +359,10 @@ void Play_Destroy(GameState* thisx) {
 
     if (sBombersNotebookOpen) {
         MsgEvent_SendNullTask();
-        func_80178750();
-        gfxCtx->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx->framebufferIndex % 2);
+        SysCfb_SetLoResMode();
+        gfxCtx->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx->framebufferIndex % 2);
         gfxCtx->zbuffer = SysCfb_GetZBuffer();
-        gfxCtx->viMode = D_801FBB88;
+        gfxCtx->viMode = gActiveViMode;
         gfxCtx->viConfigFeatures = gViConfigFeatures;
         gfxCtx->xScale = gViConfigXScale;
         gfxCtx->yScale = gViConfigYScale;
@@ -506,41 +506,41 @@ void Play_UpdateWaterCamera(PlayState* this, Camera* camera) {
     sIsCameraUnderwater = camera->stateFlags & CAM_STATE_UNDERWATER;
     if (Play_GetWaterSurface(this, &camera->eye, &lightIndex) != BGCHECK_Y_MIN) {
         if (!sIsCameraUnderwater) {
-            Camera_SetFlags(camera, CAM_STATE_UNDERWATER);
+            Camera_SetStateFlag(camera, CAM_STATE_UNDERWATER);
             sQuakeIndex = -1;
-            Distortion_SetType(DISTORTION_TYPE_UNDERWATER_ENTRY);
-            Distortion_SetCountdown(80);
+            Distortion_Request(DISTORTION_TYPE_UNDERWATER_ENTRY);
+            Distortion_SetDuration(80);
         }
 
         func_801A3EC0(0x20);
         func_800F6834(this, lightIndex);
 
-        if ((sQuakeIndex == -1) || (Quake_GetCountdown(sQuakeIndex) == 10)) {
-            s16 quakeIndex = Quake_Add(camera, QUAKE_TYPE_5);
+        if ((sQuakeIndex == -1) || (Quake_GetTimeLeft(sQuakeIndex) == 10)) {
+            s16 quakeIndex = Quake_Request(camera, QUAKE_TYPE_5);
 
             sQuakeIndex = quakeIndex;
             if (quakeIndex != 0) {
                 Quake_SetSpeed(sQuakeIndex, 550);
-                Quake_SetQuakeValues(sQuakeIndex, 1, 1, 180, 0);
-                Quake_SetCountdown(sQuakeIndex, 1000);
+                Quake_SetPerturbations(sQuakeIndex, 1, 1, 180, 0);
+                Quake_SetDuration(sQuakeIndex, 1000);
             }
         }
         if (player->stateFlags3 & PLAYER_STATE3_8000) {
-            Distortion_SetType(DISTORTION_TYPE_ZORA_SWIMMING);
-            Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_Request(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
         } else {
-            Distortion_SetType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
-            Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
+            Distortion_Request(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+            Distortion_RemoveRequest(DISTORTION_TYPE_ZORA_SWIMMING);
         }
     } else {
         if (sIsCameraUnderwater) {
-            Camera_ClearFlags(camera, CAM_STATE_UNDERWATER);
+            Camera_UnsetStateFlag(camera, CAM_STATE_UNDERWATER);
         }
-        Distortion_ClearType(DISTORTION_TYPE_NON_ZORA_SWIMMING);
-        Distortion_ClearType(DISTORTION_TYPE_UNDERWATER_ENTRY);
-        Distortion_ClearType(DISTORTION_TYPE_ZORA_SWIMMING);
+        Distortion_RemoveRequest(DISTORTION_TYPE_NON_ZORA_SWIMMING);
+        Distortion_RemoveRequest(DISTORTION_TYPE_UNDERWATER_ENTRY);
+        Distortion_RemoveRequest(DISTORTION_TYPE_ZORA_SWIMMING);
         if (sQuakeIndex != 0) {
-            Quake_Remove(sQuakeIndex);
+            Quake_RemoveRequest(sQuakeIndex);
         }
         func_800F694C(this);
         func_801A3EC0(0);
@@ -1037,9 +1037,9 @@ void Play_UpdateMain(PlayState* this) {
 
     if (this->sramCtx.status != 0) {
         if (gSaveContext.save.isOwlSave) {
-            func_80147198(&this->sramCtx);
+            Sram_UpdateWriteToFlashOwlSave(&this->sramCtx);
         } else {
-            func_80147068(&this->sramCtx);
+            Sram_UpdateWriteToFlashDefault(&this->sramCtx);
         }
     }
 }
@@ -1052,14 +1052,14 @@ void Play_Update(PlayState* this) {
     if (!sBombersNotebookOpen) {
         if (this->pauseCtx.bombersNotebookOpen) {
             sBombersNotebookOpen = true;
-            sBombersNotebook.unk_00 = 0;
+            sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         }
     } else if (CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_L) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_B) ||
                CHECK_BTN_ALL(CONTROLLER1(&this->state)->press.button, BTN_START) || (gIrqMgrResetStatus != 0)) {
         sBombersNotebookOpen = false;
         this->pauseCtx.bombersNotebookOpen = false;
-        sBombersNotebook.unk_00 = 0;
+        sBombersNotebook.loadState = BOMBERS_NOTEBOOK_LOAD_STATE_NONE;
         this->msgCtx.msgLength = 0;
         this->msgCtx.msgMode = 0;
         this->msgCtx.currentTextId = 0;
@@ -1117,7 +1117,7 @@ void Play_PostWorldDraw(PlayState* this) {
 }
 
 #ifdef NON_MATCHING
-// Stack issues and 1 small issue around Play_PostWorldDraw
+// Something weird going on with the stack of the unused arg0 of `Camera_Update`
 void Play_DrawMain(PlayState* this) {
     GraphicsContext* gfxCtx = this->state.gfxCtx;
     Lights* sp268;
@@ -1243,7 +1243,7 @@ void Play_DrawMain(PlayState* this) {
             goto PostWorldDraw;
         }
 
-        PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
+        PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, gfxCtx->curFrameBuffer, gfxCtx->zbuffer);
 
         if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_PROCESS) {
             MsgEvent_SendNullTask();
@@ -1270,11 +1270,11 @@ void Play_DrawMain(PlayState* this) {
 
             if (!this->unk_18844) {
                 if (1) {
-                    if ((this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
+                    if (((u32)this->skyboxId != SKYBOX_NONE) && !this->envCtx.skyboxDisabled) {
                         if ((this->skyboxId == SKYBOX_NORMAL_SKY) || (this->skyboxId == SKYBOX_3)) {
                             Environment_UpdateSkybox(this->skyboxId, &this->envCtx, &this->skyboxCtx);
-                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.unk_13, this->view.eye.x,
-                                        this->view.eye.y, this->view.eye.z);
+                            Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, this->envCtx.skyboxBlend,
+                                        this->view.eye.x, this->view.eye.y, this->view.eye.z);
                         } else if (!this->skyboxCtx.skyboxShouldDraw) {
                             Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x, this->view.eye.y,
                                         this->view.eye.z);
@@ -1306,10 +1306,11 @@ void Play_DrawMain(PlayState* this) {
                 if (this->skyboxCtx.skyboxShouldDraw) {
                     Vec3f sp78;
 
-                    if (1) {}
-                    Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
-                    Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
-                                this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                    if (1) {
+                        Camera_GetQuakeOffset(&sp78, GET_ACTIVE_CAM(this));
+                        Skybox_Draw(&this->skyboxCtx, gfxCtx, this->skyboxId, 0, this->view.eye.x + sp78.x,
+                                    this->view.eye.y + sp78.y, this->view.eye.z + sp78.z);
+                    }
                 }
 
                 // envCtx.precipitation[PRECIP_RAIN_CUR]
@@ -1370,9 +1371,8 @@ void Play_DrawMain(PlayState* this) {
 
             Play_DrawMotionBlur(this);
 
-            if (((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
-                 (gTransitionTileState == TRANS_TILE_SETUP)) ||
-                (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
+            if ((R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_SETUP) ||
+                (gTransitionTileState == TRANS_TILE_SETUP) || (R_PICTO_PHOTO_STATE == PICTO_PHOTO_STATE_SETUP)) {
                 Gfx* sp74;
                 Gfx* sp70 = POLY_OPA_DISP;
 
@@ -1405,14 +1405,17 @@ void Play_DrawMain(PlayState* this) {
                 POLY_OPA_DISP = sp74;
                 this->unk_18B49 = 2;
                 SREG(33) |= 1;
-            } else {
-            PostWorldDraw:
-                if (1) {
-                    Play_PostWorldDraw(this);
-                }
+                goto SkipPostWorldDraw;
+            }
+
+        PostWorldDraw:
+            if (1) {
+                Play_PostWorldDraw(this);
             }
         }
     }
+
+SkipPostWorldDraw:
 
     if ((this->view.unk164 != 0) && !gDbgCamEnabled) {
         Vec3s sp4C;
@@ -1429,7 +1432,7 @@ void Play_DrawMain(PlayState* this) {
         func_800FE3E0(this);
     }
 
-    CLOSE_DISPS(this->state.gfxCtx);
+    CLOSE_DISPS(gfxCtx);
 }
 #else
 void Play_DrawMain(PlayState* this);
@@ -1443,24 +1446,24 @@ void Play_Draw(PlayState* this) {
         GraphicsContext* gfxCtx2 = this->state.gfxCtx;
 
         if (sBombersNotebookOpen) {
-            if (D_801FBBD4 != 1) {
+            if (gSysCfbHiResEnabled != 1) {
                 MsgEvent_SendNullTask();
-                func_80178818();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
+                SysCfb_SetHiResMode();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
-                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viMode = gActiveViMode;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
                 gfxCtx2->xScale = gViConfigXScale;
                 gfxCtx2->yScale = gViConfigYScale;
                 gfxCtx2->updateViMode = true;
             }
         } else {
-            if (D_801FBBD4 != 0) {
+            if (gSysCfbHiResEnabled != 0) {
                 MsgEvent_SendNullTask();
-                func_80178750();
-                gfxCtx2->curFrameBuffer = SysCfb_GetFbPtr(gfxCtx2->framebufferIndex % 2);
+                SysCfb_SetLoResMode();
+                gfxCtx2->curFrameBuffer = SysCfb_GetFramebuffer(gfxCtx2->framebufferIndex % 2);
                 gfxCtx2->zbuffer = SysCfb_GetZBuffer();
-                gfxCtx2->viMode = D_801FBB88;
+                gfxCtx2->viMode = gActiveViMode;
                 gfxCtx2->viConfigFeatures = gViConfigFeatures;
                 gfxCtx2->xScale = gViConfigXScale;
                 gfxCtx2->yScale = gViConfigYScale;
@@ -1509,7 +1512,7 @@ void Play_Main(GameState* thisx) {
 }
 
 s32 Play_InCsMode(PlayState* this) {
-    return (this->csCtx.state != 0) || Player_InCsMode(this);
+    return (this->csCtx.state != CS_STATE_IDLE) || Player_InCsMode(this);
 }
 
 f32 Play_GetFloorSurfaceImpl(PlayState* this, MtxF* mtx, CollisionPoly** poly, s32* bgId, Vec3f* pos) {
@@ -1682,11 +1685,11 @@ s32 Play_SetCameraAtEye(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye) {
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -1711,11 +1714,11 @@ s32 Play_SetCameraAtEyeUp(PlayState* this, s16 camId, Vec3f* at, Vec3f* eye, Vec
     camera->dist = Math3D_Distance(at, eye);
 
     if (camera->focalActor != NULL) {
-        camera->atActorOffset.x = at->x - camera->focalActor->world.pos.x;
-        camera->atActorOffset.y = at->y - camera->focalActor->world.pos.y;
-        camera->atActorOffset.z = at->z - camera->focalActor->world.pos.z;
+        camera->focalActorAtOffset.x = at->x - camera->focalActor->world.pos.x;
+        camera->focalActorAtOffset.y = at->y - camera->focalActor->world.pos.y;
+        camera->focalActorAtOffset.z = at->z - camera->focalActor->world.pos.z;
     } else {
-        camera->atActorOffset.x = camera->atActorOffset.y = camera->atActorOffset.z = 0.0f;
+        camera->focalActorAtOffset.x = camera->focalActorAtOffset.y = camera->focalActorAtOffset.z = 0.0f;
     }
 
     camera->atLerpStepScale = 0.01f;
@@ -1749,13 +1752,13 @@ void Play_CopyCamera(PlayState* this, s16 destCamId, s16 srcCamId) {
     Camera_Copy(this->cameraPtrs[destCamId1], this->cameraPtrs[srcCamId2]);
 }
 
-// Same as Play_ChangeCameraSetting but also calls Camera_InitPlayerSettings
+// Same as Play_ChangeCameraSetting but also calls Camera_InitFocalActorSettings
 s32 func_80169A50(PlayState* this, s16 camId, Player* player, s16 setting) {
     Camera* camera;
     s16 camIdx = (camId == CAM_ID_NONE) ? this->activeCamId : camId;
 
     camera = this->cameraPtrs[camIdx];
-    Camera_InitPlayerSettings(camera, player);
+    Camera_InitFocalActorSettings(camera, &player->actor);
     return Camera_ChangeSetting(camera, setting);
 }
 
@@ -2180,7 +2183,8 @@ void Play_Init(GameState* thisx) {
     this->cameraPtrs[CAM_ID_MAIN]->uid = CAM_ID_MAIN;
     this->activeCamId = CAM_ID_MAIN;
 
-    func_800DFF18(&this->mainCamera, 0x7F);
+    Camera_OverwriteStateFlags(&this->mainCamera, CAM_STATE_0 | CAM_STATE_CHECK_WATER | CAM_STATE_2 | CAM_STATE_3 |
+                                                      CAM_STATE_4 | CAM_STATE_DISABLE_MODE_CHANGE | CAM_STATE_6);
     Sram_Alloc(&this->state, &this->sramCtx);
     Regs_InitData(this);
     Message_Init(this);
@@ -2217,7 +2221,7 @@ void Play_Init(GameState* thisx) {
 
     if (((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_TITLE_SCREEN)) ||
         (gSaveContext.save.cutsceneIndex >= 0xFFF0)) {
-        gSaveContext.unk_3DC0 = 0;
+        gSaveContext.nayrusLoveTimer = 0;
         Magic_Reset(this);
         gSaveContext.sceneLayer = (gSaveContext.save.cutsceneIndex & 0xF) + 1;
 
@@ -2252,10 +2256,10 @@ void Play_Init(GameState* thisx) {
     R_PICTO_PHOTO_STATE = PICTO_PHOTO_STATE_OFF;
 
     PreRender_Init(&this->pauseBgPreRender);
-    PreRender_SetValuesSave(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL, NULL);
-    PreRender_SetValues(&this->pauseBgPreRender, D_801FBBCC, D_801FBBCE, NULL, NULL);
+    PreRender_SetValuesSave(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL, NULL);
+    PreRender_SetValues(&this->pauseBgPreRender, gCfbWidth, gCfbHeight, NULL, NULL);
 
-    this->unk_18E64 = D_801FBB90;
+    this->unk_18E64 = gWorkBuffer;
     this->pictoPhotoI8 = gPictoPhotoI8;
     this->unk_18E68 = D_80784600;
     this->unk_18E58 = D_80784600;
@@ -2324,11 +2328,11 @@ void Play_Init(GameState* thisx) {
 
     player = GET_PLAYER(this);
 
-    Camera_InitPlayerSettings(&this->mainCamera, player);
+    Camera_InitFocalActorSettings(&this->mainCamera, &player->actor);
     gDbgCamEnabled = false;
 
-    if ((player->actor.params & 0xFF) != 0xFF) {
-        Camera_ChangeDataIdx(&this->mainCamera, player->actor.params & 0xFF);
+    if (PLAYER_GET_BG_CAM_INDEX(&player->actor) != 0xFF) {
+        Camera_ChangeActorCsCamIndex(&this->mainCamera, PLAYER_GET_BG_CAM_INDEX(&player->actor));
     }
 
     CutsceneManager_StoreCamera(&this->mainCamera);
@@ -2342,6 +2346,3 @@ void Play_Init(GameState* thisx) {
     sBombersNotebookOpen = false;
     BombersNotebook_Init(&sBombersNotebook);
 }
-
-//! TODO: fake symbol, remove when BombersNotebook_Update is matching
-u16 D_801D0D78[] = { 0, 0, 0, 0 };

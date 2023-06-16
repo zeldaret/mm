@@ -108,7 +108,7 @@ typedef enum {
     /* 68 */ SK_ANIM_LOOK_LEFT_START,
     /* 69 */ SK_ANIM_LOOK_LEFT_LOOP,
     /* 70 */ SK_ANIM_SNIFF,
-    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF,
+    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF
 } SkullKidAnimation;
 
 typedef enum {
@@ -116,7 +116,7 @@ typedef enum {
     /* 1 */ SK_MASK_TYPE_NORMAL,
     /* 2 */ SK_MASK_TYPE_GLOWING_EYES,
     /* 3 */ SK_MASK_TYPE_FADING_OUT,
-    /* 9 */ SK_MASK_TYPE_RAISED = 9,
+    /* 9 */ SK_MASK_TYPE_RAISED = 9
 } SkullKidMaskType;
 
 typedef enum {
@@ -127,19 +127,19 @@ typedef enum {
     /* 4 */ SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
     /* 5 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
     /* 6 */ SK_HAND_TYPE_HOLDING_FLUTE,
-    /* 9 */ SK_HAND_TYPE_DEFAULT = 9,
+    /* 9 */ SK_HAND_TYPE_DEFAULT = 9
 } SkullKidHandType;
 
 typedef enum {
     /* 0 */ SK_FADE_IN_STATE_NONE,
     /* 1 */ SK_FADE_IN_STATE_START,
     /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG,
-    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA,
+    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA
 } SkullKidFadeInState;
 
 typedef enum {
     /* 0 */ SK_FADE_OUT_STATE_NONE,
-    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT,
+    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT
 } SkullKidFadeOutState;
 
 typedef enum {
@@ -843,9 +843,10 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
         case 594:
             Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
-    }
 
-    if (1) {}
+        default:
+            break;
+    }
 
     if ((play->csCtx.curFrame >= 62) && (play->csCtx.curFrame < 273)) {
         if ((Rand_ZeroOne() < 0.75f) && ((play->state.frames % 2) != 0)) {
@@ -916,7 +917,7 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, PlayState* play) {
  * Handles sound effects for all cutscenes.
  */
 void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         switch (play->sceneId) {
             case SCENE_LOST_WOODS:
                 if (gSaveContext.sceneLayer == 1) {
@@ -1128,8 +1129,8 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 
@@ -1198,7 +1199,7 @@ void DmStk_ClockTower_StartIntroCutsceneVersion1(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForIntroCutsceneVersion1ToEnd(DmStk* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->animIndex = SK_ANIM_CALL_DOWN_MOON_LOOP;
         this->handType = SK_HAND_TYPE_HOLDING_OCARINA;
         DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
@@ -1216,7 +1217,7 @@ void DmStk_ClockTower_StartIntroCutsceneVersion2(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForIntroCutsceneVersion2ToEnd(DmStk* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->animIndex = SK_ANIM_FLOATING_ARMS_CROSSED;
         DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
         this->actionFunc = DmStk_ClockTower_Idle;
@@ -1238,7 +1239,7 @@ void DmStk_ClockTower_StartDropOcarinaCutscene(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ClockTower_WaitForDropOcarinaCutsceneToEnd(DmStk* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->csCtx.curFrame > 20)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->csCtx.curFrame > 20)) {
         this->actionFunc = DmStk_ClockTower_Idle;
     }
 }
@@ -1714,7 +1715,7 @@ void DmStk_UpdateCollision(DmStk* this, PlayState* play) {
 void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
         this->actor.flags |= ACTOR_FLAG_1;
         this->tatlMessageTimer++;
@@ -1739,7 +1740,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
  * If he is hit in this state, he will just deflect the attack.
  */
 void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
         this->actor.flags |= ACTOR_FLAG_1;
 
@@ -1804,7 +1805,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
                 break;
 
             case SK_DEKU_PIPES_CS_STATE_START:
-                if (play->csCtx.state == 0) {
+                if (play->csCtx.state == CS_STATE_IDLE) {
                     this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_END;
                 }
                 break;
@@ -1815,7 +1816,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
         if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
             (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
             (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
-            (play->csCtx.state == 0)) {
+            (play->csCtx.state == CS_STATE_IDLE)) {
             gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
             if (R_TIME_SPEED != 0) {
                 gSaveContext.save.time =
@@ -1825,8 +1826,8 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 
@@ -2033,10 +2034,10 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         this->alpha = this->alpha;
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (this->alpha < 255) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Scene_SetRenderModeXlu(play, 1, 2);
 
             gDPPipeSync(POLY_XLU_DISP++);

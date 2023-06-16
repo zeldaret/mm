@@ -191,8 +191,8 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
-            encount1->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->spawnActiveCount > 0)) {
+            encount1->spawnActiveCount--;
         }
     }
 }
@@ -650,7 +650,7 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
                 Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
-            } else if (Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f) == 0) {
+            } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
                 func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
@@ -668,7 +668,7 @@ void EnWallmas_DrawShadow(EnWallmas* this, PlayState* play) {
 
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 44]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_44]);
         gDPSetPrimColor(&gfx[1], 0, 0, 0, 0, 0, 255);
         func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
                       &mf);
@@ -742,7 +742,7 @@ void EnWallmas_Draw(Actor* thisx, PlayState* play) {
     EnWallmas* this = THIS;
 
     if (this->actionFunc != EnWallmas_WaitToDrop) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnWallmas_OverrideLimbDraw, EnWallmas_PostLimbDraw, &this->actor);
         Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,

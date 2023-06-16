@@ -9,11 +9,11 @@ typedef void (*EnTest6ActionFunc)(struct EnTest6*, PlayState*);
 
 #define ENTEST6_GET(thisx) ((thisx)->params)
 
-enum {
+typedef enum {
     /* 24 */ ENTEST6_24 = 24,
     /* 25 */ ENTEST6_25,
-    /* 26 */ ENTEST6_26,
-};
+    /* 26 */ ENTEST6_26
+} EnTest6Param;
 
 typedef struct {
     /* 0x00 */ LightNode* node;

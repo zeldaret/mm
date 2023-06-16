@@ -131,7 +131,7 @@ void BgIknvObj_UpdateWaterwheel(BgIknvObj* this, PlayState* play) {
         func_800B9010(&this->dyna.actor, NA_SE_EV_WOOD_WATER_WHEEL - SFX_FLAG);
     }
 
-    if ((play->csCtx.state != 0) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 4) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (gSaveContext.sceneLayer == 1) && (play->csCtx.scriptIndex == 4) &&
         (play->csCtx.curFrame == 1495)) {
         func_8019F128(NA_SE_EV_DOOR_UNLOCK);
     }
@@ -211,8 +211,10 @@ void BgIknvObj_Draw(Actor* thisx, PlayState* play) {
     BgIknvObj* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->displayListPtr);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

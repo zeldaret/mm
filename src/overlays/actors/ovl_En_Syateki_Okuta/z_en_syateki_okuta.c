@@ -190,13 +190,12 @@ void func_80A36360(EnSyatekiOkuta* this) {
 }
 
 void func_80A363B4(EnSyatekiOkuta* this, PlayState* play) {
-    if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 15.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
         if (func_80A361F4(this)) {
             return;
-        } else {
-            func_80A361B0(this, play);
-            Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
         }
+        func_80A361B0(this, play);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OCTAROCK_JUMP);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -404,7 +403,7 @@ void func_80A36CB0(EnSyatekiOkuta* this) {
         }
     } else if (this->actionFunc == func_80A36488) {
         this->unk_1D8.x = this->unk_1D8.z = 1.0f;
-        this->unk_1D8.y = (sin_rad((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
+        this->unk_1D8.y = (Math_SinF((M_PI / 16) * curFrame) * 0.2f) + 1.0f;
     } else if (this->actionFunc == func_80A36504) {
         if (curFrame < 3.0f) {
             this->unk_1D8.y = 1.0f;
@@ -440,7 +439,7 @@ s32 func_80A370EC(EnSyatekiOkuta* this, f32 arg1, Vec3f* arg2) {
     if (this->actionFunc == func_80A363B4) {
         arg2->y = 1.0f;
         arg2->z = 1.0f;
-        arg2->x = (sin_rad((M_PI / 16) * arg1) * 0.4f) + 1.0f;
+        arg2->x = (Math_SinF((M_PI / 16) * arg1) * 0.4f) + 1.0f;
     } else if (this->actionFunc == func_80A365EC) {
         if ((arg1 >= 35.0f) || (arg1 < 25.0f)) {
             return false;
@@ -489,7 +488,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_2A6 == 1) {
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
     } else {
@@ -498,7 +497,7 @@ void EnSyatekiOkuta_Draw(Actor* thisx, PlayState* play) {
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSyatekiOkuta_OverrideLimbDraw, NULL,
                       &this->actor);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     if (this->actionFunc == func_80A365EC) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + 30.0f, this->actor.world.pos.z + 20.0f,
                          MTXMODE_NEW);

@@ -70,7 +70,7 @@ typedef enum {
     /* 5 */ STH_ANIM_LOOK_AROUND, // checking out Oceanside Spider House
     /* 6 */ STH_ANIM_PLEAD,       // wants to buy Oceanside Spider House
     /* 7 */ STH_ANIM_PANIC,       // after buying Oceanside Spider House, can be found at bottom of slide,
-    /* 8 */ STH_ANIM_START,       // set in init, not an actual index to the array
+    /* 8 */ STH_ANIM_START        // set in init, not an actual index to the array
 } EnSthAnimation;
 
 static AnimationHeader* sAnimationInfo[] = {
@@ -148,7 +148,7 @@ void EnSth_Init(Actor* thisx, PlayState* play) {
             }
             this->actor.textId = 0;
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN)) {
                 this->sthFlags |= STH_FLAG_DRAW_MASK_OF_TRUTH;
             }
             break;
@@ -479,7 +479,7 @@ void EnSth_GetInitialSwampSpiderHouseText(EnSth* this, PlayState* play) {
         nextTextId = 0x90F; // (does not exist)
         EnSth_ChangeAnim(this, STH_ANIM_TALK);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN)) {
             nextTextId = 0x91B; // As soon as I calm down, getting rid of it
         } else {
             nextTextId = 0x918; // I've had enough of this, going home
@@ -525,7 +525,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
-        SET_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
+        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
         Actor_OfferGetItem(&this->actor, play, GI_MASK_TRUTH, 10000.0f, 50.0f);
     }
 }
@@ -566,7 +566,7 @@ void EnSth_HandleSwampSpiderHouseConversation(EnSth* this, PlayState* play) {
 
             case 0x91A: // Someone gave me this mask and said it would make me rich, getting rid of it
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
-                CLEAR_WEEKEVENTREG(WEEKEVENTREG_SWAMP_SPIDER_HOUSE_TALKED);
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_TALKED_SWAMP_SPIDER_HOUSE_MAN);
 
             case 0x902: // (does not exist)
             case 0x903: // (does not exist)
@@ -758,7 +758,7 @@ void EnSth_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_EnvColor(play->state.gfxCtx, sShirtColors[1].r, sShirtColors[1].g, sShirtColors[1].b, 255));

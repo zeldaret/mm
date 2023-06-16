@@ -588,7 +588,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     sp28.x = this->actor.projectedPos.x;
     sp28.y = this->actor.projectedPos.y;
     sp28.z = this->actor.projectedPos.z;
-    func_801A1FB4(3, &sp28, 0x6C, 1000.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &sp28, NA_BGM_BASS_PLAY, 1000.0f);
 }
 
 void func_80BA08E8(EnZob* this, PlayState* play) {
@@ -759,7 +759,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_2F4 & 0x20) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->unk_312, 1000);

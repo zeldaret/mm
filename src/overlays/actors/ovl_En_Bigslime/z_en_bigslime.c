@@ -254,7 +254,7 @@ typedef enum {
     /* 0x5 */ BIGSLIME_DMGEFF_ELECTRIC_STUN,
     /* 0xD */ BIGSLIME_DMGEFF_DEKU_STUN = 0xD,
     /* 0xE */ BIGSLIME_DMGEFF_HOOKSHOT,
-    /* 0xF */ BIGSLIME_DMGEFF_BREAK_ICE,
+    /* 0xF */ BIGSLIME_DMGEFF_BREAK_ICE
 } BigslimeDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -657,7 +657,7 @@ void EnBigslime_AddWavySurface(EnBigslime* this) {
             randFloat = (Rand_ZeroOne() * 40.0f) + 50.0f;
         }
 
-        this->vtxSurfacePerturbation[i] = sin_rad((randInt + i) * (M_PI / 3)) * randFloat * 0.001f;
+        this->vtxSurfacePerturbation[i] = Math_SinF((randInt + i) * (M_PI / 3)) * randFloat * 0.001f;
     }
 }
 
@@ -673,7 +673,7 @@ void EnBigslime_UpdateWavySurface(EnBigslime* this) {
     }
 
     this->wavySurfaceTimer--;
-    vtxSurfaceWave = sin_rad(this->wavySurfaceTimer * (M_PI / 12));
+    vtxSurfaceWave = Math_SinF(this->wavySurfaceTimer * (M_PI / 12));
     for (i = 0; i < BIGSLIME_NUM_VTX; i++) {
         staticVtx = &sBigslimeStaticVtx[i];
         dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][i];
@@ -692,9 +692,9 @@ void EnBigslime_InitFallMinislime(EnBigslime* this) {
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         minislime = this->minislime[i];
         minislime->actor.params = MINISLIME_INIT_FALL;
-        minislime->actor.world.pos.x = randPlusMinusPoint5Scaled(80.0f) + (GBT_ROOM_5_MIN_X + ((i % 4) + 1) * 192.0f);
+        minislime->actor.world.pos.x = Rand_CenteredFloat(80.0f) + (GBT_ROOM_5_MIN_X + ((i % 4) + 1) * 192.0f);
         minislime->actor.world.pos.y = Rand_ZeroFloat(250.0f) + (GBT_ROOM_5_CENTER_Y + 50.0f);
-        minislime->actor.world.pos.z = randPlusMinusPoint5Scaled(80.0f) + (GBT_ROOM_5_MIN_Z + ((i / 4) + 1) * 192.0f);
+        minislime->actor.world.pos.z = Rand_CenteredFloat(80.0f) + (GBT_ROOM_5_MIN_Z + ((i / 4) + 1) * 192.0f);
     }
 
     this->minislimeState = MINISLIME_ACTIVE_INIT_STATE;
@@ -742,11 +742,11 @@ void EnBigslime_EndThrowMinislime(EnBigslime* this) {
 
 void EnBigslime_BreakIntoMinislime(EnBigslime* this, PlayState* play) {
     s32 i;
-    s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+    s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
     Quake_SetSpeed(quakeIndex, 20000);
-    Quake_SetQuakeValues(quakeIndex, 15, 0, 0, 0);
-    Quake_SetCountdown(quakeIndex, 15);
+    Quake_SetPerturbations(quakeIndex, 15, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 15);
 
     Rumble_Request(this->actor.xyzDistToPlayerSq, 180, 20, 100);
 
@@ -1169,7 +1169,7 @@ void EnBigslime_SetTargetVtxToWideCone(EnBigslime* this) {
     s32 j;
 
     for (i = 0; i < BIGSLIME_NUM_RING_FACES / 2; i++) {
-        vtxY = (((cos_rad(i * (M_PI / 6)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
+        vtxY = (((Math_CosF(i * (M_PI / 6)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1188,7 +1188,7 @@ void EnBigslime_SetTargetVtxToWideCone(EnBigslime* this) {
     }
 
     for (; i < BIGSLIME_NUM_RING_VTX; i++) {
-        vtxY = ((cos_rad((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / 16)) * 0.05f) + -1.0f) * BIGSLIME_RADIUS_F;
+        vtxY = ((Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / 16)) * 0.05f) + -1.0f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1301,7 +1301,7 @@ void EnBigslime_SetTargetVtxToThinCone(EnBigslime* this) {
     sBigslimeTargetVtx[0].n.ob[2] = 0;
 
     for (i = 1; i < BIGSLIME_NUM_RING_FACES / 2; i++) {
-        upperSphereCos = (((cos_rad((i - 1) * (M_PI / 5)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
+        upperSphereCos = (((Math_CosF((i - 1) * (M_PI / 5)) + 1.0f) * 0.925f) + -0.85f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1318,7 +1318,7 @@ void EnBigslime_SetTargetVtxToThinCone(EnBigslime* this) {
     }
 
     for (; i < BIGSLIME_NUM_RING_FACES; i++) {
-        lowerSphereCos = cos_rad((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / BIGSLIME_NUM_RING_FACES));
+        lowerSphereCos = Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / BIGSLIME_NUM_RING_FACES));
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1361,7 +1361,7 @@ void EnBigslime_SetTargetVtxToInverseCone(EnBigslime* this) {
     sBigslimeTargetVtx[0].n.ob[2] = 0;
 
     for (i = 1; i < BIGSLIME_NUM_RING_FACES / 2; i++) {
-        upperSphereCos = cos_rad((i - 1) * (M_PI / 10));
+        upperSphereCos = Math_CosF((i - 1) * (M_PI / 10));
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1374,7 +1374,7 @@ void EnBigslime_SetTargetVtxToInverseCone(EnBigslime* this) {
 
     for (; i < BIGSLIME_NUM_RING_FACES; i++) {
         lowerSphereCos =
-            (((cos_rad((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / 5)) + 1) * 0.925f) + -1.0f) * BIGSLIME_RADIUS_F;
+            (((Math_CosF((i - BIGSLIME_NUM_RING_FACES / 2) * (M_PI / 5)) + 1) * 0.925f) + -1.0f) * BIGSLIME_RADIUS_F;
         for (j = sVtxRingStartIndex[i]; j < sVtxRingStartIndex[i + 1]; j++) {
             staticVtx = &sBigslimeStaticVtx[j];
             targetVtx = &sBigslimeTargetVtx[j];
@@ -1692,7 +1692,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
     EnBigslime_UpdateCameraGrabPlayer(this, play);
     if (this->windupPunchTimer > 0) {
         invWindupPunchTimer = 1.0f / this->windupPunchTimer;
-        scale = cos_rad(this->windupPunchTimer * (M_PI / 27)) + 1.0f;
+        scale = Math_CosF(this->windupPunchTimer * (M_PI / 27)) + 1.0f;
         player->actor.world.pos.y = this->actor.world.pos.y + (this->actor.scale.y * -500.0f);
 
         // Linearly interpolate gekkoRot.y --> this->actor.world.rot.y
@@ -1705,7 +1705,7 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
             EnBigslime_GekkoSfxInsideBigslime(this, NA_SE_EN_FROG_PUNCH1);
         }
 
-        scale = 0.5f - cos_rad(-this->windupPunchTimer * (M_PI / 5)) * 0.5f;
+        scale = 0.5f - Math_CosF(-this->windupPunchTimer * (M_PI / 5)) * 0.5f;
         if (this->windupPunchTimer == -5) {
             if (player->stateFlags2 & PLAYER_STATE2_80) {
                 player->actor.parent = NULL;
@@ -1879,7 +1879,7 @@ void EnBigslime_Freeze(EnBigslime* this, PlayState* play) {
         if (vtxIceSeed < BIGSLIME_NUM_VTX) {
             dynamicVtx = &sBigslimeDynamicVtx[this->dynamicVtxState][vtxIceSeed];
             targetVtx = &sBigslimeTargetVtx[vtxIceSeed];
-            randFloat = randPlusMinusPoint5Scaled(40.0f);
+            randFloat = Rand_CenteredFloat(40.0f);
             dynamicVtx->n.ob[0] += (s16)(randFloat / this->actor.scale.x);
             dynamicVtx->n.ob[1] += (s16)(randFloat / this->actor.scale.y);
             dynamicVtx->n.ob[2] += (s16)(randFloat / this->actor.scale.z);
@@ -2444,9 +2444,9 @@ void EnBigslime_SetupFrogSpawn(EnBigslime* this, PlayState* play) {
     func_800B0DE0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &dustPrimColor, &dustEnvColor, 500, 50);
 
     for (i = 0; i < 25; i++) {
-        hahenVel.x = randPlusMinusPoint5Scaled(5.0f);
+        hahenVel.x = Rand_CenteredFloat(5.0f);
         hahenVel.y = Rand_ZeroFloat(3.0f) + 4.0f;
-        hahenVel.z = randPlusMinusPoint5Scaled(5.0f);
+        hahenVel.z = Rand_CenteredFloat(5.0f);
         EffectSsHahen_Spawn(play, worldPos, &hahenVel, &hahenAccel, 0, Rand_S16Offset(12, 3), HAHEN_OBJECT_DEFAULT, 10,
                             0);
     }
@@ -2464,7 +2464,8 @@ void EnBigslime_FrogSpawn(EnBigslime* this, PlayState* play) {
     this->spawnFrogTimer--;
 
     // Zoom the camera in and out at the newly spawned red frog
-    subCamZoom = sin_rad(this->spawnFrogTimer * (M_PI / 5)) * ((0.04f * (this->spawnFrogTimer * 0.1f)) + 0.02f) + 1.0f;
+    subCamZoom =
+        Math_SinF(this->spawnFrogTimer * (M_PI / 5)) * ((0.04f * (this->spawnFrogTimer * 0.1f)) + 0.02f) + 1.0f;
     subCamEye.x = subCam->at.x + (this->subCamDistToFrog.x * subCamZoom);
     subCamEye.z = subCam->at.z + (this->subCamDistToFrog.z * subCamZoom);
     subCamEye.y = subCam->at.y + (this->subCamDistToFrog.y * subCamZoom);
@@ -2884,7 +2885,8 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     zx = 1.0f - (yDistMinY * (1.0f / 1550.0f));
 
     OPEN_DISPS(play->state.gfxCtx);
-    POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+
+    POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
     sysMatrix->xx = zx;
     sysMatrix->yy = 1.0f;
     sysMatrix->zz = zx;
@@ -2907,6 +2909,7 @@ void EnBigslime_SetSysMatrix(Vec3f* pos, PlayState* play, Gfx* shadowDList, f32 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (u8)(alpha * zx));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, shadowDList);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -2936,12 +2939,13 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     for (i = 0; i < MINISLIME_NUM_SPAWN; i++) {
         minislime = this->minislime[indices[i]];
         lights = LightContext_NewLights(&play->lightCtx, play->state.gfxCtx);
         Lights_BindAll(lights, play->lightCtx.listHead, &minislime->actor.world.pos, play);
         Lights_Draw(lights, play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&minislime->actor, play, 0);
         Matrix_SetTranslateRotateYXZ(minislime->actor.world.pos.x, minislime->actor.world.pos.y,
                                      minislime->actor.world.pos.z, &minislime->actor.shape.rot);
@@ -2963,6 +2967,7 @@ void EnBigslime_DrawMinislime(EnBigslime* this, PlayState* play2) {
                                 minislime->actor.scale.y * 400.0f, minislime->actor.shape.rot.y,
                                 minislime->actor.shape.shadowAlpha * (175.0f / 255.0f));
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
@@ -2980,8 +2985,9 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     MtxF* billboardMtxF;
     s32 i;
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
+
     OPEN_DISPS(play->state.gfxCtx);
 
     // Draw Bigslime
@@ -3018,6 +3024,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
             gSPDisplayList(POLY_XLU_DISP++, gBigslimeBubbleDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     EnBigslime_SetSysMatrix(&this->actor.world.pos, play, gBigslimeShadowDL, this->vtxScaleX, this->vtxScaleZ,
@@ -3070,7 +3077,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
     EnBigslime* this = THIS;
     s32 pad;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->actionFunc == EnBigslime_DamageGekko) {
         func_800AE434(play, &gekkoDamageColor, this->damageSpinTimer, 20);
     } else if ((this->actionFunc == EnBigslime_CutsceneDefeat) || (this->actionFunc == EnBigslime_GekkoDespawn)) {
@@ -3123,7 +3130,7 @@ void EnBigslime_DrawShatteringEffects(EnBigslime* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     // Draw Shockwave
     if (this->shockwaveAlpha > 0) {

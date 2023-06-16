@@ -76,32 +76,35 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             this->unk158 = this->actor.world.rot.y;
             EnWeatherTag_SetupAction(this, func_80966A08);
             break;
+
         case WEATHERTAG_TYPE_UNK1:
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
                 Actor_Kill(&this->actor);
             }
             EnWeatherTag_SetupAction(this, func_80966B08);
             break;
+
         case WEATHERTAG_TYPE_WINTERFOG:
             EnWeatherTag_SetupAction(this, func_80966E0C);
             break;
-        case WEATHERTAG_TYPE_UNK3:
-            //! FAKE: this can move to different locations and still match
-            if (1) {}
 
+        case WEATHERTAG_TYPE_UNK3:
             EnWeatherTag_SetupAction(this, func_80966EF0);
             break;
+
         case WEATHERTAG_TYPE_UNK4:
             EnWeatherTag_SetupAction(this, func_80966FEC);
             break;
+
         case WEATHERTAG_TYPE_UNK5:
             func_800BC154(play, &play->actorCtx, &this->actor, 7);
             play->skyboxId = SKYBOX_3;
-            play->envCtx.unk_1F = 5;
-            play->envCtx.unk_20 = 5;
+            play->envCtx.lightConfig = 5;
+            play->envCtx.changeLightNextConfig = 5;
             D_801F4E74 = 1.0f;
             EnWeatherTag_SetupAction(this, func_80966BF4);
             break;
+
         case WEATHERTAG_TYPE_WATERMURK:
             pathID = WEATHER_TAG_PATHID(&this->actor);
             path = &play->setupPathList[pathID];
@@ -109,32 +112,38 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
             this->pathCount = path->count;
             EnWeatherTag_SetupAction(this, func_809672DC);
             break;
+
         case WEATHERTAG_TYPE_LOCALDAY2RAIN:
             EnWeatherTag_SetupAction(this, func_809674C8);
+            break;
+
+        default:
+            break;
     }
 }
 
 // matches but unused params is suspicious
 // called WeatherTag_CheckEnableWeatherEffect in OOT, that's where "weatherMode" came from
-u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24,
-                 u8 weatherMode) {
+u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, u8 lightConfig,
+                 u8 changeLightNextConfig, u16 changeDuration, u8 weatherMode) {
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(&this->actor) > Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
-        if (play->envCtx.unk_1F == play->envCtx.unk_20) {
+        if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
             D_801BDBB8 = 1;
-            if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
+            if (!(play->envCtx.lightMode == 0) ||
+                ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
                 D_801BDBB8 = 0;
                 if (gWeatherMode != weatherMode) {
                     gWeatherMode = weatherMode;
-                    play->envCtx.unk_21 = 1;
-                    play->envCtx.unk_1F = new1F;
-                    play->envCtx.unk_20 = new20;
-                    D_801BDBB4 = new20;
-                    play->envCtx.unk_24 = new24;
-                    play->envCtx.unk_22 = play->envCtx.unk_24;
+                    play->envCtx.changeLightEnabled = true;
+                    play->envCtx.lightConfig = lightConfig;
+                    play->envCtx.changeLightNextConfig = changeLightNextConfig;
+                    D_801BDBB4 = changeLightNextConfig;
+                    play->envCtx.changeDuration = changeDuration;
+                    play->envCtx.changeLightTimer = play->envCtx.changeDuration;
                 }
                 returnVal = 1;
             }
@@ -145,23 +154,25 @@ u8 func_80966608(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, 
 
 // again with the unused parameters
 // called WeatherTag_CheckRestoreWeather in OOT
-u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, u8 new1F, u8 new20, u16 new24) {
+u8 func_80966758(EnWeatherTag* this, PlayState* play, UNK_TYPE a3, UNK_TYPE a4, u8 lightConfig,
+                 u8 changeLightNextConfig, u16 changeDuration) {
     Player* player = GET_PLAYER(play);
     u8 returnVal = 0;
 
     if (WEATHER_TAG_RANGE100(&this->actor) < Actor_WorldDistXZToActor(&player->actor, &this->actor)) {
-        if (play->envCtx.unk_1F == play->envCtx.unk_20) {
+        if (play->envCtx.lightConfig == play->envCtx.changeLightNextConfig) {
             D_801BDBB8 = 1;
-            if (!(play->envCtx.unk_1E == 0) || ((play->envCtx.unk_1F != 1) && (play->envCtx.unk_21 == 0))) {
+            if (!(play->envCtx.lightMode == 0) ||
+                ((play->envCtx.lightConfig != 1) && !play->envCtx.changeLightEnabled)) {
 
                 D_801BDBB8 = 0;
                 gWeatherMode = 0;
-                play->envCtx.unk_21 = 1;
-                play->envCtx.unk_1F = new1F;
-                play->envCtx.unk_20 = new20;
-                D_801BDBB4 = new20;
-                play->envCtx.unk_24 = new24;
-                play->envCtx.unk_22 = play->envCtx.unk_24;
+                play->envCtx.changeLightEnabled = true;
+                play->envCtx.lightConfig = lightConfig;
+                play->envCtx.changeLightNextConfig = changeLightNextConfig;
+                D_801BDBB4 = changeLightNextConfig;
+                play->envCtx.changeDuration = changeDuration;
+                play->envCtx.changeLightTimer = play->envCtx.changeDuration;
                 returnVal = 1;
             }
         }
@@ -232,7 +243,7 @@ void EnWeatherTag_Die(EnWeatherTag* this, PlayState* play) {
 //  poisoned swamp: placed behind the water fall from ikana
 // this tag stops spawning after STT cleared?
 void func_80966B08(EnWeatherTag* this, PlayState* play) {
-    if (func_80966608(this, play, 0, 0, play->envCtx.unk_1F, 5, 100, 2) || (gWeatherMode == 2)) {
+    if (func_80966608(this, play, 0, 0, play->envCtx.lightConfig, 5, 100, 2) || (gWeatherMode == 2)) {
         play->skyboxId = SKYBOX_3;
         EnWeatherTag_SetupAction(this, func_80966D20);
     } else if (D_801F4E74 <= 0.01f) {
@@ -245,7 +256,7 @@ void func_80966B08(EnWeatherTag* this, PlayState* play) {
 // WEATHERTAG_TYPE_UNK5: only one in ikana canyon, corner of cliff right outside of stone tower entrance
 // because it uses cutsecnes.. is this the clear ikana cutcsene?
 void func_80966BF4(EnWeatherTag* this, PlayState* play) {
-    u8 newUnk20;
+    u8 changeLightNextConfig;
     CsCmdActorCue* cue;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_567)) {
@@ -255,23 +266,25 @@ void func_80966BF4(EnWeatherTag* this, PlayState* play) {
                 case 0:
                 case 1:
                 default:
-                    newUnk20 = 0;
+                    changeLightNextConfig = 0;
                     break;
+
                 case 2:
-                    newUnk20 = 3;
+                    changeLightNextConfig = 3;
                     break;
+
                 case 3:
-                    newUnk20 = 4;
+                    changeLightNextConfig = 4;
                     break;
             }
 
             Math_SmoothStepToF(&D_801F4E74, 0.0f, 0.2f, 0.02f, 0.001f);
 
-            if (play->envCtx.unk_20 != newUnk20) {
-                play->envCtx.unk_21 = 1;
-                play->envCtx.unk_20 = newUnk20;
-                play->envCtx.unk_24 = 100;
-                play->envCtx.unk_22 = play->envCtx.unk_24;
+            if (play->envCtx.changeLightNextConfig != changeLightNextConfig) {
+                play->envCtx.changeLightEnabled = true;
+                play->envCtx.changeLightNextConfig = changeLightNextConfig;
+                play->envCtx.changeDuration = 100;
+                play->envCtx.changeLightTimer = play->envCtx.changeDuration;
             }
         }
     }
@@ -287,9 +300,11 @@ void func_80966D20(EnWeatherTag* this, PlayState* play) {
         default:
             newUnk20 = 0;
             break;
+
         case 2:
             newUnk20 = 3;
             break;
+
         case 3:
             newUnk20 = 4;
             break;
@@ -485,7 +500,7 @@ void EnWeatherTag_Update(Actor* thisx, PlayState* play) {
     if ((play->actorCtx.flags & ACTORCTX_FLAG_1) && (play->msgCtx.msgMode != 0) &&
         (play->msgCtx.currentTextId == 0x5E6) && !FrameAdvance_IsEnabled(&play->state) &&
         (play->transitionTrigger == TRANS_TRIGGER_OFF) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) &&
-        (play->csCtx.state == 0)) {
+        (play->csCtx.state == CS_STATE_IDLE)) {
 
         gSaveContext.save.time = ((void)0, gSaveContext.save.time) + (u16)R_TIME_SPEED;
         if (R_TIME_SPEED != 0) {

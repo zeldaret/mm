@@ -121,7 +121,7 @@ void func_80A52604(EnDnq* this, PlayState* play) {
 s32 func_80A52648(EnDnq* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_37C & 0x20)) {
             this->picto.actor.flags &= ~ACTOR_FLAG_1;
             this->cueId = 255;
@@ -469,7 +469,7 @@ void EnDnq_Update(Actor* thisx, PlayState* play) {
 void EnDnq_Draw(Actor* thisx, PlayState* play) {
     EnDnq* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->picto.actor);
 }

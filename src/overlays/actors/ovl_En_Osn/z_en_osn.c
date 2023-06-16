@@ -869,9 +869,9 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
         }
 
         if ((this->animIndex == OSN_ANIM_WALK_AWAY) &&
-            (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
-             (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
-             (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
+            (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 27.0f) ||
+             Animation_OnFrame(&this->skelAnime, 37.0f) || Animation_OnFrame(&this->skelAnime, 47.0f) ||
+             Animation_OnFrame(&this->skelAnime, 57.0f) || Animation_OnFrame(&this->skelAnime, 67.0f))) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
@@ -1037,7 +1037,7 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->alpha == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         if ((this->animIndex == OSN_ANIM_CHOKE) || (this->animIndex == OSN_ANIM_DESPAIR) ||
             (this->animIndex == OSN_ANIM_HAND_OUT_2) || (play->msgCtx.currentTextId == 0x1FCA)) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeOpenTex));
@@ -1056,7 +1056,7 @@ void EnOsn_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnOsn_OverrideLimbDraw, EnOsn_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeClosedHappyTex));
         gSPSegment(POLY_XLU_DISP++, 0x09, Lib_SegmentedToVirtual(sSmileTex));
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);

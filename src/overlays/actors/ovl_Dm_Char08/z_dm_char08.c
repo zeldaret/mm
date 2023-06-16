@@ -38,8 +38,8 @@ typedef enum {
     /* 2 */ TURTLE_EYEMODE_CLOSED,
     /* 3 */ TURTLE_EYEMODE_LOOK_STRAIGHT,
     /* 4 */ TURTLE_EYEMODE_UNUSED,
-    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT,
-} EyeMode;
+    /* 5 */ TURTLE_EYEMODE_LOOK_RIGHT
+} TurtleEyeMode;
 
 typedef enum {
     /* 0 */ TURTLE_ANIM_IDLE,
@@ -48,7 +48,7 @@ typedef enum {
     /* 3 */ TURTLE_ANIM_SPEAK1,
     /* 4 */ TURTLE_ANIM_COUGH,
     /* 5 */ TURTLE_ANIM_SPEAK2,
-    /* 6 */ TURTLE_ANIM_YAWN,
+    /* 6 */ TURTLE_ANIM_YAWN
 } TurtleAnimation;
 
 ActorInit Dm_Char08_InitVars = {
@@ -341,13 +341,13 @@ void func_80AAFA18(DmChar08* this, PlayState* play) {
 }
 
 void func_80AAFAC4(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->actionFunc = func_80AAF8F4;
     }
 }
 
 void func_80AAFAE4(DmChar08* this, PlayState* play) {
-    if (play->csCtx.state == 0) {
+    if (play->csCtx.state == CS_STATE_IDLE) {
         this->actionFunc = func_80AAFB04;
     }
 }
@@ -893,7 +893,7 @@ void func_80AB032C(DmChar08* this, PlayState* play) {
 }
 
 void func_80AB096C(DmChar08* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_31MISAKI) && (gSaveContext.sceneLayer == 0) &&
         (play->csCtx.scriptIndex == 0)) {
         if ((play->csCtx.curFrame >= 890) && (play->csCtx.curFrame < 922)) {
             Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
@@ -1002,7 +1002,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 DmChar08_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if ((play->csCtx.state == 0) && (play->sceneId == SCENE_31MISAKI) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) && (play->sceneId == SCENE_31MISAKI) &&
         (limbIndex == TURTLE_LIMB_FRONT_RIGHT_UPPER_FLIPPER)) {
         rot->z = -0x5E24;
     }
@@ -1093,7 +1093,8 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
     DmChar08* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sBigTurtleEyeTextures[this->eyeIndex]));
@@ -1113,11 +1114,12 @@ void DmChar08_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gTurtleAsleepDL);
     } else if (this->unk_1FF == 1) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Scene_SetRenderModeXlu(play, 2, 2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gTurtleAsleepDL);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

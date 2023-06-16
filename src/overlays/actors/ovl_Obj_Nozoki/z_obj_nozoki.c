@@ -4,6 +4,7 @@
  * Description: Sakon's Hideout Objects (Sun's Mask, doors, etc)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
@@ -129,7 +130,7 @@ void func_80BA2514(ObjNozoki* this, PlayState* play) {
 }
 
 s32 func_80BA26A8(ObjNozoki* this) {
-    if (this->csId < 0) {
+    if (this->csId <= CS_ID_NONE) {
         return true;
     }
 

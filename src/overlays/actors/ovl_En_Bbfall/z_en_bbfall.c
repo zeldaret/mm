@@ -32,7 +32,7 @@ void EnBbfall_Frozen(EnBbfall* this, PlayState* play);
 typedef enum {
     /* -1 */ BBFALL_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BBFALL_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD
 } EnBbfallBodyPartDrawStatus;
 
 ActorInit En_Bbfall_InitVars = {
@@ -102,7 +102,7 @@ typedef enum {
     /* 0x3 */ EN_BBFALL_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BBFALL_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BBFALL_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE
 } EnBbfallDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -340,7 +340,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
-            this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(73728.0f);
+            this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x12000);
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -718,13 +718,13 @@ void EnBbfall_Draw(Actor* thisx, PlayState* play2) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_OPA_DISP = &gfx[1];
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnBbfall_OverrideLimbDraw,
                       EnBbfall_PostLimbDraw, &this->actor);
 
     if (this->flameOpacity > 0) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS(((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) - this->actor.shape.rot.y) + 0x8000),
                         MTXMODE_APPLY);
         Matrix_Scale(this->flameScaleX, this->flameScaleY, 1.0f, MTXMODE_APPLY);

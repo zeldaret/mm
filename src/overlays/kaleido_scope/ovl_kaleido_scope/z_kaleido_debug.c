@@ -37,7 +37,7 @@ typedef struct {
     /* 0x0 */ s16 screenX;
     /* 0x2 */ s16 screenY;
     /* 0x4 */ s16 width;
-} SectionPosition; // size = 0x6;
+} SectionPosition; // size = 0x6
 
 // clang-format off
 SectionPosition sSectionPositions[] = {
@@ -285,7 +285,7 @@ void KaleidoScope_DrawInventoryEditorText(Gfx** gfxp) {
     GfxPrint_SetPos(&printer, 23, 22);
     GfxPrint_Printf(&printer, "%s", "ｾｲ");
 
-    // Life (double defence)
+    // Life (double defense)
     GfxPrint_SetPos(&printer, 4, 25);
     GfxPrint_Printf(&printer, "%s", "ｲ");
     GfxPrint_SetPos(&printer, 4, 26);
@@ -345,7 +345,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C628(play->state.gfxCtx);
+    Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
     gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -601,11 +601,11 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         counterDigits[1] += 21;
     }
 
-    // Double Defence
+    // Double Defense
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 44, 202);
 
     // Magic
-    //! @bug should be gSaveContext.save.saveInfo.playerData.doubleMagic
+    //! @bug should be gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 75, 202);
 
     // Lottery
@@ -1048,16 +1048,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 // Dungeon Items
                 slot = sCurSection - INV_EDITOR_SECTION_DUNGEON_ITEMS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    // Map
-                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 4;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_MAP);
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
-                    // Compass
-                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 2;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_COMPASS);
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    // Boss Key
-                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 1;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_BOSS_KEY);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DOUBLE_DEFENSE) {
@@ -1077,7 +1074,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 }
 
             } else {
-                // Double Defence
+                // Double Defense
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
                     CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                     gSaveContext.save.saveInfo.playerData.doubleDefense ^= 1;

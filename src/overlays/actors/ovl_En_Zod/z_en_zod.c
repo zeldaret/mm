@@ -30,7 +30,7 @@ typedef enum {
     /* 2 */ ENZOD_ANIM_ARMS_FOLDED,
     /* 3 */ ENZOD_ANIM_PLAYING_LENTO,
     /* 4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
-    /* 5 */ ENZOD_ANIM_MAX,
+    /* 5 */ ENZOD_ANIM_MAX
 } EnZodAnimation;
 
 typedef enum {
@@ -42,7 +42,7 @@ typedef enum {
     /* 6 */ ENZOD_INSTRUMENT_DRUM_3,
     /* 7 */ ENZOD_INSTRUMENT_DRUM_4,
     /* 8 */ ENZOD_INSTRUMENT_DRUM_5,
-    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM,
+    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
 const ActorInit En_Zod_InitVars = {
@@ -387,7 +387,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
     seqPos.y = this->actor.projectedPos.y;
     seqPos.z = this->actor.projectedPos.z;
 
-    func_801A1FB4(3, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &seqPos, NA_BGM_DRUMS_PLAY, 700.0f);
 }
 
 void func_80BAFA44(EnZod* this, PlayState* play) {
@@ -628,7 +628,7 @@ void EnZod_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->stateFlags & TIJO_STATE_2) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->fogNear, 1000);

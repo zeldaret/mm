@@ -253,9 +253,9 @@ void func_80893BCC(EnTite* this, PlayState* play) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 for (j = 0; j < 2; j++) {
                     ptr = &this->limbPos[i];
-                    sp7C.x = ptr->x + randPlusMinusPoint5Scaled(1.0f);
-                    sp7C.y = ptr->y + randPlusMinusPoint5Scaled(1.0f);
-                    sp7C.z = ptr->z + randPlusMinusPoint5Scaled(1.0f);
+                    sp7C.x = ptr->x + Rand_CenteredFloat(1.0f);
+                    sp7C.y = ptr->y + Rand_CenteredFloat(1.0f);
+                    sp7C.z = ptr->z + Rand_CenteredFloat(1.0f);
                     func_800B0DE0(play, &sp7C, &gZeroVec3f, &D_80896B64, &D_80896B3C, &D_80896B40,
                                   (s32)Rand_ZeroFloat(16.0f) + 80, 15);
                 }
@@ -808,9 +808,9 @@ void func_80895738(EnTite* this, PlayState* play) {
 void func_8089595C(EnTite* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.x;
+    sp2C.x = Rand_CenteredFloat(20.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 15.0f;
-    sp2C.z = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.z;
+    sp2C.z = Rand_CenteredFloat(20.0f) + this->actor.world.pos.z;
     func_800B0DE0(play, &sp2C, &gZeroVec3f, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 }
 
@@ -1161,9 +1161,10 @@ void EnTite_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
     if (this->actor.params == ENTITE_MINUS_2) {
         gSPSegment(&gfx[1], 0x08, D_80896B24[0][0]);

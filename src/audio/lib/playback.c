@@ -597,7 +597,7 @@ s32 AudioPlayback_BuildSyntheticWave(Note* note, SequenceLayer* layer, s32 waveI
     }
 
     freqScale = layer->freqScale;
-    if (layer->portamento.mode != 0 && 0.0f < layer->portamento.extent) {
+    if ((layer->portamento.mode != 0) && (0.0f < layer->portamento.extent)) {
         freqScale *= (layer->portamento.extent + 1.0f);
     }
 
@@ -906,7 +906,7 @@ Note* AudioPlayback_AllocNoteFromActive(NotePool* pool, SequenceLayer* layer) {
         aPriority = aNote->playbackState.priority;
     }
 
-    if (rNote == NULL && aNote == NULL) {
+    if ((rNote == NULL) && (aNote == NULL)) {
         return NULL;
     }
 
@@ -928,8 +928,8 @@ Note* AudioPlayback_AllocNote(SequenceLayer* layer) {
 
     if (policy & 1) {
         note = layer->note;
-        if (note != NULL && note->playbackState.prevParentLayer == layer &&
-            note->playbackState.wantedParentLayer == NO_LAYER) {
+        if ((note != NULL) && (note->playbackState.prevParentLayer == layer) &&
+            (note->playbackState.wantedParentLayer == NO_LAYER)) {
             AudioPlayback_NoteReleaseAndTakeOwnership(note, layer);
             AudioPlayback_AudioListRemove(&note->listItem);
             AudioScript_AudioListPushBack(&note->listItem.pool->releasing, &note->listItem);

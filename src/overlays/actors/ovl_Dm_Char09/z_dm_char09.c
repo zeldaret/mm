@@ -129,7 +129,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
     s32 i;
     s32 cueChannel;
     s32 max = 0;
-    s32 pathnum;
+    s32 pathIndex;
     u8 temp = false;
 
     if (!DMCHAR09_GET_F(&this->actor)) {
@@ -160,12 +160,12 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
             }
 
             if (play->csCtx.actorCues[cueChannel]->id >= 2) {
-                pathnum = DMCHAR09_GET_PATH(&this->actor);
-                path = &play->setupPathList[pathnum];
+                pathIndex = DMCHAR09_GET_PATH_INDEX(&this->actor);
+                path = &play->setupPathList[pathIndex];
 
                 for (i = 0; i < max; i++) {
-                    pathnum = path->unk1;
-                    path = &play->setupPathList[pathnum];
+                    pathIndex = path->additionalPathIndex;
+                    path = &play->setupPathList[pathIndex];
                 }
 
                 this->unk_224 = Lib_SegmentedToVirtual(path->points);
@@ -175,7 +175,7 @@ void func_80AB2268(DmChar09* this, PlayState* play) {
                 this->unk_220 = 1;
                 this->unk_22E = true;
 
-                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * 0.00390625f;
+                this->speed = (u16)play->csCtx.actorCues[cueChannel]->rot.z * (1.0f / 256.0f);
                 this->actionFunc = func_80AB1FDC;
             } else {
                 this->unk_22E = false;
@@ -202,7 +202,7 @@ void DmChar09_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80AB2268(this, play);
     func_80AB24BC(this, play);
-    if ((play->csCtx.state != 0) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E && DMCHAR09_GET_100(thisx)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_POSTMAN_WALK + SFX_FLAG);
     }
 }
@@ -217,9 +217,9 @@ s32 DmChar09_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
 void DmChar09_Draw(Actor* thisx, PlayState* play) {
     DmChar09* this = THIS;
 
-    if ((play->csCtx.state != 0) && this->unk_22E) {
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+    if ((play->csCtx.state != CS_STATE_IDLE) && this->unk_22E) {
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, DmChar09_OverrideLimbDraw, NULL,
                           &this->actor);
     }

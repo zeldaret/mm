@@ -87,7 +87,7 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->unk_21E = ENHIDDENNUTS_GET_F80(&this->actor);
+    this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = ENHIDDENNUTS_GET_SWITCHFLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
@@ -99,12 +99,12 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if (this->unk_21E == 0x1F) {
+    if (this->pathIndex == ENHIDDENNUTS_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->unk_21E, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENHIDDENNUTS_PATH_INDEX_NONE_ALT);
     this->csId = this->actor.csId;
     func_801A5080(2);
     func_80BDB268(this);
@@ -156,7 +156,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         this->unk_20A = 0;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BDB580(this);
         return;
     }
@@ -173,8 +173,8 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
-            sp74.x += randPlusMinusPoint5Scaled(15.0f);
-            sp74.z += randPlusMinusPoint5Scaled(15.0f);
+            sp74.x += Rand_CenteredFloat(15.0f);
+            sp74.z += Rand_CenteredFloat(15.0f);
 
             EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
                                               true);
@@ -216,8 +216,8 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp78, &this->actor.world.pos);
 
-            sp78.x += randPlusMinusPoint5Scaled(15.0f);
-            sp78.z += randPlusMinusPoint5Scaled(15.0f);
+            sp78.x += Rand_CenteredFloat(15.0f);
+            sp78.z += Rand_CenteredFloat(15.0f);
 
             EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
                                               true);
@@ -435,6 +435,6 @@ void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
 void EnHiddenNuts_Draw(Actor* thisx, PlayState* play) {
     EnHiddenNuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }

@@ -46,7 +46,7 @@ void func_80C1DF18(DmNb* this, PlayState* play) {
     u16 cueId;
     s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (this->unk1F8 == 0) {
             this->cueId = 255;
             this->unk1F8 = 1;
@@ -96,7 +96,7 @@ void DmNb_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 void DmNb_Draw(Actor* thisx, PlayState* play) {
     DmNb* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, DmNb_TransformLimbDraw, &this->actor);
 }

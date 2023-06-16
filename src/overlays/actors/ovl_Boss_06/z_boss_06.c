@@ -4,7 +4,6 @@
  * Description: Igos du Ikana window - curtains and ray effects
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_boss_06.h"
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Knight/z_en_knight.h"
@@ -516,8 +515,8 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     temp_v0 = gSaveContext.save.time;
     if (temp_v0 > CLOCK_TIME(12, 0)) {

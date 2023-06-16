@@ -423,8 +423,8 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
     }
 }
 
-static s16 D_80872E98[] = { 3, 5 };
-static s16 D_80872E9C[] = { 10, 15 };
+static s16 sQuakeY[] = { 3, 5 };
+static s16 sQuakeDurations[] = { 10, 15 };
 
 void EnBom_Update(Actor* thisx, PlayState* play) {
     Vec3f effVelocity = { 0.0f, 0.0f, 0.0f };
@@ -545,7 +545,8 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 }
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
                             this->isPowderKeg);
-                func_800BC848(thisx, play, D_80872E98[this->isPowderKeg], D_80872E9C[this->isPowderKeg]);
+                Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
+                                            sQuakeDurations[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
                     play->envCtx.lightSettings.diffuseColor1[2] = 250;
                 play->envCtx.lightSettings.ambientColor[0] = play->envCtx.lightSettings.ambientColor[1] =
@@ -615,7 +616,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actor.params == BOMB_TYPE_BODY) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);
 

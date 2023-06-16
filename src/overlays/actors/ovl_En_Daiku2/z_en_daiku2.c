@@ -69,8 +69,8 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void func_80BE61D0(EnDaiku2* this) {
-    if ((this->unk_27A != -1) && (this->unk_258 != 0)) {
-        if (!SubS_CopyPointFromPath(this->unk_258, this->unk_25C, &this->unk_268)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
+        if (!SubS_CopyPointFromPath(this->path, this->unk_25C, &this->unk_268)) {
             Actor_Kill(&this->actor);
         }
     }
@@ -87,8 +87,8 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->unk_278 = ENDAIKU2_GET_7F(&this->actor);
-    this->unk_27A = ENDAIKU2_GET_1F80(&this->actor);
-    this->unk_258 = SubS_GetPathByIndex(play, this->unk_27A, 0x3F);
+    this->pathIndex = ENDAIKU2_GET_PATH_INDEX(&this->actor);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENDAIKU2_PATH_INDEX_NONE);
     this->unk_280 = ENDAIKU2_GET_8000(&this->actor);
     Actor_SetScale(&this->actor, 0.01f);
     if (!this->unk_280) {
@@ -100,7 +100,7 @@ void EnDaiku2_Init(Actor* thisx, PlayState* play) {
         if (this->unk_278 == ENDAIKU2_GET_7F_127) {
             this->unk_278 = ENDAIKU2_GET_7F_MINUS1;
         } else if (Flags_GetSwitch(play, this->unk_278)) {
-            this->unk_25C = this->unk_258->count - 1;
+            this->unk_25C = this->path->count - 1;
             func_80BE61D0(this);
             Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_268);
         }
@@ -243,9 +243,9 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
             sp70.y += 40.0f;
             sp70.z += Math_CosS(this->actor.world.rot.y) * 70.0f;
 
-            sp70.x += randPlusMinusPoint5Scaled(5.0f);
-            sp70.y += randPlusMinusPoint5Scaled(5.0f);
-            sp70.z += randPlusMinusPoint5Scaled(5.0f);
+            sp70.x += Rand_CenteredFloat(5.0f);
+            sp70.y += Rand_CenteredFloat(5.0f);
+            sp70.z += Rand_CenteredFloat(5.0f);
 
             sp88.y = -1.0f;
 
@@ -342,9 +342,9 @@ void func_80BE6D40(EnDaiku2* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.z, this->unk_268.z, 0.5f, fabsf(Math_CosS(this->actor.world.rot.y) * 6.0f));
 
     if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_268.x) + SQ(this->actor.world.pos.z - this->unk_268.z)) < 4.0f) &&
-        (this->unk_258 != 0)) {
+        (this->path != NULL)) {
         this->unk_25C++;
-        if (this->unk_25C >= this->unk_258->count) {
+        if (this->unk_25C >= this->path->count) {
             func_80BE6EB0(this);
             return;
         }
@@ -385,7 +385,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
                        fabsf(Math_CosS(this->actor.world.rot.y) * 4.0f));
         if ((sqrtf(SQ(this->actor.world.pos.x - this->unk_268.x) + SQ(this->actor.world.pos.z - this->unk_268.z)) <
              4.0f) &&
-            (this->unk_258 != 0)) {
+            (this->path != NULL)) {
             if (!func_80BE64C0(this, play)) {
                 if (this->unk_276 != 3) {
                     func_80BE6408(this, 3);
@@ -412,7 +412,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
             Math_Vec3f_Copy(&sp40, &this->unk_268);
             var = this->unk_25C;
             this->unk_25C++;
-            if (this->unk_25C < this->unk_258->count) {
+            if (this->unk_25C < this->path->count) {
                 func_80BE61D0(this);
                 func_80BE6CFC(this);
                 return;
@@ -466,7 +466,7 @@ void EnDaiku2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (limbIndex == 14) {
         Matrix_Scale(this->unk_260, this->unk_260, this->unk_260, MTXMODE_APPLY);
@@ -486,7 +486,7 @@ void EnDaiku2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnDaiku2_PostLimbDraw, &this->actor);
@@ -507,9 +507,9 @@ void func_80BE7504(EnDaiku2* this, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 ar
             effect->unk_1C = *arg3;
             effect->unk_30 = arg4;
             effect->unk_34 = arg5;
-            effect->unk_28.x = randPlusMinusPoint5Scaled(30000.0f);
-            effect->unk_28.y = randPlusMinusPoint5Scaled(30000.0f);
-            effect->unk_28.z = randPlusMinusPoint5Scaled(30000.0f);
+            effect->unk_28.x = Rand_CenteredFloat(30000.0f);
+            effect->unk_28.y = Rand_CenteredFloat(30000.0f);
+            effect->unk_28.z = Rand_CenteredFloat(30000.0f);
             break;
         }
     }
@@ -544,7 +544,7 @@ void func_80BE7718(EnDaiku2* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     objectIdx = Object_GetIndex(&play->objectCtx, OBJECT_BOMBIWA);
     if ((objectIdx >= 0) && Object_IsLoaded(&play->objectCtx, objectIdx)) {

@@ -9,13 +9,12 @@
  */
 
 #include "z_en_racedog.h"
+#include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnRacedog*)thisx)
-
-//! TODO: this file require macros for its uses of weekEventReg
 
 void EnRacedog_Init(Actor* thisx, PlayState* play);
 void EnRacedog_Destroy(Actor* thisx, PlayState* play);
@@ -63,13 +62,13 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this);
  * Stores various information for each dog in the race, mostly related to speed.
  */
 typedef struct {
-    f32 sprintSpeedMultiplier;        // Target speed is multiplied by this when the dog is in the last 1/4 of the race
-    f32 goodConditionSpeedMultiplier; // Target speed is multiplied by this if the dog is in good condition
-    s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;                        // The dog's index within sDogInfo
-    s16 pointToUseSecondBaseSpeed;    // When the dog is at or after this point, the second value in sBaseSpeeds is used
-    s16 textId;                       // Used to determine the dog's condition
-} RaceDogInfo;
+    /* 0x0 */ f32 sprintSpeedMultiplier;        // Multiplies target speed when the dog is in the last 1/4 of the race
+    /* 0x4 */ f32 goodConditionSpeedMultiplier; // Multiplies target speed if the dog is in good condition
+    /* 0x8 */ s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
+    /* 0xA */ s16 index;                        // The dog's index within sDogInfo
+    /* 0xC */ s16 pointToUseSecondBaseSpeed; // When the dog is at or after this point, use the second sBaseSpeeds value
+    /* 0xE */ s16 textId;                    // Used to determine the dog's condition
+} RaceDogInfo;                               // size = 0x10
 
 ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
@@ -276,8 +275,8 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     if (path != NULL) {
         point = Lib_SegmentedToVirtual(path->points);
         point = &point[pointIndex];
-        diffXRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
-        diffZRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        diffXRand = (Rand_CenteredFloat(100.0f) + point->x) - pos->x;
+        diffZRand = (Rand_CenteredFloat(100.0f) + point->z) - pos->z;
         diffX = point->x - pos->x;
         diffZ = point->z - pos->z;
     } else {
@@ -314,10 +313,10 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH_INDEX(&this->actor), ENRACEDOG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
-    if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
+    if (ENRACEDOG_GET_INDEX(&this->actor) < RACEDOG_COUNT) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
         Actor_Kill(&this->actor);
@@ -353,7 +352,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_20;
 
-    sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
+    sSelectedDogInfo = sDogInfo[(s16)GET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
     EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
@@ -439,15 +438,8 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
  * or an intentional choice to introduce a bit of extra variance to the race.
  */
 void EnRacedog_UpdateTextId(EnRacedog* this) {
-    // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in the
-    // range of 0x3539 to 0x3546.
-    if (this->index % 2) {
-        sDogInfo[this->index].textId =
-            (((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
-    } else {
-        sDogInfo[this->index].textId =
-            ((gSaveContext.save.saveInfo.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
-    }
+    // This will produce a text ID in the range of 0x3539 to 0x3546.
+    sDogInfo[this->index].textId = GET_WEEKEVENTREG_DOG_RACE_TEXT(this->index, 0x3539);
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.
     if ((sDogInfo[this->index].textId > 0x3546) || (sDogInfo[this->index].textId < 0x3539)) {
@@ -482,9 +474,9 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                 // The dog is past the very start, but is still less than 1/4th of the way through the race track.
                 // This code will give the blue dog a higher base speed than any other dog (6.0 instead of 5.0).
                 if (sDogInfo[this->index].color == DOG_COLOR_BLUE) {
-                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + Rand_CenteredFloat(1.0f);
                 } else {
-                    this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = 5.0f + Rand_CenteredFloat(1.0f);
                 }
 
                 if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
@@ -493,9 +485,9 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
             } else if (this->currentPoint < (quarterPathCount * 3)) {
                 // The dog is between 1/4th and 3/4ths of the way through the race track.
                 if (this->currentPoint < sDogInfo[this->index].pointToUseSecondBaseSpeed) {
-                    this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = 5.0f + Rand_CenteredFloat(1.0f);
                 } else {
-                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + Rand_CenteredFloat(1.0f);
 
                     if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
                         this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
@@ -505,7 +497,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                 // The dog is more than 3/4ths of the way through the race track.
                 EnRacedog_CalculateFinalStretchTargetSpeed(this);
             } else {
-                this->targetSpeed = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
+                this->targetSpeed = Rand_CenteredFloat(1.0f) + 5.0f;
             }
         }
     }
@@ -593,7 +585,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
 
         this->raceStatus = RACEDOG_RACE_STATUS_FINISHED;
         if (this->index == this->selectedDogIndex) {
-            gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (sNumberOfDogsFinished * 8);
+            SET_EVENTINF_DOG_RACE_RACE_STANDING(sNumberOfDogsFinished);
         }
     }
 }
@@ -665,9 +657,9 @@ void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play) {
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
-        pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(15.0f);
         pos.y = this->actor.world.pos.y;
-        pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(15.0f);
         Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
@@ -733,7 +725,7 @@ void EnRacedog_DrawSelectionArrow(EnRacedog* this, PlayState* play) {
     if (shouldDrawSelectionArrow) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         EnRacedog_UpdateSelectionArrow(this);
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
                                      &rotation);
@@ -774,7 +766,7 @@ void EnRacedog_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 

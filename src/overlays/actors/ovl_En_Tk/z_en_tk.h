@@ -10,7 +10,7 @@ typedef void (*EnTkUnkFunc)(struct EnTk*, PlayState*);
 
 #define ENTK_GET_F(thisx) ((thisx)->params & 0xF)
 #define ENTK_GET_7F0(thisx) (((thisx)->params >> 4) & 0x7F)
-#define ENTK_GET_F800(thisx) ((((thisx)->params >> 0xB) & 0x1F) & 0xFF)
+#define ENTK_GET_PATH_INDEX(thisx) (((thisx)->params >> 0xB) & 0x1F)
 
 typedef struct EnTk {
     /* 0x000 */ Actor actor;

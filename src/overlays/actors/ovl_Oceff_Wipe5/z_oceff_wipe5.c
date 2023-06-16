@@ -72,7 +72,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
     s32 i;
     s32 pad2;
     Vec3f activeCamEye = GET_ACTIVE_CAM(play)->eye;
-    Camera* cam = GET_ACTIVE_CAM(play);
+    Camera* activeCam = GET_ACTIVE_CAM(play);
     Vec3f quakeOffset;
     u8 alpha;
     s32 colorIndex = OCEFF_WIPE5_GET_SONG_TYPE(thisx) * 3;
@@ -80,7 +80,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
 
     if ((((OCEFF_WIPE5_GET_SONG_TYPE(thisx) == 2) && (play->sceneId == SCENE_LABO)) &&
          ((play->csCtx.scriptIndex == 0) || (play->csCtx.scriptIndex == 1))) &&
-        (play->csCtx.state != 0)) {
+        (play->csCtx.state != CS_STATE_IDLE)) {
         phi_fv1 = 1150.0f;
     }
 
@@ -88,7 +88,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
         colorIndex = 0;
     }
 
-    Camera_GetQuakeOffset(&quakeOffset, cam);
+    Camera_GetQuakeOffset(&quakeOffset, activeCam);
 
     if (this->counter < 32) {
         z = Math_SinS(this->counter << 9) * phi_fv1;
@@ -107,7 +107,7 @@ void OceffWipe5_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     Matrix_Translate(activeCamEye.x + quakeOffset.x, activeCamEye.y + quakeOffset.y, activeCamEye.z + quakeOffset.z,
                      MTXMODE_NEW);
