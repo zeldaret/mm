@@ -18971,7 +18971,7 @@ AnimSfxEntry D_8085DA90[] = {
     ANIMSFX(ANIMSFX_TYPE_GENERAL, 18, NA_SE_PL_SIT_ON_HORSE, STOP),
 };
 
-void Player_CsPlayAnimSfxLostHorse(Player* this) {
+void Player_CsAnimHelper_PlayAnimSfxLostHorse(Player* this) {
     if (this->skelAnime.animation == &gPlayerAnim_lost_horse_wait) {
         Player_AnimSfx_PlayFloor(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG);
         Player_PlaySfx(this, NA_SE_VO_LK_DRAGGED_DAMAGE - SFX_FLAG);
@@ -18997,7 +18997,7 @@ void Player_CsAnim_PlayLoopSlowWithLongMorphResetAfterAnimSfx(PlayState* play, P
     } else if (this->skelAnime.animation == &gPlayerAnim_cl_umanoru) {
         Player_PlayAnimSfx(this, D_8085DA90);
     } else {
-        Player_CsPlayAnimSfxLostHorse(this);
+        Player_CsAnimHelper_PlayAnimSfxLostHorse(this);
     }
 }
 
@@ -19719,7 +19719,7 @@ void Player_CsAction_32(PlayState* play, Player* this, CsCmdActorCue* cue) {
     } else if (this->skelAnime.animation == &gPlayerAnim_alink_rakkatyu) {
         func_800B8F98(&this->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
     } else {
-        Player_CsPlayAnimSfxLostHorse(this);
+        Player_CsAnimHelper_PlayAnimSfxLostHorse(this);
     }
 }
 

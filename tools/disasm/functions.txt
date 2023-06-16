@@ -4811,7 +4811,7 @@
     0x80858F7C:("Player_CsAnim_PlayOnceSlow",),
     0x80858F9C:("Player_CsAnim_PlayLoopSlow",),
     0x80858FBC:("Player_CsAnim_Update",),
-    0x80858FE8:("Player_CsPlayAnimSfxLostHorse",),
+    0x80858FE8:("Player_CsAnimHelper_PlayAnimSfxLostHorse",),
     0x80859028:("Player_CsAnim_PlayLoopSlowWithLongMorphResetAfterAnimSfx",),
     0x80859168:("Player_CsAnim_PlayLoopSlowOnceFinished",),
     0x808591BC:("Player_CsAnim_PlayLoopSlowUnkFlagsOnceFinished",),
