@@ -269,7 +269,7 @@ s32 func_808CDE78(PlayState* play, SkelCurve* skelCurve, s32 limbIndex, Actor* t
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 0) {
-        s16* transform = skelCurve->jointTable[0];
+        s16* transform = skelCurve->jointTable[LIMB_INDEX_MODEL_TRANSLATION];
 
         transform[2] = transform[0] = 1024;
         transform[1] = 1024;

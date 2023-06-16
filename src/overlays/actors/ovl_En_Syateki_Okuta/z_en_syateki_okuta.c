@@ -316,7 +316,7 @@ void func_80A368E0(EnSyatekiOkuta* this, PlayState* play) {
     }
 
     this->collider.dim.pos.x = this->actor.world.pos.x;
-    // jointTable->y is the y-translation of the skeleton root
+    // jointTable->y is the y-translation of the skeleton root, see `LIMB_INDEX_MODEL_TRANSLATION`
     this->collider.dim.pos.y = this->actor.world.pos.y + (this->skelAnime.jointTable->y * this->actor.scale.y);
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
