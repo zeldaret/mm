@@ -1920,11 +1920,11 @@ void Player_Anim_ResetTranslationForm(Player* this) {
     this->skelAnime.prevTransl.z *= this->ageProperties->unk_08;
 }
 
-void func_8082E784(Player* this) {
+void Player_Anim_ResetModelYaw(Player* this) {
     this->skelAnime.jointTable[PLAYER_LIMB_MODEL_ROT].y = 0;
 }
 
-void func_8082E794(Player* this) {
+void Player_Anim_ResetMove(Player* this) {
     if (this->skelAnime.moveFlags) {
         Player_Anim_ResetModelRotY(this);
         this->skelAnime.jointTable[PLAYER_LIMB_MODEL_TRANSLATION].x = this->skelAnime.baseTransl.x;
@@ -4171,7 +4171,7 @@ s32 Player_SetAction(PlayState* play, Player* this, PlayerActionFunc actionFunc,
     }
 
     func_80831454(this);
-    func_8082E794(this);
+    Player_Anim_ResetMove(this);
 
     this->stateFlags1 &= ~(PLAYER_STATE1_40 | PLAYER_STATE1_4000000 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000 |
                            PLAYER_STATE1_80000000);
@@ -13362,7 +13362,7 @@ void func_80849A9C(Player* this, PlayState* play) {
 
     if (this->unk_AE8 != 0) {
         if (PlayerAnimation_Update(play, &this->skelAnime)) {
-            func_8082E794(this);
+            Player_Anim_ResetMove(this);
             Player_Anim_PlayLoop(play, this, func_8082EF54(this));
             this->unk_AE8 = 0;
             this->stateFlags3 &= ~PLAYER_STATE3_8;
@@ -13422,7 +13422,7 @@ void func_80849DD0(Player* this, PlayState* play) {
     s32 temp_v0;
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        func_8082E794(this);
+        Player_Anim_ResetMove(this);
         Player_Anim_PlayOnce(play, this, func_8082ED20(this));
         this->stateFlags3 &= ~PLAYER_STATE3_8;
     }
@@ -13490,7 +13490,7 @@ void func_80849FE0(Player* this, PlayState* play) {
             this->skelAnime.jointTable[PLAYER_LIMB_MODEL_TRANSLATION].y =
                 (this->skelAnime.jointTable[PLAYER_LIMB_MODEL_TRANSLATION].y + ((this->unk_AE8 & 1) * 0x50)) - 0x28;
         } else {
-            func_8082E794(this);
+            Player_Anim_ResetMove(this);
             Player_ChooseIdleAnim(play, this);
         }
         this->stateFlags3 &= ~PLAYER_STATE3_8;
@@ -13937,7 +13937,7 @@ void func_8084B3B8(Player* this, PlayState* play) {
 void func_8084B4A8(Player* this, PlayState* play) {
     if (this->skelAnime.animation == &gPlayerAnim_link_normal_backspace) {
         if (PlayerAnimation_Update(play, &this->skelAnime)) {
-            func_8082E794(this);
+            Player_Anim_ResetMove(this);
             Player_Anim_PlayOnceWithMorph(play, this, D_8085BE84[PLAYER_ANIMGROUP_31][this->modelAnimType]);
         }
     } else {
@@ -14480,7 +14480,7 @@ void func_8084CCEC(Player* this, PlayState* play) {
 
     this->stateFlags1 |= PLAYER_STATE1_1000;
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        func_8082E794(this);
+        Player_Anim_ResetMove(this);
         func_8083133C(this);
         this->stateFlags1 &= ~PLAYER_STATE1_20000;
         Player_Anim_PlayLoop(play, this, D_8085CF60[Player_IsHoldingTwoHandedWeapon(this)]);
@@ -15123,7 +15123,7 @@ void func_8084E980(Player* this, PlayState* play) {
         }
     } else if (!func_80123420(this) && PlayerAnimation_Update(play, &this->skelAnime)) {
         if (this->skelAnime.moveFlags != 0) {
-            func_8082E794(this);
+            Player_Anim_ResetMove(this);
             if ((this->talkActor->category == ACTORCAT_NPC) && (this->heldItemAction != PLAYER_IA_FISHING_ROD)) {
                 Player_Anim_PlayOnceSlow(play, this, &gPlayerAnim_link_normal_talk_free);
             } else {
@@ -16594,7 +16594,7 @@ void func_80852C04(Player* this, PlayState* play) {
                 }
             }
         } else {
-            func_8082E794(this);
+            Player_Anim_ResetMove(this);
 
             if ((this->getItemId == GI_STRAY_FAIRY) || (this->getItemId == GI_SKULL_TOKEN) ||
                 (this->getItemId == GI_ICE_TRAP)) {
@@ -18368,7 +18368,7 @@ s32 func_80857950(PlayState* play, Player* this) {
 
 s32 func_80857A44(PlayState* play, Player* this) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        func_8082E794(this);
+        Player_Anim_ResetMove(this);
 
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
         this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_800;
@@ -18775,21 +18775,21 @@ void func_80857BE8(Player* this, PlayState* play) {
     }
 }
 
-void Player_CsAnimPlayOnceWithMorphReset(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082E784(this);
+void Player_CsAnimHelper_PlayOnceWithMorphReset(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
+    Player_Anim_ResetModelYaw(this);
     Player_Anim_PlayOnceWithMorph(play, this, anim);
     Player_StopHorizontalMovement(this);
 }
 
-void Player_CsAnimPlayOnceSlowWithLongMorphReset(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082E784(this);
+void Player_CsAnimHelper_PlayOnceSlowWithLongMorphReset(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
+    Player_Anim_ResetModelYaw(this);
     PlayerAnimation_Change(play, &this->skelAnime, anim, 2.0f / 3.0f, 0.0f, Animation_GetLastFrame(anim), ANIMMODE_ONCE,
                            -8.0f);
     Player_StopHorizontalMovement(this);
 }
 
-void Player_CsAnimPlayLoopSlowWithLongMorphReset(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
-    func_8082E784(this);
+void Player_CsAnimHelper_PlayLoopSlowWithLongMorphReset(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
+    Player_Anim_ResetModelYaw(this);
     PlayerAnimation_Change(play, &this->skelAnime, anim, 2.0f / 3.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f);
     Player_StopHorizontalMovement(this);
 }
@@ -18822,21 +18822,21 @@ void Player_CsAnim_StopHorizontalMovement(PlayState* play, Player* this, void* a
 }
 
 void Player_CsAnim_PlayOnceWithMorphReset(PlayState* play, Player* this, void* anim) {
-    Player_CsAnimPlayOnceWithMorphReset(play, this, anim);
+    Player_CsAnimHelper_PlayOnceWithMorphReset(play, this, anim);
 }
 
 void Player_CsAnim_PlayOnceForOneFrameReset(PlayState* play, Player* this, void* anim) {
-    func_8082E784(this);
+    Player_Anim_ResetModelYaw(this);
     Player_Anim_PlayOnceForOneFrame(play, this, anim);
     Player_StopHorizontalMovement(this);
 }
 
 void Player_CsAnim_PlayOnceSlowWithLongMorphReset(PlayState* play, Player* this, void* anim) {
-    Player_CsAnimPlayOnceSlowWithLongMorphReset(play, this, anim);
+    Player_CsAnimHelper_PlayOnceSlowWithLongMorphReset(play, this, anim);
 }
 
 void Player_CsAnim_PlayLoopSlowWithLongMorphReset(PlayState* play, Player* this, void* anim) {
-    Player_CsAnimPlayLoopSlowWithLongMorphReset(play, this, anim);
+    Player_CsAnimHelper_PlayLoopSlowWithLongMorphReset(play, this, anim);
 }
 
 void Player_CsAnim_ReplacePlayOnceSlowUnkFlags(PlayState* play, Player* this, void* anim) {
@@ -18980,7 +18980,7 @@ void Player_CsPlayAnimSfxLostHorse(Player* this) {
 
 void Player_CsAnim_PlayLoopSlowWithLongMorphResetAfterAnimSfx(PlayState* play, Player* this, void* anim) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        Player_CsAnimPlayLoopSlowWithLongMorphReset(play, this, anim);
+        Player_CsAnimHelper_PlayLoopSlowWithLongMorphReset(play, this, anim);
         this->unk_AE8 = 1;
     }
 
@@ -19003,7 +19003,7 @@ void Player_CsAnim_PlayLoopSlowWithLongMorphResetAfterAnimSfx(PlayState* play, P
 
 void Player_CsAnim_PlayLoopSlowOnceFinished(PlayState* play, Player* this, void* anim) {
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        func_8082E794(this);
+        Player_Anim_ResetMove(this);
         Player_Anim_PlayLoopSlow(play, this, anim);
     }
 }
@@ -19372,7 +19372,7 @@ void Player_CsAction_1(PlayState* play, Player* this, CsCmdActorCue* cue) {
         if ((this->cueId == PLAYER_CUEID_6) || (this->cueId == PLAYER_CUEID_46)) {
             Player_Anim_PlayOnce(play, this, anim);
         } else {
-            func_8082E784(this);
+            Player_Anim_ResetModelYaw(this);
             PlayerAnimation_Change(play, &this->skelAnime, anim, 2.0f / 3.0f, 0.0f, Animation_GetLastFrame(anim),
                                    ANIMMODE_LOOP, -4.0f);
         }
@@ -19516,7 +19516,7 @@ void Player_CsAction_13(PlayState* play, Player* this, CsCmdActorCue* cue) {
 }
 
 void Player_CsAction_14(PlayState* play, Player* this, CsCmdActorCue* cue) {
-    Player_CsAnimPlayOnceSlowWithLongMorphReset(play, this, &gPlayerAnim_link_normal_okarina_start);
+    Player_CsAnimHelper_PlayOnceSlowWithLongMorphReset(play, this, &gPlayerAnim_link_normal_okarina_start);
     this->itemAction = PLAYER_IA_OCARINA;
     Player_SetModels(this, Player_ActionToModelGroup(this, this->itemAction));
 }
@@ -19900,7 +19900,7 @@ void Player_Cutscene_8085ABA8(Player* this, CsCmdActorCue* cue) {
     }
 
     this->skelAnime.moveFlags = 0;
-    func_8082E784(this);
+    Player_Anim_ResetModelYaw(this);
 }
 
 void func_8085AC9C(PlayState* play, Player* this, CsCmdActorCue* cue, PlayerCsModeEntry* csEntry) {
@@ -19978,7 +19978,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
 
         D_80862B6C = this->skelAnime.moveFlags;
 
-        func_8082E794(this);
+        Player_Anim_ResetMove(this);
         func_8085AD5C(play, this, ABS_ALT(csMode));
         func_8085AC9C(play, this, playerCue, &sPlayerCsModeInitFuncs[ABS_ALT(csMode)]);
 
@@ -19999,7 +19999,7 @@ void Player_CsAction_48(PlayState* play, Player* this, CsCmdActorCue* cue) {
 void func_8085B08C(Player* this, PlayState* play) {
     if (this->csMode != this->prevCsMode) {
         D_80862B6C = this->skelAnime.moveFlags;
-        func_8082E794(this);
+        Player_Anim_ResetMove(this);
 
         this->prevCsMode = this->csMode;
         func_8085AD5C(play, this, this->csMode);
