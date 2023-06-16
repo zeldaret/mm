@@ -55,14 +55,14 @@ ActorInit En_Dnh_InitVars = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_tro_Anim_0000A0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKioskKoumeHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static TexturePtr sEyeTextures[] = {
-    object_tro_Tex_001140,
-    object_tro_Tex_001940,
-    object_tro_Tex_002140,
-    object_tro_Tex_001940,
+    gKioskKoumeEyeOpenTex,
+    gKioskKoumeEyeHalfTex,
+    gKioskKoumeEyeClosedTex,
+    gKioskKoumeEyeHalfTex,
 };
 
 s32 func_80A50D40(Actor* actor, PlayState* play) {
@@ -130,8 +130,8 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_tro_Skel_002950, NULL, this->jointTable, this->morphTable,
-                   OBJECT_TRO_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gKioskKoumeSkeleton, NULL, this->jointTable, this->morphTable,
+                   KIOSK_KOUME_LIMB_MAX);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
@@ -164,7 +164,7 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == OBJECT_TRO_LIMB_1) {
+    if (limbIndex == KIOSK_KOUME_LIMB_1) {
         Matrix_Translate(0.0f, thisx->shape.yOffset, 0.0f, MTXMODE_APPLY);
     }
     return false;

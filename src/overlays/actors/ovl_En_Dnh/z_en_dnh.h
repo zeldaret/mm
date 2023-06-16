@@ -21,8 +21,8 @@ typedef struct EnDnh {
     /* 0x19C */ s16 blinkTimer;
     /* 0x19E */ s16 eyeTexIndex;
     /* 0x1A0 */ MsgEventFunc msgEventCallback;
-    /* 0x1A4 */ Vec3s jointTable[OBJECT_TRO_LIMB_MAX];
-    /* 0x1B0 */ Vec3s morphTable[OBJECT_TRO_LIMB_MAX];
+    /* 0x1A4 */ Vec3s jointTable[KIOSK_KOUME_LIMB_MAX];
+    /* 0x1B0 */ Vec3s morphTable[KIOSK_KOUME_LIMB_MAX];
 } EnDnh; // size = 0x1BC
 
 #endif // Z_EN_DNH_H
