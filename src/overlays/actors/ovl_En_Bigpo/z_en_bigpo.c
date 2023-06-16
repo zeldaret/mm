@@ -688,7 +688,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     if (this->idleTimer < 8) {
         camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x4800;
         if (this->idleTimer < 5) {
-            unkTemp = (this->idleTimer << 0xC) - 0x4000;
+            unkTemp = (this->idleTimer * 0x1000) - 0x4000;
             // 1.4.0...1 is NOT 1.4, the rodata demands it
             tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
