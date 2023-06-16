@@ -184,7 +184,7 @@ typedef struct SkelAnime {
                 } update;
     /* 0x34 */ s8 initFlags;      // Flags used when initializing Player's skeleton
     /* 0x35 */ u8 moveFlags;      // Flags used for animations that move the actor in worldspace.
-    /* 0x36 */ s16 prevRot;       // Previous rotation in worldspace.
+    /* 0x36 */ s16 prevYaw;       // Previous rotation in worldspace.
     /* 0x38 */ Vec3s prevTransl;  // Previous modelspace translation.
     /* 0x3E */ Vec3s baseTransl;  // Base modelspace translation.
 } SkelAnime; // size = 0x44

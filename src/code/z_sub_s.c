@@ -121,9 +121,9 @@ Gfx* SubS_DrawTransformFlex(PlayState* play, void** skeleton, Vec3s* jointTable,
     gSPSegment(gfx++, 0x0D, mtx);
     Matrix_Push();
     rootLimb = Lib_SegmentedToVirtual(skeleton[0]);
-    pos.x = jointTable->x;
-    pos.y = jointTable->y;
-    pos.z = jointTable->z;
+    pos.x = jointTable[0].x;
+    pos.y = jointTable[0].y;
+    pos.z = jointTable[0].z;
     rot = jointTable[1];
     newDlist = rootLimb->dList;
     limbDList = rootLimb->dList;

@@ -1564,7 +1564,6 @@ void SkelAnime_InitFlex(PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeade
 
     if (jointTable == NULL) {
         skelAnime->jointTable = ZeldaArena_Malloc(sizeof(*skelAnime->jointTable) * skelAnime->limbCount);
-
         skelAnime->morphTable = ZeldaArena_Malloc(sizeof(*skelAnime->morphTable) * skelAnime->limbCount);
     } else {
         skelAnime->jointTable = jointTable;
@@ -1926,34 +1925,38 @@ void SkelAnime_UpdateTranslation(SkelAnime* skelAnime, Vec3f* diff, s16 angle) {
     f32 sin;
     f32 cos;
 
+    // Move actor in the x-z plane
     if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
         diff->z = 0.0f;
         diff->x = 0.0f;
     } else {
         // `angle` rotation around y axis.
-        x = skelAnime->jointTable->x - skelAnime->prevTransl.x;
-        z = skelAnime->jointTable->z - skelAnime->prevTransl.z;
+        x = skelAnime->jointTable[0].x - skelAnime->prevTransl.x;
+        z = skelAnime->jointTable[0].z - skelAnime->prevTransl.z;
         sin = Math_SinS(angle);
         cos = Math_CosS(angle);
         diff->x = x * cos + z * sin;
         diff->z = z * cos - x * sin;
     }
 
-    skelAnime->prevTransl.x = skelAnime->jointTable->x;
-    skelAnime->jointTable->x = skelAnime->baseTransl.x;
-    skelAnime->prevTransl.z = skelAnime->jointTable->z;
-    skelAnime->jointTable->z = skelAnime->baseTransl.z;
+    //
+    skelAnime->prevTransl.x = skelAnime->jointTable[0].x;
+    skelAnime->jointTable[0].x = skelAnime->baseTransl.x;
+    skelAnime->prevTransl.z = skelAnime->jointTable[0].z;
+    skelAnime->jointTable[0].z = skelAnime->baseTransl.z;
+
+    //
     if (skelAnime->moveFlags & ANIM_FLAG_UPDATE_Y) {
         if (skelAnime->moveFlags & ANIM_FLAG_NOMOVE) {
             diff->y = 0.0f;
         } else {
-            diff->y = skelAnime->jointTable->y - skelAnime->prevTransl.y;
+            diff->y = skelAnime->jointTable[0].y - skelAnime->prevTransl.y;
         }
-        skelAnime->prevTransl.y = skelAnime->jointTable->y;
-        skelAnime->jointTable->y = skelAnime->baseTransl.y;
+        skelAnime->prevTransl.y = skelAnime->jointTable[0].y;
+        skelAnime->jointTable[0].y = skelAnime->baseTransl.y;
     } else {
         diff->y = 0.0f;
-        skelAnime->prevTransl.y = skelAnime->jointTable->y;
+        skelAnime->prevTransl.y = skelAnime->jointTable[0].y;
     }
     skelAnime->moveFlags &= ~ANIM_FLAG_NOMOVE;
 }
