@@ -493,7 +493,7 @@ void func_80AACF04(DmChar05* this, PlayState* play) {
 
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 if (this->animIndex == DMCHAR05_ANIM_4) {
-                    this->animIndex += (DMCHAR05_ANIM_5 - DMCHAR05_ANIM_4);
+                    this->animIndex++;
                     DmChar05_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 }
             }

@@ -47,17 +47,17 @@ static AnimationInfo sAnimationInfo[DMCHAR02_ANIM_MAX] = {
 };
 
 void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
-    f32 endCount;
+    f32 endFrame;
 
     animInfo += animIndex;
 
     if (animInfo->frameCount < 0.0f) {
-        endCount = Animation_GetLastFrame(animInfo->animation);
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        endCount = animInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endCount,
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
                      animInfo->mode, animInfo->morphFrames);
 }
 

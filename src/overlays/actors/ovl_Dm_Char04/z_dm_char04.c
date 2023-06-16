@@ -127,7 +127,7 @@ s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3
     DmChar04* this = THIS;
 
     if (limbIndex == FAIRY_LIMB_6) {
-        sp28 = ((Math_SinS(this->timer << 0xC) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
+        sp28 = ((Math_SinS(this->timer * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
         Matrix_MultVec3f(&D_80AAC4F0, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);

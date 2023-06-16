@@ -99,7 +99,12 @@ void DmZl_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animInde
     f32 endFrame;
 
     animInfo += animIndex;
-    endFrame = (animInfo->frameCount < 0.0f) ? Animation_GetLastFrame(animInfo->animation) : animInfo->frameCount;
+
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
+    } else {
+        endFrame = animInfo->frameCount;
+    }
 
     Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
                      animInfo->mode, animInfo->morphFrames);
@@ -127,7 +132,7 @@ void DmZl_DoNothing(DmZl* this, PlayState* play) {
 }
 
 void DmZl_HandleCutscene(DmZl* this, PlayState* play) {
-    s32 cueChannel; // reused as animIndex
+    s32 cueChannel;
     s32 animIndex;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_102)) {

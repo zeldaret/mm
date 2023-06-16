@@ -325,12 +325,19 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
 }
 
 void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
+
     DmStk_LoadObjectForAnimation(this, play);
 
     animInfo += animIndex;
 
-    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame,
-                     (animInfo->frameCount < 0.0f) ? Animation_GetLastFrame(animInfo->animation) : animInfo->frameCount,
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
+    } else {
+        endFrame = animInfo->frameCount;
+    }
+
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
                      animInfo->mode, animInfo->morphFrames);
 }
 
