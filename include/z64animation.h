@@ -11,6 +11,10 @@ struct Actor;
 struct SkelAnime;
 struct PlayerAnimationFrame;
 
+// for indexing `jointTable[]` and `morphTable[]`
+#define LIMB_INDEX_MODEL_TRANSLATION 0
+#define LIMB_INDEX_MODEL_ROT 1
+
 #define LIMB_DONE 0xFF
 
 #define ANIM_FLAG_1         (1 << 0)

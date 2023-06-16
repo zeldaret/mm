@@ -468,10 +468,6 @@ typedef enum PlayerFacialExpression {
     /* 15 */ PLAYER_FACE_15
 } PlayerFacialExpression;
 
-// for indexing `jointTable[]` and `morphTable[]`
-#define LIMB_INDEX_MODEL_TRANSLATION 0
-#define LIMB_INDEX_MODEL_ROT 1
-
 typedef enum PlayerLimb {
     /* 0x00 */ PLAYER_LIMB_NONE,
     /* 0x01 */ PLAYER_LIMB_ROOT,
