@@ -2172,21 +2172,6 @@ extern TriNorm D_801EF5C8;
 extern TriNorm D_801EF600;
 extern TriNorm D_801EF638;
 extern SaveContext gSaveContext;
-// extern UNK_TYPE2 D_801F3F38;
-// extern UNK_TYPE1 D_801F3F3A;
-// extern UNK_TYPE1 D_801F3F3B;
-// extern UNK_TYPE1 D_801F3F3C;
-// extern UNK_TYPE1 D_801F3F42;
-// extern UNK_TYPE1 D_801F3F4A;
-// extern UNK_TYPE1 D_801F3F5A;
-
-// extern UNK_TYPE1 D_801F3F80;
-// extern UNK_TYPE1 D_801F3F83;
-// extern UNK_TYPE1 D_801F48C8;
-
-extern UNK_TYPE D_801F4DDC;
-extern u8 gDisablePlayerCsModeStartPos;
-extern s16 gDungeonBossWarpSceneId;
 
 extern ActorCutscene* sSceneCutsceneList;
 extern s16 sSceneCutsceneCount;

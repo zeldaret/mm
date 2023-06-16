@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -20,13 +21,11 @@ u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
 
 // bss
-#ifndef NON_MATCHING
-static u16 sSeqId;
-#endif
 s16 sCutsceneQuakeIndex;
 CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
-UNK_TYPE D_801F4DDC;
+u8 D_801F4DDC;
+s16 D_801F4DDE; // unused
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
 
@@ -454,8 +453,6 @@ void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCm
     }
 }
 
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd) {
     static u16 sSeqId;
     u8 dayMinusOne;
@@ -506,10 +503,6 @@ void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdMo
         }
     }
 }
-#else
-void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s")
-#endif
 
 void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdFadeOutAmbience* cmd) {
     if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {

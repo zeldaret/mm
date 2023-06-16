@@ -856,4 +856,18 @@ void CutsceneFlags_Set(struct PlayState* play, s16 flag);
 void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
 
+//! TODO: Only bss that should be externed
+// extern u8 D_801F4DDC;
+// extern u8 gDisablePlayerCsModeStartPos;
+// extern s16 gDungeonBossWarpSceneId;
+
+//! TODO: All bss externed
+extern s16 sCutsceneQuakeIndex;
+extern CutsceneCamera sCutsceneCameraInfo;
+extern u16 sCueTypeList[10];
+extern u8 D_801F4DDC;
+extern s16 D_801F4DDE; // unused
+extern u8 gDisablePlayerCsModeStartPos;
+extern s16 gDungeonBossWarpSceneId;
+
 #endif
