@@ -379,8 +379,9 @@ void func_808B066C(EnAm* this, PlayState* play) {
 }
 
 void EnAm_TakeDamage(EnAm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f,
-                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
+    f32 endFrame = Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6;
+
+    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f, endFrame, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speed = 6.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
