@@ -4,7 +4,7 @@
  *
  * For general information about CRC, see the crc.c file (that's a lot of c's!).
  */
-#include "global.h"
+#include "libc/stddef.h"
 
 #define VOICE_CRC_LENGTH 8
 #define VOICE_CRC_GENERATOR 0x85
