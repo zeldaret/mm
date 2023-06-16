@@ -131,7 +131,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_tro_Skel_002950, NULL, this->jointTable, this->morphTable, 2);
+    SkelAnime_Init(play, &this->skelAnime, &object_tro_Skel_002950, NULL, this->jointTable, this->morphTable, OBJECT_TRO_LIMB_MAX);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
@@ -164,7 +164,7 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_TRO_LIMB_1) {
         Matrix_Translate(0.0f, thisx->shape.yOffset, 0.0f, MTXMODE_APPLY);
     }
     return false;

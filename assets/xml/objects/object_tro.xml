@@ -12,6 +12,7 @@
         <Texture Name="object_tro_Tex_001140" OutName="tex_001140" Format="rgba16" Width="32" Height="32" Offset="0x1140"/> <!-- eye open -->
         <Texture Name="object_tro_Tex_001940" OutName="tex_001940" Format="rgba16" Width="32" Height="32" Offset="0x1940"/> <!-- eye half open-->
         <Texture Name="object_tro_Tex_002140" OutName="tex_002140" Format="rgba16" Width="32" Height="32" Offset="0x2140"/> <!-- eye closed-->
-        <Skeleton Name="object_tro_Skel_002950" Type="Normal" LimbType="Standard" Offset="0x2950" />
+        <Limb Name="object_tro_Standardlimb_002940" Type="Standard" EnumName="OBJECT_TRO_LIMB_1" Offset="0x2940" />
+        <Skeleton Name="object_tro_Skel_002950" Type="Normal" LimbType="Standard" LimbNone="OBJECT_TRO_LIMB_NONE" LimbMax="OBJECT_TRO_LIMB_MAX" EnumName="ObjectTroLimb" Offset="0x2950" />
     </File>
 </Root>
