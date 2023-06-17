@@ -3,8 +3,8 @@
         <Animation Name="gKioskKoumeHeadMoving" Offset="0xA0" />
         <DList Name="gKioskKoumeDL" Offset="0x6B0" />
         <Texture Name="gKioskKoumeNoseTLUT" OutName="kiosk_koume_nose_tlut" Format="rgba16" Width="16" Height="16" Offset="0xAE0" />
-        <Texture Name="gKioskKoumeNostrilsTLUT" OutName="kiosk_koume_tlut" Format="rgba16" Width="16" Height="16" Offset="0xCE0" />
-        <Texture Name="gKioskKoumeShadowedSkinTex" OutName="kiosk_koume_shadowd_skin" Format="rgba16" Width="2" Height="8" Offset="0xEE0" />
+        <Texture Name="gKioskKoumeNostrilsTLUT" OutName="kiosk_koume_nostrils_tlut" Format="rgba16" Width="16" Height="16" Offset="0xCE0" />
+        <Texture Name="gKioskKoumeShadowedSkinTex" OutName="kiosk_koume_shadowed_skin" Format="rgba16" Width="2" Height="8" Offset="0xEE0" />
         <Texture Name="gKioskKoumeNoseTex" OutName="kiosk_koume_nose" Format="ci8" Width="16" Height="8" Offset="0xF00" />
         <Texture Name="gKioskKoumeJewelHolderTex" OutName="kiosk_koume_jewel_holder" Format="rgba16" Width="16" Height="8" Offset="0xF80" />
         <Texture Name="gKioskKoumeJewelTex" OutName="kiosk_koume_jewel" Format="rgba16" Width="8" Height="8" Offset="0x1080" />
