@@ -39,7 +39,8 @@ void Main_InitFramebuffer(u32* framebuffer, size_t numBytes, u32 value) {
 }
 
 void Main_InitScreen(void) {
-    Main_InitFramebuffer((u32*)gFramebuffer1, sizeof(gFramebuffer1), 0x00010001);
+    Main_InitFramebuffer((u32*)gFramebuffer1, sizeof(gFramebuffer1),
+                         (GPACK_RGBA5551(0, 0, 0, 1) << 16) | GPACK_RGBA5551(0, 0, 0, 1));
     ViConfig_UpdateVi(false);
     osViSwapBuffer(gFramebuffer1);
     osViBlack(false);

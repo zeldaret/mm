@@ -299,7 +299,7 @@
     0x8009B240:("gViConfigMode","OSViMode","",0x50),
     0x8009B290:("gViConfigModeType","u8","",0x1),
     0x8009B2A0:("sDmaMgrStackInfo","StackEntry","",0x1c),
-    0x8009B2BC:("numDmaEntries","u16","",0x2),
+    0x8009B2BC:("sNumDmaEntries","u16","",0x2),
     0x8009B2C0:("sDmaMgrMsgQueue","OSMesgQueue","",0x18),
     0x8009B2D8:("sDmaMgrMsgs","OSMesg","[32]",0x80),
     0x8009B358:("sDmaMgrThread","OSThread","",0x1b0),

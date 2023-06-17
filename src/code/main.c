@@ -25,7 +25,7 @@ StackEntry sSchedStackInfo;
 StackEntry sAudioStackInfo;
 StackEntry sPadMgrStackInfo;
 AudioMgr sAudioMgr;
-static s32 pad;
+static s32 sBssPad;
 PadMgr gPadMgr;
 
 #include "main.h"
@@ -34,7 +34,7 @@ PadMgr gPadMgr;
 
 s32 gScreenWidth = SCREEN_WIDTH;
 s32 gScreenHeight = SCREEN_HEIGHT;
-u32 gSystemHeapSize = 0;
+size_t gSystemHeapSize = 0;
 
 void Main(void* arg) {
     intptr_t fb;

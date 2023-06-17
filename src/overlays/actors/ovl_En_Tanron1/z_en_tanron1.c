@@ -30,7 +30,7 @@ ActorInit En_Tanron1_InitVars = {
     (ActorFunc)EnTanron1_Draw,
 };
 
-static u64 sPad = { 0 };
+static s32 sPad[2] = { 0, 0 };
 
 #include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 

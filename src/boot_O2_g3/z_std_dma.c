@@ -3,10 +3,10 @@
 #include "stack.h"
 #include "stackcheck.h"
 
-u32 gDmaMgrDmaBuffSize = 0x2000;
+size_t gDmaMgrDmaBuffSize = 0x2000;
 
 StackEntry sDmaMgrStackInfo;
-u16 numDmaEntries;
+u16 sNumDmaEntries;
 OSMesgQueue sDmaMgrMsgQueue;
 OSMesg sDmaMgrMsgs[32];
 OSThread sDmaMgrThread;
@@ -126,7 +126,7 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
 
     index = DmaMgr_FindDmaIndex(vrom);
 
-    if ((index >= 0) && (index < numDmaEntries)) {
+    if ((index >= 0) && (index < sNumDmaEntries)) {
         dmaEntry = &dmadata[index];
         if (dmaEntry->romEnd == 0) {
             if (dmaEntry->vromEnd < (vrom + size)) {
@@ -224,7 +224,7 @@ void DmaMgr_Start(void) {
             idx++;
         }
 
-        numDmaEntries = idx;
+        sNumDmaEntries = idx;
     }
 
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));
