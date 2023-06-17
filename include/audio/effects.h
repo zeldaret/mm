@@ -1,6 +1,9 @@
 #ifndef AUDIO_EFFECTS_H
 #define AUDIO_EFFECTS_H
 
+
+/* Multi-Point ADSR */
+
 typedef enum {
     /* 0 */ ADSR_STATE_DISABLED,
     /* 1 */ ADSR_STATE_INITIAL,
@@ -47,6 +50,7 @@ typedef struct {
 } AdsrState; // size = 0x20
 
 
+/* Vibrato */
 
 typedef struct VibratoSubStruct {
     /* 0x0 */ u16 vibratoRateStart;
@@ -71,6 +75,7 @@ typedef struct {
 } VibratoState; // size = 0x1C
 
 
+/* Portamento */
 
 typedef enum {
     /* 0 */ PORTAMENTO_MODE_OFF,
