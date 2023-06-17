@@ -80,10 +80,10 @@ typedef enum {
 #define OS_MESG_PRI_HIGH 1
 
 typedef struct {
-    u16 numInstruments;
-    u16 numDrums;
-    u16 numSfx;
-} UnloadedFonts;
+    /* 0x0 */ u16 numInstruments;
+    /* 0x2 */ u16 numDrums;
+    /* 0x4 */ u16 numSfx;
+} UnloadedFonts; // size = 0x6
 
 OSMesgQueue sScriptLoadQueue;
 OSMesg sScriptLoadMesgBuf[0x10];
@@ -138,13 +138,13 @@ void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaI
     s32 bufferPos;
     u32 i;
 
-    if (arg2 != 0 || *dmaIndexRef >= gAudioCtx.sampleDmaListSize1) {
+    if ((arg2 != 0) || (*dmaIndexRef >= gAudioCtx.sampleDmaListSize1)) {
         for (i = gAudioCtx.sampleDmaListSize1; i < gAudioCtx.sampleDmaCount; i++) {
             dma = &gAudioCtx.sampleDmas[i];
             bufferPos = devAddr - dma->devAddr;
-            if (0 <= bufferPos && ((u32)bufferPos <= dma->size - size)) {
+            if ((0 <= bufferPos) && ((u32)bufferPos <= (dma->size - size))) {
                 // We already have a DMA request for this memory range.
-                if (dma->ttl == 0 && gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos) {
+                if ((dma->ttl == 0) && (gAudioCtx.sampleDmaReuseQueue2RdPos != gAudioCtx.sampleDmaReuseQueue2WrPos)) {
                     // Move the DMA out of the reuse queue, by swapping it with the
                     // read pos, and then incrementing the read pos.
                     if (dma->reuseIndex != gAudioCtx.sampleDmaReuseQueue2RdPos) {
@@ -884,7 +884,6 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
 
     // The first u32 in fontData is an offset to a list of offsets to the drums
     soundListOffset = fontData[0];
-    if (1) {}
 
     // If the soundFont has drums
     if ((soundListOffset != 0) && (numDrums != 0)) {
@@ -897,20 +896,23 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
             soundOffset = ((Drum**)fontData[0])[i];
 
             // Some drum data entries are empty, represented by an offset of 0 in the list of drum offsets
-            if (soundOffset != 0) {
-                soundOffset = RELOC_TO_RAM(soundOffset);
-                ((Drum**)fontData[0])[i] = drum = soundOffset;
-
-                // The drum may be in the list multiple times and already relocated
-                if (!drum->isRelocated) {
-                    AudioLoad_RelocateSample(&drum->tunedSample, fontDataStartAddr, sampleBankReloc);
-
-                    soundOffset = drum->envelope;
-                    drum->envelope = RELOC_TO_RAM(soundOffset);
-
-                    drum->isRelocated = true;
-                }
+            if (soundOffset == 0) {
+                continue;
             }
+            soundOffset = RELOC_TO_RAM(soundOffset);
+            ((Drum**)fontData[0])[i] = drum = soundOffset;
+
+            // The drum may be in the list multiple times and already relocated
+            if (drum->isRelocated) {
+                continue;
+            }
+
+            AudioLoad_RelocateSample(&drum->tunedSample, fontDataStartAddr, sampleBankReloc);
+
+            soundOffset = drum->envelope;
+            drum->envelope = RELOC_TO_RAM(soundOffset);
+
+            drum->isRelocated = true;
         }
     }
 
@@ -918,7 +920,6 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
 
     // The second u32 in fontData is an offset to the first sound effect entry
     soundListOffset = fontData[1];
-    if (1) {}
 
     // If the soundFont has sound effects
     if ((soundListOffset != 0) && (numSfx != 0)) {
@@ -932,9 +933,11 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
             soundEffect = (SoundEffect*)soundOffset;
 
             // Check for NULL (note: the pointer is guaranteed to be in fontData and can never be NULL)
-            if ((soundEffect != NULL) && (soundEffect->tunedSample.sample != NULL)) {
-                AudioLoad_RelocateSample(&soundEffect->tunedSample, fontDataStartAddr, sampleBankReloc);
+            if ((soundEffect == NULL) || (soundEffect->tunedSample.sample == NULL)) {
+                continue;
             }
+
+            AudioLoad_RelocateSample(&soundEffect->tunedSample, fontDataStartAddr, sampleBankReloc);
         }
     }
 
@@ -1643,9 +1646,11 @@ void AudioLoad_FinishAsyncLoad(AudioAsyncLoad* asyncLoad) {
         case SEQUENCE_TABLE:
             AudioLoad_SetSeqLoadStatus(ASYNC_ID(retMsg), ASYNC_STATUS(retMsg));
             break;
+
         case SAMPLE_TABLE:
             AudioLoad_SetSampleFontLoadStatusAndApplyCaches(ASYNC_ID(retMsg), ASYNC_STATUS(retMsg));
             break;
+
         case FONT_TABLE:
             fontId = ASYNC_ID(retMsg);
             sampleBankId1 = gAudioCtx.soundFontList[fontId].sampleBankId1;
@@ -1658,6 +1663,9 @@ void AudioLoad_FinishAsyncLoad(AudioAsyncLoad* asyncLoad) {
                 (sampleBankId2 != 0xFF) ? AudioLoad_GetSampleBank(sampleBankId2, &sampleBankReloc.medium2) : 0;
             AudioLoad_SetFontLoadStatus(fontId, ASYNC_STATUS(retMsg));
             AudioLoad_RelocateFontAndPreloadSamples(fontId, asyncLoad->ramAddr, &sampleBankReloc, true);
+            break;
+
+        default:
             break;
     }
 
@@ -1905,7 +1913,7 @@ void AudioLoad_RelocateFontAndPreloadSamples(s32 fontId, SoundFontData* fontData
     }
     gAudioCtx.numUsedSamples = 0;
 
-    if (gAudioCtx.preloadSampleStackTop != 0 && !preloadInProgress) {
+    if ((gAudioCtx.preloadSampleStackTop != 0) && !preloadInProgress) {
         topPreload = &gAudioCtx.preloadSampleStack[gAudioCtx.preloadSampleStackTop - 1];
         sample = topPreload->sample;
         nChunks = (sample->size >> 12) + 1;
@@ -2002,24 +2010,29 @@ s32 AudioLoad_GetSamplesForFont(s32 fontId, Sample** sampleSet) {
     for (i = 0; i < numDrums; i++) {
         Drum* drum = AudioPlayback_GetDrum(fontId, i);
 
-        if (1) {}
-        if (drum != NULL) {
-            numSamples = AudioLoad_AddToSampleSet(drum->tunedSample.sample, numSamples, sampleSet);
+        if (drum == NULL) {
+            continue;
         }
+
+        numSamples = AudioLoad_AddToSampleSet(drum->tunedSample.sample, numSamples, sampleSet);
     }
 
     for (i = 0; i < numInstruments; i++) {
         Instrument* instrument = AudioPlayback_GetInstrumentInner(fontId, i);
 
-        if (instrument != NULL) {
-            if (instrument->normalRangeLo != 0) {
-                numSamples = AudioLoad_AddToSampleSet(instrument->lowPitchTunedSample.sample, numSamples, sampleSet);
-            }
-            if (instrument->normalRangeHi != 0x7F) {
-                numSamples = AudioLoad_AddToSampleSet(instrument->highPitchTunedSample.sample, numSamples, sampleSet);
-            }
-            numSamples = AudioLoad_AddToSampleSet(instrument->normalPitchTunedSample.sample, numSamples, sampleSet);
+        if (instrument == NULL) {
+            continue;
         }
+
+        if (instrument->normalRangeLo != 0) {
+            numSamples = AudioLoad_AddToSampleSet(instrument->lowPitchTunedSample.sample, numSamples, sampleSet);
+        }
+
+        if (instrument->normalRangeHi != 0x7F) {
+            numSamples = AudioLoad_AddToSampleSet(instrument->highPitchTunedSample.sample, numSamples, sampleSet);
+        }
+
+        numSamples = AudioLoad_AddToSampleSet(instrument->normalPitchTunedSample.sample, numSamples, sampleSet);
     }
 
     // Should really also process sfx, but this method is never called
@@ -2160,7 +2173,7 @@ void AudioLoad_PreloadSamplesForFont(s32 fontId, s32 async, SampleBankRelocInfo*
     }
     gAudioCtx.numUsedSamples = 0;
 
-    if (gAudioCtx.preloadSampleStackTop != 0 && !preloadInProgress) {
+    if ((gAudioCtx.preloadSampleStackTop != 0) && !preloadInProgress) {
         topPreload = &gAudioCtx.preloadSampleStack[gAudioCtx.preloadSampleStackTop - 1];
         sample = topPreload->sample;
         nChunks = (sample->size >> 12) + 1;

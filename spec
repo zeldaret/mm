@@ -77,7 +77,6 @@ beginseg
     include "build/src/libultra/os/createthread.o"
     include "build/src/libultra/io/contreaddata.o"
     include "build/src/libultra/voice/voicegetreaddata.o"
-    include "build/data/boot/voicegetreaddata.bss.o"
     include "build/src/libultra/os/virtualtophysical.o"
     include "build/asm/boot/getsr.text.o"
     include "build/asm/boot/setsr.text.o"
@@ -155,7 +154,6 @@ beginseg
     include "build/src/libultra/gu/rotate.o"
     include "build/src/libultra/os/setglobalintmask.o"
     include "build/src/libultra/voice/voiceinit.o"
-    include "build/data/boot/voiceinit.data.o"
     include "build/src/libultra/io/contchannelreset.o"
     include "build/src/libultra/voice/voicesetadconverter.o"
     include "build/src/libultra/io/aisetfreq.o"
@@ -373,7 +371,8 @@ endseg
 beginseg
     name "schedule_static"
     compress
-    include "build/baserom/schedule_static.o"
+    include "build/assets/interface/schedule_static/schedule_static.o"
+    number 8
 endseg
 
 beginseg
@@ -474,7 +473,6 @@ beginseg
     include "build/src/code/z_fireobj.o"
     include "build/src/code/z_game_dlftbls.o"
     include "build/src/code/z_horse.o"
-    include "build/data/code/z_horse.data.o"
     include "build/src/code/z_jpeg.o"
     include "build/src/code/z_kaleido_setup.o"
     include "build/src/code/z_kanfont.o"
@@ -549,7 +547,6 @@ beginseg
     include "build/src/code/z_overlay.o"
     include "build/src/code/z_play.o"
     include "build/src/code/z_play_hireso.o"
-    include "build/data/code/z_play_hireso.data.o"
     include "build/src/code/PreRender.o"
     include "build/data/code/PreRender.bss.o"
     include "build/src/code/TwoHeadGfxArena.o"
@@ -665,12 +662,15 @@ endseg
 beginseg
     name "ovl_file_choose"
     compress
+    include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_data.o"
+    include "build/src/overlays/gamestates/ovl_file_choose/z_file_copy_erase.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_nameset_NES.o"
-    include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_80807940.o"
     include "build/src/overlays/gamestates/ovl_file_choose/z_file_choose_NES.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.data.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.bss.o"
-    include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
+    #ifdef NON_MATCHING
+        include "build/src/overlays/gamestates/ovl_file_choose/ovl_file_choose_reloc.o"
+    #else 
+        include "build/data/ovl_file_choose/ovl_file_choose.reloc.o"
+    #endif
 endseg
 
 beginseg
@@ -1027,8 +1027,7 @@ beginseg
     name "ovl_Bg_Keikoku_Spr"
     compress
     include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/z_bg_keikoku_spr.o"
-    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.data.o"
-    include "build/data/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Keikoku_Spr/ovl_Bg_Keikoku_Spr_reloc.o"
 endseg
 
 beginseg
@@ -1108,22 +1107,14 @@ beginseg
     name "ovl_En_Sw"
     compress
     include "build/src/overlays/actors/ovl_En_Sw/z_en_sw.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_En_Sw/ovl_En_Sw_reloc.o"
-    #else
-        include "build/data/ovl_En_Sw/ovl_En_Sw.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_En_Sw/ovl_En_Sw_reloc.o"
 endseg
 
 beginseg
     name "ovl_Object_Kankyo"
     compress
     include "build/src/overlays/actors/ovl_Object_Kankyo/z_object_kankyo.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_Object_Kankyo/ovl_Object_Kankyo_reloc.o"
-#else
-    include "build/data/ovl_Object_Kankyo/ovl_Object_Kankyo.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1523,11 +1514,7 @@ beginseg
     name "ovl_En_Kanban"
     compress
     include "build/src/overlays/actors/ovl_En_Kanban/z_en_kanban.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Kanban/ovl_En_Kanban_reloc.o"
-#else
-    include "build/data/ovl_En_Kanban/ovl_En_Kanban.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -1647,9 +1634,7 @@ beginseg
     name "ovl_Bg_F40_Swlift"
     compress
     include "build/src/overlays/actors/ovl_Bg_F40_Swlift/z_bg_f40_swlift.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.data.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.bss.o"
-    include "build/data/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_F40_Swlift/ovl_Bg_F40_Swlift_reloc.o"
 endseg
 
 beginseg
@@ -2412,11 +2397,7 @@ beginseg
     name "ovl_En_Go"
     compress
     include "build/src/overlays/actors/ovl_En_Go/z_en_go.o"
-#ifdef NON_MATCHING
     include "build/src/overlays/actors/ovl_En_Go/ovl_En_Go_reloc.o"
-#else
-    include "build/data/ovl_En_Go/ovl_En_Go.reloc.o"
-#endif
 endseg
 
 beginseg
@@ -3496,8 +3477,7 @@ beginseg
     name "ovl_En_Snowwd"
     compress
     include "build/src/overlays/actors/ovl_En_Snowwd/z_en_snowwd.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.data.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Snowwd/ovl_En_Snowwd_reloc.o"
 endseg
 
 beginseg
@@ -4618,8 +4598,7 @@ beginseg
     name "ovl_Eff_Stk"
     compress
     include "build/src/overlays/actors/ovl_Eff_Stk/z_eff_stk.o"
-    include "build/data/ovl_Eff_Stk/ovl_Eff_Stk.data.o"
-    include "build/data/ovl_Eff_Stk/ovl_Eff_Stk.reloc.o"
+    include "build/src/overlays/actors/ovl_Eff_Stk/ovl_Eff_Stk_reloc.o"
 endseg
 
 beginseg
@@ -4852,8 +4831,7 @@ beginseg
     name "ovl_Demo_Moonend"
     compress
     include "build/src/overlays/actors/ovl_Demo_Moonend/z_demo_moonend.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.data.o"
-    include "build/data/ovl_Demo_Moonend/ovl_Demo_Moonend.reloc.o"
+    include "build/src/overlays/actors/ovl_Demo_Moonend/ovl_Demo_Moonend_reloc.o"
 endseg
 
 beginseg
@@ -8842,7 +8820,8 @@ beginseg
     name "title_static"
     compress
     romalign 0x1000
-    include "build/baserom/title_static.o"
+    include "build/assets/misc/title_static/title_static.o"
+    number 1
 endseg
 
 beginseg

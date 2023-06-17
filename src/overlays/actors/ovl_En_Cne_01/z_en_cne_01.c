@@ -152,7 +152,7 @@ void EnCne01_FinishInit(EnHy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;
-        if (ENCNE01_GET_PATH(&this->actor) == 0x3F) {
+        if (ENCNE01_GET_PATH_INDEX(&this->actor) == ENCNE01_PATH_INDEX_NONE) {
             this->actionFunc = EnCne01_FaceForward;
         } else {
             this->actionFunc = EnCne01_Walk;
@@ -217,7 +217,7 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = SubS_GetPathByIndex(play, ENCNE01_GET_PATH(&this->enHy.actor), 0x3F);
+    this->enHy.path = SubS_GetPathByIndex(play, ENCNE01_GET_PATH_INDEX(&this->enHy.actor), ENCNE01_PATH_INDEX_NONE);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnCne01_FinishInit;
@@ -251,10 +251,12 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if (limbIndex == CNE_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
         *dList = gCneHeadBrownHairDL;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     if (limbIndex == CNE_LIMB_HEAD) {
@@ -289,8 +291,10 @@ void EnCne01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     if (limbIndex == CNE_LIMB_RIGHT_FOOT) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
         gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 

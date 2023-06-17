@@ -61,7 +61,7 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play) {
     Path* path;
     s32 childPointIndex;
 
-    path = &play->setupPathList[OBJMAKEOSHIHIKI_GET_PATHLISTINDEX(&this->actor)];
+    path = &play->setupPathList[OBJMAKEOSHIHIKI_GET_PATH_INDEX(&this->actor)];
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
     this->pathCount = path->count;
     childPointIndex = ObjMakeoshihiki_GetChildSpawnPointIndex(this, play);

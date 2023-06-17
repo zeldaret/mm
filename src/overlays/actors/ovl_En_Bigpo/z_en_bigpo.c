@@ -375,7 +375,6 @@ void EnBigpo_SpawnCutsceneStage4(EnBigpo* this, PlayState* play) {
     this->actor.shape.rot.y += this->rotVelocity;
     EnBigpo_RotateSpawnCutsceneFires(this);
 
-    if (1) {}
     for (i = 0; i < ARRAY_COUNT(this->fires); i++) {
         this->fires[i].pos.y += this->actor.velocity.y;
     }
@@ -555,7 +554,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     // flight position calculations
     this->hoverHeightCycleTimer = (this->hoverHeightCycleTimer == 0) ? 40 : (this->hoverHeightCycleTimer - 1);
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
-    this->actor.world.pos.y = (sin_rad(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
+    this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
     func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
@@ -689,21 +688,20 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     if (this->idleTimer < 8) {
         camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x4800;
         if (this->idleTimer < 5) {
-            unkTemp = (this->idleTimer << 0xC) - 0x4000;
-            // 1.4.0...1 is NOT 1.4, the rodata demands it
-            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
+            unkTemp = (this->idleTimer * 0x1000) - 0x4000;
+            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * (1400.0f * 0.001f)) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
             tempVec.x = (Math_SinS(camYaw) * unkTemp2) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(camYaw) * unkTemp2) + this->actor.world.pos.z;
 
         } else {
-            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * 1.4000001f);
+            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * (1400.0f * 0.001f));
             tempVec.x = (Math_SinS(camYaw) * 32.2f) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(camYaw) * 32.2f) + this->actor.world.pos.z;
         }
 
         // not sure what we're turning this into, but its based on the timer
-        modifiedTimer = ((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
+        modifiedTimer = ((this->idleTimer * 10) + 80) * (1400.0f * 0.001f);
         func_800B3030(play, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
@@ -828,7 +826,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
         EnBigpo_SetupScoopSoulLeaving(this);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 35.0f, 60.0f);
-        this->actor.world.pos.y = (sin_rad(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
+        this->actor.world.pos.y = (Math_SinF(this->idleTimer * (M_PI / 20)) * 5.0f) + this->savedHeight;
     }
 }
 
@@ -861,7 +859,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
 
     // count the number of possible fires we can find (4 in vanilla)
     for (enemyPtr = GET_FIRST_ENEMY(play); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
             fireCount++;
         }
     }
@@ -882,7 +880,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
         randomIndex = ((s32)Rand_ZeroFloat(fireCount)) % fireCount;
 
         while (enemyPtr != NULL) {
-            if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == ENBIGPO_POSSIBLEFIRE) {
+            if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == ENBIGPO_POSSIBLEFIRE)) {
                 if (randomIndex == 0) {
                     randomFirePo = (EnBigpo*)enemyPtr;
                     randomFirePo->actor.params = ENBIGPO_CHOSENFIRE;
@@ -1225,8 +1223,8 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
                              Gfx** gfx) {
     EnBigpo* this = THIS;
     // not fully invisible
-    if (!(this->mainColor.a != 0 && limbIndex != 7) ||
-        (this->actionFunc == EnBigpo_BurnAwayDeath && this->idleTimer >= 2)) {
+    if ((this->mainColor.a == 0) || (limbIndex == 7) ||
+        ((this->actionFunc == EnBigpo_BurnAwayDeath) && (this->idleTimer >= 2))) {
         *dList = NULL;
     }
     return false;
@@ -1416,6 +1414,7 @@ void EnBigpo_DrawCircleFlames(Actor* thisx, PlayState* play) {
     s32 i;
 
     mtfxPtr = Matrix_GetCurrent();
+
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);

@@ -111,8 +111,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++) {
                 this->unk_2D8[i] = NULL;
             }
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
                 this->unk_2D4 = 0;
                 func_80B965D0(this, play);
             } else {
@@ -124,8 +124,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 3:
         case 4:
             this->actionFunc = func_80B97B5C;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -134,8 +134,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 5:
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97FD0;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -167,8 +167,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 10:
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -211,8 +211,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 22:
             this->actionFunc = func_80B980FC;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -757,8 +757,6 @@ void func_80B97E0C(EnZot* this, PlayState* play) {
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
-    if (1) {}
-
     if (this->unk_2F2 & 0x40) {
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     }
@@ -768,33 +766,38 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        switch (play->msgCtx.currentTextId) {
-            case 0x128C:
-                this->unk_2F2 &= ~4;
-                func_80B96BEC(this, 6, ANIMMODE_ONCE);
-                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                break;
+    if ((Message_GetState(&play->msgCtx) != TEXT_STATE_5) || !Message_ShouldAdvance(play)) {
+        return;
+    }
 
-            case 0x128D:
-            case 0x128E:
-            case 0x128F:
-                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
-                break;
+    switch (play->msgCtx.currentTextId) {
+        case 0x128C:
+            this->unk_2F2 &= ~4;
+            func_80B96BEC(this, 6, ANIMMODE_ONCE);
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x1290:
-                Message_CloseTextbox(play);
-                this->actionFunc = func_80B97D6C;
-                this->unk_2F2 |= 4;
-                func_80B96BEC(this, 3, ANIMMODE_LOOP);
-                SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
-                break;
+        case 0x128D:
+        case 0x128E:
+        case 0x128F:
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x128B:
-                Message_CloseTextbox(play);
-                this->actionFunc = func_80B97FD0;
-                break;
-        }
+        case 0x1290:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97D6C;
+            this->unk_2F2 |= 4;
+            func_80B96BEC(this, 3, ANIMMODE_LOOP);
+            SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
+            break;
+
+        case 0x128B:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97FD0;
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -1272,8 +1275,7 @@ void func_80B99160(EnZot* this, PlayState* play) {
 }
 
 void func_80B991E4(EnZot* this, PlayState* play) {
-    if (1) {
-        do { } while (0); }
+    if (1) {}
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;

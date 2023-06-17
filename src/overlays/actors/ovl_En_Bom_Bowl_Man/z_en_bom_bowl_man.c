@@ -93,8 +93,8 @@ void EnBomBowlMan_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->unk_29A = ENBOMBOWLMAN_GET_FF00(&this->actor);
-    this->path = SubS_GetPathByIndex(play, this->unk_29A, 0x3F);
+    this->pathIndex = ENBOMBOWLMAN_GET_PATH_INDEX(&this->actor);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENBOMBOWLMAN_PATH_INDEX_NONE);
     this->unk_2C8 = 80.0f;
 
     if ((gSaveContext.save.entrance == ENTRANCE(EAST_CLOCK_TOWN, 2)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_73_80) &&
@@ -156,7 +156,7 @@ void func_809C4B50(EnBomBowlMan* this) {
 }
 
 void func_809C4B6C(EnBomBowlMan* this) {
-    if ((this->unk_29A != ENBOMBOWLMAN_FF00_MINUS1) && (this->path != NULL)) {
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL)) {
         if (!SubS_CopyPointFromPath(this->path, this->unk_298, &this->unk_2A0)) {
             Actor_Kill(&this->actor);
         }
@@ -309,9 +309,9 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
                 break;
 
             case 5:
-                func_80151BB4(play, 0x24);
-                func_80151BB4(play, 0x25);
-                func_80151BB4(play, 0);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
                 this->actionFunc = func_809C51B4;
                 sp28 = true;
                 break;
@@ -330,7 +330,7 @@ void func_809C4DA4(EnBomBowlMan* this, PlayState* play) {
 void func_809C51B4(EnBomBowlMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((play->msgCtx.unk120B1 == 0) &&
+    if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
         ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
         play->nextEntrance = Entrance_CreateFromSpawn(6);
         gSaveContext.nextCutsceneIndex = 0;
@@ -432,9 +432,9 @@ void func_809C5598(EnBomBowlMan* this, PlayState* play) {
         } else if (this->actor.textId == 0x735) {
             this->unk_2C2 = 0;
             func_809C493C(this, 17, 1.0f);
-            func_80151BB4(play, 0x24);
-            func_80151BB4(play, 0x25);
-            func_80151BB4(play, 0);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS);
             func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             this->actionFunc = func_809C5738;
             return;
@@ -448,7 +448,7 @@ void func_809C5738(EnBomBowlMan* this, PlayState* play) {
     s16 yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_2A0);
 
     if (this->unk_2C2 == 0) {
-        if ((play->msgCtx.unk120B1 == 0) &&
+        if ((play->msgCtx.bombersNotebookEventQueueCount == 0) &&
             ((play->msgCtx.msgMode == 0) || (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE))) {
             this->unk_2C2 = 1;
             func_809C4B6C(this);

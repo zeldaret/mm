@@ -193,9 +193,9 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
 
     // Dust Clouds that spawn from the hop
     for (i = 4; i > 0; i--) {
-        effectPos.x = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.x;
-        effectPos.y = randPlusMinusPoint5Scaled(10.0f) + (this->actor.world.pos.y + 40.0f);
-        effectPos.z = randPlusMinusPoint5Scaled(65.0f) + this->actor.world.pos.z;
+        effectPos.x = Rand_CenteredFloat(65.0f) + this->actor.world.pos.x;
+        effectPos.y = Rand_CenteredFloat(10.0f) + (this->actor.world.pos.y + 40.0f);
+        effectPos.z = Rand_CenteredFloat(65.0f) + this->actor.world.pos.z;
         EffectSsKirakira_SpawnSmall(play, &effectPos, &sVelocity, &sAccel, &D_808B1118, &D_808B111C);
     }
     Actor_PlaySfx(&this->actor, NA_SE_EN_AMOS_WALK);
@@ -254,7 +254,7 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
         func_808B0358(this);
     } else {
         tempTextureBlend = this->textureBlend + 20;
-        rand = randPlusMinusPoint5Scaled(10.0f);
+        rand = Rand_CenteredFloat(10.0f);
         cos = Math_CosS(this->actor.shape.rot.y) * rand;
         sin = Math_SinS(this->actor.shape.rot.y) * rand;
         this->actor.world.pos.x = this->actor.home.pos.x + cos;
@@ -271,7 +271,7 @@ void func_808B0208(EnAm* this, PlayState* play) {
         this->actor.world.pos.z += this->actor.speed * Math_CosS(this->actor.world.rot.y);
     }
     SkelAnime_Update(&this->skelAnime);
-    if (Animation_OnFrame(&this->skelAnime, 8.0f) != 0) {
+    if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
         this->actor.speed = this->speed;
         this->actor.velocity.y = 12.0f;
     } else if (this->skelAnime.curFrame > 11.0f) {
@@ -433,7 +433,7 @@ void func_808B0894(EnAm* this, PlayState* play) {
 
         for (i = 0; i < 8; i++) {
             dustPos.x = (Math_SinS(0) * 7.0f) + this->actor.world.pos.x;
-            dustPos.y = (randPlusMinusPoint5Scaled(10.0f) * 6.0f) + (this->actor.world.pos.y + 40.0f);
+            dustPos.y = (Rand_CenteredFloat(10.0f) * 6.0f) + (this->actor.world.pos.y + 40.0f);
             dustPos.z = (Math_CosS(0) * 7.0f) + this->actor.world.pos.z;
 
             func_800B0EB0(play, &dustPos, &gZeroVec3f, &gZeroVec3f, &D_808B1120, &D_808B1124, 200, 45, 12);
@@ -521,7 +521,7 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->enemyCollider.base);
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->interactCollider.base);
-    if (this->enemyCollider.base.atFlags & AC_ON) {
+    if (this->enemyCollider.base.atFlags & AT_ON) {
         this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->enemyCollider.base);
     }

@@ -162,7 +162,7 @@ void EnBba01_FinishInit(EnHy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->actor.draw = EnBba01_Draw;
         this->waitingOnInit = false;
-        if (ENBBA01_GET_PATH(&this->actor) == 0x3F) {
+        if (ENBBA01_GET_PATH_INDEX(&this->actor) == ENBBA01_PATH_INDEX_NONE) {
             this->actionFunc = EnBba01_FaceFoward;
         } else {
             this->actionFunc = EnBba01_Walk;
@@ -227,7 +227,7 @@ void EnBba01_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     this->enHy.actor.flags &= ~ACTOR_FLAG_1;
-    this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH(&this->enHy.actor), 0x3F);
+    this->enHy.path = SubS_GetPathByIndex(play, ENBBA01_GET_PATH_INDEX(&this->enHy.actor), ENBBA01_PATH_INDEX_NONE);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
     this->enHy.actionFunc = EnBba01_FinishInit;
@@ -261,11 +261,14 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
+
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->enHy.headRot.y, MTXMODE_APPLY);
@@ -297,8 +300,10 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 
     if (limbIndex == BBA_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
         gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 

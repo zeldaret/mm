@@ -23,9 +23,9 @@ void EnMttag_PotentiallyRestartRace(EnMttag* this, PlayState* play);
 void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play);
 
 typedef enum {
-    GORON_RACE_CHEAT_NO_CHEATING,
-    GORON_RACE_CHEAT_FALSE_START,
-    GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND,
+    /* 0 */ GORON_RACE_CHEAT_NO_CHEATING,
+    /* 1 */ GORON_RACE_CHEAT_FALSE_START,
+    /* 2 */ GORON_RACE_CHEAT_TRYING_TO_REACH_GOAL_FROM_BEHIND
 } PlayerCheatStatus;
 
 ActorInit En_Mt_tag_InitVars = {

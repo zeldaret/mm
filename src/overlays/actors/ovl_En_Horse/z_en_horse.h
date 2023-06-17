@@ -112,7 +112,7 @@ typedef enum HorseType {
 #define ENHORSE_IS_4000_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_4000)
 #define ENHORSE_IS_DONKEY_TYPE(thisx) ((thisx)->params & ENHORSE_PARAM_DONKEY)
 
-typedef enum {
+typedef enum EnHorseParam {
     /*  0 */ ENHORSE_0,
     /*  1 */ ENHORSE_1,
     /*  2 */ ENHORSE_2,
@@ -133,7 +133,7 @@ typedef enum {
     /* 17 */ ENHORSE_17,
     /* 18 */ ENHORSE_18,
     /* 19 */ ENHORSE_19,
-    /* 20 */ ENHORSE_20,
+    /* 20 */ ENHORSE_20
 } EnHorseParam;
 
 /**

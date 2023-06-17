@@ -131,8 +131,8 @@ void func_80AAB710(DmChar03* this, PlayState* play) {
 void func_80AAB838(DmChar03* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_IT_MASK_BOUND_0);
-    } else if ((Animation_OnFrame(&this->skelAnime, 10.0f)) || (Animation_OnFrame(&this->skelAnime, 18.0f)) ||
-               (Animation_OnFrame(&this->skelAnime, 30.0f)) || (Animation_OnFrame(&this->skelAnime, 38.0f))) {
+    } else if (Animation_OnFrame(&this->skelAnime, 10.0f) || Animation_OnFrame(&this->skelAnime, 18.0f) ||
+               Animation_OnFrame(&this->skelAnime, 30.0f) || Animation_OnFrame(&this->skelAnime, 38.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_IT_MASK_BOUND_1);
     }
 }
@@ -163,7 +163,7 @@ void DmChar03_Draw(Actor* thisx, PlayState* play) {
     DmChar03* this = THIS;
 
     if (!this->unk_18E) {
-        if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136)) &&
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_136) &&
             (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_136)]->id != 1)) {
             Gfx_SetupDL25_Opa(play->state.gfxCtx);
             SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

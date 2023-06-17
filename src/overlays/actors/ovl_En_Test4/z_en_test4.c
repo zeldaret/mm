@@ -4,8 +4,8 @@
  * Description: Three-Day Events
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test4.h"
+#include "z64horse.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
@@ -405,9 +405,9 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
                         if ((rideActor->type == HORSE_TYPE_EPONA) || (rideActor->type == HORSE_TYPE_2)) {
                             if (CURRENT_DAY < 3) {
-                                D_801BDA9C = 1;
+                                gHorseIsMounted = true;
                             } else {
-                                D_801BDA9C = 0;
+                                gHorseIsMounted = false;
                             }
                         }
                     }

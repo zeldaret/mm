@@ -28,8 +28,8 @@ typedef struct EnKusa {
 #define KUSA_GET_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0x7F)
 #define KUSA_GET_RAND_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0xF)
 #define KUSA_SHOULD_SPAWN_BUGS(thisx) (((thisx)->params >> 0x4) & 1)
-#define KUSA_GET_PARAMS_0C(thisx) (((thisx)->params >> 0xC) & 0x1)
-#define KUSA_GET_PARAMS_3F(thisx) (((thisx)->params >> 0x2) & 0x3F)
+#define KUSA_GET_PARAM_0C(thisx) (((thisx)->params >> 0xC) & 0x1)
+#define KUSA_GET_PARAM_3F(thisx) (((thisx)->params >> 0x2) & 0x3F)
 
 
 #define KUSA_GET_TYPE(thisx)((thisx)->params & 0x3)
