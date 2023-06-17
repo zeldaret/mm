@@ -7,7 +7,7 @@
  * The second half of this file implements three types of audio effects over long periods of times:
  * - Vibrato: regular, pulsating change of pitch
  * - Portamento: pitch sliding from one note to another
- * - Multi-Point ADSR Envelope: volume changing over time
+ * - Multi-Point ADSR Envelope: volume changing over time through Attack, Decay, Sustain, Release
  */
 #include "global.h"
 #include "audio/effects.h"

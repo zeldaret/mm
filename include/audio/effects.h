@@ -7,7 +7,7 @@
 struct Note;
 struct SequencePlayer;
 
-/* Multi-Point ADSR */
+/* Multi-Point ADSR Envelope (Attack, Decay, Sustain, Release) */
 
 typedef enum AdsrStatus {
     /* 0 */ ADSR_STATE_DISABLED,
