@@ -69,7 +69,7 @@ typedef struct VibratoSubStruct {
 
 typedef struct VibratoState {
     /* 0x00 */ VibratoSubStruct* vibSubStruct; // Something else?
-    /* 0x04 */ u32 time;
+    /* 0x04 */ u32 time; // 0x400 is 1 unit of time, 0x10000 is 1 period
     /* 0x08 */ s16* curve;
     /* 0x0C */ f32 depth;
     /* 0x10 */ f32 rate;

@@ -115,13 +115,11 @@ f32 AudioEffects_UpdatePortamento(Portamento* portamento) {
     return portamentoFreq;
 }
 
-/**
- * time: 0x400 is 1 unit of time, 0x10000 is 1 period
- */
 s16 AudioEffects_GetVibratoPitchChange(VibratoState* vib) {
     s32 index;
 
     vib->time += (s32)vib->rate;
+    // 0x400 is 1 unit of time, 0x10000 is 1 period
     index = (vib->time >> 10) % WAVE_SAMPLE_COUNT;
     return vib->curve[index];
 }
