@@ -573,7 +573,7 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
     DECR(this->steamSpawnTimer);
     DECR(this->poolTimer);
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10,
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 5.0f, 10.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
 
