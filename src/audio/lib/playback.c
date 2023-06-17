@@ -134,10 +134,10 @@ void AudioPlayback_NoteSetResamplingRate(NoteSampleState* sampleState, f32 resam
 
 void AudioPlayback_NoteInit(Note* note) {
     if (note->playbackState.parentLayer->adsr.decayIndex == 0) {
-        AudioEffects_AdsrInit(&note->playbackState.adsr, note->playbackState.parentLayer->channel->adsr.envelope,
+        AudioEffects_InitAdsr(&note->playbackState.adsr, note->playbackState.parentLayer->channel->adsr.envelope,
                               &note->playbackState.adsrVolScaleUnused);
     } else {
-        AudioEffects_AdsrInit(&note->playbackState.adsr, note->playbackState.parentLayer->adsr.envelope,
+        AudioEffects_InitAdsr(&note->playbackState.adsr, note->playbackState.parentLayer->adsr.envelope,
                               &note->playbackState.adsrVolScaleUnused);
     }
 
@@ -170,7 +170,7 @@ void AudioPlayback_ProcessNotes(void) {
     NotePlaybackState* playbackState;
     NoteSubAttributes subAttrs;
     u8 bookOffset;
-    f32 scale;
+    f32 adsrVolumeScale;
     s32 i;
 
     for (i = 0; i < gAudioCtx.numNotes; i++) {
@@ -224,8 +224,8 @@ void AudioPlayback_ProcessNotes(void) {
                         AudioPlayback_NoteDisable(note);
                         if (playbackState->wantedParentLayer->channel != NULL) {
                             AudioPlayback_NoteInitForLayer(note, playbackState->wantedParentLayer);
-                            AudioEffects_NoteVibratoInit(note);
-                            AudioEffects_NotePortamentoInit(note);
+                            AudioEffects_InitVibrato(note);
+                            AudioEffects_InitPortamento(note);
                             AudioPlayback_AudioListRemove(&note->listItem);
                             AudioScript_AudioListPushBack(&note->listItem.pool->active, &note->listItem);
                             playbackState->wantedParentLayer = NO_LAYER;
@@ -257,8 +257,8 @@ void AudioPlayback_ProcessNotes(void) {
                 continue;
             }
 
-            scale = AudioEffects_AdsrUpdate(&playbackState->adsr);
-            AudioEffects_NoteVibratoUpdate(note);
+            adsrVolumeScale = AudioEffects_UpdateAdsr(&playbackState->adsr);
+            AudioEffects_UpdateVibrato(note);
             playbackStatus = playbackState->status;
             attrs = &playbackState->attributes;
             if ((playbackStatus == PLAYBACK_STATUS_1) || (playbackStatus == PLAYBACK_STATUS_2)) {
@@ -320,7 +320,7 @@ void AudioPlayback_ProcessNotes(void) {
 
             subAttrs.frequency *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
             subAttrs.frequency *= gAudioCtx.audioBufferParameters.resampleRate;
-            subAttrs.velocity *= scale;
+            subAttrs.velocity *= adsrVolumeScale;
             AudioPlayback_InitSampleState(note, sampleState, &subAttrs);
             noteSampleState->bitField1.bookOffset = bookOffset;
         skip:;

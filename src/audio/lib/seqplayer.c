@@ -634,7 +634,7 @@ s32 AudioScript_SeqLayerProcessScriptStep5(SequenceLayer* layer, s32 sameTunedSa
             note = layer->note;
 
             if (note->playbackState.parentLayer == layer) {
-                AudioEffects_NoteVibratoInit(note);
+                AudioEffects_InitVibrato(note);
             }
         }
     }
@@ -642,7 +642,7 @@ s32 AudioScript_SeqLayerProcessScriptStep5(SequenceLayer* layer, s32 sameTunedSa
     if ((layer->note != NULL) && (layer->note->playbackState.parentLayer == layer)) {
         note = layer->note;
 
-        AudioEffects_NotePortamentoInit(note);
+        AudioEffects_InitPortamento(note);
     }
 
     return 0;

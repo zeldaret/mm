@@ -1,4 +1,5 @@
 #include "global.h"
+#include "audio/effects.h"
 
 void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 recalculateVolume, s32 applyBend) {
     f32 channelVolume;
@@ -8,7 +9,7 @@ void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 reca
     if (channel->changes.s.volume || recalculateVolume) {
         channelVolume = channel->volume * channel->volumeScale * channel->seqPlayer->appliedFadeVolume;
         if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_SOFTEN)) {
-            channelVolume = channel->seqPlayer->muteVolumeScale * channelVolume;
+            channelVolume = channelVolume * channel->seqPlayer->muteVolumeScale;
         }
         channel->appliedVolume = SQ(channelVolume);
     }
@@ -73,7 +74,7 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
         seqPlayer->appliedFadeVolume = seqPlayer->fadeVolume * seqPlayer->fadeVolumeScale;
     }
 
-    for (i = 0; i < ARRAY_COUNT(seqPlayer->channels); i++) {
+    for (i = 0; i < SEQ_NUM_CHANNELS; i++) {
         if (seqPlayer->channels[i]->enabled == true) {
             AudioEffects_SequenceChannelProcessSound(seqPlayer->channels[i], seqPlayer->recalculateVolume,
                                                      seqPlayer->applyBend);
@@ -109,8 +110,8 @@ s16 AudioEffects_GetVibratoPitchChange(VibratoState* vib) {
 }
 
 f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
-    static f32 activeVibratoFreqScaleSum = 0.0f;
-    static s32 activeVibratoCount = 0;
+    static f32 sActiveVibratoFreqScaleSum = 0.0f;
+    static s32 sActiveVibratoCount = 0;
     f32 pitchChange;
     f32 depth;
     f32 invDepth;
@@ -162,16 +163,16 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     depth = scaledDepth + 1.0f;
     invDepth = 1.0f / depth;
 
-    // inverse linear interpolation
+    // Inverse linear interpolation
     result = 1.0f / ((depth - invDepth) * pitchChange / 65536.0f + invDepth);
 
-    activeVibratoFreqScaleSum += result;
-    activeVibratoCount++;
+    sActiveVibratoFreqScaleSum += result;
+    sActiveVibratoCount++;
 
     return result;
 }
 
-void AudioEffects_NoteVibratoUpdate(Note* note) {
+void AudioEffects_UpdateVibrato(Note* note) {
     if (note->playbackState.portamento.mode != 0) {
         note->playbackState.portamentoFreqScale = AudioEffects_GetPortamentoFreqScale(&note->playbackState.portamento);
     }
@@ -180,15 +181,15 @@ void AudioEffects_NoteVibratoUpdate(Note* note) {
     }
 }
 
-void AudioEffects_NoteVibratoInit(Note* note) {
+void AudioEffects_InitVibrato(Note* note) {
     NotePlaybackState* playbackState = &note->playbackState;
     VibratoState* vib = &playbackState->vibratoState;
     VibratoSubStruct* subVib;
 
     vib->active = true;
-    vib->curve = gWaveSamples[2];
+    vib->curve = gWaveSamples[2]; // gSineWaveSample
 
-    if (playbackState->parentLayer->unk_0A.s.bit_3 == 1) {
+    if (playbackState->parentLayer->unk_0A.s.useVibrato == true) {
         vib->vibSubStruct = &playbackState->parentLayer->channel->vibrato;
     } else {
         vib->vibSubStruct = &playbackState->parentLayer->vibrato;
@@ -213,12 +214,12 @@ void AudioEffects_NoteVibratoInit(Note* note) {
     vib->delay = subVib->vibratoDelay;
 }
 
-void AudioEffects_NotePortamentoInit(Note* note) {
+void AudioEffects_InitPortamento(Note* note) {
     note->playbackState.portamentoFreqScale = 1.0f;
     note->playbackState.portamento = note->playbackState.parentLayer->portamento;
 }
 
-void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut) {
+void AudioEffects_InitAdsr(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut) {
     adsr->action.asByte = 0;
     adsr->delay = 0;
     adsr->envelope = envelope;
@@ -230,7 +231,7 @@ void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut
     // removed, but the function parameter was forgotten and remains.)
 }
 
-f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
+f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
     u8 state = adsr->action.s.state;
 
     switch (state) {
@@ -244,12 +245,12 @@ f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
             }
             // fallthrough
         case ADSR_STATE_START_LOOP:
-            adsr->envIndex = 0;
+            adsr->envelopeIndex = 0;
             adsr->action.s.state = ADSR_STATE_LOOP;
             // fallthrough
         retry:
         case ADSR_STATE_LOOP:
-            adsr->delay = adsr->envelope[adsr->envIndex].delay;
+            adsr->delay = adsr->envelope[adsr->envelopeIndex].delay;
             switch (adsr->delay) {
                 case ADSR_DISABLE:
                     adsr->action.s.state = ADSR_STATE_DISABLED;
@@ -260,7 +261,7 @@ f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
                     break;
 
                 case ADSR_GOTO:
-                    adsr->envIndex = adsr->envelope[adsr->envIndex].arg;
+                    adsr->envelopeIndex = adsr->envelope[adsr->envelopeIndex].arg;
                     goto retry;
 
                 case ADSR_RESTART:
@@ -272,11 +273,11 @@ f32 AudioEffects_AdsrUpdate(AdsrState* adsr) {
                     if (adsr->delay == 0) {
                         adsr->delay = 1;
                     }
-                    adsr->target = adsr->envelope[adsr->envIndex].arg / 32767.0f;
+                    adsr->target = adsr->envelope[adsr->envelopeIndex].arg / 32767.0f;
                     adsr->target = adsr->target * adsr->target;
                     adsr->velocity = (adsr->target - adsr->current) / adsr->delay;
                     adsr->action.s.state = ADSR_STATE_FADE;
-                    adsr->envIndex++;
+                    adsr->envelopeIndex++;
                     break;
             }
             if (adsr->action.s.state != ADSR_STATE_FADE) {
