@@ -21,7 +21,7 @@ void ArrowIce_Fly(ArrowIce* this, PlayState* play);
 
 #include "overlays/ovl_Arrow_Ice/ovl_Arrow_Ice.c"
 
-s32 sBssPad;
+static s32 sBssPad;
 
 ActorInit Arrow_Ice_InitVars = {
     ACTOR_ARROW_ICE,
