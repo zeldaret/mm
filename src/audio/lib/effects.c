@@ -93,7 +93,7 @@ f32 AudioEffects_GetPortamentoFreqScale(Portamento* portamento) {
 
     if (loResCur >= 127) {
         loResCur = 127;
-        portamento->mode = 0;
+        portamento->mode = PORTAMENTO_MODE_OFF;
     }
 
     portamentoFreq = AUDIO_LERPIMP(1.0f, gBendPitchOneOctaveFrequencies[loResCur + 128], portamento->extent);
@@ -173,7 +173,7 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
 }
 
 void AudioEffects_UpdateVibrato(Note* note) {
-    if (note->playbackState.portamento.mode != 0) {
+    if (note->playbackState.portamento.mode != PORTAMENTO_MODE_OFF) {
         note->playbackState.portamentoFreqScale = AudioEffects_GetPortamentoFreqScale(&note->playbackState.portamento);
     }
     if (note->playbackState.vibratoState.active) {

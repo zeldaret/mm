@@ -1,4 +1,5 @@
 #include "global.h"
+#include "audio/effects.h"
 
 void AudioPlayback_NoteSetResamplingRate(NoteSampleState* sampleState, f32 resamplingRateInput);
 void AudioPlayback_AudioListPushFront(AudioListItem* list, AudioListItem* item);
@@ -600,7 +601,7 @@ s32 AudioPlayback_BuildSyntheticWave(Note* note, SequenceLayer* layer, s32 waveI
     }
 
     freqScale = layer->freqScale;
-    if ((layer->portamento.mode != 0) && (0.0f < layer->portamento.extent)) {
+    if ((layer->portamento.mode != PORTAMENTO_MODE_OFF) && (0.0f < layer->portamento.extent)) {
         freqScale *= (layer->portamento.extent + 1.0f);
     }
 

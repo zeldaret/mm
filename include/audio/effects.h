@@ -72,6 +72,18 @@ typedef struct {
 
 
 
+typedef enum {
+    /* 0 */ PORTAMENTO_MODE_OFF,
+    /* 1 */ PORTAMENTO_MODE_1,
+    /* 2 */ PORTAMENTO_MODE_2,
+    /* 3 */ PORTAMENTO_MODE_3,
+    /* 4 */ PORTAMENTO_MODE_4,
+    /* 5 */ PORTAMENTO_MODE_5
+} PortamentoMode;
+
+#define PORTAMENTO_IS_SPECIAL(x) ((x).mode & 0x80)
+#define PORTAMENTO_MODE(x) ((x).mode & ~0x80)
+
 // Pitch sliding by up to one octave in the positive direction. Negative
 // direction is "supported" by setting extent to be negative. The code
 // extrapolates exponentially in the wrong direction in that case, but that

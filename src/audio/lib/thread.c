@@ -4,6 +4,7 @@
  * Top-level file that coordinates all audio code on the audio thread.
  */
 #include "global.h"
+#include "audio/effects.h"
 
 AudioTask* AudioThread_UpdateImpl(void);
 void AudioThread_SetFadeOutTimer(s32 seqPlayerIndex, s32 fadeTimer);

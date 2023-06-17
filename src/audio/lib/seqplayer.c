@@ -15,19 +15,7 @@
  */
 #include "global.h"
 
-#define PORTAMENTO_IS_SPECIAL(x) ((x).mode & 0x80)
-#define PORTAMENTO_MODE(x) ((x).mode & ~0x80)
-
 #define PROCESS_SCRIPT_END -1
-
-typedef enum {
-    /* 0 */ PORTAMENTO_MODE_OFF,
-    /* 1 */ PORTAMENTO_MODE_1,
-    /* 2 */ PORTAMENTO_MODE_2,
-    /* 3 */ PORTAMENTO_MODE_3,
-    /* 4 */ PORTAMENTO_MODE_4,
-    /* 5 */ PORTAMENTO_MODE_5
-} PortamentoMode;
 
 u8 AudioScript_ScriptReadU8(SeqScriptState* state);
 s16 AudioScript_ScriptReadS16(SeqScriptState* state);
