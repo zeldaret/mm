@@ -1,7 +1,6 @@
 #ifndef AUDIO_EFFECTS_H
 #define AUDIO_EFFECTS_H
 
-
 struct Note;
 struct SequencePlayer;
 
@@ -103,7 +102,7 @@ typedef struct Portamento {
     /* 0x8 */ f32 extent;
 } Portamento; // size = 0xC
 
-void AudioEffects_SequencePlayerProcessSound(struct SequencePlayer* seqPlayer);
+void AudioScript_SequencePlayerProcessSound(struct SequencePlayer* seqPlayer);
 
 void AudioEffects_InitAdsr(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
 void AudioEffects_InitVibrato(struct Note* note);

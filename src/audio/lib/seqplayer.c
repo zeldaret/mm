@@ -2192,7 +2192,7 @@ void AudioScript_ProcessSequences(s32 arg0) {
         seqPlayer = &gAudioCtx.seqPlayers[i];
         if (seqPlayer->enabled == true) {
             AudioScript_SequencePlayerProcessSequence(seqPlayer);
-            AudioEffects_SequencePlayerProcessSound(seqPlayer);
+            AudioScript_SequencePlayerProcessSound(seqPlayer);
         }
     }
 
@@ -2202,7 +2202,7 @@ void AudioScript_ProcessSequences(s32 arg0) {
 void AudioScript_SkipForwardSequence(SequencePlayer* seqPlayer) {
     while (seqPlayer->skipTicks > 0) {
         AudioScript_SequencePlayerProcessSequence(seqPlayer);
-        AudioEffects_SequencePlayerProcessSound(seqPlayer);
+        AudioScript_SequencePlayerProcessSound(seqPlayer);
         seqPlayer->skipTicks--;
     }
 }

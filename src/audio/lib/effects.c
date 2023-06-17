@@ -12,7 +12,7 @@
 #include "global.h"
 #include "audio/effects.h"
 
-void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 recalculateVolume, s32 applyBend) {
+void AudioScript_SequenceChannelProcessSound(SequenceChannel* channel, s32 recalculateVolume, s32 applyBend) {
     f32 channelVolume;
     f32 chanFreqScale;
     s32 i;
@@ -60,7 +60,7 @@ void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 reca
     channel->changes.asByte = 0;
 }
 
-void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
+void AudioScript_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
     s32 i;
 
     if ((seqPlayer->fadeTimer != 0) && (seqPlayer->skipTicks == 0)) {
@@ -87,8 +87,8 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
 
     for (i = 0; i < SEQ_NUM_CHANNELS; i++) {
         if (seqPlayer->channels[i]->enabled == true) {
-            AudioEffects_SequenceChannelProcessSound(seqPlayer->channels[i], seqPlayer->recalculateVolume,
-                                                     seqPlayer->applyBend);
+            AudioScript_SequenceChannelProcessSound(seqPlayer->channels[i], seqPlayer->recalculateVolume,
+                                                    seqPlayer->applyBend);
         }
     }
 
