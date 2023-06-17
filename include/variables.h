@@ -19,7 +19,7 @@ extern u8 D_80025D00[];
 
 // data
 extern OSPiHandle* gCartHandle;
-extern u32 gDmaMgrDmaBuffSize;
+extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;
 extern volatile OSTime sIrqMgrRetraceTime;

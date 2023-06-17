@@ -7,7 +7,7 @@
 
 extern s32 gScreenWidth;
 extern s32 gScreenHeight;
-extern u32 gSystemHeapSize;
+extern size_t gSystemHeapSize;
 
 extern u32 gSegments[NUM_SEGMENTS];
 extern SchedContext gSchedContext;
