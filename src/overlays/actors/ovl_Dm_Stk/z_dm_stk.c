@@ -687,7 +687,7 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STAL22_LAUGH_KID_L);
             break;
 
-        defalt:
+        default:
             break;
     }
 }
