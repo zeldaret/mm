@@ -2179,13 +2179,6 @@ void AudioPlayback_AudioListRemove(AudioListItem* item);
 Note* AudioPlayback_AllocNote(SequenceLayer* layer);
 void AudioPlayback_NoteInitAll(void);
 
-void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
-void AudioEffects_UpdateVibrato(Note* note);
-void AudioEffects_InitVibrato(Note* note);
-void AudioEffects_InitPortamento(Note* note);
-void AudioEffects_InitAdsr(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
-f32 AudioEffects_UpdateAdsr(AdsrState* adsr);
-
 void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
 void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);
 void AudioScript_SequencePlayerDisable(SequencePlayer* seqPlayer);

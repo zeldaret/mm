@@ -1,3 +1,14 @@
+/**
+ * @file audio_effects.c
+ *
+ * The first half of this file processes sound on the seqPlayer, channel, and layer level
+ * once the .seq file is finished for this update.
+ *
+ * The second half of this file implements three types of audio effects over long periods of times:
+ * - Vibrato: regular, pulsating change of pitch
+ * - Portamento: pitch sliding from one note to another
+ * - Multi-Point ADSR Envelope: volume changing over time
+ */
 #include "global.h"
 #include "audio/effects.h"
 
@@ -84,32 +95,41 @@ void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer) {
     seqPlayer->recalculateVolume = false;
 }
 
-f32 AudioEffects_GetPortamentoFreqScale(Portamento* portamento) {
-    u32 loResCur;
+/**
+ * @return freqScale
+ */
+f32 AudioEffects_UpdatePortamento(Portamento* portamento) {
+    u32 bendIndex;
     f32 portamentoFreq;
 
     portamento->cur += portamento->speed;
-    loResCur = (portamento->cur >> 8) & 0xFF;
+    bendIndex = (portamento->cur >> 8) & 0xFF;
 
-    if (loResCur >= 127) {
-        loResCur = 127;
+    if (bendIndex >= 127) {
+        bendIndex = 127;
         portamento->mode = PORTAMENTO_MODE_OFF;
     }
 
-    portamentoFreq = AUDIO_LERPIMP(1.0f, gBendPitchOneOctaveFrequencies[loResCur + 128], portamento->extent);
+    portamentoFreq = AUDIO_LERPIMP(1.0f, gBendPitchOneOctaveFrequencies[bendIndex + 128], portamento->extent);
 
     return portamentoFreq;
 }
 
+/**
+ * time: 0x400 is 1 unit of time, 0x10000 is 1 period
+ */
 s16 AudioEffects_GetVibratoPitchChange(VibratoState* vib) {
     s32 index;
 
     vib->time += (s32)vib->rate;
-    index = (vib->time >> 10) & 0x3F;
+    index = (vib->time >> 10) % WAVE_SAMPLE_COUNT;
     return vib->curve[index];
 }
 
-f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
+/**
+ * @return freqScale
+ */
+f32 AudioEffects_UpdateVibrato(VibratoState* vib) {
     static f32 sActiveVibratoFreqScaleSum = 0.0f;
     static s32 sActiveVibratoCount = 0;
     f32 pitchChange;
@@ -125,7 +145,7 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     }
 
     if (subVib != NULL) {
-        if (vib->depthChangeTimer) {
+        if ((u32)vib->depthChangeTimer != 0) {
             if (vib->depthChangeTimer == 1) {
                 vib->depth = (s32)subVib->vibratoDepthTarget;
             } else {
@@ -139,7 +159,7 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
             }
         }
 
-        if (vib->rateChangeTimer) {
+        if ((u32)vib->rateChangeTimer != 0) {
             if (vib->rateChangeTimer == 1) {
                 vib->rate = (s32)subVib->vibratoRateTarget;
             } else {
@@ -158,13 +178,13 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
         return 1.0f;
     }
 
-    pitchChange = AudioEffects_GetVibratoPitchChange(vib) + 32768.0f;
+    pitchChange = (f32)AudioEffects_GetVibratoPitchChange(vib) + 0x8000;
     scaledDepth = vib->depth / 4096.0f;
     depth = scaledDepth + 1.0f;
     invDepth = 1.0f / depth;
 
     // Inverse linear interpolation
-    result = 1.0f / ((depth - invDepth) * pitchChange / 65536.0f + invDepth);
+    result = 1.0f / ((depth - invDepth) * pitchChange / 0x10000 + invDepth);
 
     sActiveVibratoFreqScaleSum += result;
     sActiveVibratoCount++;
@@ -172,12 +192,14 @@ f32 AudioEffects_GetVibratoFreqScale(VibratoState* vib) {
     return result;
 }
 
-void AudioEffects_UpdateVibrato(Note* note) {
+void AudioEffects_UpdatePortamentoAndVibrato(Note* note) {
+    // Update Portamento
     if (note->playbackState.portamento.mode != PORTAMENTO_MODE_OFF) {
-        note->playbackState.portamentoFreqScale = AudioEffects_GetPortamentoFreqScale(&note->playbackState.portamento);
+        note->playbackState.portamentoFreqScale = AudioEffects_UpdatePortamento(&note->playbackState.portamento);
     }
+    // Update Vibrato
     if (note->playbackState.vibratoState.active) {
-        note->playbackState.vibratoFreqScale = AudioEffects_GetVibratoFreqScale(&note->playbackState.vibratoState);
+        note->playbackState.vibratoFreqScale = AudioEffects_UpdateVibrato(&note->playbackState.vibratoState);
     }
 }
 
@@ -231,6 +253,9 @@ void AudioEffects_InitAdsr(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut
     // removed, but the function parameter was forgotten and remains.)
 }
 
+/**
+ * @return volumeScale
+ */
 f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
     u8 state = adsr->action.s.state;
 
@@ -274,7 +299,7 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
                         adsr->delay = 1;
                     }
                     adsr->target = adsr->envelope[adsr->envelopeIndex].arg / 32767.0f;
-                    adsr->target = adsr->target * adsr->target;
+                    adsr->target = SQ(adsr->target);
                     adsr->velocity = (adsr->target - adsr->current) / adsr->delay;
                     adsr->action.s.state = ADSR_STATE_FADE;
                     adsr->envelopeIndex++;
@@ -297,7 +322,7 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
         case ADSR_STATE_DECAY:
         case ADSR_STATE_RELEASE:
             adsr->current -= adsr->fadeOutVel;
-            if (adsr->sustain != 0.0f && state == ADSR_STATE_DECAY) {
+            if ((adsr->sustain != 0.0f) && (state == ADSR_STATE_DECAY)) {
                 if (adsr->current < adsr->sustain) {
                     adsr->current = adsr->sustain;
                     adsr->delay = 128;

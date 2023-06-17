@@ -2,6 +2,9 @@
 #define AUDIO_EFFECTS_H
 
 
+struct Note;
+struct SequencePlayer;
+
 /* Multi-Point ADSR */
 
 typedef enum {
@@ -99,5 +102,14 @@ typedef struct Portamento {
     /* 0x4 */ u16 speed;
     /* 0x8 */ f32 extent;
 } Portamento; // size = 0xC
+
+void AudioEffects_SequencePlayerProcessSound(struct SequencePlayer* seqPlayer);
+
+void AudioEffects_InitAdsr(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
+void AudioEffects_InitVibrato(struct Note* note);
+void AudioEffects_InitPortamento(struct Note* note);
+
+f32 AudioEffects_UpdateAdsr(AdsrState* adsr);
+void AudioEffects_UpdatePortamentoAndVibrato(struct Note* note);
 
 #endif

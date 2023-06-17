@@ -259,7 +259,7 @@ void AudioPlayback_ProcessNotes(void) {
             }
 
             adsrVolumeScale = AudioEffects_UpdateAdsr(&playbackState->adsr);
-            AudioEffects_UpdateVibrato(note);
+            AudioEffects_UpdatePortamentoAndVibrato(note);
             playbackStatus = playbackState->status;
             attrs = &playbackState->attributes;
             if ((playbackStatus == PLAYBACK_STATUS_1) || (playbackStatus == PLAYBACK_STATUS_2)) {

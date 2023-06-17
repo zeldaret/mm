@@ -330,7 +330,7 @@ typedef struct {
 } SeqScriptState; // size = 0x1C
 
 // Also known as a Group, according to debug strings.
-typedef struct {
+typedef struct SequencePlayer {
     /* 0x000 */ u8 enabled : 1;
     /* 0x000 */ u8 finished : 1;
     /* 0x000 */ u8 muted : 1;
