@@ -601,7 +601,7 @@ s32 AudioPlayback_BuildSyntheticWave(Note* note, SequenceLayer* layer, s32 waveI
     }
 
     freqScale = layer->freqScale;
-    if ((layer->portamento.mode != PORTAMENTO_MODE_OFF) && (0.0f < layer->portamento.extent)) {
+    if ((layer->portamento.mode != PORTAMENTO_MODE_OFF) && (layer->portamento.extent > 0.0f)) {
         freqScale *= (layer->portamento.extent + 1.0f);
     }
 
