@@ -107,7 +107,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
 s32 func_80A50EC0(EnDnh* this) {
     if (DECR(this->blinkTimer) == 0) {
         this->eyeTexIndex++;
-        if (this->eyeTexIndex >= 4) {
+        if (this->eyeTexIndex >= ARRAY_COUNT(sEyeTextures)) {
             this->blinkTimer = Rand_S16Offset(30, 30);
             this->eyeTexIndex = 0;
         }
