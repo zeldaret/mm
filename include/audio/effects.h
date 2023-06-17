@@ -1,12 +1,15 @@
 #ifndef AUDIO_EFFECTS_H
 #define AUDIO_EFFECTS_H
 
+#include "PR/ultratypes.h"
+#include "unk.h"
+
 struct Note;
 struct SequencePlayer;
 
 /* Multi-Point ADSR */
 
-typedef enum {
+typedef enum AdsrStatus {
     /* 0 */ ADSR_STATE_DISABLED,
     /* 1 */ ADSR_STATE_INITIAL,
     /* 2 */ ADSR_STATE_START_LOOP,
@@ -23,13 +26,13 @@ typedef struct EnvelopePoint {
     /* 0x2 */ s16 arg;
 } EnvelopePoint; // size = 0x4
 
-typedef struct {
+typedef struct AdsrSettings {
     /* 0x0 */ u8 decayIndex; // index used to obtain adsr decay rate from adsrDecayTable
     /* 0x1 */ u8 sustain;
     /* 0x4 */ EnvelopePoint* envelope;
 } AdsrSettings; // size = 0x8
 
-typedef struct {
+typedef struct AdsrState {
     union {
         struct {
             /* 0x00 */ u8 unused : 1;
@@ -64,7 +67,7 @@ typedef struct VibratoSubStruct {
     /* 0xC */ u16 vibratoDelay;
 } VibratoSubStruct; // size = 0xE
 
-typedef struct {
+typedef struct VibratoState {
     /* 0x00 */ VibratoSubStruct* vibSubStruct; // Something else?
     /* 0x04 */ u32 time;
     /* 0x08 */ s16* curve;
@@ -79,7 +82,7 @@ typedef struct {
 
 /* Portamento */
 
-typedef enum {
+typedef enum PortamentoMode {
     /* 0 */ PORTAMENTO_MODE_OFF,
     /* 1 */ PORTAMENTO_MODE_1,
     /* 2 */ PORTAMENTO_MODE_2,
