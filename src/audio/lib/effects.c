@@ -1,5 +1,5 @@
 /**
- * @file audio_effects.c
+ * @file effects.c
  *
  * The first half of this file processes sound on the seqPlayer, channel, and layer level
  * once the .seq file is finished for this update.
