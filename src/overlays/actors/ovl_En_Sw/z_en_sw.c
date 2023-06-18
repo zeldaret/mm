@@ -5,6 +5,7 @@
  */
 
 #include "z_en_sw.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_st/object_st.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
@@ -661,7 +662,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

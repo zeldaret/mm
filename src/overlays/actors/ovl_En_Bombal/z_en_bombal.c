@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bombal.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_fusen/object_fusen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -129,7 +130,7 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
         Math_Vec3f_Copy(&pos, &this->actor.world.pos);
         pos.y += 60.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, pos.x, pos.y, pos.z, 255, 255, 200,
-                    CLEAR_TAG_LARGE_EXPLOSION);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
 
         for (i = 0; i < 100; i++) {
             EnBombal_InitEffects(this, &pos, 10);

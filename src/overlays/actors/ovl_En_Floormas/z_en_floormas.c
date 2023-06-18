@@ -5,6 +5,7 @@
  */
 
 #include "z_en_floormas.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -1069,8 +1070,8 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0,
                                         0,
-                                        (this->actor.scale.x > 0.009f) ? CLEAR_TAG_LARGE_LIGHT_RAYS
-                                                                       : CLEAR_TAG_SMALL_LIGHT_RAYS);
+                                        (this->actor.scale.x > 0.009f) ? CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS)
+                                                                       : CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
                         }
                         func_808D2B18(this);
                     }

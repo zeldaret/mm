@@ -5,6 +5,7 @@
  */
 
 #include "z_en_raf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 
@@ -511,7 +512,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
     explosionPos.y += 10.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
-                CLEAR_TAG_SMALL_EXPLOSION);
+                CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
     Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {

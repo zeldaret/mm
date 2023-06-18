@@ -6,6 +6,7 @@
 
 #include "z_en_bombf.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
@@ -410,7 +411,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                 }
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
-                            CLEAR_TAG_SMALL_EXPLOSION);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =

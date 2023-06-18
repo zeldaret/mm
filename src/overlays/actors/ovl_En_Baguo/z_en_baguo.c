@@ -5,6 +5,7 @@
  */
 
 #include "z_en_baguo.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
@@ -347,7 +348,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 }
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
+                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_POP));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 

@@ -16,6 +16,7 @@
  */
 
 #include "z_en_fall.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_fall/object_fall.h"
 #include "objects/object_fall2/object_fall2.h"
 #include "objects/object_lodmoon/object_lodmoon.h"
@@ -524,7 +525,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
             Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TEST, this->actor.world.pos.x,
                                this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, -2);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
             this->actor.draw = NULL;
             this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {

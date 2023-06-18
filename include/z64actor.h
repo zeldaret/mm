@@ -593,16 +593,6 @@ typedef enum {
 #define COLORFILTER_BUFFLAG_OPA    0x0000
 
 typedef enum {
-    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
-    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
-    /* 0x02 */ CLEAR_TAG_POP,
-    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
-    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
-    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
-} ClearTagType;
-
-typedef enum {
     /* 0x00 */ TATL_HINT_ID_DEFAULT,
     /* 0x01 */ TATL_HINT_ID_SNAPPER,
     /* 0x02 */ TATL_HINT_ID_MINI_BABA,
