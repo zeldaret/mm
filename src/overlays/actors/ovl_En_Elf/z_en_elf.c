@@ -1037,7 +1037,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, PlayState* play) {
-    Actor* arrayPointerActor = play->actorCtx.targetCtx.arrowPointedActor;
+    Actor* arrowPointedActor = play->actorCtx.targetCtx.arrowPointedActor;
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
 
@@ -1069,7 +1069,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
-        if ((arrayPointerActor == NULL) ||
+        if ((arrowPointedActor == NULL) ||
             (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyHintPos) < 50.0f)) {
             this->unk_268 = 1;
         }
@@ -1085,10 +1085,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 1) {
-        if ((arrayPointerActor == NULL) || (player->targetedActor == NULL)) {
+        if ((arrowPointedActor == NULL) || (player->targetedActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((arrayPointerActor != NULL) && (player->targetedActor != NULL)) {
+    } else if ((arrowPointedActor != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1136,7 +1136,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
         if (player->stateFlags1 & PLAYER_STATE1_400) {
             sp34 = 10;
             this->unk_25C = 100;
-        } else if ((arrowPointedActor == NULL) || (arrowPointedActor->category == 4)) {
+        } else if ((arrowPointedActor == NULL) || (arrowPointedActor->category == ACTORCAT_NPC)) {
             if (arrowPointedActor != NULL) {
                 this->unk_25C = 100;
                 player->stateFlags2 |= PLAYER_STATE2_100000;
