@@ -839,7 +839,7 @@ void Environment_Update(PlayState* play, EnvironmentContext* envCtx, LightContex
                         GraphicsContext* gfxCtx);
 // void func_800F8D84(void);
 void Environment_DrawSunLensFlare(PlayState* play, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f pos);
-void func_800F9824(PlayState* play, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec, f32 arg5, f32 arg6, s8 arg7, s8 arg8);
+void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View* view, GraphicsContext* gfxCtx, Vec3f vec, f32 arg5, f32 arg6, s8 arg7, s8 arg8);
 // void func_800FA39C(void);
 // void func_800FA3C4(void);
 void Environment_DrawRain(PlayState* play, View* view, GraphicsContext* gfxCtx);

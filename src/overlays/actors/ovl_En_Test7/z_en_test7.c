@@ -17,23 +17,24 @@ void EnTest7_Destroy(Actor* thisx, PlayState* play);
 void EnTest7_Update(Actor* thisx, PlayState* play);
 void EnTest7_Draw(Actor* thisx, PlayState* play);
 
-void EnTest7_SetupAction(EnTest7* this, EnTest7ActionFunc actionFunc);
-void func_80AF19A8(EnTest7* this, PlayState* play);
-void func_80AF1A2C(EnTest7* this, PlayState* play);
-void func_80AF1CA0(EnTest7* this, PlayState* play);
-void func_80AF1E44(EnTest7* this, PlayState* play);
-void func_80AF1F48(EnTest7* this, PlayState* play);
-void func_80AF2030(EnTest7* this, PlayState* play);
-void func_80AF21E8(EnTest7* this, PlayState* play);
-void func_80AF2318(EnTest7* this, PlayState* play);
-void func_80AF2350(EnTest7* this, PlayState* play);
-void func_80AF2854(EnTest7* this, PlayState* play);
-void func_80AF2938(EnTest7* this, PlayState* play);
-void func_80AF2AE8(EnTest7* this, PlayState* play);
-void func_80AF2C48(EnTest7* this, PlayState* play);
-void func_80AF2EC8(EnTest7* this, PlayState* play);
-void func_80AF2F98(EnTest7* this, PlayState* play);
-void func_80AF30F4(EnTest7* this, PlayState* play);
+void EnTest7_StartWarpCs(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsPart1(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsPart2(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsPart3(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsPart4(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsPart5(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsPart6(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsWait(EnTest7* this, PlayState* play);
+void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play);
+
+void EnTest7_PlayerAndCameraControl(EnTest7* this, PlayState* play);
+
+void EnTest7_SetupArriveCs(EnTest7* this, PlayState* play);
+void EnTest7_StartArriveCs(EnTest7* this, PlayState* play);
+void EnTest7_ArriveCsPart1(EnTest7* this, PlayState* play);
+void EnTest7_StartArriveCsSkip(EnTest7* this, PlayState* play);
+void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play);
+void EnTest7_ArriveCsPart3(EnTest7* this, PlayState* play);
 
 ActorInit En_Test7_InitVars = {
     ACTOR_EN_TEST7,
@@ -47,120 +48,115 @@ ActorInit En_Test7_InitVars = {
     (ActorFunc)EnTest7_Draw,
 };
 
+void EnTest7_SetupPlayerCamFunc(EnTest7* this, EnTest7PlayerAndCameraControl playerCamFunc) {
+    this->playerCamFunc = playerCamFunc;
+}
+
 void EnTest7_SetupAction(EnTest7* this, EnTest7ActionFunc actionFunc) {
     this->actionFunc = actionFunc;
 }
 
-void func_80AF082C(EnTest7* this, EnTest7UnkFunc func) {
-    this->unk_1E58 = func;
-}
-
-void func_80AF0838(EnTest7Struct2* arg0) {
-    EnTest7Struct2* ptr = arg0;
+void EnTest7_InitFeathers(OwlWarpFeather* feathers) {
+    OwlWarpFeather* feather = feathers;
     s32 i;
 
-    for (i = 0, ptr = arg0; i < 100; i++, ptr++) {
+    for (i = 0, feather = feathers; i < OWL_WARP_NUM_FEATHERS; i++, feather++) {
         s32 pad;
 
-        ptr->unk_00 = 0;
-        ptr->unk_04 = 0;
-        ptr->unk_08.x = 0.0f;
-        ptr->unk_08.y = 0.0f;
-        ptr->unk_08.z = 0.0f;
-        ptr->unk_14 = 0.0f;
-        ptr->unk_18 = 0.0f;
-        ptr->unk_1C = 0.0f;
-        ptr->unk_20 = 0.0f;
-        ptr->unk_24 = 0.0f;
-        ptr->unk_28 = 0.0f;
-        ptr->unk_2C = 0.00001f;
-        ptr->unk_30.x = 0;
-        ptr->unk_30.y = 0;
-        ptr->unk_30.z = 0;
-        ptr->unk_36 = 0;
-        ptr->unk_38 = 0;
-        ptr->unk_3A = 0;
+        feather->type = OWL_WARP_FEATHER_TYPE_DISABLED;
+        feather->unk_04 = 0;
+        feather->pos.x = 0.0f;
+        feather->pos.y = 0.0f;
+        feather->pos.z = 0.0f;
+        feather->velocity.x = 0.0f;
+        feather->velocity.y = 0.0f;
+        feather->velocity.z = 0.0f;
+        feather->accel.x = 0.0f;
+        feather->accel.y = 0.0f;
+        feather->accel.z = 0.0f;
+        feather->scale = 0.00001f;
+        feather->rot.x = 0;
+        feather->rot.y = 0;
+        feather->rot.z = 0;
+        feather->rotVelocity.x = 0;
+        feather->rotVelocity.y = 0;
+        feather->rotVelocity.z = 0;
     }
 }
 
-void func_80AF0984(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
-    s16 sp26 = Rand_ZeroOne() * 0xFFFF;
-    f32 sp20;
-    f32 temp_f0;
-    f32 temp_f0_2;
-    f32 temp_f0_3;
-    f32 temp_f4;
+void EnTest7_AddFeather(OwlWarpFeather* feather, Vec3f* pos, s32 isPosYRand) {
+    s16 yaw = Rand_ZeroOne() * 0xFFFF;
+    f32 velocityXZ;
 
-    arg0->unk_08 = *arg1;
+    feather->pos = *pos;
 
-    if (arg2 != 0) {
-        Math_CosS(sp26);
-        arg0->unk_08.x = arg0->unk_08.x;
-        arg0->unk_08.y += (Rand_ZeroOne() * 100.0f) - 20.0f;
-        Math_SinS(sp26);
-        arg0->unk_08.z = arg0->unk_08.z;
+    if (isPosYRand) {
+        feather->pos.x += Math_CosS(yaw) * 0.0f;
+        feather->pos.y += (Rand_ZeroOne() * 100.0f) - 20.0f;
+        feather->pos.z += Math_SinS(yaw) * 0.0f;
     }
 
-    sp20 = (Rand_ZeroOne() * 4.0f) + 2.0f;
+    velocityXZ = (Rand_ZeroOne() * 4.0f) + 2.0f;
 
-    arg0->unk_14 = Math_CosS(sp26) * sp20;
-    arg0->unk_18 = Rand_ZeroOne();
-    arg0->unk_1C = Math_SinS(sp26) * sp20;
+    feather->velocity.x = Math_CosS(yaw) * velocityXZ;
+    feather->velocity.y = Rand_ZeroOne();
+    feather->velocity.z = Math_SinS(yaw) * velocityXZ;
 
-    arg0->unk_20 = 0.0f;
-    arg0->unk_24 = 0.0f;
-    arg0->unk_28 = 0.0f;
-    arg0->unk_2C = 0.25f;
-    arg0->unk_30.x = Rand_ZeroOne() * 0x10000;
-    arg0->unk_30.y = Rand_ZeroOne() * 0x10000;
-    arg0->unk_30.z = Rand_ZeroOne() * 0x10000;
-    arg0->unk_04 = 60;
+    feather->accel.x = 0.0f;
+    feather->accel.y = 0.0f;
+    feather->accel.z = 0.0f;
+
+    feather->scale = 0.25f;
+    feather->rot.x = Rand_ZeroOne() * 0x10000;
+    feather->rot.y = Rand_ZeroOne() * 0x10000;
+    feather->rot.z = Rand_ZeroOne() * 0x10000;
+    feather->unk_04 = 60;
 
     if (Rand_ZeroOne() < 0.9f) {
-        arg0->unk_00 = 1;
-        arg0->unk_30.x = Rand_ZeroOne() * 0x10000;
-        arg0->unk_30.y = Rand_ZeroOne() * 0x10000;
-        arg0->unk_30.z = Rand_ZeroOne() * 0x10000;
-        arg0->unk_36 = 0;
-        arg0->unk_38 = 0;
-        arg0->unk_3A = 0;
+        feather->type = OWL_WARP_FEATHER_TYPE_1;
+        feather->rot.x = Rand_ZeroOne() * 0x10000;
+        feather->rot.y = Rand_ZeroOne() * 0x10000;
+        feather->rot.z = Rand_ZeroOne() * 0x10000;
+        feather->rotVelocity.x = 0;
+        feather->rotVelocity.y = 0;
+        feather->rotVelocity.z = 0;
     } else {
-        arg0->unk_00 = 2;
-        arg0->unk_30.x = 0;
-        arg0->unk_30.y = 0;
-        arg0->unk_30.z = Rand_ZeroOne() * 5000.0f;
-        arg0->unk_36 = 0;
-        arg0->unk_38 = (Rand_ZeroOne() * 8000.0f) + 2000.0f;
+        feather->type = OWL_WARP_FEATHER_TYPE_2;
+        feather->rot.x = 0;
+        feather->rot.y = 0;
+        feather->rot.z = Rand_ZeroOne() * 5000.0f;
+        feather->rotVelocity.x = 0;
+        feather->rotVelocity.y = (Rand_ZeroOne() * 8000.0f) + 2000.0f;
         if (Rand_ZeroOne() > 0.5f) {
-            arg0->unk_38 = -arg0->unk_38;
+            feather->rotVelocity.y = -feather->rotVelocity.y;
         }
-        arg0->unk_3A = 0;
+        feather->rotVelocity.z = 0;
     }
 }
 
-void func_80AF0C30(EnTest7Struct2* arg0, Vec3f* arg1, s32 arg2) {
-    static s32 D_80AF3410 = 0;
+void EnTest7_RequestFeather(OwlWarpFeather* feathers, Vec3f* pos, s32 isPosYRand) {
+    static s32 sFeatherIndex = 0;
     s32 i;
-    s32 phi_t0 = false;
-    EnTest7Struct2* ptr;
-    s32 idx;
+    s32 featherAdded = false;
+    OwlWarpFeather* feather;
+    s32 featherIndex;
 
-    for (i = 0, ptr = arg0; i < 100; i++, ptr++) {
-        if (ptr->unk_00 == 0) {
-            func_80AF0984(ptr, arg1, arg2);
-            D_80AF3410 = i;
-            phi_t0 = true;
+    for (i = 0, feather = feathers; i < OWL_WARP_NUM_FEATHERS; i++, feather++) {
+        if (feather->type == OWL_WARP_FEATHER_TYPE_DISABLED) {
+            EnTest7_AddFeather(feather, pos, isPosYRand);
+            sFeatherIndex = i;
+            featherAdded = true;
             break;
         }
     }
 
-    if (!phi_t0) {
-        idx = D_80AF3410 + 1;
-        if (idx >= 100) {
-            idx = 0;
+    if (!featherAdded) {
+        featherIndex = sFeatherIndex + 1;
+        if (featherIndex >= OWL_WARP_NUM_FEATHERS) {
+            featherIndex = 0;
         }
 
-        func_80AF0984(&arg0[idx], arg1, arg2);
+        EnTest7_AddFeather(&feathers[featherIndex], pos, isPosYRand);
     }
 }
 
@@ -168,88 +164,80 @@ Vec3f D_80AF3414 = { 0.0f, 1.0f, 0.0f };
 
 Vec3f D_80AF3420 = { 0.0f, 0.0f, 1.0f };
 
-void func_80AF0CDC(PlayState* play, EnTest7Struct2* arg1) {
+void EnTest7_UpdateFeatherType1(PlayState* play, OwlWarpFeather* feather) {
     static MtxF D_80AF38B0;
     static Vec3f D_80AF38F0;
     static f32 D_80AF38FC;
     static Vec3f D_80AF3900;
-    s32 sp2C;
-    s32 sp28;
-    s32 sp24;
-    s16 temp_v0_2;
-    s16 temp_v0_3;
-    s32 temp_v0;
-    f32 phi_f8;
+    s32 sp2C = feather->unk_04 % 41;
+    s32 sp28 = (feather->unk_04 + 0x1B58) % 41;
+    s32 sp24 = false;
 
-    sp2C = arg1->unk_04 % 41;
-    sp24 = 0;
-    sp28 = (arg1->unk_04 + 0x1B58) % 41;
-
-    SkinMatrix_SetRotateRPY(&D_80AF38B0, arg1->unk_30.x, arg1->unk_30.y, arg1->unk_30.z);
+    SkinMatrix_SetRotateRPY(&D_80AF38B0, feather->rot.x, feather->rot.y, feather->rot.z);
     SkinMatrix_Vec3fMtxFMultXYZ(&D_80AF38B0, &D_80AF3414, &D_80AF38F0);
     SkinMatrix_Vec3fMtxFMultXYZ(&D_80AF38B0, &D_80AF3420, &D_80AF3900);
 
-    if (arg1->unk_30.x < 0x3448) {
-        arg1->unk_30.x += 0x384;
-    } else if (arg1->unk_30.x >= 0x4BB9) {
-        arg1->unk_30.x -= 0x384;
+    if (feather->rot.x < 0x3448) {
+        feather->rot.x += 0x384;
+    } else if (feather->rot.x >= 0x4BB9) {
+        feather->rot.x -= 0x384;
     } else {
-        arg1->unk_30.x = (Math_SinS((sp2C * 65535.0f) / 41.0f) * 2000.0f) + 16384.0f;
+        feather->rot.x = (Math_SinS(((f32)sp2C * 0xFFFF) / 41.0f) * 2000.0f) + 0x4000;
     }
 
-    if (arg1->unk_30.y < -0xBB8) {
-        arg1->unk_30.y += 0x384;
-    } else if (arg1->unk_30.y > 0xBB8) {
-        arg1->unk_30.y -= 0x384;
+    if (feather->rot.y < -0xBB8) {
+        feather->rot.y += 0x384;
+    } else if (feather->rot.y > 0xBB8) {
+        feather->rot.y -= 0x384;
     } else {
-        sp24 = 1;
-        arg1->unk_30.y = Math_SinS((sp28 * 65535.0f) / 41.0f) * 2000.0f;
+        sp24 = true;
+        feather->rot.y = Math_SinS(((f32)sp28 * 0xFFFF) / 41.0f) * 2000.0f;
     }
 
-    if (sp24 == 1) {
+    if (sp24 == true) {
         if (D_80AF38F0.y < 0.0f) {
-            arg1->unk_14 += D_80AF38F0.x * 0.5f;
-            arg1->unk_18 += (D_80AF38F0.y * 0.5f) + 0.08f;
-            arg1->unk_1C += (D_80AF38F0.z * 0.5f);
+            feather->velocity.x += D_80AF38F0.x * 0.5f;
+            feather->velocity.y += (D_80AF38F0.y * 0.5f) + 0.08f;
+            feather->velocity.z += (D_80AF38F0.z * 0.5f);
         } else {
-            arg1->unk_14 += -D_80AF38F0.x * 0.5f;
-            arg1->unk_18 += (-D_80AF38F0.y * 0.5f) + 0.08f;
-            arg1->unk_1C += -D_80AF38F0.z * 0.5f;
+            feather->velocity.x += -D_80AF38F0.x * 0.5f;
+            feather->velocity.y += (-D_80AF38F0.y * 0.5f) + 0.08f;
+            feather->velocity.z += -D_80AF38F0.z * 0.5f;
         }
     } else if (D_80AF38F0.y < 0.0f) {
-        arg1->unk_14 += D_80AF38F0.x * 0.2f;
-        arg1->unk_18 += (D_80AF38F0.y * 0.2f) + 0.08f;
-        arg1->unk_1C += D_80AF38F0.z * 0.2f;
+        feather->velocity.x += D_80AF38F0.x * 0.2f;
+        feather->velocity.y += (D_80AF38F0.y * 0.2f) + 0.08f;
+        feather->velocity.z += D_80AF38F0.z * 0.2f;
     } else {
-        arg1->unk_14 += -D_80AF38F0.x * 0.2f;
-        arg1->unk_18 += (-D_80AF38F0.y * 0.2f) + 0.08f;
-        arg1->unk_1C += (-D_80AF38F0.z * 0.2f);
+        feather->velocity.x += -D_80AF38F0.x * 0.2f;
+        feather->velocity.y += (-D_80AF38F0.y * 0.2f) + 0.08f;
+        feather->velocity.z += (-D_80AF38F0.z * 0.2f);
     }
 
-    arg1->unk_08.x += arg1->unk_14;
-    arg1->unk_08.y += arg1->unk_18;
-    arg1->unk_08.z += arg1->unk_1C;
+    feather->pos.x += feather->velocity.x;
+    feather->pos.y += feather->velocity.y;
+    feather->pos.z += feather->velocity.z;
 }
 
-void func_80AF10D8(PlayState* play, EnTest7Struct2* arg1) {
-    arg1->unk_30.y += arg1->unk_38;
+void EnTest7_UpdateFeatherType2(PlayState* play, OwlWarpFeather* feather) {
+    feather->rot.y += feather->rotVelocity.y;
 
-    arg1->unk_20 = Rand_Centered();
-    arg1->unk_24 = Rand_Centered() + -0.01f;
-    arg1->unk_28 = Rand_Centered();
+    feather->accel.x = Rand_Centered();
+    feather->accel.y = Rand_Centered() + -0.01f;
+    feather->accel.z = Rand_Centered();
 
-    arg1->unk_14 += arg1->unk_20;
-    arg1->unk_18 += arg1->unk_24;
-    arg1->unk_1C += arg1->unk_28;
+    feather->velocity.x += feather->accel.x;
+    feather->velocity.y += feather->accel.y;
+    feather->velocity.z += feather->accel.z;
 
-    arg1->unk_08.x += arg1->unk_14;
-    arg1->unk_08.y += arg1->unk_18;
-    arg1->unk_08.z += arg1->unk_1C;
+    feather->pos.x += feather->velocity.x;
+    feather->pos.y += feather->velocity.y;
+    feather->pos.z += feather->velocity.z;
 }
 
-void func_80AF118C(PlayState* play, EnTest7Struct2* arg1, EnTest7* this, s32 arg3, s32 arg4) {
+void EnTest7_UpdateFeathers(PlayState* play, OwlWarpFeather* feathers, EnTest7* this, s32 arg3, s32 arg4) {
     s32 pad[4];
-    EnTest7Struct2* ptr;
+    OwlWarpFeather* feather;
     s16 phi_s1;
     s32 i;
     f32 temp_f28;
@@ -260,23 +248,22 @@ void func_80AF118C(PlayState* play, EnTest7Struct2* arg1, EnTest7* this, s32 arg
     f32 temp_f26;
     f32 temp_f2;
 
-    for (i = 0, ptr = arg1; i < (s32)(ARRAY_COUNT(this->unk_15C) * sizeof(this->unk_15C[0]));
-         i += sizeof(this->unk_15C[0]), ptr++) {
-        arg1 = ptr;
+    for (i = 0, feather = feathers; i < (OWL_WARP_NUM_FEATHERS * sizeof(OwlWarpFeather));
+         i += sizeof(OwlWarpFeather), feather++) {
 
-        if (arg1->unk_00 == 0) {
+        if (feather->type == OWL_WARP_FEATHER_TYPE_DISABLED) {
             continue;
         }
 
-        if (arg1->unk_00 == 1) {
-            func_80AF0CDC(play, arg1);
+        if (feather->type == OWL_WARP_FEATHER_TYPE_1) {
+            EnTest7_UpdateFeatherType1(play, feather);
         } else {
-            func_80AF10D8(play, arg1);
+            EnTest7_UpdateFeatherType2(play, feather);
         }
 
         if (arg3) {
-            temp_f22 = arg1->unk_08.x - this->actor.world.pos.x;
-            temp_f24 = arg1->unk_08.z - this->actor.world.pos.z;
+            temp_f22 = feather->pos.x - this->actor.world.pos.x;
+            temp_f24 = feather->pos.z - this->actor.world.pos.z;
             temp_f0 = SQ(temp_f22) + SQ(temp_f24);
 
             phi_s1 = -10000;
@@ -287,26 +274,26 @@ void func_80AF118C(PlayState* play, EnTest7Struct2* arg1, EnTest7* this, s32 arg
             temp_f26 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
             temp_f28 = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
 
-            arg1->unk_08.x = this->actor.world.pos.x + temp_f26;
-            arg1->unk_08.z = this->actor.world.pos.z + temp_f28;
+            feather->pos.x = this->actor.world.pos.x + temp_f26;
+            feather->pos.z = this->actor.world.pos.z + temp_f28;
 
-            temp_f22 = arg1->unk_14;
-            temp_f24 = arg1->unk_1C;
+            temp_f22 = feather->velocity.x;
+            temp_f24 = feather->velocity.z;
 
-            arg1->unk_14 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
-            arg1->unk_1C = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
+            feather->velocity.x = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
+            feather->velocity.z = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
 
-            temp_f22 = arg1->unk_20;
-            temp_f24 = arg1->unk_28;
+            temp_f22 = feather->accel.x;
+            temp_f24 = feather->accel.z;
 
-            arg1->unk_20 = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
-            arg1->unk_28 = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
+            feather->accel.x = (temp_f22 * Math_CosS(phi_s1)) - (Math_SinS(phi_s1) * temp_f24);
+            feather->accel.z = (temp_f22 * Math_SinS(phi_s1)) + (Math_CosS(phi_s1) * temp_f24);
         }
 
         if (arg4) {
-            sp8C.x = arg1->unk_08.x - this->actor.world.pos.x;
-            sp8C.y = arg1->unk_08.y - (this->actor.world.pos.y + 40.0f);
-            sp8C.z = arg1->unk_08.z - this->actor.world.pos.z;
+            sp8C.x = feather->pos.x - this->actor.world.pos.x;
+            sp8C.y = feather->pos.y - (this->actor.world.pos.y + 40.0f);
+            sp8C.z = feather->pos.z - this->actor.world.pos.z;
 
             temp_f2 = 1.0f - (0.5f / ((Math3D_Vec3fMagnitude(&sp8C) / 500.0f) + 1.0f));
 
@@ -314,18 +301,18 @@ void func_80AF118C(PlayState* play, EnTest7Struct2* arg1, EnTest7* this, s32 arg
             sp8C.y *= temp_f2;
             sp8C.z *= temp_f2;
 
-            arg1->unk_08.x = this->actor.world.pos.x + sp8C.x;
-            arg1->unk_08.y = this->actor.world.pos.y + sp8C.y + 40.0f;
-            arg1->unk_08.z = this->actor.world.pos.z + sp8C.z;
+            feather->pos.x = this->actor.world.pos.x + sp8C.x;
+            feather->pos.y = this->actor.world.pos.y + sp8C.y + 40.0f;
+            feather->pos.z = this->actor.world.pos.z + sp8C.z;
         }
     }
 }
 
-void func_80AF14FC(PlayState* play2, EnTest7Struct2* arg1) {
+void EnTest7_DrawFeathers(PlayState* play2, OwlWarpFeather* feathers) {
     s32 pad[3];
     PlayState* play = play2;
-    Mtx* temp_v0;
-    EnTest7Struct2* ptr;
+    Mtx* mtx;
+    OwlWarpFeather* feather;
     s32 i;
     MtxF sp6C;
 
@@ -338,36 +325,37 @@ void func_80AF14FC(PlayState* play2, EnTest7Struct2* arg1) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
-    for (i = 0, ptr = arg1; i < 0x1770; i += 0x3C, ptr++) {
-        if (ptr->unk_00 == 0) {
+    for (i = 0, feather = feathers; i < (OWL_WARP_NUM_FEATHERS * sizeof(OwlWarpFeather));
+         i += sizeof(OwlWarpFeather), feather++) {
+        if (feather->type == OWL_WARP_FEATHER_TYPE_DISABLED) {
             continue;
         }
 
-        if ((ptr->unk_08.x > 30000.0f) || (ptr->unk_08.x < -30000.0f) || (ptr->unk_08.y > 30000.0f) ||
-            (ptr->unk_08.y < -30000.0f) || (ptr->unk_08.z > 30000.0f) || (ptr->unk_08.z < -30000.0f)) {
-            ptr->unk_00 = 0;
+        if ((feather->pos.x > 30000.0f) || (feather->pos.x < -30000.0f) || (feather->pos.y > 30000.0f) ||
+            (feather->pos.y < -30000.0f) || (feather->pos.z > 30000.0f) || (feather->pos.z < -30000.0f)) {
+            feather->type = OWL_WARP_FEATHER_TYPE_DISABLED;
             continue;
         }
 
-        Matrix_Translate(ptr->unk_08.x, ptr->unk_08.y, ptr->unk_08.z, MTXMODE_NEW);
+        Matrix_Translate(feather->pos.x, feather->pos.y, feather->pos.z, MTXMODE_NEW);
 
-        if (ptr->unk_00 == 1) {
-            Matrix_RotateZYX(ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z, MTXMODE_APPLY);
+        if (feather->type == OWL_WARP_FEATHER_TYPE_1) {
+            Matrix_RotateZYX(feather->rot.x, feather->rot.y, feather->rot.z, MTXMODE_APPLY);
         } else {
-            SkinMatrix_SetRotateYRP(&sp6C, ptr->unk_30.x, ptr->unk_30.y, ptr->unk_30.z);
+            SkinMatrix_SetRotateYRP(&sp6C, feather->rot.x, feather->rot.y, feather->rot.z);
             Matrix_Mult(&sp6C, MTXMODE_APPLY);
         }
 
-        Matrix_Scale(ptr->unk_2C, ptr->unk_2C, ptr->unk_2C, MTXMODE_APPLY);
-        if (ptr->unk_00 == 2) {
+        Matrix_Scale(feather->scale, feather->scale, feather->scale, MTXMODE_APPLY);
+        if (feather->type == OWL_WARP_FEATHER_TYPE_2) {
             Matrix_Translate(0.0f, 30.0f, 0.0f, MTXMODE_APPLY);
         }
 
-        temp_v0 = Matrix_NewMtx(play->state.gfxCtx);
-        if (temp_v0 == NULL) {
+        mtx = Matrix_NewMtx(play->state.gfxCtx);
+        if (mtx == NULL) {
             continue;
         }
-        gSPMatrix(POLY_OPA_DISP++, temp_v0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPMatrix(POLY_OPA_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_081628);
     }
 
@@ -376,12 +364,12 @@ void func_80AF14FC(PlayState* play2, EnTest7Struct2* arg1) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_80AF1730(EnTest7Struct* arg0) {
-    arg0->unk_00 = 0.0f;
-    arg0->unk_04 = 0.0f;
-    arg0->unk_08 = 1.0f;
-    arg0->unk_0C = 1.0f;
-    arg0->unk_10 = 0;
+void EnTest7_InitSpheroid(OwlWarpSpheroid* spheroid) {
+    spheroid->unk_00 = 0.0f;
+    spheroid->unk_04 = 0.0f;
+    spheroid->xzScale = 1.0f;
+    spheroid->yScale = 1.0f;
+    spheroid->yaw = 0;
 }
 
 void EnTest7_Init(Actor* thisx, PlayState* play2) {
@@ -391,24 +379,26 @@ void EnTest7_Init(Actor* thisx, PlayState* play2) {
     Player* player2 = GET_PLAYER(play);
 
     this->actor.world.rot.y = this->actor.shape.rot.y = player->actor.shape.rot.y;
-    this->unk_144 = 0;
-    this->unk_1E54 = 0;
+    this->flags = 0;
+    this->timer = 0;
     this->unk_1E8E = player->actor.shape.rot.y;
-    this->unk_1E90 = player->actor.scale.x;
-    this->unk_1E94 = player->actor.scale.z;
+    this->playerScaleX = player->actor.scale.x;
+    this->playerScaleZ = player->actor.scale.z;
 
-    func_80183430(&this->unk_18CC, &gameplay_keep_Blob_085640, &gameplay_keep_Blob_083534, this->unk_18FC,
+    // Keyframe animations
+    func_80183430(&this->skeletonInfo, &gameplay_keep_Blob_085640, &gameplay_keep_Blob_083534, this->unk_18FC,
                   this->unk_1BA8, NULL);
-    func_801834A8(&this->unk_18CC, &gameplay_keep_Blob_083534);
-    func_80AF0838(this->unk_15C);
-    func_80AF1730(&this->unk_148);
+    func_801834A8(&this->skeletonInfo, &gameplay_keep_Blob_083534);
 
-    if (ENTEST7_GET(&this->actor) == ENTEST7_MINUS1) {
-        func_80AF082C(this, func_80AF2938);
-        EnTest7_SetupAction(this, NULL);
+    EnTest7_InitFeathers(this->feathers);
+    EnTest7_InitSpheroid(&this->spheroid);
+
+    if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == ENTEST7_ARRIVE) {
+        EnTest7_SetupAction(this, EnTest7_SetupArriveCs);
+        EnTest7_SetupPlayerCamFunc(this, NULL);
     } else {
-        func_80AF082C(this, func_80AF19A8);
-        EnTest7_SetupAction(this, func_80AF2854);
+        EnTest7_SetupAction(this, EnTest7_StartWarpCs);
+        EnTest7_SetupPlayerCamFunc(this, EnTest7_PlayerAndCameraControl);
         Audio_PlayBgm_StorePrevBgm(NA_BGM_SONG_OF_SOARING);
     }
 
@@ -432,26 +422,26 @@ void EnTest7_Destroy(Actor* thisx, PlayState* play) {
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
 
-void func_80AF19A8(EnTest7* this, PlayState* play) {
+void EnTest7_StartWarpCs(EnTest7* this, PlayState* play) {
     if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
         CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     } else {
         CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
-        func_80AF082C(this, func_80AF1A2C);
+        EnTest7_SetupAction(this, EnTest7_WarpCsPart1);
         play->unk_18844 = true;
     }
 }
 
-void func_80AF1A2C(EnTest7* this, PlayState* play) {
+void EnTest7_WarpCsPart1(EnTest7* this, PlayState* play) {
     Color_RGB8 fogColor = { 64, 0, 0 };
     Color_RGB8 ambientColor = { 220, 220, 255 };
-    f32 envLerp = this->unk_1E54 / 10.0f;
+    f32 envLerp = this->timer / 10.0f;
 
     Environment_LerpAmbientColor(play, &ambientColor, envLerp);
     Environment_LerpFogColor(play, &fogColor, envLerp);
     Environment_LerpFog(play, 2000, 4000, envLerp);
 
-    if (this->unk_1E54 >= 10) {
+    if (this->timer >= 10) {
         Camera* subCam =
             Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
 
@@ -459,58 +449,58 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
         this->subCamAt = subCam->at;
         this->subCamFov = subCam->fov;
 
-        func_80AF082C(this, func_80AF1CA0);
-        this->unk_144 |= 0x20;
+        EnTest7_SetupAction(this, EnTest7_WarpCsPart2);
+        this->flags |= OWL_WARP_FLAGS_20;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
         Play_EnableMotionBlur(120);
     }
 }
 
 void func_80AF1B68(EnTest7* this, PlayState* play) {
-    this->unk_144 |= 2;
+    this->flags |= OWL_WARP_FLAGS_DRAW_SPHEROID;
 
-    if (this->unk_148.unk_04 < 11.0f) {
-        this->unk_148.unk_04 = this->unk_148.unk_04 + 0.3f;
-        this->unk_148.unk_08 = ((this->unk_148.unk_00 * -0.45f) / 11.0f) + 0.7f;
-        this->unk_148.unk_0C = ((this->unk_148.unk_00 * -0.29999998f) / 11.0f) + 0.7f;
+    if (this->spheroid.unk_04 < 11.0f) {
+        this->spheroid.unk_04 += 0.3f;
+        this->spheroid.xzScale = ((this->spheroid.unk_00 * -0.45f) / 11.0f) + 0.7f;
+        this->spheroid.yScale = ((this->spheroid.unk_00 * -0.29999998f) / 11.0f) + 0.7f;
     }
 
-    if (this->unk_148.unk_00 < 11.0f) {
-        this->unk_148.unk_00 += 1.0f;
-        if (this->unk_148.unk_00 > 6.0f) {
+    if (this->spheroid.unk_00 < 11.0f) {
+        this->spheroid.unk_00 += 1.0f;
+        if (this->spheroid.unk_00 > 6.0f) {
             Player* player = GET_PLAYER(play);
 
-            this->unk_144 &= ~1;
+            this->flags &= ~OWL_WARP_FLAGS_DRAW_WINGS;
             player->actor.draw = NULL;
         }
-    } else if (this->unk_1E54 >= 87) {
-        func_80AF082C(this, func_80AF1F48);
-        this->unk_144 &= -9;
-        this->unk_148.unk_10 -= 0x2EE0;
+    } else if (this->timer >= 87) {
+        EnTest7_SetupAction(this, EnTest7_WarpCsPart4);
+        this->flags &= ~OWL_WARP_FLAGS_8;
+        this->spheroid.yaw -= 0x2EE0;
     } else {
-        this->unk_148.unk_10 -= 0x2EE0;
+        this->spheroid.yaw -= 0x2EE0;
     }
 }
 
-void func_80AF1CA0(EnTest7* this, PlayState* play) {
-    Vec3f sp34;
+void EnTest7_WarpCsPart2(EnTest7* this, PlayState* play) {
+    Vec3f featherPos;
 
-    if (func_80183DE0(&this->unk_18CC)) {
-        func_80AF082C(this, func_80AF1E44);
+    if (func_80183DE0(&this->skeletonInfo)) {
+        EnTest7_SetupAction(this, EnTest7_WarpCsPart3);
     }
 
-    if (this->unk_18CC.frameCtrl.unk_10 > 60.0f) {
+    if (this->skeletonInfo.frameCtrl.unk_10 > 60.0f) {
         func_80AF1B68(this, play);
     }
 
-    if ((this->unk_18CC.frameCtrl.unk_10 > 20.0f) && !(this->unk_144 & 0x40)) {
-        this->unk_144 |= 0x40;
+    if ((this->skeletonInfo.frameCtrl.unk_10 > 20.0f) && !(this->flags & OWL_WARP_FLAGS_40)) {
+        this->flags |= OWL_WARP_FLAGS_40;
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_CLOSE);
     }
 
-    if (this->unk_18CC.frameCtrl.unk_10 > 42.0f) {
-        if (!(this->unk_144 & 0x80)) {
-            this->unk_144 |= 0x80;
+    if (this->skeletonInfo.frameCtrl.unk_10 > 42.0f) {
+        if (!(this->flags & OWL_WARP_FLAGS_80)) {
+            this->flags |= OWL_WARP_FLAGS_80;
             Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_ROLL);
         }
 
@@ -519,20 +509,20 @@ void func_80AF1CA0(EnTest7* this, PlayState* play) {
                 Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
             f32 rand = Rand_ZeroOne();
 
-            sp34.x = ((subCam->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
-            sp34.y = ((subCam->eye.y - this->actor.world.pos.y) * rand) + this->actor.world.pos.y;
-            sp34.z = ((subCam->eye.z - this->actor.world.pos.z) * rand) + this->actor.world.pos.z;
+            featherPos.x = ((subCam->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
+            featherPos.y = ((subCam->eye.y - this->actor.world.pos.y) * rand) + this->actor.world.pos.y;
+            featherPos.z = ((subCam->eye.z - this->actor.world.pos.z) * rand) + this->actor.world.pos.z;
 
-            func_80AF0C30(this->unk_15C, &sp34, 1);
-            this->unk_144 |= 8;
+            EnTest7_RequestFeather(this->feathers, &featherPos, true);
+            this->flags |= OWL_WARP_FLAGS_8;
         }
     } else {
-        this->unk_144 |= 1;
+        this->flags |= OWL_WARP_FLAGS_DRAW_WINGS;
     }
 }
 
-void func_80AF1E44(EnTest7* this, PlayState* play) {
-    Vec3f sp34;
+void EnTest7_WarpCsPart3(EnTest7* this, PlayState* play) {
+    Vec3f featherPos;
     Camera* subCam;
     f32 rand;
 
@@ -541,50 +531,51 @@ void func_80AF1E44(EnTest7* this, PlayState* play) {
     if (Rand_ZeroOne() < 0.3f) {
         subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
         rand = Rand_ZeroOne();
-        sp34.x = ((subCam->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
-        sp34.y = ((subCam->eye.y - this->actor.world.pos.y) * rand) + this->actor.world.pos.y;
-        sp34.z = ((subCam->eye.z - this->actor.world.pos.z) * rand) + this->actor.world.pos.z;
-        func_80AF0C30(this->unk_15C, &sp34, 1);
+        featherPos.x = ((subCam->eye.x - this->actor.world.pos.x) * rand) + this->actor.world.pos.x;
+        featherPos.y = ((subCam->eye.y - this->actor.world.pos.y) * rand) + this->actor.world.pos.y;
+        featherPos.z = ((subCam->eye.z - this->actor.world.pos.z) * rand) + this->actor.world.pos.z;
+        EnTest7_RequestFeather(this->feathers, &featherPos, true);
     }
 
-    Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    func_80AF0C30(this->unk_15C, &sp34, 1);
+    Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
+    EnTest7_RequestFeather(this->feathers, &featherPos, true);
     this->unk_18FC[1].y += 0x2EE0;
 }
 
-void func_80AF1F48(EnTest7* this, PlayState* play) {
+void EnTest7_WarpCsPart4(EnTest7* this, PlayState* play) {
     s32 pad;
-    s32 temp = this->unk_1E54 - 86;
+    s32 temp = this->timer - 86;
     f32 temp_f0 = temp / 10.0f;
-    Vec3f sp20;
+    Vec3f featherPos;
 
-    this->unk_144 |= 0x10;
+    this->flags |= OWL_WARP_FLAGS_10;
 
-    this->unk_148.unk_08 = (-0.15f * temp_f0) + 0.25f;
-    this->unk_148.unk_0C = (-0.3f * temp_f0) + 0.4f;
-    this->unk_148.unk_10 -= 0x2EE0;
+    this->spheroid.xzScale = (-0.15f * temp_f0) + 0.25f;
+    this->spheroid.yScale = (-0.3f * temp_f0) + 0.4f;
+    this->spheroid.yaw -= 0x2EE0;
 
-    this->unk_144 |= 4;
+    this->flags |= OWL_WARP_FLAGS_DRAW_LENS_FLARE;
 
-    if (this->unk_1E54 >= 96) {
-        func_80AF082C(this, func_80AF2030);
-        this->unk_144 &= ~0x10;
+    if (this->timer >= 96) {
+        EnTest7_SetupAction(this, EnTest7_WarpCsPart5);
+        this->flags &= ~OWL_WARP_FLAGS_10;
     }
-    Math_Vec3f_Copy(&sp20, &this->actor.world.pos);
-    func_80AF0C30(this->unk_15C, &sp20, 1);
+    Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
+    EnTest7_RequestFeather(this->feathers, &featherPos, true);
 }
 
-void func_80AF2030(EnTest7* this, PlayState* play) {
-    s32 temp = this->unk_1E54 - 96;
-    f32 four = 4;
-    f32 sp1C = 1.0f - (temp / four);
+void EnTest7_WarpCsPart5(EnTest7* this, PlayState* play) {
+    s32 pad;
+    s32 temp = this->timer - 96;
+    f32 sp1C = 1.0f - ((f32)temp / 4);
     Camera* subCam;
     f32 temp_f2;
     f32 temp_f4;
 
-    this->unk_148.unk_08 = ((temp * -0.1f) / four) + 0.1f;
-    this->unk_148.unk_0C = ((temp * 5.9f) / four) + 0.1f;
-    this->unk_148.unk_10 -= 0x2EE0;
+    this->spheroid.xzScale = ((temp * -0.1f) / 4) + 0.1f;
+    this->spheroid.yScale = ((temp * 5.9f) / 4) + 0.1f;
+    this->spheroid.yaw -= 0x2EE0;
+
     this->actor.world.pos.y += 100.0f;
 
     subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
@@ -595,21 +586,21 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
     subCam->eye.z = ((subCam->eye.z - this->subCamEye.z) * sp1C) + this->subCamEye.z;
     subCam->fov = ((subCam->fov - this->subCamFov) * sp1C) + this->subCamFov;
 
-    if (this->unk_1E54 >= 100) {
+    if (this->timer >= 100) {
         R_PLAY_FILL_SCREEN_ON = true;
         R_PLAY_FILL_SCREEN_R = 255;
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 255;
         play->unk_18844 = false;
-        this->unk_144 &= ~4;
-        func_80AF082C(this, func_80AF21E8);
+        this->flags &= ~OWL_WARP_FLAGS_DRAW_LENS_FLARE;
+        EnTest7_SetupAction(this, EnTest7_WarpCsPart6);
         Play_DisableMotionBlur();
     }
 }
 
-void func_80AF21E8(EnTest7* this, PlayState* play) {
-    s32 sp2C = this->unk_1E54 - 100;
+void EnTest7_WarpCsPart6(EnTest7* this, PlayState* play) {
+    s32 sp2C = this->timer - 100;
     f32 envLerp;
     Color_RGB8 fogColor = { 64, 0, 0 };
     Color_RGB8 ambientColor = { 220, 220, 255 };
@@ -628,47 +619,52 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
     Environment_LerpFogColor(play, &fogColor, envLerp);
     Environment_LerpFog(play, 2000, 4000, envLerp);
 
-    if (this->unk_1E54 >= 110) {
-        func_80AF082C(this, func_80AF2318);
+    if (this->timer >= 110) {
+        EnTest7_SetupAction(this, EnTest7_WarpCsWait);
     }
 }
 
-void func_80AF2318(EnTest7* this, PlayState* play) {
-    if (this->unk_1E54 >= 130) {
-        func_80AF082C(this, func_80AF2350);
+void EnTest7_WarpCsWait(EnTest7* this, PlayState* play) {
+    if (this->timer >= 130) {
+        EnTest7_SetupAction(this, EnTest7_WarpCsWarp);
     }
 }
 
-u16 D_80AF343C[] = {
-    ENTRANCE(GREAT_BAY_COAST, 11), ENTRANCE(ZORA_CAPE, 6),
-    ENTRANCE(SNOWHEAD, 3),         ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),
-    ENTRANCE(SOUTH_CLOCK_TOWN, 9), ENTRANCE(MILK_ROAD, 4),
-    ENTRANCE(WOODFALL, 4),         ENTRANCE(SOUTHERN_SWAMP_POISONED, 10),
-    ENTRANCE(IKANA_CANYON, 4),     ENTRANCE(STONE_TOWER, 3),
+u16 sOwlWarpEntrances[OWL_WARP_MAX - 1] = {
+    ENTRANCE(GREAT_BAY_COAST, 11),         // OWL_WARP_GREAT_BAY_COAST
+    ENTRANCE(ZORA_CAPE, 6),                // OWL_WARP_ZORA_CAPE
+    ENTRANCE(SNOWHEAD, 3),                 // OWL_WARP_SNOWHEAD
+    ENTRANCE(MOUNTAIN_VILLAGE_WINTER, 8),  // OWL_WARP_MOUNTAIN_VILLAGE
+    ENTRANCE(SOUTH_CLOCK_TOWN, 9),         // OWL_WARP_CLOCK_TOWN
+    ENTRANCE(MILK_ROAD, 4),                // OWL_WARP_MILK_ROAD
+    ENTRANCE(WOODFALL, 4),                 // OWL_WARP_WOODFALL
+    ENTRANCE(SOUTHERN_SWAMP_POISONED, 10), // OWL_WARP_SOUTHERN_SWAMP
+    ENTRANCE(IKANA_CANYON, 4),             // OWL_WARP_IKANA_CANYON
+    ENTRANCE(STONE_TOWER, 3),              // OWL_WARP_STONE_TOWER
 };
 
-void func_80AF2350(EnTest7* this, PlayState* play) {
-    Vec3f sp2C;
+void EnTest7_WarpCsWarp(EnTest7* this, PlayState* play) {
+    Vec3f featherPos;
 
     if (this) {}
 
-    Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+    Math_Vec3f_Copy(&featherPos, &this->actor.world.pos);
 
     if (Rand_ZeroOne() < 0.1f) {
-        func_80AF0C30(this->unk_15C, &sp2C, 1);
+        EnTest7_RequestFeather(this->feathers, &featherPos, true);
     }
 
-    this->unk_148.unk_10 -= 0x2EE0;
+    this->spheroid.yaw -= 0x2EE0;
 
     if (play->sceneId == SCENE_SECOM) {
         play->nextEntrance = ENTRANCE(IKANA_CANYON, 6);
-    } else if (ENTEST7_GET(&this->actor) == ENTEST7_26) {
+    } else if (OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) == ENTEST7_26) {
         func_80169F78(&play->state);
         gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams =
-            (gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams & 0xFF) | 0x600;
+            PLAYER_PARAMS(gSaveContext.respawn[RESPAWN_MODE_TOP].playerParams, PLAYER_INITMODE_6);
         gSaveContext.respawnFlag = -6;
     } else {
-        play->nextEntrance = D_80AF343C[ENTEST7_GET(&this->actor) - ENTEST7_1C];
+        play->nextEntrance = sOwlWarpEntrances[OWL_WARP_CS_GET_OCARINA_MODE(&this->actor) - ENTEST7_1C];
         if ((play->nextEntrance == ENTRANCE(SOUTHERN_SWAMP_POISONED, 10)) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             play->nextEntrance = ENTRANCE(SOUTHERN_SWAMP_CLEARED, 10);
@@ -684,7 +680,7 @@ void func_80AF2350(EnTest7* this, PlayState* play) {
     gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 }
 
-void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
+void EnTest7_CameraControl1(EnTest7* this, PlayState* play, f32 lerp) {
     Vec3f sp3C;
     Vec3f* pos;
     Player* player = GET_PLAYER(play);
@@ -698,15 +694,15 @@ void func_80AF24D8(EnTest7* this, PlayState* play, f32 arg2) {
     sp3C.y = (Math_SinS(0xFA0) * 180.0f) + pos->y;
     sp3C.z = ((180.0f * Math_CosS(this->unk_1E8E)) * Math_CosS(0xFA0)) + pos->z;
 
-    subCam->eye.x = ((sp3C.x - subCam->eye.x) * arg2) + subCam->eye.x;
-    subCam->eye.y = ((sp3C.y - subCam->eye.y) * arg2) + subCam->eye.y;
-    subCam->eye.z = ((sp3C.z - subCam->eye.z) * arg2) + subCam->eye.z;
+    subCam->eye.x = ((sp3C.x - subCam->eye.x) * lerp) + subCam->eye.x;
+    subCam->eye.y = ((sp3C.y - subCam->eye.y) * lerp) + subCam->eye.y;
+    subCam->eye.z = ((sp3C.z - subCam->eye.z) * lerp) + subCam->eye.z;
 
-    subCam->fov = ((this->subCamFov - subCam->fov) * arg2) + subCam->fov;
+    subCam->fov = ((this->subCamFov - subCam->fov) * lerp) + subCam->fov;
     subCam->at.y += 1.4444444f;
 }
 
-void func_80AF2654(EnTest7* this, PlayState* play, f32 arg2) {
+void EnTest7_CameraControl2(EnTest7* this, PlayState* play, f32 lerp) {
     Vec3f* pos;
     Player* player = GET_PLAYER(play);
     Camera* subCam;
@@ -721,55 +717,61 @@ void func_80AF2654(EnTest7* this, PlayState* play, f32 arg2) {
     sp30.y = (Math_SinS(0xBB8) * 80.0f) + pos->y;
     sp30.z = ((80.0f * Math_CosS(this->unk_1E8E)) * Math_CosS(0xBB8)) + pos->z;
 
-    subCam->eye.x = ((sp30.x - subCam->eye.x) * arg2) + subCam->eye.x;
-    subCam->eye.y = ((sp30.y - subCam->eye.y) * arg2) + subCam->eye.y;
-    subCam->eye.z = ((sp30.z - subCam->eye.z) * arg2) + subCam->eye.z;
+    subCam->eye.x = ((sp30.x - subCam->eye.x) * lerp) + subCam->eye.x;
+    subCam->eye.y = ((sp30.y - subCam->eye.y) * lerp) + subCam->eye.y;
+    subCam->eye.z = ((sp30.z - subCam->eye.z) * lerp) + subCam->eye.z;
 
-    subCam->at.x = ((pos->x - subCam->at.x) * arg2) + subCam->at.x;
-    subCam->at.y = (((pos->y + 40.0f) - subCam->at.y) * arg2) + subCam->at.y;
-    subCam->at.z = ((pos->z - subCam->at.z) * arg2) + subCam->at.z;
+    subCam->at.x = ((pos->x - subCam->at.x) * lerp) + subCam->at.x;
+    subCam->at.y = (((pos->y + 40.0f) - subCam->at.y) * lerp) + subCam->at.y;
+    subCam->at.z = ((pos->z - subCam->at.z) * lerp) + subCam->at.z;
 
-    subCam->fov = ((this->subCamFov - subCam->fov) * arg2) + subCam->fov;
+    subCam->fov = ((this->subCamFov - subCam->fov) * lerp) + subCam->fov;
 }
 
-void func_80AF2808(EnTest7* this, PlayState* play, f32 arg2) {
+void EnTest7_PlayerControl(EnTest7* this, PlayState* play, f32 lerp) {
     Player* player = GET_PLAYER(play);
 
+    // Spin Player
     player->actor.shape.rot.y += 0x2EE0;
-    player->actor.scale.x = ((0.0f - this->unk_1E90) * arg2) + this->unk_1E90;
-    player->actor.scale.z = ((0.0f - this->unk_1E94) * arg2) + this->unk_1E94;
+
+    // Squish Player thin
+    // player->actor.scale.x = LERPIMP(this->playerScaleX, 0.0f, lerp);
+    // player->actor.scale.z = LERPIMP(this->playerScaleZ, 0.0f, lerp);
+    player->actor.scale.x = ((0.0f - this->playerScaleX) * lerp) + this->playerScaleX;
+    player->actor.scale.z = ((0.0f - this->playerScaleZ) * lerp) + this->playerScaleZ;
 }
 
-void func_80AF2854(EnTest7* this, PlayState* play) {
-    f32 temp;
+void EnTest7_PlayerAndCameraControl(EnTest7* this, PlayState* play) {
+    f32 lerp;
     f32 sixteen = 16.0f;
 
-    if ((this->unk_1E54 >= 12) && (this->unk_1E54 < 31)) {
-        temp = (this->unk_1E54 - 12) / 18.0f;
-        func_80AF24D8(this, play, temp);
-    } else if ((this->unk_1E54 >= 79) && (this->unk_1E54 < 96)) {
-        temp = (this->unk_1E54 - 79) / sixteen;
-        func_80AF2654(this, play, temp);
+    if ((this->timer >= 12) && (this->timer < 31)) {
+        lerp = (this->timer - 12) / 18.0f;
+        EnTest7_CameraControl1(this, play, lerp);
+    } else if ((this->timer >= 79) && (this->timer < 96)) {
+        lerp = (this->timer - 79) / sixteen;
+        EnTest7_CameraControl2(this, play, lerp);
     }
 
-    if ((this->unk_1E54 >= 42) && (this->unk_1E54 < 69)) {
-        temp = (this->unk_1E54 - 42) / 26.0f;
-        func_80AF2808(this, play, temp);
+    if ((this->timer >= 42) && (this->timer < 69)) {
+        lerp = (this->timer - 42) / 26.0f;
+        EnTest7_PlayerControl(this, play, lerp);
     }
 }
 
-void func_80AF2938(EnTest7* this, PlayState* play) {
+void EnTest7_SetupArriveCs(EnTest7* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->unk_1E98 = player->actor.draw;
     player->actor.draw = NULL;
     player->stateFlags2 |= PLAYER_STATE2_20000000;
-    this->unk_144 |= 2;
-    this->unk_148.unk_04 = 30.0f;
+    this->flags |= OWL_WARP_FLAGS_DRAW_SPHEROID;
+    this->spheroid.unk_04 = 30.0f;
+
     if (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) {
-        func_80AF082C(this, func_80AF2AE8);
+        EnTest7_SetupAction(this, EnTest7_StartArriveCs);
     } else {
-        func_80AF082C(this, func_80AF2EC8);
+        EnTest7_SetupAction(this, EnTest7_StartArriveCsSkip);
     }
 }
 
@@ -793,7 +795,7 @@ void func_80AF29C0(EnTest7* this, PlayState* play) {
     this->actor.world.pos.z = subCam->at.z;
 }
 
-void func_80AF2AE8(EnTest7* this, PlayState* play) {
+void EnTest7_StartArriveCs(EnTest7* this, PlayState* play) {
     Camera* subCam;
 
     if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
@@ -802,7 +804,7 @@ void func_80AF2AE8(EnTest7* this, PlayState* play) {
     }
 
     CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
-    func_80AF082C(this, func_80AF2C48);
+    EnTest7_SetupAction(this, EnTest7_ArriveCsPart1);
 
     subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
     this->subCamEye = subCam->eye;
@@ -828,15 +830,15 @@ void func_80AF2BAC(EnTest7* this, PlayState* play, Vec3f* arg2, f32 arg3) {
     subCam->at.z = z;
 }
 
-void func_80AF2C48(EnTest7* this, PlayState* play) {
-    f32 sp24 = (40 - this->unk_1E54) / 40.0f;
+void EnTest7_ArriveCsPart1(EnTest7* this, PlayState* play) {
+    f32 sp24 = (40 - this->timer) / 40.0f;
     Camera* subCam;
 
-    this->unk_148.unk_00 = 11.0f;
-    this->unk_144 |= 4;
-    this->unk_148.unk_08 = 0.05f;
-    this->unk_148.unk_0C = 0.05f;
-    this->unk_148.unk_10 += 0x2EE0;
+    this->spheroid.unk_00 = 11.0f;
+    this->flags |= OWL_WARP_FLAGS_DRAW_LENS_FLARE;
+    this->spheroid.xzScale = 0.05f;
+    this->spheroid.yScale = 0.05f;
+    this->spheroid.yaw += 0x2EE0;
 
     this->actor.world.pos.x = ((this->actor.world.pos.x - this->actor.home.pos.x) * sp24) + this->actor.home.pos.x;
     this->actor.world.pos.y = ((this->actor.world.pos.y - this->actor.home.pos.y) * sp24) + this->actor.home.pos.y;
@@ -850,9 +852,9 @@ void func_80AF2C48(EnTest7* this, PlayState* play) {
     subCam->at.z = this->actor.world.pos.z;
 
     func_800B9010(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
-    if (this->unk_1E54 >= 40) {
-        this->unk_144 &= ~4;
-        func_80AF082C(this, func_80AF2F98);
+    if (this->timer >= 40) {
+        this->flags &= ~OWL_WARP_FLAGS_DRAW_LENS_FLARE;
+        EnTest7_SetupAction(this, EnTest7_ArriveCsPart2);
     }
 }
 
@@ -872,59 +874,60 @@ void func_80AF2DB4(EnTest7* this, PlayState* play) {
     subCam->at.z = pos->z;
 }
 
-void func_80AF2EC8(EnTest7* this, PlayState* play) {
+void EnTest7_StartArriveCsSkip(EnTest7* this, PlayState* play) {
     Camera* subCam;
 
     if (!CutsceneManager_IsNext(play->playerCsIds[PLAYER_CS_ID_SONG_WARP])) {
         CutsceneManager_Queue(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]);
     } else {
         CutsceneManager_Start(play->playerCsIds[PLAYER_CS_ID_SONG_WARP], NULL);
-        func_80AF082C(this, func_80AF2F98);
+        EnTest7_SetupAction(this, EnTest7_ArriveCsPart2);
 
         subCam = Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(play->playerCsIds[PLAYER_CS_ID_SONG_WARP]));
         this->subCamEye = subCam->eye;
         this->subCamAt = subCam->at;
-        this->unk_1E54 = 40;
+        this->timer = 40;
 
         func_80AF2DB4(this, play);
     }
 }
 
-void func_80AF2F98(EnTest7* this, PlayState* play) {
+void EnTest7_ArriveCsPart2(EnTest7* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Player* player2 = GET_PLAYER(play);
-    Vec3f sp2C;
+    Vec3f featherPos;
 
     func_800B9010(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
 
-    sp2C = this->actor.world.pos;
+    featherPos = this->actor.world.pos;
 
-    func_80AF0C30(this->unk_15C, &sp2C, 1);
-    func_80AF0C30(this->unk_15C, &sp2C, 1);
-    this->unk_148.unk_04 = 70 - this->unk_1E54;
-    if (this->unk_1E54 > 70) {
-        func_80AF082C(this, func_80AF30F4);
+    EnTest7_RequestFeather(this->feathers, &featherPos, true);
+    EnTest7_RequestFeather(this->feathers, &featherPos, true);
+
+    this->spheroid.unk_04 = 70 - this->timer;
+    if (this->timer > 70) {
+        EnTest7_SetupAction(this, EnTest7_ArriveCsPart3);
     }
 
-    if (this->unk_148.unk_04 > 11.0f) {
-        f32 temp = this->unk_148.unk_04 - 11.0f;
+    if (this->spheroid.unk_04 > 11.0f) {
+        f32 temp = this->spheroid.unk_04 - 11.0f;
 
-        this->unk_148.unk_08 = ((-0.35f * temp) / 19.0f) + 0.4f;
-        this->unk_148.unk_0C = ((-0.35f * temp) / 19.0f) + 0.4f;
-        this->unk_148.unk_10 += 0x2EE0;
+        this->spheroid.xzScale = ((-0.35f * temp) / 19.0f) + 0.4f;
+        this->spheroid.yScale = ((-0.35f * temp) / 19.0f) + 0.4f;
+        this->spheroid.yaw += 0x2EE0;
     } else {
         player2->actor.draw = this->unk_1E98;
-        this->unk_148.unk_00 = this->unk_148.unk_04;
-        this->unk_148.unk_08 = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
-        this->unk_148.unk_0C = ((this->unk_148.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
+        this->spheroid.unk_00 = this->spheroid.unk_04;
+        this->spheroid.xzScale = ((this->spheroid.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
+        this->spheroid.yScale = ((this->spheroid.unk_04 * -0.29999998f) / 11.0f) + 0.7f;
         player->stateFlags2 &= ~PLAYER_STATE2_20000000;
     }
 }
 
-void func_80AF30F4(EnTest7* this, PlayState* play) {
+void EnTest7_ArriveCsPart3(EnTest7* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (this->unk_1E54 > 90) {
+    if (this->timer > 90) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
         Actor_Kill(&this->actor);
@@ -934,15 +937,16 @@ void func_80AF30F4(EnTest7* this, PlayState* play) {
 void EnTest7_Update(Actor* thisx, PlayState* play) {
     EnTest7* this = THIS;
 
-    this->unk_1E58(this, play);
+    this->actionFunc(this, play);
 
-    if (this->actionFunc != NULL) {
-        this->actionFunc(this, play);
+    if (this->playerCamFunc != NULL) {
+        this->playerCamFunc(this, play);
     }
 
-    this->unk_1E54++;
+    this->timer++;
 
-    func_80AF118C(play, this->unk_15C, this, (this->unk_144 & 8) != 0, (this->unk_144 & 0x10) != 0);
+    EnTest7_UpdateFeathers(play, this->feathers, this, (this->flags & OWL_WARP_FLAGS_8) != 0,
+                           (this->flags & OWL_WARP_FLAGS_10) != 0);
 }
 
 s32 func_80AF31D0(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList, u8* flags, Actor* thisx,
@@ -952,7 +956,7 @@ s32 func_80AF31D0(PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gf
 
     if ((*dList != NULL) && (Rand_ZeroOne() < 0.03f)) {
         Matrix_MultVec3f(&gZeroVec3f, &sp18);
-        func_80AF0C30(this->unk_15C, &sp18, 0);
+        EnTest7_RequestFeather(this->feathers, &sp18, false);
     }
     return true;
 }
@@ -962,31 +966,34 @@ void EnTest7_Draw(Actor* thisx, PlayState* play) {
     EnTest7* this = THIS;
     s32 sp40;
 
-    if (this->unk_144 & 1) {
-        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->unk_18CC.unk_18->unk_1 * sizeof(Mtx));
+    // Draw wings
+    if (this->flags & OWL_WARP_FLAGS_DRAW_WINGS) {
+        Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
-            func_8018450C(play, &this->unk_18CC, mtx, func_80AF31D0, NULL, &this->actor);
+            func_8018450C(play, &this->skeletonInfo, mtx, func_80AF31D0, NULL, &this->actor);
         } else {
             return;
         }
     }
 
-    if (this->unk_144 & 2) {
+    // Draw spheroid encasing that surrounds player after wings
+    if (this->flags & OWL_WARP_FLAGS_DRAW_SPHEROID) {
         Matrix_Push();
         Matrix_Translate(0.0f, 4000.0f, 0.0f, MTXMODE_APPLY);
-        Matrix_RotateZYX(0, this->unk_148.unk_10, 0, MTXMODE_APPLY);
-        Matrix_Scale(this->unk_148.unk_08 * 100.0f, this->unk_148.unk_0C * 100.0f, this->unk_148.unk_08 * 100.0f,
+        Matrix_RotateZYX(0, this->spheroid.yaw, 0, MTXMODE_APPLY);
+        Matrix_Scale(this->spheroid.xzScale * 100.0f, this->spheroid.yScale * 100.0f, this->spheroid.xzScale * 100.0f,
                      MTXMODE_APPLY);
-        sp40 = this->unk_148.unk_00;
-        AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(&gameplay_keep_Matanimheader_0815D0), sp40);
-        Gfx_DrawDListXlu(play, gameplay_keep_DL_080FC8);
+        sp40 = this->spheroid.unk_00;
+        AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(&gSoaringWarpCsSpheroidTexAnim), sp40);
+        Gfx_DrawDListXlu(play, gSoaringWarpCsSpheroidDL);
         Matrix_Pop();
     }
 
-    func_80AF14FC(play, this->unk_15C);
+    EnTest7_DrawFeathers(play, this->feathers);
 
-    if (this->unk_144 & 4) {
-        func_800F9824(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f, 5.0f, 0, 0);
+    if (this->flags & OWL_WARP_FLAGS_DRAW_LENS_FLARE) {
+        Environment_DrawLensFlare(play, &play->envCtx, &play->view, play->state.gfxCtx, this->actor.world.pos, 70.0f,
+                                  5.0f, 0, 0);
     }
 }

@@ -1244,7 +1244,7 @@ asm/non_matchings/code/z_kankyo/func_800F8A9C.s,func_800F8A9C,0x800F8A9C,0x8E
 asm/non_matchings/code/z_kankyo/Environment_Update.s,Environment_Update,0x800F8CD4,0x2C
 asm/non_matchings/code/z_kankyo/func_800F8D84.s,func_800F8D84,0x800F8D84,0x269
 asm/non_matchings/code/z_kankyo/Environment_DrawSunLensFlare.s,Environment_DrawSunLensFlare,0x800F9728,0x3F
-asm/non_matchings/code/z_kankyo/func_800F9824.s,func_800F9824,0x800F9824,0x2DE
+asm/non_matchings/code/z_kankyo/Environment_DrawLensFlare.s,Environment_DrawLensFlare,0x800F9824,0x2DE
 asm/non_matchings/code/z_kankyo/func_800FA39C.s,func_800FA39C,0x800FA39C,0xA
 asm/non_matchings/code/z_kankyo/func_800FA3C4.s,func_800FA3C4,0x800FA3C4,0x18E
 asm/non_matchings/code/z_kankyo/Environment_DrawRain.s,Environment_DrawRain,0x800FA9FC,0x2E

@@ -10170,7 +10170,7 @@ void Player_InitMode_6(PlayState* play, Player* this) {
         this->stateFlags1 |= PLAYER_STATE1_20000000;
         this->stateFlags2 |= PLAYER_STATE2_20000000;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TEST7, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, ENTEST7_MINUS1);
+                    this->actor.world.pos.z, 0, 0, 0, ENTEST7_ARRIVE);
     }
 }
 

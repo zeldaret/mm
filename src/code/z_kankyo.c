@@ -48,7 +48,7 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSunLensFlare.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F9824.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawLensFlare.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FA39C.s")
 
