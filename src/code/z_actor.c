@@ -497,7 +497,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
     if (targetCtx->lockOnAlpha != 0) {
         TargetLockOnEntry* entry;
         s16 alpha = 255;
-        f32 var1 = 1.0f;
+        f32 projectdPosScale = 1.0f;
         Vec3f projectedPos;
         s32 totalEntries;
         f32 invW;
@@ -515,7 +515,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         if (actor != NULL) {
             Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
-            var1 = (500.0f - targetCtx->lockOnRadius) / 420.0f;
+            projectdPosScale = (500.0f - targetCtx->lockOnRadius) / 420.0f;
         } else {
             targetCtx->lockOnAlpha -= 120;
             if (targetCtx->lockOnAlpha < 0) {
@@ -526,13 +526,13 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
 
-        projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * var1;
+        projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * projectdPosScale;
         projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
 
-        projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * var1;
+        projectedPos.y = ((SCREEN_HEIGHT / 2) * (projectedPos.y * invW)) * projectdPosScale;
         projectedPos.y = CLAMP(projectedPos.y, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
-        projectedPos.z *= var1;
+        projectedPos.z *= projectdPosScale;
 
         targetCtx->lockOnIndex--;
         if (targetCtx->lockOnIndex < 0) {
@@ -642,14 +642,14 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
     }
 
     if (!Math_StepToF(&targetCtx->fairyMoveProgressFactor, 0.0f, 0.25f)) {
-        f32 temp_f0 = 0.25f / targetCtx->fairyMoveProgressFactor;
+        f32 fairyMoveScale = 0.25f / targetCtx->fairyMoveProgressFactor;
         f32 x = actor->focus.pos.x - targetCtx->fairyHintPos.x;
         f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->fairyHintPos.y;
         f32 z = actor->focus.pos.z - targetCtx->fairyHintPos.z;
 
-        targetCtx->fairyHintPos.x += x * temp_f0;
-        targetCtx->fairyHintPos.y += y * temp_f0;
-        targetCtx->fairyHintPos.z += z * temp_f0;
+        targetCtx->fairyHintPos.x += x * fairyMoveScale;
+        targetCtx->fairyHintPos.y += y * fairyMoveScale;
+        targetCtx->fairyHintPos.z += z * fairyMoveScale;
     } else {
         Target_SetColors(targetCtx, actor, category, play);
     }
@@ -688,12 +688,11 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         targetCtx->targetCenterPos.z = targetedActor->world.pos.z;
 
         if (targetCtx->rotZTick == 0) {
-            f32 temp_f0_2 = (500.0f - targetCtx->lockOnRadius) * 3.0f;
-            f32 clampedFloat;
+            f32 lockOnStep = (500.0f - targetCtx->lockOnRadius) * 3.0f;
 
-            clampedFloat = CLAMP(temp_f0_2, 30.0f, 100.0f);
+            lockOnStep = CLAMP(lockOnStep, 30.0f, 100.0f);
 
-            if (Math_StepToF(&targetCtx->lockOnRadius, 80.0f, clampedFloat)) {
+            if (Math_StepToF(&targetCtx->lockOnRadius, 80.0f, lockOnStep)) {
                 targetCtx->rotZTick++;
             }
         } else {
