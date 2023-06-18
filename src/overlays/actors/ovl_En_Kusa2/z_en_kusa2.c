@@ -111,7 +111,7 @@ void func_80A5B160(EnKusa2* this, PlayState* play) {
     }
 
     for (i = 1; i < ARRAY_COUNT(this->unk_194); i++) {
-        temp_s1 = (i << 0xD) - 0x2000;
+        temp_s1 = (i * 0x2000) - 0x2000;
         if (this->unk_194[i] == NULL) {
             ptr = &this->unk_194[i];
             actor = (EnKusa2*)Actor_SpawnAsChildAndCutscene(

@@ -7,15 +7,15 @@
  * The program expects an .o elf file and outputs a raw yar binary file and a
  * "symbols" elf.
  *
- * A yar file consists in multiple Yaz0 files compressed individually. The
+ * A yar file consists of multiple Yaz0 files compressed individually. The
  * archive begins with a header of non-fixed size, which describes the
  * location of each individual Yaz0 block within the archive itself. This
  * header is followed by each Yaz0 file.
  *
  * The first word (a 4 byte group) of the header indicates the size in bytes of
  * the header itself (also describes the offset of the first Yaz0 block). The
- * rest of the header consists in words descibing the offsets of each Yaz0
- * block relative to the end of the header, because of this the first Yaz0
+ * rest of the header consists of words describing the offsets of each Yaz0
+ * block relative to the end of the header, because the first Yaz0
  * block is omitted from the offsets in the header.
  *
  * Each Yaz0 block is 0xFF-padded to a multiple of 0x10 in size.
@@ -26,7 +26,7 @@
  * its own Yaz0 compressed file, appending them in order for the generated
  * archive. Other elf sections are ignored for the resulting yar file.
  *
- * The program also outputs an elf file that's identically to the elf input,
+ * The program also outputs an elf file that's identical to the elf input,
  * but with its .data section zero'ed out completely. This "symbols" elf can be
  * used for referencing each symbol as the whole file were completely
  * uncompressed.

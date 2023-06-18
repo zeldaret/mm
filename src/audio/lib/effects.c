@@ -10,7 +10,7 @@ void AudioEffects_SequenceChannelProcessSound(SequenceChannel* channel, s32 reca
         if (channel->seqPlayer->muted && (channel->muteFlags & MUTE_FLAGS_SOFTEN)) {
             channelVolume = channel->seqPlayer->muteVolumeScale * channelVolume;
         }
-        channel->appliedVolume = channelVolume * channelVolume;
+        channel->appliedVolume = SQ(channelVolume);
     }
 
     if (channel->changes.s.pan) {

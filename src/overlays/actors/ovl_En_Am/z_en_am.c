@@ -271,7 +271,7 @@ void func_808B0208(EnAm* this, PlayState* play) {
         this->actor.world.pos.z += this->actor.speed * Math_CosS(this->actor.world.rot.y);
     }
     SkelAnime_Update(&this->skelAnime);
-    if (Animation_OnFrame(&this->skelAnime, 8.0f) != 0) {
+    if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
         this->actor.speed = this->speed;
         this->actor.velocity.y = 12.0f;
     } else if (this->skelAnime.curFrame > 11.0f) {
@@ -521,7 +521,7 @@ void EnAm_Update(Actor* thisx, PlayState* play) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->enemyCollider.base);
     }
     CollisionCheck_SetAC(play, &play->colChkCtx, &this->interactCollider.base);
-    if (this->enemyCollider.base.atFlags & AC_ON) {
+    if (this->enemyCollider.base.atFlags & AT_ON) {
         this->actor.flags |= ACTOR_FLAG_1000000;
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->enemyCollider.base);
     }

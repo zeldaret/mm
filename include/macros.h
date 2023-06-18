@@ -3,7 +3,6 @@
 
 #include "libc/stdint.h"
 #include "ultra64/convert.h"
-#include "z64.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -67,6 +66,17 @@
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 #define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
 #define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
+
+#define BIT_FLAG_TO_SHIFT(flag) \
+    ((flag & 0x80) ? 7 : \
+    (flag & 0x40) ? 6 : \
+    (flag & 0x20) ? 5 : \
+    (flag & 0x10) ? 4 : \
+    (flag & 0x8) ? 3 : \
+    (flag & 0x4) ? 2 : \
+    (flag & 0x2) ? 1 : \
+    (flag & 0x1) ? 0 : \
+    0)
 
 /**
  * `x` vertex x

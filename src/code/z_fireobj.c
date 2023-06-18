@@ -67,8 +67,7 @@ void FireObj_StepSize(FireObj* fire) {
         if (Math_StepToF(&fire->dynamicSize, 1.0f, fire->dynamicSizeStep)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_FULLY_LIT);
         }
-    } else if ((fire->state == FIRE_STATE_SHRINKING) &&
-               (Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep))) {
+    } else if ((fire->state == FIRE_STATE_SHRINKING) && Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
     if (fire->sizeGrowsCos2 == 1) {
