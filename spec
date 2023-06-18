@@ -464,7 +464,6 @@ beginseg
     include "build/src/code/z_face_reaction.o"
     include "build/src/code/z_env_flags.o"
     include "build/src/code/z_eventmgr.o"
-    include "build/data/code/z_eventmgr.bss.o"
     include "build/src/code/z_fcurve_data.o"
     include "build/src/code/z_fcurve_data_skelanime.o"
     include "build/src/code/z_fireobj.o"
