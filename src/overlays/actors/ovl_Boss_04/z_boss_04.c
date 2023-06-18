@@ -5,8 +5,8 @@
  */
 
 #include "z_boss_04.h"
-#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "z64shrink_window.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
