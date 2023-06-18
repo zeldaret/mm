@@ -80,7 +80,7 @@ void EnNutsball_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnNutsball_InitColliderParams(EnNutsball* this) {
-    this->collider.base.atFlags &= ~AT_TYPE_ENEMY & ~AT_BOUNCED & ~AT_HIT;
+    this->collider.base.atFlags &= ~(AT_HIT | AT_TYPE_ENEMY | AT_BOUNCED);
     this->collider.base.atFlags |= AT_TYPE_PLAYER;
     this->collider.info.toucher.dmgFlags = 0x400000;
     this->collider.info.toucher.damage = 2;

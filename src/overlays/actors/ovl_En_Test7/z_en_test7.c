@@ -364,13 +364,12 @@ void func_80AF14FC(PlayState* play2, EnTest7Struct2* arg1) {
         }
 
         temp_v0 = Matrix_NewMtx(play->state.gfxCtx);
-        if (temp_v0 != NULL) {
-            gSPMatrix(POLY_OPA_DISP++, temp_v0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_081628);
+        if (temp_v0 == NULL) {
+            continue;
         }
+        gSPMatrix(POLY_OPA_DISP++, temp_v0, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_081628);
     }
-
-    if (ptr) {}
 
     Matrix_Pop();
 
