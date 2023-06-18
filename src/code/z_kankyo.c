@@ -90,13 +90,13 @@
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD538.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD59C.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpAmbientColor.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD5E0.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpDiffuseColor.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD654.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpFogColor.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FD698.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpFog.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/get_days_elapsed.s")
 

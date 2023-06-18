@@ -860,10 +860,10 @@ void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, 
 void Environment_DrawSandstorm(PlayState* play, u8 sandstormState);
 s32 func_800FD2B4(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 arg4);
 void func_800FD538(Color_RGB8* param_1, Color_RGB8* param_2, f32 param_3, Vec3s* param_4);
-void func_800FD59C(PlayState* play, Color_RGB8* pzParm2, f32 fParm3);
-void func_800FD5E0(PlayState* play, Color_RGB8* pzParm2, f32 fParm3);
-void func_800FD654(PlayState* play, Color_RGB8* pzParm2, f32 fParm3);
-void func_800FD698(PlayState* play, s16 arg1, s16 arg2, f32 arg3);
+void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp);
+void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp);
+void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp);
+void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 zFarTarget, f32 lerp);
 // u32 get_days_elapsed(void);
 // void reset_days_elapsed(void);
 // u32 get_current_day(void);
