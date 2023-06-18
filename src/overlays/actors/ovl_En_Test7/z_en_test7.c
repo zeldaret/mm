@@ -443,13 +443,13 @@ void func_80AF19A8(EnTest7* this, PlayState* play) {
 }
 
 void func_80AF1A2C(EnTest7* this, PlayState* play) {
-    Color_RGB8 sp34 = { 64, 0, 0 };
-    Color_RGB8 sp30 = { 220, 220, 255 };
-    f32 sp2C = this->unk_1E54 / 10.0f;
+    Color_RGB8 fogColor = { 64, 0, 0 };
+    Color_RGB8 ambientColor = { 220, 220, 255 };
+    f32 envLerp = this->unk_1E54 / 10.0f;
 
-    func_800FD59C(play, &sp30, sp2C);
-    func_800FD654(play, &sp34, sp2C);
-    func_800FD698(play, 2000, 4000, sp2C);
+    Environment_LerpAmbientColor(play, &ambientColor, envLerp);
+    Environment_LerpFogColor(play, &fogColor, envLerp);
+    Environment_LerpFog(play, 2000, 4000, envLerp);
 
     if (this->unk_1E54 >= 10) {
         Camera* subCam =
@@ -610,9 +610,9 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
 
 void func_80AF21E8(EnTest7* this, PlayState* play) {
     s32 sp2C = this->unk_1E54 - 100;
-    f32 sp1C;
-    Color_RGB8 sp24 = { 64, 0, 0 };
-    Color_RGB8 sp20 = { 220, 220, 255 };
+    f32 envLerp;
+    Color_RGB8 fogColor = { 64, 0, 0 };
+    Color_RGB8 ambientColor = { 220, 220, 255 };
 
     if (R_PLAY_FILL_SCREEN_ON) {
         Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
@@ -623,10 +623,10 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_ALPHA = 0;
     }
 
-    sp1C = 1.0f - (sp2C / 10.0f);
-    func_800FD59C(play, &sp20, sp1C);
-    func_800FD654(play, &sp24, sp1C);
-    func_800FD698(play, 2000, 4000, sp1C);
+    envLerp = 1.0f - (sp2C / 10.0f);
+    Environment_LerpAmbientColor(play, &ambientColor, envLerp);
+    Environment_LerpFogColor(play, &fogColor, envLerp);
+    Environment_LerpFog(play, 2000, 4000, envLerp);
 
     if (this->unk_1E54 >= 110) {
         func_80AF082C(this, func_80AF2318);

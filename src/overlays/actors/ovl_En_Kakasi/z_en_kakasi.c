@@ -943,7 +943,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_27);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                 } else {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;

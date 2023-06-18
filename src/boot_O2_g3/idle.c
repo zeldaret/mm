@@ -3,6 +3,7 @@
 #include "stack.h"
 #include "buffers.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 u8 D_80096B20 = 1;
 vu8 gViConfigUseDefault = 1;
@@ -94,10 +95,12 @@ void Idle_InitVideo(void) {
             D_8009B290 = 2;
             gViConfigMode = osViModeNtscLan1;
             break;
+
         case OS_TV_MPAL:
             D_8009B290 = 30;
             gViConfigMode = osViModeMpalLan1;
             break;
+
         case OS_TV_PAL:
             D_8009B290 = 44;
             gViConfigMode = osViModeFpalLan1;

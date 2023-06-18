@@ -9,6 +9,7 @@
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_heap.h"
+#include "z64thread.h"
 
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
