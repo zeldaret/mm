@@ -4,9 +4,6 @@
  * Description: Pause Menu
  */
 #include "z_kaleido_scope.h"
-#include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "interface/icon_item_gameover_static/icon_item_gameover_static.h"
-#include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"
