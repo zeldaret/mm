@@ -866,7 +866,7 @@ AudioTable* AudioLoad_GetLoadTable(s32 tableType) {
  * @param sampleBankReloc information on the sampleBank containing raw audio samples
  */
 void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, SampleBankRelocInfo* sampleBankReloc) {
-    uintptr_t soundOffset;
+    void* soundOffset;
     uintptr_t soundListOffset;
     Instrument* inst;
     Drum* drum;
@@ -893,14 +893,14 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
         // Loop through the drum offsets
         for (i = 0; i < numDrums; i++) {
             // Get the i'th drum offset
-            soundOffset = (uintptr_t)((Drum**)fontData[0])[i];
+            soundOffset = ((Drum**)fontData[0])[i];
 
             // Some drum data entries are empty, represented by an offset of 0 in the list of drum offsets
-            if (soundOffset == 0) {
+            if (soundOffset == NULL) {
                 continue;
             }
             soundOffset = RELOC_TO_RAM(soundOffset);
-            ((Drum**)fontData[0])[i] = drum = (void*)soundOffset;
+            ((Drum**)fontData[0])[i] = drum = soundOffset;
 
             // The drum may be in the list multiple times and already relocated
             if (drum->isRelocated) {
@@ -929,7 +929,7 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
         // Loop through the sound effects
         for (i = 0; i < numSfx; i++) {
             // Get a pointer to the i'th sound effect
-            soundOffset = (uintptr_t)((TunedSample*)fontData[1] + i);
+            soundOffset = (TunedSample*)fontData[1] + i;
             soundEffect = (SoundEffect*)soundOffset;
 
             // Check for NULL (note: the pointer is guaranteed to be in fontData and can never be NULL)
@@ -972,7 +972,7 @@ void AudioLoad_RelocateFont(s32 fontId, SoundFontData* fontDataStartAddr, Sample
                     AudioLoad_RelocateSample(&inst->highPitchTunedSample, fontDataStartAddr, sampleBankReloc);
                 }
 
-                soundOffset = (uintptr_t)inst->envelope;
+                soundOffset = inst->envelope;
                 inst->envelope = (EnvelopePoint*)RELOC_TO_RAM(soundOffset);
 
                 inst->isRelocated = true;
