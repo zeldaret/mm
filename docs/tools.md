@@ -273,7 +273,7 @@ Probably the best of the Nintendo 64 texture viewing programs. It is quite simpl
 
 ### Z64Utils
 
-Basically essential for convenient analysis of object files. Can analyse and display DisplayLists, some textures, skeletons, animations, and a few other resources. Download from <https://github.com/Random06457/Z64Utils>.
+Basically essential for convenient analysis of object files. Can analyse and display DisplayLists, some textures, skeletons, animations, and a few other resources. Download from <https://github.com/zeldaret/Z64Utils>.
 
 ## Retired tools
 
