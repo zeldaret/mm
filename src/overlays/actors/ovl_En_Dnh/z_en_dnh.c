@@ -164,6 +164,8 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    EnDnh* this = THIS;
+
     if (limbIndex == KIOSK_KOUME_LIMB_1) {
         Matrix_Translate(0.0f, thisx->shape.yOffset, 0.0f, MTXMODE_APPLY);
     }
