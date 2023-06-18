@@ -22,17 +22,11 @@ typedef enum {
 } ShootingGalleryGameState;
 
 typedef enum {
-    /*  0 */ SG_OCTO_STATE_SPAWNING,
-    /*  1 */ SG_OCTO_STATE_SPAWNED,
+    /*  0 */ SG_OCTO_STATE_APPEARING,
+    /*  1 */ SG_OCTO_STATE_APPEARED,
     /* 70 */ SG_OCTO_STATE_INITIAL = 70,
     /* 80 */ SG_OCTO_STATE_HIDING = 80
 } ShootingGalleryOctorokState;
-
-typedef enum {
-    /* 0 */ SG_OCTO_HIT_TYPE_NONE,
-    /* 1 */ SG_OCTO_HIT_TYPE_RED,
-    /* 2 */ SG_OCTO_HIT_TYPE_BLUE
-} ShootingGalleryoctorokHitType;
 
 typedef enum {
     /* 0 */ SG_PATH_TYPE_CROW,
@@ -62,7 +56,7 @@ typedef struct EnSyatekiMan {
                } perGameVar1;
     /* 0x26E */ union {
                    s16 bonusDekuScrubHitCounter;
-                   s16 octorokHitType;
+                   s16 lastHitOctorokType;
                } perGameVar2;
     /* 0x270 */ s16 talkWaitTimer;
     /* 0x272 */ s16 dekuScrubFlags;

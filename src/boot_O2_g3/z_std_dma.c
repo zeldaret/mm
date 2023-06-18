@@ -2,6 +2,7 @@
 #include "global.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 size_t gDmaMgrDmaBuffSize = 0x2000;
 

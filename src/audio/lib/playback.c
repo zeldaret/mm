@@ -83,6 +83,9 @@ void AudioPlayback_InitSampleState(Note* note, NoteSampleState* sampleState, Not
                 sampleState->bitField0.strongRight = stereoData.strongRight ^ strongRight;
                 sampleState->bitField0.strongLeft = stereoData.strongLeft ^ strongLeft;
                 break;
+
+            default:
+                break;
         }
 
     } else if (gAudioCtx.soundMode == SOUNDMODE_MONO) {

@@ -3,6 +3,7 @@
 #include "idle.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 StackEntry sBootStackInfo;
 OSThread sIdleThread;

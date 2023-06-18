@@ -6,6 +6,7 @@
 #include "stackcheck.h"
 #include "system_heap.h"
 #include "z64.h" // TODO: remove when AudioMgr has been split out
+#include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 OSMesgQueue sSerialEventQueue;

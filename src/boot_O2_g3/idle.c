@@ -1,7 +1,8 @@
 #include "irqmgr.h"
+#include "main.h"
 #include "stack.h"
 #include "stackcheck.h"
-#include "main.h"
+#include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 IrqMgr gIrqMgr;
