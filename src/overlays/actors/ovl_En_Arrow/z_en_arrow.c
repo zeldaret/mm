@@ -667,7 +667,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
 
         if (this->actor.speed == 0.0f) {
-            func_800B8118(&this->actor, play, MTXMODE_NEW);
+            func_800B8118(&this->actor, play, 0);
 
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F380);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);

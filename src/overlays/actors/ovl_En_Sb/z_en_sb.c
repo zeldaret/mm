@@ -337,7 +337,7 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
         }
         if (hitPlayer) {
             this->unk_252 = 0;
-            if ((this->actor.draw != NULL) && (this->isDrawn == false)) {
+            if ((this->actor.draw != NULL) && !this->isDrawn) {
                 this->isDrawn = true;
             }
             this->isDead = true;

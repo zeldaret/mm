@@ -824,7 +824,7 @@ void EnWiz_Dance(EnWiz* this, PlayState* play) {
         }
     }
 
-    if ((this->animLoopCounter >= 3) && (!this->hasActiveProjectile)) {
+    if ((this->animLoopCounter >= 3) && !this->hasActiveProjectile) {
         this->targetPlatformLightAlpha = 0;
         EnWiz_SetupWindUp(this);
     }
@@ -962,7 +962,7 @@ void EnWiz_Attack(EnWiz* this, PlayState* play) {
     }
 
     if (this->timer == 0) {
-        if ((Animation_OnFrame(&this->skelAnime, 6.0f)) && (!this->hasActiveProjectile)) {
+        if (Animation_OnFrame(&this->skelAnime, 6.0f) && !this->hasActiveProjectile) {
             Player* player = GET_PLAYER(play);
             Vec3f pos;
             s32 type = this->type;
@@ -1285,8 +1285,8 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                 //! colliders are effectively disabled, this doesn't cause any problems in the final
                 //! game, but it becomes an issue if the ghost colliders are enabled.
                 this->fightState = EN_WIZ_FIGHT_STATE_SECOND_PHASE_GHOSTS_COPY_WIZROBE;
-                this->ghostColliders.base.acFlags &= ~BUMP_HIT;
-                if (this->ghostPos[i].x != .0f || this->ghostPos[i].z != .0f) {
+                this->ghostColliders.base.acFlags &= ~AC_HIT;
+                if ((this->ghostPos[i].x != .0f) || (this->ghostPos[i].z != .0f)) {
                     for (j = 0; j < 9; j++) {
                         accel.x = 0.0f;
                         accel.y = 1.0f;
