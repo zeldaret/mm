@@ -428,7 +428,6 @@ beginseg
     include "build/data/code/gspS2DEX2.fifo.data.o"
     include "build/data/code/njpgdspMain.data.o"
     include "build/src/code/z_en_a_keep.o"
-    include "build/data/code/code_801E3FA0.bss.o"
     include "build/src/code/z_en_item00.o"
     include "build/src/code/z_eff_blure.o"
     include "build/src/code/z_eff_shield_particle.o"
