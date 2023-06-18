@@ -3804,7 +3804,7 @@
     0x801E3F40:("njpgdspMainDataStart","UNK_TYPE1","",0x1),
     0x801E3FA0:("D_801E3FA0","UNK_TYPE1","",0x1),
     0x801E3FB0:("sEffectContext","EffectContext","",0x98E0),
-    0x801ED890:("D_801ED890","UNK_TYPE1","",0x1),
+    0x801ED890:("sFlagBitIndex","UNK_TYPE1","",0x1),
     0x801ED894:("D_801ED894","UNK_TYPE1","",0x1),
     0x801ED8A0:("sActorFaultClient","UNK_TYPE1","",0x1),
     0x801ED8B0:("D_801ED8B0","UNK_TYPE1","",0x1),

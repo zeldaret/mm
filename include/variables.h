@@ -2070,7 +2070,6 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
-// extern UNK_TYPE1 D_801ED890;
 // extern UNK_TYPE1 D_801ED894;
 extern CollisionPoly* D_801ED8B0;
 extern s32 D_801ED8B4;

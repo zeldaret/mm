@@ -265,7 +265,7 @@ void FlagSet_Update(GameState* gameState) {
     }
 }
 
-extern s32 D_801ED890;
+s32 sFlagBitIndex;
 
 void FlagSet_Draw(GameState* gameState) {
     GraphicsContext* gfxCtx = gameState->gfxCtx;
@@ -288,23 +288,23 @@ void FlagSet_Draw(GameState* gameState) {
     GfxPrint_SetPos(&printer, 12, 15);
 
     // Print the flag bits in the current byte, largest to smallest
-    for (D_801ED890 = 7; D_801ED890 >= 0; D_801ED890--) {
+    for (sFlagBitIndex = 7; sFlagBitIndex >= 0; sFlagBitIndex--) {
         // Highlight current flag bit in white, rest in grey
-        if ((u32)D_801ED890 == sCurrentBit) {
+        if (sFlagBitIndex == sCurrentBit) {
             GfxPrint_SetColor(&printer, 200, 200, 200, 255);
         } else {
             GfxPrint_SetColor(&printer, 100, 100, 100, 255);
         }
 
         // Display 1 if flag set and 0 if not
-        if (*sFlagEntries[sEntryIndex].value & (1 << D_801ED890)) {
+        if (*sFlagEntries[sEntryIndex].value & (1 << sFlagBitIndex)) {
             GfxPrint_Printf(&printer, "1");
         } else {
             GfxPrint_Printf(&printer, "0");
         }
 
         // Add a space after each group of 4
-        if ((D_801ED890 % 4) == 0) {
+        if ((sFlagBitIndex % 4) == 0) {
             GfxPrint_Printf(&printer, " ");
         }
     }
