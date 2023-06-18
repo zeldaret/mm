@@ -795,7 +795,7 @@ void AudioThread_ProcessChannelCmd(SequenceChannel* channel, AudioCmd* cmd) {
 
         case AUDIOCMD_OP_CHANNEL_SET_FILTER:
             filterCutoff = cmd->arg2;
-            if (cmd->asUInt != 0) {
+            if (cmd->asPtr != NULL) {
                 channel->filter = cmd->asPtr;
             }
             if (channel->filter != NULL) {
