@@ -21,7 +21,7 @@ typedef struct {
     /* 0x08 */ f32 xzScale;
     /* 0x0C */ f32 yScale;
     /* 0x10 */ s16 yaw;
-} OwlWarpSpheroid; // size >= 0x14
+} OwlWarpSpheroid; // size = 0x14
 
 typedef struct {
     /* 0x00 */ s32 type;

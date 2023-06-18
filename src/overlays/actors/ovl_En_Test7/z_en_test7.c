@@ -170,7 +170,7 @@ void EnTest7_UpdateFeatherType1(PlayState* play, OwlWarpFeather* feather) {
     static f32 D_80AF38FC;
     static Vec3f D_80AF3900;
     s32 sp2C = feather->unk_04 % 41;
-    s32 sp28 = (feather->unk_04 + 0x1B58) % 41;
+    s32 sp28 = (feather->unk_04 + 7000) % 41;
     s32 sp24 = false;
 
     SkinMatrix_SetRotateRPY(&D_80AF38B0, feather->rot.x, feather->rot.y, feather->rot.z);
