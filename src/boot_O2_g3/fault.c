@@ -46,6 +46,7 @@
 #include "global.h"
 #include "vt.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 FaultMgr* sFaultInstance;
 f32 sFaultTimeTotal; // read but not set anywhere
