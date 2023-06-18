@@ -296,16 +296,16 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
             break;
 
         case AUDIOCMD_OP_GLOBAL_SET_CUSTOM_UPDATE_FUNCTION:
-            gAudioCustomUpdateFunction = (AudioCustomUpdateFunction)cmd->asUInt;
+            gAudioCustomUpdateFunction = cmd->asPtr;
             break;
 
         case AUDIOCMD_OP_GLOBAL_SET_CUSTOM_FUNCTION:
             if (cmd->arg2 == AUDIO_CUSTOM_FUNCTION_REVERB) {
-                gAudioCustomReverbFunction = (AudioCustomReverbFunction)cmd->asUInt;
+                gAudioCustomReverbFunction = cmd->asPtr;
             } else if (cmd->arg2 == AUDIO_CUSTOM_FUNCTION_SYNTH) {
-                gAudioCustomSynthFunction = (AudioCustomSynthFunction)cmd->asUInt;
+                gAudioCustomSynthFunction = cmd->asPtr;
             } else {
-                gAudioCtx.customSeqFunctions[cmd->arg2] = (void*)cmd->asUInt;
+                gAudioCtx.customSeqFunctions[cmd->arg2] = cmd->asPtr;
             }
             break;
 
@@ -790,13 +790,13 @@ void AudioThread_ProcessChannelCmd(SequenceChannel* channel, AudioCmd* cmd) {
             break;
 
         case AUDIOCMD_OP_CHANNEL_SET_SFX_STATE:
-            channel->sfxState = (u8*)cmd->asUInt;
+            channel->sfxState = cmd->asPtr;
             break;
 
         case AUDIOCMD_OP_CHANNEL_SET_FILTER:
             filterCutoff = cmd->arg2;
             if (cmd->asUInt != 0) {
-                channel->filter = (s16*)cmd->asUInt;
+                channel->filter = cmd->asPtr;
             }
             if (channel->filter != NULL) {
                 AudioHeap_LoadFilter(channel->filter, filterCutoff >> 4, filterCutoff & 0xF);

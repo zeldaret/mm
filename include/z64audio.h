@@ -877,6 +877,7 @@ typedef struct {
         /* 0x4 */ s8 asSbyte;
         /* 0x4 */ u8 asUbyte;
         /* 0x4 */ u32 asUInt;
+        /* 0x4 */ void* asPtr;
     };
 } AudioCmd; // size = 0x8
 
