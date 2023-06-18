@@ -3,6 +3,7 @@
 #include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 u32 sDmaMgrDmaBuffSize = 0x2000;
 
