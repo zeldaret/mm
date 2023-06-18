@@ -12,6 +12,11 @@
 #include "global.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
+typedef struct FlagSetEntry {
+    /* 0x0 */ u8* value;
+    /* 0x4 */ const char* name;
+} FlagSetEntry; // size = 0x8
+
 static FlagSetEntry sFlagEntries[] = {
     { &gSaveContext.save.saveInfo.weekEventReg[0], "week_event_reg[0]" },
     { &gSaveContext.save.saveInfo.weekEventReg[1], "week_event_reg[1]" },

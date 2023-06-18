@@ -3,7 +3,6 @@
 
 #include "libc/stdint.h"
 #include "ultra64/os_convert.h"
-#include "z64.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240

@@ -1,5 +1,5 @@
-#ifndef Z64_ANIMATION_LEGACY_H
-#define Z64_ANIMATION_LEGACY_H
+#ifndef Z64ANIMATION_LEGACY_H
+#define Z64ANIMATION_LEGACY_H
 
 #include "ultra64.h"
 #include "z64math.h"

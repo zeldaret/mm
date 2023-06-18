@@ -1,5 +1,5 @@
-#ifndef Z64_GAME_H
-#define Z64_GAME_H
+#ifndef Z64GAME_H
+#define Z64GAME_H
 
 #include "ultra64.h"
 #include "libc/stdbool.h"

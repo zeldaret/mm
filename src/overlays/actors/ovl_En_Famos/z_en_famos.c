@@ -788,7 +788,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->emblemCollider.base);
         }
 
-        if (this->collider2.base.atFlags & AC_ON) {
+        if (this->collider2.base.atFlags & AT_ON) {
             Collider_UpdateCylinder(&this->actor, &this->collider2);
             this->collider2.dim.pos.y = this->actor.floorHeight;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
