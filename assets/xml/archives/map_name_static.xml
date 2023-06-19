@@ -11,7 +11,7 @@
         <Texture Name="gIkanaCanyonPointNameENGTex" OutName="ikana_canyon_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2000" />       <!-- REGION_IKANA_CANYON, OWL_WARP_IKANA_CANYON -->
         <Texture Name="gGoronVillagePointNameENGTex" OutName="goron_village_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2400" />     <!-- REGION_GORON_VILLAGE -->
         <Texture Name="gStoneTowerPointNameENGTex" OutName="stone_tower_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2800" />         <!-- REGION_STONE_TOWER,  OWL_WARP_STONE_TOWER -->
-        <!-- See `sOwlWarpPauseItems`, uses offsets from 0xA4, defined as `gGreatBayPointNameENGTex`, to get the correct position -->
+        <!-- See `ItemId` and `sOwlWarpPauseItems`, uses offsets from 0xA4, defined as `gGreatBayPointNameENGTex`, to get the correct position -->
         <Texture Name="gGreatBayCoastPointNameENGTex" OutName="great_bay_coast_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2C00" />    <!-- OWL_WARP_GREAT_BAY_COAST -->
         <Texture Name="gSouthernSwampPointNameENGTex" OutName="southern_swamp_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3000" />     <!-- OWL_WARP_SOUTHERN_SWAMP -->
         <Texture Name="gMountainVillagePointNameENGTex" OutName="mountain_village_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3400" /> <!-- OWL_WARP_MOUNTAIN_VILLAGE -->
