@@ -188,7 +188,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
     this->flagsIndex = 0;
-    this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
+    this->lastHitOctorokType = SG_OCTO_TYPE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -1006,11 +1006,11 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         this->guayFlags = 0;
         this->wolfosFlags = 0;
-        this->perGameVar1.guaySpawnTimer = 0;
+        this->guaySpawnTimer = 0;
         this->dekuScrubHitCounter = 0;
         this->guayHitCounter = 0;
         this->currentWave = 0;
-        this->perGameVar2.bonusDekuScrubHitCounter = 0;
+        this->bonusDekuScrubHitCounter = 0;
         Interface_StartTimer(TIMER_ID_MINIGAME_1, 100);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_RunGame;
@@ -1021,11 +1021,11 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
     static s16 sHasSpawnedGuaysForThisWave = false;
     Player* player = GET_PLAYER(play);
 
-    if (((this->dekuScrubFlags == 0) || (this->perGameVar1.guaySpawnTimer > 140)) && !sHasSpawnedGuaysForThisWave &&
+    if (((this->dekuScrubFlags == 0) || (this->guaySpawnTimer > 140)) && !sHasSpawnedGuaysForThisWave &&
         (this->currentWave < 4)) {
         // Spawn three guays after the player has killed all Deku Scrubs, or after 140 frames.
         sHasSpawnedGuaysForThisWave = true;
-        this->perGameVar1.guaySpawnTimer = 0;
+        this->guaySpawnTimer = 0;
         Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
         if (this->flagsIndex == 3) {
@@ -1040,7 +1040,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->guayHitCounter = 0;
         }
 
-        this->perGameVar1.guaySpawnTimer = 0;
+        this->guaySpawnTimer = 0;
         sHasSpawnedGuaysForThisWave = false;
         this->currentWave++;
         if (this->currentWave < 4) {
@@ -1058,7 +1058,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->wolfosFlags |= 2;
     }
 
-    this->perGameVar1.guaySpawnTimer++;
+    this->guaySpawnTimer++;
 
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
         gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
@@ -1071,7 +1071,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         Audio_StopSubBgm();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
     } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
-               (this->perGameVar2.bonusDekuScrubHitCounter == 2)) {
+               (this->bonusDekuScrubHitCounter == 2)) {
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
@@ -1216,8 +1216,8 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->score = 0;
         this->flagsIndex = 0;
-        this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
-        this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
+        this->octorokState = SG_OCTO_STATE_INITIAL;
+        this->lastHitOctorokType = SG_OCTO_TYPE_NONE;
         sGameStartTimer = 30;
         Interface_StartTimer(TIMER_ID_MINIGAME_1, 75);
         this->actor.draw = NULL;
@@ -1315,36 +1315,36 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 
         // Octoroks begin hiding four seconds after a wave begins.
         if (waveTimer < 100) {
-            this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
+            this->octorokState = SG_OCTO_STATE_HIDING;
         }
 
-        if (this->perGameVar2.lastHitOctorokType != SG_OCTO_TYPE_NONE) {
-            if (this->perGameVar2.lastHitOctorokType == SG_OCTO_TYPE_BLUE) {
+        if (this->lastHitOctorokType != SG_OCTO_TYPE_NONE) {
+            if (this->lastHitOctorokType == SG_OCTO_TYPE_BLUE) {
                 gSaveContext.timerTimeLimits[TIMER_ID_MINIGAME_1] -= SECONDS_TO_TIMER_PRECISE(2, 50);
                 sModFromLosingTime = (sModFromLosingTime + 25) % 50;
             }
 
-            this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
+            this->lastHitOctorokType = SG_OCTO_TYPE_NONE;
         }
 
-        if (this->perGameVar1.octorokState == SG_OCTO_STATE_APPEARING) {
-            this->perGameVar1.octorokState++;
+        if (this->octorokState == SG_OCTO_STATE_APPEARING) {
+            this->octorokState++;
         }
 
         // A new wave of Octoroks should appear every five seconds. However, we need to take into account
         // that the player might have lost time from hitting Blue Octoroks, so we do something similar to
         // what was done with waveTimer above.
-        if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
+        if ((sModFromLosingTime == (timer % 50)) && (this->octorokState >= SG_OCTO_STATE_INITIAL)) {
             if (this->flagsIndex < ARRAY_COUNT(sOctorokFlagsPerWave)) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
                 Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
-                this->perGameVar1.octorokState = SG_OCTO_STATE_APPEARING;
+                this->octorokState = SG_OCTO_STATE_APPEARING;
             }
         }
 
         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
             this->flagsIndex = 0;
-            this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
+            this->octorokState = SG_OCTO_STATE_HIDING;
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             player->stateFlags1 |= PLAYER_STATE1_20;

@@ -212,7 +212,7 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
-    if ((syatekiMan->perGameVar1.guaySpawnTimer % 90) == 0) {
+    if ((syatekiMan->guaySpawnTimer % 90) == 0) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }

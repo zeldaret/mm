@@ -372,7 +372,7 @@ void EnSyatekiDekunuts_SetupDead(EnSyatekiDekunuts* this, PlayState* play) {
     if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
         EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
         syatekiMan->score += 100;
-        syatekiMan->perGameVar2.bonusDekuScrubHitCounter++;
+        syatekiMan->bonusDekuScrubHitCounter++;
     } else {
         EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 0);
         syatekiMan->score += 30;
