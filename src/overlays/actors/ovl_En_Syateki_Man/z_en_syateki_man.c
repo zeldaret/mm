@@ -1028,7 +1028,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         this->guaySpawnTimer = 0;
         Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
-        if (this->flagsIndex == 3) {
+        if (this->flagsIndex == ARRAY_COUNT(sGuayFlagsPerWave) - 1) {
             this->flagsIndex = 0;
         } else {
             this->flagsIndex++;
@@ -1070,8 +1070,7 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         sHasSpawnedGuaysForThisWave = false;
         Audio_StopSubBgm();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
-               (this->bonusDekuScrubHitCounter == 2)) {
+    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) && (this->bonusDekuScrubHitCounter == 2)) {
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
