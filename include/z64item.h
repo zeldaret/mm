@@ -321,13 +321,13 @@ typedef enum ItemId {
     /* 0xAD */ ITEM_REGION_GORON_VILLAGE,
     /* 0xAE */ ITEM_REGION_STONE_TOWER,
     // Owl Warps used with item pause menu
-    // Repeated Owl Warps:
+    // Overlapping Owl Warps with Regions:
     /* 0xA8 */ ITEM_OWL_WARP_WOODFALL = ITEM_REGION_WOODFALL,
     /* 0xA9 */ ITEM_OWL_WARP_CLOCK_TOWN = ITEM_REGION_CLOCK_TOWN,
     /* 0xAA */ ITEM_OWL_WARP_SNOWHEAD = ITEM_REGION_SNOWHEAD,
     /* 0xAC */ ITEM_OWL_WARP_IKANA_CANYON = ITEM_REGION_IKANA_CANYON,
     /* 0xAE */ ITEM_OWL_WARP_STONE_TOWER = ITEM_REGION_STONE_TOWER,
-    // New Owl Warps
+    // Unique Owl Warps
     /* 0xAF */ ITEM_OWL_WARP_GREAT_BAY_COAST,
     /* 0xBO */ ITEM_OWL_WARP_SOUTHERN_SWAMP,
     /* 0xB1 */ ITEM_OWL_WARP_MOUNTAIN_VILLAGE,

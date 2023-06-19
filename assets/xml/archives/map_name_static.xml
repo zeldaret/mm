@@ -1,4 +1,5 @@
 <Root>
+    <!-- Map Point Names. Must be ia4 128x16 and ordered following both `RegionId` for regions and `ItemId` for owl warps starting from `ITEM_REGION_GREAT_BAY` -->
     <File Name="map_name_static.unarchive">
         <Texture Name="gGreatBayPointNameENGTex" OutName="great_bay_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x0" />                <!-- REGION_GREAT_BAY -->
         <Texture Name="gZoraHallPointNameENGTex" OutName="zora_hall_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x400" />              <!-- REGION_ZORA_HALL -->
