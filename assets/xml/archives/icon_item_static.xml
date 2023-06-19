@@ -123,19 +123,19 @@
 
         <!-- Divided Background Menu: First Row -->
         <Texture Name="gPauseMasks00Tex" OutName="pause_masks_0_0" Format="ia8" Width="80" Height="32" Offset="0x64440" />
-        <Texture Name="gPauseMasks10JAPTex" OutName="pause_masks_1_0_jap" Format="ia8" Width="80" Height="32" Offset="0x64E40" />
+        <Texture Name="gPauseMasks10JPNTex" OutName="pause_masks_1_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x64E40" />
         <Texture Name="gPauseMasks20Tex" OutName="pause_masks_2_0" Format="ia8" Width="80" Height="32" Offset="0x65840" />
-        <Texture Name="gPauseSelectItem00JAPTex" OutName="pause_select_item_0_0_jap" Format="ia8" Width="80" Height="32" Offset="0x66240" />
-        <Texture Name="gPauseSelectItem10JAPTex" OutName="pause_select_item_1_0_jap" Format="ia8" Width="80" Height="32" Offset="0x66C40" />
-        <Texture Name="gPauseSelectItem20JAPTex" OutName="pause_select_item_2_0_jap" Format="ia8" Width="80" Height="32" Offset="0x67640" />
+        <Texture Name="gPauseSelectItem00JPNTex" OutName="pause_select_item_0_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x66240" />
+        <Texture Name="gPauseSelectItem10JPNTex" OutName="pause_select_item_1_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x66C40" />
+        <Texture Name="gPauseSelectItem20JPNTex" OutName="pause_select_item_2_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x67640" />
         <Texture Name="gPauseMap00Tex" OutName="pause_map_0_0" Format="ia8" Width="80" Height="32" Offset="0x68040" />
-        <Texture Name="gPauseMap10JAPTex" OutName="pause_map_1_0_jap" Format="ia8" Width="80" Height="32" Offset="0x68A40" />
+        <Texture Name="gPauseMap10JPNTex" OutName="pause_map_1_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x68A40" />
         <Texture Name="gPauseMap20Tex" OutName="pause_map_2_0" Format="ia8" Width="80" Height="32" Offset="0x69440" />
-        <Texture Name="gPauseQuestStatus00JAPTex" OutName="pause_quest_status_0_0_jap" Format="ia8" Width="80" Height="32" Offset="0x69E40" />
-        <Texture Name="gPauseQuestStatus10JAPTex" OutName="pause_quest_status_1_0_jap" Format="ia8" Width="80" Height="32" Offset="0x6A840" />
-        <Texture Name="gPauseQuestStatus20JAPTex" OutName="pause_quest_status_2_0_jap" Format="ia8" Width="80" Height="32" Offset="0x6B240" />
+        <Texture Name="gPauseQuestStatus00JPNTex" OutName="pause_quest_status_0_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x69E40" />
+        <Texture Name="gPauseQuestStatus10JPNTex" OutName="pause_quest_status_1_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x6A840" />
+        <Texture Name="gPauseQuestStatus20JPNTex" OutName="pause_quest_status_2_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x6B240" />
         <Texture Name="gPauseSave00Tex" OutName="pause_save_0_0" Format="ia8" Width="80" Height="32" Offset="0x6BC40" />
-        <Texture Name="gPauseSave10JAPTex" OutName="pause_save_1_0_jap" Format="ia8" Width="80" Height="32" Offset="0x6C640" />
+        <Texture Name="gPauseSave10JPNTex" OutName="pause_save_1_0_jpn" Format="ia8" Width="80" Height="32" Offset="0x6C640" />
         <Texture Name="gPauseSave20Tex" OutName="pause_save_2_0" Format="ia8" Width="80" Height="32" Offset="0x6D040" />
         <Texture Name="gPauseGameOver10Tex" OutName="pause_game_over_1_0" Format="ia8" Width="80" Height="32" Offset="0x6DA40" />
 
