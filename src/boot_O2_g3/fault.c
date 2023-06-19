@@ -821,6 +821,7 @@ void Fault_DrawStackTrace(OSThread* thread, u32 flags) {
         FaultDrawer_DrawText(0x24, line * 8 + 24, "%08x %08x", sp, pc);
 
         if (flags & 1) {
+            // Try to convert the relocated program counter to the corresponding unrelocated virtual address
             addr = Fault_ConvertAddress(pc);
             if (addr != 0) {
                 FaultDrawer_Printf(" -> %08x", addr);
@@ -847,6 +848,7 @@ void Fault_LogStackTrace(OSThread* thread, u32 flags) {
         osSyncPrintf("%08x %08x", sp, pc);
 
         if (flags & 1) {
+            // Try to convert the relocated program counter to the corresponding unrelocated virtual address
             addr = Fault_ConvertAddress(pc);
             if (addr != 0) {
                 osSyncPrintf(" -> %08x", addr);
