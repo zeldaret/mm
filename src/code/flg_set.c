@@ -319,4 +319,4 @@ void FlagSet_Draw(GameState* gameState) {
     CLOSE_DISPS(gfxCtx);
 }
 
-static const char sPad[20] = { 0 };
+static const s32 sPad[5] = { 0 };
