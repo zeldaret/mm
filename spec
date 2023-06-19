@@ -275,15 +275,17 @@ beginseg
 endseg
 
 beginseg
-    name "icon_item_static_old"
+    name "icon_item_static_syms"
     romalign 0x1000
-    include "build/baserom/icon_item_static_old.o"
+    include "build/assets/archives/icon_item_static/icon_item_static_yar.symbols.o"
+    number 8
 endseg
 
 beginseg
-    name "icon_item_24_static_old"
+    name "icon_item_24_static_syms"
     romalign 0x1000
-    include "build/baserom/icon_item_24_static_old.o"
+    include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.symbols.o"
+    number 9
 endseg
 
 beginseg
@@ -328,43 +330,47 @@ endseg
 
 beginseg
     name "map_i_static"
-    include "build/baserom/map_i_static.o"
+    include "build/assets/archives/map_i_static/map_i_static.yar.o"
 endseg
 
 beginseg
     name "map_grand_static"
-    include "build/baserom/map_grand_static.o"
+    include "build/assets/archives/map_grand_static/map_grand_static.yar.o"
 endseg
 
 beginseg
     name "item_name_static"
-    include "build/baserom/item_name_static.o"
+    include "build/assets/archives/item_name_static/item_name_static.yar.o"
 endseg
 
 beginseg
     name "map_name_static"
-    include "build/baserom/map_name_static.o"
+    include "build/assets/archives/map_name_static/map_name_static.yar.o"
 endseg
 
 beginseg
-    name "icon_item_static_test"
-    include "build/baserom/icon_item_static_test.o"
+    name "icon_item_static_yar"
+    include "build/assets/archives/icon_item_static/icon_item_static_yar.yar.o"
+    number 8
 endseg
 
 beginseg
-    name "icon_item_24_static_test"
-    include "build/baserom/icon_item_24_static_test.o"
+    name "icon_item_24_static_yar"
+    include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.yar.o"
+    number 9
 endseg
 
 beginseg
-    name "schedule_dma_static_old"
-    include "build/baserom/schedule_dma_static_old.o"
+    name "schedule_dma_static_syms"
+    include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.symbols.o"
+    number 7
 endseg
 
 beginseg
-    name "schedule_dma_static_test"
+    name "schedule_dma_static_yar"
     increment 0x1000
-    include "build/baserom/schedule_dma_static_test.o"
+    include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.yar.o"
+    number 7
 endseg
 
 beginseg
