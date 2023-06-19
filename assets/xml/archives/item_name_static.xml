@@ -1,124 +1,131 @@
 <Root>
+    <!-- Item Names. Must be ia4 128x16 and ordered following `ItemId` -->
     <File Name="item_name_static.unarchive">
-        <Blob Name="item_name_static_Blob_000000" Size="0x0400" Offset="0x0" />
-        <Blob Name="item_name_static_Blob_000400" Size="0x0400" Offset="0x400" />
-        <Blob Name="item_name_static_Blob_000800" Size="0x0400" Offset="0x800" />
-        <Blob Name="item_name_static_Blob_000C00" Size="0x0400" Offset="0xC00" />
-        <Blob Name="item_name_static_Blob_001000" Size="0x0400" Offset="0x1000" />
-        <Blob Name="item_name_static_Blob_001400" Size="0x0400" Offset="0x1400" />
-        <Blob Name="item_name_static_Blob_001800" Size="0x0400" Offset="0x1800" />
-        <Blob Name="item_name_static_Blob_001C00" Size="0x0400" Offset="0x1C00" />
-        <Blob Name="item_name_static_Blob_002000" Size="0x0400" Offset="0x2000" />
-        <Blob Name="item_name_static_Blob_002400" Size="0x0400" Offset="0x2400" />
-        <Blob Name="item_name_static_Blob_002800" Size="0x0400" Offset="0x2800" />
-        <Blob Name="item_name_static_Blob_002C00" Size="0x0400" Offset="0x2C00" />
-        <Blob Name="item_name_static_Blob_003000" Size="0x0400" Offset="0x3000" />
-        <Blob Name="item_name_static_Blob_003400" Size="0x0400" Offset="0x3400" />
-        <Blob Name="item_name_static_Blob_003800" Size="0x0400" Offset="0x3800" />
-        <Blob Name="item_name_static_Blob_003C00" Size="0x0400" Offset="0x3C00" />
-        <Blob Name="item_name_static_Blob_004000" Size="0x0400" Offset="0x4000" />
-        <Blob Name="item_name_static_Blob_004400" Size="0x0400" Offset="0x4400" />
-        <Blob Name="item_name_static_Blob_004800" Size="0x0400" Offset="0x4800" />
-        <Blob Name="item_name_static_Blob_004C00" Size="0x0400" Offset="0x4C00" />
-        <Blob Name="item_name_static_Blob_005000" Size="0x0400" Offset="0x5000" />
-        <Blob Name="item_name_static_Blob_005400" Size="0x0400" Offset="0x5400" />
-        <Blob Name="item_name_static_Blob_005800" Size="0x0400" Offset="0x5800" />
-        <Blob Name="item_name_static_Blob_005C00" Size="0x0400" Offset="0x5C00" />
-        <Blob Name="item_name_static_Blob_006000" Size="0x0400" Offset="0x6000" />
-        <Blob Name="item_name_static_Blob_006400" Size="0x0400" Offset="0x6400" />
-        <Blob Name="item_name_static_Blob_006800" Size="0x0400" Offset="0x6800" />
-        <Blob Name="item_name_static_Blob_006C00" Size="0x0400" Offset="0x6C00" />
-        <Blob Name="item_name_static_Blob_007000" Size="0x0400" Offset="0x7000" />
-        <Blob Name="item_name_static_Blob_007400" Size="0x0400" Offset="0x7400" />
-        <Blob Name="item_name_static_Blob_007800" Size="0x0400" Offset="0x7800" />
-        <Blob Name="item_name_static_Blob_007C00" Size="0x0400" Offset="0x7C00" />
-        <Blob Name="item_name_static_Blob_008000" Size="0x0400" Offset="0x8000" />
-        <Blob Name="item_name_static_Blob_008400" Size="0x0400" Offset="0x8400" />
-        <Blob Name="item_name_static_Blob_008800" Size="0x0400" Offset="0x8800" />
-        <Blob Name="item_name_static_Blob_008C00" Size="0x0400" Offset="0x8C00" />
-        <Blob Name="item_name_static_Blob_009000" Size="0x0400" Offset="0x9000" />
-        <Blob Name="item_name_static_Blob_009400" Size="0x0400" Offset="0x9400" />
-        <Blob Name="item_name_static_Blob_009800" Size="0x0400" Offset="0x9800" />
-        <Blob Name="item_name_static_Blob_009C00" Size="0x0400" Offset="0x9C00" />
-        <Blob Name="item_name_static_Blob_00A000" Size="0x0400" Offset="0xA000" />
-        <Blob Name="item_name_static_Blob_00A400" Size="0x0400" Offset="0xA400" />
-        <Blob Name="item_name_static_Blob_00A800" Size="0x0400" Offset="0xA800" />
-        <Blob Name="item_name_static_Blob_00AC00" Size="0x0400" Offset="0xAC00" />
-        <Blob Name="item_name_static_Blob_00B000" Size="0x0400" Offset="0xB000" />
-        <Blob Name="item_name_static_Blob_00B400" Size="0x0400" Offset="0xB400" />
-        <Blob Name="item_name_static_Blob_00B800" Size="0x0400" Offset="0xB800" />
-        <Blob Name="item_name_static_Blob_00BC00" Size="0x0400" Offset="0xBC00" />
-        <Blob Name="item_name_static_Blob_00C000" Size="0x0400" Offset="0xC000" />
-        <Blob Name="item_name_static_Blob_00C400" Size="0x0400" Offset="0xC400" />
-        <Blob Name="item_name_static_Blob_00C800" Size="0x0400" Offset="0xC800" />
-        <Blob Name="item_name_static_Blob_00CC00" Size="0x0400" Offset="0xCC00" />
-        <Blob Name="item_name_static_Blob_00D000" Size="0x0400" Offset="0xD000" />
-        <Blob Name="item_name_static_Blob_00D400" Size="0x0400" Offset="0xD400" />
-        <Blob Name="item_name_static_Blob_00D800" Size="0x0400" Offset="0xD800" />
-        <Blob Name="item_name_static_Blob_00DC00" Size="0x0400" Offset="0xDC00" />
-        <Blob Name="item_name_static_Blob_00E000" Size="0x0400" Offset="0xE000" />
-        <Blob Name="item_name_static_Blob_00E400" Size="0x0400" Offset="0xE400" />
-        <Blob Name="item_name_static_Blob_00E800" Size="0x0400" Offset="0xE800" />
-        <Blob Name="item_name_static_Blob_00EC00" Size="0x0400" Offset="0xEC00" />
-        <Blob Name="item_name_static_Blob_00F000" Size="0x0400" Offset="0xF000" />
-        <Blob Name="item_name_static_Blob_00F400" Size="0x0400" Offset="0xF400" />
-        <Blob Name="item_name_static_Blob_00F800" Size="0x0400" Offset="0xF800" />
-        <Blob Name="item_name_static_Blob_00FC00" Size="0x0400" Offset="0xFC00" />
-        <Blob Name="item_name_static_Blob_010000" Size="0x0400" Offset="0x10000" />
-        <Blob Name="item_name_static_Blob_010400" Size="0x0400" Offset="0x10400" />
-        <Blob Name="item_name_static_Blob_010800" Size="0x0400" Offset="0x10800" />
-        <Blob Name="item_name_static_Blob_010C00" Size="0x0400" Offset="0x10C00" />
-        <Blob Name="item_name_static_Blob_011000" Size="0x0400" Offset="0x11000" />
-        <Blob Name="item_name_static_Blob_011400" Size="0x0400" Offset="0x11400" />
-        <Blob Name="item_name_static_Blob_011800" Size="0x0400" Offset="0x11800" />
-        <Blob Name="item_name_static_Blob_011C00" Size="0x0400" Offset="0x11C00" />
-        <Blob Name="item_name_static_Blob_012000" Size="0x0400" Offset="0x12000" />
-        <Blob Name="item_name_static_Blob_012400" Size="0x0400" Offset="0x12400" />
-        <Blob Name="item_name_static_Blob_012800" Size="0x0400" Offset="0x12800" />
-        <Blob Name="item_name_static_Blob_012C00" Size="0x0400" Offset="0x12C00" />
-        <Blob Name="item_name_static_Blob_013000" Size="0x0400" Offset="0x13000" />
-        <Blob Name="item_name_static_Blob_013400" Size="0x0400" Offset="0x13400" />
-        <Blob Name="item_name_static_Blob_013800" Size="0x0400" Offset="0x13800" />
-        <Blob Name="item_name_static_Blob_013C00" Size="0x0400" Offset="0x13C00" />
-        <Blob Name="item_name_static_Blob_014000" Size="0x0400" Offset="0x14000" />
-        <Blob Name="item_name_static_Blob_014400" Size="0x0400" Offset="0x14400" />
-        <Blob Name="item_name_static_Blob_014800" Size="0x0400" Offset="0x14800" />
-        <Blob Name="item_name_static_Blob_014C00" Size="0x0400" Offset="0x14C00" />
-        <Blob Name="item_name_static_Blob_015000" Size="0x0400" Offset="0x15000" />
-        <Blob Name="item_name_static_Blob_015400" Size="0x0400" Offset="0x15400" />
-        <Blob Name="item_name_static_Blob_015800" Size="0x0400" Offset="0x15800" />
-        <Blob Name="item_name_static_Blob_015C00" Size="0x0400" Offset="0x15C00" />
-        <Blob Name="item_name_static_Blob_016000" Size="0x0400" Offset="0x16000" />
-        <Blob Name="item_name_static_Blob_016400" Size="0x0400" Offset="0x16400" />
-        <Blob Name="item_name_static_Blob_016800" Size="0x0400" Offset="0x16800" />
-        <Blob Name="item_name_static_Blob_016C00" Size="0x0400" Offset="0x16C00" />
-        <Blob Name="item_name_static_Blob_017000" Size="0x0400" Offset="0x17000" />
-        <Blob Name="item_name_static_Blob_017400" Size="0x0400" Offset="0x17400" />
-        <Blob Name="item_name_static_Blob_017800" Size="0x0400" Offset="0x17800" />
-        <Blob Name="item_name_static_Blob_017C00" Size="0x0400" Offset="0x17C00" />
-        <Blob Name="item_name_static_Blob_018000" Size="0x0400" Offset="0x18000" />
-        <Blob Name="item_name_static_Blob_018400" Size="0x0400" Offset="0x18400" />
-        <Blob Name="item_name_static_Blob_018800" Size="0x0400" Offset="0x18800" />
-        <Blob Name="item_name_static_Blob_018C00" Size="0x0400" Offset="0x18C00" />
-        <Blob Name="item_name_static_Blob_019000" Size="0x0400" Offset="0x19000" />
-        <Blob Name="item_name_static_Blob_019400" Size="0x0400" Offset="0x19400" />
-        <Blob Name="item_name_static_Blob_019800" Size="0x0400" Offset="0x19800" />
-        <Blob Name="item_name_static_Blob_019C00" Size="0x0400" Offset="0x19C00" />
-        <Blob Name="item_name_static_Blob_01A000" Size="0x0400" Offset="0x1A000" />
-        <Blob Name="item_name_static_Blob_01A400" Size="0x0400" Offset="0x1A400" />
-        <Blob Name="item_name_static_Blob_01A800" Size="0x0400" Offset="0x1A800" />
-        <Blob Name="item_name_static_Blob_01AC00" Size="0x0400" Offset="0x1AC00" />
-        <Blob Name="item_name_static_Blob_01B000" Size="0x0400" Offset="0x1B000" />
-        <Blob Name="item_name_static_Blob_01B400" Size="0x0400" Offset="0x1B400" />
-        <Blob Name="item_name_static_Blob_01B800" Size="0x0400" Offset="0x1B800" />
-        <Blob Name="item_name_static_Blob_01BC00" Size="0x0400" Offset="0x1BC00" />
-        <Blob Name="item_name_static_Blob_01C000" Size="0x0400" Offset="0x1C000" />
-        <Blob Name="item_name_static_Blob_01C400" Size="0x0400" Offset="0x1C400" />
-        <Blob Name="item_name_static_Blob_01C800" Size="0x0400" Offset="0x1C800" />
-        <Blob Name="item_name_static_Blob_01CC00" Size="0x0400" Offset="0x1CC00" />
-        <Blob Name="item_name_static_Blob_01D000" Size="0x0400" Offset="0x1D000" />
-        <Blob Name="item_name_static_Blob_01D400" Size="0x0400" Offset="0x1D400" />
-        <Blob Name="item_name_static_Blob_01D800" Size="0x0400" Offset="0x1D800" />
-        <Blob Name="item_name_static_Blob_01DC00" Size="0x0400" Offset="0x1DC00" />
+        <Texture Name="gOcarinaOfTimeItemNameENGTex" OutName="ocarina_of_time_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x0" /> <!-- ITEM_OCARINA -->
+        <Texture Name="gHerosBowItemNameENGTex" OutName="heros_bow_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x400" /> <!-- ITEM_BOW -->
+        <Texture Name="gFireArrowItemNameENGTex" OutName="fire_arrow_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x800" /> <!-- ITEM_ARROW_FIRE -->
+        <Texture Name="gIceArrowItemNameENGTex" OutName="ice_arrow_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xC00" /> <!-- ITEM_ARROW_ICE -->
+        <Texture Name="gLightArrowItemNameENGTex" OutName="light_arrow_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1000" /> <!-- ITEM_ARROW_LIGHT -->
+        <Texture Name="gFairyOcarinaItemNameJPNTex" OutName="fairy_ocarina_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x1400" /> <!-- ITEM_OCARINA_FAIRY -->
+        <Texture Name="gBombItemNameENGTex" OutName="bomb_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1800" /> <!-- ITEM_BOMB -->
+        <Texture Name="gBombchuItemNameENGTex" OutName="bombchu_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1C00" /> <!-- ITEM_BOMBCHU -->
+        <Texture Name="gDekuStickItemNameENGTex" OutName="deku_stick_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2000" /> <!-- ITEM_STICK -->
+        <Texture Name="gDekuNutItemNameENGTex" OutName="deku_nut_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2400" /> <!-- ITEM_NUT -->
+        <Texture Name="gMagicBeansItemNameENGTex" OutName="magic_beans_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2800" /> <!-- ITEM_MAGIC_BEANS -->
+        <!-- Swapped with slingshot -->
+        <Texture Name="gLongshotItemNameJPNTex" OutName="longshot_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x2C00" /> <!-- ITEM_SLINGSHOT -->
+        <Texture Name="gPowderKegItemNameENGTex" OutName="powder_keg_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3000" /> <!-- ITEM_POWDER_KEG -->
+        <Texture Name="gPictographBoxItemNameENGTex" OutName="pictograph_box_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3400" /> <!-- ITEM_PICTO_BOX -->
+        <Texture Name="gLensOfTruthItemNameENGTex" OutName="lens_of_truth_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3800" /> <!-- ITEM_LENS -->
+        <Texture Name="gHookshotItemNameENGTex" OutName="hookshot_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3C00" /> <!-- ITEM_HOOKSHOT -->
+        <Texture Name="gGreatFairysSwordItemNameENGTex" OutName="great_fairys_sword_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x4000" /> <!-- ITEM_SWORD_GREAT_FAIRY -->
+        <!-- Swapped with longshot -->
+        <Texture Name="gFairySlingshotItemNameJPNTex" OutName="fairy_slingshot_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x4400" /> <!-- ITEM_LONGSHOT -->
+        <Texture Name="gEmptyBottleItemNameENGTex" OutName="empty_bottle_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x4800" /> <!-- ITEM_BOTTLE -->
+        <Texture Name="gRedPotionItemNameENGTex" OutName="red_potion_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x4C00" /> <!-- ITEM_POTION_RED -->
+        <Texture Name="gGreenPotionItemNameENGTex" OutName="green_potion_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x5000" /> <!-- ITEM_POTION_GREEN -->
+        <Texture Name="gBluePotionItemNameENGTex" OutName="blue_potion_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x5400" /> <!-- ITEM_POTION_BLUE -->
+        <Texture Name="gFairyItemNameENGTex" OutName="fairy_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x5800" /> <!-- ITEM_FAIRY -->
+        <Texture Name="gDekuPrincessItemNameENGTex" OutName="deku_princess_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x5C00" /> <!-- ITEM_DEKU_PRINCESS -->
+        <Texture Name="gFullMilkItemNameENGTex" OutName="full_milk_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x6000" /> <!-- ITEM_MILK_BOTTLE -->
+        <Texture Name="gHalfMilkItemNameENGTex" OutName="half_milk_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x6400" /> <!-- ITEM_MILK_HALF -->
+        <Texture Name="gFishItemNameENGTex" OutName="fish_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x6800" /> <!-- ITEM_FISH -->
+        <Texture Name="gBugItemNameENGTex" OutName="bug_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x6C00" /> <!-- ITEM_BUG -->
+        <Texture Name="gBlueFireItemNameENGTex" OutName="blue_fire_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x7000" /> <!-- ITEM_BLUE_FIRE -->
+        <Texture Name="gPoeItemNameENGTex" OutName="poe_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x7400" /> <!-- ITEM_POE -->
+        <Texture Name="gBigPoeItemNameENGTex" OutName="big_poe_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x7800" /> <!-- ITEM_BIG_POE -->
+        <Texture Name="gSpringWaterItemNameENGTex" OutName="spring_water_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x7C00" /> <!-- ITEM_SPRING_WATER -->
+        <Texture Name="gHotSpringWaterItemNameENGTex" OutName="hot_spring_water_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x8000" /> <!-- ITEM_HOT_SPRING_WATER -->
+        <Texture Name="gZoraEggItemNameENGTex" OutName="zora_egg_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x8400" /> <!-- ITEM_ZORA_EGG -->
+        <Texture Name="gGoldDustItemNameENGTex" OutName="gold_dust_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x8800" /> <!-- ITEM_GOLD_DUST -->
+        <Texture Name="gMagicalMushroomItemNameENGTex" OutName="magical_mushroom_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x8C00" /> <!-- ITEM_MUSHROOM -->
+        <Texture Name="gSeaHorseItemNameENGTex" OutName="sea_horse_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x9000" /> <!-- ITEM_SEAHORSE -->
+        <Texture Name="gChateauRomaniItemNameENGTex" OutName="chateau_romani_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x9400" /> <!-- ITEM_CHATEAU -->
+        <Texture Name="gHylianLoachItemNameJPNTex" OutName="hylian_loach_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x9800" /> <!-- ITEM_HYLIAN_LOACH -->
+        <Texture Name="gObabasDrinkItemNameJPNTex" OutName="obabas_drink_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x9C00" /> <!-- ITEM_OBABA_DRINK -->
+        <Texture Name="gMoonsTearItemNameENGTex" OutName="moons_tear_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xA000" /> <!-- ITEM_MOON_TEAR -->
+        <Texture Name="gLandTitleDeedItemNameENGTex" OutName="land_title_deed_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xA400" /> <!-- ITEM_DEED_LAND -->
+        <Texture Name="gSwampTitleDeedItemNameENGTex" OutName="swamp_title_deed_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xA800" /> <!-- ITEM_DEED_SWAMP -->
+        <Texture Name="gMountainTitleDeedItemNameENGTex" OutName="mountain_title_deed_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xAC00" /> <!-- ITEM_DEED_MOUNTAIN -->
+        <Texture Name="gOceanTitleDeedItemNameENGTex" OutName="ocean_title_deed_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xB000" /> <!-- ITEM_DEED_OCEAN -->
+        <Texture Name="gRoomKeyItemNameENGTex" OutName="room_key_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xB400" /> <!-- ITEM_ROOM_KEY -->
+        <Texture Name="gSpecialDeliveryToMamaItemNameENGTex" OutName="special_delivery_to_mama_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xB800" /> <!-- ITEM_LETTER_MAMA -->
+        <Texture Name="gLetterToKafeiItemNameENGTex" OutName="letter_to_kafei_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xBC00" /> <!-- ITEM_LETTER_TO_KAFEI -->
+        <Texture Name="gPendantOfMemoriesItemNameENGTex" OutName="pendant_of_memories_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xC000" /> <!-- ITEM_PENDANT_OF_MEMORIES -->
+        <!-- Translates to Moon's Stone? Slightly different than the japanese translation of Moon's Tear. Replaces Tear with Stone, the same character used in Stone's Mask -->
+        <Texture Name="gMoonsStoneItemNameJPNTex" OutName="moons_stone_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0xC400" /> <!-- ITEM_TINGLE_MAP -->
+        <Texture Name="gDekuMaskItemNameENGTex" OutName="deku_mask_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xC800" /> <!-- ITEM_MASK_DEKU -->
+        <Texture Name="gGoronMaskItemNameENGTex" OutName="goron_mask_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xCC00" /> <!-- ITEM_MASK_GORON -->
+        <Texture Name="gZoraMaskItemNameENGTex" OutName="zora_mask_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xD000" /> <!-- ITEM_MASK_ZORA -->
+        <Texture Name="gFierceDeitysMaskItemNameENGTex" OutName="fierce_deitys_mask_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0xD400" /> <!-- ITEM_MASK_FIERCE_DEITY -->
+        <Texture Name="item_name_static_Blob_00D800" OutName="Blob_00D800" Format="ia4" Width="128" Height="16" Offset="0xD800" /> <!-- ITEM_MASK_TRUTH -->
+        <Texture Name="item_name_static_Blob_00DC00" OutName="Blob_00DC00" Format="ia4" Width="128" Height="16" Offset="0xDC00" /> <!-- ITEM_MASK_KAFEIS_MASK -->
+        <Texture Name="item_name_static_Blob_00E000" OutName="Blob_00E000" Format="ia4" Width="128" Height="16" Offset="0xE000" /> <!-- ITEM_MASK_ALL_NIGHT -->
+        <Texture Name="item_name_static_Blob_00E400" OutName="Blob_00E400" Format="ia4" Width="128" Height="16" Offset="0xE400" /> <!-- ITEM_MASK_BUNNY -->
+        <Texture Name="item_name_static_Blob_00E800" OutName="Blob_00E800" Format="ia4" Width="128" Height="16" Offset="0xE800" /> <!-- ITEM_MASK_KEATON -->
+        <Texture Name="item_name_static_Blob_00EC00" OutName="Blob_00EC00" Format="ia4" Width="128" Height="16" Offset="0xEC00" /> <!-- ITEM_MASK_GARO -->
+        <Texture Name="item_name_static_Blob_00F000" OutName="Blob_00F000" Format="ia4" Width="128" Height="16" Offset="0xF000" /> <!-- ITEM_MASK_ROMANI -->
+        <Texture Name="item_name_static_Blob_00F400" OutName="Blob_00F400" Format="ia4" Width="128" Height="16" Offset="0xF400" /> <!-- ITEM_MASK_CIRCUS_LEADER -->
+        <Texture Name="item_name_static_Blob_00F800" OutName="Blob_00F800" Format="ia4" Width="128" Height="16" Offset="0xF800" /> <!-- ITEM_MASK_POSTMAN -->
+        <Texture Name="item_name_static_Blob_00FC00" OutName="Blob_00FC00" Format="ia4" Width="128" Height="16" Offset="0xFC00" /> <!-- ITEM_MASK_COUPLE -->
+        <Texture Name="item_name_static_Blob_010000" OutName="Blob_010000" Format="ia4" Width="128" Height="16" Offset="0x10000" /> <!-- ITEM_MASK_GREAT_FAIRY -->
+        <Texture Name="item_name_static_Blob_010400" OutName="Blob_010400" Format="ia4" Width="128" Height="16" Offset="0x10400" /> <!-- ITEM_MASK_GIBDO -->
+        <Texture Name="item_name_static_Blob_010800" OutName="Blob_010800" Format="ia4" Width="128" Height="16" Offset="0x10800" /> <!-- ITEM_MASK_DON_GERO -->
+        <Texture Name="item_name_static_Blob_010C00" OutName="Blob_010C00" Format="ia4" Width="128" Height="16" Offset="0x10C00" /> <!-- ITEM_MASK_KAMARO -->
+        <Texture Name="item_name_static_Blob_011000" OutName="Blob_011000" Format="ia4" Width="128" Height="16" Offset="0x11000" /> <!-- ITEM_MASK_CAPTAIN -->
+        <Texture Name="item_name_static_Blob_011400" OutName="Blob_011400" Format="ia4" Width="128" Height="16" Offset="0x11400" /> <!-- ITEM_MASK_STONE -->
+        <Texture Name="item_name_static_Blob_011800" OutName="Blob_011800" Format="ia4" Width="128" Height="16" Offset="0x11800" /> <!-- ITEM_MASK_BREMEN -->
+        <Texture Name="item_name_static_Blob_011C00" OutName="Blob_011C00" Format="ia4" Width="128" Height="16" Offset="0x11C00" /> <!-- ITEM_MASK_BLAST -->
+        <Texture Name="item_name_static_Blob_012000" OutName="Blob_012000" Format="ia4" Width="128" Height="16" Offset="0x12000" /> <!-- ITEM_MASK_SCENTS -->
+        <Texture Name="item_name_static_Blob_012400" OutName="Blob_012400" Format="ia4" Width="128" Height="16" Offset="0x12400" /> <!-- ITEM_MASK_GIANT -->
+        <Texture Name="item_name_static_Blob_012800" OutName="Blob_012800" Format="ia4" Width="128" Height="16" Offset="0x12800" /> <!-- ITEM_BOW_ARROW_FIRE -->
+        <Texture Name="item_name_static_Blob_012C00" OutName="Blob_012C00" Format="ia4" Width="128" Height="16" Offset="0x12C00" /> <!-- ITEM_BOW_ARROW_ICE -->
+        <Texture Name="item_name_static_Blob_013000" OutName="Blob_013000" Format="ia4" Width="128" Height="16" Offset="0x13000" /> <!-- ITEM_BOW_ARROW_LIGHT -->
+        <Texture Name="item_name_static_Blob_013400" OutName="Blob_013400" Format="ia4" Width="128" Height="16" Offset="0x13400" /> <!-- ITEM_SWORD_KOKIRI -->
+        <Texture Name="item_name_static_Blob_013800" OutName="Blob_013800" Format="ia4" Width="128" Height="16" Offset="0x13800" /> <!-- ITEM_SWORD_RAZOR -->
+        <Texture Name="item_name_static_Blob_013C00" OutName="Blob_013C00" Format="ia4" Width="128" Height="16" Offset="0x13C00" /> <!-- ITEM_SWORD_GILDED -->
+        <Texture Name="item_name_static_Blob_014000" OutName="Blob_014000" Format="ia4" Width="128" Height="16" Offset="0x14000" /> <!-- ITEM_SWORD_DEITY -->
+        <Texture Name="item_name_static_Blob_014400" OutName="Blob_014400" Format="ia4" Width="128" Height="16" Offset="0x14400" /> <!-- ITEM_SHIELD_HERO -->
+        <Texture Name="item_name_static_Blob_014800" OutName="Blob_014800" Format="ia4" Width="128" Height="16" Offset="0x14800" /> <!-- ITEM_SHIELD_MIRROR -->
+        <Texture Name="item_name_static_Blob_014C00" OutName="Blob_014C00" Format="ia4" Width="128" Height="16" Offset="0x14C00" /> <!-- ITEM_QUIVER_30 -->
+        <Texture Name="item_name_static_Blob_015000" OutName="Blob_015000" Format="ia4" Width="128" Height="16" Offset="0x15000" /> <!-- ITEM_QUIVER_40 -->
+        <Texture Name="item_name_static_Blob_015400" OutName="Blob_015400" Format="ia4" Width="128" Height="16" Offset="0x15400" /> <!-- ITEM_QUIVER_50 -->
+        <Texture Name="item_name_static_Blob_015800" OutName="Blob_015800" Format="ia4" Width="128" Height="16" Offset="0x15800" /> <!-- ITEM_BOMB_BAG_20 -->
+        <Texture Name="item_name_static_Blob_015C00" OutName="Blob_015C00" Format="ia4" Width="128" Height="16" Offset="0x15C00" /> <!-- ITEM_BOMB_BAG_30 -->
+        <Texture Name="item_name_static_Blob_016000" OutName="Blob_016000" Format="ia4" Width="128" Height="16" Offset="0x16000" /> <!-- ITEM_BOMB_BAG_40 -->
+        <Texture Name="item_name_static_Blob_016400" OutName="Blob_016400" Format="ia4" Width="128" Height="16" Offset="0x16400" /> <!-- ITEM_WALLET_DEFAULT -->
+        <Texture Name="item_name_static_Blob_016800" OutName="Blob_016800" Format="ia4" Width="128" Height="16" Offset="0x16800" /> <!-- ITEM_WALLET_ADULT -->
+        <Texture Name="item_name_static_Blob_016C00" OutName="Blob_016C00" Format="ia4" Width="128" Height="16" Offset="0x16C00" /> <!-- ITEM_WALLET_GIANT -->
+        <Texture Name="item_name_static_Blob_017000" OutName="Blob_017000" Format="ia4" Width="128" Height="16" Offset="0x17000" /> <!-- ITEM_FISHING_ROD -->
+        <Texture Name="item_name_static_Blob_017400" OutName="Blob_017400" Format="ia4" Width="128" Height="16" Offset="0x17400" /> <!-- ITEM_REMAINS_ODOLWA -->
+        <Texture Name="item_name_static_Blob_017800" OutName="Blob_017800" Format="ia4" Width="128" Height="16" Offset="0x17800" /> <!-- ITEM_REMAINS_GOHT -->
+        <Texture Name="item_name_static_Blob_017C00" OutName="Blob_017C00" Format="ia4" Width="128" Height="16" Offset="0x17C00" /> <!-- ITEM_REMAINS_GYORG -->
+        <Texture Name="item_name_static_Blob_018000" OutName="Blob_018000" Format="ia4" Width="128" Height="16" Offset="0x18000" /> <!-- ITEM_REMAINS_TWINMOLD -->
+        <Texture Name="item_name_static_Blob_018400" OutName="Blob_018400" Format="ia4" Width="128" Height="16" Offset="0x18400" /> <!-- ITEM_SONG_SONATA -->
+        <Texture Name="item_name_static_Blob_018800" OutName="Blob_018800" Format="ia4" Width="128" Height="16" Offset="0x18800" /> <!-- ITEM_SONG_LULLABY -->
+        <Texture Name="item_name_static_Blob_018C00" OutName="Blob_018C00" Format="ia4" Width="128" Height="16" Offset="0x18C00" /> <!-- ITEM_SONG_NOVA -->
+        <Texture Name="item_name_static_Blob_019000" OutName="Blob_019000" Format="ia4" Width="128" Height="16" Offset="0x19000" /> <!-- ITEM_SONG_ELEGY -->
+        <Texture Name="item_name_static_Blob_019400" OutName="Blob_019400" Format="ia4" Width="128" Height="16" Offset="0x19400" /> <!-- ITEM_SONG_OATH -->
+        <Texture Name="item_name_static_Blob_019800" OutName="Blob_019800" Format="ia4" Width="128" Height="16" Offset="0x19800" /> <!-- ITEM_SONG_SARIA -->
+        <Texture Name="item_name_static_Blob_019C00" OutName="Blob_019C00" Format="ia4" Width="128" Height="16" Offset="0x19C00" /> <!-- ITEM_SONG_TIME -->
+        <Texture Name="item_name_static_Blob_01A000" OutName="Blob_01A000" Format="ia4" Width="128" Height="16" Offset="0x1A000" /> <!-- ITEM_SONG_HEALING -->
+        <Texture Name="item_name_static_Blob_01A400" OutName="Blob_01A400" Format="ia4" Width="128" Height="16" Offset="0x1A400" /> <!-- ITEM_SONG_EPONA -->
+        <Texture Name="item_name_static_Blob_01A800" OutName="Blob_01A800" Format="ia4" Width="128" Height="16" Offset="0x1A800" /> <!-- ITEM_SONG_SOARING -->
+        <Texture Name="item_name_static_Blob_01AC00" OutName="Blob_01AC00" Format="ia4" Width="128" Height="16" Offset="0x1AC00" /> <!-- ITEM_SONG_STORMS -->
+        <Texture Name="item_name_static_Blob_01B000" OutName="Blob_01B000" Format="ia4" Width="128" Height="16" Offset="0x1B000" /> <!-- ITEM_SONG_SUN -->
+        <Texture Name="item_name_static_Blob_01B400" OutName="Blob_01B400" Format="ia4" Width="128" Height="16" Offset="0x1B400" /> <!-- ITEM_BOMBERS_NOTEBOOK -->
+        <Texture Name="item_name_static_Blob_01B800" OutName="Blob_01B800" Format="ia4" Width="128" Height="16" Offset="0x1B800" /> <!-- ITEM_SKULL_TOKEN -->
+
+        <Texture Name="gPieceOfHeartItemNameENGTex" OutName="piece_of_heart_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1BC00" /> <!-- ITEM_HEART_CONTAINER, Piece of Heart? -->
+
+        <Texture Name="gPieceOfHeartItemNameJPNTex" OutName="piece_of_heart_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x1C000" /> <!-- ITEM_HEART_PIECE -->
+        <Texture Name="gSunsSongItemNameJPNTex" OutName="suns_song_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x1C400" /> <!-- ITEM_71 -->
+        <Texture Name="gSongOfTimeItemNameJPNTex" OutName="song_of_time_item_name_jpn" Format="ia4" Width="128" Height="16" Offset="0x1C800" /> <!-- ITEM_72 -->
+
+        <Texture Name="gLullabyIntroItemNameENGTex" OutName="lullaby_intro_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1CC00" /> <!-- ITEM_SONG_LULLABY_INTRO -->
+        <Texture Name="gBigKeyItemNameENGTex" OutName="big_key_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1D000" /> <!-- ITEM_KEY_BOSS -->
+        <Texture Name="gCompassItemNameENGTex" OutName="compass_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1D400" /> <!-- ITEM_COMPASS -->
+        <Texture Name="gDungeonMapItemNameENGTex" OutName="dungeon_map_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1D800" /> <!-- ITEM_DUNGEON_MAP -->
+        <Texture Name="gStrayFairiesItemNameENGTex" OutName="stray_fairies_item_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1DC00" /> <!-- ITEM_STRAY_FAIRIES -->
     </File>
 </Root>
