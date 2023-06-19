@@ -2,7 +2,7 @@
 #define Z64SAVE_H
 
 #include "ultra64.h"
-#include "ultra64/os.h"
+#include "PR/os.h"
 #include "z64item.h"
 #include "z64math.h"
 

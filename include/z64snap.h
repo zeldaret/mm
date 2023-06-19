@@ -1,7 +1,7 @@
 #ifndef Z64SNAP_H
 #define Z64SNAP_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 #include "z64actor.h"
 
 typedef s32 (*PictoValidationFunc)(struct PlayState*, Actor*);

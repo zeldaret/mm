@@ -1,7 +1,7 @@
 #include "global.h"
-#include "ultra64/osint.h"
+#include "PR/osint.h"
 #include "stack.h"
-#include "ultra64/osint.h"
+#include "PR/osint.h"
 
 OSThread viThread;
 STACK(sViStack, 0x1000);

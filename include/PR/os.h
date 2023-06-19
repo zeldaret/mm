@@ -21,6 +21,7 @@
 #include "os_thread.h"
 #include "os_time.h"
 #include "os_tlb.h"
+#include "os_vi.h"
 #include "os_voice.h"
 
 #endif

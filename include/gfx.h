@@ -2,7 +2,7 @@
 #define GFX_H
 
 #include "ultra64.h"
-#include "ultra64/sched.h"
+#include "PR/sched.h"
 #include "thga.h"
 #include "alignment.h"
 #include "unk.h"

@@ -1,7 +1,7 @@
 #ifndef UNK_H
 #define UNK_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 
 #define UNK_TYPE s32
 #define UNK_TYPE1 s8

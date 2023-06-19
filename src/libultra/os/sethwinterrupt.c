@@ -1,5 +1,5 @@
 #include "global.h"
-#include "ultra64/osint.h"
+#include "PR/osint.h"
 
 void __osSetHWIntrRoutine(OSHWIntr idx, OSMesgQueue* queue, OSMesg msg) {
     register s32 prevInt = __osDisableInt();

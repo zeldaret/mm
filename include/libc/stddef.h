@@ -1,7 +1,7 @@
 #ifndef LIBC_STDDEF_H
 #define LIBC_STDDEF_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 
 typedef u32 size_t;
 

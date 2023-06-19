@@ -1,6 +1,8 @@
 #ifndef _ULTRA64_HARDWARE_H_
 #define _ULTRA64_HARDWARE_H_
 
+// TODO: not real libultra header. Refactor to R4300.h
+
 // Segment Wrapper
 // Uncached RDRAM
 #define KSEG1 0xA0000000 // 0xA0000000 - 0xBFFFFFFF  Physical memory, uncached, unmapped

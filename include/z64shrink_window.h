@@ -1,7 +1,7 @@
 #ifndef Z64SHRINK_WINDOW_H
 #define Z64SHRINK_WINDOW_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 
 struct GraphicsContext;
 

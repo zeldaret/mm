@@ -4,9 +4,9 @@
  * Initializes Voice Recognition System control structure and hardware
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "ultra64/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 #include "functions.h"
 #include "macros.h"
 

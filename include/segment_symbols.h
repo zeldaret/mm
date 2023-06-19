@@ -2,7 +2,7 @@
 #define SEGMENT_SYMBOLS_H
 
 #include "libc/stddef.h"
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 
 #define DECLARE_SEGMENT(name)          \
     extern u8 _##name##SegmentStart[]; \

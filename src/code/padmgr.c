@@ -32,7 +32,7 @@
  */
 
 #include "global.h"
-#include "ultra64/os_motor.h"
+#include "PR/os_motor.h"
 
 #define PADMGR_RETRACE_MSG (1 << 0)
 #define PADMGR_PRE_NMI_MSG (1 << 1)

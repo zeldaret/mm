@@ -1,7 +1,7 @@
 #ifndef SYSTEM_MALLOC_H
 #define SYSTEM_MALLOC_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 #include "os_malloc.h"
 
 void* SystemArena_Malloc(size_t size);

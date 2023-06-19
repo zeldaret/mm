@@ -1,8 +1,8 @@
 #ifndef OS_MALLOC_H
 #define OS_MALLOC_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/os_message.h"
+#include "PR/ultratypes.h"
+#include "PR/os_message.h"
 #include "libc/stddef.h"
 
 typedef struct ArenaNode {

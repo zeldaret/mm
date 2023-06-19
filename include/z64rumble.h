@@ -1,8 +1,8 @@
 #ifndef Z64RUMBLE_H
 #define Z64RUMBLE_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/controller.h"
+#include "PR/ultratypes.h"
+#include "PR/controller.h"
 
 typedef enum RumbleManagerState {
     /* 0 */ RUMBLEMANAGER_STATE_WIPE, // Disables the request processing and wipes every request. It can be either set manually or automatically by the system as fail-safe in case the Rumble Pak has been vibrating for 2 minutes

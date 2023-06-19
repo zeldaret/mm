@@ -1,6 +1,6 @@
 #include "global.h"
 #include "libc/assert.h"
-#include "ultra64/viint.h"
+#include "PR/viint.h"
 
 typedef struct {
     /* 0x00 */ u32 burst;

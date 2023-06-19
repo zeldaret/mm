@@ -1,8 +1,8 @@
 #ifndef Z64VIEW_H
 #define Z64VIEW_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/gbi.h"
+#include "PR/ultratypes.h"
+#include "PR/gbi.h"
 #include "z64math.h"
 #include "unk.h"
 

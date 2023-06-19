@@ -10,9 +10,9 @@
  * is initialized with the osVoiceClearDictionary function
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/controller.h"
-#include "ultra64/os_voice.h"
+#include "PR/controller_voice.h"
+#include "PR/controller.h"
+#include "PR/os_voice.h"
 
 s32 osVoiceClearDictionary(OSVoiceHandle* hd, u8 numWords) {
     s32 errorCode;

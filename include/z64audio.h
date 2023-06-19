@@ -1,8 +1,8 @@
 #ifndef Z64AUDIO_H
 #define Z64AUDIO_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/os_voice.h"
+#include "PR/ultratypes.h"
+#include "PR/os_voice.h"
 #include "audiothread_cmd.h"
 #include "libc/stddef.h"
 

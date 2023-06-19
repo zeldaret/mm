@@ -1,9 +1,9 @@
 #ifndef ULTRA64_SCHED_H
 #define ULTRA64_SCHED_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/vi.h"
-#include "ultra64/sptask.h"
+#include "PR/ultratypes.h"
+#include "PR/os_vi.h"
+#include "PR/sptask.h"
 
 #define OS_SC_STACKSIZE      0x2000
 

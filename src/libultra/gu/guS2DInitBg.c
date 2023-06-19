@@ -1,5 +1,5 @@
 #include "global.h"
-#include "ultra64/gs2dex.h"
+#include "PR/gs2dex.h"
 
 void guS2DInitBg(uObjBg* bg) {
     u32 size;

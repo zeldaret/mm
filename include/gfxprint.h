@@ -2,9 +2,9 @@
 #define GFXPRINT_H
 
 #include "color.h"
-#include "ultra64/gbi.h"
-#include "ultra64/ultratypes.h"
-#include "ultra64/xstdio.h"
+#include "PR/gbi.h"
+#include "PR/ultratypes.h"
+#include "PR/xstdio.h"
 #include "unk.h"
 
 #define GFXP_UNUSED "\x8E"

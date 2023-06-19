@@ -1,9 +1,9 @@
 #ifndef CONTROLLER_VOICE_H
 #define CONTROLLER_VOICE_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/os_voice.h"
-#include "ultra64/os_message.h"
+#include "ultratypes.h"
+#include "os_voice.h"
+#include "os_message.h"
 #include "libc/stddef.h"
 
 typedef struct {

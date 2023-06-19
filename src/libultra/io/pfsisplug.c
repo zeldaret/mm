@@ -1,5 +1,5 @@
-#include "ultra64/os_pfs.h"
-#include "ultra64/controller.h"
+#include "PR/os_pfs.h"
+#include "PR/controller.h"
 #include "global.h"
 
 void __osPfsRequestData(u8 poll);

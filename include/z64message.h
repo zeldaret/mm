@@ -1,7 +1,7 @@
 #ifndef Z64MESSAGE_H
 #define Z64MESSAGE_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 #include "z64view.h"
 #include "unk.h"
 

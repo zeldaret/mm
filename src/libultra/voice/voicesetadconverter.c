@@ -2,8 +2,8 @@
  * File: voicesetadconverter.c
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/controller.h"
 #include "functions.h"
 #include "variables.h"
 

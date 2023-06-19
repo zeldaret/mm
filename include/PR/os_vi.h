@@ -1,8 +1,8 @@
 #ifndef ULTRA64_VI_H
 #define ULTRA64_VI_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/os_message.h"
+#include "PR/ultratypes.h"
+#include "PR/os_message.h"
 
 /* Special Features */
 #define OS_VI_GAMMA_ON          (1 << 0)

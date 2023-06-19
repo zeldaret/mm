@@ -2,7 +2,7 @@
 #include "global.h"
 #include "stack.h"
 #include "vt.h"
-#include "ultra64/osint.h"
+#include "PR/osint.h"
 #include "stackcheck.h"
 
 extern FaultThreadStruct* sFaultContext;

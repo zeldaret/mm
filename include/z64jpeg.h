@@ -1,9 +1,9 @@
 #ifndef Z64JPEG_H
 #define Z64JPEG_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/os_message.h"
-#include "ultra64/sched.h"
+#include "PR/ultratypes.h"
+#include "PR/os_message.h"
+#include "PR/sched.h"
 
 typedef struct {
     /* 0x00 */ u16 table[8*8];

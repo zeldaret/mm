@@ -1,8 +1,8 @@
 #ifndef Z64SKYBOX_H
 #define Z64SKYBOX_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/gbi.h"
+#include "PR/ultratypes.h"
+#include "PR/gbi.h"
 #include "color.h"
 
 #include "z64dma.h"

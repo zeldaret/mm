@@ -1,7 +1,7 @@
 #ifndef LIBC_STDINT_H
 #define LIBC_STDINT_H
 
-#include "ultra64/ultratypes.h"
+#include "PR/ultratypes.h"
 
 typedef s32 intptr_t;
 typedef u32 uintptr_t;

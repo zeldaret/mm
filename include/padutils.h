@@ -1,7 +1,7 @@
 #ifndef PADUTILS_H
 #define PADUTILS_H
 
-#include "ultra64/controller.h"
+#include "PR/controller.h"
 
 
 typedef struct Input {

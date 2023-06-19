@@ -1,10 +1,10 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "ultra64/ultratypes.h"
-#include "ultra64/sched.h"
-#include "ultra64/vi.h"
-#include "ultra64/sptask.h"
+#include "PR/ultratypes.h"
+#include "PR/sched.h"
+#include "PR/os_vi.h"
+#include "PR/sptask.h"
 #include "irqmgr.h"
 
 #define TASK_FRAMEBUFFER(task) ((CfbInfo*)(task)->framebuffer)

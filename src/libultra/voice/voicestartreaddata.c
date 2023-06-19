@@ -4,9 +4,9 @@
  * Start voice recognition by the Voice Recognition System
  */
 
-#include "ultra64/controller_voice.h"
-#include "ultra64/os_voice.h"
-#include "ultra64/controller.h"
+#include "PR/controller_voice.h"
+#include "PR/os_voice.h"
+#include "PR/controller.h"
 
 s32 osVoiceStartReadData(OSVoiceHandle* hd) {
     s32 errorCode;
