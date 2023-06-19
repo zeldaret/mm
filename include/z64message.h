@@ -25,6 +25,7 @@ typedef enum FaceReactionSet {
 } FaceReactionSet;
 
 u16 Text_GetFaceReaction(struct PlayState* play, FaceReactionSet reactionSet);
+
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
     /*  1 */ TEXT_STATE_1,
