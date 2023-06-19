@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 enum {
     ELF_MACHINE_NONE = 0,
@@ -52,14 +53,31 @@ struct Elf32_Section {
     uint32_t type;
     uint32_t flags;
     uint32_t addr;
+    uint32_t size;
     uint32_t offset;
     uint32_t addralign;
     uint32_t entsize;
 };
 
+#define SHN_UNDEF   0
+#define SHN_ABS     0xFFF1
+#define SHN_COMMON  0xFFF2
+
+#define STT_NOTYPE  0
+#define STT_OBJECT  1
+#define STT_FUNC    2
+#define STT_SECTION 3
+#define STT_FILE    4
+#define STT_COMMON  5
+#define STT_TLS     6
+#define STT_NUM     7
+
 struct Elf32_Symbol {
     const char* name;
     uint32_t value;
+    uint32_t size;
+    uint8_t st_type;
+    uint16_t shndx;
 };
 
 bool elf32_init(struct Elf32* e, const void* data, size_t size);
