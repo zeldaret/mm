@@ -882,7 +882,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 void func_8088E850(EnElf* this, PlayState* play) {
     Vec3f nextPos;
     Player* player = GET_PLAYER(play);
-    Actor* arrowPointedActor;
+    Actor* targetableOption;
     f32 xScale;
     f32 distFromLinksHead;
     u32 cueChannel;
@@ -968,7 +968,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 break;
 
             default:
-                arrowPointedActor = play->actorCtx.targetCtx.arrowPointedActor;
+                targetableOption = play->actorCtx.targetCtx.targetableOption;
                 if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
@@ -976,7 +976,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 }
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
-                if (arrowPointedActor != NULL) {
+                if (targetableOption != NULL) {
                     func_8088DB4C(this, &nextPos, 0.0f, 30.0f, 0.2f);
                     if (this->actor.speed >= 5.0f) {
                         func_8088F5F4(this, play, 0x10);
@@ -1037,7 +1037,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, PlayState* play) {
-    Actor* arrowPointedActor = play->actorCtx.targetCtx.arrowPointedActor;
+    Actor* targetableOption = play->actorCtx.targetCtx.targetableOption;
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
 
@@ -1069,7 +1069,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
-        if ((arrowPointedActor == NULL) ||
+        if ((targetableOption == NULL) ||
             (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyHintPos) < 50.0f)) {
             this->unk_268 = 1;
         }
@@ -1085,10 +1085,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 1) {
-        if ((arrowPointedActor == NULL) || (player->targetedActor == NULL)) {
+        if ((targetableOption == NULL) || (player->targetedActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((arrowPointedActor != NULL) && (player->targetedActor != NULL)) {
+    } else if ((targetableOption != NULL) && (player->targetedActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1101,7 +1101,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
 
 void func_8088F214(EnElf* this, PlayState* play) {
     s32 sp34;
-    Actor* arrowPointedActor;
+    Actor* targetableOption;
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -1132,12 +1132,12 @@ void func_8088F214(EnElf* this, PlayState* play) {
         sp34 = 1;
         func_800B9010(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
-        arrowPointedActor = play->actorCtx.targetCtx.arrowPointedActor;
+        targetableOption = play->actorCtx.targetCtx.targetableOption;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
             sp34 = 10;
             this->unk_25C = 100;
-        } else if ((arrowPointedActor == NULL) || (arrowPointedActor->category == ACTORCAT_NPC)) {
-            if (arrowPointedActor != NULL) {
+        } else if ((targetableOption == NULL) || (targetableOption->category == ACTORCAT_NPC)) {
+            if (targetableOption != NULL) {
                 this->unk_25C = 100;
                 player->stateFlags2 |= PLAYER_STATE2_100000;
                 sp34 = 0;

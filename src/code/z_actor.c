@@ -471,9 +471,9 @@ void Target_SetColors(TargetContext* targetCtx, Actor* actor, ActorType type, Pl
 
 void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->bgmEnemy = NULL;
-    targetCtx->nextTarget = NULL;
+    targetCtx->nextTargetableOption = NULL;
     targetCtx->targetedActor = NULL;
-    targetCtx->arrowPointedActor = NULL;
+    targetCtx->targetableOption = NULL;
     targetCtx->rotZTick = 0;
     targetCtx->lockOnIndex = 0;
     targetCtx->fairyMoveProgressFactor = 0.0f;
@@ -583,7 +583,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         }
     }
 
-    actor = targetCtx->targetableOption;
+    actor = targetCtx->arrowPointedActor;
     if ((actor != NULL) && !(actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
         TatlColor* color = &sTatlColorList[actor->category];
 
@@ -612,15 +612,15 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
 
     // If no actor is currently targeted, then try to find a targetable actor
     if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
-        targetCtx->targetableOption = NULL;
+        targetCtx->arrowPointedActor = NULL;
     } else {
         Target_GetTargetActor(play, &play->actorCtx, &actor, &D_801ED920, player);
-        targetCtx->targetableOption = actor;
+        targetCtx->arrowPointedActor = actor;
     }
 
-    if (targetCtx->nextTarget != NULL) {
-        actor = targetCtx->nextTarget;
-        targetCtx->nextTarget = NULL;
+    if (targetCtx->nextTargetableOption != NULL) {
+        actor = targetCtx->nextTargetableOption;
+        targetCtx->nextTargetableOption = NULL;
     } else if (targetedActor != NULL) {
         actor = targetedActor;
     }
@@ -631,9 +631,9 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         category = player->actor.category;
     }
 
-    if ((actor != targetCtx->arrowPointedActor) || (category != targetCtx->arrowPointedActorCategory)) {
-        targetCtx->arrowPointedActor = actor;
-        targetCtx->arrowPointedActorCategory = category;
+    if ((actor != targetCtx->targetableOption) || (category != targetCtx->targetableOptionCategory)) {
+        targetCtx->targetableOption = actor;
+        targetCtx->targetableOptionCategory = category;
         targetCtx->fairyMoveProgressFactor = 1.0f;
     }
 
@@ -3372,12 +3372,12 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
-    if (actor == actorCtx->targetCtx.arrowPointedActor) {
-        actorCtx->targetCtx.arrowPointedActor = NULL;
+    if (actor == actorCtx->targetCtx.targetableOption) {
+        actorCtx->targetCtx.targetableOption = NULL;
     }
 
-    if (actor == actorCtx->targetCtx.nextTarget) {
-        actorCtx->targetCtx.nextTarget = NULL;
+    if (actor == actorCtx->targetCtx.nextTargetableOption) {
+        actorCtx->targetCtx.nextTargetableOption = NULL;
     }
 
     if (actor == actorCtx->targetCtx.bgmEnemy) {

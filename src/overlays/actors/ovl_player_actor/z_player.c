@@ -4618,14 +4618,14 @@ void func_80832888(Player* this, PlayState* play) {
                 ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
                 var_v1_2 =
-                    (this == GET_PLAYER(play)) ? play->actorCtx.targetCtx.arrowPointedActor : &GET_PLAYER(play)->actor;
+                    (this == GET_PLAYER(play)) ? play->actorCtx.targetCtx.targetableOption : &GET_PLAYER(play)->actor;
                 var_a1 = (gSaveContext.options.zTargetSetting != 0) || (this != GET_PLAYER(play));
                 this->stateFlags1 |= PLAYER_STATE1_8000;
                 if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) &&
                     !(var_v1_2->flags & ACTOR_FLAG_CANT_LOCK_ON) &&
                     !(this->stateFlags3 & (PLAYER_STATE3_200 | PLAYER_STATE3_2000))) {
                     if ((var_v1_2 == this->targetedActor) && (this == GET_PLAYER(play))) {
-                        var_v1_2 = play->actorCtx.targetCtx.targetableOption;
+                        var_v1_2 = play->actorCtx.targetCtx.arrowPointedActor;
                     }
 
                     if ((var_v1_2 != NULL) &&
@@ -10747,7 +10747,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                             (this->transformation == PLAYER_FORM_ZORA)) &&
                            ((this->heldItemAction >= PLAYER_IA_SWORD_KOKIRI) ||
                             ((this->stateFlags2 & PLAYER_STATE2_100000) &&
-                             (play->actorCtx.targetCtx.arrowPointedActor == NULL)))) {
+                             (play->actorCtx.targetCtx.targetableOption == NULL)))) {
                     doActionA = DO_ACTION_PUTAWAY;
 
                     if (play->msgCtx.currentTextId == 0) {} //! FAKE

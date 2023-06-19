@@ -308,18 +308,18 @@ typedef struct TargetContext {
     /* 0x0C */ Vec3f targetCenterPos;
     /* 0x18 */ Color_RGBAf fairyInner;
     /* 0x28 */ Color_RGBAf fairyOuter;
-    /* 0x38 */ Actor* arrowPointedActor;
+    /* 0x38 */ Actor* targetableOption;
     /* 0x3C */ Actor* targetedActor;
     /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
     /* 0x44 */ f32 lockOnRadius; // Control the circle lock-on triangles coming in from offscreen when you first target
     /* 0x48 */ s16 lockOnAlpha;
-    /* 0x4A */ u8 arrowPointedActorCategory;
+    /* 0x4A */ u8 targetableOptionCategory;
     /* 0x4B */ u8 rotZTick;
     /* 0x4C */ s8 lockOnIndex;
     /* 0x50 */ TargetLockOnEntry lockOnEntries[3];
-    /* 0x8C */ Actor* nextTarget; // Never set to non-NULL
+    /* 0x8C */ Actor* nextTargetableOption; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
-    /* 0x94 */ Actor* targetableOption;
+    /* 0x94 */ Actor* arrowPointedActor;
 } TargetContext; // size = 0x98
 
 typedef enum TargetMode {
