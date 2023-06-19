@@ -556,7 +556,7 @@ void Sched_ThreadEntry(void* arg) {
     SchedContext* sched = (SchedContext*)arg;
 
     while (true) {
-        osRecvMesg(&sched->interruptQ, (OSMesg)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&sched->interruptQ, (OSMesg*)&msg, OS_MESG_BLOCK);
 
         // Check if it's a message from another thread or the OS
         switch (msg) {
