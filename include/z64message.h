@@ -8,6 +8,7 @@
 struct Actor;
 struct MessageTableEntry;
 struct OcarinaStaff;
+struct PlayState;
 
 extern u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX];
 extern u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX];
@@ -23,6 +24,7 @@ typedef enum FaceReactionSet {
     /* 0x36 */ FACE_REACTION_SET_PART_TIMER = 0x36
 } FaceReactionSet;
 
+u16 Text_GetFaceReaction(struct PlayState* play, FaceReactionSet reactionSet);
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
     /*  1 */ TEXT_STATE_1,
