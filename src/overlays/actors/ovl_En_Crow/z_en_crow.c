@@ -465,8 +465,8 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
-    if (this->collider.base.acFlags & AT_HIT) {
-        this->collider.base.acFlags &= ~AT_HIT;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
 
         if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {

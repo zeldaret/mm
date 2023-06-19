@@ -401,7 +401,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
     }
 
     if (this->unk_BCE != 0) {
-        if (ENFZ_GET_8000(&this->actor) && (this->collider1.base.atFlags & AC_HIT)) {
+        if (ENFZ_GET_8000(&this->actor) && (this->collider1.base.atFlags & AT_HIT)) {
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
             this->collider1.base.acFlags &= ~AC_HIT;

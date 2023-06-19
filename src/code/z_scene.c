@@ -526,7 +526,7 @@ void Scene_CommandSetRegionVisitedFlag(PlayState* play, SceneCmd* cmd) {
 
 // SceneTableEntry Header Command 0x1A: Material Animations
 void Scene_CommandAnimatedMaterials(PlayState* play, SceneCmd* cmd) {
-    play->sceneMaterialAnims = (AnimatedMaterial*)Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
+    play->sceneMaterialAnims = Lib_SegmentedToVirtual(cmd->textureAnimations.segment);
 }
 
 /**
@@ -536,38 +536,38 @@ void Scene_SetExitFade(PlayState* play) {
     play->transitionType = Entrance_GetTransitionFlags(play->nextEntrance) & 0x7F;
 }
 
-void (*sSceneCmdHandlers[])(PlayState*, SceneCmd*) = {
-    Scene_CommandSpawnList,
-    Scene_CommandActorList,
-    Scene_CommandActorCutsceneCamList,
-    Scene_CommandCollisionHeader,
-    Scene_CommandRoomList,
-    Scene_CommandWindSettings,
-    Scene_CommandEntranceList,
-    Scene_CommandSpecialFiles,
-    Scene_CommandRoomBehavior,
-    Scene_Command09,
-    Scene_CommandMesh,
-    Scene_CommandObjectList,
-    Scene_CommandLightList,
-    Scene_CommandPathList,
-    Scene_CommandTransiActorList,
-    Scene_CommandEnvLightSettings,
-    Scene_CommandTimeSettings,
-    Scene_CommandSkyboxSettings,
-    Scene_CommandSkyboxDisables,
-    Scene_CommandExitList,
-    NULL,
-    Scene_CommandSoundSettings,
-    Scene_CommandEchoSetting,
-    Scene_CommandCutsceneScriptList,
-    Scene_CommandAltHeaderList,
-    Scene_CommandSetRegionVisitedFlag,
-    Scene_CommandAnimatedMaterials,
-    Scene_CommandCutsceneList,
-    Scene_CommandMiniMap,
-    Scene_Command1D,
-    Scene_CommandMiniMapCompassInfo,
+void (*sSceneCmdHandlers[SCENE_CMD_MAX])(PlayState*, SceneCmd*) = {
+    Scene_CommandSpawnList,            // SCENE_CMD_ID_SPAWN_LIST
+    Scene_CommandActorList,            // SCENE_CMD_ID_ACTOR_LIST
+    Scene_CommandActorCutsceneCamList, // SCENE_CMD_ID_ACTOR_CUTSCENE_CAM_LIST
+    Scene_CommandCollisionHeader,      // SCENE_CMD_ID_COL_HEADER
+    Scene_CommandRoomList,             // SCENE_CMD_ID_ROOM_LIST
+    Scene_CommandWindSettings,         // SCENE_CMD_ID_WIND_SETTINGS
+    Scene_CommandEntranceList,         // SCENE_CMD_ID_ENTRANCE_LIST
+    Scene_CommandSpecialFiles,         // SCENE_CMD_ID_SPECIAL_FILES
+    Scene_CommandRoomBehavior,         // SCENE_CMD_ID_ROOM_BEHAVIOR
+    Scene_Command09,                   // SCENE_CMD_ID_UNK_09
+    Scene_CommandMesh,                 // SCENE_CMD_ID_ROOM_SHAPE
+    Scene_CommandObjectList,           // SCENE_CMD_ID_OBJECT_LIST
+    Scene_CommandLightList,            // SCENE_CMD_ID_LIGHT_LIST
+    Scene_CommandPathList,             // SCENE_CMD_ID_PATH_LIST
+    Scene_CommandTransiActorList,      // SCENE_CMD_ID_TRANSI_ACTOR_LIST
+    Scene_CommandEnvLightSettings,     // SCENE_CMD_ID_ENV_LIGHT_SETTINGS
+    Scene_CommandTimeSettings,         // SCENE_CMD_ID_TIME_SETTINGS
+    Scene_CommandSkyboxSettings,       // SCENE_CMD_ID_SKYBOX_SETTINGS
+    Scene_CommandSkyboxDisables,       // SCENE_CMD_ID_SKYBOX_DISABLES
+    Scene_CommandExitList,             // SCENE_CMD_ID_EXIT_LIST
+    NULL,                              // SCENE_CMD_ID_END
+    Scene_CommandSoundSettings,        // SCENE_CMD_ID_SOUND_SETTINGS
+    Scene_CommandEchoSetting,          // SCENE_CMD_ID_ECHO_SETTINGS
+    Scene_CommandCutsceneScriptList,   // SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST
+    Scene_CommandAltHeaderList,        // SCENE_CMD_ID_ALTERNATE_HEADER_LIST
+    Scene_CommandSetRegionVisitedFlag, // SCENE_CMD_ID_SET_REGION_VISITED
+    Scene_CommandAnimatedMaterials,    // SCENE_CMD_ID_ANIMATED_MATERIAL_LIST
+    Scene_CommandCutsceneList,         // SCENE_CMD_ID_ACTOR_CUTSCENE_LIST
+    Scene_CommandMiniMap,              // SCENE_CMD_ID_MINIMAP_INFO
+    Scene_Command1D,                   // SCENE_CMD_ID_UNUSED_1D
+    Scene_CommandMiniMapCompassInfo,   // SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO
 };
 
 /**

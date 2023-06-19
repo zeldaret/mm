@@ -536,7 +536,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(this->actor.focus.pos.x + sp80.x, this->actor.focus.pos.y + sp80.y,
                          sp80.z = this->actor.focus.pos.z + sp80.z, MTXMODE_NEW);
 
-        sp80.z = Math_SinS(play->gameplayFrames << 0xE);
+        sp80.z = Math_SinS(play->gameplayFrames * 0x4000);
         sp80.z = ((sp80.z + 1.0f) * 0.1f) + 2.0f;
         Matrix_Scale(this->actor.scale.x * sp80.z, this->actor.scale.y * sp80.z, this->actor.scale.z * sp80.z,
                      MTXMODE_APPLY);

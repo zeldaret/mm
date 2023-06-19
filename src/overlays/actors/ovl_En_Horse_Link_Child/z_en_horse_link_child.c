@@ -315,7 +315,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
             } else {
                 phi_v0 = -1;
             }
-            sp32 += (phi_v0 << 0xE);
+            sp32 += (phi_v0 * 0x4000);
         } else {
             sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos) - this->actor.world.rot.y;
         }

@@ -129,8 +129,8 @@ void EnSnowwd_Draw(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_snowwd_Tex_001AA0));
-    gSPDisplayList(POLY_OPA_DISP++, object_snowwd_DL_000198);
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gSnowTreeSnowLeavesTex));
+    gSPDisplayList(POLY_OPA_DISP++, gSnowTreeDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
