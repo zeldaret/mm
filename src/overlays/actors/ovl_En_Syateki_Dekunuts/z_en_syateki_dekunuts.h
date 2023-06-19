@@ -6,8 +6,8 @@
 
 #define SG_DEKU_GET_TYPE(thisx) ((thisx)->params & 0xF)
 #define SG_DEKU_GET_INDEX(thisx) (((thisx)->params & 0xF0) >> 4)
-#define SG_DEKU_GET_PARAM_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define SG_DEKU_PARAMS(unkFF00, index, type) (((unkFF00 << 8) & 0xFF00) | ((index << 4) & 0xF0) | (type & 0xF))
+#define SG_DEKU_GET_ADDITIONAL_PATH_LINKED_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define SG_DEKU_PARAMS(additionalPathLinkedIndex, index, type) (((additionalPathLinkedIndex << 8) & 0xFF00) | ((index << 4) & 0xF0) | (type & 0xF))
 
 typedef enum {
     /* 0 */ SG_DEKU_TYPE_NORMAL, // Worth 30 points
