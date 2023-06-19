@@ -275,7 +275,7 @@ void __osFree(Arena* arena, void* ptr) {
 
     node = (ArenaNode*)((uintptr_t)ptr - sizeof(ArenaNode));
 
-    if (ptr != NULL && node->magic == NODE_MAGIC && !node->isFree) {
+    if ((ptr != NULL) && (node->magic == NODE_MAGIC) && !node->isFree) {
         next = node->next;
         prev = node->prev;
         node->isFree = true;
@@ -297,7 +297,7 @@ void __osFree(Arena* arena, void* ptr) {
 
         // Checks if the previous node is contiguous to the current node and if it isn't currently allocated. Then merge
         // the two nodes into one.
-        if (prev != NULL && prev->isFree && (uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size) {
+        if ((prev != NULL) && prev->isFree && ((uintptr_t)node == (uintptr_t)prev + sizeof(ArenaNode) + prev->size)) {
             if (next != NULL) {
                 next->prev = prev;
             }

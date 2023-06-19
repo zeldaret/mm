@@ -10,6 +10,7 @@
 #include "z_en_syateki_man.h"
 #include "overlays/actors/ovl_En_Syateki_Crow/z_en_syateki_crow.h"
 #include "overlays/actors/ovl_En_Syateki_Dekunuts/z_en_syateki_dekunuts.h"
+#include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
@@ -49,15 +50,10 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define TALK_FLAG_SWAMP_HAS_SPOKEN_WITH_HUMAN (1 << 0)
 #define TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES (1 << 1)
 
-#define OCTOROK_FLAG(color, row, column) (1 << ((row * 6) + (column * 2) + color))
-#define COLOR_RED 0
-#define COLOR_BLUE 1
-#define ROW_BACK 0
-#define ROW_CENTER 1
-#define ROW_FRONT 2
-#define COLUMN_LEFT 0
-#define COLUMN_CENTER 1
-#define COLUMN_RIGHT 2
+#define OCTO_FLAGS(type0, type1, type2, type3, type4, type5, type6, type7, type8)           \
+    (SG_OCTO_SET_FLAG(type0, 0) | SG_OCTO_SET_FLAG(type1, 1) | SG_OCTO_SET_FLAG(type2, 2) | \
+     SG_OCTO_SET_FLAG(type3, 3) | SG_OCTO_SET_FLAG(type4, 4) | SG_OCTO_SET_FLAG(type5, 5) | \
+     SG_OCTO_SET_FLAG(type6, 6) | SG_OCTO_SET_FLAG(type7, 7) | SG_OCTO_SET_FLAG(type8, 8))
 
 ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
@@ -74,7 +70,7 @@ ActorInit En_Syateki_Man_InitVars = {
 typedef enum {
     /* 0 */ EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE,
     /* 1 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END,
+    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
 } EnSyatekiManAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -183,7 +179,7 @@ void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
-    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH(&this->actor)];
+    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = 1;
@@ -201,7 +197,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
     this->flagsIndex = 0;
-    this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
+    this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -1227,7 +1223,7 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->score = 0;
         this->flagsIndex = 0;
         this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
-        this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
+        this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
         sGameStartTimer = 30;
         Interface_StartTimer(TIMER_ID_MINIGAME_1, 75);
         this->actor.draw = NULL;
@@ -1240,62 +1236,67 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
  * For each wave, these flags are used to control which Octoroks appear.
  */
 static const s32 sOctorokFlagsPerWave[] = {
-    OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    // clang-format off
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT),
+    OCTO_FLAGS(SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_BACK, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED),
 
-    OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_CENTER),
+    OCTO_FLAGS(SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT),
+    OCTO_FLAGS(SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED),
 
-    OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_BLUE),
 
-    OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_CENTER),
+    OCTO_FLAGS(SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_RED, SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_RED, SG_OCTO_TYPE_BLUE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_BACK, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED),
 
-    OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_CENTER, COLUMN_LEFT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_BLUE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_BLUE, ROW_BACK, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_BACK, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_BLUE, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_BLUE,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_NONE),
 
-    OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_BLUE, ROW_FRONT, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_LEFT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_BLUE, SG_OCTO_TYPE_BLUE),
 
-    OCTOROK_FLAG(COLOR_RED, ROW_FRONT, COLUMN_CENTER) | OCTOROK_FLAG(COLOR_RED, ROW_CENTER, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_RIGHT) | OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_CENTER) |
-        OCTOROK_FLAG(COLOR_RED, ROW_BACK, COLUMN_LEFT),
+    OCTO_FLAGS(SG_OCTO_TYPE_RED,  SG_OCTO_TYPE_RED, SG_OCTO_TYPE_RED,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED, SG_OCTO_TYPE_NONE,
+               SG_OCTO_TYPE_NONE, SG_OCTO_TYPE_RED, SG_OCTO_TYPE_NONE),
+    // clang-format on
 };
 
 void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
@@ -1323,16 +1324,16 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
             this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
         }
 
-        if (this->perGameVar2.octorokHitType != SG_OCTO_HIT_TYPE_NONE) {
-            if (this->perGameVar2.octorokHitType == SG_OCTO_HIT_TYPE_BLUE) {
+        if (this->perGameVar2.lastHitOctorokType != SG_OCTO_TYPE_NONE) {
+            if (this->perGameVar2.lastHitOctorokType == SG_OCTO_TYPE_BLUE) {
                 gSaveContext.timerTimeLimits[TIMER_ID_MINIGAME_1] -= SECONDS_TO_TIMER_PRECISE(2, 50);
                 sModFromLosingTime = (sModFromLosingTime + 25) % 50;
             }
 
-            this->perGameVar2.octorokHitType = SG_OCTO_HIT_TYPE_NONE;
+            this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
         }
 
-        if (this->perGameVar1.octorokState == SG_OCTO_STATE_SPAWNING) {
+        if (this->perGameVar1.octorokState == SG_OCTO_STATE_APPEARING) {
             this->perGameVar1.octorokState++;
         }
 
@@ -1340,10 +1341,10 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
         // that the player might have lost time from hitting Blue Octoroks, so we do something similar to
         // what was done with waveTimer above.
         if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
-            if (this->flagsIndex < 15) {
+            if (this->flagsIndex < ARRAY_COUNT(sOctorokFlagsPerWave)) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
                 Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
-                this->perGameVar1.octorokState = SG_OCTO_STATE_SPAWNING;
+                this->perGameVar1.octorokState = SG_OCTO_STATE_APPEARING;
             }
         }
 
@@ -1502,7 +1503,7 @@ void EnSyatekiMan_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));

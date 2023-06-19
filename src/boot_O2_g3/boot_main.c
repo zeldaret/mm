@@ -1,6 +1,8 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "stack.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
 StackEntry sBootStackInfo;
 OSThread sIdleThread;

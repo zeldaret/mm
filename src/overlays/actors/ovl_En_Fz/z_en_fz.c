@@ -306,14 +306,14 @@ void func_809328F4(EnFz* this, PlayState* play, Vec3f* arg2, s32 arg3, f32 arg4)
     sp88.b = 200;
 
     for (i = 0; i < arg3; i++) {
-        temp_f24 = randPlusMinusPoint5Scaled(0.3f) + 0.6f;
-        temp_s1 = (s32)randPlusMinusPoint5Scaled(5.0f) + 12;
-        spA8.x = randPlusMinusPoint5Scaled(arg4) + arg2->x;
+        temp_f24 = Rand_CenteredFloat(0.3f) + 0.6f;
+        temp_s1 = (s32)Rand_CenteredFloat(5.0f) + 12;
+        spA8.x = Rand_CenteredFloat(arg4) + arg2->x;
         spA8.y = Rand_ZeroFloat(arg4) + arg2->y;
-        spA8.z = randPlusMinusPoint5Scaled(arg4) + arg2->z;
-        sp9C.x = randPlusMinusPoint5Scaled(10.0f);
+        spA8.z = Rand_CenteredFloat(arg4) + arg2->z;
+        sp9C.x = Rand_CenteredFloat(10.0f);
         sp9C.y = Rand_ZeroFloat(10.0f) + 2.0f;
-        sp9C.z = randPlusMinusPoint5Scaled(10.0f);
+        sp9C.z = Rand_CenteredFloat(10.0f);
         EffectSsEnIce_Spawn(play, &spA8, temp_f24, &sp9C, &sp90, &sp8C, &sp88, temp_s1);
     }
 
@@ -329,9 +329,9 @@ void func_80932AF4(EnFz* this) {
     Vec3f sp2C;
 
     if (!(this->unk_BC6 & 0xF)) {
-        sp44.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
-        sp44.y = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.y + 30.0f;
-        sp44.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
+        sp44.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
+        sp44.y = Rand_CenteredFloat(40.0f) + this->actor.world.pos.y + 30.0f;
+        sp44.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         sp2C.x = sp2C.z = 0.0f;
         sp2C.y = 0.1f;
         sp38.x = sp38.y = sp38.z = 0.0f;
@@ -345,9 +345,9 @@ void func_80932BD4(EnFz* this) {
     Vec3f sp2C;
 
     if (!(this->unk_BC6 & 3)) {
-        sp44.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
+        sp44.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp44.y = this->unk_BB4;
-        sp44.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
+        sp44.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         sp2C.x = sp2C.z = 0.0f;
         sp2C.y = 0.1f;
         sp38.x = sp38.y = sp38.z = 0.0f;
@@ -401,7 +401,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
     }
 
     if (this->unk_BCE != 0) {
-        if (ENFZ_GET_8000(&this->actor) && (this->collider1.base.atFlags & AC_HIT)) {
+        if (ENFZ_GET_8000(&this->actor) && (this->collider1.base.atFlags & AT_HIT)) {
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
             this->collider1.base.acFlags &= ~AC_HIT;
@@ -846,7 +846,7 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
 
     if (this->unk_BD7 != 0) {
         func_800B8118(&this->actor, play, 0);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, play->state.frames % 128, 0x20, 0x20, 1, 0,
@@ -993,7 +993,7 @@ void func_80934464(EnFz* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetColorDither(POLY_XLU_DISP++, G_CD_BAYER);
     gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_PATTERN);

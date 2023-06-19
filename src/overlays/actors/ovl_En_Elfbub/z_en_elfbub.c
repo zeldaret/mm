@@ -66,7 +66,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 1.25f);
 
     this->actionFunc = EnElfbub_Idle;
-    this->zRot = randPlusMinusPoint5Scaled(0x10000);
+    this->zRot = Rand_CenteredFloat(0x10000);
     this->zRotDelta = 1000;
     this->xScale = 0.08f;
 
@@ -151,7 +151,7 @@ void EnElfbub_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     Matrix_Translate(0.0f, 0.0f, 1.0f, MTXMODE_APPLY);
     Matrix_ReplaceRotation(&play->billboardMtxF);

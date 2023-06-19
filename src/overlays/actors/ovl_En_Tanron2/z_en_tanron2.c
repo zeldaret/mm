@@ -236,7 +236,7 @@ void func_80BB6BD8(EnTanron2* this, PlayState* play) {
             switch (this->unk_158) {
                 case 0:
                     if (Rand_ZeroOne() > 0.2f) {
-                        sp32 = Rand_ZeroFloat(65536.0f);
+                        sp32 = Rand_ZeroFloat(0x10000);
                     } else {
                         sp32 = Math_Atan2S(sp2C, sp28);
                     }
@@ -592,7 +592,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, gWartBubbleMaterialDL);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 150);
@@ -637,7 +637,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
         }
     }
 
-    func_8012C448(play->state.gfxCtx);
+    Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, 150);
     gSPDisplayList(POLY_XLU_DISP++, gWartShadowMaterialDL);
@@ -654,7 +654,7 @@ void EnTanron2_Draw(Actor* thisx, PlayState* play2) {
         tanron2 = tanron2->next;
     }
 
-    func_8012C974(play->state.gfxCtx);
+    Gfx_SetupDL60_XluNoCD(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
     gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);

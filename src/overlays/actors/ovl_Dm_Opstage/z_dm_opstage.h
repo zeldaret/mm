@@ -14,7 +14,7 @@ typedef enum {
     /* 0 */ DMOPSTAGE_TYPE_GROUND,
     /* 1 */ DMOPSTAGE_TYPE_ROOT_TREE,
     /* 2 */ DMOPSTAGE_TYPE_CUT_TREE,
-    /* 3 */ DMOPSTAGE_TYPE_STRAIGHT_TREE,
+    /* 3 */ DMOPSTAGE_TYPE_STRAIGHT_TREE
 } DmOpStageTypes;
 
 typedef struct DmOpstage {

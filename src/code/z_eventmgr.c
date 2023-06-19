@@ -36,7 +36,7 @@ ActorCutscene sGlobalCutsceneList[] = {
 typedef enum {
     /* 0 */ CS_START_0,
     /* 1 */ CS_START_1,
-    /* 2 */ CS_START_2,
+    /* 2 */ CS_START_2
 } ActorCutsceneStartMethod;
 
 typedef struct {
@@ -371,7 +371,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
     Camera* retCam;
     s32 csType = 0;
 
-    if ((csId < 0) || (sCutsceneMgr.csId != CS_ID_NONE)) {
+    if ((csId <= CS_ID_NONE) || (sCutsceneMgr.csId != CS_ID_NONE)) {
         return csId;
     }
 
@@ -437,7 +437,7 @@ s16 CutsceneManager_Start(s16 csId, Actor* actor) {
 s16 CutsceneManager_Stop(s16 csId) {
     ActorCutscene* csEntry;
 
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return csId;
     }
 
@@ -468,28 +468,28 @@ ActorCutscene* CutsceneManager_GetCutsceneEntry(s16 csId) {
 }
 
 s16 CutsceneManager_GetAdditionalCsId(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return CS_ID_NONE;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->additionalCsId;
 }
 
 s16 CutsceneManager_GetLength(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->length;
 }
 
 s16 CutsceneManager_GetCutsceneScriptIndex(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->scriptIndex;
 }
 
 s16 CutsceneManager_GetCutsceneCustomValue(s16 csId) {
-    if (csId < 0) {
+    if (csId <= CS_ID_NONE) {
         return -1;
     }
     return CutsceneManager_GetCutsceneEntryImpl(csId)->customValue;

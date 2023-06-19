@@ -8,7 +8,7 @@ struct EnSyatekiMan;
 
 typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
-#define EN_SYATEKI_MAN_GET_PATH(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define EN_SYATEKI_MAN_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
 
 typedef enum {
     /* 0 */ SG_GAME_STATE_NONE,             // None of the states below apply.
@@ -18,21 +18,22 @@ typedef enum {
     /* 4 */ SG_GAME_STATE_ONE_MORE_GAME,    // The player failed to get a new high score (Town) and/or perfect score (Swamp and Town).
     /* 5 */ SG_GAME_STATE_GIVING_BONUS,     // The player gets bonus points at the end of the Swamp game if they get a perfect score.
     /* 6 */ SG_GAME_STATE_ENDED,            // The player got a new high score and/or perfect score (Town), or the game is over (Swamp).
-    /* 7 */ SG_GAME_STATE_MOVING_PLAYER,    // The player is automatically moving towards the spot to play the game.
+    /* 7 */ SG_GAME_STATE_MOVING_PLAYER     // The player is automatically moving towards the spot to play the game.
 } ShootingGalleryGameState;
 
 typedef enum {
-    /*  0 */ SG_OCTO_STATE_SPAWNING,
-    /*  1 */ SG_OCTO_STATE_SPAWNED,
+    /*  0 */ SG_OCTO_STATE_APPEARING,
+    /*  1 */ SG_OCTO_STATE_APPEARED,
     /* 70 */ SG_OCTO_STATE_INITIAL = 70,
-    /* 80 */ SG_OCTO_STATE_HIDING = 80,
+    /* 80 */ SG_OCTO_STATE_HIDING = 80
 } ShootingGalleryOctorokState;
 
 typedef enum {
-    /* 0 */ SG_OCTO_HIT_TYPE_NONE,
-    /* 1 */ SG_OCTO_HIT_TYPE_RED,
-    /* 2 */ SG_OCTO_HIT_TYPE_BLUE,
-} ShootingGalleryoctorokHitType;
+    /* 0 */ SG_PATH_TYPE_CROW,
+    /* 1 */ SG_PATH_TYPE_SCRUB_NORMAL,
+    /* 2 */ SG_PATH_TYPE_WOLFOS,
+    /* 3 */ SG_PATH_TYPE_SCRUB_BONUS
+} ShootingGalleryPathType;
 
 typedef struct EnSyatekiMan {
     /* 0x000 */ Actor actor;
@@ -55,7 +56,7 @@ typedef struct EnSyatekiMan {
                } perGameVar1;
     /* 0x26E */ union {
                    s16 bonusDekuScrubHitCounter;
-                   s16 octorokHitType;
+                   s16 lastHitOctorokType;
                } perGameVar2;
     /* 0x270 */ s16 talkWaitTimer;
     /* 0x272 */ s16 dekuScrubFlags;

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "gfx.h"
 
 void MapDisp_DestroyIMap(PlayState* play);
 void MapDisp_InitIMap(PlayState* play);
@@ -148,7 +149,7 @@ void func_801031D0(PlayState* play, TexturePtr arg1, s32 arg2, s32 arg3, s32 arg
     if ((spCC->mapId != 0xFFFF) && (arg1 != 0)) {
         MapDisp_GetMapTexDim(spCC, &spC8, &spC4);
         OPEN_DISPS(play->state.gfxCtx);
-        func_8012C654(play->state.gfxCtx);
+        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
         func_801094A0(func_80109908(spCC->mapId), &spAC);
         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, spAC.r, spAC.g, spAC.b,
                         (s32)(play->interfaceCtx.minimapAlpha * arg5 * spAC.a / 255.0f));
@@ -275,7 +276,7 @@ void func_80103A58(PlayState* play, Actor* actor) {
             OPEN_DISPS(play->state.gfxCtx);
             if ((actor->category == ACTORCAT_PLAYER) && (actor->flags & 0x80000000)) {
                 s16 spA2;
-                func_8012C8D4(play->state.gfxCtx);
+                Gfx_SetupDL42_Overlay(play->state.gfxCtx);
                 gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                                   PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -300,7 +301,7 @@ void func_80103A58(PlayState* play, Actor* actor) {
             if (actor->id == ACTOR_EN_BOX) {
                 if (!Flags_GetTreasure(play, actor->params & 0x1F)) {
                     if (func_80102F9C(spB4->actor.world.pos.y) == func_80102F9C(actor->world.pos.y)) {
-                        func_8012C654(play->state.gfxCtx);
+                        Gfx_SetupDL39_Overlay(play->state.gfxCtx);
                         gDPPipeSync(OVERLAY_DISP++);
                         gDPSetTextureLUT(OVERLAY_DISP++, G_TT_NONE);
                         gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 255, 255, 255, play->interfaceCtx.minimapAlpha);
@@ -341,7 +342,7 @@ void func_80103A58(PlayState* play, Actor* actor) {
                     }
                 }
             }
-            func_8012C654(play->state.gfxCtx);
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
             if (actor->flags & 0x80000000) {
                 gDPSetPrimColor(OVERLAY_DISP++, 0, 0, D_801BEC2C[actor->category].r, D_801BEC2C[actor->category].g,
@@ -438,7 +439,7 @@ void func_801045AC(PlayState* play, Actor* actor) {
         }
         if ((sp78 > 0) && (sp78 < 0x3FF) && (sp74 > 0) && (sp74 < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
-            func_8012C654(play->state.gfxCtx);
+            Gfx_SetupDL39_Overlay(play->state.gfxCtx);
             gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
             if ((actor->category == 0xA) && (func_80103A10(play) != 0)) {
@@ -930,7 +931,7 @@ void func_80105FE0(PlayState* play, s32 x, s32 z, s32 rot) {
         }
         if ((sp68 > 0) && (sp68 < 0x3FF) && (sp64 > 0) && (sp64 < 0x3FF)) {
             OPEN_DISPS(play->state.gfxCtx);
-            func_8012C8D4(play->state.gfxCtx);
+            Gfx_SetupDL42_Overlay(play->state.gfxCtx);
             gSPMatrix(OVERLAY_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0,
                               PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
@@ -1196,7 +1197,7 @@ void func_80106D5C(PlayState* play, s32 arg1, s32 arg2, s32 arg3, s32 arg4, f32 
     OPEN_DISPS(play->state.gfxCtx);
     // temp_a0 = play->state.gfxCtx;
     // sp48 = arg6 + &gSaveContext;
-    func_8012C628(play->state.gfxCtx);
+    Gfx_SetupDL39_Opa(play->state.gfxCtx);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 0, D_801BEC84);
     gDPLoadTLUT_pal16(POLY_OPA_DISP++, 1, D_801BECA4);
@@ -1602,7 +1603,7 @@ void func_80108AF8(PlayState* play) {
             spB4 = gSaveContext.mapIndex;
         }
         OPEN_DISPS(play->state.gfxCtx);
-        func_8012C628(play->state.gfxCtx);
+        Gfx_SetupDL39_Opa(play->state.gfxCtx);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 200, pauseCtx->alpha);
 
@@ -1638,7 +1639,7 @@ void func_80108AF8(PlayState* play) {
             gSPTextureRectangle(POLY_OPA_DISP++, (a3 + 1) << 2, temp_a0_2 << 2, (a2 - 1) << 2, temp_a2_2 << 2,
                                 G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
         }
-        func_8012C8AC(play->state.gfxCtx);
+        Gfx_SetupDL42_Opa(play->state.gfxCtx);
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }

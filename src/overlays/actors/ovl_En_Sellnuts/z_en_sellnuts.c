@@ -916,7 +916,7 @@ s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
         pointY = points[var + 1].z - points[var - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(pointX, pointY)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -958,7 +958,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_PATH_INDEX(&this->actor), ENSELLNUTS_PATH_INDEX_NONE);
     this->csId = this->actor.csId;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 0;
@@ -1138,7 +1138,7 @@ void EnSellnuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) 
 void EnSellnuts_Draw(Actor* thisx, PlayState* play) {
     EnSellnuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, EnSellnuts_OverrideLimbDraw, EnSellnuts_PostLimbDraw,
                                    EnSellnuts_TransformLimbDraw, &this->actor);

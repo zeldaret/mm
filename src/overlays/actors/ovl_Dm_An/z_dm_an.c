@@ -160,7 +160,7 @@ Actor* func_80C1C8E8(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || false) {
+        if ((tempActor == NULL) || false) {
             foundActor = NULL;
             break;
         }
@@ -228,6 +228,9 @@ void func_80C1CAB0(DmAn* this, PlayState* play) {
                             func_80C1C4D8(this, play, this->unk_2C8 + 1);
                         }
                     }
+                    break;
+
+                default:
                     break;
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
@@ -356,7 +359,7 @@ void func_80C1D0B0(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C1D2F4[this->unk_2B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C1D2E8[0]));

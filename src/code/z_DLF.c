@@ -46,7 +46,7 @@ void Overlay_FreeGameState(GameStateOverlay* overlayEntry) {
     s32 var_v0;
 
     if (overlayEntry->loadedRamAddr != NULL) {
-        var_v0 = overlayEntry->unk_28 != 0 ? -1 : 0;
+        var_v0 = (overlayEntry->unk_28 != 0) ? -1 : 0;
         if (var_v0 == 0) {
             overlayEntry->unk_14 = (uintptr_t)(
                 (overlayEntry->unk_14 != NULL)

@@ -11,7 +11,7 @@
 
 typedef enum {
     /* 0 */ EN_SYATEKI_DEKUNUTS_TYPE_NORMAL, // Worth 30 points
-    /* 1 */ EN_SYATEKI_DEKUNUTS_TYPE_BONUS,  // Worth 100 points
+    /* 1 */ EN_SYATEKI_DEKUNUTS_TYPE_BONUS   // Worth 100 points
 } EnSyatekiDekunutsType;
 
 struct EnSyatekiDekunuts;

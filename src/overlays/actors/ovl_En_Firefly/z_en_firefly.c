@@ -301,7 +301,7 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y,
                                    Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos), 0x300);
             } else if (rand < 0.8f) {
-                this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(1536.0f);
+                this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x600);
             }
 
             // Climb if too close to ground
@@ -828,7 +828,7 @@ void EnFirefly_Draw(Actor* thisx, PlayState* play) {
         gfx = POLY_OPA_DISP;
     }
 
-    gSPDisplayList(gfx, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx, gSetupDLs[SETUPDL_25]);
 
     if (this->currentType == KEESE_FIRE) {
         gDPSetEnvColor(&gfx[1], 0, 0, 0, 0);

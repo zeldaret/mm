@@ -23,11 +23,11 @@ void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
 s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 typedef enum {
-    /*  0 */ DEMOHEISHI_ANIM_STAND_HAND_ON_HIP,
-    /*  1 */ DEMOHEISHI_ANIM_CHEER_WITH_SPEAR,
-    /*  2 */ DEMOHEISHI_ANIM_WAVE,
-    /*  3 */ DEMOHEISHI_ANIM_SIT_AND_REACH,
-    /*  4 */ DEMOHEISHI_ANIM_STAND_UP
+    /* 0 */ DEMOHEISHI_ANIM_STAND_HAND_ON_HIP,
+    /* 1 */ DEMOHEISHI_ANIM_CHEER_WITH_SPEAR,
+    /* 2 */ DEMOHEISHI_ANIM_WAVE,
+    /* 3 */ DEMOHEISHI_ANIM_SIT_AND_REACH,
+    /* 4 */ DEMOHEISHI_ANIM_STAND_UP
 } EnDemoheishiAnimation;
 
 ActorInit En_Demo_heishi_InitVars = {
@@ -188,7 +188,7 @@ s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play) {
     EnDemoheishi* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnDemoheishi_OverrideLimbDraw, NULL, &this->actor);
 }

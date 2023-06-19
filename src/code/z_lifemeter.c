@@ -16,14 +16,14 @@ s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-TexturePtr HeartTextures[] = {
+static TexturePtr sHeartTextures[] = {
     gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
     gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
     gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
     gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
 };
 
-TexturePtr HeartDDTextures[] = {
+static TexturePtr sHeartDDTextures[] = {
     gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,
@@ -283,7 +283,7 @@ void LifeMeter_Draw(PlayState* play) {
             if (i < fullHeartCount) {
                 heartTex = gHeartFullTex;
             } else if (i == fullHeartCount) {
-                heartTex = HeartTextures[fractionHeartCount];
+                heartTex = sHeartTextures[fractionHeartCount];
             } else {
                 heartTex = gHeartEmptyTex;
             }
@@ -323,7 +323,7 @@ void LifeMeter_Draw(PlayState* play) {
             if (i < fullHeartCount) {
                 heartTex = gDefenseHeartFullTex;
             } else if (i == fullHeartCount) {
-                heartTex = HeartDDTextures[fractionHeartCount];
+                heartTex = sHeartDDTextures[fractionHeartCount];
             } else {
                 heartTex = gDefenseHeartEmptyTex;
             }
@@ -340,13 +340,13 @@ void LifeMeter_Draw(PlayState* play) {
             if ((ddCount < 0) || (i > ddCount)) {
                 if (curCombineModeSet != 1) {
                     curCombineModeSet = 1;
-                    func_8012C654(gfxCtx);
+                    Gfx_SetupDL39_Overlay(gfxCtx);
                     gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
                                       0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
                 }
             } else if (curCombineModeSet != 3) {
                 curCombineModeSet = 3;
-                func_8012C654(gfxCtx);
+                Gfx_SetupDL39_Overlay(gfxCtx);
                 gDPSetCombineLERP(OVERLAY_DISP++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0,
                                   ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
             }
@@ -366,7 +366,7 @@ void LifeMeter_Draw(PlayState* play) {
             if ((ddCount < 0) || (ddCount < i)) {
                 if (curCombineModeSet != 2) {
                     curCombineModeSet = 2;
-                    func_8012C8D4(gfxCtx);
+                    Gfx_SetupDL42_Overlay(gfxCtx);
                     gDPSetCombineLERP(OVERLAY_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
                                       0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0);
                     gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);
@@ -374,7 +374,7 @@ void LifeMeter_Draw(PlayState* play) {
             } else {
                 if (curCombineModeSet != 4) {
                     curCombineModeSet = 4;
-                    func_8012C8D4(gfxCtx);
+                    Gfx_SetupDL42_Overlay(gfxCtx);
                     gDPSetCombineLERP(OVERLAY_DISP++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                                       0, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0);
                     gDPSetAlphaCompare(OVERLAY_DISP++, G_AC_THRESHOLD);

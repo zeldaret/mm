@@ -171,7 +171,7 @@ void func_809619D0(EnFu* this, PlayState* play) {
     }
 
     for (i = 0; i < this->unk_542; i++) {
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
     }
 
     this->unk_520 = path->count;
@@ -426,23 +426,24 @@ void func_80962340(EnFu* this, PlayState* play) {
 }
 
 void func_80962588(EnFu* this, PlayState* play) {
-    if (Message_ShouldAdvance(play) && (this->unk_552 == 0x2871)) {
-        if (1) {}
-        if (play->msgCtx.choiceIndex == 0) {
-            if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
-                func_8019F208();
-                Rupees_ChangeBy(-10);
-                func_80963DE4(this, play);
-            } else {
-                play_sound(NA_SE_SY_ERROR);
-                Message_StartTextbox(play, 0x2873, &this->actor);
-                this->unk_552 = 0x2873;
-            }
+    if (!Message_ShouldAdvance(play) || (this->unk_552 != 0x2871)) {
+        return;
+    }
+
+    if (play->msgCtx.choiceIndex == 0) {
+        if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
+            func_8019F208();
+            Rupees_ChangeBy(-10);
+            func_80963DE4(this, play);
         } else {
-            func_8019F230();
-            Message_StartTextbox(play, 0x2872, &this->actor);
-            this->unk_552 = 0x2872;
+            play_sound(NA_SE_SY_ERROR);
+            Message_StartTextbox(play, 0x2873, &this->actor);
+            this->unk_552 = 0x2873;
         }
+    } else {
+        func_8019F230();
+        Message_StartTextbox(play, 0x2872, &this->actor);
+        this->unk_552 = 0x2872;
     }
 }
 
@@ -1385,7 +1386,7 @@ void EnFu_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gSPSegment(POLY_OPA_DISP++, 0x08, Gfx_EnvColor(play->state.gfxCtx, 0, 50, 160, 0));
@@ -1449,7 +1450,7 @@ void func_80964950(PlayState* play, EnFuUnkStruct* ptr, s32 len) {
     OPEN_DISPS(play->state.gfxCtx);
 
     POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     for (i = 0; i < len; i++, ptr++) {
         if (ptr->unk_36 == 1) {

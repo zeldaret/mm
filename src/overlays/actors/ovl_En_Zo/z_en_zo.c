@@ -206,11 +206,11 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
 }
 
 void EnZo_Walk(EnZo* this, PlayState* play) {
-    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
+    if (ENZO_GET_PATH_INDEX(&this->actor) != ENZO_PATH_INDEX_NONE) {
         EnZo_ChangeAnim(&this->skelAnime, 6);
     }
 
-    if (ENZO_GET_PATH(&this->actor) != 0x3F) {
+    if (ENZO_GET_PATH_INDEX(&this->actor) != ENZO_PATH_INDEX_NONE) {
         this->actionFunc = EnZo_FollowPath;
     } else {
         this->actionFunc = EnZo_DoNothing;
@@ -264,7 +264,7 @@ void EnZo_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, ENZO_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENZO_GET_PATH_INDEX(&this->actor), ENZO_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actionFunc = EnZo_Walk;
@@ -347,7 +347,8 @@ void EnZo_Draw(Actor* thisx, PlayState* play) {
     TexturePtr eyeTextures[] = { gZoraEyeOpenTex, gZoraEyeHalfTex, gZoraEyeClosedTex };
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
@@ -370,5 +371,6 @@ void EnZo_Draw(Actor* thisx, PlayState* play) {
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

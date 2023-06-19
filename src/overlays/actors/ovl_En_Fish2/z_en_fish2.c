@@ -352,7 +352,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
             this->unk_2B4 = (s32)Rand_ZeroFloat(20.0f) + 10;
         } else if (this->unk_2B4 == 1) {
             if ((this->unk_348 == 0) || (Rand_ZeroOne() < 0.6f)) {
-                this->unk_348 = randPlusMinusPoint5Scaled(0x2000);
+                this->unk_348 = Rand_CenteredFloat(0x2000);
             } else {
                 this->unk_348 = Math_Vec3f_Pitch(&this->actor.world.pos, &this->unk_324);
                 if (this->unk_348 < -0x1000) {
@@ -545,8 +545,8 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
     Math_ApproachZeroF(&this->actor.speed, 0.3f, 0.3f);
     if (this->unk_2B4 != 0) {
         Math_Vec3f_Copy(&sp60, &this->unk_318);
-        sp60.x += randPlusMinusPoint5Scaled(100.0f);
-        sp60.z += randPlusMinusPoint5Scaled(100.0f);
+        sp60.x += Rand_CenteredFloat(100.0f);
+        sp60.z += Rand_CenteredFloat(100.0f);
 
         for (i = 0; i < 2; i++) {
             EffectSsBubble_Spawn(play, &sp60, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(this->unk_330 * 4.0f) + 0.1f);
@@ -912,10 +912,10 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
 
             for (i = 0; i < 10; i++) {
                 Math_Vec3f_Copy(&sp6C, &this->actor.world.pos);
-                sp6C.x += randPlusMinusPoint5Scaled(70.0f);
+                sp6C.x += Rand_CenteredFloat(70.0f);
                 sp6C.y = this->unk_334 + 10.0f;
-                sp6C.z += randPlusMinusPoint5Scaled(70.0f);
-                EffectSsGSplash_Spawn(play, &sp6C, NULL, NULL, 0, (s32)randPlusMinusPoint5Scaled(50.0f) + 350);
+                sp6C.z += Rand_CenteredFloat(70.0f);
+                EffectSsGSplash_Spawn(play, &sp6C, NULL, NULL, 0, (s32)Rand_CenteredFloat(50.0f) + 350);
             }
         }
     }
@@ -970,11 +970,11 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
 
         if ((play->gameplayFrames % 8) == 0) {
             Math_Vec3f_Copy(&sp5C, &this->unk_324);
-            sp5C.x += randPlusMinusPoint5Scaled(100.0f);
+            sp5C.x += Rand_CenteredFloat(100.0f);
             sp5C.y = this->actor.floorHeight;
-            sp5C.z += randPlusMinusPoint5Scaled(100.0f);
+            sp5C.z += Rand_CenteredFloat(100.0f);
 
-            for (i = 0; i < (s32)randPlusMinusPoint5Scaled(5.0f) + 10; i++) {
+            for (i = 0; i < (s32)Rand_CenteredFloat(5.0f) + 10; i++) {
                 EffectSsBubble_Spawn(play, &sp5C, 0, 5.0f, 5.0f, Rand_ZeroFloat(this->unk_330 * 4.0f) + 0.1f);
             }
         }
@@ -1078,8 +1078,8 @@ void EnFish2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
 void EnFish2_Draw(Actor* thisx, PlayState* play) {
     EnFish2* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFish2_OverrideLimbDraw, EnFish2_PostLimbDraw, &this->actor);
     func_80B2B180(this, play);
@@ -1102,9 +1102,9 @@ void func_80B2ADB0(EnFish2* this, Vec3f* vec, s16 arg2) {
             ptr->unk_20 = VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(phi_v0));
             ptr->unk_00 = true;
             ptr->unk_04 = *vec;
-            ptr->unk_04.x += randPlusMinusPoint5Scaled(ptr->unk_00 + (this->unk_330 * 4000.0f));
-            ptr->unk_04.y += randPlusMinusPoint5Scaled(20.0f);
-            ptr->unk_04.z += randPlusMinusPoint5Scaled(ptr->unk_00 + (this->unk_330 * 4000.0f));
+            ptr->unk_04.x += Rand_CenteredFloat(ptr->unk_00 + (this->unk_330 * 4000.0f));
+            ptr->unk_04.y += Rand_CenteredFloat(20.0f);
+            ptr->unk_04.z += Rand_CenteredFloat(ptr->unk_00 + (this->unk_330 * 4000.0f));
             ptr->unk_18 = (this->unk_330 * 20.0f) - (Rand_ZeroFloat(5.0f) * 0.01f);
             ptr->unk_1C = 0x42;
             ptr->unk_10 = arg2;
@@ -1157,7 +1157,7 @@ void func_80B2B180(EnFish2* this, PlayState* play) {
     OPEN_DISPS(gfxCtx);
 
     ptr = &this->unk_3F8[0];
-    func_8012C28C(gfxCtx);
+    Gfx_SetupDL25_Opa(gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->unk_3F8); i++, ptr++) {
         if (ptr->unk_00) {

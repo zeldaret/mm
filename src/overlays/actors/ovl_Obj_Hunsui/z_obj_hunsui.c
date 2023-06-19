@@ -29,16 +29,16 @@ AnimatedMaterial* D_80B9DED0;
 AnimatedMaterial* D_80B9DED4;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
+    /* 0x2 */ u8 unk_02;
 } ObjHansuiBssStruct; // size = 0x3
 
 ObjHansuiBssStruct D_80B9DED8;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
 } ObjHansuiStruct; // size = 0x2
 
 ObjHansuiStruct D_80B9DC70[] = {
@@ -130,8 +130,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 this->unk_18C = 0;
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
 
-                sp40.x += randPlusMinusPoint5Scaled(10.0f);
-                sp40.z += randPlusMinusPoint5Scaled(10.0f);
+                sp40.x += Rand_CenteredFloat(10.0f);
+                sp40.z += Rand_CenteredFloat(10.0f);
                 sp40.y += Rand_ZeroFloat(2.0f);
 
                 EffectSsGSplash_Spawn(play, &sp40, NULL, NULL, 2.0f * Rand_ZeroOne(), 1);
@@ -144,8 +144,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
                 this->unk_18C = 0;
 
-                sp40.x += randPlusMinusPoint5Scaled(10.0f);
-                sp40.z += randPlusMinusPoint5Scaled(10.0f);
+                sp40.x += Rand_CenteredFloat(10.0f);
+                sp40.z += Rand_CenteredFloat(10.0f);
                 sp40.y += Rand_ZeroFloat(45.0f);
 
                 EffectSsGSplash_Spawn(play, &sp40, NULL, NULL, 1, 1);
@@ -184,8 +184,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 Math_ApproachF(&this->unk_1A0, 3.0f, 1.0f, 1.0f);
                 Math_ApproachF(&this->unk_19C, this->unk_1A0, 1.0f, 0.1f);
             }
-            player->unk_B84 = this->unk_1A4;
-            player->unk_B80 = this->unk_19C;
+            player->pushedYaw = this->unk_1A4;
+            player->pushedSpeed = this->unk_19C;
         }
     } else {
         if (this->unk_172 & 8) {

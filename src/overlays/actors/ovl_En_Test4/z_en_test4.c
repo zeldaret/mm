@@ -4,8 +4,8 @@
  * Description: Three-Day Events
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test4.h"
+#include "z64horse.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 
@@ -296,16 +296,16 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     sCsIdList[0] = csId;
     if (csId >= 0) {
-        ActorCutscene* actorCutscene = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
+        ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
 
         SET_EVENTINF(EVENTINF_52);
-        sCsIdList[1] = actorCutscene->additionalCsId;
+        sCsIdList[1] = csEntry->additionalCsId;
     } else {
         CLEAR_EVENTINF(EVENTINF_52);
         sCsIdList[1] = sCsIdList[0];
     }
 
-    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_27))) {
+    if (sIsLoaded || CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
@@ -405,15 +405,15 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
 
                         if ((rideActor->type == HORSE_TYPE_EPONA) || (rideActor->type == HORSE_TYPE_2)) {
                             if (CURRENT_DAY < 3) {
-                                D_801BDA9C = 1;
+                                gHorseIsMounted = true;
                             } else {
-                                D_801BDA9C = 0;
+                                gHorseIsMounted = false;
                             }
                         }
                     }
 
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_27);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                     Actor_Kill(&this->actor);
                 }
             }

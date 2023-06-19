@@ -606,9 +606,9 @@ void func_80AD8388(EnKame* this, PlayState* play) {
             this->actor.scale.y = this->actor.scale.x;
             this->actor.scale.z = this->actor.scale.x;
         }
-        sp34.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
+        sp34.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 15.0f;
-        sp34.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
+        sp34.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         func_800B3030(play, &sp34, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
     }
 }
@@ -805,7 +805,7 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80AD8E34[this->unk_29C]);
 
@@ -840,7 +840,7 @@ s32 Enkame_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void func_80AD8D64(Actor* thisx, PlayState* play) {
     EnKame* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime2.skeleton, this->skelAnime2.jointTable, this->skelAnime2.dListCount,
                           Enkame_OverrideLimbDraw, NULL, &this->actor);
 }

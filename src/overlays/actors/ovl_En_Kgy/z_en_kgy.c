@@ -72,7 +72,7 @@ void EnKgy_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80B419B0;
             this->actor.textId = 0xC4E;
             this->unk_29C |= 1;
-            this->unk_2EA = 3;
+            this->getItemId = GI_RUPEE_10;
         } else {
             EnKgy_ChangeAnim(this, 4, ANIMMODE_LOOP, 0);
             this->actionFunc = func_80B42714;
@@ -420,12 +420,12 @@ void func_80B4163C(EnKgy* this, PlayState* play) {
 
     if (SkelAnime_Update(&this->skelAnime)) {
         if (this->unk_2D2 == 6) {
-            if (this->unk_2EA > 0) {
+            if (this->getItemId > GI_NONE) {
                 EnKgy_ChangeAnim(this, 6, ANIMMODE_ONCE, 0.0f);
-                this->unk_2EA--;
+                this->getItemId--;
             } else {
                 EnKgy_ChangeAnim(this, 9, ANIMMODE_ONCE, -5.0f);
-                this->unk_2EA = (s32)Rand_ZeroFloat(3.0f) + 2;
+                this->getItemId = (s32)Rand_ZeroFloat(GI_RUPEE_PURPLE - GI_RUPEE_BLUE) + GI_RUPEE_BLUE;
             }
         } else {
             EnKgy_ChangeAnim(this, 6, ANIMMODE_ONCE, -5.0f);
@@ -598,7 +598,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
         this->actor.flags |= ACTOR_FLAG_10000;
         func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, 2000.0f, 1000.0f);
     }
     func_80B40EE8(this, play);
 }
@@ -790,16 +790,16 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
 
                         case 0xC50:
                             if (func_80B40D8C(play)) {
-                                this->unk_2EA = 57;
+                                this->getItemId = GI_SWORD_GILDED;
                                 this->actor.textId = 0xC53;
                             } else {
-                                this->unk_2EA = 56;
+                                this->getItemId = GI_SWORD_RAZOR;
                                 this->actor.textId = 0xC51;
                             }
                             Message_CloseTextbox(play);
                             this->actionFunc = func_80B41D64;
                             func_80B413C8(this);
-                            Actor_OfferGetItem(&this->actor, play, this->unk_2EA, 2000.0f, 1000.0f);
+                            Actor_OfferGetItem(&this->actor, play, this->getItemId, 2000.0f, 1000.0f);
                             break;
 
                         case 0xC51:
@@ -1134,7 +1134,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     Matrix_Push();
     Matrix_Translate(-800.0f, 3100.0f, 8400.0f, MTXMODE_APPLY);
@@ -1166,7 +1166,7 @@ void func_80B43074(EnKgy* this, PlayState* play) {
 void EnKgy_Draw(Actor* thisx, PlayState* play) {
     EnKgy* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     if (this->unk_29C & 1) {
         func_80B43074(this, play);
     }

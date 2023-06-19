@@ -161,11 +161,10 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
         EnBat_SetupFlyIdle(this);
         while (BAD_BAT_GET_NUMBER_TO_SPAWN(thisx) > 1) {
             Actor_SpawnAsChildAndCutscene(
-                &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
-                thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
-                thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled(0x2000),
-                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), CS_ID_NONE,
-                thisx->halfDaysBits, NULL);
+                &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + Rand_CenteredFloat(200.0f),
+                thisx->world.pos.y + Rand_CenteredFloat(100.0f), thisx->world.pos.z + Rand_CenteredFloat(200.0f),
+                Rand_CenteredFloat(0x2000), 0xFFFF * Rand_ZeroOne(), 0,
+                BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), CS_ID_NONE, thisx->halfDaysBits, NULL);
             BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
     }
@@ -530,7 +529,7 @@ void EnBat_Draw(Actor* thisx, PlayState* play) {
 
         gfx = POLY_OPA_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(&gfx[2], gBadBatSetupDL);
         gSPDisplayList(&gfx[3], gBadBatBodyDL);

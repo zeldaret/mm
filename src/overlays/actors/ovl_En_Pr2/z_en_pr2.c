@@ -151,8 +151,8 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((EnEncount1*)parent)->pathIndex;
-                    this->path = SubS_GetPathByIndex(play, this->unk_1C8, 0x3F);
+                    this->pathIndex = ((EnEncount1*)parent)->pathIndex;
+                    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENPR2_PATH_INDEX_NONE);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
                         this->unk_208 = 20.0f;
@@ -272,7 +272,7 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
 
-    if (this->path->unk2 < this->unk_1D0) {
+    if (this->path->customValue < this->unk_1D0) {
         Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
     } else {
         Math_ApproachF(&this->actor.speed, 10.0f, 0.3f, 1.0f);
@@ -390,8 +390,8 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                 if (this->unk_1DA == 1) {
                     this->unk_1D8 = Rand_S16Offset(100, 100);
                     Math_Vec3f_Copy(&sp3C, &this->unk_228);
-                    sp3C.x += randPlusMinusPoint5Scaled(300.0f);
-                    sp3C.z += randPlusMinusPoint5Scaled(300.0f);
+                    sp3C.x += Rand_CenteredFloat(300.0f);
+                    sp3C.z += Rand_CenteredFloat(300.0f);
                     Math_Vec3f_Copy(&this->unk_21C, &sp3C);
                 }
             } else {
@@ -536,7 +536,7 @@ void func_80A751B4(EnPr2* this) {
         this->actor.shape.rot.z = this->actor.world.rot.z;
         this->unk_1D8 = 30;
         this->actor.speed = Rand_ZeroFloat(0.5f);
-        this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
+        this->actor.world.rot.y = Rand_CenteredFloat(0x8000);
     }
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 10);
     this->unk_1D4 = 3;
@@ -596,9 +596,9 @@ void func_80A75310(EnPr2* this, PlayState* play) {
                 for (i = 0; i < 10; i++) {
                     Math_Vec3f_Copy(&sp64, &this->actor.world.pos);
 
-                    sp64.x += randPlusMinusPoint5Scaled(20.0f);
-                    sp64.y += randPlusMinusPoint5Scaled(5.0f);
-                    sp64.z += randPlusMinusPoint5Scaled(20.0f);
+                    sp64.x += Rand_CenteredFloat(20.0f);
+                    sp64.y += Rand_CenteredFloat(5.0f);
+                    sp64.z += Rand_CenteredFloat(20.0f);
                     frame = Rand_ZeroFloat(0.03f) + 0.07f;
 
                     EffectSsBubble_Spawn(play, &sp64, 0.0f, 5.0f, 5.0f, frame);
@@ -675,9 +675,9 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
         Math_Vec3f_Copy(&sp58, &this->unk_270);
         this->unk_1D6 = false;
 
-        sp58.x += randPlusMinusPoint5Scaled(20.0f);
-        sp58.y += randPlusMinusPoint5Scaled(5.0f);
-        sp58.z += randPlusMinusPoint5Scaled(20.0f);
+        sp58.x += Rand_CenteredFloat(20.0f);
+        sp58.y += Rand_CenteredFloat(5.0f);
+        sp58.z += Rand_CenteredFloat(20.0f);
 
         for (i = 0; i < 2; i++) {
             rand = Rand_ZeroFloat(0.03f) + 0.07f;
@@ -741,7 +741,7 @@ void EnPr2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_1F4 == 255) {
         gDPPipeSync(POLY_OPA_DISP++);

@@ -64,10 +64,10 @@ void EnEstone_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    this->rotVel.x = this->rotVel.y = this->rotVel.z = randPlusMinusPoint5Scaled(1.0f) * 20.0f;
+    this->rotVel.x = this->rotVel.y = this->rotVel.z = Rand_CenteredFloat(1.0f) * 20.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.world.rot.y += (s16)randPlusMinusPoint5Scaled(0x2710);
+    this->actor.world.rot.y += (s16)(s32)Rand_CenteredFloat(0x2710);
     this->actor.shape.rot.y = this->actor.world.rot.y;
 
     if (this->actor.params == ENESTONE_TYPE_LARGE) {
@@ -224,9 +224,9 @@ void EnEstone_SpawnEffect(EnEstone* this, Vec3f* pos, Vec3f* velocity, Vec3f* ac
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = lifetime;
-            effect->rot.x = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.y = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.z = randPlusMinusPoint5Scaled(0x7530);
+            effect->rot.x = Rand_CenteredFloat(0x7530);
+            effect->rot.y = Rand_CenteredFloat(0x7530);
+            effect->rot.z = Rand_CenteredFloat(0x7530);
             break;
         }
     }
@@ -266,7 +266,7 @@ void EnEstone_DrawEffects(EnEstone* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isActive) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);

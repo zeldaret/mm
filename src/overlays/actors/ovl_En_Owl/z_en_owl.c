@@ -44,8 +44,8 @@ void EnOwl_ChangeMode(EnOwl* this, EnOwlActionFunc actionFunc, EnOwlFunc unkFunc
                       AnimationHeader* animation, f32 morphFrames);
 
 typedef enum {
-    /* 0x00 */ OWL_REPEAT,
-    /* 0x01 */ OWL_OK
+    /* 0 */ OWL_REPEAT,
+    /* 1 */ OWL_OK
 } EnOwlMessageChoice;
 
 ActorInit En_Owl_InitVars = {
@@ -169,6 +169,9 @@ void EnOwl_Init(Actor* thisx, PlayState* play) {
                 return;
             }
             break;
+
+        default:
+            break;
     }
 
     this->unk_3DA = 0;
@@ -271,7 +274,7 @@ void func_8095AB1C(EnOwl* this, PlayState* play) {
 }
 
 void func_8095AB4C(EnOwl* this) {
-    if (randPlusMinusPoint5Scaled(1.0f) < 0.0f) {
+    if (Rand_CenteredFloat(1.0f) < 0.0f) {
         this->actionFlags |= 0x20;
     } else {
         this->actionFlags &= ~0x20;
@@ -335,6 +338,9 @@ void func_8095AD54(EnOwl* this, PlayState* play) {
                 Message_ContinueTextbox(play, 0x7D3);
                 this->actionFunc = func_8095ABF0;
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -378,6 +384,9 @@ void func_8095AF2C(EnOwl* this, PlayState* play) {
         case TEXT_STATE_DONE:
             func_8095ACEC(this);
             this->actionFunc = func_8095ABF0;
+            break;
+
+        default:
             break;
     }
 }
@@ -625,6 +634,9 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                                 func_8019F230();
                                 Message_ContinueTextbox(play, 0xBEF);
                                 break;
+
+                            default:
+                                break;
                         }
                         break;
 
@@ -633,13 +645,19 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                             case 0:
                                 func_8019F208();
                                 Message_ContinueTextbox(play, 0xBF4);
-                                return;
+                                break;
 
                             case 1:
                                 func_8019F230();
                                 Message_ContinueTextbox(play, 0xBF3);
-                                return;
+                                break;
+
+                            default:
+                                break;
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -703,8 +721,14 @@ void func_8095BA84(EnOwl* this, PlayState* play) {
                         this->actionFlags |= 8;
                         func_8095ACEC(this);
                         break;
+
+                    default:
+                        break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -897,168 +921,179 @@ void EnOwl_Update(Actor* thisx, PlayState* play) {
     Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    if (this->actor.update != NULL) {
-        if ((this->skelAnime1.animation == &object_owl_Anim_001ADC) && Animation_OnFrame(&this->skelAnime1, 4.0f)) {
-            Actor_PlaySfx(&this->actor, NA_SE_EN_OWL_FLUTTER);
+    if (this->actor.update == NULL) {
+        return;
+    }
+
+    if ((this->skelAnime1.animation == &object_owl_Anim_001ADC) && Animation_OnFrame(&this->skelAnime1, 4.0f)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_OWL_FLUTTER);
+    }
+
+    if (this->actionFlags & 2) {
+        this->eyeTexIndex = 2;
+    } else {
+        if (DECR(this->blinkTimer) == 0) {
+            this->blinkTimer = Rand_S16Offset(60, 60);
         }
-
-        if (this->actionFlags & 2) {
-            this->eyeTexIndex = 2;
-        } else {
-            if (DECR(this->blinkTimer) == 0) {
-                this->blinkTimer = Rand_S16Offset(60, 60);
-            }
-            this->eyeTexIndex = this->blinkTimer;
-            if (this->eyeTexIndex >= 3) {
-                this->eyeTexIndex = 0;
-            }
+        this->eyeTexIndex = this->blinkTimer;
+        if (this->eyeTexIndex >= 3) {
+            this->eyeTexIndex = 0;
         }
+    }
 
-        if (!(this->actionFlags & 8)) {
-            sp36 = 0;
+    if (!(this->actionFlags & 8)) {
+        sp36 = 0;
 
-            if (this->actionFlags & 0x10) {
-                switch (this->unk_408) {
-                    case 0:
-                        this->unk_408 = 1;
-                        this->unk_409 = 6;
-                        break;
+        if (this->actionFlags & 0x10) {
+            switch (this->unk_408) {
+                case 0:
+                    this->unk_408 = 1;
+                    this->unk_409 = 6;
+                    break;
 
-                    case 1:
-                        this->unk_409--;
-                        if (this->unk_409 != 0) {
-                            sp36 = Math_CosS(this->unk_409 * 0x2000) * 0x1000;
+                case 1:
+                    this->unk_409--;
+                    if (this->unk_409 != 0) {
+                        sp36 = Math_CosS(this->unk_409 * 0x2000) * 0x1000;
+                    } else {
+                        if (this->actionFlags & 2) {
+                            this->unk_3DA = 0;
                         } else {
-                            if (this->actionFlags & 2) {
-                                this->unk_3DA = 0;
-                            } else {
-                                this->unk_3DA = 0x20;
-                            }
-
-                            if (this->actionFlags & 0x20) {
-                                this->unk_3DA -= 4;
-                            } else {
-                                this->unk_3DA += 4;
-                            }
-                            this->unk_408++;
+                            this->unk_3DA = 0x20;
                         }
 
                         if (this->actionFlags & 0x20) {
-                            sp36 = -sp36;
-                        }
-                        break;
-
-                    case 2:
-                        if (func_8095C510(this)) {
-                            this->actionFlags &= ~0x10;
-                            this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
-                            this->unk_408 = 0;
-                            func_8095AB4C(this);
-                        }
-                        break;
-                }
-            } else {
-                if (this->unk_40A > 0) {
-                    this->unk_40A--;
-                } else {
-                    if (this->unk_408 == 0) {
-                        if (Rand_ZeroOne() < 0.3f) {
-                            this->unk_408 = 4;
-                            this->unk_409 = 12;
+                            this->unk_3DA -= 4;
                         } else {
-                            this->unk_408 = 1;
-                            this->unk_409 = 4;
+                            this->unk_3DA += 4;
                         }
-                    }
-                    this->unk_409--;
-
-                    switch (this->unk_408) {
-                        case 1:
-                            sp36 = Math_SinS((-this->unk_409 * 0x1000) + 0x4000) * 5000.0f;
-                            if (this->unk_409 <= 0) {
-                                this->unk_409 = (s32)(Rand_ZeroFloat(15.0f) + 5.0f);
-                                this->unk_408 = 2;
-                            }
-                            break;
-
-                        case 2:
-                            sp36 = 0x1388;
-                            if (this->unk_409 <= 0) {
-                                this->unk_408 = 3;
-                                this->unk_409 = 4;
-                            }
-                            break;
-
-                        case 3:
-                            sp36 = Math_SinS(this->unk_409 * 0x1000) * 5000.0f;
-                            if (this->unk_409 <= 0) {
-                                this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
-                                this->unk_408 = 0;
-                                func_8095AB4C(this);
-                            }
-                            break;
-
-                        case 4:
-                            sp36 = Math_SinS(this->unk_409 * 0x2000) * 5000.0f;
-                            if (this->unk_409 <= 0) {
-                                this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
-                                this->unk_408 = 0;
-                                func_8095AB4C(this);
-                            }
-                            break;
+                        this->unk_408++;
                     }
 
                     if (this->actionFlags & 0x20) {
                         sp36 = -sp36;
                     }
-                }
+                    break;
 
-                if (this->unk_40D > 0) {
-                    this->unk_40D--;
-                } else {
-                    this->unk_40C--;
-                    switch (this->unk_40B) {
-                        case 0:
-                            this->unk_3DE = (-this->unk_40C * 0x5DC) + 0x1770;
-                            if (this->unk_40C <= 0) {
-                                this->unk_40B = 1;
-                                this->unk_40C = (s8)(Rand_ZeroFloat(15.0f) + 5.0f);
-                            }
-                            break;
+                case 2:
+                    if (func_8095C510(this)) {
+                        this->actionFlags &= ~0x10;
+                        this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
+                        this->unk_408 = 0;
+                        func_8095AB4C(this);
+                    }
+                    break;
 
-                        case 1:
-                            this->unk_3DE = 0x1770;
-                            if (this->unk_40C <= 0) {
-                                this->unk_40B = 2;
-                                this->unk_40C = 4;
-                            }
-                            break;
-
-                        case 2:
-                            this->unk_3DE = this->unk_40C * 0x5DC;
-                            if (this->unk_40C <= 0) {
-                                this->unk_40B = 0;
-                                this->unk_40C = 4;
-                                this->unk_40D = (s32)Rand_ZeroFloat(40.0f) + 160;
-                            }
-                            break;
+                default:
+                    break;
+            }
+        } else {
+            if (this->unk_40A > 0) {
+                this->unk_40A--;
+            } else {
+                if (this->unk_408 == 0) {
+                    if (Rand_ZeroOne() < 0.3f) {
+                        this->unk_408 = 4;
+                        this->unk_409 = 12;
+                    } else {
+                        this->unk_408 = 1;
+                        this->unk_409 = 4;
                     }
                 }
+                this->unk_409--;
+
+                switch (this->unk_408) {
+                    case 1:
+                        sp36 = Math_SinS((-this->unk_409 * 0x1000) + 0x4000) * 5000.0f;
+                        if (this->unk_409 <= 0) {
+                            this->unk_409 = (s32)(Rand_ZeroFloat(15.0f) + 5.0f);
+                            this->unk_408 = 2;
+                        }
+                        break;
+
+                    case 2:
+                        sp36 = 0x1388;
+                        if (this->unk_409 <= 0) {
+                            this->unk_408 = 3;
+                            this->unk_409 = 4;
+                        }
+                        break;
+
+                    case 3:
+                        sp36 = Math_SinS(this->unk_409 * 0x1000) * 5000.0f;
+                        if (this->unk_409 <= 0) {
+                            this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
+                            this->unk_408 = 0;
+                            func_8095AB4C(this);
+                        }
+                        break;
+
+                    case 4:
+                        sp36 = Math_SinS(this->unk_409 * 0x2000) * 5000.0f;
+                        if (this->unk_409 <= 0) {
+                            this->unk_40A = (s32)Rand_ZeroFloat(20.0f) + 60;
+                            this->unk_408 = 0;
+                            func_8095AB4C(this);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (this->actionFlags & 0x20) {
+                    sp36 = -sp36;
+                }
             }
 
-            if (sp36) {}
-            this->unk_3DC = (u16)((this->unk_3DA << 2) << 8) + sp36;
-            this->unk_3D8 = ABS(this->unk_3DC) >> 3;
-        } else {
-            this->unk_3DE = 0;
-            if (this->actionFlags & 2) {
-                this->unk_3DC = -0x8000;
+            if (this->unk_40D > 0) {
+                this->unk_40D--;
             } else {
-                this->unk_3DC = 0;
-            }
+                this->unk_40C--;
+                switch (this->unk_40B) {
+                    case 0:
+                        this->unk_3DE = (-this->unk_40C * 0x5DC) + 0x1770;
+                        if (this->unk_40C <= 0) {
+                            this->unk_40B = 1;
+                            this->unk_40C = (s8)(Rand_ZeroFloat(15.0f) + 5.0f);
+                        }
+                        break;
 
-            this->unk_3D8 = ABS(this->unk_3DC) >> 3;
+                    case 1:
+                        this->unk_3DE = 0x1770;
+                        if (this->unk_40C <= 0) {
+                            this->unk_40B = 2;
+                            this->unk_40C = 4;
+                        }
+                        break;
+
+                    case 2:
+                        this->unk_3DE = this->unk_40C * 0x5DC;
+                        if (this->unk_40C <= 0) {
+                            this->unk_40B = 0;
+                            this->unk_40C = 4;
+                            this->unk_40D = (s32)Rand_ZeroFloat(40.0f) + 160;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
+
+        if (sp36) {}
+        this->unk_3DC = (u16)((this->unk_3DA << 2) << 8) + sp36;
+        this->unk_3D8 = ABS(this->unk_3DC) >> 3;
+    } else {
+        this->unk_3DE = 0;
+        if (this->actionFlags & 2) {
+            this->unk_3DC = -0x8000;
+        } else {
+            this->unk_3DC = 0;
+        }
+
+        this->unk_3D8 = ABS(this->unk_3DC) >> 3;
     }
 }
 
@@ -1117,6 +1152,9 @@ s32 EnOwl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                 rot->y += (s16)(this->unk_3D8 * 1.5f);
             }
             break;
+
+        default:
+            break;
     }
 
     return false;
@@ -1151,7 +1189,7 @@ void EnOwl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(eyeTextures[this->eyeTexIndex]));
 
@@ -1172,7 +1210,7 @@ void func_8095D074(Actor* thisx, PlayState* play) {
     if (this->unk_3DC >= 0x20) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2);
         gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
@@ -1180,7 +1218,7 @@ void func_8095D074(Actor* thisx, PlayState* play) {
     } else {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_XLU_SURF2);
         gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (u8)(this->unk_3DC * 8));
