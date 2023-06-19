@@ -78,5 +78,6 @@
 
         <!--Skeleton-->
         <Skeleton Name="gFireKeeseSkel" Type="Normal" LimbType="Standard" LimbNone="FIRE_KEESE_LIMB_NONE" LimbMax="FIRE_KEESE_LIMB_MAX" EnumName="FireKeeseLimb" Offset="0x18B8" />
+        
     </File>
 </Root>
