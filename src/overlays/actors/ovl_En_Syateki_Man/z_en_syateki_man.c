@@ -68,10 +68,10 @@ ActorInit En_Syateki_Man_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE,
-    /* 1 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
-} EnSyatekiManAnimation;
+    /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
+    /* 1 */ SG_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
+    /* 2 */ SG_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
+} ShootingGalleryManAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
     { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
@@ -97,32 +97,25 @@ typedef struct {
 } SwampTargetActorEntry; // size = 0x14
 
 static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 0) },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 2, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 3, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 4, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(5, 2, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(6, 0, 1) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(7, 0, 2) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(8, 0, 1) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(9, 0, 2) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(1, 3, 0) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(0, 2, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 0, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 1, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 2, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 3, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 4, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 0, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 1, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(1, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(2, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(3, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(4, 2, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(5, 2, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(6, 0, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(7, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(8, 0, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(9, 0, 2) },
 };
 
 /**
@@ -130,22 +123,20 @@ static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
  * Without any "normal" Deku Scrubs, the game will not progress beyond the first wave.
  */
 static SwampTargetActorEntry sUnusedSwampTargetActorList[] = {
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 2) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 2) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 3) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 3) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 3) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 4) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 4) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 4) },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 5) },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 6) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(1, 0, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 0, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 1, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(2, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(3, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(0, 0, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(1, 0, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(4, 2, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(2, 0, 4) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(3, 0, 4) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(4, 2, 4) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(0, 2, 5) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(1, 3, 6) },
 };
 
 static SwampTargetActorEntry* sSwampTargetActorLists[] = {
@@ -179,7 +170,7 @@ void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
-    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH_INDEX(&this->actor)];
+    Path* path = &play->setupPathList[SG_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = 1;
@@ -265,7 +256,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
         faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_SWAMP_SHOOTING_GALLERY_MAN);
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
@@ -484,7 +475,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
 
     if (this->skelAnime.animation == &gSwampShootingGalleryManHeadScratchEndAnim) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HANDS_ON_TABLE);
         }
     }
 }
