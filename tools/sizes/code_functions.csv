@@ -2624,9 +2624,9 @@ asm/non_matchings/code/TwoHeadArena/THA_Reset.s,THA_Reset,0x80172B3C,0x7
 asm/non_matchings/code/TwoHeadArena/THA_Init.s,THA_Init,0x80172B58,0x11
 asm/non_matchings/code/TwoHeadArena/THA_Destroy.s,THA_Destroy,0x80172B9C,0x9
 asm/non_matchings/code/audio_stop_all_sfx/AudioMgr_StopAllSfxExceptSystem.s,AudioMgr_StopAllSfxExceptSystem,0x80172BC0,0x1C
-asm/non_matchings/code/audio_thread_manager/func_80172C30.s,func_80172C30,0x80172C30,0xE
+asm/non_matchings/code/audio_thread_manager/AudioMgr_NotifyTaskDone.s,AudioMgr_NotifyTaskDone,0x80172C30,0xE
 asm/non_matchings/code/audio_thread_manager/AudioMgr_HandleRetrace.s,AudioMgr_HandleRetrace,0x80172C68,0x91
-asm/non_matchings/code/audio_thread_manager/AudioMgr_HandlePRENMI.s,AudioMgr_HandlePRENMI,0x80172EAC,0x9
+asm/non_matchings/code/audio_thread_manager/AudioMgr_HandlePreNMI.s,AudioMgr_HandlePreNMI,0x80172EAC,0x9
 asm/non_matchings/code/audio_thread_manager/AudioMgr_ThreadEntry.s,AudioMgr_ThreadEntry,0x80172ED0,0x5E
 asm/non_matchings/code/audio_thread_manager/AudioMgr_Unlock.s,AudioMgr_Unlock,0x80173048,0xB
 asm/non_matchings/code/audio_thread_manager/AudioMgr_Init.s,AudioMgr_Init,0x80173074,0x2F

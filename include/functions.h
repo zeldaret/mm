@@ -1492,14 +1492,6 @@ void func_801720C4(PreRender* this);
 void func_801720FC(PreRenderParams* params, Gfx** gfxp);
 void Prerender_DrawBackground2D(Gfx** gfxp, void* timg, void* tlut, u16 width, u16 height, u8 fmt, u8 siz, u16 tt, u16 arg8, f32 x, f32 y, f32 xScale, f32 yScale, u32 flags);
 
-void AudioMgr_StopAllSfxExceptSystem(void);
-void func_80172C30(AudioMgr* audioMgr);
-void AudioMgr_HandleRetrace(AudioMgr* audioMgr);
-void AudioMgr_HandlePRENMI(AudioMgr* audioMgr);
-void AudioMgr_ThreadEntry(void* arg);
-void AudioMgr_Unlock(AudioMgr* audioMgr);
-void AudioMgr_Init(AudioMgr* audioMgr, void* stack, OSPri pri, OSId id, SchedContext* sched, IrqMgr* irqMgr);
-
 void GameAlloc_Log(GameAlloc* this);
 void* GameAlloc_Malloc(GameAlloc* this, size_t size);
 void GameAlloc_Free(GameAlloc* this, void* data);
