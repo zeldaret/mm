@@ -75,9 +75,9 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
 }
 
 TexturePtr sDungeonItemTextures[] = {
-    gBossKeyIconTex,    // DUNGEON_BOSS_KEY
-    gCompassIconTex,    // DUNGEON_COMPASS
-    gDungeonMapIconTex, // DUNGEON_MAP
+    gQuestIconBossKeyTex,    // DUNGEON_BOSS_KEY
+    gQuestIconCompassTex,    // DUNGEON_COMPASS
+    gQuestIconDungeonMapTex, // DUNGEON_MAP
 };
 
 TexturePtr sDungeonTitleTextures[] = {
@@ -282,7 +282,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             // Draw Player's face next to the dungeon floor icon currently in.
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gPlayerFaceIconTex, 16, 16, 62,
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconPlayerFaceTex, 16, 16, 62,
                                       sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
@@ -813,7 +813,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gPlayerFaceIconTex, 16, 16, sWorldMapCursorsRectLeft[n],
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconPlayerFaceTex, 16, 16, sWorldMapCursorsRectLeft[n],
                                       sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }

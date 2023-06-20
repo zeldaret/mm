@@ -98,7 +98,7 @@ typedef enum PlayerItemAction {
     /* 0x27 */ PLAYER_IA_BOTTLE_MILK_HALF,
     /* 0x28 */ PLAYER_IA_BOTTLE_CHATEAU,
     /* 0x29 */ PLAYER_IA_BOTTLE_FAIRY,
-    /* 0x2A */ PLAYER_IA_MOON_TEAR,
+    /* 0x2A */ PLAYER_IA_MOONS_TEAR,
     /* 0x2B */ PLAYER_IA_DEED_LAND,
     /* 0x2C */ PLAYER_IA_ROOM_KEY,
     /* 0x2D */ PLAYER_IA_LETTER_TO_KAFEI,

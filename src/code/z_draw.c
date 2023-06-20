@@ -313,7 +313,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa0Xlu1, { gGiRedPotionBottleEmptyDL, gGiRedPotionBottleDL } },
     // GID_ZORA_EGG, OBJECT_GI_BOTTLE_15
     { GetItem_DrawOpa0Xlu1, { gGiZoraEggBottleContentsDL, gGiZoraEggBottleGlassAndCorkDL } },
-    // GID_MOON_TEAR, OBJECT_GI_RESERVE00
+    // GID_MOONS_TEAR, OBJECT_GI_RESERVE00
     { GetItem_DrawMoonsTear, { gGiMoonsTearItemDL, gGiMoonsTearGlowDL } },
     // GID_DEED_LAND, OBJECT_GI_RESERVE01
     { GetItem_DrawOpa01, { gGiTitleDeedEmptyDL, gGiTitleDeedLandColorDL } },

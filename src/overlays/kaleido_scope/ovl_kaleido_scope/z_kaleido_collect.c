@@ -115,8 +115,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         255, // QUEST_SONG_SUN
     };
     static TexturePtr sQuestUpgradeTextures[][3] = {
-        { gQuiver30IconTex, gQuiver40IconTex, gQuiver50IconTex },    // UPG_QUIVER
-        { gBombBag20IconTex, gBombBag30IconTex, gBombBag40IconTex }, // UPG_BOMB_BAG
+        { gItemIconQuiver30Tex, gItemIconQuiver40Tex, gItemIconQuiver50Tex },    // UPG_QUIVER
+        { gItemIconBombBag20Tex, gItemIconBombBag30Tex, gItemIconBombBag40Tex }, // UPG_BOMB_BAG
     };
     static u8 sQuestUpgrades[] = { UPG_QUIVER, UPG_BOMB_BAG };
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -219,7 +219,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
 
-    gDPLoadTextureBlock(POLY_OPA_DISP++, gSongNoteIconTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gItemIconSongNoteTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
@@ -255,7 +255,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
-        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, gBombersNotebookIconTex, 32, 32, 0);
+        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, gItemIconBombersNotebookTex, 32, 32, 0);
     }
 
     j += 4;

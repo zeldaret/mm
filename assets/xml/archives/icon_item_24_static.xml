@@ -1,21 +1,21 @@
 <Root>
     <File Name="icon_item_24_static_yar.unarchive" Segment="9">
-        <Texture Name="gGoldSkulltulaIconTex" OutName="gold_skulltula_icon" Format="rgba32" Width="24" Height="24" Offset="0x0" />
-        <Texture Name="gHeartContainerIconTex" OutName="heart_container_icon" Format="rgba32" Width="24" Height="24" Offset="0x900" />
-        <Texture Name="gPieceOfHeartIconTex" OutName="piece_of_heart_icon" Format="rgba32" Width="24" Height="24" Offset="0x1200" />
-        <!-- Identical to gPieceOfHeartIconTex -->
-        <Texture Name="gPieceOfHeart2IconTex" OutName="piece_of_heart_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x1B00" />
-        <!-- Both identical to gHeartContainerIconTex -->
-        <Texture Name="gHeartContainer2IconTex" OutName="heart_container_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x2400" />
-        <Texture Name="gHeartContainer3IconTex" OutName="heart_container_3_icon" Format="rgba32" Width="24" Height="24" Offset="0x2D00" />
-        <Texture Name="gBossKeyIconTex" OutName="boss_key_icon" Format="rgba32" Width="24" Height="24" Offset="0x3600" />
-        <Texture Name="gCompassIconTex" OutName="compass_icon" Format="rgba32" Width="24" Height="24" Offset="0x3F00" />
-        <Texture Name="gDungeonMapIconTex" OutName="dungeon_map_icon" Format="rgba32" Width="24" Height="24" Offset="0x4800" />
-        <!-- Identical to gGoldSkulltulaIconTex -->
-        <Texture Name="gGoldSkulltula2IconTex" OutName="gold_skulltula_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x5100" />
-        <Texture Name="gSmallKeyIconTex" OutName="small_key_icon" Format="rgba32" Width="24" Height="24" Offset="0x5A00" />
-        <Texture Name="gSmallMagicJarIconTex" OutName="small_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6300" />
-        <Texture Name="gBigMagicJarIconTex" OutName="big_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6C00" />
-        <Texture Name="gPlayerFaceIconTex" OutName="player_face_icon" Format="rgba16" Width="16" Height="16" Offset="0x7500"/>
+        <Texture Name="gQuestIconGoldSkulltulaTex" OutName="gold_skulltula_icon" Format="rgba32" Width="24" Height="24" Offset="0x0" />
+        <Texture Name="gQuestIconHeartContainerTex" OutName="heart_container_icon" Format="rgba32" Width="24" Height="24" Offset="0x900" />
+        <Texture Name="gQuestIconPieceOfHeartTex" OutName="piece_of_heart_icon" Format="rgba32" Width="24" Height="24" Offset="0x1200" />
+        <!-- Identical to gQuestIconPieceOfHeartTex -->
+        <Texture Name="gQuestIconPieceOfHeart2Tex" OutName="piece_of_heart_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x1B00" />
+        <!-- Both identical to gQuestIconHeartContainerTex -->
+        <Texture Name="gQuestIconHeartContainer2Tex" OutName="heart_container_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x2400" />
+        <Texture Name="gQuestIconHeartContainer3Tex" OutName="heart_container_3_icon" Format="rgba32" Width="24" Height="24" Offset="0x2D00" />
+        <Texture Name="gQuestIconBossKeyTex" OutName="boss_key_icon" Format="rgba32" Width="24" Height="24" Offset="0x3600" />
+        <Texture Name="gQuestIconCompassTex" OutName="compass_icon" Format="rgba32" Width="24" Height="24" Offset="0x3F00" />
+        <Texture Name="gQuestIconDungeonMapTex" OutName="dungeon_map_icon" Format="rgba32" Width="24" Height="24" Offset="0x4800" />
+        <!-- Identical to gQuestIconGoldSkulltulaTex -->
+        <Texture Name="gQuestIconGoldSkulltula2Tex" OutName="gold_skulltula_2_icon" Format="rgba32" Width="24" Height="24" Offset="0x5100" />
+        <Texture Name="gQuestIconSmallMagicJarTex" OutName="small_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6300" />
+        <Texture Name="gQuestIconSmallKeyTex" OutName="small_key_icon" Format="rgba32" Width="24" Height="24" Offset="0x5A00" />
+        <Texture Name="gQuestIconBigMagicJarTex" OutName="big_magic_jar_icon" Format="rgba32" Width="24" Height="24" Offset="0x6C00" />
+        <Texture Name="gQuestIconPlayerFaceTex" OutName="player_face_icon" Format="rgba16" Width="16" Height="16" Offset="0x7500"/>
     </File>
 </Root>
