@@ -1201,7 +1201,7 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, true);
 
     OPEN_DISPS(play->state.gfxCtx);
-    
+
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
