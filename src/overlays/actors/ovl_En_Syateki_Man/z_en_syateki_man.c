@@ -50,6 +50,13 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define TALK_FLAG_SWAMP_HAS_SPOKEN_WITH_HUMAN (1 << 0)
 #define TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES (1 << 1)
 
+// This defines the configuration of a single wave of Octoroks in the Town Shooting Gallery. These are
+// arranged in the same columns and rows that appear in-game; the player stands in the center column, and
+// the Octorok with an index of 7 appears directly in front of them like so:
+// 0     1     2
+// 3     4     5
+// 6     7     8
+//     Player
 #define OCTO_FLAGS(type0, type1, type2, type3, type4, type5, type6, type7, type8)           \
     (SG_OCTO_SET_FLAG(type0, 0) | SG_OCTO_SET_FLAG(type1, 1) | SG_OCTO_SET_FLAG(type2, 2) | \
      SG_OCTO_SET_FLAG(type3, 3) | SG_OCTO_SET_FLAG(type4, 4) | SG_OCTO_SET_FLAG(type5, 5) | \

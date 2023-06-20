@@ -39,10 +39,10 @@ typedef enum {
 } ShootingGalleryGameState;
 
 typedef enum {
-    /*  0 */ SG_OCTO_STATE_APPEARING,
-    /*  1 */ SG_OCTO_STATE_APPEARED,
-    /* 70 */ SG_OCTO_STATE_INITIAL = 70,
-    /* 80 */ SG_OCTO_STATE_HIDING = 80
+    /*  0 */ SG_OCTO_STATE_APPEARING,    // The Octoroks will begin to appear on the next frame.
+    /*  1 */ SG_OCTO_STATE_APPEARED,     // The Octoroks are appearing from underwater or have already appeared and are floating.
+    /* 70 */ SG_OCTO_STATE_INITIAL = 70, // The initial state of the game. The Octoroks have not appeared yet.
+    /* 80 */ SG_OCTO_STATE_HIDING = 80   // The Octoroks are in the process of hiding underwater.
 } ShootingGalleryOctorokState;
 
 typedef enum {
