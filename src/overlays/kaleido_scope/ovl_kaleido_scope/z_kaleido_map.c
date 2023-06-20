@@ -282,7 +282,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             // Draw Player's face next to the dungeon floor icon currently in.
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconPlayerFaceTex, 16, 16, 62,
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, 62,
                                       sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
@@ -813,7 +813,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconPlayerFaceTex, 16, 16, sWorldMapCursorsRectLeft[n],
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, sWorldMapCursorsRectLeft[n],
                                       sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
