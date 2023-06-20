@@ -69,14 +69,14 @@ ActorInit En_Syateki_Man_InitVars = {
 
 typedef enum {
     /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
-    /* 1 */ SG_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ SG_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
+    /* 1 */ SG_MAN_ANIM_HEAD_SCRATCH_LOOP,
+    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END
 } ShootingGalleryManAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gSwampShootingGalleryManHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // SG_MAN_ANIM_HANDS_ON_TABLE
+    { &gBurlyGuyHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // SG_MAN_ANIM_HEAD_SCRATCH_LOOP
+    { &gBurlyGuyHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // SG_MAN_ANIM_HEAD_SCRATCH_END
 };
 
 /**
@@ -176,8 +176,8 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 1;
     Actor_SetScale(&this->actor, 0.01f);
     if (play->sceneId == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gSwampShootingGalleryManHeadScratchLoopAnim,
-                           this->jointTable, this->morphTable, BURLY_GUY_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHeadScratchLoopAnim, this->jointTable,
+                           this->morphTable, BURLY_GUY_LIMB_MAX);
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHandsOnTableAnim, this->jointTable,
                            this->morphTable, BURLY_GUY_LIMB_MAX);
@@ -256,7 +256,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HEAD_SCRATCH_END);
         faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_SWAMP_SHOOTING_GALLERY_MAN);
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
@@ -473,7 +473,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
     }
 
-    if (this->skelAnime.animation == &gSwampShootingGalleryManHeadScratchEndAnim) {
+    if (this->skelAnime.animation == &gBurlyGuyHeadScratchEndAnim) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HANDS_ON_TABLE);
         }

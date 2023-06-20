@@ -124,13 +124,13 @@ typedef enum {
 } ShootingGalleryWolfosAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gWolfosWaitAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &gWolfosRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gWolfosRunAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },
-    { &gWolfosRunAnim, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },
-    { &gWolfosBackflipAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gWolfosDamagedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 8.0f },
-    { &gWolfosRearUpFallOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gWolfosWaitAnim, 2.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },           // SG_WOLFOS_ANIM_WAIT
+    { &gWolfosRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },            // SG_WOLFOS_ANIM_RUN
+    { &gWolfosRunAnim, 1.0f, 0.0f, 4.0f, ANIMMODE_ONCE, 1.0f },             // SG_WOLFOS_ANIM_JUMP
+    { &gWolfosRunAnim, 1.0f, 4.0f, 8.0f, ANIMMODE_ONCE, 1.0f },             // SG_WOLFOS_ANIM_LAND
+    { &gWolfosBackflipAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },       // SG_WOLFOS_ANIM_BACKFLIP
+    { &gWolfosDamagedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 8.0f },         // SG_WOLFOS_ANIM_DAMAGED
+    { &gWolfosRearUpFallOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f }, // SG_WOLFOS_ANIM_REAR_UP_FALL_OVER
 };
 
 static InitChainEntry sInitChain[] = {
