@@ -472,12 +472,12 @@ typedef struct {
 } ExplosiveInfo; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ Color_RGB8 unk_0;
-    /* 0x3 */ Color_RGB8 unk_3;
-    /* 0x6 */ Color_RGB8 unk_6;
-    /* 0xA */ s16 unk_A;
-    /* 0xC */ s16 unk_C;
-} struct_8082F02C_arg1; // size = 0xE
+    /* 0x0 */ Color_RGB8 ambientColor;
+    /* 0x3 */ Color_RGB8 diffuseColor;
+    /* 0x6 */ Color_RGB8 fogColor;
+    /* 0xA */ s16 fogNear;
+    /* 0xC */ s16 zFar;
+} PlayerEnvLighting; // size = 0xE
 
 typedef struct GetItemEntry {
     /* 0x0 */ u8 itemId;
@@ -2720,11 +2720,11 @@ PlayerAnimationHeader* func_8082EFE4(Player* this) {
     }
 }
 
-void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
-    func_800FD59C(play, &arg1->unk_0, arg2);
-    func_800FD5E0(play, &arg1->unk_3, arg2);
-    func_800FD654(play, &arg1->unk_6, arg2);
-    func_800FD698(play, arg1->unk_A, arg1->unk_C, arg2);
+void Player_LerpEnvLighting(PlayState* play, PlayerEnvLighting* lighting, f32 lerp) {
+    Environment_LerpAmbientColor(play, &lighting->ambientColor, lerp);
+    Environment_LerpDiffuseColor(play, &lighting->diffuseColor, lerp);
+    Environment_LerpFogColor(play, &lighting->fogColor, lerp);
+    Environment_LerpFog(play, lighting->fogNear, lighting->zFar, lerp);
 }
 
 /**
@@ -2792,8 +2792,12 @@ void func_8082F164(Player* this, u16 button) {
     }
 }
 
-struct_8082F02C_arg1 D_8085C98C = {
-    { 0, 0, 0 }, { 255, 255, 155 }, { 20, 20, 50 }, 940, 5000,
+PlayerEnvLighting sZoraBarrierEnvLighting = {
+    { 0, 0, 0 },       // ambientColor
+    { 255, 255, 155 }, // diffuseColor
+    { 20, 20, 50 },    // fogColor
+    940,               // fogNear
+    5000,              // zFar
 };
 
 // Run Zora Barrier
@@ -2828,7 +2832,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
 
         sp46 = play->gameplayFrames * 7000;
         sp44 = play->gameplayFrames * 14000;
-        func_8082F02C(play, &D_8085C98C, this->unk_B62 / 255.0f);
+        Player_LerpEnvLighting(play, &sZoraBarrierEnvLighting, this->unk_B62 / 255.0f);
 
         sp34 = Math_SinS(sp44) * 40.0f;
         sp40 = Math_CosS(sp44) * 40.0f;
