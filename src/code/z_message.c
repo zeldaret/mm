@@ -1499,256 +1499,256 @@ s16 D_801CFF88[LANGUAGE_MAX] = {
 };
 
 s16 D_801CFF94[] = {
-    0x270F,
-    ITEM_RUPEE_GREEN,
-    ITEM_RUPEE_BLUE,
-    ITEM_RUPEE_10,
-    ITEM_RUPEE_RED,
-    ITEM_RUPEE_PURPLE,
-    ITEM_RUPEE_SILVER,
-    ITEM_RUPEE_HUGE,
-    ITEM_WALLET_ADULT,
-    ITEM_WALLET_GIANT,
-    ITEM_RECOVERY_HEART,
-    ITEM_RECOVERY_HEART,
-    ITEM_HEART_PIECE,
-    ITEM_HEART_CONTAINER,
-    ITEM_MAGIC_SMALL,
-    ITEM_MAGIC_LARGE,
-    ITEM_RECOVERY_HEART,
-    ITEM_STRAY_FAIRIES,
-    ITEM_RECOVERY_HEART,
-    ITEM_RECOVERY_HEART,
-    ITEM_BOMB,
-    ITEM_BOMB,
-    ITEM_BOMB,
-    ITEM_BOMB,
-    ITEM_BOMB,
-    ITEM_STICK,
-    ITEM_BOMBCHU,
-    ITEM_BOMB_BAG_20,
-    ITEM_BOMB_BAG_30,
-    ITEM_BOMB_BAG_40,
-    ITEM_BOW,
-    ITEM_BOW,
-    ITEM_BOW,
-    ITEM_BOW,
-    ITEM_QUIVER_30,
-    ITEM_QUIVER_40,
-    ITEM_QUIVER_50,
-    ITEM_ARROW_FIRE,
-    ITEM_ARROW_ICE,
-    ITEM_ARROW_LIGHT,
-    ITEM_NUT,
-    ITEM_NUT,
-    ITEM_NUT,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_STICK_UPGRADE_20,
-    0x270F,
-    0x270F,
-    ITEM_SHIELD_HERO,
-    ITEM_SHIELD_MIRROR,
-    ITEM_POWDER_KEG,
-    ITEM_MAGIC_BEANS,
-    ITEM_PICTO_BOX,
-    ITEM_SWORD_KOKIRI,
-    ITEM_SWORD_RAZOR,
-    ITEM_SWORD_GILDED,
-    ITEM_SWORD_DEITY,
-    ITEM_SWORD_GREAT_FAIRY,
-    ITEM_KEY_SMALL,
-    ITEM_KEY_BOSS,
-    ITEM_DUNGEON_MAP,
-    ITEM_COMPASS,
-    ITEM_POWDER_KEG,
-    ITEM_HOOKSHOT,
-    ITEM_LENS,
-    ITEM_PICTO_BOX,
-    ITEM_FISHING_ROD,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_OCARINA,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_BOMBERS_NOTEBOOK,
-    0x270F,
-    ITEM_SKULL_TOKEN,
-    0x270F,
-    0x270F,
-    ITEM_REMAINS_ODOLWA,
-    ITEM_REMAINS_GOHT,
-    ITEM_REMAINS_GYORG,
-    ITEM_REMAINS_TWINMOLD,
-    ITEM_POTION_RED,
-    ITEM_BOTTLE,
-    ITEM_POTION_RED,
-    ITEM_POTION_GREEN,
-    ITEM_POTION_BLUE,
-    ITEM_FAIRY,
-    ITEM_DEKU_PRINCESS,
-    ITEM_MILK_BOTTLE,
-    ITEM_MILK_HALF,
-    ITEM_FISH,
-    ITEM_BUG,
-    ITEM_BLUE_FIRE,
-    ITEM_POE,
-    ITEM_BIG_POE,
-    ITEM_SPRING_WATER,
-    ITEM_HOT_SPRING_WATER,
-    ITEM_ZORA_EGG,
-    ITEM_GOLD_DUST,
-    ITEM_MUSHROOM,
-    0x270F,
-    0x270F,
-    ITEM_SEAHORSE,
-    ITEM_CHATEAU,
-    ITEM_HYLIAN_LOACH,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_MASK_DEKU,
-    ITEM_MASK_GORON,
-    ITEM_MASK_ZORA,
-    ITEM_MASK_FIERCE_DEITY,
-    ITEM_MASK_TRUTH,
-    ITEM_MASK_KAFEIS_MASK,
-    ITEM_MASK_ALL_NIGHT,
-    ITEM_MASK_BUNNY,
-    ITEM_MASK_KEATON,
-    ITEM_MASK_GARO,
-    ITEM_MASK_ROMANI,
-    ITEM_MASK_CIRCUS_LEADER,
-    ITEM_MASK_POSTMAN,
-    ITEM_MASK_COUPLE,
-    ITEM_MASK_GREAT_FAIRY,
-    ITEM_MASK_GIBDO,
-    ITEM_MASK_DON_GERO,
-    ITEM_MASK_KAMARO,
-    ITEM_MASK_CAPTAIN,
-    ITEM_MASK_STONE,
-    ITEM_MASK_BREMEN,
-    ITEM_MASK_BLAST,
-    ITEM_MASK_SCENTS,
-    ITEM_MASK_GIANT,
-    0x270F,
-    ITEM_CHATEAU,
-    ITEM_MILK_BOTTLE,
-    ITEM_GOLD_DUST,
-    ITEM_HYLIAN_LOACH,
-    ITEM_SEAHORSE,
-    ITEM_MOON_TEAR,
-    ITEM_DEED_LAND,
-    ITEM_DEED_SWAMP,
-    ITEM_DEED_MOUNTAIN,
-    ITEM_DEED_OCEAN,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_ROOM_KEY,
-    ITEM_LETTER_MAMA,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_LETTER_TO_KAFEI,
-    ITEM_PENDANT_OF_MEMORIES,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_TINGLE_MAP,
-    ITEM_TINGLE_MAP,
-    ITEM_TINGLE_MAP,
-    ITEM_TINGLE_MAP,
-    ITEM_TINGLE_MAP,
-    ITEM_TINGLE_MAP,
-    ITEM_TINGLE_MAP,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    ITEM_SONG_SONATA,
-    ITEM_SONG_SONATA,
-    ITEM_SONG_SONATA,
-    ITEM_SONG_LULLABY,
-    ITEM_SONG_NOVA,
-    ITEM_SONG_ELEGY,
-    ITEM_SONG_OATH,
-    ITEM_SONG_SARIA,
-    ITEM_SONG_TIME,
-    ITEM_SONG_HEALING,
-    ITEM_SONG_EPONA,
-    ITEM_SONG_SOARING,
-    ITEM_SONG_STORMS,
-    ITEM_SONG_SUN,
-    ITEM_SONG_LULLABY,
-    ITEM_SONG_SONATA,
-    ITEM_SONG_SONATA,
-    ITEM_SONG_SONATA,
-    ITEM_SONG_LULLABY,
-    ITEM_SONG_NOVA,
-    0xB8,
-    0xB9,
-    0xBA,
-    0xBB,
-    0xBC,
-    0xBD,
-    0xBE,
-    0xBF,
-    0xC0,
-    0xC1,
-    0xC2,
-    0xC3,
-    0xC4,
-    0xC5,
-    0xC6,
-    0xC7,
-    0xC8,
-    0xC9,
-    0xCA,
-    0xCB,
-    0xCC,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
-    0x270F,
+    /* 0x00 */ 0x270F,
+    /* 0x01 */ ITEM_RUPEE_GREEN,
+    /* 0x02 */ ITEM_RUPEE_BLUE,
+    /* 0x03 */ ITEM_RUPEE_10,
+    /* 0x04 */ ITEM_RUPEE_RED,
+    /* 0x05 */ ITEM_RUPEE_PURPLE,
+    /* 0x06 */ ITEM_RUPEE_SILVER,
+    /* 0x07 */ ITEM_RUPEE_HUGE,
+    /* 0x08 */ ITEM_WALLET_ADULT,
+    /* 0x09 */ ITEM_WALLET_GIANT,
+    /* 0x0A */ ITEM_RECOVERY_HEART,
+    /* 0x0B */ ITEM_RECOVERY_HEART,
+    /* 0x0C */ ITEM_HEART_PIECE,
+    /* 0x0D */ ITEM_HEART_CONTAINER,
+    /* 0x0E */ ITEM_MAGIC_SMALL,
+    /* 0x0F */ ITEM_MAGIC_LARGE,
+    /* 0x10 */ ITEM_RECOVERY_HEART,
+    /* 0x11 */ ITEM_STRAY_FAIRIES,
+    /* 0x12 */ ITEM_RECOVERY_HEART,
+    /* 0x13 */ ITEM_RECOVERY_HEART,
+    /* 0x14 */ ITEM_BOMB,
+    /* 0x15 */ ITEM_BOMB,
+    /* 0x16 */ ITEM_BOMB,
+    /* 0x17 */ ITEM_BOMB,
+    /* 0x18 */ ITEM_BOMB,
+    /* 0x19 */ ITEM_STICK,
+    /* 0x1A */ ITEM_BOMBCHU,
+    /* 0x1B */ ITEM_BOMB_BAG_20,
+    /* 0x1C */ ITEM_BOMB_BAG_30,
+    /* 0x1D */ ITEM_BOMB_BAG_40,
+    /* 0x1E */ ITEM_BOW,
+    /* 0x1F */ ITEM_BOW,
+    /* 0x20 */ ITEM_BOW,
+    /* 0x21 */ ITEM_BOW,
+    /* 0x22 */ ITEM_QUIVER_30,
+    /* 0x23 */ ITEM_QUIVER_40,
+    /* 0x24 */ ITEM_QUIVER_50,
+    /* 0x25 */ ITEM_ARROW_FIRE,
+    /* 0x26 */ ITEM_ARROW_ICE,
+    /* 0x27 */ ITEM_ARROW_LIGHT,
+    /* 0x28 */ ITEM_NUT,
+    /* 0x29 */ ITEM_NUT,
+    /* 0x2A */ ITEM_NUT,
+    /* 0x2B */ 0x270F,
+    /* 0x2C */ 0x270F,
+    /* 0x2D */ 0x270F,
+    /* 0x2E */ 0x270F,
+    /* 0x2F */ ITEM_STICK_UPGRADE_20,
+    /* 0x30 */ 0x270F,
+    /* 0x31 */ 0x270F,
+    /* 0x32 */ ITEM_SHIELD_HERO,
+    /* 0x33 */ ITEM_SHIELD_MIRROR,
+    /* 0x34 */ ITEM_POWDER_KEG,
+    /* 0x35 */ ITEM_MAGIC_BEANS,
+    /* 0x36 */ ITEM_PICTO_BOX,
+    /* 0x37 */ ITEM_SWORD_KOKIRI,
+    /* 0x38 */ ITEM_SWORD_RAZOR,
+    /* 0x39 */ ITEM_SWORD_GILDED,
+    /* 0x3A */ ITEM_SWORD_DEITY,
+    /* 0x3B */ ITEM_SWORD_GREAT_FAIRY,
+    /* 0x3C */ ITEM_KEY_SMALL,
+    /* 0x3D */ ITEM_KEY_BOSS,
+    /* 0x3E */ ITEM_DUNGEON_MAP,
+    /* 0x3F */ ITEM_COMPASS,
+    /* 0x40 */ ITEM_POWDER_KEG,
+    /* 0x41 */ ITEM_HOOKSHOT,
+    /* 0x42 */ ITEM_LENS,
+    /* 0x43 */ ITEM_PICTO_BOX,
+    /* 0x44 */ ITEM_FISHING_ROD,
+    /* 0x45 */ 0x270F,
+    /* 0x46 */ 0x270F,
+    /* 0x47 */ 0x270F,
+    /* 0x48 */ 0x270F,
+    /* 0x49 */ 0x270F,
+    /* 0x4A */ 0x270F,
+    /* 0x4B */ 0x270F,
+    /* 0x4C */ ITEM_OCARINA,
+    /* 0x4D */ 0x270F,
+    /* 0x4E */ 0x270F,
+    /* 0x4F */ 0x270F,
+    /* 0x50 */ ITEM_BOMBERS_NOTEBOOK,
+    /* 0x51 */ 0x270F,
+    /* 0x52 */ ITEM_SKULL_TOKEN,
+    /* 0x53 */ 0x270F,
+    /* 0x54 */ 0x270F,
+    /* 0x55 */ ITEM_REMAINS_ODOLWA,
+    /* 0x56 */ ITEM_REMAINS_GOHT,
+    /* 0x57 */ ITEM_REMAINS_GYORG,
+    /* 0x58 */ ITEM_REMAINS_TWINMOLD,
+    /* 0x59 */ ITEM_POTION_RED,
+    /* 0x5A */ ITEM_BOTTLE,
+    /* 0x5B */ ITEM_POTION_RED,
+    /* 0x5C */ ITEM_POTION_GREEN,
+    /* 0x5D */ ITEM_POTION_BLUE,
+    /* 0x5E */ ITEM_FAIRY,
+    /* 0x5F */ ITEM_DEKU_PRINCESS,
+    /* 0x60 */ ITEM_MILK_BOTTLE,
+    /* 0x61 */ ITEM_MILK_HALF,
+    /* 0x62 */ ITEM_FISH,
+    /* 0x63 */ ITEM_BUG,
+    /* 0x64 */ ITEM_BLUE_FIRE,
+    /* 0x65 */ ITEM_POE,
+    /* 0x66 */ ITEM_BIG_POE,
+    /* 0x67 */ ITEM_SPRING_WATER,
+    /* 0x68 */ ITEM_HOT_SPRING_WATER,
+    /* 0x69 */ ITEM_ZORA_EGG,
+    /* 0x6A */ ITEM_GOLD_DUST,
+    /* 0x6B */ ITEM_MUSHROOM,
+    /* 0x6C */ 0x270F,
+    /* 0x6D */ 0x270F,
+    /* 0x6E */ ITEM_SEAHORSE,
+    /* 0x6F */ ITEM_CHATEAU,
+    /* 0x70 */ ITEM_HYLIAN_LOACH,
+    /* 0x71 */ 0x270F,
+    /* 0x72 */ 0x270F,
+    /* 0x73 */ 0x270F,
+    /* 0x74 */ 0x270F,
+    /* 0x75 */ 0x270F,
+    /* 0x76 */ 0x270F,
+    /* 0x77 */ 0x270F,
+    /* 0x78 */ ITEM_MASK_DEKU,
+    /* 0x79 */ ITEM_MASK_GORON,
+    /* 0x7A */ ITEM_MASK_ZORA,
+    /* 0x7B */ ITEM_MASK_FIERCE_DEITY,
+    /* 0x7C */ ITEM_MASK_TRUTH,
+    /* 0x7D */ ITEM_MASK_KAFEIS_MASK,
+    /* 0x7E */ ITEM_MASK_ALL_NIGHT,
+    /* 0x7F */ ITEM_MASK_BUNNY,
+    /* 0x80 */ ITEM_MASK_KEATON,
+    /* 0x81 */ ITEM_MASK_GARO,
+    /* 0x82 */ ITEM_MASK_ROMANI,
+    /* 0x83 */ ITEM_MASK_CIRCUS_LEADER,
+    /* 0x84 */ ITEM_MASK_POSTMAN,
+    /* 0x85 */ ITEM_MASK_COUPLE,
+    /* 0x86 */ ITEM_MASK_GREAT_FAIRY,
+    /* 0x87 */ ITEM_MASK_GIBDO,
+    /* 0x88 */ ITEM_MASK_DON_GERO,
+    /* 0x89 */ ITEM_MASK_KAMARO,
+    /* 0x8A */ ITEM_MASK_CAPTAIN,
+    /* 0x8B */ ITEM_MASK_STONE,
+    /* 0x8C */ ITEM_MASK_BREMEN,
+    /* 0x8D */ ITEM_MASK_BLAST,
+    /* 0x8E */ ITEM_MASK_SCENTS,
+    /* 0x8F */ ITEM_MASK_GIANT,
+    /* 0x90 */ 0x270F,
+    /* 0x91 */ ITEM_CHATEAU,
+    /* 0x92 */ ITEM_MILK_BOTTLE,
+    /* 0x93 */ ITEM_GOLD_DUST,
+    /* 0x94 */ ITEM_HYLIAN_LOACH,
+    /* 0x95 */ ITEM_SEAHORSE,
+    /* 0x96 */ ITEM_MOON_TEAR,
+    /* 0x97 */ ITEM_DEED_LAND,
+    /* 0x98 */ ITEM_DEED_SWAMP,
+    /* 0x99 */ ITEM_DEED_MOUNTAIN,
+    /* 0x9A */ ITEM_DEED_OCEAN,
+    /* 0x9B */ 0x270F,
+    /* 0x9C */ 0x270F,
+    /* 0x9D */ 0x270F,
+    /* 0x9E */ 0x270F,
+    /* 0x9F */ 0x270F,
+    /* 0xA0 */ ITEM_ROOM_KEY,
+    /* 0xA1 */ ITEM_LETTER_MAMA,
+    /* 0xA2 */ 0x270F,
+    /* 0xA3 */ 0x270F,
+    /* 0xA4 */ 0x270F,
+    /* 0xA5 */ 0x270F,
+    /* 0xA6 */ 0x270F,
+    /* 0xA7 */ 0x270F,
+    /* 0xA8 */ 0x270F,
+    /* 0xA9 */ 0x270F,
+    /* 0xAA */ ITEM_LETTER_TO_KAFEI,
+    /* 0xAB */ ITEM_PENDANT_OF_MEMORIES,
+    /* 0xAC */ 0x270F,
+    /* 0xAD */ 0x270F,
+    /* 0xAE */ 0x270F,
+    /* 0xAF */ 0x270F,
+    /* 0xB0 */ 0x270F,
+    /* 0xB1 */ 0x270F,
+    /* 0xB2 */ 0x270F,
+    /* 0xB3 */ ITEM_TINGLE_MAP,
+    /* 0xB4 */ ITEM_TINGLE_MAP,
+    /* 0xB5 */ ITEM_TINGLE_MAP,
+    /* 0xB6 */ ITEM_TINGLE_MAP,
+    /* 0xB7 */ ITEM_TINGLE_MAP,
+    /* 0xB8 */ ITEM_TINGLE_MAP,
+    /* 0xB9 */ ITEM_TINGLE_MAP,
+    /* 0xBA */ 0x270F,
+    /* 0xBB */ 0x270F,
+    /* 0xBC */ 0x270F,
+    /* 0xBD */ 0x270F,
+    /* 0xBE */ 0x270F,
+    /* 0xBF */ 0x270F,
+    /* 0xC0 */ 0x270F,
+    /* 0xC1 */ 0x270F,
+    /* 0xC2 */ 0x270F,
+    /* 0xC3 */ 0x270F,
+    /* 0xC4 */ 0x270F,
+    /* 0xC5 */ 0x270F,
+    /* 0xC6 */ 0x270F,
+    /* 0xC7 */ 0x270F,
+    /* 0xC8 */ ITEM_SONG_SONATA,
+    /* 0xC9 */ ITEM_SONG_SONATA,
+    /* 0xCA */ ITEM_SONG_SONATA,
+    /* 0xCB */ ITEM_SONG_LULLABY,
+    /* 0xCC */ ITEM_SONG_NOVA,
+    /* 0xCD */ ITEM_SONG_ELEGY,
+    /* 0xCE */ ITEM_SONG_OATH,
+    /* 0xCF */ ITEM_SONG_SARIA,
+    /* 0xD0 */ ITEM_SONG_TIME,
+    /* 0xD1 */ ITEM_SONG_HEALING,
+    /* 0xD2 */ ITEM_SONG_EPONA,
+    /* 0xD3 */ ITEM_SONG_SOARING,
+    /* 0xD4 */ ITEM_SONG_STORMS,
+    /* 0xD5 */ ITEM_SONG_SUN,
+    /* 0xD6 */ ITEM_SONG_LULLABY,
+    /* 0xD7 */ ITEM_SONG_SONATA,
+    /* 0xD8 */ ITEM_SONG_SONATA,
+    /* 0xD9 */ ITEM_SONG_SONATA,
+    /* 0xDA */ ITEM_SONG_LULLABY,
+    /* 0xDB */ ITEM_SONG_NOVA,
+    /* 0xDC */ 0xB8,
+    /* 0xDD */ 0xB9,
+    /* 0xDE */ 0xBA,
+    /* 0xDF */ 0xBB,
+    /* 0xE0 */ 0xBC,
+    /* 0xE1 */ 0xBD,
+    /* 0xE2 */ 0xBE,
+    /* 0xE3 */ 0xBF,
+    /* 0xE4 */ 0xC0,
+    /* 0xE5 */ 0xC1,
+    /* 0xE6 */ 0xC2,
+    /* 0xE7 */ 0xC3,
+    /* 0xE8 */ 0xC4,
+    /* 0xE9 */ 0xC5,
+    /* 0xEA */ 0xC6,
+    /* 0xEB */ 0xC7,
+    /* 0xEC */ 0xC8,
+    /* 0xED */ 0xC9,
+    /* 0xEE */ 0xCA,
+    /* 0xEF */ 0xCB,
+    /* 0xF0 */ 0xCC,
+    /* 0xF1 */ 0x270F,
+    /* 0xF2 */ 0x270F,
+    /* 0xF3 */ 0x270F,
+    /* 0xF4 */ 0x270F,
+    /* 0xF5 */ 0x270F,
+    /* 0xF6 */ 0x270F,
+    /* 0xF7 */ 0x270F,
+    /* 0xF8 */ 0x270F,
+    /* 0xF9 */ 0x270F,
 };
 
 void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
@@ -1794,8 +1794,8 @@ void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_yar), (itemId - ITEM_B8),
-                        msgCtx->textboxSegment + 0x1000, 0x800);
+        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_yar), (itemId - ITEM_B8), msgCtx->textboxSegment + 0x1000,
+                        0x800);
     } else if (itemId >= ITEM_SKULL_TOKEN) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
@@ -1851,32 +1851,38 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
     *arg3 = f;
 }
 
-void func_8014CDF0(OSTime time, s16* digits) {
+void Message_GetTimerDigits(OSTime time, s16* digits) {
     // offsetting to actual codepoints is done outside this function
     // every digits will be added 0x824F to get an actual S-JIS
     // printable character.
-    OSTime temp_t2 = time;
+    OSTime t = time;
 
-    digits[0] = temp_t2 / 36000;
-    temp_t2 -= digits[0] * 36000;
+    // 6 minutes
+    digits[0] = t / SECONDS_TO_TIMER(360);
+    t -= digits[0] * SECONDS_TO_TIMER(360);
 
-    digits[1] = temp_t2 / 6000;
-    temp_t2 -= digits[1] * 6000;
+    // minutes
+    digits[1] = t / SECONDS_TO_TIMER(60);
+    t -= digits[1] * SECONDS_TO_TIMER(60);
 
     digits[2] = 0x135B; // 0x135B + 0x824F = 分 (minutes) in S-JIS
 
-    digits[3] = temp_t2 / 1000;
-    temp_t2 -= digits[3] * 1000;
+    // 10 seconds
+    digits[3] = t / SECONDS_TO_TIMER(10);
+    t -= digits[3] * SECONDS_TO_TIMER(10);
 
-    digits[4] = temp_t2 / 100;
-    temp_t2 -= digits[4] * 100;
+    // seconds
+    digits[4] = t / SECONDS_TO_TIMER(1);
+    t -= digits[4] * SECONDS_TO_TIMER(1);
 
     digits[5] = 0x1313; // 0x1313 + 0x824F = 秒 (seconds) in S-JIS
 
-    digits[6] = temp_t2 / 10;
-    temp_t2 -= digits[6] * 10;
+    // 100 milliseconds
+    digits[6] = t / SECONDS_TO_TIMER_PRECISE(0, 10);
+    t -= digits[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
 
-    digits[7] = temp_t2;
+    // 10 milliseconds
+    digits[7] = t;
 }
 
 void Message_SetupLoadItemIcon(PlayState* play) {
@@ -1922,8 +1928,7 @@ void Message_SetupLoadItemIcon(PlayState* play) {
     }
 }
 
-// Message_LoadTimeBeforeMoonCrash
-void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decodedBufPos) {
+void Message_LoadTime(PlayState* play, u16 curChar, s32* offset, f32* arg3, s16* decodedBufPos) {
     MessageContext* msgCtx = &play->msgCtx;
     s16 i;
     s16 p = *decodedBufPos;
@@ -1931,14 +1936,12 @@ void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decod
     f32 f = *arg3;
     u32 dayTime;
     s16 digits[4];
-    s32 day;
     f32 timeInMinutes;
 
-    if (arg1 == 0x20F) {
-        day = gSaveContext.save.day;
-        dayTime = 0x40000 - ((day % 5) << 16) - (u16)(-0x4000 + gSaveContext.save.time);
+    if (curChar == 0x20F) {
+        dayTime = TIME_UNTIL_MOON_CRASH;
     } else {
-        dayTime = 0x10000 - (u16)(-0x4000 + gSaveContext.save.time);
+        dayTime = TIME_UNTIL_NEW_DAY;
     }
     timeInMinutes = TIME_TO_MINUTES_F(dayTime);
 
@@ -1957,7 +1960,7 @@ void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decod
     }
 
     for (i = 0; i < 4; i++) {
-        Font_LoadChar(play, digits[i] + 0x824F, o); // 0x824F = ０ in S-JIS
+        Font_LoadChar(play, digits[i] + 0x824F, o); // 0x824F = '0' in S-JIS
         o += FONT_CHAR_TEX_SIZE;
         msgCtx->decodedBuffer.wchar[p] = digits[i] + 0x824F;
         p++;
@@ -1978,56 +1981,68 @@ void func_8014D304(PlayState* play, u16 arg1, s32* offset, f32* arg3, s16* decod
             msgCtx->decodedBuffer.wchar[p] = 0x95AA;
         }
     }
+
     f += 7.0f * (16.0f * msgCtx->textCharScale);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
 }
 
-// JPN Area names
-u16 D_801D0188[OWL_WARP_MAX][9] = {
-    { 0x834F, 0x838C, 0x815B, 0x8367, 0x8378, 0x8343, 0x82CC, 0x8A43, 0x8ADD },
-    { 0x835D, 0x815B, 0x8389, 0x82CC, 0x82DD, 0x82B3, 0x82AB, 0, 0 },
-    { 0x8358, 0x836D, 0x815B, 0x8377, 0x8362, 0x8368, 0, 0, 0 },
-    { 0x8E52, 0x97A2, 0, 0, 0, 0, 0, 0, 0 },
-    { 0x834E, 0x838D, 0x8362, 0x834E, 0x835E, 0x8345, 0x8393, 0, 0 },
-    { 0x837E, 0x838B, 0x834E, 0x838D, 0x815B, 0x8368, 0, 0, 0 },
-    { 0x8345, 0x8362, 0x8368, 0x8374, 0x8348, 0x815B, 0x838B, 0, 0 },
-    { 0x8FC0, 0x926E, 0, 0, 0, 0, 0, 0, 0 },
-    { 0x8343, 0x834A, 0x815B, 0x8369, 0x8C6B, 0x924A, 0, 0, 0 },
-    { 0x838D, 0x8362, 0x834E, 0x8372, 0x838B, 0, 0, 0, 0 },
-    { 0x93FC, 0x82E8, 0x8CFB, 0, 0, 0, 0, 0, 0 },
+// Shift JIS
+u16 sOwlWarpTextJPN[OWL_WARP_MAX][9] = {
+    { 0x834F, 0x838C, 0x815B, 0x8367, 0x8378, 0x8343, 0x82CC, 0x8A43, 0x8ADD }, // OWL_WARP_GREAT_BAY_COAST
+    { 0x835D, 0x815B, 0x8389, 0x82CC, 0x82DD, 0x82B3, 0x82AB, 0, 0 },           // OWL_WARP_ZORA_CAPE
+    { 0x8358, 0x836D, 0x815B, 0x8377, 0x8362, 0x8368, 0, 0, 0 },                // OWL_WARP_SNOWHEAD
+    { 0x8E52, 0x97A2, 0, 0, 0, 0, 0, 0, 0 },                                    // OWL_WARP_MOUNTAIN_VILLAGE
+    { 0x834E, 0x838D, 0x8362, 0x834E, 0x835E, 0x8345, 0x8393, 0, 0 },           // OWL_WARP_CLOCK_TOWN
+    { 0x837E, 0x838B, 0x834E, 0x838D, 0x815B, 0x8368, 0, 0, 0 },                // OWL_WARP_MILK_ROAD
+    { 0x8345, 0x8362, 0x8368, 0x8374, 0x8348, 0x815B, 0x838B, 0, 0 },           // OWL_WARP_WOODFALL
+    { 0x8FC0, 0x926E, 0, 0, 0, 0, 0, 0, 0 },                                    // OWL_WARP_SOUTHERN_SWAMP
+    { 0x8343, 0x834A, 0x815B, 0x8369, 0x8C6B, 0x924A, 0, 0, 0 },                // OWL_WARP_IKANA_CANYON
+    { 0x838D, 0x8362, 0x834E, 0x8372, 0x838B, 0, 0, 0, 0 },                     // OWL_WARP_STONE_TOWER
+    { 0x93FC, 0x82E8, 0x8CFB, 0, 0, 0, 0, 0, 0 },                               // OWL_WARP_ENTRANCE
 };
 
-// Area Names lengths
-s16 D_801D0250[OWL_WARP_MAX] = { 9, 7, 6, 2, 7, 6, 7, 2, 6, 5, 3 };
+s16 sOwlWarpTextLengthJPN[OWL_WARP_MAX] = {
+    9, // OWL_WARP_GREAT_BAY_COAST
+    7, // OWL_WARP_ZORA_CAPE
+    6, // OWL_WARP_SNOWHEAD
+    2, // OWL_WARP_MOUNTAIN_VILLAGE
+    7, // OWL_WARP_CLOCK_TOWN
+    6, // OWL_WARP_MILK_ROAD
+    7, // OWL_WARP_WOODFALL
+    2, // OWL_WARP_SOUTHERN_SWAMP
+    6, // OWL_WARP_IKANA_CANYON
+    5, // OWL_WARP_STONE_TOWER
+    3, // OWL_WARP_ENTRANCE
+};
 
-void func_8014D62C(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
+void Message_LoadOwlWarpText(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
     MessageContext* msgCtx = &play->msgCtx;
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 stringLimit;
-    s16 temp_s1 = *decodedBufPos;
+    s16 curDecodedBufPos = *decodedBufPos;
     s32 temp_s2 = *offset;
     f32 sp3C = *arg2;
     s16 owlWarpId;
-    s16 phi_s0;
+    s16 i;
 
     if (func_8010A0A4(play) || (play->sceneId == SCENE_SECOM)) {
         owlWarpId = OWL_WARP_ENTRANCE;
     } else {
         owlWarpId = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
     }
-    stringLimit = D_801D0250[owlWarpId];
+    stringLimit = sOwlWarpTextLengthJPN[owlWarpId];
 
-    for (phi_s0 = 0; phi_s0 < stringLimit; phi_s0++, temp_s1++, temp_s2 += 0x80) {
-        msgCtx->decodedBuffer.wchar[temp_s1] = D_801D0188[owlWarpId][phi_s0];
-        Font_LoadChar(play, D_801D0188[owlWarpId][phi_s0], temp_s2);
+    for (i = 0; i < stringLimit; i++, curDecodedBufPos++, temp_s2 += FONT_CHAR_TEX_SIZE) {
+        msgCtx->decodedBuffer.wchar[curDecodedBufPos] = sOwlWarpTextJPN[owlWarpId][i];
+        Font_LoadChar(play, sOwlWarpTextJPN[owlWarpId][i], temp_s2);
     }
 
-    temp_s1--;
+    curDecodedBufPos--;
     sp3C += (stringLimit - 1) * (16.0f * msgCtx->textCharScale);
 
-    *decodedBufPos = temp_s1;
+    *decodedBufPos = curDecodedBufPos;
     *offset = temp_s2;
     *arg2 = sp3C;
 }
@@ -2172,7 +2187,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->choiceNum = 3;
                 msgCtx->unk11FF8 = msgCtx->unk11FF8 + 0x16;
             } else if (curChar == 0x204) {
-                func_8014CDF0(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
+                Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
                 loadChar = false;
                 for (i = 0; i < 5; i++) {
@@ -2187,7 +2202,7 @@ void Message_Decode(PlayState* play) {
                 decodedBufPos--;
             } else if ((curChar == 0x205) || (curChar == 0x206) || (curChar == 0x207) || (curChar == 0x208) ||
                        (curChar == 0x209)) {
-                func_8014CDF0(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
+                Message_GetTimerDigits(((void)0, gSaveContext.timerCurTimes[curChar - 0x204]), spAC);
 
                 loadChar = false;
                 for (i = 0; i < 8; i++) {
@@ -2332,7 +2347,7 @@ void Message_Decode(PlayState* play) {
                 }
                 func_8014CCB4(play, &decodedBufPos, &charTexIdx, &spC0);
             } else if (curChar == 0x20F) {
-                func_8014D304(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
+                Message_LoadTime(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
             } else if (curChar == 0x21C) {
                 digits[0] = digits[1] = 0;
                 digits[2] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
@@ -2473,7 +2488,7 @@ void Message_Decode(PlayState* play) {
                 spC0 += 3.0f * (16.0f * msgCtx->textCharScale);
                 msgCtx->choiceIndex = var_s3_8;
             } else if (curChar == 0x224) {
-                func_8014D62C(play, &charTexIdx, &spC0, &decodedBufPos);
+                Message_LoadOwlWarpText(play, &charTexIdx, &spC0, &decodedBufPos);
             } else if (curChar == 0x225) {
                 decodedBufPos++;
                 msgCtx->unk120BE = spD2;
@@ -2657,7 +2672,7 @@ void Message_Decode(PlayState* play) {
                 msgCtx->decodedBuffer.wchar[decodedBufPos] = 0x8E9E;
                 spC0 += 2.0f * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x238) {
-                func_8014D304(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
+                Message_LoadTime(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
             } else if ((curChar == 0x300) || (curChar == 0x301) || (curChar == 0x302) || (curChar == 0x308)) {
                 if (curChar == 0x308) {
                     value = ((s32)gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF);
@@ -2710,12 +2725,12 @@ void Message_Decode(PlayState* play) {
                        (curChar == 0x30C)) {
                 var_fs0 = 8.0f;
                 if (curChar == 0x307) {
-                    func_8014CDF0(((void)0, gSaveContext.save.saveInfo.unk_EBC), spAC);
+                    Message_GetTimerDigits(((void)0, gSaveContext.save.saveInfo.unk_EBC), spAC);
                 } else if (curChar == 0x309) {
-                    func_8014CDF0(((void)0, gSaveContext.save.saveInfo.horseBackBalloonHighScore), spAC);
+                    Message_GetTimerDigits(((void)0, gSaveContext.save.saveInfo.horseBackBalloonHighScore), spAC);
                 } else {
-                    func_8014CDF0(((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0x30A]),
-                                  spAC);
+                    Message_GetTimerDigits(
+                        ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0x30A]), spAC);
                 }
 
                 loadChar = false;

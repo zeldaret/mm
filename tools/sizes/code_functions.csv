@@ -2358,10 +2358,10 @@ asm/non_matchings/code/z_message/Message_DrawTextDefault.s,Message_DrawTextDefau
 asm/non_matchings/code/z_message/Message_LoadItemIcon.s,Message_LoadItemIcon,0x8014C70C,0x142
 asm/non_matchings/code/z_message/Message_LoadChar.s,Message_LoadChar,0x8014CC14,0x28
 asm/non_matchings/code/z_message/func_8014CCB4.s,func_8014CCB4,0x8014CCB4,0x4F
-asm/non_matchings/code/z_message/func_8014CDF0.s,func_8014CDF0,0x8014CDF0,0x7B
+asm/non_matchings/code/z_message/Message_GetTimerDigits.s,Message_GetTimerDigits,0x8014CDF0,0x7B
 asm/non_matchings/code/z_message/Message_SetupLoadItemIcon.s,Message_SetupLoadItemIcon,0x8014CFDC,0xCA
-asm/non_matchings/code/z_message/func_8014D304.s,func_8014D304,0x8014D304,0xCA
-asm/non_matchings/code/z_message/func_8014D62C.s,func_8014D62C,0x8014D62C,0x62
+asm/non_matchings/code/z_message/Message_LoadTime.s,Message_LoadTime,0x8014D304,0xCA
+asm/non_matchings/code/z_message/Message_LoadOwlWarpText.s,Message_LoadOwlWarpText,0x8014D62C,0x62
 asm/non_matchings/code/z_message/Message_Decode.s,Message_Decode,0x8014D7B4,0xCB4
 asm/non_matchings/code/z_message/func_80150A84.s,func_80150A84,0x80150A84,0xA1
 asm/non_matchings/code/z_message/Message_OpenText.s,Message_OpenText,0x80150D08,0x1EA
@@ -2395,7 +2395,7 @@ asm/non_matchings/code/z_message_nes/Message_LoadLocalizedRupeesNES.s,Message_Lo
 asm/non_matchings/code/z_message_nes/Message_LoadRupeesNES.s,Message_LoadRupeesNES,0x80158D98,0x86
 asm/non_matchings/code/z_message_nes/Message_LoadTimeNES.s,Message_LoadTimeNES,0x80158FB0,0xAF
 asm/non_matchings/code/z_message_nes/Message_LoadOwlWarpTextNES.s,Message_LoadOwlWarpTextNES,0x8015926C,0x73
-asm/non_matchings/code/z_message_nes/func_80159438.s,func_80159438,0x80159438,0x8D
+asm/non_matchings/code/z_message_nes/Message_GetTimerDigitsNES.s,Message_GetTimerDigitsNES,0x80159438,0x8D
 asm/non_matchings/code/z_message_nes/Message_DrawTextNES.s,Message_DrawTextNES,0x8015966C,0x6CB
 asm/non_matchings/code/z_message_nes/Message_DecodeNES.s,Message_DecodeNES,0x8015B198,0xD6E
 asm/non_matchings/code/z_message_staff/Message_FindCreditsMessage.s,Message_FindCreditsMessage,0x8015E750,0x27

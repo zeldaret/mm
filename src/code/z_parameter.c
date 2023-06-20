@@ -5415,31 +5415,31 @@ void Interface_StartMoonCrash(PlayState* play) {
     play->transitionType = TRANS_TYPE_FADE_WHITE;
 }
 
-void Interface_GetTimerDigits(u64 timer, s16* timerArr) {
-    u64 time = timer;
+void Interface_GetTimerDigits(OSTime time, s16* timerArr) {
+    OSTime t = time;
 
     // 6 minutes
-    timerArr[0] = time / SECONDS_TO_TIMER(360);
-    time -= timerArr[0] * SECONDS_TO_TIMER(360);
+    timerArr[0] = t / SECONDS_TO_TIMER(360);
+    t -= timerArr[0] * SECONDS_TO_TIMER(360);
 
     // minutes
-    timerArr[1] = time / SECONDS_TO_TIMER(60);
-    time -= timerArr[1] * SECONDS_TO_TIMER(60);
+    timerArr[1] = t / SECONDS_TO_TIMER(60);
+    t -= timerArr[1] * SECONDS_TO_TIMER(60);
 
     // 10 seconds
-    timerArr[3] = time / SECONDS_TO_TIMER(10);
-    time -= timerArr[3] * SECONDS_TO_TIMER(10);
+    timerArr[3] = t / SECONDS_TO_TIMER(10);
+    t -= timerArr[3] * SECONDS_TO_TIMER(10);
 
     // seconds
-    timerArr[4] = time / SECONDS_TO_TIMER(1);
-    time -= timerArr[4] * SECONDS_TO_TIMER(1);
+    timerArr[4] = t / SECONDS_TO_TIMER(1);
+    t -= timerArr[4] * SECONDS_TO_TIMER(1);
 
     // 100 milliseconds
-    timerArr[6] = time / SECONDS_TO_TIMER_PRECISE(0, 10);
-    time -= timerArr[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
+    timerArr[6] = t / SECONDS_TO_TIMER_PRECISE(0, 10);
+    t -= timerArr[6] * SECONDS_TO_TIMER_PRECISE(0, 10);
 
     // 10 milliseconds
-    timerArr[7] = time;
+    timerArr[7] = t;
 }
 
 #define IS_POSTMAN_TIMER_DRAWN                                                        \
