@@ -70,10 +70,10 @@ void func_80AE6130(EnShn* this) {
 
 s32 func_80AE615C(EnShn* this, s32 animIndex) {
     static AnimationInfoS sAnimationInfo[] = {
-        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
-        { &gBurlyGuyChinScratchAnim, 1.0f, 0, -1, 0, 0 },
-        { &gBurlyGuyChinScratchAnim, 1.0f, 0, -1, 0, -4 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &gBurlyGuyChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &gBurlyGuyChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     };
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
