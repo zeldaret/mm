@@ -266,7 +266,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
         u16 faceReactionTextId;
 
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
-        faceReactionTextId = Text_GetFaceReaction(play, 0x31);
+        faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_SWAMP_SHOOTING_GALLERY_MAN);
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
             this->prevTextId = faceReactionTextId;
@@ -592,7 +592,7 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
 
 void EnSyatekiMan_Town_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        u16 faceReactionTextId = Text_GetFaceReaction(play, 0x30);
+        u16 faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_TOWN_SHOOTING_GALLERY_MAN);
 
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
