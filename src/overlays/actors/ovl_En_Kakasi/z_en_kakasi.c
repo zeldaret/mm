@@ -622,7 +622,6 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->unkCounter1A4 = 0;
             CutsceneManager_Stop(this->csIdList[0]);
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_YASE_DEAD);
-            if (this) {}
             this->unkState196 = 2;
             this->subCamId = SUB_CAM_ID_DONE;
             this->picto.actor.textId = 0x1647;
@@ -945,7 +944,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_27);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                 } else {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;

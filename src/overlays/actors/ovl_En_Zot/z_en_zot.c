@@ -1275,8 +1275,7 @@ void func_80B99160(EnZot* this, PlayState* play) {
 }
 
 void func_80B991E4(EnZot* this, PlayState* play) {
-    if (1) {
-        do { } while (0); }
+    if (1) {}
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;

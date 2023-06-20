@@ -465,8 +465,8 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
-    if (this->collider.base.acFlags & AT_HIT) {
-        this->collider.base.acFlags &= ~AT_HIT;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
 
         if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
@@ -529,7 +529,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
 
     Actor_SetFocus(&this->actor, height);
 
-    if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
+    if ((this->actor.colChkInfo.health != 0) && Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
     if (this->drawDmgEffAlpha > 0.0f) {

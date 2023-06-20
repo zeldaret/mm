@@ -77,7 +77,6 @@ beginseg
     include "build/src/libultra/os/createthread.o"
     include "build/src/libultra/io/contreaddata.o"
     include "build/src/libultra/voice/voicegetreaddata.o"
-    include "build/data/boot/voicegetreaddata.bss.o"
     include "build/src/libultra/os/virtualtophysical.o"
     include "build/asm/boot/getsr.text.o"
     include "build/asm/boot/setsr.text.o"
@@ -155,7 +154,6 @@ beginseg
     include "build/src/libultra/gu/rotate.o"
     include "build/src/libultra/os/setglobalintmask.o"
     include "build/src/libultra/voice/voiceinit.o"
-    include "build/data/boot/voiceinit.data.o"
     include "build/src/libultra/io/contchannelreset.o"
     include "build/src/libultra/voice/voicesetadconverter.o"
     include "build/src/libultra/io/aisetfreq.o"
@@ -278,15 +276,17 @@ beginseg
 endseg
 
 beginseg
-    name "icon_item_static_old"
+    name "icon_item_static_syms"
     romalign 0x1000
-    include "build/baserom/icon_item_static_old.o"
+    include "build/assets/archives/icon_item_static/icon_item_static_yar.symbols.o"
+    number 8
 endseg
 
 beginseg
-    name "icon_item_24_static_old"
+    name "icon_item_24_static_syms"
     romalign 0x1000
-    include "build/baserom/icon_item_24_static_old.o"
+    include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.symbols.o"
+    number 9
 endseg
 
 beginseg
@@ -331,43 +331,47 @@ endseg
 
 beginseg
     name "map_i_static"
-    include "build/baserom/map_i_static.o"
+    include "build/assets/archives/map_i_static/map_i_static.yar.o"
 endseg
 
 beginseg
     name "map_grand_static"
-    include "build/baserom/map_grand_static.o"
+    include "build/assets/archives/map_grand_static/map_grand_static.yar.o"
 endseg
 
 beginseg
     name "item_name_static"
-    include "build/baserom/item_name_static.o"
+    include "build/assets/archives/item_name_static/item_name_static.yar.o"
 endseg
 
 beginseg
     name "map_name_static"
-    include "build/baserom/map_name_static.o"
+    include "build/assets/archives/map_name_static/map_name_static.yar.o"
 endseg
 
 beginseg
-    name "icon_item_static_test"
-    include "build/baserom/icon_item_static_test.o"
+    name "icon_item_static_yar"
+    include "build/assets/archives/icon_item_static/icon_item_static_yar.yar.o"
+    number 8
 endseg
 
 beginseg
-    name "icon_item_24_static_test"
-    include "build/baserom/icon_item_24_static_test.o"
+    name "icon_item_24_static_yar"
+    include "build/assets/archives/icon_item_24_static/icon_item_24_static_yar.yar.o"
+    number 9
 endseg
 
 beginseg
-    name "schedule_dma_static_old"
-    include "build/baserom/schedule_dma_static_old.o"
+    name "schedule_dma_static_syms"
+    include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.symbols.o"
+    number 7
 endseg
 
 beginseg
-    name "schedule_dma_static_test"
+    name "schedule_dma_static_yar"
     increment 0x1000
-    include "build/baserom/schedule_dma_static_test.o"
+    include "build/assets/archives/schedule_dma_static/schedule_dma_static_yar.yar.o"
+    number 7
 endseg
 
 beginseg
@@ -1106,11 +1110,7 @@ beginseg
     name "ovl_En_Sw"
     compress
     include "build/src/overlays/actors/ovl_En_Sw/z_en_sw.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_En_Sw/ovl_En_Sw_reloc.o"
-    #else
-        include "build/data/ovl_En_Sw/ovl_En_Sw.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_En_Sw/ovl_En_Sw_reloc.o"
 endseg
 
 beginseg
@@ -3480,8 +3480,7 @@ beginseg
     name "ovl_En_Snowwd"
     compress
     include "build/src/overlays/actors/ovl_En_Snowwd/z_en_snowwd.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.data.o"
-    include "build/data/ovl_En_Snowwd/ovl_En_Snowwd.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Snowwd/ovl_En_Snowwd_reloc.o"
 endseg
 
 beginseg

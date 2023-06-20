@@ -8,6 +8,7 @@
 struct Actor;
 struct MessageTableEntry;
 struct OcarinaStaff;
+struct PlayState;
 
 typedef enum {
     /* 0x0 */ TEXTBOX_TYPE_0,
@@ -136,6 +137,19 @@ typedef enum MessageMode {
     /* 0x4E */ MSGMODE_OWL_SAVE_1,
     /* 0x4F */ MSGMODE_OWL_SAVE_2
 } MessageMode;
+
+typedef enum FaceReactionSet {
+    /* 0x11 */ FACE_REACTION_SET_JIM = 0x11,
+    /* 0x12 */ FACE_REACTION_SET_BOMBERS,
+    /* 0x15 */ FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD = 0x15,
+    /* 0x2D */ FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL = 0x2D,
+    /* 0x2F */ FACE_REACTION_SET_CURIOSITY_SHOP_MAN = 0x2F,
+    /* 0x30 */ FACE_REACTION_SET_TOWN_SHOOTING_GALLERY_MAN,
+    /* 0x31 */ FACE_REACTION_SET_SWAMP_SHOOTING_GALLERY_MAN,
+    /* 0x36 */ FACE_REACTION_SET_PART_TIMER = 0x36
+} FaceReactionSet;
+
+u16 Text_GetFaceReaction(struct PlayState* play, FaceReactionSet reactionSet);
 
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,

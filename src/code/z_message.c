@@ -1771,36 +1771,36 @@ void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF88[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x10;
-        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_yar), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
                         0x180);
     } else if (itemId == ITEM_BOMBERS_NOTEBOOK) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
-        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_test), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_yar), ITEM_SONG_SONATA, msgCtx->textboxSegment + 0x1000,
                         0x1000);
     } else if (itemId <= ITEM_REMAINS_TWINMOLD) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 6);
         msgCtx->unk12014 = 0x20;
-        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_test), itemId, msgCtx->textboxSegment + 0x1000, 0x1000);
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_yar), itemId, msgCtx->textboxSegment + 0x1000, 0x1000);
     } else if (itemId == ITEM_CC) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_test), ITEM_POTION_BLUE, msgCtx->textboxSegment + 0x1000,
+        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_yar), ITEM_POTION_BLUE, msgCtx->textboxSegment + 0x1000,
                         0x400);
     } else if (itemId >= ITEM_B8) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF70[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 8);
         msgCtx->unk12014 = 0x20;
-        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_test), (itemId - ITEM_B8),
+        CmpDma_LoadFile(SEGMENT_ROM_START(schedule_dma_static_yar), (itemId - ITEM_B8),
                         msgCtx->textboxSegment + 0x1000, 0x800);
     } else if (itemId >= ITEM_SKULL_TOKEN) {
         msgCtx->unk12010 = (msgCtx->unk11FF8 - D_801CFF7C[gSaveContext.options.language]);
         msgCtx->unk12012 = (arg2 + 0xA);
         msgCtx->unk12014 = 0x18;
-        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_24_static_test), (itemId - ITEM_SKULL_TOKEN),
+        CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_24_static_yar), (itemId - ITEM_SKULL_TOKEN),
                         msgCtx->textboxSegment + 0x1000, 0x900);
     }
 
@@ -1825,6 +1825,7 @@ void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg
     *arg3 = temp2;
 }
 
+// TODO: SJIS support
 // Message_LoadRupees JPN ?
 void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -1840,7 +1841,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t++;
-    Font_LoadChar(play, 0x815C, k); // Ox815C = ― in JISX0213
+    Font_LoadChar(play, 0x815C, k); // 0x815C = ― in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x815C;
 

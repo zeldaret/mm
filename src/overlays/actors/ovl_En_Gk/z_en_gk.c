@@ -534,8 +534,6 @@ void func_80B51510(EnGk* this, PlayState* play) {
     s32 pad;
     s32 cueChannel;
 
-    if (this) {}
-
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_479)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_479);
 
@@ -576,6 +574,9 @@ void func_80B51510(EnGk* this, PlayState* play) {
 
                 case 7:
                     Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
+                    break;
+
+                default:
                     break;
             }
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_31A);
