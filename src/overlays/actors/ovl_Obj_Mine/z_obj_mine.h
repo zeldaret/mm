@@ -8,7 +8,7 @@ struct ObjMine;
 typedef void (*ObjMineActionFunc)(struct ObjMine*, PlayState*);
 
 #define OBJMINE_GET_LINK_COUNT(thisx) ((thisx)->params & 0x3F)
-#define OBJMINE_GET_PATH(thisx) ((thisx)->params & 0xFF)
+#define OBJMINE_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 #define OBJMINE_GET_PATH_SPEED(thisx) (((thisx)->params >> 8) & 7)
 #define OBJMINE_GET_TYPE(thisx) (((thisx)->params >> 12) & 3)
 

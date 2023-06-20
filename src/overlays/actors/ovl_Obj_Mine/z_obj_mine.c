@@ -287,7 +287,7 @@ void ObjMine_UpdateCollider(ObjMine* this) {
 }
 
 void ObjMine_Air_InitChain(ObjMine* this, s32 linkCount) {
-    f32 linkCountF = (f32)linkCount;
+    f32 linkCountF = linkCount;
     ObjMineAirChain* airChain = &this->chain.air;
     ObjMineAirLink* airLink;
     s32 i;
@@ -675,7 +675,7 @@ void ObjMine_Water_UpdateChain(ObjMine* this, PlayState* play) {
 void ObjMine_Init(Actor* thisx, PlayState* play) {
     s32 pad; // Can be playstate recast. Must be gamestate recast.
     ObjMine* this = THIS;
-    s32 pathIndex = OBJMINE_GET_PATH(&this->actor);
+    s32 pathIndex = OBJMINE_GET_PATH_INDEX(&this->actor);
     Path* path;
     s32 bgId; // not used
     s32 type = OBJMINE_GET_TYPE(&this->actor);
@@ -746,7 +746,6 @@ void ObjMine_Init(Actor* thisx, PlayState* play) {
 
 void ObjMine_Destroy(Actor* thisx, PlayState* play) {
     ObjMine* this = THIS;
-    // PlayState* play = play2; // must be in this order to match with recast
 
     Collider_DestroyJntSph(play, &this->collider);
 }
@@ -764,17 +763,18 @@ void ObjMine_Path_SetupMove(ObjMine* this) {
 }
 
 void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
-    Actor* thisx = &this->actor; // pos and velocity need this, though it can replace all `this->actor`s and match
+    s32 pad;
+    // Actor* thisx = &this->actor; // pos and velocity need this, though it can replace all `this->actor`s and match
     Vec3f nextWaypoint;
     f32 distToWaypoint;
     f32 step;
     f32 target;
     s32 bgId; // not used
 
-    // thisx->velocity is temporarily set to the vector difference to the next waypoint.
+    // this->actor.velocity is temporarily set to the vector difference to the next waypoint.
     Math_Vec3s_ToVec3f(&nextWaypoint, &this->waypoints[this->waypointIndex + 1]);
-    Math_Vec3f_Diff(&nextWaypoint, &thisx->world.pos, &thisx->velocity);
-    distToWaypoint = Math3D_Vec3fMagnitude(&thisx->velocity);
+    Math_Vec3f_Diff(&nextWaypoint, &this->actor.world.pos, &this->actor.velocity);
+    distToWaypoint = Math3D_Vec3fMagnitude(&this->actor.velocity);
 
     // Mine slows to 2.0f speed when 8 frames away from the next waypoint
     if ((distToWaypoint < (this->pathSpeed * 8.0f)) && (this->pathSpeed > 2.0f)) {
@@ -788,11 +788,11 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
 
     // Checks if mine will reach the waypoint next frame
     if ((this->actor.speed + 0.05f) < distToWaypoint) {
-        // Rescales thisx->velocity to be equal in magnitude to speed
-        Math_Vec3f_Scale(&thisx->velocity, this->actor.speed / distToWaypoint);
-        this->actor.world.pos.x += thisx->velocity.x;
-        this->actor.world.pos.y += thisx->velocity.y;
-        this->actor.world.pos.z += thisx->velocity.z;
+        // Rescales this->actor.velocity to be equal in magnitude to speed
+        Math_Vec3f_Scale(&this->actor.velocity, this->actor.speed / distToWaypoint);
+        this->actor.world.pos.x += this->actor.velocity.x;
+        this->actor.world.pos.y += this->actor.velocity.y;
+        this->actor.world.pos.z += this->actor.velocity.z;
     } else {
         this->actor.speed *= 0.4f;
         this->waypointIndex++;
@@ -802,14 +802,14 @@ void ObjMine_Path_Move(ObjMine* this, PlayState* play) {
         ObjMine_Path_MoveToWaypoint(this, this->waypointIndex);
     }
     this->actor.floorHeight =
-        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &thisx->world.pos);
+        BgCheck_EntityRaycastFloor5(&play->colCtx, &this->actor.floorPoly, &bgId, &this->actor, &this->actor.world.pos);
     if (this->actor.flags & ACTOR_FLAG_40) {
         Vec3f rotAxis;
         Vec3f yhatCrossV;
         MtxF rotMtxF;
 
         // Makes mines appear to roll while traversing the path
-        Math3D_CrossProduct(&sStandardBasis.y, &thisx->velocity, &yhatCrossV);
+        Math3D_CrossProduct(&sStandardBasis.y, &this->actor.velocity, &yhatCrossV);
         if (ObjMine_GetUnitVec3f(&yhatCrossV, &rotAxis)) {
             Matrix_RotateAxisF(this->actor.speed / PATH_RADIUS, &rotAxis, MTXMODE_NEW);
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -835,10 +835,11 @@ void ObjMine_Explode(ObjMine* this, PlayState* play) {
     this->actor.scale.x *= 1.8f;
     if (this->actor.scale.x > 0.02f * 1.5f * 5.832f) { // 5.832 = 1.8^3
         Actor_Kill(&this->actor);
-    } else {
-        this->actor.scale.y = this->actor.scale.x;
-        this->actor.scale.z = this->actor.scale.x;
+        return;
     }
+
+    this->actor.scale.y = this->actor.scale.x;
+    this->actor.scale.z = this->actor.scale.x;
 }
 
 void ObjMine_Air_SetupChained(ObjMine* this) {
@@ -928,7 +929,7 @@ void ObjMine_Air_Chained(ObjMine* this, PlayState* play) {
         if (airChain->wallCheckDistSq <= Math3D_XZDistanceSquared(this->actor.world.pos.x, this->actor.world.pos.z,
                                                                   this->actor.home.pos.x, this->actor.home.pos.z)) {
 
-            Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, AIR_RADIUS, 0.0f, 1);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, AIR_RADIUS, 0.0f, UPDBGCHECKINFO_FLAG_1);
 
             if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) && (this->actor.wallPoly != NULL)) {
                 Vec3f xzDir;
@@ -1144,6 +1145,7 @@ void ObjMine_Air_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, true);
 
     OPEN_DISPS(play->state.gfxCtx);
+
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
@@ -1199,6 +1201,7 @@ void ObjMine_Water_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, true);
 
     OPEN_DISPS(play->state.gfxCtx);
+    
     gfx = POLY_OPA_DISP;
 
     gSPDisplayList(gfx++, &gSetupDLs[SETUPDL_25]);
