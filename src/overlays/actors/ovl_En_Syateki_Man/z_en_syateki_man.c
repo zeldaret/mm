@@ -55,6 +55,30 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
      SG_OCTO_SET_FLAG(type3, 3) | SG_OCTO_SET_FLAG(type4, 4) | SG_OCTO_SET_FLAG(type5, 5) | \
      SG_OCTO_SET_FLAG(type6, 6) | SG_OCTO_SET_FLAG(type7, 7) | SG_OCTO_SET_FLAG(type8, 8))
 
+// These defines assume that sNormalSwampTargetActorList is used to spawn actors and that the logic of
+// EnSyatekiMan_Swamp_RunGame is not modified; in other words, it assumes that each wave consists of five
+// Deku Scrubs that the player must shoot and three Guays that the player can either shoot or let escape.
+// Once all Deku Scrubs and Guays have been shot or escape, the next wave starts.
+#define SG_SWAMP_WAVE_COUNT 4
+#define SG_SWAMP_DEKUS_PER_WAVE 5
+#define SG_SWAMP_GUAYS_PER_WAVE 3
+#define SG_SWAMP_BONUS_DEKU_COUNT 2
+
+// This is the score the player will receive if they hit every single Deku Scrub (both normal and bonus), Guay, and
+// Wolfos. There are two conditions for a Wolfos to appear, hence why their point value appears twice; one Wolfos
+// will appear after shooting two waves of Deku Scrubs, and one Wolfos will appear after shooting one wave of Guays.
+// Assuming the point values, actor list, and shooting game logic are unmodified, this should total to 2120 points.
+#define SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS                                                     \
+    (SG_POINTS_DEKU_NORMAL * (SG_SWAMP_DEKUS_PER_WAVE * SG_SWAMP_WAVE_COUNT) +                   \
+     SG_POINTS_GUAY * (SG_SWAMP_GUAYS_PER_WAVE * SG_SWAMP_WAVE_COUNT) +                          \
+     SG_POINTS_DEKU_BONUS * SG_SWAMP_BONUS_DEKU_COUNT + SG_POINTS_WOLFOS * SG_SWAMP_WAVE_COUNT + \
+     SG_POINTS_WOLFOS * (SG_SWAMP_WAVE_COUNT / 2))
+
+// To obtain the Heart Piece from the Swamp Shooting Gallery, the player not only needs to achieve a perfect score,
+// but they must also have at least six seconds remaining on the minigame timer. If the player has already obtained
+// the Heart Piece, then this score will be used instead to determine if the player should get a Purple Rupee.
+#define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
+
 ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
     ACTORCAT_NPC,
@@ -82,8 +106,9 @@ static AnimationInfo sAnimationInfo[] = {
 /**
  * In the Swamp Shooting Gallery, there are four waves of Guays.
  * For each wave, these flags are used to control which Guays appear.
+ * The number of flags per wave should be exactly SG_SWAMP_GUAYS_PER_WAVE for all waves.
  */
-static s16 sGuayFlagsPerWave[] = {
+static s16 sGuayFlagsPerWave[SG_SWAMP_WAVE_COUNT] = {
     (1 << 7) | (1 << 6) | (1 << 0),
     (1 << 9) | (1 << 8) | (1 << 1),
     (1 << 4) | (1 << 3) | (1 << 0),
@@ -852,7 +877,7 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE);
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE) &&
-                   (this->score >= 2180)) {
+                   (this->score >= SG_SWAMP_HEART_PIECE_SCORE)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE);
         }
 
@@ -862,7 +887,7 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
         if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) &&
             !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
             Actor_OfferGetItem(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
-        } else if (this->score < 2180) {
+        } else if (this->score < SG_SWAMP_HEART_PIECE_SCORE) {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 500.0f, 100.0f);
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE)) {
             Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
@@ -1006,7 +1031,7 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         this->guayFlags = 0;
         this->wolfosFlags = 0;
-        this->guaySpawnTimer = 0;
+        this->guayAppearTimer = 0;
         this->dekuScrubHitCounter = 0;
         this->guayHitCounter = 0;
         this->currentWave = 0;
@@ -1018,14 +1043,14 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
-    static s16 sHasSpawnedGuaysForThisWave = false;
+    static s16 sHasSignaledGuaysForThisWave = false;
     Player* player = GET_PLAYER(play);
 
-    if (((this->dekuScrubFlags == 0) || (this->guaySpawnTimer > 140)) && !sHasSpawnedGuaysForThisWave &&
-        (this->currentWave < 4)) {
-        // Spawn three guays after the player has killed all Deku Scrubs, or after 140 frames.
-        sHasSpawnedGuaysForThisWave = true;
-        this->guaySpawnTimer = 0;
+    if (((this->dekuScrubFlags == 0) || (this->guayAppearTimer > 140)) && !sHasSignaledGuaysForThisWave &&
+        (this->currentWave < SG_SWAMP_WAVE_COUNT)) {
+        // Make three Guays appear after the player has killed all Deku Scrubs, or after 140 frames.
+        sHasSignaledGuaysForThisWave = true;
+        this->guayAppearTimer = 0;
         Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
         if (this->flagsIndex == ARRAY_COUNT(sGuayFlagsPerWave) - 1) {
@@ -1033,56 +1058,65 @@ void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
         } else {
             this->flagsIndex++;
         }
-    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (sHasSpawnedGuaysForThisWave == true) &&
-               (this->currentWave < 4)) {
+    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (sHasSignaledGuaysForThisWave == true) &&
+               (this->currentWave < SG_SWAMP_WAVE_COUNT)) {
         // Once all Deku Scrubs and Guays in this wave have either disappeared or died, move on to the next wave.
-        if (this->guayHitCounter < 3) {
+        if (this->guayHitCounter < SG_SWAMP_GUAYS_PER_WAVE) {
             this->guayHitCounter = 0;
         }
 
-        this->guaySpawnTimer = 0;
-        sHasSpawnedGuaysForThisWave = false;
+        this->guayAppearTimer = 0;
+        sHasSignaledGuaysForThisWave = false;
         this->currentWave++;
-        if (this->currentWave < 4) {
+        if (this->currentWave < SG_SWAMP_WAVE_COUNT) {
             this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         }
     }
 
-    if (this->guayHitCounter == 3) {
+    // Makes a Wolfos appear after the player has shot all the Guays in the current wave.
+    if (this->guayHitCounter == SG_SWAMP_GUAYS_PER_WAVE) {
         this->guayHitCounter = 0;
         this->wolfosFlags |= 1;
     }
 
-    if (this->dekuScrubHitCounter == 10) {
+    // Makes a Wolfos appear after the player has shot two waves of Deku Scrubs.
+    if (this->dekuScrubHitCounter == SG_SWAMP_DEKUS_PER_WAVE * 2) {
         this->dekuScrubHitCounter = 0;
         this->wolfosFlags |= 2;
     }
 
-    this->guaySpawnTimer++;
+    this->guayAppearTimer++;
 
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        // End the game because the timer ran out.
         gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= PLAYER_STATE1_20;
-        sHasSpawnedGuaysForThisWave = false;
+        sHasSignaledGuaysForThisWave = false;
         Audio_StopSubBgm();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) && (this->bonusDekuScrubHitCounter == 2)) {
+    } else if ((this->currentWave == SG_SWAMP_WAVE_COUNT) && (this->wolfosFlags == 0) &&
+               (this->bonusDekuScrubHitCounter == SG_SWAMP_BONUS_DEKU_COUNT)) {
+        // End the game because the player has nothing left to shoot. This doesn't mean the
+        // player actually hit everything, since Guays and Wolfos can escape.
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= PLAYER_STATE1_20;
-        sHasSpawnedGuaysForThisWave = false;
+        sHasSignaledGuaysForThisWave = false;
         Audio_StopSubBgm();
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
-        if (this->score == 2120) {
+
+        if (this->score == SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS) {
             Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_2);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_6;
             this->actionFunc = EnSyatekiMan_Swamp_AddBonusPoints;
         } else {
+            // If the player ran out of things to shoot but did *not* get a perfect score, then
+            // they must have missed a Guay or Wolfos at some point; don't award any bonus points.
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
         }
@@ -1101,7 +1135,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
             }
 
             this->talkWaitTimer = 15;
-            if (this->score >= 2120) {
+            if (this->score >= SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS) {
                 // Perfect! Take this!
                 Message_StartTextbox(play, 0xA34, &this->actor);
                 this->prevTextId = 0xA34;
@@ -1155,8 +1189,8 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
             sBonusTimer = 0;
         } else if (sBonusTimer > 10) {
             gSaveContext.timerStopTimes[TIMER_ID_MINIGAME_1] += SECONDS_TO_TIMER(1);
-            play->interfaceCtx.minigamePoints += 10;
-            this->score += 10;
+            play->interfaceCtx.minigamePoints += SG_BONUS_POINTS_PER_SECOND;
+            this->score += SG_BONUS_POINTS_PER_SECOND;
             Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             sBonusTimer = 0;
         } else {

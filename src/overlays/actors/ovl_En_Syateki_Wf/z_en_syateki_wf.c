@@ -390,10 +390,10 @@ void EnSyatekiWf_SetupDead(EnSyatekiWf* this, PlayState* play) {
 
     this->isActive = false;
     this->actor.speed = 0.0f;
-    EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
+    EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_100);
     Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_WOLFOS_ANIM_REAR_UP_FALL_OVER);
-    syatekiMan->score += 100;
+    syatekiMan->score += SG_POINTS_WOLFOS;
     this->actionFunc = EnSyatekiWf_Dead;
 }
 
@@ -453,7 +453,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
             EnSyatekiWf_SetupDead(this, play);
         } else {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 3, 0);
+            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 3, EXTRA_SCORE_INDEX_30);
         }
     }
 

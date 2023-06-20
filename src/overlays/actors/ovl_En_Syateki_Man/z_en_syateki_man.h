@@ -3,12 +3,29 @@
 
 #include "global.h"
 #include "objects/object_shn/object_shn.h"
+#include "overlays/effects/ovl_Effect_Ss_Extra/z_eff_ss_extra.h"
 
 struct EnSyatekiMan;
 
 typedef void (*EnSyatekiManActionFunc)(struct EnSyatekiMan*, PlayState*);
 
 #define SG_MAN_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+
+// These values are used to modify the shooting gallery man's internal score. They are
+// defined in terms of the scores used by EffectSsExtra because EffectSsExtra_Update
+// updates the score displayed to the player, and defining them like this will prevent
+// these two different scores from becoming desynchronized. If you intend to modify these
+// values, then you'll also need to make sure that EffectSsExtra_Spawn in the appropriate
+// actor is called with the correct parameter for the index; failing to do this will
+// cause the two different score variables to fall out of sync.
+#define SG_POINTS_DEKU_NORMAL EXTRA_SCORE_30
+#define SG_POINTS_DEKU_BONUS EXTRA_SCORE_100
+#define SG_POINTS_GUAY EXTRA_SCORE_60
+#define SG_POINTS_WOLFOS EXTRA_SCORE_100
+
+// After getting a perfect score in the Swamp Shooting Gallery, the player is rewarded
+// additional points for every second remaining on the minigame timer.
+#define SG_BONUS_POINTS_PER_SECOND 10
 
 typedef enum {
     /* 0 */ SG_GAME_STATE_NONE,             // None of the states below apply.
@@ -29,10 +46,10 @@ typedef enum {
 } ShootingGalleryOctorokState;
 
 typedef enum {
-    /* 0 */ SG_PATH_TYPE_CROW,
-    /* 1 */ SG_PATH_TYPE_SCRUB_NORMAL,
+    /* 0 */ SG_PATH_TYPE_GUAY,
+    /* 1 */ SG_PATH_TYPE_DEKU_NORMAL,
     /* 2 */ SG_PATH_TYPE_WOLFOS,
-    /* 3 */ SG_PATH_TYPE_SCRUB_BONUS
+    /* 3 */ SG_PATH_TYPE_DEKU_BONUS
 } ShootingGalleryPathType;
 
 typedef struct EnSyatekiMan {
@@ -51,7 +68,7 @@ typedef struct EnSyatekiMan {
     /* 0x268 */ UNK_TYPE1 unk268[0x2];
     /* 0x26A */ s16 shootingGameState;
     /* 0x26C */ union {
-                   s16 guaySpawnTimer;
+                   s16 guayAppearTimer;
                    s16 octorokState;
                };
     /* 0x26E */ union {

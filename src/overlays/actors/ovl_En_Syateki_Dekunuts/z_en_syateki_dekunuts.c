@@ -115,10 +115,10 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
         Actor_SetScale(&this->actor, 0.01f);
         this->collider.dim = sBonusDekuScrubColliderDimensions[0];
-        pathType = SG_PATH_TYPE_SCRUB_BONUS;
+        pathType = SG_PATH_TYPE_DEKU_BONUS;
     } else {
         Actor_SetScale(&this->actor, 0.02f);
-        pathType = SG_PATH_TYPE_SCRUB_NORMAL;
+        pathType = SG_PATH_TYPE_DEKU_NORMAL;
     }
 
     while (path->customValue != pathType) {
@@ -370,12 +370,12 @@ void EnSyatekiDekunuts_SetupDead(EnSyatekiDekunuts* this, PlayState* play) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
     if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
-        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
-        syatekiMan->score += 100;
+        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_100);
+        syatekiMan->score += SG_POINTS_DEKU_BONUS;
         syatekiMan->bonusDekuScrubHitCounter++;
     } else {
-        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 0);
-        syatekiMan->score += 30;
+        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_30);
+        syatekiMan->score += SG_POINTS_DEKU_NORMAL;
         syatekiMan->dekuScrubHitCounter++;
     }
 

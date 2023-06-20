@@ -79,7 +79,7 @@ void EnSyatekiCrow_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     path = syatekiMan->path;
-    while (path->customValue != SG_PATH_TYPE_CROW) {
+    while (path->customValue != SG_PATH_TYPE_GUAY) {
         path = &play->setupPathList[path->additionalPathIndex];
     }
 
@@ -212,7 +212,7 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset = (fabsf(this->skelAnime.curFrame - 3.0f) * 150.0f) + 1700.0f;
-    if ((syatekiMan->guaySpawnTimer % 90) == 0) {
+    if ((syatekiMan->guayAppearTimer % 90) == 0) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 }
@@ -220,7 +220,7 @@ void EnSyatekiCrow_Fly(EnSyatekiCrow* this, PlayState* play) {
 void EnSyatekiCrow_SetupDead(EnSyatekiCrow* this) {
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    syatekiMan->score += 60;
+    syatekiMan->score += SG_POINTS_GUAY;
     this->isActive = false;
     this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
@@ -262,7 +262,7 @@ void EnSyatekiCrow_UpdateDamage(EnSyatekiCrow* this, PlayState* play) {
             play_sound(NA_SE_SY_TRE_BOX_APPEAR);
             this->deathTimer = 0;
             this->collider.base.acFlags &= ~AC_HIT;
-            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 1);
+            EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_60);
             EnSyatekiCrow_SetupDead(this);
         } else {
             this->collider.elements[0].dim.worldSphere.center.x = this->actor.world.pos.x;
