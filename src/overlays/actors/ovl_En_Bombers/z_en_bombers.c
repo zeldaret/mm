@@ -295,11 +295,11 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
             break;
     }
 
-    if (!Text_GetFaceReaction(play, 0x12)) {
+    if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS) == 0) {
         func_80C039A8(this, play);
     } else {
         this->unk_2A6 = TEXT_STATE_5;
-        this->actor.textId = Text_GetFaceReaction(play, 0x12);
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {

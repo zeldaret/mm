@@ -1,31 +1,7 @@
 #include "global.h"
 #include "z64bombers_notebook.h"
 #include "interface/schedule_static/schedule_static.h"
-
-// TODO: Needs YAZ0
-// Segment 0x07 schedule_dma_static_test
-extern TexturePtr D_07000000;
-extern TexturePtr D_07000800;
-extern TexturePtr D_07001000;
-extern TexturePtr D_07001800;
-extern TexturePtr D_07002000;
-extern TexturePtr D_07002800;
-extern TexturePtr D_07003000;
-extern TexturePtr D_07003800;
-extern TexturePtr D_07004000;
-extern TexturePtr D_07004800;
-extern TexturePtr D_07005000;
-extern TexturePtr D_07005800;
-extern TexturePtr D_07006000;
-extern TexturePtr D_07006800;
-extern TexturePtr D_07007000;
-extern TexturePtr D_07007800;
-extern TexturePtr D_07008000;
-extern TexturePtr D_07008800;
-extern TexturePtr D_07009000;
-extern TexturePtr D_07009800;
-extern TexturePtr D_0700AC00;
-extern TexturePtr D_0700AEA0;
+#include "archives/schedule_dma_static/schedule_dma_static_yar.h"
 
 #define BOMBERS_NOTEBOOK_ENTRY_SIZE 3
 #define BOMBERS_NOTEBOOK_ENTRY_MAX 10
@@ -395,8 +371,8 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
 
 TexturePtr sBombersNotebookEventIconTextures[] = {
     gBombersNotebookEntryIconExclamationPointTex,
-    &D_0700AC00,
-    &D_0700AEA0,
+    schedule_dma_static_yar_Blob_00AC00,
+    schedule_dma_static_yar_Blob_00AEA0,
 };
 s16 sBombersNotebookEntryIconColors[][3] = {
     { 255, 255, 0 },
@@ -1163,8 +1139,8 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
     s32 stickAdjY = input->rel.stick_y;
     s32 cursorEntryScan;
 
-    this->scheduleDmaSegmentStart = SEGMENT_ROM_START(schedule_dma_static_test);
-    this->scheduleDmaSegmentSize = SEGMENT_ROM_SIZE(schedule_dma_static_old);
+    this->scheduleDmaSegmentStart = SEGMENT_ROM_START(schedule_dma_static_yar);
+    this->scheduleDmaSegmentSize = SEGMENT_ROM_SIZE(schedule_dma_static_syms);
     this->scheduleSegmentStart = SEGMENT_ROM_START(schedule_static);
     this->scheduleSegmentSize = SEGMENT_ROM_SIZE(schedule_static);
 

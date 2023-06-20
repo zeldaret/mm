@@ -610,7 +610,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         }
                     }
 
-                    Math_ApproachS(&this->actor.shape.rot.x, this->direction << 0xE, 1, 0x2000);
+                    Math_ApproachS(&this->actor.shape.rot.x, this->direction * 0x4000, 1, 0x2000);
                 } else {
                     this->actor.shape.rot.y += this->spinVel.y;
                     this->actor.shape.rot.x += this->direction * 0x7D0;

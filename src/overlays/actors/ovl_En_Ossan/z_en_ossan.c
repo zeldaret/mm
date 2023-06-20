@@ -1402,7 +1402,7 @@ void EnOssan_PartTimer_Init(EnOssan* this, PlayState* play) {
 
 u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u16 textId = Text_GetFaceReaction(play, 0x2F);
+    u16 textId = Text_GetFaceReaction(play, FACE_REACTION_SET_CURIOSITY_SHOP_MAN);
 
     if (textId != 0) {
         this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_START;
@@ -1440,7 +1440,7 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
 
 u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u16 textId = Text_GetFaceReaction(play, 0x36);
+    u16 textId = Text_GetFaceReaction(play, FACE_REACTION_SET_PART_TIMER);
 
     if (textId != 0) {
         this->flags |= END_INTERACTION;

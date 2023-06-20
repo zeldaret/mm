@@ -829,7 +829,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
 
     for (i = 0; i < D_80A9E028.count; i++) {
         collider = D_80A9E028.unk_0000[i].collider;
-        if ((collider != NULL) && (collider->base.acFlags & AT_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
+        if ((collider != NULL) && (collider->base.acFlags & AC_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
             temp_f2 = this->unk_16C;
             yDiff = ABS_ALT(BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y));
             temp_f0 = temp_f2 + D_80A9E028.unk_0000[i].unk_14.y;
@@ -853,7 +853,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
     for (i = 0; i < D_80A9E028.count; i++) {
         collider = D_80A9E028.unk_0000[i].collider;
         if (collider != NULL) {
-            collider->base.acFlags &= ~AT_HIT;
+            collider->base.acFlags &= ~AC_HIT;
         }
     }
 

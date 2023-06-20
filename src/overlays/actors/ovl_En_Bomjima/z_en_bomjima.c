@@ -379,8 +379,8 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
         }
     }
 
-    if (Text_GetFaceReaction(play, 0x11) != 0) {
-        this->actor.textId = Text_GetFaceReaction(play, 0x11);
+    if (Text_GetFaceReaction(play, FACE_REACTION_SET_JIM) != 0) {
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_JIM);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -498,8 +498,8 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
         this->cutsceneEnded = true;
     }
 
-    if (Text_GetFaceReaction(play, 0x11) != 0) {
-        this->actor.textId = Text_GetFaceReaction(play, 0x11);
+    if (Text_GetFaceReaction(play, FACE_REACTION_SET_JIM) != 0) {
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_JIM);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -881,8 +881,8 @@ void func_80C00168(EnBomjima* this, PlayState* play) {
     func_80BFE32C(this, play, 0);
     func_80BFE67C(this, play);
 
-    if (Text_GetFaceReaction(play, 0x11) != 0) {
-        this->actor.textId = Text_GetFaceReaction(play, 0x11);
+    if (Text_GetFaceReaction(play, FACE_REACTION_SET_JIM) != 0) {
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_JIM);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {

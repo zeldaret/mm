@@ -1,4 +1,11 @@
 #include "global.h"
+#include "z64collision_check.h"
+
+typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
+typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
+typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
+typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
+typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
 
 Vec3f D_801EDE00;
 Vec3f D_801EDE10;

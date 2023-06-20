@@ -320,6 +320,7 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
 
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;
+    //! FAKE:
     if (this && this && this) {}
     player->pushedSpeed = 8.0f;
     player->pushedYaw = this->actor.yawTowardsPlayer;
