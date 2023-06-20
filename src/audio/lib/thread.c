@@ -313,7 +313,7 @@ void AudioThread_ProcessGlobalCmd(AudioCmd* cmd) {
         case AUDIOCMD_OP_GLOBAL_SET_SFX_FONT:
         case AUDIOCMD_OP_GLOBAL_SET_INSTRUMENT_FONT:
             if (AudioPlayback_SetFontInstrument(cmd->op - AUDIOCMD_OP_GLOBAL_SET_DRUM_FONT, cmd->arg1, cmd->arg2,
-                                                (void*)cmd->asUInt)) {}
+                                                cmd->asPtr)) {}
             break;
 
         case AUDIOCMD_OP_GLOBAL_DISABLE_ALL_SEQPLAYERS: {
