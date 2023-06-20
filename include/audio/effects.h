@@ -10,15 +10,15 @@ struct SequencePlayer;
 /* Multi-Point ADSR Envelope (Attack, Decay, Sustain, Release) */
 
 typedef enum AdsrStatus {
-    /* 0 */ ADSR_STATE_DISABLED,
-    /* 1 */ ADSR_STATE_INITIAL,
-    /* 2 */ ADSR_STATE_START_LOOP,
-    /* 3 */ ADSR_STATE_LOOP,
-    /* 4 */ ADSR_STATE_FADE,
-    /* 5 */ ADSR_STATE_HANG,
-    /* 6 */ ADSR_STATE_DECAY,
-    /* 7 */ ADSR_STATE_RELEASE,
-    /* 8 */ ADSR_STATE_SUSTAIN
+    /* 0 */ ADSR_STATUS_DISABLED,
+    /* 1 */ ADSR_STATUS_INITIAL,
+    /* 2 */ ADSR_STATUS_START_LOOP,
+    /* 3 */ ADSR_STATUS_LOOP,
+    /* 4 */ ADSR_STATUS_FADE,
+    /* 5 */ ADSR_STATUS_HANG,
+    /* 6 */ ADSR_STATUS_DECAY,
+    /* 7 */ ADSR_STATUS_RELEASE,
+    /* 8 */ ADSR_STATUS_SUSTAIN
 } AdsrStatus;
 
 typedef struct EnvelopePoint {
@@ -39,7 +39,7 @@ typedef struct AdsrState {
             /* 0x00 */ u8 hang : 1;
             /* 0x00 */ u8 decay : 1;
             /* 0x00 */ u8 release : 1;
-            /* 0x00 */ u8 state : 4;
+            /* 0x00 */ u8 status : 4;
         } s;
         /* 0x00 */ u8 asByte;
     } action;

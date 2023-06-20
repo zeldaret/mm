@@ -120,7 +120,7 @@ s16 AudioEffects_GetVibratoPitchChange(VibratoState* vib) {
 
     vib->time += (s32)vib->rate;
     // 0x400 is 1 unit of time, 0x10000 is 1 period
-    index = (vib->time >> 10) % WAVE_SAMPLE_COUNT;
+    index = (vib->time / 0x400) % WAVE_SAMPLE_COUNT;
     return vib->curve[index];
 }
 
@@ -255,32 +255,32 @@ void AudioEffects_InitAdsr(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut
  * @return volumeScale
  */
 f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
-    u8 state = adsr->action.s.state;
+    u8 status = adsr->action.s.status;
 
-    switch (state) {
-        case ADSR_STATE_DISABLED:
+    switch (status) {
+        case ADSR_STATUS_DISABLED:
             return 0.0f;
 
-        case ADSR_STATE_INITIAL:
+        case ADSR_STATUS_INITIAL:
             if (adsr->action.s.hang) {
-                adsr->action.s.state = ADSR_STATE_HANG;
+                adsr->action.s.status = ADSR_STATUS_HANG;
                 break;
             }
             // fallthrough
-        case ADSR_STATE_START_LOOP:
+        case ADSR_STATUS_START_LOOP:
             adsr->envelopeIndex = 0;
-            adsr->action.s.state = ADSR_STATE_LOOP;
+            adsr->action.s.status = ADSR_STATUS_LOOP;
             // fallthrough
         retry:
-        case ADSR_STATE_LOOP:
+        case ADSR_STATUS_LOOP:
             adsr->delay = adsr->envelope[adsr->envelopeIndex].delay;
             switch (adsr->delay) {
                 case ADSR_DISABLE:
-                    adsr->action.s.state = ADSR_STATE_DISABLED;
+                    adsr->action.s.status = ADSR_STATUS_DISABLED;
                     break;
 
                 case ADSR_HANG:
-                    adsr->action.s.state = ADSR_STATE_HANG;
+                    adsr->action.s.status = ADSR_STATUS_HANG;
                     break;
 
                 case ADSR_GOTO:
@@ -288,7 +288,7 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
                     goto retry;
 
                 case ADSR_RESTART:
-                    adsr->action.s.state = ADSR_STATE_INITIAL;
+                    adsr->action.s.status = ADSR_STATUS_INITIAL;
                     break;
 
                 default:
@@ -299,57 +299,57 @@ f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
                     adsr->target = adsr->envelope[adsr->envelopeIndex].arg / 32767.0f;
                     adsr->target = SQ(adsr->target);
                     adsr->velocity = (adsr->target - adsr->current) / adsr->delay;
-                    adsr->action.s.state = ADSR_STATE_FADE;
+                    adsr->action.s.status = ADSR_STATUS_FADE;
                     adsr->envelopeIndex++;
                     break;
             }
-            if (adsr->action.s.state != ADSR_STATE_FADE) {
+            if (adsr->action.s.status != ADSR_STATUS_FADE) {
                 break;
             }
             // fallthrough
-        case ADSR_STATE_FADE:
+        case ADSR_STATUS_FADE:
             adsr->current += adsr->velocity;
             adsr->delay--;
             if (adsr->delay <= 0) {
-                adsr->action.s.state = ADSR_STATE_LOOP;
+                adsr->action.s.status = ADSR_STATUS_LOOP;
             }
             // fallthrough
-        case ADSR_STATE_HANG:
+        case ADSR_STATUS_HANG:
             break;
 
-        case ADSR_STATE_DECAY:
-        case ADSR_STATE_RELEASE:
+        case ADSR_STATUS_DECAY:
+        case ADSR_STATUS_RELEASE:
             adsr->current -= adsr->fadeOutVel;
-            if ((adsr->sustain != 0.0f) && (state == ADSR_STATE_DECAY)) {
+            if ((adsr->sustain != 0.0f) && (status == ADSR_STATUS_DECAY)) {
                 if (adsr->current < adsr->sustain) {
                     adsr->current = adsr->sustain;
                     adsr->delay = 128;
-                    adsr->action.s.state = ADSR_STATE_SUSTAIN;
+                    adsr->action.s.status = ADSR_STATUS_SUSTAIN;
                 }
                 break;
             }
 
             if (adsr->current < 0.00001f) {
                 adsr->current = 0.0f;
-                adsr->action.s.state = ADSR_STATE_DISABLED;
+                adsr->action.s.status = ADSR_STATUS_DISABLED;
             }
             break;
 
-        case ADSR_STATE_SUSTAIN:
+        case ADSR_STATUS_SUSTAIN:
             adsr->delay--;
             if (adsr->delay == 0) {
-                adsr->action.s.state = ADSR_STATE_RELEASE;
+                adsr->action.s.status = ADSR_STATUS_RELEASE;
             }
             break;
     }
 
     if (adsr->action.s.decay) {
-        adsr->action.s.state = ADSR_STATE_DECAY;
+        adsr->action.s.status = ADSR_STATUS_DECAY;
         adsr->action.s.decay = false;
     }
 
     if (adsr->action.s.release) {
-        adsr->action.s.state = ADSR_STATE_RELEASE;
+        adsr->action.s.status = ADSR_STATUS_RELEASE;
         adsr->action.s.release = false;
     }
 

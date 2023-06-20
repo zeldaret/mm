@@ -143,7 +143,7 @@ void AudioPlayback_NoteInit(Note* note) {
     }
 
     note->playbackState.status = PLAYBACK_STATUS_0;
-    note->playbackState.adsr.action.s.state = ADSR_STATE_INITIAL;
+    note->playbackState.adsr.action.s.status = ADSR_STATUS_INITIAL;
     note->sampleState = gDefaultSampleState;
 }
 
@@ -157,7 +157,7 @@ void AudioPlayback_NoteDisable(Note* note) {
     note->sampleState.bitField0.finished = false;
     note->playbackState.parentLayer = NO_LAYER;
     note->playbackState.prevParentLayer = NO_LAYER;
-    note->playbackState.adsr.action.s.state = ADSR_STATE_DISABLED;
+    note->playbackState.adsr.action.s.status = ADSR_STATUS_DISABLED;
     note->playbackState.adsr.current = 0;
 }
 
@@ -219,7 +219,7 @@ void AudioPlayback_ProcessNotes(void) {
             if (1) {}
             noteSampleState = &note->sampleState;
             if ((playbackState->status >= 1) || noteSampleState->bitField0.finished) {
-                if ((playbackState->adsr.action.s.state == ADSR_STATE_DISABLED) ||
+                if ((playbackState->adsr.action.s.status == ADSR_STATUS_DISABLED) ||
                     noteSampleState->bitField0.finished) {
                     if (playbackState->wantedParentLayer != NO_LAYER) {
                         AudioPlayback_NoteDisable(note);
@@ -248,7 +248,7 @@ void AudioPlayback_ProcessNotes(void) {
                         continue;
                     }
                 }
-            } else if (playbackState->adsr.action.s.state == ADSR_STATE_DISABLED) {
+            } else if (playbackState->adsr.action.s.status == ADSR_STATUS_DISABLED) {
                 if (playbackState->parentLayer != NO_LAYER) {
                     playbackState->parentLayer->bit1 = true;
                 }
@@ -491,14 +491,14 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
 
     if (note->playbackState.parentLayer != layer) {
         if (note->playbackState.parentLayer == NO_LAYER && note->playbackState.wantedParentLayer == NO_LAYER &&
-            note->playbackState.prevParentLayer == layer && target != ADSR_STATE_DECAY) {
+            note->playbackState.prevParentLayer == layer && target != ADSR_STATUS_DECAY) {
             note->playbackState.adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
             note->playbackState.adsr.action.s.release = true;
         }
         return;
     }
 
-    if (note->playbackState.adsr.action.s.state != ADSR_STATE_DECAY) {
+    if (note->playbackState.adsr.action.s.status != ADSR_STATUS_DECAY) {
         attrs->freqScale = layer->noteFreqScale;
         attrs->velocity = layer->noteVelocity;
         attrs->pan = layer->notePan;
@@ -552,7 +552,7 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
 
         note->playbackState.prevParentLayer = note->playbackState.parentLayer;
         note->playbackState.parentLayer = NO_LAYER;
-        if (target == ADSR_STATE_RELEASE) {
+        if (target == ADSR_STATUS_RELEASE) {
             note->playbackState.adsr.fadeOutVel = gAudioCtx.audioBufferParameters.updatesPerFrameInv;
             note->playbackState.adsr.action.s.release = true;
             note->playbackState.status = PLAYBACK_STATUS_2;
@@ -569,18 +569,18 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
         }
     }
 
-    if (target == ADSR_STATE_DECAY) {
+    if (target == ADSR_STATUS_DECAY) {
         AudioPlayback_AudioListRemove(&note->listItem);
         AudioPlayback_AudioListPushFront(&note->listItem.pool->decaying, &note->listItem);
     }
 }
 
 void AudioPlayback_SeqLayerNoteDecay(SequenceLayer* layer) {
-    AudioPlayback_SeqLayerDecayRelease(layer, ADSR_STATE_DECAY);
+    AudioPlayback_SeqLayerDecayRelease(layer, ADSR_STATUS_DECAY);
 }
 
 void AudioPlayback_SeqLayerNoteRelease(SequenceLayer* layer) {
-    AudioPlayback_SeqLayerDecayRelease(layer, ADSR_STATE_RELEASE);
+    AudioPlayback_SeqLayerDecayRelease(layer, ADSR_STATUS_RELEASE);
 }
 
 /**
