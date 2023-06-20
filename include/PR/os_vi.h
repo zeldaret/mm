@@ -1,5 +1,5 @@
-#ifndef PR_VI_H
-#define PR_VI_H
+#ifndef PR_OS_VI_H
+#define PR_OS_VI_H
 
 #include "PR/ultratypes.h"
 #include "PR/os_message.h"

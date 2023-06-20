@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_VOICE_H
-#define CONTROLLER_VOICE_H
+#ifndef PR_CONTROLLER_VOICE_H
+#define PR_CONTROLLER_VOICE_H
 
 #include "ultratypes.h"
 #include "os_voice.h"

@@ -1,5 +1,5 @@
-#ifndef	GS2DEX_H
-#define	GS2DEX_H
+#ifndef	PR_GS2DEX_H
+#define	PR_GS2DEX_H
 
 #include "ultratypes.h"
 
