@@ -1,5 +1,5 @@
-#ifndef ULTRA64_R4300_H
-#define ULTRA64_R4300_H
+#ifndef PR_R4300_H
+#define PR_R4300_H
 
 #ifdef _LANGUAGE_C
 #include "ultratypes.h"

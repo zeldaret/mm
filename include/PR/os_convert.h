@@ -1,5 +1,5 @@
-#ifndef ULTRA64_CONVERT_H
-#define ULTRA64_CONVERT_H
+#ifndef PR_CONVERT_H
+#define PR_CONVERT_H
 
 #include "libc/stdint.h"
 

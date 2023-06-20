@@ -1,5 +1,5 @@
-#ifndef ULTRA64_RDP_H
-#define ULTRA64_RDP_H
+#ifndef PR_RDP_H
+#define PR_RDP_H
 
 /* DP Command Registers */
 #define DPC_START_REG    0x04100000

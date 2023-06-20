@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_PFS_H
-#define ULTRA64_OS_PFS_H
+#ifndef PR_OS_PFS_H
+#define PR_OS_PFS_H
 
 #include "os.h"
 

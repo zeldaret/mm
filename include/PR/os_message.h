@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_MESSAGE_H
-#define ULTRA64_OS_MESSAGE_H
+#ifndef PR_OS_MESSAGE_H
+#define PR_OS_MESSAGE_H
 
 #include "os_thread.h"
 

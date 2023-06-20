@@ -1,5 +1,5 @@
-#ifndef ULTRA64_PIINT_H
-#define ULTRA64_PIINT_H
+#ifndef PR_PIINT_H
+#define PR_PIINT_H
 
 #include "ultratypes.h"
 #include "os_pi.h"

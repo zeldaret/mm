@@ -1,5 +1,5 @@
-#ifndef ULTRA64_RSP_H
-#define ULTRA64_RSP_H
+#ifndef PR_RSP_H
+#define PR_RSP_H
 
 #include "ultratypes.h"
 #include "libc/stddef.h"

@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_INTERNAL_SI_H
-#define ULTRA64_OS_INTERNAL_SI_H
+#ifndef PR_OS_INTERNAL_SI_H
+#define PR_OS_INTERNAL_SI_H
 
 #include "ultratypes.h"
 #include "libc/stdint.h"

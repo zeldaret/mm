@@ -1,5 +1,5 @@
-#ifndef ULTRA64_GU_H
-#define ULTRA64_GU_H
+#ifndef PR_GU_H
+#define PR_GU_H
 
 #include "ultratypes.h"
 #include "gbi.h"

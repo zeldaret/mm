@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_VOICE_H
-#define ULTRA64_OS_VOICE_H
+#ifndef PR_OS_VOICE_H
+#define PR_OS_VOICE_H
 
 #include "ultratypes.h"
 #include "os_message.h"

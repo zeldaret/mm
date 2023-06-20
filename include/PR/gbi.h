@@ -1,7 +1,7 @@
 #include "mbi.h"
 
-#ifndef ULTRA64_GBI_H
-#define ULTRA64_GBI_H
+#ifndef PR_GBI_H
+#define PR_GBI_H
 
 #include "ultratypes.h"
 

@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_LIBC_H
-#define ULTRA64_OS_LIBC_H
+#ifndef PR_OS_LIBC_H
+#define PR_OS_LIBC_H
 
 #include "libc/stdarg.h"
 

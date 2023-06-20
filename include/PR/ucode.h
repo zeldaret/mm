@@ -1,5 +1,5 @@
-#ifndef ULTRA64_UCODE_H
-#define ULTRA64_UCODE_H
+#ifndef PR_UCODE_H
+#define PR_UCODE_H
 
 #include "PR/ultratypes.h"
 

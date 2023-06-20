@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_CONT_H
-#define ULTRA64_OS_CONT_H
+#ifndef PR_OS_CONT_H
+#define PR_OS_CONT_H
 
 #include "ultratypes.h"
 #include "os_message.h"

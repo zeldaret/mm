@@ -1,5 +1,5 @@
-#ifndef ULTRA64_VIINT_H
-#define ULTRA64_VIINT_H
+#ifndef PR_VIINT_H
+#define PR_VIINT_H
 
 #include "ultratypes.h"
 

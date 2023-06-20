@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_FLASH_H
-#define ULTRA64_OS_FLASH_H
+#ifndef PR_OS_FLASH_H
+#define PR_OS_FLASH_H
 
 #include "ultratypes.h"
 #include "os_pi.h"

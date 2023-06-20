@@ -1,5 +1,5 @@
-#ifndef ULTRA64_SPTASK_H
-#define ULTRA64_SPTASK_H
+#ifndef PR_SPTASK_H
+#define PR_SPTASK_H
 
 #include "PR/ultratypes.h"
 #include "libc/stddef.h"

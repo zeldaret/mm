@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_THREAD_H
-#define ULTRA64_OS_THREAD_H
+#ifndef PR_OS_THREAD_H
+#define PR_OS_THREAD_H
 
 #include "ultratypes.h"
 

@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_AI_H
-#define ULTRA64_OS_AI_H
+#ifndef PR_OS_AI_H
+#define PR_OS_AI_H
 
 #include "ultratypes.h"
 

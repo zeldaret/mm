@@ -1,5 +1,5 @@
-#ifndef ULTRA64_CONTROLLER_H
-#define ULTRA64_CONTROLLER_H
+#ifndef PR_CONTROLLER_H
+#define PR_CONTROLLER_H
 
 #include "ultratypes.h"
 #include "os_cont.h"

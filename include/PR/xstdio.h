@@ -1,5 +1,5 @@
-#ifndef ULTRA64_XSTDIO_H
-#define ULTRA64_XSTDIO_H
+#ifndef PR_XSTDIO_H
+#define PR_XSTDIO_H
 
 #include "ultratypes.h"
 #include "libc/stdarg.h"

@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_SYSTEM_H
-#define ULTRA64_OS_SYSTEM_H
+#ifndef PR_OS_SYSTEM_H
+#define PR_OS_SYSTEM_H
 
 #include "ultratypes.h"
 

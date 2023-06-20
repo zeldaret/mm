@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_TLB_H
-#define ULTRA64_OS_TLB_H
+#ifndef PR_OS_TLB_H
+#define PR_OS_TLB_H
 
 #include "ultratypes.h"
 

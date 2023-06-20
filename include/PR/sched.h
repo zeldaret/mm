@@ -1,5 +1,5 @@
-#ifndef ULTRA64_SCHED_H
-#define ULTRA64_SCHED_H
+#ifndef PR_SCHED_H
+#define PR_SCHED_H
 
 #include "PR/ultratypes.h"
 #include "PR/os_vi.h"

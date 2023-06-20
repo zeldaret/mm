@@ -1,5 +1,5 @@
-#ifndef ULTRA64_OS_MOTOR_H
-#define ULTRA64_OS_MOTOR_H
+#ifndef PR_OS_MOTOR_H
+#define PR_OS_MOTOR_H
 
 #include "ultratypes.h"
 #include "os_pfs.h"
