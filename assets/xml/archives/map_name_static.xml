@@ -1,22 +1,22 @@
 <Root>
     <!-- Map Point Names. Must be ia4 128x16 and ordered following both `RegionId` for regions and `ItemId` for owl warps starting from `ITEM_REGION_GREAT_BAY` -->
     <File Name="map_name_static.unarchive">
-        <Texture Name="gGreatBayPointNameENGTex" OutName="great_bay_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x0" />                <!-- REGION_GREAT_BAY -->
-        <Texture Name="gZoraHallPointNameENGTex" OutName="zora_hall_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x400" />              <!-- REGION_ZORA_HALL -->
-        <Texture Name="gRomaniRanchPointNameENGTex" OutName="romani_ranch_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x800" />        <!-- REGION_ROMANI_RANCH -->
-        <Texture Name="gDekuPalacePointNameENGTex" OutName="deku_palace_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0xC00" />          <!-- REGION_DEKU_PALACE -->
-        <Texture Name="gWoodfallPointNameENGTex" OutName="woodfall_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1000" />              <!-- REGION_WOODFALL,     OWL_WARP_WOODFALL -->
-        <Texture Name="gClockTownPointNameENGTex" OutName="clock_town_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1400" />           <!-- REGION_CLOCK_TOWN,   OWL_WARP_CLOCK_TOWN -->
-        <Texture Name="gSnowheadPointNameENGTex" OutName="snowhead_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1800" />              <!-- REGION_SNOWHEAD,     OWL_WARP_SNOWHEAD -->
-        <Texture Name="gIkanaGraveyardPointNameENGTex" OutName="ikana_graveyard_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x1C00" /> <!-- REGION_IKANA_GRAVEYARD -->
-        <Texture Name="gIkanaCanyonPointNameENGTex" OutName="ikana_canyon_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2000" />       <!-- REGION_IKANA_CANYON, OWL_WARP_IKANA_CANYON -->
-        <Texture Name="gGoronVillagePointNameENGTex" OutName="goron_village_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2400" />     <!-- REGION_GORON_VILLAGE -->
-        <Texture Name="gStoneTowerPointNameENGTex" OutName="stone_tower_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2800" />         <!-- REGION_STONE_TOWER,  OWL_WARP_STONE_TOWER -->
-        <!-- See `ItemId` and `sOwlWarpPauseItems`, uses offsets from 0xA4, defined as `gGreatBayPointNameENGTex`, to get the correct position -->
-        <Texture Name="gGreatBayCoastPointNameENGTex" OutName="great_bay_coast_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x2C00" />    <!-- OWL_WARP_GREAT_BAY_COAST -->
-        <Texture Name="gSouthernSwampPointNameENGTex" OutName="southern_swamp_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3000" />     <!-- OWL_WARP_SOUTHERN_SWAMP -->
-        <Texture Name="gMountainVillagePointNameENGTex" OutName="mountain_village_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3400" /> <!-- OWL_WARP_MOUNTAIN_VILLAGE -->
-        <Texture Name="gMilkRoadPointNameENGTex" OutName="milk_road_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3800" />               <!-- OWL_WARP_MILK_ROAD -->
-        <Texture Name="gZoraCapePointNameENGTex" OutName="zora_cape_point_name_eng" Format="ia4" Width="128" Height="16" Offset="0x3C00" />               <!-- OWL_WARP_ZORA_CAPE -->
+        <Texture Name="gMapPointNameGreatBayENGTex" OutName="map_point_name_great_bay_eng" Format="ia4" Width="128" Height="16" Offset="0x0" />                <!-- REGION_GREAT_BAY -->
+        <Texture Name="gMapPointNameZoraHallENGTex" OutName="map_point_name_zora_hall_eng" Format="ia4" Width="128" Height="16" Offset="0x400" />              <!-- REGION_ZORA_HALL -->
+        <Texture Name="gMapPointNameRomaniRanchENGTex" OutName="map_point_name_romani_ranch_eng" Format="ia4" Width="128" Height="16" Offset="0x800" />        <!-- REGION_ROMANI_RANCH -->
+        <Texture Name="gMapPointNameDekuPalaceENGTex" OutName="map_point_name_deku_palace_eng" Format="ia4" Width="128" Height="16" Offset="0xC00" />          <!-- REGION_DEKU_PALACE -->
+        <Texture Name="gMapPointNameWoodfallENGTex" OutName="map_point_name_woodfall_eng" Format="ia4" Width="128" Height="16" Offset="0x1000" />              <!-- REGION_WOODFALL,     OWL_WARP_WOODFALL -->
+        <Texture Name="gMapPointNameClockTownENGTex" OutName="map_point_name_clock_town_eng" Format="ia4" Width="128" Height="16" Offset="0x1400" />           <!-- REGION_CLOCK_TOWN,   OWL_WARP_CLOCK_TOWN -->
+        <Texture Name="gMapPointNameSnowheadENGTex" OutName="map_point_name_snowhead_eng" Format="ia4" Width="128" Height="16" Offset="0x1800" />              <!-- REGION_SNOWHEAD,     OWL_WARP_SNOWHEAD -->
+        <Texture Name="gMapPointNameIkanaGraveyardENGTex" OutName="map_point_name_ikana_graveyard_eng" Format="ia4" Width="128" Height="16" Offset="0x1C00" /> <!-- REGION_IKANA_GRAVEYARD -->
+        <Texture Name="gMapPointNameIkanaCanyonENGTex" OutName="map_point_name_ikana_canyon_eng" Format="ia4" Width="128" Height="16" Offset="0x2000" />       <!-- REGION_IKANA_CANYON, OWL_WARP_IKANA_CANYON -->
+        <Texture Name="gMapPointNameGoronVillageENGTex" OutName="map_point_name_goron_village_eng" Format="ia4" Width="128" Height="16" Offset="0x2400" />     <!-- REGION_GORON_VILLAGE -->
+        <Texture Name="gMapPointNameStoneTowerENGTex" OutName="map_point_name_stone_tower_eng" Format="ia4" Width="128" Height="16" Offset="0x2800" />         <!-- REGION_STONE_TOWER,  OWL_WARP_STONE_TOWER -->
+        <!-- See `ItemId` and `sOwlWarpPauseItems`, uses offsets from 0xA4, defined as `gGreatBayENGTex`, to get the correct position -->
+        <Texture Name="gMapPointNameGreatBayCoastENGTex" OutName="map_point_name_great_bay_coast_eng" Format="ia4" Width="128" Height="16" Offset="0x2C00" />    <!-- OWL_WARP_GREAT_BAY_COAST -->
+        <Texture Name="gMapPointNameSouthernSwampENGTex" OutName="map_point_name_southern_swamp_eng" Format="ia4" Width="128" Height="16" Offset="0x3000" />     <!-- OWL_WARP_SOUTHERN_SWAMP -->
+        <Texture Name="gMapPointNameMountainVillageENGTex" OutName="map_point_name_mountain_village_eng" Format="ia4" Width="128" Height="16" Offset="0x3400" /> <!-- OWL_WARP_MOUNTAIN_VILLAGE -->
+        <Texture Name="gMapPointNameMilkRoadENGTex" OutName="map_point_name_milk_road_eng" Format="ia4" Width="128" Height="16" Offset="0x3800" />               <!-- OWL_WARP_MILK_ROAD -->
+        <Texture Name="gMapPointNameZoraCapeENGTex" OutName="map_point_name_zora_cape_eng" Format="ia4" Width="128" Height="16" Offset="0x3C00" />               <!-- OWL_WARP_ZORA_CAPE -->
     </File>
 </Root>

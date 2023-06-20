@@ -252,7 +252,7 @@ void Kaleido_LoadMapNameStatic(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
 }
 
-//! note: nothing from `map_name_static` is of size `0xA00`
+//! note: nothing from `map_name_static` is of size `0xA00` in US 1.0
 void Kaleido_LoadMapNameStaticLarge(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
 }
