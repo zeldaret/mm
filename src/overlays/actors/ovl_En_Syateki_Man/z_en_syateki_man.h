@@ -41,7 +41,7 @@ typedef struct EnSyatekiMan {
     /* 0x188 */ EnSyatekiManActionFunc actionFunc;
     /* 0x18C */ Path* path;
     /* 0x190 */ s32 octorokFlags;
-    /* 0x194 */ s32 swampTargetActorListIndex; // used but never initialized, so the value is implicitly always 0
+    /* 0x194 */ s32 swampTargetActorListIndex;
     /* 0x198 */ Vec3s jointTable[BURLY_GUY_LIMB_MAX];
     /* 0x1F8 */ Vec3s morphTable[BURLY_GUY_LIMB_MAX];
     /* 0x258 */ Vec3s headRot;
