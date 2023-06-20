@@ -628,13 +628,28 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
 
     // frontPointsCrossProduct is positive if the dog is to the left of the line formed by the front points
     // crossProductTemp is positive if the dog is above the line formed by the bottom points
+    // This is checking that the dog within the region defined by front and bottom lines like so:
+    //         |
+    //    X    | Front
+    //         |
+    // --------
+    //  Bottom
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
+    //! @bug If any dog is precisely (with floating-point precision) on top of the line formed by the front points,
+    //! then frontPointsCrossProduct will be zero. This will cause this multiplication (and all future multiplications)
+    //! to be zero, which will make this function think the dog has crossed the finish line. The line formed by the
+    //! front points extends throughout the entire racetrack, so a dog can trigger this when they're not even close to
+    //! the actual finish line, causing them to finish the race incredibly early.
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
         return false;
     }
 
     // crossProductTemp is positive if the dog is to the right of the line formed by the back points
+    // This is checking that the dog within the region defined by front and back lines like so:
+    //       |       |
+    //  Back |   X   | Front
+    //       |       |
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = ((xDistToBottomBack * zDistToTopBack) - (xDistToTopBack * zDistToBottomBack));
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
@@ -642,6 +657,12 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     }
 
     // crossProductTemp is positive if the dog is below the line formed by the top points
+    // This is checking that the dog within the region defined by front and top lines like so:
+    //   Top
+    // --------
+    //         |
+    //    X    | Front
+    //         |
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = ((xDistToTopBack * zDistToTopFront) - (xDistToTopFront * zDistToTopBack));
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {

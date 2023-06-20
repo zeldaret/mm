@@ -142,11 +142,4 @@ typedef struct {
     /* 0xC */ u32* text_end;
 } OSProf; // size = 0x10
 
-typedef struct {
-    /* 0x0 */ OSMesgQueue* mq;
-    /* 0x4 */ s32 port; /* Controller port */
-    /* 0x8 */ s32 mode;
-    /* 0xC */ u8 status;
-} OSVoiceHandle; // size = 0x10
-
 #endif
