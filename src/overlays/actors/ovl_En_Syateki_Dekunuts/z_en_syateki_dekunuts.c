@@ -125,7 +125,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
         path = &play->setupPathList[path->additionalPathIndex];
     }
 
-    for (i = 0; i < SG_DEKU_GET_ADDITIONAL_PATH_LINKED_INDEX(&this->actor); i++) {
+    for (i = 0; i < SG_DEKU_GET_ADDITIONAL_PATH_INDEX_LIMIT(&this->actor); i++) {
         path = &play->setupPathList[path->additionalPathIndex];
     }
 
