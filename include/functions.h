@@ -802,8 +802,6 @@ void GetItem_Draw(PlayState* play, s16 drawId);
 
 u16 QuestHint_GetTatlTextId(PlayState* play);
 
-u16 Text_GetFaceReaction(PlayState* play, u32 reactionSet);
-
 void func_800F4A10(PlayState* play);
 void KaleidoSetup_Update(PlayState* play);
 void KaleidoSetup_Init(PlayState* play);
