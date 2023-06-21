@@ -441,12 +441,12 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
         this->tailCollider.base.acFlags &= ~AC_HIT;
         this->headCollider.base.acFlags &= ~AC_HIT;
 
-        // The Wolfos always starts with 2 health, so the subtraction below is guaranteed to kill it;
-        // the else-block is never reached in practice. If you *could* damage the Wolfos without killing
-        // it, then the number "30" would appear every time you hit it, and the player's displayed score
-        // would increase by 30. However, the else-block doesn't increase the shooting gallery man's
-        // "score" variable, so it would become desynchronized from the displayed score. This could cause
-        // weird behavior, like not getting a free replay after finishing a game with 2000 or more points.
+        //! @bug: The Wolfos always starts with 2 health, so the subtraction below is guaranteed to kill it;
+        //! the else-block is never reached in practice. If you *could* damage the Wolfos without killing
+        //! it, then the number "30" would appear every time you hit it, and the player's displayed score
+        //! would increase by 30. However, the else-block doesn't increase the shooting gallery man's
+        //! "score" variable, so it would become desynchronized from the displayed score. This could cause
+        //! weird behavior, like not getting a free replay after finishing a game with 2000 or more points.
         this->actor.colChkInfo.health -= 2;
         if (this->actor.colChkInfo.health == 0) {
             Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
