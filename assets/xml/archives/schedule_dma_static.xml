@@ -20,8 +20,8 @@
         <Texture Name="gBombersNotebookPhotoShiroTex" OutName="bombers_notebook_photo_shiro" Format="rgba16" Width="32" Height="32" Offset="0x8800" />
         <Texture Name="gBombersNotebookPhotoGuruGuruTex" OutName="bombers_notebook_photo_guru_guru" Format="rgba16" Width="32" Height="32" Offset="0x9000" />
         <Texture Name="gBombersNotebookPhotoBombersTex" OutName="bombers_notebook_photo_bombers" Format="rgba16" Width="32" Height="32" Offset="0x9800" />
-        <Texture Name="gBombersNotebookPhotoMadameAromaUnusedTex" OutName="bombers_notebook_photo_madame_aroma_unused" Format="rgba16" Width="32" Height="32" Offset="0xA000" />
-        <Texture Name="gBombersNotebookEntryIconExclamationPointUnusedTex" OutName="bombers_notebook_entry_icon_exclamation_point_unused" Format="ia8" Width="32" Height="32" Offset="0xA800" />
+        <Texture Name="gBombersNotebookPhotoMadameAromaBrightTex" OutName="bombers_notebook_photo_madame_aroma_bright" Format="rgba16" Width="32" Height="32" Offset="0xA000" /> <!-- Unused, slightly different to the used one -->
+        <Texture Name="gBombersNotebookEntryIconExclamationPointLargeTex" OutName="bombers_notebook_entry_icon_exclamation_point_ia8" Format="ia8" Width="32" Height="32" Offset="0xA800" /> <!-- Unused -->
         <Texture Name="gBombersNotebookEntryIconMaskTex" OutName="bombers_notebook_entry_icon_mask" Format="ia8" Width="24" Height="28" Offset="0xAC00" />
         <Texture Name="gBombersNotebookEntryIconRibbonTex" OutName="bombers_notebook_entry_icon_ribbon" Format="ia8" Width="32" Height="28" Offset="0xAEA0" />
     </File>
