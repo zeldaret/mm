@@ -452,7 +452,7 @@ void EnSyatekiWf_Update(Actor* thisx, PlayState* play2) {
             Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             EnSyatekiWf_SetupDead(this, play);
         } else {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 3, EXTRA_SCORE_INDEX_30);
         }
     }

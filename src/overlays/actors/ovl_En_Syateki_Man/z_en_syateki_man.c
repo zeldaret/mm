@@ -341,13 +341,13 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
             if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
 
                 // You don't have a bow!
                 Message_StartTextbox(play, 0xA30, &this->actor);
                 this->prevTextId = 0xA30;
             } else if (gSaveContext.save.saveInfo.playerData.rupees < 20) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
 
                 // You don't have enough rupees!
                 Message_StartTextbox(play, 0xA31, &this->actor);
@@ -358,7 +358,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
 
                 this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
             } else {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(-20);
                 SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
@@ -369,7 +369,7 @@ void EnSyatekiMan_Swamp_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 this->actionFunc = EnSyatekiMan_Swamp_MovePlayerAndExplainRules;
             }
         } else {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
 
             switch (CURRENT_DAY) {
                 case 1:
@@ -636,7 +636,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) {
             if (CUR_UPG_VALUE(UPG_QUIVER) == 0) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
                     // You don't have a bow? Then you can't play.
                     Message_StartTextbox(play, 0x3F9, &this->actor);
@@ -647,7 +647,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                     this->prevTextId = 0x3FA;
                 }
             } else if (gSaveContext.save.saveInfo.playerData.rupees < 20) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 if (CURRENT_DAY != 3) {
                     // You don't have a enough rupees!
                     Message_StartTextbox(play, 0x3FB, &this->actor);
@@ -665,7 +665,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
 
                 this->shootingGameState = SG_GAME_STATE_NOT_PLAYING;
             } else {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(-20);
                 this->shootingGameState = SG_GAME_STATE_EXPLAINING_RULES;
                 if (!(this->talkFlags & TALK_FLAG_TOWN_HAS_EXPLAINED_THE_RULES)) {
@@ -683,7 +683,7 @@ void EnSyatekiMan_Town_HandleChoice(EnSyatekiMan* this, PlayState* play) {
                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
             }
         } else {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             if (CURRENT_DAY != 3) {
                 // Well, be that way!
                 Message_StartTextbox(play, 0x3F7, &this->actor);

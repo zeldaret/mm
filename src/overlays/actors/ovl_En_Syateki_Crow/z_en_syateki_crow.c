@@ -259,7 +259,7 @@ static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
 void EnSyatekiCrow_UpdateDamage(EnSyatekiCrow* this, PlayState* play) {
     if (this->actionFunc == EnSyatekiCrow_Fly) {
         if (this->collider.base.acFlags & AC_HIT) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             this->deathTimer = 0;
             this->collider.base.acFlags &= ~AC_HIT;
             EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_60);

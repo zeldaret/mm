@@ -430,7 +430,7 @@ void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play) {
             if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
                 Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             }
 
             this->collider.base.acFlags &= ~AC_HIT;

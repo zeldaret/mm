@@ -709,7 +709,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
         this->animLoopCounter = 5;
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BOMCHU_RUN - SFX_FLAG);
     EnRat_UpdateSparkOffsets(this);
 }
 

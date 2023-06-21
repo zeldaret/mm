@@ -2250,7 +2250,7 @@
     0x801D66A0:("sEnterGanonsTowerTimer","UNK_TYPE1","",0x1),
     0x801D66A4:("sSfxVolumeDuration","UNK_TYPE2","",0x2),
     0x801D66A8:("sSoundMode","UNK_TYPE1","",0x1),
-    0x801D66AC:("sAudioIsWindowOpen","UNK_TYPE1","",0x1),
+    0x801D66AC:("sAudioPauseMenuOpenOrClose","UNK_TYPE1","",0x1),
     0x801D66B0:("sAudioCutsceneFlag","UNK_TYPE1","",0x1),
     0x801D66B4:("sSpecReverb","UNK_TYPE1","",0x1),
     0x801D66B8:("sAudioEnvReverb","UNK_TYPE1","",0x1),
