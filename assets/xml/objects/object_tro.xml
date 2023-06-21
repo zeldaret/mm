@@ -12,7 +12,7 @@
         <Texture Name="gKioskKoumeEyeOpenTex" OutName="kiosk_koume_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x1140"/>
         <Texture Name="gKioskKoumeEyeHalfTex" OutName="kiosk_koume_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x1940"/>
         <Texture Name="gKioskKoumeEyeClosedTex" OutName="kiosk_koume_eye_closed" Format="rgba16" Width="32" Height="32" Offset="0x2140"/>
-        <Limb Name="gKioskKoumeLimb" Type="Standard" EnumName="KIOSK_KOUME_LIMB_1" Offset="0x2940" />
+        <Limb Name="gKioskKoumeHeadLimb" Type="Standard" EnumName="KIOSK_KOUME_LIMB_HEAD" Offset="0x2940" />
         <Skeleton Name="gKioskKoumeSkeleton" Type="Normal" LimbType="Standard" LimbNone="KIOSK_KOUME_LIMB_NONE" LimbMax="KIOSK_KOUME_LIMB_MAX" EnumName="KioskKoumeLimb" Offset="0x2950" />
     </File>
 </Root>
