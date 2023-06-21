@@ -183,7 +183,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_20)) {
                     Actor_Kill(&this->actor);
                     return;
@@ -276,7 +276,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED)) {
+    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
         this->actor.textId = 0x25B;
     } else if (func_80BA1C00(this) && (player->actor.speed > 1.0f)) {
         player->tatlTextId = -this->actor.textId;

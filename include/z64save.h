@@ -607,7 +607,7 @@ typedef enum {
 // exterior gear is spawned after midnight on the Final Day. Thus, it is possible for this to be
 // unset, even if the player is in the Final Hours, if they did not watch the cutscene and haven't
 // been to an area where the Clock Tower is spawned.
-#define WEEKEVENTREG_CLOCK_TOWER_IS_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
+#define WEEKEVENTREG_CLOCK_TOWER_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
 
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)

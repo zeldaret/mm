@@ -56,7 +56,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
     switch (TIMETAG_GET_TYPE(&this->actor)) {
         case TIMETAG_KICKOUT_FINAL_HOURS:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED) || (CURRENT_DAY != 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED) || (CURRENT_DAY != 3)) {
                 Actor_Kill(&this->actor);
                 return;
             }
