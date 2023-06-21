@@ -3486,7 +3486,7 @@ asm/non_matchings/code/code_8019AF00/func_801A3950.s,func_801A3950,0x801A3950,0x
 asm/non_matchings/code/code_8019AF00/func_801A39F8.s,func_801A39F8,0x801A39F8,0x21
 asm/non_matchings/code/code_8019AF00/func_801A3A7C.s,func_801A3A7C,0x801A3A7C,0x11
 asm/non_matchings/code/code_8019AF00/func_801A3AC0.s,func_801A3AC0,0x801A3AC0,0xB
-asm/non_matchings/code/code_8019AF00/Audio_PlaySfx_Window.s,Audio_PlaySfx_Window,0x801A3AEC,0x17
+asm/non_matchings/code/code_8019AF00/Audio_PlaySfx_PauseMenuOpenOrClose.s,Audio_PlaySfx_PauseMenuOpenOrClose,0x801A3AEC,0x17
 asm/non_matchings/code/code_8019AF00/func_801A3B48.s,func_801A3B48,0x801A3B48,0x12
 asm/non_matchings/code/code_8019AF00/func_801A3B90.s,func_801A3B90,0x801A3B90,0x52
 asm/non_matchings/code/code_8019AF00/func_801A3CD8.s,func_801A3CD8,0x801A3CD8,0x7
@@ -3498,7 +3498,7 @@ asm/non_matchings/code/code_8019AF00/func_801A3EC0.s,func_801A3EC0,0x801A3EC0,0x
 asm/non_matchings/code/code_8019AF00/Audio_SetCutsceneFlag.s,Audio_SetCutsceneFlag,0x801A3F54,0x6
 asm/non_matchings/code/code_8019AF00/Audio_PlaySfx_IfNotInCutsceneImpl.s,Audio_PlaySfx_IfNotInCutsceneImpl,0x801A3F6C,0x12
 asm/non_matchings/code/code_8019AF00/Audio_PlaySfx_IfNotInCutscene.s,Audio_PlaySfx_IfNotInCutscene,0x801A3FB4,0x12
-asm/non_matchings/code/code_8019AF00/Audio_MuteSfxAndAmbienceSeqExceptOcaAndSys.s,Audio_MuteSfxAndAmbienceSeqExceptOcaAndSys,0x801A3FFC,0x4
+asm/non_matchings/code/code_8019AF00/Audio_MuteSfxAndAmbienceSeqExceptOcarinaAndSystem.s,Audio_MuteSfxAndAmbienceSeqExceptOcarinaAndSystem,0x801A3FFC,0x4
 asm/non_matchings/code/code_8019AF00/Audio_SetSpec.s,Audio_SetSpec,0x801A400C,0x13
 asm/non_matchings/code/code_8019AF00/func_801A4058.s,func_801A4058,0x801A4058,0x5C
 asm/non_matchings/code/code_8019AF00/func_801A41C8.s,func_801A41C8,0x801A41C8,0xC

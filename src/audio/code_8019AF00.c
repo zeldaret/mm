@@ -210,7 +210,7 @@ u16 sSfxVolumeDuration = 0;
 
 // System Data
 s8 sSoundMode = SOUNDMODE_STEREO;
-s8 sAudioIsWindowOpen = false;
+s8 sAudioPauseMenuOpenOrClose = SFX_PAUSE_MENU_CLOSE;
 s8 sAudioCutsceneFlag = false;
 s8 sSpecReverb = 0;
 s8 sAudioEnvReverb = 0;
@@ -4678,7 +4678,7 @@ void Audio_UpdateRiverSoundVolumes(void) {
             sRiverSoundMainBgmRestore = true;
         }
         sRiverSoundMainBgmLower = false;
-    } else if ((sRiverSoundMainBgmRestore == true) && !sAudioIsWindowOpen) {
+    } else if ((sRiverSoundMainBgmRestore == true) && (sAudioPauseMenuOpenOrClose == SFX_PAUSE_MENU_CLOSE)) {
         // restores the volume every frame
         AudioSeq_SetVolumeScale(SEQ_PLAYER_BGM_MAIN, VOL_SCALE_INDEX_BGM_MAIN, 0x7F, 10);
         sRiverSoundMainBgmCurrentVol = 0x7F;
@@ -5324,9 +5324,9 @@ void Audio_UpdateEnemyBgmVolume(f32 dist) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/func_801A3AC0.s")
 
-void Audio_PlaySfx_Window(u8 windowToggleDirection) {
-    sAudioIsWindowOpen = windowToggleDirection;
-    if (windowToggleDirection) {
+void Audio_PlaySfx_PauseMenuOpenOrClose(u8 pauseMenuOpenOrClose) {
+    sAudioPauseMenuOpenOrClose = pauseMenuOpenOrClose;
+    if (pauseMenuOpenOrClose != SFX_PAUSE_MENU_CLOSE) {
         Audio_PlaySfx(NA_SE_SY_WIN_OPEN);
         AUDIOCMD_GLOBAL_MUTE(AUDIOCMD_ALL_SEQPLAYERS);
     } else {
@@ -5379,8 +5379,8 @@ void Audio_PlaySfx_IfNotInCutscene(u16 sfxId) {
 }
 
 // Unused
-void Audio_MuteSfxAndAmbienceSeqExceptOcaAndSys(u8 arg0) {
-    sMuteOnlySfxAndAmbienceSeq = arg0;
+void Audio_MuteSfxAndAmbienceSeqExceptOcarinaAndSystem(u8 muteOnlySfxAndAmbienceSeq) {
+    sMuteOnlySfxAndAmbienceSeq = muteOnlySfxAndAmbienceSeq;
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/code_8019AF00/Audio_SetSpec.s")

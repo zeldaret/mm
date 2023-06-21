@@ -2356,6 +2356,11 @@ typedef enum {
 #undef DEFINE_SFX
 */
 
+typedef enum SfxPauseMenu {
+    /* 0 */ SFX_PAUSE_MENU_CLOSE,
+    /* 1 */ SFX_PAUSE_MENU_OPEN
+} SfxPauseMenu;
+
 // Various wrappers to AudioSfx_PlaySfx
 void Audio_PlaySfx(u16 sfxId);
 void Audio_PlaySfx_2(u16 sfxId);
@@ -2380,7 +2385,7 @@ void Audio_PlaySfx_River(Vec3f* pos, f32 freqScale);
 void Audio_PlaySfx_BigBells(Vec3f* pos, u8 volumeIndex);
 void Audio_PlaySfx_AtPosWithChannelIO(Vec3f* pos, u16 sfxId, u8 ioData);
 void Audio_PlaySfx_AtPosWithAllChannelsIO(Vec3f* pos, u16 sfxId, u8 ioData);
-void Audio_PlaySfx_Window(u8 windowToggleDirection);
+void Audio_PlaySfx_PauseMenuOpenOrClose(u8 pauseMenuOpenOrClose);
 void Audio_PlaySfx_IfNotInCutscene(u16 sfxId);
 void Audio_PlaySfx_AtFixedPos(Vec3f* pos, u16 sfxId);
 void Audio_PlaySfx_AtPosWithVolumeTransition(Vec3f* pos, u16 sfxId, u16 duration);

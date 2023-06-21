@@ -241,7 +241,7 @@ wordReplace = {
     "func_801A0124": "Audio_PlaySfx_BigBells",
     "func_801A0810": "Audio_PlaySfx_AtPosWithAllChannelsIO",
     "func_801A0868": "Audio_PlaySfx_AtPosWithChannelIO",
-    "func_801A3AEC": "Audio_PlaySfx_Window",
+    "func_801A3AEC": "Audio_PlaySfx_PauseMenuOpenOrClose",
     "func_801A3FB4": "Audio_PlaySfx_IfNotInCutscene",
     "func_801A4748": "Audio_PlaySfx_AtFixedPos",
     "func_801A479C": "Audio_PlaySfx_AtPosWithVolumeTransition",
