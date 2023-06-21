@@ -28,9 +28,9 @@ s32 gLoadLogSeverity = 2;
  * Performs runtime relocation of overlay files, loadable code segments.
  *
  * Overlays are expected to be loadable anywhere in direct-mapped cached (KSEG0) memory, with some appropriate
- * alignment requirements; memory addresses in such code must be updated once loaded in order to execute properly.
+ * alignment requirements; memory addresses in such code must be updated once loaded to execute properly.
  * When compiled, overlays are given 'fake' KSEG0 RAM addresses larger than the total possible available main memory
- * (>= 0x80800000), such addresses are referred to as Virtual RAM (VRAM) to distinguish them. When loading the overlay
+ * (>= 0x80800000), such addresses are referred to as Virtual RAM (VRAM) to distinguish them. When loading the overlay,
  * the relocation table produced at compile time is consulted to determine where and how to update these VRAM addresses
  * to correct RAM addresses based on the location the overlay was loaded at, enabling the code to execute at this
  * address as if it were compiled to run at this address.
