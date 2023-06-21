@@ -602,7 +602,13 @@ typedef enum {
 #define WEEKEVENTREG_08_08 PACK_WEEKEVENTREG_FLAG(8, 0x08)
 #define WEEKEVENTREG_08_10 PACK_WEEKEVENTREG_FLAG(8, 0x10)
 #define WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE PACK_WEEKEVENTREG_FLAG(8, 0x20)
+
+// Set at the start and end of the Clock Tower opening cutscene as well as when the Clock Tower's
+// exterior gear is spawned after midnight on the Final Day. Thus, it is possible for this to be
+// unset, even if the player is in the Final Hours, if they did not watch the cutscene and haven't
+// been to an area where the Clock Tower is spawned.
 #define WEEKEVENTREG_CLOCK_TOWER_IS_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
+
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
 #define WEEKEVENTREG_09_02 PACK_WEEKEVENTREG_FLAG(9, 0x02)
