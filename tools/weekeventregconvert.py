@@ -74,7 +74,7 @@ weekEventReg = {
     ( 8 << 8) | 0x08: "WEEKEVENTREG_08_08",
     ( 8 << 8) | 0x10: "WEEKEVENTREG_08_10",
     ( 8 << 8) | 0x20: "WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE",
-    ( 8 << 8) | 0x40: "WEEKEVENTREG_08_40",
+    ( 8 << 8) | 0x40: "WEEKEVENTREG_CLOCK_TOWER_IS_OPENED",
     ( 8 << 8) | 0x80: "WEEKEVENTREG_08_80",
     ( 9 << 8) | 0x01: "WEEKEVENTREG_09_01",
     ( 9 << 8) | 0x02: "WEEKEVENTREG_09_02",

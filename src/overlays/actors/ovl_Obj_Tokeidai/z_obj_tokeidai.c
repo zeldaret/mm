@@ -128,7 +128,7 @@ void ObjTokeidai_ExteriorGear_Init(ObjTokeidai* this, PlayState* play) {
         this->actionFunc = ObjTokeidai_ExteriorGear_OpenedIdle;
         this->actor.world.pos.y += this->actor.scale.y * 1900.0f;
         this->actor.shape.yOffset = 1500.0f;
-        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED);
     } else {
         this->actionFunc = ObjTokeidai_ExteriorGear_Idle;
     }
@@ -444,7 +444,7 @@ void ObjTokeidai_TerminaFieldWalls_Idle(ObjTokeidai* this, PlayState* play) {
 void ObjTokeidai_TowerOpening_EndCutscene(ObjTokeidai* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 5)) {
-        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED);
         if (((play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0)) ||
             ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 2) && (play->csCtx.scriptIndex == 0))) {
             Audio_SetCutsceneFlag(false);
@@ -593,7 +593,7 @@ void ObjTokeidai_TowerOpening_RaiseTower(ObjTokeidai* this, PlayState* play) {
 void ObjTokeidai_TowerOpening_Start(ObjTokeidai* this, PlayState* play) {
     if ((Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_132) &&
          (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_132)]->id == 4)) ||
-        CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED)) {
         this->actionFunc = ObjTokeidai_TowerOpening_RaiseTower;
     }
 }
@@ -616,7 +616,7 @@ void ObjTokeidai_DoNothing(ObjTokeidai* this, PlayState* play) {
 
 void ObjTokeidai_StaircaseToRooftop_Idle(ObjTokeidai* this, PlayState* play) {
     if ((((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) || (CURRENT_DAY >= 4)) ||
-        CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED)) {
         this->actor.draw = ObjTokeidai_Draw;
     } else {
         this->actor.draw = NULL;
@@ -691,7 +691,7 @@ void ObjTokeidai_TowerClock_Idle(ObjTokeidai* this, PlayState* play) {
     if ((CURRENT_DAY == 3) && (this->clockHour < 6) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
         this->actor.draw = ObjTokeidai_Clock_Draw;
         ObjTokeidai_SetupTowerOpening(this);
-        SET_WEEKEVENTREG(WEEKEVENTREG_08_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED);
         return;
     }
 

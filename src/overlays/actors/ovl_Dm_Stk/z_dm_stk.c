@@ -1173,7 +1173,7 @@ void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
 
     if (gSaveContext.save.day < 3) {
         csId = dayOneAndTwoCsId;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) ||
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_IS_OPENED) ||
                ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
         csId = finalHoursCsId;
     } else {
