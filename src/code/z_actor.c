@@ -1867,6 +1867,11 @@ s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
     return distSq < gTargetRanges[actor->targetMode].rangeSq;
 }
 
+/**
+ * Returns true if the actor is inside the leash distance to player.
+ *
+ * Passing true to ignoreLeash avoids the distance and yaw checks.
+ */
 s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
     if ((actor->update == NULL) || !(actor->flags & ACTOR_FLAG_TARGETABLE) ||
         (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
