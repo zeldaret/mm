@@ -607,7 +607,7 @@ void func_809334B8(EnFz* this, PlayState* play) {
     if (this->unk_BCA > 10) {
         sp3F = 0;
         sp3C = 150;
-        func_800B9010(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
         if ((this->unk_BCA - 10) < 16) {
             sp3C = (this->unk_BCA * 10) - 100;
         }
@@ -723,7 +723,7 @@ void func_809338E0(EnFz* this, PlayState* play) {
 
     sp3F = 0;
     sp3C = 150;
-    func_800B9010(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
     if ((this->unk_BC6 & 0x3F) >= 0x30) {
         sp3C = 630 - ((this->unk_BC6 & 0x3F) * 10);

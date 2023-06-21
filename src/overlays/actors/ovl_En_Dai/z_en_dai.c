@@ -422,7 +422,7 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
         func_80B3E96C(this, play);
         this->unk_A6C = 0;
     } else if (this->unk_A6C == 0) {
-        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+        Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         this->unk_A6C = 1;
     }
 }

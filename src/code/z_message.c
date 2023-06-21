@@ -93,13 +93,13 @@ s32 Message_ShouldAdvance(PlayState* play) {
 
     if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
-            play_sound(NA_SE_SY_MESSAGE_PASS);
+            Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
             CHECK_BTN_ALL(controller->press.button, BTN_CUP)) {
-            play_sound(NA_SE_SY_MESSAGE_PASS);
+            Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
         return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
                CHECK_BTN_ALL(controller->press.button, BTN_CUP);
@@ -125,7 +125,7 @@ void Message_CloseTextbox(PlayState* play) {
         msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
-        play_sound(NA_SE_NONE);
+        Audio_PlaySfx(NA_SE_NONE);
     }
 }
 
@@ -147,7 +147,7 @@ void func_80148B98(PlayState* play, u8 arg1) {
         if (msgCtx->choiceIndex > 128) {
             msgCtx->choiceIndex = 0;
         } else {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
         return;
     } else if ((curInput->rel.stick_y < -29) && held == 0) {
@@ -156,7 +156,7 @@ void func_80148B98(PlayState* play, u8 arg1) {
         if (msgCtx->choiceIndex > arg1) {
             msgCtx->choiceIndex = arg1;
         } else {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
         return;
     } else {
@@ -422,7 +422,7 @@ u32 func_80151C9C(PlayState* play) {
                 Message_ContinueTextbox(
                     play, sBombersNotebookEventMessages
                               [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]]);
-                play_sound(NA_SE_SY_SCHEDULE_WRITE);
+                Audio_PlaySfx(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
         }

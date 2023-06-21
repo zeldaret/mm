@@ -449,13 +449,13 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
 void EnMaYto_DefaultHandlePlayerChoice(EnMaYto* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Yes
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             EnMaYto_SetFaceExpression(this, 0, 3);
             // "Milk Road is fixed!"
             Message_StartTextbox(play, 0x3392, &this->actor);
             this->textId = 0x3392;
         } else { // No
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             // "Don't lie!"
             Message_StartTextbox(play, 0x3391, &this->actor);
             this->textId = 0x3391;
@@ -577,13 +577,13 @@ void EnMaYto_DinnerDialogueHandler(EnMaYto* this, PlayState* play) {
 void EnMaYto_DinnerHandlePlayerChoice(EnMaYto* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Yes
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             EnMaYto_SetFaceExpression(this, 0, 3);
             // "Milk Road is fixed!"
             Message_StartTextbox(play, 0x3399, &this->actor);
             this->textId = 0x3399;
         } else { // No
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             // "Don't lie!"
             Message_StartTextbox(play, 0x3398, &this->actor);
             this->textId = 0x3398;

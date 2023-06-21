@@ -496,11 +496,11 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->textId = 0x3524; // You can't play if you can't pay!
                         Message_StartTextbox(play, this->textId, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->stateFlags |= ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG;
                         this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
                         this->textId = 0x3522; // Bring me the fastest dog!
@@ -510,7 +510,7 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->textId = 0x3535; // Really?
                     Message_StartTextbox(play, this->textId, &this->actor);
                     break;
@@ -655,13 +655,13 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
             this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->stateFlags |= ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                     EnAob01_BeforeRace_HandleConversation(this, play);
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnAob01_BeforeRace_HandleConversation(this, play);
                     break;
             }

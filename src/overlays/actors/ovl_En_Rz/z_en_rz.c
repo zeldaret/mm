@@ -362,7 +362,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 cueId;
 
     if ((EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) && (this->animIndex == EN_RZ_ANIM_APPLAUDING)) {
-        func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
 
     if (Cutscene_IsCueInChannel(play, this->cueType)) {

@@ -160,8 +160,8 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
     }
     this->actor.textId = sTextIds[this->textIdIndex];
 
-    if (Text_GetFaceReaction(play, 0x15) != 0) {
-        this->actor.textId = Text_GetFaceReaction(play, 0x15);
+    if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD) != 0) {
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -240,7 +240,7 @@ void func_80C04D8C(EnBombers2* this, PlayState* play) {
                 return;
             }
         }
-        if (Text_GetFaceReaction(play, 0x15) != 0) {
+        if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD) != 0) {
             this->unk_28E = 0;
             Message_CloseTextbox(play);
             func_80C04B40(this);

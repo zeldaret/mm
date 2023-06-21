@@ -239,7 +239,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 1.5f, 0.0f);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-        func_800B8EF4(play, &this->actor);
+        Actor_PlaySfx_SurfaceBomb(play, &this->actor);
         if (this->actor.velocity.y < -6.0f) {
             this->actor.velocity.y *= -0.3f;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;

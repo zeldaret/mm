@@ -1225,9 +1225,9 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, PlayState* play) {
             case 3:
             case 4:
                 if (this->actionFunc == EnRailgibud_SinkIntoGround) {
-                    func_800B9010(&this->actor, NA_SE_EN_REDEAD_WEAKENED_L2 - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_REDEAD_WEAKENED_L2 - SFX_FLAG);
                 } else {
-                    func_800B9010(&this->actor, NA_SE_EN_REDEAD_WEAKENED_L1 - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_REDEAD_WEAKENED_L1 - SFX_FLAG);
                 }
                 break;
 

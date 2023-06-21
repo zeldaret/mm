@@ -90,7 +90,7 @@ void func_80B11F78(EnOnpuman* this, PlayState* play) {
             CutsceneManager_Stop(this->actor.csId);
         }
     } else if (play->msgCtx.ocarinaMode == 3) {
-        play_sound(NA_SE_SY_CORRECT_CHIME);
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
         play->msgCtx.ocarinaMode = 4;
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_Stop(this->actor.csId);

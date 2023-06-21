@@ -433,16 +433,16 @@ void func_80962588(EnFu* this, PlayState* play) {
 
     if (play->msgCtx.choiceIndex == 0) {
         if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             Rupees_ChangeBy(-10);
             func_80963DE4(this, play);
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             Message_StartTextbox(play, 0x2873, &this->actor);
             this->unk_552 = 0x2873;
         }
     } else {
-        func_8019F230();
+        Audio_PlaySfx_MessageCancel();
         Message_StartTextbox(play, 0x2872, &this->actor);
         this->unk_552 = 0x2872;
     }
@@ -645,7 +645,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
         return;
     }
 
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
     if (this->unk_546 == 1) {
@@ -681,7 +681,7 @@ void func_80962BCC(EnFu* this, PlayState* play) {
         return;
     }
 
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= PLAYER_STATE3_400000;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);
@@ -712,7 +712,7 @@ void func_80962D60(EnFu* this, PlayState* play) {
         return;
     }
 
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     player->stateFlags1 &= ~PLAYER_STATE1_20;
     player->stateFlags3 |= PLAYER_STATE3_400000;
     Interface_StartTimer(TIMER_ID_MINIGAME_2, 60);

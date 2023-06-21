@@ -465,7 +465,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MAP]) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
         }
     }
@@ -917,7 +917,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         // Used as cursor vtxIndex
                         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                     }
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     sStickAdjTimer = 0;
                 }
             } else if (pauseCtx->stickAdjX < -30) {
@@ -942,7 +942,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     // Used as cursor vtxIndex
                     pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                 }
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 sStickAdjTimer = 0;
             }
         }
@@ -951,7 +951,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
         }
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_SELECT) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
@@ -985,7 +985,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     }
 }

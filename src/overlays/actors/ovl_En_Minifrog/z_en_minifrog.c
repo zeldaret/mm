@@ -489,12 +489,12 @@ void EnMinifrog_YellowFrogDialog(EnMinifrog* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0: // Yes
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->actionFunc = EnMinifrog_BeginChoirCutscene;
                         play->msgCtx.msgLength = 0;
                         break;
                     case 1: // No
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0xD7E);
                         break;
                 }

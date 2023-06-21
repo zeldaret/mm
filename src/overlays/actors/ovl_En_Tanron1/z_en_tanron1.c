@@ -354,9 +354,9 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
     if (spB4 != NULL) {
         SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, spB4, &this->unk_3360, &spB0);
         if (spB8 >= (s16)(KREG(39) + 20)) {
-            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
+            Audio_PlaySfx_AtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
         } else if (spBA >= 20) {
-            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
+            Audio_PlaySfx_AtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
         }
     }
 }
