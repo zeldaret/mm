@@ -72,7 +72,7 @@ void EnHitTag_WaitForHit(EnHitTag* this, PlayState* play) {
     s32 i;
 
     if (this->collider.base.acFlags & AC_HIT) {
-        play_sound(NA_SE_SY_GET_RUPY);
+        Audio_PlaySfx(NA_SE_SY_GET_RUPY);
         Actor_Kill(&this->actor);
         dropLocation.x = this->actor.world.pos.x;
         dropLocation.y = this->actor.world.pos.y;
