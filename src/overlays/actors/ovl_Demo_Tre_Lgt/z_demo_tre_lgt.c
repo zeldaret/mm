@@ -127,7 +127,7 @@ void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
     if (curFrame > 30.0f) {
         if (!(this->status & 1)) {
             this->status |= 1;
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
         }
     }
     if (SkelCurve_Update(play, &this->skelCurve)) {
