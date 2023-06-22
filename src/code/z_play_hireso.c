@@ -371,8 +371,8 @@ void BombersNotebook_DrawColumns(Gfx** gfxP) {
 
 TexturePtr sBombersNotebookEventIconTextures[] = {
     gBombersNotebookEntryIconExclamationPointTex,
-    schedule_dma_static_yar_Blob_00AC00,
-    schedule_dma_static_yar_Blob_00AEA0,
+    gBombersNotebookEntryIconMaskTex,
+    gBombersNotebookEntryIconRibbonTex,
 };
 s16 sBombersNotebookEntryIconColors[][3] = {
     { 255, 255, 0 },
@@ -550,7 +550,7 @@ void BombersNotebook_DrawEntries(Gfx** gfxP, s32 row, u32 rectTop) {
     *gfxP = gfx;
 }
 
-#define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) &photo,
+#define DEFINE_PERSON(_enum, photo, _description, _metEnum, _metMessage, _metFlag) photo,
 
 TexturePtr sBombersNotebookPhotoTextures[] = {
 #include "tables/bombers_notebook/person_table.h"
@@ -1223,13 +1223,13 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                             while (true) {
                                 cursorEntryScan -= BOMBERS_NOTEBOOK_ENTRY_SIZE;
                                 if (cursorEntryScan == 0) {
-                                    play_sound(NA_SE_SY_ERROR);
+                                    Audio_PlaySfx(NA_SE_SY_ERROR);
                                     break;
                                 }
                                 if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
                                         this->cursorPageRow + this->cursorPage,
                                         cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE)])) {
-                                    play_sound(NA_SE_SY_ERROR);
+                                    Audio_PlaySfx(NA_SE_SY_ERROR);
                                     break;
                                 }
                             }
@@ -1238,7 +1238,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                         if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
                                 this->cursorPageRow + this->cursorPage,
                                 cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE)])) {
-                            play_sound(NA_SE_SY_CURSOR);
+                            Audio_PlaySfx(NA_SE_SY_CURSOR);
                             break;
                         }
                     }
@@ -1250,7 +1250,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                             if (CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_ENTRY_GET_EVENT(
                                     this->cursorPageRow + this->cursorPage,
                                     cursorEntryScan - BOMBERS_NOTEBOOK_ENTRY_SIZE)])) {
-                                play_sound(NA_SE_SY_CURSOR);
+                                Audio_PlaySfx(NA_SE_SY_CURSOR);
                                 break;
                             }
                         } while (cursorEntryScan != 0);
@@ -1276,7 +1276,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
 
             if (stickAdjY < -30) {
                 if (this->cursorPageRow < 3) {
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     this->cursorEntry = 0;
                     this->cursorPageRow++;
                 } else if (this->cursorPage < (BOMBERS_NOTEBOOK_PERSON_MAX - 4)) {
@@ -1290,11 +1290,11 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
                 }
             } else if (stickAdjY > 30) {
                 if (this->cursorPageRow > 0) {
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     this->cursorEntry = 0;
                     this->cursorPageRow--;
                 } else if (this->cursorPage != 0) {
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     this->cursorPage--;
                     if (sStickYRepeatState == 1) {
                         this->scrollAmount = 24;
@@ -1308,7 +1308,7 @@ void BombersNotebook_Update(PlayState* play, BombersNotebook* this, Input* input
         } else if (this->scrollAmount < 0) {
             this->scrollOffset += this->scrollAmount;
             if (ABS_ALT(this->scrollOffset) >= 48) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 this->scrollOffset = 0;
                 this->scrollAmount = 0;
                 this->cursorPage++;

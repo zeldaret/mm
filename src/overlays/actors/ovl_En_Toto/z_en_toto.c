@@ -423,9 +423,9 @@ s32 func_80BA4128(EnToto* this, PlayState* play) {
 s32 func_80BA415C(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
         } else {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
         }
         return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1;
     }
