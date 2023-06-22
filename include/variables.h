@@ -366,7 +366,7 @@ extern UNK_PTR D_801AE260[3];
 // extern UNK_TYPE1 D_801AE48C;
 // extern UNK_TYPE1 D_801AE490;
 extern EffectSsOverlay gParticleOverlayTable[39];
-// extern FlagSetEntry sFlagEntries[];
+
 // extern s32 sEntryIndex;
 // extern u32 sCurrentBit;
 // extern s32 sTimer;
@@ -376,36 +376,6 @@ extern ActorId gMaxActorId;
 extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
 // extern UNK_TYPE1 D_801B4708;
-
-extern DamageTable sDamageTablePresets[23];
-extern f32 damageMultipliers[16];
-extern Collider defaultCollider;
-extern ColliderTouch defaultColliderTouch;
-extern ColliderBump defaultColliderBump;
-extern ColliderInfo defaultColliderInfo;
-extern ColliderJntSphElementDim defaultColliderJntSphElementDim;
-extern Cylinder16 defaultColliderCylinderDim;
-extern TriNorm defaultColliderTrisElementDim;
-extern ColliderQuadDim defaultColliderQuadDim;
-extern Vec3f defaultLinePoint;
-extern ColChkResetFunc sATResetFuncs[COLSHAPE_MAX];
-extern ColChkResetFunc sACResetFuncs[COLSHAPE_MAX];
-extern ColChkResetFunc sOCResetFuncs[COLSHAPE_MAX];
-extern ColChkBloodFunc sBloodFuncs[6];
-extern HitInfo sHitInfo[14];
-extern ColChkApplyFunc sColChkApplyFuncs[COLSHAPE_MAX];
-extern ColChkVsFunc sACVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX];
-extern ColChkVsFunc sOCVsFuncs[COLSHAPE_MAX][COLSHAPE_MAX];
-extern CollisionCheckInfo defaultColChkInfo;
-extern ColChkApplyFunc sApplyDamageFuncs[COLSHAPE_MAX];
-extern ColChkLineFunc sOCLineCheckFuncs[COLSHAPE_MAX];
-extern EffectShieldParticleInit shieldParticleInitMetal;
-extern EffectShieldParticleInit shieldParticleInitWood;
-// extern UNK_TYPE4 D_801BB090;
-// extern UNK_TYPE1 D_801BB094;
-// extern UNK_TYPE1 D_801BB0DC;
-// extern UNK_TYPE2 D_801BB0FC;
-// extern UNK_TYPE1 D_801BB100;
 
 extern u8 gOpeningEntranceIndex;
 
@@ -688,7 +658,6 @@ extern s32 gDbgCamEnabled;
 extern Input* D_801D0D60;
 // extern UNK_TYPE2 sPlayerCsIdToCsCamId;
 // extern UNK_TYPE1 D_801D0D7A;
-// extern UNK_TYPE4 D_801D14F0;
 
 extern u32 retryCount;
 extern u32 cfbIdx[3];
@@ -2250,7 +2219,6 @@ extern s16 D_801F4E7A;
 // extern UNK_TYPE1 D_801F5730;
 // extern UNK_TYPE1 D_801F57B4;
 // extern UNK_TYPE1 D_801F5834;
-// extern NmiBuff* gNMIBuffer;
 
 // extern UNK_TYPE1 sSkyboxDrawMatrix;
 // extern UNK_TYPE1 D_801F6AF0;

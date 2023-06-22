@@ -666,7 +666,7 @@ typedef enum PlayerCsMode {
     /* 0x3F */ PLAYER_CSMODE_63,
     /* 0x40 */ PLAYER_CSMODE_64,
     /* 0x41 */ PLAYER_CSMODE_65,
-    /* 0x42 */ PLAYER_CSMODE_66,
+    /* 0x42 */ PLAYER_CSMODE_66, // Look side-to-side with chin down
     /* 0x43 */ PLAYER_CSMODE_67,
     /* 0x44 */ PLAYER_CSMODE_68,
     /* 0x45 */ PLAYER_CSMODE_69,
@@ -674,15 +674,15 @@ typedef enum PlayerCsMode {
     /* 0x47 */ PLAYER_CSMODE_71,
     /* 0x48 */ PLAYER_CSMODE_72,
     /* 0x49 */ PLAYER_CSMODE_73,
-    /* 0x4A */ PLAYER_CSMODE_74,
+    /* 0x4A */ PLAYER_CSMODE_74, // Give a big nod of approval
     /* 0x4B */ PLAYER_CSMODE_75,
     /* 0x4C */ PLAYER_CSMODE_76,
     /* 0x4D */ PLAYER_CSMODE_77,
     /* 0x4E */ PLAYER_CSMODE_78,
     /* 0x4F */ PLAYER_CSMODE_79,
     /* 0x50 */ PLAYER_CSMODE_80,
-    /* 0x51 */ PLAYER_CSMODE_81,
-    /* 0x52 */ PLAYER_CSMODE_82,
+    /* 0x51 */ PLAYER_CSMODE_81, // Look side-to-side with chin up
+    /* 0x52 */ PLAYER_CSMODE_82, // Close eyes and sway body in circles
     /* 0x53 */ PLAYER_CSMODE_83,
     /* 0x54 */ PLAYER_CSMODE_84, // Sucked by the moon
     /* 0x55 */ PLAYER_CSMODE_85,

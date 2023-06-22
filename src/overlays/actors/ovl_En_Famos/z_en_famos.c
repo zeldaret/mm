@@ -290,9 +290,9 @@ void EnFamos_UpdateBobbingHeight(EnFamos* this) {
     this->actor.world.pos.y = (Math_SinS(this->hoverTimer * 0x888) * 10.0f) + this->baseHeight;
 
     if (ABS_ALT(this->flipRot) > 0x4000) { // is famos upside down
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
     }
 }
 
@@ -463,9 +463,9 @@ void EnFamos_SetupAlert(EnFamos* this) {
 
 void EnFamos_Alert(EnFamos* this, PlayState* play) {
     if (ABS_ALT(this->flipRot) > 0x4000) {
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
     }
 
     this->stateTimer--;
@@ -520,7 +520,7 @@ void EnFamos_SetupAttackAim(EnFamos* this) {
 }
 
 void EnFamos_AttackAim(EnFamos* this, PlayState* play) {
-    func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     if (SkelAnime_Update(&this->skelAnime)) {
         EnFamos_SetupAttack(this);
     }
@@ -574,7 +574,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
             EnFamos_SetupAttackRebound(this);
         }
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     }
 }
 
@@ -612,9 +612,9 @@ void EnFamos_AttackRebound(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 5.0f, 0.3f);
     if (this->actor.speed > 1.0f) {
         if (ABS_ALT(this->flipRot) > 0x4000) {
-            func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
         } else {
-            func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
         }
     }
 
@@ -788,7 +788,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->emblemCollider.base);
         }
 
-        if (this->collider2.base.atFlags & AC_ON) {
+        if (this->collider2.base.atFlags & AT_ON) {
             Collider_UpdateCylinder(&this->actor, &this->collider2);
             this->collider2.dim.pos.y = this->actor.floorHeight;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);

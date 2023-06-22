@@ -107,19 +107,19 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->dyna.actor.textId = 0xCF5;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
 
                 case 1:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->dyna.actor.textId = 0xCF7;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
 
                 case 2:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
                     func_80B3C260(this);
@@ -141,9 +141,9 @@ void func_80B3C624(ObjGhaka* this, PlayState* play) {
         func_80B3C2C4(this, play);
         SET_WEEKEVENTREG(WEEKEVENTREG_20_20);
         func_80B3C260(this);
-        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
+        Audio_PlaySfx_AtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
-        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Audio_PlaySfx_AtPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 
