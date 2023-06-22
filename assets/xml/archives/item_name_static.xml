@@ -2,7 +2,7 @@
     <!-- Item Names. Must be ia4 128x16 and ordered following `ItemId` -->
     <File Name="item_name_static.unarchive">
         <!-- Main items -->
-        <Texture Name="gItemNameOcarinaOfTimeENGTex" OutName="item_name_ocarina_of_time_eng" Format="ia4" Width="128" Height="16" Offset="0x0" /> <!-- ITEM_OCARINA -->
+        <Texture Name="gItemNameOcarinaOfTimeENGTex" OutName="item_name_ocarina_of_time_eng" Format="ia4" Width="128" Height="16" Offset="0x0" /> <!-- ITEM_OCARINA_OF_TIME -->
         <Texture Name="gItemNameHerosBowENGTex" OutName="item_name_heros_bow_eng" Format="ia4" Width="128" Height="16" Offset="0x400" /> <!-- ITEM_BOW -->
         <Texture Name="gItemNameFireArrowENGTex" OutName="item_name_fire_arrow_eng" Format="ia4" Width="128" Height="16" Offset="0x800" /> <!-- ITEM_ARROW_FIRE -->
         <Texture Name="gItemNameIceArrowENGTex" OutName="item_name_ice_arrow_eng" Format="ia4" Width="128" Height="16" Offset="0xC00" /> <!-- ITEM_ARROW_ICE -->
@@ -10,14 +10,14 @@
         <Texture Name="gItemNameFairyOcarinaJPNTex" OutName="item_name_fairy_ocarina_jpn" Format="ia4" Width="128" Height="16" Offset="0x1400" /> <!-- ITEM_OCARINA_FAIRY -->
         <Texture Name="gItemNameBombENGTex" OutName="item_name_bomb_eng" Format="ia4" Width="128" Height="16" Offset="0x1800" /> <!-- ITEM_BOMB -->
         <Texture Name="gItemNameBombchuENGTex" OutName="item_name_bombchu_eng" Format="ia4" Width="128" Height="16" Offset="0x1C00" /> <!-- ITEM_BOMBCHU -->
-        <Texture Name="gItemNameDekuStickENGTex" OutName="item_name_deku_stick_eng" Format="ia4" Width="128" Height="16" Offset="0x2000" /> <!-- ITEM_STICK -->
-        <Texture Name="gItemNameDekuNutENGTex" OutName="item_name_deku_nut_eng" Format="ia4" Width="128" Height="16" Offset="0x2400" /> <!-- ITEM_NUT -->
+        <Texture Name="gItemNameDekuStickENGTex" OutName="item_name_deku_stick_eng" Format="ia4" Width="128" Height="16" Offset="0x2000" /> <!-- ITEM_DEKU_STICK -->
+        <Texture Name="gItemNameDekuNutENGTex" OutName="item_name_deku_nut_eng" Format="ia4" Width="128" Height="16" Offset="0x2400" /> <!-- ITEM_DEKU_NUT -->
         <Texture Name="gItemNameMagicBeansENGTex" OutName="item_name_magic_beans_eng" Format="ia4" Width="128" Height="16" Offset="0x2800" /> <!-- ITEM_MAGIC_BEANS -->
         <!-- Swapped with slingshot -->
         <Texture Name="gItemNameLongshotJPNTex" OutName="item_name_longshot_jpn" Format="ia4" Width="128" Height="16" Offset="0x2C00" /> <!-- ITEM_SLINGSHOT -->
         <Texture Name="gItemNamePowderKegENGTex" OutName="item_name_powder_keg_eng" Format="ia4" Width="128" Height="16" Offset="0x3000" /> <!-- ITEM_POWDER_KEG -->
-        <Texture Name="gItemNamePictographBoxENGTex" OutName="item_name_pictograph_box_eng" Format="ia4" Width="128" Height="16" Offset="0x3400" /> <!-- ITEM_PICTO_BOX -->
-        <Texture Name="gItemNameLensOfTruthENGTex" OutName="item_name_lens_of_truth_eng" Format="ia4" Width="128" Height="16" Offset="0x3800" /> <!-- ITEM_LENS -->
+        <Texture Name="gItemNamePictographBoxENGTex" OutName="item_name_pictograph_box_eng" Format="ia4" Width="128" Height="16" Offset="0x3400" /> <!-- ITEM_PICTOGRAPH_BOX -->
+        <Texture Name="gItemNameLensOfTruthENGTex" OutName="item_name_lens_of_truth_eng" Format="ia4" Width="128" Height="16" Offset="0x3800" /> <!-- ITEM_LENS_OF_TRUTH -->
         <Texture Name="gItemNameHookshotENGTex" OutName="item_name_hookshot_eng" Format="ia4" Width="128" Height="16" Offset="0x3C00" /> <!-- ITEM_HOOKSHOT -->
         <Texture Name="gItemNameGreatFairysSwordENGTex" OutName="item_name_great_fairys_sword_eng" Format="ia4" Width="128" Height="16" Offset="0x4000" /> <!-- ITEM_SWORD_GREAT_FAIRY -->
         <!-- Swapped with longshot -->
@@ -88,9 +88,9 @@
         <Texture Name="gItemNameGiantsMaskENGTex" OutName="item_name_giants_mask_eng" Format="ia4" Width="128" Height="16" Offset="0x12400" /> <!-- ITEM_MASK_GIANT -->
 
         <!-- Unused remnants from OoT -->
-        <Texture Name="gItemNameWindMedallionJPNTex" OutName="item_name_wind_medallion_jpn" Format="ia4" Width="128" Height="16" Offset="0x12800" /> <!-- ITEM_BOW_ARROW_FIRE -->
-        <Texture Name="gItemNameFireMedallionJPNTex" OutName="item_name_fire_medallion_jpn" Format="ia4" Width="128" Height="16" Offset="0x12C00" /> <!-- ITEM_BOW_ARROW_ICE -->
-        <Texture Name="gItemNameIceMedallionJPNTex" OutName="item_name_ice_medallion_jpn" Format="ia4" Width="128" Height="16" Offset="0x13000" /> <!-- ITEM_BOW_ARROW_LIGHT -->
+        <Texture Name="gItemNameWindMedallionJPNTex" OutName="item_name_wind_medallion_jpn" Format="ia4" Width="128" Height="16" Offset="0x12800" /> <!-- ITEM_BOW_FIRE -->
+        <Texture Name="gItemNameFireMedallionJPNTex" OutName="item_name_fire_medallion_jpn" Format="ia4" Width="128" Height="16" Offset="0x12C00" /> <!-- ITEM_BOW_ICE -->
+        <Texture Name="gItemNameIceMedallionJPNTex" OutName="item_name_ice_medallion_jpn" Format="ia4" Width="128" Height="16" Offset="0x13000" /> <!-- ITEM_BOW_LIGHT -->
 
         <!-- Equipment -->
         <Texture Name="gItemNameKokiriSwordENGTex" OutName="item_name_kokiri_sword_eng" Format="ia4" Width="128" Height="16" Offset="0x13400" /> <!-- ITEM_SWORD_KOKIRI -->

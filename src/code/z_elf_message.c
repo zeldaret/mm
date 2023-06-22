@@ -13,7 +13,7 @@
  * Gets the relevant text ID for Tatl hints in first cycle.
  */
 u16 QuestHint_GetTatlTextId(PlayState* play) {
-    if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
+    if (INV_CONTENT(ITEM_OCARINA_OF_TIME) == ITEM_OCARINA_OF_TIME) {
         return 0;
     }
 

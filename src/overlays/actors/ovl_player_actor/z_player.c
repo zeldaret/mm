@@ -2091,10 +2091,10 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     GET_ITEM(ITEM_HEART_CONTAINER, OBJECT_GI_HEARTS, GID_HEART_CONTAINER, 0xD,
              GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_LONG),
     // GI_MAGIC_SMALL
-    GET_ITEM(ITEM_MAGIC_SMALL, OBJECT_GI_MAGICPOT, GID_MAGIC_SMALL, 0xE,
+    GET_ITEM(ITEM_MAGIC_JAR_SMALL, OBJECT_GI_MAGICPOT, GID_MAGIC_SMALL, 0xE,
              GIFIELD(GIFIELD_20 | GIFIELD_40, ITEM00_MAGIC_SMALL), CHEST_ANIM_SHORT),
     // GI_MAGIC_LARGE
-    GET_ITEM(ITEM_MAGIC_LARGE, OBJECT_GI_MAGICPOT, GID_MAGIC_LARGE, 0xF,
+    GET_ITEM(ITEM_MAGIC_JAR_BIG, OBJECT_GI_MAGICPOT, GID_MAGIC_LARGE, 0xF,
              GIFIELD(GIFIELD_20 | GIFIELD_40, ITEM00_MAGIC_LARGE), CHEST_ANIM_SHORT),
     // GI_10
     GET_ITEM(ITEM_RECOVERY_HEART, OBJECT_GI_HEART, GID_RECOVERY_HEART, 0x10, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
@@ -2117,8 +2117,8 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     GET_ITEM(ITEM_BOMBS_20, OBJECT_GI_BOMB_1, GID_BOMB, 0x17, GIFIELD(GIFIELD_40, ITEM00_BOMBS_0), CHEST_ANIM_SHORT),
     // GI_BOMBS_30
     GET_ITEM(ITEM_BOMBS_30, OBJECT_GI_BOMB_1, GID_BOMB, 0x18, GIFIELD(GIFIELD_40, ITEM00_BOMBS_0), CHEST_ANIM_SHORT),
-    // GI_STICKS_1
-    GET_ITEM(ITEM_STICK, OBJECT_GI_STICK, GID_STICK, 0x19, GIFIELD(0, ITEM00_STICK), CHEST_ANIM_SHORT),
+    // GI_DEKU_STICKS_1
+    GET_ITEM(ITEM_DEKU_STICK, OBJECT_GI_STICK, GID_DEKU_STICK, 0x19, GIFIELD(0, ITEM00_STICK), CHEST_ANIM_SHORT),
     // GI_BOMBCHUS_10
     GET_ITEM(ITEM_BOMBCHUS_10, OBJECT_GI_BOMB_2, GID_BOMBCHU, 0x1A, GIFIELD(GIFIELD_40 | GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_SHORT),
@@ -2160,33 +2160,33 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     // GI_ARROW_LIGHT
     GET_ITEM(ITEM_ARROW_LIGHT, OBJECT_GI_M_ARROW, GID_ARROW_LIGHT, 0x27,
              GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_LONG),
-    // GI_NUTS_1
-    GET_ITEM(ITEM_NUT, OBJECT_GI_NUTS, GID_NUTS, 0x28, GIFIELD(0, ITEM00_NUTS_1), CHEST_ANIM_SHORT),
-    // GI_NUTS_5
-    GET_ITEM(ITEM_NUTS_5, OBJECT_GI_NUTS, GID_NUTS, 0x29, GIFIELD(0, ITEM00_NUTS_1), CHEST_ANIM_SHORT),
-    // GI_NUTS_10
-    GET_ITEM(ITEM_NUTS_10, OBJECT_GI_NUTS, GID_NUTS, 0x2A, GIFIELD(0, ITEM00_NUTS_1), CHEST_ANIM_SHORT),
+    // GI_DEKU_NUTS_1
+    GET_ITEM(ITEM_DEKU_NUT, OBJECT_GI_NUTS, GID_DEKU_NUTS, 0x28, GIFIELD(0, ITEM00_NUTS_1), CHEST_ANIM_SHORT),
+    // GI_DEKU_NUTS_5
+    GET_ITEM(ITEM_DEKU_NUTS_5, OBJECT_GI_NUTS, GID_DEKU_NUTS, 0x29, GIFIELD(0, ITEM00_NUTS_1), CHEST_ANIM_SHORT),
+    // GI_DEKU_NUTS_10
+    GET_ITEM(ITEM_DEKU_NUTS_10, OBJECT_GI_NUTS, GID_DEKU_NUTS, 0x2A, GIFIELD(0, ITEM00_NUTS_1), CHEST_ANIM_SHORT),
     // GI_2B
-    GET_ITEM(ITEM_NUT_UPGRADE_30, OBJECT_GI_NUTS, GID_NUTS, 0x2B, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_SHORT),
+    GET_ITEM(ITEM_DEKU_NUT_UPGRADE_30, OBJECT_GI_NUTS, GID_DEKU_NUTS, 0x2B,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
     // GI_2C
-    GET_ITEM(ITEM_NUT_UPGRADE_30, OBJECT_GI_NUTS, GID_NUTS, 0x2C, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_SHORT),
+    GET_ITEM(ITEM_DEKU_NUT_UPGRADE_30, OBJECT_GI_NUTS, GID_DEKU_NUTS, 0x2C,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
     // GI_2D
-    GET_ITEM(ITEM_NUT_UPGRADE_40, OBJECT_GI_NUTS, GID_NUTS, 0x2D, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_SHORT),
+    GET_ITEM(ITEM_DEKU_NUT_UPGRADE_40, OBJECT_GI_NUTS, GID_DEKU_NUTS, 0x2D,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
     // GI_BOMBCHUS_20
     GET_ITEM(ITEM_BOMBCHUS_20, OBJECT_GI_BOMB_2, GID_BOMBCHU, 0x2E, GIFIELD(GIFIELD_40 | GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_SHORT),
     // GI_2F
-    GET_ITEM(ITEM_STICK_UPGRADE_20, OBJECT_GI_STICK, GID_STICK, 0x2F, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_SHORT),
+    GET_ITEM(ITEM_DEKU_STICK_UPGRADE_20, OBJECT_GI_STICK, GID_DEKU_STICK, 0x2F,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
     // GI_30
-    GET_ITEM(ITEM_STICK_UPGRADE_20, OBJECT_GI_STICK, GID_STICK, 0x30, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_SHORT),
+    GET_ITEM(ITEM_DEKU_STICK_UPGRADE_20, OBJECT_GI_STICK, GID_DEKU_STICK, 0x30,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
     // GI_31
-    GET_ITEM(ITEM_STICK_UPGRADE_30, OBJECT_GI_STICK, GID_STICK, 0x31, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_SHORT),
+    GET_ITEM(ITEM_DEKU_STICK_UPGRADE_30, OBJECT_GI_STICK, GID_DEKU_STICK, 0x31,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
     // GI_SHIELD_HERO
     GET_ITEM(ITEM_SHIELD_HERO, OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, 0x32,
              GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_SHORT),
@@ -2234,14 +2234,14 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     // GI_HOOKSHOT
     GET_ITEM(ITEM_HOOKSHOT, OBJECT_GI_HOOKSHOT, GID_HOOKSHOT, 0x41, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
-    // GI_LENS
-    GET_ITEM(ITEM_LENS, OBJECT_GI_GLASSES, GID_LENS, 0x42, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
+    // GI_LENS_OF_TRUTH
+    GET_ITEM(ITEM_LENS_OF_TRUTH, OBJECT_GI_GLASSES, GID_LENS, 0x42, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
-    // GI_PICTO_BOX
-    GET_ITEM(ITEM_PICTO_BOX, OBJECT_GI_CAMERA, GID_PICTO_BOX, 0x43, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_LONG),
+    // GI_PICTOGRAPH_BOX
+    GET_ITEM(ITEM_PICTOGRAPH_BOX, OBJECT_GI_CAMERA, GID_PICTOGRAPH_BOX, 0x43,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_LONG),
     // GI_44
-    GET_ITEM(ITEM_PICTO_BOX, OBJECT_UNSET_0, GID_NONE, 0x44, GIFIELD(0, ITEM00_RUPEE_GREEN), 0),
+    GET_ITEM(ITEM_PICTOGRAPH_BOX, OBJECT_UNSET_0, GID_NONE, 0x44, GIFIELD(0, ITEM00_RUPEE_GREEN), 0),
     // GI_45
     GET_ITEM(ITEM_RECOVERY_HEART, OBJECT_GI_HEART, GID_RECOVERY_HEART, 0x45, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
@@ -2258,8 +2258,8 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     // GI_4B
     GET_ITEM(ITEM_NONE, OBJECT_UNSET_0, GID_NONE, 0x4B, 0, 0),
     // GI_OCARINA
-    GET_ITEM(ITEM_OCARINA, OBJECT_GI_OCARINA, GID_OCARINA, 0x4C, GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0),
-             CHEST_ANIM_LONG),
+    GET_ITEM(ITEM_OCARINA_OF_TIME, OBJECT_GI_OCARINA, GID_OCARINA, 0x4C,
+             GIFIELD(GIFIELD_20 | GIFIELD_NO_COLLECTIBLE, 0), CHEST_ANIM_LONG),
     // GI_4D
     GET_ITEM(ITEM_NONE, OBJECT_UNSET_0, GID_NONE, 0x4D, 0, 0),
     // GI_4E
@@ -2872,7 +2872,7 @@ void func_8082F470(PlayState* play, Player* this, PlayerItemAction itemAction) {
 }
 
 s8 sItemItemActions[] = {
-    PLAYER_IA_OCARINA,                 // ITEM_OCARINA,
+    PLAYER_IA_OCARINA,                 // ITEM_OCARINA_OF_TIME,
     PLAYER_IA_BOW,                     // ITEM_BOW,
     PLAYER_IA_BOW_FIRE,                // ITEM_ARROW_FIRE,
     PLAYER_IA_BOW_ICE,                 // ITEM_ARROW_ICE,
@@ -2880,13 +2880,13 @@ s8 sItemItemActions[] = {
     PLAYER_IA_PICTO_BOX,               // ITEM_OCARINA_FAIRY,
     PLAYER_IA_BOMB,                    // ITEM_BOMB,
     PLAYER_IA_BOMBCHU,                 // ITEM_BOMBCHU,
-    PLAYER_IA_STICK,                   // ITEM_STICK,
-    PLAYER_IA_NUT,                     // ITEM_NUT,
+    PLAYER_IA_STICK,                   // ITEM_DEKU_STICK,
+    PLAYER_IA_NUT,                     // ITEM_DEKU_NUT,
     PLAYER_IA_MAGIC_BEANS,             // ITEM_MAGIC_BEANS,
     PLAYER_IA_PICTO_BOX,               // ITEM_SLINGSHOT,
     PLAYER_IA_POWDER_KEG,              // ITEM_POWDER_KEG,
-    PLAYER_IA_PICTO_BOX,               // ITEM_PICTO_BOX,
-    PLAYER_IA_LENS,                    // ITEM_LENS,
+    PLAYER_IA_PICTO_BOX,               // ITEM_PICTOGRAPH_BOX,
+    PLAYER_IA_LENS,                    // ITEM_LENS_OF_TRUTH,
     PLAYER_IA_HOOKSHOT,                // ITEM_HOOKSHOT,
     PLAYER_IA_SWORD_TWO_HANDED,        // ITEM_SWORD_GREAT_FAIRY,
     PLAYER_IA_PICTO_BOX,               // ITEM_LONGSHOT, // OoT Leftover
@@ -2946,9 +2946,9 @@ s8 sItemItemActions[] = {
     PLAYER_IA_MASK_BLAST,              // ITEM_MASK_BLAST,
     PLAYER_IA_MASK_SCENTS,             // ITEM_MASK_SCENTS,
     PLAYER_IA_MASK_GIANT,              // ITEM_MASK_GIANT,
-    PLAYER_IA_BOW_FIRE,                // ITEM_BOW_ARROW_FIRE,
-    PLAYER_IA_BOW_ICE,                 // ITEM_BOW_ARROW_ICE,
-    PLAYER_IA_BOW_LIGHT,               // ITEM_BOW_ARROW_LIGHT,
+    PLAYER_IA_BOW_FIRE,                // ITEM_BOW_FIRE,
+    PLAYER_IA_BOW_ICE,                 // ITEM_BOW_ICE,
+    PLAYER_IA_BOW_LIGHT,               // ITEM_BOW_LIGHT,
     PLAYER_IA_SWORD_KOKIRI,            // ITEM_SWORD_KOKIRI,
     PLAYER_IA_SWORD_RAZOR,             // ITEM_SWORD_RAZOR,
     PLAYER_IA_SWORD_GILDED,            // ITEM_SWORD_GILDED,
@@ -3719,7 +3719,7 @@ void func_808304BC(Player* this, PlayState* play) {
 // EN_ARROW ammo related?
 s32 func_808305BC(PlayState* play, Player* this, ItemId* item, ArrowType* typeParam) {
     if (this->heldItemAction == PLAYER_IA_NUT) {
-        *item = ITEM_NUT;
+        *item = ITEM_DEKU_NUT;
         *typeParam = (this->transformation == PLAYER_FORM_DEKU) ? ARROW_TYPE_DEKU_BUBBLE : ARROW_TYPE_SLINGSHOT;
     } else {
         *item = ITEM_BOW;
@@ -4256,7 +4256,7 @@ void func_808318C0(PlayState* play) {
 
 // Toggle Lens from a button press
 void func_80831944(PlayState* play, Player* this) {
-    if (func_8012364C(play, this, func_8082FDC4()) == ITEM_LENS) {
+    if (func_8012364C(play, this, func_8082FDC4()) == ITEM_LENS_OF_TRUTH) {
         func_808318C0(play);
     }
 }
@@ -4307,7 +4307,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                 this->itemAction = itemAction;
                 this->unk_AA5 = PLAYER_UNKAA5_5;
             }
-        } else if (((itemAction == PLAYER_IA_STICK) && (AMMO(ITEM_STICK) == 0)) ||
+        } else if (((itemAction == PLAYER_IA_STICK) && (AMMO(ITEM_DEKU_STICK) == 0)) ||
                    (((play->unk_1887D != 0) || (play->unk_1887E != 0)) &&
                     (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 5)) ||
                    ((play->unk_1887D == 0) && (play->unk_1887E == 0) &&
@@ -4323,7 +4323,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
             }
         } else if ((itemAction == PLAYER_IA_NUT) &&
                    ((this->transformation != PLAYER_FORM_DEKU) || (this->heldItemButton != 0))) {
-            if (AMMO(ITEM_NUT) != 0) {
+            if (AMMO(ITEM_DEKU_NUT) != 0) {
                 func_8083A658(play, this);
             } else {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
@@ -7019,7 +7019,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_SWORD_RAZOR,         // PLAYER_IA_SWORD_RAZOR
     GI_SWORD_GILDED,        // PLAYER_IA_SWORD_GILDED
     GI_SWORD_GREAT_FAIRY,   // PLAYER_IA_SWORD_TWO_HANDED
-    GI_STICKS_1,            // PLAYER_IA_STICK
+    GI_DEKU_STICKS_1,       // PLAYER_IA_STICK
     GI_SWORD_KOKIRI,        // PLAYER_IA_ZORA_FINS
     GI_QUIVER_30,           // PLAYER_IA_BOW
     GI_ARROW_FIRE,          // PLAYER_IA_BOW_FIRE
@@ -7030,8 +7030,8 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_POWDER_KEG,          // PLAYER_IA_POWDER_KEG
     GI_BOMBCHUS_10,         // PLAYER_IA_BOMBCHU
     GI_40,                  // PLAYER_IA_11
-    GI_NUTS_1,              // PLAYER_IA_NUT
-    GI_PICTO_BOX,           // PLAYER_IA_PICTO_BOX
+    GI_DEKU_NUTS_1,         // PLAYER_IA_NUT
+    GI_PICTOGRAPH_BOX,      // PLAYER_IA_PICTO_BOX
     GI_OCARINA,             // PLAYER_IA_OCARINA
     GI_BOTTLE,              // PLAYER_IA_BOTTLE_EMPTY
     GI_FISH,                // PLAYER_IA_BOTTLE_FISH
@@ -7094,7 +7094,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_MASK_GORON,          // PLAYER_IA_MASK_GORON
     GI_MASK_ZORA,           // PLAYER_IA_MASK_ZORA
     GI_MASK_DEKU,           // PLAYER_IA_MASK_DEKU
-    GI_LENS,                // PLAYER_IA_LENS
+    GI_LENS_OF_TRUTH,       // PLAYER_IA_LENS
 };
 
 PlayerAnimationHeader* D_8085D1F8[] = {
@@ -9637,13 +9637,13 @@ void Player_RequestQuakeAndRumble(PlayState* play, Player* this, u16 sfxId) {
 }
 
 void func_8083FEF4(PlayState* play, Player* this) {
-    Inventory_ChangeAmmo(ITEM_STICK, -1);
+    Inventory_ChangeAmmo(ITEM_DEKU_STICK, -1);
     func_80831990(play, this, ITEM_NONE);
 }
 
 s32 func_8083FF30(PlayState* play, Player* this) {
     if ((this->heldItemAction == PLAYER_IA_STICK) && (this->unk_B0C > 0.5f)) {
-        if (AMMO(ITEM_STICK) != 0) {
+        if (AMMO(ITEM_DEKU_STICK) != 0) {
             EffectSsStick_Spawn(play, &this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND],
                                 BINANG_ADD(this->actor.shape.rot.y, 0x8000));
             this->unk_B0C = 0.5f;
@@ -11200,7 +11200,7 @@ void func_808442D8(PlayState* play, Player* this) {
 
     var_fa0 = 1.0f;
     if (DECR(this->unk_B28) == 0) {
-        Inventory_ChangeAmmo(ITEM_STICK, -1);
+        Inventory_ChangeAmmo(ITEM_DEKU_STICK, -1);
         this->unk_B28 = 1;
         this->unk_B0C = 0.0f;
         var_fa0 = 0.0f;
@@ -16515,7 +16515,7 @@ void func_80852B28(Player* this, PlayState* play) {
                         this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y,
                         this->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z, 0xFA0, this->actor.shape.rot.y, 0,
                         ARROW_TYPE_DEKU_NUT) != NULL) {
-            Inventory_ChangeAmmo(ITEM_NUT, -1);
+            Inventory_ChangeAmmo(ITEM_DEKU_NUT, -1);
             this->unk_D57 = 4;
         }
 
@@ -17198,7 +17198,7 @@ void func_80854430(Player* this, PlayState* play) {
             } else {
                 this->stateFlags1 &= ~PLAYER_STATE1_100000;
                 if ((play->sceneId == SCENE_20SICHITAI) &&
-                    (func_8012364C(play, this, func_8082FDC4()) == ITEM_PICTO_BOX)) {
+                    (func_8012364C(play, this, func_8082FDC4()) == ITEM_PICTOGRAPH_BOX)) {
                     s32 requiredScopeTemp;
 
                     play->actorCtx.flags |= ACTORCTX_FLAG_PICTO_BOX_ON;
@@ -18174,7 +18174,7 @@ void func_80856918(Player* this, PlayState* play) {
 
         Audio_PlaySfx_AtPosWithTimer(&this->actor.projectedPos, 0x1851, 2.0f * (this->unk_B86[1] * (1.0f / 6000.0f)));
         if ((this->boomerangActor == NULL) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
-            if (AMMO(ITEM_NUT) == 0) {
+            if (AMMO(ITEM_DEKU_NUT) == 0) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
             } else {
                 this->boomerangActor =
@@ -18184,7 +18184,7 @@ void func_80856918(Player* this, PlayState* play) {
                 if (this->boomerangActor != NULL) {
                     this->boomerangActor->velocity.x = this->actor.velocity.x * 1.5f;
                     this->boomerangActor->velocity.z = this->actor.velocity.z * 1.5f;
-                    Inventory_ChangeAmmo(ITEM_NUT, -1);
+                    Inventory_ChangeAmmo(ITEM_DEKU_NUT, -1);
                     Actor_PlaySfx(this->boomerangActor, NA_SE_PL_DEKUNUTS_DROP_BOMB);
                 }
             }

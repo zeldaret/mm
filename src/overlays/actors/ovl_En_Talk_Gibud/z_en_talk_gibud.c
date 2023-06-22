@@ -205,7 +205,7 @@ static EnTalkGibudRequestedItem sRequestedItemTable[] = {
     { PLAYER_IA_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
     { PLAYER_IA_BOTTLE_FISH, ITEM_FISH, 1, true },
     { PLAYER_IA_BOTTLE_BUG, ITEM_BUG, 1, true },
-    { PLAYER_IA_NUT, ITEM_NUT, 10, false },
+    { PLAYER_IA_NUT, ITEM_DEKU_NUT, 10, false },
     { PLAYER_IA_BOMB, ITEM_BOMB, 10, false },
     { PLAYER_IA_BOTTLE_HOT_SPRING_WATER, ITEM_HOT_SPRING_WATER, 1, true },
     { PLAYER_IA_BOTTLE_BIG_POE, ITEM_BIG_POE, 1, true },

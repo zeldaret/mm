@@ -98,7 +98,7 @@ u32 gGsFlagsShift[] = {
 };
 
 TexturePtr gItemIcons[] = {
-    icon_item_static_yar_Blob_000000,    // ITEM_OCARINA
+    icon_item_static_yar_Blob_000000,    // ITEM_OCARINA_OF_TIME
     icon_item_static_yar_Blob_001000,    // ITEM_BOW
     icon_item_static_yar_Blob_002000,    // ITEM_ARROW_FIRE
     icon_item_static_yar_Blob_003000,    // ITEM_ARROW_ICE
@@ -106,13 +106,13 @@ TexturePtr gItemIcons[] = {
     icon_item_static_yar_Blob_005000,    // ITEM_OCARINA_FAIRY
     icon_item_static_yar_Blob_006000,    // ITEM_BOMB
     icon_item_static_yar_Blob_007000,    // ITEM_BOMBCHU
-    icon_item_static_yar_Blob_008000,    // ITEM_STICK
-    icon_item_static_yar_Blob_009000,    // ITEM_NUT
+    icon_item_static_yar_Blob_008000,    // ITEM_DEKU_STICK
+    icon_item_static_yar_Blob_009000,    // ITEM_DEKU_NUT
     icon_item_static_yar_Blob_00A000,    // ITEM_MAGIC_BEANS
     icon_item_static_yar_Blob_00B000,    // ITEM_SLINGSHOT
     icon_item_static_yar_Blob_00C000,    // ITEM_POWDER_KEG
-    icon_item_static_yar_Blob_00D000,    // ITEM_PICTO_BOX
-    icon_item_static_yar_Blob_00E000,    // ITEM_LENS
+    icon_item_static_yar_Blob_00D000,    // ITEM_PICTOGRAPH_BOX
+    icon_item_static_yar_Blob_00E000,    // ITEM_LENS_OF_TRUTH
     icon_item_static_yar_Blob_00F000,    // ITEM_HOOKSHOT
     icon_item_static_yar_Blob_010000,    // ITEM_SWORD_GREAT_FAIRY
     icon_item_static_yar_Blob_011000,    // ITEM_LONGSHOT
@@ -172,9 +172,9 @@ TexturePtr gItemIcons[] = {
     icon_item_static_yar_Blob_047000,    // ITEM_MASK_BLAST
     icon_item_static_yar_Blob_048000,    // ITEM_MASK_SCENTS
     icon_item_static_yar_Blob_049000,    // ITEM_MASK_GIANT
-    icon_item_static_yar_Blob_04A000,    // ITEM_BOW_ARROW_FIRE
-    icon_item_static_yar_Blob_04B000,    // ITEM_BOW_ARROW_ICE
-    icon_item_static_yar_Blob_04C000,    // ITEM_BOW_ARROW_LIGHT
+    icon_item_static_yar_Blob_04A000,    // ITEM_BOW_FIRE
+    icon_item_static_yar_Blob_04B000,    // ITEM_BOW_ICE
+    icon_item_static_yar_Blob_04C000,    // ITEM_BOW_LIGHT
     icon_item_static_yar_Blob_04D000,    // ITEM_SWORD_KOKIRI
     icon_item_static_yar_Blob_04E000,    // ITEM_SWORD_RAZOR
     icon_item_static_yar_Blob_04F000,    // ITEM_SWORD_GILDED
@@ -219,8 +219,8 @@ TexturePtr gItemIcons[] = {
     icon_item_24_static_yar_Blob_003F00, // ITEM_DUNGEON_MAP
     icon_item_24_static_yar_Blob_005100, // ITEM_STRAY_FAIRIES
     icon_item_24_static_yar_Blob_005A00, // ITEM_KEY_SMALL
-    icon_item_24_static_yar_Blob_006300, // ITEM_MAGIC_SMALL
-    icon_item_24_static_yar_Blob_006C00, // ITEM_MAGIC_LARGE
+    icon_item_24_static_yar_Blob_006300, // ITEM_MAGIC_JAR_SMALL
+    icon_item_24_static_yar_Blob_006C00, // ITEM_MAGIC_JAR_BIG
     icon_item_static_yar_Blob_062180,    // ITEM_HEART_PIECE_2
     icon_item_static_yar_Blob_062A80,    // ITEM_INVALID_1
     icon_item_static_yar_Blob_063380,    // ITEM_INVALID_2
@@ -233,7 +233,7 @@ TexturePtr gItemIcons[] = {
 
 // Used to map item IDs to inventory slots
 u8 gItemSlots[] = {
-    SLOT_OCARINA,            // ITEM_OCARINA
+    SLOT_OCARINA,            // ITEM_OCARINA_OF_TIME
     SLOT_BOW,                // ITEM_BOW
     SLOT_ARROW_FIRE,         // ITEM_ARROW_FIRE
     SLOT_ARROW_ICE,          // ITEM_ARROW_ICE
@@ -241,13 +241,13 @@ u8 gItemSlots[] = {
     SLOT_TRADE_DEED,         // ITEM_OCARINA_FAIRY
     SLOT_BOMB,               // ITEM_BOMB
     SLOT_BOMBCHU,            // ITEM_BOMBCHU
-    SLOT_STICK,              // ITEM_STICK
-    SLOT_NUT,                // ITEM_NUT
+    SLOT_DEKU_STICK,         // ITEM_DEKU_STICK
+    SLOT_DEKU_NUT,           // ITEM_DEKU_NUT
     SLOT_MAGIC_BEANS,        // ITEM_MAGIC_BEANS
     SLOT_TRADE_KEY_MAMA,     // ITEM_SLINGSHOT
     SLOT_POWDER_KEG,         // ITEM_POWDER_KEG
-    SLOT_PICTO_BOX,          // ITEM_PICTO_BOX
-    SLOT_LENS,               // ITEM_LENS
+    SLOT_PICTOGRAPH_BOX,     // ITEM_PICTOGRAPH_BOX
+    SLOT_LENS_OF_TRUTH,      // ITEM_LENS_OF_TRUTH
     SLOT_HOOKSHOT,           // ITEM_HOOKSHOT
     SLOT_SWORD_GREAT_FAIRY,  // ITEM_SWORD_GREAT_FAIRY
     SLOT_BOTTLE_1,           // ITEM_LONGSHOT
@@ -307,13 +307,13 @@ u8 gItemSlots[] = {
     SLOT_MASK_BLAST,         // ITEM_MASK_BLAST
     SLOT_MASK_SCENTS,        // ITEM_MASK_SCENTS
     SLOT_MASK_GIANT,         // ITEM_MASK_GIANT
-    SLOT_BOW,                // ITEM_BOW_ARROW_FIRE
-    SLOT_BOW,                // ITEM_BOW_ARROW_ICE
-    SLOT_BOW,                // ITEM_BOW_ARROW_LIGHT
+    SLOT_BOW,                // ITEM_BOW_FIRE
+    SLOT_BOW,                // ITEM_BOW_ICE
+    SLOT_BOW,                // ITEM_BOW_LIGHT
 };
 
 s16 gItemPrices[] = {
-    0,   // ITEM_OCARINA
+    0,   // ITEM_OCARINA_OF_TIME
     0,   // ITEM_BOW
     0,   // ITEM_ARROW_FIRE
     0,   // ITEM_ARROW_ICE
@@ -321,13 +321,13 @@ s16 gItemPrices[] = {
     0,   // ITEM_OCARINA_FAIRY
     0,   // ITEM_BOMB
     0,   // ITEM_BOMBCHU
-    0,   // ITEM_STICK
-    0,   // ITEM_NUT
+    0,   // ITEM_DEKU_STICK
+    0,   // ITEM_DEKU_NUT
     0,   // ITEM_MAGIC_BEANS
     0,   // ITEM_SLINGSHOT
     0,   // ITEM_POWDER_KEG
-    0,   // ITEM_PICTO_BOX
-    0,   // ITEM_LENS
+    0,   // ITEM_PICTOGRAPH_BOX
+    0,   // ITEM_LENS_OF_TRUTH
     0,   // ITEM_HOOKSHOT
     0,   // ITEM_SWORD_GREAT_FAIRY
     0,   // ITEM_LONGSHOT
