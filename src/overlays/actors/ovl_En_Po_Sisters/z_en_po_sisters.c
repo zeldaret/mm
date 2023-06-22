@@ -280,9 +280,9 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
     if ((this->color.a == 255) && (this->actionFunc != EnPoSisters_SpinAttack) &&
         (this->actionFunc != EnPoSisters_SpinUp)) {
         if (this->actionFunc == EnPoSisters_Flee) {
-            func_800B9010(&this->actor, NA_SE_EN_PO_AWAY - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_AWAY - SFX_FLAG);
         } else {
-            func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
         }
     }
 }

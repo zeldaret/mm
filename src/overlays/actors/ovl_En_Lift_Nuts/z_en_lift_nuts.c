@@ -459,18 +459,18 @@ void func_80AEA7A4(EnLiftNuts* this, PlayState* play) {
             case 0x27E2:
                 if (play->msgCtx.choiceIndex == 0) { // Yes
                     if (gSaveContext.save.saveInfo.playerData.rupees >= 10) {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_StartTextbox(play, 0x27E5, &this->actor);
                         this->textId = 0x27E5;
                         Rupees_ChangeBy(-10);
                     } else {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                         Message_StartTextbox(play, 0x27E4, &this->actor);
                         this->textId = 0x27E4;
                     }
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
                     Message_StartTextbox(play, 0x27E3, &this->actor);
                     this->textId = 0x27E3;
@@ -811,7 +811,7 @@ void func_80AEB294(EnLiftNuts* this, PlayState* play) {
 }
 
 void func_80AEB3E0(EnLiftNuts* this, PlayState* play) {
-    play_sound(NA_SE_SY_FOUND);
+    Audio_PlaySfx(NA_SE_SY_FOUND);
     this->unk_354 = 0;
     gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
     this->actionFunc = func_80AEB428;
