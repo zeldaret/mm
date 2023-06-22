@@ -112,7 +112,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
     s32 sp34;
     Vec3s* temp_v1_2;
 
-    func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     Math_Vec3s_ToVec3f(&sp48, this->unk170 + this->unk168 + this->unk16C);
     Math_Vec3f_Diff(&sp48, &thisx->world.pos, &thisx->velocity);
     magnitude = Math3D_Vec3fMagnitude(&thisx->velocity);

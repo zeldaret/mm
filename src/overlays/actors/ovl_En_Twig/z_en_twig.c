@@ -202,7 +202,7 @@ void func_80AC0D2C(EnTwig* this, PlayState* play) {
             EffectSsKirakira_SpawnDispersed(play, &sp6C, &sKiraVel, &sKiraAccel, &sColorWhite, &sColorYellow, 1000,
                                             (s32)(Rand_ZeroOne() * 10.0f) + 20);
         }
-        play_sound(NA_SE_SY_GET_ITEM);
+        Audio_PlaySfx(NA_SE_SY_GET_ITEM);
         play->interfaceCtx.minigamePoints--;
         sRingNotCollected[RACERING_GET_PARAM_FE0(&this->dyna.actor)] = true;
         if (sCurrentRing == RACERING_GET_PARAM_FE0(&this->dyna.actor)) {

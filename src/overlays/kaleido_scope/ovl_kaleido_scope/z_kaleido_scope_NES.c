@@ -261,7 +261,7 @@ void KaleidoScope_MoveCursorToSpecialPos(PlayState* play, s16 cursorSpecialPos) 
     pauseCtx->cursorSpecialPos = cursorSpecialPos;
     pauseCtx->pageSwitchInputTimer = 0;
 
-    play_sound(NA_SE_SY_DECIDE);
+    Audio_PlaySfx(NA_SE_SY_DECIDE);
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_C_LEFT] = BTN_DISABLED;
@@ -279,7 +279,7 @@ void KaleidoScope_MoveCursorFromSpecialPos(PlayState* play) {
     pauseCtx->nameDisplayTimer = 0;
     pauseCtx->cursorSpecialPos = 0;
 
-    play_sound(NA_SE_SY_CURSOR);
+    Audio_PlaySfx(NA_SE_SY_CURSOR);
 
     pauseCtx->cursorShrinkRate = 4.0f;
 
@@ -315,11 +315,11 @@ void KaleidoScope_SwitchPage(PauseContext* pauseCtx, u8 direction) {
 
     if (direction == SWITCH_PAGE_LEFT) {
         pauseCtx->nextPageMode = (pauseCtx->pageIndex * 2) + 1;
-        play_sound(NA_SE_SY_WIN_SCROLL_LEFT);
+        Audio_PlaySfx(NA_SE_SY_WIN_SCROLL_LEFT);
         pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
     } else { // SWITCH_PAGE_RIGHT
         pauseCtx->nextPageMode = pauseCtx->pageIndex * 2;
-        play_sound(NA_SE_SY_WIN_SCROLL_RIGHT);
+        Audio_PlaySfx(NA_SE_SY_WIN_SCROLL_RIGHT);
         pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_LEFT;
     }
 
@@ -2938,7 +2938,7 @@ void KaleidoScope_Update(PlayState* play) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->state = PAUSE_STATE_UNPAUSE_SETUP;
                         sPauseMenuVerticalOffset = -6240.0f;
-                        func_801A3AEC(0);
+                        Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                     }
                     break;
 
@@ -2972,17 +2972,17 @@ void KaleidoScope_Update(PlayState* play) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->state = PAUSE_STATE_UNPAUSE_SETUP;
                         sPauseMenuVerticalOffset = -6240.0f;
-                        func_801A3AEC(0);
+                        Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
                     } else if (pauseCtx->ocarinaStaff->state == pauseCtx->ocarinaSongIndex) {
                         // The player successfully played the song
-                        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                        Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                         sNextMainState = PAUSE_MAIN_STATE_IDLE;
                         sDelayTimer = 30;
                         pauseCtx->mainState = PAUSE_MAIN_STATE_SONG_PROMPT_DONE;
                     } else if (pauseCtx->ocarinaStaff->state == 0xFF) {
                         // The player failed to play the song
-                        play_sound(NA_SE_SY_OCARINA_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_OCARINA_ERROR);
                         sNextMainState = PAUSE_MAIN_STATE_SONG_PROMPT_INIT;
                         sDelayTimer = 20;
                         pauseCtx->mainState = PAUSE_MAIN_STATE_SONG_PROMPT_DONE;
@@ -3008,7 +3008,7 @@ void KaleidoScope_Update(PlayState* play) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->state = PAUSE_STATE_UNPAUSE_SETUP;
                         sPauseMenuVerticalOffset = -6240.0f;
-                        func_801A3AEC(0);
+                        Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                         pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
                     }
                     break;
@@ -3050,7 +3050,7 @@ void KaleidoScope_Update(PlayState* play) {
                             func_8011552C(play, DO_ACTION_NONE);
                             pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU;
                         } else {
-                            play_sound(NA_SE_SY_PIECE_OF_HEART);
+                            Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                             Play_SaveCycleSceneFlags(&play->state);
                             gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
                             func_8014546C(sramCtx);
@@ -3069,7 +3069,7 @@ void KaleidoScope_Update(PlayState* play) {
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_3;
                         sPauseMenuVerticalOffset = -6240.0f;
                         D_8082B90C = pauseCtx->roll;
-                        func_801A3AEC(0);
+                        Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                         func_8011552C(play, DO_ACTION_NONE);
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_RETURN_TO_MENU;
@@ -3090,7 +3090,7 @@ void KaleidoScope_Update(PlayState* play) {
                         pauseCtx->savePromptState = PAUSE_SAVEPROMPT_STATE_3;
                         sPauseMenuVerticalOffset = -6240.0f;
                         D_8082B90C = pauseCtx->roll;
-                        func_801A3AEC(0);
+                        Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                     }
                     break;
 
@@ -3308,14 +3308,14 @@ void KaleidoScope_Update(PlayState* play) {
             if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
                 if (pauseCtx->promptChoice != PAUSE_PROMPT_YES) {
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
-                    play_sound(NA_SE_SY_DECIDE);
+                    Audio_PlaySfx(NA_SE_SY_DECIDE);
                     pauseCtx->state = PAUSE_STATE_OFF;
                     Game_SetFramerateDivisor(&play->state, 3);
                     R_PAUSE_BG_PRERENDER_STATE = PAUSE_BG_PRERENDER_UNK4;
                     Object_LoadAll(&play->objectCtx);
                     BgCheck_InitCollisionHeaders(&play->colCtx, play);
                 } else {
-                    play_sound(NA_SE_SY_PIECE_OF_HEART);
+                    Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                     pauseCtx->promptChoice = PAUSE_PROMPT_YES;
                     Play_SaveCycleSceneFlags(&play->state);
                     gSaveContext.save.saveInfo.playerData.savedSceneId = play->sceneId;
@@ -3332,10 +3332,10 @@ void KaleidoScope_Update(PlayState* play) {
                     sDelayTimer = 90;
                 }
             } else if ((pauseCtx->promptChoice == PAUSE_PROMPT_YES) && (stickAdjX >= 30)) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 pauseCtx->promptChoice = PAUSE_PROMPT_NO;
             } else if ((pauseCtx->promptChoice != PAUSE_PROMPT_YES) && (stickAdjX <= -30)) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 pauseCtx->promptChoice = PAUSE_PROMPT_YES;
             }
             break;
@@ -3359,18 +3359,18 @@ void KaleidoScope_Update(PlayState* play) {
                        (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START))) {
                 pauseCtx->state = PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT;
                 gameOverCtx->state++;
-                func_801A3AEC(0);
+                Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
             }
             break;
 
         case PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT:
             if (CHECK_BTN_ALL(input->press.button, BTN_A) || CHECK_BTN_ALL(input->press.button, BTN_START)) {
                 if (pauseCtx->promptChoice == PAUSE_PROMPT_YES) {
-                    play_sound(NA_SE_SY_PIECE_OF_HEART);
+                    Audio_PlaySfx(NA_SE_SY_PIECE_OF_HEART);
                     Play_SaveCycleSceneFlags(&play->state);
                     if (gSaveContext.save.entrance == ENTRANCE(UNSET_0D, 0)) {}
                 } else { // PAUSE_PROMPT_NO
-                    play_sound(NA_SE_SY_DECIDE);
+                    Audio_PlaySfx(NA_SE_SY_DECIDE);
                 }
                 pauseCtx->state = PAUSE_STATE_GAMEOVER_10;
             }
@@ -3478,11 +3478,11 @@ void KaleidoScope_Update(PlayState* play) {
                 func_8011552C(play, DO_ACTION_NONE);
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
-                func_801A3AEC(0);
+                Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                 play->msgCtx.ocarinaMode = 4;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             } else if (CHECK_BTN_ALL(input->press.button, BTN_A)) {
-                play_sound(NA_SE_SY_DECIDE);
+                Audio_PlaySfx(NA_SE_SY_DECIDE);
                 Message_StartTextbox(play, 0x1B93, NULL);
                 pauseCtx->state = PAUSE_STATE_OWLWARP_CONFIRM;
             } else {
@@ -3498,26 +3498,26 @@ void KaleidoScope_Update(PlayState* play) {
                     func_8011552C(play, DO_ACTION_NONE);
                     pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                     sPauseMenuVerticalOffset = -6240.0f;
-                    func_801A3AEC(0);
+                    Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                     play->msgCtx.ocarinaMode = sCursorPointsToOcarinaModes[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]];
-                    play_sound(NA_SE_SY_DECIDE);
+                    Audio_PlaySfx(NA_SE_SY_DECIDE);
                 } else {
                     pauseCtx->state = PAUSE_STATE_OWLWARP_SELECT;
                     func_8011552C(play, DO_ACTION_WARP);
-                    play_sound(NA_SE_SY_MESSAGE_PASS);
+                    Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
                 }
             } else if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = 0;
                 pauseCtx->state = PAUSE_STATE_OWLWARP_SELECT;
-                play_sound(NA_SE_SY_MESSAGE_PASS);
+                Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
             } else if (CHECK_BTN_ALL(input->press.button, BTN_START)) {
                 msgCtx->msgLength = 0;
                 msgCtx->msgMode = 0;
                 func_8011552C(play, DO_ACTION_NONE);
                 pauseCtx->state = PAUSE_STATE_OWLWARP_6;
                 sPauseMenuVerticalOffset = -6240.0f;
-                func_801A3AEC(0);
+                Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_CLOSE);
                 play->msgCtx.ocarinaMode = 4;
                 gSaveContext.prevHudVisibility = HUD_VISIBILITY_ALL;
             }

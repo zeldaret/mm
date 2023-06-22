@@ -689,7 +689,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             // if the cursor point changed
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_QUEST]) {
                 pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
 
             // Update cursor item and slot
@@ -850,7 +850,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK) {
                                 play->pauseCtx.bombersNotebookOpen = true;
                                 pauseCtx->mainState = PAUSE_MAIN_STATE_BOMBERS_NOTEBOOK_OPEN;
-                                play_sound(NA_SE_SY_DECIDE);
+                                Audio_PlaySfx(NA_SE_SY_DECIDE);
                             } else {
                                 pauseCtx->itemDescriptionOn = true;
                                 if (pauseCtx->cursorYIndex[PAUSE_QUEST] < 2) {

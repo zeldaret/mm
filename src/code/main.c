@@ -5,6 +5,7 @@
  */
 
 #include "global.h"
+#include "audiomgr.h"
 #include "buffers.h"
 #include "stack.h"
 #include "stackcheck.h"
@@ -80,7 +81,7 @@ void Main(void* arg) {
 
     while (!exit) {
         msg = NULL;
-        osRecvMesg(&irqMgrMsgQ, (OSMesg)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&irqMgrMsgQ, (OSMesg*)&msg, OS_MESG_BLOCK);
         if (msg == NULL) {
             break;
         }
