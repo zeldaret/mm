@@ -432,11 +432,11 @@ void func_80A2A444(BgDblueMovebg* this, PlayState* play) {
         }
 
         if (!(this->unk_174 & 1) && (this->unk_172 & 1)) {
-            func_801000CC(NA_SE_EV_PIPE_STREAM_START);
+            Lib_PlaySfx_2(NA_SE_EV_PIPE_STREAM_START);
         }
         func_80A2A670(this, play);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
     }
 }
 
@@ -533,14 +533,14 @@ void func_80A2A7F8(BgDblueMovebg* this, PlayState* play) {
         }
 
         if (!(this->unk_174 & 1) && (this->unk_172 & 1)) {
-            func_801000CC(NA_SE_EV_PIPE_STREAM_START);
+            Lib_PlaySfx_2(NA_SE_EV_PIPE_STREAM_START);
         }
 
         this->unk_174 = this->unk_172;
         this->unk_1D0 = 17;
         this->actionFunc = func_80A2AAB8;
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_COCK_SWITCH_ROLL - SFX_FLAG);
     }
 }
 
@@ -739,9 +739,9 @@ void func_80A2B274(Actor* thisx, PlayState* play) {
     temp_v1 = D_80A2B96C[func_80A29A80(play, this->unk_1C0, this->unk_1BC)];
     if (temp_v1 != 0) {
         if (temp_v1 > 0) {
-            func_8019FC20(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_RR - SFX_FLAG);
+            Audio_PlaySfx_WaterWheel(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_RR - SFX_FLAG);
         } else {
-            func_8019FC20(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_LR - SFX_FLAG);
+            Audio_PlaySfx_WaterWheel(&this->dyna.actor.projectedPos, NA_SE_EV_DUMMY_WATER_WHEEL_LR - SFX_FLAG);
         }
     }
 }
@@ -856,9 +856,11 @@ void BgDblueMovebg_Draw(Actor* thisx, PlayState* play2) {
 
     if ((this->unk_160 == 9) || (this->unk_160 == 8)) {
         if (this->unk_1CC >= 0) {
-            func_8019FB0C(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_RR - SFX_FLAG, this->unk_1D4, 32);
+            Audio_PlaySfx_AtPosWithFreqAndChannelIO(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_RR - SFX_FLAG,
+                                                    this->unk_1D4, 32);
         } else {
-            func_8019FB0C(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_LR - SFX_FLAG, this->unk_1D4, 32);
+            Audio_PlaySfx_AtPosWithFreqAndChannelIO(&this->unk_1A8, NA_SE_EV_BIG_WATER_WHEEL_LR - SFX_FLAG,
+                                                    this->unk_1D4, 32);
         }
     }
 }

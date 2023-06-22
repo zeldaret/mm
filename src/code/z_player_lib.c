@@ -636,7 +636,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
             if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return PLAYER_IA_MINUS1;
             } else {
                 s32 pad;

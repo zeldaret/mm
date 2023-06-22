@@ -1040,10 +1040,10 @@ void Environment_UpdateNextDayTime(void) {
         // delaying the chicken crow or dog howl sfx by 15 frames when loading the new area.
 
         if (gSaveContext.nextDayTime == (NEXT_TIME_DAY_SET - (15 * 0x10))) {
-            play_sound(NA_SE_EV_CHICKEN_CRY_M);
+            Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
             gSaveContext.nextDayTime = NEXT_TIME_NONE;
         } else if (gSaveContext.nextDayTime == (NEXT_TIME_NIGHT_SET - (15 * 0x10))) {
-            func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
+            Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
             gSaveContext.nextDayTime = NEXT_TIME_NONE;
         }
     }
@@ -1528,10 +1528,9 @@ void Environment_DrawLensFlare(PlayState* play, EnvironmentContext* envCtx, View
                             alpha * envCtx->lensFlareAlphaScale);
             mtx = Matrix_NewMtx(gfxCtx);
             if (mtx != NULL) {
-                gSPMatrix(POLY_XLU_DISP++, mtx,
-                        G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0,
-                                0, PRIMITIVE, 0);
+                gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE,
+                                  TEXEL0, 0, PRIMITIVE, 0);
                 gDPSetAlphaDither(POLY_XLU_DISP++, G_AD_DISABLE);
                 gDPSetColorDither(POLY_XLU_DISP++, G_CD_DISABLE);
                 gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);

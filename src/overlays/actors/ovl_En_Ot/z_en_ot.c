@@ -1145,21 +1145,22 @@ void func_80B5E1D8(PlayState* play, EnOtUnkStruct* arg1, s32 arg2) {
     POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     for (i = 0; i < arg2; i++, arg1++) {
-        if (arg1->unk_00) {
-            if (!flag) {
-                gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000040);
-                flag = true;
-                if (play) {}
-            }
-
-            Matrix_Translate(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
-            Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
-            Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
-
-            gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
-            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
+        if (arg1->unk_00 == 0) {
+            continue;
         }
+
+        if (!flag) {
+            gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000040);
+            flag = true;
+        }
+
+        Matrix_Translate(arg1->unk_0C.x, arg1->unk_0C.y, arg1->unk_0C.z, MTXMODE_NEW);
+        Matrix_RotateYS(BINANG_ROT180(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play))), MTXMODE_APPLY);
+        Matrix_Scale(arg1->unk_04, arg1->unk_04, arg1->unk_04, MTXMODE_APPLY);
+
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gDropRecoveryHeartTex));
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, object_ot_DL_000078);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

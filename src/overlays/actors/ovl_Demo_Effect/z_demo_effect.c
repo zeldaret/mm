@@ -210,7 +210,7 @@ void func_808CDBDC(DemoEffect* this, PlayState* play) {
         this->actor.scale.x = scale;
         this->actor.scale.z = scale;
         func_808CDAD0(alphaScale);
-        func_800B8FE8(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
     } else {
         func_808CDAD0(1.0f);
         Actor_Kill(&this->actor);
@@ -218,7 +218,7 @@ void func_808CDBDC(DemoEffect* this, PlayState* play) {
 }
 
 void func_808CDCEC(DemoEffect* this, PlayState* play) {
-    func_800B8FE8(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_TIMETRIP_LIGHT - SFX_FLAG);
 
     if (SkelCurve_Update(play, &this->skelCurve)) {
         SkelCurve_SetAnim(&this->skelCurve, &object_efc_tw_CurveAnim_000050, 1.0f, 60.0f, 59.0f, 0.0f);

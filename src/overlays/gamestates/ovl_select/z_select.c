@@ -631,13 +631,13 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                     this->timerUp = 20;
                     this->lockUp = true;
 
-                    play_sound(NA_SE_IT_SWORD_IMPACT);
+                    Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                     this->verticalInput = updateRate;
                 }
             }
 
             if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->timerUp == 0)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = updateRate * 3;
             }
 
@@ -648,24 +648,24 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                 if (this->timerDown == 0) {
                     this->timerDown = 20;
                     this->lockDown = true;
-                    play_sound(NA_SE_IT_SWORD_IMPACT);
+                    Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                     this->verticalInput = -updateRate;
                 }
             }
             if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->timerDown == 0)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = -updateRate * 3;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) ||
                 CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = updateRate;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) ||
                 CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = -updateRate;
             }
         }

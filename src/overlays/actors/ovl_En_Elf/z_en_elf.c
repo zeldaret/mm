@@ -1132,7 +1132,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
         }
     } else if (this->unk_264 & 8) {
         sp34 = 1;
-        func_800B9010(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
         arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
@@ -1367,11 +1367,11 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
                 if (play->msgCtx.currentTextId == 0x202) {
                     switch (play->msgCtx.choiceIndex) {
                         case 0:
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             break;
 
                         case 1:
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             break;
                     }
                 }
@@ -1472,7 +1472,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(thisx, &play->state)) {
-        func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
+        Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == QuestHint_GetTatlTextId(play)) {

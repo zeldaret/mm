@@ -465,7 +465,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
                         Item_Give(play, ITEM_MAGIC_LARGE);
                     }
                     Actor_Kill(&this->actor);
-                    play_sound(NA_SE_SY_GET_ITEM);
+                    Audio_PlaySfx(NA_SE_SY_GET_ITEM);
                 } else {
                     this->unk_1A1 = 20;
                     func_800B8D50(play, NULL, 5.0f, this->actor.world.rot.y, 0.0f, 8);

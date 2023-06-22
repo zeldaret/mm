@@ -73,9 +73,9 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
             this->transitionCsTimer = 0;
             SET_EVENTINF(EVENTINF_17);
         } else if (this->csIdIndex == 0) {
-            play_sound(NA_SE_EV_CHICKEN_CRY_M);
+            Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
         } else {
-            func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
+            Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
         this->actionFunc = func_80A42AB8;
@@ -110,9 +110,9 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
             this->transitionCsTimer = 0;
             SET_EVENTINF(EVENTINF_17);
         } else if (this->csIdIndex == 0) {
-            play_sound(NA_SE_EV_CHICKEN_CRY_M);
+            Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
         } else {
-            func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
+            Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
         }
     } else {
         this->actionFunc = func_80A42AB8;
@@ -296,16 +296,16 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
 
     sCsIdList[0] = csId;
     if (csId >= 0) {
-        ActorCutscene* actorCutscene = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
+        ActorCutscene* csEntry = CutsceneManager_GetCutsceneEntry(sCsIdList[0]);
 
         SET_EVENTINF(EVENTINF_52);
-        sCsIdList[1] = actorCutscene->additionalCsId;
+        sCsIdList[1] = csEntry->additionalCsId;
     } else {
         CLEAR_EVENTINF(EVENTINF_52);
         sCsIdList[1] = sCsIdList[0];
     }
 
-    if (sIsLoaded || (CHECK_EVENTINF(EVENTINF_27))) {
+    if (sIsLoaded || CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
         Actor_Kill(&this->actor);
     } else {
         sIsLoaded = true;
@@ -413,7 +413,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                     }
 
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_27);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                     Actor_Kill(&this->actor);
                 }
             }
@@ -431,7 +431,7 @@ void func_80A42AB8(EnTest4* this, PlayState* play) {
                 this->unk_146 = gSaveContext.save.time += CLOCK_TIME_MINUTE;
             }
         } else if ((new_var * bellDiff) <= 0) {
-            func_801A0124(&this->actor.projectedPos, (this->actor.params >> 5) & 0xF);
+            Audio_PlaySfx_BigBells(&this->actor.projectedPos, (this->actor.params >> 5) & 0xF);
             this->lastBellTime = gSaveContext.save.time;
 
             if (CURRENT_DAY == 3) {
@@ -484,9 +484,9 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
         this->transitionCsTimer++;
         if (this->transitionCsTimer == 10) {
             if (this->csIdIndex == 0) {
-                play_sound(NA_SE_EV_CHICKEN_CRY_M);
+                Audio_PlaySfx(NA_SE_EV_CHICKEN_CRY_M);
             } else {
-                func_8019F128(NA_SE_EV_DOG_CRY_EVENING);
+                Audio_PlaySfx_2(NA_SE_EV_DOG_CRY_EVENING);
             }
         }
         if (this->transitionCsTimer == 60) {
