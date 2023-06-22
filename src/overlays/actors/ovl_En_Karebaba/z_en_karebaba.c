@@ -466,7 +466,7 @@ void EnKarebaba_ShrinkDie(EnKarebaba* this, PlayState* play) {
         }
     } else {
         if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0005f)) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             EnKarebaba_SetupDead(this);
         } else {
             EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
