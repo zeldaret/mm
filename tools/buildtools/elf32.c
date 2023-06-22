@@ -138,6 +138,7 @@ bool elf32_get_section(struct Elf32* e, struct Elf32_Section* sec, int secnum) {
     sec->flags = e->read32(sechdr + 0x08);
     sec->addr = e->read32(sechdr + 0x0C);
     sec->offset = e->read32(sechdr + 0x10);
+    sec->size = e->read32(sechdr + 0x14);
     sec->addralign = e->read32(sechdr + 0x20);
     sec->entsize = e->read32(sechdr + 0x24);
     return true;
@@ -162,5 +163,8 @@ bool elf32_get_symbol(struct Elf32* e, struct Elf32_Symbol* sym, int symnum) {
 
     sym->name = strings + e->read32(symtab + symnum * 0x10);
     sym->value = e->read32(symtab + symnum * 0x10 + 4);
+    sym->size = e->read32(symtab + symnum * 0x10 + 8);
+    sym->st_type = symtab[symnum * 0x10 + 0xC] & 0xF;
+    sym->shndx = e->read16(symtab + symnum * 0x10 + 0xE);
     return true;
 }

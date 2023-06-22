@@ -319,7 +319,7 @@ void ObjLightSwitch_Fade(ObjLightswitch* this, PlayState* play) {
         return;
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // "burn into ashes"
 }
 
 void ObjLightswitch_Update(Actor* thisx, PlayState* play) {

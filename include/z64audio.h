@@ -5,6 +5,7 @@
 #include "ultra64/os_voice.h"
 #include "audiothread_cmd.h"
 #include "libc/stddef.h"
+#include "sequence.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
 

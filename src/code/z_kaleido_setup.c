@@ -114,7 +114,7 @@ void KaleidoSetup_Update(PlayState* play) {
                                     if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                         ShrinkWindow_Letterbox_SetSizeTarget(0);
                                     }
-                                    func_801A3AEC(1);
+                                    Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
                                 }
                             }
                         }

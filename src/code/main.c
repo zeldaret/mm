@@ -1,3 +1,4 @@
+#include "audiomgr.h"
 #include "idle.h"
 #include "irqmgr.h"
 #include "padmgr.h"
@@ -5,7 +6,6 @@
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_heap.h"
-#include "z64.h" // TODO: remove when AudioMgr has been split out
 #include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
@@ -89,7 +89,7 @@ void Main(void* arg) {
 
     while (!exit) {
         msg = NULL;
-        osRecvMesg(&sIrqMgrMsgQueue, (OSMesg)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&sIrqMgrMsgQueue, (OSMesg*)&msg, OS_MESG_BLOCK);
         if (msg == NULL) {
             break;
         }
