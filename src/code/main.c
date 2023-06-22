@@ -5,10 +5,12 @@
  */
 
 #include "global.h"
+#include "audiomgr.h"
 #include "buffers.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_heap.h"
+#include "z64thread.h"
 
 extern OSMesgQueue sSiIntMsgQ;
 extern OSMesg sSiIntMsgBuf[1];
@@ -79,7 +81,7 @@ void Main(void* arg) {
 
     while (!exit) {
         msg = NULL;
-        osRecvMesg(&irqMgrMsgQ, (OSMesg)&msg, OS_MESG_BLOCK);
+        osRecvMesg(&irqMgrMsgQ, (OSMesg*)&msg, OS_MESG_BLOCK);
         if (msg == NULL) {
             break;
         }

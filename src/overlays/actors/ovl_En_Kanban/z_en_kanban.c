@@ -610,7 +610,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         }
                     }
 
-                    Math_ApproachS(&this->actor.shape.rot.x, this->direction << 0xE, 1, 0x2000);
+                    Math_ApproachS(&this->actor.shape.rot.x, this->direction * 0x4000, 1, 0x2000);
                 } else {
                     this->actor.shape.rot.y += this->spinVel.y;
                     this->actor.shape.rot.x += this->direction * 0x7D0;
@@ -833,7 +833,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                     if ((play->msgCtx.ocarinaMode == 4) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
-                        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                        Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                     }
                     break;
 

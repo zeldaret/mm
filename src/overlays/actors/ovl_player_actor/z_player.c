@@ -464,12 +464,12 @@ typedef struct {
 } ExplosiveInfo; // size = 0x4
 
 typedef struct {
-    /* 0x0 */ Color_RGB8 unk_0;
-    /* 0x3 */ Color_RGB8 unk_3;
-    /* 0x6 */ Color_RGB8 unk_6;
-    /* 0xA */ s16 unk_A;
-    /* 0xC */ s16 unk_C;
-} struct_8082F02C_arg1; // size = 0xE
+    /* 0x0 */ Color_RGB8 ambientColor;
+    /* 0x3 */ Color_RGB8 diffuseColor;
+    /* 0x6 */ Color_RGB8 fogColor;
+    /* 0xA */ s16 fogNear;
+    /* 0xC */ s16 zFar;
+} PlayerEnvLighting; // size = 0xE
 
 typedef struct GetItemEntry {
     /* 0x0 */ u8 itemId;
@@ -1742,7 +1742,7 @@ void Player_AnimSfx_PlayVoice(Player* this, u16 sfxId) {
     u16 sfxOffset;
 
     if (this->currentMask == PLAYER_MASK_GIANT) {
-        func_8019F830(&this->actor.projectedPos, sfxId);
+        Audio_PlaySfx_GiantsMask(&this->actor.projectedPos, sfxId);
     } else if (this->actor.id == ACTOR_PLAYER) {
         if (this->currentMask == PLAYER_MASK_SCENTS) {
             sfxOffset = SFX_VOICE_BANK_SIZE * 7;
@@ -1800,7 +1800,7 @@ void Player_AnimSfx_PlayFloorWalk(Player* this, f32 freqVolumeLerp) {
     }
 
     // Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume
-    func_8019F638(&this->actor.projectedPos, sfxId, freqVolumeLerp);
+    Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(&this->actor.projectedPos, sfxId, freqVolumeLerp);
 }
 
 // ANIMSFX_TYPE_FLOOR_JUMP
@@ -1844,8 +1844,8 @@ void Player_PlayAnimSfx(Player* this, AnimSfxEntry* entry) {
                 Player_AnimSfx_PlayFloorWalk(this, 0.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_9)) {
                 // Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume
-                func_8019F638(&this->actor.projectedPos, this->ageProperties->surfaceSfxIdOffset + NA_SE_PL_WALK_LADDER,
-                              0.0f);
+                Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(
+                    &this->actor.projectedPos, this->ageProperties->surfaceSfxIdOffset + NA_SE_PL_WALK_LADDER, 0.0f);
             } else if (type == ANIMSFX_SHIFT_TYPE(ANIMSFX_TYPE_SURFACE)) {
                 Player_PlaySfx(this, entry->sfxId + this->ageProperties->surfaceSfxIdOffset);
             }
@@ -2712,11 +2712,11 @@ PlayerAnimationHeader* func_8082EFE4(Player* this) {
     }
 }
 
-void func_8082F02C(PlayState* play, struct_8082F02C_arg1* arg1, f32 arg2) {
-    func_800FD59C(play, &arg1->unk_0, arg2);
-    func_800FD5E0(play, &arg1->unk_3, arg2);
-    func_800FD654(play, &arg1->unk_6, arg2);
-    func_800FD698(play, arg1->unk_A, arg1->unk_C, arg2);
+void Player_LerpEnvLighting(PlayState* play, PlayerEnvLighting* lighting, f32 lerp) {
+    Environment_LerpAmbientColor(play, &lighting->ambientColor, lerp);
+    Environment_LerpDiffuseColor(play, &lighting->diffuseColor, lerp);
+    Environment_LerpFogColor(play, &lighting->fogColor, lerp);
+    Environment_LerpFog(play, lighting->fogNear, lighting->zFar, lerp);
 }
 
 /**
@@ -2784,8 +2784,12 @@ void func_8082F164(Player* this, u16 button) {
     }
 }
 
-struct_8082F02C_arg1 D_8085C98C = {
-    { 0, 0, 0 }, { 255, 255, 155 }, { 20, 20, 50 }, 940, 5000,
+PlayerEnvLighting sZoraBarrierEnvLighting = {
+    { 0, 0, 0 },       // ambientColor
+    { 255, 255, 155 }, // diffuseColor
+    { 20, 20, 50 },    // fogColor
+    940,               // fogNear
+    5000,              // zFar
 };
 
 // Run Zora Barrier
@@ -2820,7 +2824,7 @@ void func_8082F1AC(PlayState* play, Player* this) {
 
         sp46 = play->gameplayFrames * 7000;
         sp44 = play->gameplayFrames * 14000;
-        func_8082F02C(play, &D_8085C98C, this->unk_B62 / 255.0f);
+        Player_LerpEnvLighting(play, &sZoraBarrierEnvLighting, this->unk_B62 / 255.0f);
 
         sp34 = Math_SinS(sp44) * 40.0f;
         sp40 = Math_CosS(sp44) * 40.0f;
@@ -3758,7 +3762,7 @@ u8 sMagicArrowCosts[] = {
 s32 func_808306F8(Player* this, PlayState* play) {
     if ((this->heldItemAction >= PLAYER_IA_BOW_FIRE) && (this->heldItemAction <= PLAYER_IA_BOW_LIGHT) &&
         (gSaveContext.magicState != MAGIC_STATE_IDLE)) {
-        play_sound(NA_SE_SY_ERROR);
+        Audio_PlaySfx(NA_SE_SY_ERROR);
     } else {
         Player_SetUpperAction(play, this, Player_UpperAction_7);
 
@@ -4242,9 +4246,9 @@ void func_808318C0(PlayState* play) {
             play->actorCtx.lensActive = true;
         }
 
-        play_sound(play->actorCtx.lensActive ? NA_SE_SY_GLASSMODE_ON : NA_SE_SY_GLASSMODE_OFF);
+        Audio_PlaySfx(play->actorCtx.lensActive ? NA_SE_SY_GLASSMODE_ON : NA_SE_SY_GLASSMODE_OFF);
     } else {
-        play_sound(NA_SE_SY_ERROR);
+        Audio_PlaySfx(NA_SE_SY_ERROR);
     }
 }
 
@@ -4291,12 +4295,12 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                     (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                      BgCheck_EntityCheckCeiling(&play->colCtx, &sp54, &this->actor.world.pos,
                                                 sPlayerAgeProperties[playerForm].unk_00, &sp5C, &sp58, &this->actor))) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return;
                 }
             }
             if ((itemAction == PLAYER_IA_MAGIC_BEANS) && (AMMO(ITEM_MAGIC_BEANS) == 0)) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
             } else {
                 this->itemAction = itemAction;
                 this->unk_AA5 = PLAYER_UNKAA5_5;
@@ -4308,19 +4312,19 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                     ((explosiveType = Player_ExplosiveFromIA(this, itemAction)) > PLAYER_EXPLOSIVE_NONE) &&
                     ((AMMO(sPlayerExplosiveInfo[explosiveType].itemId) == 0) ||
                      (play->actorCtx.actorLists[ACTORCAT_EXPLOSIVES].length >= 3)))) {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
         } else if (itemAction == PLAYER_IA_LENS) {
             func_808318C0(play);
         } else if (itemAction == PLAYER_IA_PICTO_BOX) {
             if (!func_80831814(this, play, PLAYER_UNKAA5_2)) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
             }
         } else if ((itemAction == PLAYER_IA_NUT) &&
                    ((this->transformation != PLAYER_FORM_DEKU) || (this->heldItemButton != 0))) {
             if (AMMO(ITEM_NUT) != 0) {
                 func_8083A658(play, this);
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
             }
         } else if ((this->transformation == PLAYER_FORM_HUMAN) && (itemAction >= PLAYER_IA_MASK_MIN) &&
                    (itemAction < PLAYER_IA_MASK_GIANT)) {
@@ -5410,7 +5414,7 @@ s32 func_80834600(Player* this, PlayState* play) {
 
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_TAKEN_AWAY);
         play->haltAllActors = true;
-        play_sound(NA_SE_OC_ABYSS);
+        Audio_PlaySfx(NA_SE_OC_ABYSS);
     } else if ((this->unk_B75 != 0) && ((this->unk_B75 >= 3) || (this->invincibilityTimer == 0))) {
         u8 sp6C[] = { 0, 2, 1, 1 };
 
@@ -5679,7 +5683,7 @@ s32 func_80835428(PlayState* play, Player* this) {
         func_80834104(play, this);
         Player_AnimationPlayLoop(play, this, &gPlayerAnim_link_normal_landing_wait);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_FALL_S);
-        func_8019F128(NA_SE_OC_SECRET_WARP_IN);
+        Audio_PlaySfx_2(NA_SE_OC_SECRET_WARP_IN);
         return true;
     }
     return false;
@@ -5780,13 +5784,13 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     func_808354A4(play, var_a3 - 1,
                                   SurfaceType_GetFloorEffect(&play->colCtx, poly, bgId) == FLOOR_EFFECT_2);
                     if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->floorProperty == FLOOR_PROPERTY_5)) {
-                        func_8019F128(NA_SE_OC_TUNAMI);
+                        Audio_PlaySfx_2(NA_SE_OC_TUNAMI);
                         func_801A4058(5);
                         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                     } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
                                (this->floorProperty == FLOOR_PROPERTY_12)) {
-                        func_8019F128(NA_SE_OC_SECRET_WARP_IN);
+                        Audio_PlaySfx_2(NA_SE_OC_SECRET_WARP_IN);
                     }
 
                     if (this->stateFlags1 & PLAYER_STATE1_800000) {
@@ -5802,7 +5806,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                     ((floorType = SurfaceType_GetFloorType(&play->colCtx, poly, bgId)) != FLOOR_TYPE_10) &&
                     ((sp34 < 100) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
                     if (floorType == FLOOR_TYPE_11) {
-                        func_8019F128(NA_SE_OC_SECRET_HOLE_OUT);
+                        Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
                         func_801A4058(5);
                         gSaveContext.seqId = (u8)NA_BGM_DISABLED;
                         gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
@@ -5846,7 +5850,7 @@ s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) 
                         }
 
                         play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
-                        play_sound(NA_SE_OC_ABYSS);
+                        Audio_PlaySfx(NA_SE_OC_ABYSS);
                     } else {
                         if (this->stateFlags3 & PLAYER_STATE3_1000000) {
                             func_808355D8(play, this, &gPlayerAnim_pn_kakkufinish);
@@ -7257,12 +7261,12 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         }
                     }
                     this->stateFlags1 |= PLAYER_STATE1_100000;
-                    play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
+                    Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);
                     Player_StopHorizontalMovement(this);
                     return true;
                 }
                 this->unk_AA5 = PLAYER_UNKAA5_0;
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return false;
             }
             this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_10000000);
@@ -7370,7 +7374,7 @@ s32 func_80839518(Player* this, PlayState* play) {
     } else if ((this->tatlTextId == 0) && !func_80123420(this) &&
                CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_CUP) &&
                !func_80831814(this, play, PLAYER_UNKAA5_1)) {
-        play_sound(NA_SE_SY_ERROR);
+        Audio_PlaySfx(NA_SE_SY_ERROR);
     }
     return false;
 }
@@ -7858,8 +7862,8 @@ void func_8083A98C(Actor* thisx, PlayState* play2) {
                 f32 focusDeltaX = (s16)(thisx->focus.rot.x - prevFocusX);
                 f32 focusDeltaY = (s16)(thisx->focus.rot.y - prevFocusY);
 
-                func_8019FAD8(&gSfxDefaultPos, NA_SE_PL_TELESCOPE_MOVEMENT - SFX_FLAG,
-                              sqrtf(SQ(focusDeltaX) + SQ(focusDeltaY)) / 300.0f);
+                Audio_PlaySfx_AtPosWithFreq(&gSfxDefaultPos, NA_SE_PL_TELESCOPE_MOVEMENT - SFX_FLAG,
+                                            sqrtf(SQ(focusDeltaX) + SQ(focusDeltaY)) / 300.0f);
             }
         }
 
@@ -8233,7 +8237,7 @@ void func_8083BB4C(PlayState* play, Player* this) {
                         play->transitionTrigger = TRANS_TRIGGER_START;
                         play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
                         this->stateFlags1 |= PLAYER_STATE1_200;
-                        play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
+                        Audio_PlaySfx(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
                     } else if ((this->unk_3CF == 0) &&
                                ((play->sceneId == SCENE_30GYOSON) || (play->sceneId == SCENE_31MISAKI) ||
                                 (play->sceneId == SCENE_TORIDE))) {
@@ -8324,7 +8328,7 @@ void func_8083BF54(PlayState* play, Player* this) {
         this->unk_AB8 = CLAMP(this->unk_AB8, 0.0f, var_fa1);
 
         if ((this->linearVelocity == 0.0f) && (fabsf(this->unk_AB8 - temp_fv1_2) > 2.0f)) {
-            func_800B8F98(&this->actor, sfxId);
+            Actor_PlaySfx_FlaggedCentered1(&this->actor, sfxId);
         }
 
         this->actor.gravity -= this->unk_AB8 * 0.004f;
@@ -8686,7 +8690,7 @@ void func_8083D168(PlayState* play, Player* this, GetItemEntry* giEntry) {
     }
 
     Item_Give(play, giEntry->itemId);
-    play_sound((this->getItemId < GI_NONE) ? NA_SE_SY_GET_BOXITEM : NA_SE_SY_GET_ITEM);
+    Audio_PlaySfx((this->getItemId < GI_NONE) ? NA_SE_SY_GET_BOXITEM : NA_SE_SY_GET_ITEM);
 }
 
 s32 func_8083D23C(Player* this, PlayState* play) {
@@ -11238,7 +11242,7 @@ void func_808445C4(PlayState* play, Player* this) {
         pos.y = (Rand_CenteredFloat(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
         pos.z = (Rand_CenteredFloat(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
         EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, 1);
-        func_800B8F98(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
     }
 }
 
@@ -11401,8 +11405,8 @@ void func_80844784(PlayState* play, Player* this) {
             Math_ScaledStepToS(&this->actor.world.rot.y, var_a3, temp_ft2);
         }
         if ((this->linearVelocity == 0.0f) && (this->actor.speed != 0.0f)) {
-            func_8019F780(&this->actor.projectedPos, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG),
-                          this->actor.speed);
+            Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(
+                &this->actor.projectedPos, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG), this->actor.speed);
         }
     } else {
         this->actor.speed = this->linearVelocity;
@@ -11433,7 +11437,7 @@ void func_80844784(PlayState* play, Player* this) {
                 if (Player_SetAction(play, this, Player_Action_94, 1)) {
                     this->stateFlags3 |= PLAYER_STATE3_2000 | PLAYER_STATE3_1000000;
                     func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_OPEN);
-                    func_8019FD90(4, 2);
+                    Audio_SetSfxTimerLerpInterval(4, 2);
                 }
 
                 this->unk_AE8 = 0x270F;
@@ -11469,8 +11473,9 @@ void func_80844784(PlayState* play, Player* this) {
                     func_8083FBC4(play, this);
                 }
 
-                func_8019F780(&this->actor.projectedPos, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG),
-                              fabsf(D_80862B3C));
+                Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(&this->actor.projectedPos,
+                                                           Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG),
+                                                           fabsf(D_80862B3C));
             }
 
             this->actor.velocity.x += sp48;
@@ -11528,7 +11533,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         this->unk_D6A++;
         if (this->unk_D6A == 0) {
             this->unk_D6A = 1;
-            play_sound(NA_SE_OC_REVENGE);
+            Audio_PlaySfx(NA_SE_OC_REVENGE);
         }
     }
 
@@ -12758,7 +12763,7 @@ s32 func_808482E0(PlayState* play, Player* this) {
             Audio_PlayFanfare(NA_BGM_GET_NEW_MASK);
         } else if (((this->getItemId >= GI_RUPEE_GREEN) && (this->getItemId <= GI_RUPEE_10)) ||
                    (this->getItemId == GI_RECOVERY_HEART)) {
-            play_sound(NA_SE_SY_GET_BOXITEM);
+            Audio_PlaySfx(NA_SE_SY_GET_BOXITEM);
         } else {
             s32 seqId;
 
@@ -13268,7 +13273,7 @@ void Player_Action_1(Player* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_ON = 20;
         R_PLAY_FILL_SCREEN_ALPHA = 0;
         R_PLAY_FILL_SCREEN_R = R_PLAY_FILL_SCREEN_G = R_PLAY_FILL_SCREEN_B = R_PLAY_FILL_SCREEN_ALPHA;
-        play_sound(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
+        Audio_PlaySfx(NA_SE_SY_DEKUNUTS_JUMP_FAILED);
     } else if (R_PLAY_FILL_SCREEN_ON > 0) {
         R_PLAY_FILL_SCREEN_ALPHA += R_PLAY_FILL_SCREEN_ON;
         if (R_PLAY_FILL_SCREEN_ALPHA > 255) {
@@ -14367,9 +14372,9 @@ void Player_Action_26(Player* this, PlayState* play) {
             func_8083CB58(this, sp3C, this->actor.shape.rot.y);
 
             if (func_8083FBC4(play, this)) {
-                func_800B8F98(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
-                                                ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
-                                                : NA_SE_PL_ROLL_DUST - SFX_FLAG);
+                Actor_PlaySfx_FlaggedCentered1(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
+                                                                 ? NA_SE_PL_ROLL_SNOW_DUST - SFX_FLAG
+                                                                 : NA_SE_PL_ROLL_DUST - SFX_FLAG);
             }
 
             Player_PlayAnimSfx(this, D_8085D61C);
@@ -15046,7 +15051,7 @@ void Player_Action_43(Player* this, PlayState* play) {
                           BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_R | BTN_B | BTN_A))) ||
           func_808391D8(this, play)))) {
         func_80839ED0(this, play);
-        play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
+        Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);
     } else if ((DECR(this->unk_AE8) == 0) || (this->unk_AA5 != PLAYER_UNKAA5_3)) {
         if (func_801240DC(this)) {
             this->unk_AA6 |= 0x43;
@@ -15980,7 +15985,7 @@ void Player_Action_56(Player* this, PlayState* play) {
             this->unk_B86[0] = 1;
         } else {
             sp44 = 9.0f;
-            func_800B8F98(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
+            Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
         }
 
         // Y
@@ -17027,8 +17032,8 @@ void Player_Action_73(Player* this, PlayState* play) {
     this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
     PlayerAnimation_Update(play, &this->skelAnime);
     func_8083FBC4(play, this);
-    func_8019F780(&this->actor.projectedPos, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG),
-                  this->actor.speed);
+    Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(
+        &this->actor.projectedPos, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG), this->actor.speed);
 
     if (func_80838A90(this, play)) {
         return;
@@ -17145,7 +17150,7 @@ void Player_Action_77(Player* this, PlayState* play) {
             }
 
             play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
-            play_sound(NA_SE_OC_ABYSS);
+            Audio_PlaySfx(NA_SE_OC_ABYSS);
         } else {
             play->transitionType = TRANS_TYPE_FADE_BLACK;
             gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK;
@@ -17268,7 +17273,8 @@ void Player_Action_83(Player* this, PlayState* play) {
     }
 
     this->shockTimer = 40;
-    func_800B8F98(&this->actor, this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
+    Actor_PlaySfx_FlaggedCentered1(&this->actor,
+                                   this->ageProperties->voiceSfxIdOffset + (NA_SE_VO_LI_TAKEN_AWAY - SFX_FLAG));
 }
 
 void Player_Action_84(Player* this, PlayState* play) {
@@ -17622,7 +17628,7 @@ void Player_Action_86(Player* this, PlayState* play) {
             Math_StepToF(&this->unk_B10[4], 1.0f, sp4C->unk_1 / 100.0f);
         } else if (this->unk_AE7 < sp4C->unk_3) {
             if (this->unk_AE7 == sp4C->unk_2) {
-                func_801000CC(NA_SE_EV_LIGHTNING_HARD);
+                Lib_PlaySfx_2(NA_SE_EV_LIGHTNING_HARD);
             }
 
             Math_StepToF(&this->unk_B10[4], 2.0f, 0.5f);
@@ -18073,7 +18079,7 @@ void Player_Action_94(Player* this, PlayState* play) {
                     this->stateFlags3 &= ~PLAYER_STATE3_200;
                     this->stateFlags3 |= PLAYER_STATE3_1000000;
                     func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_OPEN);
-                    func_8019FD90(4, 2);
+                    Audio_SetSfxTimerLerpInterval(4, 2);
                 }
             }
         }
@@ -18165,10 +18171,10 @@ void Player_Action_94(Player* this, PlayState* play) {
             func_808566C0(play, this, PLAYER_BODYPART_RIGHT_HAND, 0.0f, 1.0f, 0.0f, 32);
         }
 
-        func_8019FCB8(&this->actor.projectedPos, 0x1851, 2.0f * (this->unk_B86[1] * (1.0f / 6000.0f)));
+        Audio_PlaySfx_AtPosWithTimer(&this->actor.projectedPos, 0x1851, 2.0f * (this->unk_B86[1] * (1.0f / 6000.0f)));
         if ((this->boomerangActor == NULL) && CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_B)) {
             if (AMMO(ITEM_NUT) == 0) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
             } else {
                 this->boomerangActor =
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ARROW, this->bodyPartsPos[PLAYER_BODYPART_WAIST].x,
@@ -18267,7 +18273,7 @@ void Player_Action_95(Player* this, PlayState* play) {
 
         func_800AE930(&play->colCtx, Effect_GetByIndex(this->meleeWeaponEffectIndex[2]), &this->actor.world.pos, 2.0f,
                       this->currentYaw, this->actor.floorPoly, this->actor.floorBgId);
-        func_800B8F98(&this->actor, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG));
+        Actor_PlaySfx_FlaggedCentered1(&this->actor, Player_GetFloorSfx(this, NA_SE_PL_SLIP_LEVEL - SFX_FLAG));
     }
 }
 
@@ -18295,7 +18301,7 @@ void func_808576BC(PlayState* play, Player* this) {
     }
 
     if (var_v0 > 0x1770) {
-        func_800B8F98(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_GORON_SLIP - SFX_FLAG);
     }
 
     if (func_8083F8A8(play, this, 12.0f, -1 - (var_v0 >> 0xC), (var_v0 >> 0xA) + 1.0f, (var_v0 >> 7) + 160, 20, true)) {
@@ -18566,7 +18572,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                         if ((gSaveContext.magicState == MAGIC_STATE_IDLE) &&
                             (gSaveContext.save.saveInfo.playerData.magic >= 2) && (this->unk_AE8 >= 0x36B0)) {
                             this->unk_AE7++;
-                            func_800B8F98(&this->actor, NA_SE_PL_GORON_BALL_CHARGE - SFX_FLAG);
+                            Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_GORON_BALL_CHARGE - SFX_FLAG);
                         } else {
                             this->unk_AE7 = 4;
                         }
@@ -18651,7 +18657,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                         if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (temp_ft3_2 != 0) &&
                             (((temp_v0_10 + temp_ft3_2) * temp_v0_10) <= 0)) {
                             spE0 = Player_GetFloorSfx(this, NA_SE_PL_GORON_ROLL);
-                            func_8019F780(&this->actor.projectedPos, spE0, sp54);
+                            Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(&this->actor.projectedPos, spE0, sp54);
                         }
                     }
                 }
@@ -18733,7 +18739,7 @@ void Player_Action_96(Player* this, PlayState* play) {
             if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (((this->unk_AE8 + spD8) * spD8) <= 0)) {
                 spE0 =
                     Player_GetFloorSfx(this, (this->unk_B86[1] != 0) ? NA_SE_PL_GORON_CHG_ROLL : NA_SE_PL_GORON_ROLL);
-                func_8019F780(&this->actor.projectedPos, spE0, this->unk_B08);
+                Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(&this->actor.projectedPos, spE0, this->unk_B08);
             }
         }
 
@@ -19127,7 +19133,7 @@ void func_8085978C(PlayState* play, Player* this, UNK_TYPE arg2) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 0;
-        play_sound(NA_SE_SY_WHITE_OUT_T);
+        Audio_PlaySfx(NA_SE_SY_WHITE_OUT_T);
     }
 }
 
@@ -19684,7 +19690,7 @@ void func_8085A364(PlayState* play, Player* this, void* arg2) {
     if (this->skelAnime.animation == &gPlayerAnim_cl_nigeru) {
         Player_PlayAnimSfx(this, D_8085DA48);
     } else if (this->skelAnime.animation == &gPlayerAnim_alink_rakkatyu) {
-        func_800B8F98(&this->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
     } else {
         func_80858FE8(this);
     }
@@ -19786,7 +19792,7 @@ void func_8085A8C4(PlayState* play, Player* this, UNK_TYPE arg2) {
         R_PLAY_FILL_SCREEN_G = 255;
         R_PLAY_FILL_SCREEN_B = 255;
         R_PLAY_FILL_SCREEN_ALPHA = 0;
-        play_sound(NA_SE_SY_WHITE_OUT_T);
+        Audio_PlaySfx(NA_SE_SY_WHITE_OUT_T);
     }
 }
 
