@@ -303,21 +303,6 @@ typedef struct {
 struct PlayState;
 
 typedef struct {
-    /* 0x000 */ IrqMgr* irqMgr;
-    /* 0x004 */ SchedContext* sched;
-    /* 0x008 */ OSScTask audioTask;
-    /* 0x060 */ AudioTask* rspTask;
-    /* 0x064 */ OSMesgQueue interruptMsgQ;
-    /* 0x07C */ OSMesg interruptMsgBuf[30];
-    /* 0x0F4 */ OSMesgQueue cmdQ;
-    /* 0x10C */ OSMesg cmdMsgBuf[1];
-    /* 0x110 */ OSMesgQueue lockMsgQ;
-    /* 0x128 */ OSMesg lockMsgBuf[1];
-    /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
-    /* 0x130 */ OSThread thread;
-} AudioMgr; // size = 0x2E0
-
-typedef struct {
     /* 0x0 */ u8   seqId;
     /* 0x1 */ u8   ambienceId;
 } SequenceContext; // size = 0x2
