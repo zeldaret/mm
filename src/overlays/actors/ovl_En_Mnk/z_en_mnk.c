@@ -951,13 +951,13 @@ void EnMnk_Monkey_TalkAfterApproach(EnMnk* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 1:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         EnMnk_Monkey_ChangeAnim(this, 10, ANIMMODE_ONCE, -5.0f);
                         Message_ContinueTextbox(play, 0x7D7);
                         break;
 
                     case 0:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         EnMnk_Monkey_SetAnim(this, 7);
                         Message_ContinueTextbox(play, 0x7D6);
                         this->unk_3E0 = 6;
@@ -1260,11 +1260,11 @@ void EnMnk_MonkeyTiedUp_TeachSong(EnMnk* this, PlayState* play) {
                 this->csId = 5;
                 SET_WEEKEVENTREG(WEEKEVENTREG_09_80);
                 this->unk_3E4 |= 0x2000;
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 break;
 
             case 0:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->picto.actor.csId = this->csIdList[4];
                 this->csId = 4;
                 break;
