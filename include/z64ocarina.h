@@ -32,6 +32,12 @@ typedef enum {
     /* 24 */ OCARINA_SONG_SCARECROW_LONG = OCARINA_SONG_MAX // anything larger than 24 is considered the long scarecrow's song
 } OcarinaSongId;
 
+typedef enum OcarinaMode {
+    /* 0x18 */ OCARINA_MODE_APPLY_INV_SOT_FAST = 24,
+    /* 0x19 */ OCARINA_MODE_APPLY_INV_SOT_SLOW,
+    /* 0x1A */ OCARINA_MODE_APPLY_DOUBLE_SOT
+} OcarinaMode;
+
 typedef enum {
     /*  0 */ OCARINA_BTN_A,
     /*  1 */ OCARINA_BTN_C_DOWN,

@@ -2,6 +2,7 @@
 #define Z_EN_FIREFLY_H
 
 #include "global.h"
+#include "objects/object_firefly/object_firefly.h"
 
 struct EnFirefly;
 
@@ -27,8 +28,8 @@ typedef struct EnFirefly {
     /* 0x18F */ u8 drawDmgEffType;
     /* 0x190 */ s16 timer;
     /* 0x192 */ s16 pitchTarget;
-    /* 0x194 */ Vec3s jointTable[28];
-    /* 0x23C */ Vec3s morphTable[28];
+    /* 0x194 */ Vec3s jointTable[FIRE_KEESE_LIMB_MAX];
+    /* 0x23C */ Vec3s morphTable[FIRE_KEESE_LIMB_MAX];
     /* 0x2E4 */ f32 maxAltitude;
     /* 0x2E8 */ f32 drawDmgEffAlpha;
     /* 0x2E8 */ f32 drawDmgEffScale;

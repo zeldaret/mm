@@ -4,10 +4,10 @@
 #include "global.h"
 #include "objects/object_crow/object_crow.h"
 
-#define EN_SYATEKI_CROW_GET_WAIT_MOD(thisx) ((thisx)->params & 0xF)
-#define EN_SYATEKI_CROW_GET_SPEED_MOD(thisx) (((thisx)->params & 0xF0) >> 4)
-#define EN_SYATEKI_CROW_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_SYATEKI_CROW_PARAMS(index, speedMod, waitMod) (((index << 8) & 0xFF00) | ((speedMod << 4) & 0xF0) | (waitMod & 0xF))
+#define SG_GUAY_GET_WAIT_MOD(thisx) ((thisx)->params & 0xF)
+#define SG_GUAY_GET_SPEED_MOD(thisx) (((thisx)->params & 0xF0) >> 4)
+#define SG_GUAY_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define SG_GUAY_PARAMS(index, speedMod, waitMod) (((index << 8) & 0xFF00) | ((speedMod << 4) & 0xF0) | (waitMod & 0xF))
 
 struct EnSyatekiCrow;
 

@@ -119,7 +119,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
     if (grottoIsOpen) {
         DOORANA_SET_TYPE(&this->actor, DOORANA_TYPE_VISIBLE);
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
-        play_sound(NA_SE_SY_CORRECT_CHIME);
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
     }
 
     Actor_SetClosestSecretDistance(&this->actor, play);

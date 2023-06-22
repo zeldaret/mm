@@ -494,7 +494,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
             this->picto.actor.speed = 0.0f;
             func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_26);
-            func_801000A4(NA_SE_SY_FOUND);
+            Lib_PlaySfx(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->actionFunc = EnGe2_SetupCharge;
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
@@ -679,7 +679,7 @@ void EnGe2_GuardStationary(EnGe2* this, PlayState* play) {
                             0x4000, 720.0f, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
             func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_26);
-            func_801000A4(NA_SE_SY_FOUND);
+            Lib_PlaySfx(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->timer = 50;
             EnGe2_SetupCapturePlayer(this);

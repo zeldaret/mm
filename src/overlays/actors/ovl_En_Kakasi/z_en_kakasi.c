@@ -512,7 +512,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
             this->talkState = TEXT_STATE_5;
 
             if (play->msgCtx.choiceIndex == 1) {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 if (this->picto.actor.textId == 0x1656) {
                     this->picto.actor.textId = 0x1658;
                 } else if (this->picto.actor.textId == 0x165C) {
@@ -524,7 +524,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                 }
                 EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_HOPPING_REGULAR);
             } else {
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 if (this->picto.actor.textId == 0x1656) { // would you like to learn a song? yes/no
                     this->picto.actor.textId = 0x1657;
                 } else if (this->picto.actor.textId == 0x165C) { // would you like to learn a song? yes/no
@@ -621,7 +621,6 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
             this->unkCounter1A4 = 0;
             CutsceneManager_Stop(this->csIdList[0]);
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_YASE_DEAD);
-            if (this) {}
             this->unkState196 = 2;
             this->subCamId = SUB_CAM_ID_DONE;
             this->picto.actor.textId = 0x1647;
@@ -772,10 +771,10 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
         } else {
             this->talkState = TEXT_STATE_5;
             if (play->msgCtx.choiceIndex == 1) {
-                func_8019F208(); // play 0x4808 sfx (decide) and calls AudioSfx_StopById
+                Audio_PlaySfx_MessageDecide();
                 this->picto.actor.textId = 0x164A;
             } else {
-                func_8019F230(); // play 0x480A sfx (cancel) and calls AudioSfx_StopById
+                Audio_PlaySfx_MessageCancel();
                 this->picto.actor.textId = 0x1661;
             }
         }
@@ -944,7 +943,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
                 if ((gSaveContext.save.time > CLOCK_TIME(18, 0)) || (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
                     gSaveContext.save.time = CLOCK_TIME(6, 0);
                     gSaveContext.respawnFlag = -4;
-                    SET_EVENTINF(EVENTINF_27);
+                    SET_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
                 } else {
                     gSaveContext.save.time = CLOCK_TIME(18, 0);
                     gSaveContext.respawnFlag = -8;
