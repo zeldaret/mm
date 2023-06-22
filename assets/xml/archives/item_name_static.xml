@@ -93,10 +93,10 @@
         <Texture Name="gItemNameBombBag20ENGTex" OutName="item_name_bomb_bag_20_eng" Format="ia4" Width="128" Height="16" Offset="0x15800" /> <!-- ITEM_BOMB_BAG_20 -->
         <Texture Name="gItemNameBombBag30ENGTex" OutName="item_name_bomb_bag_30_eng" Format="ia4" Width="128" Height="16" Offset="0x15C00" /> <!-- ITEM_BOMB_BAG_30 -->
         <Texture Name="gItemNameBombBag40ENGTex" OutName="item_name_bomb_bag_40_eng" Format="ia4" Width="128" Height="16" Offset="0x16000" /> <!-- ITEM_BOMB_BAG_40 -->
-        <Texture Name="gItemNameBossKey1JPNTex" OutName="item_name_boss_key_1_jpn" Format="ia4" Width="128" Height="16" Offset="0x16400" /> <!-- ITEM_WALLET_DEFAULT -->
-        <Texture Name="gItemNameBossKey2JPNTex" OutName="item_name_boss_key_2_jpn" Format="ia4" Width="128" Height="16" Offset="0x16800" /> <!-- ITEM_WALLET_ADULT -->
-        <Texture Name="gItemNameBossKey3JPNTex" OutName="item_name_boss_key_3_jpn" Format="ia4" Width="128" Height="16" Offset="0x16C00" /> <!-- ITEM_WALLET_GIANT -->
-        <Texture Name="gItemNameBossKey4JPNTex" OutName="item_name_boss_key_4_jpn" Format="ia4" Width="128" Height="16" Offset="0x17000" /> <!-- ITEM_FISHING_ROD -->
+        <Texture Name="gItemNameBigKey1JPNTex" OutName="item_name_big_key_1_jpn" Format="ia4" Width="128" Height="16" Offset="0x16400" /> <!-- ITEM_WALLET_DEFAULT -->
+        <Texture Name="gItemNameBigKey2JPNTex" OutName="item_name_big_key_2_jpn" Format="ia4" Width="128" Height="16" Offset="0x16800" /> <!-- ITEM_WALLET_ADULT -->
+        <Texture Name="gItemNameBigKey3JPNTex" OutName="item_name_big_key_3_jpn" Format="ia4" Width="128" Height="16" Offset="0x16C00" /> <!-- ITEM_WALLET_GIANT -->
+        <Texture Name="gItemNameBigKey4JPNTex" OutName="item_name_big_key_4_jpn" Format="ia4" Width="128" Height="16" Offset="0x17000" /> <!-- ITEM_FISHING_ROD -->
         <Texture Name="gItemNameOdolwasRemainsENGTex" OutName="item_name_odolwas_remains_eng" Format="ia4" Width="128" Height="16" Offset="0x17400" /> <!-- ITEM_REMAINS_ODOLWA -->
         <Texture Name="gItemNameGohtsRemainsENGTex" OutName="item_name_gohts_remains_eng" Format="ia4" Width="128" Height="16" Offset="0x17800" /> <!-- ITEM_REMAINS_GOHT -->
         <Texture Name="gItemNameGyorgsRemainsENGTex" OutName="item_name_gyorgs_remains_eng" Format="ia4" Width="128" Height="16" Offset="0x17C00" /> <!-- ITEM_REMAINS_GYORG -->
