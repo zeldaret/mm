@@ -17,7 +17,7 @@
         <Texture Name="gItemIconPictoBoxTex" OutName="picto_box_icon" Format="rgba32" Width="32" Height="32" Offset="0xD000" />
         <Texture Name="gItemIconLensofTruthTex" OutName="lens_of_truth_icon" Format="rgba32" Width="32" Height="32" Offset="0xE000" />
         <Texture Name="gItemIconHookshotTex" OutName="hookshot_icon" Format="rgba32" Width="32" Height="32" Offset="0xF000" />
-        <Texture Name="gItemIconGreatFairySwordTex" OutName="great_fairy_sword_icon" Format="rgba32" Width="32" Height="32" Offset="0x10000" />
+        <Texture Name="gItemIconGreatFairysSwordTex" OutName="great_fairys_sword_icon" Format="rgba32" Width="32" Height="32" Offset="0x10000" />
         <!-- Visually looks like OoT's Hookshot Icon -->
         <Texture Name="gItemIconLongshotTex" OutName="longshot_icon" Format="rgba32" Width="32" Height="32" Offset="0x11000" />
 
@@ -216,7 +216,8 @@
         <Texture Name="gNamePanelRightTex" OutName="name_panel_right" Format="ia8" Width="72" Height="24" Offset="0x94900"/>
         <Texture Name="gZButtonTex" OutName="z_button" Format="ia8" Width="24" Height="32" Offset="0x94FC0"/>
         <Texture Name="gRButtonTex" OutName="r_button" Format="ia8" Width="24" Height="32" Offset="0x952C0"/>
-        <Texture Name="gUnknownJPTex" OutName="unknown_JP" Format="ia8" Width="80" Height="16" Offset="0x955C0"/>
+        <!-- unused -->
+        <Texture Name="gShowAMusicalNoteTex" OutName="show_a_musical_note" Format="ia8" Width="80" Height="16" Offset="0x955C0"/>
         <Texture Name="gMagicArrowEquipEffectTex" OutName="magic_arrow_equip_effect" Format="ia8" Width="32" Height="32" Offset="0x95AC0"/>
     </File>
 </Root>

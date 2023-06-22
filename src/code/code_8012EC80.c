@@ -114,7 +114,7 @@ TexturePtr gItemIcons[] = {
     gItemIconPictoBoxTex,            // ITEM_PICTO_BOX
     gItemIconLensofTruthTex,         // ITEM_LENS
     gItemIconHookshotTex,            // ITEM_HOOKSHOT
-    gItemIconGreatFairySwordTex,     // ITEM_SWORD_GREAT_FAIRY
+    gItemIconGreatFairysSwordTex,    // ITEM_SWORD_GREAT_FAIRY
     gItemIconLongshotTex,            // ITEM_LONGSHOT
     gItemIconEmptyBottleTex,         // ITEM_BOTTLE
     gItemIconRedPotionTex,           // ITEM_POTION_RED

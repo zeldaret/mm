@@ -3,12 +3,12 @@
     <File Name="object_gi_sword_4" Segment="6">
         
         <!-- Great Fairy Sword Display Lists -->
-        <DList Name="gGiGreatFairySwordHiltEmblemDL" Offset="0x940" /> <!-- The leafy hilt and the green emblem on the blade -->
-        <DList Name="gGiGreatFairySwordBladeDL" Offset="0xAD8" />
+        <DList Name="gGiGreatFairysSwordHiltEmblemDL" Offset="0x940" /> <!-- The leafy hilt and the green emblem on the blade -->
+        <DList Name="gGiGreatFairysSwordBladeDL" Offset="0xAD8" />
 
         <!-- Great Fairy Sword Textures -->
-        <Texture Name="gGiGreatFairySwordLeafPatternTex" OutName="gi_great_fairy_sword_leaf_pattern" Format="ia8" Width="32" Height="32" Offset="0xE58" />
-        <Texture Name="gGiGreatFairySwordBladeTex" OutName="gi_great_fairy_sword_blade" Format="i8" Width="16" Height="16" Offset="0x1258" />
-        <Texture Name="gGiGreatFairySwordEmblemBackgroundTex" OutName="gi_great_fairy_sword_emblem_background" Format="i8" Width="16" Height="16" Offset="0x1358" />
+        <Texture Name="gGiGreatFairysSwordLeafPatternTex" OutName="gi_great_fairys_sword_leaf_pattern" Format="ia8" Width="32" Height="32" Offset="0xE58" />
+        <Texture Name="gGiGreatFairysSwordBladeTex" OutName="gi_great_fairys_sword_blade" Format="i8" Width="16" Height="16" Offset="0x1258" />
+        <Texture Name="gGiGreatFairysSwordEmblemBackgroundTex" OutName="gi_great_fairys_sword_emblem_background" Format="i8" Width="16" Height="16" Offset="0x1358" />
     </File>
 </Root>

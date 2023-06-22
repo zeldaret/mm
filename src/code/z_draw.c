@@ -344,7 +344,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SWORD_GILDED, OBJECT_GI_SWORD_3
     { GetItem_DrawOpa01, { gGiGildedSwordDL, gGiGildedSwordEmptyDL } },
     // GID_SWORD_GREAT_FAIRY, OBJECT_GI_SWORD_4
-    { GetItem_DrawOpa0Xlu1, { gGiGreatFairySwordBladeDL, gGiGreatFairySwordHiltEmblemDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiGreatFairysSwordBladeDL, gGiGreatFairysSwordHiltEmblemDL } },
     // GID_MASK_GARO, OBJECT_GI_MASK09
     { GetItem_DrawOpa0Xlu1, { gGiGarosMaskCloakDL, gGiGarosMaskFaceDL } },
     // GID_MASK_GREAT_FAIRY, OBJECT_GI_MASK14
