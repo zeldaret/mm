@@ -176,9 +176,9 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa0, { gGiStickDL } },
     // GID_DUNGEON_MAP, OBJECT_GI_MAP
     { GetItem_DrawOpa0, { gGiDungeonMapDL } },
-    // GID_MAGIC_SMALL, OBJECT_GI_MAGICPOT
+    // GID_MAGIC_JAR_SMALL, OBJECT_GI_MAGICPOT
     { GetItem_DrawOpa0, { gGiMagicJarSmallDL } },
-    // GID_MAGIC_LARGE, OBJECT_GI_MAGICPOT
+    // GID_MAGIC_JAR_BIG, OBJECT_GI_MAGICPOT
     { GetItem_DrawOpa0, { gGiMagicJarLargeDL } },
     // GID_BOMB, OBJECT_GI_BOMB_1
     { GetItem_DrawOpa0, { gGiBombDL } },
