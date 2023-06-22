@@ -335,12 +335,12 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_358) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
                         Message_StartTextbox(play, this->unk_33C, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
                         play->msgCtx.stateTimer = 4;
                         Rupees_ChangeBy(-this->unk_358);
@@ -348,7 +348,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                     }
                     break;
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     if (this->unk_358 == 150) {
                         this->unk_33C = 0x1633;
                     } else {
@@ -757,7 +757,7 @@ void EnScopenuts_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_328 & 8) {
-        func_800B9010(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
     }
     func_80BCAE78(this, play);
 }

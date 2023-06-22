@@ -697,23 +697,23 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
             if (this->bombbuyFlags & EN_S_GORO_BOMBBUYFLAG_YESBUY) {
                 if (AMMO(ITEM_POWDER_KEG) != 0) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return 0x673;
                 }
                 this->powderKegPrice = play->msgCtx.unk1206C;
                 if (gSaveContext.save.saveInfo.playerData.rupees < this->powderKegPrice) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_TIRED;
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return 0x674;
                 }
                 if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     return 0x676;
                 }
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 return 0x675;
             }
             if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
@@ -1236,7 +1236,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
                 this->bombbuyFlags |= EN_S_GORO_BOMBBUYFLAG_YESBUY;
                 break;
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->bombbuyFlags &= ~EN_S_GORO_BOMBBUYFLAG_YESBUY;
                 break;
         }

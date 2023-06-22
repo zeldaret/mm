@@ -207,12 +207,12 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_CloseTextbox(play);
                         func_809CD634(this, play);
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         switch (gSaveContext.save.playerForm) {
                             case PLAYER_FORM_DEKU:
                                 Message_ContinueTextbox(play, 0x5F0);

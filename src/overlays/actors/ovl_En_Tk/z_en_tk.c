@@ -846,10 +846,10 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
 
                     case 0x1407:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             Message_ContinueTextbox(play, 0x1409);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             Message_ContinueTextbox(play, 0x1408);
                         }
                         break;
@@ -872,11 +872,11 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                     case 0x140D:
                         this->unk_2CA |= 2;
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             play->msgCtx.msgMode = MSGMODE_PAUSED;
                             func_80AEE2A8(this, play);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             Message_ContinueTextbox(play, 0x140E);
                         }
                         break;
@@ -1323,7 +1323,7 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->unk_2CA & 0x200)) {
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-            func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }

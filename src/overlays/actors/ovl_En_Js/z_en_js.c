@@ -576,11 +576,11 @@ void func_80969898(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x2215)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x2217);
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x2216);
                         break;
                 }
@@ -726,14 +726,14 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 ((play->msgCtx.currentTextId == 0x2219) || (play->msgCtx.currentTextId == 0x221E))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
                             break;
                         }
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                 }
@@ -886,11 +886,11 @@ void func_8096A38C(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         break;
                 }
 

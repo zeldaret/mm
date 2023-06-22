@@ -159,7 +159,7 @@ void ObjY2shutter_Update(Actor* thisx, PlayState* play) {
     } else {
         this->isStationary = false;
         if (shutterType != SHUTTER_BARRED) {
-            func_800B9010(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_METALDOOR_SLIDE - SFX_FLAG);
         }
     }
 

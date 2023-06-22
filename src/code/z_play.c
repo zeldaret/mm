@@ -824,7 +824,7 @@ void Play_UpdateTransition(PlayState* this) {
             break;
 
         case TRANS_MODE_SANDSTORM:
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA < 110) {
                     gTransitionTileState = TRANS_TILE_OFF;
@@ -859,7 +859,7 @@ void Play_UpdateTransition(PlayState* this) {
             break;
 
         case TRANS_MODE_SANDSTORM_END:
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
 
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA <= 0) {
@@ -1064,7 +1064,7 @@ void Play_Update(PlayState* this) {
         this->msgCtx.msgMode = MSGMODE_NONE;
         this->msgCtx.currentTextId = 0;
         this->msgCtx.stateTimer = 0;
-        play_sound(NA_SE_SY_CANCEL);
+        Audio_PlaySfx(NA_SE_SY_CANCEL);
     }
     if (sBombersNotebookOpen) {
         BombersNotebook_Update(this, &sBombersNotebook, this->state.input);

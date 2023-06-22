@@ -227,7 +227,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             case 0x4: // MESSAGE_BOX_BREAK
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     if (!msgCtx->textboxSkipped) {
-                        play_sound(NA_SE_NONE);
+                        Audio_PlaySfx(NA_SE_NONE);
                         msgCtx->msgMode = MSGMODE_TEXT_AWAIT_NEXT;
                         Font_LoadMessageBoxEndIcon(font, 0);
                     } else {
@@ -246,7 +246,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             case 0x7: // MESSAGE_TEXTID
                 msgCtx->textboxEndType = TEXTBOX_ENDTYPE_20;
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     Font_LoadMessageBoxEndIcon(font, 0);
                 }
@@ -313,7 +313,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     msgCtx->messageHasSetSfx = true;
                     sfxHi = msgCtx->decodedBuffer.schar[i + 1];
                     sfxHi = sfxHi << 8;
-                    play_sound(sfxHi | msgCtx->decodedBuffer.schar[i + 2]);
+                    Audio_PlaySfx(sfxHi | msgCtx->decodedBuffer.schar[i + 2]);
                 }
                 i += 2;
                 break;
@@ -323,7 +323,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
 
             case 0x15: // MESSAGE_BACKGROUND
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                 }
                 gDPPipeSync(gfx++);
                 gDPSetCombineMode(gfx++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
@@ -394,7 +394,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_00) {
-                        play_sound(NA_SE_SY_MESSAGE_END);
+                        Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         Font_LoadMessageBoxEndIcon(font, 1);
                         if (play->csCtx.state == CS_STATE_IDLE) {
                             func_8011552C(play, 3);
@@ -427,7 +427,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
 
             case 0xA: // MESSAGE_PERSISTENT
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = TEXTBOX_ENDTYPE_30;
                 }
@@ -439,7 +439,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = TEXTBOX_ENDTYPE_40;
                     Font_LoadMessageBoxEndIcon(font, 0);
-                    play_sound(NA_SE_SY_MESSAGE_END);
+                    Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
                 *gfxP = gfx;
                 return;
@@ -447,7 +447,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
             default:
                 if ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) && ((i + 1) == msgCtx->textDrawPos) &&
                     (msgCtx->textDelayTimer == msgCtx->textDelay)) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                 }
                 Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                 charTexIndex += FONT_CHAR_TEX_SIZE;

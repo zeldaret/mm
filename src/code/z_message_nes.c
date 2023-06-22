@@ -670,7 +670,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case 0x12:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
                     if (!msgCtx->textboxSkipped) {
-                        play_sound(NA_SE_NONE);
+                        Audio_PlaySfx(NA_SE_NONE);
                         msgCtx->msgMode = MSGMODE_TEXT_AWAIT_NEXT;
                         Font_LoadMessageBoxEndIcon(font, 0);
                     } else {
@@ -758,7 +758,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 if (((i + 1) == msgCtx->textDrawPos) && (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING)) {
                     stateTimerHi = msgCtx->decodedBuffer.schar[i + 1] << 8;
                     stateTimerHi |= msgCtx->decodedBuffer.schar[i + 2];
-                    play_sound(stateTimerHi);
+                    Audio_PlaySfx(stateTimerHi);
                 }
                 if ((i + 1) == msgCtx->textDrawPos) {
                     msgCtx->textDrawPos += 2;
@@ -799,7 +799,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                 msgCtx->textPosX = 0x2D;
 
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                 }
 
                 gDPPipeSync(gfx++);
@@ -898,7 +898,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = 0x41;
                     Font_LoadMessageBoxEndIcon(font, 0);
-                    play_sound(NA_SE_SY_MESSAGE_END);
+                    Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
                 break;
 
@@ -921,7 +921,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     if (msgCtx->textboxEndType == 0) {
-                        play_sound(NA_SE_SY_MESSAGE_END);
+                        Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         if (character == 0xBF) {
                             Font_LoadMessageBoxEndIcon(font, 1);
                         } else {
@@ -931,7 +931,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                             func_8011552C(play, 3);
                         }
                     } else {
-                        play_sound(NA_SE_NONE);
+                        Audio_PlaySfx(NA_SE_NONE);
                     }
                 }
                 *gfxP = gfx;
@@ -939,7 +939,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
             case 0x1A:
                 if (msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = 0x30;
                 }
@@ -951,7 +951,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = 0x40;
                     Font_LoadMessageBoxEndIcon(font, 0);
-                    play_sound(NA_SE_SY_MESSAGE_END);
+                    Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
                 *gfxP = gfx;
                 return;
@@ -961,7 +961,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     msgCtx->msgMode = MSGMODE_TEXT_DONE;
                     msgCtx->textboxEndType = 0x42;
                     Font_LoadMessageBoxEndIcon(font, 1);
-                    play_sound(NA_SE_SY_MESSAGE_END);
+                    Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                 }
                 *gfxP = gfx;
                 return;
@@ -986,7 +986,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         break;
                 }
                 if ((msgCtx->msgMode == MSGMODE_TEXT_DISPLAYING) && ((i + 1) == msgCtx->textDrawPos)) {
-                    play_sound(NA_SE_NONE);
+                    Audio_PlaySfx(NA_SE_NONE);
                 }
                 if ((character >= 0xB0) && (character <= 0xBB)) {
                     sp12E = msgCtx->textColorR;
@@ -2008,8 +2008,8 @@ void Message_DecodeNES(PlayState* play) {
                 (msgCtx->textBoxType == TEXTBOX_TYPE_3) || (msgCtx->textBoxType == TEXTBOX_TYPE_6) ||
                 (msgCtx->textBoxType == TEXTBOX_TYPE_8) || (msgCtx->textBoxType == TEXTBOX_TYPE_9) ||
                 (msgCtx->textBoxType == TEXTBOX_TYPE_B) || (msgCtx->unk11F0C == 3)) {
-                play_sound((msgCtx->decodedBuffer.schar[decodedBufPos - 1] << 8) |
-                           msgCtx->decodedBuffer.schar[decodedBufPos]);
+                Audio_PlaySfx((msgCtx->decodedBuffer.schar[decodedBufPos - 1] << 8) |
+                              msgCtx->decodedBuffer.schar[decodedBufPos]);
             }
         } else if (curChar == 0x1F) {
             msgCtx->decodedBuffer.schar[++decodedBufPos] = font->msgBuf.schar[++msgCtx->msgBufPos];

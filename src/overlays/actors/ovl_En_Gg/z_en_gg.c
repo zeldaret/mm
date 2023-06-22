@@ -393,7 +393,7 @@ void func_80B359DC(EnGg* this, PlayState* play) {
         if (this->unk_306 == 0) {
             if (player->stateFlags2 & PLAYER_STATE2_8000000) {
                 this->unk_306 = 1;
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             }
         } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_306 = 0;

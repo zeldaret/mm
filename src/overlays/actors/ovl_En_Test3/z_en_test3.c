@@ -412,9 +412,9 @@ s32 func_80A3EC30(EnTest3* this, PlayState* play) {
 s32 func_80A3EC44(EnTest3* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
         } else {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
         }
         if (play->msgCtx.choiceIndex != 0) {
             return 1;

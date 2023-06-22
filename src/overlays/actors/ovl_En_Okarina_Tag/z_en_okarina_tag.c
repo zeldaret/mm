@@ -140,7 +140,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                 }
             }
             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
             this->actionFunc = func_8093E518;
         }
     }

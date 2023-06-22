@@ -527,7 +527,6 @@ extern s32 gDbgCamEnabled;
 extern Input* D_801D0D60;
 // extern UNK_TYPE2 sPlayerCsIdToCsCamId;
 // extern UNK_TYPE1 D_801D0D7A;
-// extern UNK_TYPE4 D_801D14F0;
 
 extern u32 retryCount;
 extern u32 cfbIdx[3];

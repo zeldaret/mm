@@ -258,7 +258,7 @@ void DmChar08_WaitForSong(DmChar08* this, PlayState* play) {
         ((player2->actor.world.pos.x > -5780.0f) && (player2->actor.world.pos.x < -5385.0f) &&
          (player2->actor.world.pos.z > 1120.0f) && (player2->actor.world.pos.z < 2100.0f))) {
         if (!sSuccessSoundAlreadyPlayed) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             sSuccessSoundAlreadyPlayed = true;
         }
     } else {

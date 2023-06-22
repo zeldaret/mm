@@ -14,7 +14,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
-static s16 sScores[] = { 30, 60, 100 };
+static s16 sScores[] = { EXTRA_SCORE_30, EXTRA_SCORE_60, EXTRA_SCORE_100 };
 
 EffectSsInit Effect_Ss_Extra_InitVars = {
     EFFECT_SS_EXTRA,
@@ -45,7 +45,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->draw = EffectSsExtra_Draw;
         this->update = EffectSsExtra_Update;
         this->life = 50;
-        this->rScoreIndex = params->scoreIdx;
+        this->rScoreIndex = params->scoreIndex;
         this->rScale = params->scale;
         this->rTimer = 5;
         this->rObjId = objIndex;

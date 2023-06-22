@@ -834,7 +834,7 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
                         (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING)) {
                         this->actionState = ENKANBAN_REPAIR;
                         this->bounceX = 1;
-                        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                        Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
                     }
                     break;
 
