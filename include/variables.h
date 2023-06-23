@@ -375,11 +375,7 @@ extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX];
 extern ActorId gMaxActorId;
 extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
-// extern UNK_TYPE1 D_801B4708;
 
-extern u8 gOpeningEntranceIndex;
-
-extern ActorCutscene sGlobalCutsceneList[8];
 extern GameStateOverlay gGameStateOverlayTable[];
 extern s32 gGraphNumGameStates;
 

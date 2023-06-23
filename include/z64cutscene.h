@@ -856,6 +856,8 @@ void CutsceneFlags_Set(struct PlayState* play, s16 flag);
 void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
 
+extern u8 gOpeningEntranceIndex;
+
 extern u8 D_801F4DDC;
 extern u8 gDisablePlayerCsModeStartPos;
 extern s16 gDungeonBossWarpSceneId;
