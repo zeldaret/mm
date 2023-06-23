@@ -13,8 +13,7 @@ void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx);
 
-// Unused
-UNK_TYPE4 D_801BB120 = 0;
+static s32 sPad = 0;
 u16 sCurTextId = 0;
 u16 sCurOcarinaAction = 0;
 u8 gOpeningEntranceIndex = 0;
@@ -25,7 +24,7 @@ s16 sCutsceneQuakeIndex;
 CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 u8 D_801F4DDC;
-s16 D_801F4DDE; // unused
+s16 D_801F4DDE; // static s16 sBssPad;
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
 
