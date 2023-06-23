@@ -637,7 +637,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
             if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return PLAYER_IA_MINUS1;
             } else {
                 s32 pad;
@@ -695,7 +695,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MILK_HALF
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_CHATEAU
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FAIRY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOON_TEAR
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOONS_TEAR
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_LAND
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_ROOM_KEY
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LETTER_TO_KAFEI

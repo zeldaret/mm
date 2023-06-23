@@ -6,11 +6,9 @@
 
 #include "z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
+#include "archives/icon_item_static/icon_item_static_yar.h"
 
 s32 KaleidoScope_UpdateQuestStatusPoint(PauseContext* pauseCtx, s16 point);
-
-extern TexturePtr D_08061000; // gBombersNotebookIconTex
-extern TexturePtr D_08062000; // gSongNoteIconTex
 
 s16 sQuestRemainsColorTimerInit[] = { 120, 60, 2, 80 };
 s16 sQuestHpColorTimerInits[] = { 20, 4, 20, 10 };
@@ -117,8 +115,8 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
         255, // QUEST_SONG_SUN
     };
     static TexturePtr sQuestUpgradeTextures[][3] = {
-        { (TexturePtr)0x08053000, (TexturePtr)0x08054000, (TexturePtr)0x08055000 }, // UPG_QUIVER
-        { (TexturePtr)0x08056000, (TexturePtr)0x08057000, (TexturePtr)0x08058000 }, // UPG_BOMB_BAG
+        { gItemIconQuiver30Tex, gItemIconQuiver40Tex, gItemIconQuiver50Tex },    // UPG_QUIVER
+        { gItemIconBombBag20Tex, gItemIconBombBag30Tex, gItemIconBombBag40Tex }, // UPG_BOMB_BAG
     };
     static u8 sQuestUpgrades[] = { UPG_QUIVER, UPG_BOMB_BAG };
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -221,8 +219,9 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
 
-    gDPLoadTextureBlock(POLY_OPA_DISP++, &D_08062000, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, gItemIconSongNoteTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 24, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
 
     for (i = 0; i < 12; i++, j += 4) {
         if (CHECK_QUEST_ITEM(i + QUEST_SONG_SONATA) ||
@@ -256,7 +255,7 @@ void KaleidoScope_DrawQuestStatus(PlayState* play) {
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
         gSPVertex(POLY_OPA_DISP++, &pauseCtx->questVtx[j], 4, 0);
-        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, &D_08061000, 32, 32, 0);
+        KaleidoScope_DrawTexQuadRGBA32(play->state.gfxCtx, gItemIconBombersNotebookTex, 32, 32, 0);
     }
 
     j += 4;
@@ -690,7 +689,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
             // if the cursor point changed
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_QUEST]) {
                 pauseCtx->mainState = PAUSE_MAIN_STATE_IDLE;
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
 
             // Update cursor item and slot
@@ -851,7 +850,7 @@ void KaleidoScope_UpdateQuestCursor(PlayState* play) {
                             if (pauseCtx->cursorPoint[PAUSE_QUEST] == QUEST_BOMBERS_NOTEBOOK) {
                                 play->pauseCtx.bombersNotebookOpen = true;
                                 pauseCtx->mainState = PAUSE_MAIN_STATE_BOMBERS_NOTEBOOK_OPEN;
-                                play_sound(NA_SE_SY_DECIDE);
+                                Audio_PlaySfx(NA_SE_SY_DECIDE);
                             } else {
                                 pauseCtx->itemDescriptionOn = true;
                                 if (pauseCtx->cursorYIndex[PAUSE_QUEST] < 2) {

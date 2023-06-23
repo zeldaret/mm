@@ -235,7 +235,7 @@ void EnYb_ChangeCutscene(EnYb* this, s16 csIdIndex) {
  * Sets a flag that enables the Kamaro dancing proximity music at night.
  */
 void EnYb_EnableProximityMusic(EnYb* this) {
-    func_800B9084(&this->actor);
+    Actor_PlaySeq_FlaggedKamaroDance(&this->actor);
 }
 
 void EnYb_Disappear(EnYb* this, PlayState* play) {

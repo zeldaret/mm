@@ -439,9 +439,9 @@ void EnTest6_SetupInvertedSoTCutscene(EnTest6* this, PlayState* play) {
     this->screenFillAlpha = 0;
 
     if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_SLOW) {
-        play_sound(NA_SE_SY_TIME_CONTROL_SLOW);
+        Audio_PlaySfx(NA_SE_SY_TIME_CONTROL_SLOW);
     } else if (SOTCS_GET_OCARINA_MODE(&this->actor) == OCARINA_MODE_APPLY_INV_SOT_FAST) {
-        play_sound(NA_SE_SY_TIME_CONTROL_NORMAL);
+        Audio_PlaySfx(NA_SE_SY_TIME_CONTROL_NORMAL);
     }
 }
 
@@ -773,7 +773,7 @@ void EnTest6_DoubleSoTCutscene(EnTest6* this, PlayState* play) {
         play->unk_18844 = false;
     }
 
-    func_800B8F98(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_PL_FLYING_AIR - SFX_FLAG);
 
     switch (this->timer) {
         case 119:
