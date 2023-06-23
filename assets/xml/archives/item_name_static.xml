@@ -48,7 +48,7 @@
         <Texture Name="gItemNameObabasDrinkJPNTex" OutName="item_name_obabas_drink_jpn" Format="ia4" Width="128" Height="16" Offset="0x9C00" /> <!-- ITEM_OBABA_DRINK -->
 
         <!-- Trade Items -->
-        <Texture Name="gItemNameMoonsTearENGTex" OutName="item_name_moons_tear_eng" Format="ia4" Width="128" Height="16" Offset="0xA000" /> <!-- ITEM_MOON_TEAR -->
+        <Texture Name="gItemNameMoonsTearENGTex" OutName="item_name_moons_tear_eng" Format="ia4" Width="128" Height="16" Offset="0xA000" /> <!-- ITEM_MOONS_TEAR -->
         <Texture Name="gItemNameLandTitleDeedENGTex" OutName="item_name_land_title_deed_eng" Format="ia4" Width="128" Height="16" Offset="0xA400" /> <!-- ITEM_DEED_LAND -->
         <Texture Name="gItemNameSwampTitleDeedENGTex" OutName="item_name_swamp_title_deed_eng" Format="ia4" Width="128" Height="16" Offset="0xA800" /> <!-- ITEM_DEED_SWAMP -->
         <Texture Name="gItemNameMountainTitleDeedENGTex" OutName="item_name_mountain_title_deed_eng" Format="ia4" Width="128" Height="16" Offset="0xAC00" /> <!-- ITEM_DEED_MOUNTAIN -->

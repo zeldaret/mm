@@ -805,18 +805,18 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         Inventory_DeleteItem(value, slot);
                     } else if (slot == SLOT_TRADE_DEED) {
                         if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                            if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
-                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_MOON_TEAR;
-                            } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_MOON_TEAR) &&
-                                       (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_MOUNTAIN)) {
-                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) + 1;
+                            if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_NONE) {
+                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_MOONS_TEAR;
+                            } else if ((INV_CONTENT(ITEM_MOONS_TEAR) >= ITEM_MOONS_TEAR) &&
+                                       (INV_CONTENT(ITEM_MOONS_TEAR) <= ITEM_DEED_MOUNTAIN)) {
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOONS_TEAR) + 1;
                             }
                         } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                            if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
+                            if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_NONE) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_DEED_OCEAN;
-                            } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_DEED_LAND) &&
-                                       (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_OCEAN)) {
-                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) - 1;
+                            } else if ((INV_CONTENT(ITEM_MOONS_TEAR) >= ITEM_DEED_LAND) &&
+                                       (INV_CONTENT(ITEM_MOONS_TEAR) <= ITEM_DEED_OCEAN)) {
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOONS_TEAR) - 1;
                             }
                         }
                     } else if (slot == SLOT_TRADE_KEY_MAMA) {
