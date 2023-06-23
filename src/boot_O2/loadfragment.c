@@ -70,7 +70,7 @@ void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelo
     sections[RELOC_SECTION_DATA] = allocu32 + ovlRelocs->textSize;
     sections[RELOC_SECTION_RODATA] = sections[RELOC_SECTION_DATA] + ovlRelocs->dataSize;
 
-    for (i = 0; i < ovlRelocs->nRelocations; i++) {
+    for (i = 0; i < ovlRelocs->numRelocations; i++) {
         // This will always resolve to a 32-bit aligned address as each section
         // containing code or pointers must be aligned to at least 4 bytes and the
         // MIPS ABI defines the offset of both 16-bit and 32-bit relocations to be

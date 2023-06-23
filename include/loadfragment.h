@@ -27,12 +27,12 @@ typedef enum {
 } RelocSectionId;
 
 typedef struct OverlayRelocationSection {
-    /* 0x00 */ u32 textSize;
-    /* 0x04 */ u32 dataSize;
-    /* 0x08 */ u32 rodataSize;
-    /* 0x0C */ u32 bssSize;
-    /* 0x10 */ u32 nRelocations;
-    /* 0x14 */ u32 relocations[1]; // size is nRelocations
+    /* 0x00 */ size_t textSize;
+    /* 0x04 */ size_t dataSize;
+    /* 0x08 */ size_t rodataSize;
+    /* 0x0C */ size_t bssSize;
+    /* 0x10 */ u32 numRelocations;
+    /* 0x14 */ u32 relocations[1]; // array count is numRelocations
 } OverlayRelocationSection; // size >= 0x18
 
 // Fragment overlay load functions
