@@ -7405,7 +7405,7 @@ void Camera_EarthquakeDay3(Camera* camera) {
 
         if (sEarthquakeTimer != 0) {
             sEarthquakeTimer--;
-            func_8019F128(NA_SE_SY_EARTHQUAKE_OUTDOOR - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_SY_EARTHQUAKE_OUTDOOR - SFX_FLAG);
         }
     }
 }
@@ -7871,24 +7871,24 @@ s32 Camera_ChangeModeFlags(Camera* camera, s16 mode, u8 forceChange) {
     if (camera->status == CAM_STATUS_ACTIVE) {
         switch (sModeChangeFlags) {
             case CAM_CHANGE_MODE_0:
-                play_sound(0);
+                Audio_PlaySfx(0);
                 break;
 
             case CAM_CHANGE_MODE_1:
                 if (camera->play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_1) {
-                    play_sound(NA_SE_SY_ATTENTION_URGENCY);
+                    Audio_PlaySfx(NA_SE_SY_ATTENTION_URGENCY);
                 } else {
 
-                    play_sound(NA_SE_SY_ATTENTION_ON);
+                    Audio_PlaySfx(NA_SE_SY_ATTENTION_ON);
                 }
                 break;
 
             case CAM_CHANGE_MODE_BATTLE:
-                play_sound(NA_SE_SY_ATTENTION_URGENCY);
+                Audio_PlaySfx(NA_SE_SY_ATTENTION_URGENCY);
                 break;
 
             case CAM_CHANGE_MODE_FOLLOW_TARGET:
-                play_sound(NA_SE_SY_ATTENTION_ON);
+                Audio_PlaySfx(NA_SE_SY_ATTENTION_ON);
                 break;
 
             default:

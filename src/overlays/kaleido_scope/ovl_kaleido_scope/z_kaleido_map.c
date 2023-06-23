@@ -9,8 +9,7 @@
 #include "interface/icon_item_field_static/icon_item_field_static.h"
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
-
-extern TexturePtr D_09007500; // gPlayerFaceIcon
+#include "archives/icon_item_24_static/icon_item_24_static_yar.h"
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -76,9 +75,9 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
 }
 
 TexturePtr sDungeonItemTextures[] = {
-    0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
-    0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
-    0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
+    gQuestIconBossKeyTex,    // DUNGEON_BOSS_KEY
+    gQuestIconCompassTex,    // DUNGEON_COMPASS
+    gQuestIconDungeonMapTex, // DUNGEON_MAP
 };
 
 TexturePtr sDungeonTitleTextures[] = {
@@ -283,7 +282,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             // Draw Player's face next to the dungeon floor icon currently in.
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, 62,
                                       sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
@@ -465,7 +464,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MAP]) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
         }
     }
@@ -813,8 +812,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
-                                                  sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP =
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, sWorldMapCursorsRectLeft[n],
+                                      sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
 
@@ -917,7 +917,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         // Used as cursor vtxIndex
                         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                     }
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     sStickAdjTimer = 0;
                 }
             } else if (pauseCtx->stickAdjX < -30) {
@@ -942,7 +942,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     // Used as cursor vtxIndex
                     pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                 }
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 sStickAdjTimer = 0;
             }
         }
@@ -951,7 +951,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
         }
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_SELECT) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
@@ -985,7 +985,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     }
 }

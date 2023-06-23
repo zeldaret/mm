@@ -429,7 +429,7 @@ s32 func_808A1340(DoorShutter* this, PlayState* play) {
         s32 pad;
 
         if (this->unk_163 == 7) {
-            func_800B9010(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_OPEN - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_OPEN - SFX_FLAG);
         }
 
         Lib_Vec3f_TranslateAndRotateY(&this->slidingDoor.dyna.actor.home.pos, this->slidingDoor.dyna.actor.shape.rot.y,
@@ -589,7 +589,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 s32 func_808A1A70(DoorShutter* this) {
     if (this->unk_163 == 7) {
         if (this->unk_163 == 7) {
-            func_800B9010(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_CLOSE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_CLOSE - SFX_FLAG);
         }
 
         Math_StepToF(&this->slidingDoor.dyna.actor.velocity.y, 5.0f, 0.5f);

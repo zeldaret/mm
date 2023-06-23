@@ -73,7 +73,7 @@ void viMgrMain(void* vargs) {
     args = (OSMgrArgs*)vargs;
 
     while (true) {
-        osRecvMesg(args->eventQueue, (OSMesg)&mesg, OS_MESG_BLOCK);
+        osRecvMesg(args->eventQueue, (OSMesg*)&mesg, OS_MESG_BLOCK);
         switch (mesg->hdr.type) {
             case OS_MESG_TYPE_VRETRACE:
                 __osViSwapContext();
