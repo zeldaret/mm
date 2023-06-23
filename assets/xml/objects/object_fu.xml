@@ -46,10 +46,10 @@
         <Limb Name="gGuruGuruRightThighLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT_THIGH" Offset="0x6BD0"/>
         <Limb Name="gGuruGuruRightLegLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT_LEG" Offset="0x6BDC"/>
         <Limb Name="gGuruGuruRightFootLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT_FOOT" Offset="0x6BE8"/>
-        <Limb Name="gGuruGuruChestAndMusicBoxPipeLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_GHEST_AND_MUSIC_BOX_PIPE" Offset="0x6BF4"/>
-        <Limb Name="gGuruGuruLeftArmAndMusicBoxLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_LEFT_ARM_AND_MUSIC_BOX_LIMB" Offset="0x6C00"/>
+        <Limb Name="gGuruGuruChestAndMusicBoxPipeLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_CHEST_AND_MUSIC_BOX_PIPE" Offset="0x6BF4"/>
+        <Limb Name="gGuruGuruLeftArmAndMusicBoxLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_LEFT_ARM_AND_MUSIC_BOX" Offset="0x6C00"/>
         <Limb Name="gGuruGuruTriangleLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_TRIANGLE" Offset="0x6C0C"/> <!--A random triangle near the right side of the music box-->
-        <Limb Name="gGuruGuruRightShoulderLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT_SHOULDER_LIMB" Offset="0x6C18"/>
+        <Limb Name="gGuruGuruRightShoulderLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT_SHOULDER" Offset="0x6C18"/>
         <Limb Name="gGuruGuruRightArmLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT" Offset="0x6C24"/>
         <Limb Name="gGuruGuruRightHandAndCrankLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_RIGHT_HAND_AND_CRANK" Offset="0x6C30"/>
         <Limb Name="gGuruGuruHeadLimb" LimbType="Standard" EnumName="GURU_GURU_LIMB_HEAD" Offset="0x6C3C"/>
