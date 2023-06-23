@@ -71,6 +71,12 @@ typedef enum {
     /* 3 */ CHANGE_SKYBOX_ACTIVE
 } ChangeSkyboxState;
 
+typedef enum {
+    /*  0 */ SKYBOX_DMA_INACTIVE,
+    /*  1 */ SKYBOX_DMA_TEXTURE1_START,
+    /* 11 */ SKYBOX_DMA_TEXTURE2_START = 11
+} SkyboxDmaState;
+
 //! @TODO: Verify from OoT (may not be the same)
 typedef enum {
     /* 0 */ PRECIP_RAIN_MAX, // max number of raindrops that can draw; uses this or SOS_MAX, whichever is larger
@@ -138,10 +144,10 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u16 startTime;
     /* 0x2 */ u16 endTime;
-    /* 0x4 */ u8 changeSkybox; // TODO: Verify
-    /* 0x5 */ u8 changeSkybox2; // TODO: Verify
-    /* 0x6 */ u8 skybox1Index;
-    /* 0x7 */ u8 skybox2Index;
+    /* 0x4 */ u8 skybox1Index;
+    /* 0x5 */ u8 skybox2Index;
+    /* 0x6 */ u8 color1Index;
+    /* 0x7 */ u8 color2Index;
 } TimeBasedSkyboxEntry; // size = 0x8
 
 #define ENV_FOGNEAR_MAX 996
@@ -210,7 +216,7 @@ typedef struct EnvironmentContext {
     /* 0x44 */ s8 skyboxDmaState;
     /* 0x48 */ DmaRequest dmaRequest;
     /* 0x68 */ OSMesgQueue loadQueue;
-    /* 0x80 */ OSMesg loadMsg;
+    /* 0x80 */ OSMesg loadMsg[1];
     /* 0x84 */ f32 glareAlpha;
     /* 0x88 */ f32 lensFlareAlphaScale;
     /* 0x8C */ AdjLightSettings adjLightSettings;

@@ -920,7 +920,7 @@ f32 Environment_LerpWeightAccelDecel(u16 endFrame, u16 startFrame, u16 curFrame,
     return ret;
 }
 
-Color_RGBA8 D_801BE534[] = {
+Color_RGBA8 sSkyboxPrimColors[] = {
     { 181, 100, 72, 0 },  { 255, 255, 255, 0 }, { 255, 164, 63, 0 },  { 70, 90, 100, 0 },   { 180, 110, 70, 0 },
     { 140, 120, 90, 0 },  { 186, 107, 70, 0 },  { 50, 90, 120, 0 },   { 160, 104, 125, 0 }, { 225, 234, 150, 0 },
     { 243, 84, 33, 0 },   { 112, 37, 55, 0 },   { 181, 100, 27, 0 },  { 255, 255, 255, 0 }, { 186, 107, 69, 0 },
@@ -944,7 +944,7 @@ Color_RGBA8 D_801BE534[] = {
     { 171, 113, 131, 0 }, { 225, 234, 180, 0 }, { 237, 84, 37, 0 },   { 133, 48, 75, 0 },
 };
 
-Color_RGBA8 D_801BE6D4[] = {
+Color_RGBA8 sSkyboxEnvColors[] = {
     { 102, 135, 99, 0 }, { 0, 15, 69, 0 },    { 110, 55, 110, 0 }, { 0, 0, 100, 0 },   { 70, 10, 10, 0 },
     { 40, 0, 10, 0 },    { 40, 40, 40, 0 },   { 20, 20, 30, 0 },   { 60, 0, 10, 0 },   { 65, 45, 0, 0 },
     { 20, 25, 90, 0 },   { 0, 5, 25, 0 },     { 102, 135, 99, 0 }, { 0, 4, 199, 0 },   { 60, 65, 89, 0 },
@@ -968,7 +968,129 @@ Color_RGBA8 D_801BE6D4[] = {
     { 60, 0, 10, 0 },    { 75, 45, 0, 0 },    { 20, 20, 89, 0 },   { 0, 7, 17, 0 },
 };
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateSkybox.s")
+void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxContext* skyboxCtx) {
+    size_t size;
+    s32 i;
+    u8 skybox1Index = 255;
+    u8 skybox2Index = 255;
+    u8 color1Index = 255;
+    u8 color2Index = 255;
+    u8 skyboxBlend = 0;
+    f32 colorWeight = 0.0f;
+
+    if (envCtx->skyboxConfig >= 0x1C) {
+        envCtx->skyboxConfig = 0;
+    }
+
+    if ((skyboxId == SKYBOX_NORMAL_SKY) || ((skyboxId == SKYBOX_3) && (D_801F4E74 < 1.0f))) {
+        if (envCtx->skyboxDisabled) {
+            return;
+        }
+
+        for (i = 0; i < ARRAY_COUNT(sTimeBasedSkyboxConfigs[envCtx->skyboxConfig]); i++) {
+            if ((gSaveContext.skyboxTime >= sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].startTime) &&
+                ((gSaveContext.skyboxTime < sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].endTime) ||
+                 (sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].endTime == (CLOCK_TIME(24, 0) - 1)))) {
+                skybox1Index = sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].skybox1Index;
+                skybox2Index = sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].skybox2Index;
+                if (skybox1Index == skybox2Index) {
+                    sSkyboxIsChanging = false;
+                } else {
+                    sSkyboxIsChanging = true;
+                }
+
+                if (sSkyboxIsChanging) {
+                    skyboxBlend = Environment_LerpWeight(sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].endTime,
+                                                         sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].startTime,
+                                                         ((void)0, gSaveContext.skyboxTime)) *
+                                  255.0f;
+                } else {
+                    skyboxBlend = Environment_LerpWeight(sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].endTime,
+                                                         sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].startTime,
+                                                         ((void)0, gSaveContext.skyboxTime)) *
+                                  255.0f;
+
+                    if (skyboxBlend < 128) {
+                        skyboxBlend = 255;
+                    } else {
+                        skyboxBlend = 0;
+                    }
+
+                    if ((envCtx->changeSkyboxState != CHANGE_SKYBOX_INACTIVE) && (envCtx->changeSkyboxState < CHANGE_SKYBOX_ACTIVE)) {
+                        envCtx->changeSkyboxState++;
+                        skyboxBlend = 0;
+                    }
+                }
+                color1Index = sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].color1Index;
+                color2Index = sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].color2Index;
+                colorWeight = Environment_LerpWeight(sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].endTime,
+                                                     sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].startTime,
+                                                     gSaveContext.skyboxTime);
+                break;
+            }
+        }
+
+        if (CREG(64) != 0) {
+            skybox1Index = skybox2Index = CREG(71);
+        } else {
+            CREG(71) = skybox1Index;
+        }
+
+        if (envCtx->changeSkyboxState >= CHANGE_SKYBOX_ACTIVE) {
+            skybox1Index = sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].skybox1Index;
+            skybox2Index = sTimeBasedSkyboxConfigs[envCtx->changeSkyboxNextConfig][i].skybox2Index;
+            color1Index = sTimeBasedSkyboxConfigs[envCtx->skyboxConfig][i].color1Index;
+            color2Index = sTimeBasedSkyboxConfigs[envCtx->changeSkyboxNextConfig][i].color2Index;
+            skyboxBlend = ((envCtx->changeDuration - (f32)envCtx->changeSkyboxTimer) / envCtx->changeDuration) * 255.0f;
+            colorWeight = (envCtx->changeDuration - (f32)envCtx->changeSkyboxTimer) / envCtx->changeDuration;
+            envCtx->changeSkyboxTimer--;
+            if (envCtx->changeSkyboxTimer <= 0) {
+                envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
+                envCtx->skyboxConfig = envCtx->changeSkyboxNextConfig;
+            }
+        }
+
+        if ((envCtx->skybox1Index != skybox1Index) && (envCtx->skyboxDmaState == SKYBOX_DMA_INACTIVE)) {
+            envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE1_START;
+            size = sNormalSkyFiles[skybox1Index].file.vromEnd - sNormalSkyFiles[skybox1Index].file.vromStart;
+            osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
+            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[0],
+                                   sNormalSkyFiles[skybox1Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            envCtx->skybox1Index = skybox1Index;
+        }
+
+        if ((envCtx->skybox2Index != skybox2Index) && (envCtx->skyboxDmaState == SKYBOX_DMA_INACTIVE)) {
+            envCtx->skyboxDmaState = SKYBOX_DMA_TEXTURE2_START;
+            size = sNormalSkyFiles[skybox2Index].file.vromEnd - sNormalSkyFiles[skybox2Index].file.vromStart;
+            osCreateMesgQueue(&envCtx->loadQueue, envCtx->loadMsg, ARRAY_COUNT(envCtx->loadMsg));
+            DmaMgr_SendRequestImpl(&envCtx->dmaRequest, skyboxCtx->staticSegments[1],
+                                   sNormalSkyFiles[skybox2Index].file.vromStart, size, 0, &envCtx->loadQueue, NULL);
+            envCtx->skybox2Index = skybox2Index;
+        }
+
+        if ((envCtx->skyboxDmaState == SKYBOX_DMA_TEXTURE1_START) ||
+            (envCtx->skyboxDmaState == SKYBOX_DMA_TEXTURE2_START)) {
+            if (osRecvMesg(&envCtx->loadQueue, NULL, 0) == 0) {
+                envCtx->skyboxDmaState = SKYBOX_DMA_INACTIVE;
+            }
+        }
+
+        envCtx->skyboxBlend = skyboxBlend;
+        Skybox_SetColors(skyboxCtx,
+                         (((sSkyboxPrimColors[color2Index].r - sSkyboxPrimColors[color1Index].r) * colorWeight) +
+                          sSkyboxPrimColors[color1Index].r),
+                         (((sSkyboxPrimColors[color2Index].g - sSkyboxPrimColors[color1Index].g) * colorWeight) +
+                          sSkyboxPrimColors[color1Index].g),
+                         (((sSkyboxPrimColors[color2Index].b - sSkyboxPrimColors[color1Index].b) * colorWeight) +
+                          sSkyboxPrimColors[color1Index].b),
+                         (((sSkyboxEnvColors[color2Index].r - sSkyboxEnvColors[color1Index].r) * colorWeight) +
+                          sSkyboxEnvColors[color1Index].r),
+                         (((sSkyboxEnvColors[color2Index].g - sSkyboxEnvColors[color1Index].g) * colorWeight) +
+                          sSkyboxEnvColors[color1Index].g),
+                         (((sSkyboxEnvColors[color2Index].b - sSkyboxEnvColors[color1Index].b) * colorWeight) +
+                          sSkyboxEnvColors[color1Index].b));
+    }
+}
 
 void Environment_EnableUnderwaterLights(PlayState* play, s32 waterLightsIndex) {
     if (waterLightsIndex == 0x1F) {
