@@ -13,7 +13,7 @@ void __osDevMgrMain(void* arg) {
     ret = 0;
 
     while (true) {
-        osRecvMesg(devMgr->cmdQueue, (OSMesg)&ioMesg, OS_MESG_BLOCK);
+        osRecvMesg(devMgr->cmdQueue, (OSMesg*)&ioMesg, OS_MESG_BLOCK);
         if ((ioMesg->piHandle != NULL) && (ioMesg->piHandle->type == 2) &&
             ((ioMesg->piHandle->transferInfo.cmdType == OS_READ) ||
              (ioMesg->piHandle->transferInfo.cmdType == OS_WRITE))) {
