@@ -26,7 +26,8 @@ typedef enum {
     /* 0xC */ TEXTBOX_TYPE_C,
     /* 0xD */ TEXTBOX_TYPE_D,
     /* 0xE */ TEXTBOX_TYPE_E,
-    /* 0xF */ TEXTBOX_TYPE_F
+    /* 0xF */ TEXTBOX_TYPE_F,
+    /* 0x10*/ TEXTBOX_TYPE_MAX
 } TextBoxType;
 
 #define TEXTBOX_ENDTYPE_00    0x00

@@ -156,7 +156,7 @@ typedef enum HudVisibility {
 
 // Based on D_801D06F0
 typedef enum Language {
-    /* 0 */ LANGUAGE_JAP,
+    /* 0 */ LANGUAGE_JPN,
     /* 1 */ LANGUAGE_ENG,
     /* 2 */ LANGUAGE_GER,
     /* 3 */ LANGUAGE_FRE,

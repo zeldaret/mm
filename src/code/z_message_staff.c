@@ -397,7 +397,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                         Audio_PlaySfx(NA_SE_SY_MESSAGE_END);
                         Font_LoadMessageBoxEndIcon(font, 1);
                         if (play->csCtx.state == CS_STATE_IDLE) {
-                            func_8011552C(play, 3);
+                            func_8011552C(play, DO_ACTION_RETURN);
                         }
                     }
                 }
@@ -419,7 +419,7 @@ void Message_DrawTextCredits(PlayState* play, Gfx** gfxP) {
                     msgCtx->stateTimer = msgCtx->decodedBuffer.schar[++i];
                     Font_LoadMessageBoxEndIcon(font, 1);
                     if (play->csCtx.state == CS_STATE_IDLE) {
-                        func_8011552C(play, 3);
+                        func_8011552C(play, DO_ACTION_RETURN);
                     }
                 }
                 *gfxP = gfx;
