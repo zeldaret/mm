@@ -34,19 +34,19 @@
         <!-- Display list for Eyegore's laser attack -->
         <DList Name="gEyegoreLaserDL" Offset="0x41F0" /> <!-- Original name is "eg_sen_SCR1_F_model" -->
         
-        <!-- Several unused textures. Purpose unknown. -->
-        <Texture Name="gEyegoreUnusedUnknown1Tex" OutName="eyegore_unused_unknown_1" Format="rgba16" Width="8" Height="8" Offset="0x4280" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown2Tex" OutName="eyegore_unused_unknown_2" Format="i4" Width="16" Height="32" Offset="0x4300" /> <!-- type is uncertain -->
-        <Texture Name="gEyegoreUnusedUnknown3Tex" OutName="eyegore_unused_unknown_3" Format="rgba16" Width="16" Height="32" Offset="0x4400" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown4Tex" OutName="eyegore_unused_unknown_4" Format="rgba16" Width="16" Height="8" Offset="0x4800" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown5Tex" OutName="eyegore_unused_unknown_5" Format="rgba16" Width="16" Height="16" Offset="0x4900" /> <!-- unused -->
+        <!-- Several unused textures that look to come from object_vm. Purpose unknown. -->
+        <Texture Name="gEyegoreUnusedBodyGradientTex" OutName="eyegore_unused_body_gradient" Format="rgba16" Width="8" Height="8" Offset="0x4280" /> <!-- unused -->
+        <Texture Name="gEyegoreUnusedGrayMetalTex" OutName="eyegore_unused_gray_metal" Format="i4" Width="16" Height="32" Offset="0x4300" /> <!-- unused -->
+        <Texture Name="gEyegoreUnusedBoltAndMetalTex" OutName="eyegore_unused_bolt_and_metal" Format="rgba16" Width="16" Height="32" Offset="0x4400" /> <!-- unused -->
+        <Texture Name="gEyegoreUnusedInnerEyeLidTex" OutName="eyegore_unused_inner_eye_lid" Format="rgba16" Width="16" Height="8" Offset="0x4800" /> <!-- unused -->
+        <Texture Name="gEyegoreUnusedEyeOutlineTex" OutName="eyegore_unused_eye_outline" Format="rgba16" Width="16" Height="16" Offset="0x4900" /> <!-- unused -->
         <Texture Name="gEyegoreUnusedEyeTex" OutName="eyegore_unused_eye" Format="rgba16" Width="32" Height="16" Offset="0x4B00" /> <!-- unused -->
-        <Texture Name="gEyegoreUnusedUnknown6Tex" OutName="eyegore_unused_unknown_6" Format="rgba16" Width="16" Height="16" Offset="0x4F00" /> <!-- unused -->
+        <Texture Name="gEyegoreUnusedBodyTex" OutName="eyegore_unused_body_tex" Format="rgba16" Width="16" Height="16" Offset="0x4F00" /> <!-- unused -->
 
         <!-- Animated texture for Eyegore's laser attack. Uses gEyegoreEyeLaserTexAnim. -->
         <Texture Name="gEyegoreLaserTex" OutName="eyegore_laser" Format="rgba16" Width="8" Height="8" Offset="0x5100" />
 
-        <!-- Unused teeth texture. Purpose unknown. -->
+        <!-- Unused teeth texture that looks to come from object_vm. Purpose unknown. -->
         <Texture Name="gEyegoreUnusedTeethTex" OutName="eyegore_unused_teeth" Format="rgba16" Width="32" Height="32" Offset="0x5180" /> <!-- unused -->
 
         <!-- Eyegore limb display lists -->
