@@ -305,7 +305,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
         this->unk_210 = 0.0f;
         this->unk_20C = 0x800;
 
-        if (((this->unk_1E2 == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) &&
+        if (((this->unk_1E2 == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) &&
             (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) == EQUIP_VALUE_SHIELD_HERO)) {
             sp34 = true;
             this->unk_1E2 = Inventory_DeleteEquipment(play, EQUIP_VALUE_SHIELD_HERO);

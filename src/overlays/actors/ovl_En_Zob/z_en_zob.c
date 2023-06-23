@@ -210,7 +210,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
 
     this->unk_2F4 |= 1;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_02)) {
             textId = 0x11F9;
         } else {
@@ -563,7 +563,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     if (func_800B8718(&this->actor, &play->state)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1208, NULL);
             SET_WEEKEVENTREG(WEEKEVENTREG_30_08);
         } else {
@@ -594,7 +594,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
 void func_80BA08E8(EnZob* this, PlayState* play) {
     s32 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1257;
             this->unk_304 = 3;

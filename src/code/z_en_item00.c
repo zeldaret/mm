@@ -1112,16 +1112,19 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
         dropQuantity = sDropTableAmounts[params + dropTableIndex];
 
         if (dropId == ITEM00_MASK) {
-            switch (gSaveContext.save.playerForm) {
+            switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_HUMAN:
                     dropId = ITEM00_ARROWS_10;
                     break;
+
                 case PLAYER_FORM_ZORA:
                     dropId = ITEM00_RECOVERY_HEART;
                     break;
+
                 case PLAYER_FORM_GORON:
                     dropId = ITEM00_MAGIC_SMALL;
                     break;
+
                 default:
                     dropId = ITEM00_RUPEE_GREEN;
                     break;

@@ -250,7 +250,7 @@ void func_80B34314(EnKbt* this, PlayState* play) {
     } else if (this->actor.xzDistToPlayer < 250.0f) {
         if ((this->unk_278 != NULL) && (this->unk_278->xzDistToPlayer < 250.0f)) {
             if (this->unk_27C & 4) {
-                playerForm = gSaveContext.save.playerForm;
+                playerForm = GET_PLAYER_FORM;
                 if (((playerForm ^ 0) != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
                                                                 (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
                                                                 (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
@@ -266,10 +266,10 @@ void func_80B34314(EnKbt* this, PlayState* play) {
 
             if (this->actor.textId != 0xC37) {
                 if (((this->actor.textId == 0xC4E) || (this->actor.textId == 0xC4F) || (this->actor.textId == 0xC50)) &&
-                    (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
+                    (GET_PLAYER_FORM != PLAYER_FORM_HUMAN)) {
                     this->actor.textId = 0xC37;
                 }
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
                 if (func_80B33E8C(play)) {
                     this->actor.textId = 0xC50;
                 } else {

@@ -160,7 +160,7 @@ void func_80ADFF84(EnTsn* this, PlayState* play) {
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
         textId = 0x107E;
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
             textId = 0x1083;
         } else {
