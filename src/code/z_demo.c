@@ -32,7 +32,6 @@ u16 sCurOcarinaAction = 0;
 u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
 
-
 void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
 
