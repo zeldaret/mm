@@ -10732,10 +10732,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                 !Player_IsGoronOrDeku(this)) {
                 if ((this->transformation != PLAYER_FORM_GORON) &&
                     !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
-                    ((func_80123420(this)) ||
+                    (func_80123420(this) ||
                      ((sPlayerCurrentFloorType != FLOOR_TYPE_7) &&
-                      ((func_80123434(this)) || ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
-                                                 !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
+                      (func_80123434(this) || ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
+                                               !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
                     doActionA = DO_ACTION_ATTACK;
                 } else if ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) && sp24 && (sp28 > 0)) {
                     doActionA = DO_ACTION_JUMP;
@@ -13695,7 +13695,7 @@ void func_8084A8E8(Player* this, PlayState* play) {
             func_8083AF8C(this, sp3A, play);
         }
     } else if ((this->linearVelocity < 3.6f) && (sp3C < 4.0f)) {
-        if ((func_80123420(this) == 0) && (func_80123434(this))) {
+        if (!func_80123420(this) && func_80123434(this)) {
             func_8083AF30(this, play);
         } else {
             func_80836988(this, play);
