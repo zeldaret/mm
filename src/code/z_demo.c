@@ -1,5 +1,5 @@
 #include "prevent_bss_reordering.h"
-#include "ultra64.h"
+#include "PR/ultratypes.h"
 
 struct CutsceneCamera;
 
