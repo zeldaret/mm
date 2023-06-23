@@ -2447,8 +2447,8 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     // GI_SEAHORSE_CAUGHT
     GET_ITEM(ITEM_SEAHORSE_CAUGHT, OBJECT_GI_SEAHORSE, GID_SEAHORSE_CAUGHT, 0x95, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
-    // GI_MOON_TEAR
-    GET_ITEM(ITEM_MOON_TEAR, OBJECT_GI_RESERVE00, GID_MOON_TEAR, 0x96, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
+    // GI_MOONS_TEAR
+    GET_ITEM(ITEM_MOONS_TEAR, OBJECT_GI_RESERVE00, GID_MOONS_TEAR, 0x96, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
     // GI_DEED_LAND
     GET_ITEM(ITEM_DEED_LAND, OBJECT_GI_RESERVE01, GID_DEED_LAND, 0x97, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
@@ -2910,7 +2910,7 @@ s8 sItemItemActions[] = {
     PLAYER_IA_BOTTLE_CHATEAU,          // ITEM_CHATEAU,
     PLAYER_IA_BOTTLE_HYLIAN_LOACH,     // ITEM_HYLIAN_LOACH,
     PLAYER_IA_BOTTLE_POE,              // ITEM_OBABA_DRINK, // !
-    PLAYER_IA_MOON_TEAR,               // ITEM_MOON_TEAR,
+    PLAYER_IA_MOONS_TEAR,              // ITEM_MOONS_TEAR,
     PLAYER_IA_DEED_LAND,               // ITEM_DEED_LAND,
     PLAYER_IA_DEED_SWAMP,              // ITEM_DEED_SWAMP,
     PLAYER_IA_DEED_MOUNTAIN,           // ITEM_DEED_MOUNTAIN,
@@ -3010,7 +3010,7 @@ PlayerUpperActionFunc D_8085C9F0[PLAYER_IA_MAX] = {
     Player_UpperAction_0,  // PLAYER_IA_BOTTLE_MILK_HALF
     Player_UpperAction_0,  // PLAYER_IA_BOTTLE_CHATEAU
     Player_UpperAction_0,  // PLAYER_IA_BOTTLE_FAIRY
-    Player_UpperAction_0,  // PLAYER_IA_MOON_TEAR
+    Player_UpperAction_0,  // PLAYER_IA_MOONS_TEAR
     Player_UpperAction_0,  // PLAYER_IA_DEED_LAND
     Player_UpperAction_0,  // PLAYER_IA_ROOM_KEY
     Player_UpperAction_0,  // PLAYER_IA_LETTER_TO_KAFEI
@@ -3098,7 +3098,7 @@ PlayerInitItemActionFunc sPlayerInitItemActionFuncs[PLAYER_IA_MAX] = {
     Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_MILK_HALF
     Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_CHATEAU
     Player_InitItemAction_DoNothing,      // PLAYER_IA_BOTTLE_FAIRY
-    Player_InitItemAction_DoNothing,      // PLAYER_IA_MOON_TEAR
+    Player_InitItemAction_DoNothing,      // PLAYER_IA_MOONS_TEAR
     Player_InitItemAction_DoNothing,      // PLAYER_IA_DEED_LAND
     Player_InitItemAction_DoNothing,      // PLAYER_IA_ROOM_KEY
     Player_InitItemAction_DoNothing,      // PLAYER_IA_LETTER_TO_KAFEI
@@ -7052,7 +7052,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_MILK_HALF,           // PLAYER_IA_BOTTLE_MILK_HALF
     GI_CHATEAU,             // PLAYER_IA_BOTTLE_CHATEAU
     GI_FAIRY,               // PLAYER_IA_BOTTLE_FAIRY
-    GI_MOON_TEAR,           // PLAYER_IA_MOON_TEAR
+    GI_MOONS_TEAR,          // PLAYER_IA_MOONS_TEAR
     GI_DEED_LAND,           // PLAYER_IA_DEED_LAND
     GI_ROOM_KEY,            // PLAYER_IA_ROOM_KEY
     GI_LETTER_TO_KAFEI,     // PLAYER_IA_LETTER_TO_KAFEI
@@ -7060,7 +7060,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_DEED_SWAMP,          // PLAYER_IA_DEED_SWAMP
     GI_DEED_MOUNTAIN,       // PLAYER_IA_DEED_MOUNTAIN
     GI_DEED_OCEAN,          // PLAYER_IA_DEED_OCEAN
-    GI_MOON_TEAR,           // PLAYER_IA_32
+    GI_MOONS_TEAR,          // PLAYER_IA_32
     GI_LETTER_TO_MAMA,      // PLAYER_IA_LETTER_MAMA
     GI_A7,                  // PLAYER_IA_34
     GI_A8,                  // PLAYER_IA_35
