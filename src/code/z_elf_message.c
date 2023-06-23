@@ -26,7 +26,7 @@ u16 QuestHint_GetTatlTextId(PlayState* play) {
     }
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_10)) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
             return 0;
         }
 
