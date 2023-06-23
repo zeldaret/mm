@@ -1,4 +1,5 @@
 #include "global.h"
+#include "audiomgr.h"
 #include "sys_cfb.h"
 #include "system_malloc.h"
 #include "z64debug_text.h"

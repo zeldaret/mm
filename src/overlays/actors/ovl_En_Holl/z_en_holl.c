@@ -161,7 +161,7 @@ void EnHoll_VisibleIdle(EnHoll* this, PlayState* play) {
         }
 
         if (this == sInstancePlayingSound) {
-            func_800B9010(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_INVISIBLE_MONKEY - SFX_FLAG);
         }
     }
     if ((play->transitionTrigger != TRANS_TRIGGER_OFF) || (play->transitionMode != TRANS_MODE_OFF)) {
