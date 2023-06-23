@@ -1,4 +1,17 @@
 #include "prevent_bss_reordering.h"
+#include "ultra64.h"
+
+struct CutsceneCamera;
+
+// bss
+s16 sCutsceneQuakeIndex;
+struct CutsceneCamera sCutsceneCameraInfo;
+u16 sCueTypeList[10];
+u8 D_801F4DDC;
+s16 D_801F4DDE; // static s16 sBssPad;
+u8 gDisablePlayerCsModeStartPos;
+s16 gDungeonBossWarpSceneId;
+
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -19,14 +32,6 @@ u16 sCurOcarinaAction = 0;
 u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
 
-// bss
-s16 sCutsceneQuakeIndex;
-CutsceneCamera sCutsceneCameraInfo;
-u16 sCueTypeList[10];
-u8 D_801F4DDC;
-s16 D_801F4DDE; // static s16 sBssPad;
-u8 gDisablePlayerCsModeStartPos;
-s16 gDungeonBossWarpSceneId;
 
 void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
