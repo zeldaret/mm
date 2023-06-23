@@ -198,7 +198,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_EARTHQUAKE_MEDIUM:
-            func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
@@ -259,7 +259,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 play->envCtx.sandstormState = 1;
             }
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
 
         case CS_MISC_SUNSSONG_START:
@@ -306,7 +306,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_EARTHQUAKE_STRONG:
-            func_8019F128(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
             if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 30000);
@@ -367,7 +367,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_EARTHQUAKE_WEAK:
-            func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             if (isFirstFrame) {
                 sCutsceneQuakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_6);
                 Quake_SetSpeed(sCutsceneQuakeIndex, 22000);
@@ -441,15 +441,13 @@ void CutsceneCmd_StartAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdSta
 
 void Cutscene_SetSfxReverbIndexTo2(PlayState* play, CutsceneContext* csCtx, CsCmdSfxReverbIndexTo2* cmd) {
     if (csCtx->curFrame == cmd->startFrame) {
-        // Audio_SetSfxReverbIndexExceptOcarinaBank
-        func_801A4428(2);
+        Audio_SetSfxReverbIndexExceptOcarinaBank(2);
     }
 }
 
 void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCmdSfxReverbIndexTo1* cmd) {
     if (csCtx->curFrame == cmd->startFrame) {
-        // Audio_SetSfxReverbIndexExceptOcarinaBank
-        func_801A4428(1);
+        Audio_SetSfxReverbIndexExceptOcarinaBank(1);
     }
 }
 
@@ -833,7 +831,7 @@ void CutsceneCmd_Transition(PlayState* play, CutsceneContext* csCtx, CsCmdTransi
                 if (cmd->type == CS_TRANS_GRAY_FILL_IN) {
                     play->envCtx.screenFillColor[3] = 255.0f * lerp;
                     if (lerp == 0.0f) {
-                        func_8019F128(NA_SE_EV_S_STONE_FLASH);
+                        Audio_PlaySfx_2(NA_SE_EV_S_STONE_FLASH);
                     }
                 } else {
                     play->envCtx.screenFillColor[3] = (1.0f - lerp) * 255.0f;
@@ -1057,7 +1055,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                 if (play->msgCtx.choiceIndex == 0) {
                     if (cmd->textId == 0x33BD) {
                         // Gorman Track: do you understand?
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                     }
 
                     if (cmd->altTextId1 != 0xFFFF) {
@@ -1075,7 +1073,7 @@ void CutsceneCmd_Text(PlayState* play, CutsceneContext* csCtx, CsCmdText* cmd) {
                 } else {
                     if (cmd->textId == 0x33BD) {
                         // Gorman Track: do you understand?
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                     }
 
                     if (cmd->altTextId2 != 0xFFFF) {

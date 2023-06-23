@@ -136,7 +136,6 @@ if not args.matching:
 # The order of this list should not change to prevent breaking the graph of the website
 # New stuff shall be appended at the end of the list
 assetsCategories = [
-    "archives",
     "audio",
     "interface",
     "misc",
@@ -147,6 +146,11 @@ assetsCategories = [
     # "segments",
 ]
 assetsTracker = dict()
+
+# Assets that we don't have a proper way of tracking right now
+ignoredAssets = {
+    "archives",
+}
 
 # Manual fixer for files that would be counted in wrong categories
 # "filename": "correctSection"
@@ -203,12 +207,12 @@ for line in map_file:
         file_size = int(line_split[2], 16)
         obj_file = line_split[3].strip()
         objFileSplit = obj_file.split("/")
+        objFileName = objFileSplit[-1].split(".o")[0]
 
         fileData = {"name": obj_file, "vram": obj_vram, "size": file_size, "section": section, "symbols": []}
         mapFileList.append(fileData)
 
         if (section == ".text"):
-            objFileName = objFileSplit[-1].split(".o")[0]
             srcCat = obj_file.split("/")[2]
             if srcCat in srcCategoriesFixer:
                 srcCat = srcCategoriesFixer[srcCat]
@@ -229,6 +233,8 @@ for line in map_file:
                 assetCat = obj_file.split("/")[2]
                 if assetCat in assetsTracker:
                     assetsTracker[assetCat]["currentSize"] += file_size
+                elif assetCat in ignoredAssets:
+                    pass
                 else:
                     eprint(f"Found file '{obj_file}' in unknown asset category '{assetCat}'")
                     eprint("I'll ignore this for now, but please fix it!")

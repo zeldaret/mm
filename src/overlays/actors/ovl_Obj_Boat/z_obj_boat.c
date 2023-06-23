@@ -140,7 +140,7 @@ void ObjBoat_Update(Actor* thisx, PlayState* play) {
         Math_StepToF(&this->dyna.actor.speed, speedTarget, 0.05f);
         Actor_MoveWithGravity(&this->dyna.actor);
         if (this->dyna.actor.speed != 0.0f) {
-            func_800B9010(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
         }
     }
     ObjBoat_SetRotations(this);
@@ -188,7 +188,7 @@ void ObjBoat_UpdateCutscene(Actor* thisx, PlayState* play2) {
             if (cue->id != 3) {
                 ObjBoat_SetRotations(this);
                 if (cue->id == 2) {
-                    func_800B9010(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PIRATE_SHIP - SFX_FLAG);
                 }
             } else {
                 // Tumble in the air
