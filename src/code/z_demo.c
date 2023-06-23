@@ -8,7 +8,7 @@ s16 sCutsceneQuakeIndex;
 struct CutsceneCamera sCutsceneCameraInfo;
 u16 sCueTypeList[10];
 u8 D_801F4DDC;
-s16 D_801F4DDE; // static s16 sBssPad;
+static s16 sBssPad;
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
 
