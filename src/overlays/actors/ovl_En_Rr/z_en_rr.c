@@ -869,7 +869,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.425f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.85f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.85f, 0.02125f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

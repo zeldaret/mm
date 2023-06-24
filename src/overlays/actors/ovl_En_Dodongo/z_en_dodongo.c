@@ -647,7 +647,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
     }
 
     if (func_8087721C(this)) {
-        func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         frame = this->skelAnime.curFrame - 29.0f;
         end = frame >> 1;
         if (end > 3) {
@@ -673,7 +673,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
         EffectSsDFire_Spawn(play, &this->limbPos[0], &D_80879354, &D_80879348, this->unk_334 * 100.0f,
                             this->unk_334 * 35.0f, 0xFF - (frame * 10), 5, 0, 8);
     } else if ((this->skelAnime.curFrame >= 2.0f) && (this->skelAnime.curFrame <= 20.0f)) {
-        func_800B9010(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1055,7 +1055,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
             this->drawDmgEffScale = (this->drawDmgEffScale > 0.75f) ? 0.75f : this->drawDmgEffScale;
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

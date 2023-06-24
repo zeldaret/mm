@@ -443,13 +443,13 @@ void func_80AF19A8(EnTest7* this, PlayState* play) {
 }
 
 void func_80AF1A2C(EnTest7* this, PlayState* play) {
-    Color_RGB8 sp34 = { 64, 0, 0 };
-    Color_RGB8 sp30 = { 220, 220, 255 };
-    f32 sp2C = this->unk_1E54 / 10.0f;
+    Color_RGB8 fogColor = { 64, 0, 0 };
+    Color_RGB8 ambientColor = { 220, 220, 255 };
+    f32 envLerp = this->unk_1E54 / 10.0f;
 
-    func_800FD59C(play, &sp30, sp2C);
-    func_800FD654(play, &sp34, sp2C);
-    func_800FD698(play, 2000, 4000, sp2C);
+    Environment_LerpAmbientColor(play, &ambientColor, envLerp);
+    Environment_LerpFogColor(play, &fogColor, envLerp);
+    Environment_LerpFog(play, 2000, 4000, envLerp);
 
     if (this->unk_1E54 >= 10) {
         Camera* subCam =
@@ -461,7 +461,7 @@ void func_80AF1A2C(EnTest7* this, PlayState* play) {
 
         func_80AF082C(this, func_80AF1CA0);
         this->unk_144 |= 0x20;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_OPEN);
         Play_EnableMotionBlur(120);
     }
 }
@@ -505,13 +505,13 @@ void func_80AF1CA0(EnTest7* this, PlayState* play) {
 
     if ((this->unk_18CC.frameCtrl.unk_10 > 20.0f) && !(this->unk_144 & 0x40)) {
         this->unk_144 |= 0x40;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_CLOSE);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_CLOSE);
     }
 
     if (this->unk_18CC.frameCtrl.unk_10 > 42.0f) {
         if (!(this->unk_144 & 0x80)) {
             this->unk_144 |= 0x80;
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_ROLL);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_ROLL);
         }
 
         if (Rand_ZeroOne() < 0.3f) {
@@ -610,12 +610,12 @@ void func_80AF2030(EnTest7* this, PlayState* play) {
 
 void func_80AF21E8(EnTest7* this, PlayState* play) {
     s32 sp2C = this->unk_1E54 - 100;
-    f32 sp1C;
-    Color_RGB8 sp24 = { 64, 0, 0 };
-    Color_RGB8 sp20 = { 220, 220, 255 };
+    f32 envLerp;
+    Color_RGB8 fogColor = { 64, 0, 0 };
+    Color_RGB8 ambientColor = { 220, 220, 255 };
 
     if (R_PLAY_FILL_SCREEN_ON) {
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_PL_WARP_WING_VANISH);
         R_PLAY_FILL_SCREEN_ON = false;
         R_PLAY_FILL_SCREEN_R = 0;
         R_PLAY_FILL_SCREEN_G = 0;
@@ -623,10 +623,10 @@ void func_80AF21E8(EnTest7* this, PlayState* play) {
         R_PLAY_FILL_SCREEN_ALPHA = 0;
     }
 
-    sp1C = 1.0f - (sp2C / 10.0f);
-    func_800FD59C(play, &sp20, sp1C);
-    func_800FD654(play, &sp24, sp1C);
-    func_800FD698(play, 2000, 4000, sp1C);
+    envLerp = 1.0f - (sp2C / 10.0f);
+    Environment_LerpAmbientColor(play, &ambientColor, envLerp);
+    Environment_LerpFogColor(play, &fogColor, envLerp);
+    Environment_LerpFog(play, 2000, 4000, envLerp);
 
     if (this->unk_1E54 >= 110) {
         func_80AF082C(this, func_80AF2318);
@@ -849,7 +849,7 @@ void func_80AF2C48(EnTest7* this, PlayState* play) {
     subCam->at.y = this->actor.world.pos.y + 40.0f;
     subCam->at.z = this->actor.world.pos.z;
 
-    func_800B9010(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
     if (this->unk_1E54 >= 40) {
         this->unk_144 &= ~4;
         func_80AF082C(this, func_80AF2F98);
@@ -895,7 +895,7 @@ void func_80AF2F98(EnTest7* this, PlayState* play) {
     Player* player2 = GET_PLAYER(play);
     Vec3f sp2C;
 
-    func_800B9010(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_WARP_WING_ROLL_2 - SFX_FLAG);
 
     sp2C = this->actor.world.pos;
 

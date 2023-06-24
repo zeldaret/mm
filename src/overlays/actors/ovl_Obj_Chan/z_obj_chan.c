@@ -282,7 +282,7 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
             Math_StepToF(&this->flameSize, 1.0f, 0.05f);
             this->rotation += this->rotationSpeed;
             Math_StepToS(&this->rotationSpeed, OBJCHAN_ROTATION_SPEED, 5);
-            func_800B9010(&this->actor, NA_SE_EV_CHANDELIER_ROLL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_CHANDELIER_ROLL - SFX_FLAG);
         }
     }
 }

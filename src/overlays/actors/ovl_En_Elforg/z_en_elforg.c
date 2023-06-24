@@ -404,7 +404,7 @@ void EnElforg_FairyCollected(EnElforg* this, PlayState* play) {
         return;
     }
 
-    func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
 }
 
 void EnElforg_SetupFairyCollected(EnElforg* this, PlayState* play) {
@@ -435,7 +435,7 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
         return;
     }
 
-    func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
     if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_TALK) {
         if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
             CutsceneManager_Start(CS_ID_GLOBAL_TALK, &this->actor);
@@ -504,7 +504,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
         func_80ACCBB8(this, play);
         if (Player_GetMask(play) == PLAYER_MASK_GREAT_FAIRY) {
             if (!(this->strayFairyFlags & STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED)) {
-                play_sound(NA_SE_SY_FAIRY_MASK_SUCCESS);
+                Audio_PlaySfx(NA_SE_SY_FAIRY_MASK_SUCCESS);
             }
 
             this->strayFairyFlags |= STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;

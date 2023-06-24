@@ -1374,7 +1374,7 @@ void EnPametfrog_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = unk2C4;
             this->drawDmgEffScale = unk2C4 > 0.75f ? 0.75f : this->drawDmgEffScale;
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, (3.0f / 160.0f))) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

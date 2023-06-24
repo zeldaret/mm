@@ -455,7 +455,7 @@ void func_808D14DC(EnFloormas* this, PlayState* play) {
     sp28.x = Math_SinS(this->actor.shape.rot.y - 0x6000) * 7.0f;
     sp28.z = Math_CosS(this->actor.shape.rot.y - 0x6000) * 7.0f;
     func_800B1210(play, &sp34, &sp28, &gZeroVec3f, 0x1C2, 0x64);
-    func_800B9010(&this->actor, NA_SE_EN_FLOORMASTER_SLIDING - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FLOORMASTER_SLIDING - SFX_FLAG);
 }
 
 void func_808D161C(EnFloormas* this) {
@@ -887,7 +887,7 @@ void func_808D2764(EnFloormas* this, PlayState* play) {
         }
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_FLOORMASTER_RESTORE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FLOORMASTER_RESTORE - SFX_FLAG);
 }
 
 void func_808D2A20(EnFloormas* this) {
@@ -1142,7 +1142,7 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
                     this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                     this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
                 } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-                    func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
             }
         }

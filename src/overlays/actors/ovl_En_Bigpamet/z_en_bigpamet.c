@@ -492,7 +492,7 @@ void func_80A286C0(EnBigpamet* this) {
 void func_80A28708(EnBigpamet* this, PlayState* play) {
     this->unk_29E--;
     this->actor.shape.rot.y += 0x3B00;
-    func_800B9010(&this->actor, NA_SE_EN_B_PAMET_ROLL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_B_PAMET_ROLL - SFX_FLAG);
     if (this->unk_29E == 0) {
         func_80A28760(this);
     }
@@ -523,7 +523,7 @@ void func_80A287E8(EnBigpamet* this, PlayState* play) {
     s16 quakeIndex;
 
     this->actor.shape.rot.y += 0x3B00;
-    func_800B9010(&this->actor, NA_SE_EN_B_PAMET_ROLL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_B_PAMET_ROLL - SFX_FLAG);
     this->unk_29E++;
     this->unk_29E = CLAMP_MAX(this->unk_29E, 20);
     if (this->collider.base.atFlags & AT_HIT) {

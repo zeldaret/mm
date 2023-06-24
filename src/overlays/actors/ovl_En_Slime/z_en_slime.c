@@ -1155,7 +1155,7 @@ void EnSlime_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
-                func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

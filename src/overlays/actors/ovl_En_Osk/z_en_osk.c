@@ -221,7 +221,7 @@ void func_80BF61EC(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.85f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -298,7 +298,7 @@ void func_80BF6478(EnOsk* this) {
 
             case 10:
             case 11:
-                func_800B9010(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
                 break;
         }
     }
@@ -350,7 +350,7 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -482,7 +482,7 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }

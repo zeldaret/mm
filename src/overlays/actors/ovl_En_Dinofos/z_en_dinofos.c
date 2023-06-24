@@ -560,7 +560,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
         Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
         Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
         if (this->skelAnime.curFrame <= 55.0f) {
-            func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         }
     }
 
@@ -1087,7 +1087,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
     sp7C.x = 0.9f * temp_f20;
     sp7C.y = Rand_CenteredFloat(0.6f) + 1.4f;
     sp7C.z = 0.9f * temp_f22;
-    func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
     EffectSsDFire_Spawn(play, &this->limbPos[10], &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20, 3, 8);
 
     for (end = 6, i = 3; i > 0; i--) {
@@ -1400,7 +1400,7 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * (11.0f / 40.0f);
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

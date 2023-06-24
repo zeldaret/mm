@@ -357,9 +357,9 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
 
     SkelAnime_Update(&this->snowPileSkelAnime);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-        func_800B9010(&this->actor, NA_SE_EN_YMAJIN_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YMAJIN_MOVE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_YMAJIN_MINI_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YMAJIN_MINI_MOVE - SFX_FLAG);
     }
 
     if (this->work.timer > 0) {

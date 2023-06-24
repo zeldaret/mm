@@ -499,7 +499,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
     Math_StepToF(&this->actor.world.pos.z, player->actor.world.pos.z, 3.0f);
 
     if (this->timer == 30) {
-        play_sound(NA_SE_OC_ABYSS);
+        Audio_PlaySfx(NA_SE_OC_ABYSS);
         func_80169FDC(&play->state);
     }
 }
@@ -652,7 +652,7 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

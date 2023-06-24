@@ -896,14 +896,14 @@ void EnBigslime_SetTargetVtxFromPreFrozen(EnBigslime* this) {
  * Plays the standard Gekko sound effects without reverb
  */
 void EnBigslime_GekkoSfxOutsideBigslime(EnBigslime* this, u16 sfxId) {
-    Audio_PlaySfxAtPos(&this->gekkoProjectedPos, sfxId);
+    Audio_PlaySfx_AtPos(&this->gekkoProjectedPos, sfxId);
 }
 
 /**
  * Adds reverb to Gekko sound effects when enclosed by bigslime
  */
 void EnBigslime_GekkoSfxInsideBigslime(EnBigslime* this, u16 sfxId) {
-    func_8019F420(&this->gekkoProjectedPos, sfxId);
+    Audio_PlaySfx_Underwater(&this->gekkoProjectedPos, sfxId);
 }
 
 void EnBigslime_GekkoFreeze(EnBigslime* this) {
@@ -1634,7 +1634,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
         Animation_PlayOnce(&this->skelAnime, sGekkoAttackAnimations[((s32)Rand_ZeroFloat(3.0f) % 3)]);
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_B_SLIME_PUNCH_MOVE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_B_SLIME_PUNCH_MOVE - SFX_FLAG);
 }
 
 /**
@@ -1898,7 +1898,7 @@ void EnBigslime_Freeze(EnBigslime* this, PlayState* play) {
         sBigslimeTargetVtx[vtxIceUpdate - 4].n.a = sBigslimeTargetVtx[vtxIceUpdate].n.a;
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         if (this->freezeTimer == 0) {
             EnBigslime_BreakIntoMinislime(this, play);
@@ -1981,7 +1981,7 @@ void EnBigslime_Melt(EnBigslime* this, PlayState* play) {
         EffectSsIceSmoke_Spawn(play, &iceSmokePos, &iceSmokeVelocity, &gZeroVec3f, 600);
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     for (i = 159; i >= 0; i--) {
         sBigslimeTargetVtx[i + 2].n.a = sBigslimeTargetVtx[i].n.a;
     }
@@ -2765,7 +2765,7 @@ void EnBigslime_UpdateEffects(EnBigslime* this) {
             this->gekkoDrawDmgEffScale = 0.375f * (this->gekkoDrawDmgEffAlpha + 1.0f);
             this->gekkoDrawDmgEffScale = CLAMP_MAX(this->gekkoDrawDmgEffScale, 0.75f);
         } else if (!Math_StepToF(&this->gekkoDrawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -2780,7 +2780,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, PlayState* play) {
         play->envCtx.lightSettingOverride = 0xFF;
     }
 
-    func_8019F540(1);
+    Audio_SetSfxUnderwaterReverb(true);
     this->dynamicVtxState ^= 1;
     EnBigslime_DynamicVtxCopyState(this);
     this->isAnimUpdate = SkelAnime_Update(&this->skelAnime);
@@ -2825,7 +2825,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
         play->envCtx.lightSettingOverride = 0xFF;
     }
 
-    func_8019F540(0);
+    Audio_SetSfxUnderwaterReverb(false);
     this->isAnimUpdate = SkelAnime_Update(&this->skelAnime);
     if (this->actionFunc != EnBigslime_PlayCutscene) {
         EnBigslime_ApplyDamageEffectGekko(this, play);

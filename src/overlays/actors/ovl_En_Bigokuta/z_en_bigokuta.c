@@ -553,7 +553,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
-            func_800B9010(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

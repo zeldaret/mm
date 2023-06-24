@@ -212,7 +212,7 @@ void func_808CC490(EnVm* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_216, 0, 0xA, 0x5DC);
     this->unk_218 -= 0x1F4;
-    func_800B9010(&this->actor, NA_SE_EN_BIMOS_ROLL_HEAD - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BIMOS_ROLL_HEAD - SFX_FLAG);
 
     if (this->actor.xzDistToPlayer <= this->unk_21C) {
         if ((this->actor.playerHeightRel <= 80.0f) && (this->actor.playerHeightRel >= -160.0f)) {
@@ -446,7 +446,7 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_224 > 0.0f) {
-        func_800B9010(&this->actor, NA_SE_EN_BIMOS_LAZER - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BIMOS_LAZER - SFX_FLAG);
     }
 
     this->actionFunc(this, play);

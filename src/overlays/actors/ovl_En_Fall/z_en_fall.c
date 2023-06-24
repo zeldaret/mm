@@ -426,7 +426,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                         break;
                 }
                 if (play->csCtx.curFrame >= 1145) {
-                    func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
 
@@ -445,7 +445,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                         break;
                 }
                 if (play->csCtx.curFrame >= 650) {
-                    func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
         }
@@ -454,7 +454,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
 
 void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
     if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_OKUJOU)) {
-        func_800B9010(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
     }
 }
 
@@ -529,7 +529,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
             this->actor.draw = NULL;
             this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {
-            func_800B9010(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
         }
     }
 }
@@ -628,7 +628,7 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
     }
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450) && (this->fireballAlpha > 0)) {
-        func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
+        Audio_PlaySfx_2(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);
 }

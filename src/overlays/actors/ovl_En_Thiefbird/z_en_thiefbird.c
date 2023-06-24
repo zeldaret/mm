@@ -266,7 +266,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
             Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
-            this->unk_3E8 = gTakkuriStolenGreatFairySwordDL;
+            this->unk_3E8 = gTakkuriStolenGreatFairysSwordDL;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
@@ -1039,7 +1039,7 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.5f, 0.0125f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 

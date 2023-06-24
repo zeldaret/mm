@@ -391,7 +391,7 @@ void func_80897910(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80897A34(EnPeehat* this) {
@@ -427,7 +427,7 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_SM_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_SM_FLY - SFX_FLAG);
 
     if (this->colliderTris.base.atFlags & AT_BOUNCED) {
         this->colliderTris.base.atFlags &= ~(AT_BOUNCED | AT_ON);
@@ -532,7 +532,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80898124(EnPeehat* this) {
@@ -570,7 +570,7 @@ void func_80898144(EnPeehat* this, PlayState* play) {
     if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         func_80897864(this);
     }
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_808982E0(EnPeehat* this) {
@@ -594,7 +594,7 @@ void func_80898338(EnPeehat* this, PlayState* play) {
             func_80897864(this);
         }
     }
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80898414(EnPeehat* this) {
@@ -828,7 +828,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.1f);
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.1f, 0.0275f)) {
-            func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
