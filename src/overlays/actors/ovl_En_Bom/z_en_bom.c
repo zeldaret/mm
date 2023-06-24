@@ -544,6 +544,8 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 if (Actor_HasParent(thisx, play)) {
                     effPos.y += 30.0f;
                 }
+                //! @note Assumes `isPowderKeg` values aligns with clearTag params.
+                //! Here, 0/1 are small/large explosions respectively.
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
                             CLEAR_TAG_PARAMS(this->isPowderKeg));
                 Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
