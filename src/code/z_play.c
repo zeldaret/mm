@@ -2316,8 +2316,10 @@ void Play_Init(GameState* thisx) {
     THA_GetRemaining(&this->state.heap);
     zAllocSize = THA_GetRemaining(&this->state.heap);
     zAlloc = (uintptr_t)THA_AllocTailAlign16(&this->state.heap, zAllocSize);
-    ZeldaArena_Init((void*)((zAlloc + 8) & ~0xF),
-                    (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc); //! @bug: Incorrect ALIGN16s
+
+    //! @bug: Incorrect ALIGN16s
+    ZeldaArena_Init((void*)((zAlloc + 8) & ~0xF), (zAllocSize - ((zAlloc + 8) & ~0xF)) + zAlloc);
+
     Actor_InitContext(this, &this->actorCtx, this->linkActorEntry);
 
     while (!Room_HandleLoadCallbacks(this, &this->roomCtx)) {}
