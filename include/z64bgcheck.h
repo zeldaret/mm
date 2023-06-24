@@ -223,6 +223,8 @@ typedef enum ConveyorSpeed {
     /* 4 */ CONVEYOR_SPEED_MAX
 } ConveyorSpeed;
 
+#define CONVEYOR_DIRECTION_TO_BINANG(conveyorDirection) ((conveyorDirection) * (0x10000 / 64))
+
 typedef struct {
     /* 0x0 */ u32 data[2];
 
