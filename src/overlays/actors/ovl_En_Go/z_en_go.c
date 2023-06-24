@@ -353,8 +353,8 @@ static AnimationInfoS sAnimationInfo[] = {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be between 'maxFrames / 3' and
  * 'maxFrames'
  */
-EnGoEffect* EnGo_InitSteam(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale, f32 deltaScale,
-                           s32 maxFrames) {
+EnGoEffect* EnGo_InitSteam(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f velocity,
+                           f32 scale, f32 deltaScale, s32 maxFrames) {
     s32 i;
 
     // Steam effects are from the end of the snow effects to the end of all effects
@@ -435,8 +435,8 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param maxFrames Maximum number of frames the effect will last. Actual lifetime will be 1/3 * maxFrames -> maxFrames
  * @param parentEffectType Type of the parent effect, determines which of the possible dust effects correspond
  */
-void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 maxFrames,
-                   EnGoEffectType parentEffectType) {
+void EnGo_InitDust(EnGoEffect effect[ENGO_OTHER_EFFECT_COUNT], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale,
+                   f32 deltaScale, s32 maxFrames, EnGoEffectType parentEffectType) {
     s32 i;
 
     // Dust effects are from the end of the snow effects to the end of all effects.
@@ -644,7 +644,8 @@ void EnGo_UpdateSnow(EnGoEffect* effect, f32 dustConversionHeight) {
  * @param model Snow Model
  * @param type Snow Effect type to draw
  */
-void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, Gfx* material, Gfx* model, u8 effectType) {
+void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, Gfx* material, Gfx* model,
+                   u8 effectType) {
     s32 i;
     u8 isMaterialSet = false;
 
