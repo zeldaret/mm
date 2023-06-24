@@ -607,7 +607,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
     for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
-        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOON_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
+        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOONS_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             Interface_LoadItemIconImpl(play, j);
         }
@@ -906,7 +906,7 @@ Inventory sSaveDebugInventory = {
         ITEM_ARROW_FIRE,
         ITEM_ARROW_ICE,
         ITEM_ARROW_LIGHT,
-        ITEM_MOON_TEAR,
+        ITEM_MOONS_TEAR,
         ITEM_BOMB,
         ITEM_BOMBCHU,
         ITEM_STICK,

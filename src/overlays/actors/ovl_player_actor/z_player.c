@@ -500,20 +500,20 @@ f32 D_80862AFC; // distance of the analog stick to its center
 s16 D_80862B00; // analog stick angle/yaw
 s16 D_80862B02; // analog stick yaw + camera yaw
 s32 D_80862B04; // boolean, set to the return value of func_8083216C
-FloorType sPlayerCurrentFloorType;
-u32 sPlayerCurrentWallFlags;
+FloorType sPlayerFloorType;
+u32 sPlayerTouchedWallFlags;
 ConveyorSpeed sPlayerConveyorSpeedIndex;
 s16 sPlayerIsOnFloorConveyor;
-s16 D_80862B16; // SurfaceType_GetConveyorDirection << 0xA
-f32 D_80862B18; // D_80862B18 = this->actor.world.pos.y - this->actor.floorHeight;
+s16 sPlayerConveyorYaw;
+f32 sPlayerYDistToFloor;
 FloorProperty sPlayerPrevFloorProperty;
-s32 D_80862B20; // ABS_ALT(this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000))
-s32 D_80862B24; // ABS_ALT(BINANG_SUB(this->currentYaw, BINANG_ADD(this->actor.wallYaw, 0x8000)))
-s16 D_80862B28;
+s32 sPlayerShapeYawToTouchedWall;
+s32 sPlayerWorldYawToTouchedWall;
+s16 sPlayerFloorPitchShape;
 s32 D_80862B2C; // D_80862B2C = player->currentMask;
-Vec3f D_80862B30;
+Vec3f sPlayerInteractWallCheckResult;
 f32 D_80862B3C;
-FloorEffect D_80862B40; // SurfaceType_GetFloorEffect
+FloorEffect sPlayerFloorEffect;
 Input* sPlayerControlInput;
 s32 D_80862B48;
 s32 D_80862B4C;
@@ -741,39 +741,39 @@ void Player_RequestRumble(PlayState* play, Player* this, s32 sourceIntensity, s3
 
 PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
     {
-        // unk_00;
+        // ceilingCheckHeight
         84.0f,
-        // shadowScale;
+        // shadowScale
         90.0f,
-        // unk_08;
+        // unk_08
         1.5f,
-        // unk_0C;
+        // unk_0C
         166.5f,
-        // unk_10;
+        // unk_10
         105.0f,
-        // unk_14;
+        // unk_14
         119.100006f,
-        // unk_18;
+        // unk_18
         88.5f,
-        // unk_1C;
+        // unk_1C
         61.5f,
-        // unk_20;
+        // unk_20
         28.5f,
-        // unk_24;
+        // unk_24
         54.0f,
-        // unk_28;
+        // unk_28
         75.0f,
-        // unk_2C;
+        // unk_2C
         84.0f,
-        // unk_30;
+        // unk_30
         102.0f,
-        // unk_34; // height?
+        // unk_34
         70.0f,
-        // unk_38;
+        // wallCheckRadius
         27.0f,
-        // unk_3C;
+        // unk_3C
         24.75f,
-        // unk_40;
+        // unk_40
         105.0f,
         // unk_44
         { 9, 0x123F, 0x167 },
@@ -795,13 +795,13 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // voiceSfxIdOffset;
+        // voiceSfxIdOffset
         SFX_VOICE_BANK_SIZE * 0,
-        // surfaceSfxIdOffset;
+        // surfaceSfxIdOffset
         0x80,
-        // unk_98;
+        // unk_98
         33.0f,
-        // unk_9C;
+        // unk_9C
         44.15145f,
         // openChestAnim
         &gPlayerAnim_link_demo_Tbox_open,
@@ -837,39 +837,39 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         },
     },
     {
-        // unk_00;
+        // ceilingCheckHeight
         70.0f,
-        // shadowScale;
+        // shadowScale
         90.0f,
-        // unk_08;
+        // unk_08
         0.74f,
-        // unk_0C;
+        // unk_0C
         111.0f,
-        // unk_10;
+        // unk_10
         70.0f,
-        // unk_14;
+        // unk_14
         79.4f,
-        // unk_18;
+        // unk_18
         59.0f,
-        // unk_1C;
+        // unk_1C
         41.0f,
-        // unk_20;
+        // unk_20
         19.0f,
-        // unk_24;
+        // unk_24
         36.0f,
-        // unk_28;
+        // unk_28
         50.0f,
-        // unk_2C;
+        // unk_2C
         56.0f,
-        // unk_30;
+        // unk_30
         68.0f,
-        // unk_34; // height?
+        // unk_34
         70.0f,
-        // unk_38;
+        // wallCheckRadius
         19.5f,
-        // unk_3C;
+        // unk_3C
         18.2f,
-        // unk_40;
+        // unk_40
         80.0f,
         // unk_44
         { 0x17, 0xF3B, 0xDF },
@@ -891,13 +891,13 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // voiceSfxIdOffset;
+        // voiceSfxIdOffset
         SFX_VOICE_BANK_SIZE * 6,
-        // surfaceSfxIdOffset;
+        // surfaceSfxIdOffset
         0x150,
-        // unk_98;
+        // unk_98
         -25.0f,
-        // unk_9C;
+        // unk_9C
         42.0f,
         // openChestAnim
         &gPlayerAnim_pg_Tbox_open,
@@ -933,39 +933,39 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         },
     },
     {
-        // unk_00;
+        // ceilingCheckHeight
         56.0f,
-        // shadowScale;
+        // shadowScale
         90.0f,
-        // unk_08;
+        // unk_08
         1.0f,
-        // unk_0C;
+        // unk_0C
         111.0f,
-        // unk_10;
+        // unk_10
         70.0f,
-        // unk_14;
+        // unk_14
         79.4f,
-        // unk_18;
+        // unk_18
         59.0f,
-        // unk_1C;
+        // unk_1C
         41.0f,
-        // unk_20;
+        // unk_20
         19.0f,
-        // unk_24;
+        // unk_24
         36.0f,
-        // unk_28;
+        // unk_28
         50.0f,
-        // unk_2C;
+        // unk_2C
         56.0f,
-        // unk_30;
+        // unk_30
         68.0f,
-        // unk_34; // height?
+        // unk_34
         70.0f,
-        // unk_38;
+        // wallCheckRadius
         18.0f,
-        // unk_3C;
+        // unk_3C
         23.0f,
-        // unk_40;
+        // unk_40
         70.0f,
         // unk_44
         { 0x17, 0x1323, -0x6D },
@@ -987,13 +987,13 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // voiceSfxIdOffset;
+        // voiceSfxIdOffset
         SFX_VOICE_BANK_SIZE * 5,
-        // surfaceSfxIdOffset;
+        // surfaceSfxIdOffset
         0x120,
-        // unk_98;
+        // unk_98
         22.0f,
-        // unk_9C;
+        // unk_9C
         36.0f,
         // openChestAnim
         &gPlayerAnim_pz_Tbox_open,
@@ -1029,39 +1029,39 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         },
     },
     {
-        // unk_00;
+        // ceilingCheckHeight
         35.0f,
-        // shadowScale;
+        // shadowScale
         50.0f,
-        // unk_08;
+        // unk_08
         0.3f,
-        // unk_0C;
+        // unk_0C
         71.0f,
-        // unk_10;
+        // unk_10
         50.0f,
-        // unk_14;
+        // unk_14
         49.0f,
-        // unk_18;
+        // unk_18
         39.0f,
-        // unk_1C;
+        // unk_1C
         27.0f,
-        // unk_20;
+        // unk_20
         19.0f,
-        // unk_24;
+        // unk_24
         8.0f,
-        // unk_28;
+        // unk_28
         13.6f,
-        // unk_2C;
+        // unk_2C
         24.0f,
-        // unk_30;
+        // unk_30
         24.0f,
-        // unk_34; // height?
+        // unk_34
         70.0f,
-        // unk_38;
+        // wallCheckRadius
         14.0f,
-        // unk_3C;
+        // unk_3C
         12.0f,
-        // unk_40;
+        // unk_40
         55.0f,
         // unk_44
         { -0x18, 0xDED, 0x36C },
@@ -1083,13 +1083,13 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // voiceSfxIdOffset;
+        // voiceSfxIdOffset
         SFX_VOICE_BANK_SIZE * 4,
-        // surfaceSfxIdOffset;
+        // surfaceSfxIdOffset
         0xF0,
-        // unk_98;
+        // unk_98
         -21.0f,
-        // unk_9C;
+        // unk_9C
         33.0f,
         // openChestAnim
         &gPlayerAnim_pn_Tbox_open,
@@ -1125,39 +1125,39 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
         },
     },
     {
-        // unk_00;
+        // ceilingCheckHeight
         40.0f,
-        // shadowScale;
+        // shadowScale
         60.0f,
-        // unk_08;
+        // unk_08
         11.0f / 17.0f,
-        // unk_0C;
+        // unk_0C
         71.0f,
-        // unk_10;
+        // unk_10
         50.0f,
-        // unk_14;
+        // unk_14
         49.0f,
-        // unk_18;
+        // unk_18
         39.0f,
-        // unk_1C;
+        // unk_1C
         27.0f,
-        // unk_20;
+        // unk_20
         19.0f,
-        // unk_24;
+        // unk_24
         22.0f,
-        // unk_28;
+        // unk_28
         32.4f,
-        // unk_2C;
+        // unk_2C
         32.0f,
-        // unk_30;
+        // unk_30
         48.0f,
-        // unk_34; // height?
+        // unk_34
         11.0f / 17.0f * 70.0f,
-        // unk_38;
+        // wallCheckRadius
         14.0f,
-        // unk_3C;
+        // unk_3C
         12.0f,
-        // unk_40;
+        // unk_40
         55.0f,
         // unk_44
         { -0x18, 0xDED, 0x36C },
@@ -1179,13 +1179,13 @@ PlayerAgeProperties sPlayerAgeProperties[PLAYER_FORM_MAX] = {
             { -0x638, 0x1256, 0x17C },
             { -0x637, 0x17EA, 0x167 },
         },
-        // voiceSfxIdOffset;
+        // voiceSfxIdOffset
         SFX_VOICE_BANK_SIZE * 1,
-        // surfaceSfxIdOffset;
+        // surfaceSfxIdOffset
         0,
-        // unk_98;
+        // unk_98
         22.0f,
-        // unk_9C;
+        // unk_9C
         29.4343f,
         // openChestAnim
         &gPlayerAnim_clink_demo_Tbox_open,
@@ -2461,8 +2461,8 @@ GetItemEntry sGetItemTable[GI_MAX - 1] = {
     // GI_SEAHORSE_CAUGHT
     GET_ITEM(ITEM_SEAHORSE_CAUGHT, OBJECT_GI_SEAHORSE, GID_SEAHORSE_CAUGHT, 0x95, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
-    // GI_MOON_TEAR
-    GET_ITEM(ITEM_MOON_TEAR, OBJECT_GI_RESERVE00, GID_MOON_TEAR, 0x96, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
+    // GI_MOONS_TEAR
+    GET_ITEM(ITEM_MOONS_TEAR, OBJECT_GI_RESERVE00, GID_MOONS_TEAR, 0x96, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
              CHEST_ANIM_LONG),
     // GI_DEED_LAND
     GET_ITEM(ITEM_DEED_LAND, OBJECT_GI_RESERVE01, GID_DEED_LAND, 0x97, GIFIELD(GIFIELD_NO_COLLECTIBLE, 0),
@@ -2924,7 +2924,7 @@ s8 sItemItemActions[] = {
     PLAYER_IA_BOTTLE_CHATEAU,          // ITEM_CHATEAU,
     PLAYER_IA_BOTTLE_HYLIAN_LOACH,     // ITEM_HYLIAN_LOACH,
     PLAYER_IA_BOTTLE_POE,              // ITEM_OBABA_DRINK, // !
-    PLAYER_IA_MOON_TEAR,               // ITEM_MOON_TEAR,
+    PLAYER_IA_MOONS_TEAR,              // ITEM_MOONS_TEAR,
     PLAYER_IA_DEED_LAND,               // ITEM_DEED_LAND,
     PLAYER_IA_DEED_SWAMP,              // ITEM_DEED_SWAMP,
     PLAYER_IA_DEED_MOUNTAIN,           // ITEM_DEED_MOUNTAIN,
@@ -3043,7 +3043,7 @@ PlayerFuncAC4 D_8085C9F0[PLAYER_IA_MAX] = {
     func_80848780, // PLAYER_IA_BOTTLE_MILK_HALF
     func_80848780, // PLAYER_IA_BOTTLE_CHATEAU
     func_80848780, // PLAYER_IA_BOTTLE_FAIRY
-    func_80848780, // PLAYER_IA_MOON_TEAR
+    func_80848780, // PLAYER_IA_MOONS_TEAR
     func_80848780, // PLAYER_IA_DEED_LAND
     func_80848780, // PLAYER_IA_ROOM_KEY
     func_80848780, // PLAYER_IA_LETTER_TO_KAFEI
@@ -3130,7 +3130,7 @@ void (*D_8085CB3C[PLAYER_IA_MAX])(PlayState*, Player*) = {
     func_8082F594,         // PLAYER_IA_BOTTLE_MILK_HALF
     func_8082F594,         // PLAYER_IA_BOTTLE_CHATEAU
     func_8082F594,         // PLAYER_IA_BOTTLE_FAIRY
-    func_8082F594,         // PLAYER_IA_MOON_TEAR
+    func_8082F594,         // PLAYER_IA_MOONS_TEAR
     func_8082F594,         // PLAYER_IA_DEED_LAND
     func_8082F594,         // PLAYER_IA_ROOM_KEY
     func_8082F594,         // PLAYER_IA_LETTER_TO_KAFEI
@@ -4094,7 +4094,7 @@ void func_8083133C(Player* this) {
     this->stateFlags1 |= PLAYER_STATE1_20000;
 
     if (!(this->skelAnime.moveFlags & ANIM_FLAG_80) && (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
-        (D_80862B20 < 0x2000)) {
+        (sPlayerShapeYawToTouchedWall < 0x2000)) {
         this->currentYaw = this->actor.shape.rot.y = this->actor.wallYaw + 0x8000;
     }
 
@@ -4309,7 +4309,8 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
                       (gSaveContext.save.saveInfo.playerData.magic == 0))) ||
                     (!(this->stateFlags1 & PLAYER_STATE1_8000000) &&
                      BgCheck_EntityCheckCeiling(&play->colCtx, &sp54, &this->actor.world.pos,
-                                                sPlayerAgeProperties[playerForm].unk_00, &sp5C, &sp58, &this->actor))) {
+                                                sPlayerAgeProperties[playerForm].ceilingCheckHeight, &sp5C, &sp58,
+                                                &this->actor))) {
                     Audio_PlaySfx(NA_SE_SY_ERROR);
                     return;
                 }
@@ -4715,7 +4716,7 @@ s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* outYaw, f32 arg
         }
 
         if (D_80862AFC != 0.0f) {
-            f32 temp_fv0 = Math_SinS(this->unk_B6C);
+            f32 temp_fv0 = Math_SinS(this->floorPitch);
             f32 var_fa0 = this->unk_B50;
             f32 var_fa1;
 
@@ -5416,7 +5417,7 @@ s32 func_80834600(Player* this, PlayState* play) {
             this->unk_D6A = 0;
         }
     } else if ((var_v0 = ((Player_GetHeight(this) - 8.0f) < (this->unk_AB8 * this->actor.scale.y))) ||
-               (this->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) || (sPlayerCurrentFloorType == FLOOR_TYPE_9) ||
+               (this->actor.bgCheckFlags & BGCHECKFLAG_CRUSHED) || (sPlayerFloorType == FLOOR_TYPE_9) ||
                (this->stateFlags2 & PLAYER_STATE2_80000000)) {
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_DAMAGE_S);
 
@@ -5513,7 +5514,7 @@ s32 func_80834600(Player* this, PlayState* play) {
     } else if (this->invincibilityTimer != 0) {
         return false;
     } else {
-        s32 sp58 = func_808340AC(sPlayerCurrentFloorType);
+        s32 sp58 = func_808340AC(sPlayerFloorType);
         u32 isSurfaceWallDamage = SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
         s32 var_a1 = false;
         s32 var_v1_2;
@@ -5577,44 +5578,48 @@ void func_80834DB8(Player* this, PlayerAnimationHeader* anim, f32 speed, PlaySta
 
 s32 func_80834DFC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) &&
-        ((this->transformation != PLAYER_FORM_DEKU) || func_801242B4(this) || (this->unk_B5C < 4)) &&
-        !(this->stateFlags1 & PLAYER_STATE1_800) && (this->unk_B5C >= 2) &&
-        (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->wallHeight < this->ageProperties->unk_14))) {
+        ((this->transformation != PLAYER_FORM_DEKU) || func_801242B4(this) ||
+         (this->ledgeClimbType <= PLAYER_LEDGE_CLIMB_3)) &&
+        !(this->stateFlags1 & PLAYER_STATE1_800) && (this->ledgeClimbType >= PLAYER_LEDGE_CLIMB_2) &&
+        (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->yDistToLedge < this->ageProperties->unk_14))) {
         s32 var_v1 = false;
         PlayerAnimationHeader* anim;
-        f32 wallHeight;
+        f32 yDistToLedge;
 
         if (func_801242B4(this)) {
             f32 depth = (this->transformation == PLAYER_FORM_FIERCE_DEITY) ? 80.0f : 50.0f;
 
             if (this->actor.depthInWater < depth) {
-                if ((this->unk_B5C < 2) || (this->ageProperties->unk_10 < this->wallHeight)) {
+                if ((this->ledgeClimbType <= PLAYER_LEDGE_CLIMB_1) ||
+                    (this->ageProperties->unk_10 < this->yDistToLedge)) {
                     return false;
                 }
-            } else if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) || (this->unk_B5C >= 3)) {
+            } else if ((this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER) ||
+                       (this->ledgeClimbType >= PLAYER_LEDGE_CLIMB_3)) {
                 return false;
             }
         } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) ||
-                   ((this->ageProperties->unk_14 <= this->wallHeight) && (this->stateFlags1 & PLAYER_STATE1_8000000))) {
+                   ((this->ageProperties->unk_14 <= this->yDistToLedge) &&
+                    (this->stateFlags1 & PLAYER_STATE1_8000000))) {
             return false;
         }
 
-        if ((this->actor.wallBgId != BGCHECK_SCENE) && (sPlayerCurrentWallFlags & WALL_FLAG_6)) {
-            if (this->unk_B5D >= 6) {
+        if ((this->actor.wallBgId != BGCHECK_SCENE) && (sPlayerTouchedWallFlags & WALL_FLAG_6)) {
+            if (this->ledgeClimbDelayTimer >= 6) {
                 this->stateFlags2 |= PLAYER_STATE2_4;
                 if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
                     var_v1 = true;
                 }
             }
-        } else if ((this->unk_B5D >= 6) || CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
+        } else if ((this->ledgeClimbDelayTimer >= 6) || CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A)) {
             var_v1 = true;
         }
 
         if (var_v1) {
             Player_SetAction(play, this, func_8084D4EC, 0);
-            wallHeight = this->wallHeight;
+            yDistToLedge = this->yDistToLedge;
 
-            if (this->ageProperties->unk_14 <= wallHeight) {
+            if (this->ageProperties->unk_14 <= yDistToLedge) {
                 anim = &gPlayerAnim_link_normal_250jump_start;
                 this->linearVelocity = 1.0f;
             } else {
@@ -5622,28 +5627,28 @@ s32 func_80834DFC(Player* this, PlayState* play) {
                 s32 bgId;
                 f32 wallPolyNormalX = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.x);
                 f32 wallPolyNormalZ = COLPOLY_GET_NORMAL(this->actor.wallPoly->normal.z);
-                f32 var_fv1 = this->wallDistance + 0.5f; // wallDistance
+                f32 var_fv1 = this->distToInteractWall + 0.5f;
                 f32 yIntersect;
                 s32 pad;
 
                 this->stateFlags1 |= PLAYER_STATE1_4;
 
                 if (func_801242B4(this)) {
-                    wallHeight -= 60.0f * this->ageProperties->unk_08;
+                    yDistToLedge -= 60.0f * this->ageProperties->unk_08;
                     anim = &gPlayerAnim_link_swimer_swim_15step_up;
                     this->stateFlags1 &= ~PLAYER_STATE1_8000000;
-                } else if (this->ageProperties->unk_18 <= wallHeight) {
-                    wallHeight -= 59.0f * this->ageProperties->unk_08;
+                } else if (this->ageProperties->unk_18 <= yDistToLedge) {
+                    yDistToLedge -= 59.0f * this->ageProperties->unk_08;
                     anim = &gPlayerAnim_link_normal_150step_up;
                 } else {
-                    wallHeight -= 41.0f * this->ageProperties->unk_08;
+                    yDistToLedge -= 41.0f * this->ageProperties->unk_08;
                     anim = &gPlayerAnim_link_normal_100step_up;
                 }
 
-                this->unk_ABC -= wallHeight * 100.0f;
+                this->unk_ABC -= yDistToLedge * 100.0f;
 
                 this->actor.world.pos.x -= var_fv1 * wallPolyNormalX;
-                this->actor.world.pos.y += this->wallHeight + 10.0f;
+                this->actor.world.pos.y += this->yDistToLedge + 10.0f;
                 this->actor.world.pos.z -= var_fv1 * wallPolyNormalZ;
 
                 yIntersect =
@@ -5665,8 +5670,9 @@ s32 func_80834DFC(Player* this, PlayState* play) {
             this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw + 0x8000;
             return true;
         }
-    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->unk_B5C == 1) && (this->unk_B5D >= 3)) {
-        f32 temp = (this->wallHeight * 0.08f) + 5.5f;
+    } else if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->ledgeClimbType == PLAYER_LEDGE_CLIMB_1) &&
+               (this->ledgeClimbDelayTimer >= 3)) {
+        f32 temp = (this->yDistToLedge * 0.08f) + 5.5f;
 
         func_80834DB8(this, &gPlayerAnim_link_normal_jump, temp, play);
         this->linearVelocity = 2.5f;
@@ -5732,8 +5738,8 @@ u8 sReturnEntranceGroupIndices[] = {
 };
 
 // subfunction of OoT's func_80839034
-void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
-    play->nextEntrance = play->setupExitList[arg1];
+void func_808354A4(PlayState* play, s32 exitIndex, s32 arg2) {
+    play->nextEntrance = play->setupExitList[exitIndex];
 
     if (play->nextEntrance == 0xFFFF) {
         gSaveContext.respawnFlag = 4;
@@ -5752,7 +5758,7 @@ void func_808354A4(PlayState* play, s32 arg1, s32 arg2) {
             gSaveContext.respawnFlag = -2;
         }
 
-        gSaveContext.retainWeatherMode = 1;
+        gSaveContext.retainWeatherMode = true;
         Scene_SetExitFade(play);
     }
 
@@ -5766,136 +5772,144 @@ void func_808355D8(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     func_8082E1F0(this, NA_SE_IT_DEKUNUTS_FLOWER_CLOSE);
 }
 
-// related to grottos (?)
-s32 func_8083562C(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) {
-    s32 var_a3;
+s32 Player_HandleExitsAndVoids(PlayState* play, Player* this, CollisionPoly* poly, s32 bgId) {
+    s32 exitIndexPlusOne;
     FloorType floorType;
     s32 sp34;
     s32 sp30;
 
     if ((this == GET_PLAYER(play)) && !(this->stateFlags1 & PLAYER_STATE1_80) && !func_8082DA90(play) &&
         (this->csMode == PLAYER_CSMODE_NONE) && !(this->stateFlags1 & PLAYER_STATE1_1)) {
-        var_a3 = 0;
-        if (((poly != NULL) && (var_a3 = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (var_a3 != 0)) &&
-             (((play->sceneId != SCENE_GORONRACE) && (play->sceneId != SCENE_DEKU_KING)) || (var_a3 < 3)) &&
-             (((play->sceneId != SCENE_20SICHITAI) && (play->sceneId != SCENE_20SICHITAI2)) || (var_a3 < 0x15)) &&
-             ((play->sceneId != SCENE_11GORONNOSATO) || (var_a3 < 6))) ||
-            (func_808340D4(sPlayerCurrentFloorType) && (this->floorProperty == FLOOR_PROPERTY_12))) {
+        exitIndexPlusOne = 0;
+
+        if (((poly != NULL) &&
+             (exitIndexPlusOne = SurfaceType_GetSceneExitIndex(&play->colCtx, poly, bgId), (exitIndexPlusOne != 0)) &&
+             (((play->sceneId != SCENE_GORONRACE) && (play->sceneId != SCENE_DEKU_KING)) || (exitIndexPlusOne < 3)) &&
+             (((play->sceneId != SCENE_20SICHITAI) && (play->sceneId != SCENE_20SICHITAI2)) ||
+              (exitIndexPlusOne < 0x15)) &&
+             ((play->sceneId != SCENE_11GORONNOSATO) || (exitIndexPlusOne < 6))) ||
+            (func_808340D4(sPlayerFloorType) && (this->floorProperty == FLOOR_PROPERTY_12))) {
+
             sp34 = this->unk_D68 - (s32)this->actor.world.pos.y;
+
             if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
-                !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (sp34 < 400) && (D_80862B18 > 100.0f)) {
+                !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (sp34 < 400) && (sPlayerYDistToFloor > 100.0f)) {
                 if ((this->floorProperty != FLOOR_PROPERTY_5) && (this->floorProperty != FLOOR_PROPERTY_12)) {
                     this->linearVelocity = 0.0f;
                 }
-
                 return false;
+            }
+
+            if (this->stateFlags3 & PLAYER_STATE3_1000000) {
+                func_808355D8(play, this, &gPlayerAnim_pn_kakkufinish);
+            }
+
+            if (exitIndexPlusOne == 0) {
+                func_80169EFC(&play->state);
+                Scene_SetExitFade(play);
             } else {
-                if (this->stateFlags3 & PLAYER_STATE3_1000000) {
-                    func_808355D8(play, this, &gPlayerAnim_pn_kakkufinish);
+                func_808354A4(play, exitIndexPlusOne - 1,
+                              SurfaceType_GetFloorEffect(&play->colCtx, poly, bgId) == FLOOR_EFFECT_2);
+
+                if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->floorProperty == FLOOR_PROPERTY_5)) {
+                    Audio_PlaySfx_2(NA_SE_OC_TUNAMI);
+                    func_801A4058(5);
+                    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
+                } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+                           (this->floorProperty == FLOOR_PROPERTY_12)) {
+                    Audio_PlaySfx_2(NA_SE_OC_SECRET_WARP_IN);
                 }
 
-                if (var_a3 == 0) {
-                    func_80169EFC(&play->state);
-                    Scene_SetExitFade(play);
+                if (this->stateFlags1 & PLAYER_STATE1_800000) {
+                    if (D_801BDAA0) {
+                        D_801BDAA0 = false;
+                    } else {
+                        gHorseIsMounted = true;
+                    }
+                }
+            }
+
+            if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
+                ((floorType = SurfaceType_GetFloorType(&play->colCtx, poly, bgId)) != FLOOR_TYPE_10) &&
+                ((sp34 < 100) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
+                if (floorType == FLOOR_TYPE_11) {
+                    Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
+                    func_801A4058(5);
+                    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+                    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
                 } else {
-                    func_808354A4(play, var_a3 - 1,
-                                  SurfaceType_GetFloorEffect(&play->colCtx, poly, bgId) == FLOOR_EFFECT_2);
-                    if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->floorProperty == FLOOR_PROPERTY_5)) {
-                        Audio_PlaySfx_2(NA_SE_OC_TUNAMI);
-                        func_801A4058(5);
-                        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
-                        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
-                    } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-                               (this->floorProperty == FLOOR_PROPERTY_12)) {
-                        Audio_PlaySfx_2(NA_SE_OC_SECRET_WARP_IN);
-                    }
-
-                    if (this->stateFlags1 & PLAYER_STATE1_800000) {
-                        if (D_801BDAA0) {
-                            D_801BDAA0 = false;
-                        } else {
-                            gHorseIsMounted = true;
-                        }
-                    }
+                    func_8085B74C(play);
                 }
-
-                if (!(this->stateFlags1 & (PLAYER_STATE1_800000 | PLAYER_STATE1_8000000 | PLAYER_STATE1_20000000)) &&
-                    ((floorType = SurfaceType_GetFloorType(&play->colCtx, poly, bgId)) != FLOOR_TYPE_10) &&
-                    ((sp34 < 100) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
-                    if (floorType == FLOOR_TYPE_11) {
-                        Audio_PlaySfx_2(NA_SE_OC_SECRET_HOLE_OUT);
-                        func_801A4058(5);
-                        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
-                        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
-                    } else {
-                        func_8085B74C(play);
-                    }
-                } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-                    Player_StopHorizontalMovement(this);
-                }
-
-                Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_SCENE0);
-                this->stateFlags1 |= PLAYER_STATE1_1 | PLAYER_STATE1_20000000;
-                return true;
-            }
-        } else {
-            if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->actor.floorPoly == NULL)) {
-                BgCheck_EntityRaycastFloor7(&play->colCtx, &this->actor.floorPoly, &sp30, &this->actor,
-                                            &this->actor.world.pos);
-                if (this->actor.floorPoly == NULL) {
-                    func_80169EFC(&play->state);
-                    return false;
-                }
-                //! FAKE
-                if (1) {}
+            } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+                Player_StopHorizontalMovement(this);
             }
 
-            if (!(this->stateFlags1 & PLAYER_STATE1_80000000)) {
-                if (((this->actor.world.pos.y < -4000.0f) ||
-                     (((this->floorProperty == FLOOR_PROPERTY_5) || (this->floorProperty == FLOOR_PROPERTY_12) ||
-                       (this->floorProperty == FLOOR_PROPERTY_13)) &&
-                      ((D_80862B18 < 100.0f) || (this->fallDistance > 400))))) {
-                    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-                        if (this->floorProperty == FLOOR_PROPERTY_5) {
-                            func_80169FDC(&play->state);
-                            func_808345C8();
-                        } else {
-                            func_80169EFC(&play->state);
-                        }
-                        if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
-                            gSaveContext.respawnFlag = -5;
-                        }
-
-                        play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
-                        Audio_PlaySfx(NA_SE_OC_ABYSS);
-                    } else {
-                        if (this->stateFlags3 & PLAYER_STATE3_1000000) {
-                            func_808355D8(play, this, &gPlayerAnim_pn_kakkufinish);
-                        }
-
-                        if (this->floorProperty == FLOOR_PROPERTY_13) {
-                            Player_SetAction(play, this, func_808497A0, 0);
-                            this->stateFlags1 |= PLAYER_STATE1_20000000;
-                        } else {
-                            func_80834104(play, this);
-                            this->unk_AE8 = 9999;
-                            if (this->floorProperty == FLOOR_PROPERTY_5) {
-                                this->unk_AE7 = -1;
-                            } else {
-                                this->unk_AE7 = 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            this->unk_D68 = this->actor.world.pos.y;
+            Camera_ChangeSetting(Play_GetCamera(play, CAM_ID_MAIN), CAM_SET_SCENE0);
+            this->stateFlags1 |= PLAYER_STATE1_1 | PLAYER_STATE1_20000000;
+            return true;
         }
+        if ((this->stateFlags1 & PLAYER_STATE1_8000000) && (this->actor.floorPoly == NULL)) {
+            BgCheck_EntityRaycastFloor7(&play->colCtx, &this->actor.floorPoly, &sp30, &this->actor,
+                                        &this->actor.world.pos);
+            if (this->actor.floorPoly == NULL) {
+                func_80169EFC(&play->state);
+                return false;
+            }
+            //! FAKE
+            if (1) {}
+        }
+
+        if (!(this->stateFlags1 & PLAYER_STATE1_80000000)) {
+            if (((this->actor.world.pos.y < -4000.0f) ||
+                 (((this->floorProperty == FLOOR_PROPERTY_5) || (this->floorProperty == FLOOR_PROPERTY_12) ||
+                   (this->floorProperty == FLOOR_PROPERTY_13)) &&
+                  ((sPlayerYDistToFloor < 100.0f) || (this->fallDistance > 400))))) {
+                if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+                    if (this->floorProperty == FLOOR_PROPERTY_5) {
+                        func_80169FDC(&play->state);
+                        func_808345C8();
+                    } else {
+                        func_80169EFC(&play->state);
+                    }
+                    if (!SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId)) {
+                        gSaveContext.respawnFlag = -5;
+                    }
+
+                    play->transitionType = TRANS_TYPE_FADE_BLACK_FAST;
+                    Audio_PlaySfx(NA_SE_OC_ABYSS);
+                } else {
+                    if (this->stateFlags3 & PLAYER_STATE3_1000000) {
+                        func_808355D8(play, this, &gPlayerAnim_pn_kakkufinish);
+                    }
+
+                    if (this->floorProperty == FLOOR_PROPERTY_13) {
+                        Player_SetAction(play, this, func_808497A0, 0);
+                        this->stateFlags1 |= PLAYER_STATE1_20000000;
+                    } else {
+                        func_80834104(play, this);
+                        this->unk_AE8 = 9999;
+                        if (this->floorProperty == FLOOR_PROPERTY_5) {
+                            this->unk_AE7 = -1;
+                        } else {
+                            this->unk_AE7 = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        this->unk_D68 = this->actor.world.pos.y;
     }
 
     return false;
 }
 
+/**
+ * Gets a position relative to player's yaw.
+ * An offset is applied to the provided base position in the direction of shape y rotation.
+ * The resulting position is stored in `dst`
+ */
 void Player_TranslateAndRotateY(Player* this, Vec3f* translation, Vec3f* src, Vec3f* dst) {
     Lib_Vec3f_TranslateAndRotateY(translation, this->actor.shape.rot.y, src, dst);
 }
@@ -5916,6 +5930,7 @@ Actor* Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3
 
 f32 func_80835CD8(PlayState* play, Player* this, Vec3f* arg2, Vec3f* pos, CollisionPoly** outPoly, s32* outBgId) {
     Player_TranslateAndRotateY(this, &this->actor.world.pos, arg2, pos);
+
     return BgCheck_EntityRaycastFloor5(&play->colCtx, outPoly, outBgId, &this->actor, pos);
 }
 
@@ -5926,16 +5941,25 @@ f32 func_80835D2C(PlayState* play, Player* this, Vec3f* arg2, Vec3f* pos) {
     return func_80835CD8(play, this, arg2, pos, &poly, &bgId);
 }
 
-s32 func_80835D58(PlayState* play, Player* this, Vec3f* arg2, CollisionPoly** outPoly, s32* bgId, Vec3f* posResult) {
+/**
+ * Checks if a line between the player's position and the provided `offset` intersect a wall.
+ *
+ * Point A of the line is at player's world position offset by the height provided in `offset`.
+ * Point B of the line is at player's world position offset by the entire `offset` vector.
+ * Point A and B are always at the same height, meaning this is a horizontal line test.
+ */
+s32 Player_PosVsWallLineTest(PlayState* play, Player* this, Vec3f* offset, CollisionPoly** wallPoly, s32* bgId,
+                             Vec3f* posResult) {
     Vec3f posA;
     Vec3f posB;
 
     posA.x = this->actor.world.pos.x;
-    posA.y = this->actor.world.pos.y + arg2->y;
+    posA.y = this->actor.world.pos.y + offset->y;
     posA.z = this->actor.world.pos.z;
-    Player_TranslateAndRotateY(this, &this->actor.world.pos, arg2, &posB);
 
-    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, outPoly, true, false, false, true, bgId,
+    Player_TranslateAndRotateY(this, &this->actor.world.pos, offset, &posB);
+
+    return BgCheck_EntityLineTest2(&play->colCtx, &posA, &posB, posResult, wallPoly, true, false, false, true, bgId,
                                    &this->actor);
 }
 
@@ -6126,7 +6150,7 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
             pos.y = doorHandle->dyna.actor.world.pos.y + 10.0f;
             BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
 
-            if (func_8083562C(play, this, poly, BGCHECK_SCENE)) {
+            if (Player_HandleExitsAndVoids(play, this, poly, BGCHECK_SCENE)) {
                 gSaveContext.entranceSpeed = 2.0f;
             } else if (enDoorType != ENDOOR_TYPE_7) {
                 Camera* mainCam;
@@ -6355,7 +6379,7 @@ FallImpactInfo sFallImpactInfos[] = {
 s32 func_80836F10(PlayState* play, Player* this) {
     s32 fallDistance;
 
-    if ((sPlayerCurrentFloorType == FLOOR_TYPE_6) || (sPlayerCurrentFloorType == FLOOR_TYPE_9) ||
+    if ((sPlayerFloorType == FLOOR_TYPE_6) || (sPlayerFloorType == FLOOR_TYPE_9) ||
         (this->csMode != PLAYER_CSMODE_NONE)) {
         fallDistance = 0;
     } else {
@@ -6401,8 +6425,8 @@ s32 func_80836F10(PlayState* play, Player* this) {
         fallDistance = CLAMP_MAX(fallDistance, 255);
 
         Player_RequestRumble(play, this, fallDistance, fallDistance * 0.1f, fallDistance, SQ(0));
-        if (sPlayerCurrentFloorType == FLOOR_TYPE_6) {
-            //! @bug unreachable code: When sPlayerCurrentFloorType is equal to FLOOR_TYPE_6 then fallDistance is
+        if (sPlayerFloorType == FLOOR_TYPE_6) {
+            //! @bug unreachable code: When sPlayerFloorType is equal to FLOOR_TYPE_6 then fallDistance is
             //! ignored (set to zero), so the previous check based on said variable will always fail, producing this
             //! current check to always be false.
             Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_CLIMB_END);
@@ -6509,7 +6533,7 @@ s32 func_808373F8(PlayState* play, Player* this, u16 sfxId) {
         s32 var_v1;
 
         if ((this->transformation != PLAYER_FORM_DEKU) &&
-            (((sPlayerPrevFloorProperty == FLOOR_PROPERTY_1)) || (sPlayerPrevFloorProperty == FLOOR_PROPERTY_2))) {
+            ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_1) || (sPlayerPrevFloorProperty == FLOOR_PROPERTY_2))) {
             if (sPlayerPrevFloorProperty == FLOOR_PROPERTY_1) {
                 var_v1 = 4;
             } else {
@@ -6585,7 +6609,7 @@ s32 func_80837730(PlayState* play, Player* this, f32 arg2, s32 scale) {
 s32 func_8083784C(Player* this) {
     if (this->actor.velocity.y < 0.0f) {
         if ((this->actor.depthInWater > 0.0f) &&
-            ((this->ageProperties->unk_2C - this->actor.depthInWater) < D_80862B18)) {
+            ((this->ageProperties->unk_2C - this->actor.depthInWater) < sPlayerYDistToFloor)) {
             if ((this->remainingHopsCounter != 0) && (gSaveContext.save.saveInfo.playerData.health != 0) &&
                 !(this->stateFlags1 & PLAYER_STATE1_4000000)) {
                 if (((this->talkActor == NULL) || !(this->talkActor->flags & ACTOR_FLAG_10000))) {
@@ -6709,7 +6733,11 @@ void func_80837CEC(PlayState* play, Player* this, CollisionPoly* arg2, f32 arg3,
 s32 func_80837DEC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->transformation != PLAYER_FORM_DEKU) &&
         (this->actor.depthInWater < -80.0f)) {
-        if ((ABS_ALT(this->unk_B6C)) < 0xAAA && (ABS_ALT(this->unk_B6E) < 0xAAA)) {
+        //! @bug `floorPitch` and `floorPitchAlt` are cleared to 0 before this function is called,
+        //! because the player left the ground. The angles will always be zero and therefore will always
+        //! pass these checks. The intention seems to be to prevent ledge hanging or vine grabbing when
+        //! walking off of a steep enough slope.
+        if ((ABS_ALT(this->floorPitch) < 0xAAA) && (ABS_ALT(this->floorPitchAlt) < 0xAAA)) {
             CollisionPoly* entityPoly;
             CollisionPoly* sp90;
             s32 entityBgId;
@@ -6756,7 +6784,7 @@ s32 func_80837DEC(Player* this, PlayState* play) {
                     temp_fv1_2 = this->actor.world.pos.y -
                                  BgCheck_EntityRaycastFloor5(&play->colCtx, &sp90, &sp88, &this->actor, &sp70);
                     if ((temp_fv1_2 >= -11.0f) && (temp_fv1_2 <= 0.0f)) {
-                        var_v1_2 = sPlayerPrevFloorProperty == FLOOR_PROPERTY_6;
+                        var_v1_2 = (sPlayerPrevFloorProperty == FLOOR_PROPERTY_6);
                         if (!var_v1_2) {
                             if (SurfaceType_GetWallFlags(&play->colCtx, entityPoly, entityBgId) & WALL_FLAG_3) {
                                 var_v1_2 = true;
@@ -6863,13 +6891,13 @@ void func_8083827C(Player* this, PlayState* play) {
         Player_SetAction(play, this, func_8084C16C, 1);
         func_8082DD2C(play, this);
 
-        this->floorSfxOffset = this->unk_D66;
+        this->floorSfxOffset = this->prevFloorSfxOffset;
         if ((this->transformation != PLAYER_FORM_GORON) &&
             ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0)) &&
             (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_LEAVE)) {
             if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
                 if ((sPlayerPrevFloorProperty != FLOOR_PROPERTY_6) && (sPlayerPrevFloorProperty != FLOOR_PROPERTY_9) &&
-                    (D_80862B18 > 20.0f) && (this->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0)) {
+                    (sPlayerYDistToFloor > 20.0f) && (this->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0)) {
                     if ((ABS_ALT(temp_t0) < 0x2000) && (this->linearVelocity > 3.0f)) {
                         if (!(this->stateFlags1 & PLAYER_STATE1_800)) {
                             if (((this->transformation == PLAYER_FORM_ZORA) &&
@@ -6897,7 +6925,7 @@ void func_8083827C(Player* this, PlayState* play) {
         }
 
         // Checking if the ledge is tall enough for Player to hang from
-        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_9) || (D_80862B18 <= this->ageProperties->unk_34) ||
+        if ((sPlayerPrevFloorProperty == FLOOR_PROPERTY_9) || (sPlayerYDistToFloor <= this->ageProperties->unk_34) ||
             !func_80837DEC(this, play)) {
             Player_Anim_PlayLoop(play, this, &gPlayerAnim_link_normal_landing_wait);
         }
@@ -7069,7 +7097,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_MILK_HALF,           // PLAYER_IA_BOTTLE_MILK_HALF
     GI_CHATEAU,             // PLAYER_IA_BOTTLE_CHATEAU
     GI_FAIRY,               // PLAYER_IA_BOTTLE_FAIRY
-    GI_MOON_TEAR,           // PLAYER_IA_MOON_TEAR
+    GI_MOONS_TEAR,          // PLAYER_IA_MOONS_TEAR
     GI_DEED_LAND,           // PLAYER_IA_DEED_LAND
     GI_ROOM_KEY,            // PLAYER_IA_ROOM_KEY
     GI_LETTER_TO_KAFEI,     // PLAYER_IA_LETTER_TO_KAFEI
@@ -7077,7 +7105,7 @@ u8 D_8085D1A4[PLAYER_IA_MAX] = {
     GI_DEED_SWAMP,          // PLAYER_IA_DEED_SWAMP
     GI_DEED_MOUNTAIN,       // PLAYER_IA_DEED_MOUNTAIN
     GI_DEED_OCEAN,          // PLAYER_IA_DEED_OCEAN
-    GI_MOON_TEAR,           // PLAYER_IA_32
+    GI_MOONS_TEAR,          // PLAYER_IA_32
     GI_LETTER_TO_MAMA,      // PLAYER_IA_LETTER_MAMA
     GI_A7,                  // PLAYER_IA_34
     GI_A8,                  // PLAYER_IA_35
@@ -7431,7 +7459,7 @@ s32 func_808396B8(PlayState* play, Player* this) {
 
 s32 func_80839770(Player* this, PlayState* play) {
     if (func_808396B8(play, this)) {
-        if ((this->transformation != PLAYER_FORM_GORON) && (sPlayerCurrentFloorType != FLOOR_TYPE_7)) {
+        if ((this->transformation != PLAYER_FORM_GORON) && (sPlayerFloorType != FLOOR_TYPE_7)) {
             func_808395F0(play, this,
                           (this->transformation == PLAYER_FORM_ZORA) ? PLAYER_MWA_ZORA_JUMPKICK_START
                                                                      : PLAYER_MWA_JUMPSLASH_START,
@@ -7443,7 +7471,7 @@ s32 func_80839770(Player* this, PlayState* play) {
 }
 
 s32 func_80839800(Player* this, PlayState* play) {
-    if ((this->unk_AE3[this->unk_ADE] == 0) && (sPlayerCurrentFloorType != FLOOR_TYPE_7)) {
+    if ((this->unk_AE3[this->unk_ADE] == 0) && (sPlayerFloorType != FLOOR_TYPE_7)) {
         func_80836B3C(play, this, 0.0f);
         return true;
     }
@@ -7513,8 +7541,8 @@ s32 func_80839A84(PlayState* play, Player* this) {
 
 s32 func_80839B18(Player* this, PlayState* play) {
     if (CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) &&
-        (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) && (sPlayerCurrentFloorType != FLOOR_TYPE_7) &&
-        (D_80862B40 != FLOOR_EFFECT_1)) {
+        (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) && (sPlayerFloorType != FLOOR_TYPE_7) &&
+        (sPlayerFloorEffect != FLOOR_EFFECT_1)) {
         s32 temp_a2 = this->unk_AE3[this->unk_ADE];
 
         if (temp_a2 <= 0) {
@@ -8297,11 +8325,10 @@ void func_8083BF54(PlayState* play, Player* this) {
     this->actor.gravity = REG(68) / 100.0f;
 
     var_a2 = false;
-    temp_v0 = func_808340D4(sPlayerCurrentFloorType);
+    temp_v0 = func_808340D4(sPlayerFloorType);
 
-    if (temp_v0 ||
-        (((var_a2 = (sPlayerCurrentFloorType == FLOOR_TYPE_14) || (sPlayerCurrentFloorType == FLOOR_TYPE_15))) ||
-         (sPlayerCurrentFloorType == FLOOR_TYPE_13))) {
+    if (temp_v0 || ((var_a2 = (sPlayerFloorType == FLOOR_TYPE_14) || (sPlayerFloorType == FLOOR_TYPE_15)) ||
+                    (sPlayerFloorType == FLOOR_TYPE_13))) {
         f32 temp_fv1_2;
         f32 var_fa1;
         f32 var_ft4;
@@ -8310,9 +8337,9 @@ void func_8083BF54(PlayState* play, Player* this) {
 
         var_ft4 = fabsf(this->linearVelocity + D_80862B3C) * 20.0f;
         if (temp_v0) {
-            if (sPlayerCurrentFloorType == FLOOR_TYPE_4) {
+            if (sPlayerFloorType == FLOOR_TYPE_4) {
                 var_fa1 = 1300.0f;
-            } else if (sPlayerCurrentFloorType == FLOOR_TYPE_7) {
+            } else if (sPlayerFloorType == FLOOR_TYPE_7) {
                 var_fa1 = 20000.0f;
                 var_ft4 = 0.0f;
             } else {
@@ -8321,7 +8348,7 @@ void func_8083BF54(PlayState* play, Player* this) {
             }
             sfxId = NA_SE_PL_SINK_ON_SAND - SFX_FLAG;
         } else if (var_a2) {
-            if (sPlayerCurrentFloorType == FLOOR_TYPE_14) {
+            if (sPlayerFloorType == FLOOR_TYPE_14) {
                 var_fa1 = 400.0f;
                 var_ft4 *= 10.0f;
             } else {
@@ -8337,7 +8364,7 @@ void func_8083BF54(PlayState* play, Player* this) {
 
         var_fa1 = CLAMP_MIN(var_fa1, this->unk_AB8);
 
-        var_fv0 = (sPlayerCurrentFloorType == FLOOR_TYPE_14) ? 200.0f : (var_fa1 - this->unk_AB8) * 0.02f;
+        var_fv0 = (sPlayerFloorType == FLOOR_TYPE_14) ? 200.0f : (var_fa1 - this->unk_AB8) * 0.02f;
         var_fv0 = CLAMP(var_fv0, 0.0f, 300.0f);
 
         temp_fv1_2 = this->unk_AB8;
@@ -8460,7 +8487,7 @@ void func_8083C6E8(Player* this, PlayState* play) {
         return;
     }
 
-    if (sPlayerCurrentFloorType == FLOOR_TYPE_11) {
+    if (sPlayerFloorType == FLOOR_TYPE_11) {
         Math_SmoothStepToS(&this->actor.focus.rot.x, -20000, 10, 4000, 800);
     } else {
         s16 sp46 = 0;
@@ -8643,15 +8670,15 @@ s32 func_8083CCB4(Player* this, PlayState* play) {
     return false;
 }
 
-PlayerAnimationHeader* D_8085D264[] = {
+PlayerAnimationHeader* sPlayerSlopeSlipAnims[] = {
     &gPlayerAnim_link_normal_down_slope_slip,
     &gPlayerAnim_link_normal_up_slope_slip,
 };
 
-s32 func_8083CF68(PlayState* play, Player* this) {
+s32 Player_HandleSlopes(PlayState* play, Player* this) {
     if (!Player_InBlockingCsMode(play, this) && !(this->cylinder.base.ocFlags1 & OC1_HIT)) {
         if ((func_80853D68 != this->actionFunc) && (func_80857BE8 != this->actionFunc) &&
-            (D_80862B40 == FLOOR_EFFECT_1)) {
+            (sPlayerFloorEffect == FLOOR_EFFECT_1)) {
             s16 playerVelYaw = Math_Atan2S_XY(this->actor.velocity.z, this->actor.velocity.x);
             Vec3f slopeNormal;
             s16 downwardSlopeYaw;
@@ -8665,7 +8692,7 @@ s32 func_8083CF68(PlayState* play, Player* this) {
             velYawToDownwardSlope = downwardSlopeYaw - playerVelYaw;
 
             if (ABS_ALT(velYawToDownwardSlope) > 0x3E80) { // 87.9 degrees
-                var_fa1 = (func_80857BE8 == this->actionFunc) ? Math_CosS(this->unk_B6C) : slopeNormal.y;
+                var_fa1 = (func_80857BE8 == this->actionFunc) ? Math_CosS(this->floorPitch) : slopeNormal.y;
                 slopeSlowdownSpeed = (1.0f - var_fa1) * 40.0f;
                 temp_fv1 = fabsf(this->actor.speed) + slopeSlowdownSpeed;
                 slopeSlowdownSpeedStep = SQ(temp_fv1) * 0.011f;
@@ -8677,10 +8704,10 @@ s32 func_8083CF68(PlayState* play, Player* this) {
             } else {
                 Player_SetAction(play, this, func_80853D68, 0);
                 func_8082DE50(play, this);
-                Player_Anim_PlayLoopWithMorph(play, this, D_8085D264[this->unk_AE7]);
+                Player_Anim_PlayLoopWithMorph(play, this, sPlayerSlopeSlipAnims[this->unk_AE7]);
                 this->linearVelocity = sqrtf(SQXZ(this->actor.velocity));
                 this->currentYaw = downwardSlopeYaw;
-                if (D_80862B28 >= 0) {
+                if (sPlayerFloorPitchShape >= 0) {
                     this->unk_AE7 = 1;
                     Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_HANG);
                 }
@@ -8856,11 +8883,11 @@ s32 func_8083D78C(Player* this, PlayState* play) {
 }
 
 s32 func_8083D860(Player* this, PlayState* play) {
-    if ((this->wallHeight >= 79.0f) &&
+    if ((this->yDistToLedge >= 79.0f) &&
         (!(this->stateFlags1 & PLAYER_STATE1_8000000) || (this->currentBoots == PLAYER_BOOTS_ZORA_UNDERWATER) ||
          (this->actor.depthInWater < this->ageProperties->unk_2C))) {
-        s32 var_t0 = (sPlayerCurrentWallFlags & WALL_FLAG_3) ? 2 : 0;
-        s32 temp_t2 = sPlayerCurrentWallFlags & WALL_FLAG_1;
+        s32 var_t0 = (sPlayerTouchedWallFlags & WALL_FLAG_3) ? 2 : 0;
+        s32 temp_t2 = sPlayerTouchedWallFlags & WALL_FLAG_1;
 
         if ((var_t0 != 0) || temp_t2 ||
             SurfaceType_CheckWallFlag2(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId)) {
@@ -8920,7 +8947,7 @@ s32 func_8083D860(Player* this, PlayState* play) {
             if (xOut < 8.0f) {
                 f32 wallPolyNormalX = COLPOLY_GET_NORMAL(wallPoly->normal.x);
                 f32 wallPolyNormalZ = COLPOLY_GET_NORMAL(wallPoly->normal.z);
-                f32 wallDistance = this->wallDistance;
+                f32 distToInteractWall = this->distToInteractWall;
                 PlayerAnimationHeader* anim;
 
                 func_80832558(play, this, func_80837C20);
@@ -8936,10 +8963,10 @@ s32 func_8083D860(Player* this, PlayState* play) {
                         } else {
                             anim = &gPlayerAnim_link_normal_Fclimb_hold2upL;
                         }
-                        wallDistance = (this->ageProperties->unk_3C + 4.0f) - wallDistance;
+                        distToInteractWall = (this->ageProperties->unk_3C + 4.0f) - distToInteractWall;
                     } else {
                         anim = this->ageProperties->unk_AC;
-                        wallDistance = 20.5f;
+                        distToInteractWall = 20.5f;
                     }
 
                     this->unk_AE8 = -2;
@@ -8948,14 +8975,14 @@ s32 func_8083D860(Player* this, PlayState* play) {
                     this->actor.shape.rot.y = this->currentYaw = this->actor.wallYaw + 0x8000;
                 } else {
                     anim = this->ageProperties->unk_B0;
-                    wallDistance = (this->ageProperties->unk_38 - this->ageProperties->unk_3C) + 17.0f;
+                    distToInteractWall = (this->ageProperties->wallCheckRadius - this->ageProperties->unk_3C) + 17.0f;
                     this->unk_AE8 = -4;
 
                     this->actor.shape.rot.y = this->currentYaw = i = this->actor.wallYaw; //! FAKE
                 }
 
-                this->actor.world.pos.x = (wallDistance * wallPolyNormalX) + sp78;
-                this->actor.world.pos.z = (wallDistance * wallPolyNormalZ) + sp74;
+                this->actor.world.pos.x = (distToInteractWall * wallPolyNormalX) + sp78;
+                this->actor.world.pos.z = (distToInteractWall * wallPolyNormalZ) + sp74;
                 func_8082DAD4(this);
                 Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
                 Player_Anim_PlayOnce(play, this, anim);
@@ -8998,7 +9025,7 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
         wallPoly = this->actor.wallPoly;
         this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_WALL_INTERACT;
         this->actor.wallBgId = bgId;
-        sPlayerCurrentWallFlags = SurfaceType_GetWallFlags(&play->colCtx, wallPoly, bgId);
+        sPlayerTouchedWallFlags = SurfaceType_GetWallFlags(&play->colCtx, wallPoly, bgId);
 
         wallPolyNormalX = COLPOLY_GET_NORMAL(wallPoly->normal.x);
         wallPolyNormalZ = COLPOLY_GET_NORMAL(wallPoly->normal.z);
@@ -9017,7 +9044,7 @@ s32 func_8083DD1C(PlayState* play, Player* this, f32 arg2, f32 arg3, f32 arg4, f
 }
 
 void func_8083DEE4(PlayState* play, Player* this) {
-    f32 temp_fv0 = this->ageProperties->unk_38;
+    f32 temp_fv0 = this->ageProperties->wallCheckRadius;
 
     func_8083DD1C(play, this, 268 * 0.1f, temp_fv0 + 5.0f, temp_fv0 + 15.0f, 0.0f);
 }
@@ -9035,14 +9062,14 @@ void func_8083DF38(Player* this, PlayerAnimationHeader* anim, PlayState* play) {
 
 s32 func_8083DFC4(Player* this, PlayState* play) {
     if (!(this->stateFlags1 & PLAYER_STATE1_800) && (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
-        (D_80862B20 < 0x3000)) {
+        (sPlayerShapeYawToTouchedWall < 0x3000)) {
         if ((this->linearVelocity > 0.0f) && func_8083D860(this, play)) {
             return true;
         }
 
         if (!func_801242B4(this) && ((this->linearVelocity == 0.0f) || !(this->stateFlags2 & PLAYER_STATE2_4)) &&
-            (sPlayerCurrentWallFlags & WALL_FLAG_6) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-            (this->wallHeight >= 39.0f)) {
+            (sPlayerTouchedWallFlags & WALL_FLAG_6) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            (this->yDistToLedge >= 39.0f)) {
             this->stateFlags2 |= PLAYER_STATE2_1;
 
             if (CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) {
@@ -9113,7 +9140,7 @@ void func_8083E2F4(Player* this, PlayState* play) {
 s32 func_8083E354(Player* this, PlayState* play) {
     if (!CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_A) &&
         (this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT)) {
-        if ((sPlayerCurrentWallFlags & WALL_FLAG_3) || (sPlayerCurrentWallFlags & WALL_FLAG_1) ||
+        if ((sPlayerTouchedWallFlags & WALL_FLAG_3) || (sPlayerTouchedWallFlags & WALL_FLAG_1) ||
             SurfaceType_CheckWallFlag2(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId)) {
             return false;
         }
@@ -9437,10 +9464,10 @@ void func_8083F358(Player* this, s32 arg1, PlayState* play) {
     f32 var_fv1;
     s16 var_a1;
 
-    if (ABS_ALT(D_80862B28) < 0xE38) {
+    if (ABS_ALT(sPlayerFloorPitchShape) < 0xE38) {
         var_a1 = 0;
     } else {
-        var_a1 = CLAMP(D_80862B28, -0x2AAA, 0x2AAA);
+        var_a1 = CLAMP(sPlayerFloorPitchShape, -0x2AAA, 0x2AAA);
     }
 
     Math_ScaledStepToS(&this->unk_B70, var_a1, 0x190);
@@ -9929,7 +9956,8 @@ s32 func_80840A30(PlayState* play, Player* this, f32* arg2, f32 arg3) {
 
     if (arg3 <= *arg2) {
         // If interacting with a wall and close to facing it
-        if (((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (D_80862B24 < 0x1C00)) ||
+        if (((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) &&
+             (sPlayerWorldYawToTouchedWall < 0x1C00)) ||
             // or, impacting something's cylinder
             (((this->cylinder.base.ocFlags1 & OC1_HIT) && (cylinderOc = this->cylinder.base.oc) != NULL) &&
              // and that something is a Beaver Race ring,
@@ -10748,7 +10776,7 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                 if ((this->transformation != PLAYER_FORM_GORON) &&
                     !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
                     ((func_80123420(this)) ||
-                     ((sPlayerCurrentFloorType != FLOOR_TYPE_7) &&
+                     ((sPlayerFloorType != FLOOR_TYPE_7) &&
                       ((func_80123434(this)) || ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
                                                  !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
                     doActionA = DO_ACTION_ATTACK;
@@ -10803,27 +10831,39 @@ s32 func_808430E0(Player* this) {
     }
 
     if (!(this->stateFlags1 & PLAYER_STATE1_8000000)) {
-        sPlayerCurrentFloorType = FLOOR_TYPE_0;
+        sPlayerFloorType = FLOOR_TYPE_0;
     }
-    this->unk_B6C = 0;
-    this->unk_B6E = 0;
-    D_80862B28 = 0;
+    this->floorPitch = 0;
+    this->floorPitchAlt = 0;
+    sPlayerFloorPitchShape = 0;
     return true;
 }
 
-void func_80843178(PlayState* play, Player* this) {
-    u8 spC7 = 0;
+/**
+ * Performs the following tasks related to scene collision:
+ *
+ * This includes:
+ * - Update BgCheckInfo, parameters adjusted due to various state flags
+ * - Update floor type, floor property and floor sfx offset
+ * - Update conveyor, reverb and light settings according to the current floor poly
+ * - Handle exits and voids
+ * - Update information relating to the "interact wall"
+ * - Update information for ledge climbing
+ * - Calculate floor poly angles
+ */
+void Player_ProcessSceneCollision(PlayState* play, Player* this) {
+    u8 nextLedgeClimbType = PLAYER_LEDGE_CLIMB_NONE;
     CollisionPoly* floorPoly;
-    f32 temp_fv0;
-    f32 temp_fv0_3;
-    f32 temp_fv1;
+    f32 wallCheckRadius;
+    f32 speedScale;
+    f32 ceilingCheckHeight;
     u32 updBgCheckInfoFlags;
     s32 spAC = (func_8084D820 == this->actionFunc) && (this->unk_397 == 4);
 
     sPlayerPrevFloorProperty = this->floorProperty;
 
-    temp_fv0 = this->ageProperties->unk_38;
-    temp_fv1 = this->ageProperties->unk_00;
+    wallCheckRadius = this->ageProperties->wallCheckRadius;
+    ceilingCheckHeight = this->ageProperties->ceilingCheckHeight;
 
     if (this->stateFlags1 & (PLAYER_STATE1_20000000 | PLAYER_STATE1_80000000)) {
         if ((!(this->stateFlags1 & PLAYER_STATE1_80) && !(this->stateFlags2 & PLAYER_STATE2_4000) &&
@@ -10831,20 +10871,19 @@ void func_80843178(PlayState* play, Player* this) {
             spAC) {
             updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
+        } else if ((this->stateFlags1 & PLAYER_STATE1_1) &&
+                   (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) &&
+                   ((this->unk_D68 - (s32)this->actor.world.pos.y) >= 100)) {
+            updBgCheckInfoFlags =
+                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
+        } else if (!(this->stateFlags1 & PLAYER_STATE1_1) &&
+                   ((func_8084E034 == this->actionFunc) || (func_8084D820 == this->actionFunc))) {
+            updBgCheckInfoFlags =
+                UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
+            this->actor.bgCheckFlags &= ~(BGCHECKFLAG_WALL | BGCHECKFLAG_PLAYER_WALL_INTERACT);
         } else {
-            if ((this->stateFlags1 & 1) && (play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_1) &&
-                ((this->unk_D68 - (s32)this->actor.world.pos.y) >= 100)) {
-                updBgCheckInfoFlags =
-                    UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
-            } else if (!(this->stateFlags1 & PLAYER_STATE1_1) &&
-                       ((func_8084E034 == this->actionFunc) || (func_8084D820 == this->actionFunc))) {
-                updBgCheckInfoFlags =
-                    UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
-                this->actor.bgCheckFlags &= ~(BGCHECKFLAG_WALL | BGCHECKFLAG_PLAYER_WALL_INTERACT);
-            } else {
-                updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
-                                      UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
-            }
+            updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                  UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_20;
         }
     } else {
         if (func_808561B0 == this->actionFunc) {
@@ -10862,6 +10901,7 @@ void func_80843178(PlayState* play, Player* this) {
     if (this->stateFlags3 & PLAYER_STATE3_1) {
         updBgCheckInfoFlags &= ~(UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     }
+
     if (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_4) {
         this->stateFlags3 |= PLAYER_STATE3_10;
     }
@@ -10870,7 +10910,7 @@ void func_80843178(PlayState* play, Player* this) {
         updBgCheckInfoFlags &= ~(UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 268 * 0.1f, temp_fv0, temp_fv1, updBgCheckInfoFlags);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 268 * 0.1f, wallCheckRadius, ceilingCheckHeight, updBgCheckInfoFlags);
 
     this->unk_AC0 -= (this->actor.world.pos.y - this->actor.prevPos.y) / this->actor.scale.y;
     this->unk_AC0 = CLAMP(this->unk_AC0, -1000.0f, 1000.0f);
@@ -10879,14 +10919,16 @@ void func_80843178(PlayState* play, Player* this) {
         this->actor.velocity.y = 0.0f;
     }
 
-    D_80862B18 = this->actor.world.pos.y - this->actor.floorHeight;
+    sPlayerYDistToFloor = this->actor.world.pos.y - this->actor.floorHeight;
     sPlayerConveyorSpeedIndex = CONVEYOR_SPEED_DISABLED;
     floorPoly = this->actor.floorPoly;
 
     if ((floorPoly != NULL) && (updBgCheckInfoFlags & UPDBGCHECKINFO_FLAG_4)) {
         this->floorProperty = SurfaceType_GetFloorProperty(&play->colCtx, floorPoly, this->actor.floorBgId);
+
         if (this == GET_PLAYER(play)) {
             func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
+
             if (this->actor.floorBgId == BGCHECK_SCENE) {
                 func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
@@ -10895,11 +10937,14 @@ void func_80843178(PlayState* play, Player* this) {
         }
 
         sPlayerConveyorSpeedIndex = SurfaceType_GetConveyorSpeed(&play->colCtx, floorPoly, this->actor.floorBgId);
+
         if (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) {
             sPlayerIsOnFloorConveyor = SurfaceType_IsFloorConveyor(&play->colCtx, floorPoly, this->actor.floorBgId);
+
             if ((!sPlayerIsOnFloorConveyor && (this->actor.depthInWater > 20.0f)) ||
                 (sPlayerIsOnFloorConveyor && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND))) {
-                D_80862B16 = SurfaceType_GetConveyorDirection(&play->colCtx, floorPoly, this->actor.floorBgId) << 0xA;
+                sPlayerConveyorYaw = CONVEYOR_DIRECTION_TO_BINANG(
+                    SurfaceType_GetConveyorDirection(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
                 sPlayerConveyorSpeedIndex = CONVEYOR_SPEED_DISABLED;
             }
@@ -10907,94 +10952,102 @@ void func_80843178(PlayState* play, Player* this) {
     }
 
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_PLAYER_WALL_INTERACT;
+
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-        static Vec3f D_8085D358 = { 0.0f, 0.0f, 0.0f };
-        CollisionPoly* spA8;
-        s32 spA4;
-        s16 temp_v1_3;
-        f32 sp9C;
+        static Vec3f sInteractWallCheckOffset = { 0.0f, 0.0f, 0.0f };
+        CollisionPoly* wallPoly;
+        s32 wallBgId;
+        s16 yawDiff;
+        s32 pad;
 
-        D_8085D358.y = 178.0f * 0.1f;
-        D_8085D358.z = this->ageProperties->unk_38 + 10.0f;
+        sInteractWallCheckOffset.y = 178.0f * 0.1f;
+        sInteractWallCheckOffset.z = this->ageProperties->wallCheckRadius + 10.0f;
 
-        if (func_80835D58(play, this, &D_8085D358, &spA8, &spA4, &D_80862B30)) {
+        if (Player_PosVsWallLineTest(play, this, &sInteractWallCheckOffset, &wallPoly, &wallBgId,
+                                     &sPlayerInteractWallCheckResult)) {
             this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_WALL_INTERACT;
-            if (spA8 != this->actor.wallPoly) {
-                this->actor.wallPoly = spA8;
-                this->actor.wallBgId = spA4;
-                this->actor.wallYaw = Math_Atan2S_XY(spA8->normal.z, spA8->normal.x);
+
+            if (this->actor.wallPoly != wallPoly) {
+                this->actor.wallPoly = wallPoly;
+                this->actor.wallBgId = wallBgId;
+                this->actor.wallYaw = Math_Atan2S_XY(wallPoly->normal.z, wallPoly->normal.x);
             }
         }
 
-        temp_v1_3 = this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000);
-        sPlayerCurrentWallFlags = SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
-        D_80862B20 = ABS_ALT(temp_v1_3);
-        temp_v1_3 = BINANG_SUB(this->currentYaw, BINANG_ADD(this->actor.wallYaw, 0x8000));
-        D_80862B24 = ABS_ALT(temp_v1_3);
+        yawDiff = this->actor.shape.rot.y - BINANG_ADD(this->actor.wallYaw, 0x8000);
+        sPlayerTouchedWallFlags = SurfaceType_GetWallFlags(&play->colCtx, this->actor.wallPoly, this->actor.wallBgId);
+        sPlayerShapeYawToTouchedWall = ABS_ALT(yawDiff);
 
-        temp_fv0_3 = D_80862B24 * 0.00008f;
-        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (temp_fv0_3 >= 1.0f)) {
+        yawDiff = BINANG_SUB(this->currentYaw, BINANG_ADD(this->actor.wallYaw, 0x8000));
+        sPlayerWorldYawToTouchedWall = ABS_ALT(yawDiff);
+
+        speedScale = sPlayerWorldYawToTouchedWall * 0.00008f;
+
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (speedScale >= 1.0f)) {
             this->unk_B50 = R_RUN_SPEED_LIMIT / 100.0f;
         } else {
-            temp_fv1 = (R_RUN_SPEED_LIMIT / 100.0f) * temp_fv0_3;
-
-            this->unk_B50 = temp_fv1;
-            if (temp_fv1 < 0.1f) {
+            this->unk_B50 = ceilingCheckHeight = (R_RUN_SPEED_LIMIT / 100.0f) * speedScale;
+            if (this->unk_B50 < 0.1f) {
                 this->unk_B50 = 0.1f;
             }
         }
 
-        if ((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (D_80862B20 < 0x3000)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) && (sPlayerShapeYawToTouchedWall < 0x3000)) {
             CollisionPoly* wallPoly = this->actor.wallPoly;
 
-            if (ABS_ALT(wallPoly->normal.y) < 0x258) {
+            if (ABS_ALT(wallPoly->normal.y) < 600) {
                 f32 wallPolyNormalX = COLPOLY_GET_NORMAL(wallPoly->normal.x);
                 f32 wallPolyNormalY = COLPOLY_GET_NORMAL(wallPoly->normal.y);
                 f32 wallPolyNormalZ = COLPOLY_GET_NORMAL(wallPoly->normal.z);
-                f32 temp_fv1_3;
-                CollisionPoly* sp84;
-                CollisionPoly* sp80;
-                s32 sp7C;
-                Vec3f sp70;
-                f32 temp_fv0_5;
-                f32 sp68;
-                s32 temp_v1_6;
+                f32 ledgeCheckOffsetXZ;
+                CollisionPoly* ledgeFloorPoly;
+                CollisionPoly* poly;
+                s32 bgId;
+                Vec3f ledgeCheckPos;
+                f32 ledgePosY;
+                f32 ceillingPosY;
+                s32 wallYawDiff;
 
-                this->wallDistance = Math3D_UDistPlaneToPos(wallPolyNormalX, wallPolyNormalY, wallPolyNormalZ,
-                                                            wallPoly->dist, &this->actor.world.pos);
-                temp_fv1_3 = this->wallDistance + 10.0f;
-                sp70.x = this->actor.world.pos.x - (temp_fv1_3 * wallPolyNormalX);
-                sp70.z = this->actor.world.pos.z - (temp_fv1_3 * wallPolyNormalZ);
-                sp70.y = this->actor.world.pos.y + this->ageProperties->unk_0C;
-                temp_fv0_5 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp84, &sp7C, &this->actor, &sp70);
+                this->distToInteractWall = Math3D_UDistPlaneToPos(wallPolyNormalX, wallPolyNormalY, wallPolyNormalZ,
+                                                                  wallPoly->dist, &this->actor.world.pos);
 
-                this->wallHeight = temp_fv0_5 - this->actor.world.pos.y;
-                if ((this->wallHeight < 178.0f * 0.1f) ||
-                    ((BgCheck_EntityCheckCeiling(&play->colCtx, &sp68, &this->actor.world.pos,
-                                                 (temp_fv0_5 - this->actor.world.pos.y) + 20.0f, &sp80, &sp7C,
-                                                 &this->actor) != 0))) {
-                    this->wallHeight = 399.96002f;
+                ledgeCheckOffsetXZ = this->distToInteractWall + 10.0f;
+
+                ledgeCheckPos.x = this->actor.world.pos.x - (ledgeCheckOffsetXZ * wallPolyNormalX);
+                ledgeCheckPos.z = this->actor.world.pos.z - (ledgeCheckOffsetXZ * wallPolyNormalZ);
+                ledgeCheckPos.y = this->actor.world.pos.y + this->ageProperties->unk_0C;
+
+                ledgePosY =
+                    BgCheck_EntityRaycastFloor5(&play->colCtx, &ledgeFloorPoly, &bgId, &this->actor, &ledgeCheckPos);
+                this->yDistToLedge = ledgePosY - this->actor.world.pos.y;
+
+                if ((this->yDistToLedge < 178.0f * 0.1f) ||
+                    BgCheck_EntityCheckCeiling(&play->colCtx, &ceillingPosY, &this->actor.world.pos,
+                                               (ledgePosY - this->actor.world.pos.y) + 20.0f, &poly, &bgId,
+                                               &this->actor)) {
+                    this->yDistToLedge = LEDGE_DIST_MAX;
                 } else {
-                    D_8085D358.y = (temp_fv0_5 + 5.0f) - this->actor.world.pos.y;
+                    sInteractWallCheckOffset.y = (ledgePosY + 5.0f) - this->actor.world.pos.y;
 
-                    if ((func_80835D58(play, this, &D_8085D358, &sp80, &sp7C, &D_80862B30)) &&
-                        (temp_v1_6 = this->actor.wallYaw - Math_Atan2S_XY(sp80->normal.z, sp80->normal.x),
-                         ABS_ALT(temp_v1_6) < 0x4000) &&
-                        !(SurfaceType_CheckWallFlag1(&play->colCtx, sp80, sp7C))) {
-                        this->wallHeight = 399.96002f;
-                    } else if (SurfaceType_CheckWallFlag0(&play->colCtx, wallPoly, this->actor.wallBgId) == 0) {
-                        if (this->ageProperties->unk_1C <= this->wallHeight) {
-                            if (ABS_ALT(sp84->normal.y) > 0x5DC0) {
-                                if ((this->ageProperties->unk_14 <= this->wallHeight) || func_801242B4(this)) {
-                                    spC7 = 4;
-                                } else if (this->ageProperties->unk_18 <= this->wallHeight) {
-                                    spC7 = 3;
+                    if (Player_PosVsWallLineTest(play, this, &sInteractWallCheckOffset, &poly, &bgId,
+                                                 &sPlayerInteractWallCheckResult) &&
+                        (wallYawDiff = (s32)(this->actor.wallYaw - Math_Atan2S_XY(poly->normal.z, poly->normal.x)),
+                         ABS_ALT(wallYawDiff) < 0x4000) &&
+                        !SurfaceType_CheckWallFlag1(&play->colCtx, poly, bgId)) {
+                        this->yDistToLedge = LEDGE_DIST_MAX;
+                    } else if (!SurfaceType_CheckWallFlag0(&play->colCtx, wallPoly, this->actor.wallBgId)) {
+                        if (this->ageProperties->unk_1C <= this->yDistToLedge) {
+                            if (ABS_ALT(ledgeFloorPoly->normal.y) > 0x5DC0) {
+                                if ((this->ageProperties->unk_14 <= this->yDistToLedge) || func_801242B4(this)) {
+                                    nextLedgeClimbType = PLAYER_LEDGE_CLIMB_4;
+                                } else if (this->ageProperties->unk_18 <= this->yDistToLedge) {
+                                    nextLedgeClimbType = PLAYER_LEDGE_CLIMB_3;
                                 } else {
-                                    spC7 = 2;
+                                    nextLedgeClimbType = PLAYER_LEDGE_CLIMB_2;
                                 }
                             }
                         } else {
-                            spC7 = 1;
+                            nextLedgeClimbType = PLAYER_LEDGE_CLIMB_1;
                         }
                     }
                 }
@@ -11002,39 +11055,41 @@ void func_80843178(PlayState* play, Player* this) {
         }
     } else {
         this->unk_B50 = R_RUN_SPEED_LIMIT / 100.0f;
-        this->wallHeight = 0.0f;
-        this->unk_B5D = 0;
+        this->yDistToLedge = 0.0f;
+        this->ledgeClimbDelayTimer = 0;
     }
 
-    if (spC7 == this->unk_B5C) {
+    if (nextLedgeClimbType == this->ledgeClimbType) {
         if (this->linearVelocity != 0.0f) {
-            if (this->unk_B5D < 0x64) {
-                this->unk_B5D++;
+            if (this->ledgeClimbDelayTimer < 100) {
+                this->ledgeClimbDelayTimer++;
             }
         }
     } else {
-        this->unk_B5C = spC7;
-        this->unk_B5D = 0;
+        this->ledgeClimbType = nextLedgeClimbType;
+        this->ledgeClimbDelayTimer = 0;
     }
 
-    sPlayerCurrentFloorType = SurfaceType_GetFloorType(&play->colCtx, floorPoly, this->actor.floorBgId);
+    sPlayerFloorType = SurfaceType_GetFloorType(&play->colCtx, floorPoly, this->actor.floorBgId);
+
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         f32 floorPolyNormalX;
         f32 floorPolyNormalY;
         f32 floorPolyNormalZ;
-        f32 sp54;
+        f32 sin;
         s32 pad;
-        f32 sp4C;
+        f32 cos;
 
-        D_80862B40 = SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-        if (func_808430E0(this) == 0) {
+        sPlayerFloorEffect = SurfaceType_GetFloorEffect(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
+
+        if (!func_808430E0(this)) {
             floorPolyNormalY = COLPOLY_GET_NORMAL(floorPoly->normal.y);
 
             if (this->actor.floorBgId != BGCHECK_SCENE) {
                 DynaPoly_SetPlayerOnTop(&play->colCtx, this->actor.floorBgId);
             } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) && (this->actor.depthInWater <= 24.0f) &&
-                       (D_80862B40 != FLOOR_EFFECT_1) && (sPlayerConveyorSpeedIndex == CONVEYOR_SPEED_DISABLED) &&
-                       (floorPolyNormalY > 0.5f)) {
+                       (sPlayerFloorEffect != FLOOR_EFFECT_1) &&
+                       (sPlayerConveyorSpeedIndex == CONVEYOR_SPEED_DISABLED) && (floorPolyNormalY > 0.5f)) {
                 if (CutsceneManager_GetCurrentCsId() != play->playerCsIds[PLAYER_CS_ID_SONG_WARP]) {
                     func_80841A50(play, this);
                 }
@@ -11044,26 +11099,31 @@ void func_80843178(PlayState* play, Player* this) {
             floorPolyNormalY = 1.0f / floorPolyNormalY;
             floorPolyNormalZ = COLPOLY_GET_NORMAL(floorPoly->normal.z);
 
-            sp54 = Math_SinS(this->currentYaw);
-            sp4C = Math_CosS(this->currentYaw);
-            this->unk_B6C =
-                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sp54) - (floorPolyNormalZ * sp4C)) * floorPolyNormalY);
-            this->unk_B6E =
-                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sp4C) - (floorPolyNormalZ * sp54)) * floorPolyNormalY);
-            sp54 = Math_SinS(this->actor.shape.rot.y);
-            sp4C = Math_CosS(this->actor.shape.rot.y);
-            D_80862B28 =
-                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sp54) - (floorPolyNormalZ * sp4C)) * floorPolyNormalY);
-            func_8083CF68(play, this);
+            sin = Math_SinS(this->currentYaw);
+            cos = Math_CosS(this->currentYaw);
+
+            this->floorPitch =
+                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sin) - (floorPolyNormalZ * cos)) * floorPolyNormalY);
+            this->floorPitchAlt =
+                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * cos) - (floorPolyNormalZ * sin)) * floorPolyNormalY);
+
+            sin = Math_SinS(this->actor.shape.rot.y);
+            cos = Math_CosS(this->actor.shape.rot.y);
+
+            sPlayerFloorPitchShape =
+                Math_Atan2S_XY(1.0f, (-(floorPolyNormalX * sin) - (floorPolyNormalZ * cos)) * floorPolyNormalY);
+
+            Player_HandleSlopes(play, this);
         }
     } else {
         func_808430E0(this);
-        D_80862B40 = FLOOR_EFFECT_0;
+        sPlayerFloorEffect = FLOOR_EFFECT_0;
     }
 
     if (floorPoly != NULL) {
-        this->unk_D66 = this->floorSfxOffset;
-        if (spAC != 0) {
+        this->prevFloorSfxOffset = this->floorSfxOffset;
+
+        if (spAC) {
             this->floorSfxOffset = NA_SE_PL_WALK_CONCRETE - SFX_FLAG;
             return;
         }
@@ -11071,18 +11131,18 @@ void func_80843178(PlayState* play, Player* this) {
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
             if (this->actor.depthInWater < 50.0f) {
                 if (this->actor.depthInWater < 20.0f) {
-                    this->floorSfxOffset = (sPlayerCurrentFloorType == FLOOR_TYPE_13) ? NA_SE_PL_WALK_DIRT - SFX_FLAG
-                                                                                      : NA_SE_PL_WALK_WATER0 - SFX_FLAG;
+                    this->floorSfxOffset = (sPlayerFloorType == FLOOR_TYPE_13) ? NA_SE_PL_WALK_DIRT - SFX_FLAG
+                                                                               : NA_SE_PL_WALK_WATER0 - SFX_FLAG;
                 } else {
-                    this->floorSfxOffset = (sPlayerCurrentFloorType == FLOOR_TYPE_13) ? NA_CODE_DIRT_DEEP - SFX_FLAG
-                                                                                      : NA_SE_PL_WALK_WATER1 - SFX_FLAG;
+                    this->floorSfxOffset = (sPlayerFloorType == FLOOR_TYPE_13) ? NA_CODE_DIRT_DEEP - SFX_FLAG
+                                                                               : NA_SE_PL_WALK_WATER1 - SFX_FLAG;
                 }
 
                 return;
             }
         }
 
-        if (this->stateFlags2 & PLAYER_STATE2_200) {
+        if (this->stateFlags2 & PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND) {
             this->floorSfxOffset = NA_SE_PL_WALK_SAND - SFX_FLAG;
         } else if (COLPOLY_GET_NORMAL(floorPoly->normal.y) > 0.5f) {
             this->floorSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, floorPoly, this->actor.floorBgId);
@@ -11403,7 +11463,7 @@ void func_80844784(PlayState* play, Player* this) {
     s16 temp_v0;
     f32 temp_fv0_2;
 
-    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (sPlayerCurrentFloorType == FLOOR_TYPE_5) &&
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (sPlayerFloorType == FLOOR_TYPE_5) &&
         (this->currentBoots < PLAYER_BOOTS_ZORA_UNDERWATER)) {
         var_a3 = this->currentYaw;
         var_fv0 = this->linearVelocity;
@@ -11559,7 +11619,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
 
     Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.home.pos);
 
-    temp_fv1 = fabsf(this->linearVelocity) * (fabsf(Math_SinS(this->unk_B6C) * 800.0f) + 100.0f);
+    temp_fv1 = fabsf(this->linearVelocity) * (fabsf(Math_SinS(this->floorPitch) * 800.0f) + 100.0f);
 
     Math_StepToF(&this->unk_AC0, 0.0f, CLAMP_MIN(temp_fv1, 300.0f));
 
@@ -11629,7 +11689,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             Player_StopHorizontalMovement(this);
             Actor_MoveWithGravity(&this->actor);
         }
-        func_80843178(play, this);
+        Player_ProcessSceneCollision(play, this);
     } else {
         f32 temp_fa0;
         f32 var_fv1_2;
@@ -11696,9 +11756,9 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2) && (this->actor.parent == NULL)) {
                 func_80844784(play, this);
             }
-            func_80843178(play, this);
+            Player_ProcessSceneCollision(play, this);
         } else {
-            sPlayerCurrentFloorType = FLOOR_TYPE_0;
+            sPlayerFloorType = FLOOR_TYPE_0;
             this->floorProperty = FLOOR_PROPERTY_0;
             if (this->stateFlags1 & PLAYER_STATE1_800000) {
                 this->actor.floorPoly = this->rideActor->floorPoly;
@@ -11708,7 +11768,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             this->pushedSpeed = 0.0f;
         }
 
-        func_8083562C(play, this, this->actor.floorPoly, this->actor.floorBgId);
+        Player_HandleExitsAndVoids(play, this, this->actor.floorPoly, this->actor.floorBgId);
         if (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) {
             f32 conveyorSpeed;
             s32 pad2;
@@ -11724,7 +11784,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             }
 
             Math_StepToF(&this->pushedSpeed, conveyorSpeed, conveyorSpeed * 0.1f);
-            Math_ScaledStepToS(&this->pushedYaw, D_80862B16,
+            Math_ScaledStepToS(&this->pushedYaw, sPlayerConveyorYaw,
                                ((this->stateFlags1 & PLAYER_STATE1_8000000) ? 400.0f : 800.0f) * conveyorSpeed);
         } else if (this->pushedSpeed != 0.0f) {
             Math_StepToF(&this->pushedSpeed, 0.0f, (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 2.0f);
@@ -11812,9 +11872,10 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
         }
 
         this->stateFlags1 &= ~(PLAYER_STATE1_10 | PLAYER_STATE1_1000 | PLAYER_STATE1_400000);
-        this->stateFlags2 &= ~(PLAYER_STATE2_1 | PLAYER_STATE2_4 | PLAYER_STATE2_8 | PLAYER_STATE2_20 |
-                               PLAYER_STATE2_40 | PLAYER_STATE2_100 | PLAYER_STATE2_200 | PLAYER_STATE2_1000 |
-                               PLAYER_STATE2_4000 | PLAYER_STATE2_10000 | PLAYER_STATE2_400000 | PLAYER_STATE2_4000000);
+        this->stateFlags2 &=
+            ~(PLAYER_STATE2_1 | PLAYER_STATE2_4 | PLAYER_STATE2_8 | PLAYER_STATE2_20 | PLAYER_STATE2_40 |
+              PLAYER_STATE2_100 | PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND | PLAYER_STATE2_1000 | PLAYER_STATE2_4000 |
+              PLAYER_STATE2_10000 | PLAYER_STATE2_400000 | PLAYER_STATE2_4000000);
         this->stateFlags3 &= ~(PLAYER_STATE3_10 | PLAYER_STATE3_40 | PLAYER_STATE3_100 | PLAYER_STATE3_800 |
                                PLAYER_STATE3_1000 | PLAYER_STATE3_100000 | PLAYER_STATE3_2000000 |
                                PLAYER_STATE3_4000000 | PLAYER_STATE3_8000000 | PLAYER_STATE3_10000000);
@@ -12584,19 +12645,21 @@ s32 func_80847A94(PlayState* play, Player* this, s32 arg2, f32* arg3) {
     f32 sp5C = rideActor->world.pos.y - 20.0f;
     Vec3f sp50;
     Vec3f sp44;
-    CollisionPoly* sp40;
-    CollisionPoly* sp3C;
-    s32 sp38;
-    s32 sp34;
+    CollisionPoly* wallPoly;
+    CollisionPoly* floorPoly;
+    s32 wallBgId;
+    s32 floorBgId;
 
-    *arg3 = func_80835CD8(play, this, &D_8085D588[arg2], &sp50, &sp3C, &sp34);
+    *arg3 = func_80835CD8(play, this, &D_8085D588[arg2], &sp50, &floorPoly, &floorBgId);
 
     if ((sp5C < *arg3) && (*arg3 < sp60)) {
-        if (!func_80835D58(play, this, &D_8085D5A0[arg2], &sp40, &sp38, &sp44)) {
-            if (!func_80835D58(play, this, &D_8085D5B8[arg2], &sp40, &sp38, &sp44)) {
-                this->actor.floorPoly = sp3C;
-                this->actor.floorBgId = sp38;
-                this->floorSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, sp3C, sp34);
+        if (!Player_PosVsWallLineTest(play, this, &D_8085D5A0[arg2], &wallPoly, &wallBgId, &sp44)) {
+            if (!Player_PosVsWallLineTest(play, this, &D_8085D5B8[arg2], &wallPoly, &wallBgId, &sp44)) {
+                this->actor.floorPoly = floorPoly;
+                //! @note: no poly is assigned to `wallBgId` when `Player_PosVsWallLineTest` fails.
+                //! Therefore, the default value `BGCHECK_SCENE` is assigned.
+                this->actor.floorBgId = wallBgId;
+                this->floorSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, floorPoly, floorBgId);
                 return true;
             }
         }
@@ -14205,9 +14268,8 @@ AnimSfxEntry D_8085D60C[] = {
 
 void func_8084BFDC(Player* this, PlayState* play) {
     if ((this->transformation != PLAYER_FORM_GORON) && (this->actor.depthInWater <= 0.0f)) {
-        if ((play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) ||
-            (sPlayerCurrentFloorType == FLOOR_TYPE_9) ||
-            ((func_808340AC(sPlayerCurrentFloorType) >= 0) &&
+        if ((play->roomCtx.curRoom.behaviorType2 == ROOM_BEHAVIOR_TYPE2_HOT) || (sPlayerFloorType == FLOOR_TYPE_9) ||
+            ((func_808340AC(sPlayerFloorType) >= 0) &&
              !SurfaceType_IsWallDamage(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId))) {
             func_808344C0(play, this);
         }
@@ -14282,7 +14344,7 @@ void func_8084C16C(Player* this, PlayState* play) {
             (this->actor.velocity.y < 0.0f)) {
             if (this->unk_AE8 >= 0) {
                 if ((this->actor.bgCheckFlags & BGCHECKFLAG_WALL) || (this->unk_AE8 == 0) || (this->fallDistance > 0)) {
-                    if ((D_80862B18 > 800.0f) || (this->stateFlags3 & PLAYER_STATE3_10000)) {
+                    if ((sPlayerYDistToFloor > 800.0f) || (this->stateFlags3 & PLAYER_STATE3_10000)) {
                         func_80840980(this, NA_SE_VO_LI_FALL_S);
                         this->stateFlags3 &= ~PLAYER_STATE3_10000;
                     }
@@ -14291,7 +14353,7 @@ void func_8084C16C(Player* this, PlayState* play) {
                     this->unk_AE8 = -1;
                 }
             } else {
-                if ((this->unk_AE8 == -1) && (this->fallDistance > 120) && (D_80862B18 > 280.0f)) {
+                if ((this->unk_AE8 == -1) && (this->fallDistance > 120) && (sPlayerYDistToFloor > 280.0f)) {
                     this->unk_AE8 = -2;
                     func_80840980(this, NA_SE_VO_LI_FALL_L);
                 }
@@ -14301,13 +14363,13 @@ void func_8084C16C(Player* this, PlayState* play) {
                     (this->linearVelocity > 0.0f)) {
                     if ((this->transformation != PLAYER_FORM_GORON) &&
                         ((this->transformation != PLAYER_FORM_DEKU) || (this->remainingHopsCounter != 0))) {
-                        if ((this->wallHeight >= 150.0f) && (this->unk_AE3[this->unk_ADE] == 0)) {
+                        if ((this->yDistToLedge >= 150.0f) && (this->unk_AE3[this->unk_ADE] == 0)) {
                             if (func_8083D860(this, play)) {
                                 func_8084C124(play, this);
                             }
-                        } else if ((this->unk_B5C >= 2) &&
-                                   ((this->wallHeight < (150.0f * this->ageProperties->unk_08)) &&
-                                    (((this->actor.world.pos.y - this->actor.floorHeight) + this->wallHeight)) >
+                        } else if ((this->ledgeClimbType >= PLAYER_LEDGE_CLIMB_2) &&
+                                   ((this->yDistToLedge < (150.0f * this->ageProperties->unk_08)) &&
+                                    (((this->actor.world.pos.y - this->actor.floorHeight) + this->yDistToLedge)) >
                                         (70.0f * this->ageProperties->unk_08))) {
                             AnimationContext_DisableQueue(play);
                             if (this->stateFlags3 & PLAYER_STATE3_10000) {
@@ -14316,8 +14378,8 @@ void func_8084C16C(Player* this, PlayState* play) {
                                 Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_HANG);
                             }
 
-                            this->actor.world.pos.y += this->wallHeight;
-                            func_80837CEC(play, this, this->actor.wallPoly, this->wallDistance,
+                            this->actor.world.pos.y += this->yDistToLedge;
+                            func_80837CEC(play, this, this->actor.wallPoly, this->distToInteractWall,
                                           GET_PLAYER_ANIM(PLAYER_ANIMGROUP_38, this->modelAnimType));
                             this->currentYaw += 0x8000;
                             this->actor.shape.rot.y = this->currentYaw;
@@ -14645,7 +14707,7 @@ void func_8084D4EC(Player* this, PlayState* play) {
     if (this->skelAnime.animation == &gPlayerAnim_link_normal_250jump_start) {
         this->linearVelocity = 1.0f;
         if (PlayerAnimation_OnFrame(&this->skelAnime, 8.0f)) {
-            f32 speed = this->wallHeight;
+            f32 speed = this->yDistToLedge;
 
             speed = CLAMP_MAX(speed, this->ageProperties->unk_0C);
             if (this->stateFlags1 & PLAYER_STATE1_8000000) {
@@ -14770,8 +14832,8 @@ void func_8084D820(Player* this, PlayState* play) {
             if (this->stateFlags1 & PLAYER_STATE1_1) {
                 sp5C = gSaveContext.entranceSpeed;
                 if (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) {
-                    this->unk_3A0.x = (Math_SinS(D_80862B16) * 400.0f) + this->actor.world.pos.x;
-                    this->unk_3A0.z = (Math_CosS(D_80862B16) * 400.0f) + this->actor.world.pos.z;
+                    this->unk_3A0.x = (Math_SinS(sPlayerConveyorYaw) * 400.0f) + this->actor.world.pos.x;
+                    this->unk_3A0.z = (Math_CosS(sPlayerConveyorYaw) * 400.0f) + this->actor.world.pos.z;
                 }
             } else {
                 if (this->unk_AE8 < 0) {
@@ -14926,11 +14988,11 @@ void func_8084E034(Player* this, PlayState* play) {
         Player_StopCutscene(this);
         play->func_18780(this, play);
     } else if (sp38 && PlayerAnimation_OnFrame(&this->skelAnime, 15.0f)) {
-        s16 doorRot = (this->doorDirection < 0) ? doorActor->knobDoor.dyna.actor.world.rot.x
-                                                : doorActor->knobDoor.dyna.actor.world.rot.z;
+        s16 exitIndexPlusOne = (this->doorDirection < 0) ? doorActor->knobDoor.dyna.actor.world.rot.x
+                                                         : doorActor->knobDoor.dyna.actor.world.rot.z;
 
-        if (doorRot != 0) {
-            func_808354A4(play, doorRot - 1, false);
+        if (exitIndexPlusOne != 0) {
+            func_808354A4(play, exitIndexPlusOne - 1, false);
         }
     }
 }
@@ -15413,7 +15475,7 @@ void func_8084F4E8(Player* this, PlayState* play) {
             }
         }
 
-        Actor_UpdateBgCheckInfo(play, &this->actor, 268 * 0.1f, 6.0f, this->ageProperties->unk_00 + 15.0f,
+        Actor_UpdateBgCheckInfo(play, &this->actor, 268 * 0.1f, 6.0f, this->ageProperties->ceilingCheckHeight + 15.0f,
                                 UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         func_8083DD1C(play, this, 268 * 0.1f, this->ageProperties->unk_3C, 50.0f, -20.0f);
     }
@@ -15889,17 +15951,20 @@ void func_808508C8(Player* this, PlayState* play) {
                 func_80836A98(this, D_8085BE84[PLAYER_ANIMGROUP_14][this->modelAnimType], play);
                 Player_AnimSfx_PlayFloorLand(this);
             }
-        } else if ((func_80850854(play, this) == 0) &&
-                   (func_80832F78(this, &sp34, &sp32, 0.0f, play), (sp34 != 0.0f))) {
-            if ((ABS_ALT(BINANG_SUB(this->actor.shape.rot.y, sp32)) > 0x6000) &&
-                !Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
-                return;
-            }
+        } else if (!func_80850854(play, this)) {
+            func_80832F78(this, &sp34, &sp32, 0.0f, play);
 
-            if (func_8082FC24(this) || func_80847ED4(this)) {
-                func_80848048(play, this);
-            } else {
-                func_8083B73C(play, this, sp32);
+            if (sp34 != 0.0f) {
+                if ((ABS_ALT(BINANG_SUB(this->actor.shape.rot.y, sp32)) > 0x6000) &&
+                    !Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
+                    return;
+                }
+
+                if (func_8082FC24(this) || func_80847ED4(this)) {
+                    func_80848048(play, this);
+                } else {
+                    func_8083B73C(play, this, sp32);
+                }
             }
         }
 
@@ -16017,7 +16082,7 @@ void func_80850D68(Player* this, PlayState* play) {
         sp3E = sPlayerControlInput->rel.stick_y * 0xC8;
         if (this->unk_B8C != 0) {
             this->unk_B8C--;
-            sp3E = CLAMP_MAX(sp3E, (s16)(this->unk_B6C - 0xFA0));
+            sp3E = CLAMP_MAX(sp3E, (s16)(this->floorPitch - 0xFA0));
         }
 
         if ((this->unk_AAA >= -0x1555) && (this->actor.depthInWater < (this->ageProperties->unk_24 + 10.0f))) {
@@ -16041,7 +16106,7 @@ void func_80850D68(Player* this, PlayState* play) {
             }
         }
 
-        if (D_80862B18 < 20.0f) {
+        if (sPlayerYDistToFloor < 20.0f) {
             func_80850D20(play, this);
         }
     } else {
@@ -16061,7 +16126,7 @@ void func_80850D68(Player* this, PlayState* play) {
         if ((this->actor.floorBgId == BGCHECK_SCENE) ||
             ((dynaActor = DynaPoly_GetActor(&play->colCtx, this->actor.floorBgId)) == NULL) ||
             (dynaActor->actor.id != ACTOR_EN_TWIG)) {
-            this->unk_AAA += (s16)((-this->unk_B6C - this->unk_AAA) * 2);
+            this->unk_AAA += (s16)((-this->floorPitch - this->unk_AAA) * 2);
             this->unk_B8C = 0xF;
         }
 
@@ -16937,7 +17002,7 @@ void func_80853850(Player* this, PlayState* play) {
     struct_8085D80C* sp4C;
 
     D_8085D7F8.z = D_8085D804[this->transformation];
-    if (func_80835D58(play, this, &D_8085D7F8, &sp6C, &sp68, &sp5C)) {
+    if (Player_PosVsWallLineTest(play, this, &D_8085D7F8, &sp6C, &sp68, &sp5C)) {
         temp_fv1 = this->actor.world.pos.x - sp5C.x;
         temp_fa0 = this->actor.world.pos.z - sp5C.z;
         temp_fv0 = sqrtf(SQ(temp_fv1) + SQ(temp_fa0));
@@ -16945,8 +17010,8 @@ void func_80853850(Player* this, PlayState* play) {
         if (temp_fv0 != 0.0f) {
             temp_fv0 = 3.0f / temp_fv0;
 
-            this->actor.world.pos.x = this->actor.world.pos.x + (temp_fv1 * temp_fv0);
-            this->actor.world.pos.z = this->actor.world.pos.z + (temp_fa0 * temp_fv0);
+            this->actor.world.pos.x += temp_fv1 * temp_fv0;
+            this->actor.world.pos.z += temp_fa0 * temp_fv0;
         }
     }
 
@@ -17127,7 +17192,7 @@ void func_808540A0(Player* this, PlayState* play) {
 void Player_Cutscene_SetPosAndYawToStart(Player* this, CsCmdActorCue* cue);
 
 void func_80854118(Player* this, PlayState* play) {
-    if (D_80862B18 < 150.0f) {
+    if (sPlayerYDistToFloor < 150.0f) {
         if (PlayerAnimation_Update(play, &this->skelAnime)) {
             if (this->unk_AE8 == 0) {
                 if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
@@ -17817,7 +17882,7 @@ void func_80855E08(Player* this, PlayState* play) {
         f32 var_fv0;
 
         Math_Vec3f_Copy(&this->actor.prevPos, &this->actor.world.pos);
-        func_80843178(play, this);
+        Player_ProcessSceneCollision(play, this);
 
         var_fv0 = this->actor.world.pos.y - this->actor.floorHeight;
         var_fv0 = CLAMP_MAX(var_fv0, 20.0f);
@@ -18585,11 +18650,11 @@ void func_80857BE8(Player* this, PlayState* play) {
                     f32 sp84 = (((this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG) ||
                                  (this->floorSfxOffset == NA_SE_PL_WALK_ICE - SFX_FLAG) ||
                                  (this->floorSfxOffset == NA_SE_PL_WALK_SAND - SFX_FLAG) ||
-                                 (sPlayerCurrentFloorType == FLOOR_TYPE_5)) &&
+                                 (sPlayerFloorType == FLOOR_TYPE_5)) &&
                                 (spC0 >= 0x7D0))
                                    ? 0.08f
                                    : this->unk_AE8 * 0.0003f;
-                    f32 sp80 = (Math_SinS(this->unk_B6C) * 8.0f) + 0.6f;
+                    f32 sp80 = (Math_SinS(this->floorPitch) * 8.0f) + 0.6f;
                     s16 var_a3;
                     s16 sp7C;
                     Vec3f sp70;
@@ -18642,7 +18707,7 @@ void func_80857BE8(Player* this, PlayState* play) {
 
                 spB8 = sqrtf(SQ(spA4) + SQ(spA0));
                 if (this->unk_B86[1] != 0) {
-                    if ((ABS_ALT(sp8E) + ABS_ALT(this->unk_B6C)) > 15000) {
+                    if ((ABS_ALT(sp8E) + ABS_ALT(this->floorPitch)) > 0x3A98) {
                         this->unk_B86[1] = 0;
                         this->unk_AE7 = 4;
                         this->unk_B8E = 0x14;
@@ -18709,8 +18774,8 @@ void func_80857BE8(Player* this, PlayState* play) {
             }
 
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-                this->linearVelocity = this->unk_B08 * Math_CosS(this->unk_B6C);
-                this->actor.velocity.y = this->unk_B08 * Math_SinS(this->unk_B6C);
+                this->linearVelocity = this->unk_B08 * Math_CosS(this->floorPitch);
+                this->actor.velocity.y = this->unk_B08 * Math_SinS(this->floorPitch);
             }
 
             if ((this->unk_B86[1] != 0) ||
@@ -20191,7 +20256,8 @@ void func_8085B74C(PlayState* play) {
     }
 
     func_80835324(play, player, 400.0f,
-                  (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) ? D_80862B16 : player->actor.world.rot.y);
+                  (sPlayerConveyorSpeedIndex != CONVEYOR_SPEED_DISABLED) ? sPlayerConveyorYaw
+                                                                         : player->actor.world.rot.y);
     player->stateFlags1 |= (PLAYER_STATE1_1 | PLAYER_STATE1_20000000);
 }
 

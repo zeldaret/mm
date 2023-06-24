@@ -1,42 +1,81 @@
 /**
  * @file loadfragment.c
  *
- * Functions used to process and relocate overlays
+ * Functions used to process and relocate dynamically loadable code segments (overlays).
  *
  * @note:
- *  These are completly unused in favor of the functions in `loadfragment2.c`.
+ *  These are completly unused in favor of the fragment overlay functions in `loadfragment2.c`.
  *
- *  The main difference between them seems to be the lack of vRamEnd arguments here.
+ *  The main difference between them seems to be the lack of vramEnd arguments here.
  *  Instead they are calculated on the fly.
  */
 #include "global.h"
 #include "system_malloc.h"
-#include "z64load.h"
+#include "loadfragment.h"
 
 s32 gLoadLogSeverity = 2;
 
-void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintptr_t vRamStart) {
-    u32 sections[4];
+// Extract MIPS register rs from an instruction word
+#define MIPS_REG_RS(insn) (((insn) >> 0x15) & 0x1F)
+
+// Extract MIPS register rt from an instruction word
+#define MIPS_REG_RT(insn) (((insn) >> 0x10) & 0x1F)
+
+// Extract MIPS jump target from an instruction word
+#define MIPS_JUMP_TARGET(insn) (((insn)&0x03FFFFFF) << 2)
+
+/**
+ * Performs runtime relocation of overlay files, loadable code segments.
+ *
+ * Overlays are expected to be loadable anywhere in direct-mapped cached (KSEG0) memory, with some appropriate
+ * alignment requirements; memory addresses in such code must be updated once loaded to execute properly.
+ * When compiled, overlays are given 'fake' KSEG0 RAM addresses larger than the total possible available main memory
+ * (>= 0x80800000), such addresses are referred to as Virtual RAM (VRAM) to distinguish them. When loading the overlay,
+ * the relocation table produced at compile time is consulted to determine where and how to update these VRAM addresses
+ * to correct RAM addresses based on the location the overlay was loaded at, enabling the code to execute at this
+ * address as if it were compiled to run at this address.
+ *
+ * Each relocation is represented by a packed 32-bit value, formatted in the following way:
+ *  - [31:30]  2-bit section id, taking values from the `RelocSectionId` enum.
+ *  - [29:24]  6-bit relocation type describing which relocation operation should be performed. Same as ELF32 MIPS.
+ *  - [23: 0]  24-bit section-relative offset indicating where in the section to apply this relocation.
+ *
+ * @param allocatedRamAddr Memory address the binary was loaded at.
+ * @param ovlRelocs Overlay relocation section containing overlay section layout and runtime relocations.
+ * @param vramStart Virtual RAM address that the overlay was compiled at.
+ */
+void Fragment_Relocate(void* allocatedRamAddr, OverlayRelocationSection* ovlRelocs, uintptr_t vramStart) {
+    u32 sections[RELOC_SECTION_MAX];
     u32* relocDataP;
     u32 reloc;
     uintptr_t relocatedAddress;
     u32 i;
     u32* luiInstRef;
-    uintptr_t allocu32 = (uintptr_t)allocatedVRamAddr;
+    uintptr_t allocu32 = (uintptr_t)allocatedRamAddr;
     u32* regValP;
+    //! MIPS ELF relocation does not generally require tracking register values, so at first glance it appears this
+    //! register tracking was an unnecessary complication. However there is a bug in the IDO compiler that can cause
+    //! relocations to be emitted in the wrong order under rare circumstances when the compiler attempts to reuse a
+    //! previous HI16 relocation for a different LO16 relocation as an optimization. This register tracking is likely
+    //! a workaround to prevent improper matching of unrelated HI16 and LO16 relocations that would otherwise arise
+    //! due to the incorrect ordering.
     u32* luiRefs[32];
     u32 luiVals[32];
     u32 isLoNeg;
 
     if (gLoadLogSeverity >= 3) {}
 
-    sections[0] = 0;
-    sections[1] = allocu32;
-    sections[2] = allocu32 + ovl->textSize;
-    sections[3] = sections[2] + ovl->dataSize;
+    sections[RELOC_SECTION_NULL] = 0;
+    sections[RELOC_SECTION_TEXT] = allocu32;
+    sections[RELOC_SECTION_DATA] = allocu32 + ovlRelocs->textSize;
+    sections[RELOC_SECTION_RODATA] = sections[RELOC_SECTION_DATA] + ovlRelocs->dataSize;
 
-    for (i = 0; i < ovl->nRelocations; i++) {
-        reloc = ovl->relocations[i];
+    for (i = 0; i < ovlRelocs->numRelocations; i++) {
+        // This will always resolve to a 32-bit aligned address as each section
+        // containing code or pointers must be aligned to at least 4 bytes and the
+        // MIPS ABI defines the offset of both 16-bit and 32-bit relocations to be
+        // the start of the 32-bit word containing the target.
+        reloc = ovlRelocs->relocations[i];
         relocDataP = (u32*)(sections[RELOC_SECTION(reloc)] + RELOC_OFFSET(reloc));
 
         switch (RELOC_TYPE_MASK(reloc)) {
@@ -46,7 +85,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 // Check address is valid for relocation
                 if ((*relocDataP & 0x0F000000) == 0) {
-                    *relocDataP = RELOCATE_ADDR(*relocDataP, vRamStart, allocu32);
+                    *relocDataP = *relocDataP - vramStart + allocu32;
                 } else if (gLoadLogSeverity >= 3) {
                 }
                 break;
@@ -56,10 +95,11 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
                 // Extract the address from the target field of the J-type MIPS instruction.
                 // Relocate the address and update the instruction.
 
-                *relocDataP =
-                    (*relocDataP & 0xFC000000) |
-                    ((RELOCATE_ADDR(PHYS_TO_K0((*relocDataP & 0x03FFFFFF) << 2), vRamStart, allocu32) & 0x0FFFFFFF) >>
-                     2);
+                if (1) {
+                    *relocDataP =
+                        (*relocDataP & 0xFC000000) |
+                        (((PHYS_TO_K0(MIPS_JUMP_TARGET(*relocDataP)) - vramStart + allocu32) & 0x0FFFFFFF) >> 2);
+                }
                 break;
 
             case R_MIPS_HI16 << RELOC_TYPE_SHIFT:
@@ -83,7 +123,7 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
 
                 // Check address is valid for relocation
                 if ((((*luiInstRef << 0x10) + (s16)*relocDataP) & 0x0F000000) == 0) {
-                    relocatedAddress = RELOCATE_ADDR((*regValP << 0x10) + (s16)*relocDataP, vRamStart, allocu32);
+                    relocatedAddress = ((*regValP << 0x10) + (s16)*relocDataP) - vramStart + allocu32;
                     isLoNeg = (relocatedAddress & 0x8000) ? 1 : 0;
                     *luiInstRef = (*luiInstRef & 0xFFFF0000) | (((relocatedAddress >> 0x10) & 0xFFFF) + isLoNeg);
                     *relocDataP = (*relocDataP & 0xFFFF0000) | (relocatedAddress & 0xFFFF);
@@ -94,97 +134,97 @@ void Load_Relocate(void* allocatedVRamAddr, OverlayRelocationSection* ovl, uintp
     }
 }
 
-size_t Load_LoadOverlay(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart, void* allocatedVRamAddr,
-                        size_t allocatedBytes) {
-    size_t size = vRomEnd - vRomStart;
+size_t Fragment_Load(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart, void* allocatedRamAddr,
+                     size_t allocatedBytes) {
+    size_t size = vromEnd - vromStart;
     void* end;
     s32 pad;
-    OverlayRelocationSection* ovl;
+    OverlayRelocationSection* ovlRelocs;
 
     if (gLoadLogSeverity >= 3) {}
     if (gLoadLogSeverity >= 3) {}
 
-    end = (uintptr_t)allocatedVRamAddr + size;
-    DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
+    end = (uintptr_t)allocatedRamAddr + size;
+    DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
 
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
 
     if (gLoadLogSeverity >= 3) {}
 
-    if (allocatedBytes < ovl->bssSize + size) {
+    if (allocatedBytes < ovlRelocs->bssSize + size) {
         if (gLoadLogSeverity >= 3) {}
         return 0;
     }
 
-    allocatedBytes = ovl->bssSize + size;
+    allocatedBytes = ovlRelocs->bssSize + size;
 
     if (gLoadLogSeverity >= 3) {}
 
-    Load_Relocate(allocatedVRamAddr, ovl, vRamStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
-    if (ovl->bssSize != 0) {
+    if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
-        bzero(end, ovl->bssSize);
+        bzero(end, ovlRelocs->bssSize);
     }
 
-    osWritebackDCache(allocatedVRamAddr, allocatedBytes);
-    osInvalICache(allocatedVRamAddr, allocatedBytes);
+    osWritebackDCache(allocatedRamAddr, allocatedBytes);
+    osInvalICache(allocatedRamAddr, allocatedBytes);
 
     if (gLoadLogSeverity >= 3) {}
 
     return allocatedBytes;
 }
 
-void* Load_AllocateAndLoad(uintptr_t vRomStart, uintptr_t vRomEnd, uintptr_t vRamStart) {
-    size_t size = vRomEnd - vRomStart;
+void* Fragment_AllocateAndLoad(uintptr_t vromStart, uintptr_t vromEnd, uintptr_t vramStart) {
+    size_t size = vromEnd - vromStart;
     void* end;
-    void* allocatedVRamAddr;
+    void* allocatedRamAddr;
     uintptr_t ovlOffset;
-    OverlayRelocationSection* ovl;
+    OverlayRelocationSection* ovlRelocs;
     size_t allocatedBytes;
 
     if (gLoadLogSeverity >= 3) {}
 
-    allocatedVRamAddr = SystemArena_MallocR(size);
-    end = (uintptr_t)allocatedVRamAddr + size;
+    allocatedRamAddr = SystemArena_MallocR(size);
+    end = (uintptr_t)allocatedRamAddr + size;
 
     if (gLoadLogSeverity >= 3) {}
 
-    DmaMgr_SendRequest0(allocatedVRamAddr, vRomStart, size);
+    DmaMgr_SendRequest0(allocatedRamAddr, vromStart, size);
 
     if (gLoadLogSeverity >= 3) {}
 
     ovlOffset = (uintptr_t)end - 4;
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
+    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - ((s32*)end)[-1]);
 
     if (1) {}
 
-    allocatedBytes = ovl->bssSize + size;
+    allocatedBytes = ovlRelocs->bssSize + size;
 
-    allocatedVRamAddr = SystemArena_Realloc(allocatedVRamAddr, allocatedBytes);
+    allocatedRamAddr = SystemArena_Realloc(allocatedRamAddr, allocatedBytes);
 
     if (gLoadLogSeverity >= 3) {}
 
-    if (allocatedVRamAddr == NULL) {
+    if (allocatedRamAddr == NULL) {
         if (gLoadLogSeverity >= 3) {}
-        return allocatedVRamAddr;
+        return allocatedRamAddr;
     }
 
-    end = (uintptr_t)allocatedVRamAddr + size;
-    ovl = (OverlayRelocationSection*)((uintptr_t)end - *(uintptr_t*)ovlOffset);
+    end = (uintptr_t)allocatedRamAddr + size;
+    ovlRelocs = (OverlayRelocationSection*)((uintptr_t)end - *(uintptr_t*)ovlOffset);
 
     if (gLoadLogSeverity >= 3) {}
 
-    Load_Relocate(allocatedVRamAddr, ovl, vRamStart);
+    Fragment_Relocate(allocatedRamAddr, ovlRelocs, vramStart);
 
-    if (ovl->bssSize != 0) {
+    if (ovlRelocs->bssSize != 0) {
         if (gLoadLogSeverity >= 3) {}
-        bzero(end, ovl->bssSize);
+        bzero(end, ovlRelocs->bssSize);
     }
 
-    osInvalICache(allocatedVRamAddr, allocatedBytes);
+    osInvalICache(allocatedRamAddr, allocatedBytes);
 
     if (gLoadLogSeverity >= 3) {}
 
-    return allocatedVRamAddr;
+    return allocatedRamAddr;
 }
