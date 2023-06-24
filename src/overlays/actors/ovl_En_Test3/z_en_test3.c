@@ -950,7 +950,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     dx = this->player.actor.world.pos.x - this->player.actor.prevPos.x;
     dy = this->player.actor.world.pos.z - this->player.actor.prevPos.z;
     this->player.linearVelocity = sqrtf(SQ(dx) + SQ(dy));
-    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.unk_B6C)));
+    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
     D_80A41D40 = (this->player.linearVelocity * 10.0f) + 20.0f;
     D_80A41D40 = CLAMP_MAX(D_80A41D40, 60.0f);
     D_80A41D44 = this->player.actor.world.rot.y;

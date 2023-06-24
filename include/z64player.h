@@ -98,7 +98,7 @@ typedef enum PlayerItemAction {
     /* 0x27 */ PLAYER_IA_BOTTLE_MILK_HALF,
     /* 0x28 */ PLAYER_IA_BOTTLE_CHATEAU,
     /* 0x29 */ PLAYER_IA_BOTTLE_FAIRY,
-    /* 0x2A */ PLAYER_IA_MOON_TEAR,
+    /* 0x2A */ PLAYER_IA_MOONS_TEAR,
     /* 0x2B */ PLAYER_IA_DEED_LAND,
     /* 0x2C */ PLAYER_IA_ROOM_KEY,
     /* 0x2D */ PLAYER_IA_LETTER_TO_KAFEI,
@@ -524,22 +524,32 @@ typedef struct PlayerAnimationFrame {
 #define GET_LEFT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)   (GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0xF000)
 #define GET_RIGHT_HAND_INDEX_FROM_JOINT_TABLE(jointTable)  (GET_APPEARANCE_FROM_JOINT_TABLE(jointTable) & 0x0F00)
 
+typedef enum PlayerLedgeClimbType {
+    /* 0 */ PLAYER_LEDGE_CLIMB_NONE,
+    /* 1 */ PLAYER_LEDGE_CLIMB_1,
+    /* 2 */ PLAYER_LEDGE_CLIMB_2,
+    /* 3 */ PLAYER_LEDGE_CLIMB_3,
+    /* 4 */ PLAYER_LEDGE_CLIMB_4
+} PlayerLedgeClimbType;
+
+#define LEDGE_DIST_MAX 399.96002f
+
 typedef struct PlayerAgeProperties {
-    /* 0x00 */ f32 unk_00; // ceilingCheckHeight
+    /* 0x00 */ f32 ceilingCheckHeight;
     /* 0x04 */ f32 shadowScale;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ f32 unk_0C;
     /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14; // compared to wallHeight
-    /* 0x18 */ f32 unk_18; // compared to wallHeight
-    /* 0x1C */ f32 unk_1C; // compared to wallHeight
+    /* 0x14 */ f32 unk_14; // compared to yDistToLedge
+    /* 0x18 */ f32 unk_18; // compared to yDistToLedge
+    /* 0x1C */ f32 unk_1C; // compared to yDistToLedge
     /* 0x20 */ f32 unk_20; // unused?
     /* 0x24 */ f32 unk_24; // water stuff // depthInWater
     /* 0x28 */ f32 unk_28; // water stuff // depthInWater
     /* 0x2C */ f32 unk_2C; // water stuff // depthInWater
     /* 0x30 */ f32 unk_30; // water stuff // depthInWater
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38; // wallCheckHeight
+    /* 0x34 */ f32 unk_34; // height?
+    /* 0x38 */ f32 wallCheckRadius;
     /* 0x3C */ f32 unk_3C;
     /* 0x40 */ f32 unk_40;
     /* 0x44 */ Vec3s unk_44;
@@ -915,7 +925,7 @@ typedef enum PlayerCueId {
 // 
 #define PLAYER_STATE2_100        (1 << 8)
 // 
-#define PLAYER_STATE2_200        (1 << 9)
+#define PLAYER_STATE2_FORCE_SAND_FLOOR_SOUND (1 << 9)
 // 
 #define PLAYER_STATE2_400        (1 << 10)
 // Diving
@@ -1229,10 +1239,10 @@ typedef struct Player {
     /* 0xB4C */ s16 unk_B4C;
     /* 0xB4E */ s16 unk_B4E;
     /* 0xB50 */ f32 unk_B50;
-    /* 0xB54 */ f32 wallHeight; // height used to determine whether link can climb or grab a ledge at the top
-    /* 0xB58 */ f32 wallDistance; // distance to the colliding wall plane
-    /* 0xB5C */ u8 unk_B5C;
-    /* 0xB5D */ u8 unk_B5D;
+    /* 0xB54 */ f32 yDistToLedge; // y distance to ground above an interact wall. LEDGE_DIST_MAX if no ground if found
+    /* 0xB58 */ f32 distToInteractWall; // xyz distance to the interact wall
+    /* 0xB5C */ u8 ledgeClimbType; // see PlayerLedgeClimbType enum
+    /* 0xB5D */ u8 ledgeClimbDelayTimer;
     /* 0xB5E */ u8 unk_B5E;
     /* 0xB5F */ u8 unk_B5F;
     /* 0xB60 */ u16 blastMaskTimer;
@@ -1243,8 +1253,8 @@ typedef struct Player {
     /* 0xB67 */ u8 remainingHopsCounter; // Deku hopping on water
     /* 0xB68 */ s16 fallStartHeight; // last truncated Y position before falling
     /* 0xB6A */ s16 fallDistance; // truncated Y distance the player has fallen so far (positive is down)
-    /* 0xB6C */ s16 unk_B6C;
-    /* 0xB6E */ s16 unk_B6E;
+    /* 0xB6C */ s16 floorPitch; // angle of the floor slope in the direction of current world yaw (positive for ascending slope)
+    /* 0xB6E */ s16 floorPitchAlt; // the calculation for this value is bugged and doesn't represent anything meaningful
     /* 0xB70 */ s16 unk_B70;
     /* 0xB72 */ u16 floorSfxOffset;
     /* 0xB74 */ u8 unk_B74;
@@ -1271,11 +1281,12 @@ typedef struct Player {
     /* 0xD57 */ u8 unk_D57;
     /* 0xD58 */ PlayerFuncD58 unk_D58;
     /* 0xD5C */ s8 invincibilityTimer; // prevents damage when nonzero (positive = visible, counts towards zero each frame)
-    /* 0xD5D */ u8 unk_D5D;
+    /* 0xD5D */ u8 floorTypeTimer; // Unused remnant of OoT
     /* 0xD5E */ u8 floorProperty; // FloorProperty enum
+    /* 0xD5F */ u8 prevFloorType; // Unused remnant of OoT
     /* 0xD60 */ f32 unk_D60;
     /* 0xD64 */ s16 unk_D64;
-    /* 0xD66 */ u16 unk_D66; // sfx
+    /* 0xD66 */ u16 prevFloorSfxOffset;
     /* 0xD68 */ s16 unk_D68;
     /* 0xD6A */ s8 unk_D6A;
     /* 0xD6B */ u8 unk_D6B;

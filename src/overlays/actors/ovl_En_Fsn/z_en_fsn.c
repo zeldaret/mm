@@ -959,7 +959,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             buttonItem = GET_CUR_FORM_BTN_ITEM(player->heldItemButton);
-            this->price = (buttonItem < ITEM_MOON_TEAR) ? gItemPrices[buttonItem] : 0;
+            this->price = (buttonItem < ITEM_MOONS_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
                 player->exchangeItemId = buttonItem;
