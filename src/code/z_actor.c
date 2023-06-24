@@ -4,8 +4,8 @@
  */
 
 #include "global.h"
+#include "loadfragment.h"
 #include "z64horse.h"
-#include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -3157,7 +3157,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     ActorOverlay* overlayEntry = &gActorOverlayTable[index];
     ActorInit* actorInit;
 
-    overlaySize = VRAM_PTR_SIZE(overlayEntry);
+    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
     if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
@@ -3178,14 +3178,15 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
-                              overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
+                         overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 
         actorInit = (void*)(uintptr_t)(
             (overlayEntry->initInfo != NULL)
-                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                ? (void*)((uintptr_t)overlayEntry->initInfo -
+                          (intptr_t)((uintptr_t)overlayEntry->vramStart - (uintptr_t)overlayEntry->loadedRamAddr))
                 : NULL);
     }
 

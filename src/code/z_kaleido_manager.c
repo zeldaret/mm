@@ -1,5 +1,5 @@
 #include "global.h"
-#include "z64load.h"
+#include "loadfragment.h"
 
 #define KALEIDO_OVERLAY(name)                                                                        \
     {                                                                                                \
@@ -24,7 +24,7 @@ void* KaleidoManager_FaultAddrConv(void* address, void* param) {
     size_t diff;
 
     if (kaleidoMgrOvl != NULL) {
-        diff = VRAM_PTR_SIZE(kaleidoMgrOvl);
+        diff = (uintptr_t)kaleidoMgrOvl->vramEnd - (uintptr_t)kaleidoMgrOvl->vramStart;
         ramStart = kaleidoMgrOvl->loadedRamAddr;
         ramConv = (uintptr_t)kaleidoMgrOvl->vramStart - (uintptr_t)ramStart;
 
@@ -39,7 +39,7 @@ void* KaleidoManager_FaultAddrConv(void* address, void* param) {
 
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
     ovl->loadedRamAddr = sKaleidoAreaPtr;
-    Load2_LoadOverlay(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
+    Overlay_Load(ovl->vromStart, ovl->vromEnd, ovl->vramStart, ovl->vramEnd, ovl->loadedRamAddr);
     ovl->offset = (uintptr_t)ovl->loadedRamAddr - (uintptr_t)ovl->vramStart;
     gKaleidoMgrCurOvl = ovl;
 }
@@ -47,7 +47,7 @@ void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl) {
     if (ovl->loadedRamAddr != NULL) {
         ovl->offset = 0;
-        bzero(ovl->loadedRamAddr, VRAM_PTR_SIZE(ovl));
+        bzero(ovl->loadedRamAddr, (uintptr_t)ovl->vramEnd - (uintptr_t)ovl->vramStart);
         ovl->loadedRamAddr = NULL;
         gKaleidoMgrCurOvl = NULL;
     }
@@ -59,7 +59,7 @@ void KaleidoManager_Init(PlayState* play) {
     u32 i;
 
     for (i = 0; i < ARRAY_COUNT(gKaleidoMgrOverlayTable); i++) {
-        size = VRAM_PTR_SIZE(&gKaleidoMgrOverlayTable[i]);
+        size = (uintptr_t)gKaleidoMgrOverlayTable[i].vramEnd - (uintptr_t)gKaleidoMgrOverlayTable[i].vramStart;
         if (size > largestSize) {
             largestSize = size;
         }
