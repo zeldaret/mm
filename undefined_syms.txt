@@ -594,10 +594,6 @@ D_06006F38 = 0x06006F38;
 D_06006FD8 = 0x06006FD8;
 D_06009930 = 0x06009930;
 
-// ovl_En_Ssh
-
-D_06000304 = 0x06000304; // Must keep, see bug in EnSsh_Init
-
 // ovl_En_Takaraya
 
 D_06000968 = 0x06000968;
