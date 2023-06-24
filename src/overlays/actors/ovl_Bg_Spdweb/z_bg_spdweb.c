@@ -148,7 +148,7 @@ void BgSpdweb_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->unk_161 = 0;
-    this->switchFlag = BGSPDWEB_GET_SWITCHFLAG(&this->dyna.actor);
+    this->switchFlag = BGSPDWEB_GET_SWITCH_FLAG(&this->dyna.actor);
     thisx->params &= 0xFF;
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
 

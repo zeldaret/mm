@@ -191,7 +191,7 @@ void ObjChan_InitChandelier(ObjChan* this, PlayState* play) {
         }
     }
 
-    if (Flags_GetSwitch(play, thisx->params & 0x7F)) {
+    if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
         this->stateFlags |= OBJCHAN_STATE_FIRE_DELAY;
         this->stateFlags |= OBJCHAN_STATE_ON_FIRE;
 
@@ -261,9 +261,9 @@ void ObjChan_ChandelierAction(ObjChan* this, PlayState* play) {
         }
     }
     if ((this->collider.base.acFlags & AC_HIT) && (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800)) {
-        Flags_SetSwitch(play, thisx->params & 0x7F);
+        Flags_SetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx));
     }
-    if (Flags_GetSwitch(play, thisx->params & 0x7F)) {
+    if (Flags_GetSwitch(play, OBJCHAN_GET_SWITCH_FLAG(thisx))) {
         if (!(this->stateFlags & OBJCHAN_STATE_FIRE_DELAY)) {
             this->rotationSpeed = 0;
             this->flameSize = 0.0f;

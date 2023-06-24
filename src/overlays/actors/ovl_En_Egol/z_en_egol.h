@@ -9,7 +9,7 @@ struct EnEgol;
 typedef void (*EnEgolActionFunc)(struct EnEgol*, PlayState*);
 
 #define EYEGORE_GET_PATH_INDEX(thisx) ((thisx)->params & 0x3F)
-#define EYEGORE_GET_SWITCH(thisx) (((thisx)->params >> 6) & 0x7F)
+#define EYEGORE_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 6) & 0x7F)
 
 #define EYEGORE_PATH_INDEX_NONE 0x3F
 

@@ -9,6 +9,8 @@ struct EnBigokuta;
 
 typedef void (*EnBigokutaActionFunc)(struct EnBigokuta*, PlayState*);
 
+#define EN_BIGOKUTA_GET_SWITCH_FLAG(thisx) ((thisx)->params)
+
 typedef struct EnBigokuta {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;

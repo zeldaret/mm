@@ -8,7 +8,7 @@ struct EnZoraegg;
 typedef void (*EnZoraeggActionFunc)(struct EnZoraegg*, PlayState*);
 
 #define ENZORAEGG_GET_1F(thisx) ((thisx)->params & 0x1F)
-#define ENZORAEGG_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define ENZORAEGG_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef enum {
     /* 0x00 */ ENZORAEGG_1F_00,

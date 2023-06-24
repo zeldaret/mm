@@ -309,7 +309,7 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
     s16 temp_v1_2;
 
     if (temp >= 0) {
-        sp3C = Item_DropCollectible(play, &this->actor.world.pos, temp | (ENISHI_GET_FE00(&this->actor) << 8));
+        sp3C = Item_DropCollectible(play, &this->actor.world.pos, temp | (ENISHI_GET_FLAG(&this->actor) << 8));
         if (sp3C != NULL) {
             Matrix_Push();
             Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_NEW);
@@ -397,7 +397,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, D_8095F6B8[sp34]);
     func_8095D6E0(&this->actor, play);
 
-    if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FE00(&this->actor))) {
+    if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FLAG(&this->actor))) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -535,7 +535,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
-            Flags_SetSwitch(play, ENISHI_GET_FE00(&this->actor));
+            Flags_SetSwitch(play, ENISHI_GET_FLAG(&this->actor));
         }
         func_8095EA70(this);
         func_8095E14C(this);

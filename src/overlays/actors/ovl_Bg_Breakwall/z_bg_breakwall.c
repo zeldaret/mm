@@ -191,8 +191,8 @@ s32 func_808B74D8(BgBreakwall* this, PlayState* play) {
 s32 func_808B751C(BgBreakwall* this, PlayState* play) {
     Actor_SetScale(&this->dyna.actor, 0.1f);
 
-    if ((BGBREAKWALL_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
-        !Flags_GetSwitch(play, BGBREAKWALL_SWITCHFLAG(&this->dyna.actor))) {
+    if ((BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor) != 0x7F) &&
+        !Flags_GetSwitch(play, BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor))) {
         return false;
     }
 
@@ -220,7 +220,7 @@ void BgBreakwall_Init(Actor* thisx, PlayState* play) {
     }
 
     BgBreakwall_SetupAction(this, func_808B76CC);
-    this->switchFlag = BGBREAKWALL_SWITCHFLAG(&this->dyna.actor);
+    this->switchFlag = BGBREAKWALL_SWITCH_FLAG(&this->dyna.actor);
 }
 
 void BgBreakwall_Destroy(Actor* thisx, PlayState* play) {

@@ -8,7 +8,7 @@ struct EnOt;
 typedef void (*EnOtActionFunc)(struct EnOt*, PlayState*);
 
 #define ENOT_GET_7F(thisx) ((thisx)->params & 0x7F)
-#define ENOT_GET_3F80(thisx) (((thisx)->params >> 7) & 0x7F)
+#define ENOT_GET_SWITCH_FLAG(thisx) (((thisx)->params >> 7) & 0x7F)
 #define ENOT_GET_3FFF(thisx) ((thisx)->params & 0x3FFF)
 #define ENOT_GET_C000(thisx) (((thisx)->params >> 0xE) & 3)
 

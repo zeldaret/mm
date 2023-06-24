@@ -248,7 +248,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     this->isTalking = false;
     this->type = EN_TALK_GIBUD_TYPE_GIBDO;
     this->requestedItemIndex = EN_TALK_GIBUD_REQUESTED_ITEM_INDEX(thisx);
-    this->switchFlag = EN_TALK_GIBUD_SWITCH_FLAG(thisx);
+    this->switchFlag = EN_TALK_GIBUD_GET_SWITCH_FLAG(thisx);
     this->drawDmgEffAlpha = 0.0f;
     this->drawDmgEffScale = 0.0f;
 

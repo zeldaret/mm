@@ -142,7 +142,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->unk_204 = 1;
     this->unk_198 = this->actor.world.rot.z;
     this->unk_195 = ENGS_GET_1F(thisx);
-    this->unk_196 = ENGS_GET_FE0(thisx);
+    this->switchFlag = ENGS_GET_SWITCH_FLAG(thisx);
     this->actor.params = ENGS_GET_F000(thisx);
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -280,20 +280,20 @@ void func_8099807C(EnGs* this, PlayState* play) {
             switch (play->msgCtx.lastPlayedSong) {
                 case OCARINA_SONG_HEALING:
                 case OCARINA_SONG_EPONAS:
-                    if (!Flags_GetSwitch(play, this->unk_196)) {
+                    if (!Flags_GetSwitch(play, this->switchFlag)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
-                        Flags_SetSwitch(play, this->unk_196);
+                        Flags_SetSwitch(play, this->switchFlag);
                     }
                     break;
 
                 case OCARINA_SONG_STORMS:
-                    if (!Flags_GetSwitch(play, this->unk_196)) {
+                    if (!Flags_GetSwitch(play, this->switchFlag)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                                     this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
-                        Flags_SetSwitch(play, this->unk_196);
+                        Flags_SetSwitch(play, this->switchFlag);
                     }
                     break;
 

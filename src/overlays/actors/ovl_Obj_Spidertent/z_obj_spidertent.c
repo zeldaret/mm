@@ -564,7 +564,7 @@ void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitTris(play, &this->collider);
 
-    if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -681,7 +681,7 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
         if (this->dyna.actor.csId >= 0) {
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
-        Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
+        Flags_SetSwitch(play, OBJSPIDERTENT_GET_SWITCH_FLAG(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
         CutsceneManager_Queue(this->dyna.actor.csId);

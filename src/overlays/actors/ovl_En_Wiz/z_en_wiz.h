@@ -4,7 +4,7 @@
 #include "global.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define EN_WIZ_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define EN_WIZ_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define EN_WIZ_GET_TYPE(thisx) (((thisx)->params >> 8) & 0xFF)
 
 typedef enum {

@@ -92,7 +92,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
         this->direction = 1;
         this->points = Lib_SegmentedToVirtual(path->points);
         ObjRaillift_UpdatePosition(this, this->curPoint);
-        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
+        if (OBJRAILLIFT_HAS_FLAG(thisx) && !Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
         } else {
             this->actionFunc = ObjRaillift_Move;
@@ -120,7 +120,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
     Vec3s* endPoint;
 
     if (OBJRAILLIFT_HAS_FLAG(thisx)) {
-        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(thisx))) {
+        if (!Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(thisx))) {
             this->actionFunc = ObjRaillift_Idle;
             return;
         }
@@ -196,7 +196,7 @@ void ObjRaillift_Wait(ObjRaillift* this, PlayState* play) {
 }
 
 void ObjRaillift_Idle(ObjRaillift* this, PlayState* play) {
-    if (Flags_GetSwitch(play, OBJRAILLIFT_GET_FLAG(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, OBJRAILLIFT_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->dyna.actor.speed = 0.0f;
         CutsceneManager_Queue(this->dyna.actor.csId);
         this->actionFunc = ObjRaillift_StartCutscene;

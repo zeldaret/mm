@@ -758,7 +758,7 @@ void func_80B5D160(EnOt* this, PlayState* play) {
                                 } else {
                                     phi_a1 = 0x1069;
                                 }
-                            } else if (Flags_GetSwitch(play, ENOT_GET_3F80(&this->actor))) {
+                            } else if (Flags_GetSwitch(play, ENOT_GET_SWITCH_FLAG(&this->actor))) {
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_10)) {
                                     phi_a1 = 0x106C;
                                 } else {
@@ -894,7 +894,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));
+    Flags_SetSwitch(play, ENOT_GET_SWITCH_FLAG(&this->actor));
     this->actionFunc = func_80B5D750;
 }
 

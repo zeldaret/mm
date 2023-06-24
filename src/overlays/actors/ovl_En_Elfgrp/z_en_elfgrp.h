@@ -8,7 +8,7 @@ struct EnElfgrp;
 typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, PlayState*);
 
 #define ENELFGRP_GET(thisx) ((thisx)->params & 0xF)
-#define ENELFGRP_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define ENELFGRP_GET_SWITCH_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 typedef enum {
     /* 0 */ ENELFGRP_0,

@@ -248,7 +248,7 @@ void func_80B8264C(BgDblueBalance* this) {
 }
 
 void func_80B828E4(BgDblueBalance* this, PlayState* play) {
-    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor)) && (this->unk_17D <= 0)) {
+    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor)) && (this->unk_17D <= 0)) {
         if (this->unk_183 >= 252) {
             this->unk_183 = 255;
         } else {
@@ -307,7 +307,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
     s32 sp2C = BGDBLUEBALANCE_GET_300(&this->dyna.actor);
     s32 pad2;
-    s32 sp24 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
+    s32 isSwitchFlagSet = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor));
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
 
@@ -327,7 +327,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     }
 
     if (sp2C == 0) {
-        if (sp24 != 0) {
+        if (isSwitchFlagSet) {
             this->dyna.actor.shape.rot.z = -0x1C72;
             this->unk_174 = -0x1C72;
         } else {
@@ -338,9 +338,9 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
         func_80B8259C(this, play);
         func_80B82DC4(this);
     } else if (sp2C == 3) {
-        this->unk_16C = sp24;
-        this->unk_170 = sp24;
-        if (sp24 != 0) {
+        this->unk_16C = isSwitchFlagSet;
+        this->unk_170 = isSwitchFlagSet;
+        if (isSwitchFlagSet) {
             func_80B83344(this);
         } else {
             this->unk_178 = 0x1F4;
@@ -397,7 +397,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
     BgDblueBalance* sp3C;
     Vec3f sp30;
 
-    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
+    if (Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         if (this->unk_17D > 0) {
             this->unk_17D--;
         } else {
@@ -556,7 +556,7 @@ void func_80B83344(BgDblueBalance* this) {
 }
 
 void func_80B8335C(BgDblueBalance* this, PlayState* play) {
-    if (!Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor))) {
+    if (!Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor))) {
         this->unk_178 = -0x14;
         func_80B833A8(this);
     }
@@ -620,7 +620,7 @@ void func_80B833C4(BgDblueBalance* this, PlayState* play) {
 void func_80B83518(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
-    this->unk_170 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_7F(&this->dyna.actor));
+    this->unk_170 = Flags_GetSwitch(play, BGDBLUEBALANCE_GET_SWITCH_FLAG(&this->dyna.actor));
 
     this->actionFunc(this, play);
 

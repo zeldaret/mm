@@ -100,7 +100,7 @@ void EnZoraegg_Init(Actor* thisx, PlayState* play) {
 
     switch (ENZORAEGG_GET_1F(&this->actor)) {
         case ENZORAEGG_1F_00:
-            if (Flags_GetSwitch(play, ENZORAEGG_GET_FE00(&this->actor))) {
+            if (Flags_GetSwitch(play, ENZORAEGG_GET_SWITCH_FLAG(&this->actor))) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -337,7 +337,7 @@ void func_80B32094(EnZoraegg* this, PlayState* play) {
 
 void func_80B320E0(EnZoraegg* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        Flags_SetSwitch(play, ENZORAEGG_GET_FE00(&this->actor));
+        Flags_SetSwitch(play, ENZORAEGG_GET_SWITCH_FLAG(&this->actor));
         Actor_Kill(&this->actor);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B32094;

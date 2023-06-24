@@ -40,7 +40,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->unk148 = ENOKARINATAG_GET_F800(thisx);
     this->unk14A = ENOKARINATAG_GET_780(thisx);
-    this->switchFlags = ENOKARINATAG_GET_SWITCHFLAGS(thisx);
+    this->switchFlags = ENOKARINATAG_GET_SWITCH_FLAGS(thisx);
     if (this->actor.world.rot.z > 0) {
         zRot = this->actor.world.rot.z;
         while (zRot > 10.0f) {
