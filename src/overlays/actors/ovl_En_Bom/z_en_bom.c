@@ -6,6 +6,7 @@
 
 #include "z_en_bom.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -544,7 +545,7 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                     effPos.y += 30.0f;
                 }
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
-                            this->isPowderKeg);
+                            CLEAR_TAG_PARAMS(this->isPowderKeg));
                 Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
                                             sQuakeDurations[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
@@ -579,16 +580,17 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
         if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != BOMB_TYPE_EXPLOSION)) {
             if (thisx->depthInWater >= 20.0f) {
-                Vec3f sp54;
+                Vec3f effPos;
 
-                sp54.x = thisx->world.pos.x;
-                sp54.y = thisx->world.pos.y + thisx->depthInWater;
-                sp54.z = thisx->world.pos.z;
-                EffectSsGRipple_Spawn(play, &sp54, 70, 500, 0);
-                EffectSsGRipple_Spawn(play, &sp54, 70, 500, 10);
-                sp54.y += 10.0f;
-                EffectSsGSplash_Spawn(play, &sp54, NULL, NULL, 1, 500);
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp54.x, sp54.y, sp54.z, 0, 0, 1, 200);
+                effPos.x = thisx->world.pos.x;
+                effPos.y = thisx->world.pos.y + thisx->depthInWater;
+                effPos.z = thisx->world.pos.z;
+                EffectSsGRipple_Spawn(play, &effPos, 70, 500, 0);
+                EffectSsGRipple_Spawn(play, &effPos, 70, 500, 10);
+                effPos.y += 10.0f;
+                EffectSsGSplash_Spawn(play, &effPos, NULL, NULL, 1, 500);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 0, 0, 1,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMOKE));
                 SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
                 this->unk_1F4 = 0.0f;
                 thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
