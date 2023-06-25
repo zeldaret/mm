@@ -2066,7 +2066,6 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
-// extern UNK_TYPE1 D_801ED890;
 // extern UNK_TYPE1 D_801ED894;
 extern CollisionPoly* D_801ED8B0;
 extern s32 D_801ED8B4;
@@ -2154,11 +2153,6 @@ extern UNK_TYPE D_801F4DDC;
 extern u8 gDisablePlayerCsModeStartPos;
 extern s16 gDungeonBossWarpSceneId;
 
-extern ActorCutscene* sSceneCutsceneList;
-extern s16 sSceneCutsceneCount;
-extern u8 sWaitingCutsceneList[16];
-// extern UNK_TYPE1 D_801F4E08;
-extern u8 sNextCutsceneList[16];
 // extern UNK_TYPE1 D_801F4E20;
 extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E31;
