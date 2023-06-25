@@ -16,7 +16,7 @@ void Overlay_LoadGameState(GameStateOverlay* overlayEntry) {
     }
 
     overlayEntry->loadedRamAddr =
-        Load2_AllocateAndLoad(overlayEntry->vromStart, overlayEntry->vromEnd, vramStart, overlayEntry->vramEnd);
+        Overlay_AllocateAndLoad(overlayEntry->vromStart, overlayEntry->vromEnd, vramStart, overlayEntry->vramEnd);
 
     if (overlayEntry->loadedRamAddr != NULL) {
         overlayEntry->unk_14 = (void*)(uintptr_t)(
