@@ -13,14 +13,20 @@ struct Sample;
 
 typedef s32 (*DmaHandler)(OSPiHandle* handle, OSIoMesg* mb, s32 direction);
 
+typedef enum {
+    /* 0 */ SEQUENCE_TABLE,
+    /* 1 */ FONT_TABLE,
+    /* 2 */ SAMPLE_TABLE
+} SampleBankTableType;
+
 typedef struct {
-    /* 0x00 */ uintptr_t romAddr;
-    /* 0x04 */ size_t size;
-    /* 0x08 */ s8 medium;
-    /* 0x09 */ s8 cachePolicy;
-    /* 0x0A */ s16 shortData1;
-    /* 0x0C */ s16 shortData2;
-    /* 0x0E */ s16 shortData3;
+    /* 0x0 */ uintptr_t romAddr;
+    /* 0x4 */ size_t size;
+    /* 0x8 */ s8 medium;
+    /* 0x9 */ s8 cachePolicy;
+    /* 0xA */ s16 shortData1;
+    /* 0xC */ s16 shortData2;
+    /* 0xE */ s16 shortData3;
 } AudioTableEntry; // size = 0x10
 
 typedef struct {
@@ -54,13 +60,6 @@ typedef enum {
     /* 3 */ CACHE_LOAD_EITHER,
     /* 4 */ CACHE_LOAD_EITHER_NOSYNC
 } AudioCacheLoadType;
-
-typedef enum {
-    /* 0 */ SEQUENCE_TABLE,
-    /* 1 */ FONT_TABLE,
-    /* 2 */ SAMPLE_TABLE
-} SampleBankTableType;
-
 
 typedef struct {
     /* 0x00 */ s8 status;
