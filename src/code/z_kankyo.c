@@ -1208,8 +1208,7 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
     }
 }
 
-void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
-                   EnvLightSettings* lightSettings) {
+void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings, EnvLightSettings* lightSettings) {
     s32 phi_t1;
     s32 temp_v1_2;
     s32 temp_v1 = (arg1 % 4);
@@ -1227,7 +1226,8 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
             adjLightSettings->fogColor[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].fogColor[phi_t1] - lightSettings[temp_v1].fogColor[phi_t1];
         }
-        adjLightSettings->fogNear = lightSettings[temp_v1_2 + temp_v1].blendRateAndFogNear - lightSettings[temp_v1].blendRateAndFogNear;
+        adjLightSettings->fogNear =
+            lightSettings[temp_v1_2 + temp_v1].blendRateAndFogNear - lightSettings[temp_v1].blendRateAndFogNear;
     }
 
     if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
@@ -1311,86 +1311,105 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     ((gSaveContext.skyboxTime < sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime) ||
                      sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime == 0xFFFF)) {
 
-                        func_800F6CEC(play, sp97, &spA4[0], lightSettingsList);
-                        func_800F6CEC(play, sp95, &spA4[1], lightSettingsList);
-                        func_800F6CEC(play, sp96, &spA4[2], lightSettingsList);
-                        func_800F6CEC(play, sp94, &spA4[3], lightSettingsList);
+                    func_800F6CEC(play, sp97, &spA4[0], lightSettingsList);
+                    func_800F6CEC(play, sp95, &spA4[1], lightSettingsList);
+                    func_800F6CEC(play, sp96, &spA4[2], lightSettingsList);
+                    func_800F6CEC(play, sp94, &spA4[3], lightSettingsList);
 
-                        if ((sp94 >= envCtx->numLightSettings) && (D_801BDBA8 == 0)) {
-                            D_801BDBA8 = 1;
+                    if ((sp94 >= envCtx->numLightSettings) && (D_801BDBA8 == 0)) {
+                        D_801BDBA8 = 1;
+                    }
+
+                    if ((sp97 >= envCtx->numLightSettings) || (sp95 >= envCtx->numLightSettings) ||
+                        (sp96 >= envCtx->numLightSettings) || (sp94 >= envCtx->numLightSettings)) {
+                        sp97 = 0;
+                        sp95 = 0;
+                        sp96 = 0;
+                        sp94 = 0;
+                    }
+
+                    temp_fv0 = Environment_LerpWeight(sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime,
+                                                      sTimeBasedLightConfigs[envCtx->lightConfig][i].startTime,
+                                                      ((void)0, gSaveContext.skyboxTime));
+
+                    sSandstormColorIndex = sp97 & 3;
+                    sNextSandstormColorIndex = sp95 & 3;
+                    sSandstormLerpScale = temp_fv0;
+
+                    if (envCtx->changeLightEnabled) {
+                        var_fs3 = (envCtx->changeDuration - (f32)envCtx->changeLightTimer) / envCtx->changeDuration;
+                        envCtx->changeLightTimer--;
+
+                        if (envCtx->changeLightTimer <= 0) {
+                            envCtx->changeLightEnabled = false;
+                            envCtx->lightConfig = envCtx->changeLightNextConfig;
                         }
+                    }
 
-                        if ((sp97 >= envCtx->numLightSettings) || (sp95 >= envCtx->numLightSettings) || (sp96 >= envCtx->numLightSettings) || (sp94 >= envCtx->numLightSettings)) {
-                            sp97 = 0;
-                            sp95 = 0;
-                            sp96 = 0;
-                            sp94 = 0;
-                        }
+                    for (j = 0; j < 3; j++) {
+                        sp90[0] =
+                            func_800F6EA4(lightSettingsList[sp95].ambientColor[j] + spA4[1].ambientColor[j],
+                                          lightSettingsList[sp97].ambientColor[j] + spA4[0].ambientColor[j], temp_fv0);
+                        sp90[1] =
+                            func_800F6EA4(lightSettingsList[sp94].ambientColor[j] + spA4[3].ambientColor[j],
+                                          lightSettingsList[sp96].ambientColor[j] + spA4[2].ambientColor[j], temp_fv0);
+                        envCtx->lightSettings.ambientColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                    }
 
-                        temp_fv0 = Environment_LerpWeight(sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime,
-                                                   sTimeBasedLightConfigs[envCtx->lightConfig][i].startTime,
-                                                   ((void)0, gSaveContext.skyboxTime));
+                    if (Environment_IsSceneUpsideDown(play)) {
+                        var_v0 = ((void)0, gSaveContext.save.time) + 0x8000;
+                    } else {
+                        var_v0 = ((void)0, gSaveContext.save.time);
+                    }
+                    temp_s0_2 = var_v0 - 0x8000;
 
-                        sSandstormColorIndex = sp97 & 3;
-                        sNextSandstormColorIndex = sp95 & 3;
-                        sSandstormLerpScale = temp_fv0;
+                    envCtx->lightSettings.diffuseDir1[0] = -(Math_SinS(temp_s0_2) * 120.0f);
+                    envCtx->lightSettings.diffuseDir1[1] = Math_CosS(temp_s0_2) * 120.0f;
+                    envCtx->lightSettings.diffuseDir1[2] = Math_CosS(temp_s0_2) * 20.0f;
 
-                        if (envCtx->changeLightEnabled) {
-                            var_fs3 = (envCtx->changeDuration - (f32)envCtx->changeLightTimer) / envCtx->changeDuration;
-                            envCtx->changeLightTimer--;
+                    envCtx->lightSettings.diffusePos2[0] = -envCtx->lightSettings.diffuseDir1[0];
+                    envCtx->lightSettings.diffusePos2[1] = -envCtx->lightSettings.diffuseDir1[1];
+                    envCtx->lightSettings.diffusePos2[2] = -envCtx->lightSettings.diffuseDir1[2];
 
-                            if (envCtx->changeLightTimer <= 0) {
-                                envCtx->changeLightEnabled = false;
-                                envCtx->lightConfig = envCtx->changeLightNextConfig;
-                            }
-                        }
+                    for (j = 0; j < 3; j++) {
+                        sp90[0] = func_800F6EA4(lightSettingsList[sp95].diffuseColor1[j] + spA4[1].diffuseColor1[j],
+                                                lightSettingsList[sp97].diffuseColor1[j] + spA4[0].diffuseColor1[j],
+                                                temp_fv0);
+                        sp90[1] = func_800F6EA4(lightSettingsList[sp94].diffuseColor1[j] + spA4[3].diffuseColor1[j],
+                                                lightSettingsList[sp96].diffuseColor1[j] + spA4[2].diffuseColor1[j],
+                                                temp_fv0);
+                        envCtx->lightSettings.diffuseColor1[j] = LERP(sp90[0], sp90[1], var_fs3);
 
-                        for (j = 0; j < 3; j++) {
-                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].ambientColor[j] + spA4[1].ambientColor[j], lightSettingsList[sp97].ambientColor[j] + spA4[0].ambientColor[j], temp_fv0);
-                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].ambientColor[j] + spA4[3].ambientColor[j], lightSettingsList[sp96].ambientColor[j] + spA4[2].ambientColor[j], temp_fv0);
-                            envCtx->lightSettings.ambientColor[j] = LERP(sp90[0], sp90[1], var_fs3);
-                        }
+                        sp90[0] =
+                            func_800F6EA4(lightSettingsList[sp95].diffuseColor[j] + spA4[1].diffuseColor2[j],
+                                          lightSettingsList[sp97].diffuseColor[j] + spA4[0].diffuseColor2[j], temp_fv0);
+                        sp90[1] =
+                            func_800F6EA4(lightSettingsList[sp94].diffuseColor[j] + spA4[3].diffuseColor2[j],
+                                          lightSettingsList[sp96].diffuseColor[j] + spA4[2].diffuseColor2[j], temp_fv0);
+                        envCtx->lightSettings.diffuseColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                    }
 
-                        if (Environment_IsSceneUpsideDown(play)) {
-                            var_v0 = ((void)0, gSaveContext.save.time) + 0x8000;
-                        } else {
-                            var_v0 = ((void)0, gSaveContext.save.time);
-                        }
-                        temp_s0_2 = var_v0 - 0x8000;
+                    for (j = 0; j < 3; j++) {
+                        sp90[0] = func_800F6EA4(lightSettingsList[sp95].fogColor[j] + spA4[1].fogColor[j],
+                                                lightSettingsList[sp97].fogColor[j] + spA4[0].fogColor[j], temp_fv0);
+                        sp90[1] = func_800F6EA4(lightSettingsList[sp94].fogColor[j] + spA4[3].fogColor[j],
+                                                lightSettingsList[sp96].fogColor[j] + spA4[2].fogColor[j], temp_fv0);
+                        envCtx->lightSettings.fogColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                    }
 
-                        envCtx->lightSettings.diffuseDir1[0] = -(Math_SinS(temp_s0_2) * 120.0f);
-                        envCtx->lightSettings.diffuseDir1[1] = Math_CosS(temp_s0_2) * 120.0f;
-                        envCtx->lightSettings.diffuseDir1[2] = Math_CosS(temp_s0_2) * 20.0f;
+                    sp8C[0] =
+                        LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp97].blendRateAndFogNear),
+                               ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp95].blendRateAndFogNear), temp_fv0);
+                    sp8C[1] =
+                        LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp96].blendRateAndFogNear),
+                               ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp94].blendRateAndFogNear), temp_fv0);
+                    envCtx->lightSettings.fogNear = LERP16(sp8C[0], sp8C[1], var_fs3);
 
-                        envCtx->lightSettings.diffusePos2[0] = -envCtx->lightSettings.diffuseDir1[0];
-                        envCtx->lightSettings.diffusePos2[1] = -envCtx->lightSettings.diffuseDir1[1];
-                        envCtx->lightSettings.diffusePos2[2] = -envCtx->lightSettings.diffuseDir1[2];
+                    sp8C[0] = LERP16(lightSettingsList[sp97].zFar, lightSettingsList[sp95].zFar, temp_fv0);
+                    sp8C[1] = LERP16(lightSettingsList[sp96].zFar, lightSettingsList[sp94].zFar, temp_fv0);
+                    envCtx->lightSettings.zFar = LERP16(sp8C[0], sp8C[1], var_fs3);
 
-                        for (j = 0; j < 3; j++) {
-                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].diffuseColor1[j] + spA4[1].diffuseColor1[j], lightSettingsList[sp97].diffuseColor1[j] + spA4[0].diffuseColor1[j], temp_fv0);
-                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].diffuseColor1[j] + spA4[3].diffuseColor1[j], lightSettingsList[sp96].diffuseColor1[j] + spA4[2].diffuseColor1[j], temp_fv0);
-                            envCtx->lightSettings.diffuseColor1[j] = LERP(sp90[0], sp90[1], var_fs3);
-
-                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].diffuseColor[j] + spA4[1].diffuseColor2[j], lightSettingsList[sp97].diffuseColor[j] + spA4[0].diffuseColor2[j], temp_fv0);
-                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].diffuseColor[j] + spA4[3].diffuseColor2[j], lightSettingsList[sp96].diffuseColor[j] + spA4[2].diffuseColor2[j], temp_fv0);
-                            envCtx->lightSettings.diffuseColor[j] = LERP(sp90[0], sp90[1], var_fs3);
-                        }
-
-                        for (j = 0; j < 3; j++) {
-                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].fogColor[j] + spA4[1].fogColor[j], lightSettingsList[sp97].fogColor[j] + spA4[0].fogColor[j], temp_fv0);
-                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].fogColor[j] + spA4[3].fogColor[j], lightSettingsList[sp96].fogColor[j] + spA4[2].fogColor[j], temp_fv0);
-                            envCtx->lightSettings.fogColor[j] = LERP(sp90[0], sp90[1], var_fs3);
-                        }
-
-                        sp8C[0] = LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp97].blendRateAndFogNear), ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp95].blendRateAndFogNear), temp_fv0);
-                        sp8C[1] = LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp96].blendRateAndFogNear), ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp94].blendRateAndFogNear), temp_fv0);
-                        envCtx->lightSettings.fogNear = LERP16(sp8C[0], sp8C[1], var_fs3);
-
-                        sp8C[0] = LERP16(lightSettingsList[sp97].zFar, lightSettingsList[sp95].zFar, temp_fv0);
-                        sp8C[1] = LERP16(lightSettingsList[sp96].zFar, lightSettingsList[sp94].zFar, temp_fv0);
-                        envCtx->lightSettings.zFar = LERP16(sp8C[0], sp8C[1], var_fs3);
-
-                        break;
+                    break;
                 }
             }
         } else {
@@ -1407,11 +1426,13 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     envCtx->lightSettings.diffuseColor[i] = lightSettingsList[envCtx->lightSetting].diffuseColor[i];
                     envCtx->lightSettings.fogColor[i] = lightSettingsList[envCtx->lightSetting].fogColor[i];
                 }
-                envCtx->lightSettings.fogNear = ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear);
+                envCtx->lightSettings.fogNear =
+                    ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear);
                 envCtx->lightSettings.zFar = lightSettingsList[envCtx->lightSetting].zFar;
                 envCtx->lightBlend = 1.0f;
             } else {
-                var_v0_3 = ENV_LIGHT_SETTINGS_BLEND_RATE_U8(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear);
+                var_v0_3 =
+                    ENV_LIGHT_SETTINGS_BLEND_RATE_U8(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear);
 
                 if (var_v0_3 == 0) {
                     var_v0_3++;
@@ -1430,32 +1451,31 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 }
 
                 for (i = 0; i < 3; i++) {
-                        envCtx->lightSettings.ambientColor[i] =
-                            LERP(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
-                                 lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
-                        envCtx->lightSettings.diffuseDir1[i] =
-                            LERP(lightSettingsList[envCtx->prevLightSetting].diffuseDir1[i],
-                                   lightSettingsList[envCtx->lightSetting].diffuseDir1[i], envCtx->lightBlend);
-                        envCtx->lightSettings.diffuseColor1[i] =
-                            LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor1[i],
-                                 lightSettingsList[envCtx->lightSetting].diffuseColor1[i], envCtx->lightBlend);
-                        envCtx->lightSettings.diffusePos2[i] =
-                            LERP(lightSettingsList[envCtx->prevLightSetting].diffusePos2[i],
-                                   lightSettingsList[envCtx->lightSetting].diffusePos2[i], envCtx->lightBlend);
-                        envCtx->lightSettings.diffuseColor[i] =
-                            LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor[i],
-                                 lightSettingsList[envCtx->lightSetting].diffuseColor[i], envCtx->lightBlend);
-                        envCtx->lightSettings.fogColor[i] =
-                            LERP(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
-                                 lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
-                    }
-                    envCtx->lightSettings.fogNear = LERP16(
-                        ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->prevLightSetting].blendRateAndFogNear),
-                        ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear),
-                        envCtx->lightBlend);
-                    envCtx->lightSettings.zFar =
-                        LERP16(lightSettingsList[envCtx->prevLightSetting].zFar,
-                               lightSettingsList[envCtx->lightSetting].zFar, envCtx->lightBlend);
+                    envCtx->lightSettings.ambientColor[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
+                             lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
+                    envCtx->lightSettings.diffuseDir1[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].diffuseDir1[i],
+                             lightSettingsList[envCtx->lightSetting].diffuseDir1[i], envCtx->lightBlend);
+                    envCtx->lightSettings.diffuseColor1[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor1[i],
+                             lightSettingsList[envCtx->lightSetting].diffuseColor1[i], envCtx->lightBlend);
+                    envCtx->lightSettings.diffusePos2[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].diffusePos2[i],
+                             lightSettingsList[envCtx->lightSetting].diffusePos2[i], envCtx->lightBlend);
+                    envCtx->lightSettings.diffuseColor[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor[i],
+                             lightSettingsList[envCtx->lightSetting].diffuseColor[i], envCtx->lightBlend);
+                    envCtx->lightSettings.fogColor[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
+                             lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
+                }
+                envCtx->lightSettings.fogNear =
+                    LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->prevLightSetting].blendRateAndFogNear),
+                           ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear),
+                           envCtx->lightBlend);
+                envCtx->lightSettings.zFar = LERP16(lightSettingsList[envCtx->prevLightSetting].zFar,
+                                                    lightSettingsList[envCtx->lightSetting].zFar, envCtx->lightBlend);
             }
         }
     }
@@ -1468,7 +1488,8 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
         } else if ((s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]) < 0) {
             lightCtx->ambientColor[i] = 0;
         } else {
-            lightCtx->ambientColor[i] = (s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]);
+            lightCtx->ambientColor[i] =
+                (s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]);
         }
 
         if ((s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]) > 255) {
@@ -1524,10 +1545,12 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
         lightCtx->zFar = ENV_ZFAR_MAX;
     }
 
-    if ((envCtx->dirLight1.params.dir.x == 0) && (envCtx->dirLight1.params.dir.y == 0) && (envCtx->dirLight1.params.dir.z == 0)) {
+    if ((envCtx->dirLight1.params.dir.x == 0) && (envCtx->dirLight1.params.dir.y == 0) &&
+        (envCtx->dirLight1.params.dir.z == 0)) {
         envCtx->dirLight1.params.dir.x = 1;
     }
-    if ((envCtx->dirLight2.params.dir.x == 0) && (envCtx->dirLight2.params.dir.y == 0) && (envCtx->dirLight2.params.dir.z == 0)) {
+    if ((envCtx->dirLight2.params.dir.x == 0) && (envCtx->dirLight2.params.dir.y == 0) &&
+        (envCtx->dirLight2.params.dir.z == 0)) {
         envCtx->dirLight2.params.dir.x = 1;
     }
 }
@@ -2650,39 +2673,54 @@ void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, 
     }
 }
 
-Color_RGB8 sSandstormPrimColors[] = {
-    { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 },
-    { 210, 156, 85 },  { 255, 200, 100 }, { 225, 160, 50 },  { 105, 90, 40 },
+u8 sSandstormPrimColors[] = {
+    255, 255, 255, //
+    255, 255, 255, //
+    255, 255, 255, //
+    255, 255, 255, //
+    210, 156, 85,  //
+    255, 200, 100, //
+    225, 160, 50,  //
+    105, 90,  40,  //
 };
 
-Color_RGB8 sSandstormEnvColors[] = {
-    { 100, 100, 100 }, { 100, 100, 100 }, { 100, 100, 100 }, { 100, 100, 100 },
-    { 155, 106, 35 },  { 200, 150, 50 },  { 170, 110, 0 },   { 50, 40, 0 },
+u8 sSandstormEnvColors[] = {
+    100, 100, 100, //
+    100, 100, 100, //
+    100, 100, 100, //
+    100, 100, 100, //
+    155, 106, 35,  //
+    200, 150, 50,  //
+    170, 110, 0,   //
+    50,  40,  0,   //
 };
 
-#ifdef NON_EQUIVALENT
+#define F32_LERP_ALT(v0, v1, t) ((f32)(v0) * (1.0f - (t)) + (t) * (f32)(v1))
+
 void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
-    s32 primA1;
-    s32 envA1;
+    s32 primA1 = 0;
+    s32 envA1 = 0;
     s32 primA = play->envCtx.sandstormPrimA;
     s32 envA = play->envCtx.sandstormEnvA;
-    f32 sp98;
+    s32 step = 9;
     u16 sp96;
     u16 sp94;
     u16 sp92;
     Color_RGBA8 primColor;
     Color_RGBA8 envColor;
     s32 index;
-    s32 pad[2];
+    f32 sp98;
+    s32 pad;
 
     switch (sandstormState) {
         case SANDSTORM_ACTIVE:
-            envA1 = 128; // TODO: Bottom?
+            if(1){}
             primA1 = play->state.frames % 128;
             if (primA1 > 128) {
                 primA1 = 255 - primA1;
             }
             primA1 += 73;
+            envA1 = 255;
             break;
 
         case SANDSTORM_FILL:
@@ -2708,7 +2746,6 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             break;
 
         case SANDSTORM_DISSIPATE:
-            envA1 = 0;
             primA1 = (play->envCtx.sandstormEnvA > 128) ? 255 : play->envCtx.sandstormEnvA >> 1;
 
             if (primA == 0) {
@@ -2718,67 +2755,70 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
         case SANDSTORM_6:
         case SANDSTORM_8:
-            envA1 = 1;
             primA1 = D_801F4E30;
+            envA1 = D_801F4E30;
+            step = 1;
             if (sandstormState == SANDSTORM_8) {
-                envA1 = 0xA;
+                step = 0xA;
             }
             break;
 
         case SANDSTORM_7:
         case SANDSTORM_9:
-            envA1 = 1;
-            if (play->envCtx.sandstormPrimA == 0) {
+            step = 1;
+            if (primA == 0) {
                 play->envCtx.sandstormState = SANDSTORM_OFF;
             }
             if (sandstormState == SANDSTORM_9) {
-                envA1 = 0xA;
+                step = 0xA;
             }
             break;
 
         case SANDSTORM_A:
-            envA1 = 0xFF;
+            step = 255;
             primA1 = D_801F4E30;
-            if (play->envCtx.sandstormPrimA == 0) {
+            envA1 = D_801F4E30;
+            if (primA == 0) {
                 play->envCtx.sandstormState = SANDSTORM_OFF;
             }
             break;
 
         case SANDSTORM_B:
-            envA1 = 0x80;
             primA1 = play->state.frames & 0x7F;
             if (primA1 >= 0x41) {
                 primA1 = 0x80 - primA1;
             }
-            primA1 = primA1 + 0x49;
+            primA1 += 0x49;
+            envA1 = 0x80;
             break;
 
         case SANDSTORM_C:
-            if (play->envCtx.sandstormPrimA == 0) {
+            if (primA == 0) {
                 play->envCtx.sandstormState = SANDSTORM_OFF;
             }
             break;
 
         case SANDSTORM_D:
-            envA1 = 0xA;
             primA1 = D_801F4E30;
+            envA1 = D_801F4E30;
+            step = 0xA;
             break;
     }
 
-    if (ABS_ALT(primA - primA1) < 9) {
+    if (ABS_ALT(primA - primA1) < step) {
         primA = primA1;
     } else if (primA1 < primA) {
-        primA = primA - 9;
+        primA -= step;
     } else {
-        primA = primA + 9;
+        primA += step;
     }
 
-    if (ABS_ALT(envA - envA1) < 9) {
+    if (ABS_ALT(envA - envA1) < step) {
         envA = envA1;
     } else if (envA1 < envA) {
-        envA = envA - 9;
+        envA -= step;
     } else {
-        envA = envA + 9;
+        envA += step;
     }
 
     play->envCtx.sandstormPrimA = primA;
@@ -2793,46 +2833,46 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
     if (play->envCtx.sandstormPrimA != 0) {
         index = 0;
         if (sandstormState >= SANDSTORM_B) {
-            index = 0xC;
+            index = 4 * 3;
         }
 
         if ((play->envCtx.lightMode != LIGHT_MODE_TIME) ||
             (play->envCtx.lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE)) {
-            primColor.r = sSandstormPrimColors[1 + index].r;
-            primColor.g = sSandstormPrimColors[1 + index].g;
-            primColor.b = sSandstormPrimColors[1 + index].b;
-            envColor.r = sSandstormEnvColors[1 + index].r;
-            envColor.g = sSandstormEnvColors[1 + index].g;
-            envColor.b = sSandstormEnvColors[1 + index].b;
+            primColor.r = sSandstormPrimColors[index + 1 * 3 + 0];
+            primColor.g = sSandstormPrimColors[index + 1 * 3 + 1];
+            primColor.b = sSandstormPrimColors[index + 1 * 3 + 2];
+            envColor.r = sSandstormEnvColors[index + 1 * 3 + 0];
+            envColor.g = sSandstormEnvColors[index + 1 * 3 + 1];
+            envColor.b = sSandstormEnvColors[index + 1 * 3 + 2];
         } else if (sSandstormColorIndex == sNextSandstormColorIndex) {
-            primColor.r = sSandstormPrimColors[sSandstormColorIndex + index].r;
-            primColor.g = sSandstormPrimColors[sSandstormColorIndex + index].g;
-            primColor.b = sSandstormPrimColors[sSandstormColorIndex + index].b;
-            envColor.r = sSandstormEnvColors[sSandstormColorIndex + index].r;
-            envColor.g = sSandstormEnvColors[sSandstormColorIndex + index].g;
-            envColor.b = sSandstormEnvColors[sSandstormColorIndex + index].b;
+            primColor.r = sSandstormPrimColors[sSandstormColorIndex * 3 + index + 0];
+            primColor.g = sSandstormPrimColors[sSandstormColorIndex * 3 + index + 1];
+            primColor.b = sSandstormPrimColors[sSandstormColorIndex * 3 + index + 2];
+            envColor.r = sSandstormEnvColors[sSandstormColorIndex * 3 + index + 0];
+            envColor.g = sSandstormEnvColors[sSandstormColorIndex * 3 + index + 1];
+            envColor.b = sSandstormEnvColors[sSandstormColorIndex * 3 + index + 2];
         } else {
-            primColor.r = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].r,
-                                        sSandstormPrimColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
-            primColor.g = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].g,
-                                        sSandstormPrimColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
-            primColor.b = (s32)F32_LERP(sSandstormPrimColors[sSandstormColorIndex + index].b,
-                                        sSandstormPrimColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
-            envColor.r = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].r,
-                                       sSandstormEnvColors[sNextSandstormColorIndex + index].r, sSandstormLerpScale);
-            envColor.g = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].g,
-                                       sSandstormEnvColors[sNextSandstormColorIndex + index].g, sSandstormLerpScale);
-            envColor.b = (s32)F32_LERP(sSandstormEnvColors[sSandstormColorIndex + index].b,
-                                       sSandstormEnvColors[sNextSandstormColorIndex + index].b, sSandstormLerpScale);
+            primColor.r = (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 0],
+                                        sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 0], sSandstormLerpScale);
+            primColor.g = (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 1],
+                                        sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 1], sSandstormLerpScale);
+            primColor.b = (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 2],
+                                        sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 2], sSandstormLerpScale);
+            envColor.r = (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 0],
+                                       sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 0], sSandstormLerpScale);
+            envColor.g = (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 1],
+                                       sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 1], sSandstormLerpScale);
+            envColor.b = (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 2],
+                                       sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 2], sSandstormLerpScale);
         }
 
         envColor.r = ((envColor.r * sp98) + ((6.0f - sp98) * primColor.r)) * (1.0f / 6.0f);
         envColor.g = ((envColor.g * sp98) + ((6.0f - sp98) * primColor.g)) * (1.0f / 6.0f);
         envColor.b = ((envColor.b * sp98) + ((6.0f - sp98) * primColor.b)) * (1.0f / 6.0f);
 
-        sp96 = (u32)(sSandstormScroll * (11.0f / 6.0f));
-        sp94 = (u32)(sSandstormScroll * (9.0f / 6.0f));
-        sp92 = (u32)(sSandstormScroll * (6.0f / 6.0f));
+        sp96 = (sSandstormScroll * (11.0f / 6.0f));
+        sp94 = (sSandstormScroll * (9.0f / 6.0f));
+        sp92 = (sSandstormScroll * (6.0f / 6.0f));
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -2853,9 +2893,6 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
     sSandstormScroll += (s32)sp98;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSandstorm.s")
-#endif
 
 s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
     f32 temp;
