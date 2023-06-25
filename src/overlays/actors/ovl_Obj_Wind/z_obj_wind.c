@@ -81,65 +81,64 @@ static sD_80B2448C D_80B2448C[] = {
 
 static s32 D_80B245CC = 0xFFFFFFFF;
 
-#ifdef NON_MATCHING
 void ObjWind_Update(Actor* thisx, PlayState* play) {
     ObjWind* this = (ObjWind*)thisx;
+    sD_80B2448C* entry = &D_80B2448C[(this->actor.params >> 7) & 0x1F];
     Player* player;
-    f32 cosX;
-    f32 sinYTimesX;
-    Vec3f posCopy;
+    f32 cosYTimesX; // sp80
+    f32 cosX; // sp7C
+    f32 sinYTimesX; // sp78
+    Vec3f posCopy; // sp6C;
     Vec3f sp60;
     Vec3f sp54;
-    f32 sinX;
-    f32 sp40;
-    f32 temp_fa0;
-    f32 temp_fa1_2;
-    f32 temp_ft0;
-    f32 cosYTimesX;
-    f32 temp_ft4;
-    f32 temp_ft4_2;
-    f32 temp_fv0;
-    f32 dist;
-    f32 var_fa0;
-    sD_80B2448C* entry;
+    f32 dist; // sp50
+    f32 temp_fv0; // sp4C
 
-    entry = &D_80B2448C[(this->actor.params >> 7) & 0x1F];
     if (D_80B245CC != DREG(85)) {
         if ((DREG(85) >= 0) && (DREG(85) < 0x20)) {
-            gRegEditor->data[0x2F0] = D_80B2448C[DREG(85)].unk_0;
-            gRegEditor->data[0x2F1] = D_80B2448C[DREG(85)].unk_2;
-            gRegEditor->data[0x2F2] = D_80B2448C[DREG(85)].unk_4;
-            gRegEditor->data[0x2F3] = D_80B2448C[DREG(85)].unk_6;
-            gRegEditor->data[0x2F4] = D_80B2448C[DREG(85)].unk_8;
+            DREG(80) = D_80B2448C[DREG(85)].unk_0;
+            DREG(81) = D_80B2448C[DREG(85)].unk_2;
+            DREG(82) = D_80B2448C[DREG(85)].unk_4;
+            DREG(83) = D_80B2448C[DREG(85)].unk_6;
+            DREG(84) = D_80B2448C[DREG(85)].unk_8;
             D_80B245CC = DREG(85);
         }
     } else {
-        D_80B2448C[DREG(85)].unk_0 = gRegEditor->data[0x2F0];
-        D_80B2448C[DREG(85)].unk_2 = gRegEditor->data[0x2F1];
-        D_80B2448C[DREG(85)].unk_4 = gRegEditor->data[0x2F2];
-        D_80B2448C[DREG(85)].unk_6 = gRegEditor->data[0x2F3];
-        D_80B2448C[DREG(85)].unk_8 = gRegEditor->data[0x2F4];
+        D_80B2448C[DREG(85)].unk_0 = DREG(80);
+        D_80B2448C[DREG(85)].unk_2 = DREG(81);
+        D_80B2448C[DREG(85)].unk_4 = DREG(82);
+        D_80B2448C[DREG(85)].unk_6 = DREG(83);
+        D_80B2448C[DREG(85)].unk_8 = DREG(84);
     }
     if (((this->actor.params & 0x7F) == 0x7F) || !Flags_GetSwitch(play, this->actor.params & 0x7F)) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&posCopy, &this->actor.world.pos);
         cosX = Math_CosS(this->actor.shape.rot.x);
-        sinX = Math_SinS(this->actor.shape.rot.x);
-        sinYTimesX = Math_SinS(this->actor.shape.rot.y) * sinX;
-        cosYTimesX = Math_CosS(this->actor.shape.rot.y) * sinX;
+        dist = Math_SinS(this->actor.shape.rot.x);
+        sinYTimesX = Math_SinS(this->actor.shape.rot.y) * dist;
+        cosYTimesX = Math_CosS(this->actor.shape.rot.y) * dist;
         temp_fv0 = func_80179A44(&posCopy, &player->actor.world, &sp60);
         if ((temp_fv0 >= 0.0f) && (temp_fv0 < entry->unk_0)) {
             dist = Math_Vec3f_DistXYZAndStoreDiff(&player->actor.world.pos, &sp60, &sp54);
             if (dist < entry->unk_2) {
-                const float one = 1.0f;
+                f32 var_fa0;
+                f32 temp_ft4 = 1.0f;
+                f32 sp40;
+                f32 temp_ft0; // sp3C
+                f32 temp_fa1_2; // sp38
+                f32 temp_ft4_2; // sp34
+                f32 temp_fa0; // sp30
+
                 var_fa0 = 1.0f - temp_fv0 / entry->unk_0;
                 sp40 = ((f32)entry->unk_4 / 100.0f) *
                        ((var_fa0 * (1.0f - dist / entry->unk_2)) + ((f32)entry->unk_8 / 100.0f));
                 if (0.8f < temp_fv0 / entry->unk_0) {
-                    var_fa0 = one - 1.0f;
+                    var_fa0 = temp_ft4 - 1.0f;
                 }
                 temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (dist / entry->unk_2 * var_fa0);
                 if (dist != 0.0f) {
+                    // FAKE:
+                    if (1) {}
                     dist = 1.0f / dist;
                 }
                 temp_ft0 *= dist;
@@ -148,7 +147,9 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
                 temp_fa0 = (cosYTimesX * sp40) + (sp54.z * temp_ft0);
                 player->windSpeed = sqrtf(SQ(temp_fa1_2) + SQ(temp_ft4_2) + SQ(temp_fa0));
                 player->windAngleY = Math_Atan2S_XY(temp_fa0, temp_fa1_2);
-                player->windAngleX = Math_Atan2S_XY(sqrtf(SQ(temp_fa1_2) + SQ(temp_fa0)), temp_ft4_2);
+
+                temp_ft4 = sqrtf(SQ(temp_fa1_2) + SQ(temp_fa0));
+                player->windAngleX = Math_Atan2S_XY(temp_ft4, temp_ft4_2);
             }
         }
     }
@@ -156,9 +157,6 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
     this->actor.scale.z = (f32)entry->unk_2 / 50.0f;
     this->actor.scale.y = (f32)entry->unk_0 / 400.0f;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Wind/ObjWind_Update.s")
-#endif
 
 void ObjWind_Draw(Actor* thisx, PlayState* play) {
     ObjWind* this = (ObjWind*)thisx;

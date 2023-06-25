@@ -3651,11 +3651,7 @@ beginseg
     name "ovl_Obj_Wind"
     compress
     include "build/src/overlays/actors/ovl_Obj_Wind/z_obj_wind.o"
-    #ifdef NON_MATCHING
-        include "build/src/overlays/actors/ovl_Obj_Wind/ovl_Obj_Wind_reloc.o"
-    #else 
-        include "build/data/ovl_Obj_Wind/ovl_Obj_Wind.reloc.o"
-    #endif
+    include "build/src/overlays/actors/ovl_Obj_Wind/ovl_Obj_Wind_reloc.o"
 endseg
 
 beginseg
