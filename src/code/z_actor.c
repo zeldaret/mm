@@ -5,8 +5,8 @@
 
 #include "global.h"
 #include "sys_cfb.h"
+#include "loadfragment.h"
 #include "z64horse.h"
-#include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -1371,7 +1371,8 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 s32 func_800B7200(Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
+    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
+           (player->csMode != PLAYER_CSMODE_NONE);
 }
 
 void Actor_SpawnHorse(PlayState* play, Player* player) {
@@ -1381,13 +1382,14 @@ void Actor_SpawnHorse(PlayState* play, Player* player) {
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_0))) {
+    if ((player->csMode == PLAYER_CSMODE_5) ||
+        ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_NONE))) {
         return false;
     }
 
     player->csMode = csMode;
-    player->unk_398 = actor;
-    player->doorBgCamIndex = 0;
+    player->csActor = actor;
+    player->unk_3BA = false;
     return true;
 }
 
@@ -1395,7 +1397,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->doorBgCamIndex = 1;
+        player->unk_3BA = true;
         return true;
     }
     return false;
@@ -3158,7 +3160,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     ActorOverlay* overlayEntry = &gActorOverlayTable[index];
     ActorInit* actorInit;
 
-    overlaySize = VRAM_PTR_SIZE(overlayEntry);
+    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
     if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
@@ -3179,14 +3181,15 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
-                              overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
+                         overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 
         actorInit = (uintptr_t)(
             (overlayEntry->initInfo != NULL)
-                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
+                ? (void*)((uintptr_t)overlayEntry->initInfo -
+                          (intptr_t)((uintptr_t)overlayEntry->vramStart - (uintptr_t)overlayEntry->loadedRamAddr))
                 : NULL);
     }
 

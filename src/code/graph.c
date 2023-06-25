@@ -102,7 +102,7 @@ void* Graph_FaultAddrConv(void* address, void* param) {
     s32 i;
 
     for (i = 0; i < gGraphNumGameStates; i++, gameStateOvl++) {
-        diff = VRAM_PTR_SIZE(gameStateOvl);
+        diff = (uintptr_t)gameStateOvl->vramEnd - (uintptr_t)gameStateOvl->vramStart;
         ramStart = gameStateOvl->loadedRamAddr;
         ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
