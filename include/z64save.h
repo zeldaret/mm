@@ -603,8 +603,15 @@ typedef enum {
 #define WEEKEVENTREG_08_10 PACK_WEEKEVENTREG_FLAG(8, 0x10)
 #define WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE PACK_WEEKEVENTREG_FLAG(8, 0x20)
 
-// Related to final hours
-#define WEEKEVENTREG_08_40 PACK_WEEKEVENTREG_FLAG(8, 0x40)
+// This is set under three circumstances:
+// 1. The player watches the cutscene of the Clock Tower opening.
+// 2. The player sees the Clock Tower opening outside of a cutscene. After the first cycle, this
+//    can be seen in Termina Field or in North, East, or West Clock Town.
+// 3. The player enters Termina Field or North, South, East, or West Clock Town any time after
+//    midnight on the Final Day.
+// Thus, it is possible for the player to be in the final six hours and still have this unset; all
+// the player needs to do is avoid certain areas.
+#define WEEKEVENTREG_CLOCK_TOWER_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
 
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
