@@ -65,7 +65,7 @@ typedef struct LightsBuffer {
 
 typedef struct LightContext {
     /* 0x0 */ LightNode* listHead;
-    /* 0x4 */ Color_RGB8 ambient;
+    /* 0x4 */ u8 ambientColor[3];
     /* 0x7 */ u8 fogColor[3];
     /* 0xA */ s16 fogNear; // how close until fog starts taking effect. range 0 - 996
     /* 0xC */ s16 zFar; // draw distance. range 0 - 12800

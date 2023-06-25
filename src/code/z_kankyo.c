@@ -21,6 +21,8 @@ typedef enum {
     /* 0xFF */ LIGHTNING_BOLT_INACTIVE = 0xFF
 } LightningBoltState;
 
+#define LERP(x, y, t) (((y) - (x)) * (t) + (x))
+
 // Bss
 u8 D_801F4E30;
 u8 D_801F4E31;
@@ -1016,7 +1018,8 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
                         skyboxBlend = 0;
                     }
 
-                    if ((envCtx->changeSkyboxState != CHANGE_SKYBOX_INACTIVE) && (envCtx->changeSkyboxState < CHANGE_SKYBOX_ACTIVE)) {
+                    if ((envCtx->changeSkyboxState != CHANGE_SKYBOX_INACTIVE) &&
+                        (envCtx->changeSkyboxState < CHANGE_SKYBOX_ACTIVE)) {
                         envCtx->changeSkyboxState++;
                         skyboxBlend = 0;
                     }
@@ -1077,18 +1080,12 @@ void Environment_UpdateSkybox(u8 skyboxId, EnvironmentContext* envCtx, SkyboxCon
 
         envCtx->skyboxBlend = skyboxBlend;
         Skybox_SetColors(skyboxCtx,
-                         (((sSkyboxPrimColors[color2Index].r - sSkyboxPrimColors[color1Index].r) * colorWeight) +
-                          sSkyboxPrimColors[color1Index].r),
-                         (((sSkyboxPrimColors[color2Index].g - sSkyboxPrimColors[color1Index].g) * colorWeight) +
-                          sSkyboxPrimColors[color1Index].g),
-                         (((sSkyboxPrimColors[color2Index].b - sSkyboxPrimColors[color1Index].b) * colorWeight) +
-                          sSkyboxPrimColors[color1Index].b),
-                         (((sSkyboxEnvColors[color2Index].r - sSkyboxEnvColors[color1Index].r) * colorWeight) +
-                          sSkyboxEnvColors[color1Index].r),
-                         (((sSkyboxEnvColors[color2Index].g - sSkyboxEnvColors[color1Index].g) * colorWeight) +
-                          sSkyboxEnvColors[color1Index].g),
-                         (((sSkyboxEnvColors[color2Index].b - sSkyboxEnvColors[color1Index].b) * colorWeight) +
-                          sSkyboxEnvColors[color1Index].b));
+                         LERP(sSkyboxPrimColors[color1Index].r, sSkyboxPrimColors[color2Index].r, colorWeight),
+                         LERP(sSkyboxPrimColors[color1Index].g, sSkyboxPrimColors[color2Index].g, colorWeight),
+                         LERP(sSkyboxPrimColors[color1Index].b, sSkyboxPrimColors[color2Index].b, colorWeight),
+                         LERP(sSkyboxEnvColors[color1Index].r, sSkyboxEnvColors[color2Index].r, colorWeight),
+                         LERP(sSkyboxEnvColors[color1Index].g, sSkyboxEnvColors[color2Index].g, colorWeight),
+                         LERP(sSkyboxEnvColors[color1Index].b, sSkyboxEnvColors[color2Index].b, colorWeight));
     }
 }
 
@@ -1212,7 +1209,7 @@ void Environment_UpdateTime(PlayState* play, EnvironmentContext* envCtx, PauseCo
 }
 
 void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
-                   CurrentEnvLightSettings* lightSettings) {
+                   EnvLightSettings* lightSettings) {
     s32 phi_t1;
     s32 temp_v1_2;
     s32 temp_v1 = (arg1 % 4);
@@ -1230,7 +1227,7 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
             adjLightSettings->fogColor[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].fogColor[phi_t1] - lightSettings[temp_v1].fogColor[phi_t1];
         }
-        adjLightSettings->fogNear = lightSettings[temp_v1_2 + temp_v1].fogNear - lightSettings[temp_v1].fogNear;
+        adjLightSettings->fogNear = lightSettings[temp_v1_2 + temp_v1].blendRateAndFogNear - lightSettings[temp_v1].blendRateAndFogNear;
     }
 
     if ((arg1 >= 4) && (arg1 < 8) && (gWeatherMode == WEATHER_MODE_1)) {
@@ -1267,8 +1264,277 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
     return ret;
 }
 
+#define LERP16(x, y, scale) ((s16)(((y) - (x)) * (scale)) + (x))
+
+#ifdef NON_EQUIVALENT
+void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx) {
+    AdjLightSettings spA4[4];
+    EnvLightSettings* lightSettingsList;
+    f32 var_fs3;
+    s32 i;
+    s32 j;
+    f32 temp_fv0;
+    s16 temp_s0_2;
+    u16 var_v0;
+    u8 var_v0_3;
+    s32 adjustment;
+    u8 sp97;
+    u8 sp96;
+    u8 sp95;
+    u8 sp94;
+    u8 sp90[2];
+    s16 sp8C[2];
+
+    var_fs3 = 0.0f;
+    __osMemset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
+    lightSettingsList = play->envCtx.lightSettingsList;
+
+    if ((envCtx->lightSettingOverride != LIGHT_SETTING_OVERRIDE_NONE) &&
+        (envCtx->lightBlendOverride != LIGHT_BLEND_OVERRIDE_FULL_CONTROL)) {
+        if ((envCtx->lightSettingOverride != envCtx->lightSetting) && (envCtx->lightBlend >= 1.0f) &&
+            (envCtx->lightSettingOverride <= LIGHT_SETTING_MAX)) {
+            envCtx->lightBlend = 0.0f;
+            envCtx->prevLightSetting = envCtx->lightSetting;
+            envCtx->lightSetting = envCtx->lightSettingOverride;
+        }
+    }
+
+    if (envCtx->lightSettingOverride != LIGHT_SETTING_OVERRIDE_FULL_CONTROL) {
+        if ((envCtx->lightMode == LIGHT_MODE_TIME) && (envCtx->lightSettingOverride == LIGHT_SETTING_OVERRIDE_NONE)) {
+            for (i = 0; i < ARRAY_COUNT(sTimeBasedLightConfigs[envCtx->lightConfig]); i++) {
+                sp97 = sTimeBasedLightConfigs[envCtx->lightConfig][i].lightSetting;
+                sp96 = sTimeBasedLightConfigs[envCtx->changeLightNextConfig][i].lightSetting;
+                sp95 = sTimeBasedLightConfigs[envCtx->lightConfig][i].nextLightSetting;
+                sp94 = sTimeBasedLightConfigs[envCtx->changeLightNextConfig][i].nextLightSetting;
+
+                if ((gSaveContext.skyboxTime >= sTimeBasedLightConfigs[envCtx->lightConfig][i].startTime) &&
+                    ((gSaveContext.skyboxTime < sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime) ||
+                     sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime == 0xFFFF)) {
+
+                        func_800F6CEC(play, sp97, &spA4[0], lightSettingsList);
+                        func_800F6CEC(play, sp95, &spA4[1], lightSettingsList);
+                        func_800F6CEC(play, sp96, &spA4[2], lightSettingsList);
+                        func_800F6CEC(play, sp94, &spA4[3], lightSettingsList);
+
+                        if ((sp94 >= envCtx->numLightSettings) && (D_801BDBA8 == 0)) {
+                            D_801BDBA8 = 1;
+                        }
+
+                        if ((sp97 >= envCtx->numLightSettings) || (sp95 >= envCtx->numLightSettings) || (sp96 >= envCtx->numLightSettings) || (sp94 >= envCtx->numLightSettings)) {
+                            sp97 = 0;
+                            sp95 = 0;
+                            sp96 = 0;
+                            sp94 = 0;
+                        }
+
+                        temp_fv0 = Environment_LerpWeight(sTimeBasedLightConfigs[envCtx->lightConfig][i].endTime,
+                                                   sTimeBasedLightConfigs[envCtx->lightConfig][i].startTime,
+                                                   ((void)0, gSaveContext.skyboxTime));
+
+                        sSandstormColorIndex = sp97 & 3;
+                        sNextSandstormColorIndex = sp95 & 3;
+                        sSandstormLerpScale = temp_fv0;
+
+                        if (envCtx->changeLightEnabled) {
+                            var_fs3 = (envCtx->changeDuration - (f32)envCtx->changeLightTimer) / envCtx->changeDuration;
+                            envCtx->changeLightTimer--;
+
+                            if (envCtx->changeLightTimer <= 0) {
+                                envCtx->changeLightEnabled = false;
+                                envCtx->lightConfig = envCtx->changeLightNextConfig;
+                            }
+                        }
+
+                        for (j = 0; j < 3; j++) {
+                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].ambientColor[j] + spA4[1].ambientColor[j], lightSettingsList[sp97].ambientColor[j] + spA4[0].ambientColor[j], temp_fv0);
+                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].ambientColor[j] + spA4[3].ambientColor[j], lightSettingsList[sp96].ambientColor[j] + spA4[2].ambientColor[j], temp_fv0);
+                            envCtx->lightSettings.ambientColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        }
+
+                        if (Environment_IsSceneUpsideDown(play)) {
+                            var_v0 = ((void)0, gSaveContext.save.time) + 0x8000;
+                        } else {
+                            var_v0 = ((void)0, gSaveContext.save.time);
+                        }
+                        temp_s0_2 = var_v0 - 0x8000;
+
+                        envCtx->lightSettings.diffuseDir1[0] = -(Math_SinS(temp_s0_2) * 120.0f);
+                        envCtx->lightSettings.diffuseDir1[1] = Math_CosS(temp_s0_2) * 120.0f;
+                        envCtx->lightSettings.diffuseDir1[2] = Math_CosS(temp_s0_2) * 20.0f;
+
+                        envCtx->lightSettings.diffusePos2[0] = -envCtx->lightSettings.diffuseDir1[0];
+                        envCtx->lightSettings.diffusePos2[1] = -envCtx->lightSettings.diffuseDir1[1];
+                        envCtx->lightSettings.diffusePos2[2] = -envCtx->lightSettings.diffuseDir1[2];
+
+                        for (j = 0; j < 3; j++) {
+                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].diffuseColor1[j] + spA4[1].diffuseColor1[j], lightSettingsList[sp97].diffuseColor1[j] + spA4[0].diffuseColor1[j], temp_fv0);
+                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].diffuseColor1[j] + spA4[3].diffuseColor1[j], lightSettingsList[sp96].diffuseColor1[j] + spA4[2].diffuseColor1[j], temp_fv0);
+                            envCtx->lightSettings.diffuseColor1[j] = LERP(sp90[0], sp90[1], var_fs3);
+
+                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].diffuseColor[j] + spA4[1].diffuseColor2[j], lightSettingsList[sp97].diffuseColor[j] + spA4[0].diffuseColor2[j], temp_fv0);
+                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].diffuseColor[j] + spA4[3].diffuseColor2[j], lightSettingsList[sp96].diffuseColor[j] + spA4[2].diffuseColor2[j], temp_fv0);
+                            envCtx->lightSettings.diffuseColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        }
+
+                        for (j = 0; j < 3; j++) {
+                            sp90[0] = func_800F6EA4(lightSettingsList[sp95].fogColor[j] + spA4[1].fogColor[j], lightSettingsList[sp97].fogColor[j] + spA4[0].fogColor[j], temp_fv0);
+                            sp90[1] = func_800F6EA4(lightSettingsList[sp94].fogColor[j] + spA4[3].fogColor[j], lightSettingsList[sp96].fogColor[j] + spA4[2].fogColor[j], temp_fv0);
+                            envCtx->lightSettings.fogColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        }
+
+                        sp8C[0] = LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp97].blendRateAndFogNear), ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp95].blendRateAndFogNear), temp_fv0);
+                        sp8C[1] = LERP16(ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp96].blendRateAndFogNear), ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[sp94].blendRateAndFogNear), temp_fv0);
+                        envCtx->lightSettings.fogNear = LERP16(sp8C[0], sp8C[1], var_fs3);
+
+                        sp8C[0] = LERP16(lightSettingsList[sp97].zFar, lightSettingsList[sp95].zFar, temp_fv0);
+                        sp8C[1] = LERP16(lightSettingsList[sp96].zFar, lightSettingsList[sp94].zFar, temp_fv0);
+                        envCtx->lightSettings.zFar = LERP16(sp8C[0], sp8C[1], var_fs3);
+
+                        break;
+                }
+            }
+        } else {
+            if ((envCtx->lightSetting >= envCtx->numLightSettings) && (D_801BDBA8 == 0)) {
+                D_801BDBA8 = 1;
+            }
+
+            if (!envCtx->lightBlendEnabled) {
+                for (i = 0; i < 3; i++) {
+                    envCtx->lightSettings.ambientColor[i] = lightSettingsList[envCtx->lightSetting].ambientColor[i];
+                    envCtx->lightSettings.diffuseDir1[i] = lightSettingsList[envCtx->lightSetting].diffuseDir1[i];
+                    envCtx->lightSettings.diffuseColor1[i] = lightSettingsList[envCtx->lightSetting].diffuseColor1[i];
+                    envCtx->lightSettings.diffusePos2[i] = lightSettingsList[envCtx->lightSetting].diffusePos2[i];
+                    envCtx->lightSettings.diffuseColor[i] = lightSettingsList[envCtx->lightSetting].diffuseColor[i];
+                    envCtx->lightSettings.fogColor[i] = lightSettingsList[envCtx->lightSetting].fogColor[i];
+                }
+                envCtx->lightSettings.fogNear = ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear);
+                envCtx->lightSettings.zFar = lightSettingsList[envCtx->lightSetting].zFar;
+                envCtx->lightBlend = 1.0f;
+            } else {
+                var_v0_3 = ENV_LIGHT_SETTINGS_BLEND_RATE_U8(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear);
+
+                if (var_v0_3 == 0) {
+                    var_v0_3++;
+                }
+
+                if (envCtx->lightBlendRateOverride != LIGHT_BLENDRATE_OVERRIDE_NONE) {
+                    var_v0_3 = envCtx->lightBlendRateOverride;
+                }
+
+                if (envCtx->lightBlendOverride == LIGHT_BLEND_OVERRIDE_NONE) {
+                    envCtx->lightBlend += var_v0_3 / 255.0f;
+                }
+
+                if (envCtx->lightBlend > 1.0f) {
+                    envCtx->lightBlend = 1.0f;
+                }
+
+                for (i = 0; i < 3; i++) {
+                        envCtx->lightSettings.ambientColor[i] =
+                            LERP(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
+                                 lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
+                        envCtx->lightSettings.diffuseDir1[i] =
+                            LERP(lightSettingsList[envCtx->prevLightSetting].diffuseDir1[i],
+                                   lightSettingsList[envCtx->lightSetting].diffuseDir1[i], envCtx->lightBlend);
+                        envCtx->lightSettings.diffuseColor1[i] =
+                            LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor1[i],
+                                 lightSettingsList[envCtx->lightSetting].diffuseColor1[i], envCtx->lightBlend);
+                        envCtx->lightSettings.diffusePos2[i] =
+                            LERP(lightSettingsList[envCtx->prevLightSetting].diffusePos2[i],
+                                   lightSettingsList[envCtx->lightSetting].diffusePos2[i], envCtx->lightBlend);
+                        envCtx->lightSettings.diffuseColor[i] =
+                            LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor[i],
+                                 lightSettingsList[envCtx->lightSetting].diffuseColor[i], envCtx->lightBlend);
+                        envCtx->lightSettings.fogColor[i] =
+                            LERP(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
+                                 lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
+                    }
+                    envCtx->lightSettings.fogNear = LERP16(
+                        ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->prevLightSetting].blendRateAndFogNear),
+                        ENV_LIGHT_SETTINGS_FOG_NEAR(lightSettingsList[envCtx->lightSetting].blendRateAndFogNear),
+                        envCtx->lightBlend);
+                    envCtx->lightSettings.zFar =
+                        LERP16(lightSettingsList[envCtx->prevLightSetting].zFar,
+                               lightSettingsList[envCtx->lightSetting].zFar, envCtx->lightBlend);
+            }
+        }
+    }
+
+    envCtx->lightBlendEnabled = true;
+
+    for (i = 0; i < 3; i++) {
+        if ((s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]) > 255) {
+            lightCtx->ambientColor[i] = 255;
+        } else if ((s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]) < 0) {
+            lightCtx->ambientColor[i] = 0;
+        } else {
+            lightCtx->ambientColor[i] = (s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]);
+        }
+
+        if ((s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]) > 255) {
+            envCtx->dirLight1.params.dir.color[i] = 255;
+        } else if ((s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]) < 0) {
+            envCtx->dirLight1.params.dir.color[i] = 0;
+        } else {
+            envCtx->dirLight1.params.dir.color[i] =
+                (s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]);
+        }
+
+        if ((s16)(envCtx->lightSettings.diffuseColor[i] + envCtx->adjLightSettings.diffuseColor2[i]) > 255) {
+            envCtx->dirLight2.params.dir.color[i] = 255;
+        } else if ((s16)(envCtx->lightSettings.diffuseColor[i] + envCtx->adjLightSettings.diffuseColor2[i]) < 0) {
+            envCtx->dirLight2.params.dir.color[i] = 0;
+        } else {
+            envCtx->dirLight2.params.dir.color[i] =
+                (s16)(envCtx->lightSettings.diffuseColor[i] + envCtx->adjLightSettings.diffuseColor2[i]);
+        }
+
+        if ((s16)(envCtx->lightSettings.fogColor[i] + envCtx->adjLightSettings.fogColor[i]) > 255) {
+            lightCtx->fogColor[i] = 255;
+        } else if ((s16)(envCtx->lightSettings.fogColor[i] + envCtx->adjLightSettings.fogColor[i]) < 0) {
+            lightCtx->fogColor[i] = 0;
+        } else {
+            lightCtx->fogColor[i] = (s16)(envCtx->lightSettings.fogColor[i] + envCtx->adjLightSettings.fogColor[i]);
+        }
+    }
+
+    // Set both directional light directions
+    envCtx->dirLight1.params.dir.x = envCtx->lightSettings.diffuseDir1[0];
+    envCtx->dirLight1.params.dir.y = envCtx->lightSettings.diffuseDir1[1];
+    envCtx->dirLight1.params.dir.z = envCtx->lightSettings.diffuseDir1[2];
+
+    envCtx->dirLight2.params.dir.x = envCtx->lightSettings.diffusePos2[0];
+    envCtx->dirLight2.params.dir.y = envCtx->lightSettings.diffusePos2[1];
+    envCtx->dirLight2.params.dir.z = envCtx->lightSettings.diffusePos2[2];
+
+    // Adjust fog near and far if necessary
+    adjustment = envCtx->lightSettings.fogNear + envCtx->adjLightSettings.fogNear;
+
+    if (adjustment <= ENV_FOGNEAR_MAX) {
+        lightCtx->fogNear = adjustment;
+    } else {
+        lightCtx->fogNear = ENV_FOGNEAR_MAX;
+    }
+
+    adjustment = envCtx->lightSettings.zFar + envCtx->adjLightSettings.zFar;
+
+    if (adjustment <= ENV_ZFAR_MAX) {
+        lightCtx->zFar = adjustment;
+    } else {
+        lightCtx->zFar = ENV_ZFAR_MAX;
+    }
+
+    if ((envCtx->dirLight1.params.dir.x == 0) && (envCtx->dirLight1.params.dir.y == 0) && (envCtx->dirLight1.params.dir.z == 0)) {
+        envCtx->dirLight1.params.dir.x = 1;
+    }
+    if ((envCtx->dirLight2.params.dir.x == 0) && (envCtx->dirLight2.params.dir.y == 0) && (envCtx->dirLight2.params.dir.z == 0)) {
+        envCtx->dirLight2.params.dir.x = 1;
+    }
+}
+#else
 void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx);
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
+#endif
 
 void Environment_UpdateSun(PlayState* play) {
     f32 temp_f0;
@@ -1753,7 +2019,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
     }
 
     OPEN_DISPS(gfxCtx);
-    
+
     temp.x = view->at.x - view->eye.x;
     temp.y = view->at.y - view->eye.y;
     temp.z = view->at.z - view->eye.z;
@@ -1765,7 +2031,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
     spF0 = view->eye.x + (temp_fs1 * 50.0f);
     spEC = view->eye.y + ((temp.y / length) * 120.0f);
     spE8 = view->eye.z + (temp_fs2 * 50.0f);
-    
+
     spE4 = view->eye.x + (temp_fs1 * 220.0f);
     spE0 = view->eye.z + (temp_fs2 * 220.0f);
 
@@ -1785,9 +2051,9 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
     pitch = 0x4000 - Math_Vec3f_Pitch(&gZeroVec3f, &spD4);
     yaw = Math_Vec3f_Yaw(&gZeroVec3f, &spD4) + 0x8000;
 
-
     for (i = 0; i < precip; i++) {
-        Matrix_Translate(((Rand_ZeroOne() - 0.7f) * 100.0f) + spF0, ((Rand_ZeroOne() - 0.7f) * 100.0f) + spEC, ((Rand_ZeroOne() - 0.7f) * 100.0f) + spE8, MTXMODE_NEW);
+        Matrix_Translate(((Rand_ZeroOne() - 0.7f) * 100.0f) + spF0, ((Rand_ZeroOne() - 0.7f) * 100.0f) + spEC,
+                         ((Rand_ZeroOne() - 0.7f) * 100.0f) + spE8, MTXMODE_NEW);
         gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         Matrix_RotateYS(yaw + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_RotateXS(pitch + (s16)(i << 5), MTXMODE_APPLY);
@@ -1798,18 +2064,19 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
 
     if (player->actor.floorHeight < view->eye.y) {
         materialApplied = false;
-        for(i = 0; i < precip; i++) {
+        for (i = 0; i < precip; i++) {
             if (!materialApplied) {
                 Gfx_SetupDL25_Xlu(gfxCtx);
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 100);
                 materialApplied++;
             }
-            Matrix_Translate((Environment_RandCentered() * 220.0f) + spE4, player->actor.floorHeight + 2.0f, (Environment_RandCentered() * 220.0f) + spE0, MTXMODE_NEW);
+            Matrix_Translate((Environment_RandCentered() * 220.0f) + spE4, player->actor.floorHeight + 2.0f,
+                             (Environment_RandCentered() * 220.0f) + spE0, MTXMODE_NEW);
             scale = (Rand_ZeroOne() * 0.05f) + 0.05f;
             Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);        
+            gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
         }
     }
 

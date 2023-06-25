@@ -151,7 +151,7 @@ typedef struct {
 } TimeBasedSkyboxEntry; // size = 0x8
 
 #define ENV_FOGNEAR_MAX 996
-#define ENV_ZFAR_MAX 12800
+#define ENV_ZFAR_MAX 15000
 
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];
