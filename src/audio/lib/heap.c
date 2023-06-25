@@ -1,4 +1,5 @@
 #include "global.h"
+#include "audio/effects.h"
 
 void* AudioHeap_SearchRegularCaches(s32 tableType, s32 cache, s32 id);
 void AudioHeap_InitSampleCaches(size_t persistentSampleCacheSize, size_t temporarySampleCacheSize);
@@ -870,7 +871,7 @@ s32 AudioHeap_ResetStep(void) {
             } else {
                 for (i = 0; i < gAudioCtx.numNotes; i++) {
                     if (gAudioCtx.notes[i].sampleState.bitField0.enabled &&
-                        gAudioCtx.notes[i].playbackState.adsr.action.s.state != ADSR_STATE_DISABLED) {
+                        gAudioCtx.notes[i].playbackState.adsr.action.s.status != ADSR_STATUS_DISABLED) {
                         gAudioCtx.notes[i].playbackState.adsr.fadeOutVel =
                             gAudioCtx.audioBufferParameters.updatesPerFrameInv;
                         gAudioCtx.notes[i].playbackState.adsr.action.s.release = true;

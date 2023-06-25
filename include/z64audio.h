@@ -5,6 +5,7 @@
 #include "ultra64/os_voice.h"
 #include "audiothread_cmd.h"
 #include "libc/stddef.h"
+#include "audio/effects.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
 
@@ -112,18 +113,6 @@ typedef enum {
 } SoundMode;
 
 typedef enum {
-    /* 0 */ ADSR_STATE_DISABLED,
-    /* 1 */ ADSR_STATE_INITIAL,
-    /* 2 */ ADSR_STATE_START_LOOP,
-    /* 3 */ ADSR_STATE_LOOP,
-    /* 4 */ ADSR_STATE_FADE,
-    /* 5 */ ADSR_STATE_HANG,
-    /* 6 */ ADSR_STATE_DECAY,
-    /* 7 */ ADSR_STATE_RELEASE,
-    /* 8 */ ADSR_STATE_SUSTAIN
-} AdsrStatus;
-
-typedef enum {
     /* 0 */ MEDIUM_RAM,
     /* 1 */ MEDIUM_UNK,
     /* 2 */ MEDIUM_CART,
@@ -202,22 +191,6 @@ typedef struct NotePool {
     /* 0x20 */ AudioListItem releasing;
     /* 0x30 */ AudioListItem active;
 } NotePool; // size = 0x40
-
-// Pitch sliding by up to one octave in the positive direction. Negative
-// direction is "supported" by setting extent to be negative. The code
-// extrapolates exponentially in the wrong direction in that case, but that
-// doesn't prevent seqplayer from doing it, AFAICT.
-typedef struct {
-    /* 0x0 */ u8 mode; // bit 0x80 denotes something; the rest are an index 0-5
-    /* 0x2 */ u16 cur;
-    /* 0x4 */ u16 speed;
-    /* 0x8 */ f32 extent;
-} Portamento; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ s16 delay;
-    /* 0x2 */ s16 arg;
-} EnvelopePoint; // size = 0x4
 
 typedef struct {
     /* 0x00 */ u32 start;
@@ -326,16 +299,16 @@ typedef struct {
 } Instrument; // size = 0x20
 
 typedef struct {
-    /* 0x00 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
-    /* 0x01 */ u8 pan;
-    /* 0x02 */ u8 isRelocated; // have tunedSample.sample and envelope been relocated (offsets to pointers)
-    /* 0x04 */ TunedSample tunedSample;
-    /* 0x0C */ EnvelopePoint* envelope;
+    /* 0x0 */ u8 adsrDecayIndex; // index used to obtain adsr decay rate from adsrDecayTable
+    /* 0x1 */ u8 pan;
+    /* 0x2 */ u8 isRelocated; // have tunedSample.sample and envelope been relocated (offsets to pointers)
+    /* 0x4 */ TunedSample tunedSample;
+    /* 0xC */ EnvelopePoint* envelope;
 } Drum; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ TunedSample tunedSample;
-} SoundEffect; // size = 0x08
+    /* 0x0 */ TunedSample tunedSample;
+} SoundEffect; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8 numInstruments;
@@ -357,7 +330,7 @@ typedef struct {
 } SeqScriptState; // size = 0x1C
 
 // Also known as a Group, according to debug strings.
-typedef struct {
+typedef struct SequencePlayer {
     /* 0x000 */ u8 enabled : 1;
     /* 0x000 */ u8 finished : 1;
     /* 0x000 */ u8 muted : 1;
@@ -400,34 +373,6 @@ typedef struct {
     /* 0x158 */ s8 seqScriptIO[8];
 } SequencePlayer; // size = 0x160
 
-typedef struct {
-    /* 0x0 */ u8 decayIndex; // index used to obtain adsr decay rate from adsrDecayTable
-    /* 0x1 */ u8 sustain;
-    /* 0x4 */ EnvelopePoint* envelope;
-} AdsrSettings; // size = 0x8
-
-typedef struct {
-    union {
-        struct {
-            /* 0x00 */ u8 unused : 1;
-            /* 0x00 */ u8 hang : 1;
-            /* 0x00 */ u8 decay : 1;
-            /* 0x00 */ u8 release : 1;
-            /* 0x00 */ u8 state : 4;
-        } s;
-        /* 0x00 */ u8 asByte;
-    } action;
-    /* 0x01 */ u8 envIndex;
-    /* 0x02 */ s16 delay;
-    /* 0x04 */ f32 sustain;
-    /* 0x08 */ f32 velocity;
-    /* 0x0C */ f32 fadeOutVel;
-    /* 0x10 */ f32 current;
-    /* 0x14 */ f32 target;
-    /* 0x18 */ UNK_TYPE1 unk_18[4];
-    /* 0x1C */ EnvelopePoint* envelope;
-} AdsrState; // size = 0x20
-
 typedef union {
     struct {
         /* 0x0 */ u8 unused : 2;
@@ -453,16 +398,6 @@ typedef struct {
     /* 0x10 */ s16* filter;
     /* 0x14 */ s16* filterBuf;
 } NoteAttributes; // size = 0x18
-
-typedef struct VibratoSubStruct {
-    /* 0x0 */ u16 vibratoRateStart;
-    /* 0x2 */ u16 vibratoDepthStart;
-    /* 0x4 */ u16 vibratoRateTarget;
-    /* 0x6 */ u16 vibratoDepthTarget;
-    /* 0x8 */ u16 vibratoRateChangeDelay;
-    /* 0xA */ u16 vibratoDepthChangeDelay;
-    /* 0xC */ u16 vibratoDelay;
-} VibratoSubStruct; // size = 0xE
 
 // Also known as a SubTrack, according to sm64 debug strings.
 typedef struct SequenceChannel {
@@ -551,7 +486,7 @@ typedef struct SequenceLayer {
             /* 0x0A */ u16 bit_0 : 1;
             /* 0x0A */ u16 bit_1 : 1;
             /* 0x0A */ u16 bit_2 : 1;
-            /* 0x0A */ u16 bit_3 : 1;
+            /* 0x0A */ u16 useVibrato : 1;
             /* 0x0A */ u16 bit_4 : 1;
             /* 0x0A */ u16 bit_5 : 1;
             /* 0x0A */ u16 bit_6 : 1;
@@ -622,18 +557,6 @@ typedef struct {
     /* 0x1F */ u8 unk_1F;
     /* 0x20 */ UNK_TYPE1 unk_20[0x4];
 } NoteSynthesisState; // size = 0x24
-
-typedef struct {
-    /* 0x00 */ struct VibratoSubStruct* vibSubStruct; // Something else?
-    /* 0x04 */ u32 time;
-    /* 0x08 */ s16* curve;
-    /* 0x0C */ f32 depth;
-    /* 0x10 */ f32 rate;
-    /* 0x14 */ u8 active;
-    /* 0x16 */ u16 rateChangeTimer;
-    /* 0x18 */ u16 depthChangeTimer;
-    /* 0x1A */ u16 delay;
-} VibratoState; // size = 0x1C
 
 typedef enum {
     /* 0 */ PLAYBACK_STATUS_0,

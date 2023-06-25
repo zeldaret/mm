@@ -4,6 +4,7 @@
  * Top-level file that coordinates all audio code on the audio thread.
  */
 #include "global.h"
+#include "audio/effects.h"
 
 AudioTask* AudioThread_UpdateImpl(void);
 void AudioThread_SetFadeOutTimer(s32 seqPlayerIndex, s32 fadeTimer);
@@ -938,7 +939,7 @@ s32 AudioThread_CountAndReleaseNotes(s32 flags) {
         playbackState = &note->playbackState;
         if (note->sampleState.bitField0.enabled) {
             noteSampleState = &note->sampleState;
-            if (playbackState->adsr.action.s.state != ADSR_STATE_DISABLED) {
+            if (playbackState->adsr.action.s.status != ADSR_STATUS_DISABLED) {
                 if (flags >= AUDIO_NOTE_SAMPLE_NOTES) {
                     tunedSample = noteSampleState->tunedSample;
                     if ((tunedSample == NULL) || noteSampleState->bitField1.isSyntheticWave) {
