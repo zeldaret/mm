@@ -527,7 +527,7 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
-    if (this->player.csMode != PLAYER_CSMODE_0) {
+    if (this->player.csMode != PLAYER_CSMODE_NONE) {
         play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_END);
     }
 }
@@ -950,7 +950,7 @@ s32 func_80A40230(EnTest3* this, PlayState* play) {
     dx = this->player.actor.world.pos.x - this->player.actor.prevPos.x;
     dy = this->player.actor.world.pos.z - this->player.actor.prevPos.z;
     this->player.linearVelocity = sqrtf(SQ(dx) + SQ(dy));
-    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.unk_B6C)));
+    this->player.linearVelocity *= 1.0f + (1.05f * fabsf(Math_SinS(this->player.floorPitch)));
     D_80A41D40 = (this->player.linearVelocity * 10.0f) + 20.0f;
     D_80A41D40 = CLAMP_MAX(D_80A41D40, 60.0f);
     D_80A41D44 = this->player.actor.world.rot.y;
@@ -1065,7 +1065,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_0)) {
+    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_NONE)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 

@@ -32,9 +32,6 @@ extern volatile OSTime sIrqMgrResetTime;
 extern volatile OSTime sIrqMgrRetraceTime;
 extern s32 sIrqMgrRetraceCount;
 
-extern s32 gLoadLogSeverity;
-extern s32 gLoad2LogSeverity;
-
 // extern UNK_TYPE1 sGfxPrintFontTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowTLUT;
 // extern UNK_TYPE1 sGfxPrintRainbowData;

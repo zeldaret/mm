@@ -663,7 +663,7 @@ s32 EnHorse_PlayerCanMove(EnHorse* this, PlayState* play) {
         (((this->stateFlags & ENHORSE_FLAG_19) || (this->stateFlags & ENHORSE_FLAG_29)) && !this->inRace) ||
         (this->action == ENHORSE_ACTION_HBA) || (player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
         (play->csCtx.state != CS_STATE_IDLE) || (CutsceneManager_GetCurrentCsId() != CS_ID_NONE) ||
-        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_0)) {
+        (player->stateFlags1 & PLAYER_STATE1_20) || (player->csMode != PLAYER_CSMODE_NONE)) {
         return false;
     }
     return true;
@@ -4118,7 +4118,7 @@ s32 EnHorse_UpdateConveyors(EnHorse* this, PlayState* play) {
     }
 
     conveyorDir = SurfaceType_GetConveyorDirection(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    conveyorDir = (conveyorDir * 0x400) - this->actor.world.rot.y;
+    conveyorDir = CONVEYOR_DIRECTION_TO_BINANG(conveyorDir) - this->actor.world.rot.y;
     if (conveyorDir > 0x640) {
         this->actor.world.rot.y += 0x640;
     } else if (conveyorDir < -0x640) {
