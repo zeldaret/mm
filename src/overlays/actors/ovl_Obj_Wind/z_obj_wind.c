@@ -86,12 +86,12 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
     sD_80B2448C* entry = &D_80B2448C[(this->actor.params >> 7) & 0x1F];
     Player* player;
     f32 cosYTimesX; // sp80
-    f32 cosX; // sp7C
+    f32 cosX;       // sp7C
     f32 sinYTimesX; // sp78
-    Vec3f posCopy; // sp6C;
+    Vec3f posCopy;  // sp6C;
     Vec3f sp60;
     Vec3f sp54;
-    f32 dist; // sp50
+    f32 dist;     // sp50
     f32 temp_fv0; // sp4C
 
     if (D_80B245CC != DREG(85)) {
@@ -124,10 +124,10 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
                 f32 var_fa0;
                 f32 temp_ft4 = 1.0f;
                 f32 sp40;
-                f32 temp_ft0; // sp3C
+                f32 temp_ft0;   // sp3C
                 f32 temp_fa1_2; // sp38
                 f32 temp_ft4_2; // sp34
-                f32 temp_fa0; // sp30
+                f32 temp_fa0;   // sp30
 
                 var_fa0 = 1.0f - temp_fv0 / entry->unk_0;
                 sp40 = ((f32)entry->unk_4 / 100.0f) *
