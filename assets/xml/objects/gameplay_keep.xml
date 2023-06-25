@@ -8,36 +8,36 @@
         <Texture Name="gBottleGlassTex" OutName="bottle_glass" Format="i8" Width="8" Height="8" Offset="0x708" />
         <DList Name="gHookshotChainDL" Offset="0x8D0" />
         <Texture Name="gHookshotChainLinkTex" OutName="hookshot_chain_link" Format="rgba16" Width="16" Height="32" Offset="0x988" />
-        <DList Name="gameplay_keep_DL_0019B0" Offset="0x19B0" />
-        <DList Name="gameplay_keep_DL_001B20" Offset="0x1B20" />
-        <DList Name="gameplay_keep_DL_001BC8" Offset="0x1BC8" />
-        <DList Name="gameplay_keep_DL_001C60" Offset="0x1C60" />
+        <DList Name="gRazorSwordHandlePart4DL" Offset="0x19B0" />
+        <DList Name="gRazorSwordHandlePart3DL" Offset="0x1B20" />
+        <DList Name="gRazorSwordHandlePart2DL" Offset="0x1BC8" />
+        <DList Name="gRazorSwordHandlePart1DL" Offset="0x1C60" />
         <DList Name="gRazorSwordHandleDL" Offset="0x1D00" />
-        <DList Name="gameplay_keep_DL_001D28" Offset="0x1D28" />
-        <DList Name="gameplay_keep_DL_001DC8" Offset="0x1DC8" />
-        <DList Name="gameplay_keep_DL_001E58" Offset="0x1E58" />
-        <DList Name="gameplay_keep_DL_001F08" Offset="0x1F08" />
-        <DList Name="gameplay_keep_DL_001FA8" Offset="0x1FA8" />
-        <DList Name="gameplay_keep_DL_002038" Offset="0x2038" />
-        <DList Name="gameplay_keep_DL_0020C8" Offset="0x20C8" />
+        <DList Name="gRazorSwordBladePart7DL" Offset="0x1D28" />
+        <DList Name="gRazorSwordBladePart6DL" Offset="0x1DC8" />
+        <DList Name="gRazorSwordBladePart5DL" Offset="0x1E58" />
+        <DList Name="gRazorSwordBladePart4DL" Offset="0x1F08" />
+        <DList Name="gRazorSwordBladePart3DL" Offset="0x1FA8" />
+        <DList Name="gRazorSwordBladePart2DL" Offset="0x2038" />
+        <DList Name="gRazorSwordBladePart1DL" Offset="0x20C8" />
         <DList Name="gRazorSwordBladeDL" Offset="0x2168" />
         <DList Name="gKokiriSwordHandleDL" Offset="0x21A8" />
-        <DList Name="gameplay_keep_DL_002480" Offset="0x2480" />
-        <DList Name="gameplay_keep_DL_002508" Offset="0x2508" />
-        <DList Name="gameplay_keep_DL_002590" Offset="0x2590" />
-        <DList Name="gameplay_keep_DL_002618" Offset="0x2618" />
-        <DList Name="gameplay_keep_DL_0026A0" Offset="0x26A0" />
-        <DList Name="gameplay_keep_DL_002728" Offset="0x2728" />
-        <DList Name="gameplay_keep_DL_0027B0" Offset="0x27B0" />
-        <DList Name="gameplay_keep_DL_002838" Offset="0x2838" />
+        <DList Name="gKokiriSwordBladePart8DL" Offset="0x2480" />
+        <DList Name="gKokiriSwordBladePart7DL" Offset="0x2508" />
+        <DList Name="gKokiriSwordBladePart6DL" Offset="0x2590" />
+        <DList Name="gKokiriSwordBladePart5DL" Offset="0x2618" />
+        <DList Name="gKokiriSwordBladePart4DL" Offset="0x26A0" />
+        <DList Name="gKokiriSwordBladePart3DL" Offset="0x2728" />
+        <DList Name="gKokiriSwordBladePart2DL" Offset="0x27B0" />
+        <DList Name="gKokiriSwordBladePart1DL" Offset="0x2838" />
         <DList Name="gKokiriSwordBladeDL" Offset="0x28C0" />
-        <Texture Name="gameplay_keep_TLUT_002908" OutName="tlut_002908" Format="rgba16" Width="16" Height="16" Offset="0x2908" />
-        <Texture Name="gameplay_keep_Tex_002B08" OutName="tex_002B08" Format="rgba16" Width="8" Height="8" Offset="0x2B08" />
-        <Texture Name="gameplay_keep_Tex_002B88" OutName="tex_002B88" Format="rgba16" Width="16" Height="16" Offset="0x2B88" />
-        <Texture Name="gameplay_keep_Tex_002D88" OutName="tex_002D88" Format="ci8" Width="8" Height="8" Offset="0x2D88" />
-        <Texture Name="gameplay_keep_Tex_002DC8" OutName="tex_002DC8" Format="i8" Width="8" Height="8" Offset="0x2DC8" />
-        <Texture Name="gameplay_keep_Tex_002E08" OutName="tex_002E08" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
-        <Texture Name="gameplay_keep_Tex_003008" OutName="tex_003008" Format="i8" Width="8" Height="8" Offset="0x3008" />
+        <Texture Name="gKokiriSwordHandleTLUT" OutName="kokiri_sword_handle_tlut" Format="rgba16" Width="16" Height="16" Offset="0x2908" />
+        <Texture Name="gKokiriSwordHandlePommelTex" OutName="kokiri_sword_handle_pommel" Format="rgba16" Width="8" Height="8" Offset="0x2B08" />
+        <Texture Name="gRazorSwordHandleGripTex" OutName="razor_sword_handle_grip" Format="rgba16" Width="16" Height="16" Offset="0x2B88" />
+        <Texture Name="gKokiriSwordHandleCrossGuardTex" OutName="kokiri_sword_handle_cross_gaurd" Format="ci8" Width="8" Height="8" Offset="0x2D88" />
+        <Texture Name="gKokiriSwordHandleGripTex" OutName="kokiri_sword_handle_grip" Format="i8" Width="8" Height="8" Offset="0x2DC8" />
+        <Texture Name="gRazorSwordHandleDesignTex" OutName="razor_sword_handle_design_tex" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
+        <Texture Name="gSwordMetalTex" OutName="sword_metal" Format="i8" Width="8" Height="8" Offset="0x3008" />
         <DList Name="gKokiriSwordDL" Offset="0x3050" />
         <DList Name="gRazorSwordDL" Offset="0x3060" />
         <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
