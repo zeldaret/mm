@@ -2082,7 +2082,7 @@ void Environment_DrawRainImpl(PlayState* play, View* view, GraphicsContext* gfxC
         Matrix_RotateXS(pitch + (s16)(i << 5), MTXMODE_APPLY);
         Matrix_Scale(0.3f, 1.0f, 0.3f, MTXMODE_APPLY);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0706E0); // raindropDL
+        gSPDisplayList(POLY_XLU_DISP++, gRainDropDL);
     }
 
     if (player->actor.floorHeight < view->eye.y) {
