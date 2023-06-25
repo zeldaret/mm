@@ -1,11 +1,11 @@
 ﻿<Root>
     <ExternalFile XmlPath="misc/link_animetion.xml" OutPath="assets/misc/link_animetion/"/>
     <File Name="gameplay_keep" Segment="4">
-        <Texture Name="gameplay_keep_Tex_000000" OutName="tex_000000" Format="i4" Width="16" Height="16" Offset="0x0" />
-        <DList Name="gameplay_keep_DL_000320" Offset="0x320" />
-        <DList Name="gameplay_keep_DL_0003E0" Offset="0x3E0" />
-        <Texture Name="gameplay_keep_Tex_000508" OutName="tex_000508" Format="i8" Width="16" Height="32" Offset="0x508" />
-        <Texture Name="gameplay_keep_Tex_000708" OutName="tex_000708" Format="i8" Width="8" Height="8" Offset="0x708" />
+        <Texture Name="gBottleTex" OutName="bottle" Format="i4" Width="16" Height="16" Offset="0x0" />
+        <DList Name="gBottleContentsDL" Offset="0x320" />
+        <DList Name="gBottleGlassDL" Offset="0x3E0" />
+        <Texture Name="gBottleContentsTex" OutName="bottle_contents" Format="i8" Width="16" Height="32" Offset="0x508" />
+        <Texture Name="gBottleGlassTex" OutName="bottle_glass" Format="i8" Width="8" Height="8" Offset="0x708" />
         <DList Name="gameplay_keep_DL_0008D0" Offset="0x8D0" />
         <Texture Name="gameplay_keep_Tex_000988" OutName="tex_000988" Format="rgba16" Width="16" Height="32" Offset="0x988" />
         <DList Name="gameplay_keep_DL_0019B0" Offset="0x19B0" />

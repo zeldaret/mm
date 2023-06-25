@@ -3322,10 +3322,10 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             Color_RGB8* bottleColor = &sPlayerBottleColors[bottle];
 
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);
+            gSPDisplayList(POLY_XLU_DISP++, gBottleContentsDL);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0003E0);
+        gSPDisplayList(POLY_XLU_DISP++, gBottleGlassDL);
 
         Matrix_Pop();
 
