@@ -36,7 +36,7 @@
         <Texture Name="gRazorSwordHandleGripTex" OutName="razor_sword_handle_grip" Format="rgba16" Width="16" Height="16" Offset="0x2B88" />
         <Texture Name="gKokiriSwordHandleCrossGuardTex" OutName="kokiri_sword_handle_cross_gaurd" Format="ci8" Width="8" Height="8" Offset="0x2D88" />
         <Texture Name="gKokiriSwordHandleGripTex" OutName="kokiri_sword_handle_grip" Format="i8" Width="8" Height="8" Offset="0x2DC8" />
-        <Texture Name="gRazorSwordHandleDesignTex" OutName="razor_sword_handle_design_tex" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
+        <Texture Name="gRazorSwordHandleDesignTex" OutName="razor_sword_handle_design" Format="rgba16" Width="16" Height="16" Offset="0x2E08" />
         <Texture Name="gSwordMetalTex" OutName="sword_metal" Format="i8" Width="8" Height="8" Offset="0x3008" />
         <DList Name="gKokiriSwordDL" Offset="0x3050" />
         <DList Name="gRazorSwordDL" Offset="0x3060" />
@@ -56,7 +56,7 @@
         <Texture Name="gGoronMaskHairTex" OutName="goron_mask_hair" Format="ci8" Width="16" Height="16" Offset="0x6FF8" />
         <Texture Name="gGoronMaskEyeTex" OutName="goron_mask_eye" Format="rgba32" Width="32" Height="32" Offset="0x70F8" />
         <Texture Name="gDekuMaskEyeTex" OutName="deku_mask_eye" Format="rgba16" Width="64" Height="32" Offset="0x80F8" />
-        <Texture Name="gDekuMaskFaskTex" OutName="deku_mask_face" Format="rgba16" Width="16" Height="16" Offset="0x90F8" />
+        <Texture Name="gDekuMaskFaceTex" OutName="deku_mask_face" Format="rgba16" Width="16" Height="16" Offset="0x90F8" />
         <Texture Name="gDekuMaskHairTex" OutName="deku_mask_hair" Format="rgba16" Width="32" Height="32" Offset="0x92F8" />
         <Texture Name="gZoraMaskInsideEyeTex" OutName="zora_mask_inside_eye" Format="ci8" Width="32" Height="32" Offset="0x9AF8" />
         <Texture Name="gZoraMaskMouthTex" OutName="zora_mask_mouth" Format="ci8" Width="32" Height="32" Offset="0x9EF8" />
@@ -1288,8 +1288,8 @@
         <DList Name="gRupeeDL" Offset="0x622C0" />
 
         <Texture Name="gRecoveryHeartTex" OutName="recovery_heart" Format="rgba16" Width="32" Height="32" Offset="0x62390" />
-        <Texture Name="gBombTex" OutName="bomb_tex" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
-        <Texture Name="gArrowTex" OutName="arrow_tex" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
+        <Texture Name="gBombTex" OutName="bomb" Format="rgba16" Width="32" Height="32" Offset="0x62B90" />
+        <Texture Name="gArrowTex" OutName="arrow" Format="rgba16" Width="32" Height="32" Offset="0x63390" />
         <Texture Name="gRupeeLightRedTex" OutName="rupee_light_red" Format="rgba16" Width="4" Height="4" Offset="0x63B90" />
         <Texture Name="gRupeeLightBlueTex" OutName="rupee_light_blue" Format="rgba16" Width="4" Height="4" Offset="0x63BB0" />
         <Texture Name="gHeartContainerTex" OutName="heart_container" Format="rgba16" Width="32" Height="32" Offset="0x63BD0" />
