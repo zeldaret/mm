@@ -159,16 +159,33 @@ static Gfx sScreenFillSetupDL[] = {
 
 s16 D_801BF9B0 = 0;
 f32 D_801BF9B4[] = { 100.0f, 109.0f };
-s16 D_801BF9BC[] = { 0x226, 0x2A8, 0x2A8, 0x2A8 };
+s16 D_801BF9BC[] = {
+    0x226, // EQUIP_SLOT_B
+    0x2A8, // EQUIP_SLOT_C_LEFT
+    0x2A8, // EQUIP_SLOT_C_DOWN
+    0x2A8, // EQUIP_SLOT_C_RIGHT
+};
 s16 D_801BF9C4[] = { 0x9E, 0x9B };
 s16 D_801BF9C8[] = { 0x17, 0x16 };
 f32 D_801BF9CC[] = { -380.0f, -350.0f };
-s16 D_801BF9D4[] = { 0xA7, 0xE3 };
-s16 D_801BF9D8[] = { 0xF9, 0x10F };
-s16 D_801BF9DC[] = { 0x11, 0x12 };
-s16 D_801BF9E0[] = { 0x22, 0x12 };
-s16 D_801BF9E4[] = { 0x23F, 0x26C };
-s16 D_801BF9E8[] = { 0x26C, 0x26C };
+s16 D_801BF9D4[] = {
+    0xA7,  // EQUIP_SLOT_B
+    0xE3,  // EQUIP_SLOT_C_LEFT
+    0xF9,  // EQUIP_SLOT_C_DOWN
+    0x10F, // EQUIP_SLOT_C_RIGHT
+};
+s16 D_801BF9DC[] = {
+    0x11, // EQUIP_SLOT_B
+    0x12, // EQUIP_SLOT_C_LEFT
+    0x22, // EQUIP_SLOT_C_DOWN
+    0x12, // EQUIP_SLOT_C_RIGHT
+};
+s16 D_801BF9E4[] = {
+    0x23F, // EQUIP_SLOT_B
+    0x26C, // EQUIP_SLOT_C_LEFT
+    0x26C, // EQUIP_SLOT_C_DOWN
+    0x26C, // EQUIP_SLOT_C_RIGHT
+};
 
 s16 sFinalHoursClockDigitsRed = 0;
 s16 sFinalHoursClockFrameEnvRed = 0;
@@ -3848,8 +3865,12 @@ void Interface_DrawItemButtons(PlayState* play) {
         // Remnant of OoT
         130, 136, 136, 136, 136,
     };
-    static s16 D_801BFAF4[] = { 0x1D, 0x1B };
-    static s16 D_801BFAF8[] = { 0x1B, 0x1B };
+    static s16 D_801BFAF4[] = {
+        0x1D, // EQUIP_SLOT_B
+        0x1B, // EQUIP_SLOT_C_LEFT
+        0x1B, // EQUIP_SLOT_C_DOWN
+        0x1B, // EQUIP_SLOT_C_RIGHT
+    };
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Player* player = GET_PLAYER(play);
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -3863,21 +3884,27 @@ void Interface_DrawItemButtons(PlayState* play) {
     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
     // B Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[0],
-                                                 D_801BF9DC[0], D_801BFAF4[0], D_801BFAF4[0], D_801BF9E4[0] * 2,
-                                                 D_801BF9E4[0] * 2, 100, 255, 120, interfaceCtx->bAlpha);
+    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(
+        OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[EQUIP_SLOT_B], D_801BF9DC[EQUIP_SLOT_B],
+        D_801BFAF4[EQUIP_SLOT_B], D_801BFAF4[EQUIP_SLOT_B], D_801BF9E4[EQUIP_SLOT_B] * 2, D_801BF9E4[EQUIP_SLOT_B] * 2,
+        100, 255, 120, interfaceCtx->bAlpha);
     gDPPipeSync(OVERLAY_DISP++);
 
     // C-Left Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[1], D_801BF9DC[1], D_801BFAF4[1], D_801BFAF4[1],
-                                           D_801BF9E4[1] * 2, D_801BF9E4[1] * 2, 255, 240, 0, interfaceCtx->cLeftAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_LEFT], D_801BF9DC[EQUIP_SLOT_C_LEFT],
+                                           D_801BFAF4[EQUIP_SLOT_C_LEFT], D_801BFAF4[EQUIP_SLOT_C_LEFT],
+                                           D_801BF9E4[EQUIP_SLOT_C_LEFT] * 2, D_801BF9E4[EQUIP_SLOT_C_LEFT] * 2, 255,
+                                           240, 0, interfaceCtx->cLeftAlpha);
     // C-Down Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[0], D_801BF9E0[0], D_801BFAF8[0], D_801BFAF8[0],
-                                           D_801BF9E4[2] * 2, D_801BF9E4[2] * 2, 255, 240, 0, interfaceCtx->cDownAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_DOWN], D_801BF9DC[EQUIP_SLOT_C_DOWN],
+                                           D_801BFAF4[EQUIP_SLOT_C_DOWN], D_801BFAF4[EQUIP_SLOT_C_DOWN],
+                                           D_801BF9E4[EQUIP_SLOT_C_DOWN] * 2, D_801BF9E4[EQUIP_SLOT_C_DOWN] * 2, 255,
+                                           240, 0, interfaceCtx->cDownAlpha);
     // C-Right Button Color & Texture
-    OVERLAY_DISP =
-        Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[1], D_801BF9E0[1], D_801BFAF8[1], D_801BFAF8[1],
-                                D_801BF9E4[3] * 2, D_801BF9E4[3] * 2, 255, 240, 0, interfaceCtx->cRightAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_RIGHT], D_801BF9DC[EQUIP_SLOT_C_RIGHT],
+                                           D_801BFAF4[EQUIP_SLOT_C_RIGHT], D_801BFAF4[EQUIP_SLOT_C_RIGHT],
+                                           D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, 255,
+                                           240, 0, interfaceCtx->cRightAlpha);
 
     if (!IS_PAUSE_STATE_GAMEOVER) {
         if ((play->pauseCtx.state != PAUSE_STATE_OFF) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
