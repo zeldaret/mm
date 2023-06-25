@@ -39,10 +39,10 @@ ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Draw,
 };
 
-AnimationHeader* D_808DFEC0[] = { &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468 };
-
-AnimationHeader* D_808DFEC8[] = { &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,
-                                  &object_horse_link_child_Anim_002F98 };
+AnimationHeader* D_808DFEC0[] = {
+    &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_007D50,
+    &object_horse_link_child_Anim_0043AC, &object_horse_link_child_Anim_002F98,
+};
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
@@ -444,7 +444,7 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
         if (Math_CosS(sp36) < 0.0f) {
             this->unk_148 = 2;
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], D_808DFF18[this->unk_148], 0.0f,
-                             Animation_GetLastFrame(D_808DFEC8[0]), ANIMMODE_ONCE, -5.0f);
+                             Animation_GetLastFrame(D_808DFEC0[2]), ANIMMODE_ONCE, -5.0f);
         } else {
             func_808DF560(this);
         }
