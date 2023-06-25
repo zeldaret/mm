@@ -13845,7 +13845,7 @@
     0x80B23C70:("D_80B23C70","f32","",0x4),
     0x80B23E80:("Obj_Dowsing_InitVars","UNK_TYPE1","",0x1),
     0x80B24460:("Obj_Wind_InitVars","UNK_TYPE1","",0x1),
-    0x80B24480:("D_80B24480","UNK_TYPE1","",0x1),
+    0x80B24480:("sInitChain","UNK_TYPE1","",0x1),
     0x80B2448C:("D_80B2448C","UNK_TYPE1","",0x1),
     0x80B245CC:("D_80B245CC","UNK_TYPE4","",0x4),
     0x80B245D0:("D_80B245D0","f32","",0x4),
