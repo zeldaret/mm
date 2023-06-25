@@ -48,6 +48,7 @@
  * - Effect Update/Draw
  * - Seaweed
  */
+
 #include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
