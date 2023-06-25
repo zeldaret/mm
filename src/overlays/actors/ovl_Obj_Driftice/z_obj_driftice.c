@@ -163,19 +163,19 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
             temp_f20 = 0.01f;
         }
 
-        Math_StepToS(&arg0->unk_00[1], 1200.0f * temp_f20, 0x64);
+        Math_StepToS(&arg0->unk_02, 1200.0f * temp_f20, 0x64);
         phi_s0 = 2500.0f * temp_f20;
-        Math_StepToS(&arg0->unk_00[3], Math_CosS(arg0->unk_00[2] * 6.5536f) * (120.0f * temp_f20), 0x28);
+        Math_StepToS(&arg0->unk_06, Math_CosS(arg0->unk_04 * 6.5536f) * (120.0f * temp_f20), 0x28);
         Math_StepToF(&arg0->unk_08, 1.0f, 0.02f);
     } else {
-        Math_StepToS(&arg0->unk_00[1], 0, 0x96);
+        Math_StepToS(&arg0->unk_02, 0, 0x96);
         phi_s0 = 0;
-        Math_StepToS(&arg0->unk_00[3], 20, 7);
+        Math_StepToS(&arg0->unk_06, 20, 7);
         Math_StepToF(&arg0->unk_08, 0.0f, 0.02f);
     }
-    Math_ScaledStepToS(arg0->unk_00, this->dyna.actor.yawTowardsPlayer, arg0->unk_00[1]);
-    *arg3 = arg0->unk_00[0];
-    Math_ScaledStepToS(&arg0->unk_00[2], phi_s0, arg0->unk_00[3]);
+    Math_ScaledStepToS(&arg0->unk_00, this->dyna.actor.yawTowardsPlayer, arg0->unk_02);
+    *arg3 = arg0->unk_00;
+    Math_ScaledStepToS(&arg0->unk_04, phi_s0, arg0->unk_06);
 
     for (i = 0; i < 2; i++) {
         temp_s0 = &arg0->unk_0C[i];
@@ -195,8 +195,7 @@ void func_80A66930(ObjDrifticeStruct2* arg0, ObjDriftice* this, s16* arg2, s16* 
 
     temp_f22 *= arg0->unk_08;
 
-    //! FAKE:
-    *arg2 = arg0->unk_00[2] + (s32)((void)0, temp_f22);
+    *arg2 = (s32)temp_f22 + arg0->unk_04;
 }
 
 void func_80A66C4C(ObjDrifticeStruct4* arg0, ObjDriftice* this, s16* arg2, s16* arg3) {
