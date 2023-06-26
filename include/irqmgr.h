@@ -2,6 +2,7 @@
 #define IRQMGR_H
 
 #include "ultra64.h"
+#include "PR/sched.h"
 
 typedef struct IrqMgrClient {
     /* 0x0 */ struct IrqMgrClient* next;
