@@ -105,7 +105,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
         D_80B2448C[DREG(85)].unk_8 = DREG(84);
     }
 
-    if (OBJ_WIND_GET_SWITCH_FLAG(thisx) == 0x7F || !Flags_GetSwitch(play, OBJ_WIND_GET_SWITCH_FLAG(thisx))) {
+    if ((OBJ_WIND_GET_SWITCH_FLAG(thisx) == 0x7F) || !Flags_GetSwitch(play, OBJ_WIND_GET_SWITCH_FLAG(thisx))) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&posCopy, &this->actor.world.pos);
         cosX = Math_CosS(this->actor.shape.rot.x);
