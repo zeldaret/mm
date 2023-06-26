@@ -3,6 +3,9 @@
 
 #include "global.h"
 
+#define OBJ_WIND_GET_TYPE(thisx) (((thisx)->params >> 7) & 0x1F)
+#define OBJ_WIND_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
+
 struct ObjWind;
 
 typedef struct ObjWind {

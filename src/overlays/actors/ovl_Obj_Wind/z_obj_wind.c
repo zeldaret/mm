@@ -12,9 +12,6 @@
 
 #define THIS ((ObjWind*)thisx)
 
-#define OBJ_WIND_GET_TYPE(thisx) (((thisx)->params >> 7) & 0x1F)
-#define OBJ_WIND_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
-
 void ObjWind_Init(Actor* thisx, PlayState* play);
 void ObjWind_Destroy(Actor* thisx, PlayState* play);
 void ObjWind_Update(Actor* thisx, PlayState* play);
@@ -48,7 +45,7 @@ void ObjWind_Init(Actor* thisx, PlayState* play) {
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &ySurface,
                              &waterbox) &&
         (this->actor.world.pos.y < ySurface)) {
-        this->isUnderWater = 1;
+        this->isUnderWater = true;
     }
 }
 
@@ -61,7 +58,7 @@ typedef struct ObjWindStruct {
     /* 0x4 */ s16 unk_4;
     /* 0x6 */ s16 unk_6;
     /* 0x8 */ s16 unk_8;
-} ObjWindStruct;
+} ObjWindStruct; // size = 0xA
 
 static ObjWindStruct D_80B2448C[] = {
     { 530, 90, 3000, 2000, 0 },   { 1120, 100, 2000, 1000, 0 }, { 620, 100, 2000, 1000, 0 },
@@ -120,7 +117,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
             dist = Math_Vec3f_DistXYZAndStoreDiff(&player->actor.world.pos, &nearestPoint, &sp54);
             if (dist < entry->unk_2) {
                 f32 var_fa0;
-                f32 windSpeedXZ = 1.0f;
+                f32 windSpeedXZ = 1.0f; // reused temp
                 f32 sp40;
                 f32 temp_ft0;
                 f32 windSpeedX;
