@@ -1,6 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
+#include "idle.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
