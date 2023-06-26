@@ -48,7 +48,9 @@
 
         <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
 
-        <Blob Name="gameplay_keep_Blob_003400" Size="0x9D0" Offset="0x3400" />
+        <Array Name="gameplay_keep_Vtx_003400" Count="157" Offset="0x3400">
+            <Vtx/>
+        </Array>
 
         <!-- Transformation Masks -->
         <DList Name="gZoraMaskDL" Offset="0x5360" />
