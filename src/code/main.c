@@ -1,5 +1,4 @@
 #include "audiomgr.h"
-#include "buffers.h"
 #include "fault.h"
 #include "idle.h"
 #include "irqmgr.h"
@@ -7,8 +6,6 @@
 #include "scheduler.h"
 #include "stack.h"
 #include "stackcheck.h"
-#include "system_heap.h"
-#include "z64thread.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 OSMesgQueue sSerialEventQueue;
@@ -34,6 +31,8 @@ PadMgr gPadMgr;
 #include "main.h"
 #include "buffers.h"
 #include "global.h"
+#include "system_heap.h"
+#include "z64thread.h"
 
 s32 gScreenWidth = SCREEN_WIDTH;
 s32 gScreenHeight = SCREEN_HEIGHT;

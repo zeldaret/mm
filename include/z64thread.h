@@ -3,6 +3,7 @@
 
 #define Z_THREAD_ID_IDLE      1
 #define Z_THREAD_ID_SLOWLY    2
+#define Z_THREAD_ID_FAULT     2
 #define Z_THREAD_ID_MAIN      3
 #define Z_THREAD_ID_GRAPH     4
 #define Z_THREAD_ID_SCHED     5
