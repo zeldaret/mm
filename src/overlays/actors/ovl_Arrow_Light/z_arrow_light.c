@@ -37,7 +37,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-static s32 sUnused;
+static s32 sBssPad;
 
 void ArrowLight_SetupAction(ArrowLight* this, ArrowLightActionFunc actionFunc) {
     this->actionFunc = actionFunc;

@@ -6,6 +6,7 @@
 #include "audiothread_cmd.h"
 #include "libc/stddef.h"
 #include "audio/effects.h"
+#include "sequence.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
 
