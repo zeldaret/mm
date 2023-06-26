@@ -1,14 +1,17 @@
 #include "global.h"
+#include "idle.h"
 
-void ViConfig_UpdateVi(u32 mode) {
-    if (mode != 0) {
+void ViConfig_UpdateVi(u32 black) {
+    if (black) {
         switch (osTvType) {
             case OS_TV_MPAL:
                 osViSetMode(&osViModeMpalLan1);
                 break;
+
             case OS_TV_PAL:
                 osViSetMode(&osViModePalLan1);
                 break;
+
             case OS_TV_NTSC:
             default:
                 osViSetMode(&osViModeNtscLan1);
@@ -42,11 +45,11 @@ void ViConfig_UpdateVi(u32 mode) {
         }
     }
 
-    gViConfigUseDefault = mode;
+    gViConfigUseBlack = black;
 }
 
 void ViConfig_UpdateBlack(void) {
-    if (gViConfigUseDefault != 0) {
+    if (gViConfigUseBlack) {
         osViBlack(true);
     } else {
         osViBlack(false);

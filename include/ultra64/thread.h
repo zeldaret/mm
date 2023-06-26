@@ -3,7 +3,7 @@
 
 #include "PR/ultratypes.h"
 
-#define OS_PRIORITY_IDLE         0
+#define OS_PRIORITY_IDLE          0
 #define OS_PRIORITY_MAIN         10
 #define OS_PRIORITY_GRAPH        11
 #define OS_PRIORITY_AUDIOMGR     12

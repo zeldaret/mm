@@ -18,15 +18,8 @@ extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
 // data
-extern u64 rspbootTextStart[];
-extern u8 D_80096B20;
-extern vu8 gViConfigUseDefault;
-extern u8 gViConfigAdditionalScanLines;
-extern u32 gViConfigFeatures;
-extern f32 gViConfigXScale;
-extern f32 gViConfigYScale;
 extern OSPiHandle* gCartHandle;
-extern u32 sDmaMgrDmaBuffSize;
+extern size_t gDmaMgrDmaBuffSize;
 extern vs32 gIrqMgrResetStatus;
 extern volatile OSTime sIrqMgrResetTime;
 extern volatile OSTime sIrqMgrRetraceTime;
@@ -141,11 +134,6 @@ extern f64 D_800994C8;
 extern char gBuildTeam[];
 extern char gBuildDate[];
 extern char gBuildMakeOption[];
-
-extern IrqMgr gIrqMgr;
-
-extern OSViMode gViConfigMode;
-extern u8 D_8009B290;
 
 extern u8 sYaz0DataBuffer[0x400];
 extern u8* sYaz0CurDataEnd;
@@ -523,9 +511,7 @@ extern Input* D_801D0D60;
 
 extern u32 retryCount;
 extern u32 cfbIdx[3];
-extern s32 gScreenWidth;
-extern s32 gScreenHeight;
-extern u32 startHeapSize;
+
 extern UNK_PTR D_801D1540;
 extern Vec3f gZeroVec3f;
 extern Vec3s gZeroVec3s;
@@ -1931,7 +1917,6 @@ extern u8 gSequenceTable[];
 extern u8 gSampleBankTable[];
 
 // bss
-// extern UNK_TYPE1 D_801ED890;
 // extern UNK_TYPE1 D_801ED894;
 extern CollisionPoly* D_801ED8B0;
 extern s32 D_801ED8B4;
@@ -2004,11 +1989,6 @@ extern UNK_TYPE D_801F4DDC;
 extern u8 gDisablePlayerCsModeStartPos;
 extern s16 gDungeonBossWarpSceneId;
 
-extern ActorCutscene* sSceneCutsceneList;
-extern s16 sSceneCutsceneCount;
-extern u8 sWaitingCutsceneList[16];
-// extern UNK_TYPE1 D_801F4E08;
-extern u8 sNextCutsceneList[16];
 // extern UNK_TYPE1 D_801F4E20;
 extern u8 D_801F4E30;
 // extern UNK_TYPE1 D_801F4E31;
@@ -2109,11 +2089,6 @@ extern VisMono sMonoColors;
 extern ViMode D_801F8048;
 
 extern GfxMasterList* gGfxMasterDL;
-
-extern u32 gSegments[NUM_SEGMENTS];
-extern SchedContext gSchedContext;
-
-extern OSThread gGraphThread;
 
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
