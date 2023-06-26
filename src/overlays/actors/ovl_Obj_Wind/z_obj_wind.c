@@ -6,7 +6,6 @@
 
 #include "z_obj_wind.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "z64math.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -86,7 +85,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
     Vec3f posCopy;
     Vec3f nearestPoint;
     Vec3f sp54;
-    f32 dist;
+    f32 dist; // reused temp
     f32 distToNearestPoint;
 
     if (D_80B245CC != DREG(85)) {
@@ -105,6 +104,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
         D_80B2448C[DREG(85)].unk_6 = DREG(83);
         D_80B2448C[DREG(85)].unk_8 = DREG(84);
     }
+
     if (OBJ_WIND_GET_SWITCH_FLAG(thisx) == 0x7F || !Flags_GetSwitch(play, OBJ_WIND_GET_SWITCH_FLAG(thisx))) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&posCopy, &this->actor.world.pos);
@@ -127,7 +127,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
                 var_fa0 = 1.0f - distToNearestPoint / entry->unk_0;
                 sp40 = ((f32)entry->unk_4 / 100.0f) *
                        ((var_fa0 * (1.0f - dist / entry->unk_2)) + ((f32)entry->unk_8 / 100.0f));
-                if (0.8f < distToNearestPoint / entry->unk_0) {
+                if ((distToNearestPoint / entry->unk_0) > 0.8f) {
                     var_fa0 = windSpeedXZ - 1.0f;
                 }
                 temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (dist / entry->unk_2 * var_fa0);
