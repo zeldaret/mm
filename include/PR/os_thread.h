@@ -3,7 +3,6 @@
 
 #include "ultratypes.h"
 
-
 typedef s32 OSPri;
 typedef s32 OSId;
 
@@ -50,7 +49,7 @@ typedef struct OSThread {
 #define OS_STATE_RUNNING    (1 << 2)
 #define OS_STATE_WAITING    (1 << 3)
 
-#define OS_PRIORITY_IDLE         10
+#define OS_PRIORITY_IDLE          0
 #define OS_PRIORITY_MAIN         10
 #define OS_PRIORITY_GRAPH        11
 #define OS_PRIORITY_AUDIOMGR     12

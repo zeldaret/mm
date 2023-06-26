@@ -51,8 +51,6 @@ typedef struct {
     /* 0x47E */ u8 isResetting;
 } PadMgr; // size = 0x480
 
-extern PadMgr gPadMgr;
-
 // Initialization
 
 s32 PadSetup_Init(OSMesgQueue* mq, u8* outMask, OSContStatus* status);

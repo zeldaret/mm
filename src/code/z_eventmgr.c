@@ -57,6 +57,13 @@ CutsceneManager sCutsceneMgr = {
     CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
 
+ActorCutscene* sSceneCutsceneList;
+s16 sSceneCutsceneCount;
+u8 sWaitingCutsceneList[16];
+static s32 sBssPad;
+u8 sNextCutsceneList[16];
+static s32 sBssPad2;
+
 s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     u16 hudVisibility;
 

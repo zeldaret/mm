@@ -1,9 +1,9 @@
 asm/non_matchings/boot/boot_main/bootproc.s,bootproc,0x80080060,0x3C
-asm/non_matchings/boot/idle/Idle_ClearMemory.s,Idle_ClearMemory,0x80080150,0xC
-asm/non_matchings/boot/idle/Idle_InitFramebuffer.s,Idle_InitFramebuffer,0x80080180,0x7
-asm/non_matchings/boot/idle/Idle_InitScreen.s,Idle_InitScreen,0x8008019C,0x14
-asm/non_matchings/boot/idle/Idle_InitMemory.s,Idle_InitMemory,0x800801EC,0x19
-asm/non_matchings/boot/idle/Idle_InitCodeAndMemory.s,Idle_InitCodeAndMemory,0x80080250,0x2C
+asm/non_matchings/boot/idle/Main_ClearMemory.s,Main_ClearMemory,0x80080150,0xC
+asm/non_matchings/boot/idle/Main_InitFramebuffer.s,Main_InitFramebuffer,0x80080180,0x7
+asm/non_matchings/boot/idle/Main_InitScreen.s,Main_InitScreen,0x8008019C,0x14
+asm/non_matchings/boot/idle/Main_InitMemory.s,Main_InitMemory,0x800801EC,0x19
+asm/non_matchings/boot/idle/Main_Init.s,Main_Init,0x80080250,0x2C
 asm/non_matchings/boot/idle/Main_ThreadEntry.s,Main_ThreadEntry,0x80080300,0x23
 asm/non_matchings/boot/idle/Idle_InitVideo.s,Idle_InitVideo,0x8008038C,0x62
 asm/non_matchings/boot/idle/Idle_ThreadEntry.s,Idle_ThreadEntry,0x80080514,0x33
