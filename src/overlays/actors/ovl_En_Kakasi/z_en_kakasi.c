@@ -800,7 +800,7 @@ void EnKakasi_DancingRemark(EnKakasi* this, PlayState* play) {
         if ((currentDay == 3) && gSaveContext.save.isNight) {
             EnKakasi_SetupDigAway(this);
         } else {
-            Audio_PlaySubBgm(NA_BGM_SARIAS_SONG);
+            Audio_PlaySubBgm(NA_BGM_WOODS_OF_MYSTERY);
             EnKakasi_SetupDanceNightAway(this);
         }
     }

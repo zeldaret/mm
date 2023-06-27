@@ -286,7 +286,7 @@ u8 sSeqFlags[] = {
     0,                                 // NA_BGM_SHARPS_CURSE
     SEQ_FLAG_ENEMY,                    // NA_BGM_GREAT_BAY_REGION
     SEQ_FLAG_ENEMY,                    // NA_BGM_IKANA_REGION
-    0,                                 // NA_BGM_DEKU_KING
+    0,                                 // NA_BGM_DEKU_PALACE
     SEQ_FLAG_ENEMY,                    // NA_BGM_MOUNTAIN_REGION
     0,                                 // NA_BGM_PIRATES_FORTRESS
     0,                                 // NA_BGM_CLOCK_TOWN_DAY_1
@@ -330,7 +330,7 @@ u8 sSeqFlags[] = {
     SEQ_FLAG_ENEMY,                    // NA_BGM_CAVERN
     SEQ_FLAG_RESUME | SEQ_FLAG_ENEMY,  // NA_BGM_MILK_BAR
     SEQ_FLAG_FANFARE,                  // NA_BGM_ZELDA_APPEAR
-    0,                                 // NA_BGM_SARIAS_SONG
+    0,                                 // NA_BGM_WOODS_OF_MYSTERY
     0,                                 // NA_BGM_GORON_GOAL
     0,                                 // NA_BGM_HORSE
     0,                                 // NA_BGM_HORSE_GOAL
@@ -350,7 +350,7 @@ u8 sSeqFlags[] = {
     SEQ_FLAG_FANFARE,                  // NA_BGM_OATH_TO_ORDER
     0,                                 // NA_BGM_SWORD_TRAINING_HALL
     SEQ_FLAG_FANFARE,                  // NA_BGM_GORON_LULLABY_INTRO
-    SEQ_FLAG_FANFARE,                  // NA_BGM_OCA_FAIRY
+    SEQ_FLAG_FANFARE,                  // NA_BGM_LEARNED_NEW_SONG
     SEQ_FLAG_FANFARE,                  // NA_BGM_BREMEN_MARCH
     SEQ_FLAG_FANFARE,                  // NA_BGM_BALLAD_OF_THE_WIND_FISH
     SEQ_FLAG_RESTORE,                  // NA_BGM_SONG_OF_SOARING
