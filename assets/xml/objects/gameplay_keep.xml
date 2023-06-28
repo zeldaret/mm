@@ -48,7 +48,7 @@
 
         <DList Name="gDekuStickDL" Offset="0x32B0" /> <!-- @bug Supplies the wrong size to gsDPLoadTextureBlock, meaning it uses part of gLinkPauseChildJointTable as if it were a texture. -->
 
-        <Array Name="gameplay_keep_Vtx_003400" Count="157" Offset="0x3400">
+        <Array Name="gUnknownMaskVtx" Count="157" Offset="0x3400"> <!-- Based on the shape and TLUT this looks to be a remnant of the Adult Link mask -->
             <Vtx/>
         </Array>
 
@@ -56,7 +56,7 @@
         <DList Name="gZoraMaskDL" Offset="0x5360" />
         <DList Name="gDekuMaskDL" Offset="0x56C0" />
         <DList Name="gGoronMaskDL" Offset="0x5A10" />
-        <Blob Name="gameplay_keep_Blob_005DB8" Size="0x200" Offset="0x5DB8" />
+        <Texture Name="gUnkownMaskTLUT" OutName="unknown_mask_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5DB8" />
         <Texture Name="gGoronMaskTLUT" OutName="goron_mask_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5FB8" />
         <Texture Name="gZoraMaskTLUT" OutName="zora_mask_tlut" Format="rgba16" Width="16" Height="16" Offset="0x61B8" />
         <Texture Name="gGoronMaskMouthTex" OutName="goron_mask_mouth" Format="ci8" Width="64" Height="32" Offset="0x63B8" />
