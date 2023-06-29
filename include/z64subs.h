@@ -163,7 +163,7 @@ Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorLi
 
 s32 func_8013E748(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
 s32 SubS_ActorAndPlayerFaceEachOther(struct PlayState* play, Actor* actor, void* data);
-s32 func_8013E8F8(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol, s16 actorYawTol);
+s32 func_8013E8F8(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, s16 playerYawTol, s16 actorYawTol);
 
 s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);
 

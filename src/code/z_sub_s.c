@@ -1544,13 +1544,13 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
 }
 
 //! TODO: Needs docs with func_800B8500
-s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
+s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, s16 playerYawTol,
                   s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return func_8013E748(actor, play, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+    return func_8013E748(actor, play, xzRange, yRange, exchangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
 }
 
 /**
