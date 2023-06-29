@@ -10,6 +10,19 @@ extern Vec3f gOneVec3f;
 
 #define SUBS_TIME_PATHING_ORDER 3
 
+// NOTE: all on screen checks are bugged, and always evaluate to true, even if off screen
+typedef enum {
+    /* 0 */ SUBS_OFFER_MODE_NONE,
+    /* 1 */ SUBS_OFFER_MODE_GET_ITEM,
+    // Furthur modes all deal with offering exhange items
+    /* 2 */ SUBS_OFFER_MODE_NEARBY,
+    /* 3 */ SUBS_OFFER_MODE_ONSCREEN,
+    /* 4 */ SUBS_OFFER_MODE_AUTO,
+    /* 5 */ SUBS_OFFER_MODE_AUTO_TARGETED, // Also checks nearby and on screen
+    /* 6 */ SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN,
+    /* 7 */ SUBS_OFFER_MODE_MAX
+} SubSOfferItemMode;
+
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_WITH_PLAYER,
     /* 1 */ SUBS_CUTSCENE_NORMAL,
@@ -114,7 +127,7 @@ s32 SubS_WeightPathing_Move(Actor* actor, Path* path, s32* waypoint, f32* progre
 
 s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 
-s32 func_8013C964(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type);
+s32 SubS_OfferItem(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 mode);
 
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
 void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);

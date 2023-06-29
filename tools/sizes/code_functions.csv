@@ -2189,7 +2189,7 @@ asm/non_matchings/code/z_sub_s/SubS_GetDayDependentPath.s,SubS_GetDayDependentPa
 asm/non_matchings/code/z_sub_s/SubS_WeightPathing_ComputePoint.s,SubS_WeightPathing_ComputePoint,0x8013C068,0x16F
 asm/non_matchings/code/z_sub_s/SubS_WeightPathing_Move.s,SubS_WeightPathing_Move,0x8013C624,0xA5
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPathCheckBounds.s,SubS_CopyPointFromPathCheckBounds,0x8013C8B8,0x2B
-asm/non_matchings/code/z_sub_s/func_8013C964.s,func_8013C964,0x8013C964,0xB2
+asm/non_matchings/code/z_sub_s/SubS_OfferItem.s,SubS_OfferItem,0x8013C964,0xB2
 asm/non_matchings/code/z_sub_s/SubS_FillShadowTex.s,SubS_FillShadowTex,0x8013CC2C,0x4E
 asm/non_matchings/code/z_sub_s/SubS_GenShadowTex.s,SubS_GenShadowTex,0x8013CD64,0x68
 asm/non_matchings/code/z_sub_s/SubS_DrawShadowTex.s,SubS_DrawShadowTex,0x8013CF04,0x77

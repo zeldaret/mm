@@ -159,7 +159,7 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     func_80A50EC0(this);
     SkelAnime_Update(&this->skelAnime);
-    func_8013C964(&this->actor, play, 60.0f, 30.0f, 0, this->unk18C & 7);
+    SubS_OfferItem(&this->actor, play, 60.0f, 30.0f, 0, this->unk18C & 7);
     Actor_SetFocus(&this->actor, 26.0f);
 }
 

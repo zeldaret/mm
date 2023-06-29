@@ -2675,7 +2675,7 @@
     0x8013C068:("SubS_WeightPathing_ComputePoint",),
     0x8013C624:("SubS_WeightPathing_Move",),
     0x8013C8B8:("SubS_CopyPointFromPathCheckBounds",),
-    0x8013C964:("func_8013C964",),
+    0x8013C964:("SubS_OfferItem",),
     0x8013CC2C:("SubS_FillShadowTex",),
     0x8013CD64:("SubS_GenShadowTex",),
     0x8013CF04:("SubS_DrawShadowTex",),

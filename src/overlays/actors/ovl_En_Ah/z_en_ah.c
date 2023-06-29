@@ -554,7 +554,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + 60;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2D8 & 7);
+        SubS_OfferItem(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2D8 & 7);
         if (!(this->unk_2D8 & 0x10)) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

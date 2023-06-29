@@ -382,7 +382,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE6130(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
-    func_8013C964(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & 7);
+    SubS_OfferItem(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & 7);
 }
 
 s32 EnShn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

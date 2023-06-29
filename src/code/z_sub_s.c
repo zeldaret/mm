@@ -816,59 +816,59 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
 }
 
 //! TODO: Needs docs with Actor_OfferExchangeItem
-s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
-    s32 ret = false;
+s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 mode) {
+    s32 canAccept = false;
     s16 x;
     s16 y;
     f32 xzDistToPlayerTemp;
 
     Actor_GetScreenPos(play, actor, &x, &y);
 
-    switch (type) {
-        case 1:
+    switch (mode) {
+        case SUBS_OFFER_MODE_GET_ITEM:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
+            canAccept = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
             break;
 
-        case 2:
+        case SUBS_OFFER_MODE_NEARBY:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 3:
+        case SUBS_OFFER_MODE_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 4:
+        case SUBS_OFFER_MODE_AUTO:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
             actor->flags |= ACTOR_FLAG_10000;
-            ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+            canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
 
-        case 5:
+        case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 6:
+        case SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -876,7 +876,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             break;
     }
 
-    return ret;
+    return canAccept;
 }
 
 const u8 sShadowMaps[4][12][12] = {

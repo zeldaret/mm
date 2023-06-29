@@ -2448,10 +2448,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             xzRange = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
+        SubS_OfferItem(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
     } else if ((this->actionFlags & ENGO_FLAG_ROLLED_UP) && (this->sleepState != ENGO_AWAKE)) {
         xzRange = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
+        SubS_OfferItem(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
     }
 
     if ((ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) && (ENGO_GET_TYPE(&this->actor) != ENGO_SPECTATOR) &&

@@ -410,7 +410,7 @@ void EnPst_Update(Actor* thisx, PlayState* play) {
     if (this->scheduleResult != POSTBOX_SCH_NONE) {
         if (Actor_IsFacingPlayer(&this->actor, 0x1FFE)) {
             this->unk214 = 0;
-            func_8013C964(&this->actor, play, 60.0f, 20.0f, 0, this->stateFlags & 7);
+            SubS_OfferItem(&this->actor, play, 60.0f, 20.0f, 0, this->stateFlags & 7);
         }
         Actor_SetFocus(&this->actor, 20.0f);
         EnPst_UpdateCollision(this, play);

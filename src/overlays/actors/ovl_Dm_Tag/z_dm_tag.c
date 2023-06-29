@@ -260,6 +260,6 @@ void DmTag_Update(Actor* thisx, PlayState* play) {
 
     func_80C2291C(this, play);
     this->actionFunc(this, play);
-    func_8013C964(&this->actor, play, 40.0f, fabsf(this->actor.playerHeightRel) + 1.0f, 0, this->unk_18C & 7);
+    SubS_OfferItem(&this->actor, play, 40.0f, fabsf(this->actor.playerHeightRel) + 1.0f, 0, this->unk_18C & 7);
     Actor_SetFocus(&this->actor, 0.0f);
 }

@@ -564,7 +564,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
-                func_8013C964(&this->actor, play, 0.0f, 0.0f, PLAYER_IA_NONE, this->unk_1CE & 7);
+                SubS_OfferItem(&this->actor, play, 0.0f, 0.0f, PLAYER_IA_NONE, this->unk_1CE & 7);
             }
             func_80B3E460(this);
         }
