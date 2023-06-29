@@ -345,7 +345,7 @@ void func_808F395C(EnIn* this, PlayState* play) {
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferSpeak(&this->actor, play, 200.0f);
     }
 }
 
@@ -397,7 +397,7 @@ void func_808F3AD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -421,7 +421,7 @@ void func_808F3BD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -445,7 +445,7 @@ void func_808F3CD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -1385,10 +1385,10 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {
-        if (func_800B8614(&this->actor, play, 80.0f)) {
+        if (Actor_OfferSpeak(&this->actor, play, 80.0f)) {
             this->actor.textId = func_808F3DD4(play, this, arg2);
         }
-    } else if (func_800B863C(&this->actor, play)) {
+    } else if (Actor_OfferSpeakNearby(&this->actor, play)) {
         this->actor.textId = func_808F3DD4(play, this, arg2);
     }
     return 0;

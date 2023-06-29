@@ -105,7 +105,7 @@ void EnGinkoMan_Idle(EnGinkoMan* this, PlayState* play) {
         }
         EnGinkoMan_SetupDialogue(this);
     } else if (ABS_ALT(yaw) < 0x1555) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferSpeak(&this->actor, play, 100.0f);
     }
 }
 
@@ -567,7 +567,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 500.0f, PLAYER_IA_HELD);
     }
 }
 

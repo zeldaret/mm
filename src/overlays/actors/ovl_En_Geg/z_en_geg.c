@@ -449,7 +449,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             this->unk_230 |= 4;
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8614(&this->actor, play, 300.0f);
+            Actor_OfferSpeak(&this->actor, play, 300.0f);
         }
     } else {
         this->unk_230 &= ~4;
@@ -460,7 +460,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
                 this->unk_230 &= ~8;
                 this->actionFunc = func_80BB27D4;
             } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
-                func_800B8614(&this->actor, play, 300.0f);
+                Actor_OfferSpeak(&this->actor, play, 300.0f);
                 this->unk_230 |= 8;
             }
         } else if (Actor_ProcessTalkRequest(&this->actor, &play->state) && (this->unk_230 & 8)) {
@@ -473,7 +473,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
         } else if (this->actor.xzDistToPlayer < 300.0f) {
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8614(&this->actor, play, 300.0f);
+            Actor_OfferSpeak(&this->actor, play, 300.0f);
             this->unk_230 |= 8;
         }
     }
@@ -777,7 +777,7 @@ void func_80BB30B4(EnGeg* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer < 150.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferSpeak(&this->actor, play, 150.0f);
     }
 }
 
@@ -813,7 +813,7 @@ void func_80BB32AC(EnGeg* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_496, &this->actor);
         this->actionFunc = func_80BB27D4;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 

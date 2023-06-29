@@ -815,7 +815,7 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-//! TODO: Needs docs with func_800B8500
+//! TODO: Needs docs with Actor_OfferExchangeItem
 s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
     s32 ret = false;
     s16 x;
@@ -833,14 +833,14 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
 
         case 2:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
         case 3:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -850,7 +850,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
             actor->flags |= ACTOR_FLAG_10000;
-            ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+            ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
 
@@ -859,7 +859,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -868,7 +868,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -1513,13 +1513,13 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
     return actorIter;
 }
 
-//! TODO: Needs docs with func_800B8500
+//! TODO: Needs docs with Actor_OfferExchangeItem
 s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
                   func_8013E748_VerifyFunc verifyFunc) {
     s32 ret = false;
 
     if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(play, actor, data))) {
-        ret = func_800B8500(actor, play, xzRange, yRange, exchangeItemId);
+        ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, exchangeItemId);
     }
     return ret;
 }
@@ -1543,7 +1543,7 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-//! TODO: Needs docs with func_800B8500
+//! TODO: Needs docs with Actor_OfferExchangeItem
 s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, s16 playerYawTol,
                   s16 actorYawTol) {
     Vec3s yawTols;

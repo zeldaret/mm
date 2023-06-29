@@ -350,7 +350,7 @@ void EnMa4_Wait(EnMa4* this, PlayState* play) {
         EnMa4_SetupDialogueHandler(this);
     } else if (this->type != MA4_TYPE_ALIENS_WON || ABS_ALT(yaw) < 0x4000) {
         if (!(player->stateFlags1 & PLAYER_STATE1_800000)) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferSpeak(&this->actor, play, 100.0f);
         }
     }
 }
@@ -683,7 +683,7 @@ void EnMa4_HorsebackGameCheckPlayerInteractions(EnMa4* this, PlayState* play) {
         Message_StartTextbox(play, 0x336E, &this->actor);
         this->actionFunc = EnMa4_HorsebackGameTalking;
     } else if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2] < SECONDS_TO_TIMER(115)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferSpeak(&this->actor, play, 100.0f);
     }
 }
 
@@ -839,7 +839,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags1 |= PLAYER_STATE1_20;
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
         sCueId = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -861,7 +861,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 

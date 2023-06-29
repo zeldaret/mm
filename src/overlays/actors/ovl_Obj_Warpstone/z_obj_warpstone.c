@@ -152,7 +152,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
     } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, play)) {
-        func_800B863C(&this->dyna.actor, play);
+        Actor_OfferSpeakNearby(&this->dyna.actor, play);
     }
 
     Collider_ResetCylinderAC(play, &this->collider.base);

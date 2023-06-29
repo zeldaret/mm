@@ -168,7 +168,7 @@ void func_80B14460(ObjHakaisi* this, PlayState* play) {
         func_80B14510(this);
     } else if (this->dyna.actor.textId != 0) {
         if (ABS_ALT(sp26) < 0x2000) {
-            func_800B8614(&this->dyna.actor, play, 100.0f);
+            Actor_OfferSpeak(&this->dyna.actor, play, 100.0f);
         }
     }
 

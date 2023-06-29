@@ -132,7 +132,7 @@ void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnDemoheishi_SetupTalk(this);
     } else if (absYawDiff <= 0x4BB8) {
-        func_800B8614(&this->actor, play, 70.0f);
+        Actor_OfferSpeak(&this->actor, play, 70.0f);
     }
 }
 

@@ -224,7 +224,7 @@ void func_809438F8(EnDaiku* this, PlayState* play) {
 
         this->unk_280 = this->actor.yawTowardsPlayer;
         if ((this->unk_278 == ENDAIKU_PARAM_FF_1) || (this->unk_278 == ENDAIKU_PARAM_FF_2) || (angle <= 0x2890)) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferSpeak(&this->actor, play, 100.0f);
         }
     }
 }

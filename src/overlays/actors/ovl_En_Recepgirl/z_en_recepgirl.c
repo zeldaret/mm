@@ -103,7 +103,7 @@ void EnRecepgirl_Wait(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         EnRecepgirl_SetupTalk(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferSpeak(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
             this->actor.textId = 0x2367; // "... doesn't Kafei want to break off his engagement ... ?"
         } else if (Flags_GetSwitch(play, this->actor.params)) {

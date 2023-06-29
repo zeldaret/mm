@@ -587,7 +587,7 @@ void func_80B41CBC(EnKgy* this, PlayState* play) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, play, 4);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -596,7 +596,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     } else {
         Actor_OfferGetItem(&this->actor, play, this->getItemId, 2000.0f, 1000.0f);
     }
@@ -848,7 +848,7 @@ void func_80B425A0(EnKgy* this, PlayState* play) {
         func_80B411DC(this, play, 0);
         func_80B40E18(this, this->actor.textId);
     } else if (this->actor.xzDistToPlayer < 200.0f) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferSpeak(&this->actor, play, 210.0f);
     }
 }
 
@@ -949,7 +949,7 @@ void func_80B4296C(EnKgy* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     }
 }
 
@@ -1070,7 +1070,7 @@ void func_80B42D28(EnKgy* this, PlayState* play) {
             } else {
                 this->actor.textId = 0xC1D;
             }
-            func_800B8614(&this->actor, play, 210.0f);
+            Actor_OfferSpeak(&this->actor, play, 210.0f);
         }
 
         if ((this->unk_2D2 == 0) && (this->actor.xzDistToPlayer < 200.0f)) {

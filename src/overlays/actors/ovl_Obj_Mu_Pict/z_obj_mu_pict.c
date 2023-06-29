@@ -76,7 +76,7 @@ void func_80C06B70(ObjMuPict* this, PlayState* play) {
             func_80C06C54(this);
         }
     } else if (ABS_ALT(yawDiff) < 0x2AAA) {
-        func_800B8614(&this->actor, play, 80.0f);
+        Actor_OfferSpeak(&this->actor, play, 80.0f);
     }
 }
 

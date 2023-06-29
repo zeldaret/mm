@@ -189,7 +189,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         } else if (func_801A5100() == 2) {
             func_80BDB788(this);
         } else {
-            func_800B8614(&this->actor, play, BREG(13) + 100.0f);
+            Actor_OfferSpeak(&this->actor, play, BREG(13) + 100.0f);
         }
     }
 }

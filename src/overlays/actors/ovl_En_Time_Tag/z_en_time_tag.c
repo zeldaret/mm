@@ -164,7 +164,7 @@ void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
                (Flags_GetSwitch(play, TIMETAG_SOARING_GET_SWITCHFLAG(&this->actor)) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_SOARING))) {
         this->actor.flags |= ACTOR_FLAG_1;
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferSpeak(&this->actor, play, 110.0f);
     }
 }
 
@@ -277,7 +277,7 @@ void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
         }
         this->actionFunc = EnTimeTag_Diary_Cutscene;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferSpeak(&this->actor, play, 110.0f);
     }
 }
 

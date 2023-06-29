@@ -617,10 +617,10 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId);
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId);
-s32 func_800B8614(Actor* actor, PlayState* play, f32 radius);
-s32 func_800B863C(Actor* actor, PlayState* play);
+s32 Actor_OfferExchangeItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId);
+s32 Actor_OfferExchangeItemRadius(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId);
+s32 Actor_OfferSpeak(Actor* actor, PlayState* play, f32 radius);
+s32 Actor_OfferSpeakNearby(Actor* actor, PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2);
 PlayerItemAction Player_GetExchangeItemId(PlayState* play);

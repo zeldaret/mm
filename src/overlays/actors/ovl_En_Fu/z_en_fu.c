@@ -418,9 +418,9 @@ void func_80962340(EnFu* this, PlayState* play) {
         }
         func_809628BC(this);
     } else if (this->unk_54A == 2) {
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferSpeak(&this->actor, play, 500.0f);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferSpeak(&this->actor, play, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
 }
@@ -936,7 +936,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 500.0f, PLAYER_IA_HELD);
     }
 }
 

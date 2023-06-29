@@ -247,7 +247,7 @@ void EnSth_PanicIdle(EnSth* this, PlayState* play) {
         EnSth_GetInitialPanicText(this, play);
         this->actionFunc = EnSth_HandlePanicConversation;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferSpeak(&this->actor, play, 110.0f);
     }
 }
 
@@ -310,7 +310,7 @@ void EnSth_PostOceanspiderhouseReward(EnSth* this, PlayState* play) {
         }
         Message_StartTextbox(play, nextTextId, &this->actor);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -321,7 +321,7 @@ void EnSth_GiveOceansideSpiderHouseReward(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnSth_PostOceanspiderhouseReward;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
         if (CURRENT_DAY == 3) {
             EnSth_ChangeAnim(this, STH_ANIM_PLEAD);
         } else {
@@ -434,7 +434,7 @@ void EnSth_OceansideSpiderHouseIdle(EnSth* this, PlayState* play) {
         EnSth_GetInitialOceansideSpiderHouseText(this, play);
         this->actionFunc = EnSth_HandleOceansideSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferSpeak(&this->actor, play, 110.0f);
     }
 }
 
@@ -459,7 +459,7 @@ void EnSth_MoonLookingIdle(EnSth* this, PlayState* play) {
         } else {
             this->actor.textId = 0x1131; // (The Moon) gotten bigger again
         }
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferSpeak(&this->actor, play, 110.0f);
     }
     this->headRot.x = -0x1388;
 }
@@ -510,7 +510,7 @@ void EnSth_TalkAfterSwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_MASK_OF_TRUTH);
         Message_StartTextbox(play, 0x918, &this->actor); // I've had enough of this, going home
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -521,7 +521,7 @@ void EnSth_SwampSpiderHouseGiveMask(EnSth* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnSth_TalkAfterSwampSpiderHouseGiveMask;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     } else {
         this->sthFlags &= ~STH_FLAG_DRAW_MASK_OF_TRUTH;
         // This flag is used to keep track if the player has already spoken to the actor, triggering secondary dialogue.
@@ -593,7 +593,7 @@ void EnSth_SwampSpiderHouseIdle(EnSth* this, PlayState* play) {
         this->actionFunc = EnSth_HandleSwampSpiderHouseConversation;
     } else if (EnSth_CanSpeakToPlayer(this, play)) {
         this->actor.textId = 0;
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferSpeak(&this->actor, play, 110.0f);
     }
 }
 

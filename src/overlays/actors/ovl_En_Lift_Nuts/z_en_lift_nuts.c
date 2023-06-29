@@ -443,9 +443,9 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
         func_80AEABF0(this);
     } else if (func_80AE9AC4(this, 0) || (this->unk_34E == 1)) {
         if (this->unk_34E == 1) {
-            func_800B8614(&this->actor, play, 200.0f);
+            Actor_OfferSpeak(&this->actor, play, 200.0f);
         } else if (this->actor.playerHeightRel >= -13.0f) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferSpeak(&this->actor, play, 100.0f);
         }
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000, 0x500);
@@ -900,7 +900,7 @@ void func_80AEB698(EnLiftNuts* this, PlayState* play) {
                 break;
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 

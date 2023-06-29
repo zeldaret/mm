@@ -177,7 +177,7 @@ void EnMuto_Idle(EnMuto* this, PlayState* play) {
         }
     }
 
-    func_800B8614(&this->actor, play, 80.0f);
+    Actor_OfferSpeak(&this->actor, play, 80.0f);
 }
 
 void EnMuto_SetupDialogue(EnMuto* this, PlayState* play) {

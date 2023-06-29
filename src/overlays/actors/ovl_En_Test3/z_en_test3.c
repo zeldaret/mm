@@ -670,7 +670,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             CutsceneManager_SetReturnCamera(this->subCamId);
             play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
         }
-        func_800B863C(&this->player.actor, play);
+        Actor_OfferSpeakNearby(&this->player.actor, play);
         if (this->unk_D88 == 3) {
             func_80A3F534(this, play);
         } else if (this->unk_D88 == 5) {
@@ -1022,7 +1022,7 @@ void func_80A40908(EnTest3* this, PlayState* play) {
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
     } else {
-        func_800B8500(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->player.actor, play, 9999.9f, 9999.9f, PLAYER_IA_HELD);
         this->unk_D78 = &D_80A41854[6];
         this->player.actor.textId = this->unk_D78->textId;
         this->player.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);

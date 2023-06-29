@@ -510,7 +510,7 @@ void func_809C59F0(EnBomBowlMan* this, PlayState* play) {
         } else {
             this->actor.textId = 0x716;
         }
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_HELD);
         this->actionFunc = func_809C5AA4;
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_BOMBERS_NOTEBOOK, 300.0f, 300.0f);
@@ -525,7 +525,7 @@ void func_809C5AA4(EnBomBowlMan* this, PlayState* play) {
             this->actionFunc = func_809C5598;
         }
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItem(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_HELD);
     }
 }
 

@@ -211,7 +211,7 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
 
         func_80B26AE8(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferSpeak(&this->actor, play, 100.0f);
     }
 }
 
@@ -500,7 +500,7 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
             this->unk_288 = 0x271A;
             func_80B26AE8(this);
         } else {
-            func_800B8614(&this->actor, play, 800.0f);
+            Actor_OfferSpeak(&this->actor, play, 800.0f);
         }
     }
 }
@@ -676,7 +676,7 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
         func_80B26AE8(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
-        func_800B85E0(&this->actor, play, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 1000.0f, PLAYER_IA_HELD);
     }
 }
 

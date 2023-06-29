@@ -1873,10 +1873,27 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Actor_OfferTalk / Actor_OfferGetItemExchange? Seems to be called with PLAYER_IA_HELD if the same actor used
-// Actor_OfferGetItem.
-// This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
+/**
+ * This function covers various interactions with the player actor, using Exchange Items (see `ItemAction` enum).
+ * It is typically used to take items from the player without first speaking, but also has other purposes.
+ *
+ * This function carries an exchange item request to the player actor if context allows it (e.g. the player is in range and
+ * not busy with certain things). The player actor performs the requested action itself.
+ *
+ * The following description of what the `ItemAction` values can do is provided here for completeness, but these
+ * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
+ *
+ * - Positive values (`PLAYER_IA_NONE < ItemAction < PLAYER_IA_MAX`):
+ *    Offers the ability to take an item from the player.
+ * - `PLAYER_IA_HELD`:
+ *    Used by actors/player to continue the current conversation.
+ * - `PLAYER_IA_NONE`:
+ *    Allows the player to speak to the actor (by pressing A).
+
+ *
+ * @return true If the player actor is capable of accepting the offer.
+ */
+s32 Actor_OfferExchangeItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
@@ -1895,18 +1912,18 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
-    return func_800B8500(actor, play, radius, radius, exchangeItemId);
+s32 Actor_OfferExchangeItemRadius(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
+    return Actor_OfferExchangeItem(actor, play, radius, radius, exchangeItemId);
 }
 
-s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, PLAYER_IA_NONE);
+s32 Actor_OfferSpeak(Actor* actor, PlayState* play, f32 radius) {
+    return Actor_OfferExchangeItemRadius(actor, play, radius, PLAYER_IA_NONE);
 }
 
-s32 func_800B863C(Actor* actor, PlayState* play) {
+s32 Actor_OfferSpeakNearby(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8614(actor, play, cylRadius);
+    return Actor_OfferSpeak(actor, play, cylRadius);
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
@@ -1952,7 +1969,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Similar to func_800B8500
+// Similar to Actor_OfferExchangeItem
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
@@ -4122,7 +4139,7 @@ s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interac
         return false;
     }
 
-    if (!func_800B8614(actor, play, interactRange)) {
+    if (!Actor_OfferSpeak(actor, play, interactRange)) {
         return false;
     }
 

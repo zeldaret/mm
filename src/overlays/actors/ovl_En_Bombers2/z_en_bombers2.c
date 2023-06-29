@@ -171,7 +171,7 @@ void func_80C04BA0(EnBombers2* this, PlayState* play) {
         return;
     }
     if (yawDiffAbs < 0x3BB5) {
-        func_800B8614(&this->actor, play, 70.0f);
+        Actor_OfferSpeak(&this->actor, play, 70.0f);
     }
 }
 

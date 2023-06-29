@@ -380,7 +380,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
         EnZod_HandleRoomConversation(this, play);
         this->actionFunc = func_80BAF7CC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferSpeak(&this->actor, play, 210.0f);
     }
 
     seqPos.x = this->actor.projectedPos.x;
@@ -436,7 +436,7 @@ void func_80BAFB84(EnZod* this, PlayState* play) {
         func_80BAFA44(this, play);
         this->actionFunc = func_80BAFADC;
     } else if (EnZod_PlayerIsFacingTijo(this, play)) {
-        func_800B8614(&this->actor, play, 210.0f);
+        Actor_OfferSpeak(&this->actor, play, 210.0f);
     }
 }
 

@@ -1114,7 +1114,7 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_WinterShrineGoron_Talk;
         } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferSpeakNearby(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1145,7 +1145,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
         } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isTargeted)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferSpeakNearby(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1186,7 +1186,7 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
             this->actionFunc = EnSGoro_ShopGoron_Talk;
         }
     } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferSpeakNearby(&this->actor, play);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1271,7 +1271,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -1280,7 +1280,7 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
     } else if (this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferSpeakNearby(&this->actor, play);
     }
     EnSGoro_UpdateSleeping(this, play);
 }

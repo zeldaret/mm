@@ -232,7 +232,7 @@ void func_80BE66E4(EnDaiku2* this, PlayState* play) {
         return;
     }
 
-    func_800B8614(&this->actor, play, 80.0f);
+    Actor_OfferSpeak(&this->actor, play, 80.0f);
     if ((this->unk_276 == 8) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EV_ROCK_BROKEN);
 
@@ -350,7 +350,7 @@ void func_80BE6D40(EnDaiku2* this, PlayState* play) {
         }
         func_80BE61D0(this);
     }
-    func_800B8614(&this->actor, play, 80.0f);
+    Actor_OfferSpeak(&this->actor, play, 80.0f);
 }
 
 void func_80BE6EB0(EnDaiku2* this) {
@@ -421,7 +421,7 @@ void func_80BE6EF0(EnDaiku2* this, PlayState* play) {
             Math_Vec3f_Copy(&this->unk_268, &sp40);
         }
     }
-    func_800B8614(&this->actor, play, 80.0f);
+    Actor_OfferSpeak(&this->actor, play, 80.0f);
 }
 
 void func_80BE71A0(EnDaiku2* this) {
