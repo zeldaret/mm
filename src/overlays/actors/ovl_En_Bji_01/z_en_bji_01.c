@@ -162,7 +162,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         this->textId = 0x5F1;
                     }
                     Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                  PLAYER_IA_NONE);
+                                            PLAYER_IA_NONE);
                     break;
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;

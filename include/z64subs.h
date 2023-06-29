@@ -16,10 +16,9 @@ typedef enum {
     /* 2 */ SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG
 } SubSCutsceneType;
 
-//! TODO: rename based on func_8013E748 and Actor_OfferExchangeItem
-typedef s32 (*func_8013E748_VerifyFunc)(struct PlayState*, Actor*, void*);
+typedef s32 (*VerifyExchangeItemActor)(struct PlayState*, Actor*, void*);
 
-typedef s32 (*VerifyActor)(struct PlayState*, Actor*, Actor*, void*);
+typedef s32 (*VerifyFindActor)(struct PlayState*, Actor*, Actor*, void*);
 
 #define SUBS_SHADOW_TEX_WIDTH 64
 #define SUBS_SHADOW_TEX_HEIGHT 64
@@ -159,11 +158,11 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes);
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane);
 s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect);
 
-Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyActor verifyActor);
+Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyFindActor verifyActor);
 
-s32 func_8013E748(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, func_8013E748_VerifyFunc verifyFunc);
+s32 SubS_OfferExchangeItemCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data, VerifyExchangeItemActor verifyActor);
 s32 SubS_ActorAndPlayerFaceEachOther(struct PlayState* play, Actor* actor, void* data);
-s32 func_8013E8F8(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, s16 playerYawTol, s16 actorYawTol);
+s32 SubS_OfferExchangeItemFaceEachOther(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, s16 playerYawTol, s16 actorYawTol);
 
 s32 SubS_TrackPointStep(Vec3f* worldPos, Vec3f* focusPos, s16 shapeYRot, Vec3f* yawTarget, Vec3f* pitchTarget, s16* headZRotStep, s16* headXRotStep, s16* torsoZRotStep, s16* torsoXRotStep, u16 headZRotStepMax, u16 headXRotStepMax, u16 torsoZRotStepMax, u16 torsoXRotStepMax);
 

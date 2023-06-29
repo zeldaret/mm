@@ -1877,8 +1877,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * This function covers various interactions with the player actor, using Exchange Items (see `ItemAction` enum).
  * It is typically used to take items from the player without first speaking, but also has other purposes.
  *
- * This function carries an exchange item request to the player actor if context allows it (e.g. the player is in range and
- * not busy with certain things). The player actor performs the requested action itself.
+ * This function carries an exchange item request to the player actor if context allows it (e.g. the player is in range
+ * and not busy with certain things). The player actor performs the requested action itself.
  *
  * The following description of what the `ItemAction` values can do is provided here for completeness, but these
  * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.

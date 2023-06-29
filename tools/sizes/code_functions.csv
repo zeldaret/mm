@@ -2220,9 +2220,9 @@ asm/non_matchings/code/z_sub_s/SubS_FillCutscenesList.s,SubS_FillCutscenesList,0
 asm/non_matchings/code/z_sub_s/SubS_ConstructPlane.s,SubS_ConstructPlane,0x8013E4B0,0x47
 asm/non_matchings/code/z_sub_s/SubS_LineSegVsPlane.s,SubS_LineSegVsPlane,0x8013E5CC,0x1D
 asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x8013E640,0x42
-asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
+asm/non_matchings/code/z_sub_s/SubS_OfferExchangeItemCustom.s,SubS_OfferExchangeItemCustom,0x8013E748,0x1E
 asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerFaceEachOther.s,SubS_ActorAndPlayerFaceEachOther,0x8013E7C0,0x4E
-asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
+asm/non_matchings/code/z_sub_s/SubS_OfferExchangeItemFaceEachOther.s,SubS_OfferExchangeItemFaceEachOther,0x8013E8F8,0x16
 asm/non_matchings/code/z_sub_s/SubS_TrackPointStep.s,SubS_TrackPointStep,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/Rumble_Update.s,Rumble_Update,0x8013EC10,0xD
 asm/non_matchings/code/code_8013EC10/Rumble_Override.s,Rumble_Override,0x8013EC44,0x27

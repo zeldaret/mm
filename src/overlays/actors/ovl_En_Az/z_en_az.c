@@ -1337,8 +1337,8 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
-                } else if (Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         PLAYER_IA_HELD)) {
+                } else if (Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer,
+                                                   this->actor.playerHeightRel, PLAYER_IA_HELD)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {

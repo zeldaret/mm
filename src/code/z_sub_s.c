@@ -1496,7 +1496,7 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
  * The callback should return `true` when the actor is succesfully verified.
  */
 Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
-                            void* verifyData, VerifyActor verifyActor) {
+                            void* verifyData, VerifyFindActor verifyActor) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
@@ -1513,15 +1513,14 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
     return actorIter;
 }
 
-//! TODO: Needs docs with Actor_OfferExchangeItem
-s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
-                  func_8013E748_VerifyFunc verifyFunc) {
-    s32 ret = false;
+s32 SubS_OfferExchangeItemCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
+                                 VerifyExchangeItemActor verifyActor) {
+    s32 canAccept = false;
 
-    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(play, actor, data))) {
-        ret = Actor_OfferExchangeItem(actor, play, xzRange, yRange, exchangeItemId);
+    if ((verifyActor == NULL) || ((verifyActor != NULL) && verifyActor(play, actor, data))) {
+        canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, exchangeItemId);
     }
-    return ret;
+    return canAccept;
 }
 
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
@@ -1543,14 +1542,14 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-//! TODO: Needs docs with Actor_OfferExchangeItem
-s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, s16 playerYawTol,
-                  s16 actorYawTol) {
+s32 SubS_OfferExchangeItemFaceEachOther(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId,
+                                        s16 playerYawTol, s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return func_8013E748(actor, play, xzRange, yRange, exchangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+    return SubS_OfferExchangeItemCustom(actor, play, xzRange, yRange, exchangeItemId, &yawTols,
+                                        SubS_ActorAndPlayerFaceEachOther);
 }
 
 /**
