@@ -685,29 +685,28 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 ret = false;
 
-    if (this->unk_34E & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            if (player->transformation == PLAYER_FORM_HUMAN) {
-                this->unk_34E &= ~0x80;
-            }
-            this->unk_34E &= ~(0x4000 | 0x2000);
-
-            if ((player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_RED) ||
-                (player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_BLUE)) {
-                this->unk_34E |= 0x2000;
-                this->unk_38C = player->exchangeItemId;
-            } else if (player->exchangeItemId != PLAYER_IA_NONE) {
-                this->unk_34E |= 0x4000;
-            }
-
-            this->unk_378 = func_80A875AC;
-            this->unk_390 = 0;
-            this->unk_364 = 0;
-            this->unk_354 = func_80A871E0(this, play);
-            SubS_UpdateFlags(&this->unk_34E, 0, 7);
-            this->actionFunc = func_80A881E0;
-            ret = true;
+    if (((this->unk_34E & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        if (player->transformation == PLAYER_FORM_HUMAN) {
+            this->unk_34E &= ~0x80;
         }
+        this->unk_34E &= ~(0x4000 | 0x2000);
+
+        if ((player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_RED) ||
+            (player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_BLUE)) {
+            this->unk_34E |= 0x2000;
+            this->unk_38C = player->exchangeItemId;
+        } else if (player->exchangeItemId != PLAYER_IA_NONE) {
+            this->unk_34E |= 0x4000;
+        }
+
+        this->unk_378 = func_80A875AC;
+        this->unk_390 = 0;
+        this->unk_364 = 0;
+        this->unk_354 = func_80A871E0(this, play);
+        SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        this->actionFunc = func_80A881E0;
+        ret = true;
     }
 
     return ret;
@@ -1060,15 +1059,15 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
     if (this->actor.draw != NULL) {
         if ((this->unk_34E & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
             if (func_80A873B8(this)) {
-                SubS_UpdateFlags(&this->unk_34E, 3, 7);
+                SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
             } else {
-                SubS_UpdateFlags(&this->unk_34E, 0, 7);
+                SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
             }
         } else if (this->unk_34E & 0x40) {
             if (func_80A873B8(this)) {
-                SubS_UpdateFlags(&this->unk_34E, 3, 7);
+                SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
             } else {
-                SubS_UpdateFlags(&this->unk_34E, 0, 7);
+                SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
             }
 
             if ((this->animIndex == KOUME_ANIM_TRY_GET_UP) &&
@@ -1083,13 +1082,13 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
             }
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
                    (this->actor.xzDistToPlayer < 140.0f)) {
-            SubS_UpdateFlags(&this->unk_34E, 4, 7);
+            SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MAX);
             this->unk_34E |= 0x1040;
             this->unk_362 = Rand_S16Offset(40, 20);
         } else if (func_80A873B8(this)) {
-            SubS_UpdateFlags(&this->unk_34E, 3, 7);
+            SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
         } else {
-            SubS_UpdateFlags(&this->unk_34E, 0, 7);
+            SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
         }
     }
 }
@@ -1115,7 +1114,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP_MORPH);
         }
 
-        SubS_UpdateFlags(&this->unk_34E, 0, 7);
+        SubS_UpdateFlags(&this->unk_34E, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
         this->unk_34E &= ~(0x1000 | 0x8);
         this->unk_34E |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -1180,7 +1179,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
     radius = this->collider.dim.worldSphere.radius + 30;
     this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_IA_NONE : PLAYER_IA_NONE;
 
-    SubS_OfferItem(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & 7);
+    SubS_OfferItem(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & SUBS_OFFER_MODE_MAX);
     func_80A8697C(this, play);
     func_80A86384(this->unk_394, &this->unk_1F8);
 }

@@ -13378,7 +13378,7 @@
     0x80B2B974:("EnPst_ChooseBehaviour",),
     0x80B2BAA4:("EnPst_GetMsgEventScript",),
     0x80B2BBFC:("EnPst_CheckTalk",),
-    0x80B2BCF8:("EnPst_UpdateFlagsSubs",),
+    0x80B2BCF8:("EnPst_SetOfferItemModeOnScreen",),
     0x80B2BD30:("EnPst_ProcessScheduleOutput",),
     0x80B2BD88:("EnPst_Idle",),
     0x80B2BD98:("EnPst_FollowSchedule",),

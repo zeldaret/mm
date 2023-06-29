@@ -319,9 +319,10 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
 s32 EnBjt_CheckTalk(EnBjt* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->stateFlags & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->stateFlags & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->stateFlags |= TOILET_HAND_STATE_TALKING;
-        SubS_UpdateFlags(&this->stateFlags, 0, 7);
+        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
         this->msgEventCallback = EnBjt_ChooseBehaviour;
         this->behaviour = 0;
         this->actionFunc = EnBjt_Talk;
@@ -364,7 +365,7 @@ void EnBjt_Talk(EnBjt* this, PlayState* play) {
 
     if (func_8010BF58(&this->actor, play, sMsgEventScript, this->msgEventCallback, &this->msgEventArg4)) {
         this->actor.flags &= ~ACTOR_FLAG_TALK_REQUESTED;
-        SubS_UpdateFlags(&this->stateFlags, 3, 7);
+        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
         this->stateFlags &= ~TOILET_HAND_STATE_TALKING;
         this->msgEventArg4 = 0;
         this->actionFunc = EnBjt_FollowSchedule;
@@ -383,7 +384,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
     if (scheduleOutput.result == TOILET_HAND_SCH_AVAILABLE) {
         if (this->stateFlags & TOILET_HAND_STATE_APPEARING) {
             if (EnBjt_Appear(this)) {
-                SubS_UpdateFlags(&this->stateFlags, 3, 7);
+                SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
             }
         } else if (this->stateFlags & TOILET_HAND_STATE_VANISHING) {
             EnBjt_Vanish(this);
@@ -391,7 +392,7 @@ void EnBjt_FollowSchedule(EnBjt* this, PlayState* play) {
             // Vanish if player goes too far away or heart piece given
             if ((fabsf(this->actor.playerHeightRel) > 70.0f) || (this->actor.xzDistToPlayer > 140.0f) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_90_80)) {
-                SubS_UpdateFlags(&this->stateFlags, 0, 7);
+                SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
                 this->playedSfx = false;
                 this->stateFlags &= ~TOILET_HAND_STATE_VISIBLE;
                 this->stateFlags |= TOILET_HAND_STATE_VANISHING;
@@ -446,7 +447,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
 
     if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
         EnBjt_UpdateSkelAnime(this);
-        SubS_OfferItem(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE, this->stateFlags & 7);
+        SubS_OfferItem(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE, this->stateFlags & SUBS_OFFER_MODE_MAX);
         Actor_SetFocus(&this->actor, 26.0f);
         EnBjt_UpdateCollision(this, play);
     }
