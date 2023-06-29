@@ -397,7 +397,7 @@ void func_808F3AD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -421,7 +421,7 @@ void func_808F3BD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -445,7 +445,7 @@ void func_808F3CD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 

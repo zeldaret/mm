@@ -258,7 +258,7 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
                         this->playedSfx = false;
                         this->behaviour++;
                         scriptBranch = 1; // Right item
-                    } else if (itemAction <= PLAYER_IA_MINUS1) {
+                    } else if (itemAction <= PLAYER_IA_HELD) {
                         this->playedSfx = false;
                         this->behaviour++;
                         scriptBranch = 3; // Not showing item

@@ -425,7 +425,7 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
         this->unk_3B2 = 13;
     }
 }
@@ -436,7 +436,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
         Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 

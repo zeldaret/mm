@@ -929,7 +929,7 @@ void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Swamp_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -994,7 +994,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Town_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_HELD);
     }
 }
 

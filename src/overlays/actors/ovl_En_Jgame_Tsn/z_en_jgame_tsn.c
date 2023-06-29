@@ -402,7 +402,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 

@@ -3937,7 +3937,7 @@ s32 func_80830B88(PlayState* play, Player* this) {
 void func_80830CE8(PlayState* play, Player* this) {
     func_8082F43C(play, this, func_80848AB0);
 
-    if (this->itemAction <= PLAYER_IA_MINUS1) {
+    if (this->itemAction <= PLAYER_IA_HELD) {
         func_80123C58(this);
     }
 
@@ -4212,7 +4212,7 @@ void func_8083172C(PlayState* play, Player* this, PlayerActionFunc actionFunc, s
 }
 
 void func_80831760(PlayState* play, Player* this, PlayerActionFunc actionFunc, s32 arg3) {
-    if (this->itemAction > PLAYER_IA_MINUS1) {
+    if (this->itemAction > PLAYER_IA_HELD) {
         PlayerItemAction heldItemAction = this->itemAction;
 
         this->itemAction = this->heldItemAction;
@@ -4275,7 +4275,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
     if ((((this->heldItemAction == this->itemAction) &&
           (!(this->stateFlags1 & PLAYER_STATE1_400000) ||
            (Player_MeleeWeaponFromIA(itemAction) != PLAYER_MELEEWEAPON_NONE) || (itemAction == PLAYER_IA_NONE))) ||
-         ((this->itemAction <= PLAYER_IA_MINUS1) &&
+         ((this->itemAction <= PLAYER_IA_HELD) &&
           ((Player_MeleeWeaponFromIA(itemAction) != PLAYER_MELEEWEAPON_NONE) || (itemAction == PLAYER_IA_NONE)))) &&
         ((itemAction == PLAYER_IA_NONE) || !(this->stateFlags1 & PLAYER_STATE1_8000000) ||
          (itemAction == PLAYER_IA_MASK_ZORA) ||
@@ -14019,7 +14019,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
             if (!func_8083A274(this, play)) {
                 this->stateFlags1 &= ~PLAYER_STATE1_400000;
 
-                if (this->itemAction <= PLAYER_IA_MINUS1) {
+                if (this->itemAction <= PLAYER_IA_HELD) {
                     func_80123C58(this);
                 }
 
@@ -14095,7 +14095,7 @@ void func_8084B5C0(Player* this, PlayState* play) {
                     PlayerAnimation_Change(play, &this->skelAnime, this->skelAnime.animation, 1.0f,
                                            Animation_GetLastFrame(this->skelAnime.animation), 0.0f, 2, 0.0f);
                 } else {
-                    if (this->itemAction <= PLAYER_IA_MINUS1) {
+                    if (this->itemAction <= PLAYER_IA_HELD) {
                         func_80123C58(this);
                     }
 
@@ -16633,7 +16633,7 @@ void func_80852C04(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, PLAYER_CSMODE_93);
                 } else {
-                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) ||
+                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_HELD)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
@@ -16876,7 +16876,7 @@ void func_808534C0(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
-                if ((talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) {
+                if ((talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_HELD)) {
                     Player_TalkWithPlayer(play, talkActor);
                 }
             }
@@ -20257,7 +20257,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId) {
     }
 
     if ((itemAction <= PLAYER_IA_NONE) || (itemAction >= PLAYER_IA_MAX)) {
-        return PLAYER_IA_MINUS1;
+        return PLAYER_IA_HELD;
     }
 
     this->itemAction = PLAYER_IA_NONE;

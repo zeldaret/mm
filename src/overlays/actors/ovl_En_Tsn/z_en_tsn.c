@@ -356,7 +356,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
             return;
         }
 
-        if (itemAction <= PLAYER_IA_MINUS1) {
+        if (itemAction <= PLAYER_IA_HELD) {
             Message_ContinueTextbox(play, 0x1078);
             Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_001198, -10.0f);
             this->actionFunc = func_80AE0704;

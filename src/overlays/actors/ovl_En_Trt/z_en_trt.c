@@ -486,7 +486,7 @@ void EnTrt_GivenRedPotionForKoume(EnTrt* this, PlayState* play) {
                 CutsceneManager_Queue(this->csId);
             }
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
         this->actionFunc = EnTrt_ItemGiven;
     }
 }
@@ -1055,7 +1055,7 @@ void EnTrt_ItemGiven(EnTrt* this, PlayState* play) {
         }
         Message_ContinueTextbox(play, this->textId);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -1128,7 +1128,7 @@ void EnTrt_SetupItemGiven(EnTrt* this, PlayState* play) {
             this->csId = this->lookToShopkeeperCsId;
             CutsceneManager_Queue(this->csId);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -1151,7 +1151,7 @@ void EnTrt_ContinueShopping(EnTrt* this, PlayState* play) {
                         player->stateFlags2 |= PLAYER_STATE2_20000000;
                         Message_StartTextbox(play, this->textId, &this->actor);
                         EnTrt_SetupStartShopping(play, this, true);
-                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+                        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_HELD);
                         break;
 
                     case 1:
@@ -1437,7 +1437,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                 this->actionFunc = EnTrt_Goodbye;
             }
             Message_CloseTextbox(play);
-        } else if (itemAction <= PLAYER_IA_MINUS1) {
+        } else if (itemAction <= PLAYER_IA_HELD) {
             if (this->flags & ENTRT_GIVEN_MUSHROOM) {
                 this->textId = 0x88B;
             } else {

@@ -211,7 +211,7 @@ s32 EnPst_ChooseBehaviour(Actor* thisx, PlayState* play) {
                                 this->exchangeItemId = itemAction;
                                 this->behaviour++;
                                 scriptBranch = 1;
-                            } else if (itemAction <= PLAYER_IA_MINUS1) {
+                            } else if (itemAction <= PLAYER_IA_HELD) {
                                 this->behaviour++;
                                 scriptBranch = 3;
                             } else if (itemAction != PLAYER_IA_NONE) {

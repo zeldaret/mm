@@ -536,7 +536,7 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         } else if (EnRz_CanTalk(this, play)) {
             if (func_80BFBCEC(this, play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
             } else {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 func_800B8614(&this->actor, play, 120.0f);

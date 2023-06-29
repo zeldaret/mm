@@ -355,7 +355,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
+            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_HELD);
         }
     }
 }

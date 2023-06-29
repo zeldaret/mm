@@ -621,7 +621,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
-            return PLAYER_IA_MINUS1;
+            return PLAYER_IA_HELD;
         }
     } else {
         gSaveContext.save.unk_06--;
@@ -636,9 +636,9 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_MINUS1)) {
+            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_HELD)) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
-                return PLAYER_IA_MINUS1;
+                return PLAYER_IA_HELD;
             } else {
                 s32 pad;
 
@@ -1219,7 +1219,7 @@ u8 D_801C07AC[] = {
 
 void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
-        if ((player->itemAction <= PLAYER_IA_MINUS1) || (player->itemAction == player->heldItemAction)) {
+        if ((player->itemAction <= PLAYER_IA_HELD) || (player->itemAction == player->heldItemAction)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
@@ -1234,7 +1234,7 @@ void Player_SetModelsForHoldingShield(Player* player) {
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
                     player->modelAnimType = PLAYER_ANIMTYPE_2;
-                    player->itemAction = PLAYER_IA_MINUS1;
+                    player->itemAction = PLAYER_IA_HELD;
                 }
             }
         }
@@ -1287,7 +1287,7 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
 void func_80123C58(Player* player) {
     player->itemAction = player->heldItemAction;
     Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
-    player->unk_AA5 = 0;
+    player->unk_AA5 = PLAYER_UNKAA5_0;
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
@@ -2314,7 +2314,7 @@ s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, G
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, actor)) {
-        if (player->unk_AA5 != 3) {
+        if (player->unk_AA5 != PLAYER_UNKAA5_3) {
             *dList = NULL;
         } else if (limbIndex == PLAYER_LIMB_LEFT_FOREARM) {
             *dList = sPlayerFirstPersonLeftForearmDLs[player->transformation];

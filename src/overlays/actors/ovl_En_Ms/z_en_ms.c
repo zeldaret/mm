@@ -161,7 +161,7 @@ void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
         Message_ContinueTextbox(play, 0x936); // "You can plant 'em whenever you want [...]"
         this->actionFunc = EnMs_Talk;
     } else {
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_MINUS1);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_HELD);
     }
 }
 
