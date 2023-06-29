@@ -2708,7 +2708,7 @@
     0x8013E640:("SubS_FindActorCustom",),
     0x8013E748:("SubS_OfferExchangeItemCustom",),
     0x8013E7C0:("SubS_ActorAndPlayerFaceEachOther",),
-    0x8013E8F8:("SubS_OfferExchangeItemFaceEachOther",),
+    0x8013E8F8:("SubS_OfferExchangeItemFacing",),
     0x8013E950:("SubS_TrackPointStep",),
     0x8013EC10:("Rumble_Update",),
     0x8013EC44:("Rumble_Override",),

@@ -815,7 +815,6 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-//! TODO: Needs docs with Actor_OfferExchangeItem
 s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 mode) {
     s32 canAccept = false;
     s16 x;
@@ -1542,8 +1541,8 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-s32 SubS_OfferExchangeItemFaceEachOther(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId,
-                                        s16 playerYawTol, s16 actorYawTol) {
+s32 SubS_OfferExchangeItemFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId,
+                                 s16 playerYawTol, s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
