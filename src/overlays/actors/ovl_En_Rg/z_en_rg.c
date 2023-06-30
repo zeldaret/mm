@@ -750,7 +750,7 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
-        SubS_UpdateFlags(&this->unk_310, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_310, 3, 7);
 
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
             this->unk_318 = Rand_S16Offset(30, 30);
@@ -843,7 +843,7 @@ s32 func_80BF5588(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             break;
     }
 
-    if (((this->unk_310 & 8) != 0) && (phi_v0 < 9)) {
+    if ((this->unk_310 & 8) && (phi_v0 < 9)) {
         rot->y += (s16)(Math_SinS(this->unk_32E[phi_v0]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->unk_328[phi_v0]) * 200.0f);
     }
