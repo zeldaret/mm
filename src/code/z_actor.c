@@ -1875,7 +1875,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 /**
  * This function covers various interactions with the player actor, using Exchange Items (see `ItemAction` enum).
- * It is typically used to take items from the player without first speaking, but also has other purposes.
+ * It is typically used to exchange items with the player without first speaking, but also has other purposes.
  *
  * This function carries an exchange item request to the player actor if context allows it (e.g. the player is in range
  * and not busy with certain things). The player actor performs the requested action itself.
@@ -1883,8 +1883,9 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * The following description of what the `ItemAction` values can do is provided here for completeness, but these
  * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
  *
- * - Positive values (`PLAYER_IA_NONE < ItemAction < PLAYER_IA_MAX`):
- *    Offers the ability to take an item from the player.
+ * - Positive values in range `PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN`:
+ *    Offers the ability to exhange an item with the player.
+ *    Other positive values do not work as currently implmeneted in player.
  * - `PLAYER_IA_HELD`:
  *    Used by actors/player to continue the current conversation.
  * - `PLAYER_IA_NONE`:
@@ -1892,6 +1893,9 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
  *
  * @return true If the player actor is capable of accepting the offer.
+ *
+ * Note: In MM, there is only one instance of using this for actually taking an item from the player without speaking first.
+ * Every other instance is to either offer to speak, or continue the current conversation.
  */
 s32 Actor_OfferExchangeItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
