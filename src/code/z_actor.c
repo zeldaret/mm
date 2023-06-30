@@ -1894,8 +1894,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  *
  * @return true If the player actor is capable of accepting the offer.
  *
- * Note: In MM, there is only one instance of using this for actually taking an item from the player without speaking first.
- * Every other instance is to either offer to speak, or continue the current conversation.
+ * Note: There is only one instance of using this for actually exchanging an item with the player
+ * without speaking first. Every other instance is to either offer to speak, or continue the current conversation.
  */
 s32 Actor_OfferExchangeItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
