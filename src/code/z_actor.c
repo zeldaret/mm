@@ -1883,9 +1883,10 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * The following description of what the `ItemAction` values can do is provided here for completeness, but these
  * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
  *
- * - Positive values in range `PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN`:
+ * - Positive values in range (`PLAYER_IA_NONE < ItemAction < PLAYER_IA_MAX`):
  *    Offers the ability to exhange an item with the player.
- *    Other positive values do not work as currently implmeneted in player.
+ *    Not all postivie values are implemented properly for this to work.
+ *    Working ones seem to be PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN
  * - `PLAYER_IA_HELD`:
  *    Used by actors/player to continue the current conversation.
  * - `PLAYER_IA_NONE`:
