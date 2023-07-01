@@ -58,7 +58,7 @@ void EnSekihi_Init(Actor* thisx, PlayState* play) {
     s32 objectIndex;
     s32 pad;
 
-    if ((type < SEKIHI_TYPE_0 || type >= SEKIHI_TYPE_MAX) || sOpaDLists[type] == NULL) {
+    if (((type < SEKIHI_TYPE_0) || (type >= SEKIHI_TYPE_MAX)) || (sOpaDLists[type] == NULL)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
