@@ -324,7 +324,7 @@ void EnMinifrog_Idle(EnMinifrog* this, PlayState* play) {
         }
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                (Player_GetMask(play) == PLAYER_MASK_DON_GERO)) {
-        Actor_OfferSpeak(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
@@ -464,7 +464,7 @@ void EnMinifrog_EndChoir(EnMinifrog* this, PlayState* play) {
         Message_StartTextbox(play, 0xD7E, &this->actor);
         this->actionFunc = EnMinifrog_YellowFrogDialog;
     } else {
-        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -475,7 +475,7 @@ void EnMinifrog_GetFrogHP(EnMinifrog* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnMinifrog_EndChoir;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_NONE);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 10000.0f, 50.0f);
     }
@@ -563,7 +563,7 @@ void EnMinifrog_SetupYellowFrogDialog(EnMinifrog* this, PlayState* play) {
                (Player_IsFacingActor(&this->actor, 0x3000, play) ||
                 CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) &&
                Player_GetMask(play) == PLAYER_MASK_DON_GERO) {
-        Actor_OfferSpeak(&this->actor, play, 160.0f);
+        Actor_OfferTalk(&this->actor, play, 160.0f);
     }
 }
 

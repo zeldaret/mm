@@ -2449,10 +2449,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             xzRange = this->colliderCylinder.dim.radius + 40;
         }
-        SubS_OfferItem(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MAX);
     } else if ((this->actionFlags & ENGO_FLAG_ROLLED_UP) && (this->sleepState != ENGO_AWAKE)) {
         xzRange = this->colliderCylinder.dim.radius + 40;
-        SubS_OfferItem(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MAX);
     }
 
     if ((ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) && (ENGO_GET_TYPE(&this->actor) != ENGO_SPECTATOR) &&

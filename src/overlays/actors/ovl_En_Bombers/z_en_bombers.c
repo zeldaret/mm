@@ -308,7 +308,7 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
         this->collider.dim.height = 60;
         func_80C03F64(this);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 
@@ -442,7 +442,7 @@ void func_80C04354(EnBombers* this, PlayState* play) {
         this->unk_28E = 0;
         this->actionFunc = func_80C043C8;
     } else {
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 

@@ -550,7 +550,7 @@ void EnDns_Update(Actor* thisx, PlayState* play) {
         func_8092C934(this);
         func_8092C86C(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-        SubS_OfferItem(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & SUBS_OFFER_MODE_MAX);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, play);
         func_8092C5C0(this);

@@ -720,8 +720,8 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            SubS_OfferItem(&this->actor, play, this->unk_274, 30.0f, PLAYER_IA_NONE,
-                           this->stateFlags & SUBS_OFFER_MODE_MAX);
+            SubS_Offer(&this->actor, play, this->unk_274, 30.0f, PLAYER_IA_NONE,
+                       this->stateFlags & SUBS_OFFER_MODE_MAX);
         }
         func_80BBFF24(this, play);
     }

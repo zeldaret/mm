@@ -180,7 +180,7 @@ void EnHgo_Talk(EnHgo* this, PlayState* play) {
         }
         EnHgo_SetupDialogueHandler(this);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

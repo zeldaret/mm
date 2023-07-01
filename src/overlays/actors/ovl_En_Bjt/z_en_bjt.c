@@ -447,7 +447,7 @@ void EnBjt_Update(Actor* thisx, PlayState* play) {
 
     if (this->scheduleResult != TOILET_HAND_SCH_NONE) {
         EnBjt_UpdateSkelAnime(this);
-        SubS_OfferItem(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE, this->stateFlags & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, 60.0f, 10.0f, PLAYER_IA_NONE, this->stateFlags & SUBS_OFFER_MODE_MAX);
         Actor_SetFocus(&this->actor, 26.0f);
         EnBjt_UpdateCollision(this, play);
     }

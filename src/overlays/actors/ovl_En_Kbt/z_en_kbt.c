@@ -276,7 +276,7 @@ void func_80B34314(EnKbt* this, PlayState* play) {
                     this->actor.textId = 0xC4E;
                 }
             }
-            Actor_OfferSpeak(&this->actor, play, 260.0f);
+            Actor_OfferTalk(&this->actor, play, 260.0f);
         }
     }
     func_80B3415C(this);

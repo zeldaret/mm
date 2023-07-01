@@ -349,7 +349,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        Actor_OfferSpeak(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

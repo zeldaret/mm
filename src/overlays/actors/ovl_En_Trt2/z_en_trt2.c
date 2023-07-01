@@ -425,7 +425,7 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
         this->unk_3B2 = 13;
     }
 }
@@ -436,7 +436,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
         Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -710,7 +710,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     }
 
     if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
-        Actor_OfferSpeakNearby(&this->actor, play);
+        Actor_OfferTalkNearby(&this->actor, play);
     }
 
     return true;

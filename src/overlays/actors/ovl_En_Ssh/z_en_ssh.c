@@ -750,7 +750,7 @@ void EnSsh_Idle(EnSsh* this, PlayState* play) {
 
     if ((this->unkTimer == 0) && (this->animTimer == 0) && (this->actor.xzDistToPlayer < 100.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

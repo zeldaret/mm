@@ -1874,8 +1874,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 }
 
 /**
- * This function covers various interactions with the player actor, using Exchange Items (see `ItemAction` enum).
- * It is typically used to exchange items with the player without first speaking, but also has other purposes.
+ * This function covers offering the ability to `Talk` with the player.
+ * Passing an exchangeItemId (see `ItemAction)` allows the player to also use the item to initate the converstation.
  *
  * This function carries an exchange item request to the player actor if context allows it (e.g. the player is in range
  * and not busy with certain things). The player actor performs the requested action itself.
@@ -1884,21 +1884,20 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
  *
  * - Positive values in range (`PLAYER_IA_NONE < ItemAction < PLAYER_IA_MAX`):
- *    Offers the ability to exhange an item with the player.
- *    Not all postivie values are implemented properly for this to work.
+ *    Offers the ability to initate the conversation with an item from the player.
+ *    Not all positive values are implemented properly for this to work.
  *    Working ones seem to be PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN
- * - `PLAYER_IA_HELD`:
- *    Used by actors/player to continue the current conversation.
  * - `PLAYER_IA_NONE`:
  *    Allows the player to speak to the actor (by pressing A).
-
+ * - `PLAYER_IA_HELD`:
+ *    Used by actors/player to continue the current conversation.
  *
  * @return true If the player actor is capable of accepting the offer.
  *
- * Note: There is only one instance of using this for actually exchanging an item with the player
- * without speaking first. Every other instance is to either offer to speak, or continue the current conversation.
+ * Note: There is only one instance of using this for actually using an item to start the conversation with the player.
+ * Every other instance is to either offer to speak, or continue the current conversation.
  */
-s32 Actor_OfferExchangeItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
+s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
     Player* player = GET_PLAYER(play);
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
@@ -1917,18 +1916,18 @@ s32 Actor_OfferExchangeItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRan
     return true;
 }
 
-s32 Actor_OfferExchangeItemRadius(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
-    return Actor_OfferExchangeItem(actor, play, radius, radius, exchangeItemId);
+s32 Actor_OfferTalkExchangeRadius(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
+    return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemId);
 }
 
-s32 Actor_OfferSpeak(Actor* actor, PlayState* play, f32 radius) {
-    return Actor_OfferExchangeItemRadius(actor, play, radius, PLAYER_IA_NONE);
+s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius) {
+    return Actor_OfferTalkExchangeRadius(actor, play, radius, PLAYER_IA_NONE);
 }
 
-s32 Actor_OfferSpeakNearby(Actor* actor, PlayState* play) {
+s32 Actor_OfferTalkNearby(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return Actor_OfferSpeak(actor, play, cylRadius);
+    return Actor_OfferTalk(actor, play, cylRadius);
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
@@ -1974,7 +1973,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Similar to Actor_OfferExchangeItem
+// Similar to Actor_OfferTalkExchange
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
@@ -4144,7 +4143,7 @@ s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interac
         return false;
     }
 
-    if (!Actor_OfferSpeak(actor, play, interactRange)) {
+    if (!Actor_OfferTalk(actor, play, interactRange)) {
         return false;
     }
 

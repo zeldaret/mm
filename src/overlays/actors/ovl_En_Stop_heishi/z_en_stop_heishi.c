@@ -500,7 +500,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
         this->skelAnime.playSpeed = 1.0f;
         func_80AE854C(this, play);
     } else if (yawDiffAbs < 0x4BB9) {
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 

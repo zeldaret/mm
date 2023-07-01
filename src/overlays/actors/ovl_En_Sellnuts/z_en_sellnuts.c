@@ -382,7 +382,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 80.0f, PLAYER_IA_MOONS_TEAR);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 80.0f, PLAYER_IA_MOONS_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
@@ -492,14 +492,14 @@ void func_80ADBC60(EnSellnuts* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
         this->unk_340 = D_80ADD930[this->unk_33A];
     }
 }
 
 void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
     }
@@ -713,7 +713,7 @@ void func_80ADC5A4(EnSellnuts* this, PlayState* play) {
         }
     } else if (func_80ADB08C(play) < 80.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferSpeak(&this->actor, play, this->actor.xzDistToPlayer);
+        Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer);
     }
 }
 
@@ -860,7 +860,7 @@ void func_80ADCC04(EnSellnuts* this, PlayState* play) {
         if (currentFrame == 0) {
             if (func_80ADB08C(play) < 9999.0f) {
                 this->actor.flags |= ACTOR_FLAG_10000;
-                Actor_OfferSpeak(&this->actor, play, 9999.0f);
+                Actor_OfferTalk(&this->actor, play, 9999.0f);
             }
             this->unk_340 = 0x626;
             this->unk_34C = 0;

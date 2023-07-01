@@ -327,7 +327,7 @@ void func_80994F7C(EnSkb* this, PlayState* play) {
         this->actionFunc = func_80995190;
         this->actor.speed = 0.0f;
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && !(this->collider.base.acFlags & AC_HIT)) {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -357,7 +357,7 @@ void func_80995068(EnSkb* this, PlayState* play) {
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
     } else if (!(this->collider.base.acFlags & AC_HIT)) {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

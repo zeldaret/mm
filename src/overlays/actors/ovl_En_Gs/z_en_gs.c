@@ -184,7 +184,7 @@ void func_80997D38(EnGs* this, PlayState* play) {
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
-            SubS_OfferExchangeItemFacing(&this->actor, play, D_8099A408[this->actor.params],
+            SubS_OfferTalkExchangeFacing(&this->actor, play, D_8099A408[this->actor.params],
                                          D_8099A408[this->actor.params], PLAYER_IA_NONE, 0x2000, 0x2000);
         }
     }

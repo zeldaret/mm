@@ -195,7 +195,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
             this->targetHeadPos.y = -this->targetHeadPos.y;
         }
     }
-    Actor_OfferSpeak(&this->actor, play, 70.0f);
+    Actor_OfferTalk(&this->actor, play, 70.0f);
 }
 
 void func_80ABB540(EnGuardNuts* this) {

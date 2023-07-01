@@ -1179,7 +1179,7 @@ void EnTru_Update(Actor* thisx, PlayState* play) {
     radius = this->collider.dim.worldSphere.radius + 30;
     this->unk_388 = !(this->unk_34E & 0x80) ? PLAYER_IA_NONE : PLAYER_IA_NONE;
 
-    SubS_OfferItem(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & SUBS_OFFER_MODE_MAX);
+    SubS_Offer(&this->actor, play, radius, 20.0f, this->unk_388, this->unk_34E & SUBS_OFFER_MODE_MAX);
     func_80A8697C(this, play);
     func_80A86384(this->unk_394, &this->unk_1F8);
 }

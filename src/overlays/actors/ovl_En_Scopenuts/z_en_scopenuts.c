@@ -302,7 +302,7 @@ void func_80BCB52C(EnScopenuts* this, PlayState* play) {
     } else if (((this->actor.xzDistToPlayer < 100.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     } else if (!(((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false) ||
                !((this->actor.xzDistToPlayer < 200.0f) ? true : false)) {
         this->unk_348 = 4;
@@ -360,7 +360,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
         this->actionFunc = func_80BCB980;
     }
 }
@@ -382,7 +382,7 @@ void func_80BCB980(EnScopenuts* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_33C, &this->actor);
         this->actionFunc = func_80BCB6D0;
     } else {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 

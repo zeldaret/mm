@@ -80,7 +80,7 @@ void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play) {
         Message_StartTextbox(play, 0x228, &this->actor);
         EnNnh_SetupDialogue(this);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

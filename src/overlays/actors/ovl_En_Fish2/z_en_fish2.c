@@ -426,7 +426,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
             itemAction = itemAction->next;
         }
 
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

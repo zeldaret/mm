@@ -390,7 +390,7 @@ void func_80BFEB64(EnBomjima* this, PlayState* play) {
     }
 
     if (CutsceneManager_GetCurrentCsId() == CS_ID_NONE) {
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 
     if ((this->bombal->actor.update == NULL) || (this->bombal->actor.colChkInfo.health == 0)) {
@@ -557,7 +557,7 @@ void func_80BFF174(EnBomjima* this, PlayState* play) {
         if (this->unk_2BC >= 5) {
             func_80BFE67C(this, play);
         }
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 
@@ -889,7 +889,7 @@ void func_80C00168(EnBomjima* this, PlayState* play) {
         this->unk_2DC = this->actor.yawTowardsPlayer;
         func_80C00234(this);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 

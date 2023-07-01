@@ -621,7 +621,7 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
         }
         func_80BD9A9C(this);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

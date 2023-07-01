@@ -549,7 +549,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + this->unk_30C;
         height = this->collider.dim.height + 10;
 
-        SubS_OfferItem(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2FC & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2FC & SUBS_OFFER_MODE_MAX);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         func_80BE0620(this, play);

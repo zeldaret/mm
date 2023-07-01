@@ -345,7 +345,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
         if (this->actor.isTargeted) {
-            Actor_OfferSpeak(&this->actor, play, 110.0f);
+            Actor_OfferTalk(&this->actor, play, 110.0f);
         }
     }
 

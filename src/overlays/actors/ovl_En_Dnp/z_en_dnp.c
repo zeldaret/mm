@@ -356,7 +356,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            Actor_OfferExchangeItem(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_HELD);
+            Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_HELD);
         }
     }
 }
@@ -463,7 +463,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        SubS_OfferItem(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & SUBS_OFFER_MODE_MAX);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }

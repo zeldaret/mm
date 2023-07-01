@@ -368,7 +368,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
         play->msgCtx.msgLength = 0;
         func_80A71E54(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        Actor_OfferSpeak(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
     }
 }
 
@@ -568,12 +568,12 @@ void func_80A724B8(EnDno* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80A725E0(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        Actor_OfferSpeak(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
     }
 }
 
 void func_80A7256C(EnDno* this, PlayState* play) {
-    Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+    Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                             PLAYER_IA_HELD);
 }
 

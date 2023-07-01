@@ -995,7 +995,7 @@ void DmChar08_Update(Actor* thisx, PlayState* play) {
     }
     if (this->unk_1FF != 0) {
         func_80AAFCCC(this, play);
-        Actor_OfferSpeak(&this->dyna.actor, play, 400.0f);
+        Actor_OfferTalk(&this->dyna.actor, play, 400.0f);
     }
     func_80AB096C(this, play);
     DmChar08_UpdateCollision(this, play);

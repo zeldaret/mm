@@ -294,7 +294,7 @@ void func_80AECA90(EnTk* this, PlayState* play) {
         play->msgCtx.msgLength = 0;
         func_80AEDE10(this, play);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -486,7 +486,7 @@ s32 func_80AECE60(EnTk* this, PlayState* play) {
     }
 
     if (!(this->unk_3CE & 8) && !(this->unk_2CA & 0x10) && (this->actor.xzDistToPlayer < 100.0f)) {
-        SubS_OfferExchangeItemFacing(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
+        SubS_OfferTalkExchangeFacing(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
     }
 
     return false;
@@ -696,10 +696,10 @@ void func_80AED940(EnTk* this, PlayState* play) {
         func_80AEDE10(this, play);
     } else if (!(this->unk_2CA & 0x80)) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            SubS_OfferExchangeItemFacing(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
+            SubS_OfferTalkExchangeFacing(&this->actor, play, 100.0f, 100.0f, PLAYER_IA_NONE, 0x4000, 0x4000);
         }
     } else {
-        Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                 PLAYER_IA_NONE);
     }
 }

@@ -238,10 +238,10 @@ void func_80B35450(EnGg* this, PlayState* play) {
         this->actionFunc = func_80B352A4;
     } else if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.xzDistToPlayer > 50.0f)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
-            Actor_OfferSpeakNearby(&this->actor, play);
+            Actor_OfferTalkNearby(&this->actor, play);
             this->actor.textId = 0xCEE;
         } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
-            Actor_OfferSpeakNearby(&this->actor, play);
+            Actor_OfferTalkNearby(&this->actor, play);
             this->actor.textId = 0xCE5;
         }
     }

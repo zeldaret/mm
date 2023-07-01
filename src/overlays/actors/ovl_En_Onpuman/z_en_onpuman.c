@@ -158,7 +158,7 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
         if (this->actor.xzDistToPlayer < 200.0f) {
             if (ABS_ALT(yaw) <= 0x4300) {
                 this->actor.textId = 0x8D3;
-                Actor_OfferSpeak(&this->actor, play, 100.0f);
+                Actor_OfferTalk(&this->actor, play, 100.0f);
                 func_800B874C(&this->actor, play, 100.0f, 100.0f);
             }
         }

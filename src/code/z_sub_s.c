@@ -815,7 +815,16 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 mode) {
+/**
+ * Attempt to extend different offers to the player based on different checks
+ * and on the provided mode (see SubSOfferMode).
+ *
+ * The offer types are either GetItem (see Actor_OfferGetItem) or TalkExchange (see Actor_OfferTalkExchange),
+ * with more check variants provided for TalkExchange offers.
+ *
+ * @return `true` if offer was extended and the player can accept it
+ */
+s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode) {
     s32 canAccept = false;
     s16 x;
     s16 y;
@@ -832,14 +841,14 @@ s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 i
 
         case SUBS_OFFER_MODE_NEARBY:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
         case SUBS_OFFER_MODE_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -849,7 +858,7 @@ s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 i
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
             actor->flags |= ACTOR_FLAG_10000;
-            canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+            canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
 
@@ -858,7 +867,7 @@ s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 i
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
                 actor->flags |= ACTOR_FLAG_10000;
-                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -867,7 +876,7 @@ s32 SubS_OfferItem(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 i
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
-                canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -1512,12 +1521,16 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
     return actorIter;
 }
 
-s32 SubS_OfferExchangeItemCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
+/**
+ * Will extend a TalkExchange offer to the player if the actor is verified with a custom callback.
+ * The callback should return `true` when the actor is succesfully verified.
+ */
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
                                  VerifyExchangeItemActor verifyActor) {
     s32 canAccept = false;
 
     if ((verifyActor == NULL) || ((verifyActor != NULL) && verifyActor(play, actor, data))) {
-        canAccept = Actor_OfferExchangeItem(actor, play, xzRange, yRange, exchangeItemId);
+        canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, exchangeItemId);
     }
     return canAccept;
 }
@@ -1541,13 +1554,13 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-s32 SubS_OfferExchangeItemFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId,
+s32 SubS_OfferTalkExchangeFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId,
                                  s16 playerYawTol, s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return SubS_OfferExchangeItemCustom(actor, play, xzRange, yRange, exchangeItemId, &yawTols,
+    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemId, &yawTols,
                                         SubS_ActorAndPlayerFaceEachOther);
 }
 

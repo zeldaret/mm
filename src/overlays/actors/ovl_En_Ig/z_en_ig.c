@@ -949,7 +949,7 @@ void EnIg_Update(Actor* thisx, PlayState* play) {
         func_80BF1258(this);
         func_80BF13E4(this);
         func_80BF15EC(this);
-        SubS_OfferItem(&this->actor, play, 60.0f, 30.0f, PLAYER_IA_NONE, this->unk_3D0 & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, 60.0f, 30.0f, PLAYER_IA_NONE, this->unk_3D0 & SUBS_OFFER_MODE_MAX);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         func_80BF1354(this, play);

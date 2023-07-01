@@ -184,9 +184,9 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
         }
         func_80C14030(this);
     } else if (this->actor.flags & ACTOR_FLAG_10000) {
-        Actor_OfferSpeak(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 80.0f);
+        Actor_OfferTalk(&this->actor, play, 80.0f);
     }
 
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(player->stateFlags1 & PLAYER_STATE1_2000) &&
@@ -222,7 +222,7 @@ void func_80C13E90(EnJgameTsn* this, PlayState* play) {
         }
         func_80C14030(this);
     } else {
-        Actor_OfferSpeak(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -402,7 +402,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
     }
 }
 

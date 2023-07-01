@@ -236,7 +236,7 @@ void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
             // "...Sort of looks different..."
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
-            Actor_OfferSpeak(&this->actor, play, 80.0f);
+            Actor_OfferTalk(&this->actor, play, 80.0f);
         }
     }
 }

@@ -165,7 +165,7 @@ void func_80BE887C(EnBaisen* this, PlayState* play) {
             }
         }
         this->actor.textId = sTextIds[this->textIdIndex];
-        Actor_OfferSpeak(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 

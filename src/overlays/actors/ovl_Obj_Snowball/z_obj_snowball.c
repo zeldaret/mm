@@ -771,7 +771,7 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (sp24 && (this->actionFunc == func_80B04350)) {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 
     if ((this->actor.floorPoly != NULL) && (this->actor.projectedPos.z < 920.0f)) {

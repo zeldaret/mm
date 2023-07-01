@@ -576,7 +576,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             }
         } else {
-            Actor_OfferExchangeItemRadius(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
+            Actor_OfferTalkExchangeRadius(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
         }
     }
 }

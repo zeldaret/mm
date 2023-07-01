@@ -538,7 +538,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             func_80B5D114(this, play);
         } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
-            Actor_OfferSpeak(&this->actor, play, 130.0f);
+            Actor_OfferTalk(&this->actor, play, 130.0f);
         }
     }
 }
@@ -607,7 +607,7 @@ void func_80B5CB0C(EnOt* this, PlayState* play) {
 
 void func_80B5CBA0(EnOt* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10000;
-    Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+    Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                             PLAYER_IA_NONE);
     this->actionFunc = func_80B5CBEC;
 }
@@ -619,7 +619,7 @@ void func_80B5CBEC(EnOt* this, PlayState* play) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                 PLAYER_IA_NONE);
     }
 }
@@ -699,13 +699,13 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferExchangeItem(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                 PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
             (this->actor.xzDistToPlayer < 130.0f)) {
-            Actor_OfferSpeak(&this->actor, play, 130.0f);
+            Actor_OfferTalk(&this->actor, play, 130.0f);
         }
     }
 

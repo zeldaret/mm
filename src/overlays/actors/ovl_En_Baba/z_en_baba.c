@@ -575,7 +575,7 @@ void EnBaba_Idle(EnBaba* this, PlayState* play) {
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
-            Actor_OfferSpeak(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     }
 }
@@ -647,7 +647,7 @@ void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
         EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Talk;
     } else {
-        Actor_OfferExchangeItemRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -675,7 +675,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            Actor_OfferSpeakNearby(&this->actor, play);
+            Actor_OfferTalkNearby(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);

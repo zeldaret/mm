@@ -814,7 +814,7 @@ void EnAl_Update(Actor* thisx, PlayState* play) {
     if (this->unk_35C != 0) {
         func_80BDE250(this);
         func_80BDEE5C(this);
-        SubS_OfferItem(&this->actor, play, this->unk_4D4, 30.0f, this->unk_4F0, this->unk_4C2 & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, this->unk_4D4, 30.0f, this->unk_4F0, this->unk_4C2 & SUBS_OFFER_MODE_MAX);
         func_80BDE318(this, play);
     }
 }

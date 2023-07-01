@@ -487,7 +487,7 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         this->actor.speed = 0.0f;
         if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
             this->actor.flags |= ACTOR_FLAG_10000;
-            Actor_OfferSpeak(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
             this->actionFunc = EnDg_SetupTalk;
         } else {
             this->actionFunc = EnDg_Held;
@@ -1280,7 +1280,7 @@ void EnDg_SetupTalk(EnDg* this, PlayState* play) {
         EnDg_StartTextBox(this, play);
         this->actionFunc = EnDg_Talk;
     } else {
-        Actor_OfferSpeak(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

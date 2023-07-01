@@ -76,7 +76,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         func_80B3C29C(this);
     } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
-            Actor_OfferSpeakNearby(&this->dyna.actor, play);
+            Actor_OfferTalkNearby(&this->dyna.actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->dyna.actor.textId = 0xCF3;
             } else {

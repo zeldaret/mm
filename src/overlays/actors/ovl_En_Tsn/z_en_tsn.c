@@ -275,7 +275,7 @@ void func_80AE0304(EnTsn* this, PlayState* play) {
             func_80ADFF84(this, play);
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        Actor_OfferSpeak(&this->actor, play, 160.0f);
+        Actor_OfferTalk(&this->actor, play, 160.0f);
         this->unk_220 |= 1;
     } else {
         this->unk_220 &= ~1;
@@ -537,7 +537,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
             ENTSN_SET_Z(&this->unk_1D8->actor, true);
         }
     } else if (this->actor.isTargeted) {
-        Actor_OfferSpeak(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -554,7 +554,7 @@ void func_80AE0D78(EnTsn* this, PlayState* play) {
         this->actionFunc = func_80AE0D10;
         this->unk_220 |= 4;
     } else if (this->actor.isTargeted) {
-        Actor_OfferSpeak(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 

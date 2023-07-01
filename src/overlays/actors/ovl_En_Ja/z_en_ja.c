@@ -386,7 +386,7 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
         radius = this->collider.dim.radius + 30;
         height = this->collider.dim.height + 10;
-        SubS_OfferItem(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & SUBS_OFFER_MODE_MAX);
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);

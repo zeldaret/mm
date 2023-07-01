@@ -254,7 +254,7 @@ void func_80BBB2C4(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB8AC;
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -266,7 +266,7 @@ void func_80BBB354(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBB2C4;
         SET_WEEKEVENTREG(WEEKEVENTREG_39_20);
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     } else {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_20)) {
             getItemId = GI_RUPEE_PURPLE;
@@ -516,7 +516,7 @@ void func_80BBBB84(EnZos* this, PlayState* play) {
             this->unk_2B6 |= 0x10;
         }
     } else {
-        Actor_OfferSpeak(&this->actor, play, 300.0f);
+        Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
 
@@ -527,7 +527,7 @@ void func_80BBBCBC(EnZos* this, PlayState* play) {
         Message_StartTextbox(play, 0x124D, &this->actor);
         this->actionFunc = func_80BBB574;
     } else {
-        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -536,7 +536,7 @@ void func_80BBBD5C(EnZos* this, PlayState* play) {
     if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBCBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferExchangeItem(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
     }
 }
 
@@ -559,7 +559,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80BBBB84;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferSpeak(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
         return;
     }
 
@@ -569,7 +569,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
     } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_501)) {
         this->actionFunc = func_80BBBD5C;
     } else if (func_80BBAF5C(this, play)) {
-        Actor_OfferSpeak(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 
     if (!Actor_IsFacingPlayer(&this->actor, 0x4000) && (this->actor.xzDistToPlayer < 100.0f)) {
@@ -645,7 +645,7 @@ void func_80BBC14C(EnZos* this, PlayState* play) {
         this->actionFunc = func_80BBC070;
         func_80BBBFBC(this, play);
     } else if (func_80BBAF5C(this, play)) {
-        Actor_OfferSpeak(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
