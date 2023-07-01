@@ -6,7 +6,9 @@
         <DList Name="gSunsSongGraveGoronStoneDL" Offset="0x4B8" />
         <DList Name="gSunsSongGraveGoronDL" Offset="0x5C8" />
         <Texture Name="gSunsSongGraveGoronTLUT" OutName="sun_song_grave_goron_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5E0" />
-        <!-- <Blob Name="object_sekihig_Blob_000600" Size="0x60" Offset="0x600" /> -->
+        <Texture Name="gSunsSongGraveGoronKokiriTLUT" OutName="suns_song_grave_goron_kokiri_tlut" Format="rgba16" Width="4" Height="4" Offset="0x600" />
+        <Texture Name="gSunsSongGraveGoronUnkownTLUT" OutName="suns_song_grave_goron_unkown_tlut" Format="rgba16" Width="4" Height="4" Offset="0x620" />
+        <Texture Name="gSunsSongGraveGoronTriforceTLUT" OutName="suns_song_grave_goron_triforce_tlut" Format="rgba16" Width="4" Height="4" Offset="0x640" />
         <Texture Name="gSunsSongGraveGoronGraniteTex" OutName="sun_song_grave_goron_granite" Format="rgba16" Width="32" Height="32" Offset="0x660" />
         <Texture Name="gSunsSongGraveGoronMarbleTex" OutName="sun_song_grave_goron_marble" Format="rgba16" Width="32" Height="64" Offset="0xE60" />
         <Texture Name="gSunsSongGraveGoronSymbolTex" OutName="sun_song_grave_goron_symbol" Format="ci4" Width="64" Height="64" Offset="0x1E60" />
