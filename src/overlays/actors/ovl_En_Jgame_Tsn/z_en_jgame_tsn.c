@@ -402,7 +402,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_EXCH_CONTINUE);
     }
 }
 

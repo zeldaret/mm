@@ -318,7 +318,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                Actor_OfferTalkExchange(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_HELD);
+                Actor_OfferTalkExchange(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_EXCH_CONTINUE);
             }
         }
     }

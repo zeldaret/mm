@@ -1889,7 +1889,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  *    Working ones seem to be PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN
  * - `PLAYER_IA_NONE`:
  *    Allows the player to speak to the actor (by pressing A).
- * - `PLAYER_IA_HELD`:
+ * - `PLAYER_IA_EXCH_CONTINUE`:
  *    Used by actors/player to continue the current conversation.
  *
  * @return true If the player actor is capable of accepting the offer.

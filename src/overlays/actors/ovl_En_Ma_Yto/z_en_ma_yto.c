@@ -1006,7 +1006,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_EXCH_CONTINUE);
     }
 }
 

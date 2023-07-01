@@ -621,7 +621,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
-            return PLAYER_IA_HELD;
+            return PLAYER_IA_EXCH_CONTINUE;
         }
     } else {
         gSaveContext.save.unk_06--;
@@ -636,9 +636,10 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_HELD)) {
+            if ((itemId >= ITEM_FD) ||
+                ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_EXCH_CONTINUE)) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
-                return PLAYER_IA_HELD;
+                return PLAYER_IA_EXCH_CONTINUE;
             } else {
                 s32 pad;
 

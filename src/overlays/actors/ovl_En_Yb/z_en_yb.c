@@ -267,7 +267,7 @@ void EnYb_SetupLeaving(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147D, &this->actor);
         func_80BFA2FC(play);
     } else {
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -279,7 +279,7 @@ void EnYb_ReceiveMask(EnYb* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = EnYb_SetupLeaving;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_KAMARO, 10000.0f, 100.0f);
     }
@@ -332,7 +332,7 @@ void EnYb_TeachingDanceFinish(EnYb* this, PlayState* play) {
         Message_StartTextbox(play, 0x147C, &this->actor);
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     }
     EnYb_EnableProximityMusic(this);
 }
@@ -347,7 +347,7 @@ void EnYb_TeachingDance(EnYb* this, PlayState* play) {
         EnYb_FinishTeachingCutscene(this);
         this->actionFunc = EnYb_TeachingDanceFinish;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     }
     EnYb_EnableProximityMusic(this);
 }

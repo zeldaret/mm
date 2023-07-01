@@ -548,7 +548,7 @@ void func_80B41ACC(EnKgy* this, PlayState* play) {
                 player->actor.textId = 0xC47;
             }
             this->unk_29C |= 8;
-        } else if (itemAction <= PLAYER_IA_HELD) {
+        } else if (itemAction <= PLAYER_IA_EXCH_CONTINUE) {
             if (this->unk_29C & 0x10) {
                 this->actor.textId = 0xC57;
             } else {
@@ -587,7 +587,7 @@ void func_80B41CBC(EnKgy* this, PlayState* play) {
         this->actionFunc = func_80B41E18;
         func_80B411DC(this, play, 4);
     } else {
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     }
 }
 
@@ -596,7 +596,7 @@ void func_80B41D64(EnKgy* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actionFunc = func_80B41CBC;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     } else {
         Actor_OfferGetItem(&this->actor, play, this->getItemId, 2000.0f, 1000.0f);
     }

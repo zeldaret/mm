@@ -162,7 +162,7 @@ void func_80953098(EnHs* this, PlayState* play) {
         this->actionFunc = func_8095345C;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->stateFlags |= 0x10;
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
     } else {
         this->stateFlags |= 8;
         if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
@@ -264,7 +264,7 @@ void func_8095345C(EnHs* this, PlayState* play) {
         this->actionFunc = func_80953354;
         this->stateTimer = 40;
     } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
         this->stateFlags |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
         Actor_OfferTalk(&this->actor, play, 130.0f);

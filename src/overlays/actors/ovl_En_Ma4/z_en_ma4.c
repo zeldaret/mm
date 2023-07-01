@@ -839,7 +839,7 @@ void EnMa4_EponasSongCs(EnMa4* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags1 |= PLAYER_STATE1_20;
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_EXCH_CONTINUE);
         sCueId = 99;
         this->hasBow = true;
         EnMa4_SetupEndEponasSongCs(this);
@@ -861,7 +861,7 @@ void EnMa4_EndEponasSongCs(EnMa4* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         EnMa4_SetupDialogueHandler(this);
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_HELD);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_EXCH_CONTINUE);
     }
 }
 
