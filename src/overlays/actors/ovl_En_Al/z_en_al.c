@@ -481,12 +481,12 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
     if (((this->unk_4C2 & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_4C2 &= ~0x1800;
-        if (player->exchangeItemId == PLAYER_IA_LETTER_MAMA) {
+        if (player->exchangeItemAction == PLAYER_IA_LETTER_MAMA) {
             this->unk_4C2 |= 0x800;
-            this->unk_4F4 = player->exchangeItemId;
-        } else if (player->exchangeItemId != PLAYER_IA_NONE) {
+            this->unk_4F4 = player->exchangeItemAction;
+        } else if (player->exchangeItemAction != PLAYER_IA_NONE) {
             this->unk_4C2 |= 0x1000;
-            this->unk_4F4 = player->exchangeItemId;
+            this->unk_4F4 = player->exchangeItemAction;
         }
         SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
         this->unk_4E6 = 0;

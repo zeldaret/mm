@@ -692,11 +692,11 @@ s32 func_80A872AC(EnTru* this, PlayState* play) {
         }
         this->unk_34E &= ~(0x4000 | 0x2000);
 
-        if ((player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_RED) ||
-            (player->exchangeItemId == PLAYER_IA_BOTTLE_POTION_BLUE)) {
+        if ((player->exchangeItemAction == PLAYER_IA_BOTTLE_POTION_RED) ||
+            (player->exchangeItemAction == PLAYER_IA_BOTTLE_POTION_BLUE)) {
             this->unk_34E |= 0x2000;
-            this->unk_38C = player->exchangeItemId;
-        } else if (player->exchangeItemId != PLAYER_IA_NONE) {
+            this->unk_38C = player->exchangeItemAction;
+        } else if (player->exchangeItemAction != PLAYER_IA_NONE) {
             this->unk_34E |= 0x4000;
         }
 
@@ -972,8 +972,8 @@ s32 func_80A87B48(Actor* thisx, PlayState* play) {
                     this->actor.shape.shadowDraw = NULL;
                     this->unk_34E |= (0x200 | 0x8);
                     this->unk_34E &= ~0x800;
-                    if (player->exchangeItemId != PLAYER_IA_NONE) {
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                    if (player->exchangeItemAction != PLAYER_IA_NONE) {
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                     }
                     EnTru_ChangeAnim(this, KOUME_ANIM_HOVER1);
                 }

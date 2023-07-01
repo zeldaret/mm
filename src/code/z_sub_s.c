@@ -1525,12 +1525,12 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
  * Will extend a TalkExchange offer to the player if the actor is verified with a custom callback.
  * The callback should return `true` when the actor is succesfully verified.
  */
-s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
-                                 VerifyExchangeItemActor verifyActor) {
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
+                                 void* data, VerifyExchangeItemActor verifyActor) {
     s32 canAccept = false;
 
     if ((verifyActor == NULL) || ((verifyActor != NULL) && verifyActor(play, actor, data))) {
-        canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, exchangeItemId);
+        canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, exchangeItemAction);
     }
     return canAccept;
 }
@@ -1554,13 +1554,13 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-s32 SubS_OfferTalkExchangeFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId,
+s32 SubS_OfferTalkExchangeFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
                                  s16 playerYawTol, s16 actorYawTol) {
     Vec3s yawTols;
 
     yawTols.x = playerYawTol;
     yawTols.y = actorYawTol;
-    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemId, &yawTols,
+    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemAction, &yawTols,
                                         SubS_ActorAndPlayerFaceEachOther);
 }
 

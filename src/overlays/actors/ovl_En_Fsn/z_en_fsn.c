@@ -863,7 +863,7 @@ void EnFsn_StartBuying(EnFsn* this, PlayState* play) {
                 break;
 
             case 0x29CF:
-                player->exchangeItemId = PLAYER_IA_NONE;
+                player->exchangeItemAction = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
 
@@ -962,7 +962,7 @@ void EnFsn_DeterminePrice(EnFsn* this, PlayState* play) {
             this->price = (buttonItem < ITEM_MOONS_TEAR) ? gItemPrices[buttonItem] : 0;
             if (this->price > 0) {
                 player->actor.textId = 0x29EF;
-                player->exchangeItemId = buttonItem;
+                player->exchangeItemAction = buttonItem;
                 this->actionFunc = EnFsn_MakeOffer;
             } else {
                 player->actor.textId = 0x29CF;
@@ -1026,7 +1026,7 @@ void EnFsn_MakeOffer(EnFsn* this, PlayState* play) {
 
             case 1:
                 Audio_PlaySfx_MessageCancel();
-                player->exchangeItemId = PLAYER_IA_NONE;
+                player->exchangeItemAction = PLAYER_IA_NONE;
                 this->actionFunc = EnFsn_SetupDeterminePrice;
                 break;
         }

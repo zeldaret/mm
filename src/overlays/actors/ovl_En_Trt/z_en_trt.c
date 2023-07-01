@@ -1425,7 +1425,7 @@ void EnTrt_TalkToShopkeeper(EnTrt* this, PlayState* play) {
                     player->actor.textId = 0x883;
                 }
                 this->textId = player->actor.textId;
-                player->exchangeItemId = itemAction;
+                player->exchangeItemAction = itemAction;
                 this->actionFunc = EnTrt_GetMushroom;
             } else {
                 if (this->flags & ENTRT_GIVEN_MUSHROOM) {

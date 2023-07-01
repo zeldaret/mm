@@ -1051,7 +1051,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             player->actor.textId = D_80BF048C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15E4) {
-                player->exchangeItemId = itemAction;
+                player->exchangeItemAction = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1060,7 +1060,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             player->actor.textId = D_80BF0494[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x15F9) {
-                player->exchangeItemId = itemAction;
+                player->exchangeItemAction = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1069,7 +1069,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             player->actor.textId = D_80BF049C[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x160C) {
-                player->exchangeItemId = itemAction;
+                player->exchangeItemAction = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;
@@ -1078,7 +1078,7 @@ void func_80BEE73C(EnAkindonuts* this, PlayState* play) {
             player->actor.textId = D_80BF04A4[params];
             this->unk_33C = player->actor.textId;
             if (this->unk_33C == 0x1621) {
-                player->exchangeItemId = itemAction;
+                player->exchangeItemAction = itemAction;
                 this->actionFunc = func_80BEF20C;
             } else {
                 this->actionFunc = func_80BEF18C;

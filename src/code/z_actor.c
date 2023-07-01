@@ -1875,7 +1875,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 /**
  * This function covers offering the ability to `Talk` with the player.
- * Passing an exchangeItemId (see `ItemAction)` allows the player to also use the item to initate the converstation.
+ * Passing an exchangeItemAction (see `ItemAction)` allows the player to also use the item to initate the converstation.
  *
  * This function carries an exchange item request to the player actor if context allows it (e.g. the player is in range
  * and not busy with certain things). The player actor performs the requested action itself.
@@ -1897,11 +1897,12 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * Note: There is only one instance of using this for actually using an item to start the conversation with the player.
  * Every other instance is to either offer to speak, or continue the current conversation.
  */
-s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
+s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange,
+                            PlayerItemAction exchangeItemAction) {
     Player* player = GET_PLAYER(play);
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
-        ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
+        ((exchangeItemAction > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1910,14 +1911,14 @@ s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRan
 
     player->talkActor = actor;
     player->talkActorDistance = actor->xzDistToPlayer;
-    player->exchangeItemId = exchangeItemId;
+    player->exchangeItemAction = exchangeItemAction;
 
     CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
     return true;
 }
 
-s32 Actor_OfferTalkExchangeRadius(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
-    return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemId);
+s32 Actor_OfferTalkExchangeRadius(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemAction) {
+    return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemAction);
 }
 
 s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius) {
@@ -1958,10 +1959,10 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-PlayerItemAction Player_GetExchangeItemId(PlayState* play) {
+PlayerItemAction Player_GetexchangeItemAction(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return player->exchangeItemId;
+    return player->exchangeItemAction;
 }
 
 s32 func_800B8718(Actor* actor, GameState* gameState) {

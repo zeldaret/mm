@@ -745,7 +745,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC46:
                         case 0xC55:
                             Player_UpdateBottleHeld(play, GET_PLAYER(play), ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
-                            player->exchangeItemId = PLAYER_IA_NONE;
+                            player->exchangeItemAction = PLAYER_IA_NONE;
                             this->unk_29C &= ~0x8;
                             play->msgCtx.msgLength = 0;
                             func_80B41368(this, play, 4);
@@ -760,7 +760,7 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC47:
                             func_80B40BC0(this, 1);
                             if (this->unk_29C & 8) {
-                                player->exchangeItemId = PLAYER_IA_NONE;
+                                player->exchangeItemAction = PLAYER_IA_NONE;
                                 this->unk_29C &= ~8;
                             }
                             func_80B40EBC(this, play, textId);

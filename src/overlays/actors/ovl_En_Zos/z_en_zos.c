@@ -420,7 +420,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
     switch (play->msgCtx.currentTextId) {
         case 0x1237:
-            player->exchangeItemId = PLAYER_IA_NONE;
+            player->exchangeItemAction = PLAYER_IA_NONE;
             // fallthrough
         case 0x1238:
         case 0x123A:
@@ -439,7 +439,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 
         case 0x1232:
         case 0x1241:
-            player->exchangeItemId = PLAYER_IA_NONE;
+            player->exchangeItemAction = PLAYER_IA_NONE;
             // fallthrough
         case 0x1239:
         case 0x1246:

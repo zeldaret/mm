@@ -420,7 +420,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x1075:
                     case 0x1078:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
@@ -448,7 +448,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
 
                     case 0x107B:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;

@@ -3528,7 +3528,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) ||
                 ((func_800B7118(player) == 0) && (heldActor != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
-                    (player->exchangeItemId != PLAYER_IA_NONE)) {
+                    (player->exchangeItemAction != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&sPlayerGetItemRefPos, &player->leftHandWorld.pos);
                 } else {
                     sPlayerGetItemRefPos.x =

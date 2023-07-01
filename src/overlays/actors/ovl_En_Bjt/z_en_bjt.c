@@ -275,9 +275,9 @@ s32 EnBjt_ChooseBehaviour(Actor* thisx, PlayState* play) {
             break;
 
         case TOILET_HAND_BEHAVIOUR_TAKE_ITEM:
-            if (player->exchangeItemId != PLAYER_IA_NONE) {
-                EnBjt_TakeItem(player->exchangeItemId);
-                player->exchangeItemId = PLAYER_IA_NONE;
+            if (player->exchangeItemAction != PLAYER_IA_NONE) {
+                EnBjt_TakeItem(player->exchangeItemAction);
+                player->exchangeItemAction = PLAYER_IA_NONE;
             }
             if (EnBjt_Vanish(this)) {
                 this->timer = 60;
