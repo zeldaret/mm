@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for the ivy jail -->
     <File Name="object_dkjail_obj" Segment="6">
         <DList Name="gDkjailIvyDL" Offset="0x80" /> <!-- Original name is "m2_Mn_TUTA_modelT" -->
         <DList Name="gDkjailEmptyDL" Offset="0x150" />
