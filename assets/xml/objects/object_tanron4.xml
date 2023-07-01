@@ -23,7 +23,7 @@
         <Limb Name="gSeagullRightWingRootLimb" Type="Standard" EnumName="SEAGULL_LIMB_RIGHT_WING_ROOT" Offset="0xE10" />
         <Limb Name="gSeagullRightWingWrapperLimb" Type="Standard" EnumName="SEAGULL_LIMB_RIGHT_WING_WRAPPER" Offset="0xE1C" />
         <Limb Name="gSeagullRightWingStartLimb" Type="Standard" EnumName="SEAGULL_LIMB_RIGHT_WING_START" Offset="0xE28" />
-        <Limb Name="gSeagullRightWingEndLimb" Type="Standard" EnumName="SEAGULL_LIMB_RIGHT_WING_ROOT" Offset="0xE34" />
+        <Limb Name="gSeagullRightWingEndLimb" Type="Standard" EnumName="SEAGULL_LIMB_RIGHT_WING_END" Offset="0xE34" />
 
         <Skeleton Name="gSeagullSkel" Type="Flex" LimbType="Standard" LimbNone="SEAGULL_LIMB_RIGHT_WING_NONE" LimbMax="SEAGULL_LIMB_RIGHT_WING_MAX" EnumName="ObjectTanron4Limb" Offset="0xE68" />
     </File>
