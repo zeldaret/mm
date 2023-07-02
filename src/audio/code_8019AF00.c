@@ -338,7 +338,7 @@ u8 sSeqFlags[] = {
     0,                                 // NA_BGM_KOTAKE_POTION_SHOP
     SEQ_FLAG_RESUME_PREV,              // NA_BGM_SHOP
     SEQ_FLAG_FANFARE,                  // NA_BGM_OWL
-    SEQ_FLAG_RESUME_PREV,              // NA_BGM_MINI_GAME
+    SEQ_FLAG_RESUME_PREV,              // NA_BGM_SHOOTING_GALLERY
     SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_SOARING
     SEQ_FLAG_FANFARE,                  // NA_BGM_OCARINA_HEALING
     SEQ_FLAG_FANFARE,                  // NA_BGM_INVERTED_SONG_OF_TIME

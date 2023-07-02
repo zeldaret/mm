@@ -73,7 +73,7 @@
 #define NA_BGM_KOTAKE_POTION_SHOP 0x43          // "Magic Hags' Potion Shop" (NA_BGM_KOTAKE_KOUME)
 #define NA_BGM_SHOP 0x44                        // "Shop" (NA_BGM_SHOP)
 #define NA_BGM_OWL 0x45                         // "Owl" (NA_BGM_OWL)
-#define NA_BGM_MINI_GAME 0x46                   // "Shooting Gallery" (NA_BGM_MINI_GAME)
+#define NA_BGM_SHOOTING_GALLERY 0x46            // "Shooting Gallery" (NA_BGM_MINI_GAME)
 #define NA_BGM_OCARINA_SOARING 0x47             // "Ocarina “Song Of Soaring”" (NA_BGM_OCA_BIGWING)
 #define NA_BGM_OCARINA_HEALING 0x48             // "Ocarina “Song Of Healing”" (NA_BGM_OCA_CURE)
 #define NA_BGM_INVERTED_SONG_OF_TIME 0x49       // "Ocarina “Inverted Song Of Time”" (NA_BGM_TIME_SPEED)
