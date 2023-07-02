@@ -1886,9 +1886,10 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * - Positive values in range (`PLAYER_IA_NONE < ItemAction < PLAYER_IA_MAX`):
  *    Offers the ability to initate the conversation with an item from the player.
  *    Not all positive values are implemented properly for this to work.
- *    Working ones seem to be PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN
+ *    Working ones are PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN
+ *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.
  * - `PLAYER_IA_NONE`:
- *    Allows the player to speak to the actor (by pressing A).
+ *    Allows the player to speak to or check the actor (by pressing A).
  * - `PLAYER_IA_EXCH_CONTINUE`:
  *    Used by actors/player to continue the current conversation.
  *

@@ -10,17 +10,17 @@ extern Vec3f gOneVec3f;
 
 #define SUBS_TIME_PATHING_ORDER 3
 
-// NOTE: all on screen checks are bugged, and always evaluate to true, even if off screen
+// NOTE: all on screen checks are bugged, and always evaluate to true, even if the target is off screen
 typedef enum {
     /* 0 */ SUBS_OFFER_MODE_NONE,
     /* 1 */ SUBS_OFFER_MODE_GET_ITEM,
-    // Furthur modes all deal with offering exhange items
+    // Further modes all deal with offering exchange items
     /* 2 */ SUBS_OFFER_MODE_NEARBY,
     /* 3 */ SUBS_OFFER_MODE_ONSCREEN,
     /* 4 */ SUBS_OFFER_MODE_AUTO,
     /* 5 */ SUBS_OFFER_MODE_AUTO_TARGETED, // Also checks nearby and on screen
     /* 6 */ SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN,
-    /* 7 */ SUBS_OFFER_MODE_MAX
+    /* 7 */ SUBS_OFFER_MODE_MAX = 7
 } SubSOfferMode;
 
 typedef enum {
@@ -29,7 +29,7 @@ typedef enum {
     /* 2 */ SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG
 } SubSCutsceneType;
 
-typedef s32 (*VerifyExchangeItemActor)(struct PlayState*, Actor*, void*);
+typedef s32 (*VerifyTalkExchangeActor)(struct PlayState*, Actor*, void*);
 
 typedef s32 (*VerifyFindActor)(struct PlayState*, Actor*, Actor*, void*);
 
@@ -173,7 +173,7 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
 
 Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyFindActor verifyActor);
 
-s32 SubS_OfferTalkExchangeCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, void* data, VerifyExchangeItemActor verifyActor);
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, void* data, VerifyTalkExchangeActor verifyActor);
 s32 SubS_ActorAndPlayerFaceEachOther(struct PlayState* play, Actor* actor, void* data);
 s32 SubS_OfferTalkExchangeFacing(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, s16 playerYawTol, s16 actorYawTol);
 

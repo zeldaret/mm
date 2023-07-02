@@ -1526,7 +1526,7 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
  * The callback should return `true` when the actor is succesfully verified.
  */
 s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
-                                 void* data, VerifyExchangeItemActor verifyActor) {
+                                 void* data, VerifyTalkExchangeActor verifyActor) {
     s32 canAccept = false;
 
     if ((verifyActor == NULL) || ((verifyActor != NULL) && verifyActor(play, actor, data))) {
