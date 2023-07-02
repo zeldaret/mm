@@ -623,7 +623,7 @@ s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius);
 s32 Actor_OfferTalkNearby(Actor* actor, PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2);
-PlayerItemAction Player_GetexchangeItemAction(PlayState* play);
+PlayerItemAction Player_GetExchangeItemAction(PlayState* play);
 s32 func_800B8718(Actor* actor, GameState* gameState);
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange);
 s32 func_800B8804(Actor* actor, PlayState* play, f32 xzRange);

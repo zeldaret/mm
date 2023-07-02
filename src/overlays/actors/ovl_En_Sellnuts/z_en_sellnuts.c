@@ -341,7 +341,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (Player_GetexchangeItemAction(play) == PLAYER_IA_MOONS_TEAR) {
+        if (Player_GetExchangeItemAction(play) == PLAYER_IA_MOONS_TEAR) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;

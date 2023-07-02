@@ -1959,7 +1959,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-PlayerItemAction Player_GetexchangeItemAction(PlayState* play) {
+PlayerItemAction Player_GetExchangeItemAction(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return player->exchangeItemAction;
