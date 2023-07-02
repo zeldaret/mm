@@ -290,7 +290,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 ret = false;
 
-    if (((this->unk_1D8 & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
+    if (((this->unk_1D8 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_1D8 &= ~0x180;
         if (player->exchangeItemAction == PLAYER_IA_PICTO_BOX) {
@@ -300,7 +300,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
             this->unk_1D8 |= 0x100;
             this->unk_2E4 = player->exchangeItemAction;
         }
-        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_1DC = func_80AE6880(this, play);
         this->unk_2C6 = 0;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_08)) {
@@ -327,7 +327,7 @@ void func_80AE6A64(EnShn* this, PlayState* play) {
     Vec3f shnPos;
 
     if (func_8010BF58(&this->actor, play, this->unk_1DC, this->unk_2D8, &this->unk_1E0)) {
-        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8 &= ~8;
         this->unk_1D8 |= 0x20;
         this->unk_2CA = 20;
@@ -360,10 +360,10 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     this->unk_2D8 = 0;
     this->unk_1D8 = 0;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 2)) {
-        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2BE = 0;
     } else {
-        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1D8, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
         this->unk_2BE = 1;
     }
     this->actionFunc = func_80AE69E8;
@@ -381,7 +381,7 @@ void EnShn_Update(Actor* thisx, PlayState* play) {
     func_80AE6130(this);
     func_80AE63A8(this, play);
     this->unk_2E0 = 0;
-    SubS_Offer(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & SUBS_OFFER_MODE_MAX);
+    SubS_Offer(&this->actor, play, 120.0f, 40.0f, PLAYER_IA_NONE, this->unk_1D8 & SUBS_OFFER_MODE_MASK);
 }
 
 s32 EnShn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {

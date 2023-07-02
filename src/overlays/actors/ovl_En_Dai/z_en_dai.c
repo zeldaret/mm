@@ -202,9 +202,9 @@ s32 func_80B3E69C(EnDai* this, PlayState* play) {
 s32 func_80B3E7C8(EnDai* this, PlayState* play) {
     s32 ret = false;
 
-    if (((this->unk_1CE & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
+    if (((this->unk_1CE & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_1CE, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1CE, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80B3EF90;
         ret = true;
     }
@@ -428,7 +428,7 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
 
 void func_80B3EF90(EnDai* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, D_80B3FC8C, NULL, &this->unk_1D0)) {
-        SubS_UpdateFlags(&this->unk_1CE, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1CE, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D0 = 0;
         this->actionFunc = func_80B3F00C;
     } else {
@@ -525,7 +525,7 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     this->unk_1D6 = 0;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
-        SubS_UpdateFlags(&this->unk_1CE, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_1CE, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1CE |= 0x80;
         this->unk_1CD = 0xFF;
         this->actionFunc = func_80B3F00C;
@@ -563,7 +563,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
             SkelAnime_Update(&this->skelAnime);
             func_80B3E834(this);
             if (!(this->unk_1CE & 0x200)) {
-                SubS_Offer(&this->actor, play, 0.0f, 0.0f, PLAYER_IA_NONE, this->unk_1CE & SUBS_OFFER_MODE_MAX);
+                SubS_Offer(&this->actor, play, 0.0f, 0.0f, PLAYER_IA_NONE, this->unk_1CE & SUBS_OFFER_MODE_MASK);
             }
             func_80B3E460(this);
         }

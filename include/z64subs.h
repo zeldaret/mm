@@ -19,9 +19,12 @@ typedef enum {
     /* 3 */ SUBS_OFFER_MODE_ONSCREEN,
     /* 4 */ SUBS_OFFER_MODE_AUTO,
     /* 5 */ SUBS_OFFER_MODE_AUTO_TARGETED, // Also checks nearby and on screen
-    /* 6 */ SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN,
-    /* 7 */ SUBS_OFFER_MODE_MAX = 7
+    /* 6 */ SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN
 } SubSOfferMode;
+
+#define SUBS_OFFER_MODE_MASK                                                                               \
+    (SUBS_OFFER_MODE_GET_ITEM | SUBS_OFFER_MODE_NEARBY | SUBS_OFFER_MODE_ONSCREEN | SUBS_OFFER_MODE_AUTO | \
+     SUBS_OFFER_MODE_AUTO_TARGETED | SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN)
 
 typedef enum {
     /* 0 */ SUBS_CUTSCENE_WITH_PLAYER,

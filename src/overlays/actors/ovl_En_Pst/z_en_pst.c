@@ -280,7 +280,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 ret = false;
 
-    if (((this->stateFlags & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
+    if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->stateFlags &= ~0x30;
         if (player->exchangeItemAction == PLAYER_IA_LETTER_TO_KAFEI) {
@@ -292,7 +292,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
         }
         // If Letter to Kafei is deposited, value is set to 2
         this->isLetterToKafeiDeposited = EnPst_HandleLetterDay1(this);
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = 0;
         this->msgEventCallback = NULL;
         this->stateFlags |= 0x40;
@@ -304,7 +304,7 @@ s32 EnPst_CheckTalk(EnPst* this, PlayState* play) {
 }
 
 s32 EnPst_SetOfferItemModeOnScreen(EnPst* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+    SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     return true;
 }
 
@@ -373,7 +373,7 @@ void EnPst_Talk(EnPst* this, PlayState* play) {
                     break;
             }
         }
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->msgEventArg4 = 0;
         this->actionFunc = EnPst_FollowSchedule;
     }
@@ -388,7 +388,7 @@ void EnPst_Init(Actor* thisx, PlayState* play) {
                        POSTBOX_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
-    SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+    SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.targetMode = 0;
     Actor_SetScale(&this->actor, 0.02f);
@@ -410,7 +410,7 @@ void EnPst_Update(Actor* thisx, PlayState* play) {
     if (this->scheduleResult != POSTBOX_SCH_NONE) {
         if (Actor_IsFacingPlayer(&this->actor, 0x1FFE)) {
             this->unk214 = 0;
-            SubS_Offer(&this->actor, play, 60.0f, 20.0f, PLAYER_IA_NONE, this->stateFlags & SUBS_OFFER_MODE_MAX);
+            SubS_Offer(&this->actor, play, 60.0f, 20.0f, PLAYER_IA_NONE, this->stateFlags & SUBS_OFFER_MODE_MASK);
         }
         Actor_SetFocus(&this->actor, 20.0f);
         EnPst_UpdateCollision(this, play);

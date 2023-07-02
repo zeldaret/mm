@@ -245,14 +245,14 @@ s32 func_80B3CEC0(EnDnp* this, PlayState* play) {
 s32 func_80B3CF60(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
-    if (((this->unk_322 & SUBS_OFFER_MODE_MAX) != SUBS_OFFER_MODE_NONE) &&
+    if (((this->unk_322 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && Actor_HasParent(&this->actor, play)) {
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
         this->unk_32E = 0;
@@ -272,12 +272,12 @@ s32 func_80B3D044(EnDnp* this, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->cueId = 255;
         }
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80B3D11C;
         ret = true;
     } else if (this->unk_322 & 0x200) {
         this->actor.flags |= ACTOR_FLAG_1;
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
     }
@@ -363,7 +363,7 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
 
 void func_80B3D3F8(EnDnp* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, D_80B3DE58, NULL, &this->unk_328)) {
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
     } else {
@@ -376,7 +376,7 @@ void func_80B3D47C(EnDnp* this, PlayState* play) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
             this->actor.flags |= ACTOR_FLAG_1;
-            SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+            SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             this->unk_322 &= ~0x10;
             this->unk_322 |= 0x400;
             this->actor.scale.x = 0.0085f;
@@ -412,7 +412,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
     if (EN_DNP_GET_TYPE(&this->actor) == EN_DNP_TYPE_RELEASED_FROM_BOTTLE) {
         this->actor.flags &= ~ACTOR_FLAG_1;
         Actor_SetScale(&this->actor, 0.00085000007f);
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
         this->actor.csId = 16;
@@ -422,7 +422,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
                ((EN_DNP_GET_TYPE(&this->actor) == EN_DNP_TYPE_DEKU_KINGS_CHAMBER) &&
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
         Actor_SetScale(&this->actor, 0.0085f);
-        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MAX);
+        SubS_UpdateFlags(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 |= 0x400;
         if ((play->sceneId == SCENE_MITURIN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
             this->unk_322 |= 0x20;
@@ -463,7 +463,7 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
             Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        SubS_Offer(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & SUBS_OFFER_MODE_MAX);
+        SubS_Offer(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & SUBS_OFFER_MODE_MASK);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }
