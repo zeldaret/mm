@@ -7,7 +7,7 @@
         <DList Name="gSunsSongGraveKokiriDL" Offset="0x5C8" />
         <Texture Name="gSunsSongGraveKokiriGoronTLUT" OutName="suns_song_grave_kokiri_goron_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5E0" />
         <Texture Name="gSunsSongGraveKokiriTLUT" OutName="suns_song_grave_kokiri_tlut" Format="rgba16" Width="4" Height="4" Offset="0x600" />
-        <Texture Name="gSunsSongGraveKokiriUnkownTLUT" OutName="suns_song_grave_kokiri_unkown_tlut" Format="rgba16" Width="4" Height="4" Offset="0x620" />
+        <Texture Name="gSunsSongGraveKokiriUnknownTLUT" OutName="suns_song_grave_kokiri_unknown_tlut" Format="rgba16" Width="4" Height="4" Offset="0x620" />
         <Texture Name="gSunsSongGraveKokiriTriforceTLUT" OutName="suns_song_grave_kokiri_triforce_tlut" Format="rgba16" Width="4" Height="4" Offset="0x640" />
         <Texture Name="gSunsSongGraveKokiriGraniteTex" OutName="suns_song_grave_kokiri_granite" Format="rgba16" Width="32" Height="32" Offset="0x660" />
         <Texture Name="gSunsSongGraveKokiriMarbleTex" OutName="suns_song_grave_kokiri_marble" Format="rgba16" Width="32" Height="64" Offset="0xE60" />

@@ -7,7 +7,7 @@
         <DList Name="gSunsSongGraveTriforceDL" Offset="0x5E0" />
         <Texture Name="gSunsSongGraveTriforceGoronTLUT" OutName="suns_song_grave_triforce_goron_tlut" Format="rgba16" Width="4" Height="4" Offset="0x5F8" />
         <Texture Name="gSunsSongGraveTriforceKokiriTLUT" OutName="suns_song_grave_triforce_kokiri_tlut" Format="rgba16" Width="4" Height="4" Offset="0x618" />
-        <Texture Name="gSunsSongGraveTriforceUnkownTLUT" OutName="suns_song_grave_triforce_unkown_tlut" Format="rgba16" Width="4" Height="4" Offset="0x638" />
+        <Texture Name="gSunsSongGraveTriforceUnknownTLUT" OutName="suns_song_grave_triforce_unknown_tlut" Format="rgba16" Width="4" Height="4" Offset="0x638" />
         <Texture Name="gSunsSongGraveTriforceTLUT" OutName="sun_song_grave_triforce_tlut" Format="rgba16" Width="4" Height="4" Offset="0x658" />
         <Texture Name="gSunsSongGraveTriforceGraniteTex" OutName="sun_song_grave_triforce_granite" Format="rgba16" Width="32" Height="32" Offset="0x678" />
         <Texture Name="gSunsSongGraveTriforceMarbleTex" OutName="sun_song_grave_triforce_marble" Format="rgba16" Width="32" Height="64" Offset="0xE78" />
