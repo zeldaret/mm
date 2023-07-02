@@ -623,63 +623,42 @@ u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
     return pxMed;
 }
 
-#ifdef NON_EQUIVALENT
 void PreRender_DivotFilter(PreRender* this) {
-    u16 width = this->width;
-    u16 height = this->height;
-
-    u8* redRow2;
-    u8* redRow1;
-    u8* redRow0;
-    u8* greenRow2;
-    u8* greenRow1;
-    u8* greenRow0;
-    u8* blueRow2;
-    u8* blueRow1;
-    u8* blueRow0;
+    u32 width = this->width;
+    u32 height = this->height;
+    u8* buffer = alloca(width * 10);
+    u8* redRow[3];
+    u8* greenRow[3];
+    u8* blueRow[3];
     u8* cvgFull;
-
     Color_RGBA16 inPx;
     Color_RGBA16 outPx;
-
     u32 x;
     u32 y;
+    s32 pad;
 
-    u8* buffer = alloca(width * 10);
+    redRow[0] = &buffer[width * 0];
+    redRow[1] = &buffer[width * 1];
+    redRow[2] = &buffer[width * 2];
 
-    // Debug Rom
-    // if (width > 320) {
-    //     __assert("wd <= 320", "../PreRender.c");
-    // }
+    greenRow[0] = &buffer[width * 3];
+    greenRow[1] = &buffer[width * 4];
+    greenRow[2] = &buffer[width * 5];
 
-    if (1) { }
-
-    redRow0 = &buffer[width * 0];
-    redRow1 = &buffer[width * 1];
-    redRow2 = &buffer[width * 2];
-
-    greenRow0 = &buffer[width * 3];
-    greenRow1 = &buffer[width * 4];
-    greenRow2 = &buffer[width * 5];
-
-    blueRow0 = &buffer[width * 6];
-    blueRow1 = &buffer[width * 7];
-    blueRow2 = &buffer[width * 8];
+    blueRow[0] = &buffer[width * 6];
+    blueRow[1] = &buffer[width * 7];
+    blueRow[2] = &buffer[width * 8];
 
     cvgFull = &buffer[width * 9];
 
     // Fill line buffers for first 2 rows
     for (y = 0; y < 2; y++) {
-        u8** redRow = &(&redRow0)[y];
-        u8** greenRow = &(&greenRow0)[y];
-        u8** blueRow = &(&blueRow0)[y];
-
         for (x = 0; x < width; x++) {
             inPx.rgba = this->fbufSave[x + y * this->width];
 
-            (*redRow)[x] = inPx.r;
-            (*greenRow)[x] = inPx.g;
-            (*blueRow)[x] = inPx.b;
+            redRow[y][x] = inPx.r;
+            greenRow[y][x] = inPx.g;
+            blueRow[y][x] = inPx.b;
         }
     }
 
@@ -687,6 +666,9 @@ void PreRender_DivotFilter(PreRender* this) {
     for (y = 1; y < height - 1; y++) {
         // Find start of pixels and coverage for current line (bug? this should probably be fetching the NEXT line, but
         // really the divot filter only cares about individual lines so it's already wrong)
+        u8* redRow2 = redRow[2];
+        u8* greenRow2 = greenRow[2];
+        u8* blueRow2 = blueRow[2];
         u8* lineCvg = &this->cvgSave[width * y];
         u16* linePx = &this->fbufSave[width * y];
 
@@ -704,8 +686,6 @@ void PreRender_DivotFilter(PreRender* this) {
         }
 
         for (x = 1; x < width - 1; x++) {
-            s32 xStart = x - 1;
-
             // if the coverage of the three adjacent pixels on the current line are not all fully covered
             if (cvgFull[x - 1] && cvgFull[x] && cvgFull[x + 1]) {
                 continue;
@@ -715,29 +695,24 @@ void PreRender_DivotFilter(PreRender* this) {
             //  * * *
             //  * * *
             //  * X *
-            outPx.r = PreRender_Get5bMedian9(&redRow0[xStart], &redRow1[xStart], &redRow2[xStart]);
-            outPx.g = PreRender_Get5bMedian9(&greenRow0[xStart], &greenRow1[xStart], &greenRow2[xStart]);
-            outPx.b = PreRender_Get5bMedian9(&blueRow0[xStart], &blueRow1[xStart], &blueRow2[xStart]);
+            outPx.r = PreRender_Get5bMedian9(&redRow[0][x - 1], &redRow[1][x - 1], &redRow[2][x - 1]);
+            outPx.g = PreRender_Get5bMedian9(&greenRow[0][x - 1], &greenRow[1][x - 1], &greenRow[2][x - 1]);
+            outPx.b = PreRender_Get5bMedian9(&blueRow[0][x - 1], &blueRow[1][x - 1], &blueRow[2][x - 1]);
             outPx.a = 1;
 
             this->fbufSave[x + y * this->width] = outPx.rgba;
         }
 
         // Shuffle row 1 -> 0
-        redRow0 = redRow1;
-        greenRow0 = greenRow1;
-        blueRow0 = blueRow1;
+        redRow[0] = redRow[1];
+        greenRow[0] = greenRow[1];
+        blueRow[0] = blueRow[1];
         // Shuffle row 2 -> 1
-        redRow1 = redRow2;
-        greenRow1 = greenRow2;
-        blueRow1 = blueRow2;
+        redRow[1] = redRow[2];
+        greenRow[1] = greenRow[2];
+        blueRow[1] = blueRow[2];
     }
-
-    if (1) {}
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/PreRender/PreRender_DivotFilter.s")
-#endif
 
 /**
  * Applies filters to the framebuffer prerender to make it look smoother
