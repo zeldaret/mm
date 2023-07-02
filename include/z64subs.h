@@ -14,7 +14,7 @@ extern Vec3f gOneVec3f;
 typedef enum {
     /* 0 */ SUBS_OFFER_MODE_NONE,
     /* 1 */ SUBS_OFFER_MODE_GET_ITEM,
-    // Further modes all deal with offering exchange items
+    // Further modes all deal with offering talk exchange requests
     /* 2 */ SUBS_OFFER_MODE_NEARBY,
     /* 3 */ SUBS_OFFER_MODE_ONSCREEN,
     /* 4 */ SUBS_OFFER_MODE_AUTO,
