@@ -488,7 +488,7 @@ s32 func_80BDEC2C(EnAl* this, PlayState* play) {
             this->unk_4C2 |= 0x1000;
             this->unk_4F4 = player->exchangeItemAction;
         }
-        SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_4E6 = 0;
         this->unk_4EC = 0;
         this->actor.child = this->unk_368;
@@ -644,7 +644,7 @@ s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if ((sp20 != NULL) && (sp20->update != NULL) && (temp_v0 != NULL) && (temp_v0->update != NULL)) {
         func_80BDE27C(this, 0);
-        SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_368 = sp20;
         this->unk_4C2 |= 0x20;
         ret = true;
@@ -653,7 +653,7 @@ s32 func_80BDF244(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 }
 
 s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
-    SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
     switch (scheduleOutput->result) {
         case 1:
@@ -723,9 +723,9 @@ void func_80BDF414(EnAl* this, PlayState* play) {
     temp_v0 = this->actor.world.rot.y - this->actor.yawTowardsPlayer;
     if (((this->unk_4EA == 0) && (ABS_ALT(temp_v0) >= 0x5800)) ||
         ((this->unk_4EA == 5) && (ABS_ALT(temp_v0) >= 0x5800)) || (this->unk_4EA == 2)) {
-        SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 }
 
@@ -767,7 +767,7 @@ void func_80BDF5E8(EnAl* this, PlayState* play) {
 
 void func_80BDF6C4(EnAl* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->unk_360, this->unk_4EC, &this->unk_364)) {
-        SubS_UpdateFlags(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_4C2, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_4C2 &= ~0x20;
         this->unk_4C2 |= 0x200;
         this->actor.child = NULL;

@@ -403,7 +403,7 @@ s32 func_80BC04FC(EnNb* this, PlayState* play) {
     if (((this->stateFlags & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->stateFlags |= EN_NB_FLAG_20;
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->behaviour = ENNB_BEHAVIOUR_0;
         this->msgEventCallback = NULL;
         this->actor.child = this->unk_1E8;
@@ -572,7 +572,7 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 success = false;
 
     if (EnNb_FindActor(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->stateFlags |= EN_NB_FLAG_20;
         EnNb_ChangeAnim(this, EN_NB_ANIM_0);
         success = true;
@@ -583,9 +583,9 @@ s32 func_80BC0B98(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80BC0C0C(EnNb* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (!CHECK_EVENTINF(EVENTINF_43)) {
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
     EnNb_ChangeAnim(this, EN_NB_ANIM_0);
 
@@ -664,7 +664,7 @@ void func_80BC0EAC(EnNb* this, PlayState* play) {
             CLEAR_EVENTINF(EVENTINF_43);
         }
 
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         if (this->scheduleResult != EN_NB_SCH_2) {
             this->stateFlags &= ~EN_NB_FLAG_20;
         }
@@ -692,7 +692,7 @@ void EnNb_Init(Actor* thisx, PlayState* play) {
     this->stateFlags = EN_NB_FLAG_NONE;
 
     if (CHECK_EVENTINF(EVENTINF_43)) {
-        SubS_UpdateFlags(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->stateFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     } else {
         CLEAR_EVENTINF(EVENTINF_42);
         CLEAR_EVENTINF(EVENTINF_43);

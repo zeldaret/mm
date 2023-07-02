@@ -185,7 +185,7 @@ s32 func_80BE06DC(EnTab* this, PlayState* play) {
     s32 ret = false;
 
     if (((this->unk_2FC & 7) != SUBS_OFFER_MODE_NONE) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
         this->unk_320 = 0;
         this->unk_328 = NULL;
@@ -373,7 +373,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1AFC);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         this->actor.targetMode = 0;
-        SubS_UpdateFlags(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
         this->unk_1E4 = sp28;
@@ -390,7 +390,7 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1B10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     this->actor.targetMode = 6;
-    SubS_UpdateFlags(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;
     func_80BE05BC(this, 1);
@@ -492,7 +492,7 @@ void func_80BE1348(EnTab* this, PlayState* play) {
     Vec3f sp34;
 
     if (func_8010BF58(&this->actor, play, func_80BE0E04(this, play), this->unk_328, &this->unk_1DC)) {
-        SubS_UpdateFlags(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC &= ~8;
         this->unk_2FC |= 0x40;
         this->unk_324 = 20;

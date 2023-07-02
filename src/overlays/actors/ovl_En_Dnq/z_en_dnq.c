@@ -127,14 +127,14 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
             this->cueId = 255;
             this->unk_37C |= 0x20;
         }
-        SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         ret = true;
     } else {
         if (this->unk_37C & 0x20) {
             this->picto.actor.flags |= ACTOR_FLAG_1;
             this->cueId = 255;
             this->unk_37C &= ~0x20;
-            SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         }
     }
 
@@ -325,7 +325,7 @@ s32 func_80A52D44(EnDnq* this, PlayState* play) {
 
     if (((this->unk_37C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_380 = func_80A52CF8(this, play);
         this->actionFunc = func_80A52FB8;
         ret = true;
@@ -339,9 +339,9 @@ void func_80A52DC8(EnDnq* this, PlayState* play) {
     s16 yaw = this->picto.actor.yawTowardsPlayer - this->picto.actor.world.rot.y;
 
     if (yaw <= 0x3800) {
-        SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     }
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
@@ -380,7 +380,7 @@ void func_80A52FB8(EnDnq* this, PlayState* play) {
     s16 sp2E = this->picto.actor.yawTowardsPlayer;
 
     if (func_8010BF58(&this->picto.actor, play, this->unk_380, NULL, &this->unk_1E0)) {
-        SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_386 = 0;
         this->actionFunc = func_80A52DC8;
     } else {
@@ -430,7 +430,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.targetMode = 1;
     this->unk_386 = 0;
     this->unk_37C = 0;
-    SubS_UpdateFlags(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_37C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
         this->unk_3A4 = 1;
     } else {

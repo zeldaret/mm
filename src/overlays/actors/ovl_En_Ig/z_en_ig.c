@@ -422,7 +422,7 @@ s32 func_80BF19A0(EnIg* this, PlayState* play) {
 
     if (((this->unk_3D0 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3F6 = 0;
         this->unk_3F8 = NULL;
         this->actor.child = this->unk_2A8;
@@ -530,7 +530,7 @@ s32 func_80BF1D78(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_80BF1C44(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_AN)) {
         func_80BF1284(this, 0);
-        SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3D0 |= 0x20;
         this->unk_3D0 |= 0x100;
         sp2C = true;
@@ -624,7 +624,7 @@ s32 func_80BF1FA8(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         this->unk_3D0 &= ~0x8;
         this->unk_3D0 &= ~0x10;
-        SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3D0 |= 0x100;
         func_80BF1284(this, 2);
         this->actor.gravity = -1.0f;
@@ -660,7 +660,7 @@ s32 func_80BF219C(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case 2:
                 this->actor.home.rot.y = this->actor.world.rot.y;
                 this->actor.home.rot.y += 0x8000;
-                SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_3D0 |= 0x100;
                 func_80BF1284(this, 1);
                 break;
@@ -668,7 +668,7 @@ s32 func_80BF219C(EnIg* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case 4:
                 this->actor.world.rot.y += 0x8000;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_3D0 |= 0x100;
                 func_80BF1284(this, 8);
                 break;
@@ -833,7 +833,7 @@ s32 func_80BF293C(EnIg* this, PlayState* play) {
             func_80BF1284(this, 7);
         }
     } else if ((this->unk_3FC == 7) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         func_80BF1284(this, 9);
     }
     return true;
@@ -897,7 +897,7 @@ void func_80BF2BD4(EnIg* this, PlayState* play) {
     Vec3f sp2C;
 
     if (func_8010BF58(&this->actor, play, this->unk_29C, this->unk_3F8, &this->unk_2A0)) {
-        SubS_UpdateFlags(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3D0, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3D0 &= ~0x20;
         this->unk_3D0 |= 0x200;
         this->unk_3EE = 20;

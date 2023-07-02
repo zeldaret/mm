@@ -125,7 +125,7 @@ s32 func_80BC19FC(EnJa* this, PlayState* play) {
 
     if (((this->unk_340 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80BC22F4;
         ret = true;
     }
@@ -244,7 +244,7 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, play)) {
-        SubS_UpdateFlags(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_340 |= 0x10;
         func_80BC192C(this, 5);
         func_80BC2EA4(this);
@@ -262,7 +262,7 @@ s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         } else {
             func_80BC192C(this, 4);
         }
-        SubS_UpdateFlags(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->actor.shape.shadowDraw = NULL;
         this->unk_340 |= 0x50;
         ret = true;
@@ -336,7 +336,7 @@ s32* func_80BC2274(EnJa* this, PlayState* play) {
 void func_80BC22F4(EnJa* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, func_80BC2274(this, play), this->unk_368, &this->unk_1D8.unk_04)) {
         this->unk_340 &= ~8;
-        SubS_UpdateFlags(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8.unk_04 = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -357,7 +357,7 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 0;
     this->actor.uncullZoneForward = 800.0f;
     this->actor.gravity = 0.0f;
-    SubS_UpdateFlags(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
     this->unk_1D8.unk_00 = 0;
     this->unk_368 = NULL;

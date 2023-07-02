@@ -722,7 +722,8 @@ wordReplace = {
     "func_8013E2D4": "SubS_StartCutscene",
     "SubS_StartActorCutscene": "SubS_StartCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
-    "func_8013AED4": "SubS_UpdateFlags",
+    "func_8013AED4": "SubS_SetOfferMode",
+    "SubS_UpdateFlags": "SubS_SetOfferMode"
     "func_8013D8DC": "SubS_IsObjectLoaded",
     "func_8013D924": "SubS_GetObjectIndex",
     "func_8013D5E8": "SubS_AngleDiffLessEqual",

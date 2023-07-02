@@ -203,7 +203,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
     if (((this->unk_18C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_18C |= 8;
-        SubS_UpdateFlags(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->msgEventScript = func_80C22880(this, play);
         this->actionFunc = func_80C229FC;
         ret = true;
@@ -212,7 +212,7 @@ s32 func_80C2291C(DmTag* this, PlayState* play) {
 }
 
 void func_80C229AC(DmTag* this, PlayState* play) {
-    SubS_UpdateFlags(&this->unk_18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->actor.flags |= ACTOR_FLAG_1;
 }
 
@@ -238,7 +238,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_18E = 2;
         this->unk_18C = 0;
-        SubS_UpdateFlags(&this->unk_18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
         this->actor.flags &= ~ACTOR_FLAG_1;
         this->actionFunc = func_80C229EC;
     } else if (this->actor.room == 2) {

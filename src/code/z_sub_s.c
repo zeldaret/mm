@@ -209,8 +209,8 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
     return true;
 }
 
-void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
-    *flags = (*flags & ~unsetBits) | setBits;
+void SubS_SetOfferMode(u16* flags, u16 offerMode, u16 mask) {
+    *flags = (*flags & ~mask) | offerMode;
 }
 
 /**

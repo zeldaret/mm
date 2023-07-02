@@ -734,7 +734,7 @@ s32 func_8094EE84(EnGm* this, PlayState* play) {
 
     if (((this->unk_3A4 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
         Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_3E0 = 0;
         this->unk_3E4 = NULL;
         this->actor.child = this->unk_268;
@@ -1084,7 +1084,7 @@ s32 func_8094FAC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_3A4 &= ~0x8;
         this->unk_3A4 &= ~0x10;
-        SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         func_8094E054(this, play, 7);
@@ -1101,7 +1101,7 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TAB)) {
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D90);
-            SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             func_8094E054(this, play, 0);
         } else {
             func_8094E054(this, play, 9);
@@ -1119,7 +1119,7 @@ s32 func_8094FD88(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
         func_8094E054(this, play, 11);
-        SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         ret = true;
@@ -1135,7 +1135,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) &&
         (al->update != NULL)) {
         func_8094E054(this, play, 11);
-        SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_268 = al;
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
             this->unk_3C8 = 2;
@@ -1172,7 +1172,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D9C);
-            SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             this->unk_3C8 = 4;
             this->unk_3CA = 4;
             this->unk_3CC = 8;
@@ -1199,7 +1199,7 @@ s32 func_80950088(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DA8);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DB4);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x2000 | 0x100);
     this->unk_3A4 |= 0x200;
     func_8094E054(this, play, 12);
@@ -1214,7 +1214,7 @@ s32 func_80950120(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DBC);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DC8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x800 | 0x100);
     this->unk_3A4 |= 0x200;
     func_8094E054(this, play, 4);
@@ -1230,7 +1230,7 @@ s32 func_809501B8(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DDC);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     this->actor.targetMode = 6;
-    SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x1000 | 0x100);
     this->unk_3A4 |= 0x200;
     this->unk_3C8 = 3;
@@ -1337,7 +1337,7 @@ s32 func_809503F8(EnGm* this, PlayState* play) {
     if (this->unk_3E8 == 9) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-            SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             func_8094E054(this, play, 0);
         } else {
             AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
@@ -1369,7 +1369,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
         case 9:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-                SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+                SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_3C8 = 4;
                 this->unk_3CA = 4;
                 this->unk_3CC = 8;
@@ -1605,7 +1605,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
     Actor* al;
 
     if (func_8010BF58(&this->actor, play, this->unk_264, this->unk_3E4, &this->unk_25C)) {
-        SubS_UpdateFlags(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
             this->unk_268 = al;

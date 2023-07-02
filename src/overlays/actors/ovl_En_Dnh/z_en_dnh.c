@@ -99,7 +99,7 @@ s32 func_80A50E40(EnDnh* this, PlayState* play) {
         !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         return 0;
     }
-    SubS_UpdateFlags(&this->unk18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+    SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->msgEventScript = func_80A50DF8(this, play);
     this->actionFunc = func_80A50F38;
     return 1;
@@ -117,7 +117,7 @@ s32 func_80A50EC0(EnDnh* this) {
 
 void func_80A50F38(EnDnh* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventCallback, &this->unk194)) {
-        SubS_UpdateFlags(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk194 = 0;
         this->unk198 = 0;
         this->actionFunc = EnDnh_DoNothing;
@@ -136,10 +136,10 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
-        SubS_UpdateFlags(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk198 = 0;
     } else {
-        SubS_UpdateFlags(&this->unk18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
+        SubS_SetOfferMode(&this->unk18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
         this->unk198 = CHECK_EVENTINF(EVENTINF_35) ? 2 : 1;
     }
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {

@@ -106,7 +106,7 @@ s32 SubS_InCsMode(struct PlayState* play);
 
 s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRot, s32 overrideRot);
 
-void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits);
+void SubS_SetOfferMode(u16* flags, u16 offerMode, u16 mask);
 
 void SubS_TimePathing_FillKnots(f32 knots[], s32 order, s32 numPoints);
 s32 SubS_TimePathing_ComputeProgress(f32* progress, s32 elapsedTime, s32 waypointTime, s32 totalTime, s32 pathCount, s32 order, f32 knots[]);
