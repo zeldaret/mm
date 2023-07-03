@@ -751,7 +751,9 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
 
-        SubS_SetOfferMode(&this->unk_310, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK); // These bits go unused
+        // This is the only usage of this function whose actor does not use `SubS_Offer`.
+        // Since these bits go unused, it seems like a copy paste that still used `SubSOfferMode`
+        SubS_SetOfferMode(&this->unk_310, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
             this->unk_318 = Rand_S16Offset(30, 30);
