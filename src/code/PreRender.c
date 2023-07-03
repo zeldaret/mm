@@ -115,34 +115,6 @@ void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave) {
     func_8016FF90(this, gfxp, fbuf, fbufSave, 255, 255, 255, 255);
 }
 
-//! FAKE: Same definition as `gSPTextureRectangle` but without the `_DW()` wrapper (do-while 0)
-#define gSPTextureRectangle_Alt(pkt, xl, yl, xh, yh, tile, s, t, dsdx, dtdy)                   \
-    {                                                                                          \
-        Gfx* _g = (Gfx*)(pkt);                                                                 \
-                                                                                               \
-        _g->words.w0 = (_SHIFTL(G_TEXRECT, 24, 8) | _SHIFTL(xh, 12, 12) | _SHIFTL(yh, 0, 12)); \
-        _g->words.w1 = (_SHIFTL(tile, 24, 3) | _SHIFTL(xl, 12, 12) | _SHIFTL(yl, 0, 12));      \
-        gImmp1(pkt, G_RDPHALF_1, (_SHIFTL(s, 16, 16) | _SHIFTL(t, 0, 16)));                    \
-        gImmp1(pkt, G_RDPHALF_2, (_SHIFTL(dsdx, 16, 16) | _SHIFTL(dtdy, 0, 16)));              \
-    }
-
-//! FAKE: Same definition as `gDPLoadTextureTile` but without the `_DW()` wrapper (do-while 0)
-#define gDPLoadTextureTile_Alt(pkt, timg, fmt, siz, width, height, uls, ult, lrs, lrt, pal, cms, cmt, masks, maskt,    \
-                               shifts, shiftt)                                                                         \
-    {                                                                                                                  \
-        gDPSetTextureImage(pkt, fmt, siz, width, timg);                                                                \
-        gDPSetTile(pkt, fmt, siz, (((((lrs) - (uls) + 1) * siz##_TILE_BYTES) + 7) >> 3), 0, G_TX_LOADTILE, 0, cmt,     \
-                   maskt, shiftt, cms, masks, shifts);                                                                 \
-        gDPLoadSync(pkt);                                                                                              \
-        gDPLoadTile(pkt, G_TX_LOADTILE, (uls) << G_TEXTURE_IMAGE_FRAC, (ult) << G_TEXTURE_IMAGE_FRAC,                  \
-                    (lrs) << G_TEXTURE_IMAGE_FRAC, (lrt) << G_TEXTURE_IMAGE_FRAC);                                     \
-        gDPPipeSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((((lrs) - (uls) + 1) * siz##_LINE_BYTES) + 7) >> 3), 0, G_TX_RENDERTILE, pal, cmt, \
-                   maskt, shiftt, cms, masks, shifts);                                                                 \
-        gDPSetTileSize(pkt, G_TX_RENDERTILE, (uls) << G_TEXTURE_IMAGE_FRAC, (ult) << G_TEXTURE_IMAGE_FRAC,             \
-                       (lrs) << G_TEXTURE_IMAGE_FRAC, (lrt) << G_TEXTURE_IMAGE_FRAC);                                  \
-    }
-
 /**
  * Reads the coverage values stored in the RGBA16 format `img` with dimensions `this->width`, `this->height` and
  * converts it to an 8-bpp intensity image.
@@ -183,7 +155,9 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
         s32 lrt;
 
         // Make sure that we don't load past the end of the source image
-        nRows = MIN(rowsRemaining, nRows);
+        if (nRows > rowsRemaining) {
+            nRows = rowsRemaining;
+        }
 
         // Determine the upper and lower bounds of the rect to draw
         ult = curRow;
@@ -203,18 +177,15 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
         // Since it is expected that r = g = b = cvg in the source image, this results in
         //  I = (cvg << 3) | (cvg >> 2)
         // This expands the 5-bit coverage into an 8-bit value
-        gDPLoadTextureTile_Alt(gfx++, img, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
+        gDPLoadTextureTile(gfx++, img, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
-
-        if (1) {}
 
         // Draw that horizontal strip to the destination image. With the combiner and blender configuration set above,
         // the intensity (I) channel of the loaded IA16 texture will be written as-is to the I8 color image, each pixel
         // in the final image is
         //  I = (cvg << 3) | (cvg >> 2)
-        // FAKE: See Alt definition above
-        gSPTextureRectangle_Alt(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
+        gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
                                 ult << 5, 1 << 10, 1 << 10);
 
         // Update the number of rows remaining and index of the row being drawn
@@ -343,7 +314,9 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             s32 lrt;
 
             // Make sure that we don't load past the end of the source image
-            nRows = MIN(rowsRemaining, nRows);
+            if (nRows > rowsRemaining) {
+                nRows = rowsRemaining;
+            }
 
             // Determine the upper and lower bounds of the rect to draw
             ult = curRow;
@@ -358,9 +331,6 @@ void func_80170798(PreRender* this, Gfx** gfxp) {
             gDPLoadMultiTile(gfx++, this->cvgSave, 0x0160, rtile, G_IM_FMT_I, G_IM_SIZ_8b, this->width, this->height,
                              uls, ult, lrs, lrt, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK,
                              G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            //! FAKE
-            if (1) {}
-            if (1) {}
 
             // Draw a texture for which the rgb channels come from the framebuffer and the alpha channel comes from
             // coverage, modulated by env color
