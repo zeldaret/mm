@@ -178,15 +178,15 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
         //  I = (cvg << 3) | (cvg >> 2)
         // This expands the 5-bit coverage into an 8-bit value
         gDPLoadTextureTile(gfx++, img, G_IM_FMT_IA, G_IM_SIZ_16b, this->width, this->height, uls, ult, lrs, lrt, 0,
-                               G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
-                               G_TX_NOLOD, G_TX_NOLOD);
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
 
         // Draw that horizontal strip to the destination image. With the combiner and blender configuration set above,
         // the intensity (I) channel of the loaded IA16 texture will be written as-is to the I8 color image, each pixel
         // in the final image is
         //  I = (cvg << 3) | (cvg >> 2)
         gSPTextureRectangle(gfx++, uls << 2, ult << 2, (lrs + 1) << 2, (lrt + 1) << 2, G_TX_RENDERTILE, uls << 5,
-                                ult << 5, 1 << 10, 1 << 10);
+                            ult << 5, 1 << 10, 1 << 10);
 
         // Update the number of rows remaining and index of the row being drawn
         curRow += nRows;
