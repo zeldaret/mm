@@ -79,13 +79,13 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
     ObjWind* this = (ObjWind*)thisx;
     ObjWindStruct* entry = &D_80B2448C[OBJ_WIND_GET_TYPE(thisx)];
     Player* player;
-    f32 cosYTimesX;
-    f32 cosX;
-    f32 sinYTimesX;
+    f32 upZ;
+    f32 upY;
+    f32 upX;
     Vec3f posCopy;
     Vec3f nearestPoint;
     Vec3f sp54;
-    f32 dist; // reused temp
+    f32 upXZ; // reused temp
     f32 distToNearestPoint;
 
     if (D_80B245CC != DREG(85)) {
@@ -108,38 +108,38 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
     if ((OBJ_WIND_GET_SWITCH_FLAG(thisx) == 0x7F) || !Flags_GetSwitch(play, OBJ_WIND_GET_SWITCH_FLAG(thisx))) {
         player = GET_PLAYER(play);
         Math_Vec3f_Copy(&posCopy, &this->actor.world.pos);
-        cosX = Math_CosS(this->actor.shape.rot.x);
-        dist = Math_SinS(this->actor.shape.rot.x);
-        sinYTimesX = Math_SinS(this->actor.shape.rot.y) * dist;
-        cosYTimesX = Math_CosS(this->actor.shape.rot.y) * dist;
+        upY = Math_CosS(this->actor.shape.rot.x);
+        upXZ = Math_SinS(this->actor.shape.rot.x);
+        upX = Math_SinS(this->actor.shape.rot.y) * upXZ;
+        upZ = Math_CosS(this->actor.shape.rot.y) * upXZ;
         distToNearestPoint = func_80179A44(&posCopy, &player->actor.world, &nearestPoint);
         if ((distToNearestPoint >= 0.0f) && (distToNearestPoint < entry->unk_0)) {
-            dist = Math_Vec3f_DistXYZAndStoreDiff(&player->actor.world.pos, &nearestPoint, &sp54);
-            if (dist < entry->unk_2) {
+            upXZ = Math_Vec3f_DistXYZAndStoreDiff(&player->actor.world.pos, &nearestPoint, &sp54);
+            if (upXZ < entry->unk_2) {
                 f32 var_fa0;
                 f32 windSpeedXZ = 1.0f; // reused temp
-                f32 sp40;
+                f32 windMagnitude;
                 f32 temp_ft0;
                 f32 windSpeedX;
                 f32 windSpeedY;
                 f32 windSpeedZ;
 
                 var_fa0 = 1.0f - distToNearestPoint / entry->unk_0;
-                sp40 = ((f32)entry->unk_4 / 100.0f) *
-                       ((var_fa0 * (1.0f - dist / entry->unk_2)) + ((f32)entry->unk_8 / 100.0f));
+                windMagnitude = ((f32)entry->unk_4 / 100.0f) *
+                       ((var_fa0 * (1.0f - upXZ / entry->unk_2)) + ((f32)entry->unk_8 / 100.0f));
                 if ((distToNearestPoint / entry->unk_0) > 0.8f) {
                     var_fa0 = windSpeedXZ - 1.0f;
                 }
-                temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (dist / entry->unk_2 * var_fa0);
-                if (dist != 0.0f) {
+                temp_ft0 = ((f32)entry->unk_6 / 100.0f) * (upXZ / entry->unk_2 * var_fa0);
+                if (upXZ != 0.0f) {
                     // FAKE:
                     if (1) {}
-                    dist = 1.0f / dist;
+                    upXZ = 1.0f / upXZ;
                 }
-                temp_ft0 *= dist;
-                windSpeedX = (sinYTimesX * sp40) + (sp54.x * temp_ft0);
-                windSpeedY = (cosX * sp40) + (sp54.y * temp_ft0);
-                windSpeedZ = (cosYTimesX * sp40) + (sp54.z * temp_ft0);
+                temp_ft0 *= upXZ;
+                windSpeedX = (upX * windMagnitude) + (sp54.x * temp_ft0);
+                windSpeedY = (upY * windMagnitude) + (sp54.y * temp_ft0);
+                windSpeedZ = (upZ * windMagnitude) + (sp54.z * temp_ft0);
                 player->windSpeed = sqrtf(SQ(windSpeedX) + SQ(windSpeedY) + SQ(windSpeedZ));
                 player->windAngleY = Math_Atan2S_XY(windSpeedZ, windSpeedX);
 
