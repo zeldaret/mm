@@ -574,7 +574,7 @@ void func_80A724B8(EnDno* this, PlayState* play) {
 
 void func_80A7256C(EnDno* this, PlayState* play) {
     Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                            PLAYER_IA_EXCH_CONTINUE);
+                            PLAYER_IA_CONTINUE);
 }
 
 void func_80A72598(EnDno* this, PlayState* play) {

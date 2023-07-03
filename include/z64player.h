@@ -52,8 +52,7 @@ typedef enum {
 } PlayerEnvHazard;
 
 typedef enum PlayerItemAction {
-    /*   -1 */ PLAYER_IA_EXCH_CONTINUE = -1, // When used as an exchangeItem, means to continue the conversation
-    /*   -1 */ PLAYER_IA_HELD = -1, // TODO: Used with shielding but anything else? also confirm all usages
+    /*   -1 */ PLAYER_IA_CONTINUE = -1, // TODO: determine usages with more player docs, possibly split into seperate values
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,

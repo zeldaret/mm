@@ -851,7 +851,7 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_ContinueTextbox(play, 0x647);
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_EXCH_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
     }
 }
 
@@ -1120,7 +1120,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
             this->csId = this->lookToShopkeeperCsId;
             CutsceneManager_Queue(this->csId);
         }
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_EXCH_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
     }
 }
 
@@ -1136,7 +1136,7 @@ void EnSob1_ContinueShopping(EnSob1* this, PlayState* play) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(play, this, true);
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_EXCH_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_CONTINUE);
     }
 }
 

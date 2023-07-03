@@ -763,7 +763,7 @@ void EnTalkGibud_CheckPresentedItem(EnTalkGibud* this, PlayState* play) {
                     break;
             }
             Message_CloseTextbox(play);
-        } else if (this->itemAction <= PLAYER_IA_EXCH_CONTINUE) {
+        } else if (this->itemAction <= PLAYER_IA_CONTINUE) {
             Message_StartTextbox(play, 0x1389, &this->actor);
             this->textId = 0x1389;
         }

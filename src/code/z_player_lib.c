@@ -621,7 +621,7 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
-            return PLAYER_IA_EXCH_CONTINUE;
+            return PLAYER_IA_CONTINUE;
         }
     } else {
         gSaveContext.save.unk_06--;
@@ -636,10 +636,9 @@ PlayerItemAction func_80123810(PlayState* play) {
             play->interfaceCtx.unk_224 = 0;
             Interface_SetHudVisibility(play->msgCtx.unk_120BC);
 
-            if ((itemId >= ITEM_FD) ||
-                ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_EXCH_CONTINUE)) {
+            if ((itemId >= ITEM_FD) || ((itemAction = play->unk_18794(play, player, itemId)) <= PLAYER_IA_CONTINUE)) {
                 Audio_PlaySfx(NA_SE_SY_ERROR);
-                return PLAYER_IA_EXCH_CONTINUE;
+                return PLAYER_IA_CONTINUE;
             } else {
                 s32 pad;
 
@@ -1220,7 +1219,7 @@ u8 D_801C07AC[] = {
 
 void Player_SetModelsForHoldingShield(Player* player) {
     if (player->stateFlags1 & PLAYER_STATE1_400000) {
-        if ((player->itemAction <= PLAYER_IA_HELD) || (player->itemAction == player->heldItemAction)) {
+        if ((player->itemAction <= PLAYER_IA_CONTINUE) || (player->itemAction == player->heldItemAction)) {
             if (!Player_IsHoldingTwoHandedWeapon(player)) {
                 if (!Player_IsGoronOrDeku(player)) {
                     D_801F59E0 = player->transformation * 2;
@@ -1235,7 +1234,7 @@ void Player_SetModelsForHoldingShield(Player* player) {
 
                     player->sheathDLists = &sPlayerDListGroups[player->sheathType][D_801F59E0];
                     player->modelAnimType = PLAYER_ANIMTYPE_2;
-                    player->itemAction = PLAYER_IA_HELD;
+                    player->itemAction = PLAYER_IA_CONTINUE;
                 }
             }
         }

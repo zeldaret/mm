@@ -935,7 +935,7 @@ void func_80B9849C(EnZot* this, PlayState* play) {
         }
         this->actionFunc = func_80B98728;
     } else {
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_CONTINUE);
     }
 }
 
@@ -945,7 +945,7 @@ void func_80B9854C(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_EXCH_CONTINUE);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_CONTINUE);
     } else {
         Actor_OfferGetItem(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
     }
@@ -973,7 +973,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
                 player->actor.textId = 0x12AB;
             }
             this->actionFunc = func_80B98728;
-        } else if (itemAction <= PLAYER_IA_EXCH_CONTINUE) {
+        } else if (itemAction <= PLAYER_IA_CONTINUE) {
             Message_ContinueTextbox(play, 0x12AB);
             this->actionFunc = func_80B98728;
         }

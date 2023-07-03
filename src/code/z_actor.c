@@ -1890,7 +1890,7 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.
  * - `PLAYER_IA_NONE`:
  *    Allows the player to speak to or check the actor (by pressing A).
- * - `PLAYER_IA_EXCH_CONTINUE`:
+ * - `PLAYER_IA_CONTINUE`:
  *    Used by actors/player to continue the current conversation.
  *
  * @return true If the player actor is capable of accepting the offer.

@@ -848,7 +848,7 @@ s32 func_80A8777C(Actor* thisx, PlayState* play) {
                 this->unk_378 = func_80A87880;
                 this->unk_364 = 0;
                 ret = 1;
-            } else if (itemAction <= PLAYER_IA_EXCH_CONTINUE) {
+            } else if (itemAction <= PLAYER_IA_CONTINUE) {
                 ret = 3;
             } else if (itemAction != PLAYER_IA_NONE) {
                 ret = 2;
