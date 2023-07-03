@@ -936,7 +936,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
+    gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,
