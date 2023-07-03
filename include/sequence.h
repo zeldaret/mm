@@ -32,7 +32,7 @@
 #define NA_BGM_ENEMY 0x1A                       // "Battle" (NA_BGM_ENEMY)
 #define NA_BGM_BOSS 0x1B                        // "Boss Battle" (NA_BGM_BOSS00)
 #define NA_BGM_WOODFALL_TEMPLE 0x1C             // "Woodfall Temple" (NA_BGM_JUNGLE_DUNGEON)
-#define NA_BGM_CLOCK_TOWN_MAIN_SEQUENCE 0x1D    // Plays the "morning theme" at the start of a day, then loads one of sequences 0x15, 0x16, or 0x17 (NA_BGM_MARKET)
+#define NA_BGM_CLOCK_TOWN_MAIN_SEQUENCE 0x1D    // Loads one of sequences 0x15, 0x16, or 0x17. Will also play the "morning theme" if it is the start of a day (NA_BGM_MARKET)
 #define NA_BGM_OPENING 0x1E                     // "Opening" - plays during the ambush in the opening forest area (NA_BGM_OPENING)
 #define NA_BGM_INSIDE_A_HOUSE 0x1F              // "House" (NA_BGM_LINK_HOUSE)
 #define NA_BGM_GAME_OVER 0x20                   // "Game Over" (NA_BGM_GAME_OVER)
