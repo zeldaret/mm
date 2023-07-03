@@ -126,7 +126,7 @@ void ObjWind_Update(Actor* thisx, PlayState* play) {
 
                 var_fa0 = 1.0f - distToNearestPoint / entry->unk_0;
                 windMagnitude = ((f32)entry->unk_4 / 100.0f) *
-                       ((var_fa0 * (1.0f - upXZ / entry->unk_2)) + ((f32)entry->unk_8 / 100.0f));
+                                ((var_fa0 * (1.0f - upXZ / entry->unk_2)) + ((f32)entry->unk_8 / 100.0f));
                 if ((distToNearestPoint / entry->unk_0) > 0.8f) {
                     var_fa0 = windSpeedXZ - 1.0f;
                 }
