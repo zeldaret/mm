@@ -1,14 +1,13 @@
 #include "global.h"
 #include "z64snap.h"
 #include "z64view.h"
+#include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
 
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
-
-extern TexturePtr D_08095AC0; // gMagicArrowEquipEffectTex
 
 typedef enum {
     /* 0 */ PICTO_BOX_STATE_OFF,         // Not using the pictograph
@@ -160,16 +159,33 @@ static Gfx sScreenFillSetupDL[] = {
 
 s16 D_801BF9B0 = 0;
 f32 D_801BF9B4[] = { 100.0f, 109.0f };
-s16 D_801BF9BC[] = { 0x226, 0x2A8, 0x2A8, 0x2A8 };
+s16 D_801BF9BC[] = {
+    0x226, // EQUIP_SLOT_B
+    0x2A8, // EQUIP_SLOT_C_LEFT
+    0x2A8, // EQUIP_SLOT_C_DOWN
+    0x2A8, // EQUIP_SLOT_C_RIGHT
+};
 s16 D_801BF9C4[] = { 0x9E, 0x9B };
 s16 D_801BF9C8[] = { 0x17, 0x16 };
 f32 D_801BF9CC[] = { -380.0f, -350.0f };
-s16 D_801BF9D4[] = { 0xA7, 0xE3 };
-s16 D_801BF9D8[] = { 0xF9, 0x10F };
-s16 D_801BF9DC[] = { 0x11, 0x12 };
-s16 D_801BF9E0[] = { 0x22, 0x12 };
-s16 D_801BF9E4[] = { 0x23F, 0x26C };
-s16 D_801BF9E8[] = { 0x26C, 0x26C };
+s16 D_801BF9D4[] = {
+    0xA7,  // EQUIP_SLOT_B
+    0xE3,  // EQUIP_SLOT_C_LEFT
+    0xF9,  // EQUIP_SLOT_C_DOWN
+    0x10F, // EQUIP_SLOT_C_RIGHT
+};
+s16 D_801BF9DC[] = {
+    0x11, // EQUIP_SLOT_B
+    0x12, // EQUIP_SLOT_C_LEFT
+    0x22, // EQUIP_SLOT_C_DOWN
+    0x12, // EQUIP_SLOT_C_RIGHT
+};
+s16 D_801BF9E4[] = {
+    0x23F, // EQUIP_SLOT_B
+    0x26C, // EQUIP_SLOT_C_LEFT
+    0x26C, // EQUIP_SLOT_C_DOWN
+    0x26C, // EQUIP_SLOT_C_RIGHT
+};
 
 s16 sFinalHoursClockDigitsRed = 0;
 s16 sFinalHoursClockFrameEnvRed = 0;
@@ -2057,7 +2073,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                 } else {
                     // End of special item cases. Apply restrictions to buttons
                     if (interfaceCtx->restrictions.tradeItems != 0) {
-                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) ||
                             ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) ||
@@ -2068,7 +2084,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                             gSaveContext.buttonStatus[i] = BTN_DISABLED;
                         }
                     } else if (interfaceCtx->restrictions.tradeItems == 0) {
-                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) ||
                             ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) ||
@@ -2115,7 +2131,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                     }
 
                     if (interfaceCtx->restrictions.all != 0) {
-                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) &&
                             !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) &&
@@ -2130,7 +2146,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                             }
                         }
                     } else if (interfaceCtx->restrictions.all == 0) {
-                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) &&
                             !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) &&
@@ -2899,10 +2915,10 @@ u8 Item_Give(PlayState* play, u8 item) {
             }
         }
 
-    } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
+    } else if ((item >= ITEM_MOONS_TEAR) && (item <= ITEM_MASK_GIANT)) {
         temp = INV_CONTENT(item);
         INV_CONTENT(item) = item;
-        if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_OF_MEMORIES) && (temp != ITEM_NONE)) {
+        if ((item >= ITEM_MOONS_TEAR) && (item <= ITEM_PENDANT_OF_MEMORIES) && (temp != ITEM_NONE)) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (temp == GET_CUR_FORM_BTN_ITEM(i)) {
                     SET_CUR_FORM_BTN_ITEM(i, item);
@@ -3066,7 +3082,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
                 }
             }
         }
-    } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
+    } else if ((item >= ITEM_MOONS_TEAR) && (item <= ITEM_MASK_GIANT)) {
         return ITEM_NONE;
     }
 
@@ -3849,8 +3865,12 @@ void Interface_DrawItemButtons(PlayState* play) {
         // Remnant of OoT
         130, 136, 136, 136, 136,
     };
-    static s16 D_801BFAF4[] = { 0x1D, 0x1B };
-    static s16 D_801BFAF8[] = { 0x1B, 0x1B };
+    static s16 D_801BFAF4[] = {
+        0x1D, // EQUIP_SLOT_B
+        0x1B, // EQUIP_SLOT_C_LEFT
+        0x1B, // EQUIP_SLOT_C_DOWN
+        0x1B, // EQUIP_SLOT_C_RIGHT
+    };
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Player* player = GET_PLAYER(play);
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -3864,21 +3884,27 @@ void Interface_DrawItemButtons(PlayState* play) {
     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
     // B Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[0],
-                                                 D_801BF9DC[0], D_801BFAF4[0], D_801BFAF4[0], D_801BF9E4[0] * 2,
-                                                 D_801BF9E4[0] * 2, 100, 255, 120, interfaceCtx->bAlpha);
+    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(
+        OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[EQUIP_SLOT_B], D_801BF9DC[EQUIP_SLOT_B],
+        D_801BFAF4[EQUIP_SLOT_B], D_801BFAF4[EQUIP_SLOT_B], D_801BF9E4[EQUIP_SLOT_B] * 2, D_801BF9E4[EQUIP_SLOT_B] * 2,
+        100, 255, 120, interfaceCtx->bAlpha);
     gDPPipeSync(OVERLAY_DISP++);
 
     // C-Left Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[1], D_801BF9DC[1], D_801BFAF4[1], D_801BFAF4[1],
-                                           D_801BF9E4[1] * 2, D_801BF9E4[1] * 2, 255, 240, 0, interfaceCtx->cLeftAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_LEFT], D_801BF9DC[EQUIP_SLOT_C_LEFT],
+                                           D_801BFAF4[EQUIP_SLOT_C_LEFT], D_801BFAF4[EQUIP_SLOT_C_LEFT],
+                                           D_801BF9E4[EQUIP_SLOT_C_LEFT] * 2, D_801BF9E4[EQUIP_SLOT_C_LEFT] * 2, 255,
+                                           240, 0, interfaceCtx->cLeftAlpha);
     // C-Down Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[0], D_801BF9E0[0], D_801BFAF8[0], D_801BFAF8[0],
-                                           D_801BF9E4[2] * 2, D_801BF9E4[2] * 2, 255, 240, 0, interfaceCtx->cDownAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_DOWN], D_801BF9DC[EQUIP_SLOT_C_DOWN],
+                                           D_801BFAF4[EQUIP_SLOT_C_DOWN], D_801BFAF4[EQUIP_SLOT_C_DOWN],
+                                           D_801BF9E4[EQUIP_SLOT_C_DOWN] * 2, D_801BF9E4[EQUIP_SLOT_C_DOWN] * 2, 255,
+                                           240, 0, interfaceCtx->cDownAlpha);
     // C-Right Button Color & Texture
-    OVERLAY_DISP =
-        Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[1], D_801BF9E0[1], D_801BFAF8[1], D_801BFAF8[1],
-                                D_801BF9E4[3] * 2, D_801BF9E4[3] * 2, 255, 240, 0, interfaceCtx->cRightAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_RIGHT], D_801BF9DC[EQUIP_SLOT_C_RIGHT],
+                                           D_801BFAF4[EQUIP_SLOT_C_RIGHT], D_801BFAF4[EQUIP_SLOT_C_RIGHT],
+                                           D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, 255,
+                                           240, 0, interfaceCtx->cRightAlpha);
 
     if (!IS_PAUSE_STATE_GAMEOVER) {
         if ((play->pauseCtx.state != PAUSE_STATE_OFF) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
@@ -4295,7 +4321,7 @@ void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
             }
 
             gSPVertex(OVERLAY_DISP++, &pauseCtx->cursorVtx[16], 4, 0);
-            gDPLoadTextureBlock(OVERLAY_DISP++, &D_08095AC0, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
+            gDPLoadTextureBlock(OVERLAY_DISP++, gMagicArrowEquipEffectTex, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
         }

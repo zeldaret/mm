@@ -265,7 +265,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
             Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
-            this->unk_3E8 = gTakkuriStolenGreatFairySwordDL;
+            this->unk_3E8 = gTakkuriStolenGreatFairysSwordDL;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;

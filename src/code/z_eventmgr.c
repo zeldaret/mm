@@ -55,6 +55,13 @@ CutsceneManager sCutsceneMgr = {
     CS_ID_NONE, 0, CS_ID_NONE, SUB_CAM_ID_DONE, NULL, CS_START_0, NULL, CAM_ID_MAIN, false,
 };
 
+ActorCutscene* sSceneCutsceneList;
+s16 sSceneCutsceneCount;
+u8 sWaitingCutsceneList[16];
+static s32 sBssPad;
+u8 sNextCutsceneList[16];
+static s32 sBssPad2;
+
 s16 CutsceneManager_SetHudVisibility(s16 csHudVisibility) {
     u16 hudVisibility;
 
@@ -204,7 +211,7 @@ void CutsceneManager_End(void) {
             sCutsceneMgr.targetActor->flags &= ~ACTOR_FLAG_100000;
             // fallthrough
         case CS_START_1:
-            func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_END);
+            func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_END);
             sCutsceneMgr.startMethod = CS_START_0;
             break;
 
@@ -335,7 +342,7 @@ s16 CutsceneManager_StartWithPlayerCs(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }
@@ -351,7 +358,7 @@ s16 CutsceneManager_StartWithPlayerCsAndSetFlag(s16 csId, Actor* actor) {
     s16 startCsId = CutsceneManager_Start(csId, actor);
 
     if (startCsId >= 0) {
-        func_800B7298(sCutsceneMgr.play, 0, PLAYER_CSMODE_WAIT);
+        func_800B7298(sCutsceneMgr.play, NULL, PLAYER_CSMODE_WAIT);
         if (sCutsceneMgr.length == 0) {
             CutsceneManager_Stop(sCutsceneMgr.csId);
         }

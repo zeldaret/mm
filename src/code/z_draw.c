@@ -313,7 +313,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa0Xlu1, { gGiRedPotionBottleEmptyDL, gGiRedPotionBottleDL } },
     // GID_ZORA_EGG, OBJECT_GI_BOTTLE_15
     { GetItem_DrawOpa0Xlu1, { gGiZoraEggBottleContentsDL, gGiZoraEggBottleGlassAndCorkDL } },
-    // GID_MOON_TEAR, OBJECT_GI_RESERVE00
+    // GID_MOONS_TEAR, OBJECT_GI_RESERVE00
     { GetItem_DrawMoonsTear, { gGiMoonsTearItemDL, gGiMoonsTearGlowDL } },
     // GID_DEED_LAND, OBJECT_GI_RESERVE01
     { GetItem_DrawOpa01, { gGiTitleDeedEmptyDL, gGiTitleDeedLandColorDL } },
@@ -344,7 +344,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     // GID_SWORD_GILDED, OBJECT_GI_SWORD_3
     { GetItem_DrawOpa01, { gGiGildedSwordDL, gGiGildedSwordEmptyDL } },
     // GID_SWORD_GREAT_FAIRY, OBJECT_GI_SWORD_4
-    { GetItem_DrawOpa0Xlu1, { gGiGreatFairySwordBladeDL, gGiGreatFairySwordHiltEmblemDL } },
+    { GetItem_DrawOpa0Xlu1, { gGiGreatFairysSwordBladeDL, gGiGreatFairysSwordHiltEmblemDL } },
     // GID_MASK_GARO, OBJECT_GI_MASK09
     { GetItem_DrawOpa0Xlu1, { gGiGarosMaskCloakDL, gGiGarosMaskFaceDL } },
     // GID_MASK_GREAT_FAIRY, OBJECT_GI_MASK14

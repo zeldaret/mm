@@ -495,7 +495,7 @@ void func_80123140(PlayState* play, Player* player) {
 
 s32 Player_InBlockingCsMode(PlayState* play, Player* player) {
     return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_20000000)) ||
-           (player->csMode != PLAYER_CSMODE_0) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
+           (player->csMode != PLAYER_CSMODE_NONE) || (play->transitionTrigger == TRANS_TRIGGER_START) ||
            (play->transitionMode != TRANS_MODE_OFF) || (player->stateFlags1 & PLAYER_STATE1_1) ||
            (player->stateFlags3 & PLAYER_STATE3_80) || (play->actorCtx.unk268 != 0);
 }
@@ -695,7 +695,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_MILK_HALF
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_CHATEAU
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FAIRY
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOON_TEAR
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MOONS_TEAR
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEED_LAND
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_ROOM_KEY
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LETTER_TO_KAFEI
@@ -2529,9 +2529,9 @@ Gfx* D_801C0B20[] = {
     object_mask_bakuretu_DL_0005C0, // PLAYER_MASK_BLAST
     object_mask_bu_san_DL_000710,   // PLAYER_MASK_SCENTS
     object_mask_kyojin_DL_000380,   // PLAYER_MASK_GIANT
-    gameplay_keep_DL_00B260,        // PLAYER_MASK_FIERCE_DEITY
-    gameplay_keep_DL_005A10,        // PLAYER_MASK_GORON
-    gameplay_keep_DL_005360,        // PLAYER_MASK_ZORA
+    gFierceDeityMaskDL,             // PLAYER_MASK_FIERCE_DEITY
+    gGoronMaskDL,                   // PLAYER_MASK_GORON
+    gZoraMaskDL,                    // PLAYER_MASK_ZORA
     gDekuMaskDL,                    // PLAYER_MASK_DEKU
     object_mask_boy_DL_000900,
     object_mask_goron_DL_0014A0,
@@ -3322,10 +3322,10 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             Color_RGB8* bottleColor = &sPlayerBottleColors[bottle];
 
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);
+            gSPDisplayList(POLY_XLU_DISP++, gBottleContentsDL);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0003E0);
+        gSPDisplayList(POLY_XLU_DISP++, gBottleGlassDL);
 
         Matrix_Pop();
 
