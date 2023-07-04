@@ -969,25 +969,25 @@ s32 func_80963810(PlayState* play, Vec3f pos) {
 s32 func_809638F8(PlayState* play) {
     s32 ret = true;
 
-    if (play->envCtx.adjLightSettings.diffuseColor1[0] > 25) {
-        play->envCtx.adjLightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] > 25) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
         ret = false;
     } else {
-        play->envCtx.adjLightSettings.diffuseColor1[0] = 0;
+        play->envCtx.adjLightSettings.light1Color[0] = 0;
     }
 
-    if (play->envCtx.adjLightSettings.diffuseColor1[1] > 25) {
-        play->envCtx.adjLightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] > 25) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
         ret = false;
     } else {
-        play->envCtx.adjLightSettings.diffuseColor1[1] = 0;
+        play->envCtx.adjLightSettings.light1Color[1] = 0;
     }
 
-    if (play->envCtx.adjLightSettings.diffuseColor1[2] > 25) {
-        play->envCtx.adjLightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] > 25) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
         ret = false;
     } else {
-        play->envCtx.adjLightSettings.diffuseColor1[2] = 0;
+        play->envCtx.adjLightSettings.light1Color[2] = 0;
     }
 
     if (play->envCtx.adjLightSettings.ambientColor[0] > 25) {

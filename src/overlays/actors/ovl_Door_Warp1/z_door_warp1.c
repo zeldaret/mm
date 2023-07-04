@@ -178,10 +178,10 @@ void DoorWarp1_Destroy(Actor* thisx, PlayState* play) {
     LightContext_RemoveLight(play, &play->lightCtx, this->unk_1DC);
     LightContext_RemoveLight(play, &play->lightCtx, this->unk_1F0);
 
-    for (i = 0; i < ARRAY_COUNT(play->envCtx.adjLightSettings.diffuseColor1); i++) {
-        play->envCtx.adjLightSettings.diffuseColor1[i] = 0;
-        play->envCtx.adjLightSettings.fogColor[i] = play->envCtx.adjLightSettings.diffuseColor1[i];
-        play->envCtx.adjLightSettings.ambientColor[i] = play->envCtx.adjLightSettings.diffuseColor1[i];
+    for (i = 0; i < ARRAY_COUNT(play->envCtx.adjLightSettings.light1Color); i++) {
+        play->envCtx.adjLightSettings.light1Color[i] = 0;
+        play->envCtx.adjLightSettings.fogColor[i] = play->envCtx.adjLightSettings.light1Color[i];
+        play->envCtx.adjLightSettings.ambientColor[i] = play->envCtx.adjLightSettings.light1Color[i];
     }
 
     if (this->unk_1D3 != 0) {
@@ -872,7 +872,7 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
         temp_f16 = -255.0f * temp_f0;
 
         for (i = 0; i < 3; i++) {
-            play->envCtx.adjLightSettings.diffuseColor1[i] = temp_f16;
+            play->envCtx.adjLightSettings.light1Color[i] = temp_f16;
             play->envCtx.adjLightSettings.fogColor[i] = temp_f16;
             play->envCtx.adjLightSettings.ambientColor[i] = temp_f16;
         }

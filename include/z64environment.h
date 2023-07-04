@@ -155,10 +155,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];
-    /* 0x03 */ s8 diffuseDir1[3];
-    /* 0x06 */ u8 diffuseColor1[3];
-    /* 0x09 */ s8 diffusePos2[3];
-    /* 0x0C */ u8 diffuseColor[3];
+    /* 0x03 */ s8 light1Dir[3];
+    /* 0x06 */ u8 light1Color[3];
+    /* 0x09 */ s8 light2Dir[3];
+    /* 0x0C */ u8 light2Color[3];
     /* 0x0F */ u8 fogColor[3];
     /* 0x12 */ s16 fogNear;
     /* 0x14 */ s16 zFar;
@@ -175,10 +175,10 @@ typedef struct {
 
 typedef struct {
     /* 0x00 */ u8 ambientColor[3];
-    /* 0x03 */ s8 diffuseDir1[3];
-    /* 0x06 */ u8 diffuseColor1[3];
-    /* 0x09 */ s8 diffusePos2[3];
-    /* 0x0C */ u8 diffuseColor[3];
+    /* 0x03 */ s8 light1Dir[3];
+    /* 0x06 */ u8 light1Color[3];
+    /* 0x09 */ s8 light2Dir[3];
+    /* 0x0C */ u8 light2Color[3];
     /* 0x0F */ u8 fogColor[3];
     /* 0x12 */ s16 blendRateAndFogNear; 
     /* 0x14 */ s16 zFar;

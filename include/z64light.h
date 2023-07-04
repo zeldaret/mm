@@ -10,8 +10,8 @@ struct PlayState;
 
 typedef struct {
     /* 0x00 */ s16 ambientColor[3];
-    /* 0x06 */ s16 diffuseColor1[3];
-    /* 0x0C */ s16 diffuseColor2[3];
+    /* 0x06 */ s16 light1Color[3];
+    /* 0x0C */ s16 light2Color[3];
     /* 0x12 */ s16 fogColor[3];
     /* 0x18 */ s16 fogNear;
     /* 0x1A */ s16 zFar;

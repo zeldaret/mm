@@ -5535,8 +5535,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         Math_ApproachZeroF(&D_8090CCD8, 1.0f, 2.0f);
     }
 
-    play->envCtx.adjLightSettings.diffuseColor1[0] = play->envCtx.adjLightSettings.diffuseColor1[1] =
-        play->envCtx.adjLightSettings.diffuseColor1[2] = D_8090CCD8;
+    play->envCtx.adjLightSettings.light1Color[0] = play->envCtx.adjLightSettings.light1Color[1] =
+        play->envCtx.adjLightSettings.light1Color[2] = D_8090CCD8;
 
     if ((u8)D_8090CCD0 > 0) {
         s32 pad;

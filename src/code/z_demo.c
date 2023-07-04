@@ -237,14 +237,14 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (play->state.frames & 8) {
                 if (play->envCtx.adjLightSettings.ambientColor[0] < 40) {
                     play->envCtx.adjLightSettings.ambientColor[0] += 2;
-                    play->envCtx.adjLightSettings.diffuseColor1[1] -= 3;
-                    play->envCtx.adjLightSettings.diffuseColor1[2] -= 3;
+                    play->envCtx.adjLightSettings.light1Color[1] -= 3;
+                    play->envCtx.adjLightSettings.light1Color[2] -= 3;
                 }
             } else {
                 if (play->envCtx.adjLightSettings.ambientColor[0] > 2) {
                     play->envCtx.adjLightSettings.ambientColor[0] -= 2;
-                    play->envCtx.adjLightSettings.diffuseColor1[1] += 3;
-                    play->envCtx.adjLightSettings.diffuseColor1[2] += 3;
+                    play->envCtx.adjLightSettings.light1Color[1] += 3;
+                    play->envCtx.adjLightSettings.light1Color[2] += 3;
                 }
             }
             break;

@@ -272,16 +272,16 @@ void func_808AEFD4(EnBombf* this, PlayState* play) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->colliderJntSph.base);
     }
 
-    if (play->envCtx.adjLightSettings.diffuseColor1[0] != 0) {
-        play->envCtx.adjLightSettings.diffuseColor1[0] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[0] != 0) {
+        play->envCtx.adjLightSettings.light1Color[0] -= 25;
     }
 
-    if (play->envCtx.adjLightSettings.diffuseColor1[1] != 0) {
-        play->envCtx.adjLightSettings.diffuseColor1[1] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[1] != 0) {
+        play->envCtx.adjLightSettings.light1Color[1] -= 25;
     }
 
-    if (play->envCtx.adjLightSettings.diffuseColor1[2] != 0) {
-        play->envCtx.adjLightSettings.diffuseColor1[2] -= 25;
+    if (play->envCtx.adjLightSettings.light1Color[2] != 0) {
+        play->envCtx.adjLightSettings.light1Color[2] -= 25;
     }
 
     if (play->envCtx.adjLightSettings.ambientColor[0] != 0) {
@@ -413,8 +413,8 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
                             CLEAR_TAG_SMALL_EXPLOSION);
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
-                play->envCtx.adjLightSettings.diffuseColor1[0] = play->envCtx.adjLightSettings.diffuseColor1[1] =
-                    play->envCtx.adjLightSettings.diffuseColor1[2] = 250;
+                play->envCtx.adjLightSettings.light1Color[0] = play->envCtx.adjLightSettings.light1Color[1] =
+                    play->envCtx.adjLightSettings.light1Color[2] = 250;
                 play->envCtx.adjLightSettings.ambientColor[0] = play->envCtx.adjLightSettings.ambientColor[1] =
                     play->envCtx.adjLightSettings.ambientColor[2] = 250;
 

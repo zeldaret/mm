@@ -17410,7 +17410,7 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     u8* new_var;
     s32 pad[4];
 
-    new_var = play->envCtx.lightSettings.diffuseColor1;
+    new_var = play->envCtx.lightSettings.light1Color;
     sp70.fogNear = play->envCtx.lightSettings.fogNear;
     sp70.fogColor[0] = play->envCtx.lightSettings.fogColor[0];
     sp70.fogColor[1] = play->envCtx.lightSettings.fogColor[1];
@@ -17454,7 +17454,7 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     func_80854CD0(arg1, play->envCtx.adjLightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
                   play->envCtx.lightSettings.fogColor, play->envCtx.adjLightSettings.ambientColor, var_v1->ambientColor,
                   var_t0->ambientColor, play->envCtx.lightSettings.ambientColor,
-                  play->envCtx.adjLightSettings.diffuseColor1, var_t3, var_t4, new_var);
+                  play->envCtx.adjLightSettings.light1Color, var_t3, var_t4, new_var);
 }
 
 struct_8085D848 D_8085D848[] = {

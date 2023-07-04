@@ -619,12 +619,12 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     envCtx->adjLightSettings.ambientColor[0] = 0;
     envCtx->adjLightSettings.ambientColor[1] = 0;
     envCtx->adjLightSettings.ambientColor[2] = 0;
-    envCtx->adjLightSettings.diffuseColor1[0] = 0;
-    envCtx->adjLightSettings.diffuseColor1[1] = 0;
-    envCtx->adjLightSettings.diffuseColor1[2] = 0;
-    envCtx->adjLightSettings.diffuseColor2[0] = 0;
-    envCtx->adjLightSettings.diffuseColor2[1] = 0;
-    envCtx->adjLightSettings.diffuseColor2[2] = 0;
+    envCtx->adjLightSettings.light1Color[0] = 0;
+    envCtx->adjLightSettings.light1Color[1] = 0;
+    envCtx->adjLightSettings.light1Color[2] = 0;
+    envCtx->adjLightSettings.light2Color[0] = 0;
+    envCtx->adjLightSettings.light2Color[1] = 0;
+    envCtx->adjLightSettings.light2Color[2] = 0;
     envCtx->adjLightSettings.fogColor[0] = 0;
     envCtx->adjLightSettings.fogColor[1] = 0;
     envCtx->adjLightSettings.fogColor[2] = 0;
@@ -1218,11 +1218,11 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
         for (phi_t1 = 0; phi_t1 != 3; phi_t1++) {
             adjLightSettings->ambientColor[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].ambientColor[phi_t1] - lightSettings[temp_v1].ambientColor[phi_t1];
-            adjLightSettings->diffuseColor1[phi_t1] =
-                lightSettings[temp_v1_2 + temp_v1].diffuseColor1[phi_t1] - lightSettings[temp_v1].diffuseColor1[phi_t1];
-            adjLightSettings->diffuseColor2[phi_t1] =
-                lightSettings[temp_v1_2 + temp_v1].diffuseColor[phi_t1] -
-                lightSettings[temp_v1].diffuseColor[phi_t1]; // TODO rename to diffuseColor2
+            adjLightSettings->light1Color[phi_t1] =
+                lightSettings[temp_v1_2 + temp_v1].light1Color[phi_t1] - lightSettings[temp_v1].light1Color[phi_t1];
+            adjLightSettings->light2Color[phi_t1] =
+                lightSettings[temp_v1_2 + temp_v1].light2Color[phi_t1] -
+                lightSettings[temp_v1].light2Color[phi_t1]; // TODO rename to light2Color
             adjLightSettings->fogColor[phi_t1] =
                 lightSettings[temp_v1_2 + temp_v1].fogColor[phi_t1] - lightSettings[temp_v1].fogColor[phi_t1];
         }
@@ -1234,12 +1234,12 @@ void func_800F6CEC(PlayState* play, u8 arg1, AdjLightSettings* adjLightSettings,
         adjLightSettings->ambientColor[0] = -50;
         adjLightSettings->ambientColor[1] = -100;
         adjLightSettings->ambientColor[2] = -100;
-        adjLightSettings->diffuseColor1[0] = -100;
-        adjLightSettings->diffuseColor1[1] = -100;
-        adjLightSettings->diffuseColor1[2] = -100;
-        adjLightSettings->diffuseColor2[0] = -100;
-        adjLightSettings->diffuseColor2[1] = -100;
-        adjLightSettings->diffuseColor2[2] = -100;
+        adjLightSettings->light1Color[0] = -100;
+        adjLightSettings->light1Color[1] = -100;
+        adjLightSettings->light1Color[2] = -100;
+        adjLightSettings->light2Color[0] = -100;
+        adjLightSettings->light2Color[1] = -100;
+        adjLightSettings->light2Color[2] = -100;
 
         temp_v1 = arg1;
         adjLightSettings->fogColor[0] = -lightSettings[temp_v1].fogColor[0] + 30;
@@ -1268,22 +1268,24 @@ s32 Environment_IsSceneUpsideDown(PlayState* play) {
 
 #ifdef NON_EQUIVALENT
 void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, LightContext* lightCtx) {
-    AdjLightSettings spA4[4];
     EnvLightSettings* lightSettingsList;
     f32 var_fs3;
     s32 i;
     s32 j;
     f32 temp_fv0;
+    s32 adjustment;
     s16 temp_s0_2;
     u16 var_v0;
-    u8 var_v0_3;
-    s32 adjustment;
+    AdjLightSettings spA4[4];
+    s32 pad1[3];
     u8 sp97;
     u8 sp96;
     u8 sp95;
     u8 sp94;
+    u8 var_v0_3;
     u8 sp90[2];
     s16 sp8C[2];
+    s32 pad2[5];
 
     var_fs3 = 0.0f;
     __osMemset(spA4, 0, sizeof(AdjLightSettings) * ARRAY_COUNT(spA4));
@@ -1303,8 +1305,8 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
         if ((envCtx->lightMode == LIGHT_MODE_TIME) && (envCtx->lightSettingOverride == LIGHT_SETTING_OVERRIDE_NONE)) {
             for (i = 0; i < ARRAY_COUNT(sTimeBasedLightConfigs[envCtx->lightConfig]); i++) {
                 sp97 = sTimeBasedLightConfigs[envCtx->lightConfig][i].lightSetting;
-                sp96 = sTimeBasedLightConfigs[envCtx->changeLightNextConfig][i].lightSetting;
                 sp95 = sTimeBasedLightConfigs[envCtx->lightConfig][i].nextLightSetting;
+                sp96 = sTimeBasedLightConfigs[envCtx->changeLightNextConfig][i].lightSetting;
                 sp94 = sTimeBasedLightConfigs[envCtx->changeLightNextConfig][i].nextLightSetting;
 
                 if ((gSaveContext.skyboxTime >= sTimeBasedLightConfigs[envCtx->lightConfig][i].startTime) &&
@@ -1323,8 +1325,8 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     if ((sp97 >= envCtx->numLightSettings) || (sp95 >= envCtx->numLightSettings) ||
                         (sp96 >= envCtx->numLightSettings) || (sp94 >= envCtx->numLightSettings)) {
                         sp97 = 0;
-                        sp95 = 0;
                         sp96 = 0;
+                        sp95 = 0;
                         sp94 = 0;
                     }
 
@@ -1363,30 +1365,30 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     }
                     temp_s0_2 = var_v0 - 0x8000;
 
-                    envCtx->lightSettings.diffuseDir1[0] = -(Math_SinS(temp_s0_2) * 120.0f);
-                    envCtx->lightSettings.diffuseDir1[1] = Math_CosS(temp_s0_2) * 120.0f;
-                    envCtx->lightSettings.diffuseDir1[2] = Math_CosS(temp_s0_2) * 20.0f;
+                    envCtx->lightSettings.light1Dir[0] = -(Math_SinS(temp_s0_2) * 120.0f);
+                    envCtx->lightSettings.light1Dir[1] = Math_CosS(temp_s0_2) * 120.0f;
+                    envCtx->lightSettings.light1Dir[2] = Math_CosS(temp_s0_2) * 20.0f;
 
-                    envCtx->lightSettings.diffusePos2[0] = -envCtx->lightSettings.diffuseDir1[0];
-                    envCtx->lightSettings.diffusePos2[1] = -envCtx->lightSettings.diffuseDir1[1];
-                    envCtx->lightSettings.diffusePos2[2] = -envCtx->lightSettings.diffuseDir1[2];
+                    envCtx->lightSettings.light2Dir[0] = -envCtx->lightSettings.light1Dir[0];
+                    envCtx->lightSettings.light2Dir[1] = -envCtx->lightSettings.light1Dir[1];
+                    envCtx->lightSettings.light2Dir[2] = -envCtx->lightSettings.light1Dir[2];
 
                     for (j = 0; j < 3; j++) {
-                        sp90[0] = func_800F6EA4(lightSettingsList[sp95].diffuseColor1[j] + spA4[1].diffuseColor1[j],
-                                                lightSettingsList[sp97].diffuseColor1[j] + spA4[0].diffuseColor1[j],
-                                                temp_fv0);
-                        sp90[1] = func_800F6EA4(lightSettingsList[sp94].diffuseColor1[j] + spA4[3].diffuseColor1[j],
-                                                lightSettingsList[sp96].diffuseColor1[j] + spA4[2].diffuseColor1[j],
-                                                temp_fv0);
-                        envCtx->lightSettings.diffuseColor1[j] = LERP(sp90[0], sp90[1], var_fs3);
+                        sp90[0] =
+                            func_800F6EA4(lightSettingsList[sp95].light1Color[j] + spA4[1].light1Color[j],
+                                          lightSettingsList[sp97].light1Color[j] + spA4[0].light1Color[j], temp_fv0);
+                        sp90[1] =
+                            func_800F6EA4(lightSettingsList[sp94].light1Color[j] + spA4[3].light1Color[j],
+                                          lightSettingsList[sp96].light1Color[j] + spA4[2].light1Color[j], temp_fv0);
+                        envCtx->lightSettings.light1Color[j] = LERP(sp90[0], sp90[1], var_fs3);
 
                         sp90[0] =
-                            func_800F6EA4(lightSettingsList[sp95].diffuseColor[j] + spA4[1].diffuseColor2[j],
-                                          lightSettingsList[sp97].diffuseColor[j] + spA4[0].diffuseColor2[j], temp_fv0);
+                            func_800F6EA4(lightSettingsList[sp95].light2Color[j] + spA4[1].light2Color[j],
+                                          lightSettingsList[sp97].light2Color[j] + spA4[0].light2Color[j], temp_fv0);
                         sp90[1] =
-                            func_800F6EA4(lightSettingsList[sp94].diffuseColor[j] + spA4[3].diffuseColor2[j],
-                                          lightSettingsList[sp96].diffuseColor[j] + spA4[2].diffuseColor2[j], temp_fv0);
-                        envCtx->lightSettings.diffuseColor[j] = LERP(sp90[0], sp90[1], var_fs3);
+                            func_800F6EA4(lightSettingsList[sp94].light2Color[j] + spA4[3].light2Color[j],
+                                          lightSettingsList[sp96].light2Color[j] + spA4[2].light2Color[j], temp_fv0);
+                        envCtx->lightSettings.light2Color[j] = LERP(sp90[0], sp90[1], var_fs3);
                     }
 
                     for (j = 0; j < 3; j++) {
@@ -1420,10 +1422,10 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
             if (!envCtx->lightBlendEnabled) {
                 for (i = 0; i < 3; i++) {
                     envCtx->lightSettings.ambientColor[i] = lightSettingsList[envCtx->lightSetting].ambientColor[i];
-                    envCtx->lightSettings.diffuseDir1[i] = lightSettingsList[envCtx->lightSetting].diffuseDir1[i];
-                    envCtx->lightSettings.diffuseColor1[i] = lightSettingsList[envCtx->lightSetting].diffuseColor1[i];
-                    envCtx->lightSettings.diffusePos2[i] = lightSettingsList[envCtx->lightSetting].diffusePos2[i];
-                    envCtx->lightSettings.diffuseColor[i] = lightSettingsList[envCtx->lightSetting].diffuseColor[i];
+                    envCtx->lightSettings.light1Dir[i] = lightSettingsList[envCtx->lightSetting].light1Dir[i];
+                    envCtx->lightSettings.light1Color[i] = lightSettingsList[envCtx->lightSetting].light1Color[i];
+                    envCtx->lightSettings.light2Dir[i] = lightSettingsList[envCtx->lightSetting].light2Dir[i];
+                    envCtx->lightSettings.light2Color[i] = lightSettingsList[envCtx->lightSetting].light2Color[i];
                     envCtx->lightSettings.fogColor[i] = lightSettingsList[envCtx->lightSetting].fogColor[i];
                 }
                 envCtx->lightSettings.fogNear =
@@ -1454,18 +1456,18 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                     envCtx->lightSettings.ambientColor[i] =
                         LERP(lightSettingsList[envCtx->prevLightSetting].ambientColor[i],
                              lightSettingsList[envCtx->lightSetting].ambientColor[i], envCtx->lightBlend);
-                    envCtx->lightSettings.diffuseDir1[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].diffuseDir1[i],
-                             lightSettingsList[envCtx->lightSetting].diffuseDir1[i], envCtx->lightBlend);
-                    envCtx->lightSettings.diffuseColor1[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor1[i],
-                             lightSettingsList[envCtx->lightSetting].diffuseColor1[i], envCtx->lightBlend);
-                    envCtx->lightSettings.diffusePos2[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].diffusePos2[i],
-                             lightSettingsList[envCtx->lightSetting].diffusePos2[i], envCtx->lightBlend);
-                    envCtx->lightSettings.diffuseColor[i] =
-                        LERP(lightSettingsList[envCtx->prevLightSetting].diffuseColor[i],
-                             lightSettingsList[envCtx->lightSetting].diffuseColor[i], envCtx->lightBlend);
+                    envCtx->lightSettings.light1Dir[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].light1Dir[i],
+                             lightSettingsList[envCtx->lightSetting].light1Dir[i], envCtx->lightBlend);
+                    envCtx->lightSettings.light1Color[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].light1Color[i],
+                             lightSettingsList[envCtx->lightSetting].light1Color[i], envCtx->lightBlend);
+                    envCtx->lightSettings.light2Dir[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].light2Dir[i],
+                             lightSettingsList[envCtx->lightSetting].light2Dir[i], envCtx->lightBlend);
+                    envCtx->lightSettings.light2Color[i] =
+                        LERP(lightSettingsList[envCtx->prevLightSetting].light2Color[i],
+                             lightSettingsList[envCtx->lightSetting].light2Color[i], envCtx->lightBlend);
                     envCtx->lightSettings.fogColor[i] =
                         LERP(lightSettingsList[envCtx->prevLightSetting].fogColor[i],
                              lightSettingsList[envCtx->lightSetting].fogColor[i], envCtx->lightBlend);
@@ -1492,22 +1494,22 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
                 (s16)(envCtx->lightSettings.ambientColor[i] + envCtx->adjLightSettings.ambientColor[i]);
         }
 
-        if ((s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]) > 255) {
+        if ((s16)(envCtx->lightSettings.light1Color[i] + envCtx->adjLightSettings.light1Color[i]) > 255) {
             envCtx->dirLight1.params.dir.color[i] = 255;
-        } else if ((s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]) < 0) {
+        } else if ((s16)(envCtx->lightSettings.light1Color[i] + envCtx->adjLightSettings.light1Color[i]) < 0) {
             envCtx->dirLight1.params.dir.color[i] = 0;
         } else {
             envCtx->dirLight1.params.dir.color[i] =
-                (s16)(envCtx->lightSettings.diffuseColor1[i] + envCtx->adjLightSettings.diffuseColor1[i]);
+                (s16)(envCtx->lightSettings.light1Color[i] + envCtx->adjLightSettings.light1Color[i]);
         }
 
-        if ((s16)(envCtx->lightSettings.diffuseColor[i] + envCtx->adjLightSettings.diffuseColor2[i]) > 255) {
+        if ((s16)(envCtx->lightSettings.light2Color[i] + envCtx->adjLightSettings.light2Color[i]) > 255) {
             envCtx->dirLight2.params.dir.color[i] = 255;
-        } else if ((s16)(envCtx->lightSettings.diffuseColor[i] + envCtx->adjLightSettings.diffuseColor2[i]) < 0) {
+        } else if ((s16)(envCtx->lightSettings.light2Color[i] + envCtx->adjLightSettings.light2Color[i]) < 0) {
             envCtx->dirLight2.params.dir.color[i] = 0;
         } else {
             envCtx->dirLight2.params.dir.color[i] =
-                (s16)(envCtx->lightSettings.diffuseColor[i] + envCtx->adjLightSettings.diffuseColor2[i]);
+                (s16)(envCtx->lightSettings.light2Color[i] + envCtx->adjLightSettings.light2Color[i]);
         }
 
         if ((s16)(envCtx->lightSettings.fogColor[i] + envCtx->adjLightSettings.fogColor[i]) > 255) {
@@ -1520,13 +1522,13 @@ void Environment_UpdateLights(PlayState* play, EnvironmentContext* envCtx, Light
     }
 
     // Set both directional light directions
-    envCtx->dirLight1.params.dir.x = envCtx->lightSettings.diffuseDir1[0];
-    envCtx->dirLight1.params.dir.y = envCtx->lightSettings.diffuseDir1[1];
-    envCtx->dirLight1.params.dir.z = envCtx->lightSettings.diffuseDir1[2];
+    envCtx->dirLight1.params.dir.x = envCtx->lightSettings.light1Dir[0];
+    envCtx->dirLight1.params.dir.y = envCtx->lightSettings.light1Dir[1];
+    envCtx->dirLight1.params.dir.z = envCtx->lightSettings.light1Dir[2];
 
-    envCtx->dirLight2.params.dir.x = envCtx->lightSettings.diffusePos2[0];
-    envCtx->dirLight2.params.dir.y = envCtx->lightSettings.diffusePos2[1];
-    envCtx->dirLight2.params.dir.z = envCtx->lightSettings.diffusePos2[2];
+    envCtx->dirLight2.params.dir.x = envCtx->lightSettings.light2Dir[0];
+    envCtx->dirLight2.params.dir.y = envCtx->lightSettings.light2Dir[1];
+    envCtx->dirLight2.params.dir.z = envCtx->lightSettings.light2Dir[2];
 
     // Adjust fog near and far if necessary
     adjustment = envCtx->lightSettings.fogNear + envCtx->adjLightSettings.fogNear;
@@ -2569,7 +2571,7 @@ void Environment_FadeInGameOverLights(PlayState* play) {
         for (i = 0; i < 3; i++) {
             if (play->envCtx.adjLightSettings.ambientColor[i] > -255) {
                 play->envCtx.adjLightSettings.ambientColor[i] -= 12;
-                play->envCtx.adjLightSettings.diffuseColor1[i] -= 12;
+                play->envCtx.adjLightSettings.light1Color[i] -= 12;
             }
             play->envCtx.adjLightSettings.fogColor[i] = -255;
         }
@@ -2615,7 +2617,7 @@ void Environment_FadeOutGameOverLights(PlayState* play) {
     if (Play_CamIsNotFixed(&play->state)) {
         for (i = 0; i < 3; i++) {
             Math_SmoothStepToS(&play->envCtx.adjLightSettings.ambientColor[i], 0, 5, 12, 1);
-            Math_SmoothStepToS(&play->envCtx.adjLightSettings.diffuseColor1[i], 0, 5, 12, 1);
+            Math_SmoothStepToS(&play->envCtx.adjLightSettings.light1Color[i], 0, 5, 12, 1);
             play->envCtx.adjLightSettings.fogColor[i] = 0;
         }
         play->envCtx.adjLightSettings.zFar = 0;
@@ -2714,7 +2716,7 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
 
     switch (sandstormState) {
         case SANDSTORM_ACTIVE:
-            if(1){}
+            if (1) {}
             primA1 = play->state.frames % 128;
             if (primA1 > 128) {
                 primA1 = 255 - primA1;
@@ -2852,18 +2854,24 @@ void Environment_DrawSandstorm(PlayState* play, u8 sandstormState) {
             envColor.g = sSandstormEnvColors[sSandstormColorIndex * 3 + index + 1];
             envColor.b = sSandstormEnvColors[sSandstormColorIndex * 3 + index + 2];
         } else {
-            primColor.r = (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 0],
-                                        sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 0], sSandstormLerpScale);
-            primColor.g = (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 1],
-                                        sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 1], sSandstormLerpScale);
-            primColor.b = (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 2],
-                                        sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 2], sSandstormLerpScale);
-            envColor.r = (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 0],
-                                       sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 0], sSandstormLerpScale);
-            envColor.g = (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 1],
-                                       sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 1], sSandstormLerpScale);
-            envColor.b = (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 2],
-                                       sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 2], sSandstormLerpScale);
+            primColor.r =
+                (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 0],
+                                  sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 0], sSandstormLerpScale);
+            primColor.g =
+                (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 1],
+                                  sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 1], sSandstormLerpScale);
+            primColor.b =
+                (s32)F32_LERP_ALT(sSandstormPrimColors[sSandstormColorIndex * 3 + index + 2],
+                                  sSandstormPrimColors[sNextSandstormColorIndex * 3 + index + 2], sSandstormLerpScale);
+            envColor.r =
+                (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 0],
+                                  sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 0], sSandstormLerpScale);
+            envColor.g =
+                (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 1],
+                                  sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 1], sSandstormLerpScale);
+            envColor.b =
+                (s32)F32_LERP_ALT(sSandstormEnvColors[sSandstormColorIndex * 3 + index + 2],
+                                  sSandstormEnvColors[sNextSandstormColorIndex * 3 + index + 2], sSandstormLerpScale);
         }
 
         envColor.r = ((envColor.r * sp98) + ((6.0f - sp98) * primColor.r)) * (1.0f / 6.0f);
@@ -2945,7 +2953,7 @@ s32 Environment_AdjustLights(PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 
 
     for (i = 0; i < 3; i++) {
         play->envCtx.adjLightSettings.ambientColor[i] = -(f32)play->envCtx.lightSettings.ambientColor[i] * arg1;
-        play->envCtx.adjLightSettings.diffuseColor1[i] = -(f32)play->envCtx.lightSettings.diffuseColor1[i] * arg1;
+        play->envCtx.adjLightSettings.light1Color[i] = -(f32)play->envCtx.lightSettings.light1Color[i] * arg1;
     }
 
     return 1;
@@ -2968,10 +2976,10 @@ void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp) {
 }
 
 void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp) {
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.diffuseColor1, to, lerp,
-                         (Vec3s*)play->envCtx.adjLightSettings.diffuseColor1);
-    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.diffuseColor, to, lerp,
-                         (Vec3s*)play->envCtx.adjLightSettings.diffuseColor2);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.light1Color, to, lerp,
+                         (Vec3s*)play->envCtx.adjLightSettings.light1Color);
+    Environment_LerpRGB8((Color_RGB8*)play->envCtx.lightSettings.light2Color, to, lerp,
+                         (Vec3s*)play->envCtx.adjLightSettings.light2Color);
 }
 
 void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp) {
