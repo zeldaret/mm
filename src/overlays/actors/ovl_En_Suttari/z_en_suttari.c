@@ -1191,7 +1191,7 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
-        Actor_OfferTalkNearby(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -1324,7 +1324,7 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
             Message_StartTextbox(play, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            Actor_OfferTalkNearby(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);
@@ -1361,7 +1361,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-                Actor_OfferTalkNearby(&this->actor, play);
+                Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             }
         }
         Actor_MoveWithGravity(&this->actor);

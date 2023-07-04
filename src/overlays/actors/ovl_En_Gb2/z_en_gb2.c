@@ -381,7 +381,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
     } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
-        Actor_OfferTalkNearby(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
 

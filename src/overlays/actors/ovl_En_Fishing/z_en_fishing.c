@@ -2822,7 +2822,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
                 D_8090CCF8 = D_809171CC;
                 this->unk_1CB = 1;
             } else {
-                Actor_OfferTalkNearby(&this->actor, play);
+                Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             }
         } else {
             this->unk_1CC--;

@@ -1933,7 +1933,7 @@ s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius) {
 /**
  * The actor uses their collision check cylinder's radius to determine if the player is nearby.
  */
-s32 Actor_OfferTalkNearby(Actor* actor, PlayState* play) {
+s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
     return Actor_OfferTalk(actor, play, cylRadius);

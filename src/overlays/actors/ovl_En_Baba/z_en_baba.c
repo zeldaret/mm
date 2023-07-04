@@ -675,7 +675,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            Actor_OfferTalkNearby(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);

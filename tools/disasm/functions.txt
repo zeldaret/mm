@@ -773,7 +773,7 @@
     0x800B8500:("Actor_OfferTalkExchange",),
     0x800B85E0:("Actor_OfferTalkExchangeEquiCylinder",),
     0x800B8614:("Actor_OfferTalk",),
-    0x800B863C:("Actor_OfferTalkNearby",),
+    0x800B863C:("Actor_OfferTalkNearColChkInfoCylinder",),
     0x800B867C:("Actor_TextboxIsClosing",),
     0x800B86C8:("Actor_ChangeFocus",),
     0x800B8708:("Player_GetExchangeItemId",),

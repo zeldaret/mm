@@ -710,7 +710,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     }
 
     if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
-        Actor_OfferTalkNearby(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 
     return true;

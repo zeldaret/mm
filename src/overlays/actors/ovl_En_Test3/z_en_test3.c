@@ -670,7 +670,7 @@ s32 func_80A3F73C(EnTest3* this, PlayState* play) {
             CutsceneManager_SetReturnCamera(this->subCamId);
             play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_WAIT);
         }
-        Actor_OfferTalkNearby(&this->player.actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->player.actor, play);
         if (this->unk_D88 == 3) {
             func_80A3F534(this, play);
         } else if (this->unk_D88 == 5) {

@@ -973,7 +973,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         if (Actor_OfferTalk(&this->dyna.actor, play, 50.0f)) {
             this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
         }
-    } else if (Actor_OfferTalkNearby(&this->dyna.actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play)) {
         this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
     }
 

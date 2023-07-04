@@ -1333,7 +1333,6 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
 s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
-    Player* player;
 
     if (*arg3 == 4) {
         return 0;
@@ -1353,9 +1352,8 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 1;
     }
     if (*arg3 == 1) {
-        s32 requiredScopeTemp;
+        Player* player = GET_PLAYER(play);
 
-        player = GET_PLAYER(play);
         func_808F5994(this, play, &player->actor.world.pos, 0xC80);
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1388,7 +1386,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         if (Actor_OfferTalk(&this->actor, play, 80.0f)) {
             this->actor.textId = func_808F3DD4(play, this, arg2);
         }
-    } else if (Actor_OfferTalkNearby(&this->actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play)) {
         this->actor.textId = func_808F3DD4(play, this, arg2);
     }
     return 0;

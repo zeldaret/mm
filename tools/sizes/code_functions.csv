@@ -287,7 +287,7 @@ asm/non_matchings/code/z_actor/Actor_ProcessTalkRequest.s,Actor_ProcessTalkReque
 asm/non_matchings/code/z_actor/Actor_OfferTalkExchange.s,Actor_OfferTalkExchange,0x800B8500,0x38
 asm/non_matchings/code/z_actor/Actor_OfferTalkExchangeEquiCylinder.s,Actor_OfferTalkExchangeEquiCylinder,0x800B85E0,0xD
 asm/non_matchings/code/z_actor/Actor_OfferTalk.s,Actor_OfferTalk,0x800B8614,0xA
-asm/non_matchings/code/z_actor/Actor_OfferTalkNearby.s,Actor_OfferTalkNearby,0x800B863C,0x10
+asm/non_matchings/code/z_actor/Actor_OfferTalkNearColChkInfoCylinder.s,Actor_OfferTalkNearColChkInfoCylinder,0x800B863C,0x10
 asm/non_matchings/code/z_actor/Actor_TextboxIsClosing.s,Actor_TextboxIsClosing,0x800B867C,0x13
 asm/non_matchings/code/z_actor/Actor_ChangeFocus.s,Actor_ChangeFocus,0x800B86C8,0x10
 asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4

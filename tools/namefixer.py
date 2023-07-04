@@ -177,7 +177,7 @@ wordReplace = {
     "func_800B8500": "Actor_OfferTalkExchange",
     "func_800B85E0": "Actor_OfferTalkExchangeRadius",
     "func_800B8614": "Actor_OfferTalk",
-    "func_800B863C": "Actor_OfferTalkNearby",
+    "func_800B863C": "Actor_OfferTalkNearColChkInfoCylinder",
     "Audio_PlaySoundAtPosition": "SoundSource_PlaySfxAtFixedWorldPos",
     "func_800F0590": "SoundSource_PlaySfxEachFrameAtFixedWorldPos",
     "func_8016970C": "Play_SetCameraAtEye",
