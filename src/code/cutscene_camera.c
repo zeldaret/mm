@@ -412,12 +412,12 @@ s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     return 0;
 }
 
-#ifdef NON_EQUIVALENT
 s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
                   CutsceneCameraInterp* interp) {
-    s16 temp_t0;
     f32 temp_v1;
     f32 phi_f2;
+    f32 tmp1;
+    f32 tmp2;
 
     if (interp->unk_2D != 3) {
         interp->unk_2D = 3;
@@ -437,12 +437,13 @@ s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         }
     }
 
+    tmp2 = (((point->weight + 100) * (point->duration / 2)) +
+                  (((point->weight + 100) / 2) * (point->duration & 1)));
     if (point->duration < 2) {
         phi_f2 = 1.0f;
     } else {
-        phi_f2 = (((f32)interp->curFrame * ((f32)(point->weight - 100) / (point->duration - 1))) + 100.0f) /
-                 (((f32)(point->weight + 100) * (point->duration / 2)) +
-                  ((f32)((point->weight + 100) / 2) * (point->duration & 1)));
+        tmp1 = (f32)(point->weight - 100) / (point->duration - 1);
+        phi_f2 = ((interp->curFrame * tmp1) + 100.0f) / tmp2;
     }
 
     interp->curFrame++;
@@ -474,9 +475,6 @@ s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     }
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80161E4C.s")
-#endif
 
 #ifdef NON_EQUIVALENT
 s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
