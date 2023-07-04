@@ -397,7 +397,7 @@ void func_808F3AD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -421,7 +421,7 @@ void func_808F3BD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -445,7 +445,7 @@ void func_808F3CD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

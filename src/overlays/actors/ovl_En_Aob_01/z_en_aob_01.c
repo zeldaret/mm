@@ -939,7 +939,7 @@ void EnAob01_AfterRace_AfterGivingReward(EnAob01* this, PlayState* play) {
         }
 
         this->textId = 0;
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         SET_EVENTINF_DOG_RACE_STATE(EVENTINF_DOG_RACE_STATE_NOT_STARTED);
         this->actionFunc = EnAob01_AfterRace_AskToPlayAgain;
     }
@@ -955,7 +955,7 @@ void EnAob01_AfterRace_AskToPlayAgain(EnAob01* this, PlayState* play) {
         Message_ContinueTextbox(play, this->textId);
         this->actionFunc = EnAob01_BeforeRace_RespondToPlayAgainQuestion;
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

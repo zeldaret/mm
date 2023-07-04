@@ -981,7 +981,7 @@ void func_80B525E0(EnGk* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

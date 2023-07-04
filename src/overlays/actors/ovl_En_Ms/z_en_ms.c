@@ -163,7 +163,7 @@ void EnMs_TalkAfterPurchase(EnMs* this, PlayState* play) {
         this->actionFunc = EnMs_Talk;
     } else {
         Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                PLAYER_IA_CONTINUE);
+                                PLAYER_IA_MINUS1);
     }
 }
 

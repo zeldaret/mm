@@ -936,7 +936,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
         this->actor.child->freezeTimer = 10;
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 500.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 

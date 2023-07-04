@@ -365,7 +365,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
         Message_StartTextbox(play, 0xFB3, &this->actor);
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        Actor_OfferTalkExchange(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchange(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 

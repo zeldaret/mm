@@ -434,7 +434,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
                 this->actionFunc = func_80ADB0D8;
             }
             Message_CloseTextbox(play);
-        } else if (itemAction <= PLAYER_IA_CONTINUE) {
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
             this->unk_340 = D_80ADD920[this->unk_33A];
             Message_ContinueTextbox(play, this->unk_340);
             this->actionFunc = func_80ADB0D8;
@@ -492,14 +492,14 @@ void func_80ADBC60(EnSellnuts* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_340, &this->actor);
         this->actionFunc = func_80ADB0D8;
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
     }
 }
 
 void func_80ADBCE4(EnSellnuts* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_CONTINUE);
+        Actor_OfferTalkExchangeRadius(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_340 = D_80ADD930[this->unk_33A];
         this->actionFunc = func_80ADBC60;
     }
