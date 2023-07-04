@@ -395,7 +395,7 @@ s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
 
     if (roll != NULL) {
         s16 new_var;
-        s32 temp;
+        s16 temp;
 
         new_var = CAM_DEG_TO_BINANG(misc->roll);
 
@@ -414,7 +414,6 @@ s16 func_80161C20(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
 
 s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
                   CutsceneCameraInterp* interp) {
-    f32 temp_v1;
     f32 phi_f2;
     f32 tmp1;
     f32 tmp2;
@@ -460,7 +459,7 @@ s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
 
     if (roll != NULL) {
         s16 new_var;
-        s32 temp;
+        s16 temp;
 
         new_var = CAM_DEG_TO_BINANG(misc->roll);
 
@@ -476,12 +475,12 @@ s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     return 0;
 }
 
-#ifdef NON_EQUIVALENT
 s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
                   CutsceneCameraInterp* interp) {
-    f32 sp40;
+    VecGeo sp40;
     f32 sp3C;
-    s32 pad0;
+    f32 tmp1;
+    f32 tmp2;
 
     if (interp->unk_2D != 6) {
         interp->unk_2D = 6;
@@ -489,7 +488,7 @@ s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         interp->curFrame = 0;
         interp->duration = 1;
         if (pos != NULL) {
-            interp->unk_20 = OLib_Vec3fDist(&interp->unk_00, pos) * func_80086760(*fov * 0.017453292f);
+            interp->unk_20 = OLib_Vec3fDist(&interp->unk_00, pos) * Math_FTanF(DEG_TO_RAD(*fov));
         }
         if (fov != NULL) {
             interp->unk_18 = *fov;
@@ -499,20 +498,22 @@ s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         }
     }
 
+    tmp2 = (((point->weight + 100) * (point->duration / 2)) +
+                  (((point->weight + 100) / 2) * (point->duration & 1)));
     if (point->duration < 2) {
         sp3C = 1.0f;
     } else {
-        sp3C = (((f32)interp->curFrame * ((f32)(point->weight - 100) / (f32)(point->duration - 1))) + 100.0f) /
-               (((point->weight + 100) * (f32)(point->duration / 2)) +
-                ((f32)((point->weight + 100) / 2) * (point->duration & 1)));
+        tmp1 = (f32)(point->weight - 100) / (point->duration - 1);
+        sp3C = ((interp->curFrame * tmp1) + 100.0f) / tmp2;
     }
+
 
     interp->curFrame++;
 
     if (pos != NULL) {
-        OLib_Vec3fDiffToVecSphGeo(&sp40, interp, pos);
-        sp40 = interp->unk_20 / func_80086760(*fov * 0.017453292f);
-        OLib_VecSphAddToVec3f(pos, interp, &sp40);
+        OLib_Vec3fDiffToVecGeo(&sp40, &interp->unk_00, pos);
+        sp40.r = interp->unk_20 / Math_FTanF(DEG_TO_RAD(*fov));
+        OLib_AddVecGeoToVec3f(pos, &interp->unk_00, &sp40);
     }
 
     if (fov != NULL) {
@@ -521,7 +522,7 @@ s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
 
     if (roll != NULL) {
         s16 new_var;
-        s32 temp;
+        s16 temp;
 
         new_var = CAM_DEG_TO_BINANG(misc->roll);
 
@@ -537,9 +538,6 @@ s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
 
     return 0;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_801620CC.s")
-#endif
 
 s16 func_8016237C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
                   CutsceneCameraInterp* interp) {
