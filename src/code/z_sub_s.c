@@ -1538,16 +1538,16 @@ s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32
 
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
     Player* player = GET_PLAYER(play);
-    Vec3s* yawTols = (Vec3s*)data;
+    Vec3s* yawRanges = (Vec3s*)data;
     s16 playerYaw = ABS(BINANG_SUB(Actor_WorldYawTowardActor(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
     s32 areFacing = false;
-    s32 actorYawTol = ABS(yawTols->y);
-    s32 playerYawTol;
+    s32 actorYawRange = ABS(yawRanges->y);
+    s32 playerYawRange;
 
-    if (actorYaw < (s16)actorYawTol) {
-        playerYawTol = ABS(yawTols->x);
-        if (playerYaw < (s16)playerYawTol) {
+    if (actorYaw < (s16)actorYawRange) {
+        playerYawRange = ABS(yawRanges->x);
+        if (playerYaw < (s16)playerYawRange) {
             areFacing = true;
         }
     }
@@ -1556,12 +1556,12 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
 }
 
 s32 SubS_OfferTalkExchangeFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
-                                 s16 playerYawTol, s16 actorYawTol) {
-    Vec3s yawTols;
+                                 s16 playerYawRange, s16 actorYawRange) {
+    Vec3s yawRanges;
 
-    yawTols.x = playerYawTol;
-    yawTols.y = actorYawTol;
-    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemAction, &yawTols,
+    yawRanges.x = playerYawRange;
+    yawRanges.y = actorYawRange;
+    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemAction, &yawRanges,
                                         SubS_ActorAndPlayerFaceEachOther);
 }
 
