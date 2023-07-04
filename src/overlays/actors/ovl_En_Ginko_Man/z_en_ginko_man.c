@@ -567,7 +567,7 @@ void EnGinkoMan_BankAward2(EnGinkoMan* this, PlayState* play) {
             EnGinkoMan_SetupIdle(this);
         }
     } else {
-        Actor_OfferTalkExchangeRadius(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
