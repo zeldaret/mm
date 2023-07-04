@@ -1504,7 +1504,7 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
  * The callback should return `true` when the actor is successfully verified.
  */
 Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
-                            void* verifyData, VerifyFindActor verifyActor) {
+                            void* verifyData, VerifyFindActorFunc verifyActorFunc) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
@@ -1514,7 +1514,8 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
     while ((actorIter != NULL) &&
            ((actorId != actorIter->id) ||
             ((actorId == actorIter->id) &&
-             ((verifyActor == NULL) || ((verifyActor != NULL) && !verifyActor(play, actor, actorIter, verifyData)))))) {
+             ((verifyActorFunc == NULL) ||
+              ((verifyActorFunc != NULL) && !verifyActorFunc(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 
@@ -1526,10 +1527,10 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
  * The callback should return `true` when the actor is successfully verified.
  */
 s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
-                                 void* data, VerifyTalkExchangeActor verifyActor) {
+                                 void* data, VerifyTalkExchangeActorFunc verifyActorFunc) {
     s32 canAccept = false;
 
-    if ((verifyActor == NULL) || ((verifyActor != NULL) && verifyActor(play, actor, data))) {
+    if ((verifyActorFunc == NULL) || ((verifyActorFunc != NULL) && verifyActorFunc(play, actor, data))) {
         canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, exchangeItemAction);
     }
     return canAccept;

@@ -32,9 +32,9 @@ typedef enum {
     /* 2 */ SUBS_CUTSCENE_WITH_PLAYER_SET_FLAG
 } SubSCutsceneType;
 
-typedef s32 (*VerifyTalkExchangeActor)(struct PlayState*, Actor*, void*);
+typedef s32 (*VerifyTalkExchangeActorFunc)(struct PlayState*, Actor*, void*);
 
-typedef s32 (*VerifyFindActor)(struct PlayState*, Actor*, Actor*, void*);
+typedef s32 (*VerifyFindActorFunc)(struct PlayState*, Actor*, Actor*, void*);
 
 #define SUBS_SHADOW_TEX_WIDTH 64
 #define SUBS_SHADOW_TEX_HEIGHT 64
@@ -174,9 +174,9 @@ s32 SubS_FillCutscenesList(Actor* actor, s16 csIdList[], s16 numCutscenes);
 void SubS_ConstructPlane(Vec3f* point, Vec3f* unitVec, Vec3s* rot, Plane* plane);
 s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePointA, Vec3f* linePointB, Vec3f* intersect);
 
-Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyFindActor verifyActor);
+Actor* SubS_FindActorCustom(struct PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId, void* verifyData, VerifyFindActorFunc verifyActorFunc);
 
-s32 SubS_OfferTalkExchangeCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, void* data, VerifyTalkExchangeActor verifyActor);
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, void* data, VerifyTalkExchangeActorFunc verifyActorFunc);
 s32 SubS_ActorAndPlayerFaceEachOther(struct PlayState* play, Actor* actor, void* data);
 s32 SubS_OfferTalkExchangeFacing(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction, s16 playerYawTol, s16 actorYawTol);
 
