@@ -72,28 +72,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-typedef struct {
-    /* 0x0 */ f32 data[PLAYER_FORM_MAX];
-} EnBox_PlaybackSpeed; // 0x14
-
-static EnBox_PlaybackSpeed sPlaybackSpeed = {
-    {
-        1.5f, // PLAYER_FORM_FIERCE_DEITY
-        1.0f, // PLAYER_FORM_GORON
-        1.5f, // PLAYER_FORM_ZORA
-        1.0f, // PLAYER_FORM_DEKU
-        1.5f, // PLAYER_FORM_HUMAN
-    },
-};
-
-static AnimationHeader* sBigChestAnimations[PLAYER_FORM_MAX] = {
-    &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_FIERCE_DEITY
-    &gBoxBigChestOpenGoronAnim, // PLAYER_FORM_GORON
-    &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_ZORA
-    &gBoxBigChestOpenDekuAnim,  // PLAYER_FORM_DEKU
-    &gBoxBigChestOpenChildAnim, // PLAYER_FORM_HUMAN
-};
-
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
     this->actionFunc = func;
 }
@@ -463,13 +441,17 @@ void func_80868B74(EnBox* this, PlayState* play) {
 }
 
 void EnBox_WaitOpen(EnBox* this, PlayState* play) {
+    static AnimationHeader* sBigChestAnimations[PLAYER_FORM_MAX] = {
+        &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_FIERCE_DEITY
+        &gBoxBigChestOpenGoronAnim, // PLAYER_FORM_GORON
+        &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_ZORA
+        &gBoxBigChestOpenDekuAnim,  // PLAYER_FORM_DEKU
+        &gBoxBigChestOpenChildAnim, // PLAYER_FORM_HUMAN
+    };
     s32 pad;
     AnimationHeader* animHeader;
     f32 frameCount;
     f32 playbackSpeed;
-    EnBox_PlaybackSpeed playbackSpeedTable;
-    Player* player;
-    Vec3f offset;
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
@@ -479,11 +461,16 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
             animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;
         } else {
-            s32 pad2;
+            f32 sPlaybackSpeeds[PLAYER_FORM_MAX] = {
+                1.5f, // PLAYER_FORM_FIERCE_DEITY
+                1.0f, // PLAYER_FORM_GORON
+                1.5f, // PLAYER_FORM_ZORA
+                1.0f, // PLAYER_FORM_DEKU
+                1.5f, // PLAYER_FORM_HUMAN
+            };
 
-            playbackSpeedTable = sPlaybackSpeed;
             animHeader = sBigChestAnimations[GET_PLAYER_FORM];
-            playbackSpeed = playbackSpeedTable.data[GET_PLAYER_FORM];
+            playbackSpeed = sPlaybackSpeeds[GET_PLAYER_FORM];
         }
 
         frameCount = Animation_GetLastFrame(animHeader);
@@ -506,7 +493,9 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
             Flags_SetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor));
         }
     } else {
-        player = GET_PLAYER(play);
+        Player* player = GET_PLAYER(play);
+        Vec3f offset;
+
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
         if ((offset.z > -50.0f) && (offset.z < 0.0f) && (fabsf(offset.y) < 10.0f) && (fabsf(offset.x) < 20.0f) &&
             Player_IsFacingActor(&this->dyna.actor, 0x3000, play)) {
