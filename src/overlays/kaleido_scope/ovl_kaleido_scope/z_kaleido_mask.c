@@ -647,7 +647,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
         sMaskEquipMagicArrowBowSlotHoldTimer--;
 
         if (sMaskEquipMagicArrowBowSlotHoldTimer == 0) {
-            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_FIRE;
             pauseCtx->equipTargetSlot = SLOT_BOW;
             sMaskEquipAnimTimer = 6;
             pauseCtx->equipAnimScale = 320;

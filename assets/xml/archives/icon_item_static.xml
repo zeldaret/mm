@@ -14,7 +14,7 @@
         <Texture Name="gItemIconMagicBeansTex" OutName="magic_beans_icon" Format="rgba32" Width="32" Height="32" Offset="0xA000" />
         <Texture Name="gItemIconSlingshotTex" OutName="slingshot_icon" Format="rgba32" Width="32" Height="32" Offset="0xB000" />
         <Texture Name="gItemIconPowderKegTex" OutName="powder_keg_icon" Format="rgba32" Width="32" Height="32" Offset="0xC000" />
-        <Texture Name="gItemIconPictoBoxTex" OutName="picto_box_icon" Format="rgba32" Width="32" Height="32" Offset="0xD000" />
+        <Texture Name="gItemIconPictographBoxTex" OutName="picto_box_icon" Format="rgba32" Width="32" Height="32" Offset="0xD000" />
         <Texture Name="gItemIconLensofTruthTex" OutName="lens_of_truth_icon" Format="rgba32" Width="32" Height="32" Offset="0xE000" />
         <Texture Name="gItemIconHookshotTex" OutName="hookshot_icon" Format="rgba32" Width="32" Height="32" Offset="0xF000" />
         <Texture Name="gItemIconGreatFairysSwordTex" OutName="great_fairys_sword_icon" Format="rgba32" Width="32" Height="32" Offset="0x10000" />
