@@ -2529,9 +2529,9 @@ Gfx* D_801C0B20[] = {
     object_mask_bakuretu_DL_0005C0, // PLAYER_MASK_BLAST
     object_mask_bu_san_DL_000710,   // PLAYER_MASK_SCENTS
     object_mask_kyojin_DL_000380,   // PLAYER_MASK_GIANT
-    gameplay_keep_DL_00B260,        // PLAYER_MASK_FIERCE_DEITY
-    gameplay_keep_DL_005A10,        // PLAYER_MASK_GORON
-    gameplay_keep_DL_005360,        // PLAYER_MASK_ZORA
+    gFierceDeityMaskDL,             // PLAYER_MASK_FIERCE_DEITY
+    gGoronMaskDL,                   // PLAYER_MASK_GORON
+    gZoraMaskDL,                    // PLAYER_MASK_ZORA
     gDekuMaskDL,                    // PLAYER_MASK_DEKU
     object_mask_boy_DL_000900,
     object_mask_goron_DL_0014A0,
@@ -3322,10 +3322,10 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             Color_RGB8* bottleColor = &sPlayerBottleColors[bottle];
 
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);
+            gSPDisplayList(POLY_XLU_DISP++, gBottleContentsDL);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0003E0);
+        gSPDisplayList(POLY_XLU_DISP++, gBottleGlassDL);
 
         Matrix_Pop();
 
