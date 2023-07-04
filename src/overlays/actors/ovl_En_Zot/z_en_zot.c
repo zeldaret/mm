@@ -961,7 +961,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+            if ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
                 Snap_CheckFlag(PICTO_VALID_LULU_HEAD)) {
                 if (Snap_CheckFlag(PICTO_VALID_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTO_VALID_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;

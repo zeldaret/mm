@@ -178,7 +178,7 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
+            if (INV_CONTENT(ITEM_OCARINA_OF_TIME) == ITEM_OCARINA_OF_TIME) {
                 Actor_Kill(&this->actor);
                 return;
             }
