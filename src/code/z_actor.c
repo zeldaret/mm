@@ -1920,7 +1920,7 @@ s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRan
 
 /**
  * Offers a talk exchange request within an equilateral cylinder with the radius specified.
-*/
+ */
 s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radius,
                                         PlayerItemAction exchangeItemAction) {
     return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemAction);
