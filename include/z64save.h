@@ -10,6 +10,13 @@ struct GameState;
 struct PlayState;
 struct FileSelectState;
 
+typedef enum {
+    /* 0 */ SAVE_AUDIO_STEREO,
+    /* 1 */ SAVE_AUDIO_MONO,
+    /* 2 */ SAVE_AUDIO_HEADSET,
+    /* 3 */ SAVE_AUDIO_SURROUND
+} AudioOption;
+
 // TODO: properly name DOWN, RETURN and TOP
 typedef enum RespawnMode {
     /* 0 */ RESPAWN_MODE_DOWN,                          // "RESTART_MODE_DOWN"
@@ -80,7 +87,7 @@ typedef enum {
     /*  5 */ TIMER_ID_ENV_HAZARD, // environmental hazard timer (underwater or hot room)
     /*  6 */ TIMER_ID_GORON_RACE_UNUSED,
     /*  7 */ TIMER_ID_MAX,
-    /* 99 */ TIMER_ID_NONE = 99,
+    /* 99 */ TIMER_ID_NONE = 99
 } TimerId;
 
 typedef enum {
@@ -157,13 +164,13 @@ typedef enum {
 #define PICTO_PHOTO_COMPRESSED_SIZE (PICTO_PHOTO_SIZE * 5 / 8)
 
 typedef struct SramContext {
-    /* 0x00 */ u8* readBuff;
-    /* 0x04 */ u8 *saveBuf;
+    /* 0x00 */ u8* noFlashSaveBuf; // Never allocated memory
+    /* 0x04 */ u8* saveBuf;
     /* 0x08 */ char unk_08[4];
     /* 0x0C */ s16 status;
     /* 0x10 */ u32 curPage;
     /* 0x14 */ u32 numPages;
-    /* 0x18 */ OSTime unk_18;
+    /* 0x18 */ OSTime startWriteOsTime;
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s16 unk_24;
@@ -226,14 +233,14 @@ typedef struct CycleSceneFlags {
 typedef struct SaveOptions {
     /* 0x0 */ u16 optionId;                            // "option_id"
     /* 0x2 */ u8 language;                             // "j_n"
-    /* 0x3 */ s8 audioSetting;                         // "s_sound"
+    /* 0x3 */ u8 audioSetting;                         // "s_sound"
     /* 0x4 */ u8 languageSetting;                      // "language"
     /* 0x5 */ u8 zTargetSetting;                       // "z_attention", 0: Switch; 1: Hold
 } SaveOptions; // size = 0x6
 
 typedef struct SavePlayerData {
     /* 0x00 */ char newf[6];                          // "newf"               Will always be "ZELDA3 for a valid save
-    /* 0x06 */ u16 deaths;                            // "savect"
+    /* 0x06 */ u16 threeDayResetCount;                // "savect"
     /* 0x08 */ char playerName[8];                    // "player_name"
     /* 0x10 */ s16 healthCapacity;                    // "max_life"
     /* 0x12 */ s16 health;                            // "now_life"
@@ -337,11 +344,11 @@ typedef struct SaveContext {
     /* 0x3DB4 */ f32 entranceSpeed;                     // "player_wipe_speedF"
     /* 0x3DB8 */ u16 entranceSound;                     // "player_wipe_door_SE"
     /* 0x3DBA */ u8 unk_3DBA;                           // "player_wipe_item"
-    /* 0x3DBB */ u8 unk_3DBB;                           // "next_walk"
+    /* 0x3DBB */ u8 retainWeatherMode;                  // "next_walk"
     /* 0x3DBC */ s16 dogParams;                         // OoT leftover. "dog_flag"
     /* 0x3DBE */ u8 envHazardTextTriggerFlags;          // "guide_status"
     /* 0x3DBF */ u8 showTitleCard;                      // "name_display"
-    /* 0x3DC0 */ s16 unk_3DC0;                          // "shield_magic_timer"
+    /* 0x3DC0 */ s16 nayrusLoveTimer;                   // remnant of OoT, "shield_magic_timer"
     /* 0x3DC2 */ u8 unk_3DC2;                           // "pad1"
     /* 0x3DC8 */ OSTime postmanTimerStopOsTime; // The osTime when the timer stops for the postman minigame. "get_time"
     /* 0x3DD0 */ u8 timerStates[TIMER_ID_MAX]; // See the `TimerState` enum. "event_fg"
@@ -374,13 +381,13 @@ typedef struct SaveContext {
     /* 0x3F3A */ u16 minigameScore;                     // "yabusame_total"
     /* 0x3F3C */ u16 minigameHiddenScore;               // "yabusame_out_ct"
     /* 0x3F3E */ u8 unk_3F3E;                           // "no_save"
-    /* 0x3F3F */ u8 unk_3F3F;                           // "flash_flag"
+    /* 0x3F3F */ u8 flashSaveAvailable;                 // "flash_flag"
     /* 0x3F40 */ SaveOptions options;
-    /* 0x3F46 */ u16 unk_3F46;                          // "NottoriBgm"
+    /* 0x3F46 */ u16 forcedSeqId;                       // "NottoriBgm"
     /* 0x3F48 */ u8 cutsceneTransitionControl;          // "fade_go"
     /* 0x3F4A */ u16 nextCutsceneIndex;                 // "next_daytime"
     /* 0x3F4C */ u8 cutsceneTrigger;                    // "doukidemo"
-    /* 0x3F4D */ u8 unk_3F4D;                           // "Kenjya_no"
+    /* 0x3F4D */ u8 chamberCutsceneNum;                 // remnant of OoT "Kenjya_no"
     /* 0x3F4E */ u16 nextDayTime;                       // "next_zelda_time"
     /* 0x3F50 */ u8 transFadeDuration;                  // "fade_speed"
     /* 0x3F51 */ u8 transWipeSpeed;                     // "wipe_speed"           transition related
@@ -596,8 +603,15 @@ typedef enum {
 #define WEEKEVENTREG_08_10 PACK_WEEKEVENTREG_FLAG(8, 0x10)
 #define WEEKEVENTREG_RECEIVED_DOGGY_RACETRACK_HEART_PIECE PACK_WEEKEVENTREG_FLAG(8, 0x20)
 
-// Related to final hours
-#define WEEKEVENTREG_08_40 PACK_WEEKEVENTREG_FLAG(8, 0x40)
+// This is set under three circumstances:
+// 1. The player watches the cutscene of the Clock Tower opening.
+// 2. The player sees the Clock Tower opening outside of a cutscene. After the first cycle, this
+//    can be seen in Termina Field or in North, East, or West Clock Town.
+// 3. The player enters Termina Field or North, South, East, or West Clock Town any time after
+//    midnight on the Final Day.
+// Thus, it is possible for the player to be in the final six hours and still have this unset; all
+// the player needs to do is avoid certain areas.
+#define WEEKEVENTREG_CLOCK_TOWER_OPENED PACK_WEEKEVENTREG_FLAG(8, 0x40)
 
 #define WEEKEVENTREG_08_80 PACK_WEEKEVENTREG_FLAG(8, 0x80)
 #define WEEKEVENTREG_09_01 PACK_WEEKEVENTREG_FLAG(9, 0x01)
@@ -726,13 +740,13 @@ typedef enum {
 #define WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON PACK_WEEKEVENTREG_FLAG(21, 0x08)
 
 #define WEEKEVENTREG_21_10 PACK_WEEKEVENTREG_FLAG(21, 0x10)
-#define WEEKEVENTREG_21_20 PACK_WEEKEVENTREG_FLAG(21, 0x20)
+#define WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM PACK_WEEKEVENTREG_FLAG(21, 0x20)
 #define WEEKEVENTREG_21_40 PACK_WEEKEVENTREG_FLAG(21, 0x40)
 #define WEEKEVENTREG_21_80 PACK_WEEKEVENTREG_FLAG(21, 0x80)
 
 // Aliens defeated
 // "Winning" the alien invasion
-#define WEEKEVENTREG_22_01 PACK_WEEKEVENTREG_FLAG(22, 0x01)
+#define WEEKEVENTREG_DEFENDED_AGAINST_THEM PACK_WEEKEVENTREG_FLAG(22, 0x01)
 
 #define WEEKEVENTREG_22_02 PACK_WEEKEVENTREG_FLAG(22, 0x02)
 
@@ -788,11 +802,11 @@ typedef enum {
 #define WEEKEVENTREG_26_40 PACK_WEEKEVENTREG_FLAG(26, 0x40)
 #define WEEKEVENTREG_26_80 PACK_WEEKEVENTREG_FLAG(26, 0x80)
 #define WEEKEVENTREG_27_01 PACK_WEEKEVENTREG_FLAG(27, 0x01)
-#define WEEKEVENTREG_27_02 PACK_WEEKEVENTREG_FLAG(27, 0x02)
-#define WEEKEVENTREG_27_04 PACK_WEEKEVENTREG_FLAG(27, 0x04)
-#define WEEKEVENTREG_27_08 PACK_WEEKEVENTREG_FLAG(27, 0x08)
-#define WEEKEVENTREG_27_10 PACK_WEEKEVENTREG_FLAG(27, 0x10)
-#define WEEKEVENTREG_27_20 PACK_WEEKEVENTREG_FLAG(27, 0x20)
+#define WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_UPPER_CLOCKTOWN PACK_WEEKEVENTREG_FLAG(27, 0x02)
+#define WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_NORTH_CLOCKTOWN PACK_WEEKEVENTREG_FLAG(27, 0x04)
+#define WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_UPPER_CLOCKTOWN PACK_WEEKEVENTREG_FLAG(27, 0x08)
+#define WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_EAST_LOWER_CLOCKTOWN PACK_WEEKEVENTREG_FLAG(27, 0x10)
+#define WEEKEVENTREG_DEPOSITED_LETTER_TO_KAFEI_SOUTH_LOWER_CLOCKTOWN PACK_WEEKEVENTREG_FLAG(27, 0x20)
 #define WEEKEVENTREG_27_40 PACK_WEEKEVENTREG_FLAG(27, 0x40)
 #define WEEKEVENTREG_27_80 PACK_WEEKEVENTREG_FLAG(27, 0x80)
 #define WEEKEVENTREG_28_01 PACK_WEEKEVENTREG_FLAG(28, 0x01)
@@ -838,8 +852,8 @@ typedef enum {
 #define WEEKEVENTREG_31_80 PACK_WEEKEVENTREG_FLAG(31, 0x80)
 
 #define WEEKEVENTREG_32_01 PACK_WEEKEVENTREG_FLAG(32, 0x01)
-#define WEEKEVENTREG_32_02 PACK_WEEKEVENTREG_FLAG(32, 0x02)
-#define WEEKEVENTREG_32_04 PACK_WEEKEVENTREG_FLAG(32, 0x04)
+#define WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE PACK_WEEKEVENTREG_FLAG(32, 0x02)
+#define WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE PACK_WEEKEVENTREG_FLAG(32, 0x04)
 #define WEEKEVENTREG_32_08 PACK_WEEKEVENTREG_FLAG(32, 0x08)
 #define WEEKEVENTREG_32_10 PACK_WEEKEVENTREG_FLAG(32, 0x10)
 #define WEEKEVENTREG_32_20 PACK_WEEKEVENTREG_FLAG(32, 0x20)
@@ -949,22 +963,22 @@ typedef enum {
 #define WEEKEVENTREG_50_01 PACK_WEEKEVENTREG_FLAG(50, 0x01)
 #define WEEKEVENTREG_50_02 PACK_WEEKEVENTREG_FLAG(50, 0x02)
 #define WEEKEVENTREG_50_04 PACK_WEEKEVENTREG_FLAG(50, 0x04)
-#define WEEKEVENTREG_50_08 PACK_WEEKEVENTREG_FLAG(50, 0x08)
+#define WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING PACK_WEEKEVENTREG_FLAG(50, 0x08)
 #define WEEKEVENTREG_50_10 PACK_WEEKEVENTREG_FLAG(50, 0x10)
-#define WEEKEVENTREG_50_20 PACK_WEEKEVENTREG_FLAG(50, 0x20)
+#define WEEKEVENTREG_HAD_MIDNIGHT_MEETING PACK_WEEKEVENTREG_FLAG(50, 0x20)
 #define WEEKEVENTREG_50_40 PACK_WEEKEVENTREG_FLAG(50, 0x40)
-#define WEEKEVENTREG_50_80 PACK_WEEKEVENTREG_FLAG(50, 0x80)
-#define WEEKEVENTREG_51_01 PACK_WEEKEVENTREG_FLAG(51, 0x01)
+#define WEEKEVENTREG_RECEIVED_PENDANT_OF_MEMORIES PACK_WEEKEVENTREG_FLAG(50, 0x80)
+#define WEEKEVENTREG_DELIVERED_PENDANT_OF_MEMORIES PACK_WEEKEVENTREG_FLAG(51, 0x01)
 #define WEEKEVENTREG_51_02 PACK_WEEKEVENTREG_FLAG(51, 0x02)
 #define WEEKEVENTREG_51_04 PACK_WEEKEVENTREG_FLAG(51, 0x04)
 #define WEEKEVENTREG_51_08 PACK_WEEKEVENTREG_FLAG(51, 0x08)
 #define WEEKEVENTREG_51_10 PACK_WEEKEVENTREG_FLAG(51, 0x10)
-#define WEEKEVENTREG_51_20 PACK_WEEKEVENTREG_FLAG(51, 0x20)
+#define WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT PACK_WEEKEVENTREG_FLAG(51, 0x20)
 #define WEEKEVENTREG_51_40 PACK_WEEKEVENTREG_FLAG(51, 0x40)
 #define WEEKEVENTREG_51_80 PACK_WEEKEVENTREG_FLAG(51, 0x80)
 
-// ProtectedCremia
-#define WEEKEVENTREG_52_01 PACK_WEEKEVENTREG_FLAG(52, 0x01)
+// Protected Cremia
+#define WEEKEVENTREG_ESCORTED_CREMIA PACK_WEEKEVENTREG_FLAG(52, 0x01)
 // Lose Milk Run minigame
 #define WEEKEVENTREG_52_02 PACK_WEEKEVENTREG_FLAG(52, 0x02)
 
@@ -1035,8 +1049,8 @@ typedef enum {
 #define WEEKEVENTREG_59_04 PACK_WEEKEVENTREG_FLAG(59, 0x04)
 
 #define WEEKEVENTREG_59_08 PACK_WEEKEVENTREG_FLAG(59, 0x08)
-#define WEEKEVENTREG_59_10 PACK_WEEKEVENTREG_FLAG(59, 0x10)
-#define WEEKEVENTREG_59_20 PACK_WEEKEVENTREG_FLAG(59, 0x20)
+#define WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE PACK_WEEKEVENTREG_FLAG(59, 0x10)
+#define WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE PACK_WEEKEVENTREG_FLAG(59, 0x20)
 #define WEEKEVENTREG_59_40 PACK_WEEKEVENTREG_FLAG(59, 0x40)
 #define WEEKEVENTREG_59_80 PACK_WEEKEVENTREG_FLAG(59, 0x80)
 #define WEEKEVENTREG_60_01 PACK_WEEKEVENTREG_FLAG(60, 0x01)
@@ -1094,61 +1108,65 @@ typedef enum {
 #define WEEKEVENTREG_65_20 PACK_WEEKEVENTREG_FLAG(65, 0x20)
 #define WEEKEVENTREG_65_40 PACK_WEEKEVENTREG_FLAG(65, 0x40)
 #define WEEKEVENTREG_65_80 PACK_WEEKEVENTREG_FLAG(65, 0x80)
-#define WEEKEVENTREG_66_01 PACK_WEEKEVENTREG_FLAG(66, 0x01)
-#define WEEKEVENTREG_66_02 PACK_WEEKEVENTREG_FLAG(66, 0x02)
-#define WEEKEVENTREG_66_04 PACK_WEEKEVENTREG_FLAG(66, 0x04)
-#define WEEKEVENTREG_66_08 PACK_WEEKEVENTREG_FLAG(66, 0x08)
-#define WEEKEVENTREG_66_10 PACK_WEEKEVENTREG_FLAG(66, 0x10)
-#define WEEKEVENTREG_66_20 PACK_WEEKEVENTREG_FLAG(66, 0x20)
-#define WEEKEVENTREG_66_40 PACK_WEEKEVENTREG_FLAG(66, 0x40)
-#define WEEKEVENTREG_66_80 PACK_WEEKEVENTREG_FLAG(66, 0x80)
-#define WEEKEVENTREG_67_01 PACK_WEEKEVENTREG_FLAG(67, 0x01)
-#define WEEKEVENTREG_67_02 PACK_WEEKEVENTREG_FLAG(67, 0x02)
-#define WEEKEVENTREG_67_04 PACK_WEEKEVENTREG_FLAG(67, 0x04)
-#define WEEKEVENTREG_67_08 PACK_WEEKEVENTREG_FLAG(67, 0x08)
-#define WEEKEVENTREG_67_10 PACK_WEEKEVENTREG_FLAG(67, 0x10)
-#define WEEKEVENTREG_67_20 PACK_WEEKEVENTREG_FLAG(67, 0x20)
-#define WEEKEVENTREG_67_40 PACK_WEEKEVENTREG_FLAG(67, 0x40)
-#define WEEKEVENTREG_67_80 PACK_WEEKEVENTREG_FLAG(67, 0x80)
-#define WEEKEVENTREG_68_01 PACK_WEEKEVENTREG_FLAG(68, 0x01)
-#define WEEKEVENTREG_68_02 PACK_WEEKEVENTREG_FLAG(68, 0x02)
-#define WEEKEVENTREG_68_04 PACK_WEEKEVENTREG_FLAG(68, 0x04)
-#define WEEKEVENTREG_68_08 PACK_WEEKEVENTREG_FLAG(68, 0x08)
-#define WEEKEVENTREG_68_10 PACK_WEEKEVENTREG_FLAG(68, 0x10)
-#define WEEKEVENTREG_68_20 PACK_WEEKEVENTREG_FLAG(68, 0x20)
-#define WEEKEVENTREG_68_40 PACK_WEEKEVENTREG_FLAG(68, 0x40)
-#define WEEKEVENTREG_68_80 PACK_WEEKEVENTREG_FLAG(68, 0x80)
-#define WEEKEVENTREG_69_01 PACK_WEEKEVENTREG_FLAG(69, 0x01)
-#define WEEKEVENTREG_69_02 PACK_WEEKEVENTREG_FLAG(69, 0x02)
-#define WEEKEVENTREG_69_04 PACK_WEEKEVENTREG_FLAG(69, 0x04)
-#define WEEKEVENTREG_69_08 PACK_WEEKEVENTREG_FLAG(69, 0x08)
-#define WEEKEVENTREG_69_10 PACK_WEEKEVENTREG_FLAG(69, 0x10)
-#define WEEKEVENTREG_69_20 PACK_WEEKEVENTREG_FLAG(69, 0x20)
-#define WEEKEVENTREG_69_40 PACK_WEEKEVENTREG_FLAG(69, 0x40)
-#define WEEKEVENTREG_69_80 PACK_WEEKEVENTREG_FLAG(69, 0x80)
-#define WEEKEVENTREG_70_01 PACK_WEEKEVENTREG_FLAG(70, 0x01)
-#define WEEKEVENTREG_70_02 PACK_WEEKEVENTREG_FLAG(70, 0x02)
-#define WEEKEVENTREG_70_04 PACK_WEEKEVENTREG_FLAG(70, 0x04)
-#define WEEKEVENTREG_70_08 PACK_WEEKEVENTREG_FLAG(70, 0x08)
-#define WEEKEVENTREG_70_10 PACK_WEEKEVENTREG_FLAG(70, 0x10)
-#define WEEKEVENTREG_70_20 PACK_WEEKEVENTREG_FLAG(70, 0x20)
-#define WEEKEVENTREG_70_40 PACK_WEEKEVENTREG_FLAG(70, 0x40)
-#define WEEKEVENTREG_70_80 PACK_WEEKEVENTREG_FLAG(70, 0x80)
-#define WEEKEVENTREG_71_01 PACK_WEEKEVENTREG_FLAG(71, 0x01)
-#define WEEKEVENTREG_71_02 PACK_WEEKEVENTREG_FLAG(71, 0x02)
-#define WEEKEVENTREG_71_04 PACK_WEEKEVENTREG_FLAG(71, 0x04)
-#define WEEKEVENTREG_71_08 PACK_WEEKEVENTREG_FLAG(71, 0x08)
-#define WEEKEVENTREG_71_10 PACK_WEEKEVENTREG_FLAG(71, 0x10)
-#define WEEKEVENTREG_71_20 PACK_WEEKEVENTREG_FLAG(71, 0x20)
-#define WEEKEVENTREG_71_40 PACK_WEEKEVENTREG_FLAG(71, 0x40)
-#define WEEKEVENTREG_71_80 PACK_WEEKEVENTREG_FLAG(71, 0x80)
-#define WEEKEVENTREG_72_01 PACK_WEEKEVENTREG_FLAG(72, 0x01)
-#define WEEKEVENTREG_72_02 PACK_WEEKEVENTREG_FLAG(72, 0x02)
-#define WEEKEVENTREG_72_04 PACK_WEEKEVENTREG_FLAG(72, 0x04)
-#define WEEKEVENTREG_72_08 PACK_WEEKEVENTREG_FLAG(72, 0x08)
-#define WEEKEVENTREG_72_10 PACK_WEEKEVENTREG_FLAG(72, 0x10)
-#define WEEKEVENTREG_72_20 PACK_WEEKEVENTREG_FLAG(72, 0x20)
-#define WEEKEVENTREG_72_40 PACK_WEEKEVENTREG_FLAG(72, 0x40)
+
+/* Bombers' Notebook Events */
+
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ANJU                        PACK_WEEKEVENTREG_FLAG(66, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_KAFEI                       PACK_WEEKEVENTREG_FLAG(66, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_CURIOSITY_SHOP_MAN          PACK_WEEKEVENTREG_FLAG(66, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_BOMB_SHOP_LADY              PACK_WEEKEVENTREG_FLAG(66, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ROMANI                      PACK_WEEKEVENTREG_FLAG(66, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_CREMIA                      PACK_WEEKEVENTREG_FLAG(66, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_MAYOR_DOTOUR                PACK_WEEKEVENTREG_FLAG(66, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_MADAME_AROMA                PACK_WEEKEVENTREG_FLAG(66, 0x80)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_TOTO                        PACK_WEEKEVENTREG_FLAG(67, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GORMAN                      PACK_WEEKEVENTREG_FLAG(67, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN                     PACK_WEEKEVENTREG_FLAG(67, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS                PACK_WEEKEVENTREG_FLAG(67, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_TOILET_HAND                 PACK_WEEKEVENTREG_FLAG(67, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_ANJUS_GRANDMOTHER           PACK_WEEKEVENTREG_FLAG(67, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_KAMARO                      PACK_WEEKEVENTREG_FLAG(67, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GROG                        PACK_WEEKEVENTREG_FLAG(67, 0x80)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS             PACK_WEEKEVENTREG_FLAG(68, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_SHIRO                       PACK_WEEKEVENTREG_FLAG(68, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU                   PACK_WEEKEVENTREG_FLAG(68, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_MET_BOMBERS                     PACK_WEEKEVENTREG_FLAG(68, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROOM_KEY               PACK_WEEKEVENTREG_FLAG(68, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_MIDNIGHT_MEETING       PACK_WEEKEVENTREG_FLAG(68, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_MEET_KAFEI          PACK_WEEKEVENTREG_FLAG(68, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_LETTER_TO_KAFEI        PACK_WEEKEVENTREG_FLAG(68, 0x80)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEPOSITED_LETTER_TO_KAFEI       PACK_WEEKEVENTREG_FLAG(69, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES    PACK_WEEKEVENTREG_FLAG(69, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PENDANT_OF_MEMORIES   PACK_WEEKEVENTREG_FLAG(69, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCAPED_SAKONS_HIDEOUT          PACK_WEEKEVENTREG_FLAG(69, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_PROMISED_TO_HELP_WITH_THEM      PACK_WEEKEVENTREG_FLAG(69, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DEFENDED_AGAINST_THEM           PACK_WEEKEVENTREG_FLAG(69, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MILK_BOTTLE            PACK_WEEKEVENTREG_FLAG(69, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_ESCORTED_CREMIA                 PACK_WEEKEVENTREG_FLAG(69, 0x80)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROMANIS_MASK           PACK_WEEKEVENTREG_FLAG(70, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KEATON_MASK            PACK_WEEKEVENTREG_FLAG(70, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_PRIORITY_MAIL          PACK_WEEKEVENTREG_FLAG(70, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_DELIVERED_PRIORITY_MAIL         PACK_WEEKEVENTREG_FLAG(70, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_LEARNED_SECRET_CODE             PACK_WEEKEVENTREG_FLAG(70, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BOMBERS_NOTEBOOK       PACK_WEEKEVENTREG_FLAG(70, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_MAYOR_HP               PACK_WEEKEVENTREG_FLAG(70, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP        PACK_WEEKEVENTREG_FLAG(70, 0x80)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_TOILET_HAND_HP         PACK_WEEKEVENTREG_FLAG(71, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_GRANDMA_SHORT_STORY_HP PACK_WEEKEVENTREG_FLAG(71, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_GRANDMA_LONG_STORY_HP  PACK_WEEKEVENTREG_FLAG(71, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMAN_HP             PACK_WEEKEVENTREG_FLAG(71, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAFEIS_MASK            PACK_WEEKEVENTREG_FLAG(71, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_ALL_NIGHT_MASK         PACK_WEEKEVENTREG_FLAG(71, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BUNNY_HOOD             PACK_WEEKEVENTREG_FLAG(71, 0x40)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK             PACK_WEEKEVENTREG_FLAG(71, 0x80)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_CIRCUS_LEADERS_MASK    PACK_WEEKEVENTREG_FLAG(72, 0x01)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMANS_HAT           PACK_WEEKEVENTREG_FLAG(72, 0x02)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_COUPLES_MASK           PACK_WEEKEVENTREG_FLAG(72, 0x04)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BLAST_MASK             PACK_WEEKEVENTREG_FLAG(72, 0x08)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAMAROS_MASK           PACK_WEEKEVENTREG_FLAG(72, 0x10)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_STONE_MASK             PACK_WEEKEVENTREG_FLAG(72, 0x20)
+#define WEEKEVENTREG_BOMBERS_NOTEBOOK_EVENT_RECEIVED_BREMEN_MASK            PACK_WEEKEVENTREG_FLAG(72, 0x40)
+
 #define WEEKEVENTREG_72_80 PACK_WEEKEVENTREG_FLAG(72, 0x80)
 #define WEEKEVENTREG_73_01 PACK_WEEKEVENTREG_FLAG(73, 0x01)
 #define WEEKEVENTREG_73_02 PACK_WEEKEVENTREG_FLAG(73, 0x02)
@@ -1173,7 +1191,7 @@ typedef enum {
 #define WEEKEVENTREG_75_02 PACK_WEEKEVENTREG_FLAG(75, 0x02)
 #define WEEKEVENTREG_75_04 PACK_WEEKEVENTREG_FLAG(75, 0x04)
 #define WEEKEVENTREG_75_08 PACK_WEEKEVENTREG_FLAG(75, 0x08)
-#define WEEKEVENTREG_75_10 PACK_WEEKEVENTREG_FLAG(75, 0x10)
+#define WEEKEVENTREG_RECEIVED_ROOM_KEY PACK_WEEKEVENTREG_FLAG(75, 0x10)
 #define WEEKEVENTREG_75_20 PACK_WEEKEVENTREG_FLAG(75, 0x20)
 #define WEEKEVENTREG_75_40 PACK_WEEKEVENTREG_FLAG(75, 0x40)
 #define WEEKEVENTREG_75_80 PACK_WEEKEVENTREG_FLAG(75, 0x80)
@@ -1219,7 +1237,7 @@ typedef enum {
 // Aveil has spotted Player
 #define WEEKEVENTREG_80_08 PACK_WEEKEVENTREG_FLAG(80, 0x08)
 
-#define WEEKEVENTREG_80_10 PACK_WEEKEVENTREG_FLAG(80, 0x10)
+#define WEEKEVENTREG_RECEIVED_PRIORITY_MAIL PACK_WEEKEVENTREG_FLAG(80, 0x10)
 #define WEEKEVENTREG_80_20 PACK_WEEKEVENTREG_FLAG(80, 0x20)
 #define WEEKEVENTREG_80_40 PACK_WEEKEVENTREG_FLAG(80, 0x40)
 #define WEEKEVENTREG_80_80 PACK_WEEKEVENTREG_FLAG(80, 0x80)
@@ -1455,15 +1473,8 @@ typedef enum {
  * gSaveContext.eventInf
  */
 
-// gSaveContext.eventInf[0] is used to dog race information
-// #define EVENTINF_00 0x00
-// #define EVENTINF_01 0x01
-// #define EVENTINF_02 0x02
-// #define EVENTINF_03 0x03
-// #define EVENTINF_04 0x04
-// #define EVENTINF_05 0x05
-// #define EVENTINF_06 0x06
-// #define EVENTINF_07 0x07
+// gSaveContext.eventInf[0] is used for dog race information (8 entries)
+// EVENTINF_00 to EVENTINF_07
 
 #define EVENTINF_10 0x10
 #define EVENTINF_11 0x11
@@ -1480,7 +1491,8 @@ typedef enum {
 #define EVENTINF_24 0x24
 #define EVENTINF_25 0x25
 #define EVENTINF_26 0x26
-#define EVENTINF_27 0x27
+// "Dawn of ... day". Must be triggered with respawnFlag -4 or -99
+#define EVENTINF_TRIGGER_DAYTELOP 0x27
 #define EVENTINF_30 0x30
 
 // EVENTINF_31 is used to track if Player is within range of EnGakufu (2D Song Buttons Appearing on Wall)
@@ -1524,11 +1536,14 @@ typedef enum {
 #define EVENTINF_65 0x65
 #define EVENTINF_66 0x66
 #define EVENTINF_67 0x67
-#define EVENTINF_70 0x70
-#define EVENTINF_71 0x71
-#define EVENTINF_72 0x72
-#define EVENTINF_73 0x73
-#define EVENTINF_74 0x74
+
+// Tracks which ammo is lost during the three day reset
+#define EVENTINF_THREEDAYRESET_LOST_RUPEES 0x70
+#define EVENTINF_THREEDAYRESET_LOST_BOMB_AMMO 0x71
+#define EVENTINF_THREEDAYRESET_LOST_NUT_AMMO 0x72
+#define EVENTINF_THREEDAYRESET_LOST_STICK_AMMO 0x73
+#define EVENTINF_THREEDAYRESET_LOST_ARROW_AMMO 0x74
+
 #define EVENTINF_75 0x75
 #define EVENTINF_76 0x76
 #define EVENTINF_77 0x77
@@ -1562,7 +1577,7 @@ typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
     /* 1 */ DUNGEON_INDEX_SNOWHEAD_TEMPLE,
     /* 2 */ DUNGEON_INDEX_GREAT_BAY_TEMPLE,
-    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE, // Also applies to Inverted Stone Tower Temple
+    /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
 
 void Sram_ActivateOwl(u8 owlId);
@@ -1575,28 +1590,28 @@ void Sram_InitDebugSave(void);
 void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
-void func_801457CC(struct FileSelectState* fileSelect, SramContext* sramCtx);
-void func_80146580(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
-void func_80146628(struct FileSelectState* fileSelect2, SramContext* sramCtx);
+void func_801457CC(struct GameState* gameState, SramContext* sramCtx);
+void Sram_EraseSave(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
+void Sram_CopySave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
-void func_80146DF8(SramContext* sramCtx);
+void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
 void Sram_Alloc(struct GameState* gameState, SramContext* sramCtx);
 void Sram_SaveSpecialEnterClockTown(struct PlayState* play);
 void Sram_SaveSpecialNewDay(struct PlayState* play);
-void func_80147008(SramContext* sramCtx, u32 curPage, u32 numPages);
-void func_80147020(SramContext* sramCtx);
-void func_80147068(SramContext* sramCtx);
-void func_80147138(SramContext* sramCtx, s32 curPage, s32 numPages);
-void func_80147150(SramContext* sramCtx);
-void func_80147198(SramContext* sramCtx);
+void Sram_SetFlashPagesDefault(SramContext* sramCtx, u32 curPage, u32 numPages);
+void Sram_StartWriteToFlashDefault(SramContext* sramCtx);
+void Sram_UpdateWriteToFlashDefault(SramContext* sramCtx);
+void Sram_SetFlashPagesOwlSave(SramContext* sramCtx, s32 curPage, s32 numPages);
+void Sram_StartWriteToFlashOwlSave(SramContext* sramCtx);
+void Sram_UpdateWriteToFlashOwlSave(SramContext* sramCtx);
 
-extern s32 D_801C6798[];
+extern u32 gSramSlotOffsets[];
 extern u8 gAmmoItems[];
-extern s32 D_801C67C8[];
-extern s32 D_801C67F0[];
-extern s32 D_801C6818[];
-extern s32 D_801C6840[];
-extern s32 D_801C6850[];
+extern s32 gFlashSaveStartPages[];
+extern s32 gFlashSaveNumPages[];
+extern s32 gFlashSpecialSaveNumPages[];
+extern s32 gFlashOwlSaveStartPages[];
+extern s32 gFlashOwlSaveNumPages[];
 
 #endif

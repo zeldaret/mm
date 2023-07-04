@@ -348,9 +348,9 @@ void Math_Vec3f_SumScaled(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest) {
 }
 
 void Math_Vec3f_AddRand(Vec3f* orig, f32 scale, Vec3f* dest) {
-    dest->x = randPlusMinusPoint5Scaled(scale) + orig->x;
-    dest->y = randPlusMinusPoint5Scaled(scale) + orig->y;
-    dest->z = randPlusMinusPoint5Scaled(scale) + orig->z;
+    dest->x = Rand_CenteredFloat(scale) + orig->x;
+    dest->y = Rand_CenteredFloat(scale) + orig->y;
+    dest->z = Rand_CenteredFloat(scale) + orig->z;
 }
 
 void Math_Vec3f_DistXYZAndStoreNormDiff(Vec3f* a, Vec3f* b, f32 scale, Vec3f* dest) {
@@ -639,16 +639,17 @@ void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src) {
     dst->a = src->a;
 }
 
-void func_801000A4(u16 sfxId) {
-    play_sound(sfxId);
+void Lib_PlaySfx(u16 sfxId) {
+    Audio_PlaySfx(sfxId);
 }
 
-void func_801000CC(u16 sfxId) {
-    func_8019F128(sfxId);
+void Lib_PlaySfx_2(u16 sfxId) {
+    Audio_PlaySfx_2(sfxId);
 }
 
-void Lib_PlaySfxAtPos(Vec3f* pos, u16 sfxId) {
-    Audio_PlaySfxAtPos(pos, sfxId);
+// Unused
+void Lib_PlaySfx_AtPos(Vec3f* pos, u16 sfxId) {
+    Audio_PlaySfx_AtPos(pos, sfxId);
 }
 
 void Lib_Vec3f_TranslateAndRotateY(Vec3f* translation, s16 rotAngle, Vec3f* src, Vec3f* dst) {

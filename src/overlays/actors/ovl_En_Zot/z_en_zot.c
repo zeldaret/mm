@@ -111,8 +111,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++) {
                 this->unk_2D8[i] = NULL;
             }
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
                 this->unk_2D4 = 0;
                 func_80B965D0(this, play);
             } else {
@@ -124,8 +124,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 3:
         case 4:
             this->actionFunc = func_80B97B5C;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -134,8 +134,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 5:
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97FD0;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -167,8 +167,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 10:
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -211,8 +211,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 22:
             this->actionFunc = func_80B980FC;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -961,7 +961,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+            if ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
                 Snap_CheckFlag(PICTO_VALID_LULU_HEAD)) {
                 if (Snap_CheckFlag(PICTO_VALID_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTO_VALID_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
@@ -988,12 +988,12 @@ void func_80B98728(EnZot* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1293)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x1294);
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1298);
                         break;
                 }
@@ -1275,8 +1275,7 @@ void func_80B99160(EnZot* this, PlayState* play) {
 }
 
 void func_80B991E4(EnZot* this, PlayState* play) {
-    if (1) {
-        do { } while (0); }
+    if (1) {}
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;

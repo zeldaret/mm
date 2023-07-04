@@ -52,7 +52,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 
     this->rScaleMax = initParams->scale;
 
-    if (initParams->params & ENFIRE_PARAMS_USE_SCALE) {
+    if (initParams->params & ENFIRE_PARAM_USE_SCALE) {
         this->rScale = initParams->scale;
     } else {
         this->rScale = 0;

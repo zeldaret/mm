@@ -341,7 +341,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0x7D0, 0);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == PLAYER_IA_MOON_TEAR) {
+        if (Player_GetExchangeItemId(play) == PLAYER_IA_MOONS_TEAR) {
             player->actor.textId = D_80ADD928[this->unk_33A];
             this->unk_340 = player->actor.textId;
             this->actionFunc = func_80ADBAB8;
@@ -382,7 +382,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
                this->actor.isTargeted) {
-        func_800B85E0(&this->actor, play, 80.0f, PLAYER_IA_MOON_TEAR);
+        func_800B85E0(&this->actor, play, 80.0f, PLAYER_IA_MOONS_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
                 this->unk_33A = 2;
@@ -423,7 +423,7 @@ void func_80ADB924(EnSellnuts* this, PlayState* play) {
         itemAction = func_80123810(play);
 
         if (itemAction > PLAYER_IA_NONE) {
-            if (itemAction == PLAYER_IA_MOON_TEAR) {
+            if (itemAction == PLAYER_IA_MOONS_TEAR) {
                 player->actor.textId = D_80ADD928[this->unk_33A];
                 this->unk_340 = player->actor.textId;
                 player->exchangeItemId = itemAction;
@@ -916,7 +916,7 @@ s32 func_80ADCE4C(EnSellnuts* this, Path* path, s32 arg2) {
         pointY = points[var + 1].z - points[var - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(pointX, pointY)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(pointX, pointY)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
     }
@@ -958,7 +958,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENSELLNUTS_GET_PATH_INDEX(&this->actor), ENSELLNUTS_PATH_INDEX_NONE);
     this->csId = this->actor.csId;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 0;
@@ -1051,7 +1051,7 @@ void EnSellnuts_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     this->actionFunc(this, play);
     if (this->unk_338 & 8) {
-        func_800B9010(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
     }
     func_80ADADD0(this, play);
 }

@@ -77,11 +77,11 @@ static ColliderCylinderInit sCylinderInit2 = {
 };
 
 typedef struct {
-    /* 0x00 */ ColliderCylinderInit* collider;
-    /* 0x04 */ ActorShadowFunc unk_04;
-    /* 0x08 */ ActorFunc unk_08;
-    /* 0x0C */ s32 (*unk_0C)(Actor*);
-} ObjBombiwaStruct2;
+    /* 0x0 */ ColliderCylinderInit* collider;
+    /* 0x4 */ ActorShadowFunc unk_04;
+    /* 0x8 */ ActorFunc unk_08;
+    /* 0xC */ s32 (*unk_0C)(Actor*);
+} ObjBombiwaStruct2; // size = 0x10
 
 static ObjBombiwaStruct2 D_8093A998[] = {
     { &sCylinderInit1, ActorShadow_DrawCircle, func_8093A418, func_809393B0 },
@@ -345,7 +345,7 @@ void func_80939EF4(ObjBombiwa* this, PlayState* play) {
         Flags_SetSwitch(play, OBJBOMBIWA_GET_7F(&this->actor));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 80, NA_SE_EV_WALL_BROKEN);
         if (OBJBOMBIWA_GET_8000(&this->actor)) {
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
         }
 
         if (params == OBJBOMBIWA_100_0) {

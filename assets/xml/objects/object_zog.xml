@@ -19,7 +19,7 @@
         <Texture Name="gMikauGraveBoneTex" OutName="mikau_grave_bone" Format="rgba16" Width="16" Height="32" Offset="0x7DD0" />
         <Texture Name="gMikauGraveWoodenStickTex" OutName="mikau_grave_wooden_stick" Format="rgba16" Width="32" Height="8" Offset="0x81D0" />
         <Texture Name="gMikauGraveCordTex" OutName="mikau_grave_cord" Format="rgba16" Width="16" Height="8" Offset="0x83D0" />
-        <Collision Name="gObjectZogCol" Offset="0x8670" />
+        <Collision Name="gMikauGraveCol" Offset="0x8670" />
         <Animation Name="object_zog_Anim_008EB8" Offset="0x8EB8" />
         <Animation Name="object_zog_Anim_00931C" Offset="0x931C" />
         <Animation Name="object_zog_Anim_0099A4" Offset="0x99A4" />

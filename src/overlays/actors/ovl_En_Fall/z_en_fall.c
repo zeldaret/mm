@@ -52,11 +52,11 @@ void EnFall_FireRing_Draw(Actor* thisx, PlayState* play);
 void EnFall_MoonsTear_Draw(Actor* thisx, PlayState* play);
 
 typedef struct {
-    u8 modelIndex;
-    Vec3f pos;
-    Vec3f velocity;
-    Vec3s rot;
-} EnFallDebrisEffect;
+    /* 0x00 */ u8 modelIndex;
+    /* 0x04 */ Vec3f pos;
+    /* 0x10 */ Vec3f velocity;
+    /* 0x1C */ Vec3s rot;
+} EnFallDebrisEffect; // size = 0x24
 
 #define EN_FALL_DEBRIS_EFFECT_COUNT 50
 
@@ -425,7 +425,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                         break;
                 }
                 if (play->csCtx.curFrame >= 1145) {
-                    func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
 
@@ -444,7 +444,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
                         break;
                 }
                 if (play->csCtx.curFrame >= 650) {
-                    func_800B9010(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FALL_POWER - SFX_FLAG);
                 }
                 break;
         }
@@ -453,7 +453,7 @@ void EnFall_StoppedClosedMouthMoon_PerformCutsceneActions(EnFall* this, PlayStat
 
 void EnFall_ClockTowerOrTitleScreenMoon_PerformCutsceneActions(EnFall* this, PlayState* play) {
     if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_OKUJOU)) {
-        func_800B9010(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_MOON_FALL - SFX_FLAG);
     }
 }
 
@@ -528,7 +528,7 @@ void EnFall_MoonsTear_Fall(EnFall* this, PlayState* play) {
             this->actor.draw = NULL;
             this->actionFunc = EnFall_MoonsTear_DoNothing;
         } else {
-            func_800B9010(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_MOONSTONE_FALL - SFX_FLAG);
         }
     }
 }
@@ -627,7 +627,7 @@ void EnFall_Fireball_Update(Actor* thisx, PlayState* play) {
     }
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_450) && (this->fireballAlpha > 0)) {
-        func_8019F128(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
+        Audio_PlaySfx_2(NA_SE_EV_MOON_FALL_LAST - SFX_FLAG);
     }
     Actor_SetScale(&this->actor, this->scale * 1.74f);
 }
@@ -662,16 +662,16 @@ s32 EnFall_RisingDebris_InitializeEffect(EnFall* this) {
             debrisEffects[i].pos.x = this->actor.world.pos.x;
             debrisEffects[i].pos.y = this->actor.world.pos.y;
             debrisEffects[i].pos.z = this->actor.world.pos.z;
-            angle = randPlusMinusPoint5Scaled(0x10000);
+            angle = Rand_CenteredFloat(0x10000);
             scale = (1.0f - (Rand_ZeroFloat(1.0f) * Rand_ZeroFloat(1.0f))) * 3000.0f;
             debrisEffects[i].pos.x += Math_SinS(angle) * scale;
             debrisEffects[i].pos.z += Math_CosS(angle) * scale;
             debrisEffects[i].velocity.x = 0.0f;
             debrisEffects[i].velocity.z = 0.0f;
             debrisEffects[i].velocity.y = 80.0f;
-            debrisEffects[i].rot.x = randPlusMinusPoint5Scaled(0x10000);
-            debrisEffects[i].rot.y = randPlusMinusPoint5Scaled(0x10000);
-            debrisEffects[i].rot.z = randPlusMinusPoint5Scaled(0x10000);
+            debrisEffects[i].rot.x = Rand_CenteredFloat(0x10000);
+            debrisEffects[i].rot.y = Rand_CenteredFloat(0x10000);
+            debrisEffects[i].rot.z = Rand_CenteredFloat(0x10000);
             this->activeDebrisEffectCount++;
             return true;
         }
@@ -890,6 +890,7 @@ void EnFall_FireRing_Draw(Actor* thisx, PlayState* play) {
         if (this->fireRingAlpha > 1.0f) {
             this->fireRingAlpha = 1.0f;
         }
+
         OPEN_DISPS(play->state.gfxCtx);
 
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(gMoonFireRingTexAnim));

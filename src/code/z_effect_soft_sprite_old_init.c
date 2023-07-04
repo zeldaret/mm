@@ -925,14 +925,14 @@ void EffectSsEnFire_SpawnVec3s(PlayState* play, Actor* actor, Vec3s* pos, s16 sc
 
 // EffectSsExtra Spawn Functions
 
-void EffectSsExtra_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scoreIdx) {
+void EffectSsExtra_Spawn(PlayState* play, Vec3f* pos, Vec3f* velocity, Vec3f* accel, s16 scale, s16 scoreIndex) {
     EffectSsExtraInitParams initParams;
 
     Math_Vec3f_Copy(&initParams.pos, pos);
     Math_Vec3f_Copy(&initParams.velocity, velocity);
     Math_Vec3f_Copy(&initParams.accel, accel);
     initParams.scale = scale;
-    initParams.scoreIdx = scoreIdx;
+    initParams.scoreIndex = scoreIndex;
 
     EffectSs_Spawn(play, EFFECT_SS_EXTRA, 100, &initParams);
 }

@@ -30,7 +30,7 @@ typedef enum {
     /*  7 */ EN_DNS_ANIM_RUN_LOOP,
     /*  8 */ EN_DNS_ANIM_DANCE,
     /*  9 */ EN_DNS_ANIM_FLIP,
-    /* 10 */ EN_DNS_ANIM_MAX,
+    /* 10 */ EN_DNS_ANIM_MAX
 } EnDnsAnimation;
 
 static s32 D_8092DCB0[] = {
@@ -402,7 +402,7 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
             player->stateFlags1 |= PLAYER_STATE1_20;
             this->unk_2C6 |= 0x100;
             SubS_UpdateFlags(&this->unk_2C6, 4, 7);
-            play_sound(NA_SE_SY_FOUND);
+            Audio_PlaySfx(NA_SE_SY_FOUND);
             SET_EVENTINF(EVENTINF_15);
             this->unk_2F4 = func_8092CCEC;
             func_8092C63C(this, EN_DNS_ANIM_WALK_1);

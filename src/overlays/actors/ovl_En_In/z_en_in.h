@@ -33,11 +33,13 @@ typedef enum {
     /* 14 */ ENIN_ANIM_14,
     /* 15 */ ENIN_ANIM_15,
     /* 16 */ ENIN_ANIM_16,
-    /* 17 */ ENIN_ANIM_17,
+    /* 17 */ ENIN_ANIM_17
 } EnInAnimation;
 
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
-#define ENIN_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
+#define ENIN_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
+
+#define ENIN_PATH_INDEX_NONE 0x3F
 
 typedef struct EnIn {
     /* 0x000 */ Actor actor;

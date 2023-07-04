@@ -57,7 +57,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-s32 sUnused;
+static s32 sBssPad;
 
 void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -100,7 +100,7 @@ void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play) {
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
 
-    func_800B9010(&this->actor, NA_SE_PL_ARROW_CHARGE_FIRE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_ARROW_CHARGE_FIRE - SFX_FLAG);
 
     // if arrow has no parent, player has fired the arrow
     if (arrow->actor.parent == NULL) {
@@ -249,6 +249,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
         Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);

@@ -489,9 +489,9 @@ void func_80990C6C(EnWf* this, PlayState* play, s32 arg2) {
             }
 
             for (i = 0; i < arg2; i++) {
-                sp88.x = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.x;
+                sp88.x = Rand_CenteredFloat(50.0f) + this->actor.world.pos.x;
                 sp88.y = Rand_ZeroFloat(5.0f) + this->actor.world.pos.y;
-                sp88.z = randPlusMinusPoint5Scaled(50.0f) + this->actor.world.pos.z;
+                sp88.z = Rand_CenteredFloat(50.0f) + this->actor.world.pos.z;
                 func_800B0F18(play, &sp88, &gZeroVec3f, &D_809942DC, phi_s1, phi_s1, phi_s6, 5,
                               Rand_ZeroFloat(5.0f) + 14.0f);
             }
@@ -1199,13 +1199,13 @@ void func_80992E0C(EnWf* this, PlayState* play) {
         this->unk_2A0--;
 
         for (i = (25 - this->unk_2A0) >> 1; i >= 0; i--) {
-            sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-            sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-            sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+            sp60.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+            sp60.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+            sp60.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
             func_800B3030(play, &sp60, &D_809942F0, &D_809942F0, 100, 0, 2);
         }
 
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
 }
 
@@ -1534,7 +1534,7 @@ void EnWf_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

@@ -35,6 +35,7 @@
 #include "z64animation_legacy.h"
 #include "z64audio.h"
 #include "z64bgcheck.h"
+#include "z64bombers_notebook.h"
 #include "z64camera.h"
 #include "z64collision_check.h"
 #include "z64curve.h"
@@ -44,6 +45,7 @@
 #include "z64effect.h"
 #include "z64frameadvance.h"
 #include "z64game_over.h"
+#include "z64game.h"
 #include "z64interface.h"
 #include "z64item.h"
 #include "z64light.h"
@@ -58,66 +60,11 @@
 #include "z64schedule.h"
 #include "z64skin.h"
 #include "z64skybox.h"
+#include "z64sound_source.h"
 #include "z64subs.h"
 #include "z64transition.h"
 #include "z64view.h"
 #include "regs.h"
-
-#define Z_THREAD_ID_IDLE     1
-#define Z_THREAD_ID_SLOWLY   2
-#define Z_THREAD_ID_MAIN     3
-#define Z_THREAD_ID_GRAPH    4
-#define Z_THREAD_ID_SCHED    5
-#define Z_THREAD_ID_FLASHROM 13
-#define Z_THREAD_ID_DMAMGR  18
-#define Z_THREAD_ID_IRQMGR  19
-
-#define Z_PRIORITY_SLOWLY    5
-#define Z_PRIORITY_GRAPH     9
-#define Z_PRIORITY_AUDIOMGR 11
-#define Z_PRIORITY_IDLE     12
-#define Z_PRIORITY_MAIN     12
-#define Z_PRIORITY_FLASHROM 13
-#define Z_PRIORITY_PADMGR   15
-#define Z_PRIORITY_SCHED    16
-#define Z_PRIORITY_DMAMGR   17
-#define Z_PRIORITY_IRQMGR   18
-
-typedef enum {
-    /* -1 */ EQUIP_SLOT_NONE = -1,
-    /*  0 */ EQUIP_SLOT_B,
-    /*  1 */ EQUIP_SLOT_C_LEFT,
-    /*  2 */ EQUIP_SLOT_C_DOWN,
-    /*  3 */ EQUIP_SLOT_C_RIGHT,
-    /*  4 */ EQUIP_SLOT_A
-} EquipSlot;
-
-typedef struct {
-    /* 0x0 */ s8 segment;
-    /* 0x2 */ s16 type;
-    /* 0x4 */ void* params;
-} AnimatedMaterial; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-    /* 0x6 */ s16   unk_06;
-    /* 0x8 */ Gfx*  opa;
-    /* 0xC */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u8    type;
-    /* 0x1 */ u8    num; // number of dlist entries
-    /* 0x4 */ void* start;
-    /* 0x8 */ void* end;
-} PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u32 resetting;
-    /* 0x04 */ u32 resetCount;
-    /* 0x08 */ OSTime duration;
-    /* 0x10 */ OSTime resetTime;
-} NmiBuff; // size >= 0x18
 
 typedef struct {
     /* 0x00 */ s32 requestType;
@@ -159,14 +106,6 @@ typedef struct {
     /* 0x35 */ u8 osSyncPrintfEnabled;
     /* 0x38 */ FaultDrawerCallback inputCallback;
 } FaultDrawer; // size = 0x3C
-
-typedef struct {
-    /* 0x00 */ u8 countdown;
-    /* 0x01 */ u8 playSfxEachFrame;
-    /* 0x02 */ u16 sfxId;
-    /* 0x04 */ Vec3f worldPos;
-    /* 0x10 */ Vec3f projectedPos;
-} SoundSource; // size = 0x1C
 
 typedef void(*fault_update_input_func)(Input* input);
 
@@ -273,45 +212,45 @@ typedef struct {
     /* 0x00 */ u16 unk_0;
     /* 0x02 */ u16 sceneTimeSpeed;
     /* 0x04 */ Vec3f sunPos;
-    /* 0x10 */ u8 unk_10;
-    /* 0x11 */ u8 unk_11;
+    /* 0x10 */ u8 skybox1Index;
+    /* 0x11 */ u8 skybox2Index;
     /* 0x12 */ u8 unk_12;
-    /* 0x13 */ u8 unk_13;
+    /* 0x13 */ u8 skyboxBlend;
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 skyboxDisabled;
     /* 0x16 */ u8 sunMoonDisabled;
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u16 unk_1A;
+    /* 0x17 */ u8 skyboxConfig;
+    /* 0x18 */ u8 changeSkyboxNextConfig;
+    /* 0x19 */ u8 changeSkyboxState;
+    /* 0x1A */ u16 changeSkyboxTimer;
     /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ u8 unk_1F;
-    /* 0x20 */ u8 unk_20;
-    /* 0x21 */ u8 unk_21;
-    /* 0x22 */ u16 unk_22;
-    /* 0x24 */ u16 unk_24;
+    /* 0x1E */ u8 lightMode;
+    /* 0x1F */ u8 lightConfig;
+    /* 0x20 */ u8 changeLightNextConfig;
+    /* 0x21 */ u8 changeLightEnabled;
+    /* 0x22 */ u16 changeLightTimer;
+    /* 0x24 */ u16 changeDuration;
     /* 0x26 */ u8 unk_26;
     /* 0x28 */ LightInfo dirLight1; // sun 1
     /* 0x36 */ LightInfo unk_36; // sun 2
-    /* 0x44 */ s8 unk_44;
-    /* 0x48 */ DmaRequest unk_48;
-    /* 0x68 */ OSMesgQueue unk_68;
-    /* 0x80 */ OSMesg unk_80;
-    /* 0x84 */ f32 unk_84;
-    /* 0x88 */ f32 unk_88;
+    /* 0x44 */ s8 skyboxDmaState;
+    /* 0x48 */ DmaRequest dmaRequest;
+    /* 0x68 */ OSMesgQueue loadQueue;
+    /* 0x80 */ OSMesg loadMsg;
+    /* 0x84 */ f32 glareAlpha;
+    /* 0x88 */ f32 lensFlareAlphaScale;
     /* 0x8C */ EnvLightSettings lightSettings;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ Vec3s windDir;
     /* 0xB4 */ f32 windSpeed;
     /* 0xB8 */ u8 numLightSettings;
     /* 0xBC */ LightSettings* lightSettingsList;
-    /* 0xC0 */ u8 unk_C0;
-    /* 0xC1 */ u8 unk_C1;
-    /* 0xC2 */ u8 unk_C2;
+    /* 0xC0 */ u8 lightBlendEnabled;
+    /* 0xC1 */ u8 lightSetting;
+    /* 0xC2 */ u8 prevLightSetting;
     /* 0xC3 */ u8 lightSettingOverride;
     /* 0xC4 */ LightSettings unk_C4;
-    /* 0xDA */ u16 unk_DA;
+    /* 0xDA */ u16 lightBlendRateOverride;
     /* 0xDC */ f32 lightBlend;
     /* 0xE0 */ u8 unk_E0;
     /* 0xE1 */ u8 unk_E1;
@@ -407,76 +346,7 @@ typedef struct {
     /* 0x844 */ void* fb;
 } FaultThreadStruct; // size = 0x848
 
-struct GameState;
-
-typedef void (*GameStateFunc)(struct GameState* gameState);
-
-typedef struct {
-    /* 0x00 */ void*         loadedRamAddr;
-    /* 0x04 */ uintptr_t     vromStart; // if applicable
-    /* 0x08 */ uintptr_t     vromEnd;   // if applicable
-    /* 0x0C */ void*         vramStart; // if applicable
-    /* 0x10 */ void*         vramEnd;   // if applicable
-    /* 0x14 */ UNK_PTR       unk_14;
-    /* 0x18 */ GameStateFunc init;    // initializes and executes the given context
-    /* 0x1C */ GameStateFunc destroy; // deconstructs the context, and sets the next context to load
-    /* 0x20 */ UNK_PTR       unk_20;
-    /* 0x24 */ UNK_PTR       unk_24;
-    /* 0x28 */ UNK_TYPE      unk_28;
-    /* 0x2C */ size_t        instanceSize;
-} GameStateOverlay; // size = 0x30
-
-typedef struct GameAllocEntry {
-    /* 0x0 */ struct GameAllocEntry* next;
-    /* 0x4 */ struct GameAllocEntry* prev;
-    /* 0x8 */ size_t size;
-    /* 0xC */ u32 unk_0C;
-} GameAllocEntry; // size = 0x10
-
-typedef struct GameAlloc {
-    /* 0x00 */ GameAllocEntry base;
-    /* 0x10 */ GameAllocEntry* head;
-} GameAlloc; // size = 0x14
-
-typedef struct GameState {
-    /* 0x00 */ GraphicsContext* gfxCtx;
-    /* 0x04 */ GameStateFunc main;
-    /* 0x08 */ GameStateFunc destroy;
-    /* 0x0C */ GameStateFunc init; // Usually the current game state's init, though after stopping, the graph thread will look here to determine the next game state to load.
-    /* 0x10 */ size_t size;
-    /* 0x14 */ Input input[MAXCONTROLLERS];
-    /* 0x74 */ TwoHeadArena heap;
-    /* 0x84 */ GameAlloc alloc;
-    /* 0x98 */ UNK_TYPE1 pad98[0x3];
-    /* 0x9B */ u8 running; // If 0, switch to next game state
-    /* 0x9C */ u32 frames;
-    /* 0xA0 */ u8 padA0[0x2];
-    /* 0xA2 */ u8 framerateDivisor; // game speed?
-    /* 0xA3 */ u8 unk_A3;
-} GameState; // size = 0xA4
-
 struct PlayState;
-
-typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
-typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
-typedef struct {
-    /* 0x000 */ IrqMgr* irqMgr;
-    /* 0x004 */ SchedContext* sched;
-    /* 0x008 */ OSScTask audioTask;
-    /* 0x060 */ AudioTask* rspTask;
-    /* 0x064 */ OSMesgQueue interruptMsgQ;
-    /* 0x07C */ OSMesg interruptMsgBuf[30];
-    /* 0x0F4 */ OSMesgQueue cmdQ;
-    /* 0x10C */ OSMesg cmdMsgBuf[1];
-    /* 0x110 */ OSMesgQueue lockMsgQ;
-    /* 0x128 */ OSMesg lockMsgBuf[1];
-    /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
-    /* 0x130 */ OSThread thread;
-} AudioMgr; // size = 0x2E0
 
 typedef struct {
     /* 0x0 */ u8   seqId;
@@ -502,7 +372,7 @@ typedef struct PlayState {
     /* 0x00830 */ CollisionContext colCtx;
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
-    /* 0x01F78 */ SoundSource soundSources[16];
+    /* 0x01F78 */ SoundSource soundSources[SOUND_SOURCE_COUNT];
     /* 0x02138 */ EffFootmark footprintInfo[100];
     /* 0x046B8 */ SramContext sramCtx;
     /* 0x046E0 */ SkyboxContext skyboxCtx;
@@ -576,26 +446,6 @@ typedef struct PlayState {
     /* 0x18E6C */ char unk_18E6C[0x3EC];
 } PlayState; // size = 0x19258
 
-typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ char unk_01[0x3F];
-    /* 0x40 */ void* unk_40;
-    /* 0x44 */ u32 unk_44;
-    /* 0x48 */ u32 unk_48;
-    /* 0x4C */ DmaRequest unk_4C;
-    /* 0x6C */ OSMesgQueue unk_6C;
-    /* 0x84 */ OSMesg unk_84[1];
-    /* 0x88 */ void* unk_88;
-    /* 0x8C */ uintptr_t unk_8C;
-    /* 0x90 */ size_t unk_90;
-    /* 0x94 */ s32 unk_94;
-    /* 0x98 */ s32 unk_98;
-    /* 0x9C */ s32 unk_9C;
-    /* 0xA0 */ char unk_A0[0x4];
-    /* 0xA4 */ s32 unk_A4;
-    /* 0xA8 */ s32 unk_A8;
-} BombersNotebook; // size = 0xAC
-
 typedef enum {
     /* 0 */ PICTO_PHOTO_STATE_OFF,
     /* 1 */ PICTO_PHOTO_STATE_SETUP,
@@ -634,11 +484,6 @@ typedef struct {
     /* 0x14 */ Gfx* dList;
 } VisMono; // size = 0x18
 
-typedef struct {
-    /* 0x0 */ u8* value;
-    /* 0x4 */ const char* name;
-} FlagSetEntry; // size = 0x8
-
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
 #define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
@@ -657,7 +502,7 @@ typedef struct {
 #define FLASHROM_REQUEST_WRITE 1
 #define FLASHROM_REQUEST_READ 2
 
-enum fram_command {
+typedef enum FramCommand {
     /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
        Initializes fram to 0xFF in FRAM_MODE_ERASE
        Writes Contents in FLASHRAM_MODE_WRITE
@@ -681,15 +526,15 @@ enum fram_command {
     FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
     /* unk */
     FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
-};
+} FramCommand;
 
-enum fram_mode {
-    FRAM_MODE_NOP = 0,
-    FRAM_MODE_ERASE,
-    FRAM_MODE_WRITE,
-    FRAM_MODE_READ,
-    FRAM_MODE_STATUS
-};
+typedef enum FramMode {
+    /* 0 */ FRAM_MODE_NOP,
+    /* 1 */ FRAM_MODE_ERASE,
+    /* 2 */ FRAM_MODE_WRITE,
+    /* 3 */ FRAM_MODE_READ,
+    /* 4 */ FRAM_MODE_STATUS
+} FramMode;
 
 typedef enum {
     /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,

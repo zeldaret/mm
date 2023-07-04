@@ -335,12 +335,12 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_358) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1636;
                         this->unk_328 |= 1;
                         Message_StartTextbox(play, this->unk_33C, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         play->msgCtx.msgMode = 0x43;
                         play->msgCtx.stateTimer = 4;
                         Rupees_ChangeBy(-this->unk_358);
@@ -348,7 +348,7 @@ void func_80BCB6D0(EnScopenuts* this, PlayState* play) {
                     }
                     break;
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     if (this->unk_358 == 150) {
                         this->unk_33C = 0x1633;
                     } else {
@@ -654,7 +654,7 @@ s32 func_80BCC2AC(EnScopenuts* this, Path* path, s32 arg2_) {
         phi_f14 = sp5C[arg2 + 1].z - sp5C[arg2 - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
@@ -685,7 +685,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     EnScopenuts* this = THIS;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) &&
-        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA_OF_TIME] == ITEM_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -708,7 +708,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
             Actor_Kill(&this->actor);
         } else if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
-            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
+            this->path =
+                SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             this->actor.draw = NULL;
             this->actionFunc = func_80BCAFA8;
             this->actor.gravity = 0.0f;
@@ -717,7 +718,8 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
         }
     } else if (ENSCOPENUTS_GET_3E0(&this->actor) == ENSCOPENUTS_3E0_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_52_40)) {
-            this->path = SubS_GetPathByIndex(play, ENSCOPENUTS_GET_FC00(&this->actor), 0x3F);
+            this->path =
+                SubS_GetPathByIndex(play, ENSCOPENUTS_GET_PATH_INDEX(&this->actor), ENSCOPENUTS_PATH_INDEX_NONE);
             if (this->path == NULL) {
                 Actor_Kill(&this->actor);
             } else {
@@ -755,7 +757,7 @@ void EnScopenuts_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_328 & 8) {
-        func_800B9010(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
     }
     func_80BCAE78(this, play);
 }

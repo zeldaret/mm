@@ -21,10 +21,10 @@ EffectSsInit Effect_Ss_Stone1_InitVars = {
 };
 
 typedef struct {
-    /* 0x00 */ TexturePtr texture;
-    /* 0x04 */ Color_RGBA8 primColor;
-    /* 0x08 */ Color_RGBA8 envColor;
-} EffStoneDrawInfo;
+    /* 0x0 */ TexturePtr texture;
+    /* 0x4 */ Color_RGBA8 primColor;
+    /* 0x8 */ Color_RGBA8 envColor;
+} EffStoneDrawInfo; // size = 0xC
 
 static EffStoneDrawInfo sDrawInfo[] = {
     { gEffStone8Tex, { 200, 0, 0, 255 }, { 0, 0, 0, 255 } },

@@ -35,7 +35,7 @@ typedef enum {
     /* 0 */ DMCHAR02_ANIM_HIT_GROUND,
     /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
     /* 2 */ DMCHAR02_ANIM_JUGGLE,
-    /* 3 */ DMCHAR02_ANIM_FALL,
+    /* 3 */ DMCHAR02_ANIM_FALL
 } DmChar02Animation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -148,7 +148,7 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
     this->unk_2F0 = this->unk_2F0;
     this->actionFunc(this, play);
     if (!Actor_HasParent(&this->actor, play)) {
-        Actor_OfferGetItem(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_OCARINA_OF_TIME, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
         Actor_Kill(&this->actor);

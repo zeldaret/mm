@@ -47,7 +47,7 @@ typedef enum {
     /* 1 */ GINKO_ANIM_SITTING,
     /* 2 */ GINKO_ANIM_REACHING,
     /* 3 */ GINKO_ANIM_AMAZED,
-    /* 4 */ GINKO_ANIM_ADVERTISING,
+    /* 4 */ GINKO_ANIM_ADVERTISING
 } GinkoAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -320,22 +320,22 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
         case 0x44E: // "...So, what'll it be?
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if ((gSaveContext.save.saveInfo.bankRupees & 0xFFFF) >= 5000) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x45F, &this->actor);
                     this->curTextId = 0x45F; // bank full, cannot accept more
                 } else {
                     if (gSaveContext.save.saveInfo.playerData.rupees > 0) {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_StartTextbox(play, 0x44F, &this->actor);
                         this->curTextId = 0x44F; // "All right! so..."
                     } else {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         Message_StartTextbox(play, 0x458, &this->actor);
                         this->curTextId = 0x458; // you haven't even gotten a single rup
                     }
                 }
             } else { // GINKOMAN_CHOICE_NO
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 Message_StartTextbox(play, 0x451, &this->actor);
                 this->curTextId = 0x451; // dont say that, come on, trust me!
             }
@@ -343,12 +343,12 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
         case 0x452: // Really? are you really depositing rupees?
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.bankRupeesSelected) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                     Message_StartTextbox(play, 0x459, &this->actor);
                     this->curTextId = 0x459; // HEY you dont have that much
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     if (play->msgCtx.bankRupeesSelected >= 100) {
                         Message_StartTextbox(play, 0x455, &this->actor);
                         this->curTextId = 0x455; // You're really going to be give me that much? Rich little guy!
@@ -372,7 +372,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                         (gSaveContext.save.saveInfo.bankRupees & 0xFFFF0000);
                 }
             } else { // GINKOMAN_CHOICE_NO
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
                 if ((gSaveContext.save.saveInfo.bankRupees & 0xFFFF) == 0) {
                     Message_StartTextbox(play, 0x456, &this->actor);
@@ -385,11 +385,11 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
             break;
         case 0x468: // Deposit OR withdrawl OR cancel screen
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_CANCEL) {
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 Message_StartTextbox(play, 0x470, &this->actor);
                 this->curTextId = 0x470; // "Is that so? Come back and deposit some after saving up a bunch!"
             } else {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 this->choiceDepositWithdrawl = play->msgCtx.choiceIndex;
                 if (!this->isStampChecked) {
                     this->isStampChecked = true;
@@ -405,18 +405,18 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
             if (play->msgCtx.choiceIndex == GINKOMAN_CHOICE_YES) {
                 if ((s32)((gSaveContext.save.saveInfo.bankRupees & 0xFFFF)) <
                     ((s32)(play->msgCtx.bankRupeesSelected + this->serviceFee))) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_LEGSMACKING);
                     Message_StartTextbox(play, 0x476, &this->actor);
                     this->curTextId = 0x476; // you dont have enough deposited to withdrawl
                 } else if (CUR_CAPACITY(UPG_WALLET) <
                            (play->msgCtx.bankRupeesSelected + gSaveContext.save.saveInfo.playerData.rupees)) {
                     // check if wallet is big enough
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x475, &this->actor);
                     this->curTextId = 0x475; // You can't hold that many in your wallet
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     if (play->msgCtx.bankRupeesSelected >= 100) {
                         Message_StartTextbox(play, 0x474, &this->actor);
                         this->curTextId = 0x474; // Aw, you're taking out all that?
@@ -436,7 +436,7 @@ void EnGinkoMan_WaitForDialogueInput(EnGinkoMan* this, PlayState* play) {
                     Rupees_ChangeBy(play->msgCtx.bankRupeesSelected);
                 }
             } else {
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 Message_StartTextbox(play, 0x47C, &this->actor);
                 this->curTextId = 0x47C; // "Is that so? Think it over, little guy! So what are you gonna do?"
             }

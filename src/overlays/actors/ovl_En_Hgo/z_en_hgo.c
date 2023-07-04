@@ -45,7 +45,7 @@ typedef enum {
     /* 3 */ HGO_ANIM_CONSOLE,
     /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
     /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
-    /* 6 */ HGO_ANIM_TOSS,
+    /* 6 */ HGO_ANIM_TOSS
 } HgoAnimation;
 
 ActorInit En_Hgo_InitVars = {
@@ -317,8 +317,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
                 case HGO_ANIM_ASTONISHED:
-                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-                        (this->isInCutscene == false)) {
+                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && !this->isInCutscene) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.scriptIndex == 2) || (play->csCtx.scriptIndex == 4))) {

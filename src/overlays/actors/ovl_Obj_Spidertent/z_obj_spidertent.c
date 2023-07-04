@@ -234,7 +234,7 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-} ObjSpidertentStruct;
+} ObjSpidertentStruct; // size = 0x28
 
 ObjSpidertentStruct D_80B31350[] = {
     {
@@ -272,7 +272,7 @@ typedef struct {
     /* 0x0F */ s8 unk_0F;
     /* 0x10 */ Color_RGBA8 unk_10;
     /* 0x14 */ Color_RGBA8 unk_14;
-} ObjSpidertentStruct2;
+} ObjSpidertentStruct2; // size = 0x18
 
 ObjSpidertentStruct2 D_80B313A0[] = {
     {
@@ -529,7 +529,7 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
     Vec3f sp58;
     f32 sp54;
 
-    if (player->heldItemAction == PLAYER_IA_STICK) {
+    if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
         if (player->unk_B28 > 0) {
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
                 triNorm = &this->collider.elements[i].dim;

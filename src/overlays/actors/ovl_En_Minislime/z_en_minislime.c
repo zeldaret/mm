@@ -80,7 +80,7 @@ typedef enum {
     /* 0x2 */ MINISLIME_DMGEFF_FIRE = 0x2,
     /* 0x3 */ MINISLIME_DMGEFF_ICE,
     /* 0xE */ MINISLIME_DMGEFF_HOOKSHOT = 0xE,
-    /* 0xF */ MINISLIME_DMGEFF_BREAK_ICE,
+    /* 0xF */ MINISLIME_DMGEFF_BREAK_ICE
 } MinislimeDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -209,11 +209,11 @@ void EnMinislime_AddIceSmokeEffect(EnMinislime* this, PlayState* play) {
     Vec3f pos;
     Vec3f vel;
 
-    pos.x = (randPlusMinusPoint5Scaled(200.0f) * this->actor.scale.x) + this->actor.world.pos.x;
+    pos.x = (Rand_CenteredFloat(200.0f) * this->actor.scale.x) + this->actor.world.pos.x;
     pos.y = CLAMP_MIN(this->actor.world.pos.y, GBT_ROOM_5_MIN_Y + 30.0f);
-    pos.z = (randPlusMinusPoint5Scaled(200.0f) * this->actor.scale.z) + this->actor.world.pos.z;
-    vel.x = randPlusMinusPoint5Scaled(1.5f);
-    vel.z = randPlusMinusPoint5Scaled(1.5f);
+    pos.z = (Rand_CenteredFloat(200.0f) * this->actor.scale.z) + this->actor.world.pos.z;
+    vel.x = Rand_CenteredFloat(1.5f);
+    vel.z = Rand_CenteredFloat(1.5f);
     vel.y = 2.0f;
     EffectSsIceSmoke_Spawn(play, &pos, &vel, &gZeroVec3f, 500);
 }
@@ -313,7 +313,7 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
 
     if (this->frozenTimer == 80) {
         this->frozenAlpha += 10;
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         if (this->frozenAlpha >= 200) {
             this->frozenAlpha = 200;
             this->frozenTimer--;
@@ -371,7 +371,7 @@ void EnMinislime_FireArrowDamage(EnMinislime* this, PlayState* play) {
         this->frozenAlpha = 10 * this->meltTimer;
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     if (this->meltTimer == 0) {
         EnMinislime_SetupIdle(this);
     }
@@ -401,8 +401,8 @@ void EnMinislime_GrowAndShrink(EnMinislime* this, PlayState* play) {
     this->growShrinkTimer--;
     scaleFactor = (this->growShrinkTimer / 6) + 1.0f;
     this->actor.scale.z = this->actor.scale.x =
-        ((cos_rad(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * (2.0f / 30.0f))) + 1.5f) * 0.1f;
-    this->actor.scale.y = ((sin_rad(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * 0.05f)) + 0.75f) * 0.1f;
+        ((Math_CosF(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * (2.0f / 30.0f))) + 1.5f) * 0.1f;
+    this->actor.scale.y = ((Math_SinF(this->growShrinkTimer * (M_PI / 3)) * (scaleFactor * 0.05f)) + 0.75f) * 0.1f;
     if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
         EnMinislime_SetupMoveToGekko(this);
     } else if ((this->actor.xzDistToPlayer < 150.0f) && (this->growShrinkTimer < 38)) {
@@ -424,11 +424,12 @@ void EnMinislime_Idle(EnMinislime* this, PlayState* play) {
     f32 speedXZ;
 
     this->idleTimer--;
-    speedXZ = sin_rad(this->idleTimer * (M_PI / 10));
+    speedXZ = Math_SinF(this->idleTimer * (M_PI / 10));
     this->actor.speed = speedXZ * 1.5f;
     this->actor.speed = CLAMP_MIN(this->actor.speed, 0.0f);
     Math_StepToF(&this->actor.scale.x, ((0.14f * speedXZ) + 1.5f) * 0.1f, 0.010000001f);
-    Math_StepToF(&this->actor.scale.y, ((cos_rad(this->idleTimer * (M_PI / 10)) * 0.07f) + 0.75f) * 0.1f, 0.010000001f);
+    Math_StepToF(&this->actor.scale.y, ((Math_CosF(this->idleTimer * (M_PI / 10)) * 0.07f) + 0.75f) * 0.1f,
+                 0.010000001f);
     Math_StepToF(&this->actor.scale.z, 0.3f - this->actor.scale.x, 0.010000001f);
     if (this->idleTimer == 0) {
         if (this->actor.xzDistToPlayer < 300.0f) {
@@ -537,13 +538,13 @@ void EnMinislime_Knockback(EnMinislime* this, PlayState* play) {
     this->knockbackTimer--;
     Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     sqrtFrozenTimer = sqrtf(this->knockbackTimer);
-    this->actor.scale.x = ((cos_rad(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.15f;
+    this->actor.scale.x = ((Math_CosF(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.15f;
     this->actor.scale.z = this->actor.scale.x;
     if (this->knockbackTimer == 15) {
         this->collider.base.acFlags |= AC_ON;
     }
 
-    this->actor.scale.y = ((sin_rad(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.075f;
+    this->actor.scale.y = ((Math_SinF(this->knockbackTimer * (M_PI / 3)) * (0.05f * sqrtFrozenTimer)) + 1.0f) * 0.075f;
     if (this->actor.params == MINISLIME_SETUP_GEKKO_THROW) {
         EnMinislime_SetupMoveToGekko(this);
     } else if (this->knockbackTimer == 0) {
@@ -575,9 +576,10 @@ void EnMinislime_DefeatIdle(EnMinislime* this, PlayState* play) {
     f32 xzScale;
 
     this->idleTimer--;
-    xzScale = sin_rad(this->idleTimer * (M_PI / 10));
+    xzScale = Math_SinF(this->idleTimer * (M_PI / 10));
     Math_StepToF(&this->actor.scale.x, ((0.14f * xzScale) + 1.5f) * 0.1f, 0.010000001f);
-    Math_StepToF(&this->actor.scale.y, ((0.07f * cos_rad(this->idleTimer * (M_PI / 10))) + 0.75f) * 0.1f, 0.010000001f);
+    Math_StepToF(&this->actor.scale.y, ((0.07f * Math_CosF(this->idleTimer * (M_PI / 10))) + 0.75f) * 0.1f,
+                 0.010000001f);
     Math_StepToF(&this->actor.scale.z, 0.3f - this->actor.scale.x, 0.010000001f);
     if (this->idleTimer == 0) {
         this->idleTimer = 20;
@@ -603,7 +605,7 @@ void EnMinislime_DefeatMelt(EnMinislime* this, PlayState* play) {
         EnMinislime_AddIceSmokeEffect(this, play);
     }
 
-    func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     if (Math_StepToF(&this->actor.scale.y, 0.001f, 0.00075f)) {
         if ((this->actor.shape.shadowAlpha - 4) <= 0) {
             this->actor.shape.shadowAlpha = 0;
@@ -670,9 +672,9 @@ void EnMinislime_GekkoThrow(EnMinislime* this, PlayState* play) {
     f32 xzScale;
 
     this->throwTimer--;
-    xzScale = sin_rad(this->throwTimer * (M_PI / 5));
+    xzScale = Math_SinF(this->throwTimer * (M_PI / 5));
     this->actor.scale.x = ((0.3f * xzScale) + 1.5f) * 0.1f;
-    this->actor.scale.y = ((cos_rad(this->throwTimer * (M_PI / 5)) * 0.2f) + 0.75f) * 0.1f;
+    this->actor.scale.y = ((Math_CosF(this->throwTimer * (M_PI / 5)) * 0.2f) + 0.75f) * 0.1f;
     this->actor.scale.z = 0.3f - this->actor.scale.x;
     if (this->throwTimer == 0) {
         this->throwTimer = 10;

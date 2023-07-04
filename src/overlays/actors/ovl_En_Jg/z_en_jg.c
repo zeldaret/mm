@@ -54,14 +54,14 @@ typedef enum {
     /* 16 */ EN_JG_ANIM_DEPRESSED,
     /* 17 */ EN_JG_ANIM_CUTSCENE_IDLE,
     /* 18 */ EN_JG_ANIM_CRADLE,
-    /* 19 */ EN_JG_ANIM_MAX,
+    /* 19 */ EN_JG_ANIM_MAX
 } EnJgAnimation;
 
 typedef enum {
-    /* 0x0 */ EN_JG_ACTION_FIRST_THAW,
-    /* 0x1 */ EN_JG_ACTION_SPAWNING,
-    /* 0x2 */ EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW,
-    /* 0x3 */ EN_JG_ACTION_LULLABY_INTRO_CS,
+    /* 0 */ EN_JG_ACTION_FIRST_THAW,
+    /* 1 */ EN_JG_ACTION_SPAWNING,
+    /* 2 */ EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW,
+    /* 3 */ EN_JG_ACTION_LULLABY_INTRO_CS
 } EnJgAction;
 
 ActorInit En_Jg_InitVars = {
@@ -242,7 +242,7 @@ s32 EnJg_ReachedPoint(EnJg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -693,9 +693,9 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
 
         if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {
             if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
-                Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
+                Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
             } else if (Animation_OnFrame(&this->skelAnime, 38.0f)) {
-                Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_OBJECT_SLIDE);
+                Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_OBJECT_SLIDE);
             }
         }
     } else {
@@ -928,7 +928,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         if ((this->freezeTimer <= 0) && (currentFrame == lastFrame)) {
             this->animIndex = EN_JG_ANIM_FROZEN_START;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
-            Audio_PlaySfxAtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
+            Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
             this->actionFunc = EnJg_Freeze;
         }
     }
@@ -957,7 +957,7 @@ void EnJg_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnJg_LullabyIntroCutsceneAction;
         } else {
             // This is the elder that appears in Mountain Village or the Path to Goron Village in winter.
-            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH(thisx), 0x3F);
+            this->path = SubS_GetPathByIndex(play, EN_JG_GET_PATH_INDEX(thisx), EN_JG_PATH_INDEX_NONE);
             this->animIndex = EN_JG_ANIM_SURPRISE_START;
             this->action = EN_JG_ACTION_SPAWNING;
             this->freezeTimer = 1000;

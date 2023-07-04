@@ -56,8 +56,8 @@ s32 func_80BC3980(BgF40Block* this, PlayState* play) {
     this->unk_160 = 0;
     this->unk_164 = 0;
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
-        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
+    if (BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor) != BGF40BLOCK_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
 
@@ -78,8 +78,8 @@ s32 func_80BC3A2C(BgF40Block* this, PlayState* play) {
     this->unk_160 = this->path->count - 1;
     this->unk_164 = this->path->count - 1;
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
-        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
+    if (BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor) != BGF40BLOCK_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor)];
         if (this->path != NULL) {
             points = Lib_SegmentedToVirtual(this->path->points);
             points += this->unk_164;
@@ -231,8 +231,8 @@ void BgF40Block_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gStoneTowerBlockCol);
 
-    if (BGF40BLOCK_GET_PATH(&this->dyna.actor) != 0x3F) {
-        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH(&this->dyna.actor)];
+    if (BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor) != BGF40BLOCK_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[BGF40BLOCK_GET_PATH_INDEX(&this->dyna.actor)];
     } else {
         this->path = NULL;
     }
@@ -292,17 +292,17 @@ void func_80BC4228(BgF40Block* this, PlayState* play) {
     switch (this->unk_168) {
         case 0:
         case 3:
-            func_800B9010(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_X - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_X - SFX_FLAG);
             break;
 
         case 1:
         case 4:
-            func_800B9010(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Y - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Y - SFX_FLAG);
             break;
 
         case 2:
         case 5:
-            func_800B9010(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Z - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_IKANA_BLOCK_MOVE_Z - SFX_FLAG);
             break;
     }
 }

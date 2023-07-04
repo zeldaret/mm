@@ -67,8 +67,7 @@ void FireObj_StepSize(FireObj* fire) {
         if (Math_StepToF(&fire->dynamicSize, 1.0f, fire->dynamicSizeStep)) {
             FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_FULLY_LIT);
         }
-    } else if ((fire->state == FIRE_STATE_SHRINKING) &&
-               (Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep))) {
+    } else if ((fire->state == FIRE_STATE_SHRINKING) && Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
     if (fire->sizeGrowsCos2 == 1) {
@@ -113,7 +112,7 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
         (waterY - fire->position.y > 6500.0f * fire->yScale)) {
         FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
-    if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_STICK)) {
+    if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_DEKU_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
         if (Math3D_LengthSquared(&dist) < SQ(20.0f)) {
             sp40 = true;
@@ -142,6 +141,7 @@ void FireObj_Draw(PlayState* play, FireObj* fire) {
         Vec3s vec;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (fire->timer * -20) % 512U, 32, 128));

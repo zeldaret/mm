@@ -50,14 +50,14 @@ typedef enum {
     /* 2 */ EN_AOB01_ANIM_LAUGH_LOOP,
     /* 3 */ EN_AOB01_ANIM_SURPRISE_START,
     /* 4 */ EN_AOB01_ANIM_SURPRISE_LOOP,
-    /* 5 */ EN_AOB01_ANIM_IDLE_2,
+    /* 5 */ EN_AOB01_ANIM_IDLE_2
 } EnAob01Animation;
 
 typedef enum {
     /* 0 */ EN_AOB01_EYE_OPEN,
     /* 1 */ EN_AOB01_EYE_HALF,
     /* 2 */ EN_AOB01_EYE_CLOSED,
-    /* 3 */ EN_AOB01_EYE_MAX,
+    /* 3 */ EN_AOB01_EYE_MAX
 } EnAob01EyeTexture;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -134,12 +134,12 @@ void EnAob01_InitializeDogPaths(EnAob01* this, PlayState* play) {
     s32 pathIndex = ENAOB01_GET_STARTING_DOG_PATH_INDEX(&this->actor);
     s16 i = 0;
 
-    if (pathIndex != 0x3F) {
+    if (pathIndex != ENAOB01_PATH_INDEX_NONE) {
         do {
-            this->dogPaths[i] = SubS_GetPathByIndex(play, pathIndex, 0x3F);
-            pathIndex = this->dogPaths[i]->unk1;
+            this->dogPaths[i] = SubS_GetPathByIndex(play, pathIndex, ENAOB01_PATH_INDEX_NONE);
+            pathIndex = this->dogPaths[i]->additionalPathIndex;
             i++;
-        } while (pathIndex != 0xFF);
+        } while (pathIndex != ADDITIONAL_PATH_INDEX_NONE);
     }
 }
 
@@ -153,7 +153,7 @@ void EnAob01_SpawnDogs(EnAob01* this, PlayState* play) {
     EnAob01_InitializeDogPaths(this, play);
 
     for (i = 0; i < RACEDOG_COUNT; i++) {
-        enDgParams = ENDG_PARAMS(this->dogPaths[sDogInfo[i].pathIndex]->unk1, i);
+        enDgParams = ENDG_PARAMS(this->dogPaths[sDogInfo[i].pathIndex]->additionalPathIndex, i);
 
         this->dogs[i] = Actor_SpawnAsChildAndCutscene(
             &play->actorCtx, play, ACTOR_EN_DG, sDogInfo[i].pos.x, sDogInfo[i].pos.y, sDogInfo[i].pos.z, 0,
@@ -496,11 +496,11 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->textId = 0x3524; // You can't play if you can't pay!
                         Message_StartTextbox(play, this->textId, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->stateFlags |= ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG;
                         this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
                         this->textId = 0x3522; // Bring me the fastest dog!
@@ -510,7 +510,7 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->textId = 0x3535; // Really?
                     Message_StartTextbox(play, this->textId, &this->actor);
                     break;
@@ -655,13 +655,13 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
             this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->stateFlags |= ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                     EnAob01_BeforeRace_HandleConversation(this, play);
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnAob01_BeforeRace_HandleConversation(this, play);
                     break;
             }

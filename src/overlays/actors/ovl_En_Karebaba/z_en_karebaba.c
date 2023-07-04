@@ -93,11 +93,11 @@ static ColliderCylinderInit sAttackCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 80, MASS_HEAVY };
 
 typedef enum {
-    /* 0x0 */ KAREBABA_DMGEFF_NONE,
-    /* 0x2 */ KAREBABA_DMGEFF_FIRE = 2,
-    /* 0x3 */ KAREBABA_DMGEFF_ICE,
-    /* 0x4 */ KAREBABA_DMGEFF_LIGHT,
-    /* 0x5 */ KAREBABA_DMGEFF_ELECTRIC,
+    /* 0 */ KAREBABA_DMGEFF_NONE,
+    /* 2 */ KAREBABA_DMGEFF_FIRE = 2,
+    /* 3 */ KAREBABA_DMGEFF_ICE,
+    /* 4 */ KAREBABA_DMGEFF_LIGHT,
+    /* 5 */ KAREBABA_DMGEFF_ELECTRIC
 } DekuBabaDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -466,7 +466,7 @@ void EnKarebaba_ShrinkDie(EnKarebaba* this, PlayState* play) {
         }
     } else {
         if (Math_StepToF(&this->actor.scale.x, 0.0f, 0.0005f)) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             EnKarebaba_SetupDead(this);
         } else {
             EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 1, HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -499,7 +499,7 @@ void EnKarebaba_DeadItemDrop(EnKarebaba* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play) || (this->timer == 0)) {
         EnKarebaba_SetupDead(this);
     } else {
-        Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
+        Actor_OfferGetItemNearby(&this->actor, play, GI_DEKU_STICKS_1);
     }
 }
 
@@ -595,7 +595,7 @@ void EnKarebaba_Update(Actor* thisx, PlayState* play2) {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.75f / 40)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 

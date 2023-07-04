@@ -30,7 +30,7 @@ typedef enum {
     /* 2 */ ENZOD_ANIM_ARMS_FOLDED,
     /* 3 */ ENZOD_ANIM_PLAYING_LENTO,
     /* 4 */ ENZOD_ANIM_PLAYING_ANDANTINO,
-    /* 5 */ ENZOD_ANIM_MAX,
+    /* 5 */ ENZOD_ANIM_MAX
 } EnZodAnimation;
 
 typedef enum {
@@ -42,7 +42,7 @@ typedef enum {
     /* 6 */ ENZOD_INSTRUMENT_DRUM_3,
     /* 7 */ ENZOD_INSTRUMENT_DRUM_4,
     /* 8 */ ENZOD_INSTRUMENT_DRUM_5,
-    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM,
+    /* 9 */ ENZOD_INSTRUMENT_BASS_DRUM
 } EnZodInstrument;
 
 const ActorInit En_Zod_InitVars = {
@@ -315,12 +315,12 @@ void func_80BAF7CC(EnZod* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x121F)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x1220);
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1223);
                         break;
                 }
@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, 0x44);
+        func_800B7298(play, NULL, PLAYER_CSMODE_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {

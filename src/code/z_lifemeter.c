@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "interface/parameter_static/parameter_static.h"
@@ -16,14 +17,14 @@ s16 sBeatingHeartsDDEnv[3];
 s16 sHeartsDDPrim[2][3];
 s16 sHeartsDDEnv[2][3];
 
-TexturePtr HeartTextures[] = {
+static TexturePtr sHeartTextures[] = {
     gHeartFullTex,         gHeartQuarterTex,      gHeartQuarterTex,      gHeartQuarterTex,
     gHeartQuarterTex,      gHeartQuarterTex,      gHeartHalfTex,         gHeartHalfTex,
     gHeartHalfTex,         gHeartHalfTex,         gHeartHalfTex,         gHeartThreeQuarterTex,
     gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex, gHeartThreeQuarterTex,
 };
 
-TexturePtr HeartDDTextures[] = {
+static TexturePtr sHeartDDTextures[] = {
     gDefenseHeartFullTex,         gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,      gDefenseHeartQuarterTex,
     gDefenseHeartHalfTex,         gDefenseHeartHalfTex,         gDefenseHeartHalfTex,
@@ -283,7 +284,7 @@ void LifeMeter_Draw(PlayState* play) {
             if (i < fullHeartCount) {
                 heartTex = gHeartFullTex;
             } else if (i == fullHeartCount) {
-                heartTex = HeartTextures[fractionHeartCount];
+                heartTex = sHeartTextures[fractionHeartCount];
             } else {
                 heartTex = gHeartEmptyTex;
             }
@@ -323,7 +324,7 @@ void LifeMeter_Draw(PlayState* play) {
             if (i < fullHeartCount) {
                 heartTex = gDefenseHeartFullTex;
             } else if (i == fullHeartCount) {
-                heartTex = HeartDDTextures[fractionHeartCount];
+                heartTex = sHeartDDTextures[fractionHeartCount];
             } else {
                 heartTex = gDefenseHeartEmptyTex;
             }
@@ -407,7 +408,7 @@ void LifeMeter_UpdateSizeAndBeep(PlayState* play) {
             interfaceCtx->lifeSizeChangeDirection = 0;
             if (!Player_InCsMode(play) && (play->pauseCtx.state == PAUSE_STATE_OFF) &&
                 (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE) && LifeMeter_IsCritical() && !Play_InCsMode(play)) {
-                play_sound(NA_SE_SY_HITPOINT_ALARM);
+                Audio_PlaySfx(NA_SE_SY_HITPOINT_ALARM);
             }
         }
     } else {

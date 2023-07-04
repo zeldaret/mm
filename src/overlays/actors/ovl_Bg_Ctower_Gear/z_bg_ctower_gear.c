@@ -153,7 +153,7 @@ void BgCtowerGear_Update(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.x -= 0x1F4;
     } else if (type == BGCTOWERGEAR_CENTER_COG) {
         this->dyna.actor.shape.rot.y += 0x1F4;
-        func_800B9010(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     } else if (type == BGCTOWERGEAR_WATER_WHEEL) {
         this->dyna.actor.shape.rot.z -= 0x1F4;
         BgCtowerGear_Splash(this, play);
@@ -191,11 +191,13 @@ void BgCtowerGear_Draw(Actor* thisx, PlayState* play) {
 
 void BgCtowerGear_DrawOrgan(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gClockTowerOrganDL);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gClockTowerOrganPipesDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

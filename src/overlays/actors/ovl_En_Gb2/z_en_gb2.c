@@ -408,19 +408,19 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_26E = 0x14D7;
                         this->unk_26C |= 2;
                         Message_StartTextbox(play, this->unk_26E, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_26E = 0x14D8;
                         Message_StartTextbox(play, this->unk_26E, &this->actor);
                     }
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_26E = 0x14D6;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -429,7 +429,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
         } else if (this->unk_26E == 0x14DA) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
@@ -438,7 +438,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_26E = 0x14DB;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -576,12 +576,12 @@ void func_80B10634(EnGb2* this, PlayState* play) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     this->unk_26E = 0x14D7;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
@@ -591,7 +591,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 break;
 
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->unk_26E = 0x14E3;
                 this->unk_26C |= 2;
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -615,24 +615,24 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10924(EnGb2* this, PlayState* play) {
-    s32 sp24;
+    s32 getItemId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
-        sp24 = 5;
+        getItemId = GI_RUPEE_PURPLE;
     } else {
-        sp24 = 12;
+        getItemId = GI_HEART_PIECE;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (sp24 == 12) {
+        if (getItemId == GI_HEART_PIECE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
         } else {
             Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 

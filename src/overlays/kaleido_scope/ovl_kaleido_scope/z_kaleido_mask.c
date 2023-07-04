@@ -546,7 +546,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                             ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
                              (sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
                               BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)))) {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
@@ -555,7 +555,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                             ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
                              (sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
                               BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)))) {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
@@ -564,7 +564,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                             ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
                              (sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
                               BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)))) {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                     }
@@ -573,7 +573,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                         (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE) &&
                         ((cursorSlot == (SLOT_MASK_DEKU - ITEM_NUM_SLOTS)) ||
                          (cursorSlot == (SLOT_MASK_GORON - ITEM_NUM_SLOTS)))) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         return;
                     }
 
@@ -596,7 +596,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     sMaskEquipMagicArrowSlotHoldTimer = 0;
                     sMaskEquipState = EQUIP_STATE_MOVE_TO_C_BTN;
                     sMaskEquipAnimTimer = 10;
-                    play_sound(NA_SE_SY_DECIDE);
+                    Audio_PlaySfx(NA_SE_SY_DECIDE);
                 } else if ((pauseCtx->debugEditor == DEBUG_EDITOR_NONE) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
                            (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
                            CHECK_BTN_ALL(input->press.button, BTN_A) && (msgCtx->msgLength == 0)) {
@@ -614,7 +614,7 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
         }
 
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MASK]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if ((pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_MASK) && (pauseCtx->pageIndex == PAUSE_MASK)) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_YELLOW;
@@ -647,13 +647,13 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
         sMaskEquipMagicArrowBowSlotHoldTimer--;
 
         if (sMaskEquipMagicArrowBowSlotHoldTimer == 0) {
-            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_FIRE;
             pauseCtx->equipTargetSlot = SLOT_BOW;
             sMaskEquipAnimTimer = 6;
             pauseCtx->equipAnimScale = 320;
             pauseCtx->equipAnimShrinkRate = 40;
             sMaskEquipState++;
-            play_sound(NA_SE_SY_SYNTH_MAGIC_ARROW);
+            Audio_PlaySfx(NA_SE_SY_SYNTH_MAGIC_ARROW);
         }
         return;
     }

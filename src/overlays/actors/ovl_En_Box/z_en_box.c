@@ -73,7 +73,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    f32 data[5];
+    /* 0x0 */ f32 data[5];
 } EnBox_PlaybackSpeed; // 0x14
 
 static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
@@ -122,6 +122,7 @@ void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
 
     if (temp_s6 > 0) {
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Push();
         for (i = 0; i < temp_s6; i++) {
             f32 temp_f0 = (f32)i / temp_s6;
@@ -150,6 +151,7 @@ void func_80867C8C(struct_80867BDC_a0* arg0, PlayState* play) {
         }
         Matrix_Pop();
         gSPMatrix(POLY_XLU_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -362,7 +364,7 @@ void EnBox_Fall(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
             EnBox_SetupAction(this, EnBox_WaitOpen);
         }
-        Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_BOUND);
+        Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_BOUND);
         EnBox_SpawnDust(this, play);
     }
     yDiff = this->dyna.actor.world.pos.y - this->dyna.actor.floorHeight;
@@ -417,7 +419,7 @@ void func_80868AFC(EnBox* this, PlayState* play) {
         EnBox_SetupAction(this, func_80868B74);
         this->unk_1A0 = 0;
         func_80867FBC(&this->unk_1F4, play, (this->movementFlags & ENBOX_MOVE_0x80) != 0);
-        Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
+        Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     }
 }
 
@@ -554,8 +556,8 @@ void EnBox_Open(EnBox* this, PlayState* play) {
                                      gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
-        if (sfxId != 0) {
-            Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, sfxId);
+        if (sfxId != NA_SE_NONE) {
+            Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, sfxId);
         }
         if (this->skelAnime.jointTable[3].z > 0) {
             this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[3].z) * 0.00006f;
@@ -581,7 +583,7 @@ void EnBox_SpawnIceSmoke(EnBox* this, PlayState* play) {
 
     this->iceSmokeTimer++;
     //! @bug sfxId should be NA_SE_EN_MIMICK_BREATH, but uses OoT's sfxId value
-    func_800B9010(&this->dyna.actor, NA_SE_EN_LAST3_COIL_ATTACK_OLD - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EN_LAST3_COIL_ATTACK_OLD - SFX_FLAG);
     if (Rand_ZeroOne() < 0.3f) {
         randomf = 2.0f * Rand_ZeroOne() - 1.0f;
         pos = this->dyna.actor.world.pos;
@@ -694,6 +696,7 @@ void EnBox_Draw(Actor* thisx, PlayState* play) {
     EnBox* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (this->unk_1F4.unk_10 != NULL) {
         this->unk_1F4.unk_10(&this->unk_1F4, play);
     }
@@ -719,5 +722,6 @@ void EnBox_Draw(Actor* thisx, PlayState* play) {
         POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL,
                                        EnBox_PostLimbDraw, &this->dyna.actor, POLY_XLU_DISP);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

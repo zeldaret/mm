@@ -136,9 +136,9 @@ void EnYb_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80BFA2FC(PlayState* play) {
     if (INV_CONTENT(ITEM_MASK_KAMARO) == ITEM_MASK_KAMARO) {
-        func_80151BB4(play, 0x34);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_KAMAROS_MASK);
     }
-    func_80151BB4(play, 0xF);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAMARO);
 }
 
 /**
@@ -170,35 +170,37 @@ void EnYb_ActorShadowFunc(Actor* thisx, Lights* mapper, PlayState* play) {
 }
 
 void EnYb_ChangeAnim(PlayState* play, EnYb* this, s16 animIndex, u8 animMode, f32 morphFrames) {
-    if (animIndex >= 0 && animIndex < 3) {
-        if ((animIndex != this->animIndex) || (animMode != ANIMMODE_LOOP)) {
-            if (animIndex > 0) {
-                if (animMode == ANIMMODE_LOOP) {
-                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
-                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                           morphFrames);
-                } else {
-                    // unused case, (only called once with animMode = ANIMMODE_LOOP)
-                    PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
-                                           Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
-                                           morphFrames);
-                }
-            } else {
-                // unused case, (only called once with animIndex = 2)
-                AnimationHeader* animationPtr = gYbUnusedAnimations[animIndex];
+    s32 pad;
 
-                if (1) {}
-
-                Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
-                                 Animation_GetLastFrame(animationPtr), animMode, morphFrames);
-            }
-            this->animIndex = animIndex;
-        }
+    if ((animIndex < 0) || (animIndex > 2)) {
+        return;
     }
+
+    if ((animIndex == this->animIndex) && (animMode == ANIMMODE_LOOP)) {
+        return;
+    }
+
+    if (animIndex > 0) {
+        if (animMode == ANIMMODE_LOOP) {
+            PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                   Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                   morphFrames);
+        } else {
+            // unused case, (only called once with animMode = ANIMMODE_LOOP)
+            PlayerAnimation_Change(play, &this->skelAnime, gPlayerAnimations[animIndex - 1], 1.0f, 0.0f,
+                                   Animation_GetLastFrame(gPlayerAnimations[animIndex - 1]), ANIMMODE_LOOP,
+                                   morphFrames);
+        }
+    } else {
+        // unused case, (only called once with animIndex = 2)
+        Animation_Change(&this->skelAnime, gYbUnusedAnimations[animIndex], 1.0f, 0.0f,
+                         Animation_GetLastFrame(gYbUnusedAnimations[animIndex]), animMode, morphFrames);
+    }
+    this->animIndex = animIndex;
 }
 
 s32 EnYb_CanTalk(EnYb* this, PlayState* play) {
-    if (this->actor.xzDistToPlayer < 100.0f && Player_IsFacingActor(&this->actor, 0x3000, play) &&
+    if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
         Actor_IsFacingPlayer(&this->actor, 0x3000)) {
         return true;
     } else {
@@ -232,7 +234,7 @@ void EnYb_ChangeCutscene(EnYb* this, s16 csIdIndex) {
  * Sets a flag that enables the Kamaro dancing proximity music at night.
  */
 void EnYb_EnableProximityMusic(EnYb* this) {
-    func_800B9084(&this->actor);
+    Actor_PlaySeq_FlaggedKamaroDance(&this->actor);
 }
 
 void EnYb_Disappear(EnYb* this, PlayState* play) {
@@ -242,9 +244,9 @@ void EnYb_Disappear(EnYb* this, PlayState* play) {
 
     EnYb_UpdateAnimation(this, play);
     for (i = 3; i >= 0; i--) {
-        sp60.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-        sp60.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-        sp60.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+        sp60.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+        sp60.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+        sp60.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
         func_800B3030(play, &sp60, &D_80BFB2E8, &D_80BFB2E8, 100, 0, 2);
     }
 
@@ -296,6 +298,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
                 this->actionFunc = EnYb_Disappear;
                 SET_WEEKEVENTREG(WEEKEVENTREG_82_04);
                 break;
+
             case 0x147C: // Spread my dance across the world
                 if (Player_GetMask(play) == PLAYER_MASK_KAMARO) {
                     Message_CloseTextbox(play);
@@ -311,6 +314,7 @@ void EnYb_Talk(EnYb* this, PlayState* play) {
                     EnYb_ReceiveMask(this, play);
                 }
                 break;
+
             default:
                 Message_CloseTextbox(play);
                 this->actionFunc = EnYb_Idle;
@@ -353,9 +357,9 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     EnYb_UpdateAnimation(this, play);
-    if (this->actor.xzDistToPlayer < 180.0f && fabsf(this->actor.playerHeightRel) < 50.0f &&
-        play->msgCtx.ocarinaMode == 3 && play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING &&
-        gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
+        (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
+        (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);
@@ -377,8 +381,8 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
         if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->playerOcarinaOut &= ~1;
         }
-    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && this->actor.xzDistToPlayer < 180.0f &&
-               fabsf(this->actor.playerHeightRel) < 50.0f) {
+    } else if ((player->stateFlags2 & PLAYER_STATE2_8000000) && (this->actor.xzDistToPlayer < 180.0f) &&
+               (fabsf(this->actor.playerHeightRel) < 50.0f)) {
         this->playerOcarinaOut |= 1;
         Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
     }
@@ -465,8 +469,6 @@ void EnYb_Draw(Actor* thisx, PlayState* play) {
                 Scene_SetRenderModeXlu(play, 1, 2);
             }
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
-
-            if (1) {}
 
             POLY_XLU_DISP =
                 SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

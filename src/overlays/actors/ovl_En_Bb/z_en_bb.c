@@ -32,7 +32,7 @@ void EnBb_Revive(EnBb* this, PlayState* play);
 typedef enum {
     /* -1 */ BB_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BB_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD
 } EnBbBodyPartDrawStatus;
 
 ActorInit En_Bb_InitVars = {
@@ -73,7 +73,7 @@ typedef enum {
     /* 0x3 */ EN_BB_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BB_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BB_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE
 } EnBbDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -256,7 +256,7 @@ void EnBb_FlyIdle(EnBb* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -287,11 +287,11 @@ void EnBb_Attack(EnBb* this, PlayState* play) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
     EnBb_UpdateStateForFlying(this);
 
-    if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
-    } else if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 7.0f))) {
+    } else if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -615,7 +615,7 @@ void EnBb_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

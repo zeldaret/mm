@@ -63,7 +63,7 @@ typedef enum {
     /* 16 */ EN_DNO_ANIM_IMPLORE_START,
     /* 17 */ EN_DNO_ANIM_SHOCK_START,
     /* 18 */ EN_DNO_ANIM_SHOCK_LOOP,
-    /* 19 */ EN_DNO_ANIM_GRIEVE,
+    /* 19 */ EN_DNO_ANIM_GRIEVE
 } EnDnoAnimation;
 
 static AnimationSpeedInfo sAnimations[] = {
@@ -861,7 +861,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
     this->unk_3AE += 1000;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     func_80A715DC(this, play);
-    func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
     if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_PERMANENT) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actorPath.curPoint);
         this->actor.speed = 0.0f;
@@ -943,12 +943,16 @@ void func_80A73408(EnDno* this, PlayState* play) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
-    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-        (this->animIndex == EN_DNO_ANIM_SHOCK_START)) {
-        //! FAKE:
-        if (1) {}
+    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
+        switch (this->animIndex) {
+            case EN_DNO_ANIM_SHOCK_START:
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP,
+                                                &this->animIndex);
+                break;
 
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP, &this->animIndex);
+            default:
+                break;
+        }
     }
 }
 

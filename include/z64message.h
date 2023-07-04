@@ -8,6 +8,23 @@
 struct Actor;
 struct MessageTableEntry;
 struct OcarinaStaff;
+struct PlayState;
+
+extern u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX];
+extern u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX];
+
+typedef enum FaceReactionSet {
+    /* 0x11 */ FACE_REACTION_SET_JIM = 0x11,
+    /* 0x12 */ FACE_REACTION_SET_BOMBERS,
+    /* 0x15 */ FACE_REACTION_SET_BOMBERS_HIDEOUT_GUARD = 0x15,
+    /* 0x2D */ FACE_REACTION_SET_TREASURE_CHEST_SHOP_GAL = 0x2D,
+    /* 0x2F */ FACE_REACTION_SET_CURIOSITY_SHOP_MAN = 0x2F,
+    /* 0x30 */ FACE_REACTION_SET_TOWN_SHOOTING_GALLERY_MAN,
+    /* 0x31 */ FACE_REACTION_SET_SWAMP_SHOOTING_GALLERY_MAN,
+    /* 0x36 */ FACE_REACTION_SET_PART_TIMER = 0x36
+} FaceReactionSet;
+
+u16 Text_GetFaceReaction(struct PlayState* play, FaceReactionSet reactionSet);
 
 typedef enum TextState {
     /*  0 */ TEXT_STATE_NONE,
@@ -159,8 +176,8 @@ typedef struct MessageContext {
     /* 0x120A0 */ s32 unk120A0;
     /* 0x120A4 */ s16 unk120A4[6];
     /* 0x120B0 */ u8 unk120B0;
-    /* 0x120B1 */ u8 unk120B1;
-    /* 0x120B2 */ u8 unk120B2[0xA];
+    /* 0x120B1 */ u8 bombersNotebookEventQueueCount;
+    /* 0x120B2 */ u8 bombersNotebookEventQueue[10];
     /* 0x120BC */ u16 unk_120BC;
     /* 0x120BE */ s16 unk120BE;
     /* 0x120C0 */ s16 unk120C0;

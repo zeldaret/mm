@@ -42,7 +42,7 @@ typedef enum EnSlimeType {
     /* 0 */ EN_SLIME_TYPE_BLUE,
     /* 1 */ EN_SLIME_TYPE_GREEN,
     /* 2 */ EN_SLIME_TYPE_YELLOW,
-    /* 3 */ EN_SLIME_TYPE_RED,
+    /* 3 */ EN_SLIME_TYPE_RED
 } EnSlimeType;
 
 #endif // Z_EN_SLIME_H

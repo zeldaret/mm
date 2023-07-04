@@ -161,11 +161,10 @@ void EnBat_Init(Actor* thisx, PlayState* play) {
         EnBat_SetupFlyIdle(this);
         while (BAD_BAT_GET_NUMBER_TO_SPAWN(thisx) > 1) {
             Actor_SpawnAsChildAndCutscene(
-                &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + randPlusMinusPoint5Scaled(200.0f),
-                thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
-                thisx->world.pos.z + randPlusMinusPoint5Scaled(200.0f), randPlusMinusPoint5Scaled(0x2000),
-                0xFFFF * Rand_ZeroOne(), 0, BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), CS_ID_NONE,
-                thisx->halfDaysBits, NULL);
+                &play->actorCtx, play, ACTOR_EN_BAT, thisx->world.pos.x + Rand_CenteredFloat(200.0f),
+                thisx->world.pos.y + Rand_CenteredFloat(100.0f), thisx->world.pos.z + Rand_CenteredFloat(200.0f),
+                Rand_CenteredFloat(0x2000), 0xFFFF * Rand_ZeroOne(), 0,
+                BAD_BAT_PARAMS(this->switchFlag, this->paramFlags, 0), CS_ID_NONE, thisx->halfDaysBits, NULL);
             BAD_BAT_GET_NUMBER_TO_SPAWN(thisx)--;
         }
     }
@@ -515,7 +514,7 @@ void EnBat_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.225f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.45f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.45f, 0.45f / 40.0f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

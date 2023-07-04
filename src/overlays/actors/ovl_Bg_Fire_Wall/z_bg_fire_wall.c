@@ -182,7 +182,7 @@ void BgFireWall_Update(Actor* thisx, PlayState* play2) {
         }
     }
     if (this->actionFunc == func_809AC6C0) {
-        func_800B9010(&this->actor, NA_SE_EV_FIRE_PLATE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FIRE_PLATE - SFX_FLAG);
         if ((this->unk_14C == 0) || ((this->unk_14C != 0) && (this->actor.xzDistToPlayer < 240.0f))) {
             func_809AC7F8(this, play);
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);

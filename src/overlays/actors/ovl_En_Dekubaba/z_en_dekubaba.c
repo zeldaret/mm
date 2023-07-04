@@ -384,7 +384,7 @@ void EnDekubaba_Grow(EnDekubaba* this, PlayState* play) {
         this->size * 0.01f * (0.5f + (15 - this->timer) * 0.5f / 15.0f);
     Math_ScaledStepToS(&this->actor.shape.rot.x, 0x1800, 0x800);
 
-    headDistVertical = sin_rad(CLAMP_MAX((15 - this->timer) * (1.0f / 15), 0.7f) * M_PI) * 32.0f + 14.0f;
+    headDistVertical = Math_SinF(CLAMP_MAX((15 - this->timer) * (1.0f / 15), 0.7f) * M_PI) * 32.0f + 14.0f;
 
     if (this->actor.shape.rot.x < -0x38E3) {
         headDistHorizontal = 0.0f;
@@ -468,7 +468,7 @@ void EnDekubaba_Retract(EnDekubaba* this, PlayState* play) {
         this->size * 0.01f * (0.5f + this->timer * (1.0f / 30));
     Math_ScaledStepToS(&this->actor.shape.rot.x, -0x4000, 0x300);
 
-    headDistVertical = (sin_rad(CLAMP_MAX(this->timer * 0.033f, 0.7f) * M_PI) * 32.0f) + 14.0f;
+    headDistVertical = (Math_SinF(CLAMP_MAX(this->timer * 0.033f, 0.7f) * M_PI) * 32.0f) + 14.0f;
 
     if (this->actor.shape.rot.x < -0x38E3) {
         headDistHorizontal = 0.0f;
@@ -914,10 +914,10 @@ void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
                       (s32)(this->size * 100.0f));
 
         if (!this->actor.dropFlag) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             if (this->actor.params == DEKUBABA_BIG) {
-                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
-                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             }
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x30);
@@ -1059,7 +1059,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
         return;
     }
 
-    Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
+    Actor_OfferGetItemNearby(&this->actor, play, GI_DEKU_STICKS_1);
 }
 
 /* Update and associated functions */
@@ -1214,7 +1214,7 @@ void EnDekubaba_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.75f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.75f / 40)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

@@ -1,14 +1,13 @@
 #include "global.h"
 #include "z64snap.h"
 #include "z64view.h"
+#include "archives/icon_item_static/icon_item_static_yar.h"
 #include "interface/parameter_static/parameter_static.h"
 #include "interface/do_action_static/do_action_static.h"
 #include "misc/story_static/story_static.h"
 
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "overlays/actors/ovl_En_Mm3/z_en_mm3.h"
-
-extern TexturePtr D_08095AC0; // gMagicArrowEquipEffectTex
 
 typedef enum {
     /* 0 */ PICTO_BOX_STATE_OFF,         // Not using the pictograph
@@ -23,11 +22,11 @@ typedef enum {
 #define DO_ACTION_TEX_SIZE ((DO_ACTION_TEX_WIDTH * DO_ACTION_TEX_HEIGHT) / 2) // (sizeof(gCheckDoActionENGTex))
 
 typedef struct {
-    /* 0x00 */ u8 scene;
-    /* 0x01 */ u8 flags1;
-    /* 0x02 */ u8 flags2;
-    /* 0x03 */ u8 flags3;
-} RestrictionFlags;
+    /* 0x0 */ u8 scene;
+    /* 0x1 */ u8 flags1;
+    /* 0x2 */ u8 flags2;
+    /* 0x3 */ u8 flags3;
+} RestrictionFlags; // size = 0x4
 
 Input sPostmanTimerInput[MAXCONTROLLERS];
 
@@ -105,25 +104,25 @@ s16 sMagicBorderRatio = 2;
 s16 sMagicBorderStep = 1;
 
 s16 sExtraItemBases[] = {
-    ITEM_STICK,   // ITEM_STICKS_5
-    ITEM_STICK,   // ITEM_STICKS_10
-    ITEM_NUT,     // ITEM_NUTS_5
-    ITEM_NUT,     // ITEM_NUTS_10
-    ITEM_BOMB,    // ITEM_BOMBS_5
-    ITEM_BOMB,    // ITEM_BOMBS_10
-    ITEM_BOMB,    // ITEM_BOMBS_20
-    ITEM_BOMB,    // ITEM_BOMBS_30
-    ITEM_BOW,     // ITEM_ARROWS_10
-    ITEM_BOW,     // ITEM_ARROWS_30
-    ITEM_BOW,     // ITEM_ARROWS_40
-    ITEM_BOMBCHU, // ITEM_ARROWS_50 !@bug this data is missing an ITEM_BOW, offsetting the rest by 1
-    ITEM_BOMBCHU, // ITEM_BOMBCHUS_20
-    ITEM_BOMBCHU, // ITEM_BOMBCHUS_10
-    ITEM_BOMBCHU, // ITEM_BOMBCHUS_1
-    ITEM_STICK,   // ITEM_BOMBCHUS_5
-    ITEM_STICK,   // ITEM_STICK_UPGRADE_20
-    ITEM_NUT,     // ITEM_STICK_UPGRADE_30
-    ITEM_NUT,     // ITEM_NUT_UPGRADE_30
+    ITEM_DEKU_STICK, // ITEM_DEKU_STICKS_5
+    ITEM_DEKU_STICK, // ITEM_DEKU_STICKS_10
+    ITEM_DEKU_NUT,   // ITEM_DEKU_NUTS_5
+    ITEM_DEKU_NUT,   // ITEM_DEKU_NUTS_10
+    ITEM_BOMB,       // ITEM_BOMBS_5
+    ITEM_BOMB,       // ITEM_BOMBS_10
+    ITEM_BOMB,       // ITEM_BOMBS_20
+    ITEM_BOMB,       // ITEM_BOMBS_30
+    ITEM_BOW,        // ITEM_ARROWS_10
+    ITEM_BOW,        // ITEM_ARROWS_30
+    ITEM_BOW,        // ITEM_ARROWS_40
+    ITEM_BOMBCHU,    // ITEM_ARROWS_50 !@bug this data is missing an ITEM_BOW, offsetting the rest by 1
+    ITEM_BOMBCHU,    // ITEM_BOMBCHUS_20
+    ITEM_BOMBCHU,    // ITEM_BOMBCHUS_10
+    ITEM_BOMBCHU,    // ITEM_BOMBCHUS_1
+    ITEM_DEKU_STICK, // ITEM_BOMBCHUS_5
+    ITEM_DEKU_STICK, // ITEM_DEKU_STICK_UPGRADE_20
+    ITEM_DEKU_NUT,   // ITEM_DEKU_STICK_UPGRADE_30
+    ITEM_DEKU_NUT,   // ITEM_DEKU_NUT_UPGRADE_30
 };
 
 s16 sEnvHazard = PLAYER_ENV_HAZARD_NONE;
@@ -147,7 +146,7 @@ s16 D_801BF97C = 255;
 f32 D_801BF980 = 1.0f;
 s32 D_801BF984 = 0;
 
-Gfx sScreenFillSetupDL[] = {
+static Gfx sScreenFillSetupDL[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_ZBUFFER | G_SHADE | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN |
                           G_TEXTURE_GEN_LINEAR | G_LOD | G_SHADING_SMOOTH),
@@ -160,16 +159,33 @@ Gfx sScreenFillSetupDL[] = {
 
 s16 D_801BF9B0 = 0;
 f32 D_801BF9B4[] = { 100.0f, 109.0f };
-s16 D_801BF9BC[] = { 0x226, 0x2A8, 0x2A8, 0x2A8 };
+s16 D_801BF9BC[] = {
+    0x226, // EQUIP_SLOT_B
+    0x2A8, // EQUIP_SLOT_C_LEFT
+    0x2A8, // EQUIP_SLOT_C_DOWN
+    0x2A8, // EQUIP_SLOT_C_RIGHT
+};
 s16 D_801BF9C4[] = { 0x9E, 0x9B };
 s16 D_801BF9C8[] = { 0x17, 0x16 };
 f32 D_801BF9CC[] = { -380.0f, -350.0f };
-s16 D_801BF9D4[] = { 0xA7, 0xE3 };
-s16 D_801BF9D8[] = { 0xF9, 0x10F };
-s16 D_801BF9DC[] = { 0x11, 0x12 };
-s16 D_801BF9E0[] = { 0x22, 0x12 };
-s16 D_801BF9E4[] = { 0x23F, 0x26C };
-s16 D_801BF9E8[] = { 0x26C, 0x26C };
+s16 D_801BF9D4[] = {
+    0xA7,  // EQUIP_SLOT_B
+    0xE3,  // EQUIP_SLOT_C_LEFT
+    0xF9,  // EQUIP_SLOT_C_DOWN
+    0x10F, // EQUIP_SLOT_C_RIGHT
+};
+s16 D_801BF9DC[] = {
+    0x11, // EQUIP_SLOT_B
+    0x12, // EQUIP_SLOT_C_LEFT
+    0x22, // EQUIP_SLOT_C_DOWN
+    0x12, // EQUIP_SLOT_C_RIGHT
+};
+s16 D_801BF9E4[] = {
+    0x23F, // EQUIP_SLOT_B
+    0x26C, // EQUIP_SLOT_C_LEFT
+    0x26C, // EQUIP_SLOT_C_DOWN
+    0x26C, // EQUIP_SLOT_C_RIGHT
+};
 
 s16 sFinalHoursClockDigitsRed = 0;
 s16 sFinalHoursClockFrameEnvRed = 0;
@@ -1691,7 +1707,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     if (CHECK_EVENTINF(EVENTINF_41)) {
         // Related to swamp boat (non-minigame)?
         for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
-            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX) || (msgCtx->msgMode != 0)) {
+            if ((GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX) || (msgCtx->msgMode != 0)) {
                 if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                     restoreHudVisibility = true;
                 }
@@ -1776,8 +1792,8 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     } else if (CHECK_EVENTINF(EVENTINF_34)) {
         // Deku playground minigame
         if (player->stateFlags3 & PLAYER_STATE3_1000000) {
-            if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
-                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
+            if (gSaveContext.save.saveInfo.inventory.items[SLOT_DEKU_NUT] == ITEM_DEKU_NUT) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_DEKU_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
             } else {
                 gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
@@ -1804,9 +1820,9 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
     } else if (player->stateFlags3 & PLAYER_STATE3_1000000) {
         // Nuts on B (from flying as Deku Link)
-        if (gSaveContext.save.saveInfo.inventory.items[SLOT_NUT] == ITEM_NUT) {
-            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT) {
-                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_NUT;
+        if (gSaveContext.save.saveInfo.inventory.items[SLOT_DEKU_NUT] == ITEM_DEKU_NUT) {
+            if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_DEKU_NUT) {
+                BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_DEKU_NUT;
                 Interface_LoadItemIconImpl(play, EQUIP_SLOT_B);
                 gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
                 restoreHudVisibility = true;
@@ -1822,7 +1838,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
             gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_DISABLED;
         }
     } else if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired && (CUR_FORM == PLAYER_FORM_DEKU) &&
-               (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_NUT)) {
+               (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) == ITEM_DEKU_NUT)) {
         // Nuts on B (as Deku Link)
         BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) = ITEM_FD;
         gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_DISABLED;
@@ -1893,7 +1909,7 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
     } else if (player->stateFlags1 & PLAYER_STATE1_200000) {
         // First person view
         for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
-            if (GET_CUR_FORM_BTN_ITEM(i) != ITEM_LENS) {
+            if (GET_CUR_FORM_BTN_ITEM(i) != ITEM_LENS_OF_TRUTH) {
                 if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                     restoreHudVisibility = true;
                 }
@@ -2057,22 +2073,22 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                 } else {
                     // End of special item cases. Apply restrictions to buttons
                     if (interfaceCtx->restrictions.tradeItems != 0) {
-                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) ||
                             ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) ||
-                            (GET_CUR_FORM_BTN_ITEM(i) == ITEM_OCARINA)) {
+                            (GET_CUR_FORM_BTN_ITEM(i) == ITEM_OCARINA_OF_TIME)) {
                             if (gSaveContext.buttonStatus[i] == BTN_ENABLED) {
                                 restoreHudVisibility = true;
                             }
                             gSaveContext.buttonStatus[i] = BTN_DISABLED;
                         }
                     } else if (interfaceCtx->restrictions.tradeItems == 0) {
-                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) ||
                             ((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                              (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) ||
-                            (GET_CUR_FORM_BTN_ITEM(i) == ITEM_OCARINA)) {
+                            (GET_CUR_FORM_BTN_ITEM(i) == ITEM_OCARINA_OF_TIME)) {
                             if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
                                 restoreHudVisibility = true;
                             }
@@ -2099,14 +2115,14 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                     }
 
                     if (interfaceCtx->restrictions.pictoBox != 0) {
-                        if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_PICTO_BOX) {
+                        if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_PICTOGRAPH_BOX) {
                             if (!gSaveContext.buttonStatus[i]) { // == BTN_ENABLED
                                 restoreHudVisibility = true;
                             }
                             gSaveContext.buttonStatus[i] = BTN_DISABLED;
                         }
                     } else if (interfaceCtx->restrictions.pictoBox == 0) {
-                        if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_PICTO_BOX) {
+                        if (GET_CUR_FORM_BTN_ITEM(i) == ITEM_PICTOGRAPH_BOX) {
                             if (gSaveContext.buttonStatus[i] == BTN_DISABLED) {
                                 restoreHudVisibility = true;
                             }
@@ -2115,14 +2131,14 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                     }
 
                     if (interfaceCtx->restrictions.all != 0) {
-                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) &&
                             !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) &&
-                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_OCARINA) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_OCARINA_OF_TIME) &&
                             !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) &&
-                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX)) {
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX)) {
 
                             if ((gSaveContext.buttonStatus[i] == BTN_ENABLED)) {
                                 restoreHudVisibility = true;
@@ -2130,14 +2146,14 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
                             }
                         }
                     } else if (interfaceCtx->restrictions.all == 0) {
-                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOON_TEAR) &&
+                        if (!((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MOONS_TEAR) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_PENDANT_OF_MEMORIES)) &&
                             !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_BOTTLE) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_OBABA_DRINK)) &&
-                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_OCARINA) &&
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_OCARINA_OF_TIME) &&
                             !((GET_CUR_FORM_BTN_ITEM(i) >= ITEM_MASK_DEKU) &&
                               (GET_CUR_FORM_BTN_ITEM(i) <= ITEM_MASK_GIANT)) &&
-                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTO_BOX)) {
+                            (GET_CUR_FORM_BTN_ITEM(i) != ITEM_PICTOGRAPH_BOX)) {
 
                             if ((gSaveContext.buttonStatus[i] == BTN_DISABLED)) {
                                 restoreHudVisibility = true;
@@ -2331,7 +2347,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                 } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
                     if (!(CHECK_EVENTINF(EVENTINF_41)) ||
                         ((CHECK_EVENTINF(EVENTINF_41)) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
-                        play_sound(NA_SE_SY_CAMERA_SHUTTER);
+                        Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
                         SREG(89) = 1;
                         play->haltAllActors = true;
                         sPictoState = PICTO_BOX_STATE_SETUP_PHOTO;
@@ -2344,13 +2360,13 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                 player->stateFlags1 &= ~PLAYER_STATE1_200;
                 Message_CloseTextbox(play);
                 if (play->msgCtx.choiceIndex != 0) {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     func_80115844(play, DO_ACTION_STOP);
                     Interface_SetHudVisibility(HUD_VISIBILITY_A_B);
                     sPictoState = PICTO_BOX_STATE_LENS;
                     REMOVE_QUEST_ITEM(QUEST_PICTOGRAPH);
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     interfaceCtx->unk_222 = interfaceCtx->unk_224 = 0;
                     restoreHudVisibility = true;
                     Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
@@ -2501,8 +2517,8 @@ u8 Item_Give(PlayState* play, u8 item) {
     u8 slot;
 
     slot = SLOT(item);
-    if (item >= ITEM_STICKS_5) {
-        slot = SLOT(sExtraItemBases[item - ITEM_STICKS_5]);
+    if (item >= ITEM_DEKU_STICKS_5) {
+        slot = SLOT(sExtraItemBases[item - ITEM_DEKU_STICKS_5]);
     }
 
     if (item == ITEM_SKULL_TOKEN) {
@@ -2626,84 +2642,84 @@ u8 Item_Give(PlayState* play, u8 item) {
         Inventory_ChangeUpgrade(UPG_WALLET, 2);
         return ITEM_NONE;
 
-    } else if (item == ITEM_STICK_UPGRADE_20) {
-        if (INV_CONTENT(ITEM_STICK) != ITEM_STICK) {
-            INV_CONTENT(ITEM_STICK) = ITEM_STICK;
+    } else if (item == ITEM_DEKU_STICK_UPGRADE_20) {
+        if (INV_CONTENT(ITEM_DEKU_STICK) != ITEM_DEKU_STICK) {
+            INV_CONTENT(ITEM_DEKU_STICK) = ITEM_DEKU_STICK;
         }
-        Inventory_ChangeUpgrade(UPG_STICKS, 2);
-        AMMO(ITEM_STICK) = CAPACITY(UPG_STICKS, 2);
+        Inventory_ChangeUpgrade(UPG_DEKU_STICKS, 2);
+        AMMO(ITEM_DEKU_STICK) = CAPACITY(UPG_DEKU_STICKS, 2);
         return ITEM_NONE;
 
-    } else if (item == ITEM_STICK_UPGRADE_30) {
-        if (INV_CONTENT(ITEM_STICK) != ITEM_STICK) {
-            INV_CONTENT(ITEM_STICK) = ITEM_STICK;
+    } else if (item == ITEM_DEKU_STICK_UPGRADE_30) {
+        if (INV_CONTENT(ITEM_DEKU_STICK) != ITEM_DEKU_STICK) {
+            INV_CONTENT(ITEM_DEKU_STICK) = ITEM_DEKU_STICK;
         }
-        Inventory_ChangeUpgrade(UPG_STICKS, 3);
-        AMMO(ITEM_STICK) = CAPACITY(UPG_STICKS, 3);
+        Inventory_ChangeUpgrade(UPG_DEKU_STICKS, 3);
+        AMMO(ITEM_DEKU_STICK) = CAPACITY(UPG_DEKU_STICKS, 3);
         return ITEM_NONE;
 
-    } else if (item == ITEM_NUT_UPGRADE_30) {
-        if (INV_CONTENT(ITEM_NUT) != ITEM_NUT) {
-            INV_CONTENT(ITEM_NUT) = ITEM_NUT;
+    } else if (item == ITEM_DEKU_NUT_UPGRADE_30) {
+        if (INV_CONTENT(ITEM_DEKU_NUT) != ITEM_DEKU_NUT) {
+            INV_CONTENT(ITEM_DEKU_NUT) = ITEM_DEKU_NUT;
         }
-        Inventory_ChangeUpgrade(UPG_NUTS, 2);
-        AMMO(ITEM_NUT) = CAPACITY(UPG_NUTS, 2);
+        Inventory_ChangeUpgrade(UPG_DEKU_NUTS, 2);
+        AMMO(ITEM_DEKU_NUT) = CAPACITY(UPG_DEKU_NUTS, 2);
         return ITEM_NONE;
 
-    } else if (item == ITEM_NUT_UPGRADE_40) {
-        if (INV_CONTENT(ITEM_NUT) != ITEM_NUT) {
-            INV_CONTENT(ITEM_NUT) = ITEM_NUT;
+    } else if (item == ITEM_DEKU_NUT_UPGRADE_40) {
+        if (INV_CONTENT(ITEM_DEKU_NUT) != ITEM_DEKU_NUT) {
+            INV_CONTENT(ITEM_DEKU_NUT) = ITEM_DEKU_NUT;
         }
-        Inventory_ChangeUpgrade(UPG_NUTS, 3);
-        AMMO(ITEM_NUT) = CAPACITY(UPG_NUTS, 3);
+        Inventory_ChangeUpgrade(UPG_DEKU_NUTS, 3);
+        AMMO(ITEM_DEKU_NUT) = CAPACITY(UPG_DEKU_NUTS, 3);
         return ITEM_NONE;
 
-    } else if (item == ITEM_STICK) {
-        if (INV_CONTENT(ITEM_STICK) != ITEM_STICK) {
-            Inventory_ChangeUpgrade(UPG_STICKS, 1);
-            AMMO(ITEM_STICK) = 1;
+    } else if (item == ITEM_DEKU_STICK) {
+        if (INV_CONTENT(ITEM_DEKU_STICK) != ITEM_DEKU_STICK) {
+            Inventory_ChangeUpgrade(UPG_DEKU_STICKS, 1);
+            AMMO(ITEM_DEKU_STICK) = 1;
         } else {
-            AMMO(ITEM_STICK)++;
-            if (AMMO(ITEM_STICK) > CUR_CAPACITY(UPG_STICKS)) {
-                AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
+            AMMO(ITEM_DEKU_STICK)++;
+            if (AMMO(ITEM_DEKU_STICK) > CUR_CAPACITY(UPG_DEKU_STICKS)) {
+                AMMO(ITEM_DEKU_STICK) = CUR_CAPACITY(UPG_DEKU_STICKS);
             }
         }
 
-    } else if ((item == ITEM_STICKS_5) || (item == ITEM_STICKS_10)) {
-        if (INV_CONTENT(ITEM_STICK) != ITEM_STICK) {
-            Inventory_ChangeUpgrade(UPG_STICKS, 1);
-            AMMO(ITEM_STICK) = sAmmoRefillCounts[item - ITEM_STICKS_5];
+    } else if ((item == ITEM_DEKU_STICKS_5) || (item == ITEM_DEKU_STICKS_10)) {
+        if (INV_CONTENT(ITEM_DEKU_STICK) != ITEM_DEKU_STICK) {
+            Inventory_ChangeUpgrade(UPG_DEKU_STICKS, 1);
+            AMMO(ITEM_DEKU_STICK) = sAmmoRefillCounts[item - ITEM_DEKU_STICKS_5];
         } else {
-            AMMO(ITEM_STICK) += sAmmoRefillCounts[item - ITEM_STICKS_5];
-            if (AMMO(ITEM_STICK) > CUR_CAPACITY(UPG_STICKS)) {
-                AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
+            AMMO(ITEM_DEKU_STICK) += sAmmoRefillCounts[item - ITEM_DEKU_STICKS_5];
+            if (AMMO(ITEM_DEKU_STICK) > CUR_CAPACITY(UPG_DEKU_STICKS)) {
+                AMMO(ITEM_DEKU_STICK) = CUR_CAPACITY(UPG_DEKU_STICKS);
             }
         }
 
-        item = ITEM_STICK;
+        item = ITEM_DEKU_STICK;
 
-    } else if (item == ITEM_NUT) {
-        if (INV_CONTENT(ITEM_NUT) != ITEM_NUT) {
-            Inventory_ChangeUpgrade(UPG_NUTS, 1);
-            AMMO(ITEM_NUT) = 1;
+    } else if (item == ITEM_DEKU_NUT) {
+        if (INV_CONTENT(ITEM_DEKU_NUT) != ITEM_DEKU_NUT) {
+            Inventory_ChangeUpgrade(UPG_DEKU_NUTS, 1);
+            AMMO(ITEM_DEKU_NUT) = 1;
         } else {
-            AMMO(ITEM_NUT)++;
-            if (AMMO(ITEM_NUT) > CUR_CAPACITY(UPG_NUTS)) {
-                AMMO(ITEM_NUT) = CUR_CAPACITY(UPG_NUTS);
+            AMMO(ITEM_DEKU_NUT)++;
+            if (AMMO(ITEM_DEKU_NUT) > CUR_CAPACITY(UPG_DEKU_NUTS)) {
+                AMMO(ITEM_DEKU_NUT) = CUR_CAPACITY(UPG_DEKU_NUTS);
             }
         }
 
-    } else if ((item == ITEM_NUTS_5) || (item == ITEM_NUTS_10)) {
-        if (INV_CONTENT(ITEM_NUT) != ITEM_NUT) {
-            Inventory_ChangeUpgrade(UPG_NUTS, 1);
-            AMMO(ITEM_NUT) += sAmmoRefillCounts[item - ITEM_NUTS_5];
+    } else if ((item == ITEM_DEKU_NUTS_5) || (item == ITEM_DEKU_NUTS_10)) {
+        if (INV_CONTENT(ITEM_DEKU_NUT) != ITEM_DEKU_NUT) {
+            Inventory_ChangeUpgrade(UPG_DEKU_NUTS, 1);
+            AMMO(ITEM_DEKU_NUT) += sAmmoRefillCounts[item - ITEM_DEKU_NUTS_5];
         } else {
-            AMMO(ITEM_NUT) += sAmmoRefillCounts[item - ITEM_NUTS_5];
-            if (AMMO(ITEM_NUT) > CUR_CAPACITY(UPG_NUTS)) {
-                AMMO(ITEM_NUT) = CUR_CAPACITY(UPG_NUTS);
+            AMMO(ITEM_DEKU_NUT) += sAmmoRefillCounts[item - ITEM_DEKU_NUTS_5];
+            if (AMMO(ITEM_DEKU_NUT) > CUR_CAPACITY(UPG_DEKU_NUTS)) {
+                AMMO(ITEM_DEKU_NUT) = CUR_CAPACITY(UPG_DEKU_NUTS);
             }
         }
-        item = ITEM_NUT;
+        item = ITEM_DEKU_NUT;
 
     } else if (item == ITEM_POWDER_KEG) {
         if (INV_CONTENT(ITEM_POWDER_KEG) != ITEM_POWDER_KEG) {
@@ -2766,8 +2782,8 @@ u8 Item_Give(PlayState* play, u8 item) {
         }
         return ITEM_BOW;
 
-    } else if (item == ITEM_OCARINA) {
-        INV_CONTENT(ITEM_OCARINA) = ITEM_OCARINA;
+    } else if (item == ITEM_OCARINA_OF_TIME) {
+        INV_CONTENT(ITEM_OCARINA_OF_TIME) = ITEM_OCARINA_OF_TIME;
         return ITEM_NONE;
 
     } else if (item == ITEM_MAGIC_BEANS) {
@@ -2789,7 +2805,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         Health_ChangeBy(play, 0x10);
         return item;
 
-    } else if (item == ITEM_MAGIC_SMALL) {
+    } else if (item == ITEM_MAGIC_JAR_SMALL) {
         Magic_Add(play, MAGIC_NORMAL_METER / 2);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_80)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_12_80);
@@ -2797,7 +2813,7 @@ u8 Item_Give(PlayState* play, u8 item) {
         }
         return item;
 
-    } else if (item == ITEM_MAGIC_LARGE) {
+    } else if (item == ITEM_MAGIC_JAR_BIG) {
         Magic_Add(play, MAGIC_NORMAL_METER);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_80)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_12_80);
@@ -2899,10 +2915,10 @@ u8 Item_Give(PlayState* play, u8 item) {
             }
         }
 
-    } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
+    } else if ((item >= ITEM_MOONS_TEAR) && (item <= ITEM_MASK_GIANT)) {
         temp = INV_CONTENT(item);
         INV_CONTENT(item) = item;
-        if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_PENDANT_OF_MEMORIES) && (temp != ITEM_NONE)) {
+        if ((item >= ITEM_MOONS_TEAR) && (item <= ITEM_PENDANT_OF_MEMORIES) && (temp != ITEM_NONE)) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 if (temp == GET_CUR_FORM_BTN_ITEM(i)) {
                     SET_CUR_FORM_BTN_ITEM(i, item);
@@ -2925,8 +2941,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     u8 bottleSlot;
 
     slot = SLOT(item);
-    if (item >= ITEM_STICKS_5) {
-        slot = SLOT(sExtraItemBases[item - ITEM_STICKS_5]);
+    if (item >= ITEM_DEKU_STICKS_5) {
+        slot = SLOT(sExtraItemBases[item - ITEM_DEKU_STICKS_5]);
     }
 
     if (item == ITEM_SKULL_TOKEN) {
@@ -2953,8 +2969,8 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     } else if (item == ITEM_KEY_SMALL) {
         return ITEM_NONE;
 
-    } else if ((item == ITEM_OCARINA) || (item == ITEM_BOMBCHU) || (item == ITEM_HOOKSHOT) || (item == ITEM_LENS) ||
-               (item == ITEM_SWORD_GREAT_FAIRY) || (item == ITEM_PICTO_BOX)) {
+    } else if ((item == ITEM_OCARINA_OF_TIME) || (item == ITEM_BOMBCHU) || (item == ITEM_HOOKSHOT) ||
+               (item == ITEM_LENS_OF_TRUTH) || (item == ITEM_SWORD_GREAT_FAIRY) || (item == ITEM_PICTOGRAPH_BOX)) {
         if (INV_CONTENT(item) == ITEM_NONE) {
             return ITEM_NONE;
         }
@@ -2988,7 +3004,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
         }
         return 0;
 
-    } else if ((item >= ITEM_STICK_UPGRADE_20) && (item <= ITEM_NUT_UPGRADE_40)) {
+    } else if ((item >= ITEM_DEKU_STICK_UPGRADE_20) && (item <= ITEM_DEKU_NUT_UPGRADE_40)) {
         return ITEM_NONE;
 
     } else if ((item >= ITEM_BOMB_BAG_30) && (item <= ITEM_WALLET_GIANT)) {
@@ -3009,7 +3025,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
     } else if (item == ITEM_RECOVERY_HEART) {
         return ITEM_RECOVERY_HEART;
 
-    } else if ((item == ITEM_MAGIC_SMALL) || (item == ITEM_MAGIC_LARGE)) {
+    } else if ((item == ITEM_MAGIC_JAR_SMALL) || (item == ITEM_MAGIC_JAR_BIG)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_80)) {
             return ITEM_NONE;
         }
@@ -3066,7 +3082,7 @@ u8 Item_CheckObtainabilityImpl(u8 item) {
                 }
             }
         }
-    } else if ((item >= ITEM_MOON_TEAR) && (item <= ITEM_MASK_GIANT)) {
+    } else if ((item >= ITEM_MOONS_TEAR) && (item <= ITEM_MASK_GIANT)) {
         return ITEM_NONE;
     }
 
@@ -3250,7 +3266,7 @@ void func_80115428(InterfaceContext* interfaceCtx, u16 doAction, s16 loadOffset)
  */
 s32 Health_ChangeBy(PlayState* play, s16 healthChange) {
     if (healthChange > 0) {
-        play_sound(NA_SE_SY_HP_RECOVER);
+        Audio_PlaySfx(NA_SE_SY_HP_RECOVER);
     } else if (gSaveContext.save.saveInfo.playerData.doubleDefense && (healthChange < 0)) {
         healthChange >>= 1;
     }
@@ -3279,22 +3295,22 @@ void Rupees_ChangeBy(s16 rupeeChange) {
 }
 
 void Inventory_ChangeAmmo(s16 item, s16 ammoChange) {
-    if (item == ITEM_STICK) {
-        AMMO(ITEM_STICK) += ammoChange;
+    if (item == ITEM_DEKU_STICK) {
+        AMMO(ITEM_DEKU_STICK) += ammoChange;
 
-        if (AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS)) {
-            AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
-        } else if (AMMO(ITEM_STICK) < 0) {
-            AMMO(ITEM_STICK) = 0;
+        if (AMMO(ITEM_DEKU_STICK) >= CUR_CAPACITY(UPG_DEKU_STICKS)) {
+            AMMO(ITEM_DEKU_STICK) = CUR_CAPACITY(UPG_DEKU_STICKS);
+        } else if (AMMO(ITEM_DEKU_STICK) < 0) {
+            AMMO(ITEM_DEKU_STICK) = 0;
         }
 
-    } else if (item == ITEM_NUT) {
-        AMMO(ITEM_NUT) += ammoChange;
+    } else if (item == ITEM_DEKU_NUT) {
+        AMMO(ITEM_DEKU_NUT) += ammoChange;
 
-        if (AMMO(ITEM_NUT) >= CUR_CAPACITY(UPG_NUTS)) {
-            AMMO(ITEM_NUT) = CUR_CAPACITY(UPG_NUTS);
-        } else if (AMMO(ITEM_NUT) < 0) {
-            AMMO(ITEM_NUT) = 0;
+        if (AMMO(ITEM_DEKU_NUT) >= CUR_CAPACITY(UPG_DEKU_NUTS)) {
+            AMMO(ITEM_DEKU_NUT) = CUR_CAPACITY(UPG_DEKU_NUTS);
+        } else if (AMMO(ITEM_DEKU_NUT) < 0) {
+            AMMO(ITEM_DEKU_NUT) = 0;
         }
 
     } else if (item == ITEM_BOMBCHU) {
@@ -3369,7 +3385,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
     // Not enough magic available to consume
     if ((gSaveContext.save.saveInfo.playerData.magic - magicToConsume) < 0) {
         if (gSaveContext.magicCapacity != 0) {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
         }
         return false;
     }
@@ -3390,7 +3406,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 gSaveContext.magicState = MAGIC_STATE_CONSUME_SETUP;
                 return true;
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return false;
             }
 
@@ -3409,7 +3425,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 gSaveContext.magicState = MAGIC_STATE_METER_FLASH_3;
                 return true;
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return false;
             }
 
@@ -3440,7 +3456,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 gSaveContext.magicState = MAGIC_STATE_METER_FLASH_2;
                 return true;
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return false;
             }
 
@@ -3484,7 +3500,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
                 gSaveContext.save.saveInfo.playerData.magic -= magicToConsume;
                 return true;
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 return false;
             }
     }
@@ -3495,7 +3511,7 @@ s32 Magic_Consume(PlayState* play, s16 magicToConsume, s16 type) {
 void Magic_UpdateAddRequest(void) {
     if (gSaveContext.isMagicRequested) {
         gSaveContext.save.saveInfo.playerData.magic += 4;
-        play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
+        Audio_PlaySfx(NA_SE_SY_GAUGE_UP - SFX_FLAG);
 
         if (((void)0, gSaveContext.save.saveInfo.playerData.magic) >= ((void)0, gSaveContext.magicCapacity)) {
             gSaveContext.save.saveInfo.playerData.magic = gSaveContext.magicCapacity;
@@ -3599,7 +3615,7 @@ void Magic_Update(PlayState* play) {
             gSaveContext.save.saveInfo.playerData.magic += 0x10;
 
             if ((gSaveContext.gameMode == GAMEMODE_NORMAL) && (gSaveContext.sceneLayer < 4)) {
-                play_sound(NA_SE_SY_GAUGE_UP - SFX_FLAG);
+                Audio_PlaySfx(NA_SE_SY_GAUGE_UP - SFX_FLAG);
             }
 
             if (((void)0, gSaveContext.save.saveInfo.playerData.magic) >= ((void)0, gSaveContext.magicFillTarget)) {
@@ -3649,13 +3665,13 @@ void Magic_Update(PlayState* play) {
                 if ((gSaveContext.save.saveInfo.playerData.magic == 0) ||
                     ((Player_GetEnvironmentalHazard(play) >= PLAYER_ENV_HAZARD_UNDERWATER_FLOOR) &&
                      (Player_GetEnvironmentalHazard(play) <= PLAYER_ENV_HAZARD_UNDERWATER_FREE)) ||
-                    ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_LENS) &&
-                     (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_LENS) &&
-                     (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_LENS)) ||
+                    ((BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT) != ITEM_LENS_OF_TRUTH) &&
+                     (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN) != ITEM_LENS_OF_TRUTH) &&
+                     (BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT) != ITEM_LENS_OF_TRUTH)) ||
                     !play->actorCtx.lensActive) {
                     // Deactivate Lens of Truth and set magic state to idle
                     play->actorCtx.lensActive = false;
-                    play_sound(NA_SE_SY_GLASSMODE_OFF);
+                    Audio_PlaySfx(NA_SE_SY_GLASSMODE_OFF);
                     gSaveContext.magicState = MAGIC_STATE_IDLE;
                     sMagicMeterOutlinePrimRed = sMagicMeterOutlinePrimGreen = sMagicMeterOutlinePrimBlue = 255;
                     break;
@@ -3849,8 +3865,12 @@ void Interface_DrawItemButtons(PlayState* play) {
         // Remnant of OoT
         130, 136, 136, 136, 136,
     };
-    static s16 D_801BFAF4[] = { 0x1D, 0x1B };
-    static s16 D_801BFAF8[] = { 0x1B, 0x1B };
+    static s16 D_801BFAF4[] = {
+        0x1D, // EQUIP_SLOT_B
+        0x1B, // EQUIP_SLOT_C_LEFT
+        0x1B, // EQUIP_SLOT_C_DOWN
+        0x1B, // EQUIP_SLOT_C_RIGHT
+    };
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     Player* player = GET_PLAYER(play);
     PauseContext* pauseCtx = &play->pauseCtx;
@@ -3864,21 +3884,27 @@ void Interface_DrawItemButtons(PlayState* play) {
     gDPSetCombineMode(OVERLAY_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
     // B Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[0],
-                                                 D_801BF9DC[0], D_801BFAF4[0], D_801BFAF4[0], D_801BF9E4[0] * 2,
-                                                 D_801BF9E4[0] * 2, 100, 255, 120, interfaceCtx->bAlpha);
+    OVERLAY_DISP = Gfx_DrawTexRectIA8_DropShadow(
+        OVERLAY_DISP, gButtonBackgroundTex, 0x20, 0x20, D_801BF9D4[EQUIP_SLOT_B], D_801BF9DC[EQUIP_SLOT_B],
+        D_801BFAF4[EQUIP_SLOT_B], D_801BFAF4[EQUIP_SLOT_B], D_801BF9E4[EQUIP_SLOT_B] * 2, D_801BF9E4[EQUIP_SLOT_B] * 2,
+        100, 255, 120, interfaceCtx->bAlpha);
     gDPPipeSync(OVERLAY_DISP++);
 
     // C-Left Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[1], D_801BF9DC[1], D_801BFAF4[1], D_801BFAF4[1],
-                                           D_801BF9E4[1] * 2, D_801BF9E4[1] * 2, 255, 240, 0, interfaceCtx->cLeftAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_LEFT], D_801BF9DC[EQUIP_SLOT_C_LEFT],
+                                           D_801BFAF4[EQUIP_SLOT_C_LEFT], D_801BFAF4[EQUIP_SLOT_C_LEFT],
+                                           D_801BF9E4[EQUIP_SLOT_C_LEFT] * 2, D_801BF9E4[EQUIP_SLOT_C_LEFT] * 2, 255,
+                                           240, 0, interfaceCtx->cLeftAlpha);
     // C-Down Button Color & Texture
-    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[0], D_801BF9E0[0], D_801BFAF8[0], D_801BFAF8[0],
-                                           D_801BF9E4[2] * 2, D_801BF9E4[2] * 2, 255, 240, 0, interfaceCtx->cDownAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_DOWN], D_801BF9DC[EQUIP_SLOT_C_DOWN],
+                                           D_801BFAF4[EQUIP_SLOT_C_DOWN], D_801BFAF4[EQUIP_SLOT_C_DOWN],
+                                           D_801BF9E4[EQUIP_SLOT_C_DOWN] * 2, D_801BF9E4[EQUIP_SLOT_C_DOWN] * 2, 255,
+                                           240, 0, interfaceCtx->cDownAlpha);
     // C-Right Button Color & Texture
-    OVERLAY_DISP =
-        Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D8[1], D_801BF9E0[1], D_801BFAF8[1], D_801BFAF8[1],
-                                D_801BF9E4[3] * 2, D_801BF9E4[3] * 2, 255, 240, 0, interfaceCtx->cRightAlpha);
+    OVERLAY_DISP = Gfx_DrawRect_DropShadow(OVERLAY_DISP, D_801BF9D4[EQUIP_SLOT_C_RIGHT], D_801BF9DC[EQUIP_SLOT_C_RIGHT],
+                                           D_801BFAF4[EQUIP_SLOT_C_RIGHT], D_801BFAF4[EQUIP_SLOT_C_RIGHT],
+                                           D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, D_801BF9E4[EQUIP_SLOT_C_RIGHT] * 2, 255,
+                                           240, 0, interfaceCtx->cRightAlpha);
 
     if (!IS_PAUSE_STATE_GAMEOVER) {
         if ((play->pauseCtx.state != PAUSE_STATE_OFF) || (play->pauseCtx.debugEditor != DEBUG_EDITOR_NONE)) {
@@ -3984,17 +4010,17 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
 
     i = ((void)0, GET_CUR_FORM_BTN_ITEM(button));
 
-    if ((i == ITEM_STICK) || (i == ITEM_NUT) || (i == ITEM_BOMB) || (i == ITEM_BOW) ||
-        ((i >= ITEM_BOW_ARROW_FIRE) && (i <= ITEM_BOW_ARROW_LIGHT)) || (i == ITEM_BOMBCHU) || (i == ITEM_POWDER_KEG) ||
-        (i == ITEM_MAGIC_BEANS) || (i == ITEM_PICTO_BOX)) {
+    if ((i == ITEM_DEKU_STICK) || (i == ITEM_DEKU_NUT) || (i == ITEM_BOMB) || (i == ITEM_BOW) ||
+        ((i >= ITEM_BOW_FIRE) && (i <= ITEM_BOW_LIGHT)) || (i == ITEM_BOMBCHU) || (i == ITEM_POWDER_KEG) ||
+        (i == ITEM_MAGIC_BEANS) || (i == ITEM_PICTOGRAPH_BOX)) {
 
-        if ((i >= ITEM_BOW_ARROW_FIRE) && (i <= ITEM_BOW_ARROW_LIGHT)) {
+        if ((i >= ITEM_BOW_FIRE) && (i <= ITEM_BOW_LIGHT)) {
             i = ITEM_BOW;
         }
 
         ammo = AMMO(i);
 
-        if (i == ITEM_PICTO_BOX) {
+        if (i == ITEM_PICTOGRAPH_BOX) {
             if (!CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                 ammo = 0;
             } else {
@@ -4010,10 +4036,10 @@ void Interface_DrawAmmoCount(PlayState* play, s16 button, s16 alpha) {
             ammo = play->unk_1887C - 1;
         } else if (((i == ITEM_BOW) && (AMMO(i) == CUR_CAPACITY(UPG_QUIVER))) ||
                    ((i == ITEM_BOMB) && (AMMO(i) == CUR_CAPACITY(UPG_BOMB_BAG))) ||
-                   ((i == ITEM_STICK) && (AMMO(i) == CUR_CAPACITY(UPG_STICKS))) ||
-                   ((i == ITEM_NUT) && (AMMO(i) == CUR_CAPACITY(UPG_NUTS))) ||
+                   ((i == ITEM_DEKU_STICK) && (AMMO(i) == CUR_CAPACITY(UPG_DEKU_STICKS))) ||
+                   ((i == ITEM_DEKU_NUT) && (AMMO(i) == CUR_CAPACITY(UPG_DEKU_NUTS))) ||
                    ((i == ITEM_BOMBCHU) && (AMMO(i) == CUR_CAPACITY(UPG_BOMB_BAG))) ||
-                   ((i == ITEM_POWDER_KEG) && (ammo == 1)) || ((i == ITEM_PICTO_BOX) && (ammo == 1)) ||
+                   ((i == ITEM_POWDER_KEG) && (ammo == 1)) || ((i == ITEM_PICTOGRAPH_BOX) && (ammo == 1)) ||
                    ((i == ITEM_MAGIC_BEANS) && (ammo == 20))) {
             gDPSetPrimColor(OVERLAY_DISP++, 0, 0, 120, 255, 0, alpha);
         }
@@ -4064,7 +4090,7 @@ void Interface_DrawBButtonIcons(PlayState* play) {
                  ((BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) < ITEM_SWORD_KOKIRI) ||
                   (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) > ITEM_SWORD_GILDED)) &&
                  BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) &&
-                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NUT))) {
+                (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_DEKU_NUT))) {
         if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) || (player->transformation == PLAYER_FORM_HUMAN)) {
             if (BUTTON_ITEM_EQUIP(CUR_FORM, EQUIP_SLOT_B) != ITEM_NONE) {
                 Interface_DrawItemIconTexture(play, interfaceCtx->iconItemSegment, EQUIP_SLOT_B);
@@ -4295,7 +4321,7 @@ void Interface_DrawPauseMenuEquippingIcons(PlayState* play) {
             }
 
             gSPVertex(OVERLAY_DISP++, &pauseCtx->cursorVtx[16], 4, 0);
-            gDPLoadTextureBlock(OVERLAY_DISP++, &D_08095AC0, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
+            gDPLoadTextureBlock(OVERLAY_DISP++, gMagicArrowEquipEffectTex, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
         }
@@ -5761,16 +5787,16 @@ void Interface_DrawTimers(PlayState* play) {
                 // Use seconds to determine when to beep
                 if (gSaveContext.timerCurTimes[sTimerId] > SECONDS_TO_TIMER(60)) {
                     if ((sTimerBeepSfxSeconds != sTimerDigits[4]) && (sTimerDigits[4] == 1)) {
-                        play_sound(NA_SE_SY_MESSAGE_WOMAN);
+                        Audio_PlaySfx(NA_SE_SY_MESSAGE_WOMAN);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
                     }
                 } else if (gSaveContext.timerCurTimes[sTimerId] > SECONDS_TO_TIMER(10)) {
                     if ((sTimerBeepSfxSeconds != sTimerDigits[4]) && ((sTimerDigits[4] % 2) != 0)) {
-                        play_sound(NA_SE_SY_WARNING_COUNT_N);
+                        Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_N);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
                     }
                 } else if (sTimerBeepSfxSeconds != sTimerDigits[4]) {
-                    play_sound(NA_SE_SY_WARNING_COUNT_E);
+                    Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                     sTimerBeepSfxSeconds = sTimerDigits[4];
                 }
             } else { // TIMER_COUNT_UP
@@ -5814,7 +5840,7 @@ void Interface_DrawTimers(PlayState* play) {
                     (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0))) {
                     if ((gSaveContext.timerCurTimes[sTimerId] > SECONDS_TO_TIMER(110)) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
-                        play_sound(NA_SE_SY_WARNING_COUNT_E);
+                        Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
                     }
                 } else if (CHECK_EVENTINF(EVENTINF_34) && (play->sceneId == SCENE_DEKUTES)) {
@@ -5822,7 +5848,7 @@ void Interface_DrawTimers(PlayState* play) {
                          (gSaveContext.save.saveInfo.dekuPlaygroundHighScores[CURRENT_DAY - 1] -
                           SECONDS_TO_TIMER(9))) &&
                         (sTimerBeepSfxSeconds != sTimerDigits[4])) {
-                        play_sound(NA_SE_SY_WARNING_COUNT_E);
+                        Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                         sTimerBeepSfxSeconds = sTimerDigits[4];
                     }
                 }
@@ -6606,7 +6632,7 @@ void Interface_Update(PlayState* play) {
         case HUD_VISIBILITY_NONE:
         case HUD_VISIBILITY_NONE_ALT:
         case HUD_VISIBILITY_B:
-            dimmingAlpha = 255 - (gSaveContext.hudVisibilityTimer << 5);
+            dimmingAlpha = 255 - (gSaveContext.hudVisibilityTimer * 32);
             if (dimmingAlpha < 0) {
                 dimmingAlpha = 0;
             }
@@ -6637,7 +6663,7 @@ void Interface_Update(PlayState* play) {
         case HUD_VISIBILITY_B_MAGIC:
         case HUD_VISIBILITY_A_B:
         case HUD_VISIBILITY_A_B_HEARTS_MAGIC_MINIMAP:
-            dimmingAlpha = 255 - (gSaveContext.hudVisibilityTimer << 5);
+            dimmingAlpha = 255 - (gSaveContext.hudVisibilityTimer * 32);
             if (dimmingAlpha < 0) {
                 dimmingAlpha = 0;
             }
@@ -6650,7 +6676,7 @@ void Interface_Update(PlayState* play) {
             break;
 
         case HUD_VISIBILITY_ALL:
-            dimmingAlpha = 255 - (gSaveContext.hudVisibilityTimer << 5);
+            dimmingAlpha = 255 - (gSaveContext.hudVisibilityTimer * 32);
             if (dimmingAlpha < 0) {
                 dimmingAlpha = 0;
             }
@@ -6716,7 +6742,7 @@ void Interface_Update(PlayState* play) {
         gSaveContext.save.saveInfo.playerData.health += 4;
 
         if ((gSaveContext.save.saveInfo.playerData.health & 0xF) < 4) {
-            play_sound(NA_SE_SY_HP_RECOVER);
+            Audio_PlaySfx(NA_SE_SY_HP_RECOVER);
         }
 
         if (((void)0, gSaveContext.save.saveInfo.playerData.health) >=
@@ -6749,7 +6775,7 @@ void Interface_Update(PlayState* play) {
             if (gSaveContext.save.saveInfo.playerData.rupees < CUR_CAPACITY(UPG_WALLET)) {
                 gSaveContext.rupeeAccumulator--;
                 gSaveContext.save.saveInfo.playerData.rupees++;
-                play_sound(NA_SE_SY_RUPY_COUNT);
+                Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
             } else {
                 // Max rupees
                 gSaveContext.save.saveInfo.playerData.rupees = CUR_CAPACITY(UPG_WALLET);
@@ -6762,11 +6788,11 @@ void Interface_Update(PlayState* play) {
                 if (gSaveContext.save.saveInfo.playerData.rupees < 0) {
                     gSaveContext.save.saveInfo.playerData.rupees = 0;
                 }
-                play_sound(NA_SE_SY_RUPY_COUNT);
+                Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
             } else {
                 gSaveContext.rupeeAccumulator++;
                 gSaveContext.save.saveInfo.playerData.rupees--;
-                play_sound(NA_SE_SY_RUPY_COUNT);
+                Audio_PlaySfx(NA_SE_SY_RUPY_COUNT);
             }
         } else {
             gSaveContext.rupeeAccumulator = 0;
@@ -6799,9 +6825,9 @@ void Interface_Update(PlayState* play) {
                     interfaceCtx->minigameState++;
                     if (interfaceCtx->minigameState == MINIGAME_STATE_COUNTDOWN_GO) {
                         interfaceCtx->minigameCountdownScale = 160;
-                        play_sound(NA_SE_SY_START_SHOT);
+                        Audio_PlaySfx(NA_SE_SY_START_SHOT);
                     } else {
-                        play_sound(NA_SE_SY_WARNING_COUNT_E);
+                        Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                     }
                     break;
 
@@ -6924,7 +6950,7 @@ void Interface_Update(PlayState* play) {
             gSaveContext.magicFillTarget = gSaveContext.save.saveInfo.playerData.magic;
             gSaveContext.save.saveInfo.playerData.magic = 0;
             gSaveContext.magicState = MAGIC_STATE_STEP_CAPACITY;
-            BUTTON_ITEM_EQUIP(PLAYER_FORM_DEKU, EQUIP_SLOT_B) = ITEM_NUT;
+            BUTTON_ITEM_EQUIP(PLAYER_FORM_DEKU, EQUIP_SLOT_B) = ITEM_DEKU_NUT;
         }
 
         Magic_Update(play);

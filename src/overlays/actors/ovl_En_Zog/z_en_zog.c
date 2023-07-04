@@ -394,9 +394,9 @@ void func_80B93D2C(EnZog* this, PlayState* play) {
 void func_80B93DE8(Vec3f* arg0, PlayState* play, s32 arg2) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + arg0->x;
+    sp2C.x = Rand_CenteredFloat(30.0f) + arg0->x;
     sp2C.y = arg0->y + 3.0f;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + arg0->z;
+    sp2C.z = Rand_CenteredFloat(30.0f) + arg0->z;
     EffectSsKirakira_SpawnDispersed(play, &sp2C, &D_80B9598C, &D_80B95998, &D_80B959A4, &D_80B959A8, 1000, arg2);
 }
 
@@ -667,14 +667,14 @@ void func_80B946FC(EnZog* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         play->msgCtx.msgLength = 0;
                         this->actionFunc = func_80B946B4;
                         func_80B93BA8(this, 1);
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1014);
                         break;
                 }
@@ -865,9 +865,9 @@ void func_80B94E34(EnZog* this, PlayState* play) {
             Vec3f sp38;
 
             Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B959AC, &sp38);
-            sp38.x += randPlusMinusPoint5Scaled(30.0f);
+            sp38.x += Rand_CenteredFloat(30.0f);
             sp38.y += 20.0f;
-            sp38.z += randPlusMinusPoint5Scaled(30.0f);
+            sp38.z += Rand_CenteredFloat(30.0f);
             if (WaterBox_GetSurface1(play, &play->colCtx, sp38.x, sp38.z, &sp38.y, &sp44) &&
                 (this->actor.world.pos.y < sp38.y)) {
                 EffectSsGSplash_Spawn(play, &sp38, NULL, NULL, 1,

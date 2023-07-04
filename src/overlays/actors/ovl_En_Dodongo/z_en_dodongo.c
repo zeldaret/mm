@@ -371,11 +371,11 @@ void func_80876930(EnDodongo* this, PlayState* play, Vec3f* arg2) {
     temp3 = this->unk_334 * 30.0f;
 
     for (i = 0; i < 3; i++) {
-        sp88.x = randPlusMinusPoint5Scaled(temp3) + arg2->x;
+        sp88.x = Rand_CenteredFloat(temp3) + arg2->x;
         sp88.y = Rand_ZeroFloat(5.0f) + this->actor.floorHeight;
-        sp88.z = randPlusMinusPoint5Scaled(temp3) + arg2->z;
-        D_8087933C.x = randPlusMinusPoint5Scaled(2.0f);
-        D_8087933C.z = randPlusMinusPoint5Scaled(2.0f);
+        sp88.z = Rand_CenteredFloat(temp3) + arg2->z;
+        D_8087933C.x = Rand_CenteredFloat(2.0f);
+        D_8087933C.z = Rand_CenteredFloat(2.0f);
         func_800B0DE0(play, &sp88, &gZeroVec3f, &D_8087933C, sp80, sp7C, temp1, temp2);
     }
 }
@@ -645,7 +645,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
     }
 
     if (func_8087721C(this)) {
-        func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         frame = this->skelAnime.curFrame - 29.0f;
         end = frame >> 1;
         if (end > 3) {
@@ -671,7 +671,7 @@ void func_8087784C(EnDodongo* this, PlayState* play) {
         EffectSsDFire_Spawn(play, &this->limbPos[0], &D_80879354, &D_80879348, this->unk_334 * 100.0f,
                             this->unk_334 * 35.0f, 0xFF - (frame * 10), 5, 0, 8);
     } else if ((this->skelAnime.curFrame >= 2.0f) && (this->skelAnime.curFrame <= 20.0f)) {
-        func_800B9010(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_BREATH - SFX_FLAG);
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -738,9 +738,9 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
         this->timer--;
         if (this->timer == 10) {
             for (i = 10; i >= 0; i--) {
-                sp84.x = randPlusMinusPoint5Scaled(10.0f);
-                sp84.y = randPlusMinusPoint5Scaled(10.0f);
-                sp84.z = randPlusMinusPoint5Scaled(10.0f);
+                sp84.x = Rand_CenteredFloat(10.0f);
+                sp84.y = Rand_CenteredFloat(10.0f);
+                sp84.z = Rand_CenteredFloat(10.0f);
                 sp78.x = sp84.x * -0.1f;
                 sp78.y = sp84.y * -0.1f;
                 sp78.z = sp84.z * -0.1f;
@@ -1053,7 +1053,7 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.375f;
             this->drawDmgEffScale = (this->drawDmgEffScale > 0.75f) ? 0.75f : this->drawDmgEffScale;
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.75f, 0.01875f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

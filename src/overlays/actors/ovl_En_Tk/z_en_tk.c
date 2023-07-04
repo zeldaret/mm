@@ -130,9 +130,9 @@ static f32 D_80AEF8F0[] = {
 };
 
 typedef struct {
-    /* 0x00 */ Actor* unk_00;
-    /* 0x04 */ f32 unk_04;
-} EnTkStruct; // size = 0x8?
+    /* 0x0 */ Actor* unk_00;
+    /* 0x4 */ f32 unk_04;
+} EnTkStruct; // size = 0x8
 
 void func_80AEC460(EnTk* this) {
     if (DECR(this->unk_2C4) == 0) {
@@ -503,12 +503,12 @@ s32 func_80AED354(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80AED38C(EnTk* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp1E = SCHEDULE_TIME_NOW;
-    u8 params = ENTK_GET_F800(&this->actor);
+    u8 pathIndex = ENTK_GET_PATH_INDEX(&this->actor);
     u16 phi_a1;
     s32 index = scheduleOutput->result - 1;
     u16 tmp;
 
-    this->timePath = SubS_GetAdditionalPath(play, params, D_80AEF8E8[index + 1]);
+    this->timePath = SubS_GetAdditionalPath(play, pathIndex, D_80AEF8E8[index + 1]);
     if (this->timePath == NULL) {
         return false;
     }
@@ -846,10 +846,10 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
 
                     case 0x1407:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             Message_ContinueTextbox(play, 0x1409);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             Message_ContinueTextbox(play, 0x1408);
                         }
                         break;
@@ -872,11 +872,11 @@ void func_80AEDF5C(EnTk* this, PlayState* play) {
                     case 0x140D:
                         this->unk_2CA |= 2;
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             play->msgCtx.msgMode = 0x44;
                             func_80AEE2A8(this, play);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             Message_ContinueTextbox(play, 0x140E);
                         }
                         break;
@@ -1323,7 +1323,7 @@ void EnTk_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->unk_2CA & 0x200)) {
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-            func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_HUMAN_BOUND);
         }
@@ -1366,6 +1366,7 @@ void EnTk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 gSPDisplayList(POLY_OPA_DISP++, object_tk_DL_00B530);
 
                 CLOSE_DISPS(play->state.gfxCtx);
+
                 break;
         }
     }

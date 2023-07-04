@@ -25,71 +25,17 @@ typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
 typedef u16 (*NpcGetTextIdFunc)(struct PlayState*, struct Actor*);
 typedef s16 (*NpcUpdateTalkStateFunc)(struct PlayState*, struct Actor*);
 
-typedef struct {
+typedef struct PosRot {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3s rot;
 } PosRot; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ u8 attack[32];
-} DamageTable; // size = 0x20
-
-typedef struct {
-    /* 0x0 */ u8 health;
-    /* 0x2 */ s16 cylRadius;
-    /* 0x4 */ s16 cylHeight;
-    /* 0x6 */ u8 mass;
-} CollisionCheckInfoInit; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u8 health;
-    /* 0x2 */ s16 cylRadius;
-    /* 0x4 */ s16 cylHeight;
-    /* 0x6 */ s16 cylYShift;
-    /* 0x8 */ u8 mass;
-} CollisionCheckInfoInit2; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ DamageTable* damageTable;
-    /* 0x04 */ Vec3f displacement;
-    /* 0x10 */ s16 cylRadius;
-    /* 0x12 */ s16 cylHeight;
-    /* 0x14 */ s16 cylYShift;
-    /* 0x16 */ u8 mass;
-    /* 0x17 */ u8 health;
-    /* 0x18 */ u8 damage;
-    /* 0x19 */ u8 damageEffect;
-    /* 0x1A */ u8 atHitEffect;
-    /* 0x1B */ u8 acHitEffect;
-} CollisionCheckInfo; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ s32 unk4;
-    /* 0x08 */ f32 unk8;
-    /* 0x0C */ f32 unkC;
-    /* 0x10 */ f32 unk10;
-    /* 0x14 */ f32 unk14;
-    /* 0x18 */ f32 unk18;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-    /* 0x24 */ f32 unk24;
-    /* 0x28 */ f32 unk28;
-    /* 0x2C */ f32 unk2C;
-    /* 0x30 */ s16 unk30;
-    /* 0x32 */ s16 unk32;
-    /* 0x34 */ s16 unk34;
-    /* 0x36 */ s16 unk36;
-    /* 0x38 */ s16 unk38;
-    /* 0x3A */ s16 unk3A;
-} ActorEnTest20C; // size = 0x3C
 
 typedef struct {
     /* 0x0 */ s16 unk_0; // frame?
     /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
-typedef struct {
+typedef struct ActorInit {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
     /* 0x04 */ u32 flags;
@@ -262,10 +208,10 @@ typedef enum Item00Type {
     /* 0x09 */ ITEM00_ARROWS_40,
     /* 0x0A */ ITEM00_ARROWS_50,
     /* 0x0B */ ITEM00_BOMBS_B,
-    /* 0x0C */ ITEM00_NUTS_1,
-    /* 0x0D */ ITEM00_STICK,
-    /* 0x0E */ ITEM00_MAGIC_LARGE,
-    /* 0x0F */ ITEM00_MAGIC_SMALL,
+    /* 0x0C */ ITEM00_DEKU_NUTS_1,
+    /* 0x0D */ ITEM00_DEKU_STICK,
+    /* 0x0E */ ITEM00_MAGIC_JAR_BIG,
+    /* 0x0F */ ITEM00_MAGIC_JAR_SMALL,
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
@@ -273,7 +219,7 @@ typedef enum Item00Type {
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
-    /* 0x17 */ ITEM00_NUTS_10,
+    /* 0x17 */ ITEM00_DEKU_NUTS_10,
     /* 0x18 */ ITEM00_NOTHING,
     /* 0x19 */ ITEM00_BOMBS_0,
     /* 0x1A */ ITEM00_BIG_FAIRY,
@@ -317,7 +263,7 @@ typedef struct EnAObj {
 
 typedef enum {
     /* 0 */ AOBJ_SIGNPOST_OBLONG,
-    /* 1 */ AOBJ_SIGNPOST_ARROW,
+    /* 1 */ AOBJ_SIGNPOST_ARROW
 } AObjType;
 
 #define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)

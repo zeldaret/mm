@@ -86,7 +86,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     if (this->speed < 0.01f) {
         this->actionFunc = ObjRaillift_DoNothing;
     } else {
-        path = &play->setupPathList[OBJRAILLIFT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJRAILLIFT_GET_PATH_INDEX(thisx)];
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
@@ -126,7 +126,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
         }
 
         if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM) {
-            func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 

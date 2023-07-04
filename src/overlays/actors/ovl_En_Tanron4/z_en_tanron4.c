@@ -23,13 +23,13 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play);
 
 typedef enum {
     /* 0 */ SEAGULL_FLY_FLAP,
-    /* 1 */ SEAGULL_FLY_GLIDE,
+    /* 1 */ SEAGULL_FLY_GLIDE
 } SeagullFlyState;
 
 typedef enum {
     /* 0 */ SEAGULL_TIMER_FLY_STATE,
-    /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET,
-} SeagullTimers;
+    /* 1 */ SEAGULL_TIMER_CHOOSE_TARGET
+} SeagullTimer;
 
 ActorInit En_Tanron4_InitVars = {
     ACTOR_EN_TANRON4,
@@ -48,7 +48,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     EnTanron4* this = THIS;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
-                       OBJECT_TANRON4_LIMB_MAX);
+                       SEAGULL_LIMB_RIGHT_WING_MAX);
 
     thisx->flags &= ~ACTOR_FLAG_1;
     thisx->speed = 3.0f + KREG(48);
@@ -65,10 +65,9 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
             s32 i;
 
             for (i = 0; i < thisx->params; i++) {
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON4,
-                            thisx->world.pos.x + randPlusMinusPoint5Scaled(500.0f),
-                            thisx->world.pos.y + randPlusMinusPoint5Scaled(100.0f),
-                            thisx->world.pos.z + randPlusMinusPoint5Scaled(500.0f), 0, Rand_ZeroFloat(65536.0f), 0,
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON4, thisx->world.pos.x + Rand_CenteredFloat(500.0f),
+                            thisx->world.pos.y + Rand_CenteredFloat(100.0f),
+                            thisx->world.pos.z + Rand_CenteredFloat(500.0f), 0, Rand_ZeroFloat(0x10000), 0,
                             SEAGULL_CLONE);
             }
         }
@@ -112,9 +111,9 @@ void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
     distToTarget = sqrtf(SQ(xDiff) + SQ(zDiff));
 
     if ((this->timers[SEAGULL_TIMER_CHOOSE_TARGET] == 0) || (distToTarget < 100.0f)) {
-        this->targetPos.x = this->actor.home.pos.x + randPlusMinusPoint5Scaled(500.0f);
-        this->targetPos.y = this->actor.home.pos.y + randPlusMinusPoint5Scaled(100.0f);
-        this->targetPos.z = this->actor.home.pos.z + randPlusMinusPoint5Scaled(500.0f);
+        this->targetPos.x = this->actor.home.pos.x + Rand_CenteredFloat(500.0f);
+        this->targetPos.y = this->actor.home.pos.y + Rand_CenteredFloat(100.0f);
+        this->targetPos.z = this->actor.home.pos.z + Rand_CenteredFloat(500.0f);
 
         this->timers[SEAGULL_TIMER_CHOOSE_TARGET] = Rand_ZeroFloat(100.0f) + 60.0f;
         this->step = 0;
@@ -151,7 +150,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
 
         case SEAGULL_FLY_GLIDE:
             if (((this->randRollTimer % 8) == 0) && (Rand_ZeroOne() < 0.5f)) {
-                this->rollTarget = randPlusMinusPoint5Scaled(3000.0f + KREG(44));
+                this->rollTarget = Rand_CenteredFloat(3000.0f + KREG(44));
             }
 
             if (this->timers[SEAGULL_TIMER_FLY_STATE] == 0) {
@@ -192,9 +191,9 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play) {
     distToTarget = sqrtf(SQ(xDiff) + SQ(zDiff));
 
     if ((this->timers[SEAGULL_TIMER_CHOOSE_TARGET] == 0) || (distToTarget < 100.0f)) {
-        this->targetPos.x = targetActor->world.pos.x + randPlusMinusPoint5Scaled(200.0f + KREG(82));
-        this->targetPos.y = targetActor->world.pos.y + KREG(80) + 100.0f + randPlusMinusPoint5Scaled(100.0f + KREG(81));
-        this->targetPos.z = targetActor->world.pos.z + randPlusMinusPoint5Scaled(200.0f + KREG(82));
+        this->targetPos.x = targetActor->world.pos.x + Rand_CenteredFloat(200.0f + KREG(82));
+        this->targetPos.y = targetActor->world.pos.y + KREG(80) + 100.0f + Rand_CenteredFloat(100.0f + KREG(81));
+        this->targetPos.z = targetActor->world.pos.z + Rand_CenteredFloat(200.0f + KREG(82));
 
         this->timers[SEAGULL_TIMER_CHOOSE_TARGET] = Rand_ZeroFloat(100.0f) + 60.0f;
         this->step = 0;
@@ -230,7 +229,7 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play) {
 
         case SEAGULL_FLY_GLIDE:
             if (((this->randRollTimer % 8) == 0) && (Rand_ZeroOne() < 0.5f)) {
-                this->rollTarget = randPlusMinusPoint5Scaled(3000.0f + KREG(44));
+                this->rollTarget = Rand_CenteredFloat(3000.0f + KREG(44));
             }
 
             if (this->timers[SEAGULL_TIMER_FLY_STATE] == 0) {

@@ -62,18 +62,18 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
+static AnimationHeader* sAnimations[] = { &gGuruGuruPlayStillAnim, &gGuruGuruPlayAndMoveHeadAnim };
 static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 static f32 sPlaySpeeds[] = { 1.0f, 1.0f };
-static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
-static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
+static TexturePtr sEyeTextures[] = { gGuruGuruEyeClosedTex, gGuruGuruEyeAngryTex };
+static TexturePtr sMouthTextures[] = { gGuruGuruMouthOpenTex, gGuruGuruMouthAngryTex };
 
 void EnGuruguru_Init(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGuruGuruSkel, &gGuruGuruPlayStillAnim, this->jointTable,
                        this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {
@@ -131,7 +131,7 @@ void func_80BC6E10(EnGuruguru* this) {
     this->headZRotTarget = 0;
     this->unk268 = 1;
     this->actor.textId = textIDs[this->textIdIndex];
-    if ((this->textIdIndex == 0 || this->textIdIndex == 1) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
+    if (((this->textIdIndex == 0) || (this->textIdIndex == 1)) && CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04)) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_88_04)) {
             this->actor.textId = 0x295F;
         } else {
@@ -175,7 +175,7 @@ void func_80BC701C(EnGuruguru* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->unk268 != 0) &&
-        (player->transformation == PLAYER_FORM_HUMAN || player->transformation == PLAYER_FORM_DEKU)) {
+        ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_DEKU))) {
         this->headZRotTarget = 5000;
     }
 
@@ -211,7 +211,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         Message_CloseTextbox(play);
         this->headZRotTarget = 0;
         if ((this->textIdIndex == 13) || (this->textIdIndex == 14)) {
-            func_80151BB4(play, 0x13);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             SET_WEEKEVENTREG(WEEKEVENTREG_79_04);
             func_80BC6E10(this);
             return;
@@ -223,7 +223,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             if (this->actor.textId == 0x292A) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_38_10);
             }
-            func_80151BB4(play, 0x13);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             func_80BC6E10(this);
             return;
         }
@@ -234,8 +234,8 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
         if (this->textIdIndex == 12) {
             SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
             func_801A3B48(0);
-            func_80151BB4(play, 0x36);
-            func_80151BB4(play, 0x13);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BREMEN_MASK);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
             func_80BC6E10(this);
             return;
         }
@@ -275,7 +275,7 @@ void func_80BC7068(EnGuruguru* this, PlayState* play) {
             return;
         }
         func_801A3B48(0);
-        func_80151BB4(play, 0x13);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GURU_GURU);
         func_80BC6E10(this);
     }
 }
@@ -324,7 +324,7 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
             return;
         }
-    } else if (this->actor.params == 0 || this->actor.params == 2) {
+    } else if ((this->actor.params == 0) || (this->actor.params == 2)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -352,10 +352,10 @@ void EnGuruguru_Update(Actor* thisx, PlayState* play) {
     this->headXRotTarget = 0;
     if (yaw < 0x2AF8) {
         this->headXRotTarget = this->actor.yawTowardsPlayer - this->actor.world.rot.y;
-        if (this->headXRotTarget > 5000) {
-            this->headXRotTarget = 5000;
-        } else if (this->headXRotTarget < -5000) {
-            this->headXRotTarget = -5000;
+        if (this->headXRotTarget > 0x1388) {
+            this->headXRotTarget = 0x1388;
+        } else if (this->headXRotTarget < -0x1388) {
+            this->headXRotTarget = -0x1388;
         }
     }
     Actor_SetScale(&this->actor, 0.01f);

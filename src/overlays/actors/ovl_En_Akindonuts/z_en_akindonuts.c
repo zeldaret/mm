@@ -179,7 +179,7 @@ s32 func_80BECD10(EnAkindonuts* this, Path* path, s32 arg2) {
         phi_f14 = sp5C[idx + 1].z - sp5C[idx - 1].z;
     }
 
-    func_8017B7F8(&sp30, RAD_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         sp50 = true;
     }
@@ -232,8 +232,10 @@ s32 func_80BECFBC(EnAkindonuts* this) {
         case 3:
             Inventory_DeleteItem(ITEM_DEED_OCEAN, SLOT(ITEM_DEED_OCEAN));
             return GI_RUPEE_HUGE;
+
+        default:
+            return GI_NONE;
     }
-    return GI_NONE;
 }
 
 s32 func_80BED034(EnAkindonuts* this) {
@@ -249,8 +251,10 @@ s32 func_80BED034(EnAkindonuts* this) {
 
         case 3:
             return GI_POTION_BLUE;
+
+        default:
+            return GI_NONE;
     }
-    return GI_NONE;
 }
 
 void func_80BED090(PlayState* play) {
@@ -407,22 +411,22 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED208(this)) {
                     case 0:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15EC;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15ED;
                         break;
 
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15EE;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C &= ~0x1;
                         this->unk_32C |= 0x40;
                         play->msgCtx.msgMode = 0x43;
@@ -490,22 +494,22 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED208(this)) {
                     case 0:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15EC;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15ED;
                         break;
 
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15EE;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -585,22 +589,22 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED27C(this)) {
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1601;
                         break;
 
                     case 0:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1602;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1603;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -668,22 +672,22 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED27C(this)) {
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1601;
                         break;
 
                     case 0:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1602;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1603;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -763,17 +767,17 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED2FC(this)) {
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1613;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15ED;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -841,17 +845,17 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED2FC(this)) {
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1613;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15ED;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -924,17 +928,17 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED35C(this)) {
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1613;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15ED;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -1002,17 +1006,17 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
 
                 switch (func_80BED35C(this)) {
                     case 2:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x1613;
                         break;
 
                     case 1:
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_33C = 0x15ED;
                         break;
 
                     case 3:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_32C |= 0x40;
                         this->unk_32C &= ~0x1;
                         play->msgCtx.msgMode = 0x43;
@@ -1273,7 +1277,7 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_32C |= 0x10;
                     this->unk_2DC(this, play);
                     break;
@@ -1606,7 +1610,7 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
 
     if (!ENAKINDONUTS_GET_4(&this->actor)) {
-        this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_FC00(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENAKINDONUTS_GET_PATH_INDEX(&this->actor), ENAKINDONUTS_PATH_INDEX_NONE);
         if (this->path == NULL) {
             Actor_Kill(&this->actor);
             return;
@@ -1638,7 +1642,7 @@ void EnAkindonuts_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (this->unk_32C & 0x80) {
-        func_800B9010(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_AKINDO_FLY - SFX_FLAG);
     }
     func_80BECC7C(this, play);
 }

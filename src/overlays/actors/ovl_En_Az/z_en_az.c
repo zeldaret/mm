@@ -72,7 +72,7 @@ typedef enum {
     /* 10 */ BEAVER_ANIM_TALK_TO_RIGHT,
     /* 11 */ BEAVER_ANIM_BOW,
     /* 12 */ BEAVER_ANIM_IDLE_FACE_LEFT,
-    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT,
+    /* 13 */ BEAVER_ANIM_IDLE_FACE_RIGHT
 } BeaverAnimation;
 
 static AnimationSpeedInfo sAnimationInfo[] = {
@@ -590,7 +590,7 @@ void func_80A95CEC(EnAz* this, PlayState* play) {
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->actor.draw = EnAz_Draw;
             Actor_MoveWithGravity(&this->actor);
-            func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         } else {
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_DOWN);
@@ -628,7 +628,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
             }
         } else {
-            func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
         }
     }
     if (!(this->unk_374 & 0x2000)) {
@@ -655,7 +655,7 @@ void func_80A95FE8(EnAz* this, PlayState* play) {
         CutsceneManager_Queue(this->csIdList[0]);
     }
     if (Actor_WorldDistXYZToPoint(&this->actor, &this->actor.home.pos) > 20.0f) {
-        func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
         func_800BE33C(&this->actor.world.pos, &this->actor.home.pos, &this->actor.world.rot, false);
         Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x, 3, 0xE38, 0x38E);
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0xE38, 0x38E);
@@ -726,12 +726,12 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10D2:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             this->actor.textId = 0x10D6;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo,
                                                             BEAVER_ANIM_TALK_WAVE_ARMS, &this->animIndex);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10D3;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
                                                             &this->animIndex);
@@ -760,7 +760,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             switch (this->unk_2FA) {
                                 case 2:
                                     this->unk_2FA = 1;
@@ -777,7 +777,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             }
                             ret = 0;
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10D9;
                         }
                         break;
@@ -796,12 +796,12 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10DB:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             play->msgCtx.msgMode = 0x44;
                             this->unk_2FA = 1;
                             ret = 0;
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10DC;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
                                                             &this->animIndex);
@@ -850,10 +850,10 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10E5:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             this->actor.textId = 0x10E8;
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10E6;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_TO_LEFT,
                                                             &this->animIndex);
@@ -895,7 +895,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                     case 0x10EB:
                         if (play->msgCtx.choiceIndex == 0) {
                             play->msgCtx.msgMode = 0x44;
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             switch (this->unk_2FA) {
                                 case 4:
                                     this->unk_2FA = 3;
@@ -911,7 +911,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             }
                             ret = 0;
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10EC;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_LAUGH_LEFT,
                                                             &this->animIndex);
@@ -992,7 +992,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10F8:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                                 this->actor.textId = 0x1107;
                             } else {
@@ -1001,7 +1001,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo,
                                                             BEAVER_ANIM_TALK_WAVE_ARMS, &this->animIndex);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10F9;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_BOW,
                                                             &this->animIndex);
@@ -1044,7 +1044,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                         break;
                     case 0x10FE:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_01)) {
                                 this->actor.textId = 0x1108;
                             } else {
@@ -1053,7 +1053,7 @@ s32 func_80A9617C(EnAz* this, PlayState* play) {
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK,
                                                             &this->animIndex);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             this->actor.textId = 0x10FF;
                             SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, BEAVER_ANIM_TALK_TO_LEFT,
                                                             &this->animIndex);
@@ -1425,13 +1425,13 @@ void func_80A97AB4(EnAz* this, PlayState* play) {
                         break;
                     case 0x10D8:
                         if (play->msgCtx.choiceIndex == 0) {
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             play->msgCtx.msgMode = 0x44;
                             func_800FD750(NA_BGM_TIMED_MINI_GAME);
                             func_80A94AB8(this, play, 1);
                             func_80A979DC(this, play);
                         } else {
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_04)) {
                                 CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
                             }
@@ -1578,7 +1578,7 @@ void func_80A97F9C(EnAz* this, PlayState* play) {
                     Actor_PlaySfx(&this->actor, NA_SE_EV_BEAVER_SWIM_HAND);
                 }
             } else {
-                func_800B9010(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BEAVER_SWIM_MOTOR - SFX_FLAG);
             }
         }
         SkelAnime_Update(&this->skelAnime);
@@ -1794,13 +1794,16 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
                               func_80A98DA4, func_80A98E48, &this->actor);
     } else {
         OPEN_DISPS(play->state.gfxCtx);
+
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sYoungerBrotherEyeTextures[this->unk_37E]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sYoungerBrotherBeltTextures[this->unk_380]));
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               func_80A98DA4, func_80A98E48, &this->actor);
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actor.depthInWater >= 28.0f) && (this->actor.speed > 0.5f)) {
         Matrix_Translate(this->unk_3B4.x, this->unk_3B4.y, this->unk_3B4.z, MTXMODE_NEW);
         Matrix_RotateYS(this->actor.shape.rot.y, MTXMODE_APPLY);
@@ -1855,6 +1858,7 @@ void EnAz_Draw(Actor* thisx, PlayState* play2) {
             gSPDisplayList(POLY_XLU_DISP++, gBeaverYoungerBrotherTailSplashDL);
         }
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

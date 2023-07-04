@@ -458,25 +458,25 @@ void func_8099874C(EnGs* this, PlayState* play) {
             }
 
             if (phi_v0 != 0) {
-                this->unk_20C = -1;
+                this->getItemId = -1;
                 switch (this->unk_194) {
                     case 1:
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_08)) {
-                            this->unk_20C = 6;
+                            this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_08);
                         }
                         break;
 
                     case 3:
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_10)) {
-                            this->unk_20C = 6;
+                            this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_10);
                         }
                         break;
 
                     case 2:
                         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_20)) {
-                            this->unk_20C = 6;
+                            this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_20);
                         }
                         break;
@@ -484,10 +484,10 @@ void func_8099874C(EnGs* this, PlayState* play) {
 
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_90_10)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_90_10);
-                    this->unk_20C = 12;
+                    this->getItemId = GI_HEART_PIECE;
                 }
 
-                if (this->unk_20C > 0) {
+                if (this->getItemId > GI_NONE) {
                     func_809989B4(this, play);
                 } else {
                     func_80997D14(this, play);
@@ -502,7 +502,7 @@ void func_8099874C(EnGs* this, PlayState* play) {
 }
 
 void func_809989B4(EnGs* this, PlayState* play) {
-    Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+    Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
     this->actionFunc = func_809989F4;
 }
 
@@ -511,7 +511,8 @@ void func_809989F4(EnGs* this, PlayState* play) {
         this->actor.parent = NULL;
         func_80997D14(this, play);
     } else {
-        Actor_OfferGetItem(&this->actor, play, this->unk_20C, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
+        Actor_OfferGetItem(&this->actor, play, this->getItemId, this->actor.xzDistToPlayer,
+                           this->actor.playerHeightRel);
     }
 }
 
@@ -787,13 +788,13 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
                     if ((this->unk_1D4 % 20) == 7) {
                         func_80999584(&this->unk_1FA, &flashColours[0]);
                         this->unk_1F4 = this->unk_1FA;
-                        play_sound(NA_SE_SY_WARNING_COUNT_E);
+                        Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                         this->unk_200 = 0.0f;
                     }
                 } else if ((this->unk_1D4 % 20) == 7) {
                     func_80999584(&this->unk_1FA, &flashColours[1]);
                     this->unk_1F4 = this->unk_1FA;
-                    play_sound(NA_SE_SY_WARNING_COUNT_N);
+                    Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_N);
                     this->unk_200 = 0.0f;
                 }
             }
@@ -814,9 +815,9 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         Vec3f sp60;
 
         for (i = 0; i < 3; i++) {
-            sp60.x = randPlusMinusPoint5Scaled(15.0f);
+            sp60.x = Rand_CenteredFloat(15.0f);
             sp60.y = Rand_ZeroFloat(-1.0f);
-            sp60.z = randPlusMinusPoint5Scaled(15.0f);
+            sp60.z = Rand_CenteredFloat(15.0f);
 
             sp6C.x = this->actor.world.pos.x + (2.0f * sp60.x);
             sp6C.y = this->actor.world.pos.y + 7.0f;
@@ -825,7 +826,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             func_800B0EB0(play, &sp6C, &sp60, &dustAccel, &dustPrim, &dustEnv, Rand_ZeroFloat(50.0f) + 200.0f, 40, 15);
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
 
         if (this->unk_1D4++ >= 40) {
             this->unk_19A |= 0x10;
@@ -858,7 +859,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             this->unk_216 = 0;
             this->actionFunc = func_80999A8C;
         } else {
-            func_800B9010(&this->actor, NA_SE_EV_STONE_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_STONE_LAUNCH - SFX_FLAG);
         }
 
         Actor_MoveWithGravity(&this->actor);

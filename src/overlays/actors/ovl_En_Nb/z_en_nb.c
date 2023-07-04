@@ -43,7 +43,7 @@ typedef enum EnNbScheduleResult {
     /* 1 */ EN_NB_SCH_1,
     /* 2 */ EN_NB_SCH_2,
     /* 3 */ EN_NB_SCH_3,
-    /* 4 */ EN_NB_SCH_4,
+    /* 4 */ EN_NB_SCH_4
 } EnNbScheduleResult;
 
 static u8 sScheduleScript[] = {
@@ -66,7 +66,7 @@ static u8 sScheduleScript[] = {
     /* 0x3E */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
     /* 0x41 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_2),
     /* 0x44 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
-    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_50_20, 0x57 - 0x4B),
+    /* 0x47 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_HAD_MIDNIGHT_MEETING, 0x57 - 0x4B),
     /* 0x4B */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(8, 0, 18, 0, 0x54 - 0x51),
     /* 0x51 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_3),
     /* 0x54 */ SCHEDULE_CMD_RET_VAL_L(EN_NB_SCH_1),
@@ -724,7 +724,7 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA,
+            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA_OF_TIME,
                           this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
         }
         func_80BBFF24(this, play);

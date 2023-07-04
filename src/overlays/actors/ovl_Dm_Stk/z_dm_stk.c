@@ -108,7 +108,7 @@ typedef enum {
     /* 68 */ SK_ANIM_LOOK_LEFT_START,
     /* 69 */ SK_ANIM_LOOK_LEFT_LOOP,
     /* 70 */ SK_ANIM_SNIFF,
-    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF,
+    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF
 } SkullKidAnimation;
 
 typedef enum {
@@ -116,7 +116,7 @@ typedef enum {
     /* 1 */ SK_MASK_TYPE_NORMAL,
     /* 2 */ SK_MASK_TYPE_GLOWING_EYES,
     /* 3 */ SK_MASK_TYPE_FADING_OUT,
-    /* 9 */ SK_MASK_TYPE_RAISED = 9,
+    /* 9 */ SK_MASK_TYPE_RAISED = 9
 } SkullKidMaskType;
 
 typedef enum {
@@ -127,19 +127,19 @@ typedef enum {
     /* 4 */ SK_HAND_TYPE_JUGGLING_OR_DROPPING_OCARINA,
     /* 5 */ SK_HAND_TYPE_HOLDING_MAJORAS_MASK_AND_FLUTE,
     /* 6 */ SK_HAND_TYPE_HOLDING_FLUTE,
-    /* 9 */ SK_HAND_TYPE_DEFAULT = 9,
+    /* 9 */ SK_HAND_TYPE_DEFAULT = 9
 } SkullKidHandType;
 
 typedef enum {
     /* 0 */ SK_FADE_IN_STATE_NONE,
     /* 1 */ SK_FADE_IN_STATE_START,
     /* 2 */ SK_FADE_IN_STATE_INCREASE_FOG,
-    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA,
+    /* 3 */ SK_FADE_IN_STATE_INCREASE_ALPHA
 } SkullKidFadeInState;
 
 typedef enum {
     /* 0 */ SK_FADE_OUT_STATE_NONE,
-    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT,
+    /* 1 */ SK_FADE_OUT_STATE_FADING_OUT
 } SkullKidFadeOutState;
 
 typedef enum {
@@ -428,7 +428,7 @@ void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
  */
 void DmStk_PlaySfxForTitleCutscene(DmStk* this, PlayState* play) {
     if (play->csCtx.curFrame == 535) {
-        func_8019F128(NA_SE_EV_CLOCK_TOWER_BELL);
+        Audio_PlaySfx_2(NA_SE_EV_CLOCK_TOWER_BELL);
     }
 }
 
@@ -492,12 +492,12 @@ void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, PlayState* play) 
 void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, PlayState* play) {
     switch (play->csCtx.curFrame) {
         case 415:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 100);
             break;
 
         case 785:
-            func_8019F128(NA_SE_SY_STALKIDS_PSYCHO);
-            func_8019FE74(&gSfxVolume, 0.0f, 150);
+            Audio_PlaySfx_2(NA_SE_SY_STALKIDS_PSYCHO);
+            Audio_SetSfxVolumeTransition(&gSfxVolume, 0.0f, 150);
             break;
 
         case 560:
@@ -520,7 +520,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
 
     switch (play->csCtx.curFrame) {
         case 10:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 50);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 50);
             break;
 
         case 71:
@@ -532,7 +532,7 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
             break;
 
         case 650:
-            func_8019FE74(&gSfxVolume, 0.0f, 80);
+            Audio_SetSfxVolumeTransition(&gSfxVolume, 0.0f, 80);
             break;
 
         case 265:
@@ -573,7 +573,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
 
     switch (play->csCtx.curFrame) {
         case 140:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
             break;
 
         case 258:
@@ -762,7 +762,7 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, PlayState* pla
 
     switch (play->csCtx.curFrame) {
         case 40:
-            func_801A479C(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
+            Audio_PlaySfx_AtPosWithVolumeTransition(&this->actor.projectedPos, NA_SE_EN_STALKIDS_FLOAT, 80);
             break;
 
         case 234:
@@ -805,7 +805,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 
     switch (play->csCtx.curFrame) {
         case 64:
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL06_SURPRISED);
             break;
 
         case 327:
@@ -825,11 +825,11 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
 
         case 486:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_OFF);
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL08_CRY_BIG);
             break;
 
         case 496:
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL09_SCREAM);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL09_SCREAM);
             break;
 
         case 590:
@@ -841,7 +841,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
             break;
 
         case 594:
-            Audio_PlaySfxAtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
+            Audio_PlaySfx_AtPos(&this->oathToOrderCutsceneVoicePos, NA_SE_EN_STAL24_SCREAM2);
             break;
 
         default:
@@ -865,7 +865,7 @@ void DmStk_PlaySfxForCutsceneAfterPlayingOathToOrder(DmStk* this, PlayState* pla
     }
 
     if (play->csCtx.curFrame >= 290) {
-        func_8019F128(NA_SE_EV_KYOJIN_VOICE_SUCCESS - SFX_FLAG);
+        Audio_PlaySfx_2(NA_SE_EV_KYOJIN_VOICE_SUCCESS - SFX_FLAG);
     }
 }
 
@@ -1129,8 +1129,8 @@ void DmStk_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 
@@ -1173,7 +1173,7 @@ void DmStk_StartTelescopeCutscene(DmStk* this, PlayState* play) {
 
     if (gSaveContext.save.day < 3) {
         csId = dayOneAndTwoCsId;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) ||
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED) ||
                ((CURRENT_DAY == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
         csId = finalHoursCsId;
     } else {
@@ -1826,8 +1826,8 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 3) && (play->csCtx.scriptIndex > 0)) {
-        play->envCtx.unk_17 = 15;
-        play->envCtx.unk_18 = 15;
+        play->envCtx.skyboxConfig = 15;
+        play->envCtx.changeSkyboxNextConfig = 15;
     }
 }
 

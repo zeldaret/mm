@@ -10,7 +10,7 @@
 typedef enum {
     /* 0 */ EN_WIZ_TYPE_FIRE,
     /* 1 */ EN_WIZ_TYPE_ICE,
-    /* 2 */ EN_WIZ_TYPE_FIRE_NO_BGM, // does not request the mini-boss BGM
+    /* 2 */ EN_WIZ_TYPE_FIRE_NO_BGM // does not request the mini-boss BGM
 } EnWizType;
 
 struct EnWiz;

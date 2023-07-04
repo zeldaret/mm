@@ -74,8 +74,8 @@ void DmChar01_Init(Actor* thisx, PlayState* play) {
             }
 
             if (gSaveContext.sceneLayer == 0) {
-                play->envCtx.unk_1F = 5;
-                play->envCtx.unk_20 = 5;
+                play->envCtx.lightConfig = 5;
+                play->envCtx.changeLightNextConfig = 5;
             }
             this->unk_348 = 255.0f;
 
@@ -168,7 +168,7 @@ void func_80AA8698(DmChar01* this, PlayState* play) {
         (player2->actor.world.pos.x < 40.0f) && (player2->actor.world.pos.z > 1000.0f) &&
         (player2->actor.world.pos.z < 1078.0f)) {
         if (!D_80AAAAB4) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             D_80AAAAB4 = true;
         }
     } else {

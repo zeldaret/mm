@@ -868,7 +868,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.425f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.85f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.85f, 0.02125f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -936,7 +936,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
+    gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,
