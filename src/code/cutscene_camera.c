@@ -771,9 +771,36 @@ s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     return 0;
 }
 
-// Only used by unused func_80162FF8
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80162FF8.s")
+extern f32 D_801F6B58[];
 
+void func_80162FF8(s16 arg0) {
+    f32 var_fv0 = 0.0f;
+    s32 i;
+
+    D_801F6B58[0] = 0.0f;
+    D_801F6B58[1] = 0.0f;
+    D_801F6B58[2] = 0.0f;
+
+    for (i = 3; i < arg0; i++) {
+        if (i == 3) {
+            var_fv0 += 0.9f;
+        } else if ((i == 4) || (i == (arg0 - 1))) {
+            var_fv0 += 0.6f;
+        } else {
+            var_fv0 += 0.3f;
+        }
+
+        D_801F6B58[i] = var_fv0;
+    }
+
+    var_fv0 += 0.9f;
+    D_801F6B58[i++] = var_fv0;
+    D_801F6B58[i++] = var_fv0;
+    D_801F6B58[i++] = var_fv0;
+
+}
+
+void func_801631DC(f32 arg0, s32 arg2, f32* arg3);
 // Only used by unused func_80163334
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_801631DC.s")
 
