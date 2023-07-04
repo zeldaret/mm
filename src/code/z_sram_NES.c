@@ -267,30 +267,30 @@ u32 gSramSlotOffsets[] = {
 };
 
 u8 gAmmoItems[] = {
-    ITEM_NONE,        // SLOT_OCARINA
-    ITEM_BOW,         // SLOT_BOW
-    ITEM_NONE,        // SLOT_ARROW_FIRE
-    ITEM_NONE,        // SLOT_ARROW_ICE
-    ITEM_NONE,        // SLOT_ARROW_LIGHT
-    ITEM_NONE,        // SLOT_TRADE_DEED
-    ITEM_BOMB,        // SLOT_BOMB
-    ITEM_BOMBCHU,     // SLOT_BOMBCHU
-    ITEM_STICK,       // SLOT_STICK
-    ITEM_NUT,         // SLOT_NUT
-    ITEM_MAGIC_BEANS, // SLOT_MAGIC_BEANS
-    ITEM_NONE,        // SLOT_TRADE_KEY_MAMA
-    ITEM_POWDER_KEG,  // SLOT_POWDER_KEG
-    ITEM_PICTO_BOX,   // SLOT_PICTO_BOX
-    ITEM_NONE,        // SLOT_LENS
-    ITEM_NONE,        // SLOT_HOOKSHOT
-    ITEM_NONE,        // SLOT_SWORD_GREAT_FAIRY
-    ITEM_NONE,        // SLOT_TRADE_COUPLE
-    ITEM_NONE,        // SLOT_BOTTLE_1
-    ITEM_NONE,        // SLOT_BOTTLE_2
-    ITEM_NONE,        // SLOT_BOTTLE_3
-    ITEM_NONE,        // SLOT_BOTTLE_4
-    ITEM_NONE,        // SLOT_BOTTLE_5
-    ITEM_NONE,        // SLOT_BOTTLE_6
+    ITEM_NONE,           // SLOT_OCARINA
+    ITEM_BOW,            // SLOT_BOW
+    ITEM_NONE,           // SLOT_ARROW_FIRE
+    ITEM_NONE,           // SLOT_ARROW_ICE
+    ITEM_NONE,           // SLOT_ARROW_LIGHT
+    ITEM_NONE,           // SLOT_TRADE_DEED
+    ITEM_BOMB,           // SLOT_BOMB
+    ITEM_BOMBCHU,        // SLOT_BOMBCHU
+    ITEM_DEKU_STICK,     // SLOT_DEKU_STICK
+    ITEM_DEKU_NUT,       // SLOT_DEKU_NUT
+    ITEM_MAGIC_BEANS,    // SLOT_MAGIC_BEANS
+    ITEM_NONE,           // SLOT_TRADE_KEY_MAMA
+    ITEM_POWDER_KEG,     // SLOT_POWDER_KEG
+    ITEM_PICTOGRAPH_BOX, // SLOT_PICTOGRAPH_BOX
+    ITEM_NONE,           // SLOT_LENS_OF_TRUTH
+    ITEM_NONE,           // SLOT_HOOKSHOT
+    ITEM_NONE,           // SLOT_SWORD_GREAT_FAIRY
+    ITEM_NONE,           // SLOT_TRADE_COUPLE
+    ITEM_NONE,           // SLOT_BOTTLE_1
+    ITEM_NONE,           // SLOT_BOTTLE_2
+    ITEM_NONE,           // SLOT_BOTTLE_3
+    ITEM_NONE,           // SLOT_BOTTLE_4
+    ITEM_NONE,           // SLOT_BOTTLE_5
+    ITEM_NONE,           // SLOT_BOTTLE_6
 };
 
 // Stores flash start page number
@@ -506,14 +506,14 @@ void Sram_SaveEndOfCycle(PlayState* play) {
             SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_BOMB_AMMO);
         }
     }
-    if (INV_CONTENT(ITEM_NUT) == ITEM_NUT) {
-        item = INV_CONTENT(ITEM_NUT);
+    if (INV_CONTENT(ITEM_DEKU_NUT) == ITEM_DEKU_NUT) {
+        item = INV_CONTENT(ITEM_DEKU_NUT);
         if (AMMO(item) != 0) {
             SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_NUT_AMMO);
         }
     }
-    if (INV_CONTENT(ITEM_STICK) == ITEM_STICK) {
-        item = INV_CONTENT(ITEM_STICK);
+    if (INV_CONTENT(ITEM_DEKU_STICK) == ITEM_DEKU_STICK) {
+        item = INV_CONTENT(ITEM_DEKU_STICK);
         if (AMMO(item) != 0) {
             SET_EVENTINF(EVENTINF_THREEDAYRESET_LOST_STICK_AMMO);
         }
@@ -527,7 +527,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
 
     for (i = 0; i < ARRAY_COUNT(gAmmoItems); i++) {
         if (gAmmoItems[i] != ITEM_NONE) {
-            if ((gSaveContext.save.saveInfo.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTO_BOX)) {
+            if ((gSaveContext.save.saveInfo.inventory.items[i] != ITEM_NONE) && (i != SLOT_PICTOGRAPH_BOX)) {
                 item = gSaveContext.save.saveInfo.inventory.items[i];
                 AMMO(item) = 0;
             }
@@ -607,7 +607,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     Inventory_DeleteItem(ITEM_LONGSHOT, SLOT_TRADE_COUPLE);
 
     for (j = EQUIP_SLOT_C_LEFT; j <= EQUIP_SLOT_C_RIGHT; j++) {
-        if (GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOONS_TEAR && GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES) {
+        if ((GET_CUR_FORM_BTN_ITEM(j) >= ITEM_MOONS_TEAR) && (GET_CUR_FORM_BTN_ITEM(j) <= ITEM_PENDANT_OF_MEMORIES)) {
             SET_CUR_FORM_BTN_ITEM(j, ITEM_NONE);
             Interface_LoadItemIconImpl(play, j);
         }
@@ -884,10 +884,10 @@ SavePlayerData sSaveDebugPlayerData = {
 
 ItemEquips sSaveDebugItemEquips = {
     {
-        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_POTION_RED, ITEM_OCARINA },
-        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_GORON, ITEM_OCARINA },
-        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_ZORA, ITEM_OCARINA },
-        { ITEM_NUT, ITEM_NUT, ITEM_MASK_DEKU, ITEM_OCARINA },
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_POTION_RED, ITEM_OCARINA_OF_TIME },
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_GORON, ITEM_OCARINA_OF_TIME },
+        { ITEM_SWORD_KOKIRI, ITEM_BOW, ITEM_MASK_ZORA, ITEM_OCARINA_OF_TIME },
+        { ITEM_DEKU_NUT, ITEM_DEKU_NUT, ITEM_MASK_DEKU, ITEM_OCARINA_OF_TIME },
     },
     {
         { SLOT_OCARINA, SLOT_BOW, SLOT_BOTTLE_2, SLOT_OCARINA },
@@ -901,7 +901,7 @@ ItemEquips sSaveDebugItemEquips = {
 Inventory sSaveDebugInventory = {
     // items
     {
-        ITEM_OCARINA,
+        ITEM_OCARINA_OF_TIME,
         ITEM_BOW,
         ITEM_ARROW_FIRE,
         ITEM_ARROW_ICE,
@@ -909,13 +909,13 @@ Inventory sSaveDebugInventory = {
         ITEM_MOONS_TEAR,
         ITEM_BOMB,
         ITEM_BOMBCHU,
-        ITEM_STICK,
-        ITEM_NUT,
+        ITEM_DEKU_STICK,
+        ITEM_DEKU_NUT,
         ITEM_MAGIC_BEANS,
         ITEM_ROOM_KEY,
         ITEM_POWDER_KEG,
-        ITEM_PICTO_BOX,
-        ITEM_LENS,
+        ITEM_PICTOGRAPH_BOX,
+        ITEM_LENS_OF_TRUTH,
         ITEM_HOOKSHOT,
         ITEM_SWORD_GREAT_FAIRY,
         ITEM_LETTER_TO_KAFEI,

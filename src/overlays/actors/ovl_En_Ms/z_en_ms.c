@@ -61,7 +61,7 @@ void EnMs_Init(Actor* thisx, PlayState* play) {
     EnMs* this = THIS;
 
     Actor_ProcessInitChain(thisx, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ms_Skel_003DC0, &object_ms_Anim_0005EC, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBeanSalesmanSkel, &gBeanSalesmanEatingAnim, this->jointTable,
                        this->morphTable, 9);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);

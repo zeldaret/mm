@@ -324,7 +324,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80AE0704;
-            if (itemAction == PLAYER_IA_PICTO_BOX) {
+            if (itemAction == PLAYER_IA_PICTOGRAPH_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;

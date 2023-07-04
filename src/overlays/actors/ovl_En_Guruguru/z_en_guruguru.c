@@ -62,18 +62,18 @@ static ColliderCylinderInit sCylinderInit = {
     { 15, 20, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* sAnimations[] = { &object_fu_Anim_000B04, &object_fu_Anim_00057C };
+static AnimationHeader* sAnimations[] = { &gGuruGuruPlayStillAnim, &gGuruGuruPlayAndMoveHeadAnim };
 static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP };
 static f32 sPlaySpeeds[] = { 1.0f, 1.0f };
-static TexturePtr sEyeTextures[] = { object_fu_Tex_005F20, object_fu_Tex_006320 };
-static TexturePtr sMouthTextures[] = { object_fu_Tex_006720, object_fu_Tex_006920 };
+static TexturePtr sEyeTextures[] = { gGuruGuruEyeClosedTex, gGuruGuruEyeAngryTex };
+static TexturePtr sMouthTextures[] = { gGuruGuruMouthOpenTex, gGuruGuruMouthAngryTex };
 
 void EnGuruguru_Init(Actor* thisx, PlayState* play) {
     EnGuruguru* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_fu_Skel_006C90, &object_fu_Anim_000B04, this->jointTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGuruGuruSkel, &gGuruGuruPlayStillAnim, this->jointTable,
                        this->morphTable, 16);
     this->actor.targetMode = 0;
     if (this->actor.params != 2) {

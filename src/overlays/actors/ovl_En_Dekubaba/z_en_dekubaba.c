@@ -914,10 +914,10 @@ void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
                       (s32)(this->size * 100.0f));
 
         if (!this->actor.dropFlag) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             if (this->actor.params == DEKUBABA_BIG) {
-                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
-                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             }
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x30);
@@ -1059,7 +1059,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
         return;
     }
 
-    Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
+    Actor_OfferGetItemNearby(&this->actor, play, GI_DEKU_STICKS_1);
 }
 
 /* Update and associated functions */

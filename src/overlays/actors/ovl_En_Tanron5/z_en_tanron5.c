@@ -462,7 +462,7 @@ void func_80BE5818(Actor* thisx, PlayState* play2) {
                     if (this->unk_1A0 == 0) {
                         Item_Give(play, ITEM_ARROWS_10);
                     } else {
-                        Item_Give(play, ITEM_MAGIC_LARGE);
+                        Item_Give(play, ITEM_MAGIC_JAR_BIG);
                     }
                     Actor_Kill(&this->actor);
                     Audio_PlaySfx(NA_SE_SY_GET_ITEM);
