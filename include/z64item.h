@@ -308,6 +308,24 @@ typedef enum ItemId {
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEAHORSE_CAUGHT,
+    // First entries of `MAP_POINT` must be continguous with `RegionId`
+    /* 0xA4 */ ITEM_MAP_POINT_GREAT_BAY,
+    /* 0xA5 */ ITEM_MAP_POINT_ZORA_HALL,
+    /* 0xA6 */ ITEM_MAP_POINT_ROMANI_RANCH,
+    /* 0xA7 */ ITEM_MAP_POINT_DEKU_PALACE,
+    /* 0xA8 */ ITEM_MAP_POINT_WOODFALL,
+    /* 0xA9 */ ITEM_MAP_POINT_CLOCK_TOWN,
+    /* 0xAA */ ITEM_MAP_POINT_SNOWHEAD,
+    /* 0xAB */ ITEM_MAP_POINT_IKANA_GRAVEYARD,
+    /* 0xAC */ ITEM_MAP_POINT_IKANA_CANYON,
+    /* 0xAD */ ITEM_MAP_POINT_GORON_VILLAGE,
+    /* 0xAE */ ITEM_MAP_POINT_STONE_TOWER,
+    // Remaining map points are unique to owl warps
+    /* 0xAF */ ITEM_MAP_POINT_GREAT_BAY_COAST,
+    /* 0xBO */ ITEM_MAP_POINT_SOUTHERN_SWAMP,
+    /* 0xB1 */ ITEM_MAP_POINT_MOUNTAIN_VILLAGE,
+    /* 0xB2 */ ITEM_MAP_POINT_MILK_ROAD,
+    /* 0xB3 */ ITEM_MAP_POINT_ZORA_CAPE,
     /* 0xF0 */ ITEM_F0 = 0xF0, // PLAYER_MASK_BLAST
     /* 0xF1 */ ITEM_F1, // PLAYER_MASK_BREMEN
     /* 0xF2 */ ITEM_F2, // PLAYER_MASK_KAMARO

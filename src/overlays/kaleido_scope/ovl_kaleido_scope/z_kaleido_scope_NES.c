@@ -246,6 +246,7 @@ void Kaleido_LoadMapNameStatic(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
 }
 
+//! note: nothing from `map_name_static` is of size `0xA00` in US 1.0
 void Kaleido_LoadMapNameStaticLarge(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
 }
@@ -2890,7 +2891,9 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_INFO);
-            if (((void)0, gSaveContext.worldMapArea) < 0x16) {
+
+            //! note: `worldMapArea` never set to a value other than 0
+            if (((void)0, gSaveContext.worldMapArea) < 22) {
                 Kaleido_LoadMapNameStaticLarge(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
             }
 
