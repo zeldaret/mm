@@ -8,7 +8,7 @@ void PreNMI_Stop(PreNMIState* this) {
 
 void PreNMI_Update(PreNMIState* this) {
     if (this->timer == 0) {
-        ViConfig_UpdateVi(1);
+        ViConfig_UpdateVi(true);
         PreNMI_Stop(this);
     } else {
         this->timer--;

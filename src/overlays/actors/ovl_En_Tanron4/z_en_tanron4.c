@@ -48,7 +48,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     EnTanron4* this = THIS;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
-                       OBJECT_TANRON4_LIMB_MAX);
+                       SEAGULL_LIMB_RIGHT_WING_MAX);
 
     thisx->flags &= ~ACTOR_FLAG_1;
     thisx->speed = 3.0f + KREG(48);

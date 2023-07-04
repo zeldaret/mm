@@ -39,40 +39,44 @@ ActorInit En_Sekihi_InitVars = {
 static s16 sObjectIds[] = { OBJECT_SEKIHIL, OBJECT_SEKIHIG, OBJECT_SEKIHIN, OBJECT_SEKIHIZ, OBJECT_ZOG };
 
 static Gfx* sOpaDLists[] = {
-    gGraveTriforceSymbolDL, gGraveGoronSymbolDL, gGraveKokiriSymbolDL, gTombSongOfSoaringDL, gMikauGraveDL,
+    gSunsSongGraveTriforceDL, gSunsSongGraveGoronDL, gSunsSongGraveKokiriDL, gSongOfSoaringPedestalDL, gMikauGraveDL,
 };
 
 static Gfx* sXluDLists[] = {
-    gSunSongTriforceSymbolDL, gSunSongGoronSymbolDL, gSunSongKokiriSymbolDL, gSekihizEmptyDL, gMikauGraveDirtDL,
+    gSunsSongGraveTriforceSymbolsDL,
+    gSunsSongGraveGoronSymbolsDL,
+    gSunsSongGraveKokiriSymbolsDL,
+    gSongOfSoaringPedestalEmptyDL,
+    gMikauGraveDirtDL,
 };
 
 static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
-    s32 params = ENSIKIHI_GET_TYPE(thisx);
+    s32 type = ENSIKIHI_GET_TYPE(thisx);
     s32 objectIndex;
     s32 pad;
 
-    if ((params < SEKIHI_TYPE_0 || params >= SEKIHI_TYPE_MAX) || sOpaDLists[params] == NULL) {
+    if (((type < SEKIHI_TYPE_0) || (type >= SEKIHI_TYPE_MAX)) || (sOpaDLists[type] == NULL)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    if ((params == SEKIHI_TYPE_4) &&
+    if ((type == SEKIHI_TYPE_4) &&
         ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED)) {
         // For some reason the mikau grave sets the flag instead of something in the spider house on exit.
         SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
+    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
     if (objectIndex >= 0) {
         this->objectIndex = objectIndex;
     }
     this->actionFunc = func_80A44DE8;
-    this->opaDList = sOpaDLists[params];
-    this->xluDList = sXluDLists[params];
-    this->dyna.actor.textId = sTextIds[params];
+    this->opaDList = sOpaDLists[type];
+    this->xluDList = sXluDLists[type];
+    this->dyna.actor.textId = sTextIds[type];
     this->dyna.actor.focus.pos.y = this->dyna.actor.world.pos.y + 60.0f;
     Actor_SetScale(&this->dyna.actor, 0.1f);
 }
@@ -85,16 +89,17 @@ void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80A44DE8(EnSekihi* this, PlayState* play) {
     CollisionHeader* colHeader = NULL;
-    s32 params;
+    s32 type;
     CollisionHeader* colHeaders[] = {
-        &gSekihilCol, &gSekihigCol, &gSekihinCol, &gSekihizCol, &gObjectZogCol,
+        &gSunsSongGraveTriforceCol, &gSunsSongGraveGoronCol, &gSunsSongGraveKokiriCol,
+        &gSongOfSoaringPedestalCol, &gMikauGraveCol,
     };
 
-    params = ENSIKIHI_GET_TYPE(&this->dyna.actor);
+    type = ENSIKIHI_GET_TYPE(&this->dyna.actor);
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->dyna.actor.objBankIndex = this->objectIndex;
         this->dyna.actor.draw = EnSekihi_Draw;
-        if (params == SEKIHI_TYPE_4) {
+        if (type == SEKIHI_TYPE_4) {
             this->actionFunc = func_80A450B0;
         } else {
             this->actionFunc = EnSekihi_DoNothing;
@@ -102,12 +107,12 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 0);
-        if (colHeaders[params] != NULL) {
-            CollisionHeader_GetVirtual(colHeaders[params], &colHeader);
+        if (colHeaders[type] != NULL) {
+            CollisionHeader_GetVirtual(colHeaders[type], &colHeader);
         }
 
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-        if ((params == SEKIHI_TYPE_4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
+        if ((type == SEKIHI_TYPE_4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
             Actor_Kill(&this->dyna.actor);
         }
     }

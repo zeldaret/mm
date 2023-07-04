@@ -4,8 +4,7 @@
 #include "z64.h"
 
 void bootproc(void);
-void Idle_ThreadEntry(void* arg);
-void ViConfig_UpdateVi(u32 mode);
+void ViConfig_UpdateVi(u32 black);
 void ViConfig_UpdateBlack(void);
 s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size);
 s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
@@ -1514,7 +1513,7 @@ ListAlloc* ListAlloc_Init(ListAlloc* this);
 // void ListAlloc_Alloc(void);
 // void ListAlloc_Free(void);
 void ListAlloc_FreeAll(ListAlloc* this);
-void Main(void* arg);
+
 void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
 void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
 void Sched_HandleReset(SchedContext* sched);
@@ -1536,7 +1535,7 @@ void Sched_SendAudioCancelMsg(SchedContext* sched);
 void Sched_SendGfxCancelMsg(SchedContext* sched);
 void Sched_FaultClient(void* param1, void* param2);
 void Sched_ThreadEntry(void* arg);
-void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_TYPE arg4, IrqMgr* irqMgr);
+void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
 // void func_80177390(void);
 void func_801773A0(void* arg0);
 void func_801773C4(void* arg0);
@@ -1824,13 +1823,6 @@ void AudioPlayback_NotePoolFill(NotePool* pool, s32 count);
 void AudioPlayback_AudioListRemove(AudioListItem* item);
 Note* AudioPlayback_AllocNote(SequenceLayer* layer);
 void AudioPlayback_NoteInitAll(void);
-
-void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
-void AudioEffects_NoteVibratoUpdate(Note* note);
-void AudioEffects_NoteVibratoInit(Note* note);
-void AudioEffects_NotePortamentoInit(Note* note);
-void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
-f32 AudioEffects_AdsrUpdate(AdsrState* adsr);
 
 void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
 void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);

@@ -1,6 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
+#include "idle.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
@@ -101,7 +102,7 @@ void* Graph_FaultAddrConv(void* address, void* param) {
     s32 i;
 
     for (i = 0; i < gGraphNumGameStates; i++, gameStateOvl++) {
-        diff = VRAM_PTR_SIZE(gameStateOvl);
+        diff = (uintptr_t)gameStateOvl->vramEnd - (uintptr_t)gameStateOvl->vramStart;
         ramStart = gameStateOvl->loadedRamAddr;
         ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
