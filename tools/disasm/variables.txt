@@ -4006,7 +4006,7 @@
     0x801F6B40:("sShrinkWindow","ShrinkWindow","",0x4),
     0x801F6B44:("sShrinkWindowPtr","ShrinkWindow*","",0x4),
     0x801F6B50:("sCurCsCamera","UNK_TYPE4","",0x4),
-    0x801F6B58:("D_801F6B58","UNK_TYPE1","",0x1),
+    0x801F6B58:("sKnots","UNK_TYPE1","",0x1),
     0x801F6BF0:("sKaleidoMgrFaultAddrConvClient","FaultAddrConvClient","",0xC),
     0x801F6C00:("sKaleidoScopeUpdateFunc","void*","",0x4),
     0x801F6C04:("sKaleidoScopeDrawFunc","void*","",0x4),

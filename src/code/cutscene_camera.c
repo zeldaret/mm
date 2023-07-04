@@ -831,8 +831,54 @@ void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
     }
 }
 
-// Unused
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80163334.s")
+s16 func_80163334(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCamMisc* misc,
+                  CutsceneCameraInterp* interp) {
+    s32 index;
+    f32 coeff[3];
+
+    if (interp->unk_2D != 4) {
+        interp->unk_2D = 4;
+        interp->unk_26 = 0;
+        interp->duration = point->duration;
+        func_80162FF8(interp->duration);
+        interp->curFrame = 0;
+    }
+
+    index = interp->unk_26 + 2;
+    func_801631DC(F32_LERPIMP(sKnots[index], sKnots[index + 1], (f32)interp->curFrame / misc[interp->unk_26].unused0),
+                  index, coeff);
+
+    if (pos != NULL) {
+        pos->x = (coeff[0] * point[interp->unk_26].pos.x) + (coeff[1] * point[interp->unk_26 + 1].pos.x) +
+                 (coeff[2] * point[interp->unk_26 + 2].pos.x);
+        pos->y = (coeff[0] * point[interp->unk_26].pos.y) + (coeff[1] * point[interp->unk_26 + 1].pos.y) +
+                 (coeff[2] * point[interp->unk_26 + 2].pos.y);
+        pos->z = (coeff[0] * point[interp->unk_26].pos.z) + (coeff[1] * point[interp->unk_26 + 1].pos.z) +
+                 (coeff[2] * point[interp->unk_26 + 2].pos.z);
+    }
+
+    if (fov != NULL) {
+        *fov = (coeff[0] * misc[interp->unk_26].fov) + (coeff[1] * misc[interp->unk_26 + 1].fov) +
+               (coeff[2] * misc[interp->unk_26 + 2].fov);
+    }
+
+    if (roll != NULL) {
+        *roll = CAM_DEG_TO_BINANG((coeff[0] * misc[interp->unk_26].roll) + (coeff[1] * misc[interp->unk_26 + 1].roll) +
+                                  (coeff[2] * misc[interp->unk_26 + 2].roll));
+    }
+
+    interp->curFrame++;
+
+    if (interp->curFrame >= misc[interp->unk_26].unused0) {
+        interp->unk_26++;
+        interp->curFrame = 0;
+        if (interp->unk_26 >= (interp->duration - 2)) {
+            interp->unk_2D = 7;
+            return interp->duration;
+        }
+    }
+    return 0;
+}
 
 f32 func_80163660(Actor* actor) {
     if (actor->category != ACTORCAT_PLAYER) {
