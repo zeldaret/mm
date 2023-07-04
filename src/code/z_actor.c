@@ -1877,14 +1877,14 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
  * This function covers offering the ability to `Talk` with the player.
  * Passing an exchangeItemAction (see `ItemAction`) allows the player to also use the item to initiate the conversation.
  *
- * This function carries talk exchange request to the player actor if context allows it (e.g. the player is in range
+ * This function carries a talk exchange request to the player actor if context allows it (e.g. the player is in range
  * and not busy with certain things). The player actor performs the requested action itself.
  *
  * The following description of what the `ItemAction` values can do is provided here for completeness, but these
  * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
  *
  * - Positive values in range (`PLAYER_IA_NONE < ItemAction < PLAYER_IA_MAX`):
- *    Offers the ability to initate the conversation with an item from the player.
+ *    Offers the ability to initiate the conversation with an item from the player.
  *    Not all positive values are implemented properly for this to work.
  *    Working ones are PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= ItemAction < PLAYER_IA_MASK_MIN
  *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.

@@ -1501,7 +1501,7 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
 
 /**
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
- * The callback should return `true` when the actor is succesfully verified.
+ * The callback should return `true` when the actor is successfully verified.
  */
 Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
                             void* verifyData, VerifyFindActor verifyActor) {
@@ -1523,7 +1523,7 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
 
 /**
  * Will extend a TalkExchange offer to the player if the actor is verified with a custom callback.
- * The callback should return `true` when the actor is succesfully verified.
+ * The callback should return `true` when the actor is successfully verified.
  */
 s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
                                  void* data, VerifyTalkExchangeActor verifyActor) {

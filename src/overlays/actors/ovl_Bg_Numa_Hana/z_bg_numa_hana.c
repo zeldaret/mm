@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 
 /**
  * Spawns another wooden flower instance that handles the opened flower's collision.
- * Returns true if this wooden flower instance was succesfully spawned.
+ * Returns true if this wooden flower instance was successfully spawned.
  */
 s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, PlayState* play) {
     Actor* child;
