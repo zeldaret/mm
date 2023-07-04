@@ -59,6 +59,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+static s32 sBssPad;
+
 void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale) {
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.5f);
@@ -74,43 +76,43 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     f32 shadowOffset = 980.0f;
     f32 shadowScale = 6.0f;
     s32 getItemId = GI_NONE;
-    s32 sp30 = ENITEM00_GET_8000(&this->actor) ? 1 : 0;
+    s32 sp30 = ENITEM00_GET_8000(thisx) ? 1 : 0;
 
-    this->collectibleFlag = ENITEM00_GET_7F00(&this->actor);
+    this->collectibleFlag = ENITEM00_GET_7F00(thisx);
 
-    thisx->params &= 0xFF; // Has to be thisx to match
+    thisx->params &= 0xFF;
 
     if (Flags_GetCollectible(play, this->collectibleFlag)) {
-        if (this->actor.params == ITEM00_HEART_PIECE) {
+        if (thisx->params == ITEM00_HEART_PIECE) {
             sp30 = 0;
             this->collectibleFlag = 0;
-            this->actor.params = ITEM00_RECOVERY_HEART;
+            thisx->params = ITEM00_RECOVERY_HEART;
         } else {
-            Actor_Kill(&this->actor);
+            Actor_Kill(thisx);
             return;
         }
     }
-    if (this->actor.params == ITEM00_3_HEARTS) {
-        this->actor.params = ITEM00_RECOVERY_HEART;
+    if (thisx->params == ITEM00_3_HEARTS) {
+        thisx->params = ITEM00_RECOVERY_HEART;
     }
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Actor_ProcessInitChain(thisx, sInitChain);
+    Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
 
     this->unk150 = 1;
 
-    switch (this->actor.params) {
+    switch (thisx->params) {
         case ITEM00_RUPEE_GREEN:
         case ITEM00_RUPEE_BLUE:
         case ITEM00_RUPEE_RED:
-            Actor_SetScale(&this->actor, 0.015f);
+            Actor_SetScale(thisx, 0.015f);
             this->unk154 = 0.015f;
             shadowOffset = 750.0f;
             break;
 
         case ITEM00_SMALL_KEY:
             this->unk150 = 0;
-            Actor_SetScale(&this->actor, 0.03f);
+            Actor_SetScale(thisx, 0.03f);
             this->unk154 = 0.03f;
             shadowOffset = 350.0f;
             break;
@@ -118,18 +120,18 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_HEART_PIECE:
         case ITEM00_HEART_CONTAINER:
             this->unk150 = 0;
-            Actor_SetScale(&this->actor, 0.02f);
+            Actor_SetScale(thisx, 0.02f);
             this->unk154 = 0.02f;
             shadowOffset = 650.0f;
-            if (this->actor.params == ITEM00_HEART_CONTAINER) {
+            if (thisx->params == ITEM00_HEART_CONTAINER) {
                 sp30 = -1;
             }
             break;
 
         case ITEM00_RECOVERY_HEART:
-            this->actor.home.rot.z = Rand_CenteredFloat(0xFFFF);
+            thisx->home.rot.z = Rand_CenteredFloat(0xFFFF);
             shadowOffset = 430.0f;
-            Actor_SetScale(&this->actor, 0.02f);
+            Actor_SetScale(thisx, 0.02f);
             this->unk154 = 0.02f;
             break;
 
@@ -137,7 +139,7 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_ARROWS_30:
         case ITEM00_ARROWS_40:
         case ITEM00_ARROWS_50:
-            Actor_SetScale(&this->actor, 0.035f);
+            Actor_SetScale(thisx, 0.035f);
             this->unk154 = 0.035f;
             shadowOffset = 250.0f;
             break;
@@ -149,25 +151,25 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_MAGIC_JAR_SMALL:
         case ITEM00_DEKU_NUTS_10:
         case ITEM00_BOMBS_0:
-            Actor_SetScale(&this->actor, 0.03f);
+            Actor_SetScale(thisx, 0.03f);
             this->unk154 = 0.03f;
             shadowOffset = 320.0f;
             break;
 
         case ITEM00_MAGIC_JAR_BIG:
-            Actor_SetScale(&this->actor, 4.5f * 0.01f);
+            Actor_SetScale(thisx, 4.5f * 0.01f);
             this->unk154 = 4.5f * 0.01f;
             shadowOffset = 320.0f;
             break;
 
         case ITEM00_RUPEE_HUGE:
-            Actor_SetScale(&this->actor, 4.5f * 0.01f);
+            Actor_SetScale(thisx, 4.5f * 0.01f);
             this->unk154 = 4.5f * 0.01f;
             shadowOffset = 750.0f;
             break;
 
         case ITEM00_RUPEE_PURPLE:
-            Actor_SetScale(&this->actor, 0.03f);
+            Actor_SetScale(thisx, 0.03f);
             this->unk154 = 0.03f;
             shadowOffset = 750.0f;
             break;
@@ -175,22 +177,22 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
             shadowOffset = 500.0f;
-            Actor_SetScale(&this->actor, 0.01f);
+            Actor_SetScale(thisx, 0.01f);
             this->unk154 = 0.01f;
             break;
 
         case ITEM00_SHIELD_HERO:
-            this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_SHIELD_2);
+            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_SHIELD_2);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_MAP:
-            this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_MAP);
+            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_MAP);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_COMPASS:
-            this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_COMPASS);
+            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_COMPASS);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
@@ -199,9 +201,9 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk14E = 0;
-    ActorShape_Init(&this->actor.shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
-    this->actor.shape.shadowAlpha = 180;
-    this->actor.focus.pos = this->actor.world.pos;
+    ActorShape_Init(&thisx->shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
+    thisx->shape.shadowAlpha = 180;
+    thisx->focus.pos = thisx->world.pos;
     this->getItemId = GI_NONE;
 
     if (sp30 < 0) {
@@ -219,11 +221,11 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
 
-    this->actor.speed = 0.0f;
-    this->actor.velocity.y = 0.0f;
-    this->actor.gravity = 0.0f;
+    thisx->speed = 0.0f;
+    thisx->velocity.y = 0.0f;
+    thisx->gravity = 0.0f;
 
-    switch (this->actor.params) {
+    switch (thisx->params) {
         case ITEM00_RUPEE_GREEN:
             Item_Give(play, ITEM_RUPEE_GREEN);
             break;
@@ -298,8 +300,8 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((getItemId != GI_NONE) && !Actor_HasParent(&this->actor, play)) {
-        Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
+    if ((getItemId != GI_NONE) && !Actor_HasParent(thisx, play)) {
+        Actor_OfferGetItem(thisx, play, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -373,7 +375,7 @@ static Vec3f sEffectVelocity = { 0.0f, 0.1f, 0.0f };
 static Vec3f sEffectAccel = { 0.0f, 0.01f, 0.0f };
 
 void func_800A6650(EnItem00* this, PlayState* play) {
-    u32 pad;
+    s32 pad;
     Vec3f pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {

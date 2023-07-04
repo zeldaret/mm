@@ -6,6 +6,8 @@
 #define Z_THREAD_ID_MAIN     3
 #define Z_THREAD_ID_GRAPH    4
 #define Z_THREAD_ID_SCHED    5
+#define Z_THREAD_ID_PADMGR   7
+#define Z_THREAD_ID_AUDIOMGR 10
 #define Z_THREAD_ID_FLASHROM 13
 #define Z_THREAD_ID_DMAMGR  18
 #define Z_THREAD_ID_IRQMGR  19

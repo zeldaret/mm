@@ -4,8 +4,7 @@
 #include "z64.h"
 
 void bootproc(void);
-void Idle_ThreadEntry(void* arg);
-void ViConfig_UpdateVi(u32 mode);
+void ViConfig_UpdateVi(u32 black);
 void ViConfig_UpdateBlack(void);
 s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size);
 s32 DmaMgr_DmaHandler(OSPiHandle* pihandle, OSIoMesg* mb, s32 direction);
@@ -1514,7 +1513,7 @@ ListAlloc* ListAlloc_Init(ListAlloc* this);
 // void ListAlloc_Alloc(void);
 // void ListAlloc_Free(void);
 void ListAlloc_FreeAll(ListAlloc* this);
-void Main(void* arg);
+
 void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
 void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);
 void Sched_HandleReset(SchedContext* sched);
@@ -1536,7 +1535,7 @@ void Sched_SendAudioCancelMsg(SchedContext* sched);
 void Sched_SendGfxCancelMsg(SchedContext* sched);
 void Sched_FaultClient(void* param1, void* param2);
 void Sched_ThreadEntry(void* arg);
-void Sched_Init(SchedContext* sched, void* stack, OSPri pri, UNK_TYPE arg3, UNK_TYPE arg4, IrqMgr* irqMgr);
+void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
 // void func_80177390(void);
 void func_801773A0(void* arg0);
 void func_801773C4(void* arg0);
@@ -1571,7 +1570,7 @@ void Check_RegionIsSupported(void);
 f32 Math3D_Normalize(Vec3f* vec);
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
 s32 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
-void func_80179A44(Vec3f* arg0, PosRot* arg1, Vec3f* arg2);
+f32 func_80179A44(Vec3f* arg0, PosRot* arg1, Vec3f* arg2);
 void func_80179B34(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32* arg7, f32* arg8);
 // UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, Vec3f* param_9);
 // void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);
@@ -1824,13 +1823,6 @@ void AudioPlayback_NotePoolFill(NotePool* pool, s32 count);
 void AudioPlayback_AudioListRemove(AudioListItem* item);
 Note* AudioPlayback_AllocNote(SequenceLayer* layer);
 void AudioPlayback_NoteInitAll(void);
-
-void AudioEffects_SequencePlayerProcessSound(SequencePlayer* seqPlayer);
-void AudioEffects_NoteVibratoUpdate(Note* note);
-void AudioEffects_NoteVibratoInit(Note* note);
-void AudioEffects_NotePortamentoInit(Note* note);
-void AudioEffects_AdsrInit(AdsrState* adsr, EnvelopePoint* envelope, s16* volOut);
-f32 AudioEffects_AdsrUpdate(AdsrState* adsr);
 
 void AudioScript_SequenceChannelDisable(SequenceChannel* channel);
 void AudioScript_SequencePlayerDisableAsFinished(SequencePlayer* seqPlayer);

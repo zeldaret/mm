@@ -23,8 +23,10 @@ typedef struct {
 } ObjDrifticeStruct3; // size = 0x14
 
 typedef struct {
-    /* 0x00 */ s16 unk_00[2];
-    /* 0x04 */ f32 unk_04;
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ ObjDrifticeStruct3 unk_0C[2];
 } ObjDrifticeStruct2; // size = 0x34
