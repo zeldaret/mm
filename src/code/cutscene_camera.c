@@ -436,8 +436,7 @@ s16 func_80161E4C(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         }
     }
 
-    tmp2 = (((point->weight + 100) * (point->duration / 2)) +
-                  (((point->weight + 100) / 2) * (point->duration & 1)));
+    tmp2 = (((point->weight + 100) * (point->duration / 2)) + (((point->weight + 100) / 2) * (point->duration & 1)));
     if (point->duration < 2) {
         phi_f2 = 1.0f;
     } else {
@@ -498,15 +497,13 @@ s16 func_801620CC(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
         }
     }
 
-    tmp2 = (((point->weight + 100) * (point->duration / 2)) +
-                  (((point->weight + 100) / 2) * (point->duration & 1)));
+    tmp2 = (((point->weight + 100) * (point->duration / 2)) + (((point->weight + 100) / 2) * (point->duration & 1)));
     if (point->duration < 2) {
         sp3C = 1.0f;
     } else {
         tmp1 = (f32)(point->weight - 100) / (point->duration - 1);
         sp3C = ((interp->curFrame * tmp1) + 100.0f) / tmp2;
     }
-
 
     interp->curFrame++;
 
@@ -771,15 +768,16 @@ s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     return 0;
 }
 
-extern f32 D_801F6B58[];
+extern f32 sKnots[];
 
+// Only used by unused func_80163334
 void func_80162FF8(s16 arg0) {
     f32 var_fv0 = 0.0f;
     s32 i;
 
-    D_801F6B58[0] = 0.0f;
-    D_801F6B58[1] = 0.0f;
-    D_801F6B58[2] = 0.0f;
+    sKnots[0] = 0.0f;
+    sKnots[1] = 0.0f;
+    sKnots[2] = 0.0f;
 
     for (i = 3; i < arg0; i++) {
         if (i == 3) {
@@ -790,19 +788,48 @@ void func_80162FF8(s16 arg0) {
             var_fv0 += 0.3f;
         }
 
-        D_801F6B58[i] = var_fv0;
+        sKnots[i] = var_fv0;
     }
 
     var_fv0 += 0.9f;
-    D_801F6B58[i++] = var_fv0;
-    D_801F6B58[i++] = var_fv0;
-    D_801F6B58[i++] = var_fv0;
-
+    sKnots[i++] = var_fv0;
+    sKnots[i++] = var_fv0;
+    sKnots[i++] = var_fv0;
 }
 
-void func_801631DC(f32 arg0, s32 arg2, f32* arg3);
 // Only used by unused func_80163334
-#pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_801631DC.s")
+void func_801631DC(f32 progress, s32 arg2, f32* coeff) {
+    f32 coeffTemp[4][4];
+    s32 i;
+    s32 j;
+    s32 k;
+
+    for (i = 0; i < 3 + 1; i++) {
+        for (j = 0; j < 3 + 1; j++) {
+            coeffTemp[i][j] = 0.0f;
+        }
+    }
+
+    coeffTemp[0][3 - 1] = 1.0f;
+
+    for (i = 1; i < 3; i++) {
+        for (j = arg2 - i, k = (3 - 1) - i; j <= arg2; j++, k++) {
+            if (sKnots[j + i] != sKnots[j]) {
+                coeffTemp[i][k] = ((progress - sKnots[j]) / (sKnots[j + i] - sKnots[j])) * coeffTemp[i - 1][k];
+            } else {
+                coeffTemp[i][k] = 0.0f;
+            }
+
+            if (sKnots[j + i + 1] != sKnots[j + 1]) {
+                coeffTemp[i][k] +=
+                    ((sKnots[j + i + 1] - progress) / (sKnots[j + i + 1] - sKnots[j + 1])) * coeffTemp[i - 1][k + 1];
+            }
+        }
+    }
+    for (j = 0; j < 3; j++) {
+        coeff[j] = coeffTemp[3 - 1][j];
+    }
+}
 
 // Unused
 #pragma GLOBAL_ASM("asm/non_matchings/code/cutscene_camera/func_80163334.s")
