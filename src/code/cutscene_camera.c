@@ -1,6 +1,6 @@
 #include "global.h"
 
-extern CutsceneCamera* sCurCsCamera;
+static CutsceneCamera* sCurCsCamera;
 
 typedef s16 (*CsCamInterpolateCallback)(Vec3f*, f32*, s16*, CsCmdCamPoint*, CsCmdCamMisc*, CutsceneCameraInterp*);
 
@@ -768,7 +768,7 @@ s16 func_80162A50(Vec3f* pos, f32* fov, s16* roll, CsCmdCamPoint* point, CsCmdCa
     return 0;
 }
 
-extern f32 sKnots[];
+static f32 sKnots[38];
 
 // Only used by unused func_80163334
 void func_80162FF8(s16 arg0) {

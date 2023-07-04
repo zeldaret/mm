@@ -538,7 +538,6 @@ beginseg
     include "build/src/code/z_player_call.o"
     include "build/src/code/z_shrink_window.o"
     include "build/src/code/cutscene_camera.o"
-    include "build/data/code/cutscene_camera.bss.o"
     include "build/src/code/z_kaleido_manager.o"
     include "build/src/code/z_kaleido_scope_call.o"
     include "build/src/code/z_fbdemo_dlftbls.o"
