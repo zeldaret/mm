@@ -99,7 +99,7 @@ s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
 void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDs2n* this = THIS;
-    Vec3f focusOffset = {0.0f, 0.0f, 0.0f};
+    Vec3f focusOffset = { 0.0f, 0.0f, 0.0f };
 
     if ((limbIndex == DS2N_LIMB_HIPS) || (limbIndex == DS2N_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == DS2N_LIMB_RIGHT_UPPER_ARM)) {
