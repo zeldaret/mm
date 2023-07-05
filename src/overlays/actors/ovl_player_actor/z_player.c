@@ -4938,14 +4938,14 @@ PlayerMeleeWeaponAnimation func_808335F4(Player* this) {
 
     temp_a1 = this->unk_AE3[this->unk_ADE];
     if ((this->transformation == PLAYER_FORM_ZORA) || (this->transformation == PLAYER_FORM_GORON)) {
-        s32 requiredScopeTemp;
+        s8* meleeWeaponAnims = (this->transformation == PLAYER_FORM_ZORA) ? D_8085D094[0] : D_8085D094[1];
+        s32 unk_ADD = this->unk_ADD;
 
-        // yikes
-        meleeWeaponAnim = ((this->transformation == PLAYER_FORM_ZORA) ? D_8085D094[0] : D_8085D094[1])[this->unk_ADD];
+        meleeWeaponAnim = meleeWeaponAnims[unk_ADD];
 
-        if (this->unk_ADD != 0) {
+        if (unk_ADD != 0) {
             this->meleeWeaponAnimation = meleeWeaponAnim;
-            if (this->unk_ADD >= 2) {
+            if (unk_ADD >= 2) {
                 this->unk_ADD = -1;
             }
         }

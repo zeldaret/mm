@@ -308,8 +308,6 @@ void EnMinislime_SetupIceArrowDamage(EnMinislime* this) {
 void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
     f32 invFrozenTimer;
     s32 pad;
-    f32 randFloat;
-    s32 randSign;
 
     if (this->frozenTimer == 80) {
         this->frozenAlpha += 10;
@@ -324,7 +322,8 @@ void EnMinislime_IceArrowDamage(EnMinislime* this, PlayState* play) {
             Math_Vec3f_Copy(&this->shakeRefPos, &this->actor.world.pos);
         } else if (this->frozenTimer > 0) {
             if ((this->frozenTimer < 20) || ((this->frozenTimer < 40) && ((this->frozenTimer % 2) != 0))) {
-                s32 requiredScopeTemp;
+                f32 randFloat;
+                s32 randSign;
 
                 invFrozenTimer = 1.0f / this->frozenTimer;
                 randFloat = Rand_ZeroFloat(invFrozenTimer);

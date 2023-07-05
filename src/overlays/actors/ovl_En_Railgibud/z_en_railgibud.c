@@ -427,10 +427,9 @@ void EnRailgibud_SetupGrab(EnRailgibud* this) {
 }
 
 void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
-    Player* player2 = GET_PLAYER(play);
-    Player* player = player2;
+    Actor* playerActor = &GET_PLAYER(play)->actor;
+    Player* player = (Player*)playerActor;
     s32 inPositionToAttack;
-    u16 damageSfxId;
 
     switch (this->grabState) {
         case EN_RAILGIBUD_GRAB_START:
@@ -448,9 +447,8 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
 
         case EN_RAILGIBUD_GRAB_ATTACK:
             if (this->grabDamageTimer == 20) {
-                s16 requiredScopeTemp;
+                u16 damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
 
-                damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
                 play->damagePlayer(play, -8);
                 Player_PlaySfx(player, damageSfxId);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);

@@ -533,6 +533,7 @@ void func_80B9765C(EnZot* this, PlayState* play) {
             case 0x126B:
                 Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
+
             default:
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80B97708;
