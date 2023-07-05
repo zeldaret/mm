@@ -63,8 +63,8 @@ typedef struct EnHy {
     /* 0x2D8 */ Vec3s prevTrackTarget;
     /* 0x2DE */ Vec3s prevHeadRot;
     /* 0x2E4 */ Vec3s prevTorsoRot;
-    /* 0x2EA */ s16 limbRotTableY[16];
-    /* 0x30A */ s16 limbRotTableZ[16];
+    /* 0x2EA */ s16 fidgetTableY[ENHY_LIMB_MAX];
+    /* 0x30A */ s16 fidgetTableZ[ENHY_LIMB_MAX];
     /* 0x32C */ Vec3f bodyPartsPos[15];
     /* 0x3E0 */ UNK_TYPE1 unk_3E0[0x6];
     /* 0x3E6 */ s16 eyeTexIndex;

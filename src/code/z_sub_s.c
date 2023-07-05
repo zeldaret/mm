@@ -1194,13 +1194,13 @@ Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, 
  *
  * Note: This effect is practically unnoticeable if the current animation already has motion involved.
  */
-s32 SubS_FillLimbRotTables(PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 tableLen) {
+s32 SubS_FillFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     u32 frames = play->gameplayFrames;
     s32 i;
 
     for (i = 0; i < tableLen; i++) {
-        limbRotTableY[i] = (i * 50 + 0x814) * frames;
-        limbRotTableZ[i] = (i * 50 + 0x940) * frames;
+        fidgetTableY[i] = (i * 50 + 0x814) * frames;
+        fidgetTableZ[i] = (i * 50 + 0x940) * frames;
     }
 
     return true;
