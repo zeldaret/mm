@@ -44,7 +44,7 @@ void EnDs2n_SetupIdle(EnDs2n* this) {
 }
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play) {
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, DS2N_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, DS2N_LIMB_MAX);
 }
 
 void EnDs2n_UpdateEyes(EnDs2n* this) {

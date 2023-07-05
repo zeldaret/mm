@@ -368,7 +368,7 @@ void EnOssan_SetupLookToShopkeeperFromShelf(PlayState* play, EnOssan* this) {
 void EnOssan_Idle(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENOSSAN_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENOSSAN_LIMB_MAX);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);

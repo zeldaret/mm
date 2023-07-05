@@ -4472,9 +4472,9 @@ void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationI
  *
  * Note: This effect is practically unnoticeable if the current animation already has motion involved.
  *
- * Note: This function goes unused in favor of `SubS_FillFidgetTables`.
+ * Note: This function goes unused in favor of `SubS_UpdateFidgetTables`.
  */
-void Actor_FillFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
+void Actor_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     s32 frames = play->gameplayFrames;
     s32 i;
 

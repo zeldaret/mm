@@ -218,7 +218,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
 
     EnRu_UpdateEyes(this, 3);
     EnRu_PlayWalkingSound(this, play);
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, RU2_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, RU2_LIMB_MAX);
 }
 
 void EnRu_DoNothing(EnRu* this, PlayState* play) {

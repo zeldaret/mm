@@ -1437,7 +1437,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             break;
     }
 
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 
     return false;
 }
@@ -1626,7 +1626,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
     }
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 }
 
 void func_80950F2C(EnGm* this, PlayState* play) {

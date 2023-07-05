@@ -1189,12 +1189,14 @@ Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, 
 /**
  * Fills two tables with rotation angles that can be used to simulate idle animations.
  *
+ * The rotation angels are dependent on the current frame, so should be updated regularly, generally every frame.
+ *
  * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of th zTable value,
  * multiplying by some scale factor (generally 200.0f), and adding that to the already existing rotation.
  *
  * Note: This effect is practically unnoticeable if the current animation already has motion involved.
  */
-s32 SubS_FillFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
+s32 SubS_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     u32 frames = play->gameplayFrames;
     s32 i;
 

@@ -202,7 +202,7 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
     }
 
     EnZo_Blink(this, 3);
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ZORA_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ZORA_LIMB_MAX);
 }
 
 void EnZo_Walk(EnZo* this, PlayState* play) {

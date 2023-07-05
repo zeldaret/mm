@@ -669,7 +669,7 @@ void func_80BF4EBC(EnRg* this, PlayState* play) {
             this->unk_318 = Rand_S16Offset(0, 20);
         }
     }
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENRG_FIDGET_TABLE_LEN);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENRG_FIDGET_TABLE_LEN);
 }
 
 void func_80BF4FC4(EnRg* this, PlayState* play) {

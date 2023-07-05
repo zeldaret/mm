@@ -2048,7 +2048,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
         this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
     }
 
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
     Math_ApproachS(&this->actor.shape.rot.y, targetRot, 4, 0x2AA8);
 }
 
@@ -2243,7 +2243,7 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                 }
             }
 
-            SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
+            SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     }
@@ -2388,7 +2388,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisPos, &targetPos), 4, 0x2AA8);
         }
-        SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
+        SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
         return;
     }
 

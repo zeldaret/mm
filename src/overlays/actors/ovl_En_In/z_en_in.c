@@ -252,7 +252,7 @@ void func_808F3414(EnIn* this, PlayState* play) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, play);
-    SubS_FillFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_IN_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_IN_LIMB_MAX);
 }
 
 void func_808F35AC(EnIn* this, PlayState* play) {
