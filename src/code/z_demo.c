@@ -301,7 +301,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_PLAYER_FORM_HUMAN:
-            sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;
+            sCutsceneStoredPlayerForm = GET_PLAYER_FORM;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
             break;

@@ -10348,7 +10348,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
 
         Actor_SetObjectDependency(play, &this->actor);
     } else {
-        this->transformation = gSaveContext.save.playerForm;
+        this->transformation = GET_PLAYER_FORM;
         if (this->transformation == PLAYER_FORM_HUMAN) {
             if (gSaveContext.save.equippedMask == PLAYER_MASK_GIANT) {
                 gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
@@ -10765,10 +10765,10 @@ void Player_SetDoAction(PlayState* play, Player* this) {
                 !Player_IsGoronOrDeku(this)) {
                 if ((this->transformation != PLAYER_FORM_GORON) &&
                     !(this->stateFlags1 & (PLAYER_STATE1_4 | PLAYER_STATE1_4000)) && (sp28 <= 0) &&
-                    ((func_80123420(this)) ||
+                    (func_80123420(this) ||
                      ((sPlayerFloorType != FLOOR_TYPE_7) &&
-                      ((func_80123434(this)) || ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
-                                                 !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
+                      (func_80123434(this) || ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) &&
+                                               !(this->stateFlags1 & PLAYER_STATE1_400000) && (sp28 == 0)))))) {
                     doActionA = DO_ACTION_ATTACK;
                 } else if ((play->roomCtx.curRoom.behaviorType1 != ROOM_BEHAVIOR_TYPE1_2) && sp24 && (sp28 > 0)) {
                     doActionA = DO_ACTION_JUMP;
@@ -13768,7 +13768,7 @@ void func_8084A8E8(Player* this, PlayState* play) {
             func_8083AF8C(this, sp3A, play);
         }
     } else if ((this->linearVelocity < 3.6f) && (sp3C < 4.0f)) {
-        if ((func_80123420(this) == 0) && (func_80123434(this))) {
+        if (!func_80123420(this) && func_80123434(this)) {
             func_8083AF30(this, play);
         } else {
             func_80836988(this, play);
@@ -17669,14 +17669,14 @@ void func_808553F4(Player* this, PlayState* play) {
             this->actor.draw = NULL;
             this->unk_AE7 = 0;
             Play_DisableMotionBlurPriority();
-            SET_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm]);
+            SET_WEEKEVENTREG(D_8085D908[GET_PLAYER_FORM]);
         }
     } else if ((this->unk_AE7++ > ((this->transformation == PLAYER_FORM_HUMAN) ? 0x53 : 0x37)) ||
                ((this->unk_AE7 >= 5) &&
-                (sp48 = ((this->transformation != PLAYER_FORM_HUMAN) ||
-                         CHECK_WEEKEVENTREG(D_8085D908[gSaveContext.save.playerForm])) &&
-                        CHECK_BTN_ANY(sPlayerControlInput->press.button,
-                                      BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A)))) {
+                (sp48 =
+                     ((this->transformation != PLAYER_FORM_HUMAN) || CHECK_WEEKEVENTREG(D_8085D908[GET_PLAYER_FORM])) &&
+                     CHECK_BTN_ANY(sPlayerControlInput->press.button,
+                                   BTN_CRIGHT | BTN_CLEFT | BTN_CDOWN | BTN_CUP | BTN_B | BTN_A)))) {
         R_PLAY_FILL_SCREEN_ON = 45;
         R_PLAY_FILL_SCREEN_R = 220;
         R_PLAY_FILL_SCREEN_G = 220;
@@ -19681,7 +19681,7 @@ void Player_CsAction_22(PlayState* play, Player* this, CsCmdActorCue* cue) {
 
 void Player_CsAction_23(PlayState* play, Player* this, CsCmdActorCue* cue) {
     PlayerAnimation_Update(play, &this->skelAnime);
-    if (gSaveContext.save.playerForm != this->transformation) {
+    if (GET_PLAYER_FORM != this->transformation) {
         this->actor.update = func_8012301C;
         this->actor.draw = NULL;
     }
@@ -19724,7 +19724,7 @@ void Player_CsAction_25(PlayState* play, Player* this, CsCmdActorCue* cue) {
 
 void Player_CsAction_26(PlayState* play, Player* this, CsCmdActorCue* cue) {
     PlayerAnimation_Update(play, &this->skelAnime);
-    if (gSaveContext.save.playerForm != this->transformation) {
+    if (GET_PLAYER_FORM != this->transformation) {
         this->actor.update = func_8012301C;
         this->actor.draw = NULL;
     }

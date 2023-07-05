@@ -479,10 +479,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
 
     switch (arg2) {
         case 0:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x345C;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3460;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_08)) {
                 textId = 0x3458;
@@ -500,10 +499,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 3:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3485;
-            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x3484;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_04)) {
                 textId = 0x346D;
@@ -513,10 +511,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 4:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x348A;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x348B;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_01)) {
                 textId = 0x3486;
@@ -536,10 +533,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 7:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x34A8;
-            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x34A7;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_04)) {
                 textId = 0x3495;
