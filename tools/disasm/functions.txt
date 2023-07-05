@@ -878,7 +878,7 @@
     0x800BDAA0:("func_800BDAA0",),
     0x800BDB6C:("func_800BDB6C",),
     0x800BDC5C:("Actor_ChangeAnimationByInfo",),
-    0x800BDCF4:("func_800BDCF4",),
+    0x800BDCF4:("Actor_FillLimbRotTables",),
     0x800BDFB0:("Actor_Noop",),
     0x800BDFC0:("Gfx_DrawDListOpa",),
     0x800BE03C:("Gfx_DrawDListXlu",),

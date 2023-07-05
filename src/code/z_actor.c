@@ -4464,14 +4464,23 @@ void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationI
                      frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-// Unused
-void func_800BDCF4(PlayState* play, s16* arg1, s16* arg2, s32 size) {
+/**
+ * Fills two tables with rotation angles that can be used to simulate idle animations.
+ *
+ * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of th zTable value,
+ * multiplying by some scale factor (generally 200.0f), and adding that to the already existing rotation.
+ *
+ * Note: This effect is practically unnoticeable if the current animation already has motion involved.
+ *
+ * Note: This function goes unused in favor of `SubS_FillLimbRotTables`.
+ */
+void Actor_FillLimbRotTables(PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 tableLen) {
     s32 frames = play->gameplayFrames;
     s32 i;
 
-    for (i = 0; i < size; i++) {
-        arg1[i] = (0x814 + 50 * i) * frames;
-        arg2[i] = (0x940 + 50 * i) * frames;
+    for (i = 0; i < tableLen; i++) {
+        limbRotTableY[i] = (i * 50 + 0x814) * frames;
+        limbRotTableZ[i] = (i * 50 + 0x940) * frames;
     }
 }
 
