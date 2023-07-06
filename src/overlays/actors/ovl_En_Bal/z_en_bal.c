@@ -8,8 +8,9 @@
 Week Event Flags:
         10 Bit 0 -- Whether player has talked to Tingle before during this cycle
         35 Bits 0-5	--	Whether player has bought each possible map. For a given map, the flag is 1 << mapId.
-        64 Bits 3-4 --  Appears to be a 2 bit enum that stores player form when 10/0 is set. 0 - Zora, 1 - Deku, 2 - Goron, 3 - Human
-                Notably neither bit is ever cleared by EnBal, so this field could be corrupted if not cleared at the same time as 10/0
+        64 Bits 3-4 --  Appears to be a 2 bit enum that stores player form when 10/0 is set. 0 - Zora, 1 - Deku, 2 -
+Goron, 3 - Human Notably neither bit is ever cleared by EnBal, so this field could be corrupted if not cleared at the
+same time as 10/0
 
 Message IDs:
     0x1D00 - 0x1D17
@@ -34,7 +35,7 @@ void EnBal_Draw(Actor* thisx, PlayState* play);
 
 typedef enum EnBalEyeTexture {
     /* 0x0 */ EN_BAL_EYETEX_OPEN,
-    /* 0x1 */ EN_BAL_EYETEX_CLOSED,
+    /* 0x1 */ EN_BAL_EYETEX_CLOSED
 } EnBalEyeTexture;
 
 typedef enum EnBalAnimation {
@@ -51,19 +52,19 @@ typedef enum EnBalAnimation {
     /* 0xA */ EN_BAL_ANIM_WAIT,
     /* 0xB */ EN_BAL_ANIM_SPIN,
     /* 0xC */ EN_BAL_ANIM_HIDE_FACE,
-    /* 0xD */ EN_BAL_ANIM_CONFETTI,
+    /* 0xD */ EN_BAL_ANIM_CONFETTI
 } EnBalAnimation;
 
 typedef enum EnBalBuyMapChoice {
     /* 0x0 */ EN_BAL_MAPCHOICE_PROXIMAL,
     /* 0x1 */ EN_BAL_MAPCHOICE_DISTAL,
-    /* 0x2 */ EN_BAL_MAPCHOICE_CANCEL,
+    /* 0x2 */ EN_BAL_MAPCHOICE_CANCEL
 } EnBalBuyMapChoice;
 
 typedef enum EnBalWatchTarget {
     /* 0x0 */ EN_BAL_WATCHTRG_NONE,
     /* 0x1 */ EN_BAL_WATCHTRG_PLAYER,
-    /* 0x2 */ EN_BAL_WATCHTRG_FAIRY,
+    /* 0x2 */ EN_BAL_WATCHTRG_FAIRY
 } EnBalWatchTarget;
 
 typedef enum EnBalBalloonAction {
@@ -71,13 +72,13 @@ typedef enum EnBalBalloonAction {
     /* 0x1 */ EN_BAL_BALACT_POP,
     /* 0x2 */ EN_BAL_BALACT_FALL,
     /* 0x4 */ EN_BAL_BALACT_INFLATE = 4,
-    /* 0x5 */ EN_BAL_BALACT_RISE,
+    /* 0x5 */ EN_BAL_BALACT_RISE
 } EnBalBalloonAction;
 
-typedef enum EnBalIdleAnimStage{
+typedef enum EnBalIdleAnimStage {
     /* 0x0 */ EN_BAL_IDLESTAGE_ACTIVITY,
     /* 0x2 */ EN_BAL_IDLESTAGE_PREP_WAIT = 2,
-    /* 0x3 */ EN_BAL_IDLESTAGE_WAIT,
+    /* 0x3 */ EN_BAL_IDLESTAGE_WAIT
 } EnBalIdleAnimStage;
 
 void EnBal_SetMainColliderToBalloon(EnBal* this);
@@ -168,24 +169,35 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 static ColliderJntSphElementInit sJntSphElementsInit[1] = {
     {
-        { ELEMTYPE_UNK0, { 0xF7CFFFFF, 0x00, 0x00 }, { 0xF7CFFFFF, 0x00, 0x00 }, TOUCH_NONE | TOUCH_SFX_NORMAL, BUMP_ON, OCELEM_ON, },
+        {
+            ELEMTYPE_UNK0,
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            { 0xF7CFFFFF, 0x00, 0x00 },
+            TOUCH_NONE | TOUCH_SFX_NORMAL,
+            BUMP_ON,
+            OCELEM_ON,
+        },
         { TINGLE_LIMB_BALLOON, { { 2400, 0, 0 }, 50 }, 100 },
     },
 };
 
 static ColliderJntSphInit sJntSphInit = {
-    { COLTYPE_NONE, AT_ON | AT_TYPE_ENEMY, AC_ON | AC_TYPE_PLAYER, OC1_ON | OC1_TYPE_ALL, OC2_TYPE_1, COLSHAPE_JNTSPH, },
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_ENEMY,
+        AC_ON | AC_TYPE_PLAYER,
+        OC1_ON | OC1_TYPE_ALL,
+        OC2_TYPE_1,
+        COLSHAPE_JNTSPH,
+    },
     ARRAY_COUNT(sJntSphElementsInit),
     sJntSphElementsInit, // sJntSphElementsInit,
 };
 
-static s16 sBuyMapOptions[6][2] = { 
-    { TINGLE_MAP_CLOCK_TOWN, TINGLE_MAP_WOODFALL }, 
-    { TINGLE_MAP_WOODFALL, TINGLE_MAP_SNOWHEAD }, 
-    { TINGLE_MAP_SNOWHEAD, TINGLE_MAP_ROMANI_RANCH }, 
-    { TINGLE_MAP_ROMANI_RANCH, TINGLE_MAP_GREAT_BAY }, 
-    { TINGLE_MAP_GREAT_BAY, TINGLE_MAP_STONE_TOWER }, 
-    { TINGLE_MAP_STONE_TOWER, TINGLE_MAP_CLOCK_TOWN },
+static s16 sBuyMapOptions[6][2] = {
+    { TINGLE_MAP_CLOCK_TOWN, TINGLE_MAP_WOODFALL },   { TINGLE_MAP_WOODFALL, TINGLE_MAP_SNOWHEAD },
+    { TINGLE_MAP_SNOWHEAD, TINGLE_MAP_ROMANI_RANCH }, { TINGLE_MAP_ROMANI_RANCH, TINGLE_MAP_GREAT_BAY },
+    { TINGLE_MAP_GREAT_BAY, TINGLE_MAP_STONE_TOWER }, { TINGLE_MAP_STONE_TOWER, TINGLE_MAP_CLOCK_TOWN },
 };
 
 static AnimationInfo sAnimationInfo[14] = {
@@ -205,7 +217,7 @@ static AnimationInfo sAnimationInfo[14] = {
     /* 13 */ { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
 };
 
-static Vec3f sInitBalloonScale = {0.0f, 0.0f, 0.0f};
+static Vec3f sInitBalloonScale = { 0.0f, 0.0f, 0.0f };
 
 void EnBal_Init(Actor* thisx, PlayState* play) {
     EnBal* this = THIS;
@@ -217,8 +229,7 @@ void EnBal_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.targetMode = 1;
     this->picto.actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->picto.actor, 0.02f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable,
-                       this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
                        TINGLE_LIMB_MAX);
     if (gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         Animation_Change(&this->skelAnime, &gTingleTalkIdleAnim, 1.0f, 0.0f, lastFrame, ANIMMODE_LOOP, -10.0f);
@@ -243,8 +254,9 @@ void EnBal_Init(Actor* thisx, PlayState* play) {
         this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
         EnBal_SetMainColliderToHead(this);
         EnBal_SetupGroundIdle(this);
-    } else
+    } else {
         EnBal_SetupFloatIdle(this);
+    }
 }
 
 void EnBal_Destroy(Actor* thisx, PlayState* play) {
@@ -269,8 +281,7 @@ s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {
     EnBal* this = THIS;
 
     pictoValid = Snap_ValidatePictograph(play, thisx, PICTO_VALID_TINGLE, &this->picto.actor.focus.pos,
-                                         &thisx->shape.rot,
-                                      10.0f, 400.0f, 0x4000);
+                                         &thisx->shape.rot, 10.0f, 400.0f, 0x4000);
     if (!pictoValid) {
         this->forceEyesShut = true;
         this->idleAnimStage = EN_BAL_IDLESTAGE_WAIT;
@@ -346,7 +357,7 @@ void EnBal_PopBalloon(EnBal* this, PlayState* play) {
         EnBal_SetupFallFromSky(this);
     } else {
         if (this->timer >= 11) {
-            //Freeze animation and induce blink
+            // Freeze animation and induce blink
             this->skelAnime.playSpeed = 0.0f;
             if (this->eyeTimer >= 7) {
                 this->eyeTimer = 6;
@@ -414,7 +425,7 @@ void EnBal_FallFromSky(EnBal* this, PlayState* play) {
             this->timer++;
         }
     } else if (this->picto.actor.velocity.y < 0.0f) {
-        func_800B9010(&this->picto.actor, 0x20A0);
+        Actor_PlaySfx_Flagged(&this->picto.actor, 0x20A0);
     }
 
     this->skyFloatPhase += 3000;
@@ -442,7 +453,7 @@ void EnBal_InflateBalloon(EnBal* this, PlayState* play) {
         EnBal_SetupFloatUpToSky(this);
     }
     EnBal_EmitDustPuff(this, play);
-    func_800B9010(&this->picto.actor, 0x214A);
+    Actor_PlaySfx_Flagged(&this->picto.actor, 0x214A);
     scale = this->balloonScale.x * 1.1f;
     this->balloonScale.z = scale;
     this->balloonScale.y = scale;
@@ -597,8 +608,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
             } else {
                 this->idleAnimStage++;
             }
-        } else if ((this->idleAnimStage == EN_BAL_IDLESTAGE_WAIT) &&
-                   (Animation_OnFrame(&this->skelAnime, 20.0f))) {
+        } else if ((this->idleAnimStage == EN_BAL_IDLESTAGE_WAIT) && (Animation_OnFrame(&this->skelAnime, 20.0f))) {
             this->forceEyesShut = true;
         }
     }
@@ -726,8 +736,8 @@ void EnBal_ThrowMagicSparkles(EnBal* this, PlayState* play) {
     for (i = 0; i < 20; i++) {
         sSparkleVel.x = Rand_Centered() * 3.0f;
         sSparkleVel.z = Rand_Centered() * 3.0f;
-        EffectSsKirakira_SpawnDispersed(play, &pos, &sSparkleVel, &sSparkleAcc, &sSparkleColorPrim, &sSparkleColorEnv, 2500,
-                                        40);
+        EffectSsKirakira_SpawnDispersed(play, &pos, &sSparkleVel, &sSparkleAcc, &sSparkleColorPrim, &sSparkleColorEnv,
+                                        2500, 40);
     }
 }
 
@@ -740,8 +750,8 @@ void EnBal_EmitDustPuff(EnBal* this, PlayState* play) {
     Vec3f pos = this->picto.actor.world.pos;
 
     pos.y += 40.0f;
-    sDustVel.x = randPlusMinusPoint5Scaled(10.0f);
-    sDustVel.z = randPlusMinusPoint5Scaled(10.0f);
+    sDustVel.x = Rand_CenteredFloat(10.0f);
+    sDustVel.z = Rand_CenteredFloat(10.0f);
     sDustVel.y = Rand_ZeroFloat(5.0f);
     func_800B0EB0(play, &pos, &sDustVel, &sDustAcc, &sDustColorPrim, &sDustColorEnv, 150, 40, 15);
 }
@@ -830,19 +840,19 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
 
             if (gSaveContext.save.saveInfo.playerData.rupees < price) {
                 // Can't buy map because player doesn't have the money
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_BAL_ANIM_TALK_IDLE);
                 Message_StartTextbox(play, 0x1D0A, &this->picto.actor);
                 this->lastMessageId = 0x1D0A;
             } else if (EnBal_CheckIfMapUnlocked(this, play)) {
                 // Can't buy map because player already has it
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_BAL_ANIM_TALK_IDLE);
                 Message_StartTextbox(play, 0x1D09, &this->picto.actor);
                 this->lastMessageId = 0x1D09;
             } else {
                 // Proceed with map purchase
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(-price);
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_BAL_ANIM_MAGIC_SHORT);
                 this->forceEyesShut = true;
@@ -854,7 +864,7 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
             }
         } else {
             // Cancel
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_BAL_ANIM_TALK_IDLE);
             Message_StartTextbox(play, 0x1D06, &this->picto.actor);
             this->lastMessageId = 0x1D06;
@@ -1075,8 +1085,7 @@ void EnBal_UpdateCollision(EnBal* this, PlayState* play) {
 void EnBal_CheckBalloonPopped(EnBal* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->picto.actor.world.pos.x,
-                    this->picto.actor.world.pos.y + 100.0f,
-                    this->picto.actor.world.pos.z, 0xFF, 0xFF, 0xC8, 2);
+                    this->picto.actor.world.pos.y + 100.0f, this->picto.actor.world.pos.z, 0xFF, 0xFF, 0xC8, 2);
         this->collider.base.acFlags &= ~AC_HIT;
         EnBal_SetupPopBalloon(this);
     }
@@ -1145,7 +1154,7 @@ void EnBal_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 8, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnBal_OverrideLimbDraw, EnBal_PostLimbDraw, &this->picto.actor);

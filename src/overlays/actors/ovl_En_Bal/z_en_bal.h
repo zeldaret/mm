@@ -45,7 +45,7 @@ typedef enum EnBalLocation {
     /* 0x2 */ EN_BAL_LOC_SNOWHEAD,
     /* 0x3 */ EN_BAL_LOC_ROMANI_RANCH,
     /* 0x4 */ EN_BAL_LOC_GREAT_BAY,
-    /* 0x5 */ EN_BAL_LOC_STONE_TOWER,
+    /* 0x5 */ EN_BAL_LOC_STONE_TOWER
 } EnBalLocation;
  
 #endif // Z_EN_BAL_H
