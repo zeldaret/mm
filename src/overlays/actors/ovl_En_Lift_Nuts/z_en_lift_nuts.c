@@ -117,7 +117,7 @@ void func_80AE9A20(EnLiftNuts* this, PlayState* play) {
     static s32 D_80AEBF64 = false;
 
     if (!D_80AEBF64) {
-        func_800B6584(play, ACTOR_EN_GAMELUPY, &D_80AEBF60, sizeof(s16));
+        Actor_AddSharedMemoryEntry(play, ACTOR_EN_GAMELUPY, &D_80AEBF60, sizeof(s16));
         D_80AEBF64 = true;
     }
     this->ptr_1EC = &D_80AEBF60;
@@ -127,7 +127,7 @@ void func_80AE9A80(EnLiftNuts* this, PlayState* play) {
     static s16 D_80AEBF68 = false;
 
     if (!D_80AEBF68) {
-        func_800B6608(play, ACTOR_EN_GAMELUPY);
+        Actor_FreeSharedMemoryEntry(play, ACTOR_EN_GAMELUPY);
         D_80AEBF68 = true;
     }
 }

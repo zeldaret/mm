@@ -112,7 +112,7 @@ void func_80AF6944(EnGamelupy* this) {
 }
 
 void func_80AF6958(EnGamelupy* this, PlayState* play) {
-    s16* unk_198 = func_800B6680(play, ACTOR_EN_GAMELUPY);
+    s16* unk_198 = Actor_FindSharedMemoryEntry(play, ACTOR_EN_GAMELUPY);
 
     if (unk_198 != NULL) {
         this->unk_198 = unk_198;

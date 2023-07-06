@@ -214,9 +214,9 @@ asm/non_matchings/code/z_actor/Actor_InitPlayerImpact.s,Actor_InitPlayerImpact,0
 asm/non_matchings/code/z_actor/Actor_UpdatePlayerImpact.s,Actor_UpdatePlayerImpact,0x800B6474,0x6
 asm/non_matchings/code/z_actor/Actor_SetPlayerImpact.s,Actor_SetPlayerImpact,0x800B648C,0x1C
 asm/non_matchings/code/z_actor/Actor_GetPlayerImpact.s,Actor_GetPlayerImpact,0x800B64FC,0x22
-asm/non_matchings/code/z_actor/func_800B6584.s,func_800B6584,0x800B6584,0x21
-asm/non_matchings/code/z_actor/func_800B6608.s,func_800B6608,0x800B6608,0x1E
-asm/non_matchings/code/z_actor/func_800B6680.s,func_800B6680,0x800B6680,0x23
+asm/non_matchings/code/z_actor/Actor_AddSharedMemoryEntry.s,func_800B6584,0x800B6584,0x21
+asm/non_matchings/code/z_actor/Actor_FreeSharedMemoryEntry.s,func_800B6608,0x800B6608,0x1E
+asm/non_matchings/code/z_actor/Actor_FindSharedMemoryEntry.s,func_800B6680,0x800B6680,0x23
 asm/non_matchings/code/z_actor/Actor_Kill.s,Actor_Kill,0x800B670C,0x8
 asm/non_matchings/code/z_actor/Actor_SetWorldToHome.s,Actor_SetWorldToHome,0x800B672C,0xC
 asm/non_matchings/code/z_actor/Actor_SetFocus.s,Actor_SetFocus,0x800B675C,0x11
