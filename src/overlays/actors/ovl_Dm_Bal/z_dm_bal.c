@@ -31,20 +31,20 @@ ActorInit Dm_Bal_InitVars = {
 };
 
 static AnimationInfo sAnimationInfo[] = {
-    { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_bal_Anim_00A7DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_bal_Anim_00B1E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_00B604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_00C498, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_bal_Anim_00C498, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_bal_Anim_00D530, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_000C78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
-    { &object_bal_Anim_00CB78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
-    { &object_bal_Anim_001804, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
+    { &gTingleFloatIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gTingleTalkTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gTingleTalkIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gTingleMagicSpellAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gTingleMagicSpellAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gTingleWaitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
+    { &gTingleHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
+    { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
 };
 
 void DmBal_Init(Actor* thisx, PlayState* play) {
@@ -54,8 +54,8 @@ void DmBal_Init(Actor* thisx, PlayState* play) {
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->jointTable,
-                       this->morphTable, OBJECT_BAL_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
+                       TINGLE_LIMB_MAX);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->timer = 60;
     this->eyeIndex = 0;
@@ -152,7 +152,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
     // Throw confetti
-    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &object_bal_Anim_001804)) {
+    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &gTingleThrowConfettiAnim)) {
         Vec3f pos = this->actor.world.pos;
         Vec3f vel = { 0.0f, 9.0f, 0.0f };
 
@@ -189,7 +189,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void DmBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-static TexturePtr sEyeTextures[] = { object_bal_Tex_006050, object_bal_Tex_0094D0 };
+static TexturePtr sEyeTextures[] = { gTingleEyeOpenTex, gTingleEyeClosedTex };
 
 void DmBal_Draw(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
