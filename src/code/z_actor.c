@@ -4470,10 +4470,10 @@ void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationI
  * The rotation angles are dependent on the current frame, so should be updated regularly, generally every frame.
  *
  * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of th zTable value,
- * multiplying by some scale factor (generally 200.0f), and adding that to the already existing rotation.
+ * multiplying by some scale factor (generally 200), and adding that to the already existing rotation.
  *
- * Note: With the common scale of 200, this effect is practically unnoticeable if the current animation already has
- * motion involved.
+ * Note: With the common scale factor of 200, this effect is practically unnoticeable if the current animation already
+ * has motion involved.
  *
  * Note: This function goes unused in favor of `SubS_UpdateFidgetTables`.
  */
