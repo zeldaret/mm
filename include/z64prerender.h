@@ -3,6 +3,12 @@
 
 #include "ultra64.h"
 
+#define BG2D_FLAGS_1 (1 << 0)
+#define BG2D_FLAGS_2 (1 << 1)
+#define BG2D_FLAGS_AC_THRESHOLD (1 << 2)
+#define BG2D_FLAGS_LOAD_S2DEX2 (1 << 3)
+#define BG2D_FLAGS_COPY (1 << 4)
+
 typedef struct ListAlloc {
     /* 0x0 */ struct ListAlloc* prev;
     /* 0x4 */ struct ListAlloc* next;
@@ -38,8 +44,8 @@ void PreRender_SetValuesSave(PreRender* this, u32 width, u32 height, void* fbuf,
 void PreRender_Init(PreRender* this);
 void PreRender_SetValues(PreRender* this, u32 width, u32 height, void* fbuf, void* zbuf);
 void PreRender_Destroy(PreRender* this);
-void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4);
-void func_8016FF70(PreRender* this, Gfx** gfxp, void* buf, void* bufSave);
+void PreRender_CopyImage(PreRender* this, Gfx** gfxp, void* img, void* imgDst, u32 useThresholdAlphaCompare);
+void PreRender_RestoreBuffer(PreRender* this, Gfx** gfxp, void* buf, void* bufSave);
 void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA);
 void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave);
 void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* cvgDst);

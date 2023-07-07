@@ -2571,8 +2571,8 @@ asm/non_matchings/code/PreRender/PreRender_SetValuesSave.s,PreRender_SetValuesSa
 asm/non_matchings/code/PreRender/PreRender_Init.s,PreRender_Init,0x8016FD2C,0xD
 asm/non_matchings/code/PreRender/PreRender_SetValues.s,PreRender_SetValues,0x8016FD60,0xD
 asm/non_matchings/code/PreRender/PreRender_Destroy.s,PreRender_Destroy,0x8016FD94,0x9
-asm/non_matchings/code/PreRender/func_8016FDB8.s,func_8016FDB8,0x8016FDB8,0x6E
-asm/non_matchings/code/PreRender/func_8016FF70.s,func_8016FF70,0x8016FF70,0x8
+asm/non_matchings/code/PreRender/PreRender_CopyImage.s,PreRender_CopyImage,0x8016FDB8,0x6E
+asm/non_matchings/code/PreRender/PreRender_RestoreBuffer.s,PreRender_RestoreBuffer,0x8016FF70,0x8
 asm/non_matchings/code/PreRender/func_8016FF90.s,func_8016FF90,0x8016FF90,0x9C
 asm/non_matchings/code/PreRender/func_80170200.s,func_80170200,0x80170200,0xF
 asm/non_matchings/code/PreRender/PreRender_CoverageRgba16ToI8.s,PreRender_CoverageRgba16ToI8,0x8017023C,0xD0

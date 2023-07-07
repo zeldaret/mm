@@ -51,20 +51,20 @@ void PreRender_Destroy(PreRender* this) {
     ListAlloc_FreeAll(&this->alloc);
 }
 
-void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 arg4) {
+void PreRender_CopyImage(PreRender* this, Gfx** gfxp, void* img, void* imgDst, u32 useThresholdAlphaCompare) {
     Gfx* gfx = *gfxp;
     u32 flags;
 
     gDPPipeSync(gfx++);
-    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, bufSave);
+    gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, imgDst);
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
-    flags = 0x18;
-    if (arg4 == true) {
-        flags = 0x1C;
+    flags = BG2D_FLAGS_LOAD_S2DEX2 | BG2D_FLAGS_COPY;
+    if (useThresholdAlphaCompare == true) {
+        flags |= BG2D_FLAGS_AC_THRESHOLD;
     }
 
-    Prerender_DrawBackground2D(&gfx, buf, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0,
+    Prerender_DrawBackground2D(&gfx, img, NULL, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0,
                                0.0f, 0.0f, 1.0f, 1.0f, flags);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
@@ -72,8 +72,8 @@ void func_8016FDB8(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, u32 ar
     *gfxp = gfx;
 }
 
-void func_8016FF70(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
-    func_8016FDB8(this, gfxp, buf, bufSave, false);
+void PreRender_RestoreBuffer(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
+    PreRender_CopyImage(this, gfxp, buf, bufSave, false);
 }
 
 void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA) {
@@ -101,7 +101,7 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
     gDPSetScissor(gfx++, G_SC_NON_INTERLACE, 0, 0, this->width, this->height);
 
     Prerender_DrawBackground2D(&gfx, buf, 0, this->width, this->height, G_IM_FMT_RGBA, G_IM_SIZ_16b, G_TT_NONE, 0, 0.0f,
-                               0.0f, 1.0f, 1.0f, 0xB);
+                               0.0f, 1.0f, 1.0f, BG2D_FLAGS_1 | BG2D_FLAGS_2 | BG2D_FLAGS_LOAD_S2DEX2);
     gDPPipeSync(gfx++);
     gDPSetColorImage(gfx++, G_IM_FMT_RGBA, G_IM_SIZ_16b, this->width, this->fbuf);
 
@@ -205,7 +205,7 @@ void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* 
  */
 void PreRender_SaveZBuffer(PreRender* this, Gfx** gfxp) {
     if ((this->zbufSave != NULL) && (this->zbuf != NULL)) {
-        func_8016FF70(this, gfxp, this->zbuf, this->zbufSave);
+        PreRender_RestoreBuffer(this, gfxp, this->zbuf, this->zbufSave);
     }
 }
 
@@ -271,7 +271,7 @@ void PreRender_DrawCoverage(PreRender* this, Gfx** gfxp) {
  * Restores zbufSave to zbuf
  */
 void PreRender_RestoreZBuffer(PreRender* this, Gfx** gfxp) {
-    func_8016FF70(this, gfxp, this->zbufSave, this->zbuf);
+    PreRender_RestoreBuffer(this, gfxp, this->zbufSave, this->zbuf);
 }
 
 /**
@@ -354,7 +354,7 @@ void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha) {
  * Copies fbufSave to fbuf
  */
 void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp) {
-    func_8016FF70(this, gfxp, this->fbufSave, this->fbuf);
+    PreRender_RestoreBuffer(this, gfxp, this->fbufSave, this->fbuf);
 }
 
 /**
@@ -757,12 +757,12 @@ typedef struct {
 void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfxp) {
     Gfx* gfx;
     uObjBg* bg;
-    u32 sp64;
+    u32 alphaCompare;
     Gfx* gfxTemp;
-    u32 sp5C;
+    u32 loadS2DEX2;
 
-    sp5C = (bg2D->flags & 8) != 0;
-    sp64 = (bg2D->flags & 4) ? G_AC_THRESHOLD : G_AC_NONE;
+    loadS2DEX2 = (bg2D->flags & BG2D_FLAGS_LOAD_S2DEX2) != 0;
+    alphaCompare = (bg2D->flags & BG2D_FLAGS_AC_THRESHOLD) ? G_AC_THRESHOLD : G_AC_NONE;
 
     gfxTemp = *gfxp;
     bg = Graph_DlistAlloc(&gfxTemp, sizeof(uObjBg));
@@ -783,7 +783,7 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
     bg->b.imagePal = 0;
     bg->b.imageFlip = 0;
 
-    if (sp5C) {
+    if (loadS2DEX2) {
         gSPLoadUcodeL(gfx++, gspS2DEX2_fifo);
     }
 
@@ -793,14 +793,14 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
         gDPPipeSync(gfx++);
     }
 
-    if (bg2D->flags & 0x10) {
+    if (bg2D->flags & BG2D_FLAGS_COPY) {
         bg->b.frameW = bg2D->width * (1 << 2);
         bg->b.frameH = bg2D->height * (1 << 2);
 
         guS2DInitBg(bg);
 
-        if (!(bg2D->flags & 1)) {
-            gDPSetOtherMode(gfx++, bg2D->tt | G_CYC_COPY, sp64);
+        if (!(bg2D->flags & BG2D_FLAGS_1)) {
+            gDPSetOtherMode(gfx++, bg2D->tt | G_CYC_COPY, alphaCompare);
         }
 
         gSPBgRectCopy(gfx++, bg);
@@ -811,14 +811,14 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
         bg->b.tmemH = (1 << 10) / bg2D->yScale;
         bg->s.imageYorig = bg->b.imageY;
 
-        if (!(bg2D->flags & 1)) {
+        if (!(bg2D->flags & BG2D_FLAGS_1)) {
             gDPSetOtherMode(gfx++, bg2D->tt | G_AD_DISABLE | G_CD_DISABLE | G_TC_FILT,
                             AA_EN | CVG_X_ALPHA | ALPHA_CVG_SEL |
                                 GBL_c1(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) |
-                                GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) | sp64);
+                                GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_BL, G_BL_1MA) | alphaCompare);
         }
 
-        if (!(bg2D->flags & 2)) {
+        if (!(bg2D->flags & BG2D_FLAGS_2)) {
             gDPSetCombineLERP(gfx++, 0, 0, 0, TEXEL0, 0, 0, 0, 1, 0, 0, 0, TEXEL0, 0, 0, 0, 1);
         }
 
@@ -828,7 +828,7 @@ void Prerender_DrawBackground2DImpl(PreRenderBackground2DParams* bg2D, Gfx** gfx
 
     gDPPipeSync(gfx++);
 
-    if (sp5C) {
+    if (loadS2DEX2) {
         gSPLoadUcode(gfx++, SysUcode_GetUCode(), SysUcode_GetUCodeData());
     }
 
