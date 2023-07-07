@@ -1542,7 +1542,7 @@ void Check_RegionIsSupported(void);
 f32 Math3D_Normalize(Vec3f* vec);
 s32 Math3D_PlaneVsLineSegClosestPoint(f32 planeAA, f32 planeAB, f32 planeAC, f32 planeADist, f32 planeBA, f32 planeBB, f32 planeBC, f32 planeBDist, Vec3f* linePointA, Vec3f* linePointB, Vec3f* closestPoint);
 s32 func_80179798(Vec3f* param_1, Vec3f* param_2, Vec3f* param_3, Vec3f* param_4, Vec3f* param_5, Vec3f* param_6);
-void func_80179A44(Vec3f* arg0, PosRot* arg1, Vec3f* arg2);
+f32 func_80179A44(Vec3f* arg0, PosRot* arg1, Vec3f* arg2);
 void func_80179B34(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32* arg7, f32* arg8);
 // UNK_TYPE4 func_80179B94(f32 fParm1, f32 fParm2, f32 fParm5, f32 param_4, f32 param_5, f32 param_6, f32 param_7, f32 param_8, Vec3f* param_9);
 // void func_80179D74(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9, UNK_TYPE4 param_10);

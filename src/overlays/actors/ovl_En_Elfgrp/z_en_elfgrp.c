@@ -558,7 +558,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer < 30.0f) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             player->actor.freezeTimer = 100;
             player->stateFlags1 |= PLAYER_STATE1_20000000;

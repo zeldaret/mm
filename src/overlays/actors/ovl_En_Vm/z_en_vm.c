@@ -167,8 +167,7 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_vm_Skel_003F60, &object_vm_Anim_000068, this->jointTable,
-                   this->morphTable, 11);
+    SkelAnime_Init(play, &this->skelAnime, &gBeamosSkel, &gBeamosAnim, this->jointTable, this->morphTable, 11);
     Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
     Collider_InitAndSetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -199,9 +198,9 @@ void EnVm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808CC420(EnVm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&object_vm_Anim_000068);
+    f32 lastFrame = Animation_GetLastFrame(&gBeamosAnim);
 
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
     this->actionFunc = func_808CC490;
 }
 
@@ -231,7 +230,7 @@ void func_808CC490(EnVm* this, PlayState* play) {
 }
 
 void func_808CC5C4(EnVm* this) {
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_vm_Anim_000068, 2.0f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gBeamosAnim, 2.0f);
     this->unk_214 = 10;
     this->actionFunc = func_808CC610;
 }
@@ -266,7 +265,7 @@ void func_808CC610(EnVm* this, PlayState* play) {
 
 void func_808CC788(EnVm* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_BIMOS_AIM);
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 3.0f, 3.0f, 7.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, 3.0f, 3.0f, 7.0f, ANIMMODE_ONCE, 0.0f);
     this->unk_214 = 305;
     this->unk_220 = 0.06f;
     this->colliderTris.base.atFlags &= ~AT_HIT;
@@ -322,8 +321,8 @@ void func_808CC820(EnVm* this, PlayState* play) {
 }
 
 void func_808CCA10(EnVm* this) {
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
-                     0.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, -1.0f, Animation_GetLastFrame(&gBeamosAnim), 0.0f, ANIMMODE_ONCE,
+                     0.0f);
     this->unk_214 = 100;
     this->unk_210 = 0;
     this->unk_224 = 0.0f;
@@ -343,7 +342,7 @@ void func_808CCAA4(EnVm* this, PlayState* play) {
 }
 
 void func_808CCB08(EnVm* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_vm_Anim_000068);
+    Animation_PlayOnce(&this->skelAnime, &gBeamosAnim);
     this->unk_214 = -1;
     this->actionFunc = func_808CCB50;
 }
@@ -365,8 +364,8 @@ void func_808CCB50(EnVm* this, PlayState* play) {
 }
 
 void func_808CCBE4(EnVm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
-                     0.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, -1.0f, Animation_GetLastFrame(&gBeamosAnim), 0.0f, ANIMMODE_ONCE,
+                     0.0f);
     Enemy_StartFinishingBlow(play, &this->actor);
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 33);
     this->unk_214 = 33;
@@ -462,10 +461,10 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
 s32 EnVm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnVm* this = THIS;
 
-    if (limbIndex == OBJECT_VM_LIMB_02) {
+    if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         rot->x += this->unk_216;
         rot->y += this->unk_218;
-    } else if ((limbIndex == OBJECT_VM_LIMB_0A) && (this->actionFunc == func_808CCCF0)) {
+    } else if ((limbIndex == BEAMOS_LIMB_BODY) && (this->actionFunc == func_808CCCF0)) {
         *dList = NULL;
     }
     return false;
@@ -481,7 +480,7 @@ void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
 
-    if (limbIndex == OBJECT_VM_LIMB_02) {
+    if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         sp4C = NULL;
 
         Matrix_MultZero(&this->actor.focus.pos);
@@ -549,7 +548,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->unk_220, this->unk_220, this->unk_224 * 0.0015f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[2], object_vm_DL_002728);
+        gSPDisplayList(&gfx[2], gBeamosLaserDL);
 
         POLY_OPA_DISP = &gfx[3];
     }

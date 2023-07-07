@@ -126,31 +126,31 @@ typedef struct GraphicsContext {
     /* 0x05C */ OSMesgQueue queue;
     /* 0x074 */ char unk_74[0x04];
     /* 0x078 */ OSScTask task;
-    /* 0x0E0 */ char unk_E0[0xD0];
-    /* 0x1B0 */ Gfx* workBuffer;
-    /* 0x1B4 */ TwoHeadGfxArena work;
-    /* 0x1C4 */ Gfx* debugBuffer;
-    /* 0x1C8 */ TwoHeadGfxArena debug;
-    /* 0x1D8 */ UNK_TYPE1 unk_1D8[0xAC];
-    /* 0x284 */ OSViMode* viMode;
-    /* 0x288 */ void* zbuffer;
-    /* 0x28C */ char unk_28C[0x1C];
-    /* 0x2A8 */ TwoHeadGfxArena overlay; // "Zelda 4"
-    /* 0x2B8 */ TwoHeadGfxArena polyOpa; // "Zelda 0"
-    /* 0x2C8 */ TwoHeadGfxArena polyXlu; // "Zelda 1"
-    /* 0x2D8 */ u32 gfxPoolIdx;
-    /* 0x2DC */ u16* curFrameBuffer;
-    /* 0x2E0 */ char unk_2E0[0x4];
-    /* 0x2E4 */ u32 viConfigFeatures;
-    /* 0x2E8 */ char unk_2E8[0x2];
-    /* 0x2EA */ u8 updateViMode;
-    /* 0x2EB */ u8 framebufferIndex;
-    /* 0x2EC */ void (*callback)(struct GraphicsContext*, u32);
-    /* 0x2F0 */ u32 callbackArg;
-    /* 0x2F4 */ f32 xScale;
-    /* 0x2F8 */ f32 yScale;
-    /* 0x2FC */ GfxMasterList* masterList;
-} GraphicsContext; // size = 0x300
+    /* 0x0D0 */ char unk_D0[0xD0];
+    /* 0x1A0 */ Gfx* workBuffer;
+    /* 0x1A4 */ TwoHeadGfxArena work;
+    /* 0x1B4 */ Gfx* debugBuffer;
+    /* 0x1B8 */ TwoHeadGfxArena debug;
+    /* 0x1C8 */ UNK_TYPE1 unk_1C8[0xAC];
+    /* 0x274 */ OSViMode* viMode;
+    /* 0x278 */ void* zbuffer;
+    /* 0x27C */ char unk_27C[0x1C];
+    /* 0x298 */ TwoHeadGfxArena overlay; // "Zelda 4"
+    /* 0x2A8 */ TwoHeadGfxArena polyOpa; // "Zelda 0"
+    /* 0x2B8 */ TwoHeadGfxArena polyXlu; // "Zelda 1"
+    /* 0x2C8 */ u32 gfxPoolIdx;
+    /* 0x2CC */ u16* curFrameBuffer;
+    /* 0x2D0 */ char unk_2D0[0x4];
+    /* 0x2D4 */ u32 viConfigFeatures;
+    /* 0x2D8 */ char unk_2D8[0x2];
+    /* 0x2DA */ u8 updateViMode;
+    /* 0x2DB */ u8 framebufferIndex;
+    /* 0x2DC */ void (*callback)(struct GraphicsContext*, u32);
+    /* 0x2E0 */ u32 callbackArg;
+    /* 0x2E4 */ f32 xScale;
+    /* 0x2E8 */ f32 yScale;
+    /* 0x2EC */ GfxMasterList* masterList;
+} GraphicsContext; // size = 0x2F0
 
 Gfx* Gfx_SetFog(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
 Gfx* Gfx_SetFogWithSync(Gfx* gfx, s32 r, s32 g, s32 b, s32 a, s32 n, s32 f);
