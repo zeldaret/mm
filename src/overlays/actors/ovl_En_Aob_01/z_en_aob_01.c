@@ -556,7 +556,7 @@ void EnAob01_UpdateCommon(EnAob01* this, PlayState* play) {
     }
 
     EnAob01_Blink(this, EN_AOB01_EYE_MAX);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, MAMAMU_YAN_LIMB_MAX);
     EnAob01_UpdateCollision(this, play);
 
     // This specific code ensures that in-game time passes during the race.
@@ -1188,8 +1188,8 @@ s32 EnAob01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == MAMAMU_YAN_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 200;
+        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
+        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
     }
 
     return false;

@@ -458,8 +458,8 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
 }
 
 s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
-        case 4:
+    switch (GET_PLAYER_FORM) {
+        case PLAYER_FORM_HUMAN:
             if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                 if (this->unk_2B2 & 0x10) {
                     return true;
@@ -469,22 +469,25 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             if (this->unk_2B2 & 2) {
                 return true;
             }
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             if (this->unk_2B2 & 4) {
                 return true;
             }
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             if (this->unk_2B2 & 8) {
                 return true;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -492,8 +495,8 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
 }
 
 void func_80A70084(EnMm3* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
-        case 4:
+    switch (GET_PLAYER_FORM) {
+        case PLAYER_FORM_HUMAN:
             if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                 this->unk_2B2 |= 0x10;
                 this->unk_2B2 |= 1;
@@ -502,16 +505,19 @@ void func_80A70084(EnMm3* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             this->unk_2B2 |= 2;
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             this->unk_2B2 |= 4;
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             this->unk_2B2 |= 8;
+            break;
+
+        default:
             break;
     }
 }

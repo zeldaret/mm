@@ -505,7 +505,7 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
 }
 
 void func_80AE854C(EnStopheishi* this, PlayState* play) {
-    if (((this->unk_265 != 0) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20))) &&
+    if (((this->unk_265 != 0) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20)) &&
         (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
         EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     }

@@ -2020,10 +2020,10 @@ void Interface_UpdateButtonsPart2(PlayState* play) {
         }
 
         // C buttons
-        if (gSaveContext.save.playerForm == player->transformation) {
+        if (GET_PLAYER_FORM == player->transformation) {
             for (i = EQUIP_SLOT_C_LEFT; i <= EQUIP_SLOT_C_RIGHT; i++) {
                 // Individual C button
-                if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][GET_CUR_FORM_BTN_ITEM(i)]) {
+                if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][GET_CUR_FORM_BTN_ITEM(i)]) {
                     // Item not usable in current playerForm
                     if (gSaveContext.buttonStatus[i] != BTN_DISABLED) {
                         gSaveContext.buttonStatus[i] = BTN_DISABLED;
@@ -2182,7 +2182,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
     if (gSaveContext.save.cutsceneIndex < 0xFFF0) {
         gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
         if ((player->stateFlags1 & PLAYER_STATE1_800000) || CHECK_WEEKEVENTREG(WEEKEVENTREG_08_01) ||
-            (!(CHECK_EVENTINF(EVENTINF_41)) && (play->unk_1887C >= 2))) {
+            (!CHECK_EVENTINF(EVENTINF_41) && (play->unk_1887C >= 2))) {
             // Riding Epona OR Honey & Darling minigame OR Horseback balloon minigame OR related to swamp boat
             // (non-minigame?)
             if ((player->stateFlags1 & PLAYER_STATE1_800000) && (player->currentMask == PLAYER_MASK_BLAST) &&
@@ -2255,8 +2255,7 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                                (gSaveContext.save.entrance == ENTRANCE(ROMANI_RANCH, 0)) &&
                                (Cutscene_GetSceneLayer(play) != 0) && (play->transitionTrigger == TRANS_TRIGGER_OFF)) {
                         Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
-                    } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) &&
-                               (CHECK_EVENTINF(EVENTINF_35))) {
+                    } else if ((gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE) && CHECK_EVENTINF(EVENTINF_35)) {
                         Interface_SetHudVisibility(HUD_VISIBILITY_B_MINIMAP);
                     } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_82_08) &&
                                (gSaveContext.minigameStatus == MINIGAME_STATUS_ACTIVE)) {
@@ -2345,8 +2344,8 @@ void Interface_UpdateButtonsPart1(PlayState* play) {
                     restoreHudVisibility = true;
                     sPictoState = PICTO_BOX_STATE_OFF;
                 } else if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_A) || (func_801A5100() == 1)) {
-                    if (!(CHECK_EVENTINF(EVENTINF_41)) ||
-                        ((CHECK_EVENTINF(EVENTINF_41)) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
+                    if (!CHECK_EVENTINF(EVENTINF_41) ||
+                        (CHECK_EVENTINF(EVENTINF_41) && (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
                         Audio_PlaySfx(NA_SE_SY_CAMERA_SHUTTER);
                         SREG(89) = 1;
                         play->haltAllActors = true;
@@ -3145,10 +3144,8 @@ void Inventory_UpdateDeitySwordEquip(PlayState* play) {
         interfaceCtx->unk_21C = 0;
         interfaceCtx->bButtonDoAction = 0;
 
-        // Is simply checking if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY)
-        if ((((gSaveContext.save.playerForm > 0) && (gSaveContext.save.playerForm < 4))
-                 ? 1
-                 : gSaveContext.save.playerForm >> 1) == 0) {
+        // Is simply checking if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY)
+        if ((((GET_PLAYER_FORM > 0) && (GET_PLAYER_FORM < 4)) ? 1 : GET_PLAYER_FORM >> 1) == 0) {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_SWORD_DEITY;
         } else if (CUR_FORM_EQUIP(EQUIP_SLOT_B) == ITEM_SWORD_DEITY) {
             if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
@@ -4104,7 +4101,7 @@ void Interface_DrawBButtonIcons(PlayState* play) {
                         (play->sceneId != SCENE_BOWLING) &&
                         ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) ||
                          (gSaveContext.save.entrance != ENTRANCE(ROMANI_RANCH, 0))) &&
-                        ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) || !(CHECK_EVENTINF(EVENTINF_35))) &&
+                        ((gSaveContext.minigameStatus != MINIGAME_STATUS_ACTIVE) || !CHECK_EVENTINF(EVENTINF_35)) &&
                         (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || (play->unk_1887C != 100))) {
                         Interface_DrawAmmoCount(play, EQUIP_SLOT_B, interfaceCtx->bAlpha);
                     }
@@ -6409,7 +6406,7 @@ void Interface_Draw(PlayState* play) {
 
         Interface_DrawItemButtons(play);
 
-        if (player->transformation == ((void)0, gSaveContext.save.playerForm)) {
+        if (player->transformation == GET_PLAYER_FORM) {
             Interface_DrawBButtonIcons(play);
         }
         Interface_DrawCButtonIcons(play);

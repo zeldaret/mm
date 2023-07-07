@@ -190,8 +190,7 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
     }
 
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(player->stateFlags1 & PLAYER_STATE1_2000) &&
-        (this->unk_2FE == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) &&
-        func_80C149B0(play, &this->unk_1F8)) {
+        (this->unk_2FE == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) && func_80C149B0(play, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
     } else if (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {

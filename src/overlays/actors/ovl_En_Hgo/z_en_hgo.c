@@ -159,7 +159,7 @@ void EnHgo_Talk(EnHgo* this, PlayState* play) {
                 Message_StartTextbox(play, 0x15A7, &this->actor);
                 this->textId = 0x15A7; // can I research that mask
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_HUMAN)) {
                 this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_HUMAN;
                 Message_StartTextbox(play, 0x158F, &this->actor);

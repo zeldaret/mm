@@ -359,7 +359,7 @@ void EnYb_Idle(EnYb* this, PlayState* play) {
     EnYb_UpdateAnimation(this, play);
     if ((this->actor.xzDistToPlayer < 180.0f) && (fabsf(this->actor.playerHeightRel) < 50.0f) &&
         (play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-        (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
         this->actionFunc = EnYb_TeachingDance;
         this->teachingCutsceneTimer = 200;
         EnYb_ChangeCutscene(this, 0);

@@ -4494,14 +4494,26 @@ void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationI
                      frameCount, animationInfo->mode, animationInfo->morphFrames);
 }
 
-// Unused
-void func_800BDCF4(PlayState* play, s16* arg1, s16* arg2, s32 size) {
+/**
+ * Fills two tables with rotation angles that can be used to simulate idle animations.
+ *
+ * The rotation angles are dependent on the current frame, so should be updated regularly, generally every frame.
+ *
+ * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of the zTable value,
+ * multiplying by some scale factor (generally 200), and adding that to the already existing rotation.
+ *
+ * Note: With the common scale factor of 200, this effect is practically unnoticeable if the current animation already
+ * has motion involved.
+ *
+ * Note: This function goes unused in favor of `SubS_UpdateFidgetTables`.
+ */
+void Actor_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     s32 frames = play->gameplayFrames;
     s32 i;
 
-    for (i = 0; i < size; i++) {
-        arg1[i] = (0x814 + 50 * i) * frames;
-        arg2[i] = (0x940 + 50 * i) * frames;
+    for (i = 0; i < tableLen; i++) {
+        fidgetTableY[i] = (i * 50 + 0x814) * frames;
+        fidgetTableZ[i] = (i * 50 + 0x940) * frames;
     }
 }
 

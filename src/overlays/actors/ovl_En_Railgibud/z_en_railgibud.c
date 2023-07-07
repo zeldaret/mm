@@ -382,8 +382,7 @@ void EnRailgibud_WalkToPlayer(EnRailgibud* this, PlayState* play) {
     if (EnRailgibud_PlayerInRangeWithCorrectState(this, play) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) || (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
                 // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
                 // do so. It will appear to take damage and shake its head side-to-side.
                 EnRailgibud_SetupGrabFail(this);
@@ -427,10 +426,9 @@ void EnRailgibud_SetupGrab(EnRailgibud* this) {
 }
 
 void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
-    Player* player2 = GET_PLAYER(play);
-    Player* player = player2;
+    Actor* playerActor = &GET_PLAYER(play)->actor;
+    Player* player = (Player*)playerActor;
     s32 inPositionToAttack;
-    u16 damageSfxId;
 
     switch (this->grabState) {
         case EN_RAILGIBUD_GRAB_START:
@@ -448,9 +446,8 @@ void EnRailgibud_Grab(EnRailgibud* this, PlayState* play) {
 
         case EN_RAILGIBUD_GRAB_ATTACK:
             if (this->grabDamageTimer == 20) {
-                s16 requiredScopeTemp;
+                u16 damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
 
-                damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
                 play->damagePlayer(play, -8);
                 Player_PlaySfx(player, damageSfxId);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
@@ -555,7 +552,7 @@ void EnRailgibud_WalkToHome(EnRailgibud* this, PlayState* play) {
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (EnRailgibud_PlayerInRangeWithCorrectState(this, play)) {
-        if ((gSaveContext.save.playerForm != PLAYER_FORM_GORON) && (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) &&
+        if ((GET_PLAYER_FORM != PLAYER_FORM_GORON) && (GET_PLAYER_FORM != PLAYER_FORM_DEKU) &&
             Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             EnRailgibud_SetupWalkToPlayer(this);
         }
@@ -869,7 +866,7 @@ s32 EnRailgibud_MoveToIdealGrabPositionAndRotation(EnRailgibud* this, PlayState*
     distanceFromTargetPos = Math_Vec3f_StepTo(&this->actor.world.pos, &targetPos, 10.0f);
     distanceFromTargetAngle = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         distanceFromTargetYOffset = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
     }
 
