@@ -5,7 +5,7 @@
 #include "z64snap.h"
 #include "objects/object_bal/object_bal.h"
 
-#define EN_BAL_GET_LOCATION(thisx) ((thisx)->params & 0xFF)
+#define TINGLE_GET_MAP_ID(thisx) ((thisx)->params & 0xFF)
 
 struct EnBal;
 
@@ -27,25 +27,16 @@ typedef struct EnBal {
     /* 0x39A */ s16 forceEyesShut;
     /* 0x39C */ s16 watchTarget;
     /* 0x39E */ s16 skyFloatPhase;
-    /* 0x3A0 */ s16 lastMessageId;
-    /* 0x3A2 */ char pad3A2[2];
-    /* 0x3A4 */ s16 lastBalloonAction;
+    /* 0x3A0 */ s16 prevTextId;
+    /* 0x3A2 */ UNK_TYPE2 unk3A2;
+    /* 0x3A4 */ s16 prevBalloonAction;
     /* 0x3A6 */ s16 idleAnimStage;
     /* 0x3A8 */ s16 timer;
-    /* 0x3AA */ char pad3AA[2]; 
-    /* 0x3AC */ s16 mapId;
-    /* 0x3AE */ s16 location;    
+    /* 0x3AA */ UNK_TYPE2 unk3AA; 
+    /* 0x3AC */ s16 purchaseMapId;
+    /* 0x3AE */ s16 locationMapId;    
     /* 0x3B0 */ s16 inflateEarly;
     /* 0x3B2 */ u8 isTalking;
 } EnBal; /* size = 0x3B4 */
 
-typedef enum EnBalLocation {
-    /* 0x0 */ EN_BAL_LOC_CLOCK_TOWN,
-    /* 0x1 */ EN_BAL_LOC_WOODFALL,
-    /* 0x2 */ EN_BAL_LOC_SNOWHEAD,
-    /* 0x3 */ EN_BAL_LOC_ROMANI_RANCH,
-    /* 0x4 */ EN_BAL_LOC_GREAT_BAY,
-    /* 0x5 */ EN_BAL_LOC_STONE_TOWER
-} EnBalLocation;
- 
 #endif // Z_EN_BAL_H

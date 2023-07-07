@@ -237,14 +237,14 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_A:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_02)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_GORON_SON_CRYING)) {
                         switch (this->textId) {
                             case 0xCFB:
                                 return 0xCFC;
                             case 0xCFC:
                                 return 0xCFD;
                             case 0xCFD:
-                                SET_WEEKEVENTREG(WEEKEVENTREG_36_02);
+                                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_GORON_SON_CRYING);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xCFE;
                             default:
@@ -255,8 +255,8 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xCFE;
                     }
                 } else {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_01)) {
-                        SET_WEEKEVENTREG(WEEKEVENTREG_36_01);
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_NONGORON_SON_CRYING)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_NONGORON_SON_CRYING);
                         return 0xCF9;
                     }
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
@@ -266,9 +266,11 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                 // Scene flag - Checks whether the chandelier has been lit
                 if (!Flags_GetSwitch(play, EN_S_GORO_SCENEFLAG_INDEX(&this->actor))) {
                     if (player->transformation == PLAYER_FORM_GORON) {
-                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08)) {
+                        if (!CHECK_WEEKEVENTREG(
+                                WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_GORON_SON_CALM_CHAND_UNLIT)) {
                             if (this->textId == 0xD02) {
-                                SET_WEEKEVENTREG(WEEKEVENTREG_36_08);
+                                SET_WEEKEVENTREG(
+                                    WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_GORON_SON_CALM_CHAND_UNLIT);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD03;
                             }
@@ -277,10 +279,12 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD04;
                     }
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_04)) {
+                    if (!CHECK_WEEKEVENTREG(
+                            WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_NONGORON_SON_CALM_CHAND_UNLIT)) {
                         if (this->textId == 0xCFF) {
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                            SET_WEEKEVENTREG(WEEKEVENTREG_36_04);
+                            SET_WEEKEVENTREG(
+                                WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_AS_NONGORON_SON_CALM_CHAND_UNLIT);
                             return 0xD00;
                         }
                         return 0xCFF;
@@ -288,9 +292,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD01;
                 }
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_10)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_SON_CALM_CHAND_LIT)) {
                     if (this->textId == 0xD05) {
-                        SET_WEEKEVENTREG(WEEKEVENTREG_36_10);
+                        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_A_SON_CALM_CHAND_LIT);
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD06;
                     }
@@ -304,12 +308,12 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_B:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_40)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_GORON_SON_CRYING)) {
                         switch (this->textId) {
                             case 0xD15:
                                 return 0xD16;
                             case 0xD16:
-                                SET_WEEKEVENTREG(WEEKEVENTREG_36_40);
+                                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_GORON_SON_CRYING);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD17;
                             default:
@@ -320,20 +324,20 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xD17;
                     }
                 } else {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_20)) {
-                        SET_WEEKEVENTREG(WEEKEVENTREG_36_20);
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_NONGORON_SON_CRYING)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_NONGORON_SON_CRYING);
                         return 0xD13;
                     }
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD14;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_01)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_GORON_SON_CALM)) {
                     switch (this->textId) {
                         case 0xD1E:
                             return 0xD1F;
                         case 0xD1F:
-                            SET_WEEKEVENTREG(WEEKEVENTREG_37_01);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_GORON_SON_CALM);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD20;
                         default:
@@ -344,7 +348,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD21;
                 }
             } else {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_80)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_NONGORON_SON_CALM)) {
                     switch (this->textId) {
                         case 0xD18:
                             return 0xD19;
@@ -353,7 +357,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         case 0xD1A:
                             return 0xD1B;
                         case 0xD1B:
-                            SET_WEEKEVENTREG(WEEKEVENTREG_36_80);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_B_AS_NONGORON_SON_CALM);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD1C;
                         default:
@@ -369,14 +373,14 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_C:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_02)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_C_AS_GORON_SON_CRYING)) {
                         switch (this->textId) {
                             case 0xD09:
                                 return 0xD0A;
                             case 0xD0A:
                                 return 0xD0B;
                             case 0xD0B:
-                                SET_WEEKEVENTREG(WEEKEVENTREG_37_02);
+                                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_C_AS_GORON_SON_CRYING);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD0C;
                             default:
@@ -391,12 +395,12 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD08;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_04)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_C_AS_GORON_SON_CALM)) {
                     switch (this->textId) {
                         case 0xD0E:
                             return 0xD0F;
                         case 0xD0F:
-                            SET_WEEKEVENTREG(WEEKEVENTREG_37_04);
+                            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TO_WINTER_SHRINE_GORON_C_AS_GORON_SON_CALM);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD10;
                         default:
