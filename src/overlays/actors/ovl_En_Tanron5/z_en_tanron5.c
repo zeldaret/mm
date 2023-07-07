@@ -209,7 +209,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
         for (i = 0; i < ARRAY_COUNT(sSpawnPositions); i++) {
             child = (EnTanron5*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, sSpawnPositions[i].x,
                                             this->actor.world.pos.y, sSpawnPositions[i].z, 0, Rand_ZeroFloat(0x10000),
-                                            0, i + EN_TANRON5_TYPE_MAJORA_PILLAR_1);
+                                            0, EN_TANRON5_PARAMS(EN_TANRON5_TYPE_MAJORA_PILLAR_1 + i));
 
             child->actor.parent = this->actor.parent;
             child->baseScale = sBaseScales[i];
@@ -333,7 +333,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                     for (i = 3; i < fragmentAndItemCount; i++) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, pos.x, pos.y, pos.z,
                                     Rand_ZeroFloat(0x10000), Rand_ZeroFloat(0x10000), 0,
-                                    i + EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1);
+                                    EN_TANRON5_PARAMS(EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1 + i));
                     }
 
                     for (i = 0; i < 6; i++) {
@@ -374,15 +374,15 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                             yFactor = 50.0f;
                         }
 
-                        fragmentAndDustPos.x = (Rand_CenteredFloat(xzFactor) * sGiantModeScaleFactor) + pos.x;
-                        fragmentAndDustPos.z = (Rand_CenteredFloat(xzFactor) * sGiantModeScaleFactor) + pos.z;
+                        fragmentAndDustPos.x = pos.x + (Rand_CenteredFloat(xzFactor) * sGiantModeScaleFactor);
+                        fragmentAndDustPos.z = pos.z + (Rand_CenteredFloat(xzFactor) * sGiantModeScaleFactor);
                         fragmentAndDustPos.y = this->actor.floorHeight + (yFactor * sGiantModeScaleFactor);
 
                         // This will spawn seven normal-sized ruin fragments, three small ruin fragments, and
                         // zero, one, or two item drops, depending on the result of Rand_ZeroFloat above.
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, fragmentAndDustPos.x, fragmentAndDustPos.y,
                                     fragmentAndDustPos.z, Rand_ZeroFloat(0x10000), Rand_ZeroFloat(0x10000), 0,
-                                    i + EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1);
+                                    EN_TANRON5_PARAMS(EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1 + i));
 
                         if (i < 8) {
                             EnTanron5_SpawnEffectBlackDust(play->specialEffects, &fragmentAndDustPos,

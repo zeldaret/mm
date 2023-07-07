@@ -6,6 +6,7 @@
 struct EnTanron5;
 
 #define EN_TANRON5_GET_TYPE(thisx) ((thisx)->params)
+#define EN_TANRON5_PARAMS(type) (type)
 
 typedef enum {
     /*   0 */ EN_TANRON5_TYPE_STATIC,

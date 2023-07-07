@@ -577,7 +577,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         R_MAGIC_CONSUME_TIMER_GIANTS_MASK = KREG(14) + 20;
         this->giantModeScaleFactor = 1.0f;
         Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_TANRON5, 0.0f, 1000.0f, 0.0f, 0, 0, 0,
-                           EN_TANRON5_TYPE_STATIC);
+                           EN_TANRON5_PARAMS(EN_TANRON5_TYPE_STATIC));
     } else if (TWINMOLD_GET_TYPE(&this->actor) == TWINMOLD_TYPE_TAIL) {
         this->actor.update = Boss02_Tail_Update;
         this->actor.draw = NULL;
