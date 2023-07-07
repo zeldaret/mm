@@ -61,32 +61,54 @@ ActorInit En_Lift_Nuts_InitVars = {
     (ActorFunc)EnLiftNuts_Draw,
 };
 
+typedef enum {
+    /*  0 */ ENLIFTNUTS_ANIM_IDLE_STAND,
+    /*  1 */ ENLIFTNUTS_ANIM_WALK,
+    /*  2 */ ENLIFTNUTS_ANIM_RISE_UP,
+    /*  3 */ ENLIFTNUTS_ANIM_BURROW_LONG,
+    /*  4 */ ENLIFTNUTS_ANIM_EXCITED_START,
+    /*  5 */ ENLIFTNUTS_ANIM_EXCITED,
+    /*  6 */ ENLIFTNUTS_ANIM_EXCITED_END,
+    /*  7 */ ENLIFTNUTS_ANIM_TAKE_OFF_HAT,
+    /*  8 */ ENLIFTNUTS_ANIM_FLY_START,
+    /*  9 */ ENLIFTNUTS_ANIM_FLY,
+    /* 10 */ ENLIFTNUTS_ANIM_SHOCKED_START,
+    /* 11 */ ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD,
+    /* 12 */ ENLIFTNUTS_ANIM_SHOCKED_POUND,
+    /* 13 */ ENLIFTNUTS_ANIM_SHOCKED_END,
+    /* 14 */ ENLIFTNUTS_ANIM_THINK,
+    /* 15 */ ENLIFTNUTS_ANIM_BOB,
+    /* 16 */ ENLIFTNUTS_ANIM_JUMP,
+    /* 17 */ ENLIFTNUTS_ANIM_BURROW_HALF,
+    /* 18 */ ENLIFTNUTS_ANIM_BURROW_SHORT
+} EnLiftNutsAnimation;
+
 static AnimationInfo sAnimations[] = {
-    { &object_dnt_Anim_005488, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_00B0B4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_004AA0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_0029E8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_005CA8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dnt_Anim_0038CC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_003CC0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dnt_Anim_0012F4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_004700, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_001BC8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_003438, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f },
-    { &object_dnt_Anim_001E2C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_000994, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_002268, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &object_dnt_Anim_002F08, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_00577C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_dnt_Anim_004E38, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_0029E8, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_dnt_Anim_0029E8, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    { &gBusinessScrubIdleStandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubWalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubRiseUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubExcitedStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gBusinessScrubExcitedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubExcitedEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubFlyStartAnim, 0.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubFlyAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubShockedStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -2.0f },
+    { &gBusinessScrubShockedShakeHeadAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubShockedPoundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubShockedEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gBusinessScrubThinkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubBobAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    { &gBusinessScrubJumpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubBurrowAnim, 1.0f, 4.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
+    { &gBusinessScrubBurrowAnim, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 Gfx* sEyeTextures[] = {
-    object_dnt_DL_008290,
-    object_dnt_DL_001350,
-    object_dnt_DL_001420,
+    gBusinessScrubEyesDL,
+    gBusinessScrubEyesWideDL,
+    gBusinessScrubEyesSquintDL,
     NULL,
 };
 
@@ -241,8 +263,8 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     Vec3s* points;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_0029E8, this->jointTable,
-                       this->morphTable, OBJECT_DNT_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBusinessScrubSkel, &gBusinessScrubBurrowAnim, this->jointTable,
+                       this->morphTable, BUSINESS_SCRUB_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
@@ -292,7 +314,7 @@ void EnLiftNuts_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnLiftNuts_SetupIdleHidden(EnLiftNuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 18);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_SHORT);
     this->actionFunc = EnLiftNuts_IdleHidden;
     this->frames = 0;
 }
@@ -307,9 +329,9 @@ void EnLiftNuts_IdleHidden(EnLiftNuts* this, PlayState* play) {
 
 void EnLiftNuts_SetupBurrow(EnLiftNuts* this) {
     if (this->actionFunc == EnLiftNuts_Idle) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 17);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_HALF);
     } else {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 3);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_LONG);
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
@@ -328,7 +350,7 @@ void EnLiftNuts_SetupIdle(EnLiftNuts* this) {
     if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_STARTING)) {
         this->actionFunc = EnLiftNuts_Idle;
     } else {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 2);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_RISE_UP);
         Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         this->actionFunc = EnLiftNuts_RiseUp;
     }
@@ -336,7 +358,7 @@ void EnLiftNuts_SetupIdle(EnLiftNuts* this) {
 
 void EnLiftNuts_RiseUp(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 15);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BOB);
         this->actionFunc = EnLiftNuts_Idle;
     } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
         EnLiftNuts_SpawnDust(this, play);
@@ -496,13 +518,13 @@ void EnLiftNuts_HandleConversationChoice(EnLiftNuts* this, PlayState* play) {
                         Rupees_ChangeBy(-10);
                     } else {
                         Audio_PlaySfx(NA_SE_SY_ERROR);
-                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
                         Message_StartTextbox(play, 0x27E4, &this->actor);
                         this->textId = 0x27E4;
                     }
                 } else {
                     Audio_PlaySfx_MessageCancel();
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
                     Message_StartTextbox(play, 0x27E3, &this->actor);
                     this->textId = 0x27E3;
                 }
@@ -555,7 +577,7 @@ void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27E6:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
                 switch (CURRENT_DAY) {
                     case 1:
                         Message_StartTextbox(play, 0x27E7, &this->actor);
@@ -591,7 +613,7 @@ void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27EE:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0x10);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_JUMP);
                 Message_StartTextbox(play, 0x27EF, &this->actor);
                 this->textId = 0x27EF;
                 break;
@@ -608,7 +630,7 @@ void EnLiftNuts_HandleConversation5(EnLiftNuts* this, PlayState* play) {
                 break;
 
             case 0x27F2:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
                 Message_StartTextbox(play, 0x27F3, &this->actor);
                 this->textId = 0x27F3;
                 break;
@@ -644,7 +666,7 @@ void EnLiftNuts_SetupStartConversation(EnLiftNuts* this) {
         if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_NONE)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
         }
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 16);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_JUMP);
     }
     this->actionFunc = EnLiftNuts_StartConversation;
 }
@@ -652,9 +674,9 @@ void EnLiftNuts_SetupStartConversation(EnLiftNuts* this) {
 void EnLiftNuts_StartConversation(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if ((this->textId == 0x27EE) || (this->textId == 0x27F4) || (this->textId == 0x27F5)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 10);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_START);
         } else {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 0);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_IDLE_STAND);
         }
         this->actionFunc = EnLiftNuts_HandleConversation;
     }
@@ -697,19 +719,19 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->textId) {
             case 0x27EE:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD);
                 break;
 
             case 0x27EF:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
                 break;
 
             case 0x27F4:
                 if (this->frames == 0) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 11);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_SHAKE_HEAD);
                     this->frames++;
                 } else if (this->frames == 4) {
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 12);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_POUND);
                     this->frames = 0;
                 } else {
                     this->frames++;
@@ -725,7 +747,7 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
 
 void EnLiftNuts_SetupMove(EnLiftNuts* this) {
     this->actor.speed = 2.0f;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
     EnLiftNuts_AutoTalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_ON);
     EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_SET, ENLIFTNUTS_MINIGAME_STATE_STARTING);
     this->actionFunc = EnLiftNuts_Move;
@@ -912,11 +934,11 @@ void EnLiftNuts_ResumeConversation(EnLiftNuts* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_1) &&
             CHECK_WEEKEVENTREG(WEEKEVENTREG_WON_DEKU_PLAYGROUND_DAY_2) && (CURRENT_DAY == 3)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 13);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_SHOCKED_END);
             Message_StartTextbox(play, 0x27F5, &this->actor);
             this->textId = 0x27F5;
         } else if (EnLiftNuts_GetNumDaysWon() > 0) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 1);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
             Message_StartTextbox(play, 0x27F0, &this->actor);
             this->textId = 0x27F0;
         } else {
@@ -952,7 +974,7 @@ void EnLiftNuts_SetupStartHiding(EnLiftNuts* this) {
         this->isFirstTimeHiding = true;
     }
     if (this->actionFunc == EnLiftNuts_IdleHidden) {
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 15);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BOB);
     }
     this->frames = 0;
     this->actionFunc = EnLiftNuts_StartHiding;
@@ -964,7 +986,7 @@ void EnLiftNuts_StartHiding(EnLiftNuts* this, PlayState* play) {
             Message_StartTextbox(play, 0x27F6, &this->actor);
             this->textId = 0x27F6;
         }
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, 17);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_BURROW_HALF);
         this->actionFunc = EnLiftNuts_Hide;
     }
     this->frames++;
@@ -1045,13 +1067,14 @@ void EnLiftNuts_Update(Actor* thisx, PlayState* play) {
 s32 EnLiftNuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnLiftNuts* this = THIS;
 
-    if ((limbIndex == OBJECT_DNT_LIMB_0F) || (limbIndex == OBJECT_DNT_LIMB_10) || (limbIndex == OBJECT_DNT_LIMB_15) ||
-        (limbIndex == OBJECT_DNT_LIMB_17) || (limbIndex == OBJECT_DNT_LIMB_18) || (limbIndex == OBJECT_DNT_LIMB_15) ||
-        (limbIndex == OBJECT_DNT_LIMB_1B)) {
+    if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT) || (limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) ||
+        (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_SCALP) ||
+        (limbIndex == BUSINESS_SCRUB_LIMB_HAIR) || (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+        (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG)) {
         *dList = NULL;
     }
 
-    if (limbIndex == OBJECT_DNT_LIMB_1A) {
+    if (limbIndex == BUSINESS_SCRUB_LIMB_EYES) {
         *dList = sEyeTextures[this->eyeTexIndex];
     }
     return false;
@@ -1061,7 +1084,7 @@ void EnLiftNuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
     static Vec3f sFocusOffset = { 0.0f, 0.0f, 0.0f };
     EnLiftNuts* this = THIS;
 
-    if (limbIndex == OBJECT_DNT_LIMB_19) {
+    if (limbIndex == BUSINESS_SCRUB_LIMB_HAT) {
         Matrix_MultVec3f(&sFocusOffset, &this->actor.focus.pos);
     }
 }
