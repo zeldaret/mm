@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 
 // Init Vars declarations (also used in the table below)
 #define DEFINE_ACTOR(name, _enumValue, _allocType, _debugName) extern ActorInit name##_InitVars;
@@ -61,7 +62,7 @@ void ActorOverlayTable_FaultClient(void* arg0, void* arg1) {
     }
 }
 
-void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
+uintptr_t ActorOverlayTable_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     ActorOverlay* actorOvl = &gActorOverlayTable[0];
     size_t ramConv;
@@ -80,7 +81,8 @@ void* ActorOverlayTable_FaultAddrConv(void* address, void* param) {
             }
         }
     }
-    return NULL;
+
+    return 0;
 }
 
 void ActorOverlayTable_Init(void) {

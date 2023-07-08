@@ -1191,7 +1191,7 @@ s32 func_80A97274(EnAz* this, PlayState* play) {
         case 0:
         default:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_24_04);
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_16_40))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_40)) {
                 textId = 0x10CE;
             } else {
                 textId = 0x10D4;

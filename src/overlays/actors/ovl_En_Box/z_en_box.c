@@ -72,17 +72,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-typedef struct {
-    /* 0x0 */ f32 data[5];
-} EnBox_PlaybackSpeed; // 0x14
-
-static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
-
-static AnimationHeader* sBigChestAnimations[5] = {
-    &gBoxBigChestOpenAdultAnim, &gBoxBigChestOpenGoronAnim, &gBoxBigChestOpenAdultAnim,
-    &gBoxBigChestOpenDekuAnim,  &gBoxBigChestOpenChildAnim,
-};
-
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
     this->actionFunc = func;
 }
@@ -452,13 +441,17 @@ void func_80868B74(EnBox* this, PlayState* play) {
 }
 
 void EnBox_WaitOpen(EnBox* this, PlayState* play) {
+    static AnimationHeader* sBigChestAnimations[PLAYER_FORM_MAX] = {
+        &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_FIERCE_DEITY
+        &gBoxBigChestOpenGoronAnim, // PLAYER_FORM_GORON
+        &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_ZORA
+        &gBoxBigChestOpenDekuAnim,  // PLAYER_FORM_DEKU
+        &gBoxBigChestOpenChildAnim, // PLAYER_FORM_HUMAN
+    };
     s32 pad;
     AnimationHeader* animHeader;
     f32 frameCount;
     f32 playbackSpeed;
-    EnBox_PlaybackSpeed playbackSpeedTable;
-    Player* player;
-    Vec3f offset;
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
@@ -468,12 +461,16 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
             animHeader = &gBoxChestOpenAnim;
             playbackSpeed = 1.5f;
         } else {
-            u8 playerForm;
+            f32 sPlaybackSpeeds[PLAYER_FORM_MAX] = {
+                1.5f, // PLAYER_FORM_FIERCE_DEITY
+                1.0f, // PLAYER_FORM_GORON
+                1.5f, // PLAYER_FORM_ZORA
+                1.0f, // PLAYER_FORM_DEKU
+                1.5f, // PLAYER_FORM_HUMAN
+            };
 
-            playbackSpeedTable = sPlaybackSpeed;
-            playerForm = gSaveContext.save.playerForm;
-            animHeader = sBigChestAnimations[playerForm];
-            playbackSpeed = playbackSpeedTable.data[playerForm];
+            animHeader = sBigChestAnimations[GET_PLAYER_FORM];
+            playbackSpeed = sPlaybackSpeeds[GET_PLAYER_FORM];
         }
 
         frameCount = Animation_GetLastFrame(animHeader);
@@ -496,9 +493,11 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
             Flags_SetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor));
         }
     } else {
-        player = GET_PLAYER(play);
+        Player* player = GET_PLAYER(play);
+        Vec3f offset;
+
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
-        if (offset.z > -50.0f && offset.z < 0.0f && fabsf(offset.y) < 10.0f && fabsf(offset.x) < 20.0f &&
+        if ((offset.z > -50.0f) && (offset.z < 0.0f) && (fabsf(offset.y) < 10.0f) && (fabsf(offset.x) < 20.0f) &&
             Player_IsFacingActor(&this->dyna.actor, 0x3000, play)) {
             if (((this->getItemId == GI_HEART_PIECE) || (this->getItemId == GI_BOTTLE)) &&
                 Flags_GetCollectible(play, this->collectableFlag)) {
@@ -550,10 +549,9 @@ void EnBox_Open(EnBox* this, PlayState* play) {
         s32 bgId;
         u16 sfxId = 0;
 
-        if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, GET_PLAYER_FORM == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
             sfxId = NA_SE_EV_TBOX_UNLOCK;
-        } else if (Animation_OnFrame(&this->skelAnime,
-                                     gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
+        } else if (Animation_OnFrame(&this->skelAnime, GET_PLAYER_FORM == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
         if (sfxId != NA_SE_NONE) {

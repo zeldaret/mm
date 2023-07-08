@@ -48,7 +48,7 @@ void EnTanron4_Init(Actor* thisx, PlayState* play2) {
     EnTanron4* this = THIS;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &gSeagullSkel, &gSeagullFlapAnim, this->jointTable, this->morphTable,
-                       OBJECT_TANRON4_LIMB_MAX);
+                       SEAGULL_LIMB_RIGHT_WING_MAX);
 
     thisx->flags &= ~ACTOR_FLAG_1;
     thisx->speed = 3.0f + KREG(48);
@@ -138,8 +138,7 @@ void EnTanron4_FlyNearHome(EnTanron4* this, PlayState* play) {
 
     switch (this->flyState) {
         case SEAGULL_FLY_FLAP:
-            if ((this->timers[SEAGULL_TIMER_FLY_STATE] == 0) &&
-                (Animation_OnFrame(&this->skelAnime, 2.0f + KREG(42)))) {
+            if ((this->timers[SEAGULL_TIMER_FLY_STATE] == 0) && Animation_OnFrame(&this->skelAnime, 2.0f + KREG(42))) {
                 this->flyState = SEAGULL_FLY_GLIDE;
                 this->timers[SEAGULL_TIMER_FLY_STATE] = Rand_ZeroFloat(50.0f) + 50.0f;
                 Animation_MorphToLoop(&this->skelAnime, &gSeagullFlapAnim, -15.0f + KREG(43));
@@ -217,8 +216,7 @@ void EnTanron4_FlyNearActor(EnTanron4* this, PlayState* play) {
 
     switch (this->flyState) {
         case SEAGULL_FLY_FLAP:
-            if ((this->timers[SEAGULL_TIMER_FLY_STATE] == 0) &&
-                (Animation_OnFrame(&this->skelAnime, 2.0f + KREG(42)))) {
+            if ((this->timers[SEAGULL_TIMER_FLY_STATE] == 0) && Animation_OnFrame(&this->skelAnime, 2.0f + KREG(42))) {
                 this->flyState = SEAGULL_FLY_GLIDE;
                 this->timers[SEAGULL_TIMER_FLY_STATE] = Rand_ZeroFloat(50.0f) + 50.0f;
                 Animation_MorphToLoop(&this->skelAnime, &gSeagullFlapAnim, -15.0f + KREG(43));

@@ -39,6 +39,7 @@
  * (APPLY), or to just overwrite it (NEW).
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 
 /* data */

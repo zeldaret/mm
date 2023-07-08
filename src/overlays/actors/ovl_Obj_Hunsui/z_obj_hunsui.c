@@ -3,6 +3,7 @@
  * Overlay: ovl_Obj_Hunsui
  * Description: Switch-Activated Geyser
  */
+
 #include "z_obj_hunsui.h"
 #include "objects/object_hunsui/object_hunsui.h"
 

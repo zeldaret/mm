@@ -4307,7 +4307,7 @@ void EnFishing_UpdatePondProps(PlayState* play) {
 
                     actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
                     while (actor != NULL) {
-                        if (!((actor->id == ACTOR_EN_FISHING) && (actor->params >= 100))) {
+                        if ((actor->id != ACTOR_EN_FISHING) || (actor->params < 100)) {
                             actor = actor->next;
                         } else {
                             EnFishing_HandleReedContact(prop, &actor->world.pos);
@@ -4321,7 +4321,7 @@ void EnFishing_UpdatePondProps(PlayState* play) {
 
                     actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
                     while (actor != NULL) {
-                        if (!((actor->id == ACTOR_EN_FISHING) && (actor->params >= 100))) {
+                        if ((actor->id != ACTOR_EN_FISHING) || (actor->params < 100)) {
                             actor = actor->next;
                         } else {
                             EnFishing_HandleLilyPadContact(prop, &actor->world.pos, ((EnFishing*)actor)->unk_149);

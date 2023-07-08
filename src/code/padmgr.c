@@ -32,7 +32,9 @@
  */
 
 #include "global.h"
+#include "PR/controller.h"
 #include "PR/os_motor.h"
+#include "fault.h"
 
 #define PADMGR_RETRACE_MSG (1 << 0)
 #define PADMGR_PRE_NMI_MSG (1 << 1)
@@ -641,7 +643,7 @@ void PadMgr_HandleRetrace(void) {
     }
 
     // Rumble Pak
-    if (gFaultStruct.msgId != 0) {
+    if (gFaultMgr.msgId != 0) {
         // If fault is active, no rumble
         PadMgr_RumbleStop();
     } else if (sPadMgrInstance->rumbleOffTimer > 0) {
