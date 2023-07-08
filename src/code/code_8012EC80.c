@@ -43,14 +43,14 @@ u32 gUpgradeMasks[] = {
 // 3 = two-bit masks
 // 7 = three-bit masks
 u32 gUpgradeNegMasks[] = {
-    ~(7 << 0),  // Quivers
-    ~(7 << 3),  // Bomb Bags
-    ~(7 << 6),  // Unused (Strength)
-    ~(7 << 9),  // Unused (Scale)
-    ~(3 << 12), // Wallets
-    ~(7 << 14), // Unused (Deku Seed Bullet Bags)
-    ~(7 << 17), // Unused (Deku Stick)
-    ~(7 << 20), // Unused (Deku Nut)
+    ~(7 << 0),  // UPG_QUIVER
+    ~(7 << 3),  // UPG_BOMB_BAG
+    ~(7 << 6),  // UPG_STRENGTH
+    ~(7 << 9),  // UPG_SCALE
+    ~(3 << 12), // UPG_WALLET
+    ~(7 << 14), // UPG_BULLET_BAG
+    ~(7 << 17), // UPG_DEKU_STICKS
+    ~(7 << 20), // UPG_DEKU_NUTS
 };
 
 u8 gEquipShifts[] = {
@@ -61,25 +61,25 @@ u8 gEquipShifts[] = {
 };
 
 u8 gUpgradeShifts[] = {
-    0,  // Quivers
-    3,  // Bomb Bags
-    6,  // Unused (Strength)
-    9,  // Unused (Scale)
-    12, // Wallets
-    14, // Unused (Deku Seed Bullet Bags)
-    17, // Unused (Deku Stick)
-    20, // Unused (Deku Nut)
+    0,  // UPG_QUIVER
+    3,  // UPG_BOMB_BAG
+    6,  // UPG_STRENGTH
+    9,  // UPG_SCALE
+    12, // UPG_WALLET
+    14, // UPG_BULLET_BAG
+    17, // UPG_DEKU_STICKS
+    20, // UPG_DEKU_NUTS
 };
 
 u16 gUpgradeCapacities[][4] = {
-    { 0, 30, 40, 50 },     // Quivers
-    { 0, 20, 30, 40 },     // Bomb Bags
-    { 0, 0, 0, 0 },        // Unused (Strength)
-    { 0, 0, 0, 0 },        // Unused (Scale)
-    { 99, 200, 500, 500 }, // Wallets
-    { 0, 30, 40, 50 },     // Unused (Deku Seed Bullet Bags)
-    { 0, 10, 20, 30 },     // Unused (Deku Stick)
-    { 0, 20, 30, 40 },     // Unused (Deku Nut)
+    { 0, 30, 40, 50 },     // UPG_QUIVER
+    { 0, 20, 30, 40 },     // UPG_BOMB_BAG
+    { 0, 0, 0, 0 },        // UPG_STRENGTH
+    { 0, 0, 0, 0 },        // UPG_SCALE
+    { 99, 200, 500, 500 }, // UPG_WALLET
+    { 0, 30, 40, 50 },     // UPG_BULLET_BAG
+    { 0, 10, 20, 30 },     // UPG_DEKU_STICKS
+    { 0, 20, 30, 40 },     // UPG_DEKU_NUTS
 };
 
 // eight-bit masks
@@ -98,7 +98,7 @@ u32 gGsFlagsShift[] = {
 };
 
 TexturePtr gItemIcons[] = {
-    gItemIconOcarinaOfTimeTex,       // ITEM_OCARINA
+    gItemIconOcarinaOfTimeTex,       // ITEM_OCARINA_OF_TIME
     gItemIconBowTex,                 // ITEM_BOW
     gItemIconFireArrowTex,           // ITEM_ARROW_FIRE
     gItemIconIceArrowTex,            // ITEM_ARROW_ICE
@@ -106,13 +106,13 @@ TexturePtr gItemIcons[] = {
     gItemIconFairyOcarinaTex,        // ITEM_OCARINA_FAIRY
     gItemIconBombTex,                // ITEM_BOMB
     gItemIconBombchuTex,             // ITEM_BOMBCHU
-    gItemIconDekuStickTex,           // ITEM_STICK
-    gItemIconDekuNutTex,             // ITEM_NUT
+    gItemIconDekuStickTex,           // ITEM_DEKU_STICK
+    gItemIconDekuNutTex,             // ITEM_DEKU_NUT
     gItemIconMagicBeansTex,          // ITEM_MAGIC_BEANS
     gItemIconSlingshotTex,           // ITEM_SLINGSHOT
     gItemIconPowderKegTex,           // ITEM_POWDER_KEG
-    gItemIconPictoBoxTex,            // ITEM_PICTO_BOX
-    gItemIconLensofTruthTex,         // ITEM_LENS
+    gItemIconPictographBoxTex,       // ITEM_PICTOGRAPH_BOX
+    gItemIconLensofTruthTex,         // ITEM_LENS_OF_TRUTH
     gItemIconHookshotTex,            // ITEM_HOOKSHOT
     gItemIconGreatFairysSwordTex,    // ITEM_SWORD_GREAT_FAIRY
     gItemIconLongshotTex,            // ITEM_LONGSHOT
@@ -172,9 +172,9 @@ TexturePtr gItemIcons[] = {
     gItemIconBlastMaskTex,           // ITEM_MASK_BLAST
     gItemIconMaskOfScentsTex,        // ITEM_MASK_SCENTS
     gItemIconGiantsMaskTex,          // ITEM_MASK_GIANT
-    gItemIconBowFireTex,             // ITEM_BOW_ARROW_FIRE
-    gItemIconBowIceTex,              // ITEM_BOW_ARROW_ICE
-    gItemIconBowLightTex,            // ITEM_BOW_ARROW_LIGHT
+    gItemIconBowFireTex,             // ITEM_BOW_FIRE
+    gItemIconBowIceTex,              // ITEM_BOW_ICE
+    gItemIconBowLightTex,            // ITEM_BOW_LIGHT
     gItemIconKokiriSwordTex,         // ITEM_SWORD_KOKIRI
     gItemIconRazorSwordTex,          // ITEM_SWORD_RAZOR
     gItemIconGildedSwordTex,         // ITEM_SWORD_GILDED
@@ -219,8 +219,8 @@ TexturePtr gItemIcons[] = {
     gQuestIconCompassTex,            // ITEM_DUNGEON_MAP
     gQuestIconGoldSkulltula2Tex,     // ITEM_STRAY_FAIRIES
     gQuestIconSmallKeyTex,           // ITEM_KEY_SMALL
-    gQuestIconSmallMagicJarTex,      // ITEM_MAGIC_SMALL
-    gQuestIconBigMagicJarTex,        // ITEM_MAGIC_LARGE
+    gQuestIconSmallMagicJarTex,      // ITEM_MAGIC_JAR_SMALL
+    gQuestIconBigMagicJarTex,        // ITEM_MAGIC_JAR_BIG
     gItemIconHeartPiece1Tex,         // ITEM_HEART_PIECE_2
     gItemIconHeartPiece2Tex,         // ITEM_INVALID_1
     gItemIconHeartPiece3Tex,         // ITEM_INVALID_2
@@ -233,7 +233,7 @@ TexturePtr gItemIcons[] = {
 
 // Used to map item IDs to inventory slots
 u8 gItemSlots[] = {
-    SLOT_OCARINA,            // ITEM_OCARINA
+    SLOT_OCARINA,            // ITEM_OCARINA_OF_TIME
     SLOT_BOW,                // ITEM_BOW
     SLOT_ARROW_FIRE,         // ITEM_ARROW_FIRE
     SLOT_ARROW_ICE,          // ITEM_ARROW_ICE
@@ -241,13 +241,13 @@ u8 gItemSlots[] = {
     SLOT_TRADE_DEED,         // ITEM_OCARINA_FAIRY
     SLOT_BOMB,               // ITEM_BOMB
     SLOT_BOMBCHU,            // ITEM_BOMBCHU
-    SLOT_STICK,              // ITEM_STICK
-    SLOT_NUT,                // ITEM_NUT
+    SLOT_DEKU_STICK,         // ITEM_DEKU_STICK
+    SLOT_DEKU_NUT,           // ITEM_DEKU_NUT
     SLOT_MAGIC_BEANS,        // ITEM_MAGIC_BEANS
     SLOT_TRADE_KEY_MAMA,     // ITEM_SLINGSHOT
     SLOT_POWDER_KEG,         // ITEM_POWDER_KEG
-    SLOT_PICTO_BOX,          // ITEM_PICTO_BOX
-    SLOT_LENS,               // ITEM_LENS
+    SLOT_PICTOGRAPH_BOX,     // ITEM_PICTOGRAPH_BOX
+    SLOT_LENS_OF_TRUTH,      // ITEM_LENS_OF_TRUTH
     SLOT_HOOKSHOT,           // ITEM_HOOKSHOT
     SLOT_SWORD_GREAT_FAIRY,  // ITEM_SWORD_GREAT_FAIRY
     SLOT_BOTTLE_1,           // ITEM_LONGSHOT
@@ -307,13 +307,13 @@ u8 gItemSlots[] = {
     SLOT_MASK_BLAST,         // ITEM_MASK_BLAST
     SLOT_MASK_SCENTS,        // ITEM_MASK_SCENTS
     SLOT_MASK_GIANT,         // ITEM_MASK_GIANT
-    SLOT_BOW,                // ITEM_BOW_ARROW_FIRE
-    SLOT_BOW,                // ITEM_BOW_ARROW_ICE
-    SLOT_BOW,                // ITEM_BOW_ARROW_LIGHT
+    SLOT_BOW,                // ITEM_BOW_FIRE
+    SLOT_BOW,                // ITEM_BOW_ICE
+    SLOT_BOW,                // ITEM_BOW_LIGHT
 };
 
 s16 gItemPrices[] = {
-    0,   // ITEM_OCARINA
+    0,   // ITEM_OCARINA_OF_TIME
     0,   // ITEM_BOW
     0,   // ITEM_ARROW_FIRE
     0,   // ITEM_ARROW_ICE
@@ -321,13 +321,13 @@ s16 gItemPrices[] = {
     0,   // ITEM_OCARINA_FAIRY
     0,   // ITEM_BOMB
     0,   // ITEM_BOMBCHU
-    0,   // ITEM_STICK
-    0,   // ITEM_NUT
+    0,   // ITEM_DEKU_STICK
+    0,   // ITEM_DEKU_NUT
     0,   // ITEM_MAGIC_BEANS
     0,   // ITEM_SLINGSHOT
     0,   // ITEM_POWDER_KEG
-    0,   // ITEM_PICTO_BOX
-    0,   // ITEM_LENS
+    0,   // ITEM_PICTOGRAPH_BOX
+    0,   // ITEM_LENS_OF_TRUTH
     0,   // ITEM_HOOKSHOT
     0,   // ITEM_SWORD_GREAT_FAIRY
     0,   // ITEM_LONGSHOT
@@ -512,7 +512,7 @@ u8 Inventory_DeleteEquipment(PlayState* play, s16 equipment) {
 }
 
 void Inventory_ChangeUpgrade(s16 upgrade, u32 value) {
-    u32 upgrades = gSaveContext.save.saveInfo.inventory.upgrades;
+    u32 upgrades = GET_SAVE_INVENTORY_UPGRADES;
 
     upgrades &= gUpgradeNegMasks[upgrade];
     upgrades |= value << gUpgradeShifts[upgrade];

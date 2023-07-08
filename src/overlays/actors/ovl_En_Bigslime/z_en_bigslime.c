@@ -2601,7 +2601,7 @@ void EnBigslime_ApplyDamageEffectBigslime(EnBigslime* this, PlayState* play) {
                     if (randFloat < 0.15f) {
                         Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
                     } else if (randFloat < 0.3f) {
-                        Item_DropCollectible(play, &this->actor.world.pos, ITEM00_MAGIC_SMALL);
+                        Item_DropCollectible(play, &this->actor.world.pos, ITEM00_MAGIC_JAR_SMALL);
                     }
                     this->itemDropTimer = 40;
                 }

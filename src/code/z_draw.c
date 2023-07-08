@@ -154,7 +154,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa01, { gGiBremenMaskDL, gGiBremenMaskEmptyDL } },
     // GID_MASK_ALL_NIGHT, OBJECT_GI_MASK06
     { GetItem_DrawOpa0Xlu1, { gGiAllNightMaskEyesDL, gGiAllNightMaskFaceDL } },
-    // GID_NUTS, OBJECT_GI_NUTS
+    // GID_DEKU_NUTS, OBJECT_GI_NUTS
     { GetItem_DrawDekuNuts, { gGiNutDL } },
     // GID_HEART_CONTAINER, OBJECT_GI_HEARTS
     { GetItem_DrawXlu01, { gGiHeartBorderDL, gGiHeartContainerDL } },
@@ -172,13 +172,13 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawUpgrades, { gGiBombBagDL, gGiBombBag30BagColorDL, gGiBombBag30RingColorDL, gGiBombBagRingDL } },
     // GID_BOMB_BAG_40, OBJECT_GI_BOMBPOUCH
     { GetItem_DrawUpgrades, { gGiBombBagDL, gGiBombBag40BagColorDL, gGiBombBag40RingColorDL, gGiBombBagRingDL } },
-    // GID_STICK, OBJECT_GI_STICK
+    // GID_DEKU_STICK, OBJECT_GI_STICK
     { GetItem_DrawOpa0, { gGiStickDL } },
     // GID_DUNGEON_MAP, OBJECT_GI_MAP
     { GetItem_DrawOpa0, { gGiDungeonMapDL } },
-    // GID_MAGIC_SMALL, OBJECT_GI_MAGICPOT
+    // GID_MAGIC_JAR_SMALL, OBJECT_GI_MAGICPOT
     { GetItem_DrawOpa0, { gGiMagicJarSmallDL } },
-    // GID_MAGIC_LARGE, OBJECT_GI_MAGICPOT
+    // GID_MAGIC_JAR_BIG, OBJECT_GI_MAGICPOT
     { GetItem_DrawOpa0, { gGiMagicJarLargeDL } },
     // GID_BOMB, OBJECT_GI_BOMB_1
     { GetItem_DrawOpa0, { gGiBombDL } },
@@ -367,7 +367,7 @@ static DrawItemTableEntry sDrawItemTable[] = {
     { GetItem_DrawOpa01, { gGiGiantMaskEmptyDL, gGiGiantMaskDL } },
     // GID_CHATEAU, OBJECT_GI_BOTTLE_21
     { GetItem_DrawOpa0Xlu1, { gGiChateauRomaniBottleEmptyDL, gGiChateauRomaniBottleDL } },
-    // GID_PICTO_BOX, OBJECT_GI_CAMERA
+    // GID_PICTOGRAPH_BOX, OBJECT_GI_CAMERA
     { GetItem_DrawOpa0Xlu1, { gGiPictoBoxFrameDL, gGiPictoBoxBodyAndLensDL } },
     // GID_MASK_FIERCE_DEITY, OBJECT_GI_MASK03
     { GetItem_DrawOpa01, { gGiFierceDeityMaskFaceDL, gGiFierceDeityMaskHairAndHatDL } },

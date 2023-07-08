@@ -8,7 +8,6 @@
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
-#include "objects/object_boj/object_boj.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -578,7 +577,7 @@ void func_80BAB4F0(EnSuttari* this, PlayState* play) {
             Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
         }
     }
-    SubS_FillLimbRotTables(play, this->unk2FA, this->unk31A, ARRAY_COUNT(this->unk2FA));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_BOJ_LIMB_MAX);
 }
 
 s16 EnSuttari_GetDistSqAndOrient(Path* path, s32 index, Vec3f* pos, f32* distSq) {
@@ -1568,8 +1567,8 @@ s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
     if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 0xC)) {
-        rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk31A[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     return false;
 }
