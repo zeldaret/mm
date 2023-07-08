@@ -1871,7 +1871,7 @@ s32 Target_IsActorInRange(Actor* actor, f32 distSq) {
 }
 
 /**
- * Returns true if the actor is inside the leash distance to player.
+ * Returns true if the actor is outside the leash distance to player.
  *
  * Passing true to ignoreLeash avoids the distance and yaw checks.
  */
