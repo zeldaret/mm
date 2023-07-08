@@ -112,10 +112,10 @@ void EnGamelupy_SetupFindSharedMemory(EnGamelupy* this) {
 }
 
 void EnGamelupy_FindSharedMemory(EnGamelupy* this, PlayState* play) {
-    s16* sharedMem = Actor_FindSharedMemoryEntry(play, ACTOR_EN_GAMELUPY);
+    s16* minigameScore = Actor_FindSharedMemoryEntry(play, ACTOR_EN_GAMELUPY);
 
-    if (sharedMem != NULL) {
-        this->sharedMem = sharedMem;
+    if (minigameScore != NULL) {
+        this->minigameScore = minigameScore;
         EnGamelupy_SetupIdle(this);
     }
 }
@@ -126,7 +126,7 @@ void EnGamelupy_SetupIdle(EnGamelupy* this) {
 
 void EnGamelupy_Idle(EnGamelupy* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        *this->sharedMem += ENGAMELUPY_COLLECTED;
+        *this->minigameScore += ENGAMELUPY_POINTS;
         if (this->type == ENGAMELUPY_TYPE_BLUE) {
             Rupees_ChangeBy(5);
         } else {

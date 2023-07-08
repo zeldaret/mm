@@ -10,25 +10,25 @@
         <DList Name="gBusinessScrubEyesSquintDL" Offset="0x1420" />
 
         <!-- Animations -->
-        <Animation Name="gBusinessScrubFlyAnim" Offset="0x1BC8" /> <!-- Original name is "dnt_fly" -->
+        <Animation Name="gBusinessScrubFlyLoopAnim" Offset="0x1BC8" /> <!-- Original name is "dnt_fly" -->
         <Animation Name="gBusinessScrubShockedShakeHeadAnim" Offset="0x1E2C" /> <!-- Original name is "dnt_iyaiya" -->
         <Animation Name="gBusinessScrubShockedEndAnim" Offset="0x2268" /> <!-- Original name is "dnt_iyaiyaTOmuun" -->
         <Animation Name="gBusinessScrubFlyEndAnim" Offset="0x2670" /> <!-- Original name is "dnt_kouka" -->
         <Animation Name="gBusinessScrubBurrowAnim" Offset="0x29E8" /> <!-- Original name is "dnt_moguru" -->
         <Animation Name="gBusinessScrubThinkAnim" Offset="0x2F08" /> <!-- Original name is "dnt_muun" -->
         <Animation Name="gBusinessScrubShockedStartAnim" Offset="0x3438" /> <!-- Original name is "dnt_nooo" -->
-        <Animation Name="gBusinessScrubExcitedAnim" Offset="0x38CC" /> <!-- Original name is "dnt_onedari" -->
+        <Animation Name="gBusinessScrubExcitedLoopAnim" Offset="0x38CC" /> <!-- Original name is "dnt_onedari" -->
         <Animation Name="gBusinessScrubExcitedEndAnim" Offset="0x3CC0" /> <!-- Original name is "dnt_onedariTOwait" -->
         <TextureAnimation Name="gBusinessScrubEmptyTexAnim" Offset="0x3CD0" />
         <Animation Name="gBusinessScrubFlyStartAnim" Offset="0x4700" /> <!-- Original name is "dnt_spoon" -->
         <Animation Name="gBusinessScrubRiseUpAnim" Offset="0x4AA0" /> <!-- Original name is "dnt_tobidasu01" -->
         <Animation Name="gBusinessScrubJumpAnim" Offset="0x4E38" /> <!-- Original name is "dnt_tobidasu02" -->
-        <Animation Name="gBusinessScrubIdleStandAnim" Offset="0x5488" /> <!-- Original name is "dnt_wait" -->
+        <Animation Name="gBusinessScrubStandingAnim" Offset="0x5488" /> <!-- Original name is "dnt_wait" -->
         <Animation Name="gBusinessScrubBobAnim" Offset="0x577C" /> <!-- Original name is "dnt_wait02" --> <!-- used as the idle anim when half burrowed into a deku flower-->
         <Animation Name="gBusinessScrubExcitedStartAnim" Offset="0x5CA8" /> <!-- Original name is "dnt_waitTOonedari" -->
 
         <!-- DLs -->
-        <DList Name="gBusinessScrubFaceDL" Offset="0x7EA0" />
+        <DList Name="gBusinessScrubHeadDL" Offset="0x7EA0" />
         <DList Name="gBusinessScrubLeftArmBagDL" Offset="0x8048" />
         <DList Name="gBusinessScrubEyesDL" Offset="0x8290" />
         <DList Name="gBusinessScrubScalpDL" Offset="0x8320" />
@@ -77,7 +77,7 @@
         <Limb Name="gBusinessScrubLeftThighLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_LEFT_THIGH" Offset="0xAAFC" />
         <Limb Name="gBusinessScrubLeftShinLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_LEFT_SHIN" Offset="0xAB08" />
         <Limb Name="gBusinessScrubLeftFootLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_LEFT_FOOT" Offset="0xAB14" />
-        <Limb Name="gBusinessScrubFaceLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_FACE" Offset="0xAB20" />
+        <Limb Name="gBusinessScrubHeadLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_HEAD" Offset="0xAB20" />
         <Limb Name="gBusinessScrubSnoutLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_SNOUT" Offset="0xAB2C" />
         <Limb Name="gBusinessScrubRightLeafLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_RIGHT_LEAF" Offset="0xAB38" />
         <Limb Name="gBusinessScrubRightMustacheLimb" Type="Standard" EnumName="BUSINESS_SCRUB_LIMB_RIGHT_MUSTACHE" Offset="0xAB44" />

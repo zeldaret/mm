@@ -18,14 +18,14 @@ typedef struct EnLiftNuts {
     /* 0x1D8 */ Vec3f waypointPos;
     /* 0x1E4 */ s32 eyeTexIndex;
     /* 0x1E8 */ s32 unk1E8; // Set but never used
-    /* 0x1EC */ s16* sharedMem; // Shared memory location with Actor EnGamelupy
+    /* 0x1EC */ s16* minigameScore; // Shared memory location with Actor EnGamelupy
     /* 0x1F0 */ Vec3s jointTable[BUSINESS_SCRUB_LIMB_MAX];
     /* 0x298 */ Vec3s morphTable[BUSINESS_SCRUB_LIMB_MAX];
     /* 0x340 */ UNK_TYPE1 unk_340[0xC];
     /* 0x34C */ s16 textId;
     /* 0x34E */ s16 autotalk;
     /* 0x350 */ UNK_TYPE1 unk_350[0x4];
-    /* 0x354 */ s16 frames; // Frame counter used for various different things
+    /* 0x354 */ s16 timer; // Frame counter used for various different things
     /* 0x356 */ s16 isFirstTimeHiding;
 } EnLiftNuts; // size = 0x358
 
