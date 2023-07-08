@@ -15,6 +15,8 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENGO_PATH_INDEX_NONE 0xFF
 
+#define ENGO_FIDGET_TABLE_LEN 3
+
 #define ENGO_SNOW_EFFECT_COUNT 16
 #define ENGO_OTHER_EFFECT_COUNT 16
 #define ENGO_EFFECT_COUNT (ENGO_SNOW_EFFECT_COUNT + ENGO_OTHER_EFFECT_COUNT)
@@ -126,8 +128,8 @@ typedef struct EnGo {
     /* 0x3C2 */ s16 cutsceneDelayTimer;
     /* 0x3C4 */ s16 gatekeeperAnimState;
     /* 0x3C6 */ s16 harmlessTimer;
-    /* 0x3C8 */ s16 limbRotTableZ[3];
-    /* 0x3CE */ s16 limbRotTableY[3];
+    /* 0x3C8 */ s16 fidgetTableZ[ENGO_FIDGET_TABLE_LEN];
+    /* 0x3CE */ s16 fidgetTableY[ENGO_FIDGET_TABLE_LEN];
     /* 0x3D4 */ s16 surprisePhase;
     /* 0x3D8 */ MsgEventFunc msgEventFunc;
     /* 0x3DC */ s32 curAnimIndex;

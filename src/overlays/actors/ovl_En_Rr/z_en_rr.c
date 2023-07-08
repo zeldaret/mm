@@ -305,7 +305,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
         this->unk_210 = 0.0f;
         this->unk_20C = 0x800;
 
-        if (((this->unk_1E2 == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) &&
+        if (((this->unk_1E2 == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) &&
             (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) == EQUIP_VALUE_SHIELD_HERO)) {
             sp34 = true;
             this->unk_1E2 = Inventory_DeleteEquipment(play, EQUIP_VALUE_SHIELD_HERO);
@@ -936,7 +936,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
+    gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,

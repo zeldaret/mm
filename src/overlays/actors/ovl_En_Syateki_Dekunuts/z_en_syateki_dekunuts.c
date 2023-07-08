@@ -35,9 +35,9 @@ void EnSyatekiDekunuts_GameEnd(EnSyatekiDekunuts* this, PlayState* play);
 void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_NORMAL,
-    /* 1 */ EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP
-} EnSyatekiDekunutsHeaddressType;
+    /* 0 */ SG_DEKU_HEADDRESS_TYPE_NORMAL,
+    /* 1 */ SG_DEKU_HEADDRESS_TYPE_FLIPPED_UP
+} ShootingGalleryDekuScrubHeaddressType;
 
 ActorInit En_Syateki_Dekunuts_InitVars = {
     ACTOR_EN_SYATEKI_DEKUNUTS,
@@ -74,23 +74,23 @@ static ColliderCylinderInit sCylinderInit = {
 static Cylinder16 sBonusDekuScrubColliderDimensions[] = { { 24, 40, 0, { 0, 0, 0 } } };
 
 typedef enum {
-    /* 0 */ EN_SYATEKI_DEKUNUTS_ANIM_UP,
-    /* 1 */ EN_SYATEKI_DEKUNUTS_ANIM_BURROW,
-    /* 2 */ EN_SYATEKI_DEKUNUTS_ANIM_IDLE, // unused
-    /* 3 */ EN_SYATEKI_DEKUNUTS_ANIM_LOOK_AROUND,
-    /* 4 */ EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE,
-    /* 5 */ EN_SYATEKI_DEKUNUTS_ANIM_DIE,
-    /* 6 */ EN_SYATEKI_DEKUNUTS_ANIM_UNBURROW // unused
-} EnSyatekiDekunutsAnimation;
+    /* 0 */ SG_DEKU_ANIM_UP,
+    /* 1 */ SG_DEKU_ANIM_BURROW,
+    /* 2 */ SG_DEKU_ANIM_IDLE, // unused
+    /* 3 */ SG_DEKU_ANIM_LOOK_AROUND,
+    /* 4 */ SG_DEKU_ANIM_DAMAGE,
+    /* 5 */ SG_DEKU_ANIM_DIE,
+    /* 6 */ SG_DEKU_ANIM_UNBURROW // unused
+} ShootingGalleryDekuScrubAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gDekuScrubUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gDekuScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gDekuScrubIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &gDekuScrubLookAroundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },
-    { &gDekuScrubDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gDekuScrubDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
-    { &gDekuScrubUnburrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },
+    { &gDekuScrubUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },         // SG_DEKU_ANIM_UP
+    { &gDekuScrubBurrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },     // SG_DEKU_ANIM_BURROW
+    { &gDekuScrubIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f },       // SG_DEKU_ANIM_IDLE
+    { &gDekuScrubLookAroundAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -1.0f }, // SG_DEKU_ANIM_LOOK_AROUND
+    { &gDekuScrubDamageAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },     // SG_DEKU_ANIM_DAMAGE
+    { &gDekuScrubDieAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },        // SG_DEKU_ANIM_DIE
+    { &gDekuScrubUnburrowAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -1.0f },   // SG_DEKU_ANIM_UNBURROW
 };
 
 static InitChainEntry sInitChain[] = {
@@ -112,20 +112,20 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) == EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
+    if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
         Actor_SetScale(&this->actor, 0.01f);
         this->collider.dim = sBonusDekuScrubColliderDimensions[0];
-        pathType = SG_PATH_TYPE_SCRUB_BONUS;
+        pathType = SG_PATH_TYPE_DEKU_BONUS;
     } else {
         Actor_SetScale(&this->actor, 0.02f);
-        pathType = SG_PATH_TYPE_SCRUB_NORMAL;
+        pathType = SG_PATH_TYPE_DEKU_NORMAL;
     }
 
     while (path->customValue != pathType) {
         path = &play->setupPathList[path->additionalPathIndex];
     }
 
-    for (i = 0; i < EN_SYATEKI_DEKUNUTS_GET_PARAM_FF00(&this->actor); i++) {
+    for (i = 0; i < SG_DEKU_GET_ADDITIONAL_PATH_INDEX_LIMIT(&this->actor); i++) {
         path = &play->setupPathList[path->additionalPathIndex];
     }
 
@@ -147,7 +147,7 @@ void EnSyatekiDekunuts_Init(Actor* thisx, PlayState* play2) {
     }
 
     this->flowerPos = Lib_SegmentedToVirtual(path->points);
-    this->index = EN_SYATEKI_DEKUNUTS_GET_INDEX(&this->actor);
+    this->index = SG_DEKU_GET_INDEX(&this->actor);
     this->flowerCount = path->count;
     this->timer = 0;
     this->unk_1DC = 0;
@@ -172,7 +172,7 @@ void EnSyatekiDekunuts_SetupWaitForSignal(EnSyatekiDekunuts* this) {
     this->timer = 0;
     this->unk_1DC = 0;
 
-    if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
+    if (SG_DEKU_GET_TYPE(&this->actor) != SG_DEKU_TYPE_BONUS) {
         this->isAlive = true;
     }
 
@@ -193,7 +193,7 @@ void EnSyatekiDekunuts_WaitForSignal(EnSyatekiDekunuts* this, PlayState* play) {
     }
 
     if (!syatekiMan->dekuScrubFlags && !syatekiMan->guayFlags &&
-        (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS)) {
+        (SG_DEKU_GET_TYPE(&this->actor) != SG_DEKU_TYPE_BONUS)) {
         this->isAlive = true;
     }
 }
@@ -215,10 +215,10 @@ void EnSyatekiDekunuts_SetupWaitToStart(EnSyatekiDekunuts* this) {
     this->timeToBurrow = 140 - (syatekiMan->currentWave * 20);
 
     if ((syatekiMan->currentWave % 2) != 0) {
-        this->headdressType = EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP;
+        this->headdressType = SG_DEKU_HEADDRESS_TYPE_FLIPPED_UP;
         this->headdressRotZ = 0;
     } else {
-        this->headdressType = EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_NORMAL;
+        this->headdressType = SG_DEKU_HEADDRESS_TYPE_NORMAL;
     }
 
     this->actionFunc = EnSyatekiDekunuts_WaitToStart;
@@ -259,7 +259,7 @@ void EnSyatekiDekunuts_WaitToEmerge(EnSyatekiDekunuts* this, PlayState* play) {
 
 void EnSyatekiDekunuts_SetupEmerge(EnSyatekiDekunuts* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_UP);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_DEKU_ANIM_UP);
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     this->actor.world.rot.y = this->actor.yawTowardsPlayer;
     this->actionFunc = EnSyatekiDekunuts_Emerge;
@@ -275,7 +275,7 @@ void EnSyatekiDekunuts_Emerge(EnSyatekiDekunuts* this, PlayState* play) {
         EnSyatekiDekunuts_SetupLookAround(this);
     }
 
-    if (this->headdressType == EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP) {
+    if (this->headdressType == SG_DEKU_HEADDRESS_TYPE_FLIPPED_UP) {
         Math_SmoothStepToS(&this->headdressRotZ, -0x8000, 5, 0x1000, 0x100);
     }
 
@@ -283,8 +283,8 @@ void EnSyatekiDekunuts_Emerge(EnSyatekiDekunuts* this, PlayState* play) {
 }
 
 void EnSyatekiDekunuts_SetupLookAround(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_LOOK_AROUND);
-    if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_DEKU_ANIM_LOOK_AROUND);
+    if (SG_DEKU_GET_TYPE(&this->actor) != SG_DEKU_TYPE_BONUS) {
         this->actionFunc = EnSyatekiDekunuts_LookAround;
     } else {
         this->actionFunc = EnSyatekiDekunuts_BonusLookAround;
@@ -325,7 +325,7 @@ void EnSyatekiDekunuts_BonusLookAround(EnSyatekiDekunuts* this, PlayState* play)
 }
 
 void EnSyatekiDekunuts_SetupBurrow(EnSyatekiDekunuts* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_BURROW);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_DEKU_ANIM_BURROW);
     this->actionFunc = EnSyatekiDekunuts_Burrow;
 }
 
@@ -369,19 +369,19 @@ void EnSyatekiDekunuts_SetupDead(EnSyatekiDekunuts* this, PlayState* play) {
     static Vec3f sAccel = { 0.0f, 0.0f, 0.0f };
     EnSyatekiMan* syatekiMan = (EnSyatekiMan*)this->actor.parent;
 
-    if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) == EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
-        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 2);
-        syatekiMan->score += 100;
-        syatekiMan->perGameVar2.bonusDekuScrubHitCounter++;
+    if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
+        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_100);
+        syatekiMan->score += SG_POINTS_DEKU_BONUS;
+        syatekiMan->bonusDekuScrubHitCounter++;
     } else {
-        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, 0);
-        syatekiMan->score += 30;
+        EffectSsExtra_Spawn(play, &this->actor.world.pos, &sVelocity, &sAccel, 5, EXTRA_SCORE_INDEX_30);
+        syatekiMan->score += SG_POINTS_DEKU_NORMAL;
         syatekiMan->dekuScrubHitCounter++;
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->isAlive = false;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DAMAGE);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_DEKU_ANIM_DAMAGE);
     this->timer = 160;
     this->actionFunc = EnSyatekiDekunuts_Dead;
 }
@@ -393,7 +393,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         if (this->timer == 160) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_DEKUNUTS_ANIM_DIE);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_DEKU_ANIM_DIE);
             Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
             this->timer--;
         } else if (this->timer < 160) {
@@ -407,7 +407,7 @@ void EnSyatekiDekunuts_Dead(EnSyatekiDekunuts* this, PlayState* play) {
             pos.y = this->actor.world.pos.y + 10.0f;
             EffectSsHahen_SpawnBurst(play, &pos, 3.0f, 0, 12, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-            if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) != EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
+            if (SG_DEKU_GET_TYPE(&this->actor) != SG_DEKU_TYPE_BONUS) {
                 syatekiMan->dekuScrubFlags &= ~(1 << this->index);
             }
 
@@ -427,7 +427,7 @@ void EnSyatekiDekunuts_Update(Actor* thisx, PlayState* play) {
     if ((this->actionFunc != EnSyatekiDekunuts_WaitForSignal) && (this->timer < this->timeToBurrow) &&
         (this->timer > 10)) {
         if ((this->collider.base.acFlags & AC_HIT) && (this->isAlive == true)) {
-            if (EN_SYATEKI_DEKUNUTS_GET_TYPE(&this->actor) == EN_SYATEKI_DEKUNUTS_TYPE_BONUS) {
+            if (SG_DEKU_GET_TYPE(&this->actor) == SG_DEKU_TYPE_BONUS) {
                 Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
                 Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
@@ -450,8 +450,7 @@ s32 EnSyatekiDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dLi
                                        Actor* thisx) {
     EnSyatekiDekunuts* this = THIS;
 
-    if ((limbIndex == DEKU_SCRUB_LIMB_HEADDRESS) &&
-        (this->headdressType == EN_SYATEKI_DEKUNUTS_HEADDRESS_TYPE_FLIPPED_UP)) {
+    if ((limbIndex == DEKU_SCRUB_LIMB_HEADDRESS) && (this->headdressType == SG_DEKU_HEADDRESS_TYPE_FLIPPED_UP)) {
         rot->z += this->headdressRotZ;
     }
 

@@ -361,7 +361,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
 
     if (ENZOW_GET_F(&this->actor) == ENZOW_F_1) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_04)) {
                     phi_a1 = 0x12FD;
                 } else {
@@ -374,7 +374,7 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_78_10);
                 phi_a1 = 0x12FF;
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_08)) {
                 phi_a1 = 0x12F8;
             } else {
@@ -388,12 +388,12 @@ void func_80BDD1E0(EnZow* this, PlayState* play) {
             phi_a1 = 0x12FF;
         }
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             phi_a1 = 0x12EC;
         } else {
             phi_a1 = 0x12F1;
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_02)) {
             phi_a1 = 0x12EB;
         } else {

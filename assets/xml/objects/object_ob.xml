@@ -55,10 +55,10 @@
         <DList Name="gMoonChildChestDL" Offset="0x14DA0" />
         <DList Name="gMoonChildHeadDL" Offset="0x14F18" />
         <DList Name="gMoonChildLeftArmDL" Offset="0x15380" />
-        <DList Name="gMoonChildLeftForeArmDL" Offset="0x154B0" />
+        <DList Name="gMoonChildLeftForearmDL" Offset="0x154B0" />
         <DList Name="gMoonChildLeftHandDL" Offset="0x155D0" />
         <DList Name="gMoonChildRightArmDL" Offset="0x15758" />
-        <DList Name="gMoonChildRightForeArmDL" Offset="0x15888" />
+        <DList Name="gMoonChildRightForearmDL" Offset="0x15888" />
         <DList Name="gMoonChildRightHandDL" Offset="0x159A8" />
 
         <!-- Moonchild Textures -->

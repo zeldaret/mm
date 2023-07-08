@@ -361,7 +361,7 @@ void func_80B97100(EnZot* this, PlayState* play) {
 void func_80B97110(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         textId = 0x125F;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_28_80)) {
             textId = 0x1261;
@@ -412,7 +412,7 @@ void func_80B972E8(EnZot* this, PlayState* play) {
     u16 textId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_10)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             textId = 0x126A;
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_01)) {
                 textId = 0x126D;
@@ -427,7 +427,7 @@ void func_80B972E8(EnZot* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_29_02);
             }
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         textId = 0x1265;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_04)) {
             textId = 0x1266;
@@ -533,6 +533,7 @@ void func_80B9765C(EnZot* this, PlayState* play) {
             case 0x126B:
                 Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
+
             default:
                 Message_CloseTextbox(play);
                 this->actionFunc = func_80B97708;
@@ -564,12 +565,12 @@ void func_80B97708(EnZot* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_29_10);
         this->actor.flags |= ACTOR_FLAG_10000;
         if (phi_v1 == 5) {
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 this->actor.textId = 0x126E;
             } else {
                 this->actor.textId = 0x1272;
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.textId = 0x1273;
         } else {
             this->actor.textId = 0x1276;
@@ -586,7 +587,7 @@ void func_80B9787C(EnZot* this, PlayState* play) {
     u16 textId;
 
     if (this->actor.textId == 0) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             switch (ENZOT_GET_1F(&this->actor)) {
                 case 2:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_37_40)) {
@@ -709,7 +710,7 @@ void func_80B97B5C(EnZot* this, PlayState* play) {
 void func_80B97BF8(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         textId = 0x128C;
     } else {
         textId = 0x128B;
@@ -808,7 +809,7 @@ void func_80B97FD0(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B97E4C;
         func_80B97BF8(this, play);
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_08)) {
-        if ((this->actor.xzDistToPlayer < 120.0f) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
+        if ((this->actor.xzDistToPlayer < 120.0f) && (GET_PLAYER_FORM == PLAYER_FORM_ZORA)) {
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97E0C;
             func_80B96BEC(this, 6, ANIMMODE_ONCE);
@@ -838,7 +839,7 @@ void func_80B98178(EnZot* this, PlayState* play) {
 
     switch (ENZOT_GET_1F(&this->actor)) {
         case 6:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 if (CURRENT_DAY == 3) {
                     textId = 0x129D;
                 } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_01)) {
@@ -856,7 +857,7 @@ void func_80B98178(EnZot* this, PlayState* play) {
             break;
 
         case 7:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_04)) {
                     textId = 0x12AA;
                 } else {
@@ -885,14 +886,14 @@ void func_80B98178(EnZot* this, PlayState* play) {
                 phi_v0 += 2;
             }
 
-            if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
                 phi_v0++;
             }
             textId = phi_v0 + 0x1302;
             break;
 
         default:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 textId = 0x129F;
             } else {
                 textId = 0x1295;
@@ -961,7 +962,7 @@ void func_80B985EC(EnZot* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction == PLAYER_IA_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+            if ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
                 Snap_CheckFlag(PICTO_VALID_LULU_HEAD)) {
                 if (Snap_CheckFlag(PICTO_VALID_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTO_VALID_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
@@ -1080,7 +1081,7 @@ void func_80B98998(EnZot* this, PlayState* play) {
 void func_80B98A4C(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_80)) {
             textId = 0x12B6;
         } else {
@@ -1158,7 +1159,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
             func_800B8614(&this->actor, play, 120.0f);
         }
 
-        if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
+        if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
             func_800B874C(&this->actor, play, 120.0, 100.0f);
         }
     }
@@ -1171,7 +1172,7 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
 void func_80B98E10(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_04)) {
                 textId = 0x12C5;
@@ -1258,7 +1259,7 @@ void func_80B990A4(EnZot* this, PlayState* play) {
 void func_80B99160(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_10)) {
             textId = 0x12CD;
         } else {

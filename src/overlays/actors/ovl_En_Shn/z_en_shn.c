@@ -70,10 +70,10 @@ void func_80AE6130(EnShn* this) {
 
 s32 func_80AE615C(EnShn* this, s32 animIndex) {
     static AnimationInfoS sAnimationInfo[] = {
-        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, 0 },
-        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, 0, -4 },
-        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, 0 },
-        { &gSwampGuideChinScratchAnim, 1.0f, 0, -1, 0, -4 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &gBurlyGuyHandsOnTableAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+        { &gBurlyGuyChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+        { &gBurlyGuyChinScratchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     };
     s32 phi_v0 = 0;
     s32 phi_v1 = 0;
@@ -293,7 +293,7 @@ s32 func_80AE68F0(EnShn* this, PlayState* play) {
     if (this->unk_1D8 & 7) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_1D8 &= ~0x180;
-            if (player->exchangeItemId == PLAYER_IA_PICTO_BOX) {
+            if (player->exchangeItemId == PLAYER_IA_PICTOGRAPH_BOX) {
                 this->unk_1D8 |= 0x80;
                 this->unk_2E4 = player->exchangeItemId;
             } else if (player->exchangeItemId != PLAYER_IA_NONE) {

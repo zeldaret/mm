@@ -16,7 +16,7 @@ s16 sMaskEquipMagicArrowSlotHoldTimer = 0;
 s16 sMaskEquipAnimTimer = 10;
 
 u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][MASK_NUM_SLOTS] = {
-    // Fierce Deity
+    // PLAYER_FORM_FIERCE_DEITY
     {
         false, // SLOT_MASK_POSTMAN
         false, // SLOT_MASK_ALL_NIGHT
@@ -43,7 +43,7 @@ u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][MASK_NUM_SLOTS] = {
         false, // SLOT_MASK_GIANT
         true,  // SLOT_MASK_FIERCE_DEITY
     },
-    // Goron
+    // PLAYER_FORM_GORON
     {
         false, // SLOT_MASK_POSTMAN
         false, // SLOT_MASK_ALL_NIGHT
@@ -70,7 +70,7 @@ u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][MASK_NUM_SLOTS] = {
         false, // SLOT_MASK_GIANT
         true,  // SLOT_MASK_FIERCE_DEITY
     },
-    // Zora
+    // PLAYER_FORM_ZORA
     {
         false, // SLOT_MASK_POSTMAN
         false, // SLOT_MASK_ALL_NIGHT
@@ -97,7 +97,7 @@ u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][MASK_NUM_SLOTS] = {
         false, // SLOT_MASK_GIANT
         true,  // SLOT_MASK_FIERCE_DEITY
     },
-    // Deku
+    // PLAYER_FORM_DEKU
     {
         false, // SLOT_MASK_POSTMAN
         false, // SLOT_MASK_ALL_NIGHT
@@ -124,7 +124,7 @@ u8 gMaskPlayerFormSlotRestrictions[PLAYER_FORM_MAX][MASK_NUM_SLOTS] = {
         false, // SLOT_MASK_GIANT
         true,  // SLOT_MASK_FIERCE_DEITY
     },
-    // Human
+    // PLAYER_FORM_HUMAN
     {
         true, // SLOT_MASK_POSTMAN
         true, // SLOT_MASK_ALL_NIGHT
@@ -224,8 +224,7 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
         if (((void)0, gSaveContext.save.saveInfo.inventory.items[i + ITEM_NUM_SLOTS]) != ITEM_NONE) {
             if (!CHECK_GIVEN_MASK_ON_MOON(i)) {
                 if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MASK) &&
-                    (pauseCtx->cursorSpecialPos == 0) &&
-                    gMaskPlayerFormSlotRestrictions[(void)0, gSaveContext.save.playerForm][i]) {
+                    (pauseCtx->cursorSpecialPos == 0) && gMaskPlayerFormSlotRestrictions[GET_PLAYER_FORM][i]) {
                     if ((sMaskEquipState == EQUIP_STATE_MAGIC_ARROW_HOVER_OVER_BOW_SLOT) && (i == SLOT_ARROW_ICE)) {
                         // Possible bug:
                         // Supposed to be `SLOT_BOW`, unchanged from OoT, instead increase size of ice arrow icon
@@ -267,8 +266,12 @@ void KaleidoScope_DrawMaskSelect(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-u8 sMaskPlayerFormItems[] = {
-    ITEM_MASK_FIERCE_DEITY, ITEM_MASK_GORON, ITEM_MASK_ZORA, ITEM_MASK_DEKU, ITEM_NONE,
+u8 sMaskPlayerFormItems[PLAYER_FORM_MAX] = {
+    ITEM_MASK_FIERCE_DEITY, // PLAYER_FORM_FIERCE_DEITY
+    ITEM_MASK_GORON,        // PLAYER_FORM_GORON
+    ITEM_MASK_ZORA,         // PLAYER_FORM_ZORA
+    ITEM_MASK_DEKU,         // PLAYER_FORM_DEKU
+    ITEM_NONE,              // PLAYER_FORM_HUMAN
 };
 
 void KaleidoScope_UpdateMaskCursor(PlayState* play) {
@@ -543,27 +546,24 @@ void KaleidoScope_UpdateMaskCursor(PlayState* play) {
                     if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT))) ||
-                            ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
-                             (sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
-                              BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)))) {
+                            ((sMaskPlayerFormItems[GET_PLAYER_FORM] != ITEM_NONE) &&
+                             (sMaskPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_LEFT)))) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN))) ||
-                            ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
-                             (sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
-                              BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)))) {
+                            ((sMaskPlayerFormItems[GET_PLAYER_FORM] != ITEM_NONE) &&
+                             (sMaskPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_DOWN)))) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
                     } else if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                         if (((Player_GetCurMaskItemId(play) != ITEM_NONE) &&
                              (Player_GetCurMaskItemId(play) == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT))) ||
-                            ((sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] != ITEM_NONE) &&
-                             (sMaskPlayerFormItems[((void)0, gSaveContext.save.playerForm)] ==
-                              BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)))) {
+                            ((sMaskPlayerFormItems[GET_PLAYER_FORM] != ITEM_NONE) &&
+                             (sMaskPlayerFormItems[GET_PLAYER_FORM] == BUTTON_ITEM_EQUIP(0, EQUIP_SLOT_C_RIGHT)))) {
                             Audio_PlaySfx(NA_SE_SY_ERROR);
                             return;
                         }
@@ -647,7 +647,7 @@ void KaleidoScope_UpdateMaskEquip(PlayState* play) {
         sMaskEquipMagicArrowBowSlotHoldTimer--;
 
         if (sMaskEquipMagicArrowBowSlotHoldTimer == 0) {
-            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_ARROW_FIRE;
+            pauseCtx->equipTargetItem -= 0xB5 - ITEM_BOW_FIRE;
             pauseCtx->equipTargetSlot = SLOT_BOW;
             sMaskEquipAnimTimer = 6;
             pauseCtx->equipAnimScale = 320;

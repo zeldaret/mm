@@ -78,12 +78,12 @@ static ShopItemEntry sShopItemEntries[] = {
       EnGirlA_BuyBottleItem, EnGirlA_BuyFanfare },
     { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x06AE, 0x06AF, GI_SHIELD_HERO, EnGirlA_CanBuyShieldHero,
       EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
-    { OBJECT_GI_STICK, GID_STICK, NULL, 1, 0x06B4, 0x06B5, GI_STICKS_1, EnGirlA_CanBuyStick, EnGirlA_BuyStick,
+    { OBJECT_GI_STICK, GID_DEKU_STICK, NULL, 1, 0x06B4, 0x06B5, GI_DEKU_STICKS_1, EnGirlA_CanBuyStick, EnGirlA_BuyStick,
       EnGirlA_BuyFanfare },
     { OBJECT_GI_ARROW, GID_ARROWS_MEDIUM, func_800B8050, 30, 0x06B8, 0x06B9, GI_ARROWS_30, EnGirlA_CanBuyArrows,
       EnGirlA_BuyArrows, EnGirlA_BuyFanfare },
-    { OBJECT_GI_NUTS, GID_NUTS, func_800B8118, 10, 0x06B0, 0x06B1, GI_NUTS_10, EnGirlA_CanBuyNuts, EnGirlA_BuyNuts,
-      EnGirlA_BuyFanfare },
+    { OBJECT_GI_NUTS, GID_DEKU_NUTS, func_800B8118, 10, 0x06B0, 0x06B1, GI_DEKU_NUTS_10, EnGirlA_CanBuyNuts,
+      EnGirlA_BuyNuts, EnGirlA_BuyFanfare },
     { OBJECT_GI_LIQUID, GID_POTION_RED, func_800B8050, 1, 0x06AC, 0x06AD, GI_POTION_RED, EnGirlA_CanBuyPotionRed,
       EnGirlA_BuyBottleItem, EnGirlA_BuyFanfare },
     { OBJECT_GI_BOTTLE_04, GID_FAIRY, func_800B8050, 1, 0x06D3, 0x06D4, GI_FAIRY, EnGirlA_CanBuyFairy,
@@ -94,9 +94,9 @@ static ShopItemEntry sShopItemEntries[] = {
       EnGirlA_BuyArrows, EnGirlA_BuyFanfare },
     { OBJECT_GI_LIQUID, GID_POTION_GREEN, func_800B8050, 1, 0x06CF, 0x06D0, GI_POTION_GREEN, EnGirlA_CanBuyPotionGreen,
       EnGirlA_BuyBottleItem, EnGirlA_BuyFanfare },
-    { OBJECT_GI_NUTS, GID_NUTS, func_800B8118, 10, 0x06CD, 0x06CE, GI_NUTS_10, EnGirlA_CanBuyNuts, EnGirlA_BuyNuts,
-      EnGirlA_BuyFanfare },
-    { OBJECT_GI_STICK, GID_STICK, NULL, 1, 0x06D1, 0x06D2, GI_STICKS_1, EnGirlA_CanBuyStick, EnGirlA_BuyStick,
+    { OBJECT_GI_NUTS, GID_DEKU_NUTS, func_800B8118, 10, 0x06CD, 0x06CE, GI_DEKU_NUTS_10, EnGirlA_CanBuyNuts,
+      EnGirlA_BuyNuts, EnGirlA_BuyFanfare },
+    { OBJECT_GI_STICK, GID_DEKU_STICK, NULL, 1, 0x06D1, 0x06D2, GI_DEKU_STICKS_1, EnGirlA_CanBuyStick, EnGirlA_BuyStick,
       EnGirlA_BuyFanfare },
     { OBJECT_GI_SHIELD_2, GID_SHIELD_HERO, func_800B8050, 1, 0x06CB, 0x06CC, GI_SHIELD_HERO, EnGirlA_CanBuyShieldHero,
       EnGirlA_BuyShieldHero, EnGirlA_BuyFanfare },
@@ -234,13 +234,13 @@ s32 EnGirlA_CanBuyArrows(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyNuts(PlayState* play, EnGirlA* this) {
-    if ((CUR_CAPACITY(UPG_NUTS) != 0) && (CUR_CAPACITY(UPG_NUTS) <= AMMO(ITEM_NUT))) {
+    if ((CUR_CAPACITY(UPG_DEKU_NUTS) != 0) && (CUR_CAPACITY(UPG_DEKU_NUTS) <= AMMO(ITEM_DEKU_NUT))) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (Item_CheckObtainability(ITEM_NUT) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_DEKU_NUT) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -257,13 +257,13 @@ s32 EnGirlA_CanBuyShieldHero(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyStick(PlayState* play, EnGirlA* this) {
-    if ((CUR_CAPACITY(UPG_STICKS) != 0) && (AMMO(ITEM_STICK) >= CUR_CAPACITY(UPG_STICKS))) {
+    if ((CUR_CAPACITY(UPG_DEKU_STICKS) != 0) && (AMMO(ITEM_DEKU_STICK) >= CUR_CAPACITY(UPG_DEKU_STICKS))) {
         return CANBUY_RESULT_NO_ROOM;
     }
     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
         return CANBUY_RESULT_NEED_RUPEES;
     }
-    if (Item_CheckObtainability(ITEM_STICK) == ITEM_NONE) {
+    if (Item_CheckObtainability(ITEM_DEKU_STICK) == ITEM_NONE) {
         return CANBUY_RESULT_SUCCESS_1;
     }
     return CANBUY_RESULT_SUCCESS_2;
@@ -415,11 +415,11 @@ void EnGirlA_BuyArrows(PlayState* play, EnGirlA* this) {
 void EnGirlA_BuyNuts(PlayState* play, EnGirlA* this) {
     switch (this->itemParams) {
         case 5:
-            Item_Give(play, ITEM_NUTS_5);
+            Item_Give(play, ITEM_DEKU_NUTS_5);
             break;
 
         case 10:
-            Item_Give(play, ITEM_NUTS_10);
+            Item_Give(play, ITEM_DEKU_NUTS_10);
             break;
 
         default:
@@ -434,7 +434,7 @@ void EnGirlA_BuyShieldHero(PlayState* play, EnGirlA* this) {
 }
 
 void EnGirlA_BuyStick(PlayState* play, EnGirlA* this) {
-    Item_Give(play, ITEM_STICK);
+    Item_Give(play, ITEM_DEKU_STICK);
     Rupees_ChangeBy(-play->msgCtx.unk1206C);
 }
 

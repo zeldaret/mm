@@ -685,7 +685,7 @@ void EnScopenuts_Init(Actor* thisx, PlayState* play) {
     EnScopenuts* this = THIS;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40) &&
-        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA] == ITEM_NONE)) {
+        (gSaveContext.save.saveInfo.inventory.items[ITEM_OCARINA_OF_TIME] == ITEM_NONE)) {
         Actor_Kill(&this->actor);
         return;
     }

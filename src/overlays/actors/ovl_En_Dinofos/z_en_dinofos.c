@@ -450,8 +450,8 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) &&
-        (player->unk_AE7 == 1) && (this->unk_28B == 0)) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->unk_AE7 == 1) &&
+        (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {
             this->colliderJntSph.elements[i].info.bumper.dmgFlags &= ~0x400;

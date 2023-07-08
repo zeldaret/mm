@@ -60,7 +60,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-f32 D_80A771E0[] = { 40.0f, 40.0f, 40.0f, 30.0f, 30.0f };
+f32 D_80A771E0[PLAYER_FORM_MAX] = {
+    40.0f, // PLAYER_FORM_FIERCE_DEITY
+    40.0f, // PLAYER_FORM_GORON
+    40.0f, // PLAYER_FORM_ZORA
+    30.0f, // PLAYER_FORM_DEKU
+    30.0f, // PLAYER_FORM_HUMAN
+};
 
 static ColliderCylinderInit sCylinderInit = {
     {

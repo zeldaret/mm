@@ -218,7 +218,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
 
     EnRu_UpdateEyes(this, 3);
     EnRu_PlayWalkingSound(this, play);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, RU2_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, RU2_LIMB_MAX);
 }
 
 void EnRu_DoNothing(EnRu* this, PlayState* play) {
@@ -274,8 +274,8 @@ s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if ((limbIndex == RU2_LIMB_TORSO) || (limbIndex == RU2_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == RU2_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;

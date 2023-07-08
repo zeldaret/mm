@@ -119,7 +119,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
     switch (this->actor.params) {
         case SHIKASHI_TYPE_DEFAULT:
         case SHIKASHI_TYPE_FINISHED_CONVERSATION:
-            switch (gSaveContext.save.playerForm) {
+            switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_DEKU:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_10)) {
                         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
@@ -132,6 +132,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_17_10);
                     }
                     break;
+
                 case PLAYER_FORM_HUMAN:
                     if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
                         this->textId = 0x236A;
@@ -142,6 +143,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_74_10);
                     }
                     break;
+
                 case PLAYER_FORM_GORON:
                 case PLAYER_FORM_ZORA:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_08)) {
@@ -151,10 +153,14 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                         SET_WEEKEVENTREG(WEEKEVENTREG_75_08);
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
+
         case SHIKASHI_TYPE_LOOKED_THROUGH_TELESCOPE:
-            switch (gSaveContext.save.playerForm) {
+            switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_DEKU:
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
                         this->textId = 0x5F2;
@@ -164,18 +170,22 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                     func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
                                   PLAYER_IA_NONE);
                     break;
+
                 case PLAYER_FORM_HUMAN:
                     this->textId = 0x5F7;
                     break;
+
                 case PLAYER_FORM_GORON:
                 case PLAYER_FORM_ZORA:
                     switch (CURRENT_DAY) {
                         case 1:
                             this->textId = 0x5E9;
                             break;
+
                         case 2:
                             this->textId = 0x5EA;
                             break;
+
                         case 3:
                             timeUntilMoonCrash = TIME_UNTIL_MOON_CRASH;
                             if (timeUntilMoonCrash < CLOCK_TIME_F(1, 0)) {
@@ -184,8 +194,18 @@ void func_809CD028(EnBji01* this, PlayState* play) {
                                 this->textId = 0x5EB;
                             }
                             break;
+
+                        default:
+                            break;
                     }
+                    break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
@@ -201,6 +221,7 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 Message_StartTextbox(play, this->textId, &this->actor);
             }
             break;
+
         case TEXT_STATE_CHOICE:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -211,24 +232,34 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                         Message_CloseTextbox(play);
                         func_809CD634(this, play);
                         break;
+
                     case 1:
                         Audio_PlaySfx_MessageCancel();
-                        switch (gSaveContext.save.playerForm) {
+                        switch (GET_PLAYER_FORM) {
                             case PLAYER_FORM_DEKU:
                                 Message_ContinueTextbox(play, 0x5F0);
                                 break;
+
                             case PLAYER_FORM_HUMAN:
                                 Message_ContinueTextbox(play, 0x5F8);
                                 break;
+
                             case PLAYER_FORM_GORON:
                             case PLAYER_FORM_ZORA:
                                 Message_ContinueTextbox(play, 0x5E1);
                                 break;
+
+                            default:
+                                break;
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
             break;
+
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play)) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
@@ -237,15 +268,19 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 3, &this->animIndex);
                         Message_ContinueTextbox(play, 0x5DF);
                         break;
+
                     case 0x5E4:
                         Message_ContinueTextbox(play, 0x5E7);
                         break;
+
                     case 0x5E5:
                         Message_ContinueTextbox(play, 0x5E0);
                         break;
+
                     case 0x5E7:
                         Message_ContinueTextbox(play, 0x5E5);
                         break;
+
                     case 0x5DC:
                     case 0x5DD:
                     case 0x5DF:
@@ -256,10 +291,12 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                     case 0x5F5:
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
+
                     case 0x5F0:
                     case 0x5F6:
                         Message_ContinueTextbox(play, 0x5EF);
                         break;
+
                     case 0x5E1:
                     case 0x5E8:
                     case 0x5E9:
@@ -275,13 +312,20 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                         this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
                         func_809CCE98(this, play);
                         break;
+
+                    default:
+                        break;
                 }
             }
             break;
+
         case TEXT_STATE_DONE:
             this->actor.params = SHIKASHI_TYPE_FINISHED_CONVERSATION;
             this->actor.flags &= ~ACTOR_FLAG_10000;
             func_809CCE98(this, play);
+            break;
+
+        default:
             break;
     }
     if ((this->animIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {

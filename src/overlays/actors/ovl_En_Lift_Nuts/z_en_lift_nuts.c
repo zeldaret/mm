@@ -201,7 +201,7 @@ void func_80AE9BCC(EnLiftNuts* this, PlayState* play) {
         (this->actionFunc != func_80AEACF8) && (this->actionFunc != func_80AEAC64) &&
         (this->actionFunc != func_80AEA044) && (this->actionFunc != func_80AEB598) &&
         (this->actionFunc != func_80AEB698) && !func_80AE9B4C(0, 3) && (func_80AE9B8C() == 3) &&
-        (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && (this->actor.xzDistToPlayer < 150.0f)) {
+        (GET_PLAYER_FORM == PLAYER_FORM_DEKU) && (this->actor.xzDistToPlayer < 150.0f)) {
         func_80AEB828(this);
     }
 }
@@ -322,7 +322,7 @@ void func_80AEA1A0(EnLiftNuts* this, PlayState* play) {
         func_80AE9FC8(this);
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             if (func_80AE9B4C(0, 0)) {
                 switch (CURRENT_DAY) {
                     case 1:

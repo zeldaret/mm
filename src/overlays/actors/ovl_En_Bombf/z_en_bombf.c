@@ -477,8 +477,8 @@ void EnBombf_Draw(Actor* thisx, PlayState* play) {
 
         if (ENBOMBF_GET(&this->actor) != ENBOMBF_0) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000340);
-            gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000530);
+            gSPDisplayList(POLY_OPA_DISP++, gBombFlowerLeavesDL);
+            gSPDisplayList(POLY_OPA_DISP++, gBombFlowerBaseLeavesDL);
 
             Matrix_Translate(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(this->unk_204, this->unk_204, this->unk_204, MTXMODE_APPLY);
@@ -495,7 +495,7 @@ void EnBombf_Draw(Actor* thisx, PlayState* play) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gfx));
         }
 
-        gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000408);
+        gSPDisplayList(POLY_OPA_DISP++, gBombFlowerBombAndSparkDL);
     } else {
         Collider_UpdateSpheres(0, &this->colliderJntSph);
     }

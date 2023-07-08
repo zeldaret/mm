@@ -135,6 +135,9 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 5:
                 func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
+
+            default:
+                break;
         }
     } else {
         func_809592E0(this, 0);
@@ -144,7 +147,7 @@ void func_8095954C(EnMk* this, PlayState* play) {
 void func_80959624(EnMk* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -209,7 +212,7 @@ void func_80959844(EnMk* this, PlayState* play) {
     } else if (func_80959524(play) >= 7) {
         textId = 0xFB3;
     } else {
-        switch (gSaveContext.save.playerForm) {
+        switch (GET_PLAYER_FORM) {
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_10)) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -411,7 +414,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
     if (func_800B8718(&this->actor, &play->state)) {
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80959D28;
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.csId = this->csIdList[0];
             SET_WEEKEVENTREG(WEEKEVENTREG_20_40);
             Item_Give(play, ITEM_SONG_NOVA);

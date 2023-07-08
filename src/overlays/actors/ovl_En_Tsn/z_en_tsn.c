@@ -160,7 +160,7 @@ void func_80ADFF84(EnTsn* this, PlayState* play) {
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
         textId = 0x107E;
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_80)) {
             textId = 0x1083;
         } else {
@@ -324,7 +324,7 @@ void func_80AE04FC(EnTsn* this, PlayState* play) {
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
             this->actionFunc = func_80AE0704;
-            if (itemAction == PLAYER_IA_PICTO_BOX) {
+            if (itemAction == PLAYER_IA_PICTOGRAPH_BOX) {
                 if (CHECK_QUEST_ITEM(QUEST_PICTOGRAPH)) {
                     if (Snap_CheckFlag(PICTO_VALID_PIRATE_GOOD)) {
                         player->actor.textId = 0x107B;

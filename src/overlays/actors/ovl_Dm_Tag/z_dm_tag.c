@@ -154,7 +154,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 6:
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
@@ -168,7 +168,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
 s32 func_80C227E8(DmTag* this, PlayState* play) {
     if (this->unk_1A4 == 0) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;

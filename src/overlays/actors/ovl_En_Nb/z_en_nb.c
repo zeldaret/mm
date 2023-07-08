@@ -724,7 +724,7 @@ void EnNb_Update(Actor* thisx, PlayState* play) {
         EnNb_UpdateSkelAnime(this);
         func_80BC0800(this);
         if (Actor_IsFacingPlayer(&this->actor, 0x38E0)) {
-            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA,
+            func_8013C964(&this->actor, play, this->unk_274, 30.0f, ITEM_OCARINA_OF_TIME,
                           this->stateFlags & (EN_NB_FLAG_1 | EN_NB_FLAG_2 | EN_NB_FLAG_4));
         }
         func_80BBFF24(this, play);

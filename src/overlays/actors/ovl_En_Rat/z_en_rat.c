@@ -700,7 +700,7 @@ void EnRat_ChasePlayer(EnRat* this, PlayState* play) {
         func_800B1210(play, &this->actor.world.pos, &sDustVelocity, &gZeroVec3f, 550, 50);
     }
 
-    if ((this->actor.floorPoly == NULL) && (Animation_OnFrame(&this->skelAnime, 0.0f))) {
+    if ((this->actor.floorPoly == NULL) && Animation_OnFrame(&this->skelAnime, 0.0f)) {
         EnRat_SpawnWaterEffects(this, play);
     }
 

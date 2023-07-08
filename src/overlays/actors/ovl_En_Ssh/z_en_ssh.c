@@ -6,6 +6,7 @@
 
 #include "z_en_ssh.h"
 #include "objects/object_ssh/object_ssh.h"
+#include "objects/object_st/object_st.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -627,8 +628,10 @@ void EnSsh_SetColliders(EnSsh* this, PlayState* play) {
 }
 
 void EnSsh_Init(Actor* thisx, PlayState* play) {
-    // @bug - this symbol no longer exists, reads from a random place in object_ssh_Tex_000190 instead
-    f32 frameCount = Animation_GetLastFrame(&D_06000304);
+    //! @bug: object_st_Anim_000304 is similar if not idential to object_ssh_Anim_001494.
+    //! They also shared the same offset into their respective object files in OoT.
+    //! However since object_ssh is the one loaded, this ends up reading garbage data from within object_ssh_Tex_000190.
+    f32 frameCount = Animation_GetLastFrame(&object_st_Anim_000304);
     s32 pad;
     EnSsh* this = THIS;
 

@@ -905,7 +905,7 @@ void EnGeg_Update(Actor* thisx, PlayState* play) {
     func_80BB1FCC(this, play);
     func_80BB2088(this, play);
     func_80BB1C8C(this);
-    SubS_FillLimbRotTables(play, this->unk_238, this->unk_232, ARRAY_COUNT(this->unk_238));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGEG_FIDGET_TABLE_LEN);
     func_80BB1D04(this);
     func_80BB178C(this, play);
 }

@@ -390,8 +390,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     }
 
     if (play->msgCtx.ocarinaMode == 3) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                 this->csIdIndex = HG_CS_SONG_OF_HEALING;
             } else {

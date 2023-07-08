@@ -608,7 +608,7 @@ void EnMa4_ChooseNextDialogue(EnMa4* this, PlayState* play) {
                 break;
 
             case 0x3358:
-                if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) || !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
+                if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) || !CHECK_QUEST_ITEM(QUEST_SONG_EPONA)) {
                     Message_StartTextbox(play, 0x335C, &this->actor);
                     this->textId = 0x335C;
                     Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
@@ -883,7 +883,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
 
     switch (this->type) {
         case MA4_TYPE_DAY1:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);
@@ -939,7 +939,7 @@ void EnMa4_StartDialogue(EnMa4* this, PlayState* play) {
             break;
 
         case MA4_TYPE_ALIENS_DEFEATED:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_21_80)) {
                     EnMa4_SetFaceExpression(this, 3, 3);
                     Message_StartTextbox(play, 0x3337, &this->actor);

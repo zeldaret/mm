@@ -30,7 +30,7 @@ ActorInit En_Tanron1_InitVars = {
     (ActorFunc)EnTanron1_Draw,
 };
 
-static u64 sPad = { 0 };
+static s32 sPad = 0;
 
 #include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
@@ -149,7 +149,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+    if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
         this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
         this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
         this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;

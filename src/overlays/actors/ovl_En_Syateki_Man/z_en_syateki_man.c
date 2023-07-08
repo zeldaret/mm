@@ -50,10 +50,41 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play);
 #define TALK_FLAG_SWAMP_HAS_SPOKEN_WITH_HUMAN (1 << 0)
 #define TALK_FLAG_SWAMP_HAS_EXPLAINED_THE_RULES (1 << 1)
 
+// This defines the configuration of a single wave of Octoroks in the Town Shooting Gallery. These are
+// arranged in the same columns and rows that appear in-game; the player stands in the center column, and
+// the Octorok with an index of 7 appears directly in front of them like so:
+// 0     1     2
+// 3     4     5
+// 6     7     8
+//     Player
 #define OCTO_FLAGS(type0, type1, type2, type3, type4, type5, type6, type7, type8)           \
     (SG_OCTO_SET_FLAG(type0, 0) | SG_OCTO_SET_FLAG(type1, 1) | SG_OCTO_SET_FLAG(type2, 2) | \
      SG_OCTO_SET_FLAG(type3, 3) | SG_OCTO_SET_FLAG(type4, 4) | SG_OCTO_SET_FLAG(type5, 5) | \
      SG_OCTO_SET_FLAG(type6, 6) | SG_OCTO_SET_FLAG(type7, 7) | SG_OCTO_SET_FLAG(type8, 8))
+
+// These defines assume that sNormalSwampTargetActorList is used to spawn actors and that the logic of
+// EnSyatekiMan_Swamp_RunGame is not modified; in other words, it assumes that each wave consists of five
+// Deku Scrubs that the player must shoot and three Guays that the player can either shoot or let escape.
+// Once all Deku Scrubs and Guays have been shot or escape, the next wave starts.
+#define SG_SWAMP_WAVE_COUNT 4
+#define SG_SWAMP_DEKUS_PER_WAVE 5
+#define SG_SWAMP_GUAYS_PER_WAVE 3
+#define SG_SWAMP_BONUS_DEKU_COUNT 2
+
+// This is the score the player will receive if they hit every single Deku Scrub (both normal and bonus), Guay, and
+// Wolfos. There are two conditions for a Wolfos to appear, hence why their point value appears twice; one Wolfos
+// will appear after shooting two waves of Deku Scrubs, and one Wolfos will appear after shooting one wave of Guays.
+// Assuming the point values, actor list, and shooting game logic are unmodified, this should total to 2120 points.
+#define SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS                                                     \
+    (SG_POINTS_DEKU_NORMAL * (SG_SWAMP_DEKUS_PER_WAVE * SG_SWAMP_WAVE_COUNT) +                   \
+     SG_POINTS_GUAY * (SG_SWAMP_GUAYS_PER_WAVE * SG_SWAMP_WAVE_COUNT) +                          \
+     SG_POINTS_DEKU_BONUS * SG_SWAMP_BONUS_DEKU_COUNT + SG_POINTS_WOLFOS * SG_SWAMP_WAVE_COUNT + \
+     SG_POINTS_WOLFOS * (SG_SWAMP_WAVE_COUNT / 2))
+
+// To obtain the Heart Piece from the Swamp Shooting Gallery, the player not only needs to achieve a perfect score,
+// but they must also have at least six seconds remaining on the minigame timer. If the player has already obtained
+// the Heart Piece, then this score will be used instead to determine if the player should get a Purple Rupee.
+#define SG_SWAMP_HEART_PIECE_SCORE (SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS + (6 * SG_BONUS_POINTS_PER_SECOND))
 
 ActorInit En_Syateki_Man_InitVars = {
     ACTOR_EN_SYATEKI_MAN,
@@ -68,22 +99,23 @@ ActorInit En_Syateki_Man_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE,
-    /* 1 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_LOOP,
-    /* 2 */ EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END
-} EnSyatekiManAnimation;
+    /* 0 */ SG_MAN_ANIM_HANDS_ON_TABLE,
+    /* 1 */ SG_MAN_ANIM_HEAD_SCRATCH_LOOP,
+    /* 2 */ SG_MAN_ANIM_HEAD_SCRATCH_END
+} ShootingGalleryManAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
-    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gSwampShootingGalleryManHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gSwampShootingGalleryManHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
+    { &gBurlyGuyHandsOnTableAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // SG_MAN_ANIM_HANDS_ON_TABLE
+    { &gBurlyGuyHeadScratchLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f }, // SG_MAN_ANIM_HEAD_SCRATCH_LOOP
+    { &gBurlyGuyHeadScratchEndAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // SG_MAN_ANIM_HEAD_SCRATCH_END
 };
 
 /**
  * In the Swamp Shooting Gallery, there are four waves of Guays.
  * For each wave, these flags are used to control which Guays appear.
+ * The number of flags per wave should be exactly SG_SWAMP_GUAYS_PER_WAVE for all waves.
  */
-static s16 sGuayFlagsPerWave[] = {
+static s16 sGuayFlagsPerWave[SG_SWAMP_WAVE_COUNT] = {
     (1 << 7) | (1 << 6) | (1 << 0),
     (1 << 9) | (1 << 8) | (1 << 1),
     (1 << 4) | (1 << 3) | (1 << 0),
@@ -97,32 +129,25 @@ typedef struct {
 } SwampTargetActorEntry; // size = 0x14
 
 static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 0) },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 2, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 3, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 4, EN_SYATEKI_DEKUNUTS_TYPE_NORMAL) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(5, 2, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(6, 0, 1) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(7, 0, 2) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(8, 0, 1) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(9, 0, 2) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(1, 3, 0) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(0, 2, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 0, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 1, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 2, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 3, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 4, SG_DEKU_TYPE_NORMAL) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 0, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 1, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(1, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(2, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(3, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(4, 2, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(5, 2, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(6, 0, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(7, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(8, 0, 1) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(9, 0, 2) },
 };
 
 /**
@@ -130,22 +155,20 @@ static SwampTargetActorEntry sNormalSwampTargetActorList[] = {
  * Without any "normal" Deku Scrubs, the game will not progress beyond the first wave.
  */
 static SwampTargetActorEntry sUnusedSwampTargetActorList[] = {
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 0) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 0) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 0, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f,
-      EN_SYATEKI_DEKUNUTS_PARAMS(0, 1, EN_SYATEKI_DEKUNUTS_TYPE_BONUS) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 2) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 2) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(0, 0, 3) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(1, 0, 3) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 3) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(2, 0, 4) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(3, 0, 4) },
-    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_CROW_PARAMS(4, 2, 4) },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(0, 2, 5) },
-    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, EN_SYATEKI_WF_PARAMS(1, 3, 6) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(0, 0, 0) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(1, 0, 0) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 0, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_DEKUNUTS, -1000.0f, 200.0f, -700.0f, SG_DEKU_PARAMS(0, 1, SG_DEKU_TYPE_BONUS) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(2, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(3, 0, 2) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(0, 0, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(1, 0, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(4, 2, 3) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(2, 0, 4) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(3, 0, 4) },
+    { ACTOR_EN_SYATEKI_CROW, -1000.0f, 200.0f, -700.0f, SG_GUAY_PARAMS(4, 2, 4) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(0, 2, 5) },
+    { ACTOR_EN_SYATEKI_WF, -1000.0f, 200.0f, -700.0f, SG_WOLFOS_PARAMS(1, 3, 6) },
 };
 
 static SwampTargetActorEntry* sSwampTargetActorLists[] = {
@@ -179,14 +202,14 @@ void EnSyatekiMan_Swamp_SpawnTargetActors(EnSyatekiMan* this, PlayState* play2, 
 void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     EnSyatekiMan* this = THIS;
     s32 pad;
-    Path* path = &play->setupPathList[EN_SYATEKI_MAN_GET_PATH_INDEX(&this->actor)];
+    Path* path = &play->setupPathList[SG_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
     this->actor.targetMode = TARGET_MODE_1;
     Actor_SetScale(&this->actor, 0.01f);
     if (play->sceneId == SCENE_SYATEKI_MORI) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gSwampShootingGalleryManHeadScratchLoopAnim,
-                           this->jointTable, this->morphTable, BURLY_GUY_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHeadScratchLoopAnim, this->jointTable,
+                           this->morphTable, BURLY_GUY_LIMB_MAX);
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHandsOnTableAnim, this->jointTable,
                            this->morphTable, BURLY_GUY_LIMB_MAX);
@@ -197,7 +220,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     this->shootingGameState = SG_GAME_STATE_NONE;
     this->talkWaitTimer = 15;
     this->flagsIndex = 0;
-    this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
+    this->lastHitOctorokType = SG_OCTO_TYPE_NONE;
     this->octorokFlags = 0;
     this->dekuScrubFlags = 0;
     this->guayFlags = 0;
@@ -265,7 +288,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         u16 faceReactionTextId;
 
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_SWAMP_HEAD_SCRATCH_END);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HEAD_SCRATCH_END);
         faceReactionTextId = Text_GetFaceReaction(play, FACE_REACTION_SET_SWAMP_SHOOTING_GALLERY_MAN);
         if (faceReactionTextId != 0) {
             Message_StartTextbox(play, faceReactionTextId, &this->actor);
@@ -482,15 +505,15 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
             break;
     }
 
-    if (this->skelAnime.animation == &gSwampShootingGalleryManHeadScratchEndAnim) {
+    if (this->skelAnime.animation == &gBurlyGuyHeadScratchEndAnim) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_SYATEKI_MAN_ANIM_HANDS_ON_TABLE);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, SG_MAN_ANIM_HANDS_ON_TABLE);
         }
     }
 }
 
 void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
+    switch (GET_PLAYER_FORM) {
         case PLAYER_FORM_HUMAN:
             Flags_SetAllTreasure(play, Flags_GetAllTreasure(play) + 1);
             if (CURRENT_DAY != 3) {
@@ -586,6 +609,9 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
                 Message_StartTextbox(play, 0x3F5, &this->actor);
                 this->prevTextId = 0x3F5;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -858,20 +884,22 @@ void EnSyatekiMan_Swamp_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_59_10);
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02) && (this->score >= 2180)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_32_02);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE);
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE) &&
+                   (this->score >= SG_SWAMP_HEART_PIECE_SCORE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE);
         }
 
         this->actor.parent = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_GiveReward;
     } else {
-        if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_10)) {
+        if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
             Actor_OfferGetItem(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
-        } else if (this->score < 2180) {
+        } else if (this->score < SG_SWAMP_HEART_PIECE_SCORE) {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 500.0f, 100.0f);
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_02)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_SWAMP_SHOOTING_GALLERY_HEART_PIECE)) {
             Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
@@ -913,14 +941,14 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         if (this->prevTextId == 0x407) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_59_20);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE);
             }
         }
 
         if ((this->prevTextId == 0x405) || (this->prevTextId == 0x406)) {
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04)) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_32_04);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE);
             }
         }
 
@@ -928,12 +956,13 @@ void EnSyatekiMan_Town_SetupGiveReward(EnSyatekiMan* this, PlayState* play) {
         this->actionFunc = EnSyatekiMan_Town_GiveReward;
     } else {
         if (this->prevTextId == 0x407) {
-            if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
+            if ((CUR_UPG_VALUE(UPG_QUIVER) < 3) &&
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
                 Actor_OfferGetItem(&this->actor, play, GI_QUIVER_30 + CUR_UPG_VALUE(UPG_QUIVER), 500.0f, 100.0f);
             } else {
                 Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_32_04)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_HEART_PIECE)) {
             Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
         } else {
             Actor_OfferGetItem(&this->actor, play, GI_RUPEE_HUGE, 500.0f, 100.0f);
@@ -1012,11 +1041,11 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
         this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         this->guayFlags = 0;
         this->wolfosFlags = 0;
-        this->perGameVar1.guaySpawnTimer = 0;
+        this->guayAppearTimer = 0;
         this->dekuScrubHitCounter = 0;
         this->guayHitCounter = 0;
         this->currentWave = 0;
-        this->perGameVar2.bonusDekuScrubHitCounter = 0;
+        this->bonusDekuScrubHitCounter = 0;
         Interface_StartTimer(TIMER_ID_MINIGAME_1, 100);
         this->actor.draw = NULL;
         this->actionFunc = EnSyatekiMan_Swamp_RunGame;
@@ -1024,72 +1053,80 @@ void EnSyatekiMan_Swamp_StartGame(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Swamp_RunGame(EnSyatekiMan* this, PlayState* play) {
-    static s16 sHasSpawnedGuaysForThisWave = false;
+    static s16 sHasSignaledGuaysForThisWave = false;
     Player* player = GET_PLAYER(play);
 
-    if (((this->dekuScrubFlags == 0) || (this->perGameVar1.guaySpawnTimer > 140)) && !sHasSpawnedGuaysForThisWave &&
-        (this->currentWave < 4)) {
-        // Spawn three guays after the player has killed all Deku Scrubs, or after 140 frames.
-        sHasSpawnedGuaysForThisWave = true;
-        this->perGameVar1.guaySpawnTimer = 0;
+    if (((this->dekuScrubFlags == 0) || (this->guayAppearTimer > 140)) && !sHasSignaledGuaysForThisWave &&
+        (this->currentWave < SG_SWAMP_WAVE_COUNT)) {
+        // Make three Guays appear after the player has killed all Deku Scrubs, or after 140 frames.
+        sHasSignaledGuaysForThisWave = true;
+        this->guayAppearTimer = 0;
         Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
         this->guayFlags = sGuayFlagsPerWave[this->flagsIndex];
-        if (this->flagsIndex == 3) {
+        if (this->flagsIndex == ARRAY_COUNT(sGuayFlagsPerWave) - 1) {
             this->flagsIndex = 0;
         } else {
             this->flagsIndex++;
         }
-    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (sHasSpawnedGuaysForThisWave == true) &&
-               (this->currentWave < 4)) {
+    } else if ((this->guayFlags == 0) && (this->dekuScrubFlags == 0) && (sHasSignaledGuaysForThisWave == true) &&
+               (this->currentWave < SG_SWAMP_WAVE_COUNT)) {
         // Once all Deku Scrubs and Guays in this wave have either disappeared or died, move on to the next wave.
-        if (this->guayHitCounter < 3) {
+        if (this->guayHitCounter < SG_SWAMP_GUAYS_PER_WAVE) {
             this->guayHitCounter = 0;
         }
 
-        this->perGameVar1.guaySpawnTimer = 0;
-        sHasSpawnedGuaysForThisWave = false;
+        this->guayAppearTimer = 0;
+        sHasSignaledGuaysForThisWave = false;
         this->currentWave++;
-        if (this->currentWave < 4) {
+        if (this->currentWave < SG_SWAMP_WAVE_COUNT) {
             this->dekuScrubFlags = (1 << 4) | (1 << 3) | (1 << 2) | (1 << 1) | (1 << 0);
         }
     }
 
-    if (this->guayHitCounter == 3) {
+    // Makes a Wolfos appear after the player has shot all the Guays in the current wave.
+    if (this->guayHitCounter == SG_SWAMP_GUAYS_PER_WAVE) {
         this->guayHitCounter = 0;
         this->wolfosFlags |= 1;
     }
 
-    if (this->dekuScrubHitCounter == 10) {
+    // Makes a Wolfos appear after the player has shot two waves of Deku Scrubs.
+    if (this->dekuScrubHitCounter == SG_SWAMP_DEKUS_PER_WAVE * 2) {
         this->dekuScrubHitCounter = 0;
         this->wolfosFlags |= 2;
     }
 
-    this->perGameVar1.guaySpawnTimer++;
+    this->guayAppearTimer++;
 
     if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
+        // End the game because the timer ran out.
         gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= PLAYER_STATE1_20;
-        sHasSpawnedGuaysForThisWave = false;
+        sHasSignaledGuaysForThisWave = false;
         Audio_StopSubBgm();
         this->actionFunc = EnSyatekiMan_Swamp_EndGame;
-    } else if ((this->currentWave == 4) && (this->wolfosFlags == 0) &&
-               (this->perGameVar2.bonusDekuScrubHitCounter == 2)) {
+    } else if ((this->currentWave == SG_SWAMP_WAVE_COUNT) && (this->wolfosFlags == 0) &&
+               (this->bonusDekuScrubHitCounter == SG_SWAMP_BONUS_DEKU_COUNT)) {
+        // End the game because the player has nothing left to shoot. This doesn't mean the
+        // player actually hit everything, since Guays and Wolfos can escape.
         this->actor.draw = EnSyatekiMan_Draw;
         this->flagsIndex = 0;
         this->currentWave = 0;
         player->stateFlags1 |= PLAYER_STATE1_20;
-        sHasSpawnedGuaysForThisWave = false;
+        sHasSignaledGuaysForThisWave = false;
         Audio_StopSubBgm();
         this->shootingGameState = SG_GAME_STATE_GIVING_BONUS;
-        if (this->score == 2120) {
+
+        if (this->score == SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS) {
             Interface_SetPerfectLetters(play, PERFECT_LETTERS_TYPE_2);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_6;
             this->actionFunc = EnSyatekiMan_Swamp_AddBonusPoints;
         } else {
+            // If the player ran out of things to shoot but did *not* get a perfect score, then
+            // they must have missed a Guay or Wolfos at some point; don't award any bonus points.
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             this->actionFunc = EnSyatekiMan_Swamp_EndGame;
         }
@@ -1108,7 +1145,7 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
             }
 
             this->talkWaitTimer = 15;
-            if (this->score >= 2120) {
+            if (this->score >= SG_SWAMP_PERFECT_SCORE_WITHOUT_BONUS) {
                 // Perfect! Take this!
                 Message_StartTextbox(play, 0xA34, &this->actor);
                 this->prevTextId = 0xA34;
@@ -1162,8 +1199,8 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
             sBonusTimer = 0;
         } else if (sBonusTimer > 10) {
             gSaveContext.timerStopTimes[TIMER_ID_MINIGAME_1] += SECONDS_TO_TIMER(1);
-            play->interfaceCtx.minigamePoints += 10;
-            this->score += 10;
+            play->interfaceCtx.minigamePoints += SG_BONUS_POINTS_PER_SECOND;
+            this->score += SG_BONUS_POINTS_PER_SECOND;
             Actor_PlaySfx(&this->actor, NA_SE_SY_TRE_BOX_APPEAR);
             sBonusTimer = 0;
         } else {
@@ -1175,7 +1212,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Town_MovePlayerAndSayHighScore(EnSyatekiMan* this, PlayState* play) {
     Vec3f targetPlayerPos;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY) {
         targetPlayerPos = sTownFierceDeityPlayerPos;
     } else {
         targetPlayerPos = sTownPlayerPos;
@@ -1222,8 +1259,8 @@ void EnSyatekiMan_Town_StartGame(EnSyatekiMan* this, PlayState* play) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->score = 0;
         this->flagsIndex = 0;
-        this->perGameVar1.octorokState = SG_OCTO_STATE_INITIAL;
-        this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
+        this->octorokState = SG_OCTO_STATE_INITIAL;
+        this->lastHitOctorokType = SG_OCTO_TYPE_NONE;
         sGameStartTimer = 30;
         Interface_StartTimer(TIMER_ID_MINIGAME_1, 75);
         this->actor.draw = NULL;
@@ -1321,36 +1358,36 @@ void EnSyatekiMan_Town_RunGame(EnSyatekiMan* this, PlayState* play) {
 
         // Octoroks begin hiding four seconds after a wave begins.
         if (waveTimer < 100) {
-            this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
+            this->octorokState = SG_OCTO_STATE_HIDING;
         }
 
-        if (this->perGameVar2.lastHitOctorokType != SG_OCTO_TYPE_NONE) {
-            if (this->perGameVar2.lastHitOctorokType == SG_OCTO_TYPE_BLUE) {
+        if (this->lastHitOctorokType != SG_OCTO_TYPE_NONE) {
+            if (this->lastHitOctorokType == SG_OCTO_TYPE_BLUE) {
                 gSaveContext.timerTimeLimits[TIMER_ID_MINIGAME_1] -= SECONDS_TO_TIMER_PRECISE(2, 50);
                 sModFromLosingTime = (sModFromLosingTime + 25) % 50;
             }
 
-            this->perGameVar2.lastHitOctorokType = SG_OCTO_TYPE_NONE;
+            this->lastHitOctorokType = SG_OCTO_TYPE_NONE;
         }
 
-        if (this->perGameVar1.octorokState == SG_OCTO_STATE_APPEARING) {
-            this->perGameVar1.octorokState++;
+        if (this->octorokState == SG_OCTO_STATE_APPEARING) {
+            this->octorokState++;
         }
 
         // A new wave of Octoroks should appear every five seconds. However, we need to take into account
         // that the player might have lost time from hitting Blue Octoroks, so we do something similar to
         // what was done with waveTimer above.
-        if ((sModFromLosingTime == (timer % 50)) && (this->perGameVar1.octorokState >= SG_OCTO_STATE_INITIAL)) {
+        if ((sModFromLosingTime == (timer % 50)) && (this->octorokState >= SG_OCTO_STATE_INITIAL)) {
             if (this->flagsIndex < ARRAY_COUNT(sOctorokFlagsPerWave)) {
                 this->octorokFlags = sOctorokFlagsPerWave[this->flagsIndex++];
                 Actor_PlaySfx(&this->actor, NA_SE_SY_FOUND);
-                this->perGameVar1.octorokState = SG_OCTO_STATE_APPEARING;
+                this->octorokState = SG_OCTO_STATE_APPEARING;
             }
         }
 
         if (gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] == SECONDS_TO_TIMER(0)) {
             this->flagsIndex = 0;
-            this->perGameVar1.octorokState = SG_OCTO_STATE_HIDING;
+            this->octorokState = SG_OCTO_STATE_HIDING;
             gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_1] = SECONDS_TO_TIMER(0);
             gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
             player->stateFlags1 |= PLAYER_STATE1_20;
@@ -1374,7 +1411,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
             this->talkWaitTimer = 15;
             if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
                 if (GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_59_20)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
                         // You got a new record!
                         Message_StartTextbox(play, 0x407, &this->actor);
                         this->prevTextId = 0x407;

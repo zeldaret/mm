@@ -202,7 +202,7 @@ void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
     }
 
     EnZo_Blink(this, 3);
-    SubS_FillLimbRotTables(play, this->limbRotY, this->limbRotZ, 20);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ZORA_LIMB_MAX);
 }
 
 void EnZo_Walk(EnZo* this, PlayState* play) {
@@ -305,8 +305,8 @@ s32 EnZo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if ((limbIndex == ZORA_LIMB_TORSO) || (limbIndex == ZORA_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == ZORA_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->limbRotY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotZ[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     return false;
 }

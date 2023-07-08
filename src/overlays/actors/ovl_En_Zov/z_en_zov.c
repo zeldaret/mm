@@ -187,7 +187,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
         this->unk_320 &= ~2;
-        if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
             textId = 0x1024;
             if ((this->unk_322 == 0) || (this->unk_322 == 4)) {
                 func_80BD1570(this, 4, ANIMMODE_ONCE);
@@ -201,7 +201,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
             this->unk_320 |= 4;
             func_80BD1570(this, 3, ANIMMODE_ONCE);
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         func_80BD1570(this, 2, ANIMMODE_ONCE);
         this->actionFunc = func_80BD19FC;
         this->unk_324 = 10;
@@ -390,7 +390,7 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
 void func_80BD1D30(EnZov* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1032;
         } else {

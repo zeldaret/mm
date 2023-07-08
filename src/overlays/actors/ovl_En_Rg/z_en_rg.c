@@ -669,7 +669,7 @@ void func_80BF4EBC(EnRg* this, PlayState* play) {
             this->unk_318 = Rand_S16Offset(0, 20);
         }
     }
-    SubS_FillLimbRotTables(play, this->unk_32E, this->unk_328, ARRAY_COUNT(this->unk_328));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENRG_FIDGET_TABLE_LEN);
 }
 
 void func_80BF4FC4(EnRg* this, PlayState* play) {
@@ -823,29 +823,29 @@ void func_80BF547C(EnRg* this, PlayState* play) {
 
 s32 func_80BF5588(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnRg* this = THIS;
-    s32 phi_v0;
+    s32 fidgetIndex;
 
     switch (limbIndex) {
         case 10:
-            phi_v0 = 0;
+            fidgetIndex = 0;
             break;
 
         case 11:
-            phi_v0 = 1;
+            fidgetIndex = 1;
             break;
 
         case 14:
-            phi_v0 = 2;
+            fidgetIndex = 2;
             break;
 
         default:
-            phi_v0 = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if (((this->unk_310 & 8) != 0) && (phi_v0 < 9)) {
-        rot->y += (s16)(Math_SinS(this->unk_32E[phi_v0]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk_328[phi_v0]) * 200.0f);
+    if (((this->unk_310 & 8) != 0) && (fidgetIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

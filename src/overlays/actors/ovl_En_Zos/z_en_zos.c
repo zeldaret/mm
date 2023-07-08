@@ -214,7 +214,7 @@ void func_80BBB0D4(EnZos* this, PlayState* play) {
 void func_80BBB15C(EnZos* this, PlayState* play) {
     s32 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (this->unk_2B6 & 8) {
             textId = 0x1235;
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
@@ -499,7 +499,7 @@ void func_80BBB8AC(EnZos* this, PlayState* play) {
 void func_80BBBB84(EnZos* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1248, &this->actor);
             this->actionFunc = func_80BBB8AC;
             EnZos_ChangeAnim(this, EN_ZOS_ANIM_TALK_HANDS_ON_HIPS, ANIMMODE_LOOP);
@@ -587,7 +587,7 @@ void func_80BBBDE0(EnZos* this, PlayState* play) {
 void func_80BBBFBC(EnZos* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x125B;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_78_80)) {

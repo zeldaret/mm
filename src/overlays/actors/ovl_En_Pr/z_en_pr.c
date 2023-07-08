@@ -66,7 +66,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-f32 D_80A338C0[PLAYER_FORM_MAX] = { 30.0f, 30.0f, 30.0f, 15.0f, 15.0f };
+f32 D_80A338C0[PLAYER_FORM_MAX] = {
+    30.0f, // PLAYER_FORM_FIERCE_DEITY
+    30.0f, // PLAYER_FORM_GORON
+    30.0f, // PLAYER_FORM_ZORA
+    15.0f, // PLAYER_FORM_DEKU
+    15.0f, // PLAYER_FORM_HUMAN
+};
 
 ActorInit En_Pr_InitVars = {
     ACTOR_EN_PR,

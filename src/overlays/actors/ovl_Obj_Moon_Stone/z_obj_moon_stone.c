@@ -117,7 +117,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play) {
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            Actor_OfferGetItem(&this->actor, play, GI_MOON_TEAR, 100.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MOONS_TEAR, 100.0f, 30.0f);
         }
     }
 }

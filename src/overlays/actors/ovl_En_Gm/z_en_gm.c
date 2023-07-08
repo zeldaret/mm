@@ -1437,7 +1437,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             break;
     }
 
-    SubS_FillLimbRotTables(play, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 
     return false;
 }
@@ -1626,7 +1626,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
     }
-    SubS_FillLimbRotTables(play, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 }
 
 void func_80950F2C(EnGm* this, PlayState* play) {
@@ -1725,7 +1725,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
 s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnGm* this = THIS;
-    s32 phi_v0;
+    s32 fidgetIndex;
 
     if (limbIndex == 16) {
         func_8094F3D0(this, play);
@@ -1733,25 +1733,25 @@ s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     switch (limbIndex) {
         case 9:
-            phi_v0 = 0;
+            fidgetIndex = 0;
             break;
 
         case 10:
-            phi_v0 = 1;
+            fidgetIndex = 1;
             break;
 
         case 13:
-            phi_v0 = 2;
+            fidgetIndex = 2;
             break;
 
         default:
-            phi_v0 = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if ((this->unk_3A4 & 0x2000) && (phi_v0 < 9)) {
-        rot->y += (s16)(Math_SinS(this->unk_3D8[phi_v0]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk_3D2[phi_v0]) * 200.0f);
+    if ((this->unk_3A4 & 0x2000) && (fidgetIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;
