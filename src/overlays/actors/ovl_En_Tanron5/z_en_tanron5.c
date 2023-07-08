@@ -1,20 +1,21 @@
 /*
  * File: z_en_tanron5.c
  * Overlay: ovl_En_Tanron5
- * Description: Destructible props, fragments, and item drops in Twinmold's arena.
+ * Description: Destructible ruins, fragments, and item drops in Twinmold's arena.
  *
- * This actor is responsible for three different things, all of which can be further divided into more categories.
- * The main thing this actor handles are the destructible props in Twinmold's arena, of which there are two kinds.
- * There are pillars with Majora's Mask on them, and there are ruins in a roughly pyramidal shape. While both types
- * of prop behave in roughly the same way, how they implement this behavior can sometimes be quite different.
+ * This actor is responsible for three different interactive props in Twinmold's arena, all of which can be further
+ * divided into more categories. The main thing this actor handles are the destructible ruins placed around the arena,
+ * of which there are two kinds. There are pillars with Majora's Mask on them, and there are ruins in a roughly
+ * pyramidal shape. While both types of ruin behave in roughly the same way, how they implement this behavior can
+ * sometimes be quite different.
  *
- * When Twinmold or the player wearing the Giant's Mask hits one of these destructible props, various fragments
- * of the destroyed ruin fly off from the point of impact. These fragments are handled by this actor as well. The
- * fragments can be large or small, and the two sizes behave almost identically outside of two small differences.
- * Large fragments can damage the player and sink into the sand once they hit the ground, whereas small fragments
+ * When Twinmold or the player wearing the Giant's Mask hits one of these destructible ruins, various fragments
+ * of the ruin fly off from the point of impact. These fragments are handled by this actor as well. The fragments
+ * can be large or small, and the two sizes behave almost identically outside of two small differences. Large
+ * fragments can damage the player and sink into the sand once they hit the ground, whereas small fragments
  * deal no damage and despawn upon touching the ground.
  *
- * Sometimes, item drops can also appear when a destructible prop is hit; this actor is responsible for handling
+ * Sometimes, item drops can also appear when a destructible ruin is hit; this actor is responsible for handling
  * these drops too. There are drops that give the player 10 arrows, and drops that give the player a large amount
  * of magic, and these drops behave identically outside of what item they give when collected by the player.
  */
@@ -37,11 +38,11 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2);
 void EnTanron5_ItemDrop_Draw(Actor* thisx, PlayState* play);
 
 typedef enum {
-    /* 0 */ EN_TANRON5_ITEM_DROP_TYPE_10_ARROWS,
-    /* 1 */ EN_TANRON5_ITEM_DROP_TYPE_LARGE_MAGIC
-} EnTanron5ItemDropType;
+    /* 0 */ TWINMOLD_PROP_ITEM_DROP_TYPE_10_ARROWS,
+    /* 1 */ TWINMOLD_PROP_ITEM_DROP_TYPE_LARGE_MAGIC
+} TwinmoldPropItemDropType;
 
-s32 ruinFragmentItemDropCount = 0;
+s32 sFragmentAndItemDropCount = 0;
 
 ActorInit En_Tanron5_InitVars = {
     ACTOR_EN_TANRON5,
@@ -82,8 +83,8 @@ static ColliderCylinderInit sCylinderInit = {
 static f32 sGiantModeScaleFactor = 1.0f;
 
 /**
- * Stores the X and Z spawn positions all pillars and ruins. Their Y spawn position is determined
- * by the height of the floor, so there's no need to store it.
+ * Stores the X and Z spawn positions for all of the ruins. Their Y spawn position is determined by the
+ * height of the floor, so there's no need to store it.
  */
 static Vec2s sSpawnPositions[] = {
     { 1200, 2500 },  { -1200, 2500 },  { 1200, -2500 },  { -1200, -2500 }, { 2500, 1200 },
@@ -93,7 +94,7 @@ static Vec2s sSpawnPositions[] = {
 };
 
 /**
- * Display lists for all pillars and ruins.
+ * Display lists for all ruins.
  */
 static Gfx* sDLists[] = {
     gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
@@ -104,9 +105,9 @@ static Gfx* sDLists[] = {
 };
 
 /**
- * The initial base scale for all pillars and ruins. In the final game, this array isn't very
- * useful, since they're all the same value, but this could be used to make some pillars or
- * ruins larger or smaller than the others.
+ * The initial base scale for all ruins. In the final game, this array isn't very useful,
+ * since they're all the same value, but this could be used to make some ruins larger or
+ * smaller than the others.
  */
 static f32 sBaseScales[] = {
     0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f,
@@ -138,7 +139,7 @@ void EnTanron5_SpawnEffectSand(TwinmoldEffect* effect, Vec3f* pos, f32 scale) {
 }
 
 /**
- * Spawns the black dust that appears whenever part of a pillar or ruin is destroyed.
+ * Spawns the black dust that appears whenever part of a ruin is destroyed.
  */
 void EnTanron5_SpawnEffectBlackDust(TwinmoldEffect* effect, Vec3f* pos, f32 scale) {
     s16 i;
@@ -164,22 +165,22 @@ void EnTanron5_SpawnEffectBlackDust(TwinmoldEffect* effect, Vec3f* pos, f32 scal
 void EnTanron5_Init(Actor* thisx, PlayState* play) {
     EnTanron5* this = THIS;
 
-    if (EN_TANRON5_GET_TYPE(&this->actor) >= EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1) {
+    if (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_1) {
         // This is a ruin fragment or item drop; if there are more than 60 fragments or drops
         // already spawned, immediately kill this one. Otherwise, set up the fragment or drop
         // to fly off while spinning randomly.
-        ruinFragmentItemDropCount++;
-        if (ruinFragmentItemDropCount > 60) {
+        sFragmentAndItemDropCount++;
+        if (sFragmentAndItemDropCount > 60) {
             Actor_Kill(&this->actor);
             return;
         }
 
-        // ruinFragmentRotationalVelocityX is in a union with itemDropRotZ, so for item drops, this code
+        // fragmentRotationalVelocityX is in a union with itemDropRotZ, so for item drops, this code
         // will initialize its z-rotation to a random value.
-        this->ruinFragmentRotationalVelocityX = Rand_CenteredFloat(0x2000);
-        this->ruinFragmentRotationalVelocityY = Rand_CenteredFloat(0x2000);
+        this->fragmentRotationalVelocityX = Rand_CenteredFloat(0x2000);
+        this->fragmentRotationalVelocityY = Rand_CenteredFloat(0x2000);
 
-        if (EN_TANRON5_GET_TYPE(&this->actor) <= EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_7) {
+        if (TWINMOLD_PROP_GET_TYPE(&this->actor) <= TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_7) {
             Actor_SetScale(&this->actor, (Rand_ZeroFloat(0.025f) + 0.085f) * sGiantModeScaleFactor);
         } else {
             Actor_SetScale(&this->actor, (Rand_ZeroFloat(0.015f) + 0.01f) * sGiantModeScaleFactor);
@@ -191,7 +192,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
         this->actor.terminalVelocity = -1000.0f * sGiantModeScaleFactor;
         this->actor.update = EnTanron5_RuinFragmentItemDrop_Update;
 
-        if (EN_TANRON5_GET_TYPE(&this->actor) >= EN_TANRON5_TYPE_ITEM_DROP_1) {
+        if (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_ITEM_DROP_1) {
             this->actor.draw = EnTanron5_ItemDrop_Draw;
             this->itemDropType = Rand_ZeroFloat(1.999f);
             Actor_SetScale(&this->actor, sGiantModeScaleFactor * 0.03f);
@@ -201,15 +202,15 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             this->dList = gRuinFragmentDL;
             this->timer = 150;
         }
-    } else if (EN_TANRON5_GET_TYPE(&this->actor) == EN_TANRON5_TYPE_STATIC) {
+    } else if (TWINMOLD_PROP_GET_TYPE(&this->actor) == TWINMOLD_PROP_TYPE_STATIC) {
         EnTanron5* child;
         s32 i;
 
-        // Spawns all of the pillars and ruins in the right places. Gets killed after everything is spawned.
+        // Spawns all of the ruins in the right places. Gets killed after everything is spawned.
         for (i = 0; i < ARRAY_COUNT(sSpawnPositions); i++) {
             child = (EnTanron5*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, sSpawnPositions[i].x,
                                             this->actor.world.pos.y, sSpawnPositions[i].z, 0, Rand_ZeroFloat(0x10000),
-                                            0, EN_TANRON5_PARAMS(EN_TANRON5_TYPE_MAJORA_PILLAR_1 + i));
+                                            0, TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_RUIN_PILLAR_1 + i));
 
             child->actor.parent = this->actor.parent;
             child->baseScale = sBaseScales[i];
@@ -226,8 +227,8 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
 
         Actor_Kill(&this->actor);
     } else {
-        // This is a pillar or ruin; update its y-position to be just below the floor, so it looks
-        // like it's buried in the sand.
+        // This is a ruin; update its y-position to be just below the floor, so it looks like it's
+        // buried in the sand.
         Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
         this->actor.world.pos.y = this->actor.floorHeight + -20.0f;
     }
@@ -236,13 +237,13 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
 void EnTanron5_Destroy(Actor* thisx, PlayState* play) {
     EnTanron5* this = THIS;
 
-    if (EN_TANRON5_GET_TYPE(&this->actor) >= EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1) {
-        ruinFragmentItemDropCount--;
+    if (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_1) {
+        sFragmentAndItemDropCount--;
     }
 }
 
 /**
- * This is the update function for the destructible props (the Majora pillars and pyramid ruins).
+ * This is the update function for the destructible ruins (both the pillar and pyarmid ruins).
  */
 void EnTanron5_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
@@ -254,8 +255,8 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
     s32 fragmentAndItemCount;
     Vec3f pos;
 
-    // When a pillar or ruin is destroyed (i.e., it is hit three times), it will reduce its scale to 0.0f
-    // (making it effectively invisible and intangible), then wait an additional 37 frames before actually
+    // When a ruin is destroyed (i.e., it is hit three times), it will reduce its scale to 0.0f (making
+    // it effectively invisible and intangible), then wait an additional 37 frames before actually
     // calling Actor_Kill to despawn. The reason for this extra waiting period is unknown.
     if (this->hitCount >= 3) {
         this->hitCount++;
@@ -270,12 +271,12 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
     DECR(this->timer);
 
-    //! @bug This code will ensure sGiantModeScaleFactor is kept up-to-date so long as at least one pillar
-    //! or ruin is still active. However, once the last prop is destroyed, this code will no longer run, so
-    //! sGiantModeScaleFactor will get "stuck" at whatever its current value is. This is a problem, because
-    //! other instances of EnTanron5, like the item drops, rely on this variable being updated to function
-    //! properly. Getting in this "stuck" state can result in odd behavior for these other instances, like
-    //! item drops not being obtainable when the player is normal-sized.
+    //! @bug This code will keep sGiantModeScaleFactor up-to-date so long as at least one ruin is still active.
+    //! However, once the last ruin is destroyed, this code will no longer run, so sGiantModeScaleFactor will
+    //! get "stuck" at whatever its current value is. This is a problem, because other instances of EnTanron5,
+    //! like the item drops, rely on this variable being updated to function properly. Getting in this "stuck"
+    //! state can result in odd behavior for these other instances, like item drops not being obtainable when
+    //! the player is normal-sized.
     //!
     //! The strange waiting period before despawning seen above may be an attempt to mitigate this, but it
     //! doesn't work. It doesn't update sGiantModeScaleFactor, and even if it did, waiting 37 frames before
@@ -311,9 +312,9 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
             fragmentAndItemCount = 10;
 
             if (Play_InCsMode(play)) {
-                // In Twinmold's opening cutscene, it emerges from the sand beneath a pyramid ruin and destroys it.
-                // Setting the timer to 1 here allows Twinmold to hit the ruin every single frame during the cutscene,
-                // allowing it to destory the ruin in only 3 frames.
+                // In Twinmold's opening cutscene, it emerges from the sand beneath a ruin and destroys it.
+                // Setting the timer to 1 here allows Twinmold to hit the ruin every single frame during the
+                // cutscene, allowing it to destory the ruin in only 3 frames.
                 this->timer = 1;
             } else {
                 this->timer = 5;
@@ -333,7 +334,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                     for (i = 3; i < fragmentAndItemCount; i++) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, pos.x, pos.y, pos.z,
                                     Rand_ZeroFloat(0x10000), Rand_ZeroFloat(0x10000), 0,
-                                    EN_TANRON5_PARAMS(EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1 + i));
+                                    TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_1 + i));
                     }
 
                     for (i = 0; i < 6; i++) {
@@ -382,7 +383,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                         // zero, one, or two item drops, depending on the result of Rand_ZeroFloat above.
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, fragmentAndDustPos.x, fragmentAndDustPos.y,
                                     fragmentAndDustPos.z, Rand_ZeroFloat(0x10000), Rand_ZeroFloat(0x10000), 0,
-                                    EN_TANRON5_PARAMS(EN_TANRON5_TYPE_LARGE_RUIN_FRAGMENT_1 + i));
+                                    TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_1 + i));
 
                         if (i < 8) {
                             EnTanron5_SpawnEffectBlackDust(play->specialEffects, &fragmentAndDustPos,
@@ -391,9 +392,9 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                     }
                 }
 
-                // To better sell the illusion of the pillar or ruin being partially destroyed when it's
-                // hit (rather than just being pushed into the ground, which is what actually happens),
-                // this code will rotate the prop in a somewhat-random way.
+                // To better sell the illusion of the ruin being partially destroyed when it's hit
+                // rather than just being pushed into the ground (which is what actually happens),
+                // this code will rotate the ruin in a somewhat-random way.
                 if (Rand_ZeroOne() < 0.333f) {
                     yawDiff = 0x4000;
                 } else if (Rand_ZeroOne() < 0.5f) {
@@ -407,8 +408,8 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
                 Actor_RequestQuakeAndRumble(&this->actor, play, 4, 4);
                 this->hitCount++;
             } else {
-                // Something hit the pillar or ruin, but it wasn't Twinmold, and it wasn't the player while
-                // in giant mode. Play the reflect sound effect and spawn some sparks instead of breaking.
+                // Something hit the ruin, but it wasn't Twinmold, and it wasn't the player while in giant
+                // mode. Play the reflect sound effect and spawn some sparks instead of breaking.
                 Vec3f hitPos;
                 ColliderInfo* info = this->collider.info.acHitInfo;
 
@@ -457,7 +458,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 }
 
 /**
- * This is the update function for the fragments and the item drops that fly off from a destructible prop.
+ * This is the update function for the fragments and the item drops that fly off from a destructible ruin.
  */
 void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
     f32 interactionDistSq;
@@ -468,7 +469,7 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
 
     // When a ruin fragment hits the floor, it will slowly sink into the sand. After sinking for 38 frames,
     // the ruin fragment will despawn.
-    if ((EN_TANRON5_GET_TYPE(&this->actor) < EN_TANRON5_TYPE_ITEM_DROP_1) && (this->sinkTimer != 0)) {
+    if ((TWINMOLD_PROP_GET_TYPE(&this->actor) < TWINMOLD_PROP_TYPE_ITEM_DROP_1) && (this->sinkTimer != 0)) {
         this->sinkTimer++;
         this->actor.world.pos.y -= 2.0f * sGiantModeScaleFactor;
         if (this->sinkTimer == 40) {
@@ -487,13 +488,13 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
         Actor_UpdateBgCheckInfo(play, &this->actor, 50.0f, 150.0f, 100.0f, UPDBGCHECKINFO_FLAG_4);
     }
 
-    if (EN_TANRON5_GET_TYPE(&this->actor) < EN_TANRON5_TYPE_ITEM_DROP_1) {
-        this->actor.shape.rot.x += this->ruinFragmentRotationalVelocityX;
-        this->actor.shape.rot.y += this->ruinFragmentRotationalVelocityY;
+    if (TWINMOLD_PROP_GET_TYPE(&this->actor) < TWINMOLD_PROP_TYPE_ITEM_DROP_1) {
+        this->actor.shape.rot.x += this->fragmentRotationalVelocityX;
+        this->actor.shape.rot.y += this->fragmentRotationalVelocityY;
         interactionDistSq = SQ(35.0f);
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
-            if (EN_TANRON5_GET_TYPE(&this->actor) <= EN_TANRON5_TYPE_SMALL_RUIN_FRAGMENT_1) {
+            if (TWINMOLD_PROP_GET_TYPE(&this->actor) <= TWINMOLD_PROP_TYPE_FRAGMENT_SMALL_1) {
                 Math_Vec3f_Copy(&pos, &this->actor.world.pos);
                 pos.y = this->actor.floorHeight;
 
@@ -519,8 +520,8 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
 
     if (this->hitTimer == 0) {
         if ((sGiantModeScaleFactor > 0.5f) &&
-            ((EN_TANRON5_GET_TYPE(&this->actor) <= EN_TANRON5_TYPE_SMALL_RUIN_FRAGMENT_1) ||
-             (EN_TANRON5_GET_TYPE(&this->actor) >= EN_TANRON5_TYPE_ITEM_DROP_1))) {
+            ((TWINMOLD_PROP_GET_TYPE(&this->actor) <= TWINMOLD_PROP_TYPE_FRAGMENT_SMALL_1) ||
+             (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_ITEM_DROP_1))) {
             Player* player = GET_PLAYER(play);
             Vec3f pos;
 
@@ -529,8 +530,8 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
             pos.z = player->actor.world.pos.z - this->actor.world.pos.z;
 
             if (SQXYZ(pos) < interactionDistSq) {
-                if (EN_TANRON5_GET_TYPE(&this->actor) >= EN_TANRON5_TYPE_ITEM_DROP_1) {
-                    if (this->itemDropType == EN_TANRON5_ITEM_DROP_TYPE_10_ARROWS) {
+                if (TWINMOLD_PROP_GET_TYPE(&this->actor) >= TWINMOLD_PROP_TYPE_ITEM_DROP_1) {
+                    if (this->itemDropType == TWINMOLD_PROP_ITEM_DROP_TYPE_10_ARROWS) {
                         Item_Give(play, ITEM_ARROWS_10);
                     } else {
                         Item_Give(play, ITEM_MAGIC_LARGE);
@@ -582,7 +583,7 @@ void EnTanron5_ItemDrop_Draw(Actor* thisx, PlayState* play) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
-        if (this->itemDropType == EN_TANRON5_ITEM_DROP_TYPE_10_ARROWS) {
+        if (this->itemDropType == TWINMOLD_PROP_ITEM_DROP_TYPE_10_ARROWS) {
             texture = gDropArrows1Tex;
         } else {
             texture = gDropMagicLargeTex;

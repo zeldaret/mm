@@ -15917,7 +15917,7 @@
     0x80BE48AC:("D_80BE48AC","f32","",0x4),
     0x80BE48B0:("D_80BE48B0","f32","",0x4),
     0x80BE48B4:("D_80BE48B4","f32","",0x4),
-    0x80BE5D80:("ruinFragmentItemDropCount","UNK_TYPE4","",0x4),
+    0x80BE5D80:("sFragmentAndItemDropCount","UNK_TYPE4","",0x4),
     0x80BE5D84:("En_Tanron5_InitVars","UNK_TYPE1","",0x1),
     0x80BE5DA4:("D_80BE5DA4","UNK_TYPE1","",0x1),
     0x80BE5DD0:("sGiantModeScaleFactor","f32","",0x4),
