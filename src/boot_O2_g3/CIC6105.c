@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fault.h"
 
 UNK_TYPE4 D_8009BE30;
 UNK_TYPE4 D_8009BE34;
@@ -17,7 +18,7 @@ void CIC6105_PrintRomInfo(void) {
 }
 
 void CIC6105_AddRomInfoFaultPage(void) {
-    Fault_AddClient(&romInfoFaultClient, CIC6105_PrintRomInfo, 0, 0);
+    Fault_AddClient(&romInfoFaultClient, (void*)CIC6105_PrintRomInfo, NULL, NULL);
 }
 
 void CIC6105_RemoveRomInfoFaultPage(void) {
