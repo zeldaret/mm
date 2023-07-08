@@ -4,6 +4,7 @@
  */
 
 #include "global.h"
+#include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
 #include "z64horse.h"
