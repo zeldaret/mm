@@ -1,4 +1,5 @@
 #include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
