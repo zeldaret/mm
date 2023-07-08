@@ -235,8 +235,6 @@ void func_80B3415C(EnKbt* this) {
 }
 
 void func_80B34314(EnKbt* this, PlayState* play) {
-    s32 playerForm;
-
     func_80B34078(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -250,10 +248,9 @@ void func_80B34314(EnKbt* this, PlayState* play) {
     } else if (this->actor.xzDistToPlayer < 250.0f) {
         if ((this->unk_278 != NULL) && (this->unk_278->xzDistToPlayer < 250.0f)) {
             if (this->unk_27C & 4) {
-                playerForm = gSaveContext.save.playerForm;
-                if (((playerForm ^ 0) != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
-                                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
-                                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
+                if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
+                                                               (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
+                                                               (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
                     this->actor.textId = 0xC38;
                 } else if (CURRENT_DAY == 3) {
                     this->actor.textId = 0xC39;
@@ -264,17 +261,27 @@ void func_80B34314(EnKbt* this, PlayState* play) {
                 }
             }
 
-            if (this->actor.textId != 0xC37) {
-                if (((this->actor.textId == 0xC4E) || (this->actor.textId == 0xC4F) || (this->actor.textId == 0xC50)) &&
-                    (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
-                    this->actor.textId = 0xC37;
-                }
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-                if (func_80B33E8C(play)) {
-                    this->actor.textId = 0xC50;
-                } else {
-                    this->actor.textId = 0xC4E;
-                }
+            switch (this->actor.textId) {
+                case 0xC4E:
+                case 0xC4F:
+                case 0xC50:
+                    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+                        this->actor.textId = 0xC37;
+                    }
+                    break;
+
+                case 0xC37:
+                    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
+                        if (func_80B33E8C(play)) {
+                            this->actor.textId = 0xC50;
+                        } else {
+                            this->actor.textId = 0xC4E;
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
             func_800B8614(&this->actor, play, 260.0f);
         }

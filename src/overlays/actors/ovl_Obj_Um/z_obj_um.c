@@ -911,7 +911,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;

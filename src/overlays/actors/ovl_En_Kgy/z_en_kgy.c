@@ -361,7 +361,7 @@ void func_80B413C8(EnKgy* this) {
 }
 
 s32 func_80B41460(void) {
-    if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
+    if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) ||
         ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) && (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
          (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
         return 0xC38;

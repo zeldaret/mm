@@ -111,7 +111,7 @@ void func_809616E0(EnFu* this, PlayState* play) {
     s16 spA0 = false;
     Vec3f sp94;
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && (CURRENT_DAY == 3)) {
         spA0 = true;
     }
     this->unk_54C = 0;
@@ -385,7 +385,7 @@ void func_80962340(EnFu* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (this->unk_54A == 2) {
             if (this->unk_552 == 0x287D) {
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+                if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                     Message_StartTextbox(play, 0x287E, &this->actor);
                     this->unk_552 = 0x287E;
                 } else if ((CURRENT_DAY == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10) &&
@@ -653,7 +653,7 @@ void func_80962A10(EnFu* this, PlayState* play) {
         this->unk_546 = 1;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_DEKU) && gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_DEKU) && gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
@@ -748,7 +748,7 @@ void func_80962F4C(EnFu* this, PlayState* play) {
 
     switch (this->unk_542) {
         case 0:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
                 player->stateFlags3 |= PLAYER_STATE3_400;
             }
             break;
@@ -821,7 +821,7 @@ void func_8096326C(EnFu* this, PlayState* play) {
 }
 
 void func_809632D0(EnFu* this) {
-    if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
         Interface_SetHudVisibility(HUD_VISIBILITY_ALL);
     }
 
@@ -897,7 +897,7 @@ void func_80963630(EnFu* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_10) && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_20) && (CURRENT_DAY == 3) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_40)) {
                 Message_StartTextbox(play, 0x2884, &this->actor);
                 this->unk_552 = 0x2884;
@@ -918,7 +918,7 @@ void func_80963630(EnFu* this, PlayState* play) {
         this->actor.child->freezeTimer = 0;
         func_809628BC(this);
 
-        if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             switch (CURRENT_DAY) {
                 case 1:
                     SET_WEEKEVENTREG(WEEKEVENTREG_22_10);
@@ -1016,7 +1016,7 @@ s32 func_809638F8(PlayState* play) {
 void func_809639D0(EnFu* this, PlayState* play) {
     switch (CURRENT_DAY) {
         case 1:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
                 if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
                     Message_StartTextbox(play, 0x2853, &this->actor);
                     this->unk_552 = 0x2853;
@@ -1038,7 +1038,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
             break;
 
         case 2:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 Message_StartTextbox(play, 0x286F, &this->actor);
                 this->unk_552 = 0x286F;
             } else if (CUR_UPG_VALUE(UPG_BOMB_BAG) == 0) {
@@ -1067,8 +1067,8 @@ void func_809639D0(EnFu* this, PlayState* play) {
             break;
 
         case 3:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-                if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+                if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                     func_80963EAC(this, play);
                 } else {
                     Message_StartTextbox(play, 0x2841, &this->actor);
@@ -1118,7 +1118,7 @@ void func_809639D0(EnFu* this, PlayState* play) {
 void func_80963DE4(EnFu* this, PlayState* play) {
     switch (this->unk_542) {
         case 0:
-            if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
                 Message_StartTextbox(play, 0x2875, &this->actor);
                 this->unk_552 = 0x2875;
             } else {
