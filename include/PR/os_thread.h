@@ -73,13 +73,13 @@ typedef struct OSThread {
 #define OS_PRIORITY_THREADTAIL -1
 
 
-void osCreateThread(OSThread* t, OSId id, void* entry, void* arg, void* sp, OSPri p);
+void osCreateThread(OSThread* thread, OSId id, void* entry, void* arg, void* sp, OSPri p);
 void osDestroyThread(OSThread* t);
 void osYieldThread(void);
 void osStartThread(OSThread* t);
 void osStopThread(OSThread* t);
 OSId osGetThreadId(OSThread* t);
-void osSetThreadPri(OSThread* t, OSPri p);
+void osSetThreadPri(OSThread* thread, OSPri p);
 OSPri osGetThreadPri(OSThread* t);
 
 // internal
