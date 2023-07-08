@@ -1470,10 +1470,9 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
     EnFsn* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-
-    // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
     SkelAnime_InitFlex(play, &this->skelAnime, &gFsnSkel, &gFsnIdleAnim, this->jointTable, this->morphTable,
-                       FSN_LIMB_MAX + 1);
+                       ENFSN_LIMB_MAX);
+
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
         this->actor.flags &= ~ACTOR_FLAG_1;
@@ -1508,7 +1507,7 @@ void EnFsn_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->unk27A, this->actor.focus.pos);
-    SubS_FillLimbRotTables(play, this->limbRotYTable, this->limbRotZTable, ARRAY_COUNT(this->limbRotYTable));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENFSN_LIMB_MAX);
     EnFsn_Blink(this);
     if (ENFSN_IS_SHOP(&this->actor) && EnFsn_HasItemsToSell()) {
         EnFsn_UpdateJoystickInputState(this, play);
@@ -1630,7 +1629,7 @@ void EnFsn_DrawStickDirectionPrompts(EnFsn* this, PlayState* play) {
 
 s32 EnFsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFsn* this = THIS;
-    s32 limbRotTableIdx;
+    s32 fidgetIndex;
 
     if (limbIndex == FSN_LIMB_HEAD) {
         Matrix_RotateXS(this->headRot.y, MTXMODE_APPLY);
@@ -1638,24 +1637,24 @@ s32 EnFsn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     if (ENFSN_IS_BACKROOM(&this->actor)) {
         switch (limbIndex) {
             case FSN_LIMB_TORSO:
-                limbRotTableIdx = 0;
+                fidgetIndex = 0;
                 break;
 
             case FSN_LIMB_LEFT_HAND:
-                limbRotTableIdx = 1;
+                fidgetIndex = 1;
                 break;
 
             case FSN_LIMB_HEAD:
-                limbRotTableIdx = 2;
+                fidgetIndex = 2;
                 break;
 
             default:
-                limbRotTableIdx = 9;
+                fidgetIndex = 9;
                 break;
         }
-        if (limbRotTableIdx < 9) {
-            rot->y += (s16)(Math_SinS(this->limbRotYTable[limbRotTableIdx]) * 200.0f);
-            rot->z += (s16)(Math_CosS(this->limbRotZTable[limbRotTableIdx]) * 200.0f);
+        if (fidgetIndex < 9) {
+            rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+            rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
         }
     }
     if (limbIndex == FSN_LIMB_TOUPEE) {

@@ -256,7 +256,7 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
 
 void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             if (TIMETAG_DIARY_GET_TYPE(&this->actor) == TIMETAG_DIARY_LULU) {
                 Message_StartTextbox(play, 0x101C, &this->actor);
             } else {

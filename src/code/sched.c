@@ -1,15 +1,8 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "fault.h"
 #include "idle.h"
-#include "stackcheck.h"
-#include "z64thread.h"
+#include "z64.h"
 
-#define RSP_DONE_MSG 667
-#define RDP_DONE_MSG 668
-#define ENTRY_MSG 670
-#define RDP_AUDIO_CANCEL_MSG 671
-#define RSP_GFX_CANCEL_MSG 672
-
+// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultClient sSchedFaultClient;
 
 OSTime sRSPGFXStartTime;
@@ -19,6 +12,17 @@ OSTime sRDPStartTime;
 
 u64* gAudioSPDataPtr;
 u32 gAudioSPDataSize;
+
+#include "functions.h"
+#include "variables.h"
+#include "stackcheck.h"
+#include "z64thread.h"
+
+#define RSP_DONE_MSG 667
+#define RDP_DONE_MSG 668
+#define ENTRY_MSG 670
+#define RDP_AUDIO_CANCEL_MSG 671
+#define RSP_GFX_CANCEL_MSG 672
 
 void Sched_SwapFramebuffer(CfbInfo* cfbInfo) {
     if (cfbInfo->swapBuffer != NULL) {

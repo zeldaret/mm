@@ -1781,7 +1781,7 @@ void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
 void EnGo_SetupAthletic(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         EnGo_ChangeToStretchingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -2048,7 +2048,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
         this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
     }
 
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
     Math_ApproachS(&this->actor.shape.rot.y, targetRot, 4, 0x2AA8);
 }
 
@@ -2243,7 +2243,7 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                 }
             }
 
-            SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+            SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     }
@@ -2388,7 +2388,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisPos, &targetPos), 4, 0x2AA8);
         }
-        SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+        SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
         return;
     }
 
@@ -2498,7 +2498,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGo* this = THIS;
     Vec3f worldPos;
-    s32 rotTableIndex;
+    s32 fidgetIndex;
 
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_MEDIGORON) && (limbIndex == GORON_LIMB_BODY)) {
         Matrix_MultZero(&worldPos);
@@ -2508,25 +2508,25 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     switch (limbIndex) {
         case GORON_LIMB_BODY:
-            rotTableIndex = 0;
+            fidgetIndex = 0;
             break;
 
         case GORON_LIMB_LEFT_UPPER_ARM:
-            rotTableIndex = 1;
+            fidgetIndex = 1;
             break;
 
         case GORON_LIMB_RIGHT_UPPER_ARM:
-            rotTableIndex = 2;
+            fidgetIndex = 2;
             break;
 
         default:
-            rotTableIndex = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if ((this->actionFlags & ENGO_FLAG_STANDING) && (rotTableIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[rotTableIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[rotTableIndex]) * 200.0f);
+    if ((this->actionFlags & ENGO_FLAG_STANDING) && (fidgetIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
     return false;
 }

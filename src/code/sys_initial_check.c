@@ -7,6 +7,7 @@
  * are DMA'd directly to fixed RAM addresses.
  */
 #include "global.h"
+#include "fault.h"
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 

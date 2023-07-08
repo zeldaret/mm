@@ -1,3 +1,4 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
 #include "idle.h"
@@ -2149,7 +2150,7 @@ void Play_Init(GameState* thisx) {
         }
 
         // "First cycle" Termina Field
-        if (INV_CONTENT(ITEM_OCARINA) != ITEM_OCARINA) {
+        if (INV_CONTENT(ITEM_OCARINA_OF_TIME) != ITEM_OCARINA_OF_TIME) {
             if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
                 (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
                 gSaveContext.nextCutsceneIndex = 0xFFF4;

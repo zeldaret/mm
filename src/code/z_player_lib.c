@@ -3,7 +3,6 @@
  * Description: Set of library functions to interact with the Player system
  */
 
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -655,12 +654,12 @@ PlayerItemAction func_80123810(PlayState* play) {
 u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NONE
     PLAYER_MODELGROUP_13,             // PLAYER_IA_LAST_USED
-    PLAYER_MODELGROUP_STICK,          // PLAYER_IA_FISHING_ROD
+    PLAYER_MODELGROUP_DEKU_STICK,     // PLAYER_IA_FISHING_ROD
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_KOKIRI
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_RAZOR
     PLAYER_MODELGROUP_ONE_HAND_SWORD, // PLAYER_IA_SWORD_GILDED
     PLAYER_MODELGROUP_TWO_HAND_SWORD, // PLAYER_IA_SWORD_TWO_HANDED
-    PLAYER_MODELGROUP_STICK,          // PLAYER_IA_STICK
+    PLAYER_MODELGROUP_DEKU_STICK,     // PLAYER_IA_DEKU_STICK
     PLAYER_MODELGROUP_ZORA_FINS,      // PLAYER_IA_ZORA_FINS
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW
     PLAYER_MODELGROUP_BOW,            // PLAYER_IA_BOW_FIRE
@@ -671,8 +670,8 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_POWDER_KEG
     PLAYER_MODELGROUP_EXPLOSIVES,     // PLAYER_IA_BOMBCHU
     PLAYER_MODELGROUP_8,              // PLAYER_IA_11
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_NUT
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PICTO_BOX
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_DEKU_NUT
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_PICTOGRAPH_BOX
     PLAYER_MODELGROUP_INSTRUMENT,     // PLAYER_IA_OCARINA
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_EMPTY
     PLAYER_MODELGROUP_BOTTLE,         // PLAYER_IA_BOTTLE_FISH
@@ -735,7 +734,7 @@ u8 sActionModelGroups[PLAYER_IA_MAX] = {
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_GORON
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_ZORA
     PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_MASK_DEKU
-    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LENS
+    PLAYER_MODELGROUP_DEFAULT,        // PLAYER_IA_LENS_OF_TRUTH
 };
 
 PlayerModelGroup Player_ActionToModelGroup(Player* player, PlayerItemAction itemAction) {
@@ -808,7 +807,7 @@ PlayerModelIndices gPlayerModelTypes[PLAYER_MODELGROUP_MAX] = {
     /* PLAYER_MODELGROUP_HOOKSHOT */
     { PLAYER_ANIMTYPE_4, PLAYER_MODELTYPE_LH_OPEN, PLAYER_MODELTYPE_RH_HOOKSHOT, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
-    /* PLAYER_MODELGROUP_STICK */
+    /* PLAYER_MODELGROUP_DEKU_STICK */
     { PLAYER_ANIMTYPE_3, PLAYER_MODELTYPE_LH_CLOSED, PLAYER_MODELTYPE_RH_CLOSED, PLAYER_MODELTYPE_SHEATH_14,
       PLAYER_MODELTYPE_WAIST },
     /* PLAYER_MODELGROUP_INSTRUMENT */
@@ -1367,7 +1366,7 @@ s32 Player_IsBurningStickInRange(PlayState* play, Vec3f* pos, f32 xzRange, f32 y
     Vec3f diff;
     s32 pad;
 
-    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+    if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, pos, &diff);
         return (SQXZ(diff) <= SQ(xzRange)) && (0.0f <= diff.y) && (diff.y <= yRange);
     }
@@ -1446,7 +1445,7 @@ PlayerMeleeWeapon Player_GetMeleeWeaponHeld(Player* player) {
 
 s32 Player_IsHoldingTwoHandedWeapon(Player* player) {
     // Relies on the itemActions for two-handed weapons being contiguous.
-    if ((player->heldItemAction >= PLAYER_IA_SWORD_TWO_HANDED) && (player->heldItemAction <= PLAYER_IA_STICK)) {
+    if ((player->heldItemAction >= PLAYER_IA_SWORD_TWO_HANDED) && (player->heldItemAction <= PLAYER_IA_DEKU_STICK)) {
         return true;
     }
 
@@ -2529,9 +2528,9 @@ Gfx* D_801C0B20[] = {
     object_mask_bakuretu_DL_0005C0, // PLAYER_MASK_BLAST
     object_mask_bu_san_DL_000710,   // PLAYER_MASK_SCENTS
     object_mask_kyojin_DL_000380,   // PLAYER_MASK_GIANT
-    gameplay_keep_DL_00B260,        // PLAYER_MASK_FIERCE_DEITY
-    gameplay_keep_DL_005A10,        // PLAYER_MASK_GORON
-    gameplay_keep_DL_005360,        // PLAYER_MASK_ZORA
+    gFierceDeityMaskDL,             // PLAYER_MASK_FIERCE_DEITY
+    gGoronMaskDL,                   // PLAYER_MASK_GORON
+    gZoraMaskDL,                    // PLAYER_MASK_ZORA
     gDekuMaskDL,                    // PLAYER_MASK_DEKU
     object_mask_boy_DL_000900,
     object_mask_goron_DL_0014A0,
@@ -3291,7 +3290,7 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             CLOSE_DISPS(play->state.gfxCtx);
         }
 
-    } else if (player->itemAction == PLAYER_IA_STICK) {
+    } else if (player->itemAction == PLAYER_IA_DEKU_STICK) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -3322,10 +3321,10 @@ s32 func_80128640(PlayState* play, Player* player, Gfx* dlist) {
             Color_RGB8* bottleColor = &sPlayerBottleColors[bottle];
 
             gDPSetEnvColor(POLY_XLU_DISP++, bottleColor->r, bottleColor->g, bottleColor->b, 0);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_000320);
+            gSPDisplayList(POLY_XLU_DISP++, gBottleContentsDL);
         }
 
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0003E0);
+        gSPDisplayList(POLY_XLU_DISP++, gBottleGlassDL);
 
         Matrix_Pop();
 
@@ -3415,17 +3414,17 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                     3000.0f, // PLAYER_MELEEWEAPON_SWORD_RAZOR
                     4000.0f, // PLAYER_MELEEWEAPON_SWORD_GILDED
                     5500.0f, // PLAYER_MELEEWEAPON_SWORD_TWO_HANDED
-                    -1.0f,   // PLAYER_MELEEWEAPON_STICK
+                    -1.0f,   // PLAYER_MELEEWEAPON_DEKU_STICK
                     2500.0f, // PLAYER_MELEEWEAPON_ZORA_FINS
                 };
 
                 if ((player->transformation == PLAYER_FORM_FIERCE_DEITY) ||
                     ((player->transformation != PLAYER_FORM_ZORA) &&
-                     ((player->itemAction == PLAYER_IA_STICK) ||
+                     ((player->itemAction == PLAYER_IA_DEKU_STICK) ||
                       ((player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_RIGHT) &&
                        (player->meleeWeaponAnimation != PLAYER_MWA_GORON_PUNCH_BUTT))))) {
-                    if (player->itemAction == PLAYER_IA_STICK) {
+                    if (player->itemAction == PLAYER_IA_DEKU_STICK) {
                         D_801C0994->x = player->unk_B0C * 5000.0f;
                     } else {
                         D_801C0994->x = sMeleeWeaponLengths[Player_GetMeleeWeaponHeld(player)];
