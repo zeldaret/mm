@@ -31,7 +31,7 @@ uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param) {
 
         if (ramStart != NULL) {
             if ((addr >= (uintptr_t)ramStart) && (addr < (uintptr_t)ramStart + diff)) {
-                return (void*)(addr + ramConv);
+                return addr + ramConv;
             }
         }
     }
