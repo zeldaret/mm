@@ -1926,12 +1926,16 @@ s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radiu
     return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemAction);
 }
 
+/**
+ * Offers a talk request within an equilateral cylinder with the radius specified.
+ */
 s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius) {
     return Actor_OfferTalkExchangeEquiCylinder(actor, play, radius, PLAYER_IA_NONE);
 }
 
 /**
- * The actor uses their collision check cylinder's radius to determine if the player is nearby.
+ * Offers a talk request within an equilateral cylinder whose radius is determined by the actor's collision check
+ * cylinder's radius.
  */
 s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
