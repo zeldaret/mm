@@ -41,6 +41,7 @@
  */
 
 #include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
 #include "fault_internal.h"
 #include "fault.h"
 #include "global.h"
