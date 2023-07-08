@@ -27,7 +27,7 @@ typedef struct {
 typedef enum {
     /* 0 */ TWINMOLD_EFFECT_NONE,
     /* 1 */ TWINMOLD_EFFECT_SAND,       // The sand kicked up when Twinmold touches the ground
-    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // The dust that appears when either Twinmold or the player destroys a prop
+    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // The dust that appears when either Twinmold or the player destroys a ruin
     /* 3 */ TWINMOLD_EFFECT_FRAGMENT,   // The fragments that fly off when the parts of Twinmold explode
     /* 4 */ TWINMOLD_EFFECT_FLASH       // The flashes of light that appear when the parts of Twinmold explode
 } TwinmoldEffectType;
