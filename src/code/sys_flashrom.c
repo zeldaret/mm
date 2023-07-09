@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "system_malloc.h"

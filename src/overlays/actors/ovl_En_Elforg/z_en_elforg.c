@@ -385,7 +385,7 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 distanceFromPlayer;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_GORON) {
         distanceFromPlayer = 40.0f;
     } else {
         distanceFromPlayer = 20.0f;

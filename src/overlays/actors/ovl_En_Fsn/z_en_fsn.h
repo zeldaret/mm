@@ -13,6 +13,8 @@
 #define ENFSN_ANGRY (1 << 8)
 #define ENFSN_CALM_DOWN (1 << 9)
 
+#define ENFSN_LIMB_MAX FSN_LIMB_MAX + 1 // Note: adding 1 to FSN_LIMB_MAX due to bug in the skeleton, see bug in object_fsn.xml
+
 struct EnFsn;
 
 typedef void (*EnFsnActionFunc)(struct EnFsn*, PlayState*);
@@ -24,12 +26,12 @@ typedef struct EnFsn {
     /* 0x1D4 */ EnFsnActionFunc actionFunc;
     /* 0x1D8 */ EnFsnActionFunc prevActionFunc; // Used to return to correct browsing function
     /* 0x1DC */ ColliderCylinder collider;
-    /* 0x228 */ s16 limbRotYTable[19];
-    /* 0x24E */ s16 limbRotZTable[19];
+    /* 0x228 */ s16 fidgetTableY[ENFSN_LIMB_MAX];
+    /* 0x24E */ s16 fidgetTableZ[ENFSN_LIMB_MAX];
     /* 0x274 */ Vec3s headRot;
     /* 0x27A */ Vec3s unk27A; // Set but never used
-    /* 0x280 */ Vec3s jointTable[FSN_LIMB_MAX + 1]; // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
-    /* 0x2F2 */ Vec3s morphTable[FSN_LIMB_MAX + 1];
+    /* 0x280 */ Vec3s jointTable[ENFSN_LIMB_MAX];
+    /* 0x2F2 */ Vec3s morphTable[ENFSN_LIMB_MAX];
     /* 0x364 */ s16 eyeTexIndex;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;

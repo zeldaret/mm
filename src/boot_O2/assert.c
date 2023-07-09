@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fault.h"
 
 void __assert(const char* file, u32 lineNum) {
     osGetThreadId(NULL);

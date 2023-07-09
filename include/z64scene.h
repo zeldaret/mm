@@ -559,6 +559,7 @@ typedef union {
 
 // Sets cursor point options on the world map
 typedef enum {
+    /*  -1 */ REGION_NONE = -1,
     /* 0x0 */ REGION_GREAT_BAY,
     /* 0x1 */ REGION_ZORA_HALL,
     /* 0x2 */ REGION_ROMANI_RANCH,

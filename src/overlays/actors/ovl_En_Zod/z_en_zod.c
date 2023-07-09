@@ -124,7 +124,7 @@ void EnZod_Init(Actor* thisx, PlayState* play) {
             }
 
             this->actionFunc = func_80BAFB84;
-            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE))) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->actor);
                 break;
             }
@@ -154,7 +154,7 @@ void EnZod_Destroy(Actor* thisx, PlayState* play) {
 void EnZod_HandleRoomConversation(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
         textId = 0x1227;
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_08)) {
             textId = 0x1229;
@@ -393,7 +393,7 @@ void EnZod_PlayDrumsSequence(EnZod* this, PlayState* play) {
 void func_80BAFA44(EnZod* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1253;
         } else {
@@ -480,7 +480,7 @@ void func_80BAFDB4(EnZod* this, PlayState* play) {
     EnZod_UpdateAnimation(this);
     if (CutsceneManager_IsNext(this->actor.csId)) {
         CutsceneManager_Start(this->actor.csId, &this->actor);
-        func_800B7298(play, NULL, 0x44);
+        func_800B7298(play, NULL, PLAYER_CSMODE_68);
         Message_StartTextbox(play, 0x103A, &this->actor);
         this->actionFunc = EnZod_SetupRehearse;
     } else {

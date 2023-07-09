@@ -137,7 +137,7 @@ s8 SubS_GetObjectIndex(s16 id, struct PlayState* play);
 
 Actor* SubS_FindActor(struct PlayState* play, Actor* actorListStart, u8 actorCategory, s16 actorId);
 
-s32 SubS_FillLimbRotTables(struct PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs);
+s32 SubS_UpdateFidgetTables(struct PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen);
 
 s32 SubS_IsFloorAbove(struct PlayState* play, Vec3f* pos, f32 distAbove);
 
