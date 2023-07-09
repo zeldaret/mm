@@ -286,8 +286,8 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     }
     this->actor.targetMode = 0;
     this->timer = 0;
-    this->autotalk = 0;
-    this->isFirstTimeHiding = 0;
+    this->autotalk = false;
+    this->isFirstTimeHiding = false;
     this->eyeTexIndex = 0;
     this->unk1E8 = 0;
     this->actor.gravity = -2.0f;
@@ -375,7 +375,7 @@ void EnLiftNuts_RiseUp(EnLiftNuts* this, PlayState* play) {
 void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
     if ((EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_AFTER) ||
          EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_STARTING)) &&
-        (this->autotalk == 1)) {
+        (this->autotalk == true)) {
         this->actor.flags |= ACTOR_FLAG_10000;
     } else if (this->actor.xzDistToPlayer > 120.0f) {
         EnLiftNuts_SetupBurrow(this);

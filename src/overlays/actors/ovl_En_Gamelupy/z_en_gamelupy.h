@@ -21,7 +21,7 @@ typedef struct EnGamelupy {
     /* 0x190 */ EnGamelupyActionFunc actionFunc;
     /* 0x194 */ s32 type;
     /* 0x198 */ s16* minigameScore; // Shared memory location with actor EnLiftNuts
-    /* 0x19C */ s16 collectedFrames;
+    /* 0x19C */ s16 collectedTimer;
     /* 0x19E */ s16 sparklesAngle;
     /* 0x1A0 */ s16 sparklesAngleStep;
 } EnGamelupy; // size = 0x1A4

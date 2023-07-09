@@ -74,7 +74,7 @@ void EnGamelupy_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.gravity = -0.5f;
     this->actor.shape.rot.y = Rand_Next();
-    this->collectedFrames = 0;
+    this->collectedTimer = 0;
     this->sparklesAngle = 0;
     this->sparklesAngleStep = 0x7D0;
     if (this->actor.params == ENGAMELUPY_TYPE_BLUE) {
@@ -138,7 +138,7 @@ void EnGamelupy_Idle(EnGamelupy* this, PlayState* play) {
 }
 
 void EnGamelupy_SetupCollected(EnGamelupy* this) {
-    this->collectedFrames = 0;
+    this->collectedTimer = 0;
     this->actor.gravity = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
     this->actionFunc = EnGamelupy_Collected;
@@ -148,13 +148,13 @@ void EnGamelupy_Collected(EnGamelupy* this, PlayState* play) {
     f32 scale;
     Player* player = GET_PLAYER(play);
 
-    if (this->collectedFrames > 30) {
+    if (this->collectedTimer > 30) {
         Actor_Kill(&this->actor);
     } else {
-        this->collectedFrames++;
+        this->collectedTimer++;
         this->actor.world.pos = player->actor.world.pos;
         this->actor.world.pos.y += 40.0f;
-        scale = (30.0f - this->collectedFrames) * 0.001f;
+        scale = (30.0f - this->collectedTimer) * 0.001f;
         Actor_SetScale(&this->actor, scale);
         EnGamelupy_SpawnSparkles(this, play);
     }
