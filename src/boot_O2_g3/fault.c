@@ -40,8 +40,6 @@
  * DPad-Down disables sending fault pages over osSyncPrintf.
  */
 
-#include "prevent_bss_reordering.h"
-#include "prevent_bss_reordering2.h"
 #include "fault_internal.h"
 #include "fault.h"
 #include "global.h"
