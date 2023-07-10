@@ -497,11 +497,11 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->textId = 0x3524; // You can't play if you can't pay!
                         Message_StartTextbox(play, this->textId, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->stateFlags |= ENAOB01_FLAG_PLAYER_TOLD_TO_PICK_A_DOG;
                         this->stateFlags |= ENAOB01_FLAG_CONVERSATION_OVER;
                         this->textId = 0x3522; // Bring me the fastest dog!
@@ -511,7 +511,7 @@ void EnAob01_BeforeRace_RespondToPlayAgainQuestion(EnAob01* this, PlayState* pla
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->textId = 0x3535; // Really?
                     Message_StartTextbox(play, this->textId, &this->actor);
                     break;
@@ -557,7 +557,7 @@ void EnAob01_UpdateCommon(EnAob01* this, PlayState* play) {
     }
 
     EnAob01_Blink(this, EN_AOB01_EYE_MAX);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, MAMAMU_YAN_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, MAMAMU_YAN_LIMB_MAX);
     EnAob01_UpdateCollision(this, play);
 
     // This specific code ensures that in-game time passes during the race.
@@ -656,13 +656,13 @@ void EnAob01_BeforeRace_Talk(EnAob01* this, PlayState* play) {
             this->stateFlags &= ~ENAOB01_FLAG_LAUGH;
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->stateFlags |= ENAOB01_FLAG_PLAYER_CONFIRMED_CHOICE;
                     EnAob01_BeforeRace_HandleConversation(this, play);
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     EnAob01_BeforeRace_HandleConversation(this, play);
                     break;
             }
@@ -1189,8 +1189,8 @@ s32 EnAob01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == MAMAMU_YAN_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 200;
+        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
+        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
     }
 
     return false;

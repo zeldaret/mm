@@ -128,7 +128,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
-static f32 sYOffsetPerForm[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
+static f32 sYOffsetPerForm[PLAYER_FORM_MAX] = {
+    50.0f, // PLAYER_FORM_FIERCE_DEITY
+    55.0f, // PLAYER_FORM_GORON
+    50.0f, // PLAYER_FORM_ZORA
+    20.0f, // PLAYER_FORM_DEKU
+    30.0f, // PLAYER_FORM_HUMAN
+};
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
@@ -498,7 +504,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
     Math_StepToF(&this->actor.world.pos.z, player->actor.world.pos.z, 3.0f);
 
     if (this->timer == 30) {
-        play_sound(NA_SE_OC_ABYSS);
+        Audio_PlaySfx(NA_SE_OC_ABYSS);
         func_80169FDC(&play->state);
     }
 }
@@ -651,7 +657,7 @@ void EnWallmas_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

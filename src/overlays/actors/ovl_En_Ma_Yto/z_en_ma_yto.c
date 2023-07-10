@@ -449,13 +449,13 @@ void EnMaYto_DefaultDialogueHandler(EnMaYto* this, PlayState* play) {
 void EnMaYto_DefaultHandlePlayerChoice(EnMaYto* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Yes
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             EnMaYto_SetFaceExpression(this, 0, 3);
             // "Milk Road is fixed!"
             Message_StartTextbox(play, 0x3392, &this->actor);
             this->textId = 0x3392;
         } else { // No
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             // "Don't lie!"
             Message_StartTextbox(play, 0x3391, &this->actor);
             this->textId = 0x3391;
@@ -577,13 +577,13 @@ void EnMaYto_DinnerDialogueHandler(EnMaYto* this, PlayState* play) {
 void EnMaYto_DinnerHandlePlayerChoice(EnMaYto* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Yes
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             EnMaYto_SetFaceExpression(this, 0, 3);
             // "Milk Road is fixed!"
             Message_StartTextbox(play, 0x3399, &this->actor);
             this->textId = 0x3399;
         } else { // No
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             // "Don't lie!"
             Message_StartTextbox(play, 0x3398, &this->actor);
             this->textId = 0x3398;
@@ -1109,7 +1109,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
     if (CURRENT_DAY == 1) {
-        if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             switch (Player_GetMask(play)) {
                 case PLAYER_MASK_ROMANI:
                     Message_StartTextbox(play, 0x235D, &this->actor);
@@ -1168,7 +1168,7 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
     switch (CURRENT_DAY) {
         case 1:
-            if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
                 switch (Player_GetMask(play)) {
                     case PLAYER_MASK_ROMANI:
                         Message_StartTextbox(play, 0x235D, &this->actor);

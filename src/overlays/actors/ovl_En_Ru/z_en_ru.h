@@ -32,8 +32,8 @@ typedef struct EnRu {
     /* 0x318 */ Vec3s headRot;
     /* 0x31E */ Vec3s torsoRot;
     /* 0x324 */ UNK_TYPE1 pad324[0x12];
-    /* 0x336 */ s16 limbRotTableY[RU2_LIMB_MAX];
-    /* 0x364 */ s16 limbRotTableZ[RU2_LIMB_MAX];
+    /* 0x336 */ s16 fidgetTableY[RU2_LIMB_MAX];
+    /* 0x364 */ s16 fidgetTableZ[RU2_LIMB_MAX];
     /* 0x394 */ Vec3f bodyPartsPos[RU_BODYPARTSPOS_COUNT];
     /* 0x348 */ UNK_TYPE1 padUNK[6];
     /* 0x44E */ s16 eyeState;

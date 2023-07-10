@@ -4,6 +4,7 @@
  * Description: Twinmold
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_boss_02.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
@@ -938,7 +939,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 this->unk_0152 = 0;
                 sTwinmoldStatic->unk_1D20 = 102;
                 sTwinmoldStatic->subCamAtVel = 0.0f;
-                play_sound(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
+                Audio_PlaySfx(NA_SE_EN_INBOSS_DEAD_PRE2_OLD);
             } else if (!(this->unk_0146[1] & 0xF) && (Rand_ZeroOne() < 0.5f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
             }
@@ -955,7 +956,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 }
 
                 Boss02_SpawnEffectFlash(play->specialEffects, &this->unk_147C[this->unk_1678]);
-                play_sound(NA_SE_EV_EXPLOSION);
+                Audio_PlaySfx(NA_SE_EV_EXPLOSION);
 
                 this->unk_1678--;
                 if (this->unk_1678 <= 0) {
@@ -1005,7 +1006,7 @@ void func_809DAB78(Boss02* this, PlayState* play) {
                 sTwinmoldStatic->unk_1D1C = 0;
                 sTwinmoldStatic->unk_0146[0] = 15;
                 sTwinmoldStatic->unk_0150 = 0;
-                play_sound(NA_SE_EV_LIGHTNING);
+                Audio_PlaySfx(NA_SE_EV_LIGHTNING);
 
                 for (i = 0; i < 30; i++) {
                     Boss02_SpawnEffectFragment(play->specialEffects, &this->unk_0170);
@@ -1077,7 +1078,7 @@ void func_809DBFB4(Boss02* this, PlayState* play) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 1;
                 } else {
-                    Audio_PlaySfxAtPos(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
+                    Audio_PlaySfx_AtPos(&this->unk_167C, NA_SE_EN_INBOSS_DAMAGE_OLD);
                     this->unk_015C = 10;
                 }
 
@@ -1671,7 +1672,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             label1:
                 if (this->unk_1D14 >= 50) {
                     if (this->unk_1D14 == (u32)(BREG(43) + 60)) {
-                        play_sound(NA_SE_PL_TRANSFORM_GIANT);
+                        Audio_PlaySfx(NA_SE_PL_TRANSFORM_GIANT);
                     }
                     Math_ApproachF(&this->unk_1D64, 200.0f, 0.1f, this->subCamAtVel * 640.0f);
                     Math_ApproachF(&this->unk_1D6C, 273.0f, 0.1f, this->subCamAtVel * 150.0f);
@@ -1722,7 +1723,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
         label2:
             if (this->unk_1D14 != 0) {
                 if (this->unk_1D14 == (u32)(BREG(44) + 10)) {
-                    play_sound(NA_SE_PL_TRANSFORM_NORAML);
+                    Audio_PlaySfx(NA_SE_PL_TRANSFORM_NORAML);
                 }
                 Math_ApproachF(&this->unk_1D64, 60.0f, 0.1f, this->subCamAtVel * 640.0f);
                 Math_ApproachF(&this->unk_1D6C, 23.0f, 0.1f, this->subCamAtVel * 150.0f);
@@ -1986,7 +1987,7 @@ void func_809DD934(Boss02* this, PlayState* play) {
             this->unk_1D7A = 0;
             func_809DA1D0(play, 255, 255, 255, 0);
             this->unk_1D78 = 2;
-            play_sound(NA_SE_SY_TRANSFORM_MASK_FLASH);
+            Audio_PlaySfx(NA_SE_SY_TRANSFORM_MASK_FLASH);
 
         case 2:
             this->unk_1D7A += 40;
@@ -2079,7 +2080,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                 sp58 = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
                 Matrix_RotateZF(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f), MTXMODE_NEW);
                 Matrix_MultVecY(1.0f, &this->subCamUp);
-                func_8019F128(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
+                Audio_PlaySfx_2(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
             }
 
             if (this->unk_1D1C == 20) {

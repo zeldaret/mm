@@ -245,7 +245,7 @@ void EnHg_PlayRedeadSfx(EnHg* this, PlayState* play) {
     if (this->actor.colChkInfo.health == 1) {
         if ((this->actionFunc == EnHg_ChasePlayer) || (this->actionFunc == EnHg_ReactToHit) ||
             (this->actionFunc == EnHg_ChasePlayerWait)) {
-            func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
         }
     }
 }
@@ -315,7 +315,7 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
                     this->csIdList[2] = 0;
                     this->animIndex = HG_ANIM_PANIC;
                     if ((this->csIdIndex == HG_CS_GET_MASK) || (this->csIdIndex == HG_CS_SONG_OF_HEALING)) {
-                        func_8019F128(NA_SE_EN_HALF_REDEAD_TRANS);
+                        Audio_PlaySfx_2(NA_SE_EN_HALF_REDEAD_TRANS);
                     }
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HG_ANIM_PANIC);
                     break;
@@ -347,17 +347,17 @@ void EnHg_HandleCsAction(EnHg* this, PlayState* play) {
         switch (this->animIndex) {
             case HG_ANIM_LEAN_FORWARD:
             case HG_ANIM_REACH_FORWARD:
-                func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_LOOP - SFX_FLAG);
                 break;
 
             case HG_ANIM_CURL_UP:
             case HG_ANIM_CROUCHED_PANIC:
-                func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 break;
 
             case HG_ANIM_PANIC:
                 if ((this->csIdIndex == HG_CS_FIRST_ENCOUNTER) || (this->csIdIndex == HG_CS_SUBSEQUENT_ENCOUNTER)) {
-                    func_800B9010(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_HALF_REDEAD_SCREAME - SFX_FLAG);
                 }
                 break;
         }
@@ -382,7 +382,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         if (!sHasSoundPlayed) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         sHasSoundPlayed = true;
     } else {
@@ -390,8 +390,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     }
 
     if (play->msgCtx.ocarinaMode == 3) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                 this->csIdIndex = HG_CS_SONG_OF_HEALING;
             } else {

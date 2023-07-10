@@ -576,11 +576,11 @@ void func_80969898(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x2215)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x2217);
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x2216);
                         break;
                 }
@@ -631,7 +631,7 @@ void func_80969898(EnJs* this, PlayState* play) {
 void func_80969AA0(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else {
         textId = 0x2215;
@@ -726,14 +726,14 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 ((play->msgCtx.currentTextId == 0x2219) || (play->msgCtx.currentTextId == 0x221E))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
                             break;
                         }
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                 }
@@ -807,7 +807,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
 void func_8096A080(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x2218;
     } else {
         textId = 0x221B;
@@ -837,7 +837,7 @@ void func_8096A104(EnJs* this, PlayState* play) {
 void func_8096A184(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else if (func_80968E38(0) >= 20) {
         textId = 0x2202;
@@ -886,11 +886,11 @@ void func_8096A38C(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         break;
                 }
 

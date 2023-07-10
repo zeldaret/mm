@@ -169,8 +169,8 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
         if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
             Message_StartTextbox(play, 0x273C, &this->actor);
             this->unk_288 = 0x273C;
-        } else if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-            switch (gSaveContext.save.playerForm) {
+        } else if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+            switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_DEKU:
                     phi_v0 = 0;
                     break;
@@ -220,16 +220,16 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-play->msgCtx.unk1206C);
                     Message_StartTextbox(play, 0x2719, &this->actor);
                     this->unk_288 = 0x2719;
@@ -238,16 +238,16 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
 
             case 1:
                 if (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_NONE) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x272C, &this->actor);
                     this->unk_288 = 0x272C;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
                 } else if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk12070) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     Message_StartTextbox(play, 0x2718, &this->actor);
                     this->unk_288 = 0x2718;
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-play->msgCtx.unk12070);
                     Message_StartTextbox(play, 0x273A, &this->actor);
                     this->unk_288 = 0x273A;
@@ -255,7 +255,7 @@ void func_80B26758(EnKendoJs* this, PlayState* play) {
                 break;
 
             case 2:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 Message_StartTextbox(play, 0x2717, &this->actor);
                 this->unk_288 = 0x2717;
         }
@@ -612,7 +612,7 @@ void func_80B274BC(EnKendoJs* this, PlayState* play) {
             return;
         }
 
-        play_sound(NA_SE_SY_FOUND);
+        Audio_PlaySfx(NA_SE_SY_FOUND);
         func_80B279F0(this, play, ((u8)Rand_Next() % 3) + 1);
         func_80B279F0(this, play, ((u8)Rand_Next() % 3) + 4);
         this->unk_290 = 0;

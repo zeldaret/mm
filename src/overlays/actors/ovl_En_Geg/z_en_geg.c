@@ -700,7 +700,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
         this->unk_4E0--;
     }
     AudioSfx_LowerSfxSettingsReverb(&this->actor.projectedPos, true);
-    func_8019F4AC(&this->actor.projectedPos, NA_SE_EN_GOLON_SIRLOIN_EAT - SFX_FLAG);
+    Audio_PlaySfx_WithSfxSettingsReverb(&this->actor.projectedPos, NA_SE_EN_GOLON_SIRLOIN_EAT - SFX_FLAG);
 }
 
 void func_80BB2E00(EnGeg* this, PlayState* play) {
@@ -753,7 +753,7 @@ void func_80BB2F7C(EnGeg* this, PlayState* play) {
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->unk_230 & 0x80) {
-            func_800B9010(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
         } else {
             this->unk_230 |= 0x80;
             Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
@@ -845,7 +845,7 @@ void func_80BB3318(EnGeg* this, PlayState* play) {
         Actor_MoveWithGravity(&this->actor);
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_GOLON_SIRLOIN_ROLL - SFX_FLAG);
 }
 
 void func_80BB347C(EnGeg* this, PlayState* play) {
@@ -905,7 +905,7 @@ void EnGeg_Update(Actor* thisx, PlayState* play) {
     func_80BB1FCC(this, play);
     func_80BB2088(this, play);
     func_80BB1C8C(this);
-    SubS_FillLimbRotTables(play, this->unk_238, this->unk_232, ARRAY_COUNT(this->unk_238));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGEG_FIDGET_TABLE_LEN);
     func_80BB1D04(this);
     func_80BB178C(this, play);
 }

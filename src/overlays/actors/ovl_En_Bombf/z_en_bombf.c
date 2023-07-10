@@ -239,7 +239,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 1.5f, 0.0f);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-        func_800B8EF4(play, &this->actor);
+        Actor_PlaySfx_SurfaceBomb(play, &this->actor);
         if (this->actor.velocity.y < -6.0f) {
             this->actor.velocity.y *= -0.3f;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -477,8 +477,8 @@ void EnBombf_Draw(Actor* thisx, PlayState* play) {
 
         if (ENBOMBF_GET(&this->actor) != ENBOMBF_0) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000340);
-            gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000530);
+            gSPDisplayList(POLY_OPA_DISP++, gBombFlowerLeavesDL);
+            gSPDisplayList(POLY_OPA_DISP++, gBombFlowerBaseLeavesDL);
 
             Matrix_Translate(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(this->unk_204, this->unk_204, this->unk_204, MTXMODE_APPLY);
@@ -495,7 +495,7 @@ void EnBombf_Draw(Actor* thisx, PlayState* play) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gfx));
         }
 
-        gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000408);
+        gSPDisplayList(POLY_OPA_DISP++, gBombFlowerBombAndSparkDL);
     } else {
         Collider_UpdateSpheres(0, &this->colliderJntSph);
     }

@@ -1,32 +1,43 @@
 ﻿<Root>
     <File Name="object_ms" Segment="6">
-        <Animation Name="object_ms_Anim_0005EC" Offset="0x5EC" />
-        <DList Name="object_ms_DL_0021E0" Offset="0x21E0" />
-        <DList Name="object_ms_DL_002300" Offset="0x2300" />
-        <DList Name="object_ms_DL_0028A0" Offset="0x28A0" />
-        <DList Name="object_ms_DL_002CC8" Offset="0x2CC8" />
-        <DList Name="object_ms_DL_002E58" Offset="0x2E58" />
-        <DList Name="object_ms_DL_002F90" Offset="0x2F90" />
-        <DList Name="object_ms_DL_0030C0" Offset="0x30C0" />
-        <Texture Name="object_ms_TLUT_003230" OutName="tlut_003230" Format="rgba16" Width="16" Height="16" Offset="0x3230" />
-        <Texture Name="object_ms_Tex_003430" OutName="tex_003430" Format="ci8" Width="16" Height="16" Offset="0x3430" />
-        <Texture Name="object_ms_Tex_003530" OutName="tex_003530" Format="ci8" Width="32" Height="32" Offset="0x3530" />
-        <Texture Name="object_ms_Tex_003930" OutName="tex_003930" Format="ci8" Width="16" Height="16" Offset="0x3930" />
-        <Texture Name="object_ms_Tex_003A30" OutName="tex_003A30" Format="ci8" Width="8" Height="8" Offset="0x3A30" />
-        <Texture Name="object_ms_Tex_003A70" OutName="tex_003A70" Format="ci8" Width="8" Height="8" Offset="0x3A70" />
-        <Texture Name="object_ms_Tex_003AB0" OutName="tex_003AB0" Format="ci8" Width="8" Height="8" Offset="0x3AB0" />
-        <Texture Name="object_ms_Tex_003AF0" OutName="tex_003AF0" Format="ci8" Width="16" Height="16" Offset="0x3AF0" />
-        <Texture Name="object_ms_Tex_003BF0" OutName="tex_003BF0" Format="ci8" Width="8" Height="8" Offset="0x3BF0" />
-        <Texture Name="object_ms_Tex_003C30" OutName="tex_003C30" Format="ci8" Width="4" Height="4" Offset="0x3C30" />
-        <Texture Name="object_ms_Tex_003C40" OutName="tex_003C40" Format="ci8" Width="16" Height="16" Offset="0x3C40" />
-        <Limb Name="object_ms_Standardlimb_003D40" Type="Standard" EnumName="OBJECT_MS_LIMB_01" Offset="0x3D40" />
-        <Limb Name="object_ms_Standardlimb_003D4C" Type="Standard" EnumName="OBJECT_MS_LIMB_02" Offset="0x3D4C" />
-        <Limb Name="object_ms_Standardlimb_003D58" Type="Standard" EnumName="OBJECT_MS_LIMB_03" Offset="0x3D58" />
-        <Limb Name="object_ms_Standardlimb_003D64" Type="Standard" EnumName="OBJECT_MS_LIMB_04" Offset="0x3D64" />
-        <Limb Name="object_ms_Standardlimb_003D70" Type="Standard" EnumName="OBJECT_MS_LIMB_05" Offset="0x3D70" />
-        <Limb Name="object_ms_Standardlimb_003D7C" Type="Standard" EnumName="OBJECT_MS_LIMB_06" Offset="0x3D7C" />
-        <Limb Name="object_ms_Standardlimb_003D88" Type="Standard" EnumName="OBJECT_MS_LIMB_07" Offset="0x3D88" />
-        <Limb Name="object_ms_Standardlimb_003D94" Type="Standard" EnumName="OBJECT_MS_LIMB_08" Offset="0x3D94" />
-        <Skeleton Name="object_ms_Skel_003DC0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MS_LIMB_NONE" LimbMax="OBJECT_MS_LIMB_MAX" EnumName="ObjectMsLimb" Offset="0x3DC0" />
+        <!-- Bean Salesman Animations -->
+        <Animation Name="gBeanSalesmanEatingAnim" Offset="0x5EC"/>
+
+        <!-- Bean Salesman Limb DisplayLists -->
+        <DList Name="gBeanSalesmanLeftUpperArmDL" Offset="0x2E58"/>
+        <DList Name="gBeanSalesmanLeftForearmDL" Offset="0x2F90"/>
+        <DList Name="gBeanSalesmanLeftHandDL" Offset="0x30C0"/>
+        <DList Name="gBeanSalesmanHeadDL" Offset="0x28A0"/>
+        <DList Name="gBeanSalesmanMouthDL" Offset="0x2CC8"/>
+        <DList Name="gBeanSalesmanBodyDL" Offset="0x2300"/>
+        <DList Name="gBeanSalesmanBeanbagDL" Offset="0x21E0"/>
+
+        <!-- Bean Salesman Palettes -->
+        <Texture Name="gBeanSalesmanTLUT" OutName="bean_salesman_tlut" Format="rgba16" Width="16" Height="16" Offset="0x3230"/>
+
+        <!-- Bean Salesman DisplayList Textures -->
+        <Texture Name="gBeanSalesmanBackOfHandTex" OutName="bean_salesman_back_of_hand" Format="ci8" Width="16" Height="16" Offset="0x3430" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanTattooTex" OutName="bean_salesman_tattoo" Format="ci8" Width="32" Height="32" Offset="0x3530" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanMouthTex" OutName="bean_salesman_mouth" Format="ci8" Width="16" Height="16" Offset="0x3930" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanEarTex" OutName="bean_salesman_ear" Format="ci8" Width="8" Height="8" Offset="0x3A30" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanNoseTex" OutName="bean_salesman_nose" Format="ci8" Width="8" Height="8" Offset="0x3A70" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanEyeTex" OutName="bean_salesman_eye" Format="ci8" Width="8" Height="8" Offset="0x3AB0" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanPantsTex" OutName="bean_salesman_pants" Format="ci8" Width="16" Height="16" Offset="0x3AF0" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanShoeTex" OutName="bean_salesman_shoe" Format="ci8" Width="8" Height="8" Offset="0x3BF0" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanSkinGradientTex" OutName="bean_salesman_skin_gradient" Format="ci8" Width="4" Height="4" Offset="0x3C30" TlutOffset="0x3230"/>
+        <Texture Name="gBeanSalesmanBeanbagTex" OutName="bean_salesman_beanbag" Format="ci8" Width="16" Height="16" Offset="0x3C40" TlutOffset="0x3230"/>
+
+        <!-- Bean Salesman Limbs -->
+        <Limb Name="gBeanSalesmanRootLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_ROOT" Offset="0x3D40"/>
+        <Limb Name="gBeanSalesmanLeftUpperArmLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_LEFT_UPPER_ARM" Offset="0x3D4C"/>
+        <Limb Name="gBeanSalesmanLeftForearmLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_LEFT_FOREARM" Offset="0x3D58"/>
+        <Limb Name="gBeanSalesmanLeftHandLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_LEFT_HAND" Offset="0x3D64"/>
+        <Limb Name="gBeanSalesmanHeadLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_HEAD" Offset="0x3D70"/>
+        <Limb Name="gBeanSalesmanMouthLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_MOUTH" Offset="0x3D7C"/>
+        <Limb Name="gBeanSalesmanBodyLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_BODY" Offset="0x3D88"/>
+        <Limb Name="gBeanSalesmanBeanbagLimb" LimbType="Standard" EnumName="BEAN_SALESMAN_LIMB_BEANBAG" Offset="0x3D94"/>
+
+        <!-- Bean Salesman Skeleton -->
+        <Skeleton Name="gBeanSalesmanSkel" Type="Flex" LimbType="Standard" LimbNone="BEAN_SALESMAN_LIMB_NONE" LimbMax="BEAN_SALESMAN_LIMB_MAX" EnumName="BeanSalesmanLimb" Offset="0x3DC0"/>
     </File>
 </Root>

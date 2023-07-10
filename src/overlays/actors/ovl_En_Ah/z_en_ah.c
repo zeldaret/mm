@@ -196,6 +196,9 @@ void func_80BD2C6C(EnAh* this) {
                         this->unk_2FA = 4;
                     }
                     break;
+
+                default:
+                    break;
             }
 
             if (!phi_a3 && (this->unk_2FA == 4)) {

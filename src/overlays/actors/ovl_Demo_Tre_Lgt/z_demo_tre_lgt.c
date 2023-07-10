@@ -70,7 +70,7 @@ void DemoTreLgt_Init(Actor* thisx, PlayState* play) {
     this->colorAlpha2 = 255;
     this->status = 0;
     //! @bug Zora Link should also use animationType 0
-    if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY) {
         this->animationType = 0;
     } else {
         this->animationType = 1;
@@ -127,7 +127,7 @@ void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
     if (curFrame > 30.0f) {
         if (!(this->status & 1)) {
             this->status |= 1;
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
         }
     }
     if (SkelCurve_Update(play, &this->skelCurve)) {

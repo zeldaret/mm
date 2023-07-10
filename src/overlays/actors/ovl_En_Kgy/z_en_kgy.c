@@ -361,7 +361,7 @@ void func_80B413C8(EnKgy* this) {
 }
 
 s32 func_80B41460(void) {
-    if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
+    if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) ||
         ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) && (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
          (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
         return 0xC38;
@@ -623,17 +623,17 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                             switch (play->msgCtx.choiceIndex) {
                                 case 0:
                                     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {
-                                        play_sound(NA_SE_SY_ERROR);
+                                        Audio_PlaySfx(NA_SE_SY_ERROR);
                                         func_80B40E74(this, play, 0xC3F);
                                     } else {
-                                        func_8019F208();
+                                        Audio_PlaySfx_MessageDecide();
                                         func_80B40E74(this, play, 0xC42);
                                         Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                     }
                                     break;
 
                                 case 1:
-                                    func_8019F230();
+                                    Audio_PlaySfx_MessageCancel();
                                     func_80B40EBC(this, play, textId);
                                     break;
                             }
@@ -642,12 +642,12 @@ void func_80B41E18(EnKgy* this, PlayState* play) {
                         case 0xC3E:
                             switch (play->msgCtx.choiceIndex) {
                                 case 0:
-                                    func_8019F208();
+                                    Audio_PlaySfx_MessageDecide();
                                     func_80B40E74(this, play, func_80B41460());
                                     break;
 
                                 case 1:
-                                    func_8019F230();
+                                    Audio_PlaySfx_MessageCancel();
                                     func_80B40E74(this, play, 0xC3C);
                                     break;
                             }

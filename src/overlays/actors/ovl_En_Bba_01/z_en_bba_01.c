@@ -123,8 +123,7 @@ void EnBba01_UpdateModel(EnBba01* this, PlayState* play) {
         Math_SmoothStepToS(&this->enHy.torsoRot.x, 0, 4, 0x3E8, 1);
         Math_SmoothStepToS(&this->enHy.torsoRot.y, 0, 4, 0x3E8, 1);
     }
-    SubS_FillLimbRotTables(play, this->enHy.limbRotTableY, this->enHy.limbRotTableZ,
-                           ARRAY_COUNT(this->enHy.limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->enHy.fidgetTableY, this->enHy.fidgetTableZ, ENHY_LIMB_MAX);
     EnHy_UpdateCollider(&this->enHy, play);
 }
 
@@ -286,8 +285,8 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     }
 
     if ((limbIndex == BBA_LIMB_BAG) || (limbIndex == BBA_LIMB_TORSO) || (limbIndex == BBA_LIMB_LEFT_FOREARM)) {
-        rot->y += (s16)(Math_SinS(this->enHy.limbRotTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->enHy.limbRotTableZ[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->enHy.fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->enHy.fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;
