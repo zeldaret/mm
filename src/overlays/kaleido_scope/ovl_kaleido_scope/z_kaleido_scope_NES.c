@@ -3,6 +3,8 @@
  * Overlay: ovl_kaleido_scope
  * Description: Pause Menu
  */
+
+#include "prevent_bss_reordering.h"
 #include "z_kaleido_scope.h"
 #include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
@@ -246,6 +248,7 @@ void Kaleido_LoadMapNameStatic(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0x400);
 }
 
+//! note: nothing from `map_name_static` is of size `0xA00` in US 1.0
 void Kaleido_LoadMapNameStaticLarge(void* segment, u32 texIndex) {
     CmpDma_LoadFile(SEGMENT_ROM_START(map_name_static), texIndex, segment, 0xA00);
 }
@@ -2856,8 +2859,8 @@ void KaleidoScope_Update(PlayState* play) {
 
             gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
-            for (itemId = 0; itemId <= ITEM_BOW_ARROW_FIRE; itemId++) {
-                if (!gPlayerFormItemRestrictions[(void)0, gSaveContext.save.playerForm][(s32)itemId]) {
+            for (itemId = 0; itemId <= ITEM_BOW_FIRE; itemId++) {
+                if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][(s32)itemId]) {
                     KaleidoScope_GrayOutTextureRGBA32(Lib_SegmentedToVirtual(gItemIcons[(s32)itemId]), 0x400);
                 }
             }
@@ -2890,7 +2893,9 @@ void KaleidoScope_Update(PlayState* play) {
 
             pauseCtx->nameSegment = (void*)ALIGN16((uintptr_t)pauseCtx->iconItemLangSegment + size2);
             func_8011552C(play, DO_ACTION_INFO);
-            if (((void)0, gSaveContext.worldMapArea) < 0x16) {
+
+            //! note: `worldMapArea` never set to a value other than 0
+            if (((void)0, gSaveContext.worldMapArea) < 22) {
                 Kaleido_LoadMapNameStaticLarge(pauseCtx->nameSegment + 0x400, ((void)0, gSaveContext.worldMapArea));
             }
 

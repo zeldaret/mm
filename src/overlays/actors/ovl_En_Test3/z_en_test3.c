@@ -457,7 +457,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
-    this->player.heldItemId = ITEM_OCARINA;
+    this->player.heldItemId = ITEM_OCARINA_OF_TIME;
 
     Player_SetModelGroup(&this->player, 3);
     play->playerInit(&this->player, play, &object_test3_Skel_00F7EC);

@@ -7,6 +7,7 @@
  * are DMA'd directly to fixed RAM addresses.
  */
 #include "global.h"
+#include "fault.h"
 #include "misc/locerrmsg/locerrmsg.h"
 #include "misc/memerrmsg/memerrmsg.h"
 
@@ -23,7 +24,7 @@
 
 // Address with enough room after to load either of the error message image files before the fault screen buffer at the
 // end of RDRAM
-#define CHECK_ERRMSG_STATIC_SEGMENT (u8*)(FAULT_FB_ADDRESS - MAX(SIZEOF_LOCERRMSG, SIZEOF_MEMERRMSG))
+#define CHECK_ERRMSG_STATIC_SEGMENT (u8*)((uintptr_t)FAULT_FB_ADDRESS - MAX(SIZEOF_LOCERRMSG, SIZEOF_MEMERRMSG))
 
 void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value) {
     if (value & RGBA16_PIXEL_OPAQUE) {

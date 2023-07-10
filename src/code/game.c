@@ -85,19 +85,14 @@ void GameState_Draw(GameState* gameState, GraphicsContext* gfxCtx) {
     Graph_BranchDlist(polyOpa, nextDisplayList);
     POLY_OPA_DISP = nextDisplayList;
 
-    // Block prevents reordering, if(1) around the above block don't seem to help unlike in OoT
-    {
-        s32 requiredScopeTemp;
+    CLOSE_DISPS(gfxCtx);
 
-        Debug_DrawText(gfxCtx);
-    }
+    Debug_DrawText(gfxCtx);
 
     if (R_ENABLE_ARENA_DBG != 0) {
         SpeedMeter_DrawTimeEntries(&D_801F7FF0, gfxCtx);
         SpeedMeter_DrawAllocEntries(&D_801F7FF0, gfxCtx, gameState);
     }
-
-    CLOSE_DISPS(gfxCtx);
 }
 
 void GameState_SetFrameBuffer(GraphicsContext* gfxCtx) {
@@ -207,20 +202,21 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
         s32 requiredScopeTemp;
 
         GameAlloc_Init(&gameState->alloc);
-        GameState_InitArena(gameState, 0x100000);
-        Game_SetFramerateDivisor(gameState, 3);
-
-        init(gameState);
-
-        VisCvg_Init(&D_801F8010);
-        VisZbuf_Init(&sVisZbuf);
-        VisMono_Init(&sMonoColors);
-        ViMode_Init(&D_801F8048);
-        func_801773A0(&D_801F7FF0);
-        Rumble_Init();
-
-        osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
     }
+
+    GameState_InitArena(gameState, 0x100000);
+    Game_SetFramerateDivisor(gameState, 3);
+
+    init(gameState);
+
+    VisCvg_Init(&D_801F8010);
+    VisZbuf_Init(&sVisZbuf);
+    VisMono_Init(&sMonoColors);
+    ViMode_Init(&D_801F8048);
+    func_801773A0(&D_801F7FF0);
+    Rumble_Init();
+
+    osSendMesg(&gameState->gfxCtx->queue, NULL, OS_MESG_BLOCK);
 }
 
 void GameState_Destroy(GameState* gameState) {

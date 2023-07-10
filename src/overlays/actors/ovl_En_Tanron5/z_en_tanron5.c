@@ -534,7 +534,7 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
                     if (this->itemDropType == TWINMOLD_PROP_ITEM_DROP_TYPE_10_ARROWS) {
                         Item_Give(play, ITEM_ARROWS_10);
                     } else {
-                        Item_Give(play, ITEM_MAGIC_LARGE);
+                        Item_Give(play, ITEM_MAGIC_JAR_BIG);
                     }
 
                     Actor_Kill(&this->actor);
