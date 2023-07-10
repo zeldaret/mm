@@ -109,9 +109,10 @@ static AnimationInfo sAnimations[ENLIFTNUTS_ANIM_MAX] = {
 Gfx* sEyeTextures[] = {
     gBusinessScrubEyesDL,
     gBusinessScrubEyesWideDL,
-    gBusinessScrubEyesSquintDL,
-    NULL,
+    gBusinessScrubEyesSquintDL
 };
+
+static s32 sPad = 0;
 
 static ColliderCylinderInit sCylinderInit = {
     {
