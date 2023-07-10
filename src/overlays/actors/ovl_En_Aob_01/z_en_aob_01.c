@@ -45,12 +45,12 @@ ActorInit En_Aob_01_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ EN_AOB01_ANIM_IDLE_1,
+    /* 0 */ EN_AOB01_ANIM_IDLE,
     /* 1 */ EN_AOB01_ANIM_LAUGH_START,
     /* 2 */ EN_AOB01_ANIM_LAUGH_LOOP,
     /* 3 */ EN_AOB01_ANIM_SURPRISE_START,
     /* 4 */ EN_AOB01_ANIM_SURPRISE_LOOP,
-    /* 5 */ EN_AOB01_ANIM_IDLE_2,
+    /* 5 */ EN_AOB01_ANIM_IDLE_MORPH,
     /* 6 */ EN_AOB01_ANIM_IDLE_MAX
 } EnAob01Animation;
 
@@ -62,12 +62,12 @@ typedef enum {
 } EnAob01EyeTexture;
 
 static AnimationInfo sAnimationInfo[EN_AOB01_ANIM_IDLE_MAX] = {
-    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },          // EN_AOB01_ANIM_IDLE_1
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },          // EN_AOB01_ANIM_IDLE
     { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },    // EN_AOB01_ANIM_LAUGH_START
     { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },     // EN_AOB01_ANIM_LAUGH_LOOP
     { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // EN_AOB01_ANIM_SURPRISE_START
     { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  // EN_AOB01_ANIM_SURPRISE_LOOP
-    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },         // EN_AOB01_ANIM_IDLE_2
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },         // EN_AOB01_ANIM_IDLE_MORPH
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -209,7 +209,7 @@ s32 EnAob01_ProcessSurpriseAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animIndex == EN_AOB01_ANIM_IDLE_1) || (this->animIndex == EN_AOB01_ANIM_IDLE_2)) {
+    if ((this->animIndex == EN_AOB01_ANIM_IDLE) || (this->animIndex == EN_AOB01_ANIM_IDLE_MORPH)) {
         if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_START;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_START);
@@ -237,10 +237,10 @@ s32 EnAob01_ProcessIdleAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
     s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animIndex != EN_AOB01_ANIM_IDLE_1) && (this->animIndex != EN_AOB01_ANIM_IDLE_2)) {
+    if ((this->animIndex != EN_AOB01_ANIM_IDLE) && (this->animIndex != EN_AOB01_ANIM_IDLE_MORPH)) {
         if (curFrame == endFrame) {
-            this->animIndex = EN_AOB01_ANIM_IDLE_2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_2);
+            this->animIndex = EN_AOB01_ANIM_IDLE_MORPH;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_MORPH);
             return true;
         }
     } else {
@@ -1106,8 +1106,8 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
                        MAMAMU_YAN_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->animIndex = EN_AOB01_ANIM_IDLE_1;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_1);
+    this->animIndex = EN_AOB01_ANIM_IDLE;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (GET_EVENTINF_DOG_RACE_STATE) {
