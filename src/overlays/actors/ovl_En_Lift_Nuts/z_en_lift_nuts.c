@@ -106,11 +106,7 @@ static AnimationInfo sAnimations[ENLIFTNUTS_ANIM_MAX] = {
     { &gBusinessScrubBurrowAnim, 1.0f, 8.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
-Gfx* sEyeTextures[] = {
-    gBusinessScrubEyesDL,
-    gBusinessScrubEyesWideDL,
-    gBusinessScrubEyesSquintDL
-};
+Gfx* sEyeTextures[] = { gBusinessScrubEyesDL, gBusinessScrubEyesWideDL, gBusinessScrubEyesSquintDL };
 
 static s32 sPad = 0;
 
