@@ -16,8 +16,8 @@
  * deal no damage and despawn upon touching the ground.
  *
  * Sometimes, item drops can also appear when a destructible ruin is hit; this actor is responsible for handling
- * these drops too. There are drops that give the player 10 arrows, and drops that give the player a large amount
- * of magic, and these drops behave identically outside of what item they give when collected by the player.
+ * these drops too. There are drops that give the player 10 arrows, and drops that give the player a big magic
+ * jar, and these drops behave identically outside of what item they give when collected by the player.
  */
 
 #include "z_en_tanron5.h"
@@ -39,7 +39,7 @@ void EnTanron5_ItemDrop_Draw(Actor* thisx, PlayState* play);
 
 typedef enum {
     /* 0 */ TWINMOLD_PROP_ITEM_DROP_TYPE_10_ARROWS,
-    /* 1 */ TWINMOLD_PROP_ITEM_DROP_TYPE_LARGE_MAGIC
+    /* 1 */ TWINMOLD_PROP_ITEM_DROP_TYPE_MAGIC_JAR_BIG
 } TwinmoldPropItemDropType;
 
 s32 sFragmentAndItemDropCount = 0;
@@ -86,22 +86,53 @@ static f32 sGiantModeScaleFactor = 1.0f;
  * Stores the X and Z spawn positions for all of the ruins. Their Y spawn position is determined by the
  * height of the floor, so there's no need to store it.
  */
-static Vec2s sSpawnPositions[] = {
-    { 1200, 2500 },  { -1200, 2500 },  { 1200, -2500 },  { -1200, -2500 }, { 2500, 1200 },
-    { -2500, 1200 }, { 2500, -1200 },  { -2500, -1200 }, { 1000, 1000 },   { -1000, 1000 },
-    { 1000, -1000 }, { -1000, -1000 }, { 0, -1000 },     { 0, 1000 },      { 1000, 0 },
-    { -1000, 0 },    { 0, -2000 },     { 0, 2000 },      { 2000, 0 },      { -2000, 0 },
+static Vec2s sSpawnPosList[] = {
+    { 1200, 2500 },   // TWINMOLD_PROP_TYPE_RUIN_PILLAR_1
+    { -1200, 2500 },  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_2
+    { 1200, -2500 },  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_3
+    { -1200, -2500 }, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_4
+    { 2500, 1200 },   // TWINMOLD_PROP_TYPE_RUIN_PILLAR_5
+    { -2500, 1200 },  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_6
+    { 2500, -1200 },  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_7
+    { -2500, -1200 }, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_8
+    { 1000, 1000 },   // TWINMOLD_PROP_TYPE_RUIN_PILLAR_9
+    { -1000, 1000 },  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_10
+    { 1000, -1000 },  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_11
+    { -1000, -1000 }, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_12
+    { 0, -1000 },     // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_1
+    { 0, 1000 },      // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_2
+    { 1000, 0 },      // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_3
+    { -1000, 0 },     // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_4
+    { 0, -2000 },     // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_5
+    { 0, 2000 },      // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_6
+    { 2000, 0 },      // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_7
+    { -2000, 0 },     // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_8
 };
 
 /**
  * Display lists for all ruins.
  */
 static Gfx* sDLists[] = {
-    gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
-    gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
-    gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL, gTwinmoldMajoraPillarDL,
-    gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,
-    gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,  gTwinmoldPyramidRuinDL,
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_1
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_2
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_3
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_4
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_5
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_6
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_7
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_8
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_9
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_10
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_11
+    gTwinmoldRuinPillarDL,  // TWINMOLD_PROP_TYPE_RUIN_PILLAR_12
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_1
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_2
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_3
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_4
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_5
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_6
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_7
+    gTwinmoldRuinPyramidDL, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_8
 };
 
 /**
@@ -110,8 +141,26 @@ static Gfx* sDLists[] = {
  * smaller than the others.
  */
 static f32 sBaseScales[] = {
-    0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f,
-    0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f, 0.09f,
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_1
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_2
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_3
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_4
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_5
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_6
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_7
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_8
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_9
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_10
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_11
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PILLAR_12
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_1
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_2
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_3
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_4
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_5
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_6
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_7
+    0.09f, // TWINMOLD_PROP_TYPE_RUIN_PYRAMID_8
 };
 
 /**
@@ -207,10 +256,10 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
         s32 i;
 
         // Spawns all of the ruins in the right places. Gets killed after everything is spawned.
-        for (i = 0; i < ARRAY_COUNT(sSpawnPositions); i++) {
-            child = (EnTanron5*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, sSpawnPositions[i].x,
-                                            this->actor.world.pos.y, sSpawnPositions[i].z, 0, Rand_ZeroFloat(0x10000),
-                                            0, TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_RUIN_PILLAR_1 + i));
+        for (i = 0; i < ARRAY_COUNT(sSpawnPosList); i++) {
+            child = (EnTanron5*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_TANRON5, sSpawnPosList[i].x,
+                                            this->actor.world.pos.y, sSpawnPosList[i].z, 0, Rand_ZeroFloat(0x10000), 0,
+                                            TWINMOLD_PROP_PARAMS(TWINMOLD_PROP_TYPE_RUIN_PILLAR_1 + i));
 
             child->actor.parent = this->actor.parent;
             child->baseScale = sBaseScales[i];
@@ -218,7 +267,7 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             Actor_SetScale(&child->actor, child->baseScale);
 
             child->dList = sDLists[i];
-            if (child->dList == gTwinmoldPyramidRuinDL) {
+            if (child->dList == gTwinmoldRuinPyramidDL) {
                 child->actor.shape.rot.y = 0;
             }
 
@@ -289,7 +338,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, this->baseScale * sGiantModeScaleFactor);
 
-    if (this->dList == gTwinmoldMajoraPillarDL) {
+    if (this->dList == gTwinmoldRuinPillarDL) {
         this->collider.dim.radius = 65.0f * sGiantModeScaleFactor;
         this->collider.dim.height = 380.0f * sGiantModeScaleFactor;
     } else if (this->hitCount == 0) {
@@ -323,7 +372,7 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
 
             if ((KREG(19) != 0) || ((acHitInfo->toucher.dmgFlags & 0x05000202) && (sGiantModeScaleFactor < 0.5f)) ||
                 (ac->id == ACTOR_BOSS_02)) {
-                if (this->dList == gTwinmoldMajoraPillarDL) {
+                if (this->dList == gTwinmoldRuinPillarDL) {
                     // To create the appearance of the pillar shrinking after being hit, push it further into the floor,
                     // spawn some ruin fragments, and also spawn some black dust effects.
                     Math_Vec3f_Copy(&pos, &this->actor.world.pos);
@@ -424,11 +473,11 @@ void EnTanron5_Update(Actor* thisx, PlayState* play2) {
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    if (this->dList == gTwinmoldPyramidRuinDL) {
+    if (this->dList == gTwinmoldRuinPyramidDL) {
         this->collider.dim.pos.y = this->actor.floorHeight;
     }
 
-    if ((this->dList == gTwinmoldMajoraPillarDL) || (sGiantModeScaleFactor < 0.5f)) {
+    if ((this->dList == gTwinmoldRuinPillarDL) || (sGiantModeScaleFactor < 0.5f)) {
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     } else {
         // The collider cylinder used for the pyramid ruin is smaller than the ruin's visual appearance. When

@@ -15921,7 +15921,7 @@
     0x80BE5D84:("En_Tanron5_InitVars","UNK_TYPE1","",0x1),
     0x80BE5DA4:("D_80BE5DA4","UNK_TYPE1","",0x1),
     0x80BE5DD0:("sGiantModeScaleFactor","f32","",0x4),
-    0x80BE5DD4:("sSpawnPositions","UNK_TYPE2","",0x2),
+    0x80BE5DD4:("sSpawnPosList","UNK_TYPE2","",0x2),
     0x80BE5E24:("sDLists","UNK_TYPE1","",0x1),
     0x80BE5E74:("sBaseScales","UNK_TYPE1","",0x1),
     0x80BE5ED0:("D_80BE5ED0","f32","",0x4),

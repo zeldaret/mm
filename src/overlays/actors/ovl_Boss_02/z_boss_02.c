@@ -126,6 +126,10 @@ ActorInit Boss_02_InitVars = {
     (ActorFunc)Boss02_Twinmold_Draw,
 };
 
+/**
+ * Multiplies the scale differently depending on whether the player is wearing the Giant's Mask or not.
+ * When the player is wearing the Giant's Mask, this value is smaller to make the player seem larger.
+ */
 static f32 sGiantModeScaleFactor = 1.0f;
 
 s16 D_809DF5B4[] = {
