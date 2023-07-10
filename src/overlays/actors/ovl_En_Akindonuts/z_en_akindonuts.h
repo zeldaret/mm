@@ -23,8 +23,8 @@ typedef enum {
 typedef struct EnAkindonuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[OBJECT_DNT_LIMB_MAX];
-    /* 0x230 */ Vec3s morphTable[OBJECT_DNT_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[BUSINESS_SCRUB_LIMB_MAX];
+    /* 0x230 */ Vec3s morphTable[BUSINESS_SCRUB_LIMB_MAX];
     /* 0x2D8 */ EnAkindonutsActionFunc actionFunc;
     /* 0x2DC */ EnAkindonutsUnkFunc unk_2DC;
     /* 0x2E0 */ ColliderCylinder collider;

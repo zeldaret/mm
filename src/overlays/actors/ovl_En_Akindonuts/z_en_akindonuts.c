@@ -91,29 +91,29 @@ typedef enum {
 } EnAkindonutsAnimation;
 
 static AnimationInfoS sAnimationInfo[ENAKINDONUTS_ANIM_MAX] = {
-    { &object_dnt_Anim_005488, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_0
-    { &object_dnt_Anim_00B0B4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_1
-    { &object_dnt_Anim_004AA0, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_2
-    { &object_dnt_Anim_004E38, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_3
-    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_4
-    { &object_dnt_Anim_005CA8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_5
-    { &object_dnt_Anim_0038CC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_6
-    { &object_dnt_Anim_003CC0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_7
-    { &object_dnt_Anim_0012F4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_8
-    { &object_dnt_Anim_004700, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_9
-    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_10
-    { &object_dnt_Anim_003438, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_11
-    { &object_dnt_Anim_001E2C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_12
-    { &object_dnt_Anim_000994, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_13
-    { &object_dnt_Anim_002268, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_14
-    { &object_dnt_Anim_002F08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_15
-    { &object_dnt_Anim_00577C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENAKINDONUTS_ANIM_16
-    { &object_dnt_Anim_0029E8, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_17
-    { &object_dnt_Anim_0029E8, 1.0f, 4, -1, ANIMMODE_ONCE, -4 }, // ENAKINDONUTS_ANIM_18
-    { &object_dnt_Anim_0029E8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_19
-    { &object_dnt_Anim_001BC8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAKINDONUTS_ANIM_20
-    { &object_dnt_Anim_0012F4, -1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAKINDONUTS_ANIM_21
-    { &object_dnt_Anim_002670, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAKINDONUTS_ANIM_22
+    { &gBusinessScrubStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // ENAKINDONUTS_ANIM_0
+    { &gBusinessScrubWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENAKINDONUTS_ANIM_1
+    { &gBusinessScrubRiseUpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAKINDONUTS_ANIM_2
+    { &gBusinessScrubJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },             // ENAKINDONUTS_ANIM_3
+    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAKINDONUTS_ANIM_4
+    { &gBusinessScrubExcitedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAKINDONUTS_ANIM_5
+    { &gBusinessScrubExcitedLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENAKINDONUTS_ANIM_6
+    { &gBusinessScrubExcitedEndAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // ENAKINDONUTS_ANIM_7
+    { &gBusinessScrubTakeOffHatAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENAKINDONUTS_ANIM_8
+    { &gBusinessScrubFlyStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // ENAKINDONUTS_ANIM_9
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // ENAKINDONUTS_ANIM_10
+    { &gBusinessScrubShockedStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // ENAKINDONUTS_ANIM_11
+    { &gBusinessScrubShockedShakeHeadAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAKINDONUTS_ANIM_12
+    { &gBusinessScrubShockedPoundAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // ENAKINDONUTS_ANIM_13
+    { &gBusinessScrubShockedEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },       // ENAKINDONUTS_ANIM_14
+    { &gBusinessScrubThinkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // ENAKINDONUTS_ANIM_15
+    { &gBusinessScrubBobAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // ENAKINDONUTS_ANIM_16
+    { &gBusinessScrubBurrowAnim, 1.0f, 8, -1, ANIMMODE_ONCE, 0 },           // ENAKINDONUTS_ANIM_17
+    { &gBusinessScrubBurrowAnim, 1.0f, 4, -1, ANIMMODE_ONCE, -4 },          // ENAKINDONUTS_ANIM_18
+    { &gBusinessScrubBurrowAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAKINDONUTS_ANIM_19
+    { &gBusinessScrubFlyLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // ENAKINDONUTS_ANIM_20
+    { &gBusinessScrubTakeOffHatAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENAKINDONUTS_ANIM_21
+    { &gBusinessScrubFlyEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // ENAKINDONUTS_ANIM_22
 };
 
 static u16 D_80BF048C[] = {
@@ -1689,8 +1689,8 @@ void EnAkindonuts_Init(Actor* thisx, PlayState* play) {
     EnAkindonuts* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnt_Skel_00AC70, &object_dnt_Anim_005488, this->jointTable,
-                       this->morphTable, OBJECT_DNT_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBusinessScrubSkel, &gBusinessScrubStandingAnim, this->jointTable,
+                       this->morphTable, BUSINESS_SCRUB_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
@@ -1747,25 +1747,27 @@ s32 EnAkindonuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
         (this->animIndex == ENAKINDONUTS_ANIM_3) || (this->animIndex == ENAKINDONUTS_ANIM_17) ||
         (this->animIndex == ENAKINDONUTS_ANIM_5) || (this->animIndex == ENAKINDONUTS_ANIM_6) ||
         (this->animIndex == ENAKINDONUTS_ANIM_7) || (this->animIndex == ENAKINDONUTS_ANIM_16)) {
-        if ((limbIndex == OBJECT_DNT_LIMB_10) || (limbIndex == OBJECT_DNT_LIMB_15) ||
-            (limbIndex == OBJECT_DNT_LIMB_1B) || (limbIndex == OBJECT_DNT_LIMB_17) ||
-            (limbIndex == OBJECT_DNT_LIMB_18) || (limbIndex == OBJECT_DNT_LIMB_0F)) {
+        if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+            (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_SCALP) ||
+            (limbIndex == BUSINESS_SCRUB_LIMB_HAIR) || (limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT)) {
             *dList = NULL;
         }
     } else if ((this->animIndex == ENAKINDONUTS_ANIM_8) || (this->animIndex == ENAKINDONUTS_ANIM_19)) {
         switch (this->unk_33E) {
             case 1:
-                if ((limbIndex == OBJECT_DNT_LIMB_10) || (limbIndex == OBJECT_DNT_LIMB_15) ||
-                    (limbIndex == OBJECT_DNT_LIMB_1B) || (limbIndex == OBJECT_DNT_LIMB_19)) {
+                if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_HAT)) {
                     *dList = NULL;
                 }
                 break;
 
             case 2:
             case 3:
-                if ((limbIndex == OBJECT_DNT_LIMB_10) || (limbIndex == OBJECT_DNT_LIMB_15) ||
-                    (limbIndex == OBJECT_DNT_LIMB_1B) || (limbIndex == OBJECT_DNT_LIMB_0F) ||
-                    (limbIndex == OBJECT_DNT_LIMB_19)) {
+                if ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG) ||
+                    (limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT) || (limbIndex == BUSINESS_SCRUB_LIMB_HAT)) {
                     *dList = NULL;
                 }
                 break;
@@ -1774,16 +1776,16 @@ s32 EnAkindonuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
                 break;
         }
     } else if (((this->animIndex == ENAKINDONUTS_ANIM_9) || (this->animIndex == ENAKINDONUTS_ANIM_10)) &&
-               ((limbIndex == OBJECT_DNT_LIMB_0F) || (limbIndex == OBJECT_DNT_LIMB_19))) {
+               ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_HAT) || (limbIndex == BUSINESS_SCRUB_LIMB_HAT))) {
         *dList = NULL;
     }
 
-    if (limbIndex == OBJECT_DNT_LIMB_1A) {
+    if (limbIndex == BUSINESS_SCRUB_LIMB_EYES) {
         if ((this->animIndex == ENAKINDONUTS_ANIM_6) || (this->animIndex == ENAKINDONUTS_ANIM_5) ||
             (this->animIndex == ENAKINDONUTS_ANIM_7)) {
-            *dList = object_dnt_DL_001350;
+            *dList = gBusinessScrubEyesWideDL;
         } else {
-            *dList = object_dnt_DL_008290;
+            *dList = gBusinessScrubEyesDL;
         }
     }
     return false;
@@ -1796,16 +1798,17 @@ void EnAkindonuts_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx
     EnAkindonuts* this = THIS;
 
     if (((this->unk_33E == 1) || (this->unk_33E == 2)) &&
-        ((limbIndex == OBJECT_DNT_LIMB_17) || (limbIndex == OBJECT_DNT_LIMB_18))) {
+        ((limbIndex == BUSINESS_SCRUB_LIMB_SCALP) || (limbIndex == BUSINESS_SCRUB_LIMB_HAIR))) {
         Matrix_Scale(this->unk_340, this->unk_344, this->unk_348, MTXMODE_APPLY);
     }
 
     if ((this->animIndex == ENAKINDONUTS_ANIM_9) &&
-        ((limbIndex == OBJECT_DNT_LIMB_10) || (limbIndex == OBJECT_DNT_LIMB_15) || (limbIndex == OBJECT_DNT_LIMB_1B))) {
+        ((limbIndex == BUSINESS_SCRUB_LIMB_RIGHT_HAND_BAG) || (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_HAND_BAG) ||
+         (limbIndex == BUSINESS_SCRUB_LIMB_LEFT_ARM_BAG))) {
         Matrix_Scale(this->unk_34C, this->unk_34C, this->unk_34C, MTXMODE_APPLY);
     }
 
-    if (limbIndex == OBJECT_DNT_LIMB_18) {
+    if (limbIndex == BUSINESS_SCRUB_LIMB_HAIR) {
         Matrix_RotateYS(this->unk_352, MTXMODE_APPLY);
     }
 }
