@@ -30,21 +30,40 @@ ActorInit Dm_Bal_InitVars = {
     (ActorFunc)DmBal_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_bal_Anim_00A7DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_bal_Anim_00B1E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_00B604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_00C498, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_bal_Anim_00C498, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &object_bal_Anim_00D530, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &object_bal_Anim_000C78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
-    { &object_bal_Anim_00CB78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
-    { &object_bal_Anim_001804, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
+typedef enum {
+    /*  -1 */ DMBAL_ANIM_NONE = -1,
+    /* 0x0 */ DMBAL_ANIM_0,
+    /* 0x1 */ DMBAL_ANIM_1,
+    /* 0x2 */ DMBAL_ANIM_2,
+    /* 0x3 */ DMBAL_ANIM_3,
+    /* 0x4 */ DMBAL_ANIM_4,
+    /* 0x5 */ DMBAL_ANIM_5,
+    /* 0x6 */ DMBAL_ANIM_6,
+    /* 0x7 */ DMBAL_ANIM_7,
+    /* 0x8 */ DMBAL_ANIM_8,
+    /* 0x9 */ DMBAL_ANIM_9,
+    /* 0xA */ DMBAL_ANIM_10,
+    /* 0xB */ DMBAL_ANIM_11,
+    /* 0xC */ DMBAL_ANIM_12,
+    /* 0xD */ DMBAL_ANIM_13,
+    /* 0xE */ DMBAL_ANIM_MAX
+} DmBalAnimation;
+
+static AnimationInfo sAnimationInfo[DMBAL_ANIM_MAX] = {
+    { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_0
+    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_1
+    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_2
+    { &object_bal_Anim_00A7DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_3
+    { &object_bal_Anim_00B1E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_4
+    { &object_bal_Anim_00B604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_5
+    { &object_bal_Anim_00C498, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_6
+    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_7
+    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_8
+    { &object_bal_Anim_00C498, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // DMBAL_ANIM_9
+    { &object_bal_Anim_00D530, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_10
+    { &object_bal_Anim_000C78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_11
+    { &object_bal_Anim_00CB78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_12
+    { &object_bal_Anim_001804, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_13
 };
 
 void DmBal_Init(Actor* thisx, PlayState* play) {
@@ -73,7 +92,7 @@ void DmBal_SetupDoNothing(DmBal* this) {
 void DmBal_DoNothing(DmBal* this, PlayState* play) {
 }
 
-void func_80C1EAE8(DmBal* this, PlayState* play) {
+void DmBal_HandleCutscene(DmBal* this, PlayState* play) {
     static u16 sCueId = 99;
     s32 cueChannel;
 
@@ -86,14 +105,19 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                 case 1:
                     this->keepEyesShut = false;
                     this->eyeIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_0);
                     break;
+
                 case 2:
                     this->keepEyesShut = true;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_12);
                     break;
+
                 case 3:
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 13);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_13);
+                    break;
+
+                default:
                     break;
             }
         } else if (sCueId == 3) {
@@ -165,7 +189,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
         DmBal_SpawnPaper(this, play, &pos, &vel, -0.5f);
     }
     this->actionFunc(this, play);
-    func_80C1EAE8(this, play);
+    DmBal_HandleCutscene(this, play);
     func_80C1EC60(this, play);
     DmBal_UpdateEyes(this);
     SkelAnime_Update(&this->skelAnime);
@@ -175,7 +199,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     DmBal* this = THIS;
     Vec3s rots;
 
-    if (limbIndex == 6) {
+    if (limbIndex == OBJECT_BAL_LIMB_06) {
         rots.x = Math_SinS(this->unk_33A) * (0x10000 / 18);
         rots.z = Math_CosS(this->unk_33A) * (0x10000 / 18);
         Matrix_RotateZYX(rots.x, 0, rots.z, MTXMODE_APPLY);

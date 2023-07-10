@@ -108,7 +108,8 @@ typedef enum {
     /* 68 */ SK_ANIM_LOOK_LEFT_START,
     /* 69 */ SK_ANIM_LOOK_LEFT_LOOP,
     /* 70 */ SK_ANIM_SNIFF,
-    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF
+    /* 71 */ SK_ANIM_LAUGH_AFTER_SNIFF,
+    /* 72 */ SK_ANIM_LAUGH_AFTER_MAX
 } SkullKidAnimation;
 
 typedef enum {
@@ -219,79 +220,87 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gSkullKidShakeHeadAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidLookAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidBentOverHeadTwitchAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidGlitchyHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidRecliningFloatAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidCurseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidCurseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidLaughStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidLaughLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHideOcarinaStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidHideOcarinaLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+static AnimationInfo sAnimationInfo[SK_ANIM_LAUGH_AFTER_MAX] = {
+    { &gSkullKidShakeHeadAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },             // SK_ANIM_SHAKE_HEAD
+    { &gSkullKidWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },                  // SK_ANIM_WALK
+    { &gSkullKidLookAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },            // SK_ANIM_LOOK_AROUND
+    { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },                  // SK_ANIM_IDLE
+    { &gSkullKidIdleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },                  // SK_ANIM_UNUSED_IDLE
+    { &gSkullKidBentOverHeadTwitchAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },    // SK_ANIM_BENT_OVER_HEAD_TWITCH
+    { &gSkullKidGlitchyHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // SK_ANIM_GLITCHY_HORSE_RIDE_START
+    { &gSkullKidRecliningFloatAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },        // SK_ANIM_RECLINING_FLOAT
+    { &gSkullKidCurseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },            // SK_ANIM_CURSE_START
+    { &gSkullKidCurseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },             // SK_ANIM_CURSE_LOOP
+    { &gSkullKidLaughStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },            // SK_ANIM_LAUGH_START
+    { &gSkullKidLaughLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },             // SK_ANIM_LAUGH_LOOP
+    { &gSkullKidHideOcarinaStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },      // SK_ANIM_HIDE_OCARINA_START
+    { &gSkullKidHideOcarinaLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },       // SK_ANIM_HIDE_OCARINA_LOOP
+    // SK_ANIM_PICK_UP_OCARINA_AND_START_PLAYING
     { &gSkullKidPickUpOcarinaAndStartPlayingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidPlayOcarinaAndLaughAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidPickUpOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidLookAtOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidSearchLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidSearchLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidHorseRideLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidRaiseMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidRaiseMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidLowerMaskAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidPlayOcarinaAndLaughAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // SK_ANIM_PLAY_OCARINA_AND_LAUGH
+    { &gSkullKidPickUpOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },       // SK_ANIM_PICK_UP_OCARINA
+    { &gSkullKidLookAtOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },       // SK_ANIM_LOOK_AT_OCARINA
+    { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },        // SK_ANIM_KICK_OVER_LINK
+    { &gSkullKidSearchLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },          // SK_ANIM_SEARCH_LINK
+    { &gSkullKidKickOverLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },        // SK_ANIM_UNUSED_KICK_OVER_LINK
+    { &gSkullKidSearchLinkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },          // SK_ANIM_UNUSED_SEARCH_LINK
+    { &gSkullKidHorseRideStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },      // SK_ANIM_HORSE_RIDE_START
+    { &gSkullKidHorseRideLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },       // SK_ANIM_HORSE_RIDE_LOOP
+    { &gSkullKidRaiseMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },      // SK_ANIM_RAISE_MASK_START
+    { &gSkullKidRaiseMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },       // SK_ANIM_RAISE_MASK_LOOP
+    { &gSkullKidLowerMaskAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },           // SK_ANIM_LOWER_MASK
+    // SK_ANIM_JUMP_WHILE_HIDING_OCARINA
     { &gSkullKidJumpWhileHidingOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidHorseRideAndRotateAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    { &gSkullKidHorseRideAndRotateAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // SK_ANIM_HORSE_RIDE_AND_ROTATE
+    // SK_ANIM_PLAY_OCARINA_WHILE_FLOATING
     { &gSkullKidPlayOcarinaWhileFloatingAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidFloatingTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidOcarinaJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidCallDownMoonStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidCallDownMoonLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidSmackFairyStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidSmackFairyLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHitByBubbleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidDropOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidFloatingArmsCrossedAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidDeflectAttackAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidTelescopeLookUpStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidTelescopeLookUpLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidSurpriseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidSurpriseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidFloatingTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },   // SK_ANIM_FLOATING_TURN_AROUND
+    { &gSkullKidOcarinaJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },        // SK_ANIM_OCARINA_JUGGLE
+    { &gSkullKidCallDownMoonStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },    // SK_ANIM_CALL_DOWN_MOON_START
+    { &gSkullKidCallDownMoonLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },     // SK_ANIM_CALL_DOWN_MOON_LOOP
+    { &gSkullKidSmackFairyStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },      // SK_ANIM_SMACK_FAIRY_START
+    { &gSkullKidSmackFairyLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },       // SK_ANIM_SMACK_FAIRY_LOOP
+    { &gSkullKidHitByBubbleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },          // SK_ANIM_HIT_BY_BUBBLE
+    { &gSkullKidDropOcarinaAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },          // SK_ANIM_DROP_OCARINA
+    { &gSkullKidFloatingArmsCrossedAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },  // SK_ANIM_FLOATING_ARMS_CROSSED
+    { &gSkullKidDeflectAttackAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },        // SK_ANIM_DEFLECT_ATTACK
+    { &gSkullKidTelescopeLookUpStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // SK_ANIM_TELESCOPE_LOOK_UP_START
+    { &gSkullKidTelescopeLookUpLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },  // SK_ANIM_TELESCOPE_LOOK_UP_LOOP
+    { &gSkullKidSurpriseStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },        // SK_ANIM_SURPRISE_START
+    { &gSkullKidSurpriseLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },         // SK_ANIM_SURPRISE_LOOP
+    // SK_ANIM_LOOK_AROUND_FOR_GIANTS_START
     { &gSkullKidLookAroundForGiantsStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    // SK_ANIM_LOOK_AROUND_FOR_GIANTS_LOOP
     { &gSkullKidLookAroundForGiantsLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHoldHeadAndShakeStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidHoldHeadAndShakeLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHoldHeadAndShakeStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE,
+      0.0f },                                                                       // SK_ANIM_HOLD_HEAD_AND_SHAKE_START
+    { &gSkullKidHoldHeadAndShakeLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // SK_ANIM_HOLD_HEAD_AND_SHAKE_LOOP
+    // SK_ANIM_HOLD_HEAD_AND_SCREAM_START
     { &gSkullKidHoldHeadAndScreamStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+    // SK_ANIM_HOLD_HEAD_AND_SCREAM_LOOP
     { &gSkullKidHoldHeadAndScreamLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHuddleWithFairiesAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidSearchMaskSalesmanAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHoldUpMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidHoldUpMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidShiverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidDrawAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidBentOverLookUpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidSpankAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidHipShakeAndJumpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidPlayFluteAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidCartwheelAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidDangleFromMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidDangleFromMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidDangleFromMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidDroppedFromMaskAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidLookUpAtGiantsAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidAshamedStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidAshamedLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidLookLeftStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidLookLeftLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gSkullKidSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gSkullKidLaughAfterSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+    { &gSkullKidHuddleWithFairiesAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },   // SK_ANIM_HUDDLE_WITH_FAIRIES
+    { &gSkullKidSearchMaskSalesmanAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },  // SK_ANIM_SEARCH_MASK_SALESMAN
+    { &gSkullKidHoldUpMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },     // SK_ANIM_HOLD_UP_MASK_START
+    { &gSkullKidHoldUpMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },      // SK_ANIM_HOLD_UP_MASK_LOOP
+    { &gSkullKidShiverAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },              // SK_ANIM_SHIVER
+    { &gSkullKidDrawAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },                // SK_ANIM_DRAW
+    { &gSkullKidBentOverLookUpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },      // SK_ANIM_BENT_OVER_LOOK_UP
+    { &gSkullKidSpankAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },               // SK_ANIM_SPANK
+    { &gSkullKidHipShakeAndJumpAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },     // SK_ANIM_HIP_SHAKE_AND_JUMP
+    { &gSkullKidPlayFluteAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },           // SK_ANIM_PLAY_FLUTE
+    { &gSkullKidCartwheelAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },           // SK_ANIM_CARTWHEEL
+    { &gSkullKidDangleFromMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // SK_ANIM_LIE_FLAT
+    { &gSkullKidDangleFromMaskStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // SK_ANIM_DANGLE_FROM_MASK_START
+    { &gSkullKidDangleFromMaskLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },  // SK_ANIM_DANGLE_FROM_MASK_LOOP
+    { &gSkullKidDroppedFromMaskAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },     // SK_ANIM_DROPPED_FROM_MASK
+    { &gSkullKidLookUpAtGiantsAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },      // SK_ANIM_LOOK_UP_AT_GIANTS
+    { &gSkullKidAshamedStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },        // SK_ANIM_ASHAMED_START
+    { &gSkullKidAshamedLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },         // SK_ANIM_ASHAMED_LOOP
+    { &gSkullKidLookLeftStartAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },       // SK_ANIM_LOOK_LEFT_START
+    { &gSkullKidLookLeftLoopAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },        // SK_ANIM_LOOK_LEFT_LOOP
+    { &gSkullKidSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },               // SK_ANIM_SNIFF
+    { &gSkullKidLaughAfterSniffAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },     // SK_ANIM_LAUGH_AFTER_SNIFF
 };
 
 /**
@@ -315,19 +324,21 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
     }
 }
 
-/**
- * This function is always called with unusedExtraOffset = 0.
- */
-void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animationInfo,
-                      u16 unusedExtraOffset) {
+void DmStk_ChangeAnim(DmStk* this, PlayState* play, SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
+
     DmStk_LoadObjectForAnimation(this, play);
 
-    animationInfo += unusedExtraOffset;
+    animInfo += animIndex;
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     (animationInfo->frameCount < 0.0f) ? Animation_GetLastFrame(animationInfo->animation)
-                                                        : animationInfo->frameCount,
-                     animationInfo->mode, animationInfo->morphFrames);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
+    } else {
+        endFrame = animInfo->frameCount;
+    }
+
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 /**
@@ -418,6 +429,9 @@ void DmStk_PlaySfxForIntroCutsceneFirstPart(DmStk* this, PlayState* play) {
         case 2530:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_RIDE);
             break;
+
+        default:
+            break;
     }
 }
 
@@ -461,6 +475,9 @@ void DmStk_PlaySfxForIntroCutsceneSecondPart(DmStk* this, PlayState* play) {
         case 173:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STAL03_LAUGH_BIG);
             break;
+
+        default:
+            break;
     }
 }
 
@@ -480,6 +497,9 @@ void DmStk_PlaySfxForObtainingMajorasMaskCutscene(DmStk* this, PlayState* play) 
 
         case 142:
             Actor_PlaySfx(&this->actor, NA_SE_EN_EVIL_POWER);
+            break;
+
+        default:
             break;
     }
 }
@@ -506,6 +526,9 @@ void DmStk_PlaySfxForCurseCutsceneFirstPart(DmStk* this, PlayState* play) {
 
         case 890:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STAL21_PSYCHO_VOICE);
+            break;
+
+        default:
             break;
     }
 }
@@ -554,9 +577,10 @@ void DmStk_PlaySfxForCurseCutsceneSecondPart(DmStk* this, PlayState* play) {
         case 217:
             Actor_PlaySfx(&player->actor, NA_SE_VO_DUMMY_136);
             break;
-    }
 
-    if (player) {}
+        default:
+            break;
+    }
 
     if ((play->csCtx.curFrame >= 263) && (play->csCtx.curFrame < 698)) {
         Actor_PlaySfx(&player->actor, NA_SE_EN_STALKIDS_BODY_LEV - SFX_FLAG);
@@ -591,6 +615,9 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion1(DmStk* this, PlayState* pla
 
         case 678:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
+            break;
+
+        default:
             break;
     }
 
@@ -659,6 +686,9 @@ void DmStk_PlaySfxForPlayingWithFairiesCutscene(DmStk* this, PlayState* play) {
         case 230:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STAL22_LAUGH_KID_L);
             break;
+
+        default:
+            break;
     }
 }
 
@@ -675,6 +705,9 @@ void DmStk_PlaySfxForEndingCutsceneFirstPart(DmStk* this, PlayState* play) {
 
         case 660:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_SHAKEHEAD);
+            break;
+
+        default:
             break;
     }
 }
@@ -731,6 +764,9 @@ void DmStk_PlaySfxForEndingCutsceneSecondPart(DmStk* this, PlayState* play) {
             AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                                (1 << BANK_SYSTEM) | (1 << BANK_OCARINA) | (1 << BANK_VOICE));
             break;
+
+        default:
+            break;
     }
 
     if (this->animIndex == SK_ANIM_SHAKE_HEAD) {
@@ -776,6 +812,9 @@ void DmStk_PlaySfxForClockTowerIntroCutsceneVersion2(DmStk* this, PlayState* pla
 
         case 388:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_STRETCH);
+            break;
+
+        default:
             break;
     }
 
@@ -888,6 +927,9 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion1(DmStk* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_ONGND);
             break;
+
+        default:
+            break;
     }
 }
 
@@ -909,6 +951,9 @@ void DmStk_PlaySfxForMoonWarpCutsceneVersion2(DmStk* this, PlayState* play) {
         case 372:
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_MASK_ON);
             Actor_PlaySfx(&this->actor, NA_SE_EN_STALKIDS_ONGND);
+            break;
+
+        default:
             break;
     }
 }
@@ -979,6 +1024,9 @@ void DmStk_PlaySfxForCutscenes(DmStk* this, PlayState* play) {
                         DmStk_PlaySfxForEndingCutsceneSecondPart(this, play);
                     }
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -1306,7 +1354,7 @@ void DmStk_ClockTower_WaitForDeflectionToEnd(DmStk* this, PlayState* play) {
  * Updates a variety of states based on Skull Kid's current cutscene, including his current
  * animation, his hand/mask type, his fade in/fade out state, and his current cutscene action.
  */
-void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
+void DmStk_HandleCutscene(DmStk* this, PlayState* play) {
     s32 pad;
     s32 cueChannel;
 
@@ -1676,6 +1724,9 @@ void DmStk_UpdateCutscenes(DmStk* this, PlayState* play) {
                 this->handType = SK_HAND_TYPE_DEFAULT;
                 DmStk_ChangeAnim(this, play, &this->skelAnime, &sAnimationInfo[this->animIndex], 0);
                 break;
+
+            default:
+                break;
         }
     }
 
@@ -1781,7 +1832,7 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
             DmStk_UpdateCollision(this, play);
         }
 
-        DmStk_UpdateCutscenes(this, play);
+        DmStk_HandleCutscene(this, play);
         DmStk_PlaySfxForCutscenes(this, play);
 
         // This handles the cutscene where the player takes out the Deku Pipes for the first time.
@@ -1808,6 +1859,9 @@ void DmStk_Update(Actor* thisx, PlayState* play) {
                 if (play->csCtx.state == CS_STATE_IDLE) {
                     this->dekuPipesCutsceneState = SK_DEKU_PIPES_CS_STATE_END;
                 }
+                break;
+
+            default:
                 break;
         }
 
@@ -1853,6 +1907,9 @@ s32 DmStk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                 if (this->alpha == 255) {
                     *dList = NULL;
                 }
+                break;
+
+            default:
                 break;
         }
     } else if (limbIndex == SKULL_KID_LIMB_HEAD) {
@@ -1924,6 +1981,9 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                     Matrix_Pop();
                 }
                 break;
+
+            default:
+                break;
         }
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -1963,6 +2023,9 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, gSkullKidMajorasMask1DL);
+                break;
+
+            default:
                 break;
         }
 
@@ -2007,6 +2070,9 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                 if (this->alpha == 255) {
                     gSPDisplayList(POLY_OPA_DISP++, gSkullKidOpenLeftHand);
                 }
+                break;
+
+            default:
                 break;
         }
 
