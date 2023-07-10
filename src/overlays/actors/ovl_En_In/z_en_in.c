@@ -6,7 +6,6 @@
 
 #include "z_en_in.h"
 #include "z64horse.h"
-#include "objects/object_in/object_in.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
@@ -253,7 +252,7 @@ void func_808F3414(EnIn* this, PlayState* play) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, play);
-    SubS_FillLimbRotTables(play, this->unk376, this->unk39E, ARRAY_COUNT(this->unk376));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_IN_LIMB_MAX);
 }
 
 void func_808F35AC(EnIn* this, PlayState* play) {
@@ -479,10 +478,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
 
     switch (arg2) {
         case 0:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x345C;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3460;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_08)) {
                 textId = 0x3458;
@@ -500,10 +498,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 3:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3485;
-            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x3484;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_04)) {
                 textId = 0x346D;
@@ -513,10 +510,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 4:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x348A;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x348B;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_01)) {
                 textId = 0x3486;
@@ -536,10 +532,9 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
             break;
 
         case 7:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x34A8;
-            } else if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                       (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x34A7;
             } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_04)) {
                 textId = 0x3495;
@@ -1333,7 +1328,6 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
 s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
-    Player* player;
 
     if (*arg3 == 4) {
         return 0;
@@ -1353,9 +1347,8 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 1;
     }
     if (*arg3 == 1) {
-        s32 requiredScopeTemp;
+        Player* player = GET_PLAYER(play);
 
-        player = GET_PLAYER(play);
         func_808F5994(this, play, &player->actor.world.pos, 0xC80);
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1687,8 +1680,8 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         Matrix_RotateXS(this->torsoRot.x, MTXMODE_APPLY);
     }
     if ((limbIndex == 9) || (limbIndex == 10) || (limbIndex == 13)) {
-        rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk39E[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     if (this->unk4AC & 0x40) {
         if (limbIndex == 18) {

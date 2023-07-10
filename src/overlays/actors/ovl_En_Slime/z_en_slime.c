@@ -776,7 +776,7 @@ void EnSlime_Dead(EnSlime* this, PlayState* play) {
         if (this->actor.params == EN_SLIME_TYPE_YELLOW) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_ARROWS_10);
         } else if (this->actor.params == EN_SLIME_TYPE_GREEN) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_MAGIC_SMALL);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_MAGIC_JAR_SMALL);
         } else if (this->actor.params == EN_SLIME_TYPE_RED) {
             Item_DropCollectible(play, &this->actor.world.pos, ITEM00_RECOVERY_HEART);
         }

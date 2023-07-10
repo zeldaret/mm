@@ -631,7 +631,7 @@ void func_80969898(EnJs* this, PlayState* play) {
 void func_80969AA0(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else {
         textId = 0x2215;
@@ -807,7 +807,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
 void func_8096A080(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x2218;
     } else {
         textId = 0x221B;
@@ -837,7 +837,7 @@ void func_8096A104(EnJs* this, PlayState* play) {
 void func_8096A184(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else if (func_80968E38(0) >= 20) {
         textId = 0x2202;
