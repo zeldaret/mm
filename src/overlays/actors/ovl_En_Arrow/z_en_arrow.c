@@ -193,6 +193,9 @@ void func_8088A594(EnArrow* this, PlayState* play) {
             case ARROW_TYPE_DEKU_BUBBLE:
                 Player_PlaySfx(player, NA_SE_PL_DEKUNUTS_FIRE);
                 break;
+
+            default:
+                break;
         }
 
         this->actionFunc = func_8088ACE0;

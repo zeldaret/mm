@@ -691,6 +691,9 @@ s32 func_80BDF308(EnAl* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             this->unk_4EA = 0;
             EnAl_ChangeAnim(this, ENAL_ANIM_2);
             break;
+
+        default:
+            break;
     }
     return true;
 }

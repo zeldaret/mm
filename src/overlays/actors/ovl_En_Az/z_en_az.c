@@ -2009,13 +2009,13 @@ void func_80A98EFC(EnAz* this, PlayState* play, u16 textId, s32 animIndex, s32 b
     EnAz* brother = this->brother;
 
     Actor_ChangeFocus(&this->actor, play, &brother->actor);
-    if (animIndex >= 0) {
+    if (animIndex > BEAVER_ANIM_NONE) {
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, animIndex, &this->animIndex);
     }
     this->actor.textId = 0;
     brother->actor.textId = textId;
     brother->unk_378 = 5;
-    if ((brotherAnimIndex >= 0) && (brotherAnimIndex != brother->animIndex)) {
+    if ((brotherAnimIndex > BEAVER_ANIM_NONE) && (brotherAnimIndex != brother->animIndex)) {
         SubS_ChangeAnimationBySpeedInfo(&brother->skelAnime, sAnimationSpeedInfo, brotherAnimIndex,
                                         &brother->animIndex);
     }
@@ -2031,6 +2031,7 @@ void func_80A98F94(struct_80A98F94* yData, f32 frame, f32* yInterp) {
         yData++;
         nextFrame = yData[0].unk_0;
     } while (nextFrame < frame);
+
     prevFrame = yData[-1].unk_0;
     weight = LERPWEIGHT(frame, prevFrame, nextFrame);
     *yInterp = LERPIMP(yData[-1].unk_4, yData[0].unk_4, weight) * 0.01f;

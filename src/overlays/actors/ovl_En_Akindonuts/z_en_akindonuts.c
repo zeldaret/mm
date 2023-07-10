@@ -462,6 +462,9 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -484,6 +487,9 @@ void func_80BED3BC(EnAkindonuts* this, PlayState* play) {
 
         case 0x15EF:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -545,6 +551,9 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -555,6 +564,9 @@ void func_80BED680(EnAkindonuts* this, PlayState* play) {
 
         case 0x15EF:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -569,10 +581,13 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_DEKU) {
                 this->unk_33C = 0x15F4;
                 break;
-            } else if (player->transformation == PLAYER_FORM_GORON) {
+            }
+
+            if (player->transformation == PLAYER_FORM_GORON) {
                 this->unk_33C = 0x15FE;
                 break;
             }
+
             this->unk_33C = 0x15FC;
             break;
 
@@ -640,6 +655,9 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -661,6 +679,9 @@ void func_80BED8A4(EnAkindonuts* this, PlayState* play) {
 
         case 0x15EF:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -723,6 +744,9 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -733,6 +757,9 @@ void func_80BEDB88(EnAkindonuts* this, PlayState* play) {
 
         case 0x15EF:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -747,10 +774,13 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->unk_33C = 0x1607;
                 break;
-            } else if (player->transformation == PLAYER_FORM_ZORA) {
+            }
+
+            if (player->transformation == PLAYER_FORM_ZORA) {
                 this->unk_33C = 0x1610;
                 break;
             }
+
             this->unk_33C = 0x160E;
             break;
 
@@ -813,6 +843,9 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -834,6 +867,9 @@ void func_80BEDDAC(EnAkindonuts* this, PlayState* play) {
 
         case 0x15EF:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -891,6 +927,9 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x161A;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -901,6 +940,9 @@ void func_80BEE070(EnAkindonuts* this, PlayState* play) {
 
         case 0x161A:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -974,6 +1016,9 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x1629;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -995,6 +1040,9 @@ void func_80BEE274(EnAkindonuts* this, PlayState* play) {
 
         case 0x1629:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -1052,6 +1100,9 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
                         this->unk_33C = 0x15EF;
                         this->actionFunc = func_80BEF360;
                         return;
+
+                    default:
+                        break;
                 }
             } else if (this->unk_32C & 0x10) {
                 this->unk_32C &= ~0x10;
@@ -1062,6 +1113,9 @@ void func_80BEE530(EnAkindonuts* this, PlayState* play) {
 
         case 0x15EF:
             this->unk_32C |= 1;
+            break;
+
+        default:
             break;
     }
 
@@ -1180,6 +1234,9 @@ void func_80BEE938(EnAkindonuts* this, PlayState* play) {
             } else {
                 this->unk_2DC = func_80BEE274;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -1308,6 +1365,9 @@ void func_80BEEFA8(EnAkindonuts* this, PlayState* play) {
                     Audio_PlaySfx_MessageCancel();
                     this->unk_32C |= 0x10;
                     this->unk_2DC(this, play);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -1445,6 +1505,9 @@ void func_80BEF518(EnAkindonuts* this, PlayState* play) {
 
         case 24:
             this->unk_344 = 1.0f;
+            break;
+
+        default:
             break;
     }
 
@@ -1705,6 +1768,9 @@ s32 EnAkindonuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
                     (limbIndex == OBJECT_DNT_LIMB_19)) {
                     *dList = NULL;
                 }
+                break;
+
+            default:
                 break;
         }
     } else if (((this->animIndex == ENAKINDONUTS_ANIM_9) || (this->animIndex == ENAKINDONUTS_ANIM_10)) &&

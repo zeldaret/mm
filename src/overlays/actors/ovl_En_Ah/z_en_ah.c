@@ -303,6 +303,9 @@ s32 func_80BD30C0(EnAh* this, PlayState* play) {
         case 2:
             EnAh_ChangeAnim(this, ENAH_ANIM_4);
             break;
+
+        default:
+            break;
     }
     return false;
 }
@@ -337,6 +340,9 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
                 case 0x2954:
                     this->unk_2F6 = 2;
                     this->unk_2F8 = 8;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -374,6 +380,9 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
 
         case 2:
             return D_80BD3DF8;
+
+        default:
+            break;
     }
     return NULL;
 }
@@ -399,6 +408,7 @@ s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     EnAh_ChangeAnim(this, ENAH_ANIM_0);
     SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= 0x40;
+
     return true;
 }
 
@@ -411,6 +421,7 @@ s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     EnAh_ChangeAnim(this, ENAH_ANIM_4);
     SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= (0x40 | 0x10);
+
     return true;
 }
 
