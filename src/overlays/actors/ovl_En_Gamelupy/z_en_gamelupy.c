@@ -77,7 +77,7 @@ void EnGamelupy_Init(Actor* thisx, PlayState* play) {
     this->collectedTimer = 0;
     this->sparklesAngle = 0;
     this->sparklesAngleStep = 0x7D0;
-    if (this->actor.params == ENGAMELUPY_TYPE_BLUE) {
+    if (EN_GAMELUPY_GET_TYPE(&this->actor) == ENGAMELUPY_TYPE_BLUE) {
         this->type = ENGAMELUPY_TYPE_BLUE;
     } else {
         this->type = ENGAMELUPY_TYPE_GREEN;

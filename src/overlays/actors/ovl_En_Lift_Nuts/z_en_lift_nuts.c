@@ -156,9 +156,9 @@ typedef enum {
     /* 0 */ ENLIFTNUTS_AUTOTALK_MODE_CHECK_OFF,
     /* 1 */ ENLIFTNUTS_AUTOTALK_MODE_SET_ON,
     /* 2 */ ENLIFTNUTS_AUTOTALK_MODE_SET_OFF
-} EnLiftNutsAutoTalkMode;
+} EnLiftNutsAutotalkMode;
 
-s32 EnLiftNuts_AutoTalk(EnLiftNuts* this, EnLiftNutsAutoTalkMode mode) {
+s32 EnLiftNuts_Autotalk(EnLiftNuts* this, EnLiftNutsAutotalkMode mode) {
     static s32 sIsAutotalkOn = false;
 
     switch (mode) {
@@ -206,6 +206,11 @@ typedef enum {
 
 /**
  * Will either check or set the current minigame state based on the given mode
+ *
+ * @return boolean, based on the mode
+ *  ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK: true if the current minigame state equals the provided state, false otherwise
+ *  ENLIFTNUTS_MINIGAME_STATE_MODE_SET: true if the minigame state was set succesfully to the provided state, false
+ * otherwise
  */
 s32 EnLiftNuts_MinigameState(EnLiftNutsMiniGameStateMode mode, EnLiftNutsMiniGameState state) {
     static EnLiftNutsMiniGameState sMinigameState = ENLIFTNUTS_MINIGAME_STATE_NONE;
@@ -298,11 +303,11 @@ void EnLiftNuts_Init(Actor* thisx, PlayState* play) {
     if (!Flags_GetSwitch(play, 0x41)) {
         EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_SET, ENLIFTNUTS_MINIGAME_STATE_NONE);
         EnLiftNuts_SetupIdleHidden(this);
-    } else if (EnLiftNuts_AutoTalk(this, ENLIFTNUTS_AUTOTALK_MODE_CHECK_OFF)) {
+    } else if (EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_CHECK_OFF)) {
         Player* player = GET_PLAYER(play);
 
         player->stateFlags1 |= PLAYER_STATE1_20;
-        EnLiftNuts_AutoTalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_ON);
+        EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_ON);
         EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_SET, ENLIFTNUTS_MINIGAME_STATE_AFTER);
         EnLiftNuts_SetupIdle(this);
     } else {
@@ -498,7 +503,7 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
             this->textId = 0x27D8;
         }
         EnLiftNuts_SetupStartConversation(this);
-    } else if (EnLiftNuts_AutoTalk(this, ENLIFTNUTS_AUTOTALK_MODE_CHECK_OFF) || (this->autotalk == true)) {
+    } else if (EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_CHECK_OFF) || (this->autotalk == true)) {
         if (this->autotalk == true) {
             func_800B8614(&this->actor, play, 200.0f);
         } else if (this->actor.playerHeightRel >= -13.0f) {
@@ -708,7 +713,7 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 player->stateFlags1 &= ~PLAYER_STATE1_20;
                 EnLiftNuts_SetupBurrow(this);
-                EnLiftNuts_AutoTalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_OFF);
+                EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_OFF);
                 if (EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_CHECK, ENLIFTNUTS_MINIGAME_STATE_AFTER)) {
                     EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_SET, ENLIFTNUTS_MINIGAME_STATE_NONE);
                 }
@@ -752,7 +757,7 @@ void EnLiftNuts_HandleConversation(EnLiftNuts* this, PlayState* play) {
 void EnLiftNuts_SetupMove(EnLiftNuts* this) {
     this->actor.speed = 2.0f;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimations, ENLIFTNUTS_ANIM_WALK);
-    EnLiftNuts_AutoTalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_ON);
+    EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_SET_ON);
     EnLiftNuts_MinigameState(ENLIFTNUTS_MINIGAME_STATE_MODE_SET, ENLIFTNUTS_MINIGAME_STATE_STARTING);
     this->actionFunc = EnLiftNuts_Move;
 }

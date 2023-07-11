@@ -961,8 +961,8 @@ f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactTy
  * This allows allows different actors the ability to access the varible, and thus communicate with each other by
  * reading/setting the value.
  *
- * In success returns the allocated pointer if `ptr` was NULL or the `ptr` pointer otherwise.
- * In failure (There's no space left in `play->actorCtx.actorSharedMemory` or an allocation error happened) returns
+ * In success: returns the allocated pointer if `ptr` was NULL or the `ptr` pointer otherwise.
+ * In failure (There's no space left in `play->actorCtx.actorSharedMemory` or an allocation error happened): returns
  * NULL.
  *
  * Note there are no duplicated id checks.
