@@ -24,7 +24,6 @@ beginseg
     include "build/src/boot_O2_g3/CIC6105.o"
     include "build/src/boot_O2_g3/syncprintf.o"
     include "build/src/boot_O2_g3/fault.o"
-    include "build/data/boot/fault.bss.o"
     include "build/src/boot_O2_g3/fault_drawer.o"
     include "build/src/boot_O2/boot_80084940.o"
     include "build/src/boot_O2/loadfragment.o"
