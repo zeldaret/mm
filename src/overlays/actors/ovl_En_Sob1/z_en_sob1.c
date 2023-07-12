@@ -190,7 +190,7 @@ u16 EnSob1_GetTalkOption(EnSob1* this, PlayState* play) {
     if (this->shopType == BOMB_SHOP) {
         if ((gSaveContext.save.day == 1) && (gSaveContext.save.time >= CLOCK_TIME(6, 00))) {
             return 0x648;
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             return 0x649;
         } else {
             return 0x64A;
@@ -1401,7 +1401,7 @@ void EnSob1_InitShop(EnSob1* this, PlayState* play) {
         this->actor.world.pos.y += posOffset->y;
         this->actor.world.pos.z += posOffset->z;
         shopItems = sShops[this->shopType];
-        if ((this->shopType == BOMB_SHOP) && CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        if ((this->shopType == BOMB_SHOP) && CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             sShops[this->shopType][0].shopItemId = SI_BOMB_BAG_30_2;
         }
 
