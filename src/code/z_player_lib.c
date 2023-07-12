@@ -3,7 +3,6 @@
  * Description: Set of library functions to interact with the Player system
  */
 
-#include "prevent_bss_reordering.h"
 #include "global.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"

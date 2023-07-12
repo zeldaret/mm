@@ -16,7 +16,7 @@ void DmChar04_Destroy(Actor* thisx, PlayState* play);
 void DmChar04_Update(Actor* thisx, PlayState* play);
 void DmChar04_Draw(Actor* thisx, PlayState* play);
 
-void func_80AABE34(DmChar04* this, PlayState* play);
+void DmChar04_HandleCutscene(DmChar04* this, PlayState* play);
 
 ActorInit Dm_Char04_InitVars = {
     ACTOR_DM_CHAR04,
@@ -30,31 +30,38 @@ ActorInit Dm_Char04_InitVars = {
     (ActorFunc)DmChar04_Draw,
 };
 
-void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animation, u16 animIndex) {
-    f32 endFrame;
+typedef enum {
+    /* 0 */ DMCHAR04_ANIM_0,
+    /* 1 */ DMCHAR04_ANIM_1,
+    /* 2 */ DMCHAR04_ANIM_MAX
+} DmChar04Animation;
 
-    animation += animIndex;
-
-    if (animation->frameCount < 0.0f) {
-        endFrame = Animation_GetLastFrame(animation->animation);
-    } else {
-        endFrame = animation->frameCount;
-    }
-    Animation_Change(skelAnime, animation->animation, animation->playSpeed, animation->startFrame, endFrame,
-                     animation->mode, animation->morphFrames);
-}
-
-static AnimationInfo sAnimationInfo[] = {
-    { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+static AnimationInfo sAnimationInfo[DMCHAR04_ANIM_MAX] = {
+    { &gameplay_keep_Anim_02B2E8, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR04_ANIM_0
+    { &gameplay_keep_Anim_029140, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }, // DMCHAR04_ANIM_1
 };
 
-Color_RGBAf sPrimColors[] = {
+void DmChar04_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
+
+    animInfo += animIndex;
+
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
+    } else {
+        endFrame = animInfo->frameCount;
+    }
+
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
+}
+
+static Color_RGBAf sPrimColors[] = {
     { 250.0f, 255.0f, 230.0f, 255.0f },
     { 10.0f, 10.0f, 40.0f, 255.0f },
     { 255.0f, 235.0f, 220.0f, 255.0f },
 };
-Color_RGBAf sEnvColors[] = {
+static Color_RGBAf sEnvColors[] = {
     { 220.0f, 160.0f, 80.0f, 255.0f },
     { 120.0f, 255.0f, 255.0f, 255.0f },
     { 255.0f, 235.0f, 220.0f, 255.0f },
@@ -70,17 +77,17 @@ void DmChar04_Init(Actor* thisx, PlayState* play) {
     this->timer = this->actor.params << 0xB;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
-                   this->morphTable, 7);
+                   this->morphTable, FAIRY_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 15.0f);
-    DmChar04_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+    DmChar04_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR04_ANIM_0], 0);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_80AABE34;
+    this->actionFunc = DmChar04_HandleCutscene;
 }
 
 void DmChar04_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80AABE34(DmChar04* this, PlayState* play) {
+void DmChar04_HandleCutscene(DmChar04* this, PlayState* play) {
     u16 cueType = CS_CMD_ACTOR_CUE_113 + this->actor.params;
 
     if (Cutscene_IsCueInChannel(play, cueType)) {
@@ -90,9 +97,9 @@ void func_80AABE34(DmChar04* this, PlayState* play) {
             if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
                 this->cueId = play->csCtx.actorCues[cueChannel]->id;
                 if (play->csCtx.actorCues[cueChannel]->id == 1) {
-                    this->animIndex = 0;
+                    this->animIndex = DMCHAR04_ANIM_0;
                 } else {
-                    this->animIndex = 0;
+                    this->animIndex = DMCHAR04_ANIM_0;
                 }
                 DmChar04_ChangeAnim(&this->skelAnime, &sAnimationInfo[this->animIndex], 0);
             }
@@ -119,8 +126,8 @@ s32 DmChar04_OverrideLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3
     Vec3f sp1C;
     DmChar04* this = THIS;
 
-    if (limbIndex == 6) {
-        sp28 = ((Math_SinS(this->timer << 0xC) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
+    if (limbIndex == FAIRY_LIMB_6) {
+        sp28 = ((Math_SinS(this->timer * 0x1000) * 0.1f) + 1.0f) * 0.012f * (this->actor.scale.x * (1.0f / 0.008f));
         Matrix_MultVec3f(&D_80AAC4F0, &sp1C);
         Matrix_Translate(sp1C.x, sp1C.y, sp1C.z, MTXMODE_NEW);
         Matrix_Scale(sp28, sp28, sp28, MTXMODE_APPLY);
@@ -152,5 +159,6 @@ void DmChar04_Draw(Actor* thisx, PlayState* play) {
     gDPSetDither(POLY_XLU_DISP++, G_CD_BAYER);
     POLY_XLU_DISP = SkelAnime_Draw(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    DmChar04_OverrideLimbDraw, NULL, &this->actor, POLY_XLU_DISP);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

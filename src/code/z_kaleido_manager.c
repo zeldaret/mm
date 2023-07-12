@@ -1,4 +1,5 @@
 #include "global.h"
+#include "fault.h"
 #include "loadfragment.h"
 
 #define KALEIDO_OVERLAY(name)                                                                        \
@@ -16,7 +17,7 @@ void* sKaleidoAreaPtr = NULL;
 KaleidoMgrOverlay* gKaleidoMgrCurOvl = NULL;
 FaultAddrConvClient sKaleidoMgrFaultAddrConvClient;
 
-void* KaleidoManager_FaultAddrConv(void* address, void* param) {
+uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     KaleidoMgrOverlay* kaleidoMgrOvl = gKaleidoMgrCurOvl;
     size_t ramConv;
@@ -34,7 +35,7 @@ void* KaleidoManager_FaultAddrConv(void* address, void* param) {
             }
         }
     }
-    return NULL;
+    return 0;
 }
 
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl) {
