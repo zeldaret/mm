@@ -252,9 +252,9 @@ u16 sBombersNotebookEntries[BOMBERS_NOTEBOOK_PERSON_MAX][BOMBERS_NOTEBOOK_ENTRY_
 
 s16 sBombersNotebookDayRectRectLeft[] = { 120, 120, 270, 420 };
 TexturePtr sBombersNotebookDayTextures[] = {
-    gBombersNotebookDay1stTex,
-    gBombersNotebookDay2ndTex,
-    gBombersNotebookDayFinalTex,
+    gBombersNotebookDay1stENGTex,
+    gBombersNotebookDay2ndENGTex,
+    gBombersNotebookDayFinalENGTex,
 };
 
 #define DEFINE_EVENT(_enum, icon, _colorFlag, _description, _completedMessage, _completedFlag) icon,
@@ -721,7 +721,7 @@ void BombersNotebook_DrawTimeOfDay(Gfx** gfxP) {
     gDPSetPrimColor(gfx++, 0, 0, 0, 0, 0, 255);
     gDPPipeSync(gfx++);
     gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0, 0, 0, 0, PRIMITIVE, 0, 0, 0, TEXEL0);
-    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookTimeOfDayTex, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gfx++, gBombersNotebookTimeOfDayENGTex, G_IM_FMT_I, 96, 20, 0, G_TX_MIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
     BombersNotebook_DrawScisTexRect(&gfx, (timeOfDayRectLeft + 16) * 4, 47 * 4, (timeOfDayRectLeft + 112) * 4, 67 * 4,
