@@ -12,6 +12,7 @@
         <Texture Name="gBombersNotebookBackgroundTex" OutName="bombers_notebook_background" Format="i8" Width="32" Height="32" Offset="0x13D8"/>
         <Texture Name="gBombersNotebookHeaderBoxTex" OutName="bombers_notebook_header_box" Format="i8" Width="8" Height="24" Offset="0x17D8"/>
         <Texture Name="gBombersNotebookLineTex" OutName="bombers_notebook_line" Format="i8" Width="8" Height="1" Offset="0x1898"/>
+        <Texture Name="gBombersNotebookBarSmallTex" OutName="bombers_notebook_bar_small" Format="i8" Width="8" Height="2" Offset="0x18A0"/> <!-- Unused -->
         <Texture Name="gBombersNotebookBarTex" OutName="bombers_notebook_bar" Format="i8" Width="8" Height="4" Offset="0x18B0"/>
         <Texture Name="gBombersNotebookCursorTex" OutName="bombers_notebook_cursor" Format="ia4" Width="16" Height="16" Offset="0x18D0"/>
         <Texture Name="gBombersNoteoobkTimeOfDayBoxTex" OutName="bombers_notebook_time_of_day_box" Format="ia4" Width="64" Height="28" Offset="0x1950"/>
