@@ -5806,7 +5806,7 @@
     0x808AAE1C:("EnOssan_PartTimer_Init",),
     0x808AAE84:("EnOssan_CuriosityShopMan_GetWelcome",),
     0x808AAFB0:("EnOssan_PartTimer_GetWelcome",),
-    0x808AB0B0:("EnOssan_SetHaveMet",),
+    0x808AB0B0:("EnOssan_SetTalked",),
     0x808AB16C:("EnOssan_InitShop",),
     0x808AB404:("EnOssan_GetCutscenes",),
     0x808AB458:("EnOssan_Update",),
