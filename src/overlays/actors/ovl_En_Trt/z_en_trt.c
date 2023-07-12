@@ -776,7 +776,8 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
 void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_SHOP) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_SHOP) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->textId = 0x88F;
     } else if (!(this->flags & ENTRT_TALKED)) {
         this->textId = 0x834;
@@ -908,8 +909,10 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
         this->animIndex = TRT_ANIM_HANDS_ON_COUNTER;
         switch (this->textId) {
             case 0x834:
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
-                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_EMPTY_BOAT_CRUISE)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_EMPTY_BOAT_CRUISE)) {
                     func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
@@ -1488,8 +1491,8 @@ void EnTrt_LookToShopkeeperFromShelf(EnTrt* this, PlayState* play) {
 
 void EnTrt_InitShopkeeper(EnTrt* this, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gKotakeSkel, &gKotakeSleepingAnim, NULL, NULL, 0);
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
-        (gSaveContext.save.day >= 2)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) && (gSaveContext.save.day >= 2)) {
         this->actor.draw = NULL;
     } else {
         this->actor.draw = EnTrt_Draw;
@@ -1504,8 +1507,8 @@ void EnTrt_InitShop(EnTrt* this, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.colChkInfo.cylRadius = 50;
     this->timer = Rand_S16Offset(40, 20);
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
-        gSaveContext.save.day >= 2) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) && gSaveContext.save.day >= 2) {
         this->textId = 0x84A;
         this->actionFunc = EnTrt_ShopkeeperGone;
     } else {

@@ -1081,8 +1081,8 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
                     EnTru_ChangeAnim(this, KOUME_ANIM_TRY_GET_UP);
                 }
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
-                   (this->actor.xzDistToPlayer < 140.0f)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
+                   (fabsf(this->actor.playerHeightRel) < 10.0f) && (this->actor.xzDistToPlayer < 140.0f)) {
             SubS_UpdateFlags(&this->unk_34E, 4, 7);
             this->unk_34E |= 0x1040;
             this->unk_362 = Rand_S16Offset(40, 20);
