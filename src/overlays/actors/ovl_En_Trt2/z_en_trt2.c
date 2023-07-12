@@ -144,13 +144,13 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         this->unk_3A8 = 0x838;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_EMPTY_BOAT_CRUISE)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -378,7 +378,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
-            SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS);
             this->unk_3A8 = 0x88E;
             Message_StartTextbox(play, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -391,11 +391,11 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) ||
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
                 this->unk_3B2 = 12;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS);
                 this->unk_3A8 = 0x88E;
                 Message_StartTextbox(play, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
@@ -410,13 +410,13 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE);
         }
-        SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
@@ -743,12 +743,12 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         Actor_Kill(&this->actor);
         return;
     }

@@ -141,7 +141,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
         SubS_UpdateFlags(&this->unk18C, 4, 7);
         this->unk198 = CHECK_EVENTINF(EVENTINF_35) ? 2 : 1;
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         this->actor.draw = NULL;
     }
     this->msgEventCallback = func_80A50D40;
