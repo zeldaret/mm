@@ -270,34 +270,34 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
     } else if (this->shopType == ZORA_SHOP) {
         switch (player->transformation) {
             case PLAYER_FORM_HUMAN:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_10)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_HUMAN)) {
                     return 0x12CF;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_10);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_HUMAN);
                     return 0x12CE;
                 }
 
             case PLAYER_FORM_DEKU:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_20)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_DEKU)) {
                     return 0x12D1;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_20);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_DEKU);
                     return 0x12D0;
                 }
 
             case PLAYER_FORM_GORON:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_GORON)) {
                     return 0x12D3;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_40);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_GORON);
                     return 0x12D2;
                 }
 
             case PLAYER_FORM_ZORA:
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_57_80)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_ZORA)) {
                     return 0x12D5;
                 } else {
-                    SET_WEEKEVENTREG(WEEKEVENTREG_57_80);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_ZORA_SHOPKEEPER_AS_ZORA);
                     return 0x12D4;
                 }
 
@@ -306,33 +306,33 @@ u16 EnSob1_GetWelcome(EnSob1* this, PlayState* play) {
         }
     } else if (this->shopType == GORON_SHOP) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_NON_GORON)) {
                 return 0xBB9;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_04);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_NON_GORON);
                 return 0xBB8;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_GORON)) {
                 return 0xBBB;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_AS_GORON);
                 return 0xBBA;
             }
         }
     } else if (this->shopType == GORON_SHOP_SPRING) {
         if (player->transformation != PLAYER_FORM_GORON) {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_NON_GORON)) {
                 return 0xBBD;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_NON_GORON);
                 return 0xBBC;
             }
         } else {
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_GORON)) {
                 return 0xBBF;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_58_20);
+                SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_SHOPKEEPER_SPRING_AS_GORON);
                 return 0xBBE;
             }
         }
