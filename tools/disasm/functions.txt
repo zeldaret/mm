@@ -12404,7 +12404,7 @@
     0x80AE1F5C:("EnFsn_HandleLookToShopkeeperBuyingCutscene",),
     0x80AE2028:("EnFsn_SetCursorIndexFromNeutral",),
     0x80AE2074:("EnFsn_CursorLeftRight",),
-    0x80AE21C8:("EnFsn_GetThirdDayItemId",),
+    0x80AE21C8:("EnFsn_GetSpecialItemId",),
     0x80AE2234:("EnFsn_GetStolenItemId",),
     0x80AE2298:("EnFsn_HasItemsToSell",),
     0x80AE2340:("EnFsn_GetShopItemIds",),
