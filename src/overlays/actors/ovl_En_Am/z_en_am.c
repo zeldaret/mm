@@ -203,9 +203,9 @@ void EnAm_SpawnEffects(EnAm* this, PlayState* play) {
 }
 
 void func_808AFF9C(EnAm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
+    f32 endFrame = Animation_GetLastFrame(&gArmosPushedBackAnim);
 
-    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, lastFrame, lastFrame, ANIMMODE_LOOP, 0.0f);
+    Animation_Change(&this->skelAnime, &gArmosPushedBackAnim, 0.0f, endFrame, endFrame, ANIMMODE_LOOP, 0.0f);
     this->enemyCollider.info.bumper.dmgFlags = 0x80000088;
     this->interactCollider.info.bumper.dmgFlags = 0x77CFFF77;
     if (this->actor.colChkInfo.health != 0) {
@@ -379,8 +379,9 @@ void func_808B066C(EnAm* this, PlayState* play) {
 }
 
 void EnAm_TakeDamage(EnAm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f,
-                     Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6, ANIMMODE_ONCE, 0.0f);
+    f32 endFrame = Animation_GetLastFrame(&gArmosTakeDamageAnim) - 6;
+
+    Animation_Change(&this->skelAnime, &gArmosTakeDamageAnim, 1.0f, 4.0f, endFrame, ANIMMODE_ONCE, 0.0f);
     func_800BE504(&this->actor, &this->enemyCollider);
     this->actor.speed = 6.0f;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
@@ -539,16 +540,16 @@ void EnAm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     phi_s2 = 0;
     phi_s1 = 0;
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_AM_LIMB_04) {
         phi_s2 = &this->limbPos[0];
         phi_s1 = D_808B1128;
         phi_s3 = 5;
-    } else if (limbIndex == 13) {
+    } else if (limbIndex == OBJECT_AM_LIMB_0D) {
         phi_s2 = &this->limbPos[9];
         phi_s1 = D_808B117C;
         phi_s3 = 4;
-    } else if ((limbIndex == 7) || (limbIndex == 10)) {
-        phi_s2 = (limbIndex == 7) ? &this->limbPos[5] : &this->limbPos[7];
+    } else if ((limbIndex == OBJECT_AM_LIMB_07) || (limbIndex == OBJECT_AM_LIMB_0A)) {
+        phi_s2 = (limbIndex == OBJECT_AM_LIMB_07) ? &this->limbPos[5] : &this->limbPos[7];
         phi_s1 = D_808B1164;
         phi_s3 = 2;
     } else {
