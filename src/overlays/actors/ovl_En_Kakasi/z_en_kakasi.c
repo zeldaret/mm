@@ -197,9 +197,9 @@ void EnKakasi_Init(Actor* thisx, PlayState* play) {
 
 void EnKakasi_ChangeAnim(EnKakasi* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->animeFrameCount = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
+    this->animEndFrame = Animation_GetLastFrame(&sAnimations[this->animIndex]->common);
     // 1: regular playback speed, 0: starting frame
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animeFrameCount,
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -4.0f);
 }
 
@@ -330,7 +330,7 @@ void EnKakasi_SetupIdleStanding(EnKakasi* this) {
 }
 
 void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
-    u32 saveContextDay = gSaveContext.save.day;
+    u32 day = gSaveContext.save.day;
     s16 x;
     s16 y;
 
@@ -359,7 +359,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);
             this->skelAnime.playSpeed = 2.0f;
         }
-    } else if ((saveContextDay == 3) && gSaveContext.save.isNight) {
+    } else if ((day == 3) && gSaveContext.save.isNight) {
         this->skelAnime.playSpeed = 1.0f;
         if (this->animIndex != ENKAKASI_ANIM_SIDEWAYS_SHAKING) {
             EnKakasi_ChangeAnim(this, 1);
@@ -386,12 +386,12 @@ void EnKakasi_SetupDialogue(EnKakasi* this) {
 }
 
 void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
-    u32 saveContextDay = gSaveContext.save.day;
-    f32 currentAnimeFrame = this->skelAnime.curFrame;
+    u32 day = gSaveContext.save.day;
+    f32 curFrame = this->skelAnime.curFrame;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.yawTowardsPlayer, 5, 2000, 0);
     // if first dialogue
-    if ((this->picto.actor.textId != 0x1644) && (this->animeFrameCount <= currentAnimeFrame) &&
+    if ((this->picto.actor.textId != 0x1644) && (curFrame >= this->animEndFrame) &&
         (this->animIndex == ENKAKASI_ANIM_SLOWROLL)) {
 
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
@@ -400,7 +400,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
 
     // if dialogue: oh sorry come back again
     if ((this->picto.actor.textId == 0x1651) || (this->picto.actor.textId == 0x1659)) {
-        if ((this->animeFrameCount <= currentAnimeFrame) && (this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER)) {
+        if ((curFrame >= this->animEndFrame) && (this->animIndex != ENKAKASI_ANIM_SPIN_REACH_OFFER)) {
             if (++this->unkCounter1A4 >= 2) {
                 this->unkCounter1A4 = 0;
                 EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
@@ -517,7 +517,7 @@ void EnKakasi_RegularDialogue(EnKakasi* this, PlayState* play) {
                     this->picto.actor.textId = 0x1658;
                 } else if (this->picto.actor.textId == 0x165C) {
                     this->picto.actor.textId = 0x165E;
-                } else if ((saveContextDay == 3) && gSaveContext.save.isNight) {
+                } else if ((day == 3) && gSaveContext.save.isNight) {
                     this->picto.actor.textId = 0x164F;
                 } else {
                     this->picto.actor.textId = 0x1652;
@@ -639,14 +639,13 @@ void EnKakasi_TeachingSong(EnKakasi* this, PlayState* play) {
 }
 
 void EnKakasi_PostSongLearnTwirl(EnKakasi* this, PlayState* play) {
-    f32 animeFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
     if ((this->postTeachTimer == 0) && (this->animIndex != ENKAKASI_ANIM_TWIRL)) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_TWIRL);
         this->skelAnime.playSpeed = 2.0f;
     }
-    if ((this->postTeachTimer == 0) && (this->animIndex == ENKAKASI_ANIM_TWIRL) &&
-        (this->animeFrameCount <= animeFrame)) {
+    if ((this->postTeachTimer == 0) && (this->animIndex == ENKAKASI_ANIM_TWIRL) && (curFrame >= this->animEndFrame)) {
         EnKakasi_SetupPostSongLearnDialogue(this, play);
     }
 }
@@ -667,7 +666,7 @@ void EnKakasi_SetupPostSongLearnDialogue(EnKakasi* this, PlayState* play) {
 
 void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 tempAnimFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Vec3f vec3fCopy;
 
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
@@ -683,7 +682,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if ((this->picto.actor.textId == 0x1648) && (this->animIndex == ENKAKASI_ANIM_HOPPING_REGULAR) &&
-        (this->animeFrameCount <= tempAnimFrame)) {
+        (curFrame >= this->animEndFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_ARMS_CROSSED_ROCKING);
@@ -691,7 +690,7 @@ void EnKakasi_PostSongLearnDialogue(EnKakasi* this, PlayState* play) {
     }
 
     if ((this->picto.actor.textId == 0x164B) && (this->animIndex == ENKAKASI_ANIM_ARMS_CROSSED_ROCKING) &&
-        (this->animeFrameCount <= tempAnimFrame)) {
+        (curFrame >= this->animEndFrame)) {
         this->unkCounter1A4++;
         if (this->unkCounter1A4 >= 2) {
             EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SPIN_REACH_OFFER);
@@ -818,11 +817,10 @@ void EnKakasi_SetupDanceNightAway(EnKakasi* this) {
 }
 
 void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
-    f32 currentFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Vec3f localVec3f;
     Player* player;
 
-    currentFrame = this->skelAnime.curFrame;
     EnKakasi_CheckPlayerPosition(this, play);
     Math_SmoothStepToS(&this->picto.actor.shape.rot.y, this->picto.actor.home.rot.y, 1, 3000, 0);
     this->unk22C.y = this->picto.actor.home.pos.y + 50.0f;
@@ -856,7 +854,7 @@ void EnKakasi_DancingNightAway(EnKakasi* this, PlayState* play) {
 
         case 1:
             // end of twirl, start shaking back and forth
-            if ((this->unk204 == 0) && (this->animeFrameCount <= currentFrame)) {
+            if ((this->unk204 == 0) && (curFrame >= this->animEndFrame)) {
                 this->unk204 = 0x14;
                 this->unk190++;
                 EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_SIDEWAYS_SHAKING);

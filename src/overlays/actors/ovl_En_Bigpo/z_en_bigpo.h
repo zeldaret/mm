@@ -54,12 +54,12 @@ typedef struct EnBigpo {
 // well version is "regular" (spawns automatically), dampe basement version is "summoned"
 // on room enter, 3 "possiblefire" are turned into "chosenfire" at random
 typedef enum EnBigpoType {
-  /* 0 */ BIG_POE_REGULAR,
-  /* 1 */ BIG_POE_SUMMONED,
-  /* 2 */ BIG_POE_POSSIBLEFIRE,
-  /* 3 */ BIG_POE_CHOSENFIRE,
-  /* 4 */ BIG_POE_REVEALEDFIRE,
-  /* 5 */ BIG_POE_UNK5
+  /* 0 */ BIG_POE_TYPE_REGULAR,
+  /* 1 */ BIG_POE_TYPE_SUMMONED,
+  /* 2 */ BIG_POE_TYPE_POSSIBLE_FIRE,
+  /* 3 */ BIG_POE_TYPE_CHOSEN_FIRE,
+  /* 4 */ BIG_POE_TYPE_REVEALED_FIRE,
+  /* 5 */ BIG_POE_TYPE_UNK5
 } EnBigpoType;
 
 #define BIG_POE_GET_SWITCHFLAGS(thisx) (u8)((thisx)->params >> 0x8) 

@@ -8,7 +8,7 @@
         <Animation Name="gBigPoeAwakenSpawnAnim" Offset="0xF9C" /> <!-- Original name is "pog_start" -->
         <Animation Name="gBigPoeAwakenStretchAnim" Offset="0x1360" /> <!-- Original name is "pog_wait" -->
         <Texture Name="gBigPoeSoulFace" OutName="bigpo_soul_face" Format="i8" Width="32" Height="64" Offset="0x1370" />
-        <DList Name="gBigPoeDrawSoulDL" Offset="0x1BB0" /> <!-- Original name is "bigpo_soul_modelT" -->
+        <DList Name="gBigPoeSoulDL" Offset="0x1BB0" /> <!-- Original name is "bigpo_soul_modelT" -->
         <Texture Name="gBigPoeNecklaceSkullHalfTex" OutName="bigpo_skull_necklace" Format="rgba16" Width="16" Height="16" Offset="0x1C70" />
         <Texture Name="gBigPoeLanternGlassTex" OutName="bigpo_lantern_glass" Format="rgba16" Width="16" Height="16" Offset="0x1E70" />
         <Texture Name="gBigPoeTornRobeTex" OutName="bigpo_torn_robe" Format="rgba16" Width="32" Height="32" Offset="0x2070" />
@@ -17,22 +17,24 @@
         <Texture Name="gBigPoeNecklaceBeadsTex" OutName="bigpo_necklace_beads" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
         <Texture Name="gBigPoeShawlTex" OutName="bigpo_shawl" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
         <Texture Name="gBigPoeGlowingEyeTex" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
-        <!-- <Blob Name="object_bigpo_Blob_003200" Size="0x350" Offset="0x3200" /> -->
-        <!-- <Blob Name="object_bigpo_Blob_003790" Size="0x370" Offset="0x3790" /> -->
-        <DList Name="gBigPoeDrawLanternFallingDL" Offset="0x41A0" /> <!-- Original name is "pog_kantera_hahen_model" ("kantera" = "lantern", "hahen" = "fragment") -->
-        <DList Name="gBigPoeDrawLanternMainDL" Offset="0x42C8" /> <!-- Original name is "poh_big_cantera" -->
-        <DList Name="gBigPoeDrawLanternPurpleTopDL" Offset="0x43F8" />
-        <DList Name="gBigPoeDrawHandDL" Offset="0x4488" />
-        <DList Name="gBigPoeDrawSmallArmDL" Offset="0x4538" />
-        <DList Name="gBigPoeDrawBigArmDL" Offset="0x45D8" />
-        <DList Name="gBigPoeDrawArmAndGrowthDL" Offset="0x4680" />
-        <DList Name="gBigPoeDrawMediumArmDL" Offset="0x4768" />
-        <DList Name="gBigPoeDrawNecklaceHoodShawlDL" Offset="0x4808" />
-        <DList Name="gBigPoeDrawFaceDL" Offset="0x4AE8" />
-        <DList Name="gBigPoeDrawLowerRobeDL" Offset="0x4BD8" />
+        <!-- Unused remnant of OoT -->
+        <Array Name="gBigPoeUnusedVtx" Count="283" Offset="0x2FF0">
+            <Vtx/>
+        </Array>
+        <DList Name="gBigPoeLanternFallingDL" Offset="0x41A0" /> <!-- Original name is "pog_kantera_hahen_model" ("kantera" = "lantern", "hahen" = "fragment") -->
+        <DList Name="gBigPoeLanternMainDL" Offset="0x42C8" /> <!-- Original name is "poh_big_cantera" -->
+        <DList Name="gBigPoeLanternPurpleTopDL" Offset="0x43F8" />
+        <DList Name="gBigPoeHandDL" Offset="0x4488" />
+        <DList Name="gBigPoeSmallArmDL" Offset="0x4538" />
+        <DList Name="gBigPoeBigArmDL" Offset="0x45D8" />
+        <DList Name="gBigPoeArmAndGrowthDL" Offset="0x4680" />
+        <DList Name="gBigPoeMediumArmDL" Offset="0x4768" />
+        <DList Name="gBigPoeNecklaceHoodShawlDL" Offset="0x4808" />
+        <DList Name="gBigPoeFaceDL" Offset="0x4AE8" />
+        <DList Name="gBigPoeLowerRobeDL" Offset="0x4BD8" />
         <Texture Name="gBigPoeCrispyPiecesTex" OutName="bigpo_crispy_pieces" Format="rgba16" Width="16" Height="16" Offset="0x4C98" />
         <Texture Name="gBigPoeCrispyEyesTex" OutName="bigpo_crispy_eyes" Format="rgba16" Width="8" Height="8" Offset="0x4E98" />
-        <DList Name="gBigPoeDrawCrispyBodyDL" Offset="0x58B8" />
+        <DList Name="gBigPoeCrispyBodyDL" Offset="0x58B8" />
         <Limb Name="gBigPoeFaceLimb" Type="Standard" EnumName="BIG_POE_LIMB_FACE" Offset="0x5B88" />
         <Limb Name="gBigPoeLeftUpperArmLimb" Type="Standard" EnumName="BIG_POE_LIMB_LEFT_UPPER_ARM" Offset="0x5B94" />
         <Limb Name="gBigPoeLeftForearmLimb" Type="Standard" EnumName="BIG_POE_LIMB_LEFT_FOREARM" Offset="0x5BA0" />
