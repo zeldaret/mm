@@ -353,7 +353,7 @@ void func_80A3A0AC(EnElfgrp* this, PlayState* play) {
 
 void func_80A3A0F4(EnElfgrp* this, PlayState* play) {
     if (this->unk_144 == 10) {
-        play_sound(NA_SE_SY_WHITE_OUT_T);
+        Audio_PlaySfx(NA_SE_SY_WHITE_OUT_T);
         if (ENELFGRP_GET(&this->actor) < ENELFGRP_4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 30.0f, this->actor.world.pos.z, 0, 0, 0,
@@ -365,7 +365,7 @@ void func_80A3A0F4(EnElfgrp* this, PlayState* play) {
     }
 
     if ((this->unk_144 > 10) && (this->unk_14A & 1)) {
-        func_800B9010(&this->actor, NA_SE_EV_FAIRY_GROUP_FRY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FAIRY_GROUP_FRY - SFX_FLAG);
     }
 
     if (this->unk_144 == 0) {
@@ -381,14 +381,14 @@ void func_80A3A210(EnElfgrp* this, PlayState* play) {
     }
 
     if (this->unk_14A & 1) {
-        func_800B9010(&this->actor, NA_SE_EV_FAIRY_GROUP_FRY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FAIRY_GROUP_FRY - SFX_FLAG);
     }
 }
 
 void func_80A3A274(EnElfgrp* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_100)) {
         if (this->unk_14A & 1) {
-            func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
         }
 
         switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_100)]->id) {
@@ -558,7 +558,7 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play) {
     }
 
     if (this->actor.xzDistToPlayer < 30.0f) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             this->actor.flags &= ~ACTOR_FLAG_10000;
             player->actor.freezeTimer = 100;
             player->stateFlags1 |= PLAYER_STATE1_20000000;

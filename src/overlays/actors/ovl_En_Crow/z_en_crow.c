@@ -465,8 +465,8 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
-    if (this->collider.base.acFlags & AT_HIT) {
-        this->collider.base.acFlags &= ~AT_HIT;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
 
         if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
@@ -542,7 +542,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffFrozenSteamScale = this->drawDmgEffFrozenSteamScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffScale, 0.5f, 0.5f * 0.025f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

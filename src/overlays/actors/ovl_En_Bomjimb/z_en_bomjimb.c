@@ -656,7 +656,7 @@ void func_80C0217C(EnBomjimb* this, PlayState* play) {
 
     this->actor.world.rot.y = this->unk_2D6 + this->unk_2D4;
 
-    if (SurfaceType_GetSceneExitIndex(&play->colCtx, sp58, sp5C)) {
+    if (SurfaceType_GetSceneExitIndex(&play->colCtx, sp58, sp5C) != 0) {
         s16 temp = BINANG_SUB(this->actor.world.rot.y, this->actor.yawTowardsPlayer - 0x8000);
 
         if (temp < 0) {

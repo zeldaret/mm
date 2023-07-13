@@ -555,7 +555,7 @@ void EnBigpo_IdleFlying(EnBigpo* this, PlayState* play) {
     Math_StepToF(&this->savedHeight, player->actor.world.pos.y + 100.0f, 1.5f);
     this->actor.world.pos.y = (Math_SinF(this->hoverHeightCycleTimer * (M_PI / 20)) * 10.0f) + this->savedHeight;
     Math_StepToF(&this->actor.speed, 3.0f, 0.2f);
-    func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
         this->unk208 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
@@ -687,21 +687,20 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     if (this->idleTimer < 8) {
         camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x4800;
         if (this->idleTimer < 5) {
-            unkTemp = (this->idleTimer << 0xC) - 0x4000;
-            // 1.4.0...1 is NOT 1.4, the rodata demands it
-            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * 1.4000001f) + this->actor.world.pos.y;
+            unkTemp = (this->idleTimer * 0x1000) - 0x4000;
+            tempVec.y = (((Math_SinS(unkTemp) * 23.0f) + 40.0f) * (1400.0f * 0.001f)) + this->actor.world.pos.y;
             unkTemp2 = Math_CosS(unkTemp) * 32.2f;
             tempVec.x = (Math_SinS(camYaw) * unkTemp2) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(camYaw) * unkTemp2) + this->actor.world.pos.z;
 
         } else {
-            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * 1.4000001f);
+            tempVec.y = this->actor.world.pos.y + ((40.0f + (15.0f * (this->idleTimer - 5))) * (1400.0f * 0.001f));
             tempVec.x = (Math_SinS(camYaw) * 32.2f) + this->actor.world.pos.x;
             tempVec.z = (Math_CosS(camYaw) * 32.2f) + this->actor.world.pos.z;
         }
 
         // not sure what we're turning this into, but its based on the timer
-        modifiedTimer = ((f32)((this->idleTimer * 10) + 80) * 1.4000001f);
+        modifiedTimer = ((this->idleTimer * 10) + 80) * (1400.0f * 0.001f);
         func_800B3030(play, &tempVec, &D_80B6506C, &gZeroVec3f, modifiedTimer, 0, 2);
         tempVec.x = (2.0f * this->actor.world.pos.x) - tempVec.x;
         tempVec.z = (2.0f * this->actor.world.pos.z) - tempVec.z;
@@ -720,7 +719,7 @@ void EnBigpo_BurnAwayDeath(EnBigpo* this, PlayState* play) {
     }
 
     if (this->idleTimer < 18) {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // burning sfx
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG); // burning sfx
     }
     if (this->idleTimer == 18) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_WIZ_DISAPPEAR);

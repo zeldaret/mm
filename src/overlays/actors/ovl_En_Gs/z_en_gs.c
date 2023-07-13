@@ -298,7 +298,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     break;
 
                 case OCARINA_SONG_SONATA:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+                    if ((this->actor.params == ENGS_1) && (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
                         this->unk_194 = 1;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -308,7 +308,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     break;
 
                 case OCARINA_SONG_NEW_WAVE:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
+                    if ((this->actor.params == ENGS_1) && (GET_PLAYER_FORM == PLAYER_FORM_ZORA)) {
                         this->unk_194 = 3;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -318,7 +318,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     break;
 
                 case OCARINA_SONG_GORON_LULLABY:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+                    if ((this->actor.params == ENGS_1) && (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                         this->unk_194 = 2;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -788,13 +788,13 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
                     if ((this->unk_1D4 % 20) == 7) {
                         func_80999584(&this->unk_1FA, &flashColours[0]);
                         this->unk_1F4 = this->unk_1FA;
-                        play_sound(NA_SE_SY_WARNING_COUNT_E);
+                        Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                         this->unk_200 = 0.0f;
                     }
                 } else if ((this->unk_1D4 % 20) == 7) {
                     func_80999584(&this->unk_1FA, &flashColours[1]);
                     this->unk_1F4 = this->unk_1FA;
-                    play_sound(NA_SE_SY_WARNING_COUNT_N);
+                    Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_N);
                     this->unk_200 = 0.0f;
                 }
             }
@@ -826,7 +826,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             func_800B0EB0(play, &sp6C, &sp60, &dustAccel, &dustPrim, &dustEnv, Rand_ZeroFloat(50.0f) + 200.0f, 40, 15);
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
 
         if (this->unk_1D4++ >= 40) {
             this->unk_19A |= 0x10;
@@ -859,7 +859,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             this->unk_216 = 0;
             this->actionFunc = func_80999A8C;
         } else {
-            func_800B9010(&this->actor, NA_SE_EV_STONE_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_STONE_LAUNCH - SFX_FLAG);
         }
 
         Actor_MoveWithGravity(&this->actor);

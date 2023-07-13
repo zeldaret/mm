@@ -126,7 +126,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
         }
 
         if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM) {
-            func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 
@@ -215,8 +215,6 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     ObjRaillift* this = THIS;
-    f32 target;
-    f32 step;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);
@@ -227,7 +225,8 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
         }
     }
     if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
-        s32 requiredScopeTemp;
+        f32 target;
+        f32 step;
 
         this->isPlayerOnTopPrev = this->isPlayerOnTop;
         this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;

@@ -430,7 +430,7 @@ typedef enum {
     /* 0x1F6 */ CS_CMD_ACTOR_CUE_502,
     /* 0x1F7 */ CS_CMD_ACTOR_CUE_503,
     /* 0x1F8 */ CS_CMD_ACTOR_CUE_504,
-    /* 0x1F9 */ CS_CMD_ACTOR_CUE_505,
+    /* 0x1F9 */ CS_CMD_ACTOR_CUE_SOTCS, // Song of Time Cutscenes (Double SoT, Three-Day Reset SoT)
     /* 0x1FA */ CS_CMD_ACTOR_CUE_506,
     /* 0x1FB */ CS_CMD_ACTOR_CUE_507,
     /* 0x1FC */ CS_CMD_ACTOR_CUE_508,

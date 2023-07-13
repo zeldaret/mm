@@ -73,4 +73,8 @@ typedef union{
 
 #define RGBA8(r, g, b, a) ((((r) & 0xFF) << 24) | (((g) & 0xFF) << 16) | (((b) & 0xFF) << 8) | (((a) & 0xFF) << 0))
 
+#define RGBA16_GET_R(pixel) (((pixel) >> 11) & 0x1F)
+#define RGBA16_GET_G(pixel) (((pixel) >> 6) & 0x1F)
+#define RGBA16_GET_B(pixel) (((pixel) >> 1) & 0x1F)
+
 #endif

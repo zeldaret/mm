@@ -348,11 +348,11 @@ void func_80C03AF4(EnBombers* this, PlayState* play) {
             break;
     }
 
-    if (!Text_GetFaceReaction(play, 0x12)) {
+    if (Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS) == 0) {
         func_80C039A8(this, play);
     } else {
         this->unk_2A6 = TEXT_STATE_5;
-        this->actor.textId = Text_GetFaceReaction(play, 0x12);
+        this->actor.textId = Text_GetFaceReaction(play, FACE_REACTION_SET_BOMBERS);
     }
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -403,11 +403,11 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
             sp2A = 1;
         } else if (this->actor.textId == 0x740) {
             if (play->msgCtx.choiceIndex == 0) {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 this->actor.textId = 0x742;
                 sp2A = 1;
             } else {
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->actor.textId = 0x741;
                 sp2A = 1;
             }
@@ -423,11 +423,11 @@ void func_80C03FAC(EnBombers* this, PlayState* play) {
             sp2A = 1;
         } else if (this->actor.textId == 0x74C) {
             if (play->msgCtx.choiceIndex == 1) {
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->actor.textId = 0x737;
                 sp2A = 1;
             } else {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 this->actor.textId = 0x74D;
                 EnBombers_ChangeAnim(this, ENBOMBERS_ANIM_14, 1.0f);
                 sp2A = 1;

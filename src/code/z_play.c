@@ -1,5 +1,7 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "buffers.h"
+#include "idle.h"
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"
 #include "z64quake.h"
@@ -824,7 +826,7 @@ void Play_UpdateTransition(PlayState* this) {
             break;
 
         case TRANS_MODE_SANDSTORM:
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA < 110) {
                     gTransitionTileState = TRANS_TILE_OFF;
@@ -859,7 +861,7 @@ void Play_UpdateTransition(PlayState* this) {
             break;
 
         case TRANS_MODE_SANDSTORM_END:
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
 
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA <= 0) {
@@ -1064,7 +1066,7 @@ void Play_Update(PlayState* this) {
         this->msgCtx.msgMode = 0;
         this->msgCtx.currentTextId = 0;
         this->msgCtx.stateTimer = 0;
-        play_sound(NA_SE_SY_CANCEL);
+        Audio_PlaySfx(NA_SE_SY_CANCEL);
     }
     if (sBombersNotebookOpen) {
         BombersNotebook_Update(this, &sBombersNotebook, this->state.input);
@@ -2090,8 +2092,8 @@ void Play_Init(GameState* thisx) {
     s32 scene;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
-        if (CHECK_EVENTINF(EVENTINF_27)) {
-            CLEAR_EVENTINF(EVENTINF_27);
+        if (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
+            CLEAR_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
             STOP_GAMESTATE(&this->state);
             SET_NEXT_GAMESTATE(&this->state, DayTelop_Init, sizeof(DayTelopState));
             return;
@@ -2148,7 +2150,7 @@ void Play_Init(GameState* thisx) {
         }
 
         // "First cycle" Termina Field
-        if (INV_CONTENT(ITEM_OCARINA) != ITEM_OCARINA) {
+        if (INV_CONTENT(ITEM_OCARINA_OF_TIME) != ITEM_OCARINA_OF_TIME) {
             if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
                 (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
                 gSaveContext.nextCutsceneIndex = 0xFFF4;
