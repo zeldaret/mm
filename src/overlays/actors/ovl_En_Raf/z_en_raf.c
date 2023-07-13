@@ -895,9 +895,9 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = Rand_CenteredFloat(30000.0f);
-            effect->rotation.y = Rand_CenteredFloat(30000.0f);
-            effect->rotation.z = Rand_CenteredFloat(30000.0f);
+            effect->rot.x = Rand_CenteredFloat(30000.0f);
+            effect->rot.y = Rand_CenteredFloat(30000.0f);
+            effect->rot.z = Rand_CenteredFloat(30000.0f);
             return;
         }
     }
@@ -912,9 +912,9 @@ void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
             effect->pos.x += effect->velocity.x;
             effect->pos.y += effect->velocity.y;
             effect->pos.z += effect->velocity.z;
-            effect->rotation.x += 0xBB8;
-            effect->rotation.y += 0xBB8;
-            effect->rotation.z += 0xBB8;
+            effect->rot.x += 0xBB8;
+            effect->rot.y += 0xBB8;
+            effect->rot.z += 0xBB8;
             effect->velocity.x += effect->accel.x;
             effect->velocity.y += effect->accel.y;
             effect->velocity.z += effect->accel.z;
@@ -953,9 +953,9 @@ void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-            Matrix_RotateXS(effect->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateYS(effect->rotation.y, MTXMODE_APPLY);
-            Matrix_RotateZS(effect->rotation.z, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
+            Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);
