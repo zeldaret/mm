@@ -557,8 +557,8 @@ void EnBox_Open(EnBox* this, PlayState* play) {
         if (sfxId != NA_SE_NONE) {
             Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, sfxId);
         }
-        if (this->skelAnime.jointTable[3].z > 0) {
-            this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[3].z) * 0.00006f;
+        if (this->skelAnime.jointTable[OBJECT_BOX_CHEST_LIMB_03].z > 0) {
+            this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[OBJECT_BOX_CHEST_LIMB_03].z) * 0.00006f;
             if (this->unk_1A8 < 0.0f) {
                 this->unk_1A8 = 0.0f;
             } else if (this->unk_1A8 > 1.0f) {

@@ -899,9 +899,9 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
                         this->actor.child = &randomFirePo->actor;
                     }
                     break;
-                } else {
-                    randomIndex--;
                 }
+
+                randomIndex--;
             }
             enemyPtr = enemyPtr->next;
         }
@@ -909,7 +909,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
 
     // remove unused fires
     for (enemyPtr = GET_FIRST_ENEMY(play); enemyPtr != NULL; enemyPtr = enemyPtr->next) {
-        if (enemyPtr->id == ACTOR_EN_BIGPO && enemyPtr->params == BIG_POE_POSSIBLEFIRE) {
+        if ((enemyPtr->id == ACTOR_EN_BIGPO) && (enemyPtr->params == BIG_POE_POSSIBLEFIRE)) {
             randomFirePo = (EnBigpo*)enemyPtr;
             randomFirePo->actionFunc = EnBigpo_Die;
             randomFirePo->actor.update = EnBigpo_UpdateFire;
@@ -932,7 +932,7 @@ void EnBigpo_FireCounting(EnBigpo* this, PlayState* play) {
     s32 activatedFireCount = 0;
 
     for (firePo = (EnBigpo*)this->actor.child; firePo; firePo = (EnBigpo*)firePo->actor.child) {
-        if (firePo->actor.params == BIG_POE_REVEALEDFIRE && firePo->actionFunc == EnBigpo_RevealedFireIdle) {
+        if ((firePo->actor.params == BIG_POE_REVEALEDFIRE) && (firePo->actionFunc == EnBigpo_RevealedFireIdle)) {
             activatedFireCount++;
         }
     }
@@ -1203,7 +1203,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffAlpha = this->mainColor.a * (1.0f / 255.0f);
             }
         }
-        this->drawDmgEffScale = ((this->drawDmgEffAlpha + 1.0f) * 0.5f);
+        this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.5f;
         this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.0f);
     }
 }
