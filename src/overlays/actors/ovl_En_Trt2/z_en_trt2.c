@@ -393,7 +393,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
             if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 this->unk_3B2 = 12;
             } else {
                 SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS);
@@ -411,13 +411,13 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE);
         }
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);

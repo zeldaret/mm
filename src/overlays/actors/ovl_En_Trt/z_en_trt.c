@@ -407,7 +407,7 @@ void EnTrt_Goodbye(EnTrt* this, PlayState* play) {
 void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         if (this->textId == 0x88F) {
-            if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
+            if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                     CutsceneManager_Stop(this->csId);
                     this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
@@ -453,13 +453,13 @@ void EnTrt_GiveRedPotionForKoume(EnTrt* this, PlayState* play) {
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE);
         }
         SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME);
         player->stateFlags2 &= ~PLAYER_STATE2_20000000;
         this->actionFunc = EnTrt_GivenRedPotionForKoume;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
@@ -975,7 +975,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
 
     this->blinkFunc = EnTrt_Blink;
     if ((talkState == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_BOTTLE)) {
+        if (Inventory_HasEmptyBottle() || !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
             if (this->cutsceneState == ENTRT_CUTSCENESTATE_PLAYING) {
                 CutsceneManager_Stop(this->csId);
                 this->cutsceneState = ENTRT_CUTSCENESTATE_STOPPED;
