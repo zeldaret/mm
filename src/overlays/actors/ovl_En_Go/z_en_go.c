@@ -2061,7 +2061,8 @@ void EnGo_Frozen(EnGo* this, PlayState* play) {
     Actor* actorCollidedWith = this->colliderCylinder.base.ac;
 
     if ((this->actionFlags & ENGO_FLAG_HIT_BY_OTHER) &&
-        (((actorCollidedWith != NULL) && (actorCollidedWith->id == ACTOR_OBJ_AQUA) && AQUA_HOT(actorCollidedWith)) ||
+        (((actorCollidedWith != NULL) && (actorCollidedWith->id == ACTOR_OBJ_AQUA) &&
+          (AQUA_GET_TYPE(actorCollidedWith) != AQUA_TYPE_COLD)) ||
          (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_FIRE))) {
         this->actionFunc = EnGo_AwaitThaw;
     }

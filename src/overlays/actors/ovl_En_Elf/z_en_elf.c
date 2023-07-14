@@ -298,7 +298,7 @@ void func_8088CC48(EnElf* this, PlayState* play) {
     func_8088CBAC(this, play);
     this->unk_25C = 0;
     this->disappearTimer = 240;
-    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->unk_260)) {
+    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->collectibleFlag)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -320,7 +320,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     EnElf* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 colorConfig;
-    s32 params;
+    s32 fairyType;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
@@ -340,15 +340,15 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     this->unk_240 = 0.0f;
     colorConfig = 0;
 
-    this->unk_260 = ENELF_GET_FE00(&this->actor);
-    params = ENELF_GET_F(&this->actor);
+    this->collectibleFlag = FAIRY_GET_COLLECTIBLE_FLAG(&this->actor);
+    fairyType = FAIRY_GET_TYPE(&this->actor);
     if (thisx->params & 0x100) {
         this->fairyFlags |= 0x400;
     }
 
-    this->actor.params = params;
-    switch (params) {
-        case 0:
+    this->actor.params = fairyType;
+    switch (fairyType) {
+        case FAIRY_TYPE_0:
             thisx->room = -1;
             EnElf_SetupAction(this, func_8088E850);
             func_8088C51C(this, 0);
@@ -364,7 +364,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
 
-        case 1:
+        case FAIRY_TYPE_1:
             colorConfig = -1;
             gSaveContext.jinxTimer = 0;
             EnElf_SetupAction(this, func_8088E0F0);
@@ -376,7 +376,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_250 = 0.0f;
             break;
 
-        case 5:
+        case FAIRY_TYPE_5:
             colorConfig = -1;
             EnElf_SetupAction(this, func_8088E484);
             this->unk_254 = 0.0f;
@@ -387,7 +387,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_250 = 7.0f;
             break;
 
-        case 7:
+        case FAIRY_TYPE_7:
             this->fairyFlags |= 0x200;
             thisx->shape.shadowDraw = ActorShadow_DrawWhiteCircle;
             this->fairyFlags |= 0x100;
@@ -397,7 +397,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 2:
+        case FAIRY_TYPE_2:
             this->fairyFlags |= 0x100;
             colorConfig = -1;
             this->fairyFlags |= 0x800;
@@ -406,7 +406,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 6:
+        case FAIRY_TYPE_6:
             colorConfig = -1;
             this->fairyFlags |= 0x800;
             this->fairyFlags |= 0x2000;
@@ -414,25 +414,25 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 9:
+        case FAIRY_TYPE_9:
             this->fairyFlags |= 0x1000;
 
-        case 10:
+        case FAIRY_TYPE_10:
             colorConfig = -2;
             func_8088CC48(this, play);
             break;
 
-        case 8:
+        case FAIRY_TYPE_8:
             Actor_Kill(thisx);
             return;
 
-        case 3:
+        case FAIRY_TYPE_3:
             colorConfig = Rand_ZeroFloat(11.99f) + 1.0f;
             EnElf_SetupAction(this, func_8088E018);
             func_8088C51C(this, 0);
             break;
 
-        case 4:
+        case FAIRY_TYPE_4:
             EnElf_SetupAction(this, func_8088E0E0);
             func_8088C51C(this, 6);
             this->fairyFlags |= 8;
@@ -441,9 +441,12 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
                 for (i = 0; i < 8; i++) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, thisx->world.pos.x, thisx->world.pos.y - 30.0f,
-                                thisx->world.pos.z, 0, 0, 0, 6);
+                                thisx->world.pos.z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_6, false, 0));
                 }
             }
+            break;
+
+        default:
             break;
     }
 
@@ -659,7 +662,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
     func_8088D9BC(this, play);
     if (Actor_HasParent(&this->actor, play)) {
         if (this->fairyFlags & 0x400) {
-            Flags_SetCollectible(play, this->unk_260);
+            Flags_SetCollectible(play, this->collectibleFlag);
         }
         Actor_Kill(&this->actor);
         return;
@@ -689,7 +692,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         this->unk_246 = 0;
         EnElf_SetupAction(this, func_8088E0F0);
         if (this->fairyFlags & 0x400) {
-            Flags_SetCollectible(play, this->unk_260);
+            Flags_SetCollectible(play, this->collectibleFlag);
         }
         return;
     }

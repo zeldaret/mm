@@ -7,12 +7,14 @@ struct EnButte;
 
 typedef void (*EnButteActionFunc)(struct EnButte*, PlayState*);
 
-#define ENBUTTE_GET(thisx) ((thisx)->params)
-#define ENBUTTE_GET_1(thisx) ((thisx)->params & 1)
+#define BUTTERFLY_GET(thisx) ((thisx)->params)
+#define BUTTERFLY_GET_1(thisx) ((thisx)->params & 1)
 
-#define ENBUTTE_MINUS1 -1
-#define ENBUTTE_0 0
-#define ENBUTTE_1 1
+#define BUTTERFLY_MINUS1 -1
+#define BUTTERFLY_0 0
+#define BUTTERFLY_1 1
+
+#define BUTTERFLY_PARAMS(param) (param)
 
 typedef struct EnButte {
     /* 0x000 */ Actor actor;

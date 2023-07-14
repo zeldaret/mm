@@ -90,14 +90,18 @@ void ShotSun_SpawnFairy(ShotSun* this, PlayState* play2) {
         CutsceneManager_Stop(this->actor.csId);
         switch (params) {
             case SHOTSUN_FAIRY_SPAWNER_SUNS:
-                fairyType = ENELF_TYPE_7;
+                fairyType = FAIRY_TYPE_7;
                 break;
+
             case SHOTSUN_FAIRY_SPAWNER_STORMS:
-                fairyType = ENELF_TYPE_7;
+                fairyType = FAIRY_TYPE_7;
+                break;
+
+            default:
                 break;
         }
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.home.pos.x, this->actor.home.pos.y,
-                    this->actor.home.pos.z, 0, 0, 0, fairyType);
+                    this->actor.home.pos.z, 0, 0, 0, FAIRY_PARAMS(fairyType, false, 0));
         Actor_Kill(&this->actor);
     }
 }
