@@ -36,15 +36,6 @@ void EnBaba_Walk(EnBaba* this, PlayState* play);
 void EnBaba_FaceForward(EnBaba* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG,
-    /* 1 */ BOMB_SHOP_LADY_ANIM_IDLE,
-    /* 2 */ BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG,
-    /* 3 */ BOMB_SHOP_LADY_ANIM_KNOCKED_OVER,
-    /* 4 */ BOMB_SHOP_LADY_ANIM_LYING_DOWN,
-    /* 5 */ BOMB_SHOP_LADY_ANIM_SWAY
-} BombShopLadyAnimation;
-
-typedef enum {
     /* 0 */ BOMB_SHOP_LADY_SCH_NONE,
     /* 1 */ BOMB_SHOP_LADY_SCH_KNOCKED_OVER,
     /* 2 */ BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH
@@ -62,13 +53,23 @@ ActorInit En_Baba_InitVars = {
     (ActorFunc)EnBaba_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaKnockedOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gBbaLyingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG,
+    /* 1 */ BOMB_SHOP_LADY_ANIM_IDLE,
+    /* 2 */ BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG,
+    /* 3 */ BOMB_SHOP_LADY_ANIM_KNOCKED_OVER,
+    /* 4 */ BOMB_SHOP_LADY_ANIM_LYING_DOWN,
+    /* 5 */ BOMB_SHOP_LADY_ANIM_SWAY,
+    /* 6 */ BOMB_SHOP_LADY_ANIM_MAX
+} BombShopLadyAnimation;
+
+static AnimationInfo sAnimationInfo[BOMB_SHOP_LADY_ANIM_MAX] = {
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },    // BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG
+    { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },              // BOMB_SHOP_LADY_ANIM_IDLE
+    { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG
+    { &gBbaKnockedOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },       // BOMB_SHOP_LADY_ANIM_KNOCKED_OVER
+    { &gBbaLyingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },         // BOMB_SHOP_LADY_ANIM_LYING_DOWN
+    { &gBbaSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },              // BOMB_SHOP_LADY_ANIM_SWAY
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -184,7 +185,9 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 // Can't stock Bomb Bags tomorrow
                 this->textId = 0x2A32;
                 break;
-            } else if (player->transformation == PLAYER_FORM_DEKU) {
+            }
+
+            if (player->transformation == PLAYER_FORM_DEKU) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_79_20)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_79_20);
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
@@ -197,7 +200,9 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                     this->textId = 0x2A38;
                 }
                 break;
-            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+            }
+
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_01)) {
                     // Thought could sell Big Bomb Bags
                     this->textId = 0x660;
@@ -206,16 +211,16 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 // Can't judge people
                 this->textId = 0x662;
                 break;
-            } else {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_02)) {
-                    // Someone helped me out
-                    this->textId = 0x65A;
-                    break;
-                }
-                // Buy Big Bomb Bag
-                this->textId = 0x65E;
+            }
+
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_02)) {
+                // Someone helped me out
+                this->textId = 0x65A;
                 break;
             }
+
+            // Buy Big Bomb Bag
+            this->textId = 0x65E;
             break;
 
         case 0x660:
@@ -286,6 +291,9 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
         case 0x2A30:
         case 0x2A31:
             this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
+            break;
+
+        default:
             break;
     }
 
@@ -404,10 +412,6 @@ s32 EnBaba_ProcessScheduleOutput(EnBaba* this, PlayState* play, ScheduleOutput* 
     s32 success;
 
     switch (scheduleOutput->result) {
-        default:
-            success = false;
-            break;
-
         case BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH:
             success = EnBaba_InitTimePath(this, play, scheduleOutput);
             break;
@@ -415,7 +419,12 @@ s32 EnBaba_ProcessScheduleOutput(EnBaba* this, PlayState* play, ScheduleOutput* 
         case BOMB_SHOP_LADY_SCH_KNOCKED_OVER:
             success = true;
             break;
+
+        default:
+            success = false;
+            break;
     }
+
     return success;
 }
 
@@ -490,6 +499,9 @@ void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
             this->stateFlags |= BOMB_SHOP_LADY_STATE_KNOCKED_OVER;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_KnockedOver;
+            break;
+
+        default:
             break;
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);

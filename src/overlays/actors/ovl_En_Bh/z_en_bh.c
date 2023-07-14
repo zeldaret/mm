@@ -34,9 +34,9 @@ void EnBh_Init(Actor* thisx, PlayState* play) {
 
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
-    SkelAnime_InitFlex(play, &this->skelanime, &gBhSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gBhSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
                        OBJECT_BH_LIMB_MAX);
-    Animation_PlayLoop(&this->skelanime, &gBhFlyingAnim);
+    Animation_PlayLoop(&this->skelAnime, &gBhFlyingAnim);
     this->actionFunc = func_80C22DEC;
 }
 
@@ -80,17 +80,17 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
     Math_ApproachS(&this->actor.world.rot.z, -zRot, 0xA, this->step);
     Math_ApproachS(&this->step, 0x200, 1, 0x10);
 
-    if ((s32)this->skelanime.playSpeed == 0) {
+    if ((s32)this->skelAnime.playSpeed == 0) {
         if (this->timer == 0) {
-            this->skelanime.playSpeed = 1.0f;
+            this->skelAnime.playSpeed = 1.0f;
             this->timer = Rand_ZeroFloat(70.0f) + 50.0f;
         } else if (((this->timer & 7) == 7) && (Rand_ZeroOne() < 0.5f)) {
             this->unk1E4 = Rand_CenteredFloat(3000.0f);
         }
     } else {
-        SkelAnime_Update(&this->skelanime);
-        if ((this->timer == 0) && Animation_OnFrame(&this->skelanime, 6.0f)) {
-            this->skelanime.playSpeed = 0.0f;
+        SkelAnime_Update(&this->skelAnime);
+        if ((this->timer == 0) && Animation_OnFrame(&this->skelAnime, 6.0f)) {
+            this->skelAnime.playSpeed = 0.0f;
             this->timer = Rand_ZeroFloat(50.0f) + 50.0f;
         }
     }
@@ -116,6 +116,6 @@ void EnBh_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateZS(this->unk1E2, MTXMODE_APPLY);
-    SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount, NULL,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }

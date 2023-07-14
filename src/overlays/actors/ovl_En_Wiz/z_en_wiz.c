@@ -6,6 +6,7 @@
 
 #include "z_en_wiz.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Wiz_Brock/z_en_wiz_brock.h"
 
 #define FLAGS                                                                                                    \
@@ -1250,7 +1251,8 @@ void EnWiz_UpdateDamage(EnWiz* this, PlayState* play) {
                      (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) ||
                     (this->drawDmgEffTimer == 0)) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
-                                this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     attackDealsDamage = true;

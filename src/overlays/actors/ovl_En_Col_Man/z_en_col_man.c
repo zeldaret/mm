@@ -6,6 +6,7 @@
 
 #include "z_en_col_man.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_100000)
@@ -201,7 +202,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
         if (this->actor.params == EN_COL_MAN_CUTSCENE_BOMB) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.parent->world.pos.x,
                         this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0,
-                        CLEAR_TAG_SMALL_EXPLOSION);
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z,
