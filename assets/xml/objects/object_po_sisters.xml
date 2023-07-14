@@ -15,12 +15,12 @@
         <DList Name="gPoeSistersMegFaceDL" Offset="0x1CB0" />
         <DList Name="gPoeSistersMegBodyDL" Offset="0x1DE0" />
         <DList Name="gPoeSistersLowerBodyDL" Offset="0x24A8" />
-        <DList Name="gPoeSistersDrawRightHandDL" Offset="0x2570" />
-        <DList Name="gPoeSistersDrawArmShortDL" Offset="0x25E8" />
-        <DList Name="gPoeSistersDrawArmMedDL" Offset="0x2680" />
-        <DList Name="gPoeSistersDrawArmLongDL" Offset="0x2718" />
-        <DList Name="gPoeSistersDrawTorchDL" Offset="0x27B0" />
-        <DList Name="gPoeSistersDrawLeftHandDL" Offset="0x2870" />
+        <DList Name="gPoeSistersRightHandDL" Offset="0x2570" />
+        <DList Name="gPoeSistersArmShortDL" Offset="0x25E8" />
+        <DList Name="gPoeSistersArmMedDL" Offset="0x2680" />
+        <DList Name="gPoeSistersArmLongDL" Offset="0x2718" />
+        <DList Name="gPoeSistersTorchDL" Offset="0x27B0" />
+        <DList Name="gPoeSistersLeftHandDL" Offset="0x2870" />
         <DList Name="gPoeSistersJoelleFaceDL" Offset="0x2EB8" />
         <DList Name="gPoeSistersJoelleBodyDL" Offset="0x2F88" />
         <DList Name="gPoeSistersBethBodyDL" Offset="0x3628" />

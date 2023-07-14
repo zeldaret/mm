@@ -1227,7 +1227,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         Matrix_Put(&this->mtxf);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gPoeSistersDrawTorchDL);
+        gSPDisplayList(POLY_OPA_DISP++, gPoeSistersTorchDL);
     }
 
     gSPSegment(
