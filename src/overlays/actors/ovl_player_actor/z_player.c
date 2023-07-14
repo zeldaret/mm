@@ -16912,7 +16912,8 @@ void Player_Action_68(Player* this, PlayState* play) {
 
                         for (i = 0; i < ARRAY_COUNT(D_8085D798); i++) {
                             if (((interactRangeActor->id == entry->actorId) &&
-                                 ((entry->actorParams < 0) || (interactRangeActor->params == entry->actorParams)))) {
+                                 ((entry->actorParams <= BOTTLE_CATCH_PARAMS_ANY) ||
+                                  (interactRangeActor->params == entry->actorParams)))) {
                                 break;
                             }
                             entry++;
