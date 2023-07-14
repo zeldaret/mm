@@ -1880,7 +1880,8 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
 
 /**
  * This function covers offering the ability to `Talk` with the player.
- * Passing an exchangeItemAction (see `PlayerItemAction`) allows the player to also use the item to initiate the conversation.
+ * Passing an exchangeItemAction (see `PlayerItemAction`) allows the player to also use the item to initiate the
+ * conversation.
  *
  * This function carries a talk exchange request to the player actor if context allows it (e.g. the player is in range
  * and not busy with certain things). The player actor performs the requested action itself.
