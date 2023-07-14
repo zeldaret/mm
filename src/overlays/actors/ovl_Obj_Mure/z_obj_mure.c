@@ -60,7 +60,7 @@ static s16 sSpawnActorIds[OBJMURE_TYPE_MAX] = {
 };
 
 static s16 sSpawnParams[OBJMURE_TYPE_MAX] = {
-    KUSA_PARAMS_BUSH(false, 0, false),   // OBJMURE_TYPE_GRASS
+    KUSA_BUSH_PARAMS(false, 0, false),   // OBJMURE_TYPE_GRASS
     PLAYER_PARAMS(2, PLAYER_INITMODE_0), // OBJMURE_TYPE_UNDEFINED
     FISH_PARAMS(ENFISH_MINUS1),          // OBJMURE_TYPE_FISH
     ENINSECT_PARAMS(false),              // OBJMURE_TYPE_BUGS

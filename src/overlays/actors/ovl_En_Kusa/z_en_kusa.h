@@ -9,11 +9,11 @@ typedef void (*EnKusaActionFunc)(struct EnKusa*, PlayState*);
 
 #define KUSA_GET_TYPE(thisx)((thisx)->params & 0x3)
 
-// `ENKUSA_TYPE_BUSH` and `KUSA_PARAMS_GRASS`
+// `ENKUSA_TYPE_BUSH` and `ENKUSA_TYPE_GRASS`
 #define KUSA_GET_RAND_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0xF)
 #define KUSA_GET_PARAM_0C(thisx) (((thisx)->params >> 12) & 1)
 
-// `ENKUSA_TYPE_REGROWING_GRASS`, `ENKUSA_TYPE_BUSH` and `KUSA_PARAMS_GRASS`
+// `ENKUSA_TYPE_REGROWING_GRASS`, `ENKUSA_TYPE_BUSH` and `ENKUSA_TYPE_GRASS`
 #define KUSA_SHOULD_SPAWN_BUGS(thisx) (((thisx)->params >> 4) & 1)
 
 // `ENKUSA_TYPE_GRASS_2`
@@ -27,16 +27,16 @@ typedef enum {
     /* 3 */ ENKUSA_TYPE_GRASS_2
 } EnKusaType;
 
-#define KUSA_PARAMS_BUSH(spawnBugs, randCollectibleId, param0C) \
+#define KUSA_BUSH_PARAMS(spawnBugs, randCollectibleId, param0C) \
     (((ENKUSA_TYPE_BUSH) & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
 
-#define KUSA_PARAMS_REGROWING_GRASS(spawnBugs) \
+#define KUSA_REGROWING_GRASS_PARAMS(spawnBugs) \
     (((ENKUSA_TYPE_REGROWING_GRASS) & 0x3) | (((spawnBugs) & 1) << 4))
 
-#define KUSA_PARAMS_GRASS(spawnBugs, randCollectibleId, param0C) \
+#define KUSA_GRASS_PARAMS(spawnBugs, randCollectibleId, param0C) \
     (((ENKUSA_TYPE_GRASS) & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
 
-#define KUSA_PARAMS_GRASS_2(spawnBugs, collectibleId) \
+#define KUSA_GRASS_2_PARAMS(spawnBugs, collectibleId) \
     (((ENKUSA_TYPE_GRASS_2) & 0x3) | (((param3F) & 0x3F) << 2) | (((collectibleId) & 0x7F) << 8))
 
 
