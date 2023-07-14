@@ -195,6 +195,9 @@ void EnCne01_Talk(EnHy* this, PlayState* play) {
             this->actionFunc = this->prevActionFunc;
             this->prevActionFunc = NULL;
             break;
+
+        default:
+            break;
     }
 }
 

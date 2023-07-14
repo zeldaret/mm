@@ -478,10 +478,10 @@ void func_80C11538(EnThiefbird* this) {
 
 void func_80C11590(EnThiefbird* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s32 sp38;
+    s32 onFirstFrameAnim;
 
     SkelAnime_Update(&this->skelAnime);
-    sp38 = Animation_OnFrame(&this->skelAnime, 0.0f);
+    onFirstFrameAnim = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
@@ -492,7 +492,7 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
         }
     }
 
-    if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 5, 0x300, 0x10) && (sp38 != 0) &&
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_192, 5, 0x300, 0x10) && onFirstFrameAnim &&
         (Rand_ZeroOne() < 0.1f)) {
         s16 yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y;
 
@@ -512,7 +512,7 @@ void func_80C11590(EnThiefbird* this, PlayState* play) {
         this->unk_190 = Rand_S16Offset(2048, 2048);
     }
 
-    if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_190, 10, 0x100, 8) && (sp38 != 0) &&
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->unk_190, 10, 0x100, 8) && onFirstFrameAnim &&
         (Rand_ZeroOne() < 0.1f)) {
         if (this->actor.home.pos.y < this->actor.world.pos.y) {
             this->unk_190 -= Rand_S16Offset(0x400, 0x400);

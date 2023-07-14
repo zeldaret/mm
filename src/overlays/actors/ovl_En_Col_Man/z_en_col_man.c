@@ -59,9 +59,6 @@ ActorInit En_Col_Man_InitVars = {
     (ActorFunc)NULL,
 };
 
-static Color_RGBA8 primColor = { 60, 50, 20, 255 };
-static Color_RGBA8 envColor = { 40, 30, 30, 255 };
-
 void EnColMan_Init(Actor* thisx, PlayState* play) {
     EnColMan* this = THIS;
 
@@ -76,10 +73,12 @@ void EnColMan_Init(Actor* thisx, PlayState* play) {
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDD60(this);
             break;
+
         case EN_COL_MAN_FALLING_ROCK:
             ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
             func_80AFDF60(this);
             break;
+
         case EN_COL_MAN_CUTSCENE_BOMB:
         case EN_COL_MAN_GAMEPLAY_BOMB:
             func_80AFE234(this);
@@ -155,6 +154,8 @@ void func_80AFDF60(EnColMan* this) {
 }
 
 void func_80AFDFB4(EnColMan* this, PlayState* play) {
+    static Color_RGBA8 sPrimColor = { 60, 50, 20, 255 };
+    static Color_RGBA8 sEnvColor = { 40, 30, 30, 255 };
     s32 i;
     Vec3f velocity;
     Vec3f accel;
@@ -179,7 +180,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
             accel.z = 0.0f;
             accel.x = 0.0f;
 
-            func_800B0EB0(play, &this->actor.world.pos, &velocity, &accel, &primColor, &envColor,
+            func_800B0EB0(play, &this->actor.world.pos, &velocity, &accel, &sPrimColor, &sEnvColor,
                           Rand_ZeroFloat(50.0f) + 60.0f, 30, Rand_ZeroFloat(5.0f) + 20.0f);
         }
 
