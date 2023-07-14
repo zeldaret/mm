@@ -953,7 +953,7 @@ void EnBigslime_SetupCutsceneStartBattle(EnBigslime* this, PlayState* play) {
 }
 
 void EnBigslime_CutsceneStartBattle(EnBigslime* this, PlayState* play) {
-    if (this->isAnimUpdate) {
+    if (this->isAnimFinished) {
         EnBigslime_SetupCutsceneNoticePlayer(this);
     } else if (!this->isInitJump && Math_ScaledStepToS(&this->gekkoRot.y, this->actor.yawTowardsPlayer, 0x200)) {
         Animation_PlayOnce(&this->skelAnime, &gGekkoSurpriseJumpAnim);
@@ -1004,7 +1004,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
             this->actor.flags |= ACTOR_FLAG_1;
             EnBigslime_SetupIdleNoticePlayer(this);
         }
-    } else if (this->isAnimUpdate) {
+    } else if (this->isAnimFinished) {
         Animation_PlayLoop(&this->skelAnime, &gGekkoNervousIdleAnim);
         EnBigslime_UpdateCameraIntroCs(this, play, 25);
         Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
@@ -1610,7 +1610,7 @@ void EnBigslime_AttackPlayerInBigslime(EnBigslime* this, PlayState* play) {
     EnBigslime_Scale(this, pitch, ((this->scaleFactor * 0.08f) + 0.2f) * 0.15f,
                      ((this->scaleFactor * 0.08f) + 0.2f) * 0.05f);
     player->actor.world.pos.y = this->actor.world.pos.y + (this->actor.scale.y * -500.0f);
-    if (this->isAnimUpdate) {
+    if (this->isAnimFinished) {
         this->numGekkoMeleeAttacks--;
         if (this->numGekkoMeleeAttacks == 0) {
             this->numGekkoPosGrabPlayer--;
@@ -2102,7 +2102,7 @@ void EnBigslime_IdleLookAround(EnBigslime* this, PlayState* play) {
     s16 yawDiff;
 
     this->idleTimer--;
-    if (this->isAnimUpdate) {
+    if (this->isAnimFinished) {
         if (Rand_ZeroOne() < 0.25f) {
             Animation_PlayOnce(&this->skelAnime, &gGekkoLookAroundAnim);
         } else {
@@ -2138,7 +2138,7 @@ void EnBigslime_IdleNoticePlayer(EnBigslime* this, PlayState* play) {
     if (this->skelAnime.curFrame > 10.0f) {
         Math_ScaledStepToS(yaw, this->gekkoYaw, 0x800);
     }
-    if (this->isAnimUpdate) {
+    if (this->isAnimFinished) {
         EnBigslime_SetupJumpGekko(this);
     }
 }
@@ -2159,7 +2159,7 @@ void EnBigslime_ThrowMinislime(EnBigslime* this, PlayState* play) {
         EnBigslime_GekkoSfxOutsideBigslime(this, NA_SE_EN_FROG_THROW_SLIME);
         this->minislimeToThrow->actor.params = MINISLIME_GEKKO_THROW;
     }
-    if (this->isAnimUpdate) {
+    if (this->isAnimFinished) {
         jumpTimerStored = this->jumpTimer; // Stores jumpTimer so it doesn't get overwritten back to 100
         EnBigslime_SetupJumpGekko(this);
         this->jumpTimer = jumpTimerStored;
@@ -2287,7 +2287,7 @@ void EnBigslime_FormBigslime(EnBigslime* this, PlayState* play) {
         Animation_PlayLoop(&this->skelAnime, &gGekkoSwimForwardAnim);
         this->formBigslimeCutsceneTimer--;
         Actor_PlaySfx(&this->actor, NA_SE_EN_B_SLIME_COMBINE);
-    } else if (this->isAnimUpdate) {
+    } else if (this->isAnimFinished) {
         this->formBigslimeCutsceneTimer--;
         if (this->formBigslimeCutsceneTimer == 0) {
             Animation_PlayLoop(&this->skelAnime, &gGekkoSwimUpAnim);
@@ -2783,7 +2783,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, PlayState* play) {
     Audio_SetSfxUnderwaterReverb(true);
     this->dynamicVtxState ^= 1;
     EnBigslime_DynamicVtxCopyState(this);
-    this->isAnimUpdate = SkelAnime_Update(&this->skelAnime);
+    this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
     if (this->actionFunc != EnBigslime_PlayCutscene) {
         EnBigslime_ApplyDamageEffectBigslime(this, play);
     } else {
@@ -2826,7 +2826,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
     }
 
     Audio_SetSfxUnderwaterReverb(false);
-    this->isAnimUpdate = SkelAnime_Update(&this->skelAnime);
+    this->isAnimFinished = SkelAnime_Update(&this->skelAnime);
     if (this->actionFunc != EnBigslime_PlayCutscene) {
         EnBigslime_ApplyDamageEffectGekko(this, play);
     } else {

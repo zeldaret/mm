@@ -24,7 +24,7 @@ typedef struct {
 
 typedef struct EnNiw {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime skelanime;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[NIW_LIMB_MAX];
     /* 0x1E8 */ Vec3s morphTable[NIW_LIMB_MAX];
     /* 0x248 */ EnNiwActionFunc actionFunc;

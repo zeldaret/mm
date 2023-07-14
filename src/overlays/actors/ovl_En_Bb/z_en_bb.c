@@ -124,7 +124,7 @@ static InitChainEntry sInitChain[] = {
  * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
  * limb is not part of the bodyParts arrays.
  */
-static s8 sLimbIndexToBodyPartsIndex[] = {
+static s8 sLimbIndexToBodyPartsIndex[BUBBLE_LIMB_MAX] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
@@ -554,27 +554,25 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
                             CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }
-    } else {
-        if (this->collider.base.atFlags & AT_BOUNCED) {
-            this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
-            if (this->actionFunc != EnBb_Down) {
-                this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
-                this->actor.shape.rot.y = this->actor.world.rot.y;
-                EnBb_SetupDown(this);
-            }
-        } else if (this->collider.base.atFlags & AT_HIT) {
-            this->collider.base.atFlags &= ~AT_HIT;
+    } else if (this->collider.base.atFlags & AT_BOUNCED) {
+        this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
+        if (this->actionFunc != EnBb_Down) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_BITE);
+            EnBb_SetupDown(this);
+        }
+    } else if (this->collider.base.atFlags & AT_HIT) {
+        this->collider.base.atFlags &= ~AT_HIT;
+        this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_BITE);
 
-            if (this->flameScaleX > 0.0f) {
-                gSaveContext.jinxTimer = 1200;
-            }
+        if (this->flameScaleX > 0.0f) {
+            gSaveContext.jinxTimer = 1200;
+        }
 
-            if (this->actionFunc == EnBb_Attack) {
-                EnBb_SetupFlyIdle(this);
-            }
+        if (this->actionFunc == EnBb_Attack) {
+            EnBb_SetupFlyIdle(this);
         }
     }
 }
