@@ -30,12 +30,12 @@
         <Texture Name="gHsBackTex" OutName="back" Format="ci8" Width="16" Height="32" Offset="0x5F70" />
         <Limb Name="gHsRootLimb" Type="Standard" EnumName="HS_LIMB_ROOT" Offset="0x6170" />
         <Limb Name="gHsLeftUpperArmLimb" Type="Standard" EnumName="HS_LIMB_LEFT_UPPER_ARM" Offset="0x617C" />
-        <Limb Name="gHsLeftForarmLimb" Type="Standard" EnumName="HS_LIMB_LEFT_FORARM" Offset="0x6188" />
+        <Limb Name="gHsLeftForearmLimb" Type="Standard" EnumName="HS_LIMB_LEFT_FOREARM" Offset="0x6188" />
         <Limb Name="gHsLeftHandLimb" Type="Standard" EnumName="HS_LIMB_LEFT_HAND" Offset="0x6194" />
         <Limb Name="gHsRightUpperArmLimb" Type="Standard" EnumName="HS_LIMB_RIGHT_UPPER_ARM" Offset="0x61A0" />
-        <Limb Name="gHsRightForarmLimb" Type="Standard" EnumName="HS_LIMB_RIGHT_FORARM" Offset="0x61AC" />
+        <Limb Name="gHsRightForearmLimb" Type="Standard" EnumName="HS_LIMB_RIGHT_FOREARM" Offset="0x61AC" />
         <Limb Name="gHsRightHandLimb" Type="Standard" EnumName="HS_LIMB_RIGHT_HAND" Offset="0x61B8" />
-        <Limb Name="gHsHeadRoot" Type="Standard" EnumName="HS_LIMB_HEAD_ROOT" Offset="0x61C4" />
+        <Limb Name="gHsHeadRootLimb" Type="Standard" EnumName="HS_LIMB_HEAD_ROOT" Offset="0x61C4" />
         <Limb Name="gHsHeadLimb" Type="Standard" EnumName="HS_LIMB_HEAD" Offset="0x61D0" />
         <Limb Name="gHsHairSpikesLimb" Type="Standard" EnumName="HS_LIMB_HAIR_SPIKES" Offset="0x61DC" />
         <!-- this limb is nulled in the override limb function -->

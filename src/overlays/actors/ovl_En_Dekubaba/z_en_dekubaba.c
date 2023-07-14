@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dekubaba.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -280,7 +281,7 @@ void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index
         sphElement = &this->collider.elements[index];
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sphElement->info.bumper.hitPos.x,
                     sphElement->info.bumper.hitPos.y, sphElement->info.bumper.hitPos.z, 0, 0, 0,
-                    CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     }
 }
 

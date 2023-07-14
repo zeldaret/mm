@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bombal.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "assets/objects/object_fusen/object_fusen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -105,7 +106,7 @@ void func_80C05B3C(EnBombal* this, PlayState* play) {
 void func_80C05C44(EnBombal* this, PlayState* play) {
     s32 phi_s0 = false;
     s32 i;
-    Vec3f pos;
+    Vec3f effPos;
 
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_75_40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_73_10) &&
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_85_02)) {
@@ -126,13 +127,13 @@ void func_80C05C44(EnBombal* this, PlayState* play) {
     }
 
     if (phi_s0) {
-        Math_Vec3f_Copy(&pos, &this->actor.world.pos);
-        pos.y += 60.0f;
-        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, pos.x, pos.y, pos.z, 255, 255, 200,
-                    CLEAR_TAG_LARGE_EXPLOSION);
+        Math_Vec3f_Copy(&effPos, &this->actor.world.pos);
+        effPos.y += 60.0f;
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 255, 255, 200,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
 
         for (i = 0; i < 100; i++) {
-            EnBombal_InitEffects(this, &pos, 10);
+            EnBombal_InitEffects(this, &effPos, 10);
         }
 
         SET_WEEKEVENTREG(WEEKEVENTREG_83_04);

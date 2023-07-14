@@ -7,6 +7,7 @@
 #include "z_en_am.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
 
@@ -484,7 +485,7 @@ s32 EnAm_UpdateDamage(EnAm* this, PlayState* play) {
             this->drawDmgEffAlpha = 4.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->enemyCollider.info.bumper.hitPos.x,
                         this->enemyCollider.info.bumper.hitPos.y, this->enemyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                        CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         EnAm_TakeDamage(this, play);
         return true;
