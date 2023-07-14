@@ -208,10 +208,10 @@ typedef enum Item00Type {
     /* 0x09 */ ITEM00_ARROWS_40,
     /* 0x0A */ ITEM00_ARROWS_50,
     /* 0x0B */ ITEM00_BOMBS_B,
-    /* 0x0C */ ITEM00_NUTS_1,
-    /* 0x0D */ ITEM00_STICK,
-    /* 0x0E */ ITEM00_MAGIC_LARGE,
-    /* 0x0F */ ITEM00_MAGIC_SMALL,
+    /* 0x0C */ ITEM00_DEKU_NUTS_1,
+    /* 0x0D */ ITEM00_DEKU_STICK,
+    /* 0x0E */ ITEM00_MAGIC_JAR_BIG,
+    /* 0x0F */ ITEM00_MAGIC_JAR_SMALL,
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
@@ -219,7 +219,7 @@ typedef enum Item00Type {
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
-    /* 0x17 */ ITEM00_NUTS_10,
+    /* 0x17 */ ITEM00_DEKU_NUTS_10,
     /* 0x18 */ ITEM00_NOTHING,
     /* 0x19 */ ITEM00_BOMBS_0,
     /* 0x1A */ ITEM00_BIG_FAIRY,
@@ -348,11 +348,11 @@ typedef struct PlayerImpact {
     /* 0x08 */ Vec3f pos;
 } PlayerImpact; // size = 0x14
 
-typedef struct ActorContext_unk_20C {
+typedef struct ActorSharedMemoryEntry {
     /* 0x0 */ s16 id;
     /* 0x2 */ s8 isDynamicallyInitialised;
     /* 0x4 */ void* ptr;
-} ActorContext_unk_20C; // size = 0x8
+} ActorSharedMemoryEntry; // size = 0x8
 
 typedef struct ActorContextSceneFlags {
     /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
@@ -412,7 +412,7 @@ typedef struct ActorContext {
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
-    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
     /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX

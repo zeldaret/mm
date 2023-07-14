@@ -11,6 +11,7 @@
 #include "audio/heap.h"
 #include "audio/load.h"
 #include "audio/soundfont.h"
+#include "sequence.h"
 
 #define NO_LAYER ((SequenceLayer*)(-1))
 

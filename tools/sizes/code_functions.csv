@@ -214,9 +214,9 @@ asm/non_matchings/code/z_actor/Actor_InitPlayerImpact.s,Actor_InitPlayerImpact,0
 asm/non_matchings/code/z_actor/Actor_UpdatePlayerImpact.s,Actor_UpdatePlayerImpact,0x800B6474,0x6
 asm/non_matchings/code/z_actor/Actor_SetPlayerImpact.s,Actor_SetPlayerImpact,0x800B648C,0x1C
 asm/non_matchings/code/z_actor/Actor_GetPlayerImpact.s,Actor_GetPlayerImpact,0x800B64FC,0x22
-asm/non_matchings/code/z_actor/func_800B6584.s,func_800B6584,0x800B6584,0x21
-asm/non_matchings/code/z_actor/func_800B6608.s,func_800B6608,0x800B6608,0x1E
-asm/non_matchings/code/z_actor/func_800B6680.s,func_800B6680,0x800B6680,0x23
+asm/non_matchings/code/z_actor/Actor_AddSharedMemoryEntry.s,func_800B6584,0x800B6584,0x21
+asm/non_matchings/code/z_actor/Actor_FreeSharedMemoryEntry.s,func_800B6608,0x800B6608,0x1E
+asm/non_matchings/code/z_actor/Actor_FindSharedMemoryEntry.s,func_800B6680,0x800B6680,0x23
 asm/non_matchings/code/z_actor/Actor_Kill.s,Actor_Kill,0x800B670C,0x8
 asm/non_matchings/code/z_actor/Actor_SetWorldToHome.s,Actor_SetWorldToHome,0x800B672C,0xC
 asm/non_matchings/code/z_actor/Actor_SetFocus.s,Actor_SetFocus,0x800B675C,0x11
@@ -392,7 +392,7 @@ asm/non_matchings/code/z_actor/func_800BD9E0.s,func_800BD9E0,0x800BD9E0,0x30
 asm/non_matchings/code/z_actor/func_800BDAA0.s,func_800BDAA0,0x800BDAA0,0x33
 asm/non_matchings/code/z_actor/func_800BDB6C.s,func_800BDB6C,0x800BDB6C,0x3C
 asm/non_matchings/code/z_actor/Actor_ChangeAnimationByInfo.s,Actor_ChangeAnimationByInfo,0x800BDC5C,0x26
-asm/non_matchings/code/z_actor/func_800BDCF4.s,func_800BDCF4,0x800BDCF4,0xAF
+asm/non_matchings/code/z_actor/Actor_UpdateFidgetTables.s,Actor_UpdateFidgetTables,0x800BDCF4,0xAF
 asm/non_matchings/code/z_actor/Actor_Noop.s,Actor_Noop,0x800BDFB0,0x4
 asm/non_matchings/code/z_actor/Gfx_DrawDListOpa.s,Gfx_DrawDListOpa,0x800BDFC0,0x1F
 asm/non_matchings/code/z_actor/Gfx_DrawDListXlu.s,Gfx_DrawDListXlu,0x800BE03C,0x1F
@@ -2204,7 +2204,7 @@ asm/non_matchings/code/z_sub_s/SubS_GetDistSqAndOrientPath.s,SubS_GetDistSqAndOr
 asm/non_matchings/code/z_sub_s/SubS_IsObjectLoaded.s,SubS_IsObjectLoaded,0x8013D8DC,0x12
 asm/non_matchings/code/z_sub_s/SubS_GetObjectIndex.s,SubS_GetObjectIndex,0x8013D924,0xF
 asm/non_matchings/code/z_sub_s/SubS_FindActor.s,SubS_FindActor,0x8013D960,0x1A
-asm/non_matchings/code/z_sub_s/SubS_FillLimbRotTables.s,SubS_FillLimbRotTables,0x8013D9C8,0x72
+asm/non_matchings/code/z_sub_s/SubS_UpdateFidgetTables.s,SubS_UpdateFidgetTables,0x8013D9C8,0x72
 asm/non_matchings/code/z_sub_s/SubS_IsFloorAbove.s,SubS_IsFloorAbove,0x8013DB90,0x2C
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPathList.s,SubS_CopyPointFromPathList,0x8013DC40,0x23
 asm/non_matchings/code/z_sub_s/SubS_GetPathCountFromPathList.s,SubS_GetPathCountFromPathList,0x8013DCCC,0x5

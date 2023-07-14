@@ -368,7 +368,7 @@ void EnOssan_SetupLookToShopkeeperFromShelf(PlayState* play, EnOssan* this) {
 void EnOssan_Idle(EnOssan* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENOSSAN_LIMB_MAX);
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         EnOssan_SetupAction(this, EnOssan_BeginInteraction);
@@ -1744,8 +1744,8 @@ void EnOssan_CuriosityShopMan_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx**
 
     if ((limbIndex == FSN_LIMB_PELVIS) || (limbIndex == FSN_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == FSN_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 200;
+        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
+        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
     }
 }
 

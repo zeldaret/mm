@@ -89,7 +89,7 @@ void func_80C22DEC(EnBh* this, PlayState* play) {
         }
     } else {
         SkelAnime_Update(&this->skelanime);
-        if ((this->timer == 0) && (Animation_OnFrame(&this->skelanime, 6.0f))) {
+        if ((this->timer == 0) && Animation_OnFrame(&this->skelanime, 6.0f)) {
             this->skelanime.playSpeed = 0.0f;
             this->timer = Rand_ZeroFloat(50.0f) + 50.0f;
         }

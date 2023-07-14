@@ -45,12 +45,13 @@ ActorInit En_Aob_01_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ EN_AOB01_ANIM_IDLE_1,
+    /* 0 */ EN_AOB01_ANIM_IDLE,
     /* 1 */ EN_AOB01_ANIM_LAUGH_START,
     /* 2 */ EN_AOB01_ANIM_LAUGH_LOOP,
     /* 3 */ EN_AOB01_ANIM_SURPRISE_START,
     /* 4 */ EN_AOB01_ANIM_SURPRISE_LOOP,
-    /* 5 */ EN_AOB01_ANIM_IDLE_2
+    /* 5 */ EN_AOB01_ANIM_IDLE_MORPH,
+    /* 6 */ EN_AOB01_ANIM_MAX
 } EnAob01Animation;
 
 typedef enum {
@@ -60,13 +61,13 @@ typedef enum {
     /* 3 */ EN_AOB01_EYE_MAX
 } EnAob01EyeTexture;
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },
+static AnimationInfo sAnimationInfo[EN_AOB01_ANIM_MAX] = {
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },          // EN_AOB01_ANIM_IDLE
+    { &gMamamuYanLaughStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },    // EN_AOB01_ANIM_LAUGH_START
+    { &gMamamuYanLaughLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },     // EN_AOB01_ANIM_LAUGH_LOOP
+    { &gMamamuYanSurpriseStartAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // EN_AOB01_ANIM_SURPRISE_START
+    { &gMamamuYanSurpriseLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  // EN_AOB01_ANIM_SURPRISE_LOOP
+    { &gMamamuYanIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f },         // EN_AOB01_ANIM_IDLE_MORPH
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -182,10 +183,10 @@ void EnAob01_SpawnRacedogs(EnAob01* this, PlayState* play) {
  */
 s32 EnAob01_ProcessLaughAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->animIndex == EN_AOB01_ANIM_LAUGH_START) {
-        if (curFrame == lastFrame) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_LAUGH_LOOP;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_LAUGH_LOOP);
             return true;
@@ -206,16 +207,16 @@ s32 EnAob01_ProcessLaughAnim(EnAob01* this) {
  */
 s32 EnAob01_ProcessSurpriseAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animIndex == EN_AOB01_ANIM_IDLE_1) || (this->animIndex == EN_AOB01_ANIM_IDLE_2)) {
-        if (curFrame == lastFrame) {
+    if ((this->animIndex == EN_AOB01_ANIM_IDLE) || (this->animIndex == EN_AOB01_ANIM_IDLE_MORPH)) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_START;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_START);
             return true;
         }
     } else if (this->animIndex == EN_AOB01_ANIM_SURPRISE_START) {
-        if (curFrame == lastFrame) {
+        if (curFrame == endFrame) {
             this->animIndex = EN_AOB01_ANIM_SURPRISE_LOOP;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_SURPRISE_LOOP);
             return true;
@@ -234,12 +235,12 @@ s32 EnAob01_ProcessSurpriseAnim(EnAob01* this) {
  */
 s32 EnAob01_ProcessIdleAnim(EnAob01* this) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
-    if ((this->animIndex != EN_AOB01_ANIM_IDLE_1) && (this->animIndex != EN_AOB01_ANIM_IDLE_2)) {
-        if (curFrame == lastFrame) {
-            this->animIndex = EN_AOB01_ANIM_IDLE_2;
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_2);
+    if ((this->animIndex != EN_AOB01_ANIM_IDLE) && (this->animIndex != EN_AOB01_ANIM_IDLE_MORPH)) {
+        if (curFrame == endFrame) {
+            this->animIndex = EN_AOB01_ANIM_IDLE_MORPH;
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_MORPH);
             return true;
         }
     } else {
@@ -556,7 +557,7 @@ void EnAob01_UpdateCommon(EnAob01* this, PlayState* play) {
     }
 
     EnAob01_Blink(this, EN_AOB01_EYE_MAX);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, MAMAMU_YAN_LIMB_MAX);
     EnAob01_UpdateCollision(this, play);
 
     // This specific code ensures that in-game time passes during the race.
@@ -1105,8 +1106,8 @@ void EnAob01_Init(Actor* thisx, PlayState* play) {
                        MAMAMU_YAN_LIMB_MAX);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->animIndex = EN_AOB01_ANIM_IDLE_1;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE_1);
+    this->animIndex = EN_AOB01_ANIM_IDLE;
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_AOB01_ANIM_IDLE);
     Actor_SetScale(&this->actor, 0.01f);
 
     switch (GET_EVENTINF_DOG_RACE_STATE) {
@@ -1188,8 +1189,8 @@ s32 EnAob01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
     if ((limbIndex == MAMAMU_YAN_LIMB_TORSO) || (limbIndex == MAMAMU_YAN_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == MAMAMU_YAN_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 200;
-        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 200;
+        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
+        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
     }
 
     return false;

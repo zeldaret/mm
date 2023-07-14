@@ -764,8 +764,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             }
         }
 
-        // Find the regionId that player is currently in
-        // Loop over regionId (n) and regionIdIndex (j)
+        // Find the region that player is currently in
+        // Loop over region (n) and regionIndex (j)
         while (true) {
             if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
                 n++;
@@ -824,16 +824,16 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 }
 
 u16 sOwlWarpPauseItems[] = {
-    0xAF, // OWL_WARP_GREAT_BAY_COAST
-    0xB3, // OWL_WARP_ZORA_CAPE
-    0xAA, // OWL_WARP_SNOWHEAD
-    0xB1, // OWL_WARP_MOUNTAIN_VILLAGE
-    0xA9, // OWL_WARP_CLOCK_TOWN
-    0xB2, // OWL_WARP_MILK_ROAD
-    0xA8, // OWL_WARP_WOODFALL
-    0xB0, // OWL_WARP_SOUTHERN_SWAMP
-    0xAC, // OWL_WARP_IKANA_CANYON
-    0xAE, // OWL_WARP_STONE_TOWER
+    ITEM_MAP_POINT_GREAT_BAY_COAST,  // OWL_WARP_GREAT_BAY_COAST
+    ITEM_MAP_POINT_ZORA_CAPE,        // OWL_WARP_ZORA_CAPE
+    ITEM_MAP_POINT_SNOWHEAD,         // OWL_WARP_SNOWHEAD
+    ITEM_MAP_POINT_MOUNTAIN_VILLAGE, // OWL_WARP_MOUNTAIN_VILLAGE
+    ITEM_MAP_POINT_CLOCK_TOWN,       // OWL_WARP_CLOCK_TOWN
+    ITEM_MAP_POINT_MILK_ROAD,        // OWL_WARP_MILK_ROAD
+    ITEM_MAP_POINT_WOODFALL,         // OWL_WARP_WOODFALL
+    ITEM_MAP_POINT_SOUTHERN_SWAMP,   // OWL_WARP_SOUTHERN_SWAMP
+    ITEM_MAP_POINT_IKANA_CANYON,     // OWL_WARP_IKANA_CANYON
+    ITEM_MAP_POINT_STONE_TOWER,      // OWL_WARP_STONE_TOWER
 };
 
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
@@ -874,7 +874,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < REGION_GREAT_BAY) {
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] <= REGION_NONE) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
@@ -896,13 +896,13 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
             if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                 if (pauseCtx->stickAdjX > 30) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = -1;
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = REGION_NONE;
                     pauseCtx->cursorSpecialPos = 0;
                     pauseCtx->cursorShrinkRate = 4.0f;
 
                     while (true) {
                         pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
-                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > REGION_STONE_TOWER) {
+                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= REGION_MAX) {
                             KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                             break;
@@ -921,13 +921,13 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     sStickAdjTimer = 0;
                 }
             } else if (pauseCtx->stickAdjX < -30) {
-                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = REGION_MAX;
                 pauseCtx->cursorSpecialPos = 0;
                 pauseCtx->cursorShrinkRate = 4.0f;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] <= REGION_NONE) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
@@ -979,8 +979,9 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer++;
         }
 
-        //! TODO: Is the `0xA4` here related to `0xA3` being the last recored item in the `ItemId` enum?
-        pauseCtx->cursorItem[PAUSE_MAP] = sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        // Offset from `ITEM_MAP_POINT_GREAT_BAY` is to get the correct ordering in `map_name_static`
+        pauseCtx->cursorItem[PAUSE_MAP] =
+            sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - ITEM_MAP_POINT_GREAT_BAY;
         // Used as cursor vtxIndex
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 

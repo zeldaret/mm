@@ -6,10 +6,10 @@
         <DList Name="gFsnToupeeDL" Offset="0x2D88" />
         <DList Name="gFsnHeadDL" Offset="0x2EF0" />
         <DList Name="gFsnRightUpperArmDL" Offset="0x34C8" />
-        <DList Name="gFsnRightForeArmDL" Offset="0x3600" />
+        <DList Name="gFsnRightForearmDL" Offset="0x3600" />
         <DList Name="gFsnRightHandDL" Offset="0x3718" />
         <DList Name="gFsnLeftUpperArmDL" Offset="0x3860" />
-        <DList Name="gFsnLeftForeArmDL" Offset="0x3998" />
+        <DList Name="gFsnLeftForearmDL" Offset="0x3998" />
         <DList Name="gFsnLeftHandDL" Offset="0x3AB0" />
         <DList Name="gFsnPelvisDL" Offset="0x3BF8" />
         <DList Name="gFsnRightThighDL" Offset="0x3CF0" />

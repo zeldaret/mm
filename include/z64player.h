@@ -61,7 +61,7 @@ typedef enum PlayerItemAction {
     /* 0x04 */ PLAYER_IA_SWORD_RAZOR,
     /* 0x05 */ PLAYER_IA_SWORD_GILDED,
     /* 0x06 */ PLAYER_IA_SWORD_TWO_HANDED,
-    /* 0x07 */ PLAYER_IA_STICK,
+    /* 0x07 */ PLAYER_IA_DEKU_STICK,
     /* 0x08 */ PLAYER_IA_ZORA_FINS,
     /* 0x09 */ PLAYER_IA_BOW,
     /* 0x0A */ PLAYER_IA_BOW_FIRE,
@@ -73,8 +73,8 @@ typedef enum PlayerItemAction {
     /* 0x0F */ PLAYER_IA_POWDER_KEG,
     /* 0x10 */ PLAYER_IA_BOMBCHU,
     /* 0x11 */ PLAYER_IA_11,
-    /* 0x12 */ PLAYER_IA_NUT,
-    /* 0x13 */ PLAYER_IA_PICTO_BOX,
+    /* 0x12 */ PLAYER_IA_DEKU_NUT,
+    /* 0x13 */ PLAYER_IA_PICTOGRAPH_BOX,
     /* 0x14 */ PLAYER_IA_OCARINA,
     /* 0x15 */ PLAYER_IA_BOTTLE_MIN,
     /* 0x15 */ PLAYER_IA_BOTTLE_EMPTY = PLAYER_IA_BOTTLE_MIN,
@@ -141,7 +141,7 @@ typedef enum PlayerItemAction {
     /* 0x50 */ PLAYER_IA_MASK_ZORA,
     /* 0x51 */ PLAYER_IA_MASK_DEKU,
     /* 0x51 */ PLAYER_IA_MASK_MAX = PLAYER_IA_MASK_DEKU,
-    /* 0x52 */ PLAYER_IA_LENS,
+    /* 0x52 */ PLAYER_IA_LENS_OF_TRUTH,
     /* 0x53 */ PLAYER_IA_MAX
 } PlayerItemAction;
 
@@ -165,7 +165,7 @@ typedef enum PlayerMeleeWeapon {
     /* 2 */ PLAYER_MELEEWEAPON_SWORD_RAZOR = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_RAZOR),
     /* 3 */ PLAYER_MELEEWEAPON_SWORD_GILDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_GILDED),
     /* 4 */ PLAYER_MELEEWEAPON_SWORD_TWO_HANDED = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_SWORD_TWO_HANDED),
-    /* 5 */ PLAYER_MELEEWEAPON_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_STICK),
+    /* 5 */ PLAYER_MELEEWEAPON_DEKU_STICK = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_DEKU_STICK),
     /* 6 */ PLAYER_MELEEWEAPON_ZORA_FINS = GET_MELEE_WEAPON_FROM_IA(PLAYER_IA_ZORA_FINS),
     /* 7 */ PLAYER_MELEEWEAPON_MAX
 } PlayerMeleeWeapon;
@@ -414,7 +414,7 @@ typedef enum PlayerModelGroup {
     /*  7 */ PLAYER_MODELGROUP_EXPLOSIVES,
     /*  8 */ PLAYER_MODELGROUP_8,
     /*  9 */ PLAYER_MODELGROUP_HOOKSHOT,
-    /* 10 */ PLAYER_MODELGROUP_STICK,
+    /* 10 */ PLAYER_MODELGROUP_DEKU_STICK,
     /* 11 */ PLAYER_MODELGROUP_INSTRUMENT,
     /* 12 */ PLAYER_MODELGROUP_BOTTLE,
     /* 13 */ PLAYER_MODELGROUP_13,
@@ -600,7 +600,7 @@ typedef struct struct_80122744_arg1 {
 } struct_80122744_arg1; // size = 0x8
 
 typedef enum PlayerCsMode {
-    /* 0x00 */ PLAYER_CSMODE_0,
+    /* 0x00 */ PLAYER_CSMODE_NONE,
     /* 0x01 */ PLAYER_CSMODE_1,
     /* 0x02 */ PLAYER_CSMODE_2,
     /* 0x03 */ PLAYER_CSMODE_3,
@@ -742,6 +742,102 @@ typedef enum PlayerCsMode {
     /* 0x8B */ PLAYER_CSMODE_139,
     /* 0x8C */ PLAYER_CSMODE_MAX
 } PlayerCsMode;
+
+typedef enum PlayerCueId {
+    /* 0x00 */ PLAYER_CUEID_NONE,
+    /* 0x01 */ PLAYER_CUEID_1,
+    /* 0x02 */ PLAYER_CUEID_2,
+    /* 0x03 */ PLAYER_CUEID_3,
+    /* 0x04 */ PLAYER_CUEID_4,
+    /* 0x05 */ PLAYER_CUEID_5,
+    /* 0x06 */ PLAYER_CUEID_6,
+    /* 0x07 */ PLAYER_CUEID_7,
+    /* 0x08 */ PLAYER_CUEID_8,
+    /* 0x09 */ PLAYER_CUEID_9,
+    /* 0x0A */ PLAYER_CUEID_10,
+    /* 0x0B */ PLAYER_CUEID_11,
+    /* 0x0C */ PLAYER_CUEID_12,
+    /* 0x0D */ PLAYER_CUEID_13,
+    /* 0x0E */ PLAYER_CUEID_14,
+    /* 0x0F */ PLAYER_CUEID_15,
+    /* 0x10 */ PLAYER_CUEID_16,
+    /* 0x11 */ PLAYER_CUEID_17,
+    /* 0x12 */ PLAYER_CUEID_18,
+    /* 0x13 */ PLAYER_CUEID_19,
+    /* 0x14 */ PLAYER_CUEID_20,
+    /* 0x15 */ PLAYER_CUEID_21,
+    /* 0x16 */ PLAYER_CUEID_22,
+    /* 0x17 */ PLAYER_CUEID_23,
+    /* 0x18 */ PLAYER_CUEID_24,
+    /* 0x19 */ PLAYER_CUEID_25,
+    /* 0x1A */ PLAYER_CUEID_26,
+    /* 0x1B */ PLAYER_CUEID_27,
+    /* 0x1C */ PLAYER_CUEID_28,
+    /* 0x1D */ PLAYER_CUEID_29,
+    /* 0x1E */ PLAYER_CUEID_30,
+    /* 0x1F */ PLAYER_CUEID_31,
+    /* 0x20 */ PLAYER_CUEID_32,
+    /* 0x21 */ PLAYER_CUEID_33,
+    /* 0x22 */ PLAYER_CUEID_34,
+    /* 0x23 */ PLAYER_CUEID_35,
+    /* 0x24 */ PLAYER_CUEID_36,
+    /* 0x25 */ PLAYER_CUEID_37,
+    /* 0x26 */ PLAYER_CUEID_38,
+    /* 0x27 */ PLAYER_CUEID_39,
+    /* 0x28 */ PLAYER_CUEID_40,
+    /* 0x29 */ PLAYER_CUEID_41,
+    /* 0x2A */ PLAYER_CUEID_42,
+    /* 0x2B */ PLAYER_CUEID_43,
+    /* 0x2C */ PLAYER_CUEID_44,
+    /* 0x2D */ PLAYER_CUEID_45,
+    /* 0x2E */ PLAYER_CUEID_46,
+    /* 0x2F */ PLAYER_CUEID_47,
+    /* 0x30 */ PLAYER_CUEID_48,
+    /* 0x31 */ PLAYER_CUEID_49,
+    /* 0x32 */ PLAYER_CUEID_50,
+    /* 0x33 */ PLAYER_CUEID_51,
+    /* 0x34 */ PLAYER_CUEID_52,
+    /* 0x35 */ PLAYER_CUEID_53,
+    /* 0x36 */ PLAYER_CUEID_54,
+    /* 0x37 */ PLAYER_CUEID_55,
+    /* 0x38 */ PLAYER_CUEID_56,
+    /* 0x39 */ PLAYER_CUEID_57,
+    /* 0x3A */ PLAYER_CUEID_58,
+    /* 0x3B */ PLAYER_CUEID_59,
+    /* 0x3C */ PLAYER_CUEID_60,
+    /* 0x3D */ PLAYER_CUEID_61,
+    /* 0x3E */ PLAYER_CUEID_62,
+    /* 0x3F */ PLAYER_CUEID_63,
+    /* 0x40 */ PLAYER_CUEID_64,
+    /* 0x41 */ PLAYER_CUEID_65,
+    /* 0x42 */ PLAYER_CUEID_66,
+    /* 0x43 */ PLAYER_CUEID_67,
+    /* 0x44 */ PLAYER_CUEID_68,
+    /* 0x45 */ PLAYER_CUEID_69,
+    /* 0x46 */ PLAYER_CUEID_70,
+    /* 0x47 */ PLAYER_CUEID_71,
+    /* 0x48 */ PLAYER_CUEID_72,
+    /* 0x49 */ PLAYER_CUEID_73,
+    /* 0x4A */ PLAYER_CUEID_74,
+    /* 0x4B */ PLAYER_CUEID_75,
+    /* 0x4C */ PLAYER_CUEID_76,
+    /* 0x4D */ PLAYER_CUEID_77,
+    /* 0x4E */ PLAYER_CUEID_78,
+    /* 0x4F */ PLAYER_CUEID_79,
+    /* 0x50 */ PLAYER_CUEID_80,
+    /* 0x51 */ PLAYER_CUEID_81,
+    /* 0x52 */ PLAYER_CUEID_82,
+    /* 0x53 */ PLAYER_CUEID_83,
+    /* 0x54 */ PLAYER_CUEID_84,
+    /* 0x55 */ PLAYER_CUEID_85,
+    /* 0x56 */ PLAYER_CUEID_86,
+    /* 0x57 */ PLAYER_CUEID_87,
+    /* 0x58 */ PLAYER_CUEID_88,
+    /* 0x59 */ PLAYER_CUEID_89,
+    /* 0x5A */ PLAYER_CUEID_90,
+    /* 0x5B */ PLAYER_CUEID_91,
+    /* 0x5C */ PLAYER_CUEID_MAX
+} PlayerCueId;
 
 
 // 
@@ -976,7 +1072,7 @@ typedef enum PlayerUnkAA5 {
 } PlayerUnkAA5;
 
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
-typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
+typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
 typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
 
 
@@ -1040,14 +1136,17 @@ typedef struct Player {
     /* 0x390 */ Actor* rideActor;
     /* 0x394 */ u8 csMode; // PlayerCsMode enum
     /* 0x395 */ u8 prevCsMode; // PlayerCsMode enum
-    /* 0x396 */ u8 unk_396; // currentActorActionId?
+    /* 0x396 */ u8 cueId; // PlayerCueId enum
     /* 0x397 */ u8 unk_397; // PlayerDoorType enum
-    /* 0x398 */ Actor* unk_398; // csActor?
+    /* 0x398 */ Actor* csActor;
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
     /* 0x3A0 */ Vec3f unk_3A0;
     /* 0x3AC */ Vec3f unk_3AC;
     /* 0x3B8 */ u16 unk_3B8;
-    /* 0x3BA */ s16 doorBgCamIndex;
+    /* 0x3BA */ union {
+                    s16 doorBgCamIndex;
+                    s16 unk_3BA; // When in a cutscene, boolean to determine if `PLAYER_STATE1_20000000` is set
+                };
     /* 0x3BC */ s16 subCamId;
     /* 0x3BE */ char unk_3BE[2];
     /* 0x3C0 */ Vec3f unk_3C0;
@@ -1099,7 +1198,7 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ PlayerFuncAC4 unk_AC4;
+    /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc; // Upper body/item action functions
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;

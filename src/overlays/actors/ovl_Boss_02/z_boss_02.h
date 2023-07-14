@@ -6,6 +6,8 @@
 
 struct Boss02;
 
+#define TWINMOLD_GET_TYPE(thisx) ((thisx)->params)
+
 typedef void (*Boss02ActionFunc)(struct Boss02*, PlayState*);
 
 typedef struct {
@@ -25,17 +27,19 @@ typedef struct {
 typedef enum {
     /* 0 */ TWINMOLD_EFFECT_NONE,
     /* 1 */ TWINMOLD_EFFECT_SAND,       // The sand kicked up when Twinmold touches the ground
-    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // Unused
+    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // The dust that appears when either Twinmold or the player destroys a ruin
     /* 3 */ TWINMOLD_EFFECT_FRAGMENT,   // The fragments that fly off when the parts of Twinmold explode
     /* 4 */ TWINMOLD_EFFECT_FLASH       // The flashes of light that appear when the parts of Twinmold explode
 } TwinmoldEffectType;
 
+#define TWINMOLD_EFFECT_COUNT 150
+
 typedef enum {
-    /*   0 */ TWINMOLD_RED,
-    /*  35 */ TWINMOLD_BLUE = 35,
-    /* 100 */ TWINMOLD_TAIL = 100,
-    /* 200 */ TWINMOLD_STATIC = 200
-} TwinmoldParam;
+    /*   0 */ TWINMOLD_TYPE_RED,
+    /*  35 */ TWINMOLD_TYPE_BLUE = 35,
+    /* 100 */ TWINMOLD_TYPE_TAIL = 100,
+    /* 200 */ TWINMOLD_TYPE_STATIC = 200
+} TwinmoldType;
 
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;
@@ -66,7 +70,7 @@ typedef struct Boss02 {
     /* 0x01A0 */ f32 unk_01A0;
     /* 0x01A4 */ s16 unk_01A4;
     /* 0x01A8 */ f32 unk_01A8;
-    /* 0x01AC */ f32 unk_01AC;
+    /* 0x01AC */ f32 giantModeScaleFactor;
     /* 0x01B0 */ Vec3f unk_01B0;
     /* 0x01BC */ Vec3f unk_01BC[200];
     /* 0x0B1C */ Vec3f unk_0B1C[200];

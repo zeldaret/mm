@@ -457,7 +457,7 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->player.transformation = PLAYER_FORM_HUMAN;
     this->player.ageProperties = &sAgeProperties;
     this->player.heldItemAction = PLAYER_IA_NONE;
-    this->player.heldItemId = ITEM_OCARINA;
+    this->player.heldItemId = ITEM_OCARINA_OF_TIME;
 
     Player_SetModelGroup(&this->player, 3);
     play->playerInit(&this->player, play, &object_test3_Skel_00F7EC);
@@ -527,7 +527,7 @@ void func_80A3F0B0(EnTest3* this, PlayState* play) {
 }
 
 void func_80A3F114(EnTest3* this, PlayState* play) {
-    if (this->player.csMode != PLAYER_CSMODE_0) {
+    if (this->player.csMode != PLAYER_CSMODE_NONE) {
         play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_END);
     }
 }
@@ -1065,7 +1065,7 @@ void EnTest3_Update(Actor* thisx, PlayState* play2) {
         play->actorCtx.flags &= ~ACTORCTX_FLAG_4;
     } else if (this->player.actor.category == ACTORCAT_PLAYER) {
         func_80A409D4(this, play);
-    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_0)) {
+    } else if (play->startPlayerCutscene(play, &this->player, PLAYER_CSMODE_NONE)) {
         if (this->unk_D88 >= 7) {
             Vec3f worldPos;
 

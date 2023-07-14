@@ -709,7 +709,8 @@ wordReplace = {
     "func_8013A860": "SubS_DrawTransformFlexLimb",
     "func_8013BC6C": "SubS_ChangeAnimationByInfoS",
     "func_8013E1C8": "SubS_ChangeAnimationBySpeedInfo",
-    "func_8013D9C8": "SubS_FillLimbRotTables",
+    "func_8013D9C8": "SubS_UpdateFidgetTables",
+    "SubS_FillLimbRotTables": "SubS_UpdateFidgetTables",
     "func_8013A7C0": "SubS_FindDoor",
     "func_8013E640": "SubS_FindActorCustom",
     "func_ActorCategoryIterateById": "SubS_FindActor",
@@ -1127,6 +1128,8 @@ wordReplace = {
     "D_801D1E20": "gIdentityMtxF",
     "sSetupDL": "gSetupDLs",
 
+    "gFaultStruct": "gFaultMgr",
+
     "D_801BDA9C": "gHorseIsMounted",
     "D_801BDAA4": "gHorsePlayedEponasSong",
 
@@ -1147,7 +1150,7 @@ wordReplace = {
 
     "EXCH_ITEM_MINUS1": "PLAYER_IA_MINUS1",
     "EXCH_ITEM_NONE": "PLAYER_IA_NONE",
-    "EXCH_ITEM_PICTO_BOX": "PLAYER_IA_PICTO_BOX",
+    "EXCH_ITEM_PICTO_BOX": "PLAYER_IA_PICTOGRAPH_BOX",
     "EXCH_ITEM_1E": "PLAYER_IA_BOTTLE_MUSHROOM",
     "EXCH_ITEM_MOON_TEAR": "PLAYER_IA_MOONS_TEAR",
     "EXCH_ITEM_DEED_LAND": "PLAYER_IA_DEED_LAND",
@@ -1159,6 +1162,14 @@ wordReplace = {
     "EXCH_ITEM_DEED_OCEAN": "PLAYER_IA_DEED_OCEAN",
     "EXCH_ITEM_LETTER_MAMA": "PLAYER_IA_LETTER_MAMA",
     "ITEM_FISHING_POLE": "ITEM_FISHING_ROD",
+    "ITEM_OCARINA": "ITEM_OCARINA_OF_TIME",
+    "ITEM_STICK": "ITEM_DEKU_STICK",
+    "ITEM_NUT": "ITEM_DEKU_NUT",
+    "ITEM_PICTO_BOX": "ITEM_PICTOGRAPH_BOX",
+    "ITEM_LENS": "ITEM_LENS_OF_TRUTH",
+    "ITEM_MAGIC_SMALL": "ITEM_MAGIC_JAR_SMALL",
+    "ITEM_MAGIC_LARGE": "ITEM_MAGIC_JAR_BIG",
+    "ITEM_MOON_TEAR": "ITEM_MOONS_TEAR",
     "PLAYER_AP_FISHING_POLE": "PLAYER_IA_FISHING_ROD",
     "PLAYER_IA_BOTTLE": "PLAYER_IA_BOTTLE_EMPTY",
 
