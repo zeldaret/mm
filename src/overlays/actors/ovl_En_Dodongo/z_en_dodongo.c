@@ -7,7 +7,6 @@
 #include "z_en_dodongo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
-#include "objects/object_dodongo/object_dodongo.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -296,7 +295,7 @@ void EnDodongo_Init(Actor* thisx, PlayState* play) {
     Math_Vec3f_Copy(&this->unk_314, &gOneVec3f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 48.0f);
     SkelAnime_Init(play, &this->skelAnime, &object_dodongo_Skel_008318, &object_dodongo_Anim_004C20, this->jointTable,
-                   this->morphTable, 31);
+                   this->morphTable, OBJECT_DODONGO_LIMB_MAX);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Collider_InitAndSetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
     Collider_InitAndSetJntSph(play, &this->collider1, &this->actor, &sJntSphInit1, this->collider1Elements);
@@ -798,20 +797,20 @@ void func_80877E60(EnDodongo* this, PlayState* play) {
 
 void func_80878354(EnDodongo* this) {
     s32 pad;
-    AnimationHeader* sp18;
+    AnimationHeader* anim;
     s16 yDiff = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
 
     this->unk_306 = (0xFFFF - ABS_ALT(yDiff)) / 15;
 
     if (yDiff >= 0) {
-        sp18 = &object_dodongo_Anim_0042C4;
+        anim = &object_dodongo_Anim_0042C4;
         this->unk_306 = -this->unk_306;
     } else {
-        sp18 = &object_dodongo_Anim_003B14;
+        anim = &object_dodongo_Anim_003B14;
     }
 
     Actor_PlaySfx(&this->actor, NA_SE_EN_DODO_J_TAIL);
-    Animation_PlayOnceSetSpeed(&this->skelAnime, sp18, 2.0f);
+    Animation_PlayOnceSetSpeed(&this->skelAnime, anim, 2.0f);
     this->timer = 0;
     this->collider1.base.atFlags |= AT_ON;
     this->unk_304 = -1;
@@ -1061,22 +1060,54 @@ void EnDodongo_Update(Actor* thisx, PlayState* play2) {
 s32 EnDodongo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDodongo* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_DODONGO_LIMB_01) {
         pos->z += 1000.0f;
-    } else if ((limbIndex == 15) || (limbIndex == 16)) {
+    } else if ((limbIndex == OBJECT_DODONGO_LIMB_0F) || (limbIndex == OBJECT_DODONGO_LIMB_10)) {
         Matrix_Scale(this->unk_314.x, this->unk_314.y, this->unk_314.z, MTXMODE_APPLY);
     }
 
     return false;
 }
 
+static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
+
+static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
+
+static s8 D_80879388[OBJECT_DODONGO_LIMB_MAX] = {
+    -1, // OBJECT_DODONGO_LIMB_NONE
+    -1, // OBJECT_DODONGO_LIMB_01
+    -1, // OBJECT_DODONGO_LIMB_02
+    -1, // OBJECT_DODONGO_LIMB_03
+    -1, // OBJECT_DODONGO_LIMB_04
+    -1, // OBJECT_DODONGO_LIMB_05
+    -1, // OBJECT_DODONGO_LIMB_06
+    -1, // OBJECT_DODONGO_LIMB_07
+    -1, // OBJECT_DODONGO_LIMB_08
+    -1, // OBJECT_DODONGO_LIMB_09
+    -1, // OBJECT_DODONGO_LIMB_0A
+    -1, // OBJECT_DODONGO_LIMB_0B
+    -1, // OBJECT_DODONGO_LIMB_0C
+    2,  // OBJECT_DODONGO_LIMB_0D
+    3,  // OBJECT_DODONGO_LIMB_0E
+    4,  // OBJECT_DODONGO_LIMB_0F
+    -1, // OBJECT_DODONGO_LIMB_10
+    -1, // OBJECT_DODONGO_LIMB_11
+    -1, // OBJECT_DODONGO_LIMB_12
+    -1, // OBJECT_DODONGO_LIMB_13
+    -1, // OBJECT_DODONGO_LIMB_14
+    5,  // OBJECT_DODONGO_LIMB_15
+    6,  // OBJECT_DODONGO_LIMB_16
+    -1, // OBJECT_DODONGO_LIMB_17
+    -1, // OBJECT_DODONGO_LIMB_18
+    -1, // OBJECT_DODONGO_LIMB_19
+    -1, // OBJECT_DODONGO_LIMB_1A
+    -1, // OBJECT_DODONGO_LIMB_1B
+    7,  // OBJECT_DODONGO_LIMB_1C
+    8,  // OBJECT_DODONGO_LIMB_1D
+    -1, // OBJECT_DODONGO_LIMB_1E
+};
+
 void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
-    static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
-    static s8 D_80879388[] = {
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 3,  4,
-        -1, -1, -1, -1, -1, 5,  6,  -1, -1, -1, -1, -1, 7,  8, -1, 0,
-    };
     EnDodongo* this = THIS;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
@@ -1085,16 +1116,17 @@ void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultZero(&this->limbPos[D_80879388[limbIndex]]);
     }
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_DODONGO_LIMB_07) {
         Matrix_MultVec3f(&D_80879370, &this->unk_308);
         Matrix_MultVec3f(&D_8087937C, &this->limbPos[0]);
         Matrix_MultZero(&this->actor.focus.pos);
         Matrix_MultVecY(-200.0f, &this->limbPos[1]);
-    } else if (limbIndex == 13) {
+    } else if (limbIndex == OBJECT_DODONGO_LIMB_0D) {
         Matrix_MultVecX(1600.0f, &this->unk_320);
     }
 
-    if ((limbIndex == 30) && (this->actionFunc == func_80878424) && (this->timer != this->unk_304)) {
+    if ((limbIndex == OBJECT_DODONGO_LIMB_1E) && (this->actionFunc == func_80878424) &&
+        (this->timer != this->unk_304)) {
         EffectBlure_AddVertex(Effect_GetByIndex(this->unk_338), &this->unk_320, &this->limbPos[4]);
         this->unk_304 = this->timer;
     }

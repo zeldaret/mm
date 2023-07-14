@@ -2,6 +2,9 @@
 #define Z_EN_DNK_H
 
 #include "global.h"
+#include "objects/object_dnk/object_dnk.h"
+#include "objects/object_hintnuts/object_hintnuts.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
 struct EnDnk;
 
@@ -24,9 +27,19 @@ typedef struct EnDnk {
     /* 0x188 */ EnDnkActionFunc actionFunc;
     /* 0x18C */ UNK_TYPE1 unk_18C[0x4];
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ Vec3s jointTable[11];
-    /* 0x21E */ Vec3s morphTable[11];
-    /* 0x260 */ Gfx* unk_260[11];
+    /* 0x1DC */ union {
+                    Vec3s jointTable[1]; // Union used to ensure size is always max of the three LIMB_MAX
+                    Vec3s jointTableGuard[DEKU_PALACE_GUARD_LIMB_MAX];
+                    Vec3s jointTableHint[OBJECT_HINTNUTS_LIMB_MAX];
+                    Vec3s jointTableScrub[DEKU_SCRUB_LIMB_MAX];
+                };
+    /* 0x21E */ union {
+                    Vec3s morphTable[1]; // Union used to ensure size is always max of the three LIMB_MAX
+                    Vec3s morphTableGuard[DEKU_PALACE_GUARD_LIMB_MAX];
+                    Vec3s morphTableHint[OBJECT_HINTNUTS_LIMB_MAX];
+                    Vec3s morphTableScrub[DEKU_SCRUB_LIMB_MAX];
+                };
+    /* 0x260 */ Gfx* unk_260[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x28C */ u16 unk_28C;
     /* 0x28E */ s8 unk_28E;
     /* 0x290 */ s16 unk_290;

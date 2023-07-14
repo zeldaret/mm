@@ -19,20 +19,6 @@ void func_8092D330(EnDns* this, PlayState* play);
 void EnDns_DoNothing(EnDns* this, PlayState* play);
 void func_8092D4D8(EnDns* this, PlayState* play);
 
-typedef enum {
-    /*  0 */ EN_DNS_ANIM_IDLE_1,
-    /*  1 */ EN_DNS_ANIM_IDLE_2,
-    /*  2 */ EN_DNS_ANIM_WALK_1,
-    /*  3 */ EN_DNS_ANIM_WALK_2,
-    /*  4 */ EN_DNS_ANIM_SURPRISE_START,
-    /*  5 */ EN_DNS_ANIM_SURPRISE_LOOP,
-    /*  6 */ EN_DNS_ANIM_RUN_START,
-    /*  7 */ EN_DNS_ANIM_RUN_LOOP,
-    /*  8 */ EN_DNS_ANIM_DANCE,
-    /*  9 */ EN_DNS_ANIM_FLIP,
-    /* 10 */ EN_DNS_ANIM_MAX
-} EnDnsAnimation;
-
 static s32 D_8092DCB0[] = {
     0x00172000, 0x050E082F, 0x0C100E08, 0x200C1000, 0x00172000, 0x050E0830, 0x0C100E08, 0x210C1000,
     0x00172000, 0x050E0831, 0x0C100E08, 0x220C1000, 0x00172000, 0x050E0832, 0x0C100E08, 0x230C1000,
@@ -73,60 +59,75 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+typedef enum {
+    /* -1 */ EN_DNS_ANIM_NONE = -1,
+    /*  0 */ EN_DNS_ANIM_IDLE,
+    /*  1 */ EN_DNS_ANIM_IDLE_MORPH,
+    /*  2 */ EN_DNS_ANIM_WALK,
+    /*  3 */ EN_DNS_ANIM_WALK_MORPH,
+    /*  4 */ EN_DNS_ANIM_SURPRISE_START,
+    /*  5 */ EN_DNS_ANIM_SURPRISE_LOOP,
+    /*  6 */ EN_DNS_ANIM_RUN_START,
+    /*  7 */ EN_DNS_ANIM_RUN_LOOP,
+    /*  8 */ EN_DNS_ANIM_DANCE,
+    /*  9 */ EN_DNS_ANIM_FLIP,
+    /* 10 */ EN_DNS_ANIM_MAX
+} EnDnsAnimation;
+
+static AnimationInfoS sAnimationInfo[EN_DNS_ANIM_MAX] = {
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // EN_DNS_ANIM_IDLE
+    { &gKingsChamberDekuGuardIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // EN_DNS_ANIM_IDLE_MORPH
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },          // EN_DNS_ANIM_WALK
+    { &gKingsChamberDekuGuardWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // EN_DNS_ANIM_WALK_MORPH
+    { &gKingsChamberDekuGuardSurpriseStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // EN_DNS_ANIM_SURPRISE_START
+    { &gKingsChamberDekuGuardSurpriseLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // EN_DNS_ANIM_SURPRISE_LOOP
+    { &gKingsChamberDekuGuardRunStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // EN_DNS_ANIM_RUN_START
+    { &gKingsChamberDekuGuardRunLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },       // EN_DNS_ANIM_RUN_LOOP
+    { &gKingsChamberDekuGuardDanceAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // EN_DNS_ANIM_DANCE
+    { &gKingsChamberDekuGuardFlipAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // EN_DNS_ANIM_FLIP
 };
 
 void func_8092C5C0(EnDns* this) {
     s32 pad;
 
-    if (((this->animIndex == EN_DNS_ANIM_WALK_1) || (this->animIndex == EN_DNS_ANIM_WALK_2) ||
+    if (((this->animIndex == EN_DNS_ANIM_WALK) || (this->animIndex == EN_DNS_ANIM_WALK_MORPH) ||
          (this->animIndex == EN_DNS_ANIM_RUN_START) || (this->animIndex == EN_DNS_ANIM_RUN_LOOP)) &&
         (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 3.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 }
 
-s32 func_8092C63C(EnDns* this, s32 arg1) {
-    s32 phi_v1 = false;
-    s32 ret = false;
+s32 EnDns_ChangeAnim(EnDns* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    switch (arg1) {
-        case EN_DNS_ANIM_IDLE_1:
-        case EN_DNS_ANIM_IDLE_2:
-            if ((this->animIndex != EN_DNS_ANIM_IDLE_1) && (this->animIndex != EN_DNS_ANIM_IDLE_2)) {
-                phi_v1 = true;
+    switch (animIndex) {
+        case EN_DNS_ANIM_IDLE:
+        case EN_DNS_ANIM_IDLE_MORPH:
+            if ((this->animIndex != EN_DNS_ANIM_IDLE) && (this->animIndex != EN_DNS_ANIM_IDLE_MORPH)) {
+                changeAnim = true;
             }
             break;
 
-        case EN_DNS_ANIM_WALK_1:
-        case EN_DNS_ANIM_WALK_2:
-            if ((this->animIndex != EN_DNS_ANIM_WALK_1) && (this->animIndex != EN_DNS_ANIM_WALK_2)) {
-                phi_v1 = true;
+        case EN_DNS_ANIM_WALK:
+        case EN_DNS_ANIM_WALK_MORPH:
+            if ((this->animIndex != EN_DNS_ANIM_WALK) && (this->animIndex != EN_DNS_ANIM_WALK_MORPH)) {
+                changeAnim = true;
             }
             break;
 
         default:
-            if (this->animIndex != arg1) {
-                phi_v1 = true;
+            if (this->animIndex != animIndex) {
+                changeAnim = true;
             }
     }
 
-    if (phi_v1) {
-        this->animIndex = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_8092C6FC(EnDns* this, PlayState* play) {
@@ -200,9 +201,10 @@ s32* func_8092C9BC(EnDns* this, PlayState* play) {
 
         case ENDNS_GET_7_3:
             return &D_8092DCB0[12];
-    }
 
-    return 0;
+        default:
+            return NULL;
+    }
 }
 
 s32 EnDns_GetCueType(EnDns* this) {
@@ -218,9 +220,10 @@ s32 EnDns_GetCueType(EnDns* this) {
 
         case ENDNS_GET_7_3:
             return CS_CMD_ACTOR_CUE_468;
-    }
 
-    return 0;
+        default:
+            return 0;
+    }
 }
 
 s32 func_8092CAD0(EnDns* this, PlayState* play) {
@@ -231,10 +234,10 @@ s32 func_8092CAD0(EnDns* this, PlayState* play) {
             SubS_UpdateFlags(&this->unk_2C6, 0, 7);
             this->unk_2C6 &= ~0x10;
             if (ENDNS_GET_4000(&this->actor)) {
-                this->unk_2F0 = 0.0f;
+                this->animCurFrame = 0.0f;
                 if (this->unk_2D2 != 0) {
-                    this->unk_2F0 = this->skelAnime.curFrame;
-                    func_8092C63C(this, EN_DNS_ANIM_WALK_1);
+                    this->animCurFrame = this->skelAnime.curFrame;
+                    EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
                 }
                 this->unk_2DA = this->actor.world.rot.y;
             }
@@ -306,13 +309,13 @@ s32 func_8092CCEC(EnDns* this, PlayState* play) {
 
 s32 func_8092CE38(EnDns* this) {
     static s32 D_8092DE00[] = { EN_DNS_ANIM_DANCE, EN_DNS_ANIM_DANCE, EN_DNS_ANIM_FLIP };
-    s16 frame;
+    s16 rotVelocity;
     s32 pad;
     Vec3f sp2C;
     s32 ret = false;
 
     if ((this->unk_2C6 & 0x200) || Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_8092C63C(this, D_8092DE00[this->unk_2D2]);
+        EnDns_ChangeAnim(this, D_8092DE00[this->unk_2D2]);
         this->unk_2C6 &= ~0x200;
         this->skelAnime.curFrame = 0.0f;
         if (this->unk_2D2 == 2) {
@@ -331,10 +334,10 @@ s32 func_8092CE38(EnDns* this) {
                 this->actor.shape.rot.y = this->actor.world.rot.y;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_JUMP);
             } else if (this->skelAnime.curFrame < 13.0f) {
-                frame = this->skelAnime.curFrame;
+                rotVelocity = this->skelAnime.curFrame;
                 this->actor.shape.rot.y = this->actor.world.rot.y;
-                frame *= 2520;
-                this->actor.shape.rot.y += frame;
+                rotVelocity *= 0x9D8;
+                this->actor.shape.rot.y += rotVelocity;
                 this->unk_2E4 -= -(40.0f / 13.0f);
             }
         } else {
@@ -405,11 +408,11 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
             Audio_PlaySfx(NA_SE_SY_FOUND);
             SET_EVENTINF(EVENTINF_15);
             this->unk_2F4 = func_8092CCEC;
-            func_8092C63C(this, EN_DNS_ANIM_WALK_1);
+            EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = EnDns_DoNothing;
         } else if (CHECK_EVENTINF(EVENTINF_16)) {
             func_8092CCEC(this, play);
-            func_8092C63C(this, EN_DNS_ANIM_WALK_1);
+            EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
             this->actionFunc = func_8092D330;
         }
         Math_ApproachS(&this->actor.shape.rot.y, sp22, 3, 0x2AA8);
@@ -451,16 +454,16 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
 
     if (ENDNS_GET_4000(&this->actor) && (this->unk_2D2 == 0)) {
         if (func_8092CE38(this)) {
-            func_8092C63C(this, EN_DNS_ANIM_WALK_1);
+            EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
         }
     } else if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
         SubS_UpdateFlags(&this->unk_2C6, 3, 7);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
             if (!CHECK_EVENTINF(EVENTINF_15)) {
-                this->skelAnime.curFrame = this->unk_2F0;
+                this->skelAnime.curFrame = this->animCurFrame;
                 this->actor.world.rot.y = this->unk_2DA;
-                func_8092C63C(this, EN_DNS_ANIM_DANCE);
+                EnDns_ChangeAnim(this, EN_DNS_ANIM_DANCE);
             }
             this->unk_2CC = 0;
             this->unk_2CE = 0;
@@ -472,10 +475,10 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
     }
 }
 
-void func_8092D5E8(EnDns* this, PlayState* play) {
-    static s32 D_8092DE0C[] = {
-        EN_DNS_ANIM_IDLE_1,
-        EN_DNS_ANIM_IDLE_1,
+void EnDns_HandleCutscene(EnDns* this, PlayState* play) {
+    static s32 sCsAnimIndex[] = {
+        EN_DNS_ANIM_IDLE,
+        EN_DNS_ANIM_IDLE,
         EN_DNS_ANIM_SURPRISE_START,
         EN_DNS_ANIM_RUN_START,
     };
@@ -486,13 +489,13 @@ void func_8092D5E8(EnDns* this, PlayState* play) {
         cueChannel = Cutscene_GetCueChannel(play, this->cueType);
         cueId = play->csCtx.actorCues[cueChannel]->id;
         if (this->cueId != (u8)cueId) {
-            func_8092C63C(this, D_8092DE0C[cueId]);
+            EnDns_ChangeAnim(this, sCsAnimIndex[cueId]);
             this->cueId = cueId;
         }
 
         if (((this->animIndex == EN_DNS_ANIM_SURPRISE_START) || (this->animIndex == EN_DNS_ANIM_RUN_START)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            func_8092C63C(this, this->animIndex + 1);
+            EnDns_ChangeAnim(this, this->animIndex + 1);
         }
 
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
@@ -510,8 +513,8 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 18.0f);
     SkelAnime_Init(play, &this->skelAnime, &gKingsChamberDekuGuardSkel, NULL, this->jointTable, this->morphTable,
                    KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX);
-    this->animIndex = -1;
-    func_8092C63C(this, EN_DNS_ANIM_WALK_1);
+    this->animIndex = EN_DNS_ANIM_NONE;
+    EnDns_ChangeAnim(this, EN_DNS_ANIM_WALK);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
@@ -542,7 +545,7 @@ void EnDns_Update(Actor* thisx, PlayState* play) {
     EnDns* this = THIS;
 
     if (!func_8092CAD0(this, play) && func_8092CB98(this, play)) {
-        func_8092D5E8(this, play);
+        EnDns_HandleCutscene(this, play);
         SkelAnime_Update(&this->skelAnime);
         func_8092C5C0(this);
     } else {

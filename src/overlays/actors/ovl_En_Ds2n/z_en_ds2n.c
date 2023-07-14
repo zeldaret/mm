@@ -32,14 +32,19 @@ ActorInit En_Ds2n_InitVars = {
     (ActorFunc)EnDs2n_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
+typedef enum {
+    /* 0 */ ENDS2N_ANIM_IDLE,
+    /* 1 */ ENDS2N_ANIM_MAX
+} EnDs2nAnimation;
+
+static AnimationInfo sAnimationInfo[ENDS2N_ANIM_MAX] = {
     { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
     this->blinkState = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENDS2N_ANIM_IDLE);
     this->actionFunc = EnDs2n_Idle;
 }
 

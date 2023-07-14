@@ -5,7 +5,6 @@
  */
 
 #include "z_en_dinofos.h"
-#include "objects/object_dinofos/object_dinofos.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
@@ -1406,20 +1405,44 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
 s32 func_8089DC4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnDinofos* this = THIS;
 
-    if (limbIndex == 16) {
+    if (limbIndex == OBJECT_DINOFOS_LIMB_10) {
         rot->y -= this->unk_28E;
     }
 
     return 0;
 }
 
+static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
+
+static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
+
+static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };
+
+static s8 D_8089E3B0[OBJECT_DINOFOS_LIMB_MAX] = {
+    -1, // OBJECT_DINOFOS_LIMB_NONE
+    -1, // OBJECT_DINOFOS_LIMB_01
+    0,  // OBJECT_DINOFOS_LIMB_02
+    -1, // OBJECT_DINOFOS_LIMB_03
+    1,  // OBJECT_DINOFOS_LIMB_04
+    2,  // OBJECT_DINOFOS_LIMB_05
+    -1, // OBJECT_DINOFOS_LIMB_06
+    3,  // OBJECT_DINOFOS_LIMB_07
+    4,  // OBJECT_DINOFOS_LIMB_08
+    -1, // OBJECT_DINOFOS_LIMB_09
+    5,  // OBJECT_DINOFOS_LIMB_0A
+    6,  // OBJECT_DINOFOS_LIMB_0B
+    -1, // OBJECT_DINOFOS_LIMB_0C
+    7,  // OBJECT_DINOFOS_LIMB_0D
+    8,  // OBJECT_DINOFOS_LIMB_0E
+    -1, // OBJECT_DINOFOS_LIMB_0F
+    9,  // OBJECT_DINOFOS_LIMB_10
+    10, // OBJECT_DINOFOS_LIMB_11
+    -1, // OBJECT_DINOFOS_LIMB_12
+    11, // OBJECT_DINOFOS_LIMB_13
+    -1, // OBJECT_DINOFOS_LIMB_14
+};
+
 void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
-    static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
-    static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };
-    static s8 D_8089E3B0[] = {
-        -1, -1, 0, -1, 1, 2, -1, 3, 4, -1, 5, 6, -1, 7, 8, -1, 9, 10, -1, 11, -1,
-    };
     EnDinofos* this = THIS;
     Vec3f sp80;
     Vec3f sp74;
@@ -1434,7 +1457,7 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         Matrix_MultZero(&this->limbPos[D_8089E3B0[limbIndex]]);
     }
 
-    if ((limbIndex == 14) && (this->unk_292 != this->unk_290) &&
+    if ((limbIndex == OBJECT_DINOFOS_LIMB_0E) && (this->unk_292 != this->unk_290) &&
         ((this->actionFunc == func_8089C56C) || (this->actionFunc == func_8089C2A8))) {
         Math_Vec3f_Copy(&sp74, &this->colliderQuad.dim.quad[0]);
         Math_Vec3f_Copy(&sp80, &this->colliderQuad.dim.quad[1]);
@@ -1447,13 +1470,13 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         this->unk_292 = this->unk_290;
     }
 
-    if (limbIndex == 4) {
+    if (limbIndex == OBJECT_DINOFOS_LIMB_04) {
         Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[0]);
-    } else if (limbIndex == 7) {
+    } else if (limbIndex == OBJECT_DINOFOS_LIMB_07) {
         Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[1]);
     }
 
-    if ((limbIndex == 16) && (this->actionFunc == func_8089B580)) {
+    if ((limbIndex == OBJECT_DINOFOS_LIMB_10) && (this->actionFunc == func_8089B580)) {
         if ((this->skelAnime.curFrame > 38.0f) && (this->skelAnime.curFrame <= 55.0f) &&
             (this->unk_292 != this->unk_290)) {
             sp48 = Matrix_GetCurrent();

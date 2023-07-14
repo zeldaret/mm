@@ -2196,24 +2196,41 @@ s32 Boss03_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
  * Since there are two sets of ColliderJntSph, indices < 2 (ARRAY_COUNT(sHeadJntSphElementsInit)) refers to the first
  * collider and indices >= 2 refers to the second one
  */
-s8 sGyorgSphElementIndices[] = {
-    -1, // GYORG_LIMB_NONE,
-    -1, // GYORG_LIMB_ROOT,
-    0,  // GYORG_LIMB_HEAD,
-    -1, // GYORG_LIMB_BODY_ROOT,
-    4,  // GYORG_LIMB_UPPER_TRUNK,
-    5,  // GYORG_LIMB_LOWER_TRUNK,
-    6,  // GYORG_LIMB_TAIL,
-    -1, // GYORG_LIMB_RIGHT_FIN_ROOT,
-    2,  // GYORG_LIMB_UPPER_RIGHT_FIN,
-    -1, // GYORG_LIMB_LOWER_RIGHT_FIN,
-    -1, // GYORG_LIMB_LEFT_FIN_ROOT,
-    3,  // GYORG_LIMB_UPPER_LEFT_FIN,
-    -1, // GYORG_LIMB_LOWER_LEFT_FIN,
-    -1, // GYORG_LIMB_JAW_ROOT,
-    1,  // GYORG_LIMB_JAW,
-    -1, // GYORG_LIMB_MAX
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+s8 sGyorgSphElementIndices[2][GYORG_LIMB_MAX] = {
+    {
+        -1, // GYORG_LIMB_NONE
+        -1, // GYORG_LIMB_ROOT
+        0,  // GYORG_LIMB_HEAD
+        -1, // GYORG_LIMB_BODY_ROOT
+        4,  // GYORG_LIMB_UPPER_TRUNK
+        5,  // GYORG_LIMB_LOWER_TRUNK
+        6,  // GYORG_LIMB_TAIL
+        -1, // GYORG_LIMB_RIGHT_FIN_ROOT
+        2,  // GYORG_LIMB_UPPER_RIGHT_FIN
+        -1, // GYORG_LIMB_LOWER_RIGHT_FIN
+        -1, // GYORG_LIMB_LEFT_FIN_ROOT
+        3,  // GYORG_LIMB_UPPER_LEFT_FIN
+        -1, // GYORG_LIMB_LOWER_LEFT_FIN
+        -1, // GYORG_LIMB_JAW_ROOT
+        1,  // GYORG_LIMB_JAW
+    },
+    {
+        -1, // GYORG_LIMB_NONE
+        -1, // GYORG_LIMB_ROOT
+        -1, // GYORG_LIMB_HEAD
+        -1, // GYORG_LIMB_BODY_ROOT
+        -1, // GYORG_LIMB_UPPER_TRUNK
+        -1, // GYORG_LIMB_LOWER_TRUNK
+        -1, // GYORG_LIMB_TAIL
+        -1, // GYORG_LIMB_RIGHT_FIN_ROOT
+        -1, // GYORG_LIMB_UPPER_RIGHT_FIN
+        -1, // GYORG_LIMB_LOWER_RIGHT_FIN
+        -1, // GYORG_LIMB_LEFT_FIN_ROOT
+        -1, // GYORG_LIMB_UPPER_LEFT_FIN
+        -1, // GYORG_LIMB_LOWER_LEFT_FIN
+        -1, // GYORG_LIMB_JAW_ROOT
+        -1, // GYORG_LIMB_JAW
+    },
 };
 
 Vec3f D_809E9148 = { 600.0f, -100.0f, 0.0f };
@@ -2235,7 +2252,7 @@ void Boss03_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         Matrix_MultVec3f(&D_809E9148, &this->actor.focus.pos);
     }
 
-    sphereElementIndex = sGyorgSphElementIndices[limbIndex];
+    sphereElementIndex = sGyorgSphElementIndices[0][limbIndex];
     if (sphereElementIndex >= 0) {
         Matrix_MultVec3f(&D_809E9154[sphereElementIndex], &spherePos);
 

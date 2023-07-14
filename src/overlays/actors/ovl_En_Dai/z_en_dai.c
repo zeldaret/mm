@@ -5,7 +5,6 @@
  */
 
 #include "z_en_dai.h"
-#include "objects/object_dai/object_dai.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -127,50 +126,64 @@ s32 func_80B3E5B4(EnDai* this, PlayState* play) {
     return 0;
 }
 
-s32 func_80B3E5DC(EnDai* this, s32 arg1) {
-    static AnimationInfoS sAnimationInfo[] = {
-        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-        { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-        { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-        { &object_dai_Anim_000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-        { &object_dai_Anim_0069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-        { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-        { &object_dai_Anim_002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-        { &object_dai_Anim_006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    };
+typedef enum {
+    /* -1 */ ENDAI_ANIM_NONE = -1,
+    /*  0 */ ENDAI_ANIM_0,
+    /*  1 */ ENDAI_ANIM_1,
+    /*  2 */ ENDAI_ANIM_2,
+    /*  3 */ ENDAI_ANIM_3,
+    /*  4 */ ENDAI_ANIM_4,
+    /*  5 */ ENDAI_ANIM_5,
+    /*  6 */ ENDAI_ANIM_6,
+    /*  7 */ ENDAI_ANIM_7,
+    /*  8 */ ENDAI_ANIM_8,
+    /*  9 */ ENDAI_ANIM_MAX
+} EnDaiAnimation;
 
-    s32 phi_v1 = false;
-    s32 ret = false;
+static AnimationInfoS sAnimationInfo[ENDAI_ANIM_MAX] = {
+    { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENDAI_ANIM_0
+    { &object_dai_Anim_0079E4, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDAI_ANIM_1
+    { &object_dai_Anim_007354, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDAI_ANIM_2
+    { &object_dai_Anim_000CEC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDAI_ANIM_3
+    { &object_dai_Anim_0069DC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDAI_ANIM_4
+    { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENDAI_ANIM_5
+    { &object_dai_Anim_00563C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDAI_ANIM_6
+    { &object_dai_Anim_002E58, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDAI_ANIM_7
+    { &object_dai_Anim_006590, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // ENDAI_ANIM_8
+};
 
-    switch (arg1) {
-        case 0:
-        case 1:
-            if ((this->unk_A70 != 0) && (this->unk_A70 != 1)) {
-                phi_v1 = true;
+s32 EnDai_ChangeAnim(EnDai* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
+
+    switch (animIndex) {
+        case ENDAI_ANIM_0:
+        case ENDAI_ANIM_1:
+            if ((this->animIndex != ENDAI_ANIM_0) && (this->animIndex != ENDAI_ANIM_1)) {
+                changeAnim = true;
             }
             break;
 
-        case 5:
-        case 6:
-            if ((this->unk_A70 != 5) && (this->unk_A70 != 6)) {
-                phi_v1 = true;
+        case ENDAI_ANIM_5:
+        case ENDAI_ANIM_6:
+            if ((this->animIndex != ENDAI_ANIM_5) && (this->animIndex != ENDAI_ANIM_6)) {
+                changeAnim = true;
             }
             break;
 
         default:
-            if (arg1 != this->unk_A70) {
-                phi_v1 = true;
+            if (this->animIndex != animIndex) {
+                changeAnim = true;
             }
             break;
     }
 
-    if (phi_v1) {
-        this->unk_A70 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 s32 func_80B3E69C(EnDai* this, PlayState* play) {
@@ -240,19 +253,19 @@ static s32 D_80B3FC8C[] = {
     0x920C0F0C, 0x930C1211, 0x5520100E, 0x0C940C12, 0x10000000,
 };
 
+static f32 D_80B3FCB4[] = {
+    1.0f, 6.0f, 16.0f, 19.0f, 46.0f, 48.0f, 50.0f, 52.0f, 54.0f, 1.0f, 6.0f, 36.0f,
+};
+
+static f32 D_80B3FCE4[] = {
+    5.0f, 15.0f, 18.0f, 45.0f, 47.0f, 49.0f, 51.0f, 53.0f, 55.0f, 5.0f, 35.0f, 45.0f,
+};
+
+static s16 D_80B3FD14[] = {
+    4, 5, 2, 0, 4, 5, 2, 5, 4, 4, 5, 2,
+};
+
 s16 func_80B3E8BC(EnDai* this, s32 cueId) {
-    static f32 D_80B3FCB4[] = {
-        1.0f, 6.0f, 16.0f, 19.0f, 46.0f, 48.0f, 50.0f, 52.0f, 54.0f, 1.0f, 6.0f, 36.0f,
-    };
-
-    static f32 D_80B3FCE4[] = {
-        5.0f, 15.0f, 18.0f, 45.0f, 47.0f, 49.0f, 51.0f, 53.0f, 55.0f, 5.0f, 35.0f, 45.0f,
-    };
-
-    static s16 D_80B3FD14[] = {
-        4, 5, 2, 0, 4, 5, 2, 5, 4, 4, 5, 2,
-    };
-
     s32 i;
     s32 end;
 
@@ -286,7 +299,7 @@ s32 func_80B3E96C(EnDai* this, PlayState* play) {
         ((this->unk_1DC == 0) || Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame))) {
         switch (this->unk_1DC) {
             case 0:
-                func_80B3E5DC(this, 2);
+                EnDai_ChangeAnim(this, ENDAI_ANIM_2);
                 this->unk_1DC++;
                 break;
 
@@ -294,21 +307,24 @@ s32 func_80B3E96C(EnDai* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWSTORM_HARD);
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WEATHER_TAG, this->actor.world.pos.x,
                             this->actor.world.pos.y, this->actor.world.pos.z, 0x1388, 0x708, 0x3E8, 0);
-                func_80B3E5DC(this, 3);
+                EnDai_ChangeAnim(this, ENDAI_ANIM_3);
                 this->unk_1DC++;
                 break;
 
             case 2:
-                func_80B3E5DC(this, 4);
+                EnDai_ChangeAnim(this, ENDAI_ANIM_4);
                 this->unk_1DC++;
                 break;
 
             case 3:
-                func_80B3E5DC(this, 1);
+                EnDai_ChangeAnim(this, ENDAI_ANIM_1);
                 this->unk_1F0 = D_80B3FBF0;
                 this->unk_1FC = D_80B3FBF0;
                 this->unk_1DC = 0;
                 this->unk_1DA = Rand_S16Offset(20, 20);
+                break;
+
+            default:
                 break;
         }
     } else if (this->unk_1DC == 2) {
@@ -337,24 +353,24 @@ void func_80B3EC10(f32 arg0, Vec3f arg1, f32 arg2, Vec3f arg3, f32 arg4, Vec3f* 
     arg5->z = ((arg3.z - arg1.z) * temp_f0) + arg1.z;
 }
 
+static f32 D_80B3FD2C[] = {
+    6.0f, 11.0f, 15.0f, 0.0f, 12.0f, 17.0f, 0.0f, 3.0f,
+};
+
+static f32 D_80B3FD4C[] = {
+    8.0f, 15.0f, 24.0f, 4.0f, 17.0f, 26.0f, 3.0f, 7.0f,
+};
+
+static s16 D_80B3FD6C[] = {
+    1, 1, 1, 2, 2, 2, 3, 3,
+};
+
+static Vec3f D_80B3FD7C[] = {
+    { 1.0f, 1.0f, 1.0f }, { 1.0f, 0.8f, 0.8f }, { 1.0f, 1.1f, 1.1f }, { 1.0f, 1.3f, 1.3f }, { 1.0f, 0.7f, 0.9f },
+    { 1.0f, 0.8f, 0.9f }, { 1.0f, 0.7f, 0.9f }, { 1.0f, 0.8f, 0.9f }, { 1.0f, 1.0f, 1.0f },
+};
+
 s32 func_80B3EC84(EnDai* this) {
-    static f32 D_80B3FD2C[] = {
-        6.0f, 11.0f, 15.0f, 0.0f, 12.0f, 17.0f, 0.0f, 3.0f,
-    };
-
-    static f32 D_80B3FD4C[] = {
-        8.0f, 15.0f, 24.0f, 4.0f, 17.0f, 26.0f, 3.0f, 7.0f,
-    };
-
-    static s16 D_80B3FD6C[] = {
-        1, 1, 1, 2, 2, 2, 3, 3,
-    };
-
-    static Vec3f D_80B3FD7C[] = {
-        { 1.0f, 1.0f, 1.0f }, { 1.0f, 0.8f, 0.8f }, { 1.0f, 1.1f, 1.1f }, { 1.0f, 1.3f, 1.3f }, { 1.0f, 0.7f, 0.9f },
-        { 1.0f, 0.8f, 0.9f }, { 1.0f, 0.7f, 0.9f }, { 1.0f, 0.8f, 0.9f }, { 1.0f, 1.0f, 1.0f },
-    };
-
     s32 i;
     s32 ret = false;
 
@@ -371,20 +387,20 @@ s32 func_80B3EC84(EnDai* this) {
     return ret;
 }
 
+static f32 D_80B3FDE8[] = { 22.0f, 0.0f, 0.0f };
+
+static f32 D_80B3FDF4[] = { 29.0f, 3.0f, 9.0f };
+
+static s16 D_80B3FE00[] = { 1, 2, 3 };
+
+static Vec3f D_80B3FE08[] = {
+    { 1.0f, 1.0f, 1.0f },
+    { 1.0f, 1.2f, 1.2f },
+    { 1.0f, 0.7f, 0.8f },
+    { 1.0f, 1.0f, 1.0f },
+};
+
 s32 func_80B3ED88(EnDai* this) {
-    static f32 D_80B3FDE8[] = { 22.0f, 0.0f, 0.0f };
-
-    static f32 D_80B3FDF4[] = { 29.0f, 3.0f, 9.0f };
-
-    static s16 D_80B3FE00[] = { 1, 2, 3 };
-
-    static Vec3f D_80B3FE08[] = {
-        { 1.0f, 1.0f, 1.0f },
-        { 1.0f, 1.2f, 1.2f },
-        { 1.0f, 0.7f, 0.8f },
-        { 1.0f, 1.0f, 1.0f },
-    };
-
     s32 i;
     s32 ret = false;
 
@@ -416,7 +432,7 @@ void func_80B3EEDC(EnDai* this, PlayState* play) {
 
     if ((player->transformation == PLAYER_FORM_GORON) && (play->msgCtx.ocarinaMode == 3) &&
         (play->msgCtx.lastPlayedSong == OCARINA_SONG_GORON_LULLABY)) {
-        func_80B3E5DC(this, 1);
+        EnDai_ChangeAnim(this, ENDAI_ANIM_1);
         this->actionFunc = func_80B3EE8C;
     } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
         func_80B3E96C(this, play);
@@ -442,8 +458,8 @@ void func_80B3F00C(EnDai* this, PlayState* play) {
 }
 
 void func_80B3F044(EnDai* this, PlayState* play) {
-    static s32 D_80B3FE38[] = {
-        0, 0, 6, 7, 8,
+    static s32 sCsAnimIndex[] = {
+        ENDAI_ANIM_0, ENDAI_ANIM_0, ENDAI_ANIM_6, ENDAI_ANIM_7, ENDAI_ANIM_8,
     };
     s32 cueChannel = 0;
     s32 cueId;
@@ -452,7 +468,7 @@ void func_80B3F044(EnDai* this, PlayState* play) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_472);
         cueId = play->csCtx.actorCues[cueChannel]->id;
         if (this->cueId != (u8)cueId) {
-            func_80B3E5DC(this, D_80B3FE38[cueId]);
+            EnDai_ChangeAnim(this, sCsAnimIndex[cueId]);
             switch (cueId) {
                 case 1:
                     this->unk_1E0 = 0.0f;
@@ -464,6 +480,9 @@ void func_80B3F044(EnDai* this, PlayState* play) {
 
                 case 3:
                     this->unk_1CE &= ~0x80;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -506,6 +525,9 @@ void func_80B3F044(EnDai* this, PlayState* play) {
             }
             this->unk_1D6 = func_80B3E8BC(this, this->cueId);
             break;
+
+        default:
+            break;
     }
 
     Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
@@ -515,9 +537,10 @@ void EnDai_Init(Actor* thisx, PlayState* play) {
     EnDai* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable, 19);
-    this->unk_A70 = -1;
-    func_80B3E5DC(this, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_dai_Skel_0130D0, NULL, this->jointTable, this->morphTable,
+                       OBJECT_DAI_LIMB_MAX);
+    this->animIndex = ENDAI_ANIM_NONE;
+    EnDai_ChangeAnim(this, ENDAI_ANIM_0);
     Actor_SetScale(&this->actor, 0.2f);
     this->actor.targetMode = 10;
     this->unk_1F0 = D_80B3FBF0;
@@ -579,11 +602,11 @@ s32 EnDai_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         *dList = NULL;
     }
 
-    if (limbIndex == 11) {
+    if (limbIndex == OBJECT_DAI_LIMB_0B) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk_1E4);
     }
 
-    if (limbIndex == 10) {
+    if (limbIndex == OBJECT_DAI_LIMB_0A) {
         *dList = NULL;
     }
 
@@ -598,7 +621,7 @@ void EnDai_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     MtxF sp24;
 
     switch (limbIndex) {
-        case 11:
+        case OBJECT_DAI_LIMB_0B:
             D_80B3FE4C.x = sREG(0);
             D_80B3FE4C.y = sREG(1);
             D_80B3FE4C.z = sREG(2);
@@ -609,8 +632,11 @@ void EnDai_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
             this->unk_1D4 = BINANG_SUB(sp64.y, 0x4000);
             break;
 
-        case 10:
+        case OBJECT_DAI_LIMB_0A:
             Matrix_Get(&this->unk_18C);
+            break;
+
+        default:
             break;
     }
 }
@@ -619,18 +645,21 @@ void EnDai_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx, Gfx**
     EnDai* this = THIS;
 
     switch (limbIndex) {
-        case 9:
+        case OBJECT_DAI_LIMB_09:
             if (this->unk_1CE & 0x100) {
                 func_80B3EC84(this);
             }
             Matrix_Scale(this->unk_1F0.x, this->unk_1F0.y, this->unk_1F0.z, MTXMODE_APPLY);
             break;
 
-        case 2:
+        case OBJECT_DAI_LIMB_02:
             if (this->unk_1CE & 0x100) {
                 func_80B3ED88(this);
             }
             Matrix_Scale(this->unk_1FC.x, this->unk_1FC.y, this->unk_1FC.z, MTXMODE_APPLY);
+            break;
+
+        default:
             break;
     }
 }
@@ -678,7 +707,6 @@ void func_80B3F920(EnDai* this, PlayState* play) {
         object_dai_Tex_0107B0, object_dai_Tex_010FB0, object_dai_Tex_0117B0,
         object_dai_Tex_010FB0, object_dai_Tex_011FB0, object_dai_Tex_0127B0,
     };
-
     s32 pad;
 
     this->unk_1CE |= 0x40;

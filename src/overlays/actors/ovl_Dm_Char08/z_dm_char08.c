@@ -26,11 +26,6 @@ void DmChar08_SetupAppearCs(DmChar08* this, PlayState* play);
 void func_80AAF884(DmChar08* this, PlayState* play);
 void func_80AAFB04(DmChar08* this, PlayState* play);
 void func_80AAFB94(DmChar08* this, PlayState* play);
-void DmChar08_HandleCutscene(DmChar08* this, PlayState* play);
-void func_80AB023C(DmChar08* this, PlayState* play);
-void DmChar08_UpdateAnim(DmChar08* this, PlayState* play);
-void DmChar08_SpawnBubbles(DmChar08* this, PlayState* play);
-void func_80AAFCCC(DmChar08* this, PlayState* play);
 
 typedef enum {
     /* 0 */ TURTLE_EYEMODE_BLINK_LEFT,
@@ -415,6 +410,9 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                             this->unk_206 = 0;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else {
                 switch (this->unk_206) {
@@ -432,6 +430,9 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                             Message_CloseTextbox(play);
                             this->unk_206 = 0;
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -453,7 +454,13 @@ void func_80AAFCCC(DmChar08* this, PlayState* play) {
                         this->unk_206 = 0;
                     }
                     break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
 }

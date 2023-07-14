@@ -54,7 +54,12 @@ ActorInit En_Dnh_InitVars = {
     (ActorFunc)EnDnh_Draw,
 };
 
-static AnimationInfoS sAnimationInfo[] = {
+typedef enum {
+    /* 0 */ ENDNH_ANIM_0,
+    /* 1 */ ENDNH_ANIM_MAX
+} EnDnhAnimation;
+
+static AnimationInfoS sAnimationInfo[ENDNH_ANIM_MAX] = {
     { &gKioskKoumeHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
@@ -132,7 +137,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gKioskKoumeSkeleton, NULL, this->jointTable, this->morphTable,
                    KIOSK_KOUME_LIMB_MAX);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENDNH_ANIM_0);
     this->actor.shape.yOffset = 1100.0f;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
         SubS_UpdateFlags(&this->unk18C, 3, 7);
