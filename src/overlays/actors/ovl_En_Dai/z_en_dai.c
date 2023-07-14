@@ -280,7 +280,7 @@ s16 func_80B3E8BC(EnDai* this, s32 cueId) {
     }
 
     while (i < end) {
-        if ((D_80B3FCB4[i] <= this->skelAnime.curFrame) && (D_80B3FCE4[i] >= this->skelAnime.curFrame)) {
+        if ((this->skelAnime.curFrame >= D_80B3FCB4[i]) && (this->skelAnime.curFrame <= D_80B3FCE4[i])) {
             return D_80B3FD14[i];
         }
         i++;
@@ -375,8 +375,8 @@ s32 func_80B3EC84(EnDai* this) {
     s32 ret = false;
 
     for (i = 0; i < ARRAY_COUNT(D_80B3FD6C); i++) {
-        if ((this->unk_1DC == D_80B3FD6C[i]) && (D_80B3FD2C[i] < this->skelAnime.curFrame) &&
-            (D_80B3FD4C[i] >= this->skelAnime.curFrame)) {
+        if ((this->unk_1DC == D_80B3FD6C[i]) && (this->skelAnime.curFrame > D_80B3FD2C[i]) &&
+            (this->skelAnime.curFrame <= D_80B3FD4C[i])) {
             func_80B3EC10(D_80B3FD2C[i], D_80B3FD7C[i], D_80B3FD4C[i], D_80B3FD7C[i + 1], this->skelAnime.curFrame,
                           &this->unk_1F0);
             ret = true;
@@ -457,7 +457,7 @@ void func_80B3F00C(EnDai* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
 }
 
-void func_80B3F044(EnDai* this, PlayState* play) {
+void EnDai_HandleCutscene(EnDai* this, PlayState* play) {
     static s32 sCsAnimIndex[] = {
         ENDAI_ANIM_0, ENDAI_ANIM_0, ENDAI_ANIM_6, ENDAI_ANIM_7, ENDAI_ANIM_8,
     };
@@ -577,7 +577,7 @@ void EnDai_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (!func_80B3E7C8(this, play) && func_80B3E69C(this, play)) {
-        func_80B3F044(this, play);
+        EnDai_HandleCutscene(this, play);
         SkelAnime_Update(&this->skelAnime);
         func_80B3E834(this);
         func_80B3E460(this);

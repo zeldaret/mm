@@ -14,7 +14,7 @@ void EnDnk_Init(Actor* thisx, PlayState* play);
 void EnDnk_Destroy(Actor* thisx, PlayState* play);
 void EnDnk_Update(Actor* thisx, PlayState* play);
 
-void func_80A51890(EnDnk* this, PlayState* play);
+void EnDnk_HandleCutscene(EnDnk* this, PlayState* play);
 void EnDnk_DoNothing(EnDnk* this, PlayState* play);
 void func_80A52018(Actor* thisx, PlayState* play);
 void func_80A52134(EnDnk* this, PlayState* play);
@@ -241,7 +241,7 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         if (ENDNK_GET_3C(&this->actor) == 4) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
-            this->actionFunc = func_80A51890;
+            this->actionFunc = EnDnk_HandleCutscene;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
             this->actor.flags &= ~ACTOR_FLAG_1;
@@ -251,7 +251,7 @@ void func_80A51648(EnDnk* this, PlayState* play) {
     }
 }
 
-void func_80A51890(EnDnk* this, PlayState* play) {
+void EnDnk_HandleCutscene(EnDnk* this, PlayState* play) {
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_126)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_126));
     }

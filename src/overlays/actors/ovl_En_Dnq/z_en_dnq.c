@@ -285,10 +285,10 @@ s32 func_80A52A78(EnDnq* this, PlayState* play) {
 
 s32 func_80A52B68(EnDnq* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    u16 temp = play->msgCtx.currentTextId;
+    u16 textId = play->msgCtx.currentTextId;
 
     if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
-        switch (temp) {
+        switch (textId) {
             case 0x89B:
                 EnDnq_ChangeAnim(this, ENDNQ_ANIM_18);
                 break;
@@ -310,6 +310,9 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
             case 0x89A:
             case 0x89C:
                 EnDnq_ChangeAnim(this, ENDNQ_ANIM_15);
+                break;
+
+            default:
                 break;
         }
         this->unk_39C = 1;

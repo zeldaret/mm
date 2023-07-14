@@ -2214,6 +2214,7 @@ s8 sGyorgSphElementIndices[2][GYORG_LIMB_MAX] = {
         -1, // GYORG_LIMB_JAW_ROOT
         1,  // GYORG_LIMB_JAW
     },
+    // unused
     {
         -1, // GYORG_LIMB_NONE
         -1, // GYORG_LIMB_ROOT
