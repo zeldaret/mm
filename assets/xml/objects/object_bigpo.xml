@@ -17,8 +17,22 @@
         <Texture Name="gBigPoeNecklaceBeadsTex" OutName="bigpo_necklace_beads" Format="rgba16" Width="16" Height="8" Offset="0x2AF0" />
         <Texture Name="gBigPoeShawlTex" OutName="bigpo_shawl" Format="rgba16" Width="16" Height="16" Offset="0x2BF0" />
         <Texture Name="gBigPoeGlowingEyeTex" OutName="bigpo_glowing_eye" Format="rgba16" Width="16" Height="16" Offset="0x2DF0" />
-        <!-- Unused remnant of OoT -->
-        <Array Name="gBigPoeUnusedVtx" Count="283" Offset="0x2FF0">
+        <!-- Carried over from object_po_field from OoT. Field Poes and Big Poes shared assets, -->
+        <!-- but certain DLists/Vtx were dropped, so some remain unused  -->
+        <!-- These 5 vtx were likely grouped as one, but they are separated out here for the used and unused sections -->
+        <Array Name="gFieldPoeLanternVtx" Count="33" Offset="0x2FF0">
+            <Vtx/>
+        </Array>
+        <Array Name="gFieldPoeBodyAndFaceVtx" Count="53" Offset="0x3200"> <!-- Unused -->
+            <Vtx/>
+        </Array>
+        <Array Name="gFieldPoeArmVtx" Count="36" Offset="0x3550">
+            <Vtx/>
+        </Array>
+        <Array Name="gFieldPoeCloakVtx" Count="55" Offset="0x3790"> <!-- Unused -->
+            <Vtx/>
+        </Array>
+        <Array Name="gFieldPoeFaceHoodRobeVtx" Count="106" Offset="0x3B00">
             <Vtx/>
         </Array>
         <DList Name="gBigPoeLanternFallingDL" Offset="0x41A0" /> <!-- Original name is "pog_kantera_hahen_model" ("kantera" = "lantern", "hahen" = "fragment") -->
