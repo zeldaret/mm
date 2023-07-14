@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ending_hero5.h"
-#include "objects/object_daiku/object_daiku.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
 
@@ -16,8 +15,8 @@ void EnEndingHero5_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero5_Update(Actor* thisx, PlayState* play);
 void EnEndingHero5_Draw(Actor* thisx, PlayState* play);
 
-void func_80C23980(EnEndingHero5* this);
-void func_80C2399C(EnEndingHero5* this, PlayState* play);
+void EnEndingHero5_SetupIdle(EnEndingHero5* this);
+void EnEndingHero5_Idle(EnEndingHero5* this, PlayState* play);
 
 ActorInit En_Ending_Hero5_InitVars = {
     ACTOR_EN_ENDING_HERO5,
@@ -39,21 +38,21 @@ void EnEndingHero5_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = 6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_daiku_Skel_00A850, &object_daiku_Anim_002FA0, this->jointTable,
-                       this->morphTable, 17);
+                       this->morphTable, OBJECT_DAIKU_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     this->unk25C = this->actor.params;
-    func_80C23980(this);
+    EnEndingHero5_SetupIdle(this);
 }
 
 void EnEndingHero5_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80C23980(EnEndingHero5* this) {
-    this->unk258 = 1;
-    this->actionFunc = func_80C2399C;
+void EnEndingHero5_SetupIdle(EnEndingHero5* this) {
+    this->isIdle = true;
+    this->actionFunc = EnEndingHero5_Idle;
 }
 
-void func_80C2399C(EnEndingHero5* this, PlayState* play) {
+void EnEndingHero5_Idle(EnEndingHero5* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 

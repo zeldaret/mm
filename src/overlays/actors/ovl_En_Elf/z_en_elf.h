@@ -2,6 +2,7 @@
 #define Z_EN_ELF_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnElf;
 
@@ -14,8 +15,8 @@ typedef void (*EnElfUnkFunc)(struct EnElf*, PlayState*);
 typedef struct EnElf {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[7];
-    /* 0x1B2 */ Vec3s morphTable[7];
+    /* 0x188 */ Vec3s jointTable[FAIRY_LIMB_MAX];
+    /* 0x1B2 */ Vec3s morphTable[FAIRY_LIMB_MAX];
     /* 0x1DC */ Color_RGBAf innerColor;
     /* 0x1EC */ Color_RGBAf outerColor;
     /* 0x1FC */ LightInfo lightInfoGlow;
