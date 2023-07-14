@@ -47,7 +47,7 @@
         <Limb Name="gYbChestRootLimb" Type="Standard" EnumName="YB_LIMB_CHEST_ROOT" Offset="0x5E64" />
         <Limb Name="gYbHeadLimb" Type="Standard" EnumName="YB_LIMB_HEAD" Offset="0x5E70" />
         <Limb Name="gYbPonyTailLimb" Type="Standard" EnumName="YB_LIMB_PONYTAIL" Offset="0x5E7C" />
-        <!-- TODO: Name empy limb based on Player's Skeleton -->
+        <!-- TODO: Name empty limb based on Player's Skeleton -->
         <Limb Name="gYbEmpty5E88Limb" Type="Standard" EnumName="YB_LIMB_EMPTY_5E88" Offset="0x5E88" />
         <Limb Name="gYbLeftUpperArmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_UPPER_ARM" Offset="0x5E94" />
         <Limb Name="gYbLeftForearmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_FOREARM" Offset="0x5EA0" />
