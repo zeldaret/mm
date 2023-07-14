@@ -3,7 +3,7 @@
     <File Name="object_bigpo" Segment="6">
         <Animation Name="gBigPoeSwingLampAttackAnim" Offset="0x158" /> <!-- Original name is "pog_atack" -->
         <Animation Name="gBigPoeShockAnim" Offset="0x454" /> <!-- Original name is "pog_damage" -->
-        <Animation Name="gBigPoeBackpeddleAnim" Offset="0x608" /> <!-- Original name is "pog_escape" -->
+        <Animation Name="gBigPoeBackpedalAnim" Offset="0x608" /> <!-- Original name is "pog_escape" -->
         <Animation Name="gBigPoeFloatAnim" Offset="0x924" /> <!-- Original name is "pog_fly" -->
         <Animation Name="gBigPoeAwakenSpawnAnim" Offset="0xF9C" /> <!-- Original name is "pog_start" -->
         <Animation Name="gBigPoeAwakenStretchAnim" Offset="0x1360" /> <!-- Original name is "pog_wait" -->
