@@ -21,24 +21,16 @@ typedef enum {
     /* 4 */ ENDNK_GET_3_4
 } EnDnkParam;
 
+#define DNK_LIMB_MAX MAX(MAX((s32)DEKU_PALACE_GUARD_LIMB_MAX, (s32)OBJECT_HINTNUTS_LIMB_MAX), (s32)DEKU_SCRUB_LIMB_MAX)
+
 typedef struct EnDnk {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnDnkActionFunc actionFunc;
     /* 0x18C */ UNK_TYPE1 unk_18C[0x4];
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ union {
-                    Vec3s jointTable[1]; // Union used to ensure size is always max of the three LIMB_MAX
-                    Vec3s jointTableGuard[DEKU_PALACE_GUARD_LIMB_MAX];
-                    Vec3s jointTableHint[OBJECT_HINTNUTS_LIMB_MAX];
-                    Vec3s jointTableScrub[DEKU_SCRUB_LIMB_MAX];
-                };
-    /* 0x21E */ union {
-                    Vec3s morphTable[1]; // Union used to ensure size is always max of the three LIMB_MAX
-                    Vec3s morphTableGuard[DEKU_PALACE_GUARD_LIMB_MAX];
-                    Vec3s morphTableHint[OBJECT_HINTNUTS_LIMB_MAX];
-                    Vec3s morphTableScrub[DEKU_SCRUB_LIMB_MAX];
-                };
+    /* 0x1DC */ Vec3s jointTable[DNK_LIMB_MAX];
+    /* 0x21E */ Vec3s morphTable[DNK_LIMB_MAX];
     /* 0x260 */ Gfx* unk_260[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x28C */ u16 unk_28C;
     /* 0x28E */ s8 unk_28E;

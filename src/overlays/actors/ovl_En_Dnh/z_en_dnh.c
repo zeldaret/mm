@@ -55,12 +55,12 @@ ActorInit En_Dnh_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ ENDNH_ANIM_0,
+    /* 0 */ ENDNH_ANIM_HEAD_MOVING,
     /* 1 */ ENDNH_ANIM_MAX
 } EnDnhAnimation;
 
 static AnimationInfoS sAnimationInfo[ENDNH_ANIM_MAX] = {
-    { &gKioskKoumeHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKioskKoumeHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENDNH_ANIM_HEAD_MOVING
 };
 
 static TexturePtr sEyeTextures[] = {
@@ -137,8 +137,9 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_Init(play, &this->skelAnime, &gKioskKoumeSkeleton, NULL, this->jointTable, this->morphTable,
                    KIOSK_KOUME_LIMB_MAX);
-    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENDNH_ANIM_0);
+    SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, ENDNH_ANIM_HEAD_MOVING);
     this->actor.shape.yOffset = 1100.0f;
+
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
         SubS_UpdateFlags(&this->unk18C, 3, 7);
         this->unk198 = 0;
@@ -146,9 +147,11 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
         SubS_UpdateFlags(&this->unk18C, 4, 7);
         this->unk198 = CHECK_EVENTINF(EVENTINF_35) ? 2 : 1;
     }
+
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
         this->actor.draw = NULL;
     }
+
     this->msgEventCallback = func_80A50D40;
     this->unk194 = 0;
     this->actionFunc = EnDnh_DoNothing;

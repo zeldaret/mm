@@ -38,7 +38,7 @@ typedef enum {
 } EnDs2nAnimation;
 
 static AnimationInfo sAnimationInfo[ENDS2N_ANIM_MAX] = {
-    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENDS2N_ANIM_IDLE
 };
 
 void EnDs2n_SetupIdle(EnDs2n* this) {

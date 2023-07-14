@@ -354,13 +354,13 @@ static InitChainEntry sInitChain[] = {
 };
 
 static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
-    // door A
+    // left
     &gameplay_keep_Anim_020658, // PLAYER_FORM_FIERCE_DEITY
     &gameplay_keep_Anim_022CA8, // PLAYER_FORM_GORON
     &gameplay_keep_Anim_020658, // PLAYER_FORM_ZORA
     &gameplay_keep_Anim_022E68, // PLAYER_FORM_DEKU
     &gameplay_keep_Anim_0204B4, // PLAYER_FORM_HUMAN
-    // door B
+    // right
     &gameplay_keep_Anim_022BE8, // PLAYER_FORM_FIERCE_DEITY
     &gameplay_keep_Anim_022D90, // PLAYER_FORM_GORON
     &gameplay_keep_Anim_022BE8, // PLAYER_FORM_ZORA
@@ -368,13 +368,13 @@ static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
     &gameplay_keep_Anim_0205A0, // PLAYER_FORM_HUMAN
 };
 static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
-    // door A
+    // left
     25, // PLAYER_FORM_FIERCE_DEITY
     25, // PLAYER_FORM_GORON
     25, // PLAYER_FORM_ZORA
     25, // PLAYER_FORM_DEKU
     25, // PLAYER_FORM_HUMAN
-    // door B
+    // right
     25, // PLAYER_FORM_FIERCE_DEITY
     25, // PLAYER_FORM_GORON
     25, // PLAYER_FORM_ZORA
@@ -383,13 +383,13 @@ static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
 };
 
 static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
-    // door A
+    // left
     60, // PLAYER_FORM_FIERCE_DEITY
     60, // PLAYER_FORM_GORON
     60, // PLAYER_FORM_ZORA
     70, // PLAYER_FORM_DEKU
     70, // PLAYER_FORM_HUMAN
-    // door B
+    // right
     60, // PLAYER_FORM_FIERCE_DEITY
     60, // PLAYER_FORM_GORON
     60, // PLAYER_FORM_ZORA

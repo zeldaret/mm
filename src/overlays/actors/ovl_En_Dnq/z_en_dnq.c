@@ -421,7 +421,9 @@ void func_80A52FB8(EnDnq* this, PlayState* play) {
 
 void EnDnq_HandleCutscene(EnDnq* this, PlayState* play) {
     static s32 sCsAnimIndex[] = {
-        0, 1, 2, 3, 5, 6,
+        DEKU_KING_ANIM_IDLE,          DEKU_KING_ANIM_IDLE_MORPH,
+        DEKU_KING_ANIM_SURPRISE,      DEKU_KING_ANIM_JUMPED_ON_START,
+        DEKU_KING_ANIM_JUMPED_ON_END, DEKU_KING_ANIM_JUMPED_ON_END_MORPH,
     };
     s32 cueChannel;
     u32 cueId;

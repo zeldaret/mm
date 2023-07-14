@@ -15,12 +15,10 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play);
 void EnDemoheishi_Update(Actor* thisx, PlayState* play);
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play);
 
-void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex);
 void EnDemoheishi_SetupIdle(EnDemoheishi* this);
 void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
-s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
@@ -102,8 +100,8 @@ static u8 sAnimationModes[DEMOHEISHI_ANIM_MAX] = {
 
 void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -10.0f);
 }
 
