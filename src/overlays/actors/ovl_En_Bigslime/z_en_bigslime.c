@@ -7,6 +7,7 @@
 #include "z_en_bigslime.h"
 #include "z64quake.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_bigslime/object_bigslime.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -2635,10 +2636,10 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                        this->gekkoCollider.info.bumper.hitPos.x,
-                                        this->gekkoCollider.info.bumper.hitPos.y,
-                                        this->gekkoCollider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            Actor_Spawn(
+                                &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->gekkoCollider.info.bumper.hitPos.x,
+                                this->gekkoCollider.info.bumper.hitPos.y, this->gekkoCollider.info.bumper.hitPos.z, 0,
+                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         }
                     } else if (this->actor.colChkInfo.damageEffect == BIGSLIME_DMGEFF_ICE) {
                         EnBigslime_GekkoFreeze(this);
@@ -2670,10 +2671,10 @@ void EnBigslime_ApplyDamageEffectGekko(EnBigslime* this, PlayState* play) {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
                         } else {
                             this->gekkoDrawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
-                            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
-                                        this->gekkoCollider.info.bumper.hitPos.x,
-                                        this->gekkoCollider.info.bumper.hitPos.y,
-                                        this->gekkoCollider.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            Actor_Spawn(
+                                &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->gekkoCollider.info.bumper.hitPos.x,
+                                this->gekkoCollider.info.bumper.hitPos.y, this->gekkoCollider.info.bumper.hitPos.z, 0,
+                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         }
                     }
                     EnBigslime_SetupDamageGekko(this, true);

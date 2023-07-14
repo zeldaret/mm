@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bbfall.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
@@ -571,7 +572,8 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
                             this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }
     } else {

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigokuta.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -501,7 +502,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
                 this->drawDmgEffAlpha = 4.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
                             this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
 
