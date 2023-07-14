@@ -182,8 +182,8 @@ void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
                 ? STRAY_FAIRY_AREA_CLOCK_TOWN
                 : this->area;
-    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAccel, &sPrimColors[index], &sEnvColors[index],
-                                    1000, life);
+    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAccel, &sPrimColors[index], &sEnvColors[index], 1000,
+                                    life);
 }
 
 void EnElforg_ApproachTargetYPosition(EnElforg* this, Vec3f* targetPos) {
