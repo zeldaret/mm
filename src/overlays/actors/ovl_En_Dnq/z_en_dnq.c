@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 typedef enum {
-    /* -1 */ ENDNQ_ANIM_NONE = -1,
+    /* -1 */ DEKU_KING_ANIM_NONE = -1,
     /*  0 */ DEKU_KING_ANIM_IDLE,
     /*  1 */ DEKU_KING_ANIM_IDLE_MORPH,
     /*  2 */ DEKU_KING_ANIM_SURPRISE,
@@ -454,7 +454,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->picto.actor.shape, 0.0f, NULL, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
                        DEKU_KING_LIMB_MAX);
-    this->animIndex = ENDNQ_ANIM_NONE;
+    this->animIndex = DEKU_KING_ANIM_NONE;
     EnDnq_ChangeAnim(this, DEKU_KING_ANIM_IDLE);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
