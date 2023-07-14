@@ -61,50 +61,50 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 1, 0, 0, 0, MASS_IMMOVABLE };
 
 typedef enum {
     /* -1 */ ENDNQ_ANIM_NONE = -1,
-    /*  0 */ ENDNQ_ANIM_0,
-    /*  1 */ ENDNQ_ANIM_1,
-    /*  2 */ ENDNQ_ANIM_2,
-    /*  3 */ ENDNQ_ANIM_3,
-    /*  4 */ ENDNQ_ANIM_4,
-    /*  5 */ ENDNQ_ANIM_5,
-    /*  6 */ ENDNQ_ANIM_6,
-    /*  7 */ ENDNQ_ANIM_7,
-    /*  8 */ ENDNQ_ANIM_8,
-    /*  9 */ ENDNQ_ANIM_9,
-    /* 10 */ ENDNQ_ANIM_10,
-    /* 11 */ ENDNQ_ANIM_11,
-    /* 12 */ ENDNQ_ANIM_12,
-    /* 13 */ ENDNQ_ANIM_13,
-    /* 14 */ ENDNQ_ANIM_14,
-    /* 15 */ ENDNQ_ANIM_15,
-    /* 16 */ ENDNQ_ANIM_16,
-    /* 17 */ ENDNQ_ANIM_17,
-    /* 18 */ ENDNQ_ANIM_18,
-    /* 19 */ ENDNQ_ANIM_19,
+    /*  0 */ DEKU_KING_ANIM_IDLE,
+    /*  1 */ DEKU_KING_ANIM_IDLE_MORPH,
+    /*  2 */ DEKU_KING_ANIM_SURPRISE,
+    /*  3 */ DEKU_KING_ANIM_JUMPED_ON_START,
+    /*  4 */ DEKU_KING_ANIM_JUMPED_ON_LOOP,
+    /*  5 */ DEKU_KING_ANIM_JUMPED_ON_END,
+    /*  6 */ DEKU_KING_ANIM_JUMPED_ON_END_MORPH,
+    /*  7 */ DEKU_KING_ANIM_LYING_DOWN_TWITCH,
+    /*  8 */ DEKU_KING_ANIM_WAIL,
+    /*  9 */ DEKU_KING_ANIM_FOOT_STAMP_START,
+    /* 10 */ DEKU_KING_ANIM_FOOT_STAMP_ONCE,
+    /* 11 */ DEKU_KING_ANIM_WAIL_START,
+    /* 12 */ DEKU_KING_ANIM_MARCH,
+    /* 13 */ DEKU_KING_ANIM_SPIN_SCEPTER,
+    /* 14 */ DEKU_KING_ANIM_INTIMIDATE,
+    /* 15 */ DEKU_KING_ANIM_POINT_SCEPTER,
+    /* 16 */ DEKU_KING_ANIM_JUMP,
+    /* 17 */ DEKU_KING_ANIM_LAUGH_ONCE,
+    /* 18 */ DEKU_KING_ANIM_FOOT_STAMP_LOOP,
+    /* 19 */ DEKU_KING_ANIM_LAUGH_LOOP,
     /* 36 */ ENDNQ_ANIM_MAX
 } EnDnkAnimation;
 
 static AnimationInfoS sAnimationInfo[ENDNQ_ANIM_MAX] = {
-    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // ENDNQ_ANIM_0
-    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },            // ENDNQ_ANIM_1
-    { &gDekuKingSurpriseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // ENDNQ_ANIM_2
-    { &gDekuKingJumpedOnStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // ENDNQ_ANIM_3
-    { &gDekuKingJumpedOnLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ENDNQ_ANIM_4
-    { &gDekuKingJumpedOnEndAnim, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENDNQ_ANIM_5
-    { &gDekuKingJumpedOnEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },     // ENDNQ_ANIM_6
-    { &gDekuKingLyingDownTwitchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENDNQ_ANIM_7
-    { &gDekuKingWailLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // ENDNQ_ANIM_8
-    { &gDekuKingFootStampStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },  // ENDNQ_ANIM_9
-    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },   // ENDNQ_ANIM_10
-    { &gDekuKingWailStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },       // ENDNQ_ANIM_11
-    { &gDekuKingMarchAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },            // ENDNQ_ANIM_12
-    { &gDekuKingSpinScepterAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENDNQ_ANIM_13
-    { &gDekuKingIntimidateAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // ENDNQ_ANIM_14
-    { &gDekuKingPointScepterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // ENDNQ_ANIM_15
-    { &gDekuKingJumpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },            // ENDNQ_ANIM_16
-    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // ENDNQ_ANIM_17
-    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },   // ENDNQ_ANIM_18
-    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },           // ENDNQ_ANIM_19
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },             // DEKU_KING_ANIM_IDLE
+    { &gDekuKingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },            // DEKU_KING_ANIM_IDLE_MORPH
+    { &gDekuKingSurpriseAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_KING_ANIM_SURPRISE
+    { &gDekuKingJumpedOnStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // DEKU_KING_ANIM_JUMPED_ON_START
+    { &gDekuKingJumpedOnLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // DEKU_KING_ANIM_JUMPED_ON_LOOP
+    { &gDekuKingJumpedOnEndAnim, 0.0f, 0, -1, ANIMMODE_ONCE, 0 },      // DEKU_KING_ANIM_JUMPED_ON_END
+    { &gDekuKingJumpedOnEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },     // DEKU_KING_ANIM_JUMPED_ON_END_MORPH
+    { &gDekuKingLyingDownTwitchAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DEKU_KING_ANIM_LYING_DOWN_TWITCH
+    { &gDekuKingWailLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_KING_ANIM_WAIL
+    { &gDekuKingFootStampStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },  // DEKU_KING_ANIM_FOOT_STAMP_START
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },   // DEKU_KING_ANIM_FOOT_STAMP_ONCE
+    { &gDekuKingWailStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },       // DEKU_KING_ANIM_WAIL_START
+    { &gDekuKingMarchAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },            // DEKU_KING_ANIM_MARCH
+    { &gDekuKingSpinScepterAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // DEKU_KING_ANIM_SPIN_SCEPTER
+    { &gDekuKingIntimidateAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },      // DEKU_KING_ANIM_INTIMIDATE
+    { &gDekuKingPointScepterAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },    // DEKU_KING_ANIM_POINT_SCEPTER
+    { &gDekuKingJumpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },            // DEKU_KING_ANIM_JUMP
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },           // DEKU_KING_ANIM_LAUGH_ONCE
+    { &gDekuKingFootStampLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },   // DEKU_KING_ANIM_FOOT_STAMP_LOOP
+    { &gDekuKingLaughAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },           // DEKU_KING_ANIM_LAUGH_LOOP
 };
 
 s32 EnDnq_ValidatePictograph(PlayState* play, Actor* thisx) {
@@ -116,10 +116,10 @@ s32 EnDnq_ChangeAnim(EnDnq* this, s32 animIndex) {
     s32 changeAnim = false;
     s32 didAnimChange = false;
 
-    if ((animIndex == ENDNQ_ANIM_0) || (animIndex == ENDNQ_ANIM_1)) {
+    if ((animIndex == DEKU_KING_ANIM_IDLE) || (animIndex == DEKU_KING_ANIM_IDLE_MORPH)) {
         switch (this->animIndex) {
-            case ENDNQ_ANIM_0:
-            case ENDNQ_ANIM_1:
+            case DEKU_KING_ANIM_IDLE:
+            case DEKU_KING_ANIM_IDLE_MORPH:
                 break;
 
             default:
@@ -168,41 +168,41 @@ s32 func_80A52648(EnDnq* this, PlayState* play) {
 
 s32 func_80A526F8(EnDnq* this) {
     if (this->unk_386 == 0) {
-        EnDnq_ChangeAnim(this, ENDNQ_ANIM_8);
+        EnDnq_ChangeAnim(this, DEKU_KING_ANIM_WAIL);
         this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 4) + 3;
         this->unk_388 = 0;
         this->unk_386 = 1;
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->animIndex) {
-            case ENDNQ_ANIM_8:
+            case DEKU_KING_ANIM_WAIL:
                 if (DECR(this->unk_38C) == 0) {
-                    EnDnq_ChangeAnim(this, ENDNQ_ANIM_9);
+                    EnDnq_ChangeAnim(this, DEKU_KING_ANIM_FOOT_STAMP_START);
                 }
                 break;
 
-            case ENDNQ_ANIM_9:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_10);
+            case DEKU_KING_ANIM_FOOT_STAMP_START:
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_FOOT_STAMP_ONCE);
                 this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 3) + 2;
                 break;
 
-            case ENDNQ_ANIM_10:
+            case DEKU_KING_ANIM_FOOT_STAMP_ONCE:
                 if (DECR(this->unk_38C) == 0) {
                     this->unk_388++;
                     if ((this->unk_38C != 0) || (this->unk_388 < 2)) {
-                        EnDnq_ChangeAnim(this, ENDNQ_ANIM_11);
+                        EnDnq_ChangeAnim(this, DEKU_KING_ANIM_WAIL_START);
                     } else {
-                        EnDnq_ChangeAnim(this, ENDNQ_ANIM_17);
+                        EnDnq_ChangeAnim(this, DEKU_KING_ANIM_LAUGH_ONCE);
                         this->unk_38C = 4;
                     }
                 }
                 break;
 
-            case ENDNQ_ANIM_11:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_8);
+            case DEKU_KING_ANIM_WAIL_START:
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_WAIL);
                 this->unk_38C = ((s32)(Rand_ZeroOne() * 100.0f) % 4) + 3;
                 break;
 
-            case ENDNQ_ANIM_17:
+            case DEKU_KING_ANIM_LAUGH_ONCE:
                 if (DECR(this->unk_38C) == 0) {
                     this->unk_386 = 0;
                 }
@@ -225,7 +225,7 @@ s32 func_80A52944(EnDnq* this) {
     s16 phi_v1 = 0;
 
     if (this->unk_386 == 0) {
-        EnDnq_ChangeAnim(this, ENDNQ_ANIM_12);
+        EnDnq_ChangeAnim(this, DEKU_KING_ANIM_MARCH);
         this->unk_38C = 1;
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
         this->unk_386 = 1;
@@ -234,7 +234,7 @@ s32 func_80A52944(EnDnq* this) {
     } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         this->unk_386++;
         if (this->unk_386 >= 6) {
-            EnDnq_ChangeAnim(this, ENDNQ_ANIM_12);
+            EnDnq_ChangeAnim(this, DEKU_KING_ANIM_MARCH);
             this->unk_386 = 1;
             phi_v1 = this->unk_38C * 0x2000;
         } else if (this->unk_386 <= 3) {
@@ -242,7 +242,7 @@ s32 func_80A52944(EnDnq* this) {
             this->skelAnime.curFrame = 0.0f;
             phi_v1 = this->unk_38C * 0x2000;
         } else {
-            EnDnq_ChangeAnim(this, ENDNQ_ANIM_13);
+            EnDnq_ChangeAnim(this, DEKU_KING_ANIM_SPIN_SCEPTER);
             this->skelAnime.curFrame = 0.0f;
         }
         this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y;
@@ -255,7 +255,8 @@ s32 func_80A52944(EnDnq* this) {
 
 s32 func_80A52A78(EnDnq* this, PlayState* play) {
     static s32 D_80A535DC[] = {
-        ENDNQ_ANIM_17, ENDNQ_ANIM_12, ENDNQ_ANIM_14, ENDNQ_ANIM_13, ENDNQ_ANIM_16,
+        DEKU_KING_ANIM_LAUGH_ONCE,   DEKU_KING_ANIM_MARCH, DEKU_KING_ANIM_INTIMIDATE,
+        DEKU_KING_ANIM_SPIN_SCEPTER, DEKU_KING_ANIM_JUMP,
     };
 
     if (this->unk_38A == 0) {
@@ -290,26 +291,26 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
     if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor == &this->picto.actor)) {
         switch (textId) {
             case 0x89B:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_18);
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_FOOT_STAMP_LOOP);
                 break;
 
             case 0x89E:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_19);
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_LAUGH_LOOP);
                 break;
 
             case 0x898:
             case 0x89F:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_16);
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_JUMP);
                 break;
 
             case 0x899:
             case 0x89D:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_14);
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_INTIMIDATE);
                 break;
 
             case 0x89A:
             case 0x89C:
-                EnDnq_ChangeAnim(this, ENDNQ_ANIM_15);
+                EnDnq_ChangeAnim(this, DEKU_KING_ANIM_POINT_SCEPTER);
                 break;
 
             default:
@@ -317,7 +318,7 @@ s32 func_80A52B68(EnDnq* this, PlayState* play) {
         }
         this->unk_39C = 1;
     } else if (this->unk_39C != 0) {
-        EnDnq_ChangeAnim(this, ENDNQ_ANIM_0);
+        EnDnq_ChangeAnim(this, DEKU_KING_ANIM_IDLE);
         this->unk_39C = 0;
         this->unk_37E = 0;
         this->unk_386 = 0;
@@ -433,11 +434,12 @@ void EnDnq_HandleCutscene(EnDnq* this, PlayState* play) {
             this->cueId = cueId;
         }
 
-        if ((this->animIndex == ENDNQ_ANIM_4) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
+        if ((this->animIndex == DEKU_KING_ANIM_JUMPED_ON_LOOP) && Animation_OnFrame(&this->skelAnime, 2.0f)) {
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_KINGNUTS_DAMAGE);
         }
 
-        if (((this->animIndex == ENDNQ_ANIM_3) || (this->animIndex == ENDNQ_ANIM_6)) &&
+        if (((this->animIndex == DEKU_KING_ANIM_JUMPED_ON_START) ||
+             (this->animIndex == DEKU_KING_ANIM_JUMPED_ON_END_MORPH)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             EnDnq_ChangeAnim(this, this->animIndex + 1);
         }
@@ -453,7 +455,7 @@ void EnDnq_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gDekuKingSkel, NULL, this->jointTable, this->morphTable,
                        DEKU_KING_LIMB_MAX);
     this->animIndex = ENDNQ_ANIM_NONE;
-    EnDnq_ChangeAnim(this, ENDNQ_ANIM_0);
+    EnDnq_ChangeAnim(this, DEKU_KING_ANIM_IDLE);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->picto.actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->picto.actor, 0.02f);
