@@ -19,10 +19,10 @@
         <DList Name="object_gk_DL_004DA0" Offset="0x4DA0" />
         <DList Name="object_gk_DL_004ED0" Offset="0x4ED0" />
         <TextureAnimation Name="object_gk_Matanimheader_005144" Offset="0x5144" />
-        <Animation Name="object_gk_Anim_005EDC" Offset="0x5EDC" />
+        <Animation Name="object_gk_Anim_005EDC" Offset="0x5EDC" /> <!-- Original name is "gk_furafura" -->
         <DList Name="object_gk_DL_006680" Offset="0x6680" />
-        <DList Name="object_gk_DL_006688" Offset="0x6688" />
-        <Animation Name="object_gk_Anim_00787C" Offset="0x787C" />
+        <DList Name="object_gk_DL_006688" Offset="0x6688" /> <!-- Original name is "gk_iwa_obj_model" -->
+        <Animation Name="object_gk_Anim_00787C" Offset="0x787C" /> <!-- Oriignal name is "gk_naki" -->
         <Limb Name="object_gk_Standardlimb_007890" Type="Standard" EnumName="OBJECT_GK_LIMB_01" Offset="0x7890" />
         <Limb Name="object_gk_Standardlimb_00789C" Type="Standard" EnumName="OBJECT_GK_LIMB_02" Offset="0x789C" />
         <Limb Name="object_gk_Standardlimb_0078A8" Type="Standard" EnumName="OBJECT_GK_LIMB_03" Offset="0x78A8" />
@@ -43,17 +43,17 @@
         <Limb Name="object_gk_Standardlimb_00795C" Type="Standard" EnumName="OBJECT_GK_LIMB_12" Offset="0x795C" />
         <Limb Name="object_gk_Standardlimb_007968" Type="Standard" EnumName="OBJECT_GK_LIMB_13" Offset="0x7968" />
         <Skeleton Name="object_gk_Skel_0079C0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_GK_LIMB_NONE" LimbMax="OBJECT_GK_LIMB_MAX" EnumName="ObjectGkLimb" Offset="0x79C0" />
-        <Animation Name="object_gk_Anim_007DC4" Offset="0x7DC4" />
-        <Animation Name="object_gk_Anim_008774" Offset="0x8774" />
-        <Animation Name="object_gk_Anim_0092C0" Offset="0x92C0" />
-        <Animation Name="object_gk_Anim_009638" Offset="0x9638" />
-        <Animation Name="object_gk_Anim_009858" Offset="0x9858" />
-        <Animation Name="object_gk_Anim_009D88" Offset="0x9D88" />
-        <Animation Name="object_gk_Anim_00A21C" Offset="0xA21C" />
-        <Animation Name="object_gk_Anim_00AAEC" Offset="0xAAEC" />
-        <Animation Name="object_gk_Anim_00AE34" Offset="0xAE34" />
-        <Animation Name="object_gk_Anim_00BD90" Offset="0xBD90" />
-        <Animation Name="object_gk_Anim_00C308" Offset="0xC308" />
+        <Animation Name="object_gk_Anim_007DC4" Offset="0x7DC4" /> <!-- Original name is "gk_sleep" -->
+        <Animation Name="object_gk_Anim_008774" Offset="0x8774" /> <!-- Original name is "gk_stand_wait" -->
+        <Animation Name="object_gk_Anim_0092C0" Offset="0x92C0" /> <!-- Original name is "gk_talk" -->
+        <Animation Name="object_gk_Anim_009638" Offset="0x9638" /> <!-- Original name is "gk_wait" -->
+        <Animation Name="object_gk_Anim_009858" Offset="0x9858" /> <!-- Original name is "gkid_dada" -->
+        <Animation Name="object_gk_Anim_009D88" Offset="0x9D88" /> <!-- Original name is "gkid_dada_loop" -->
+        <Animation Name="object_gk_Anim_00A21C" Offset="0xA21C" /> <!-- Original name is "gkid_dada_modori" -->
+        <Animation Name="object_gk_Anim_00AAEC" Offset="0xAAEC" /> <!-- Original name is "gkid_dakko" -->
+        <Animation Name="object_gk_Anim_00AE34" Offset="0xAE34" /> <!-- Original name is "gkid_run_loop" -->
+        <Animation Name="object_gk_Anim_00BD90" Offset="0xBD90" /> <!-- Original name is "gkid_utau" -->
+        <Animation Name="object_gk_Anim_00C308" Offset="0xC308" /> <!-- Original name is "gkid_utau_loop" -->
         <Texture Name="object_gk_TLUT_00C320" OutName="tlut_00C320" Format="rgba16" Width="16" Height="16" Offset="0xC320" />
         <!-- <Blob Name="object_gk_Blob_00C520" Size="0x1900" Offset="0xC520" /> -->
         <Texture Name="object_gk_Tex_00DE20" OutName="tex_00DE20" Format="ci8" Width="8" Height="8" Offset="0xDE20" />
