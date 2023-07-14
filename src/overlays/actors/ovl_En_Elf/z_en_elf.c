@@ -1565,7 +1565,9 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }
 
-    // `limbIndex` extends past `FAIRY_LIMB_MAX`
+    //! @note: `limbIndex` extends past `FAIRY_LIMB_MAX`.
+    //! This code was blindly copied from OoT despite the number of limbs decreasing.
+    //! In OoT, this was intented to not draw wings for big fairies
     if ((this->fairyFlags & 0x200) &&
         ((limbIndex == FAIRY_LIMB_4) || (limbIndex == 7) || (limbIndex == 11) || (limbIndex == 14))) {
         *dList = NULL;
