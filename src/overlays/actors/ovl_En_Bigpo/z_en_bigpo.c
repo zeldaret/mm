@@ -162,7 +162,16 @@ static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
 // bytes per limb, used in draw func? bit over my head
 static u8 D_80B65078[BIG_POE_LIMB_MAX] = {
-    -1, 4, -1, 0, -1, 1, -1, 2, 5, 3,
+    -1, // BIG_POE_LIMB_NONE
+    4,  // BIG_POE_LIMB_FACE
+    -1, // BIG_POE_LIMB_LEFT_UPPER_ARM
+    0,  // BIG_POE_LIMB_LEFT_FOREARM
+    -1, // BIG_POE_LIMB_RIGHT_UPPER_ARM
+    1,  // BIG_POE_LIMB_RIGHT_FOREARM
+    -1, // BIG_POE_LIMB_RIGHT_HAND
+    2,  // BIG_POE_LIMB_LANTERN
+    5,  // BIG_POE_LIMB_HAT_AND_CLOAK
+    3,  // BIG_POE_LIMB_LOWER_ROBE
 };
 
 // used in limbdraw

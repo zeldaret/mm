@@ -125,7 +125,22 @@ static InitChainEntry sInitChain[] = {
  * limb is not part of the bodyParts arrays.
  */
 static s8 sLimbIndexToBodyPartsIndex[BUBBLE_LIMB_MAX] = {
-    -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
+    -1, // BUBBLE_LIMB_NONE
+    -1, // BUBBLE_LIMB_ROOT
+    -1, // BUBBLE_LIMB_CRANIUM_ROOT
+    -1, // BUBBLE_LIMB_JAW_ROOT
+    0,  // BUBBLE_LIMB_JAW
+    -1, // BUBBLE_LIMB_LEFT_WING_ROOT
+    -1, // BUBBLE_LIMB_LEFT_WING_WRAPPER
+    -1, // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
+    1,  // BUBBLE_LIMB_LEFT_WING_WEBBING
+    -1, // BUBBLE_LIMB_LEFT_WING_BONE
+    -1, // BUBBLE_LIMB_RIGHT_WING_ROOT
+    -1, // BUBBLE_LIMB_RIGHT_WING_WRAPPER
+    -1, // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
+    2,  // BUBBLE_LIMB_RIGHT_WING_WEBBING
+    -1, // BUBBLE_LIMB_RIGHT_WING_BONE
+    3,  // BUBBLE_LIMB_CRANIUM
 };
 
 /**

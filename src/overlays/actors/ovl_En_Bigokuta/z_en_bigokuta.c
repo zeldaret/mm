@@ -627,14 +627,35 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
+static s8 D_80AC45BC[BIGOKUTA_LIMB_MAX] = {
+    -1, // BIGOKUTA_LIMB_NONE
+    -1, // BIGOKUTA_LIMB_BODY
+    -1, // BIGOKUTA_LIMB_RIGHT_FRONT_ARM_BASE
+    0,  // BIGOKUTA_LIMB_RIGHT_FRONT_ARM_END
+    -1, // BIGOKUTA_LIMB_LEFT_FRONT_ARM_BASE
+    1,  // BIGOKUTA_LIMB_LEFT_FRONT_ARM_END
+    -1, // BIGOKUTA_LIMB_RIGHT_BACK_ARM_BASE
+    2,  // BIGOKUTA_LIMB_RIGHT_BACK_ARM_END
+    -1, // BIGOKUTA_LIMB_LEFT_BACK_ARM_BASE
+    3,  // BIGOKUTA_LIMB_LEFT_BACK_ARM_END
+    8,  // BIGOKUTA_LIMB_HEAD
+    4,  // BIGOKUTA_LIMB_LEFT_TENTACLE_BASE
+    -1, // BIGOKUTA_LIMB_LEFT_TENTACLE_TIP
+    5,  // BIGOKUTA_LIMB_RIGHT_TENTACLE_BASE
+    -1, // BIGOKUTA_LIMB_RIGHT_TENTACLE_TIP
+    -1, // BIGOKUTA_LIMB_LEFT_WEAK_POINT
+    -1, // BIGOKUTA_LIMB_RIGHT_WEAK_POINT
+    -1, // BIGOKUTA_LIMB_CENTER_SNOUT
+    6,  // BIGOKUTA_LIMB_RIGHT_SNOUT
+    7,  // BIGOKUTA_LIMB_LEFT_SNOUT
+};
+
+static Vec3f D_80AC45D0[] = {
+    { 0.0f, 2000.0f, 1000.0f },    { 0.0f, 2000.0f, -2000.0f }, { 1700.0f, 700.0f, -600.0f },
+    { -1700.0f, 700.0f, -600.0f }, { 0.0f, 500.0f, -2500.0f },
+};
+
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static s8 D_80AC45BC[BIGOKUTA_LIMB_MAX] = {
-        -1, -1, -1, 0, -1, 1, -1, 2, -1, 3, 8, 4, -1, 5, -1, -1, -1, -1, 6, 7,
-    };
-    static Vec3f D_80AC45D0[] = {
-        { 0.0f, 2000.0f, 1000.0f },    { 0.0f, 2000.0f, -2000.0f }, { 1700.0f, 700.0f, -600.0f },
-        { -1700.0f, 700.0f, -600.0f }, { 0.0f, 500.0f, -2500.0f },
-    };
     EnBigokuta* this = THIS;
     s32 i;
     s8 limbPosIndex = D_80AC45BC[limbIndex];
