@@ -15,12 +15,12 @@ void EnBal_Destroy(Actor* thisx, PlayState* play);
 void EnBal_Update(Actor* thisx, PlayState* play);
 void EnBal_Draw(Actor* thisx, PlayState* play);
 
-typedef enum EnBalEyeTexture {
+typedef enum {
     /* 0 */ TINGLE_EYETEX_OPEN,
     /* 1 */ TINGLE_EYETEX_CLOSED
 } EnBalEyeTexture;
 
-typedef enum EnBalAnimation {
+typedef enum {
     /*  0 */ TINGLE_ANIM_FLOAT_DRAW,
     /*  1 */ TINGLE_ANIM_FALL_LOOP,
     /*  2 */ TINGLE_ANIM_FALL_ONCE,
@@ -38,19 +38,19 @@ typedef enum EnBalAnimation {
     /* 14 */ TINGLE_ANIM_MAX
 } EnBalAnimation;
 
-typedef enum EnBalBuyMapChoice {
+typedef enum {
     /* 0 */ TINGLE_MAPCHOICE_PROXIMAL,
     /* 1 */ TINGLE_MAPCHOICE_DISTAL,
     /* 2 */ TINGLE_MAPCHOICE_CANCEL
 } EnBalBuyMapChoice;
 
-typedef enum EnBalWatchTarget {
+typedef enum {
     /* 0 */ TINGLE_WATCH_TARGET_NONE,
     /* 1 */ TINGLE_WATCH_TARGET_PLAYER,
     /* 2 */ TINGLE_WATCH_TARGET_FAIRY
 } EnBalWatchTarget;
 
-typedef enum EnBalBalloonAction {
+typedef enum {
     /* 0 */ TINGLE_BALLOON_ACTION_NONE,
     /* 1 */ TINGLE_BALLOON_ACTION_POP,
     /* 2 */ TINGLE_BALLOON_ACTION_FALL,
@@ -58,7 +58,7 @@ typedef enum EnBalBalloonAction {
     /* 5 */ TINGLE_BALLOON_ACTION_RISE
 } EnBalBalloonAction;
 
-typedef enum EnBalIdleAnimStage {
+typedef enum {
     /* 0 */ EN_BAL_IDLESTAGE_ACTIVITY,
     /* 2 */ EN_BAL_IDLESTAGE_PREP_WAIT = 2,
     /* 3 */ EN_BAL_IDLESTAGE_WAIT
@@ -1078,8 +1078,7 @@ void EnBal_UpdateCollision(EnBal* this, PlayState* play) {
 void EnBal_TryBalloonPopped(EnBal* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->picto.actor.world.pos.x,
-                    this->picto.actor.world.pos.y + 100.0f, this->picto.actor.world.pos.z, 0xFF, 0xFF, 0xC8,
-                    CLEAR_TAG_POP);
+                    this->picto.actor.world.pos.y + 100.0f, this->picto.actor.world.pos.z, 0xFF, 0xFF, 0xC8, 2);
         this->collider.base.acFlags &= ~AC_HIT;
         EnBal_SetupPopBalloon(this);
     }
