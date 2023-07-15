@@ -30,21 +30,40 @@ ActorInit Dm_Bal_InitVars = {
     (ActorFunc)DmBal_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gTingleFloatIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &gTingleTalkTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gTingleTalkIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gTingleMagicSpellAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gTingleMagicSpellAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },
-    { &gTingleWaitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
-    { &gTingleHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
-    { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },
+typedef enum {
+    /*  -1 */ DMBAL_ANIM_NONE = -1,
+    /* 0x0 */ DMBAL_ANIM_0,
+    /* 0x1 */ DMBAL_ANIM_1,
+    /* 0x2 */ DMBAL_ANIM_2,
+    /* 0x3 */ DMBAL_ANIM_3,
+    /* 0x4 */ DMBAL_ANIM_4,
+    /* 0x5 */ DMBAL_ANIM_5,
+    /* 0x6 */ DMBAL_ANIM_6,
+    /* 0x7 */ DMBAL_ANIM_7,
+    /* 0x8 */ DMBAL_ANIM_8,
+    /* 0x9 */ DMBAL_ANIM_9,
+    /* 0xA */ DMBAL_ANIM_10,
+    /* 0xB */ DMBAL_ANIM_11,
+    /* 0xC */ DMBAL_ANIM_12,
+    /* 0xD */ DMBAL_ANIM_13,
+    /* 0xE */ DMBAL_ANIM_MAX
+} DmBalAnimation;
+
+static AnimationInfo sAnimationInfo[DMBAL_ANIM_MAX] = {
+    { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_0
+    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_1
+    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_2
+    { &object_bal_Anim_00A7DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_3
+    { &object_bal_Anim_00B1E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_4
+    { &object_bal_Anim_00B604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_5
+    { &object_bal_Anim_00C498, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_6
+    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_7
+    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_8
+    { &object_bal_Anim_00C498, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // DMBAL_ANIM_9
+    { &object_bal_Anim_00D530, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_10
+    { &object_bal_Anim_000C78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_11
+    { &object_bal_Anim_00CB78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_12
+    { &object_bal_Anim_001804, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_13
 };
 
 void DmBal_Init(Actor* thisx, PlayState* play) {
@@ -54,8 +73,8 @@ void DmBal_Init(Actor* thisx, PlayState* play) {
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
-                       TINGLE_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->jointTable,
+                       this->morphTable, OBJECT_BAL_LIMB_MAX);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->timer = 60;
     this->eyeIndex = 0;
@@ -73,7 +92,7 @@ void DmBal_SetupDoNothing(DmBal* this) {
 void DmBal_DoNothing(DmBal* this, PlayState* play) {
 }
 
-void func_80C1EAE8(DmBal* this, PlayState* play) {
+void DmBal_HandleCutscene(DmBal* this, PlayState* play) {
     static u16 sCueId = 99;
     s32 cueChannel;
 
@@ -86,14 +105,19 @@ void func_80C1EAE8(DmBal* this, PlayState* play) {
                 case 1:
                     this->keepEyesShut = false;
                     this->eyeIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_0);
                     break;
+
                 case 2:
                     this->keepEyesShut = true;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_12);
                     break;
+
                 case 3:
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 13);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_13);
+                    break;
+
+                default:
                     break;
             }
         } else if (sCueId == 3) {
@@ -152,7 +176,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
     // Throw confetti
-    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &gTingleThrowConfettiAnim)) {
+    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &object_bal_Anim_001804)) {
         Vec3f pos = this->actor.world.pos;
         Vec3f vel = { 0.0f, 9.0f, 0.0f };
 
@@ -165,7 +189,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
         DmBal_SpawnPaper(this, play, &pos, &vel, -0.5f);
     }
     this->actionFunc(this, play);
-    func_80C1EAE8(this, play);
+    DmBal_HandleCutscene(this, play);
     func_80C1EC60(this, play);
     DmBal_UpdateEyes(this);
     SkelAnime_Update(&this->skelAnime);
@@ -175,7 +199,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     DmBal* this = THIS;
     Vec3s rots;
 
-    if (limbIndex == 6) {
+    if (limbIndex == OBJECT_BAL_LIMB_06) {
         rots.x = Math_SinS(this->unk_33A) * (0x10000 / 18);
         rots.z = Math_CosS(this->unk_33A) * (0x10000 / 18);
         Matrix_RotateZYX(rots.x, 0, rots.z, MTXMODE_APPLY);
@@ -189,7 +213,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void DmBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-static TexturePtr sEyeTextures[] = { gTingleEyeOpenTex, gTingleEyeClosedTex };
+static TexturePtr sEyeTextures[] = { object_bal_Tex_006050, object_bal_Tex_0094D0 };
 
 void DmBal_Draw(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
