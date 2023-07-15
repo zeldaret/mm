@@ -499,9 +499,9 @@ void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, Te
 
 s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos);
 f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type);
-void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size);
-void* func_800B6608(PlayState* play, s16 id);
-void* func_800B6680(PlayState* play, s16 id);
+void* Actor_AddSharedMemoryEntry(PlayState* play, s16 id, void* ptr, size_t size);
+void* Actor_FreeSharedMemoryEntry(PlayState* play, s16 id);
+void* Actor_FindSharedMemoryEntry(PlayState* play, s16 id);
 void Actor_Kill(Actor* actor);
 void Actor_SetWorldToHome(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 height);
@@ -640,7 +640,7 @@ s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interac
 void Npc_TrackPoint(Actor* actor, NpcInteractInfo* interactInfo, s16 presetIndex, s16 trackingMode);
 void func_800BD9E0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
 void func_800BDAA0(PlayState* play, SkelAnime* skelAnime, OverrideLimbDraw overrideLimbDraw, PostLimbDraw postLimbDraw, Actor* actor, s16 alpha);
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex);
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex);
 void Actor_Noop(Actor* actor, PlayState* play);
 
 void Gfx_DrawDListOpa(PlayState* play, Gfx* dlist);

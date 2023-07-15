@@ -31,7 +31,7 @@ typedef struct DmChar08 {
     /* 0x200 */ u8 eyeMode;
     /* 0x201 */ u8 eyeIndex;
     /* 0x202 */ u8 animIndex;
-    /* 0x203 */ u8 unk_203;
+    /* 0x203 */ u8 prevAnimIndex;
     /* 0x204 */ UNK_TYPE1 unk_204;
     /* 0x205 */ u8 alpha;
     /* 0x206 */ u8 unk_206;
