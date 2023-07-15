@@ -19,9 +19,9 @@ void EnFg_Draw(Actor* thisx, PlayState* play);
 void EnFg_Jump(EnFg* this, PlayState* play);
 void EnFg_DoNothing(EnFg* this, PlayState* play);
 void EnFg_Knockback(EnFg* this, PlayState* play);
-void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
-void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
-void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect);
+void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* worldPos);
+void EnFg_UpdateDust(BetaFrogEffectDust* dustEffect);
+void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect);
 
 typedef enum {
     /* 0 */ BETAFROG_DMGEFFECT_NONE,
@@ -30,7 +30,7 @@ typedef enum {
     /* 3 */ BETAFROG_DMGEFFECT_HOOKSHOT,
     /* 4 */ BETAFROG_DMGEFFECT_ARROW,
     /* 5 */ BETAFROG_DMGEFFECT_ICEARROW
-} FrogDamageEffect;
+} BetaFrogDamageEffect;
 
 ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
@@ -110,7 +110,7 @@ typedef enum {
     /*  2 */ BETAFROG_ANIM_2,
     /*  3 */ BETAFROG_ANIM_3,
     /*  4 */ BETAFROG_ANIM_MAX
-} FrogAnimation;
+} BetaFrogAnimation;
 
 static AnimationInfoS sAnimationInfo[BETAFROG_ANIM_MAX] = {
     { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // BETAFROG_ANIM_0
@@ -449,7 +449,7 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos) {
+void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* worldPos) {
     Vec3f vel = { 0.0f, 3.0f, 0.0f };
     Vec3f unk_20 = { 0.0f, 0.0f, 0.0f };
     s32 i;
@@ -467,7 +467,7 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos) {
     }
 }
 
-void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
+void EnFg_UpdateDust(BetaFrogEffectDust* dustEffect) {
     s32 i;
 
     for (i = 0; i < 10; i++, dustEffect++) {
@@ -484,7 +484,7 @@ static TexturePtr sDustTextures[] = {
     gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
-void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
+void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect) {
     s16 i;
     s16 alpha;
     s16 index;

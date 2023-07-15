@@ -16,7 +16,7 @@ typedef enum {
     /* 3 */ BETAFROG_BLUE,
     /* 4 */ BETAFROG_WHITE,
     /* 5 */ BETAFROG_BLACK // All frogs are blackened when hit by an explosion
-} MinifrogBetaType;
+} BetaFrogType;
 
 typedef struct {
     /* 0x00 */ u8 type;
@@ -27,7 +27,7 @@ typedef struct {
     /* 0x20 */ Vec3f unk_20; // Likely acceleration, set to 0 but unused
     /* 0x2C */ Vec3f velocity;
     /* 0x38 */ UNK_TYPE1 unk_38[0x4];
-} EnFgEffectDust; // size = 0x3C
+} BetaFrogEffectDust; // size = 0x3C
 
 typedef struct EnFg {
     /* 0x000 */ Actor actor;
@@ -38,7 +38,7 @@ typedef struct EnFg {
     /* 0x268 */ Vec3s morphTable[OBJECT_FR_LIMB_MAX];
     /* 0x2F8 */ s16 timer;
     /* 0x2FA */ s16 bounceCounter;
-    /* 0x2FC */ EnFgEffectDust dustEffect[10];
+    /* 0x2FC */ BetaFrogEffectDust dustEffect[10];
 } EnFg; // size = 0x554
 
 #endif // Z_EN_FG_H

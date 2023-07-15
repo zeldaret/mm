@@ -65,7 +65,7 @@ static TexturePtr D_808A4D74[] = {
     object_fr_Tex_005BA0,
 };
 
-static u16 isFrogReturnedFlags[] = {
+static u16 sIsFrogReturnedFlags[] = {
     0,                  // FROG_YELLOW
     WEEKEVENTREG_32_40, // FROG_CYAN
     WEEKEVENTREG_32_80, // FROG_PINK
@@ -73,7 +73,7 @@ static u16 isFrogReturnedFlags[] = {
     WEEKEVENTREG_33_02, // FROG_WHITE
 };
 
-static s32 isInitialized = false;
+static s32 sIsInitialized = false;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -800, ICHAIN_STOP),
@@ -90,11 +90,11 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    if (!isInitialized) {
+    if (!sIsInitialized) {
         for (i = 0; i < ARRAY_COUNT(D_808A4D74); i++) {
             D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
         }
-        isInitialized = true;
+        sIsInitialized = true;
     }
 
     this->frogIndex = (this->actor.params & 0xF);
@@ -111,7 +111,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     if (1) {}
 
     if (!EN_FROG_IS_RETURNED(&this->actor)) {
-        if ((this->frogIndex == FROG_YELLOW) || CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
+        if ((this->frogIndex == FROG_YELLOW) || CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->frogIndex])) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -136,7 +136,7 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
             this->actor.flags &= ~ACTOR_FLAG_1;
 
             // Frog has been returned
-            if (CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex])) {
+            if (CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->frogIndex])) {
                 this->actionFunc = EnMinifrog_SetupNextFrogInit;
             } else {
                 this->actor.draw = NULL;
@@ -276,7 +276,7 @@ void EnMinifrog_ReturnFrogCutscene(EnMinifrog* this, PlayState* play) {
                     Message_ContinueTextbox(play, 0xD86);
                 }
 
-                SET_WEEKEVENTREG(isFrogReturnedFlags[this->frogIndex]);
+                SET_WEEKEVENTREG(sIsFrogReturnedFlags[this->frogIndex]);
                 break;
 
             case 0xD85:
