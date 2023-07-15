@@ -75,40 +75,6 @@ typedef struct {
     /* 0x14 */ OSMesgQueue messageQueue;
 } FlashromRequest; // size = 0x2C
 
-// End of RDRAM without the Expansion Pak installed
-#define NORMAL_RDRAM_END 0x80400000
-// End of RDRAM with the Expansion Pak installed
-#define EXPANDED_RDRAM_END 0x80800000
-// Address at the end of normal RDRAM after which is room for a screen buffer
-#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
-
-typedef void (*FaultDrawerCallback)(void);
-
-typedef struct {
-    /* 0x00 */ u16* fb;
-    /* 0x04 */ u16 w;
-    /* 0x06 */ u16 h;
-    /* 0x08 */ u16 yStart;
-    /* 0x0A */ u16 yEnd;
-    /* 0x0C */ u16 xStart;
-    /* 0x0E */ u16 xEnd;
-    /* 0x10 */ u16 foreColor;
-    /* 0x12 */ u16 backColor;
-    /* 0x14 */ u16 cursorX;
-    /* 0x16 */ u16 cursorY;
-    /* 0x18 */ const u32* font;
-    /* 0x1C */ u8 charW;
-    /* 0x1D */ u8 charH;
-    /* 0x1E */ s8 charWPad;
-    /* 0x1F */ s8 charHPad;
-    /* 0x20 */ u16 printColors[10];
-    /* 0x34 */ u8 escCode;
-    /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ FaultDrawerCallback inputCallback;
-} FaultDrawer; // size = 0x3C
-
-typedef void(*fault_update_input_func)(Input* input);
-
 typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
@@ -314,37 +280,6 @@ typedef struct {
     /* 0x20 */ f32 yScale;
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
-
-typedef struct FaultAddrConvClient {
-    /* 0x0 */ struct FaultAddrConvClient* next;
-    /* 0x4 */ void* (*callback)(void*, void*);
-    /* 0x8 */ void* param;
-} FaultAddrConvClient; // size = 0xC
-
-typedef struct FaultClient {
-    /* 0x0 */ struct FaultClient* next;
-    /* 0x4 */ void (*callback)(void*, void*);
-    /* 0x8 */ void* param0;
-    /* 0xC */ void* param1;
-} FaultClient; // size = 0x10
-
-typedef struct {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 stack[1536]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
-    /* 0x7B0 */ OSMesgQueue queue;
-    /* 0x7C8 */ OSMesg msg[1];
-    /* 0x7CC */ u8 exitDebugger;
-    /* 0x7CD */ u8 msgId; // 1 - CPU Break; 2 - Fault; 3 - Unknown
-    /* 0x7CE */ u8 faultHandlerEnabled;
-    /* 0x7CF */ u8 faultActive;
-    /* 0x7D0 */ OSThread* faultedThread;
-    /* 0x7D4 */ fault_update_input_func padCallback;
-    /* 0x7D8 */ FaultClient* clients;
-    /* 0x7DC */ FaultAddrConvClient* addrConvClients;
-    /* 0x7E0 */ UNK_TYPE1 pad7E0[0x4];
-    /* 0x7E4 */ Input padInput[MAXCONTROLLERS];
-    /* 0x844 */ void* fb;
-} FaultThreadStruct; // size = 0x848
 
 struct PlayState;
 

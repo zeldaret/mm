@@ -1128,6 +1128,8 @@ wordReplace = {
     "D_801D1E20": "gIdentityMtxF",
     "sSetupDL": "gSetupDLs",
 
+    "gFaultStruct": "gFaultMgr",
+
     "D_801BDA9C": "gHorseIsMounted",
     "D_801BDAA4": "gHorsePlayedEponasSong",
 
