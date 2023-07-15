@@ -9,6 +9,7 @@ typedef void (*EnElfActionFunc)(struct EnElf*, PlayState*);
 typedef void (*EnElfUnkFunc)(struct EnElf*, PlayState*);
 
 #define FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
+#define FAIRY_GET_BOOL_PARAM(thisx) ((thisx)->params & 0x100)
 #define FAIRY_GET_COLLECTIBLE_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 
 #define FAIRY_PARAMS(type, boolParam, collectibleFlag) (((type) /* & 0xF */) | (((boolParam) & 0x1) << 8) | ((((collectibleFlag) & 0x7F) << 9) & 0xFE00))

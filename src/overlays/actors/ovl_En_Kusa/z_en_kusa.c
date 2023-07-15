@@ -253,7 +253,7 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play) {
     } else if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
         Item_DropCollectible(play, &this->actor.world.pos, 3);
     } else { // ENKUSA_TYPE_GRASS_2
-        collectible = func_800A8150(KUSA_GET_PARAM_3F(&this->actor));
+        collectible = func_800A8150(KUSA_GET_PARAM_FC(&this->actor));
         if (collectible >= 0) {
             collectableParams = KUSA_GET_COLLECTIBLE_ID(&this->actor);
             Item_DropCollectible(play, &this->actor.world.pos, (collectableParams << 8) | collectible);

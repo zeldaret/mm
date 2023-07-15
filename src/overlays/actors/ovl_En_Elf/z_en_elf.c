@@ -342,7 +342,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
     this->collectibleFlag = FAIRY_GET_COLLECTIBLE_FLAG(&this->actor);
     fairyType = FAIRY_GET_TYPE(&this->actor);
-    if (thisx->params & 0x100) {
+    if (FAIRY_GET_BOOL_PARAM(thisx)) {
         this->fairyFlags |= 0x400;
     }
 

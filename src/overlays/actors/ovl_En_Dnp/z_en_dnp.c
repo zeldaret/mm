@@ -414,7 +414,7 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -1.0f;
     if (DEKU_PRINCESS_GET_TYPE(&this->actor) == DEKU_PRINCESS_TYPE_RELEASED_FROM_BOTTLE) {
         this->actor.flags &= ~ACTOR_FLAG_1;
-        Actor_SetScale(&this->actor, 0.00085000007f);
+        Actor_SetScale(&this->actor, 0.85f * 0.001f);
         SubS_UpdateFlags(&this->unk_322, 0, 7);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;

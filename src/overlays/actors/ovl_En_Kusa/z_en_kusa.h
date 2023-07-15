@@ -18,7 +18,7 @@ typedef void (*EnKusaActionFunc)(struct EnKusa*, PlayState*);
 
 // `ENKUSA_TYPE_GRASS_2`
 #define KUSA_GET_COLLECTIBLE_ID(thisx) (((thisx)->params >> 8) & 0x7F)
-#define KUSA_GET_PARAM_3F(thisx) (((thisx)->params >> 2) & 0x3F)
+#define KUSA_GET_PARAM_FC(thisx) (((thisx)->params >> 2) & 0x3F)
 
 typedef enum {
     /* 0 */ ENKUSA_TYPE_BUSH,
@@ -36,8 +36,8 @@ typedef enum {
 #define KUSA_GRASS_PARAMS(spawnBugs, randCollectibleId, param0C) \
     (((ENKUSA_TYPE_GRASS) & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
 
-#define KUSA_GRASS_2_PARAMS(spawnBugs, collectibleId) \
-    (((ENKUSA_TYPE_GRASS_2) & 0x3) | (((param3F) & 0x3F) << 2) | (((collectibleId) & 0x7F) << 8))
+#define KUSA_GRASS_2_PARAMS(paramFC, collectibleId) \
+    (((ENKUSA_TYPE_GRASS_2) & 0x3) | (((paramFC) & 0x3F) << 2) | (((collectibleId) & 0x7F) << 8))
 
 
 typedef struct EnKusa {

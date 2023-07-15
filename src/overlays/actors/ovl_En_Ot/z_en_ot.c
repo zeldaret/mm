@@ -172,7 +172,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     switch (SEAHORSE_GET_TYPE(&this->actor)) {
         case SEAHORSE_TYPE_1:
             D_80B5E884 = this;
-            Actor_SetScale(&this->actor, 0.012999999f);
+            Actor_SetScale(&this->actor, 1.3f * 0.01f);
 
             switch (this->unk_344) {
                 case 0:
@@ -248,7 +248,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    Actor_SetScale(&this->actor, 0.012999999f);
+                    Actor_SetScale(&this->actor, 1.3f * 0.01f);
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) {
                         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
                             func_80B5C244(this, play);
@@ -584,9 +584,9 @@ void func_80B5C9D0(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CA30(EnOt* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.scale.x, 0.012999999f, 0.7f, 0.0001f, 0.01f);
+    Math_SmoothStepToF(&this->actor.scale.x, 1.3f * 0.01f, 0.7f, 0.0001f, 0.01f);
     Actor_SetScale(&this->actor, this->actor.scale.x);
-    if (this->actor.scale.x == 0.012999999f) {
+    if (this->actor.scale.x == 1.3f * 0.01f) {
         this->unk_360->unk_32C |= 0x1000;
         this->unk_360->unk_360 = this;
         func_80B5C9A8(this, play);
@@ -599,9 +599,9 @@ void func_80B5CAD0(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CB0C(EnOt* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.scale.x, 0.012999999f, 0.7f, 0.0001f, 0.01f);
+    Math_SmoothStepToF(&this->actor.scale.x, 1.3f * 0.01f, 0.7f, 0.0001f, 0.01f);
     Actor_SetScale(&this->actor, this->actor.scale.x);
-    if (this->actor.scale.x == 0.012999999f) {
+    if (this->actor.scale.x == 1.3f * 0.01f) {
         this->unk_32C |= 0x800;
         func_80B5CE6C(this, play);
     }
