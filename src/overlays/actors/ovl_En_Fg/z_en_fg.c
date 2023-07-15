@@ -19,7 +19,7 @@ void EnFg_Draw(Actor* thisx, PlayState* play);
 void EnFg_Jump(EnFg* this, PlayState* play);
 void EnFg_DoNothing(EnFg* this, PlayState* play);
 void EnFg_Knockback(EnFg* this, PlayState* play);
-void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* worldPos);
+void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* pos);
 void EnFg_UpdateDust(BetaFrogEffectDust* dustEffect);
 void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect);
 
