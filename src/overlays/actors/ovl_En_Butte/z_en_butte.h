@@ -2,6 +2,7 @@
 #define Z_EN_BUTTE_H
 
 #include "global.h"
+#include "objects/gameplay_field_keep/gameplay_field_keep.h"
 
 struct EnButte;
 
@@ -21,8 +22,8 @@ typedef struct EnButte {
     /* 0x144 */ ColliderJntSph collider;
     /* 0x164 */ ColliderJntSphElement colldierElements[1];
     /* 0x1A4 */ SkelAnime skelAnime;
-    /* 0x1E8 */ Vec3s jointTable[8];
-    /* 0x218 */ Vec3s morphTable[8];
+    /* 0x1E8 */ Vec3s jointTable[BUTTERFLY_LIMB_MAX];
+    /* 0x218 */ Vec3s morphTable[BUTTERFLY_LIMB_MAX];
     /* 0x248 */ EnButteActionFunc actionFunc;
     /* 0x24C */ s16 unk_24C;
     /* 0x24E */ u8 unk_24E;

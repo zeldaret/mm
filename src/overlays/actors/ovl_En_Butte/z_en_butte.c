@@ -179,7 +179,7 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     }
 
     SkelAnime_Init(play, &this->skelAnime, &gameplay_field_keep_Skel_002FA0, &gameplay_field_keep_Anim_001D20,
-                   this->jointTable, this->morphTable, 8);
+                   this->jointTable, this->morphTable, BUTTERFLY_LIMB_MAX);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colldierElements);
 
