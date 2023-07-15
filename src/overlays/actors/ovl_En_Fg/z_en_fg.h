@@ -10,12 +10,12 @@ typedef void (*EnFgActionFunc)(struct EnFg*, PlayState*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {
-    /* 0 */ MINIFROG_BETA_YELLOW,
-    /* 1 */ MINIFROG_BETA_CYAN,
-    /* 2 */ MINIFROG_BETA_PINK,
-    /* 3 */ MINIFROG_BETA_BLUE,
-    /* 4 */ MINIFROG_BETA_WHITE,
-    /* 5 */ MINIFROG_BETA_BLACK // All frogs are blackened when hit by an explosion
+    /* 0 */ BETAFROG_YELLOW,
+    /* 1 */ BETAFROG_CYAN,
+    /* 2 */ BETAFROG_PINK,
+    /* 3 */ BETAFROG_BLUE,
+    /* 4 */ BETAFROG_WHITE,
+    /* 5 */ BETAFROG_BLACK // All frogs are blackened when hit by an explosion
 } MinifrogBetaType;
 
 typedef struct {

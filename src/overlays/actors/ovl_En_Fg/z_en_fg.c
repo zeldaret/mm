@@ -24,12 +24,12 @@ void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
 void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect);
 
 typedef enum {
-    /* 0 */ MINIFROG_BETA_DMGEFFECT_NONE,
-    /* 1 */ MINIFROG_BETA_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
-    /* 2 */ MINIFROG_BETA_DMGEFFECT_DEKUSTICK,
-    /* 3 */ MINIFROG_BETA_DMGEFFECT_HOOKSHOT,
-    /* 4 */ MINIFROG_BETA_DMGEFFECT_ARROW,
-    /* 5 */ MINIFROG_BETA_DMGEFFECT_ICEARROW
+    /* 0 */ BETAFROG_DMGEFFECT_NONE,
+    /* 1 */ BETAFROG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
+    /* 2 */ BETAFROG_DMGEFFECT_DEKUSTICK,
+    /* 3 */ BETAFROG_DMGEFFECT_HOOKSHOT,
+    /* 4 */ BETAFROG_DMGEFFECT_ARROW,
+    /* 5 */ BETAFROG_DMGEFFECT_ICEARROW
 } FrogDamageEffect;
 
 ActorInit En_Fg_InitVars = {
@@ -104,26 +104,26 @@ static DamageTable sDamageTable = {
 };
 
 typedef enum {
-    /* -1 */ MINIFROG_BETA_ANIM_NONE = -1,
-    /*  0 */ MINIFROG_BETA_ANIM_0,
-    /*  1 */ MINIFROG_BETA_ANIM_1,
-    /*  2 */ MINIFROG_BETA_ANIM_2,
-    /*  3 */ MINIFROG_BETA_ANIM_3,
-    /*  4 */ MINIFROG_BETA_ANIM_MAX
+    /* -1 */ BETAFROG_ANIM_NONE = -1,
+    /*  0 */ BETAFROG_ANIM_0,
+    /*  1 */ BETAFROG_ANIM_1,
+    /*  2 */ BETAFROG_ANIM_2,
+    /*  3 */ BETAFROG_ANIM_3,
+    /*  4 */ BETAFROG_ANIM_MAX
 } FrogAnimation;
 
-static AnimationInfoS sAnimationInfo[MINIFROG_BETA_ANIM_MAX] = {
-    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // MINIFROG_BETA_ANIM_0
-    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // MINIFROG_BETA_ANIM_1
-    { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // MINIFROG_BETA_ANIM_2
-    { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // MINIFROG_BETA_ANIM_3
+static AnimationInfoS sAnimationInfo[BETAFROG_ANIM_MAX] = {
+    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // BETAFROG_ANIM_0
+    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_1
+    { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_2
+    { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // BETAFROG_ANIM_3
 };
 
 s32 EnFg_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 endFrame;
     s32 didAnimChange = false;
 
-    if ((animIndex > MINIFROG_BETA_ANIM_NONE) && (animIndex < MINIFROG_BETA_ANIM_MAX)) {
+    if ((animIndex > BETAFROG_ANIM_NONE) && (animIndex < BETAFROG_ANIM_MAX)) {
         didAnimChange = true;
         endFrame = sAnimationInfo[animIndex].frameCount;
         if (endFrame < 0) {
@@ -160,28 +160,28 @@ u8 EnFg_UpdateHealth(EnFg* this) {
 }
 
 s32 EnFg_GetDamageEffect(EnFg* this) {
-    s32 ret = MINIFROG_BETA_DMGEFFECT_NONE;
+    s32 ret = BETAFROG_DMGEFFECT_NONE;
 
     if (this->collider.base.acFlags & AC_HIT) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 1:
-                ret = MINIFROG_BETA_DMGEFFECT_DEKUSTICK;
+                ret = BETAFROG_DMGEFFECT_DEKUSTICK;
                 break;
 
             case 15:
-                ret = MINIFROG_BETA_DMGEFFECT_HOOKSHOT;
+                ret = BETAFROG_DMGEFFECT_HOOKSHOT;
                 break;
 
             case 14:
-                ret = MINIFROG_BETA_DMGEFFECT_ARROW;
+                ret = BETAFROG_DMGEFFECT_ARROW;
                 break;
 
             case 3:
-                ret = MINIFROG_BETA_DMGEFFECT_ICEARROW;
+                ret = BETAFROG_DMGEFFECT_ICEARROW;
                 break;
 
             default:
-                ret = MINIFROG_BETA_DMGEFFECT_EXPLOSION;
+                ret = BETAFROG_DMGEFFECT_EXPLOSION;
                 break;
         }
         this->collider.base.acFlags &= ~AC_HIT;
@@ -196,7 +196,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
     s16 rotX;
 
     switch (EnFg_GetDamageEffect(this)) {
-        case MINIFROG_BETA_DMGEFFECT_DEKUSTICK:
+        case BETAFROG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
@@ -208,10 +208,10 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
             break;
 
-        case MINIFROG_BETA_DMGEFFECT_HOOKSHOT:
+        case BETAFROG_DMGEFFECT_HOOKSHOT:
             break;
 
-        case MINIFROG_BETA_DMGEFFECT_ARROW:
+        case BETAFROG_DMGEFFECT_ARROW:
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
@@ -225,10 +225,10 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
             break;
 
-        case MINIFROG_BETA_DMGEFFECT_EXPLOSION:
+        case BETAFROG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
-            this->actor.params = MINIFROG_BETA_BLACK;
+            this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
@@ -244,7 +244,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
         default:
             if (DECR(this->timer) == 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
-                EnFg_ChangeAnim(&this->skelAnime, MINIFROG_BETA_ANIM_3);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
@@ -260,7 +260,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
     s16 rotX;
 
     switch (EnFg_GetDamageEffect(this)) {
-        case MINIFROG_BETA_DMGEFFECT_ARROW:
+        case BETAFROG_DMGEFFECT_ARROW:
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -275,14 +275,14 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
             break;
 
-        case MINIFROG_BETA_DMGEFFECT_HOOKSHOT:
+        case BETAFROG_DMGEFFECT_HOOKSHOT:
             break;
 
-        case MINIFROG_BETA_DMGEFFECT_EXPLOSION:
+        case BETAFROG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
-            EnFg_ChangeAnim(&this->skelAnime, MINIFROG_BETA_ANIM_0);
-            this->actor.params = MINIFROG_BETA_BLACK;
+            EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+            this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
@@ -302,7 +302,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             }
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-                EnFg_ChangeAnim(&this->skelAnime, MINIFROG_BETA_ANIM_0);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
@@ -343,7 +343,7 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable,
                        OBJECT_FR_LIMB_MAX);
-    EnFg_ChangeAnim(&this->skelAnime, MINIFROG_BETA_ANIM_0);
+    EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -423,12 +423,12 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
     s32 pad;
     Color_RGBA8 envColor[] = {
-        { 200, 170, 0, 255 },   // MINIFROG_BETA_YELLOW
-        { 0, 170, 200, 255 },   // MINIFROG_BETA_CYAN
-        { 210, 120, 100, 255 }, // MINIFROG_BETA_PINK
-        { 120, 130, 230, 255 }, // MINIFROG_BETA_BLUE
-        { 190, 190, 190, 255 }, // MINIFROG_BETA_WHITE
-        { 0, 0, 0, 255 },       // MINIFROG_BETA_BLACK
+        { 200, 170, 0, 255 },   // BETAFROG_YELLOW
+        { 0, 170, 200, 255 },   // BETAFROG_CYAN
+        { 210, 120, 100, 255 }, // BETAFROG_PINK
+        { 120, 130, 230, 255 }, // BETAFROG_BLUE
+        { 190, 190, 190, 255 }, // BETAFROG_WHITE
+        { 0, 0, 0, 255 },       // BETAFROG_BLACK
     };
 
     Matrix_Push();
