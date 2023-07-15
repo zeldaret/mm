@@ -4179,19 +4179,19 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == OBJECT_FISHING_FISH_LIMB_0D) {
+    if (limbIndex == FISHING_FISH_LIMB_0D) {
         rot->z -= this->unk_168 - 11000;
-    } else if ((limbIndex == OBJECT_FISHING_FISH_LIMB_02) || (limbIndex == OBJECT_FISHING_FISH_LIMB_03)) {
+    } else if ((limbIndex == FISHING_FISH_LIMB_02) || (limbIndex == FISHING_FISH_LIMB_03)) {
         rot->y += this->unk_164;
-    } else if (limbIndex == OBJECT_FISHING_FISH_LIMB_04) {
+    } else if (limbIndex == FISHING_FISH_LIMB_04) {
         rot->y += this->unk_16E;
-    } else if (limbIndex == OBJECT_FISHING_FISH_LIMB_0E) {
+    } else if (limbIndex == FISHING_FISH_LIMB_0E) {
         rot->y -= this->unk_16A;
-    } else if (limbIndex == OBJECT_FISHING_FISH_LIMB_0F) {
+    } else if (limbIndex == FISHING_FISH_LIMB_0F) {
         rot->y += this->unk_16A;
-    } else if (limbIndex == OBJECT_FISHING_FISH_LIMB_08) {
+    } else if (limbIndex == FISHING_FISH_LIMB_08) {
         rot->y += this->unk_16C;
-    } else if (limbIndex == OBJECT_FISHING_FISH_LIMB_09) {
+    } else if (limbIndex == FISHING_FISH_LIMB_09) {
         rot->y -= this->unk_16C;
     }
 
@@ -4201,7 +4201,7 @@ s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
 void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == OBJECT_FISHING_FISH_LIMB_0D) {
+    if (limbIndex == FISHING_FISH_LIMB_0D) {
         Matrix_MultVec3f(&sFishMouthOffset, &this->fishMouthPos);
     }
 }
@@ -4209,11 +4209,11 @@ void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 s32 EnFishing_LoachOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == OBJECT_FISHING_LOACH_LIMB_03) {
+    if (limbIndex == FISHING_LOACH_LIMB_03) {
         rot->y += this->unk_1C4[0];
-    } else if (limbIndex == OBJECT_FISHING_LOACH_LIMB_04) {
+    } else if (limbIndex == FISHING_LOACH_LIMB_04) {
         rot->y += this->unk_1C4[1];
-    } else if (limbIndex == OBJECT_FISHING_LOACH_LIMB_05) {
+    } else if (limbIndex == FISHING_LOACH_LIMB_05) {
         rot->y += this->unk_1C4[2];
     }
 
@@ -4224,7 +4224,7 @@ void EnFishing_LoachPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     static Vec3f sLoachMouthOffset = { 500.0f, 500.0f, 0.0f };
     EnFishing* this = THIS;
 
-    if (limbIndex == OBJECT_FISHING_LOACH_LIMB_0B) {
+    if (limbIndex == FISHING_LOACH_LIMB_0B) {
         Matrix_MultVec3f(&sLoachMouthOffset, &this->fishMouthPos);
     }
 }
@@ -5613,7 +5613,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == OBJECT_FISHING_OWNER_LIMB_HEAD) {
+    if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         rot->x -= this->unk_15C;
     }
 
@@ -5621,7 +5621,7 @@ s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
 }
 
 void EnFishing_OwnerPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == OBJECT_FISHING_OWNER_LIMB_HEAD) {
+    if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_MultVec3f(&sZeroVec, &sOwnerHeadPos);
