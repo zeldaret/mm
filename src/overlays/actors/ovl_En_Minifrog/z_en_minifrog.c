@@ -67,7 +67,11 @@ static TexturePtr D_808A4D74[] = {
 };
 
 static u16 isFrogReturnedFlags[] = {
-    0, WEEKEVENTREG_32_40, WEEKEVENTREG_32_80, WEEKEVENTREG_33_01, WEEKEVENTREG_33_02,
+    0,                  // MINIFROG_YELLOW
+    WEEKEVENTREG_32_40, // MINIFROG_CYAN
+    WEEKEVENTREG_32_80, // MINIFROG_PINK
+    WEEKEVENTREG_33_01, // MINIFROG_BLUE
+    WEEKEVENTREG_33_02, // MINIFROG_WHITE
 };
 
 static s32 isInitialized = false;

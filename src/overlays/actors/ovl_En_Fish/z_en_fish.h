@@ -2,6 +2,7 @@
 #define Z_EN_FISH_H
 
 #include "global.h"
+#include "objects/gameplay_keep/gameplay_keep.h"
 
 struct EnFish;
 
@@ -19,8 +20,8 @@ typedef struct EnFish {
     /* 0x144 */ ColliderJntSph collider;
     /* 0x164 */ ColliderJntSphElement colliderElements[1];
     /* 0x1A4 */ SkelAnime skelAnime;
-    /* 0x1E8 */ Vec3s jointTable[7];
-    /* 0x212 */ Vec3s morphTable[7];
+    /* 0x1E8 */ Vec3s jointTable[FISH_LIMB_MAX];
+    /* 0x212 */ Vec3s morphTable[FISH_LIMB_MAX];
     /* 0x23C */ EnFishUnkFunc unkFunc;
     /* 0x240 */ s16 unk_240;
     /* 0x242 */ s16 unk_242;

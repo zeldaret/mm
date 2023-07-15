@@ -2,6 +2,7 @@
 #define Z_EN_FG_H
 
 #include "global.h"
+#include "objects/object_fr/object_fr.h"
 
 struct EnFg;
 
@@ -9,22 +10,13 @@ typedef void (*EnFgActionFunc)(struct EnFg*, PlayState*);
 
 // Based on the envColor data. Related to params but mostly unused.
 typedef enum {
-    /* 0 */ FG_YELLOW,
-    /* 1 */ FG_CYAN,
-    /* 2 */ FG_PINK,
-    /* 3 */ FG_BLUE,
-    /* 4 */ FG_WHITE,
-    /* 5 */ FG_BLACK // All frogs are blackened when hit by an explosion
-} FrogType;
-
-typedef enum {
-    /* 0 */ FG_DMGEFFECT_NONE,
-    /* 1 */ FG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
-    /* 2 */ FG_DMGEFFECT_DEKUSTICK,
-    /* 3 */ FG_DMGEFFECT_HOOKSHOT,
-    /* 4 */ FG_DMGEFFECT_ARROW,
-    /* 5 */ FG_DMGEFFECT_ICEARROW
-} FrogDamageEffect;
+    /* 0 */ MINIFROG_BETA_YELLOW,
+    /* 1 */ MINIFROG_BETA_CYAN,
+    /* 2 */ MINIFROG_BETA_PINK,
+    /* 3 */ MINIFROG_BETA_BLUE,
+    /* 4 */ MINIFROG_BETA_WHITE,
+    /* 5 */ MINIFROG_BETA_BLACK // All frogs are blackened when hit by an explosion
+} MinifrogBetaType;
 
 typedef struct {
     /* 0x00 */ u8 type;
@@ -42,8 +34,8 @@ typedef struct EnFg {
     /* 0x144 */ EnFgActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[24];
-    /* 0x268 */ Vec3s morphTable[24];
+    /* 0x1D8 */ Vec3s jointTable[OBJECT_FR_LIMB_MAX];
+    /* 0x268 */ Vec3s morphTable[OBJECT_FR_LIMB_MAX];
     /* 0x2F8 */ s16 timer;
     /* 0x2FA */ s16 bounceCounter;
     /* 0x2FC */ EnFgEffectDust dustEffect[10];
