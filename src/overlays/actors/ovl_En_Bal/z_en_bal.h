@@ -16,7 +16,7 @@ typedef struct EnBal {
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ EnBalActionFunc actionFunc;
     /* 0x190 */ ColliderJntSph collider;
-    /* 0x1B0 */ ColliderJntSphElement colliderElement;
+    /* 0x1B0 */ ColliderJntSphElement colliderElements[1];
     /* 0x1F0 */ Vec3f balloonScale;
     /* 0x1FC */ s32 eyeTexIndex;
     /* 0x200 */ Vec3s jointTable[TINGLE_LIMB_MAX];
@@ -27,9 +27,9 @@ typedef struct EnBal {
     /* 0x39A */ s16 forceEyesShut;
     /* 0x39C */ s16 watchTarget;
     /* 0x39E */ s16 skyFloatPhase;
-    /* 0x3A0 */ s16 prevTextId;
+    /* 0x3A0 */ s16 textId;
     /* 0x3A2 */ UNK_TYPE2 unk3A2;
-    /* 0x3A4 */ s16 prevBalloonAction;
+    /* 0x3A4 */ s16 balloonAction;
     /* 0x3A6 */ s16 idleAnimStage;
     /* 0x3A8 */ s16 timer;
     /* 0x3AA */ UNK_TYPE2 unk3AA; 

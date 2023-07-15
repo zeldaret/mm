@@ -1,13 +1,13 @@
 ﻿<Root>
     <File Name="object_bal" Segment="6">
-	
-		<!-- Animations 1 -->
+
+    <!-- Animations 1 -->
         <Animation Name="gTingleFloatIdleAnim" Offset="0x5FC" /> <!-- Original name is "bal_fly"-->
         <Animation Name="gTingleFallAnim" Offset="0x840" /> <!-- Original name is "bal_fly2"-->
         <Animation Name="gTingleSpinAnim" Offset="0xC78" /> <!-- Original name is "bal_kaiten" ("rotation; revolution; turn; spin​") -->
         <Animation Name="gTingleThrowConfettiAnim" Offset="0x1804" /> <!-- Original name is "bal_kami" ("paper​")-->
-		
-		<!-- Model Pieces -->
+
+    <!-- Model Pieces -->
         <DList Name="gTingleBriefsDL" Offset="0x4000" />
         <DList Name="gTingleLeftFootDL" Offset="0x4108" />
         <DList Name="gTingleLeftShinDL" Offset="0x41E8" />
@@ -26,8 +26,8 @@
         <DList Name="gTingleRightForearmDL" Offset="0x50F8" />
         <DList Name="gTingleRightUpperArmDL" Offset="0x51E0" />
         <DList Name="gTingleBalloonDL" Offset="0x52A0" />
-		
-		<!-- Textures -->
+
+    <!-- Textures -->
         <Texture Name="gTingleMapTLUT" OutName="tingle_map_tlut" Format="rgba16" Width="4" Height="4" Offset="0x53B0" />
         <Texture Name="gTingleBriefsTex" OutName="tingle_briefs" Format="rgba16" Width="16" Height="16" Offset="0x53D0" />
         <Texture Name="gTingleTopFrontTex" OutName="tingle_top" Format="rgba16" Width="32" Height="32" Offset="0x55D0" />
@@ -42,8 +42,8 @@
         <Texture Name="gTinglePenTopTex" OutName="tingle_pen_top" Format="rgba16" Width="16" Height="16" Offset="0x8AD0" />
         <Texture Name="gTingleMapTex" OutName="tingle_map" Format="ci4" Width="64" Height="64" Offset="0x8CD0" />
         <Texture Name="gTingleEyeClosedTex" OutName="tingle_eye_closed" Format="rgba16" Width="32" Height="64" Offset="0x94D0" />
-		
-		<!-- Skeleton -->
+
+    <!-- Skeleton -->
         <Limb Name="gTingleRootLimb" Type="Standard" EnumName="TINGLE_LIMB_ROOT" Offset="0xA4D0" />
         <Limb Name="gTinglePelvisLimb" Type="Standard" EnumName="TINGLE_LIMB_PELVIS" Offset="0xA4DC" />
         <Limb Name="gTingleBodyLimb" Type="Standard" EnumName="TINGLE_LIMB_BODY" Offset="0xA4E8" />
@@ -77,8 +77,8 @@
         <Limb Name="gTingleLeftShinLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_SHIN" Offset="0xA638" />
         <Limb Name="gTingleLeftFootLimb" Type="Standard" EnumName="TINGLE_LIMB_LEFT_FOOT" Offset="0xA644" />
         <Skeleton Name="gTingleSkel" Type="Flex" LimbType="Standard" LimbNone="TINGLE_LIMB_NONE" LimbMax="TINGLE_LIMB_MAX" EnumName="ObjectBalLimb" Offset="0xA6D0" />
-		
-		<!-- Animations 2 -->
+
+    <!-- Animations 2 -->
         <Animation Name="gTingleLandAnim" Offset="0xA7DC" /> <!-- Original name is "bal_put"-->
         <Animation Name="gTingleTalkTwistAnim" Offset="0xB1E8" /> <!-- Original name is "bal_talk" -->
         <Animation Name="gTingleTalkIdleAnim" Offset="0xB604" /> <!-- Original name is "bal_talk2" -->
@@ -87,7 +87,7 @@
         <Animation Name="gTingleHideFaceAnim" Offset="0xCB78" /> <!-- Original name is "bal_tereru" ("to be shy; to be bashful") -->
         <Animation Name="gTingleWaitAnim" Offset="0xD530" /> <!-- Original name is "bal_wait" -->
 		
-		<!-- Misc. -->
+    <!-- Misc. -->
         <DList Name="gTingleConfettiDL" Offset="0xD5A0" /> <!-- Original name is "bal_cube32_model" -->
     </File>
 </Root>

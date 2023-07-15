@@ -50,20 +50,20 @@ typedef enum {
 } DmBalAnimation;
 
 static AnimationInfo sAnimationInfo[DMBAL_ANIM_MAX] = {
-    { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_0
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_1
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_2
-    { &object_bal_Anim_00A7DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_3
-    { &object_bal_Anim_00B1E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_4
-    { &object_bal_Anim_00B604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_5
-    { &object_bal_Anim_00C498, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_6
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_7
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_8
-    { &object_bal_Anim_00C498, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // DMBAL_ANIM_9
-    { &object_bal_Anim_00D530, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_10
-    { &object_bal_Anim_000C78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_11
-    { &object_bal_Anim_00CB78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_12
-    { &object_bal_Anim_001804, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_13
+    { &gTingleFloatIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // DMBAL_ANIM_0
+    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_1
+    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_2
+    { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_3
+    { &gTingleTalkTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_4
+    { &gTingleTalkIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_5
+    { &gTingleMagicSpellAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_6
+    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_7
+    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_8
+    { &gTingleMagicSpellAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // DMBAL_ANIM_9
+    { &gTingleWaitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_10
+    { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_11
+    { &gTingleHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_12
+    { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_13
 };
 
 void DmBal_Init(Actor* thisx, PlayState* play) {
@@ -73,8 +73,8 @@ void DmBal_Init(Actor* thisx, PlayState* play) {
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->jointTable,
-                       this->morphTable, OBJECT_BAL_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_bal_Skel_00A6D0, &gTingleFloatIdleAnim, this->jointTable,
+                       this->morphTable, TINGLE_LIMB_MAX);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->timer = 60;
     this->eyeIndex = 0;
@@ -176,7 +176,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
     // Throw confetti
-    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &object_bal_Anim_001804)) {
+    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &gTingleThrowConfettiAnim)) {
         Vec3f pos = this->actor.world.pos;
         Vec3f vel = { 0.0f, 9.0f, 0.0f };
 
@@ -199,7 +199,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     DmBal* this = THIS;
     Vec3s rots;
 
-    if (limbIndex == OBJECT_BAL_LIMB_06) {
+    if (limbIndex == TINGLE_LIMB_BALLOON) {
         rots.x = Math_SinS(this->unk_33A) * (0x10000 / 18);
         rots.z = Math_CosS(this->unk_33A) * (0x10000 / 18);
         Matrix_RotateZYX(rots.x, 0, rots.z, MTXMODE_APPLY);
