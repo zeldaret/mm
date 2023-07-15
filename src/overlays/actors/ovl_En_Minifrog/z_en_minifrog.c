@@ -226,7 +226,7 @@ static Color_RGBA8 sEnvColor = { 80, 80, 80, 255 };
 void EnMinifrog_SpawnDust(EnMinifrog* this, PlayState* play) {
     Vec3f pos;
     Vec3f vec5;
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
     s16 yaw;
     s16 pitch;
@@ -240,16 +240,16 @@ void EnMinifrog_SpawnDust(EnMinifrog* this, PlayState* play) {
     vec5.z = this->actor.world.pos.z - (5.0f * Math_CosS(yaw) * Math_CosS(pitch));
 
     for (i = 0; i < 5; i++) {
-        vel.x = Rand_CenteredFloat(4.0f);
-        vel.y = Rand_CenteredFloat(4.0f);
-        vel.z = Rand_CenteredFloat(4.0f);
-        accel.x = -vel.x * 0.1f;
-        accel.y = -vel.y * 0.1f;
-        accel.z = -vel.z * 0.1f;
-        pos.x = vec5.x + vel.x;
-        pos.y = vec5.y + vel.y;
-        pos.z = vec5.z + vel.z;
-        func_800B0F80(play, &pos, &vel, &accel, &sPrimColor, &sEnvColor, 300, 30, 10);
+        velocity.x = Rand_CenteredFloat(4.0f);
+        velocity.y = Rand_CenteredFloat(4.0f);
+        velocity.z = Rand_CenteredFloat(4.0f);
+        accel.x = -velocity.x * 0.1f;
+        accel.y = -velocity.y * 0.1f;
+        accel.z = -velocity.z * 0.1f;
+        pos.x = vec5.x + velocity.x;
+        pos.y = vec5.y + velocity.y;
+        pos.z = vec5.z + velocity.z;
+        func_800B0F80(play, &pos, &velocity, &accel, &sPrimColor, &sEnvColor, 300, 30, 10);
     }
 }
 
@@ -421,7 +421,7 @@ void EnMinifrog_SetupNextFrogChoir(EnMinifrog* this, PlayState* play) {
 
     EnMinifrog_Jump(this);
     frogIndex = func_801A39F8();
-    if (frogIndex != FROG_INVALID) {
+    if (frogIndex != FROG_NONE) {
         if (frogIndex == FROG_YELLOW) {
             EnMinifrog_SetJumpState(this);
         } else {

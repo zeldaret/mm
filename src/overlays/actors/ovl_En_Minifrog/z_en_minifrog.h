@@ -16,7 +16,7 @@ typedef enum {
     /* 0x02 */ FROG_PINK,           // Great Bay Temple
     /* 0x03 */ FROG_BLUE,           // Southern Swamp
     /* 0x04 */ FROG_WHITE,          // Laundry Pool
-    /* 0xFF */ FROG_INVALID = 0xFF // -1
+    /* 0xFF */ FROG_NONE = 0xFF // -1
 } FrogType;
 
 typedef enum {

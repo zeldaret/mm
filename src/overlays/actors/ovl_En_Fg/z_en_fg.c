@@ -449,8 +449,8 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* worldPos) {
-    Vec3f vel = { 0.0f, 3.0f, 0.0f };
+void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* pos) {
+    Vec3f velocity = { 0.0f, 3.0f, 0.0f };
     Vec3f unk_20 = { 0.0f, 0.0f, 0.0f };
     s32 i;
 
@@ -458,8 +458,8 @@ void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* worldPos) {
         if (!dustEffect->type) {
             dustEffect->type = true;
             dustEffect->timer = 16;
-            dustEffect->pos = *worldPos;
-            dustEffect->velocity = vel;
+            dustEffect->pos = *pos;
+            dustEffect->velocity = velocity;
             dustEffect->unk_20 = unk_20;
             dustEffect->xyScale = 0.4f;
             break;
