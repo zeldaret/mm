@@ -81,12 +81,22 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_ah_Anim_002280, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_ah_Anim_000968, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_ah_Anim_000DDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum {
+    /* -1 */ ENAH_ANIM_NONE = -1,
+    /*  0 */ ENAH_ANIM_0,
+    /*  1 */ ENAH_ANIM_1,
+    /*  2 */ ENAH_ANIM_2,
+    /*  3 */ ENAH_ANIM_3,
+    /*  4 */ ENAH_ANIM_4,
+    /*  5 */ ENAH_ANIM_MAX
+} EnAhAnimation;
+
+static AnimationInfoS sAnimationInfo[ENAH_ANIM_MAX] = {
+    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAH_ANIM_0
+    { &object_ah_Anim_001860, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENAH_ANIM_1
+    { &object_ah_Anim_002280, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // ENAH_ANIM_2
+    { &object_ah_Anim_000968, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENAH_ANIM_3
+    { &object_ah_Anim_000DDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENAH_ANIM_4
 };
 
 s16 D_80BD3EBC[] = { 0, 0, 1, 0 };
@@ -127,29 +137,30 @@ Actor* func_80BD2A30(EnAh* this, PlayState* play, u8 actorCat, s16 actorId) {
     return foundActor;
 }
 
-void func_80BD2AE0(EnAh* this) {
-    this->skelAnime.playSpeed = this->unk_2DC;
+void EnAh_UpdateSkelAnime(EnAh* this) {
+    this->skelAnime.playSpeed = this->animPlaySpeed;
     SkelAnime_Update(&this->skelAnime);
 }
 
-s32 func_80BD2B0C(EnAh* this, s32 arg1) {
-    s32 phi_v1 = false;
-    s32 ret = false;
+s32 EnAh_ChangeAnim(EnAh* this, s32 animIndex) {
+    s32 changeAnim = false;
+    s32 didAnimChange = false;
 
-    if ((arg1 == 0) || (arg1 == 1)) {
-        if ((this->unk_300 != 0) && (this->unk_300 != 1)) {
-            phi_v1 = true;
+    if ((animIndex == ENAH_ANIM_0) || (animIndex == ENAH_ANIM_1)) {
+        if ((this->animIndex != ENAH_ANIM_0) && (this->animIndex != ENAH_ANIM_1)) {
+            changeAnim = true;
         }
-    } else if (arg1 != this->unk_300) {
-        phi_v1 = true;
+    } else if (this->animIndex != animIndex) {
+        changeAnim = true;
     }
 
-    if (phi_v1) {
-        this->unk_300 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
-        this->unk_2DC = this->skelAnime.playSpeed;
+    if (changeAnim) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        this->animPlaySpeed = this->skelAnime.playSpeed;
     }
-    return ret;
+
+    return didAnimChange;
 }
 
 void func_80BD2BA4(EnAh* this, PlayState* play) {
@@ -184,6 +195,9 @@ void func_80BD2C6C(EnAh* this) {
                         phi_a3 = true;
                         this->unk_2FA = 4;
                     }
+                    break;
+
+                default:
                     break;
             }
 
@@ -283,11 +297,14 @@ void func_80BD2FD0(EnAh* this, PlayState* play) {
 s32 func_80BD30C0(EnAh* this, PlayState* play) {
     switch (this->unk_1DC) {
         case 1:
-            func_80BD2B0C(this, 0);
+            EnAh_ChangeAnim(this, ENAH_ANIM_0);
             break;
 
         case 2:
-            func_80BD2B0C(this, 4);
+            EnAh_ChangeAnim(this, ENAH_ANIM_4);
+            break;
+
+        default:
             break;
     }
     return false;
@@ -295,10 +312,10 @@ s32 func_80BD30C0(EnAh* this, PlayState* play) {
 
 void func_80BD3118(EnAh* this, PlayState* play) {
     if (this->unk_2FE == 0) {
-        func_80BD2B0C(this, 2);
+        EnAh_ChangeAnim(this, ENAH_ANIM_2);
         this->unk_2FE++;
     } else if ((this->unk_2FE == 1) && Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        func_80BD2B0C(this, 3);
+        EnAh_ChangeAnim(this, ENAH_ANIM_3);
         this->unk_2FE++;
     }
 }
@@ -323,6 +340,9 @@ s32 func_80BD3198(EnAh* this, PlayState* play) {
                 case 0x2954:
                     this->unk_2F6 = 2;
                     this->unk_2F8 = 8;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -360,6 +380,9 @@ s32* func_80BD3294(EnAh* this, PlayState* play) {
 
         case 2:
             return D_80BD3DF8;
+
+        default:
+            break;
     }
     return NULL;
 }
@@ -382,9 +405,10 @@ s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3EC4.pos);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3EC4.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_80BD2B0C(this, 0);
+    EnAh_ChangeAnim(this, ENAH_ANIM_0);
     SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= 0x40;
+
     return true;
 }
 
@@ -394,9 +418,10 @@ s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BD3ED8.pos);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3ED8.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    func_80BD2B0C(this, 4);
+    EnAh_ChangeAnim(this, ENAH_ANIM_4);
     SubS_UpdateFlags(&this->unk_2D8, 3, 7);
     this->unk_2D8 |= (0x40 | 0x10);
+
     return true;
 }
 
@@ -409,7 +434,7 @@ s32 func_80BD3484(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3EEC.rot);
             Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         }
-        func_80BD2B0C(this, 4);
+        EnAh_ChangeAnim(this, ENAH_ANIM_4);
         this->unk_2D8 |= (0x40 | 0x8);
         this->unk_2D8 |= 0x10;
         this->unk_2D8 |= 0x80;
@@ -425,10 +450,6 @@ s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->unk_2D8 = 0;
 
     switch (scheduleOutput->result) {
-        default:
-            ret = false;
-            break;
-
         case 1:
             ret = func_80BD3374(this, play, scheduleOutput);
             break;
@@ -439,6 +460,10 @@ s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         case 3:
             ret = func_80BD3484(this, play, scheduleOutput);
+            break;
+
+        default:
+            ret = false;
             break;
     }
     return ret;
@@ -517,9 +542,10 @@ void EnAh_Init(Actor* thisx, PlayState* play) {
     }
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable, 17);
-    this->unk_300 = -1;
-    func_80BD2B0C(this, 0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_ah_Skel_009E70, NULL, this->jointTable, this->morphTable,
+                       OBJECT_AH_LIMB_MAX);
+    this->animIndex = ENAH_ANIM_NONE;
+    EnAh_ChangeAnim(this, ENAH_ANIM_0);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->actor.targetMode = 6;
@@ -548,7 +574,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1DC != 0) {
         func_80BD3198(this, play);
-        func_80BD2AE0(this);
+        EnAh_UpdateSkelAnime(this);
         func_80BD2C6C(this);
         func_80BD2FD0(this, play);
         radius = this->collider.dim.radius + 60;
@@ -566,7 +592,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
 void EnAh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAh* this = THIS;
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_AH_LIMB_07) {
         Matrix_MultVec3f(&D_80BD3F00, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
     }
@@ -589,7 +615,7 @@ void EnAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         overrideRot = false;
     }
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_AH_LIMB_07) {
         SubS_UpdateLimb(BINANG_ADD(this->unk_2EC + this->unk_2F0, 0x4000),
                         BINANG_ADD(this->unk_2EE + this->unk_2F2 + this->actor.shape.rot.y, 0x4000), this->unk_1E8,
                         this->unk_200, stepRot, overrideRot);
@@ -600,7 +626,7 @@ void EnAh_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         Matrix_RotateXS(this->unk_200[0].x, MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_200[0].z, MTXMODE_APPLY);
         Matrix_Push();
-    } else if (limbIndex == 2) {
+    } else if (limbIndex == OBJECT_AH_LIMB_02) {
         SubS_UpdateLimb(BINANG_ADD(this->unk_2F0, 0x4000), BINANG_ADD(this->unk_2F2 + this->actor.shape.rot.y, 0x4000),
                         &this->unk_1E8[1], &this->unk_200[1], stepRot, overrideRot);
         Matrix_Pop();

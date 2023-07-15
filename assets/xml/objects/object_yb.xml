@@ -19,10 +19,10 @@
         <DList Name="gYbPonyTailDL" Offset="0x47F8" />
         <DList Name="gYbEndDisplayList4970DL" Offset="0x4970" />
         <DList Name="gYbRightUpperArmDL" Offset="0x4978" />
-        <DList Name="gYbRightForArmDL" Offset="0x4AA0" />
+        <DList Name="gYbRightForearmDL" Offset="0x4AA0" />
         <DList Name="gYbRightHandDL" Offset="0x4BC0" />
         <DList Name="gYbLeftUpperArmDL" Offset="0x4D98" />
-        <DList Name="gYbLeftForArmDL" Offset="0x4EC0" />
+        <DList Name="gYbLeftForearmDL" Offset="0x4EC0" />
         <DList Name="gYbLeftHandDL" Offset="0x4FE0" />
         <Texture Name="gYbTLUT" OutName="yb_tlut" Format="rgba16" Width="16" Height="16" Offset="0x51B8" />
         <Texture Name="gYbForeheadBlotchTex" OutName="yb_forhead_blotch" Format="ci8" Width="8" Height="8" Offset="0x53B8" />
@@ -47,12 +47,13 @@
         <Limb Name="gYbChestRootLimb" Type="Standard" EnumName="YB_LIMB_CHEST_ROOT" Offset="0x5E64" />
         <Limb Name="gYbHeadLimb" Type="Standard" EnumName="YB_LIMB_HEAD" Offset="0x5E70" />
         <Limb Name="gYbPonyTailLimb" Type="Standard" EnumName="YB_LIMB_PONYTAIL" Offset="0x5E7C" />
+        <!-- TODO: Name empty limb based on Player's Skeleton -->
         <Limb Name="gYbEmpty5E88Limb" Type="Standard" EnumName="YB_LIMB_EMPTY_5E88" Offset="0x5E88" />
         <Limb Name="gYbLeftUpperArmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_UPPER_ARM" Offset="0x5E94" />
-        <Limb Name="gYbLeftForArmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_FORARM" Offset="0x5EA0" />
+        <Limb Name="gYbLeftForearmLimb" Type="Standard" EnumName="YB_LIMB_LEFT_FOREARM" Offset="0x5EA0" />
         <Limb Name="gYbLeftHandLimb" Type="Standard" EnumName="YB_LIMB_LEFT_HAND" Offset="0x5EAC" />
         <Limb Name="gYbRightUpperArmLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_UPPER_ARM" Offset="0x5EB8" />
-        <Limb Name="gYbRightForArmLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_FORARM" Offset="0x5EC4" />
+        <Limb Name="gYbRightForearmLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_FOREARM" Offset="0x5EC4" />
         <Limb Name="gYbRightHandLimb" Type="Standard" EnumName="YB_LIMB_RIGHT_HAND" Offset="0x5ED0" />
         <Limb Name="gYbEmpty5EDCLimb" Type="Standard" EnumName="YB_LIMB_EMPTY_5EDC" Offset="0x5EDC" />
         <Limb Name="gYbUpperTorsoLimb" Type="Standard" EnumName="YB_LIMB_TORSO" Offset="0x5EE8" />
