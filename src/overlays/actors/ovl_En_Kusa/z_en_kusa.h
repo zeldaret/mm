@@ -28,16 +28,16 @@ typedef enum {
 } EnKusaType;
 
 #define KUSA_BUSH_PARAMS(spawnBugs, randCollectibleId, param0C) \
-    (((ENKUSA_TYPE_BUSH) & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
+    ((ENKUSA_TYPE_BUSH & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
 
 #define KUSA_REGROWING_GRASS_PARAMS(spawnBugs) \
-    (((ENKUSA_TYPE_REGROWING_GRASS) & 0x3) | (((spawnBugs) & 1) << 4))
+    ((ENKUSA_TYPE_REGROWING_GRASS & 0x3) | (((spawnBugs) & 1) << 4))
 
 #define KUSA_GRASS_PARAMS(spawnBugs, randCollectibleId, param0C) \
-    (((ENKUSA_TYPE_GRASS) & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
+    ((ENKUSA_TYPE_GRASS & 0x3) | (((spawnBugs) & 1) << 4) | (((randCollectibleId) & 0xF) << 8) | (((param0C) & 1) << 12))
 
 #define KUSA_GRASS_2_PARAMS(paramFC, collectibleId) \
-    (((ENKUSA_TYPE_GRASS_2) & 0x3) | (((paramFC) & 0x3F) << 2) | (((collectibleId) & 0x7F) << 8))
+    ((ENKUSA_TYPE_GRASS_2 & 0x3) | (((paramFC) & 0x3F) << 2) | (((collectibleId) & 0x7F) << 8))
 
 
 typedef struct EnKusa {
