@@ -144,14 +144,14 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS) &&
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS) &&
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         this->unk_3A8 = 0x838;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_EMPTY_BOAT_CRUISE)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KIOSK_KOUME_EMPTY)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -379,7 +379,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
-            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS);
+            SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS);
             this->unk_3A8 = 0x88E;
             Message_StartTextbox(play, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -396,7 +396,7 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
                 !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 this->unk_3B2 = 12;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_WOODS);
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS);
                 this->unk_3A8 = 0x88E;
                 Message_StartTextbox(play, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;

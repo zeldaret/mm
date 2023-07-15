@@ -418,7 +418,7 @@ void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
             } else {
                 this->prevTextId = this->textId;
                 this->textId = 0x88E;
-                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_SHOP);
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP);
                 Message_StartTextbox(play, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
@@ -439,7 +439,7 @@ void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
                 this->actionFunc = EnTrt_Surprised;
                 return;
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_EMPTY_BOAT_CRUISE)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KIOSK_KOUME_EMPTY)) {
                 this->textId = 0x835;
                 EnTrt_SetupStartShopping(play, this, false);
             }
@@ -776,7 +776,7 @@ void EnTrt_SelectItem(EnTrt* this, PlayState* play) {
 void EnTrt_IdleSleeping(EnTrt* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_SHOP) &&
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP) &&
         !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->textId = 0x88F;
     } else if (!(this->flags & ENTRT_TALKED)) {
@@ -912,7 +912,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
-                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_EMPTY_BOAT_CRUISE)) {
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KIOSK_KOUME_EMPTY)) {
                     func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
@@ -984,7 +984,7 @@ void EnTrt_TryToGiveRedPotionAfterSurprised(EnTrt* this, PlayState* play) {
         } else {
             this->prevTextId = this->textId;
             this->textId = 0x88E;
-            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_SHOP);
+            SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnTrt_EndConversation;
         }
@@ -1005,7 +1005,7 @@ void EnTrt_TryToGiveRedPotion(EnTrt* this, PlayState* play) {
             } else {
                 this->prevTextId = this->textId;
                 this->textId = 0x88E;
-                SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME_FAILED_SHOP);
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP);
                 Message_StartTextbox(play, this->textId, &this->actor);
                 this->actionFunc = EnTrt_EndConversation;
             }
