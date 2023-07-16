@@ -151,7 +151,7 @@ void func_80AD349C(EnTrt2* this) {
         this->unk_3A8 = 0x84B;
     } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         this->unk_3A8 = 0x838;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KIOSK_KOUME_EMPTY)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;

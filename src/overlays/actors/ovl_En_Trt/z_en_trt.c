@@ -439,7 +439,7 @@ void EnTrt_StartRedPotionConversation(EnTrt* this, PlayState* play) {
                 this->cutsceneState = ENTRT_CUTSCENESTATE_PLAYING_SPECIAL;
                 this->actionFunc = EnTrt_Surprised;
                 return;
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KIOSK_KOUME_EMPTY)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
                 this->textId = 0x835;
                 EnTrt_SetupStartShopping(play, this, false);
             }
@@ -912,7 +912,7 @@ void EnTrt_BeginInteraction(EnTrt* this, PlayState* play) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
-                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KIOSK_KOUME_EMPTY)) {
+                    !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
                     func_8011552C(play, DO_ACTION_DECIDE);
                     this->stickLeftPrompt.isEnabled = false;
                     this->stickRightPrompt.isEnabled = true;
