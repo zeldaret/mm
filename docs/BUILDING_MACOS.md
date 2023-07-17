@@ -11,13 +11,13 @@ For macOS, use Homebrew to install the following dependencies:
 * python3
 * libpng
 * bash
-* clang-format 11
+* clang-format-14
 
 You can install them with the following commands:
 
 ```bash
 brew update
-brew install coreutils make python3 libpng bash clang-format@11
+brew install coreutils make python3 libpng bash clang-format@14
 ```
 
 (The repository expects Homebrew-installed programs to be either linked correctly in `$PATH` etc. or in their default locations.)
