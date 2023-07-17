@@ -658,16 +658,16 @@ static Vec3f D_80AC45D0[] = {
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnBigokuta* this = THIS;
     s32 i;
-    s8 limbPosIndex = sLimbToBodyParts[limbIndex];
+    s8 bodyPartIndex = sLimbToBodyParts[limbIndex];
 
-    if (limbPosIndex != -1) {
-        if (limbPosIndex < 6) {
-            Matrix_MultVecX(800.0f, &this->limbPos[limbPosIndex]);
-        } else if (limbPosIndex < 8) {
-            Matrix_MultZero(&this->limbPos[limbPosIndex]);
+    if (bodyPartIndex != -1) {
+        if (bodyPartIndex < 6) {
+            Matrix_MultVecX(800.0f, &this->limbPos[bodyPartIndex]);
+        } else if (bodyPartIndex < 8) {
+            Matrix_MultZero(&this->limbPos[bodyPartIndex]);
         } else {
             for (i = 0; i < ARRAY_COUNT(D_80AC45D0); i++) {
-                Matrix_MultVec3f(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
+                Matrix_MultVec3f(&D_80AC45D0[i], &this->limbPos[bodyPartIndex + i]);
             }
         }
     }

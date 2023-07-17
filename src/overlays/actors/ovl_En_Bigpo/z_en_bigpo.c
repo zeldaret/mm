@@ -1240,7 +1240,7 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
 void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnBigpo* this = THIS;
-    s8 limbByte;
+    s8 bodyPartIndex;
     Vec3f* v1ptr; // todo: figure out better names
     Vec3f* v2ptr;
     Vec3f unusedVec;
@@ -1266,20 +1266,20 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Get(&this->drawMtxF);
     }
 
-    limbByte = sLimbToBodyParts[limbIndex];
-    if (limbByte != -1) {
-        if (limbByte < 3) {
-            Matrix_MultZero(&this->limbPos[limbByte]);
-        } else if (limbByte == 3) {
-            Matrix_MultVecX(3000.0f, &this->limbPos[limbByte]);
-        } else if (limbByte == 4) {
-            Matrix_MultVecY(-2000.0f, &this->limbPos[limbByte]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != -1) {
+        if (bodyPartIndex < 3) {
+            Matrix_MultZero(&this->limbPos[bodyPartIndex]);
+        } else if (bodyPartIndex == 3) {
+            Matrix_MultVecX(3000.0f, &this->limbPos[bodyPartIndex]);
+        } else if (bodyPartIndex == 4) {
+            Matrix_MultVecY(-2000.0f, &this->limbPos[bodyPartIndex]);
         } else {
-            v2ptr = &this->limbPos[limbByte + 1];
+            v2ptr = &this->limbPos[bodyPartIndex + 1];
             v1ptr = D_80B65084;
-            Matrix_MultVecX(-4000.0f, &this->limbPos[limbByte]);
+            Matrix_MultVecX(-4000.0f, &this->limbPos[bodyPartIndex]);
 
-            for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+            for (i = bodyPartIndex + 1; i < ARRAY_COUNT(this->limbPos); i++) {
                 Matrix_MultVec3f(v1ptr, v2ptr);
                 v2ptr++;
                 v1ptr++;
