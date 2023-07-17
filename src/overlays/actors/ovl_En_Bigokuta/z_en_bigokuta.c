@@ -627,7 +627,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
-static s8 D_80AC45BC[BIGOKUTA_LIMB_MAX] = {
+static s8 sLimbToBodyParts[BIGOKUTA_LIMB_MAX] = {
     -1, // BIGOKUTA_LIMB_NONE
     -1, // BIGOKUTA_LIMB_BODY
     -1, // BIGOKUTA_LIMB_RIGHT_FRONT_ARM_BASE
@@ -658,7 +658,7 @@ static Vec3f D_80AC45D0[] = {
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnBigokuta* this = THIS;
     s32 i;
-    s8 limbPosIndex = D_80AC45BC[limbIndex];
+    s8 limbPosIndex = sLimbToBodyParts[limbIndex];
 
     if (limbPosIndex != -1) {
         if (limbPosIndex < 6) {

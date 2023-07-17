@@ -3033,7 +3033,7 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     EnBigslime_DrawGekko(&this->actor, play);
 }
 
-static s8 sLimbPosIndex[GEKKO_LIMB_MAX] = {
+static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
     -1, // GEKKO_LIMB_NONE
     -1, // GEKKO_LIMB_ROOT
     0,  // GEKKO_LIMB_WAIST
@@ -3072,8 +3072,8 @@ void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         this->actor.focus.rot.y = this->gekkoRot.y;
     }
 
-    if (sLimbPosIndex[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[sLimbPosIndex[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != -1) {
+        Matrix_MultZero(&this->limbPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == GEKKO_LIMB_RIGHT_ANKLE) {

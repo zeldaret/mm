@@ -160,7 +160,7 @@ static InitChainEntry sInitChain[] = {
 // used in the burning death actionfunc
 static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
-static u8 D_80B65078[BIG_POE_LIMB_MAX] = {
+static u8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
     -1, // BIG_POE_LIMB_NONE
     4,  // BIG_POE_LIMB_FACE
     -1, // BIG_POE_LIMB_LEFT_UPPER_ARM
@@ -1266,7 +1266,7 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Get(&this->drawMtxF);
     }
 
-    limbByte = D_80B65078[limbIndex];
+    limbByte = sLimbToBodyParts[limbIndex];
     if (limbByte != -1) {
         if (limbByte < 3) {
             Matrix_MultZero(&this->limbPos[limbByte]);
