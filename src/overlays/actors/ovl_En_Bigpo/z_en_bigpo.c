@@ -160,7 +160,6 @@ static InitChainEntry sInitChain[] = {
 // used in the burning death actionfunc
 static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
-// bytes per limb, used in draw func? bit over my head
 static u8 D_80B65078[BIG_POE_LIMB_MAX] = {
     -1, // BIG_POE_LIMB_NONE
     4,  // BIG_POE_LIMB_FACE

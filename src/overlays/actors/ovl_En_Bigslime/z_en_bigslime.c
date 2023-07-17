@@ -3033,20 +3033,6 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     EnBigslime_DrawGekko(&this->actor, play);
 }
 
-/* value -1: Limb Not used
- * value 0:  GEKKO_LIMB_WAIST
- * value 1:  GEKKO_LIMB_L_SHIN
- * value 2:  GEKKO_LIMB_L_FOOT
- * value 3:  GEKKO_LIMB_R_SHIN
- * value 4:  GEKKO_LIMB_R_FOOT
- * value 5:  GEKKO_LIMB_L_UPPER_ARM
- * value 6:  GEKKO_LIMB_L_FOREARM
- * value 7:  GEKKO_LIMB_L_HAND
- * value 8:  GEKKO_LIMB_R_UPPER_ARM
- * value 9:  GEKKO_LIMB_R_FOREARM
- * value 10: GEKKO_LIMB_R_HAND
- * value 11: GEKKO_LIMB_JAW
- */
 static s8 sLimbPosIndex[GEKKO_LIMB_MAX] = {
     -1, // GEKKO_LIMB_NONE
     -1, // GEKKO_LIMB_ROOT
