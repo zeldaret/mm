@@ -4934,8 +4934,8 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
     }
 }
 
-void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s32 bodyPartsCount, s32 effectsPerLimb,
-                           f32 scale, f32 scaleRange) {
+void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s32 bodyPartsCount,
+                           s32 effectsPerBodyPart, f32 scale, f32 scaleRange) {
     static Color_RGBA8 sPrimColor = { 170, 255, 255, 255 };
     static Color_RGBA8 sEnvColor = { 200, 200, 255, 255 };
     static Vec3f sAccel = { 0.0f, -1.0f, 0.0f };
@@ -4951,7 +4951,7 @@ void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], 
     for (i = 0; i < bodyPartsCount; i++) {
         yaw = Actor_WorldYawTowardPoint(actor, bodyPartsPos);
 
-        for (j = 0; j < effectsPerLimb; j++) {
+        for (j = 0; j < effectsPerBodyPart; j++) {
             randomYaw = ((s32)Rand_Next() >> 0x13) + yaw;
 
             velocity.z = Rand_ZeroFloat(5.0f);
