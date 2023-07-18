@@ -307,7 +307,7 @@ void EnIk_Thaw(EnIk* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -928,7 +928,7 @@ void EnIk_Update(Actor* thisx, PlayState* play2) {
     EnIk_UpdateArmor(this, play);
 }
 
-s8 D_8092C1A8[] = {
+s8 sLimbToBodyParts1[] = {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  -1, -1, -1,
     -1, -1, -1, -1, -1, -1, 3,  5,  4,  6,  1,  2,  -1, -1, 0,  0,
 };
@@ -937,23 +937,23 @@ s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     EnIk* this = THIS;
 
     if (this->drawArmorFlags) {
-        if (D_8092C1A8[limbIndex] > 0) {
+        if (sLimbToBodyParts1[limbIndex] > 0) {
             *dList = NULL;
         }
     }
     return false;
 }
 
-void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_8092C1C8 = { 2000.0f, -200.0f, -5200.0f };
-    static Vec3f D_8092C1D4 = { 300.0f, -200.0f, 0.0f };
-    static s8 limbPosIndex[] = {
-        -1, -1, -1, 0,  1, 2,  3,  4,  5,  -1, -1, -1, 6,  -1, -1, 7,
-        -1, -1, 8,  -1, 9, 10, -1, 11, -1, 12, -1, -1, -1, -1, 0,  0,
-    };
+static Vec3f D_8092C1C8 = { 2000.0f, -200.0f, -5200.0f };
+static Vec3f D_8092C1D4 = { 300.0f, -200.0f, 0.0f };
 
+static s8 sLimbToBodyParts2[] = {
+    -1, -1, -1, 0, 1, 2, 3, 4, 5, -1, -1, -1, 6, -1, -1, 7, -1, -1, 8, -1, 9, 10, -1, 11, -1, 12, -1, -1, -1, -1, 0, 0,
+};
+
+void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
-    s32 index = D_8092C1A8[limbIndex];
+    s32 bodyPart1Index = sLimbToBodyParts1[limbIndex];
     Gfx* xlu;
     IronKnuckleEffect* ikEffect;
     s16 sp76;
@@ -964,15 +964,16 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     MtxF* mf;
 
     if (this->drawArmorFlags == 0x1) {
-        if (index > 0) {
-            ikEffect = &this->effects[index];
+        if (bodyPart1Index > 0) {
+            ikEffect = &this->effects[bodyPart1Index];
             mf = Matrix_GetCurrent();
             ikEffect->pos.x = mf->mf[3][0];
             ikEffect->pos.y = mf->mf[3][1];
             ikEffect->pos.z = mf->mf[3][2];
             Matrix_MtxFToYXZRot(mf, &ikEffect->rot, false);
             ikEffect->enabled = true;
-            sp76 = sIronKnuckleArmorMarkings[index].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
+            sp76 = sIronKnuckleArmorMarkings[bodyPart1Index].unk04 +
+                   (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
             ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
             ikEffect->vel.y = 6.0f;
             ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
@@ -1004,18 +1005,18 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         this->blurEffectSpawnLock = this->timer;
     }
 
-    if (limbPosIndex[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[limbPosIndex[limbIndex]]);
+    if (sLimbToBodyParts2[limbIndex] != -1) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts2[limbIndex]]);
     }
 
-    if ((index == 0) ||
-        ((index != -1) && (this->drawArmorFlags == 0) && (sIronKnuckleArmorMarkings[index].unk00 != 0))) {
+    if ((bodyPart1Index == 0) || ((bodyPart1Index != -1) && (this->drawArmorFlags == 0) &&
+                                  (sIronKnuckleArmorMarkings[bodyPart1Index].unk00 != 0))) {
         OPEN_DISPS(play->state.gfxCtx);
 
         xlu = POLY_XLU_DISP;
 
         gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[index].unk00);
+        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[bodyPart1Index].unk00);
         POLY_XLU_DISP = &xlu[2];
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -1095,8 +1096,9 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
     func_800BC620(&this->actor.focus.pos, &sScale, 255, play);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

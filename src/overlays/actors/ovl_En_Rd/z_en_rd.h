@@ -36,7 +36,7 @@ typedef struct EnRd {
     /* 0x188 */ EnRdActionFunc actionFunc;
     /* 0x18C */ EnRdSetupDanceFunc setupDanceFunc;
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ Vec3f limbPos[15];
+    /* 0x1DC */ Vec3f bodyPartsPos[15];
     /* 0x290 */ s32 limbIndex;
     /* 0x294 */ f32 drawDmgEffAlpha;
     /* 0x298 */ f32 drawDmgEffScale;

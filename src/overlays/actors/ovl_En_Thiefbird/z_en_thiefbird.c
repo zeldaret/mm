@@ -465,7 +465,7 @@ void func_80C114C0(EnThiefbird* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 11, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -656,8 +656,8 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
     }
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            func_800B3030(play, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            func_800B3030(play, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -888,10 +888,10 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_3EC->actor),
                                3, 0x2000, 0x100);
         }
-        temp_v0 = Math_Vec3f_Pitch(&this->limbPos[9], &this->unk_3EC->actor.world.pos);
+        temp_v0 = Math_Vec3f_Pitch(&this->bodyPartsPos[9], &this->unk_3EC->actor.world.pos);
         temp_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, temp_v0, 4, 0x800, 0x80);
-        temp_f0 = Actor_WorldDistXYZToPoint(&this->unk_3EC->actor, &this->limbPos[9]);
+        temp_f0 = Actor_WorldDistXYZToPoint(&this->unk_3EC->actor, &this->bodyPartsPos[9]);
         this->actor.speed = (0.02f * temp_f0) + 2.0f;
         this->actor.speed = CLAMP_MAX(this->actor.speed, 4.0f);
         if ((this->unk_3EC->actor.speed <= 0.0f) && (temp_f0 < 40.0f)) {
@@ -1065,14 +1065,31 @@ s32 EnThiefbird_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     return false;
 }
 
+static s8 sLimbToBodyParts[TAKKURI_LIMB_MAX] = {
+    -1, // TAKKURI_LIMB_NONE
+    0,  // TAKKURI_LIMB_BODY
+    -1, // TAKKURI_LIMB_LEFT_WING_BASE
+    1,  // TAKKURI_LIMB_LEFT_WING_MIDDLE
+    3,  // TAKKURI_LIMB_LEFT_WING_TIP
+    -1, // TAKKURI_LIMB_RIGHT_WING_BASE
+    2,  // TAKKURI_LIMB_RIGHT_WING_MIDDLE
+    5,  // TAKKURI_LIMB_RIGHT_WING_TIP
+    -1, // TAKKURI_LIMB_NECK
+    -1, // TAKKURI_LIMB_HEAD
+    7,  // TAKKURI_LIMB_RIGHT_EAR
+    8,  // TAKKURI_LIMB_LEFT_EAR
+    9,  // TAKKURI_LIMB_LOWER_BEAK
+    -1, // TAKKURI_LIMB_EYES
+    -1, // TAKKURI_LIMB_LEGS
+    10, // TAKKURI_LIMB_FEET
+    -1, // TAKKURI_LIMB_STOLEN_ITEM
+};
+
 void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_80C13698[] = {
-        -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1,
-    };
     EnThiefbird* this = THIS;
     s32 pad;
     Gfx* gfx;
-    s8 idx;
+    s8 bodyPartIndex;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
     if ((limbIndex == TAKKURI_LIMB_RIGHT_EAR) || (limbIndex == TAKKURI_LIMB_LEFT_EAR)) {
@@ -1108,14 +1125,14 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         }
     }
 
-    idx = D_80C13698[limbIndex];
-    if (idx != -1) {
-        if (idx == 9) {
-            Matrix_MultVecX(1000.0f, &this->limbPos[idx]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != -1) {
+        if (bodyPartIndex == 9) {
+            Matrix_MultVecX(1000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
-            Matrix_MultZero(&this->limbPos[idx]);
-            if ((idx == 3) || (idx == 5)) {
-                Matrix_MultVecX(2000.0f, &this->limbPos[idx + 1]);
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
+            if ((bodyPartIndex == 3) || (bodyPartIndex == 5)) {
+                Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex + 1]);
             }
         }
     }
@@ -1163,7 +1180,8 @@ void EnThiefbird_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
     func_80C13354(this, play);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
     Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[1].dim.worldSphere.center);
 }

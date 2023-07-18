@@ -2117,11 +2117,11 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         (limbIndex == KAIZOKU_LIMB_0D) || (limbIndex == KAIZOKU_LIMB_0F) || (limbIndex == KAIZOKU_LIMB_11) ||
         (limbIndex == KAIZOKU_LIMB_12) || (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_14) ||
         (limbIndex == KAIZOKU_LIMB_15) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_17)) {
-        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
 
-        this->bodyPartsPosIndex++;
-        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
-            this->bodyPartsPosIndex = 0;
+        this->bodyPartIndex++;
+        if (this->bodyPartIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+            this->bodyPartIndex = 0;
         }
     }
 }

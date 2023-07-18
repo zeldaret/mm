@@ -14,6 +14,30 @@ typedef enum {
     /* 3 */ ENRR_3
 } EnRrParam;
 
+typedef enum EnRrBodyPart {
+    /*  0 */ ENRR_BODYPART_0,
+    /*  1 */ ENRR_BODYPART_1,
+    /*  2 */ ENRR_BODYPART_2,
+    /*  3 */ ENRR_BODYPART_3,
+    /*  4 */ ENRR_BODYPART_4,
+    /*  5 */ ENRR_BODYPART_5,
+    /*  6 */ ENRR_BODYPART_6,
+    /*  7 */ ENRR_BODYPART_7,
+    /*  8 */ ENRR_BODYPART_8,
+    /*  9 */ ENRR_BODYPART_9,
+    /* 10 */ ENRR_BODYPART_10,
+    /* 11 */ ENRR_BODYPART_11,
+    /* 12 */ ENRR_BODYPART_12,
+    /* 13 */ ENRR_BODYPART_13,
+    /* 14 */ ENRR_BODYPART_14,
+    /* 15 */ ENRR_BODYPART_15,
+    /* 16 */ ENRR_BODYPART_16,
+    /* 17 */ ENRR_BODYPART_17,
+    /* 18 */ ENRR_BODYPART_18,
+    /* 19 */ ENRR_BODYPART_19,
+    /* 20 */ ENRR_BODYPART_MAX
+} EnRrBodyPart;
+
 typedef struct {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
@@ -58,7 +82,7 @@ typedef struct EnRr {
     /* 0x220 */ f32 drawDmgEffScale;
     /* 0x224 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x228 */ Vec3f unk_228;
-    /* 0x234 */ Vec3f limbPos[20];
+    /* 0x234 */ Vec3f bodyPartsPos[ENRR_BODYPART_MAX];
     /* 0x324 */ EnRrStruct unk_324[5];
 } EnRr; // size = 0x3C4
 

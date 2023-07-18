@@ -37,7 +37,7 @@ typedef struct EnPr {
     /* 0x230 */ s16 drawDmgEffType;
     /* 0x234 */ f32 unk_234;
     /* 0x238 */ f32 unk_238;
-    /* 0x23C */ Vec3f limbPos[10];
+    /* 0x23C */ Vec3f bodyPartsPos[10];
     /* 0x2B4 */ f32 unk_2B4;
     /* 0x2B8 */ f32 unk_2B8;
     /* 0x2BC */ f32 unk_2BC;

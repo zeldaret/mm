@@ -864,16 +864,38 @@ s32 EnPoh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     return false;
 }
 
+static s8 sLimbToBodyParts[OBJECT_PO_LIMB_MAX] = {
+    -1, // OBJECT_PO_LIMB_NONE
+    -1, // OBJECT_PO_LIMB_01
+    -1, // OBJECT_PO_LIMB_02
+    -1, // OBJECT_PO_LIMB_03
+    4,  // OBJECT_PO_LIMB_04
+    5,  // OBJECT_PO_LIMB_05
+    -1, // OBJECT_PO_LIMB_06
+    -1, // OBJECT_PO_LIMB_07
+    -1, // OBJECT_PO_LIMB_08
+    0,  // OBJECT_PO_LIMB_09
+    1,  // OBJECT_PO_LIMB_0A
+    -1, // OBJECT_PO_LIMB_0B
+    -1, // OBJECT_PO_LIMB_0C
+    -1, // OBJECT_PO_LIMB_0D
+    -1, // OBJECT_PO_LIMB_0E
+    -1, // OBJECT_PO_LIMB_0F
+    2,  // OBJECT_PO_LIMB_10
+    -1, // OBJECT_PO_LIMB_11
+    -1, // OBJECT_PO_LIMB_12
+    3,  // OBJECT_PO_LIMB_13
+    -1, // OBJECT_PO_LIMB_14
+};
+
+static Vec3f D_80B2F734[ENPOH_BODYPART_MAX - ENPOH_BODYPART_7] = {
+    { -600.0f, 500.0f, 1700.0f },  // ENPOH_BODYPART_7
+    { -600.0f, 500.0f, -1700.0f }, // ENPOH_BODYPART_8
+    { 1000.0f, 1700.0f, 0.0f },    // ENPOH_BODYPART_9
+};
+
 void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static s8 D_80B2F71C[] = {
-        -1, -1, -1, -1, 4, 5, -1, -1, -1, 0, 1, -1, -1, -1, -1, -1, 2, -1, -1, 3, -1,
-    };
-    static Vec3f D_80B2F734[] = {
-        { -600.0f, 500.0f, 1700.0f },
-        { -600.0f, 500.0f, -1700.0f },
-        { 1000.0f, 1700.0f, 0.0f },
-    };
-    s32 temp_s3;
+    s32 bodyPartIndex;
     Vec3f sp60;
     EnPoh* this = THIS;
     s32 pad;
@@ -897,21 +919,21 @@ void EnPoh_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
                                 this->unk_199, this->unk_19A, this->unk_19B * (200.0f / 255.0f));
     }
 
-    temp_s3 = D_80B2F71C[limbIndex];
-    if (temp_s3 != -1) {
-        if (temp_s3 < 4) {
-            Matrix_MultZero(&this->limbPos[temp_s3]);
-        } else if (temp_s3 == 4) {
-            Matrix_MultVecX(2000.0f, &this->limbPos[temp_s3]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != -1) {
+        if (bodyPartIndex <= ENPOH_BODYPART_3) {
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex == ENPOH_BODYPART_4) {
+            Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
             s32 i;
-            Vec3f* vec = &this->limbPos[temp_s3 + 2];
+            Vec3f* vec = &this->bodyPartsPos[bodyPartIndex + 2];
             Vec3f* vec2 = &D_80B2F734[0];
 
-            Matrix_MultVecX(-2000.0f, &this->limbPos[temp_s3]);
-            Matrix_MultVecY(-2000.0f, &this->limbPos[temp_s3 + 1]);
+            Matrix_MultVecX(-2000.0f, &this->bodyPartsPos[bodyPartIndex]);     // ENPOH_BODYPART_5
+            Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[bodyPartIndex + 1]); // ENPOH_BODYPART_6
 
-            for (i = temp_s3 + 2; i < ARRAY_COUNT(this->limbPos); i++, vec++, vec2++) {
+            for (i = bodyPartIndex + 2; i < ENPOH_BODYPART_MAX; i++, vec++, vec2++) {
                 Matrix_MultVec3f(vec2, vec);
             }
         }
@@ -959,7 +981,7 @@ void EnPoh_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(&gfx[3], object_po_DL_002D28);
 
     POLY_OPA_DISP = &gfx[4];
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENPOH_BODYPART_MAX,
                             this->actor.scale.x * 100.0f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 

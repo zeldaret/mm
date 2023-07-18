@@ -58,7 +58,7 @@ typedef struct EnPoSisters {
     /* 0x1DE */ Vec3s morphTable[POE_SISTERS_LIMB_MAX];
     /* 0x226 */ Color_RGBA8 color;
     /* 0x22C */ Vec3f firePos[8];
-    /* 0x28C */ Vec3f limbPos[8]; // passed to Actor_DrawDamageEffects
+    /* 0x28C */ Vec3f bodyPartsPos[8]; // passed to Actor_DrawDamageEffects
     /* 0x2EC */ f32 megDistToPlayer;
     /* 0x2F0 */ f32 drawDmgEffAlpha;
     /* 0x2F4 */ f32 drawDmgEffScale;

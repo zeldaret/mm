@@ -377,7 +377,7 @@ void func_80990854(EnWf* this, PlayState* play) {
         this->collider2.base.colType = COLTYPE_HIT5;
         this->collider3.base.colType = COLTYPE_HIT5;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 10, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -1549,17 +1549,39 @@ s32 EnWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     return false;
 }
 
+static s8 sLimbToBodyParts[WOLFOS_NORMAL_LIMB_MAX] = {
+    -1,                                    // WOLFOS_NORMAL_LIMB_NONE
+    -1,                                    // WOLFOS_NORMAL_LIMB_ROOT
+    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_LEFT_THIGH
+    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_LEFT_SHIN
+    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_LEFT_PASTERN
+    WOLFOS_BODYPART_BACK_LEFT_PAW,         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PAW
+    WOLFOS_BODYPART_TAIL,                  // WOLFOS_NORMAL_LIMB_TAIL
+    -1,                                    // WOLFOS_NORMAL_LIMB_ABDOMEN
+    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_RIGHT_THIGH
+    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_RIGHT_SHIN
+    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PASTERN
+    WOLFOS_BODYPART_BACK_RIGHT_PAW,        // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PAW
+    -1,                                    // WOLFOS_NORMAL_LIMB_THORAX
+    WOLFOS_BODYPART_FRONT_RIGHT_UPPER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_UPPER_LEG
+    WOLFOS_BODYPART_FRONT_RIGHT_LOWER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_LOWER_LEG
+    WOLFOS_BODYPART_FRONT_RIGHT_CLAW,      // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_CLAW
+    WOLFOS_BODYPART_HEAD_ROOT,             // WOLFOS_NORMAL_LIMB_HEAD_ROOT
+    -1,                                    // WOLFOS_NORMAL_LIMB_HEAD
+    -1,                                    // WOLFOS_NORMAL_LIMB_EYES
+    WOLFOS_BODYPART_FRONT_LEFT_UPPER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_UPPER_LEG
+    WOLFOS_BODYPART_FRONT_LEFT_LOWER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_LOWER_LEG
+    WOLFOS_BODYPART_FRONT_LEFT_CLAW,       // WOLFOS_NORMAL_LIMB_FRONT_LEFT_CLAW
+};
+
 void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_809942FC[] = {
-        -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, -1, 2, -1, 3, 4, 5, 6, -1, -1, 7, 8, 9,
-    };
     EnWf* this = THIS;
     Vec3f sp20;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
-    if (D_809942FC[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_809942FC[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != -1) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
@@ -1588,7 +1610,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnWf_OverrideLimbDraw, EnWf_PostLimbDraw, &this->actor);
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, this->drawDmgEffScale,
                                 this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }

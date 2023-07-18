@@ -1019,11 +1019,11 @@ void func_80996BEC(EnSkb* this, PlayState* play) {
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
     for (i = 0; i < end; i++) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->limbPos[i]);
+        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bodyPartsPos[i]);
         sp84.x = Math_SinS(yaw) * 3.0f;
         sp84.z = Math_CosS(yaw) * 3.0f;
         sp84.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
-        EffectSsEnIce_Spawn(play, &this->limbPos[i], 0.6f, &sp84, &D_80997558, &D_80997550, &D_80997554, 30);
+        EffectSsEnIce_Spawn(play, &this->bodyPartsPos[i], 0.6f, &sp84, &D_80997558, &D_80997550, &D_80997554, 30);
     }
 }
 
@@ -1118,10 +1118,10 @@ void EnSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
             (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
             (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-            Matrix_MultZero(&this->limbPos[this->limbCount]);
+            Matrix_MultZero(&this->bodyPartsPos[this->limbCount]);
             this->limbCount++;
         } else if ((limbIndex == 11) && !(this->unk_3D8 & 2)) {
-            Matrix_MultVec3f(&D_80997564, &this->limbPos[this->limbCount]);
+            Matrix_MultVec3f(&D_80997564, &this->bodyPartsPos[this->limbCount]);
             this->limbCount++;
         }
     }
@@ -1135,7 +1135,7 @@ void EnSkb_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnSkb_OverrideLimbDraw,
                       EnSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, this->limbCount, this->drawDmgEffScale, 0.5f,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, this->limbCount, this->drawDmgEffScale, 0.5f,
                                 this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 

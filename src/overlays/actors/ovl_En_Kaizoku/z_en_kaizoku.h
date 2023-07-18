@@ -64,7 +64,7 @@ typedef struct EnKaizoku {
     /* 0x2DC */ f32 frameCount;
     /* 0x2E0 */ f32 unk_2E0;
     /* 0x2E4 */ EnKaizokuAnimation animIndex;
-    /* 0x2E8 */ s32 bodyPartsPosIndex;
+    /* 0x2E8 */ s32 bodyPartIndex;
     /* 0x2EC */ s32 unk_2EC;
     /* 0x2F0 */ f32 unk_2F0;
     /* 0x2F4 */ s16 unk_2F4;

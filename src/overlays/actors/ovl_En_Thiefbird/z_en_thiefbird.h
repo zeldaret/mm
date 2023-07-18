@@ -32,7 +32,7 @@ typedef struct EnThiefbird {
     /* 0x208 */ Vec3s morphTable[TAKKURI_LIMB_MAX];
     /* 0x270 */ ColliderJntSph collider;
     /* 0x290 */ ColliderJntSphElement colliderElements[3];
-    /* 0x350 */ Vec3f limbPos[11];
+    /* 0x350 */ Vec3f bodyPartsPos[11];
     /* 0x3D4 */ f32 drawDmgEffAlpha;
     /* 0x3D8 */ f32 drawDmgEffScale;
     /* 0x3DC */ f32 drawDmgEffFrozenSteamScale;

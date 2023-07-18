@@ -620,20 +620,20 @@ void EnNeoReeba_DrawFrozenEffects(EnNeoReeba* this, PlayState* play) {
         drawEffectScale *= 1.5f;
     }
 
-    for (i = 0; i < ARRAY_COUNT(this->limbPos) - 1; i++) {
-        this->limbPos[i] = this->actor.world.pos;
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos) - 1; i++) {
+        this->bodyPartsPos[i] = this->actor.world.pos;
 
-        this->limbPos[i].x += limbPosScale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-        this->limbPos[i].z += limbPosScale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-        this->limbPos[i].y += 5.0f;
+        this->bodyPartsPos[i].x += limbPosScale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+        this->bodyPartsPos[i].z += limbPosScale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+        this->bodyPartsPos[i].y += 5.0f;
     }
 
-    this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-    this->limbPos[ARRAY_COUNT(this->limbPos) - 1].y += phi_f2;
+    this->bodyPartsPos[ARRAY_COUNT(this->bodyPartsPos) - 1] = this->actor.world.pos;
+    this->bodyPartsPos[ARRAY_COUNT(this->bodyPartsPos) - 1].y += phi_f2;
 
     this->drawEffectScale = drawEffectScale;
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), drawEffectScale, 0.5f,
-                            this->drawEffectAlpha, this->drawEffectType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), drawEffectScale,
+                            0.5f, this->drawEffectAlpha, this->drawEffectType);
 }
 
 void EnNeoReeba_DrawEffects(EnNeoReeba* this, PlayState* play) {
@@ -646,16 +646,16 @@ void EnNeoReeba_DrawEffects(EnNeoReeba* this, PlayState* play) {
 
     if ((this->drawEffectType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawEffectType == ACTOR_DRAW_DMGEFF_LIGHT_ORBS) ||
         (this->drawEffectType == ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL)) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos) - 1; i++) {
-            this->limbPos[i] = this->actor.world.pos;
-            this->limbPos[i].x += scale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-            this->limbPos[i].z += scale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
-            this->limbPos[i].y += -20.0f;
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos) - 1; i++) {
+            this->bodyPartsPos[i] = this->actor.world.pos;
+            this->bodyPartsPos[i].x += scale * Math_SinS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+            this->bodyPartsPos[i].z += scale * Math_CosS(BINANG_ADD(this->actor.shape.rot.y, i * 0x5555));
+            this->bodyPartsPos[i].y += -20.0f;
         }
 
-        this->limbPos[ARRAY_COUNT(this->limbPos) - 1] = this->actor.world.pos;
-        Actor_DrawDamageEffects(play, NULL, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawEffectScale, 0.5f,
-                                this->drawEffectAlpha, this->drawEffectType);
+        this->bodyPartsPos[ARRAY_COUNT(this->bodyPartsPos) - 1] = this->actor.world.pos;
+        Actor_DrawDamageEffects(play, NULL, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), this->drawEffectScale,
+                                0.5f, this->drawEffectAlpha, this->drawEffectType);
     }
 }
 
@@ -672,8 +672,8 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play) {
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
-    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->limbPos[i]);
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bodyPartsPos[i]);
         xVel = Math_SinS(yaw) * 3.0f;
         zVel = Math_CosS(yaw) * 3.0f;
 
@@ -681,7 +681,8 @@ void EnNeoReeba_SpawnIce(EnNeoReeba* this, PlayState* play) {
             iceVel.x = (Rand_Centered() * 3.0f) + xVel;
             iceVel.z = (Rand_Centered() * 3.0f) + zVel;
             iceVel.y = (Rand_ZeroOne() * 6.0f) + 4.0f;
-            EffectSsEnIce_Spawn(play, &this->limbPos[i], 0.7f, &iceVel, &sIceAccel, &sIcePrimColor, &sIceEnvColor, 30);
+            EffectSsEnIce_Spawn(play, &this->bodyPartsPos[i], 0.7f, &iceVel, &sIceAccel, &sIcePrimColor, &sIceEnvColor,
+                                30);
         }
     }
 }

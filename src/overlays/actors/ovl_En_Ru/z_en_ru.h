@@ -12,7 +12,24 @@ struct EnRu;
 
 typedef void (*EnRuActionFunc)(struct EnRu*, PlayState*);
 
-#define RU_BODYPARTSPOS_COUNT 15
+typedef enum EnRuBodyPart {
+    /*  0 */ RU_SHADOW_BODYPART_0,
+    /*  1 */ RU_SHADOW_BODYPART_1,
+    /*  2 */ RU_SHADOW_BODYPART_2,
+    /*  3 */ RU_SHADOW_BODYPART_3,
+    /*  4 */ RU_SHADOW_BODYPART_4,
+    /*  5 */ RU_SHADOW_BODYPART_5,
+    /*  6 */ RU_SHADOW_BODYPART_6,
+    /*  7 */ RU_SHADOW_BODYPART_7,
+    /*  8 */ RU_SHADOW_BODYPART_8,
+    /*  9 */ RU_SHADOW_BODYPART_9,
+    /* 10 */ RU_SHADOW_BODYPART_10,
+    /* 11 */ RU_SHADOW_BODYPART_11,
+    /* 12 */ RU_SHADOW_BODYPART_12,
+    /* 13 */ RU_SHADOW_BODYPART_13,
+    /* 14 */ RU_SHADOW_BODYPART_14,
+    /* 15 */ RU_SHADOW_BODYPART_MAX
+} EnruBodyPart;
 
 typedef struct EnRu {
     /* 0x000 */ Actor actor;
@@ -34,7 +51,7 @@ typedef struct EnRu {
     /* 0x324 */ UNK_TYPE1 pad324[0x12];
     /* 0x336 */ s16 fidgetTableY[RU2_LIMB_MAX];
     /* 0x364 */ s16 fidgetTableZ[RU2_LIMB_MAX];
-    /* 0x394 */ Vec3f bodyPartsPos[RU_BODYPARTSPOS_COUNT];
+    /* 0x394 */ Vec3f shadowBodyPartsPos[RU_SHADOW_BODYPART_MAX];
     /* 0x348 */ UNK_TYPE1 padUNK[6];
     /* 0x44E */ s16 eyeState;
     /* 0x450 */ s16 blinkTimer;

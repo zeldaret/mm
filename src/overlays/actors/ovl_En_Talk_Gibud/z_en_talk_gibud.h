@@ -16,7 +16,7 @@ typedef struct EnTalkGibud {
     /* 0x144 */ ColliderCylinder collider;
     /* 0x190 */ SkelAnime skelAnime;
     /* 0x1D4 */ EnTalkGibudActionFunc actionFunc;
-    /* 0x1D8 */ Vec3f limbPos[15];
+    /* 0x1D8 */ Vec3f bodyPartsPos[15];
     /* 0x28C */ s32 limbIndex;
     /* 0x290 */ s32 requestedItemIndex;
     /* 0x294 */ PlayerItemAction itemAction;

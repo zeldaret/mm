@@ -208,8 +208,8 @@ void func_808FA19C(EnRr* this, PlayState* play) {
         this->collider1.base.colType = COLTYPE_HIT0;
         this->collider1.info.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 20, 2, this->actor.scale.y * 23.333334f,
-                              this->actor.scale.y * 20.000002f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENRR_BODYPART_MAX, 2,
+                              this->actor.scale.y * 23.333334f, this->actor.scale.y * 20.000002f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -878,7 +878,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnRr* this = THIS;
     Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
-    Vec3f* vecPtr;
+    Vec3f* bodyPartPos;
     s32 i;
     EnRrStruct* ptr;
     Vec3f spA4;
@@ -897,14 +897,15 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     Matrix_Scale((1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, 1.0f,
                  (1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, MTXMODE_APPLY);
 
-    vecPtr = &this->limbPos[0];
+    bodyPartPos = &this->bodyPartsPos[0];
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    Matrix_MultVecZ(1842.1053f, vecPtr++);
-    Matrix_MultVecZ(-1842.1053f, vecPtr++);
-    Matrix_MultVecX(1842.1053f, vecPtr++);
-    Matrix_MultVecX(-1842.1053f, vecPtr++);
+    // ENRR_BODYPART_0 - ENRR_BODYPART_3
+    Matrix_MultVecZ(1842.1053f, bodyPartPos++);
+    Matrix_MultVecZ(-1842.1053f, bodyPartPos++);
+    Matrix_MultVecX(1842.1053f, bodyPartPos++);
+    Matrix_MultVecX(-1842.1053f, bodyPartPos++);
     Matrix_Pop();
 
     for (i = 1; i < ARRAY_COUNT(this->unk_324); i++) {
@@ -921,10 +922,14 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
             Matrix_RotateYS(0x2000, MTXMODE_APPLY);
         }
 
-        Matrix_MultVecZ(1842.1053f, vecPtr++);
-        Matrix_MultVecZ(-1842.1053f, vecPtr++);
-        Matrix_MultVecX(1842.1053f, vecPtr++);
-        Matrix_MultVecX(-1842.1053f, vecPtr++);
+        // ENRR_BODYPART_4 - ENRR_BODYPART_7
+        // ENRR_BODYPART_8 - ENRR_BODYPART_11
+        // ENRR_BODYPART_12 - ENRR_BODYPART_15
+        // ENRR_BODYPART_16 - ENRR_BODYPART_19
+        Matrix_MultVecZ(1842.1053f, bodyPartPos++);
+        Matrix_MultVecZ(-1842.1053f, bodyPartPos++);
+        Matrix_MultVecX(1842.1053f, bodyPartPos++);
+        Matrix_MultVecX(-1842.1053f, bodyPartPos++);
         Matrix_Pop();
         mtx++;
         if (i == 3) {
@@ -939,7 +944,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
 
     gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 

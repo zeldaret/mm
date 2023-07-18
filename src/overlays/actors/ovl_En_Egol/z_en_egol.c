@@ -1436,10 +1436,10 @@ void EnEgol_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         (limbIndex == EYEGORE_LIMB_RIGHT_HAND) || (limbIndex == EYEGORE_LIMB_UPPER_EYELID) ||
         (limbIndex == EYEGORE_LIMB_LOWER_EYELID) || (limbIndex == EYEGORE_LIMB_HIPS) ||
         (limbIndex == EYEGORE_LIMB_LEFT_SHIN) || (limbIndex == EYEGORE_LIMB_RIGHT_SHIN)) {
-        Matrix_MultZero(&this->limbPos[this->limbPosIndex]);
-        this->limbPosIndex++;
-        if (this->limbPosIndex >= ARRAY_COUNT(this->limbPos)) {
-            this->limbPosIndex = 0;
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+        this->bodyPartIndex++;
+        if (this->bodyPartIndex >= EYEGORE_BODYPART_MAX) {
+            this->bodyPartIndex = 0;
         }
     }
     Collider_UpdateSpheres(limbIndex, &this->bodyCollider);
@@ -1462,7 +1462,7 @@ void EnEgol_Draw(Actor* thisx, PlayState* play2) {
     if (this->dmgEffectTimer != 0) {
         f32 drawDmgEffAlpha = 0.05f * this->dmgEffectTimer;
 
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0.8f, 0.8f,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EYEGORE_BODYPART_MAX, 0.8f, 0.8f,
                                 drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     }
     if (this->laserState >= EYEGORE_LASER_FIRE) {

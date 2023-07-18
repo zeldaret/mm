@@ -1189,16 +1189,16 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
-        this->deadBodyPartDrawDmgEffCount = 10;
-        for (i = 0; i < ARRAY_COUNT(this->deadBodyPartDrawDmgEffPos); i++) {
-            Math_Vec3f_Copy(&this->deadBodyPartDrawDmgEffPos[i], &this->deadBodyPartPos);
-            this->deadBodyPartDrawDmgEffPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
-            this->deadBodyPartDrawDmgEffPos[i].y += -5.0f;
-            this->deadBodyPartDrawDmgEffPos[i].z += Math_CosS(0xCCC * i) * 15.0f;
+        this->deadBodyPartCount = 10;
+        for (i = 0; i < ARRAY_COUNT(this->deadBodyPartsPos); i++) {
+            Math_Vec3f_Copy(&this->deadBodyPartsPos[i], &this->deadBodyPartPos);
+            this->deadBodyPartsPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
+            this->deadBodyPartsPos[i].y += -5.0f;
+            this->deadBodyPartsPos[i].z += Math_CosS(0xCCC * i) * 15.0f;
         }
     } else {
-        Math_Vec3f_Copy(&this->deadBodyPartDrawDmgEffPos[0], &this->deadBodyPartPos);
-        this->deadBodyPartDrawDmgEffCount = 1;
+        Math_Vec3f_Copy(&this->deadBodyPartsPos[0], &this->deadBodyPartPos);
+        this->deadBodyPartCount = 1;
         this->actor.shape.rot.x += this->deadBodyPartRotationalVelocity.x;
         this->actor.shape.rot.z += this->deadBodyPartRotationalVelocity.z;
     }
@@ -1541,10 +1541,10 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             (limbIndex == HIPLOOP_LIMB_CENTER_WING_BASE) || (limbIndex == HIPLOOP_LIMB_CENTER_WING_MIDDLE) ||
             (limbIndex == HIPLOOP_LIMB_BACK_LEFT_LOWER_LEG) || (limbIndex == HIPLOOP_LIMB_RIGHT_EYE) ||
             (limbIndex == HIPLOOP_LIMB_LEFT_EYE)) {
-            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
-            this->bodyPartsPosIndex++;
-            if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
-                this->bodyPartsPosIndex = 0;
+            Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+            this->bodyPartIndex++;
+            if (this->bodyPartIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+                this->bodyPartIndex = 0;
             }
 
             if ((this->action == EN_PP_ACTION_SPAWN_BODY_PARTS) && (this->deadBodyPartsSpawnedCount < 6) &&
@@ -1575,14 +1575,14 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnPp_OverrideLimbDraw, EnPp_PostLimbDraw, &this->actor);
 
-    if (this->deadBodyPartDrawDmgEffCount != 0) {
+    if (this->deadBodyPartCount != 0) {
         scale = 0.4f;
         if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
             scale = 0.6f;
         }
 
-        Actor_DrawDamageEffects(play, &this->actor, this->deadBodyPartDrawDmgEffPos, this->deadBodyPartDrawDmgEffCount,
-                                scale, scale, 1.0f, ACTOR_DRAW_DMGEFF_BLUE_FIRE);
+        Actor_DrawDamageEffects(play, &this->actor, this->deadBodyPartsPos, this->deadBodyPartCount, scale, scale, 1.0f,
+                                ACTOR_DRAW_DMGEFF_BLUE_FIRE);
     }
 
     if (this->drawDmgEffTimer != 0) {

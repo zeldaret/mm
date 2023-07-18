@@ -245,15 +245,15 @@ void func_80893BCC(EnTite* this, PlayState* play) {
             SurfaceType_GetMaterial(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
 
         if ((surfaceMaterial == SURFACE_MATERIAL_DIRT) || (surfaceMaterial == SURFACE_MATERIAL_SAND)) {
-            for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
-                func_800BBFB0(play, &this->limbPos[i], 1.0f, 2, 80, 15, 1);
+            for (i = 5; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+                func_800BBFB0(play, &this->bodyPartsPos[i], 1.0f, 2, 80, 15, 1);
             }
         } else if (surfaceMaterial == SURFACE_MATERIAL_SNOW) {
             Vec3f* ptr;
 
-            for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
+            for (i = 5; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
                 for (j = 0; j < 2; j++) {
-                    ptr = &this->limbPos[i];
+                    ptr = &this->bodyPartsPos[i];
                     sp7C.x = ptr->x + Rand_CenteredFloat(1.0f);
                     sp7C.y = ptr->y + Rand_CenteredFloat(1.0f);
                     sp7C.z = ptr->z + Rand_CenteredFloat(1.0f);
@@ -282,7 +282,7 @@ void func_80893E54(EnTite* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 9, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -650,8 +650,8 @@ void func_80895020(EnTite* this, PlayState* play) {
     this->actor.speed = 0.0f;
 
     ptr = &this->unk_33C[0];
-    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++, ptr++) {
-        Math_Vec3f_Diff(&this->limbPos[i], &this->actor.world.pos, &sp74);
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++, ptr++) {
+        Math_Vec3f_Diff(&this->bodyPartsPos[i], &this->actor.world.pos, &sp74);
         temp_f0 = Math3D_Vec3fMagnitude(&sp74);
         if (temp_f0 > 1.0f) {
             temp_f0 = 1.2f / temp_f0;
@@ -671,16 +671,16 @@ void func_808951B8(EnTite* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
 
     if (this->unk_2BC == 0) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            func_800B3030(play, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
-            SoundSource_PlaySfxAtFixedWorldPos(play, &this->limbPos[i], 11, NA_SE_EN_EXTINCT);
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            func_800B3030(play, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 1);
+            SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
         }
         Actor_Kill(&this->actor);
         return;
     }
 
     for (i = 0; i < ARRAY_COUNT(this->unk_33C); i++) {
-        Math_Vec3f_Sum(&this->limbPos[i], &this->unk_33C[i], &this->limbPos[i]);
+        Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->unk_33C[i], &this->bodyPartsPos[i]);
         this->unk_33C[i].y += this->actor.gravity;
     }
 }
@@ -1040,8 +1040,8 @@ void func_808963B4(EnTite* this, PlayState* play) {
     Vec3f sp48;
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
-        for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
-            Math_Vec3f_Copy(&sp48, &this->limbPos[i]);
+        for (i = 5; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            Math_Vec3f_Copy(&sp48, &this->bodyPartsPos[i]);
             sp48.y = this->actor.world.pos.y + this->actor.depthInWater;
             EffectSsGRipple_Spawn(play, &sp48, 0, 220, 0);
         }
@@ -1049,7 +1049,7 @@ void func_808963B4(EnTite* this, PlayState* play) {
         s32 temp = play->gameplayFrames & 7;
 
         if (!(temp & 1) && (this->actor.depthInWater < 10.0f)) {
-            Math_Vec3f_Copy(&sp48, &this->limbPos[5 + (temp >> 1)]);
+            Math_Vec3f_Copy(&sp48, &this->bodyPartsPos[5 + (temp >> 1)]);
             sp48.y = this->actor.world.pos.y + this->actor.depthInWater;
             EffectSsGRipple_Spawn(play, &sp48, 0, 220, 0);
         }
@@ -1114,40 +1114,42 @@ s32 EnTite_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
     return false;
 }
 
+static s8 sLimbToBodyParts1[] = {
+    -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, -1, -1, -1, 3, -1, -1, -1, -1, 4, -1,
+};
+
+static s8 sLimbToBodyParts2[] = {
+    -1, -1, -1, -1, 0, -1, -1, -1, 1, 5, -1, -1, -1, 2, 6, -1, -1, -1, 3, 7, -1, -1, -1, 4, 8,
+};
+
 void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_80896B70[] = {
-        -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, -1, -1, -1, 3, -1, -1, -1, -1, 4, -1,
-    };
-    static s8 D_80896B8C[] = {
-        -1, -1, -1, -1, 0, -1, -1, -1, 1, 5, -1, -1, -1, 2, 6, -1, -1, -1, 3, 7, -1, -1, -1, 4, 8,
-    };
     EnTite* this = THIS;
     MtxF* matrix;
-    s8 idx;
+    s8 bodyPart1Index;
 
     if (this->unk_2BA == 0) {
-        idx = D_80896B70[limbIndex];
-        if (idx != -1) {
-            Matrix_MultZero(&this->limbPos[idx]);
-            if (idx >= 1) {
-                Matrix_MultVecX(2500.0f, &this->limbPos[idx + 4]);
+        bodyPart1Index = sLimbToBodyParts1[limbIndex];
+        if (bodyPart1Index != -1) {
+            Matrix_MultZero(&this->bodyPartsPos[bodyPart1Index]);
+            if (bodyPart1Index >= 1) {
+                Matrix_MultVecX(2500.0f, &this->bodyPartsPos[4 + bodyPart1Index]);
             }
         }
     } else if (this->unk_2BA > 0) {
-        if (D_80896B8C[limbIndex] != -1) {
-            Matrix_MultZero(&this->limbPos[D_80896B8C[limbIndex]]);
+        if (sLimbToBodyParts2[limbIndex] != -1) {
+            Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts2[limbIndex]]);
         }
 
         if (limbIndex == 24) {
             this->unk_2BA = -1;
         }
-    } else if (D_80896B8C[limbIndex] != -1) {
+    } else if (sLimbToBodyParts2[limbIndex] != -1) {
         OPEN_DISPS(play->state.gfxCtx);
 
         matrix = Matrix_GetCurrent();
-        matrix->xw = this->limbPos[D_80896B8C[limbIndex]].x;
-        matrix->yw = this->limbPos[D_80896B8C[limbIndex]].y;
-        matrix->zw = this->limbPos[D_80896B8C[limbIndex]].z;
+        matrix->xw = this->bodyPartsPos[sLimbToBodyParts2[limbIndex]].x;
+        matrix->yw = this->bodyPartsPos[sLimbToBodyParts2[limbIndex]].y;
+        matrix->zw = this->bodyPartsPos[sLimbToBodyParts2[limbIndex]].z;
         Matrix_RotateZS(this->actor.world.rot.z, MTXMODE_APPLY);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1181,8 +1183,9 @@ void EnTite_Draw(Actor* thisx, PlayState* play) {
 
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnTite_OverrideLimbDraw,
                       EnTite_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

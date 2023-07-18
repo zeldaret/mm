@@ -34,7 +34,7 @@ typedef struct EnSlime {
     /* 0x16C */ f32 drawDmgEffFrozenSteamScale;
     /* 0x170 */ f32 distLimit;
     /* 0x174 */ Vec3f reviveScale;
-    /* 0x180 */ Vec3f limbPos[EN_SLIME_LIMBPOS_COUNT];
+    /* 0x180 */ Vec3f bodyPartsPos[EN_SLIME_LIMBPOS_COUNT];
     /* 0x1BC */ ColliderCylinder collider;
 } EnSlime; // size = 0x208
 

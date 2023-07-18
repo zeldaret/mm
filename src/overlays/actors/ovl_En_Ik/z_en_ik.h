@@ -40,7 +40,7 @@ typedef struct EnIk {
     /* 0x0304 */ f32 drawDmgEffAlpha;
     /* 0x0308 */ f32 drawDmgEffScale;
     /* 0x030C */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x0310 */ Vec3f limbPos[13];
+    /* 0x0310 */ Vec3f bodyPartsPos[13];
     /* 0x03AC */ ColliderCylinder colliderCylinder;
     /* 0x03F8 */ ColliderQuad colliderQuad;
     /* 0x0478 */ ColliderTris colliderTris;

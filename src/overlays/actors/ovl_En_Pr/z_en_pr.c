@@ -589,9 +589,9 @@ void EnPr_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||
         (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 8) || (limbIndex == 9)) {
-        Matrix_MultZero(&this->limbPos[this->unk_228]);
+        Matrix_MultZero(&this->bodyPartsPos[this->unk_228]);
         this->unk_228++;
-        if (this->unk_228 >= ARRAY_COUNT(this->limbPos)) {
+        if (this->unk_228 >= ARRAY_COUNT(this->bodyPartsPos)) {
             this->unk_228 = 0;
         }
     }
@@ -627,7 +627,7 @@ void EnPr_Draw(Actor* thisx, PlayState* play) {
 
         this->unk_238 = 0.8f;
         this->unk_234 = 0.8f;
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0.8f, 0.8f,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 0.8f, 0.8f,
                                 drawDmgEffAlpha, this->drawDmgEffType);
     }
 

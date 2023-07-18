@@ -31,7 +31,7 @@ typedef struct EnTite {
     /* 0x2C4 */ f32 drawDmgEffAlpha;
     /* 0x2C8 */ f32 drawDmgEffScale;
     /* 0x2CC */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2D0 */ Vec3f limbPos[9];
+    /* 0x2D0 */ Vec3f bodyPartsPos[9];
     /* 0x33C */ Vec3f unk_33C[9];
     /* 0x3A8 */ Gfx* unk_3A8;
     /* 0x3AC */ ColliderSphere collider;

@@ -966,7 +966,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     s32 startRow;
 
     for (i = 0; i < bodyPartsNum; i++) {
-        if (parentBodyParts[i] >= 0) {
+        if (parentBodyParts[i] > -1) {
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 

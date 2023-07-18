@@ -19,7 +19,7 @@ typedef struct EnNeoReeba {
     /* 0x2AC */ EnNeoReebaActionFunc actionFunc;
     /* 0x2B0 */ Vec3f targetPos;
     /* 0x2BC */ Vec3f velToTarget;
-    /* 0x2C8 */ Vec3f limbPos[4];
+    /* 0x2C8 */ Vec3f bodyPartsPos[4];
     /* 0x2F8 */ f32 sinkRiseRate;
     /* 0x2FC */ f32 rotationSpeed;
     /* 0x300 */ f32 drawEffectAlpha;

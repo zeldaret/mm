@@ -7,6 +7,20 @@ struct EnKame;
 
 typedef void (*EnKameActionFunc)(struct EnKame*, PlayState*);
 
+typedef enum Tl2BodyPart {
+    /*  0 */ TL_2_BODYPART_0,
+    /*  1 */ TL_2_BODYPART_1,
+    /*  2 */ TL_2_BODYPART_2,
+    /*  3 */ TL_2_BODYPART_3,
+    /*  4 */ TL_2_BODYPART_4,
+    /*  5 */ TL_2_BODYPART_5,
+    /*  6 */ TL_2_BODYPART_6,
+    /*  7 */ TL_2_BODYPART_7,
+    /*  8 */ TL_2_BODYPART_8,
+    /*  9 */ TL_2_BODYPART_9,
+    /* 10 */ TL_2_BODYPART_MAX
+} Tl2BodyPart;
+
 typedef struct EnKame {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime1;
@@ -29,7 +43,7 @@ typedef struct EnKame {
     /* 0x2B4 */ f32 drawDmgEffScale;
     /* 0x2B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2BC */ Vec3f unk_2BC;
-    /* 0x2C8 */ Vec3f limbPos[10];
+    /* 0x2C8 */ Vec3f bodyPartsPos[10];
     /* 0x340 */ ColliderCylinder collider;
 } EnKame; // size = 0x38C
 

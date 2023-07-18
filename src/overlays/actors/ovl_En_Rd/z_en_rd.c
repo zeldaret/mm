@@ -1322,7 +1322,7 @@ void EnRd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
          (limbIndex == REDEAD_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) || (limbIndex == REDEAD_LIMB_RIGHT_FOREARM) ||
          (limbIndex == REDEAD_LIMB_RIGHT_HAND) || (limbIndex == REDEAD_LIMB_HEAD) ||
          (limbIndex == REDEAD_LIMB_PELVIS))) {
-        Matrix_MultZero(&this->limbPos[this->limbIndex]);
+        Matrix_MultZero(&this->bodyPartsPos[this->limbIndex]);
         this->limbIndex++;
     }
 }
@@ -1363,7 +1363,7 @@ void EnRd_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (this->drawDmgEffTimer > 0) {
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                                0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }

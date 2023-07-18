@@ -222,7 +222,7 @@ void EnRuppecrow_ShatterIce(EnRuppecrow* this, PlayState* play) {
     if (this->currentEffect == ENRUPPECROW_EFFECT_ICE) {
         this->currentEffect = ENRUPPECROW_EFFECT_NONE;
         this->unk_2C8 = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0x2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 0x2, 0.2f, 0.2f);
     }
 }
 

@@ -10,6 +10,15 @@ struct EnBb;
 
 typedef void (*EnBbActionFunc)(struct EnBb*, PlayState*);
 
+typedef enum BubbleBodyPart {
+    /* 0 */ BUBBLE_BODYPART_0,
+    /* 1 */ BUBBLE_BODYPART_1,
+    /* 2 */ BUBBLE_BODYPART_2,
+    /* 3 */ BUBBLE_BODYPART_3,
+    /* 4 */ BUBBLE_BODYPART_4,
+    /* 5 */ BUBBLE_BODYPART_MAX
+} BubbleBodyPart;
+
 typedef struct EnBb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -31,8 +40,8 @@ typedef struct EnBb {
     /* 0x26C */ f32 drawDmgEffAlpha;
     /* 0x270 */ f32 drawDmgEffScale;
     /* 0x274 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x278 */ Vec3f bodyPartsPos[5];
-    /* 0x2B4 */ Vec3f bodyPartsVelocity[5];
+    /* 0x278 */ Vec3f bodyPartsPos[BUBBLE_BODYPART_MAX];
+    /* 0x2B4 */ Vec3f bodyPartsVelocity[BUBBLE_BODYPART_MAX];
     /* 0x2F0 */ Gfx* limbDList;
     /* 0x2F4 */ ColliderSphere collider;
 } EnBb; // size = 0x34C

@@ -97,17 +97,66 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gAdultRutoSwimmingUpAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-// in PostLimbdraw, converts limbIndex to bodyPartsPos index
-static s8 sBodyPartPosIndices[] = {
-    -1, -1, 12, 13, 14, -1, 9, 10, 11, -1, 0, 6, -1, -1, 7, 8, 2, -1, -1, 3, 4, 2, 1,
+static s8 sLimbToShadowBodyParts[RU2_LIMB_MAX] = {
+    -1,                    // RU2_LIMB_NONE
+    -1,                    // RU2_LIMB_ROOT
+    RU_SHADOW_BODYPART_12, // RU2_LIMB_LEFT_THIGH
+    RU_SHADOW_BODYPART_13, // RU2_LIMB_LEFT_LEG
+    RU_SHADOW_BODYPART_14, // RU2_LIMB_LEFT_FOOT
+    -1,                    // RU2_LIMB_LEFT_TAIL
+    RU_SHADOW_BODYPART_9,  // RU2_LIMB_RIGHT_THIGH
+    RU_SHADOW_BODYPART_10, // RU2_LIMB_RIGHT_LEG
+    RU_SHADOW_BODYPART_11, // RU2_LIMB_RIGHT_FOOT
+    -1,                    // RU2_LIMB_RIGHT_TAIL
+    RU_SHADOW_BODYPART_0,  // RU2_LIMB_TORSO
+    RU_SHADOW_BODYPART_6,  // RU2_LIMB_LEFT_UPPER_ARM
+    -1,                    // RU2_LIMB_LEFT_UPPER_WING
+    -1,                    // RU2_LIMB_LEFT_LOWER_WING
+    RU_SHADOW_BODYPART_7,  // RU2_LIMB_LEFT_FOREARM
+    RU_SHADOW_BODYPART_8,  // RU2_LIMB_LEFT_HAND
+    RU_SHADOW_BODYPART_2,  // RU2_LIMB_RIGHT_UPPER_ARM
+    -1,                    // RU2_LIMB_RIGHT_UPPER_WING
+    -1,                    // RU2_LIMB_RIGHT_LOWER_WING
+    RU_SHADOW_BODYPART_3,  // RU2_LIMB_RIGHT_FOREARM
+    RU_SHADOW_BODYPART_4,  // RU2_LIMB_RIGHT_HAND
+    RU_SHADOW_BODYPART_2,  // RU2_LIMB_HEAD
+    RU_SHADOW_BODYPART_1,  // RU2_LIMB_WAIST
 };
 
-static s8 sRuBodyParts[RU_BODYPARTSPOS_COUNT] = {
-    0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13,
+static s8 sParentShadowBodyParts[RU_SHADOW_BODYPART_MAX] = {
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_0
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_1
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_2
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_3
+    RU_SHADOW_BODYPART_3,  // RU_SHADOW_BODYPART_4
+    RU_SHADOW_BODYPART_4,  // RU_SHADOW_BODYPART_5
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_6
+    RU_SHADOW_BODYPART_6,  // RU_SHADOW_BODYPART_7
+    RU_SHADOW_BODYPART_7,  // RU_SHADOW_BODYPART_8
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_9
+    RU_SHADOW_BODYPART_9,  // RU_SHADOW_BODYPART_10
+    RU_SHADOW_BODYPART_10, // RU_SHADOW_BODYPART_11
+    RU_SHADOW_BODYPART_0,  // RU_SHADOW_BODYPART_12
+    RU_SHADOW_BODYPART_12, // RU_SHADOW_BODYPART_13
+    RU_SHADOW_BODYPART_13, // RU_SHADOW_BODYPART_14
 };
 
-static u8 sRuShadowSizes[] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+static u8 sShadowSizes[RU_SHADOW_BODYPART_MAX] = {
+    0, // RU_SHADOW_BODYPART_0
+    0, // RU_SHADOW_BODYPART_1
+    0, // RU_SHADOW_BODYPART_2
+    0, // RU_SHADOW_BODYPART_3
+    0, // RU_SHADOW_BODYPART_4
+    0, // RU_SHADOW_BODYPART_5
+    0, // RU_SHADOW_BODYPART_6
+    0, // RU_SHADOW_BODYPART_7
+    0, // RU_SHADOW_BODYPART_8
+    0, // RU_SHADOW_BODYPART_9
+    0, // RU_SHADOW_BODYPART_10
+    0, // RU_SHADOW_BODYPART_11
+    0, // RU_SHADOW_BODYPART_12
+    0, // RU_SHADOW_BODYPART_13
+    0, // RU_SHADOW_BODYPART_14
 };
 
 static TrackOptionsSet sTrackOptions = {
@@ -202,7 +251,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
         Vec3f playerPos;
 
         playerPos.x = player->actor.world.pos.x;
-        playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+        playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         playerPos.z = player->actor.world.pos.z;
         SubS_TrackPoint(&playerPos, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->torsoRot, &sTrackOptions);
@@ -286,8 +335,8 @@ void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f headFocus = { 800.0f, 0, 0 };
     Vec3f bodyPartPos = { 0, 0, 0 };
 
-    if (sBodyPartPosIndices[limbIndex] >= 0) {
-        Matrix_MultVec3f(&bodyPartPos, &this->bodyPartsPos[sBodyPartPosIndices[limbIndex]]);
+    if (sLimbToShadowBodyParts[limbIndex] > -1) {
+        Matrix_MultVec3f(&bodyPartPos, &this->shadowBodyPartsPos[sLimbToShadowBodyParts[limbIndex]]);
     }
     if (limbIndex == RU2_LIMB_HEAD) {
         Matrix_MultVec3f(&headFocus, &thisx->focus.pos);
@@ -344,8 +393,8 @@ void EnRu_Draw(Actor* thisx, PlayState* play) {
     }
 
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(&this->bodyPartsPos[0], &this->actor.world.pos, shadowTex, (i / 5.0f),
-                          (ARRAY_COUNT(sRuBodyParts)), sRuShadowSizes, sRuBodyParts);
+        SubS_GenShadowTex(this->shadowBodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f, RU_SHADOW_BODYPART_MAX,
+                          sShadowSizes, sParentShadowBodyParts);
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);

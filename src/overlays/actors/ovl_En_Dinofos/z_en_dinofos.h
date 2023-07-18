@@ -7,6 +7,22 @@ struct EnDinofos;
 
 typedef void (*EnDinofosActionFunc)(struct EnDinofos*, PlayState*);
 
+typedef enum EnDinofosBodyPart {
+    /*  0 */ DINOFOS_BODYPART_0,
+    /*  1 */ DINOFOS_BODYPART_1,
+    /*  2 */ DINOFOS_BODYPART_2,
+    /*  3 */ DINOFOS_BODYPART_3,
+    /*  4 */ DINOFOS_BODYPART_4,
+    /*  5 */ DINOFOS_BODYPART_5,
+    /*  6 */ DINOFOS_BODYPART_6,
+    /*  7 */ DINOFOS_BODYPART_7,
+    /*  8 */ DINOFOS_BODYPART_8,
+    /*  9 */ DINOFOS_BODYPART_9,
+    /* 10 */ DINOFOS_BODYPART_10,
+    /* 11 */ DINOFOS_BODYPART_11,
+    /* 12 */ DINOFOS_BODYPART_MAX
+} EnDinofosBodyPart;
+
 typedef struct EnDinofos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -33,7 +49,7 @@ typedef struct EnDinofos {
     /* 0x2B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2BC */ Vec3f unk_2BC;
     /* 0x2C8 */ Vec3f unk_2C8;
-    /* 0x2D4 */ Vec3f limbPos[12];
+    /* 0x2D4 */ Vec3f bodyPartsPos[DINOFOS_BODYPART_MAX];
     /* 0x364 */ ColliderJntSph colliderJntSph;
     /* 0x384 */ ColliderJntSphElement colliderJntSphElement[9];
     /* 0x5C4 */ ColliderQuad colliderQuad;

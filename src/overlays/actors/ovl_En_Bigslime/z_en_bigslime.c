@@ -923,7 +923,7 @@ void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
         this->gekkoCollider.base.colType = COLTYPE_HIT6;
         this->gekkoCollider.info.elemType = ELEMTYPE_UNK1;
         this->gekkoDrawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -3033,26 +3033,37 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
     EnBigslime_DrawGekko(&this->actor, play);
 }
 
+static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
+    -1,                             // GEKKO_LIMB_NONE
+    -1,                             // GEKKO_LIMB_ROOT
+    GEKKO_BODYPART_WAIST,           // GEKKO_LIMB_WAIST
+    -1,                             // GEKKO_LIMB_LEFT_THIGH
+    GEKKO_BODYPART_LEFT_SHIN,       // GEKKO_LIMB_LEFT_SHIN
+    -1,                             // GEKKO_LIMB_LEFT_ANKLE
+    GEKKO_BODYPART_LEFT_FOOT,       // GEKKO_LIMB_LEFT_FOOT
+    -1,                             // GEKKO_LIMB_RIGHT_THIGH
+    GEKKO_BODYPART_RIGHT_SHIN,      // GEKKO_LIMB_RIGHT_SHIN
+    -1,                             // GEKKO_LIMB_RIGHT_ANKLE
+    GEKKO_BODYPART_RIGHT_FOOT,      // GEKKO_LIMB_RIGHT_FOOT
+    -1,                             // GEKKO_LIMB_TORSO
+    GEKKO_BODYPART_LEFT_UPPER_ARM,  // GEKKO_LIMB_LEFT_UPPER_ARM
+    GEKKO_BODYPART_LEFT_FOREARM,    // GEKKO_LIMB_LEFT_FOREARM
+    -1,                             // GEKKO_LIMB_LEFT_WRIST
+    GEKKO_BODYPART_LEFT_HAND,       // GEKKO_LIMB_LEFT_HAND
+    GEKKO_BODYPART_RIGHT_UPPER_ARM, // GEKKO_LIMB_RIGHT_UPPER_ARM
+    GEKKO_BODYPART_RIGHT_FOREARM,   // GEKKO_LIMB_RIGHT_FOREARM
+    -1,                             // GEKKO_LIMB_RIGHT_WRIST
+    GEKKO_BODYPART_RIGHT_HAND,      // GEKKO_LIMB_RIGHT_HAND
+    -1,                             // GEKKO_LIMB_HEAD
+    GEKKO_BODYPART_JAW,             // GEKKO_LIMB_JAW
+    -1,                             // GEKKO_LIMB_LEFT_EYE
+    -1,                             // GEKKO_LIMB_RIGHT_EYE
+};
+
+// Some kind of offset for the position of the Gekkos right foot
+static Vec3f sRightFootOffsetRef = { 1500.0f, 2200.0f, 0.0f };
+
 void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    /* value -1: Limb Not used
-     * value 0:  GEKKO_LIMB_WAIST
-     * value 1:  GEKKO_LIMB_L_SHIN
-     * value 2:  GEKKO_LIMB_L_FOOT
-     * value 3:  GEKKO_LIMB_R_SHIN
-     * value 4:  GEKKO_LIMB_R_FOOT
-     * value 5:  GEKKO_LIMB_L_UPPER_ARM
-     * value 6:  GEKKO_LIMB_L_FOREARM
-     * value 7:  GEKKO_LIMB_L_HAND
-     * value 8:  GEKKO_LIMB_R_UPPER_ARM
-     * value 9:  GEKKO_LIMB_R_FOREARM
-     * value 10: GEKKO_LIMB_R_HAND
-     * value 11: GEKKO_LIMB_JAW
-     */
-    static s8 limbPosIndex[] = {
-        -1, -1, 0, -1, 1, -1, 2, -1, 3, -1, 4, -1, 5, 6, -1, 7, 8, 9, -1, 10, -1, 11, -1, -1,
-    };
-    // Some kind of offset for the position of the Gekkos right foot
-    static Vec3f rightFootOffsetRef = { 1500.0f, 2200.0f, 0.0f };
     EnBigslime* this = THIS;
     Vec3f rightFootOffset;
 
@@ -3061,12 +3072,12 @@ void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         this->actor.focus.rot.y = this->gekkoRot.y;
     }
 
-    if (limbPosIndex[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[limbPosIndex[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != -1) {
+        Matrix_MultZero(&this->gekkoBodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == GEKKO_LIMB_RIGHT_ANKLE) {
-        Matrix_MultVec3f(&rightFootOffsetRef, &rightFootOffset);
+        Matrix_MultVec3f(&sRightFootOffsetRef, &rightFootOffset);
         this->gekkoCollider.dim.pos.y = rightFootOffset.y;
     }
 }
@@ -3119,7 +3130,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
 
     EnBigslime_DrawShatteringEffects(this, play);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX,
                             this->gekkoScale * (999.99991f / 7.0f) * this->gekkoDrawDmgEffScale,
                             this->gekkoDrawDmgEffFrozenSteamScale, this->gekkoDrawDmgEffAlpha,
                             this->gekkoDrawDmgEffType);

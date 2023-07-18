@@ -137,15 +137,6 @@ static f32 sYOffsetPerForm[PLAYER_FORM_MAX] = {
     30.0f, // PLAYER_FORM_HUMAN
 };
 
-/**
- * This maps a given limb based on its limbIndex to its appropriate index
- * in the limbPos array. An index of -1 indicates that the limb is not part
- * of the limbPos array.
- */
-static s8 sLimbIndexToLimbPosIndex[] = {
-    -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8,
-};
-
 void EnWallmas_Init(Actor* thisx, PlayState* play) {
     EnWallmas* this = THIS;
 
@@ -220,7 +211,7 @@ void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = 0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 11, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WALLMASTER_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -712,17 +703,50 @@ s32 EnWallmas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     return false;
 }
 
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the bodyPartsPos array. An index of -1 indicates that the limb is not part
+ * of the bodyPartsPos array.
+ */
+static s8 sLimbToBodyParts[WALLMASTER_LIMB_MAX] = {
+    -1,                    // WALLMASTER_LIMB_NONE
+    -1,                    // WALLMASTER_LIMB_ROOT
+    -1,                    // WALLMASTER_LIMB_HAND
+    -1,                    // WALLMASTER_LIMB_INDEX_FINGER_ROOT
+    WALLMASTER_BODYPART_0, // WALLMASTER_LIMB_INDEX_FINGER_PROXIMAL
+    -1,                    // WALLMASTER_LIMB_INDEX_FINGER_DISTAL_ROOT
+    -1,                    // WALLMASTER_LIMB_INDEX_FINGER_MIDDLE
+    WALLMASTER_BODYPART_1, // WALLMASTER_LIMB_INDEX_FINGER_DISTAL
+    -1,                    // WALLMASTER_LIMB_RING_FINGER_ROOT
+    WALLMASTER_BODYPART_2, // WALLMASTER_LIMB_RING_FINGER_PROXIMAL
+    -1,                    // WALLMASTER_LIMB_RING_FINGER_DISTAL_ROOT
+    -1,                    // WALLMASTER_LIMB_RING_FINGER_MIDDLE
+    WALLMASTER_BODYPART_3, // WALLMASTER_LIMB_RING_FINGER_DISTAL
+    -1,                    // WALLMASTER_LIMB_MIDDLE_FINGER_ROOT
+    WALLMASTER_BODYPART_4, // WALLMASTER_LIMB_MIDDLE_FINGER_PROXIMAL
+    -1,                    // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL_ROOT
+    -1,                    // WALLMASTER_LIMB_MIDDLE_FINGER_MIDDLE
+    WALLMASTER_BODYPART_5, // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL
+    -1,                    // WALLMASTER_LIMB_WRIST_ROOT
+    -1,                    // WALLMASTER_LIMB_WRIST
+    -1,                    // WALLMASTER_LIMB_THUMB_ROOT
+    WALLMASTER_BODYPART_6, // WALLMASTER_LIMB_THUMB_PROXIMAL
+    WALLMASTER_BODYPART_7, // WALLMASTER_LIMB_THUMB_DISTAL_ROOT
+    -1,                    // WALLMASTER_LIMB_THUMB_MIDDLE
+    WALLMASTER_BODYPART_8, // WALLMASTER_LIMB_THUMB_DISTAL
+};
+
 void EnWallmas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnWallmas* this = THIS;
     Gfx* gfx;
 
-    if (sLimbIndexToLimbPosIndex[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[sLimbIndexToLimbPosIndex[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != -1) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
-        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->bodyPartsPos[WALLMASTER_BODYPART_9]);
+        Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[WALLMASTER_BODYPART_10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -752,7 +776,7 @@ void EnWallmas_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnWallmas_OverrideLimbDraw, EnWallmas_PostLimbDraw, &this->actor);
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, WALLMASTER_BODYPART_MAX, this->drawDmgEffScale,
                                 this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 

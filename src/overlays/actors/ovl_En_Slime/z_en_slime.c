@@ -263,7 +263,7 @@ void EnSlime_Thaw(EnSlime* this, PlayState* play) {
         this->drawDmgEffType = 0; // So it's not triggered again until Freeze has been called again.
         this->collider.base.colType = COLTYPE_NONE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -1218,7 +1218,7 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
     }
 
     for (i = 0; i < EN_SLIME_LIMBPOS_COUNT; i++) {
-        Matrix_MultVec3f(&sLimbPosOffsets[i], &this->limbPos[i]);
+        Matrix_MultVec3f(&sLimbPosOffsets[i], &this->bodyPartsPos[i]);
     }
 
     if (this->actionFunc == EnSlime_Revive) {
@@ -1243,8 +1243,9 @@ void EnSlime_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_OPA_DISP++, gItemDropDL);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

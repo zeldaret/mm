@@ -57,8 +57,8 @@ typedef struct EnPp {
     /* 0x34C */ Vec3f maskVelocity;
     /* 0x358 */ Vec3f targetPos;
     /* 0x364 */ Vec3f deadBodyPartPos;
-    /* 0x370 */ s32 deadBodyPartDrawDmgEffCount;
-    /* 0x374 */ Vec3f deadBodyPartDrawDmgEffPos[10];
+    /* 0x370 */ s32 deadBodyPartCount;
+    /* 0x374 */ Vec3f deadBodyPartsPos[10];
     /* 0x3EC */ Vec3s deadBodyPartRotationalVelocity;
     /* 0x3F2 */ s16 drawDmgEffTimer;
     /* 0x3F4 */ s16 drawDmgEffType;
@@ -67,7 +67,7 @@ typedef struct EnPp {
     /* 0x400 */ f32 attackRange;
     /* 0x404 */ s32 hasBeenDamaged;
     /* 0x408 */ Vec3f bodyPartsPos[11];
-    /* 0x48C */ s16 bodyPartsPosIndex;
+    /* 0x48C */ s16 bodyPartIndex;
     /* 0x490 */ f32 maskAccelY;
     /* 0x494 */ ColliderJntSph maskCollider;
     /* 0x4B4 */ ColliderJntSphElement maskColliderElements[1];

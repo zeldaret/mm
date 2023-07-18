@@ -21,7 +21,7 @@ typedef struct EnSkb {
     /* 0x228 */ EnSkbActionFunc actionFunc;
     /* 0x22C */ f32 drawDmgEffAlpha;
     /* 0x230 */ f32 drawDmgEffScale;
-    /* 0x234 */ Vec3f limbPos[14];
+    /* 0x234 */ Vec3f bodyPartsPos[14];
     /* 0x2DC */ s32 limbCount;
     /* 0x2E0 */ Vec3s jointTable[20];
     /* 0x358 */ Vec3s morphTable[20];

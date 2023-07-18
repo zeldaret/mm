@@ -243,7 +243,7 @@ void func_808971DC(EnPeehat* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->colliderSphere.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.5f, 0.35f);
     }
 }
 
@@ -866,25 +866,50 @@ s32 EnPeehat_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f
     return false;
 }
 
+static Vec3f D_80899570[] = {
+    { 1300.0f, 1200.0f, 0.0f },  // PEEHAT_BODYPART_12
+    { 1300.0f, -1200.0f, 0.0f }, // PEEHAT_BODYPART_13
+    { 1300.0f, 0.0f, 1200.0f },  // PEEHAT_BODYPART_14
+    { 1300.0f, 0.0f, -1200.0f }, // PEEHAT_BODYPART_15
+};
+
+static s8 sLimbToBodyParts[OBJECT_PH_LIMB_MAX] = {
+    -1,                 // OBJECT_PH_LIMB_NONE
+    -1,                 // OBJECT_PH_LIMB_01
+    -1,                 // OBJECT_PH_LIMB_02
+    -1,                 // OBJECT_PH_LIMB_03
+    -1,                 // OBJECT_PH_LIMB_04
+    -1,                 // OBJECT_PH_LIMB_05
+    -1,                 // OBJECT_PH_LIMB_06
+    PEEHAT_BODYPART_0,  // OBJECT_PH_LIMB_07
+    -1,                 // OBJECT_PH_LIMB_08
+    -1,                 // OBJECT_PH_LIMB_09
+    PEEHAT_BODYPART_2,  // OBJECT_PH_LIMB_0A
+    -1,                 // OBJECT_PH_LIMB_0B
+    -1,                 // OBJECT_PH_LIMB_0C
+    PEEHAT_BODYPART_4,  // OBJECT_PH_LIMB_0D
+    -1,                 // OBJECT_PH_LIMB_0E
+    -1,                 // OBJECT_PH_LIMB_0F
+    PEEHAT_BODYPART_6,  // OBJECT_PH_LIMB_10
+    -1,                 // OBJECT_PH_LIMB_11
+    -1,                 // OBJECT_PH_LIMB_12
+    PEEHAT_BODYPART_8,  // OBJECT_PH_LIMB_13
+    -1,                 // OBJECT_PH_LIMB_14
+    -1,                 // OBJECT_PH_LIMB_15
+    PEEHAT_BODYPART_10, // OBJECT_PH_LIMB_16
+    -1,                 // OBJECT_PH_LIMB_17
+};
+
 void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80899570[] = {
-        { 1300.0f, 1200.0f, 0.0f },
-        { 1300.0f, -1200.0f, 0.0f },
-        { 1300.0f, 0.0f, 1200.0f },
-        { 1300.0f, 0.0f, -1200.0f },
-    };
-    static s8 D_808995A0[] = {
-        -1, -1, -1, -1, -1, -1, -1, 0, -1, -1, 2, -1, -1, 4, -1, -1, 6, -1, -1, 8, -1, -1, 10, -1,
-    };
     PlayState* play = play2;
     EnPeehat* this = THIS;
     s32 i;
-    s32 index = D_808995A0[limbIndex];
+    s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
     Gfx* gfx;
 
-    if (index != -1) {
-        Matrix_MultVecX(2000.0f, &this->limbPos[index]);
-        Matrix_MultVecX(4000.0f, &this->limbPos[index + 1]);
+    if (bodyPartIndex != -1) {
+        Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex]);
+        Matrix_MultVecX(4000.0f, &this->bodyPartsPos[bodyPartIndex + 1]);
     }
 
     if (limbIndex == 4) {
@@ -892,14 +917,14 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecZ(-5500.0f, &this->unk_2D4[1]);
     } else if ((limbIndex == 3) && (thisx->params == 0)) {
         Vec3f* vec = &D_80899570[0];
-        Vec3f* vec2 = &this->limbPos[12];
+        Vec3f* bodyPartPosPtr = &this->bodyPartsPos[PEEHAT_BODYPART_12];
 
-        for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, vec2++) {
-            Matrix_MultVec3f(vec, vec2);
+        for (i = 0; i < ARRAY_COUNT(D_80899570); i++, vec++, bodyPartPosPtr++) {
+            Matrix_MultVec3f(vec, bodyPartPosPtr);
         }
 
-        Matrix_MultVecX(3000.0f, vec2++);
-        Matrix_MultVecX(-400.0f, vec2);
+        Matrix_MultVecX(3000.0f, bodyPartPosPtr++); // PEEHAT_BODYPART_16
+        Matrix_MultVecX(-400.0f, bodyPartPosPtr);   // PEEHAT_BODYPART_17
 
         OPEN_DISPS(play->state.gfxCtx);
 
@@ -943,11 +968,12 @@ void EnPeehat_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            this->limbPos[i].y -= 50.0f;
+        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+            this->bodyPartsPos[i].y -= 50.0f;
         }
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
+                            this->drawDmgEffType);
 }

@@ -1128,17 +1128,31 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
  * in the bodyPartsPos array. An index of -1 indicates that the limb is
  * not part of the bodyPartsPos array.
  */
-static s8 sLimbIndexToBodyPartsPosIndex[] = {
-    -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
+static s8 sLimbToBodyParts[EENO_LIMB_MAX] = {
+    -1,                    // EENO_LIMB_NONE
+    -1,                    // EENO_LIMB_ROOT
+    -1,                    // EENO_LIMB_BODY_TOP
+    -1,                    // EENO_LIMB_LEFT_EYE
+    -1,                    // EENO_LIMB_RIGHT_EYE
+    -1,                    // EENO_LIMB_LEFT_UPPER_ARM
+    EN_SNOWMAN_BODYPART_0, // EENO_LIMB_LEFT_FOREARM
+    EN_SNOWMAN_BODYPART_1, // EENO_LIMB_LEFT_HAND
+    -1,                    // EENO_LIMB_RIGHT_UPPER_ARM
+    EN_SNOWMAN_BODYPART_2, // EENO_LIMB_RIGHT_FOREARM
+    EN_SNOWMAN_BODYPART_3, // EENO_LIMB_RIGHT_HAND
+    EN_SNOWMAN_BODYPART_4, // EENO_LIMB_BODY_BOTTOM
 };
 
 /**
  * The last five elements of the bodyPartsPos array are duplicates of the body
  * bottom limb, each offset by a certain certain amount.
  */
-static Vec3f sBodyBottomBodyPartOffsets[] = {
-    { 2000.0f, 3000.0f, 0.0f }, { 2000.0f, -2000.0f, 0.0f }, { 3000.0f, 0.0f, 0.0f },
-    { 1000.0f, 0.0f, 3000.0f }, { 1000.0f, 0.0f, -3000.0f },
+static Vec3f sBodyBottomBodyPartOffsets[EN_SNOWMAN_BODYPART_MAX - EN_SNOWMAN_BODYPART_4] = {
+    { 2000.0f, 3000.0f, 0.0f },  // EN_SNOWMAN_BODYPART_4
+    { 2000.0f, -2000.0f, 0.0f }, // EN_SNOWMAN_BODYPART_5
+    { 3000.0f, 0.0f, 0.0f },     // EN_SNOWMAN_BODYPART_6
+    { 1000.0f, 0.0f, 3000.0f },  // EN_SNOWMAN_BODYPART_7
+    { 1000.0f, 0.0f, -3000.0f }, // EN_SNOWMAN_BODYPART_8
 };
 
 void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1147,13 +1161,13 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     Gfx* gfx;
     s32 i;
 
-    if (sLimbIndexToBodyPartsPosIndex[limbIndex] != -1) {
-        if (sLimbIndexToBodyPartsPosIndex[limbIndex] == 4) {
-            for (i = 0; i < 5; i++) {
-                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[i + 4]);
+    if (sLimbToBodyParts[limbIndex] != -1) {
+        if (sLimbToBodyParts[limbIndex] == EN_SNOWMAN_BODYPART_4) {
+            for (i = 0; i < ARRAY_COUNT(sBodyBottomBodyPartOffsets); i++) {
+                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[EN_SNOWMAN_BODYPART_4 + i]);
             }
         } else {
-            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsPosIndex[limbIndex]]);
+            Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
         }
     }
 

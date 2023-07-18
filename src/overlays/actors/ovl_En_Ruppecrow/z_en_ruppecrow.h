@@ -36,7 +36,7 @@ typedef struct EnRuppecrow {
     /* 0x2C8 */ f32 unk_2C8; // set but not used
     /* 0x2CC */ f32 unk_2CC; // set but not used
     /* 0x2D0 */ f32 iceSfxTimer;
-    /* 0x2D4 */ Vec3f limbPos[ENRUPPECROW_LIMB_POS_COUNT];
+    /* 0x2D4 */ Vec3f bodyPartsPos[ENRUPPECROW_LIMB_POS_COUNT];
 } EnRuppecrow; // size = 0x304
 
 #endif // Z_EN_RUPPECROW_H

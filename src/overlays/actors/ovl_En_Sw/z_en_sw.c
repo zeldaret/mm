@@ -200,7 +200,7 @@ s32 func_808D8B58(EnSw* this) {
 s32 func_808D8D60(EnSw* this, PlayState* play, s32 arg2) {
     s32 ret = false;
     u8 drawDmgEffType;
-    Vec3f limbPos[1];
+    Vec3f bodyPartsPos[1];
     f32 drawDmgEffAlpha;
 
     if (arg2 < this->unk_462) {
@@ -208,17 +208,17 @@ s32 func_808D8D60(EnSw* this, PlayState* play, s32 arg2) {
             drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
             drawDmgEffType = this->drawDmgEffType;
             Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
-            limbPos[0].x += this->unk_380[arg2].x;
-            limbPos[0].y += this->unk_380[arg2].y;
-            limbPos[0].z += this->unk_380[arg2].z;
+            Math_Vec3f_Copy(&bodyPartsPos[0], &this->actor.world.pos);
+            bodyPartsPos[0].x += this->unk_380[arg2].x;
+            bodyPartsPos[0].y += this->unk_380[arg2].y;
+            bodyPartsPos[0].z += this->unk_380[arg2].z;
             if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
                 if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
                     drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
                 drawDmgEffAlpha = 1.0f;
             }
-            Actor_DrawDamageEffects(play, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
+            Actor_DrawDamageEffects(play, &this->actor, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), 0.3f,
                                     this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
             ret = true;
         }

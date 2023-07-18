@@ -1061,7 +1061,7 @@ void EnRailgibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
          (limbIndex == GIBDO_LIMB_LEFT_FOREARM) || (limbIndex == GIBDO_LIMB_LEFT_HAND) ||
          (limbIndex == GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) || (limbIndex == GIBDO_LIMB_RIGHT_FOREARM) ||
          (limbIndex == GIBDO_LIMB_RIGHT_HAND) || (limbIndex == GIBDO_LIMB_HEAD) || (limbIndex == GIBDO_LIMB_PELVIS))) {
-        Matrix_MultZero(&this->limbPos[this->limbIndex]);
+        Matrix_MultZero(&this->bodyPartsPos[this->limbIndex]);
         this->limbIndex++;
     }
 }
@@ -1093,8 +1093,8 @@ void EnRailgibud_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->drawDmgEffTimer > 0) {
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                                0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

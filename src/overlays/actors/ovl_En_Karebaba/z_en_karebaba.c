@@ -177,18 +177,18 @@ void EnKarebaba_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnKarebaba_SpawnIceEffects(EnKarebaba* this, PlayState* play) {
-    s32 limbPosCount;
+    s32 bodyPartsCount;
 
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
 
         if (this->actor.params == KAREBABA_MINI) {
-            limbPosCount = 1;
+            bodyPartsCount = 1;
         } else {
-            limbPosCount = 4;
+            bodyPartsCount = ARRAY_COUNT(this->bodyPartsPos);
         }
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, limbPosCount, 4, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, bodyPartsCount, 4, 0.3f, 0.2f);
     }
 }
 
