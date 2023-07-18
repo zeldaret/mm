@@ -6,6 +6,7 @@
 
 #include "z_en_bombf.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_bombf/object_bombf.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
@@ -313,7 +314,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
     Vec3f sp8C = { 0.0f, 0.0f, 0.0f };
     Vec3f sp80 = { 0.0f, 0.1f, 0.0f };
     Vec3f sp74 = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp68;
+    Vec3f effPos;
     Vec3f sp5C = { 0.0f, 0.6f, 0.0f };
     Color_RGBA8 sp58 = { 255, 255, 255, 255 };
     EnBombf* this = THIS;
@@ -375,16 +376,16 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_1F8 != 0) {
             sp5C.y = 0.2f;
-            sp68 = this->actor.world.pos;
-            sp68.y += 25.0f;
+            effPos = this->actor.world.pos;
+            effPos.y += 25.0f;
 
             if (this->timer < 127) {
                 if ((play->gameplayFrames % 2) == 0) {
-                    EffectSsGSpk_SpawnFuse(play, &this->actor, &sp68, &sp8C, &sp74);
+                    EffectSsGSpk_SpawnFuse(play, &this->actor, &effPos, &sp8C, &sp74);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
-                sp68.y += 3.0f;
-                func_800B0DE0(play, &sp68, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
+                effPos.y += 3.0f;
+                func_800B0DE0(play, &effPos, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
             }
 
             if ((this->timer == 3) || (this->timer == 30) || (this->timer == 50) || (this->timer == 70)) {
@@ -402,15 +403,15 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             }
 
             if (this->timer == 0) {
-                sp68 = this->actor.world.pos;
-                sp68.y += 10.0f;
+                effPos = this->actor.world.pos;
+                effPos.y += 10.0f;
 
                 if (Actor_HasParent(&this->actor, play)) {
-                    sp68.y += 30.0f;
+                    effPos.y += 30.0f;
                 }
 
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
-                            CLEAR_TAG_SMALL_EXPLOSION);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =

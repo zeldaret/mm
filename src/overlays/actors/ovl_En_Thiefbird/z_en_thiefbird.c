@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS \
     (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
@@ -950,7 +951,8 @@ void func_80C12B1C(EnThiefbird* this, PlayState* play) {
             if (i != ARRAY_COUNT(this->colliderElements)) {
                 sph = &this->collider.elements[i];
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
-                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;

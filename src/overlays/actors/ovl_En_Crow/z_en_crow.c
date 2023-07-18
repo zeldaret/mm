@@ -5,6 +5,7 @@
  */
 
 #include "z_en_crow.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
@@ -317,7 +318,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
         this->drawDmgEffFrozenSteamScale = 0.5f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements->info.bumper.hitPos.x,
                     this->collider.elements->info.bumper.hitPos.y, this->collider.elements->info.bumper.hitPos.z, 0, 0,
-                    0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 4.0f;

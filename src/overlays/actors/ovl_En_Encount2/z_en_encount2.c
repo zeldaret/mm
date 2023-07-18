@@ -5,6 +5,7 @@
  */
 
 #include "z_en_encount2.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_fusen/object_fusen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -160,15 +161,15 @@ void EnEncount2_Idle(EnEncount2* this, PlayState* play) {
 
 void EnEncount2_Popped(EnEncount2* this, PlayState* play) {
     s32 i;
-    Vec3f curPos;
+    Vec3f effPos;
 
-    Math_Vec3f_Copy(&curPos, &this->dyna.actor.world.pos);
-    curPos.y += 60.0f;
-    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, curPos.x, curPos.y, curPos.z, 255, 255, 200,
-                CLEAR_TAG_LARGE_EXPLOSION);
+    Math_Vec3f_Copy(&effPos, &this->dyna.actor.world.pos);
+    effPos.y += 60.0f;
+    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 255, 255, 200,
+                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
 
     for (i = 0; i < ARRAY_COUNT(this->effects) / 2; ++i) {
-        EnEncount2_InitEffects(this, &curPos, 10);
+        EnEncount2_InitEffects(this, &effPos, 10);
     }
 
     Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_MUJURA_BALLOON_BROKEN);

@@ -6,6 +6,7 @@
 
 #include "z_en_peehat.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_ph/object_ph.h"
 
@@ -727,7 +728,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.info.bumper.hitPos.x,
                                 this->colliderSphere.info.bumper.hitPos.y, this->colliderSphere.info.bumper.hitPos.z, 0,
-                                0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_800BE568(&this->actor, &this->colliderSphere);
                 func_808984E0(this);

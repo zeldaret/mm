@@ -6,6 +6,7 @@
 
 #include "z_en_wf.h"
 #include "overlays/actors/ovl_En_Bom_Chu/z_en_bom_chu.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
@@ -1456,7 +1457,7 @@ void func_8099386C(EnWf* this, PlayState* play) {
                     this->drawDmgEffAlpha = 4.0f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
                                 collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);

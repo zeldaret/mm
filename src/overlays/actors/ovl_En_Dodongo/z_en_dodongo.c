@@ -7,6 +7,7 @@
 #include "z_en_dodongo.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_dodongo/object_dodongo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
@@ -408,7 +409,8 @@ void func_80876BD0(EnDodongo* this, PlayState* play, s32 arg2) {
         this->drawDmgEffAlpha = 4.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider1.elements[arg2].info.bumper.hitPos.x,
                     this->collider1.elements[arg2].info.bumper.hitPos.y,
-                    this->collider1.elements[arg2].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    this->collider1.elements[arg2].info.bumper.hitPos.z, 0, 0, 0,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     }
 }
 

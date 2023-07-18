@@ -5,6 +5,7 @@
  */
 
 #include "z_en_grasshopper.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
@@ -879,7 +880,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
                 this->drawDmgEffTimer = 20;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
-                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 attackDealsDamage = true;
             }
         }

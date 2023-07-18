@@ -973,33 +973,37 @@ f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactTy
 }
 
 /**
- * Initializes an element of the `play->actorCtx.unk_20C` array to the `arg2` pointer, or allocates one using the
- * `size` argument in case `arg2` is NULL. This element is associated to an `id`
+ * Initializes an element of the `play->actorCtx.actorSharedMemory` array to the `ptr` pointer, or allocates one using
+ * the `size` argument in case `ptr` is NULL. This element is associated to an `id`.
  *
- * In success returns the allocated pointer if `arg2` was NULL or the `arg2` pointer otherwise
- * In failure (There's no space left in `play->actorCtx.unk_20C` or an allocation error happened) returns NULL
+ * This allows allows different actors the ability to access the varible, and thus communicate with each other by
+ * reading/setting the value.
+ *
+ * In success: returns the allocated pointer if `ptr` was NULL or the `ptr` pointer otherwise.
+ * In failure (There's no space left in `play->actorCtx.actorSharedMemory` or an allocation error happened): returns
+ * NULL.
  *
  * Note there are no duplicated id checks.
  *
  * Used only by EnLiftNuts.
  */
-void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_AddSharedMemoryEntry(PlayState* play, s16 id, void* ptr, size_t size) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (entry->id == 0) {
-            if (arg2 == NULL) {
-                arg2 = ZeldaArena_Malloc(size);
-                if (arg2 == NULL) {
+            if (ptr == NULL) {
+                ptr = ZeldaArena_Malloc(size);
+                if (ptr == NULL) {
                     return NULL;
                 }
                 entry->isDynamicallyInitialised = true;
             }
 
             entry->id = id;
-            entry->ptr = arg2;
-            return arg2;
+            entry->ptr = ptr;
+            return ptr;
         }
 
         entry++;
@@ -1009,18 +1013,18 @@ void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size) {
 }
 
 /**
- * Frees the first element of `play->actorCtx.unk_20C` with id `id`.
+ * Frees the first element of `play->actorCtx.actorSharedMemory` with id `id`.
  *
  * If success, the free'd pointer is returned.
  * If failure, NULL is returned.
  *
  * Used only by EnLiftNuts.
  */
-void* func_800B6608(PlayState* play, s16 id) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_FreeSharedMemoryEntry(PlayState* play, s16 id) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (id == entry->id) {
             entry->id = 0;
             if (entry->isDynamicallyInitialised) {
@@ -1037,16 +1041,16 @@ void* func_800B6608(PlayState* play, s16 id) {
 }
 
 /**
- * Retrieves the first pointer stored with the id `id`.
+ * Retrieves the first pointer stored with the id `id` from `play->actorCtx.actorSharedMemory`.
  * If there's no pointer stored with that id, NULL is returned.
  *
  * Used only by EnGamelupy.
  */
-void* func_800B6680(PlayState* play, s16 id) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_FindSharedMemoryEntry(PlayState* play, s16 id) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (id == entry->id) {
             return entry->ptr;
         }

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_st.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_st/object_st.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -567,7 +568,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         this->collider3.base.acFlags &= ~AC_HIT;
     }
@@ -577,7 +578,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         this->collider4.base.acFlags &= ~AC_HIT;
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {

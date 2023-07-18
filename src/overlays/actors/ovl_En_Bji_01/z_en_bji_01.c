@@ -15,19 +15,14 @@ void EnBji01_Destroy(Actor* thisx, PlayState* play);
 void EnBji01_Update(Actor* thisx, PlayState* play);
 void EnBji01_Draw(Actor* thisx, PlayState* play);
 
-void func_809CCE98(EnBji01* this, PlayState* play);
 void func_809CCEE8(EnBji01* this, PlayState* play);
 void func_809CD028(EnBji01* this, PlayState* play);
 void EnBji01_DialogueHandler(EnBji01* this, PlayState* play);
-void func_809CCDE0(EnBji01* this, PlayState* play);
 void func_809CD634(EnBji01* this, PlayState* play);
 void EnBji01_DoNothing(EnBji01* this, PlayState* play);
 void func_809CD6C0(EnBji01* this, PlayState* play);
 void func_809CD70C(EnBji01* this, PlayState* play);
 void func_809CD77C(EnBji01* this, PlayState* play);
-
-s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-void EnBji01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 ActorInit En_Bji_01_InitVars = {
     ACTOR_EN_BJI_01,
@@ -61,12 +56,20 @@ static ColliderCylinderInit sCylinderInit = {
     { 18, 64, 0, { 0, 0, 0 } },
 };
 
-/* Animations struct */
-static AnimationSpeedInfo sAnimationInfo[] = {
-    { &object_bji_Anim_000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Looking through telescope */
-    { &object_bji_Anim_005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, /* Breathing? Unused? */
-    { &object_bji_Anim_000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  /* Talking */
-    { &object_bji_Anim_00066C, 1.0f, ANIMMODE_ONCE, -5.0f }, /* Scratching chin? */
+typedef enum {
+    /* -1 */ SHIKASHI_ANIM_NONE = -1,
+    /*  0 */ SHIKASHI_ANIM_LOOK_THROUGH_TELESCOPE,
+    /*  1 */ SHIKASHI_ANIM_BREATHE,
+    /*  2 */ SHIKASHI_ANIM_TALK,
+    /*  3 */ SHIKASHI_ANIM_SCRATCH_CHIN,
+    /*  4 */ SHIKASHI_ANIM_MAX
+} ShikashiAnimation;
+
+static AnimationSpeedInfo sAnimationSpeedInfo[SHIKASHI_ANIM_MAX] = {
+    { &object_bji_Anim_000FDC, 1.0f, ANIMMODE_LOOP, 0.0f },  // SHIKASHI_ANIM_LOOK_THROUGH_TELESCOPE
+    { &object_bji_Anim_005B58, 1.0f, ANIMMODE_LOOP, 10.0f }, // SHIKASHI_ANIM_BREATHE
+    { &object_bji_Anim_000AB0, 1.0f, ANIMMODE_LOOP, 0.0f },  // SHIKASHI_ANIM_TALK
+    { &object_bji_Anim_00066C, 1.0f, ANIMMODE_ONCE, -5.0f }, // SHIKASHI_ANIM_SCRATCH_CHIN
 };
 
 void func_809CCDE0(EnBji01* this, PlayState* play) {
@@ -82,7 +85,8 @@ void func_809CCDE0(EnBji01* this, PlayState* play) {
 }
 
 void func_809CCE98(EnBji01* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 0, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SHIKASHI_ANIM_LOOK_THROUGH_TELESCOPE,
+                                    &this->animIndex);
     this->actor.textId = 0;
     this->actionFunc = func_809CCEE8;
 }
@@ -208,7 +212,7 @@ void func_809CD028(EnBji01* this, PlayState* play) {
         default:
             break;
     }
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SHIKASHI_ANIM_TALK, &this->animIndex);
     this->actionFunc = EnBji01_DialogueHandler;
 }
 
@@ -265,7 +269,8 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 switch (play->msgCtx.currentTextId) {
                     case 0x5DE:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 3, &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                        SHIKASHI_ANIM_SCRATCH_CHIN, &this->animIndex);
                         Message_ContinueTextbox(play, 0x5DF);
                         break;
 
@@ -328,8 +333,8 @@ void EnBji01_DialogueHandler(EnBji01* this, PlayState* play) {
         default:
             break;
     }
-    if ((this->animIndex == 3) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
+    if ((this->animIndex == SHIKASHI_ANIM_SCRATCH_CHIN) && (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SHIKASHI_ANIM_TALK, &this->animIndex);
     }
 }
 
@@ -348,7 +353,7 @@ void EnBji01_DoNothing(EnBji01* this, PlayState* play) {
 }
 
 void func_809CD6C0(EnBji01* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationInfo, 2, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, SHIKASHI_ANIM_TALK, &this->animIndex);
     this->actionFunc = func_809CD70C;
 }
 
@@ -378,7 +383,7 @@ void EnBji01_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.targetMode = TARGET_MODE_0;
     this->actor.child = NULL;
-    this->animIndex = -1;
+    this->animIndex = SHIKASHI_ANIM_NONE;
 
     Actor_SetScale(&this->actor, 0.01f);
     SubS_FillCutscenesList(&this->actor, this->csIdList, ARRAY_COUNT(this->csIdList));
@@ -421,7 +426,8 @@ void EnBji01_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (this->blinkTimer-- <= 0) {
-        if (--this->blinkSeqIndex < 0) {
+        this->blinkSeqIndex--;
+        if (this->blinkSeqIndex < 0) {
             this->blinkSeqIndex = 4;
             this->blinkTimer = (Rand_ZeroOne() * 60.0f) + 20.0f;
         } else {
@@ -450,9 +456,13 @@ s32 EnBji01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
             rot->x += this->torsoXRotStep;
             rot->z += this->torsoZRotStep;
             break;
+
         case SHIKASHI_LIMB_HEAD:
             rot->x += this->headXRotStep;
             rot->z += this->headZRotStep;
+            break;
+
+        default:
             break;
     }
     return false;

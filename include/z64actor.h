@@ -362,11 +362,11 @@ typedef struct PlayerImpact {
     /* 0x08 */ Vec3f pos;
 } PlayerImpact; // size = 0x14
 
-typedef struct ActorContext_unk_20C {
+typedef struct ActorSharedMemoryEntry {
     /* 0x0 */ s16 id;
     /* 0x2 */ s8 isDynamicallyInitialised;
     /* 0x4 */ void* ptr;
-} ActorContext_unk_20C; // size = 0x8
+} ActorSharedMemoryEntry; // size = 0x8
 
 typedef struct ActorContextSceneFlags {
     /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
@@ -426,7 +426,7 @@ typedef struct ActorContext {
     /* 0x1E4 */ TitleCardContext titleCtxt;
     /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
-    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
     /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
@@ -551,16 +551,6 @@ typedef enum {
 
 #define COLORFILTER_BUFFLAG_XLU    0x2000
 #define COLORFILTER_BUFFLAG_OPA    0x0000
-
-typedef enum {
-    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
-    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
-    /* 0x02 */ CLEAR_TAG_POP,
-    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
-    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
-    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
-} ClearTagType;
 
 typedef enum {
     /* 0x00 */ TATL_HINT_ID_DEFAULT,

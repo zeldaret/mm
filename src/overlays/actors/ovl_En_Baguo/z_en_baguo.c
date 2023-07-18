@@ -5,6 +5,7 @@
  */
 
 #include "z_en_baguo.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
@@ -158,7 +159,7 @@ void EnBaguo_Destroy(Actor* thisx, PlayState* play) {
 
 void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
     this->action = NEJIRON_ACTION_INACTIVE;
-    if (this->actor.xzDistToPlayer < 200.0f && Player_GetMask(play) != PLAYER_MASK_STONE) {
+    if ((this->actor.xzDistToPlayer < 200.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         this->actor.draw = EnBaguo_DrawBody;
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.world.rot.z = 0;
@@ -246,7 +247,7 @@ void EnBaguo_Roll(EnBaguo* this, PlayState* play) {
         this->actionFunc = EnBaguo_Idle;
         this->actor.speed = 0.0f;
     } else {
-        if (!this->bouncedFlag && this->collider.base.atFlags & AT_BOUNCED) {
+        if (!this->bouncedFlag && (this->collider.base.atFlags & AT_BOUNCED)) {
             this->zRollDirection ^= 1;
             this->bouncedFlag = 1;
             this->actor.speed = -7.0f;
@@ -317,7 +318,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
     i = false;
     if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_RETREATING) {
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
-            this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f)) {
+            (this->actor.world.pos.y < (this->actor.home.pos.y - 100.0f))) {
             // Force a detonation if we're off the ground and have fallen
             // below our home position (e.g., we rolled off a ledge).
             i = true;
@@ -327,9 +328,9 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
             // Force a detonation if we're too far below the water's surface.
             i = true;
         }
-        if ((this->collider.base.acFlags & AC_HIT || i)) {
+        if ((this->collider.base.acFlags & AC_HIT) || i) {
             this->collider.base.acFlags &= ~AC_HIT;
-            if (i || this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL) {
+            if (i || (this->actor.colChkInfo.damageEffect == NEJIRON_DMGEFF_KILL)) {
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
                 this->action = NEJIRON_ACTION_EXPLODING;
                 this->actor.speed = 0.0f;
@@ -347,7 +348,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
                 }
 
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_POP);
+                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_POP));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_DEAD);
 
@@ -375,7 +376,7 @@ void EnBaguo_Update(Actor* thisx, PlayState* play) {
     DECR(this->blinkTimer);
     DECR(this->timer);
 
-    if (this->action != NEJIRON_ACTION_EXPLODING && this->action != NEJIRON_ACTION_INACTIVE) {
+    if ((this->action != NEJIRON_ACTION_EXPLODING) && (this->action != NEJIRON_ACTION_INACTIVE)) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
 
@@ -449,9 +450,9 @@ void EnBaguo_InitializeEffect(EnBaguo* this, Vec3f* pos, Vec3f* velocity, Vec3f*
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rotation.y = (s16)(s32)Rand_CenteredFloat(0x7530);
-            effect->rotation.z = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.x = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.y = (s16)(s32)Rand_CenteredFloat(0x7530);
+            effect->rot.z = (s16)(s32)Rand_CenteredFloat(0x7530);
             return;
         }
     }
@@ -466,9 +467,9 @@ void EnBaguo_UpdateEffects(EnBaguo* this, PlayState* play) {
             effect->pos.x += effect->velocity.x;
             effect->pos.y += effect->velocity.y;
             effect->pos.z += effect->velocity.z;
-            effect->rotation.x += 0xBB8;
-            effect->rotation.y += 0xBB8;
-            effect->rotation.z += 0xBB8;
+            effect->rot.x += 0xBB8;
+            effect->rot.y += 0xBB8;
+            effect->rot.z += 0xBB8;
             effect->velocity.x += effect->accel.x;
             effect->velocity.y += effect->accel.y;
             effect->velocity.z += effect->accel.z;
@@ -500,9 +501,9 @@ void EnBaguo_DrawEffects(EnBaguo* this, PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-            Matrix_RotateXS(effect->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateYS(effect->rotation.y, MTXMODE_APPLY);
-            Matrix_RotateZS(effect->rotation.z, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
+            Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kame.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_tl/object_tl.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
@@ -673,7 +674,7 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                 this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 
                 if (!Actor_ApplyDamage(&this->actor)) {

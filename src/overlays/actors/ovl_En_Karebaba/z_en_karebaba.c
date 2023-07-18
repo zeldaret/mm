@@ -5,6 +5,7 @@
  */
 
 #include "z_en_karebaba.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -203,7 +204,7 @@ void EnKarebaba_SetDamageEffects(EnKarebaba* this, PlayState* play) {
 
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->hurtCollider.info.bumper.hitPos.x,
                     this->hurtCollider.info.bumper.hitPos.y, this->hurtCollider.info.bumper.hitPos.z, 0, 0, 0,
-                    CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == KAREBABA_DMGEFF_ICE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
         this->drawDmgEffScale = 0.75f;

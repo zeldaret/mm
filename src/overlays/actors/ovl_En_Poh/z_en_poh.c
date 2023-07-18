@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_poh.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_po/object_po.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
@@ -711,7 +712,8 @@ void func_80B2E438(EnPoh* this, PlayState* play) {
                     this->drawDmgEffScale = 0.45f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
                                 this->colliderCylinder.info.bumper.hitPos.y,
-                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_80B2CFF8(this);
             }

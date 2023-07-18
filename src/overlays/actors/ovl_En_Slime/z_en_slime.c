@@ -5,6 +5,7 @@
  */
 
 #include "z_en_slime.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_200)
 
@@ -1090,7 +1091,7 @@ void EnSlime_UpdateDamage(EnSlime* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                     this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     } else if (this->actor.colChkInfo.damageEffect == EN_SLIME_DMGEFF_ELECTRIC) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                         this->drawDmgEffAlpha = 4.0f;

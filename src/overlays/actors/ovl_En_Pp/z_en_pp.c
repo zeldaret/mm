@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pp.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
@@ -1320,7 +1321,7 @@ void EnPp_UpdateDamage(EnPp* this, PlayState* play) {
                                 (this->drawDmgEffTimer == 0))) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_GRAY, 255, COLORFILTER_BUFFLAG_OPA,
                                              25);
                         this->drawDmgEffTimer = 20;

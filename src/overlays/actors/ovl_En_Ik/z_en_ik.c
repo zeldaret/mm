@@ -6,6 +6,7 @@
 
 #include "z_en_ik.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
@@ -317,7 +318,7 @@ void EnIk_HitArmor(EnIk* this, PlayState* play) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
                 this->colliderCylinder.info.bumper.hitPos.y, this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
-                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
 }
 
 s32 EnIk_IsChangingAction(EnIk* this, PlayState* play) {

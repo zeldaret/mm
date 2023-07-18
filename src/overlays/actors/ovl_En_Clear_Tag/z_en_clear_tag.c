@@ -435,7 +435,7 @@ void EnClearTag_Init(Actor* thisx, PlayState* play) {
 
         if (thisx->params != CLEAR_TAG_SPLASH) {
             // Initialize isolated light ray effect
-            if (thisx->params == CLEAR_TAG_SMALL_LIGHT_RAYS || thisx->params == CLEAR_TAG_LARGE_LIGHT_RAYS) {
+            if ((thisx->params == CLEAR_TAG_SMALL_LIGHT_RAYS) || (thisx->params == CLEAR_TAG_LARGE_LIGHT_RAYS)) {
                 for (i = 0; i < 54; i++) {
                     lightRayMaxScale =
                         sLightRayMaxScale[thisx->params] + Rand_ZeroFloat(sLightRayMaxScale[thisx->params]);

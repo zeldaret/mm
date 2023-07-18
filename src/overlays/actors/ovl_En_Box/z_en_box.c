@@ -180,12 +180,12 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     EnBox* this = THIS;
     s16 csId;
     CollisionHeader* colHeader;
-    f32 animFrame;
-    f32 animFrameEnd;
+    f32 startFrame;
+    f32 endFrame;
 
     colHeader = NULL;
-    animFrame = 0.0f;
-    animFrameEnd = Animation_GetLastFrame(&gBoxChestOpenAnim);
+    startFrame = 0.0f;
+    endFrame = Animation_GetLastFrame(&gBoxChestOpenAnim);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&gBoxChestCol, &colHeader);
@@ -216,7 +216,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->iceSmokeTimer = 100;
         EnBox_SetupAction(this, EnBox_Open);
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
-        animFrame = animFrameEnd;
+        startFrame = endFrame;
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -272,7 +272,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
 
     SkelAnime_Init(play, &this->skelAnime, &gBoxChestSkel, &gBoxChestOpenAnim, this->jointTable, this->morphTable,
                    OBJECT_BOX_CHEST_LIMB_MAX);
-    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, animFrame, animFrameEnd, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, startFrame, endFrame, ANIMMODE_ONCE, 0.0f);
     if (Actor_IsSmallChest(this)) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
         Actor_SetFocus(&this->dyna.actor, 20.0f);
@@ -449,17 +449,17 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
         &gBoxBigChestOpenChildAnim, // PLAYER_FORM_HUMAN
     };
     s32 pad;
-    AnimationHeader* animHeader;
-    f32 frameCount;
-    f32 playbackSpeed;
+    AnimationHeader* anim;
+    f32 endFrame;
+    f32 playSpeed;
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
     if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (CutsceneManager_GetCurrentCsId() == this->csId2) ||
                                  (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
-            animHeader = &gBoxChestOpenAnim;
-            playbackSpeed = 1.5f;
+            anim = &gBoxChestOpenAnim;
+            playSpeed = 1.5f;
         } else {
             f32 sPlaybackSpeeds[PLAYER_FORM_MAX] = {
                 1.5f, // PLAYER_FORM_FIERCE_DEITY
@@ -469,12 +469,12 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
                 1.5f, // PLAYER_FORM_HUMAN
             };
 
-            animHeader = sBigChestAnimations[GET_PLAYER_FORM];
-            playbackSpeed = sPlaybackSpeeds[GET_PLAYER_FORM];
+            anim = sBigChestAnimations[GET_PLAYER_FORM];
+            playSpeed = sPlaybackSpeeds[GET_PLAYER_FORM];
         }
 
-        frameCount = Animation_GetLastFrame(animHeader);
-        Animation_Change(&this->skelAnime, animHeader, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
+        endFrame = Animation_GetLastFrame(anim);
+        Animation_Change(&this->skelAnime, anim, playSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0.0f);
         EnBox_SetupAction(this, EnBox_Open);
         if (this->unk_1EC > 0) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DEMO_TRE_LGT,
@@ -557,8 +557,8 @@ void EnBox_Open(EnBox* this, PlayState* play) {
         if (sfxId != NA_SE_NONE) {
             Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, sfxId);
         }
-        if (this->skelAnime.jointTable[3].z > 0) {
-            this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[3].z) * 0.00006f;
+        if (this->skelAnime.jointTable[OBJECT_BOX_CHEST_LIMB_03].z > 0) {
+            this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[OBJECT_BOX_CHEST_LIMB_03].z) * 0.00006f;
             if (this->unk_1A8 < 0.0f) {
                 this->unk_1A8 = 0.0f;
             } else if (this->unk_1A8 > 1.0f) {

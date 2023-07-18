@@ -5,8 +5,9 @@
  */
 
 #include "z_en_suttari.h"
-#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
@@ -1272,7 +1273,7 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->flags2 |= 4;
             this->actor.speed = 0.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_Kill(&this->actor);
             return;

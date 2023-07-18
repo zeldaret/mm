@@ -36,13 +36,13 @@
         <DList Name="gTwinmoldHeadRightMandibleDL" Offset="0x6C68" />
 
         <!-- DisplayLists and Textures for the destructible props in Twinmold's arena -->
-        <DList Name="gTwinmoldPyramidRuinDL" Offset="0x6FD0" />
-        <Texture Name="gTwinmoldPyramidRuinTLUT" OutName="pyramid_ruin_tlut" Format="rgba16" Width="4" Height="4" Offset="0x7158" />
-        <Texture Name="gTwinmoldPyramidRuinTex" OutName="pyramid_ruin" Format="ci4" Width="64" Height="64" Offset="0x7178" />
+        <DList Name="gTwinmoldRuinPyramidDL" Offset="0x6FD0" />
+        <Texture Name="gTwinmoldRuinPyramidTLUT" OutName="ruin_pyramid_tlut" Format="rgba16" Width="4" Height="4" Offset="0x7158" />
+        <Texture Name="gTwinmoldRuinPyramidTex" OutName="ruin_pyramid" Format="ci4" Width="64" Height="64" Offset="0x7178" />
         <DList Name="gRuinFragmentDL" Offset="0x7A88" />
-        <DList Name="gTwinmoldMajoraPillarDL" Offset="0x7D18" />
-        <Texture Name="gTwinmoldMajoraPillarTLUT" OutName="majora_pillar_tlut" Format="rgba16" Width="4" Height="4" Offset="0x7E30" />
-        <Texture Name="gTwinmoldMajoraPillarTex" OutName="majora_pillar" Format="ci4" Width="64" Height="64" Offset="0x7E50" />
+        <DList Name="gTwinmoldRuinPillarDL" Offset="0x7D18" />
+        <Texture Name="gTwinmoldRuinPillarTLUT" OutName="ruin_pillar_tlut" Format="rgba16" Width="4" Height="4" Offset="0x7E30" />
+        <Texture Name="gTwinmoldRuinPillarTex" OutName="ruin_pillar" Format="ci4" Width="64" Height="64" Offset="0x7E50" />
         
         <!-- Twinmold Title Card -->
         <Texture Name="gTwinmoldTitleCardTex" OutName="twinmold_title_card" Format="ia8" Width="128" Height="40" Offset="0x8650" />
