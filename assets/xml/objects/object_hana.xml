@@ -8,6 +8,6 @@
         <DList Name="object_hana_DL_000320" Offset="0x320" />
         <DList Name="object_hana_DL_0003C0" Offset="0x3C0" />
         <DList Name="object_hana_DL_000460" Offset="0x460" />
-        <DList Name="object_hana_DL_000500" Offset="0x500" />
+        <DList Name="object_hana_DL_000500" Offset="0x500" /> <!-- Original name is "flower1_model" -->
     </File>
 </Root>
