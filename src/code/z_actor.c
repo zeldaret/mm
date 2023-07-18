@@ -4670,7 +4670,7 @@ TexturePtr sElectricSparkTextures[] = {
 };
 
 /**
- * Draw common damage effects applied to each limb provided in bodyPartsPos
+ * Draw common damage effects applied to each body part provided in bodyPartsPos
  */
 void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s16 bodyPartsCount, f32 effectScale,
                              f32 frozenSteamScale, f32 effectAlpha, u8 type) {
@@ -4723,7 +4723,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
-                // Apply and draw ice over each limb of frozen actor
+                // Apply and draw ice over each body part of frozen actor
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     alpha = bodyPartIndex & 3;
                     alpha = effectAlphaScaled - (30.0f * alpha);
@@ -4768,7 +4768,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
 
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 195, 225, 235, (u8)alpha);
 
-                // Apply and draw steam over each limb of frozen actor
+                // Apply and draw steam over each body part of frozen actor
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     twoTexScrollParam = ((bodyPartIndex * 3) + gameplayFrames);
                     gSPSegment(POLY_XLU_DISP++, 0x08,
@@ -4802,7 +4802,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
 
                 effectAlphaScaled = effectAlpha * 255.0f;
 
-                // Apply and draw fire on every limb
+                // Apply and draw fire on every body part
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     alpha = bodyPartIndex & 3;
                     alpha = effectAlphaScaled - 30.0f * alpha;
@@ -4862,7 +4862,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                 Matrix_Put(&play->billboardMtxF);
                 Matrix_Scale(lightOrbsScale, lightOrbsScale, 1.0f, MTXMODE_APPLY);
 
-                // Apply and draw a light orb over each limb of frozen actor
+                // Apply and draw a light orb over each body part of frozen actor
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     Matrix_RotateZF(Rand_CenteredFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = bodyPartsPos->x;
@@ -4900,7 +4900,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[]
                 Matrix_Put(&play->billboardMtxF);
                 Matrix_Scale(electricSparksScale, electricSparksScale, electricSparksScale, MTXMODE_APPLY);
 
-                // Every limb draws two electric sparks at random orientations
+                // Every body part draws two electric sparks at random orientations
                 for (bodyPartIndex = 0; bodyPartIndex < bodyPartsCount; bodyPartIndex++, bodyPartsPos++) {
                     // first electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));

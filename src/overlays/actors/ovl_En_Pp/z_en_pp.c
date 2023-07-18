@@ -1188,7 +1188,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
-        this->deadBodyPartCount = 10;
+        this->deadBodyPartCount = EN_PP_DEAD_BODYPART_MAX;
         for (i = 0; i < EN_PP_DEAD_BODYPART_MAX; i++) {
             Math_Vec3f_Copy(&this->deadBodyPartsPos[i], &this->deadBodyPartPos);
             this->deadBodyPartsPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
