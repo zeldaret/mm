@@ -539,7 +539,7 @@ void func_80BDED20(EnAl* this) {
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
 
     if (this->unk_368->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_368)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_368)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_368->focus.pos);
     }

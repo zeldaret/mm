@@ -186,7 +186,7 @@ void EnKarebaba_SpawnIceEffects(EnKarebaba* this, PlayState* play) {
         if (this->actor.params == KAREBABA_MINI) {
             bodyPartsCount = 1;
         } else {
-            bodyPartsCount = ARRAY_COUNT(this->bodyPartsPos);
+            bodyPartsCount = KAREBABA_BODYPART_MAX;
         }
         Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, bodyPartsCount, 4, 0.3f, 0.2f);
     }
@@ -694,7 +694,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sStemDLists[i]);
 
-            Matrix_MultZero(&this->bodyPartsPos[1 + i]);
+            Matrix_MultZero(&this->bodyPartsPos[KAREBABA_BODYPART_1 + i]);
             if ((i == 0) && (this->actionFunc == EnKarebaba_Dying)) {
                 Matrix_MultZero(&this->actor.focus.pos);
             }
@@ -720,7 +720,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemBaseDL);
 
-        Matrix_MultZero(&this->bodyPartsPos[3]);
+        Matrix_MultZero(&this->bodyPartsPos[KAREBABA_BODYPART_3]);
     }
 
     func_800AE5A0(play);
@@ -728,7 +728,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params == KAREBABA_MINI) {
         bodyPartsCount = 1;
     } else {
-        bodyPartsCount = ARRAY_COUNT(this->bodyPartsPos);
+        bodyPartsCount = KAREBABA_BODYPART_MAX;
     }
 
     Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, bodyPartsCount, this->drawDmgEffScale,

@@ -230,14 +230,14 @@ void func_808D8ED0(EnSw* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++) {
         Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
         sp54.x += this->bodyPartsPos[i].x;
         sp54.y += this->bodyPartsPos[i].y;
         sp54.z += this->bodyPartsPos[i].z;
         Math_Vec3f_Copy(&this->bodyPartsPos[i], &sp54);
     }
-    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENSW_BODYPART_MAX, 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, PlayState* play) {

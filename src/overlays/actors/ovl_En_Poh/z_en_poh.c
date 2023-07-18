@@ -865,27 +865,27 @@ s32 EnPoh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 }
 
 static s8 sLimbToBodyParts[OBJECT_PO_LIMB_MAX] = {
-    -1, // OBJECT_PO_LIMB_NONE
-    -1, // OBJECT_PO_LIMB_01
-    -1, // OBJECT_PO_LIMB_02
-    -1, // OBJECT_PO_LIMB_03
-    4,  // OBJECT_PO_LIMB_04
-    5,  // OBJECT_PO_LIMB_05
-    -1, // OBJECT_PO_LIMB_06
-    -1, // OBJECT_PO_LIMB_07
-    -1, // OBJECT_PO_LIMB_08
-    0,  // OBJECT_PO_LIMB_09
-    1,  // OBJECT_PO_LIMB_0A
-    -1, // OBJECT_PO_LIMB_0B
-    -1, // OBJECT_PO_LIMB_0C
-    -1, // OBJECT_PO_LIMB_0D
-    -1, // OBJECT_PO_LIMB_0E
-    -1, // OBJECT_PO_LIMB_0F
-    2,  // OBJECT_PO_LIMB_10
-    -1, // OBJECT_PO_LIMB_11
-    -1, // OBJECT_PO_LIMB_12
-    3,  // OBJECT_PO_LIMB_13
-    -1, // OBJECT_PO_LIMB_14
+    -1,               // OBJECT_PO_LIMB_NONE
+    -1,               // OBJECT_PO_LIMB_01
+    -1,               // OBJECT_PO_LIMB_02
+    -1,               // OBJECT_PO_LIMB_03
+    ENPOH_BODYPART_4, // OBJECT_PO_LIMB_04
+    ENPOH_BODYPART_5, // OBJECT_PO_LIMB_05
+    -1,               // OBJECT_PO_LIMB_06
+    -1,               // OBJECT_PO_LIMB_07
+    -1,               // OBJECT_PO_LIMB_08
+    ENPOH_BODYPART_0, // OBJECT_PO_LIMB_09
+    ENPOH_BODYPART_1, // OBJECT_PO_LIMB_0A
+    -1,               // OBJECT_PO_LIMB_0B
+    -1,               // OBJECT_PO_LIMB_0C
+    -1,               // OBJECT_PO_LIMB_0D
+    -1,               // OBJECT_PO_LIMB_0E
+    -1,               // OBJECT_PO_LIMB_0F
+    ENPOH_BODYPART_2, // OBJECT_PO_LIMB_10
+    -1,               // OBJECT_PO_LIMB_11
+    -1,               // OBJECT_PO_LIMB_12
+    ENPOH_BODYPART_3, // OBJECT_PO_LIMB_13
+    -1,               // OBJECT_PO_LIMB_14
 };
 
 static Vec3f D_80B2F734[ENPOH_BODYPART_MAX - ENPOH_BODYPART_7] = {

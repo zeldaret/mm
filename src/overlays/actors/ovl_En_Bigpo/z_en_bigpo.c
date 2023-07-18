@@ -160,7 +160,7 @@ static InitChainEntry sInitChain[] = {
 // used in the burning death actionfunc
 static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
-static u8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
+static s8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
     -1,                 // BIG_POE_LIMB_NONE
     BIG_POE_BODYPART_4, // BIG_POE_LIMB_FACE
     -1,                 // BIG_POE_LIMB_LEFT_UPPER_ARM

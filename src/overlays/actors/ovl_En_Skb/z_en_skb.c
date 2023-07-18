@@ -1008,17 +1008,17 @@ void func_80996BEC(EnSkb* this, PlayState* play) {
     Vec3f sp84;
     s32 i;
     s16 yaw;
-    s32 end;
+    s32 bodyPartsCount;
 
     if (this->unk_3D8 & 2) {
-        end = 13;
+        bodyPartsCount = ENSKB_BODYPART_MAX - 1;
     } else {
-        end = 14;
+        bodyPartsCount = ENSKB_BODYPART_MAX;
     }
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
-    for (i = 0; i < end; i++) {
+    for (i = 0; i < bodyPartsCount; i++) {
         yaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bodyPartsPos[i]);
         sp84.x = Math_SinS(yaw) * 3.0f;
         sp84.z = Math_CosS(yaw) * 3.0f;

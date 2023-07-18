@@ -928,7 +928,7 @@ void EnIk_Update(Actor* thisx, PlayState* play2) {
     EnIk_UpdateArmor(this, play);
 }
 
-s8 sLimbToBodyParts1[IRON_KNUCKLE_LIMB_MAX] = {
+static s8 sLimbToBodyParts1[IRON_KNUCKLE_LIMB_MAX] = {
     -1, // IRON_KNUCKLE_LIMB_NONE
     -1, // IRON_KNUCKLE_LIMB_ROOT
     -1, // IRON_KNUCKLE_LIMB_TASSET_CENTER

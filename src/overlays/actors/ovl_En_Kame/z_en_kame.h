@@ -43,7 +43,7 @@ typedef struct EnKame {
     /* 0x2B4 */ f32 drawDmgEffScale;
     /* 0x2B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2BC */ Vec3f unk_2BC;
-    /* 0x2C8 */ Vec3f bodyPartsPos[10];
+    /* 0x2C8 */ Vec3f bodyPartsPos[TL_2_BODYPART_MAX];
     /* 0x340 */ ColliderCylinder collider;
 } EnKame; // size = 0x38C
 
