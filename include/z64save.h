@@ -1291,7 +1291,7 @@ typedef enum {
 
 #define WEEKEVENTREG_85_04 PACK_WEEKEVENTREG_FLAG(85, 0x04)
 
-// These get set per location, if Kotake tries to give the player a red potion to save koume,
+// These get set per location, if Kotake tries to give the player a Red Potion to save Koume,
 // but is unable to do so since all bottles are full.
 #define WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_SHOP PACK_WEEKEVENTREG_FLAG(85, 0x08)
 #define WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS PACK_WEEKEVENTREG_FLAG(85, 0x10)
