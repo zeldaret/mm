@@ -35,6 +35,25 @@ typedef enum EnKaizokuAnimation {
     /* 19 */ EN_KAIZOKU_ANIM_MAX
 } EnKaizokuAnimation;
 
+typedef enum EnKaizokuBodyPart {
+    /*  0 */ KAIZOKU_BODYPART_0,
+    /*  1 */ KAIZOKU_BODYPART_1,
+    /*  2 */ KAIZOKU_BODYPART_2,
+    /*  3 */ KAIZOKU_BODYPART_3,
+    /*  4 */ KAIZOKU_BODYPART_4,
+    /*  5 */ KAIZOKU_BODYPART_5,
+    /*  6 */ KAIZOKU_BODYPART_6,
+    /*  7 */ KAIZOKU_BODYPART_7,
+    /*  8 */ KAIZOKU_BODYPART_8,
+    /*  9 */ KAIZOKU_BODYPART_9,
+    /* 10 */ KAIZOKU_BODYPART_10,
+    /* 11 */ KAIZOKU_BODYPART_11,
+    /* 12 */ KAIZOKU_BODYPART_12,
+    /* 13 */ KAIZOKU_BODYPART_13,
+    /* 14 */ KAIZOKU_BODYPART_14,
+    /* 15 */ KAIZOKU_BODYPART_MAX
+} EnKaizokuBodyPart;
+
 typedef struct EnKaizoku {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;
@@ -70,7 +89,7 @@ typedef struct EnKaizoku {
     /* 0x2F4 */ s16 unk_2F4;
     /* 0x2F8 */ Vec3f unk_2F8;
     /* 0x304 */ Vec3f unk_304;
-    /* 0x310 */ Vec3f bodyPartsPos[15];
+    /* 0x310 */ Vec3f bodyPartsPos[KAIZOKU_BODYPART_MAX];
     /* 0x3C4 */ Vec3f unk_3C4;
     /* 0x3D0 */ s32 blureIndex;
     /* 0x3D4 */ ColliderCylinder bodyCollider;

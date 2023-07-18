@@ -12123,7 +12123,7 @@ void Player_DrawGameplay(PlayState* play, Player* this, s32 lod, Gfx* cullDList,
 
 void func_80846460(Player* this) {
     Vec3f* pos;
-    Vec3f* bodyPartsPos;
+    Vec3f* bodyPartPosPtr;
     s32 i;
 
     this->actor.focus.pos.x = this->actor.world.pos.x;
@@ -12131,15 +12131,15 @@ void func_80846460(Player* this) {
     this->actor.focus.pos.y = this->actor.world.pos.y + 24.0f;
 
     pos = &this->actor.world.pos;
-    bodyPartsPos = this->bodyPartsPos;
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
-        Math_Vec3f_Copy(bodyPartsPos, pos);
-        bodyPartsPos++;
+    bodyPartPosPtr = this->bodyPartsPos;
+    for (i = 0; i < PLAYER_BODYPART_MAX; i++) {
+        Math_Vec3f_Copy(bodyPartPosPtr, pos);
+        bodyPartPosPtr++;
     }
 
     this->bodyPartsPos[PLAYER_BODYPART_HEAD].y = this->actor.world.pos.y + 24.0f;
     this->bodyPartsPos[PLAYER_BODYPART_WAIST].y = this->actor.world.pos.y + 60.0f;
-    Math_Vec3f_Copy(this->actor.shape.feetPos, pos);
+    Math_Vec3f_Copy(&this->actor.shape.feetPos[0], pos);
     Math_Vec3f_Copy(&this->actor.shape.feetPos[1], pos);
 }
 

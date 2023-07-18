@@ -331,14 +331,14 @@ void func_808A5AF8(EnSt* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+    for (i = 0; i < ENST_BODYPART_MAX; i++) {
         Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
         sp54.x += this->bodyPartsPos[i].x;
         sp54.y += this->bodyPartsPos[i].y;
         sp54.z += this->bodyPartsPos[i].z;
         Math_Vec3f_Copy(&this->bodyPartsPos[i], &sp54);
     }
-    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENST_BODYPART_MAX, 3, 0.1f, 0.3f);
 }
 
 s16 func_808A5BEC(EnSt* this) {
@@ -757,16 +757,16 @@ void func_808A6D84(EnSt* this, PlayState* play) {
 
 void func_808A6E24(EnSt* this, PlayState* play) {
     s32 i;
-    s32 count = 0;
+    s32 bodyPartsCount = 0;
 
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         for (i = 0; i < ENST_BODYPART_MAX; i++) {
             if (DECR(this->unk_31C[i]) == 0) {
-                count++;
+                bodyPartsCount++;
             }
         }
 
-        if (count == ENST_BODYPART_MAX) {
+        if (bodyPartsCount == ENST_BODYPART_MAX) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 7);
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_BLUE_FIRE;
             this->unk_2CC = 0.0f;
@@ -811,7 +811,7 @@ void func_808A6E24(EnSt* this, PlayState* play) {
 
 void func_808A701C(EnSt* this, PlayState* play) {
     s32 i;
-    s32 count = 0;
+    s32 bodyPartsCount = 0;
 
     if (this->unk_18C & 0x40) {
         if (DECR(this->unk_318) == 0) {
@@ -820,11 +820,11 @@ void func_808A701C(EnSt* this, PlayState* play) {
 
         for (i = 0; i < ENST_BODYPART_MAX; i++) {
             if (DECR(this->unk_31C[i]) == 0) {
-                count++;
+                bodyPartsCount++;
             }
         }
 
-        if (count == ENST_BODYPART_MAX) {
+        if (bodyPartsCount == ENST_BODYPART_MAX) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, 0);
             Actor_Kill(&this->actor);
         }

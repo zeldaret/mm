@@ -19,14 +19,26 @@ typedef enum {
     /* 1 */ POE_SISTERS_TYPE_JO,   // red
     /* 2 */ POE_SISTERS_TYPE_BETH, // blue
     /* 3 */ POE_SISTERS_TYPE_AMY   // green
-} EnPoSisterType;
+} PoeSisterType;
 
 typedef enum {
     /* 0 */ POE_SISTERS_MEG_REAL,
     /* 1 */ POE_SISTERS_MEG_CLONE1,
     /* 2 */ POE_SISTERS_MEG_CLONE2,
     /* 3 */ POE_SISTERS_MEG_CLONE3
-} EnPoSisterMegCloneID;
+} PoeSisterMegCloneId;
+
+typedef enum PoeSisterBodyPart {
+    /* 0 */ POE_SISTERS_BODYPART_LEFT_ARM,
+    /* 1 */ POE_SISTERS_BODYPART_LEFT_HAND,
+    /* 2 */ POE_SISTERS_BODYPART_RIGHT_UPPER_ARM,
+    /* 3 */ POE_SISTERS_BODYPART_TORCH_ROOT,
+    /* 4 */ POE_SISTERS_BODYPART_MAIN_BODY_0,
+    /* 5 */ POE_SISTERS_BODYPART_MAIN_BODY_1,
+    /* 6 */ POE_SISTERS_BODYPART_FACE,
+    /* 7 */ POE_SISTERS_BODYPART_LOWER_BODY,
+    /* 8 */ POE_SISTERS_BODYPART_MAX
+} PoeSisterBodyPart;
 
 typedef struct EnPoSisters {
     /* 0x000 */ Actor actor;
@@ -58,7 +70,7 @@ typedef struct EnPoSisters {
     /* 0x1DE */ Vec3s morphTable[POE_SISTERS_LIMB_MAX];
     /* 0x226 */ Color_RGBA8 color;
     /* 0x22C */ Vec3f firePos[8];
-    /* 0x28C */ Vec3f bodyPartsPos[8]; // passed to Actor_DrawDamageEffects
+    /* 0x28C */ Vec3f bodyPartsPos[POE_SISTERS_BODYPART_MAX];
     /* 0x2EC */ f32 megDistToPlayer;
     /* 0x2F0 */ f32 drawDmgEffAlpha;
     /* 0x2F4 */ f32 drawDmgEffScale;

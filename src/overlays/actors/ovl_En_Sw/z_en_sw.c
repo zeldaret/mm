@@ -173,10 +173,10 @@ void func_808D8940(EnSw* this, PlayState* play) {
 }
 
 s32 func_808D8B58(EnSw* this) {
-    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % ARRAY_COUNT(this->unk_464)) * 0x1555;
+    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % ENSW_BODYPART_MAX) * 0x1555;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++, phi_s2 += 0x1555) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
@@ -186,41 +186,41 @@ s32 func_808D8B58(EnSw* this) {
         this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
+            this->bodyPartsPos[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
-            this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
+            this->bodyPartsPos[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
         }
-        this->unk_380[i].x = Math_SinS(phi_s2) * 10.0f;
-        this->unk_380[i].z = Math_CosS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].x = Math_SinS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].z = Math_CosS(phi_s2) * 10.0f;
     }
     this->unk_462 = 1;
     return 0;
 }
 
-s32 func_808D8D60(EnSw* this, PlayState* play, s32 arg2) {
-    s32 ret = false;
+s32 func_808D8D60(EnSw* this, PlayState* play, s32 bodyPartIndex) {
+    s32 ret = 0;
     u8 drawDmgEffType;
     Vec3f bodyPartsPos[1];
     f32 drawDmgEffAlpha;
 
-    if (arg2 < this->unk_462) {
-        if (this->unk_464[arg2] != 0) {
-            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+    if (bodyPartIndex < this->unk_462) {
+        if (this->unk_464[bodyPartIndex] != 0) {
+            drawDmgEffAlpha = (f32)this->unk_464[bodyPartIndex] / this->unk_47C[bodyPartIndex];
             drawDmgEffType = this->drawDmgEffType;
-            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[bodyPartIndex], 0.3f, 0.3f, 0.5f);
             Math_Vec3f_Copy(&bodyPartsPos[0], &this->actor.world.pos);
-            bodyPartsPos[0].x += this->unk_380[arg2].x;
-            bodyPartsPos[0].y += this->unk_380[arg2].y;
-            bodyPartsPos[0].z += this->unk_380[arg2].z;
+            bodyPartsPos[0].x += this->bodyPartsPos[bodyPartIndex].x;
+            bodyPartsPos[0].y += this->bodyPartsPos[bodyPartIndex].y;
+            bodyPartsPos[0].z += this->bodyPartsPos[bodyPartIndex].z;
             if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-                if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
+                if ((this->unk_47C[bodyPartIndex] - this->unk_464[bodyPartIndex]) < 20) {
                     drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
                 drawDmgEffAlpha = 1.0f;
             }
             Actor_DrawDamageEffects(play, &this->actor, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), 0.3f,
-                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
-            ret = true;
+                                    this->drawDmgEffFrozenSteamScales[bodyPartIndex], drawDmgEffAlpha, drawDmgEffType);
+            ret = 1;
         }
     }
     return ret;
@@ -230,14 +230,14 @@ void func_808D8ED0(EnSw* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_380); i++) {
+    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
         Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
-        sp54.x += this->unk_380[i].x;
-        sp54.y += this->unk_380[i].y;
-        sp54.z += this->unk_380[i].z;
-        Math_Vec3f_Copy(&this->unk_380[i], &sp54);
+        sp54.x += this->bodyPartsPos[i].x;
+        sp54.y += this->bodyPartsPos[i].y;
+        sp54.z += this->bodyPartsPos[i].z;
+        Math_Vec3f_Copy(&this->bodyPartsPos[i], &sp54);
     }
-    Actor_SpawnIceEffects(play, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, PlayState* play) {
@@ -1281,6 +1281,9 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
             case 4:
                 *dList = object_st_DL_0043D8;
                 break;
+
+            default:
+                break;
         }
     }
     return false;
@@ -1288,7 +1291,7 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnSw_Draw(Actor* thisx, PlayState* play) {
     EnSw* this = THIS;
-    s32 i;
+    s32 bodyPartIndex;
     s32 count;
 
     if (this->unk_410 & 4) {
@@ -1301,8 +1304,8 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
                           &this->actor);
     }
 
-    for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {
-        count += func_808D8D60(this, play, i);
+    for (bodyPartIndex = 0, count = 0; bodyPartIndex < ENSW_BODYPART_MAX; bodyPartIndex++) {
+        count += func_808D8D60(this, play, bodyPartIndex);
     }
 
     if (count != 0) {

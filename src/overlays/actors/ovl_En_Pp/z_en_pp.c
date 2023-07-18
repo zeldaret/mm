@@ -869,8 +869,7 @@ void EnPp_StunnedOrFrozen(EnPp* this, PlayState* play) {
     if ((this->secondaryTimer == 0) && (this->drawDmgEffTimer == 0)) {
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f,
-                                  0.4f);
+            Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, 2, 0.7f, 0.4f);
             this->drawDmgEffTimer = 0;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         }
@@ -906,7 +905,7 @@ void EnPp_SetupDamaged(EnPp* this, PlayState* play) {
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
         (this->drawDmgEffTimer != 0)) {
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f, 0.4f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
@@ -1026,7 +1025,7 @@ void EnPp_Dead(EnPp* this, PlayState* play) {
             return;
         }
 
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f, 0.4f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
@@ -1190,7 +1189,7 @@ void EnPp_BodyPart_Move(EnPp* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (EN_PP_GET_TYPE(&this->actor) == EN_PP_TYPE_BODY_PART_BODY) {
         this->deadBodyPartCount = 10;
-        for (i = 0; i < ARRAY_COUNT(this->deadBodyPartsPos); i++) {
+        for (i = 0; i < EN_PP_DEAD_BODYPART_MAX; i++) {
             Math_Vec3f_Copy(&this->deadBodyPartsPos[i], &this->deadBodyPartPos);
             this->deadBodyPartsPos[i].x += Math_SinS(0xCCC * i) * 15.0f;
             this->deadBodyPartsPos[i].y += -5.0f;
@@ -1543,7 +1542,7 @@ void EnPp_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             (limbIndex == HIPLOOP_LIMB_LEFT_EYE)) {
             Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
             this->bodyPartIndex++;
-            if (this->bodyPartIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
+            if (this->bodyPartIndex >= EN_PP_BODYPART_MAX) {
                 this->bodyPartIndex = 0;
             }
 
@@ -1600,8 +1599,8 @@ void EnPp_Draw(Actor* thisx, PlayState* play) {
             this->drawDmgEffFrozenSteamScale = 0.8f;
         }
 
-        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, alpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_PP_BODYPART_MAX, this->drawDmgEffScale,
+                                this->drawDmgEffFrozenSteamScale, alpha, this->drawDmgEffType);
     }
 
     if (this->floorPolyForCircleShadow != NULL) {

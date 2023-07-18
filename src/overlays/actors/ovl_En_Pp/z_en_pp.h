@@ -25,6 +25,35 @@ typedef enum {
     /* 26 */ EN_PP_TYPE_BODY_PART_CENTER_WING_MIDDLE = 26
 } EnPpType;
 
+typedef enum EnPpBodyPart {
+    /*  0 */ EN_PP_BODYPART_0,
+    /*  1 */ EN_PP_BODYPART_1,
+    /*  2 */ EN_PP_BODYPART_2,
+    /*  3 */ EN_PP_BODYPART_3,
+    /*  4 */ EN_PP_BODYPART_4,
+    /*  5 */ EN_PP_BODYPART_5,
+    /*  6 */ EN_PP_BODYPART_6,
+    /*  7 */ EN_PP_BODYPART_7,
+    /*  8 */ EN_PP_BODYPART_8,
+    /*  9 */ EN_PP_BODYPART_9,
+    /* 10 */ EN_PP_BODYPART_10,
+    /* 11 */ EN_PP_BODYPART_MAX
+} EnPpBodyPart;
+
+typedef enum EnPpDeadBodyPart {
+    /*  0 */ EN_PP_DEAD_BODYPART_0,
+    /*  1 */ EN_PP_DEAD_BODYPART_1,
+    /*  2 */ EN_PP_DEAD_BODYPART_2,
+    /*  3 */ EN_PP_DEAD_BODYPART_3,
+    /*  4 */ EN_PP_DEAD_BODYPART_4,
+    /*  5 */ EN_PP_DEAD_BODYPART_5,
+    /*  6 */ EN_PP_DEAD_BODYPART_6,
+    /*  7 */ EN_PP_DEAD_BODYPART_7,
+    /*  8 */ EN_PP_DEAD_BODYPART_8,
+    /*  9 */ EN_PP_DEAD_BODYPART_9,
+    /* 10 */ EN_PP_DEAD_BODYPART_MAX
+} EnPpDeadBodyPart;
+
 typedef struct EnPp {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -58,7 +87,7 @@ typedef struct EnPp {
     /* 0x358 */ Vec3f targetPos;
     /* 0x364 */ Vec3f deadBodyPartPos;
     /* 0x370 */ s32 deadBodyPartCount;
-    /* 0x374 */ Vec3f deadBodyPartsPos[10];
+    /* 0x374 */ Vec3f deadBodyPartsPos[EN_PP_DEAD_BODYPART_MAX];
     /* 0x3EC */ Vec3s deadBodyPartRotationalVelocity;
     /* 0x3F2 */ s16 drawDmgEffTimer;
     /* 0x3F4 */ s16 drawDmgEffType;
@@ -66,7 +95,7 @@ typedef struct EnPp {
     /* 0x3FC */ f32 drawDmgEffFrozenSteamScale;
     /* 0x400 */ f32 attackRange;
     /* 0x404 */ s32 hasBeenDamaged;
-    /* 0x408 */ Vec3f bodyPartsPos[11];
+    /* 0x408 */ Vec3f bodyPartsPos[EN_PP_BODYPART_MAX];
     /* 0x48C */ s16 bodyPartIndex;
     /* 0x490 */ f32 maskAccelY;
     /* 0x494 */ ColliderJntSph maskCollider;

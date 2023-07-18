@@ -133,7 +133,7 @@ void EnRr_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
-    if (this->actor.params != ENRR_3) {
+    if (this->actor.params != LIKE_LIKE_PARAM_3) {
         this->actor.scale.y = 0.015f;
         this->actor.scale.x = 0.019f;
         this->actor.scale.z = 0.019f;
@@ -152,9 +152,9 @@ void EnRr_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, this->actor.scale.y * 2000.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if ((this->actor.params == ENRR_2) || (this->actor.params == ENRR_3)) {
+    if ((this->actor.params == LIKE_LIKE_PARAM_2) || (this->actor.params == LIKE_LIKE_PARAM_3)) {
         this->actor.colChkInfo.health = 6;
-        if (this->actor.params == ENRR_2) {
+        if (this->actor.params == LIKE_LIKE_PARAM_2) {
             this->actor.colChkInfo.mass = MASS_HEAVY;
         }
     }
@@ -208,7 +208,7 @@ void func_808FA19C(EnRr* this, PlayState* play) {
         this->collider1.base.colType = COLTYPE_HIT0;
         this->collider1.info.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENRR_BODYPART_MAX, 2,
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX, 2,
                               this->actor.scale.y * 23.333334f, this->actor.scale.y * 20.000002f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
@@ -318,7 +318,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
             Message_StartTextbox(play, 0xF6, NULL);
         }
 
-        if (this->actor.params == ENRR_0) {
+        if (this->actor.params == LIKE_LIKE_PARAM_0) {
             sp38 = 8;
         } else {
             sp38 = 16;
@@ -801,7 +801,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->actor.params == ENRR_2) {
+    if (this->actor.params == LIKE_LIKE_PARAM_2) {
         this->actor.speed = 0.0f;
     } else {
         Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
@@ -901,7 +901,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    // ENRR_BODYPART_0 - ENRR_BODYPART_3
+    // LIKE_LIKE_BODYPART_0 - LIKE_LIKE_BODYPART_3
     Matrix_MultVecZ(1842.1053f, bodyPartPos++);
     Matrix_MultVecZ(-1842.1053f, bodyPartPos++);
     Matrix_MultVecX(1842.1053f, bodyPartPos++);
@@ -922,10 +922,10 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
             Matrix_RotateYS(0x2000, MTXMODE_APPLY);
         }
 
-        // ENRR_BODYPART_4 - ENRR_BODYPART_7
-        // ENRR_BODYPART_8 - ENRR_BODYPART_11
-        // ENRR_BODYPART_12 - ENRR_BODYPART_15
-        // ENRR_BODYPART_16 - ENRR_BODYPART_19
+        // LIKE_LIKE_BODYPART_4 - LIKE_LIKE_BODYPART_7
+        // LIKE_LIKE_BODYPART_8 - LIKE_LIKE_BODYPART_11
+        // LIKE_LIKE_BODYPART_12 - LIKE_LIKE_BODYPART_15
+        // LIKE_LIKE_BODYPART_16 - LIKE_LIKE_BODYPART_19
         Matrix_MultVecZ(1842.1053f, bodyPartPos++);
         Matrix_MultVecZ(-1842.1053f, bodyPartPos++);
         Matrix_MultVecX(1842.1053f, bodyPartPos++);
@@ -944,7 +944,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
 
     gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX,
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 

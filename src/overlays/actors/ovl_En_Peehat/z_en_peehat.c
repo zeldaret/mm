@@ -243,7 +243,7 @@ void func_808971DC(EnPeehat* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->colliderSphere.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.5f, 0.35f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, PEEHAT_BODYPART_MAX, 2, 0.5f, 0.35f);
     }
 }
 
@@ -968,12 +968,11 @@ void EnPeehat_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) {
-        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        for (i = 0; i < PEEHAT_BODYPART_MAX; i++) {
             this->bodyPartsPos[i].y -= 50.0f;
         }
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
-                            this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, PEEHAT_BODYPART_MAX, this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

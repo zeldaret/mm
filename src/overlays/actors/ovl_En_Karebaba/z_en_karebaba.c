@@ -654,7 +654,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     EnKarebaba* this = THIS;
     s32 i;
     s32 stemSections;
-    s16 limbCount;
+    s16 bodyPartsCount;
     f32 scale = 0.01f;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -726,12 +726,12 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     func_800AE5A0(play);
 
     if (this->actor.params == KAREBABA_MINI) {
-        limbCount = 1;
+        bodyPartsCount = 1;
     } else {
-        limbCount = ARRAY_COUNT(this->bodyPartsPos);
+        bodyPartsCount = ARRAY_COUNT(this->bodyPartsPos);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, limbCount, this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, bodyPartsCount, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->boundFloor != 0) {

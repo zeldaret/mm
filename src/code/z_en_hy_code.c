@@ -36,7 +36,22 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s8 gEnHyLimbToShadowBodyParts[ENHY_LIMB_MAX] = {
-    -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2,
+    -1, //
+    1,  //
+    12, //
+    13, //
+    14, //
+    9,  //
+    10, //
+    11, //
+    0,  //
+    6,  //
+    7,  //
+    8,  //
+    3,  //
+    4,  //
+    5,  //
+    2,  //
 };
 
 s8 gEnHyParentShadowBodyParts[ENHY_SHADOW_BODYPART_MAX] = {

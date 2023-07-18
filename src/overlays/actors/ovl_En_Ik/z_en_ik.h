@@ -24,6 +24,23 @@ typedef struct {
     /* 0x24 */ s32 enabled;
 } IronKnuckleEffect; // size = 0x28
 
+typedef enum IronKnuckleBodyPart {
+    /*  0 */ IRON_KNUCKLE_BODYPART_0,
+    /*  1 */ IRON_KNUCKLE_BODYPART_1,
+    /*  2 */ IRON_KNUCKLE_BODYPART_2,
+    /*  3 */ IRON_KNUCKLE_BODYPART_3,
+    /*  4 */ IRON_KNUCKLE_BODYPART_4,
+    /*  5 */ IRON_KNUCKLE_BODYPART_5,
+    /*  6 */ IRON_KNUCKLE_BODYPART_6,
+    /*  7 */ IRON_KNUCKLE_BODYPART_7,
+    /*  8 */ IRON_KNUCKLE_BODYPART_8,
+    /*  9 */ IRON_KNUCKLE_BODYPART_9,
+    /* 10 */ IRON_KNUCKLE_BODYPART_10,
+    /* 11 */ IRON_KNUCKLE_BODYPART_11,
+    /* 12 */ IRON_KNUCKLE_BODYPART_12,
+    /* 13 */ IRON_KNUCKLE_BODYPART_MAX
+} IronKnuckleBodyPart;
+
 typedef struct EnIk {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
@@ -40,7 +57,7 @@ typedef struct EnIk {
     /* 0x0304 */ f32 drawDmgEffAlpha;
     /* 0x0308 */ f32 drawDmgEffScale;
     /* 0x030C */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x0310 */ Vec3f bodyPartsPos[13];
+    /* 0x0310 */ Vec3f bodyPartsPos[IRON_KNUCKLE_BODYPART_MAX];
     /* 0x03AC */ ColliderCylinder colliderCylinder;
     /* 0x03F8 */ ColliderQuad colliderQuad;
     /* 0x0478 */ ColliderTris colliderTris;
