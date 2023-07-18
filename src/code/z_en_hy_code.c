@@ -36,22 +36,22 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 s8 gEnHyLimbToShadowBodyParts[ENHY_LIMB_MAX] = {
-    -1, //
-    1,  //
-    12, //
-    13, //
-    14, //
-    9,  //
-    10, //
-    11, //
-    0,  //
-    6,  //
-    7,  //
-    8,  //
-    3,  //
-    4,  //
-    5,  //
-    2,  //
+    -1,                      //
+    ENHY_SHADOW_BODYPART_1,  //
+    ENHY_SHADOW_BODYPART_12, //
+    ENHY_SHADOW_BODYPART_13, //
+    ENHY_SHADOW_BODYPART_14, //
+    ENHY_SHADOW_BODYPART_9,  //
+    ENHY_SHADOW_BODYPART_10, //
+    ENHY_SHADOW_BODYPART_11, //
+    ENHY_SHADOW_BODYPART_0,  //
+    ENHY_SHADOW_BODYPART_6,  //
+    ENHY_SHADOW_BODYPART_7,  //
+    ENHY_SHADOW_BODYPART_8,  //
+    ENHY_SHADOW_BODYPART_3,  //
+    ENHY_SHADOW_BODYPART_4,  //
+    ENHY_SHADOW_BODYPART_5,  //
+    ENHY_SHADOW_BODYPART_2,  //
 };
 
 s8 gEnHyParentShadowBodyParts[ENHY_SHADOW_BODYPART_MAX] = {
