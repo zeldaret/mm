@@ -670,11 +670,11 @@ UNK_TYPE* func_80A871E0(EnTru* this, PlayState* play) {
         return D_80A88924;
     }
 
-    if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         return D_80A88918;
     }
 
-    if ((this->unk_34E & 0x1000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if ((this->unk_34E & 0x1000) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         return D_80A88910;
     }
 
@@ -769,7 +769,7 @@ s32 func_80A875AC(Actor* thisx, PlayState* play) {
 
     switch (this->unk_364) {
         case 0:
-            if ((this->unk_34E & 0x40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+            if ((this->unk_34E & 0x40) || CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
                 this->csId = this->actor.csId;
                 this->unk_364++;
             } else {
@@ -1040,7 +1040,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
         case 4:
             if (func_80A87400(this, play) || (DECR(this->unk_362) == 0)) {
                 ret = true;
-                SET_WEEKEVENTREG(WEEKEVENTREG_12_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME);
             }
             break;
     }
@@ -1057,7 +1057,7 @@ s32 func_80A87DC0(Actor* thisx, PlayState* play) {
 
 void func_80A87FD0(EnTru* this, PlayState* play) {
     if (this->actor.draw != NULL) {
-        if ((this->unk_34E & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        if ((this->unk_34E & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
             if (func_80A873B8(this)) {
                 SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
@@ -1080,8 +1080,8 @@ void func_80A87FD0(EnTru* this, PlayState* play) {
                     EnTru_ChangeAnim(this, KOUME_ANIM_TRY_GET_UP);
                 }
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10) && (fabsf(this->actor.playerHeightRel) < 10.0f) &&
-                   (this->actor.xzDistToPlayer < 140.0f)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED) &&
+                   (fabsf(this->actor.playerHeightRel) < 10.0f) && (this->actor.xzDistToPlayer < 140.0f)) {
             SubS_SetOfferMode(&this->unk_34E, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             this->unk_34E |= 0x1040;
             this->unk_362 = Rand_S16Offset(40, 20);
@@ -1105,12 +1105,12 @@ void func_80A881E0(EnTru* this, PlayState* play) {
             CutsceneManager_Stop(CutsceneManager_GetCurrentCsId());
         }
 
-        if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        if (!(this->unk_34E & 0x40) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
         } else if (this->unk_34E & 0x80) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_LYING_DOWN);
             func_80A86460(this);
-        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
             EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP_MORPH);
         }
 
@@ -1127,7 +1127,7 @@ void func_80A881E0(EnTru* this, PlayState* play) {
 void EnTru_Init(Actor* thisx, PlayState* play) {
     EnTru* this = THIS;
 
-    if ((gSaveContext.save.entrance != ENTRANCE(WOODS_OF_MYSTERY, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if ((gSaveContext.save.entrance != ENTRANCE(WOODS_OF_MYSTERY, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1148,7 +1148,7 @@ void EnTru_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.008f);
     this->unk_34E = 0;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         EnTru_ChangeAnim(this, KOUME_ANIM_INJURED_HEAD_UP);
     } else {
         this->unk_388 = PLAYER_IA_NONE;

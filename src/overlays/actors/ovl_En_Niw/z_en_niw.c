@@ -108,7 +108,7 @@ void EnNiw_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&thisx->shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
 
-    SkelAnime_InitFlex(play, &this->skelanime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gNiwSkeleton, &gNiwIdleAnim, this->jointTable, this->morphTable,
                        NIW_LIMB_MAX);
     Math_Vec3f_Copy(&this->unk2A4, &this->actor.world.pos);
     Math_Vec3f_Copy(&this->unk2B0, &this->actor.world.pos);
@@ -331,7 +331,7 @@ void EnNiw_UpdateRunning(EnNiw* this, PlayState* play, s32 isStormCucco) {
 }
 
 void EnNiw_SetupIdle(EnNiw* this) {
-    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
+    Animation_Change(&this->skelAnime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
                      -10.0f);
     this->niwState = NIW_STATE_IDLE;
     this->actionFunc = EnNiw_Idle;
@@ -636,7 +636,7 @@ void EnNiw_CuccoStorm(EnNiw* this, PlayState* play) {
 }
 
 void EnNiw_SetupRunAway(EnNiw* this) {
-    Animation_Change(&this->skelanime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
+    Animation_Change(&this->skelAnime, &gNiwIdleAnim, 1.0f, 0.0f, Animation_GetLastFrame(&gNiwIdleAnim), ANIMMODE_LOOP,
                      -10.0f);
     this->isRunningRight = Rand_ZeroFloat(1.99f);
     this->niwState = NIW_STATE_RUNNING;
@@ -943,7 +943,7 @@ void EnNiw_Draw(Actor* thisx, PlayState* play) {
     EnNiw* this = THIS;
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelanime.skeleton, this->skelanime.jointTable, this->skelanime.dListCount,
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnNiw_OverrideLimbDraw, NULL, &this->actor);
     EnNiw_DrawFeathers(this, play);
 }

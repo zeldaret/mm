@@ -1,14 +1,14 @@
 ﻿<Root>
     <File Name="object_haka_obj" Segment="6">
-        <DList Name="object_haka_obj_DL_000040" Offset="0x40" />
-        <Collision Name="object_haka_obj_Colheader_000148" Offset="0x148" />
-        <DList Name="object_haka_obj_DL_0007B0" Offset="0x7B0" />
-        <Collision Name="object_haka_obj_Colheader_000EE8" Offset="0xEE8" />
-        <DList Name="object_haka_obj_DL_000F70" Offset="0xF70" />
-        <DList Name="object_haka_obj_DL_001200" Offset="0x1200" />
-        <DList Name="object_haka_obj_DL_001410" Offset="0x1410" />
-        <Collision Name="object_haka_obj_Colheader_001588" Offset="0x1588" />
-        <DList Name="object_haka_obj_DL_001680" Offset="0x1680" />
+        <DList Name="object_haka_obj_DL_000040" Offset="0x40" /> <!-- Original name is "Y2_bakuKABE_model" -->
+        <Collision Name="object_haka_obj_Colheader_000148" Offset="0x148" /> <!-- Original name is "Y2_bakuKABE_bgdatainfo" -->
+        <DList Name="object_haka_obj_DL_0007B0" Offset="0x7B0" /> <!-- Original name is "Y2_hakaishi_model" -->
+        <Collision Name="object_haka_obj_Colheader_000EE8" Offset="0xEE8" /> <!-- Original name is "Y2_hakaishi_bgdatainfo" -->
+        <DList Name="object_haka_obj_DL_000F70" Offset="0xF70" /> <!-- Original name is "Y2_hakashita00_meganeOBJ_model" -->
+        <DList Name="object_haka_obj_DL_001200" Offset="0x1200" /> <!-- Original name is "Y2_hakashita03_meganeOBJ_model" -->
+        <DList Name="object_haka_obj_DL_001410" Offset="0x1410" /> <!-- Original name is "Y2_hakashitaMAKU_model" -->
+        <Collision Name="object_haka_obj_Colheader_001588" Offset="0x1588" /> <!-- Original name is "Y2_hakashitaMAKU_bgdatainfo" -->
+        <DList Name="object_haka_obj_DL_001680" Offset="0x1680" /> <!-- Original name is "Y2_kakera_model" -->
         <Texture Name="object_haka_obj_TLUT_001800" OutName="tlut_001800" Format="rgba16" Width="16" Height="16" Offset="0x1800" />
         <Texture Name="object_haka_obj_TLUT_001A00" OutName="tlut_001A00" Format="rgba16" Width="4" Height="4" Offset="0x1A00" />
         <Texture Name="object_haka_obj_TLUT_001A20" OutName="tlut_001A20" Format="rgba16" Width="4" Height="4" Offset="0x1A20" />
