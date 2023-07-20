@@ -888,7 +888,7 @@ static s8 sLimbToBodyParts[OBJECT_PO_LIMB_MAX] = {
     BODYPART_NONE,    // OBJECT_PO_LIMB_14
 };
 
-static Vec3f D_80B2F734[ENPOH_BODYPART_MAX - ENPOH_BODYPART_7] = {
+static Vec3f D_80B2F734[] = {
     { -600.0f, 500.0f, 1700.0f },  // ENPOH_BODYPART_7
     { -600.0f, 500.0f, -1700.0f }, // ENPOH_BODYPART_8
     { 1000.0f, 1700.0f, 0.0f },    // ENPOH_BODYPART_9

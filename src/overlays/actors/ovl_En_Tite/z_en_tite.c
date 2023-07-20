@@ -1115,57 +1115,57 @@ s32 EnTite_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 }
 
 static s8 sLimbToBodyParts1[OBJECT_TITE_LIMB_MAX] = {
-    -1,                // OBJECT_TITE_LIMB_NONE
-    -1,                // OBJECT_TITE_LIMB_01
-    -1,                // OBJECT_TITE_LIMB_02
-    -1,                // OBJECT_TITE_LIMB_03
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_NONE
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_01
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_02
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_03
     ENTITE_BODYPART_0, // OBJECT_TITE_LIMB_04
-    -1,                // OBJECT_TITE_LIMB_05
-    -1,                // OBJECT_TITE_LIMB_06
-    -1,                // OBJECT_TITE_LIMB_07
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_05
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_06
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_07
     ENTITE_BODYPART_1, // OBJECT_TITE_LIMB_08
-    -1,                // OBJECT_TITE_LIMB_09
-    -1,                // OBJECT_TITE_LIMB_0A
-    -1,                // OBJECT_TITE_LIMB_0B
-    -1,                // OBJECT_TITE_LIMB_0C
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_09
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0A
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0B
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0C
     ENTITE_BODYPART_2, // OBJECT_TITE_LIMB_0D
-    -1,                // OBJECT_TITE_LIMB_0E
-    -1,                // OBJECT_TITE_LIMB_0F
-    -1,                // OBJECT_TITE_LIMB_10
-    -1,                // OBJECT_TITE_LIMB_11
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0E
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0F
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_10
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_11
     ENTITE_BODYPART_3, // OBJECT_TITE_LIMB_12
-    -1,                // OBJECT_TITE_LIMB_13
-    -1,                // OBJECT_TITE_LIMB_14
-    -1,                // OBJECT_TITE_LIMB_15
-    -1,                // OBJECT_TITE_LIMB_16
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_13
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_14
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_15
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_16
     ENTITE_BODYPART_4, // OBJECT_TITE_LIMB_17
-    -1,                // OBJECT_TITE_LIMB_18
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_18
 };
 
 static s8 sLimbToBodyParts2[OBJECT_TITE_LIMB_MAX] = {
-    -1,                // OBJECT_TITE_LIMB_NONE
-    -1,                // OBJECT_TITE_LIMB_01
-    -1,                // OBJECT_TITE_LIMB_02
-    -1,                // OBJECT_TITE_LIMB_03
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_NONE
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_01
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_02
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_03
     ENTITE_BODYPART_0, // OBJECT_TITE_LIMB_04
-    -1,                // OBJECT_TITE_LIMB_05
-    -1,                // OBJECT_TITE_LIMB_06
-    -1,                // OBJECT_TITE_LIMB_07
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_05
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_06
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_07
     ENTITE_BODYPART_1, // OBJECT_TITE_LIMB_08
     ENTITE_BODYPART_5, // OBJECT_TITE_LIMB_09
-    -1,                // OBJECT_TITE_LIMB_0A
-    -1,                // OBJECT_TITE_LIMB_0B
-    -1,                // OBJECT_TITE_LIMB_0C
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0A
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0B
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0C
     ENTITE_BODYPART_2, // OBJECT_TITE_LIMB_0D
     ENTITE_BODYPART_6, // OBJECT_TITE_LIMB_0E
-    -1,                // OBJECT_TITE_LIMB_0F
-    -1,                // OBJECT_TITE_LIMB_10
-    -1,                // OBJECT_TITE_LIMB_11
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_0F
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_10
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_11
     ENTITE_BODYPART_3, // OBJECT_TITE_LIMB_12
     ENTITE_BODYPART_7, // OBJECT_TITE_LIMB_13
-    -1,                // OBJECT_TITE_LIMB_14
-    -1,                // OBJECT_TITE_LIMB_15
-    -1,                // OBJECT_TITE_LIMB_16
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_14
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_15
+    BODYPART_NONE,     // OBJECT_TITE_LIMB_16
     ENTITE_BODYPART_4, // OBJECT_TITE_LIMB_17
     ENTITE_BODYPART_8, // OBJECT_TITE_LIMB_18
 };
@@ -1179,7 +1179,7 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         bodyPart1Index = sLimbToBodyParts1[limbIndex];
         if (bodyPart1Index != BODYPART_NONE) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPart1Index]);
-            if (bodyPart1Index >= 1) {
+            if (bodyPart1Index >= ENTITE_BODYPART_1) {
                 Matrix_MultVecX(2500.0f, &this->bodyPartsPos[ENTITE_BODYPART_4 + bodyPart1Index]);
             }
         }

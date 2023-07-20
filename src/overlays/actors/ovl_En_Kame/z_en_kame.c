@@ -765,7 +765,7 @@ s32 func_80AD8A48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-static Vec3f D_80AD8E68[TL2_BODYPART_MAX - TL2_BODYPART_5] = {
+static Vec3f D_80AD8E68[] = {
     { 1500.0f, 0.0f, -2000.0f }, // TL2_BODYPART_5
     { 1500.0f, 0.0f, 2000.0f },  // TL2_BODYPART_6
     { 1500.0f, 2000.0f, 0.0f },  // TL2_BODYPART_7

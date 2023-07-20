@@ -1147,7 +1147,7 @@ static s8 sLimbToBodyParts[EENO_LIMB_MAX] = {
  * The last five elements of the bodyPartsPos array are duplicates of the body
  * bottom limb, each offset by a certain certain amount.
  */
-static Vec3f sBodyBottomBodyPartOffsets[EN_SNOWMAN_BODYPART_MAX - EN_SNOWMAN_BODYPART_4] = {
+static Vec3f sBodyBottomBodyPartOffsets[] = {
     { 2000.0f, 3000.0f, 0.0f },  // EN_SNOWMAN_BODYPART_4
     { 2000.0f, -2000.0f, 0.0f }, // EN_SNOWMAN_BODYPART_5
     { 3000.0f, 0.0f, 0.0f },     // EN_SNOWMAN_BODYPART_6

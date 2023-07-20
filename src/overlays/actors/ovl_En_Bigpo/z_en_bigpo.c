@@ -174,7 +174,7 @@ static s8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
 };
 
 // used in limbdraw
-static Vec3f D_80B65084[BIG_POE_BODYPART_MAX - BIG_POE_BODYPART_6] = {
+static Vec3f D_80B65084[] = {
     { 2000.0f, 4000.0f, 0.0f },      // BIG_POE_BODYPART_6
     { -1000.0f, 1500.0f, -2000.0f }, // BIG_POE_BODYPART_7
     { -1000.0f, 1500.0f, 2000.0f },  // BIG_POE_BODYPART_8
