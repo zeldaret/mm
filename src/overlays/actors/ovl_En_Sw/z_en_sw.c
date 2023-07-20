@@ -173,7 +173,7 @@ void func_808D8940(EnSw* this, PlayState* play) {
 }
 
 s32 func_808D8B58(EnSw* this) {
-    s16 phi_s2 = (s16)((s16)(s32)(Rand_ZeroOne() * 1000.0f) % ENSW_BODYPART_MAX) * 0x1555;
+    s16 phi_s2 = (s16)(TRUNCF_BINANG(Rand_ZeroOne() * 1000.0f) % ENSW_BODYPART_MAX) * 0x1555;
     s32 i;
 
     for (i = 0; i < ENSW_BODYPART_MAX; i++, phi_s2 += 0x1555) {
