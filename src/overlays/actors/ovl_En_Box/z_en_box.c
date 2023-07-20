@@ -423,7 +423,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y += 1.25f;
         }
         this->unk_1A0++;
-        if ((this->csId1 != -1) && CutsceneManager_GetCurrentCsId() == this->csId1) {
+        if ((this->csId1 != CS_ID_NONE) && CutsceneManager_GetCurrentCsId() == this->csId1) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
             } else if (this->unk_1A0 == 22) {

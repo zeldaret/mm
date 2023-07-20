@@ -621,21 +621,21 @@ s32 EnBb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
  * limb is not part of the bodyParts arrays.
  */
 static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
-    -1,                // BUBBLE_LIMB_NONE
-    -1,                // BUBBLE_LIMB_ROOT
-    -1,                // BUBBLE_LIMB_CRANIUM_ROOT
-    -1,                // BUBBLE_LIMB_JAW_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_NONE
+    BODYPART_NONE,     // BUBBLE_LIMB_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_CRANIUM_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_JAW_ROOT
     BUBBLE_BODYPART_0, // BUBBLE_LIMB_JAW
-    -1,                // BUBBLE_LIMB_LEFT_WING_ROOT
-    -1,                // BUBBLE_LIMB_LEFT_WING_WRAPPER
-    -1,                // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WRAPPER
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
     BUBBLE_BODYPART_1, // BUBBLE_LIMB_LEFT_WING_WEBBING
-    -1,                // BUBBLE_LIMB_LEFT_WING_BONE
-    -1,                // BUBBLE_LIMB_RIGHT_WING_ROOT
-    -1,                // BUBBLE_LIMB_RIGHT_WING_WRAPPER
-    -1,                // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_BONE
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WRAPPER
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
     BUBBLE_BODYPART_2, // BUBBLE_LIMB_RIGHT_WING_WEBBING
-    -1,                // BUBBLE_LIMB_RIGHT_WING_BONE
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_BONE
     BUBBLE_BODYPART_3, // BUBBLE_LIMB_CRANIUM
 };
 
@@ -652,7 +652,7 @@ void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     MtxF* currentMatrixState;
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
-        if (sLimbToBodyParts[limbIndex] != -1) {
+        if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
             if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_0) {
                 Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_0]);
             } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_3) {
@@ -663,7 +663,7 @@ void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             }
         }
     } else if (this->bodyPartDrawStatus > BB_BODY_PART_DRAW_STATUS_ALIVE) {
-        if (sLimbToBodyParts[limbIndex] != -1) {
+        if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
             Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
         }
 
@@ -671,7 +671,7 @@ void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
             this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_BROKEN;
         }
     } else {
-        if (sLimbToBodyParts[limbIndex] != -1) {
+        if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
             OPEN_DISPS(play->state.gfxCtx);
 
             currentMatrixState = Matrix_GetCurrent();

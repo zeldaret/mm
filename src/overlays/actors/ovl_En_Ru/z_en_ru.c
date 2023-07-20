@@ -98,25 +98,25 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 static s8 sLimbToShadowBodyParts[RU2_LIMB_MAX] = {
-    -1,                    // RU2_LIMB_NONE
-    -1,                    // RU2_LIMB_ROOT
+    BODYPART_NONE,         // RU2_LIMB_NONE
+    BODYPART_NONE,         // RU2_LIMB_ROOT
     RU_SHADOW_BODYPART_12, // RU2_LIMB_LEFT_THIGH
     RU_SHADOW_BODYPART_13, // RU2_LIMB_LEFT_LEG
     RU_SHADOW_BODYPART_14, // RU2_LIMB_LEFT_FOOT
-    -1,                    // RU2_LIMB_LEFT_TAIL
+    BODYPART_NONE,         // RU2_LIMB_LEFT_TAIL
     RU_SHADOW_BODYPART_9,  // RU2_LIMB_RIGHT_THIGH
     RU_SHADOW_BODYPART_10, // RU2_LIMB_RIGHT_LEG
     RU_SHADOW_BODYPART_11, // RU2_LIMB_RIGHT_FOOT
-    -1,                    // RU2_LIMB_RIGHT_TAIL
+    BODYPART_NONE,         // RU2_LIMB_RIGHT_TAIL
     RU_SHADOW_BODYPART_0,  // RU2_LIMB_TORSO
     RU_SHADOW_BODYPART_6,  // RU2_LIMB_LEFT_UPPER_ARM
-    -1,                    // RU2_LIMB_LEFT_UPPER_WING
-    -1,                    // RU2_LIMB_LEFT_LOWER_WING
+    BODYPART_NONE,         // RU2_LIMB_LEFT_UPPER_WING
+    BODYPART_NONE,         // RU2_LIMB_LEFT_LOWER_WING
     RU_SHADOW_BODYPART_7,  // RU2_LIMB_LEFT_FOREARM
     RU_SHADOW_BODYPART_8,  // RU2_LIMB_LEFT_HAND
     RU_SHADOW_BODYPART_2,  // RU2_LIMB_RIGHT_UPPER_ARM
-    -1,                    // RU2_LIMB_RIGHT_UPPER_WING
-    -1,                    // RU2_LIMB_RIGHT_LOWER_WING
+    BODYPART_NONE,         // RU2_LIMB_RIGHT_UPPER_WING
+    BODYPART_NONE,         // RU2_LIMB_RIGHT_LOWER_WING
     RU_SHADOW_BODYPART_3,  // RU2_LIMB_RIGHT_FOREARM
     RU_SHADOW_BODYPART_4,  // RU2_LIMB_RIGHT_HAND
     RU_SHADOW_BODYPART_2,  // RU2_LIMB_HEAD
@@ -335,7 +335,7 @@ void EnRu_PostLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f headFocus = { 800.0f, 0, 0 };
     Vec3f bodyPartPos = { 0, 0, 0 };
 
-    if (sLimbToShadowBodyParts[limbIndex] > -1) {
+    if (sLimbToShadowBodyParts[limbIndex] > BODYPART_NONE) {
         Matrix_MultVec3f(&bodyPartPos, &this->shadowBodyPartsPos[sLimbToShadowBodyParts[limbIndex]]);
     }
     if (limbIndex == RU2_LIMB_HEAD) {

@@ -25,21 +25,32 @@ typedef struct {
 } IronKnuckleEffect; // size = 0x28
 
 typedef enum IronKnuckleBodyPart {
-    /*  0 */ IRON_KNUCKLE_BODYPART_0,
-    /*  1 */ IRON_KNUCKLE_BODYPART_1,
-    /*  2 */ IRON_KNUCKLE_BODYPART_2,
-    /*  3 */ IRON_KNUCKLE_BODYPART_3,
-    /*  4 */ IRON_KNUCKLE_BODYPART_4,
-    /*  5 */ IRON_KNUCKLE_BODYPART_5,
-    /*  6 */ IRON_KNUCKLE_BODYPART_6,
-    /*  7 */ IRON_KNUCKLE_BODYPART_7,
-    /*  8 */ IRON_KNUCKLE_BODYPART_8,
-    /*  9 */ IRON_KNUCKLE_BODYPART_9,
-    /* 10 */ IRON_KNUCKLE_BODYPART_10,
-    /* 11 */ IRON_KNUCKLE_BODYPART_11,
-    /* 12 */ IRON_KNUCKLE_BODYPART_12,
+    /*  0 */ IRON_KNUCKLE_BODYPART_TASSET_RIGHT,
+    /*  1 */ IRON_KNUCKLE_BODYPART_RIGHT_LEG,
+    /*  2 */ IRON_KNUCKLE_BODYPART_RIGHT_FOOT,
+    /*  3 */ IRON_KNUCKLE_BODYPART_TASSET_LEFT,
+    /*  4 */ IRON_KNUCKLE_BODYPART_LEFT_LEG,
+    /*  5 */ IRON_KNUCKLE_BODYPART_LEFT_FOOT,
+    /*  6 */ IRON_KNUCKLE_BODYPART_HELMET_ARMOR,
+    /*  7 */ IRON_KNUCKLE_BODYPART_RIGHT_FOREARM,
+    /*  8 */ IRON_KNUCKLE_BODYPART_RIGHT_HAND,
+    /*  9 */ IRON_KNUCKLE_BODYPART_LEFT_FOREARM,
+    /* 10 */ IRON_KNUCKLE_BODYPART_LEFT_HAND,
+    /* 11 */ IRON_KNUCKLE_BODYPART_LOWER_LEFT_PAULDRON,
+    /* 12 */ IRON_KNUCKLE_BODYPART_LOWER_RIGHT_PAULDRON,
     /* 13 */ IRON_KNUCKLE_BODYPART_MAX
 } IronKnuckleBodyPart;
+
+typedef enum IronKnuckleArmorBodyPart {
+    /* 0 */ IRON_KNUCKLE_ARMOR_BODYPART_HELMET,
+    /* 1 */ IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT,
+    /* 2 */ IRON_KNUCKLE_ARMOR_BODYPART_CHEST_BACK,
+    /* 3 */ IRON_KNUCKLE_ARMOR_BODYPART_UPPER_LEFT_PAULDRON,
+    /* 4 */ IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON,
+    /* 5 */ IRON_KNUCKLE_ARMOR_BODYPART_LOWER_LEFT_PAULDRON,
+    /* 6 */ IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON,
+    /* 7 */ IRON_KNUCKLE_ARMOR_BODYPART_MAX
+} IronKnuckleArmorBodyPart;
 
 typedef struct EnIk {
     /* 0x0000 */ Actor actor;
@@ -62,7 +73,7 @@ typedef struct EnIk {
     /* 0x03F8 */ ColliderQuad colliderQuad;
     /* 0x0478 */ ColliderTris colliderTris;
     /* 0x0498 */ ColliderTrisElement shieldColliderItems[2];
-    /* 0x0550 */ IronKnuckleEffect effects[7];
+    /* 0x0550 */ IronKnuckleEffect effects[IRON_KNUCKLE_ARMOR_BODYPART_MAX];
 } EnIk; // size = 0x668
 
 #endif // Z_EN_IK_H

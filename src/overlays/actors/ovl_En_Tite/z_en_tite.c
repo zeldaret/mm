@@ -1177,21 +1177,21 @@ void EnTite_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
 
     if (this->unk_2BA == 0) {
         bodyPart1Index = sLimbToBodyParts1[limbIndex];
-        if (bodyPart1Index != -1) {
+        if (bodyPart1Index != BODYPART_NONE) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPart1Index]);
             if (bodyPart1Index >= 1) {
                 Matrix_MultVecX(2500.0f, &this->bodyPartsPos[ENTITE_BODYPART_4 + bodyPart1Index]);
             }
         }
     } else if (this->unk_2BA > 0) {
-        if (sLimbToBodyParts2[limbIndex] != -1) {
+        if (sLimbToBodyParts2[limbIndex] != BODYPART_NONE) {
             Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts2[limbIndex]]);
         }
 
         if (limbIndex == 24) {
             this->unk_2BA = -1;
         }
-    } else if (sLimbToBodyParts2[limbIndex] != -1) {
+    } else if (sLimbToBodyParts2[limbIndex] != BODYPART_NONE) {
         OPEN_DISPS(play->state.gfxCtx);
 
         matrix = Matrix_GetCurrent();

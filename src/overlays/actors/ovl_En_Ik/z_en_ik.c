@@ -54,14 +54,14 @@ typedef struct {
     /* 0x4 */ s16 unk04;
 } EnIkUnkStruct; // size = 0x8
 
-EnIkUnkStruct sIronKnuckleArmorMarkings[] = {
-    { gIronKnuckleHelmetMarkingDL, 0x0000 },
-    { gIronKnuckleFrontTorsoArmorMarkingDL, 0x0000 },
-    { gIronKnuckleRearTorsoArmorMarkingDL, 0x7FFF },
-    { gIronKnuckleRivetsMarking2DL, 0x4000 },
-    { gIronKnuckleRivetsMarking1DL, 0xC000 },
-    { NULL, 0x4000 },
-    { NULL, 0xC000 },
+EnIkUnkStruct sIronKnuckleArmorMarkings[IRON_KNUCKLE_ARMOR_BODYPART_MAX] = {
+    { gIronKnuckleHelmetMarkingDL, 0x0000 },          // IRON_KNUCKLE_ARMOR_BODYPART_HELMET
+    { gIronKnuckleFrontTorsoArmorMarkingDL, 0x0000 }, // IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT
+    { gIronKnuckleRearTorsoArmorMarkingDL, 0x7FFF },  // IRON_KNUCKLE_ARMOR_BODYPART_CHEST_BACK
+    { gIronKnuckleRivetsMarking2DL, 0x4000 },         // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_LEFT_PAULDRON
+    { gIronKnuckleRivetsMarking1DL, 0xC000 },         // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON
+    { NULL, 0x4000 },                                 // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_LEFT_PAULDRON
+    { NULL, 0xC000 },                                 // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON
 };
 
 // sIronKnuckleArmorType[PARAM_VALUE][ARMOR_SECTIONS]
@@ -928,44 +928,44 @@ void EnIk_Update(Actor* thisx, PlayState* play2) {
     EnIk_UpdateArmor(this, play);
 }
 
-static s8 sLimbToBodyParts1[IRON_KNUCKLE_LIMB_MAX] = {
-    -1, // IRON_KNUCKLE_LIMB_NONE
-    -1, // IRON_KNUCKLE_LIMB_ROOT
-    -1, // IRON_KNUCKLE_LIMB_TASSET_CENTER
-    -1, // IRON_KNUCKLE_LIMB_TASSET_RIGHT
-    -1, // IRON_KNUCKLE_LIMB_RIGHT_LEG
-    -1, // IRON_KNUCKLE_LIMB_RIGHT_FOOT
-    -1, // IRON_KNUCKLE_LIMB_TASSET_LEFT
-    -1, // IRON_KNUCKLE_LIMB_LEFT_LEG
-    -1, // IRON_KNUCKLE_LIMB_LEFT_FOOT
-    -1, // IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT
-    -1, // IRON_KNUCKLE_LIMB_UNK_ROOT
-    -1, // IRON_KNUCKLE_LIMB_HEAD_ROOT
-    0,  // IRON_KNUCKLE_LIMB_HELMET_ARMOR
-    -1, // IRON_KNUCKLE_LIMB_HEAD
-    -1, // IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM
-    -1, // IRON_KNUCKLE_LIMB_RIGHT_FOREARM
-    -1, // IRON_KNUCKLE_LIMB_AXE_ROOT
-    -1, // IRON_KNUCKLE_LIMB_AXE
-    -1, // IRON_KNUCKLE_LIMB_RIGHT_HAND
-    -1, // IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM
-    -1, // IRON_KNUCKLE_LIMB_LEFT_FOREARM
-    -1, // IRON_KNUCKLE_LIMB_LEFT_HAND
-    3,  // IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON
-    5,  // IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON
-    4,  // IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON
-    6,  // IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON
-    1,  // IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT
-    2,  // IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK
-    -1, // IRON_KNUCKLE_LIMB_TORSO
-    -1, // IRON_KNUCKLE_LIMB_WAIST
+static s8 sLimbToArmorBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_NONE
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TASSET_CENTER
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TASSET_RIGHT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_LEG
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TASSET_LEFT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_LEG
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_FOOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_UNK_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_HEAD_ROOT
+    IRON_KNUCKLE_ARMOR_BODYPART_HELMET,               // IRON_KNUCKLE_LIMB_HELMET_ARMOR
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_HEAD
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_AXE_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_AXE
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_HAND
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_HAND
+    IRON_KNUCKLE_ARMOR_BODYPART_UPPER_LEFT_PAULDRON,  // IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_LOWER_LEFT_PAULDRON,  // IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON, // IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON, // IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT,          // IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT
+    IRON_KNUCKLE_ARMOR_BODYPART_CHEST_BACK,           // IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TORSO
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_WAIST
 };
 
 s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
 
     if (this->drawArmorFlags) {
-        if (sLimbToBodyParts1[limbIndex] > 0) {
+        if (sLimbToArmorBodyParts[limbIndex] > 0) {
             *dList = NULL;
         }
     }
@@ -976,41 +976,41 @@ static Vec3f D_8092C1C8 = { 2000.0f, -200.0f, -5200.0f };
 static Vec3f D_8092C1D4 = { 300.0f, -200.0f, 0.0f };
 
 static s8 sLimbToBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
-    -1,                       // IRON_KNUCKLE_LIMB_NONE
-    -1,                       // IRON_KNUCKLE_LIMB_ROOT
-    -1,                       // IRON_KNUCKLE_LIMB_TASSET_CENTER
-    IRON_KNUCKLE_BODYPART_0,  // IRON_KNUCKLE_LIMB_TASSET_RIGHT
-    IRON_KNUCKLE_BODYPART_1,  // IRON_KNUCKLE_LIMB_RIGHT_LEG
-    IRON_KNUCKLE_BODYPART_2,  // IRON_KNUCKLE_LIMB_RIGHT_FOOT
-    IRON_KNUCKLE_BODYPART_3,  // IRON_KNUCKLE_LIMB_TASSET_LEFT
-    IRON_KNUCKLE_BODYPART_4,  // IRON_KNUCKLE_LIMB_LEFT_LEG
-    IRON_KNUCKLE_BODYPART_5,  // IRON_KNUCKLE_LIMB_LEFT_FOOT
-    -1,                       // IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT
-    -1,                       // IRON_KNUCKLE_LIMB_UNK_ROOT
-    -1,                       // IRON_KNUCKLE_LIMB_HEAD_ROOT
-    IRON_KNUCKLE_BODYPART_6,  // IRON_KNUCKLE_LIMB_HELMET_ARMOR
-    -1,                       // IRON_KNUCKLE_LIMB_HEAD
-    -1,                       // IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM
-    IRON_KNUCKLE_BODYPART_7,  // IRON_KNUCKLE_LIMB_RIGHT_FOREARM
-    -1,                       // IRON_KNUCKLE_LIMB_AXE_ROOT
-    -1,                       // IRON_KNUCKLE_LIMB_AXE
-    IRON_KNUCKLE_BODYPART_8,  // IRON_KNUCKLE_LIMB_RIGHT_HAND
-    -1,                       // IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM
-    IRON_KNUCKLE_BODYPART_9,  // IRON_KNUCKLE_LIMB_LEFT_FOREARM
-    IRON_KNUCKLE_BODYPART_10, // IRON_KNUCKLE_LIMB_LEFT_HAND
-    -1,                       // IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON
-    IRON_KNUCKLE_BODYPART_11, // IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON
-    -1,                       // IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON
-    IRON_KNUCKLE_BODYPART_12, // IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON
-    -1,                       // IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT
-    -1,                       // IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK
-    -1,                       // IRON_KNUCKLE_LIMB_TORSO
-    -1,                       // IRON_KNUCKLE_LIMB_WAIST
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_NONE
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_TASSET_CENTER
+    IRON_KNUCKLE_BODYPART_TASSET_RIGHT,         // IRON_KNUCKLE_LIMB_TASSET_RIGHT
+    IRON_KNUCKLE_BODYPART_RIGHT_LEG,            // IRON_KNUCKLE_LIMB_RIGHT_LEG
+    IRON_KNUCKLE_BODYPART_RIGHT_FOOT,           // IRON_KNUCKLE_LIMB_RIGHT_FOOT
+    IRON_KNUCKLE_BODYPART_TASSET_LEFT,          // IRON_KNUCKLE_LIMB_TASSET_LEFT
+    IRON_KNUCKLE_BODYPART_LEFT_LEG,             // IRON_KNUCKLE_LIMB_LEFT_LEG
+    IRON_KNUCKLE_BODYPART_LEFT_FOOT,            // IRON_KNUCKLE_LIMB_LEFT_FOOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UNK_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_HEAD_ROOT
+    IRON_KNUCKLE_BODYPART_HELMET_ARMOR,         // IRON_KNUCKLE_LIMB_HELMET_ARMOR
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_HEAD
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM
+    IRON_KNUCKLE_BODYPART_RIGHT_FOREARM,        // IRON_KNUCKLE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_AXE_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_AXE
+    IRON_KNUCKLE_BODYPART_RIGHT_HAND,           // IRON_KNUCKLE_LIMB_RIGHT_HAND
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM
+    IRON_KNUCKLE_BODYPART_LEFT_FOREARM,         // IRON_KNUCKLE_LIMB_LEFT_FOREARM
+    IRON_KNUCKLE_BODYPART_LEFT_HAND,            // IRON_KNUCKLE_LIMB_LEFT_HAND
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON
+    IRON_KNUCKLE_BODYPART_LOWER_LEFT_PAULDRON,  // IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON
+    IRON_KNUCKLE_BODYPART_LOWER_RIGHT_PAULDRON, // IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_TORSO
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_WAIST
 };
 
 void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
-    s32 bodyPart1Index = sLimbToBodyParts1[limbIndex];
+    s32 armorBodyPart = sLimbToArmorBodyParts[limbIndex];
     Gfx* xlu;
     IronKnuckleEffect* ikEffect;
     s16 sp76;
@@ -1021,16 +1021,16 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     MtxF* mf;
 
     if (this->drawArmorFlags == 0x1) {
-        if (bodyPart1Index > 0) {
-            ikEffect = &this->effects[bodyPart1Index];
+        if (armorBodyPart >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
+            ikEffect = &this->effects[armorBodyPart];
             mf = Matrix_GetCurrent();
             ikEffect->pos.x = mf->mf[3][0];
             ikEffect->pos.y = mf->mf[3][1];
             ikEffect->pos.z = mf->mf[3][2];
             Matrix_MtxFToYXZRot(mf, &ikEffect->rot, false);
             ikEffect->enabled = true;
-            sp76 = sIronKnuckleArmorMarkings[bodyPart1Index].unk04 +
-                   (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
+            sp76 =
+                sIronKnuckleArmorMarkings[armorBodyPart].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
             ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
             ikEffect->vel.y = 6.0f;
             ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
@@ -1062,18 +1062,19 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         this->blurEffectSpawnLock = this->timer;
     }
 
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
-    if ((bodyPart1Index == 0) || ((bodyPart1Index != -1) && (this->drawArmorFlags == 0) &&
-                                  (sIronKnuckleArmorMarkings[bodyPart1Index].unk00 != 0))) {
+    if ((armorBodyPart == IRON_KNUCKLE_ARMOR_BODYPART_HELMET) ||
+        ((armorBodyPart != BODYPART_NONE) && (this->drawArmorFlags == 0) &&
+         (sIronKnuckleArmorMarkings[armorBodyPart].unk00 != 0))) {
         OPEN_DISPS(play->state.gfxCtx);
 
         xlu = POLY_XLU_DISP;
 
         gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[bodyPart1Index].unk00);
+        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[armorBodyPart].unk00);
         POLY_XLU_DISP = &xlu[2];
 
         CLOSE_DISPS(play->state.gfxCtx);

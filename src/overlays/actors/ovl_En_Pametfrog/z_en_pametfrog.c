@@ -1380,30 +1380,30 @@ void EnPametfrog_Update(Actor* thisx, PlayState* play) {
 }
 
 static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
-    -1,                             // GEKKO_LIMB_NONE
-    -1,                             // GEKKO_LIMB_ROOT
+    BODYPART_NONE,                  // GEKKO_LIMB_NONE
+    BODYPART_NONE,                  // GEKKO_LIMB_ROOT
     GEKKO_BODYPART_WAIST,           // GEKKO_LIMB_WAIST
-    -1,                             // GEKKO_LIMB_LEFT_THIGH
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_THIGH
     GEKKO_BODYPART_LEFT_SHIN,       // GEKKO_LIMB_LEFT_SHIN
-    -1,                             // GEKKO_LIMB_LEFT_ANKLE
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_ANKLE
     GEKKO_BODYPART_LEFT_FOOT,       // GEKKO_LIMB_LEFT_FOOT
-    -1,                             // GEKKO_LIMB_RIGHT_THIGH
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_THIGH
     GEKKO_BODYPART_RIGHT_SHIN,      // GEKKO_LIMB_RIGHT_SHIN
-    -1,                             // GEKKO_LIMB_RIGHT_ANKLE
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_ANKLE
     GEKKO_BODYPART_RIGHT_FOOT,      // GEKKO_LIMB_RIGHT_FOOT
-    -1,                             // GEKKO_LIMB_TORSO
+    BODYPART_NONE,                  // GEKKO_LIMB_TORSO
     GEKKO_BODYPART_LEFT_UPPER_ARM,  // GEKKO_LIMB_LEFT_UPPER_ARM
     GEKKO_BODYPART_LEFT_FOREARM,    // GEKKO_LIMB_LEFT_FOREARM
-    -1,                             // GEKKO_LIMB_LEFT_WRIST
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_WRIST
     GEKKO_BODYPART_LEFT_HAND,       // GEKKO_LIMB_LEFT_HAND
     GEKKO_BODYPART_RIGHT_UPPER_ARM, // GEKKO_LIMB_RIGHT_UPPER_ARM
     GEKKO_BODYPART_RIGHT_FOREARM,   // GEKKO_LIMB_RIGHT_FOREARM
-    -1,                             // GEKKO_LIMB_RIGHT_WRIST
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_WRIST
     GEKKO_BODYPART_RIGHT_HAND,      // GEKKO_LIMB_RIGHT_HAND
-    -1,                             // GEKKO_LIMB_HEAD
+    BODYPART_NONE,                  // GEKKO_LIMB_HEAD
     GEKKO_BODYPART_JAW,             // GEKKO_LIMB_JAW
-    -1,                             // GEKKO_LIMB_LEFT_EYE
-    -1,                             // GEKKO_LIMB_RIGHT_EYE
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_EYE
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_EYE
 };
 
 void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1427,7 +1427,7 @@ void EnPametfrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     }
 
     bodyPartIndex = sLimbToBodyParts[limbIndex];
-    if (bodyPartIndex != -1) {
+    if (bodyPartIndex != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
     }
 }

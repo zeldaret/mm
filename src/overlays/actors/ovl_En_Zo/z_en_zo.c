@@ -99,7 +99,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 static s8 sLimbToShadowBodyParts[ZORA_LIMB_MAX] = {
-    -1,                      // ZORA_LIMB_NONE
+    BODYPART_NONE,           // ZORA_LIMB_NONE
     ZORA_SHADOW_BODYPART_1,  // ZORA_LIMB_PELVIS
     ZORA_SHADOW_BODYPART_12, // ZORA_LIMB_LEFT_THIGH
     ZORA_SHADOW_BODYPART_13, // ZORA_LIMB_LEFT_SHIN
@@ -115,10 +115,10 @@ static s8 sLimbToShadowBodyParts[ZORA_LIMB_MAX] = {
     ZORA_SHADOW_BODYPART_4,  // ZORA_LIMB_RIGHT_FOREARM
     ZORA_SHADOW_BODYPART_5,  // ZORA_LIMB_RIGHT_HAND
     ZORA_SHADOW_BODYPART_2,  // ZORA_LIMB_HEAD
-    -1,                      // ZORA_LIMB_HEAD_TAIL_1
-    -1,                      // ZORA_LIMB_HEAD_TAIL_2
-    -1,                      // ZORA_LIMB_HEAD_TAIL_3
-    -1,                      // ZORA_LIMB_HEAD_TAIL_FIN
+    BODYPART_NONE,           // ZORA_LIMB_HEAD_TAIL_1
+    BODYPART_NONE,           // ZORA_LIMB_HEAD_TAIL_2
+    BODYPART_NONE,           // ZORA_LIMB_HEAD_TAIL_3
+    BODYPART_NONE,           // ZORA_LIMB_HEAD_TAIL_FIN
 };
 
 static s8 sParentShadowBodyParts[ZORA_SHADOW_BODYPART_MAX] = {
@@ -372,7 +372,7 @@ void EnZo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (sLimbToShadowBodyParts[limbIndex] > -1) {
+    if (sLimbToShadowBodyParts[limbIndex] > BODYPART_NONE) {
         Matrix_MultVec3f(&zeroVec, &this->shadowBodyPartsPos[sLimbToShadowBodyParts[limbIndex]]);
     }
 

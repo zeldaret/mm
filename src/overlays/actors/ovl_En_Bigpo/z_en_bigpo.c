@@ -161,13 +161,13 @@ static InitChainEntry sInitChain[] = {
 static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
 static s8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
-    -1,                 // BIG_POE_LIMB_NONE
+    BODYPART_NONE,      // BIG_POE_LIMB_NONE
     BIG_POE_BODYPART_4, // BIG_POE_LIMB_FACE
-    -1,                 // BIG_POE_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,      // BIG_POE_LIMB_LEFT_UPPER_ARM
     BIG_POE_BODYPART_0, // BIG_POE_LIMB_LEFT_FOREARM
-    -1,                 // BIG_POE_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,      // BIG_POE_LIMB_RIGHT_UPPER_ARM
     BIG_POE_BODYPART_1, // BIG_POE_LIMB_RIGHT_FOREARM
-    -1,                 // BIG_POE_LIMB_RIGHT_HAND
+    BODYPART_NONE,      // BIG_POE_LIMB_RIGHT_HAND
     BIG_POE_BODYPART_2, // BIG_POE_LIMB_LANTERN
     BIG_POE_BODYPART_5, // BIG_POE_LIMB_HAT_AND_CLOAK
     BIG_POE_BODYPART_3, // BIG_POE_LIMB_LOWER_ROBE
@@ -1267,7 +1267,7 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     }
 
     bodyPartIndex = sLimbToBodyParts[limbIndex];
-    if (bodyPartIndex != -1) {
+    if (bodyPartIndex != BODYPART_NONE) {
         if (bodyPartIndex <= BIG_POE_BODYPART_2) {
             Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
         } else if (bodyPartIndex == BIG_POE_BODYPART_3) {

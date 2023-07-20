@@ -6,7 +6,27 @@
 
 struct EnHy;
 
-#define ENHY_LIMB_MAX 16
+//! @note: any actor that uses the EnHy system should 
+//! have a skeleton that aligns with the enum below.
+typedef enum EnHyLimb {
+    /* 0x00 */ ENHY_LIMB_NONE,
+    /* 0x01 */ ENHY_LIMB_PELVIS,
+    /* 0x02 */ ENHY_LIMB_LEFT_THIGH,
+    /* 0x03 */ ENHY_LIMB_LEFT_SHIN,
+    /* 0x04 */ ENHY_LIMB_LEFT_FOOT,
+    /* 0x05 */ ENHY_LIMB_RIGHT_THIGH,
+    /* 0x06 */ ENHY_LIMB_RIGHT_SHIN,
+    /* 0x07 */ ENHY_LIMB_RIGHT_FOOT,
+    /* 0x08 */ ENHY_LIMB_TORSO,
+    /* 0x09 */ ENHY_LIMB_LEFT_UPPER_ARM,
+    /* 0x0A */ ENHY_LIMB_LEFT_FOREARM,
+    /* 0x0B */ ENHY_LIMB_LEFT_HAND,
+    /* 0x0C */ ENHY_LIMB_RIGHT_UPPER_ARM,
+    /* 0x0D */ ENHY_LIMB_RIGHT_FOREARM,
+    /* 0x0E */ ENHY_LIMB_RIGHT_HAND,
+    /* 0x0F */ ENHY_LIMB_HEAD,
+    /* 0x10 */ ENHY_LIMB_MAX
+} EnHyLimb;
 
 //! TODO: Better animaion enum names when animations are documented
 typedef enum {

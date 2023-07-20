@@ -1079,37 +1079,37 @@ static Vec3f D_80879370 = { 1800.0f, 1200.0f, 0.0f };
 static Vec3f D_8087937C = { 1500.0f, 300.0f, 0.0f };
 
 static s8 sLimbToBodyParts[OBJECT_DODONGO_LIMB_MAX] = {
-    -1,                 // OBJECT_DODONGO_LIMB_NONE
-    -1,                 // OBJECT_DODONGO_LIMB_01
-    -1,                 // OBJECT_DODONGO_LIMB_02
-    -1,                 // OBJECT_DODONGO_LIMB_03
-    -1,                 // OBJECT_DODONGO_LIMB_04
-    -1,                 // OBJECT_DODONGO_LIMB_05
-    -1,                 // OBJECT_DODONGO_LIMB_06
-    -1,                 // OBJECT_DODONGO_LIMB_07
-    -1,                 // OBJECT_DODONGO_LIMB_08
-    -1,                 // OBJECT_DODONGO_LIMB_09
-    -1,                 // OBJECT_DODONGO_LIMB_0A
-    -1,                 // OBJECT_DODONGO_LIMB_0B
-    -1,                 // OBJECT_DODONGO_LIMB_0C
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_NONE
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_01
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_02
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_03
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_04
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_05
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_06
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_07
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_08
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_09
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_0A
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_0B
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_0C
     DODONGO_BODYPART_2, // OBJECT_DODONGO_LIMB_0D
     DODONGO_BODYPART_3, // OBJECT_DODONGO_LIMB_0E
     DODONGO_BODYPART_4, // OBJECT_DODONGO_LIMB_0F
-    -1,                 // OBJECT_DODONGO_LIMB_10
-    -1,                 // OBJECT_DODONGO_LIMB_11
-    -1,                 // OBJECT_DODONGO_LIMB_12
-    -1,                 // OBJECT_DODONGO_LIMB_13
-    -1,                 // OBJECT_DODONGO_LIMB_14
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_10
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_11
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_12
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_13
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_14
     DODONGO_BODYPART_5, // OBJECT_DODONGO_LIMB_15
     DODONGO_BODYPART_6, // OBJECT_DODONGO_LIMB_16
-    -1,                 // OBJECT_DODONGO_LIMB_17
-    -1,                 // OBJECT_DODONGO_LIMB_18
-    -1,                 // OBJECT_DODONGO_LIMB_19
-    -1,                 // OBJECT_DODONGO_LIMB_1A
-    -1,                 // OBJECT_DODONGO_LIMB_1B
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_17
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_18
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_19
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_1A
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_1B
     DODONGO_BODYPART_7, // OBJECT_DODONGO_LIMB_1C
     DODONGO_BODYPART_8, // OBJECT_DODONGO_LIMB_1D
-    -1,                 // OBJECT_DODONGO_LIMB_1E
+    BODYPART_NONE,      // OBJECT_DODONGO_LIMB_1E
 };
 
 void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1117,7 +1117,7 @@ void EnDodongo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
     Collider_UpdateSpheres(limbIndex, &this->collider2);
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 

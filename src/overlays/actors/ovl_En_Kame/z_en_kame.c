@@ -179,7 +179,7 @@ void func_80AD7018(EnKame* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, TL_2_BODYPART_MAX, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, TL2_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -765,34 +765,34 @@ s32 func_80AD8A48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
-static Vec3f D_80AD8E68[TL_2_BODYPART_MAX - TL_2_BODYPART_5] = {
-    { 1500.0f, 0.0f, -2000.0f }, // TL_2_BODYPART_5
-    { 1500.0f, 0.0f, 2000.0f },  // TL_2_BODYPART_6
-    { 1500.0f, 2000.0f, 0.0f },  // TL_2_BODYPART_7
-    { 1500.0f, -2000.0f, 0.0f }, // TL_2_BODYPART_8
-    { 2500.0f, 0.0f, 0.0f },     // TL_2_BODYPART_9
+static Vec3f D_80AD8E68[TL2_BODYPART_MAX - TL2_BODYPART_5] = {
+    { 1500.0f, 0.0f, -2000.0f }, // TL2_BODYPART_5
+    { 1500.0f, 0.0f, 2000.0f },  // TL2_BODYPART_6
+    { 1500.0f, 2000.0f, 0.0f },  // TL2_BODYPART_7
+    { 1500.0f, -2000.0f, 0.0f }, // TL2_BODYPART_8
+    { 2500.0f, 0.0f, 0.0f },     // TL2_BODYPART_9
 };
 
 static s8 sLimbToBodyParts[OBJECT_TL_2_LIMB_MAX] = {
-    -1,              // OBJECT_TL_2_LIMB_NONE
-    -1,              // OBJECT_TL_2_LIMB_01
-    -1,              // OBJECT_TL_2_LIMB_02
-    TL_2_BODYPART_0, // OBJECT_TL_2_LIMB_03
-    -1,              // OBJECT_TL_2_LIMB_04
-    -1,              // OBJECT_TL_2_LIMB_05
-    TL_2_BODYPART_1, // OBJECT_TL_2_LIMB_06
-    -1,              // OBJECT_TL_2_LIMB_07
-    TL_2_BODYPART_2, // OBJECT_TL_2_LIMB_08
-    -1,              // OBJECT_TL_2_LIMB_09
-    TL_2_BODYPART_3, // OBJECT_TL_2_LIMB_0A
-    -1,              // OBJECT_TL_2_LIMB_0B
-    TL_2_BODYPART_4, // OBJECT_TL_2_LIMB_0C
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_NONE
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_01
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_02
+    TL2_BODYPART_0, // OBJECT_TL_2_LIMB_03
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_04
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_05
+    TL2_BODYPART_1, // OBJECT_TL_2_LIMB_06
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_07
+    TL2_BODYPART_2, // OBJECT_TL_2_LIMB_08
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_09
+    TL2_BODYPART_3, // OBJECT_TL_2_LIMB_0A
+    BODYPART_NONE,  // OBJECT_TL_2_LIMB_0B
+    TL2_BODYPART_4, // OBJECT_TL_2_LIMB_0C
 };
 
 void func_80AD8AF8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnKame* this = THIS;
 
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
@@ -806,7 +806,7 @@ void func_80AD8AF8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         }
 
         ptr2 = D_80AD8E68;
-        ptr = &this->bodyPartsPos[TL_2_BODYPART_5];
+        ptr = &this->bodyPartsPos[TL2_BODYPART_5];
         for (i = 0; i < ARRAY_COUNT(D_80AD8E68); i++) {
             Matrix_MultVec3f(ptr2, ptr);
             ptr2++;
@@ -831,7 +831,7 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 
     SkelAnime_DrawFlexOpa(play, this->skelAnime1.skeleton, this->skelAnime1.jointTable, this->skelAnime1.dListCount,
                           func_80AD8A48, func_80AD8AF8, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, TL_2_BODYPART_MAX, this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, TL2_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->actor.shape.shadowDraw == NULL) {

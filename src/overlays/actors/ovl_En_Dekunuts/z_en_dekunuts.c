@@ -701,15 +701,15 @@ s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 static s8 sLimbToBodyParts[DEKU_SCRUB_LIMB_MAX] = {
-    -1,                    // DEKU_SCRUB_LIMB_NONE
-    -1,                    // DEKU_SCRUB_LIMB_BODY
-    -1,                    // DEKU_SCRUB_LIMB_HEAD
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_NONE
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_BODY
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_HEAD
     ENDEKUNUTS_BODYPART_3, // DEKU_SCRUB_LIMB_HEADDRESS
-    -1,                    // DEKU_SCRUB_LIMB_CREST
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_CREST
     ENDEKUNUTS_BODYPART_0, // DEKU_SCRUB_LIMB_SNOUT
-    -1,                    // DEKU_SCRUB_LIMB_LEFT_LEG
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_LEFT_LEG
     ENDEKUNUTS_BODYPART_1, // DEKU_SCRUB_LIMB_LEFT_FOOT
-    -1,                    // DEKU_SCRUB_LIMB_RIGHT_LEG
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_RIGHT_LEG
     ENDEKUNUTS_BODYPART_2, // DEKU_SCRUB_LIMB_RIGHT_FOOT
 };
 
@@ -727,7 +727,7 @@ void EnDekunuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
     Vec3f* ptr2;
     s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
 
-    if (bodyPartIndex != -1) {
+    if (bodyPartIndex != BODYPART_NONE) {
         if (bodyPartIndex <= ENDEKUNUTS_BODYPART_2) {
             Matrix_MultVecX(1000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {

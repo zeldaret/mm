@@ -257,7 +257,7 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     bodyPartIndex = gEnHyLimbToShadowBodyParts[limbIndex];
-    if (bodyPartIndex > -1) {
+    if (bodyPartIndex > BODYPART_NONE) {
         Matrix_MultVec3f(&zeroVec, &this->enHy.shadowBodyPartsPos[bodyPartIndex]);
     }
 

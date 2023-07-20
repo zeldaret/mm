@@ -874,30 +874,30 @@ static Vec3f D_80899570[] = {
 };
 
 static s8 sLimbToBodyParts[OBJECT_PH_LIMB_MAX] = {
-    -1,                 // OBJECT_PH_LIMB_NONE
-    -1,                 // OBJECT_PH_LIMB_01
-    -1,                 // OBJECT_PH_LIMB_02
-    -1,                 // OBJECT_PH_LIMB_03
-    -1,                 // OBJECT_PH_LIMB_04
-    -1,                 // OBJECT_PH_LIMB_05
-    -1,                 // OBJECT_PH_LIMB_06
+    BODYPART_NONE,      // OBJECT_PH_LIMB_NONE
+    BODYPART_NONE,      // OBJECT_PH_LIMB_01
+    BODYPART_NONE,      // OBJECT_PH_LIMB_02
+    BODYPART_NONE,      // OBJECT_PH_LIMB_03
+    BODYPART_NONE,      // OBJECT_PH_LIMB_04
+    BODYPART_NONE,      // OBJECT_PH_LIMB_05
+    BODYPART_NONE,      // OBJECT_PH_LIMB_06
     PEEHAT_BODYPART_0,  // OBJECT_PH_LIMB_07
-    -1,                 // OBJECT_PH_LIMB_08
-    -1,                 // OBJECT_PH_LIMB_09
+    BODYPART_NONE,      // OBJECT_PH_LIMB_08
+    BODYPART_NONE,      // OBJECT_PH_LIMB_09
     PEEHAT_BODYPART_2,  // OBJECT_PH_LIMB_0A
-    -1,                 // OBJECT_PH_LIMB_0B
-    -1,                 // OBJECT_PH_LIMB_0C
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0B
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0C
     PEEHAT_BODYPART_4,  // OBJECT_PH_LIMB_0D
-    -1,                 // OBJECT_PH_LIMB_0E
-    -1,                 // OBJECT_PH_LIMB_0F
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0E
+    BODYPART_NONE,      // OBJECT_PH_LIMB_0F
     PEEHAT_BODYPART_6,  // OBJECT_PH_LIMB_10
-    -1,                 // OBJECT_PH_LIMB_11
-    -1,                 // OBJECT_PH_LIMB_12
+    BODYPART_NONE,      // OBJECT_PH_LIMB_11
+    BODYPART_NONE,      // OBJECT_PH_LIMB_12
     PEEHAT_BODYPART_8,  // OBJECT_PH_LIMB_13
-    -1,                 // OBJECT_PH_LIMB_14
-    -1,                 // OBJECT_PH_LIMB_15
+    BODYPART_NONE,      // OBJECT_PH_LIMB_14
+    BODYPART_NONE,      // OBJECT_PH_LIMB_15
     PEEHAT_BODYPART_10, // OBJECT_PH_LIMB_16
-    -1,                 // OBJECT_PH_LIMB_17
+    BODYPART_NONE,      // OBJECT_PH_LIMB_17
 };
 
 void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -907,7 +907,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
     s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
     Gfx* gfx;
 
-    if (bodyPartIndex != -1) {
+    if (bodyPartIndex != BODYPART_NONE) {
         Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex]);
         Matrix_MultVecX(4000.0f, &this->bodyPartsPos[bodyPartIndex + 1]);
     }

@@ -1550,25 +1550,25 @@ s32 EnWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 }
 
 static s8 sLimbToBodyParts[WOLFOS_NORMAL_LIMB_MAX] = {
-    -1,                                    // WOLFOS_NORMAL_LIMB_NONE
-    -1,                                    // WOLFOS_NORMAL_LIMB_ROOT
-    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_LEFT_THIGH
-    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_LEFT_SHIN
-    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_LEFT_PASTERN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_NONE
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_ROOT
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_THIGH
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_SHIN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PASTERN
     WOLFOS_BODYPART_BACK_LEFT_PAW,         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PAW
     WOLFOS_BODYPART_TAIL,                  // WOLFOS_NORMAL_LIMB_TAIL
-    -1,                                    // WOLFOS_NORMAL_LIMB_ABDOMEN
-    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_RIGHT_THIGH
-    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_RIGHT_SHIN
-    -1,                                    // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PASTERN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_ABDOMEN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_THIGH
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_SHIN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PASTERN
     WOLFOS_BODYPART_BACK_RIGHT_PAW,        // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PAW
-    -1,                                    // WOLFOS_NORMAL_LIMB_THORAX
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_THORAX
     WOLFOS_BODYPART_FRONT_RIGHT_UPPER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_UPPER_LEG
     WOLFOS_BODYPART_FRONT_RIGHT_LOWER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_LOWER_LEG
     WOLFOS_BODYPART_FRONT_RIGHT_CLAW,      // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_CLAW
     WOLFOS_BODYPART_HEAD_ROOT,             // WOLFOS_NORMAL_LIMB_HEAD_ROOT
-    -1,                                    // WOLFOS_NORMAL_LIMB_HEAD
-    -1,                                    // WOLFOS_NORMAL_LIMB_EYES
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_HEAD
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_EYES
     WOLFOS_BODYPART_FRONT_LEFT_UPPER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_UPPER_LEG
     WOLFOS_BODYPART_FRONT_LEFT_LOWER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_LOWER_LEG
     WOLFOS_BODYPART_FRONT_LEFT_CLAW,       // WOLFOS_NORMAL_LIMB_FRONT_LEFT_CLAW
@@ -1580,7 +1580,7 @@ void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 

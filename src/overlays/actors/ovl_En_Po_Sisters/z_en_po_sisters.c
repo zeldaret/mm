@@ -1125,18 +1125,18 @@ s32 EnPoSisters_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 static Vec3f D_80B1DAFC = { 1000.0f, -1700.0f, 0.0f };
 
 static s8 sLimbToBodyParts[POE_SISTERS_LIMB_MAX] = {
-    -1,                                   // POE_SISTERS_LIMB_NONE
-    -1,                                   // POE_SISTERS_LIMB_ROOT
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_NONE
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_ROOT
     POE_SISTERS_BODYPART_LEFT_ARM,        // POE_SISTERS_LIMB_LEFT_ARM
     POE_SISTERS_BODYPART_LEFT_HAND,       // POE_SISTERS_LIMB_LEFT_HAND
     POE_SISTERS_BODYPART_RIGHT_UPPER_ARM, // POE_SISTERS_LIMB_RIGHT_UPPER_ARM
-    -1,                                   // POE_SISTERS_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_RIGHT_FOREARM
     POE_SISTERS_BODYPART_TORCH_ROOT,      // POE_SISTERS_LIMB_TORCH_ROOT
-    -1,                                   // POE_SISTERS_LIMB_RIGHT_HAND
-    -1,                                   // POE_SISTERS_LIMB_TORCH
-    -1,                                   // POE_SISTERS_LIMB_MAIN_BODY
-    -1,                                   // POE_SISTERS_LIMB_FACE
-    -1,                                   // POE_SISTERS_LIMB_LOWER_BODY
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_RIGHT_HAND
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_TORCH
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_MAIN_BODY
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_FACE
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_LOWER_BODY
 };
 
 void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
@@ -1144,7 +1144,7 @@ void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     s32 end;
     f32 brightness;
 
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     } else if (limbIndex == POE_SISTERS_LIMB_MAIN_BODY) {
         Matrix_MultVecY(-2500.0f, &this->bodyPartsPos[POE_SISTERS_BODYPART_MAIN_BODY_0]);

@@ -1129,15 +1129,15 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
  * not part of the bodyPartsPos array.
  */
 static s8 sLimbToBodyParts[EENO_LIMB_MAX] = {
-    -1,                    // EENO_LIMB_NONE
-    -1,                    // EENO_LIMB_ROOT
-    -1,                    // EENO_LIMB_BODY_TOP
-    -1,                    // EENO_LIMB_LEFT_EYE
-    -1,                    // EENO_LIMB_RIGHT_EYE
-    -1,                    // EENO_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,         // EENO_LIMB_NONE
+    BODYPART_NONE,         // EENO_LIMB_ROOT
+    BODYPART_NONE,         // EENO_LIMB_BODY_TOP
+    BODYPART_NONE,         // EENO_LIMB_LEFT_EYE
+    BODYPART_NONE,         // EENO_LIMB_RIGHT_EYE
+    BODYPART_NONE,         // EENO_LIMB_LEFT_UPPER_ARM
     EN_SNOWMAN_BODYPART_0, // EENO_LIMB_LEFT_FOREARM
     EN_SNOWMAN_BODYPART_1, // EENO_LIMB_LEFT_HAND
-    -1,                    // EENO_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,         // EENO_LIMB_RIGHT_UPPER_ARM
     EN_SNOWMAN_BODYPART_2, // EENO_LIMB_RIGHT_FOREARM
     EN_SNOWMAN_BODYPART_3, // EENO_LIMB_RIGHT_HAND
     EN_SNOWMAN_BODYPART_4, // EENO_LIMB_BODY_BOTTOM
@@ -1161,7 +1161,7 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     Gfx* gfx;
     s32 i;
 
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         if (sLimbToBodyParts[limbIndex] == EN_SNOWMAN_BODYPART_4) {
             for (i = 0; i < ARRAY_COUNT(sBodyBottomBodyPartOffsets); i++) {
                 Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[EN_SNOWMAN_BODYPART_4 + i]);

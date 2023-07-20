@@ -1423,27 +1423,27 @@ static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
 static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };
 
 static s8 sLimbToBodyParts[OBJECT_DINOFOS_LIMB_MAX] = {
-    -1,                  // OBJECT_DINOFOS_LIMB_NONE
-    -1,                  // OBJECT_DINOFOS_LIMB_01
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_NONE
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_01
     DINOFOS_BODYPART_0,  // OBJECT_DINOFOS_LIMB_02
-    -1,                  // OBJECT_DINOFOS_LIMB_03
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_03
     DINOFOS_BODYPART_1,  // OBJECT_DINOFOS_LIMB_04
     DINOFOS_BODYPART_2,  // OBJECT_DINOFOS_LIMB_05
-    -1,                  // OBJECT_DINOFOS_LIMB_06
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_06
     DINOFOS_BODYPART_3,  // OBJECT_DINOFOS_LIMB_07
     DINOFOS_BODYPART_4,  // OBJECT_DINOFOS_LIMB_08
-    -1,                  // OBJECT_DINOFOS_LIMB_09
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_09
     DINOFOS_BODYPART_5,  // OBJECT_DINOFOS_LIMB_0A
     DINOFOS_BODYPART_6,  // OBJECT_DINOFOS_LIMB_0B
-    -1,                  // OBJECT_DINOFOS_LIMB_0C
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_0C
     DINOFOS_BODYPART_7,  // OBJECT_DINOFOS_LIMB_0D
     DINOFOS_BODYPART_8,  // OBJECT_DINOFOS_LIMB_0E
-    -1,                  // OBJECT_DINOFOS_LIMB_0F
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_0F
     DINOFOS_BODYPART_9,  // OBJECT_DINOFOS_LIMB_10
     DINOFOS_BODYPART_10, // OBJECT_DINOFOS_LIMB_11
-    -1,                  // OBJECT_DINOFOS_LIMB_12
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_12
     DINOFOS_BODYPART_11, // OBJECT_DINOFOS_LIMB_13
-    -1,                  // OBJECT_DINOFOS_LIMB_14
+    BODYPART_NONE,       // OBJECT_DINOFOS_LIMB_14
 };
 
 void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
@@ -1457,7 +1457,7 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     MtxF* sp48;
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
-    if (sLimbToBodyParts[limbIndex] != -1) {
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
         Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 

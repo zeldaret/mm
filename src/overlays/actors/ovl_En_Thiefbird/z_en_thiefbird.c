@@ -1066,23 +1066,23 @@ s32 EnThiefbird_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 }
 
 static s8 sLimbToBodyParts[TAKKURI_LIMB_MAX] = {
-    -1,                       // TAKKURI_LIMB_NONE
+    BODYPART_NONE,            // TAKKURI_LIMB_NONE
     EN_THIEFBIRD_BODYPART_0,  // TAKKURI_LIMB_BODY
-    -1,                       // TAKKURI_LIMB_LEFT_WING_BASE
+    BODYPART_NONE,            // TAKKURI_LIMB_LEFT_WING_BASE
     EN_THIEFBIRD_BODYPART_1,  // TAKKURI_LIMB_LEFT_WING_MIDDLE
     EN_THIEFBIRD_BODYPART_3,  // TAKKURI_LIMB_LEFT_WING_TIP
-    -1,                       // TAKKURI_LIMB_RIGHT_WING_BASE
+    BODYPART_NONE,            // TAKKURI_LIMB_RIGHT_WING_BASE
     EN_THIEFBIRD_BODYPART_2,  // TAKKURI_LIMB_RIGHT_WING_MIDDLE
     EN_THIEFBIRD_BODYPART_5,  // TAKKURI_LIMB_RIGHT_WING_TIP
-    -1,                       // TAKKURI_LIMB_NECK
-    -1,                       // TAKKURI_LIMB_HEAD
+    BODYPART_NONE,            // TAKKURI_LIMB_NECK
+    BODYPART_NONE,            // TAKKURI_LIMB_HEAD
     EN_THIEFBIRD_BODYPART_7,  // TAKKURI_LIMB_RIGHT_EAR
     EN_THIEFBIRD_BODYPART_8,  // TAKKURI_LIMB_LEFT_EAR
     EN_THIEFBIRD_BODYPART_9,  // TAKKURI_LIMB_LOWER_BEAK
-    -1,                       // TAKKURI_LIMB_EYES
-    -1,                       // TAKKURI_LIMB_LEGS
+    BODYPART_NONE,            // TAKKURI_LIMB_EYES
+    BODYPART_NONE,            // TAKKURI_LIMB_LEGS
     EN_THIEFBIRD_BODYPART_10, // TAKKURI_LIMB_FEET
-    -1,                       // TAKKURI_LIMB_STOLEN_ITEM
+    BODYPART_NONE,            // TAKKURI_LIMB_STOLEN_ITEM
 };
 
 void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1126,7 +1126,7 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     }
 
     bodyPartIndex = sLimbToBodyParts[limbIndex];
-    if (bodyPartIndex != -1) {
+    if (bodyPartIndex != BODYPART_NONE) {
         if (bodyPartIndex == EN_THIEFBIRD_BODYPART_9) {
             Matrix_MultVecX(1000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
