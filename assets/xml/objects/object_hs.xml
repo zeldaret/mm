@@ -1,9 +1,9 @@
 ﻿<Root>
     <!-- Grog: the Cucco keeper, you raise his Cucco chicks into adults to earn the Bunny Hood mask -->
     <File Name="object_hs" Segment="6">
-        <Animation Name="gHsShiveringAnim" Offset="0x304" /> <!-- unused, "h_purupuru" japanese onomatopoeic for 'shivering' -->
-        <Animation Name="gHsPleadingAnim" Offset="0x528" /> <!-- unused, "h_tanomuu" japanese for 'to beg' -->
-        <Animation Name="gHsIdleAnim" Offset="0x5C0" /> <!-- "h_matsu" japanese for 'to wait' -->
+        <Animation Name="gHsShiveringAnim" Offset="0x304" /> <!-- Original name is "h_purupuru" (onomatopoeic for "shivering"), unused -->
+        <Animation Name="gHsPleadingAnim" Offset="0x528" /> <!-- Original name is "h_tanomuu" ("to beg"), unused -->
+        <Animation Name="gHsIdleAnim" Offset="0x5C0" /> <!-- Original name is "h_matsu" ("to wait") -->
         <DList Name="object_hs_DL_003760" Offset="0x3760" />
         <DList Name="object_hs_DL_003AB0" Offset="0x3AB0" />
         <DList Name="object_hs_DL_004140" Offset="0x4140" />
