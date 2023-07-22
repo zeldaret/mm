@@ -54,3 +54,6 @@ docs/doxygen/
 # Per-user configuration
 .python-version
 .make_options
+
+# ABDOO PERSONAL STUFF
+.abdoo/
