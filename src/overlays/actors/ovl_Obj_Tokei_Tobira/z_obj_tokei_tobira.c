@@ -16,7 +16,6 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this);
 
-
 ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
     ACTORCAT_BG,
@@ -41,10 +40,9 @@ Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
 s16 D_80ABD76C[2] = { 0xC000, 0x4000 };
 s32 D_80ABD770[2] = { 0x060012B0, 0x06001590 };
 f32 D_80ABD778[2] = { 1.0f, -1.0f };
-Gfx *D_80ABD780[4] = { (Gfx *)0x06001108, (Gfx *)0x060013E8, NULL, NULL };
+Gfx* D_80ABD780[4] = { (Gfx*)0x06001108, (Gfx*)0x060013E8, NULL, NULL };
 
-
-//TODO: Deal with the data
+// TODO: Deal with the data
 
 /*extern InitChainEntry D_80ABD750;
 extern Vec3f D_80ABD760;
@@ -104,7 +102,7 @@ void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
     }
 }
 
-//extern f32 D_80ABD778[];
+// extern f32 D_80ABD778[];
 void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjTokeiTobira* this = THIS;
@@ -179,7 +177,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-//extern Gfx* D_80ABD780[];
+// extern Gfx* D_80ABD780[];
 
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play) {
     Gfx_DrawDListOpa(play, D_80ABD780[thisx->params & 1]);
