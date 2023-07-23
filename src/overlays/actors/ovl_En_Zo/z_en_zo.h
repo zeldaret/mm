@@ -12,24 +12,24 @@ typedef void (*EnZoActionFunc)(struct EnZo*, PlayState*);
 
 #define ENZO_PATH_INDEX_NONE 0x3F
 
-typedef enum EnZoShadowBodyPart {
-    /*  0 */ ZORA_SHADOW_BODYPART_0,
-    /*  1 */ ZORA_SHADOW_BODYPART_1,
-    /*  2 */ ZORA_SHADOW_BODYPART_2,
-    /*  3 */ ZORA_SHADOW_BODYPART_3,
-    /*  4 */ ZORA_SHADOW_BODYPART_4,
-    /*  5 */ ZORA_SHADOW_BODYPART_5,
-    /*  6 */ ZORA_SHADOW_BODYPART_6,
-    /*  7 */ ZORA_SHADOW_BODYPART_7,
-    /*  8 */ ZORA_SHADOW_BODYPART_8,
-    /*  9 */ ZORA_SHADOW_BODYPART_9,
-    /* 10 */ ZORA_SHADOW_BODYPART_10,
-    /* 11 */ ZORA_SHADOW_BODYPART_11,
-    /* 12 */ ZORA_SHADOW_BODYPART_12,
-    /* 13 */ ZORA_SHADOW_BODYPART_13,
-    /* 14 */ ZORA_SHADOW_BODYPART_14,
-    /* 15 */ ZORA_SHADOW_BODYPART_MAX
-} EnZoShadowBodyPart;
+typedef enum EnZoBodyPart {
+    /*  0 */ ZORA_BODYPART_0,
+    /*  1 */ ZORA_BODYPART_1,
+    /*  2 */ ZORA_BODYPART_2,
+    /*  3 */ ZORA_BODYPART_3,
+    /*  4 */ ZORA_BODYPART_4,
+    /*  5 */ ZORA_BODYPART_5,
+    /*  6 */ ZORA_BODYPART_6,
+    /*  7 */ ZORA_BODYPART_7,
+    /*  8 */ ZORA_BODYPART_8,
+    /*  9 */ ZORA_BODYPART_9,
+    /* 10 */ ZORA_BODYPART_10,
+    /* 11 */ ZORA_BODYPART_11,
+    /* 12 */ ZORA_BODYPART_12,
+    /* 13 */ ZORA_BODYPART_13,
+    /* 14 */ ZORA_BODYPART_14,
+    /* 15 */ ZORA_BODYPART_MAX
+} EnZoBodyPart;
 
 typedef struct EnZo {
     /* 0x000 */ Actor actor;
@@ -51,7 +51,7 @@ typedef struct EnZo {
     /* 0x300 */ UNK_TYPE1 unk_300[0x12];
     /* 0x312 */ s16 fidgetTableY[ZORA_LIMB_MAX];
     /* 0x33A */ s16 fidgetTableZ[ZORA_LIMB_MAX];
-    /* 0x364 */ Vec3f shadowBodyPartsPos[ZORA_SHADOW_BODYPART_MAX];
+    /* 0x364 */ Vec3f bodyPartsPos[ZORA_BODYPART_MAX];
     /* 0x41A */ UNK_TYPE1 unk_41A[0x6];
     /* 0x41E */ s16 eyeIndex;
     /* 0x420 */ s16 blinkTimer;

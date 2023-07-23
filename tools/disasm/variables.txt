@@ -921,7 +921,7 @@
     0x801BC240:("gEffFootprintMaterialDL","Gfx","[9]",0x48),
     0x801BC288:("gEffFootprintModelDL","Gfx","[3]",0x18),
     0x801BC2A0:("D_801BC2A0","UNK_TYPE1","",0x1),
-    0x801BC3F0:("gEnHyLimbToShadowBodyParts","UNK_TYPE1","",0x1),
+    0x801BC3F0:("gEnHyLimbToBodyParts","UNK_TYPE1","",0x1),
     0x801BC400:("gEnHyParentShadowBodyParts","UNK_TYPE1","",0x1),
     0x801BC410:("gEnHyShadowSizes","s32",[],0x10),
     0x801BC420:("sReactionTextIds","u16","[]",0x140A),

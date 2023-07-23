@@ -243,9 +243,9 @@ s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
     s8 bodyPartIndex;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    bodyPartIndex = gEnHyLimbToShadowBodyParts[limbIndex];
+    bodyPartIndex = gEnHyLimbToBodyParts[limbIndex];
     if (bodyPartIndex > BODYPART_NONE) {
-        Matrix_MultVec3f(&zeroVec, &this->enHy.shadowBodyPartsPos[bodyPartIndex]);
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPartIndex]);
     }
 
     if (limbIndex == CNE_LIMB_HEAD) {
@@ -327,8 +327,8 @@ void EnCne01_Draw(Actor* thisx, PlayState* play) {
         *shadowTexIter++ = 0;
     }
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(this->enHy.shadowBodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
-                          ENHY_SHADOW_BODYPART_MAX, gEnHyShadowSizes, gEnHyParentShadowBodyParts);
+        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f, ENHY_BODYPART_MAX,
+                          gEnHyShadowSizes, gEnHyParentShadowBodyParts);
     }
     SubS_DrawShadowTex(&this->enHy.actor, &play->state, shadowTex);
 

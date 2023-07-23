@@ -57,22 +57,22 @@ typedef enum {
 typedef void (*EnHyActionFunc)(struct EnHy*, PlayState*);
 
 typedef enum EnHyBodyPart {
-    /*  0 */ ENHY_SHADOW_BODYPART_0,
-    /*  1 */ ENHY_SHADOW_BODYPART_1,
-    /*  2 */ ENHY_SHADOW_BODYPART_2,
-    /*  3 */ ENHY_SHADOW_BODYPART_3,
-    /*  4 */ ENHY_SHADOW_BODYPART_4,
-    /*  5 */ ENHY_SHADOW_BODYPART_5,
-    /*  6 */ ENHY_SHADOW_BODYPART_6,
-    /*  7 */ ENHY_SHADOW_BODYPART_7,
-    /*  8 */ ENHY_SHADOW_BODYPART_8,
-    /*  9 */ ENHY_SHADOW_BODYPART_9,
-    /* 10 */ ENHY_SHADOW_BODYPART_10,
-    /* 11 */ ENHY_SHADOW_BODYPART_11,
-    /* 12 */ ENHY_SHADOW_BODYPART_12,
-    /* 13 */ ENHY_SHADOW_BODYPART_13,
-    /* 14 */ ENHY_SHADOW_BODYPART_14,
-    /* 15 */ ENHY_SHADOW_BODYPART_MAX
+    /*  0 */ ENHY_BODYPART_0,
+    /*  1 */ ENHY_BODYPART_1,
+    /*  2 */ ENHY_BODYPART_2,
+    /*  3 */ ENHY_BODYPART_3,
+    /*  4 */ ENHY_BODYPART_4,
+    /*  5 */ ENHY_BODYPART_5,
+    /*  6 */ ENHY_BODYPART_6,
+    /*  7 */ ENHY_BODYPART_7,
+    /*  8 */ ENHY_BODYPART_8,
+    /*  9 */ ENHY_BODYPART_9,
+    /* 10 */ ENHY_BODYPART_10,
+    /* 11 */ ENHY_BODYPART_11,
+    /* 12 */ ENHY_BODYPART_12,
+    /* 13 */ ENHY_BODYPART_13,
+    /* 14 */ ENHY_BODYPART_14,
+    /* 15 */ ENHY_BODYPART_MAX
 } EnHyBodyPart;
 
 typedef struct EnHy {
@@ -104,13 +104,13 @@ typedef struct EnHy {
     /* 0x2E4 */ Vec3s prevTorsoRot;
     /* 0x2EA */ s16 fidgetTableY[ENHY_LIMB_MAX];
     /* 0x30A */ s16 fidgetTableZ[ENHY_LIMB_MAX];
-    /* 0x32C */ Vec3f shadowBodyPartsPos[ENHY_SHADOW_BODYPART_MAX];
+    /* 0x32C */ Vec3f bodyPartsPos[ENHY_BODYPART_MAX];
     /* 0x3E0 */ UNK_TYPE1 unk_3E0[0x6];
     /* 0x3E6 */ s16 eyeTexIndex;
     /* 0x3E8 */ s16 blinkTimer;
 } EnHy; // size = 0x3EC
 
-extern s8 gEnHyLimbToShadowBodyParts[];
+extern s8 gEnHyLimbToBodyParts[];
 extern s8 gEnHyParentShadowBodyParts[];
 extern u8 gEnHyShadowSizes[];
 
