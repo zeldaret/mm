@@ -1,7 +1,10 @@
 #ifndef Z_OBJ_TOKEI_TOBIRA_H
 #define Z_OBJ_TOKEI_TOBIRA_H
 
+#define OBJTOKEITOBIRA_GET_TYPE(thisx) ((thisx)->params & 1)
+
 #include "global.h"
+
 
 struct ObjTokeiTobira;
 

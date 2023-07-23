@@ -39,6 +39,8 @@ static InitChainEntry D_80ABD750[] = {
 
 #endif
 
+//TODO: Deal with the data
+
 extern InitChainEntry D_80ABD750;
 extern Vec3f D_80ABD760;
 extern s16 D_80ABD76C[];
@@ -49,15 +51,13 @@ extern s32 D_80ABD770;
  */
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
-    s16 pad;
-    s32 params;
-    Vec3f ObjPos; // Object's position
-
-    params = this->dyna.actor.params & 1;
+    s32 pad;
+    s32 params = this->dyna.actor.params & 1;
+    Vec3f objPos; // Object's position
 
     Actor_ProcessInitChain(&this->dyna.actor, &D_80ABD750);
-    DynaPolyActor_Init((DynaPolyActor*)this, 3);
-    DynaPolyActor_LoadMesh(play, (DynaPolyActor*)this, *(&D_80ABD770 + params));
+    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_LoadMesh(play, &this->dyna, *(&D_80ABD770 + params));
 
     if (params == 0) {
         Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x1A2, this->dyna.actor.world.pos.x,
@@ -65,21 +65,22 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
                            this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 1);
     }
 
-    Matrix_RotateYS((s16)(D_80ABD76C[params] + this->dyna.actor.shape.rot.y), MTXMODE_NEW);
-    Matrix_MultVec3f(&D_80ABD760, &ObjPos);
-    this->dyna.actor.world.pos.x += ObjPos.x;
-    this->dyna.actor.world.pos.y += ObjPos.y;
-    this->dyna.actor.world.pos.z += ObjPos.z;
+    Matrix_RotateYS(D_80ABD76C[params] + this->dyna.actor.shape.rot.y, MTXMODE_NEW);
+    Matrix_MultVec3f(&D_80ABD760, &objPos);
+    this->dyna.actor.world.pos.x += objPos.x;
+    this->dyna.actor.world.pos.y += objPos.y;
+    this->dyna.actor.world.pos.z += objPos.z;
 
-    if ((params == 0) && !(gSaveContext.save.saveInfo.weekEventReg[0x3B] & 4) && (play->sceneId == 0x6F) &&
+    if ((params == 0) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04)) && (play->sceneId == SCENE_CLOCKTOWER) &&
         (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId >= 0)) {
-        this->dyna.actor.flags |= 0x10;
+        this->dyna.actor.flags |= ACTOR_FLAG_10;
         this->actionFunc = ObjTokeiTobira_StartCutscene;
     }
 }
 
 void ObjTokeiTobira_Destroy(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
@@ -88,12 +89,11 @@ void ObjTokeiTobira_Destroy(Actor* thisx, PlayState* play) {
  * (Originally called "func * _80ABD3B0")
  */
 void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
-
-    if (CutsceneManager_IsNext((s16)this->dyna.actor.csId) != 0) {
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
         CutsceneManager_StartWithPlayerCs((s16)this->dyna.actor.csId, &this->dyna.actor);
-        gSaveContext.save.saveInfo.weekEventReg[0x3B] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_59_04);
         this->actionFunc = NULL;
-        this->dyna.actor.flags &= ~0x10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     } else {
         CutsceneManager_Queue((s16)this->dyna.actor.csId);
     }
@@ -109,7 +109,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     f32 sp48 = D_80ABD778[temp_param];
     s32 pad44;
 
-    if (player->actor.bgCheckFlags & 0x200) {
+    if (player->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) {
         if (DynaPoly_GetActor(&play->colCtx, player->actor.wallBgId) == &this->dyna) {
             f32 sp40;
             Vec3f sp34;
@@ -119,10 +119,10 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
 
             if (sp40 > 20.0f) {
                 if (sp34.z > 0.0f) {
-                    this->unk160 += (sp40 - 20.0f) * sp48 * 5.3333335f;
+                    this->unk160 += (sp40 - 20.0f) * sp48 * (16.0f / 3.0f);
                     this->unk168 = 1;
                     if (this->unk16C <= 0) {
-                        Actor_PlaySfx(&this->dyna.actor, 0x5809);
+                        Actor_PlaySfx(&this->dyna.actor, NA_SE_OC_WOOD_GATE_OPEN);
                         this->unk16C = 0x50;
                     }
                 }
@@ -174,7 +174,8 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-extern UNK_TYPE D_80ABD780;
+extern Gfx* D_80ABD780[];
+
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play) {
     Gfx_DrawDListOpa(play, (&D_80ABD780)[thisx->params & 1]);
 }
