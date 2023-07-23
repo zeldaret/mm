@@ -14,8 +14,8 @@ from typing import List
 
 
 # clang-format, clang-tidy and clang-apply-replacements default version
-# This specific version is used when available, for more consistency between contributors
-CLANG_VER = 14
+# Version 11 is used when available for more consistency between contributors
+CLANG_VER = 11
 
 # Clang-Format options (see .clang-format for rules applied)
 FORMAT_OPTS = "-i -style=file"
@@ -146,12 +146,6 @@ def main():
     parser = argparse.ArgumentParser(description="Format files in the codebase to enforce most style rules")
     parser.add_argument("files", metavar="file", nargs="*")
     parser.add_argument(
-        "--show-paths",
-        dest="show_paths",
-        action="store_true",
-        help="Print the paths to the clang-* binaries used",
-    )
-    parser.add_argument(
         "-j",
         dest="jobs",
         type=int,
@@ -160,13 +154,6 @@ def main():
         help="number of jobs to run (default: 1 without -j, number of cpus with -j)",
     )
     args = parser.parse_args()
-
-    if args.show_paths:
-        import shutil
-
-        print("CLANG_FORMAT             ->", shutil.which(CLANG_FORMAT))
-        print("CLANG_TIDY               ->", shutil.which(CLANG_TIDY))
-        print("CLANG_APPLY_REPLACEMENTS ->", shutil.which(CLANG_APPLY_REPLACEMENTS))
 
     nb_jobs = args.jobs or multiprocessing.cpu_count()
     if nb_jobs > 1:

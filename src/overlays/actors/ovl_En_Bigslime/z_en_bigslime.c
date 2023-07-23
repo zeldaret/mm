@@ -1741,10 +1741,10 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
                     // Linearly interpolate dynamicVtx --> staticVtx * (1 - scale * vtxSurfacePerturbation)
-                    dynamicVtx->n.ob[j] += (s16)(((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] *
-                                                                              this->vtxSurfacePerturbation[i])) -
-                                                  dynamicVtx->n.ob[j]) *
-                                                 invWindupPunchTimer);
+                    dynamicVtx->n.ob[j] += (s16)(
+                        ((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] * this->vtxSurfacePerturbation[i])) -
+                         dynamicVtx->n.ob[j]) *
+                        invWindupPunchTimer);
                 }
             } else {
                 // loop over x, y, z
