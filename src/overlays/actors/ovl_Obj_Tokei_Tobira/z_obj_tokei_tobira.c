@@ -16,7 +16,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play);
 void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this);
 
-#if 0
+
 ActorInit Obj_Tokei_Tobira_InitVars = {
     ACTOR_OBJ_TOKEI_TOBIRA,
     ACTORCAT_BG,
@@ -37,14 +37,19 @@ static InitChainEntry D_80ABD750[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-#endif
+Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
+s16 D_80ABD76C[2] = { 0xC000, 0x4000 };
+s32 D_80ABD770[2] = { 0x060012B0, 0x06001590 };
+f32 D_80ABD778[2] = { 1.0f, -1.0f };
+Gfx *D_80ABD780[4] = { (Gfx *)0x06001108, (Gfx *)0x060013E8, NULL, NULL };
+
 
 //TODO: Deal with the data
 
-extern InitChainEntry D_80ABD750;
+/*extern InitChainEntry D_80ABD750;
 extern Vec3f D_80ABD760;
 extern s16 D_80ABD76C[];
-extern s32 D_80ABD770;
+extern s32 D_80ABD770;*/
 
 /**
  *  Object's Initialization
@@ -56,8 +61,8 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     Vec3f objPos; // Object's position
 
     Actor_ProcessInitChain(&this->dyna.actor, &D_80ABD750);
-    DynaPolyActor_Init(&this->dyna, 3);
-    DynaPolyActor_LoadMesh(play, &this->dyna, *(&D_80ABD770 + params));
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
+    DynaPolyActor_LoadMesh(play, &this->dyna, D_80ABD770[params]);
 
     if (params == 0) {
         Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x1A2, this->dyna.actor.world.pos.x,
@@ -99,13 +104,13 @@ void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
     }
 }
 
-extern f32 D_80ABD778[];
+//extern f32 D_80ABD778[];
 void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     ObjTokeiTobira* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 pad50;
-    s32 temp_param = this->dyna.actor.params & 1;
+    s32 temp_param = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
     f32 sp48 = D_80ABD778[temp_param];
     s32 pad44;
 
@@ -174,8 +179,8 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-extern Gfx* D_80ABD780[];
+//extern Gfx* D_80ABD780[];
 
 void ObjTokeiTobira_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, (&D_80ABD780)[thisx->params & 1]);
+    Gfx_DrawDListOpa(play, D_80ABD780[thisx->params & 1]);
 }
