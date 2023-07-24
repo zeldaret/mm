@@ -157,7 +157,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
         this->unk164 = -1000.0f * sp48;
     }
 
-    this->dyna.actor.shape.rot.y = (s32) this->unk164 + this->dyna.actor.home.rot.y;
+    this->dyna.actor.shape.rot.y = (s32)this->unk164 + this->dyna.actor.home.rot.y;
 
     if (this->actionFunc != NULL) {
         this->actionFunc(this);
