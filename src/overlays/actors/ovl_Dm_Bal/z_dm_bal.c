@@ -37,13 +37,13 @@ typedef enum {
     /* 0x1 */ TINGLE_ANIM_FALL_LOOP,
     /* 0x2 */ TINGLE_ANIM_FALL_ONCE,
     /* 0x3 */ TINGLE_ANIM_LAND,
-    /* 0x4 */ TINGLE_ANIM_TALK_TWIST,
-    /* 0x5 */ TINGLE_ANIM_TALK_IDLE,
+    /* 0x4 */ TINGLE_ANIM_TWIST,
+    /* 0x5 */ TINGLE_ANIM_TALK,
     /* 0x6 */ TINGLE_ANIM_MAGIC,
     /* 0x7 */ TINGLE_ANIM_HAPPY_DANCE_LOOP,
     /* 0x8 */ TINGLE_ANIM_HAPPY_DANCE_ONCE,
     /* 0x9 */ TINGLE_ANIM_MAGIC_REVERSE,
-    /* 0xA */ TINGLE_ANIM_WAIT,
+    /* 0xA */ TINGLE_ANIM_IDLE,
     /* 0xB */ TINGLE_ANIM_SPIN,
     /* 0xC */ TINGLE_ANIM_HIDE_FACE,
     /* 0xD */ TINGLE_ANIM_CONFETTI,
@@ -55,13 +55,13 @@ static AnimationInfo sAnimationInfo[TINGLE_ANIM_MAX] = {
     { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_FALL_LOOP
     { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },               // TINGLE_ANIM_FALL_ONCE
     { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },               // TINGLE_ANIM_LAND
-    { &gTingleTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },              // TINGLE_ANIM_TALK_TWIST
-    { &gTingleTalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_TALK_IDLE
+    { &gTingleTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },              // TINGLE_ANIM_TWIST
+    { &gTingleTalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_TALK
     { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // TINGLE_ANIM_MAGIC
     { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },         // TINGLE_ANIM_HAPPY_DANCE_LOOP
     { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },         // TINGLE_ANIM_HAPPY_DANCE_ONCE
     { &gTingleThrowConfettiAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // TINGLE_ANIM_MAGIC_REVERSE
-    { &gTingleIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_WAIT
+    { &gTingleIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_IDLE
     { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },               // TINGLE_ANIM_SPIN
     { &gTingleFloatHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },      // TINGLE_ANIM_HIDE_FACE
     { &gTingleFloatThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f }, // TINGLE_ANIM_CONFETTI

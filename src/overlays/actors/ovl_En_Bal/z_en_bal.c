@@ -19,20 +19,21 @@ void EnBal_Draw(Actor* thisx, PlayState* play);
 typedef enum {
     /* 0 */ TINGLE_EYETEX_OPEN,
     /* 1 */ TINGLE_EYETEX_CLOSED
-} EnBalEyeTexture;
+} TingleEyeTexture;
 
 typedef enum {
+    /* -1 */ TINGLE_ANIM_NONE = -1,
     /*  0 */ TINGLE_ANIM_FLOAT_IDLE,
     /*  1 */ TINGLE_ANIM_FALL_LOOP,
     /*  2 */ TINGLE_ANIM_FALL_ONCE,
     /*  3 */ TINGLE_ANIM_LAND,
-    /*  4 */ TINGLE_ANIM_TALK_TWIST,
-    /*  5 */ TINGLE_ANIM_TALK_IDLE,
+    /*  4 */ TINGLE_ANIM_TWIST,
+    /*  5 */ TINGLE_ANIM_TALK,
     /*  6 */ TINGLE_ANIM_MAGIC,
     /*  7 */ TINGLE_ANIM_HAPPY_DANCE_LOOP,
     /*  8 */ TINGLE_ANIM_HAPPY_DANCE_ONCE,
     /*  9 */ TINGLE_ANIM_MAGIC_REVERSE,
-    /* 10 */ TINGLE_ANIM_WAIT,
+    /* 10 */ TINGLE_ANIM_IDLE,
     /* 11 */ TINGLE_ANIM_SPIN,
     /* 12 */ TINGLE_ANIM_HIDE_FACE,
     /* 13 */ TINGLE_ANIM_CONFETTI,
@@ -43,13 +44,13 @@ typedef enum {
     /* 0 */ TINGLE_MAPCHOICE_PROXIMAL,
     /* 1 */ TINGLE_MAPCHOICE_DISTAL,
     /* 2 */ TINGLE_MAPCHOICE_CANCEL
-} EnBalBuyMapChoice;
+} TingleBuyMapChoice;
 
 typedef enum {
     /* 0 */ TINGLE_WATCH_TARGET_NONE,
     /* 1 */ TINGLE_WATCH_TARGET_PLAYER,
     /* 2 */ TINGLE_WATCH_TARGET_FAIRY
-} EnBalWatchTarget;
+} TingleWatchTarget;
 
 typedef enum {
     /* 0 */ TINGLE_BALLOON_ACTION_NONE,
@@ -57,7 +58,7 @@ typedef enum {
     /* 2 */ TINGLE_BALLOON_ACTION_FALL,
     /* 4 */ TINGLE_BALLOON_ACTION_INFLATE = 4,
     /* 5 */ TINGLE_BALLOON_ACTION_RISE
-} EnBalBalloonAction;
+} TingleBalloonAction;
 
 typedef enum {
     /* 0 */ TINGLE_IDLESTAGE_ACTIVITY,
@@ -179,13 +180,13 @@ static AnimationInfo sAnimationInfo[TINGLE_ANIM_MAX] = {
     { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_FALL_LOOP
     { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },               // TINGLE_ANIM_FALL_ONCE
     { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },               // TINGLE_ANIM_LAND
-    { &gTingleTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },              // TINGLE_ANIM_TALK_TWIST
-    { &gTingleTalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_TALK_IDLE
+    { &gTingleTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },              // TINGLE_ANIM_TWIST
+    { &gTingleTalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_TALK
     { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // TINGLE_ANIM_MAGIC
     { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },         // TINGLE_ANIM_HAPPY_DANCE_LOOP
     { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },         // TINGLE_ANIM_HAPPY_DANCE_ONCE
     { &gTingleThrowConfettiAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // TINGLE_ANIM_MAGIC_REVERSE
-    { &gTingleIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_WAIT
+    { &gTingleIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_IDLE
     { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },               // TINGLE_ANIM_SPIN
     { &gTingleFloatHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },      // TINGLE_ANIM_HIDE_FACE
     { &gTingleFloatThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f }, // TINGLE_ANIM_CONFETTI
@@ -465,10 +466,10 @@ void EnBal_SetupGroundIdle(EnBal* this) {
         this->forceEyesShut = false;
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         this->idleAnimStage = TINGLE_IDLESTAGE_WAIT;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_WAIT);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_IDLE);
     } else if (Rand_Next() & 1) {
         this->idleAnimStage = TINGLE_IDLESTAGE_ACTIVITY;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
     } else {
         this->idleAnimStage = TINGLE_IDLESTAGE_ACTIVITY;
         this->forceEyesShut = true;
@@ -512,12 +513,12 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_TINGLE)) {
             if (GET_PLAYER_FORM == EnBal_GetRecognizedPlayerForm()) {
                 this->watchTarget = TINGLE_WATCH_TARGET_PLAYER;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 Message_StartTextbox(play, 0x1D0C, &this->picto.actor);
                 this->textId = 0x1D0C;
             } else {
                 this->watchTarget = TINGLE_WATCH_TARGET_PLAYER;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 Message_StartTextbox(play, 0x1D05, &this->picto.actor);
                 this->textId = 0x1D05;
             }
@@ -558,13 +559,13 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
             if (this->idleAnimStage == TINGLE_IDLESTAGE_PREP_WAIT) {
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_WAIT);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_IDLE);
                 this->idleAnimStage++;
             } else if (this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) {
                 if (Rand_Next() & 1) {
                     this->forceEyesShut = false;
                     this->eyeTexIndex = TINGLE_EYETEX_OPEN;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 } else {
                     this->forceEyesShut = true;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_SPIN);
@@ -831,13 +832,13 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
             if (gSaveContext.save.saveInfo.playerData.rupees < price) {
                 // Can't buy map because player doesn't have the money
                 Audio_PlaySfx(NA_SE_SY_ERROR);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 Message_StartTextbox(play, 0x1D0A, &this->picto.actor);
                 this->textId = 0x1D0A;
             } else if (EnBal_CheckIfMapUnlocked(this, play)) {
                 // Can't buy map because player already has it
                 Audio_PlaySfx(NA_SE_SY_ERROR);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 Message_StartTextbox(play, 0x1D09, &this->picto.actor);
                 this->textId = 0x1D09;
             } else {
@@ -855,7 +856,7 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
         } else {
             // Cancel
             Audio_PlaySfx_MessageCancel();
-            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+            Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
             Message_StartTextbox(play, 0x1D06, &this->picto.actor);
             this->textId = 0x1D06;
         }
@@ -867,7 +868,7 @@ void EnBal_HandleConversation(EnBal* this, PlayState* play) {
         (Message_ShouldAdvance(play))) {
         switch (this->textId) {
             case 0x1D00:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 Message_StartTextbox(play, 0x1D01, &this->picto.actor);
                 this->textId = 0x1D01;
                 break;
@@ -889,7 +890,7 @@ void EnBal_HandleConversation(EnBal* this, PlayState* play) {
             case 0x1D0D:
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                 Message_StartTextbox(play, 0x1D04, &this->picto.actor);
                 this->textId = 0x1D04;
                 break;
@@ -958,7 +959,7 @@ void EnBal_HandleConversation(EnBal* this, PlayState* play) {
                 } else {
                     this->forceEyesShut = true;
                     this->watchTarget = TINGLE_WATCH_TARGET_PLAYER;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK);
                     Message_StartTextbox(play, 0x1D08, &this->picto.actor);
                     this->textId = 0x1D08;
                     SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_TINGLE);
@@ -1038,7 +1039,7 @@ void EnBal_ThankYou(EnBal* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         player->stateFlags1 &= ~PLAYER_STATE1_20;
-        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_TWIST);
+        Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TWIST);
         this->forceEyesShut = false;
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
         Message_StartTextbox(play, 0x1D17, &this->picto.actor);
