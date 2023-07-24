@@ -36,18 +36,17 @@ static InitChainEntry D_80ABD750[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
-s16 D_80ABD76C[2] = { 0xC000, 0x4000 };
-s32 D_80ABD770[2] = { 0x060012B0, 0x06001590 };
-f32 D_80ABD778[2] = { 1.0f, -1.0f };
-Gfx* D_80ABD780[4] = { (Gfx*)0x06001108, (Gfx*)0x060013E8, NULL, NULL };
-
+Vec3f D_80ABD760[] = { 0.0f, 0.0f, 80.0f };
+s16 D_80ABD76C[] = { 0xC000, 0x4000 };
+s32 D_80ABD770[] = { 0x060012B0, 0x06001590 };
+f32 D_80ABD778[] = { 1.0f, -1.0f };
+Gfx* D_80ABD780[] = { (Gfx*)0x06001108, (Gfx*)0x060013E8 };
 
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
     s32 pad;
     s32 params = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
-    Vec3f objPos; // Object's position
+    Vec3f pos; // Object's position
 
     Actor_ProcessInitChain(&this->dyna.actor, D_80ABD750);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
@@ -60,10 +59,10 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     }
 
     Matrix_RotateYS(D_80ABD76C[params] + this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultVec3f(&D_80ABD760, &objPos);
-    this->dyna.actor.world.pos.x += objPos.x;
-    this->dyna.actor.world.pos.y += objPos.y;
-    this->dyna.actor.world.pos.z += objPos.z;
+    Matrix_MultVec3f(D_80ABD760, &pos);
+    this->dyna.actor.world.pos.x += pos.x;
+    this->dyna.actor.world.pos.y += pos.y;
+    this->dyna.actor.world.pos.z += pos.z;
 
     if ((params == 0) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04)) && (play->sceneId == SCENE_CLOCKTOWER) &&
         (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId >= 0)) {
