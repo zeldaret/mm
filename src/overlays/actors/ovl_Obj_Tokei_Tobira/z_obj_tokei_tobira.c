@@ -41,7 +41,7 @@ Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
 s16 D_80ABD76C[] = { 0xC000, 0x4000 };
 CollisionHeader* D_80ABD770[] = { &object_tokei_tobira_Colheader_0012B0, &object_tokei_tobira_Colheader_001590 };
 f32 D_80ABD778[] = { 1.0f, -1.0f };
-Gfx* D_80ABD780[] = { &object_tokei_tobira_DL_001108, &object_tokei_tobira_DL_0013E8 };
+Gfx* D_80ABD780[] = { object_tokei_tobira_DL_001108, object_tokei_tobira_DL_0013E8 };
 
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
