@@ -5,6 +5,7 @@
  */
 
 #include "z_obj_tokei_tobira.h"
+#include "objects/object_tokei_tobira/object_tokei_tobira.h"
 
 #define FLAGS 0x00000000
 
@@ -38,9 +39,9 @@ static InitChainEntry D_80ABD750[] = {
 
 Vec3f D_80ABD760[] = { 0.0f, 0.0f, 80.0f };
 s16 D_80ABD76C[] = { 0xC000, 0x4000 };
-s32 D_80ABD770[] = { 0x060012B0, 0x06001590 };
+CollisionHeader* D_80ABD770[] = { object_tokei_tobira_Colheader_0012B0, object_tokei_tobira_Colheader_001590 };
 f32 D_80ABD778[] = { 1.0f, -1.0f };
-Gfx* D_80ABD780[] = { (Gfx*)0x06001108, (Gfx*)0x060013E8 };
+Gfx* D_80ABD780[] = { object_tokei_tobira_DL_001108, object_tokei_tobira_DL_0013E8 };
 
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
