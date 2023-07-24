@@ -2,6 +2,7 @@
 #define Z_OBJ_TOKEI_TOBIRA_H
 
 #define OBJTOKEITOBIRA_GET_TYPE(thisx) ((thisx)->params & 1)
+#define OBJTOKEITOBIRA_PARAM(type) (type)
 
 #include "global.h"
 
@@ -9,6 +10,12 @@
 struct ObjTokeiTobira;
 
 typedef void (*ObjTokeiTobiraActionFunc)(struct ObjTokeiTobira*);
+
+
+typedef enum ObjTokeiTobiraType {
+    /* 0 */ OBJTOKEITOBIRA_TYPE_0,
+    /* 1 */ OBJTOKEITOBIRA_TYPE_1
+} ObjTokeiTobiraType;
 
 typedef struct ObjTokeiTobira {
     /* 0x000 */ DynaPolyActor dyna;

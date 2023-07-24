@@ -30,33 +30,34 @@ ActorInit Obj_Tokei_Tobira_InitVars = {
 };
 
 // static InitChainEntry sInitChain[] = {
-static InitChainEntry D_80ABD750[] = {
+static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-Vec3f D_80ABD760[] = { 0.0f, 0.0f, 80.0f };
+Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
 s16 D_80ABD76C[] = { 0xC000, 0x4000 };
-CollisionHeader* D_80ABD770[] = { object_tokei_tobira_Colheader_0012B0, object_tokei_tobira_Colheader_001590 };
+CollisionHeader* D_80ABD770[] = { &object_tokei_tobira_Colheader_0012B0, object_tokei_tobira_Colheader_001590 };
 f32 D_80ABD778[] = { 1.0f, -1.0f };
-Gfx* D_80ABD780[] = { object_tokei_tobira_DL_001108, object_tokei_tobira_DL_0013E8 };
+Gfx* D_80ABD780[] = { &object_tokei_tobira_DL_001108, &object_tokei_tobira_DL_0013E8 };
 
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
     s32 pad;
     s32 params = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
-    Vec3f pos; // Object's position
+    Vec3f pos;
 
-    Actor_ProcessInitChain(&this->dyna.actor, D_80ABD750);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80ABD770[params]);
 
-    if (params == 0) {
+    if (type == OBJTOKEITOBIRA_TYPE_0) {
         Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_TOKEI_TOBIRA,
                            this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
-                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 1);
+                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
+                           OBJTOKEITOBIRA_PARAM(OBJTOKEITOBIRA_TYPE_1));
     }
 
     Matrix_RotateYS(D_80ABD76C[params] + this->dyna.actor.shape.rot.y, MTXMODE_NEW);
@@ -65,8 +66,8 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.pos.y += pos.y;
     this->dyna.actor.world.pos.z += pos.z;
 
-    if ((params == 0) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04)) && (play->sceneId == SCENE_CLOCKTOWER) &&
-        (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId >= 0)) {
+    if ((type == OBJTOKEITOBIRA_TYPE_0) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04)) &&
+        (play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId >= 0)) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
         this->actionFunc = ObjTokeiTobira_StartCutscene;
     }
@@ -85,7 +86,7 @@ void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
         this->actionFunc = NULL;
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;
     } else {
-        CutsceneManager_Queue((s16)this->dyna.actor.csId);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -118,7 +119,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
 
                 if (sp40 > 48.0f) {
                     ObjTokeiTobira* tobira;
-                    if (temp_param == 0) {
+                    if (temp_param == OBJTOKEITOBIRA_TYPE_0) {
                         tobira = (ObjTokeiTobira*)this->dyna.actor.child;
                     } else {
                         tobira = (ObjTokeiTobira*)this->dyna.actor.parent;
@@ -156,7 +157,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
         this->unk164 = -1000.0f * sp48;
     }
 
-    this->dyna.actor.shape.rot.y = (s32)this->unk164 + this->dyna.actor.home.rot.y;
+    this->dyna.actor.shape.rot.y = this->unk164 + this->dyna.actor.home.rot.y;
 
     if (this->actionFunc != NULL) {
         this->actionFunc(this);
