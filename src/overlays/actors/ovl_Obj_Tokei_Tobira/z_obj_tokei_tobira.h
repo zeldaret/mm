@@ -24,6 +24,6 @@ typedef struct ObjTokeiTobira {
     /* 0x164 */ f32 unk164;
     /* 0x168 */ s32 unk168;
     /* 0x16C */ s32 unk16C;
-} ObjTokeiTobira;    /* size = 0x170 */
+} ObjTokeiTobira;   // size = 0x170 
 
 #endif // Z_OBJ_TOKEI_TOBIRA_H

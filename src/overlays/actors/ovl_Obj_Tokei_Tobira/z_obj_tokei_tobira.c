@@ -94,8 +94,8 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 pad50;
-    s32 temp_param = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
-    f32 sp48 = D_80ABD778[temp_param];
+    s32 type = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
+    f32 sp48 = D_80ABD778[type];
     s32 pad44;
 
     if (player->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) {
@@ -118,7 +118,8 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
 
                 if (sp40 > 48.0f) {
                     ObjTokeiTobira* tobira;
-                    if (temp_param == OBJTOKEITOBIRA_TYPE_0) {
+                    
+                    if (type == OBJTOKEITOBIRA_TYPE_0) {
                         tobira = (ObjTokeiTobira*)this->dyna.actor.child;
                     } else {
                         tobira = (ObjTokeiTobira*)this->dyna.actor.parent;
