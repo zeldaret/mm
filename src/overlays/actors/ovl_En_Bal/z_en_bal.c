@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bal.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -21,22 +22,22 @@ typedef enum {
 } EnBalEyeTexture;
 
 typedef enum {
-    /*  0 */ TINGLE_ANIM_FLOAT_DRAW,
+    /*  0 */ TINGLE_ANIM_FLOAT_IDLE,
     /*  1 */ TINGLE_ANIM_FALL_LOOP,
     /*  2 */ TINGLE_ANIM_FALL_ONCE,
     /*  3 */ TINGLE_ANIM_LAND,
     /*  4 */ TINGLE_ANIM_TALK_TWIST,
     /*  5 */ TINGLE_ANIM_TALK_IDLE,
-    /*  6 */ TINGLE_ANIM_MAGIC_FULL,
+    /*  6 */ TINGLE_ANIM_MAGIC,
     /*  7 */ TINGLE_ANIM_HAPPY_DANCE_LOOP,
     /*  8 */ TINGLE_ANIM_HAPPY_DANCE_ONCE,
-    /*  9 */ TINGLE_ANIM_MAGIC_SHORT,
+    /*  9 */ TINGLE_ANIM_MAGIC_REVERSE,
     /* 10 */ TINGLE_ANIM_WAIT,
     /* 11 */ TINGLE_ANIM_SPIN,
     /* 12 */ TINGLE_ANIM_HIDE_FACE,
     /* 13 */ TINGLE_ANIM_CONFETTI,
     /* 14 */ TINGLE_ANIM_MAX
-} EnBalAnimation;
+} TingleAnimation;
 
 typedef enum {
     /* 0 */ TINGLE_MAPCHOICE_PROXIMAL,
@@ -59,10 +60,10 @@ typedef enum {
 } EnBalBalloonAction;
 
 typedef enum {
-    /* 0 */ EN_BAL_IDLESTAGE_ACTIVITY,
-    /* 2 */ EN_BAL_IDLESTAGE_PREP_WAIT = 2,
-    /* 3 */ EN_BAL_IDLESTAGE_WAIT
-} EnBalIdleAnimStage;
+    /* 0 */ TINGLE_IDLESTAGE_ACTIVITY,
+    /* 2 */ TINGLE_IDLESTAGE_PREP_WAIT = 2,
+    /* 3 */ TINGLE_IDLESTAGE_WAIT
+} TingleIdleAnimStage;
 
 void EnBal_SetMainColliderToHead(EnBal* this);
 s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx);
@@ -165,32 +166,35 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 static s16 sBuyMapOptions[TINGLE_MAP_MAX][2] = {
-    { TINGLE_MAP_CLOCK_TOWN, TINGLE_MAP_WOODFALL },   { TINGLE_MAP_WOODFALL, TINGLE_MAP_SNOWHEAD },
-    { TINGLE_MAP_SNOWHEAD, TINGLE_MAP_ROMANI_RANCH }, { TINGLE_MAP_ROMANI_RANCH, TINGLE_MAP_GREAT_BAY },
-    { TINGLE_MAP_GREAT_BAY, TINGLE_MAP_STONE_TOWER }, { TINGLE_MAP_STONE_TOWER, TINGLE_MAP_CLOCK_TOWN },
+    { TINGLE_MAP_CLOCK_TOWN, TINGLE_MAP_WOODFALL },  // TINGLE_MAP_CLOCK_TOWN
+    { TINGLE_MAP_WOODFALL, TINGLE_MAP_SNOWHEAD }, // TINGLE_MAP_WOODFALL
+    { TINGLE_MAP_SNOWHEAD, TINGLE_MAP_ROMANI_RANCH },  // TINGLE_MAP_SNOWHEAD
+    { TINGLE_MAP_ROMANI_RANCH, TINGLE_MAP_GREAT_BAY }, // TINGLE_MAP_ROMANI_RANCH
+    { TINGLE_MAP_GREAT_BAY, TINGLE_MAP_STONE_TOWER },  // TINGLE_MAP_GREAT_BAY
+    { TINGLE_MAP_STONE_TOWER, TINGLE_MAP_CLOCK_TOWN }, // TINGLE_MAP_STONE_TOWER
 };
 
 static AnimationInfo sAnimationInfo[TINGLE_ANIM_MAX] = {
-    { &gTingleFloatIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // TINGLE_ANIM_FLOAT_DRAW
+    { &gTingleFloatIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // TINGLE_ANIM_FLOAT_IDLE
     { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },          // TINGLE_ANIM_FALL_LOOP
     { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },          // TINGLE_ANIM_FALL_ONCE
     { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },          // TINGLE_ANIM_LAND
-    { &gTingleTalkTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },     // TINGLE_ANIM_TALK_TWIST
-    { &gTingleTalkIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },      // TINGLE_ANIM_TALK_IDLE
-    { &gTingleMagicSpellAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },    // TINGLE_ANIM_MAGIC_FULL
+    { &gTingleTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },              // TINGLE_ANIM_TALK_TWIST
+    { &gTingleTalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_TALK_IDLE
+    { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // TINGLE_ANIM_MAGIC
     { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },    // TINGLE_ANIM_HAPPY_DANCE_LOOP
     { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },    // TINGLE_ANIM_HAPPY_DANCE_ONCE
-    { &gTingleMagicSpellAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },   // TINGLE_ANIM_MAGIC_SHORT
-    { &gTingleWaitAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },          // TINGLE_ANIM_WAIT
+    { &gTingleThrowConfettiAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // TINGLE_ANIM_MAGIC_REVERSE
+    { &gTingleIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_ANIM_WAIT
     { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },          // TINGLE_ANIM_SPIN
-    { &gTingleHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },      // TINGLE_ANIM_HIDE_FACE
-    { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f }, // TINGLE_ANIM_CONFETTI
+    { &gTingleFloatHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },      // TINGLE_ANIM_HIDE_FACE
+    { &gTingleFloatThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f }, // TINGLE_ANIM_CONFETTI
 };
 
 void EnBal_Init(Actor* thisx, PlayState* play) {
     EnBal* this = THIS;
     s32 pad;
-    f32 lastFrame = Animation_GetLastFrame(&gTingleFloatIdleAnim);
+    f32 endFrame = Animation_GetLastFrame(&gTingleFloatIdleAnim);
 
     this->locationMapId = TINGLE_GET_MAP_ID(&this->picto.actor);
     this->picto.actor.targetMode = 1;
@@ -199,7 +203,7 @@ void EnBal_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
                        TINGLE_LIMB_MAX);
     if (gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
-        Animation_Change(&this->skelAnime, &gTingleTalkIdleAnim, 1.0f, 0.0f, lastFrame, ANIMMODE_LOOP, -10.0f);
+        Animation_Change(&this->skelAnime, &gTingleTalkAnim, 1.0f, 0.0f, endFrame, ANIMMODE_LOOP, -10.0f);
     }
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 0.0f);
     this->skyFloatPhase = 0;
@@ -252,7 +256,7 @@ s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {
                                          &this->picto.actor.shape.rot, 10.0f, 400.0f, 0x4000);
     if (!pictoValid) {
         this->forceEyesShut = true;
-        this->idleAnimStage = EN_BAL_IDLESTAGE_WAIT;
+        this->idleAnimStage = TINGLE_IDLESTAGE_WAIT;
     }
     return pictoValid;
 }
@@ -260,7 +264,7 @@ s32 EnBal_ValidatePictograph(PlayState* play, Actor* thisx) {
 void EnBal_SetupFloatIdle(EnBal* this) {
     this->timer = 0;
     EnBal_SetMainColliderToBalloon(this);
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_FLOAT_DRAW);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_FLOAT_IDLE);
 
     this->picto.actor.focus.pos = this->picto.actor.world.pos;
     this->picto.actor.focus.pos.y = this->picto.actor.world.pos.y + 100.0f;
@@ -284,15 +288,15 @@ void EnBal_FloatIdle(EnBal* this, PlayState* play) {
 
     this->picto.actor.world.pos.y = (Math_SinS(this->skyFloatPhase) * 50.0f) + this->picto.actor.home.pos.y;
     if (this->forceEyesShut == true) {
-        if (this->skelAnime.animation != &gTingleHideFaceAnim) {
+        if (this->skelAnime.animation != &gTingleFloatHideFaceAnim) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_HIDE_FACE);
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            if (this->idleAnimStage != EN_BAL_IDLESTAGE_ACTIVITY) {
+            if (this->idleAnimStage != TINGLE_IDLESTAGE_ACTIVITY) {
                 this->idleAnimStage--;
             } else {
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_FLOAT_DRAW);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_FLOAT_IDLE);
             }
         }
     }
@@ -393,13 +397,13 @@ void EnBal_Fall(EnBal* this, PlayState* play) {
         Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
     }
 
-    this->skyFloatPhase += 3000;
+    this->skyFloatPhase += 0xBB8;
 }
 
 void EnBal_SetupInflateBalloon(EnBal* this) {
     Vec3f scale = { 0.0f, 0.0f, 0.0f };
 
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_FLOAT_DRAW);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_FLOAT_IDLE);
     this->balloonAction = TINGLE_BALLOON_ACTION_INFLATE;
     this->watchTarget = TINGLE_WATCH_TARGET_NONE;
     this->forceEyesShut = false;
@@ -450,7 +454,7 @@ void EnBal_FloatUp(EnBal* this, PlayState* play) {
         } else {
             this->timer += 10;
         }
-        this->skyFloatPhase += 800;
+        this->skyFloatPhase += 0x320;
     } else {
         EnBal_SetupFloatIdle(this);
     }
@@ -460,13 +464,13 @@ void EnBal_SetupGroundIdle(EnBal* this) {
     if (this->actionFunc == EnBal_Fall) {
         this->forceEyesShut = false;
         this->eyeTexIndex = TINGLE_EYETEX_OPEN;
-        this->idleAnimStage = EN_BAL_IDLESTAGE_WAIT;
+        this->idleAnimStage = TINGLE_IDLESTAGE_WAIT;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_WAIT);
     } else if (Rand_Next() & 1) {
-        this->idleAnimStage = EN_BAL_IDLESTAGE_ACTIVITY;
+        this->idleAnimStage = TINGLE_IDLESTAGE_ACTIVITY;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_TALK_IDLE);
     } else {
-        this->idleAnimStage = EN_BAL_IDLESTAGE_ACTIVITY;
+        this->idleAnimStage = TINGLE_IDLESTAGE_ACTIVITY;
         this->forceEyesShut = true;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_SPIN);
     }
@@ -536,7 +540,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
         EnBal_SetupTalk(this);
     } else {
         if ((this->picto.actor.xzDistToPlayer < 100.0f) && (this->actionFunc != EnBal_InflateBalloon)) {
-            if (this->idleAnimStage != EN_BAL_IDLESTAGE_WAIT) {
+            if (this->idleAnimStage != TINGLE_IDLESTAGE_WAIT) {
                 this->watchTarget = TINGLE_WATCH_TARGET_PLAYER;
             } else {
                 this->watchTarget = TINGLE_WATCH_TARGET_NONE;
@@ -551,12 +555,12 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            if (this->idleAnimStage == EN_BAL_IDLESTAGE_PREP_WAIT) {
+            if (this->idleAnimStage == TINGLE_IDLESTAGE_PREP_WAIT) {
                 this->forceEyesShut = false;
                 this->eyeTexIndex = TINGLE_EYETEX_OPEN;
                 Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_WAIT);
                 this->idleAnimStage++;
-            } else if (this->idleAnimStage == EN_BAL_IDLESTAGE_WAIT) {
+            } else if (this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) {
                 if (Rand_Next() & 1) {
                     this->forceEyesShut = false;
                     this->eyeTexIndex = TINGLE_EYETEX_OPEN;
@@ -565,11 +569,11 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
                     this->forceEyesShut = true;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_SPIN);
                 }
-                this->idleAnimStage = EN_BAL_IDLESTAGE_ACTIVITY;
+                this->idleAnimStage = TINGLE_IDLESTAGE_ACTIVITY;
             } else {
                 this->idleAnimStage++;
             }
-        } else if ((this->idleAnimStage == EN_BAL_IDLESTAGE_WAIT) && (Animation_OnFrame(&this->skelAnime, 20.0f))) {
+        } else if ((this->idleAnimStage == TINGLE_IDLESTAGE_WAIT) && (Animation_OnFrame(&this->skelAnime, 20.0f))) {
             this->forceEyesShut = true;
         }
     }
@@ -682,10 +686,14 @@ PlayerTransformation EnBal_GetRecognizedPlayerForm(void) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TINGLE_RECOGNIZED_PLAYER_FORM_HIGH_BIT)) {
             return PLAYER_FORM_HUMAN;
         }
+
         return PLAYER_FORM_DEKU;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TINGLE_RECOGNIZED_PLAYER_FORM_HIGH_BIT)) {
+    }
+   
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TINGLE_RECOGNIZED_PLAYER_FORM_HIGH_BIT)) {
         return PLAYER_FORM_GORON;
     }
+
     return PLAYER_FORM_ZORA;
 }
 
@@ -695,9 +703,8 @@ void EnBal_ThrowMagicSparkles(EnBal* this, PlayState* play) {
     static Color_RGBA8 sSparklePrimColor = { 255, 255, 255, 255 };
     static Color_RGBA8 sSparkleEnvColor = { 100, 200, 0, 255 };
     s32 i;
-    Vec3f pos;
+    Vec3f pos = this->picto.actor.world.pos;
 
-    pos = this->picto.actor.world.pos;
     pos.y += 30.0f;
     pos.x += 20.0f * Math_SinS(this->picto.actor.shape.rot.y);
     pos.z += 20.0f * Math_CosS(this->picto.actor.shape.rot.y);
@@ -727,7 +734,7 @@ void EnBal_EmitDustPuff(EnBal* this, PlayState* play) {
     func_800B0EB0(play, &pos, &sDustVelocity, &sDustAccel, &sDustPrimColor, &sDustEnvColor, 150, 40, 15);
 }
 
-static s32 sGetItemPending = 0;
+static s32 sGetItemPending = false;
 static Vec3f sFocusPosMultiplier = { 1000.0f, 0.0f, 0.0f };
 static TexturePtr sEyeTextures[] = { gTingleEyeOpenTex, gTingleEyeClosedTex };
 
@@ -769,6 +776,9 @@ s32 EnBal_CheckIfMapUnlocked(EnBal* this, PlayState* play) {
                 return true;
             }
             break;
+
+        default:
+            break;
     }
     return false;
 }
@@ -798,6 +808,9 @@ void EnBal_UnlockSelectedAreaMap(EnBal* this) {
 
         case TINGLE_MAP_STONE_TOWER:
             SET_WEEKEVENTREG(WEEKEVENTREG_TINGLE_MAP_BOUGHT_STONE_TOWER);
+            break;
+
+        default:
             break;
     }
 }
@@ -831,7 +844,7 @@ void EnBal_TryPurchaseMap(EnBal* this, PlayState* play) {
                 // Proceed with map purchase
                 Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(-price);
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_MAGIC_SHORT);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_MAGIC_REVERSE);
                 this->forceEyesShut = true;
                 Message_StartTextbox(play, 0x1D0B, &this->picto.actor);
                 this->textId = 0x1D0B;
@@ -932,7 +945,7 @@ void EnBal_HandleConversation(EnBal* this, PlayState* play) {
             case 0x1D06:
             case 0x1D17:
                 this->watchTarget = TINGLE_WATCH_TARGET_NONE;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_MAGIC_FULL);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_ANIM_MAGIC);
                 this->forceEyesShut = true;
                 Message_StartTextbox(play, 0x1D07, &this->picto.actor);
                 this->textId = 0x1D07;
@@ -959,6 +972,9 @@ void EnBal_HandleConversation(EnBal* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 EnBal_SetupGroundIdle(this);
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -970,7 +986,7 @@ void EnBal_SetupOfferGetItem(EnBal* this) {
 void EnBal_OfferGetItem(EnBal* this, PlayState* play) {
     GetItemId mapGetItemId;
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && (Message_ShouldAdvance(play))) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         sGetItemPending = true;
     }
@@ -1038,7 +1054,7 @@ void EnBal_UpdateHead(EnBal* this, PlayState* play) {
     Player* player;
 
     if (this->watchTarget == TINGLE_WATCH_TARGET_PLAYER) {
-        if ((this->skelAnime.animation != &gTingleWaitAnim) && (this->skelAnime.animation != &gTingleSpinAnim)) {
+        if ((this->skelAnime.animation != &gTingleIdleAnim) && (this->skelAnime.animation != &gTingleSpinAnim)) {
             Actor_TrackPlayer(play, &this->picto.actor, &this->headRot, &this->torsoRot, this->picto.actor.focus.pos);
         } else {
             Actor_TrackNone(&this->headRot, &this->torsoRot);
@@ -1078,7 +1094,8 @@ void EnBal_UpdateCollision(EnBal* this, PlayState* play) {
 void EnBal_TryBalloonPopped(EnBal* this, PlayState* play) {
     if (this->collider.base.acFlags & AC_HIT) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->picto.actor.world.pos.x,
-                    this->picto.actor.world.pos.y + 100.0f, this->picto.actor.world.pos.z, 0xFF, 0xFF, 0xC8, 2);
+                    this->picto.actor.world.pos.y + 100.0f, this->picto.actor.world.pos.z, 0xFF, 0xFF, 0xC8,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_POP));
         this->collider.base.acFlags &= ~AC_HIT;
         EnBal_SetupPopBalloon(this);
     }
@@ -1126,7 +1143,7 @@ s32 EnBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     if (limbIndex == TINGLE_LIMB_HEAD) {
         rot->x += this->headRot.y;
         rot->y -= this->headRot.x;
-        if ((this->isTalking == true) && !(play->state.frames & 2)) {
+        if ((this->isTalking == true) && ((play->state.frames & 2) == 0)) {
             Matrix_Translate(20.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         }
     }

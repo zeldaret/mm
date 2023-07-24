@@ -28,11 +28,11 @@ typedef struct EnBal {
     /* 0x39C */ s16 watchTarget;
     /* 0x39E */ s16 skyFloatPhase;
     /* 0x3A0 */ s16 textId;
-    /* 0x3A2 */ UNK_TYPE2 unk3A2;
+    /* 0x3A2 */ UNK_TYPE1 unk3A2[0x2];
     /* 0x3A4 */ s16 balloonAction;
     /* 0x3A6 */ s16 idleAnimStage;
     /* 0x3A8 */ s16 timer;
-    /* 0x3AA */ UNK_TYPE2 unk3AA; 
+    /* 0x3AA */ UNK_TYPE1 unk3AA[0x2]; 
     /* 0x3AC */ s16 purchaseMapId;
     /* 0x3AE */ s16 locationMapId;    
     /* 0x3B0 */ s16 inflateEarly;
