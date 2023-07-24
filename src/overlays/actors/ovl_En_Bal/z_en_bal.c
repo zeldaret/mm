@@ -524,8 +524,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
             }
 
             if (!gSaveContext.save.saveInfo.playerData.isMagicAcquired) {
-                // Reinflation should be unreachable while player does not have magic,
-                //  so I am not sure why this is here?
+                // Reinflation should be unreachable while player does not have magic
                 this->inflateEarly = true;
             }
         } else {
