@@ -118,7 +118,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
 
                 if (sp40 > 48.0f) {
                     ObjTokeiTobira* tobira;
-                    
+
                     if (type == OBJTOKEITOBIRA_TYPE_0) {
                         tobira = (ObjTokeiTobira*)this->dyna.actor.child;
                     } else {
