@@ -29,7 +29,6 @@ ActorInit Obj_Tokei_Tobira_InitVars = {
     (ActorFunc)ObjTokeiTobira_Draw,
 };
 
-// static InitChainEntry sInitChain[] = {
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
