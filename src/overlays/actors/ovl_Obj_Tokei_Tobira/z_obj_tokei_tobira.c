@@ -53,9 +53,9 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80ABD770[params]);
 
     if (params == 0) {
-        Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, 0x1A2, this->dyna.actor.world.pos.x,
-                           this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
-                           this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 1);
+        Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_TOKEI_TOBIRA,
+                           this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
+                           this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, 1);
     }
 
     Matrix_RotateYS(D_80ABD76C[params] + this->dyna.actor.shape.rot.y, MTXMODE_NEW);
@@ -77,13 +77,9 @@ void ObjTokeiTobira_Destroy(Actor* thisx, PlayState* play) {
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-/**
- * Starts Cutscene (I think)
- * (Originally called "func * _80ABD3B0")
- */
 void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
     if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
-        CutsceneManager_StartWithPlayerCs((s16)this->dyna.actor.csId, &this->dyna.actor);
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         SET_WEEKEVENTREG(WEEKEVENTREG_59_04);
         this->actionFunc = NULL;
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;
