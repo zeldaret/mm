@@ -37,16 +37,28 @@ static InitChainEntry sInitChain[] = {
 };
 
 Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
-s16 D_80ABD76C[] = { -0x4000, 0x4000 };
-CollisionHeader* D_80ABD770[] = { &object_tokei_tobira_Colheader_0012B0, &object_tokei_tobira_Colheader_001590 };
-f32 D_80ABD778[] = { 1.0f, -1.0f };
-Gfx* D_80ABD780[] = { object_tokei_tobira_DL_001108, object_tokei_tobira_DL_0013E8 };
+s16 D_80ABD76C[] = {
+    -0x4000, // OBJTOKEITOBIRA_TYPE_0
+    0x4000,  // OBJTOKEITOBIRA_TYPE_1
+};
+CollisionHeader* D_80ABD770[] = {
+    &object_tokei_tobira_Colheader_0012B0, // OBJTOKEITOBIRA_TYPE_0
+    &object_tokei_tobira_Colheader_001590, // OBJTOKEITOBIRA_TYPE_1
+};
+f32 D_80ABD778[] = {
+    1.0f,  // OBJTOKEITOBIRA_TYPE_0
+    -1.0f, // OBJTOKEITOBIRA_TYPE_1
+};
+Gfx* D_80ABD780[] = {
+    object_tokei_tobira_DL_001108, // OBJTOKEITOBIRA_TYPE_0
+    object_tokei_tobira_DL_0013E8, // OBJTOKEITOBIRA_TYPE_1
+};
 
 void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     ObjTokeiTobira* this = THIS;
     s32 pad;
     s32 type = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
-    Vec3f pos;
+    Vec3f posOffset;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
@@ -60,10 +72,10 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     }
 
     Matrix_RotateYS(D_80ABD76C[type] + this->dyna.actor.shape.rot.y, MTXMODE_NEW);
-    Matrix_MultVec3f(&D_80ABD760, &pos);
-    this->dyna.actor.world.pos.x += pos.x;
-    this->dyna.actor.world.pos.y += pos.y;
-    this->dyna.actor.world.pos.z += pos.z;
+    Matrix_MultVec3f(&D_80ABD760, &posOffset);
+    this->dyna.actor.world.pos.x += posOffset.x;
+    this->dyna.actor.world.pos.y += posOffset.y;
+    this->dyna.actor.world.pos.z += posOffset.z;
 
     if ((type == OBJTOKEITOBIRA_TYPE_0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04) &&
         (play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId > CS_ID_NONE)) {
@@ -90,13 +102,13 @@ void ObjTokeiTobira_StartCutscene(ObjTokeiTobira* this) {
 }
 
 void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
-    s32 pad;
+    s32 pad1;
     ObjTokeiTobira* this = THIS;
     Player* player = GET_PLAYER(play);
-    s32 pad50;
+    s32 pad2;
     s32 type = OBJTOKEITOBIRA_GET_TYPE(&this->dyna.actor);
     f32 sp48 = D_80ABD778[type];
-    s32 pad44;
+    s32 pad3;
 
     if (player->actor.bgCheckFlags & BGCHECKFLAG_PLAYER_WALL_INTERACT) {
         if (DynaPoly_GetActor(&play->colCtx, player->actor.wallBgId) == &this->dyna) {
