@@ -37,7 +37,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 Vec3f D_80ABD760 = { 0.0f, 0.0f, 80.0f };
-s16 D_80ABD76C[] = { 0xC000, 0x4000 };
+s16 D_80ABD76C[] = { -0x4000, 0x4000 };
 CollisionHeader* D_80ABD770[] = { &object_tokei_tobira_Colheader_0012B0, &object_tokei_tobira_Colheader_001590 };
 f32 D_80ABD778[] = { 1.0f, -1.0f };
 Gfx* D_80ABD780[] = { object_tokei_tobira_DL_001108, object_tokei_tobira_DL_0013E8 };
@@ -56,7 +56,7 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
         Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_OBJ_TOKEI_TOBIRA,
                            this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z,
                            this->dyna.actor.shape.rot.x, this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z,
-                           OBJTOKEITOBIRA_PARAM(OBJTOKEITOBIRA_TYPE_1));
+                           OBJTOKEITOBIRA_PARAMS(OBJTOKEITOBIRA_TYPE_1));
     }
 
     Matrix_RotateYS(D_80ABD76C[type] + this->dyna.actor.shape.rot.y, MTXMODE_NEW);
@@ -65,8 +65,8 @@ void ObjTokeiTobira_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.pos.y += pos.y;
     this->dyna.actor.world.pos.z += pos.z;
 
-    if ((type == OBJTOKEITOBIRA_TYPE_0) && !(CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04)) &&
-        (play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId >= 0)) {
+    if ((type == OBJTOKEITOBIRA_TYPE_0) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_04) &&
+        (play->sceneId == SCENE_CLOCKTOWER) && (gSaveContext.sceneLayer == 0) && (this->dyna.actor.csId > CS_ID_NONE)) {
         this->dyna.actor.flags |= ACTOR_FLAG_10;
         this->actionFunc = ObjTokeiTobira_StartCutscene;
     }
@@ -112,7 +112,7 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
                     this->unk168 = 1;
                     if (this->unk16C <= 0) {
                         Actor_PlaySfx(&this->dyna.actor, NA_SE_OC_WOOD_GATE_OPEN);
-                        this->unk16C = 0x50;
+                        this->unk16C = 80;
                     }
                 }
 
@@ -143,16 +143,16 @@ void ObjTokeiTobira_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk16C > 0) {
-        this->unk16C -= 1;
+        this->unk16C--;
     }
 
     this->unk168 = 0;
     this->unk160 *= 0.87f;
     this->unk164 += this->unk160;
-    if (this->unk164 * sp48 > 14336.0f) {
+    if ((this->unk164 * sp48) > 14336.0f) {
         this->unk160 *= 0.1f;
         this->unk164 = 14336.0f * sp48;
-    } else if (this->unk164 * sp48 < -1000.0f) {
+    } else if ((this->unk164 * sp48) < -1000.0f) {
         this->unk160 *= 0.1f;
         this->unk164 = -1000.0f * sp48;
     }
