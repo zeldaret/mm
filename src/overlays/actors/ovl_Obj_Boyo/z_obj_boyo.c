@@ -33,6 +33,7 @@ const ActorInit Obj_Boyo_InitVars = {
 #endif
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Init.s")
+// D_809A6170
 static ColliderCylinderInit Obj_Boyo_ColliderCylinderInit = {
     {
         /* ColliderInit base */
@@ -44,16 +45,19 @@ static ColliderCylinderInit Obj_Boyo_ColliderCylinderInit = {
         1     /* u8 shape */
     },
     {
-        /* ColliderInfoInit dim */
+        /* ColliderInfoInit info */
         0, /* u8 elemType */
         {  /* ColliderTouchInit toucher */
-          0, 0, 0 },
-        { /* ColliderBumpInit  bumper */ 0x01CBFFBE, 0, 0 },
+          0 /* u32 dmgFlags */, 0 /* u8 effect */, 0 /* u8 defense */ },
+        {
+            /* ColliderBumpInit  bumper */
+            0x01CBFFBE /* u32 dmgFlags */, 0 /* u8 effect */, 0 /* u8 defense */
+        },
         0, /* u8 toucherFlags */
         1, /* u8 bumperFlags */
         1  /* u8 ocElemFlags */
-    },     /* info */
-    {      /* Cylinder16 dim */
+    },
+    { /* Cylinder16 dim */
       0x3C /* s16 radius */,
       0x8C /* s16 height */,
       0 /* yShift */,
@@ -64,7 +68,23 @@ static ColliderCylinderInit Obj_Boyo_ColliderCylinderInit = {
           0  /*s16 z */
       } },
 };
-static InitChainEntry Obj_Boyo_InitChainEntry[5]; /* unable to generate initializer */
+
+// D_809A619C
+static InitChainEntry Obj_Boyo_InitChainEntry[5] = { 0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064,
+                                                     0x00000000 }; /* unable to generate initializer */
+
+typedef void (*func_unk)(ObjBoyo* this, Actor* actor);
+
+typedef struct {
+    /* 0x0 */ func_unk unk_0;
+    /* 0x4 */ u8 unk_4[0x4];
+} struct_809A61B0; /* Size 0x8 */
+
+extern struct_809A61B0 D_809A61B0[] = { { func_809A5DC0, { 0, 0, 0, 0 } } };
+
+static s32 D_809A61B4[0x8] = {
+    0x021D0000, func_809A5DE0, 0x00090000, func_809A5E14, 0x0, 0x0, 0x0, 0x0
+}; /* unable to generate initializer */
 
 /********************** INIT **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Init.s")
@@ -91,9 +111,9 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5DC0.s")
-void func_809A5DC0(void* arg0, void* arg1) {
-    arg1->unkB80 = 30.0f;
-    arg1->unkB84 = (s16)arg0->unk92;
+void func_809A5DC0(Actor* actor_a, Actor* actor_b) {
+    actor_b->unkB80 = 30.0f;
+    actor_b->unkB84 = (s16)actor_a->unk92;
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5DE0.s")
@@ -108,30 +128,34 @@ void func_809A5E14(s32 arg0, void* arg1) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5E24.s")
-static s16 D_809A61B4[0xE]; /* unable to generate initializer */
-
-s32 func_809A5E24(ObjBoyo* this, PlayState* play, s32* arg2) {
-    s16* temp_v1;
-    s16* var_v0;
-    s32 var_a1;
+/*
+ * Return first actor of type 2 (supposing actorList is deterministic)
+ * or
+ * look for the address A in D_809A61B4 matching the address in *this->unk150
+ * arg2 is the index of the address into D_809A61B4.
+ */
+s32 func_809A5E24(ObjBoyo* this, PlayState* play, s32* index) {
+    s32* temp_v1;
+    s32* data;
+    s32 counter;
 
     if (this->unk157 & 1) {
-        *arg2 = 0;
-        /* Returns head of the actor List for actors of types ??? */
+        *index = 0;
+        /* Returns first actor of the actor List for actors of types ??? */
         return (s32)play->actorCtx.actorLists[2].first;
     }
-    var_v0 = D_809A61B4;
+    data = D_809A61B4;
     if (this->unk156 & 2) {
-        temp_v1 = this->unk150;
-        var_a1 = 1;
+        temp_v1 = this->unk150; // Address of target data.
+        counter = 1;
     loop_4:
-        if (*temp_v1 == *var_v0) {
-            *arg2 = var_a1;
-            return (s32)temp_v1;
+        if (*temp_v1 == *data) {
+            *index = counter;
+            return temp_v1;
         }
-        var_a1 += 1;
-        var_v0 += 8;
-        if (var_a1 == 3) {
+        counter += 1;
+        data += 8;
+        if (counter == 3) {
             return 0;
         }
         goto loop_4;
@@ -141,21 +165,20 @@ s32 func_809A5E24(ObjBoyo* this, PlayState* play, s32* arg2) {
 
 /********************** UPDATE **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Update.s")
-// static ? D_809A61B0;                           /* unable to generate initializer */
 void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
-    s32 sp30;
+    s32 index;
     CollisionCheckContext* temp_a1;
     ColliderCylinder* sp20;
     ColliderCylinder* temp_a2;
     CollisionCheckContext* sp24;
     f32 temp_fv1;
     s16 temp_v0_2;
-    s32 temp_v0;
+    Actor* temp_v0;
     ObjBoyo* this = THIS;
 
-    temp_v0 = func_809A5E24(this, play2, &sp30);
+    temp_v0 = func_809A5E24(this, play2, &index);
     if (temp_v0 != 0) {
-        *(&D_809A61B0 + (sp30 * 8))(this, temp_v0);
+        D_809A61B0[index].unk_0(this, temp_v0);
         this->unk194 = 0x64;
         this->unk196 = 3;
         this->unk1A4 = 0x3F40;

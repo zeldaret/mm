@@ -8,9 +8,9 @@ struct ObjBoyo;
 
 typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ ColliderCylinder collider; /* inferred */
-    /* 0x150 */ s16* unk150;               /* inferred */
-    /* 0x154 */ char pad154[2];
+    /* 0x144 */ ColliderCylinder collider;           /* inferred */
+    /* 0x150 */ s32* unk150;                         /* inferred */
+                                                     // /* 0x154 */ char pad154[2];
     /* 0x156 */ u8 unk156;                           /* inferred */
     /* 0x157 */ u8 unk157;                           /* inferred */
     /* 0x158 */ char pad158[0x58];                   /* maybe part of unk157[0x59]? */

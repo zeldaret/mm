@@ -9406,7 +9406,7 @@
     0x809A6170:("Obj_Boyo_ColliderCylinderInit","ColliderCylinderInit","",0x1),
     0x809A619C:("Obj_Boyo_InitChainEntry","InitChainEntry","[]",0x5), # TODO: figure out what the dimension means.
     0x809A61B0:("D_809A61B0","UNK_TYPE1","",0x1), # TODO: find what it is. it should be some sort of struct.
-    0x809A61B4:("D_809A61B4","s16","[]",0xE), # figure out dimension and name.
+    0x809A61B4:("D_809A61B4","s16","[]",0x7), # figure out dimension and name.
     0x809A61D0:("D_809A61D0","f32","",0x4),
     0x809A61D4:("D_809A61D4","f32","",0x4),
     0x809A61D8:("D_809A61D8","f32","",0x4),
