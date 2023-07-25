@@ -7,6 +7,7 @@
 #define HAS_POSIX 0
 #endif
 
+#include <stdint.h>
 #include <array>
 #include <cstdio>
 #include <cstdlib>
