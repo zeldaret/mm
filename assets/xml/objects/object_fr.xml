@@ -5,7 +5,7 @@
         <Animation Name="gFrogDanceAnim" Offset="0x11C0" /> <!-- Original name is "swing" -->
         <Animation Name="gFrogIdleAnim" Offset="0x1534" /> <!-- Original name is "wait" -->
         <Texture Name="gFrogLimbPatternTex" OutName="frog_limb_pattern" Format="rgba16" Width="32" Height="32" Offset="0x1550" />
-        <Texture Name="gFrogQuestionMarkTex" OutName="frog_question_mark" Format="rgba16" Width="50" Height="75" Offset="0x1D50" />
+        <Texture Name="gFrogQuestionMarkTex" OutName="frog_question_mark" Format="rgba16" Width="50" Height="74" Offset="0x1D50" />
         <Texture Name="gFrogNostrilTex" OutName="frog_nostril" Format="i8" Width="16" Height="16" Offset="0x3AA0" />
         <Texture Name="gFrogLowerInnerMouthTex" OutName="frog_lower_inner_mouth" Format="rgba16" Width="32" Height="32" Offset="0x3BA0" />
         <Texture Name="gFrogUpperInnerMouthTex" OutName="frog_upper_inner_mouth" Format="rgba16" Width="32" Height="32" Offset="0x43A0" />
