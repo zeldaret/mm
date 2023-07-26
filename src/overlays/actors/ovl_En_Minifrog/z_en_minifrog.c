@@ -62,8 +62,8 @@ static CollisionCheckInfoInit sColChkInfoInit = { 1, 12, 14, MASS_IMMOVABLE };
 
 // sEyeTextures???
 static TexturePtr D_808A4D74[] = {
-    object_fr_Tex_0059A0,
-    object_fr_Tex_005BA0,
+    gFrogIrisOpenTex,
+    gFrogIrisClosedTex,
 };
 
 static u16 isFrogReturnedFlags[] = {
@@ -82,8 +82,8 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_fr_Skel_00B538, &object_fr_Anim_001534, this->jointTable,
-                       this->morphTable, 24);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, &gFrogIdleAnim, this->jointTable,
+                       this->morphTable, FROG_LIMB_MAX);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
@@ -169,7 +169,7 @@ EnMinifrog* EnMinifrog_GetFrog(PlayState* play) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == MINIFROG_STATE_GROUND) {
         this->jumpState = MINIFROG_STATE_JUMP;
-        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, ANIMMODE_ONCE, -5.0f);
+        Animation_Change(&this->skelAnime, &gFrogJumpAnim, 1.0f, 0.0f, 7.0f, ANIMMODE_ONCE, -5.0f);
     }
 }
 
@@ -196,7 +196,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
         case MINIFROG_STATE_AIR:
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->jumpState = MINIFROG_STATE_GROUND;
-                Animation_MorphToLoop(&this->skelAnime, &object_fr_Anim_001534, -2.5f);
+                Animation_MorphToLoop(&this->skelAnime, &gFrogIdleAnim, -2.5f);
                 SkelAnime_Update(&this->skelAnime);
             }
             break;
@@ -592,11 +592,11 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play) {
 }
 
 s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 1) {
+    if (limbIndex == FROG_LIMB_LOWER_BODY) {
         pos->z -= 500.0f;
     }
 
-    if ((limbIndex == 7) || (limbIndex == 8)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         *dList = NULL;
     }
 
@@ -606,7 +606,7 @@ s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMinifrog* this = THIS;
 
-    if ((limbIndex == 7) || (limbIndex == 8)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -616,7 +616,7 @@ void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == 4) {
+    if (limbIndex == FROG_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }

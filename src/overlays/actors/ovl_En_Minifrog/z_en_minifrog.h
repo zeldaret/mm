@@ -2,6 +2,7 @@
 #define Z_EN_MINIFROG_H
 
 #include "global.h"
+#include "objects/object_fr/object_fr.h"
 
 struct EnMinifrog;
 
@@ -27,8 +28,8 @@ typedef enum {
 typedef struct EnMinifrog {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[24];
-    /* 0x218 */ Vec3s morphTable[24];
+    /* 0x188 */ Vec3s jointTable[FROG_LIMB_MAX];
+    /* 0x218 */ Vec3s morphTable[FROG_LIMB_MAX];
     /* 0x2A8 */ EnMinifrogActionFunc actionFunc;
     /* 0x2AC */ struct EnMinifrog* frog;
     /* 0x2B0 */ s16 frogIndex;

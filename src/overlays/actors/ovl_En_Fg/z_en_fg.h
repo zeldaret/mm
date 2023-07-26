@@ -2,6 +2,7 @@
 #define Z_EN_FG_H
 
 #include "global.h"
+#include "objects/object_fr/object_fr.h"
 
 struct EnFg;
 
@@ -42,8 +43,8 @@ typedef struct EnFg {
     /* 0x144 */ EnFgActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[24];
-    /* 0x268 */ Vec3s morphTable[24];
+    /* 0x1D8 */ Vec3s jointTable[FROG_LIMB_MAX];
+    /* 0x268 */ Vec3s morphTable[FROG_LIMB_MAX];
     /* 0x2F8 */ s16 timer;
     /* 0x2FA */ s16 bounceCounter;
     /* 0x2FC */ EnFgEffectDust dustEffect[10];

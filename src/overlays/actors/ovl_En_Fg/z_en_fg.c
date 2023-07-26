@@ -96,10 +96,10 @@ static DamageTable sDamageTable = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gFrogDanceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gFrogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
 };
 
 s32 EnFg_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
@@ -325,7 +325,7 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable, 24);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, NULL, this->jointTable, this->morphTable, FROG_LIMB_MAX);
     EnFg_ChangeAnim(&this->skelAnime, 0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -368,12 +368,12 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
 s32 EnFg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFg* this = THIS;
 
-    if ((limbIndex == 7) || (limbIndex == 8)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         *dList = NULL;
     }
 
     if (this->actor.colChkInfo.health == 0) {
-        if ((limbIndex == 5) || (limbIndex == 9)) {
+        if ((limbIndex == FROG_LIMB_RIGHT_IRIS) || (limbIndex == FROG_LIMB_LEFT_IRIS)) {
             *dList = NULL;
         }
     }
@@ -385,7 +385,7 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s16 pad;
     Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
 
-    if ((limbIndex == 7) || (limbIndex == 8)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -397,7 +397,7 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == 4) {
+    if (limbIndex == FROG_LIMB_HEAD) {
         Matrix_MultVec3f(&vec1, &this->actor.focus.pos);
     }
 }
@@ -420,8 +420,8 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g,
                    envColor[this->actor.params].b, envColor[this->actor.params].a);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_fr_Tex_0059A0));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(object_fr_Tex_0059A0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gFrogIrisOpenTex));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(gFrogIrisOpenTex));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
 
@@ -480,7 +480,7 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
 
         if (!firstDone) {
             POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
-            gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B328);
+            gSPDisplayList(POLY_XLU_DISP++, gFrogDustMaterialDL);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
             firstDone = true;
         }
@@ -494,7 +494,7 @@ void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         index = 0.5f * dustEffect->timer;
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
-        gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B338);
+        gSPDisplayList(POLY_XLU_DISP++, gFrogDustModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
