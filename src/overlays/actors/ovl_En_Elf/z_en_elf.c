@@ -1079,8 +1079,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             this->outerColor = play->actorCtx.targetCtx.fairyOuterColor;
         } else {
             transitionRate = 0.25f / this->unk_238;
-            func_8088EF18(&this->innerColor, &play->actorCtx.targetCtx.fairyInnerColor, &this->innerColor, transitionRate);
-            func_8088EF18(&this->outerColor, &play->actorCtx.targetCtx.fairyOuterColor, &this->outerColor, transitionRate);
+            func_8088EF18(&this->innerColor, &play->actorCtx.targetCtx.fairyInnerColor, &this->innerColor,
+                          transitionRate);
+            func_8088EF18(&this->outerColor, &play->actorCtx.targetCtx.fairyOuterColor, &this->outerColor,
+                          transitionRate);
         }
     }
 

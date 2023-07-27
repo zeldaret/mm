@@ -4623,8 +4623,7 @@ void func_80832888(Player* this, PlayState* play) {
             if (!(this->stateFlags1 & PLAYER_STATE1_2000000) &&
                 ((this->heldItemAction != PLAYER_IA_FISHING_ROD) || (this->unk_B28 == 0)) &&
                 CHECK_BTN_ALL(sPlayerControlInput->press.button, BTN_Z)) {
-                var_v1_2 =
-                    (this == GET_PLAYER(play)) ? play->actorCtx.targetCtx.fairyActor : &GET_PLAYER(play)->actor;
+                var_v1_2 = (this == GET_PLAYER(play)) ? play->actorCtx.targetCtx.fairyActor : &GET_PLAYER(play)->actor;
                 var_a1 = (gSaveContext.options.zTargetSetting != 0) || (this != GET_PLAYER(play));
                 this->stateFlags1 |= PLAYER_STATE1_8000;
                 if ((this->currentMask != PLAYER_MASK_GIANT) && (var_v1_2 != NULL) &&
@@ -13260,8 +13259,8 @@ s32 Player_UpperAction_14(Player* this, PlayState* play) {
             untargetedRotY = (this->actor.shape.rot.y + 0x190);
             rightBoomerang =
                 (EnBoom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOOM, pos.x, pos.y, pos.z, this->actor.focus.rot.x,
-                                     (this->lockOnActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : untargetedRotY,
-                                     0, ZORA_BOOMERANG_RIGHT);
+                                     (this->lockOnActor != NULL) ? this->actor.shape.rot.y - 0x36B0 : untargetedRotY, 0,
+                                     ZORA_BOOMERANG_RIGHT);
 
             if (rightBoomerang != NULL) {
                 rightBoomerang->moveTo = this->lockOnActor;

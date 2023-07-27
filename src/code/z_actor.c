@@ -625,7 +625,8 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
     Vec3f projectedPos;
     f32 invW;
 
-    // If currently not locked on to an actor and not pressing down on the analog stick then try to find a targetable actor
+    // If currently not locked on to an actor and not pressing down on the analog stick then try to find a targetable
+    // actor
     if ((player->lockOnActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->arrowPointedActor = NULL;
     } else {
@@ -698,8 +699,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
         }
 
         targetCtx->lockOnPos.x = lockOnActor->world.pos.x;
-        targetCtx->lockOnPos.y =
-            lockOnActor->world.pos.y - (lockOnActor->shape.yOffset * lockOnActor->scale.y);
+        targetCtx->lockOnPos.y = lockOnActor->world.pos.y - (lockOnActor->shape.yOffset * lockOnActor->scale.y);
         targetCtx->lockOnPos.z = lockOnActor->world.pos.z;
 
         if (targetCtx->rotZTick == 0) {
