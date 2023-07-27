@@ -55,14 +55,14 @@ ActorInit En_Dnh_InitVars = {
 };
 
 static AnimationInfoS sAnimationInfo[] = {
-    { &gKioskKoumeHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gKoumeKioskHeadMoving, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
 static TexturePtr sEyeTextures[] = {
-    gKioskKoumeEyeOpenTex,
-    gKioskKoumeEyeHalfTex,
-    gKioskKoumeEyeClosedTex,
-    gKioskKoumeEyeHalfTex,
+    gKoumeKioskEyeOpenTex,
+    gKoumeKioskEyeHalfTex,
+    gKoumeKioskEyeClosedTex,
+    gKoumeKioskEyeHalfTex,
 };
 
 s32 func_80A50D40(Actor* actor, PlayState* play) {
@@ -130,8 +130,8 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
     EnDnh* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    SkelAnime_Init(play, &this->skelAnime, &gKioskKoumeSkeleton, NULL, this->jointTable, this->morphTable,
-                   KIOSK_KOUME_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gKoumeKioskSkeleton, NULL, this->jointTable, this->morphTable,
+                   KOUME_KIOSK_LIMB_MAX);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 0);
     this->actor.shape.yOffset = 1100.0f;
     if (gSaveContext.save.entrance != ENTRANCE(TOURIST_INFORMATION, 1)) {
@@ -141,7 +141,7 @@ void EnDnh_Init(Actor* thisx, PlayState* play) {
         SubS_UpdateFlags(&this->unk18C, 4, 7);
         this->unk198 = CHECK_EVENTINF(EVENTINF_35) ? 2 : 1;
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         this->actor.draw = NULL;
     }
     this->msgEventCallback = func_80A50D40;
@@ -166,7 +166,7 @@ void EnDnh_Update(Actor* thisx, PlayState* play) {
 s32 EnDnh_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDnh* this = THIS;
 
-    if (limbIndex == KIOSK_KOUME_LIMB_HEAD) {
+    if (limbIndex == KOUME_KIOSK_LIMB_HEAD) {
         Matrix_Translate(0.0f, this->actor.shape.yOffset, 0.0f, MTXMODE_APPLY);
     }
     return false;

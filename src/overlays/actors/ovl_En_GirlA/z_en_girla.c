@@ -205,13 +205,13 @@ s32 EnGirlA_CanBuyPotionGreen(PlayState* play, EnGirlA* this) {
 }
 
 s32 EnGirlA_CanBuyPotionBlue(PlayState* play, EnGirlA* this) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_08)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_GAVE_KOTAKE_MUSHROOM)) {
         return CANBUY_RESULT_CANNOT_GET_NOW;
     }
     if (!Inventory_HasEmptyBottle()) {
         return CANBUY_RESULT_NEED_EMPTY_BOTTLE;
     }
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_10)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_FREE_BLUE_POTION)) {
         return CANBUY_RESULT_SUCCESS_2;
     }
     if (gSaveContext.save.saveInfo.playerData.rupees < play->msgCtx.unk1206C) {

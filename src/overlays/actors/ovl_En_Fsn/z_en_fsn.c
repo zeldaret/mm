@@ -312,9 +312,10 @@ void EnFsn_CursorLeftRight(EnFsn* this) {
     }
 }
 
-s16 EnFsn_GetThirdDayItemId(void) {
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04) && (CURRENT_DAY == 3)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+s16 EnFsn_GetSpecialItemId(void) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM) && (CURRENT_DAY == 3)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
             return SI_BOMB_BAG_30_1;
         }
         return SI_MASK_ALL_NIGHT;
@@ -353,7 +354,7 @@ s32 EnFsn_HasItemsToSell(void) {
     }
 
     if ((STOLEN_ITEM_1 != STOLEN_ITEM_NONE) || (STOLEN_ITEM_2 != STOLEN_ITEM_NONE) ||
-        !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM)) {
         return true;
     }
 
@@ -368,7 +369,7 @@ void EnFsn_GetShopItemIds(EnFsn* this) {
     this->stolenItem1 = this->stolenItem2 = 0;
     this->itemIds[0] = this->itemIds[1] = this->itemIds[2] = 0;
 
-    itemId = EnFsn_GetThirdDayItemId();
+    itemId = EnFsn_GetSpecialItemId();
     this->itemIds[this->totalSellingItems] = itemId;
     if (itemId != SI_NONE) {
         this->totalSellingItems++;
@@ -459,9 +460,10 @@ s32 EnFsn_FacingShopkeeperDialogResult(EnFsn* this, PlayState* play) {
             Audio_PlaySfx_MessageDecide();
             if (CURRENT_DAY != 3) {
                 this->actor.textId = 0x29FB;
-            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM)) {
                 this->actor.textId = 0x29FF;
-            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) &&
+                       !CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
                 this->actor.textId = 0x29D7;
             } else {
                 this->actor.textId = 0x29D8;
@@ -889,9 +891,10 @@ void EnFsn_AskBuyOrSell(EnFsn* this, PlayState* play) {
                     break;
 
                 case 0x29D2:
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_04)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM)) {
                         this->actor.textId = 0x2A01;
-                    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+                    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) &&
+                               !CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
                         this->actor.textId = 0x29D3;
                     } else {
                         this->actor.textId = 0x29D4;
@@ -1189,7 +1192,7 @@ void EnFsn_HandleCanPlayerBuyItem(EnFsn* this, PlayState* play) {
     switch (item->canBuyFunc(play, item)) {
         case CANBUY_RESULT_SUCCESS_2:
             Audio_PlaySfx_MessageDecide();
-            SET_WEEKEVENTREG(WEEKEVENTREG_33_04);
+            SET_WEEKEVENTREG(WEEKEVENTREG_BOUGHT_CURIOSITY_SHOP_SPECIAL_ITEM);
             // fallthrough
         case CANBUY_RESULT_SUCCESS_1:
             if (this->cutsceneState == ENFSN_CUTSCENESTATE_PLAYING) {
@@ -1479,7 +1482,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
             Actor_Kill(&this->actor);
             return;
         }

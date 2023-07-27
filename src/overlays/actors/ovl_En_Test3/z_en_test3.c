@@ -122,8 +122,8 @@ static u8 sScheduleScript[] = {
     /* 0x094 */ SCHEDULE_CMD_RET_TIME(15, 55, 16, 10, 12),
     /* 0x09A */ SCHEDULE_CMD_RET_NONE(),
     /* 0x09B */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(3, 0x138 - 0x0A0),
-    /* 0x0A0 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_33_08, 0x12C - 0x0A5),
-    /* 0x0A5 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_79_40, 0x12C - 0x0AA),
+    /* 0x0A0 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG, 0x12C - 0x0A5),
+    /* 0x0A5 */ SCHEDULE_CMD_CHECK_FLAG_L(WEEKEVENTREG_SAKON_DEAD, 0x12C - 0x0AA),
     /* 0x0AA */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_SECOM, 0x0B0 - 0x0AE),
     /* 0x0AE */ SCHEDULE_CMD_RET_VAL_S(7),
     /* 0x0B0 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_ESCAPED_SAKONS_HIDEOUT, 0x0DD - 0x0B4),
@@ -471,7 +471,8 @@ void EnTest3_Init(Actor* thisx, PlayState* play2) {
     this->unk_D90 = GET_PLAYER(play);
     this->player.giObjectSegment = this->unk_D90->giObjectSegment;
     this->player.tatlActor = this->unk_D90->tatlActor;
-    if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) || !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
+    if ((CURRENT_DAY != 3) || CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) ||
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
         this->player.currentMask = PLAYER_MASK_KEATON;
     }
     this->player.prevMask = this->player.currentMask;

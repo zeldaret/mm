@@ -31,7 +31,7 @@ void EnOssan_InitShop(EnOssan* this, PlayState* play);
 void EnOssan_Idle(EnOssan* this, PlayState* play);
 void EnOssan_BeginInteraction(EnOssan* this, PlayState* play);
 void EnOssan_Hello(EnOssan* this, PlayState* play);
-void EnOssan_SetHaveMet(EnOssan* this);
+void EnOssan_SetTalked(EnOssan* this);
 void EnOssan_StartShopping(PlayState* play, EnOssan* this);
 void EnOssan_FaceShopkeeper(EnOssan* this, PlayState* play);
 void EnOssan_LookToShopkeeperFromShelf(EnOssan* this, PlayState* play);
@@ -417,7 +417,7 @@ void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
                     break;
 
                 case FSN_ANIM_TURN_AROUND_FORWARD:
-                    EnOssan_SetHaveMet(this);
+                    EnOssan_SetTalked(this);
                     this->textId = EnOssan_CuriosityShopMan_GetWelcome(this, play);
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, animationInfo, this->animIndex);
                     break;
@@ -454,7 +454,7 @@ void EnOssan_BeginInteraction(EnOssan* this, PlayState* play) {
             }
         }
     } else {
-        EnOssan_SetHaveMet(this);
+        EnOssan_SetTalked(this);
         this->textId = EnOssan_PartTimer_GetWelcome(this, play);
         Message_StartTextbox(play, this->textId, &this->actor);
         EnOssan_SetupStartShopping(play, this, false);
@@ -1413,21 +1413,21 @@ u16 EnOssan_CuriosityShopMan_GetWelcome(EnOssan* this, PlayState* play) {
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
             this->animIndex = FSN_ANIM_SLAM_COUNTER_START;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_DEKU)) {
                 return sWelcomeDekuTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
 
         case PLAYER_FORM_ZORA:
             this->animIndex = FSN_ANIM_LEAN_FORWARD_START;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_ZORA)) {
                 return sWelcomeZoraTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
 
         case PLAYER_FORM_GORON:
             this->animIndex = FSN_ANIM_HAND_ON_FACE_START;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_18_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_GORON)) {
                 return sWelcomeGoronTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_CURIOSITY_SHOP_MAN];
@@ -1449,19 +1449,19 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
 
     switch (player->transformation) {
         case PLAYER_FORM_DEKU:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_10)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_PART_TIMER_AS_DEKU)) {
                 return sWelcomeDekuTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeDekuFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
 
         case PLAYER_FORM_ZORA:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_PART_TIMER_AS_ZORA)) {
                 return sWelcomeZoraTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeZoraFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
 
         case PLAYER_FORM_GORON:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_04)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_PART_TIMER_AS_GORON)) {
                 return sWelcomeGoronTextIds[ENOSSAN_PART_TIME_WORKER];
             }
             return sWelcomeGoronFirstTimeTextIds[ENOSSAN_PART_TIME_WORKER];
@@ -1471,30 +1471,30 @@ u16 EnOssan_PartTimer_GetWelcome(EnOssan* this, PlayState* play) {
     }
 }
 
-void EnOssan_SetHaveMet(EnOssan* this) {
+void EnOssan_SetTalked(EnOssan* this) {
     switch (this->textId) {
         case 0x06A9:
-            SET_WEEKEVENTREG(WEEKEVENTREG_18_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_DEKU);
             break;
 
         case 0x06C6:
-            SET_WEEKEVENTREG(WEEKEVENTREG_55_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_PART_TIMER_AS_DEKU);
             break;
 
         case 0x06A7:
-            SET_WEEKEVENTREG(WEEKEVENTREG_18_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_ZORA);
             break;
 
         case 0x06C4:
-            SET_WEEKEVENTREG(WEEKEVENTREG_55_08);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_PART_TIMER_AS_ZORA);
             break;
 
         case 0x06A5:
-            SET_WEEKEVENTREG(WEEKEVENTREG_18_04);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_CURIOSITY_SHOP_MAN_AS_GORON);
             break;
 
         case 0x06C2:
-            SET_WEEKEVENTREG(WEEKEVENTREG_55_04);
+            SET_WEEKEVENTREG(WEEKEVENTREG_TALKED_PART_TIMER_AS_GORON);
             break;
 
         default:
