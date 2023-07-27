@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/zeldaret/ZAPD.git
 	branch = master
-	commit = cb03424254152e4c96d236125ef925f9333e90f4
-	parent = 9e85f5545a290c0bc113ba9b8a12bb7c56130e59
+	commit = 505024b33eb1fcd00e3e9bb71f1355fa2ae6e9cf
+	parent = 387d3597142ebdbebe1fbb99858ea831aa2752b4
 	method = merge
 	cmdver = 0.4.6

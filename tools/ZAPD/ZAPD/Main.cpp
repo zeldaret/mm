@@ -258,6 +258,12 @@ void ParseArgs(int& argc, char* argv[])
 	{
 		std::string arg = argv[i];
 
+		// Ignore warning args as they have already been parsed
+		if (arg.length() > 2 && arg[0] == '-' && arg[1] == 'W' && arg[2] != '\0')
+		{
+			continue;
+		}
+
 		auto it = ArgFuncDictionary.find(arg);
 		if (it == ArgFuncDictionary.end())
 		{
