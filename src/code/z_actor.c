@@ -452,9 +452,9 @@ TatlColor sTatlColorList[] = {
 void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
-    TargetLockOnEntry* lockOnEntry;
+    LockOnTriangleSet* lockOnEntry;
 
-    Math_Vec3f_Copy(&targetCtx->targetCenterPos, &play->view.eye);
+    Math_Vec3f_Copy(&targetCtx->lockOnPos, &play->view.eye);
     targetCtx->lockOnAlpha = 256;
     tatlColorEntry = &sTatlColorList[type];
     targetCtx->lockOnRadius = 500.0f;
@@ -470,25 +470,25 @@ void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play
 }
 
 void Target_SetColors(TargetContext* targetCtx, Actor* actor, ActorType type, PlayState* play) {
-    targetCtx->fairyHintPos.x = actor->focus.pos.x;
-    targetCtx->fairyHintPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
-    targetCtx->fairyHintPos.z = actor->focus.pos.z;
+    targetCtx->fairyPos.x = actor->focus.pos.x;
+    targetCtx->fairyPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
+    targetCtx->fairyPos.z = actor->focus.pos.z;
 
-    targetCtx->fairyInner.r = sTatlColorList[type].inner.r;
-    targetCtx->fairyInner.g = sTatlColorList[type].inner.g;
-    targetCtx->fairyInner.b = sTatlColorList[type].inner.b;
-    targetCtx->fairyInner.a = sTatlColorList[type].inner.a;
-    targetCtx->fairyOuter.r = sTatlColorList[type].outer.r;
-    targetCtx->fairyOuter.g = sTatlColorList[type].outer.g;
-    targetCtx->fairyOuter.b = sTatlColorList[type].outer.b;
-    targetCtx->fairyOuter.a = sTatlColorList[type].outer.a;
+    targetCtx->fairyInnerColor.r = sTatlColorList[type].inner.r;
+    targetCtx->fairyInnerColor.g = sTatlColorList[type].inner.g;
+    targetCtx->fairyInnerColor.b = sTatlColorList[type].inner.b;
+    targetCtx->fairyInnerColor.a = sTatlColorList[type].inner.a;
+    targetCtx->fairyOuterColor.r = sTatlColorList[type].outer.r;
+    targetCtx->fairyOuterColor.g = sTatlColorList[type].outer.g;
+    targetCtx->fairyOuterColor.b = sTatlColorList[type].outer.b;
+    targetCtx->fairyOuterColor.a = sTatlColorList[type].outer.a;
 }
 
 void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->bgmEnemy = NULL;
-    targetCtx->nextTargetableOption = NULL;
-    targetCtx->targetedActor = NULL;
-    targetCtx->targetableOption = NULL;
+    targetCtx->forcedTargetActor = NULL;
+    targetCtx->lockOnActor = NULL;
+    targetCtx->fairyActor = NULL;
     targetCtx->rotZTick = 0;
     targetCtx->lockOnIndex = 0;
     targetCtx->fairyMoveProgressFactor = 0.0f;
@@ -505,12 +505,12 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         return;
     }
 
-    actor = targetCtx->targetedActor;
+    actor = targetCtx->lockOnActor;
 
     OPEN_DISPS(play->state.gfxCtx);
 
     if (targetCtx->lockOnAlpha != 0) {
-        TargetLockOnEntry* entry;
+        LockOnTriangleSet* entry;
         s16 alpha = 255;
         f32 projectdPosScale = 1.0f;
         Vec3f projectedPos;
@@ -529,7 +529,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         }
 
         if (actor != NULL) {
-            Math_Vec3f_Copy(&targetCtx->targetCenterPos, &actor->focus.pos);
+            Math_Vec3f_Copy(&targetCtx->lockOnPos, &actor->focus.pos);
             projectdPosScale = (500.0f - targetCtx->lockOnRadius) / 420.0f;
         } else {
             targetCtx->lockOnAlpha -= 120;
@@ -539,7 +539,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
             alpha = targetCtx->lockOnAlpha;
         }
 
-        Actor_GetProjectedPos(play, &targetCtx->targetCenterPos, &projectedPos, &invW);
+        Actor_GetProjectedPos(play, &targetCtx->lockOnPos, &projectedPos, &invW);
 
         projectedPos.x = ((SCREEN_WIDTH / 2) * (projectedPos.x * invW)) * projectdPosScale;
         projectedPos.x = CLAMP(projectedPos.x, -SCREEN_WIDTH, SCREEN_WIDTH);
@@ -556,7 +556,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         Target_SetLockOnPos(targetCtx, targetCtx->lockOnIndex, projectedPos.x, projectedPos.y, projectedPos.z);
 
-        if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->targetedActor)) {
+        if (!(player->stateFlags1 & PLAYER_STATE1_40) || (actor != player->lockOnActor)) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
             for (i = 0, index = targetCtx->lockOnIndex; i < totalEntries;
@@ -618,26 +618,26 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 }
 
 // OoT: func_8002C7BC
-void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActor, PlayState* play) {
+void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor, PlayState* play) {
     s32 pad;
     Actor* actor = NULL;
     s32 category;
     Vec3f projectedPos;
     f32 invW;
 
-    // If no actor is currently targeted, then try to find a targetable actor
-    if ((player->targetedActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
+    // If currently not locked on to an actor and not pressing down on the analog stick then try to find a targetable actor
+    if ((player->lockOnActor != NULL) && (player->unk_AE3[player->unk_ADE] == 2)) {
         targetCtx->arrowPointedActor = NULL;
     } else {
         Target_GetTargetActor(play, &play->actorCtx, &actor, &D_801ED920, player);
         targetCtx->arrowPointedActor = actor;
     }
 
-    if (targetCtx->nextTargetableOption != NULL) {
-        actor = targetCtx->nextTargetableOption;
-        targetCtx->nextTargetableOption = NULL;
-    } else if (targetedActor != NULL) {
-        actor = targetedActor;
+    if (targetCtx->forcedTargetActor != NULL) {
+        actor = targetCtx->forcedTargetActor;
+        targetCtx->forcedTargetActor = NULL;
+    } else if (lockOnActor != NULL) {
+        actor = lockOnActor;
     }
 
     if (actor != NULL) {
@@ -646,9 +646,9 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
         category = player->actor.category;
     }
 
-    if ((actor != targetCtx->targetableOption) || (category != targetCtx->targetableOptionCategory)) {
-        targetCtx->targetableOption = actor;
-        targetCtx->targetableOptionCategory = category;
+    if ((actor != targetCtx->fairyActor) || (category != targetCtx->fairyActorCategory)) {
+        targetCtx->fairyActor = actor;
+        targetCtx->fairyActorCategory = category;
         targetCtx->fairyMoveProgressFactor = 1.0f;
     }
 
@@ -658,49 +658,49 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
 
     if (!Math_StepToF(&targetCtx->fairyMoveProgressFactor, 0.0f, 0.25f)) {
         f32 fairyMoveScale = 0.25f / targetCtx->fairyMoveProgressFactor;
-        f32 x = actor->focus.pos.x - targetCtx->fairyHintPos.x;
-        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->fairyHintPos.y;
-        f32 z = actor->focus.pos.z - targetCtx->fairyHintPos.z;
+        f32 x = actor->focus.pos.x - targetCtx->fairyPos.x;
+        f32 y = (actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y)) - targetCtx->fairyPos.y;
+        f32 z = actor->focus.pos.z - targetCtx->fairyPos.z;
 
-        targetCtx->fairyHintPos.x += x * fairyMoveScale;
-        targetCtx->fairyHintPos.y += y * fairyMoveScale;
-        targetCtx->fairyHintPos.z += z * fairyMoveScale;
+        targetCtx->fairyPos.x += x * fairyMoveScale;
+        targetCtx->fairyPos.y += y * fairyMoveScale;
+        targetCtx->fairyPos.z += z * fairyMoveScale;
     } else {
         Target_SetColors(targetCtx, actor, category, play);
     }
 
-    if ((targetedActor != NULL) && (targetCtx->rotZTick == 0)) {
-        Actor_GetProjectedPos(play, &targetedActor->focus.pos, &projectedPos, &invW);
+    if ((lockOnActor != NULL) && (targetCtx->rotZTick == 0)) {
+        Actor_GetProjectedPos(play, &lockOnActor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
-            targetedActor = NULL;
+            lockOnActor = NULL;
         }
     }
 
-    if (targetedActor != NULL) {
-        if (targetedActor != targetCtx->targetedActor) {
+    if (lockOnActor != NULL) {
+        if (lockOnActor != targetCtx->lockOnActor) {
             s32 sfxId;
 
             // Lock On entries need to be re-initialized when changing the targeted actor
-            Target_InitLockOn(targetCtx, targetedActor->category, play);
+            Target_InitLockOn(targetCtx, lockOnActor->category, play);
 
-            targetCtx->targetedActor = targetedActor;
+            targetCtx->lockOnActor = lockOnActor;
 
-            if (targetedActor->id == ACTOR_EN_BOOM) {
+            if (lockOnActor->id == ACTOR_EN_BOOM) {
                 // Avoid drawing the lock on triangles on a zora boomerang
                 targetCtx->lockOnAlpha = 0;
             }
 
-            sfxId = CHECK_FLAG_ALL(targetedActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
+            sfxId = CHECK_FLAG_ALL(lockOnActor->flags, ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
                         ? NA_SE_SY_LOCK_ON
                         : NA_SE_SY_LOCK_ON_HUMAN;
             Audio_PlaySfx(sfxId);
         }
 
-        targetCtx->targetCenterPos.x = targetedActor->world.pos.x;
-        targetCtx->targetCenterPos.y =
-            targetedActor->world.pos.y - (targetedActor->shape.yOffset * targetedActor->scale.y);
-        targetCtx->targetCenterPos.z = targetedActor->world.pos.z;
+        targetCtx->lockOnPos.x = lockOnActor->world.pos.x;
+        targetCtx->lockOnPos.y =
+            lockOnActor->world.pos.y - (lockOnActor->shape.yOffset * lockOnActor->scale.y);
+        targetCtx->lockOnPos.z = lockOnActor->world.pos.z;
 
         if (targetCtx->rotZTick == 0) {
             f32 lockOnStep = (500.0f - targetCtx->lockOnRadius) * 3.0f;
@@ -717,7 +717,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* targetedActo
             targetCtx->lockOnRadius = 120.0f;
         }
     } else {
-        targetCtx->targetedActor = NULL;
+        targetCtx->lockOnActor = NULL;
         Math_StepToF(&targetCtx->lockOnRadius, 500.0f, 80.0f);
     }
 }
@@ -1832,7 +1832,7 @@ f32 Target_GetAdjustedDistSq(Actor* actor, Player* player, s16 playerShapeYaw) {
     // The yaw, with player as the origin, from where player is facing to where the actor is positioned
     yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), playerShapeYaw));
 
-    if (player->targetedActor != NULL) {
+    if (player->lockOnActor != NULL) {
         if ((yawDiff > 0x4000) || (actor->flags & ACTOR_FLAG_CANT_LOCK_ON)) {
             return FLT_MAX;
         }
@@ -1892,7 +1892,7 @@ s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash) {
         // The yaw, with player as the origin, from where player is facing to where the actor is positioned
         yawDiff = ABS_ALT(BINANG_SUB(BINANG_SUB(actor->yawTowardsPlayer, 0x8000), player->actor.shape.rot.y));
 
-        if ((player->targetedActor == NULL) && (yawDiff > (0x10000 / 6))) {
+        if ((player->lockOnActor == NULL) && (yawDiff > (0x10000 / 6))) {
             distSq = FLT_MAX;
         } else {
             distSq = actor->xyzDistToPlayerSq;
@@ -1982,7 +1982,7 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) && (talkActor != NULL)) {
         player->talkActor = actor2;
-        player->targetedActor = actor2;
+        player->lockOnActor = actor2;
         return true;
     }
 
@@ -2484,13 +2484,13 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
             actor->flags &= ~ACTOR_FLAG_1000000;
 
             if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
-                if (actor == params->player->targetedActor) {
+                if (actor == params->player->lockOnActor) {
                     actor->isTargeted = true;
                 } else {
                     actor->isTargeted = false;
                 }
 
-                if ((actor->targetPriority != 0) && (params->player->targetedActor == NULL)) {
+                if ((actor->targetPriority != 0) && (params->player->lockOnActor == NULL)) {
                     actor->targetPriority = 0;
                 }
 
@@ -2615,7 +2615,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         }
     }
 
-    actor = player->targetedActor;
+    actor = player->lockOnActor;
     if ((actor != NULL) && (actor->update == NULL)) {
         actor = NULL;
         Player_Untarget(player);
@@ -3407,17 +3407,17 @@ Actor* Actor_Delete(ActorContext* actorCtx, Actor* actor, PlayState* play) {
     Actor* newHead;
     ActorOverlay* overlayEntry = actor->overlayEntry;
 
-    if ((player != NULL) && (actor == player->targetedActor)) {
+    if ((player != NULL) && (actor == player->lockOnActor)) {
         Player_Untarget(player);
         Camera_ChangeMode(Play_GetCamera(play, Play_GetActiveCamId(play)), CAM_MODE_NORMAL);
     }
 
-    if (actor == actorCtx->targetCtx.targetableOption) {
-        actorCtx->targetCtx.targetableOption = NULL;
+    if (actor == actorCtx->targetCtx.fairyActor) {
+        actorCtx->targetCtx.fairyActor = NULL;
     }
 
-    if (actor == actorCtx->targetCtx.nextTargetableOption) {
-        actorCtx->targetCtx.nextTargetableOption = NULL;
+    if (actor == actorCtx->targetCtx.forcedTargetActor) {
+        actorCtx->targetCtx.forcedTargetActor = NULL;
     }
 
     if (actor == actorCtx->targetCtx.bgmEnemy) {
@@ -3480,7 +3480,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
                                            ActorType actorCategory) {
     f32 distSq;
     Actor* actor = actorCtx->actorLists[actorCategory].first;
-    Actor* targetedActor = player->targetedActor;
+    Actor* lockOnActor = player->lockOnActor;
     s32 isNearestTargetableActor;
     s32 phi_s2_2;
 
@@ -3504,7 +3504,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
         }
 
         // If this actor is the currently targeted one, then ignore it unless it has the ACTOR_FLAG_80000 flag
-        if ((actor == targetedActor) && !(actor->flags & ACTOR_FLAG_80000)) {
+        if ((actor == lockOnActor) && !(actor->flags & ACTOR_FLAG_80000)) {
             continue;
         }
 

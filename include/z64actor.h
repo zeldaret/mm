@@ -297,27 +297,27 @@ typedef enum {
 #define ACTORCTX_FLAG_7 (1 << 7)
 
 // A Lock On entry is a set of 4 triangles which appear around an actor when the player Z-Targets it
-typedef struct TargetLockOnEntry {
+typedef struct LockOnTriangleSet {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 radius; // distance towards the center of the locked on
     /* 0x10 */ Color_RGBA8 color;
-} TargetLockOnEntry; // size = 0x14
+} LockOnTriangleSet; // size = 0x14
 
 typedef struct TargetContext {
-    /* 0x00 */ Vec3f fairyHintPos; // Used by Tatl to indicate a targetable actor or general hint
-    /* 0x0C */ Vec3f targetCenterPos;
-    /* 0x18 */ Color_RGBAf fairyInner;
-    /* 0x28 */ Color_RGBAf fairyOuter;
-    /* 0x38 */ Actor* targetableOption;
-    /* 0x3C */ Actor* targetedActor;
+    /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
+    /* 0x0C */ Vec3f lockOnPos;
+    /* 0x18 */ Color_RGBAf fairyInnerColor;
+    /* 0x28 */ Color_RGBAf fairyOuterColor;
+    /* 0x38 */ Actor* fairyActor;
+    /* 0x3C */ Actor* lockOnActor;
     /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
     /* 0x44 */ f32 lockOnRadius; // Control the circle lock-on triangles coming in from offscreen when you first target
     /* 0x48 */ s16 lockOnAlpha;
-    /* 0x4A */ u8 targetableOptionCategory;
+    /* 0x4A */ u8 fairyActorCategory;
     /* 0x4B */ u8 rotZTick;
     /* 0x4C */ s8 lockOnIndex;
-    /* 0x50 */ TargetLockOnEntry lockOnEntries[3];
-    /* 0x8C */ Actor* nextTargetableOption; // Never set to non-NULL
+    /* 0x50 */ LockOnTriangleSet lockOnEntries[3];
+    /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* arrowPointedActor;
 } TargetContext; // size = 0x98
@@ -468,7 +468,7 @@ typedef enum {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Allows Tatl to fly over the actor and Z-targeting it
+// Allows Tatl to fly over the actor and Z-target it
 #define ACTOR_FLAG_TARGETABLE    (1 << 0)
 // Unused
 #define ACTOR_FLAG_2             (1 << 1)

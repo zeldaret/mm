@@ -882,7 +882,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 void func_8088E850(EnElf* this, PlayState* play) {
     Vec3f nextPos;
     Player* player = GET_PLAYER(play);
-    Actor* targetableOption;
+    Actor* fairyActor;
     f32 xScale;
     f32 distFromLinksHead;
     u32 cueChannel;
@@ -968,15 +968,15 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 break;
 
             default:
-                targetableOption = play->actorCtx.targetCtx.targetableOption;
+                fairyActor = play->actorCtx.targetCtx.fairyActor;
                 if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
-                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetCtx.fairyHintPos);
+                    Math_Vec3f_Copy(&nextPos, &play->actorCtx.targetCtx.fairyPos);
                 }
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
-                if (targetableOption != NULL) {
+                if (fairyActor != NULL) {
                     func_8088DB4C(this, &nextPos, 0.0f, 30.0f, 0.2f);
                     if (this->actor.speed >= 5.0f) {
                         func_8088F5F4(this, play, 0x10);
@@ -1037,7 +1037,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, PlayState* play) {
-    Actor* targetableOption = play->actorCtx.targetCtx.targetableOption;
+    Actor* fairyActor = play->actorCtx.targetCtx.fairyActor;
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
 
@@ -1069,26 +1069,26 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
-        if ((targetableOption == NULL) ||
-            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyHintPos) < 50.0f)) {
+        if ((fairyActor == NULL) ||
+            (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyPos) < 50.0f)) {
             this->unk_268 = 1;
         }
     } else if (this->unk_238 != 0.0f) {
         if (Math_StepToF(&this->unk_238, 0.0f, 0.25f)) {
-            this->innerColor = play->actorCtx.targetCtx.fairyInner;
-            this->outerColor = play->actorCtx.targetCtx.fairyOuter;
+            this->innerColor = play->actorCtx.targetCtx.fairyInnerColor;
+            this->outerColor = play->actorCtx.targetCtx.fairyOuterColor;
         } else {
             transitionRate = 0.25f / this->unk_238;
-            func_8088EF18(&this->innerColor, &play->actorCtx.targetCtx.fairyInner, &this->innerColor, transitionRate);
-            func_8088EF18(&this->outerColor, &play->actorCtx.targetCtx.fairyOuter, &this->outerColor, transitionRate);
+            func_8088EF18(&this->innerColor, &play->actorCtx.targetCtx.fairyInnerColor, &this->innerColor, transitionRate);
+            func_8088EF18(&this->outerColor, &play->actorCtx.targetCtx.fairyOuterColor, &this->outerColor, transitionRate);
         }
     }
 
     if (this->fairyFlags & 1) {
-        if ((targetableOption == NULL) || (player->targetedActor == NULL)) {
+        if ((fairyActor == NULL) || (player->lockOnActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((targetableOption != NULL) && (player->targetedActor != NULL)) {
+    } else if ((fairyActor != NULL) && (player->lockOnActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1101,7 +1101,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
 
 void func_8088F214(EnElf* this, PlayState* play) {
     s32 sp34;
-    Actor* targetableOption;
+    Actor* fairyActor;
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -1132,12 +1132,12 @@ void func_8088F214(EnElf* this, PlayState* play) {
         sp34 = 1;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
-        targetableOption = play->actorCtx.targetCtx.targetableOption;
+        fairyActor = play->actorCtx.targetCtx.fairyActor;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
             sp34 = 10;
             this->unk_25C = 100;
-        } else if ((targetableOption == NULL) || (targetableOption->category == ACTORCAT_NPC)) {
-            if (targetableOption != NULL) {
+        } else if ((fairyActor == NULL) || (fairyActor->category == ACTORCAT_NPC)) {
+            if (fairyActor != NULL) {
                 this->unk_25C = 100;
                 player->stateFlags2 |= PLAYER_STATE2_100000;
                 sp34 = 0;
@@ -1276,13 +1276,13 @@ void func_8088FA38(EnElf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (this->fairyFlags & 0x10) {
-        refPos = play->actorCtx.targetCtx.fairyHintPos;
+        refPos = play->actorCtx.targetCtx.fairyPos;
 
         if (this->unk_234 != NULL) {
             refPos = this->unk_234->world.pos;
         } else {
-            if ((player->targetedActor == NULL) || (&player->actor == player->targetedActor) ||
-                (&this->actor == player->targetedActor) || (this->unk_264 & 4)) {
+            if ((player->lockOnActor == NULL) || (&player->actor == player->lockOnActor) ||
+                (&this->actor == player->lockOnActor) || (this->unk_264 & 4)) {
                 refPos.x =
                     player->bodyPartsPos[PLAYER_BODYPART_HEAD].x + (Math_SinS(player->actor.shape.rot.y) * 20.0f);
                 refPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 5.0f;
@@ -1458,7 +1458,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
         gSaveContext.save.saveInfo.playerData.tatlTimer = 0;
     }
 
-    if ((player->tatlTextId == 0) && (player->targetedActor == NULL)) {
+    if ((player->tatlTextId == 0) && (player->lockOnActor == NULL)) {
         if ((gSaveContext.save.saveInfo.playerData.tatlTimer >= 600) &&
             (gSaveContext.save.saveInfo.playerData.tatlTimer <= 3000)) {
             player->tatlTextId = QuestHint_GetTatlTextId(play);

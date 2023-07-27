@@ -1038,7 +1038,8 @@ wordReplace = {
     "player->unk_B84": "player->pushedYaw",
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
-    "player->unk_730": "player->targetedActor",
+    "player->unk_730": "player->lockOnActor",
+    "player->targetedActor": "player->lockOnActor",
 
     "ageProperties->unk_04": "ageProperties->shadowScale",
     "ageProperties->unk_92": "ageProperties->voiceSfxOffset",
@@ -1086,7 +1087,7 @@ wordReplace = {
     "play->actorCtx.unk3": "play->actorCtx.lensActive",
     "play->actorCtx.unk4": "play->actorCtx.lensMaskSize",
     "play->actorCtx.targetContext": "play->actorCtx.targetCtx",
-    "play->actorCtx.targetCtx.unk0": "play->actorCtx.targetCtx.fairyHintPos",
+    "play->actorCtx.targetCtx.unk0": "play->actorCtx.targetCtx.fairyPos",
     "play->actorCtx.targetCtx.unk40": "play->actorCtx.targetCtx.fairyMoveProgressFactor",
     "play->actorCtx.targetCtx.unk44": "play->actorCtx.targetCtx.lockOnRadius",
     "play->actorCtx.targetCtx.unk48": "play->actorCtx.targetCtx.lockOnAlpha",

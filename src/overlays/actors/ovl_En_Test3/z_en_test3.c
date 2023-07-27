@@ -354,7 +354,7 @@ s32 func_80A3EA30(EnTest3* this, PlayState* play) {
         Actor* hideoutDoor = SubS_FindActor(play, NULL, ACTORCAT_BG, ACTOR_BG_IKNV_OBJ);
 
         if (hideoutDoor != NULL) {
-            this->player.targetedActor = hideoutDoor;
+            this->player.lockOnActor = hideoutDoor;
         }
     }
     if (this->unk_D78->unk_1 != 0) {
@@ -378,7 +378,7 @@ s32 func_80A3EAF8(EnTest3* this, PlayState* play) {
             CutsceneManager_Stop(this->csId);
             this->csId = CS_ID_GLOBAL_TALK;
             CutsceneManager_Queue(this->csId);
-            this->player.targetedActor = &GET_PLAYER(play)->actor;
+            this->player.lockOnActor = &GET_PLAYER(play)->actor;
         }
         return 1;
     }
@@ -390,7 +390,7 @@ s32 func_80A3EB8C(EnTest3* this, PlayState* play) {
         Actor* hideoutObject = SubS_FindActor(play, NULL, ACTORCAT_ITEMACTION, ACTOR_OBJ_NOZOKI);
 
         if (hideoutObject != NULL) {
-            this->player.targetedActor = hideoutObject;
+            this->player.lockOnActor = hideoutObject;
         }
         play->msgCtx.msgMode = 0x44;
         return 1;
@@ -655,7 +655,7 @@ s32 func_80A3F62C(EnTest3* this, PlayState* play, struct_80A41828* arg2, Schedul
 s32 func_80A3F73C(EnTest3* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
-        this->player.targetedActor = &GET_PLAYER(play)->actor;
+        this->player.lockOnActor = &GET_PLAYER(play)->actor;
         this->player.stateFlags2 &= ~PLAYER_STATE2_40000;
         D_80A41D5C = true;
         if ((this->unk_D78->unk_0 == 4) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
@@ -1008,7 +1008,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
             } else {
                 func_80A3E7E0(this, func_80A40678);
             }
-            this->player.targetedActor = NULL;
+            this->player.lockOnActor = NULL;
         }
     } else if (func_80A3ED24(this, play)) {
         func_80A3E7E0(this, func_80A40908);
@@ -1018,7 +1018,7 @@ void func_80A4084C(EnTest3* this, PlayState* play) {
 void func_80A40908(EnTest3* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->player.actor, &play->state)) {
         func_80A3E7E0(this, func_80A4084C);
-        this->player.targetedActor = &GET_PLAYER(play)->actor;
+        this->player.lockOnActor = &GET_PLAYER(play)->actor;
         SET_WEEKEVENTREG(WEEKEVENTREG_51_08);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_PENDANT_OF_MEMORIES);
         Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_KAFEI);
@@ -1194,7 +1194,7 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
             leftHandActor->world.pos.z = (this->player.bodyPartsPos[15].z + this->player.leftHandWorld.pos.z) / 2.0f;
         }
     } else if (limbIndex == OBJECT_TEST3_LIMB_0B) {
-        Actor* actor730 = this->player.targetedActor;
+        Actor* actor730 = this->player.lockOnActor;
 
         if ((*dList1 != NULL) && this->player.currentMask && !(this->player.stateFlags2 & PLAYER_STATE2_1000000)) {
             // this->player.currentMask != PLAYER_MASK_NONE
