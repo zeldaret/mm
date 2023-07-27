@@ -16,12 +16,12 @@ void EnGamelupy_Destroy(Actor* thisx, PlayState* play);
 void EnGamelupy_Update(Actor* thisx, PlayState* play);
 void EnGamelupy_Draw(Actor* thisx, PlayState* play);
 
-void func_80AF6958(EnGamelupy* this, PlayState* play);
-void func_80AF69A8(EnGamelupy* this, PlayState* play);
-void func_80AF6A78(EnGamelupy* this, PlayState* play);
-void func_80AF6944(EnGamelupy* this);
-void func_80AF6994(EnGamelupy* this);
-void func_80AF6A38(EnGamelupy* this);
+void EnGamelupy_FindSharedMemory(EnGamelupy* this, PlayState* play);
+void EnGamelupy_Idle(EnGamelupy* this, PlayState* play);
+void EnGamelupy_Collected(EnGamelupy* this, PlayState* play);
+void EnGamelupy_SetupFindSharedMemory(EnGamelupy* this);
+void EnGamelupy_SetupIdle(EnGamelupy* this);
+void EnGamelupy_SetupCollected(EnGamelupy* this);
 
 ActorInit En_Gamelupy_InitVars = {
     ACTOR_EN_GAMELUPY,
@@ -74,15 +74,15 @@ void EnGamelupy_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.gravity = -0.5f;
     this->actor.shape.rot.y = Rand_Next();
-    this->unk_19C = 0;
-    this->unk_19E = 0;
-    this->unk_1A0 = 0x7D0;
-    if (this->actor.params == 1) {
-        this->rupeeIndex = 1;
+    this->collectedTimer = 0;
+    this->sparklesAngle = 0;
+    this->sparklesAngleStep = 0x7D0;
+    if (EN_GAMELUPY_GET_TYPE(&this->actor) == ENGAMELUPY_TYPE_BLUE) {
+        this->type = ENGAMELUPY_TYPE_BLUE;
     } else {
-        this->rupeeIndex = 0;
+        this->type = ENGAMELUPY_TYPE_GREEN;
     }
-    func_80AF6944(this);
+    EnGamelupy_SetupFindSharedMemory(this);
 }
 
 void EnGamelupy_Destroy(Actor* thisx, PlayState* play) {
@@ -91,77 +91,77 @@ void EnGamelupy_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80AF6854(EnGamelupy* this, PlayState* play) {
-    Vec3f sp4C;
-    Vec3f sp40;
-    Vec3f sp30;
+void EnGamelupy_SpawnSparkles(EnGamelupy* this, PlayState* play) {
+    Vec3f pos;
+    Vec3f accel;
+    Vec3f velocity;
 
-    sp4C = this->actor.world.pos;
-    sp30.x = Math_SinS(this->unk_19E) * 3.0f;
-    sp30.y = 5.5f;
-    sp30.z = Math_CosS(this->unk_19E) * 3.0f;
-    sp40.x = -0.05f * sp30.x;
-    sp40.y = -0.4f;
-    sp40.z = -0.05f * sp30.z;
-    EffectSsKirakira_SpawnDispersed(play, &sp4C, &sp30, &sp40, &sPrimColor, &sEnvColor, 3000, 40);
-    this->unk_19E += this->unk_1A0;
+    pos = this->actor.world.pos;
+    velocity.x = Math_SinS(this->sparklesAngle) * 3.0f;
+    velocity.y = 5.5f;
+    velocity.z = Math_CosS(this->sparklesAngle) * 3.0f;
+    accel.x = -0.05f * velocity.x;
+    accel.y = -0.4f;
+    accel.z = -0.05f * velocity.z;
+    EffectSsKirakira_SpawnDispersed(play, &pos, &velocity, &accel, &sPrimColor, &sEnvColor, 3000, 40);
+    this->sparklesAngle += this->sparklesAngleStep;
 }
 
-void func_80AF6944(EnGamelupy* this) {
-    this->actionFunc = func_80AF6958;
+void EnGamelupy_SetupFindSharedMemory(EnGamelupy* this) {
+    this->actionFunc = EnGamelupy_FindSharedMemory;
 }
 
-void func_80AF6958(EnGamelupy* this, PlayState* play) {
-    s16* unk_198 = func_800B6680(play, ACTOR_EN_GAMELUPY);
+void EnGamelupy_FindSharedMemory(EnGamelupy* this, PlayState* play) {
+    s16* minigameScore = Actor_FindSharedMemoryEntry(play, ACTOR_EN_GAMELUPY);
 
-    if (unk_198 != NULL) {
-        this->unk_198 = unk_198;
-        func_80AF6994(this);
+    if (minigameScore != NULL) {
+        this->minigameScore = minigameScore;
+        EnGamelupy_SetupIdle(this);
     }
 }
 
-void func_80AF6994(EnGamelupy* this) {
-    this->actionFunc = func_80AF69A8;
+void EnGamelupy_SetupIdle(EnGamelupy* this) {
+    this->actionFunc = EnGamelupy_Idle;
 }
 
-void func_80AF69A8(EnGamelupy* this, PlayState* play) {
+void EnGamelupy_Idle(EnGamelupy* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
-        *this->unk_198 += 50;
-        if (this->rupeeIndex == 1) {
+        *this->minigameScore += ENGAMELUPY_POINTS;
+        if (this->type == ENGAMELUPY_TYPE_BLUE) {
             Rupees_ChangeBy(5);
         } else {
             Rupees_ChangeBy(1);
         }
-        func_80AF6A38(this);
+        EnGamelupy_SetupCollected(this);
     }
     this->actor.shape.rot.y += 0x1F4;
 }
 
-void func_80AF6A38(EnGamelupy* this) {
-    this->unk_19C = 0;
+void EnGamelupy_SetupCollected(EnGamelupy* this) {
+    this->collectedTimer = 0;
     this->actor.gravity = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_SY_GET_RUPY);
-    this->actionFunc = func_80AF6A78;
+    this->actionFunc = EnGamelupy_Collected;
 }
 
-void func_80AF6A78(EnGamelupy* this, PlayState* play) {
+void EnGamelupy_Collected(EnGamelupy* this, PlayState* play) {
     f32 scale;
     Player* player = GET_PLAYER(play);
 
-    if (this->unk_19C > 30) {
+    if (this->collectedTimer > 30) {
         Actor_Kill(&this->actor);
     } else {
-        this->unk_19C++;
+        this->collectedTimer++;
         this->actor.world.pos = player->actor.world.pos;
         this->actor.world.pos.y += 40.0f;
-        scale = (30.0f - this->unk_19C) * 0.001f;
+        scale = (30.0f - this->collectedTimer) * 0.001f;
         Actor_SetScale(&this->actor, scale);
-        func_80AF6854(this, play);
+        EnGamelupy_SpawnSparkles(this, play);
     }
     this->actor.shape.rot.y += 0x3E8;
 }
 
-void func_80AF6B40(EnGamelupy* this, PlayState* play) {
+void EnGamelupy_UpdateCollision(EnGamelupy* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
@@ -172,7 +172,7 @@ void EnGamelupy_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8);
-    func_80AF6B40(this, play);
+    EnGamelupy_UpdateCollision(this, play);
 }
 
 void EnGamelupy_Draw(Actor* thisx, PlayState* play) {
@@ -184,7 +184,7 @@ void EnGamelupy_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTextures[this->rupeeIndex]));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sRupeeTextures[this->type]));
     gSPDisplayList(POLY_OPA_DISP++, gRupeeDL);
 
     CLOSE_DISPS(play->state.gfxCtx);

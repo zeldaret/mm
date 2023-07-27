@@ -29,25 +29,38 @@ ActorInit En_And_InitVars = {
     (ActorFunc)EnAnd_Draw,
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gAndStaticAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAndIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAndWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAndRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gAndRaisedHeadLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAndRaiseHandAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gAndRaisedHandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gAndRaisedHandWalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+typedef enum {
+    /* -1 */ ENAND_ANIM_NONE = -1,
+    /*  0 */ ENAND_ANIM_0,
+    /*  1 */ ENAND_ANIM_1,
+    /*  2 */ ENAND_ANIM_2,
+    /*  3 */ ENAND_ANIM_3,
+    /*  4 */ ENAND_ANIM_4,
+    /*  5 */ ENAND_ANIM_5,
+    /*  6 */ ENAND_ANIM_6,
+    /*  7 */ ENAND_ANIM_7,
+    /*  8 */ ENAND_ANIM_MAX
+} EnAndAnimation;
+
+static AnimationInfoS sAnimationInfo[ENAND_ANIM_MAX] = {
+    { &gAndStaticAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // ENAND_ANIM_0
+    { &gAndIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // ENAND_ANIM_1
+    { &gAndWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // ENAND_ANIM_2
+    { &gAndRaiseHeadAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENAND_ANIM_3
+    { &gAndRaisedHeadLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAND_ANIM_4
+    { &gAndRaiseHandAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },      // ENAND_ANIM_5
+    { &gAndRaisedHandLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAND_ANIM_6
+    { &gAndRaisedHandWalkAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // ENAND_ANIM_7
 };
 
 s32 EnAnd_ChangeAnim(EnAnd* this, s32 animIndex) {
-    s32 ret = false;
+    s32 didAnimChange = false;
 
     if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
-    return ret;
+    return didAnimChange;
 }
 
 void EnAnd_Blink(EnAnd* this) {
@@ -61,8 +74,10 @@ void EnAnd_Blink(EnAnd* this) {
 }
 
 void EnAnd_HandleCutscene(EnAnd* this, PlayState* play) {
-    s32 csAnimations[] = { 0, 1, 2, 3, 5, 7 };
-    u16 cueType;
+    s32 csAnimIndex[] = {
+        ENAND_ANIM_0, ENAND_ANIM_1, ENAND_ANIM_2, ENAND_ANIM_3, ENAND_ANIM_5, ENAND_ANIM_7,
+    };
+    u16 cueId;
     s32 cueChannel;
 
     if (play->csCtx.state != CS_STATE_IDLE) {
@@ -74,15 +89,15 @@ void EnAnd_HandleCutscene(EnAnd* this, PlayState* play) {
         }
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_565)) {
             cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_565);
-            cueType = play->csCtx.actorCues[cueChannel]->id;
-            if (this->cueId != (u8)cueType) {
-                this->cueId = cueType;
-                EnAnd_ChangeAnim(this, csAnimations[cueType]);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                EnAnd_ChangeAnim(this, csAnimIndex[cueId]);
             }
             switch (this->cueId) {
                 case 3:
                 case 4:
-                    if ((this->animIndex == 3) || (this->animIndex == 5)) {
+                    if ((this->animIndex == ENAND_ANIM_3) || (this->animIndex == ENAND_ANIM_5)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                             EnAnd_ChangeAnim(this, this->animIndex + 1);
                         }
@@ -106,8 +121,8 @@ void EnAnd_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 14.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gAndSkel, NULL, this->jointTable, this->morphTable,
                        OBJECT_AND_LIMB_MAX);
-    this->animIndex = -1;
-    EnAnd_ChangeAnim(this, 0);
+    this->animIndex = ENAND_ANIM_NONE;
+    EnAnd_ChangeAnim(this, ENAND_ANIM_0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.flags &= ~ACTOR_FLAG_1;
     this->flags |= 8;
