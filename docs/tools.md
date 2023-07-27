@@ -215,12 +215,10 @@ sudo apt install clang-format-14 clang-tidy-14 clang-apply-replacements-14
 ```
 
 Mac:
-Install with brew, than create symlinks for `clang-tidy` and `clang-apply-replacements` to use properly
-```bash
-brew install llvm clang-format-14
-ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
-```
+Brew does not have clang-format-14, but MacPorts does.
+
+(Have been unable to confirm actual commands with somone that has a Mac)
+
 
 ## External tools
 
