@@ -64,7 +64,7 @@ Ideally you should at least be able to get a function to have equivalent behavio
 
 ### Format
 
-Run the formatting script `format.sh`, to format the C files in the standard way we use. If you have some arrays or struct definitions in your file, check that they have not been obnoxiously padded out: you can usually get a better format without a final comma for short things.
+Run the formatting script `format.py`, to format the C files in the standard way we use. If you have some arrays or struct definitions in your file, check that they have not been obnoxiously padded out: you can usually get a better format without a final comma for short things.
 
 **N.B.** this is now essential: the CI will fail immediately if it detects files that change when formatted.
 
