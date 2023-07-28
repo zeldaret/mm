@@ -50,8 +50,8 @@ def parse_map(fname):
                 if "noload" in line or "noload" in prev_line:
                     ram_offset = None
                     continue
-                ram = int(line[16 : 16 + 18], 0)
-                rom = int(line[59 : 59 + 18], 0)
+                ram = int(line[16 : 16 + 10], 0)
+                rom = int(line[51 : 51 + 10], 0)
                 ram_offset = ram - rom
                 continue
             prev_line = line
@@ -63,7 +63,7 @@ def parse_map(fname):
                 or " 0x" not in line
             ):
                 continue
-            ram = int(line[16 : 16 + 18], 0)
+            ram = int(line[16 : 16 + 10], 0)
             rom = ram - ram_offset
             fn = line.split()[-1]
             if "0x" in fn:
