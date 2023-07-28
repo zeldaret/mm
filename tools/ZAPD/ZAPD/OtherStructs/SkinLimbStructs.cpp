@@ -165,7 +165,7 @@ void Struct_800A598C::DeclareReferences(const std::string& prefix)
 			                            res.GetSourceTypeName(), unk_8_Str, arrayItemCnt, entryStr);
 		}
 		else
-			decl->text = entryStr;
+			decl->declBody = entryStr;
 	}
 
 	if (unk_C != 0 && GETSEGNUM(unk_C) == parent->segment)
@@ -195,7 +195,7 @@ void Struct_800A598C::DeclareReferences(const std::string& prefix)
 			                            res.GetSourceTypeName(), unk_C_Str, arrayItemCnt, entryStr);
 		}
 		else
-			decl->text = entryStr;
+			decl->declBody = entryStr;
 	}
 }
 
@@ -296,7 +296,7 @@ void Struct_800A5E28::DeclareReferences(const std::string& prefix)
 			                            res.GetSourceTypeName(), unk_4_Str, arrayItemCnt, entryStr);
 		}
 		else
-			decl->text = entryStr;
+			decl->declBody = entryStr;
 	}
 
 	if (unk_8 != SEGMENTED_NULL && GETSEGNUM(unk_8) == parent->segment)
