@@ -8743,7 +8743,7 @@
     0x809A5B50:("ObjArmos_Draw",),
     0x809A5D10:("ObjBoyo_Init",),
     0x809A5D94:("ObjBoyo_Destroy",),
-    0x809A5DC0:("func_809A5DC0",),
+    0x809A5DC0:("ObjBoyo_PushPlayer",),
     0x809A5DE0:("func_809A5DE0",),
     0x809A5E14:("func_809A5E14",),
     0x809A5E24:("func_809A5E24",),
