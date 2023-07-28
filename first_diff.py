@@ -3,9 +3,14 @@
 from __future__ import annotations
 
 import argparse
-import mapfile_parser
 from pathlib import Path
 import rabbitizer
+
+try:
+    import mapfile_parser
+except ImportError:
+    print("Missing dependency mapfile_parser, install it with `python3 -m pip install mapfile-parser`")
+    exit(1)
 
 
 def decodeInstruction(bytesDiff: bytes, mapFile: mapfile_parser.MapFile) -> str:

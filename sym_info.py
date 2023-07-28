@@ -3,8 +3,13 @@
 from __future__ import annotations
 
 import argparse
-import mapfile_parser
 from pathlib import Path
+
+try:
+    import mapfile_parser
+except ImportError:
+    print("Missing dependency mapfile_parser, install it with `python3 -m pip install mapfile-parser`")
+    exit(1)
 
 
 def symInfoMain():
