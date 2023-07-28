@@ -13,3 +13,6 @@ watchdog>=0.10.2
 argcomplete
 python-Levenshtein
 cxxfilt
+
+# map parsing
+mapfile-parser>=1.1.5<2.0.0

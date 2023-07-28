@@ -3,7 +3,7 @@
 import argparse, os, sys
 from collections import OrderedDict
 
-gAddressWidth = 10
+gAddressWidth = 18
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 root_dir = script_dir + "/../"
