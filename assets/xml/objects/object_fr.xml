@@ -63,6 +63,6 @@
         <Limb Name="gFrogLeftShinLimb" Type="Standard" EnumName="FROG_LIMB_LEFT_SHIN" Offset="0xB4B8" />
         <Limb Name="gFrogLeftHeelLimb" Type="Standard" EnumName="FROG_LIMB_LEFT_HEEL" Offset="0xB4C4" />
         <Limb Name="gFrogLeftToesLimb" Type="Standard" EnumName="FROG_LIMB_LEFT_TOES" Offset="0xB4D0" />
-        <Skeleton Name="gFrogSkel" Type="Flex" LimbType="Standard" LimbNone="FROG_LIMB_NONE" LimbMax="FROG_LIMB_MAX" EnumName="FrogLimbs" Offset="0xB538" />
+        <Skeleton Name="gFrogSkel" Type="Flex" LimbType="Standard" LimbNone="FROG_LIMB_NONE" LimbMax="FROG_LIMB_MAX" EnumName="FrogLimb" Offset="0xB538" />
     </File>
 </Root>
