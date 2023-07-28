@@ -65,7 +65,7 @@
         <Limb Name="gDinolfosUpperTailLimb" Type="Standard" EnumName="DINOLFOS_LIMB_UPPER_TAIL" Offset="0x94FC" />
         <Limb Name="gDinolfosLowerTailLimb" Type="Standard" EnumName="DINOLFOS_LIMB_LOWER_TAIL" Offset="0x9508" />
         <Limb Name="gDinolfosKnife" Type="Standard" EnumName="DINOLFOS_LIMB_KNIFE" Offset="0x9514" />
-        <Skeleton Name="gDinolfosSkel" Type="Flex" LimbType="Standard" LimbNone="DINOLFOS_LIMB_NONE" LimbMax="DINOLFOS_LIMB_MAX" EnumName="DinolfosLimbs" Offset="0x9570" />
+        <Skeleton Name="gDinolfosSkel" Type="Flex" LimbType="Standard" LimbNone="DINOLFOS_LIMB_NONE" LimbMax="DINOLFOS_LIMB_MAX" EnumName="DinolfosLimb" Offset="0x9570" />
 
         <Animation Name="gDinolfosCryAnim" Offset="0x9B70" /> <!-- Original name is "zf2_sakebi" -->
         <Animation Name="gDinolfosDieAnim" Offset="0xABD0" /> <!-- Original name is "zf2_lowerlegi" -->
