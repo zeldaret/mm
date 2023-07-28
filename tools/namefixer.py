@@ -1093,7 +1093,7 @@ wordReplace = {
     "play->actorCtx.targetCtx.unk48": "play->actorCtx.targetCtx.lockOnAlpha",
     "play->actorCtx.targetCtx.unk4B": "play->actorCtx.targetCtx.rotation",
     "play->actorCtx.targetCtx.unk4C": "play->actorCtx.targetCtx.lockOnIndex",
-    "play->actorCtx.targetCtx.unk50": "play->actorCtx.targetCtx.lockOnEntries",
+    "play->actorCtx.targetCtx.unk50": "play->actorCtx.targetCtx.lockOnTriangleSets",
     "play->actorCtx.targetCtx.unk8C": "play->actorCtx.targetCtx.nextTarget",
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",

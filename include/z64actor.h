@@ -316,7 +316,7 @@ typedef struct TargetContext {
     /* 0x4A */ u8 fairyActorCategory;
     /* 0x4B */ u8 rotZTick;
     /* 0x4C */ s8 lockOnIndex;
-    /* 0x50 */ LockOnTriangleSet lockOnEntries[3];
+    /* 0x50 */ LockOnTriangleSet lockOnTriangleSets[3];
     /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
     /* 0x94 */ Actor* arrowPointedActor;
@@ -468,7 +468,7 @@ typedef enum {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Allows Tatl to fly over the actor and Z-target it
+// Allows Tatl to fly over the actor and lock-on it (using the Z-target)
 #define ACTOR_FLAG_TARGETABLE    (1 << 0)
 // Unused
 #define ACTOR_FLAG_2             (1 << 1)

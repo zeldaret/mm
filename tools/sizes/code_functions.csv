@@ -185,7 +185,7 @@ asm/non_matchings/code/z_actor/func_800B4B50.s,func_800B4B50,0x800B4B50,0xE3
 asm/non_matchings/code/z_actor/Actor_GetProjectedPos.s,Actor_GetProjectedPos,0x800B4EDC,0x19
 asm/non_matchings/code/z_actor/Target_SetLockOnPos.s,Target_SetLockOnPos,0x800B4F40,0xE
 asm/non_matchings/code/z_actor/Target_InitLockOn.s,Target_InitLockOn,0x800B4F78,0x32
-asm/non_matchings/code/z_actor/Target_SetColors.s,Target_SetColors,0x800B5040,0x59
+asm/non_matchings/code/z_actor/Target_SetFairyState.s,Target_SetFairyState,0x800B5040,0x59
 asm/non_matchings/code/z_actor/Target_Init.s,Target_Init,0x800B51A4,0x19
 asm/non_matchings/code/z_actor/Target_Draw.s,Target_Draw,0x800B5208,0x183
 asm/non_matchings/code/z_actor/Target_Update.s,Target_Update,0x800B5814,0xE7

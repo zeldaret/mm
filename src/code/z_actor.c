@@ -24,16 +24,16 @@ CollisionPoly* D_801ED8B0; // 1 func
 s32 D_801ED8B4;            // 2 funcs
 
 Actor* sTargetableNearestActor;
-Actor* sTargetableHighestPriorityActor;
+Actor* sTargetablePrioritizedActor;
 Actor* D_801ED8C0;
 Actor* D_801ED8C4;
 
-f32 sTargetableNearestActorDistanceSq;
+f32 sTargetableNearestActorDistSq;
 f32 sBgmEnemyDistSq;
 f32 D_801ED8D0;
-s32 sTargetableHighestPriorityPriority;
+s32 sTargetablePrioritizedPriority;
 s32 D_801ED8D8;
-s16 sTargetPlayerYRot;
+s16 sTargetPlayerRotY;
 
 Mtx sActorHiliteMtx;
 
@@ -421,10 +421,10 @@ void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos
 }
 
 void Target_SetLockOnPos(TargetContext* targetCtx, s32 index, f32 x, f32 y, f32 z) {
-    targetCtx->lockOnEntries[index].pos.x = x;
-    targetCtx->lockOnEntries[index].pos.y = y;
-    targetCtx->lockOnEntries[index].pos.z = z;
-    targetCtx->lockOnEntries[index].radius = targetCtx->lockOnRadius;
+    targetCtx->lockOnTriangleSets[index].pos.x = x;
+    targetCtx->lockOnTriangleSets[index].pos.y = y;
+    targetCtx->lockOnTriangleSets[index].pos.z = z;
+    targetCtx->lockOnTriangleSets[index].radius = targetCtx->lockOnRadius;
 }
 
 typedef struct {
@@ -452,24 +452,24 @@ TatlColor sTatlColorList[] = {
 void Target_InitLockOn(TargetContext* targetCtx, ActorType type, PlayState* play) {
     TatlColor* tatlColorEntry;
     s32 i;
-    LockOnTriangleSet* lockOnEntry;
+    LockOnTriangleSet* triangleSet;
 
     Math_Vec3f_Copy(&targetCtx->lockOnPos, &play->view.eye);
     targetCtx->lockOnAlpha = 256;
     tatlColorEntry = &sTatlColorList[type];
     targetCtx->lockOnRadius = 500.0f;
 
-    lockOnEntry = targetCtx->lockOnEntries;
-    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnEntries); i++, lockOnEntry++) {
+    triangleSet = targetCtx->lockOnTriangleSets;
+    for (i = 0; i < ARRAY_COUNT(targetCtx->lockOnTriangleSets); i++, triangleSet++) {
         Target_SetLockOnPos(targetCtx, i, 0.0f, 0.0f, 0.0f);
 
-        lockOnEntry->color.r = tatlColorEntry->inner.r;
-        lockOnEntry->color.g = tatlColorEntry->inner.g;
-        lockOnEntry->color.b = tatlColorEntry->inner.b;
+        triangleSet->color.r = tatlColorEntry->inner.r;
+        triangleSet->color.g = tatlColorEntry->inner.g;
+        triangleSet->color.b = tatlColorEntry->inner.b;
     }
 }
 
-void Target_SetColors(TargetContext* targetCtx, Actor* actor, ActorType type, PlayState* play) {
+void Target_SetFairyState(TargetContext* targetCtx, Actor* actor, ActorType type, PlayState* play) {
     targetCtx->fairyPos.x = actor->focus.pos.x;
     targetCtx->fairyPos.y = actor->focus.pos.y + (actor->targetArrowOffset * actor->scale.y);
     targetCtx->fairyPos.z = actor->focus.pos.z;
@@ -492,7 +492,7 @@ void Target_Init(TargetContext* targetCtx, Actor* actor, PlayState* play) {
     targetCtx->rotZTick = 0;
     targetCtx->lockOnIndex = 0;
     targetCtx->fairyMoveProgressFactor = 0.0f;
-    Target_SetColors(targetCtx, actor, actor->category, play);
+    Target_SetFairyState(targetCtx, actor, actor->category, play);
     Target_InitLockOn(targetCtx, actor->category, play);
 }
 
@@ -525,7 +525,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
         } else {
             // Use multiple entries for the movement effect when the triangles are getting closer to the actor from the
             // margin of the screen
-            totalEntries = ARRAY_COUNT(targetCtx->lockOnEntries);
+            totalEntries = ARRAY_COUNT(targetCtx->lockOnTriangleSets);
         }
 
         if (actor != NULL) {
@@ -551,7 +551,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
 
         targetCtx->lockOnIndex--;
         if (targetCtx->lockOnIndex < 0) {
-            targetCtx->lockOnIndex = ARRAY_COUNT(targetCtx->lockOnEntries) - 1;
+            targetCtx->lockOnIndex = ARRAY_COUNT(targetCtx->lockOnTriangleSets) - 1;
         }
 
         Target_SetLockOnPos(targetCtx, targetCtx->lockOnIndex, projectedPos.x, projectedPos.y, projectedPos.z);
@@ -560,8 +560,8 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
             OVERLAY_DISP = Gfx_SetupDL(OVERLAY_DISP, SETUPDL_57);
 
             for (i = 0, index = targetCtx->lockOnIndex; i < totalEntries;
-                 i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnEntries)) {
-                entry = &targetCtx->lockOnEntries[index];
+                 i++, index = (index + 1) % ARRAY_COUNT(targetCtx->lockOnTriangleSets)) {
+                entry = &targetCtx->lockOnTriangleSets[index];
 
                 if (entry->radius < 500.0f) {
                     s32 triangleIndex;
@@ -590,7 +590,7 @@ void Target_Draw(TargetContext* targetCtx, PlayState* play) {
                     }
                 }
 
-                alpha -= 255 / ARRAY_COUNT(targetCtx->lockOnEntries);
+                alpha -= 255 / ARRAY_COUNT(targetCtx->lockOnTriangleSets);
                 if (alpha < 0) {
                     alpha = 0;
                 }
@@ -667,7 +667,7 @@ void Target_Update(TargetContext* targetCtx, Player* player, Actor* lockOnActor,
         targetCtx->fairyPos.y += y * fairyMoveScale;
         targetCtx->fairyPos.z += z * fairyMoveScale;
     } else {
-        Target_SetColors(targetCtx, actor, category, play);
+        Target_SetFairyState(targetCtx, actor, category, play);
     }
 
     if ((lockOnActor != NULL) && (targetCtx->rotZTick == 0)) {
@@ -3455,11 +3455,12 @@ s32 Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
  *
  * The actor must be on-screen
  *
- * The highest priority actor is stored in `sTargetableHighestPriorityActor`, while the nearest actor is stored in
+ * The highest priority actor is stored in `sTargetablePrioritizedActor`, while the nearest actor is stored in
  * `sTargetableNearestActor`. The higher priority / smaller distance of those actors are stored in
- * `sTargetableHighestPriorityPriority` and `sTargetableNearestActorDistanceSq`.
+ * `sTargetablePrioritizedPriority` and `sTargetableNearestActorDistSq`.
  *
- * Something something, ACTOR_FLAG_40000000, D_801ED8C4/D_801ED8C0, D_801ED8D8/D_801ED8D0.
+ * There is not much info to infer anything about ACTOR_FLAG_40000000, D_801ED8C4/D_801ED8C0, D_801ED8D8/D_801ED8D0.
+ * All appear unused in any meaningful way.
  *
  * For an actor to be taken in consideration by this function it needs:
  * - Non-NULL update function (maybe obvious?)
@@ -3508,10 +3509,9 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
             continue;
         }
 
-        distSq = Target_GetAdjustedDistSq(actor, player, sTargetPlayerYRot);
+        distSq = Target_GetAdjustedDistSq(actor, player, sTargetPlayerRotY);
 
-        isNearestTargetableActor =
-            (actor->flags & ACTOR_FLAG_TARGETABLE) && (distSq < sTargetableNearestActorDistanceSq);
+        isNearestTargetableActor = (actor->flags & ACTOR_FLAG_TARGETABLE) && (distSq < sTargetableNearestActorDistSq);
         phi_s2_2 = (actor->flags & ACTOR_FLAG_40000000) && (distSq < D_801ED8D0);
 
         if (!isNearestTargetableActor && !phi_s2_2) {
@@ -3531,9 +3531,9 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
             }
 
             if (actor->targetPriority != 0) {
-                if (isNearestTargetableActor && (actor->targetPriority < sTargetableHighestPriorityPriority)) {
-                    sTargetableHighestPriorityActor = actor;
-                    sTargetableHighestPriorityPriority = actor->targetPriority;
+                if (isNearestTargetableActor && (actor->targetPriority < sTargetablePrioritizedPriority)) {
+                    sTargetablePrioritizedActor = actor;
+                    sTargetablePrioritizedPriority = actor->targetPriority;
                 }
                 if (phi_s2_2 && (actor->targetPriority < D_801ED8D8)) {
                     D_801ED8C4 = actor;
@@ -3542,7 +3542,7 @@ void Target_FindTargetableActorForCategory(PlayState* play, ActorContext* actorC
             } else {
                 if (isNearestTargetableActor) {
                     sTargetableNearestActor = actor;
-                    sTargetableNearestActorDistanceSq = distSq;
+                    sTargetableNearestActorDistSq = distSq;
                 }
                 if (phi_s2_2) {
                     D_801ED8C0 = actor;
@@ -3570,12 +3570,12 @@ void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targ
     u8* actorCategories;
     s32 i;
 
-    sTargetableNearestActor = sTargetableHighestPriorityActor = D_801ED8C0 = D_801ED8C4 = NULL;
-    sTargetableNearestActorDistanceSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
-    sTargetableHighestPriorityPriority = D_801ED8D8 = INT32_MAX;
+    sTargetableNearestActor = sTargetablePrioritizedActor = D_801ED8C0 = D_801ED8C4 = NULL;
+    sTargetableNearestActorDistSq = D_801ED8D0 = sBgmEnemyDistSq = FLT_MAX;
+    sTargetablePrioritizedPriority = D_801ED8D8 = INT32_MAX;
 
     actorCtx->targetCtx.bgmEnemy = NULL;
-    sTargetPlayerYRot = player->actor.shape.rot.y;
+    sTargetPlayerRotY = player->actor.shape.rot.y;
 
     actorCategories = sTargetableActorCategories;
 
@@ -3594,7 +3594,7 @@ void Target_GetTargetActor(PlayState* play, ActorContext* actorCtx, Actor** targ
     }
 
     if (sTargetableNearestActor == NULL) {
-        *targetableP = sTargetableHighestPriorityActor;
+        *targetableP = sTargetablePrioritizedActor;
     } else {
         *targetableP = sTargetableNearestActor;
     }

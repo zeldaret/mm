@@ -882,7 +882,7 @@ void func_8088E60C(EnElf* this, PlayState* play) {
 void func_8088E850(EnElf* this, PlayState* play) {
     Vec3f nextPos;
     Player* player = GET_PLAYER(play);
-    Actor* fairyActor;
+    Actor* targetFairyActor;
     f32 xScale;
     f32 distFromLinksHead;
     u32 cueChannel;
@@ -968,7 +968,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 break;
 
             default:
-                fairyActor = play->actorCtx.targetCtx.fairyActor;
+                targetFairyActor = play->actorCtx.targetCtx.fairyActor;
                 if ((player->stateFlags1 & PLAYER_STATE1_40) && (player->talkActor != NULL)) {
                     Math_Vec3f_Copy(&nextPos, &player->talkActor->focus.pos);
                 } else {
@@ -976,7 +976,7 @@ void func_8088E850(EnElf* this, PlayState* play) {
                 }
                 nextPos.y += 1500.0f * this->actor.scale.y;
 
-                if (fairyActor != NULL) {
+                if (targetFairyActor != NULL) {
                     func_8088DB4C(this, &nextPos, 0.0f, 30.0f, 0.2f);
                     if (this->actor.speed >= 5.0f) {
                         func_8088F5F4(this, play, 0x10);
