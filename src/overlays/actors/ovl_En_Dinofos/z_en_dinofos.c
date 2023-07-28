@@ -275,8 +275,8 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElement);
     Collider_InitAndSetQuad(play, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gDinolfosSkel, &gDinolfosIdleAnim,
-                       this->jointTable, this->morphTable, DINOLFOS_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDinolfosSkel, &gDinolfosIdleAnim, this->jointTable, this->morphTable,
+                       DINOLFOS_LIMB_MAX);
 
     if (D_8089E364 == 0) {
         for (i = 0; i < ARRAY_COUNT(D_8089E33C); i++) {
@@ -467,8 +467,7 @@ void func_8089B100(EnDinofos* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp3C;
 
-    Animation_Change(&this->skelAnime, &gDinolfosJumpAnim, 1.0f,
-                     Animation_GetLastFrame(&gDinolfosJumpAnim),
+    Animation_Change(&this->skelAnime, &gDinolfosJumpAnim, 1.0f, Animation_GetLastFrame(&gDinolfosJumpAnim),
                      Animation_GetLastFrame(&gDinolfosJumpAnim), ANIMMODE_ONCE, 0.0f);
     func_800BE33C(&subCam->eye, &subCam->at, &this->unk_29A, true);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
@@ -716,8 +715,8 @@ void func_8089BBB4(EnDinofos* this, PlayState* play) {
         if (this->actionFunc == func_8089D1E0) {
             this->skelAnime.playSpeed = this->actor.speed * 0.166666671634f;
         } else {
-            Animation_Change(&this->skelAnime, &gDinolfosSidestepAnim, this->actor.speed * 0.166666671634f, 0.0f,
-                             0.0f, ANIMMODE_LOOP, -4.0f);
+            Animation_Change(&this->skelAnime, &gDinolfosSidestepAnim, this->actor.speed * 0.166666671634f, 0.0f, 0.0f,
+                             ANIMMODE_LOOP, -4.0f);
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
@@ -937,8 +936,8 @@ void func_8089C56C(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089C690(EnDinofos* this) {
-    Animation_Change(&this->skelAnime, &gDinolfosAttackAnim, -1.0f, this->skelAnime.curFrame, 0.0f,
-                     ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gDinolfosAttackAnim, -1.0f, this->skelAnime.curFrame, 0.0f, ANIMMODE_ONCE,
+                     0.0f);
     this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);
     if (this->actionFunc != func_8089C2A8) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
