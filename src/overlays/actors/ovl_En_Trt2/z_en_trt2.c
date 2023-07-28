@@ -701,7 +701,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isLockedOn &&
         !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
         this->actor.speed = 0.0f;
@@ -710,7 +710,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
         return true;
     }
 
-    if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
+    if (func_80AD4C4C(this) && this->actor.isLockedOn && (sp1E < 0x4000) && (sp1E > -0x4000)) {
         func_800B863C(&this->actor, play);
     }
 

@@ -150,7 +150,7 @@ typedef struct Actor {
     /* 0x100 */ f32 uncullZoneScale; // Amount to increase the uncull zone scale by (in projected space)
     /* 0x104 */ f32 uncullZoneDownward; // Amount to increase uncull zone downward by (in projected space)
     /* 0x108 */ Vec3f prevPos; // World position from the previous update cycle
-    /* 0x114 */ u8 isTargeted; // Set to true if the actor is currently being targeted by the player
+    /* 0x114 */ u8 isLockedOn; // Set to true if the actor is currently being targeted by the player
     /* 0x115 */ u8 targetPriority; // Lower values have higher priority. Resets to 0 when player stops targeting
     /* 0x116 */ u16 textId; // Text ID to pass to link/display when interacting with the actor
     /* 0x118 */ u16 freezeTimer; // Actor does not update when set. Timer decrements automatically

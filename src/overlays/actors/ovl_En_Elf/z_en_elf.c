@@ -1037,7 +1037,7 @@ void func_8088EF18(Color_RGBAf* dest, Color_RGBAf* newColor, Color_RGBAf* curCol
 }
 
 void func_8088EFA4(EnElf* this, PlayState* play) {
-    Actor* fairyActor = play->actorCtx.targetCtx.fairyActor;
+    Actor* targetFairyActor = play->actorCtx.targetCtx.fairyActor;
     Player* player = GET_PLAYER(play);
     f32 transitionRate;
 
@@ -1069,7 +1069,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_BELL_DASH_NORMAL);
         }
     } else if (this->unk_268 == 0) {
-        if ((fairyActor == NULL) ||
+        if ((targetFairyActor == NULL) ||
             (Math_Vec3f_DistXYZ(&this->actor.world.pos, &play->actorCtx.targetCtx.fairyPos) < 50.0f)) {
             this->unk_268 = 1;
         }
@@ -1087,10 +1087,10 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
     }
 
     if (this->fairyFlags & 1) {
-        if ((fairyActor == NULL) || (player->lockOnActor == NULL)) {
+        if ((targetFairyActor == NULL) || (player->lockOnActor == NULL)) {
             this->fairyFlags ^= 1;
         }
-    } else if ((fairyActor != NULL) && (player->lockOnActor != NULL)) {
+    } else if ((targetFairyActor != NULL) && (player->lockOnActor != NULL)) {
         u8 temp = this->unk_269;
         u16 targetSfxId = (this->unk_269 == 0) ? NA_SE_NONE : NA_SE_NONE;
 
@@ -1103,7 +1103,7 @@ void func_8088EFA4(EnElf* this, PlayState* play) {
 
 void func_8088F214(EnElf* this, PlayState* play) {
     s32 sp34;
-    Actor* fairyActor;
+    Actor* targetFairyActor;
     Player* player = GET_PLAYER(play);
     s32 pad;
 
@@ -1134,12 +1134,12 @@ void func_8088F214(EnElf* this, PlayState* play) {
         sp34 = 1;
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
-        fairyActor = play->actorCtx.targetCtx.fairyActor;
+        targetFairyActor = play->actorCtx.targetCtx.fairyActor;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
             sp34 = 10;
             this->unk_25C = 100;
-        } else if ((fairyActor == NULL) || (fairyActor->category == ACTORCAT_NPC)) {
-            if (fairyActor != NULL) {
+        } else if ((targetFairyActor == NULL) || (targetFairyActor->category == ACTORCAT_NPC)) {
+            if (targetFairyActor != NULL) {
                 this->unk_25C = 100;
                 player->stateFlags2 |= PLAYER_STATE2_100000;
                 sp34 = 0;

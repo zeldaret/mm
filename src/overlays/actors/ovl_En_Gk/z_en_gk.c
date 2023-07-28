@@ -646,7 +646,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
                 this->unk_2E4 = 0;
                 this->unk_1E4 |= 2;
             }
-        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) &&
                    (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
             func_800B863C(&this->actor, play);
         }
@@ -851,7 +851,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_24_80);
             this->actionFunc = func_80B51698;
-        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
             func_800B863C(&this->actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->actor.textId = 0xE74;

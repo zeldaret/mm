@@ -79,7 +79,7 @@ void EnGinkoMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE; // targetable
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
     this->actionFunc = EnGinkoMan_Idle;
 }

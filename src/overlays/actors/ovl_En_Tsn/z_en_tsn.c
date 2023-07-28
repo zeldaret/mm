@@ -536,7 +536,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
             this->unk_220 |= 4;
             ENTSN_SET_Z(&this->unk_1D8->actor, true);
         }
-    } else if (this->actor.isTargeted) {
+    } else if (this->actor.isLockedOn) {
         func_800B8614(&this->actor, play, 1000.0f);
     }
 }
@@ -553,7 +553,7 @@ void func_80AE0D78(EnTsn* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0D10;
         this->unk_220 |= 4;
-    } else if (this->actor.isTargeted) {
+    } else if (this->actor.isLockedOn) {
         func_800B8614(&this->actor, play, 1000.0f);
     }
 }

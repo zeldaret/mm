@@ -285,7 +285,7 @@ void func_80B372CC(EnMaruta* this, PlayState* play) {
     if ((this->actor.parent != NULL) && (this->actor.parent->id == ACTOR_EN_KENDO_JS)) {
         EnKendoJs* kendoJs = (EnKendoJs*)this->actor.parent;
 
-        kendoJs->unk_292 = this->actor.isTargeted;
+        kendoJs->unk_292 = this->actor.isLockedOn;
     }
 }
 

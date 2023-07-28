@@ -1933,7 +1933,7 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
         ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
-        (!actor->isTargeted &&
+        (!actor->isLockedOn &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
         return false;
@@ -2485,9 +2485,9 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
 
             if ((DECR(actor->freezeTimer) == 0) && (actor->flags & params->unk_18)) {
                 if (actor == params->player->lockOnActor) {
-                    actor->isTargeted = true;
+                    actor->isLockedOn = true;
                 } else {
-                    actor->isTargeted = false;
+                    actor->isLockedOn = false;
                 }
 
                 if ((actor->targetPriority != 0) && (params->player->lockOnActor == NULL)) {
@@ -3867,7 +3867,7 @@ s16 Actor_TestFloorInDirection(Actor* actor, PlayState* play, f32 distance, s16 
 s32 Actor_IsTargeted(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags3 & PLAYER_STATE3_80000000) && actor->isTargeted) {
+    if ((player->stateFlags3 & PLAYER_STATE3_80000000) && actor->isLockedOn) {
         return true;
     }
 
@@ -3880,7 +3880,7 @@ s32 Actor_IsTargeted(PlayState* play, Actor* actor) {
 s32 Actor_OtherIsTargeted(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags3 & PLAYER_STATE3_80000000) && !actor->isTargeted) {
+    if ((player->stateFlags3 & PLAYER_STATE3_80000000) && !actor->isLockedOn) {
         return true;
     }
 

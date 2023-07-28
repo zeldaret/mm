@@ -1423,7 +1423,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isLockedOn) {
         func_800B8614(&this->actor, play, 100.0f);
     }
 }

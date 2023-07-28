@@ -344,7 +344,7 @@ void func_80B320E0(EnZoraegg* this, PlayState* play) {
         Message_StartTextbox(play, 0x24B, &this->actor);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 60.0f);
-        if (this->actor.isTargeted) {
+        if (this->actor.isLockedOn) {
             func_800B8614(&this->actor, play, 110.0f);
         }
     }

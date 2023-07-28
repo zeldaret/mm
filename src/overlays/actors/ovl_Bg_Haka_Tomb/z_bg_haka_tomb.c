@@ -88,7 +88,7 @@ void func_80BD66AC(BgHakaTomb* this, PlayState* play) {
     if (!func_80BD6638(&csId, this->csIdList, ARRAY_COUNT(this->csIdList)) && (csId <= CS_ID_NONE) &&
         Flags_GetClear(play, this->dyna.actor.room)) {
         this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
-        if (this->dyna.actor.isTargeted) {
+        if (this->dyna.actor.isLockedOn) {
             func_80BD6754(this);
         }
     } else {

@@ -352,7 +352,7 @@ void EnJg_GoronShrineIdle(EnJg* this, PlayState* play) {
         this->flags |= FLAG_LOOKING_AT_PLAYER;
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
-    } else if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
+    } else if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isLockedOn)) {
         func_800B863C(&this->actor, play);
         this->textId = EnJg_GetStartingConversationTextId(this, play);
     }
@@ -594,7 +594,7 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             Message_StartTextbox(play, 0x236, &this->actor); // The old Goron is frozen solid!
             this->actionFunc = EnJg_EndFrozenInteraction;
-        } else if (this->actor.isTargeted) {
+        } else if (this->actor.isLockedOn) {
             func_800B863C(&this->actor, play);
         }
     }
@@ -917,7 +917,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_SetupTalk;
     } else {
-        if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
+        if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isLockedOn)) {
             func_800B863C(&this->actor, play);
             if (this->action == EN_JG_ACTION_FIRST_THAW) {
                 this->textId = EnJg_GetStartingConversationTextId(this, play);

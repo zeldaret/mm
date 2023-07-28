@@ -724,7 +724,7 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
         !CHECK_QUEST_ITEM(QUEST_SONG_HEALING)) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actionFunc = EnOsn_StartCutscene;
-        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) &&
                    (yaw > -0x4000)) {
             func_800B863C(&this->actor, play);
             this->actor.textId = 0xFFFF;
@@ -733,7 +733,7 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
         this->textId = EnOsn_GetInitialText(this, play);
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnOsn_Talk;
-    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) && (yaw > -0x4000)) {
+    } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) && (yaw < 0x4000) && (yaw > -0x4000)) {
         func_800B863C(&this->actor, play);
     }
 }

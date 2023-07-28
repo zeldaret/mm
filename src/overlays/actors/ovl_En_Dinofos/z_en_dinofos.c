@@ -440,7 +440,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-        this->actor.isTargeted && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
+        this->actor.isLockedOn && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
         Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);

@@ -459,7 +459,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_496, &this->actor);
                 this->unk_230 &= ~8;
                 this->actionFunc = func_80BB27D4;
-            } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
+            } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isLockedOn) {
                 func_800B8614(&this->actor, play, 300.0f);
                 this->unk_230 |= 8;
             }

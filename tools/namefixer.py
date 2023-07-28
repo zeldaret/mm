@@ -919,6 +919,8 @@ wordReplace = {
     "actor.yDistToPlayer": "actor.playerHeightRel",
     "actor.cutscene": "actor.csId",
     "actor.speedXZ": "actor.speed",
+    "actor.isTargeted": "actor.isLockedOn",
+    "actor->isTargeted": "actor->isLockedOn",
     "thisx->speedXZ": "thisx->speed",
 
     "gSaveContext.unk_3F1E": "gSaveContext.hudVisibilityForceButtonAlphasByStatus",

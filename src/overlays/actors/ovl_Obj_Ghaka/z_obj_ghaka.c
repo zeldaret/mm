@@ -74,7 +74,7 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         func_80B3C29C(this);
-    } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
+    } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isLockedOn) {
         if (distDiff <= -0x5556 || distDiff >= 0x5556) {
             func_800B863C(&this->dyna.actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {

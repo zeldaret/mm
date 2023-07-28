@@ -1374,7 +1374,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     if (yawDiff >= 0x4300) {
         return 0;
     }
-    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isTargeted) {
+    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isLockedOn) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {

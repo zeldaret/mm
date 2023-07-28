@@ -380,7 +380,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
-    } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
+    } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isLockedOn) {
         func_800B863C(&this->actor, play);
     }
 }
@@ -697,7 +697,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             this->csIdIndex = 1;
             this->unk_26C &= ~0x40;
             this->actionFunc = func_80B10DAC;
-        } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isLockedOn) {
             this->unk_26C |= 0x40;
             func_800B8614(&this->actor, play, 300.0f);
         }

@@ -381,7 +381,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
         }
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
-               this->actor.isTargeted) {
+               this->actor.isLockedOn) {
         func_800B85E0(&this->actor, play, 80.0f, PLAYER_IA_MOONS_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {

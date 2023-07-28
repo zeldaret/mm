@@ -291,7 +291,7 @@ void EnPoSisters_MatchPlayerY(EnPoSisters* this, PlayState* play) {
 
 // check for z target
 void EnPoSisters_CheckZTarget(EnPoSisters* this, PlayState* play) {
-    if (this->actor.isTargeted && (this->color.a == 255)) {
+    if (this->actor.isLockedOn && (this->color.a == 255)) {
         DECR(this->zTargetTimer);
     } else {
         this->zTargetTimer = 20;

@@ -924,7 +924,7 @@ void func_80999BC8(Actor* thisx, PlayState* play2) {
     EnGs* this = THIS;
     s32 pad;
 
-    if (this->actor.isTargeted && !func_801A5100()) {
+    if (this->actor.isLockedOn && !func_801A5100()) {
         this->unk_19D = 0;
         this->unk_19A |= 1;
         func_80999AC0(this);

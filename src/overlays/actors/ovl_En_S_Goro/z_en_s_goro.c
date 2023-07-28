@@ -1113,7 +1113,7 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_WinterShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
             func_800B863C(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1144,7 +1144,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isTargeted)) {
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isLockedOn)) {
             func_800B863C(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1185,7 +1185,7 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_ShopGoron_Talk;
         }
-    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
+    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
         func_800B863C(&this->actor, play);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1279,7 +1279,7 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
-    } else if (this->actor.isTargeted) {
+    } else if (this->actor.isLockedOn) {
         func_800B863C(&this->actor, play);
     }
     EnSGoro_UpdateSleeping(this, play);

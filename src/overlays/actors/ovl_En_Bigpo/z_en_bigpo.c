@@ -281,7 +281,7 @@ void EnBigpo_LowerCutsceneSubCamera(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_InitWellBigpo(EnBigpo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_WellWaitForProximity;
     this->fireRadius = 200.0f;
 }
@@ -480,7 +480,7 @@ void EnBigpo_SetupWarpOut(EnBigpo* this) {
     this->collider.base.ocFlags1 &= ~OC1_ON;
     this->rotVelocity = 0x2000;
     this->idleTimer = 32;
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
     this->actionFunc = EnBigpo_WarpingOut;
@@ -541,7 +541,7 @@ void EnBigpo_SetupIdleFlying(EnBigpo* this) {
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.ocFlags1 |= OC1_ON;
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE; // targetable ON
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_IdleFlying;
 }
 
@@ -808,8 +808,8 @@ void EnBigpo_ScoopSoulAppearing(EnBigpo* this, PlayState* play) {
 void EnBigpo_SetupScoopSoulIdle(EnBigpo* this) {
     this->savedHeight = this->actor.world.pos.y;
     Actor_SetFocus(&this->actor, -10.0f);
-    this->idleTimer = 400;                      // 20 seconds
-    this->actor.flags |= ACTOR_FLAG_TARGETABLE; // targetable ON
+    this->idleTimer = 400; // 20 seconds
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_ScoopSoulIdle;
 }
 
@@ -831,7 +831,7 @@ void EnBigpo_ScoopSoulIdle(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_SetupScoopSoulLeaving(EnBigpo* this) {
-    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10000); // targetable OFF and unknown OFF
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10000); // unknown OFF
     this->actionFunc = EnBigpo_ScoopSoulFadingAway;
 }
 
@@ -843,7 +843,7 @@ void EnBigpo_ScoopSoulFadingAway(EnBigpo* this, PlayState* play) {
 }
 
 void EnBigpo_InitDampeMainPo(EnBigpo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE; // targetable OFF
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBigpo_SelectRandomFireLocations;
 }
 
@@ -889,7 +889,7 @@ void EnBigpo_SelectRandomFireLocations(EnBigpo* this, PlayState* play) {
                     randomFirePo->actor.update = EnBigpo_UpdateFire;
                     func_800BC154(play, &play->actorCtx, &randomFirePo->actor, ACTORCAT_PROP);
                     randomFirePo->unk20C = fireIndex;
-                    randomFirePo->actor.flags &= ~ACTOR_FLAG_TARGETABLE; // targetable OFF
+                    randomFirePo->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     // make invisible by size: 0
                     Actor_SetScale(&randomFirePo->actor, 0);
 
@@ -1120,7 +1120,7 @@ s32 EnBigpo_ApplyDamage(EnBigpo* this, PlayState* play) {
         }
 
         if (Actor_ApplyDamage(&this->actor) == 0) {
-            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE; // targetable OFF
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
             if (this->actor.params == BIG_POE_TYPE_SUMMONED) { // dampe type
@@ -1155,7 +1155,7 @@ void EnBigpo_Update(Actor* thisx, PlayState* play) {
     }
 
     if (EnBigpo_ApplyDamage(this, play) == 0) {
-        if ((this->actor.isTargeted) && (this->actionFunc != EnBigpo_WarpingOut) &&
+        if ((this->actor.isLockedOn) && (this->actionFunc != EnBigpo_WarpingOut) &&
             !(this->collider.base.acFlags & AC_HARD) && (this->actor.category == ACTORCAT_ENEMY)) {
             this->unk20C++;
         } else {

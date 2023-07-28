@@ -741,7 +741,7 @@ void func_8095BE0C(EnOwl* this, PlayState* play) {
         this->csIdIndex = 1;
         this->actionFlags |= 0x40;
     } else if (this->actor.textId == 0xBF0) {
-        if (this->actor.isTargeted) {
+        if (this->actor.isLockedOn) {
             func_800B8500(&this->actor, play, 200.0f, 200.0f, PLAYER_IA_NONE);
         }
     } else if (this->actor.xzDistToPlayer < 200.0f) {

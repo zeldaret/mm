@@ -650,7 +650,7 @@ void func_80A95E88(EnAz* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
     this->unk_374 &= ~0x2000;
-    if (this->actor.isTargeted) {
+    if (this->actor.isLockedOn) {
         func_80A95F94(this, play);
     }
 }

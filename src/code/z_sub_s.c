@@ -857,7 +857,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
         case 5:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
                 actor->flags |= ACTOR_FLAG_10000;
                 ret = func_800B8500(actor, play, xzRange, yRange, itemId);
             }

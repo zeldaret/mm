@@ -729,7 +729,7 @@ void func_80B2E55C(EnPoh* this) {
         }
 
         if (this->unk_197 == 255) {
-            if (this->actor.isTargeted) {
+            if (this->actor.isLockedOn) {
                 this->unk_18C++;
                 this->unk_18C = CLAMP_MAX(this->unk_18C, 20);
             } else {
