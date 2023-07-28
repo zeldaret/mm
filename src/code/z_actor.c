@@ -3453,7 +3453,7 @@ s32 Target_InTargetableScreenRegion(PlayState* play, Actor* actor) {
  * Looks for the actor of said category with higher targetPriority and the one that is nearest to player. This actor
  * must be within the range (relative to player) speicified by its targetMode.
  *
- * The actor must be on-screen (more or less, not sure what's going on in Target_InTargetableScreenRegion)
+ * The actor must be on-screen
  *
  * The highest priority actor is stored in `sTargetableHighestPriorityActor`, while the nearest actor is stored in
  * `sTargetableNearestActor`. The higher priority / smaller distance of those actors are stored in
