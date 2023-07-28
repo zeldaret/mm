@@ -15,4 +15,4 @@ python-Levenshtein
 cxxfilt
 
 # map parsing
-mapfile-parser>=1.1.5<2.0.0
+mapfile-parser>=1.2.1<2.0.0
