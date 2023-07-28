@@ -296,7 +296,7 @@ typedef enum {
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
-// A Lock On entry is a set of 4 triangles which appear around an actor when the player Z-Targets it
+// A set of 4 triangles which appear around an actor when the player Z-Targets it
 typedef struct LockOnTriangleSet {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ f32 radius; // distance towards the center of the locked on
