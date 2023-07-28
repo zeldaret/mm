@@ -15,13 +15,12 @@ def firstDiffMain():
 
     args = parser.parse_args()
 
-    cwd = Path(".")
     buildFolder = Path("build")
 
-    BUILTROM = cwd / f"mm.{args.version}.rom_uncompressed.z64"
+    BUILTROM = Path(f"mm.{args.version}.rom_uncompressed.z64")
     BUILTMAP = buildFolder / f"mm.map"
 
-    EXPECTEDROM = cwd / "baserom_uncompressed.z64"
+    EXPECTEDROM = Path("baserom_uncompressed.z64")
     EXPECTEDMAP = "expected" / BUILTMAP
 
     exit(mapfile_parser.frontends.first_diff.doFirstDiff(BUILTMAP, EXPECTEDMAP, BUILTROM, EXPECTEDROM, args.count, mismatchSize=True))
