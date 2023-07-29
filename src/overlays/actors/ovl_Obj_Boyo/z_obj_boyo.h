@@ -31,7 +31,9 @@ typedef struct ObjBoyo {
     /* 0x208 */ s16 unk208;
     /* 0x20A */ s16 unk20A;
     /* 0x20C */ s16 unk20C;
-    /* 0x20E */ char pad20E[2];
+    /* 0x20E */ char pad20E[225];
+    /* 0x2F0 */ f32 pushedSpeed;
+    /* 0x2F0 */ s16 yawTowardsActor;
 } ObjBoyo; /* size = 0x20F */
 
 #endif // Z_OBJ_BOYO_H

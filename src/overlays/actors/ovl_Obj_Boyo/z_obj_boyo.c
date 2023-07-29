@@ -9,11 +9,12 @@ void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(ObjBoyo* thisx, PlayState* play);
 
-void ObjBoyo_PushPlayer(Actor* actor, Player* player);
-void func_809A5DE0(Actor* actor, Actor* actor_b);
+void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* player);
+void func_809A5DE0(Actor* actor, ObjBoyo* this);
 void func_809A5E14(Actor* arg0, ObjBoyo* this);
-s32 func_809A5E24(ObjBoyo* this, PlayState* play, s32* index);
+Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index);
 
+f32 D_809A61D4 = 0.01f;
 /*
  * From Z64Utils
  * Segment: 0xFF (0x08)
@@ -86,12 +87,13 @@ typedef struct {
 
 static Struct809A61B0 D_809A61B0[] = { { ObjBoyo_PushPlayer, { 0, 0, 0, 0 } } };
 
-s16 D_809A61B4[0xE];
+extern s16 D_809A61B4[0xE];
 //     0x021D0000, func_809A5DE0, 0x00090000, func_809A5E14, 0x0, 0x0, 0x0, 0x0
 // }; /* unable to generate initializer */
 
 /********************** INIT **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Init.s")
+// MATCHING
 void ObjBoyo_Init(ObjBoyo* this, PlayState* play) {
     ColliderCylinder* temp_a1;
 
@@ -107,21 +109,23 @@ void ObjBoyo_Init(ObjBoyo* this, PlayState* play) {
 
 /********************** DESTROY **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Destroy.s")
+// MATCHING
 void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &THIS->collider);
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_PushPlayer.s")
-void ObjBoyo_PushPlayer(Actor* actor, Player* player) {
-    player->pushedSpeed = 30.0f;
-    player->pushedYaw = (s16)actor->yawTowardsPlayer;
+// ObjBoyo_PushPlayer
+void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* player) {
+    ((Player*)player)->pushedSpeed = 30.0f;
+    ((Player*)player)->pushedYaw = (s16)this->actor.yawTowardsPlayer;
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5DE0.s")
-void func_809A5DE0(Actor* actor_a, Actor* actor_b) {
-    // actor_b->unk2F0 = 30.0f;                                                 // push speed ?
-    actor_b->speed = 30.0f;                                                  // push speed ?
-    actor_b->yawTowardsPlayer = Actor_WorldYawTowardActor(actor_a, actor_b); // push direction
+// MATCHING
+void func_809A5DE0(Actor* actor, ObjBoyo* this) {
+    this->pushedSpeed = 30.0f;                                              // push speed
+    this->yawTowardsActor = Actor_WorldYawTowardActor(actor, &this->actor); // push direction
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5E14.s")
@@ -138,10 +142,14 @@ void func_809A5E14(Actor* arg0, ObjBoyo* this) {
  * look for the address A in D_809A61B4 matching the address in *this->unk150
  * arg2 is the index of the address into D_809A61B4.
  */
-s32 func_809A5E24(ObjBoyo* this, PlayState* play, s32* index) {
+// ALMOST MATCHING:
+// only diff is $a0 and $a1 being set in the inverse order.
+// no clue on how to make the cpu rearrange it without
+// messing with all the asm.
+Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index) {
     Actor* collidedActor;
     s16* data;
-    s32 counter;
+    u32 counter;
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *index = 0;
@@ -156,16 +164,14 @@ s32 func_809A5E24(ObjBoyo* this, PlayState* play, s32* index) {
     loop_4:
         if (collidedActor->id == *data) {
             *index = counter;
-            return (s32)collidedActor;
+            return collidedActor;
         }
-        counter += 1;
         data += 4;
-        if (counter == 3) {
-            goto end;
+        counter += 1;
+        if (3 != counter) {
+            goto loop_4;
         }
-        goto loop_4;
     }
-end:
     return 0;
 }
 
@@ -178,8 +184,8 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     s16 temp_v0_2;
     PlayState* play = play2;
     ObjBoyo* this = THIS;
-    s32* dataPtr;
-    s32 index;
+    Actor* dataPtr;
+    u32 index;
 
     dataPtr = func_809A5E24(this, play, &index);
 
