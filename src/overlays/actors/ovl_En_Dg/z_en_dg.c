@@ -508,7 +508,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
 
     while (enemy != NULL) {
         if (enemy->id == ACTOR_EN_DG) {
-            if (enemy->isTargeted) {
+            if (enemy->isLockedOn) {
                 sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 return true;
             }
