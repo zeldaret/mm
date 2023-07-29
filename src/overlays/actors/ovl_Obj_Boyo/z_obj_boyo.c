@@ -142,10 +142,7 @@ void func_809A5E14(Actor* arg0, ObjBoyo* this) {
  * look for the address A in D_809A61B4 matching the address in *this->unk150
  * arg2 is the index of the address into D_809A61B4.
  */
-// ALMOST MATCHING:
-// only diff is $a0 and $a1 being set in the inverse order.
-// no clue on how to make the cpu rearrange it without
-// messing with all the asm.
+// MATCHING
 Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index) {
     Actor* collidedActor;
     s16* data;
@@ -160,16 +157,12 @@ Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index) {
     data = D_809A61B4;
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         collidedActor = this->collider.base.oc;
-        counter = 1;
-    loop_4:
-        if (collidedActor->id == *data) {
-            *index = counter;
-            return collidedActor;
-        }
-        data += 4;
-        counter += 1;
-        if (3 != counter) {
-            goto loop_4;
+        for (counter = 1; counter != 3; ++counter) {
+            if (collidedActor->id == *data) {
+                *index = counter;
+                return collidedActor;
+            }
+            data += 4;
         }
     }
     return 0;
