@@ -31,12 +31,42 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play);
 void Boss02_Static_Draw(Actor* thisx, PlayState* play);
 void Boss02_UpdateEffects(PlayState* play);
 void Boss02_DrawEffects(PlayState* play);
-void func_809DD934(Boss02* this, PlayState* play);
+void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play);
 void func_809DEAC4(Boss02* this, PlayState* play);
 
-u8 D_809E0420;
-u8 D_809E0421;
+typedef enum {
+    /*  0 */ GIANTS_MASK_CS_STATE_WAITING_FOR_MASK, // Starts the cutscene when the player puts on/takes off the mask.
+    /*  1 */ GIANTS_MASK_CS_STATE_MASK_ON,          // Controls the cutscene where the player puts the mask on.
+    /*  2 */ GIANTS_MASK_CS_STATE_MASK_ON_SKIPPED,  // Moves to the "done" state when the mask-on cutscene is skipped.
+    /* 10 */ GIANTS_MASK_CS_STATE_MASK_OFF = 10,    // Controls the cutscene where the player takes the mask off.
+    /* 11 */ GIANTS_MASK_CS_STATE_MASK_OFF_SKIPPED, // Moves to the "done" state when the mask-off cutscene is skipped.
+    /* 20 */ GIANTS_MASK_CS_STATE_DONE = 20         // Stops the cutscene and resets the player's scale back to normal.
+} GiantsMaskCsState;
+
+typedef enum {
+    /* 0 */ GIANTS_MASK_CS_FLASH_STATE_NOT_STARTED,    // Does nothing at all.
+    /* 1 */ GIANTS_MASK_CS_FLASH_STATE_STARTED,        // Plays the "mask flash" SFX and initializes a white FillScreen.
+    /* 2 */ GIANTS_MASK_CS_FLASH_STATE_INCREASE_ALPHA, // Increases the alpha for the FillScreen on every frame.
+    /* 3 */ GIANTS_MASK_CS_FLASH_STATE_DECREASE_ALPHA  // Decreases the alpha for the FillScreen on every frame.
+} GiantsMaskCsFlashState;
+
+/**
+ * If set to true, the player can skip the cutscene of putting on the Giant's Mask
+ * by pressing A, B, or any C-button. If false, they must watch it in full.
+ */
+u8 sCanSkipMaskOnCs;
+
+/**
+ * If set to true, the player can skip the cutscene of taking off the Giant's Mask
+ * by pressing A, B, or any C-button. If false, they must watch it in full.
+ */
+u8 sCanSkipMaskOffCs;
+
+/**
+ * True when the player is giant-sized (i.e. wearing the Giant's Mask), false when the player is normal-sized.
+ */
 u8 sIsInGiantMode;
+
 Boss02* sRedTwinmold;
 Boss02* sBlueTwinmold;
 Boss02* sTwinmoldStatic;
@@ -468,7 +498,7 @@ Vec3f D_809DFA2C[] = {
     { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f }, { -800.0f, -1000.0f, 0.0f },
 };
 
-void func_809DA1D0(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
+void Boss02_FillScreen(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
     R_PLAY_FILL_SCREEN_ON = true;
     R_PLAY_FILL_SCREEN_R = red;
     R_PLAY_FILL_SCREEN_G = green;
@@ -476,11 +506,11 @@ void func_809DA1D0(PlayState* play, u8 red, u8 green, u8 blue, u8 alpha) {
     R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
-void func_809DA22C(PlayState* play, u8 alpha) {
+void Boss02_SetFillScreenAlpha(PlayState* play, u8 alpha) {
     R_PLAY_FILL_SCREEN_ALPHA = alpha;
 }
 
-void func_809DA24C(PlayState* play) {
+void Boss02_StopFillScreen(PlayState* play) {
     R_PLAY_FILL_SCREEN_ON = false;
 }
 
@@ -572,7 +602,7 @@ void Boss02_Init(Actor* thisx, PlayState* play) {
         this->actor.update = Boss02_Static_Update;
         this->actor.draw = Boss02_Static_Draw;
         this->actor.flags &= ~ACTOR_FLAG_1;
-        this->unk_1D70 = 0.00999999977648f;
+        this->playerScale = 0.01f;
         if ((KREG(64) != 0) || CHECK_EVENTINF(EVENTINF_55) || (sBlueWarp != NULL)) {
             this->unk_1D20 = 0;
             sMusicStartTimer = KREG(15) + 20;
@@ -1181,7 +1211,7 @@ void Boss02_Twinmold_Update(Actor* thisx, PlayState* play) {
         Actor_SetScale(&this->actor, 0.060000001f);
     }
 
-    if (sTwinmoldStatic->unk_1D18 == 0) {
+    if (sTwinmoldStatic->giantsMaskCsState == GIANTS_MASK_CS_STATE_WAITING_FOR_MASK) {
         for (i = 0; i < ARRAY_COUNT(this->unk_0146); i++) {
             if (this->unk_0146[i] != 0) {
                 this->unk_0146[i]--;
@@ -1294,17 +1324,17 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
     play->envCtx.sandstormState = 0xD;
 
     if (sBlueWarp != NULL) {
-        this->unk_1D74 = KREG(23) + -15.0f;
+        this->fogNear = KREG(23) + -15.0f;
         D_801F4E30 = 0;
         play->envCtx.lightSettingOverride = 1;
         play->skyboxId = SKYBOX_NORMAL_SKY;
     } else if (!sIsInGiantMode) {
-        this->unk_1D74 = 0.0f;
+        this->fogNear = 0.0f;
         D_801F4E30 = this->unk_1D7C;
         play->envCtx.lightSettingOverride = 0;
         play->skyboxId = SKYBOX_2;
     } else {
-        this->unk_1D74 = KREG(23) + -15.0f;
+        this->fogNear = KREG(23) + -15.0f;
         D_801F4E30 = ((KREG(24) * 0.1f) + 1.0f) * this->unk_1D7C;
         play->envCtx.lightSettingOverride = 1;
         play->skyboxId = SKYBOX_NORMAL_SKY;
@@ -1327,7 +1357,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
 
     Boss02_UpdateEffects(play);
     func_809DEAC4(this, play);
-    func_809DD934(this, play);
+    Boss02_HandleGiantsMaskCutscene(this, play);
 }
 
 Gfx* D_809DFA9C[] = {
@@ -1630,158 +1660,181 @@ void Boss02_DrawEffects(PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_809DD934(Boss02* this, PlayState* play) {
+/**
+ * This function is primarily responsible for handling the cutscene where the player puts on
+ * or takes off the Giant's Mask. It does some manual camera control, adjusts the player's
+ * scale, switches between the "Normal" and "Giant" variations of the arena, and creates a
+ * "flash" when the cutscene ends by filling the screen with white. In addition, this function
+ * is responsible for updating the EnvironmentContext's fogNear variable, which it does even
+ * when the Giant's Mask cutscene is not playing.
+ */
+void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 i;
-    Actor* temp_a0_5;
-    Vec3f sp58;
-    u8 sp57 = 0;
-    f32 phi_f0_2;
+    Actor* actorIter;
+    Vec3f subCamEyeOffset;
+    u8 switchArena = false;
+    f32 scale;
     s16 alpha;
 
-    this->unk_1D14++;
+    this->giantsMaskCsTimer++;
 
-    switch (this->unk_1D18) {
-        case 0:
+    switch (this->giantsMaskCsState) {
+        case GIANTS_MASK_CS_STATE_WAITING_FOR_MASK:
             if (player->stateFlags1 & PLAYER_STATE1_100) {
                 Cutscene_StartManual(play, &play->csCtx);
                 this->subCamId = Play_CreateSubCamera(play);
                 Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
                 Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
                 Play_EnableMotionBlur(150);
-                this->unk_1D14 = 0;
+                this->giantsMaskCsTimer = 0;
                 this->subCamAtVel = 0.0f;
-                this->unk_1D58 = 0.0f;
+                this->subCamUpRotZScale = 0.0f;
                 if (!sIsInGiantMode) {
-                    this->unk_1D18 = 1;
-                    this->unk_1D68 = 10.0f;
-                    this->unk_1D64 = 60.0f;
-                    this->unk_1D6C = 23.0f;
-                    this->unk_1D70 = 0.01f;
-                    this->unk_1D74 = 0.0f;
-                    goto label1;
+                    this->giantsMaskCsState = GIANTS_MASK_CS_STATE_MASK_ON;
+                    this->subCamEyeOffsetY = 10.0f;
+                    this->subCamDistZFromPlayer = 60.0f;
+                    this->subCamAtOffsetY = 23.0f;
+                    this->playerScale = 0.01f;
+                    this->fogNear = 0.0f;
+                    goto maskOn; // Jumps to this label to prevent the player from skipping the cutscene immediately.
                 } else {
-                    this->unk_1D18 = 10;
-                    this->unk_1D68 = 10.0f;
-                    this->unk_1D64 = 200.0f;
-                    this->unk_1D6C = 273.0f;
-                    this->unk_1D70 = 0.1f;
-                    this->unk_1D74 = -100.0f;
-                    sp57 = 1;
-                    goto label2;
+                    this->giantsMaskCsState = GIANTS_MASK_CS_STATE_MASK_OFF;
+                    this->subCamEyeOffsetY = 10.0f;
+                    this->subCamDistZFromPlayer = 200.0f;
+                    this->subCamAtOffsetY = 273.0f;
+                    this->playerScale = 0.1f;
+                    this->fogNear = -100.0f;
+                    switchArena = true;
+                    goto maskOff; // Jumps to this label to prevent the player from skipping the cutscene immediately.
                 }
             }
             break;
 
-        case 1:
-            if ((this->unk_1D14 < 80) && (D_809E0420 != 0) &&
+        case GIANTS_MASK_CS_STATE_MASK_ON:
+            if ((this->giantsMaskCsTimer < 80) && sCanSkipMaskOnCs &&
                 CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
-                this->unk_1D18++;
-                this->unk_1D78 = 1;
-                this->unk_1D14 = 0;
+                this->giantsMaskCsState++;
+                this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_STARTED;
+                this->giantsMaskCsTimer = 0;
+                break;
+            }
+
+        maskOn:
+            if (this->giantsMaskCsTimer >= 50) {
+                if (this->giantsMaskCsTimer == (u32)(BREG(43) + 60)) {
+                    Audio_PlaySfx(NA_SE_PL_TRANSFORM_GIANT);
+                }
+
+                // Makes the camera quickly move away from the player and look upwards as the player
+                // increases in size. Also decreases the fogNear from 0.0f to -100.0f.
+                Math_ApproachF(&this->subCamDistZFromPlayer, 200.0f, 0.1f, this->subCamAtVel * 640.0f);
+                Math_ApproachF(&this->subCamAtOffsetY, 273.0f, 0.1f, this->subCamAtVel * 150.0f);
+                Math_ApproachF(&this->playerScale, 0.1f, 0.2f, this->subCamAtVel * 0.1f);
+                Math_ApproachF(&this->fogNear, -100.0f, 1.0f, this->subCamAtVel * 100.0f);
+                Math_ApproachF(&this->subCamAtVel, 1.0f, 1.0f, 0.001f);
             } else {
-            label1:
-                if (this->unk_1D14 >= 50) {
-                    if (this->unk_1D14 == (u32)(BREG(43) + 60)) {
-                        Audio_PlaySfx(NA_SE_PL_TRANSFORM_GIANT);
-                    }
-                    Math_ApproachF(&this->unk_1D64, 200.0f, 0.1f, this->subCamAtVel * 640.0f);
-                    Math_ApproachF(&this->unk_1D6C, 273.0f, 0.1f, this->subCamAtVel * 150.0f);
-                    Math_ApproachF(&this->unk_1D70, 0.1f, 0.2f, this->subCamAtVel * 0.1f);
-                    Math_ApproachF(&this->unk_1D74, -100.0f, 1.0f, this->subCamAtVel * 100.0f);
-                    Math_ApproachF(&this->subCamAtVel, 1.0f, 1.0f, 0.001f);
-                } else {
-                    Math_ApproachF(&this->unk_1D64, 30.0f, 0.1f, 1.0f);
-                }
+                // Makes the camera slowly approach the player.
+                Math_ApproachF(&this->subCamDistZFromPlayer, 30.0f, 0.1f, 1.0f);
+            }
 
-                if (this->unk_1D14 > 50) {
-                    Math_ApproachZeroF(&this->unk_1D58, 1.0f, 0.06f);
-                } else {
-                    Math_ApproachF(&this->unk_1D58, 0.4f, 1.0f, 0.02f);
-                }
+            // Makes the camera roll side-to-side at the start of the cutscene, and stops
+            // the camera from rolling after 51 frames have passed.
+            if (this->giantsMaskCsTimer > 50) {
+                Math_ApproachZeroF(&this->subCamUpRotZScale, 1.0f, 0.06f);
+            } else {
+                Math_ApproachF(&this->subCamUpRotZScale, 0.4f, 1.0f, 0.02f);
+            }
 
-                if (this->unk_1D14 == 107) {
-                    this->unk_1D78 = 1;
-                }
+            if (this->giantsMaskCsTimer == 107) {
+                this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_STARTED;
+            }
 
-                if (this->unk_1D14 < 121) {
-                    break;
-                }
-
-                sp57 = 1;
-                D_809E0420 = 1;
-                goto block_38;
+            if (this->giantsMaskCsTimer > 120) {
+                switchArena = true;
+                sCanSkipMaskOnCs = true;
+                goto done;
             }
             break;
 
-        case 2:
-            if (this->unk_1D14 < 8) {
-                break;
+        case GIANTS_MASK_CS_STATE_MASK_ON_SKIPPED:
+            if (this->giantsMaskCsTimer >= 8) {
+                switchArena = true;
+                goto done;
             }
-            sp57 = 1;
-            goto block_38;
+            break;
 
-        case 10:
-            if ((this->unk_1D14 < 30) && (D_809E0421 != 0) &&
+        case GIANTS_MASK_CS_STATE_MASK_OFF:
+            if ((this->giantsMaskCsTimer < 30) && sCanSkipMaskOffCs &&
                 CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                               BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
-                this->unk_1D18++;
-                this->unk_1D78 = 1;
-                this->unk_1D14 = 0;
+                this->giantsMaskCsState++;
+                this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_STARTED;
+                this->giantsMaskCsTimer = 0;
                 break;
             }
 
-        label2:
-            if (this->unk_1D14 != 0) {
-                if (this->unk_1D14 == (u32)(BREG(44) + 10)) {
+        maskOff:
+            if (this->giantsMaskCsTimer != 0) {
+                if (this->giantsMaskCsTimer == (u32)(BREG(44) + 10)) {
                     Audio_PlaySfx(NA_SE_PL_TRANSFORM_NORAML);
                 }
-                Math_ApproachF(&this->unk_1D64, 60.0f, 0.1f, this->subCamAtVel * 640.0f);
-                Math_ApproachF(&this->unk_1D6C, 23.0f, 0.1f, this->subCamAtVel * 150.0f);
-                Math_ApproachF(&this->unk_1D70, 0.01f, 0.1f, 0.003f);
-                Math_ApproachF(&this->unk_1D74, 0.0f, 1.0f, this->subCamAtVel * 100.0f);
+
+                // Makes the camera move slowly towards the player and look downwards as the player
+                // decreases in size. Also increases the fogNear from -100.0f to 0.0f.
+                Math_ApproachF(&this->subCamDistZFromPlayer, 60.0f, 0.1f, this->subCamAtVel * 640.0f);
+                Math_ApproachF(&this->subCamAtOffsetY, 23.0f, 0.1f, this->subCamAtVel * 150.0f);
+                Math_ApproachF(&this->playerScale, 0.01f, 0.1f, 0.003f);
+                Math_ApproachF(&this->fogNear, 0.0f, 1.0f, this->subCamAtVel * 100.0f);
                 Math_ApproachF(&this->subCamAtVel, 2.0f, 1.0f, 0.01f);
             }
 
-            if (this->unk_1D14 == 42) {
-                this->unk_1D78 = 1;
+            if (this->giantsMaskCsTimer == 42) {
+                this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_STARTED;
             }
 
-            if (this->unk_1D14 > 50) {
-                D_809E0421 = 1;
-                goto block_38;
+            if (this->giantsMaskCsTimer > 50) {
+                sCanSkipMaskOffCs = true;
+                goto done;
             }
             break;
 
-        case 11:
-            if (this->unk_1D14 < 8) {
-                break;
+        case GIANTS_MASK_CS_STATE_MASK_OFF_SKIPPED:
+            if (this->giantsMaskCsTimer >= 8) {
+                goto done;
             }
+            break;
 
-        block_38:
-        case 20:
-            this->unk_1D18 = 0;
+        done:
+        case GIANTS_MASK_CS_STATE_DONE:
+            // Ends the cutscene and restores the player's scale to its "original" value of 0.1f.
+            // This might seem strange in the case where the player has put on the Giant's Mask,
+            // since they seem so large after the cutscene ends. However, the player is still
+            // their normal size; the arena and everything in it has shrunk instead.
+            this->giantsMaskCsState = GIANTS_MASK_CS_STATE_WAITING_FOR_MASK;
             func_80169AFC(play, this->subCamId, 0);
             this->subCamId = SUB_CAM_ID_DONE;
             Cutscene_StopManual(play, &play->csCtx);
             this->actor.flags |= ACTOR_FLAG_1;
             player->stateFlags1 &= ~PLAYER_STATE1_100;
-            this->unk_1D70 = 0.01f;
+            this->playerScale = 0.01f;
             Play_DisableMotionBlur();
             break;
     }
 
     if (player->transformation == PLAYER_FORM_FIERCE_DEITY) {
-        Actor_SetScale(&player->actor, this->unk_1D70 * 1.5f);
+        Actor_SetScale(&player->actor, this->playerScale * 1.5f);
     } else {
-        Actor_SetScale(&player->actor, this->unk_1D70);
+        Actor_SetScale(&player->actor, this->playerScale);
     }
 
-    play->envCtx.lightSettings.fogNear = this->unk_1D74;
+    play->envCtx.lightSettings.fogNear = this->fogNear;
 
-    if (sp57) {
-        sIsInGiantMode = 1 - sIsInGiantMode;
+    // Switches from the "normal" variation of the arena to the "giant" variation (or vice versa)
+    // at the appropriate point in the Giant's Mask cutscene.
+    if (switchArena) {
+        sIsInGiantMode = true - sIsInGiantMode;
         if (!sIsInGiantMode) {
             sGiantModeScaleFactor = 1.0f;
         } else {
@@ -1789,7 +1842,12 @@ void func_809DD934(Boss02* this, PlayState* play) {
         }
 
         this->giantModeScaleFactor = sGiantModeScaleFactor;
+
         if (!sIsInGiantMode) {
+            // In this case, the player is switching from the "giant" arena to the "normal" arena.
+            // The "giant" arena sits 3150 units above the "normal" arena, so this moves the player,
+            // Twinmold, and the blue warp down and scales their world coordinates upwards to be
+            // appropriate for the larger arena.
             if (sBlueWarp != NULL) {
                 sBlueWarp->unk_203 = 0;
                 sBlueWarp->unk_204 = 1.0f;
@@ -1802,6 +1860,10 @@ void func_809DD934(Boss02* this, PlayState* play) {
             player->fallStartHeight = player->actor.world.pos.y;
             player->actor.world.pos.z *= 10.0f;
 
+            // If the blue warp exists, and if the player is within 60 units of its center after switching
+            // to the "normal" arena, this code will move the player to a fixed point next to the blue warp.
+            // This prevents the player from instantly activating the blue warp after switching arenas, and
+            // it relies on the blue warp's XZ-coordinates being (0, 0) as they are in Twinmold's boss room.
             if ((sBlueWarp != NULL) && ((SQ(player->actor.world.pos.z) + SQ(player->actor.world.pos.x)) < SQ(60.0f))) {
                 player->actor.world.pos.z = 60.0f;
                 player->actor.world.pos.x = 60.0f;
@@ -1862,7 +1924,11 @@ void func_809DD934(Boss02* this, PlayState* play) {
             sBlueTwinmold->unk_0188.y *= 10.0f;
 
         } else {
-            if (sBlueWarp != 0) {
+            // In this case, the player is switching from the "normal" arena to the "giant" arena.
+            // The "giant" arena sits 3150 units above the "normal" arena, so this moves the player,
+            // Twinmold, and the blue warp up and scales their world coordinates downwards to be
+            // appropriate for the smaller arena.
+            if (sBlueWarp != NULL) {
                 sBlueWarp->unk_203 = 1;
                 sBlueWarp->unk_204 = 0.1f;
                 sBlueWarp->dyna.actor.world.pos.y = 3155.0f;
@@ -1932,113 +1998,121 @@ void func_809DD934(Boss02* this, PlayState* play) {
         player->actor.home.pos = player->actor.world.pos;
         player->actor.prevPos = player->actor.world.pos;
 
-        temp_a0_5 = play->actorCtx.actorLists[ACTORCAT_BG].first;
-        while (temp_a0_5 != NULL) {
-            if (temp_a0_5->id == ACTOR_BG_INIBS_MOVEBG) {
-                Actor_Kill(temp_a0_5);
+        // Kills the existing instance of Twinmold's arena and spawns a new instance with the appropriate
+        // scale and at the appropriate height.
+        actorIter = play->actorCtx.actorLists[ACTORCAT_BG].first;
+        while (actorIter != NULL) {
+            if (actorIter->id == ACTOR_BG_INIBS_MOVEBG) {
+                Actor_Kill(actorIter);
                 break;
             }
-            temp_a0_5 = temp_a0_5->next;
+
+            actorIter = actorIter->next;
         }
         {
-            f32 tmp = sIsInGiantMode ? 3150.0f : 0.0f;
+            f32 arenaPosY = sIsInGiantMode ? 3150.0f : 0.0f;
 
-            Actor_Spawn(&play->actorCtx, play, ACTOR_BG_INIBS_MOVEBG, 0, tmp, 0, 0, 0, 0, sIsInGiantMode);
+            Actor_Spawn(&play->actorCtx, play, ACTOR_BG_INIBS_MOVEBG, 0, arenaPosY, 0, 0, 0, 0, sIsInGiantMode);
         }
 
-        temp_a0_5 = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
-        while (temp_a0_5 != NULL) {
-            if ((temp_a0_5->id == ACTOR_EN_TANRON5) || (temp_a0_5->id == ACTOR_ITEM_B_HEART)) {
+        // Moves the props in Twinmold's arena and the Heart Container 3150 units up or down
+        // so they're in the appropriate arena and scales them accordingly.
+        actorIter = play->actorCtx.actorLists[ACTORCAT_BOSS].first;
+        while (actorIter != NULL) {
+            if ((actorIter->id == ACTOR_EN_TANRON5) || (actorIter->id == ACTOR_ITEM_B_HEART)) {
                 if (!sIsInGiantMode) {
-                    temp_a0_5->world.pos.y -= 3150.0f;
-                    temp_a0_5->world.pos.y *= 10.0f;
+                    actorIter->world.pos.y -= 3150.0f;
+                    actorIter->world.pos.y *= 10.0f;
 
-                    temp_a0_5->floorHeight -= 3150.0f;
-                    temp_a0_5->floorHeight *= 10.0f;
+                    actorIter->floorHeight -= 3150.0f;
+                    actorIter->floorHeight *= 10.0f;
 
-                    phi_f0_2 = 10.0f;
+                    scale = 10.0f;
                 } else {
-                    temp_a0_5->world.pos.y *= 0.1f;
-                    temp_a0_5->world.pos.y += 3150.0f;
+                    actorIter->world.pos.y *= 0.1f;
+                    actorIter->world.pos.y += 3150.0f;
 
-                    temp_a0_5->floorHeight *= 0.1f;
-                    temp_a0_5->floorHeight += 3150.0f;
+                    actorIter->floorHeight *= 0.1f;
+                    actorIter->floorHeight += 3150.0f;
 
-                    phi_f0_2 = 0.1f;
+                    scale = 0.1f;
                 }
 
-                temp_a0_5->world.pos.x *= phi_f0_2;
-                temp_a0_5->world.pos.z *= phi_f0_2;
+                actorIter->world.pos.x *= scale;
+                actorIter->world.pos.z *= scale;
 
-                temp_a0_5->speed *= phi_f0_2;
+                actorIter->speed *= scale;
 
-                temp_a0_5->velocity.x *= phi_f0_2;
-                temp_a0_5->velocity.y *= phi_f0_2;
-                temp_a0_5->velocity.z *= phi_f0_2;
+                actorIter->velocity.x *= scale;
+                actorIter->velocity.y *= scale;
+                actorIter->velocity.z *= scale;
 
-                temp_a0_5->gravity *= phi_f0_2;
-                temp_a0_5->terminalVelocity *= phi_f0_2;
+                actorIter->gravity *= scale;
+                actorIter->terminalVelocity *= scale;
 
-                temp_a0_5->scale.x *= phi_f0_2;
-                temp_a0_5->scale.y *= phi_f0_2;
-                temp_a0_5->scale.z *= phi_f0_2;
+                actorIter->scale.x *= scale;
+                actorIter->scale.y *= scale;
+                actorIter->scale.z *= scale;
 
-                if (temp_a0_5->id == ACTOR_ITEM_B_HEART) {
-                    ((ItemBHeart*)temp_a0_5)->baseScale *= phi_f0_2;
+                if (actorIter->id == ACTOR_ITEM_B_HEART) {
+                    ((ItemBHeart*)actorIter)->baseScale *= scale;
                 }
             }
-            temp_a0_5 = temp_a0_5->next;
+
+            actorIter = actorIter->next;
         }
     }
 
-    switch (this->unk_1D78) {
-        case 0:
+    switch (this->giantsMaskCsFlashState) {
+        case GIANTS_MASK_CS_FLASH_STATE_NOT_STARTED:
             break;
 
-        case 1:
-            this->unk_1D7A = 0;
-            func_809DA1D0(play, 255, 255, 255, 0);
-            this->unk_1D78 = 2;
+        case GIANTS_MASK_CS_FLASH_STATE_STARTED:
+            this->giantsMaskCsFlashAlpha = 0;
+            Boss02_FillScreen(play, 255, 255, 255, 0);
+            this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_INCREASE_ALPHA;
             Audio_PlaySfx(NA_SE_SY_TRANSFORM_MASK_FLASH);
+            // fallthrough
 
-        case 2:
-            this->unk_1D7A += 40;
-            if (this->unk_1D7A >= 400) {
-                this->unk_1D78 = 3;
+        case GIANTS_MASK_CS_FLASH_STATE_INCREASE_ALPHA:
+            this->giantsMaskCsFlashAlpha += 40;
+            if (this->giantsMaskCsFlashAlpha >= 400) {
+                this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_DECREASE_ALPHA;
             }
-            alpha = this->unk_1D7A;
+
+            alpha = this->giantsMaskCsFlashAlpha;
             alpha = CLAMP_MAX(alpha, 255);
-            func_809DA22C(play, alpha);
+            Boss02_SetFillScreenAlpha(play, alpha);
             break;
 
-        case 3:
-            this->unk_1D7A -= 40;
-            if (this->unk_1D7A <= 0) {
-                this->unk_1D7A = 0;
-                this->unk_1D78 = 0;
-                func_809DA24C(play);
+        case GIANTS_MASK_CS_FLASH_STATE_DECREASE_ALPHA:
+            this->giantsMaskCsFlashAlpha -= 40;
+            if (this->giantsMaskCsFlashAlpha <= 0) {
+                this->giantsMaskCsFlashAlpha = 0;
+                this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_NOT_STARTED;
+                Boss02_StopFillScreen(play);
             } else {
-                alpha = this->unk_1D7A;
+                alpha = this->giantsMaskCsFlashAlpha;
                 alpha = CLAMP_MAX(alpha, 255);
-                func_809DA22C(play, alpha);
+                Boss02_SetFillScreenAlpha(play, alpha);
             }
             break;
     }
 
-    if ((this->unk_1D18 != 0) && (this->subCamId != SUB_CAM_ID_DONE)) {
+    if ((this->giantsMaskCsState != GIANTS_MASK_CS_STATE_WAITING_FOR_MASK) && (this->subCamId != SUB_CAM_ID_DONE)) {
         Matrix_RotateYS(player->actor.shape.rot.y, MTXMODE_NEW);
-        Matrix_MultVecZ(this->unk_1D64, &sp58);
+        Matrix_MultVecZ(this->subCamDistZFromPlayer, &subCamEyeOffset);
 
-        this->subCamEye.x = player->actor.world.pos.x + sp58.x;
-        this->subCamEye.y = player->actor.world.pos.y + sp58.y + this->unk_1D68;
-        this->subCamEye.z = player->actor.world.pos.z + sp58.z;
+        this->subCamEye.x = player->actor.world.pos.x + subCamEyeOffset.x;
+        this->subCamEye.y = player->actor.world.pos.y + subCamEyeOffset.y + this->subCamEyeOffsetY;
+        this->subCamEye.z = player->actor.world.pos.z + subCamEyeOffset.z;
 
         this->subCamAt.x = player->actor.world.pos.x;
-        this->subCamAt.y = player->actor.world.pos.y + this->unk_1D6C;
+        this->subCamAt.y = player->actor.world.pos.y + this->subCamAtOffsetY;
         this->subCamAt.z = player->actor.world.pos.z;
 
-        this->unk_1D54 = Math_SinS(this->unk_1D14 * 1512) * this->unk_1D58;
-        Matrix_RotateZF(this->unk_1D54, MTXMODE_APPLY);
+        this->subCamUpRotZ = Math_SinS(this->giantsMaskCsTimer * 1512) * this->subCamUpRotZScale;
+        Matrix_RotateZF(this->subCamUpRotZ, MTXMODE_APPLY);
         Matrix_MultVecY(1.0f, &this->subCamUp);
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &this->subCamEye, &this->subCamUp);
         ShrinkWindow_Letterbox_SetSizeTarget(27);
@@ -2049,7 +2123,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Boss02* sp68;
     Vec3f subCamEye;
-    f32 sp58 = 0.0f;
+    f32 subCamEyeOffset = 0.0f;
 
     this->unk_1D1C++;
     if (this->unk_0194 == 0) {
@@ -2089,7 +2163,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
                     Rumble_Override(0.0f, 50, 200, 1);
                 }
                 this->unk_0150 += 0x4000;
-                sp58 = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
+                subCamEyeOffset = (Math_SinS(this->unk_0150) * (BREG(19) + 5)) * 0.1f;
                 Matrix_RotateZF(Math_SinS(this->unk_1D1C * 0x3000) * ((KREG(28) * 0.001f) + 0.017f), MTXMODE_NEW);
                 Matrix_MultVecY(1.0f, &this->subCamUp);
                 Audio_PlaySfx_2(NA_SE_EV_EARTHQUAKE_LAST - SFX_FLAG);
@@ -2208,8 +2282,8 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
 
         case 103:
             this->unk_0150 += 0x4000;
-            sp58 = Math_SinS(this->unk_0150);
-            sp58 = (sp58 * this->unk_0146[0]) * 1.5f;
+            subCamEyeOffset = Math_SinS(this->unk_0150);
+            subCamEyeOffset = (subCamEyeOffset * this->unk_0146[0]) * 1.5f;
             if (this->unk_1D1C == 30) {
                 func_80169AFC(play, this->subCamId, 0);
                 this->subCamId = SUB_CAM_ID_DONE;
@@ -2248,7 +2322,7 @@ void func_809DEAC4(Boss02* this, PlayState* play) {
 
     if ((this->unk_1D20 != 0) && (this->subCamId != SUB_CAM_ID_DONE)) {
         subCamEye = this->subCamEye;
-        subCamEye.y += sp58 * sGiantModeScaleFactor;
+        subCamEye.y += subCamEyeOffset * sGiantModeScaleFactor;
         Play_SetCameraAtEyeUp(play, this->subCamId, &this->subCamAt, &subCamEye, &this->subCamUp);
         this->subCamUp.z = this->subCamUp.x = 0.0f;
         this->subCamUp.y = 1.0f;
