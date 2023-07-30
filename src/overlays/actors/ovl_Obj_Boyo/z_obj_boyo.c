@@ -9,12 +9,18 @@ void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(ObjBoyo* thisx, PlayState* play);
 
-void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* player);
-void func_809A5DE0(Actor* actor, ObjBoyo* this);
-void func_809A5E14(Actor* arg0, ObjBoyo* this);
+void ObjBoyo_PushPlayer(Actor* thisx, Actor* player);
+void func_809A5DE0(Actor* actor, Actor* thisx);
+void func_809A5E14(Actor* arg0, Actor* this);
 Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index);
 
+f32 D_809A61D0 = 0.03f;
 f32 D_809A61D4 = 0.01f;
+f32 D_809A61D8 = 0.1f;
+f32 D_809A61DC = 0.1f;
+f32 D_809A61E0 = 0.033333335f;
+f32 D_809A61E4 = 0.012f;
+f32 D_809A61E8[2] = { 0.006f, 0.0f };
 /*
  * From Z64Utils
  * Segment: 0xFF (0x08)
@@ -79,13 +85,8 @@ static ColliderCylinderInit sColliderCylinderInit = {
 static InitChainEntry sInitChainEntry[5] = { 0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064,
                                              0x00000000 }; /* unable to generate initializer */
 
-typedef void (*func_unk)(ObjBoyo* this, Actor* actor);
-typedef struct {
-    /* 0x0 */ func_unk unk_0;
-    /* 0x4 */ u8 unk_4[4];
-} Struct809A61B0; /* Size 0x8 */
-
-static Struct809A61B0 D_809A61B0[] = { { ObjBoyo_PushPlayer, { 0, 0, 0, 0 } } };
+typedef void (*ObjBoyo_CollisionHandler)(ObjBoyo* this, Actor* actor);
+ObjBoyo_CollisionHandler D_809A61B0[] = { ObjBoyo_PushPlayer };
 
 extern s16 D_809A61B4[0xE];
 //     0x021D0000, func_809A5DE0, 0x00090000, func_809A5E14, 0x0, 0x0, 0x0, 0x0
@@ -116,23 +117,22 @@ void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play) {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_PushPlayer.s")
 // ObjBoyo_PushPlayer
-void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* player) {
+void ObjBoyo_PushPlayer(Actor* thisx, Actor* player) {
     ((Player*)player)->pushedSpeed = 30.0f;
-    ((Player*)player)->pushedYaw = (s16)this->actor.yawTowardsPlayer;
+    ((Player*)player)->pushedYaw = (s16)THIS->actor.yawTowardsPlayer;
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5DE0.s")
 // MATCHING
-void func_809A5DE0(Actor* actor, ObjBoyo* this) {
-    this->pushedSpeed = 30.0f;                                              // push speed
-    this->yawTowardsActor = Actor_WorldYawTowardActor(actor, &this->actor); // push direction
+void func_809A5DE0(Actor* actor, Actor* thisx) {
+    THIS->pushedSpeed = 30.0f;                                       // push speed
+    THIS->yawTowardsActor = Actor_WorldYawTowardActor(actor, thisx); // push direction
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5E14.s")
-void func_809A5E14(Actor* arg0, ObjBoyo* this) {
+void func_809A5E14(Actor* arg0, Actor* thisx) {
     // some kind of reset ?
-    // arg1->unk1F0 = 0;
-    this->unk1F0 = 0;
+    THIS->unk1F0 = 0;
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/func_809A5E24.s")
@@ -175,15 +175,14 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     ColliderCylinder* tempCollider;
     f32 temp_fv1;
     s16 temp_v0_2;
+    Actor* dataPtr;
     PlayState* play = play2;
     ObjBoyo* this = THIS;
-    Actor* dataPtr;
     u32 index;
 
     dataPtr = func_809A5E24(this, play, &index);
-
     if (dataPtr != 0) {
-        D_809A61B0[index].unk_0(this, dataPtr);
+        D_809A61B0[index](this, dataPtr);
         // TODO: find out what all of these are.
         this->unk194 = 0x64;
         this->unk196 = 3;
@@ -194,7 +193,7 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         this->unk1AC = 0x258;
         this->unk19C = 0.03f;
         this->unk1A0 = 0.03f;
-        this->unk198 = 0.01f;
+        this->unk198 = D_809A61D4;
     }
     temp_v0_2 = this->unk194;
     if (temp_v0_2 > 0) { /* compute new scaling */
@@ -236,8 +235,8 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
 }
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Draw.s")
+// MATCHING
 extern Gfx D_06000300;
-
 void ObjBoyo_Draw(ObjBoyo* this, PlayState* play) {
     AnimatedMat_Draw(play, this->animatedMaterial);
     Gfx_DrawDListOpa(play, &D_06000300);
