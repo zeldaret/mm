@@ -571,7 +571,7 @@ void EnSob1_Idle(EnSob1* this, PlayState* play) {
              player->actor.world.pos.x <= this->posXZRange.xMax) &&
             (player->actor.world.pos.z >= this->posXZRange.zMin &&
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
-            func_800B8614(&this->actor, play, 400.0f);
+            Actor_OfferTalk(&this->actor, play, 400.0f);
         }
         if (this->wasTalkedToWhileWalking == true) {
             this->wasTalkedToWhileWalking = false;
@@ -826,7 +826,7 @@ void EnSob1_Walking(EnSob1* this, PlayState* play) {
              player->actor.world.pos.x <= this->posXZRange.xMax) &&
             (player->actor.world.pos.z >= this->posXZRange.zMin &&
              player->actor.world.pos.z <= this->posXZRange.zMax)) {
-            func_800B8614(&this->actor, play, 400.0f);
+            Actor_OfferTalk(&this->actor, play, 400.0f);
         }
     }
 }
@@ -851,7 +851,7 @@ void EnSob1_ItemPurchased(EnSob1* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_ContinueTextbox(play, 0x647);
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1120,7 +1120,7 @@ void EnSob1_SetupItemPurchased(EnSob1* this, PlayState* play) {
             this->csId = this->lookToShopkeeperCsId;
             CutsceneManager_Queue(this->csId);
         }
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1136,7 +1136,7 @@ void EnSob1_ContinueShopping(EnSob1* this, PlayState* play) {
         player->stateFlags2 |= PLAYER_STATE2_20000000;
         Message_StartTextbox(play, this->welcomeTextId, &this->actor);
         EnSob1_SetupStartShopping(play, this, true);
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

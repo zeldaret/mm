@@ -1447,16 +1447,17 @@ typedef enum {
     /* 1 */ WEEKEVENTREG_HORSE_RACE_STATE_START,
     /* 2 */ WEEKEVENTREG_HORSE_RACE_STATE_2,
     /* 3 */ WEEKEVENTREG_HORSE_RACE_STATE_3,
-    /* 4 */ WEEKEVENTREG_HORSE_RACE_STATE_4,
-    /* 7 */ WEEKEVENTREG_HORSE_RACE_STATE_MAX = 7
+    /* 4 */ WEEKEVENTREG_HORSE_RACE_STATE_4
 } WeekEventRegHorseRaceState;
 
-#define GET_WEEKEVENTREG_HORSE_RACE_STATE (WEEKEVENTREG(92) & WEEKEVENTREG_HORSE_RACE_STATE_MAX)
+#define WEEKEVENTREG_HORSE_RACE_STATE_MASK 7
+
+#define GET_WEEKEVENTREG_HORSE_RACE_STATE (WEEKEVENTREG(92) & WEEKEVENTREG_HORSE_RACE_STATE_MASK)
 
 #define SET_WEEKEVENTREG_HORSE_RACE_STATE(state)                                                                       \
     {                                                                                                                  \
-        WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_HORSE_RACE_STATE_MAX;                                                    \
-        WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_HORSE_RACE_STATE_MAX) | (state)); \
+        WEEKEVENTREG(92) &= (u8)~WEEKEVENTREG_HORSE_RACE_STATE_MASK;                                                    \
+        WEEKEVENTREG(92) = WEEKEVENTREG(92) | (u8)((WEEKEVENTREG(92) & ~WEEKEVENTREG_HORSE_RACE_STATE_MASK) | (state)); \
     }                                                                                                                  \
     (void)0
 
@@ -1561,22 +1562,23 @@ typedef enum {
 typedef enum {
     /* 0 */ EVENTINF_DOG_RACE_STATE_NOT_STARTED,
     /* 2 */ EVENTINF_DOG_RACE_STATE_STARTED = 2,
-    /* 3 */ EVENTINF_DOG_RACE_STATE_ENDED,
-    /* 7 */ EVENTINF_DOG_RACE_STATE_MAX = 7
+    /* 3 */ EVENTINF_DOG_RACE_STATE_ENDED
 } EventInfDogRaceState;
 
-#define GET_EVENTINF_DOG_RACE_STATE (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MAX)
-#define SET_EVENTINF_DOG_RACE_STATE(state) \
-    (gSaveContext.eventInf[0] = ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MAX) | (state)))
+#define EVENTINF_DOG_RACE_STATE_MASK 7
 
-#define GET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MAX) >> 3)
+#define GET_EVENTINF_DOG_RACE_STATE (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MASK)
+#define SET_EVENTINF_DOG_RACE_STATE(state) \
+    (gSaveContext.eventInf[0] = ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MASK) | (state)))
+
+#define GET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MASK) >> 3)
 #define SET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX(selectedDogIndex) \
-    (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MAX) | (selectedDogIndex << 3))
+    (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MASK) | (selectedDogIndex << 3))
 
 // This is exactly the same as the selected dog index; they never need both of them at the same time.
-#define GET_EVENTINF_DOG_RACE_RACE_STANDING ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MAX) >> 3)
+#define GET_EVENTINF_DOG_RACE_RACE_STANDING ((gSaveContext.eventInf[0] & (u8)~EVENTINF_DOG_RACE_STATE_MASK) >> 3)
 #define SET_EVENTINF_DOG_RACE_RACE_STANDING(raceStanding) \
-    (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MAX) | (raceStanding << 3))
+    (gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & EVENTINF_DOG_RACE_STATE_MASK) | (raceStanding << 3))
 
 typedef enum {
     /* 0 */ DUNGEON_INDEX_WOODFALL_TEMPLE,
