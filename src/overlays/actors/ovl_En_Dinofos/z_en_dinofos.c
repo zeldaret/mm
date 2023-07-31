@@ -242,7 +242,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 40, 100, 80 };
 
-static TexturePtr D_8089E33C[] = {
+static TexturePtr eyeTextures[] = {
     gDinolfosEyeOpenTex,
     gDinolfosEyeHalfTex,
     gDinolfosEyeClosedTex,
@@ -279,8 +279,8 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
                        DINOLFOS_LIMB_MAX);
 
     if (D_8089E364 == 0) {
-        for (i = 0; i < ARRAY_COUNT(D_8089E33C); i++) {
-            D_8089E33C[i] = Lib_SegmentedToVirtual(D_8089E33C[i]);
+        for (i = 0; i < ARRAY_COUNT(eyeTextures); i++) {
+            eyeTextures[i] = Lib_SegmentedToVirtual(eyeTextures[i]);
         }
         D_8089E364 = 1;
     }
@@ -1479,7 +1479,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_800B8050(&this->actor, play, 0);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_8089E33C[this->unk_289]);
+        gSPSegment(POLY_OPA_DISP++, 0x08, eyeTextures[this->unk_289]);
         gDPSetEnvColor(POLY_OPA_DISP++, 20, 40, 40, 255);
 
         Scene_SetRenderModeXlu(play, 0, 1);
@@ -1490,7 +1490,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&this->actor, play, 0);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_8089E33C[this->unk_289]);
+        gSPSegment(POLY_XLU_DISP++, 0x08, eyeTextures[this->unk_289]);
         gDPSetEnvColor(POLY_XLU_DISP++, 20, 40, 40, this->unk_288);
 
         Scene_SetRenderModeXlu(play, 1, 2);
