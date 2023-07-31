@@ -68,10 +68,9 @@ typedef struct {
 ObjTsuboData sPotTypeData[4] = {
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
-    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45,
-      ObjTsubo_RacePotBreak1, ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
-    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, ObjTsubo_PotBreak1,
-      ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { OBJECT_RACETSUBO, 0.29549998f, gGreenPotDL, gGreenPotShardDL, 18, 45, ObjTsubo_RacePotBreak1,
+      ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
+    { OBJECT_TSUBO, 0.197f, gPotDL, gPotShardDL, 12, 32, ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
 };
