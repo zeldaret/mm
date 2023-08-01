@@ -184,16 +184,14 @@ void func_80BE0664(EnTab* this) {
 s32 func_80BE06DC(EnTab* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_2FC & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            SubS_UpdateFlags(&this->unk_2FC, 0, 7);
-            ret = true;
-            this->unk_320 = 0;
-            this->unk_328 = NULL;
-            this->actor.child = &GET_PLAYER(play)->actor;
-            this->unk_2FC |= 8;
-            this->actionFunc = func_80BE1348;
-        }
+    if (((this->unk_2FC & 7) != SUBS_OFFER_MODE_NONE) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        ret = true;
+        this->unk_320 = 0;
+        this->unk_328 = NULL;
+        this->actor.child = &GET_PLAYER(play)->actor;
+        this->unk_2FC |= 8;
+        this->actionFunc = func_80BE1348;
     }
     return ret;
 }
@@ -375,7 +373,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1AFC);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
         this->actor.targetMode = 0;
-        SubS_UpdateFlags(&this->unk_2FC, 3, 7);
+        SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
         this->unk_1E4 = sp28;
@@ -392,7 +390,7 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1B10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     this->actor.targetMode = 6;
-    SubS_UpdateFlags(&this->unk_2FC, 3, 7);
+    SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;
     func_80BE05BC(this, 1);
@@ -494,7 +492,7 @@ void func_80BE1348(EnTab* this, PlayState* play) {
     Vec3f sp34;
 
     if (func_8010BF58(&this->actor, play, func_80BE0E04(this, play), this->unk_328, &this->unk_1DC)) {
-        SubS_UpdateFlags(&this->unk_2FC, 3, 7);
+        SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC &= ~8;
         this->unk_2FC |= 0x40;
         this->unk_324 = 20;
@@ -551,7 +549,7 @@ void EnTab_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + this->unk_30C;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2FC & 7);
+        SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2FC & SUBS_OFFER_MODE_MASK);
         Actor_MoveWithGravity(&this->actor);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         func_80BE0620(this, play);

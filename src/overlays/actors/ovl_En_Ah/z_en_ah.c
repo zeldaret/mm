@@ -171,13 +171,12 @@ void func_80BD2BA4(EnAh* this, PlayState* play) {
 s32 func_80BD2BE8(EnAh* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_2D8 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            SubS_UpdateFlags(&this->unk_2D8, 0, 7);
-            ret = true;
-            this->unk_2D8 |= 8;
-            this->actionFunc = func_80BD3768;
-        }
+    if (((this->unk_2D8 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        ret = true;
+        this->unk_2D8 |= 8;
+        this->actionFunc = func_80BD3768;
     }
 
     return ret;
@@ -406,7 +405,7 @@ s32 func_80BD3374(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3EC4.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     EnAh_ChangeAnim(this, ENAH_ANIM_0);
-    SubS_UpdateFlags(&this->unk_2D8, 3, 7);
+    SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2D8 |= 0x40;
 
     return true;
@@ -419,7 +418,7 @@ s32 func_80BD33FC(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BD3ED8.rot);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     EnAh_ChangeAnim(this, ENAH_ANIM_4);
-    SubS_UpdateFlags(&this->unk_2D8, 3, 7);
+    SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2D8 |= (0x40 | 0x10);
 
     return true;
@@ -471,19 +470,17 @@ s32 func_80BD3548(EnAh* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
 s32 func_80BD35BC(EnAh* this, PlayState* play) {
     s16 temp;
-    s16 temp2;
 
     switch (this->unk_1DC) {
         default:
             return false;
 
         case 2:
-            temp = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
-            temp2 = ABS_ALT(temp);
-            if (temp2 < 0x3800) {
-                SubS_UpdateFlags(&this->unk_2D8, 3, 7);
+            temp = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y));
+            if (temp < 0x3800) {
+                SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_UpdateFlags(&this->unk_2D8, 0, 7);
+                SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
             return false;
     }
@@ -518,7 +515,7 @@ void func_80BD3768(EnAh* this, PlayState* play) {
     Vec3f sp34;
 
     if (func_8010BF58(&this->actor, play, func_80BD3294(this, play), NULL, &this->unk_1E0)) {
-        SubS_UpdateFlags(&this->unk_2D8, 3, 7);
+        SubS_SetOfferMode(&this->unk_2D8, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2D8 &= ~8;
         this->unk_2D8 |= 0x80;
         this->unk_2F4 = 20;
@@ -580,7 +577,7 @@ void EnAh_Update(Actor* thisx, PlayState* play) {
         radius = this->collider.dim.radius + 60;
         height = this->collider.dim.height + 10;
 
-        func_8013C964(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2D8 & 7);
+        SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_2D8 & SUBS_OFFER_MODE_MASK);
         if (!(this->unk_2D8 & 0x10)) {
             Actor_MoveWithGravity(&this->actor);
             Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);

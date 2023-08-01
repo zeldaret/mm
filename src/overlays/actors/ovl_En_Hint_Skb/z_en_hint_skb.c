@@ -414,7 +414,7 @@ void func_80C2077C(EnHintSkb* this, PlayState* play) {
         }
         func_80C208BC(this);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && !(this->collider.base.acFlags & AC_HIT)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
