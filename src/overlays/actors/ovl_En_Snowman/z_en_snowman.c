@@ -1125,8 +1125,7 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos array. An index of -1 indicates that the limb is
- * not part of the bodyPartsPos array.
+ * in the bodyPartsPos array.
  */
 static s8 sLimbToBodyParts[EENO_LIMB_MAX] = {
     BODYPART_NONE,         // EENO_LIMB_NONE

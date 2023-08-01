@@ -15,7 +15,7 @@ typedef enum BubbleBodyPart {
     /* 1 */ BUBBLE_BODYPART_1,
     /* 2 */ BUBBLE_BODYPART_2,
     /* 3 */ BUBBLE_BODYPART_3,
-    /* 4 */ BUBBLE_BODYPART_4,
+    /* 4 */ BUBBLE_BODYPART_EFFECTS,
     /* 5 */ BUBBLE_BODYPART_MAX
 } BubbleBodyPart;
 

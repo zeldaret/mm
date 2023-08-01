@@ -705,8 +705,7 @@ s32 EnWallmas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos array. An index of -1 indicates that the limb is not part
- * of the bodyPartsPos array.
+ * in the bodyPartsPos array.
  */
 static s8 sLimbToBodyParts[WALLMASTER_LIMB_MAX] = {
     BODYPART_NONE,         // WALLMASTER_LIMB_NONE

@@ -83,7 +83,7 @@ void EffectSsFireTail_Draw(PlayState* play, u32 index, EffectSs* this) {
     if (this->actor != NULL) {
         this->vec = this->actor->velocity;
 
-        if (this->rBodyPart <= -1) {
+        if (this->rBodyPart <= BODYPART_NONE) {
             Matrix_Translate(this->pos.x + this->actor->world.pos.x, this->pos.y + this->actor->world.pos.y,
                              this->pos.z + this->actor->world.pos.z, MTXMODE_NEW);
         } else {

@@ -59,9 +59,9 @@ EnIkUnkStruct sIronKnuckleArmorMarkings[IRON_KNUCKLE_ARMOR_BODYPART_MAX] = {
     { gIronKnuckleFrontTorsoArmorMarkingDL, 0x0000 }, // IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT
     { gIronKnuckleRearTorsoArmorMarkingDL, 0x7FFF },  // IRON_KNUCKLE_ARMOR_BODYPART_CHEST_BACK
     { gIronKnuckleRivetsMarking2DL, 0x4000 },         // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_LEFT_PAULDRON
-    { gIronKnuckleRivetsMarking1DL, 0xC000 },         // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON
+    { gIronKnuckleRivetsMarking1DL, -0x4000 },        // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON
     { NULL, 0x4000 },                                 // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_LEFT_PAULDRON
-    { NULL, 0xC000 },                                 // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON
+    { NULL, -0x4000 },                                // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON
 };
 
 // sIronKnuckleArmorType[PARAM_VALUE][ARMOR_SECTIONS]
@@ -356,7 +356,7 @@ s32 EnIk_ChooseAttack(EnIk* this) {
 
 void EnIk_CheckActions(EnIk* this, PlayState* play) {
     if (!EnIk_IsChangingAction(this, play) && !EnIk_ChooseAttack(this)) {
-        if (this->drawArmorFlags) {
+        if (this->drawArmorFlags != 0) {
             EnIk_SetupRun(this);
         } else {
             EnIk_SetupWalk(this);
@@ -965,7 +965,7 @@ s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     EnIk* this = THIS;
 
     if (this->drawArmorFlags) {
-        if (sLimbToArmorBodyParts[limbIndex] > 0) {
+        if (sLimbToArmorBodyParts[limbIndex] >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
             *dList = NULL;
         }
     }
@@ -1068,7 +1068,7 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if ((armorBodyPart == IRON_KNUCKLE_ARMOR_BODYPART_HELMET) ||
         ((armorBodyPart != BODYPART_NONE) && (this->drawArmorFlags == 0) &&
-         (sIronKnuckleArmorMarkings[armorBodyPart].unk00 != 0))) {
+         (sIronKnuckleArmorMarkings[armorBodyPart].unk00 != NULL))) {
         OPEN_DISPS(play->state.gfxCtx);
 
         xlu = POLY_XLU_DISP;

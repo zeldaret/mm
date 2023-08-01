@@ -617,8 +617,7 @@ s32 EnBb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
- * limb is not part of the bodyParts arrays.
+ * in the bodyPartsPos/Velocity arrays.
  */
 static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
     BODYPART_NONE,     // BUBBLE_LIMB_NONE
@@ -644,7 +643,7 @@ static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
  * limb, which is then offset by a certain amount. There is no display list
  * associated with this, so it is only used for effects.
  */
-static Vec3f sDuplicateCraniumBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
+static Vec3f sEffectsBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
 
 void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
@@ -657,7 +656,7 @@ void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
                 Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_0]);
             } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_3) {
                 Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_3]);
-                Matrix_MultVec3f(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[BUBBLE_BODYPART_4]);
+                Matrix_MultVec3f(&sEffectsBodyPartOffset, &this->bodyPartsPos[BUBBLE_BODYPART_EFFECTS]);
             } else {
                 Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
             }
