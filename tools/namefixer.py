@@ -349,7 +349,7 @@ wordReplace = {
     "func_800B8C50": "Actor_SetClosestSecretDistance",
     "func_800BBDAC": "Actor_SpawnFloorDustRing",
     "func_800B8708": "Player_GetExchangeItemAction",
-    "Player_GetExchangeItemId": "Player_GetExchangeItemAction"
+    "Player_GetExchangeItemId": "Player_GetExchangeItemAction",
     "func_801233E4": "Player_InCsMode",
     "func_800BC4EC": "Actor_TestFloorInDirection",
     "func_800BC5B8": "Actor_IsTargeted",
@@ -724,7 +724,7 @@ wordReplace = {
     "SubS_StartActorCutscene": "SubS_StartCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_SetOfferMode",
-    "SubS_UpdateFlags": "SubS_SetOfferMode"
+    "SubS_UpdateFlags": "SubS_SetOfferMode",
     "func_8013D8DC": "SubS_IsObjectLoaded",
     "func_8013D924": "SubS_GetObjectIndex",
     "func_8013D5E8": "SubS_AngleDiffLessEqual",
