@@ -4290,7 +4290,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
             (itemAction == PLAYER_IA_OCARINA) ||
             ((itemAction > PLAYER_IA_BOTTLE_MIN) && itemAction < PLAYER_IA_MASK_MIN) ||
             ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && (this->talkActor != NULL) &&
-             (this->exchangeItemId > PLAYER_IA_NONE))) {
+             (this->exchangeItemAction > PLAYER_IA_NONE))) {
             if (var_v1) {
                 PlayerTransformation playerForm = (itemAction < PLAYER_IA_MASK_FIERCE_DEITY)
                                                       ? PLAYER_FORM_HUMAN
@@ -6661,7 +6661,7 @@ void func_808379C0(PlayState* play, Player* this) {
 void func_80837B60(PlayState* play, Player* this) {
     Player_SetAction_PreserveMoveFlags(play, this, Player_Action_44, 0);
 
-    this->exchangeItemId = PLAYER_IA_NONE;
+    this->exchangeItemAction = PLAYER_IA_NONE;
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     if (this->actor.textId != 0) {
         Message_StartTextbox(play, this->actor.textId, this->talkActor);
@@ -7181,10 +7181,10 @@ s32 func_80838A90(Player* this, PlayState* play) {
                              ((this->itemAction >= PLAYER_IA_BOTTLE_ZORA_EGG) &&
                               (this->itemAction <= PLAYER_IA_BOTTLE_HYLIAN_LOACH)) ||
                              (this->itemAction > PLAYER_IA_BOTTLE_FAIRY) ||
-                             ((this->talkActor != NULL) && (this->exchangeItemId > PLAYER_IA_NONE) &&
-                              (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
+                             ((this->talkActor != NULL) && (this->exchangeItemAction > PLAYER_IA_NONE) &&
+                              (((this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) &&
                                 (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
-                               ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
+                               ((this->exchangeItemAction != PLAYER_IA_MAGIC_BEANS) &&
                                 (Player_BottleFromIA(this, this->itemAction) > PLAYER_BOTTLE_NONE))))))) {
                     Actor* talkActor;
                     s32 heldItemTemp = this->itemAction;
@@ -7196,12 +7196,12 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     this->itemAction = heldItemTemp;
                     this->csId = CS_ID_NONE;
 
-                    if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
+                    if ((talkActor != NULL) && (((this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) &&
                                                  (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
-                                                ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
-                                                 (this->exchangeItemId > PLAYER_IA_NONE)))) {
+                                                ((this->exchangeItemAction != PLAYER_IA_MAGIC_BEANS) &&
+                                                 (this->exchangeItemAction > PLAYER_IA_NONE)))) {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_40);
-                        if (this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) {
+                        if (this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
                             Player_SetAction_PreserveItemAction(play, this, Player_Action_17, 0);
                             this->currentYaw = talkActor->yawTowardsPlayer + 0x8000;
@@ -7230,7 +7230,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->actor.textId = 0xFE;
                     }
                     this->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
-                    this->exchangeItemId = this->itemAction;
+                    this->exchangeItemAction = this->itemAction;
                     if (this->unk_AE7 >= 0) {
                         Player_AnimationPlayOnce(play, this, D_8085D1F8[this->unk_AE7]);
                     }
@@ -11897,7 +11897,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             this->talkActorDistance = 0.0f;
         } else {
             this->talkActor = NULL;
-            this->exchangeItemId = PLAYER_IA_NONE;
+            this->exchangeItemAction = PLAYER_IA_NONE;
             this->talkActorDistance = FLT_MAX;
         }
         if (!(this->actor.flags & ACTOR_FLAG_20000000) && (this->unk_AA5 != PLAYER_UNKAA5_5)) {
@@ -16631,14 +16631,14 @@ void Player_Action_65(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, PLAYER_CSMODE_93);
                 } else {
-                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) ||
+                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemAction <= PLAYER_IA_MINUS1)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
                         Player_StopCutscene(this);
                         if (var_a2) {
                             func_80848250(play, this);
-                            this->exchangeItemId = PLAYER_IA_NONE;
+                            this->exchangeItemAction = PLAYER_IA_NONE;
                             if (!func_80847994(play, this)) {
                                 Player_TalkWithPlayer(play, this->talkActor);
                             }
@@ -16874,7 +16874,7 @@ void Player_Action_68(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
-                if ((talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) {
+                if ((talkActor != NULL) && (this->exchangeItemAction <= PLAYER_IA_MINUS1)) {
                     Player_TalkWithPlayer(play, talkActor);
                 }
             }
@@ -17028,7 +17028,7 @@ void Player_Action_71(Player* this, PlayState* play) {
     func_8083249C(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        if (this->exchangeItemId == PLAYER_IA_NONE) {
+        if (this->exchangeItemAction == PLAYER_IA_NONE) {
             Actor* talkActor = this->talkActor;
 
             Player_StopCutscene(this);
@@ -17039,7 +17039,7 @@ void Player_Action_71(Player* this, PlayState* play) {
             }
             Player_TalkWithPlayer(play, talkActor);
         } else {
-            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
+            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemAction] - 1];
 
             if (Player_BottleFromIA(this, this->itemAction) <= PLAYER_BOTTLE_NONE) {
                 this->getItemDrawIdPlusOne = ABS_ALT(giEntry->gid);
@@ -20158,7 +20158,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     }
 
     player->talkActor = actor;
-    player->exchangeItemId = PLAYER_IA_NONE;
+    player->exchangeItemAction = PLAYER_IA_NONE;
     player->targetedActor = actor;
 
     if (actor->textId == 0xFFFF) {
@@ -20266,7 +20266,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId) {
     Player_AnimationPlayOnce(play, this, &gPlayerAnim_link_normal_give_other);
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     this->getItemDrawIdPlusOne = GID_NONE + 1;
-    this->exchangeItemId = itemAction;
+    this->exchangeItemAction = itemAction;
 
     return itemAction;
 }

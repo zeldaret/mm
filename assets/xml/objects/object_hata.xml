@@ -1,10 +1,10 @@
 ﻿<Root>
     <File Name="object_hata" Segment="6">
         <!-- Flagpole Collision -->
-        <Collision Name="gFlagpoleCol" Offset="0xC0" />
+        <Collision Name="gFlagpoleCol" Offset="0xC0" /> <!-- Original name is "hata_bgdatainfo" -->
 
         <!-- Flagpole Animation -->
-        <Animation Name="gFlagpoleFlapAnim" Offset="0x444" />
+        <Animation Name="gFlagpoleFlapAnim" Offset="0x444" /> <!-- Original name is "ht_hata" -->
 
         <!-- Flagpole Textures -->
         <Texture Name="gFlagpolePoleTex" OutName="flagpole_pole" Format="rgba16" Width="32" Height="32" Offset="0x460" />

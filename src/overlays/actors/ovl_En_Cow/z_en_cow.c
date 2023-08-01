@@ -260,7 +260,7 @@ void EnCow_Talk(EnCow* this, PlayState* play) {
         }
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 170.0f);
+        Actor_OfferTalk(&this->actor, play, 170.0f);
         this->actor.textId = 0x32C8; //! @bug textId is reset to this no matter the intial value
     }
 
@@ -278,7 +278,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                 gHorsePlayedEponasSong = false;
                 this->actionFunc = EnCow_Talk;
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 170.0f);
+                Actor_OfferTalk(&this->actor, play, 170.0f);
                 this->actor.textId = 0x32C8; // Text to give milk after playing Epona's Song.
 
                 EnCow_UpdateAnimation(this, play);
@@ -302,7 +302,7 @@ void EnCow_Idle(EnCow* this, PlayState* play) {
                     this->actor.textId = 0x32CA; // Text if you don't have an empty bottle.
                 }
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 170.0f);
+                Actor_OfferTalk(&this->actor, play, 170.0f);
                 this->actionFunc = EnCow_Talk;
             }
         } else {

@@ -168,13 +168,13 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
     switch (this->textId) {
         case 0:
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                     // Thanks. Can stock Bomb Bags tomorrow
                     this->textId = 0x2A34;
                     break;
                 }
 
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
                     // Oh my, learned my lesson. Can't stock Bomb Bags tomorrow
                     this->textId = 0x2A33;
@@ -202,7 +202,7 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 break;
             }
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_01)) {
                     // Thought could sell Big Bomb Bags
                     this->textId = 0x660;
@@ -542,7 +542,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             }
 
             this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                 this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG;
             } else {
                 this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
@@ -587,7 +587,7 @@ void EnBaba_Idle(EnBaba* this, PlayState* play) {
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     }
 }
@@ -659,7 +659,7 @@ void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
         EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -687,7 +687,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);
@@ -710,7 +710,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40) && (DECR(this->sakonDeadTimer) == 0)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD) && (DECR(this->sakonDeadTimer) == 0)) {
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
