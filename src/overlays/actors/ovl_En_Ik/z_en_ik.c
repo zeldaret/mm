@@ -367,7 +367,7 @@ void EnIk_CheckActions(EnIk* this, PlayState* play) {
 void EnIk_SetupIdle(EnIk* this) {
     f32 frameCount = Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim);
 
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         this->timer = 10;
     } else {
         this->timer = 0;
@@ -455,7 +455,7 @@ void EnIk_SetupVerticalAttack(EnIk* this) {
     f32 playbackSpeed;
 
     this->actor.speed = 0.0f;
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         playbackSpeed = 1.5f;
     } else {
         playbackSpeed = 1.2f;
@@ -487,7 +487,7 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
 
         if ((this->skelAnime.curFrame > 13.0f) && (this->skelAnime.curFrame < 23.0f)) {
             this->colliderQuad.base.atFlags |= AT_ON;
-            if (this->drawArmorFlags) {
+            if (this->drawArmorFlags != 0) {
                 this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
             }
         } else {
@@ -543,7 +543,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
     }
     if (((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 9.0f)) ||
         ((this->skelAnime.curFrame > 12.0f) && (this->skelAnime.curFrame < 20.0f))) {
-        if (this->drawArmorFlags) {
+        if (this->drawArmorFlags != 0) {
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x5DC);
             this->actor.world.rot.y = this->actor.shape.rot.y;
             if (this->skelAnime.curFrame > 12.0f) {
@@ -567,7 +567,7 @@ void EnIk_SetupSingleHorizontalAttack(EnIk* this) {
     f32 playSpeed;
 
     this->actor.speed = 0.0f;
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         this->actor.world.rot.z = 0x1000;
         playSpeed = 1.3f;
     } else {
@@ -795,7 +795,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
                 this->actor.colChkInfo.damageTable = &sDamageTableNoArmor;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO);
                 EnIk_SetupCutscene(this);
-            } else if (this->drawArmorFlags) {
+            } else if (this->drawArmorFlags != 0) {
                 if (this->actor.colChkInfo.damageEffect == DMG_EFF_ICE) {
                     EnIk_Freeze(this);
                     EnIk_SetupFrozen(this);
@@ -964,7 +964,7 @@ static s8 sLimbToArmorBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
 s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
 
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         if (sLimbToArmorBodyParts[limbIndex] >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
             *dList = NULL;
         }
