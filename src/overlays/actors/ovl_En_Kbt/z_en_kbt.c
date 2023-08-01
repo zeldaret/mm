@@ -283,7 +283,7 @@ void func_80B34314(EnKbt* this, PlayState* play) {
                 default:
                     break;
             }
-            func_800B8614(&this->actor, play, 260.0f);
+            Actor_OfferTalk(&this->actor, play, 260.0f);
         }
     }
     func_80B3415C(this);

@@ -499,9 +499,9 @@ void TitleCard_InitBossName(GameState* gameState, TitleCardContext* titleCtx, Te
 
 s32 Actor_SetPlayerImpact(PlayState* play, PlayerImpactType type, s32 timer, f32 dist, Vec3f* pos);
 f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactType* type);
-void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size);
-void* func_800B6608(PlayState* play, s16 id);
-void* func_800B6680(PlayState* play, s16 id);
+void* Actor_AddSharedMemoryEntry(PlayState* play, s16 id, void* ptr, size_t size);
+void* Actor_FreeSharedMemoryEntry(PlayState* play, s16 id);
+void* Actor_FindSharedMemoryEntry(PlayState* play, s16 id);
 void Actor_Kill(Actor* actor);
 void Actor_SetWorldToHome(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 height);
@@ -560,13 +560,13 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 
 s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId);
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId);
-s32 func_800B8614(Actor* actor, PlayState* play, f32 radius);
-s32 func_800B863C(Actor* actor, PlayState* play);
+s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemAction);
+s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemAction);
+s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius);
+s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2);
-PlayerItemAction Player_GetExchangeItemId(PlayState* play);
+PlayerItemAction Player_GetExchangeItemAction(PlayState* play);
 s32 func_800B8718(Actor* actor, GameState* gameState);
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange);
 s32 func_800B8804(Actor* actor, PlayState* play, f32 xzRange);

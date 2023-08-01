@@ -2,6 +2,7 @@
 #define Z_EN_BOMJIMB_H
 
 #include "global.h"
+#include "objects/object_cs/object_cs.h"
 
 struct EnBomjimb;
 
@@ -28,8 +29,8 @@ typedef enum {
 typedef struct EnBomjimb {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[21];
-    /* 0x206 */ Vec3s morphTable[21];
+    /* 0x188 */ Vec3s jointTable[OBJECT_CS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[OBJECT_CS_LIMB_MAX];
     /* 0x284 */ EnBomjimbActionFunc actionFunc;
     /* 0x288 */ s16 unk_288;
     /* 0x28A */ s16 unk_28A;
@@ -42,7 +43,7 @@ typedef struct EnBomjimb {
     /* 0x2B0 */ s16 unk_2B0;
     /* 0x2B2 */ s16 unk_2B2;
     /* 0x2B4 */ f32 unk_2B4;
-    /* 0x2B8 */ f32 unk_2B8;
+    /* 0x2B8 */ f32 animEndFrame;
     /* 0x2BC */ UNK_TYPE1 unk2BC[4];
     /* 0x2C0 */ s16 unk_2C0;
     /* 0x2C2 */ s16 unk_2C2;
@@ -55,7 +56,7 @@ typedef struct EnBomjimb {
     /* 0x2D4 */ s16 unk_2D4;
     /* 0x2D6 */ s16 unk_2D6;
     /* 0x2D8 */ UNK_TYPE1 unk2D8[4];
-    /* 0x2DC */ s32 unk_2DC;
+    /* 0x2DC */ s32 animIndex;
     /* 0x2E0 */ u8 unk_2E0;
     /* 0x2E4 */ Actor* unk_2E4;
     /* 0x2E8 */ ColliderCylinder collider;
