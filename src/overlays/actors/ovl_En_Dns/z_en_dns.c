@@ -226,22 +226,21 @@ s32 EnDns_GetCueType(EnDns* this) {
 s32 func_8092CAD0(EnDns* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_2C6 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            SubS_UpdateFlags(&this->unk_2C6, 0, 7);
-            this->unk_2C6 &= ~0x10;
-            if (ENDNS_GET_4000(&this->actor)) {
-                this->unk_2F0 = 0.0f;
-                if (this->unk_2D2 != 0) {
-                    this->unk_2F0 = this->skelAnime.curFrame;
-                    func_8092C63C(this, EN_DNS_ANIM_WALK_1);
-                }
-                this->unk_2DA = this->actor.world.rot.y;
+    if (((this->unk_2C6 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->unk_2C6 &= ~0x10;
+        if (ENDNS_GET_4000(&this->actor)) {
+            this->unk_2F0 = 0.0f;
+            if (this->unk_2D2 != 0) {
+                this->unk_2F0 = this->skelAnime.curFrame;
+                func_8092C63C(this, EN_DNS_ANIM_WALK_1);
             }
-            this->unk_1E0 = func_8092C9BC(this, play);
-            this->actionFunc = func_8092D4D8;
-            ret = true;
+            this->unk_2DA = this->actor.world.rot.y;
         }
+        this->unk_1E0 = func_8092C9BC(this, play);
+        this->actionFunc = func_8092D4D8;
+        ret = true;
     }
     return ret;
 }
@@ -253,14 +252,14 @@ s32 func_8092CB98(EnDns* this, PlayState* play) {
         if (!(this->unk_2C6 & 0x80)) {
             this->cueType = EnDns_GetCueType(this);
             this->actor.flags &= ~ACTOR_FLAG_1;
-            SubS_UpdateFlags(&this->unk_2C6, 0, 7);
+            SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             this->unk_2C6 |= 0x80;
             this->cueId = 255;
         }
         phi_v1 = 1;
     } else if (this->unk_2C6 & 0x80) {
         this->actor.flags |= ACTOR_FLAG_1;
-        SubS_UpdateFlags(&this->unk_2C6, 3, 7);
+        SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2C6 &= ~0x80;
     }
     return phi_v1;
@@ -401,7 +400,7 @@ void func_8092D1B8(EnDns* this, PlayState* play) {
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && !CHECK_EVENTINF(EVENTINF_15) && func_8092CC68(play)) {
             player->stateFlags1 |= PLAYER_STATE1_20;
             this->unk_2C6 |= 0x100;
-            SubS_UpdateFlags(&this->unk_2C6, 4, 7);
+            SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             Audio_PlaySfx(NA_SE_SY_FOUND);
             SET_EVENTINF(EVENTINF_15);
             this->unk_2F4 = func_8092CCEC;
@@ -454,7 +453,7 @@ void func_8092D4D8(EnDns* this, PlayState* play) {
             func_8092C63C(this, EN_DNS_ANIM_WALK_1);
         }
     } else if (func_8010BF58(&this->actor, play, this->unk_1E0, this->unk_2F4, &this->unk_1DC)) {
-        SubS_UpdateFlags(&this->unk_2C6, 3, 7);
+        SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2F4 = NULL;
         if (ENDNS_GET_4000(&this->actor)) {
             if (!CHECK_EVENTINF(EVENTINF_15)) {
@@ -519,7 +518,7 @@ void EnDns_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -0.8f;
     this->unk_2D2 = 0;
     this->unk_2C6 = 0;
-    SubS_UpdateFlags(&this->unk_2C6, 3, 7);
+    SubS_SetOfferMode(&this->unk_2C6, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2C6 |= (0x40 | 0x10);
     this->unk_2C6 |= 0x200;
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_09_80)) {
@@ -551,7 +550,7 @@ void EnDns_Update(Actor* thisx, PlayState* play) {
         func_8092C934(this);
         func_8092C86C(this, play);
         Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-        func_8013C964(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & 7);
+        SubS_Offer(&this->actor, play, 80.0f, 40.0f, PLAYER_IA_NONE, this->unk_2C6 & SUBS_OFFER_MODE_MASK);
         Actor_SetFocus(&this->actor, 34.0f);
         func_8092C6FC(this, play);
         func_8092C5C0(this);

@@ -284,10 +284,10 @@ asm/non_matchings/code/z_actor/func_800B82EC.s,func_800B82EC,0x800B82EC,0x34
 asm/non_matchings/code/z_actor/func_800B83BC.s,func_800B83BC,0x800B83BC,0xF
 asm/non_matchings/code/z_actor/func_800B83F8.s,func_800B83F8,0x800B83F8,0x36
 asm/non_matchings/code/z_actor/Actor_ProcessTalkRequest.s,Actor_ProcessTalkRequest,0x800B84D0,0xC
-asm/non_matchings/code/z_actor/func_800B8500.s,func_800B8500,0x800B8500,0x38
-asm/non_matchings/code/z_actor/func_800B85E0.s,func_800B85E0,0x800B85E0,0xD
-asm/non_matchings/code/z_actor/func_800B8614.s,func_800B8614,0x800B8614,0xA
-asm/non_matchings/code/z_actor/func_800B863C.s,func_800B863C,0x800B863C,0x10
+asm/non_matchings/code/z_actor/Actor_OfferTalkExchange.s,Actor_OfferTalkExchange,0x800B8500,0x38
+asm/non_matchings/code/z_actor/Actor_OfferTalkExchangeEquiCylinder.s,Actor_OfferTalkExchangeEquiCylinder,0x800B85E0,0xD
+asm/non_matchings/code/z_actor/Actor_OfferTalk.s,Actor_OfferTalk,0x800B8614,0xA
+asm/non_matchings/code/z_actor/Actor_OfferTalkNearColChkInfoCylinder.s,Actor_OfferTalkNearColChkInfoCylinder,0x800B863C,0x10
 asm/non_matchings/code/z_actor/Actor_TextboxIsClosing.s,Actor_TextboxIsClosing,0x800B867C,0x13
 asm/non_matchings/code/z_actor/Actor_ChangeFocus.s,Actor_ChangeFocus,0x800B86C8,0x10
 asm/non_matchings/code/z_actor/Player_GetExchangeItemId.s,Player_GetExchangeItemId,0x800B8708,0x4
@@ -2174,7 +2174,7 @@ asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlexLimb.s,SubS_DrawTransformFl
 asm/non_matchings/code/z_sub_s/SubS_DrawTransformFlex.s,SubS_DrawTransformFlex,0x8013AB00,0x9B
 asm/non_matchings/code/z_sub_s/SubS_InCsMode.s,SubS_InCsMode,0x8013AD6C,0xC
 asm/non_matchings/code/z_sub_s/SubS_UpdateLimb.s,SubS_UpdateLimb,0x8013AD9C,0x4E
-asm/non_matchings/code/z_sub_s/SubS_UpdateFlags.s,SubS_UpdateFlags,0x8013AED4,0xB
+asm/non_matchings/code/z_sub_s/SubS_SetOfferMode.s,SubS_SetOfferMode,0x8013AED4,0xB
 asm/non_matchings/code/z_sub_s/SubS_TimePathing_FillKnots.s,SubS_TimePathing_FillKnots,0x8013AF00,0x44
 asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputeProgress.s,SubS_TimePathing_ComputeProgress,0x8013B010,0x2E
 asm/non_matchings/code/z_sub_s/SubS_TimePathing_ComputeWeights.s,SubS_TimePathing_ComputeWeights,0x8013B0C8,0xA2
@@ -2189,7 +2189,7 @@ asm/non_matchings/code/z_sub_s/SubS_GetDayDependentPath.s,SubS_GetDayDependentPa
 asm/non_matchings/code/z_sub_s/SubS_WeightPathing_ComputePoint.s,SubS_WeightPathing_ComputePoint,0x8013C068,0x16F
 asm/non_matchings/code/z_sub_s/SubS_WeightPathing_Move.s,SubS_WeightPathing_Move,0x8013C624,0xA5
 asm/non_matchings/code/z_sub_s/SubS_CopyPointFromPathCheckBounds.s,SubS_CopyPointFromPathCheckBounds,0x8013C8B8,0x2B
-asm/non_matchings/code/z_sub_s/func_8013C964.s,func_8013C964,0x8013C964,0xB2
+asm/non_matchings/code/z_sub_s/SubS_Offer.s,SubS_Offer,0x8013C964,0xB2
 asm/non_matchings/code/z_sub_s/SubS_FillShadowTex.s,SubS_FillShadowTex,0x8013CC2C,0x4E
 asm/non_matchings/code/z_sub_s/SubS_GenShadowTex.s,SubS_GenShadowTex,0x8013CD64,0x68
 asm/non_matchings/code/z_sub_s/SubS_DrawShadowTex.s,SubS_DrawShadowTex,0x8013CF04,0x77
@@ -2220,9 +2220,9 @@ asm/non_matchings/code/z_sub_s/SubS_FillCutscenesList.s,SubS_FillCutscenesList,0
 asm/non_matchings/code/z_sub_s/SubS_ConstructPlane.s,SubS_ConstructPlane,0x8013E4B0,0x47
 asm/non_matchings/code/z_sub_s/SubS_LineSegVsPlane.s,SubS_LineSegVsPlane,0x8013E5CC,0x1D
 asm/non_matchings/code/z_sub_s/SubS_FindActorCustom.s,SubS_FindActorCustom,0x8013E640,0x42
-asm/non_matchings/code/z_sub_s/func_8013E748.s,func_8013E748,0x8013E748,0x1E
+asm/non_matchings/code/z_sub_s/SubS_OfferTalkExchangeCustom.s,SubS_OfferTalkExchangeCustom,0x8013E748,0x1E
 asm/non_matchings/code/z_sub_s/SubS_ActorAndPlayerFaceEachOther.s,SubS_ActorAndPlayerFaceEachOther,0x8013E7C0,0x4E
-asm/non_matchings/code/z_sub_s/func_8013E8F8.s,func_8013E8F8,0x8013E8F8,0x16
+asm/non_matchings/code/z_sub_s/SubS_OfferTalkExchangeFacing.s,SubS_OfferTalkExchangeFacing,0x8013E8F8,0x16
 asm/non_matchings/code/z_sub_s/SubS_TrackPointStep.s,SubS_TrackPointStep,0x8013E950,0xB0
 asm/non_matchings/code/code_8013EC10/Rumble_Update.s,Rumble_Update,0x8013EC10,0xD
 asm/non_matchings/code/code_8013EC10/Rumble_Override.s,Rumble_Override,0x8013EC44,0x27
