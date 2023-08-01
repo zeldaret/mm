@@ -5,6 +5,7 @@
  */
 
 #include "z_en_floormas.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -134,9 +135,12 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-static Vec3f D_808D3900[] = {
-    { 25.0f, 45.0f, -7.0f }, { 25.0f, 40.0f, -12.0f }, { 25.0f, 35.0f, -2.0f },
-    { 10.0f, 20.0f, -4.0f }, { 15.0f, 25.0f, -2.0f },
+static Vec3f D_808D3900[PLAYER_FORM_MAX] = {
+    { 25.0f, 45.0f, -7.0f },  // PLAYER_FORM_FIERCE_DEITY
+    { 25.0f, 40.0f, -12.0f }, // PLAYER_FORM_GORON
+    { 25.0f, 35.0f, -2.0f },  // PLAYER_FORM_ZORA
+    { 10.0f, 20.0f, -4.0f },  // PLAYER_FORM_DEKU
+    { 15.0f, 25.0f, -2.0f },  // PLAYER_FORM_HUMAN
 };
 
 static s8 D_808D393C[] = {
@@ -1069,8 +1073,8 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0,
                                         0,
-                                        (this->actor.scale.x > 0.009f) ? CLEAR_TAG_LARGE_LIGHT_RAYS
-                                                                       : CLEAR_TAG_SMALL_LIGHT_RAYS);
+                                        (this->actor.scale.x > 0.009f) ? CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS)
+                                                                       : CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
                         }
                         func_808D2B18(this);
                     }

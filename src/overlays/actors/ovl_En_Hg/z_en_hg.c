@@ -236,7 +236,7 @@ void EnHg_HandleTatlDialog(EnHg* this, PlayState* play) {
             // "...Sort of looks different..."
             Message_StartTextbox(play, 0x24F, &this->actor);
         } else {
-            func_800B8614(&this->actor, play, 80.0f);
+            Actor_OfferTalk(&this->actor, play, 80.0f);
         }
     }
 }
@@ -390,8 +390,7 @@ void EnHg_WaitForPlayerAction(EnHg* this, PlayState* play) {
     }
 
     if (play->msgCtx.ocarinaMode == OCARINA_MODE_EVENT) {
-        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) &&
-            (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((play->msgCtx.lastPlayedSong == OCARINA_SONG_HEALING) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             if (INV_CONTENT(ITEM_MASK_GIBDO) == ITEM_MASK_GIBDO) {
                 this->csIdIndex = HG_CS_SONG_OF_HEALING;
             } else {

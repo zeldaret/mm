@@ -160,7 +160,7 @@ void func_80B3AFB0(EnGg2* this, PlayState* play) {
         this->actionFunc = func_80B3AE60;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && (this->actor.xzDistToPlayer > 50.0f) &&
                CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         this->actor.textId = 0xCE4;
     }
 }

@@ -353,7 +353,7 @@ void EnJg_GoronShrineIdle(EnJg* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnJg_GoronShrineTalk;
     } else if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         this->textId = EnJg_GetStartingConversationTextId(this, play);
     }
 }
@@ -501,8 +501,8 @@ void EnJg_Talk(EnJg* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 this->flags &= ~FLAG_LOOKING_AT_PLAYER;
                 this->actionFunc = EnJg_SetupWalk;
-            } else if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_24_40)) ||
-                       (CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO))) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_24_40) || CHECK_QUEST_ITEM(QUEST_SONG_LULLABY) ||
+                       CHECK_QUEST_ITEM(QUEST_SONG_LULLABY_INTRO)) {
                 // The player already has the Lullaby or Lullaby Intro, so say "I'm counting on you"
                 this->textId = EnJg_GetNextTextId(this);
                 Message_StartTextbox(play, this->textId, &this->actor);
@@ -595,7 +595,7 @@ void EnJg_FrozenIdle(EnJg* this, PlayState* play) {
             Message_StartTextbox(play, 0x236, &this->actor); // The old Goron is frozen solid!
             this->actionFunc = EnJg_EndFrozenInteraction;
         } else if (this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
 }
@@ -678,8 +678,8 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->cutsceneAnimIndex);
         }
 
-        if ((!(this->flags & FLAG_DRUM_SPAWNED)) &&
-            (((this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) && (Animation_OnFrame(&this->skelAnime, 14.0f)) &&
+        if (!(this->flags & FLAG_DRUM_SPAWNED) &&
+            (((this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) && Animation_OnFrame(&this->skelAnime, 14.0f) &&
               (this->action != EN_JG_ACTION_LULLABY_INTRO_CS)) ||
              (((this->cutsceneAnimIndex == EN_JG_ANIM_DRUM_IDLE) ||
                (this->cutsceneAnimIndex == EN_JG_ANIM_PLAYING_DRUM)) &&
@@ -918,7 +918,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         this->actionFunc = EnJg_SetupTalk;
     } else {
         if ((this->actor.xzDistToPlayer < 100.0f) || (this->actor.isTargeted)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             if (this->action == EN_JG_ACTION_FIRST_THAW) {
                 this->textId = EnJg_GetStartingConversationTextId(this, play);
             }

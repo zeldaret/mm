@@ -28,47 +28,51 @@ ActorInit Dm_Al_InitVars = {
 };
 
 typedef enum {
-    /* 0 */ MADAME_AROMA_ANIM_0,
-    /* 1 */ MADAME_AROMA_ANIM_1
+    /* -1 */ MADAME_AROMA_ANIM_NONE = -1,
+    /*  0 */ MADAME_AROMA_ANIM_0,
+    /*  1 */ MADAME_AROMA_ANIM_MAX
 } DmAlAnimation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[MADAME_AROMA_ANIM_MAX] = {
+    { &object_al_Anim_00DBE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // MADAME_AROMA_ANIM_0
 };
 
 s32 DmAl_ChangeAnim(DmAl* this, s32 animIndex) {
-    s32 didAnimationChange = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->animIndex) {
+    if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        didAnimationChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
-    return didAnimationChange;
+
+    return didAnimChange;
 }
 
-void func_80C1BDD8(DmAl* this, PlayState* play) {
-    s32 D_80C1C280[] = { 0, 0, 0, 0, 0 };
+void DmAl_HandleCutscene(DmAl* this, PlayState* play) {
+    s32 csAnimIndex[] = {
+        MADAME_AROMA_ANIM_0, MADAME_AROMA_ANIM_0, MADAME_AROMA_ANIM_0, MADAME_AROMA_ANIM_0, MADAME_AROMA_ANIM_0,
+    };
     u16 cueId;
     s32 cueChannel;
 
     if (play->csCtx.state != CS_STATE_IDLE) {
-        if (!this->unk_45C) {
+        if (!this->isCutscenePlaying) {
             this->cueId = 255;
-            this->unk_45C = true;
-            this->animIndex2 = this->animIndex;
+            this->isCutscenePlaying = true;
+            this->prevAnimIndex = this->animIndex;
         }
         if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_562)) {
             cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_562);
             cueId = play->csCtx.actorCues[cueChannel]->id;
             if (this->cueId != (u8)cueId) {
                 this->cueId = cueId;
-                DmAl_ChangeAnim(this, D_80C1C280[cueId]);
+                DmAl_ChangeAnim(this, csAnimIndex[cueId]);
             }
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
-    } else if (this->unk_45C) {
-        this->unk_45C = false;
-        DmAl_ChangeAnim(this, this->animIndex2);
+    } else if (this->isCutscenePlaying) {
+        this->isCutscenePlaying = false;
+        DmAl_ChangeAnim(this, this->prevAnimIndex);
     }
 }
 
@@ -78,11 +82,11 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMadameAromaSkel, NULL, this->jointTable, this->morphTable,
                        MADAME_AROMA_LIMB_MAX);
-    this->animIndex = -1;
+    this->animIndex = MADAME_AROMA_ANIM_NONE;
     DmAl_ChangeAnim(this, MADAME_AROMA_ANIM_0);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actionFunc = func_80C1BDD8;
+    this->actionFunc = DmAl_HandleCutscene;
 }
 
 void DmAl_Destroy(Actor* thisx, PlayState* play) {
@@ -106,6 +110,9 @@ s32 DmAl_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* ro
         case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
             *dList = NULL;
             break;
+
+        default:
+            break;
     }
     return false;
 }
@@ -117,21 +124,27 @@ void DmAl_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         case MADAME_AROMA_LIMB_SHAWL_MIDDLE:
             Matrix_Get(&this->shawlMatrices[0]);
             break;
+
         case MADAME_AROMA_LIMB_SHAWL_UPPER:
             Matrix_Get(&this->shawlMatrices[1]);
             break;
+
         case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER_MIDDLE:
             Matrix_Get(&this->shawlMatrices[2]);
             break;
+
         case MADAME_AROMA_LIMB_SHAWL_LEFT_LOWER:
             Matrix_Get(&this->shawlMatrices[3]);
             break;
+
         case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER_MIDDLE:
             Matrix_Get(&this->shawlMatrices[4]);
             break;
+
         case MADAME_AROMA_LIMB_SHAWL_RIGHT_LOWER:
             Matrix_Get(&this->shawlMatrices[5]);
             break;
+
         default:
             break;
     }

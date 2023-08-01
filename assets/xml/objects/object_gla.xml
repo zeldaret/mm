@@ -1,15 +1,15 @@
 ﻿<Root>
     <!-- object for the assets for ovl_En_Ge2 (Purple-clad Gerudo) -->
     <File Name="object_gla" Segment="6">
-        <Animation Name="gGerudoPurpleRunningAwayCutsceneAnim" Offset="0x30C" /><!-- Original name: g_yari_nigedasu -->
-        <Animation Name="gGerudoPurpleGreatBayCutsceneAnim" Offset="0x460" /><!-- Original name: g_yari_twister -->
+        <Animation Name="gGerudoPurpleRunningAwayCutsceneAnim" Offset="0x30C" /><!-- Original name is "g_yari_nigedasu" -->
+        <Animation Name="gGerudoPurpleGreatBayCutsceneAnim" Offset="0x460" /><!-- Original name is "g_yari_twister" -->
 
         <!-- Identical to OoT's object_gla from here to the end -->
-        <Animation Name="gGerudoPurpleHorizontalSlashAnim" Offset="0x794" /><!-- Unused. Original name: geldA_attack -->
-        <Animation Name="gGerudoPurpleSlashToStandingAnim" Offset="0xBF0" /><!-- Usused. Original name: geldA_attack_end -->
-        <Animation Name="gGerudoPurpleFallingToGroundAnim" Offset="0x1664" /><!-- Original name: geldA_down -->
-        <Animation Name="gGerudoPurpleStandingToCrouchAnim" Offset="0x1A40" /><!-- Unused. Original name: geldA_find -->
-        <Animation Name="gGerudoPurpleCrouchingLookAroundAnim" Offset="0x1FAC" /><!-- Unused. Original name: geldA_find_wait -->
+        <Animation Name="gGerudoPurpleHorizontalSlashAnim" Offset="0x794" /><!-- Unused. Original name is "geldA_attack" -->
+        <Animation Name="gGerudoPurpleSlashToStandingAnim" Offset="0xBF0" /><!-- Usused. Original name is "geldA_attack_end" -->
+        <Animation Name="gGerudoPurpleFallingToGroundAnim" Offset="0x1664" /><!-- Original name is "geldA_down" -->
+        <Animation Name="gGerudoPurpleStandingToCrouchAnim" Offset="0x1A40" /><!-- Unused. Original name is "geldA_find" -->
+        <Animation Name="gGerudoPurpleCrouchingLookAroundAnim" Offset="0x1FAC" /><!-- Unused. Original name is "geldA_find_wait" -->
 
         <DList Name="gGerudoPurpleTorsoDL" Offset="0x39B0" />
         <DList Name="gGerudoPurpleLeftUpperArmDL" Offset="0x3E50" />
@@ -71,8 +71,8 @@
         <Limb Name="gGerudoPurpleWaistLimb" Type="Standard" EnumName="GERUDO_PURPLE_WAIST_LIMB" Offset="0x8D78" />
         <Skeleton Name="gGerudoPurpleSkel" Type="Flex" LimbType="Standard" LimbNone="GERUDO_PURPLE_LIMB_NONE" LimbMax="GERUDO_PURPLE_LIMB_MAX" EnumName="GerudoPurpleLimb" Offset="0x8DD8" />
 
-        <Animation Name="gGerudoPurpleChargingAnim" Offset="0x91D0" /><!-- Original name: geldA_run -->
-        <Animation Name="gGerudoPurpleLookingAboutAnim" Offset="0x9D1C" /><!-- Original name: geldA_wait -->
-        <Animation Name="gGerudoPurpleWalkingAnim" Offset="0xA344" /><!-- Original name: geldA_walk -->
+        <Animation Name="gGerudoPurpleChargingAnim" Offset="0x91D0" /><!-- Original name is "geldA_run" -->
+        <Animation Name="gGerudoPurpleLookingAboutAnim" Offset="0x9D1C" /><!-- Original name is "geldA_wait" -->
+        <Animation Name="gGerudoPurpleWalkingAnim" Offset="0xA344" /><!-- Original name is "geldA_walk" -->
     </File>
 </Root>

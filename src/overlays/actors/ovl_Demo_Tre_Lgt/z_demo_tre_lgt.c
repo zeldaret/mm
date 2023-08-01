@@ -70,7 +70,7 @@ void DemoTreLgt_Init(Actor* thisx, PlayState* play) {
     this->colorAlpha2 = 255;
     this->status = 0;
     //! @bug Zora Link should also use animationType 0
-    if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY) {
         this->animationType = 0;
     } else {
         this->animationType = 1;

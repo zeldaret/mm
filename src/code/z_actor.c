@@ -4,8 +4,9 @@
  */
 
 #include "global.h"
+#include "fault.h"
+#include "loadfragment.h"
 #include "z64horse.h"
-#include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -955,33 +956,37 @@ f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactTy
 }
 
 /**
- * Initializes an element of the `play->actorCtx.unk_20C` array to the `arg2` pointer, or allocates one using the
- * `size` argument in case `arg2` is NULL. This element is associated to an `id`
+ * Initializes an element of the `play->actorCtx.actorSharedMemory` array to the `ptr` pointer, or allocates one using
+ * the `size` argument in case `ptr` is NULL. This element is associated to an `id`.
  *
- * In success returns the allocated pointer if `arg2` was NULL or the `arg2` pointer otherwise
- * In failure (There's no space left in `play->actorCtx.unk_20C` or an allocation error happened) returns NULL
+ * This allows allows different actors the ability to access the varible, and thus communicate with each other by
+ * reading/setting the value.
+ *
+ * In success: returns the allocated pointer if `ptr` was NULL or the `ptr` pointer otherwise.
+ * In failure (There's no space left in `play->actorCtx.actorSharedMemory` or an allocation error happened): returns
+ * NULL.
  *
  * Note there are no duplicated id checks.
  *
  * Used only by EnLiftNuts.
  */
-void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_AddSharedMemoryEntry(PlayState* play, s16 id, void* ptr, size_t size) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (entry->id == 0) {
-            if (arg2 == NULL) {
-                arg2 = ZeldaArena_Malloc(size);
-                if (arg2 == NULL) {
+            if (ptr == NULL) {
+                ptr = ZeldaArena_Malloc(size);
+                if (ptr == NULL) {
                     return NULL;
                 }
                 entry->isDynamicallyInitialised = true;
             }
 
             entry->id = id;
-            entry->ptr = arg2;
-            return arg2;
+            entry->ptr = ptr;
+            return ptr;
         }
 
         entry++;
@@ -991,18 +996,18 @@ void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size) {
 }
 
 /**
- * Frees the first element of `play->actorCtx.unk_20C` with id `id`.
+ * Frees the first element of `play->actorCtx.actorSharedMemory` with id `id`.
  *
  * If success, the free'd pointer is returned.
  * If failure, NULL is returned.
  *
  * Used only by EnLiftNuts.
  */
-void* func_800B6608(PlayState* play, s16 id) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_FreeSharedMemoryEntry(PlayState* play, s16 id) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (id == entry->id) {
             entry->id = 0;
             if (entry->isDynamicallyInitialised) {
@@ -1019,16 +1024,16 @@ void* func_800B6608(PlayState* play, s16 id) {
 }
 
 /**
- * Retrieves the first pointer stored with the id `id`.
+ * Retrieves the first pointer stored with the id `id` from `play->actorCtx.actorSharedMemory`.
  * If there's no pointer stored with that id, NULL is returned.
  *
  * Used only by EnGamelupy.
  */
-void* func_800B6680(PlayState* play, s16 id) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_FindSharedMemoryEntry(PlayState* play, s16 id) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (id == entry->id) {
             return entry->ptr;
         }
@@ -1370,7 +1375,8 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 s32 func_800B7200(Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
+    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
+           (player->csMode != PLAYER_CSMODE_NONE);
 }
 
 void Actor_SpawnHorse(PlayState* play, Player* player) {
@@ -1380,13 +1386,14 @@ void Actor_SpawnHorse(PlayState* play, Player* player) {
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_0))) {
+    if ((player->csMode == PLAYER_CSMODE_5) ||
+        ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_NONE))) {
         return false;
     }
 
     player->csMode = csMode;
-    player->unk_398 = actor;
-    player->doorBgCamIndex = 0;
+    player->csActor = actor;
+    player->unk_3BA = false;
     return true;
 }
 
@@ -1394,7 +1401,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->doorBgCamIndex = 1;
+        player->unk_3BA = true;
         return true;
     }
     return false;
@@ -1871,14 +1878,38 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Actor_OfferTalk / Actor_OfferGetItemExchange? Seems to be called with PLAYER_IA_MINUS1 if the same actor used
-// Actor_OfferGetItem.
-// This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
+/**
+ * This function covers offering the ability to `Talk` with the player.
+ * Passing an exchangeItemAction (see `PlayerItemAction`) allows the player to also use the item to initiate the
+ * conversation.
+ *
+ * This function carries a talk exchange request to the player actor if context allows it (e.g. the player is in range
+ * and not busy with certain things). The player actor performs the requested action itself.
+ *
+ * The following description of what the `exchangeItemAction` values can do is provided here for completeness, but these
+ * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
+ *
+ * - Positive values (`PLAYER_IA_NONE < exchangeItemAction < PLAYER_IA_MAX`):
+ *    Offers the ability to initiate the conversation with an item from the player.
+ *    Not all positive values are implemented properly for this to work.
+ *    Working ones are PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= exchangeItemAction < PLAYER_IA_MASK_MIN
+ *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.
+ * - `PLAYER_IA_NONE`:
+ *    Allows the player to speak to or check the actor (by pressing A).
+ * - `PLAYER_IA_MINUS1`:
+ *    Used by actors/player to continue the current conversation after a textbox is closed.
+ *
+ * @return true If the player actor is capable of accepting the offer.
+ *
+ * Note: There is only one instance of using this for actually using an item to start the conversation with the player.
+ * Every other instance is to either offer to speak, or continue the current conversation.
+ */
+s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange,
+                            PlayerItemAction exchangeItemAction) {
     Player* player = GET_PLAYER(play);
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
-        ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
+        ((exchangeItemAction > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1887,24 +1918,35 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
 
     player->talkActor = actor;
     player->talkActorDistance = actor->xzDistToPlayer;
-    player->exchangeItemId = exchangeItemId;
+    player->exchangeItemAction = exchangeItemAction;
 
     CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
-    return func_800B8500(actor, play, radius, radius, exchangeItemId);
+/**
+ * Offers a talk exchange request within an equilateral cylinder with the radius specified.
+ */
+s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radius,
+                                        PlayerItemAction exchangeItemAction) {
+    return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemAction);
 }
 
-s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, PLAYER_IA_NONE);
+/**
+ * Offers a talk request within an equilateral cylinder with the radius specified.
+ */
+s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius) {
+    return Actor_OfferTalkExchangeEquiCylinder(actor, play, radius, PLAYER_IA_NONE);
 }
 
-s32 func_800B863C(Actor* actor, PlayState* play) {
+/**
+ * Offers a talk request within an equilateral cylinder whose radius is determined by the actor's collision check
+ * cylinder's radius.
+ */
+s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8614(actor, play, cylRadius);
+    return Actor_OfferTalk(actor, play, cylRadius);
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
@@ -1935,10 +1977,10 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-PlayerItemAction Player_GetExchangeItemId(PlayState* play) {
+PlayerItemAction Player_GetExchangeItemAction(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return player->exchangeItemId;
+    return player->exchangeItemAction;
 }
 
 s32 func_800B8718(Actor* actor, GameState* gameState) {
@@ -1950,7 +1992,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Similar to func_800B8500
+// Similar to Actor_OfferTalkExchange
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
@@ -3157,7 +3199,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     ActorOverlay* overlayEntry = &gActorOverlayTable[index];
     ActorInit* actorInit;
 
-    overlaySize = VRAM_PTR_SIZE(overlayEntry);
+    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
     if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
@@ -3178,15 +3220,16 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
-                              overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
+                         overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit = (uintptr_t)(
-            (overlayEntry->initInfo != NULL)
-                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
-                : NULL);
+        actorInit = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)
+                                           ? (void*)((uintptr_t)overlayEntry->initInfo -
+                                                     (intptr_t)((uintptr_t)overlayEntry->vramStart -
+                                                                (uintptr_t)overlayEntry->loadedRamAddr))
+                                           : NULL);
     }
 
     return actorInit;
@@ -4119,7 +4162,7 @@ s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interac
         return false;
     }
 
-    if (!func_800B8614(actor, play, interactRange)) {
+    if (!Actor_OfferTalk(actor, play, interactRange)) {
         return false;
     }
 
@@ -4447,28 +4490,41 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
-    f32 frameCount;
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
-    if (animationInfo->frameCount > 0.0f) {
-        frameCount = animationInfo->frameCount;
+    animInfo += animIndex;
+
+    if (animInfo->frameCount > 0.0f) {
+        endFrame = animInfo->frameCount;
     } else {
-        frameCount = Animation_GetLastFrame(&animationInfo->animation->common);
+        endFrame = Animation_GetLastFrame(&animInfo->animation->common);
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
-// Unused
-void func_800BDCF4(PlayState* play, s16* arg1, s16* arg2, s32 size) {
+/**
+ * Fills two tables with rotation angles that can be used to simulate idle animations.
+ *
+ * The rotation angles are dependent on the current frame, so should be updated regularly, generally every frame.
+ *
+ * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of the zTable value,
+ * multiplying by some scale factor (generally 200), and adding that to the already existing rotation.
+ *
+ * Note: With the common scale factor of 200, this effect is practically unnoticeable if the current animation already
+ * has motion involved.
+ *
+ * Note: This function goes unused in favor of `SubS_UpdateFidgetTables`.
+ */
+void Actor_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     s32 frames = play->gameplayFrames;
     s32 i;
 
-    for (i = 0; i < size; i++) {
-        arg1[i] = (0x814 + 50 * i) * frames;
-        arg2[i] = (0x940 + 50 * i) * frames;
+    for (i = 0; i < tableLen; i++) {
+        fidgetTableY[i] = (i * 50 + 0x814) * frames;
+        fidgetTableZ[i] = (i * 50 + 0x940) * frames;
     }
 }
 

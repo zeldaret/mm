@@ -603,7 +603,7 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
             Message_StartTextbox(play, 0x15A8, &this->actor);
 
             this->unk_324 = 0x15A8;
-        } else if ((gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) ||
+        } else if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) ||
                    (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE) &&
                     !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20))) {
             func_80BD93CC(this, 1, 0);
@@ -621,7 +621,7 @@ void func_80BD994C(EnPamera* this, PlayState* play) {
         }
         func_80BD9A9C(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

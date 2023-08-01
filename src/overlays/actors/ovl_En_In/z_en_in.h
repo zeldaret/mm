@@ -2,6 +2,7 @@
 #define Z_EN_IN_H
 
 #include "global.h"
+#include "assets/objects/object_in/object_in.h"
 
 struct EnIn;
 
@@ -57,14 +58,14 @@ typedef struct EnIn {
     /* 0x254 */ Vec3f unk254;
     /* 0x260 */ u8 unk260;
     /* 0x261 */ u8 unk261;
-    /* 0x262 */ Vec3s jointTable[20];
-    /* 0x2DA */ Vec3s morphTable[20];
+    /* 0x262 */ Vec3s jointTable[OBJECT_IN_LIMB_MAX];
+    /* 0x2DA */ Vec3s morphTable[OBJECT_IN_LIMB_MAX];
     /* 0x352 */ Vec3s trackTarget;
     /* 0x358 */ Vec3s headRot;
     /* 0x35E */ Vec3s torsoRot;
     /* 0x364 */ UNK_TYPE1 unk364[0x12];
-    /* 0x376 */ s16 unk376[20];
-    /* 0x39E */ s16 unk39E[20];
+    /* 0x376 */ s16 fidgetTableY[OBJECT_IN_LIMB_MAX];
+    /* 0x39E */ s16 fidgetTableZ[OBJECT_IN_LIMB_MAX];
     /* 0x3C6 */ UNK_TYPE1 unk3C6[0xBC];
     /* 0x482 */ s16 unk482;
     /* 0x484 */ s16 unk484;

@@ -1530,8 +1530,8 @@ s16 D_801CFF94[] = {
     /* 0x0B */ ITEM_RECOVERY_HEART,
     /* 0x0C */ ITEM_HEART_PIECE,
     /* 0x0D */ ITEM_HEART_CONTAINER,
-    /* 0x0E */ ITEM_MAGIC_SMALL,
-    /* 0x0F */ ITEM_MAGIC_LARGE,
+    /* 0x0E */ ITEM_MAGIC_JAR_SMALL,
+    /* 0x0F */ ITEM_MAGIC_JAR_BIG,
     /* 0x10 */ ITEM_RECOVERY_HEART,
     /* 0x11 */ ITEM_STRAY_FAIRIES,
     /* 0x12 */ ITEM_RECOVERY_HEART,
@@ -1541,7 +1541,7 @@ s16 D_801CFF94[] = {
     /* 0x16 */ ITEM_BOMB,
     /* 0x17 */ ITEM_BOMB,
     /* 0x18 */ ITEM_BOMB,
-    /* 0x19 */ ITEM_STICK,
+    /* 0x19 */ ITEM_DEKU_STICK,
     /* 0x1A */ ITEM_BOMBCHU,
     /* 0x1B */ ITEM_BOMB_BAG_20,
     /* 0x1C */ ITEM_BOMB_BAG_30,
@@ -1556,21 +1556,21 @@ s16 D_801CFF94[] = {
     /* 0x25 */ ITEM_ARROW_FIRE,
     /* 0x26 */ ITEM_ARROW_ICE,
     /* 0x27 */ ITEM_ARROW_LIGHT,
-    /* 0x28 */ ITEM_NUT,
-    /* 0x29 */ ITEM_NUT,
-    /* 0x2A */ ITEM_NUT,
+    /* 0x28 */ ITEM_DEKU_NUT,
+    /* 0x29 */ ITEM_DEKU_NUT,
+    /* 0x2A */ ITEM_DEKU_NUT,
     /* 0x2B */ 0x270F,
     /* 0x2C */ 0x270F,
     /* 0x2D */ 0x270F,
     /* 0x2E */ 0x270F,
-    /* 0x2F */ ITEM_STICK_UPGRADE_20,
+    /* 0x2F */ ITEM_DEKU_STICK_UPGRADE_20,
     /* 0x30 */ 0x270F,
     /* 0x31 */ 0x270F,
     /* 0x32 */ ITEM_SHIELD_HERO,
     /* 0x33 */ ITEM_SHIELD_MIRROR,
     /* 0x34 */ ITEM_POWDER_KEG,
     /* 0x35 */ ITEM_MAGIC_BEANS,
-    /* 0x36 */ ITEM_PICTO_BOX,
+    /* 0x36 */ ITEM_PICTOGRAPH_BOX,
     /* 0x37 */ ITEM_SWORD_KOKIRI,
     /* 0x38 */ ITEM_SWORD_RAZOR,
     /* 0x39 */ ITEM_SWORD_GILDED,
@@ -1582,8 +1582,8 @@ s16 D_801CFF94[] = {
     /* 0x3F */ ITEM_COMPASS,
     /* 0x40 */ ITEM_POWDER_KEG,
     /* 0x41 */ ITEM_HOOKSHOT,
-    /* 0x42 */ ITEM_LENS,
-    /* 0x43 */ ITEM_PICTO_BOX,
+    /* 0x42 */ ITEM_LENS_OF_TRUTH,
+    /* 0x43 */ ITEM_PICTOGRAPH_BOX,
     /* 0x44 */ ITEM_FISHING_ROD,
     /* 0x45 */ 0x270F,
     /* 0x46 */ 0x270F,
@@ -1592,7 +1592,7 @@ s16 D_801CFF94[] = {
     /* 0x49 */ 0x270F,
     /* 0x4A */ 0x270F,
     /* 0x4B */ 0x270F,
-    /* 0x4C */ ITEM_OCARINA,
+    /* 0x4C */ ITEM_OCARINA_OF_TIME,
     /* 0x4D */ 0x270F,
     /* 0x4E */ 0x270F,
     /* 0x4F */ 0x270F,
@@ -1666,7 +1666,7 @@ s16 D_801CFF94[] = {
     /* 0x93 */ ITEM_GOLD_DUST,
     /* 0x94 */ ITEM_HYLIAN_LOACH,
     /* 0x95 */ ITEM_SEAHORSE,
-    /* 0x96 */ ITEM_MOON_TEAR,
+    /* 0x96 */ ITEM_MOONS_TEAR,
     /* 0x97 */ ITEM_DEED_LAND,
     /* 0x98 */ ITEM_DEED_SWAMP,
     /* 0x99 */ ITEM_DEED_MOUNTAIN,
@@ -1912,7 +1912,7 @@ void Message_SetupLoadItemIcon(PlayState* play) {
             msgCtx->unk11F18 = 0;
             if ((msgCtx->currentTextId == 0x176F) || (msgCtx->currentTextId == 0x1770) ||
                 (msgCtx->currentTextId == 0x1771)) {
-                msgCtx->itemId = ITEM_OCARINA;
+                msgCtx->itemId = ITEM_OCARINA_OF_TIME;
                 msgCtx->msgBufPos += 2;
             } else {
                 msgCtx->msgBufPos += 2;
@@ -2706,12 +2706,11 @@ void Message_Decode(PlayState* play) {
                     if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
                         value = value & 0x7F;
                     } else {
-                        value =
-                            (s16)(
-                                (u32)((&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.wchar[msgCtx->msgBufPos]] &
-                                      0xFF000000) >>
-                                0x18) &
-                            0x7F;
+                        value = (s16)((u32)((&gSaveContext.save.saveInfo
+                                                  .bankRupees)[font->msgBuf.wchar[msgCtx->msgBufPos]] &
+                                            0xFF000000) >>
+                                      0x18) &
+                                0x7F;
                     }
                 }
                 digits[3] = value;
@@ -3990,23 +3989,23 @@ void Message_DrawSceneTitleCard(PlayState* play, Gfx** gfxP) {
 }
 
 s16 sOcarinaSongFanfares[] = {
-    NA_BGM_OCA_SONATA,
-    NA_BGM_OCA_LULLABY,
-    NA_BGM_OCA_NEW_WAVE,
-    NA_BGM_OCA_ELEGY,
-    NA_BGM_OCA_OATH,
-    NA_BGM_MAJORAS_LAIR,
-    NA_BGM_OCA_TIME,
-    NA_BGM_OCA_HEALING,
-    NA_BGM_OCA_EPONA,
-    NA_BGM_OCA_SOARING,
-    NA_BGM_OCA_STORM,
-    NA_BGM_OCA_SUNS,
-    NA_BGM_INVERTED_SONG_OF_TIME,
-    NA_BGM_SONG_OF_DOUBLE_TIME,
-    NA_BGM_OCA_LULLABY_INTRO,
-    NA_BGM_OCA_LULLABY_INTRO,
-    NA_BGM_OCA_LULLABY_INTRO,
+    NA_BGM_OCARINA_SONATA,            // OCARINA_SONG_SONATA
+    NA_BGM_OCARINA_LULLABY,           // OCARINA_SONG_GORON_LULLABY
+    NA_BGM_OCARINA_NEW_WAVE,          // OCARINA_SONG_NEW_WAVE
+    NA_BGM_OCARINA_ELEGY,             // OCARINA_SONG_ELEGY
+    NA_BGM_OCARINA_OATH,              // OCARINA_SONG_OATH
+    NA_BGM_MAJORAS_LAIR,              // OCARINA_SONG_SARIAS
+    NA_BGM_OCARINA_TIME,              // OCARINA_SONG_TIME
+    NA_BGM_OCARINA_HEALING,           // OCARINA_SONG_HEALING
+    NA_BGM_OCARINA_EPONA,             // OCARINA_SONG_EPONAS
+    NA_BGM_OCARINA_SOARING,           // OCARINA_SONG_SOARING
+    NA_BGM_OCARINA_STORM,             // OCARINA_SONG_STORMS
+    NA_BGM_OCARINA_SUNS,              // OCARINA_SONG_SUNS
+    NA_BGM_INVERTED_SONG_OF_TIME,     // OCARINA_SONG_INVERTED_TIME
+    NA_BGM_SONG_OF_DOUBLE_TIME,       // OCARINA_SONG_DOUBLE_TIME
+    NA_BGM_OCARINA_LULLABY_INTRO_PTR, // OCARINA_SONG_GORON_LULLABY_INTRO
+    NA_BGM_OCARINA_LULLABY_INTRO_PTR, // OCARINA_SONG_WIND_FISH_HUMAN
+    NA_BGM_OCARINA_LULLABY_INTRO_PTR, // OCARINA_SONG_WIND_FISH_GORON
 };
 
 s8 sOcarinaSongFanfareIoData[] = {

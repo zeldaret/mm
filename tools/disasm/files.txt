@@ -692,7 +692,7 @@
             0x801E3F40 : "njpgdspMain",
 
             # .bss section
-            0x801E3FA0 : "code_801E3FA0",
+            0x801E3FA0 : "z_en_item00",
             0x801E3FB0 : "z_effect",
             0x801ED890 : "flg_set",
             0x801ED8A0 : "z_actor",
