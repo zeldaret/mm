@@ -84,14 +84,20 @@ typedef enum {
 } HoneyAndDarlingAnimation;
 
 static AnimationInfo sAnimationInfo[HONEY_DARLING_ANIM_MAX] = {
-    { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },          // HONEY_DARLING_ANIM_IDLE
-    { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // HONEY_DARLING_ANIM_CUP_CHEEKS
-    { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },       // HONEY_DARLING_ANIM_HUG
-    { &gHoneyAndDarlingGameDanceLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },  // HONEY_DARLING_ANIM_GAME_DANCE
+    // HONEY_DARLING_ANIM_IDLE
+    { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_CUP_CHEEKS
+    { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_HUG
+    { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_GAME_DANCE
+    { &gHoneyAndDarlingGameDanceLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
     // HONEY_DARLING_ANIM_HOLD_HANDS_MORPH
     { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
-    { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // HONEY_DARLING_ANIM_HOLD_HANDS
-    { &gHoneyAndDarlingSurpiseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },       // HONEY_DARLING_ANIM_SURPRISE
+    // HONEY_DARLING_ANIM_HOLD_HANDS
+    { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    // HONEY_DARLING_ANIM_SURPRISE
+    { &gHoneyAndDarlingSurpiseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
 static ColliderCylinderInit sCylinderInit = {
