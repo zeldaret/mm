@@ -1,5 +1,6 @@
 ﻿<Root>
     <File Name="object_obj_chan" Segment="6">
+        <!-- Object for the Goron Shrine Chandelier-->
         <DList Name="gChandelierPotHolderDL" Offset="0xA10" />
         <DList Name="gChandelierCenterDL" Offset="0xAF0" />
         <Texture Name="gChandelierCenterBottomTex" OutName="chandelier_center_bottom" Format="rgba16" Width="32" Height="32" Offset="0xD80" />
