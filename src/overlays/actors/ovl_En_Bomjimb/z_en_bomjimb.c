@@ -575,7 +575,7 @@ void func_80C0201C(EnBomjimb* this, PlayState* play) {
         this->unk_2CA = 10;
         this->actionFunc = func_80C02A14;
     } else {
-        func_800B8614(&this->actor, play, 40.0f);
+        Actor_OfferTalk(&this->actor, play, 40.0f);
     }
 }
 

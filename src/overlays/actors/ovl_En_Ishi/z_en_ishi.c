@@ -181,7 +181,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
     if (!ENISHI_GET_8(&this->actor)) {
         phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
-        phi_s4 = object_ishi_DL_0009B0;
+        phi_s4 = gSmallRockDL;
     }
 
     temp = D_8095F6E8[ENISHI_GET_8(&this->actor)];
@@ -763,5 +763,5 @@ void func_8095F61C(Actor* thisx, PlayState* play) {
 }
 
 void func_8095F654(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_ishi_DL_0009B0);
+    Gfx_DrawDListOpa(play, gSmallRockDL);
 }

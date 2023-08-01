@@ -164,7 +164,7 @@ void EnAni_SetText(EnAni* this, PlayState* play, u16 textId) {
     this->actor.textId = textId;
     if ((this->stateFlags & ANI_STATE_WRITHING) || ABS_ALT(diffAngle) <= 0x4300) {
         if (this->actor.xzDistToPlayer < 100.0f) {
-            func_800B8614(&this->actor, play, 120.0f);
+            Actor_OfferTalk(&this->actor, play, 120.0f);
         }
     }
 }

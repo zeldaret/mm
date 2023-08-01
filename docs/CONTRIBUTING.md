@@ -110,7 +110,7 @@ See the [Style Guide](STYLE.md) for more details on documentation style.
 Before opening a PR, walk through the following steps to ensure that your code conforms to the style guide and conventions.
 
 - `make` successfully builds a matching ROM.
-- `./format.sh` was run to apply standard formatting.
+- `./format.py` was run to apply standard formatting.
 - No new compiler warnings were introduced during the build process.
     - Can be verified locally by running `tools/warnings_count/check_new_warnings.sh`
 - New variables & functions should follow standard naming conventions.
