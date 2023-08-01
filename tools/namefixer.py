@@ -175,7 +175,7 @@ wordReplace = {
     "func_800B648C": "Actor_SetPlayerImpact",
     "func_800B64FC": "Actor_GetPlayerImpact",
     "func_800B8500": "Actor_OfferTalkExchange",
-    "func_800B85E0": "Actor_OfferTalkExchangeRadius",
+    "func_800B85E0": "Actor_OfferTalkExchangeEquiCylinder",
     "func_800B8614": "Actor_OfferTalk",
     "func_800B863C": "Actor_OfferTalkNearColChkInfoCylinder",
     "Audio_PlaySoundAtPosition": "SoundSource_PlaySfxAtFixedWorldPos",
