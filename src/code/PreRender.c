@@ -108,9 +108,6 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
     *gfxp = gfx;
 }
 
-/**
- * Copies `fbuf` to `fbufSave`, discarding the alpha channel and leaving the rgb channel unchanged
- */
 void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave) {
     func_8016FF90(this, gfxp, fbuf, fbufSave, 255, 255, 255, 255);
 }
@@ -392,7 +389,7 @@ void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp) {
  * @param x     Center pixel x
  * @param y     Center pixel y
  */
-void PreRender_AntiAliasFilter(PreRender* this, s32 x, s32 y) {
+void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     s32 i;
     s32 j;
     s32 buffCvg[3 * 5];
@@ -524,7 +521,7 @@ void PreRender_AntiAliasFilter(PreRender* this, s32 x, s32 y) {
 /**
  * Applies the Video Interface anti-aliasing filter to `this->fbufSave` using `this->cvgSave`
  */
-void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
+void PreRender_AntiAliasFilter(PreRender* this) {
     s32 x;
     s32 y;
     s32 cvg;
@@ -538,7 +535,7 @@ void PreRender_ApplyAntiAliasingFilter(PreRender* this) {
 
             if (cvg != 8) {
                 // If this pixel has only partial coverage, perform the Video Filter interpolation on it
-                PreRender_AntiAliasFilter(this, x, y);
+                PreRender_AntiAliasFilterPixel(this, x, y);
             }
         }
     }
@@ -689,17 +686,17 @@ void PreRender_DivotFilter(PreRender* this) {
  */
 void PreRender_ApplyFilters(PreRender* this) {
     if ((this->cvgSave == NULL) || (this->fbufSave == NULL)) {
-        this->unk_4D = 0;
+        this->filterState = PRERENDER_FILTER_STATE_NONE;
     } else {
-        this->unk_4D = 1;
-        PreRender_ApplyAntiAliasingFilter(this);
+        this->filterState = PRERENDER_FILTER_STATE_PROCESS;
+        PreRender_AntiAliasFilter(this);
         PreRender_DivotFilter(this);
-        this->unk_4D = 2;
+        this->filterState = PRERENDER_FILTER_STATE_DONE;
     }
 }
 
 SlowlyMgr sSlowlyMgr;
-s32 D_801F6FC0;
+s32 sSlowlyRunning;
 StackEntry sSlowlyStackInfo;
 STACK(sSlowlyStack, 0x1000);
 
@@ -708,15 +705,15 @@ STACK(sSlowlyStack, 0x1000);
  */
 void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
     if ((this->cvgSave != NULL) && (this->fbufSave != NULL)) {
-        if (D_801F6FC0) {
+        if (sSlowlyRunning) {
             StackCheck_Cleanup(&sSlowlyStackInfo);
             Slowly_Destroy(&sSlowlyMgr);
         }
 
-        this->unk_4D = 1;
+        this->filterState = PRERENDER_FILTER_STATE_PROCESS;
         StackCheck_Init(&sSlowlyStackInfo, sSlowlyStack, STACK_TOP(sSlowlyStack), 0, 0x100, "slowly");
         Slowly_Init(&sSlowlyMgr, STACK_TOP(sSlowlyStack), (void*)PreRender_ApplyFilters, this, NULL);
-        D_801F6FC0 = true;
+        sSlowlyRunning = true;
     }
 }
 
@@ -724,10 +721,10 @@ void PreRender_ApplyFiltersSlowlyInit(PreRender* this) {
  * Destroys the "slowly" thread
  */
 void PreRender_ApplyFiltersSlowlyDestroy(PreRender* this) {
-    if (D_801F6FC0) {
+    if (sSlowlyRunning) {
         StackCheck_Cleanup(&sSlowlyStackInfo);
         Slowly_Destroy(&sSlowlyMgr);
-        D_801F6FC0 = false;
+        sSlowlyRunning = false;
     }
 }
 

@@ -9,6 +9,12 @@
 #define BG2D_FLAGS_LOAD_S2DEX2 (1 << 3)
 #define BG2D_FLAGS_COPY (1 << 4)
 
+typedef enum {
+    /* 0 */ PRERENDER_FILTER_STATE_NONE,
+    /* 1 */ PRERENDER_FILTER_STATE_PROCESS,
+    /* 2 */ PRERENDER_FILTER_STATE_DONE
+} PrerenderFilterState;
+
 typedef struct ListAlloc {
     /* 0x0 */ struct ListAlloc* prev;
     /* 0x4 */ struct ListAlloc* next;
@@ -36,7 +42,7 @@ typedef struct PreRender {
     /* 0x34 */ UNK_TYPE1 unk_34[0x10];
     /* 0x44 */ ListAlloc alloc;
     /* 0x4C */ u8 unk_4C;
-    /* 0x4D */ u8 unk_4D;
+    /* 0x4D */ u8 filterState; // See `PrerenderFilterState`
 } PreRender; // size = 0x50
 
 
@@ -57,8 +63,8 @@ void PreRender_RestoreZBuffer(PreRender* this, Gfx** gfxp);
 void func_80170798(PreRender* this, Gfx** gfxp);
 void func_80170AE0(PreRender* this, Gfx** gfxp, s32 alpha);
 void PreRender_RestoreFramebuffer(PreRender* this, Gfx** gfxp);
-void PreRender_AntiAliasFilter(PreRender* this, s32 x, s32 y);
-void PreRender_ApplyAntiAliasingFilter(PreRender* this);
+void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y);
+void PreRender_AntiAliasFilter(PreRender* this);
 u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3);
 void PreRender_DivotFilter(PreRender* this);
 void PreRender_ApplyFilters(PreRender* this);

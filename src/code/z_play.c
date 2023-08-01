@@ -1258,7 +1258,7 @@ void Play_DrawMain(PlayState* this) {
             if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) {
                 Gfx* sp8C = POLY_OPA_DISP;
 
-                if (this->pauseBgPreRender.unk_4D == 2) {
+                if (this->pauseBgPreRender.filterState == PRERENDER_FILTER_STATE_DONE) {
                     PreRender_RestoreFramebuffer(&this->pauseBgPreRender, &sp8C);
                 } else {
                     func_80170798(&this->pauseBgPreRender, &sp8C);
