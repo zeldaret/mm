@@ -30,7 +30,7 @@ You should first famiiarise yourself with our [Contributing guide](CONTRIBUTING.
 
 - [ ] Jenkins build is successful.
   - [ ] `make` builds a matching ROM.
-  - [ ] `format.sh` was run.
+  - [ ] `format.py` was run.
   - [ ] `spec` contains correct relocation files.
   - [ ] Any new compiler warnings that were added are required for matching. Ensure there is good reason if the warnings files have changed.
 - [ ] Files with `NON_MATCHING` functions have equivalent behaviour.

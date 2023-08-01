@@ -198,29 +198,27 @@ Fixes line endings in the repo to Linux style (LF), which is required for the bu
 
 ### `format.py`
 
-Formats all C files in the repo using `clang-format-11`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
+Formats all C files in the repo using `clang-format-14`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
 
 You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (i.e. `-j1`).
 
-`clang-11` is available in many native package managers, but if not try:
+`clang-14` is available in many native package managers, but if not try:
 
 Linux:
 Download llvm's setup script, run it, than install normally
 ```bash
 wget https://apt.llvm.org/llvm.sh
 chmod +x llvm.sh
-sudo ./llvm.sh 11
+sudo ./llvm.sh 14
 rm llvm.sh
-sudo apt install clang-format-11 clang-tidy-11 clang-apply-replacements-11
+sudo apt install clang-format-14 clang-tidy-14 clang-apply-replacements-14
 ```
 
 Mac:
-Install with brew, than create symlinks for `clang-tidy` and `clang-apply-replacements` to use properly
-```bash
-brew install llvm clang-format-11
-ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
-```
+Brew does not have clang-format-14, but MacPorts does.
+
+(Have been unable to confirm actual commands with somone that has a Mac)
+
 
 ## External tools
 

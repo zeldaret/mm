@@ -505,9 +505,9 @@ void EnLiftNuts_Idle(EnLiftNuts* this, PlayState* play) {
         EnLiftNuts_SetupStartConversation(this);
     } else if (EnLiftNuts_Autotalk(this, ENLIFTNUTS_AUTOTALK_MODE_CHECK_OFF) || (this->autotalk == true)) {
         if (this->autotalk == true) {
-            func_800B8614(&this->actor, play, 200.0f);
+            Actor_OfferTalk(&this->actor, play, 200.0f);
         } else if (this->actor.playerHeightRel >= -13.0f) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000, 0x500);
@@ -973,7 +973,7 @@ void EnLiftNuts_ResumeConversation(EnLiftNuts* this, PlayState* play) {
                 break;
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

@@ -543,7 +543,7 @@ void func_80BA0610(EnZob* this, PlayState* play) {
         func_80B9FC70(this, 0);
         this->actionFunc = func_80BA00BC;
     } else {
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
 
@@ -581,7 +581,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
         func_800B874C(&this->actor, play, 200.0f, 150.0f);
     }
 
@@ -658,7 +658,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
         func_80BA08E8(this, play);
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

@@ -139,22 +139,23 @@ Each warning type uses one of these by default, but can be modified with flags, 
 
 All warning types currently implemented, with their default levels:
 
-| Warning type                | Default level | Description                                                              |
-| --------------------------- | ------------- | ------------------------------------------------------------------------ |
-| `-Wdeprecated`              | Warn          | Deprecated features                                                      |
-| `-Whardcoded-pointer`       | Warn          | ZAPD lacks the info to make a symbol, so must output a hardcoded pointer |
-| `-Wintersection`            | Warn          | Two assets intersect                                                     |
-| `-Winvalid-attribute-value` | Err           | Attribute declared in XML is wrong                                       |
-| `-Winvalid-extracted-data`  | Err           | Extracted data does not have correct form                                |
-| `-Winvalid-jpeg`            | Err           | JPEG file does not conform to the game's format requirements             |
-| `-Winvalid-png`             | Err           | Issues arising when processing PNG data                                  |
-| `-Winvalid-xml`             | Err           | XML has syntax errors                                                    |
-| `-Wmissing-attribute`       | Warn          | Required attribute missing in XML tag                                    |
-| `-Wmissing-offsets`         | Warn          | Offset attribute missing in XML tag                                      |
-| `-Wmissing-segment`         | Warn          | Segment not given in File tag in XML                                     |
-| `-Wnot-implemented`         | Warn          | ZAPD does not currently support this feature                             |
-| `-Wunaccounted`             | Off           | Large blocks of unaccounted                                              |
-| `-Wunknown-attribute`       | Warn          | Unknown attribute in XML entry tag                                       |
+| Warning type                  | Default level | Description                                                              |
+| ----------------------------- | ------------- | ------------------------------------------------------------------------ |
+| `-Wdeprecated`                | Warn          | Deprecated features                                                      |
+| `-Whardcoded-generic-pointer` | Off           | A generic segmented pointer must be produced                             |
+| `-Whardcoded-pointer`         | Warn          | ZAPD lacks the info to make a symbol, so must output a hardcoded pointer |
+| `-Wintersection`              | Warn          | Two assets intersect                                                     |
+| `-Winvalid-attribute-value`   | Err           | Attribute declared in XML is wrong                                       |
+| `-Winvalid-extracted-data`    | Err           | Extracted data does not have correct form                                |
+| `-Winvalid-jpeg`              | Err           | JPEG file does not conform to the game's format requirements             |
+| `-Winvalid-png`               | Err           | Issues arising when processing PNG data                                  |
+| `-Winvalid-xml`               | Err           | XML has syntax errors                                                    |
+| `-Wmissing-attribute`         | Warn          | Required attribute missing in XML tag                                    |
+| `-Wmissing-offsets`           | Warn          | Offset attribute missing in XML tag                                      |
+| `-Wmissing-segment`           | Warn          | Segment not given in File tag in XML                                     |
+| `-Wnot-implemented`           | Warn          | ZAPD does not currently support this feature                             |
+| `-Wunaccounted`               | Off           | Large blocks of unaccounted                                              |
+| `-Wunknown-attribute`         | Warn          | Unknown attribute in XML entry tag                                       |
 
 There are also errors that do not have a type, and cannot be disabled.
 
