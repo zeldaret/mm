@@ -318,7 +318,7 @@ void EnKakasi_TimeSkipDialogue(EnKakasi* this, PlayState* play) {
                 this->picto.actor.flags &= ~ACTOR_FLAG_10000;
                 this->actionFunc = EnKakasi_RegularDialogue;
             } else {
-                func_800B8500(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
+                Actor_OfferTalkExchange(&this->picto.actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
             }
         }
     }
@@ -368,7 +368,7 @@ void EnKakasi_IdleStanding(EnKakasi* this, PlayState* play) {
         EnKakasi_ChangeAnim(this, ENKAKASI_ANIM_IDLE);
     }
     if (this->picto.actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->picto.actor, play, 100.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 100.0f);
         func_800B874C(&this->picto.actor, play, 100.0f, 80.0f);
     }
 }
@@ -1098,7 +1098,7 @@ void EnKakasi_IdleRisen(EnKakasi* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         this->actionFunc = EnKakasi_RisenDialogue;
     } else {
-        func_800B8614(&this->picto.actor, play, 70.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 70.0f);
     }
 }
 
