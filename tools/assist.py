@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import argparse, os, sys
+import argparse 
+import os 
+import sys
 from collections import OrderedDict
 
 gAddressWidth = 18 # if your ld >= 2.40 change this to 10
