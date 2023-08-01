@@ -30,9 +30,11 @@
  * `osContStartReadData` to receiving the data. By running this on a separate thread to the game state, work can be
  * done while waiting for this operation to complete.
  */
+
 #include "global.h"
 #include "io/controller.h"
 #include "ultra64/motor.h"
+#include "fault.h"
 
 #define PADMGR_RETRACE_MSG (1 << 0)
 #define PADMGR_PRE_NMI_MSG (1 << 1)
@@ -641,7 +643,7 @@ void PadMgr_HandleRetrace(void) {
     }
 
     // Rumble Pak
-    if (gFaultStruct.msgId != 0) {
+    if (gFaultMgr.msgId != 0) {
         // If fault is active, no rumble
         PadMgr_RumbleStop();
     } else if (sPadMgrInstance->rumbleOffTimer > 0) {

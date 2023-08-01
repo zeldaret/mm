@@ -1,5 +1,6 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 #include "fixed_point.h"
 #include "vt.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
@@ -81,9 +82,15 @@ BgSpecialSceneMaxObjects sCustomDynapolyMem[] = {
 // TODO: All these bss variables are localized to one function and can
 // likely be made into in-function static bss variables in the future
 
+char D_801ED950[80];
+char D_801ED9A0[80];
+
 Vec3f D_801ED9F0[3]; // polyVerts
 Vec3f D_801EDA18[3]; // polyVerts
+MtxF sModelToWorldMtxF;
 Vec3f D_801EDA80[3]; // polyVerts
+char D_801EDAA8[80];
+char D_801EDAF8[80];
 Vec3f D_801EDB48[3]; // polyVerts
 
 #ifndef NON_MATCHING
@@ -92,13 +99,6 @@ Plane D_801EDB98;    // plane;
 Sphere16 D_801EDBA8; // sphere;
 TriNorm D_801EDBB0;  // tri;
 #endif
-
-char D_801ED950[80];
-char D_801ED9A0[80];
-
-char D_801EDAA8[80];
-char D_801EDAF8[80];
-MtxF sModelToWorldMtxF;
 
 void BgCheck_GetStaticLookupIndicesFromPos(CollisionContext* colCtx, Vec3f* pos, Vec3i* sector);
 f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast);
@@ -4201,6 +4201,9 @@ Vec3s* BgCheck_GetBgCamFuncData(CollisionContext* colCtx, CollisionPoly* poly, s
     return BgCheck_GetBgCamFuncDataImpl(colCtx, SurfaceType_GetBgCamIndex(colCtx, poly, bgId), bgId);
 }
 
+/**
+ * Returns one above the value indexed by `play->setupExitList[]`
+ */
 u32 SurfaceType_GetSceneExitIndex(CollisionContext* colCtx, CollisionPoly* poly, s32 bgId) {
     return SurfaceType_GetData(colCtx, poly, bgId, 0) >> 8 & 0x1F;
 }

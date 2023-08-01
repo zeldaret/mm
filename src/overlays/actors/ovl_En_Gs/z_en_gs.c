@@ -184,8 +184,8 @@ void func_80997D38(EnGs* this, PlayState* play) {
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
-            func_8013E8F8(&this->actor, play, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
-                          PLAYER_IA_NONE, 0x2000, 0x2000);
+            SubS_OfferTalkExchangeFacing(&this->actor, play, D_8099A408[this->actor.params],
+                                         D_8099A408[this->actor.params], PLAYER_IA_NONE, 0x2000, 0x2000);
         }
     }
 
@@ -298,7 +298,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     break;
 
                 case OCARINA_SONG_SONATA:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+                    if ((this->actor.params == ENGS_1) && (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
                         this->unk_194 = 1;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -308,7 +308,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     break;
 
                 case OCARINA_SONG_NEW_WAVE:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
+                    if ((this->actor.params == ENGS_1) && (GET_PLAYER_FORM == PLAYER_FORM_ZORA)) {
                         this->unk_194 = 3;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;
@@ -318,7 +318,7 @@ void func_8099807C(EnGs* this, PlayState* play) {
                     break;
 
                 case OCARINA_SONG_GORON_LULLABY:
-                    if ((this->actor.params == ENGS_1) && (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+                    if ((this->actor.params == ENGS_1) && (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                         this->unk_194 = 2;
                         this->unk_19C = 5;
                         this->unk_19A |= 1;

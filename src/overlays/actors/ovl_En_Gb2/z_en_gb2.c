@@ -381,7 +381,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
     } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
 
@@ -543,7 +543,7 @@ void func_80B10584(EnGb2* this, PlayState* play) {
         this->actionFunc = func_80B10634;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 300.0f);
+        Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
 
@@ -641,7 +641,7 @@ void func_80B109DC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
-        func_800B85E0(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -699,7 +699,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             this->actionFunc = func_80B10DAC;
         } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
             this->unk_26C |= 0x40;
-            func_800B8614(&this->actor, play, 300.0f);
+            Actor_OfferTalk(&this->actor, play, 300.0f);
         }
     } else {
         this->unk_26C &= ~0x40;
@@ -719,7 +719,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             if (!(this->unk_26C & 0x80)) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 this->unk_26C |= 0x20;
-                func_800B8614(&this->actor, play, 300.0f);
+                Actor_OfferTalk(&this->actor, play, 300.0f);
             }
         }
     }
@@ -786,7 +786,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
         this->actionFunc = func_80B10DAC;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
 

@@ -7,8 +7,9 @@
 #include "z_en_egol.h"
 #include "objects/object_eg/object_eg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
+#include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
@@ -1085,7 +1086,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
             s32 i;
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
             this->waitTimer = 30;
             Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             this->action = EYEGORE_ACTION_DEAD;
@@ -1128,7 +1129,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
                     if ((this->action == EYEGORE_ACTION_STUNNED) || (this->action == EYEGORE_ACTION_SLAM_WAIT)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         this->dmgEffectTimer = 20;
                         reaction = EYEGORE_HIT_DAMAGE;
                     } else if ((this->action >= EYEGORE_ACTION_WALK) && (this->action <= EYEGORE_ACTION_STUN_END) &&

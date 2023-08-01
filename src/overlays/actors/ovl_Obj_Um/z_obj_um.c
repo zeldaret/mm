@@ -911,7 +911,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;
@@ -970,10 +970,10 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
-        if (func_800B8614(&this->dyna.actor, play, 50.0f)) {
+        if (Actor_OfferTalk(&this->dyna.actor, play, 50.0f)) {
             this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
         }
-    } else if (func_800B863C(&this->dyna.actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play)) {
         this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
     }
 

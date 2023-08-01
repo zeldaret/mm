@@ -1,13 +1,14 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 #include "stack.h"
 #include "stackcheck.h"
 #include "z64thread.h"
 
-u32 sDmaMgrDmaBuffSize = 0x2000;
+size_t gDmaMgrDmaBuffSize = 0x2000;
 
 StackEntry sDmaMgrStackInfo;
-u16 numDmaEntries;
+u16 sNumDmaEntries;
 OSMesgQueue sDmaMgrMsgQueue;
 OSMesg sDmaMgrMsgs[32];
 OSThread sDmaMgrThread;
@@ -18,7 +19,7 @@ s32 DmaMgr_DmaRomToRam(uintptr_t rom, void* ram, size_t size) {
     OSMesgQueue queue;
     OSMesg msg[1];
     s32 ret;
-    size_t buffSize = sDmaMgrDmaBuffSize;
+    size_t buffSize = gDmaMgrDmaBuffSize;
 
     osInvalDCache(ram, size);
     osCreateMesgQueue(&queue, msg, ARRAY_COUNT(msg));
@@ -127,7 +128,7 @@ void DmaMgr_ProcessMsg(DmaRequest* req) {
 
     index = DmaMgr_FindDmaIndex(vrom);
 
-    if ((index >= 0) && (index < numDmaEntries)) {
+    if ((index >= 0) && (index < sNumDmaEntries)) {
         dmaEntry = &dmadata[index];
         if (dmaEntry->romEnd == 0) {
             if (dmaEntry->vromEnd < (vrom + size)) {
@@ -225,7 +226,7 @@ void DmaMgr_Start(void) {
             idx++;
         }
 
-        numDmaEntries = idx;
+        sNumDmaEntries = idx;
     }
 
     osCreateMesgQueue(&sDmaMgrMsgQueue, sDmaMgrMsgs, ARRAY_COUNT(sDmaMgrMsgs));

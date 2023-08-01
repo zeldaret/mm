@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dinofos.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_dinofos/object_dinofos.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
@@ -450,8 +451,8 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) &&
-        (player->unk_AE7 == 1) && (this->unk_28B == 0)) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->unk_AE7 == 1) &&
+        (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {
             this->colliderJntSph.elements[i].info.bumper.dmgFlags &= ~0x400;
@@ -1332,7 +1333,8 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
                         this->colliderJntSph.elements[i].info.bumper.hitPos.x,
                         this->colliderJntSph.elements[i].info.bumper.hitPos.y,
-                        this->colliderJntSph.elements[i].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->colliderJntSph.elements[i].info.bumper.hitPos.z, 0, 0, 0,
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         func_8089C87C(this, i);
         return true;

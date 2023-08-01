@@ -732,28 +732,27 @@ s32* func_8094EDBC(EnGm* this, PlayState* play) {
 s32 func_8094EE84(EnGm* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_3A4 & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            SubS_UpdateFlags(&this->unk_3A4, 0, 7);
-            this->unk_3E0 = 0;
-            this->unk_3E4 = NULL;
-            this->actor.child = this->unk_268;
-            this->unk_264 = func_8094EDBC(this, play);
+    if (((this->unk_3A4 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->unk_3E0 = 0;
+        this->unk_3E4 = NULL;
+        this->actor.child = this->unk_268;
+        this->unk_264 = func_8094EDBC(this, play);
 
-            if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
-                this->unk_3A4 |= 0x20;
-            } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
-                this->unk_3A4 |= 0x20;
-            }
-
-            if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
-                this->unk_3A4 &= ~0x20;
-            }
-
-            this->actionFunc = func_80950DB8;
-            ret = true;
+        if ((this->unk_258 == 5) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_50_01) &&
+            !CHECK_WEEKEVENTREG(WEEKEVENTREG_51_80) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_75_02)) {
+            this->unk_3A4 |= 0x20;
+        } else if ((this->unk_258 != 1) && (this->unk_258 != 5) && (this->unk_258 != 7)) {
+            this->unk_3A4 |= 0x20;
         }
+
+        if ((this->unk_258 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_01)) {
+            this->unk_3A4 &= ~0x20;
+        }
+
+        this->actionFunc = func_80950DB8;
+        ret = true;
     }
     return ret;
 }
@@ -1085,7 +1084,7 @@ s32 func_8094FAC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             (this->timePathElapsedTime / this->timePathWaypointTime) + (SUBS_TIME_PATHING_ORDER - 1);
         this->unk_3A4 &= ~0x8;
         this->unk_3A4 &= ~0x10;
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         func_8094E054(this, play, 7);
@@ -1102,7 +1101,7 @@ s32 func_8094FCC4(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TAB)) {
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D90);
-            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             func_8094E054(this, play, 0);
         } else {
             func_8094E054(this, play, 9);
@@ -1120,7 +1119,7 @@ s32 func_8094FD88(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_RECEPGIRL)) {
         func_8094E054(this, play, 11);
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_3A4 |= 0x100;
         this->unk_3A4 |= 0x200;
         ret = true;
@@ -1136,7 +1135,7 @@ s32 func_8094FE10(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     if (func_8094F7D0(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_TOTO) && (al != NULL) &&
         (al->update != NULL)) {
         func_8094E054(this, play, 11);
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_268 = al;
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_86_20)) {
             this->unk_3C8 = 2;
@@ -1173,7 +1172,7 @@ s32 func_8094FF04(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
         if (this->unk_258 == 0) {
             Math_Vec3f_Copy(&this->actor.world.pos, &D_80951D9C);
-            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             this->unk_3C8 = 4;
             this->unk_3CA = 4;
             this->unk_3CC = 8;
@@ -1200,7 +1199,7 @@ s32 func_80950088(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DA8);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DB4);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x2000 | 0x100);
     this->unk_3A4 |= 0x200;
     func_8094E054(this, play, 12);
@@ -1215,7 +1214,7 @@ s32 func_80950120(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80951DBC);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DC8);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x800 | 0x100);
     this->unk_3A4 |= 0x200;
     func_8094E054(this, play, 4);
@@ -1231,7 +1230,7 @@ s32 func_809501B8(EnGm* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80951DDC);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
     this->actor.targetMode = 6;
-    SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+    SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_3A4 |= (0x1000 | 0x100);
     this->unk_3A4 |= 0x200;
     this->unk_3C8 = 3;
@@ -1338,7 +1337,7 @@ s32 func_809503F8(EnGm* this, PlayState* play) {
     if (this->unk_3E8 == 9) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-            SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+            SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             func_8094E054(this, play, 0);
         } else {
             AnimationContext_SetMoveActor(play, &this->actor, &this->skelAnime, 1.0f);
@@ -1370,7 +1369,7 @@ s32 func_80950490(EnGm* this, PlayState* play) {
         case 9:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
                 this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-                SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+                SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
                 this->unk_3C8 = 4;
                 this->unk_3CA = 4;
                 this->unk_3CC = 8;
@@ -1437,7 +1436,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             break;
     }
 
-    SubS_FillLimbRotTables(play, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 
     return false;
 }
@@ -1606,7 +1605,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
     Actor* al;
 
     if (func_8010BF58(&this->actor, play, this->unk_264, this->unk_3E4, &this->unk_25C)) {
-        SubS_UpdateFlags(&this->unk_3A4, 3, 7);
+        SubS_SetOfferMode(&this->unk_3A4, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         al = func_8094DEE0(this, play, ACTORCAT_NPC, ACTOR_EN_AL);
         if ((this->unk_258 == 2) && (al != NULL) && (al->update != NULL)) {
             this->unk_268 = al;
@@ -1626,7 +1625,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&sp34, &sp40), 4, 0x2AA8);
         }
     }
-    SubS_FillLimbRotTables(play, this->unk_3D8, this->unk_3D2, ARRAY_COUNT(this->unk_3D8));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGM_FIDGET_TABLE_LEN);
 }
 
 void func_80950F2C(EnGm* this, PlayState* play) {
@@ -1712,7 +1711,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
             func_8094DFF8(this, play);
             func_8094E2D0(this);
             func_8094F2E8(this);
-            func_8013C964(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & 7);
+            SubS_Offer(&this->actor, play, this->unk_3B4, 30.0f, PLAYER_IA_NONE, this->unk_3A4 & SUBS_OFFER_MODE_MASK);
             if ((this->unk_258 != 3) && (this->unk_258 != 5) && (this->unk_258 != 8)) {
                 Actor_MoveWithGravity(&this->actor);
                 Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
@@ -1725,7 +1724,7 @@ void EnGm_Update(Actor* thisx, PlayState* play) {
 s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnGm* this = THIS;
-    s32 phi_v0;
+    s32 fidgetIndex;
 
     if (limbIndex == 16) {
         func_8094F3D0(this, play);
@@ -1733,25 +1732,25 @@ s32 EnGm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     switch (limbIndex) {
         case 9:
-            phi_v0 = 0;
+            fidgetIndex = 0;
             break;
 
         case 10:
-            phi_v0 = 1;
+            fidgetIndex = 1;
             break;
 
         case 13:
-            phi_v0 = 2;
+            fidgetIndex = 2;
             break;
 
         default:
-            phi_v0 = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if ((this->unk_3A4 & 0x2000) && (phi_v0 < 9)) {
-        rot->y += (s16)(Math_SinS(this->unk_3D8[phi_v0]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk_3D2[phi_v0]) * 200.0f);
+    if ((this->unk_3A4 & 0x2000) && (fidgetIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
 
     return false;

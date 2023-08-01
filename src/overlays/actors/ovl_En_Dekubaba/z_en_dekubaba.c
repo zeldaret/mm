@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dekubaba.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -280,7 +281,7 @@ void EnDekubaba_SetFireLightEffects(EnDekubaba* this, PlayState* play, s32 index
         sphElement = &this->collider.elements[index];
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sphElement->info.bumper.hitPos.x,
                     sphElement->info.bumper.hitPos.y, sphElement->info.bumper.hitPos.z, 0, 0, 0,
-                    CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     }
 }
 
@@ -914,10 +915,10 @@ void EnDekubaba_ShrinkDie(EnDekubaba* this, PlayState* play) {
                       (s32)(this->size * 100.0f));
 
         if (!this->actor.dropFlag) {
-            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+            Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             if (this->actor.params == DEKUBABA_BIG) {
-                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
-                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
+                Item_DropCollectible(play, &this->actor.world.pos, ITEM00_DEKU_NUTS_1);
             }
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x30);
@@ -1059,7 +1060,7 @@ void EnDekubaba_DeadStickDrop(EnDekubaba* this, PlayState* play) {
         return;
     }
 
-    Actor_OfferGetItemNearby(&this->actor, play, GI_STICKS_1);
+    Actor_OfferGetItemNearby(&this->actor, play, GI_DEKU_STICKS_1);
 }
 
 /* Update and associated functions */

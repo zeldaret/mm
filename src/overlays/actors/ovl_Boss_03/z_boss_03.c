@@ -48,6 +48,7 @@
  * - Effect Update/Draw
  * - Seaweed
  */
+
 #include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
@@ -687,7 +688,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
         }
 
         func_809E344C(this, play);
@@ -783,7 +784,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
         }
 
@@ -911,7 +912,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
@@ -1753,7 +1754,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     if (&this->actor == player->actor.parent) {
         player->unk_AE8 = 101;
         player->actor.parent = NULL;
-        player->csMode = PLAYER_CSMODE_0;
+        player->csMode = PLAYER_CSMODE_NONE;
         Play_DisableMotionBlur();
     }
 
@@ -1905,7 +1906,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     if (&this->actor == player->actor.parent) {
                         player->unk_AE8 = 101;
                         player->actor.parent = NULL;
-                        player->csMode = PLAYER_CSMODE_0;
+                        player->csMode = PLAYER_CSMODE_NONE;
                         Play_DisableMotionBlur();
                     }
 
