@@ -6,7 +6,6 @@
 
 #include "z_en_kame.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_tl/object_tl.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -111,8 +110,7 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-static TexturePtr D_80AD8E34[] = { object_tl_Tex_0055A0, object_tl_Tex_0057A0, object_tl_Tex_0059A0,
-                                   object_tl_Tex_0057A0 };
+static TexturePtr D_80AD8E34[] = { gSnapperEyeOpenTex, gSnapperEyeHalfTex, gSnapperEyeClosedTex, gSnapperEyeHalfTex };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_SNAPPER, ICHAIN_CONTINUE),
@@ -126,10 +124,10 @@ void EnKame_Init(Actor* thisx, PlayState* play) {
     EnKame* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime1, &object_tl_Skel_007C70, &object_tl_Anim_004210, this->jointTable1,
-                       this->morphTable1, 13);
-    SkelAnime_InitFlex(play, &this->skelAnime2, &object_tl_Skel_001A50, &object_tl_Anim_000B30, this->jointTable2,
-                       this->morphTable2, 4);
+    SkelAnime_InitFlex(play, &this->skelAnime1, &gSnapperSkel, &gSnapperIdleAnim, this->jointTable1, this->morphTable1,
+                       SNAPPER_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime2, &gSpikedSnapperSkel, &gSpikedSnapperIdleAnim, this->jointTable2,
+                       this->morphTable2, SPIKED_SNAPPER_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 55.0f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -185,7 +183,7 @@ void func_80AD7018(EnKame* this, PlayState* play) {
 }
 
 void func_80AD70A0(EnKame* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_004210, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperIdleAnim, -5.0f);
     this->actor.speed = 0.0f;
     this->actionFunc = func_80AD70EC;
 }
@@ -207,9 +205,9 @@ void func_80AD70EC(EnKame* this, PlayState* play) {
 }
 
 void func_80AD71B4(EnKame* this) {
-    Animation_MorphToLoop(&this->skelAnime1, &object_tl_Anim_00823C, -5.0f);
+    Animation_MorphToLoop(&this->skelAnime1, &gSnapperWalkAnim, -5.0f);
     this->actor.speed = 0.5f;
-    this->unk_29E = Animation_GetLastFrame(&object_tl_Anim_00823C) * ((s32)Rand_ZeroFloat(5.0f) + 3);
+    this->unk_29E = Animation_GetLastFrame(&gSnapperWalkAnim) * ((s32)Rand_ZeroFloat(5.0f) + 3);
     this->unk_2A4 = this->actor.shape.rot.y;
     this->collider.base.acFlags |= (AC_HARD | AC_ON);
     this->collider.base.colType = COLTYPE_HARD;
@@ -243,7 +241,7 @@ void func_80AD7254(EnKame* this, PlayState* play) {
 }
 
 void func_80AD73A8(EnKame* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_001C68, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperRetreatIntoShellAnim, -3.0f);
     this->unk_29E = 0;
     this->unk_2AC = 1.0f;
     this->unk_2A8 = 1.0f;
@@ -402,7 +400,7 @@ void func_80AD7948(EnKame* this, PlayState* play) {
 
 void func_80AD7B18(EnKame* this) {
     this->actor.draw = EnKame_Draw;
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0031DC, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperEmergeFromShellAnim, -3.0f);
     this->actor.speed = 0.0f;
     this->unk_2AC = 0.1f;
     this->unk_2A8 = 1.0f;
@@ -426,11 +424,11 @@ void func_80AD7B90(EnKame* this, PlayState* play) {
 
 void func_80AD7C54(EnKame* this) {
     if (this->actionFunc == func_80AD7E0C) {
-        Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0035EC, -3.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperBouncedUprightAnim, -3.0f);
         this->unk_29E = 1;
         this->collider.info.bumper.dmgFlags &= ~0x8000;
     } else {
-        Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0039C0, -3.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperFlipOverAnim, -3.0f);
         this->unk_29E = 0;
         this->collider.info.bumper.dmgFlags |= 0x8000;
     }
@@ -458,7 +456,7 @@ void func_80AD7D40(EnKame* this, PlayState* play) {
 }
 
 void func_80AD7DA4(EnKame* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_0027D8, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperWiggleLegsAnim, -3.0f);
     this->collider.base.acFlags |= AC_ON;
     this->collider.base.acFlags &= ~AC_HARD;
     this->collider.base.colType = COLTYPE_HIT6;
@@ -471,9 +469,9 @@ void func_80AD7E0C(EnKame* this, PlayState* play) {
         this->unk_29E--;
         if (SkelAnime_Update(&this->skelAnime1)) {
             if (Rand_ZeroOne() > 0.5f) {
-                Animation_PlayOnce(&this->skelAnime1, &object_tl_Anim_0027D8);
+                Animation_PlayOnce(&this->skelAnime1, &gSnapperWiggleLegsAnim);
             } else {
-                Animation_PlayOnce(&this->skelAnime1, &object_tl_Anim_002F88);
+                Animation_PlayOnce(&this->skelAnime1, &gSnapperFailToFlipUprightAnim);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_ROAR);
             }
         }
@@ -483,7 +481,7 @@ void func_80AD7E0C(EnKame* this, PlayState* play) {
 }
 
 void func_80AD7EC0(EnKame* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime1, &object_tl_Anim_002510, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime1, &gSnapperFlipUprightAnim, -3.0f);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_WAKEUP);
     this->actionFunc = func_80AD7F10;
 }
@@ -525,9 +523,9 @@ void func_80AD7FF8(EnKame* this, PlayState* play) {
 }
 
 void func_80AD8060(EnKame* this) {
-    s16 lastFrame = Animation_GetLastFrame(&object_tl_Anim_0008B4);
+    s16 lastFrame = Animation_GetLastFrame(&gSnapperDamageAnim);
 
-    Animation_Change(&this->skelAnime1, &object_tl_Anim_0008B4, 1.0f, 0.0f, lastFrame, ANIMMODE_ONCE, -3.0f);
+    Animation_Change(&this->skelAnime1, &gSnapperDamageAnim, 1.0f, 0.0f, lastFrame, ANIMMODE_ONCE, -3.0f);
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, lastFrame);
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DAMAGE);
     this->collider.base.acFlags &= ~AC_ON;
@@ -541,7 +539,7 @@ void func_80AD810C(EnKame* this, PlayState* play) {
 }
 
 void func_80AD8148(EnKame* this, PlayState* play) {
-    Animation_PlayLoop(&this->skelAnime1, &object_tl_Anim_000AF4);
+    Animation_PlayLoop(&this->skelAnime1, &gSnapperDeathAnim);
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 20);
     this->collider.base.acFlags &= ~AC_ON;
     this->collider.base.atFlags &= ~AT_ON;
@@ -756,9 +754,10 @@ s32 func_80AD8A48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     EnKame* this = THIS;
 
     if ((this->actionFunc == func_80AD7424) || (this->actionFunc == func_80AD7B90)) {
-        if (limbIndex == 2) {
+        if (limbIndex == SNAPPER_LIMB_HEAD) {
             Matrix_Scale(this->unk_2A8, this->unk_2AC, this->unk_2A8, MTXMODE_APPLY);
-        } else if ((limbIndex == 11) || (limbIndex == 9) || (limbIndex == 7) || (limbIndex == 5)) {
+        } else if ((limbIndex == SNAPPER_LIMB_BACK_RIGHT_LEG) || (limbIndex == SNAPPER_LIMB_BACK_LEFT_LEG) ||
+                   (limbIndex == SNAPPER_LIMB_FRONT_RIGHT_LEG) || (limbIndex == SNAPPER_LIMB_FRONT_LEFT_LEG)) {
             Matrix_Scale(this->unk_2A8, this->unk_2AC, this->unk_2AC, MTXMODE_APPLY);
         }
     }
@@ -777,7 +776,7 @@ void func_80AD8AF8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         Matrix_MultZero(&this->limbPos[D_80AD8EA4[limbIndex]]);
     }
 
-    if (limbIndex == 1) {
+    if (limbIndex == SNAPPER_LIMB_BODY) {
         s32 i;
         Vec3f* ptr;
         Vec3f* ptr2;
@@ -828,11 +827,11 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 s32 Enkame_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnKame* this = THIS;
 
-    if (limbIndex == 1) {
+    if (limbIndex == SPIKED_SNAPPER_LIMB_BODY) {
         pos->y -= 700.0f;
     }
 
-    if ((this->unk_2AC != 1.0f) && (limbIndex == 3)) {
+    if ((this->unk_2AC != 1.0f) && (limbIndex == SPIKED_SNAPPER_LIMB_SPIKES)) {
         Matrix_Scale(1.0f, this->unk_2AC, this->unk_2AC, MTXMODE_APPLY);
     }
     return false;

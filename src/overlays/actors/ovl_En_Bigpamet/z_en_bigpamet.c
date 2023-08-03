@@ -116,10 +116,10 @@ static DamageTable sDamageTable = {
 };
 
 TexturePtr D_80A29754[] = {
-    object_tl_Tex_0055A0,
-    object_tl_Tex_0057A0,
-    object_tl_Tex_0059A0,
-    object_tl_Tex_0057A0,
+    gSnapperEyeOpenTex,
+    gSnapperEyeHalfTex,
+    gSnapperEyeClosedTex,
+    gSnapperEyeHalfTex,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -139,10 +139,10 @@ void EnBigpamet_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    SkelAnime_InitFlex(play, &this->skelAnime2, &object_tl_Skel_007C70, &object_tl_Anim_004210, this->jointTable2,
-                       this->morphTable2, OBJECT_TL_2_LIMB_MAX);
-    SkelAnime_InitFlex(play, &this->skelAnime1, &object_tl_Skel_001A50, &object_tl_Anim_000B30, this->jointTable1,
-                       this->morphTable1, OBJECT_TL_1_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime2, &gSnapperSkel, &gSnapperIdleAnim, this->jointTable2, this->morphTable2,
+                       SNAPPER_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime1, &gSpikedSnapperSkel, &gSpikedSnapperIdleAnim, this->jointTable1,
+                       this->morphTable1, SPIKED_SNAPPER_LIMB_MAX);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 55.0f);
 
@@ -386,7 +386,7 @@ void func_80A281DC(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28274(EnBigpamet* this) {
-    Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_004210);
+    Animation_PlayLoop(&this->skelAnime2, &gSnapperIdleAnim);
     this->actor.draw = EnBigpamet_Draw;
     this->unk_29E = 20;
     this->actionFunc = func_80A282C8;
@@ -420,7 +420,7 @@ void func_80A283A0(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A283F0(EnBigpamet* this) {
-    Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_00823C);
+    Animation_PlayLoop(&this->skelAnime2, &gSnapperWalkAnim);
     this->actor.speed = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.params = ENBIGPAMET_1;
@@ -442,7 +442,7 @@ void func_80A2844C(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A284E4(EnBigpamet* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_001C68, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime2, &gSnapperRetreatIntoShellAnim, -3.0f);
     this->unk_29E = 0;
     this->unk_2A8 = 1.0f;
     this->unk_2A4 = 1.0f;
@@ -575,7 +575,7 @@ void func_80A289C8(EnBigpamet* this, PlayState* play) {
 
 void func_80A28A28(EnBigpamet* this) {
     this->actor.draw = EnBigpamet_Draw;
-    Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_0031DC, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime2, &gSnapperEmergeFromShellAnim, -3.0f);
     this->unk_2A8 = 0.1f;
     this->unk_2A4 = 1.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -610,7 +610,7 @@ void func_80A28A98(EnBigpamet* this, PlayState* play) {
 void func_80A28B98(EnBigpamet* this, PlayState* play) {
     Actor* collectible;
 
-    Animation_PlayLoop(&this->skelAnime2, &object_tl_Anim_000AF4);
+    Animation_PlayLoop(&this->skelAnime2, &gSnapperDeathAnim);
 
     this->collider.base.atFlags &= ~AT_ON;
     this->collider.info.bumper.dmgFlags = 0xF7CFFFFF;
@@ -679,7 +679,7 @@ void func_80A28DC0(EnBigpamet* this, PlayState* play) {
 }
 
 void func_80A28E40(EnBigpamet* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime2, &object_tl_Anim_000440, -2.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime2, &gSnapperRearUpAnim, -2.0f);
     this->actor.flags |= ACTOR_FLAG_1;
     this->actor.speed = 0.0f;
     this->actionFunc = func_80A28E98;
@@ -811,10 +811,10 @@ s32 EnBigpamet_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     EnBigpamet* this = THIS;
 
     if ((this->actionFunc == func_80A2855C) || (this->actionFunc == func_80A28A98)) {
-        if (limbIndex == OBJECT_TL_2_LIMB_02) {
+        if (limbIndex == SNAPPER_LIMB_HEAD) {
             Matrix_Scale(this->unk_2A4, this->unk_2A8, this->unk_2A4, MTXMODE_APPLY);
-        } else if ((limbIndex == OBJECT_TL_2_LIMB_0B) || (limbIndex == OBJECT_TL_2_LIMB_09) ||
-                   (limbIndex == OBJECT_TL_2_LIMB_07) || (limbIndex == OBJECT_TL_2_LIMB_05)) {
+        } else if ((limbIndex == SNAPPER_LIMB_BACK_RIGHT_LEG) || (limbIndex == SNAPPER_LIMB_BACK_LEFT_LEG) ||
+                   (limbIndex == SNAPPER_LIMB_FRONT_RIGHT_LEG) || (limbIndex == SNAPPER_LIMB_FRONT_LEFT_LEG)) {
             Matrix_Scale(this->unk_2A4, this->unk_2A8, this->unk_2A8, MTXMODE_APPLY);
         }
     }
@@ -824,7 +824,7 @@ s32 EnBigpamet_OverrideLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 void EnBigpamet_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnBigpamet* this = THIS;
 
-    if (limbIndex == OBJECT_TL_2_LIMB_01) {
+    if (limbIndex == SNAPPER_LIMB_BODY) {
         this->unk_2AC = Matrix_GetCurrent()->yw;
     }
 }
@@ -848,7 +848,7 @@ void EnBigpamet_Draw(Actor* thisx, PlayState* play) {
 s32 EnBigpamet_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBigpamet* this = THIS;
 
-    if (limbIndex == OBJECT_TL_1_LIMB_01) {
+    if (limbIndex == SPIKED_SNAPPER_LIMB_BODY) {
         if (this->actionFunc == func_80A28D0C) {
             pos->y -= 2500.0f;
         } else {
@@ -856,7 +856,7 @@ s32 EnBigpamet_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Ve
         }
     }
 
-    if ((this->unk_2A8 != 1.0f) && (limbIndex == OBJECT_TL_1_LIMB_03)) {
+    if ((this->unk_2A8 != 1.0f) && (limbIndex == SPIKED_SNAPPER_LIMB_SPIKES)) {
         Matrix_Scale(1.0f, this->unk_2A8, this->unk_2A8, MTXMODE_APPLY);
     }
 
@@ -866,7 +866,7 @@ s32 EnBigpamet_OverrideLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 void EnBigpamet_PostLimbDraw1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnBigpamet* this = THIS;
 
-    if (limbIndex == OBJECT_TL_1_LIMB_01) {
+    if (limbIndex == SPIKED_SNAPPER_LIMB_BODY) {
         this->unk_2AC = Matrix_GetCurrent()->yw;
     }
 }
