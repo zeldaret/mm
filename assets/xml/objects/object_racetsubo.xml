@@ -1,6 +1,6 @@
 ﻿<Root>
+    <!-- Object for green pot/jar -->
     <File Name="object_racetsubo" Segment="6">
-        <!-- Object for green pot/jar -->
         <DList Name="gGreenPotEmpty1DL" Offset="0x270" />
         <DList Name="gGreenPotDL" Offset="0x278" />
         <Texture Name="gGreenPotWallTex" OutName="green_pot_wall" Format="rgba16" Width="32" Height="64" Offset="0x3E0" />

@@ -1,6 +1,6 @@
 ﻿<Root>
+    <!-- Object for normal brown pot/jar -->
     <File Name="object_tsubo" Segment="6">
-        <!-- Object for normal brown pot/jar -->
         <Texture Name="gPotWallTex" OutName="pot_wall" Format="rgba16" Width="32" Height="64" Offset="0x0" />
         <Texture Name="gPotRimTex" OutName="pot_rim" Format="rgba16" Width="16" Height="16" Offset="0x1000" />
         <Texture Name="gPotShardTex" OutName="pot_shard" Format="rgba16" Width="16" Height="16" Offset="0x1200" />
