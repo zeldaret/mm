@@ -2073,7 +2073,6 @@ void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play) {
             this->giantsMaskCsFlashState = GIANTS_MASK_CS_FLASH_STATE_INCREASE_ALPHA;
             Audio_PlaySfx(NA_SE_SY_TRANSFORM_MASK_FLASH);
             // fallthrough
-
         case GIANTS_MASK_CS_FLASH_STATE_INCREASE_ALPHA:
             this->giantsMaskCsFlashAlpha += 40;
             if (this->giantsMaskCsFlashAlpha >= 400) {
