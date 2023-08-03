@@ -39,7 +39,7 @@ ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Draw,
 };
 
-AnimationHeader* D_808DFEC0[] = {
+AnimationHeader* sAnimations[] = {
     &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_007D50,
     &object_horse_link_child_Anim_0043AC, &object_horse_link_child_Anim_002F98,
 };
@@ -73,26 +73,41 @@ static ColliderJntSphInit sJntSphInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 10, 35, 100, MASS_HEAVY };
 
-s32 D_808DFF10[] = { 1, 19 };
+// todo double check
+static s32 sGallopSfxAnimationCounts[] = { 1, 19 };
 
-f32 D_808DFF18[] = { 1.0f, 1.0f, 1.5f, 1.5f, 1.5f };
+static f32 sAnimPlaySpeeds[] = { 1.0f, 1.0f, 1.5f, 1.5f, 1.5f };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
 };
 
-EnHorseLinkChildUnkFunc D_808DFF30[] = {
-    func_808DEA0C, func_808DED40, func_808DEB14, func_808DF194, func_808DF838, func_808DF620,
+static EnHorseLinkChildUnkFunc sActionFuncs[] = {
+  /* 0 */ func_808DEA0C, // OOT_EPONA_ACTION_0
+  /* 1 */ func_808DED40, // OOT_EPONA_ACTION_1
+  /* 2 */ func_808DEB14, // OOT_EPONA_ACTION_2
+  /* 3 */ func_808DF194, // OOT_EPONA_ACTION_3
+  /* 4 */ func_808DF838, // OOT_EPONA_ACTION_4
+  /* 5 */ func_808DF620, // OOT_EPONA_ACTION_5
 };
 
-TexturePtr D_808DFF48[] = { object_horse_link_child_Tex_001D28, object_horse_link_child_Tex_001928,
+typedef enum OOTEponaActions {
+  OOT_EPONA_ACTION_0,
+  OOT_EPONA_ACTION_1,
+  OOT_EPONA_ACTION_2,
+  OOT_EPONA_ACTION_3, // seems to be idle standing
+  OOT_EPONA_ACTION_4,
+  OOT_EPONA_ACTION_5,
+};
+
+static TexturePtr sEyeTextures[] = { object_horse_link_child_Tex_001D28, object_horse_link_child_Tex_001928,
                             object_horse_link_child_Tex_001B28 };
 
 s8 D_808DFF54[] = { 0, 1, 2, 1 };
 
 void func_808DE5C0(EnHorseLinkChild* this) {
-    if ((D_808DFF10[this->unk_1E8] < this->skin.skelAnime.curFrame) &&
-        ((this->unk_1E8 != 0) || !(D_808DFF10[1] < this->skin.skelAnime.curFrame))) {
+    if ((sGallopSfxAnimationCounts[this->unk_1E8] < this->skin.skelAnime.curFrame) &&
+        ((this->unk_1E8 != 0) || !(sGallopSfxAnimationCounts[1] < this->skin.skelAnime.curFrame))) {
         Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_WALK);
         this->unk_1E8++;
         if (this->unk_1E8 >= 2) {
@@ -102,12 +117,12 @@ void func_808DE5C0(EnHorseLinkChild* this) {
 }
 
 void func_808DE660(EnHorseLinkChild* this) {
-    if (this->unk_148 == 2) {
+    if (this->animIndex == 2) {
         func_808DE5C0(this);
     } else if (this->skin.skelAnime.curFrame == 0.0f) {
-        if ((this->unk_148 == 3) || (this->unk_148 == 4)) {
+        if ((this->animIndex == 3) || (this->animIndex == 4)) {
             Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
-        } else if (this->unk_148 == 1) {
+        } else if (this->animIndex == 1) {
             if (Rand_ZeroOne() > 0.5f) {
                 Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_GROAN);
             } else {
@@ -120,14 +135,14 @@ void func_808DE660(EnHorseLinkChild* this) {
 f32 func_808DE728(EnHorseLinkChild* this) {
     f32 phi_fv1;
 
-    if (this->unk_148 == 2) {
-        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speed * (1.0f / 2.0f);
-    } else if (this->unk_148 == 3) {
-        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speed * (1.0f / 3.0f);
-    } else if (this->unk_148 == 4) {
-        phi_fv1 = D_808DFF18[this->unk_148] * this->actor.speed * (1.0f / 5.0f);
+    if (this->animIndex == 2) {
+        phi_fv1 = sAnimPlaySpeeds[this->animIndex] * this->actor.speed * (1.0f / 2.0f);
+    } else if (this->animIndex == 3) {
+        phi_fv1 = sAnimPlaySpeeds[this->animIndex] * this->actor.speed * (1.0f / 3.0f);
+    } else if (this->animIndex == 4) {
+        phi_fv1 = sAnimPlaySpeeds[this->animIndex] * this->actor.speed * (1.0f / 5.0f);
     } else {
-        phi_fv1 = D_808DFF18[this->unk_148];
+        phi_fv1 = sAnimPlaySpeeds[this->animIndex];
     }
     return phi_fv1;
 }
@@ -142,14 +157,14 @@ void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawHorse, 20.0f);
 
-    this->unk_144 = 1;
+    this->action = OOT_EPONA_ACTION_1;
     this->actor.speed = 0.0f;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 70.0f;
 
     Skin_Init(&play->state, &this->skin, &object_horse_link_child_Skel_00A480, &object_horse_link_child_Anim_002F98);
-    this->unk_148 = 0;
-    Animation_PlayOnce(&this->skin.skelAnime, D_808DFEC0[0]);
+    this->animIndex = 0;
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimations[0]);
 
     Collider_InitCylinder(play, &this->colldierCylinder);
     Collider_InitJntSph(play, &this->colliderJntSph);
@@ -157,7 +172,7 @@ void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
 
     this->unk_1E8 = 0;
-    this->unk_1E4 = 0;
+    this->eyeTexIndex = 0;
 
     if (gSaveContext.sceneLayer >= 4) {
         func_808DEFE8(this);
@@ -177,12 +192,12 @@ void EnHorseLinkChild_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808DE9A8(EnHorseLinkChild* this) {
-    this->unk_144 = 0;
-    this->unk_148++;
-    if (this->unk_148 >= ARRAY_COUNT(D_808DFF18)) {
-        this->unk_148 = 0;
+    this->action = OOT_EPONA_ACTION_0;
+    this->animIndex++;
+    if (this->animIndex >= ARRAY_COUNT(sAnimPlaySpeeds)) {
+        this->animIndex = 0;
     }
-    Animation_PlayOnce(&this->skin.skelAnime, D_808DFEC0[this->unk_148]);
+    Animation_PlayOnce(&this->skin.skelAnime, sAnimations[this->animIndex]);
     this->skin.skelAnime.playSpeed = func_808DE728(this);
 }
 
@@ -194,53 +209,53 @@ void func_808DEA0C(EnHorseLinkChild* this, PlayState* play) {
 }
 
 void func_808DEA54(EnHorseLinkChild* this, s32 arg1) {
-    this->unk_144 = 2;
+    this->action = OOT_EPONA_ACTION_2;
     this->actor.speed = 0.0f;
 
     if ((arg1 != 0) && (arg1 != 1)) {
         arg1 = 0;
     }
 
-    if (arg1 != this->unk_148) {
-        this->unk_148 = arg1;
-        Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    if (arg1 != this->animIndex) {
+        this->animIndex = arg1;
+        Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                         Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
     }
 }
 
 void func_808DEB14(EnHorseLinkChild* this, PlayState* play) {
-    f32 sp44 = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
+    f32 distToPlayer = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
     s32 phi_v0;
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        if ((sp44 < 1000.0f) && (sp44 > 70.0f)) {
+        if ((distToPlayer < 1000.0f) && (distToPlayer > 70.0f)) {
             func_808DECA0(this);
             return;
         }
 
-        if (this->unk_148 == 1) {
+        if (this->animIndex == 1) {
             phi_v0 = 0;
         } else {
             phi_v0 = 1;
         }
 
-        if (phi_v0 != this->unk_148) {
-            this->unk_148 = phi_v0;
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+        if (phi_v0 != this->animIndex) {
+            this->animIndex = phi_v0;
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
         } else {
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, 0.0f);
         }
     }
 }
 
 void func_808DECA0(EnHorseLinkChild* this) {
-    this->unk_144 = 1;
-    this->unk_148 = 0;
+    this->action = OOT_EPONA_ACTION_1;
+    this->animIndex = 0;
     this->actor.speed = 0.0f;
-    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
 }
 
 void func_808DED40(EnHorseLinkChild* this, PlayState* play) {
@@ -248,7 +263,7 @@ void func_808DED40(EnHorseLinkChild* this, PlayState* play) {
     s16 temp_a0;
     s32 phi_v0;
 
-    if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
+    if ((this->animIndex == 4) || (this->animIndex == 3) || (this->animIndex == 2)) {
         temp_a0 = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
         if (temp_a0 > 0x12C) {
             this->actor.world.rot.y += 0x12C;
@@ -282,27 +297,28 @@ void func_808DED40(EnHorseLinkChild* this, PlayState* play) {
             return;
         }
 
-        if (phi_v0 != this->unk_148) {
-            this->unk_148 = phi_v0;
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+        if (phi_v0 != this->animIndex) {
+            this->animIndex = phi_v0;
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
         } else {
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, 0.0f);
         }
     }
 }
 
+// changes one animation
 void func_808DEFE8(EnHorseLinkChild* this) {
-    this->unk_144 = 3;
-    this->unk_148 = 0;
+    this->action = OOT_EPONA_ACTION_3;
+    this->animIndex = 0;
     this->actor.speed = 0.0f;
-    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
 }
 
 void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
-    if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
+    if ((this->animIndex == 4) || (this->animIndex == 3) || (this->animIndex == 2)) {
         Player* player = GET_PLAYER(play);
         s16 sp32;
         s32 phi_v0;
@@ -342,10 +358,10 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
 
     player = GET_PLAYER(play);
     sp50 = Actor_WorldDistXZToActor(&this->actor, &player->actor);
-    sp48 = this->unk_148;
+    sp48 = this->animIndex;
     sp4C = SkelAnime_Update(&this->skin.skelAnime);
 
-    if ((sp4C != 0) || (this->unk_148 == 1) || (this->unk_148 == 0)) {
+    if ((sp4C != 0) || (this->animIndex == 1) || (this->animIndex == 0)) {
         // The carry-over of this flag from OoT was not done correctly
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_ZORA_HALL)) {
             f32 sp44 = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
@@ -364,7 +380,7 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
                     this->actor.speed = 2.0f;
                 } else {
                     this->actor.speed = 0.0f;
-                    if (this->unk_148 == 0) {
+                    if (this->animIndex == 0) {
                         sp48 = (sp4C == 1) ? 1 : 0;
                     } else {
                         sp48 = (sp4C == 1) ? 0 : 1;
@@ -382,7 +398,7 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
                 this->actor.speed = 2.0f;
             } else {
                 this->actor.speed = 0.0f;
-                if (this->unk_148 == 0) {
+                if (this->animIndex == 0) {
                     sp48 = (sp4C == 1) ? 1 : 0;
                 } else {
                     sp48 = (sp4C == 1) ? 0 : 1;
@@ -390,7 +406,7 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
             }
         } else {
             this->actor.speed = 0.0f;
-            if (this->unk_148 == 0) {
+            if (this->animIndex == 0) {
                 sp48 = (sp4C == 1) ? 1 : 0;
             } else {
                 sp48 = (sp4C == 1) ? 0 : 1;
@@ -398,29 +414,29 @@ void func_808DF194(EnHorseLinkChild* this, PlayState* play) {
         }
     }
 
-    if ((sp48 != this->unk_148) || (sp4C == 1)) {
-        this->unk_148 = sp48;
-        Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                         Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    if ((sp48 != this->animIndex) || (sp4C == 1)) {
+        this->animIndex = sp48;
+        Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                         Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
     } else {
-        Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this),
-                         this->skin.skelAnime.curFrame, Animation_GetLastFrame(D_808DFEC0[this->unk_148]),
+        Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this),
+                         this->skin.skelAnime.curFrame, Animation_GetLastFrame(sAnimations[this->animIndex]),
                          ANIMMODE_ONCE, 0.0f);
     }
 }
 
 void func_808DF560(EnHorseLinkChild* this) {
-    this->unk_144 = 5;
+    this->action = OOT_EPONA_ACTION_5;
 
     if (Rand_ZeroOne() > 0.5f) {
-        this->unk_148 = 0;
+        this->animIndex = 0;
     } else {
-        this->unk_148 = 1;
+        this->animIndex = 1;
     }
 
     gHorsePlayedEponasSong = false;
-    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, 0.0f);
 }
 
 void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
@@ -436,15 +452,15 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
     this->actor.speed = 0.0f;
     sp36 = Actor_WorldYawTowardActor(&this->actor, &GET_PLAYER(play)->actor) - this->actor.world.rot.y;
 
-    if ((Math_CosS(sp36) < 0.7071f) && (this->unk_148 == 2)) {
+    if ((Math_CosS(sp36) < 0.7071f) && (this->animIndex == 2)) {
         Horse_RotateToPoint(&this->actor, &GET_PLAYER(play)->actor.world.pos, 0x12C);
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         if (Math_CosS(sp36) < 0.0f) {
-            this->unk_148 = 2;
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], D_808DFF18[this->unk_148], 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[2]), ANIMMODE_ONCE, -5.0f);
+            this->animIndex = 2;
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], sAnimPlaySpeeds[this->animIndex], 0.0f,
+                             Animation_GetLastFrame(sAnimations[2]), ANIMMODE_ONCE, -5.0f);
         } else {
             func_808DF560(this);
         }
@@ -453,12 +469,12 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
 
 void func_808DF788(EnHorseLinkChild* this) {
     this->unk_1DC = 0;
-    this->unk_144 = 4;
-    this->unk_148 = 2;
+    this->action = OOT_EPONA_ACTION_4;
+    this->animIndex = 2;
     this->unk_1E0 = 0;
     this->actor.speed = 2.0f;
-    Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                     Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+    Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                     Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
 }
 
 void func_808DF838(EnHorseLinkChild* this, PlayState* play) {
@@ -471,7 +487,7 @@ void func_808DF838(EnHorseLinkChild* this, PlayState* play) {
         this->unk_1E0 = 1;
     }
 
-    if ((this->unk_148 == 4) || (this->unk_148 == 3) || (this->unk_148 == 2)) {
+    if ((this->animIndex == 4) || (this->animIndex == 3) || (this->animIndex == 2)) {
         if (this->unk_1E0 == 0) {
             Horse_RotateToPoint(&this->actor, &player->actor.world.pos, 0x12C);
         } else {
@@ -513,13 +529,13 @@ void func_808DF838(EnHorseLinkChild* this, PlayState* play) {
             return;
         }
 
-        if (phi_v0 != this->unk_148) {
-            this->unk_148 = phi_v0;
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, -5.0f);
+        if (phi_v0 != this->animIndex) {
+            this->animIndex = phi_v0;
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
         } else {
-            Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], func_808DE728(this), 0.0f,
-                             Animation_GetLastFrame(D_808DFEC0[this->unk_148]), ANIMMODE_ONCE, 0.0f);
+            Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], func_808DE728(this), 0.0f,
+                             Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, 0.0f);
         }
     }
 }
@@ -528,7 +544,8 @@ void EnHorseLinkChild_Update(Actor* thisx, PlayState* play) {
     s32 pad;
     EnHorseLinkChild* this = THIS;
 
-    D_808DFF30[this->unk_144](this, play);
+    sActionFuncs[this->action](this, play);
+
     Actor_MoveWithGravity(&this->actor);
     Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 55.0f, 100.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
@@ -537,12 +554,12 @@ void EnHorseLinkChild_Update(Actor* thisx, PlayState* play) {
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 70.0f;
 
-    if ((Rand_ZeroOne() < 0.025f) && (this->unk_1E4 == 0)) {
-        this->unk_1E4++;
-    } else if (this->unk_1E4 > 0) {
-        this->unk_1E4++;
-        if (this->unk_1E4 >= 4) {
-            this->unk_1E4 = 0;
+    if ((Rand_ZeroOne() < 0.025f) && (this->eyeTexIndex == 0)) {
+        this->eyeTexIndex++;
+    } else if (this->eyeTexIndex > 0) {
+        this->eyeTexIndex++;
+        if (this->eyeTexIndex >= 4) {
+            this->eyeTexIndex = 0;
         }
     }
 
@@ -581,9 +598,9 @@ s32 EnHorseLinkChild_OverrideSkinDraw(Actor* thisx, PlayState* play, s32 limbInd
     OPEN_DISPS(play->state.gfxCtx);
 
     if (limbIndex == OBJECT_HORSE_LINK_CHILD_LIMB_0D) {
-        u8 index = D_808DFF54[this->unk_1E4];
+        u8 index = D_808DFF54[this->eyeTexIndex];
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_808DFF48[index]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[index]));
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
