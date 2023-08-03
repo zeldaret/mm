@@ -14,9 +14,9 @@ typedef struct EnHorseLinkChild {
     /* 0x148 */ s32 animIndex;
     /* 0x14C */ Skin skin;
     /* 0x1DC */ s32 unk_1DC;
-    /* 0x1DC */ s32 unk_1E0;
+    /* 0x1DC */ s32 unk_1E0; // true false
     /* 0x1E4 */ u8 eyeTexIndex;
-    /* 0x1E8 */ s32 unk_1E8;
+    /* 0x1E8 */ s32 gallopTimer;
     /* 0x1EC */ ColliderCylinder colldierCylinder;
     /* 0x238 */ ColliderJntSph colliderJntSph;
     /* 0x258 */ ColliderJntSphElement colliderJntSphElements[1];
