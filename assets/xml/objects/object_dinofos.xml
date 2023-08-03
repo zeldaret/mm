@@ -1,6 +1,6 @@
 ﻿<Root>
+    <!-- Object for Dinolfos -->
     <File Name="object_dinofos" Segment="6">
-        <!-- Object for Dinolfos -->
         <Animation Name="gDinolfosWalkAnim" Offset="0x580" /> <!-- Original name is "zf2_aruku" -->
         <Animation Name="gDinolfosLandAnim" Offset="0xAF0" /> <!-- Original name is "zf2_chakuti" -->
         <Animation Name="gDinolfosFireStartAnim" Offset="0x1040" /> <!-- Original name is "zf2_fire1" -->

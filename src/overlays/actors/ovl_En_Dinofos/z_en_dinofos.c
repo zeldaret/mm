@@ -242,7 +242,7 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 40, 100, 80 };
 
-static TexturePtr eyeTextures[] = {
+static TexturePtr sEyeTextures[] = {
     gDinolfosEyeOpenTex,
     gDinolfosEyeHalfTex,
     gDinolfosEyeClosedTex,
