@@ -17,12 +17,15 @@ void EnHorseLinkChild_Destroy(Actor* thisx, PlayState* play);
 void EnHorseLinkChild_Update(Actor* thisx, PlayState* play);
 void EnHorseLinkChild_Draw(Actor* thisx, PlayState* play);
 
+
 void EnHorseLinkChild_ActionFunc0(EnHorseLinkChild* this, PlayState* play);
+void EnHorseLinkChild_SetupActionFunc2(EnHorseLinkChild* this, s32 second);
 void EnHorseLinkChild_ActionFunc2(EnHorseLinkChild* this, PlayState* play);
-void func_808DECA0(EnHorseLinkChild* this);
+void EnHorseLinkChild_SetupActionFunc1(EnHorseLinkChild* this);
 void EnHorseLinkChild_ActionFunc1(EnHorseLinkChild* this, PlayState* play);
 void EnHorseLinkChild_SetupActionFunc3(EnHorseLinkChild* this);
 void EnHorseLinkChild_ActionFunc3(EnHorseLinkChild* this, PlayState* play);
+void EnHorseLinkChild_SetupActionFunc5(EnHorseLinkChild* this);
 void EnHorseLinkChild_ActionFunc5(EnHorseLinkChild* this, PlayState* play);
 void EnHorseLinkChild_SetupActionFunc4(EnHorseLinkChild* this);
 void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play);
@@ -160,6 +163,7 @@ f32 EnHorseLinkChild_GetAnimSpeed(EnHorseLinkChild* this) {
     return animSpeed;
 }
 
+
 void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
     EnHorseLinkChild* this = THIS;
 
@@ -223,7 +227,7 @@ void EnHorseLinkChild_ActionFunc0(EnHorseLinkChild* this, PlayState* play) {
     }
 }
 
-void func_808DEA54(EnHorseLinkChild* this, s32 nextAnimIndex) {
+void EnHorseLinkChild_SetupActionFunc2(EnHorseLinkChild* this, s32 nextAnimIndex) {
     this->action = OOT_EPONA_ACTION_2;
     this->actor.speed = 0.0f;
 
@@ -244,7 +248,7 @@ void EnHorseLinkChild_ActionFunc2(EnHorseLinkChild* this, PlayState* play) {
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         if ((distToPlayer < 1000.0f) && (distToPlayer > 70.0f)) {
-            func_808DECA0(this);
+            EnHorseLinkChild_SetupActionFunc1(this);
             return;
         }
 
@@ -265,7 +269,7 @@ void EnHorseLinkChild_ActionFunc2(EnHorseLinkChild* this, PlayState* play) {
     }
 }
 
-void func_808DECA0(EnHorseLinkChild* this) {
+void EnHorseLinkChild_SetupActionFunc1(EnHorseLinkChild* this) {
     this->action = OOT_EPONA_ACTION_1;
     this->animIndex = OOT_EPONA_ANIMATION_0;
     this->actor.speed = 0.0f;
@@ -293,7 +297,7 @@ void EnHorseLinkChild_ActionFunc1(EnHorseLinkChild* this, PlayState* play) {
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         temp_fv0 = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         if (temp_fv0 > 1000.0f) {
-            func_808DEA54(this, 0);
+            EnHorseLinkChild_SetupActionFunc2(this, 0);
             return;
         }
 
@@ -308,7 +312,7 @@ void EnHorseLinkChild_ActionFunc1(EnHorseLinkChild* this, PlayState* play) {
             this->gallopTimer = 0;
             this->actor.speed = 2.0f;
         } else {
-            func_808DEA54(this, 1);
+            EnHorseLinkChild_SetupActionFunc2(this, 1);
             return;
         }
 
