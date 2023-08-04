@@ -12,9 +12,21 @@ struct GraphicsContext;
 struct GameState;
 
 
+#define DEFINE_GAMESTATE_INTERNAL(typeName, enumName) enumName,
+#define DEFINE_GAMESTATE(typeName, enumName, name) DEFINE_GAMESTATE_INTERNAL(typeName, enumName)
+
+typedef enum GameStateId {
+#include "tables/gamestate_table.h"
+    /* 0x07 */ GAMESTATE_ID_MAX
+} GameStateId;
+
+#undef DEFINE_GAMESTATE
+#undef DEFINE_GAMESTATE_INTERNAL
+
+
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
-typedef struct {
+typedef struct GameStateOverlay {
     /* 0x00 */ void*         loadedRamAddr;
     /* 0x04 */ uintptr_t     vromStart; // if applicable
     /* 0x08 */ uintptr_t     vromEnd;   // if applicable
@@ -28,6 +40,7 @@ typedef struct {
     /* 0x28 */ UNK_TYPE      unk_28;
     /* 0x2C */ size_t        instanceSize;
 } GameStateOverlay; // size = 0x30
+
 
 typedef struct GameAllocEntry {
     /* 0x0 */ struct GameAllocEntry* next;
@@ -83,6 +96,10 @@ extern s32 gFramerateDivisor;
 extern f32 gFramerateDivisorF;
 extern f32 gFramerateDivisorHalf;
 extern f32 gFramerateDivisorThird;
+
+
+extern GameStateOverlay gGameStateOverlayTable[GAMESTATE_ID_MAX];
+extern GameStateId gGraphNumGameStates;
 
 
 #define STOP_GAMESTATE(curState)     \
