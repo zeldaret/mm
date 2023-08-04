@@ -76,7 +76,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
 
     // Generates code to match gameStateInit to a gamestate entry and returns it if found
 #define DEFINE_GAMESTATE_INTERNAL(typeName, enumName) \
-    if (gameStateInit == typeName##_Init) {       \
+    if (gameStateInit == typeName##_Init) {           \
         return &gGameStateOverlayTable[enumName];     \
     }
 #define DEFINE_GAMESTATE(typeName, enumName, name) DEFINE_GAMESTATE_INTERNAL(typeName, enumName)

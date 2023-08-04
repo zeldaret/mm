@@ -26,7 +26,7 @@ typedef enum GameStateId {
 
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
-typedef struct GameStateOverlay {
+typedef struct {
     /* 0x00 */ void*         loadedRamAddr;
     /* 0x04 */ uintptr_t     vromStart; // if applicable
     /* 0x08 */ uintptr_t     vromEnd;   // if applicable
@@ -40,7 +40,6 @@ typedef struct GameStateOverlay {
     /* 0x28 */ UNK_TYPE      unk_28;
     /* 0x2C */ size_t        instanceSize;
 } GameStateOverlay; // size = 0x30
-
 
 typedef struct GameAllocEntry {
     /* 0x0 */ struct GameAllocEntry* next;
