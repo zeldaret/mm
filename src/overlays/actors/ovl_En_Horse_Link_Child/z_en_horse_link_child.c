@@ -106,7 +106,7 @@ typedef enum OOTEponaActions {
     OOT_EPONA_ACTION_MAX
 };
 
-static EnHorseLinkChildUnkFunc sActionFuncs[] = {
+static EnHorseLinkChildActionFunc sActionFuncs[] = {
     /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_EPONA_ACTION_0
     /* 1 */ EnHorseLinkChild_GreetPlayer,   // OOT_EPONA_ACTION_GREET_PLAYER
     /* 2 */ EnHorseLinkChild_WaitForPlayer, // OOT_EPONA_ACTION_WAIT_FOR_PLAYER
@@ -509,7 +509,7 @@ void EnHorseLinkChild_SetupActionFunc4(EnHorseLinkChild* this) {
     this->timer = 0;
     this->action = OOT_EPONA_ACTION_4;
     this->animIndex = OOT_EPONA_ANIMATION_WALK;
-    this->returningHome = false;
+    this->isReturningHome = false;
     this->actor.speed = 2.0f;
     Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], EnHorseLinkChild_GetAnimSpeed(this), 0.0f,
                      Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
@@ -522,12 +522,12 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
 
     this->timer++;
     if (this->timer > 300) {
-        this->returningHome = true;
+        this->isReturningHome = true;
     }
 
     if ((this->animIndex == OOT_EPONA_ANIMATION_GALLOP) || (this->animIndex == OOT_EPONA_ANIMATION_TROT) ||
         (this->animIndex == OOT_EPONA_ANIMATION_WALK)) {
-        if (this->returningHome == false) {
+        if (this->isReturningHome == false) {
             Horse_RotateToPoint(&this->actor, &player->actor.world.pos, 0x12C);
         } else {
             Horse_RotateToPoint(&this->actor, &this->actor.home.pos, 0x12C);
@@ -535,13 +535,13 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        if (this->returningHome == false) {
+        if (this->isReturningHome == false) {
             distToTargetLoc = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         } else {
             distToTargetLoc = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
         }
 
-        if (this->returningHome == false) {
+        if (this->isReturningHome == false) {
             if (distToTargetLoc >= 300.0f) {
                 nextAnimIndex = OOT_EPONA_ANIMATION_GALLOP;
                 this->actor.speed = 6.0f;
