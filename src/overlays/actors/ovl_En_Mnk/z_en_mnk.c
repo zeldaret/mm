@@ -5,7 +5,6 @@
  */
 
 #include "z_en_mnk.h"
-#include "objects/object_mnk/object_mnk.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -76,6 +75,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 typedef enum {
+    /* 0 */ MONKEY_TIEDUP_ANIM_NONE = -1,
     /* 0 */ MONKEY_TIEDUP_ANIM_KICKAROUND,
     /* 1 */ MONKEY_TIEDUP_ANIM_KICKUPANDDOWN,
     /* 2 */ MONKEY_TIEDUP_ANIM_SHH,
@@ -250,9 +250,9 @@ void EnMnk_MonkeyTiedUp_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnMnk_MonkeyTiedUp_Wait;
     this->picto.actor.flags |= ACTOR_FLAG_2000000;
     SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyTiedUpPoleSkeleton, &object_mnk_Anim_003584,
-                       this->propJointTable, this->propMorphTable, 5);
+                       this->propJointTable, this->propMorphTable, OBJECT_MNK_1_LIMB_MAX);
     this->cueId = 4;
-    this->animIndex = -1;
+    this->animIndex = MONKEY_TIEDUP_ANIM_NONE;
     EnMnk_MonkeyTiedUp_ChangeAnim(this, MONKEY_TIEDUP_ANIM_KICKAROUND, ANIMMODE_ONCE, 0.0f);
     this->picto.actor.draw = EnMnk_MonkeyTiedUp_Draw;
     this->picto.actor.shape.shadowDraw = NULL;
@@ -278,7 +278,7 @@ void EnMnk_MonkeyHanging_Init(Actor* thisx, PlayState* play) {
     this->actionFunc = EnMnk_MonkeyHanging_StruggleBeforeDunk;
     this->picto.actor.textId = 0x8E8;
     SkelAnime_InitFlex(play, &this->propSkelAnime, &gMonkeyHangingRopeSkeleton, &gMonkeyHangingStruggleAnim,
-                       this->propJointTable, this->propMorphTable, 4);
+                       this->propJointTable, this->propMorphTable, OBJECT_MNK_3_LIMB_MAX);
     EnMnk_MonkeyHanging_ChangeAnim(this, MONKEY_HANGING_ANIM_STRUGGLE, ANIMMODE_LOOP, 0.0f);
     this->unk_3E0 = 5;
     this->picto.actor.draw = EnMnk_MonkeyHanging_Draw;
@@ -298,7 +298,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->picto.actor.shape, 0.0f, ActorShadow_DrawCircle, 12.0f);
     this->actionFunc = EnMnk_DoNothing;
     SkelAnime_InitFlex(play, &this->skelAnime, &gMonkeySkeleton, &object_mnk_Anim_0105DC, this->jointTable,
-                       this->morphTable, 23);
+                       this->morphTable, OBJECT_MNK_2_LIMB_MAX);
     Animation_PlayLoop(&this->skelAnime, &object_mnk_Anim_0105DC);
     this->unk_3E4 = 0;
     this->unk_3D4 = 0;
@@ -374,7 +374,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             break;
 
         case MONKEY_BY_WITCH:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08) ||
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME) ||
                 Flags_GetSwitch(play, MONKEY_GET_SWITCHFLAG(&this->picto.actor))) {
                 Actor_Kill(thisx);
                 return;
@@ -382,7 +382,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             break;
 
         case MONKEY_WOODS_GUIDE:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_02) || CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
                 Actor_Kill(thisx);
                 return;
             }
@@ -627,6 +627,7 @@ void func_80AB5F6C(EnMnk* this) {
     this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
     SkelAnime_Update(&this->skelAnime);
+
     if ((s32)this->skelAnime.curFrame == 0) {
         if (this->unk_3C8 < 0) {
             EnMnk_Monkey_ChangeAnim(this, 100, ANIMMODE_LOOP, 0.0f);
@@ -778,7 +779,7 @@ void func_80AB64B8(EnMnk* this, PlayState* play) {
         this->unk_3E4 &= ~4;
     } else if (this->picto.actor.xzDistToPlayer < 100.0f) {
         this->picto.actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     } else {
         this->picto.actor.flags &= ~ACTOR_FLAG_10000;
     }
@@ -880,7 +881,7 @@ void EnMnk_Monkey_WaitToTalkAfterRun(EnMnk* this, PlayState* play) {
         this->actionFunc = EnMnk_Monkey_TalkAfterRun;
         this->unk_3E4 &= ~4;
     } else if (this->picto.actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 }
 
@@ -1077,7 +1078,7 @@ void EnMnk_Monkey_WaitToTalkAfterApproach(EnMnk* this, PlayState* play) {
         this->unk_3E4 |= 0x10;
         this->actionFunc = EnMnk_Monkey_UnapproachPlayer;
     } else if (this->picto.actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 }
 
@@ -1150,7 +1151,7 @@ void EnMnk_Monkey_WaitOutsideWoods(EnMnk* this, PlayState* play) {
     this->picto.actor.shape.rot.y = this->picto.actor.yawTowardsPlayer;
     this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
-    if (((this->picto.actor.xzDistToPlayer < 200.0f) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) ||
+    if (((this->picto.actor.xzDistToPlayer < 200.0f) && CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) ||
         CHECK_EVENTINF(EVENTINF_26)) {
         SET_EVENTINF(EVENTINF_26);
         EnMnk_Monkey_SetupDrop(this);
@@ -1455,7 +1456,7 @@ void EnMnk_MonkeyTiedUp_WaitUnused(EnMnk* this, PlayState* play) {
         this->unk_3E0 = 0;
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
         this->picto.actor.textId = 0x8E2;
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 }
 
@@ -1506,7 +1507,7 @@ void EnMnk_MonkeyTiedUp_WaitForInstrument(EnMnk* this, PlayState* play) {
         EnMnk_MonkeyTiedUp_SetAnim(this, MONKEY_TIEDUP_ANIM_KICKAROUND);
     } else if (EnMnk_PlayerIsInTalkRange(this, play)) {
         this->picto.actor.textId = 0x8D3;
-        func_800B8614(&this->picto.actor, play, 100.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 100.0f);
         func_800B874C(&this->picto.actor, play, 100.0f, 100.0f);
     }
 }
@@ -1519,7 +1520,7 @@ void EnMnk_MonkeyTiedUp_TalkAfterCutRope(EnMnk* this, PlayState* play) {
         this->actionFunc = EnMnk_MonkeyTiedUp_TransitionAfterTalk;
         this->picto.actor.flags &= ~ACTOR_FLAG_10000;
     } else {
-        func_800B8614(&this->picto.actor, play, 150.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 150.0f);
     }
 }
 
@@ -1548,7 +1549,7 @@ void EnMnk_MonkeyTiedUp_WaitForCutRope(EnMnk* this, PlayState* play) {
         } else {
             this->picto.actor.textId = 0x8D0;
         }
-        func_800B8614(&this->picto.actor, play, 100.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 100.0f);
     }
 }
 
@@ -1600,11 +1601,11 @@ void EnMnk_MonkeyTiedUp_Wait(EnMnk* this, PlayState* play) {
         } else {
             this->picto.actor.textId = 0x8CC;
         }
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     } else if ((play->curSpawn != 1) && (this->picto.actor.xzDistToPlayer < 140.0f) &&
                Player_IsFacingActor(&this->picto.actor, 0x3000, play)) {
         this->picto.actor.textId = 0x8CA;
-        func_800B8614(&this->picto.actor, play, 140.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 140.0f);
     }
 }
 
@@ -1726,7 +1727,7 @@ void EnMnk_MonkeyHanging_WaitAfterDunk(EnMnk* this, PlayState* play) {
     } else if (this->unk_3C8 > 0) {
         this->unk_3C8--;
         if (this->picto.actor.isTargeted && (this->picto.actor.csId != CS_ID_NONE)) {
-            func_800B8614(&this->picto.actor, play, 1000.0f);
+            Actor_OfferTalk(&this->picto.actor, play, 1000.0f);
         }
     } else {
         this->unk_3C8 = 240;
@@ -1794,7 +1795,7 @@ void EnMnk_MonkeyHanging_StruggleBeforeDunk(EnMnk* this, PlayState* play) {
     } else if (this->unk_3C8 > 0) {
         this->unk_3C8--;
         if (this->picto.actor.isTargeted) {
-            func_800B8614(&this->picto.actor, play, 1000.0f);
+            Actor_OfferTalk(&this->picto.actor, play, 1000.0f);
         }
     } else {
         this->unk_3C8 = 60;
@@ -1863,9 +1864,9 @@ void EnMnk_Monkey_WaitToGuideThroughWoods(EnMnk* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         EnMnk_Monkey_SetupTalkBeforeGuideThroughWoods(this);
     } else if (this->picto.actor.isTargeted || (this->picto.actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         Actor_Kill(&this->picto.actor);
     }
 }
@@ -1906,7 +1907,7 @@ void EnMnk_Monkey_WaitToTalkAfterSaved(EnMnk* this, PlayState* play) {
         this->actionFunc = EnMnk_Monkey_TalkAfterSaved;
         EnMnk_Monkey_SetAnim(this, 7);
     } else if ((this->picto.actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->picto.actor, 0x3000, play)) {
-        func_800B8614(&this->picto.actor, play, 110.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 110.0f);
     }
 }
 

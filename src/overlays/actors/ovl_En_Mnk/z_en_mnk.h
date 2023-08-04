@@ -2,6 +2,7 @@
 #define Z_EN_MNK_H
 
 #include "global.h"
+#include "objects/object_mnk/object_mnk.h"
 #include "z64snap.h"
 
 struct EnMnk;
@@ -29,14 +30,16 @@ typedef enum {
     /* 10 */ MONKEY_10
 } MonkeyType;
 
+#define MONKEY_PROP_LIMB_MAX MAX((s32)OBJECT_MNK_1_LIMB_MAX, (s32)OBJECT_MNK_3_LIMB_MAX)
+
 typedef struct EnMnk {
     /* 0x000 */ PictoActor picto;
     /* 0x148 */ SkelAnime skelAnime;
-    /* 0x18C */ Vec3s jointTable[23];
-    /* 0x216 */ Vec3s morphTable[23];
+    /* 0x18C */ Vec3s jointTable[OBJECT_MNK_2_LIMB_MAX];
+    /* 0x216 */ Vec3s morphTable[OBJECT_MNK_2_LIMB_MAX];
     /* 0x2A0 */ SkelAnime propSkelAnime;
-    /* 0x2E4 */ Vec3s propJointTable[5];
-    /* 0x302 */ Vec3s propMorphTable[5];
+    /* 0x2E4 */ Vec3s propJointTable[MONKEY_PROP_LIMB_MAX];
+    /* 0x302 */ Vec3s propMorphTable[MONKEY_PROP_LIMB_MAX];
     /* 0x320 */ ColliderCylinder collider;
     /* 0x36C */ MtxF unk_36C;
     /* 0x3AC */ Path* path;
