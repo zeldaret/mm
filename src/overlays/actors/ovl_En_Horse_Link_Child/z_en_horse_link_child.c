@@ -41,14 +41,14 @@ ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Draw,
 };
 
-typedef enum OOTEponaAnimations {
+typedef enum {
     OOT_EPONA_ANIMATION_IDLE,   // head down + pawing
     OOT_EPONA_ANIMATION_WHINNY, // head shake
     OOT_EPONA_ANIMATION_WALK,   // slow
     OOT_EPONA_ANIMATION_TROT,   // mid
     OOT_EPONA_ANIMATION_GALLOP, // fast
     OOT_EPONA_ANIMATION_MAX
-};
+} OOTEponaAnimations;
 
 AnimationHeader* sAnimations[] = {
     &gEponaIdleAnim,   // OOT_EPONA_ANIMATION_IDLE
@@ -96,7 +96,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
 };
 
-typedef enum OOTEponaActions {
+typedef enum {
     OOT_EPONA_ACTION_0,            // unfinished
     OOT_EPONA_ACTION_GREET_PLAYER, // approaching
     OOT_EPONA_ACTION_WAIT_FOR_PLAYER,
@@ -104,7 +104,7 @@ typedef enum OOTEponaActions {
     OOT_EPONA_ACTION_4,
     OOT_EPONA_ACTION_5,
     OOT_EPONA_ACTION_MAX
-};
+} OOTEponaActions;
 
 static EnHorseLinkChildActionFunc sActionFuncs[] = {
     /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_EPONA_ACTION_0
