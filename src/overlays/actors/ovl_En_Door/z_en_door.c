@@ -5,7 +5,7 @@
  */
 
 #include "z_en_door.h"
-#include "objects/object_mkk/object_mkk.h"
+#include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "objects/object_dor01/object_dor01.h"
 #include "objects/object_dor02/object_dor02.h"
 #include "objects/object_dor03/object_dor03.h"
@@ -369,17 +369,17 @@ static u8 sAnimCloseFrames[10] = {
 static Gfx* D_808679A4[14][2] = {
     { gDoorLeftDL, gDoorRightDL },
     { gWoodfallDoorDL, gWoodfallDoorDL },
-    { object_dor01_DL_000448, object_dor01_DL_000448 },
+    { gObservatoryLabDoorDL, gObservatoryLabDoorDL },
     { gZoraHallDoorDL, gZoraHallDoorDL },
     { gSwampDoorDL, gSwampDoorDL },
     { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL },
-    { object_wdor01_DL_000548, object_wdor01_DL_000548 }, // Lottery Shop / Curiosity Shop / Mayor's House Door
-    { object_wdor02_DL_000548, object_wdor02_DL_000548 }, // Trading Post / Post Office Door
-    { object_wdor03_DL_000548, object_wdor03_DL_000548 }, // Stockpot Inn & Swordsman's School Door
+    { gLotteryCuriosityShopMayorHouseDoorDL, gLotteryCuriosityShopMayorHouseDoorDL }, // Lottery Shop / Curiosity Shop / Mayor's House Door
+    { gPostOfficeTradingPostDoorDL, gPostOfficeTradingPostDoorDL }, // Trading Post / Post Office Door
+    { gInnSchoolDoorDL, gInnSchoolDoorDL }, // Stockpot Inn & Swordsman's School Door
     { gMilkBarDoorDL, gMilkBarDoorDL },
     { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },
     { gPiratesFortressDoorDL, gPiratesFortressDoorDL },
-    { object_mkk_DL_000310, object_mkk_DL_000310 },
+    { OceansideSpiderHouseDoorDL, OceansideSpiderHouseDoorDL },
     { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },
 };
 
