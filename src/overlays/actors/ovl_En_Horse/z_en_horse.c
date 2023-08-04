@@ -110,9 +110,15 @@ typedef struct {
 } RaceInfo; // size = 0x8
 
 static AnimationHeader* sEponaAnimations[] = {
-    &gEponaIdleAnim, &gEponaWhinnyAnim, &object_horse_link_child_Anim_005F64,
-    &object_horse_link_child_Anim_004DE8, &gEponaWalkAnim, &gEponaTrotAnim,
-    &gEponaGallopAnim, &object_horse_link_child_Anim_0035B0, &object_horse_link_child_Anim_003D38,
+    &gEponaIdleAnim,
+    &gEponaWhinnyAnim,
+    &object_horse_link_child_Anim_005F64,
+    &object_horse_link_child_Anim_004DE8,
+    &gEponaWalkAnim,
+    &gEponaTrotAnim,
+    &gEponaGallopAnim,
+    &object_horse_link_child_Anim_0035B0,
+    &object_horse_link_child_Anim_003D38,
 };
 
 static AnimationHeader* sHniAnimations[] = {
