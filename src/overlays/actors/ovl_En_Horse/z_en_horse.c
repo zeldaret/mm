@@ -110,9 +110,9 @@ typedef struct {
 } RaceInfo; // size = 0x8
 
 static AnimationHeader* sEponaAnimations[] = {
-    &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_005F64,
-    &object_horse_link_child_Anim_004DE8, &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,
-    &object_horse_link_child_Anim_002F98, &object_horse_link_child_Anim_0035B0, &object_horse_link_child_Anim_003D38,
+    &gEponaIdleAnim, &gEponaWhinnyAnim, &object_horse_link_child_Anim_005F64,
+    &object_horse_link_child_Anim_004DE8, &gEponaWalkAnim, &gEponaTrotAnim,
+    &gEponaGallopAnim, &object_horse_link_child_Anim_0035B0, &object_horse_link_child_Anim_003D38,
 };
 
 static AnimationHeader* sHniAnimations[] = {
@@ -130,7 +130,7 @@ static f32 sPlaybackSpeeds[] = {
 };
 
 static SkeletonHeader* sSkeletonHeaders[] = {
-    NULL, NULL, &object_horse_link_child_Skel_00A480, NULL, NULL,
+    NULL, NULL, &gEponaSkel, NULL, NULL,
 };
 
 ActorInit En_Horse_InitVars = {
@@ -4633,9 +4633,9 @@ void EnHorse_PostDraw(Actor* thisx, PlayState* play, Skin* skin) {
 
 s32 EnHorse_OverrideLimbDraw(Actor* thisx, PlayState* play, s32 limbIndex, Skin* skin) {
     static TexturePtr D_80889204[] = {
-        object_horse_link_child_Tex_001D28,
-        object_horse_link_child_Tex_001928,
-        object_horse_link_child_Tex_001B28,
+        gEponaEyeOpenTex,
+        gEponaEyeHalfTex,
+        gEponaEyeClosedTex,
     };
     static u8 D_80889210[] = { 0, 1, 2, 1 };
     EnHorse* this = THIS;
