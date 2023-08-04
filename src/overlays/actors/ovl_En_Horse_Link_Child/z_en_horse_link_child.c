@@ -367,7 +367,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
             newYawDiff = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos) - this->actor.world.rot.y;
         }
 
-        if (newYawDiff > 0x12C) { // 300
+        if (newYawDiff > 0x12C) {
             this->actor.world.rot.y += 0x12C;
         } else if (newYawDiff < -0x12C) {
             this->actor.world.rot.y += -0x12C;
