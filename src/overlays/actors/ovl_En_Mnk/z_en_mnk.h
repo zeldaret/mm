@@ -11,7 +11,7 @@ typedef void (*EnMnkActionFunc)(struct EnMnk*, PlayState*);
 typedef void (*EnMnkFunc)(PlayState*, struct EnMnk*);
 
 #define MONKEY_GET_TYPE(thisx) (((thisx)->params & 0x780) >> 7)
-#define MONKEY_GET_SWITCHFLAG(thisx) ((thisx)->params & 0x7F)
+#define MONKEY_GET_SWITCH_FLAG(thisx) ((thisx)->params & 0x7F)
 #define MONKEY_GET_PATH_INDEX(thisx) (((thisx)->params & 0xF800) >> 11)
 
 #define MONKEY_PATH_INDEX_NONE 0x1F
