@@ -102,6 +102,11 @@ extern GameStateOverlay gGameStateOverlayTable[GAMESTATE_ID_MAX];
 extern GameStateId gGraphNumGameStates;
 
 
+#define CONTROLLER1(gameState) (&(gameState)->input[0])
+#define CONTROLLER2(gameState) (&(gameState)->input[1])
+#define CONTROLLER3(gameState) (&(gameState)->input[2])
+#define CONTROLLER4(gameState) (&(gameState)->input[3])
+
 #define STOP_GAMESTATE(curState)     \
     do {                             \
         GameState* state = curState; \
