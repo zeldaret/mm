@@ -41,20 +41,21 @@ ActorInit En_Horse_Link_Child_InitVars = {
     (ActorFunc)EnHorseLinkChild_Draw,
 };
 
-AnimationHeader* sAnimations[] = {
-    &gEponaIdleAnim,   // OOT_EPONA_ANIMATION_IDLE
-    &gEponaWhinnyAnim, // OOT_EPONA_ANIMATION_WHINNY
-    &gEponaWalkAnim,   // OOT_EPONA_ANIMATION_WALK
-    &gEponaTrotAnim,   // OOT_EPONA_ANIMATION_TROT
-    &gEponaGallopAnim, // OOT_EPONA_ANIMATION_GALLOP
-};
-
 typedef enum OOTEponaAnimations {
     OOT_EPONA_ANIMATION_IDLE,   // head down + pawing
     OOT_EPONA_ANIMATION_WHINNY, // head shake
     OOT_EPONA_ANIMATION_WALK,   // slow
     OOT_EPONA_ANIMATION_TROT,   // mid
     OOT_EPONA_ANIMATION_GALLOP, // fast
+    OOT_EPONA_ANIMATION_MAX
+};
+
+AnimationHeader* sAnimations[] = {
+    &gEponaIdleAnim,   // OOT_EPONA_ANIMATION_IDLE
+    &gEponaWhinnyAnim, // OOT_EPONA_ANIMATION_WHINNY
+    &gEponaWalkAnim,   // OOT_EPONA_ANIMATION_WALK
+    &gEponaTrotAnim,   // OOT_EPONA_ANIMATION_TROT
+    &gEponaGallopAnim, // OOT_EPONA_ANIMATION_GALLOP
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
@@ -95,15 +96,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
 };
 
-static EnHorseLinkChildUnkFunc sActionFuncs[] = {
-    /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_EPONA_ACTION_0
-    /* 1 */ EnHorseLinkChild_GreetPlayer,   // OOT_EPONA_ACTION_GREET_PLAYER
-    /* 2 */ EnHorseLinkChild_WaitForPlayer, // OOT_EPONA_ACTION_WAIT_FOR_PLAYER
-    /* 3 */ EnHorseLinkChild_LonLonIdle,    // OOT_EPONA_ACTION_LONLON_IDLE
-    /* 4 */ EnHorseLinkChild_ActionFunc4,   // OOT_EPONA_ACTION_4
-    /* 5 */ EnHorseLinkChild_ActionFunc5,   // OOT_EPONA_ACTION_5
-};
-
 typedef enum OOTEponaActions {
     OOT_EPONA_ACTION_0,            // unfinished
     OOT_EPONA_ACTION_GREET_PLAYER, // approaching
@@ -111,6 +103,16 @@ typedef enum OOTEponaActions {
     OOT_EPONA_ACTION_LONLON_IDLE,
     OOT_EPONA_ACTION_4,
     OOT_EPONA_ACTION_5,
+    OOT_EPONA_ACTION_MAX
+};
+
+static EnHorseLinkChildUnkFunc sActionFuncs[] = {
+    /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_EPONA_ACTION_0
+    /* 1 */ EnHorseLinkChild_GreetPlayer,   // OOT_EPONA_ACTION_GREET_PLAYER
+    /* 2 */ EnHorseLinkChild_WaitForPlayer, // OOT_EPONA_ACTION_WAIT_FOR_PLAYER
+    /* 3 */ EnHorseLinkChild_LonLonIdle,    // OOT_EPONA_ACTION_LONLON_IDLE
+    /* 4 */ EnHorseLinkChild_ActionFunc4,   // OOT_EPONA_ACTION_4
+    /* 5 */ EnHorseLinkChild_ActionFunc5,   // OOT_EPONA_ACTION_5
 };
 
 static TexturePtr sEyeTextures[] = { gEponaEyeOpenTex, gEponaEyeHalfTex, gEponaEyeClosedTex };
@@ -167,7 +169,7 @@ void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
     EnHorseLinkChild* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    Actor_SetScale(&this->actor, 64.8 * 0.0001);
+    Actor_SetScale(&this->actor, 64.8f * 0.0001f);
 
     this->actor.gravity = -3.5f;
 
