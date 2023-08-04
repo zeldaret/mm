@@ -373,9 +373,10 @@ static Gfx* D_808679A4[14][2] = {
     { gZoraHallDoorDL, gZoraHallDoorDL },
     { gSwampDoorDL, gSwampDoorDL },
     { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL },
-    { gLotteryCuriosityShopMayorHouseDoorDL, gLotteryCuriosityShopMayorHouseDoorDL }, // Lottery Shop / Curiosity Shop / Mayor's House Door
+    { gLotteryCuriosityShopMayorHouseDoorDL,
+      gLotteryCuriosityShopMayorHouseDoorDL }, // Lottery Shop / Curiosity Shop / Mayor's House Door
     { gPostOfficeTradingPostDoorDL, gPostOfficeTradingPostDoorDL }, // Trading Post / Post Office Door
-    { gInnSchoolDoorDL, gInnSchoolDoorDL }, // Stockpot Inn & Swordsman's School Door
+    { gInnSchoolDoorDL, gInnSchoolDoorDL },                         // Stockpot Inn & Swordsman's School Door
     { gMilkBarDoorDL, gMilkBarDoorDL },
     { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },
     { gPiratesFortressDoorDL, gPiratesFortressDoorDL },
