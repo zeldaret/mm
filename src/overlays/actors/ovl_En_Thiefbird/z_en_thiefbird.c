@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
 
@@ -231,7 +232,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         }
     }
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
@@ -265,7 +266,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
             Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
-            this->unk_3E8 = gTakkuriStolenGreatFairySwordDL;
+            this->unk_3E8 = gTakkuriStolenGreatFairysSwordDL;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
@@ -949,7 +950,8 @@ void func_80C12B1C(EnThiefbird* this, PlayState* play) {
             if (i != ARRAY_COUNT(this->colliderElements)) {
                 sph = &this->collider.elements[i];
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
-                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;

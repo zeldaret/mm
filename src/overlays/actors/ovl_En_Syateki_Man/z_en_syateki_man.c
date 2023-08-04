@@ -327,7 +327,7 @@ void EnSyatekiMan_Swamp_Idle(EnSyatekiMan* this, PlayState* play) {
         }
         this->actionFunc = EnSyatekiMan_Swamp_Talk;
     } else {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 
     if (player->actor.world.pos.z < 135.0f) {
@@ -513,7 +513,7 @@ void EnSyatekiMan_Swamp_Talk(EnSyatekiMan* this, PlayState* play) {
 }
 
 void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
+    switch (GET_PLAYER_FORM) {
         case PLAYER_FORM_HUMAN:
             Flags_SetAllTreasure(play, Flags_GetAllTreasure(play) + 1);
             if (CURRENT_DAY != 3) {
@@ -610,6 +610,9 @@ void EnSyatekiMan_Town_StartIntroTextbox(EnSyatekiMan* this, PlayState* play) {
                 this->prevTextId = 0x3F5;
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -626,7 +629,7 @@ void EnSyatekiMan_Town_Idle(EnSyatekiMan* this, PlayState* play) {
 
         this->actionFunc = EnSyatekiMan_Town_Talk;
     } else {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -929,7 +932,7 @@ void EnSyatekiMan_Swamp_GiveReward(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Swamp_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -994,7 +997,7 @@ void EnSyatekiMan_Town_GiveReward(EnSyatekiMan* this, PlayState* play) {
         this->shootingGameState = SG_GAME_STATE_NONE;
         this->actionFunc = EnSyatekiMan_Town_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1209,7 +1212,7 @@ void EnSyatekiMan_Swamp_AddBonusPoints(EnSyatekiMan* this, PlayState* play) {
 void EnSyatekiMan_Town_MovePlayerAndSayHighScore(EnSyatekiMan* this, PlayState* play) {
     Vec3f targetPlayerPos;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY) {
         targetPlayerPos = sTownFierceDeityPlayerPos;
     } else {
         targetPlayerPos = sTownPlayerPos;

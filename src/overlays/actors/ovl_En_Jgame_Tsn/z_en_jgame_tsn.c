@@ -184,14 +184,13 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
         }
         func_80C14030(this);
     } else if (this->actor.flags & ACTOR_FLAG_10000) {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     } else {
-        func_800B8614(&this->actor, play, 80.0f);
+        Actor_OfferTalk(&this->actor, play, 80.0f);
     }
 
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(player->stateFlags1 & PLAYER_STATE1_2000) &&
-        (this->unk_2FE == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) &&
-        func_80C149B0(play, &this->unk_1F8)) {
+        (this->unk_2FE == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) && func_80C149B0(play, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
     } else if (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
@@ -222,7 +221,7 @@ void func_80C13E90(EnJgameTsn* this, PlayState* play) {
         }
         func_80C14030(this);
     } else {
-        func_800B8614(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -402,7 +401,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 

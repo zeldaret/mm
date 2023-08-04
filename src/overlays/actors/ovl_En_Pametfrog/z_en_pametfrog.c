@@ -8,6 +8,7 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -394,7 +395,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, PlayState* play) {
         this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
                     this->collider.elements[0].info.bumper.hitPos.y, this->collider.elements[0].info.bumper.hitPos.z, 0,
-                    0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
         EnPametfrog_Freeze(this);
     }
@@ -1299,10 +1300,11 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         this->drawDmgEffScale = 0.75f;
                         this->drawDmgEffAlpha = 4.0f;
-                        Actor_Spawn(
-                            &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
-                            this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                                    this->collider.elements[0].info.bumper.hitPos.x,
+                                    this->collider.elements[0].info.bumper.hitPos.y,
+                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
                     EnPametfrog_SetupDamage(this);
                 }

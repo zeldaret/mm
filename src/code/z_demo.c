@@ -1,8 +1,10 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
 void CutsceneHandler_DoNothing(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StartManual(PlayState* play, CutsceneContext* csCtx);
@@ -43,7 +45,7 @@ void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
         sCueTypeList[i] = 0;
     }
 
-    gDisablePlayerCsModeStartPos = 0;
+    gDisablePlayerCsModeStartPos = false;
 
     Audio_SetCutsceneFlag(false);
 }
@@ -301,7 +303,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             break;
 
         case CS_MISC_PLAYER_FORM_HUMAN:
-            sCutsceneStoredPlayerForm = gSaveContext.save.playerForm;
+            sCutsceneStoredPlayerForm = GET_PLAYER_FORM;
             gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
             gSaveContext.save.equippedMask = PLAYER_MASK_NONE;
             break;
@@ -815,8 +817,9 @@ void CutsceneCmd_GiveTatlToPlayer(PlayState* play, CutsceneContext* csCtx, CsCmd
             if (player->tatlActor != NULL) {
                 return;
             }
-            player->tatlActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x,
-                                            player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, 0);
+            player->tatlActor =
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, player->actor.world.pos.x, player->actor.world.pos.y,
+                            player->actor.world.pos.z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
         }
     }
 }

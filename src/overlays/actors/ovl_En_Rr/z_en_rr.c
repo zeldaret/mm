@@ -6,6 +6,7 @@
 
 #include "z_en_rr.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_rr/object_rr.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
@@ -180,7 +181,7 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
                     collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
-                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == 5) {
         this->drawDmgEffScale = 0.85f;
         this->drawDmgEffAlpha = 4.0f;
@@ -305,7 +306,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
         this->unk_210 = 0.0f;
         this->unk_20C = 0x800;
 
-        if (((this->unk_1E2 == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) &&
+        if (((this->unk_1E2 == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) &&
             (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) == EQUIP_VALUE_SHIELD_HERO)) {
             sp34 = true;
             this->unk_1E2 = Inventory_DeleteEquipment(play, EQUIP_VALUE_SHIELD_HERO);
@@ -936,7 +937,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
+    gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
     Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,

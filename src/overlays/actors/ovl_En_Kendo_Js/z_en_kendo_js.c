@@ -169,8 +169,8 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
         if (ENKENDOJS_GET_FF(&this->actor) == ENKENDOJS_FF_1) {
             Message_StartTextbox(play, 0x273C, &this->actor);
             this->unk_288 = 0x273C;
-        } else if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
-            switch (gSaveContext.save.playerForm) {
+        } else if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+            switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_DEKU:
                     phi_v0 = 0;
                     break;
@@ -211,7 +211,7 @@ void func_80B2654C(EnKendoJs* this, PlayState* play) {
 
         func_80B26AE8(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -500,7 +500,7 @@ void func_80B27030(EnKendoJs* this, PlayState* play) {
             this->unk_288 = 0x271A;
             func_80B26AE8(this);
         } else {
-            func_800B8614(&this->actor, play, 800.0f);
+            Actor_OfferTalk(&this->actor, play, 800.0f);
         }
     }
 }
@@ -676,7 +676,7 @@ void func_80B27774(EnKendoJs* this, PlayState* play) {
         func_80B26AE8(this);
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
-        func_800B85E0(&this->actor, play, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 

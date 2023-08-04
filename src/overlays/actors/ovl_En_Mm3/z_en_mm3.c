@@ -133,7 +133,7 @@ void func_80A6F2C8(EnMm3* this, PlayState* play) {
         this->unk_2B4 = 0x278A;
         func_80A6F9C8(this);
     } else if (func_80A6F22C(this)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 
     Math_SmoothStepToS(&this->unk_2A0.x, 0, 5, 0x1000, 0x100);
@@ -409,7 +409,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
         Audio_PlaySfx(NA_SE_SY_START_SHOT);
         func_80A6F9C8(this);
     } else {
-        func_800B8614(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
+        Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
         func_80123E90(play, &this->actor);
         if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
             Audio_PlaySfx(NA_SE_SY_STOPWATCH_TIMER_INF - SFX_FLAG);
@@ -453,13 +453,13 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80A6F9C8(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
 s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
-        case 4:
+    switch (GET_PLAYER_FORM) {
+        case PLAYER_FORM_HUMAN:
             if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                 if (this->unk_2B2 & 0x10) {
                     return true;
@@ -469,22 +469,25 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             if (this->unk_2B2 & 2) {
                 return true;
             }
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             if (this->unk_2B2 & 4) {
                 return true;
             }
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             if (this->unk_2B2 & 8) {
                 return true;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -492,8 +495,8 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
 }
 
 void func_80A70084(EnMm3* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
-        case 4:
+    switch (GET_PLAYER_FORM) {
+        case PLAYER_FORM_HUMAN:
             if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                 this->unk_2B2 |= 0x10;
                 this->unk_2B2 |= 1;
@@ -502,16 +505,19 @@ void func_80A70084(EnMm3* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             this->unk_2B2 |= 2;
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             this->unk_2B2 |= 4;
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             this->unk_2B2 |= 8;
+            break;
+
+        default:
             break;
     }
 }

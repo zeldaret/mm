@@ -5,6 +5,7 @@
  */
 
 #include "z_en_wallmas.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -128,7 +129,13 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1500, ICHAIN_STOP),
 };
 
-static f32 sYOffsetPerForm[] = { 50.0f, 55.0f, 50.0f, 20.0f, 30.0f };
+static f32 sYOffsetPerForm[PLAYER_FORM_MAX] = {
+    50.0f, // PLAYER_FORM_FIERCE_DEITY
+    55.0f, // PLAYER_FORM_GORON
+    50.0f, // PLAYER_FORM_ZORA
+    20.0f, // PLAYER_FORM_DEKU
+    30.0f, // PLAYER_FORM_HUMAN
+};
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
@@ -605,7 +612,7 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                     this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
 
                     EnWallmas_SetupDamage(this, true);

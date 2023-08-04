@@ -300,7 +300,7 @@ void ZCurveAnimation::DeclareReferences(const std::string& prefix)
 		}
 		else
 		{
-			decl->text = entryStr;
+			decl->declBody = entryStr;
 		}
 	}
 
@@ -331,7 +331,7 @@ void ZCurveAnimation::DeclareReferences(const std::string& prefix)
 		}
 		else
 		{
-			decl->text = entryStr;
+			decl->declBody = entryStr;
 		}
 	}
 
@@ -359,7 +359,7 @@ void ZCurveAnimation::DeclareReferences(const std::string& prefix)
 		}
 		else
 		{
-			decl->text = entryStr;
+			decl->declBody = entryStr;
 		}
 	}
 }

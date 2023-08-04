@@ -405,7 +405,7 @@ void EnMaYto_DefaultWait(EnMaYto* this, PlayState* play) {
         EnMaYto_DefaultStartDialogue(this, play);
         EnMaYto_SetupDefaultDialogueHandler(this);
     } else if (ABS_ALT(direction) < 0x1555) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -525,14 +525,14 @@ void EnMaYto_DinnerWait(EnMaYto* this, PlayState* play) {
             EnMaYto_DinnerStartDialogue(this, play);
             EnMaYto_SetupDinnerDialogueHandler(this);
         } else if (ABS_ALT(direction) < 0x4000) {
-            func_800B8614(&this->actor, play, 120.0f);
+            Actor_OfferTalk(&this->actor, play, 120.0f);
 
             child = this->actor.child;
             if ((child != NULL) && (CURRENT_DAY != 2)) {
                 s16 childDirection = child->shape.rot.y - child->yawTowardsPlayer;
 
                 if (ABS_ALT(childDirection) < 0x4000) {
-                    func_800B8614(child, play, 120.0f);
+                    Actor_OfferTalk(child, play, 120.0f);
                 }
             }
         }
@@ -723,11 +723,11 @@ void EnMaYto_BarnWait(EnMaYto* this, PlayState* play) {
             EnMaYto_BarnStartDialogue(this, play);
             EnMaYto_SetupBarnDialogueHandler(this);
         } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM) || (ABS_ALT(direction) < 0x2000)) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
 
             child = this->actor.child;
             if (child != NULL) {
-                func_800B8614(child, play, 100.0f);
+                Actor_OfferTalk(child, play, 100.0f);
             }
         }
     }
@@ -914,7 +914,7 @@ void EnMaYto_AfterMilkRunInit(EnMaYto* this, PlayState* play) {
 
         EnMaYto_SetupAfterMilkRunDialogueHandler(this);
     } else {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
 
@@ -1006,7 +1006,7 @@ void EnMaYto_PostMilkRunExplainReward(EnMaYto* this, PlayState* play) {
             EnMaYto_SetupPostMilkRunWaitDialogueEnd(this);
         }
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1109,7 +1109,7 @@ void EnMaYto_PostMilkRunEnd(EnMaYto* this, PlayState* play) {
 
 void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
     if (CURRENT_DAY == 1) {
-        if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
             switch (Player_GetMask(play)) {
                 case PLAYER_MASK_ROMANI:
                     Message_StartTextbox(play, 0x235D, &this->actor);
@@ -1168,7 +1168,7 @@ void EnMaYto_DefaultStartDialogue(EnMaYto* this, PlayState* play) {
 void EnMaYto_DinnerStartDialogue(EnMaYto* this, PlayState* play) {
     switch (CURRENT_DAY) {
         case 1:
-            if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+            if ((Player_GetMask(play) != PLAYER_MASK_NONE) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) {
                 switch (Player_GetMask(play)) {
                     case PLAYER_MASK_ROMANI:
                         Message_StartTextbox(play, 0x235D, &this->actor);

@@ -117,11 +117,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
     this->actionFunc(this, play);
 
-    switch (gSaveContext.save.playerForm) {
-        default:
-            scale = 1.0f;
-            break;
-
+    switch (GET_PLAYER_FORM) {
         case PLAYER_FORM_DEKU:
             scale = 1.3f;
             break;
@@ -132,6 +128,10 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
 
         case PLAYER_FORM_GORON:
             scale = 2.0f;
+            break;
+
+        default:
+            scale = 1.0f;
             break;
     }
 
