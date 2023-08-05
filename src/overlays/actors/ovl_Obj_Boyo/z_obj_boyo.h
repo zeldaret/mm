@@ -8,8 +8,8 @@ typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;          /* inferred */
     /* 0x190 */ AnimatedMaterial* animatedMaterial; /* inferred */
-    /* 0x194 */ u16 unk194;
-    /* 0x196 */ u16 unk196;
+    /* 0x194 */ s16 unk194;
+    /* 0x196 */ s16 unk196;
     /* 0x198 */ f32 unk198;        /* inferred */
     /* 0x19C */ f32 unk19C;        /* inferred */
     /* 0x1A0 */ f32 unk1A0;        /* inferred */

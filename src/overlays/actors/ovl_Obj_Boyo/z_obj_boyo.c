@@ -191,8 +191,8 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         this->unk1A8 = 0;
         this->unk1AA = 0x2DF7;
         this->unk1AC = 0x258;
-        this->unk19C = 0.03f;
-        this->unk1A0 = 0.03f;
+        this->unk19C = D_809A61D0;
+        this->unk1A0 = D_809A61D0;
         this->unk198 = D_809A61D4;
     }
     temp_v0_2 = this->unk194;
