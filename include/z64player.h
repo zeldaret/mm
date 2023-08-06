@@ -51,8 +51,15 @@ typedef enum {
     /* 4 */ PLAYER_ENV_HAZARD_UNDERWATER_FREE
 } PlayerEnvHazard;
 
+/*
+ * Current known usages for PLAYER_IA_MINUS1:
+ *  1. With TalkExchange requests, used to continue a current conversation after a textbox is closed
+ *  2. In `func_80123810` as a return value representing the offer is declined or invalid
+ *  3. Used as an item action to return the previously held item after player is done shielding
+ */
+
 typedef enum PlayerItemAction {
-    /*   -1 */ PLAYER_IA_MINUS1 = -1,
+    /*   -1 */ PLAYER_IA_MINUS1 = -1, // TODO: determine usages with more player docs, possibly split into seperate values (see known usages above)
     /* 0x00 */ PLAYER_IA_NONE,
     /* 0x01 */ PLAYER_IA_LAST_USED,
     /* 0x02 */ PLAYER_IA_FISHING_ROD,
@@ -1072,7 +1079,7 @@ typedef enum PlayerUnkAA5 {
 } PlayerUnkAA5;
 
 typedef void (*PlayerActionFunc)(struct Player* this, struct PlayState* play);
-typedef s32 (*PlayerFuncAC4)(struct Player* this, struct PlayState* play);
+typedef s32 (*PlayerUpperActionFunc)(struct Player* this, struct PlayState* play);
 typedef void (*PlayerFuncD58)(struct PlayState* play, struct Player* this);
 
 
@@ -1180,7 +1187,7 @@ typedef struct Player {
     /* 0xA80 */ Actor* tatlActor;
     /* 0xA84 */ s16 tatlTextId;
     /* 0xA86 */ s8 csId;
-    /* 0xA87 */ s8 exchangeItemId; // PlayerItemAction enum
+    /* 0xA87 */ s8 exchangeItemAction; // PlayerItemAction enum
     /* 0xA88 */ Actor* talkActor;
     /* 0xA8C */ f32 talkActorDistance;
     /* 0xA90 */ Actor* unk_A90;
@@ -1198,7 +1205,7 @@ typedef struct Player {
     /* 0xAB8 */ f32 unk_AB8;
     /* 0xABC */ f32 unk_ABC;
     /* 0xAC0 */ f32 unk_AC0;
-    /* 0xAC4 */ PlayerFuncAC4 unk_AC4;
+    /* 0xAC4 */ PlayerUpperActionFunc upperActionFunc; // Upper body/item action functions
     /* 0xAC8 */ f32 unk_AC8;
     /* 0xACC */ s16 unk_ACC;
     /* 0xACE */ s8 unk_ACE;

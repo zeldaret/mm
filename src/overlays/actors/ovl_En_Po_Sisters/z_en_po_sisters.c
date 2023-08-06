@@ -5,6 +5,7 @@
  */
 
 #include "z_en_po_sisters.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
@@ -946,7 +947,7 @@ void EnPoSisters_CheckCollision(EnPoSisters* this, PlayState* play) {
                     this->drawDmgEffScale = 0.5f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                 this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 EnPoSisters_SetupDamageFlinch(this);
             }
@@ -1227,7 +1228,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         Matrix_Put(&this->mtxf);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gPoeSistersDrawTorchDL);
+        gSPDisplayList(POLY_OPA_DISP++, gPoeSistersTorchDL);
     }
 
     gSPSegment(

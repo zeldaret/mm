@@ -151,7 +151,7 @@ void PolygonDlist::GetSourceOutputCode(const std::string& prefix)
 	if (decl == nullptr)
 		DeclareVar(prefix, bodyStr);
 	else
-		decl->text = bodyStr;
+		decl->declBody = bodyStr;
 }
 
 std::string PolygonDlist::GetSourceTypeName() const
@@ -371,7 +371,7 @@ void PolygonTypeBase::DeclareAndGenerateOutputCode(const std::string& prefix)
 	}
 	else
 	{
-		decl->text = bodyStr;
+		decl->declBody = bodyStr;
 	}
 }
 

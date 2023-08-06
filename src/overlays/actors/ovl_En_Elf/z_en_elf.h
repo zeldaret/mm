@@ -8,8 +8,25 @@ struct EnElf;
 typedef void (*EnElfActionFunc)(struct EnElf*, PlayState*);
 typedef void (*EnElfUnkFunc)(struct EnElf*, PlayState*);
 
-#define ENELF_GET_F(thisx) ((thisx)->params & 0xF)
-#define ENELF_GET_FE00(thisx) (((thisx)->params & 0xFE00) >> 9)
+#define FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
+#define FAIRY_GET_BOOL_PARAM(thisx) ((thisx)->params & 0x100)
+#define FAIRY_GET_COLLECTIBLE_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+
+#define FAIRY_PARAMS(type, boolParam, collectibleFlag) (((type) /* & 0xF */) | (((boolParam) & 0x1) << 8) | ((((collectibleFlag) & 0x7F) << 9) & 0xFE00))
+
+typedef enum {
+    /* 0x0 */ FAIRY_TYPE_0,
+    /* 0x1 */ FAIRY_TYPE_1,
+    /* 0x2 */ FAIRY_TYPE_2,
+    /* 0x3 */ FAIRY_TYPE_3,
+    /* 0x4 */ FAIRY_TYPE_4,
+    /* 0x5 */ FAIRY_TYPE_5,
+    /* 0x6 */ FAIRY_TYPE_6,
+    /* 0x7 */ FAIRY_TYPE_7,
+    /* 0x8 */ FAIRY_TYPE_8,
+    /* 0x9 */ FAIRY_TYPE_9,
+    /* 0xA */ FAIRY_TYPE_10
+} FairyType;
 
 typedef struct EnElf {
     /* 0x000 */ Actor actor;
@@ -39,7 +56,7 @@ typedef struct EnElf {
     /* 0x25A */ u16 timer;
     /* 0x25C */ s16 unk_25C;
     /* 0x25E */ s16 disappearTimer;
-    /* 0x260 */ s16 unk_260;
+    /* 0x260 */ s16 collectibleFlag;
     /* 0x262 */ u16 fairyFlags;
     /* 0x264 */ u16 unk_264;
     /* 0x266 */ u16 unk_266;
@@ -48,16 +65,5 @@ typedef struct EnElf {
     /* 0x26C */ EnElfUnkFunc unk_26C;
     /* 0x270 */ EnElfActionFunc actionFunc;
 } EnElf; // size = 0x274
-
-typedef enum {
-    /* 0 */ ENELF_TYPE_0,
-    /* 1 */ ENELF_TYPE_1,
-    /* 2 */ ENELF_TYPE_2,
-    /* 3 */ ENELF_TYPE_3,
-    /* 4 */ ENELF_TYPE_4,
-    /* 5 */ ENELF_TYPE_5,
-    /* 6 */ ENELF_TYPE_6,
-    /* 7 */ ENELF_TYPE_7
-} FairyType;
 
 #endif // Z_EN_ELF_H

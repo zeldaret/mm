@@ -24,7 +24,7 @@ void SetEntranceList::DeclareReferences([[maybe_unused]] const std::string& pref
 void SetEntranceList::ParseRawDataLate()
 {
 	// Parse Entrances and Generate Declaration
-	uint32_t numEntrances = zRoom->GetDeclarationSizeFromNeighbor(segmentOffset) / 2;
+	uint32_t numEntrances = zRoom->parent->GetDeclarationSizeFromNeighbor(segmentOffset) / 2;
 	uint32_t currentPtr = segmentOffset;
 
 	entrances.reserve(numEntrances);

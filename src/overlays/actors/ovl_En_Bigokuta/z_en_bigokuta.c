@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigokuta.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -501,7 +502,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
                 this->drawDmgEffAlpha = 4.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
                             this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
 
@@ -563,11 +564,11 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         EnBigokuta* this = THIS;
         s32 envColor;
         s16 rotX;
-        f32 lastFrame;
+        f32 endFrame;
 
         if (this->actionFunc == EnBigokuta_PlayDeathEffects) {
-            lastFrame = Animation_GetLastFrame(&gBigOctoDeathAnim);
-            envColor = ((255.0f / lastFrame) * (lastFrame - this->skelAnime.curFrame));
+            endFrame = Animation_GetLastFrame(&gBigOctoDeathAnim);
+            envColor = ((255.0f / endFrame) * (endFrame - this->skelAnime.curFrame));
         } else {
             envColor = 255;
         }
@@ -627,7 +628,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static s8 D_80AC45BC[] = {
+    static s8 D_80AC45BC[BIGOKUTA_LIMB_MAX] = {
         -1, -1, -1, 0, -1, 1, -1, 2, -1, 3, 8, 4, -1, 5, -1, -1, -1, -1, 6, 7,
     };
     static Vec3f D_80AC45D0[] = {
