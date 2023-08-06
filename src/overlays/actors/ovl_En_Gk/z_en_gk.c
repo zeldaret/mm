@@ -648,7 +648,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
                    (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
 
         if (this->unk_1E4 & 4) {
@@ -852,7 +852,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_24_80);
             this->actionFunc = func_80B51698;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->actor.textId = 0xE74;
             } else {
@@ -920,7 +920,7 @@ void func_80B52340(EnGk* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -981,7 +981,7 @@ void func_80B525E0(EnGk* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

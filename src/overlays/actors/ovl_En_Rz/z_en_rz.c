@@ -537,10 +537,10 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         } else if (EnRz_CanTalk(this, play)) {
             if (func_80BFBCEC(this, play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+                Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
             } else {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 120.0f);
+                Actor_OfferTalk(&this->actor, play, 120.0f);
             }
         }
 
@@ -573,7 +573,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
             Message_StartTextbox(play, 0x2924, &this->actor);
         }
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -610,7 +610,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -645,7 +645,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

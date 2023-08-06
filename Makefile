@@ -309,7 +309,7 @@ setup:
 	python3 tools/decompress_yars.py
 
 assets:
-	python3 extract_assets.py -j $(N_THREADS)
+	python3 extract_assets.py -j $(N_THREADS) -Z Wno-hardcoded-pointer
 
 ## Assembly generation
 disasm:

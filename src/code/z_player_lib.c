@@ -1286,7 +1286,7 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup) {
 void func_80123C58(Player* player) {
     player->itemAction = player->heldItemAction;
     Player_SetModelGroup(player, Player_ActionToModelGroup(player, player->heldItemAction));
-    player->unk_AA5 = 0;
+    player->unk_AA5 = PLAYER_UNKAA5_0;
 }
 
 void Player_SetEquipmentData(PlayState* play, Player* player) {
@@ -2313,7 +2313,7 @@ s32 Player_OverrideLimbDrawGameplayFirstPerson(PlayState* play, s32 limbIndex, G
     Player* player = (Player*)actor;
 
     if (!Player_OverrideLimbDrawGameplayCommon(play, limbIndex, dList, pos, rot, actor)) {
-        if (player->unk_AA5 != 3) {
+        if (player->unk_AA5 != PLAYER_UNKAA5_3) {
             *dList = NULL;
         } else if (limbIndex == PLAYER_LIMB_LEFT_FOREARM) {
             *dList = sPlayerFirstPersonLeftForearmDLs[player->transformation];
@@ -3526,7 +3526,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             if ((player->getItemDrawIdPlusOne != (GID_NONE + 1)) ||
                 ((func_800B7118(player) == 0) && (heldActor != NULL))) {
                 if (!(player->stateFlags1 & PLAYER_STATE1_400) && (player->getItemDrawIdPlusOne != (GID_NONE + 1)) &&
-                    (player->exchangeItemId != PLAYER_IA_NONE)) {
+                    (player->exchangeItemAction != PLAYER_IA_NONE)) {
                     Math_Vec3f_Copy(&sPlayerGetItemRefPos, &player->leftHandWorld.pos);
                 } else {
                     sPlayerGetItemRefPos.x =

@@ -124,6 +124,7 @@ void GameConfig::ConfigFunc_BGConfig(const tinyxml2::XMLElement& element)
 {
 	bgScreenWidth = element.IntAttribute("ScreenWidth", 320);
 	bgScreenHeight = element.IntAttribute("ScreenHeight", 240);
+	useScreenWidthHeightConstants = element.BoolAttribute("UseScreenWidthHeightConstants", true);
 }
 
 void GameConfig::ConfigFunc_ExternalXMLFolder(const tinyxml2::XMLElement& element)
