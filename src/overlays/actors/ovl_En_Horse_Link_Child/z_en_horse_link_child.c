@@ -42,20 +42,20 @@ ActorInit En_Horse_Link_Child_InitVars = {
 };
 
 typedef enum {
-    OOT_EPONA_ANIMATION_IDLE,   // head down + pawing
-    OOT_EPONA_ANIMATION_WHINNY, // head shake
-    OOT_EPONA_ANIMATION_WALK,   // slow
-    OOT_EPONA_ANIMATION_TROT,   // mid
-    OOT_EPONA_ANIMATION_GALLOP, // fast
-    OOT_EPONA_ANIMATION_MAX
-} OOTEponaAnimations;
+    /* 0 */ OOT_EPONA_ANIMATION_IDLE,   // head down + pawing
+    /* 1 */ OOT_EPONA_ANIMATION_WHINNY, // head shake
+    /* 2 */ OOT_EPONA_ANIMATION_WALK,   // slow
+    /* 3 */ OOT_EPONA_ANIMATION_TROT,   // mid
+    /* 4 */ OOT_EPONA_ANIMATION_GALLOP, // fast
+    /* 5 */ OOT_EPONA_ANIMATION_MAX
+} OOTEponaAnimation;
 
 AnimationHeader* sAnimations[] = {
-    &gEponaIdleAnim,   // OOT_EPONA_ANIMATION_IDLE
-    &gEponaWhinnyAnim, // OOT_EPONA_ANIMATION_WHINNY
-    &gEponaWalkAnim,   // OOT_EPONA_ANIMATION_WALK
-    &gEponaTrotAnim,   // OOT_EPONA_ANIMATION_TROT
-    &gEponaGallopAnim, // OOT_EPONA_ANIMATION_GALLOP
+    /* 0 */ &gEponaIdleAnim,   // OOT_EPONA_ANIMATION_IDLE
+    /* 1 */ &gEponaWhinnyAnim, // OOT_EPONA_ANIMATION_WHINNY
+    /* 2 */ &gEponaWalkAnim,   // OOT_EPONA_ANIMATION_WALK
+    /* 3 */ &gEponaTrotAnim,   // OOT_EPONA_ANIMATION_TROT
+    /* 4 */ &gEponaGallopAnim, // OOT_EPONA_ANIMATION_GALLOP
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
@@ -97,14 +97,14 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef enum {
-    OOT_EPONA_ACTION_0,            // unfinished
-    OOT_EPONA_ACTION_GREET_PLAYER, // approaching
-    OOT_EPONA_ACTION_WAIT_FOR_PLAYER,
-    OOT_EPONA_ACTION_LONLON_IDLE,
-    OOT_EPONA_ACTION_4,
-    OOT_EPONA_ACTION_5,
-    OOT_EPONA_ACTION_MAX
-} OOTEponaActions;
+    /* 0 */ OOT_EPONA_ACTION_0,            // unfinished
+    /* 1 */ OOT_EPONA_ACTION_GREET_PLAYER, // approaching
+    /* 2 */ OOT_EPONA_ACTION_WAIT_FOR_PLAYER,
+    /* 3 */ OOT_EPONA_ACTION_LONLON_IDLE,
+    /* 4 */ OOT_EPONA_ACTION_4,
+    /* 5 */ OOT_EPONA_ACTION_5,
+    /* 6 */ OOT_EPONA_ACTION_MAX
+} OOTEponaAction;
 
 static EnHorseLinkChildActionFunc sActionFuncs[] = {
     /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_EPONA_ACTION_0
