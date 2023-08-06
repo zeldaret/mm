@@ -129,16 +129,16 @@ void ArmsHook_AttachHookToActor(ArmsHook* this, Actor* actor) {
 void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if ((this->actor.parent == NULL) || (!Player_IsHoldingHookshot(player))) {
+    if ((this->actor.parent == NULL) || !Player_IsHoldingHookshot(player)) {
         ArmsHook_DetachHookFromActor(this);
         Actor_Kill(&this->actor);
         return;
     }
 
-    func_800B8F98(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_HOOKSHOT_CHAIN - SFX_FLAG);
     ArmsHook_CheckForCancel(this);
 
-    if (this->timer != 0 && (this->collider.base.atFlags & AT_HIT) &&
+    if ((this->timer != 0) && (this->collider.base.atFlags & AT_HIT) &&
         (this->collider.info.atHitInfo->elemType != ELEMTYPE_UNK4)) {
         Actor* touchedActor = this->collider.base.at;
 
@@ -151,7 +151,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             }
         }
         this->timer = 0;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_CRE);
 
         return;
     }
@@ -191,12 +191,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
             } else {
                 if (this->actor.child != NULL) {
                     velocity = 30.0f;
+                } else if (grabbed != NULL) {
+                    velocity = 50.0f;
                 } else {
-                    if (grabbed != NULL) {
-                        velocity = 50.0f;
-                    } else {
-                        velocity = 200.0f;
-                    }
+                    velocity = 200.0f;
                 }
                 phi_f16 = bodyDistDiff - velocity;
                 if (bodyDistDiff <= velocity) {
@@ -245,7 +243,7 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
         sp60.z = this->unk1EC.z - (this->unk1E0.z - this->unk1EC.z);
         if (BgCheck_EntityLineTest1(&play->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
                                     &bgId) &&
-            (func_800B90AC(play, &this->actor, poly, bgId, &posResult) == 0 ||
+            (!func_800B90AC(play, &this->actor, poly, bgId, &posResult) ||
              BgCheck_ProjectileLineTest(&play->colCtx, &sp60, &this->unk1E0, &posResult, &poly, true, true, true, true,
                                         &bgId))) {
             f32 nx = COLPOLY_GET_NORMAL(poly->normal.x);
@@ -262,10 +260,10 @@ void ArmsHook_Shoot(ArmsHook* this, PlayState* play) {
                     ArmsHook_AttachHookToActor(this, &dynaPolyActor->actor);
                 }
                 func_808C1154(this);
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_STICK_OBJ);
             } else {
                 CollisionCheck_SpawnShieldParticlesMetal(play, &this->actor.world.pos);
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_HOOKSHOT_REFLECT);
             }
         } else if (CHECK_BTN_ANY(CONTROLLER1(&play->state)->press.button,
                                  BTN_A | BTN_B | BTN_R | BTN_CUP | BTN_CLEFT | BTN_CRIGHT | BTN_CDOWN)) {
@@ -329,7 +327,7 @@ void ArmsHook_Draw(Actor* thisx, PlayState* play) {
         f0 = sqrtf(SQ(sp68.y) + sp48);
         Matrix_Scale(0.015f, 0.015f, f0 * 0.01f, MTXMODE_APPLY);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, gameplay_keep_DL_0008D0);
+        gSPDisplayList(POLY_OPA_DISP++, gHookshotChainDL);
         func_801229A0(play, player);
 
         CLOSE_DISPS(play->state.gfxCtx);

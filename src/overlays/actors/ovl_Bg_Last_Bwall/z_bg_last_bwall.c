@@ -225,8 +225,8 @@ void func_80C187E4(BgLastBwall* this) {
 }
 
 void func_80C187F8(BgLastBwall* this, PlayState* play) {
-    if (this->colliderTris.base.acFlags & 2) {
-        this->colliderTris.base.acFlags &= ~2;
+    if (this->colliderTris.base.acFlags & AC_HIT) {
+        this->colliderTris.base.acFlags &= ~AC_HIT;
         Flags_SetSwitch(play, BGLASTBWALL_GET_SWITCHFLAGS(&this->dyna.actor));
         func_80C1886C(this, play);
     } else {

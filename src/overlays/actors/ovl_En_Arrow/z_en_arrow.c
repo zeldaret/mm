@@ -85,7 +85,7 @@ void EnArrow_Init(Actor* thisx, PlayState* play) {
 
     if (ARROW_IS_ARROW(this->actor.params)) {
         SkelAnime_Init(play, &this->arrow.skelAnime, &gameplay_keep_Skel_014560, &gameplay_keep_Anim_0128BC,
-                       this->arrow.jointTable, this->arrow.jointTable, 5);
+                       this->arrow.jointTable, this->arrow.jointTable, ARROW_LIMB_MAX);
         if (this->actor.params < ARROW_TYPE_FIRE) {
             if (this->actor.params == ARROW_TYPE_NORMAL_HORSE) {
                 D_8088C234.elemDuration = 4;
@@ -155,7 +155,7 @@ void func_8088A594(EnArrow* this, PlayState* play) {
     if (this->actor.parent != NULL) {
         if (this->actor.params == ARROW_TYPE_DEKU_BUBBLE) {
             if (Math_SmoothStepToF(&this->bubble.unk_144, 16.0f, 0.07f, 1.8f, 0.0f) > 0.5f) {
-                func_800B9010(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_DEKUNUTS_BUBLE_BREATH - SFX_FLAG);
                 return;
             }
 
@@ -192,6 +192,9 @@ void func_8088A594(EnArrow* this, PlayState* play) {
 
             case ARROW_TYPE_DEKU_BUBBLE:
                 Player_PlaySfx(player, NA_SE_PL_DEKUNUTS_FIRE);
+                break;
+
+            default:
                 break;
         }
 
@@ -336,7 +339,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
                 (this->collider.base.atFlags & AT_BOUNCED)) {
                 if ((this->collider.base.at != NULL) && (this->collider.base.at->id != ACTOR_OBJ_SYOKUDAI)) {
                     Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.prevPos);
-                    this->actor.world.rot.y += BINANG_ROT180((s16)randPlusMinusPoint5Scaled(8000.0f));
+                    this->actor.world.rot.y += BINANG_ROT180((s16)(s32)Rand_CenteredFloat(0x1F40));
                     this->actor.velocity.y = -this->actor.velocity.y;
                     this->bubble.unk_149 = -1;
                     return;
@@ -449,7 +452,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
                 func_8088A514(this);
             }
-            func_800B9010(&this->actor, NA_SE_IT_DEKUNUTS_BUBLE_SHOT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_IT_DEKUNUTS_BUBLE_SHOT_LEVEL - SFX_FLAG);
         } else if (this->unk_260 < 7) {
             this->actor.gravity = -0.4f;
         }
@@ -468,6 +471,7 @@ void func_8088ACE0(EnArrow* this, PlayState* play) {
 
         if ((this->unk_262 = BgCheck_ProjectileLineTest(&play->colCtx, &this->actor.prevPos, &this->actor.world.pos,
                                                         &sp9C, &this->actor.wallPoly, true, true, true, true, &spA8))) {
+            // `func_800B90AC` only returns a boolean, and does not process any code
             func_800B90AC(play, &this->actor, this->actor.wallPoly, spA8, &sp9C);
             Math_Vec3f_Copy(&this->actor.world.pos, &sp9C);
             this->actor.wallBgId = spA8;
@@ -666,7 +670,7 @@ void EnArrow_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, 0.0f, 460.0f, MTXMODE_APPLY);
 
         if (this->actor.speed == 0.0f) {
-            func_800B8118(&this->actor, play, MTXMODE_NEW);
+            func_800B8118(&this->actor, play, 0);
 
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_06F380);
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);

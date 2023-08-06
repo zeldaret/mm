@@ -208,31 +208,31 @@ void func_809AB474(ObjGrassCarry* this) {
 }
 
 void func_809AB4A8(ObjGrassCarry* this, PlayState* play) {
-    ObjGrassCarry* this2 = this;
+    Actor* thisx = &this->actor;
 
-    if (Actor_HasParent(&this->actor, play)) {
+    if (Actor_HasParent(thisx, play)) {
         func_809AB5FC(this);
         if (this->unk_194 != NULL) {
             this->unk_194->unk_0F |= 4;
         }
-        this->actor.draw = func_809ABB7C;
-        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.shape.shadowAlpha = 60;
-        this->actor.shape.shadowScale = 1.0f;
+        thisx->draw = func_809ABB7C;
+        thisx->shape.shadowDraw = ActorShadow_DrawCircle;
+        thisx->shape.shadowAlpha = 60;
+        thisx->shape.shadowScale = 1.0f;
         this->unk_190->unk_3292 ^= 1;
-        this->actor.room = -1;
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
+        thisx->room = -1;
+        SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
     } else if (this->unk_190->unk_3294 != NULL) {
         Player* player = GET_PLAYER(play);
 
         this->unk_194 = this->unk_190->unk_3294;
-        Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_194->unk_00);
-        this->actor.shape.rot.y = this->actor.world.rot.y = this->unk_194->unk_0C;
-        this->unk_198 = this2->unk_194->unk_0E;
-        this->actor.xzDistToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
-        this->actor.playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
-        this->actor.xyzDistToPlayerSq = SQ(this->actor.xzDistToPlayer) + SQ(this->actor.playerHeightRel);
-        this->actor.yawTowardsPlayer = Actor_WorldYawTowardActor(&this->actor, &player->actor);
+        Math_Vec3f_Copy(&thisx->world.pos, &this->unk_194->unk_00);
+        thisx->shape.rot.y = thisx->world.rot.y = this->unk_194->unk_0C;
+        this->unk_198 = this->unk_194->unk_0E;
+        thisx->xzDistToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
+        thisx->playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
+        thisx->xyzDistToPlayerSq = SQ(thisx->xzDistToPlayer) + SQ(thisx->playerHeightRel);
+        thisx->yawTowardsPlayer = Actor_WorldYawTowardActor(&this->actor, &player->actor);
         Actor_OfferCarry(&this->actor, play);
     }
 }

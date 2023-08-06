@@ -109,12 +109,12 @@ void BgIcicle_Break(BgIcicle* this, PlayState* play, f32 arg2) {
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 10; j++) {
-            pos.x = this->dyna.actor.world.pos.x + randPlusMinusPoint5Scaled(8.0f);
+            pos.x = this->dyna.actor.world.pos.x + Rand_CenteredFloat(8.0f);
             pos.y = this->dyna.actor.world.pos.y + (Rand_ZeroOne() * arg2) + (i * arg2);
-            pos.z = this->dyna.actor.world.pos.z + randPlusMinusPoint5Scaled(8.0f);
+            pos.z = this->dyna.actor.world.pos.z + Rand_CenteredFloat(8.0f);
 
-            velocity.x = randPlusMinusPoint5Scaled(7.0f);
-            velocity.z = randPlusMinusPoint5Scaled(7.0f);
+            velocity.x = Rand_CenteredFloat(7.0f);
+            velocity.z = Rand_CenteredFloat(7.0f);
             velocity.y = (Rand_ZeroOne() * 4.0f) + 8.0f;
 
             EffectSsEnIce_Spawn(play, &pos, (Rand_ZeroOne() * 0.2f) + 0.1f, &velocity, &accel, &primColor, &envColor,

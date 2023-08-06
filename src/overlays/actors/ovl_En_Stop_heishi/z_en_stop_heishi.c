@@ -31,7 +31,7 @@ typedef enum {
     /* 5 */ SOLDIER_ANIM_5,
     /* 6 */ SOLDIER_ANIM_6,
     /* 7 */ SOLDIER_ANIM_STAND_HAND_ON_CHEST,
-    /* 8 */ SOLDIER_ANIM_MAX,
+    /* 8 */ SOLDIER_ANIM_MAX
 } SoldierAnimation;
 
 ActorInit En_Stop_heishi_InitVars = {
@@ -500,12 +500,12 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
         this->skelAnime.playSpeed = 1.0f;
         func_80AE854C(this, play);
     } else if (yawDiffAbs < 0x4BB9) {
-        func_800B8614(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 
 void func_80AE854C(EnStopheishi* this, PlayState* play) {
-    if (((this->unk_265 != 0) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20))) &&
+    if (((this->unk_265 != 0) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20)) &&
         (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
         EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     }

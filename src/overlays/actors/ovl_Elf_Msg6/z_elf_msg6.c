@@ -178,12 +178,12 @@ void ElfMsg6_Init(Actor* thisx, PlayState* play) {
             break;
 
         case 2:
-            if (INV_CONTENT(ITEM_OCARINA) == ITEM_OCARINA) {
+            if (INV_CONTENT(ITEM_OCARINA_OF_TIME) == ITEM_OCARINA_OF_TIME) {
                 Actor_Kill(&this->actor);
                 return;
             }
 
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_88_20)) {
                     Actor_Kill(&this->actor);
                     return;
@@ -276,7 +276,7 @@ void func_80BA1CF8(ElfMsg6* this, PlayState* play) {
         return;
     }
 
-    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40)) {
+    if ((this->actor.textId == 0x224) && CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED)) {
         this->actor.textId = 0x25B;
     } else if (func_80BA1C00(this) && (player->actor.speed > 1.0f)) {
         player->tatlTextId = -this->actor.textId;

@@ -90,7 +90,7 @@ void func_80B11F78(EnOnpuman* this, PlayState* play) {
             CutsceneManager_Stop(this->actor.csId);
         }
     } else if (play->msgCtx.ocarinaMode == 3) {
-        play_sound(NA_SE_SY_CORRECT_CHIME);
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
         play->msgCtx.ocarinaMode = 4;
         if (this->actor.csId != CS_ID_NONE) {
             CutsceneManager_Stop(this->actor.csId);
@@ -158,7 +158,7 @@ void func_80B121D8(EnOnpuman* this, PlayState* play) {
         if (this->actor.xzDistToPlayer < 200.0f) {
             if (ABS_ALT(yaw) <= 0x4300) {
                 this->actor.textId = 0x8D3;
-                func_800B8614(&this->actor, play, 100.0f);
+                Actor_OfferTalk(&this->actor, play, 100.0f);
                 func_800B874C(&this->actor, play, 100.0f, 100.0f);
             }
         }

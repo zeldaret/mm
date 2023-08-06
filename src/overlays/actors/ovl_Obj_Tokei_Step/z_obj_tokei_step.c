@@ -140,7 +140,7 @@ void ObjTokeiStep_InitTimers(ObjTokeiStep* this) {
 }
 
 s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, PlayState* play) {
-    ObjTokeiStep* this2 = this;
+    Actor* thisx = &this->dyna.actor;
     s32 i;
     ObjTokeiStepPanel* panel;
     f32 finalPosY;
@@ -179,8 +179,8 @@ s32 ObjTokeiStep_OpenProcess(ObjTokeiStep* this, PlayState* play) {
                         panel->pos.y += finalPosY;
                     }
                     if (panel->numBounces == 1) {
-                        ObjTokeiStep_SpawnDust(this2, panel, play);
-                        ObjTokeiStep_RequestQuakeAndRumble(this2, play);
+                        ObjTokeiStep_SpawnDust(this, panel, play);
+                        ObjTokeiStep_RequestQuakeAndRumble(this, play);
                     }
                 }
             }

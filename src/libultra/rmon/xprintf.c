@@ -42,7 +42,7 @@ int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
         unsigned char ac[0x20];
 
         s = fmt;
-        while ((c = *s) != 0 && c != '%') {
+        while (((c = *s) != 0) && (c != '%')) {
             s++;
         }
         _PROUT((char*)fmt, s - fmt);

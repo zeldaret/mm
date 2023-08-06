@@ -238,10 +238,10 @@ void func_80B35450(EnGg* this, PlayState* play) {
         this->actionFunc = func_80B352A4;
     } else if ((this->actor.xzDistToPlayer < 200.0f) && (this->actor.xzDistToPlayer > 50.0f)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_80)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             this->actor.textId = 0xCEE;
         } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_REACT_TO_LENS)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             this->actor.textId = 0xCE5;
         }
     }
@@ -393,7 +393,7 @@ void func_80B359DC(EnGg* this, PlayState* play) {
         if (this->unk_306 == 0) {
             if (player->stateFlags2 & PLAYER_STATE2_8000000) {
                 this->unk_306 = 1;
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             }
         } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
             this->unk_306 = 0;

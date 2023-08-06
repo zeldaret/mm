@@ -6,6 +6,7 @@
 
 #include "z_en_peehat.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_ph/object_ph.h"
 
@@ -257,9 +258,9 @@ void func_80897258(PlayState* play, EnPeehat* this, Vec3f* arg2, f32 arg3, f32 a
     sp44.x = (Math_SinS(sp42) * arg3) + arg2->x;
     sp44.z = (Math_CosS(sp42) * arg3) + arg2->z;
 
-    D_80899564.x = randPlusMinusPoint5Scaled(1.05f);
-    D_80899564.z = randPlusMinusPoint5Scaled(1.05f);
-    D_80899558.y = randPlusMinusPoint5Scaled(4.0f) + 8.0f;
+    D_80899564.x = Rand_CenteredFloat(1.05f);
+    D_80899564.z = Rand_CenteredFloat(1.05f);
+    D_80899558.y = Rand_CenteredFloat(4.0f) + 8.0f;
 
     EffectSsHahen_Spawn(play, &sp44, &D_80899558, &D_80899564, 0, (Rand_ZeroFloat(5.0f) + 12.0f) * arg4,
                         HAHEN_OBJECT_DEFAULT, 10, NULL);
@@ -390,7 +391,7 @@ void func_80897910(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80897A34(EnPeehat* this) {
@@ -426,7 +427,7 @@ void func_80897A94(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_SM_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_SM_FLY - SFX_FLAG);
 
     if (this->colliderTris.base.atFlags & AT_BOUNCED) {
         this->colliderTris.base.atFlags &= ~(AT_BOUNCED | AT_ON);
@@ -506,7 +507,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
         this->actor.world.pos.y -= 1.0f;
     }
 
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->actor.world.pos.y += cos * 1.4f;
     this->unk_2B8 += fabsf(cos * 0.18f) + 0.07f;
     this->unk_2B0--;
@@ -514,7 +515,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
     if (this->unk_2B0 <= 0) {
         this->actor.speed = Rand_ZeroFloat(0.5f) + 2.5f;
         this->unk_2B0 = Rand_ZeroFloat(10.0f) + 10.0f;
-        this->unk_2B6 = randPlusMinusPoint5Scaled(1000.0f);
+        this->unk_2B6 = Rand_CenteredFloat(1000.0f);
     }
 
     SkelAnime_Update(&this->skelAnime);
@@ -531,7 +532,7 @@ void func_80897F44(EnPeehat* this, PlayState* play) {
     Math_ScaledStepToS(&this->unk_2B2, 4000, 500);
     this->unk_2B4 += this->unk_2B2;
     Math_StepToF(&this->unk_2C4, 0.075f, 0.005f);
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80898124(EnPeehat* this) {
@@ -549,10 +550,10 @@ void func_80898144(EnPeehat* this, PlayState* play) {
     } else {
         this->actor.world.pos.y += 1.0f;
     }
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->actor.world.pos.y += cos * 1.4f;
 
-    cos = cos_rad(this->unk_2B8);
+    cos = Math_CosF(this->unk_2B8);
     this->unk_2B8 += fabsf(cos * 0.18f) + 0.07f;
 
     step = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos);
@@ -569,7 +570,7 @@ void func_80898144(EnPeehat* this, PlayState* play) {
     if (!gSaveContext.save.isNight && (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 1200.0f)) {
         func_80897864(this);
     }
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_808982E0(EnPeehat* this) {
@@ -593,7 +594,7 @@ void func_80898338(EnPeehat* this, PlayState* play) {
             func_80897864(this);
         }
     }
-    func_800B9010(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PIHAT_FLY - SFX_FLAG);
 }
 
 void func_80898414(EnPeehat* this) {
@@ -727,7 +728,7 @@ void func_8089874C(EnPeehat* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderSphere.info.bumper.hitPos.x,
                                 this->colliderSphere.info.bumper.hitPos.y, this->colliderSphere.info.bumper.hitPos.z, 0,
-                                0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_800BE568(&this->actor, &this->colliderSphere);
                 func_808984E0(this);
@@ -827,7 +828,7 @@ void EnPeehat_Update(Actor* thisx, PlayState* play2) {
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.1f);
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.1f, 0.0275f)) {
-            func_800B9010(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -901,6 +902,7 @@ void EnPeehat_PostLimbDraw(PlayState* play2, s32 limbIndex, Gfx** dList, Vec3s* 
         Matrix_MultVecX(-400.0f, vec2);
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfx = POLY_OPA_DISP;
 
         Matrix_Translate(-1000.0f, 0.0f, 0.0f, MTXMODE_APPLY);

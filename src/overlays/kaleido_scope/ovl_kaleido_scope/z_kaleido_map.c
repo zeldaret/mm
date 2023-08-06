@@ -9,8 +9,7 @@
 #include "interface/icon_item_field_static/icon_item_field_static.h"
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
-
-extern TexturePtr D_09007500; // gPlayerFaceIcon
+#include "archives/icon_item_24_static/icon_item_24_static_yar.h"
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -76,9 +75,9 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
 }
 
 TexturePtr sDungeonItemTextures[] = {
-    0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
-    0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
-    0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
+    gQuestIconBossKeyTex,    // DUNGEON_BOSS_KEY
+    gQuestIconCompassTex,    // DUNGEON_COMPASS
+    gQuestIconDungeonMapTex, // DUNGEON_MAP
 };
 
 TexturePtr sDungeonTitleTextures[] = {
@@ -283,7 +282,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
             // Draw Player's face next to the dungeon floor icon currently in.
             POLY_OPA_DISP =
-                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, 62,
                                       sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
@@ -465,7 +464,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MAP]) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
         }
     }
@@ -765,8 +764,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             }
         }
 
-        // Find the regionId that player is currently in
-        // Loop over regionId (n) and regionIdIndex (j)
+        // Find the region that player is currently in
+        // Loop over region (n) and regionIndex (j)
         while (true) {
             if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
                 n++;
@@ -813,8 +812,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
-                                                  sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP =
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, sWorldMapCursorsRectLeft[n],
+                                      sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
 
@@ -824,16 +824,16 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 }
 
 u16 sOwlWarpPauseItems[] = {
-    0xAF, // OWL_WARP_GREAT_BAY_COAST
-    0xB3, // OWL_WARP_ZORA_CAPE
-    0xAA, // OWL_WARP_SNOWHEAD
-    0xB1, // OWL_WARP_MOUNTAIN_VILLAGE
-    0xA9, // OWL_WARP_CLOCK_TOWN
-    0xB2, // OWL_WARP_MILK_ROAD
-    0xA8, // OWL_WARP_WOODFALL
-    0xB0, // OWL_WARP_SOUTHERN_SWAMP
-    0xAC, // OWL_WARP_IKANA_CANYON
-    0xAE, // OWL_WARP_STONE_TOWER
+    ITEM_MAP_POINT_GREAT_BAY_COAST,  // OWL_WARP_GREAT_BAY_COAST
+    ITEM_MAP_POINT_ZORA_CAPE,        // OWL_WARP_ZORA_CAPE
+    ITEM_MAP_POINT_SNOWHEAD,         // OWL_WARP_SNOWHEAD
+    ITEM_MAP_POINT_MOUNTAIN_VILLAGE, // OWL_WARP_MOUNTAIN_VILLAGE
+    ITEM_MAP_POINT_CLOCK_TOWN,       // OWL_WARP_CLOCK_TOWN
+    ITEM_MAP_POINT_MILK_ROAD,        // OWL_WARP_MILK_ROAD
+    ITEM_MAP_POINT_WOODFALL,         // OWL_WARP_WOODFALL
+    ITEM_MAP_POINT_SOUTHERN_SWAMP,   // OWL_WARP_SOUTHERN_SWAMP
+    ITEM_MAP_POINT_IKANA_CANYON,     // OWL_WARP_IKANA_CANYON
+    ITEM_MAP_POINT_STONE_TOWER,      // OWL_WARP_STONE_TOWER
 };
 
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
@@ -874,7 +874,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < REGION_GREAT_BAY) {
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] <= REGION_NONE) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
@@ -896,13 +896,13 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
             if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                 if (pauseCtx->stickAdjX > 30) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = -1;
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = REGION_NONE;
                     pauseCtx->cursorSpecialPos = 0;
                     pauseCtx->cursorShrinkRate = 4.0f;
 
                     while (true) {
                         pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
-                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > REGION_STONE_TOWER) {
+                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= REGION_MAX) {
                             KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                             break;
@@ -917,17 +917,17 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         // Used as cursor vtxIndex
                         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                     }
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     sStickAdjTimer = 0;
                 }
             } else if (pauseCtx->stickAdjX < -30) {
-                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = REGION_MAX;
                 pauseCtx->cursorSpecialPos = 0;
                 pauseCtx->cursorShrinkRate = 4.0f;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] <= REGION_NONE) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
@@ -942,7 +942,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     // Used as cursor vtxIndex
                     pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                 }
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 sStickAdjTimer = 0;
             }
         }
@@ -951,7 +951,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
         }
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_SELECT) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
@@ -979,13 +979,14 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer++;
         }
 
-        //! TODO: Is the `0xA4` here related to `0xA3` being the last recored item in the `ItemId` enum?
-        pauseCtx->cursorItem[PAUSE_MAP] = sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        // Offset from `ITEM_MAP_POINT_GREAT_BAY` is to get the correct ordering in `map_name_static`
+        pauseCtx->cursorItem[PAUSE_MAP] =
+            sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - ITEM_MAP_POINT_GREAT_BAY;
         // Used as cursor vtxIndex
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     }
 }

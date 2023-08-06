@@ -36,15 +36,6 @@ void EnBaba_Walk(EnBaba* this, PlayState* play);
 void EnBaba_FaceForward(EnBaba* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG,
-    /* 1 */ BOMB_SHOP_LADY_ANIM_IDLE,
-    /* 2 */ BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG,
-    /* 3 */ BOMB_SHOP_LADY_ANIM_KNOCKED_OVER,
-    /* 4 */ BOMB_SHOP_LADY_ANIM_LYING_DOWN,
-    /* 5 */ BOMB_SHOP_LADY_ANIM_SWAY
-} BombShopLadyAnimation;
-
-typedef enum {
     /* 0 */ BOMB_SHOP_LADY_SCH_NONE,
     /* 1 */ BOMB_SHOP_LADY_SCH_KNOCKED_OVER,
     /* 2 */ BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH
@@ -62,13 +53,23 @@ ActorInit En_Baba_InitVars = {
     /**/ EnBaba_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaKnockedOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gBbaLyingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gBbaSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG,
+    /* 1 */ BOMB_SHOP_LADY_ANIM_IDLE,
+    /* 2 */ BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG,
+    /* 3 */ BOMB_SHOP_LADY_ANIM_KNOCKED_OVER,
+    /* 4 */ BOMB_SHOP_LADY_ANIM_LYING_DOWN,
+    /* 5 */ BOMB_SHOP_LADY_ANIM_SWAY,
+    /* 6 */ BOMB_SHOP_LADY_ANIM_MAX
+} BombShopLadyAnimation;
+
+static AnimationInfo sAnimationInfo[BOMB_SHOP_LADY_ANIM_MAX] = {
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },    // BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG
+    { &gBbaIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },              // BOMB_SHOP_LADY_ANIM_IDLE
+    { &gBbaWalkingHoldingBagAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG
+    { &gBbaKnockedOverAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },       // BOMB_SHOP_LADY_ANIM_KNOCKED_OVER
+    { &gBbaLyingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },         // BOMB_SHOP_LADY_ANIM_LYING_DOWN
+    { &gBbaSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },              // BOMB_SHOP_LADY_ANIM_SWAY
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -167,13 +168,13 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
     switch (this->textId) {
         case 0:
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                     // Thanks. Can stock Bomb Bags tomorrow
                     this->textId = 0x2A34;
                     break;
                 }
 
-                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
                     // Oh my, learned my lesson. Can't stock Bomb Bags tomorrow
                     this->textId = 0x2A33;
@@ -184,7 +185,9 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 // Can't stock Bomb Bags tomorrow
                 this->textId = 0x2A32;
                 break;
-            } else if (player->transformation == PLAYER_FORM_DEKU) {
+            }
+
+            if (player->transformation == PLAYER_FORM_DEKU) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_79_20)) {
                     SET_WEEKEVENTREG(WEEKEVENTREG_79_20);
                     this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
@@ -197,7 +200,9 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                     this->textId = 0x2A38;
                 }
                 break;
-            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+            }
+
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                 if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_01)) {
                     // Thought could sell Big Bomb Bags
                     this->textId = 0x660;
@@ -206,16 +211,16 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
                 // Can't judge people
                 this->textId = 0x662;
                 break;
-            } else {
-                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_02)) {
-                    // Someone helped me out
-                    this->textId = 0x65A;
-                    break;
-                }
-                // Buy Big Bomb Bag
-                this->textId = 0x65E;
+            }
+
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_73_02)) {
+                // Someone helped me out
+                this->textId = 0x65A;
                 break;
             }
+
+            // Buy Big Bomb Bag
+            this->textId = 0x65E;
             break;
 
         case 0x660:
@@ -287,15 +292,18 @@ void EnBaba_HandleConversation(EnBaba* this, PlayState* play) {
         case 0x2A31:
             this->stateFlags |= BOMB_SHOP_LADY_STATE_END_CONVERSATION;
             break;
+
+        default:
+            break;
     }
 
     Message_StartTextbox(play, this->textId, &this->actor);
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_END_CONVERSATION) {
         if (this->stateFlags & BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK) {
             this->stateFlags &= ~BOMB_SHOP_LADY_STATE_GAVE_BLAST_MASK;
-            func_80151BB4(play, 0x33);
+            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BLAST_MASK);
         }
-        func_80151BB4(play, 4);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_BOMB_SHOP_LADY);
     }
 }
 
@@ -355,7 +363,7 @@ void EnBaba_UpdateModel(EnBaba* this, PlayState* play) {
         Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
     }
 
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, BBA_LIMB_MAX);
 
     if (this->stateFlags & BOMB_SHOP_LADY_STATE_VISIBLE) {
         EnBaba_UpdateCollider(this, play);
@@ -404,10 +412,6 @@ s32 EnBaba_ProcessScheduleOutput(EnBaba* this, PlayState* play, ScheduleOutput* 
     s32 success;
 
     switch (scheduleOutput->result) {
-        default:
-            success = false;
-            break;
-
         case BOMB_SHOP_LADY_SCH_FOLLOW_TIME_PATH:
             success = EnBaba_InitTimePath(this, play, scheduleOutput);
             break;
@@ -415,7 +419,12 @@ s32 EnBaba_ProcessScheduleOutput(EnBaba* this, PlayState* play, ScheduleOutput* 
         case BOMB_SHOP_LADY_SCH_KNOCKED_OVER:
             success = true;
             break;
+
+        default:
+            success = false;
+            break;
     }
+
     return success;
 }
 
@@ -491,6 +500,9 @@ void EnBaba_HandleSchedule(EnBaba* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_KnockedOver;
             break;
+
+        default:
+            break;
     }
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 4, 0x1554);
 }
@@ -511,7 +523,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
     } else if (play->sceneId == SCENE_BACKTOWN) {
         if ((BOMB_SHOP_LADY_GET_TYPE(&this->actor) == BOMB_SHOP_LADY_TYPE_FOLLOW_SCHEDULE) &&
             (gSaveContext.save.entrance != ENTRANCE(NORTH_CLOCK_TOWN, 7)) &&
-            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F)) {
+            (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != BOMB_SHOP_LADY_PATH_INDEX_NONE)) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_58_40) ||
                 (gSaveContext.save.time >= CLOCK_TIME(0, 20) && (gSaveContext.save.time < CLOCK_TIME(6, 0)))) {
                 Actor_Kill(&this->actor);
@@ -530,7 +542,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             }
 
             this->stateFlags |= BOMB_SHOP_LADY_STATE_VISIBLE;
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                 this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE_HOLDING_BAG;
             } else {
                 this->animIndex = BOMB_SHOP_LADY_ANIM_IDLE;
@@ -550,7 +562,7 @@ void EnBaba_FinishInit(EnBaba* this, PlayState* play) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_SWAY;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_DoNothing;
-        } else if (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != 0x3F) {
+        } else if (BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor) != BOMB_SHOP_LADY_PATH_INDEX_NONE) {
             this->animIndex = BOMB_SHOP_LADY_ANIM_WALKING_HOLDING_BAG;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
             this->actionFunc = EnBaba_Walk;
@@ -575,7 +587,7 @@ void EnBaba_Idle(EnBaba* this, PlayState* play) {
             if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                 this->actor.flags |= ACTOR_FLAG_10000;
             }
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     }
 }
@@ -602,7 +614,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
                 play->msgCtx.stateTimer = 4;
                 if (this->stateFlags & BOMB_SHOP_LADY_STATE_AUTOTALK) {
                     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                        if (play->msgCtx.unk120B1 == 0) {
+                        if (play->msgCtx.bombersNotebookEventQueueCount == 0) {
                             SET_WEEKEVENTREG(WEEKEVENTREG_81_02);
                             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
                             return;
@@ -625,7 +637,7 @@ void EnBaba_Talk(EnBaba* this, PlayState* play) {
             }
         }
     } else if (talkState == TEXT_STATE_DONE) {
-        if (Message_ShouldAdvance(play) && (play->msgCtx.unk120B1 == 0)) {
+        if (Message_ShouldAdvance(play) && (play->msgCtx.bombersNotebookEventQueueCount == 0)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_81_02);
             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         }
@@ -647,7 +659,7 @@ void EnBaba_GaveBlastMask(EnBaba* this, PlayState* play) {
         EnBaba_HandleConversation(this, play);
         this->actionFunc = EnBaba_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -675,7 +687,7 @@ void EnBaba_FollowSchedule(EnBaba* this, PlayState* play) {
             Message_StartTextbox(play, 0x2A39, &this->actor); // "I'm sorry"
             this->actionFunc = EnBaba_FollowSchedule_Talk;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);
@@ -698,7 +710,7 @@ void EnBaba_KnockedOver(EnBaba* this, PlayState* play) {
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
     } else {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40) && (DECR(this->sakonDeadTimer) == 0)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD) && (DECR(this->sakonDeadTimer) == 0)) {
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
             EnBaba_TriggerTransition(play, ENTRANCE(NORTH_CLOCK_TOWN, 7));
         } else {
@@ -728,7 +740,7 @@ void EnBaba_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, BOMB_SHOP_LADY_GET_PATH_INDEX(&this->actor), BOMB_SHOP_LADY_PATH_INDEX_NONE);
 
     Actor_SetScale(&this->actor, 0.01f);
 
@@ -773,8 +785,8 @@ s32 EnBaba_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if ((limbIndex == BBA_LIMB_UPPER_ROOT) || (limbIndex == BBA_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == BBA_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     if (((this->animIndex == BOMB_SHOP_LADY_ANIM_IDLE) || (this->animIndex == BOMB_SHOP_LADY_ANIM_KNOCKED_OVER) ||

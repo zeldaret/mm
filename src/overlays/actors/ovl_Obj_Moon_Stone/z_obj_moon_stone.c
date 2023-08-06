@@ -80,7 +80,7 @@ void func_80C06640(ObjMoonStone* this, PlayState* play) {
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
-            func_800B8614(&this->actor, play, 80.0f);
+            Actor_OfferTalk(&this->actor, play, 80.0f);
         }
     }
 }
@@ -117,7 +117,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play) {
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            Actor_OfferGetItem(&this->actor, play, GI_MOON_TEAR, 100.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MOONS_TEAR, 100.0f, 30.0f);
         }
     }
 }

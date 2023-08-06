@@ -138,9 +138,9 @@ s32 func_80ACF8B8(EnFuKago* this, PlayState* play) {
 
         Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
         return true;
-    } else {
-        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     }
+
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     return false;
 }
 

@@ -52,9 +52,9 @@ ActorInit Bg_Hakugin_Post_InitVars = {
 };
 
 typedef struct {
-    f32 unk_00;
-    u8 unk_04;
-} BgHakuginPostUnkStruct3;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ u8 unk_04;
+} BgHakuginPostUnkStruct3; // size = 0x8
 
 static BgHakuginPostUnkStruct3 D_80A9D880[] = {
     { 1200.0f, false }, { 600.0f, false }, { 900.0f, false }, { 870.0f, false },
@@ -492,7 +492,7 @@ void func_80A9BD24(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
             if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
                 func_80A9B554(this, play, unkStruct, &unkStruct->unk_0000[i]);
-                func_8019F128(NA_SE_EV_GLASSBROKEN_IMPACT);
+                Audio_PlaySfx_2(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
                 unkStruct->unk_0000[i].unk_30 = 30;
             }
@@ -528,7 +528,7 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 Quake_SetDuration(quakeIndex, 12);
 
                 if (this->unk_179 <= 0) {
-                    func_8019F128(NA_SE_EV_STONEDOOR_STOP);
+                    Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
                     this->unk_179 = 40;
                 }
                 break;
@@ -799,10 +799,10 @@ void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
     this->unk_16C += temp_f12;
     if (this->unk_168 <= this->unk_16C) {
         BgHakuginPost_RequestQuakeAndRumble(this, play);
-        func_8019F128(NA_SE_EV_STONEDOOR_STOP);
+        Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
-        func_800B8FE8(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
 }
 
@@ -829,7 +829,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
 
     for (i = 0; i < D_80A9E028.count; i++) {
         collider = D_80A9E028.unk_0000[i].collider;
-        if ((collider != NULL) && (collider->base.acFlags & AT_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
+        if ((collider != NULL) && (collider->base.acFlags & AC_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
             temp_f2 = this->unk_16C;
             yDiff = ABS_ALT(BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y));
             temp_f0 = temp_f2 + D_80A9E028.unk_0000[i].unk_14.y;
@@ -840,7 +840,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
                 D_80A9E028.unk_0000[i].unk_28 = ((s16)(player->actor.shape.rot.y - temp) / 3) + temp;
                 D_80A9E028.unk_0000[i].unk_34 = 2;
                 Player_PlaySfx(player, NA_SE_IT_HAMMER_HIT);
-                func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
+                Audio_PlaySfx_2(NA_SE_EV_SLIDE_DOOR_OPEN);
                 Flags_SetSwitch(play, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;
                 func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f, D_80A9E028.unk_0000[i].csId,
@@ -853,7 +853,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
     for (i = 0; i < D_80A9E028.count; i++) {
         collider = D_80A9E028.unk_0000[i].collider;
         if (collider != NULL) {
-            collider->base.acFlags &= ~AT_HIT;
+            collider->base.acFlags &= ~AC_HIT;
         }
     }
 
@@ -877,10 +877,10 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
         func_80A9B160(&D_80A9E028, play);
         this->unk_16C = this->unk_164;
         BgHakuginPost_RequestQuakeAndRumble(this, play);
-        func_8019F128(NA_SE_EV_STONEDOOR_STOP);
+        Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {
-        func_800B8FE8(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
 }
 
@@ -1019,7 +1019,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
 
     for (i = 0; i < D_80A9E028.count; i++) {
         unkStruct1 = &D_80A9E028.unk_0000[i];
-        if (unkStruct1->unk_34 != 5 && unkStruct1->unk_34 != 4) {
+        if ((unkStruct1->unk_34 != 5) && (unkStruct1->unk_34 != 4)) {
             sp68.x = unkStruct1->unk_14.x + this->dyna.actor.home.pos.x;
             sp68.y = unkStruct1->unk_14.y + this->unk_16C;
             sp68.z = unkStruct1->unk_14.z + this->dyna.actor.home.pos.z;

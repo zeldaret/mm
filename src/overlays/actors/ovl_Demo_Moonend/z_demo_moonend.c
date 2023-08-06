@@ -38,7 +38,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.1f);
     this->actionFunc = DemoMoonend_DoNothing;
 
-    if (DEMOMOONEND_GET_PARAMS_F(thisx) == 1) {
+    if (DEMOMOONEND_GET_PARAM_F(thisx) == 1) {
         Actor_SetScale(&this->actor, 0.05f);
         Actor_SetScale(&this->actor, 6.0f);
         this->actor.draw = NULL;
@@ -60,7 +60,7 @@ void DemoMoonend_Init(Actor* thisx, PlayState* play) {
 void DemoMoonend_Destroy(Actor* thisx, PlayState* play) {
     DemoMoonend* this = THIS;
 
-    if (DEMOMOONEND_GET_PARAMS_F(thisx) != 1) {
+    if (DEMOMOONEND_GET_PARAM_F(thisx) != 1) {
         func_8018349C(&this->skeletonInfo);
     }
 }
@@ -89,7 +89,7 @@ void func_80C17B60(DemoMoonend* this, PlayState* play) {
             }
         }
         if (this->cueId == 2) {
-            func_800B9010(&this->actor, NA_SE_EV_RAINBOW - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_RAINBOW - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;
@@ -127,7 +127,7 @@ void func_80C17C48(DemoMoonend* this, PlayState* play) {
             }
         }
         if (this->actor.home.rot.z != 0) {
-            func_800B9010(&this->actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_EARTHQUAKE_LAST2 - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;

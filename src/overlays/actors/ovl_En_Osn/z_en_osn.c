@@ -726,7 +726,7 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
             this->actionFunc = EnOsn_StartCutscene;
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) &&
                    (yaw > -0x4000)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             this->actor.textId = 0xFFFF;
         }
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -734,7 +734,7 @@ void EnOsn_Idle(EnOsn* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnOsn_Talk;
     } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) && (yaw < 0x4000) && (yaw > -0x4000)) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
 
@@ -869,9 +869,9 @@ void EnOsn_HandleCsAction(EnOsn* this, PlayState* play) {
         }
 
         if ((this->animIndex == OSN_ANIM_WALK_AWAY) &&
-            (((Animation_OnFrame(&this->skelAnime, 17.0f))) || (Animation_OnFrame(&this->skelAnime, 27.0f)) ||
-             (Animation_OnFrame(&this->skelAnime, 37.0f)) || (Animation_OnFrame(&this->skelAnime, 47.0f)) ||
-             (Animation_OnFrame(&this->skelAnime, 57.0f)) || (Animation_OnFrame(&this->skelAnime, 67.0f)))) {
+            (Animation_OnFrame(&this->skelAnime, 17.0f) || Animation_OnFrame(&this->skelAnime, 27.0f) ||
+             Animation_OnFrame(&this->skelAnime, 37.0f) || Animation_OnFrame(&this->skelAnime, 47.0f) ||
+             Animation_OnFrame(&this->skelAnime, 57.0f) || Animation_OnFrame(&this->skelAnime, 67.0f))) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_OMENYA_WALK);
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_st.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_st/object_st.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -546,7 +547,7 @@ void func_808A650C(EnSt* this) {
 }
 
 s32 func_808A6580(EnSt* this, PlayState* play) {
-    Player* sp3C = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     s32 ret = false;
     s32 i;
 
@@ -565,7 +566,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         this->collider3.base.acFlags &= ~AC_HIT;
     }
@@ -575,7 +576,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         this->collider4.base.acFlags &= ~AC_HIT;
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -666,7 +667,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
         if ((this->unk_316 == 0) && (this->unk_314 == 0) && (this->unk_312 == 0) &&
             !(this->collider1.base.atFlags & AT_BOUNCED) && (this->actor.colChkInfo.health != 0)) {
             play->damagePlayer(play, -8);
-            Actor_PlaySfx(&sp3C->actor, NA_SE_PL_BODY_HIT);
+            Actor_PlaySfx(&player->actor, NA_SE_PL_BODY_HIT);
             func_800B8D98(play, &this->actor, 4.0f, this->actor.yawTowardsPlayer, 6.0f);
             this->unk_316 = 10;
             this->unk_18C |= 1;

@@ -86,7 +86,7 @@ void func_808A7BA0(ObjWturn* this, PlayState* play) {
     if (Math_ScaledStepToS(&this->actor.shape.rot.z, -0x8000, 0x0200)) {
         func_808A7C04(this, play);
     }
-    func_800B8FE8(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
+    Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_EARTHQUAKE - SFX_FLAG);
     Play_SetCameraRoll(play, this->subCamId, this->actor.shape.rot.z);
 }
 

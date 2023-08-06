@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_poh.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_po/object_po.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE)
@@ -235,7 +236,7 @@ void func_80B2CAA4(EnPoh* this, PlayState* play) {
     }
 
     if (this->unk_197 == 255) {
-        func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     }
 }
 
@@ -270,7 +271,7 @@ void func_80B2CBBC(EnPoh* this, PlayState* play) {
     }
 
     if (this->unk_197 == 255) {
-        func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     }
 }
 
@@ -309,7 +310,7 @@ void func_80B2CD64(EnPoh* this, PlayState* play) {
     }
 
     if (this->unk_197 == 255) {
-        func_800B9010(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_FLY - SFX_FLAG);
     }
 }
 
@@ -435,7 +436,7 @@ void func_80B2D300(EnPoh* this, PlayState* play) {
     }
 
     if (this->unk_18E < 18) {
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
     }
 
     if (this->unk_18E == 18) {
@@ -561,7 +562,7 @@ void func_80B2DB44(EnPoh* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
         func_80B2CB60(this);
     }
-    func_800B9010(&this->actor, NA_SE_EN_PO_AWAY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PO_AWAY - SFX_FLAG);
 }
 
 void func_80B2DC50(EnPoh* this, PlayState* play) {
@@ -711,7 +712,8 @@ void func_80B2E438(EnPoh* this, PlayState* play) {
                     this->drawDmgEffScale = 0.45f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
                                 this->colliderCylinder.info.bumper.hitPos.y,
-                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
                 func_80B2CFF8(this);
             }

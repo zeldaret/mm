@@ -95,20 +95,20 @@ s32 func_809A4F00(ObjArmos* this, s32 arg1) {
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_4) {
-        return arg1 == 0 || arg1 == 1;
+        return (arg1 == 0) || (arg1 == 1);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_5) {
-        return arg1 == 2 || arg1 == 3;
+        return (arg1 == 2) || (arg1 == 3);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_6) {
         if (this->unk_26E != 0) {
-            return arg1 == 0 || arg1 == 1;
+            return (arg1 == 0) || (arg1 == 1);
         }
 
         if (this->unk_270 != 0) {
-            return arg1 == 2 || arg1 == 3;
+            return (arg1 == 2) || (arg1 == 3);
         }
 
         return true;
@@ -141,22 +141,22 @@ s32 func_809A500C(ObjArmos* this, s32 arg1) {
 
     if (temp_v0 == OBJARMOS_ROT_7_4) {
         temp = D_809A5BB0[arg1] + this->unk_26E;
-        return temp <= temp_v1 && -temp_v1 <= temp;
+        return (temp <= temp_v1) && (-temp_v1 <= temp);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_5) {
         temp2 = D_809A5BB8[arg1] + this->unk_270;
-        return temp2 <= temp_v1 && -temp_v1 <= temp2;
+        return (temp2 <= temp_v1) && (-temp_v1 <= temp2);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_6) {
         if ((arg1 == 0) || (arg1 == 1)) {
             temp = D_809A5BB0[arg1] + this->unk_26E;
-            return temp <= temp_v1 && -temp_v1 <= temp;
+            return (temp <= temp_v1) && (-temp_v1 <= temp);
         }
 
         temp2 = D_809A5BB8[arg1] + this->unk_270;
-        return temp2 <= temp_v1 && -temp_v1 <= temp2;
+        return (temp2 <= temp_v1) && (-temp_v1 <= temp2);
     }
 
     return false;
@@ -298,7 +298,7 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
             func_809A57D8(this);
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 

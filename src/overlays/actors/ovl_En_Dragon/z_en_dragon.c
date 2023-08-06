@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dragon.h"
+#include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -35,17 +36,17 @@ typedef enum {
     /* 0 */ DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED,
     /* 1 */ DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED,
     /* 2 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY,
-    /* 3 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY,
+    /* 3 */ DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY
 } DeepPythonExtendState;
 
 typedef enum {
     /* 0 */ DEEP_PYTHON_GRAB_STATE_START,
-    /* 1 */ DEEP_PYTHON_GRAB_STATE_GRABBED,
+    /* 1 */ DEEP_PYTHON_GRAB_STATE_GRABBED
 } DeepPythonGrabState;
 
 typedef enum {
     /* 0 */ DEEP_PYTHON_ATTACK_STATE_START,
-    /* 1 */ DEEP_PYTHON_ATTACK_STATE_RELEASED,
+    /* 1 */ DEEP_PYTHON_ATTACK_STATE_RELEASED
 } DeepPythonAttackState;
 
 static s32 sNumPythonsDead = 0;
@@ -299,11 +300,11 @@ void EnDragon_SpawnBubbles(EnDragon* this, PlayState* play, Vec3f basePos) {
     Vec3f bubblePos;
     s32 i;
 
-    bubbleCount = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
+    bubbleCount = (s32)Rand_CenteredFloat(5.0f) + 10;
     colorIndex = 0;
     if (this->action == DEEP_PYTHON_ACTION_DEAD) {
         colorIndex = 1;
-        bubbleCount = (s32)randPlusMinusPoint5Scaled(5.0f) + 10;
+        bubbleCount = (s32)Rand_CenteredFloat(5.0f) + 10;
     }
 
     for (i = 0; i < bubbleCount; i++) {
@@ -311,9 +312,9 @@ void EnDragon_SpawnBubbles(EnDragon* this, PlayState* play, Vec3f basePos) {
         sBubbleVelocity.x = Rand_ZeroFloat(1.0f) * 23.0f;
         sBubbleVelocity.y = Rand_ZeroFloat(1.0f) * 10.0f;
         sBubbleVelocity.z = Rand_ZeroFloat(1.0f) * 23.0f;
-        bubblePos.x += randPlusMinusPoint5Scaled(i * 30.0f);
-        bubblePos.y += randPlusMinusPoint5Scaled(5.0f);
-        bubblePos.z += randPlusMinusPoint5Scaled(i * 30.0f);
+        bubblePos.x += Rand_CenteredFloat(i * 30.0f);
+        bubblePos.y += Rand_CenteredFloat(5.0f);
+        bubblePos.z += Rand_CenteredFloat(i * 30.0f);
         sBubbleAccel.y = Rand_ZeroFloat(1.0f) * 20.0f * 3.0f;
         scale = Rand_S16Offset(380, 240);
         EffectSsDtBubble_SpawnCustomColor(play, &bubblePos, &sBubbleVelocity, &sBubbleAccel,
@@ -682,7 +683,8 @@ void EnDragon_Dead(EnDragon* this, PlayState* play) {
         seahorsePos.y += -100.0f + BREG(33);
         seahorsePos.z += (Math_CosS((this->actor.parent->world.rot.y + 0x8000)) * (500.0f + BREG(38)));
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, seahorsePos.x, seahorsePos.y,
-                                          seahorsePos.z, 0, this->actor.shape.rot.y, 0, 0x4000, this->actor.csId,
+                                          seahorsePos.z, 0, this->actor.shape.rot.y, 0,
+                                          SEAHORSE_PARAMS(SEAHORSE_TYPE_1, 0, 0), this->actor.csId,
                                           this->actor.halfDaysBits, NULL)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_13_01);
             switch (this->pythonIndex) {

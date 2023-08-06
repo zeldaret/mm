@@ -24,11 +24,11 @@ void DemoTreLgt_SetupAnimate(DemoTreLgt* this, PlayState* play, f32 frame);
 void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play);
 
 typedef struct {
-    f32 unk0;
-    f32 unk4;
-    f32 unk8;
-    f32 unkC;
-} DemoTreLgtInfo;
+    /* 0x0 */ f32 unk0;
+    /* 0x4 */ f32 unk4;
+    /* 0x8 */ f32 unk8;
+    /* 0xC */ f32 unkC;
+} DemoTreLgtInfo; // size = 0x10
 
 static DemoTreLgtInfo D_808E1490[2] = {
     { 1.0f, 136.0f, 190.0f, 40.0f },
@@ -53,8 +53,8 @@ static TransformUpdateIndex* sBoxLightAnimations[] = {
 };
 
 typedef enum {
-    /* 0x00 */ DEMO_TRE_LGT_ACTION_WAIT, // wait until animation is needed
-    /* 0x01 */ DEMO_TRE_LGT_ACTION_ANIMATE
+    /* 0 */ DEMO_TRE_LGT_ACTION_WAIT, // wait until animation is needed
+    /* 1 */ DEMO_TRE_LGT_ACTION_ANIMATE
 } DemoTreLgtAction;
 
 static DemoTreLgtActionFunc sActionFuncs[] = {
@@ -70,7 +70,7 @@ void DemoTreLgt_Init(Actor* thisx, PlayState* play) {
     this->colorAlpha2 = 255;
     this->status = 0;
     //! @bug Zora Link should also use animationType 0
-    if (gSaveContext.save.playerForm == PLAYER_FORM_FIERCE_DEITY) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_FIERCE_DEITY) {
         this->animationType = 0;
     } else {
         this->animationType = 1;
@@ -127,7 +127,7 @@ void DemoTreLgt_Animate(DemoTreLgt* this, PlayState* play) {
     if (curFrame > 30.0f) {
         if (!(this->status & 1)) {
             this->status |= 1;
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_TRE_BOX_FLASH);
         }
     }
     if (SkelCurve_Update(play, &this->skelCurve)) {

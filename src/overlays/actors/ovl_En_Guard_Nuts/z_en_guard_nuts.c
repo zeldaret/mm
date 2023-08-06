@@ -84,7 +84,7 @@ typedef enum {
     /* 0 */ WAIT_HEAD_TILT_ANIM,
     /* 1 */ WALK_ANIM,
     /* 2 */ DIG_ANIM,
-    /* 3 */ WALK_ANIM_2,
+    /* 3 */ WALK_ANIM_2
 } EnGuardNutsAnim;
 
 typedef enum {
@@ -195,7 +195,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
             this->targetHeadPos.y = -this->targetHeadPos.y;
         }
     }
-    func_800B8614(&this->actor, play, 70.0f);
+    Actor_OfferTalk(&this->actor, play, 70.0f);
 }
 
 void func_80ABB540(EnGuardNuts* this) {
@@ -328,7 +328,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
         }
     }
     if ((this->animIndex == WALK_ANIM) &&
-        ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f)))) {
+        (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 

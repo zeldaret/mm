@@ -160,7 +160,8 @@ void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
     Gfx* gfx = sShellDLists[this->actor.params];
 
     OPEN_DISPS(play->state.gfxCtx);
-    if (this->alpha == 0xFF) {
+
+    if (this->alpha == 255) {
         Scene_SetRenderModeXlu(play, 0, 0x01);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
         Gfx_DrawDListOpa(play, gfx);
@@ -169,5 +170,6 @@ void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
         Gfx_DrawDListXlu(play, gfx);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

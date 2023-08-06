@@ -8,7 +8,9 @@ struct EnZo;
 
 typedef void (*EnZoActionFunc)(struct EnZo*, PlayState*);
 
-#define ENZO_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
+#define ENZO_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
+
+#define ENZO_PATH_INDEX_NONE 0x3F
 
 typedef struct EnZo {
     /* 0x000 */ Actor actor;
@@ -28,8 +30,8 @@ typedef struct EnZo {
     /* 0x2F4 */ Vec3s headRot;
     /* 0x2FA */ Vec3s upperBodyRot;
     /* 0x300 */ UNK_TYPE1 unk_300[0x12];
-    /* 0x312 */ s16 limbRotY[20];
-    /* 0x33A */ s16 limbRotZ[20];
+    /* 0x312 */ s16 fidgetTableY[ZORA_LIMB_MAX];
+    /* 0x33A */ s16 fidgetTableZ[ZORA_LIMB_MAX];
     /* 0x364 */ Vec3f bodyPartsPos[15];
     /* 0x41A */ UNK_TYPE1 unk_41A[0x6];
     /* 0x41E */ s16 eyeIndex;

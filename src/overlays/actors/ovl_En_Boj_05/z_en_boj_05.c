@@ -29,9 +29,12 @@ ActorInit En_Boj_05_InitVars = {
 
 void EnBoj05_Init(Actor* thisx, PlayState* play) {
 }
+
 void EnBoj05_Destroy(Actor* thisx, PlayState* play) {
 }
+
 void EnBoj05_Update(Actor* thisx, PlayState* play) {
 }
+
 void EnBoj05_Draw(Actor* thisx, PlayState* play) {
 }

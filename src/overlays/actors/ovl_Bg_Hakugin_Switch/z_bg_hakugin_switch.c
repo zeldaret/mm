@@ -78,7 +78,7 @@ typedef struct {
     /* 0x0C */ f32 unk_C;
     /* 0x10 */ Gfx* unk_10;
     /* 0x14 */ u8 unk_14;
-} BgHakuginSwitchStruct;
+} BgHakuginSwitchStruct; // size = 0x18
 
 BgHakuginSwitchStruct D_80B1688C[] = {
     { -156.0f, -178.0f, 6.0f, 10.0f, object_goronswitch_DL_000268, 0xB4 },
@@ -109,7 +109,7 @@ void func_80B15790(BgHakuginSwitch* this, u16 sfxId) {
 
 void func_80B157C4(BgHakuginSwitch* this, u16 arg1) {
     if (this->unk_1B2 <= 0) {
-        func_800B9010(&this->dyna.actor, arg1);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, arg1);
     }
 }
 
@@ -254,7 +254,7 @@ void func_80B15B74(BgHakuginSwitch* this, PlayState* play) {
     if (this->unk_1B0 > 0) {
         this->unk_1B0--;
         if (sp38->unk_14 & 8) {
-            func_800B9038(&this->dyna.actor, this->unk_1B0);
+            Actor_PlaySfx_FlaggedTimer(&this->dyna.actor, this->unk_1B0);
             if (this->unk_1B0 == 0) {
                 sp24 = true;
                 sp20 = sp28;

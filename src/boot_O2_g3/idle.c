@@ -1,16 +1,10 @@
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "irqmgr.h"
+#include "main.h"
 #include "stack.h"
-#include "buffers.h"
 #include "stackcheck.h"
+#include "z64thread.h"
 
-u8 D_80096B20 = 1;
-vu8 gViConfigUseDefault = 1;
-u8 gViConfigAdditionalScanLines = 0;
-u32 gViConfigFeatures = 0x42;
-f32 gViConfigXScale = 1.0f;
-f32 gViConfigYScale = 1.0f;
-
+// Variables are put before most headers as a hacky way to bypass bss reordering
 IrqMgr gIrqMgr;
 STACK(sIrqMgrStack, 0x500);
 StackEntry sIrqMgrStackInfo;
@@ -18,88 +12,101 @@ OSThread sMainThread;
 STACK(sMainStack, 0x900);
 StackEntry sMainStackInfo;
 OSMesg sPiMgrCmdBuff[50];
-OSMesgQueue gPiMgrCmdQ;
+OSMesgQueue gPiMgrCmdQueue;
+OSViMode gViConfigMode;
+u8 gViConfigModeType;
 
-void Idle_ClearMemory(void* begin, void* end) {
+#include "global.h"
+#include "buffers.h"
+#include "idle.h"
+
+u8 D_80096B20 = 1;
+vu8 gViConfigUseBlack = true;
+u8 gViConfigAdditionalScanLines = 0;
+u32 gViConfigFeatures = OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF;
+f32 gViConfigXScale = 1.0f;
+f32 gViConfigYScale = 1.0f;
+
+void Main_ClearMemory(void* begin, void* end) {
     if (begin < end) {
         bzero(begin, (uintptr_t)end - (uintptr_t)begin);
     }
 }
 
-void Idle_InitFramebuffer(u32* ptr, size_t numBytes, u32 value) {
-    s32 temp = sizeof(u32);
-
-    while (numBytes) {
-        *ptr++ = value;
-        numBytes -= temp;
+void Main_InitFramebuffer(u32* framebuffer, size_t numBytes, u32 value) {
+    for (; numBytes > 0; numBytes -= sizeof(u32)) {
+        *framebuffer++ = value;
     }
 }
 
-void Idle_InitScreen(void) {
-    Idle_InitFramebuffer((u32*)gFramebuffer1, 0x25800, 0x00010001);
-    ViConfig_UpdateVi(0);
+void Main_InitScreen(void) {
+    Main_InitFramebuffer((u32*)gFramebuffer1, sizeof(gFramebuffer1),
+                         (GPACK_RGBA5551(0, 0, 0, 1) << 16) | GPACK_RGBA5551(0, 0, 0, 1));
+    ViConfig_UpdateVi(false);
     osViSwapBuffer(gFramebuffer1);
     osViBlack(false);
 }
 
-void Idle_InitMemory(void) {
-    u32 pad;
+void Main_InitMemory(void) {
+    void* memStart = (void*)0x80000400;
     void* memEnd = OS_PHYSICAL_TO_K0(osMemSize);
 
-    Idle_ClearMemory(0x80000400, gFramebuffer1);
-    Idle_ClearMemory(D_80025D00, bootproc);
-    Idle_ClearMemory(gGfxSPTaskYieldBuffer, memEnd);
+    Main_ClearMemory(memStart, gFramebuffer1);
+    Main_ClearMemory(D_80025D00, bootproc);
+    Main_ClearMemory(gGfxSPTaskYieldBuffer, memEnd);
 }
 
-void Idle_InitCodeAndMemory(void) {
+void Main_Init(void) {
     DmaRequest dmaReq;
-    OSMesgQueue queue;
-    OSMesg mesg;
-    size_t oldSize;
+    OSMesgQueue mq;
+    OSMesg msg[1];
+    size_t prevSize;
 
-    osCreateMesgQueue(&queue, &mesg, 1);
+    osCreateMesgQueue(&mq, msg, ARRAY_COUNT(msg));
 
-    oldSize = sDmaMgrDmaBuffSize;
-    sDmaMgrDmaBuffSize = 0;
+    prevSize = gDmaMgrDmaBuffSize;
+    gDmaMgrDmaBuffSize = 0;
 
     DmaMgr_SendRequestImpl(&dmaReq, SEGMENT_START(code), SEGMENT_ROM_START(code),
-                           SEGMENT_ROM_END(code) - SEGMENT_ROM_START(code), 0, &queue, 0);
-    Idle_InitScreen();
-    Idle_InitMemory();
-    osRecvMesg(&queue, NULL, OS_MESG_BLOCK);
+                           SEGMENT_ROM_END(code) - SEGMENT_ROM_START(code), 0, &mq, NULL);
+    Main_InitScreen();
+    Main_InitMemory();
+    osRecvMesg(&mq, NULL, OS_MESG_BLOCK);
 
-    sDmaMgrDmaBuffSize = oldSize;
+    gDmaMgrDmaBuffSize = prevSize;
 
-    Idle_ClearMemory(SEGMENT_BSS_START(code), SEGMENT_BSS_END(code));
+    Main_ClearMemory(SEGMENT_BSS_START(code), SEGMENT_BSS_END(code));
 }
 
 void Main_ThreadEntry(void* arg) {
     StackCheck_Init(&sIrqMgrStackInfo, sIrqMgrStack, STACK_TOP(sIrqMgrStack), 0, 0x100, "irqmgr");
     IrqMgr_Init(&gIrqMgr, STACK_TOP(sIrqMgrStack), Z_PRIORITY_IRQMGR, 1);
     DmaMgr_Start();
-    Idle_InitCodeAndMemory();
+    Main_Init();
     Main(arg);
     DmaMgr_Stop();
 }
 
 void Idle_InitVideo(void) {
-    osCreateViManager(254);
+    osCreateViManager(OS_PRIORITY_VIMGR);
 
-    gViConfigFeatures = 66;
-    gViConfigXScale = 1.0;
-    gViConfigYScale = 1.0;
+    gViConfigFeatures = OS_VI_DITHER_FILTER_ON | OS_VI_GAMMA_OFF;
+    gViConfigXScale = 1.0f;
+    gViConfigYScale = 1.0f;
 
     switch (osTvType) {
         case OS_TV_NTSC:
-            D_8009B290 = 2;
+            gViConfigModeType = OS_VI_NTSC_LAN1;
             gViConfigMode = osViModeNtscLan1;
             break;
+
         case OS_TV_MPAL:
-            D_8009B290 = 30;
+            gViConfigModeType = OS_VI_MPAL_LAN1;
             gViConfigMode = osViModeMpalLan1;
             break;
+
         case OS_TV_PAL:
-            D_8009B290 = 44;
+            gViConfigModeType = OS_VI_FPAL_LAN1;
             gViConfigMode = osViModeFpalLan1;
             gViConfigYScale = 0.833f;
             break;
@@ -110,10 +117,11 @@ void Idle_InitVideo(void) {
 
 void Idle_ThreadEntry(void* arg) {
     Idle_InitVideo();
-    osCreatePiManager(150, &gPiMgrCmdQ, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
+    osCreatePiManager(OS_PRIORITY_PIMGR, &gPiMgrCmdQueue, sPiMgrCmdBuff, ARRAY_COUNT(sPiMgrCmdBuff));
     StackCheck_Init(&sMainStackInfo, sMainStack, STACK_TOP(sMainStack), 0, 0x400, "main");
     osCreateThread(&sMainThread, Z_THREAD_ID_MAIN, Main_ThreadEntry, arg, STACK_TOP(sMainStack), Z_PRIORITY_MAIN);
     osStartThread(&sMainThread);
-    osSetThreadPri(NULL, 0);
+    osSetThreadPri(NULL, OS_PRIORITY_IDLE);
 
-    do { } while (true); }
+    for (;;) {}
+}

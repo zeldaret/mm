@@ -118,9 +118,9 @@ void func_80BF5E68(EnOsk* this, AnimationHeader** animations, s16 index, f32 pla
 void func_80BF5EBC(EnOsk* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.x;
-    sp2C.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.z;
-    sp2C.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.world.pos.y;
+    sp2C.x = Rand_CenteredFloat(30.0f) + this->actor.world.pos.x;
+    sp2C.z = Rand_CenteredFloat(30.0f) + this->actor.world.pos.z;
+    sp2C.y = Rand_CenteredFloat(30.0f) + this->actor.world.pos.y;
 
     func_800B3030(play, &sp2C, &D_80BF7018, &D_80BF7018, 100, 0, 2);
 }
@@ -221,7 +221,7 @@ void func_80BF61EC(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.85f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -298,7 +298,7 @@ void func_80BF6478(EnOsk* this) {
 
             case 10:
             case 11:
-                func_800B9010(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YASE_LAUGH_K - SFX_FLAG);
                 break;
         }
     }
@@ -350,7 +350,7 @@ void func_80BF656C(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -423,7 +423,7 @@ void func_80BF68E0(EnOsk* this) {
                 break;
 
             case 5:
-                if ((Animation_OnFrame(&this->skelAnime, 6.0f)) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
+                if (Animation_OnFrame(&this->skelAnime, 6.0f) || Animation_OnFrame(&this->skelAnime, 11.0f)) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_DEBU_HEAD_UP);
                 }
                 break;
@@ -482,7 +482,7 @@ void func_80BF6A20(EnOsk* this, PlayState* play) {
             this->actor.scale.x -= 0.65f * 0.001f;
             Actor_SetScale(&this->actor, this->actor.scale.x);
             func_80BF5EBC(this, play);
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         } else {
             this->actor.draw = NULL;
         }
@@ -536,7 +536,7 @@ void EnOsk_Draw(Actor* thisx, PlayState* play) {
         Matrix_Translate(this->actor.focus.pos.x + sp80.x, this->actor.focus.pos.y + sp80.y,
                          sp80.z = this->actor.focus.pos.z + sp80.z, MTXMODE_NEW);
 
-        sp80.z = Math_SinS(play->gameplayFrames << 0xE);
+        sp80.z = Math_SinS(play->gameplayFrames * 0x4000);
         sp80.z = ((sp80.z + 1.0f) * 0.1f) + 2.0f;
         Matrix_Scale(this->actor.scale.x * sp80.z, this->actor.scale.y * sp80.z, this->actor.scale.z * sp80.z,
                      MTXMODE_APPLY);

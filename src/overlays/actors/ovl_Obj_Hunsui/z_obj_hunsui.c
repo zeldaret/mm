@@ -3,7 +3,7 @@
  * Overlay: ovl_Obj_Hunsui
  * Description: Switch-Activated Geyser
  */
-#include "prevent_bss_reordering.h"
+
 #include "z_obj_hunsui.h"
 #include "objects/object_hunsui/object_hunsui.h"
 
@@ -29,16 +29,16 @@ AnimatedMaterial* D_80B9DED0;
 AnimatedMaterial* D_80B9DED4;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
+    /* 0x2 */ u8 unk_02;
 } ObjHansuiBssStruct; // size = 0x3
 
 ObjHansuiBssStruct D_80B9DED8;
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x0 */ u8 unk_00;
+    /* 0x1 */ u8 unk_01;
 } ObjHansuiStruct; // size = 0x2
 
 ObjHansuiStruct D_80B9DC70[] = {
@@ -130,8 +130,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 this->unk_18C = 0;
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
 
-                sp40.x += randPlusMinusPoint5Scaled(10.0f);
-                sp40.z += randPlusMinusPoint5Scaled(10.0f);
+                sp40.x += Rand_CenteredFloat(10.0f);
+                sp40.z += Rand_CenteredFloat(10.0f);
                 sp40.y += Rand_ZeroFloat(2.0f);
 
                 EffectSsGSplash_Spawn(play, &sp40, NULL, NULL, 2.0f * Rand_ZeroOne(), 1);
@@ -144,8 +144,8 @@ void func_80B9C5E8(ObjHunsui* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp40, &player->actor.world.pos);
                 this->unk_18C = 0;
 
-                sp40.x += randPlusMinusPoint5Scaled(10.0f);
-                sp40.z += randPlusMinusPoint5Scaled(10.0f);
+                sp40.x += Rand_CenteredFloat(10.0f);
+                sp40.z += Rand_CenteredFloat(10.0f);
                 sp40.y += Rand_ZeroFloat(45.0f);
 
                 EffectSsGSplash_Spawn(play, &sp40, NULL, NULL, 1, 1);
@@ -634,7 +634,7 @@ void ObjHunsui_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_172 & 0x10) {
         f32 temp_f8 = (this->dyna.actor.world.pos.y - this->dyna.actor.home.pos.y) / 800.0f;
 
-        func_8019FAD8(&this->dyna.actor.projectedPos, NA_SE_EV_WATER_PILLAR - SFX_FLAG, 1.0f + temp_f8);
+        Audio_PlaySfx_AtPosWithFreq(&this->dyna.actor.projectedPos, NA_SE_EV_WATER_PILLAR - SFX_FLAG, 1.0f + temp_f8);
     }
 
     if (!(this->unk_172 & 2)) {
@@ -650,7 +650,7 @@ void func_80B9DA60(Actor* thisx, PlayState* play) {
 
     if (this->unk_172 & 0x10) {
         temp = 1.0f + ((this->unk_178 - 240.0f) / 270.0f);
-        func_8019FAD8(&this->dyna.actor.projectedPos, NA_SE_EV_WATER_PILLAR - SFX_FLAG, 1.0f + temp);
+        Audio_PlaySfx_AtPosWithFreq(&this->dyna.actor.projectedPos, NA_SE_EV_WATER_PILLAR - SFX_FLAG, 1.0f + temp);
     }
 
     if ((this->dyna.actor.flags & ACTOR_FLAG_40) && !(this->unk_172 & 2)) {

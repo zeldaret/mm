@@ -201,7 +201,7 @@ void func_8088C858(EnElf* this, PlayState* play) {
         this->unk_244 = 1;
         this->unk_248 = 128;
         this->unk_254 = Rand_ZeroFloat(1.0f) + 0.5f;
-        this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+        this->unk_24C = Rand_CenteredFloat(0x7FFF);
         this->unk_26C = func_8088C9CC;
     }
 }
@@ -216,7 +216,7 @@ void func_8088C920(EnElf* this, PlayState* play) {
             this->unk_244 = 1;
             this->unk_248 = 128;
             this->unk_254 = Rand_ZeroFloat(1.0f) + 0.5f;
-            this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+            this->unk_24C = Rand_CenteredFloat(0x7FFF);
             this->unk_26C = func_8088C9CC;
         }
     }
@@ -264,7 +264,7 @@ void func_8088C9CC(EnElf* this, PlayState* play) {
         this->unk_244 = 1;
         this->unk_248 = 128;
         this->unk_254 = Rand_ZeroFloat(0.5f) + 0.5f;
-        this->unk_24C = randPlusMinusPoint5Scaled(0x7FFF);
+        this->unk_24C = Rand_CenteredFloat(0x7FFF);
     }
 }
 
@@ -293,12 +293,12 @@ void func_8088CC48(EnElf* this, PlayState* play) {
     this->unk_246 = 0;
     this->unk_24A = (s32)Rand_ZeroFloat(1048.0f) + 0x200;
     this->unk_224 = this->actor.world.pos;
-    this->unk_258 = randPlusMinusPoint5Scaled(0x7FFF);
+    this->unk_258 = Rand_CenteredFloat(0x7FFF);
     this->unk_26C = func_8088C9CC;
     func_8088CBAC(this, play);
     this->unk_25C = 0;
     this->disappearTimer = 240;
-    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->unk_260)) {
+    if ((this->fairyFlags & 0x400) && Flags_GetCollectible(play, this->collectibleFlag)) {
         Actor_Kill(&this->actor);
     }
 }
@@ -320,7 +320,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     EnElf* this = THIS;
     Player* player = GET_PLAYER(play);
     s32 colorConfig;
-    s32 params;
+    s32 fairyType;
 
     Actor_ProcessInitChain(thisx, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
@@ -340,15 +340,15 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
     this->unk_240 = 0.0f;
     colorConfig = 0;
 
-    this->unk_260 = ENELF_GET_FE00(&this->actor);
-    params = ENELF_GET_F(&this->actor);
-    if (thisx->params & 0x100) {
+    this->collectibleFlag = FAIRY_GET_COLLECTIBLE_FLAG(&this->actor);
+    fairyType = FAIRY_GET_TYPE(&this->actor);
+    if (FAIRY_GET_BOOL_PARAM(thisx)) {
         this->fairyFlags |= 0x400;
     }
 
-    this->actor.params = params;
-    switch (params) {
-        case 0:
+    this->actor.params = fairyType;
+    switch (fairyType) {
+        case FAIRY_TYPE_0:
             thisx->room = -1;
             EnElf_SetupAction(this, func_8088E850);
             func_8088C51C(this, 0);
@@ -364,7 +364,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_266 = QuestHint_GetTatlTextId(play);
             break;
 
-        case 1:
+        case FAIRY_TYPE_1:
             colorConfig = -1;
             gSaveContext.jinxTimer = 0;
             EnElf_SetupAction(this, func_8088E0F0);
@@ -376,7 +376,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_250 = 0.0f;
             break;
 
-        case 5:
+        case FAIRY_TYPE_5:
             colorConfig = -1;
             EnElf_SetupAction(this, func_8088E484);
             this->unk_254 = 0.0f;
@@ -387,7 +387,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             this->unk_250 = 7.0f;
             break;
 
-        case 7:
+        case FAIRY_TYPE_7:
             this->fairyFlags |= 0x200;
             thisx->shape.shadowDraw = ActorShadow_DrawWhiteCircle;
             this->fairyFlags |= 0x100;
@@ -397,7 +397,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 2:
+        case FAIRY_TYPE_2:
             this->fairyFlags |= 0x100;
             colorConfig = -1;
             this->fairyFlags |= 0x800;
@@ -406,7 +406,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 6:
+        case FAIRY_TYPE_6:
             colorConfig = -1;
             this->fairyFlags |= 0x800;
             this->fairyFlags |= 0x2000;
@@ -414,25 +414,25 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
             func_8088CC48(this, play);
             break;
 
-        case 9:
+        case FAIRY_TYPE_9:
             this->fairyFlags |= 0x1000;
 
-        case 10:
+        case FAIRY_TYPE_10:
             colorConfig = -2;
             func_8088CC48(this, play);
             break;
 
-        case 8:
+        case FAIRY_TYPE_8:
             Actor_Kill(thisx);
             return;
 
-        case 3:
+        case FAIRY_TYPE_3:
             colorConfig = Rand_ZeroFloat(11.99f) + 1.0f;
             EnElf_SetupAction(this, func_8088E018);
             func_8088C51C(this, 0);
             break;
 
-        case 4:
+        case FAIRY_TYPE_4:
             EnElf_SetupAction(this, func_8088E0E0);
             func_8088C51C(this, 6);
             this->fairyFlags |= 8;
@@ -441,9 +441,12 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
                 for (i = 0; i < 8; i++) {
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, thisx->world.pos.x, thisx->world.pos.y - 30.0f,
-                                thisx->world.pos.z, 0, 0, 0, 6);
+                                thisx->world.pos.z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_6, false, 0));
                 }
             }
+            break;
+
+        default:
             break;
     }
 
@@ -638,9 +641,9 @@ s32 func_8088DCA4(EnElf* this) {
 }
 
 void func_8088DD34(EnElf* this, PlayState* play) {
-    Player* refActor = GET_PLAYER(play);
+    Actor* playerActor = &GET_PLAYER(play)->actor;
     s32 pad;
-    Player* player2 = GET_PLAYER(play);
+    Player* player = GET_PLAYER(play);
     f32 heightDiff;
 
     SkelAnime_Update(&this->skelAnime);
@@ -652,14 +655,14 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     func_8088CBAC(this, play);
     if (this->fairyFlags & 0x800) {
-        this->unk_224.y = player2->bodyPartsPos[0].y;
+        this->unk_224.y = player->bodyPartsPos[0].y;
     }
 
     func_8088D8D0(this, &this->unk_224);
     func_8088D9BC(this, play);
     if (Actor_HasParent(&this->actor, play)) {
         if (this->fairyFlags & 0x400) {
-            Flags_SetCollectible(play, this->unk_260);
+            Flags_SetCollectible(play, this->collectibleFlag);
         }
         Actor_Kill(&this->actor);
         return;
@@ -672,24 +675,24 @@ void func_8088DD34(EnElf* this, PlayState* play) {
         return;
     }
 
-    heightDiff = this->actor.world.pos.y - refActor->actor.world.pos.y;
+    heightDiff = this->actor.world.pos.y - playerActor->world.pos.y;
 
     if ((this->fairyFlags & 0x1000) && (heightDiff > 0.0f) && (heightDiff < 60.0f) &&
-        !func_8088C804(&this->actor.world.pos, &refActor->actor.world.pos, 10.0f)) {
+        !func_8088C804(&this->actor.world.pos, &playerActor->world.pos, 10.0f)) {
         Health_ChangeBy(play, 0x80);
         if (this->fairyFlags & 0x200) {
             Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
         }
         gSaveContext.jinxTimer = 0;
         this->unk_254 = 50.0f;
-        this->unk_248 = refActor->actor.shape.rot.y;
+        this->unk_248 = playerActor->shape.rot.y;
         this->unk_24C = -0x1000;
         this->unk_224.y = 30.0f;
         this->unk_250 = 0.0f;
         this->unk_246 = 0;
         EnElf_SetupAction(this, func_8088E0F0);
         if (this->fairyFlags & 0x400) {
-            Flags_SetCollectible(play, this->unk_260);
+            Flags_SetCollectible(play, this->collectibleFlag);
         }
         return;
     }
@@ -1132,7 +1135,7 @@ void func_8088F214(EnElf* this, PlayState* play) {
         }
     } else if (this->unk_264 & 8) {
         sp34 = 1;
-        func_800B9010(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BELL_ANGER - SFX_FLAG);
     } else {
         arrowPointedActor = play->actorCtx.targetContext.arrowPointedActor;
         if (player->stateFlags1 & PLAYER_STATE1_400) {
@@ -1247,9 +1250,9 @@ void func_8088F5F4(EnElf* this, PlayState* play, s32 sparkleLife) {
     Color_RGBA8 envColor;
 
     if (!(this->fairyFlags & 8)) {
-        sparklePos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
+        sparklePos.x = Rand_CenteredFloat(6.0f) + this->actor.world.pos.x;
         sparklePos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y;
-        sparklePos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
+        sparklePos.z = Rand_CenteredFloat(6.0f) + this->actor.world.pos.z;
 
         primColor.r = this->innerColor.r;
         primColor.g = this->innerColor.g;
@@ -1367,11 +1370,11 @@ void func_8088FE64(Actor* thisx, PlayState* play2) {
                 if (play->msgCtx.currentTextId == 0x202) {
                     switch (play->msgCtx.choiceIndex) {
                         case 0:
-                            func_8019F230();
+                            Audio_PlaySfx_MessageCancel();
                             break;
 
                         case 1:
-                            func_8019F208();
+                            Audio_PlaySfx_MessageDecide();
                             break;
                     }
                 }
@@ -1472,7 +1475,7 @@ void func_8089010C(Actor* thisx, PlayState* play) {
     }
 
     if (Actor_ProcessTalkRequest(thisx, &play->state)) {
-        func_8019FDC8(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
+        Audio_PlaySfx_AtPosWithReverb(&gSfxDefaultPos, NA_SE_VO_NA_LISTEN, 0x20);
         thisx->focus.pos = thisx->world.pos;
 
         if (thisx->textId == QuestHint_GetTatlTextId(play)) {

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_tite.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_tite/object_tite.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
@@ -253,9 +254,9 @@ void func_80893BCC(EnTite* this, PlayState* play) {
             for (i = 5; i < ARRAY_COUNT(this->limbPos); i++) {
                 for (j = 0; j < 2; j++) {
                     ptr = &this->limbPos[i];
-                    sp7C.x = ptr->x + randPlusMinusPoint5Scaled(1.0f);
-                    sp7C.y = ptr->y + randPlusMinusPoint5Scaled(1.0f);
-                    sp7C.z = ptr->z + randPlusMinusPoint5Scaled(1.0f);
+                    sp7C.x = ptr->x + Rand_CenteredFloat(1.0f);
+                    sp7C.y = ptr->y + Rand_CenteredFloat(1.0f);
+                    sp7C.z = ptr->z + Rand_CenteredFloat(1.0f);
                     func_800B0DE0(play, &sp7C, &gZeroVec3f, &D_80896B64, &D_80896B3C, &D_80896B40,
                                   (s32)Rand_ZeroFloat(16.0f) + 80, 15);
                 }
@@ -808,9 +809,9 @@ void func_80895738(EnTite* this, PlayState* play) {
 void func_8089595C(EnTite* this, PlayState* play) {
     Vec3f sp2C;
 
-    sp2C.x = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.x;
+    sp2C.x = Rand_CenteredFloat(20.0f) + this->actor.world.pos.x;
     sp2C.y = this->actor.world.pos.y + 15.0f;
-    sp2C.z = randPlusMinusPoint5Scaled(20.0f) + this->actor.world.pos.z;
+    sp2C.z = Rand_CenteredFloat(20.0f) + this->actor.world.pos.z;
     func_800B0DE0(play, &sp2C, &gZeroVec3f, &D_80896B44, &D_80896B3C, &D_80896B40, 500, 50);
 }
 
@@ -999,7 +1000,7 @@ void func_80895FF8(EnTite* this, PlayState* play) {
                     this->drawDmgEffScale = 0.5f;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                 this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 
                 Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 8);
@@ -1097,7 +1098,7 @@ void EnTite_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.5f, 0.0125f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

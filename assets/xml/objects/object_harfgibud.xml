@@ -3,11 +3,11 @@
     <File Name="object_harfgibud" Segment="6">
 
         <!-- Gibdo Form -->
-        <Animation Name="gPamelasFatherLeanForwardAnim" Offset="0x370" />
-        <Animation Name="gPamelasFatherReachForwardAnim" Offset="0x1138" />
-        <Animation Name="gPamelasFatherCurlUpAnim" Offset="0x15D4" />
-        <Animation Name="gPamelasFatherCrouchedPanicAnim" Offset="0x1960" />
-        <Animation Name="gPamelasFatherIdleAnim" Offset="0x260C" />
+        <Animation Name="gPamelasFatherLeanForwardAnim" Offset="0x370" /> <!-- Original name is "hg_garuru" -->
+        <Animation Name="gPamelasFatherReachForwardAnim" Offset="0x1138" /> <!-- Original name is "hg_garuru_loop" -->
+        <Animation Name="gPamelasFatherCurlUpAnim" Offset="0x15D4" /> <!-- Original name is "hg_kurusimu" -->
+        <Animation Name="gPamelasFatherCrouchedPanicAnim" Offset="0x1960" /> <!-- Original name is "hg_kurusimu_loop" -->
+        <Animation Name="gPamelasFatherIdleAnim" Offset="0x260C" /> <!-- Original name is "hg_wait" -->
 
         <DList Name="gPamelasFatherGibdoPelvisDL" Offset="0x5790" />
         <DList Name="gPamelasFatherGibdoRightFootDL" Offset="0x5878" />
@@ -61,11 +61,11 @@
         <Limb Name="gPamelasFatherGibdoRightFootLimb" Type="Standard" EnumName="PAMELAS_FATHER_GIBDO_LIMB_RIGHT_FOOT" Offset="0x852C" />
         <Skeleton Name="gPamelasFatherGibdoSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELAS_FATHER_GIBDO_LIMB_NONE" LimbMax="PAMELAS_FATHER_GIBDO_LIMB_MAX" EnumName="PamelasFatherGibdoLimb" Offset="0x8580" />
 
-        <Animation Name="gPamelasFatherLurchForwardAnim" Offset="0x9D44" />
-        <Animation Name="gPamelasFatherRecoilFromHitAnim" Offset="0xA164" />
-        <Animation Name="gPamelasFatherPanicAnim" Offset="0xAE1C" />
+        <Animation Name="gPamelasFatherLurchForwardAnim" Offset="0x9D44" /> <!-- Original name is "hg_walk" -->
+        <Animation Name="gPamelasFatherRecoilFromHitAnim" Offset="0xA164" /> <!-- Original name is "hg_yarare" -->
+        <Animation Name="gPamelasFatherPanicAnim" Offset="0xAE1C" /> <!-- Original name is "hg_yurayura" -->
         <TextureAnimation Name="gPamelasFatherEyeTexAnim" Offset="0xAE50" />
-        <Animation Name="gPamelasFatherArmsFoldedAnim" Offset="0xB644" />
+        <Animation Name="gPamelasFatherArmsFoldedAnim" Offset="0xB644" /> <!-- Original name is "hgo_wait" -->
 
         <DList Name="gPamelasFatherHumanPelvisDL" Offset="0xE860" />
         <DList Name="gPamelasFatherHumanRightFootDL" Offset="0xE9E0" />
@@ -121,11 +121,11 @@
         <Limb Name="gPamelasFatherHumanRightFootLimb" Type="Standard" EnumName="PAMELAS_FATHER_HUMAN_LIMB_RIGHT_FOOT" Offset="0x12A04" />
         <Skeleton Name="gPamelasFatherHumanSkel" Type="Flex" LimbType="Standard" LimbNone="PAMELAS_FATHER_HUMAN_LIMB_NONE" LimbMax="PAMELAS_FATHER_HUMAN_LIMB_MAX" EnumName="PamelasFatherHumanLimb" Offset="0x12A58" />
 
-        <Animation Name="gPamelasFatherAstonishedAnim" Offset="0x13684" />
-        <Animation Name="gPamelasFatherReachDownToLiftAnim" Offset="0x14220" />
-        <Animation Name="gPamelasFatherTossAnim" Offset="0x14A9C" />
-        <Animation Name="gPamelasFatherKneelDownAndHugAnim" Offset="0x152EC" />
-        <Animation Name="gPamelasFatherConsoleAnim" Offset="0x15C70" />
-        <Animation Name="gPamelasFatherConsoleHeadUpAnim" Offset="0x165F0" />
+        <Animation Name="gPamelasFatherAstonishedAnim" Offset="0x13684" /> <!-- Original name is "ho_bozen_loop" -->
+        <Animation Name="gPamelasFatherReachDownToLiftAnim" Offset="0x14220" /> <!-- Original name is "ho_siawase" -->
+        <Animation Name="gPamelasFatherTossAnim" Offset="0x14A9C" /> <!-- Original name is "ho_siawase_loop" -->
+        <Animation Name="gPamelasFatherKneelDownAndHugAnim" Offset="0x152EC" /> <!-- Original name is "ho_uketome" -->
+        <Animation Name="gPamelasFatherConsoleAnim" Offset="0x15C70" /> <!-- Original name is "ho_uketome_loop" -->
+        <Animation Name="gPamelasFatherConsoleHeadUpAnim" Offset="0x165F0" /> <!-- Original name is "ho_watasiwa" -->
     </File>
 </Root>

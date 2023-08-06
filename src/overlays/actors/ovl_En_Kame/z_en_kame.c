@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kame.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_tl/object_tl.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
@@ -302,7 +303,7 @@ void func_80AD75A8(EnKame* this, PlayState* play) {
     }
 
     if (this->unk_2A6 > 0x1200) {
-        func_800B9010(&this->actor, NA_SE_EN_PAMET_ROLL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_PAMET_ROLL - SFX_FLAG);
     }
 }
 
@@ -606,9 +607,9 @@ void func_80AD8388(EnKame* this, PlayState* play) {
             this->actor.scale.y = this->actor.scale.x;
             this->actor.scale.z = this->actor.scale.x;
         }
-        sp34.x = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.x;
+        sp34.x = Rand_CenteredFloat(40.0f) + this->actor.world.pos.x;
         sp34.y = this->actor.world.pos.y + 15.0f;
-        sp34.z = randPlusMinusPoint5Scaled(40.0f) + this->actor.world.pos.z;
+        sp34.z = Rand_CenteredFloat(40.0f) + this->actor.world.pos.z;
         func_800B3030(play, &sp34, &gZeroVec3f, &gZeroVec3f, 100, 0, 2);
     }
 }
@@ -673,7 +674,7 @@ void func_80AD84C0(EnKame* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                 this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 }
 
                 if (!Actor_ApplyDamage(&this->actor)) {
@@ -746,7 +747,7 @@ void EnKame_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.6f, 0.015000001f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

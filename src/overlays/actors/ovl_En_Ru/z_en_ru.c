@@ -218,7 +218,7 @@ void EnRu_UpdateModel(EnRu* this, PlayState* play) {
 
     EnRu_UpdateEyes(this, 3);
     EnRu_PlayWalkingSound(this, play);
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, RU2_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, RU2_LIMB_MAX);
 }
 
 void EnRu_DoNothing(EnRu* this, PlayState* play) {
@@ -235,7 +235,7 @@ void EnRu_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    this->path = SubS_GetPathByIndex(play, RU_GET_PATH(thisx), 0x3F);
+    this->path = SubS_GetPathByIndex(play, RU_GET_PATH_INDEX(thisx), RU_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = EnRu_DoNothing;
     this->actor.gravity = -4.0f;
@@ -274,8 +274,8 @@ s32 EnRu_OverrideLimbdraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     if ((limbIndex == RU2_LIMB_TORSO) || (limbIndex == RU2_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == RU2_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
 
     return false;

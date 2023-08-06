@@ -5,6 +5,7 @@
  */
 
 #include "z_en_dinofos.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_dinofos/object_dinofos.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
@@ -450,8 +451,8 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
         return true;
     }
 
-    if ((gSaveContext.save.playerForm == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) &&
-        (player->unk_AE7 == 1) && (this->unk_28B == 0)) {
+    if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) && (player->actor.velocity.y < -5.0f) && (player->unk_AE7 == 1) &&
+        (this->unk_28B == 0)) {
         this->unk_28B = 1;
         for (i = 0; i < ARRAY_COUNT(this->colliderJntSphElement) - 3; i++) {
             this->colliderJntSph.elements[i].info.bumper.dmgFlags &= ~0x400;
@@ -559,7 +560,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
         Math_Vec3f_StepTo(&subCam->eye, &this->unk_2BC, 10.0f);
         Play_SetCameraAtEye(play, this->subCamId, &this->actor.focus.pos, &subCam->eye);
         if (this->skelAnime.curFrame <= 55.0f) {
-            func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
         }
     }
 
@@ -1062,7 +1063,7 @@ void func_8089CB10(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089CBEC(EnDinofos* this, PlayState* play) {
-    s16 temp_s3 = ((s32)randPlusMinusPoint5Scaled(0x1000) + this->actor.shape.rot.y) + this->unk_28E;
+    s16 temp_s3 = ((s32)Rand_CenteredFloat(0x1000) + this->actor.shape.rot.y) + this->unk_28E;
     Vec3f sp88;
     Vec3f sp7C;
     ColliderJntSphElementDim* dim;
@@ -1081,12 +1082,12 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
     temp_s0 = CLAMP_MIN(temp_s0, 0);
 
     sp88.x = 11.0f * temp_f20;
-    sp88.y = randPlusMinusPoint5Scaled(2.0f) + -5.4f;
+    sp88.y = Rand_CenteredFloat(2.0f) + -5.4f;
     sp88.z = 11.0f * temp_f22;
     sp7C.x = 0.9f * temp_f20;
-    sp7C.y = randPlusMinusPoint5Scaled(0.6f) + 1.4f;
+    sp7C.y = Rand_CenteredFloat(0.6f) + 1.4f;
     sp7C.z = 0.9f * temp_f22;
-    func_800B9010(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
     EffectSsDFire_Spawn(play, &this->limbPos[10], &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20, 3, 8);
 
     for (end = 6, i = 3; i > 0; i--) {
@@ -1098,7 +1099,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
 
     for (i = 6; i < end; i++) {
         dim = &this->colliderJntSph.elements[i].dim;
-        temp_s3 = (s32)(cos_rad((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
+        temp_s3 = (s32)(Math_CosF((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
 
         dim->worldSphere.center.x = (s32)this->limbPos[10].x + (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z);
         dim->worldSphere.center.y = (s32)this->limbPos[10].y + (s32)dim->modelSphere.center.y;
@@ -1232,9 +1233,9 @@ void func_8089D42C(EnDinofos* this, PlayState* play) {
     if ((this->actionFunc == func_8089B834) && (this->unk_290 != 0)) {
         Math_ScaledStepToS(&this->unk_28E, Math_SinS(this->unk_290 * 1400) * 0x2C00, 0x300);
     } else if (this->actionFunc == func_8089CA74) {
-        Math_ScaledStepToS(&this->unk_28E, cos_rad(M_PI) * 0x2C00, 0x233);
+        Math_ScaledStepToS(&this->unk_28E, Math_CosF(M_PI) * 0x2C00, 0x2C00 / 20);
     } else if (this->actionFunc == func_8089CBEC) {
-        this->unk_28E = cos_rad(this->unk_290 * (M_PI / 20)) * 0x2C00;
+        this->unk_28E = Math_CosF(this->unk_290 * (M_PI / 20)) * 0x2C00;
     } else if (!Play_InCsMode(play)) {
         temp_v0_2 = this->unk_28E + this->actor.shape.rot.y;
         temp_v0_2 = BINANG_SUB(this->actor.yawTowardsPlayer, temp_v0_2);
@@ -1332,7 +1333,8 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
                         this->colliderJntSph.elements[i].info.bumper.hitPos.x,
                         this->colliderJntSph.elements[i].info.bumper.hitPos.y,
-                        this->colliderJntSph.elements[i].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->colliderJntSph.elements[i].info.bumper.hitPos.z, 0, 0, 0,
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
         func_8089C87C(this, i);
         return true;
@@ -1398,7 +1400,7 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * (11.0f / 40.0f);
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }

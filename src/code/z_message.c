@@ -5,6 +5,27 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 #if 0
+#define DEFINE_PERSON(_enum, _photo, _description, _metEnum, metMessage, _metFlag) metMessage,
+#define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, completedMessage, _completedFlag) completedMessage,
+
+u16 sBombersNotebookEventMessages[BOMBERS_NOTEBOOK_EVENT_MAX] = {
+#include "tables/bombers_notebook/person_table.h"
+#include "tables/bombers_notebook/event_table.h"
+};
+
+#undef DEFINE_PERSON
+#undef DEFINE_EVENT
+
+#define DEFINE_PERSON(_enum, _photo, _description, _metEnum, _metMessage, metFlag) metFlag,
+#define DEFINE_EVENT(_enum, _icon, _colorFlag, _description, _completedMessage, completedFlag) completedFlag,
+
+u16 gBombersNotebookWeekEventFlags[BOMBERS_NOTEBOOK_EVENT_MAX] = {
+#include "tables/bombers_notebook/person_table.h"
+#include "tables/bombers_notebook/event_table.h"
+};
+
+#undef DEFINE_PERSON
+#undef DEFINE_EVENT
 
 s16 D_801D02D8[15] = {
     ACTOR_OCEFF_WIPE5, ACTOR_OCEFF_WIPE5, // Sonata of Awakening Effect, Sonata of Awakening Effect
@@ -20,8 +41,6 @@ s32 D_801D02F8[15] = { 0,1,2,3,4,0,1,0,0,0,0,0,1,1,0 };
 
 #endif
 
-extern u16 D_801C6AB8[];
-extern u16 D_801C6B28[];
 extern s16 D_801D02D8[];
 extern s32 D_801D02F8[];
 extern s16 D_801F6B0C;
@@ -74,13 +93,13 @@ s32 Message_ShouldAdvance(PlayState* play) {
 
     if ((msgCtx->unk12020 == 0x10) || (msgCtx->unk12020 == 0x11)) {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A)) {
-            play_sound(NA_SE_SY_MESSAGE_PASS);
+            Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
         if (CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
             CHECK_BTN_ALL(controller->press.button, BTN_CUP)) {
-            play_sound(NA_SE_SY_MESSAGE_PASS);
+            Audio_PlaySfx(NA_SE_SY_MESSAGE_PASS);
         }
         return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
                CHECK_BTN_ALL(controller->press.button, BTN_CUP);
@@ -106,7 +125,7 @@ void Message_CloseTextbox(PlayState* play) {
         msgCtx->stateTimer = 2;
         msgCtx->msgMode = 0x43;
         msgCtx->unk12020 = 0;
-        play_sound(NA_SE_NONE);
+        Audio_PlaySfx(NA_SE_NONE);
     }
 }
 
@@ -128,7 +147,7 @@ void func_80148B98(PlayState* play, u8 arg1) {
         if (msgCtx->choiceIndex > 128) {
             msgCtx->choiceIndex = 0;
         } else {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
         return;
     } else if ((curInput->rel.stick_y < -29) && held == 0) {
@@ -137,7 +156,7 @@ void func_80148B98(PlayState* play, u8 arg1) {
         if (msgCtx->choiceIndex > arg1) {
             msgCtx->choiceIndex = arg1;
         } else {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
         return;
     } else {
@@ -225,6 +244,7 @@ void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg
     *arg3 = temp2;
 }
 
+// TODO: SJIS support
 // Message_LoadRupees JPN ?
 void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -240,7 +260,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x8373;
     t += 1;
-    Font_LoadChar(play, 0x815C, k); // Ox815C = ― in JISX0213
+    Font_LoadChar(play, 0x815C, k); // 0x815C = ― in JISX0213
     k += FONT_CHAR_TEX_SIZE;
     msgCtx->decodedBuffer.wchar[t] = 0x815C;
 
@@ -365,19 +385,19 @@ void func_80151A68(PlayState* play, u16 textId) {
     }
 }
 
-void func_80151BB4(PlayState* play, u8 arg1) {
+void Message_BombersNotebookQueueEvent(PlayState* play, u8 event) {
     MessageContext* msgCtx = &play->msgCtx;
-    u8 temp = arg1;
 
     if (CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
-            msgCtx->unk120B2[msgCtx->unk120B1] = temp;
-            msgCtx->unk120B1++;
+        if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[event])) {
+            msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount] = event;
+            msgCtx->bombersNotebookEventQueueCount++;
         }
-    } else if (arg1 >= 20) {
-        if (!CHECK_WEEKEVENTREG(D_801C6B28[arg1])) {
-            msgCtx->unk120B2[msgCtx->unk120B1] = temp;
-            msgCtx->unk120B1++;
+    } else if (event >= BOMBERS_NOTEBOOK_PERSON_MAX) {
+        // Non MET events are processed even if the player does not have the notebook yet
+        if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags[event])) {
+            msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount] = event;
+            msgCtx->bombersNotebookEventQueueCount++;
         }
     }
 }
@@ -386,17 +406,23 @@ u32 func_80151C9C(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
     while (true) {
-        if (msgCtx->unk120B1 == 0) {
+        if (msgCtx->bombersNotebookEventQueueCount == 0) {
             return false;
         }
-        msgCtx->unk120B1--;
+        msgCtx->bombersNotebookEventQueueCount--;
 
-        if (!CHECK_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]])) {
-            SET_WEEKEVENTREG(D_801C6B28[msgCtx->unk120B2[msgCtx->unk120B1]]);
+        if (!CHECK_WEEKEVENTREG(gBombersNotebookWeekEventFlags
+                                    [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]])) {
+            SET_WEEKEVENTREG(gBombersNotebookWeekEventFlags
+                                 [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]]);
 
-            if ((D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]] != 0) && CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
-                Message_ContinueTextbox(play, D_801C6AB8[msgCtx->unk120B2[msgCtx->unk120B1]]);
-                play_sound(NA_SE_SY_SCHEDULE_WRITE);
+            if ((sBombersNotebookEventMessages
+                     [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]] != 0) &&
+                CHECK_QUEST_ITEM(QUEST_BOMBERS_NOTEBOOK)) {
+                Message_ContinueTextbox(
+                    play, sBombersNotebookEventMessages
+                              [msgCtx->bombersNotebookEventQueue[msgCtx->bombersNotebookEventQueueCount]]);
+                Audio_PlaySfx(NA_SE_SY_SCHEDULE_WRITE);
                 return true;
             }
         }
@@ -476,7 +502,7 @@ u8 Message_GetState(MessageContext* msgCtx) {
     if (msgCtx->msgMode == 0x40) {
         return TEXT_STATE_13;
     }
-    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->unk120B1 == 0)) {
+    if ((msgCtx->msgMode == 0x43) && (msgCtx->stateTimer == 1) && (msgCtx->bombersNotebookEventQueueCount == 0)) {
         return TEXT_STATE_CLOSING;
     }
 

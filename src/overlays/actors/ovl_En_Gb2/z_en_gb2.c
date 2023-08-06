@@ -381,7 +381,7 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
     } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
 
@@ -408,19 +408,19 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_26E = 0x14D7;
                         this->unk_26C |= 2;
                         Message_StartTextbox(play, this->unk_26E, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_26E = 0x14D8;
                         Message_StartTextbox(play, this->unk_26E, &this->actor);
                     }
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_26E = 0x14D6;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -429,7 +429,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
         } else if (this->unk_26E == 0x14DA) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
@@ -438,7 +438,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_26E = 0x14DB;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -543,7 +543,7 @@ void func_80B10584(EnGb2* this, PlayState* play) {
         this->actionFunc = func_80B10634;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 300.0f);
+        Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
 
@@ -576,12 +576,12 @@ void func_80B10634(EnGb2* this, PlayState* play) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     this->unk_26E = 0x14D7;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
@@ -591,7 +591,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 break;
 
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->unk_26E = 0x14E3;
                 this->unk_26C |= 2;
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -615,24 +615,24 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10924(EnGb2* this, PlayState* play) {
-    s32 sp24;
+    s32 getItemId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
-        sp24 = 5;
+        getItemId = GI_RUPEE_PURPLE;
     } else {
-        sp24 = 12;
+        getItemId = GI_HEART_PIECE;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (sp24 == 12) {
+        if (getItemId == GI_HEART_PIECE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
         } else {
             Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -641,7 +641,7 @@ void func_80B109DC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
-        func_800B85E0(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -699,7 +699,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             this->actionFunc = func_80B10DAC;
         } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
             this->unk_26C |= 0x40;
-            func_800B8614(&this->actor, play, 300.0f);
+            Actor_OfferTalk(&this->actor, play, 300.0f);
         }
     } else {
         this->unk_26C &= ~0x40;
@@ -719,7 +719,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             if (!(this->unk_26C & 0x80)) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 this->unk_26C |= 0x20;
-                func_800B8614(&this->actor, play, 300.0f);
+                Actor_OfferTalk(&this->actor, play, 300.0f);
             }
         }
     }
@@ -786,7 +786,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
         this->actionFunc = func_80B10DAC;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
 

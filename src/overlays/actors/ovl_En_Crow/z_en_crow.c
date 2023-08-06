@@ -5,6 +5,7 @@
  */
 
 #include "z_en_crow.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
@@ -74,7 +75,7 @@ typedef enum {
     /* 2 */ GUAY_DMGEFF_FIRE,
     /* 3 */ GUAY_DMGEFF_ICE,
     /* 4 */ GUAY_DMGEFF_LIGHT,
-    /* 5 */ GUAY_DMGEFF_ELECTRIC,
+    /* 5 */ GUAY_DMGEFF_ELECTRIC
 } GuayDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -317,7 +318,7 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
         this->drawDmgEffFrozenSteamScale = 0.5f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements->info.bumper.hitPos.x,
                     this->collider.elements->info.bumper.hitPos.y, this->collider.elements->info.bumper.hitPos.z, 0, 0,
-                    0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+                    0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_FIRE) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 4.0f;
@@ -465,8 +466,8 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
-    if (this->collider.base.acFlags & AT_HIT) {
-        this->collider.base.acFlags &= ~AT_HIT;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
 
         if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
@@ -529,7 +530,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
 
     Actor_SetFocus(&this->actor, height);
 
-    if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
+    if ((this->actor.colChkInfo.health != 0) && Animation_OnFrame(&this->skelAnime, 3.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
     if (this->drawDmgEffAlpha > 0.0f) {
@@ -542,7 +543,7 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffFrozenSteamScale = this->drawDmgEffFrozenSteamScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffScale, 0.5f, 0.5f * 0.025f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -552,9 +553,9 @@ s32 EnCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
     if (this->actor.colChkInfo.health != 0) {
         if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-            rot->y += (s16)(0xC00 * sin_rad(this->skelAnime.curFrame * (M_PI / 4)));
+            rot->y += (s16)(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
         } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-            rot->y += (s16)(0x1400 * sin_rad((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+            rot->y += (s16)(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
         }
     }
     return false;

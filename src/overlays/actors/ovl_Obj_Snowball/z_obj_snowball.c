@@ -73,10 +73,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ ObjSnowballActionFunc unk_04;
-} ObjSnowballStruct2;
+    /* 0x0 */ s16 unk_00;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ ObjSnowballActionFunc unk_04;
+} ObjSnowballStruct2; // size = 0x8
 
 static ObjSnowballStruct2 D_80B04F84[] = {
     { -1, 0, func_80B02D58 },
@@ -771,7 +771,7 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (sp24 && (this->actionFunc == func_80B04350)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 
     if ((this->actor.floorPoly != NULL) && (this->actor.projectedPos.z < 920.0f)) {

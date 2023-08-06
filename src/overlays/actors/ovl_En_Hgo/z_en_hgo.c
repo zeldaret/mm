@@ -45,7 +45,7 @@ typedef enum {
     /* 3 */ HGO_ANIM_CONSOLE,
     /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
     /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
-    /* 6 */ HGO_ANIM_TOSS,
+    /* 6 */ HGO_ANIM_TOSS
 } HgoAnimation;
 
 ActorInit En_Hgo_InitVars = {
@@ -159,7 +159,7 @@ void EnHgo_Talk(EnHgo* this, PlayState* play) {
                 Message_StartTextbox(play, 0x15A7, &this->actor);
                 this->textId = 0x15A7; // can I research that mask
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_HUMAN)) {
                 this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_HUMAN;
                 Message_StartTextbox(play, 0x158F, &this->actor);
@@ -180,7 +180,7 @@ void EnHgo_Talk(EnHgo* this, PlayState* play) {
         }
         EnHgo_SetupDialogueHandler(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -317,8 +317,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
                 case HGO_ANIM_ASTONISHED:
-                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-                        (this->isInCutscene == false)) {
+                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && !this->isInCutscene) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
                             ((play->csCtx.scriptIndex == 2) || (play->csCtx.scriptIndex == 4))) {

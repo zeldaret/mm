@@ -94,7 +94,7 @@ typedef enum {
     /* 1 */ EN_RD_GRAB_INITIAL_DAMAGE,
     /* 2 */ EN_RD_GRAB_ATTACK,
     /* 3 */ EN_RD_GRAB_RELEASE,
-    /* 4 */ EN_RD_GRAB_END,
+    /* 4 */ EN_RD_GRAB_END
 } EnRdGrabState;
 
 ActorInit En_Rd_InitVars = {
@@ -139,7 +139,7 @@ typedef enum {
     /* 0xC */ EN_RD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_RD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_RD_DMGEFF_LIGHT_RAY,         // Instantly kills on contact
-    /* 0xF */ EN_RD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+    /* 0xF */ EN_RD_DMGEFF_DAMAGE             // Deals damage and plays the damage animation
 } EnRdDamageEffect;
 
 static DamageTable sDamageTable = {

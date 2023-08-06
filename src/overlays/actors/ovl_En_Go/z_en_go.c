@@ -110,77 +110,6 @@ typedef enum EnGoAnimationIndex {
     /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
 } EnGoAnimationIndex;
 
-EnGoEffect* EnGo_InitSteam(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f velocity, f32 scale, f32 deltaScale,
-                           s32 maxFrames);
-void EnGo_DrawSteam(EnGoEffect effect[], PlayState* play2);
-
-void EnGo_InitDust(EnGoEffect effect[], Vec3f pos, Vec3f accel, Vec3f vel, f32 scale, f32 deltaScale, s32 maxFrames,
-                   EnGoEffectType parentEffectType);
-void EnGo_DrawDust(EnGoEffect effect[], PlayState* play2);
-
-void EnGo_InitSnow(EnGoEffect effect[], Vec3f pos);
-void EnGo_UpdateSnow(EnGoEffect* effect, f32 dustConversionHeight);
-void EnGo_DrawSnow(EnGoEffect effect[], PlayState* play, Gfx* material, Gfx* model, u8 effectType);
-
-void EnGo_UpdateEffects(EnGo* this);
-void EnGo_DrawEffects(EnGo* this, PlayState* play);
-
-s32 EnGo_CanSnowballHurtPlayer(PlayState* play);
-s32 EnGo_IsFallingAsleep(EnGo* this, PlayState* play);
-
-s32 EnGo_UpdateFocus(EnGo* this);
-
-void EnGo_UpdateSnowballCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateMedigoronCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateRolledUpCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateFrozenCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateStandingCollider(EnGo* this, PlayState* play);
-void EnGo_UpdateCollider(EnGo* this, PlayState* play);
-
-s32 EnGo_UpdateTalking(EnGo* this, PlayState* play);
-s32 EnGo_DetectCollisions(EnGo* this, PlayState* play);
-s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play);
-s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play);
-s32 EnGo_UpdateSfx(EnGo* this, PlayState* play);
-s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex);
-void EnGo_UpdateEyes(EnGo* this);
-
-void EnGo_UpdateShiverSurprisedAnimation(EnGo* this, PlayState* play);
-s32 EnGo_UpdateGraveyardAttentionTargetAndReactions(EnGo* this, PlayState* play);
-s32 EnGo_UpdateRotationToTarget(EnGo* this, PlayState* play);
-s32 EnGo_UpdateAttentionTargetAndReactions(EnGo* this, PlayState* play);
-
-void EnGo_GravemakerIdle(EnGo* this, PlayState* play);
-void EnGo_FrozenIdle(EnGo* this, PlayState* play);
-Actor* EnGo_FindGravemaker(EnGo* this, PlayState* play);
-
-void EnGo_UpdateMedigoronColliderRadius(EnGo* this, PlayState* play, s32 isGivenPowderKeg);
-s32 EnGo_ChangeCutscene(EnGo* this, s16 csId);
-
-s32 EnGo_HandleGatekeeperPoundCutscene(EnGo* this, f32 initialVelocity, f32 maxDistortion, s32 maxHangtime);
-void EnGo_AddGatekeeperPoundQuake(PlayState* play, s16 speed, s16 verticalMag, s16 countdown);
-void EnGo_CreateGatekeeperPoundEffects(EnGo* this, PlayState* play);
-void EnGo_DrawIceBlockWhenFrozen(EnGo* this, PlayState* play, f32 scale, f32 alpha);
-void EnGo_MakeSteam(EnGo* this);
-
-s32 EnGo_HandleOpenShrineCutscene(Actor* thisx, PlayState* play);
-s32 EnGo_HandleGivePowderKegCutscene(Actor* thisx, PlayState* play);
-
-void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToSnowballAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play);
-void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play);
-
-void EnGo_SetupAthletic(EnGo* this, PlayState* play);
-void EnGo_SetupSpectator(EnGo* this, PlayState* play);
-void EnGo_SetupGatekeeper(EnGo* this, PlayState* play);
-void EnGo_SetupGraveyardGoron(EnGo* this, PlayState* play);
-void EnGo_SetupShrineGoron(EnGo* this, PlayState* play);
-void EnGo_SetupMedigoron(EnGo* this, PlayState* play);
-void EnGo_SetupInitialAction(EnGo* this, PlayState* play);
-
 void EnGo_Idle(EnGo* this, PlayState* play);
 void EnGo_Sleep(EnGo* this, PlayState* play);
 void EnGo_Frozen(EnGo* this, PlayState* play);
@@ -190,8 +119,6 @@ void EnGo_Thaw(EnGo* this, PlayState* play);
 void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play);
 
 void EnGo_Snowball(EnGo* this, PlayState* play);
-
-s32* EnGo_GetMsgEventScript(EnGo* this, PlayState* play);
 
 void EnGo_Talk(EnGo* this, PlayState* play);
 
@@ -461,6 +388,7 @@ void EnGo_DrawSteam(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
     f32 alpha;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ENGO_EFFECT_COUNT; i++, effect++) {
         if (effect->type != ENGO_EFFECT_STEAM) {
@@ -554,6 +482,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
     f32 alpha;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ENGO_EFFECT_COUNT; i++, effect++) {
         if ((effect->type < ENGO_EFFECT_DUST_MIN) || (effect->type >= ENGO_EFFECT_STEAM_MIN)) {
@@ -599,14 +528,13 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param effect The EnGoEffect table
  * @param pos Position around which the effects appear
  */
-void EnGo_InitSnow(EnGoEffect effect[ENGO_EFFECT_COUNT], Vec3f pos) {
-    static u8 effectIndexToSnowEffectTable[] = {
+void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
+    static u8 effectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
     };
-
     EnGoEffect* dustEffects = &effect[ENGO_SNOW_EFFECT_COUNT];
     s32 i;
     Vec3f randRelativeToWorldPos;
@@ -722,7 +650,9 @@ void EnGo_DrawSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], PlayState* play, G
     u8 isMaterialSet = false;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
     for (i = 0; i < ENGO_SNOW_EFFECT_COUNT; i++, effect++) {
         if (effect->type != effectType) {
             continue;
@@ -959,7 +889,8 @@ void EnGo_UpdateCollider(EnGo* this, PlayState* play) {
  * @return True if talking
  */
 s32 EnGo_UpdateTalking(EnGo* this, PlayState* play) {
-    if (!(this->actionFlags & 7) || !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+    if (((this->actionFlags & SUBS_OFFER_MODE_MASK) == SUBS_OFFER_MODE_NONE) ||
+        !Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         return false;
     }
 
@@ -976,7 +907,7 @@ s32 EnGo_UpdateTalking(EnGo* this, PlayState* play) {
         this->actionFlags |= ENGO_FLAG_EYES_OPEN;
     }
 
-    SubS_UpdateFlags(&this->actionFlags, 0, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->cutsceneState = 0;
     this->gatekeeperAnimState = 0;
     this->interruptedActionFunc = this->actionFunc;
@@ -1021,19 +952,19 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEYARD) && (play->csCtx.state != CS_STATE_IDLE) &&
         (this->actor.draw != NULL) && (play->sceneId == SCENE_10YUKIYAMANOMURA2) && (gSaveContext.sceneLayer == 1) &&
         (play->csCtx.scriptIndex == 0)) {
-        if (this->springArrivalCutsceneActive == false) {
+        if (!this->springArrivalCutsceneActive) {
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->springArrivalCueId = 255;
             this->springArrivalCutsceneActive = true;
             this->interruptedActionFunc = this->actionFunc;
         }
-        SubS_UpdateFlags(&this->actionFlags, 0, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = EnGo_HandleSpringArrivalCutscene;
     } else if (this->springArrivalCutsceneActive) {
         this->actor.flags |= ACTOR_FLAG_1;
         this->springArrivalCueId = 255;
         this->springArrivalCutsceneActive = false;
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->actionFunc = this->interruptedActionFunc;
     }
 
@@ -1294,13 +1225,13 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
     s16 deltaYaw = BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y);
 
     if ((fabsf(this->actor.playerHeightRel) > 20.0f) || (this->actor.xzDistToPlayer > 300.0f)) {
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else if ((player->transformation != PLAYER_FORM_GORON) || (ABS_ALT(deltaYaw) >= 0x1C70) ||
                CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_GORON_GRAVEMAKER_AS_GORON) ||
                CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON)) {
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->actionFlags, 4, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
 }
 
@@ -1309,9 +1240,9 @@ void EnGo_GravemakerIdle(EnGo* this, PlayState* play) {
  */
 void EnGo_FrozenIdle(EnGo* this, PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_THAWED_GRAVEYARD_GORON)) {
-        SubS_UpdateFlags(&this->actionFlags, 3, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     } else {
-        SubS_UpdateFlags(&this->actionFlags, 4, 7);
+        SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
     }
 }
 
@@ -1814,7 +1745,7 @@ void EnGo_ChangeToCoveringEarsAnimation(EnGo* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->blinkTimer = 0;
@@ -1833,7 +1764,7 @@ void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
     Actor_SetScale(&this->actor, this->scaleFactor);
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->sleepState = ENGO_AWAKE;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
@@ -1851,7 +1782,7 @@ void EnGo_ChangeToShiveringAnimation(EnGo* this, PlayState* play) {
 void EnGo_SetupAthletic(EnGo* this, PlayState* play) {
     if (((gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 0)) ||
          (gSaveContext.save.entrance == ENTRANCE(GORON_RACETRACK, 2))) &&
-        (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE))) {
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE)) {
         EnGo_ChangeToStretchingAnimation(this, play);
         this->actionFunc = EnGo_Idle;
     } else {
@@ -1883,7 +1814,8 @@ void EnGo_SetupSpectator(EnGo* this, PlayState* play) {
  */
 void EnGo_SetupGatekeeper(EnGo* this, PlayState* play) {
     if (gSaveContext.save.day >= 2) {
-        this->gatekeeperPath = SubS_GetDayDependentPath(play, ENGO_GET_PATH(&this->actor), 0xFF, &this->indexPathPoint);
+        this->gatekeeperPath = SubS_GetDayDependentPath(play, ENGO_GET_PATH_INDEX(&this->actor), ENGO_PATH_INDEX_NONE,
+                                                        &this->indexPathPoint);
         if (this->gatekeeperPath != NULL) {
             this->indexPathPoint = 1;
         }
@@ -1947,7 +1879,7 @@ void EnGo_SetupMedigoron(EnGo* this, PlayState* play) {
     this->actor.targetMode = 3;
     this->actionFlags = 0;
     this->actor.gravity = -1.0f;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFlags |= ENGO_FLAG_EYES_OPEN;
     this->msgEventFunc = EnGo_HandleGivePowderKegCutscene;
@@ -2033,7 +1965,7 @@ void EnGo_Idle(EnGo* this, PlayState* play) {
     } else if (ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) {
         // All others besides the Medigoron in the Powder Keg Shop can fall asleep
         if (EnGo_IsFallingAsleep(this, play)) {
-            SubS_UpdateFlags(&this->actionFlags, 0, 7);
+            SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             this->sleepState = ENGO_ASLEEP_POS;
             this->actionFunc = EnGo_Sleep;
         } else if (ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEYARD) {
@@ -2051,9 +1983,9 @@ void EnGo_Idle(EnGo* this, PlayState* play) {
             }
         } else if (ENGO_GET_TYPE(&this->actor) == ENGO_ATHLETIC) {
             if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3FFC) {
-                SubS_UpdateFlags(&this->actionFlags, 3, 7);
+                SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             } else {
-                SubS_UpdateFlags(&this->actionFlags, 0, 7);
+                SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
             }
         }
     }
@@ -2106,7 +2038,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
             }
             this->snorePhase += 0x400;
             this->actor.shape.yOffset = (this->actor.scale.y / this->scaleFactor) * ENGO_ROLLEDUP_Y_OFFSET;
-            SubS_UpdateFlags(&this->actionFlags, 3, 7);
+            SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         }
     } else if ((this->actor.xzDistToPlayer >= 240.0f) || (this->actor.playerHeightRel >= 20.0f) ||
                (this->sleepState != ENGO_AWAKE)) {
@@ -2117,7 +2049,7 @@ void EnGo_Sleep(EnGo* this, PlayState* play) {
         this->actor.shape.yOffset = ENGO_STANDING_Y_OFFSET;
     }
 
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
     Math_ApproachS(&this->actor.shape.rot.y, targetRot, 4, 0x2AA8);
 }
 
@@ -2130,7 +2062,8 @@ void EnGo_Frozen(EnGo* this, PlayState* play) {
     Actor* actorCollidedWith = this->colliderCylinder.base.ac;
 
     if ((this->actionFlags & ENGO_FLAG_HIT_BY_OTHER) &&
-        (((actorCollidedWith != NULL) && (actorCollidedWith->id == ACTOR_OBJ_AQUA) && AQUA_HOT(actorCollidedWith)) ||
+        (((actorCollidedWith != NULL) && (actorCollidedWith->id == ACTOR_OBJ_AQUA) &&
+          (AQUA_GET_TYPE(actorCollidedWith) != AQUA_TYPE_COLD)) ||
          (this->actor.colChkInfo.damageEffect == ENGO_DMGEFF_FIRE))) {
         this->actionFunc = EnGo_AwaitThaw;
     }
@@ -2161,7 +2094,7 @@ void EnGo_Thaw(EnGo* this, PlayState* play) {
         EnGo_ChangeToShiveringAnimation(this, play);
         if ((ENGO_GET_TYPE(&this->actor) == ENGO_GRAVEYARD) &&
             (ENGO_GET_SUBTYPE(&this->actor) == ENGO_GRAVEYARD_FROZEN)) {
-            SubS_UpdateFlags(&this->actionFlags, 4, 7);
+            SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
             EnGo_ChangeToShiveringAnimation(otherGoron, play);
             otherGoron->actionFunc = EnGo_Idle;
         }
@@ -2312,7 +2245,7 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
                 }
             }
 
-            SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+            SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
             Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
     }
@@ -2457,7 +2390,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
             Math_Vec3f_Copy(&thisPos, &this->actor.world.pos);
             Math_ApproachS(&this->actor.shape.rot.y, Math_Vec3f_Yaw(&thisPos, &targetPos), 4, 0x2AA8);
         }
-        SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, ARRAY_COUNT(this->limbRotTableY));
+        SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, ENGO_FIDGET_TABLE_LEN);
         return;
     }
 
@@ -2469,7 +2402,7 @@ void EnGo_Talk(EnGo* this, PlayState* play) {
     }
 
     this->actionFlags &= ~ENGO_FLAG_ENGAGED;
-    SubS_UpdateFlags(&this->actionFlags, 3, 7);
+    SubS_SetOfferMode(&this->actionFlags, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->msgScriptResumePos = 0;
     this->actionFlags |= ENGO_FLAG_LOST_ATTENTION;
     this->actionFunc = this->interruptedActionFunc;
@@ -2517,10 +2450,10 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
         } else {
             xzRange = this->colliderCylinder.dim.radius + 40;
         }
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
+        SubS_Offer(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MASK);
     } else if ((this->actionFlags & ENGO_FLAG_ROLLED_UP) && (this->sleepState != ENGO_AWAKE)) {
         xzRange = this->colliderCylinder.dim.radius + 40;
-        func_8013C964(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & 7);
+        SubS_Offer(&this->actor, play, xzRange, 20.0f, PLAYER_IA_NONE, this->actionFlags & SUBS_OFFER_MODE_MASK);
     }
 
     if ((ENGO_GET_TYPE(&this->actor) != ENGO_MEDIGORON) && (ENGO_GET_TYPE(&this->actor) != ENGO_SPECTATOR) &&
@@ -2567,7 +2500,7 @@ void EnGo_Draw_NoSkeleton(EnGo* this, PlayState* play) {
 s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGo* this = THIS;
     Vec3f worldPos;
-    s32 rotTableIndex;
+    s32 fidgetIndex;
 
     if ((ENGO_GET_TYPE(&this->actor) == ENGO_MEDIGORON) && (limbIndex == GORON_LIMB_BODY)) {
         Matrix_MultZero(&worldPos);
@@ -2577,25 +2510,25 @@ s32 EnGo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
     switch (limbIndex) {
         case GORON_LIMB_BODY:
-            rotTableIndex = 0;
+            fidgetIndex = 0;
             break;
 
         case GORON_LIMB_LEFT_UPPER_ARM:
-            rotTableIndex = 1;
+            fidgetIndex = 1;
             break;
 
         case GORON_LIMB_RIGHT_UPPER_ARM:
-            rotTableIndex = 2;
+            fidgetIndex = 2;
             break;
 
         default:
-            rotTableIndex = 9;
+            fidgetIndex = 9;
             break;
     }
 
-    if ((this->actionFlags & ENGO_FLAG_STANDING) && (rotTableIndex < 9)) {
-        rot->y += (s16)(Math_SinS(this->limbRotTableY[rotTableIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->limbRotTableZ[rotTableIndex]) * 200.0f);
+    if ((this->actionFlags & ENGO_FLAG_STANDING) && (fidgetIndex < 9)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }
     return false;
 }

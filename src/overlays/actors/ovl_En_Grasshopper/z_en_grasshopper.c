@@ -5,6 +5,7 @@
  */
 
 #include "z_en_grasshopper.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
@@ -52,18 +53,18 @@ typedef enum {
     /*  7 */ EN_GRASSHOPPER_ACTION_WAIT_AFTER_ATTACK,
     /*  8 */ EN_GRASSHOPPER_ACTION_DAMAGED,
     /*  9 */ EN_GRASSHOPPER_ACTION_DEAD,
-    /* 10 */ EN_GRASSHOPPER_ACTION_FALL,
+    /* 10 */ EN_GRASSHOPPER_ACTION_FALL
 } EnGrasshopperAction;
 
 typedef enum {
     /* 0 */ EN_GRASSHOPPER_DECISION_ATTACK,
     /* 1 */ EN_GRASSHOPPER_DECISION_FLY,
-    /* 2 */ EN_GRASSHOPPER_DECISION_ROAM_IN_CIRCLES, // Never used in the final game
+    /* 2 */ EN_GRASSHOPPER_DECISION_ROAM_IN_CIRCLES // Never used in the final game
 } EnGrasshopperNextAction;
 
 typedef enum {
     /* 0 */ EN_GRASSHOPPER_BANK_STATE_BANKING,
-    /* 1 */ EN_GRASSHOPPER_BANK_STATE_DONE,
+    /* 1 */ EN_GRASSHOPPER_BANK_STATE_DONE
 } EnGrasshopperBankState;
 
 typedef enum {
@@ -74,7 +75,7 @@ typedef enum {
     /* 4 */ EN_GRASSHOPPER_ANIM_HOVER,
     /* 5 */ EN_GRASSHOPPER_ANIM_DAMAGE,
     /* 6 */ EN_GRASSHOPPER_ANIM_DEAD,
-    /* 7 */ EN_GRASSHOPPER_ANIM_FALL,
+    /* 7 */ EN_GRASSHOPPER_ANIM_FALL
 } EnGrasshopperAnim;
 
 static s32 sOccupiedIndices[] = {
@@ -99,7 +100,7 @@ typedef enum {
     /* 0x3 */ EN_GRASSHOPPER_DMGEFF_FREEZE,     // Damages and freezes the Dragonfly in ice
     /* 0x4 */ EN_GRASSHOPPER_DMGEFF_LIGHT_ORB,  // Damages and surrounds the Dragonfly with light orbs
     /* 0xE */ EN_GRASSHOPPER_DMGEFF_HOOK = 0xE, // If hit by the Hookshot, it pulls the Dragonfly towards the player
-    /* 0xF */ EN_GRASSHOPPER_DMGEFF_NONE,       // Deals regular damage with no extra effect
+    /* 0xF */ EN_GRASSHOPPER_DMGEFF_NONE        // Deals regular damage with no extra effect
 } EnDragonflyDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -246,7 +247,7 @@ void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
             this->type;
     }
 
-    this->baseFlyHeight = randPlusMinusPoint5Scaled(50.0f) + this->flyingHomePos.y;
+    this->baseFlyHeight = Rand_CenteredFloat(50.0f) + this->flyingHomePos.y;
     EnGrasshopper_SetupFly(this);
 }
 
@@ -343,7 +344,7 @@ void EnGrasshopper_DecideAction(EnGrasshopper* this, PlayState* play) {
 
 void EnGrasshopper_SetupFly(EnGrasshopper* this) {
     EnGrasshopper_ChangeAnim(this, EN_GRASSHOPPER_ANIM_FLY);
-    this->baseFlyHeight = randPlusMinusPoint5Scaled(50.0f) + this->flyingHomePos.y;
+    this->baseFlyHeight = Rand_CenteredFloat(50.0f) + this->flyingHomePos.y;
     this->action = EN_GRASSHOPPER_ACTION_FLY;
     this->actionFunc = EnGrasshopper_Fly;
 }
@@ -384,7 +385,7 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
         }
 
         if (this->shouldTurn) {
-            this->baseFlyHeight = randPlusMinusPoint5Scaled(50.0f) + this->flyingHomePos.y;
+            this->baseFlyHeight = Rand_CenteredFloat(50.0f) + this->flyingHomePos.y;
             this->targetRot.y = Math_Atan2S(diffX, diffZ);
             this->timer = Rand_S16Offset(30, 30);
         }
@@ -412,7 +413,7 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
 
                 this->targetRot.y = Math_Atan2S(diffX, diffZ);
                 this->timer = Rand_S16Offset(30, 70);
-                this->baseFlyHeight = randPlusMinusPoint5Scaled(50.0f) + this->flyingHomePos.y;
+                this->baseFlyHeight = Rand_CenteredFloat(50.0f) + this->flyingHomePos.y;
             }
         }
     }
@@ -441,7 +442,7 @@ void EnGrasshopper_RoamInCircles(EnGrasshopper* this, PlayState* play) {
         this->baseFlyHeight = Math_SinS(this->bobPhase) * 10.0f;
 
         if (this->timer == 0) {
-            this->baseFlyHeight = randPlusMinusPoint5Scaled(10.0f);
+            this->baseFlyHeight = Rand_CenteredFloat(10.0f);
             this->timer = Rand_S16Offset(30, 30);
         }
 
@@ -583,8 +584,8 @@ void EnGrasshopper_ApproachPlayer(EnGrasshopper* this, PlayState* play) {
             if ((this->splashCount < 3) || !(play->gameplayFrames % 8)) {
                 this->splashCount++;
                 Math_Vec3f_Copy(&splashPos, &this->tailTipPos);
-                splashPos.x += randPlusMinusPoint5Scaled(20.0f);
-                splashPos.z += randPlusMinusPoint5Scaled(20.0f);
+                splashPos.x += Rand_CenteredFloat(20.0f);
+                splashPos.z += Rand_CenteredFloat(20.0f);
                 EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, (((s32)Rand_ZeroOne() * 100) + 400));
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
             }
@@ -633,8 +634,8 @@ void EnGrasshopper_Attack(EnGrasshopper* this, PlayState* play) {
             if ((this->splashCount < 3) || !(play->gameplayFrames % 8)) {
                 this->splashCount++;
                 Math_Vec3f_Copy(&splashPos, &this->tailTipPos);
-                splashPos.x += randPlusMinusPoint5Scaled(20.0f);
-                splashPos.z += randPlusMinusPoint5Scaled(20.0f);
+                splashPos.x += Rand_CenteredFloat(20.0f);
+                splashPos.z += Rand_CenteredFloat(20.0f);
                 EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, ((s32)Rand_ZeroOne() * 100) + 400);
                 SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 50, NA_SE_EV_BOMB_DROP_WATER);
             }
@@ -796,8 +797,8 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
 
             for (i = 0; i < 3; i++) {
                 Math_Vec3f_Copy(&splashPos, &this->actor.world.pos);
-                splashPos.x += randPlusMinusPoint5Scaled((i * 5.0f) + 20.0f);
-                splashPos.z += randPlusMinusPoint5Scaled((i * 5.0f) + 20.0f);
+                splashPos.x += Rand_CenteredFloat((i * 5.0f) + 20.0f);
+                splashPos.z += Rand_CenteredFloat((i * 5.0f) + 20.0f);
                 EffectSsGSplash_Spawn(play, &splashPos, NULL, NULL, 0, (((s32)Rand_ZeroOne() * 100) + 400));
             }
 
@@ -826,7 +827,7 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
 
         for (i = 0; i < ARRAY_COUNT(sFireVelocityAndAccel); i++) {
             Math_Vec3f_Copy(&firePos, &this->actor.world.pos);
-            firePos.x += randPlusMinusPoint5Scaled(30.0f);
+            firePos.x += Rand_CenteredFloat(30.0f);
             if (!isUnderWater) {
                 firePos.y = this->actor.floorHeight;
             } else if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z,
@@ -834,7 +835,7 @@ void EnGrasshopper_Fall(EnGrasshopper* this, PlayState* play) {
                 firePos.y = waterSurface;
             }
 
-            firePos.z += randPlusMinusPoint5Scaled(30.0f);
+            firePos.z += Rand_CenteredFloat(30.0f);
             func_800B3030(play, &firePos, &sFireVelocityAndAccel[i], &sFireVelocityAndAccel[i], 100, 0, 2);
         }
 
@@ -879,7 +880,7 @@ void EnGrasshopper_UpdateDamage(EnGrasshopper* this, PlayState* play) {
                 this->drawDmgEffTimer = 20;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
-                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                 attackDealsDamage = true;
             }
         }
@@ -1062,10 +1063,10 @@ void EnGrasshopper_InitializeEffect(EnGrasshopper* this, Vec3f* pos) {
             effect->isEnabled = true;
             effect->pos = *pos;
             effect->timer = 10;
-            effect->velocity.x = randPlusMinusPoint5Scaled(20.0f);
-            effect->velocity.y = randPlusMinusPoint5Scaled(20.0f);
-            effect->velocity.z = randPlusMinusPoint5Scaled(20.0f);
-            effect->yaw = randPlusMinusPoint5Scaled(30000.0f);
+            effect->velocity.x = Rand_CenteredFloat(20.0f);
+            effect->velocity.y = Rand_CenteredFloat(20.0f);
+            effect->velocity.z = Rand_CenteredFloat(20.0f);
+            effect->yaw = Rand_CenteredFloat(30000.0f);
             return;
         }
     }

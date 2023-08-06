@@ -103,11 +103,11 @@ void func_809C4078(EnEncount4* this, PlayState* play) {
                 return;
             }
 
-            fireWallParams = BGFIREWALL_PARAMS_0;
+            fireWallParams = BGFIREWALL_PARAM_0;
             if ((this->unk_148 == 0) || (captainKeeta->unk2DC != 0)) {
                 i = 0;
                 if (this->unk_148 != 0) {
-                    fireWallParams = BGFIREWALL_PARAMS_1;
+                    fireWallParams = BGFIREWALL_PARAM_1;
                     i = 2;
                 }
                 while (i < ARRAY_COUNT(D_809C46DC)) {
@@ -171,10 +171,10 @@ void func_809C42A8(EnEncount4* this, PlayState* play) {
     if (this->unk_14C != 0) {
         yRot += 0x8000;
     }
-    pos.x += Math_SinS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
-    pos.z += Math_CosS(yRot) * (40.0f + randPlusMinusPoint5Scaled(40.0f));
+    pos.x += Math_SinS(yRot) * (40.0f + Rand_CenteredFloat(40.0f));
+    pos.z += Math_CosS(yRot) * (40.0f + Rand_CenteredFloat(40.0f));
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SKB, pos.x, pos.y, pos.z, 0, 0, 0,
-                           ENSKB_PARAMS_0) != NULL) {
+                           ENSKB_PARAM_0) != NULL) {
         this->unk_14C++;
         if (this->unk_14C >= 2) {
             this->actionFunc = func_809C4598;

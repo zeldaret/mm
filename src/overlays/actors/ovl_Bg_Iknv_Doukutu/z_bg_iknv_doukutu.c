@@ -131,7 +131,7 @@ void func_80BD7250(BgIknvDoukutu* this, PlayState* play) {
         this->dyna.actor.world.pos.y = temp_fv0;
         this->actionFunc = func_80BD73D0;
     }
-    func_8019F128(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_2(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {

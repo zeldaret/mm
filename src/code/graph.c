@@ -1,18 +1,26 @@
-#include "global.h"
-#include "buffers.h"
-#include "system_malloc.h"
-#include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
-#include "overlays/gamestates/ovl_file_choose/z_file_choose.h"
-#include "overlays/gamestates/ovl_opening/z_opening.h"
-#include "overlays/gamestates/ovl_select/z_select.h"
-#include "overlays/gamestates/ovl_title/z_title.h"
-#include "z_title_setup.h"
+#include "z64.h"
+#include "regs.h"
+#include "functions.h"
+#include "fault.h"
 
+// Variables are put before most headers as a hacky way to bypass bss reordering
 FaultAddrConvClient sGraphFaultAddrConvClient;
 FaultClient sGraphFaultClient;
 GfxMasterList* gGfxMasterDL;
 CfbInfo sGraphCfbInfos[3];
 OSTime sGraphTaskStartTime;
+
+#include "variables.h"
+#include "macros.h"
+#include "buffers.h"
+#include "idle.h"
+#include "system_malloc.h"
+#include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
+#include "overlays/gamestates/ovl_file_choose/z_file_select.h"
+#include "overlays/gamestates/ovl_opening/z_opening.h"
+#include "overlays/gamestates/ovl_select/z_select.h"
+#include "overlays/gamestates/ovl_title/z_title.h"
+#include "z_title_setup.h"
 
 void Graph_FaultClient(void) {
     FaultDrawer_DrawText(30, 100, "ShowFrameBuffer PAGE 0/1");
@@ -91,7 +99,7 @@ GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     return NULL;
 }
 
-void* Graph_FaultAddrConv(void* address, void* param) {
+uintptr_t Graph_FaultAddrConv(uintptr_t address, void* param) {
     uintptr_t addr = address;
     GameStateOverlay* gameStateOvl = &gGameStateOverlayTable[0];
     size_t ramConv;
@@ -100,7 +108,7 @@ void* Graph_FaultAddrConv(void* address, void* param) {
     s32 i;
 
     for (i = 0; i < gGraphNumGameStates; i++, gameStateOvl++) {
-        diff = VRAM_PTR_SIZE(gameStateOvl);
+        diff = (uintptr_t)gameStateOvl->vramEnd - (uintptr_t)gameStateOvl->vramStart;
         ramStart = gameStateOvl->loadedRamAddr;
         ramConv = (uintptr_t)gameStateOvl->vramStart - (uintptr_t)ramStart;
 
@@ -110,7 +118,7 @@ void* Graph_FaultAddrConv(void* address, void* param) {
             }
         }
     }
-    return NULL;
+    return 0;
 }
 
 void Graph_Init(GraphicsContext* gfxCtx) {
@@ -122,7 +130,7 @@ void Graph_Init(GraphicsContext* gfxCtx) {
     gfxCtx->xScale = gViConfigXScale;
     gfxCtx->yScale = gViConfigYScale;
     osCreateMesgQueue(&gfxCtx->queue, gfxCtx->msgBuff, ARRAY_COUNT(gfxCtx->msgBuff));
-    Fault_AddClient(&sGraphFaultClient, Graph_FaultClient, NULL, NULL);
+    Fault_AddClient(&sGraphFaultClient, (void*)Graph_FaultClient, NULL, NULL);
     Fault_AddAddrConvClient(&sGraphFaultAddrConvClient, Graph_FaultAddrConv, NULL);
 }
 
@@ -352,7 +360,7 @@ void Graph_ThreadEntry(void* arg) {
     gGfxSPTaskOutputBufferEndHiRes = (u8*)gGfxSPTaskOutputBufferHiRes + sizeof(*gGfxSPTaskOutputBufferHiRes);
 
     SysCfb_Init();
-    Fault_SetFB(gWorkBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    Fault_SetFrameBuffer(gWorkBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
     Graph_Init(&gfxCtx);
 
     while (nextOvl) {

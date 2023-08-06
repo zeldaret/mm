@@ -307,7 +307,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play) {
         this->dyna.actor.world.pos.z = ((Math_CosS(sp36) * phi_f20) * D_80B70750[sp40]) + this->dyna.actor.home.pos.z;
 
         if (this->unk_166 != 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         func_80B700A8(this);
     } else {
@@ -353,7 +353,7 @@ void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
         this->dyna.actor.world.pos.z = ((Math_CosS(sp36) * temp_f20) * D_80B70758[sp40]) + this->dyna.actor.home.pos.z;
 
         if (this->unk_167 != 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         func_80B700A8(this);
     } else {

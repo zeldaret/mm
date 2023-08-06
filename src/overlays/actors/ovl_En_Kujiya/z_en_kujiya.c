@@ -104,7 +104,7 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
                (this->actor.shape.rot.y == 0)) {
         EnKujiya_SetupTurnToOpen(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -112,17 +112,17 @@ void EnKujiya_HandlePlayerChoice(EnKujiya* this, PlayState* play) {
     if (Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex == 0) { // Buy
             if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
                 Message_StartTextbox(play, 0x2B62, &this->actor);
                 this->textId = 0x2B62; // Not enough Rupees
             } else {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 Rupees_ChangeBy(-10);
                 Message_StartTextbox(play, 0x2B5F, &this->actor);
                 this->textId = 0x2B5F; // Enter number
             }
         } else { // Don't buy
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             Message_StartTextbox(play, 0x2B5E, &this->actor);
             this->textId = 0x2B5E; // Too bad
         }
@@ -314,7 +314,7 @@ void EnKujiya_TurnToOpen(EnKujiya* this, PlayState* play) {
             this->timer++;
         }
     } else {
-        func_800B9010(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     }
 }
 
@@ -342,7 +342,7 @@ void EnKujiya_TurnToClosed(EnKujiya* this, PlayState* play) {
             this->timer++;
         }
     } else {
-        func_800B9010(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_WINDMILL_LEVEL - SFX_FLAG);
     }
 }
 

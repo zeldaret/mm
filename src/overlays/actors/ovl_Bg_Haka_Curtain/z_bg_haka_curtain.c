@@ -110,7 +110,7 @@ void func_80B6DD9C(BgHakaCurtain* this, PlayState* play) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {

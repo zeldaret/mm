@@ -5,6 +5,7 @@
  */
 
 #include "z_en_po_fusen.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Ma4/z_en_ma4.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
@@ -58,7 +59,7 @@ static ColliderSphereInit sSphereInit = {
 
 typedef enum {
     /* 0x0 */ POE_BALLOON_DMGEFF_NONE,
-    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF,
+    /* 0xF */ POE_BALLOON_DMGEFF_POP = 0xF
 } PoeBalloonDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -239,7 +240,7 @@ void EnPoFusen_IncrementRomaniPop(EnPoFusen* this) {
 
 void EnPoFusen_Pop(EnPoFusen* this, PlayState* play) {
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y + 20.0f,
-                this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_POP);
+                this->actor.world.pos.z, 255, 255, 200, CLEAR_TAG_PARAMS(CLEAR_TAG_POP));
     Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
     Actor_Kill(&this->actor);
 }

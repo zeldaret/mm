@@ -30,7 +30,7 @@ ActorInit En_Tanron1_InitVars = {
     /**/ EnTanron1_Draw,
 };
 
-static u64 sPad = { 0 };
+static s32 sPad = 0;
 
 #include "overlays/ovl_En_Tanron1/ovl_En_Tanron1.c"
 
@@ -149,7 +149,7 @@ void EnTanron1_Update(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if ((player->heldItemAction == PLAYER_IA_STICK) && (player->unk_B28 != 0)) {
+    if ((player->heldItemAction == PLAYER_IA_DEKU_STICK) && (player->unk_B28 != 0)) {
         this->unk_14C.x = player->meleeWeaponInfo[0].tip.x;
         this->unk_14C.y = player->meleeWeaponInfo[0].tip.y;
         this->unk_14C.z = player->meleeWeaponInfo[0].tip.z;
@@ -248,9 +248,9 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
                         ptr->unk_20 = Math_Atan2S(temp.x, temp.z);
                         ptr->unk_1E = Math_Atan2S(temp.y, sqrtf(SQXZ(temp)));
                         if ((ptr->unk_26 & 0xF) == 0) {
-                            ptr->unk_30 = randPlusMinusPoint5Scaled(temp_f30);
-                            ptr->unk_34 = randPlusMinusPoint5Scaled(temp_f30 * 0.5f);
-                            ptr->unk_38 = randPlusMinusPoint5Scaled(temp_f30);
+                            ptr->unk_30 = Rand_CenteredFloat(temp_f30);
+                            ptr->unk_34 = Rand_CenteredFloat(temp_f30 * 0.5f);
+                            ptr->unk_38 = Rand_CenteredFloat(temp_f30);
                         }
 
                         temp.x = player->actor.world.pos.x - ptr->unk_00.x;
@@ -336,7 +336,7 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
                         Math_ApproachF(&ptr->unk_30, ptr->unk_34, 1.0f, 0.5f);
                         if ((ptr->unk_26 & 0xF) == 0) {
                             if (Rand_ZeroOne() < 0.5f) {
-                                ptr->unk_34 = randPlusMinusPoint5Scaled(12.0f);
+                                ptr->unk_34 = Rand_CenteredFloat(12.0f);
                             }
                             ptr->unk_3C = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp98, &ptr->unk_00);
                             sp9C = ptr->unk_00.y;
@@ -354,9 +354,9 @@ void func_80BB5318(EnTanron1* this, PlayState* play) {
     if (spB4 != NULL) {
         SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, spB4, &this->unk_3360, &spB0);
         if (spB8 >= (s16)(KREG(39) + 20)) {
-            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
+            Audio_PlaySfx_AtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_DEAD);
         } else if (spBA >= 20) {
-            Audio_PlaySfxAtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
+            Audio_PlaySfx_AtPos(&this->unk_3360, NA_SE_EN_MB_MOTH_FLY - SFX_FLAG);
         }
     }
 }

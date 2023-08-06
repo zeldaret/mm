@@ -23,7 +23,7 @@ typedef enum {
     /* 2 */ RUPEE_RED,
     /* 3 */ RUPEE_ORANGE,
     /* 4 */ RUPEE_PURPLE,
-    /* 5 */ RUPEE_UNUSED,
+    /* 5 */ RUPEE_UNUSED
 } RupeeType;
 
 #endif // Z_EN_SC_RUPPE_H

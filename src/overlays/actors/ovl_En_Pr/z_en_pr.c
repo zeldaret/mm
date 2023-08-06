@@ -5,6 +5,7 @@
  */
 
 #include "z_en_pr.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 #include "objects/object_pr/object_pr.h"
 
@@ -66,7 +67,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-f32 D_80A338C0[PLAYER_FORM_MAX] = { 30.0f, 30.0f, 30.0f, 15.0f, 15.0f };
+f32 D_80A338C0[PLAYER_FORM_MAX] = {
+    30.0f, // PLAYER_FORM_FIERCE_DEITY
+    30.0f, // PLAYER_FORM_GORON
+    30.0f, // PLAYER_FORM_ZORA
+    15.0f, // PLAYER_FORM_DEKU
+    15.0f, // PLAYER_FORM_HUMAN
+};
 
 ActorInit En_Pr_InitVars = {
     /**/ ACTOR_EN_PR,
@@ -319,7 +326,7 @@ void func_80A32A40(EnPr* this, PlayState* play) {
     WaterBox* sp30;
 
     Math_Vec3f_Copy(&sp34, &this->actor.world.pos);
-    sp34.y = randPlusMinusPoint5Scaled(50.0f) + this->actor.home.pos.y;
+    sp34.y = Rand_CenteredFloat(50.0f) + this->actor.home.pos.y;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &this->unk_2B4,
                              &sp30)) {
@@ -460,7 +467,7 @@ void func_80A33098(EnPr* this, PlayState* play) {
                 this->drawDmgEffAlpha = 40;
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x, this->actor.focus.pos.y,
-                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            this->actor.focus.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
 
             if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (this->actor.colChkInfo.damageEffect == 5)) {
@@ -551,9 +558,9 @@ void EnPr_Update(Actor* thisx, PlayState* play) {
 
             Math_Vec3f_Copy(&sp40, &this->unk_2D4);
             this->unk_204 = 0;
-            sp40.x += randPlusMinusPoint5Scaled(20.0f);
-            sp40.y += randPlusMinusPoint5Scaled(5.0f);
-            sp40.z += randPlusMinusPoint5Scaled(20.0f);
+            sp40.x += Rand_CenteredFloat(20.0f);
+            sp40.y += Rand_CenteredFloat(5.0f);
+            sp40.z += Rand_CenteredFloat(20.0f);
 
             for (i = 0; i < (s32)Rand_ZeroFloat(5.0f) + 5; i++) {
                 EffectSsBubble_Spawn(play, &sp40, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);

@@ -7,8 +7,9 @@
 #include "z_en_egol.h"
 #include "objects/object_eg/object_eg.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
+#include "overlays/actors/ovl_En_Estone/z_en_estone.h"
 #include "overlays/effects/ovl_Effect_Ss_Hitmark/z_eff_ss_hitmark.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80000000)
@@ -37,7 +38,7 @@ typedef enum {
     /* 0 */ EYEGORE_EFFECT_IMPACT,
     /* 1 */ EYEGORE_EFFECT_PIECE_LARGE,
     /* 2 */ EYEGORE_EFFECT_PIECE_SMALL,
-    /* 3 */ EYEGORE_EFFECT_DEBRIS,
+    /* 3 */ EYEGORE_EFFECT_DEBRIS
 } EnEgolEffectType;
 
 typedef enum {
@@ -56,7 +57,7 @@ typedef enum {
     /* 12 */ EYEGORE_ANIM_SIT,
     /* 13 */ EYEGORE_ANIM_LEFT_PUNCH,
     /* 14 */ EYEGORE_ANIM_RIGHT_PUNCH,
-    /* 15 */ EYEGORE_ANIM_MAX,
+    /* 15 */ EYEGORE_ANIM_MAX
 } EnEgolAnimation;
 
 typedef enum {
@@ -64,7 +65,7 @@ typedef enum {
     /* 1 */ EYEGORE_LASER_START,
     /* 2 */ EYEGORE_LASER_CHARGING,
     /* 3 */ EYEGORE_LASER_FIRE,
-    /* 7 */ EYEGORE_LASER_ON = 7,
+    /* 7 */ EYEGORE_LASER_ON = 7
 } EnEgolLaserState;
 
 void EnEgol_Init(Actor* thisx, PlayState* play);
@@ -238,7 +239,7 @@ typedef enum {
     /* 0x0 */ EYEGORE_DMGEFF_IMMUNE_0,
     /* 0x4 */ EYEGORE_DMGEFF_LIGHT_ARROW = 4,
     /* 0xE */ EYEGORE_DMGEFF_NONE = 0xE,
-    /* 0xF */ EYEGORE_DMGEFF_IMMUNE_F,
+    /* 0xF */ EYEGORE_DMGEFF_IMMUNE_F
 } EnEgolDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -394,7 +395,7 @@ void EnEgol_DestroyBlocks(EnEgol* this, PlayState* play, Vec3f pos1, Vec3f pos2)
 }
 
 void EnEgol_GetWaypoint(EnEgol* this) {
-    if ((this->pathIndex != -1) && (this->path != NULL) &&
+    if ((this->pathIndex != PATH_INDEX_NONE) && (this->path != NULL) &&
         !SubS_CopyPointFromPath(this->path, this->waypoint, &this->waypointPos)) {
         Actor_Kill(&this->actor);
     }
@@ -426,9 +427,9 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->eyeCollider, &this->actor, &sEyeJntSphInit, this->eyeElements);
     Collider_InitAndSetQuad(play, &this->laserCollider, &this->actor, &sLaserQuadInit);
 
-    this->pathIndex = EYEGORE_GET_PATH(&this->actor);
-    if (this->pathIndex == 0x3F) {
-        this->pathIndex = -1;
+    this->pathIndex = EYEGORE_GET_PATH_INDEX(&this->actor);
+    if (this->pathIndex == EYEGORE_PATH_INDEX_NONE) {
+        this->pathIndex = PATH_INDEX_NONE;
         Actor_Kill(&this->actor);
         return;
     }
@@ -445,7 +446,7 @@ void EnEgol_Init(Actor* thisx, PlayState* play) {
         this->minLaserRange = 200.0f;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathIndex, 0x3F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, EYEGORE_PATH_INDEX_NONE);
 
     EYEGORE_SET_SPH_DIM(this->eyeCollider.elements[0], 500, 0, 0, 26, 1.0f);
 
@@ -610,8 +611,7 @@ void EnEgol_Retreat(EnEgol* this, PlayState* play) {
 
     if ((ABS_ALT(angleToFacing) < 0x3000) && (fabsf(this->actor.world.pos.y - player->actor.world.pos.y) < 50.0f) &&
         (this->actor.xzDistToPlayer < 100.0f) && (player->invincibilityTimer == 0)) {
-        func_800B8D50(play, &this->actor, 2.0f, (s32)randPlusMinusPoint5Scaled(0x2000) + this->actor.world.rot.y, 5.0f,
-                      0x10);
+        func_800B8D50(play, &this->actor, 2.0f, (s32)Rand_CenteredFloat(0x2000) + this->actor.world.rot.y, 5.0f, 0x10);
     }
     Math_Vec3f_Copy(&spawnPos, &gZeroVec3f);
     if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
@@ -764,11 +764,11 @@ void EnEgol_Laser(EnEgol* this, PlayState* play) {
 
                 /*! @bug The following is supposed to calculate the rotation from vertical to the collision poly normal.
                  * However, the calculation is performed incorrectly. The correct calculation is
-                 * rotToNorm.x = func_80086B30(nz, ny) * 0x8000 / M_PI;
-                 * rotToNorm.z = func_80086B30(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
+                 * rotToNorm.x = Math_FAtan2F(nz, ny) * 0x8000 / M_PI;
+                 * rotToNorm.z = Math_FAtan2F(-nx, sqrtf(1.0f - SQ(nx))) * 0x8000 / M_PI;
                  */
-                rotToNorm.x = RAD_TO_BINANG_ALT2(-func_80086B30(-nz * ny, 1.0f));
-                rotToNorm.z = RAD_TO_BINANG_ALT2(func_80086B30(-nx * ny, 1.0f));
+                rotToNorm.x = RAD_TO_BINANG_ALT2(-Math_FAtan2F(-nz * ny, 1.0f));
+                rotToNorm.z = RAD_TO_BINANG_ALT2(Math_FAtan2F(-nx * ny, 1.0f));
 
                 if ((this->actor.world.pos.y - 50.0f) <= player->actor.world.pos.y) {
                     EnEgol_SpawnEffect(this, &hitPos, &rotToNorm, 100, 0.02f, EYEGORE_EFFECT_IMPACT);
@@ -1086,7 +1086,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
             s32 i;
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
             this->waitTimer = 30;
             Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
             this->action = EYEGORE_ACTION_DEAD;
@@ -1101,7 +1101,7 @@ void EnEgol_Death(EnEgol* this, PlayState* play) {
 typedef enum {
     /* 0 */ EYEGORE_HIT_NONE,
     /* 1 */ EYEGORE_HIT_DAMAGE,
-    /* 2 */ EYEGORE_HIT_IMMUNE, // Makes hitmarks, but no reaction
+    /* 2 */ EYEGORE_HIT_IMMUNE // Makes hitmarks, but no reaction
 } EyegoreHitReaction;
 
 void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
@@ -1129,7 +1129,7 @@ void EnEgol_CollisionCheck(EnEgol* this, PlayState* play) {
                     if ((this->action == EYEGORE_ACTION_STUNNED) || (this->action == EYEGORE_ACTION_SLAM_WAIT)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.focus.pos.x,
                                     this->actor.focus.pos.y, this->actor.focus.pos.z, 0, 0, 0,
-                                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                         this->dmgEffectTimer = 20;
                         reaction = EYEGORE_HIT_DAMAGE;
                     } else if ((this->action >= EYEGORE_ACTION_WALK) && (this->action <= EYEGORE_ACTION_STUN_END) &&
@@ -1534,9 +1534,9 @@ void EnEgol_SpawnEffect(EnEgol* this, Vec3f* pos, Vec3s* rot, s16 lifetime, f32 
             effect->timer = lifetime;
             effect->alpha = 255;
             effect->type = type;
-            effect->rot.x = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.y = randPlusMinusPoint5Scaled(0x7530);
-            effect->rot.z = randPlusMinusPoint5Scaled(0x7530);
+            effect->rot.x = Rand_CenteredFloat(0x7530);
+            effect->rot.y = Rand_CenteredFloat(0x7530);
+            effect->rot.z = Rand_CenteredFloat(0x7530);
             if ((effect->type == EYEGORE_EFFECT_PIECE_LARGE) || (effect->type == EYEGORE_EFFECT_PIECE_SMALL)) {
                 effect->accel.y = -1.0f;
                 effect->velocity.x = 4.0f * (Rand_ZeroOne() - 0.5f);

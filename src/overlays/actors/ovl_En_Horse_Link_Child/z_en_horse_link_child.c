@@ -39,10 +39,10 @@ ActorInit En_Horse_Link_Child_InitVars = {
     /**/ EnHorseLinkChild_Draw,
 };
 
-AnimationHeader* D_808DFEC0[] = { &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468 };
-
-AnimationHeader* D_808DFEC8[] = { &object_horse_link_child_Anim_007D50, &object_horse_link_child_Anim_0043AC,
-                                  &object_horse_link_child_Anim_002F98 };
+AnimationHeader* D_808DFEC0[] = {
+    &object_horse_link_child_Anim_006D44, &object_horse_link_child_Anim_007468, &object_horse_link_child_Anim_007D50,
+    &object_horse_link_child_Anim_0043AC, &object_horse_link_child_Anim_002F98,
+};
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
     {
@@ -93,7 +93,7 @@ s8 D_808DFF54[] = { 0, 1, 2, 1 };
 void func_808DE5C0(EnHorseLinkChild* this) {
     if ((D_808DFF10[this->unk_1E8] < this->skin.skelAnime.curFrame) &&
         ((this->unk_1E8 != 0) || !(D_808DFF10[1] < this->skin.skelAnime.curFrame))) {
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_WALK);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_WALK);
         this->unk_1E8++;
         if (this->unk_1E8 >= 2) {
             this->unk_1E8 = 0;
@@ -106,12 +106,12 @@ void func_808DE660(EnHorseLinkChild* this) {
         func_808DE5C0(this);
     } else if (this->skin.skelAnime.curFrame == 0.0f) {
         if ((this->unk_148 == 3) || (this->unk_148 == 4)) {
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_RUN);
         } else if (this->unk_148 == 1) {
             if (Rand_ZeroOne() > 0.5f) {
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_GROAN);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_GROAN);
             } else {
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
             }
         }
     }
@@ -315,7 +315,7 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
             } else {
                 phi_v0 = -1;
             }
-            sp32 += (phi_v0 << 0xE);
+            sp32 += (phi_v0 * 0x4000);
         } else {
             sp32 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->actor.home.pos) - this->actor.world.rot.y;
         }
@@ -428,7 +428,7 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
 
     if (gHorsePlayedEponasSong) {
         gHorsePlayedEponasSong = false;
-        Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
+        Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_EV_KID_HORSE_NEIGH);
         func_808DF788(this);
         return;
     }
@@ -444,7 +444,7 @@ void func_808DF620(EnHorseLinkChild* this, PlayState* play) {
         if (Math_CosS(sp36) < 0.0f) {
             this->unk_148 = 2;
             Animation_Change(&this->skin.skelAnime, D_808DFEC0[this->unk_148], D_808DFF18[this->unk_148], 0.0f,
-                             Animation_GetLastFrame(D_808DFEC8[0]), ANIMMODE_ONCE, -5.0f);
+                             Animation_GetLastFrame(D_808DFEC0[2]), ANIMMODE_ONCE, -5.0f);
         } else {
             func_808DF560(this);
         }

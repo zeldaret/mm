@@ -4,8 +4,9 @@
  */
 
 #include "global.h"
+#include "fault.h"
+#include "loadfragment.h"
 #include "z64horse.h"
-#include "z64load.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
@@ -31,6 +32,20 @@ extern s32 D_801ED8D8;                // 2 funcs
 extern s16 D_801ED8DC;                // 2 funcs
 extern Mtx D_801ED8E0;                // 1 func
 extern Actor* D_801ED920;             // 2 funcs. 1 out of z_actor
+
+#define ACTOR_AUDIO_FLAG_SFX_ACTOR_POS (1 << 0)
+#define ACTOR_AUDIO_FLAG_SFX_CENTERED_1 (1 << 1)
+#define ACTOR_AUDIO_FLAG_SFX_CENTERED_2 (1 << 2)
+#define ACTOR_AUDIO_FLAG_SFX_CENTERED_3 (1 << 3)
+#define ACTOR_AUDIO_FLAG_SFX_TIMER (1 << 4)
+#define ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE (1 << 5)
+#define ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE (1 << 6)
+
+#define ACTOR_AUDIO_FLAG_SFX_ALL                                                                      \
+    (ACTOR_AUDIO_FLAG_SFX_TIMER | ACTOR_AUDIO_FLAG_SFX_CENTERED_3 | ACTOR_AUDIO_FLAG_SFX_CENTERED_2 | \
+     ACTOR_AUDIO_FLAG_SFX_CENTERED_1 | ACTOR_AUDIO_FLAG_SFX_ACTOR_POS)
+#define ACTOR_AUDIO_FLAG_SEQ_ALL (ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE | ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE)
+#define ACTOR_AUDIO_FLAG_ALL (ACTOR_AUDIO_FLAG_SFX_ALL | ACTOR_AUDIO_FLAG_SEQ_ALL)
 
 // Internal forward declarations
 void Actor_KillAllOnHalfDayChange(PlayState* play, ActorContext* actorCtx);
@@ -476,6 +491,7 @@ void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play) {
         Actor* actor = targetCtx->targetedActor;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         if (targetCtx->unk48 != 0) {
             TargetContextEntry* entry;
             s16 alpha = 255;
@@ -598,10 +614,10 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
         targetCtx->unk_94 = sp68;
     }
 
-    if (targetCtx->unk8C != 0) {
+    if (targetCtx->unk8C != NULL) {
         sp68 = targetCtx->unk8C;
         targetCtx->unk8C = NULL;
-    } else if (actor != 0) {
+    } else if (actor != NULL) {
         sp68 = actor;
     }
 
@@ -640,7 +656,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
         Target_SetColors(targetCtx, sp68, category, play);
     }
 
-    if (actor != NULL && targetCtx->unk4B == 0) {
+    if ((actor != NULL) && (targetCtx->unk4B == 0)) {
         Actor_GetProjectedPos(play, &actor->focus.pos, &projectedPos, &invW);
         if ((projectedPos.z <= 0.0f) || (fabsf(projectedPos.x * invW) >= 1.0f) ||
             (fabsf(projectedPos.y * invW) >= 1.0f)) {
@@ -662,7 +678,7 @@ void func_800B5814(TargetContext* targetCtx, Player* player, Actor* actor, GameS
 
             sfxId =
                 CHECK_FLAG_ALL(actor->flags, ACTOR_FLAG_4 | ACTOR_FLAG_1) ? NA_SE_SY_LOCK_ON : NA_SE_SY_LOCK_ON_HUMAN;
-            play_sound(sfxId);
+            Audio_PlaySfx(sfxId);
         }
 
         targetCtx->targetCenterPos.x = actor->world.pos.x;
@@ -940,33 +956,37 @@ f32 Actor_GetPlayerImpact(PlayState* play, f32 range, Vec3f* pos, PlayerImpactTy
 }
 
 /**
- * Initializes an element of the `play->actorCtx.unk_20C` array to the `arg2` pointer, or allocates one using the
- * `size` argument in case `arg2` is NULL. This element is associated to an `id`
+ * Initializes an element of the `play->actorCtx.actorSharedMemory` array to the `ptr` pointer, or allocates one using
+ * the `size` argument in case `ptr` is NULL. This element is associated to an `id`.
  *
- * In success returns the allocated pointer if `arg2` was NULL or the `arg2` pointer otherwise
- * In failure (There's no space left in `play->actorCtx.unk_20C` or an allocation error happened) returns NULL
+ * This allows allows different actors the ability to access the varible, and thus communicate with each other by
+ * reading/setting the value.
+ *
+ * In success: returns the allocated pointer if `ptr` was NULL or the `ptr` pointer otherwise.
+ * In failure (There's no space left in `play->actorCtx.actorSharedMemory` or an allocation error happened): returns
+ * NULL.
  *
  * Note there are no duplicated id checks.
  *
  * Used only by EnLiftNuts.
  */
-void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_AddSharedMemoryEntry(PlayState* play, s16 id, void* ptr, size_t size) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (entry->id == 0) {
-            if (arg2 == NULL) {
-                arg2 = ZeldaArena_Malloc(size);
-                if (arg2 == NULL) {
+            if (ptr == NULL) {
+                ptr = ZeldaArena_Malloc(size);
+                if (ptr == NULL) {
                     return NULL;
                 }
                 entry->isDynamicallyInitialised = true;
             }
 
             entry->id = id;
-            entry->ptr = arg2;
-            return arg2;
+            entry->ptr = ptr;
+            return ptr;
         }
 
         entry++;
@@ -976,18 +996,18 @@ void* func_800B6584(PlayState* play, s16 id, void* arg2, size_t size) {
 }
 
 /**
- * Frees the first element of `play->actorCtx.unk_20C` with id `id`.
+ * Frees the first element of `play->actorCtx.actorSharedMemory` with id `id`.
  *
  * If success, the free'd pointer is returned.
  * If failure, NULL is returned.
  *
  * Used only by EnLiftNuts.
  */
-void* func_800B6608(PlayState* play, s16 id) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_FreeSharedMemoryEntry(PlayState* play, s16 id) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (id == entry->id) {
             entry->id = 0;
             if (entry->isDynamicallyInitialised) {
@@ -1004,16 +1024,16 @@ void* func_800B6608(PlayState* play, s16 id) {
 }
 
 /**
- * Retrieves the first pointer stored with the id `id`.
+ * Retrieves the first pointer stored with the id `id` from `play->actorCtx.actorSharedMemory`.
  * If there's no pointer stored with that id, NULL is returned.
  *
  * Used only by EnGamelupy.
  */
-void* func_800B6680(PlayState* play, s16 id) {
-    ActorContext_unk_20C* entry = play->actorCtx.unk_20C;
+void* Actor_FindSharedMemoryEntry(PlayState* play, s16 id) {
+    ActorSharedMemoryEntry* entry = play->actorCtx.actorSharedMemory;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(play->actorCtx.unk_20C); i++) {
+    for (i = 0; i < ARRAY_COUNT(play->actorCtx.actorSharedMemory); i++) {
         if (id == entry->id) {
             return entry->ptr;
         }
@@ -1355,7 +1375,8 @@ void Actor_MountHorse(PlayState* play, Player* player, Actor* horse) {
 }
 
 s32 func_800B7200(Player* player) {
-    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) || (player->csMode != PLAYER_CSMODE_0);
+    return (player->stateFlags1 & (PLAYER_STATE1_80 | PLAYER_STATE1_20000000)) ||
+           (player->csMode != PLAYER_CSMODE_NONE);
 }
 
 void Actor_SpawnHorse(PlayState* play, Player* player) {
@@ -1365,13 +1386,14 @@ void Actor_SpawnHorse(PlayState* play, Player* player) {
 s32 func_800B724C(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
-    if ((player->csMode == PLAYER_CSMODE_5) || ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_0))) {
+    if ((player->csMode == PLAYER_CSMODE_5) ||
+        ((csMode == PLAYER_CSMODE_END) && (player->csMode == PLAYER_CSMODE_NONE))) {
         return false;
     }
 
     player->csMode = csMode;
-    player->unk_398 = actor;
-    player->doorBgCamIndex = 0;
+    player->csActor = actor;
+    player->unk_3BA = false;
     return true;
 }
 
@@ -1379,7 +1401,7 @@ s32 func_800B7298(PlayState* play, Actor* actor, u8 csMode) {
     Player* player = GET_PLAYER(play);
 
     if (func_800B724C(play, actor, csMode)) {
-        player->doorBgCamIndex = 1;
+        player->unk_3BA = true;
         return true;
     }
     return false;
@@ -1856,14 +1878,38 @@ s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Actor_OfferTalk / Actor_OfferGetItemExchange? Seems to be called with PLAYER_IA_MINUS1 if the same actor used
-// Actor_OfferGetItem.
-// This function is also used to toggle the "Speak" action on the A button
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId) {
+/**
+ * This function covers offering the ability to `Talk` with the player.
+ * Passing an exchangeItemAction (see `PlayerItemAction`) allows the player to also use the item to initiate the
+ * conversation.
+ *
+ * This function carries a talk exchange request to the player actor if context allows it (e.g. the player is in range
+ * and not busy with certain things). The player actor performs the requested action itself.
+ *
+ * The following description of what the `exchangeItemAction` values can do is provided here for completeness, but these
+ * behaviors are entirely out of the scope of this function. All behavior is defined by the player actor.
+ *
+ * - Positive values (`PLAYER_IA_NONE < exchangeItemAction < PLAYER_IA_MAX`):
+ *    Offers the ability to initiate the conversation with an item from the player.
+ *    Not all positive values are implemented properly for this to work.
+ *    Working ones are PLAYER_IA_PICTO_BOX and PLAYER_IA_BOTTLE_MIN <= exchangeItemAction < PLAYER_IA_MASK_MIN
+ *    Note: While PLAYER_IA_BEANS works, it is special cased to just plant the bean with no talking.
+ * - `PLAYER_IA_NONE`:
+ *    Allows the player to speak to or check the actor (by pressing A).
+ * - `PLAYER_IA_MINUS1`:
+ *    Used by actors/player to continue the current conversation after a textbox is closed.
+ *
+ * @return true If the player actor is capable of accepting the offer.
+ *
+ * Note: There is only one instance of using this for actually using an item to start the conversation with the player.
+ * Every other instance is to either offer to speak, or continue the current conversation.
+ */
+s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange,
+                            PlayerItemAction exchangeItemAction) {
     Player* player = GET_PLAYER(play);
 
     if ((player->actor.flags & ACTOR_FLAG_TALK_REQUESTED) ||
-        ((exchangeItemId > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
+        ((exchangeItemAction > PLAYER_IA_NONE) && Player_InCsMode(play)) ||
         (!actor->isTargeted &&
          ((fabsf(actor->playerHeightRel) > fabsf(yRange)) || (actor->xzDistToPlayer > player->talkActorDistance) ||
           (xzRange < actor->xzDistToPlayer)))) {
@@ -1872,24 +1918,35 @@ s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, Player
 
     player->talkActor = actor;
     player->talkActorDistance = actor->xzDistToPlayer;
-    player->exchangeItemId = exchangeItemId;
+    player->exchangeItemAction = exchangeItemAction;
 
     CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
     return true;
 }
 
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId) {
-    return func_800B8500(actor, play, radius, radius, exchangeItemId);
+/**
+ * Offers a talk exchange request within an equilateral cylinder with the radius specified.
+ */
+s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radius,
+                                        PlayerItemAction exchangeItemAction) {
+    return Actor_OfferTalkExchange(actor, play, radius, radius, exchangeItemAction);
 }
 
-s32 func_800B8614(Actor* actor, PlayState* play, f32 radius) {
-    return func_800B85E0(actor, play, radius, PLAYER_IA_NONE);
+/**
+ * Offers a talk request within an equilateral cylinder with the radius specified.
+ */
+s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius) {
+    return Actor_OfferTalkExchangeEquiCylinder(actor, play, radius, PLAYER_IA_NONE);
 }
 
-s32 func_800B863C(Actor* actor, PlayState* play) {
+/**
+ * Offers a talk request within an equilateral cylinder whose radius is determined by the actor's collision check
+ * cylinder's radius.
+ */
+s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play) {
     f32 cylRadius = actor->colChkInfo.cylRadius + 50.0f;
 
-    return func_800B8614(actor, play, cylRadius);
+    return Actor_OfferTalk(actor, play, cylRadius);
 }
 
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play) {
@@ -1920,10 +1977,10 @@ s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2) {
     return false;
 }
 
-PlayerItemAction Player_GetExchangeItemId(PlayState* play) {
+PlayerItemAction Player_GetExchangeItemAction(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return player->exchangeItemId;
+    return player->exchangeItemAction;
 }
 
 s32 func_800B8718(Actor* actor, GameState* gameState) {
@@ -1935,7 +1992,7 @@ s32 func_800B8718(Actor* actor, GameState* gameState) {
     return false;
 }
 
-// Similar to func_800B8500
+// Similar to Actor_OfferTalkExchange
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange) {
     Player* player = GET_PLAYER(play);
 
@@ -2028,10 +2085,10 @@ s32 Actor_OfferGetItem(Actor* actor, PlayState* play, GetItemId getItemId, f32 x
            PLAYER_STATE1_80000 | PLAYER_STATE1_100000 | PLAYER_STATE1_200000)) &&
         (Player_GetExplosiveHeld(player) <= PLAYER_EXPLOSIVE_NONE)) {
         if ((actor->xzDistToPlayer <= xzRange) && (fabsf(actor->playerHeightRel) <= fabsf(yRange))) {
-            if ((getItemId == GI_MASK_CIRCUS_LEADER || getItemId == GI_PENDANT_OF_MEMORIES ||
-                 getItemId == GI_DEED_LAND ||
-                 ((player->heldActor != NULL || actor == player->talkActor) &&
-                  (getItemId > GI_NONE && getItemId < GI_MAX))) ||
+            if (((getItemId == GI_MASK_CIRCUS_LEADER) || (getItemId == GI_PENDANT_OF_MEMORIES) ||
+                 (getItemId == GI_DEED_LAND) ||
+                 (((player->heldActor != NULL) || (actor == player->talkActor)) &&
+                  ((getItemId > GI_NONE) && (getItemId < GI_MAX)))) ||
                 !(player->stateFlags1 & (PLAYER_STATE1_800 | PLAYER_STATE1_20000000))) {
                 s16 yawDiff = actor->yawTowardsPlayer - player->actor.shape.rot.y;
                 s32 absYawDiff = ABS_ALT(yawDiff);
@@ -2163,7 +2220,7 @@ void func_800B8E1C(PlayState* play, Actor* actor, f32 arg2, s16 arg3, f32 arg4) 
  */
 void Player_PlaySfx(Player* player, u16 sfxId) {
     if (player->currentMask == PLAYER_MASK_GIANT) {
-        func_8019F170(&player->actor.projectedPos, sfxId);
+        Audio_PlaySfx_AtPosWithPresetLowFreqAndHighReverb(&player->actor.projectedPos, sfxId);
     } else {
         AudioSfx_PlaySfx(sfxId, &player->actor.projectedPos, 4, &gSfxDefaultFreqAndVolScale,
                          &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
@@ -2174,10 +2231,10 @@ void Player_PlaySfx(Player* player, u16 sfxId) {
  * Play a sound effect at the actor's position
  */
 void Actor_PlaySfx(Actor* actor, u16 sfxId) {
-    Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
+    Audio_PlaySfx_AtPos(&actor->projectedPos, sfxId);
 }
 
-void func_800B8EF4(PlayState* play, Actor* actor) {
+void Actor_PlaySfx_SurfaceBomb(PlayState* play, Actor* actor) {
     SurfaceSfxOffset surfaceSfxOffset;
 
     if (actor->bgCheckFlags & BGCHECKFLAG_WATER) {
@@ -2190,41 +2247,53 @@ void func_800B8EF4(PlayState* play, Actor* actor) {
         surfaceSfxOffset = SurfaceType_GetSfxOffset(&play->colCtx, actor->floorPoly, actor->floorBgId);
     }
 
-    Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
-    Audio_PlaySfxAtPos(&actor->projectedPos, NA_SE_PL_WALK_GROUND + surfaceSfxOffset);
+    Audio_PlaySfx_AtPos(&actor->projectedPos, NA_SE_EV_BOMB_BOUND);
+    Audio_PlaySfx_AtPos(&actor->projectedPos, NA_SE_PL_WALK_GROUND + surfaceSfxOffset);
 }
 
-void func_800B8F98(Actor* actor, u16 sfxId) {
+/**
+ * Play a sfx at the center of the screen using the shared audioFlag system
+ */
+void Actor_PlaySfx_FlaggedCentered1(Actor* actor, u16 sfxId) {
     actor->sfxId = sfxId;
-    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->audioFlags |= 0x02;
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_CENTERED_1;
 }
 
-void func_800B8FC0(Actor* actor, u16 sfxId) {
+/**
+ * Play a sfx at the center of the screen using the shared audioFlag system
+ */
+void Actor_PlaySfx_FlaggedCentered2(Actor* actor, u16 sfxId) {
     actor->sfxId = sfxId;
-    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->audioFlags |= 4;
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_CENTERED_2;
 }
 
-void func_800B8FE8(Actor* actor, u16 sfxId) {
+/**
+ * Play a sfx at the center of the screen using the shared audioFlag system
+ */
+void Actor_PlaySfx_FlaggedCentered3(Actor* actor, u16 sfxId) {
     actor->sfxId = sfxId;
-    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->audioFlags |= 0x08;
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_CENTERED_3;
 }
 
-void func_800B9010(Actor* actor, u16 sfxId) {
+/**
+ * Play a sfx at the actor's position using the shared audioFlag system
+ */
+void Actor_PlaySfx_Flagged(Actor* actor, u16 sfxId) {
     actor->sfxId = sfxId;
-    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->audioFlags |= 0x01;
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_ACTOR_POS;
 }
 
-void func_800B9038(Actor* actor, s32 timer) {
-    actor->audioFlags &= ~(0x10 | 0x08 | 0x04 | 0x02 | 0x01);
-    actor->audioFlags |= 0x10;
+void Actor_PlaySfx_FlaggedTimer(Actor* actor, s32 timer) {
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_SFX_ALL;
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SFX_TIMER;
 
     // The sfxId here are not actually sound effects, but instead this is data that gets sent into
-    // the io ports of the music macro language (func_801A0810 / Audio_PlaySfxAtPosWithSoundScriptIO is
-    // the function that it's used for)
+    // the io ports of the music macro language (Audio_PlaySfx_AtPosWithChannelIO / Audio_PlaySfxAtPosWithSoundScriptIO
+    // is the function that it's used for)
     if (timer < 40) {
         actor->sfxId = 3;
     } else if (timer < 100) {
@@ -2234,12 +2303,12 @@ void func_800B9038(Actor* actor, s32 timer) {
     }
 }
 
-void func_800B9084(Actor* actor) {
-    actor->audioFlags |= 0x20;
+void Actor_PlaySeq_FlaggedKamaroDance(Actor* actor) {
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE;
 }
 
-void func_800B9098(Actor* actor) {
-    actor->audioFlags |= 0x40;
+void Actor_PlaySeq_FlaggedMusicBoxHouse(Actor* actor) {
+    actor->audioFlags |= ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE;
 }
 
 s32 func_800B90AC(PlayState* play, Actor* actor, CollisionPoly* polygon, s32 bgId, Vec3f* arg4) {
@@ -2367,7 +2436,7 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     }
 
     actor->sfxId = 0;
-    actor->audioFlags &= ~0x7F;
+    actor->audioFlags &= ~ACTOR_AUDIO_FLAG_ALL;
 
     if (actor->init != NULL) {
         if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
@@ -2386,12 +2455,12 @@ Actor* Actor_UpdateActor(UpdateActor_Params* params) {
     } else {
         if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
             Actor_Kill(actor);
-        } else if (((params->requiredActorFlag) && !(actor->flags & params->requiredActorFlag)) ||
-                   ((((!params->requiredActorFlag) != 0)) &&
+        } else if ((params->requiredActorFlag && !(actor->flags & params->requiredActorFlag)) ||
+                   (((!params->requiredActorFlag) != 0) &&
                     (!(actor->flags & ACTOR_FLAG_100000) ||
                      ((actor->category == ACTORCAT_EXPLOSIVES) && (params->player->stateFlags1 & PLAYER_STATE1_200))) &&
-                    params->canFreezeCategory && (actor != params->talkActor) &&
-                    ((actor != params->player->heldActor)) && (actor->parent != &params->player->actor))) {
+                    params->canFreezeCategory && (actor != params->talkActor) && (actor != params->player->heldActor) &&
+                    (actor->parent != &params->player->actor))) {
             CollisionCheck_ResetDamage(&actor->colChkInfo);
         } else {
             Math_Vec3f_Copy(&actor->prevPos, &actor->world.pos);
@@ -2544,7 +2613,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
         actor = NULL;
         if (actorCtx->targetContext.unk4B != 0) {
             actorCtx->targetContext.unk4B = 0;
-            play_sound(NA_SE_SY_LOCK_OFF);
+            Audio_PlaySfx(NA_SE_SY_LOCK_OFF);
         }
     }
 
@@ -2629,31 +2698,32 @@ void Actor_Draw(PlayState* play, Actor* actor) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void func_800B9D1C(Actor* actor) {
+void Actor_UpdateFlaggedAudio(Actor* actor) {
     s32 sfxId = actor->sfxId;
 
-    if (sfxId != 0) {
-        if (actor->audioFlags & 2) {
+    if (sfxId != NA_SE_NONE) {
+        if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_1) {
             AudioSfx_PlaySfx(sfxId, &actor->projectedPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale,
                              &gSfxDefaultReverb);
-        } else if (actor->audioFlags & 4) {
-            play_sound(sfxId);
-        } else if (actor->audioFlags & 8) {
-            func_8019F128(sfxId);
-        } else if (actor->audioFlags & 0x10) {
-            func_801A0810(&gSfxDefaultPos, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
-        } else if (actor->audioFlags & 1) {
-            Audio_PlaySfxAtPos(&actor->projectedPos, sfxId);
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_2) {
+            Audio_PlaySfx(sfxId);
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_CENTERED_3) {
+            Audio_PlaySfx_2(sfxId);
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_TIMER) {
+            Audio_PlaySfx_AtPosWithChannelIO(&gSfxDefaultPos, NA_SE_SY_TIMER - SFX_FLAG, (sfxId - 1));
+        } else if (actor->audioFlags & ACTOR_AUDIO_FLAG_SFX_ACTOR_POS) {
+            Audio_PlaySfx_AtPos(&actor->projectedPos, sfxId);
         }
     }
 
-    if (sfxId) {}
+    //! FAKE:
+    if (sfxId != NA_SE_NONE) {}
 
-    if (actor->audioFlags & 0x40) {
+    if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_MUSIC_BOX_HOUSE) {
         func_801A1FB4(SEQ_PLAYER_BGM_SUB, &actor->projectedPos, NA_BGM_MUSIC_BOX_HOUSE, 1500.0f);
     }
 
-    if (actor->audioFlags & 0x20) {
+    if (actor->audioFlags & ACTOR_AUDIO_FLAG_SEQ_KAMARO_DANCE) {
         func_801A1FB4(SEQ_PLAYER_BGM_MAIN, &actor->projectedPos, NA_BGM_KAMARO_DANCE, 900.0f);
     }
 }
@@ -2865,8 +2935,8 @@ void Actor_DrawAll(PlayState* play, ActorContext* actorCtx) {
             SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &actor->world.pos, &actor->projectedPos,
                                          &actor->projectedW);
 
-            if (actor->audioFlags & 0x7F) {
-                func_800B9D1C(actor);
+            if (actor->audioFlags & ACTOR_AUDIO_FLAG_ALL) {
+                Actor_UpdateFlaggedAudio(actor);
             }
 
             if (func_800BA2D8(play, actor)) {
@@ -3129,7 +3199,7 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
     ActorOverlay* overlayEntry = &gActorOverlayTable[index];
     ActorInit* actorInit;
 
-    overlaySize = VRAM_PTR_SIZE(overlayEntry);
+    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
     if (overlayEntry->vramStart == NULL) {
         actorInit = overlayEntry->initInfo;
@@ -3150,15 +3220,16 @@ ActorInit* Actor_LoadOverlay(ActorContext* actorCtx, s16 index) {
                 return NULL;
             }
 
-            Load2_LoadOverlay(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart,
-                              overlayEntry->vramEnd, overlayEntry->loadedRamAddr);
+            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
+                         overlayEntry->loadedRamAddr);
             overlayEntry->numLoaded = 0;
         }
 
-        actorInit = (uintptr_t)(
-            (overlayEntry->initInfo != NULL)
-                ? (void*)((uintptr_t)overlayEntry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(overlayEntry))
-                : NULL);
+        actorInit = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)
+                                           ? (void*)((uintptr_t)overlayEntry->initInfo -
+                                                     (intptr_t)((uintptr_t)overlayEntry->vramStart -
+                                                                (uintptr_t)overlayEntry->loadedRamAddr))
+                                           : NULL);
     }
 
     return actorInit;
@@ -3195,7 +3266,7 @@ Actor* Actor_SpawnAsChildAndCutscene(ActorContext* actorCtx, PlayState* play, s1
     }
 
     overlayEntry = &gActorOverlayTable[index];
-    if (overlayEntry->vramStart != 0) {
+    if (overlayEntry->vramStart != NULL) {
         overlayEntry->numLoaded++;
     }
 
@@ -3566,8 +3637,8 @@ void Actor_SpawnFloorDustRing(PlayState* play, Actor* actor, Vec3f* posXZ, f32 r
     accel.y += (Rand_ZeroOne() - 0.5f) * 0.2f;
 
     for (i = countMinusOne; i >= 0; i--) {
-        pos.x = (sin_rad(angle) * radius) + posXZ->x;
-        pos.z = (cos_rad(angle) * radius) + posXZ->z;
+        pos.x = (Math_SinF(angle) * radius) + posXZ->x;
+        pos.z = (Math_CosF(angle) * radius) + posXZ->z;
         accel.x = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
         accel.z = (Rand_ZeroOne() - 0.5f) * randAccelWeight;
 
@@ -4091,7 +4162,7 @@ s32 Npc_UpdateTalking(PlayState* play, Actor* actor, s16* talkState, f32 interac
         return false;
     }
 
-    if (!func_800B8614(actor, play, interactRange)) {
+    if (!Actor_OfferTalk(actor, play, interactRange)) {
         return false;
     }
 
@@ -4419,28 +4490,41 @@ s16 func_800BDB6C(Actor* actor, PlayState* play, s16 arg2, f32 arg3) {
     return arg2;
 }
 
-void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animationInfo, s32 animIndex) {
-    f32 frameCount;
+void Actor_ChangeAnimationByInfo(SkelAnime* skelAnime, AnimationInfo* animInfo, s32 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
-    if (animationInfo->frameCount > 0.0f) {
-        frameCount = animationInfo->frameCount;
+    animInfo += animIndex;
+
+    if (animInfo->frameCount > 0.0f) {
+        endFrame = animInfo->frameCount;
     } else {
-        frameCount = Animation_GetLastFrame(&animationInfo->animation->common);
+        endFrame = Animation_GetLastFrame(&animInfo->animation->common);
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
-// Unused
-void func_800BDCF4(PlayState* play, s16* arg1, s16* arg2, s32 size) {
+/**
+ * Fills two tables with rotation angles that can be used to simulate idle animations.
+ *
+ * The rotation angles are dependent on the current frame, so should be updated regularly, generally every frame.
+ *
+ * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of the zTable value,
+ * multiplying by some scale factor (generally 200), and adding that to the already existing rotation.
+ *
+ * Note: With the common scale factor of 200, this effect is practically unnoticeable if the current animation already
+ * has motion involved.
+ *
+ * Note: This function goes unused in favor of `SubS_UpdateFidgetTables`.
+ */
+void Actor_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     s32 frames = play->gameplayFrames;
     s32 i;
 
-    for (i = 0; i < size; i++) {
-        arg1[i] = (0x814 + 50 * i) * frames;
-        arg2[i] = (0x940 + 50 * i) * frames;
+    for (i = 0; i < tableLen; i++) {
+        fidgetTableY[i] = (i * 50 + 0x814) * frames;
+        fidgetTableZ[i] = (i * 50 + 0x940) * frames;
     }
 }
 
@@ -4815,7 +4899,7 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
 
                 // Apply and draw a light orb over each limb of frozen actor
                 for (limbIndex = 0; limbIndex < limbPosCount; limbIndex++, limbPos++) {
-                    Matrix_RotateZF(randPlusMinusPoint5Scaled(2 * M_PI), MTXMODE_APPLY);
+                    Matrix_RotateZF(Rand_CenteredFloat(2 * M_PI), MTXMODE_APPLY);
                     currentMatrix->mf[3][0] = limbPos->x;
                     currentMatrix->mf[3][1] = limbPos->y;
                     currentMatrix->mf[3][2] = limbPos->z;
@@ -4856,9 +4940,9 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     // first electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
                     Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
-                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    currentMatrix->mf[3][0] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -4868,9 +4952,9 @@ void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16
                     // second electric spark
                     Matrix_RotateXFApply(Rand_ZeroFloat(2 * M_PI));
                     Matrix_RotateZF(Rand_ZeroFloat(2 * M_PI), MTXMODE_APPLY);
-                    currentMatrix->mf[3][0] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->x;
-                    currentMatrix->mf[3][1] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->y;
-                    currentMatrix->mf[3][2] = randPlusMinusPoint5Scaled((f32)sREG(24) + 30.0f) + limbPos->z;
+                    currentMatrix->mf[3][0] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->x;
+                    currentMatrix->mf[3][1] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->y;
+                    currentMatrix->mf[3][2] = Rand_CenteredFloat((f32)sREG(24) + 30.0f) + limbPos->z;
 
                     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

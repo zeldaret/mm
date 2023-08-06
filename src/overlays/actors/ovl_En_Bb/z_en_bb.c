@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bb.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
@@ -32,7 +33,7 @@ void EnBb_Revive(EnBb* this, PlayState* play);
 typedef enum {
     /* -1 */ BB_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BB_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BB_BODY_PART_DRAW_STATUS_DEAD
 } EnBbBodyPartDrawStatus;
 
 ActorInit En_Bb_InitVars = {
@@ -73,7 +74,7 @@ typedef enum {
     /* 0x3 */ EN_BB_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BB_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BB_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BB_DMGEFF_HOOKSHOT = 0xE
 } EnBbDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -123,7 +124,7 @@ static InitChainEntry sInitChain[] = {
  * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
  * limb is not part of the bodyParts arrays.
  */
-static s8 sLimbIndexToBodyPartsIndex[] = {
+static s8 sLimbIndexToBodyPartsIndex[BUBBLE_LIMB_MAX] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
@@ -256,7 +257,7 @@ void EnBb_FlyIdle(EnBb* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -287,11 +288,11 @@ void EnBb_Attack(EnBb* this, PlayState* play) {
     this->targetYRotation = this->actor.yawTowardsPlayer;
     EnBb_UpdateStateForFlying(this);
 
-    if ((Animation_OnFrame(&this->skelAnime, 0.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
-    } else if ((Animation_OnFrame(&this->skelAnime, 2.0f)) || (Animation_OnFrame(&this->skelAnime, 7.0f))) {
+    } else if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 7.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_WING);
-    } else if ((Animation_OnFrame(&this->skelAnime, 0.0f)) && (Rand_ZeroOne() < 0.1f)) {
+    } else if (Animation_OnFrame(&this->skelAnime, 0.0f) && (Rand_ZeroOne() < 0.1f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_LAUGH);
     }
 
@@ -550,30 +551,28 @@ void EnBb_UpdateDamage(EnBb* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                             this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_SMALL_LIGHT_RAYS);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }
-    } else {
-        if (this->collider.base.atFlags & AT_BOUNCED) {
-            this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
-            if (this->actionFunc != EnBb_Down) {
-                this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
-                this->actor.shape.rot.y = this->actor.world.rot.y;
-                EnBb_SetupDown(this);
-            }
-        } else if (this->collider.base.atFlags & AT_HIT) {
-            this->collider.base.atFlags &= ~AT_HIT;
+    } else if (this->collider.base.atFlags & AT_BOUNCED) {
+        this->collider.base.atFlags &= ~(AT_HIT | AT_BOUNCED);
+        if (this->actionFunc != EnBb_Down) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
             this->actor.shape.rot.y = this->actor.world.rot.y;
-            Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_BITE);
+            EnBb_SetupDown(this);
+        }
+    } else if (this->collider.base.atFlags & AT_HIT) {
+        this->collider.base.atFlags &= ~AT_HIT;
+        this->actor.world.rot.y = this->actor.yawTowardsPlayer + 0x8000;
+        this->actor.shape.rot.y = this->actor.world.rot.y;
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_BITE);
 
-            if (this->flameScaleX > 0.0f) {
-                gSaveContext.jinxTimer = 1200;
-            }
+        if (this->flameScaleX > 0.0f) {
+            gSaveContext.jinxTimer = 1200;
+        }
 
-            if (this->actionFunc == EnBb_Attack) {
-                EnBb_SetupFlyIdle(this);
-            }
+        if (this->actionFunc == EnBb_Attack) {
+            EnBb_SetupFlyIdle(this);
         }
     }
 }
@@ -615,7 +614,7 @@ void EnBb_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

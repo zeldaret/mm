@@ -309,7 +309,7 @@ void func_8098D99C(ObjComb* this, PlayState* play) {
                 temp_v0->speed = 2.0f;
             }
             this->unk_1B6 = 1;
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
 }
@@ -469,7 +469,7 @@ void func_8098DEA0(ObjComb* this, PlayState* play) {
             if (this->unk_1B0 > 0x258) {
                 this->unk_1B0 = 0x258;
             }
-            func_800B9010(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_HONEYCOMB_FALL - SFX_FLAG);
         }
 
         Actor_MoveWithGravity(&this->actor);

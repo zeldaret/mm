@@ -320,6 +320,7 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
 
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;
+    //! FAKE:
     if (this && this && this) {}
     player->pushedSpeed = 8.0f;
     player->pushedYaw = this->actor.yawTowardsPlayer;
@@ -530,7 +531,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play) {
             }
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
             CutsceneManager_Stop(this->csId);
@@ -569,7 +570,7 @@ void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
             this->unk_19F = 0;
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
             CutsceneManager_Stop(this->csId);

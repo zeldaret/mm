@@ -32,14 +32,14 @@ void EnNwc_DrawAdultBody(Actor* thisx, PlayState* play);
 s32 EnNwc_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 EnHs* EnNwc_FindGrog(PlayState* play);
 
-enum EnNiwState {
-    /* -1 */ NWC_STATE_NIW_LOADED = -1,  // set after loading object_niw
-    /*  0 */ NWC_STATE_CHECK_BREMAN = 0, // checking for breman mask
-    /*  1 */ NWC_STATE_TURNING,          // turning to face a new direction to explore
-    /*  2 */ NWC_STATE_HOPPING_FORWARD,  // hopping to go explore
-    /*  3 */ NWC_STATE_FOLLOWING,        // following the player
-    /*  4 */ NWC_STATE_RUNNING,          // running from the player after failed breman march
-};
+typedef enum EnNwcState {
+    /* -1 */ NWC_STATE_NIW_LOADED = -1, // set after loading object_niw
+    /*  0 */ NWC_STATE_CHECK_BREMAN,    // checking for breman mask
+    /*  1 */ NWC_STATE_TURNING,         // turning to face a new direction to explore
+    /*  2 */ NWC_STATE_HOPPING_FORWARD, // hopping to go explore
+    /*  3 */ NWC_STATE_FOLLOWING,       // following the player
+    /*  4 */ NWC_STATE_RUNNING          // running from the player after failed breman march
+} EnNwcState;
 
 ActorInit En_Nwc_InitVars = {
     /**/ ACTOR_EN_NWC,
@@ -110,9 +110,9 @@ void EnNwc_SpawnDust(EnNwc* this, PlayState* play) {
     vec5.z = this->actor.world.pos.z - 5.0f * Math_CosS(yaw) * Math_CosS(pitch);
 
     for (i = 0; i < 5; i++) {
-        vel.x = randPlusMinusPoint5Scaled(4.0f);
-        vel.y = randPlusMinusPoint5Scaled(4.0f);
-        vel.z = randPlusMinusPoint5Scaled(4.0f);
+        vel.x = Rand_CenteredFloat(4.0f);
+        vel.y = Rand_CenteredFloat(4.0f);
+        vel.z = Rand_CenteredFloat(4.0f);
         accel.x = -vel.x * 0.1f;
         accel.y = -vel.y * 0.1f;
         accel.z = -vel.z * 0.1f;
@@ -164,7 +164,7 @@ s32 EnNwc_IsFound(EnNwc* this, PlayState* play) {
         return false;
     }
 
-    if ((player->stateFlags3 & PLAYER_STATE3_20000000) && this->actor.xzDistToPlayer < 100.0f) {
+    if ((player->stateFlags3 & PLAYER_STATE3_20000000) && (this->actor.xzDistToPlayer < 100.0f)) {
         return true;
     }
 
@@ -178,25 +178,33 @@ void EnNwc_ChangeState(EnNwc* this, s16 newState) {
             this->stateTimer = 10;
             this->actionFunc = EnNwc_CheckForBreman;
             break;
+
         case NWC_STATE_TURNING:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_Turn;
-            this->fallingRotY = (s16)(s32)randPlusMinusPoint5Scaled(65536.0f);
+            this->fallingRotY = (s16)(s32)Rand_CenteredFloat(0x10000);
             break;
+
         case NWC_STATE_HOPPING_FORWARD:
             this->stateTimer = Rand_ZeroFloat(20.0f) + 15.0f;
             this->actionFunc = EnNwc_HopForward;
             break;
+
         case NWC_STATE_FOLLOWING:
             this->actionFunc = EnNwc_Follow;
             this->transformTimer = 0;
-            this->randomRot = (s16)(s32)randPlusMinusPoint5Scaled(10000.0f);
+            this->randomRot = (s16)(s32)Rand_CenteredFloat(0x2710);
             break;
+
         case NWC_STATE_RUNNING:
-            this->actor.world.rot.y = this->actor.home.rot.z * 0x3000 & 0xFFFF; // Fake Match?: & 0xFFFF
+            //! FAKE: & 0xFFFF
+            this->actor.world.rot.y = this->actor.home.rot.z * 0x3000 & 0xFFFF;
             this->actor.shape.rot.y = this->actor.world.rot.y;
             this->stateTimer = Rand_ZeroFloat(40.0f) + 120.0f;
             this->actionFunc = EnNwc_RunAway;
+            break;
+
+        default:
             break;
     }
 
@@ -234,7 +242,7 @@ void EnNwc_CheckFound(EnNwc* this, PlayState* play) {
         }
 
         EnNwc_ChangeState(this, NWC_STATE_FOLLOWING);
-        func_801A0868(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
+        Audio_PlaySfx_AtPosWithAllChannelsIO(&gSfxDefaultPos, NA_SE_SY_CHICK_JOIN_CHIME, currentChickCount);
     }
 }
 
@@ -289,7 +297,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         Math_SmoothStepToS(&this->upperBodyRotY, targetUpperBodyRot, 2, 0x1B58, 0x3E8);
 
     } else { // NOT grown up
-        if ((this->stateTimer & 3) == 3 && this->stateTimer & 20) {
+        if (((this->stateTimer & 3) == 3) && ((this->stateTimer & 0x14) != 0)) {
             this->actor.velocity.y = 2.0f; // hop up and down
         }
         if ((this->stateTimer & 0x1B) == 24) {
@@ -297,8 +305,8 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
     }
 
-    if (this->grog->actor.home.rot.z >= 20 && // all 10 chicks have been found
-        (this->hasGrownUp & 1) == false) {
+    if ((this->grog->actor.home.rot.z >= 20) && // all 10 chicks have been found
+        !(this->hasGrownUp & 1)) {
         this->transformTimer += 2;
         if (this->transformTimer >= (s32)(s16)((this->actor.home.rot.z * 0x1E) + 0x1E)) {
             // it is our turn to transform
@@ -323,7 +331,7 @@ void EnNwc_Follow(EnNwc* this, PlayState* play) {
         }
 
     } else { // not too close: keep moving
-        this->randomRot += (s16)randPlusMinusPoint5Scaled(1500.0f);
+        this->randomRot += (s16)(s32)Rand_CenteredFloat(0x5DC);
         if (this->randomRot > 0x1388) {
             this->randomRot = 0x1388;
         } else if (this->randomRot < -0x1388) {
@@ -473,7 +481,7 @@ void EnNwc_Update(Actor* thisx, PlayState* play) {
         this->blinkTimer = Rand_S16Offset(0x3C, 0x3C);
     }
 
-    if (this->blinkTimer == 1 || this->blinkTimer == 3) {
+    if ((this->blinkTimer == 1) || (this->blinkTimer == 3)) {
         this->blinkState = true;
     } else {
         this->blinkState = false;
@@ -508,7 +516,7 @@ s32 EnNwc_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     if (limbIndex == NIW_LIMB_UPPER_BODY) {
         rot->y += this->upperBodyRotY;
     }
-    if (limbIndex == NIW_LIMB_RIGHT_WING_ROOT || limbIndex == NIW_LIMB_LEFT_WING_ROOT) {
+    if ((limbIndex == NIW_LIMB_RIGHT_WING_ROOT) || (limbIndex == NIW_LIMB_LEFT_WING_ROOT)) {
         rot->y += this->footRotY;
         rot->z += this->footRotZ;
     }

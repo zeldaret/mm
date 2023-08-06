@@ -103,7 +103,7 @@ void func_80A66278(EnWarpUzu* this, PlayState* play) {
             phi_v1 = ABS(temp_v0);
             if (phi_a0 >= 0x2AAB) {
                 if (phi_v1 < 0x238E) {
-                    func_800B8614(&this->actor, play, 70.0f);
+                    Actor_OfferTalk(&this->actor, play, 70.0f);
                 }
             }
         }

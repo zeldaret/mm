@@ -5,6 +5,7 @@
  */
 
 #include "z_en_floormas.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
 
@@ -133,17 +134,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 5500, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
-
-static Vec3f D_808D3900[] = {
-    { 25.0f, 45.0f, -7.0f }, { 25.0f, 40.0f, -12.0f }, { 25.0f, 35.0f, -2.0f },
-    { 10.0f, 20.0f, -4.0f }, { 15.0f, 25.0f, -2.0f },
-};
-
-static s8 D_808D393C[] = {
-    -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8,
-};
-
-static Color_RGBA8 D_808D3958 = { 0, 255, 0, 0 };
 
 void EnFloormas_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
@@ -389,7 +379,7 @@ void func_808D108C(EnFloormas* this) {
 }
 
 void func_808D11BC(EnFloormas* this, PlayState* play) {
-    f32 frame;
+    f32 curFrame;
     f32 sp30;
     f32 sp2C;
 
@@ -406,8 +396,8 @@ void func_808D11BC(EnFloormas* this, PlayState* play) {
         }
     }
 
-    frame = this->skelAnime.curFrame;
-    if ((frame >= 7.0f) && (frame < 22.0f)) {
+    curFrame = this->skelAnime.curFrame;
+    if ((curFrame >= 7.0f) && (curFrame < 22.0f)) {
         sp30 = Math_SinS(this->actor.shape.rot.y + 0x4268);
         sp2C = Math_CosS(this->actor.shape.rot.y + 0x4268);
         this->actor.shape.rot.y += this->unk_190;
@@ -454,7 +444,7 @@ void func_808D14DC(EnFloormas* this, PlayState* play) {
     sp28.x = Math_SinS(this->actor.shape.rot.y - 0x6000) * 7.0f;
     sp28.z = Math_CosS(this->actor.shape.rot.y - 0x6000) * 7.0f;
     func_800B1210(play, &sp34, &sp28, &gZeroVec3f, 0x1C2, 0x64);
-    func_800B9010(&this->actor, NA_SE_EN_FLOORMASTER_SLIDING - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FLOORMASTER_SLIDING - SFX_FLAG);
 }
 
 void func_808D161C(EnFloormas* this) {
@@ -711,6 +701,14 @@ void func_808D2040(EnFloormas* this, PlayState* play) {
     }
 }
 
+static Vec3f D_808D3900[PLAYER_FORM_MAX] = {
+    { 25.0f, 45.0f, -7.0f },  // PLAYER_FORM_FIERCE_DEITY
+    { 25.0f, 40.0f, -12.0f }, // PLAYER_FORM_GORON
+    { 25.0f, 35.0f, -2.0f },  // PLAYER_FORM_ZORA
+    { 10.0f, 20.0f, -4.0f },  // PLAYER_FORM_DEKU
+    { 15.0f, 25.0f, -2.0f },  // PLAYER_FORM_HUMAN
+};
+
 void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;
 
@@ -886,7 +884,7 @@ void func_808D2764(EnFloormas* this, PlayState* play) {
         }
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_FLOORMASTER_RESTORE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FLOORMASTER_RESTORE - SFX_FLAG);
 }
 
 void func_808D2A20(EnFloormas* this) {
@@ -1069,8 +1067,8 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                         this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0,
                                         0,
-                                        (this->actor.scale.x > 0.009f) ? CLEAR_TAG_LARGE_LIGHT_RAYS
-                                                                       : CLEAR_TAG_SMALL_LIGHT_RAYS);
+                                        (this->actor.scale.x > 0.009f) ? CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS)
+                                                                       : CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
                         }
                         func_808D2B18(this);
                     }
@@ -1141,7 +1139,7 @@ void EnFloormas_Update(Actor* thisx, PlayState* play) {
                     this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.275f;
                     this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
                 } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, 0.01375f)) {
-                    func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
                 }
             }
         }
@@ -1158,6 +1156,34 @@ s32 EnFloormas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 
     return false;
 }
+
+static s8 D_808D393C[WALLMASTER_LIMB_MAX] = {
+    -1, // WALLMASTER_LIMB_NONE
+    -1, // WALLMASTER_LIMB_ROOT
+    -1, // WALLMASTER_LIMB_HAND
+    -1, // WALLMASTER_LIMB_INDEX_FINGER_ROOT
+    0,  // WALLMASTER_LIMB_INDEX_FINGER_PROXIMAL
+    -1, // WALLMASTER_LIMB_INDEX_FINGER_DISTAL_ROOT
+    -1, // WALLMASTER_LIMB_INDEX_FINGER_MIDDLE
+    1,  // WALLMASTER_LIMB_INDEX_FINGER_DISTAL
+    -1, // WALLMASTER_LIMB_RING_FINGER_ROOT
+    2,  // WALLMASTER_LIMB_RING_FINGER_PROXIMAL
+    -1, // WALLMASTER_LIMB_RING_FINGER_DISTAL_ROOT
+    -1, // WALLMASTER_LIMB_RING_FINGER_MIDDLE
+    3,  // WALLMASTER_LIMB_RING_FINGER_DISTAL
+    -1, // WALLMASTER_LIMB_MIDDLE_FINGER_ROOT
+    4,  // WALLMASTER_LIMB_MIDDLE_FINGER_PROXIMAL
+    -1, // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL_ROOT
+    -1, // WALLMASTER_LIMB_MIDDLE_FINGER_MIDDLE
+    5,  // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL
+    -1, // WALLMASTER_LIMB_WRIST_ROOT
+    -1, // WALLMASTER_LIMB_WRIST
+    -1, // WALLMASTER_LIMB_THUMB_ROOT
+    6,  // WALLMASTER_LIMB_THUMB_PROXIMAL
+    7,  // WALLMASTER_LIMB_THUMB_DISTAL_ROOT
+    -1, // WALLMASTER_LIMB_THUMB_MIDDLE
+    8,  // WALLMASTER_LIMB_THUMB_DISTAL
+};
 
 void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnFloormas* this = THIS;
@@ -1182,6 +1208,8 @@ void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         Matrix_Pop();
     }
 }
+
+static Color_RGBA8 D_808D3958 = { 0, 255, 0, 0 };
 
 void EnFloormas_Draw(Actor* thisx, PlayState* play) {
     EnFloormas* this = THIS;

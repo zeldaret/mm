@@ -4,7 +4,6 @@
  * Description: Sakon's Hideout Objects (Sun's Mask, doors, etc)
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
@@ -184,7 +183,7 @@ void func_80BA27C4(ObjNozoki* this, PlayState* play) {
             func_80BA2790(this);
             if (D_80BA36B0 == 0) {
                 this->unk_15E = 25;
-                play_sound(NA_SE_SY_SECOM_WARNING);
+                Audio_PlaySfx(NA_SE_SY_SECOM_WARNING);
             } else {
                 this->unk_15E = CutsceneManager_GetLength(this->csId);
                 if (this->unk_15E < 0) {
@@ -363,7 +362,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
 
     play->roomCtx.unk7A[0] = this->dyna.actor.velocity.x;
 
-    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speed);
+    Audio_PlaySfx_AtPosWithFreq(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speed);
 }
 
 void func_80BA3044(ObjNozoki* this, PlayState* play) {
@@ -428,7 +427,7 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
             if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
                 ObjNozoki_SetupAction(this, func_80BA3344);
             } else {
-                func_800B8614(&this->dyna.actor, play, 50.0f);
+                Actor_OfferTalk(&this->dyna.actor, play, 50.0f);
             }
         }
     }

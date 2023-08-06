@@ -100,7 +100,7 @@ void ObjTree_Init(Actor* thisx, PlayState* play) {
     } else {
         Actor_SetScale(&this->dyna.actor, 0.1f);
         DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
-        CollisionHeader_GetVirtual(&object_tree_Colheader_001B2C, &colHeader);
+        CollisionHeader_GetVirtual(&gTreeTopCol, &colHeader);
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     }
 
@@ -187,11 +187,11 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_000680);
+    gSPDisplayList(POLY_OPA_DISP++, gTreeBodyDL);
 
     Matrix_RotateZYX(xRot, 0, zRot, MTXMODE_APPLY);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_OPA_DISP++, object_tree_DL_0007C8);
+    gSPDisplayList(POLY_OPA_DISP++, gTreeLeavesDL);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -247,8 +247,8 @@ void func_80BFBA1C(PlayState* play, EnRz* this, s16 animIndex) {
 }
 
 s32 EnRz_SetupPath(EnRz* this, PlayState* play) {
-    if (EN_RZ_GET_PATH(&this->actor) != 0x3F) {
-        this->path = &play->setupPathList[EN_RZ_GET_PATH(&this->actor)];
+    if (EN_RZ_GET_PATH_INDEX(&this->actor) != EN_RZ_PATH_INDEX_NONE) {
+        this->path = &play->setupPathList[EN_RZ_GET_PATH_INDEX(&this->actor)];
         if (this->path != NULL) {
             Path* path = this->path;
             Vec3s* points = (Vec3s*)Lib_SegmentedToVirtual(path->points);
@@ -347,9 +347,9 @@ EnRz* EnRz_FindSister(EnRz* this, PlayState* play) {
 
 void func_80BFBDFC(PlayState* play) {
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_80)) {
-        func_80151BB4(play, 0x27);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_ROSA_SISTERS_HP);
     }
-    func_80151BB4(play, 0xC);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROSA_SISTERS);
 }
 
 void EnRz_Destroy(Actor* thisx, PlayState* play) {
@@ -362,7 +362,7 @@ s32 func_80BFBE70(EnRz* this, PlayState* play) {
     u16 cueId;
 
     if ((EN_RZ_GET_SISTER(&this->actor) == EN_RZ_JUDO) && (this->animIndex == EN_RZ_ANIM_APPLAUDING)) {
-        func_800B9010(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_CLAPPING_2P - SFX_FLAG);
     }
 
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
@@ -536,10 +536,10 @@ void func_80BFC3F8(EnRz* this, PlayState* play) {
         } else if (EnRz_CanTalk(this, play)) {
             if (func_80BFBCEC(this, play) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_77_04) && this->sister != NULL) {
                 this->actor.flags |= ACTOR_FLAG_10000;
-                func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+                Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
             } else {
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_800B8614(&this->actor, play, 120.0f);
+                Actor_OfferTalk(&this->actor, play, 120.0f);
             }
         }
 
@@ -572,7 +572,7 @@ void func_80BFC674(EnRz* this, PlayState* play) {
             Message_StartTextbox(play, 0x2924, &this->actor);
         }
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -609,7 +609,7 @@ void func_80BFC7E0(EnRz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -644,7 +644,7 @@ void EnRz_Walk(EnRz* this, PlayState* play) {
         this->actor.speed = 0.0f;
         func_80BFBDFC(play);
     } else if (EnRz_CanTalk(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

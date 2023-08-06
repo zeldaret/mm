@@ -697,23 +697,23 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
             if (this->bombbuyFlags & EN_S_GORO_BOMBBUYFLAG_YESBUY) {
                 if (AMMO(ITEM_POWDER_KEG) != 0) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return 0x673;
                 }
                 this->powderKegPrice = play->msgCtx.unk1206C;
                 if (gSaveContext.save.saveInfo.playerData.rupees < this->powderKegPrice) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_TIRED;
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return 0x674;
                 }
                 if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     return 0x676;
                 }
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 return 0x675;
             }
             if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
@@ -1114,7 +1114,7 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_WinterShrineGoron_Talk;
         } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1145,7 +1145,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
         } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isTargeted)) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1186,7 +1186,7 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
             this->actionFunc = EnSGoro_ShopGoron_Talk;
         }
     } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1236,7 +1236,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
                 this->bombbuyFlags |= EN_S_GORO_BOMBBUYFLAG_YESBUY;
                 break;
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->bombbuyFlags &= ~EN_S_GORO_BOMBBUYFLAG_YESBUY;
                 break;
         }
@@ -1271,7 +1271,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1280,7 +1280,7 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
     } else if (this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     EnSGoro_UpdateSleeping(this, play);
 }
@@ -1350,7 +1350,7 @@ s32 EnSGoro_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 ste
 
     Matrix_MultVec3f(&zeroVec, &newPos);
     Matrix_Get(&curState);
-    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
+    Matrix_MtxFToYXZRot(&curState, &newRot, false);
 
     *pos = newPos;
 

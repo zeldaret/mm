@@ -53,12 +53,12 @@ typedef struct {
     /* 0x4 */ ItemId item;
     /* 0x8 */ s32 amount;
     /* 0xC */ s16 isBottledItem;
-} EnTalkGibudRequestedItem;
+} EnTalkGibudRequestedItem; // size = 0x10
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_REQUESTED_ITEM_MET,
     /* 1 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_ENOUGH_AMMO,
-    /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET,
+    /* 2 */ EN_TALK_GIBUD_REQUESTED_ITEM_NOT_MET
 } EnTalkGibudRequestedItemState;
 
 typedef enum {
@@ -71,7 +71,7 @@ typedef enum {
     /*  6 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BOMBS,
     /*  7 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_HOT_SPRING_WATER,
     /*  8 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BIG_POE,
-    /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK,
+    /*  9 */ EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_MILK
 } EnTalkGibudRequestedItemIndex;
 
 typedef enum {
@@ -88,18 +88,18 @@ typedef enum {
     /* 10 */ EN_TALK_GIBUD_ANIM_WALK,
     /* 11 */ EN_TALK_GIBUD_ANIM_DANCE_SQUAT,
     /* 12 */ EN_TALK_GIBUD_ANIM_DANCE_PIROUETTE,
-    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP,
+    /* 13 */ EN_TALK_GIBUD_ANIM_DANCE_CLAP
 } EnTalkGibudAnimation;
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_TYPE_GIBDO,
-    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD,
+    /* 1 */ EN_TALK_GIBUD_TYPE_REDEAD
 } EnTalkGibudType;
 
 typedef enum {
     /* 0 */ EN_TALK_GIBUD_GRAB_START,
     /* 1 */ EN_TALK_GIBUD_GRAB_ATTACK,
-    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE,
+    /* 2 */ EN_TALK_GIBUD_GRAB_RELEASE
 } EnTalkGibudGrabState;
 
 ActorInit En_Talk_Gibud_InitVars = {
@@ -159,7 +159,7 @@ typedef enum {
     /* 0xC */ EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC = 0xC,  // Stuns and applies an electric effect
     /* 0xD */ EN_TALK_GIBUD_DMGEFF_RECOIL,            // Deals no damage, but displays hit mark and recoil animation
     /* 0xE */ EN_TALK_GIBUD_DMGEFF_LIGHT_RAY,         // Instantly kills a Redead on contact
-    /* 0xF */ EN_TALK_GIBUD_DMGEFF_DAMAGE,            // Deals damage and plays the damage animation
+    /* 0xF */ EN_TALK_GIBUD_DMGEFF_DAMAGE             // Deals damage and plays the damage animation
 } EnTalkGibudDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -205,7 +205,7 @@ static EnTalkGibudRequestedItem sRequestedItemTable[] = {
     { PLAYER_IA_BOTTLE_SPRING_WATER, ITEM_SPRING_WATER, 1, true },
     { PLAYER_IA_BOTTLE_FISH, ITEM_FISH, 1, true },
     { PLAYER_IA_BOTTLE_BUG, ITEM_BUG, 1, true },
-    { PLAYER_IA_NUT, ITEM_NUT, 10, false },
+    { PLAYER_IA_DEKU_NUT, ITEM_DEKU_NUT, 10, false },
     { PLAYER_IA_BOMB, ITEM_BOMB, 10, false },
     { PLAYER_IA_BOTTLE_HOT_SPRING_WATER, ITEM_HOT_SPRING_WATER, 1, true },
     { PLAYER_IA_BOTTLE_BIG_POE, ITEM_BIG_POE, 1, true },
@@ -268,7 +268,7 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
 
-    if (this->switchFlag != -1 && Flags_GetSwitch(play, this->switchFlag)) {
+    if ((this->switchFlag != -1) && Flags_GetSwitch(play, this->switchFlag)) {
         Actor_Kill(&this->actor);
     }
 
@@ -291,7 +291,7 @@ void EnTalkGibud_SetupIdle(EnTalkGibud* this) {
  * Gibdo will attack the player if they get too close.
  */
 void EnTalkGibud_Idle(EnTalkGibud* this, PlayState* play) {
-    if (this->actor.xzDistToPlayer <= 150.0f && func_800B715C(play)) {
+    if ((this->actor.xzDistToPlayer <= 150.0f) && func_800B715C(play)) {
         EnTalkGibud_SetupAttemptPlayerFreeze(this);
     }
 
@@ -345,7 +345,7 @@ void EnTalkGibud_WalkToPlayer(EnTalkGibud* this, PlayState* play) {
     if (EnTalkGibud_PlayerInRangeWithCorrectState(this, play) && Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
         if ((this->grabWaitTimer == 0) && (this->actor.xzDistToPlayer <= 45.0f)) {
             player->actor.freezeTimer = 0;
-            if (gSaveContext.save.playerForm == PLAYER_FORM_GORON || gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_GORON) || (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
                 // If the Gibdo/Redead tries to grab Goron or Deku Link, it will fail to
                 // do so. It will appear to take damage and shake its head side-to-side.
                 EnTalkGibud_SetupGrabFail(this);
@@ -389,10 +389,9 @@ void EnTalkGibud_SetupGrab(EnTalkGibud* this) {
 }
 
 void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
-    Player* player2 = GET_PLAYER(play);
-    Player* player = player2;
+    Actor* playerActor = &GET_PLAYER(play)->actor;
+    Player* player = (Player*)playerActor;
     s32 inPositionToAttack;
-    u16 damageSfxId;
 
     switch (this->grabState) {
         case EN_TALK_GIBUD_GRAB_START:
@@ -405,9 +404,8 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
 
         case EN_TALK_GIBUD_GRAB_ATTACK:
             if (this->grabDamageTimer == 20) {
-                s16 requiredScopeTemp;
+                u16 damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
 
-                damageSfxId = player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S;
                 play->damagePlayer(play, -8);
                 Player_PlaySfx(player, damageSfxId);
                 Rumble_Request(this->actor.xzDistToPlayer, 240, 1, 12);
@@ -441,6 +439,9 @@ void EnTalkGibud_Grab(EnTalkGibud* this, PlayState* play) {
             } else {
                 Math_SmoothStepToF(&this->actor.shape.yOffset, 0.0f, 1.0f, 400.0f, 0.0f);
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -512,7 +513,7 @@ void EnTalkGibud_WalkToHome(EnTalkGibud* this, PlayState* play) {
         this->actor.world.rot = this->actor.shape.rot;
     }
     if (EnTalkGibud_PlayerInRangeWithCorrectState(this, play)) {
-        if (gSaveContext.save.playerForm != PLAYER_FORM_GORON && gSaveContext.save.playerForm != PLAYER_FORM_DEKU &&
+        if ((GET_PLAYER_FORM != PLAYER_FORM_GORON) && (GET_PLAYER_FORM != PLAYER_FORM_DEKU) &&
             Actor_IsFacingPlayer(&this->actor, 0x38E3)) {
             EnTalkGibud_SetupWalkToPlayer(this);
         }
@@ -676,6 +677,9 @@ void EnTalkGibud_GetTextIdForRequestedItem(EnTalkGibud* this, PlayState* play) {
             Message_StartTextbox(play, 0x1395, &this->actor);
             this->textId = 0x1395;
             break;
+
+        default:
+            break;
     }
 }
 
@@ -699,6 +703,9 @@ void EnTalkGibud_GetNextTextBoxId(EnTalkGibud* this, PlayState* play) {
                 // Prompts the player to choose an item
                 Message_StartTextbox(play, 0xFF, &this->actor);
                 this->textId = 0xFF;
+                break;
+
+            default:
                 break;
         }
     }
@@ -781,7 +788,7 @@ void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
         EnTalkGibud_SetupTalk(this);
     } else if (this->actor.xzDistToPlayer < 100.0f && !(this->collider.base.acFlags & AC_HIT)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRotation, &this->upperBodyRotation, this->actor.focus.pos);
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     } else {
         Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
         Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);
@@ -869,7 +876,7 @@ void EnTalkGibud_Disappear(EnTalkGibud* this, PlayState* play) {
             velocity.z += Rand_Centered() * 1.5f;
             func_800B3030(play, &pos, &velocity, &accel, 100, 0, 1);
         }
-        func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         player->stateFlags1 |= PLAYER_STATE1_20000000;
         this->disappearanceTimer--;
     } else {
@@ -984,7 +991,7 @@ s32 EnTalkGibud_MoveToIdealGrabPositionAndRotation(EnTalkGibud* this, PlayState*
     distanceFromTargetPos = Math_Vec3f_StepTo(&this->actor.world.pos, &targetPos, 10.0f);
     distanceFromTargetAngle = Math_SmoothStepToS(&this->actor.shape.rot.y, player->actor.shape.rot.y, 1, 0x1770, 0x64);
     this->actor.world.rot.y = this->actor.shape.rot.y;
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         distanceFromTargetYOffset = Math_SmoothStepToF(&this->actor.shape.yOffset, -1500.0f, 1.0f, 150.0f, 0.0f);
     }
 
@@ -1063,8 +1070,8 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_ZORA_MAGIC:
-                if (this->actionFunc != EnTalkGibud_Grab &&
-                    (this->actionFunc != EnTalkGibud_Stunned || this->stunTimer == 0)) {
+                if ((this->actionFunc != EnTalkGibud_Grab) &&
+                    ((this->actionFunc != EnTalkGibud_Stunned) || (this->stunTimer == 0))) {
                     this->drawDmgEffAlpha = 1.0f;
                     this->drawDmgEffTimer = 40;
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_SMALL;
@@ -1073,9 +1080,12 @@ void EnTalkGibud_UpdateDamage(EnTalkGibud* this, PlayState* play) {
                 break;
 
             case EN_TALK_GIBUD_DMGEFF_STUN:
-                if ((this->actionFunc != EnTalkGibud_Stunned) || this->stunTimer == 0) {
+                if ((this->actionFunc != EnTalkGibud_Stunned) || (this->stunTimer == 0)) {
                     EnTalkGibud_SetupStunned(this);
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -1114,7 +1124,7 @@ void EnTalkGibud_MoveGrabbedPlayerAwayFromWall(EnTalkGibud* this, PlayState* pla
     Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 35.0f,
                             UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
                                 UPDBGCHECKINFO_FLAG_10);
-    if (this->actionFunc == EnTalkGibud_Grab && this->grabState == EN_TALK_GIBUD_GRAB_START &&
+    if ((this->actionFunc == EnTalkGibud_Grab) && (this->grabState == EN_TALK_GIBUD_GRAB_START) &&
         (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
         targetPos = player->actor.world.pos;
         targetPos.x += 10.0f * Math_SinS(this->actor.wallYaw);

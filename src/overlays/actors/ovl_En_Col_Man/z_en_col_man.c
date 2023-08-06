@@ -6,6 +6,7 @@
 
 #include "z_en_col_man.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_100000)
@@ -163,7 +164,7 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) {
         if (!this->hasSetRandomValues) {
-            this->actor.world.rot.y = randPlusMinusPoint5Scaled(30000.0f);
+            this->actor.world.rot.y = Rand_CenteredFloat(30000.0f);
             this->actor.speed = 2.0f + BREG(56) + Rand_ZeroFloat(2.0f);
             this->actor.velocity.y = 12.0f + BREG(57) + Rand_ZeroFloat(5.0f);
             this->hasSetRandomValues = true;
@@ -172,9 +173,9 @@ void func_80AFDFB4(EnColMan* this, PlayState* play) {
         }
 
         for (i = 0; i < 2; i++) {
-            velocity.x = randPlusMinusPoint5Scaled(2.0f);
+            velocity.x = Rand_CenteredFloat(2.0f);
             velocity.y = Rand_ZeroFloat(2.0f) + 1.0f;
-            velocity.z = randPlusMinusPoint5Scaled(2.0f);
+            velocity.z = Rand_CenteredFloat(2.0f);
             accel.y = -0.1f;
             accel.z = 0.0f;
             accel.x = 0.0f;
@@ -200,7 +201,7 @@ void func_80AFE25C(EnColMan* this, PlayState* play) {
         if (this->actor.params == EN_COL_MAN_CUTSCENE_BOMB) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.parent->world.pos.x,
                         this->actor.parent->world.pos.y, this->actor.parent->world.pos.z, 0, 0, 0,
-                        CLEAR_TAG_SMALL_EXPLOSION);
+                        CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
         } else {
             EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
                                               this->actor.world.pos.y, this->actor.world.pos.z,

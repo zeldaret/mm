@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bbfall.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
@@ -32,7 +33,7 @@ void EnBbfall_Frozen(EnBbfall* this, PlayState* play);
 typedef enum {
     /* -1 */ BBFALL_BODY_PART_DRAW_STATUS_BROKEN = -1,
     /*  0 */ BBFALL_BODY_PART_DRAW_STATUS_ALIVE,
-    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD,
+    /*  1 */ BBFALL_BODY_PART_DRAW_STATUS_DEAD
 } EnBbfallBodyPartDrawStatus;
 
 ActorInit En_Bbfall_InitVars = {
@@ -102,7 +103,7 @@ typedef enum {
     /* 0x3 */ EN_BBFALL_DMGEFF_ICE_ARROW = 0x3,
     /* 0x4 */ EN_BBFALL_DMGEFF_LIGHT_ARROW,
     /* 0x5 */ EN_BBFALL_DMGEFF_ZORA_MAGIC,
-    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE,
+    /* 0xE */ EN_BBFALL_DMGEFF_HOOKSHOT = 0xE
 } EnBbfallDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -152,7 +153,7 @@ static InitChainEntry sInitChain[] = {
  * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
  * limb is not part of the bodyParts arrays.
  */
-static s8 sLimbIndexToBodyPartsIndex[] = {
+static s8 sLimbIndexToBodyPartsIndex[BUBBLE_LIMB_MAX] = {
     -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
 };
 
@@ -226,7 +227,7 @@ void EnBbfall_PlaySfx(EnBbfall* this) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLE_MOUTH);
     }
 
-    func_800B9010(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BUBLEFALL_FIRE - SFX_FLAG);
 }
 
 /**
@@ -340,7 +341,7 @@ void EnBbfall_Fly(EnBbfall* this, PlayState* play) {
             // Bounce upwards off the ground
             this->actor.velocity.y *= -1.2f;
             this->actor.velocity.y = CLAMP(this->actor.velocity.y, 8.0f, 12.0f);
-            this->actor.shape.rot.y += (s16)randPlusMinusPoint5Scaled(73728.0f);
+            this->actor.shape.rot.y += (s16)(s32)Rand_CenteredFloat(0x12000);
         }
 
         this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -571,7 +572,8 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
                             this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }
     } else {
@@ -648,7 +650,7 @@ void EnBbfall_Update(Actor* thisx, PlayState* play) {
                 this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.2f;
                 this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.4f);
             } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.4f, 0.01f)) {
-                func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+                Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
             }
         }
     }

@@ -101,8 +101,8 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 sceneId;
-    /* 0x02 */ u8 index;
+    /* 0x0 */ s16 sceneId;
+    /* 0x2 */ u8 index;
 } ShutterSceneInfo; // size = 0x4
 
 ShutterSceneInfo D_808A2258[] = {
@@ -115,9 +115,9 @@ ShutterSceneInfo D_808A2258[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 dungeonSceneId;
-    /* 0x02 */ s16 bossSceneId;
-    /* 0x04 */ u8 index;
+    /* 0x0 */ s16 dungeonSceneId;
+    /* 0x2 */ s16 bossSceneId;
+    /* 0x4 */ u8 index;
 } BossDoorInfo; // size = 0x6
 
 BossDoorInfo D_808A22A0[] = {
@@ -348,7 +348,7 @@ void func_808A1090(DoorShutter* this, PlayState* play) {
         if (this->unk_166 != 0) {
             Flags_SetSwitch(play, DOORSHUTTER_GET_7F(&this->slidingDoor.dyna.actor));
             if (this->doorType != 5) {
-                gSaveContext.save.saveInfo.inventory.dungeonKeys[gSaveContext.mapIndex]--;
+                DUNGEON_KEY_COUNT(gSaveContext.mapIndex) = DUNGEON_KEY_COUNT(gSaveContext.mapIndex) - 1;
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
             } else {
                 Actor_PlaySfx(&this->slidingDoor.dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
@@ -429,7 +429,7 @@ s32 func_808A1340(DoorShutter* this, PlayState* play) {
         s32 pad;
 
         if (this->unk_163 == 7) {
-            func_800B9010(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_OPEN - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_OPEN - SFX_FLAG);
         }
 
         Lib_Vec3f_TranslateAndRotateY(&this->slidingDoor.dyna.actor.home.pos, this->slidingDoor.dyna.actor.shape.rot.y,
@@ -589,7 +589,7 @@ void func_808A1884(DoorShutter* this, PlayState* play) {
 s32 func_808A1A70(DoorShutter* this) {
     if (this->unk_163 == 7) {
         if (this->unk_163 == 7) {
-            func_800B9010(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_CLOSE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->slidingDoor.dyna.actor, NA_SE_EV_IKANA_DOOR_CLOSE - SFX_FLAG);
         }
 
         Math_StepToF(&this->slidingDoor.dyna.actor.velocity.y, 5.0f, 0.5f);

@@ -6,6 +6,7 @@
 
 #include "z_boss_04.h"
 #include "z64shrink_window.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -324,13 +325,13 @@ void func_809EC568(Boss04* this, PlayState* play) {
             Math_ApproachF(&this->subCamAt.y, this->actor.world.pos.y, 0.5f, 1000.0f);
             Math_ApproachF(&this->subCamAt.z, this->actor.world.pos.z, 0.5f, 1000.0f);
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-                play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
+                Audio_PlaySfx(NA_SE_IT_BIG_BOMB_EXPLOSION);
                 this->unk_6F4 = 15;
                 this->unk_708 = 13;
                 this->unk_704 = 0;
                 this->unk_2DA = 10;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
+                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SPLASH));
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
                 this->subCamAtOscillator = 20;
             }
@@ -439,8 +440,8 @@ void func_809ECD18(Boss04* this, PlayState* play) {
         if (Rand_ZeroOne() < 0.1f) {
             Math_Vec3f_Copy(&this->unk_6C8, &player->actor.world.pos);
         } else {
-            this->unk_6C8.x = randPlusMinusPoint5Scaled(600.0f) + this->unk_6E8;
-            this->unk_6C8.z = randPlusMinusPoint5Scaled(600.0f) + this->unk_6F0;
+            this->unk_6C8.x = Rand_CenteredFloat(600.0f) + this->unk_6E8;
+            this->unk_6C8.z = Rand_CenteredFloat(600.0f) + this->unk_6F0;
         }
     }
 
@@ -480,7 +481,7 @@ void func_809ECF58(Boss04* this, PlayState* play) {
         this->actor.speed = 0.0f;
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-            play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
+            Audio_PlaySfx(NA_SE_IT_BIG_BOMB_EXPLOSION);
             Actor_RequestQuakeAndRumble(&this->actor, play, 15, 10);
             this->unk_6F4 = 15;
             sp3C.x = this->actor.focus.pos.x;
@@ -550,7 +551,7 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
 
     if ((this->unk_1F8 == 2) || (this->unk_1F8 == 5)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+                    this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
     }
 

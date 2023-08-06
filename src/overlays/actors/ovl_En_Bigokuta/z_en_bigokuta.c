@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigokuta.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -436,9 +437,9 @@ void EnBigokuta_PlayDeathEffects(EnBigokuta* this, PlayState* play) {
                 bubblePos.y = this->picto.actor.world.pos.y;
 
                 for (i = 0; i < 20; i++) {
-                    bubbleVel.x = randPlusMinusPoint5Scaled(10.0f);
+                    bubbleVel.x = Rand_CenteredFloat(10.0f);
                     bubbleVel.y = Rand_ZeroFloat(5.5f) + 5.5f;
-                    bubbleVel.z = randPlusMinusPoint5Scaled(10.0f);
+                    bubbleVel.z = Rand_CenteredFloat(10.0f);
                     bubblePos.x = this->picto.actor.world.pos.x + (2.0f * bubbleVel.x);
                     bubblePos.z = this->picto.actor.world.pos.z + (2.0f * bubbleVel.z);
 
@@ -501,7 +502,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
                 this->drawDmgEffAlpha = 4.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
                             this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
 
@@ -552,7 +553,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
-            func_800B9010(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -563,11 +564,11 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         EnBigokuta* this = THIS;
         s32 envColor;
         s16 rotX;
-        f32 lastFrame;
+        f32 endFrame;
 
         if (this->actionFunc == EnBigokuta_PlayDeathEffects) {
-            lastFrame = Animation_GetLastFrame(&gBigOctoDeathAnim);
-            envColor = ((255.0f / lastFrame) * (lastFrame - this->skelAnime.curFrame));
+            endFrame = Animation_GetLastFrame(&gBigOctoDeathAnim);
+            envColor = ((255.0f / endFrame) * (endFrame - this->skelAnime.curFrame));
         } else {
             envColor = 255;
         }
@@ -604,7 +605,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
                              MTXMODE_APPLY);
             }
         } else if (this->actionFunc == EnBigokuta_SuckInPlayer) {
-            f32 sin = sin_rad(this->timer * (M_PI / 3.0f)) * 0.5f;
+            f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
 
             Matrix_Scale(((this->timer * (2 / 90.0f)) * (0.5f + sin)) + 1.0f,
                          ((this->timer * (2 / 90.0f)) * (0.5f - sin)) + 1.0f, 1.0f - ((this->timer * 0.3f) / 9.0f),
@@ -613,7 +614,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
             if (this->timer == 0) {
                 Matrix_Scale(0.9f, 0.9f, 1.15f, MTXMODE_APPLY);
             } else if (this->timer > 0) {
-                f32 sin = sin_rad(this->timer * (M_PI / 3.0f)) * 0.5f;
+                f32 sin = Math_SinF(this->timer * (M_PI / 3.0f)) * 0.5f;
 
                 Matrix_Scale(((0.5f + sin) * 0.2f) + 1.0f, ((0.5f - sin) * 0.2f) + 1.0f, 0.7f, MTXMODE_APPLY);
             } else {
@@ -627,7 +628,7 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 }
 
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static s8 D_80AC45BC[] = {
+    static s8 D_80AC45BC[BIGOKUTA_LIMB_MAX] = {
         -1, -1, -1, 0, -1, 1, -1, 2, -1, 3, 8, 4, -1, 5, -1, -1, -1, -1, 6, 7,
     };
     static Vec3f D_80AC45D0[] = {
@@ -657,6 +658,7 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
     Gfx* gfx;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if ((this->actionFunc != EnBigokuta_PlayDeathEffects) || (this->timer != 0)) {
         Scene_SetRenderModeXlu(play, 0, 1);
         gfx = POLY_OPA_DISP;

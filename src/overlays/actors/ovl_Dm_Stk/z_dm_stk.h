@@ -12,7 +12,7 @@ typedef void (*DmStkActionFunc)(struct DmStk*, PlayState*);
 
 typedef enum {
     /* 0 */ DM_STK_TYPE_SKULL_KID,
-    /* 1 */ DM_STK_TYPE_MAJORAS_MASK,
+    /* 1 */ DM_STK_TYPE_MAJORAS_MASK
 } DmStkType;
 
 typedef struct DmStk {

@@ -55,7 +55,7 @@ void func_80A61334(EnDyExtra* this, PlayState* play) {
         this->actor.velocity.y = 0.0f;
     }
 
-    if (this->unk14C == 0 && this->unk14A != 0) {
+    if ((this->unk14C == 0) && (this->unk14A != 0)) {
         this->unk14C = 0x32;
         this->actionFunc = func_80A613C8;
     }
@@ -64,7 +64,7 @@ void func_80A61334(EnDyExtra* this, PlayState* play) {
 void func_80A613C8(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
-    if (this->unk14C == 0 || this->unk150 < 0.02f) {
+    if ((this->unk14C == 0) || (this->unk150 < 0.02f)) {
         Actor_Kill(&this->actor);
         return;
     }

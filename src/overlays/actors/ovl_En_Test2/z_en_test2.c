@@ -72,7 +72,7 @@ void EnTest2_Init(Actor* thisx, PlayState* play) {
     EnTest2* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if ((this->actor.params == EN_TEST2_PARAMS_B) || (this->actor.params == EN_TEST2_PARAMS_C)) {
+    if ((this->actor.params == EN_TEST2_PARAM_B) || (this->actor.params == EN_TEST2_PARAM_C)) {
         this->actor.flags |= ACTOR_FLAG_20;
     }
 }

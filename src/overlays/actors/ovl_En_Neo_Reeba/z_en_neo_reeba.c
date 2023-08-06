@@ -57,7 +57,7 @@ typedef enum {
     /* 0xC */ EN_NEO_REEBA_DMGEFF_HOOKSHOT = 0xC, // No damage, used only for hookshot
     /* 0xD */ EN_NEO_REEBA_DMGEFF_ELECTRIC_STUN,  // Electric effects, frozen in place
     /* 0xE */ EN_NEO_REEBA_DMGEFF_NONE,           // Normal hit
-    /* 0xF */ EN_NEO_REEBA_DMGEFF_SHATTER,        // Normal hit that can break ice if leever is frozen
+    /* 0xF */ EN_NEO_REEBA_DMGEFF_SHATTER         // Normal hit that can break ice if leever is frozen
 } EnNeoReebaDamageEffect;
 
 static DamageTable sDamageTable = {

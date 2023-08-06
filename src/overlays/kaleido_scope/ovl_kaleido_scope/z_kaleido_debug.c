@@ -37,7 +37,7 @@ typedef struct {
     /* 0x0 */ s16 screenX;
     /* 0x2 */ s16 screenY;
     /* 0x4 */ s16 width;
-} SectionPosition; // size = 0x6;
+} SectionPosition; // size = 0x6
 
 // clang-format off
 SectionPosition sSectionPositions[] = {
@@ -97,7 +97,7 @@ SectionPosition sSectionPositions[] = {
 
 s16 sSlotItems[] = {
     // Items Row 1
-    ITEM_OCARINA,
+    ITEM_OCARINA_OF_TIME,
     ITEM_BOW,
     ITEM_ARROW_FIRE,
     ITEM_ARROW_ICE,
@@ -106,14 +106,14 @@ s16 sSlotItems[] = {
     // Items Row 2
     ITEM_BOMB,
     ITEM_BOMBCHU,
-    ITEM_STICK,
-    ITEM_NUT,
+    ITEM_DEKU_STICK,
+    ITEM_DEKU_NUT,
     ITEM_MAGIC_BEANS,
     ITEM_SLINGSHOT,
     // Items Row 3
     ITEM_POWDER_KEG,
-    ITEM_PICTO_BOX,
-    ITEM_LENS,
+    ITEM_PICTOGRAPH_BOX,
+    ITEM_LENS_OF_TRUTH,
     ITEM_HOOKSHOT,
     ITEM_SWORD_GREAT_FAIRY,
     ITEM_LONGSHOT,
@@ -285,7 +285,7 @@ void KaleidoScope_DrawInventoryEditorText(Gfx** gfxp) {
     GfxPrint_SetPos(&printer, 23, 22);
     GfxPrint_Printf(&printer, "%s", "ｾｲ");
 
-    // Life (double defence)
+    // Life (double defense)
     GfxPrint_SetPos(&printer, 4, 25);
     GfxPrint_Printf(&printer, "%s", "ｲ");
     GfxPrint_SetPos(&printer, 4, 26);
@@ -427,7 +427,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         for (j = 0, rectLeft = 44; j < 6; j++, slot++, rectLeft += 23) {
             counterDigits[3] = 0;
             counterDigits[2] = 0;
-            if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_NUT)) || (slot == SLOT_POWDER_KEG) ||
+            if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_DEKU_NUT)) || (slot == SLOT_POWDER_KEG) ||
                 (slot == SLOT_MAGIC_BEANS)) {
                 counterDigits[3] = AMMO(gAmmoItems[slot]);
             } else if ((slot == SLOT_TRADE_DEED) || (slot == SLOT_TRADE_KEY_MAMA) || (slot == SLOT_TRADE_COUPLE)) {
@@ -601,7 +601,7 @@ void KaleidoScope_DrawInventoryEditor(PlayState* play) {
         counterDigits[1] += 21;
     }
 
-    // Double Defence
+    // Double Defense
     KaleidoScope_DrawDigit(play, gSaveContext.save.saveInfo.playerData.doubleDefense, 44, 202);
 
     // Magic
@@ -778,8 +778,8 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
             if (sCurSection < INV_EDITOR_SECTION_BOSS) {
                 // Items
                 slot = sCurSection - INV_EDITOR_SECTION_ITEMS;
-                if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_NUT)) || (slot == SLOT_POWDER_KEG) ||
-                    (slot == SLOT_MAGIC_BEANS)) {
+                if ((slot == SLOT_BOW) || ((slot >= SLOT_BOMB) && (slot <= SLOT_DEKU_NUT)) ||
+                    (slot == SLOT_POWDER_KEG) || (slot == SLOT_MAGIC_BEANS)) {
                     if (CHECK_BTN_ALL(input->press.button, BTN_CUP)) {
                         Inventory_DeleteItem(gAmmoItems[slot], SLOT(gAmmoItems[slot]));
                         AMMO(gAmmoItems[slot]) = 0;
@@ -805,18 +805,18 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                         Inventory_DeleteItem(value, slot);
                     } else if (slot == SLOT_TRADE_DEED) {
                         if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                            if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
-                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_MOON_TEAR;
-                            } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_MOON_TEAR) &&
-                                       (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_MOUNTAIN)) {
-                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) + 1;
+                            if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_NONE) {
+                                gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_MOONS_TEAR;
+                            } else if ((INV_CONTENT(ITEM_MOONS_TEAR) >= ITEM_MOONS_TEAR) &&
+                                       (INV_CONTENT(ITEM_MOONS_TEAR) <= ITEM_DEED_MOUNTAIN)) {
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOONS_TEAR) + 1;
                             }
                         } else if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                            if (INV_CONTENT(ITEM_MOON_TEAR) == ITEM_NONE) {
+                            if (INV_CONTENT(ITEM_MOONS_TEAR) == ITEM_NONE) {
                                 gSaveContext.save.saveInfo.inventory.items[slot] = ITEM_DEED_OCEAN;
-                            } else if ((INV_CONTENT(ITEM_MOON_TEAR) >= ITEM_DEED_LAND) &&
-                                       (INV_CONTENT(ITEM_MOON_TEAR) <= ITEM_DEED_OCEAN)) {
-                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOON_TEAR) - 1;
+                            } else if ((INV_CONTENT(ITEM_MOONS_TEAR) >= ITEM_DEED_LAND) &&
+                                       (INV_CONTENT(ITEM_MOONS_TEAR) <= ITEM_DEED_OCEAN)) {
+                                gSaveContext.save.saveInfo.inventory.items[slot] = INV_CONTENT(ITEM_MOONS_TEAR) - 1;
                             }
                         }
                     } else if (slot == SLOT_TRADE_KEY_MAMA) {
@@ -1048,16 +1048,13 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 // Dungeon Items
                 slot = sCurSection - INV_EDITOR_SECTION_DUNGEON_ITEMS;
                 if (CHECK_BTN_ALL(input->press.button, BTN_CLEFT)) {
-                    // Map
-                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 4;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_MAP);
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CDOWN)) {
-                    // Compass
-                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 2;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_COMPASS);
                 }
                 if (CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
-                    // Boss Key
-                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= 1;
+                    gSaveContext.save.saveInfo.inventory.dungeonItems[slot] ^= (1 << DUNGEON_BOSS_KEY);
                 }
 
             } else if (sCurSection < INV_EDITOR_SECTION_DOUBLE_DEFENSE) {
@@ -1077,7 +1074,7 @@ void KaleidoScope_UpdateInventoryEditor(PlayState* play) {
                 }
 
             } else {
-                // Double Defence
+                // Double Defense
                 if (CHECK_BTN_ALL(input->press.button, BTN_CUP) || CHECK_BTN_ALL(input->press.button, BTN_CLEFT) ||
                     CHECK_BTN_ALL(input->press.button, BTN_CDOWN) || CHECK_BTN_ALL(input->press.button, BTN_CRIGHT)) {
                     gSaveContext.save.saveInfo.playerData.doubleDefense ^= 1;

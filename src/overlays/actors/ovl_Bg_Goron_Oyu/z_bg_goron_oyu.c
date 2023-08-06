@@ -74,7 +74,7 @@ void func_80B40160(BgGoronOyu* this, PlayState* play) {
         func_80B40080(this);
     }
 
-    Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_AtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80B401F8(BgGoronOyu* this, PlayState* play) {

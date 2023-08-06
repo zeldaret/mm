@@ -62,17 +62,17 @@ void func_80C2590C(EnInvisibleRuppe* this, PlayState* play) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         switch (INVISIBLERUPPE_GET_3(&this->actor)) {
             case 0:
-                play_sound(NA_SE_SY_GET_RUPY);
+                Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_GREEN);
                 break;
 
             case 1:
-                play_sound(NA_SE_SY_GET_RUPY);
+                Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_BLUE);
                 break;
 
             case 2:
-                play_sound(NA_SE_SY_GET_RUPY);
+                Audio_PlaySfx(NA_SE_SY_GET_RUPY);
                 Item_DropCollectible(play, &this->actor.world.pos, 0x8000 | ITEM00_RUPEE_RED);
                 break;
         }

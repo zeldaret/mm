@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_en_thiefbird.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000)
 
@@ -193,12 +194,12 @@ void func_80C10984(EnThiefbird* this, s32 arg1) {
     for (i = 0; i < ARRAY_COUNT(this->unk_3F0); i++, ptr++) {
         if (ptr->unk_22 == 0) {
             ptr->unk_22 = (s32)Rand_ZeroFloat(20.0f) + 40;
-            ptr->unk_00.x = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.x;
-            ptr->unk_00.y = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.y;
-            ptr->unk_00.z = randPlusMinusPoint5Scaled(30.0f) + this->actor.focus.pos.z;
-            ptr->unk_0C.x = randPlusMinusPoint5Scaled(5.0f);
+            ptr->unk_00.x = Rand_CenteredFloat(30.0f) + this->actor.focus.pos.x;
+            ptr->unk_00.y = Rand_CenteredFloat(30.0f) + this->actor.focus.pos.y;
+            ptr->unk_00.z = Rand_CenteredFloat(30.0f) + this->actor.focus.pos.z;
+            ptr->unk_0C.x = Rand_CenteredFloat(5.0f);
             ptr->unk_0C.y = Rand_ZeroOne() + 2.0f;
-            ptr->unk_0C.z = randPlusMinusPoint5Scaled(5.0f);
+            ptr->unk_0C.z = Rand_CenteredFloat(5.0f);
             ptr->unk_1C = Rand_ZeroFloat(1000.0f);
             ptr->unk_18 = (Rand_ZeroFloat(20.0f) + 40.0f) * 0.0001f;
             ptr->unk_1E = (s32)Rand_Next() >> 0x10;
@@ -231,7 +232,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         }
     }
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         phi_a3 = GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD);
         if (INV_CONTENT(ITEM_SWORD_GREAT_FAIRY) == ITEM_SWORD_GREAT_FAIRY) {
             phi_a3 += 4;
@@ -265,7 +266,7 @@ s32 func_80C10B0C(EnThiefbird* this, PlayState* play) {
         itemId1 = phi_a3 + (ITEM_SWORD_KOKIRI - 1);
         if (phi_a3 == 4) {
             Inventory_DeleteItem(ITEM_SWORD_GREAT_FAIRY, SLOT_SWORD_GREAT_FAIRY);
-            this->unk_3E8 = gTakkuriStolenGreatFairySwordDL;
+            this->unk_3E8 = gTakkuriStolenGreatFairysSwordDL;
             itemId1 = ITEM_SWORD_GREAT_FAIRY;
         } else {
             CUR_FORM_EQUIP(EQUIP_SLOT_B) = ITEM_NONE;
@@ -949,7 +950,8 @@ void func_80C12B1C(EnThiefbird* this, PlayState* play) {
             if (i != ARRAY_COUNT(this->colliderElements)) {
                 sph = &this->collider.elements[i];
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sph->info.bumper.hitPos.x,
-                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            sph->info.bumper.hitPos.y, sph->info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         } else if (this->actor.colChkInfo.damageEffect == 2) {
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
@@ -1037,7 +1039,7 @@ void EnThiefbird_Update(Actor* thisx, PlayState* play2) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.5f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.5f, 0.0125f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 

@@ -48,6 +48,8 @@
  * - Effect Update/Draw
  * - Seaweed
  */
+
+#include "prevent_bss_reordering.h"
 #include "z_boss_03.h"
 #include "overlays/actors/ovl_Door_Warp1/z_door_warp1.h"
 #include "overlays/actors/ovl_En_Water_Effect/z_en_water_effect.h"
@@ -121,7 +123,7 @@ GyorgEffect sGyorgEffects[GYORG_EFFECT_COUNT];
 Boss03* sGyorgBossInstance;
 
 void Boss03_PlayUnderwaterSfx(Vec3f* projectedPos, u16 sfxId) {
-    func_8019F420(projectedPos, sfxId);
+    Audio_PlaySfx_Underwater(projectedPos, sfxId);
 }
 
 /* Start of SpawnEffect section */
@@ -162,8 +164,8 @@ void Boss03_SpawnEffectDroplet(PlayState* play, Vec3f* pos) {
             eff->unk_34.y = 0.0f;
             eff->unk_34.z = Rand_ZeroFloat(2 * M_PI);
             eff->unk_02 = Rand_ZeroFloat(100.0f);
-            eff->velocity.x = randPlusMinusPoint5Scaled(25.0f);
-            eff->velocity.z = randPlusMinusPoint5Scaled(25.0f);
+            eff->velocity.x = Rand_CenteredFloat(25.0f);
+            eff->velocity.z = Rand_CenteredFloat(25.0f);
             return;
         }
 
@@ -425,17 +427,17 @@ void Boss03_SpawnDust(Boss03* this, PlayState* play) {
         Vec3f accel;
 
         for (i = 0; i < 5; i++) {
-            velocity.x = randPlusMinusPoint5Scaled(10.0f);
+            velocity.x = Rand_CenteredFloat(10.0f);
             velocity.y = Rand_ZeroFloat(2.0f) + 2.0f;
-            velocity.z = randPlusMinusPoint5Scaled(10.0f);
+            velocity.z = Rand_CenteredFloat(10.0f);
 
             accel.y = -0.075f;
             accel.z = 0.0f;
             accel.x = 0.0f;
 
             pos.y = Rand_ZeroFloat(20.0f) + 5.0f;
-            pos.z = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.z;
-            pos.x = randPlusMinusPoint5Scaled(150.0f) + this->insideJawPos.x;
+            pos.z = Rand_CenteredFloat(150.0f) + this->insideJawPos.z;
+            pos.x = Rand_CenteredFloat(150.0f) + this->insideJawPos.x;
 
             func_800B0EB0(play, &pos, &velocity, &accel, &sGyorgDustPrimColor, &sGyorgDustEnvColor,
                           Rand_ZeroFloat(200.0f) + 400.0f, 10, Rand_ZeroFloat(10.0f) + 25.0f);
@@ -597,9 +599,9 @@ void func_809E34B8(Boss03* this, PlayState* play) {
     if (this->workTimer[WORK_TIMER_UNK2_A] == 0) {
         if ((sqrtf(SQ(xDiff) + SQ(zDiff)) < 100.0f) || (this->workTimer[WORK_TIMER_UNK0_A] == 0)) {
             for (i = 0; i < 200; i++) {
-                this->unk_268.x = randPlusMinusPoint5Scaled(2500.0f);
+                this->unk_268.x = Rand_CenteredFloat(2500.0f);
                 this->unk_268.y = Rand_ZeroFloat(100.0f) + 150.0f;
-                this->unk_268.z = randPlusMinusPoint5Scaled(2500.0f);
+                this->unk_268.z = Rand_CenteredFloat(2500.0f);
 
                 xDiff = this->unk_268.x - this->actor.world.pos.x;
                 zDiff = this->unk_268.z - this->actor.world.pos.z;
@@ -686,7 +688,7 @@ void Boss03_ChasePlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
         }
 
         func_809E344C(this, play);
@@ -782,7 +784,7 @@ void Boss03_CatchPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
         }
 
@@ -910,7 +912,7 @@ void Boss03_ChewPlayer(Boss03* this, PlayState* play) {
         if (&this->actor == player->actor.parent) {
             player->unk_AE8 = 101;
             player->actor.parent = NULL;
-            player->csMode = PLAYER_CSMODE_0;
+            player->csMode = PLAYER_CSMODE_NONE;
             Play_DisableMotionBlur();
             func_800B8D50(play, NULL, 10.0f, this->actor.shape.rot.y, 0.0f, 0x20);
         }
@@ -1051,7 +1053,7 @@ void Boss03_Charge(Boss03* this, PlayState* play) {
 
         // Attack platform
         if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
-            play_sound(NA_SE_IT_BIG_BOMB_EXPLOSION);
+            Audio_PlaySfx(NA_SE_IT_BIG_BOMB_EXPLOSION);
             Actor_RequestQuakeAndRumble(&this->actor, play, 20, 15);
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_WATER_EFFECT, 0.0f, this->waterHeight, 0.0f, 0, 0, 0x96,
                         ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE);
@@ -1100,9 +1102,9 @@ void Boss03_JumpOverPlatform(Boss03* this, PlayState* play) {
         Vec3f sp30;
 
         for (i = 0; i < 3; i++) {
-            sp30.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(150.0f);
+            sp30.x = this->actor.world.pos.x + Rand_CenteredFloat(150.0f);
             sp30.y = this->actor.world.pos.y;
-            sp30.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(150.0f);
+            sp30.z = this->actor.world.pos.z + Rand_CenteredFloat(150.0f);
             Boss03_SpawnEffectDroplet(play, &sp30);
         }
     }
@@ -1337,9 +1339,9 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
                     if (1) {}
 
                     for (i = 0; i < 3; i++) {
-                        effectPos.x = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.x;
+                        effectPos.x = Rand_CenteredFloat(150.0f) + this->actor.world.pos.x;
                         effectPos.y = this->actor.world.pos.y;
-                        effectPos.z = randPlusMinusPoint5Scaled(150.0f) + this->actor.world.pos.z;
+                        effectPos.z = Rand_CenteredFloat(150.0f) + this->actor.world.pos.z;
 
                         Boss03_SpawnEffectDroplet(play, &effectPos);
                     }
@@ -1399,9 +1401,9 @@ void Boss03_IntroCutscene(Boss03* this, PlayState* play) {
         this->subCamEye = this->actor.world.pos;
 
         for (i = 0; i < bubblesToSpawnNum; i++) {
-            effectPos.x = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.x;
-            effectPos.y = (randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.y) - 150.0f;
-            effectPos.z = randPlusMinusPoint5Scaled(100.0f) + this->subCamAt.z;
+            effectPos.x = Rand_CenteredFloat(100.0f) + this->subCamAt.x;
+            effectPos.y = (Rand_CenteredFloat(100.0f) + this->subCamAt.y) - 150.0f;
+            effectPos.z = Rand_CenteredFloat(100.0f) + this->subCamAt.z;
 
             Boss03_SpawnEffectBubble(play, &effectPos);
         }
@@ -1573,17 +1575,15 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
                     this->actor.speed = ((Rand_ZeroFloat(5.0f) + 2.5f) * sp64) + 2.5f;
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetX =
-                            ((s16)randPlusMinusPoint5Scaled(500.0f) + this->shapeRotTargetX) + 0x8000;
+                        this->shapeRotTargetX = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetX) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetZ =
-                            ((s16)randPlusMinusPoint5Scaled(500.0f) + this->shapeRotTargetZ) + 0x8000;
+                        this->shapeRotTargetZ = ((s16)(s32)Rand_CenteredFloat(0x1F4) + this->shapeRotTargetZ) + 0x8000;
                     }
 
                     if (Rand_ZeroOne() < 0.5f) {
-                        this->shapeRotTargetY = Rand_ZeroFloat(65536.0f);
+                        this->shapeRotTargetY = Rand_ZeroFloat(0x10000);
                     }
 
                     this->actor.world.rot.y = Math_Atan2S_XY(-this->actor.world.pos.z, -this->actor.world.pos.x);
@@ -1600,9 +1600,9 @@ void Boss03_DeathCutscene(Boss03* this, PlayState* play) {
             sp4C = 150.0f * sp64;
 
             for (i = 0; i < 1; i++) {
-                sp78.x = randPlusMinusPoint5Scaled(sp4C) + this->actor.world.pos.x;
+                sp78.x = Rand_CenteredFloat(sp4C) + this->actor.world.pos.x;
                 sp78.y = this->actor.world.pos.y;
-                sp78.z = randPlusMinusPoint5Scaled(sp4C) + this->actor.world.pos.z;
+                sp78.z = Rand_CenteredFloat(sp4C) + this->actor.world.pos.z;
                 Boss03_SpawnEffectDroplet(play, &sp78);
             }
 
@@ -1754,7 +1754,7 @@ void Boss03_SetupStunned(Boss03* this, PlayState* play) {
     if (&this->actor == player->actor.parent) {
         player->unk_AE8 = 101;
         player->actor.parent = NULL;
-        player->csMode = PLAYER_CSMODE_0;
+        player->csMode = PLAYER_CSMODE_NONE;
         Play_DisableMotionBlur();
     }
 
@@ -1774,7 +1774,7 @@ void Boss03_Stunned(Boss03* this, PlayState* play) {
         this->actor.gravity = -2.0f;
         Actor_MoveWithGravity(&this->actor);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-            play_sound(NA_SE_IT_WALL_HIT_HARD);
+            Audio_PlaySfx(NA_SE_IT_WALL_HIT_HARD);
             Actor_RequestQuakeAndRumble(&this->actor, play, 10, 10);
         }
     } else {
@@ -1906,7 +1906,7 @@ void Boss03_UpdateCollision(Boss03* this, PlayState* play) {
                     if (&this->actor == player->actor.parent) {
                         player->unk_AE8 = 101;
                         player->actor.parent = NULL;
-                        player->csMode = PLAYER_CSMODE_0;
+                        player->csMode = PLAYER_CSMODE_NONE;
                         Play_DisableMotionBlur();
                     }
 
@@ -2073,9 +2073,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
 
     if ((this->unk_240 % 2) == 0) {
         for (i = 0; i < this->bubbleEffectSpawnCount; i++) {
-            bubblePos.x = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.x;
-            bubblePos.y = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.y;
-            bubblePos.z = randPlusMinusPoint5Scaled(100.0f) + this->actor.world.pos.z;
+            bubblePos.x = Rand_CenteredFloat(100.0f) + this->actor.world.pos.x;
+            bubblePos.y = Rand_CenteredFloat(100.0f) + this->actor.world.pos.y;
+            bubblePos.z = Rand_CenteredFloat(100.0f) + this->actor.world.pos.z;
 
             Boss03_SpawnEffectBubble(play, &bubblePos);
         }
@@ -2106,9 +2106,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
         if (this->wetSpotEffectSpawnCount != 0) {
             this->wetSpotEffectSpawnCount--;
 
-            wetSpotPos.x = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.x;
+            wetSpotPos.x = Rand_CenteredFloat(50.0f) + player->actor.world.pos.x;
             wetSpotPos.y = PLATFORM_HEIGHT;
-            wetSpotPos.z = randPlusMinusPoint5Scaled(50.0f) + player->actor.world.pos.z;
+            wetSpotPos.z = Rand_CenteredFloat(50.0f) + player->actor.world.pos.z;
             Boss03_SpawnEffectWetSpot(play, &wetSpotPos);
         }
     }
@@ -2116,9 +2116,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
     this->prevPlayerPos = player->actor.world.pos;
 
     if (this->waterHeight < this->actor.world.pos.y) {
-        func_8019F540(0);
+        Audio_SetSfxUnderwaterReverb(false);
     } else {
-        func_8019F540(1);
+        Audio_SetSfxUnderwaterReverb(true);
     }
 
     if (this->unk_280 != 0) {
@@ -2131,9 +2131,9 @@ void Boss03_Update(Actor* thisx, PlayState* play2) {
         for (j = 0, i = 0; i < 20; j++) {
             Matrix_RotateYF(yRot, MTXMODE_NEW);
             Matrix_MultVecZ(Rand_ZeroFloat(60.000004f) + 312.0f, &dropletPos);
-            dropletPos.x += this->unk_284 + randPlusMinusPoint5Scaled(40.0f);
+            dropletPos.x += this->unk_284 + Rand_CenteredFloat(40.0f);
             dropletPos.y = PLATFORM_HEIGHT;
-            dropletPos.z += this->unk_28C + randPlusMinusPoint5Scaled(40.0f);
+            dropletPos.z += this->unk_28C + Rand_CenteredFloat(40.0f);
 
             if (sqrtf(SQ(dropletPos.x) + SQ(dropletPos.z)) < 355.0f) {
                 Boss03_SpawnEffectDroplet(play, &dropletPos);
