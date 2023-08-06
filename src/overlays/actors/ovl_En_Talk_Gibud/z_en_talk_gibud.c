@@ -788,7 +788,7 @@ void EnTalkGibud_PassiveIdle(EnTalkGibud* this, PlayState* play) {
         EnTalkGibud_SetupTalk(this);
     } else if (this->actor.xzDistToPlayer < 100.0f && !(this->collider.base.acFlags & AC_HIT)) {
         Actor_TrackPlayer(play, &this->actor, &this->headRotation, &this->upperBodyRotation, this->actor.focus.pos);
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     } else {
         Math_SmoothStepToS(&this->headRotation.y, 0, 1, 100, 0);
         Math_SmoothStepToS(&this->upperBodyRotation.y, 0, 1, 100, 0);

@@ -312,7 +312,7 @@ static InitChainEntry sInitChain[] = {
 };
 
 void EnBigslime_Init(Actor* thisx, PlayState* play2) {
-    static s32 isFrogReturnedFlags[] = {
+    static s32 sIsFrogReturnedFlags[] = {
         WEEKEVENTREG_32_40,
         WEEKEVENTREG_32_80,
         WEEKEVENTREG_33_01,
@@ -341,7 +341,7 @@ void EnBigslime_Init(Actor* thisx, PlayState* play2) {
 
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->actor.params);
         }
@@ -1741,10 +1741,10 @@ void EnBigslime_WindupThrowPlayer(EnBigslime* this, PlayState* play) {
                 // loop over x, y, z
                 for (j = 0; j < 3; j++) {
                     // Linearly interpolate dynamicVtx --> staticVtx * (1 - scale * vtxSurfacePerturbation)
-                    dynamicVtx->n.ob[j] += (s16)(
-                        ((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] * this->vtxSurfacePerturbation[i])) -
-                         dynamicVtx->n.ob[j]) *
-                        invWindupPunchTimer);
+                    dynamicVtx->n.ob[j] += (s16)(((staticVtx->n.ob[j] - (s32)(scale * staticVtx->n.ob[j] *
+                                                                              this->vtxSurfacePerturbation[i])) -
+                                                  dynamicVtx->n.ob[j]) *
+                                                 invWindupPunchTimer);
                 }
             } else {
                 // loop over x, y, z

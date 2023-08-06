@@ -4,6 +4,7 @@
  * Description: Player
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
 #include "z64quake.h"
@@ -17,12 +18,20 @@
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "overlays/actors/ovl_En_Boom/z_en_boom.h"
 #include "overlays/actors/ovl_En_Box/z_en_box.h"
+#include "overlays/actors/ovl_En_Dnp/z_en_dnp.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "overlays/actors/ovl_En_Fish/z_en_fish.h"
 #include "overlays/actors/ovl_En_Horse/z_en_horse.h"
 #include "overlays/actors/ovl_En_Ishi/z_en_ishi.h"
+#include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
+#include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 #include "overlays/actors/ovl_En_Test3/z_en_test3.h"
+#include "overlays/actors/ovl_En_Test5/z_en_test5.h"
 #include "overlays/actors/ovl_En_Test7/z_en_test7.h"
 #include "overlays/actors/ovl_En_Torch2/z_en_torch2.h"
+#include "overlays/actors/ovl_En_Zoraegg/z_en_zoraegg.h"
+#include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
 #include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
 
@@ -4290,7 +4299,7 @@ void func_80831990(PlayState* play, Player* this, ItemId item) {
             (itemAction == PLAYER_IA_OCARINA) ||
             ((itemAction > PLAYER_IA_BOTTLE_MIN) && itemAction < PLAYER_IA_MASK_MIN) ||
             ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && (this->talkActor != NULL) &&
-             (this->exchangeItemId > PLAYER_IA_NONE))) {
+             (this->exchangeItemAction > PLAYER_IA_NONE))) {
             if (var_v1) {
                 PlayerTransformation playerForm = (itemAction < PLAYER_IA_MASK_FIERCE_DEITY)
                                                       ? PLAYER_FORM_HUMAN
@@ -5910,12 +5919,12 @@ void func_80835BF8(Vec3f* srcPos, s16 rotY, f32 radius, Vec3f* dstPos) {
     dstPos->z = Math_CosS(rotY) * radius + srcPos->z;
 }
 
-Actor* Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3f* arg3, s32 elfParams) {
-    Vec3f pos;
+Actor* Player_SpawnFairy(PlayState* play, Player* this, Vec3f* translation, Vec3f* pos, s32 fairyParams) {
+    Vec3f spawnPos;
 
-    Player_TranslateAndRotateY(this, translation, arg3, &pos);
+    Player_TranslateAndRotateY(this, translation, pos, &spawnPos);
 
-    return Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, pos.x, pos.y, pos.z, 0, 0, 0, elfParams);
+    return Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0, fairyParams);
 }
 
 f32 func_80835CD8(PlayState* play, Player* this, Vec3f* arg2, Vec3f* pos, CollisionPoly** outPoly, s32* outBgId) {
@@ -6662,7 +6671,7 @@ void func_808379C0(PlayState* play, Player* this) {
 void func_80837B60(PlayState* play, Player* this) {
     Player_SetAction_PreserveMoveFlags(play, this, Player_Action_44, 0);
 
-    this->exchangeItemId = PLAYER_IA_NONE;
+    this->exchangeItemAction = PLAYER_IA_NONE;
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     if (this->actor.textId != 0) {
         Message_StartTextbox(play, this->actor.textId, this->talkActor);
@@ -7182,10 +7191,10 @@ s32 func_80838A90(Player* this, PlayState* play) {
                              ((this->itemAction >= PLAYER_IA_BOTTLE_ZORA_EGG) &&
                               (this->itemAction <= PLAYER_IA_BOTTLE_HYLIAN_LOACH)) ||
                              (this->itemAction > PLAYER_IA_BOTTLE_FAIRY) ||
-                             ((this->talkActor != NULL) && (this->exchangeItemId > PLAYER_IA_NONE) &&
-                              (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
+                             ((this->talkActor != NULL) && (this->exchangeItemAction > PLAYER_IA_NONE) &&
+                              (((this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) &&
                                 (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
-                               ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
+                               ((this->exchangeItemAction != PLAYER_IA_MAGIC_BEANS) &&
                                 (Player_BottleFromIA(this, this->itemAction) > PLAYER_BOTTLE_NONE))))))) {
                     Actor* talkActor;
                     s32 heldItemTemp = this->itemAction;
@@ -7197,12 +7206,12 @@ s32 func_80838A90(Player* this, PlayState* play) {
                     this->itemAction = heldItemTemp;
                     this->csId = CS_ID_NONE;
 
-                    if ((talkActor != NULL) && (((this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) &&
+                    if ((talkActor != NULL) && (((this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) &&
                                                  (this->itemAction == PLAYER_IA_MAGIC_BEANS)) ||
-                                                ((this->exchangeItemId != PLAYER_IA_MAGIC_BEANS) &&
-                                                 (this->exchangeItemId > PLAYER_IA_NONE)))) {
+                                                ((this->exchangeItemAction != PLAYER_IA_MAGIC_BEANS) &&
+                                                 (this->exchangeItemAction > PLAYER_IA_NONE)))) {
                         this->stateFlags1 |= (PLAYER_STATE1_20000000 | PLAYER_STATE1_40);
-                        if (this->exchangeItemId == PLAYER_IA_MAGIC_BEANS) {
+                        if (this->exchangeItemAction == PLAYER_IA_MAGIC_BEANS) {
                             Inventory_ChangeAmmo(ITEM_MAGIC_BEANS, -1);
                             Player_SetAction_PreserveItemAction(play, this, Player_Action_17, 0);
                             this->currentYaw = talkActor->yawTowardsPlayer + 0x8000;
@@ -7231,7 +7240,7 @@ s32 func_80838A90(Player* this, PlayState* play) {
                         this->actor.textId = 0xFE;
                     }
                     this->actor.flags |= ACTOR_FLAG_TALK_REQUESTED;
-                    this->exchangeItemId = this->itemAction;
+                    this->exchangeItemAction = this->itemAction;
                     if (this->unk_AE7 >= 0) {
                         Player_AnimationPlayOnce(play, this, D_8085D1F8[this->unk_AE7]);
                     }
@@ -9916,7 +9925,7 @@ void func_80840770(PlayState* play, Player* this) {
         Player_StopCutscene(this);
         this->csId = play->playerCsIds[PLAYER_CS_ID_REVIVE];
         this->unk_AE8 = 60;
-        Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D2A4, 5);
+        Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D2A4, FAIRY_PARAMS(FAIRY_TYPE_5, false, 0));
         Player_PlaySfx(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
     } else if (play->gameOverCtx.state == GAMEOVER_DEATH_WAIT_GROUND) {
         play->gameOverCtx.state = GAMEOVER_DEATH_FADE_OUT;
@@ -10533,7 +10542,8 @@ void Player_Init(Actor* thisx, PlayState* play) {
     if ((this->actor.draw != NULL) && gSaveContext.save.hasTatl &&
         ((gSaveContext.gameMode == GAMEMODE_NORMAL) || (gSaveContext.gameMode == GAMEMODE_END_CREDITS)) &&
         (play->sceneId != SCENE_SPOT00)) {
-        this->tatlActor = Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, 0);
+        this->tatlActor =
+            Player_SpawnFairy(play, this, &this->actor.world.pos, &D_8085D340, FAIRY_PARAMS(FAIRY_TYPE_0, false, 0));
 
         if (gSaveContext.dogParams != 0) {
             gSaveContext.dogParams |= 0x8000;
@@ -11898,7 +11908,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
             this->talkActorDistance = 0.0f;
         } else {
             this->talkActor = NULL;
-            this->exchangeItemId = PLAYER_IA_NONE;
+            this->exchangeItemAction = PLAYER_IA_NONE;
             this->talkActorDistance = FLT_MAX;
         }
         if (!(this->actor.flags & ACTOR_FLAG_20000000) && (this->unk_AA5 != PLAYER_UNKAA5_5)) {
@@ -16632,14 +16642,14 @@ void Player_Action_65(Player* this, PlayState* play) {
                     this->stateFlags1 &= ~PLAYER_STATE1_20000000;
                     func_8085B28C(play, NULL, PLAYER_CSMODE_93);
                 } else {
-                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) ||
+                    s32 var_a2 = ((this->talkActor != NULL) && (this->exchangeItemAction <= PLAYER_IA_MINUS1)) ||
                                  (this->stateFlags3 & PLAYER_STATE3_20);
 
                     if (var_a2 || (gSaveContext.healthAccumulator == 0)) {
                         Player_StopCutscene(this);
                         if (var_a2) {
                             func_80848250(play, this);
-                            this->exchangeItemId = PLAYER_IA_NONE;
+                            this->exchangeItemAction = PLAYER_IA_NONE;
                             if (!func_80847994(play, this)) {
                                 Player_TalkWithPlayer(play, this->talkActor);
                             }
@@ -16836,21 +16846,23 @@ void Player_Action_67(Player* this, PlayState* play) {
     }
 }
 
+#define BOTTLE_CATCH_PARAMS_ANY -1
+
 struct_8085D798 D_8085D798[] = {
-    { ACTOR_EN_ELF, 2, ITEM_FAIRY, PLAYER_IA_BOTTLE_FAIRY, 0x5E },
-    { ACTOR_EN_FISH, -1, ITEM_FISH, PLAYER_IA_BOTTLE_FISH, 0x62 },
-    { ACTOR_EN_INSECT, -1, ITEM_BUG, PLAYER_IA_BOTTLE_BUG, 0x63 },
-    { ACTOR_EN_MUSHI2, -1, ITEM_BUG, PLAYER_IA_BOTTLE_BUG, 0x63 },
-    { ACTOR_EN_TEST5, 0, ITEM_SPRING_WATER, PLAYER_IA_BOTTLE_SPRING_WATER, 0x67 },
-    { ACTOR_EN_TEST5, 1, ITEM_HOT_SPRING_WATER, PLAYER_IA_BOTTLE_HOT_SPRING_WATER, 0x68 },
-    { ACTOR_BG_GORON_OYU, -1, ITEM_HOT_SPRING_WATER, PLAYER_IA_BOTTLE_HOT_SPRING_WATER, 0x68 },
-    { ACTOR_EN_ZORAEGG, -1, ITEM_ZORA_EGG, PLAYER_IA_BOTTLE_ZORA_EGG, 0x69 },
-    { ACTOR_EN_DNP, -1, ITEM_DEKU_PRINCESS, PLAYER_IA_BOTTLE_DEKU_PRINCESS, 0x5F },
-    { ACTOR_EN_OT, -1, ITEM_SEAHORSE, PLAYER_IA_BOTTLE_SEAHORSE, 0x6E },
-    { ACTOR_OBJ_KINOKO, -1, ITEM_MUSHROOM, PLAYER_IA_BOTTLE_SEAHORSE, 0x6B },
-    { ACTOR_EN_POH, -1, ITEM_POE, PLAYER_IA_BOTTLE_POE, 0x65 },
-    { ACTOR_EN_BIGPO, -1, ITEM_BIG_POE, PLAYER_IA_BOTTLE_BIG_POE, 0x66 },
-    { ACTOR_EN_ELF, 6, ITEM_FAIRY, PLAYER_IA_BOTTLE_FAIRY, 0x5E },
+    { ACTOR_EN_ELF, FAIRY_PARAMS(FAIRY_TYPE_2, false, 0), ITEM_FAIRY, PLAYER_IA_BOTTLE_FAIRY, 0x5E },
+    { ACTOR_EN_FISH, BOTTLE_CATCH_PARAMS_ANY, ITEM_FISH, PLAYER_IA_BOTTLE_FISH, 0x62 },
+    { ACTOR_EN_INSECT, BOTTLE_CATCH_PARAMS_ANY, ITEM_BUG, PLAYER_IA_BOTTLE_BUG, 0x63 },
+    { ACTOR_EN_MUSHI2, BOTTLE_CATCH_PARAMS_ANY, ITEM_BUG, PLAYER_IA_BOTTLE_BUG, 0x63 },
+    { ACTOR_EN_TEST5, ENTEST5_PARAMS(false), ITEM_SPRING_WATER, PLAYER_IA_BOTTLE_SPRING_WATER, 0x67 },
+    { ACTOR_EN_TEST5, ENTEST5_PARAMS(true), ITEM_HOT_SPRING_WATER, PLAYER_IA_BOTTLE_HOT_SPRING_WATER, 0x68 },
+    { ACTOR_BG_GORON_OYU, BOTTLE_CATCH_PARAMS_ANY, ITEM_HOT_SPRING_WATER, PLAYER_IA_BOTTLE_HOT_SPRING_WATER, 0x68 },
+    { ACTOR_EN_ZORAEGG, BOTTLE_CATCH_PARAMS_ANY, ITEM_ZORA_EGG, PLAYER_IA_BOTTLE_ZORA_EGG, 0x69 },
+    { ACTOR_EN_DNP, BOTTLE_CATCH_PARAMS_ANY, ITEM_DEKU_PRINCESS, PLAYER_IA_BOTTLE_DEKU_PRINCESS, 0x5F },
+    { ACTOR_EN_OT, BOTTLE_CATCH_PARAMS_ANY, ITEM_SEAHORSE, PLAYER_IA_BOTTLE_SEAHORSE, 0x6E },
+    { ACTOR_OBJ_KINOKO, BOTTLE_CATCH_PARAMS_ANY, ITEM_MUSHROOM, PLAYER_IA_BOTTLE_SEAHORSE, 0x6B },
+    { ACTOR_EN_POH, BOTTLE_CATCH_PARAMS_ANY, ITEM_POE, PLAYER_IA_BOTTLE_POE, 0x65 },
+    { ACTOR_EN_BIGPO, BOTTLE_CATCH_PARAMS_ANY, ITEM_BIG_POE, PLAYER_IA_BOTTLE_BIG_POE, 0x66 },
+    { ACTOR_EN_ELF, FAIRY_PARAMS(FAIRY_TYPE_6, false, 0), ITEM_FAIRY, PLAYER_IA_BOTTLE_FAIRY, 0x5E },
 };
 
 void Player_Action_68(Player* this, PlayState* play) {
@@ -16875,7 +16887,7 @@ void Player_Action_68(Player* this, PlayState* play) {
                 func_800E0238(Play_GetCamera(play, CAM_ID_MAIN));
 
                 talkActor = this->talkActor;
-                if ((talkActor != NULL) && (this->exchangeItemId <= PLAYER_IA_MINUS1)) {
+                if ((talkActor != NULL) && (this->exchangeItemAction <= PLAYER_IA_MINUS1)) {
                     Player_TalkWithPlayer(play, talkActor);
                 }
             }
@@ -16900,7 +16912,8 @@ void Player_Action_68(Player* this, PlayState* play) {
 
                         for (i = 0; i < ARRAY_COUNT(D_8085D798); i++) {
                             if (((interactRangeActor->id == entry->actorId) &&
-                                 ((entry->actorParams < 0) || (interactRangeActor->params == entry->actorParams)))) {
+                                 ((entry->actorParams <= BOTTLE_CATCH_PARAMS_ANY) ||
+                                  (interactRangeActor->params == entry->actorParams)))) {
                                 break;
                             }
                             entry++;
@@ -16934,17 +16947,17 @@ void Player_Action_69(Player* this, PlayState* play) {
         Player_StopCutscene(this);
         func_80839E74(this, play);
     } else if (PlayerAnimation_OnFrame(&this->skelAnime, 37.0f)) {
-        s32 sp2C = 8;
+        s32 fairyParams = FAIRY_PARAMS(FAIRY_TYPE_8, false, 0);
 
         Player_PlaySfx(this, NA_SE_EV_BOTTLE_CAP_OPEN);
         Player_AnimSfx_PlayVoice(this, NA_SE_VO_LI_AUTO_JUMP);
         if (this->itemAction == PLAYER_IA_BOTTLE_FAIRY) {
             Player_UpdateBottleHeld(play, this, ITEM_BOTTLE, PLAYER_IA_BOTTLE_EMPTY);
             Player_PlaySfx(this, NA_SE_EV_FIATY_HEAL - SFX_FLAG);
-            sp2C = 1;
+            fairyParams = FAIRY_PARAMS(FAIRY_TYPE_1, false, 0);
         }
 
-        Player_SpawnFairy(play, this, &this->leftHandWorld.pos, &D_8085D7EC, sp2C);
+        Player_SpawnFairy(play, this, &this->leftHandWorld.pos, &D_8085D7EC, fairyParams);
     }
 }
 
@@ -16958,17 +16971,17 @@ void Player_Action_70(Player* this, PlayState* play) {
         0x28, // PLAYER_FORM_HUMAN
     };
     static struct_8085D80C D_8085D80C[] = {
-        { ACTOR_EN_FISH, 0 },       // PLAYER_BOTTLE_FISH
-        { ACTOR_OBJ_AQUA, 0 },      // PLAYER_BOTTLE_SPRING_WATER
-        { ACTOR_OBJ_AQUA, 1 },      // PLAYER_BOTTLE_HOT_SPRING_WATER
-        { ACTOR_EN_ZORAEGG, 0x11 }, // PLAYER_BOTTLE_ZORA_EGG
-        { ACTOR_EN_DNP, 1 },        // PLAYER_BOTTLE_DEKU_PRINCESS
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_GOLD_DUST
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_1C
-        { ACTOR_EN_OT, 0x8000 },    // PLAYER_BOTTLE_SEAHORSE
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_MUSHROOM
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_HYLIAN_LOACH
-        { ACTOR_EN_MUSHI2, 0 },     // PLAYER_BOTTLE_BUG
+        { ACTOR_EN_FISH, FISH_PARAMS(ENFISH_0) },                   // PLAYER_BOTTLE_FISH
+        { ACTOR_OBJ_AQUA, AQUA_PARAMS(AQUA_TYPE_COLD) },            // PLAYER_BOTTLE_SPRING_WATER
+        { ACTOR_OBJ_AQUA, AQUA_PARAMS(AQUA_TYPE_HOT) },             // PLAYER_BOTTLE_HOT_SPRING_WATER
+        { ACTOR_EN_ZORAEGG, ZORA_EGG_PARAMS(ZORA_EGG_TYPE_11, 0) }, // PLAYER_BOTTLE_ZORA_EGG
+        { ACTOR_EN_DNP, DEKU_PRINCESS_PARAMS(DEKU_PRINCESS_TYPE_RELEASED_FROM_BOTTLE) }, // PLAYER_BOTTLE_DEKU_PRINCESS
+        { ACTOR_EN_MUSHI2, ENMUSHI2_PARAMS(ENMUSHI2_0) },                                // PLAYER_BOTTLE_GOLD_DUST
+        { ACTOR_EN_MUSHI2, ENMUSHI2_PARAMS(ENMUSHI2_0) },                                // PLAYER_BOTTLE_1C
+        { ACTOR_EN_OT, SEAHORSE_PARAMS(SEAHORSE_TYPE_2, 0, 0) },                         // PLAYER_BOTTLE_SEAHORSE
+        { ACTOR_EN_MUSHI2, ENMUSHI2_PARAMS(ENMUSHI2_0) },                                // PLAYER_BOTTLE_MUSHROOM
+        { ACTOR_EN_MUSHI2, ENMUSHI2_PARAMS(ENMUSHI2_0) },                                // PLAYER_BOTTLE_HYLIAN_LOACH
+        { ACTOR_EN_MUSHI2, ENMUSHI2_PARAMS(ENMUSHI2_0) },                                // PLAYER_BOTTLE_BUG
     };
     static AnimSfxEntry D_8085D838[] = {
         ANIMSFX(ANIMSFX_TYPE_VOICE, 38, NA_SE_VO_LI_AUTO_JUMP, CONTINUE),
@@ -17029,7 +17042,7 @@ void Player_Action_71(Player* this, PlayState* play) {
     func_8083249C(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
-        if (this->exchangeItemId == PLAYER_IA_NONE) {
+        if (this->exchangeItemAction == PLAYER_IA_NONE) {
             Actor* talkActor = this->talkActor;
 
             Player_StopCutscene(this);
@@ -17040,7 +17053,7 @@ void Player_Action_71(Player* this, PlayState* play) {
             }
             Player_TalkWithPlayer(play, talkActor);
         } else {
-            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemId] - 1];
+            GetItemEntry* giEntry = &sGetItemTable[D_8085D1A4[this->exchangeItemAction] - 1];
 
             if (Player_BottleFromIA(this, this->itemAction) <= PLAYER_BOTTLE_NONE) {
                 this->getItemDrawIdPlusOne = ABS_ALT(giEntry->gid);
@@ -20159,7 +20172,7 @@ void Player_TalkWithPlayer(PlayState* play, Actor* actor) {
     }
 
     player->talkActor = actor;
-    player->exchangeItemId = PLAYER_IA_NONE;
+    player->exchangeItemAction = PLAYER_IA_NONE;
     player->targetedActor = actor;
 
     if (actor->textId == 0xFFFF) {
@@ -20267,7 +20280,7 @@ PlayerItemAction func_8085B854(PlayState* play, Player* this, ItemId itemId) {
     Player_AnimationPlayOnce(play, this, &gPlayerAnim_link_normal_give_other);
     this->stateFlags1 |= (PLAYER_STATE1_40 | PLAYER_STATE1_20000000);
     this->getItemDrawIdPlusOne = GID_NONE + 1;
-    this->exchangeItemId = itemAction;
+    this->exchangeItemAction = itemAction;
 
     return itemAction;
 }
