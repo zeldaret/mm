@@ -8,22 +8,22 @@ struct EnMinifrog;
 
 typedef void (*EnMinifrogActionFunc)(struct EnMinifrog*, PlayState*);
 
-#define EN_MINIFROG_IS_RETURNED(thisx) ((((thisx)->params) & 0xF0) >> 4)
+#define EN_FROG_IS_RETURNED(thisx) ((((thisx)->params) & 0xF0) >> 4)
 
 typedef enum {
-    /* 0x00 */ MINIFROG_YELLOW,         // Mountain Village
-    /* 0x01 */ MINIFROG_CYAN,           // Woodfall Temple
-    /* 0x02 */ MINIFROG_PINK,           // Great Bay Temple
-    /* 0x03 */ MINIFROG_BLUE,           // Southern Swamp
-    /* 0x04 */ MINIFROG_WHITE,          // Laundry Pool
-    /* 0xFF */ MINIFROG_INVALID = 0xFF // -1
-} MinifrogType;
+    /* 0x00 */ FROG_YELLOW, // Mountain Village
+    /* 0x01 */ FROG_CYAN, // Woodfall Temple
+    /* 0x02 */ FROG_PINK, // Great Bay Temple
+    /* 0x03 */ FROG_BLUE, // Southern Swamp
+    /* 0x04 */ FROG_WHITE, // Laundry Pool
+    /* 0xFF */ FROG_NONE = 0xFF // -1
+} FrogType;
 
 typedef enum {
-    /* 0 */ MINIFROG_STATE_JUMP,
-    /* 1 */ MINIFROG_STATE_AIR,
-    /* 2 */ MINIFROG_STATE_GROUND
-} MinifrogJumpState;
+    /* 0 */ FROG_STATE_JUMP,
+    /* 1 */ FROG_STATE_AIR,
+    /* 2 */ FROG_STATE_GROUND
+} FrogJumpState;
 
 typedef struct EnMinifrog {
     /* 0x000 */ Actor actor;

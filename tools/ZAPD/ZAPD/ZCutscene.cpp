@@ -231,6 +231,7 @@ CutsceneCommand* ZCutscene::GetCommandOoT(uint32_t id, offset_t currentPtr) cons
 	case 142:
 	case 62:   // CutsceneCommands::SetActorAction9
 	case 143:  // CutsceneCommands::SetActorAction10
+	case 74:
 		return new CutsceneCommand_ActorAction(rawData, currentPtr);
 
 	case 0x0B:
@@ -249,7 +250,6 @@ CutsceneCommand* ZCutscene::GetCommandOoT(uint32_t id, offset_t currentPtr) cons
 	case 0x16:
 	case 0x70:
 	case 0x71:
-	case 0x4A:
 		return new CutsceneCommand_GenericCmd(rawData, currentPtr, cmdID);
 	}
 

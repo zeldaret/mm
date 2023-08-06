@@ -9,7 +9,6 @@
 #include "overlays/actors/ovl_En_Fu_Kago/z_en_fu_kago.h"
 #include "overlays/actors/ovl_Bg_Fu_Kaiten/z_bg_fu_kaiten.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
-#include "objects/object_mu/object_mu.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
@@ -73,13 +72,31 @@ static Vec3f D_80964B0C = { 0.0f, 60.0f, -8.0f };
 static Vec3f D_80964B18 = { 0.0f, 55.0f, 12.0f };
 static Vec3f D_80964B24 = { 0.0f, 60.0f, 0.0f };
 
-static AnimationInfo sAnimationInfo[] = {
+typedef enum {
+    /* 0 */ HONEY_DARLING_ANIM_IDLE,
+    /* 1 */ HONEY_DARLING_ANIM_CUP_CHEEKS,
+    /* 2 */ HONEY_DARLING_ANIM_HUG,
+    /* 3 */ HONEY_DARLING_ANIM_GAME_DANCE,
+    /* 4 */ HONEY_DARLING_ANIM_HOLD_HANDS_MORPH,
+    /* 5 */ HONEY_DARLING_ANIM_HOLD_HANDS,
+    /* 6 */ HONEY_DARLING_ANIM_SURPRISE,
+    /* 7 */ HONEY_DARLING_ANIM_MAX
+} HoneyAndDarlingAnimation;
+
+static AnimationInfo sAnimationInfo[HONEY_DARLING_ANIM_MAX] = {
+    // HONEY_DARLING_ANIM_IDLE
     { &gHoneyAndDarlingIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_CUP_CHEEKS
     { &gHoneyAndDarlingCupCheeksLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_HUG
     { &gHoneyAndDarlingHugLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    // HONEY_DARLING_ANIM_GAME_DANCE
     { &gHoneyAndDarlingGameDanceLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    // HONEY_DARLING_ANIM_HOLD_HANDS_MORPH
     { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },
+    // HONEY_DARLING_ANIM_HOLD_HANDS
     { &gHoneyAndDarlingHoldHandsLoopAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    // HONEY_DARLING_ANIM_SURPRISE
     { &gHoneyAndDarlingSurpiseAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
 };
 
@@ -371,7 +388,7 @@ void func_8096209C(EnFu* this, PlayState* play) {
 }
 
 void func_809622FC(EnFu* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_CUP_CHEEKS);
     this->actionFunc = func_80962340;
 }
 
@@ -418,9 +435,9 @@ void func_80962340(EnFu* this, PlayState* play) {
         }
         func_809628BC(this);
     } else if (this->unk_54A == 2) {
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, BINANG_SUB(this->actor.child->shape.rot.y, 0x4000), 10, 3000, 100);
 }
@@ -538,7 +555,7 @@ void func_80962660(EnFu* this, PlayState* play) {
                 Message_CloseTextbox(play);
                 player->stateFlags1 |= PLAYER_STATE1_20;
                 this->unk_53C = 0;
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_GAME_DANCE);
                 Audio_PlaySubBgm(NA_BGM_TIMED_MINI_GAME);
                 if (this->unk_542 == 0) {
                     if (this->unk_546 == 1) {
@@ -616,6 +633,9 @@ void func_809628D0(EnFu* this, PlayState* play) {
                         break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 
@@ -759,6 +779,9 @@ void func_80962F4C(EnFu* this, PlayState* play) {
 
         case 2:
             play->unk_1887D = 30;
+            break;
+
+        default:
             break;
     }
 
@@ -931,12 +954,15 @@ void func_80963630(EnFu* this, PlayState* play) {
                 case 3:
                     SET_WEEKEVENTREG(WEEKEVENTREG_22_40);
                     break;
+
+                default:
+                    break;
             }
         }
         player->stateFlags1 &= ~PLAYER_STATE1_20;
     } else {
         this->actor.child->freezeTimer = 10;
-        func_800B85E0(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 500.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1112,6 +1138,9 @@ void func_809639D0(EnFu* this, PlayState* play) {
                 this->unk_552 = 0x286D;
             }
             break;
+
+        default:
+            break;
     }
 }
 
@@ -1135,6 +1164,9 @@ void func_80963DE4(EnFu* this, PlayState* play) {
         case 2:
             Message_StartTextbox(play, 0x287B, &this->actor);
             this->unk_552 = 0x287B;
+            break;
+
+        default:
             break;
     }
 }
@@ -1215,7 +1247,7 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x2842:
             case 0x2844:
             case 0x2848:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_CUP_CHEEKS);
                 break;
 
             case 0x2840:
@@ -1241,21 +1273,24 @@ void func_80964190(EnFu* this, PlayState* play) {
             case 0x286B:
             case 0x286D:
             case 0x2871:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_HOLD_HANDS_MORPH);
                 break;
 
             case 0x2860:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_HOLD_HANDS);
                 break;
 
             case 0x285F:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_SURPRISE);
                 break;
 
             case 0x287E:
             case 0x2880:
             case 0x2883:
-                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HONEY_DARLING_ANIM_HUG);
+                break;
+
+            default:
                 break;
         }
     }
@@ -1348,13 +1383,13 @@ void EnFu_Update(Actor* thisx, PlayState* play) {
 s32 EnFu_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFu* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
         Matrix_Translate(1600.0f, 300.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_524[1], MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_524[0], MTXMODE_APPLY);
         Matrix_RotateYS(this->unk_524[2], MTXMODE_APPLY);
         Matrix_Translate(-1600.0f, -300.0f, 0.0f, MTXMODE_APPLY);
-    } else if (limbIndex == 20) {
+    } else if (limbIndex == HONEY_AND_DARLING_LIMB_WOMAN_HEAD) {
         Matrix_Translate(1800.0f, 200.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->unk_52A[1], MTXMODE_APPLY);
         Matrix_RotateZS(this->unk_52A[0], MTXMODE_APPLY);
@@ -1369,9 +1404,9 @@ void EnFu_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     static Vec3f D_80964C34 = { -3500.0f, 0.0f, 0.0f };
     EnFu* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == HONEY_AND_DARLING_LIMB_MAN_HEAD) {
         Matrix_MultVec3f(&D_80964C28, &this->unk_508);
-    } else if (limbIndex == 20) {
+    } else if (limbIndex == HONEY_AND_DARLING_LIMB_WOMAN_HEAD) {
         Matrix_MultVec3f(&D_80964C34, &this->unk_514);
     }
 }

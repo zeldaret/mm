@@ -19,9 +19,18 @@ void EnFg_Draw(Actor* thisx, PlayState* play);
 void EnFg_Jump(EnFg* this, PlayState* play);
 void EnFg_DoNothing(EnFg* this, PlayState* play);
 void EnFg_Knockback(EnFg* this, PlayState* play);
-void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos);
-void EnFg_UpdateDust(EnFgEffectDust* dustEffect);
-void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect);
+void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* pos);
+void EnFg_UpdateDust(BetaFrogEffectDust* dustEffect);
+void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect);
+
+typedef enum {
+    /* 0 */ BETAFROG_DMGEFFECT_NONE,
+    /* 1 */ BETAFROG_DMGEFFECT_EXPLOSION, // Bomb or bombchu, not powderkeg
+    /* 2 */ BETAFROG_DMGEFFECT_DEKUSTICK,
+    /* 3 */ BETAFROG_DMGEFFECT_HOOKSHOT,
+    /* 4 */ BETAFROG_DMGEFFECT_ARROW,
+    /* 5 */ BETAFROG_DMGEFFECT_ICEARROW
+} BetaFrogDamageEffect;
 
 ActorInit En_Fg_InitVars = {
     ACTOR_EN_FG,
@@ -94,29 +103,37 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gFrogDanceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gFrogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
+typedef enum {
+    /* -1 */ BETAFROG_ANIM_NONE = -1,
+    /*  0 */ BETAFROG_ANIM_0,
+    /*  1 */ BETAFROG_ANIM_1,
+    /*  2 */ BETAFROG_ANIM_2,
+    /*  3 */ BETAFROG_ANIM_3,
+    /*  4 */ BETAFROG_ANIM_MAX
+} BetaFrogAnimation;
+
+static AnimationInfoS sAnimationInfo[BETAFROG_ANIM_MAX] = {
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // BETAFROG_ANIM_0
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // BETAFROG_ANIM_1
+    { &gFrogDanceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_2
+    { &gFrogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },  // BETAFROG_ANIM_3
 };
 
 s32 EnFg_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frameCount;
-    s32 ret;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
-    ret = false;
-    if ((animIndex >= 0) && (animIndex < 4)) {
-        ret = true;
-        frameCount = sAnimationInfo[animIndex].frameCount;
-        if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
+    if ((animIndex > BETAFROG_ANIM_NONE) && (animIndex < BETAFROG_ANIM_MAX)) {
+        didAnimChange = true;
+        endFrame = sAnimationInfo[animIndex].frameCount;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(sAnimationInfo[animIndex].animation);
         }
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
-    return ret;
+    return didAnimChange;
 }
 
 void func_80A2D348(EnFg* this, PlayState* play) {
@@ -129,7 +146,7 @@ void func_80A2D348(EnFg* this, PlayState* play) {
     }
 }
 
-void func_80A2D3D4(EnFg* this, PlayState* play) {
+void EnFg_UpdateSkelAnime(EnFg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -143,28 +160,28 @@ u8 EnFg_UpdateHealth(EnFg* this) {
 }
 
 s32 EnFg_GetDamageEffect(EnFg* this) {
-    s32 ret = 0;
+    s32 ret = BETAFROG_DMGEFFECT_NONE;
 
     if (this->collider.base.acFlags & AC_HIT) {
         switch (this->actor.colChkInfo.damageEffect) {
             case 1:
-                ret = FG_DMGEFFECT_DEKUSTICK;
+                ret = BETAFROG_DMGEFFECT_DEKUSTICK;
                 break;
 
             case 15:
-                ret = FG_DMGEFFECT_HOOKSHOT;
+                ret = BETAFROG_DMGEFFECT_HOOKSHOT;
                 break;
 
             case 14:
-                ret = FG_DMGEFFECT_ARROW;
+                ret = BETAFROG_DMGEFFECT_ARROW;
                 break;
 
             case 3:
-                ret = FG_DMGEFFECT_ICEARROW;
+                ret = BETAFROG_DMGEFFECT_ICEARROW;
                 break;
 
             default:
-                ret = FG_DMGEFFECT_EXPLOSION;
+                ret = BETAFROG_DMGEFFECT_EXPLOSION;
                 break;
         }
         this->collider.base.acFlags &= ~AC_HIT;
@@ -179,7 +196,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
     s16 rotX;
 
     switch (EnFg_GetDamageEffect(this)) {
-        case FG_DMGEFFECT_DEKUSTICK:
+        case BETAFROG_DMGEFFECT_DEKUSTICK:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_1);
             this->skelAnime.playSpeed = 0.0f;
@@ -191,10 +208,10 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
             break;
 
-        case FG_DMGEFFECT_HOOKSHOT:
+        case BETAFROG_DMGEFFECT_HOOKSHOT:
             break;
 
-        case FG_DMGEFFECT_ARROW:
+        case BETAFROG_DMGEFFECT_ARROW:
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             rotY = this->collider.base.ac->world.rot.y;
@@ -208,10 +225,10 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
             break;
 
-        case FG_DMGEFFECT_EXPLOSION:
+        case BETAFROG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
-            this->actor.params = FG_BLACK;
+            this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
@@ -227,7 +244,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
         default:
             if (DECR(this->timer) == 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
-                EnFg_ChangeAnim(&this->skelAnime, 3);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_3);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
@@ -243,7 +260,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
     s16 rotX;
 
     switch (EnFg_GetDamageEffect(this)) {
-        case FG_DMGEFFECT_ARROW:
+        case BETAFROG_DMGEFFECT_ARROW:
             this->actor.flags &= ~ACTOR_FLAG_1;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -258,14 +275,14 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             this->actionFunc = EnFg_DoNothing;
             break;
 
-        case FG_DMGEFFECT_HOOKSHOT:
+        case BETAFROG_DMGEFFECT_HOOKSHOT:
             break;
 
-        case FG_DMGEFFECT_EXPLOSION:
+        case BETAFROG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
-            EnFg_ChangeAnim(&this->skelAnime, 0);
-            this->actor.params = FG_BLACK;
+            EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+            this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
             this->actor.world.rot.y = Math_Vec3f_Yaw(&ac->world.pos, &this->actor.world.pos);
@@ -285,7 +302,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             }
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-                EnFg_ChangeAnim(&this->skelAnime, 0);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
@@ -325,7 +342,7 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, NULL, this->jointTable, this->morphTable, FROG_LIMB_MAX);
-    EnFg_ChangeAnim(&this->skelAnime, 0);
+    EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -359,7 +376,7 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    func_80A2D3D4(this, play);
+    EnFg_UpdateSkelAnime(this, play);
     EnFg_UpdateDust(&this->dustEffect[0]);
     func_80A2D348(this, play);
 }
@@ -382,7 +399,7 @@ s32 EnFg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFg* this = THIS;
     s16 pad;
-    Vec3f vec1 = { 0.0f, 0.0f, 0.0f };
+    Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
     if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -397,7 +414,7 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     }
 
     if (limbIndex == FROG_LIMB_HEAD) {
-        Matrix_MultVec3f(&vec1, &this->actor.focus.pos);
+        Matrix_MultVec3f(&zeroVec, &this->actor.focus.pos);
     }
 }
 
@@ -405,8 +422,12 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
     s32 pad;
     Color_RGBA8 envColor[] = {
-        { 200, 170, 0, 255 },   { 0, 170, 200, 255 },   { 210, 120, 100, 255 },
-        { 120, 130, 230, 255 }, { 190, 190, 190, 255 }, { 0, 0, 0, 255 },
+        { 200, 170, 0, 255 },   // BETAFROG_YELLOW
+        { 0, 170, 200, 255 },   // BETAFROG_CYAN
+        { 210, 120, 100, 255 }, // BETAFROG_PINK
+        { 120, 130, 230, 255 }, // BETAFROG_BLUE
+        { 190, 190, 190, 255 }, // BETAFROG_WHITE
+        { 0, 0, 0, 255 },       // BETAFROG_BLACK
     };
 
     Matrix_Push();
@@ -427,8 +448,8 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
-void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos) {
-    Vec3f vel = { 0.0f, 3.0f, 0.0f };
+void EnFg_AddDust(BetaFrogEffectDust* dustEffect, Vec3f* pos) {
+    Vec3f velocity = { 0.0f, 3.0f, 0.0f };
     Vec3f unk_20 = { 0.0f, 0.0f, 0.0f };
     s32 i;
 
@@ -436,8 +457,8 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos) {
         if (!dustEffect->type) {
             dustEffect->type = true;
             dustEffect->timer = 16;
-            dustEffect->pos = *worldPos;
-            dustEffect->velocity = vel;
+            dustEffect->pos = *pos;
+            dustEffect->velocity = velocity;
             dustEffect->unk_20 = unk_20;
             dustEffect->xyScale = 0.4f;
             break;
@@ -445,7 +466,7 @@ void EnFg_AddDust(EnFgEffectDust* dustEffect, Vec3f* worldPos) {
     }
 }
 
-void EnFg_UpdateDust(EnFgEffectDust* dustEffect) {
+void EnFg_UpdateDust(BetaFrogEffectDust* dustEffect) {
     s32 i;
 
     for (i = 0; i < 10; i++, dustEffect++) {
@@ -462,7 +483,7 @@ static TexturePtr sDustTextures[] = {
     gEffDust8Tex, gEffDust7Tex, gEffDust6Tex, gEffDust5Tex, gEffDust4Tex, gEffDust3Tex, gEffDust2Tex, gEffDust1Tex,
 };
 
-void EnFg_DrawDust(PlayState* play, EnFgEffectDust* dustEffect) {
+void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect) {
     s16 i;
     s16 alpha;
     s16 index;
