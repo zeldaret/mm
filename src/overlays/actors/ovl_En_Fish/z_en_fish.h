@@ -14,6 +14,8 @@ typedef enum {
     /*  2 */ ENFISH_2
 } EnFishParam;
 
+#define FISH_PARAMS(param) (param)
+
 typedef struct EnFish {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderJntSph collider;

@@ -8,6 +8,7 @@
 #include "objects/object_kusa/object_kusa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -250,8 +251,8 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play) {
         }
     } else if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
         Item_DropCollectible(play, &this->actor.world.pos, 3);
-    } else {
-        collectible = func_800A8150(KUSA_GET_PARAM_3F(&this->actor));
+    } else { // ENKUSA_TYPE_GRASS_2
+        collectible = func_800A8150(KUSA_GET_PARAM_FC(&this->actor));
         if (collectible >= 0) {
             collectableParams = KUSA_GET_COLLECTIBLE_ID(&this->actor);
             Item_DropCollectible(play, &this->actor.world.pos, (collectableParams << 8) | collectible);
@@ -326,9 +327,9 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     u32 numBugs;
 
     for (numBugs = 0; numBugs < 3; numBugs++) {
-        Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
-                                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                                   this->actor.csId, this->actor.halfDaysBits, 0);
+        Actor* bug = Actor_SpawnAsChildAndCutscene(
+            &play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, 0, 0, 0, ENINSECT_PARAMS(true), this->actor.csId, this->actor.halfDaysBits, 0);
 
         if (bug == NULL) {
             break;

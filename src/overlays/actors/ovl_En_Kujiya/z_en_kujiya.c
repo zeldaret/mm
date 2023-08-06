@@ -104,7 +104,7 @@ void EnKujiya_Wait(EnKujiya* this, PlayState* play) {
                (this->actor.shape.rot.y == 0)) {
         EnKujiya_SetupTurnToOpen(this);
     } else if (this->actor.xzDistToPlayer < 100.0f) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 

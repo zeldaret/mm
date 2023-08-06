@@ -1,6 +1,7 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000000
@@ -929,7 +930,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
         newParamFF = params & 0xFF;
         if (newParamFF == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
             if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
@@ -990,7 +991,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
     if ((((params & 0xFF) == ITEM00_FLEXIBLE) || ((params & 0xFF) == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
         if ((params & 0xFF) == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
         } else {
             spawnedActor =
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0,
@@ -1373,7 +1374,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
         if (dropId == ITEM00_FLEXIBLE) {
             if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
-                            2);
+                            FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }

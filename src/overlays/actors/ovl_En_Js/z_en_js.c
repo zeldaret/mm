@@ -608,7 +608,7 @@ void func_80969898(EnJs* this, PlayState* play) {
                     case 0x2210:
                     case 0x2211:
                     case 0x2212:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969748;
                         break;
@@ -671,7 +671,7 @@ void func_80969B5C(EnJs* this, PlayState* play) {
         this->unk_2B4 = 0.0f;
         func_80969AA0(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
     func_80968CB8(this);
 }
@@ -765,7 +765,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         }
                         break;
                     case 0x2222:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x2223:
@@ -791,7 +791,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                     case 0x221D:
                     case 0x2220:
                     case 0x2221:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969C54;
                         break;
@@ -830,7 +830,7 @@ void func_8096A104(EnJs* this, PlayState* play) {
         this->actionFunc = func_80969DA4;
         func_8096A080(this, play);
     } else if (func_80968DD0(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -858,7 +858,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_84_20);
         func_809696EC(this, 0);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -870,7 +870,7 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_8096A1E8;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
     }
@@ -1003,7 +1003,7 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
     }
     if (!(this->unk_2B8 & 8) && (this->actor.xzDistToPlayer < 100.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x1000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

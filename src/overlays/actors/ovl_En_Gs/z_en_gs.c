@@ -6,6 +6,7 @@
 
 #include "z_en_gs.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -184,8 +185,8 @@ void func_80997D38(EnGs* this, PlayState* play) {
 
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
         if (this->actor.xzDistToPlayer <= D_8099A408[this->actor.params]) {
-            func_8013E8F8(&this->actor, play, D_8099A408[this->actor.params], D_8099A408[this->actor.params],
-                          PLAYER_IA_NONE, 0x2000, 0x2000);
+            SubS_OfferTalkExchangeFacing(&this->actor, play, D_8099A408[this->actor.params],
+                                         D_8099A408[this->actor.params], PLAYER_IA_NONE, 0x2000, 0x2000);
         }
     }
 
@@ -282,7 +283,8 @@ void func_8099807C(EnGs* this, PlayState* play) {
                 case OCARINA_SONG_EPONAS:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
-                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
+                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0,
+                                    FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
@@ -291,7 +293,8 @@ void func_8099807C(EnGs* this, PlayState* play) {
                 case OCARINA_SONG_STORMS:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
-                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
+                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0,
+                                    FAIRY_PARAMS(FAIRY_TYPE_7, false, 0));
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }

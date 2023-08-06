@@ -2,6 +2,7 @@
 #define Z_EN_AKINDONUTS_H
 
 #include "global.h"
+#include "objects/object_dnt/object_dnt.h"
 
 struct EnAkindonuts;
 
@@ -22,15 +23,15 @@ typedef enum {
 typedef struct EnAkindonuts {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[28];
-    /* 0x230 */ Vec3s morphTable[28];
+    /* 0x188 */ Vec3s jointTable[BUSINESS_SCRUB_LIMB_MAX];
+    /* 0x230 */ Vec3s morphTable[BUSINESS_SCRUB_LIMB_MAX];
     /* 0x2D8 */ EnAkindonutsActionFunc actionFunc;
     /* 0x2DC */ EnAkindonutsUnkFunc unk_2DC;
     /* 0x2E0 */ ColliderCylinder collider;
     /* 0x32C */ u16 unk_32C;
     /* 0x330 */ Path* path;
     /* 0x334 */ s32 unk_334;
-    /* 0x338 */ s16 unk_338;
+    /* 0x338 */ s16 animIndex;
     /* 0x33A */ s16 unk_33A;
     /* 0x33C */ u16 unk_33C;
     /* 0x33E */ s16 unk_33E;

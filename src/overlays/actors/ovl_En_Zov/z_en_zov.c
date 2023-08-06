@@ -378,7 +378,7 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
         this->actionFunc = func_80BD187C;
         func_80BD160C(this, play);
     } else if (func_80BD15A4(this, play)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
@@ -452,7 +452,7 @@ void func_80BD1F1C(EnZov* this, PlayState* play) {
         this->actionFunc = func_80BD1DB8;
         func_80BD1D30(this, play);
     } else if (func_80BD15A4(this, play)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 }
 
