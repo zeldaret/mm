@@ -275,7 +275,7 @@ void func_80AE0304(EnTsn* this, PlayState* play) {
             func_80ADFF84(this, play);
         }
     } else if ((this->actor.xzDistToPlayer < 150.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 160.0f);
+        Actor_OfferTalk(&this->actor, play, 160.0f);
         this->unk_220 |= 1;
     } else {
         this->unk_220 &= ~1;
@@ -420,7 +420,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
 
                     case 0x1075:
                     case 0x1078:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
@@ -448,7 +448,7 @@ void func_80AE0704(EnTsn* this, PlayState* play) {
                         break;
 
                     case 0x107B:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         Animation_MorphToLoop(&this->unk_1D8->skelAnime, &object_tsn_Anim_0092FC, -10.0f);
                         break;
@@ -537,7 +537,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
             ENTSN_SET_Z(&this->unk_1D8->actor, true);
         }
     } else if (this->actor.isLockedOn) {
-        func_800B8614(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -554,7 +554,7 @@ void func_80AE0D78(EnTsn* this, PlayState* play) {
         this->actionFunc = func_80AE0D10;
         this->unk_220 |= 4;
     } else if (this->actor.isLockedOn) {
-        func_800B8614(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 

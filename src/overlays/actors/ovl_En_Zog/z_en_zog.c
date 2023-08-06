@@ -634,7 +634,7 @@ void func_80B9451C(EnZog* this, PlayState* play) {
             this->actor.shape.shadowDraw = NULL;
         }
     } else if (this->actor.xzDistToPlayer < 120.0f) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
     func_80B943EC(this, play);
 }
@@ -732,7 +732,7 @@ void func_80B948A8(EnZog* this, PlayState* play) {
         }
 
         if ((this->unk_302 == 0) && (this->actor.xzDistToPlayer < 120.0f)) {
-            func_800B8614(&this->actor, play, 150.0f);
+            Actor_OfferTalk(&this->actor, play, 150.0f);
         }
     }
     func_80B93A48(this, play);
@@ -906,7 +906,7 @@ void func_80B94E34(EnZog* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_88_10);
     } else if ((this->actor.yawTowardsPlayer > 16000) && (this->actor.yawTowardsPlayer < 32000) &&
                (this->unk_302 == 0)) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
 
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -939,7 +939,7 @@ void func_80B95128(EnZog* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         SET_WEEKEVENTREG(WEEKEVENTREG_91_01);
     } else {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
     func_80B93A48(this, play);

@@ -58,7 +58,7 @@ void func_80BDE090(EnTalk* this, PlayState* play) {
 
     if (((this->actor.xzDistToPlayer < 40.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) ||
         this->actor.isLockedOn) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 

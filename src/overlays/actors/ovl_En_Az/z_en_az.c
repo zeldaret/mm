@@ -1433,8 +1433,8 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                     func_80A97114(this, play);
                     this->unk_378 = 2;
-                } else if (func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
-                                         PLAYER_IA_MINUS1)) {
+                } else if (Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer,
+                                                   this->actor.playerHeightRel, PLAYER_IA_MINUS1)) {
                     this->actor.textId = func_80A973B4(this, play);
                 }
             } else {
@@ -1467,7 +1467,7 @@ void func_80A97410(EnAz* this, PlayState* play) {
                 } else {
                     Actor_GetScreenPos(play, &this->actor, &sp56, &sp54);
                     if ((sp56 >= 0) && (sp56 <= SCREEN_WIDTH) && (sp54 >= 0) && (sp54 <= SCREEN_HEIGHT) &&
-                        func_800B8500(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
+                        Actor_OfferTalkExchange(&this->actor, play, 120.0f, 120.0f, PLAYER_IA_NONE)) {
                         this->unk_3D2 = func_80A97274(this, play);
                         if ((this->unk_3D2 == 0x10CE) || (this->unk_3D2 == 0x10D4)) {
                             this->actor.textId = 0;

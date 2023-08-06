@@ -750,7 +750,10 @@ void EnRg_Init(Actor* thisx, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_310 = 8;
         this->actor.gravity = -1.0f;
-        SubS_UpdateFlags(&this->unk_310, 3, 7);
+
+        // This is the only usage of this function whose actor does not use `SubS_Offer`.
+        // Since these bits go unused, it seems like a copy paste that still used `SubSOfferMode`
+        SubS_SetOfferMode(&this->unk_310, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
 
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_02)) {
             this->unk_318 = Rand_S16Offset(30, 30);
@@ -843,7 +846,7 @@ s32 func_80BF5588(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
             break;
     }
 
-    if (((this->unk_310 & 8) != 0) && (fidgetIndex < 9)) {
+    if ((this->unk_310 & 8) && (fidgetIndex < 9)) {
         rot->y += (s16)(Math_SinS(this->fidgetTableY[fidgetIndex]) * 200.0f);
         rot->z += (s16)(Math_CosS(this->fidgetTableZ[fidgetIndex]) * 200.0f);
     }

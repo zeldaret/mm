@@ -560,13 +560,13 @@ PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 
 s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
-s32 func_800B8500(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemId);
-s32 func_800B85E0(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemId);
-s32 func_800B8614(Actor* actor, PlayState* play, f32 radius);
-s32 func_800B863C(Actor* actor, PlayState* play);
+s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemAction);
+s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemAction);
+s32 Actor_OfferTalk(Actor* actor, PlayState* play, f32 radius);
+s32 Actor_OfferTalkNearColChkInfoCylinder(Actor* actor, PlayState* play);
 s32 Actor_TextboxIsClosing(Actor* actor, PlayState* play);
 s32 Actor_ChangeFocus(Actor* actor1, PlayState* play, Actor* actor2);
-PlayerItemAction Player_GetExchangeItemId(PlayState* play);
+PlayerItemAction Player_GetExchangeItemAction(PlayState* play);
 s32 func_800B8718(Actor* actor, GameState* gameState);
 s32 func_800B874C(Actor* actor, PlayState* play, f32 xzRange, f32 yRange);
 s32 func_800B8804(Actor* actor, PlayState* play, f32 xzRange);

@@ -966,7 +966,7 @@ void EnRailgibud_CheckIfTalkingToPlayer(EnRailgibud* this, PlayState* play) {
             this->actor.speed = 0.0f;
         } else if (CHECK_FLAG_ALL(this->actor.flags, (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)) &&
                    !(this->collider.base.acFlags & AC_HIT)) {
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
         }
     } else {
         switch (Message_GetState(&play->msgCtx)) {

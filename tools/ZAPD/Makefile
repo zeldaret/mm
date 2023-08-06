@@ -106,7 +106,7 @@ clean:
 rebuild: clean all
 
 format:
-	clang-format-11 -i $(ZAPD_CPP_FILES) $(ZAPD_H_FILES)
+	clang-format-14 -i $(ZAPD_CPP_FILES) $(ZAPD_H_FILES)
 	$(MAKE) -C ZAPDUtils format
 	$(MAKE) -C ExporterTest format
 
