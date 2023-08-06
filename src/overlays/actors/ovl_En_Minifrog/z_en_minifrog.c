@@ -60,7 +60,7 @@ static ColliderCylinderInit sCylinderInit = {
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 12, 14, MASS_IMMOVABLE };
 
 // sEyeTextures???
-static TexturePtr D_808A4D74[] = {
+static TexturePtr sEyeTextures[] = {
     gFrogIrisOpenTex,
     gFrogIrisClosedTex,
 };
@@ -87,8 +87,8 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (!isInitialized) {
-        for (i = 0; i < ARRAY_COUNT(D_808A4D74); i++) {
-            D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
+        for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
+            sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
         isInitialized = true;
     }
@@ -632,8 +632,8 @@ void EnMinifrog_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     envColor = &sEnMinifrogColor[this->frogIndex];
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_808A4D74[0]);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_808A4D74[0]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[0]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sEyeTextures[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, envColor->a);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMinifrog_OverrideLimbDraw, EnMinifrog_PostLimbDraw, &this->actor);
