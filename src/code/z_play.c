@@ -12,7 +12,7 @@
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "libc/assert.h"
+#include "debug.h"
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
@@ -326,11 +326,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
                 fbdemoType = FBDEMO_WIPE5;
                 break;
 
-            default:
+            defa_dbg_hungup
                 fbdemoType = -1;
                 __assert("../z_play.c", 1420);
         }
-    } else {
+    } el_dbg_hungup
         fbdemoType = -1;
         __assert("../z_play.c", 1423);
     }

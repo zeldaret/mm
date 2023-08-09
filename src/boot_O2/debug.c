@@ -1,11 +1,11 @@
 #include "global.h"
 #include "fault.h"
 
-void __assert(const char* file, int lineNum) {
+void _dbg_hungup(const char* file, int lineNum) {
     osGetThreadId(NULL);
     Fault_AddHungupAndCrash(file, lineNum);
 }
 
-void func_800862B4(void) {
+void Reset(void) {
     Fault_AddHungupAndCrash("Reset", 0);
 }

@@ -1,5 +1,5 @@
 #include "global.h"
-#include "libc/assert.h"
+#include "debug.h"
 #include "PR/viint.h"
 
 typedef struct {
@@ -143,7 +143,7 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->fldRegs[0].vBurst = ptr->vBurst;
         viMode->fldRegs[1].vBurst = ptr->vBurst;
     } else {
-        __assert("../z_vimode.c", 216);
+        _dbg_hungup("../z_vimode.c", 216);
     }
 
     viMode->comRegs.hStart += (leftAdjust << 16) + (s16)rightAdjust;

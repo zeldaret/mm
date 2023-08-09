@@ -67,7 +67,6 @@ void PadUtils_UpdateRelXY(Input* input);
 void MtxConv_F2L(Mtx* mtx, MtxF* mf);
 void MtxConv_L2F(MtxF* mtx, Mtx* mf);
 
-// void func_800862B4(void);
 s32 func_80086620(OSMesgQueue* param_1, PadMgr* param_2, OSContStatus* param_3);
 
 u32 Rand_Next(void);

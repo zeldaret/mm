@@ -5,7 +5,7 @@
 #include "z64debug_text.h"
 #include "z64rumble.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
-#include "libc/assert.h"
+#include "debug.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -160,7 +160,7 @@ void GameState_InitArena(GameState* gameState, size_t size) {
     __assert("../game.c", 1035);
 }
 
-void GameState_Realloc(GameState* gameState, size_t size) {
+void_dbg_hungupte_Realloc(GameState* gameState, size_t size) {
     GameAlloc* alloc;
     void* gameArena;
     size_t systemMaxFree;
@@ -185,7 +185,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
         __assert("../game.c", 1074);
     }
 }
-
+_dbg_hungup
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
     gameState->gfxCtx = gfxCtx;
     gameState->frames = 0;
