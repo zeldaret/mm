@@ -106,9 +106,9 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_STOP),
 };
 
-void func_80B5B2E0(PlayState* play, Vec3f* pos, s16 params, Vec3f* vec, s32* index) {
+void func_80B5B2E0(PlayState* play, Vec3f* pos, s16 pathIndex, Vec3f* vec, s32* index) {
     s32 i;
-    Path* path = &play->setupPathList[params];
+    Path* path = &play->setupPathList[pathIndex];
     f32 dist;
     Vec3f sp58;
     Vec3f sp4C;
@@ -117,7 +117,7 @@ void func_80B5B2E0(PlayState* play, Vec3f* pos, s16 params, Vec3f* vec, s32* ind
     for (i = 0; i < path->count; i++) {
         Math_Vec3s_ToVec3f(&sp58, &((Vec3s*)Lib_SegmentedToVirtual(path->points))[i]);
         dist = Math_Vec3f_DistXYZ(pos, &sp58);
-        if (dist < minDist) {
+        if (minDist > dist) {
             minDist = dist;
             Math_Vec3f_Copy(&sp4C, &sp58);
             *index = i;
@@ -137,8 +137,8 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     this->unk_388 = 0;
-    this->unk_33C = ENOT_GET_C000(&this->actor);
-    if (this->unk_33C == 0) {
+    this->type = SEAHORSE_GET_TYPE(&this->actor);
+    if (this->type == SEAHORSE_TYPE_0) {
         D_80B5E880 = this;
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
         this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
@@ -155,7 +155,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                      Animation_GetLastFrame(&sAnimations[0].animation->common) * Rand_ZeroOne(),
                      Animation_GetLastFrame(&sAnimations[0].animation->common), sAnimations[0].mode,
                      sAnimations[0].morphFrames);
-    this->unk_346 = ENOT_GET_7F(&this->actor);
+    this->pathIndex = SEAHORSE_GET_PATH_INDEX(&this->actor);
     this->unk_344 = this->actor.world.rot.z;
     this->actor.world.rot.z = 0;
     this->actor.shape.rot.z = 0;
@@ -169,10 +169,10 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
     this->unk_744.g = 200;
     this->unk_744.b = 80;
 
-    switch (ENOT_GET_C000(&this->actor)) {
-        case 1:
+    switch (SEAHORSE_GET_TYPE(&this->actor)) {
+        case SEAHORSE_TYPE_1:
             D_80B5E884 = this;
-            Actor_SetScale(&this->actor, 0.012999999f);
+            Actor_SetScale(&this->actor, 1.3f * 0.01f);
 
             switch (this->unk_344) {
                 case 0:
@@ -185,7 +185,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                         Math_Vec3f_Sum(&this->actor.world.pos, &sp64, &sp64);
                         this->unk_360 = (EnOt*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OT, sp64.x, sp64.y, sp64.z,
                                                            0, BINANG_ROT180(this->actor.shape.rot.y), 1,
-                                                           ENOT_GET_3FFF(&this->actor) | 0x8000);
+                                                           SEAHORSE_PARAMS_PARTNER(&this->actor, SEAHORSE_TYPE_2));
                         if (this->unk_360 != NULL) {
                             this->unk_360->unk_360 = this;
                             this->unk_3A0 = 0;
@@ -223,7 +223,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case 2:
+        case SEAHORSE_TYPE_2:
             D_80B5E888 = this;
 
             switch (this->unk_344) {
@@ -248,7 +248,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
                     break;
 
                 case 1:
-                    Actor_SetScale(&this->actor, 0.012999999f);
+                    Actor_SetScale(&this->actor, 1.3f * 0.01f);
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10)) {
                         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_32_01)) {
                             func_80B5C244(this, play);
@@ -262,7 +262,7 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             }
             break;
 
-        case 3:
+        case SEAHORSE_TYPE_3:
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_26_08)) {
                 this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
                 this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
@@ -275,6 +275,9 @@ void EnOt_Init(Actor* thisx, PlayState* play) {
             } else {
                 Actor_Kill(&this->actor);
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -407,7 +410,7 @@ void func_80B5C25C(EnOt* this, PlayState* play) {
         this->unk_32C |= 0x80;
     }
 
-    if ((this->unk_33C == 2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
+    if ((this->type == SEAHORSE_TYPE_2) && (this->unk_32C & 0x80) && (this->unk_360->unk_32C & 0x80)) {
         this->unk_32C |= 0x100;
         this->unk_360->unk_32C |= 0x100;
         SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 2, &this->animIndex);
@@ -501,7 +504,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
 
     sp3E = Actor_WorldYawTowardPoint(&player->actor, &this->unk_394);
     Matrix_RotateYS(BINANG_ADD(sp3E, 0x4000), MTXMODE_NEW);
-    if (this->unk_33C == 2) {
+    if (this->type == SEAHORSE_TYPE_2) {
         Matrix_MultVecZ(26.259998f, &sp30);
     } else {
         if (this->unk_73C == 0) {
@@ -527,7 +530,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
     Math_SmoothStepToF(&this->actor.world.pos.x, this->unk_348.x, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToF(&this->actor.world.pos.z, this->unk_348.z, 1.0f, 2.0f, 0.01f);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (this->unk_33C == 1)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (this->type == SEAHORSE_TYPE_1)) {
         this->actor.textId = 0;
         this->unk_384 = 1;
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -537,7 +540,7 @@ void func_80B5C6DC(EnOt* this, PlayState* play) {
             func_80B5D114(this, play);
         } else if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
                    (this->actor.xzDistToPlayer < 130.0f)) {
-            func_800B8614(&this->actor, play, 130.0f);
+            Actor_OfferTalk(&this->actor, play, 130.0f);
         }
     }
 }
@@ -581,9 +584,9 @@ void func_80B5C9D0(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CA30(EnOt* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.scale.x, 0.012999999f, 0.7f, 0.0001f, 0.01f);
+    Math_SmoothStepToF(&this->actor.scale.x, 1.3f * 0.01f, 0.7f, 0.0001f, 0.01f);
     Actor_SetScale(&this->actor, this->actor.scale.x);
-    if (this->actor.scale.x == 0.012999999f) {
+    if (this->actor.scale.x == 1.3f * 0.01f) {
         this->unk_360->unk_32C |= 0x1000;
         this->unk_360->unk_360 = this;
         func_80B5C9A8(this, play);
@@ -596,9 +599,9 @@ void func_80B5CAD0(EnOt* this, PlayState* play) {
 }
 
 void func_80B5CB0C(EnOt* this, PlayState* play) {
-    Math_SmoothStepToF(&this->actor.scale.x, 0.012999999f, 0.7f, 0.0001f, 0.01f);
+    Math_SmoothStepToF(&this->actor.scale.x, 1.3f * 0.01f, 0.7f, 0.0001f, 0.01f);
     Actor_SetScale(&this->actor, this->actor.scale.x);
-    if (this->actor.scale.x == 0.012999999f) {
+    if (this->actor.scale.x == 1.3f * 0.01f) {
         this->unk_32C |= 0x800;
         func_80B5CE6C(this, play);
     }
@@ -606,7 +609,8 @@ void func_80B5CB0C(EnOt* this, PlayState* play) {
 
 void func_80B5CBA0(EnOt* this, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10000;
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
+    Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                            PLAYER_IA_NONE);
     this->actionFunc = func_80B5CBEC;
 }
 
@@ -617,7 +621,8 @@ void func_80B5CBEC(EnOt* this, PlayState* play) {
     } else {
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
         this->actor.world.rot.y = this->actor.shape.rot.y;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                                PLAYER_IA_NONE);
     }
 }
 
@@ -696,16 +701,17 @@ void func_80B5CEC8(EnOt* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 3, 0xE38, 0x38E);
     if (this->unk_32C & 0x800) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                                PLAYER_IA_NONE);
     } else {
         this->actor.flags &= ~ACTOR_FLAG_10000;
         if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !func_801242B4(player) &&
             (this->actor.xzDistToPlayer < 130.0f)) {
-            func_800B8614(&this->actor, play, 130.0f);
+            Actor_OfferTalk(&this->actor, play, 130.0f);
         }
     }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (ENOT_GET_C000(&this->actor) == 1)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_84_10) && (SEAHORSE_GET_TYPE(&this->actor) == 1)) {
         if ((fabsf(this->actor.xzDistToPlayer) <= 130.0f) && (fabsf(this->actor.playerHeightRel) <= 130.0f)) {
             player->unk_B2B = 29;
         }
@@ -750,14 +756,14 @@ void func_80B5D160(EnOt* this, PlayState* play) {
             if (temp == 0) {
                 switch (this->unk_384) {
                     case 0:
-                        if ((this->unk_33C != 1) && (this->unk_33C == 2)) {
+                        if ((this->type != SEAHORSE_TYPE_1) && (this->type == SEAHORSE_TYPE_2)) {
                             if (this->unk_32C & 1) {
                                 if (this->unk_32C & 4) {
                                     phi_a1 = 0x106A;
                                 } else {
                                     phi_a1 = 0x1069;
                                 }
-                            } else if (Flags_GetSwitch(play, ENOT_GET_3F80(&this->actor))) {
+                            } else if (Flags_GetSwitch(play, SEAHORSE_GET_SWITCH_FLAG(&this->actor))) {
                                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_10)) {
                                     phi_a1 = 0x106C;
                                 } else {
@@ -880,10 +886,10 @@ s32 EnOt_ActorPathing_UpdateActorInfo(PlayState* play, ActorPathing* actorPath) 
 }
 
 void func_80B5D648(EnOt* this, PlayState* play) {
-    func_80B5B2E0(play, &this->actor.world.pos, this->unk_346, &this->unk_348, &this->unk_340);
+    func_80B5B2E0(play, &this->actor.world.pos, this->pathIndex, &this->unk_348, &this->unk_340);
     Math_Vec3f_Copy(&this->unk_330, &this->actor.world.pos);
-    SubS_ActorPathing_Init(play, &this->unk_330, &this->actor, &this->actorPath, play->setupPathList, this->unk_346, 0,
-                           0, this->unk_340, 0);
+    SubS_ActorPathing_Init(play, &this->unk_330, &this->actor, &this->actorPath, play->setupPathList, this->pathIndex,
+                           0, 0, this->unk_340, 0);
     this->unk_32C = 0;
     this->actorPath.pointOffset.x = 0.0f;
     this->actorPath.pointOffset.y = 0.0f;
@@ -893,7 +899,7 @@ void func_80B5D648(EnOt* this, PlayState* play) {
     SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, 1, &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    Flags_SetSwitch(play, ENOT_GET_3F80(&this->actor));
+    Flags_SetSwitch(play, SEAHORSE_GET_SWITCH_FLAG(&this->actor));
     this->actionFunc = func_80B5D750;
 }
 
@@ -993,10 +999,11 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_04)) {
             Vec3f sp50;
 
-            func_80B5B2E0(play, &this->actor.world.pos, ENOT_GET_7F(&this->actor), &sp50, &this->unk_340);
+            func_80B5B2E0(play, &this->actor.world.pos, SEAHORSE_GET_PATH_INDEX(&this->actor), &sp50, &this->unk_340);
             if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_OT, sp50.x, sp50.y, sp50.z, 0,
-                                              this->actor.shape.rot.y, 1, ENOT_GET_3FFF(&this->actor) | 0x8000,
-                                              this->actor.csId, this->actor.halfDaysBits, NULL) != NULL) {
+                                              this->actor.shape.rot.y, 1,
+                                              SEAHORSE_PARAMS_PARTNER(&this->actor, SEAHORSE_TYPE_2), this->actor.csId,
+                                              this->actor.halfDaysBits, NULL) != NULL) {
                 this->unk_32C |= 8;
             }
         } else if (D_80B5E888 != NULL) {
@@ -1012,7 +1019,7 @@ void func_80B5DB6C(Actor* thisx, PlayState* play) {
                 EnOt* temp = D_80B5E888;
 
                 temp->unk_32C |= 8;
-                temp->unk_346 = ENOT_GET_7F(&this->actor);
+                temp->pathIndex = SEAHORSE_GET_PATH_INDEX(&this->actor);
                 temp->actor.params = this->actor.params;
                 temp->actor.csId = this->actor.csId;
                 this->unk_32C |= 8;
