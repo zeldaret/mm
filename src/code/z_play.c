@@ -326,11 +326,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
                 fbdemoType = FBDEMO_WIPE5;
                 break;
 
-            defa_dbg_hungup
+            default:
                 fbdemoType = -1;
                 __assert("../z_play.c", 1420);
         }
-    } el_dbg_hungup
+    } else {
         fbdemoType = -1;
         __assert("../z_play.c", 1423);
     }

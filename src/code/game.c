@@ -160,7 +160,7 @@ void GameState_InitArena(GameState* gameState, size_t size) {
     __assert("../game.c", 1035);
 }
 
-void_dbg_hungupte_Realloc(GameState* gameState, size_t size) {
+void GameState_Realloc(GameState* gameState, size_t size) {
     GameAlloc* alloc;
     void* gameArena;
     size_t systemMaxFree;
@@ -185,7 +185,7 @@ void_dbg_hungupte_Realloc(GameState* gameState, size_t size) {
         __assert("../game.c", 1074);
     }
 }
-_dbg_hungup
+
 void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* gfxCtx) {
     gameState->gfxCtx = gfxCtx;
     gameState->frames = 0;
