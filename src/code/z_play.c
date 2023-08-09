@@ -328,11 +328,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
 
             default:
                 fbdemoType = -1;
-                __assert("../z_play.c", 1420);
+                _dbg_hungup("../z_play.c", 1420);
         }
     } else {
         fbdemoType = -1;
-        __assert("../z_play.c", 1423);
+        _dbg_hungup("../z_play.c", 1423);
     }
 
     transitionCtx->transitionType = transitionType;
