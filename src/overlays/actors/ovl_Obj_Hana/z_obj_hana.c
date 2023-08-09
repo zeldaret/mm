@@ -48,5 +48,5 @@ void ObjHana_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjHana_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, gGraveyardFlowerModelDL);
+    Gfx_DrawDListOpa(play, gGraveyardFlowersDL);
 }

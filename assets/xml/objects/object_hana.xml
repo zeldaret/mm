@@ -14,6 +14,6 @@
         <DList Name="gGraveyardFlowerLeaf5DL" Offset="0x460" />
 
         <!-- This DL combines all the other DLs to make the whole object -->
-        <DList Name="gGraveyardFlowerModelDL" Offset="0x500" /> <!-- Original name is "flower1_model" -->
+        <DList Name="gGraveyardFlowersDL" Offset="0x500" /> <!-- Original name is "flower1_model" -->
     </File>
 </Root>
