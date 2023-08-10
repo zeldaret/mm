@@ -2057,7 +2057,7 @@ extern u32 gAudioSPDataSize;
 
 extern volatile OSTime D_801FBAE0;
 extern volatile OSTime D_801FBAE8;
-extern volatile OSTime D_801FBAF0;
+extern volatile OSTime gRDPTotalTimePrev;
 extern volatile OSTime lastRenderFrameDuration;
 extern volatile OSTime gRSPAudioTotalTime;
 extern volatile OSTime sRSPGFXTotalTime;

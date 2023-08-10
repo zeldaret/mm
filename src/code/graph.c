@@ -238,8 +238,8 @@ retry:
 }
 
 void Graph_UpdateGame(GameState* gameState) {
-    Game_UpdateInput(gameState);
-    Game_IncrementFrameCount(gameState);
+    GameState_GetInput(gameState);
+    GameState_IncrementFrameCount(gameState);
     if (SREG(20) < 3) {
         Audio_Update();
     }
@@ -255,7 +255,7 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
     gameState->unk_A3 = 0;
     Graph_SetNextGfxPool(gfxCtx);
 
-    Game_Update(gameState);
+    GameState_Update(gameState);
 
     OPEN_DISPS(gfxCtx);
 
@@ -322,7 +322,7 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
 
         D_801FBAE8 = sRSPGFXTotalTime;
         D_801FBAE0 = gRSPAudioTotalTime;
-        D_801FBAF0 = gRDPTotalTime;
+        gRDPTotalTimePrev = gRDPTotalTime;
         sRSPGFXTotalTime = 0;
         gRSPAudioTotalTime = 0;
         gRDPTotalTime = 0;
