@@ -105,18 +105,18 @@ static DamageTable sDamageTable = {
 
 typedef enum {
     /* -1 */ BETAFROG_ANIM_NONE = -1,
-    /*  0 */ BETAFROG_ANIM_0,
-    /*  1 */ BETAFROG_ANIM_1,
-    /*  2 */ BETAFROG_ANIM_2,
-    /*  3 */ BETAFROG_ANIM_3,
+    /*  0 */ BETAFROG_ANIM_IDLE,
+    /*  1 */ BETAFROG_ANIM_IDLE_MORPH,
+    /*  2 */ BETAFROG_ANIM_DANCE,
+    /*  3 */ BETAFROG_ANIM_JUMP,
     /*  4 */ BETAFROG_ANIM_MAX
 } BetaFrogAnimation;
 
 static AnimationInfoS sAnimationInfo[BETAFROG_ANIM_MAX] = {
-    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // BETAFROG_ANIM_0
-    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // BETAFROG_ANIM_1
-    { &gFrogDanceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_2
-    { &gFrogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },  // BETAFROG_ANIM_3
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // BETAFROG_ANIM_IDLE
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // BETAFROG_ANIM_IDLE_MORPH
+    { &gFrogDanceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_DANCE
+    { &gFrogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },  // BETAFROG_ANIM_JUMP
 };
 
 s32 EnFg_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
@@ -244,7 +244,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
         default:
             if (DECR(this->timer) == 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
-                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_3);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_JUMP);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
@@ -281,7 +281,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
         case BETAFROG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
-            EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+            EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
             this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -302,7 +302,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             }
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
@@ -342,7 +342,7 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, NULL, this->jointTable, this->morphTable, FROG_LIMB_MAX);
-    EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+    EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
