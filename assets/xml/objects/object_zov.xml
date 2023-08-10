@@ -47,7 +47,7 @@
         <Texture Name="gLuluEyeClosedTex" OutName="lulu_eye_closed" Format="ci8" Width="32" Height="32" Offset="0x14138" />
         <Texture Name="gLuluMouthOpenTex" OutName="lulu_mouth_open" Format="ci8" Width="32" Height="32" Offset="0x14538" />
         <Texture Name="gLuluSpottedSkinTex" OutName="lulu_spotted_skin" Format="ci8" Width="32" Height="32" Offset="0x14938" />
-        <Texture Name="gLuluMouthUnusedTex" OutName="lulu_mouth_unused" Format="ci8" Width="32" Height="32" Offset="0x14D38" />
+        <Texture Name="gLuluMouthOpenFullTex" OutName="lulu_mouth_open_full" Format="ci8" Width="32" Height="32" Offset="0x14D38" />
         <Texture Name="gLuluEyeHalfTex" OutName="lulu_eye_half" Format="ci8" Width="32" Height="32" Offset="0x15138" />
         <Texture Name="gLuluSkinShadowTex" OutName="lulu_skin_shadow" Format="ci8" Width="8" Height="8" Offset="0x15538" />
         <Texture Name="gLuluKneeAndElbowTex" OutName="lulu_knee_and_elbow" Format="ci8" Width="16" Height="16" Offset="0x15578" />

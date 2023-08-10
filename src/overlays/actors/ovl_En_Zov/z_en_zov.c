@@ -146,7 +146,7 @@ void func_80BD1440(EnZov* this, s16 arg1) {
     this->csIdIndex = arg1;
 }
 
-void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
+void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 morphFrames) {
     f32 frame;
 
     if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) &&
@@ -165,7 +165,7 @@ void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
                 break;
         }
         Animation_Change(&this->skelAnime, sAnimationInfo[index], 1.0f, frame,
-                         Animation_GetLastFrame(sAnimationInfo[index]), mode, transitionRate);
+                         Animation_GetLastFrame(sAnimationInfo[index]), mode, morphFrames);
         this->unk_322 = index;
     }
 }
