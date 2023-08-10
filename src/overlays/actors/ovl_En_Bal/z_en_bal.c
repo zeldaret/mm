@@ -548,7 +548,7 @@ void EnBal_GroundIdle(EnBal* this, PlayState* play) {
 
             if (!(player->stateFlags1 & PLAYER_STATE1_800000) && !(player->actor.bgCheckFlags & BGCHECKFLAG_WATER) &&
                 ((this->timer < 300) || (this->timer == 301))) {
-                func_800B8614(&this->picto.actor, play, 100.0f);
+                Actor_OfferTalk(&this->picto.actor, play, 100.0f);
             }
         } else {
             this->watchTarget = TINGLE_WATCH_TARGET_NONE;
@@ -1046,7 +1046,7 @@ void EnBal_ThankYou(EnBal* this, PlayState* play) {
         this->picto.actor.flags &= ~ACTOR_FLAG_10000;
         EnBal_SetupTalk(this);
     } else {
-        func_800B85E0(&this->picto.actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->picto.actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
