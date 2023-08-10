@@ -172,7 +172,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, TARGET_MODE_10, ICHAIN_STOP),
 };
 
-static s32 isFrogReturnedFlags[] = {
+static s32 sIsFrogReturnedFlags[] = {
     WEEKEVENTREG_32_40,
     WEEKEVENTREG_32_80,
     WEEKEVENTREG_33_01,
@@ -192,7 +192,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }

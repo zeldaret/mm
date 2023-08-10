@@ -6,6 +6,7 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
 #include "fault.h"
+#include "sys_cfb.h"
 #include "loadfragment.h"
 #include "z64horse.h"
 #include "z64quake.h"
