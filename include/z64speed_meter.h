@@ -3,12 +3,12 @@
 
 #include "PR/ultratypes.h"
 
-typedef struct SpeedMeter {
-    /* 0x00 */ char unk_00[0x1C];
-} SpeedMeter; // size = 0x20
-
 struct GameState;
 struct GraphicsContext;
+
+typedef struct SpeedMeter {
+    /* 0x00 */ char unk_00[0x20];
+} SpeedMeter; // size = 0x20
 
 void SpeedMeter_Init(SpeedMeter* this);
 void SpeedMeter_Destroy(SpeedMeter* this);
