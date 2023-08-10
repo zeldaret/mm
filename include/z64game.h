@@ -7,6 +7,7 @@
 #include "padutils.h"
 #include "tha.h"
 #include "padmgr.h"
+#include "unk.h"
 
 struct GraphicsContext;
 struct GameState;
