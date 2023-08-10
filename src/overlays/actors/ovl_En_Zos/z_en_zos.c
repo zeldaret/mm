@@ -138,7 +138,7 @@ static AnimationHeader* sAnimations[] = {
     &gEvanLeanOnKeyboardAnim,        // EN_ZOS_ANIM_LEAN_ON_KEYBOARD
     &gEvanLeanOnKeyboardAndSighAnim, // EN_ZOS_ANIM_LEAN_ON_KEYBOARD_AND_SIGH
     &gEvanHandsOnHipsAnim,           // EN_ZOS_ANIM_HANDS_ON_HIPS
-    &gEeanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
+    &gEvanTalkFootTapAnim,           // EN_ZOS_ANIM_TALK_FOOT_TAP
     &gEvanTalkLookDownAnim,          // EN_ZOS_ANIM_TALK_LOOK_DOWN
     &gEvanTalkArmsOutAnim,           // EN_ZOS_ANIM_TALK_ARMS_OUT
     &gEvanTalkHandsOnHipsAnim,       // EN_ZOS_ANIM_TALK_HANDS_ON_HIPS
