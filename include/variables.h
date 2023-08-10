@@ -2057,13 +2057,15 @@ extern u32 gAudioSPDataSize;
 
 extern volatile OSTime D_801FBAE0;
 extern volatile OSTime D_801FBAE8;
-extern volatile OSTime gRDPTotalTimePrev;
+extern volatile OSTime gRDPTimeTotal;
 extern volatile OSTime lastRenderFrameDuration;
 extern volatile OSTime gRSPAudioTotalTime;
 extern volatile OSTime sRSPGFXTotalTime;
 extern volatile OSTime sRSPOtherTotalTime;
 // extern UNK_TYPE1 D_801FBB18;
-extern volatile OSTime gRDPTotalTime;
+
+// Accumulator for `gRDPTimeTotal`
+extern volatile OSTime gRDPTimeAcc;
 // extern UNK_TYPE1 D_801FBB28;
 
 extern Vec3f D_801FBBF0;

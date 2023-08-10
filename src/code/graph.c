@@ -322,10 +322,10 @@ void Graph_ExecuteAndDraw(GraphicsContext* gfxCtx, GameState* gameState) {
 
         D_801FBAE8 = sRSPGFXTotalTime;
         D_801FBAE0 = gRSPAudioTotalTime;
-        gRDPTotalTimePrev = gRDPTotalTime;
+        gRDPTimeTotal = gRDPTimeAcc;
         sRSPGFXTotalTime = 0;
         gRSPAudioTotalTime = 0;
-        gRDPTotalTime = 0;
+        gRDPTimeAcc = 0;
 
         if (sGraphTaskStartTime != 0) {
             lastRenderFrameDuration = time - sGraphTaskStartTime;

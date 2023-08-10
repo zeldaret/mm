@@ -266,8 +266,7 @@ s32 GameState_GetArenaSize(GameState* gameState) {
 }
 
 s32 func_80173B48(GameState* gameState) {
-    s32 result =
-        OS_CYCLES_TO_NSEC(gameState->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(gRDPTotalTimePrev);
+    s32 result = OS_CYCLES_TO_NSEC(gameState->framerateDivisor * sIrqMgrRetraceTime) - OS_CYCLES_TO_NSEC(gRDPTimeTotal);
 
     return result;
 }
