@@ -15,6 +15,15 @@ void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play);
 void BgDanpeiMovebg_Destroy(Actor* thisx, PlayState* play);
 void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play);
 
+void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play);
+void func_80AF70FC(BgDanpeiMovebg* this, PlayState* play);
+void func_80AF74CC(Actor* thisx, PlayState* play);
+u16 func_80AF705C(BgDanpeiMovebg* this, u16 flags);
+void func_80AF71FC(BgDanpeiMovebg* this, PlayState* play);
+void func_80AF72F8(BgDanpeiMovebg* this, PlayState* play);
+void func_80AF7354(BgDanpeiMovebg* this, PlayState* play);
+void func_80AF746C(BgDanpeiMovebg* this, PlayState* play);
+
 ActorInit Bg_Danpei_Movebg_InitVars = {
     ACTOR_BG_DANPEI_MOVEBG,
     ACTORCAT_BG,
@@ -55,20 +64,15 @@ s32 func_80AF6DE0(PlayState* this, ActorPathing* actorPathing) {
     return res;
 }
 
-void func_80AF6EA8(BgDanpeiMovebg*, PlayState*);
-
 void BgDanpeiMovebg_Init(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
     DynaPolyActor_Init(&this->dyna, 1);
-    this->bankIdx = SubS_GetObjectIndex(D_80AF7530[(this->dyna.actor.params >> 0xE) & 0x3], play);
+    this->bankIdx = SubS_GetObjectIndex(D_80AF7530[BGDANPEIMOVEBG_GET_TYPE(thisx)], play);
     if (this->bankIdx < 0) {
         Actor_Kill(&this->dyna.actor);
     }
     this->actionFunc = func_80AF6EA8;
 }
-
-void func_80AF70FC(BgDanpeiMovebg* this, PlayState* play);
-void func_80AF74CC(Actor* thisx, PlayState* play);
 
 void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
     Actor* thisx = (Actor*)this;
@@ -77,15 +81,15 @@ void func_80AF6EA8(BgDanpeiMovebg* this, PlayState* play) {
         this->dyna.actor.objBankIndex = this->bankIdx;
         this->dyna.actor.draw = func_80AF74CC;
         Actor_ProcessInitChain(thisx, sInitChain);
-        DynaPolyActor_LoadMesh(play, &this->dyna, D_80AF7538[(thisx->params >> 0xE) & 0x3]);
-        this->unk_1D0 = D_80AF7534[((thisx->params >> 0xE) & 0x3)];
+        DynaPolyActor_LoadMesh(play, &this->dyna, D_80AF7538[BGDANPEIMOVEBG_GET_TYPE(thisx)]);
+        this->dList = D_80AF7534[BGDANPEIMOVEBG_GET_TYPE(thisx)];
 
         /* If D_LIFT */
-        if (((thisx->params >> 0xE) & 0x3) == 0) {
+        if (BGDANPEIMOVEBG_GET_TYPE(thisx) == 0) {
             this->dyna.actor.gravity = 0.0f;
             this->dyna.actor.speed = 1.0f;
             SubS_ActorPathing_Init(play, &thisx->world.pos, thisx, &this->actorPath, play->setupPathList,
-                                   thisx->params & 0x7F, 0, 0, 0, 0);
+                                   BGDANPEIMOVEBG_GET_PATH_INDEX(thisx), 0, 0, 0, 0);
             this->actionFunc = func_80AF70FC;
         }
     }
@@ -100,115 +104,103 @@ void BgDanpeiMovebg_Update(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
 
     this->actionFunc(this, play);
-    this->unk_1CE = this->unk_1CC;
-    this->unk_1CC &= ~1;
+    this->prevFlags = this->flags;
+    this->flags &= ~1;
 }
 
-u16 func_80AF705C(BgDanpeiMovebg* this, u16 unk_1CC) {
-    u16 v1 = unk_1CC & ~0x1C;
+u16 func_80AF705C(BgDanpeiMovebg* this, u16 flags) {
+    u16 newFlags = flags & ~0x1C;
 
-    if (DynaPolyActor_IsActorOnTop(&this->dyna) && (this->unk_1CC & 1)) {
-        v1 |= 4;
+    if (DynaPolyActor_IsActorOnTop(&this->dyna) && (this->flags & 1)) {
+        newFlags |= 4;
     }
     if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
-        if (gSaveContext.save.playerForm == 3) {
-            v1 |= 8;
+        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            newFlags |= 8;
         } else {
-            v1 |= 0x10;
+            newFlags |= 0x10;
         }
     }
-    return v1;
+    return newFlags;
 }
-
-u16 func_80AF705C(BgDanpeiMovebg*, u16);
-void func_80AF71FC(BgDanpeiMovebg*, PlayState*);
 
 void func_80AF70FC(BgDanpeiMovebg* this, PlayState* play) {
-    this->unk_1CC = func_80AF705C(this, this->unk_1CC);
-    if (this->unk_1CC & 0xC) {
-        if (this->unk_1CC & 4) {
-            this->unk_1CC |= 2;
+    this->flags = func_80AF705C(this, this->flags);
+    if (this->flags & 0xC) {
+        if (this->flags & 4) {
+            this->flags |= 2;
         }
         this->actionFunc = func_80AF71FC;
-        return;
-    }
-    if (this->unk_1CC & 0x10) {
-        if (!(this->unk_1CE & 0x10)) {
-            Actor_PlaySfx(&this->dyna.actor, 0x2979U);
+    } else if (this->flags & 0x10) {
+        if (!(this->prevFlags & 0x10)) {
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SINK_WOOD_FLOOR);
         }
         Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y - 8.0f, 1.0f, 2.0f, 0.01f);
-        return;
+    } else {
+        if (this->prevFlags & 0x10) {
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_REBOUND_WOOD_FLOOR);
+        }
+        Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f, 2.0f, 0.01f);
     }
-    if (this->unk_1CE & 0x10) {
-        Actor_PlaySfx(&this->dyna.actor, 0x297AU);
-    }
-    Math_SmoothStepToF(&this->dyna.actor.world.pos.y, this->dyna.actor.home.pos.y, 1.0f, 2.0f, 0.01f);
 }
-
-s32 func_80AF6DE0(PlayState*, ActorPathing*);
-void func_80AF72F8(BgDanpeiMovebg*, PlayState*);
-void func_80AF7354(BgDanpeiMovebg*, PlayState*);
-void func_80AF746C(BgDanpeiMovebg*, PlayState*);
 
 void func_80AF71FC(BgDanpeiMovebg* this, PlayState* play) {
     SubS_ActorPathing_Update(play, &this->actorPath, SubS_ActorPathing_ComputePointInfo, func_80AF6DE0,
                              SubS_ActorPathing_MoveWithoutGravityReverse, SubS_ActorPathing_SetNextPoint);
-    Actor_PlaySfx_Flagged(&this->dyna.actor, 0x2103U);
-    if (this->actorPath.flags & 0x80) {
-        if (this->unk_1CC & 2) {
-            this->unk_1CC &= ~0x2;
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
+        if (this->flags & 2) {
+            this->flags &= ~0x2;
         }
         this->actionFunc = func_80AF72F8;
-        return;
-    }
-    this->unk_1CC = func_80AF705C(this, this->unk_1CC);
-    if ((this->unk_1CC & 0x10) || ((this->unk_1CC & 0xC) == 0xC)) {
-        this->actionFunc = func_80AF746C;
-        return;
-    }
-    if (!(this->unk_1CC & 0x1C)) {
-        this->actorPath.flags |= 8;
-        this->dyna.actor.speed = 2.0f;
-        this->actionFunc = func_80AF7354;
+    } else {
+        this->flags = func_80AF705C(this, this->flags);
+        if ((this->flags & 0x10) || (this->flags & 0xC) == 0xC) {
+            this->actionFunc = func_80AF746C;
+        } else if ((this->flags & 0x1C) == 0) {
+            this->actorPath.flags |= ACTOR_PATHING_MOVE_BACKWARDS;
+            this->dyna.actor.speed = 2.0f;
+            this->actionFunc = func_80AF7354;
+        }
     }
 }
 
 void func_80AF72F8(BgDanpeiMovebg* this, PlayState* play) {
-    this->unk_1CC = func_80AF705C(this, this->unk_1CC);
-    if (!(this->unk_1CC & 0x1C)) {
-        this->actorPath.flags |= 8;
+    this->flags = func_80AF705C(this, this->flags);
+    if (!(this->flags & 0x1C)) {
+        this->actorPath.flags |= ACTOR_PATHING_MOVE_BACKWARDS;
         this->dyna.actor.speed = 2.0f;
         this->actionFunc = func_80AF7354;
     }
 }
 
 void func_80AF7354(BgDanpeiMovebg* this, PlayState* play) {
-    Actor_PlaySfx_Flagged(&this->dyna.actor, 0x2103U);
-    this->unk_1CC = func_80AF705C(this, this->unk_1CC);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    this->flags = func_80AF705C(this, this->flags);
     SubS_ActorPathing_Update(play, &this->actorPath, SubS_ActorPathing_ComputePointInfo, func_80AF6DE0,
                              SubS_ActorPathing_MoveWithoutGravityReverse, SubS_ActorPathing_SetNextPoint);
-    if ((this->unk_1CC & 0x10) || (this->unk_1CC & 0xC) == 0xC) {
+    if ((this->flags & 0x10) || (this->flags & 0xC) == 0xC) {
         this->actionFunc = func_80AF746C;
-    } else if ((this->unk_1CC & 0xC) && (this->unk_1CC & 0xC) != 0xC) {
-        this->actorPath.flags &= 0xFFF7;
+    } else if ((this->flags & 0xC) && (this->flags & 0xC) != 0xC) {
+        this->actorPath.flags &= ~ACTOR_PATHING_MOVE_BACKWARDS;
         this->dyna.actor.speed = 1.0f;
-        if (this->unk_1CC & 4) {
-            this->unk_1CC = this->unk_1CC | 2;
+        if (this->flags & 4) {
+            this->flags |= 2;
         }
         this->actionFunc = func_80AF71FC;
     }
-    if (this->actorPath.flags & 0x80) {
-        this->actorPath.flags = this->actorPath.flags & 0xFFF7;
-        this->unk_1CC &= 0xFFFD;
+    if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_TEMPORARY) {
+        this->actorPath.flags &= ~ACTOR_PATHING_MOVE_BACKWARDS;
+        this->flags &= ~2;
         this->dyna.actor.speed = 1.0f;
         this->actionFunc = func_80AF70FC;
     }
 }
 
 void func_80AF746C(BgDanpeiMovebg* this, PlayState* arg1) {
-    this->unk_1CC = func_80AF705C(this, this->unk_1CC);
-    if (!(this->unk_1CC & 0x18)) {
-        if (this->actorPath.flags & 8) {
+    this->flags = func_80AF705C(this, this->flags);
+    if (!(this->flags & 0x18)) {
+        if (this->actorPath.flags & ACTOR_PATHING_MOVE_BACKWARDS) {
             this->actionFunc = func_80AF7354;
         } else {
             this->actionFunc = func_80AF71FC;
@@ -218,7 +210,7 @@ void func_80AF746C(BgDanpeiMovebg* this, PlayState* arg1) {
 
 void func_80AF74CC(Actor* thisx, PlayState* play) {
     BgDanpeiMovebg* this = THIS;
-    if (this->unk_1D0 != NULL) {
-        Gfx_DrawDListOpa(play, this->unk_1D0);
+    if (this->dList != NULL) {
+        Gfx_DrawDListOpa(play, this->dList);
     }
 }
