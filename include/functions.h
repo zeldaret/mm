@@ -984,18 +984,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-void ViMode_LogPrint(OSViMode* vimode);
-void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 antialiasOff, s32 modeN, s32 fb16Bit,
-                      s32 width, s32 height, s32 leftAdjust, s32 rightAdjust, s32 upperAdjust, s32 lowerAdjust);
-void ViMode_Save(ViMode* viMode);
-void ViMode_Load(ViMode* viMode);
-void ViMode_Init(ViMode* viMode);
-void ViMode_Destroy(ViMode* viMode);
-void ViMode_ConfigureFeatures(ViMode* viMode, s32 viFeatures);
-void ViMode_Update(ViMode* viMode, Input* input);
-void VisCvg_Init(struct_801F8010* this);
-void VisCvg_Destroy(struct_801F8010* this);
-void VisCvg_Draw(struct_801F8010* this, Gfx** gfxp);
 void func_80140E80(Struct_80140E80* arg0);
 void func_80140EA0(Struct_80140E80* arg0);
 // void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
@@ -1006,16 +994,6 @@ void func_8014116C(Gfx** gfxP, u16* arg1, u16* workBuffer, s32 width, s32 height
 // void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void func_80141778(Struct_80140E80* arg0, Gfx** gfxp, void* unk_18E60, GraphicsContext* gfxCtx);
-void VisMono_Init(VisMono* this);
-void VisMono_Destroy(VisMono* this);
-// void VisMono_DesaturateTLUT(u16* tlut);
-// void VisMono_DesaturateDList(Gfx* gfx);
-void VisMono_Draw(VisMono* this, Gfx** gfxp);
-// void VisMono_DrawOld(VisMono* this);
-
-void VisZbuf_Init(VisZbuf* this);
-void VisZbuf_Destroy(VisZbuf* this);
-void VisZbuf_Draw(VisZbuf* this, Gfx** gfxP, void* zbuffer);
 
 // void func_80147520(void);
 void func_80147564(PlayState* play);
@@ -1269,14 +1247,6 @@ void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
 void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,f32 translateX, f32 translateY, f32 translateZ);
 
-void SysCfb_SetLoResMode(void);
-void SysCfb_SetHiResMode(void);
-void SysCfb_Init(void);
-void* SysCfb_GetFramebuffer(s32 index);
-void* SysCfb_GetZBuffer(void);
-void* SysCfb_GetWorkBuffer(void);
-u16 SysCfb_GetZBufferPixel(s32 x, s32 y);
-s32 SysCfb_GetZBufferInt(s32 x, s32 y);
 void CmpDma_LoadFile(uintptr_t segmentVrom, s32 id, void* dst, size_t size);
 void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size);
 // void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value);

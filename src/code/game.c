@@ -1,11 +1,22 @@
 #include "global.h"
 #include "audiomgr.h"
 #include "idle.h"
+#include "sys_cfb.h"
 #include "system_malloc.h"
 #include "z64debug_text.h"
 #include "z64rumble.h"
+#include "z64vimode.h"
+#include "z64viscvg.h"
+#include "z64vismono.h"
+#include "z64viszbuf.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 #include "debug.h"
+
+extern UNK_TYPE1 D_801F7FF0;
+extern VisCvg sGameVisCvg;
+extern VisZbuf sGameVisZbuf;
+extern VisMono sGameVisMono;
+extern ViMode sGameViMode;
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -29,34 +40,34 @@ void GameState_SetFBFilter(Gfx** gfx, void* zbuffer) {
     Gfx* dlist = *gfx;
 
     if ((R_FB_FILTER_TYPE > 0) && (R_FB_FILTER_TYPE < 5)) {
-        D_801F8010.type = R_FB_FILTER_TYPE;
-        D_801F8010.color.r = R_FB_FILTER_PRIM_COLOR(0);
-        D_801F8010.color.g = R_FB_FILTER_PRIM_COLOR(1);
-        D_801F8010.color.b = R_FB_FILTER_PRIM_COLOR(2);
-        D_801F8010.color.a = R_FB_FILTER_A;
-        VisCvg_Draw(&D_801F8010, &dlist);
+        sGameVisCvg.type = R_FB_FILTER_TYPE;
+        sGameVisCvg.color.r = R_FB_FILTER_PRIM_COLOR(0);
+        sGameVisCvg.color.g = R_FB_FILTER_PRIM_COLOR(1);
+        sGameVisCvg.color.b = R_FB_FILTER_PRIM_COLOR(2);
+        sGameVisCvg.color.a = R_FB_FILTER_A;
+        VisCvg_Draw(&sGameVisCvg, &dlist);
     } else if ((R_FB_FILTER_TYPE == 5) || (R_FB_FILTER_TYPE == 6)) {
-        sVisZbuf.useRgba = (R_FB_FILTER_TYPE == 6);
-        sVisZbuf.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-        sVisZbuf.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-        sVisZbuf.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-        sVisZbuf.primColor.a = R_FB_FILTER_A;
-        sVisZbuf.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-        sVisZbuf.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-        sVisZbuf.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-        sVisZbuf.envColor.a = R_FB_FILTER_A;
-        VisZbuf_Draw(&sVisZbuf, &dlist, zbuffer);
+        sGameVisZbuf.useRgba = (R_FB_FILTER_TYPE == 6);
+        sGameVisZbuf.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sGameVisZbuf.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sGameVisZbuf.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sGameVisZbuf.primColor.a = R_FB_FILTER_A;
+        sGameVisZbuf.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sGameVisZbuf.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sGameVisZbuf.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sGameVisZbuf.envColor.a = R_FB_FILTER_A;
+        VisZbuf_Draw(&sGameVisZbuf, &dlist, zbuffer);
     } else if (R_FB_FILTER_TYPE == 7) {
-        sMonoColors.unk_00 = 0;
-        sMonoColors.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
-        sMonoColors.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
-        sMonoColors.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
-        sMonoColors.primColor.a = R_FB_FILTER_A;
-        sMonoColors.envColor.r = R_FB_FILTER_ENV_COLOR(0);
-        sMonoColors.envColor.g = R_FB_FILTER_ENV_COLOR(1);
-        sMonoColors.envColor.b = R_FB_FILTER_ENV_COLOR(2);
-        sMonoColors.envColor.a = R_FB_FILTER_A;
-        VisMono_Draw(&sMonoColors, &dlist);
+        sGameVisMono.unk_00 = 0;
+        sGameVisMono.primColor.r = R_FB_FILTER_PRIM_COLOR(0);
+        sGameVisMono.primColor.g = R_FB_FILTER_PRIM_COLOR(1);
+        sGameVisMono.primColor.b = R_FB_FILTER_PRIM_COLOR(2);
+        sGameVisMono.primColor.a = R_FB_FILTER_A;
+        sGameVisMono.envColor.r = R_FB_FILTER_ENV_COLOR(0);
+        sGameVisMono.envColor.g = R_FB_FILTER_ENV_COLOR(1);
+        sGameVisMono.envColor.b = R_FB_FILTER_ENV_COLOR(2);
+        sGameVisMono.envColor.a = R_FB_FILTER_A;
+        VisMono_Draw(&sGameVisMono, &dlist);
     }
 
     *gfx = dlist;
@@ -210,10 +221,10 @@ void GameState_Init(GameState* gameState, GameStateFunc init, GraphicsContext* g
 
     init(gameState);
 
-    VisCvg_Init(&D_801F8010);
-    VisZbuf_Init(&sVisZbuf);
-    VisMono_Init(&sMonoColors);
-    ViMode_Init(&D_801F8048);
+    VisCvg_Init(&sGameVisCvg);
+    VisZbuf_Init(&sGameVisZbuf);
+    VisMono_Init(&sGameVisMono);
+    ViMode_Init(&sGameViMode);
     func_801773A0(&D_801F7FF0);
     Rumble_Init();
 
@@ -231,10 +242,10 @@ void GameState_Destroy(GameState* gameState) {
 
     Rumble_Destroy();
     func_801773C4(&D_801F7FF0);
-    VisCvg_Destroy(&D_801F8010);
-    VisZbuf_Destroy(&sVisZbuf);
-    VisMono_Destroy(&sMonoColors);
-    ViMode_Destroy(&D_801F8048);
+    VisCvg_Destroy(&sGameVisCvg);
+    VisZbuf_Destroy(&sGameVisZbuf);
+    VisMono_Destroy(&sGameVisMono);
+    ViMode_Destroy(&sGameViMode);
     THA_Destroy(&gameState->heap);
     GameAlloc_Cleanup(&gameState->alloc);
 }

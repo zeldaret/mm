@@ -5,7 +5,6 @@
 #include "ultra64.h"
 #include "irqmgr.h"
 #include "padutils.h"
-#include "unk.h"
 
 typedef enum {
     /*  0 */ PADMGR_CONT_NONE,

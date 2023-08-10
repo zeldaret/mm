@@ -393,29 +393,6 @@ typedef struct {
     /* 0x10 */ Color_RGBA8_u32 envColor;
 } Struct_80140E80; // size = 0x14
 
-typedef struct {
-    /* 0x0 */ u32 type;
-    /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8_u32 color;
-    /* 0xC */ Color_RGBA8 envColor;
-} struct_801F8010; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32 useRgba;
-    /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8_u32 primColor;
-    /* 0xC */ Color_RGBA8_u32 envColor;
-} VisZbuf; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8_u32 primColor;
-    /* 0x0C */ Color_RGBA8_u32 envColor;
-    /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* dList;
-} VisMono; // size = 0x18
-
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
 #define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
@@ -467,30 +444,5 @@ typedef enum FramMode {
     /* 3 */ FRAM_MODE_READ,
     /* 4 */ FRAM_MODE_STATUS
 } FramMode;
-
-typedef enum {
-    /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,
-    /* 1 */ VI_MODE_EDIT_STATE_ACTIVE,
-    /* 2 */ VI_MODE_EDIT_STATE_2, // active, more adjustments
-    /* 3 */ VI_MODE_EDIT_STATE_3  // active, more adjustments, print comparison with NTSC LAN1 mode
-} ViModeEditState;
-
-typedef struct {
-    /* 0x00 */ OSViMode customViMode;
-    /* 0x50 */ s32 viHeight;
-    /* 0x54 */ s32 viWidth;
-    /* 0x58 */ s32 rightAdjust;
-    /* 0x5C */ s32 leftAdjust;
-    /* 0x60 */ s32 lowerAdjust;
-    /* 0x64 */ s32 upperAdjust;
-    /* 0x68 */ s32 editState;
-    /* 0x6C */ s32 tvType;
-    /* 0x70 */ u32 loRes;
-    /* 0x74 */ u32 antialiasOff;
-    /* 0x78 */ u32 modeN;
-    /* 0x7C */ u32 fb16Bit;
-    /* 0x80 */ u32 viFeatures;
-    /* 0x84 */ u32 unk_84;
-} ViMode; // size = 0x88
 
 #endif

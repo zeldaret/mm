@@ -1,5 +1,6 @@
 #include "global.h"
 #include "debug.h"
+#include "z64vimode.h"
 #include "PR/viint.h"
 
 typedef struct {
