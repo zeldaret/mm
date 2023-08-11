@@ -1912,17 +1912,14 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     dz = posNext->z - posPrev->z;
 
     // if there's movement on the xz plane, and argA flag is 0,
-    if (((dx != 0.0f) || (dz != 0.0f)) && !(argA & 1)) {
-        if ((checkHeight + dy) < 5.0f) {
+    if ((dx != 0.0f || dz != 0.0f) && !(argA & 1)) {
+        if (checkHeight + dy < 5.0f) {
             //! @bug checkHeight is not applied to posPrev/posNext
             result = BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, posPrev, posNext, &posIntersect, &poly,
                                            &bgId, actor, 1.0f, BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING);
             if (result) {
                 // unit normal of polygon
-                f32 nx;
-                f32 ny;
-                f32 nz;
-                ny = COLPOLY_GET_NORMAL(poly->normal.y);
+                f32 ny = COLPOLY_GET_NORMAL(poly->normal.y);
                 // if poly is floor, push result underneath the floor
                 if (ny > 0.5f) {
                     posResult->x = posIntersect.x;
@@ -1938,8 +1935,8 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                 }
                 // poly is wall
                 else {
-                    nx = COLPOLY_GET_NORMAL(poly->normal.x);
-                    nz = COLPOLY_GET_NORMAL(poly->normal.z);
+                    f32 nx = COLPOLY_GET_NORMAL(poly->normal.x);
+                    f32 nz = COLPOLY_GET_NORMAL(poly->normal.z);
                     posResult->x = radius * nx + posIntersect.x;
                     posResult->y = radius * ny + posIntersect.y;
                     posResult->z = radius * nz + posIntersect.z;
@@ -1973,15 +1970,15 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                 // if poly is not a "flat" floor or "flat" ceiling
                 if (!IS_ZERO(n2XZDist)) {
                     // normalize nx,nz and multiply each by the radius to go back to the other side of the wall
-                    f32 new_var;
+                    f32 ny2;
                     f32temp = 1.0f / n2XZDist;
                     posResult->x = radius * f32temp * nx2 + posIntersect.x;
                     posResult->z = radius * f32temp * nz2 + posIntersect.z;
                     *outPoly = poly;
                     *outBgId = bgId;
-                    new_var = poly->normal.y * COLPOLY_NORMAL_FRAC;
+                    ny2 = COLPOLY_GET_NORMAL(poly->normal.y);
                     result = true;
-                    if (new_var > 0.5f) {
+                    if (ny2 > 0.5f) {
                         if (actor != NULL) {
                             actor->bgCheckFlags |= BGCHECKFLAG_PLAYER_1000;
                         }
@@ -2027,8 +2024,8 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
             if (!IS_ZERO(n3XZDist)) {
                 // normalize nx,nz and multiply each by the radius to go back to the other side of the wall
                 f32temp = 1.0f / n3XZDist;
-                posResult->x = (radius * f32temp) * nx3 + posIntersect2.x;
-                posResult->z = (radius * f32temp) * nz3 + posIntersect2.z;
+                posResult->x = radius * f32temp * nx3 + posIntersect2.x;
+                posResult->z = radius * f32temp * nz3 + posIntersect2.z;
                 *outPoly = poly;
                 *outBgId = bgId2;
                 result = true;
