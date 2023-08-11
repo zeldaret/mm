@@ -3332,7 +3332,6 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
                         &polyVtx[0], &polyVtx[1], &polyVtx[2], polyNorm.x, polyNorm.y, polyNorm.z, polyDist,
                         dynaRaycast->pos->z, dynaRaycast->pos->x, &intersect, dynaRaycast->checkDist)) {
                     if (fabsf(intersect - result) < 1.0f) {
-
                         result = intersect;
                     }
                 }
