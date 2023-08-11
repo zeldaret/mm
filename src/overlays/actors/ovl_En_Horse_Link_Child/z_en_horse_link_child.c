@@ -50,7 +50,7 @@ typedef enum {
     /* 5 */ OOT_EPONA_ANIM_MAX
 } OOTEponaAnimation;
 
-AnimationHeader* sAnimations[] = {
+AnimationHeader* sAnimations[OOT_EPONA_ANIMATION_MAX] = {
     /* 0 */ &gEponaIdleAnim,   // OOT_EPONA_ANIM_IDLE
     /* 1 */ &gEponaWhinnyAnim, // OOT_EPONA_ANIM_WHINNY
     /* 2 */ &gEponaWalkAnim,   // OOT_EPONA_ANIM_WALK
