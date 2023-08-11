@@ -119,6 +119,9 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                             this->unk_14A |= 0x10;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else if (func_80A39BD0(play, this->unk_147)) {
                 this->actionFunc = func_80A3A7FC;
@@ -408,6 +411,9 @@ void func_80A3A274(EnElfgrp* this, PlayState* play) {
                 func_80A39F50(play);
                 this->actionFunc = func_80A3A210;
                 this->unk_144 = 90;
+                break;
+
+            default:
                 break;
         }
     }
