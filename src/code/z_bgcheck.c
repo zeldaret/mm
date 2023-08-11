@@ -1953,8 +1953,8 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
             Vec3f checkLinePrev;
             s32 pad;
             s32 bccFlags = SQ(radius) < (SQ(dx) + SQ(dz))
-                           ? (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING)
-                           : (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_FLOOR & ~BGCHECK_CHECK_CEILING);
+                               ? (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING)
+                               : (BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_FLOOR & ~BGCHECK_CHECK_CEILING);
 
             // perform a straight line test to see if a line at posNext.y + checkHeight from posPrev.xz to posNext.xz
             // passes through any wall and possibly floor polys
@@ -3316,7 +3316,7 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
             vtxList = dynaRaycast->dyna->bgActors[*dynaRaycast->bgId].colHeader->vtxList;
 
             for (i2 = 0; i2 < 3; i2++) {
-                Vec3s *src = &vtxList[COLPOLY_VTX_INDEX(poly->vtxData[i2])];
+                Vec3s* src = &vtxList[COLPOLY_VTX_INDEX(poly->vtxData[i2])];
                 Math_Vec3s_ToVec3f(&vtx, src);
                 SkinMatrix_Vec3fMtxFMultXYZ(&srpMtx, &vtx, &polyVtx[i2]);
             }
