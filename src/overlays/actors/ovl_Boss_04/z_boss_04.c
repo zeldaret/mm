@@ -6,6 +6,7 @@
 
 #include "z_boss_04.h"
 #include "z64shrink_window.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -330,7 +331,7 @@ void func_809EC568(Boss04* this, PlayState* play) {
                 this->unk_704 = 0;
                 this->unk_2DA = 10;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SPLASH);
+                            this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SPLASH));
                 Actor_PlaySfx(&this->actor, NA_SE_EN_KONB_JUMP_LEV_OLD - SFX_FLAG);
                 this->subCamAtOscillator = 20;
             }
@@ -550,7 +551,7 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
 
     if ((this->unk_1F8 == 2) || (this->unk_1F8 == 5)) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                    this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_EXPLOSION);
+                    this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_EXPLOSION));
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_IT_BIG_BOMB_EXPLOSION);
     }
 

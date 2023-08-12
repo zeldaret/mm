@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bbfall.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_200)
@@ -152,8 +153,23 @@ static InitChainEntry sInitChain[] = {
  * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
  * limb is not part of the bodyParts arrays.
  */
-static s8 sLimbIndexToBodyPartsIndex[] = {
-    -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
+static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
+    -1, // BUBBLE_LIMB_NONE
+    -1, // BUBBLE_LIMB_ROOT
+    -1, // BUBBLE_LIMB_CRANIUM_ROOT
+    -1, // BUBBLE_LIMB_JAW_ROOT
+    0,  // BUBBLE_LIMB_JAW
+    -1, // BUBBLE_LIMB_LEFT_WING_ROOT
+    -1, // BUBBLE_LIMB_LEFT_WING_WRAPPER
+    -1, // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
+    1,  // BUBBLE_LIMB_LEFT_WING_WEBBING
+    -1, // BUBBLE_LIMB_LEFT_WING_BONE
+    -1, // BUBBLE_LIMB_RIGHT_WING_ROOT
+    -1, // BUBBLE_LIMB_RIGHT_WING_WRAPPER
+    -1, // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
+    2,  // BUBBLE_LIMB_RIGHT_WING_WEBBING
+    -1, // BUBBLE_LIMB_RIGHT_WING_BONE
+    3,  // BUBBLE_LIMB_CRANIUM
 };
 
 /**
@@ -571,7 +587,8 @@ void EnBbfall_UpdateDamage(EnBbfall* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
                             this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_SMALL_LIGHT_RAYS);
+                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
             }
         }
     } else {
@@ -671,32 +688,32 @@ void EnBbfall_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
     MtxF* currentMatrixState;
 
     if (this->bodyPartDrawStatus == BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
-        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
-            if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
+        if (sLimbToBodyParts[limbIndex] != -1) {
+            if (sLimbToBodyParts[limbIndex] == 0) {
                 Matrix_MultVecX(1000.0f, &this->bodyPartsPos[0]);
-            } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
+            } else if (sLimbToBodyParts[limbIndex] == 3) {
                 Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[3]);
                 Matrix_MultVec3f(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
             } else {
-                Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
+                Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
             }
         }
     } else if (this->bodyPartDrawStatus > BBFALL_BODY_PART_DRAW_STATUS_ALIVE) {
-        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
-            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
+        if (sLimbToBodyParts[limbIndex] != -1) {
+            Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
             this->bodyPartDrawStatus = BBFALL_BODY_PART_DRAW_STATUS_BROKEN;
         }
     } else {
-        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
+        if (sLimbToBodyParts[limbIndex] != -1) {
             OPEN_DISPS(play->state.gfxCtx);
 
             currentMatrixState = Matrix_GetCurrent();
-            currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
-            currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
-            currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
+            currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].x;
+            currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].y;
+            currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].z;
             Matrix_RotateZS(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, this->limbDList);

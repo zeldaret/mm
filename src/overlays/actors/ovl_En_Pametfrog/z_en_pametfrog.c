@@ -8,6 +8,7 @@
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Bigpamet/z_en_bigpamet.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -171,7 +172,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 10, ICHAIN_STOP),
 };
 
-static s32 isFrogReturnedFlags[] = {
+static s32 sIsFrogReturnedFlags[] = {
     WEEKEVENTREG_32_40,
     WEEKEVENTREG_32_80,
     WEEKEVENTREG_33_01,
@@ -191,7 +192,7 @@ void EnPametfrog_Init(Actor* thisx, PlayState* play) {
     this->params = CLAMP(this->actor.params, 1, 4);
     if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
         Actor_Kill(&this->actor);
-        if (!CHECK_WEEKEVENTREG(isFrogReturnedFlags[this->actor.params - 1])) {
+        if (!CHECK_WEEKEVENTREG(sIsFrogReturnedFlags[this->actor.params - 1])) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_MINIFROG, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, this->actor.shape.rot.y, 0, this->params);
         }
@@ -394,7 +395,7 @@ void EnPametfrog_ApplyMagicArrowEffects(EnPametfrog* this, PlayState* play) {
         this->drawDmgEffAlpha = 3.0f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
                     this->collider.elements[0].info.bumper.hitPos.y, this->collider.elements[0].info.bumper.hitPos.z, 0,
-                    0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == GEKKO_DMGEFF_ICE) {
         EnPametfrog_Freeze(this);
     }
@@ -1299,10 +1300,11 @@ void EnPametfrog_ApplyDamageEffect(EnPametfrog* this, PlayState* play) {
                         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                         this->drawDmgEffScale = 0.75f;
                         this->drawDmgEffAlpha = 4.0f;
-                        Actor_Spawn(
-                            &play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements[0].info.bumper.hitPos.x,
-                            this->collider.elements[0].info.bumper.hitPos.y,
-                            this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG,
+                                    this->collider.elements[0].info.bumper.hitPos.x,
+                                    this->collider.elements[0].info.bumper.hitPos.y,
+                                    this->collider.elements[0].info.bumper.hitPos.z, 0, 0, 0,
+                                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     }
                     EnPametfrog_SetupDamage(this);
                 }

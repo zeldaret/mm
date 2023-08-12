@@ -502,7 +502,7 @@ void func_80BDD634(EnZow* this, PlayState* play) {
         this->actionFunc = func_80BDD570;
         func_80BDD1E0(this, play);
     } else if (func_80BDD154(this, play)) {
-        func_800B8614(&this->actor, play, 180.0f);
+        Actor_OfferTalk(&this->actor, play, 180.0f);
     }
 }
 

@@ -167,7 +167,7 @@ void func_80BC6F14(EnGuruguru* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BC701C(this, play);
     } else if (yaw <= 0x2890) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
     }
 }
 
@@ -295,7 +295,7 @@ void func_80BC7440(EnGuruguru* this, PlayState* play) {
         this->textIdIndex++;
         this->actor.textId = textIDs[this->textIdIndex];
         func_801A3B48(1);
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
         this->unk268 = 0;
         SET_WEEKEVENTREG(WEEKEVENTREG_38_40);
         this->actionFunc = func_80BC7520;
@@ -309,7 +309,7 @@ void func_80BC7520(EnGuruguru* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80BC7068;
     } else {
-        func_800B8500(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 400.0f, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
