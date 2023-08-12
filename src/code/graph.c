@@ -14,6 +14,7 @@ OSTime sGraphTaskStartTime;
 #include "macros.h"
 #include "buffers.h"
 #include "idle.h"
+#include "sys_cfb.h"
 #include "system_malloc.h"
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
@@ -74,27 +75,17 @@ void Graph_SetNextGfxPool(GraphicsContext* gfxCtx) {
 GameStateOverlay* Graph_GetNextGameState(GameState* gameState) {
     GameStateFunc gameStateInit = GameState_GetInit(gameState);
 
-    if (gameStateInit == Setup_Init) {
-        return &gGameStateOverlayTable[0];
+    // Generates code to match gameStateInit to a gamestate entry and returns it if found
+#define DEFINE_GAMESTATE_INTERNAL(typeName, enumName) \
+    if (gameStateInit == typeName##_Init) {           \
+        return &gGameStateOverlayTable[enumName];     \
     }
-    if (gameStateInit == MapSelect_Init) {
-        return &gGameStateOverlayTable[1];
-    }
-    if (gameStateInit == ConsoleLogo_Init) {
-        return &gGameStateOverlayTable[2];
-    }
-    if (gameStateInit == Play_Init) {
-        return &gGameStateOverlayTable[3];
-    }
-    if (gameStateInit == TitleSetup_Init) {
-        return &gGameStateOverlayTable[4];
-    }
-    if (gameStateInit == FileSelect_Init) {
-        return &gGameStateOverlayTable[5];
-    }
-    if (gameStateInit == DayTelop_Init) {
-        return &gGameStateOverlayTable[6];
-    }
+#define DEFINE_GAMESTATE(typeName, enumName, name) DEFINE_GAMESTATE_INTERNAL(typeName, enumName)
+
+#include "tables/gamestate_table.h"
+
+#undef DEFINE_GAMESTATE
+#undef DEFINE_GAMESTATE_INTERNAL
 
     return NULL;
 }

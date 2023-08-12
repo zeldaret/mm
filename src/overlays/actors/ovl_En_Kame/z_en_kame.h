@@ -2,6 +2,7 @@
 #define Z_EN_KAME_H
 
 #include "global.h"
+#include "objects/object_tl/object_tl.h"
 
 struct EnKame;
 
@@ -9,12 +10,12 @@ typedef void (*EnKameActionFunc)(struct EnKame*, PlayState*);
 
 typedef struct EnKame {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime skelAnime1;
-    /* 0x188 */ Vec3s jointTable1[13];
-    /* 0x1D6 */ Vec3s morphTable1[13];
-    /* 0x224 */ SkelAnime skelAnime2;
-    /* 0x268 */ Vec3s jointTable2[4];
-    /* 0x280 */ Vec3s morphTable2[4];
+    /* 0x144 */ SkelAnime snapperSkelAnime;
+    /* 0x188 */ Vec3s snapperJointTable[SNAPPER_LIMB_MAX];
+    /* 0x1D6 */ Vec3s snapperMorphTable[SNAPPER_LIMB_MAX];
+    /* 0x224 */ SkelAnime spikedSnapperSkelAnime;
+    /* 0x268 */ Vec3s spikedSnapperJointTable[SPIKED_SNAPPER_LIMB_MAX];
+    /* 0x280 */ Vec3s spikedSnapperMorphTable[SPIKED_SNAPPER_LIMB_MAX];
     /* 0x298 */ EnKameActionFunc actionFunc;
     /* 0x29C */ u8 unk_29C;
     /* 0x29D */ u8 drawDmgEffType;

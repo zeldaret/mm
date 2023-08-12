@@ -11,8 +11,8 @@ typedef void (*EnDinofosActionFunc)(struct EnDinofos*, PlayState*);
 typedef struct EnDinofos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[OBJECT_DINOFOS_LIMB_MAX];
-    /* 0x206 */ Vec3s morphTable[OBJECT_DINOFOS_LIMB_MAX];
+    /* 0x188 */ Vec3s jointTable[DINOLFOS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[DINOLFOS_LIMB_MAX];
     /* 0x284 */ EnDinofosActionFunc actionFunc;
     /* 0x288 */ u8 unk_288;
     /* 0x289 */ u8 unk_289;
