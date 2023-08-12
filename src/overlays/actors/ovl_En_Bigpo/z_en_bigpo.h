@@ -8,7 +8,7 @@ struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, PlayState*);
 
-typedef enum BigokutaBodyPart {
+typedef enum BigPoeBodyPart {
     /* 0 */ BIG_POE_BODYPART_0,
     /* 1 */ BIG_POE_BODYPART_1,
     /* 2 */ BIG_POE_BODYPART_2,
