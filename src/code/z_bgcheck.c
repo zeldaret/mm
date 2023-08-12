@@ -1912,14 +1912,15 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     dz = posNext->z - posPrev->z;
 
     // if there's movement on the xz plane, and argA flag is 0,
-    if ((dx != 0.0f || dz != 0.0f) && !(argA & 1)) {
-        if (checkHeight + dy < 5.0f) {
+    if (((dx != 0.0f) || (dz != 0.0f)) && !(argA & 1)) {
+        if ((checkHeight + dy) < 5.0f) {
             //! @bug checkHeight is not applied to posPrev/posNext
             result = BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, posPrev, posNext, &posIntersect, &poly,
                                            &bgId, actor, 1.0f, BGCHECK_CHECK_ALL & ~BGCHECK_CHECK_CEILING);
             if (result) {
                 // unit normal of polygon
                 f32 ny = COLPOLY_GET_NORMAL(poly->normal.y);
+
                 // if poly is floor, push result underneath the floor
                 if (ny > 0.5f) {
                     posResult->x = posIntersect.x;
@@ -1937,6 +1938,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                 else {
                     f32 nx = COLPOLY_GET_NORMAL(poly->normal.x);
                     f32 nz = COLPOLY_GET_NORMAL(poly->normal.z);
+
                     posResult->x = radius * nx + posIntersect.x;
                     posResult->y = radius * ny + posIntersect.y;
                     posResult->z = radius * nz + posIntersect.z;
@@ -1971,6 +1973,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
                 if (!IS_ZERO(n2XZDist)) {
                     // normalize nx,nz and multiply each by the radius to go back to the other side of the wall
                     f32 ny2;
+
                     f32temp = 1.0f / n2XZDist;
                     posResult->x = radius * f32temp * nx2 + posIntersect.x;
                     posResult->z = radius * f32temp * nz2 + posIntersect.z;
@@ -2014,6 +2017,7 @@ s32 BgCheck_CheckWallImpl(CollisionContext* colCtx, u16 xpFlags, Vec3f* posResul
     if (dynaPolyCollision || (*outBgId != BGCHECK_SCENE)) {
         Vec3f posIntersect2;
         s32 bgId2;
+
         if (BgCheck_CheckLineImpl(colCtx, xpFlags, COLPOLY_IGNORE_NONE, posPrev, posResult, &posIntersect2, &poly,
                                   &bgId2, actor, 1.0f, BGCHECK_CHECK_ONE_FACE | BGCHECK_CHECK_WALL)) {
             f32 nx3 = COLPOLY_GET_NORMAL(poly->normal.x);
@@ -3314,6 +3318,7 @@ f32 BgCheck_RaycastFloorDyna(DynaRaycast* dynaRaycast) {
 
             for (i2 = 0; i2 < 3; i2++) {
                 Vec3s* src = &vtxList[COLPOLY_VTX_INDEX(poly->vtxData[i2])];
+
                 Math_Vec3s_ToVec3f(&vtx, src);
                 SkinMatrix_Vec3fMtxFMultXYZ(&srpMtx, &vtx, &polyVtx[i2]);
             }
