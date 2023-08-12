@@ -30,6 +30,23 @@ typedef enum {
     /* 10 */ MONKEY_10
 } MonkeyType;
 
+#define MONKEY_FLAGS_1 (1 << 0)
+#define MONKEY_FLAGS_2 (1 << 1)
+#define MONKEY_FLAGS_4 (1 << 2)
+#define MONKEY_FLAGS_8 (1 << 3)
+#define MONKEY_FLAGS_10 (1 << 4)
+#define MONKEY_FLAGS_20 (1 << 5)
+#define MONKEY_FLAGS_40 (1 << 6)
+#define MONKEY_FLAGS_80 (1 << 7)
+#define MONKEY_FLAGS_100 (1 << 8)
+#define MONKEY_FLAGS_200 (1 << 9)
+#define MONKEY_FLAGS_400 (1 << 10)
+#define MONKEY_FLAGS_800 (1 << 11)
+#define MONKEY_FLAGS_1000 (1 << 12)
+#define MONKEY_FLAGS_2000 (1 << 13)
+#define MONKEY_FLAGS_4000 (1 << 14)
+#define MONKEY_FLAGS_8000 (1 << 15)
+
 #define MONKEY_PROP_LIMB_MAX MAX((s32)OBJECT_MNK_1_LIMB_MAX, (s32)OBJECT_MNK_3_LIMB_MAX)
 
 typedef struct EnMnk {
@@ -60,7 +77,7 @@ typedef struct EnMnk {
     /* 0x3DC */ s16 blinkFrame;
     /* 0x3DE */ s16 blinkTimer;
     /* 0x3E0 */ s32 unk_3E0;
-    /* 0x3E4 */ u16 unk_3E4;
+    /* 0x3E4 */ u16 flags;
     /* 0x3E8 */ EnMnkActionFunc actionFunc;
 } EnMnk; // size = 0x3EC
 
