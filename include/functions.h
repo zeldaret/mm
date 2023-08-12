@@ -1650,55 +1650,6 @@ s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 pageNum, void* dramAddr, u3
 
 Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
 
-void AudioHeap_DiscardFont(s32 fontId);
-void* AudioHeap_WritebackDCache(void* addr, size_t size);
-void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size);
-void* AudioHeap_AllocDmaMemory(AudioAllocPool* pool, size_t size);
-void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size);
-void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size);
-void AudioHeap_InitPool(AudioAllocPool* pool, void* addr, size_t size);
-void AudioHeap_PopPersistentCache(s32 tableType);
-void AudioHeap_InitMainPool(size_t initPoolSize);
-void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id);
-void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
-void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff);
-s32 AudioHeap_ResetStep(void);
-void AudioHeap_Init(void);
-void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id);
-void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
-void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr, s8 medium, s32 cache);
-void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
-void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 isFirstInit);
-
-void AudioLoad_DecreaseSampleDmaTtls(void);
-void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
-void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
-s32 AudioLoad_IsFontLoadComplete(s32 fontId);
-s32 AudioLoad_IsSeqLoadComplete(s32 seqId);
-void AudioLoad_SetFontLoadStatus(s32 fontId, s32 loadStatus);
-void AudioLoad_SetSeqLoadStatus(s32 seqId, s32 loadStatus);
-void AudioLoad_SyncLoadSeqParts(s32 seqId, s32 arg1, s32 arg2, OSMesgQueue* arg3);
-s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId);
-void AudioLoad_AsyncLoadSeq(s32 seqId, s32 arg1, s32 retData, OSMesgQueue* retQueue);
-void AudioLoad_AsyncLoadSampleBank(s32 sampleBankId, s32 arg1, s32 retData, OSMesgQueue* retQueue);
-void AudioLoad_AsyncLoadFont(s32 fontId, s32 arg1, s32 retData, OSMesgQueue* retQueue);
-u8* AudioLoad_GetFontsForSequence(s32 seqId, u32* outNumFonts);
-void AudioLoad_DiscardSeqFonts(s32 seqId);
-void func_8018FA60(u32 tableType, u32 id, s32 type, s32 data);
-s32 AudioLoad_SyncInitSeqPlayer(s32 playerIndex, s32 seqId, s32 arg2);
-s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 playerIndex, s32 seqId, s32 skipTicks);
-void AudioLoad_ProcessLoads(s32 resetStatus);
-void AudioLoad_SetDmaHandler(DmaHandler callback);
-void AudioLoad_Init(void* heap, u32 heapSize);
-void AudioLoad_InitSlowLoads(void);
-s32 AudioLoad_SlowLoadSample(s32 fontId, s32 instId, s8* isDone);
-s32 AudioLoad_SlowLoadSeq(s32 seqId, u8* ramAddr, s8* isDone);
-void AudioLoad_InitAsyncLoads(void);
-void AudioLoad_LoadPermanentSamples(void);
-void AudioLoad_ScriptLoad(s32 tableType, s32 id, s8* isDone);
-void AudioLoad_ProcessScriptLoads(void);
-void AudioLoad_InitScriptLoads(void);
-
 AudioTask* AudioThread_Update(void);
 void AudioThread_QueueCmdF32(u32 opArgs, f32 data);
 void AudioThread_QueueCmdS32(u32 opArgs, s32 data);
