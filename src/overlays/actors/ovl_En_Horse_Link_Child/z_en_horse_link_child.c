@@ -1,7 +1,7 @@
 /*
  * File: z_en_horse_link_child.c
  * Overlay: ovl_En_Horse_Link_Child
- * Description: Child Epona from OOT, when player learns Epona's song
+ * Description: Child Epona from OoT, when player learns Epona's song
  *   (Unused in MM and broken)
  */
 
@@ -49,7 +49,7 @@ typedef enum {
     /* 3 */ OOT_CHILD_EPONA_ANIM_TROT,   // mid
     /* 4 */ OOT_CHILD_EPONA_ANIM_GALLOP, // fast
     /* 5 */ OOT_CHILD_EPONA_ANIM_MAX
-} OOTEponaAnimation;
+} OoTEponaAnimation;
 
 AnimationHeader* sAnimations[OOT_CHILD_EPONA_ANIM_MAX] = {
     /* 0 */ &gEponaIdleAnim,   // OOT_CHILD_EPONA_ANIM_IDLE
@@ -91,7 +91,13 @@ static CollisionCheckInfoInit sColChkInfoInit = { 10, 35, 100, MASS_HEAVY };
 // the animation frames that should have sfx
 static s32 sAnimSoundFrames[] = { 1, 19 };
 
-static f32 sAnimPlaySpeeds[] = { 1.0f, 1.0f, 1.5f, 1.5f, 1.5f };
+static f32 sAnimPlaySpeeds[OOT_CHILD_EPONA_ANIM_MAX] = {
+    1.0f, // OOT_CHILD_EPONA_ANIM_IDLE
+    1.0f, // OOT_CHILD_EPONA_ANIM_WHINNY
+    1.5f, // OOT_CHILD_EPONA_ANIM_WALK
+    1.5f, // OOT_CHILD_EPONA_ANIM_TROT
+    1.5f  // OOT_CHILD_EPONA_ANIM_GALLOP
+};
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneScale, 1200, ICHAIN_STOP),
@@ -105,7 +111,7 @@ typedef enum {
     /* 4 */ OOT_CHILD_EPONA_ACTION_4,
     /* 5 */ OOT_CHILD_EPONA_ACTION_5,
     /* 6 */ OOT_CHILD_EPONA_ACTION_MAX
-} OOTEponaAction;
+} OoTEponaAction;
 
 static EnHorseLinkChildActionFunc sActionFuncs[] = {
     /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_CHILD_EPONA_ACTION_0
@@ -195,7 +201,7 @@ void EnHorseLinkChild_Init(Actor* thisx, PlayState* play) {
     this->footstepCounter = 0;
     this->eyeTexIndex = 0;
 
-    if (gSaveContext.sceneLayer >= 4) { // IS_CUTSCENE_LAYER in OOT
+    if (gSaveContext.sceneLayer >= 4) { // IS_CUTSCENE_LAYER in OoT
         EnHorseLinkChild_SetupLonLonIdle(this);
     } else {
         EnHorseLinkChild_SetupLonLonIdle(this);
@@ -382,12 +388,12 @@ void func_808DF088(EnHorseLinkChild* this, PlayState* play) {
 
 /**
  * Idle in one spot, waiting for player to finish getting Epona song.
- * However, the flag was not migrated from OOT corectly, so it checks for the wrong flag.
+ * However, the flag was not migrated from OoT corectly, so it checks for the wrong flag.
  */
 void EnHorseLinkChild_LonLonIdle(EnHorseLinkChild* this, PlayState* play) {
     Player* player;
     f32 distToPlayer;
-    s32 animIsFinished;
+    s32 isAnimFinished;
     s32 nextAnimIndex;
 
     func_808DF088(this, play);
@@ -395,9 +401,9 @@ void EnHorseLinkChild_LonLonIdle(EnHorseLinkChild* this, PlayState* play) {
     player = GET_PLAYER(play);
     distToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
     nextAnimIndex = this->animIndex;
-    animIsFinished = SkelAnime_Update(&this->skin.skelAnime);
+    isAnimFinished = SkelAnime_Update(&this->skin.skelAnime);
 
-    if ((animIsFinished) || (this->animIndex == OOT_CHILD_EPONA_ANIM_WHINNY) ||
+    if ((isAnimFinished) || (this->animIndex == OOT_CHILD_EPONA_ANIM_WHINNY) ||
         (this->animIndex == OOT_CHILD_EPONA_ANIM_IDLE)) {
         //! @bug: The carry-over of this flag from OoT was not done correctly
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ENTERED_ZORA_HALL)) {
@@ -419,10 +425,10 @@ void EnHorseLinkChild_LonLonIdle(EnHorseLinkChild* this, PlayState* play) {
                     this->actor.speed = 0.0f;
                     if (this->animIndex == OOT_CHILD_EPONA_ANIM_IDLE) {
                         nextAnimIndex =
-                            (animIsFinished == true) ? OOT_CHILD_EPONA_ANIM_WHINNY : OOT_CHILD_EPONA_ANIM_IDLE;
+                            (isAnimFinished == true) ? OOT_CHILD_EPONA_ANIM_WHINNY : OOT_CHILD_EPONA_ANIM_IDLE;
                     } else {
                         nextAnimIndex =
-                            (animIsFinished == true) ? OOT_CHILD_EPONA_ANIM_IDLE : OOT_CHILD_EPONA_ANIM_WHINNY;
+                            (isAnimFinished == true) ? OOT_CHILD_EPONA_ANIM_IDLE : OOT_CHILD_EPONA_ANIM_WHINNY;
                     }
                 }
             } else if (distToPlayer < 200.0f) {
@@ -438,22 +444,22 @@ void EnHorseLinkChild_LonLonIdle(EnHorseLinkChild* this, PlayState* play) {
             } else {
                 this->actor.speed = 0.0f;
                 if (this->animIndex == OOT_CHILD_EPONA_ANIM_IDLE) {
-                    nextAnimIndex = (animIsFinished == true) ? OOT_CHILD_EPONA_ANIM_WHINNY : OOT_CHILD_EPONA_ANIM_IDLE;
+                    nextAnimIndex = (isAnimFinished == true) ? OOT_CHILD_EPONA_ANIM_WHINNY : OOT_CHILD_EPONA_ANIM_IDLE;
                 } else {
-                    nextAnimIndex = (animIsFinished == true) ? OOT_CHILD_EPONA_ANIM_IDLE : OOT_CHILD_EPONA_ANIM_WHINNY;
+                    nextAnimIndex = (isAnimFinished == true) ? OOT_CHILD_EPONA_ANIM_IDLE : OOT_CHILD_EPONA_ANIM_WHINNY;
                 }
             }
         } else {
             this->actor.speed = 0.0f;
             if (this->animIndex == OOT_CHILD_EPONA_ANIM_IDLE) {
-                nextAnimIndex = (animIsFinished == true) ? OOT_CHILD_EPONA_ANIM_WHINNY : OOT_CHILD_EPONA_ANIM_IDLE;
+                nextAnimIndex = (isAnimFinished == true) ? OOT_CHILD_EPONA_ANIM_WHINNY : OOT_CHILD_EPONA_ANIM_IDLE;
             } else {
-                nextAnimIndex = (animIsFinished == true) ? OOT_CHILD_EPONA_ANIM_IDLE : OOT_CHILD_EPONA_ANIM_WHINNY;
+                nextAnimIndex = (isAnimFinished == true) ? OOT_CHILD_EPONA_ANIM_IDLE : OOT_CHILD_EPONA_ANIM_WHINNY;
             }
         }
     }
 
-    if ((nextAnimIndex != this->animIndex) || (animIsFinished == true)) {
+    if ((nextAnimIndex != this->animIndex) || (isAnimFinished == true)) {
         this->animIndex = nextAnimIndex;
         Animation_Change(&this->skin.skelAnime, sAnimations[this->animIndex], EnHorseLinkChild_GetAnimSpeed(this), 0.0f,
                          Animation_GetLastFrame(sAnimations[this->animIndex]), ANIMMODE_ONCE, -5.0f);
@@ -519,7 +525,7 @@ void EnHorseLinkChild_SetupActionFunc4(EnHorseLinkChild* this) {
 
 void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 distToTargetLoc;
+    f32 distToTargetLocation;
     s32 nextAnimIndex;
 
     this->timer++;
@@ -529,7 +535,7 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
 
     if ((this->animIndex == OOT_CHILD_EPONA_ANIM_GALLOP) || (this->animIndex == OOT_CHILD_EPONA_ANIM_TROT) ||
         (this->animIndex == OOT_CHILD_EPONA_ANIM_WALK)) {
-        if (this->isReturningHome == false) {
+        if (!this->isReturningHome) {
             Horse_RotateToPoint(&this->actor, &player->actor.world.pos, 0x12C);
         } else {
             Horse_RotateToPoint(&this->actor, &this->actor.home.pos, 0x12C);
@@ -537,17 +543,17 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
     }
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
-        if (this->isReturningHome == false) {
-            distToTargetLoc = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
+        if (!this->isReturningHome) {
+            distToTargetLocation = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         } else {
-            distToTargetLoc = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            distToTargetLocation = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
         }
 
-        if (this->isReturningHome == false) {
-            if (distToTargetLoc >= 300.0f) {
+        if (!this->isReturningHome) {
+            if (distToTargetLocation >= 300.0f) {
                 nextAnimIndex = OOT_CHILD_EPONA_ANIM_GALLOP;
                 this->actor.speed = 6.0f;
-            } else if (distToTargetLoc >= 150.0f) {
+            } else if (distToTargetLocation >= 150.0f) {
                 nextAnimIndex = OOT_CHILD_EPONA_ANIM_TROT;
                 this->actor.speed = 4.0f;
             } else {
@@ -555,13 +561,13 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
                 this->footstepCounter = 0;
                 this->actor.speed = 2.0f;
             }
-        } else if (distToTargetLoc >= 300.0f) {
+        } else if (distToTargetLocation >= 300.0f) {
             nextAnimIndex = OOT_CHILD_EPONA_ANIM_GALLOP;
             this->actor.speed = 6.0f;
-        } else if (distToTargetLoc >= 150.0f) {
+        } else if (distToTargetLocation >= 150.0f) {
             nextAnimIndex = OOT_CHILD_EPONA_ANIM_TROT;
             this->actor.speed = 4.0f;
-        } else if (distToTargetLoc >= 70.0f) {
+        } else if (distToTargetLocation >= 70.0f) {
             nextAnimIndex = OOT_CHILD_EPONA_ANIM_WALK;
             this->footstepCounter = 0;
             this->actor.speed = 2.0f;
