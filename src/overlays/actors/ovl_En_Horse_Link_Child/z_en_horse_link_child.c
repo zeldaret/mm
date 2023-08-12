@@ -52,11 +52,11 @@ typedef enum {
 } OoTEponaAnimation;
 
 AnimationHeader* sAnimations[OOT_CHILD_EPONA_ANIM_MAX] = {
-    /* 0 */ &gEponaIdleAnim,   // OOT_CHILD_EPONA_ANIM_IDLE
-    /* 1 */ &gEponaWhinnyAnim, // OOT_CHILD_EPONA_ANIM_WHINNY
-    /* 2 */ &gEponaWalkAnim,   // OOT_CHILD_EPONA_ANIM_WALK
-    /* 3 */ &gEponaTrotAnim,   // OOT_CHILD_EPONA_ANIM_TROT
-    /* 4 */ &gEponaGallopAnim, // OOT_CHILD_EPONA_ANIM_GALLOP
+    &gEponaIdleAnim,   // OOT_CHILD_EPONA_ANIM_IDLE
+    &gEponaWhinnyAnim, // OOT_CHILD_EPONA_ANIM_WHINNY
+    &gEponaWalkAnim,   // OOT_CHILD_EPONA_ANIM_WALK
+    &gEponaTrotAnim,   // OOT_CHILD_EPONA_ANIM_TROT
+    &gEponaGallopAnim, // OOT_CHILD_EPONA_ANIM_GALLOP
 };
 
 static ColliderJntSphElementInit sJntSphElementsInit[] = {
@@ -114,12 +114,12 @@ typedef enum {
 } OoTEponaAction;
 
 static EnHorseLinkChildActionFunc sActionFuncs[] = {
-    /* 0 */ EnHorseLinkChild_ActionFunc0,   // OOT_CHILD_EPONA_ACTION_0
-    /* 1 */ EnHorseLinkChild_GreetPlayer,   // OOT_CHILD_EPONA_ACTION_GREET_PLAYER
-    /* 2 */ EnHorseLinkChild_WaitForPlayer, // OOT_CHILD_EPONA_ACTION_WAIT_FOR_PLAYER
-    /* 3 */ EnHorseLinkChild_LonLonIdle,    // OOT_CHILD_EPONA_ACTION_LONLON_IDLE
-    /* 4 */ EnHorseLinkChild_ActionFunc4,   // OOT_CHILD_EPONA_ACTION_4
-    /* 5 */ EnHorseLinkChild_ActionFunc5,   // OOT_CHILD_EPONA_ACTION_5
+    EnHorseLinkChild_ActionFunc0,   // OOT_CHILD_EPONA_ACTION_0
+    EnHorseLinkChild_GreetPlayer,   // OOT_CHILD_EPONA_ACTION_GREET_PLAYER
+    EnHorseLinkChild_WaitForPlayer, // OOT_CHILD_EPONA_ACTION_WAIT_FOR_PLAYER
+    EnHorseLinkChild_LonLonIdle,    // OOT_CHILD_EPONA_ACTION_LONLON_IDLE
+    EnHorseLinkChild_ActionFunc4,   // OOT_CHILD_EPONA_ACTION_4
+    EnHorseLinkChild_ActionFunc5,   // OOT_CHILD_EPONA_ACTION_5
 };
 
 static TexturePtr sEyeTextures[] = { gEponaEyeOpenTex, gEponaEyeHalfTex, gEponaEyeClosedTex };
@@ -525,7 +525,7 @@ void EnHorseLinkChild_SetupActionFunc4(EnHorseLinkChild* this) {
 
 void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 distToTargetLocation;
+    f32 distToTargetPos;
     s32 nextAnimIndex;
 
     this->timer++;
@@ -544,16 +544,16 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
 
     if (SkelAnime_Update(&this->skin.skelAnime)) {
         if (!this->isReturningHome) {
-            distToTargetLocation = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
+            distToTargetPos = Actor_WorldDistXZToActor(&this->actor, &GET_PLAYER(play)->actor);
         } else {
-            distToTargetLocation = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
+            distToTargetPos = Math3D_Distance(&this->actor.world.pos, &this->actor.home.pos);
         }
 
         if (!this->isReturningHome) {
-            if (distToTargetLocation >= 300.0f) {
+            if (distToTargetPos >= 300.0f) {
                 nextAnimIndex = OOT_CHILD_EPONA_ANIM_GALLOP;
                 this->actor.speed = 6.0f;
-            } else if (distToTargetLocation >= 150.0f) {
+            } else if (distToTargetPos >= 150.0f) {
                 nextAnimIndex = OOT_CHILD_EPONA_ANIM_TROT;
                 this->actor.speed = 4.0f;
             } else {
@@ -561,13 +561,13 @@ void EnHorseLinkChild_ActionFunc4(EnHorseLinkChild* this, PlayState* play) {
                 this->footstepCounter = 0;
                 this->actor.speed = 2.0f;
             }
-        } else if (distToTargetLocation >= 300.0f) {
+        } else if (distToTargetPos >= 300.0f) {
             nextAnimIndex = OOT_CHILD_EPONA_ANIM_GALLOP;
             this->actor.speed = 6.0f;
-        } else if (distToTargetLocation >= 150.0f) {
+        } else if (distToTargetPos >= 150.0f) {
             nextAnimIndex = OOT_CHILD_EPONA_ANIM_TROT;
             this->actor.speed = 4.0f;
-        } else if (distToTargetLocation >= 70.0f) {
+        } else if (distToTargetPos >= 70.0f) {
             nextAnimIndex = OOT_CHILD_EPONA_ANIM_WALK;
             this->footstepCounter = 0;
             this->actor.speed = 2.0f;
