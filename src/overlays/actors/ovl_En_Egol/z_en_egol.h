@@ -62,7 +62,7 @@ typedef struct EnEgol {
     /* 0x02C0 */ Vec3f bodyPartsPos[EYEGORE_BODYPART_MAX];
     /* 0x0350 */ s16 bodyPartIndex;
     /* 0x0352 */ s16 pathIndex;
-    /* 0x0354 */ s32 animation;
+    /* 0x0354 */ s32 animIndex;
     /* 0x0358 */ u8 isRetreating;
     /* 0x035C */ f32 animEndFrame;
     /* 0x0360 */ f32 wakeupRange;

@@ -142,6 +142,9 @@ void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
                 Actor_Kill(&this->actor);
             }
             break;
+
+        default:
+            break;
     }
 
     actorId = sActorIds[this->type];

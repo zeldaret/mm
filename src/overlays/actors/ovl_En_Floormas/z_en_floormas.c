@@ -135,14 +135,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-static Vec3f D_808D3900[PLAYER_FORM_MAX] = {
-    { 25.0f, 45.0f, -7.0f },  // PLAYER_FORM_FIERCE_DEITY
-    { 25.0f, 40.0f, -12.0f }, // PLAYER_FORM_GORON
-    { 25.0f, 35.0f, -2.0f },  // PLAYER_FORM_ZORA
-    { 10.0f, 20.0f, -4.0f },  // PLAYER_FORM_DEKU
-    { 15.0f, 25.0f, -2.0f },  // PLAYER_FORM_HUMAN
-};
-
 void EnFloormas_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnFloormas* this = THIS;
@@ -387,7 +379,7 @@ void func_808D108C(EnFloormas* this) {
 }
 
 void func_808D11BC(EnFloormas* this, PlayState* play) {
-    f32 frame;
+    f32 curFrame;
     f32 sp30;
     f32 sp2C;
 
@@ -404,8 +396,8 @@ void func_808D11BC(EnFloormas* this, PlayState* play) {
         }
     }
 
-    frame = this->skelAnime.curFrame;
-    if ((frame >= 7.0f) && (frame < 22.0f)) {
+    curFrame = this->skelAnime.curFrame;
+    if ((curFrame >= 7.0f) && (curFrame < 22.0f)) {
         sp30 = Math_SinS(this->actor.shape.rot.y + 0x4268);
         sp2C = Math_CosS(this->actor.shape.rot.y + 0x4268);
         this->actor.shape.rot.y += this->unk_190;
@@ -708,6 +700,14 @@ void func_808D2040(EnFloormas* this, PlayState* play) {
         func_808D217C(this, player);
     }
 }
+
+static Vec3f D_808D3900[PLAYER_FORM_MAX] = {
+    { 25.0f, 45.0f, -7.0f },  // PLAYER_FORM_FIERCE_DEITY
+    { 25.0f, 40.0f, -12.0f }, // PLAYER_FORM_GORON
+    { 25.0f, 35.0f, -2.0f },  // PLAYER_FORM_ZORA
+    { 10.0f, 20.0f, -4.0f },  // PLAYER_FORM_DEKU
+    { 15.0f, 25.0f, -2.0f },  // PLAYER_FORM_HUMAN
+};
 
 void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;

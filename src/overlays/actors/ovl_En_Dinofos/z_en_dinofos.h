@@ -2,32 +2,33 @@
 #define Z_EN_DINOFOS_H
 
 #include "global.h"
+#include "objects/object_dinofos/object_dinofos.h"
 
 struct EnDinofos;
 
 typedef void (*EnDinofosActionFunc)(struct EnDinofos*, PlayState*);
 
 typedef enum EnDinofosBodyPart {
-    /*  0 */ DINOFOS_BODYPART_0,
-    /*  1 */ DINOFOS_BODYPART_1,
-    /*  2 */ DINOFOS_BODYPART_2,
-    /*  3 */ DINOFOS_BODYPART_3,
-    /*  4 */ DINOFOS_BODYPART_4,
-    /*  5 */ DINOFOS_BODYPART_5,
-    /*  6 */ DINOFOS_BODYPART_6,
-    /*  7 */ DINOFOS_BODYPART_7,
-    /*  8 */ DINOFOS_BODYPART_8,
-    /*  9 */ DINOFOS_BODYPART_9,
-    /* 10 */ DINOFOS_BODYPART_10,
-    /* 11 */ DINOFOS_BODYPART_11,
+    /*  0 */ DINOFOS_BODYPART_LEFT_UPPER_LEG,
+    /*  1 */ DINOFOS_BODYPART_LEFT_CLAWS,
+    /*  2 */ DINOFOS_BODYPART_RIGHT_UPPER_LEG,
+    /*  3 */ DINOFOS_BODYPART_RIGHT_CLAWS,
+    /*  4 */ DINOFOS_BODYPART_UPPER_BODY,
+    /*  5 */ DINOFOS_BODYPART_LEFT_FOREARM,
+    /*  6 */ DINOFOS_BODYPART_LEFT_HAND,
+    /*  7 */ DINOFOS_BODYPART_RIGHT_FOREARM,
+    /*  8 */ DINOFOS_BODYPART_RIGHT_HAND,
+    /*  9 */ DINOFOS_BODYPART_HEAD,
+    /* 10 */ DINOFOS_BODYPART_JAW,
+    /* 11 */ DINOFOS_BODYPART_LOWER_TAIL,
     /* 12 */ DINOFOS_BODYPART_MAX
 } EnDinofosBodyPart;
 
 typedef struct EnDinofos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[21];
-    /* 0x206 */ Vec3s morphTable[21];
+    /* 0x188 */ Vec3s jointTable[DINOLFOS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[DINOLFOS_LIMB_MAX];
     /* 0x284 */ EnDinofosActionFunc actionFunc;
     /* 0x288 */ u8 unk_288;
     /* 0x289 */ u8 unk_289;
