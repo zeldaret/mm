@@ -4,7 +4,6 @@
  * Description: Kafei
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_en_test3.h"
 #include "objects/object_test3/object_test3.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
@@ -1189,9 +1188,12 @@ void EnTest3_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList1, Gfx** dL
         Actor* leftHandActor = this->player.heldActor;
 
         if (leftHandActor != NULL) {
-            leftHandActor->world.pos.x = (this->player.bodyPartsPos[15].x + this->player.leftHandWorld.pos.x) / 2.0f;
-            leftHandActor->world.pos.y = (this->player.bodyPartsPos[15].y + this->player.leftHandWorld.pos.y) / 2.0f;
-            leftHandActor->world.pos.z = (this->player.bodyPartsPos[15].z + this->player.leftHandWorld.pos.z) / 2.0f;
+            leftHandActor->world.pos.x =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x + this->player.leftHandWorld.pos.x) / 2.0f;
+            leftHandActor->world.pos.y =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y + this->player.leftHandWorld.pos.y) / 2.0f;
+            leftHandActor->world.pos.z =
+                (this->player.bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + this->player.leftHandWorld.pos.z) / 2.0f;
         }
     } else if (limbIndex == OBJECT_TEST3_LIMB_0B) {
         Actor* actor730 = this->player.targetedActor;

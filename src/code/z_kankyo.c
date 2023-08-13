@@ -782,7 +782,7 @@ void Environment_Init(PlayState* play2, EnvironmentContext* envCtx, s32 arg2) {
     cREG(12) = 0;
     cREG(13) = 0;
     cREG(14) = 0;
-    D_801F4DDC = 1; // should be u8, breaks bss
+    D_801F4DDC = 1;
 
     for (i = 0; i < ARRAY_COUNT(sLightningBolts); i++) {
         sLightningBolts[i].state = LIGHTNING_BOLT_INACTIVE;

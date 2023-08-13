@@ -127,7 +127,7 @@ void func_80AE626C(EnShn* this) {
     this->unk_2BC = CLAMP(this->unk_2BC, -0x1FFE, 0x1FFE);
     Math_Vec3f_Copy(&shnPos, &this->actor.focus.pos);
     if (this->shnPlayerRef->actor.id == ACTOR_PLAYER) {
-        playerPos.y = this->shnPlayerRef->bodyPartsPos[7].y + 3.0f;
+        playerPos.y = this->shnPlayerRef->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&playerPos, &this->shnPlayerRef->actor.focus.pos);
     }

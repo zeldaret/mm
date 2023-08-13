@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_cfb.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 LightsBuffer sLightsBuffer;

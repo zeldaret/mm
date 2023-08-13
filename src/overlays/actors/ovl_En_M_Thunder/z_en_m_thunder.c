@@ -119,7 +119,7 @@ void EnMThunder_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.yShift = -20;
     this->timer = 8;
     this->scroll = 0.0f;
-    this->actor.world.pos = player->bodyPartsPos[0];
+    this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
     this->lightColorFrac = 0.0f;
     this->adjustLightsArg1 = 0.0f;
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
@@ -230,7 +230,7 @@ void EnMThunder_Charge(EnMThunder* this, PlayState* play) {
     Actor* child = this->actor.child;
 
     this->unk1B0 = player->unk_B08;
-    this->actor.world.pos = player->bodyPartsPos[0];
+    this->actor.world.pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
 
     if (!this->isCharging && (player->unk_B08 >= 0.1f)) {
@@ -380,8 +380,8 @@ void EnMThunder_Spin_Attack(EnMThunder* this, PlayState* play) {
     }
 
     if (this->timer > 0) {
-        this->actor.world.pos.x = player->bodyPartsPos[0].x;
-        this->actor.world.pos.z = player->bodyPartsPos[0].z;
+        this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+        this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
         this->timer--;
     }
 
