@@ -8,6 +8,19 @@ struct EnDodongo;
 
 typedef void (*EnDodongoActionFunc)(struct EnDodongo*, PlayState*);
 
+typedef enum DodongoBodyPart {
+    /* 0 */ DODONGO_BODYPART_0,
+    /* 1 */ DODONGO_BODYPART_1,
+    /* 2 */ DODONGO_BODYPART_2,
+    /* 3 */ DODONGO_BODYPART_3,
+    /* 4 */ DODONGO_BODYPART_4,
+    /* 5 */ DODONGO_BODYPART_5,
+    /* 6 */ DODONGO_BODYPART_6,
+    /* 7 */ DODONGO_BODYPART_7,
+    /* 8 */ DODONGO_BODYPART_8,
+    /* 9 */ DODONGO_BODYPART_MAX
+} DodongoBodyPart;
+
 typedef struct EnDodongo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -28,7 +41,7 @@ typedef struct EnDodongo {
     /* 0x33C */ f32 drawDmgEffAlpha;
     /* 0x340 */ f32 drawDmgEffScale;
     /* 0x344 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x348 */ Vec3f limbPos[9];
+    /* 0x348 */ Vec3f bodyPartsPos[DODONGO_BODYPART_MAX];
     /* 0x3B4 */ ColliderJntSph collider1;
     /* 0x3D4 */ ColliderJntSphElement collider1Elements[10];
     /* 0x654 */ ColliderJntSph collider2;

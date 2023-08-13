@@ -162,7 +162,7 @@ void func_808BD3B4(EnDekunuts* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 8, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENDEKUNUTS_BODYPART_MAX, 2, 0.2f, 0.2f);
     }
 }
 
@@ -700,22 +700,24 @@ s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
-static s8 D_808BEF98[DEKU_SCRUB_LIMB_MAX] = {
-    -1, // DEKU_SCRUB_LIMB_NONE
-    -1, // DEKU_SCRUB_LIMB_BODY
-    -1, // DEKU_SCRUB_LIMB_HEAD
-    3,  // DEKU_SCRUB_LIMB_HEADDRESS
-    -1, // DEKU_SCRUB_LIMB_CREST
-    0,  // DEKU_SCRUB_LIMB_SNOUT
-    -1, // DEKU_SCRUB_LIMB_LEFT_LEG
-    1,  // DEKU_SCRUB_LIMB_LEFT_FOOT
-    -1, // DEKU_SCRUB_LIMB_RIGHT_LEG
-    2,  // DEKU_SCRUB_LIMB_RIGHT_FOOT
+static s8 sLimbToBodyParts[DEKU_SCRUB_LIMB_MAX] = {
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_NONE
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_BODY
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_HEAD
+    ENDEKUNUTS_BODYPART_3, // DEKU_SCRUB_LIMB_HEADDRESS
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_CREST
+    ENDEKUNUTS_BODYPART_0, // DEKU_SCRUB_LIMB_SNOUT
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_LEFT_LEG
+    ENDEKUNUTS_BODYPART_1, // DEKU_SCRUB_LIMB_LEFT_FOOT
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_RIGHT_LEG
+    ENDEKUNUTS_BODYPART_2, // DEKU_SCRUB_LIMB_RIGHT_FOOT
 };
 
 static Vec3f D_808BEFA4[] = {
-    { -1500.0f, 0.0f, -1700.0f }, { -1500.0f, 0.0f, 1700.0f }, { -2500.0f, -2000.0f, 0.0f },
-    { -1000.0f, 1000.0f, 0.0f },  { 0.0f, 0.0f, 0.0f },
+    { -1500.0f, 0.0f, -1700.0f }, // ENDEKUNUTS_BODYPART_4
+    { -1500.0f, 0.0f, 1700.0f },  // ENDEKUNUTS_BODYPART_5
+    { -2500.0f, -2000.0f, 0.0f }, // ENDEKUNUTS_BODYPART_6
+    { -1000.0f, 1000.0f, 0.0f },  // ENDEKUNUTS_BODYPART_7
 };
 
 void EnDekunuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -723,16 +725,17 @@ void EnDekunuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
     s32 i;
     Vec3f* ptr1;
     Vec3f* ptr2;
-    s32 value = D_808BEF98[limbIndex];
+    s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
 
-    if (value != -1) {
-        if (value < 3) {
-            Matrix_MultVecX(1000.0f, &this->limbPos[value]);
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex <= ENDEKUNUTS_BODYPART_2) {
+            Matrix_MultVecX(1000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
-            Matrix_MultZero(&this->limbPos[value]);
+            // ENDEKUNUTS_BODYPART_3
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
             ptr1 = &D_808BEFA4[0];
-            ptr2 = &this->limbPos[value + 1];
-            for (i = value + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+            ptr2 = &this->bodyPartsPos[bodyPartIndex + 1];
+            for (i = bodyPartIndex + 1; i < ENDEKUNUTS_BODYPART_MAX; i++) {
                 Matrix_MultVec3f(ptr1, ptr2);
                 ptr1++, ptr2++;
             }
@@ -756,6 +759,6 @@ void EnDekunuts_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
     Gfx_DrawDListOpa(play, gDekuScrubFlowerDL);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENDEKUNUTS_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

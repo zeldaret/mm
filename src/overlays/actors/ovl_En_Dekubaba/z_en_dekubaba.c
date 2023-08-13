@@ -301,8 +301,8 @@ void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 4,
-                              this->size * 0.3f, this->size * 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DEKUBABA_BODYPART_MAX, 4, this->size * 0.3f,
+                              this->size * 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -1237,7 +1237,7 @@ void EnDekubaba_DrawStemRetracted(EnDekubaba* this, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemTopDL);
 
-    for (i = 1; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+    for (i = DEKUBABA_BODYPART_1; i < DEKUBABA_BODYPART_MAX; i++) {
         Matrix_MultZero(&this->bodyPartsPos[i]);
     }
 
@@ -1293,7 +1293,7 @@ void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
             }
         }
 
-        Matrix_MultZero(&this->bodyPartsPos[i + 1]);
+        Matrix_MultZero(&this->bodyPartsPos[DEKUBABA_BODYPART_1 + i]);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1309,7 +1309,7 @@ void EnDekubaba_DrawStemBasePruned(EnDekubaba* this, PlayState* play) {
     Collider_UpdateSpheres(55, &this->collider);
     Collider_UpdateSpheres(56, &this->collider);
 
-    Matrix_MultZero(&this->bodyPartsPos[3]);
+    Matrix_MultZero(&this->bodyPartsPos[DEKUBABA_BODYPART_3]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1349,7 +1349,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    Math_Vec3f_Copy(&this->bodyPartsPos[0], &this->actor.world.pos);
+    Math_Vec3f_Copy(&this->bodyPartsPos[DEKUBABA_BODYPART_0], &this->actor.world.pos);
 
     if (this->actionFunc != EnDekubaba_DeadStickDrop) {
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnDekubaba_PostLimbDraw,
@@ -1382,7 +1382,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, DEKUBABA_BODYPART_MAX,
                             this->drawDmgEffScale * this->size, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                             this->drawDmgEffType);
 }

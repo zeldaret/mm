@@ -2196,7 +2196,7 @@ s32 Boss03_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
  * Since there are two sets of ColliderJntSph, indices < 2 (ARRAY_COUNT(sHeadJntSphElementsInit)) refers to the first
  * collider and indices >= 2 refers to the second one
  */
-s8 sGyorgSphElementIndices[2][GYORG_LIMB_MAX] = {
+static s8 sLimbToSphere[2][GYORG_LIMB_MAX] = {
     {
         -1, // GYORG_LIMB_NONE
         -1, // GYORG_LIMB_ROOT
@@ -2253,8 +2253,8 @@ void Boss03_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
         Matrix_MultVec3f(&D_809E9148, &this->actor.focus.pos);
     }
 
-    sphereElementIndex = sGyorgSphElementIndices[0][limbIndex];
-    if (sphereElementIndex >= 0) {
+    sphereElementIndex = sLimbToSphere[0][limbIndex];
+    if (sphereElementIndex > -1) {
         Matrix_MultVec3f(&D_809E9154[sphereElementIndex], &spherePos);
 
         if (sphereElementIndex < 2) {

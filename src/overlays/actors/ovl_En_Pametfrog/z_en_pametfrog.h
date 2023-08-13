@@ -21,6 +21,23 @@ typedef enum {
     /* 9 */ GEKKO_DEFEAT
 } EnPametfrogState;
 
+typedef enum GekkoBodyPart {
+    /* -1 */ GEKKO_BODYPART_NONE = -1,
+    /*  0 */ GEKKO_BODYPART_WAIST,
+    /*  1 */ GEKKO_BODYPART_LEFT_SHIN,
+    /*  2 */ GEKKO_BODYPART_LEFT_FOOT,
+    /*  3 */ GEKKO_BODYPART_RIGHT_SHIN,
+    /*  4 */ GEKKO_BODYPART_RIGHT_FOOT,
+    /*  5 */ GEKKO_BODYPART_LEFT_UPPER_ARM,
+    /*  6 */ GEKKO_BODYPART_LEFT_FOREARM,
+    /*  7 */ GEKKO_BODYPART_LEFT_HAND,
+    /*  8 */ GEKKO_BODYPART_RIGHT_UPPER_ARM,
+    /*  9 */ GEKKO_BODYPART_RIGHT_FOREARM,
+    /* 10 */ GEKKO_BODYPART_RIGHT_HAND,
+    /* 11 */ GEKKO_BODYPART_JAW,
+    /* 12 */ GEKKO_BODYPART_MAX
+} GekkoBodyPart;
+
 typedef struct EnPametfrog {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -44,7 +61,7 @@ typedef struct EnPametfrog {
     /* 0x2D0 */ Vec3f unk_2D0; // MtxF xz/yz/zz
     /* 0x2DC */ Vec3f unk_2DC; // MtxF xy/yy/zy: wallNorm/floorNorm/Base of Gekko walking???
     /* 0x2E8 */ Vec3f unk_2E8; // MtxF xx/yx/zx
-    /* 0x2F4 */ Vec3f limbPos[12]; 
+    /* 0x2F4 */ Vec3f bodyPartsPos[GEKKO_BODYPART_MAX]; 
     /* 0x384 */ ColliderJntSph collider;
     /* 0x3A4 */ ColliderJntSphElement colElement[2];
 } EnPametfrog; // size = 0x424

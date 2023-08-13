@@ -290,7 +290,7 @@ void EnCrow_CheckIfFrozen(EnCrow* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 4, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GUAY_BODYPART_MAX, 2, 0.2f, 0.2f);
     }
 }
 
@@ -565,7 +565,7 @@ void EnCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     EnCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
-        Matrix_MultVecX(2500.0f, this->bodyPartsPos);
+        Matrix_MultVecX(2500.0f, &this->bodyPartsPos[GUAY_BODYPART_BODY]);
     } else if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
                (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
         Matrix_MultZero(&this->bodyPartsPos[(limbIndex >> 1) - 1]);
@@ -578,7 +578,7 @@ void EnCrow_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCrow_OverrideLimbDraw, EnCrow_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GUAY_BODYPART_MAX,
                             this->actor.scale.x * 100.0f * this->drawDmgEffFrozenSteamScale, this->drawDmgEffScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 }
