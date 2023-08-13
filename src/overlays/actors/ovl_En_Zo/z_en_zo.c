@@ -98,9 +98,64 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gZoraWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
 };
 
-s8 sBodyParts[] = { -1, 1, 12, 13, 14, 9, 10, 11, 0, 6, 7, 8, 3, 4, 5, 2, -1, -1, -1, -1 };
-s8 sParentBodyParts[] = { 0, 0, 0, 0, 3, 4, 0, 6, 7, 0, 9, 10, 0, 12, 13 };
-u8 sShadowSizes[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+static s8 sLimbToBodyParts[ZORA_LIMB_MAX] = {
+    BODYPART_NONE,    // ZORA_LIMB_NONE
+    ZORA_BODYPART_1,  // ZORA_LIMB_PELVIS
+    ZORA_BODYPART_12, // ZORA_LIMB_LEFT_THIGH
+    ZORA_BODYPART_13, // ZORA_LIMB_LEFT_SHIN
+    ZORA_BODYPART_14, // ZORA_LIMB_LEFT_FOOT
+    ZORA_BODYPART_9,  // ZORA_LIMB_RIGHT_THIGH
+    ZORA_BODYPART_10, // ZORA_LIMB_RIGHT_SHIN
+    ZORA_BODYPART_11, // ZORA_LIMB_RIGHT_FOOT
+    ZORA_BODYPART_0,  // ZORA_LIMB_TORSO
+    ZORA_BODYPART_6,  // ZORA_LIMB_LEFT_UPPER_ARM
+    ZORA_BODYPART_7,  // ZORA_LIMB_LEFT_FOREARM
+    ZORA_BODYPART_8,  // ZORA_LIMB_LEFT_HAND
+    ZORA_BODYPART_3,  // ZORA_LIMB_RIGHT_UPPER_ARM
+    ZORA_BODYPART_4,  // ZORA_LIMB_RIGHT_FOREARM
+    ZORA_BODYPART_5,  // ZORA_LIMB_RIGHT_HAND
+    ZORA_BODYPART_2,  // ZORA_LIMB_HEAD
+    BODYPART_NONE,    // ZORA_LIMB_HEAD_TAIL_1
+    BODYPART_NONE,    // ZORA_LIMB_HEAD_TAIL_2
+    BODYPART_NONE,    // ZORA_LIMB_HEAD_TAIL_3
+    BODYPART_NONE,    // ZORA_LIMB_HEAD_TAIL_FIN
+};
+
+static s8 sParentShadowBodyParts[ZORA_BODYPART_MAX] = {
+    ZORA_BODYPART_0,  // ZORA_BODYPART_0
+    ZORA_BODYPART_0,  // ZORA_BODYPART_1
+    ZORA_BODYPART_0,  // ZORA_BODYPART_2
+    ZORA_BODYPART_0,  // ZORA_BODYPART_3
+    ZORA_BODYPART_3,  // ZORA_BODYPART_4
+    ZORA_BODYPART_4,  // ZORA_BODYPART_5
+    ZORA_BODYPART_0,  // ZORA_BODYPART_6
+    ZORA_BODYPART_6,  // ZORA_BODYPART_7
+    ZORA_BODYPART_7,  // ZORA_BODYPART_8
+    ZORA_BODYPART_0,  // ZORA_BODYPART_9
+    ZORA_BODYPART_9,  // ZORA_BODYPART_10
+    ZORA_BODYPART_10, // ZORA_BODYPART_11
+    ZORA_BODYPART_0,  // ZORA_BODYPART_12
+    ZORA_BODYPART_12, // ZORA_BODYPART_13
+    ZORA_BODYPART_13, // ZORA_BODYPART_14
+};
+
+static u8 sShadowSizes[ZORA_BODYPART_MAX] = {
+    0, // ZORA_BODYPART_0
+    0, // ZORA_BODYPART_1
+    0, // ZORA_BODYPART_2
+    0, // ZORA_BODYPART_3
+    0, // ZORA_BODYPART_4
+    0, // ZORA_BODYPART_5
+    0, // ZORA_BODYPART_6
+    0, // ZORA_BODYPART_7
+    0, // ZORA_BODYPART_8
+    0, // ZORA_BODYPART_9
+    0, // ZORA_BODYPART_10
+    0, // ZORA_BODYPART_11
+    0, // ZORA_BODYPART_12
+    0, // ZORA_BODYPART_13
+    0, // ZORA_BODYPART_14
+};
 
 s32 EnZo_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
@@ -142,12 +197,12 @@ s32 EnZo_PlayWalkingSound(EnZo* this, PlayState* play) {
     }
 
     this->isLeftFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->leftFootPos, -6.0f);
-    if ((this->isLeftFootGrounded) && (!leftWasGrounded) && (isFootGrounded)) {
+    if (this->isLeftFootGrounded && !leftWasGrounded && isFootGrounded) {
         Actor_PlaySfx(&this->actor, sfxId);
     }
 
     this->isRightFootGrounded = isFootGrounded = SubS_IsFloorAbove(play, &this->rightFootPos, -6.0f);
-    if ((this->isRightFootGrounded) && (!rightWasGrounded) && (isFootGrounded)) {
+    if (this->isRightFootGrounded && !rightWasGrounded && isFootGrounded) {
         Actor_PlaySfx(&this->actor, sfxId);
     }
 
@@ -173,13 +228,14 @@ void EnZo_UpdateCollider(EnZo* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
+static TrackOptionsSet sTrackOptions = {
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+    { 0xFA0, 4, 1, 3 },
+    { 0x1770, 4, 1, 6 },
+};
+
 void EnZo_LookAtPlayer(EnZo* this, PlayState* play) {
-    static TrackOptionsSet sTrackOptions = {
-        { 0xFA0, 4, 1, 3 },
-        { 0x1770, 4, 1, 6 },
-        { 0xFA0, 4, 1, 3 },
-        { 0x1770, 4, 1, 6 },
-    };
     Player* player = GET_PLAYER(play);
     Vec3f point;
 
@@ -316,15 +372,18 @@ void EnZo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f sp30 = { 400.0f, 0.0f, 0.0f };
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if (sBodyParts[limbIndex] >= 0) {
-        Matrix_MultVec3f(&zeroVec, &this->bodyPartsPos[sBodyParts[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] > BODYPART_NONE) {
+        Matrix_MultVec3f(&zeroVec, &this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
+
     if (limbIndex == ZORA_LIMB_HEAD) {
         Matrix_MultVec3f(&sp30, &this->actor.focus.pos);
     }
+
     if (limbIndex == ZORA_LIMB_LEFT_FOOT) {
         Matrix_MultVec3f(&zeroVec, &this->leftFootPos);
     }
+
     if (limbIndex == ZORA_LIMB_RIGHT_FOOT) {
         Matrix_MultVec3f(&zeroVec, &this->rightFootPos);
     }
@@ -366,8 +425,8 @@ void EnZo_Draw(Actor* thisx, PlayState* play) {
         shadowTexIter++;
     }
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(this->bodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f,
-                          ARRAY_COUNT(this->bodyPartsPos), sShadowSizes, sParentBodyParts);
+        SubS_GenShadowTex(this->bodyPartsPos, &this->actor.world.pos, shadowTex, i / 5.0f, ZORA_BODYPART_MAX,
+                          sShadowSizes, sParentShadowBodyParts);
     }
 
     SubS_DrawShadowTex(&this->actor, &play->state, shadowTex);
