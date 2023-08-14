@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ending_hero3.h"
-#include "objects/object_toryo/object_toryo.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -16,8 +15,8 @@ void EnEndingHero3_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero3_Update(Actor* thisx, PlayState* play);
 void EnEndingHero3_Draw(Actor* thisx, PlayState* play);
 
-void func_80C23518(EnEndingHero3* this);
-void func_80C23534(EnEndingHero3* this, PlayState* play);
+void EnEndingHero3_SetupIdle(EnEndingHero3* this);
+void EnEndingHero3_Idle(EnEndingHero3* this, PlayState* play);
 
 ActorInit En_Ending_Hero3_InitVars = {
     ACTOR_EN_ENDING_HERO3,
@@ -39,20 +38,20 @@ void EnEndingHero3_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_toryo_Skel_007150, &object_toryo_Anim_000E50, this->jointTable,
-                       this->morphTable, 17);
+                       this->morphTable, OBJECT_TORYO_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    func_80C23518(this);
+    EnEndingHero3_SetupIdle(this);
 }
 
 void EnEndingHero3_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80C23518(EnEndingHero3* this) {
-    this->unk258 = 1;
-    this->actionFunc = func_80C23534;
+void EnEndingHero3_SetupIdle(EnEndingHero3* this) {
+    this->isIdle = true;
+    this->actionFunc = EnEndingHero3_Idle;
 }
 
-void func_80C23534(EnEndingHero3* this, PlayState* play) {
+void EnEndingHero3_Idle(EnEndingHero3* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 

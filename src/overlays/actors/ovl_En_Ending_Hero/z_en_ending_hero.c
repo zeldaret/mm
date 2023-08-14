@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ending_hero.h"
-#include "objects/object_dt/object_dt.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -16,8 +15,8 @@ void EnEndingHero_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero_Update(Actor* thisx, PlayState* play);
 void EnEndingHero_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1E748(EnEndingHero* this);
-void func_80C1E764(EnEndingHero* this, PlayState* play);
+void EnEndingHero1_SetupIdle(EnEndingHero* this);
+void EnEndingHero1_Idle(EnEndingHero* this, PlayState* play);
 
 ActorInit En_Ending_Hero_InitVars = {
     ACTOR_EN_ENDING_HERO,
@@ -39,20 +38,20 @@ void EnEndingHero_Init(Actor* thisx, PlayState* play) {
     this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_dt_Skel_00B0CC, &object_dt_Anim_000BE0, this->jointTable,
-                       this->morphTable, 15);
+                       this->morphTable, OBJECT_DT_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
-    func_80C1E748(this);
+    EnEndingHero1_SetupIdle(this);
 }
 
 void EnEndingHero_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void func_80C1E748(EnEndingHero* this) {
-    this->unk244 = 1;
-    this->actionFunc = func_80C1E764;
+void EnEndingHero1_SetupIdle(EnEndingHero* this) {
+    this->isIdle = true;
+    this->actionFunc = EnEndingHero1_Idle;
 }
 
-void func_80C1E764(EnEndingHero* this, PlayState* play) {
+void EnEndingHero1_Idle(EnEndingHero* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 }
 
@@ -60,7 +59,7 @@ void EnEndingHero_Update(Actor* thisx, PlayState* play) {
     EnEndingHero* this = THIS;
 
     if (this->unk240 == 0) {
-        this->unk242 += 1;
+        this->unk242++;
         if (this->unk242 > 2) {
             this->unk242 = 0;
             this->unk240 = (s16)Rand_ZeroFloat(60.0f) + 0x14;

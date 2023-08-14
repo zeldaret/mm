@@ -34,8 +34,8 @@ typedef struct EnFg {
     /* 0x144 */ EnFgActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[OBJECT_FR_LIMB_MAX];
-    /* 0x268 */ Vec3s morphTable[OBJECT_FR_LIMB_MAX];
+    /* 0x1D8 */ Vec3s jointTable[FROG_LIMB_MAX];
+    /* 0x268 */ Vec3s morphTable[FROG_LIMB_MAX];
     /* 0x2F8 */ s16 timer;
     /* 0x2FA */ s16 bounceCounter;
     /* 0x2FC */ BetaFrogEffectDust dustEffect[10];
