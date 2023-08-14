@@ -7,7 +7,7 @@
 #include "libc/stdint.h"
 #include "PR/os_message.h"
 #include "unk.h"
-#include "os.h"
+#include "PR/os.h"
 
 struct Sample;
 
