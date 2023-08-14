@@ -149,8 +149,7 @@ void func_80BD1440(EnZov* this, s16 arg1) {
 void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 morphFrames) {
     f32 frame;
 
-    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) &&
-        (index < ARRAY_COUNT(sAnimations))) {
+    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(sAnimations))) {
         switch (index) {
             case 6:
                 frame = 30.0f;
@@ -164,8 +163,8 @@ void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 morphFrames) {
                 frame = 0.0f;
                 break;
         }
-        Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, frame,
-                         Animation_GetLastFrame(sAnimations[index]), mode, morphFrames);
+        Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, frame, Animation_GetLastFrame(sAnimations[index]),
+                         mode, morphFrames);
         this->unk_322 = index;
     }
 }
