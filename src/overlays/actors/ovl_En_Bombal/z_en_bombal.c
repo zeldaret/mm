@@ -195,24 +195,24 @@ void EnBombal_Draw(Actor* thisx, PlayState* play) {
 
 void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay) {
     s16 i;
-    EnBombalEffect* sPtr = this->effects;
+    EnBombalEffect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (!sPtr->isEnabled) {
-            sPtr->isEnabled = true;
-            sPtr->pos = *pos;
-            sPtr->alphaFadeDelay = fadeDelay;
-            sPtr->alpha = 255;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (!effect->isEnabled) {
+            effect->isEnabled = true;
+            effect->pos = *pos;
+            effect->alphaFadeDelay = fadeDelay;
+            effect->alpha = 255;
 
-            sPtr->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
-            sPtr->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
-            sPtr->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            effect->accel.x = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            effect->accel.y = (Rand_ZeroOne() - 0.5f) * 10.0f;
+            effect->accel.z = (Rand_ZeroOne() - 0.5f) * 10.0f;
 
-            sPtr->velocity.x = Rand_ZeroOne() - 0.5f;
-            sPtr->velocity.y = Rand_ZeroOne() - 0.5f;
-            sPtr->velocity.z = Rand_ZeroOne() - 0.5f;
+            effect->velocity.x = Rand_ZeroOne() - 0.5f;
+            effect->velocity.y = Rand_ZeroOne() - 0.5f;
+            effect->velocity.z = Rand_ZeroOne() - 0.5f;
 
-            sPtr->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
+            effect->scale = (Rand_ZeroFloat(1.0f) * 0.5f) + 2.0f;
             return;
         }
     }
@@ -220,23 +220,23 @@ void EnBombal_InitEffects(EnBombal* this, Vec3f* pos, s16 fadeDelay) {
 
 void EnBombal_UpdateEffects(EnBombal* this, PlayState* play) {
     s32 i;
-    EnBombalEffect* sPtr = this->effects;
+    EnBombalEffect* effect = this->effects;
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (sPtr->isEnabled) {
-            sPtr->pos.x += sPtr->velocity.x;
-            sPtr->pos.y += sPtr->velocity.y;
-            sPtr->pos.z += sPtr->velocity.z;
-            sPtr->velocity.x += sPtr->accel.x;
-            sPtr->velocity.y += sPtr->accel.y;
-            sPtr->velocity.z += sPtr->accel.z;
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            effect->pos.x += effect->velocity.x;
+            effect->pos.y += effect->velocity.y;
+            effect->pos.z += effect->velocity.z;
+            effect->velocity.x += effect->accel.x;
+            effect->velocity.y += effect->accel.y;
+            effect->velocity.z += effect->accel.z;
 
-            if (sPtr->alphaFadeDelay != 0) {
-                sPtr->alphaFadeDelay--;
+            if (effect->alphaFadeDelay != 0) {
+                effect->alphaFadeDelay--;
             } else {
-                sPtr->alpha -= 10;
-                if (sPtr->alpha < 10) {
-                    sPtr->isEnabled = 0;
+                effect->alpha -= 10;
+                if (effect->alpha < 10) {
+                    effect->isEnabled = 0;
                 }
             }
         }
@@ -246,17 +246,17 @@ void EnBombal_UpdateEffects(EnBombal* this, PlayState* play) {
 void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
     s16 i;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
-    EnBombalEffect* sPtr = this->effects;
+    EnBombalEffect* effect = this->effects;
 
     OPEN_DISPS(gfxCtx);
 
     Gfx_SetupDL25_Opa(gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    for (i = 0; i < ARRAY_COUNT(this->effects); i++, sPtr++) {
-        if (sPtr->isEnabled != 0) {
-            Matrix_Translate(sPtr->pos.x, sPtr->pos.y, sPtr->pos.z, MTXMODE_NEW);
-            Matrix_Scale(sPtr->scale, sPtr->scale, sPtr->scale, MTXMODE_APPLY);
+    for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
+        if (effect->isEnabled) {
+            Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
+            Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
 
             POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
@@ -267,7 +267,7 @@ void EnBombal_DrawEffects(EnBombal* this, PlayState* play) {
             gDPPipeSync(POLY_XLU_DISP++);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
-            gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, sPtr->alpha);
+            gDPSetEnvColor(POLY_XLU_DISP++, 250, 180, 255, effect->alpha);
 
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
             Matrix_RotateZF(DEG_TO_RAD(play->state.frames * 20.0f), MTXMODE_APPLY);

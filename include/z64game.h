@@ -13,6 +13,18 @@ struct GraphicsContext;
 struct GameState;
 
 
+#define DEFINE_GAMESTATE_INTERNAL(typeName, enumName) enumName,
+#define DEFINE_GAMESTATE(typeName, enumName, name) DEFINE_GAMESTATE_INTERNAL(typeName, enumName)
+
+typedef enum GameStateId {
+#include "tables/gamestate_table.h"
+    /* 0x07 */ GAMESTATE_ID_MAX
+} GameStateId;
+
+#undef DEFINE_GAMESTATE
+#undef DEFINE_GAMESTATE_INTERNAL
+
+
 typedef void (*GameStateFunc)(struct GameState* gameState);
 
 typedef struct {
@@ -85,6 +97,15 @@ extern f32 gFramerateDivisorF;
 extern f32 gFramerateDivisorHalf;
 extern f32 gFramerateDivisorThird;
 
+
+extern GameStateOverlay gGameStateOverlayTable[GAMESTATE_ID_MAX];
+extern GameStateId gGraphNumGameStates;
+
+
+#define CONTROLLER1(gameState) (&(gameState)->input[0])
+#define CONTROLLER2(gameState) (&(gameState)->input[1])
+#define CONTROLLER3(gameState) (&(gameState)->input[2])
+#define CONTROLLER4(gameState) (&(gameState)->input[3])
 
 #define STOP_GAMESTATE(curState)     \
     do {                             \

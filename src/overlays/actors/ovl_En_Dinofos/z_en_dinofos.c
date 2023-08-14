@@ -6,7 +6,6 @@
 
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
-#include "objects/object_dinofos/object_dinofos.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
@@ -242,11 +241,11 @@ static DamageTable sDamageTable = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 4, 40, 100, 80 };
 
-static TexturePtr D_8089E33C[] = {
-    object_dinofos_Tex_008E30,
-    object_dinofos_Tex_009030,
-    object_dinofos_Tex_009230,
-    object_dinofos_Tex_009030,
+static TexturePtr sEyeTextures[] = {
+    gDinolfosEyeOpenTex,
+    gDinolfosEyeHalfTex,
+    gDinolfosEyeClosedTex,
+    gDinolfosEyeHalfTex,
 };
 
 static s16 sCsId = CS_ID_NONE;
@@ -275,12 +274,12 @@ void EnDinofos_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElement);
     Collider_InitAndSetQuad(play, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dinofos_Skel_009570, &object_dinofos_Anim_002E40,
-                       this->jointTable, this->morphTable, 21);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDinolfosSkel, &gDinolfosIdleAnim, this->jointTable, this->morphTable,
+                       DINOLFOS_LIMB_MAX);
 
     if (D_8089E364 == 0) {
-        for (i = 0; i < ARRAY_COUNT(D_8089E33C); i++) {
-            D_8089E33C[i] = Lib_SegmentedToVirtual(D_8089E33C[i]);
+        for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
+            sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
         D_8089E364 = 1;
     }
@@ -467,9 +466,8 @@ void func_8089B100(EnDinofos* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp3C;
 
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_001CCC, 1.0f,
-                     Animation_GetLastFrame(&object_dinofos_Anim_001CCC),
-                     Animation_GetLastFrame(&object_dinofos_Anim_001CCC), ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gDinolfosJumpAnim, 1.0f, Animation_GetLastFrame(&gDinolfosJumpAnim),
+                     Animation_GetLastFrame(&gDinolfosJumpAnim), ANIMMODE_ONCE, 0.0f);
     func_800BE33C(&subCam->eye, &subCam->at, &this->unk_29A, true);
     Math_Vec3f_Diff(&this->actor.world.pos, &player->actor.world.pos, &sp3C);
     this->unk_2BC.x = player->actor.world.pos.x + (0.4f * sp3C.x);
@@ -534,7 +532,7 @@ void func_8089B4A4(EnDinofos* this) {
     if (this->unk_290 < 10) {
         Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
     }
-    Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00C974);
+    Animation_PlayOnce(&this->skelAnime, &gDinolfosIntroAnim);
     this->unk_2BC.x = (Math_SinS(this->actor.shape.rot.y + 0x200) * 123.0f) + this->actor.world.pos.x;
     this->unk_2BC.y = this->actor.floorHeight + 11.0f;
     this->unk_2BC.z = (Math_CosS(this->actor.shape.rot.y + 0x200) * 123.0f) + this->actor.world.pos.z;
@@ -574,7 +572,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089B6E8(EnDinofos* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dinofos_Anim_009B70, -3.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDinolfosCryAnim, -3.0f);
     this->actionFunc = func_8089B72C;
 }
 
@@ -592,7 +590,7 @@ void func_8089B72C(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089B7B0(EnDinofos* this) {
-    Animation_MorphToLoop(&this->skelAnime, &object_dinofos_Anim_002E40, -4.0f);
+    Animation_MorphToLoop(&this->skelAnime, &gDinolfosIdleAnim, -4.0f);
     this->unk_290 = (s32)Rand_ZeroFloat(20.0f) + 40;
     this->unk_292 = 30;
     this->actor.speed = 0.0f;
@@ -620,7 +618,7 @@ void func_8089B8B0(EnDinofos* this, PlayState* play) {
     f32 phi_f0;
 
     if (this->actionFunc != func_8089B98C) {
-        Animation_MorphToLoop(&this->skelAnime, &object_dinofos_Anim_000580, -4.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gDinolfosWalkAnim, -4.0f);
         if (Actor_OtherIsTargeted(play, &this->actor)) {
             phi_f0 = 170.0f;
         } else {
@@ -675,7 +673,7 @@ void func_8089B98C(EnDinofos* this, PlayState* play) {
 
 void func_8089BAC0(EnDinofos* this) {
     if (this->actionFunc != func_8089BB60) {
-        Animation_MorphToLoop(&this->skelAnime, &object_dinofos_Anim_000580, -4.0f);
+        Animation_MorphToLoop(&this->skelAnime, &gDinolfosWalkAnim, -4.0f);
         this->actor.speed = 0.0f;
     }
     if (BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y) > 0) {
@@ -716,8 +714,8 @@ void func_8089BBB4(EnDinofos* this, PlayState* play) {
         if (this->actionFunc == func_8089D1E0) {
             this->skelAnime.playSpeed = this->actor.speed * 0.166666671634f;
         } else {
-            Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speed * 0.166666671634f, 0.0f,
-                             0.0f, ANIMMODE_LOOP, -4.0f);
+            Animation_Change(&this->skelAnime, &gDinolfosSidestepAnim, this->actor.speed * 0.166666671634f, 0.0f, 0.0f,
+                             ANIMMODE_LOOP, -4.0f);
         }
 
         this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
@@ -796,10 +794,10 @@ void func_8089BD28(EnDinofos* this, PlayState* play) {
 
 void func_8089C024(EnDinofos* this, s32 arg1) {
     if (arg1 == 0) {
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_dinofos_Anim_001CCC, 2.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &gDinolfosJumpAnim, 2.0f);
         func_8089AD70(this);
     } else {
-        Animation_MorphToPlayOnce(&this->skelAnime, &object_dinofos_Anim_001CCC, -1.0f);
+        Animation_MorphToPlayOnce(&this->skelAnime, &gDinolfosJumpAnim, -1.0f);
         if ((arg1 == 2) || (arg1 == 3)) {
             this->colliderJntSph.base.acFlags &= ~AC_ON;
             func_8089AD70(this);
@@ -863,10 +861,10 @@ void func_8089C2A8(EnDinofos* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     this->unk_290++;
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x1800);
-    if ((this->actor.velocity.y < 0.0f) && (this->skelAnime.animation == &object_dinofos_Anim_001CCC)) {
+    if ((this->actor.velocity.y < 0.0f) && (this->skelAnime.animation == &gDinolfosJumpAnim)) {
         this->colliderQuad.base.atFlags |= AT_ON;
         this->colliderJntSph.base.acFlags |= AC_ON;
-        Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, 1.0f, 7.0f, 13.0f, ANIMMODE_ONCE, -2.0f);
+        Animation_Change(&this->skelAnime, &gDinolfosAttackAnim, 1.0f, 7.0f, 13.0f, ANIMMODE_ONCE, -2.0f);
     }
 
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
@@ -877,9 +875,9 @@ void func_8089C2A8(EnDinofos* this, PlayState* play) {
 
 void func_8089C398(EnDinofos* this) {
     if (this->actionFunc != func_8089C2A8) {
-        Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_000AF0);
+        Animation_PlayOnce(&this->skelAnime, &gDinolfosLandAnim);
     } else {
-        this->skelAnime.endFrame = Animation_GetLastFrame(&object_dinofos_Anim_0025B4);
+        this->skelAnime.endFrame = Animation_GetLastFrame(&gDinolfosAttackAnim);
     }
 
     if (this->actor.speed < 0.0f) {
@@ -906,7 +904,7 @@ void func_8089C44C(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089C4F8(EnDinofos* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0025B4);
+    Animation_PlayOnce(&this->skelAnime, &gDinolfosAttackAnim);
     this->colliderQuad.base.atFlags &= ~AT_BOUNCED;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_CRY);
     this->unk_290 = 0;
@@ -937,8 +935,8 @@ void func_8089C56C(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089C690(EnDinofos* this) {
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_0025B4, -1.0f, this->skelAnime.curFrame, 0.0f,
-                     ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gDinolfosAttackAnim, -1.0f, this->skelAnime.curFrame, 0.0f, ANIMMODE_ONCE,
+                     0.0f);
     this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);
     if (this->actionFunc != func_8089C2A8) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -988,7 +986,7 @@ void func_8089C7B8(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089C87C(EnDinofos* this, s32 arg1) {
-    Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00D21C);
+    Animation_PlayOnce(&this->skelAnime, &gDinolfosHitAnim);
     func_800BE5CC(&this->actor, &this->colliderJntSph, arg1);
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
     this->actor.speed = 10.0f;
@@ -1021,7 +1019,7 @@ void func_8089C938(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089CA14(EnDinofos* this) {
-    Animation_MorphToPlayOnce(&this->skelAnime, &object_dinofos_Anim_001040, -5.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gDinolfosFireStartAnim, -5.0f);
     this->colliderJntSph.base.acFlags |= AC_ON;
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1042,7 +1040,7 @@ void func_8089CB10(EnDinofos* this, PlayState* play) {
     s32 i;
     Sphere16* worldSphere;
 
-    Animation_PlayLoop(&this->skelAnime, &object_dinofos_Anim_0013C0);
+    Animation_PlayLoop(&this->skelAnime, &gDinolfosFireLoopAnim);
     this->unk_290 = 20;
     this->actor.speed = 0.0f;
     this->colliderJntSph.base.atFlags |= AT_ON;
@@ -1114,7 +1112,7 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089CF00(EnDinofos* this, PlayState* play) {
-    Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_0017B8);
+    Animation_PlayOnce(&this->skelAnime, &gDinolfosFireEndAnim);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
     if (play->sceneId == SCENE_MITURIN) {
         play->envCtx.lightSettingOverride = 255;
@@ -1129,7 +1127,7 @@ void func_8089CF70(EnDinofos* this, PlayState* play) {
 }
 
 void func_8089CFAC(EnDinofos* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_dinofos_Anim_00ABD0);
+    Animation_PlayOnce(&this->skelAnime, &gDinolfosDieAnim);
     this->actor.flags &= ~ACTOR_FLAG_1;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speed = 0.0f;
@@ -1169,7 +1167,7 @@ void func_8089D11C(EnDinofos* this, s16 arg1) {
     } else {
         this->actor.speed = 15.0f;
     }
-    Animation_Change(&this->skelAnime, &object_dinofos_Anim_00D62C, this->actor.speed * (1.0f / 7.5f), 0.0f, 0.0f,
+    Animation_Change(&this->skelAnime, &gDinolfosSidestepAnim, this->actor.speed * (1.0f / 7.5f), 0.0f, 0.0f,
                      ANIMMODE_LOOP, -4.0f);
     this->actor.world.rot.y = BINANG_ADD(this->actor.shape.rot.y, 0x4000);
     this->unk_292 = 10;
@@ -1408,7 +1406,7 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
 s32 func_8089DC4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnDinofos* this = THIS;
 
-    if (limbIndex == 16) {
+    if (limbIndex == DINOLFOS_LIMB_HEAD) {
         rot->y -= this->unk_28E;
     }
 
@@ -1436,7 +1434,7 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         Matrix_MultZero(&this->limbPos[D_8089E3B0[limbIndex]]);
     }
 
-    if ((limbIndex == 14) && (this->unk_292 != this->unk_290) &&
+    if ((limbIndex == DINOLFOS_LIMB_RIGHT_HAND) && (this->unk_292 != this->unk_290) &&
         ((this->actionFunc == func_8089C56C) || (this->actionFunc == func_8089C2A8))) {
         Math_Vec3f_Copy(&sp74, &this->colliderQuad.dim.quad[0]);
         Math_Vec3f_Copy(&sp80, &this->colliderQuad.dim.quad[1]);
@@ -1449,13 +1447,13 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         this->unk_292 = this->unk_290;
     }
 
-    if (limbIndex == 4) {
+    if (limbIndex == DINOLFOS_LIMB_LEFT_CLAWS) {
         Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[0]);
-    } else if (limbIndex == 7) {
+    } else if (limbIndex == DINOLFOS_LIMB_RIGHT_CLAWS) {
         Matrix_MultVecX(300.0f, &this->actor.shape.feetPos[1]);
     }
 
-    if ((limbIndex == 16) && (this->actionFunc == func_8089B580)) {
+    if ((limbIndex == DINOLFOS_LIMB_HEAD) && (this->actionFunc == func_8089B580)) {
         if ((this->skelAnime.curFrame > 38.0f) && (this->skelAnime.curFrame <= 55.0f) &&
             (this->unk_292 != this->unk_290)) {
             sp48 = Matrix_GetCurrent();
@@ -1480,7 +1478,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
         func_800B8050(&this->actor, play, 0);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, D_8089E33C[this->unk_289]);
+        gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[this->unk_289]);
         gDPSetEnvColor(POLY_OPA_DISP++, 20, 40, 40, 255);
 
         Scene_SetRenderModeXlu(play, 0, 1);
@@ -1491,7 +1489,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
         Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         func_800B8118(&this->actor, play, 0);
 
-        gSPSegment(POLY_XLU_DISP++, 0x08, D_8089E33C[this->unk_289]);
+        gSPSegment(POLY_XLU_DISP++, 0x08, sEyeTextures[this->unk_289]);
         gDPSetEnvColor(POLY_XLU_DISP++, 20, 40, 40, this->unk_288);
 
         Scene_SetRenderModeXlu(play, 1, 2);

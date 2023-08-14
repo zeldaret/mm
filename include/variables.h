@@ -222,9 +222,6 @@ extern ActorId gMaxActorId;
 extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
 
-extern GameStateOverlay gGameStateOverlayTable[];
-extern s32 gGraphNumGameStates;
-
 // extern UNK_TYPE4 D_801BDAC0;
 // extern UNK_TYPE4 D_801BDAC4;
 // extern UNK_TYPE4 D_801BDAC8;

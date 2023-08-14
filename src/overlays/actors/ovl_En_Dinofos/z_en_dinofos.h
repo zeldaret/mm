@@ -2,6 +2,7 @@
 #define Z_EN_DINOFOS_H
 
 #include "global.h"
+#include "objects/object_dinofos/object_dinofos.h"
 
 struct EnDinofos;
 
@@ -10,8 +11,8 @@ typedef void (*EnDinofosActionFunc)(struct EnDinofos*, PlayState*);
 typedef struct EnDinofos {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[21];
-    /* 0x206 */ Vec3s morphTable[21];
+    /* 0x188 */ Vec3s jointTable[DINOLFOS_LIMB_MAX];
+    /* 0x206 */ Vec3s morphTable[DINOLFOS_LIMB_MAX];
     /* 0x284 */ EnDinofosActionFunc actionFunc;
     /* 0x288 */ u8 unk_288;
     /* 0x289 */ u8 unk_289;
