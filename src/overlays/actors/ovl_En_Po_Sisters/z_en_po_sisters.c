@@ -1122,37 +1122,37 @@ s32 EnPoSisters_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     return false;
 }
 
-#define POE_SISTERS_LIMBPOS_INVALID -1
+static Vec3f D_80B1DAFC = { 1000.0f, -1700.0f, 0.0f };
+
+static s8 sLimbToBodyParts[POE_SISTERS_LIMB_MAX] = {
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_NONE
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_ROOT
+    POE_SISTERS_BODYPART_LEFT_ARM,        // POE_SISTERS_LIMB_LEFT_ARM
+    POE_SISTERS_BODYPART_LEFT_HAND,       // POE_SISTERS_LIMB_LEFT_HAND
+    POE_SISTERS_BODYPART_RIGHT_UPPER_ARM, // POE_SISTERS_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_RIGHT_FOREARM
+    POE_SISTERS_BODYPART_TORCH_ROOT,      // POE_SISTERS_LIMB_TORCH_ROOT
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_RIGHT_HAND
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_TORCH
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_MAIN_BODY
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_FACE
+    BODYPART_NONE,                        // POE_SISTERS_LIMB_LOWER_BODY
+};
 
 void EnPoSisters_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static Vec3f D_80B1DAFC = { 1000.0f, -1700.0f, 0.0f };
-    static s8 D_80B1DB08[] = {
-        POE_SISTERS_LIMBPOS_INVALID,
-        POE_SISTERS_LIMBPOS_INVALID,
-        0,
-        1,
-        2,
-        POE_SISTERS_LIMBPOS_INVALID,
-        3,
-        POE_SISTERS_LIMBPOS_INVALID,
-        POE_SISTERS_LIMBPOS_INVALID,
-        POE_SISTERS_LIMBPOS_INVALID,
-        POE_SISTERS_LIMBPOS_INVALID,
-        POE_SISTERS_LIMBPOS_INVALID,
-    };
     EnPoSisters* this = THIS;
     s32 end;
     f32 brightness;
 
-    if (D_80B1DB08[limbIndex] != POE_SISTERS_LIMBPOS_INVALID) {
-        Matrix_MultZero(&this->limbPos[D_80B1DB08[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     } else if (limbIndex == POE_SISTERS_LIMB_MAIN_BODY) {
-        Matrix_MultVecY(-2500.0f, &this->limbPos[4]);
-        Matrix_MultVecY(3000.0f, &this->limbPos[5]);
+        Matrix_MultVecY(-2500.0f, &this->bodyPartsPos[POE_SISTERS_BODYPART_MAIN_BODY_0]);
+        Matrix_MultVecY(3000.0f, &this->bodyPartsPos[POE_SISTERS_BODYPART_MAIN_BODY_1]);
     } else if (limbIndex == POE_SISTERS_LIMB_FACE) {
-        Matrix_MultVecY(-4000.0f, &this->limbPos[6]);
+        Matrix_MultVecY(-4000.0f, &this->bodyPartsPos[POE_SISTERS_BODYPART_FACE]);
     } else if (limbIndex == POE_SISTERS_LIMB_LOWER_BODY) {
-        Matrix_MultVecX(3000.0f, &this->limbPos[7]);
+        Matrix_MultVecX(3000.0f, &this->bodyPartsPos[POE_SISTERS_BODYPART_LOWER_BODY]);
     }
 
     if ((this->actionFunc == EnPoSisters_DeathStage1) && (this->deathTimer >= 8) &&
@@ -1265,7 +1265,7 @@ void EnPoSisters_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, POE_SISTERS_BODYPART_MAX,
                             this->actor.scale.x * (1.0f / 0.007f) * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 

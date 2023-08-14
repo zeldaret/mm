@@ -1174,7 +1174,7 @@ s32 EnGo_UpdateRotationToTarget(EnGo* this, PlayState* play) {
 
     Math_Vec3f_Copy(&thisPos, &this->actor.focus.pos);
     if (this->attentionTarget->id == ACTOR_PLAYER) {
-        targetPos.y = ((Player*)this->attentionTarget)->bodyPartsPos[7].y + 3.0f;
+        targetPos.y = ((Player*)this->attentionTarget)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&targetPos, &this->attentionTarget->focus.pos);
     }

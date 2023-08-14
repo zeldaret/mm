@@ -62,8 +62,8 @@ void OceffSpot_Init(Actor* thisx, PlayState* play2) {
     this->actor.scale.y = 0.3f;
     this->unk16C = 0.0f;
     this->actor.world.pos.y = player->actor.world.pos.y;
-    this->actor.world.pos.x = player->bodyPartsPos[0].x;
-    this->actor.world.pos.z = player->bodyPartsPos[0].z;
+    this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+    this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
 }
 
 void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {

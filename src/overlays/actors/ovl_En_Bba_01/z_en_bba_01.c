@@ -253,12 +253,12 @@ void EnBba01_Update(Actor* thisx, PlayState* play) {
 
 s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnBba01* this = THIS;
-    s8 bodyPart;
+    s8 bodyPartIndex;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    bodyPart = gEnHyBodyParts[limbIndex];
-    if (bodyPart >= 0) {
-        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
+    bodyPartIndex = gEnHyLimbToBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPartIndex]);
     }
 
     if (limbIndex == BBA_LIMB_RIGHT_LOWER_ARM_ROOT) {
@@ -338,8 +338,8 @@ void EnBba01_Draw(Actor* thisx, PlayState* play) {
         *shadowTexIter++ = 0;
     }
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
-                          ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
+        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f, ENHY_BODYPART_MAX,
+                          gEnHyShadowSizes, gEnHyParentShadowBodyParts);
     }
     SubS_DrawShadowTex(&this->enHy.actor, &play->state, shadowTex);
 

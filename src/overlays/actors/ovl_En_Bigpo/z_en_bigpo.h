@@ -8,6 +8,19 @@ struct EnBigpo;
 
 typedef void (*EnBigPoActionFunc)(struct EnBigpo*, PlayState*);
 
+typedef enum BigPoeBodyPart {
+    /* 0 */ BIG_POE_BODYPART_0,
+    /* 1 */ BIG_POE_BODYPART_1,
+    /* 2 */ BIG_POE_BODYPART_2,
+    /* 3 */ BIG_POE_BODYPART_3,
+    /* 4 */ BIG_POE_BODYPART_4,
+    /* 5 */ BIG_POE_BODYPART_5,
+    /* 6 */ BIG_POE_BODYPART_6,
+    /* 7 */ BIG_POE_BODYPART_7,
+    /* 8 */ BIG_POE_BODYPART_8,
+    /* 9 */ BIG_POE_BODYPART_MAX
+} BigPoeBodyPart;
+
 typedef struct EnBigpoFireEffect {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ LightNode* light;
@@ -40,7 +53,7 @@ typedef struct EnBigpo {
     /* 0x218 */ f32 savedHeight; // actual height while flying moves as part of bobbing
     /* 0x21C */ f32 drawDmgEffAlpha;
     /* 0x220 */ f32 drawDmgEffScale;
-    /* 0x224 */ Vec3f limbPos[9];
+    /* 0x224 */ Vec3f bodyPartsPos[BIG_POE_BODYPART_MAX];
     /* 0x290 */ Color_RGBA8 mainColor;
     /* 0x294 */ Color_RGBA8 lanternColor;
     /* 0x298 */ UNK_TYPE1 pad298[0x14];

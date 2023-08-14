@@ -237,7 +237,7 @@ void func_808D0A48(EnFloormas* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2,
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX, 2,
                               this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= ACTOR_FLAG_400;
@@ -1157,44 +1157,44 @@ s32 EnFloormas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
-static s8 D_808D393C[WALLMASTER_LIMB_MAX] = {
-    -1, // WALLMASTER_LIMB_NONE
-    -1, // WALLMASTER_LIMB_ROOT
-    -1, // WALLMASTER_LIMB_HAND
-    -1, // WALLMASTER_LIMB_INDEX_FINGER_ROOT
-    0,  // WALLMASTER_LIMB_INDEX_FINGER_PROXIMAL
-    -1, // WALLMASTER_LIMB_INDEX_FINGER_DISTAL_ROOT
-    -1, // WALLMASTER_LIMB_INDEX_FINGER_MIDDLE
-    1,  // WALLMASTER_LIMB_INDEX_FINGER_DISTAL
-    -1, // WALLMASTER_LIMB_RING_FINGER_ROOT
-    2,  // WALLMASTER_LIMB_RING_FINGER_PROXIMAL
-    -1, // WALLMASTER_LIMB_RING_FINGER_DISTAL_ROOT
-    -1, // WALLMASTER_LIMB_RING_FINGER_MIDDLE
-    3,  // WALLMASTER_LIMB_RING_FINGER_DISTAL
-    -1, // WALLMASTER_LIMB_MIDDLE_FINGER_ROOT
-    4,  // WALLMASTER_LIMB_MIDDLE_FINGER_PROXIMAL
-    -1, // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL_ROOT
-    -1, // WALLMASTER_LIMB_MIDDLE_FINGER_MIDDLE
-    5,  // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL
-    -1, // WALLMASTER_LIMB_WRIST_ROOT
-    -1, // WALLMASTER_LIMB_WRIST
-    -1, // WALLMASTER_LIMB_THUMB_ROOT
-    6,  // WALLMASTER_LIMB_THUMB_PROXIMAL
-    7,  // WALLMASTER_LIMB_THUMB_DISTAL_ROOT
-    -1, // WALLMASTER_LIMB_THUMB_MIDDLE
-    8,  // WALLMASTER_LIMB_THUMB_DISTAL
+static s8 sLimbToBodyParts[WALLMASTER_LIMB_MAX] = {
+    BODYPART_NONE,         // WALLMASTER_LIMB_NONE
+    BODYPART_NONE,         // WALLMASTER_LIMB_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_HAND
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_ROOT
+    ENFLOORMAS_BODYPART_0, // WALLMASTER_LIMB_INDEX_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_MIDDLE
+    ENFLOORMAS_BODYPART_1, // WALLMASTER_LIMB_INDEX_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_ROOT
+    ENFLOORMAS_BODYPART_2, // WALLMASTER_LIMB_RING_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_MIDDLE
+    ENFLOORMAS_BODYPART_3, // WALLMASTER_LIMB_RING_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_ROOT
+    ENFLOORMAS_BODYPART_4, // WALLMASTER_LIMB_MIDDLE_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_MIDDLE
+    ENFLOORMAS_BODYPART_5, // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_WRIST_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_WRIST
+    BODYPART_NONE,         // WALLMASTER_LIMB_THUMB_ROOT
+    ENFLOORMAS_BODYPART_6, // WALLMASTER_LIMB_THUMB_PROXIMAL
+    ENFLOORMAS_BODYPART_7, // WALLMASTER_LIMB_THUMB_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_THUMB_MIDDLE
+    ENFLOORMAS_BODYPART_8, // WALLMASTER_LIMB_THUMB_DISTAL
 };
 
 void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnFloormas* this = THIS;
 
-    if (D_808D393C[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_808D393C[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
-        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->bodyPartsPos[ENFLOORMAS_BODYPART_9]);
+        Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[ENFLOORMAS_BODYPART_10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         Matrix_Push();
         Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
@@ -1230,7 +1230,7 @@ void EnFloormas_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX,
                             100.0f * (this->drawDmgEffScale * this->actor.scale.x),
                             100.0f * (this->drawDmgEffFrozenSteamScale * this->actor.scale.x), this->drawDmgEffAlpha,
                             this->drawDmgEffType);
@@ -1255,7 +1255,7 @@ void func_808D3754(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX,
                             this->drawDmgEffScale * this->actor.scale.x * 100.0f,
                             this->drawDmgEffFrozenSteamScale * this->actor.scale.x * 100.0f, this->drawDmgEffAlpha,
                             this->drawDmgEffType);

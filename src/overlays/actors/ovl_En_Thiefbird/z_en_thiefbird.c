@@ -465,7 +465,7 @@ void func_80C114C0(EnThiefbird* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 11, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_THIEFBIRD_BODYPART_MAX, 2, 0.2f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -656,8 +656,8 @@ void func_80C11DF0(EnThiefbird* this, PlayState* play) {
     }
 
     if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
-        for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-            func_800B3030(play, &this->limbPos[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
+        for (i = 0; i < EN_THIEFBIRD_BODYPART_MAX; i++) {
+            func_800B3030(play, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 0x8C, 0, 0);
         }
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -888,10 +888,10 @@ void func_80C127F4(EnThiefbird* this, PlayState* play) {
             Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, &this->unk_3EC->actor),
                                3, 0x2000, 0x100);
         }
-        temp_v0 = Math_Vec3f_Pitch(&this->limbPos[9], &this->unk_3EC->actor.world.pos);
+        temp_v0 = Math_Vec3f_Pitch(&this->bodyPartsPos[EN_THIEFBIRD_BODYPART_9], &this->unk_3EC->actor.world.pos);
         temp_v0 = CLAMP(temp_v0, -0x3000, 0x3000);
         Math_SmoothStepToS(&this->actor.shape.rot.x, temp_v0, 4, 0x800, 0x80);
-        temp_f0 = Actor_WorldDistXYZToPoint(&this->unk_3EC->actor, &this->limbPos[9]);
+        temp_f0 = Actor_WorldDistXYZToPoint(&this->unk_3EC->actor, &this->bodyPartsPos[EN_THIEFBIRD_BODYPART_9]);
         this->actor.speed = (0.02f * temp_f0) + 2.0f;
         this->actor.speed = CLAMP_MAX(this->actor.speed, 4.0f);
         if ((this->unk_3EC->actor.speed <= 0.0f) && (temp_f0 < 40.0f)) {
@@ -1065,14 +1065,31 @@ s32 EnThiefbird_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     return false;
 }
 
+static s8 sLimbToBodyParts[TAKKURI_LIMB_MAX] = {
+    BODYPART_NONE,            // TAKKURI_LIMB_NONE
+    EN_THIEFBIRD_BODYPART_0,  // TAKKURI_LIMB_BODY
+    BODYPART_NONE,            // TAKKURI_LIMB_LEFT_WING_BASE
+    EN_THIEFBIRD_BODYPART_1,  // TAKKURI_LIMB_LEFT_WING_MIDDLE
+    EN_THIEFBIRD_BODYPART_3,  // TAKKURI_LIMB_LEFT_WING_TIP
+    BODYPART_NONE,            // TAKKURI_LIMB_RIGHT_WING_BASE
+    EN_THIEFBIRD_BODYPART_2,  // TAKKURI_LIMB_RIGHT_WING_MIDDLE
+    EN_THIEFBIRD_BODYPART_5,  // TAKKURI_LIMB_RIGHT_WING_TIP
+    BODYPART_NONE,            // TAKKURI_LIMB_NECK
+    BODYPART_NONE,            // TAKKURI_LIMB_HEAD
+    EN_THIEFBIRD_BODYPART_7,  // TAKKURI_LIMB_RIGHT_EAR
+    EN_THIEFBIRD_BODYPART_8,  // TAKKURI_LIMB_LEFT_EAR
+    EN_THIEFBIRD_BODYPART_9,  // TAKKURI_LIMB_LOWER_BEAK
+    BODYPART_NONE,            // TAKKURI_LIMB_EYES
+    BODYPART_NONE,            // TAKKURI_LIMB_LEGS
+    EN_THIEFBIRD_BODYPART_10, // TAKKURI_LIMB_FEET
+    BODYPART_NONE,            // TAKKURI_LIMB_STOLEN_ITEM
+};
+
 void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_80C13698[] = {
-        -1, 0, -1, 1, 3, -1, 2, 5, -1, -1, 7, 8, 9, -1, -1, 10, -1,
-    };
     EnThiefbird* this = THIS;
     s32 pad;
     Gfx* gfx;
-    s8 idx;
+    s8 bodyPartIndex;
 
     Collider_UpdateSpheres(limbIndex, &this->collider);
     if ((limbIndex == TAKKURI_LIMB_RIGHT_EAR) || (limbIndex == TAKKURI_LIMB_LEFT_EAR)) {
@@ -1108,14 +1125,14 @@ void EnThiefbird_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
         }
     }
 
-    idx = D_80C13698[limbIndex];
-    if (idx != -1) {
-        if (idx == 9) {
-            Matrix_MultVecX(1000.0f, &this->limbPos[idx]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex == EN_THIEFBIRD_BODYPART_9) {
+            Matrix_MultVecX(1000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
-            Matrix_MultZero(&this->limbPos[idx]);
-            if ((idx == 3) || (idx == 5)) {
-                Matrix_MultVecX(2000.0f, &this->limbPos[idx + 1]);
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
+            if ((bodyPartIndex == EN_THIEFBIRD_BODYPART_3) || (bodyPartIndex == EN_THIEFBIRD_BODYPART_5)) {
+                Matrix_MultVecX(2000.0f, &this->bodyPartsPos[bodyPartIndex + 1]);
             }
         }
     }
@@ -1163,7 +1180,7 @@ void EnThiefbird_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
     func_80C13354(this, play);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_THIEFBIRD_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     Math_Vec3s_ToVec3f(&this->actor.focus.pos, &this->collider.elements[1].dim.worldSphere.center);
 }

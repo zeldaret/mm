@@ -8,6 +8,20 @@ struct EnKame;
 
 typedef void (*EnKameActionFunc)(struct EnKame*, PlayState*);
 
+typedef enum SnapperBodyPart {
+    /*  0 */ SNAPPER_BODYPART_JAW,
+    /*  1 */ SNAPPER_BODYPART_FRONT_LEFT_FOOT,
+    /*  2 */ SNAPPER_BODYPART_FRONT_RIGHT_FOOT,
+    /*  3 */ SNAPPER_BODYPART_BACK_LEFT_FOOT,
+    /*  4 */ SNAPPER_BODYPART_BACK_RIGHT_FOOT,
+    /*  5 */ SNAPPER_BODYPART_5,
+    /*  6 */ SNAPPER_BODYPART_6,
+    /*  7 */ SNAPPER_BODYPART_7,
+    /*  8 */ SNAPPER_BODYPART_8,
+    /*  9 */ SNAPPER_BODYPART_9,
+    /* 10 */ SNAPPER_BODYPART_MAX
+} SnapperBodyPart;
+
 typedef struct EnKame {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime snapperSkelAnime;
@@ -30,7 +44,7 @@ typedef struct EnKame {
     /* 0x2B4 */ f32 drawDmgEffScale;
     /* 0x2B8 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x2BC */ Vec3f unk_2BC;
-    /* 0x2C8 */ Vec3f limbPos[10];
+    /* 0x2C8 */ Vec3f bodyPartsPos[SNAPPER_BODYPART_MAX];
     /* 0x340 */ ColliderCylinder collider;
 } EnKame; // size = 0x38C
 
