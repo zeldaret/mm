@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!-- Assets for the orange graveyard flowers-->
+    <!-- Assets for the orange graveyard flowers -->
     <File Name="object_hana" Segment="6">
         <!-- Each of these is a single flower out of the 3 -->
         <DList Name="gGraveyardFlower1DL" Offset="0x0" />
