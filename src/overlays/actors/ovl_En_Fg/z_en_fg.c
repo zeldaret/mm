@@ -105,18 +105,18 @@ static DamageTable sDamageTable = {
 
 typedef enum {
     /* -1 */ BETAFROG_ANIM_NONE = -1,
-    /*  0 */ BETAFROG_ANIM_0,
-    /*  1 */ BETAFROG_ANIM_1,
-    /*  2 */ BETAFROG_ANIM_2,
-    /*  3 */ BETAFROG_ANIM_3,
+    /*  0 */ BETAFROG_ANIM_IDLE,
+    /*  1 */ BETAFROG_ANIM_IDLE_MORPH,
+    /*  2 */ BETAFROG_ANIM_DANCE,
+    /*  3 */ BETAFROG_ANIM_JUMP,
     /*  4 */ BETAFROG_ANIM_MAX
 } BetaFrogAnimation;
 
 static AnimationInfoS sAnimationInfo[BETAFROG_ANIM_MAX] = {
-    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // BETAFROG_ANIM_0
-    { &object_fr_Anim_001534, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_1
-    { &object_fr_Anim_0011C0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_2
-    { &object_fr_Anim_0007BC, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // BETAFROG_ANIM_3
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },   // BETAFROG_ANIM_IDLE
+    { &gFrogIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // BETAFROG_ANIM_IDLE_MORPH
+    { &gFrogDanceAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // BETAFROG_ANIM_DANCE
+    { &gFrogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },  // BETAFROG_ANIM_JUMP
 };
 
 s32 EnFg_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
@@ -244,7 +244,7 @@ void EnFg_Idle(EnFg* this, PlayState* play) {
         default:
             if (DECR(this->timer) == 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_JUMP);
-                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_3);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_JUMP);
                 this->actor.velocity.y = 10.0f;
                 this->timer = Rand_S16Offset(30, 30);
                 this->actionFunc = EnFg_Jump;
@@ -281,7 +281,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
         case BETAFROG_DMGEFFECT_EXPLOSION:
             this->actor.flags &= ~ACTOR_FLAG_1;
             Actor_PlaySfx(&this->actor, NA_SE_EV_FROG_CRY_0);
-            EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+            EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
             this->actor.params = BETAFROG_BLACK;
             this->skelAnime.playSpeed = 0.0f;
             ac = this->collider.base.ac;
@@ -302,7 +302,7 @@ void EnFg_Jump(EnFg* this, PlayState* play) {
             }
 
             if ((this->actor.velocity.y <= 0.0f) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+                EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
                 this->actionFunc = EnFg_Idle;
                 this->actor.velocity.y = 0.0f;
             } else {
@@ -341,9 +341,8 @@ void EnFg_Init(Actor* thisx, PlayState* play) {
     EnFg* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 10.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_fr_Skel_00B538, NULL, this->jointTable, this->morphTable,
-                       OBJECT_FR_LIMB_MAX);
-    EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_0);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, NULL, this->jointTable, this->morphTable, FROG_LIMB_MAX);
+    EnFg_ChangeAnim(&this->skelAnime, BETAFROG_ANIM_IDLE);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit2);
@@ -385,12 +384,12 @@ void EnFg_Update(Actor* thisx, PlayState* play) {
 s32 EnFg_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFg* this = THIS;
 
-    if ((limbIndex == OBJECT_FR_LIMB_07) || (limbIndex == OBJECT_FR_LIMB_08)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         *dList = NULL;
     }
 
     if (this->actor.colChkInfo.health == 0) {
-        if ((limbIndex == OBJECT_FR_LIMB_05) || (limbIndex == OBJECT_FR_LIMB_09)) {
+        if ((limbIndex == FROG_LIMB_RIGHT_IRIS) || (limbIndex == FROG_LIMB_LEFT_IRIS)) {
             *dList = NULL;
         }
     }
@@ -402,7 +401,7 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s16 pad;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    if ((limbIndex == OBJECT_FR_LIMB_07) || (limbIndex == OBJECT_FR_LIMB_08)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -414,7 +413,7 @@ void EnFg_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == OBJECT_FR_LIMB_04) {
+    if (limbIndex == FROG_LIMB_HEAD) {
         Matrix_MultVec3f(&zeroVec, &this->actor.focus.pos);
     }
 }
@@ -441,8 +440,8 @@ void EnFg_Draw(Actor* thisx, PlayState* play) {
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor[this->actor.params].r, envColor[this->actor.params].g,
                    envColor[this->actor.params].b, envColor[this->actor.params].a);
-    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(object_fr_Tex_0059A0));
-    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(object_fr_Tex_0059A0));
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gFrogIrisOpenTex));
+    gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(gFrogIrisOpenTex));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnFg_OverrideLimbDraw, EnFg_PostLimbDraw, &this->actor);
 
@@ -501,7 +500,7 @@ void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect) {
 
         if (!firstDone) {
             POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
-            gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B328);
+            gSPDisplayList(POLY_XLU_DISP++, gFrogDustMaterialDL);
             gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, 0);
             firstDone = true;
         }
@@ -515,7 +514,7 @@ void EnFg_DrawDust(PlayState* play, BetaFrogEffectDust* dustEffect) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         index = 0.5f * dustEffect->timer;
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[index]));
-        gSPDisplayList(POLY_XLU_DISP++, object_fr_DL_00B338);
+        gSPDisplayList(POLY_XLU_DISP++, gFrogDustModelDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

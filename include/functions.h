@@ -1206,18 +1206,6 @@ void SkinMatrix_SetYRotation(MtxF* mf, s16 a);
 void SkinMatrix_MulYRotation(MtxF* mf, s16 a);
 void SkinMatrix_SetZRotation(MtxF* mf, s16 a);
 
-void ViMode_LogPrint(OSViMode* vimode);
-void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 antialiasOff, s32 modeN, s32 fb16Bit,
-                      s32 width, s32 height, s32 leftAdjust, s32 rightAdjust, s32 upperAdjust, s32 lowerAdjust);
-void ViMode_Save(ViMode* viMode);
-void ViMode_Load(ViMode* viMode);
-void ViMode_Init(ViMode* viMode);
-void ViMode_Destroy(ViMode* viMode);
-void ViMode_ConfigureFeatures(ViMode* viMode, s32 viFeatures);
-void ViMode_Update(ViMode* viMode, Input* input);
-void VisCvg_Init(struct_801F8010* this);
-void VisCvg_Destroy(struct_801F8010* this);
-void VisCvg_Draw(struct_801F8010* this, Gfx** gfxp);
 void func_80140E80(Struct_80140E80* arg0);
 void func_80140EA0(Struct_80140E80* arg0);
 // void func_80140EAC(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
@@ -1228,16 +1216,6 @@ void func_8014116C(Gfx** gfxP, u16* arg1, u16* workBuffer, s32 width, s32 height
 // void func_8014151C(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5, UNK_TYPE4 param_6);
 // void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void func_80141778(Struct_80140E80* arg0, Gfx** gfxp, void* unk_18E60, GraphicsContext* gfxCtx);
-void VisMono_Init(VisMono* this);
-void VisMono_Destroy(VisMono* this);
-// void VisMono_DesaturateTLUT(u16* tlut);
-// void VisMono_DesaturateDList(Gfx* gfx);
-void VisMono_Draw(VisMono* this, Gfx** gfxp);
-// void VisMono_DrawOld(VisMono* this);
-
-void VisZbuf_Init(VisZbuf* this);
-void VisZbuf_Destroy(VisZbuf* this);
-void VisZbuf_Draw(VisZbuf* this, Gfx** gfxP, void* zbuffer);
 
 // void func_80147520(void);
 void func_80147564(PlayState* play);
@@ -1491,14 +1469,6 @@ void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);
 void Mtx_SetTranslationRotationScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, s32 angle, f32 axisX, f32 axisY, f32 axisZ,f32 translateX, f32 translateY, f32 translateZ);
 
-void SysCfb_SetLoResMode(void);
-void SysCfb_SetHiResMode(void);
-void SysCfb_Init(void);
-void* SysCfb_GetFramebuffer(s32 index);
-void* SysCfb_GetZBuffer(void);
-void* SysCfb_GetWorkBuffer(void);
-u16 SysCfb_GetZBufferPixel(s32 x, s32 y);
-s32 SysCfb_GetZBufferInt(s32 x, s32 y);
 void CmpDma_LoadFile(uintptr_t segmentVrom, s32 id, void* dst, size_t size);
 void CmpDma_LoadAllFiles(uintptr_t segmentVrom, void* dst, size_t size);
 // void Check_WriteRGBA16Pixel(u16* buffer, u32 x, u32 y, u32 value);
@@ -1679,55 +1649,6 @@ s32 osFlashWriteArray(u32 pageNum);
 s32 osFlashReadArray(OSIoMesg* mb, s32 priority, u32 pageNum, void* dramAddr, u32 pageCount, OSMesgQueue* mq);
 
 Acmd* AudioSynth_Update(Acmd* abiCmdStart, s32* numAbiCmds, s16* aiBufStart, s32 numSamplesPerFrame);
-
-void AudioHeap_DiscardFont(s32 fontId);
-void* AudioHeap_WritebackDCache(void* addr, size_t size);
-void* AudioHeap_AllocAttemptExternal(AudioAllocPool* pool, size_t size);
-void* AudioHeap_AllocDmaMemory(AudioAllocPool* pool, size_t size);
-void* AudioHeap_AllocZeroed(AudioAllocPool* pool, size_t size);
-void* AudioHeap_Alloc(AudioAllocPool* pool, size_t size);
-void AudioHeap_InitPool(AudioAllocPool* pool, void* addr, size_t size);
-void AudioHeap_PopPersistentCache(s32 tableType);
-void AudioHeap_InitMainPool(size_t initPoolSize);
-void* AudioHeap_AllocCached(s32 tableType, size_t size, s32 cache, s32 id);
-void* AudioHeap_SearchCaches(s32 tableType, s32 cache, s32 id);
-void AudioHeap_LoadFilter(s16* filter, s32 lowPassCutoff, s32 highPassCutoff);
-s32 AudioHeap_ResetStep(void);
-void AudioHeap_Init(void);
-void* AudioHeap_SearchPermanentCache(s32 tableType, s32 id);
-void* AudioHeap_AllocPermanent(s32 tableType, s32 id, size_t size);
-void* AudioHeap_AllocSampleCache(size_t size, s32 sampleBankId, void* sampleAddr, s8 medium, s32 cache);
-void AudioHeap_ApplySampleBankCache(s32 sampleBankId);
-void AudioHeap_SetReverbData(s32 reverbIndex, u32 dataType, s32 data, s32 isFirstInit);
-
-void AudioLoad_DecreaseSampleDmaTtls(void);
-void* AudioLoad_DmaSampleData(uintptr_t devAddr, size_t size, s32 arg2, u8* dmaIndexRef, s32 medium);
-void AudioLoad_InitSampleDmaBuffers(s32 numNotes);
-s32 AudioLoad_IsFontLoadComplete(s32 fontId);
-s32 AudioLoad_IsSeqLoadComplete(s32 seqId);
-void AudioLoad_SetFontLoadStatus(s32 fontId, s32 loadStatus);
-void AudioLoad_SetSeqLoadStatus(s32 seqId, s32 loadStatus);
-void AudioLoad_SyncLoadSeqParts(s32 seqId, s32 arg1, s32 arg2, OSMesgQueue* arg3);
-s32 AudioLoad_SyncLoadInstrument(s32 fontId, s32 instId, s32 drumId);
-void AudioLoad_AsyncLoadSeq(s32 seqId, s32 arg1, s32 retData, OSMesgQueue* retQueue);
-void AudioLoad_AsyncLoadSampleBank(s32 sampleBankId, s32 arg1, s32 retData, OSMesgQueue* retQueue);
-void AudioLoad_AsyncLoadFont(s32 fontId, s32 arg1, s32 retData, OSMesgQueue* retQueue);
-u8* AudioLoad_GetFontsForSequence(s32 seqId, u32* outNumFonts);
-void AudioLoad_DiscardSeqFonts(s32 seqId);
-void func_8018FA60(u32 tableType, u32 id, s32 type, s32 data);
-s32 AudioLoad_SyncInitSeqPlayer(s32 playerIndex, s32 seqId, s32 arg2);
-s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 playerIndex, s32 seqId, s32 skipTicks);
-void AudioLoad_ProcessLoads(s32 resetStatus);
-void AudioLoad_SetDmaHandler(DmaHandler callback);
-void AudioLoad_Init(void* heap, u32 heapSize);
-void AudioLoad_InitSlowLoads(void);
-s32 AudioLoad_SlowLoadSample(s32 fontId, s32 instId, s8* isDone);
-s32 AudioLoad_SlowLoadSeq(s32 seqId, u8* ramAddr, s8* isDone);
-void AudioLoad_InitAsyncLoads(void);
-void AudioLoad_LoadPermanentSamples(void);
-void AudioLoad_ScriptLoad(s32 tableType, s32 id, s8* isDone);
-void AudioLoad_ProcessScriptLoads(void);
-void AudioLoad_InitScriptLoads(void);
 
 AudioTask* AudioThread_Update(void);
 void AudioThread_QueueCmdF32(u32 opArgs, f32 data);

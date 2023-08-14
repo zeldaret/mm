@@ -6,22 +6,38 @@
 #include "overlays/gamestates/ovl_title/z_title.h"
 #include "z_title_setup.h"
 
-#define GAMESTATE_OVERLAY(name, init, destroy, size)                                                 \
-    {                                                                                                \
-        NULL, SEGMENT_ROM_START(ovl_##name), SEGMENT_ROM_END(ovl_##name), SEGMENT_START(ovl_##name), \
-            SEGMENT_END(ovl_##name), 0, init, destroy, 0, 0, 0, size                                 \
-    }
-#define GAMESTATE_OVERLAY_INTERNAL(init, destroy, size) \
-    { NULL, 0, 0, NULL, NULL, 0, init, destroy, 0, 0, 0, size }
+// Linker symbol declarations (used in the table below)
+#define DEFINE_GAMESTATE(_typeName, _enumName, segmentName) DECLARE_OVERLAY_SEGMENT(segmentName)
+#define DEFINE_GAMESTATE_INTERNAL(_typeName, _enumName)
 
-GameStateOverlay gGameStateOverlayTable[] = {
-    GAMESTATE_OVERLAY_INTERNAL(Setup_Init, Setup_Destroy, sizeof(SetupState)),
-    GAMESTATE_OVERLAY(select, MapSelect_Init, MapSelect_Destroy, sizeof(MapSelectState)),
-    GAMESTATE_OVERLAY(title, ConsoleLogo_Init, ConsoleLogo_Destroy, sizeof(ConsoleLogoState)),
-    GAMESTATE_OVERLAY_INTERNAL(Play_Init, Play_Destroy, sizeof(PlayState)),
-    GAMESTATE_OVERLAY(opening, TitleSetup_Init, TitleSetup_Destroy, sizeof(TitleSetupState)),
-    GAMESTATE_OVERLAY(file_choose, FileSelect_Init, FileSelect_Destroy, sizeof(FileSelectState)),
-    GAMESTATE_OVERLAY(daytelop, DayTelop_Init, DayTelop_Destroy, sizeof(DayTelopState)),
+#include "tables/gamestate_table.h"
+
+#undef DEFINE_GAMESTATE
+#undef DEFINE_GAMESTATE_INTERNAL
+
+// Gamestate Overlay Table definition
+#define DEFINE_GAMESTATE_INTERNAL(typeName, _enumName) \
+    { NULL, 0, 0, NULL, NULL, NULL, typeName##_Init, typeName##_Destroy, NULL, NULL, 0, sizeof(typeName##State) },
+
+#define DEFINE_GAMESTATE(typeName, _enumName, segmentName) \
+    { NULL,                                                \
+      (uintptr_t)SEGMENT_ROM_START(ovl_##segmentName),     \
+      (uintptr_t)SEGMENT_ROM_END(ovl_##segmentName),       \
+      SEGMENT_START(ovl_##segmentName),                    \
+      SEGMENT_END(ovl_##segmentName),                      \
+      NULL,                                                \
+      typeName##_Init,                                     \
+      typeName##_Destroy,                                  \
+      NULL,                                                \
+      NULL,                                                \
+      0,                                                   \
+      sizeof(typeName##State) },
+
+GameStateOverlay gGameStateOverlayTable[GAMESTATE_ID_MAX] = {
+#include "tables/gamestate_table.h"
 };
 
-s32 gGraphNumGameStates = ARRAY_COUNT(gGameStateOverlayTable);
+#undef DEFINE_GAMESTATE
+#undef DEFINE_GAMESTATE_INTERNAL
+
+GameStateId gGraphNumGameStates = GAMESTATE_ID_MAX;

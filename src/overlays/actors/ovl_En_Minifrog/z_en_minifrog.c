@@ -59,10 +59,9 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 12, 14, MASS_IMMOVABLE };
 
-// sEyeTextures???
-static TexturePtr D_808A4D74[] = {
-    object_fr_Tex_0059A0,
-    object_fr_Tex_005BA0,
+static TexturePtr sEyeTextures[] = {
+    gFrogIrisOpenTex,
+    gFrogIrisClosedTex,
 };
 
 static u16 sIsFrogReturnedFlags[] = {
@@ -85,14 +84,14 @@ void EnMinifrog_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 15.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_fr_Skel_00B538, &object_fr_Anim_001534, this->jointTable,
-                       this->morphTable, OBJECT_FR_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gFrogSkel, &gFrogIdleAnim, this->jointTable, this->morphTable,
+                       FROG_LIMB_MAX);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
     if (!sIsInitialized) {
-        for (i = 0; i < ARRAY_COUNT(D_808A4D74); i++) {
-            D_808A4D74[i] = Lib_SegmentedToVirtual(D_808A4D74[i]);
+        for (i = 0; i < ARRAY_COUNT(sEyeTextures); i++) {
+            sEyeTextures[i] = Lib_SegmentedToVirtual(sEyeTextures[i]);
         }
         sIsInitialized = true;
     }
@@ -172,7 +171,7 @@ EnMinifrog* EnMinifrog_GetFrog(PlayState* play) {
 void EnMinifrog_SetJumpState(EnMinifrog* this) {
     if (this->jumpState == FROG_STATE_GROUND) {
         this->jumpState = FROG_STATE_JUMP;
-        Animation_Change(&this->skelAnime, &object_fr_Anim_0007BC, 1.0f, 0.0f, 7.0f, ANIMMODE_ONCE, -5.0f);
+        Animation_Change(&this->skelAnime, &gFrogJumpAnim, 1.0f, 0.0f, 7.0f, ANIMMODE_ONCE, -5.0f);
     }
 }
 
@@ -200,7 +199,7 @@ void EnMinifrog_Jump(EnMinifrog* this) {
         case FROG_STATE_AIR:
             if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 this->jumpState = FROG_STATE_GROUND;
-                Animation_MorphToLoop(&this->skelAnime, &object_fr_Anim_001534, -2.5f);
+                Animation_MorphToLoop(&this->skelAnime, &gFrogIdleAnim, -2.5f);
                 SkelAnime_Update(&this->skelAnime);
             }
             break;
@@ -616,11 +615,11 @@ void EnMinifrog_UpdateMissingFrog(Actor* thisx, PlayState* play) {
 }
 
 s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == OBJECT_FR_LIMB_01) {
+    if (limbIndex == FROG_LIMB_LOWER_BODY) {
         pos->z -= 500.0f;
     }
 
-    if ((limbIndex == OBJECT_FR_LIMB_07) || (limbIndex == OBJECT_FR_LIMB_08)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         *dList = NULL;
     }
 
@@ -630,7 +629,7 @@ s32 EnMinifrog_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnMinifrog* this = THIS;
 
-    if ((limbIndex == OBJECT_FR_LIMB_07) || (limbIndex == OBJECT_FR_LIMB_08)) {
+    if ((limbIndex == FROG_LIMB_RIGHT_EYE) || (limbIndex == FROG_LIMB_LEFT_EYE)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -640,7 +639,7 @@ void EnMinifrog_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == OBJECT_FR_LIMB_04) {
+    if (limbIndex == FROG_LIMB_HEAD) {
         Matrix_MultZero(&this->actor.focus.pos);
     }
 }
@@ -661,8 +660,8 @@ void EnMinifrog_Draw(Actor* thisx, PlayState* play) {
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     envColor = &sFrogEnvColors[this->frogIndex];
-    gSPSegment(POLY_OPA_DISP++, 0x08, D_808A4D74[0]);
-    gSPSegment(POLY_OPA_DISP++, 0x09, D_808A4D74[0]);
+    gSPSegment(POLY_OPA_DISP++, 0x08, sEyeTextures[0]);
+    gSPSegment(POLY_OPA_DISP++, 0x09, sEyeTextures[0]);
     gDPSetEnvColor(POLY_OPA_DISP++, envColor->r, envColor->g, envColor->b, envColor->a);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMinifrog_OverrideLimbDraw, EnMinifrog_PostLimbDraw, &this->actor);
