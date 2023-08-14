@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!-- Object for the Goron Shrine Chandelier-->
+    <!-- Object for the Goron Shrine Chandelier -->
     <File Name="object_obj_chan" Segment="6">
         <DList Name="gChandelierPotHolderDL" Offset="0xA10" />
         <DList Name="gChandelierCenterDL" Offset="0xAF0" />
