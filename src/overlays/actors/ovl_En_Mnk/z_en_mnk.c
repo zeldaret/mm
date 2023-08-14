@@ -231,7 +231,7 @@ void EnMnk_Monkey_SetupWaitToRunAndWaitAtEachPoint(EnMnk* this, PlayState* play)
 
 void EnMnk_Monkey_StartInvisible(EnMnk* this, PlayState* play) {
     this->picto.actor.draw = NULL;
-    this->picto.actor.flags &= ~ACTOR_FLAG_1;
+    this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->collider.dim.radius = 100;
     this->flags |= MONKEY_FLAGS_8;
     this->flags |= MONKEY_FLAGS_20;
@@ -421,7 +421,7 @@ void EnMnk_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = EnMnk_Monkey_WaitToFollowPath;
             this->unk_3C8 = 0;
             this->flags |= MONKEY_FLAGS_2;
-            this->picto.actor.flags &= ~ACTOR_FLAG_1;
+            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->picto.actor.velocity.y = 0.0f;
             this->picto.actor.terminalVelocity = 0.0f;
             this->picto.actor.gravity = 0.0f;
@@ -1141,7 +1141,7 @@ void EnMnk_Monkey_SetupDrop(EnMnk* this) {
     this->actionFunc = EnMnk_Monkey_Drop;
     this->picto.actor.velocity.y = -10.0f;
     this->picto.actor.terminalVelocity = -10.0f;
-    this->picto.actor.flags |= ACTOR_FLAG_1;
+    this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->picto.actor.draw = EnMnk_Draw;
     Animation_Change(&this->skelAnime, &object_mnk_Anim_008814, 1.0f, 10.0f,
                      Animation_GetLastFrame(&object_mnk_Anim_008814), ANIMMODE_ONCE, 0.0f);
@@ -1726,7 +1726,7 @@ void EnMnk_MonkeyHanging_WaitAfterDunk(EnMnk* this, PlayState* play) {
         this->unk_3E0 = 5;
     } else if (this->unk_3C8 > 0) {
         this->unk_3C8--;
-        if (this->picto.actor.isTargeted && (this->picto.actor.csId != CS_ID_NONE)) {
+        if (this->picto.actor.isLockedOn && (this->picto.actor.csId != CS_ID_NONE)) {
             Actor_OfferTalk(&this->picto.actor, play, 1000.0f);
         }
     } else {
@@ -1794,7 +1794,7 @@ void EnMnk_MonkeyHanging_StruggleBeforeDunk(EnMnk* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_83_08);
     } else if (this->unk_3C8 > 0) {
         this->unk_3C8--;
-        if (this->picto.actor.isTargeted) {
+        if (this->picto.actor.isLockedOn) {
             Actor_OfferTalk(&this->picto.actor, play, 1000.0f);
         }
     } else {
@@ -1863,7 +1863,7 @@ void EnMnk_Monkey_WaitToGuideThroughWoods(EnMnk* this, PlayState* play) {
     func_80AB5F6C(this);
     if (Actor_ProcessTalkRequest(&this->picto.actor, &play->state)) {
         EnMnk_Monkey_SetupTalkBeforeGuideThroughWoods(this);
-    } else if (this->picto.actor.isTargeted || (this->picto.actor.xzDistToPlayer < 100.0f)) {
+    } else if (this->picto.actor.isLockedOn || (this->picto.actor.xzDistToPlayer < 100.0f)) {
         Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
