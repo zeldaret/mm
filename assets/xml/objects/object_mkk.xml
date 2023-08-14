@@ -1,5 +1,5 @@
 ﻿<Root>
-    <!--Object for Black and White Boes-->
+    <!-- Object for Black and White Boes -->
     <File Name="object_mkk" Segment="6">
         <DList Name="gBlackBoeBodyMaterialDL" Offset="0x30" />
         <DList Name="gBlackBoeBodyModelDL" Offset="0xB0" />
