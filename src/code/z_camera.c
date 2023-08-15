@@ -482,7 +482,7 @@ s32 Camera_GetFocalActorPos(Vec3f* dst, Camera* camera) {
     Actor* focalActor = camera->focalActor;
 
     if (camera->focalActor == &GET_PLAYER(camera->play)->actor) {
-        *dst = ((Player*)focalActor)->bodyPartsPos[0];
+        *dst = ((Player*)focalActor)->bodyPartsPos[PLAYER_BODYPART_WAIST];
         return dst;
     } else {
         Actor_GetWorldPosShapeRot(&focalPosRot, camera->focalActor);

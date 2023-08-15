@@ -923,7 +923,7 @@ void EnBigslime_GekkoThaw(EnBigslime* this, PlayState* play) {
         this->gekkoCollider.base.colType = COLTYPE_HIT6;
         this->gekkoCollider.info.elemType = ELEMTYPE_UNK1;
         this->gekkoDrawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -3034,30 +3034,30 @@ void EnBigslime_DrawBigslime(Actor* thisx, PlayState* play) {
 }
 
 static s8 sLimbToBodyParts[GEKKO_LIMB_MAX] = {
-    -1, // GEKKO_LIMB_NONE
-    -1, // GEKKO_LIMB_ROOT
-    0,  // GEKKO_LIMB_WAIST
-    -1, // GEKKO_LIMB_LEFT_THIGH
-    1,  // GEKKO_LIMB_LEFT_SHIN
-    -1, // GEKKO_LIMB_LEFT_ANKLE
-    2,  // GEKKO_LIMB_LEFT_FOOT
-    -1, // GEKKO_LIMB_RIGHT_THIGH
-    3,  // GEKKO_LIMB_RIGHT_SHIN
-    -1, // GEKKO_LIMB_RIGHT_ANKLE
-    4,  // GEKKO_LIMB_RIGHT_FOOT
-    -1, // GEKKO_LIMB_TORSO
-    5,  // GEKKO_LIMB_LEFT_UPPER_ARM
-    6,  // GEKKO_LIMB_LEFT_FOREARM
-    -1, // GEKKO_LIMB_LEFT_WRIST
-    7,  // GEKKO_LIMB_LEFT_HAND
-    8,  // GEKKO_LIMB_RIGHT_UPPER_ARM
-    9,  // GEKKO_LIMB_RIGHT_FOREARM
-    -1, // GEKKO_LIMB_RIGHT_WRIST
-    10, // GEKKO_LIMB_RIGHT_HAND
-    -1, // GEKKO_LIMB_HEAD
-    11, // GEKKO_LIMB_JAW
-    -1, // GEKKO_LIMB_LEFT_EYE
-    -1, // GEKKO_LIMB_RIGHT_EYE
+    BODYPART_NONE,                  // GEKKO_LIMB_NONE
+    BODYPART_NONE,                  // GEKKO_LIMB_ROOT
+    GEKKO_BODYPART_WAIST,           // GEKKO_LIMB_WAIST
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_THIGH
+    GEKKO_BODYPART_LEFT_SHIN,       // GEKKO_LIMB_LEFT_SHIN
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_ANKLE
+    GEKKO_BODYPART_LEFT_FOOT,       // GEKKO_LIMB_LEFT_FOOT
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_THIGH
+    GEKKO_BODYPART_RIGHT_SHIN,      // GEKKO_LIMB_RIGHT_SHIN
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_ANKLE
+    GEKKO_BODYPART_RIGHT_FOOT,      // GEKKO_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                  // GEKKO_LIMB_TORSO
+    GEKKO_BODYPART_LEFT_UPPER_ARM,  // GEKKO_LIMB_LEFT_UPPER_ARM
+    GEKKO_BODYPART_LEFT_FOREARM,    // GEKKO_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_WRIST
+    GEKKO_BODYPART_LEFT_HAND,       // GEKKO_LIMB_LEFT_HAND
+    GEKKO_BODYPART_RIGHT_UPPER_ARM, // GEKKO_LIMB_RIGHT_UPPER_ARM
+    GEKKO_BODYPART_RIGHT_FOREARM,   // GEKKO_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_WRIST
+    GEKKO_BODYPART_RIGHT_HAND,      // GEKKO_LIMB_RIGHT_HAND
+    BODYPART_NONE,                  // GEKKO_LIMB_HEAD
+    GEKKO_BODYPART_JAW,             // GEKKO_LIMB_JAW
+    BODYPART_NONE,                  // GEKKO_LIMB_LEFT_EYE
+    BODYPART_NONE,                  // GEKKO_LIMB_RIGHT_EYE
 };
 
 // Some kind of offset for the position of the Gekkos right foot
@@ -3072,8 +3072,8 @@ void EnBigslime_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         this->actor.focus.rot.y = this->gekkoRot.y;
     }
 
-    if (sLimbToBodyParts[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[sLimbToBodyParts[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->gekkoBodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == GEKKO_LIMB_RIGHT_ANKLE) {
@@ -3130,7 +3130,7 @@ void EnBigslime_DrawGekko(Actor* thisx, PlayState* play) {
 
     EnBigslime_DrawShatteringEffects(this, play);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->gekkoBodyPartsPos, GEKKO_BODYPART_MAX,
                             this->gekkoScale * (999.99991f / 7.0f) * this->gekkoDrawDmgEffScale,
                             this->gekkoDrawDmgEffFrozenSteamScale, this->gekkoDrawDmgEffAlpha,
                             this->gekkoDrawDmgEffType);

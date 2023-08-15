@@ -1076,7 +1076,7 @@ void func_80AF898C(EnPm* this) {
     this->unk_372 = CLAMP(this->unk_372, -0x1FFE, 0x1FFE);
     Math_Vec3f_Copy(&sp34, &this->actor.focus.pos);
     if (this->unk_268->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_268)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_268)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_268->focus.pos);
     }
