@@ -15,20 +15,10 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play);
 void EnDemoheishi_Update(Actor* thisx, PlayState* play);
 void EnDemoheishi_Draw(Actor* thisx, PlayState* play);
 
-void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex);
 void EnDemoheishi_SetupIdle(EnDemoheishi* this);
 void EnDemoheishi_Idle(EnDemoheishi* this, PlayState* play);
 void EnDemoheishi_SetupTalk(EnDemoheishi* this);
 void EnDemoheishi_Talk(EnDemoheishi* this, PlayState* play);
-s32 EnDemoheishi_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
-
-typedef enum {
-    /* 0 */ DEMOHEISHI_ANIM_STAND_HAND_ON_HIP,
-    /* 1 */ DEMOHEISHI_ANIM_CHEER_WITH_SPEAR,
-    /* 2 */ DEMOHEISHI_ANIM_WAVE,
-    /* 3 */ DEMOHEISHI_ANIM_SIT_AND_REACH,
-    /* 4 */ DEMOHEISHI_ANIM_STAND_UP
-} EnDemoheishiAnimation;
 
 ActorInit En_Demo_heishi_InitVars = {
     ACTOR_EN_DEMO_HEISHI,
@@ -83,18 +73,35 @@ void EnDemoheishi_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->colliderCylinder);
 }
 
-void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex) {
-    static AnimationHeader* sAnimations[] = {
-        &gSoldierStandHandOnHip, &gSoldierCheerWithSpear, &gSoldierWave, &gSoldierSitAndReach, &gSoldierStandUp,
-    };
-    static u8 sAnimationModes[] = {
-        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_LOOP,
-        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_LOOP,
-    };
+typedef enum {
+    /* 0 */ DEMOHEISHI_ANIM_STAND_HAND_ON_HIP,
+    /* 1 */ DEMOHEISHI_ANIM_CHEER_WITH_SPEAR,
+    /* 2 */ DEMOHEISHI_ANIM_WAVE,
+    /* 3 */ DEMOHEISHI_ANIM_SIT_AND_REACH,
+    /* 4 */ DEMOHEISHI_ANIM_STAND_UP,
+    /* 5 */ DEMOHEISHI_ANIM_MAX
+} EnDemoheishiAnimation;
 
+static AnimationHeader* sAnimations[DEMOHEISHI_ANIM_MAX] = {
+    &gSoldierStandHandOnHip, // DEMOHEISHI_ANIM_STAND_HAND_ON_HIP
+    &gSoldierCheerWithSpear, // DEMOHEISHI_ANIM_CHEER_WITH_SPEAR
+    &gSoldierWave,           // DEMOHEISHI_ANIM_WAVE
+    &gSoldierSitAndReach,    // DEMOHEISHI_ANIM_SIT_AND_REACH
+    &gSoldierStandUp,        // DEMOHEISHI_ANIM_STAND_UP
+};
+
+static u8 sAnimationModes[DEMOHEISHI_ANIM_MAX] = {
+    ANIMMODE_LOOP, // DEMOHEISHI_ANIM_STAND_HAND_ON_HIP
+    ANIMMODE_LOOP, // DEMOHEISHI_ANIM_CHEER_WITH_SPEAR
+    ANIMMODE_LOOP, // DEMOHEISHI_ANIM_WAVE
+    ANIMMODE_LOOP, // DEMOHEISHI_ANIM_SIT_AND_REACH
+    ANIMMODE_ONCE, // DEMOHEISHI_ANIM_STAND_UP
+};
+
+void EnDemoheishi_ChangeAnim(EnDemoheishi* this, s32 animIndex) {
     this->animIndex = animIndex;
-    this->frameCount = Animation_GetLastFrame(sAnimations[animIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->frameCount,
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.0f, this->animEndFrame,
                      sAnimationModes[this->animIndex], -10.0f);
 }
 

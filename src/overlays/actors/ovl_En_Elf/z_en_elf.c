@@ -654,7 +654,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     func_8088CBAC(this, play);
     if (this->fairyFlags & 0x800) {
-        this->unk_224.y = player->bodyPartsPos[0].y;
+        this->unk_224.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     }
 
     func_8088D8D0(this, &this->unk_224);

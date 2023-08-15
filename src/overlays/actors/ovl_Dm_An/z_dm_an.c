@@ -137,7 +137,7 @@ s32 func_80C1C62C(DmAn* this, PlayState* play) {
     this->unk_2C4 = CLAMP(this->unk_2C4, -0x1C70, 0x1C70);
 
     if (this->unk_2B4->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_2B4->focus.pos);
     }

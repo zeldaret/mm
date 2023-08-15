@@ -326,9 +326,9 @@ void EnSsh_Stunned(EnSsh* this, PlayState* play) {
 
     if (this->stunTimer < 30) {
         if (this->stunTimer & 1) {
-            this->actor.shape.rot.y += 2000;
+            this->actor.shape.rot.y += 0x7D0;
         } else {
-            this->actor.shape.rot.y -= 2000;
+            this->actor.shape.rot.y -= 0x7D0;
         }
     }
 }

@@ -863,14 +863,14 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
 
     if (this->drawDmgEffTimer > 0) {
         s32 pad2[6];
-        Vec3f limbPos[2];
+        Vec3f bodyPartsPos[2];
         s32 pad3;
 
-        limbPos[0] = this->actor.world.pos;
-        limbPos[1] = this->actor.world.pos;
-        limbPos[0].y += 20.0f;
-        limbPos[1].y += 40.0f;
-        Actor_DrawDamageEffects(play, NULL, limbPos, ARRAY_COUNT(limbPos), this->drawDmgEffScale * 4.0f, 0.5f,
+        bodyPartsPos[0] = this->actor.world.pos;
+        bodyPartsPos[1] = this->actor.world.pos;
+        bodyPartsPos[0].y += 20.0f;
+        bodyPartsPos[1].y += 40.0f;
+        Actor_DrawDamageEffects(play, NULL, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), this->drawDmgEffScale * 4.0f, 0.5f,
                                 this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     }
 

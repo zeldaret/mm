@@ -252,8 +252,8 @@ void EnTalkGibud_Init(Actor* thisx, PlayState* play) {
     this->drawDmgEffAlpha = 0.0f;
     this->drawDmgEffScale = 0.0f;
 
-    for (i = 0; i < ARRAY_COUNT(this->limbPos); i++) {
-        this->limbPos[i] = gZeroVec3f;
+    for (i = 0; i < EN_TALK_GIBUD_BODYPART_MAX; i++) {
+        this->bodyPartsPos[i] = gZeroVec3f;
     }
 
     if (this->requestedItemIndex < EN_TALK_GIBUD_REQUESTED_ITEM_INDEX_BLUE_POTION) {
@@ -1188,8 +1188,8 @@ void EnTalkGibud_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
          (limbIndex == GIBDO_LIMB_LEFT_FOREARM) || (limbIndex == GIBDO_LIMB_LEFT_HAND) ||
          (limbIndex == GIBDO_LIMB_RIGHT_SHOULDER_AND_UPPER_ARM) || (limbIndex == GIBDO_LIMB_RIGHT_FOREARM) ||
          (limbIndex == GIBDO_LIMB_RIGHT_HAND) || (limbIndex == GIBDO_LIMB_HEAD) || (limbIndex == GIBDO_LIMB_PELVIS))) {
-        Matrix_MultZero(&this->limbPos[this->limbIndex]);
-        this->limbIndex++;
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+        this->bodyPartIndex++;
     }
 }
 
@@ -1198,7 +1198,7 @@ void EnTalkGibud_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    this->limbIndex = 0;
+    this->bodyPartIndex = 0;
     if (this->actor.shape.shadowAlpha == 255) {
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
@@ -1220,8 +1220,8 @@ void EnTalkGibud_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->drawDmgEffTimer > 0) {
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
-                                0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_TALK_GIBUD_BODYPART_MAX,
+                                this->drawDmgEffScale, 0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

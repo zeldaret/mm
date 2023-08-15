@@ -1097,7 +1097,7 @@ void EnWiz_Damaged(EnWiz* this, PlayState* play) {
     s32 i;
 
     if ((this->drawDmgEffTimer < 50) && (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX)) {
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 1.0f, 0.7f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, EN_WIZ_BODYPART_MAX, 2, 1.0f, 0.7f);
         this->drawDmgEffTimer = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->rotationalVelocity = 0x4E20;
@@ -1390,10 +1390,10 @@ void EnWiz_PostLimbDrawOpa(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
         (limbIndex == WIZROBE_LIMB_NECK) || (limbIndex == WIZROBE_LIMB_HEAD) || (limbIndex == WIZROBE_LIMB_JAW) ||
         (limbIndex == WIZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZROBE_LIMB_RIGHT_SHIN) ||
         (limbIndex == WIZROBE_LIMB_LOINCLOTH)) {
-        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
-        this->bodyPartsPosIndex++;
-        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
-            this->bodyPartsPosIndex = 0;
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+        this->bodyPartIndex++;
+        if (this->bodyPartIndex >= EN_WIZ_BODYPART_MAX) {
+            this->bodyPartIndex = 0;
         }
     }
 }
@@ -1439,10 +1439,10 @@ void EnWiz_PostLimbDrawXlu(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* r
         (limbIndex == WIZROBE_LIMB_NECK) || (limbIndex == WIZROBE_LIMB_HEAD) || (limbIndex == WIZROBE_LIMB_JAW) ||
         (limbIndex == WIZROBE_LIMB_LEFT_SHIN) || (limbIndex == WIZROBE_LIMB_RIGHT_SHIN) ||
         (limbIndex == WIZROBE_LIMB_LOINCLOTH)) {
-        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
-        this->bodyPartsPosIndex++;
-        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
-            this->bodyPartsPosIndex = 0;
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
+        this->bodyPartIndex++;
+        if (this->bodyPartIndex >= EN_WIZ_BODYPART_MAX) {
+            this->bodyPartIndex = 0;
         }
     }
 }
@@ -1487,9 +1487,8 @@ void EnWiz_Draw(Actor* thisx, PlayState* play) {
             this->drawDmgEffFrozenSteamScale = 0.8f;
         }
 
-        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                                this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, drawDmgEffAlpha,
-                                this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_WIZ_BODYPART_MAX, this->drawDmgEffScale,
+                                this->drawDmgEffFrozenSteamScale, drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     if (this->platformCount > 0) {

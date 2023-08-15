@@ -253,7 +253,7 @@ void EnTuboTrap_Idle(EnTuboTrap* this, PlayState* play) {
 }
 
 void EnTuboTrap_Levitate(EnTuboTrap* this, PlayState* play) {
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     Math_ApproachF(&this->actor.world.pos.y, this->targetHeight, 0.8f, 3.0f);
 
     if (fabsf(this->actor.world.pos.y - this->targetHeight) < 10.0f) {
@@ -279,7 +279,7 @@ void EnTuboTrap_FlyAtPlayer(EnTuboTrap* this, PlayState* play) {
         Math_ApproachF(&this->actor.gravity, -3.0f, 0.2f, 0.5f);
     }
 
-    this->actor.shape.rot.y += 5000;
+    this->actor.shape.rot.y += 0x1388;
     EnTuboTrap_HandleImpact(this, play);
 }
 
