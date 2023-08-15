@@ -93,36 +93,37 @@ typedef enum {
     /* 22 */ DEKU_PRINCESS_ANIM_BOUNCE_START,
     /* 23 */ DEKU_PRINCESS_ANIM_BOUNCE_LOOP,
     /* 24 */ DEKU_PRINCESS_ANIM_GLARE_START,
-    /* 25 */ DEKU_PRINCESS_ANIM_GLARE_LOOP
-} EnDnpAnimation;
+    /* 25 */ DEKU_PRINCESS_ANIM_GLARE_LOOP,
+    /* 26 */ DEKU_PRINCESS_ANIM_MAX
+} DekuPrincessAnimation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gDekuPrincessJumpKickAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessHurryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gDekuPrincessHurryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessHurryEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessScoldAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessLaughStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessLaughLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuPrincessBowAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessThinkStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessThinkLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessArmsTogetherStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessArmsTogetherLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessGreetingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gDekuPrincessIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gDekuPrincessAngryStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessAngryLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &gDekuPrincessBounceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuPrincessBounceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &gDekuPrincessGlareStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDekuPrincessGlareLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+static AnimationInfoS sAnimationInfo[DEKU_PRINCESS_ANIM_MAX] = {
+    { &gDekuPrincessJumpKickAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // DEKU_PRINCESS_ANIM_JUMP_KICK
+    { &gDekuPrincessHurryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },              // DEKU_PRINCESS_ANIM_HURRY
+    { &gDekuPrincessHurryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // DEKU_PRINCESS_ANIM_CUTSCENE_HURRY
+    { &gDekuPrincessHurryEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // DEKU_PRINCESS_ANIM_HURRY_END
+    { &gDekuPrincessScoldAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },             // DEKU_PRINCESS_ANIM_SCOLD
+    { &gDekuPrincessLaughStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_PRINCESS_ANIM_LAUGH_START
+    { &gDekuPrincessLaughLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_LAUGH_LOOP
+    { &gDekuPrincessTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // DEKU_PRINCESS_ANIM_TURN_AROUND
+    { &gDekuPrincessBowAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },               // DEKU_PRINCESS_ANIM_BOW
+    { &gDekuPrincessRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },               // DEKU_PRINCESS_ANIM_RUN
+    { &gDekuPrincessThinkStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_PRINCESS_ANIM_THINK_START
+    { &gDekuPrincessThinkLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_THINK_LOOP
+    { &gDekuPrincessArmsTogetherStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // DEKU_PRINCESS_ANIM_ARMS_TOGETHER_START
+    { &gDekuPrincessArmsTogetherLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // DEKU_PRINCESS_ANIM_ARMS_TOGETHER_LOOP
+    { &gDekuPrincessGreetingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },          // DEKU_PRINCESS_ANIM_GREETING
+    { &gDekuPrincessIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // DEKU_PRINCESS_ANIM_IDLE
+    { &gDekuPrincessIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },              // DEKU_PRINCESS_ANIM_CUTSCENE_IDLE
+    { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },              // DEKU_PRINCESS_ANIM_UNUSED_WALK
+    { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // DEKU_PRINCESS_ANIM_WALK
+    { &gDekuPrincessAngryStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_PRINCESS_ANIM_ANGRY_START
+    { &gDekuPrincessAngryLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_ANGRY_LOOP
+    { &gDekuPrincessJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },              // DEKU_PRINCESS_ANIM_JUMP
+    { &gDekuPrincessBounceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DEKU_PRINCESS_ANIM_BOUNCE_START
+    { &gDekuPrincessBounceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },        // DEKU_PRINCESS_ANIM_BOUNCE_LOOP
+    { &gDekuPrincessGlareStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // DEKU_PRINCESS_ANIM_GLARE_START
+    { &gDekuPrincessGlareLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_GLARE_LOOP
 };
 
 static s32 D_80B3DE58[] = {
@@ -173,14 +174,14 @@ s32 func_80B3CA20(EnDnp* this) {
 }
 
 s32 EnDnp_ChangeAnim(EnDnp* this, s32 animIndex) {
-    s32 ret = false;
+    s32 didAnimChange = false;
 
-    if (animIndex != this->animIndex) {
+    if (this->animIndex != animIndex) {
         this->animIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80B3CC80(EnDnp* this, PlayState* play) {
@@ -287,7 +288,7 @@ s32 func_80B3D044(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D11C(EnDnp* this, PlayState* play) {
-    static s32 sCsAnimations[] = {
+    static s32 sCsAnimIndex[] = {
         DEKU_PRINCESS_ANIM_JUMP_KICK,   DEKU_PRINCESS_ANIM_CUTSCENE_IDLE, DEKU_PRINCESS_ANIM_GREETING,
         DEKU_PRINCESS_ANIM_THINK_START, DEKU_PRINCESS_ANIM_WALK,          DEKU_PRINCESS_ANIM_ARMS_TOGETHER_START,
         DEKU_PRINCESS_ANIM_LAUGH_START, DEKU_PRINCESS_ANIM_TURN_AROUND,   DEKU_PRINCESS_ANIM_CUTSCENE_HURRY,
@@ -306,7 +307,7 @@ void func_80B3D11C(EnDnp* this, PlayState* play) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_101);
         cueId = play->csCtx.actorCues[cueChannel]->id;
         if (this->cueId != (u8)cueId) {
-            EnDnp_ChangeAnim(this, sCsAnimations[cueId]);
+            EnDnp_ChangeAnim(this, sCsAnimIndex[cueId]);
             if (this->animIndex == DEKU_PRINCESS_ANIM_CUTSCENE_IDLE) {
                 this->unk_322 |= 8;
             } else {

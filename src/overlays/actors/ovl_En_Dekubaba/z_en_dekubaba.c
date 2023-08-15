@@ -343,7 +343,7 @@ void EnDekubaba_Wait(EnDekubaba* this, PlayState* play) {
     this->actor.world.pos.z = this->actor.home.pos.z;
     this->actor.world.pos.y = this->actor.home.pos.y + 14.0f * this->size;
 
-    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f * this->size) &&
+    if ((this->timer == 0) && (this->actor.xzDistToPlayer < (200.0f * this->size)) &&
         (fabsf(this->actor.playerHeightRel) < 30.0f * this->size)) {
         EnDekubaba_SetupGrow(this);
     }
@@ -430,7 +430,7 @@ void EnDekubaba_Grow(EnDekubaba* this, PlayState* play) {
                              1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     if (this->timer == 0) {
-        if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 240.0f * this->size) {
+        if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < (240.0f * this->size)) {
             EnDekubaba_SetupPrepareLunge(this);
         } else {
             EnDekubaba_SetupRetract(this);
@@ -942,7 +942,7 @@ void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     if (this->timer == 1) {
         Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 4.0f, 0.0f,
                          Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
-        this->timer = 0x28;
+        this->timer = 40;
     } else {
         Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 0.0f, 0.0f,
                          Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);

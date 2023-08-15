@@ -159,11 +159,11 @@ void EnCrow_SetupFlyIdle(EnCrow* this) {
 void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 dist;
-    s32 onInitialAnimFrame;
+    s32 onAnimFirstFrame;
     s16 yaw;
 
     SkelAnime_Update(&this->skelAnime);
-    onInitialAnimFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
@@ -181,7 +181,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 5, 0x300, 0x10) == 0) && onInitialAnimFrame &&
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 5, 0x300, 0x10) == 0) && onAnimFirstFrame &&
         (Rand_ZeroOne() < 0.1f)) {
 
         yaw = (Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
@@ -201,7 +201,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->pitchTarget = Rand_S16Offset(0x800, 0x800);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0xA, 0x100, 8) == 0) && onInitialAnimFrame &&
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0xA, 0x100, 8) && onAnimFirstFrame &&
         (Rand_ZeroOne() < 0.1f)) {
         if (this->actor.home.pos.y < this->actor.world.pos.y) {
             this->pitchTarget -= Rand_S16Offset(0x400, 0x400);

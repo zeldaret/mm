@@ -353,17 +353,48 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
 };
 
-static AnimationHeader* sAnimations[] = {
-    &gameplay_keep_Anim_020658, &gameplay_keep_Anim_022CA8, &gameplay_keep_Anim_020658, &gameplay_keep_Anim_022E68,
-    &gameplay_keep_Anim_0204B4, &gameplay_keep_Anim_022BE8, &gameplay_keep_Anim_022D90, &gameplay_keep_Anim_022BE8,
-    &gameplay_keep_Anim_022FF0, &gameplay_keep_Anim_0205A0,
+static AnimationHeader* sAnimations[2 * PLAYER_FORM_MAX] = {
+    // left
+    &gameplay_keep_Anim_020658, // PLAYER_FORM_FIERCE_DEITY
+    &gameplay_keep_Anim_022CA8, // PLAYER_FORM_GORON
+    &gameplay_keep_Anim_020658, // PLAYER_FORM_ZORA
+    &gameplay_keep_Anim_022E68, // PLAYER_FORM_DEKU
+    &gameplay_keep_Anim_0204B4, // PLAYER_FORM_HUMAN
+    // right
+    &gameplay_keep_Anim_022BE8, // PLAYER_FORM_FIERCE_DEITY
+    &gameplay_keep_Anim_022D90, // PLAYER_FORM_GORON
+    &gameplay_keep_Anim_022BE8, // PLAYER_FORM_ZORA
+    &gameplay_keep_Anim_022FF0, // PLAYER_FORM_DEKU
+    &gameplay_keep_Anim_0205A0, // PLAYER_FORM_HUMAN
 };
-static u8 sAnimOpenFrames[10] = {
-    25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
+static u8 sAnimOpenFrames[2 * PLAYER_FORM_MAX] = {
+    // left
+    25, // PLAYER_FORM_FIERCE_DEITY
+    25, // PLAYER_FORM_GORON
+    25, // PLAYER_FORM_ZORA
+    25, // PLAYER_FORM_DEKU
+    25, // PLAYER_FORM_HUMAN
+    // right
+    25, // PLAYER_FORM_FIERCE_DEITY
+    25, // PLAYER_FORM_GORON
+    25, // PLAYER_FORM_ZORA
+    25, // PLAYER_FORM_DEKU
+    25, // PLAYER_FORM_HUMAN
 };
 
-static u8 sAnimCloseFrames[10] = {
-    60, 60, 60, 70, 70, 60, 60, 60, 60, 70,
+static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
+    // left
+    60, // PLAYER_FORM_FIERCE_DEITY
+    60, // PLAYER_FORM_GORON
+    60, // PLAYER_FORM_ZORA
+    70, // PLAYER_FORM_DEKU
+    70, // PLAYER_FORM_HUMAN
+    // right
+    60, // PLAYER_FORM_FIERCE_DEITY
+    60, // PLAYER_FORM_GORON
+    60, // PLAYER_FORM_ZORA
+    60, // PLAYER_FORM_DEKU
+    70, // PLAYER_FORM_HUMAN
 };
 
 static Gfx* D_808679A4[14][2] = {
@@ -638,8 +669,9 @@ s32 EnDoor_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
             (transitionEntry->sides[0].room == transitionEntry->sides[1].room)) {
             s32 pad;
 
-            temp = (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[3].z + rot->z) -
-                   Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
+            temp =
+                (this->knobDoor.dyna.actor.shape.rot.y + this->knobDoor.skelAnime.jointTable[DOOR_LIMB_3].z + rot->z) -
+                Math_Vec3f_Yaw(&play->view.eye, &this->knobDoor.dyna.actor.world.pos);
             *dList = (ABS_ALT(temp) < 0x4000) ? dl[0] : dl[1];
 
         } else {
