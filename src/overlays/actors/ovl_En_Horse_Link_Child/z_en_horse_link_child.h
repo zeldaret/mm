@@ -20,7 +20,7 @@ typedef struct EnHorseLinkChild {
     /* 0x1EC */ ColliderCylinder colldierCylinder;
     /* 0x238 */ ColliderJntSph colliderJntSph;
     /* 0x258 */ ColliderJntSphElement colliderJntSphElements[1];
-    /* 0x298 */ UNK_TYPE1 unk298[4]; // suspected padding
+    /* 0x298 */ UNK_TYPE1 unk298[4];
 } EnHorseLinkChild; // size = 0x29C
 
 #endif // Z_EN_HORSE_LINK_CHILD_H
