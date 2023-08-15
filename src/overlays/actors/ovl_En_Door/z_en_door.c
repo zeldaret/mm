@@ -379,7 +379,7 @@ static Gfx* D_808679A4[14][2] = {
     { gMilkBarDoorDL, gMilkBarDoorDL },
     { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },
     { gPiratesFortressDoorDL, gPiratesFortressDoorDL },
-    { object_mkk_DL_000310, object_mkk_DL_000310 },
+    { gWhiteBoeEyesDL, gWhiteBoeEyesDL },
     { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },
 };
 
