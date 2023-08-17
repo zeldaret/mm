@@ -72,7 +72,7 @@ typedef struct EnIk {
     /* 0x03AC */ ColliderCylinder colliderCylinder;
     /* 0x03F8 */ ColliderQuad colliderQuad;
     /* 0x0478 */ ColliderTris colliderTris;
-    /* 0x0498 */ ColliderTrisElement shieldColliderItems[2];
+    /* 0x0498 */ ColliderTrisElement shieldColliderElements[2];
     /* 0x0550 */ IronKnuckleEffect effects[IRON_KNUCKLE_ARMOR_BODYPART_MAX];
 } EnIk; // size = 0x668
 

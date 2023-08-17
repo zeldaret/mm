@@ -26,7 +26,7 @@ typedef struct EnBom {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider1;
     /* 0x190 */ ColliderJntSph collider2;
-    /* 0x1B0 */ ColliderJntSphElement collider3;
+    /* 0x1B0 */ ColliderJntSphElement collider2Elements[1];
     /* 0x1F0 */ s16 timer;
     /* 0x1F2 */ s16 flashSpeedScale;
     /* 0x1F4 */ f32 unk_1F4;
