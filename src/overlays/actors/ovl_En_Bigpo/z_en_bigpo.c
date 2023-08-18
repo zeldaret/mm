@@ -160,16 +160,24 @@ static InitChainEntry sInitChain[] = {
 // used in the burning death actionfunc
 static Vec3f D_80B6506C = { 0.0f, 3.0f, 0.0f };
 
-// bytes per limb, used in draw func? bit over my head
-static u8 D_80B65078[BIG_POE_LIMB_MAX] = {
-    -1, 4, -1, 0, -1, 1, -1, 2, 5, 3,
+static s8 sLimbToBodyParts[BIG_POE_LIMB_MAX] = {
+    BODYPART_NONE,      // BIG_POE_LIMB_NONE
+    BIG_POE_BODYPART_4, // BIG_POE_LIMB_FACE
+    BODYPART_NONE,      // BIG_POE_LIMB_LEFT_UPPER_ARM
+    BIG_POE_BODYPART_0, // BIG_POE_LIMB_LEFT_FOREARM
+    BODYPART_NONE,      // BIG_POE_LIMB_RIGHT_UPPER_ARM
+    BIG_POE_BODYPART_1, // BIG_POE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,      // BIG_POE_LIMB_RIGHT_HAND
+    BIG_POE_BODYPART_2, // BIG_POE_LIMB_LANTERN
+    BIG_POE_BODYPART_5, // BIG_POE_LIMB_HAT_AND_CLOAK
+    BIG_POE_BODYPART_3, // BIG_POE_LIMB_LOWER_ROBE
 };
 
 // used in limbdraw
 static Vec3f D_80B65084[] = {
-    { 2000.0f, 4000.0f, 0.0f },
-    { -1000.0f, 1500.0f, -2000.0f },
-    { -1000.0f, 1500.0f, 2000.0f },
+    { 2000.0f, 4000.0f, 0.0f },      // BIG_POE_BODYPART_6
+    { -1000.0f, 1500.0f, -2000.0f }, // BIG_POE_BODYPART_7
+    { -1000.0f, 1500.0f, 2000.0f },  // BIG_POE_BODYPART_8
 };
 
 void EnBigpo_Init(Actor* thisx, PlayState* play2) {
@@ -1232,7 +1240,7 @@ s32 EnBigpo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
 
 void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnBigpo* this = THIS;
-    s8 limbByte;
+    s8 bodyPartIndex;
     Vec3f* v1ptr; // todo: figure out better names
     Vec3f* v2ptr;
     Vec3f unusedVec;
@@ -1258,20 +1266,21 @@ void EnBigpo_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         Matrix_Get(&this->drawMtxF);
     }
 
-    limbByte = D_80B65078[limbIndex];
-    if (limbByte != -1) {
-        if (limbByte < 3) {
-            Matrix_MultZero(&this->limbPos[limbByte]);
-        } else if (limbByte == 3) {
-            Matrix_MultVecX(3000.0f, &this->limbPos[limbByte]);
-        } else if (limbByte == 4) {
-            Matrix_MultVecY(-2000.0f, &this->limbPos[limbByte]);
+    bodyPartIndex = sLimbToBodyParts[limbIndex];
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex <= BIG_POE_BODYPART_2) {
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex == BIG_POE_BODYPART_3) {
+            Matrix_MultVecX(3000.0f, &this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex == BIG_POE_BODYPART_4) {
+            Matrix_MultVecY(-2000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
-            v2ptr = &this->limbPos[limbByte + 1];
+            v2ptr = &this->bodyPartsPos[bodyPartIndex + 1];
             v1ptr = D_80B65084;
-            Matrix_MultVecX(-4000.0f, &this->limbPos[limbByte]);
+            // BIG_POE_BODYPART_5
+            Matrix_MultVecX(-4000.0f, &this->bodyPartsPos[bodyPartIndex]);
 
-            for (i = limbByte + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+            for (i = bodyPartIndex + 1; i < BIG_POE_BODYPART_MAX; i++) {
                 Matrix_MultVec3f(v1ptr, v2ptr);
                 v2ptr++;
                 v1ptr++;
@@ -1310,7 +1319,7 @@ void EnBigpo_DrawMainBigpo(Actor* thisx, PlayState* play) {
     }
 
     // 71.428566f might be 500/7 context unknown
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, BIG_POE_BODYPART_MAX,
                             this->actor.scale.x * 71.428566f * this->drawDmgEffScale, 0.0f, this->drawDmgEffAlpha,
                             ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
 

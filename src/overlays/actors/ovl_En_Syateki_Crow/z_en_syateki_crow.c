@@ -307,8 +307,8 @@ void EnSyatekiCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     Vec3f* bodyPartPos;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
-        Matrix_MultVec3f(&sBodyOffset, &this->bodyPartsPos[0]);
-        this->bodyPartsPos[0].y -= 20.0f;
+        Matrix_MultVec3f(&sBodyOffset, &this->bodyPartsPos[SG_GUAY_BODYPART_BODY]);
+        this->bodyPartsPos[SG_GUAY_BODYPART_BODY].y -= 20.0f;
     } else if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
                (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
         bodyPartPos = &this->bodyPartsPos[(limbIndex >> 1) - 1];

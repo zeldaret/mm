@@ -2810,8 +2810,7 @@ beginseg
     name "ovl_En_Bal"
     compress
     include "build/src/overlays/actors/ovl_En_Bal/z_en_bal.o"
-    include "build/data/ovl_En_Bal/ovl_En_Bal.data.o"
-    include "build/data/ovl_En_Bal/ovl_En_Bal.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bal/ovl_En_Bal_reloc.o"
 endseg
 
 beginseg
@@ -3073,8 +3072,7 @@ beginseg
     name "ovl_En_Mnk"
     compress
     include "build/src/overlays/actors/ovl_En_Mnk/z_en_mnk.o"
-    include "build/data/ovl_En_Mnk/ovl_En_Mnk.data.o"
-    include "build/data/ovl_En_Mnk/ovl_En_Mnk.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Mnk/ovl_En_Mnk_reloc.o"
 endseg
 
 beginseg

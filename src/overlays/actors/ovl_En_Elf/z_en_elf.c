@@ -5,7 +5,6 @@
  */
 
 #include "z_en_elf.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_2000000)
 
@@ -324,7 +323,7 @@ void EnElf_Init(Actor* thisx, PlayState* play2) {
 
     Actor_ProcessInitChain(thisx, sInitChain);
     SkelAnime_Init(play, &this->skelAnime, &gameplay_keep_Skel_02AF58.sh, &gameplay_keep_Anim_029140, this->jointTable,
-                   this->morphTable, 7);
+                   this->morphTable, FAIRY_LIMB_MAX);
     ActorShape_Init(&thisx->shape, 0.0f, NULL, 15.0f);
     thisx->shape.shadowAlpha = 255;
 
@@ -655,7 +654,7 @@ void func_8088DD34(EnElf* this, PlayState* play) {
 
     func_8088CBAC(this, play);
     if (this->fairyFlags & 0x800) {
-        this->unk_224.y = player->bodyPartsPos[0].y;
+        this->unk_224.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     }
 
     func_8088D8D0(this, &this->unk_224);
@@ -1557,7 +1556,7 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     Vec3f sp34;
     f32 scale;
 
-    if (limbIndex == 6) {
+    if (limbIndex == FAIRY_LIMB_6) {
         scale = ((Math_SinS(this->timer * 4096) * 0.1f) + 1.0f) * 0.012f;
         if (this->fairyFlags & 0x200) {
             scale *= 2.0f;
@@ -1569,8 +1568,11 @@ s32 EnElf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     }
 
+    //! @note: `limbIndex` extends past `FAIRY_LIMB_MAX`.
+    //! This code was copied from OoT despite the number of limbs decreasing.
+    //! In OoT, this was intented to not draw wings for big fairies
     if ((this->fairyFlags & 0x200) &&
-        ((limbIndex == 4) || (limbIndex == 7) || (limbIndex == 11) || (limbIndex == 14))) {
+        ((limbIndex == FAIRY_LIMB_4) || (limbIndex == 7) || (limbIndex == 11) || (limbIndex == 14))) {
         *dList = NULL;
     }
     return false;

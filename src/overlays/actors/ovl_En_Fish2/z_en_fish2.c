@@ -8,7 +8,6 @@
 #include "overlays/actors/ovl_En_Mushi2/z_en_mushi2.h"
 #include "z_en_fish2.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-#include "objects/object_fb/object_fb.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -44,7 +43,7 @@ void func_80B2B180(EnFish2* this, PlayState* play);
 
 static s32 D_80B2B2E0 = 0;
 static s32 D_80B2B2E4 = 0;
-static s32 D_80B2B2E8 = 0;
+static s32 D_80B2B2E8 = false;
 static s32 D_80B2B2EC = 0;
 static s32 D_80B2B2F0 = 0;
 static Actor* D_80B2B2F4 = NULL;
@@ -102,29 +101,51 @@ static ColliderJntSphInit sJntSphInit = {
 static f32 D_80B2B370[] = { 0.01f, 0.012f, 0.014f, 0.017f };
 static f32 D_80B2B380[] = { 0.019f, 0.033f };
 
-void func_80B28370(EnFish2* this, s32 arg0) {
-    static AnimationHeader* D_80B2B388[] = {
-        &object_fb_Anim_0013AC, &object_fb_Anim_0007D4, &object_fb_Anim_0006D8,
-        &object_fb_Anim_0006D8, &object_fb_Anim_001174, &object_fb_Anim_000ACC,
-    };
-    static u8 D_80B2B3A0[] = {
-        ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE, ANIMMODE_ONCE,
-    };
-    f32 sp34;
+typedef enum {
+    /* 0 */ FISH2_ANIM_0,
+    /* 1 */ FISH2_ANIM_1,
+    /* 2 */ FISH2_ANIM_2,
+    /* 3 */ FISH2_ANIM_3,
+    /* 4 */ FISH2_ANIM_4,
+    /* 5 */ FISH2_ANIM_5,
+    /* 6 */ FISH2_ANIM_MAX
+} Fish2Animation;
 
-    this->unk_2AC = arg0;
-    this->unk_2CC = Animation_GetLastFrame(&D_80B2B388[arg0]->common);
-    sp34 = 0.0f;
-    if (this->unk_2AC == 3) {
-        sp34 = Animation_GetLastFrame(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
+static AnimationHeader* sAnimations[FISH2_ANIM_MAX] = {
+    &object_fb_Anim_0013AC, // FISH2_ANIM_0
+    &object_fb_Anim_0007D4, // FISH2_ANIM_1
+    &object_fb_Anim_0006D8, // FISH2_ANIM_2
+    &object_fb_Anim_0006D8, // FISH2_ANIM_3
+    &object_fb_Anim_001174, // FISH2_ANIM_4
+    &object_fb_Anim_000ACC, // FISH2_ANIM_5
+};
+
+static u8 sAnimationModes[FISH2_ANIM_MAX] = {
+    ANIMMODE_LOOP, // FISH2_ANIM_0
+    ANIMMODE_LOOP, // FISH2_ANIM_1
+    ANIMMODE_ONCE, // FISH2_ANIM_2
+    ANIMMODE_ONCE, // FISH2_ANIM_3
+    ANIMMODE_ONCE, // FISH2_ANIM_4
+    ANIMMODE_ONCE, // FISH2_ANIM_5
+};
+
+void EnFish2_ChangeAnim(EnFish2* this, s32 animIndex) {
+    f32 startFrame;
+
+    this->animIndex = animIndex;
+    this->animEndFrame = Animation_GetLastFrame(&sAnimations[animIndex]->common);
+
+    startFrame = 0.0f;
+    if (this->animIndex == FISH2_ANIM_3) {
+        startFrame = Animation_GetLastFrame(&sAnimations[this->animIndex]->common) - 21.0f;
     }
 
-    if (this->unk_2AC == 2) {
-        this->unk_2CC = Animation_GetLastFrame(&D_80B2B388[this->unk_2AC]->common) - 21.0f;
+    if (this->animIndex == FISH2_ANIM_2) {
+        this->animEndFrame = Animation_GetLastFrame(&sAnimations[this->animIndex]->common) - 21.0f;
     }
 
-    Animation_Change(&this->skelAnime, D_80B2B388[this->unk_2AC], 1.0f, sp34, this->unk_2CC, D_80B2B3A0[this->unk_2AC],
-                     -10.0f);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, startFrame, this->animEndFrame,
+                     sAnimationModes[this->animIndex], -10.0f);
 }
 
 s32 func_80B28478(EnFish2* this) {
@@ -160,7 +181,7 @@ void EnFish2_Init(Actor* thisx, PlayState* play) {
     if (this->actor.params == 0) {
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &object_fb_Skel_006190, &object_fb_Anim_0013AC, this->jointTable,
-                           this->morphTable, 24);
+                           this->morphTable, OBJECT_FB_LIMB_MAX);
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         if (this->unk_344 == 0) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_81_10)) {
@@ -309,7 +330,7 @@ void func_80B289DC(EnFish2* this, PlayState* play) {
 }
 
 void func_80B28B5C(EnFish2* this) {
-    func_80B28370(this, 0);
+    EnFish2_ChangeAnim(this, FISH2_ANIM_0);
     this->unk_2B4 = 0;
     this->unk_348 = 0;
     this->unk_2C4 = 0;
@@ -387,7 +408,7 @@ void func_80B28C14(EnFish2* this, PlayState* play) {
         Math_ApproachZeroF(&this->actor.speed, 0.3f, 0.3f);
     }
 
-    if ((D_80B2B2E8 == 0) && (D_80B2B2E0 != 2)) {
+    if (!D_80B2B2E8 && (D_80B2B2E0 != 2)) {
         while (itemAction != NULL) {
             if ((itemAction->id != ACTOR_EN_FISH) && (itemAction->id != ACTOR_EN_MUSHI2)) {
                 itemAction = itemAction->next;
@@ -457,7 +478,7 @@ void func_80B29194(EnFish2* this) {
 
     this->unk_34A = 0;
     this->unk_340 = (s32)Rand_ZeroOne() & 1;
-    func_80B28370(this, 1);
+    EnFish2_ChangeAnim(this, FISH2_ANIM_1);
     this->actionFunc = func_80B29250;
 }
 
@@ -482,15 +503,15 @@ void func_80B29250(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2938C(EnFish2* this) {
-    func_80B28370(this, 5);
+    EnFish2_ChangeAnim(this, FISH2_ANIM_5);
     this->unk_348 = 0;
     this->actionFunc = func_80B293C4;
 }
 
 void func_80B293C4(EnFish2* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
 
-    if (func_80B28478(this) == 0) {
+    if (!func_80B28478(this)) {
         func_80B287F4(this, 1);
         Math_ApproachF(&this->actor.speed, (*D_80B2B380 - this->unk_330) * 1000.0f, 0.3f, 0.3f);
 
@@ -500,8 +521,8 @@ void func_80B293C4(EnFish2* this, PlayState* play) {
             this->actor.speed = 1.0f;
         }
 
-        if (this->unk_2CC <= currentFrame) {
-            func_80B28370(this, 1);
+        if (curFrame >= this->animEndFrame) {
+            EnFish2_ChangeAnim(this, FISH2_ANIM_1);
             if (this->unk_2B0 == 0) {
                 this->actionFunc = func_80B29250;
             } else {
@@ -536,7 +557,7 @@ void func_80B2951C(EnFish2* this) {
 
 void func_80B295A4(EnFish2* this, PlayState* play) {
     s32 i;
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     s32 pad;
     Vec3f sp60;
 
@@ -551,9 +572,9 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
         for (i = 0; i < 2; i++) {
             EffectSsBubble_Spawn(play, &sp60, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(this->unk_330 * 4.0f) + 0.1f);
         }
-    } else if (this->unk_2CC <= currentFrame) {
-        if (this->unk_2AC != 5) {
-            func_80B28370(this, 5);
+    } else if (curFrame >= this->animEndFrame) {
+        if (this->animIndex != FISH2_ANIM_5) {
+            EnFish2_ChangeAnim(this, FISH2_ANIM_5);
         } else if (this->unk_2C8 == 0) {
             func_80B29778(this);
         } else {
@@ -566,7 +587,7 @@ void func_80B295A4(EnFish2* this, PlayState* play) {
 }
 
 void func_80B29778(EnFish2* this) {
-    func_80B28370(this, 0);
+    EnFish2_ChangeAnim(this, FISH2_ANIM_0);
     this->unk_2B4 = 0;
     this->unk_2C4 = 0;
     this->unk_2B6 = this->unk_2B4;
@@ -645,12 +666,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 2:
             phi_f0 = 0.1f;
-
+            // fallthrough
         case 4:
             if (phi_f0 == 0) {
                 phi_f0 = 0.3f;
             }
-
+            // fallthrough
         case 6:
             if (phi_f0 == 0) {
                 phi_f0 = 0.5f;
@@ -676,12 +697,12 @@ void func_80B297FC(EnFish2* this, PlayState* play) {
 
         case 3:
             phi_f0 = 1.3f;
-
+            // fallthrough
         case 5:
             if (phi_f0 == 0) {
                 phi_f0 = 1.5f;
             }
-
+            // fallthrough
         case 7:
             if (phi_f0 == 0) {
                 phi_f0 = 1.7f;
@@ -754,7 +775,7 @@ void func_80B29E5C(EnFish2* this, PlayState* play) {
         if (&this->actor != prop) {
             this->unk_350 = prop;
             this->unk_2B0 = D_80B2B2E8 = 1;
-            func_80B28370(this, 0);
+            EnFish2_ChangeAnim(this, FISH2_ANIM_0);
             this->actionFunc = func_80B29EE4;
             break;
         }
@@ -868,7 +889,7 @@ void func_80B2A23C(EnFish2* this, PlayState* play) {
 }
 
 void func_80B2A448(EnFish2* this) {
-    func_80B28370(this, 4);
+    EnFish2_ChangeAnim(this, FISH2_ANIM_4);
     this->unk_2B4 = 0;
     this->unk_2C4 = 0;
     this->unk_2B6 = this->unk_2B4;
@@ -877,10 +898,10 @@ void func_80B2A448(EnFish2* this) {
 }
 
 void func_80B2A498(EnFish2* this, PlayState* play) {
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Vec3f sp80;
 
-    if ((this->unk_2AC == 4) && Animation_OnFrame(&this->skelAnime, 13.0f)) {
+    if ((this->animIndex == FISH2_ANIM_4) && Animation_OnFrame(&this->skelAnime, 13.0f)) {
         Actor* temp_v0;
 
         Math_Vec3f_Copy(&sp80, &this->unk_318);
@@ -899,7 +920,7 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2AC == 4) &&
+    if ((this->animIndex == FISH2_ANIM_4) &&
         (Animation_OnFrame(&this->skelAnime, 13.0f) || Animation_OnFrame(&this->skelAnime, 31.0f))) {
         WaterBox* sp78;
 
@@ -920,12 +941,12 @@ void func_80B2A498(EnFish2* this, PlayState* play) {
         }
     }
 
-    if ((this->unk_2CC <= currentFrame) && (this->unk_2AC == 4)) {
+    if ((curFrame >= this->animEndFrame) && (this->animIndex == FISH2_ANIM_4)) {
         D_80B2B2E0 = 0;
         D_80B2B2E4 = 3;
         this->actor.world.pos.x = this->unk_324.x;
         this->actor.world.pos.z = this->unk_324.z;
-        func_80B28370(this, 0);
+        EnFish2_ChangeAnim(this, FISH2_ANIM_0);
     }
 }
 
@@ -1004,7 +1025,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
                 }
             }
 
-            if ((D_80B2B2E8 == 0) && (this->actionFunc == func_80B28C14)) {
+            if (!D_80B2B2E8 && (this->actionFunc == func_80B28C14)) {
                 s32 temp_s0_2 = this->unk_344 * 2;
                 f32 phi_f2 = 0.0f;
                 f32 phi_f20 = 0;
@@ -1029,7 +1050,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
                 }
             }
 
-            if (D_80B2B2E8 == 0) {
+            if (!D_80B2B2E8) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
             }
         }
@@ -1039,7 +1060,7 @@ void EnFish2_Update(Actor* thisx, PlayState* play2) {
 s32 EnFish2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFish2* this = THIS;
 
-    if ((limbIndex == 20) || (limbIndex == 21)) {
+    if ((limbIndex == OBJECT_FB_LIMB_14) || (limbIndex == OBJECT_FB_LIMB_15)) {
         *dList = NULL;
     }
 
@@ -1050,7 +1071,7 @@ void EnFish2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     EnFish2* this = THIS;
     s32 pad;
 
-    if ((limbIndex == 20) || (limbIndex == 21)) {
+    if ((limbIndex == OBJECT_FB_LIMB_14) || (limbIndex == OBJECT_FB_LIMB_15)) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -1064,11 +1085,11 @@ void EnFish2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if (limbIndex == 14) {
+    if (limbIndex == OBJECT_FB_LIMB_0E) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk_318);
     }
 
-    if (limbIndex == 17) {
+    if (limbIndex == OBJECT_FB_LIMB_11) {
         Matrix_MultVec3f(&gZeroVec3f, &this->unk_300);
     }
 

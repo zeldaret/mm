@@ -1,4 +1,17 @@
 #include "prevent_bss_reordering.h"
+#include "PR/ultratypes.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+struct CutsceneCamera;
+
+s16 sCutsceneQuakeIndex;
+struct CutsceneCamera sCutsceneCameraInfo;
+u16 sCueTypeList[10];
+u8 D_801F4DDC;
+static s16 sBssPad;
+u8 gDisablePlayerCsModeStartPos;
+s16 gDungeonBossWarpSceneId;
+
 #include "global.h"
 #include "z64quake.h"
 #include "z64rumble.h"
@@ -14,23 +27,11 @@ void CutsceneHandler_RunScript(PlayState* play, CutsceneContext* csCtx);
 void CutsceneHandler_StopScript(PlayState* play, CutsceneContext* csCtx);
 void Cutscene_SetupScripted(PlayState* play, CutsceneContext* csCtx);
 
-// Unused
-UNK_TYPE4 D_801BB120 = 0;
+static s32 sPad = 0;
 u16 sCurTextId = 0;
 u16 sCurOcarinaAction = 0;
 u8 gOpeningEntranceIndex = 0;
 u8 sCutsceneStoredPlayerForm = 0;
-
-// bss
-#ifndef NON_MATCHING
-static u16 sSeqId;
-#endif
-s16 sCutsceneQuakeIndex;
-CutsceneCamera sCutsceneCameraInfo;
-u16 sCueTypeList[10];
-UNK_TYPE D_801F4DDC;
-u8 gDisablePlayerCsModeStartPos;
-s16 gDungeonBossWarpSceneId;
 
 void Cutscene_InitContext(PlayState* play, CutsceneContext* csCtx) {
     s32 i;
@@ -454,8 +455,6 @@ void Cutscene_SetSfxReverbIndexTo1(PlayState* play, CutsceneContext* csCtx, CsCm
     }
 }
 
-#ifdef NON_MATCHING
-// needs in-function static bss
 void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd) {
     static u16 sSeqId;
     u8 dayMinusOne;
@@ -506,10 +505,6 @@ void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdMo
         }
     }
 }
-#else
-void CutsceneCmd_ModifySequence(PlayState* play, CutsceneContext* csCtx, CsCmdModifySeq* cmd);
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_demo/CutsceneCmd_ModifySequence.s")
-#endif
 
 void CutsceneCmd_FadeOutAmbience(PlayState* play, CutsceneContext* csCtx, CsCmdFadeOutAmbience* cmd) {
     if ((csCtx->curFrame == cmd->startFrame) && (csCtx->curFrame < cmd->endFrame)) {

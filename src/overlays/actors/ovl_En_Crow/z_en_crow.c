@@ -159,11 +159,11 @@ void EnCrow_SetupFlyIdle(EnCrow* this) {
 void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 dist;
-    s32 onInitialAnimFrame;
+    s32 onAnimFirstFrame;
     s16 yaw;
 
     SkelAnime_Update(&this->skelAnime);
-    onInitialAnimFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
@@ -181,7 +181,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 5, 0x300, 0x10) == 0) && onInitialAnimFrame &&
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 5, 0x300, 0x10) == 0) && onAnimFirstFrame &&
         (Rand_ZeroOne() < 0.1f)) {
 
         yaw = (Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
@@ -201,7 +201,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->pitchTarget = Rand_S16Offset(0x800, 0x800);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0xA, 0x100, 8) == 0) && onInitialAnimFrame &&
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0xA, 0x100, 8) && onAnimFirstFrame &&
         (Rand_ZeroOne() < 0.1f)) {
         if (this->actor.home.pos.y < this->actor.world.pos.y) {
             this->pitchTarget -= Rand_S16Offset(0x400, 0x400);
@@ -290,7 +290,7 @@ void EnCrow_CheckIfFrozen(EnCrow* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 4, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GUAY_BODYPART_MAX, 2, 0.2f, 0.2f);
     }
 }
 
@@ -565,7 +565,7 @@ void EnCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     EnCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
-        Matrix_MultVecX(2500.0f, this->bodyPartsPos);
+        Matrix_MultVecX(2500.0f, &this->bodyPartsPos[GUAY_BODYPART_BODY]);
     } else if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
                (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
         Matrix_MultZero(&this->bodyPartsPos[(limbIndex >> 1) - 1]);
@@ -578,7 +578,7 @@ void EnCrow_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCrow_OverrideLimbDraw, EnCrow_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GUAY_BODYPART_MAX,
                             this->actor.scale.x * 100.0f * this->drawDmgEffFrozenSteamScale, this->drawDmgEffScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 }
