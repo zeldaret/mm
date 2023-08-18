@@ -158,7 +158,7 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&object_ghaka_Colheader_003CD0, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-    if (this->dyna.actor.floorPoly == 0) {
+    if (this->dyna.actor.floorPoly == NULL) {
         Actor_Kill(&this->dyna.actor);
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {
