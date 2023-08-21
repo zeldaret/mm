@@ -266,7 +266,7 @@ void EnIk_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, IRON_KNUCKLE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
-    Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->shieldColliderItems);
+    Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->shieldColliderElements);
     Collider_InitAndSetQuad(play, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTableArmor, &sColChkInfoInit);
     this->actor.params = IK_GET_ARMOR_TYPE(&this->actor);

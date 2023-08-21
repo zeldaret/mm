@@ -33,6 +33,7 @@
 #include "overlays/actors/ovl_En_Zoraegg/z_en_zoraegg.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
+#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -11315,7 +11316,7 @@ void func_808445C4(PlayState* play, Player* this) {
         pos.x = (Rand_CenteredFloat(5.0f) + bodyPartsPos->x) - this->actor.world.pos.x;
         pos.y = (Rand_CenteredFloat(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
         pos.z = (Rand_CenteredFloat(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
-        EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, 1);
+        EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, FHGFLASH_SHOCK_PLAYER);
         Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
     }
 }

@@ -645,7 +645,7 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     Collider_InitJntSph(play, &this->collider);
-    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 

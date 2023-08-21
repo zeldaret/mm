@@ -104,10 +104,11 @@ void EnNnh_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnNnh_Draw(Actor* thisx, PlayState* play) {
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    s32 pad;
+    OPEN_DISPS(play->state.gfxCtx);
 
-    Gfx_SetupDL25_Opa(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, gButlerSonMainBodyDL);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gButlerSonMainBodyDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }

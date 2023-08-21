@@ -97,12 +97,12 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
         s32 pad;
         Vec3f* bodyPartPos;
         BossHakugin* goht = (BossHakugin*)this->actor;
-        s32 index = goht->unk_191 - 3;
+        s32 gohtIndex = goht->unk_191 - 3;
 
-        if (index < 0) {
+        if (gohtIndex < 0) {
             bodyPartPos = &goht->unk_2F00[this->rParams][12].unk_00;
         } else {
-            bodyPartPos = &goht->unk_2F00[this->rParams][index].unk_00;
+            bodyPartPos = &goht->unk_2F00[this->rParams][gohtIndex].unk_00;
         }
 
         this->pos.x = Rand_CenteredFloat(70.0f) + bodyPartPos->x;
