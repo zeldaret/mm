@@ -237,8 +237,8 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
         { SEGMENT_ROM_START(elf_message_ydan), SEGMENT_ROM_END(elf_message_ydan) },
     };
 
-    if (cmd->specialFiles.subKeepSlot != 0) {
-        play->objectCtx.subKeepSlot = Object_SpawnPersistent(&play->objectCtx, cmd->specialFiles.subKeepSlot);
+    if (cmd->specialFiles.subKeepId != 0) {
+        play->objectCtx.subKeepSlot = Object_SpawnPersistent(&play->objectCtx, cmd->specialFiles.subKeepId);
         // TODO: Segment number enum?
         gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[play->objectCtx.subKeepSlot].segment);
     }
