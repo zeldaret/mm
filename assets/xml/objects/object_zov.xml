@@ -1,6 +1,8 @@
 ﻿<Root>
     <!-- Assets for Lulu - Zora Vocalist -->
     <File Name="object_zov" Segment="6">
+
+        <!-- Lulu Animations -->
         <Animation Name="gLuluTurnAndWalkAnim" Offset="0x17D4" />
         <Animation Name="gLuluWalkLoopAnim" Offset="0x23F4" />
         <Animation Name="gLuluSingStartAnim" Offset="0x2B5C" />
@@ -13,6 +15,8 @@
         <Animation Name="gLuluAngleHeadAnim" Offset="0xC510" />
         <Animation Name="gLuluNodAnim" Offset="0xCAA8" />
         <Animation Name="gLuluLookDownAnim" Offset="0xD3EC" />
+
+        <!-- Lulu Limb DLists -->
         <DList Name="gLuluTorsoDL" Offset="0x107B0" />
         <DList Name="gLuluRightUpperArmDL" Offset="0x10BC0" />
         <DList Name="gLuluRightForearmDL" Offset="0x10E60" />
@@ -34,6 +38,8 @@
         <DList Name="gLuluLeftShinDL" Offset="0x12CB8" />
         <DList Name="gLuluLeftLegFinDL" Offset="0x12F28" />
         <DList Name="gLuluLeftFootDL" Offset="0x12FE8" />
+
+        <!-- Lulu Textures -->
         <Texture Name="gLuluTLUT" OutName="lulu_tlut" Format="rgba16" Width="16" Height="16" Offset="0x13278" />
         <Texture Name="gLuluEarringTex" OutName="lulu_earring" Format="rgba16" Width="8" Height="16" Offset="0x13478" />
         <Texture Name="gLuluSkinTex" OutName="lulu_skin" Format="ci8" Width="8" Height="8" Offset="0x13578" />
@@ -55,6 +61,8 @@
         <Texture Name="gLuluDressPatternTex" OutName="lulu_dress_pattern" Format="rgba16" Width="32" Height="32" Offset="0x15778" />
         <Texture Name="gLuluDressStringTex" OutName="lulu_dress_string" Format="ci8" Width="16" Height="16" Offset="0x15F78" />
         <Texture Name="gLuluDressLoopTex" OutName="lulu_dress_loop" Format="ci8" Width="8" Height="16" Offset="0x16078" />
+        
+        <!-- Lulu Limbs and Skeleton -->
         <Limb Name="gLuluRootLimb" Type="Standard" EnumName="LULU_LIMB_ROOT" Offset="0x160F8" />
         <Limb Name="gLuluPelvisLimb" Type="Standard" EnumName="LULU_LIMB_PELVIS" Offset="0x16104" />
         <Limb Name="gLuluLeftThighLimb" Type="Standard" EnumName="LULU_LIMB_LEFT_THIGH" Offset="0x16110" />
