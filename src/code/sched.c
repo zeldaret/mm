@@ -481,7 +481,7 @@ void Sched_HandleRDPDone(SchedContext* sched) {
     }
 
     // Log run time
-    gRDPTotalTime = osGetTime() - sRDPStartTime;
+    gRDPTimeAcc = osGetTime() - sRDPStartTime;
 
     // Mark task done
     curRDP = sched->curRDPTask;

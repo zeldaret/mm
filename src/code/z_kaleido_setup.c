@@ -110,7 +110,7 @@ void KaleidoSetup_Update(PlayState* play) {
                                 }
 
                                 if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
-                                    Game_SetFramerateDivisor(&play->state, 2);
+                                    GameState_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                         ShrinkWindow_Letterbox_SetSizeTarget(0);
                                     }

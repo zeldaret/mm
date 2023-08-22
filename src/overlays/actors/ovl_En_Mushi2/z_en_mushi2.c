@@ -750,7 +750,7 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     if (ENMUSHI2_GET_3(&this->actor) == ENMUSHI2_0) {
         func_80A68A78(this, play);
     }
-    this->actor.shape.rot.y += Rand_S16Offset(-2000, 4000);
+    this->actor.shape.rot.y += Rand_S16Offset(-0x7D0, 0xFA0);
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);

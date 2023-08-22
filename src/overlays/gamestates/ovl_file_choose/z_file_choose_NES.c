@@ -2521,7 +2521,7 @@ void FileSelect_Init(GameState* thisx) {
     FileSelectState* this = (FileSelectState*)thisx;
     size_t size;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);

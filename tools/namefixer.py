@@ -894,6 +894,8 @@ wordReplace = {
     "func_8012CA0C": "Gfx_SetupDL56_Ptr",
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
+    "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",

@@ -296,15 +296,15 @@ void func_808D0CE4(EnFloormas* this) {
 }
 
 void func_808D0D70(EnFloormas* this, PlayState* play) {
-    s32 temp_v0;
+    s32 onAnimFirstFrame;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_v0 = Animation_OnFrame(&this->skelAnime, 0.0f);
-    if ((temp_v0 != 0) && (this->unk_18E != 0)) {
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
+    if (onAnimFirstFrame && (this->unk_18E != 0)) {
         this->unk_18E--;
     }
 
-    if ((temp_v0 != 0) || Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 24.0f) ||
+    if (onAnimFirstFrame || Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 24.0f) ||
         Animation_OnFrame(&this->skelAnime, 36.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_WALK);
     }

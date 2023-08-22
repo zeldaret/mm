@@ -226,7 +226,7 @@ void DayTelop_LoadGraphics(DayTelopState* this) {
 void DayTelop_Init(GameState* thisx) {
     DayTelopState* this = (DayTelopState*)thisx;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Destroy();
     View_Init(&this->view, this->state.gfxCtx);
