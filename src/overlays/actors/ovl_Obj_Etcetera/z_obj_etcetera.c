@@ -80,7 +80,7 @@ void ObjEtcetera_Init(Actor* thisx, PlayState* play) {
         type = DEKU_FLOWER_TYPE_PINK;
     }
 
-    objectIndex = Object_GetIndex(&play->objectCtx, objectIds[type]);
+    objectIndex = Object_GetSlot(&play->objectCtx, objectIds[type]);
     if (objectIndex >= 0) {
         this->objIndex = objectIndex;
     }

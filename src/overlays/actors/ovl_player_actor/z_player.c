@@ -10347,7 +10347,7 @@ void Player_Init(Actor* thisx, PlayState* play) {
     if (this->actor.shape.rot.x != 0) {
         this->transformation = this->actor.shape.rot.x - 1;
 
-        objBankIndex = Object_GetIndex(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
+        objBankIndex = Object_GetSlot(&play->objectCtx, gPlayerFormObjectIndices[this->transformation]);
         this->actor.objBankIndex = objBankIndex;
         if (objBankIndex < 0) {
             Actor_Kill(&this->actor);
@@ -12066,7 +12066,7 @@ void Player_Update(Actor* thisx, PlayState* play) {
 
     // This block is a leftover dog-following mechanic from OoT
     if (gSaveContext.dogParams < 0) {
-        if (Object_GetIndex(&play->objectCtx, OBJECT_DOG) < 0) {
+        if (Object_GetSlot(&play->objectCtx, OBJECT_DOG) < 0) {
             gSaveContext.dogParams = 0;
         } else {
             Actor* dog;

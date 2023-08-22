@@ -373,12 +373,12 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB1FCC(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->unk_248].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void func_80BB2020(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[this->unk_248].segment);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_4AC);
 }
 
@@ -507,7 +507,7 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
                 break;
 
             case 0xD66:
-                this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
+                this->unk_248 = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
                 if (this->unk_248 >= 0) {
                     this->unk_4AC = 19;
                     func_80BB2020(this, play);
@@ -525,7 +525,7 @@ void func_80BB2520(EnGeg* this, PlayState* play) {
             case 0xD72:
             case 0xD75:
             case 0xD8B:
-                this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
+                this->unk_248 = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
                 if (this->unk_248 >= 0) {
                     this->unk_4AC = 4;
                     func_80BB2020(this, play);
@@ -664,7 +664,7 @@ void func_80BB2B1C(EnGeg* this, PlayState* play) {
             CutsceneManager_StartWithPlayerCsAndSetFlag(this->csId, &this->actor);
             this->unk_496 = 0xD68;
             Message_ContinueTextbox(play, this->unk_496);
-            this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
+            this->unk_248 = Object_GetSlot(&play->objectCtx, OBJECT_TAISOU);
             if (this->unk_248 >= 0) {
                 this->unk_4AC = 13;
                 func_80BB2020(this, play);
@@ -877,7 +877,7 @@ void EnGeg_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     if (this->actor.update != NULL) {
-        this->unk_248 = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
+        this->unk_248 = Object_GetSlot(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->unk_248 < 0) {
             Actor_Kill(&this->actor);
         }

@@ -275,7 +275,7 @@ void EnOssan_Init(Actor* thisx, PlayState* play) {
         return;
     }
     id = sObjectIds[this->actor.params];
-    this->objIndex = Object_GetIndex(&play->objectCtx, id);
+    this->objIndex = Object_GetSlot(&play->objectCtx, id);
     if (this->objIndex < 0) {
         Actor_Kill(&this->actor);
         return;

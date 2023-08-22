@@ -990,10 +990,10 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->skelAnime.playSpeed = this->curAnimPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
     }
 
     return ret;
@@ -1050,11 +1050,11 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
     }
 
     if (extraObjIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[extraObjIndex].segment);
         this->curAnimIndex = animIndex;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->curAnimPlaySpeed = this->skelAnime.playSpeed;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
     }
 
     return ret;

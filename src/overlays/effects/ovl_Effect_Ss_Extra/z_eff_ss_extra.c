@@ -33,11 +33,11 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
     EffectSsExtraInitParams* params = PARAMS;
     s32 objIndex;
 
-    objIndex = Object_GetIndex(&play->objectCtx, OBJECT_YABUSAME_POINT);
+    objIndex = Object_GetSlot(&play->objectCtx, OBJECT_YABUSAME_POINT);
     if ((objIndex >= 0) && (Object_IsLoaded(&play->objectCtx, objIndex))) {
         void* segBackup = gSegments[6];
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.slots[objIndex].segment);
 
         this->pos = params->pos;
         this->velocity = params->velocity;
@@ -62,7 +62,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
     void* storedSegment;
 
     scale = this->rScale / 100.0f;
-    storedSegment = play->objectCtx.status[this->rObjId].segment;
+    storedSegment = play->objectCtx.slots[this->rObjId].segment;
 
     OPEN_DISPS(play->state.gfxCtx);
 

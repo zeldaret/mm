@@ -35,7 +35,7 @@ ActorInit En_Sth2_InitVars = {
 void EnSth2_Init(Actor* thisx, PlayState* play) {
     EnSth2* this = THIS;
 
-    this->objIndex = Object_GetIndex(&play->objectCtx, OBJECT_STH);
+    this->objIndex = Object_GetSlot(&play->objectCtx, OBJECT_STH);
     Actor_SetScale(&this->actor, 0.01f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
