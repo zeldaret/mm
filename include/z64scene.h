@@ -74,7 +74,7 @@ typedef struct {
 typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  naviQuestHintFileId;
-    /* 0x4 */ u32 subKeepSlot;
+    /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
 typedef struct {
