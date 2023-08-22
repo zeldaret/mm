@@ -2,6 +2,7 @@
 #define Z_EN_DODONGO_H
 
 #include "global.h"
+#include "objects/object_dodongo/object_dodongo.h"
 
 struct EnDodongo;
 
@@ -23,8 +24,8 @@ typedef enum DodongoBodyPart {
 typedef struct EnDodongo {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
-    /* 0x188 */ Vec3s jointTable[31];
-    /* 0x242 */ Vec3s morphTable[31];
+    /* 0x188 */ Vec3s jointTable[OBJECT_DODONGO_LIMB_MAX];
+    /* 0x242 */ Vec3s morphTable[OBJECT_DODONGO_LIMB_MAX];
     /* 0x2FC */ EnDodongoActionFunc actionFunc;
     /* 0x300 */ u8 drawDmgEffType;
     /* 0x302 */ s16 timer;

@@ -11,28 +11,28 @@
 #include "objects/object_boj/object_boj.h"
 #include "objects/object_os_anime/object_os_anime.h"
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00071C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_os_anime_Anim_001EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00DED8, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_boj_Anim_00F920, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
-    { &object_boj_Anim_005D9C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
+static AnimationInfoS sAnimationInfo[ENHY_ANIM_MAX] = {
+    { &gMamamuYanUnusedIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },    // ENHY_ANIM_AOB_0
+    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_1
+    { &object_boj_Anim_001494, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_2
+    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_3
+    { &object_boj_Anim_001908, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_4
+    { &object_boj_Anim_0008C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_5
+    { &gBbaIdleHoldingBagAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BBA_6
+    { &object_bji_Anim_000FDC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BJI_7
+    { &object_bji_Anim_000AB0, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BJI_8
+    { &object_bji_Anim_00066C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BJI_9
+    { &object_boj_Anim_00071C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_10
+    { &object_os_anime_Anim_001EE0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENHY_ANIM_OS_ANIME_11
+    { &object_boj_Anim_00DED8, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },      // ENHY_ANIM_BOJ_12
+    { &object_boj_Anim_00F920, 1.5f, 0, -1, ANIMMODE_ONCE, 0 },      // ENHY_ANIM_BOJ_13
+    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_14
+    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_15
+    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // ENHY_ANIM_BOJ_16
+    { &object_boj_Anim_00FC1C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_17
+    { &object_boj_Anim_00FEE4, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_18
+    { &object_boj_Anim_010330, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_19
+    { &object_boj_Anim_005D9C, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },     // ENHY_ANIM_BOJ_20
 };
 
 s8 gEnHyLimbToBodyParts[ENHY_LIMB_MAX] = {
@@ -91,20 +91,20 @@ u8 gEnHyShadowSizes[ENHY_BODYPART_MAX] = {
 };
 
 s32 EnHy_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
-    s16 frameCount;
-    s32 isChanged = false;
+    s16 endFrame;
+    s32 didAnimChange = false;
 
-    if (animIndex >= ENHY_ANIM_AOB_0 && animIndex < ENHY_ANIM_MAX) {
-        isChanged = true;
-        frameCount = sAnimationInfo[animIndex].frameCount;
-        if (frameCount < 0) {
-            frameCount = Animation_GetLastFrame(&sAnimationInfo[animIndex].animation->common);
+    if ((animIndex > ENHY_ANIM_NONE) && (animIndex < ENHY_ANIM_MAX)) {
+        didAnimChange = true;
+        endFrame = sAnimationInfo[animIndex].frameCount;
+        if (endFrame < 0) {
+            endFrame = Animation_GetLastFrame(&sAnimationInfo[animIndex].animation->common);
         }
         Animation_Change(skelAnime, sAnimationInfo[animIndex].animation, sAnimationInfo[animIndex].playSpeed,
-                         sAnimationInfo[animIndex].startFrame, frameCount, sAnimationInfo[animIndex].mode,
+                         sAnimationInfo[animIndex].startFrame, endFrame, sAnimationInfo[animIndex].mode,
                          sAnimationInfo[animIndex].morphFrames);
     }
-    return isChanged;
+    return didAnimChange;
 }
 
 EnDoor* EnHy_FindNearestDoor(Actor* actor, PlayState* play) {

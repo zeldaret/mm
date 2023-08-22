@@ -30,6 +30,7 @@ typedef enum EnHyLimb {
 
 //! TODO: Better animaion enum names when animations are documented
 typedef enum {
+    /* -1 */ ENHY_ANIM_NONE = -1,
     /*  0 */ ENHY_ANIM_AOB_0,
     /*  1 */ ENHY_ANIM_BOJ_1,
     /*  2 */ ENHY_ANIM_BOJ_2,

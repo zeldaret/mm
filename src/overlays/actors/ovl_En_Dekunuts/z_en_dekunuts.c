@@ -671,22 +671,22 @@ s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     f32 arg1;
     f32 arg2;
     f32 arg3;
-    f32 currentFrame;
+    f32 curFrame;
 
     if (this->actionFunc == func_808BDA4C) {
         if (limbIndex == DEKU_SCRUB_LIMB_SNOUT) {
-            currentFrame = this->skelAnime.curFrame;
-            if (currentFrame <= 6.0f) {
-                arg2 = 1.0f - (currentFrame * 0.0833f);
-                arg1 = (currentFrame * 0.1167f) + 1.0f;
-                arg3 = (currentFrame * 0.1167f) + 1.0f;
-            } else if (currentFrame <= 7.0f) {
-                currentFrame -= 6.0f;
-                arg2 = 0.5f + currentFrame;
-                arg1 = 1.7f - (currentFrame * 0.7f);
-                arg3 = 1.7f - (currentFrame * 0.7f);
-            } else if (currentFrame <= 10.0f) {
-                arg2 = 1.5f - ((currentFrame - 7.0f) * 0.1667f);
+            curFrame = this->skelAnime.curFrame;
+            if (curFrame <= 6.0f) {
+                arg2 = 1.0f - (curFrame * 0.0833f);
+                arg1 = (curFrame * 0.1167f) + 1.0f;
+                arg3 = (curFrame * 0.1167f) + 1.0f;
+            } else if (curFrame <= 7.0f) {
+                curFrame -= 6.0f;
+                arg2 = 0.5f + curFrame;
+                arg1 = 1.7f - (curFrame * 0.7f);
+                arg3 = 1.7f - (curFrame * 0.7f);
+            } else if (curFrame <= 10.0f) {
+                arg2 = 1.5f - ((curFrame - 7.0f) * 0.1667f);
                 arg1 = 1.0f;
                 arg3 = 1.0f;
             } else {

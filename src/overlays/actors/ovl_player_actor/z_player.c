@@ -33,6 +33,7 @@
 #include "overlays/actors/ovl_En_Zoraegg/z_en_zoraegg.h"
 #include "overlays/actors/ovl_Obj_Aqua/z_obj_aqua.h"
 
+#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 #include "overlays/effects/ovl_Effect_Ss_G_Splash/z_eff_ss_g_splash.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -6088,9 +6089,9 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     s32 temp = this->transformation - 1;
     PlayerAnimationHeader* anim;
     f32 temp_fv0; // sp5C
-    KnobDoorActor* doorHandle = (KnobDoorActor*)door;
+    KnobDoorActor* knobDoor = (KnobDoorActor*)door;
 
-    doorHandle->animIndex = this->transformation;
+    knobDoor->animIndex = this->transformation;
 
     if (this->doorDirection < 0) {
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
@@ -6101,7 +6102,7 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
             anim = D_8085D118[temp];
         }
     } else {
-        doorHandle->animIndex += 5;
+        knobDoor->animIndex += PLAYER_FORM_MAX;
 
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
             anim = D_8085BE84[PLAYER_ANIMGROUP_10][this->modelAnimType];
@@ -6116,15 +6117,14 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     this->stateFlags2 |= PLAYER_STATE2_800000;
     func_8082DE14(play, this);
     if (this->doorDirection < 0) {
-        this->actor.shape.rot.y = doorHandle->dyna.actor.shape.rot.y;
+        this->actor.shape.rot.y = knobDoor->dyna.actor.shape.rot.y;
     } else {
-        this->actor.shape.rot.y = doorHandle->dyna.actor.shape.rot.y - 0x8000;
+        this->actor.shape.rot.y = knobDoor->dyna.actor.shape.rot.y - 0x8000;
     }
 
     this->currentYaw = this->actor.shape.rot.y;
     temp_fv0 = this->doorDirection * 22.0f;
-    func_80835BF8(&doorHandle->dyna.actor.world.pos, doorHandle->dyna.actor.shape.rot.y, temp_fv0,
-                  &this->actor.world.pos);
+    func_80835BF8(&knobDoor->dyna.actor.world.pos, knobDoor->dyna.actor.shape.rot.y, temp_fv0, &this->actor.world.pos);
     func_8082EC9C(play, this, anim);
 
     if (this->doorTimer != 0) {
@@ -6134,19 +6134,19 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
     func_8082DAD4(this);
     func_8082E920(play, this,
                   ANIM_FLAG_1 | ANIM_FLAG_UPDATE_Y | ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_80 | ANIM_FLAG_200);
-    doorHandle->playOpenAnim = true;
+    knobDoor->playOpenAnim = true;
     if (this->doorType != PLAYER_DOORTYPE_FAKE) {
         CollisionPoly* poly;
         s32 bgId;
         Vec3f pos;
-        s32 enDoorType = ENDOOR_GET_TYPE(&doorHandle->dyna.actor);
+        s32 enDoorType = ENDOOR_GET_TYPE(&knobDoor->dyna.actor);
 
         this->stateFlags1 |= PLAYER_STATE1_20000000;
 
         if (this->actor.category == ACTORCAT_PLAYER) {
             Actor_DeactivateLens(play);
-            func_80835BF8(&doorHandle->dyna.actor.world.pos, doorHandle->dyna.actor.shape.rot.y, -temp_fv0, &pos);
-            pos.y = doorHandle->dyna.actor.world.pos.y + 10.0f;
+            func_80835BF8(&knobDoor->dyna.actor.world.pos, knobDoor->dyna.actor.shape.rot.y, -temp_fv0, &pos);
+            pos.y = knobDoor->dyna.actor.world.pos.y + 10.0f;
             BgCheck_EntityRaycastFloor5(&play->colCtx, &poly, &bgId, &this->actor, &pos);
 
             if (Player_HandleExitsAndVoids(play, this, poly, BGCHECK_SCENE)) {
@@ -6157,8 +6157,8 @@ void Player_Door_Knob(PlayState* play, Player* this, Actor* door) {
                 this->unk_AE7 = 38.0f * D_8085C3E8;
                 mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                Camera_ChangeDoorCam(mainCam, &doorHandle->dyna.actor,
-                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&doorHandle->dyna.actor)]
+                Camera_ChangeDoorCam(mainCam, &knobDoor->dyna.actor,
+                                     play->doorCtx.transitionActorList[DOOR_GET_TRANSITION_ID(&knobDoor->dyna.actor)]
                                          .sides[(this->doorDirection > 0) ? 0 : 1]
                                          .bgCamIndex,
                                      0.0f, this->unk_AE7, 26.0f * D_8085C3E8, 10.0f * D_8085C3E8);
@@ -11316,7 +11316,7 @@ void func_808445C4(PlayState* play, Player* this) {
         pos.x = (Rand_CenteredFloat(5.0f) + bodyPartsPos->x) - this->actor.world.pos.x;
         pos.y = (Rand_CenteredFloat(5.0f) + bodyPartsPos->y) - this->actor.world.pos.y;
         pos.z = (Rand_CenteredFloat(5.0f) + bodyPartsPos->z) - this->actor.world.pos.z;
-        EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, 1);
+        EffectSsFhgFlash_SpawnShock(play, &this->actor, &pos, scale, FHGFLASH_SHOCK_PLAYER);
         Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_SPARK - SFX_FLAG);
     }
 }

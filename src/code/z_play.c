@@ -728,7 +728,7 @@ void Play_UpdateTransition(PlayState* this) {
                     if (gTransitionTileState == TRANS_TILE_READY) {
                         TransitionTile_Destroy(&sTransitionTile);
                         gTransitionTileState = TRANS_TILE_OFF;
-                        Game_SetFramerateDivisor(&this->state, 3);
+                        GameState_SetFramerateDivisor(&this->state, 3);
                     }
                 }
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
@@ -775,7 +775,7 @@ void Play_UpdateTransition(PlayState* this) {
 
             if (sTransitionFillTimer >= 20) {
                 gTransitionTileState = TRANS_TILE_OFF;
-                Game_SetFramerateDivisor(&this->state, 3);
+                GameState_SetFramerateDivisor(&this->state, 3);
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
                 this->envCtx.fillScreen = false;
@@ -809,7 +809,7 @@ void Play_UpdateTransition(PlayState* this) {
                 this->transitionMode = TRANS_MODE_OFF;
             } else {
                 gTransitionTileState = TRANS_TILE_OFF;
-                Game_SetFramerateDivisor(&this->state, 3);
+                GameState_SetFramerateDivisor(&this->state, 3);
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
             }
@@ -838,7 +838,7 @@ void Play_UpdateTransition(PlayState* this) {
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA < 110) {
                     gTransitionTileState = TRANS_TILE_OFF;
-                    Game_SetFramerateDivisor(&this->state, 3);
+                    GameState_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
@@ -874,7 +874,7 @@ void Play_UpdateTransition(PlayState* this) {
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA <= 0) {
                     gTransitionTileState = TRANS_TILE_OFF;
-                    Game_SetFramerateDivisor(&this->state, 3);
+                    GameState_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
@@ -897,7 +897,7 @@ void Play_UpdateTransition(PlayState* this) {
 
                 if (gSaveContext.cutsceneTransitionControl <= 100) {
                     gTransitionTileState = TRANS_TILE_OFF;
-                    Game_SetFramerateDivisor(&this->state, 3);
+                    GameState_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
@@ -945,7 +945,7 @@ void Play_UpdateMain(PlayState* this) {
                     } else {
                         sTransitionTile.zBuffer = gZBufferPtr;
                         gTransitionTileState = TRANS_TILE_READY;
-                        Game_SetFramerateDivisor(&this->state, 1);
+                        GameState_SetFramerateDivisor(&this->state, 1);
                     }
                     break;
 

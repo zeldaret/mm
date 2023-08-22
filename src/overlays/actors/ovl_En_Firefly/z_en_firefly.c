@@ -282,7 +282,7 @@ void EnFirefly_SetupFlyIdle(EnFirefly* this) {
 }
 
 void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
-    s32 isSkelAnimeUpdated;
+    s32 onAnimFirstFrame;
     f32 rand;
 
     SkelAnime_Update(&this->skelAnime);
@@ -290,11 +290,11 @@ void EnFirefly_FlyIdle(EnFirefly* this, PlayState* play) {
         this->timer--;
     }
 
-    isSkelAnimeUpdated = Animation_OnFrame(&this->skelAnime, 0.0f);
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
     this->actor.speed = (Rand_ZeroOne() * 1.5f) + 1.5f;
 
     if (!EnFirefly_ReturnToPerch(this, play) && !EnFirefly_SeekTorch(this, play)) {
-        if (isSkelAnimeUpdated) {
+        if (onAnimFirstFrame) {
             rand = Rand_ZeroOne();
 
             if (rand < 0.5f) {
