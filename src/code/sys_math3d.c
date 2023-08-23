@@ -1,30 +1,52 @@
-#include "prevent_bss_reordering.h"
 // Partial structs taken from "prevent_bss_reordering.h"
-// clang-format off
-struct Dummy200 { int x; };
-struct Dummy201 { int x; };
-struct Dummy202 { int x; };
-struct Dummy203 { int x; };
-struct Dummy204 { int x; };
-struct Dummy205 { int x; };
-struct Dummy206 { int x; };
-struct Dummy207 { int x; };
-struct Dummy208 { int x; };
-struct Dummy209 { int x; };
-struct Dummy210 { int x; };
-struct Dummy211 { int x; };
-struct Dummy212 { int x; };
-struct Dummy213 { int x; };
-struct Dummy214 { int x; };
-struct Dummy215 { int x; };
-struct Dummy216 { int x; };
-struct Dummy217 { int x; };
-// clang-format on
-
+struct Dummy0 { int x; };
+struct Dummy1 { int x; };
+struct Dummy2 { int x; };
+struct Dummy3 { int x; };
+struct Dummy4 { int x; };
+struct Dummy5 { int x; };
+struct Dummy6 { int x; };
+struct Dummy7 { int x; };
+struct Dummy8 { int x; };
+struct Dummy9 { int x; };
+struct Dummy10 { int x; };
+struct Dummy11 { int x; };
+struct Dummy12 { int x; };
+struct Dummy13 { int x; };
+struct Dummy14 { int x; };
+struct Dummy15 { int x; };
+struct Dummy16 { int x; };
+struct Dummy17 { int x; };
+struct Dummy18 { int x; };
+struct Dummy19 { int x; };
+struct Dummy20 { int x; };
+struct Dummy21 { int x; };
+struct Dummy22 { int x; };
+struct Dummy23 { int x; };
+struct Dummy24 { int x; };
+struct Dummy25 { int x; };
+struct Dummy26 { int x; };
+struct Dummy27 { int x; };
+struct Dummy28 { int x; };
+struct Dummy29 { int x; };
+struct Dummy30 { int x; };
+struct Dummy31 { int x; };
+struct Dummy32 { int x; };
+struct Dummy33 { int x; };
+struct Dummy34 { int x; };
+struct Dummy35 { int x; };
+struct Dummy36 { int x; };
+struct Dummy37 { int x; };
+struct Dummy38 { int x; };
+struct Dummy39 { int x; };
+struct Dummy40 { int x; };
+struct Dummy41 { int x; };
+typedef int Dummy42;
 #include "z64math.h"
 #include "libc/stdbool.h"
 #include "libc/math.h"
-#include "macros.h"
+
+#define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 
 // extern Vec3f D_801FBBF0;
 // extern Linef D_801FBC00;
