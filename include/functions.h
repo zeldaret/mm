@@ -1235,13 +1235,6 @@ void Sched_SendGfxCancelMsg(SchedContext* sched);
 void Sched_FaultClient(void* param1, void* param2);
 void Sched_ThreadEntry(void* arg);
 void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
-// void func_80177390(void);
-void func_801773A0(void* arg0);
-void func_801773C4(void* arg0);
-void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gfxCtx);
-// void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
-//void func_80177AC8(void);
-void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, GameState* gameState);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);

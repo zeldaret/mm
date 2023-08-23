@@ -32,7 +32,7 @@ typedef struct EnCrow {
     /* 0x194 */ Vec3s jointTable[OBJECT_CROW_LIMB_MAX];
     /* 0x1CA */ Vec3s morphTable[OBJECT_CROW_LIMB_MAX];
     /* 0x200 */ ColliderJntSph collider;
-    /* 0x220 */ ColliderJntSphElement colliderItems[1];
+    /* 0x220 */ ColliderJntSphElement colliderElements[1];
     /* 0x260 */ Vec3f bodyPartsPos[GUAY_BODYPART_MAX];
     /* 0x290 */ f32 drawDmgEffAlpha;
     /* 0x294 */ f32 drawDmgEffFrozenSteamScale;

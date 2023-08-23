@@ -339,7 +339,7 @@ void ObjComb_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     if ((sp2C == 0) && Item_CanDropBigFairy(play, OBJCOMB_GET_3F(&this->actor), OBJCOMB_GET_7F00(&this->actor))) {
         this->unk_1B7 = 1;
