@@ -80,7 +80,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
                 spAC->flags |= 1;
             }
 
-            if (spA8) {} // Necessary to match
+            //! FAKE:
+            if (spA8) {}
 
             spA8 = &this->elements[this->numElements];
             spA8->flags = 0;

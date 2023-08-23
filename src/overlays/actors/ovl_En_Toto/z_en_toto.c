@@ -257,10 +257,10 @@ void func_80BA39C8(EnToto* this, PlayState* play) {
         if (this->unk2B6 != 0) {
             this->text = D_80BA5044;
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
+            Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_NONE);
         } else {
             this->actor.flags &= ~ACTOR_FLAG_10000;
-            func_800B8614(&this->actor, play, 50.0f);
+            Actor_OfferTalk(&this->actor, play, 50.0f);
             if (play->sceneId == SCENE_SONCHONOIE) {
                 if (player->transformation == PLAYER_FORM_DEKU) {
                     if (!Flags_GetSwitch(play, this->actor.home.rot.x)) {
@@ -423,9 +423,9 @@ s32 func_80BA4128(EnToto* this, PlayState* play) {
 s32 func_80BA415C(EnToto* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
         } else {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
         }
         return ((play->msgCtx.choiceIndex != 0) ? 0 : this->text->unk1) + 1;
     }
@@ -548,16 +548,16 @@ s32 func_80BA46D8(EnToto* this, PlayState* play) {
 
 s32 func_80BA4740(EnToto* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 4) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_10);
         }
-        if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_20);
         }
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_40);
         }
-        if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_GORON) {
             SET_WEEKEVENTREG(WEEKEVENTREG_56_80);
         }
         return 1;
@@ -583,7 +583,7 @@ s32 func_80BA47E0(EnToto* this, PlayState* play) {
         this->unk2B3 += 8;
     }
     for (i = 0; i < ARRAY_COUNT(D_80BA50DC); i++) {
-        if ((gSaveContext.save.playerForm != (i + 1)) && (D_80BA5128[i] & this->unk2B3)) {
+        if ((GET_PLAYER_FORM != (i + 1)) && (D_80BA5128[i] & this->unk2B3)) {
             Math_Vec3s_ToVec3f(&spawnPos, &D_80BA50DC[i].unk6);
 
             Actor_Spawn(&play->actorCtx, play, ACTOR_PLAYER, spawnPos.x, spawnPos.y, spawnPos.z, i + 2, 0, 0,

@@ -546,7 +546,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
     this->unk_1E8(this);
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
-        if (Player_GetExchangeItemId(play) == PLAYER_IA_MAGIC_BEANS) {
+        if (Player_GetExchangeItemAction(play) == PLAYER_IA_MAGIC_BEANS) {
             func_809383B4(this);
             Flags_SetSwitch(play, OBJBEAN_GET_3F80(&this->dyna.actor, 0));
         }
@@ -576,7 +576,7 @@ void func_80937FC8(ObjBean* this, PlayState* play) {
                 CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
             }
         } else {
-            func_800B85E0(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
+            Actor_OfferTalkExchangeEquiCylinder(&this->dyna.actor, play, 28.0f, PLAYER_IA_MAGIC_BEANS);
         }
     }
 }
@@ -597,7 +597,7 @@ void func_809381C4(ObjBean* this, PlayState* play) {
         func_80938284(this);
     } else if (this->unk_1E4 == 4) {
         CutsceneManager_Stop(this->dyna.actor.csId);
-        play_sound(NA_SE_SY_ERROR);
+        Audio_PlaySfx(NA_SE_SY_ERROR);
         this->unk_1E4 = 0;
         func_80937FB0(this);
     } else {
@@ -619,7 +619,7 @@ void func_80938298(ObjBean* this, PlayState* play) {
         func_8093833C(this);
     } else if (this->unk_1E4 == 4) {
         CutsceneManager_Stop(this->dyna.actor.csId);
-        play_sound(NA_SE_SY_ERROR);
+        Audio_PlaySfx(NA_SE_SY_ERROR);
         this->unk_1E4 = 0;
         func_80937FB0(this);
     }
@@ -670,7 +670,7 @@ void func_80938444(ObjBean* this, PlayState* play) {
     } else {
         this->unk_1B2 = 1;
     }
-    func_800B9010(&this->dyna.actor, NA_SE_PL_PLANT_GROW_UP - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_PLANT_GROW_UP - SFX_FLAG);
 }
 
 void func_809384E8(ObjBean* this) {
@@ -785,7 +785,7 @@ void func_809388A8(ObjBean* this, PlayState* play) {
         func_809372A8(this);
         func_8093892C(this);
     } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
-        func_800B9010(&this->dyna.actor, NA_SE_PL_PLANT_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_PL_PLANT_MOVE - SFX_FLAG);
     }
     func_80936F24(this);
 }
@@ -889,7 +889,7 @@ void func_80938C1C(Actor* thisx, PlayState* play) {
     if (this->unk_1DF > 0) {
         this->unk_1DF--;
         if (this->unk_1DF == 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
     }
 

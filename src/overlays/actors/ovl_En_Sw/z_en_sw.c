@@ -5,6 +5,7 @@
  */
 
 #include "z_en_sw.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_st/object_st.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
@@ -172,10 +173,10 @@ void func_808D8940(EnSw* this, PlayState* play) {
 }
 
 s32 func_808D8B58(EnSw* this) {
-    s16 phi_s2 = (s16)((s16)(Rand_ZeroOne() * 1000.0f) % ARRAY_COUNT(this->unk_464)) * 0x1555;
+    s16 phi_s2 = (s16)(TRUNCF_BINANG(Rand_ZeroOne() * 1000.0f) % ENSW_BODYPART_MAX) * 0x1555;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_464); i++, phi_s2 += 0x1555) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++, phi_s2 += 0x1555) {
         if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             this->unk_464[i] = (Rand_ZeroOne() * 16.0f) + 8.0f;
         } else {
@@ -185,41 +186,41 @@ s32 func_808D8B58(EnSw* this) {
         this->drawDmgEffFrozenSteamScales[i] = 0.45000002f;
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FIRE) || (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_BLUE_FIRE) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            this->unk_380[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
+            this->bodyPartsPos[i].y = (Rand_ZeroOne() - 0.5f) * 20.0f;
         } else {
-            this->unk_380[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
+            this->bodyPartsPos[i].y = ((Rand_ZeroOne() - 0.5f) * 20.0f) + 10.0f;
         }
-        this->unk_380[i].x = Math_SinS(phi_s2) * 10.0f;
-        this->unk_380[i].z = Math_CosS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].x = Math_SinS(phi_s2) * 10.0f;
+        this->bodyPartsPos[i].z = Math_CosS(phi_s2) * 10.0f;
     }
     this->unk_462 = 1;
     return 0;
 }
 
-s32 func_808D8D60(EnSw* this, PlayState* play, s32 arg2) {
-    s32 ret = false;
+s32 func_808D8D60(EnSw* this, PlayState* play, s32 bodyPartIndex) {
+    s32 ret = 0;
     u8 drawDmgEffType;
-    Vec3f limbPos[1];
+    Vec3f bodyPartsPos[1];
     f32 drawDmgEffAlpha;
 
-    if (arg2 < this->unk_462) {
-        if (this->unk_464[arg2] != 0) {
-            drawDmgEffAlpha = (f32)this->unk_464[arg2] / this->unk_47C[arg2];
+    if (bodyPartIndex < this->unk_462) {
+        if (this->unk_464[bodyPartIndex] != 0) {
+            drawDmgEffAlpha = (f32)this->unk_464[bodyPartIndex] / this->unk_47C[bodyPartIndex];
             drawDmgEffType = this->drawDmgEffType;
-            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[arg2], 0.3f, 0.3f, 0.5f);
-            Math_Vec3f_Copy(&limbPos[0], &this->actor.world.pos);
-            limbPos[0].x += this->unk_380[arg2].x;
-            limbPos[0].y += this->unk_380[arg2].y;
-            limbPos[0].z += this->unk_380[arg2].z;
+            Math_ApproachF(&this->drawDmgEffFrozenSteamScales[bodyPartIndex], 0.3f, 0.3f, 0.5f);
+            Math_Vec3f_Copy(&bodyPartsPos[0], &this->actor.world.pos);
+            bodyPartsPos[0].x += this->bodyPartsPos[bodyPartIndex].x;
+            bodyPartsPos[0].y += this->bodyPartsPos[bodyPartIndex].y;
+            bodyPartsPos[0].z += this->bodyPartsPos[bodyPartIndex].z;
             if (drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
-                if ((this->unk_47C[arg2] - this->unk_464[arg2]) < 20) {
+                if ((this->unk_47C[bodyPartIndex] - this->unk_464[bodyPartIndex]) < 20) {
                     drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_SFX;
                 }
                 drawDmgEffAlpha = 1.0f;
             }
-            Actor_DrawDamageEffects(play, &this->actor, limbPos, ARRAY_COUNT(limbPos), 0.3f,
-                                    this->drawDmgEffFrozenSteamScales[arg2], drawDmgEffAlpha, drawDmgEffType);
-            ret = true;
+            Actor_DrawDamageEffects(play, &this->actor, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), 0.3f,
+                                    this->drawDmgEffFrozenSteamScales[bodyPartIndex], drawDmgEffAlpha, drawDmgEffType);
+            ret = 1;
         }
     }
     return ret;
@@ -229,14 +230,14 @@ void func_808D8ED0(EnSw* this, PlayState* play) {
     Vec3f sp54;
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(this->unk_380); i++) {
+    for (i = 0; i < ENSW_BODYPART_MAX; i++) {
         Math_Vec3f_Copy(&sp54, &this->actor.world.pos);
-        sp54.x += this->unk_380[i].x;
-        sp54.y += this->unk_380[i].y;
-        sp54.z += this->unk_380[i].z;
-        Math_Vec3f_Copy(&this->unk_380[i], &sp54);
+        sp54.x += this->bodyPartsPos[i].x;
+        sp54.y += this->bodyPartsPos[i].y;
+        sp54.z += this->bodyPartsPos[i].z;
+        Math_Vec3f_Copy(&this->bodyPartsPos[i], &sp54);
     }
-    Actor_SpawnIceEffects(play, &this->actor, this->unk_380, ARRAY_COUNT(this->unk_380), 3, 0.1f, 0.3f);
+    Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENSW_BODYPART_MAX, 3, 0.1f, 0.3f);
 }
 
 void func_808D8FC4(EnSw* this, PlayState* play) {
@@ -358,7 +359,6 @@ s32 func_808D9440(PlayState* play, Vec3f* posA, Vec3f* posB, Vec3f* posResult, C
     return ret;
 }
 
-#ifdef NON_MATCHING
 void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
     CollisionPoly* spA4;
     CollisionPoly* spA0;
@@ -412,7 +412,6 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
 
         for (i = 0; i < 3; i++) {
             if (i == 0) {
-                if (this && this && this) {}
                 sp84.x = sp90.x - (this->unk_350.x * temp_f20);
                 sp84.y = sp90.y - (this->unk_350.y * temp_f20);
                 sp84.z = sp90.z - (this->unk_350.z * temp_f20);
@@ -433,6 +432,9 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
                 break;
             }
         }
+
+        //! FAKE
+        if (i == 3) {}
     }
 
     func_808D93BC(this);
@@ -448,10 +450,6 @@ void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4) {
         Actor_MoveWithoutGravity(&this->actor);
     }
 }
-#else
-void func_808D94D0(EnSw* this, PlayState* play, s32 arg2, s32 arg3, s16 arg4);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Sw/func_808D94D0.s")
-#endif
 
 void func_808D9894(EnSw* this, Vec3f* vec) {
     Vec3f sp5C;
@@ -664,7 +662,7 @@ s32 func_808DA08C(EnSw* this, PlayState* play) {
 
         if (this->actor.colChkInfo.damageEffect == 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_LARGE_LIGHT_RAYS);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
         }
 
         if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
@@ -1037,7 +1035,7 @@ void func_808DAEB4(EnSw* this, PlayState* play) {
                 sp5C.z += this->unk_368.z * 10.0f;
                 if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_SI, sp5C.x, sp5C.y, sp5C.z, 0, 0,
                                        0, this->actor.params) != NULL) {
-                    play_sound(NA_SE_SY_KINSTA_MARK_APPEAR);
+                    Audio_PlaySfx(NA_SE_SY_KINSTA_MARK_APPEAR);
                 }
                 Actor_Kill(&this->actor);
             }
@@ -1283,6 +1281,9 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
             case 4:
                 *dList = object_st_DL_0043D8;
                 break;
+
+            default:
+                break;
         }
     }
     return false;
@@ -1290,7 +1291,7 @@ s32 EnSw_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
 
 void EnSw_Draw(Actor* thisx, PlayState* play) {
     EnSw* this = THIS;
-    s32 i;
+    s32 bodyPartIndex;
     s32 count;
 
     if (this->unk_410 & 4) {
@@ -1303,8 +1304,8 @@ void EnSw_Draw(Actor* thisx, PlayState* play) {
                           &this->actor);
     }
 
-    for (i = 0, count = 0; i < ARRAY_COUNT(this->unk_464); i++) {
-        count += func_808D8D60(this, play, i);
+    for (bodyPartIndex = 0, count = 0; bodyPartIndex < ENSW_BODYPART_MAX; bodyPartIndex++) {
+        count += func_808D8D60(this, play, bodyPartIndex);
     }
 
     if (count != 0) {

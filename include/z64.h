@@ -60,66 +60,11 @@
 #include "z64schedule.h"
 #include "z64skin.h"
 #include "z64skybox.h"
+#include "z64sound_source.h"
 #include "z64subs.h"
 #include "z64transition.h"
 #include "z64view.h"
 #include "regs.h"
-
-#define Z_THREAD_ID_IDLE     1
-#define Z_THREAD_ID_SLOWLY   2
-#define Z_THREAD_ID_MAIN     3
-#define Z_THREAD_ID_GRAPH    4
-#define Z_THREAD_ID_SCHED    5
-#define Z_THREAD_ID_FLASHROM 13
-#define Z_THREAD_ID_DMAMGR  18
-#define Z_THREAD_ID_IRQMGR  19
-
-#define Z_PRIORITY_SLOWLY    5
-#define Z_PRIORITY_GRAPH     9
-#define Z_PRIORITY_AUDIOMGR 11
-#define Z_PRIORITY_IDLE     12
-#define Z_PRIORITY_MAIN     12
-#define Z_PRIORITY_FLASHROM 13
-#define Z_PRIORITY_PADMGR   15
-#define Z_PRIORITY_SCHED    16
-#define Z_PRIORITY_DMAMGR   17
-#define Z_PRIORITY_IRQMGR   18
-
-typedef enum {
-    /* -1 */ EQUIP_SLOT_NONE = -1,
-    /*  0 */ EQUIP_SLOT_B,
-    /*  1 */ EQUIP_SLOT_C_LEFT,
-    /*  2 */ EQUIP_SLOT_C_DOWN,
-    /*  3 */ EQUIP_SLOT_C_RIGHT,
-    /*  4 */ EQUIP_SLOT_A
-} EquipSlot;
-
-typedef struct {
-    /* 0x0 */ s8 segment;
-    /* 0x2 */ s16 type;
-    /* 0x4 */ void* params;
-} AnimatedMaterial; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ Vec3s pos;
-    /* 0x6 */ s16   unk_06;
-    /* 0x8 */ Gfx*  opa;
-    /* 0xC */ Gfx*  xlu;
-} PolygonDlist2; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u8    type;
-    /* 0x1 */ u8    num; // number of dlist entries
-    /* 0x4 */ void* start;
-    /* 0x8 */ void* end;
-} PolygonType2; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ u32 resetting;
-    /* 0x04 */ u32 resetCount;
-    /* 0x08 */ OSTime duration;
-    /* 0x10 */ OSTime resetTime;
-} NmiBuff; // size >= 0x18
 
 typedef struct {
     /* 0x00 */ s32 requestType;
@@ -129,48 +74,6 @@ typedef struct {
     /* 0x10 */ s32 pageCount;
     /* 0x14 */ OSMesgQueue messageQueue;
 } FlashromRequest; // size = 0x2C
-
-// End of RDRAM without the Expansion Pak installed
-#define NORMAL_RDRAM_END 0x80400000
-// End of RDRAM with the Expansion Pak installed
-#define EXPANDED_RDRAM_END 0x80800000
-// Address at the end of normal RDRAM after which is room for a screen buffer
-#define FAULT_FB_ADDRESS (NORMAL_RDRAM_END - sizeof(u16[SCREEN_HEIGHT][SCREEN_WIDTH]))
-
-typedef void (*FaultDrawerCallback)(void);
-
-typedef struct {
-    /* 0x00 */ u16* fb;
-    /* 0x04 */ u16 w;
-    /* 0x06 */ u16 h;
-    /* 0x08 */ u16 yStart;
-    /* 0x0A */ u16 yEnd;
-    /* 0x0C */ u16 xStart;
-    /* 0x0E */ u16 xEnd;
-    /* 0x10 */ u16 foreColor;
-    /* 0x12 */ u16 backColor;
-    /* 0x14 */ u16 cursorX;
-    /* 0x16 */ u16 cursorY;
-    /* 0x18 */ const u32* font;
-    /* 0x1C */ u8 charW;
-    /* 0x1D */ u8 charH;
-    /* 0x1E */ s8 charWPad;
-    /* 0x1F */ s8 charHPad;
-    /* 0x20 */ u16 printColors[10];
-    /* 0x34 */ u8 escCode;
-    /* 0x35 */ u8 osSyncPrintfEnabled;
-    /* 0x38 */ FaultDrawerCallback inputCallback;
-} FaultDrawer; // size = 0x3C
-
-typedef struct {
-    /* 0x00 */ u8 countdown;
-    /* 0x01 */ u8 playSfxEachFrame;
-    /* 0x02 */ u16 sfxId;
-    /* 0x04 */ Vec3f worldPos;
-    /* 0x10 */ Vec3f projectedPos;
-} SoundSource; // size = 0x1C
-
-typedef void(*fault_update_input_func)(Input* input);
 
 typedef struct {
     /* 0x000 */ View view;
@@ -378,59 +281,7 @@ typedef struct {
     /* 0x24 */ u32 flags;
 } PreRenderParams; // size = 0x28
 
-typedef struct FaultAddrConvClient {
-    /* 0x0 */ struct FaultAddrConvClient* next;
-    /* 0x4 */ void* (*callback)(void*, void*);
-    /* 0x8 */ void* param;
-} FaultAddrConvClient; // size = 0xC
-
-typedef struct FaultClient {
-    /* 0x0 */ struct FaultClient* next;
-    /* 0x4 */ void (*callback)(void*, void*);
-    /* 0x8 */ void* param0;
-    /* 0xC */ void* param1;
-} FaultClient; // size = 0x10
-
-typedef struct {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 stack[1536]; // Seems leftover from an earlier version. The thread actually uses a stack of this size at 0x8009BE60
-    /* 0x7B0 */ OSMesgQueue queue;
-    /* 0x7C8 */ OSMesg msg[1];
-    /* 0x7CC */ u8 exitDebugger;
-    /* 0x7CD */ u8 msgId; // 1 - CPU Break; 2 - Fault; 3 - Unknown
-    /* 0x7CE */ u8 faultHandlerEnabled;
-    /* 0x7CF */ u8 faultActive;
-    /* 0x7D0 */ OSThread* faultedThread;
-    /* 0x7D4 */ fault_update_input_func padCallback;
-    /* 0x7D8 */ FaultClient* clients;
-    /* 0x7DC */ FaultAddrConvClient* addrConvClients;
-    /* 0x7E0 */ UNK_TYPE1 pad7E0[0x4];
-    /* 0x7E4 */ Input padInput[MAXCONTROLLERS];
-    /* 0x844 */ void* fb;
-} FaultThreadStruct; // size = 0x848
-
 struct PlayState;
-
-typedef s32 (*ColChkResetFunc)(struct PlayState*, Collider*);
-typedef void (*ColChkBloodFunc)(struct PlayState*, Collider*, Vec3f*);
-typedef void (*ColChkApplyFunc)(struct PlayState*, CollisionCheckContext*, Collider*);
-typedef void (*ColChkVsFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Collider*);
-typedef s32 (*ColChkLineFunc)(struct PlayState*, CollisionCheckContext*, Collider*, Vec3f*, Vec3f*);
-
-typedef struct {
-    /* 0x000 */ IrqMgr* irqMgr;
-    /* 0x004 */ SchedContext* sched;
-    /* 0x008 */ OSScTask audioTask;
-    /* 0x060 */ AudioTask* rspTask;
-    /* 0x064 */ OSMesgQueue interruptMsgQ;
-    /* 0x07C */ OSMesg interruptMsgBuf[30];
-    /* 0x0F4 */ OSMesgQueue cmdQ;
-    /* 0x10C */ OSMesg cmdMsgBuf[1];
-    /* 0x110 */ OSMesgQueue lockMsgQ;
-    /* 0x128 */ OSMesg lockMsgBuf[1];
-    /* 0x12C */ UNK_TYPE1 pad_12C[0x4];
-    /* 0x130 */ OSThread thread;
-} AudioMgr; // size = 0x2E0
 
 typedef struct {
     /* 0x0 */ u8   seqId;
@@ -456,7 +307,7 @@ typedef struct PlayState {
     /* 0x00830 */ CollisionContext colCtx;
     /* 0x01CA0 */ ActorContext actorCtx;
     /* 0x01F24 */ CutsceneContext csCtx;
-    /* 0x01F78 */ SoundSource soundSources[16];
+    /* 0x01F78 */ SoundSource soundSources[SOUND_SOURCE_COUNT];
     /* 0x02138 */ EffFootmark footprintInfo[100];
     /* 0x046B8 */ SramContext sramCtx;
     /* 0x046E0 */ SkyboxContext skyboxCtx;
@@ -545,34 +396,6 @@ typedef struct {
     /* 0x10 */ Color_RGBA8_u32 envColor;
 } Struct_80140E80; // size = 0x14
 
-typedef struct {
-    /* 0x0 */ u32 type;
-    /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8_u32 color;
-    /* 0xC */ Color_RGBA8 envColor;
-} struct_801F8010; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ u32 useRgba;
-    /* 0x4 */ u32 setScissor;
-    /* 0x8 */ Color_RGBA8_u32 primColor;
-    /* 0xC */ Color_RGBA8_u32 envColor;
-} VisZbuf; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u32 setScissor;
-    /* 0x08 */ Color_RGBA8_u32 primColor;
-    /* 0x0C */ Color_RGBA8_u32 envColor;
-    /* 0x10 */ u16* tlut;
-    /* 0x14 */ Gfx* dList;
-} VisMono; // size = 0x18
-
-typedef struct {
-    /* 0x0 */ u8* value;
-    /* 0x4 */ const char* name;
-} FlagSetEntry; // size = 0x8
-
 // TODO: Dedicated Header?
 #define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
 #define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
@@ -624,30 +447,5 @@ typedef enum FramMode {
     /* 3 */ FRAM_MODE_READ,
     /* 4 */ FRAM_MODE_STATUS
 } FramMode;
-
-typedef enum {
-    /* 0 */ VI_MODE_EDIT_STATE_INACTIVE,
-    /* 1 */ VI_MODE_EDIT_STATE_ACTIVE,
-    /* 2 */ VI_MODE_EDIT_STATE_2, // active, more adjustments
-    /* 3 */ VI_MODE_EDIT_STATE_3  // active, more adjustments, print comparison with NTSC LAN1 mode
-} ViModeEditState;
-
-typedef struct {
-    /* 0x00 */ OSViMode customViMode;
-    /* 0x50 */ s32 viHeight;
-    /* 0x54 */ s32 viWidth;
-    /* 0x58 */ s32 rightAdjust;
-    /* 0x5C */ s32 leftAdjust;
-    /* 0x60 */ s32 lowerAdjust;
-    /* 0x64 */ s32 upperAdjust;
-    /* 0x68 */ s32 editState;
-    /* 0x6C */ s32 tvType;
-    /* 0x70 */ u32 loRes;
-    /* 0x74 */ u32 antialiasOff;
-    /* 0x78 */ u32 modeN;
-    /* 0x7C */ u32 fb16Bit;
-    /* 0x80 */ u32 viFeatures;
-    /* 0x84 */ u32 unk_84;
-} ViMode; // size = 0x88
 
 #endif

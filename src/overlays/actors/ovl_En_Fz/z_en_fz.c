@@ -401,7 +401,7 @@ void func_80932C98(EnFz* this, PlayState* play) {
     }
 
     if (this->unk_BCE != 0) {
-        if (ENFZ_GET_8000(&this->actor) && (this->collider1.base.atFlags & AC_HIT)) {
+        if (ENFZ_GET_8000(&this->actor) && (this->collider1.base.atFlags & AT_HIT)) {
             this->unk_BCD = 0;
             this->unk_BBC = 0.0f;
             this->collider1.base.acFlags &= ~AC_HIT;
@@ -607,7 +607,7 @@ void func_809334B8(EnFz* this, PlayState* play) {
     if (this->unk_BCA > 10) {
         sp3F = 0;
         sp3C = 150;
-        func_800B9010(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
         if ((this->unk_BCA - 10) < 16) {
             sp3C = (this->unk_BCA * 10) - 100;
         }
@@ -723,7 +723,7 @@ void func_809338E0(EnFz* this, PlayState* play) {
 
     sp3F = 0;
     sp3C = 150;
-    func_800B9010(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FREEZAD_BREATH - SFX_FLAG);
 
     if ((this->unk_BC6 & 0x3F) >= 0x30) {
         sp3C = 630 - ((this->unk_BC6 & 0x3F) * 10);
@@ -863,14 +863,14 @@ void EnFz_Draw(Actor* thisx, PlayState* play) {
 
     if (this->drawDmgEffTimer > 0) {
         s32 pad2[6];
-        Vec3f limbPos[2];
+        Vec3f bodyPartsPos[2];
         s32 pad3;
 
-        limbPos[0] = this->actor.world.pos;
-        limbPos[1] = this->actor.world.pos;
-        limbPos[0].y += 20.0f;
-        limbPos[1].y += 40.0f;
-        Actor_DrawDamageEffects(play, NULL, limbPos, ARRAY_COUNT(limbPos), this->drawDmgEffScale * 4.0f, 0.5f,
+        bodyPartsPos[0] = this->actor.world.pos;
+        bodyPartsPos[1] = this->actor.world.pos;
+        bodyPartsPos[0].y += 20.0f;
+        bodyPartsPos[1].y += 40.0f;
+        Actor_DrawDamageEffects(play, NULL, bodyPartsPos, ARRAY_COUNT(bodyPartsPos), this->drawDmgEffScale * 4.0f, 0.5f,
                                 this->drawDmgEffAlpha, ACTOR_DRAW_DMGEFF_LIGHT_ORBS);
     }
 

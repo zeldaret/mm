@@ -149,7 +149,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
 
     if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         if (this->unk_20A == 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             this->unk_20A = 1;
         }
     } else {
@@ -189,7 +189,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         } else if (func_801A5100() == 2) {
             func_80BDB788(this);
         } else {
-            func_800B8614(&this->actor, play, BREG(13) + 100.0f);
+            Actor_OfferTalk(&this->actor, play, BREG(13) + 100.0f);
         }
     }
 }

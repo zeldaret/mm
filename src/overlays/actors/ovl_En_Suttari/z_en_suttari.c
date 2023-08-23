@@ -5,10 +5,10 @@
  */
 
 #include "z_en_suttari.h"
-#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_En_Door/z_en_door.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/effects/ovl_Effect_Ss_Solder_Srch_Ball/z_eff_ss_solder_srch_ball.h"
-#include "objects/object_boj/object_boj.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
 
@@ -130,7 +130,7 @@ static TrackOptionsSet sTrackOptions = {
 
 static u8 D_80BAE820[] = {
     /* 0x00 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_S(2, 0x80 - 0x04),
-    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_33_08, 0x7F - 0x08),
+    /* 0x04 */ SCHEDULE_CMD_CHECK_FLAG_S(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG, 0x7F - 0x08),
     /* 0x08 */ SCHEDULE_CMD_CHECK_NOT_IN_SCENE_S(SCENE_ICHIBA, 0x3D - 0x0C),
     /* 0x0C */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 0, 0, 25, 0x37 - 0x12),
     /* 0x12 */ SCHEDULE_CMD_CHECK_TIME_RANGE_S(0, 25, 0, 30, 0x31 - 0x18),
@@ -483,7 +483,7 @@ void func_80BAAFDC(EnSuttari* this, PlayState* play) {
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
-            play_sound(NA_SE_SY_FOUND);
+            Audio_PlaySfx(NA_SE_SY_FOUND);
             this->playerDetected = false;
             this->actor.speed = 0.0f;
             if (this->unk1F4[0] != 0) {
@@ -516,7 +516,7 @@ void func_80BAB1A0(EnSuttari* this, PlayState* play) {
                                          SOLDERSRCHBALL_INVISIBLE);
         }
         if (this->playerDetected == true) {
-            play_sound(NA_SE_SY_FOUND);
+            Audio_PlaySfx(NA_SE_SY_FOUND);
             this->playerDetected = false;
             this->actor.speed = 0.0f;
             if (this->unk1F4[0] != 0) {
@@ -578,7 +578,7 @@ void func_80BAB4F0(EnSuttari* this, PlayState* play) {
             Math_SmoothStepToS(&this->torsoRot.y, 0, 4, 0x3E8, 1);
         }
     }
-    SubS_FillLimbRotTables(play, this->unk2FA, this->unk31A, ARRAY_COUNT(this->unk2FA));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_BOJ_LIMB_MAX);
 }
 
 s16 EnSuttari_GetDistSqAndOrient(Path* path, s32 index, Vec3f* pos, f32* distSq) {
@@ -963,7 +963,7 @@ void func_80BAC2FC(EnSuttari* this, PlayState* play) {
             break;
 
         case 4:
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
                 if ((this->animIndex == 2) || (this->animIndex == 1)) {
                     this->animIndex = 5;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
@@ -1003,7 +1003,8 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
             this->actionFunc = func_80BACA14;
             return;
         } else if ((gSaveContext.save.day == 3) && (gSaveContext.save.time <= CLOCK_TIME(19, 0)) &&
-                   !CHECK_WEEKEVENTREG(WEEKEVENTREG_61_08) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08) &&
+                   !CHECK_WEEKEVENTREG(WEEKEVENTREG_61_08) &&
+                   !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG) &&
                    CHECK_WEEKEVENTREG(WEEKEVENTREG_51_08)) {
             this->animIndex = 2;
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->animIndex);
@@ -1027,7 +1028,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BAD004;
         return;
     } else if (play->sceneId == SCENE_ICHIBA) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -1037,7 +1038,7 @@ void func_80BAC6E8(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BAD5F8;
         return;
     } else if (play->sceneId == SCENE_AYASHIISHOP) {
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_33_08)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG)) {
             Actor_Kill(&this->actor);
             return;
         }
@@ -1078,7 +1079,7 @@ void func_80BACA14(EnSuttari* this, PlayState* play) {
             func_80BAAB78(this, play);
             this->actionFunc = func_80BADA9C;
         } else if (this->actor.xzDistToPlayer < 200.0f) {
-            func_800B8614(&this->actor, play, 200.0f);
+            Actor_OfferTalk(&this->actor, play, 200.0f);
         }
     }
     Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 0.1f);
@@ -1191,7 +1192,7 @@ void func_80BAD004(EnSuttari* this, PlayState* play) {
         Message_StartTextbox(play, 0x2A3A, &this->actor);
         this->actionFunc = func_80BAD130;
     } else if ((this->actor.xzDistToPlayer < 200.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Actor_MoveWithGravity(&this->actor);
 }
@@ -1269,18 +1270,18 @@ void func_80BAD380(EnSuttari* this, PlayState* play) {
             this->flags2 |= 8;
             func_80BAAF1C(this);
         } else if (this->flags1 & 0x200) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_79_40);
+            SET_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD);
             this->flags2 |= 4;
             this->actor.speed = 0.0f;
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->actor.world.pos.x, this->actor.world.pos.y,
-                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_SMALL_EXPLOSION);
+                        this->actor.world.pos.z, 0, 0, 0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_IT_BOMB_EXPLOSION);
             Actor_Kill(&this->actor);
             return;
         }
         if (this->unk1F4[1] == -0x63) {
             if (this->flags2 & 8) {
-                SET_WEEKEVENTREG(WEEKEVENTREG_33_08);
+                SET_WEEKEVENTREG(WEEKEVENTREG_RECOVERED_STOLEN_BOMB_BAG);
             }
             this->actor.speed = 0.0f;
             SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
@@ -1324,7 +1325,7 @@ void func_80BAD5F8(EnSuttari* this, PlayState* play) {
             Message_StartTextbox(play, 0x2A02, &this->actor);
             this->actionFunc = func_80BAD130;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
     }
     Actor_MoveWithGravity(&this->actor);
@@ -1361,7 +1362,7 @@ void func_80BAD7F8(EnSuttari* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2A02, &this->actor);
                 this->actionFunc = func_80BAD130;
             } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-                func_800B863C(&this->actor, play);
+                Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             }
         }
         Actor_MoveWithGravity(&this->actor);
@@ -1375,7 +1376,7 @@ void func_80BADA08(EnSuttari* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_81_04);
     } else if (this->actor.xzDistToPlayer < 500.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
 
@@ -1417,13 +1418,13 @@ void func_80BADA9C(EnSuttari* this, PlayState* play) {
     } else if ((talkstate == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 this->flags1 |= 0x800;
                 func_80BAAB78(this, play);
                 break;
 
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 func_80BAAB78(this, play);
                 break;
 
@@ -1480,7 +1481,7 @@ void func_80BADE8C(EnSuttari* this, PlayState* play) {
         this->actionFunc = func_80BAD130;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
 
@@ -1500,7 +1501,7 @@ void EnSuttari_Init(Actor* thisx, PlayState* play) {
     EnSuttari* this = THIS;
     s32 pad;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAKON_DEAD)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -1568,8 +1569,8 @@ s32 EnSuttari_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
         Matrix_RotateZS(-this->torsoRot.x, MTXMODE_APPLY);
     }
     if ((limbIndex == 8) || (limbIndex == 9) || (limbIndex == 0xC)) {
-        rot->y += (s16)(Math_SinS(this->unk2FA[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk31A[limbIndex]) * 200.0f);
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     return false;
 }

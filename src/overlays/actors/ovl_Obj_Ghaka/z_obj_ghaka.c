@@ -70,13 +70,13 @@ void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
 
 void func_80B3C39C(ObjGhaka* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
+    s16 yaw = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         func_80B3C29C(this);
-    } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
-        if (distDiff <= -0x5556 || distDiff >= 0x5556) {
-            func_800B863C(&this->dyna.actor, play);
+    } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) || this->dyna.actor.isTargeted) {
+        if ((yaw <= -0x5556) || (yaw >= 0x5556)) {
+            Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->dyna.actor.textId = 0xCF3;
             } else {
@@ -85,8 +85,8 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         }
     }
 
-    if (this->dyna.pushForce < 0.0f && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20) &&
-        player->transformation == PLAYER_FORM_GORON) {
+    if ((this->dyna.pushForce < 0.0f) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20) &&
+        (player->transformation == PLAYER_FORM_GORON)) {
         func_80B3C2B0(this);
     } else {
         player->stateFlags2 &= ~PLAYER_STATE2_10;
@@ -107,19 +107,19 @@ void func_80B3C4E0(ObjGhaka* this, PlayState* play) {
         if (Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->dyna.actor.textId = 0xCF5;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
 
                 case 1:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     this->dyna.actor.textId = 0xCF7;
                     Message_StartTextbox(play, this->dyna.actor.textId, &this->dyna.actor);
                     break;
 
                 case 2:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
                     func_80B3C260(this);
@@ -141,9 +141,9 @@ void func_80B3C624(ObjGhaka* this, PlayState* play) {
         func_80B3C2C4(this, play);
         SET_WEEKEVENTREG(WEEKEVENTREG_20_20);
         func_80B3C260(this);
-        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
+        Audio_PlaySfx_AtPos(&D_80B3C960, NA_SE_EV_BLOCK_BOUND);
     } else {
-        Audio_PlaySfxAtPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Audio_PlaySfx_AtPos(&D_80B3C960, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 
@@ -158,7 +158,7 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&object_ghaka_Colheader_003CD0, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-    if (this->dyna.actor.floorPoly == 0) {
+    if (this->dyna.actor.floorPoly == NULL) {
         Actor_Kill(&this->dyna.actor);
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {

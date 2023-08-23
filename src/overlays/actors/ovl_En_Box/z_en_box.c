@@ -72,17 +72,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
 };
 
-typedef struct {
-    /* 0x0 */ f32 data[5];
-} EnBox_PlaybackSpeed; // 0x14
-
-static EnBox_PlaybackSpeed sPlaybackSpeed = { { 1.5f, 1.0f, 1.5f, 1.0f, 1.5f } };
-
-static AnimationHeader* sBigChestAnimations[5] = {
-    &gBoxBigChestOpenAdultAnim, &gBoxBigChestOpenGoronAnim, &gBoxBigChestOpenAdultAnim,
-    &gBoxBigChestOpenDekuAnim,  &gBoxBigChestOpenChildAnim,
-};
-
 void EnBox_SetupAction(EnBox* this, EnBoxActionFunc func) {
     this->actionFunc = func;
 }
@@ -191,12 +180,12 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
     EnBox* this = THIS;
     s16 csId;
     CollisionHeader* colHeader;
-    f32 animFrame;
-    f32 animFrameEnd;
+    f32 startFrame;
+    f32 endFrame;
 
     colHeader = NULL;
-    animFrame = 0.0f;
-    animFrameEnd = Animation_GetLastFrame(&gBoxChestOpenAnim);
+    startFrame = 0.0f;
+    endFrame = Animation_GetLastFrame(&gBoxChestOpenAnim);
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, 0);
     CollisionHeader_GetVirtual(&gBoxChestCol, &colHeader);
@@ -227,7 +216,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
         this->iceSmokeTimer = 100;
         EnBox_SetupAction(this, EnBox_Open);
         this->movementFlags |= ENBOX_MOVE_STICK_TO_GROUND;
-        animFrame = animFrameEnd;
+        startFrame = endFrame;
     } else if (((this->type == ENBOX_TYPE_BIG_SWITCH_FLAG_FALL) || (this->type == ENBOX_TYPE_SMALL_SWITCH_FLAG_FALL)) &&
                !Flags_GetSwitch(play, this->switchFlag)) {
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -283,7 +272,7 @@ void EnBox_Init(Actor* thisx, PlayState* play) {
 
     SkelAnime_Init(play, &this->skelAnime, &gBoxChestSkel, &gBoxChestOpenAnim, this->jointTable, this->morphTable,
                    OBJECT_BOX_CHEST_LIMB_MAX);
-    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, animFrame, animFrameEnd, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBoxChestOpenAnim, 1.5f, startFrame, endFrame, ANIMMODE_ONCE, 0.0f);
     if (Actor_IsSmallChest(this)) {
         Actor_SetScale(&this->dyna.actor, 0.0075f);
         Actor_SetFocus(&this->dyna.actor, 20.0f);
@@ -364,7 +353,7 @@ void EnBox_Fall(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
             EnBox_SetupAction(this, EnBox_WaitOpen);
         }
-        Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_BOUND);
+        Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_BOUND);
         EnBox_SpawnDust(this, play);
     }
     yDiff = this->dyna.actor.world.pos.y - this->dyna.actor.floorHeight;
@@ -419,7 +408,7 @@ void func_80868AFC(EnBox* this, PlayState* play) {
         EnBox_SetupAction(this, func_80868B74);
         this->unk_1A0 = 0;
         func_80867FBC(&this->unk_1F4, play, (this->movementFlags & ENBOX_MOVE_0x80) != 0);
-        Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
+        Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, NA_SE_EV_TRE_BOX_APPEAR);
     }
 }
 
@@ -434,7 +423,7 @@ void func_80868B74(EnBox* this, PlayState* play) {
             this->dyna.actor.world.pos.y += 1.25f;
         }
         this->unk_1A0++;
-        if ((this->csId1 != -1) && CutsceneManager_GetCurrentCsId() == this->csId1) {
+        if ((this->csId1 != CS_ID_NONE) && (CutsceneManager_GetCurrentCsId() == this->csId1)) {
             if (this->unk_1A0 == 2) {
                 func_800B724C(play, &this->dyna.actor, PLAYER_CSMODE_4);
             } else if (this->unk_1A0 == 22) {
@@ -452,32 +441,40 @@ void func_80868B74(EnBox* this, PlayState* play) {
 }
 
 void EnBox_WaitOpen(EnBox* this, PlayState* play) {
+    static AnimationHeader* sBigChestAnimations[PLAYER_FORM_MAX] = {
+        &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_FIERCE_DEITY
+        &gBoxBigChestOpenGoronAnim, // PLAYER_FORM_GORON
+        &gBoxBigChestOpenAdultAnim, // PLAYER_FORM_ZORA
+        &gBoxBigChestOpenDekuAnim,  // PLAYER_FORM_DEKU
+        &gBoxBigChestOpenChildAnim, // PLAYER_FORM_HUMAN
+    };
     s32 pad;
-    AnimationHeader* animHeader;
-    f32 frameCount;
-    f32 playbackSpeed;
-    EnBox_PlaybackSpeed playbackSpeedTable;
-    Player* player;
-    Vec3f offset;
+    AnimationHeader* anim;
+    f32 endFrame;
+    f32 playSpeed;
 
     this->alpha = 255;
     this->movementFlags |= ENBOX_MOVE_IMMOBILE;
     if ((this->unk_1EC != 0) && ((this->csId2 < 0) || (CutsceneManager_GetCurrentCsId() == this->csId2) ||
                                  (CutsceneManager_GetCurrentCsId() == CS_ID_NONE))) {
         if (this->unk_1EC < 0) {
-            animHeader = &gBoxChestOpenAnim;
-            playbackSpeed = 1.5f;
+            anim = &gBoxChestOpenAnim;
+            playSpeed = 1.5f;
         } else {
-            u8 playerForm;
+            f32 sPlaybackSpeeds[PLAYER_FORM_MAX] = {
+                1.5f, // PLAYER_FORM_FIERCE_DEITY
+                1.0f, // PLAYER_FORM_GORON
+                1.5f, // PLAYER_FORM_ZORA
+                1.0f, // PLAYER_FORM_DEKU
+                1.5f, // PLAYER_FORM_HUMAN
+            };
 
-            playbackSpeedTable = sPlaybackSpeed;
-            playerForm = gSaveContext.save.playerForm;
-            animHeader = sBigChestAnimations[playerForm];
-            playbackSpeed = playbackSpeedTable.data[playerForm];
+            anim = sBigChestAnimations[GET_PLAYER_FORM];
+            playSpeed = sPlaybackSpeeds[GET_PLAYER_FORM];
         }
 
-        frameCount = Animation_GetLastFrame(animHeader);
-        Animation_Change(&this->skelAnime, animHeader, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0.0f);
+        endFrame = Animation_GetLastFrame(anim);
+        Animation_Change(&this->skelAnime, anim, playSpeed, 0.0f, endFrame, ANIMMODE_ONCE, 0.0f);
         EnBox_SetupAction(this, EnBox_Open);
         if (this->unk_1EC > 0) {
             Actor_SpawnAsChild(&play->actorCtx, &this->dyna.actor, play, ACTOR_DEMO_TRE_LGT,
@@ -496,9 +493,11 @@ void EnBox_WaitOpen(EnBox* this, PlayState* play) {
             Flags_SetTreasure(play, ENBOX_GET_CHEST_FLAG(&this->dyna.actor));
         }
     } else {
-        player = GET_PLAYER(play);
+        Player* player = GET_PLAYER(play);
+        Vec3f offset;
+
         Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
-        if (offset.z > -50.0f && offset.z < 0.0f && fabsf(offset.y) < 10.0f && fabsf(offset.x) < 20.0f &&
+        if ((offset.z > -50.0f) && (offset.z < 0.0f) && (fabsf(offset.y) < 10.0f) && (fabsf(offset.x) < 20.0f) &&
             Player_IsFacingActor(&this->dyna.actor, 0x3000, play)) {
             if (((this->getItemId == GI_HEART_PIECE) || (this->getItemId == GI_BOTTLE)) &&
                 Flags_GetCollectible(play, this->collectableFlag)) {
@@ -550,17 +549,16 @@ void EnBox_Open(EnBox* this, PlayState* play) {
         s32 bgId;
         u16 sfxId = 0;
 
-        if (Animation_OnFrame(&this->skelAnime, gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
+        if (Animation_OnFrame(&this->skelAnime, GET_PLAYER_FORM == PLAYER_FORM_DEKU ? 14.0f : 30.0f)) {
             sfxId = NA_SE_EV_TBOX_UNLOCK;
-        } else if (Animation_OnFrame(&this->skelAnime,
-                                     gSaveContext.save.playerForm == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
+        } else if (Animation_OnFrame(&this->skelAnime, GET_PLAYER_FORM == PLAYER_FORM_DEKU ? 15.0f : 90.0f)) {
             sfxId = NA_SE_EV_TBOX_OPEN;
         }
-        if (sfxId != 0) {
-            Audio_PlaySfxAtPos(&this->dyna.actor.projectedPos, sfxId);
+        if (sfxId != NA_SE_NONE) {
+            Audio_PlaySfx_AtPos(&this->dyna.actor.projectedPos, sfxId);
         }
-        if (this->skelAnime.jointTable[3].z > 0) {
-            this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[3].z) * 0.00006f;
+        if (this->skelAnime.jointTable[OBJECT_BOX_CHEST_LIMB_03].z > 0) {
+            this->unk_1A8 = (0x7D00 - this->skelAnime.jointTable[OBJECT_BOX_CHEST_LIMB_03].z) * 0.00006f;
             if (this->unk_1A8 < 0.0f) {
                 this->unk_1A8 = 0.0f;
             } else if (this->unk_1A8 > 1.0f) {
@@ -583,7 +581,7 @@ void EnBox_SpawnIceSmoke(EnBox* this, PlayState* play) {
 
     this->iceSmokeTimer++;
     //! @bug sfxId should be NA_SE_EN_MIMICK_BREATH, but uses OoT's sfxId value
-    func_800B9010(&this->dyna.actor, NA_SE_EN_LAST3_COIL_ATTACK_OLD - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EN_LAST3_COIL_ATTACK_OLD - SFX_FLAG);
     if (Rand_ZeroOne() < 0.3f) {
         randomf = 2.0f * Rand_ZeroOne() - 1.0f;
         pos = this->dyna.actor.world.pos;

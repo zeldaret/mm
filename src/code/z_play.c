@@ -1,11 +1,33 @@
-#include "global.h"
+#include "z64.h"
+#include "regs.h"
+#include "functions.h"
+#include "z64vismono.h"
+
+// Variables are put before most headers as a hacky way to bypass bss reordering
+s16 sTransitionFillTimer;
+Input D_801F6C18;
+TransitionTile sTransitionTile;
+s32 gTransitionTileState;
+VisMono sPlayVisMono;
+Color_RGBA8_u32 gVisMonoColor;
+Struct_80140E80 D_801F6D38;
+Struct_80140E80* D_801F6D4C;
+BombersNotebook sBombersNotebook;
+u8 sBombersNotebookOpen;
+u8 sMotionBlurStatus;
+
+#include "variables.h"
+#include "macros.h"
 #include "buffers.h"
+#include "idle.h"
+#include "sys_cfb.h"
 #include "z64bombers_notebook.h"
 #include "z64debug_display.h"
 #include "z64quake.h"
 #include "z64rumble.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+
 #include "overlays/gamestates/ovl_daytelop/z_daytelop.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
@@ -13,18 +35,6 @@
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
-
-s16 sTransitionFillTimer;
-Input D_801F6C18;
-TransitionTile sTransitionTile;
-s32 gTransitionTileState;
-VisMono sVisMono;
-Color_RGBA8_u32 gVisMonoColor;
-Struct_80140E80 D_801F6D38;
-Struct_80140E80* D_801F6D4C;
-BombersNotebook sBombersNotebook;
-u8 sBombersNotebookOpen;
-u8 sMotionBlurStatus;
 
 typedef enum {
     /* 0 */ MOTION_BLUR_OFF,
@@ -404,7 +414,7 @@ void Play_Destroy(GameState* thisx) {
 
     ShrinkWindow_Destroy();
     TransitionFade_Destroy(&this->unk_18E48);
-    VisMono_Destroy(&sVisMono);
+    VisMono_Destroy(&sPlayVisMono);
     func_80140EA0(D_801F6D4C);
     D_801F6D4C = NULL;
 
@@ -718,7 +728,7 @@ void Play_UpdateTransition(PlayState* this) {
                     if (gTransitionTileState == TRANS_TILE_READY) {
                         TransitionTile_Destroy(&sTransitionTile);
                         gTransitionTileState = TRANS_TILE_OFF;
-                        Game_SetFramerateDivisor(&this->state, 3);
+                        GameState_SetFramerateDivisor(&this->state, 3);
                     }
                 }
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
@@ -765,7 +775,7 @@ void Play_UpdateTransition(PlayState* this) {
 
             if (sTransitionFillTimer >= 20) {
                 gTransitionTileState = TRANS_TILE_OFF;
-                Game_SetFramerateDivisor(&this->state, 3);
+                GameState_SetFramerateDivisor(&this->state, 3);
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
                 this->envCtx.fillScreen = false;
@@ -799,7 +809,7 @@ void Play_UpdateTransition(PlayState* this) {
                 this->transitionMode = TRANS_MODE_OFF;
             } else {
                 gTransitionTileState = TRANS_TILE_OFF;
-                Game_SetFramerateDivisor(&this->state, 3);
+                GameState_SetFramerateDivisor(&this->state, 3);
                 this->transitionTrigger = TRANS_TRIGGER_OFF;
                 this->transitionMode = TRANS_MODE_OFF;
             }
@@ -824,11 +834,11 @@ void Play_UpdateTransition(PlayState* this) {
             break;
 
         case TRANS_MODE_SANDSTORM:
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA < 110) {
                     gTransitionTileState = TRANS_TILE_OFF;
-                    Game_SetFramerateDivisor(&this->state, 3);
+                    GameState_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
@@ -859,12 +869,12 @@ void Play_UpdateTransition(PlayState* this) {
             break;
 
         case TRANS_MODE_SANDSTORM_END:
-            func_8019F128(NA_SE_EV_SAND_STORM - SFX_FLAG);
+            Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
 
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
                 if (this->envCtx.sandstormPrimA <= 0) {
                     gTransitionTileState = TRANS_TILE_OFF;
-                    Game_SetFramerateDivisor(&this->state, 3);
+                    GameState_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
@@ -887,7 +897,7 @@ void Play_UpdateTransition(PlayState* this) {
 
                 if (gSaveContext.cutsceneTransitionControl <= 100) {
                     gTransitionTileState = TRANS_TILE_OFF;
-                    Game_SetFramerateDivisor(&this->state, 3);
+                    GameState_SetFramerateDivisor(&this->state, 3);
                     this->transitionTrigger = TRANS_TRIGGER_OFF;
                     this->transitionMode = TRANS_MODE_OFF;
                 }
@@ -935,7 +945,7 @@ void Play_UpdateMain(PlayState* this) {
                     } else {
                         sTransitionTile.zBuffer = gZBufferPtr;
                         gTransitionTileState = TRANS_TILE_READY;
-                        Game_SetFramerateDivisor(&this->state, 1);
+                        GameState_SetFramerateDivisor(&this->state, 1);
                     }
                     break;
 
@@ -1064,7 +1074,7 @@ void Play_Update(PlayState* this) {
         this->msgCtx.msgMode = 0;
         this->msgCtx.currentTextId = 0;
         this->msgCtx.stateTimer = 0;
-        play_sound(NA_SE_SY_CANCEL);
+        Audio_PlaySfx(NA_SE_SY_CANCEL);
     }
     if (sBombersNotebookOpen) {
         BombersNotebook_Update(this, &sBombersNotebook, this->state.input);
@@ -1225,8 +1235,8 @@ void Play_DrawMain(PlayState* this) {
             TransitionFade_Draw(&this->unk_18E48, &sp218);
 
             if (gVisMonoColor.a != 0) {
-                sVisMono.primColor.rgba = gVisMonoColor.rgba;
-                VisMono_Draw(&sVisMono, &sp218);
+                sPlayVisMono.primColor.rgba = gVisMonoColor.rgba;
+                VisMono_Draw(&sPlayVisMono, &sp218);
             }
 
             gSPEndDisplayList(sp218++);
@@ -2090,8 +2100,8 @@ void Play_Init(GameState* thisx) {
     s32 scene;
 
     if ((gSaveContext.respawnFlag == -4) || (gSaveContext.respawnFlag == -0x63)) {
-        if (CHECK_EVENTINF(EVENTINF_27)) {
-            CLEAR_EVENTINF(EVENTINF_27);
+        if (CHECK_EVENTINF(EVENTINF_TRIGGER_DAYTELOP)) {
+            CLEAR_EVENTINF(EVENTINF_TRIGGER_DAYTELOP);
             STOP_GAMESTATE(&this->state);
             SET_NEXT_GAMESTATE(&this->state, DayTelop_Init, sizeof(DayTelopState));
             return;
@@ -2148,7 +2158,7 @@ void Play_Init(GameState* thisx) {
         }
 
         // "First cycle" Termina Field
-        if (INV_CONTENT(ITEM_OCARINA) != ITEM_OCARINA) {
+        if (INV_CONTENT(ITEM_OCARINA_OF_TIME) != ITEM_OCARINA_OF_TIME) {
             if ((scene == ENTR_SCENE_TERMINA_FIELD) &&
                 (((void)0, gSaveContext.save.entrance) != ENTRANCE(TERMINA_FIELD, 10))) {
                 gSaveContext.nextCutsceneIndex = 0xFFF4;
@@ -2297,7 +2307,7 @@ void Play_Init(GameState* thisx) {
     TransitionFade_SetType(&this->unk_18E48, 3);
     TransitionFade_SetColor(&this->unk_18E48, RGBA8(160, 160, 160, 255));
     TransitionFade_Start(&this->unk_18E48);
-    VisMono_Init(&sVisMono);
+    VisMono_Init(&sPlayVisMono);
 
     gVisMonoColor.a = 0;
     D_801F6D4C = &D_801F6D38;

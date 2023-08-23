@@ -209,8 +209,8 @@ s32 SubS_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 stepRo
     return true;
 }
 
-void SubS_UpdateFlags(u16* flags, u16 setBits, u16 unsetBits) {
-    *flags = (*flags & ~unsetBits) | setBits;
+void SubS_SetOfferMode(u16* flags, u16 offerMode, u16 mask) {
+    *flags = (*flags & ~mask) | offerMode;
 }
 
 /**
@@ -815,60 +815,68 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst) {
     return true;
 }
 
-//! TODO: Needs docs with func_800B8500
-s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, s32 type) {
-    s32 ret = false;
+/**
+ * Attempt to extend different offers to the player based on different checks
+ * and on the provided mode (see SubSOfferMode).
+ *
+ * The offer types are either GetItem (see Actor_OfferGetItem) or TalkExchange (see Actor_OfferTalkExchange),
+ * with more check variants provided for TalkExchange offers.
+ *
+ * @return `true` if offer was extended and the player can accept it
+ */
+s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode) {
+    s32 canAccept = false;
     s16 x;
     s16 y;
     f32 xzDistToPlayerTemp;
 
     Actor_GetScreenPos(play, actor, &x, &y);
 
-    switch (type) {
-        case 1:
+    switch (mode) {
+        case SUBS_OFFER_MODE_GET_ITEM:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
-            ret = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
+            canAccept = Actor_OfferGetItem(actor, play, itemId, xzRange, yRange);
             break;
 
-        case 2:
+        case SUBS_OFFER_MODE_NEARBY:
             if ((fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 3:
+        case SUBS_OFFER_MODE_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT))) {
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 4:
+        case SUBS_OFFER_MODE_AUTO:
             yRange = fabsf(actor->playerHeightRel) + 1.0f;
             xzRange = actor->xzDistToPlayer + 1.0f;
             xzDistToPlayerTemp = actor->xzDistToPlayer;
             actor->xzDistToPlayer = 0.0f;
             actor->flags |= ACTOR_FLAG_10000;
-            ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+            canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             actor->xzDistToPlayer = xzDistToPlayerTemp;
             break;
 
-        case 5:
+        case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
-        case 6:
+        case SUBS_OFFER_MODE_AUTO_NEARBY_ONSCREEN:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
                 (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange)) {
                 actor->flags |= ACTOR_FLAG_10000;
-                ret = func_800B8500(actor, play, xzRange, yRange, itemId);
+                canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
             break;
 
@@ -876,7 +884,7 @@ s32 func_8013C964(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 it
             break;
     }
 
-    return ret;
+    return canAccept;
 }
 
 const u8 sShadowMaps[4][12][12] = {
@@ -966,7 +974,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     s32 startRow;
 
     for (i = 0; i < bodyPartsNum; i++) {
-        if (parentBodyParts[i] >= 0) {
+        if (parentBodyParts[i] > BODYPART_NONE) {
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 
@@ -1186,13 +1194,24 @@ Actor* SubS_FindActor(PlayState* play, Actor* actorListStart, u8 actorCategory, 
     return actor;
 }
 
-s32 SubS_FillLimbRotTables(PlayState* play, s16* limbRotTableY, s16* limbRotTableZ, s32 numLimbs) {
-    s32 i;
+/**
+ * Fills two tables with rotation angles that can be used to simulate idle animations.
+ *
+ * The rotation angles are dependent on the current frame, so should be updated regularly, generally every frame.
+ *
+ * This is done for the desired limb by taking either the `sin` of the yTable value or the `cos` of the zTable value,
+ * multiplying by some scale factor (generally 200), and adding that to the already existing rotation.
+ *
+ * Note: With the common scale factor of 200, this effect is practically unnoticeable if the current animation already
+ * has motion involved.
+ */
+s32 SubS_UpdateFidgetTables(PlayState* play, s16* fidgetTableY, s16* fidgetTableZ, s32 tableLen) {
     u32 frames = play->gameplayFrames;
+    s32 i;
 
-    for (i = 0; i < numLimbs; i++) {
-        limbRotTableY[i] = (i * 50 + 0x814) * frames;
-        limbRotTableZ[i] = (i * 50 + 0x940) * frames;
+    for (i = 0; i < tableLen; i++) {
+        fidgetTableY[i] = (i * 50 + 0x814) * frames;
+        fidgetTableZ[i] = (i * 50 + 0x940) * frames;
     }
 
     return true;
@@ -1493,10 +1512,10 @@ s32 SubS_LineSegVsPlane(Vec3f* point, Vec3s* rot, Vec3f* unitVec, Vec3f* linePoi
 
 /**
  * Finds the first actor instance of a specified Id and category verified with a custom callback.
- * The callback should return `true` when the actor is succesfully verified.
+ * The callback should return `true` when the actor is successfully verified.
  */
 Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart, u8 actorCategory, s16 actorId,
-                            void* verifyData, VerifyActor verifyActor) {
+                            void* verifyData, VerifyFindActorFunc verifyActorFunc) {
     Actor* actorIter = actorListStart;
 
     if (actorListStart == NULL) {
@@ -1506,36 +1525,40 @@ Actor* SubS_FindActorCustom(PlayState* play, Actor* actor, Actor* actorListStart
     while ((actorIter != NULL) &&
            ((actorId != actorIter->id) ||
             ((actorId == actorIter->id) &&
-             ((verifyActor == NULL) || ((verifyActor != NULL) && !verifyActor(play, actor, actorIter, verifyData)))))) {
+             ((verifyActorFunc == NULL) ||
+              ((verifyActorFunc != NULL) && !verifyActorFunc(play, actor, actorIter, verifyData)))))) {
         actorIter = actorIter->next;
     }
 
     return actorIter;
 }
 
-//! TODO: Needs docs with func_800B8500
-s32 func_8013E748(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemId, void* data,
-                  func_8013E748_VerifyFunc verifyFunc) {
-    s32 ret = false;
+/**
+ * Will extend a TalkExchange offer to the player if the actor is verified with a custom callback.
+ * The callback should return `true` when the actor is successfully verified.
+ */
+s32 SubS_OfferTalkExchangeCustom(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
+                                 void* data, VerifyTalkExchangeActorFunc verifyActorFunc) {
+    s32 canAccept = false;
 
-    if ((verifyFunc == NULL) || ((verifyFunc != NULL) && verifyFunc(play, actor, data))) {
-        ret = func_800B8500(actor, play, xzRange, yRange, exchangeItemId);
+    if ((verifyActorFunc == NULL) || ((verifyActorFunc != NULL) && verifyActorFunc(play, actor, data))) {
+        canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, exchangeItemAction);
     }
-    return ret;
+    return canAccept;
 }
 
 s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) {
     Player* player = GET_PLAYER(play);
-    Vec3s* yawTols = (Vec3s*)data;
+    Vec3s* yawRanges = (Vec3s*)data;
     s16 playerYaw = ABS(BINANG_SUB(Actor_WorldYawTowardActor(&player->actor, actor), player->actor.shape.rot.y));
     s16 actorYaw = ABS(BINANG_SUB(actor->yawTowardsPlayer, actor->shape.rot.y));
     s32 areFacing = false;
-    s32 actorYawTol = ABS(yawTols->y);
-    s32 playerYawTol;
+    s32 actorYawRange = ABS(yawRanges->y);
+    s32 playerYawRange;
 
-    if (actorYaw < (s16)actorYawTol) {
-        playerYawTol = ABS(yawTols->x);
-        if (playerYaw < (s16)playerYawTol) {
+    if (actorYaw < (s16)actorYawRange) {
+        playerYawRange = ABS(yawRanges->x);
+        if (playerYaw < (s16)playerYawRange) {
             areFacing = true;
         }
     }
@@ -1543,14 +1566,14 @@ s32 SubS_ActorAndPlayerFaceEachOther(PlayState* play, Actor* actor, void* data) 
     return areFacing;
 }
 
-//! TODO: Needs docs with func_800B8500
-s32 func_8013E8F8(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exhangeItemId, s16 playerYawTol,
-                  s16 actorYawTol) {
-    Vec3s yawTols;
+s32 SubS_OfferTalkExchangeFacing(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 exchangeItemAction,
+                                 s16 playerYawRange, s16 actorYawRange) {
+    Vec3s yawRanges;
 
-    yawTols.x = playerYawTol;
-    yawTols.y = actorYawTol;
-    return func_8013E748(actor, play, xzRange, yRange, exhangeItemId, &yawTols, SubS_ActorAndPlayerFaceEachOther);
+    yawRanges.x = playerYawRange;
+    yawRanges.y = actorYawRange;
+    return SubS_OfferTalkExchangeCustom(actor, play, xzRange, yRange, exchangeItemAction, &yawRanges,
+                                        SubS_ActorAndPlayerFaceEachOther);
 }
 
 /**

@@ -144,13 +144,14 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_10) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_16_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         this->unk_3A8 = 0x838;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_17_01)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -200,7 +201,7 @@ void func_80AD3664(EnTrt2* this, PlayState* play) {
         CutsceneManager_Queue(this->csId);
         return;
     }
-    func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
 }
 
 void func_80AD36EC(EnTrt2* this, PlayState* play) {
@@ -227,7 +228,7 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
         }
     }
     Actor_MoveWithGravity(&this->actor);
-    func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
@@ -281,7 +282,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
     }
 
     Actor_MoveWithoutGravity(&this->actor);
-    func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
 }
 
 void func_80AD3A24(EnTrt2* this, PlayState* play) {
@@ -378,7 +379,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
-            SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
+            SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS);
             this->unk_3A8 = 0x88E;
             Message_StartTextbox(play, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -391,11 +392,11 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) ||
-                !CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) ||
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 this->unk_3B2 = 12;
             } else {
-                SET_WEEKEVENTREG(WEEKEVENTREG_85_10);
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS);
                 this->unk_3A8 = 0x88E;
                 Message_StartTextbox(play, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
@@ -410,13 +411,13 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_12_10);
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE);
         }
-        SET_WEEKEVENTREG(WEEKEVENTREG_84_40);
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_10)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
@@ -425,7 +426,7 @@ void func_80AD3FF4(EnTrt2* this, PlayState* play) {
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_3B2 = 13;
     }
 }
@@ -436,7 +437,7 @@ void func_80AD4110(EnTrt2* this, PlayState* play) {
         Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -505,7 +506,7 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
                 func_800B3030(play, &sp68, &sp5C, &sp5C, 100, 0, 3);
             }
 
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
     } else if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, play);
@@ -710,7 +711,7 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     }
 
     if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
-        func_800B863C(&this->actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 
     return true;
@@ -743,12 +744,12 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_08)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
         Actor_Kill(&this->actor);
         return;
     }
 
-    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_84_40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         Actor_Kill(&this->actor);
         return;
     }

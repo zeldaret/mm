@@ -185,7 +185,8 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
         return false;
     }
 
-    if (BgCheck_AnyLineTest1(&play->colCtx, pos, &player->bodyPartsPos[7], &posResult, &outPoly, false)) {
+    if (BgCheck_AnyLineTest1(&play->colCtx, pos, &player->bodyPartsPos[PLAYER_BODYPART_HEAD], &posResult, &outPoly,
+                             false)) {
         return false;
     } else {
         return true;
@@ -478,7 +479,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 visionRange = gSaveContext.save.isNight ? 200.0f : 280.0f;
 
-    if (player->csMode == 0x1A) {
+    if (player->csMode == PLAYER_CSMODE_26) {
         this->picto.actor.speed = 0.0f;
         this->actionFunc = EnGe2_SetupCharge;
         Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
@@ -493,8 +494,8 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
                                    this->picto.actor.shape.rot.y, 0x1800, visionRange, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
             this->picto.actor.speed = 0.0f;
-            func_800B7298(play, &this->picto.actor, 0x1A);
-            func_801000A4(NA_SE_SY_FOUND);
+            func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_26);
+            Lib_PlaySfx(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->actionFunc = EnGe2_SetupCharge;
             Animation_Change(&this->skelAnime, &gGerudoPurpleLookingAboutAnim, 1.0f, 0.0f,
@@ -678,8 +679,8 @@ void EnGe2_GuardStationary(EnGe2* this, PlayState* play) {
     if (EnGe2_LookForPlayer(play, &this->picto.actor, &this->picto.actor.focus.pos, this->picto.actor.shape.rot.y,
                             0x4000, 720.0f, this->verticalDetectRange)) {
         if ((GERUDO_PURPLE_GET_EXIT(&this->picto.actor) != GERUDO_PURPLE_EXIT_NONE) && !Play_InCsMode(play)) {
-            func_800B7298(play, &this->picto.actor, 0x1A);
-            func_801000A4(NA_SE_SY_FOUND);
+            func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_26);
+            Lib_PlaySfx(NA_SE_SY_FOUND);
             Message_StartTextbox(play, 0x1194, &this->picto.actor);
             this->timer = 50;
             EnGe2_SetupCapturePlayer(this);

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_bigokuta.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
 
@@ -371,7 +372,7 @@ void EnBigokuta_PlayDeathCutscene(EnBigokuta* this, PlayState* play) {
         if (this->timer == 0) {
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->drawDmgEffAlpha = 0.0f;
-            Actor_SpawnIceEffects(play, &this->picto.actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.5f, 0.35f);
+            Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, BIGOKUTA_BODYPART_MAX, 2, 0.5f, 0.35f);
             EnBigokuta_SetupDeathEffects(this);
         }
     } else if (CutsceneManager_IsNext(this->csId)) {
@@ -501,7 +502,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
                 this->drawDmgEffAlpha = 4.0f;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->bodyCollider.info.bumper.hitPos.x,
                             this->bodyCollider.info.bumper.hitPos.y, this->bodyCollider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
 
@@ -552,7 +553,7 @@ void EnBigokuta_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.6f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 1.2f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 1.2f, 0.030000001f)) {
-            func_800B9010(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->picto.actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -563,11 +564,11 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
         EnBigokuta* this = THIS;
         s32 envColor;
         s16 rotX;
-        f32 lastFrame;
+        f32 endFrame;
 
         if (this->actionFunc == EnBigokuta_PlayDeathEffects) {
-            lastFrame = Animation_GetLastFrame(&gBigOctoDeathAnim);
-            envColor = ((255.0f / lastFrame) * (lastFrame - this->skelAnime.curFrame));
+            endFrame = Animation_GetLastFrame(&gBigOctoDeathAnim);
+            envColor = ((255.0f / endFrame) * (endFrame - this->skelAnime.curFrame));
         } else {
             envColor = 255;
         }
@@ -626,26 +627,50 @@ s32 EnBigokuta_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
+static s8 sLimbToBodyParts[BIGOKUTA_LIMB_MAX] = {
+    BODYPART_NONE,       // BIGOKUTA_LIMB_NONE
+    BODYPART_NONE,       // BIGOKUTA_LIMB_BODY
+    BODYPART_NONE,       // BIGOKUTA_LIMB_RIGHT_FRONT_ARM_BASE
+    BIGOKUTA_BODYPART_0, // BIGOKUTA_LIMB_RIGHT_FRONT_ARM_END
+    BODYPART_NONE,       // BIGOKUTA_LIMB_LEFT_FRONT_ARM_BASE
+    BIGOKUTA_BODYPART_1, // BIGOKUTA_LIMB_LEFT_FRONT_ARM_END
+    BODYPART_NONE,       // BIGOKUTA_LIMB_RIGHT_BACK_ARM_BASE
+    BIGOKUTA_BODYPART_2, // BIGOKUTA_LIMB_RIGHT_BACK_ARM_END
+    BODYPART_NONE,       // BIGOKUTA_LIMB_LEFT_BACK_ARM_BASE
+    BIGOKUTA_BODYPART_3, // BIGOKUTA_LIMB_LEFT_BACK_ARM_END
+    BIGOKUTA_BODYPART_8, // BIGOKUTA_LIMB_HEAD
+    BIGOKUTA_BODYPART_4, // BIGOKUTA_LIMB_LEFT_TENTACLE_BASE
+    BODYPART_NONE,       // BIGOKUTA_LIMB_LEFT_TENTACLE_TIP
+    BIGOKUTA_BODYPART_5, // BIGOKUTA_LIMB_RIGHT_TENTACLE_BASE
+    BODYPART_NONE,       // BIGOKUTA_LIMB_RIGHT_TENTACLE_TIP
+    BODYPART_NONE,       // BIGOKUTA_LIMB_LEFT_WEAK_POINT
+    BODYPART_NONE,       // BIGOKUTA_LIMB_RIGHT_WEAK_POINT
+    BODYPART_NONE,       // BIGOKUTA_LIMB_CENTER_SNOUT
+    BIGOKUTA_BODYPART_6, // BIGOKUTA_LIMB_RIGHT_SNOUT
+    BIGOKUTA_BODYPART_7, // BIGOKUTA_LIMB_LEFT_SNOUT
+};
+
+static Vec3f D_80AC45D0[] = {
+    { 0.0f, 2000.0f, 1000.0f },    // BIGOKUTA_BODYPART_8
+    { 0.0f, 2000.0f, -2000.0f },   // BIGOKUTA_BODYPART_9
+    { 1700.0f, 700.0f, -600.0f },  // BIGOKUTA_BODYPART_10
+    { -1700.0f, 700.0f, -600.0f }, // BIGOKUTA_BODYPART_11
+    { 0.0f, 500.0f, -2500.0f },    // BIGOKUTA_BODYPART_12
+};
+
 void EnBigokuta_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static s8 D_80AC45BC[] = {
-        -1, -1, -1, 0, -1, 1, -1, 2, -1, 3, 8, 4, -1, 5, -1, -1, -1, -1, 6, 7,
-    };
-    static Vec3f D_80AC45D0[] = {
-        { 0.0f, 2000.0f, 1000.0f },    { 0.0f, 2000.0f, -2000.0f }, { 1700.0f, 700.0f, -600.0f },
-        { -1700.0f, 700.0f, -600.0f }, { 0.0f, 500.0f, -2500.0f },
-    };
     EnBigokuta* this = THIS;
     s32 i;
-    s8 limbPosIndex = D_80AC45BC[limbIndex];
+    s8 bodyPartIndex = sLimbToBodyParts[limbIndex];
 
-    if (limbPosIndex != -1) {
-        if (limbPosIndex < 6) {
-            Matrix_MultVecX(800.0f, &this->limbPos[limbPosIndex]);
-        } else if (limbPosIndex < 8) {
-            Matrix_MultZero(&this->limbPos[limbPosIndex]);
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex <= BIGOKUTA_BODYPART_5) {
+            Matrix_MultVecX(800.0f, &this->bodyPartsPos[bodyPartIndex]);
+        } else if (bodyPartIndex <= BIGOKUTA_BODYPART_7) {
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
         } else {
             for (i = 0; i < ARRAY_COUNT(D_80AC45D0); i++) {
-                Matrix_MultVec3f(&D_80AC45D0[i], &this->limbPos[limbPosIndex + i]);
+                Matrix_MultVec3f(&D_80AC45D0[i], &this->bodyPartsPos[bodyPartIndex + i]);
             }
         }
     }
@@ -676,7 +701,7 @@ void EnBigokuta_Draw(Actor* thisx, PlayState* play) {
                                NULL, EnBigokuta_PostLimbDraw, &this->picto.actor, &gfx[2]);
     }
 
-    Actor_DrawDamageEffects(play, &this->picto.actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->picto.actor, this->bodyPartsPos, BIGOKUTA_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);

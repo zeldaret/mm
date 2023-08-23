@@ -250,7 +250,7 @@ s32 func_80B50854(EnGk* this, PlayState* play) {
     if (!(this->unk_1E4 & 0x40)) {
         if (player->stateFlags2 & PLAYER_STATE2_8000000) {
             this->unk_1E4 |= 0x40;
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
     } else if (!(player->stateFlags2 & PLAYER_STATE2_8000000)) {
         this->unk_1E4 &= ~0x40;
@@ -534,8 +534,6 @@ void func_80B51510(EnGk* this, PlayState* play) {
     s32 pad;
     s32 cueChannel;
 
-    if (this) {}
-
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_479)) {
         cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_479);
 
@@ -576,6 +574,9 @@ void func_80B51510(EnGk* this, PlayState* play) {
 
                 case 7:
                     Flags_SetSwitch(play, ENGK_GET_3F00(&this->actor));
+                    break;
+
+                default:
                     break;
             }
             Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, this->unk_31A);
@@ -647,7 +648,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
             }
         } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
                    (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
 
         if (this->unk_1E4 & 4) {
@@ -689,7 +690,7 @@ void func_80B51970(EnGk* this, PlayState* play) {
     }
 
     if (this->unk_1E4 & 2) {
-        func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
+        Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
         if (this->unk_2E4 != 10) {
             if (this->unk_2E4 != 9) {
                 this->unk_2E4 = 9;
@@ -741,13 +742,13 @@ void func_80B51B40(EnGk* this, PlayState* play) {
     } else if ((talkState == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 this->unk_31C = 0xE8E;
                 Message_StartTextbox(play, this->unk_31C, &this->actor);
                 break;
 
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->unk_31C = 0xE8A;
                 Message_StartTextbox(play, this->unk_31C, &this->actor);
                 break;
@@ -755,7 +756,7 @@ void func_80B51B40(EnGk* this, PlayState* play) {
     }
 
     if (this->unk_1E4 & 2) {
-        func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
+        Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
         if (this->unk_2E4 != 10) {
             if (this->unk_2E4 != 9) {
                 this->unk_2E4 = 9;
@@ -832,7 +833,7 @@ void func_80B51EA4(EnGk* this, PlayState* play) {
 void func_80B51FD0(EnGk* this, PlayState* play) {
     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
         if (this->unk_1E4 & 2) {
-            func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
+            Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
         } else {
             this->unk_1E4 |= 2;
         }
@@ -851,7 +852,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
             SET_WEEKEVENTREG(WEEKEVENTREG_24_80);
             this->actionFunc = func_80B51698;
         } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->actor.textId = 0xE74;
             } else {
@@ -862,7 +863,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
         if (this->unk_1E4 & 2) {
             if ((play->msgCtx.ocarinaMode != 1) && (play->msgCtx.ocarinaMode != 3) &&
                 (play->csCtx.state == CS_STATE_IDLE)) {
-                func_801A4748(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
+                Audio_PlaySfx_AtFixedPos(&this->actor.projectedPos, NA_SE_EN_GOLON_KID_CRY - SFX_FLAG);
             }
         } else {
             this->unk_1E4 |= 2;
@@ -919,7 +920,7 @@ void func_80B52340(EnGk* this, PlayState* play) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -980,7 +981,7 @@ void func_80B525E0(EnGk* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_31C, &this->actor);
         this->actionFunc = func_80B52430;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 

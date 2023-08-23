@@ -361,14 +361,14 @@ void EnMttag_Race(EnMttag* this, PlayState* play) {
 
     if (EnMttag_IsInFinishLine(playerPos)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_GOAL | SEQ_FLAG_ASYNC);
         this->timer = 55;
         SET_EVENTINF(EVENTINF_11);
         this->actionFunc = EnMttag_RaceFinish;
     } else if (EnMttag_IsAnyRaceGoronOverFinishLine(this)) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_6;
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GORON_GOAL | SEQ_FLAG_ASYNC);
         this->timer = 55;
         SET_EVENTINF(EVENTINF_12);
@@ -456,7 +456,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         if (play->msgCtx.choiceIndex != 0) {
             // Exit the race
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_OFF;
             EnMttag_ExitRace(play, TRANS_TYPE_FADE_BLACK, TRANS_TYPE_FADE_BLACK);
             CLEAR_EVENTINF(EVENTINF_13);
@@ -466,7 +466,7 @@ void EnMttag_HandleCantWinChoice(EnMttag* this, PlayState* play) {
         }
 
         // Keep racing
-        func_8019F208();
+        Audio_PlaySfx_MessageDecide();
         Message_CloseTextbox(play);
         func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
         CLEAR_EVENTINF(EVENTINF_13);

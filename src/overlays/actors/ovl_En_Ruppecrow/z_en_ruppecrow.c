@@ -222,7 +222,7 @@ void EnRuppecrow_ShatterIce(EnRuppecrow* this, PlayState* play) {
     if (this->currentEffect == ENRUPPECROW_EFFECT_ICE) {
         this->currentEffect = ENRUPPECROW_EFFECT_NONE;
         this->unk_2C8 = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0x2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENRUPPECROW_BODYPART_MAX, 0x2, 0.2f, 0.2f);
     }
 }
 
@@ -611,7 +611,7 @@ void EnRuppecrow_FallToDespawn(EnRuppecrow* this, PlayState* play) {
         this->unk_2CC = (this->unk_2C8 + 1.0f) * 0.25f;
         this->unk_2CC = CLAMP_MAX(this->unk_2CC, 0.5f);
     } else if (!Math_StepToF(&this->iceSfxTimer, 0.5f, 0.0125f)) {
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     }
 
     this->actor.colorFilterTimer = 40;
@@ -640,12 +640,12 @@ void EnRuppecrow_Init(Actor* thisx, PlayState* play2) {
     EnRuppecrow* this = THIS;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->joinTable, this->morphTable,
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                        OBJECT_CROW_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
 
     Collider_InitJntSph(play, &this->collider);
-    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, &this->colliderElement);
+    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 

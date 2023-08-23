@@ -430,7 +430,7 @@ typedef enum {
     /* 0x1F6 */ CS_CMD_ACTOR_CUE_502,
     /* 0x1F7 */ CS_CMD_ACTOR_CUE_503,
     /* 0x1F8 */ CS_CMD_ACTOR_CUE_504,
-    /* 0x1F9 */ CS_CMD_ACTOR_CUE_505,
+    /* 0x1F9 */ CS_CMD_ACTOR_CUE_SOTCS, // Song of Time Cutscenes (Double SoT, Three-Day Reset SoT)
     /* 0x1FA */ CS_CMD_ACTOR_CUE_506,
     /* 0x1FB */ CS_CMD_ACTOR_CUE_507,
     /* 0x1FC */ CS_CMD_ACTOR_CUE_508,
@@ -781,7 +781,7 @@ typedef struct {
     /* 0x2E */ UNK_TYPE1 unk_2E[2];
 } CutsceneCameraInterp; // size = 0x30
 
-typedef struct {
+typedef struct CutsceneCamera {
     /* 0x00 */ s16 splineIndex;
     /* 0x02 */ s16 cmdIndex;
     /* 0x04 */ s16 splineNeedsInit;
@@ -855,5 +855,11 @@ void CutsceneFlags_UnsetAll(struct PlayState* play);
 void CutsceneFlags_Set(struct PlayState* play, s16 flag);
 void CutsceneFlags_Unset(struct PlayState* play, s16 flag);
 s32 CutsceneFlags_Get(struct PlayState* play, s16 flag);
+
+extern u8 gOpeningEntranceIndex;
+
+extern u8 D_801F4DDC;
+extern u8 gDisablePlayerCsModeStartPos;
+extern s16 gDungeonBossWarpSceneId;
 
 #endif

@@ -5,6 +5,7 @@
  */
 
 #include "z_en_butte.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -164,8 +165,8 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnButte* this = THIS;
 
-    if (ENBUTTE_GET(&this->actor) == ENBUTTE_MINUS1) {
-        this->actor.params = ENBUTTE_0;
+    if (BUTTERFLY_GET(&this->actor) == BUTTERFLY_MINUS1) {
+        this->actor.params = BUTTERFLY_0;
     }
 
     this->actor.world.rot.y = Rand_Next();
@@ -173,12 +174,12 @@ void EnButte_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.rot.y = this->actor.world.rot.y;
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    if ((ENBUTTE_GET_1(&this->actor) & 0xFF) == ENBUTTE_1) {
+    if ((BUTTERFLY_GET_1(&this->actor) & 0xFF) == BUTTERFLY_1) {
         this->actor.uncullZoneScale = 200.0f;
     }
 
     SkelAnime_Init(play, &this->skelAnime, &gameplay_field_keep_Skel_002FA0, &gameplay_field_keep_Anim_001D20,
-                   this->jointTable, this->morphTable, 8);
+                   this->jointTable, this->morphTable, BUTTERFLY_LIMB_MAX);
     Collider_InitJntSph(play, &this->collider);
     Collider_SetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colldierElements);
 
@@ -286,7 +287,7 @@ void func_8091C794(EnButte* this, PlayState* play) {
         func_8091C0A0(this, &D_8091D324[this->unk_24E]);
     }
 
-    if ((ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) && (player->heldItemAction == PLAYER_IA_STICK) &&
+    if ((BUTTERFLY_GET_1(&this->actor) == BUTTERFLY_1) && (player->heldItemAction == PLAYER_IA_DEKU_STICK) &&
         (this->unk_252 <= 0) &&
         ((Math3D_Dist2DSq(player->actor.world.pos.x, player->actor.world.pos.z, this->actor.home.pos.x,
                           this->actor.home.pos.z) < SQ(120.0f)) ||
@@ -355,8 +356,8 @@ void func_8091CBB4(EnButte* this, PlayState* play) {
 
     distSq = Math3D_Dist2DSq(this->actor.world.pos.x, this->actor.world.pos.z, this->actor.home.pos.x,
                              this->actor.home.pos.z);
-    if ((player->heldItemAction != PLAYER_IA_STICK) || !(fabsf(player->actor.speed) < 1.8f) || (this->unk_252 > 0) ||
-        !(distSq < SQ(320.0f))) {
+    if ((player->heldItemAction != PLAYER_IA_DEKU_STICK) || !(fabsf(player->actor.speed) < 1.8f) ||
+        (this->unk_252 > 0) || !(distSq < SQ(320.0f))) {
         func_8091C748(this);
     } else if ((distSq > SQ(240.0f)) &&
                (Math3D_Dist2DSq(player->meleeWeaponInfo[0].tip.x, player->meleeWeaponInfo[0].tip.z,
@@ -381,7 +382,7 @@ void func_8091CFB4(EnButte* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 60, NA_SE_EV_BUTTERFRY_TO_FAIRY);
     } else if (this->unk_24C == 4) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.focus.pos.x, this->actor.focus.pos.y,
-                    this->actor.focus.pos.z, 0, this->actor.shape.rot.y, 0, 2);
+                    this->actor.focus.pos.z, 0, this->actor.shape.rot.y, 0, FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
         this->unk_250 = 0;
     } else if (this->unk_24C <= 0) {
         func_8091D070(this);
@@ -415,7 +416,7 @@ void EnButte_Update(Actor* thisx, PlayState* play) {
     this->unk_256 += 0x1000;
     this->unk_258 += 0x600;
 
-    if (ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) {
+    if (BUTTERFLY_GET_1(&this->actor) == BUTTERFLY_1) {
         if (GET_PLAYER(play)->meleeWeaponState == PLAYER_MELEE_WEAPON_STATE_0) {
             if (this->unk_252 > 0) {
                 this->unk_252--;
@@ -450,7 +451,7 @@ void EnButte_Draw(Actor* thisx, PlayState* play) {
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
     }
 
-    if ((ENBUTTE_GET_1(&this->actor) == ENBUTTE_1) && (this->actionFunc == func_8091CFB4)) {
+    if ((BUTTERFLY_GET_1(&this->actor) == BUTTERFLY_1) && (this->actionFunc == func_8091CFB4)) {
         func_8091C178(this, play);
     }
 }

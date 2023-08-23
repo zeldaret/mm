@@ -44,6 +44,7 @@ s32 EnDno_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 
 typedef enum {
+    /* -1 */ EN_DNO_ANIM_NONE = -1,
     /*  0 */ EN_DNO_ANIM_START_RACE_START,
     /*  1 */ EN_DNO_ANIM_START_RACE_END,
     /*  2 */ EN_DNO_ANIM_FLY,
@@ -63,30 +64,31 @@ typedef enum {
     /* 16 */ EN_DNO_ANIM_IMPLORE_START,
     /* 17 */ EN_DNO_ANIM_SHOCK_START,
     /* 18 */ EN_DNO_ANIM_SHOCK_LOOP,
-    /* 19 */ EN_DNO_ANIM_GRIEVE
+    /* 19 */ EN_DNO_ANIM_GRIEVE,
+    /* 20 */ EN_DNO_ANIM_MAX
 } EnDnoAnimation;
 
-static AnimationSpeedInfo sAnimations[] = {
-    { &gDekuButlerStartRaceStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerStartRaceEndAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerFlyAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerFarewellAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerGreetingAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerGreetingWithCandleAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerPrayerLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerCloseParasolAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerOpenParasolAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerImploreLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerImploreEndAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerTalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerTalkWithParasolAndCandleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerIdleWithCandleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerPrayerStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerImploreStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerShockStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gDekuButlerShockLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gDekuButlerGrieveAnim, 1.0f, ANIMMODE_LOOP, 0.0f },
+static AnimationSpeedInfo sAnimationSpeedInfo[EN_DNO_ANIM_MAX] = {
+    { &gDekuButlerStartRaceStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },           // EN_DNO_ANIM_START_RACE_START
+    { &gDekuButlerStartRaceEndAnim, 1.0f, ANIMMODE_ONCE, 0.0f },             // EN_DNO_ANIM_START_RACE_END
+    { &gDekuButlerFlyAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                      // EN_DNO_ANIM_FLY
+    { &gDekuButlerFarewellAnim, 1.0f, ANIMMODE_ONCE, 0.0f },                 // EN_DNO_ANIM_FAREWELL
+    { &gDekuButlerGreetingAnim, 1.0f, ANIMMODE_ONCE, 0.0f },                 // EN_DNO_ANIM_GREETING
+    { &gDekuButlerGreetingWithCandleAnim, 1.0f, ANIMMODE_ONCE, 0.0f },       // EN_DNO_ANIM_GREETING_WITH_CANDLE
+    { &gDekuButlerPrayerLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },               // EN_DNO_ANIM_PRAYER_LOOP
+    { &gDekuButlerCloseParasolAnim, 1.0f, ANIMMODE_ONCE, 0.0f },             // EN_DNO_ANIM_CLOSE_PARASOL
+    { &gDekuButlerOpenParasolAnim, 1.0f, ANIMMODE_ONCE, 0.0f },              // EN_DNO_ANIM_OPEN_PARASOL
+    { &gDekuButlerImploreLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },              // EN_DNO_ANIM_IMPLORE_LOOP
+    { &gDekuButlerImploreEndAnim, 1.0f, ANIMMODE_ONCE, 0.0f },               // EN_DNO_ANIM_IMPLORE_END
+    { &gDekuButlerTalkAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                     // EN_DNO_ANIM_TALK
+    { &gDekuButlerTalkWithParasolAndCandleAnim, 1.0f, ANIMMODE_LOOP, 0.0f }, // EN_DNO_ANIM_TALK_WITH_PARSOL_AND_CANDLE
+    { &gDekuButlerIdleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                     // EN_DNO_ANIM_IDLE
+    { &gDekuButlerIdleWithCandleAnim, 1.0f, ANIMMODE_LOOP, 0.0f },           // EN_DNO_ANIM_IDLE_WITH_CANDLE
+    { &gDekuButlerPrayerStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },              // EN_DNO_ANIM_PRAYER_START
+    { &gDekuButlerImploreStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },             // EN_DNO_ANIM_IMPLORE_START
+    { &gDekuButlerShockStartAnim, 1.0f, ANIMMODE_ONCE, 0.0f },               // EN_DNO_ANIM_SHOCK_START
+    { &gDekuButlerShockLoopAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                // EN_DNO_ANIM_SHOCK_LOOP
+    { &gDekuButlerGrieveAnim, 1.0f, ANIMMODE_LOOP, 0.0f },                   // EN_DNO_ANIM_GRIEVE
 };
 
 ActorInit En_Dno_InitVars = {
@@ -236,10 +238,10 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
             Collider_InitCylinder(play, &this->collider);
             Collider_SetCylinder(play, &this->collider, thisx, &sCylinderInit);
             Actor_UpdateBgCheckInfo(play, thisx, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-            Animation_Change(&this->skelAnime, sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation, 1.0f, 0.0f,
-                             Animation_GetLastFrame(sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation),
-                             sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].mode,
-                             sAnimations[EN_DNO_ANIM_IDLE_WITH_CANDLE].morphFrames);
+            Animation_Change(&this->skelAnime, sAnimationSpeedInfo[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation, 1.0f, 0.0f,
+                             Animation_GetLastFrame(sAnimationSpeedInfo[EN_DNO_ANIM_IDLE_WITH_CANDLE].animation),
+                             sAnimationSpeedInfo[EN_DNO_ANIM_IDLE_WITH_CANDLE].mode,
+                             sAnimationSpeedInfo[EN_DNO_ANIM_IDLE_WITH_CANDLE].morphFrames);
             this->unk_3BE = 0x3E93;
             this->unk_3C0 = 60.0f;
             this->unk_3B0 = 0;
@@ -252,8 +254,8 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_93_02)) {
                         Actor_Kill(thisx);
                     } else {
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE_WITH_CANDLE,
-                                                        &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                        EN_DNO_ANIM_IDLE_WITH_CANDLE, &this->animIndex);
                         thisx->room = -1;
                         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
                         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
@@ -267,7 +269,7 @@ void EnDno_Init(Actor* thisx, PlayState* play) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
                         Actor_Kill(thisx);
                     } else {
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE,
                                                         &this->animIndex);
                         this->unk_460 = SubS_FindActor(play, NULL, ACTORCAT_NPC, ACTOR_EN_DNQ);
                         if (this->unk_460 == NULL) {
@@ -296,7 +298,7 @@ void EnDno_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80A71B04(EnDno* this, PlayState* play) {
     this->unk_452 = 0;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_GRIEVE, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_GRIEVE, &this->animIndex);
     this->actionFunc = EnDno_DoNothing;
 }
 
@@ -309,15 +311,15 @@ void func_80A71B68(EnDno* this, PlayState* play) {
     if (CHECK_QUEST_ITEM(QUEST_SONG_SONATA)) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_27_01)) {
             if (!(this->unk_3B0 & 0x20)) {
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_LOOP,
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_PRAYER_LOOP,
                                                 &this->animIndex);
                 this->actor.shape.rot.y = Actor_WorldYawTowardActor(&this->actor, this->unk_460);
             }
         } else {
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE, &this->animIndex);
         }
     } else {
-        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE, &this->animIndex);
+        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE, &this->animIndex);
     }
     this->actionFunc = func_80A71C3C;
 }
@@ -326,29 +328,35 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
     switch (this->animIndex) {
         case EN_DNO_ANIM_IMPLORE_LOOP:
         case EN_DNO_ANIM_IMPLORE_START:
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IMPLORE_END, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IMPLORE_END,
+                                            &this->animIndex);
             break;
 
         case EN_DNO_ANIM_FAREWELL:
         case EN_DNO_ANIM_IMPLORE_END:
             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE, &this->animIndex);
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE,
+                                                &this->animIndex);
             }
             break;
 
         case EN_DNO_ANIM_TALK:
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_START, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_PRAYER_START,
+                                            &this->animIndex);
             break;
 
         case EN_DNO_ANIM_PRAYER_START:
             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_LOOP,
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_PRAYER_LOOP,
                                                 &this->animIndex);
             }
 
         case EN_DNO_ANIM_PRAYER_LOOP:
             Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->unk_460), 2,
                                0xE38, 0x222);
+            break;
+
+        default:
             break;
     }
 
@@ -368,7 +376,7 @@ void func_80A71C3C(EnDno* this, PlayState* play) {
         play->msgCtx.msgLength = 0;
         func_80A71E54(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
     }
 }
 
@@ -404,8 +412,8 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                 Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xE38)) {
                 switch (this->textId) {
                     case 0x80B:
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IMPLORE_START,
-                                                        &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                        EN_DNO_ANIM_IMPLORE_START, &this->animIndex);
 
                     case 0x811:
                         Message_StartTextbox(play, this->textId, &this->actor);
@@ -414,14 +422,17 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                     case 0x80C:
                     case 0x80F:
                         if (this->animIndex == EN_DNO_ANIM_IDLE) {
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_GREETING,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_GREETING,
                                                             &this->animIndex);
                         } else if ((this->animIndex == EN_DNO_ANIM_GREETING) &&
                                    (this->skelAnime.curFrame == this->skelAnime.endFrame)) {
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_TALK,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_TALK,
                                                             &this->animIndex);
                             Message_StartTextbox(play, this->textId, &this->actor);
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -432,8 +443,8 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                 switch (this->animIndex) {
                     case EN_DNO_ANIM_IMPLORE_START:
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IMPLORE_LOOP,
-                                                            &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                            EN_DNO_ANIM_IMPLORE_LOOP, &this->animIndex);
                         }
                         Math_ScaledStepToS(&this->actor.shape.rot.y,
                                            Actor_WorldYawTowardActor(&this->actor, this->unk_460), 0x71C);
@@ -442,10 +453,13 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                     case EN_DNO_ANIM_IMPLORE_END:
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
                             Message_CloseTextbox(play);
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE,
                                                             &this->animIndex);
                             func_80A71B68(this, play);
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -459,15 +473,15 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                     switch (this->animIndex) {
                         case EN_DNO_ANIM_IMPLORE_START:
                             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IMPLORE_LOOP,
-                                                                &this->animIndex);
+                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                                EN_DNO_ANIM_IMPLORE_LOOP, &this->animIndex);
                             }
                             break;
 
                         case EN_DNO_ANIM_IMPLORE_LOOP:
                             if (Message_ShouldAdvance(play)) {
-                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IMPLORE_END,
-                                                                &this->animIndex);
+                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                                EN_DNO_ANIM_IMPLORE_END, &this->animIndex);
                                 play->msgCtx.msgMode = 0x44;
                             }
                             break;
@@ -475,10 +489,13 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                         case EN_DNO_ANIM_IMPLORE_END:
                             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
                                 Message_CloseTextbox(play);
-                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
+                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE,
                                                                 &this->animIndex);
                                 func_80A71B68(this, play);
                             }
+                            break;
+
+                        default:
                             break;
                     }
                     break;
@@ -497,11 +514,11 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                 case 0x80E:
                     if (this->animIndex == EN_DNO_ANIM_TALK) {
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_FAREWELL,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_FAREWELL,
                                                         &this->animIndex);
                     } else if (this->animIndex == EN_DNO_ANIM_FAREWELL) {
                         if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE,
                                                             &this->animIndex);
                         }
                     } else if ((this->animIndex == EN_DNO_ANIM_IDLE) && Message_ShouldAdvance(play)) {
@@ -526,15 +543,18 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
                     switch (this->animIndex) {
                         case EN_DNO_ANIM_TALK:
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_START,
-                                                            &this->animIndex);
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                            EN_DNO_ANIM_PRAYER_START, &this->animIndex);
                             break;
 
                         case EN_DNO_ANIM_PRAYER_START:
                             if (this->skelAnime.curFrame == this->skelAnime.endFrame) {
-                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_PRAYER_LOOP,
-                                                                &this->animIndex);
+                                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                                EN_DNO_ANIM_PRAYER_LOOP, &this->animIndex);
                             }
+                            break;
+
+                        default:
                             break;
                     }
                     break;
@@ -545,6 +565,9 @@ void func_80A71F18(EnDno* this, PlayState* play) {
                         func_80A71B68(this, play);
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
     }
@@ -552,7 +575,8 @@ void func_80A71F18(EnDno* this, PlayState* play) {
 
 void func_80A72438(EnDno* this, PlayState* play) {
     this->unk_452 = 1;
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE_WITH_CANDLE, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE_WITH_CANDLE,
+                                    &this->animIndex);
     this->actor.textId = 0;
     if (Flags_GetSwitch(play, EN_DNO_GET_RACE_STARTED_SWITCH_FLAG(&this->actor))) {
         this->unk_454 = 1.0f;
@@ -568,12 +592,13 @@ void func_80A724B8(EnDno* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80A725E0(this, play);
     } else if (this->actor.xzDistToPlayer < 60.0f) {
-        func_800B8614(&this->actor, play, 60.0f);
+        Actor_OfferTalk(&this->actor, play, 60.0f);
     }
 }
 
 void func_80A7256C(EnDno* this, PlayState* play) {
-    func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, PLAYER_IA_MINUS1);
+    Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel,
+                            PLAYER_IA_MINUS1);
 }
 
 void func_80A72598(EnDno* this, PlayState* play) {
@@ -598,7 +623,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 case 0:
                     if (this->animIndex == EN_DNO_ANIM_IDLE_WITH_CANDLE) {
                         if (Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x2D8)) {
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
                                                             EN_DNO_ANIM_GREETING_WITH_CANDLE, &this->animIndex);
                         }
                     } else if ((this->animIndex == EN_DNO_ANIM_GREETING_WITH_CANDLE) &&
@@ -610,8 +635,8 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         } else {
                             Message_StartTextbox(play, 0x800, &this->actor);
                         }
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE_WITH_CANDLE,
-                                                        &this->animIndex);
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
+                                                        EN_DNO_ANIM_IDLE_WITH_CANDLE, &this->animIndex);
                     }
                     break;
 
@@ -624,6 +649,9 @@ void func_80A725F8(EnDno* this, PlayState* play) {
 
                 case 3:
                     Message_StartTextbox(play, 0x804, &this->actor);
+                    break;
+
+                default:
                     break;
             }
             break;
@@ -646,7 +674,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 }
 
                 if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations,
+                    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
                                                     EN_DNO_ANIM_TALK_WITH_PARSOL_AND_CANDLE, &this->animIndex);
                     Message_StartTextbox(play, 0x803, &this->actor);
                 }
@@ -663,7 +691,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                         play->msgCtx.msgMode = 0x44;
                         this->unk_452 = 1;
                         this->unk_454 = 0.0f;
-                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_OPEN_PARASOL,
+                        SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_OPEN_PARASOL,
                                                         &this->animIndex);
                     }
                     break;
@@ -690,7 +718,7 @@ void func_80A725F8(EnDno* this, PlayState* play) {
                 case 0x804:
                     if (this->animIndex == EN_DNO_ANIM_IDLE_WITH_CANDLE) {
                         if (Message_ShouldAdvance(play)) {
-                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations,
+                            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo,
                                                             EN_DNO_ANIM_GREETING_WITH_CANDLE, &this->animIndex);
                             if (!(this->unk_3B0 & 0x40)) {
                                 func_80A72CF8(this, play);
@@ -719,7 +747,8 @@ void func_80A725F8(EnDno* this, PlayState* play) {
 }
 
 void func_80A72AE4(EnDno* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_START_RACE_START, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_START_RACE_START,
+                                    &this->animIndex);
     func_80A714B4(this, play);
     this->actionFunc = func_80A72B3C;
 }
@@ -746,7 +775,8 @@ void func_80A72BA4(EnDno* this, PlayState* play) {
 }
 
 void func_80A72C04(EnDno* this, PlayState* play) {
-    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_START_RACE_START, &this->animIndex);
+    SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_START_RACE_START,
+                                    &this->animIndex);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
     this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
     Math_Vec3f_Copy(&this->unk_334, &this->actor.world.pos);
@@ -825,26 +855,29 @@ s32 EnDno_ActorPathing_Move(PlayState* play, ActorPathing* actorPath) {
 }
 
 void func_80A730A0(EnDno* this, PlayState* play) {
-    s32 phi_a2;
+    s32 nextAnimIndex;
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-        phi_a2 = -1;
+        nextAnimIndex = EN_DNO_ANIM_NONE;
         switch (this->animIndex) {
             case EN_DNO_ANIM_START_RACE_START:
                 if (this->unk_44E >= 20) {
-                    phi_a2 = EN_DNO_ANIM_START_RACE_END;
+                    nextAnimIndex = EN_DNO_ANIM_START_RACE_END;
                 } else {
                     this->unk_44E = 20;
                 }
                 break;
 
             case EN_DNO_ANIM_START_RACE_END:
-                phi_a2 = EN_DNO_ANIM_FLY;
+                nextAnimIndex = EN_DNO_ANIM_FLY;
+                break;
+
+            default:
                 break;
         }
 
-        if (phi_a2 >= 0) {
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, phi_a2, &this->animIndex);
+        if (nextAnimIndex > EN_DNO_ANIM_NONE) {
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, nextAnimIndex, &this->animIndex);
         }
     }
 
@@ -861,7 +894,7 @@ void func_80A730A0(EnDno* this, PlayState* play) {
     this->unk_3AE += 1000;
     this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     func_80A715DC(this, play);
-    func_800B9010(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_BUTLER_FRY - SFX_FLAG);
     if (this->actorPath.flags & ACTOR_PATHING_REACHED_END_PERMANENT) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actorPath.curPoint);
         this->actor.speed = 0.0f;
@@ -890,11 +923,12 @@ void func_80A732C8(EnDno* this, PlayState* play) {
         if (Math_ScaledStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0x71C)) {
             this->unk_3B0 |= 4;
             this->unk_44E = 3;
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_CLOSE_PARASOL, &this->animIndex);
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_CLOSE_PARASOL,
+                                            &this->animIndex);
         }
     } else if (this->unk_44E == 3) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_IDLE_WITH_CANDLE,
+            SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_IDLE_WITH_CANDLE,
                                             &this->animIndex);
             func_80A72438(this, play);
         } else {
@@ -914,8 +948,8 @@ void func_80A732C8(EnDno* this, PlayState* play) {
 }
 
 void func_80A73408(EnDno* this, PlayState* play) {
-    s32 phi_a2;
-    u8 sp33 = true;
+    s32 nextAnimIndex;
+    u8 changeAnim = true;
     s32 cueChannel;
 
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_475)) {
@@ -923,21 +957,21 @@ void func_80A73408(EnDno* this, PlayState* play) {
         if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    phi_a2 = 13;
+                    nextAnimIndex = EN_DNO_ANIM_IDLE;
                     break;
 
                 case 2:
-                    phi_a2 = 17;
+                    nextAnimIndex = EN_DNO_ANIM_SHOCK_START;
                     break;
 
                 default:
-                    phi_a2 = 0;
-                    sp33 = false;
+                    nextAnimIndex = EN_DNO_ANIM_START_RACE_START;
+                    changeAnim = false;
                     break;
             }
 
-            if (sp33) {
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, phi_a2, &this->animIndex);
+            if (changeAnim) {
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, nextAnimIndex, &this->animIndex);
             }
         }
         Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
@@ -946,7 +980,7 @@ void func_80A73408(EnDno* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
         switch (this->animIndex) {
             case EN_DNO_ANIM_SHOCK_START:
-                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimations, EN_DNO_ANIM_SHOCK_LOOP,
+                SubS_ChangeAnimationBySpeedInfo(&this->skelAnime, sAnimationSpeedInfo, EN_DNO_ANIM_SHOCK_LOOP,
                                                 &this->animIndex);
                 break;
 
@@ -982,7 +1016,7 @@ s32 EnDno_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     EnDno* this = THIS;
 
     *dList = NULL;
-    if (limbIndex == 9) {
+    if (limbIndex == DEKU_BUTLER_LIMB_EYES) {
         rot->x += this->unk_466;
     }
     return false;
@@ -1000,35 +1034,46 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     if (*dList != NULL) {
         switch (this->unk_452) {
             case 0:
-                if ((limbIndex != 25) && (limbIndex != 26) && (limbIndex != 13) && (limbIndex != 15) &&
-                    (limbIndex != 16) && (limbIndex != 14)) {
+                if ((limbIndex != DEKU_BUTLER_LIMB_CANDLE) && (limbIndex != DEKU_BUTLER_LIMB_CANDLE_WICK) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_HANDLE) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_LOWER_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_MIDDLE_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_UPPER_PETALS)) {
                     phi_v0 = true;
                 }
                 break;
 
             case 1:
-                if ((limbIndex != 26) && (limbIndex != 13) && (limbIndex != 15) && (limbIndex != 16) &&
-                    (limbIndex != 14)) {
+                if ((limbIndex != DEKU_BUTLER_LIMB_CANDLE_WICK) && (limbIndex != DEKU_BUTLER_LIMB_PARASOL_HANDLE) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_LOWER_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_MIDDLE_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_UPPER_PETALS)) {
                     phi_v0 = true;
                 }
                 break;
 
             case 2:
-                if ((limbIndex != 15) && (limbIndex != 16)) {
+                if ((limbIndex != DEKU_BUTLER_LIMB_PARASOL_LOWER_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_MIDDLE_PETALS)) {
                     phi_v0 = true;
                 }
                 break;
 
             case 3:
-                if ((limbIndex != 16) && (limbIndex != 14)) {
+                if ((limbIndex != DEKU_BUTLER_LIMB_PARASOL_MIDDLE_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_UPPER_PETALS)) {
                     phi_v0 = true;
                 }
                 break;
 
             case 4:
-                if ((limbIndex != 15) && (limbIndex != 14)) {
+                if ((limbIndex != DEKU_BUTLER_LIMB_PARASOL_LOWER_PETALS) &&
+                    (limbIndex != DEKU_BUTLER_LIMB_PARASOL_UPPER_PETALS)) {
                     phi_v0 = true;
                 }
+                break;
+
+            default:
                 break;
         }
     }
@@ -1037,7 +1082,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         OPEN_DISPS(play->state.gfxCtx);
 
         Gfx_SetupDL25_Opa(play->state.gfxCtx);
-        if (limbIndex == 13) {
+        if (limbIndex == DEKU_BUTLER_LIMB_PARASOL_HANDLE) {
             Matrix_Scale(this->unk_454, this->unk_454, this->unk_454, MTXMODE_APPLY);
             Matrix_RotateXS(this->unk_45C, MTXMODE_APPLY);
         }
@@ -1050,7 +1095,7 @@ void EnDno_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         CLOSE_DISPS(play->state.gfxCtx);
     }
 
-    if ((this->unk_3B0 & 1) && (limbIndex == 26)) {
+    if ((this->unk_3B0 & 1) && (limbIndex == DEKU_BUTLER_LIMB_CANDLE_WICK)) {
         u32 frames;
 
         OPEN_DISPS(play->state.gfxCtx);

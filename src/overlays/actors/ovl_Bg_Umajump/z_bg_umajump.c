@@ -49,7 +49,7 @@ void func_80919F30(BgUmajump* this, PlayState* play) {
 void BgUmajump_StopCutscene(BgUmajump* this, PlayState* play) {
     if ((play->csCtx.curFrame >= 6) && !this->hasSoundPlayed) {
         this->hasSoundPlayed = true;
-        play_sound(NA_SE_EV_KID_HORSE_NEIGH);
+        Audio_PlaySfx(NA_SE_EV_KID_HORSE_NEIGH);
     }
 
     if (play->csCtx.state == CS_STATE_IDLE) {

@@ -5,7 +5,7 @@
 #include "io/controller.h"
 #include "irqmgr.h"
 
-typedef struct {
+typedef struct Input {
     /* 0x00 */ OSContPad cur;
     /* 0x06 */ OSContPad prev;
     /* 0x0C */ OSContPad press; // X/Y store delta from last frame
@@ -55,8 +55,6 @@ typedef struct {
     /* 0x47D */ vu8 rumbleOnTimer; // amount of VI retraces to rumble for
     /* 0x47E */ u8 isResetting;
 } PadMgr; // size = 0x480
-
-extern PadMgr gPadMgr;
 
 // Initialization
 

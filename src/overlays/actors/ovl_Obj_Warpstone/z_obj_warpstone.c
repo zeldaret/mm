@@ -140,7 +140,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
             this->isTalking = false;
         } else if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
             if (play->msgCtx.choiceIndex != 0) {
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 play->msgCtx.msgMode = 0x4D;
                 play->msgCtx.unk120D6 = 0;
                 play->msgCtx.unk120D4 = 0;
@@ -152,7 +152,7 @@ void ObjWarpstone_Update(Actor* thisx, PlayState* play) {
     } else if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         this->isTalking = true;
     } else if (!this->actionFunc(this, play)) {
-        func_800B863C(&this->dyna.actor, play);
+        Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play);
     }
 
     Collider_ResetCylinderAC(play, &this->collider.base);

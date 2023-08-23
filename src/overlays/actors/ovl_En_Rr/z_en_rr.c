@@ -6,6 +6,7 @@
 
 #include "z_en_rr.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_rr/object_rr.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
@@ -132,7 +133,7 @@ void EnRr_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider1, &this->actor, &sCylinderInit1);
     Collider_InitAndSetCylinder(play, &this->collider2, &this->actor, &sCylinderInit2);
-    if (this->actor.params != ENRR_3) {
+    if (this->actor.params != LIKE_LIKE_PARAM_3) {
         this->actor.scale.y = 0.015f;
         this->actor.scale.x = 0.019f;
         this->actor.scale.z = 0.019f;
@@ -151,9 +152,9 @@ void EnRr_Init(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, this->actor.scale.y * 2000.0f);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
-    if ((this->actor.params == ENRR_2) || (this->actor.params == ENRR_3)) {
+    if ((this->actor.params == LIKE_LIKE_PARAM_2) || (this->actor.params == LIKE_LIKE_PARAM_3)) {
         this->actor.colChkInfo.health = 6;
-        if (this->actor.params == ENRR_2) {
+        if (this->actor.params == LIKE_LIKE_PARAM_2) {
             this->actor.colChkInfo.mass = MASS_HEAVY;
         }
     }
@@ -180,7 +181,7 @@ void func_808FA01C(EnRr* this, PlayState* play, ColliderCylinder* collider) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, collider->info.bumper.hitPos.x,
                     collider->info.bumper.hitPos.y, collider->info.bumper.hitPos.z, 0, 0, 0,
-                    CLEAR_TAG_LARGE_LIGHT_RAYS);
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == 5) {
         this->drawDmgEffScale = 0.85f;
         this->drawDmgEffAlpha = 4.0f;
@@ -207,8 +208,8 @@ void func_808FA19C(EnRr* this, PlayState* play) {
         this->collider1.base.colType = COLTYPE_HIT0;
         this->collider1.info.elemType = ELEMTYPE_UNK1;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 20, 2, this->actor.scale.y * 23.333334f,
-                              this->actor.scale.y * 20.000002f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX, 2,
+                              this->actor.scale.y * 23.333334f, this->actor.scale.y * 20.000002f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -305,7 +306,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
         this->unk_210 = 0.0f;
         this->unk_20C = 0x800;
 
-        if (((this->unk_1E2 == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) &&
+        if (((this->unk_1E2 == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN)) &&
             (GET_CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) == EQUIP_VALUE_SHIELD_HERO)) {
             sp34 = true;
             this->unk_1E2 = Inventory_DeleteEquipment(play, EQUIP_VALUE_SHIELD_HERO);
@@ -317,7 +318,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
             Message_StartTextbox(play, 0xF6, NULL);
         }
 
-        if (this->actor.params == ENRR_0) {
+        if (this->actor.params == LIKE_LIKE_PARAM_0) {
             sp38 = 8;
         } else {
             sp38 = 16;
@@ -800,7 +801,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->actor.params == ENRR_2) {
+    if (this->actor.params == LIKE_LIKE_PARAM_2) {
         this->actor.speed = 0.0f;
     } else {
         Math_StepToF(&this->actor.speed, 0.0f, 0.1f);
@@ -868,7 +869,7 @@ void EnRr_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = (this->drawDmgEffAlpha + 1.0f) * 0.425f;
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.85f);
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.85f, 0.02125f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
@@ -877,7 +878,7 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnRr* this = THIS;
     Mtx* mtx = GRAPH_ALLOC(play->state.gfxCtx, 4 * sizeof(Mtx));
-    Vec3f* vecPtr;
+    Vec3f* bodyPartPos;
     s32 i;
     EnRrStruct* ptr;
     Vec3f spA4;
@@ -896,14 +897,15 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     Matrix_Scale((1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, 1.0f,
                  (1.0f + this->unk_324[0].unk_10) * this->unk_324[0].unk_08, MTXMODE_APPLY);
 
-    vecPtr = &this->limbPos[0];
+    bodyPartPos = &this->bodyPartsPos[0];
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    Matrix_MultVecZ(1842.1053f, vecPtr++);
-    Matrix_MultVecZ(-1842.1053f, vecPtr++);
-    Matrix_MultVecX(1842.1053f, vecPtr++);
-    Matrix_MultVecX(-1842.1053f, vecPtr++);
+    // LIKE_LIKE_BODYPART_0 - LIKE_LIKE_BODYPART_3
+    Matrix_MultVecZ(1842.1053f, bodyPartPos++);
+    Matrix_MultVecZ(-1842.1053f, bodyPartPos++);
+    Matrix_MultVecX(1842.1053f, bodyPartPos++);
+    Matrix_MultVecX(-1842.1053f, bodyPartPos++);
     Matrix_Pop();
 
     for (i = 1; i < ARRAY_COUNT(this->unk_324); i++) {
@@ -920,10 +922,14 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
             Matrix_RotateYS(0x2000, MTXMODE_APPLY);
         }
 
-        Matrix_MultVecZ(1842.1053f, vecPtr++);
-        Matrix_MultVecZ(-1842.1053f, vecPtr++);
-        Matrix_MultVecX(1842.1053f, vecPtr++);
-        Matrix_MultVecX(-1842.1053f, vecPtr++);
+        // LIKE_LIKE_BODYPART_4 - LIKE_LIKE_BODYPART_7
+        // LIKE_LIKE_BODYPART_8 - LIKE_LIKE_BODYPART_11
+        // LIKE_LIKE_BODYPART_12 - LIKE_LIKE_BODYPART_15
+        // LIKE_LIKE_BODYPART_16 - LIKE_LIKE_BODYPART_19
+        Matrix_MultVecZ(1842.1053f, bodyPartPos++);
+        Matrix_MultVecZ(-1842.1053f, bodyPartPos++);
+        Matrix_MultVecX(1842.1053f, bodyPartPos++);
+        Matrix_MultVecX(-1842.1053f, bodyPartPos++);
         Matrix_Pop();
         mtx++;
         if (i == 3) {
@@ -936,9 +942,9 @@ void EnRr_Draw(Actor* thisx, PlayState* play2) {
     this->collider2.dim.pos.y = ((this->unk_228.y - spA4.y) * 0.85f) + spA4.y;
     this->collider2.dim.pos.z = ((this->unk_228.z - spA4.z) * 0.85f) + spA4.z;
 
-    gSPDisplayList(POLY_OPA_DISP++, object_rr_DL_000470);
+    gSPDisplayList(POLY_OPA_DISP++, gLikeLikeDL);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, LIKE_LIKE_BODYPART_MAX,
                             this->actor.scale.y * 66.66667f * this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale,
                             this->drawDmgEffAlpha, this->drawDmgEffType);
 

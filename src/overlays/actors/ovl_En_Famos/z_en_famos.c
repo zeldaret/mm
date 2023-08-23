@@ -18,9 +18,6 @@ void EnFamos_Destroy(Actor* thisx, PlayState* play);
 void EnFamos_Update(Actor* thisx, PlayState* play);
 void EnFamos_Draw(Actor* thisx, PlayState* play);
 
-void EnFamos_SetupAttackDebris(EnFamos* this);
-void EnFamos_SetupDeathDebris(EnFamos* this);
-s32 EnFamos_IsPlayerSeen(EnFamos* this, PlayState* play);
 void EnFamos_SetupStillIdle(EnFamos* this);
 void EnFamos_StillIdle(EnFamos* this, PlayState* play);
 void EnFamos_SetupPathingIdle(EnFamos* this);
@@ -49,7 +46,6 @@ void EnFamos_SetupDeathExplosion(EnFamos* this);
 void EnFamos_DeathExplosion(EnFamos* this, PlayState* play);
 void EnFamos_SetupDeathFade(EnFamos* this);
 void EnFamos_DeathFade(EnFamos* this, PlayState* play);
-void EnFamos_DrawDebris(EnFamos* this, PlayState* play);
 
 ActorInit En_Famos_InitVars = {
     ACTOR_EN_FAMOS,
@@ -232,9 +228,9 @@ void EnFamos_SetupAttackDebris(EnFamos* this) {
         rock->velocity.x = randFloat * Math_CosS(randOffset) * Math_SinS(randVelDirection);
         rock->velocity.y = Math_SinS(randOffset) * randFloat + 3.0f;
         rock->velocity.z = randFloat * Math_CosS(randOffset) * Math_CosS(randVelDirection);
-        rock->rotation.x = (s32)Rand_Next() >> 0x10;
-        rock->rotation.y = (s32)Rand_Next() >> 0x10;
-        rock->rotation.z = (s32)Rand_Next() >> 0x10;
+        rock->rot.x = (s32)Rand_Next() >> 0x10;
+        rock->rot.y = (s32)Rand_Next() >> 0x10;
+        rock->rot.z = (s32)Rand_Next() >> 0x10;
         rock->pos.x = (Math_SinS(randVelDirection) * 20.0f) + this->actor.world.pos.x;
         rock->pos.y = this->actor.floorHeight;
         rock->pos.z = (Math_CosS(randVelDirection) * 20.0f) + this->actor.world.pos.z;
@@ -261,9 +257,9 @@ void EnFamos_SetupDeathDebris(EnFamos* this) {
         rock->velocity.x = randFloat * Math_CosS(randSmaller) * Math_SinS(randVelDirection);
         rock->velocity.y = Math_SinS(randSmaller) * randFloat + 4.5f;
         rock->velocity.z = randFloat * Math_CosS(randSmaller) * Math_CosS(randVelDirection);
-        rock->rotation.x = (s32)Rand_Next() >> 0x10;
-        rock->rotation.y = (s32)Rand_Next() >> 0x10;
-        rock->rotation.z = (s32)Rand_Next() >> 0x10;
+        rock->rot.x = (s32)Rand_Next() >> 0x10;
+        rock->rot.y = (s32)Rand_Next() >> 0x10;
+        rock->rot.z = (s32)Rand_Next() >> 0x10;
         rock->pos.x = Math_SinS(randVelDirection) * 20.0f + this->actor.world.pos.x;
         rock->pos.y = Rand_CenteredFloat(60.0f) + (this->actor.world.pos.y + 40.0f);
         rock->pos.z = Math_CosS(randVelDirection) * 20.0f + this->actor.world.pos.z;
@@ -290,9 +286,9 @@ void EnFamos_UpdateBobbingHeight(EnFamos* this) {
     this->actor.world.pos.y = (Math_SinS(this->hoverTimer * 0x888) * 10.0f) + this->baseHeight;
 
     if (ABS_ALT(this->flipRot) > 0x4000) { // is famos upside down
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
     }
 }
 
@@ -463,9 +459,9 @@ void EnFamos_SetupAlert(EnFamos* this) {
 
 void EnFamos_Alert(EnFamos* this, PlayState* play) {
     if (ABS_ALT(this->flipRot) > 0x4000) {
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
     }
 
     this->stateTimer--;
@@ -501,7 +497,7 @@ void EnFamos_Chase(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 6.0f, 0.5f);
 
     surfaceType = SurfaceType_GetFloorProperty2(&play->colCtx, this->actor.floorPoly, this->actor.floorBgId);
-    if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) && // close enough
+    if ((this->actor.xzDistToPlayer < 30.0f) && (this->actor.floorHeight > BGCHECK_Y_MIN) &&
         ((surfaceType != FLOOR_PROPERTY_12) && (surfaceType != FLOOR_PROPERTY_13))) {
         EnFamos_SetupAttackAim(this);
 
@@ -520,7 +516,7 @@ void EnFamos_SetupAttackAim(EnFamos* this) {
 }
 
 void EnFamos_AttackAim(EnFamos* this, PlayState* play) {
-    func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     if (SkelAnime_Update(&this->skelAnime)) {
         EnFamos_SetupAttack(this);
     }
@@ -574,7 +570,7 @@ void EnFamos_Attack(EnFamos* this, PlayState* play) {
             EnFamos_SetupAttackRebound(this);
         }
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_LAST1_FALL_OLD - SFX_FLAG);
     }
 }
 
@@ -612,9 +608,9 @@ void EnFamos_AttackRebound(EnFamos* this, PlayState* play) {
     Math_StepToF(&this->actor.speed, 5.0f, 0.3f);
     if (this->actor.speed > 1.0f) {
         if (ABS_ALT(this->flipRot) > 0x4000) {
-            func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT_REVERSE - SFX_FLAG);
         } else {
-            func_800B9010(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_FAMOS_FLOAT - SFX_FLAG);
         }
     }
 
@@ -736,9 +732,9 @@ void EnFamos_UpdateDebrisPosRot(EnFamos* this) {
     for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
         rock->velocity.y -= 1.0f;
         Math_Vec3f_Sum(&rock->pos, &rock->velocity, &rock->pos);
-        rock->rotation.x += (s16)((Rand_Next() >> 0x17) + 0x700);
-        rock->rotation.y += (s16)((Rand_Next() >> 0x17) + 0x900);
-        rock->rotation.z += (s16)((Rand_Next() >> 0x17) + 0xB00);
+        rock->rot.x += (s16)((Rand_Next() >> 0x17) + 0x700);
+        rock->rot.y += (s16)((Rand_Next() >> 0x17) + 0x900);
+        rock->rot.z += (s16)((Rand_Next() >> 0x17) + 0xB00);
     }
 }
 
@@ -788,7 +784,7 @@ void EnFamos_Update(Actor* thisx, PlayState* play) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->emblemCollider.base);
         }
 
-        if (this->collider2.base.atFlags & AC_ON) {
+        if (this->collider2.base.atFlags & AT_ON) {
             Collider_UpdateCylinder(&this->actor, &this->collider2);
             this->collider2.dim.pos.y = this->actor.floorHeight;
             CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
@@ -842,7 +838,7 @@ void EnFamos_DrawDebris(EnFamos* this, PlayState* play) {
         rock = &this->rocks[0];
         for (i = 0; i < ARRAY_COUNT(this->rocks); i++, rock++) {
 
-            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rotation);
+            Matrix_SetTranslateRotateYXZ(rock->pos.x, rock->pos.y, rock->pos.z, &rock->rot);
             Matrix_Scale(rock->scale, rock->scale, rock->scale, MTXMODE_APPLY);
 
             gSPMatrix(&dispOpa[3 + i * 2], Matrix_NewMtx(play->state.gfxCtx),

@@ -11,6 +11,8 @@ typedef void (*EnGmUnkFunc2)(struct EnGm*, PlayState*);
 
 #define ENGM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
+#define ENGM_FIDGET_TABLE_LEN 3
+
 typedef struct EnGm {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -61,8 +63,8 @@ typedef struct EnGm {
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s16 unk_3CE;
     /* 0x3D0 */ s16 unk_3D0;
-    /* 0x3D2 */ s16 unk_3D2[3];
-    /* 0x3D8 */ s16 unk_3D8[3];
+    /* 0x3D2 */ s16 fidgetTableZ[ENGM_FIDGET_TABLE_LEN];
+    /* 0x3D8 */ s16 fidgetTableY[ENGM_FIDGET_TABLE_LEN];
     /* 0x3DE */ s16 unk_3DE;
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;

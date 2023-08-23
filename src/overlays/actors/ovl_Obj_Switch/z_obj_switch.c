@@ -509,7 +509,7 @@ void ObjSwitch_FloorSwitchUp(ObjSwitch* this, PlayState* play) {
 
     if (OBJ_SWITCH_GET_TYPE(&this->dyna.actor) == OBJSWITCH_TYPE_FLOOR_RUSTY) {
         if (this->colliderTris.base.acFlags & AC_HIT) {
-            this->colliderTris.base.acFlags &= ~AT_HIT;
+            this->colliderTris.base.acFlags &= ~AC_HIT;
             ObjSwitch_TryPlayCutsceneInit(this, play, ObjSwitch_FloorSwitchPushDownInit, true);
         } else {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderTris.base);

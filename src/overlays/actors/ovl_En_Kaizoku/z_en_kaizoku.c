@@ -5,6 +5,7 @@
  */
 
 #include "z_en_kaizoku.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
 #define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_100000)
 
@@ -480,7 +481,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
             }
 
             CutsceneManager_StartWithPlayerCs(this->csId, &this->picto.actor);
-            func_800B7298(play, &this->picto.actor, 0x15);
+            func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_21);
             this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
             this->picto.actor.shape.rot.y = this->picto.actor.world.rot.y = this->picto.actor.yawTowardsPlayer;
 
@@ -537,7 +538,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
                     this->unk_2D8 = 0;
                     this->picto.actor.world.pos.y = this->picto.actor.floorHeight;
                     this->picto.actor.velocity.y = 0.0f;
-                    func_800B7298(play, &this->picto.actor, 4);
+                    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_4);
                     Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->leftFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
                     Actor_SpawnFloorDustRing(play, &this->picto.actor, &this->rightFootPos, 3.0f, 2, 2.0f, 0, 0, 0);
                     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_ONGND);
@@ -608,7 +609,7 @@ void func_80B85FA8(EnKaizoku* this, PlayState* play) {
 
         case 7:
             if (this->unk_598 == 0) {
-                func_800B7298(play, &this->picto.actor, 6);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
                 CutsceneManager_Stop(this->csId);
                 this->unk_59C = 0;
                 this->subCamId = SUB_CAM_ID_DONE;
@@ -673,7 +674,7 @@ void func_80B86804(EnKaizoku* this, PlayState* play) {
         CutsceneManager_StartWithPlayerCs(this->csId, &this->picto.actor);
     }
 
-    func_800B7298(play, &this->picto.actor, 0x60);
+    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_96);
     this->subCamId = CutsceneManager_GetCurrentSubCamId(this->picto.actor.csId);
     this->unk_2B2 = 30;
     this->picto.actor.flags &= ~ACTOR_FLAG_1;
@@ -723,7 +724,7 @@ void func_80B868B8(EnKaizoku* this, PlayState* play) {
         case 2:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
-                func_800B7298(play, &this->picto.actor, 6);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
                 CutsceneManager_Stop(this->csId);
                 this->subCamId = SUB_CAM_ID_DONE;
                 play->nextEntrance = play->setupExitList[this->exitIndex];
@@ -798,7 +799,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
                 Message_CloseTextbox(play);
                 EnKaizoku_ChangeAnim(this, EN_KAIZOKU_ANIM_18);
-                func_800B7298(play, &this->picto.actor, 0x85);
+                func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_133);
                 this->unk_5A0 = 0;
                 this->unk_598 = 0;
                 this->unk_59C++;
@@ -864,7 +865,7 @@ void func_80B86B74(EnKaizoku* this, PlayState* play) {
                     play->envCtx.fillScreen = false;
                     this->unk_59C = 0;
                     this->subCamId = SUB_CAM_ID_DONE;
-                    func_800B7298(play, &this->picto.actor, 6);
+                    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_END);
                     CutsceneManager_Stop(this->csId);
                     if (this->switchFlag >= 0) {
                         Flags_SetSwitch(play, this->switchFlag);
@@ -1610,8 +1611,7 @@ void func_80B89280(EnKaizoku* this, PlayState* play) {
 
         if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
             (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) {
-            Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2,
-                                  0.7f, 0.4f);
+            Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
             this->unk_2B8 = 0;
             this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
             this->picto.actor.flags |= ACTOR_FLAG_400;
@@ -1633,8 +1633,7 @@ void func_80B893CC(EnKaizoku* this, PlayState* play) {
     if (((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_SFX) ||
          (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX)) &&
         (this->unk_2B8 != 0)) {
-        Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f,
-                              0.4f);
+        Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->unk_2B8 = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->picto.actor.flags |= ACTOR_FLAG_400;
@@ -1684,7 +1683,7 @@ void func_80B8960C(EnKaizoku* this, PlayState* play) {
     }
     this->picto.actor.speed = 0.0f;
     this->unk_2D8 = 1;
-    func_800B7298(play, &this->picto.actor, 0x7B);
+    func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_123);
     Enemy_StartFinishingBlow(play, &this->picto.actor);
     Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
     this->picto.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
@@ -1713,8 +1712,7 @@ void func_80B8971C(EnKaizoku* this, PlayState* play) {
         if (this->unk_2B8 == 0) {
             return;
         }
-        Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.7f,
-                              0.4f);
+        Actor_SpawnIceEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX, 2, 0.7f, 0.4f);
         this->unk_2B8 = 0;
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
     }
@@ -1908,7 +1906,7 @@ void func_80B89A08(EnKaizoku* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->picto.actor.focus.pos.x,
                                 this->picto.actor.focus.pos.y, this->picto.actor.focus.pos.z, 0, 0, 0,
-                                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
                     sp64 = 1;
                 }
                 break;
@@ -2116,11 +2114,11 @@ void EnKaizoku_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
         (limbIndex == KAIZOKU_LIMB_0D) || (limbIndex == KAIZOKU_LIMB_0F) || (limbIndex == KAIZOKU_LIMB_11) ||
         (limbIndex == KAIZOKU_LIMB_12) || (limbIndex == KAIZOKU_LIMB_L_FOOT) || (limbIndex == KAIZOKU_LIMB_14) ||
         (limbIndex == KAIZOKU_LIMB_15) || (limbIndex == KAIZOKU_LIMB_R_FOOT) || (limbIndex == KAIZOKU_LIMB_17)) {
-        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsPosIndex]);
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartIndex]);
 
-        this->bodyPartsPosIndex++;
-        if (this->bodyPartsPosIndex >= ARRAY_COUNT(this->bodyPartsPos)) {
-            this->bodyPartsPosIndex = 0;
+        this->bodyPartIndex++;
+        if (this->bodyPartIndex >= KAIZOKU_BODYPART_MAX) {
+            this->bodyPartIndex = 0;
         }
     }
 }
@@ -2166,7 +2164,7 @@ void EnKaizoku_Draw(Actor* thisx, PlayState* play) {
             this->drawDmgEffFrozenSteamScale = 0.8f;
         }
 
-        Actor_DrawDamageEffects(play, &this->picto.actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+        Actor_DrawDamageEffects(play, &this->picto.actor, this->bodyPartsPos, KAIZOKU_BODYPART_MAX,
                                 this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, drawDmgEffAlpha,
                                 this->drawDmgEffType);
     }
