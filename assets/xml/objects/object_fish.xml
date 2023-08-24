@@ -157,6 +157,7 @@
         <DList Name="gFishingWaterDustMaterialDL" Offset="0x88C0" />
         <DList Name="gFishingWaterDustModelDL" Offset="0x8970" /> <!-- Original name is "fs_smoke_modelT" -->
 
+        <!-- Owner -->
 
         <!-- Owner Textures -->
         <Texture Name="gFishingOwnerTLUT" OutName="fishing_owner_tlut" Format="rgba16" Width="16" Height="16" Offset="0x8990" />
