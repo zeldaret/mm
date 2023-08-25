@@ -4181,7 +4181,8 @@ s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
 
     if (limbIndex == FISHING_BASS_LIMB_JAW) {
         rot->z -= this->unk_168 - 11000;
-    } else if ((limbIndex == FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT) || (limbIndex == FISHING_BASS_LIMB_BACK_SEGMENT_ROOT)) {
+    } else if ((limbIndex == FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT) ||
+               (limbIndex == FISHING_BASS_LIMB_BACK_SEGMENT_ROOT)) {
         rot->y += this->unk_164;
     } else if (limbIndex == FISHING_BASS_LIMB_END_ROOT) {
         rot->y += this->unk_16E;
