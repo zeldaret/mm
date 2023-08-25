@@ -9,7 +9,7 @@
 
         <!-- Bass DLs -->
         <DList Name="gFishingBassTailFinDL" Offset="0x940" />
-        <DList Name="gFishingBassBackSegmentTipDL" Offset="0x9E8" />
+        <DList Name="gFishingBassBackSegmentEndDL" Offset="0x9E8" />
         <DList Name="gFishingBassTopRearFinDL" Offset="0xB00" />
         <DList Name="gFishingBassBottomRearFinDL" Offset="0xBA0" />
         <DList Name="gFishingBassBackSegmentDL" Offset="0xC40" />
@@ -34,9 +34,9 @@
         <Limb Name="gFishingBassHeadLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_HEAD" Offset="0x28D0" />
         <Limb Name="gFishingBassMiddleSegmentRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT" Offset="0x28DC" />
         <Limb Name="gFishingBassBackSegmentRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT_ROOT" Offset="0x28E8" />
-        <Limb Name="gFishingBassTipRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_END_ROOT" Offset="0x28F4" />
+        <Limb Name="gFishingBassEndRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_END_ROOT" Offset="0x28F4" />
         <Limb Name="gFishingBassTailFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_TAIL_FIN" Offset="0x2900" />
-        <Limb Name="gFishingBassBackSegmentTipLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT_TIP" Offset="0x290C" />
+        <Limb Name="gFishingBassBackSegmentEndLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT_END" Offset="0x290C" />
         <Limb Name="gFishingBassBackSegmentLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT" Offset="0x2918" />
         <Limb Name="gFishingBassTopRearFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_TOP_REAR_FIN" Offset="0x2924" />
         <Limb Name="gFishingBassBottomRearFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BOTTOM_REAR_FIN" Offset="0x2930" />
@@ -130,7 +130,7 @@
         <DList Name="gFishingOwnerLeftHandDL" Offset="0x83B8" />
 
         <!-- Owner Limbs and Skel -->
-        <Limb Name="gFishingOwnerTorsoLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_MIDDLE_SEGMENT" Offset="0x8578" />
+        <Limb Name="gFishingOwnerTorsoLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_TORSO" Offset="0x8578" />
         <Limb Name="gFishingOwnerLeftUpperArmLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_LEFT_UPPER_ARM" Offset="0x8584" />
         <Limb Name="gFishingOwnerLeftForearmLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_LEFT_FOREARM" Offset="0x8590" />
         <Limb Name="gFishingOwnerLeftHandLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_LEFT_HAND" Offset="0x859C" />

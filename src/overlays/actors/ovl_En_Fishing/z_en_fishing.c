@@ -948,8 +948,8 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
     thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_800; // Added in MM
 
     if ((thisx->params < 115) || (thisx->params == 200)) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, NULL, NULL, 0);
-        Animation_MorphToLoop(&this->skelAnime, &gFishingFishAnim, 0.0f);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingBassSkel, &gFishingBassAnim, NULL, NULL, 0);
+        Animation_MorphToLoop(&this->skelAnime, &gFishingBassAnim, 0.0f);
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingLoachSkel, &gFishingLoachAnim, NULL, NULL, 0);
         Animation_MorphToLoop(&this->skelAnime, &gFishingLoachAnim, 0.0f);
@@ -3931,8 +3931,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     SkelAnime_Free(&this->skelAnime, play);
 
                     if (this->unk_148 == 0) {
-                        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, 0, 0, 0);
-                        Animation_MorphToLoop(&this->skelAnime, &gFishingFishAnim, 0.0f);
+                        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingBassSkel, &gFishingBassAnim, 0, 0, 0);
+                        Animation_MorphToLoop(&this->skelAnime, &gFishingBassAnim, 0.0f);
                     } else {
                         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingLoachSkel, &gFishingLoachAnim, 0, 0, 0);
                         Animation_MorphToLoop(&this->skelAnime, &gFishingLoachAnim, 0.0f);
@@ -4179,19 +4179,19 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == FISHING_FISH_LIMB_JAW) {
+    if (limbIndex == FISHING_BASS_LIMB_JAW) {
         rot->z -= this->unk_168 - 11000;
-    } else if ((limbIndex == FISHING_FISH_LIMB_TORSO_ROOT) || (limbIndex == FISHING_FISH_LIMB_TAIL_ROOT)) {
+    } else if ((limbIndex == FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT) || (limbIndex == FISHING_BASS_LIMB_BACK_SEGMENT_ROOT)) {
         rot->y += this->unk_164;
-    } else if (limbIndex == FISHING_FISH_LIMB_END_ROOT) {
+    } else if (limbIndex == FISHING_BASS_LIMB_END_ROOT) {
         rot->y += this->unk_16E;
-    } else if (limbIndex == FISHING_FISH_LIMB_RIGHT_PECTORAL_FIN) {
+    } else if (limbIndex == FISHING_BASS_LIMB_RIGHT_PECTORAL_FIN) {
         rot->y -= this->unk_16A;
-    } else if (limbIndex == FISHING_FISH_LIMB_LEFT_PECTORAL_FIN) {
+    } else if (limbIndex == FISHING_BASS_LIMB_LEFT_PECTORAL_FIN) {
         rot->y += this->unk_16A;
-    } else if (limbIndex == FISHING_FISH_LIMB_TOP_REAR_FIN) {
+    } else if (limbIndex == FISHING_BASS_LIMB_TOP_REAR_FIN) {
         rot->y += this->unk_16C;
-    } else if (limbIndex == FISHING_FISH_LIMB_BOTTOM_REAR_FIN) {
+    } else if (limbIndex == FISHING_BASS_LIMB_BOTTOM_REAR_FIN) {
         rot->y -= this->unk_16C;
     }
 
@@ -4201,7 +4201,7 @@ s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
 void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == FISHING_FISH_LIMB_JAW) {
+    if (limbIndex == FISHING_BASS_LIMB_JAW) {
         Matrix_MultVec3f(&sFishMouthOffset, &this->fishMouthPos);
     }
 }
