@@ -1,52 +1,52 @@
 ﻿<Root>
-    <!-- Assets for fishing ?? -->
+    <!-- Assets for fishing -->
     <File Name="object_fish" Segment="6">
 
-        <!-- "Fish" -->
+        <!-- Bass -->
 
-        <!-- Fish Animations -->
-        <Animation Name="gFishingFishAnim" Offset="0x7C" /> <!-- Original name is "basu" -->
+        <!-- Bass Animations -->
+        <Animation Name="gFishingBassAnim" Offset="0x7C" /> <!-- Original name is "basu" -->
 
-        <!-- Fish DLs -->
-        <DList Name="gFishingFishTailFinDL" Offset="0x940" />
-        <DList Name="gFishingFishCaudalPeduncleEndDL" Offset="0x9E8" />
-        <DList Name="gFishingFishTopRearFinDL" Offset="0xB00" />
-        <DList Name="gFishingFishBottomRearFinDL" Offset="0xBA0" />
-        <DList Name="gFishingFishCaudalPeduncleDL" Offset="0xC40" />
-        <DList Name="gFishingFishTopFrontFinDL" Offset="0xE30" />
-        <DList Name="gFishingFishBottomFrontFinDL" Offset="0xED0" />
-        <DList Name="gFishingFishTorsoDL" Offset="0xF70" />
-        <DList Name="gFishingFishHeadDL" Offset="0x10A0" />
-        <DList Name="gFishingFishLeftPectoralFinDL" Offset="0x1260" />
-        <DList Name="gFishingFishRightPectoralFinDL" Offset="0x1300" />
-        <DList Name="gFishingFishJawDL" Offset="0x13A0" />
+        <!-- Bass DLs -->
+        <DList Name="gFishingBassTailFinDL" Offset="0x940" />
+        <DList Name="gFishingBassBackSegmentTipDL" Offset="0x9E8" />
+        <DList Name="gFishingBassTopRearFinDL" Offset="0xB00" />
+        <DList Name="gFishingBassBottomRearFinDL" Offset="0xBA0" />
+        <DList Name="gFishingBassBackSegmentDL" Offset="0xC40" />
+        <DList Name="gFishingBassTopFrontFinDL" Offset="0xE30" />
+        <DList Name="gFishingBassBottomFrontFinDL" Offset="0xED0" />
+        <DList Name="gFishingBassMiddleSegmentDL" Offset="0xF70" />
+        <DList Name="gFishingBassHeadDL" Offset="0x10A0" />
+        <DList Name="gFishingBassLeftPectoralFinDL" Offset="0x1260" />
+        <DList Name="gFishingBassRightPectoralFinDL" Offset="0x1300" />
+        <DList Name="gFishingBassJawDL" Offset="0x13A0" />
 
-        <!-- Fish Textures -->
-        <Texture Name="gFishingFishTailFinTex" OutName="fishing_fish_caudal_fin" Format="rgba16" Width="16" Height="16" Offset="0x14D0" />
-        <Texture Name="gFishingFishTopScalesTex" OutName="fishing_fish_dorsal_scales" Format="rgba16" Width="16" Height="16" Offset="0x16D0" />
-        <Texture Name="gFishingFishBottomScalesTex" OutName="fishing_fish_belly_scales" Format="rgba16" Width="16" Height="16" Offset="0x18D0" />
-        <Texture Name="gFishingFishHeadTex" OutName="fishing_fish_head" Format="rgba16" Width="32" Height="32" Offset="0x1AD0" />
-        <Texture Name="gFishingFishFinTex" OutName="fishing_fish_fin" Format="rgba16" Width="16" Height="16" Offset="0x22D0" />
-        <Texture Name="gFishingFishUnusedFinTex" OutName="fishing_fish_unused_fin" Format="rgba16" Width="16" Height="16" Offset="0x24D0" />
-        <Texture Name="gFishingFishSpinyFinTex" OutName="fishing_fish_spiny_fin" Format="rgba16" Width="16" Height="16" Offset="0x26D0" />
+        <!-- Bass Textures -->
+        <Texture Name="gFishingBassTailFinTex" OutName="fishing_bass_caudal_fin" Format="rgba16" Width="16" Height="16" Offset="0x14D0" />
+        <Texture Name="gFishingBassTopScalesTex" OutName="fishing_bass_dorsal_scales" Format="rgba16" Width="16" Height="16" Offset="0x16D0" />
+        <Texture Name="gFishingBassBottomScalesTex" OutName="fishing_bass_belly_scales" Format="rgba16" Width="16" Height="16" Offset="0x18D0" />
+        <Texture Name="gFishingBassHeadTex" OutName="fishing_bass_head" Format="rgba16" Width="32" Height="32" Offset="0x1AD0" />
+        <Texture Name="gFishingBassFinTex" OutName="fishing_bass_fin" Format="rgba16" Width="16" Height="16" Offset="0x22D0" />
+        <Texture Name="gFishingBassUnusedFinTex" OutName="fishing_bass_unused_fin" Format="rgba16" Width="16" Height="16" Offset="0x24D0" />
+        <Texture Name="gFishingBassSpinyFinTex" OutName="fishing_bass_spiny_fin" Format="rgba16" Width="16" Height="16" Offset="0x26D0" />
 
-        <!-- Fish Limbs and Skel -->
-        <Limb Name="gFishingFishHeadLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_HEAD" Offset="0x28D0" />
-        <Limb Name="gFishingFishTorsoRootLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_TORSO_ROOT" Offset="0x28DC" />
-        <Limb Name="gFishingFishTailRootLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_TAIL_ROOT" Offset="0x28E8" />
-        <Limb Name="gFishingFishEndRootLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_END_ROOT" Offset="0x28F4" />
-        <Limb Name="gFishingFishTailFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_TAIL_FIN" Offset="0x2900" />
-        <Limb Name="gFishingFishCaudalPeduncleEndLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_CAUDAL_PEDUNCLE_END" Offset="0x290C" />
-        <Limb Name="gFishingFishCaudalPeduncleLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_CAUDAL_PEDUNCLE" Offset="0x2918" />
-        <Limb Name="gFishingFishTopRearFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_TOP_REAR_FIN" Offset="0x2924" />
-        <Limb Name="gFishingFishBottomRearFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_BOTTOM_REAR_FIN" Offset="0x2930" />
-        <Limb Name="gFishingFishTorsoLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_TORSO" Offset="0x293C" />
-        <Limb Name="gFishingFishTopFrontFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_TOP_FRONT_FIN" Offset="0x2948" />
-        <Limb Name="gFishingFishBottomFrontFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_BOTTOM_FRONT_FIN" Offset="0x2954" />
-        <Limb Name="gFishingFishJawLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_JAW" Offset="0x2960" />
-        <Limb Name="gFishingFishRightPectoralFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_RIGHT_PECTORAL_FIN" Offset="0x296C" />
-        <Limb Name="gFishingFishLeftPectoralFinLimb" Type="Standard" EnumName="FISHING_FISH_LIMB_LEFT_PECTORAL_FIN" Offset="0x2978" />
-        <Skeleton Name="gFishingFishSkel" Type="Flex" LimbType="Standard" LimbNone="FISHING_FISH_LIMB_NONE" LimbMax="FISHING_FISH_LIMB_MAX" EnumName="FishingFishLimb" Offset="0x29C0" />
+        <!-- Bass Limbs and Skel -->
+        <Limb Name="gFishingBassHeadLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_HEAD" Offset="0x28D0" />
+        <Limb Name="gFishingBassMiddleSegmentRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT" Offset="0x28DC" />
+        <Limb Name="gFishingBassBackSegmentRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT_ROOT" Offset="0x28E8" />
+        <Limb Name="gFishingBassTipRootLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_END_ROOT" Offset="0x28F4" />
+        <Limb Name="gFishingBassTailFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_TAIL_FIN" Offset="0x2900" />
+        <Limb Name="gFishingBassBackSegmentTipLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT_TIP" Offset="0x290C" />
+        <Limb Name="gFishingBassBackSegmentLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BACK_SEGMENT" Offset="0x2918" />
+        <Limb Name="gFishingBassTopRearFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_TOP_REAR_FIN" Offset="0x2924" />
+        <Limb Name="gFishingBassBottomRearFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BOTTOM_REAR_FIN" Offset="0x2930" />
+        <Limb Name="gFishingBassMiddleSegmentLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_MIDDLE_SEGMENT" Offset="0x293C" />
+        <Limb Name="gFishingBassTopFrontFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_TOP_FRONT_FIN" Offset="0x2948" />
+        <Limb Name="gFishingBassBottomFrontFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_BOTTOM_FRONT_FIN" Offset="0x2954" />
+        <Limb Name="gFishingBassJawLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_JAW" Offset="0x2960" />
+        <Limb Name="gFishingBassRightPectoralFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_RIGHT_PECTORAL_FIN" Offset="0x296C" />
+        <Limb Name="gFishingBassLeftPectoralFinLimb" Type="Standard" EnumName="FISHING_BASS_LIMB_LEFT_PECTORAL_FIN" Offset="0x2978" />
+        <Skeleton Name="gFishingBassSkel" Type="Flex" LimbType="Standard" LimbNone="FISHING_BASS_LIMB_NONE" LimbMax="FISHING_BASS_LIMB_MAX" EnumName="FishingBassLimb" Offset="0x29C0" />
 
 
         <!-- Old Lure -->
@@ -130,7 +130,7 @@
         <DList Name="gFishingOwnerLeftHandDL" Offset="0x83B8" />
 
         <!-- Owner Limbs and Skel -->
-        <Limb Name="gFishingOwnerTorsoLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_TORSO" Offset="0x8578" />
+        <Limb Name="gFishingOwnerTorsoLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_MIDDLE_SEGMENT" Offset="0x8578" />
         <Limb Name="gFishingOwnerLeftUpperArmLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_LEFT_UPPER_ARM" Offset="0x8584" />
         <Limb Name="gFishingOwnerLeftForearmLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_LEFT_FOREARM" Offset="0x8590" />
         <Limb Name="gFishingOwnerLeftHandLimb" Type="Standard" EnumName="FISHING_OWNER_LIMB_LEFT_HAND" Offset="0x859C" />
