@@ -4176,7 +4176,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnFishing_BassOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
     if (limbIndex == FISHING_BASS_LIMB_JAW) {
@@ -4199,7 +4199,7 @@ s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, 
     return false;
 }
 
-void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnFishing_BassPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
     if (limbIndex == FISHING_BASS_LIMB_JAW) {
@@ -4246,7 +4246,7 @@ void EnFishing_DrawFish(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, 0.0f, this->unk_164 * 10.0f * 0.01f, MTXMODE_APPLY);
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              EnFishing_FishOverrideLimbDraw, EnFishing_FishPostLimbDraw, &this->actor);
+                              EnFishing_BassOverrideLimbDraw, EnFishing_BassPostLimbDraw, &this->actor);
     } else {
         Matrix_Translate(0.0f, 0.0f, 3000.0f, MTXMODE_APPLY);
         Matrix_RotateYF(BINANG_TO_RAD(this->unk_164), MTXMODE_APPLY);
