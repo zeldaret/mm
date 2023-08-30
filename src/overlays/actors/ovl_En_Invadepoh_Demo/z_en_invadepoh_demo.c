@@ -230,7 +230,8 @@ void EnInvadepohDemo_Romani_Init(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_Cow_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sCowInitChain);
-    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH_DEMO, 0.0f, 0.0f, 0.0f, 0, 0, 0, 4);
+    Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_INVADEPOH_DEMO, 0.0f, 0.0f, 0.0f, 0, 0, 0,
+                       EN_INVADEPOH_DEMO_TYPE_COW_TAIL);
     this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_COW);
     if (this->objectIndex < 0) {
         Actor_Kill(&this->actor);
