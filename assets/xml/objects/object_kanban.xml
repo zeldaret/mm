@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for cuttable signs-->
     <File Name="object_kanban" Segment="6">
         <DList Name="gSignSetupDL" Offset="0xC30" />
         <DList Name="gSignUpperLeftDL" Offset="0xCB0" />
