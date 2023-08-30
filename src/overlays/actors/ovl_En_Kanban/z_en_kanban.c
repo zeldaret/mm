@@ -890,9 +890,8 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 }
 
 static Gfx* sDisplayLists[] = {
-    object_kanban_DL_000CB0, object_kanban_DL_000DB8, object_kanban_DL_000E78, object_kanban_DL_000F38,
-    object_kanban_DL_000FF8, object_kanban_DL_0010B8, object_kanban_DL_0011C0, object_kanban_DL_0012C8,
-    object_kanban_DL_0013D0, object_kanban_DL_001488, object_kanban_DL_001540,
+    gSignUpperLeftDL,  gSignLeftUpperDL,  gSignLeftLowerDL, gSignRightUpperDL, gSignRightLowerDL, gSignLowerLeftDL,
+    gSignUpperRightDL, gSignLowerRightDL, gSignPostUpperDL, gSignPostLowerDL,  gSignPostStandDL,
 };
 
 #include "z_en_kanban_gfx.c"
@@ -923,7 +922,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPDisplayList(POLY_OPA_DISP++, object_kanban_DL_000C30);
+    gSPDisplayList(POLY_OPA_DISP++, gSignSetupDL);
 
     if (this->actionState != ENKANBAN_SIGN) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
@@ -982,7 +981,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0x00, 0x00, 255, 255, 255, this->cutMarkAlpha);
             gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 150, 0);
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, object_kanban_DL_001630);
+            gSPDisplayList(POLY_XLU_DISP++, gSignParticleDL);
         }
     }
 
