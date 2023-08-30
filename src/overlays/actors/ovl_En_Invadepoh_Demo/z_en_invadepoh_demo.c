@@ -199,8 +199,8 @@ static EnInvadepohDemoFunc sDrawFuncs[EN_INVADEPOH_DEMO_TYPE_MAX] = {
     EnInvadepohDemo_CowTail_Draw, // EN_INVADEPOH_DEMO_TYPE_COW_TAIL
 };
 
-static MtxF sAlienLeftEyeBeamMtxF;
-static MtxF sAlienRightEyeBeamMtxF;
+MtxF sAlienLeftEyeBeamMtxF;
+MtxF sAlienRightEyeBeamMtxF;
 
 void EnInvadepohDemo_DoNothing(EnInvadepohDemo* this, PlayState* play) {
 }
