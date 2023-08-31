@@ -50,7 +50,7 @@
         <Texture Name="gDonkeyBanditSaddleBackTex" OutName="donkey_bandit_saddle_back" Format="ci8" Width="8" Height="16" Offset="0x8A58" />
 
         <!-- Gorman Brothers' Donkeys' Limbs and Skel -->
-        
+
         <Limb Name="gDonkeyBanditRootLimb" Type="Standard" EnumName="DONKEY_BANDIT_LIMB_ROOT" Offset="0x8AD8" />
         <Limb Name="gDonkeyBanditPelvisLimb" Type="Standard" EnumName="DONKEY_BANDIT_LIMB_PELVIS" Offset="0x8AE4" />
         <Limb Name="gDonkeyBanditTorsoLimb" Type="Standard" EnumName="DONKEY_BANDIT_LIMB_TORSO" Offset="0x8AF0" />
@@ -81,8 +81,8 @@
         <!-- Donkey Animations -->
 
         <Animation Name="gDonkeyGallopAnim" Offset="0x9208" /> <!-- Original name is "ha_fastrun" -->
-        <Animation Name="gDonkeyJump1Anim" Offset="0x9858" /> <!-- Original name is "ha_jump100" -->
-        <Animation Name="gDonkeyJump2Anim" Offset="0xA05C" /> <!-- Original name is "ha_jump200" -->
+        <Animation Name="gDonkeyJumpLowAnim" Offset="0x9858" /> <!-- Original name is "ha_jump100" -->
+        <Animation Name="gDonkeyJumpHighAnim" Offset="0xA05C" /> <!-- Original name is "ha_jump200" -->
         <Animation Name="gDonkeyTrotAnim" Offset="0xA650" /> <!-- Original name is "ha_slowrun" -->
         <Animation Name="gDonkeyWhinnyAnim" Offset="0xB00C" /> <!-- Original name is "ha_stand" -->
         <Animation Name="gDonkeyStopAnim" Offset="0xB9C8" /> <!-- Original name is "ha_stop" -->
