@@ -1,18 +1,18 @@
 ﻿<Root>
     <!-- Assets for cuttable signs-->
     <File Name="object_kanban" Segment="6">
-        <DList Name="gSignSetupDL" Offset="0xC30" />
-        <DList Name="gSignUpperLeftDL" Offset="0xCB0" />
-        <DList Name="gSignLeftUpperDL" Offset="0xDB8" />
-        <DList Name="gSignLeftLowerDL" Offset="0xE78" />
-        <DList Name="gSignRightUpperDL" Offset="0xF38" />
-        <DList Name="gSignRightLowerDL" Offset="0xFF8" />
-        <DList Name="gSignLowerLeftDL" Offset="0x10B8" />
-        <DList Name="gSignUpperRightDL" Offset="0x11C0" />
-        <DList Name="gSignLowerRightDL" Offset="0x12C8" />
-        <DList Name="gSignPostUpperDL" Offset="0x13D0" />
-        <DList Name="gSignPostLowerDL" Offset="0x1488" />
-        <DList Name="gSignPostStandDL" Offset="0x1540" />
+        <DList Name="gSignMaterialDL" Offset="0xC30" />
+        <DList Name="gSignUpperLeftModelDL" Offset="0xCB0" />
+        <DList Name="gSignLeftUpperModelDL" Offset="0xDB8" />
+        <DList Name="gSignLeftLowerModelDL" Offset="0xE78" />
+        <DList Name="gSignRightUpperModelDL" Offset="0xF38" />
+        <DList Name="gSignRightLowerModelDL" Offset="0xFF8" />
+        <DList Name="gSignLowerLeftModelDL" Offset="0x10B8" />
+        <DList Name="gSignUpperRightModelDL" Offset="0x11C0" />
+        <DList Name="gSignLowerRightModelDL" Offset="0x12C8" />
+        <DList Name="gSignPostUpperModelDL" Offset="0x13D0" />
+        <DList Name="gSignPostLowerModelDL" Offset="0x1488" />
+        <DList Name="gSignPostStandModelDL" Offset="0x1540" />
         <DList Name="gSignParticleDL" Offset="0x1630" />
         <Texture Name="gSignParticleTex" OutName="sign_particle" Format="i8" Width="16" Height="16" Offset="0x16B0" />
     </File>
