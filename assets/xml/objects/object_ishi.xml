@@ -2,6 +2,6 @@
     <!-- Object for small rocks -->
     <File Name="object_ishi" Segment="6">
         <Texture Name="gSmallRockTex" OutName="small_rock" Format="rgba16" Width="32" Height="32" Offset="0x1B0" />
-        <DList Name="gSmallRockDL" Offset="0x9B0" />
+        <DList Name="gSmallRockDL" Offset="0x9B0" /> <!-- Original name is "zelda2_ishi_model" -->
     </File>
 </Root>
