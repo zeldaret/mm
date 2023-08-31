@@ -50,6 +50,7 @@
         <Texture Name="gDonkeyBanditSaddleBackTex" OutName="donkey_bandit_saddle_back" Format="ci8" Width="8" Height="16" Offset="0x8A58" />
 
         <!-- Gorman Brothers' Donkeys' Limbs and Skel -->
+        
         <Limb Name="gDonkeyBanditRootLimb" Type="Standard" EnumName="DONKEY_BANDIT_LIMB_ROOT" Offset="0x8AD8" />
         <Limb Name="gDonkeyBanditPelvisLimb" Type="Standard" EnumName="DONKEY_BANDIT_LIMB_PELVIS" Offset="0x8AE4" />
         <Limb Name="gDonkeyBanditTorsoLimb" Type="Standard" EnumName="DONKEY_BANDIT_LIMB_TORSO" Offset="0x8AF0" />
