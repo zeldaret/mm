@@ -890,8 +890,9 @@ void EnKanban_Update(Actor* thisx, PlayState* play) {
 }
 
 static Gfx* sDisplayLists[] = {
-    gSignUpperLeftDL,  gSignLeftUpperDL,  gSignLeftLowerDL, gSignRightUpperDL, gSignRightLowerDL, gSignLowerLeftDL,
-    gSignUpperRightDL, gSignLowerRightDL, gSignPostUpperDL, gSignPostLowerDL,  gSignPostStandDL,
+    gSignUpperLeftModelDL,  gSignLeftUpperModelDL, gSignLeftLowerModelDL,  gSignRightUpperModelDL,
+    gSignRightLowerModelDL, gSignLowerLeftModelDL, gSignUpperRightModelDL, gSignLowerRightModelDL,
+    gSignPostUpperModelDL,  gSignPostLowerModelDL, gSignPostStandModelDL,
 };
 
 #include "z_en_kanban_gfx.c"
@@ -922,7 +923,7 @@ void EnKanban_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    gSPDisplayList(POLY_OPA_DISP++, gSignSetupDL);
+    gSPDisplayList(POLY_OPA_DISP++, gSignMaterialDL);
 
     if (this->actionState != ENKANBAN_SIGN) {
         Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
