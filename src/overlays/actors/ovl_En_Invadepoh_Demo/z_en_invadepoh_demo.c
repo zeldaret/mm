@@ -56,7 +56,7 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play);
 void EnInvadepohDemo_CowTail_Draw(EnInvadepohDemo* this, PlayState* play);
 
 #define DRAW_FLAG_SHOULD_DRAW 1
-#define EN_INVADEPOH_DEMO_CUE_ID_UNINITIALIZED -1
+#define EN_INVADEPOH_DEMO_CUE_ID_NONE -1
 
 typedef enum {
     /* 0 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_DO_NOTHING,
@@ -207,7 +207,7 @@ void EnInvadepohDemo_DoNothing(EnInvadepohDemo* this, PlayState* play) {
 
 void EnInvadepohDemo_Alien_Init(EnInvadepohDemo* this, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sAlienInitChain);
-    this->actor.flags = (ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000);
+    this->actor.flags = ACTOR_FLAG_10 | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_80000000;
     this->objectIndex = Object_GetIndex(&play->objectCtx, OBJECT_UCH);
     if (this->objectIndex < 0) {
         Actor_Kill(&this->actor);
@@ -324,7 +324,7 @@ void EnInvadepohDemo_Romani_FollowPath(EnInvadepohDemo* this, PlayState* play) {
  * Positions the cow tail actor at the appropriate spot on the cow's body and rotates it to
  * match the cow's rotation. This function is also responsible for playing the cow's animation.
  */
-void EnInvadepohDemo_Cow_PositionTailAndPlayAnimation(EnInvadepohDemo* this, PlayState* play) {
+void EnInvadepohDemo_Cow_UpdateCommon(EnInvadepohDemo* this, PlayState* play) {
     s32 pad;
     MtxF mtx;
 
@@ -345,7 +345,7 @@ void EnInvadepohDemo_Cow_PositionTailAndPlayAnimation(EnInvadepohDemo* this, Pla
 }
 
 void EnInvadepohDemo_Cow_Idle(EnInvadepohDemo* this, PlayState* play) {
-    EnInvadepohDemo_Cow_PositionTailAndPlayAnimation(this, play);
+    EnInvadepohDemo_Cow_UpdateCommon(this, play);
 }
 
 void EnInvadepohDemo_Cow_FollowPath(EnInvadepohDemo* this, PlayState* play) {
@@ -368,7 +368,7 @@ void EnInvadepohDemo_Cow_FollowPath(EnInvadepohDemo* this, PlayState* play) {
                 Actor_Kill(&this->actor);
             }
         } else {
-            EnInvadepohDemo_Cow_PositionTailAndPlayAnimation(this, play);
+            EnInvadepohDemo_Cow_UpdateCommon(this, play);
         }
     }
 }
@@ -668,7 +668,8 @@ void EnInvadepohDemo_Alien_Draw(EnInvadepohDemo* this, PlayState* play) {
 
         gfx = POLY_XLU_DISP;
         gfx = Gfx_SetupDL20_NoCD(gfx);
-        gSPSetOtherMode(gfx++, G_SETOTHERMODE_H, 4, 4, 0x00000080);
+
+        gDPSetDither(gfx++, G_CD_NOISE);
         gDPSetCombineLERP(gfx++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE,
                           0);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_NEW);
@@ -780,7 +781,7 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
     }
 
     this->drawFlags = 0;
-    this->cueId = EN_INVADEPOH_DEMO_CUE_ID_UNINITIALIZED;
+    this->cueId = EN_INVADEPOH_DEMO_CUE_ID_NONE;
     this->ufoRotZ = 0;
     this->pathIndex = EN_INVADEPOH_DEMO_GET_PATH_INDEX(&this->actor);
     this->currentPointIndex = 0;
@@ -806,7 +807,7 @@ void EnInvadepohDemo_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnInvadepohDemo* this = THIS;
 
-    if ((this->cueId != EN_INVADEPOH_DEMO_CUE_ID_UNINITIALIZED) && (this->drawFlags & DRAW_FLAG_SHOULD_DRAW)) {
+    if ((this->cueId != EN_INVADEPOH_DEMO_CUE_ID_NONE) && (this->drawFlags & DRAW_FLAG_SHOULD_DRAW)) {
         sDrawFuncs[this->type](this, play);
     }
 }

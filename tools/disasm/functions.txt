@@ -16888,7 +16888,7 @@
     0x80C19590:("EnInvadepohDemo_Alien_FollowPath",),
     0x80C1965C:("EnInvadepohDemo_Romani_Idle",),
     0x80C19688:("EnInvadepohDemo_Romani_FollowPath",),
-    0x80C19754:("EnInvadepohDemo_Cow_PositionTailAndPlayAnimation",),
+    0x80C19754:("EnInvadepohDemo_Cow_UpdateCommon",),
     0x80C1985C:("EnInvadepohDemo_Cow_Idle",),
     0x80C1987C:("EnInvadepohDemo_Cow_FollowPath",),
     0x80C199BC:("EnInvadepohDemo_Ufo_Idle",),
