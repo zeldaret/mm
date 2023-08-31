@@ -122,7 +122,7 @@ static AnimationHeader* sEponaAnimations[] = {
 };
 
 static AnimationHeader* sHniAnimations[] = {
-    &gDonkeyIdleAnim, &gDonkeyShakeHeadAnim, &gDonkeyStopAnim,  &gDonkeyWhinnyAnim, &gDonkeyWalkAnim,
+    &gDonkeyIdleAnim, &gDonkeyShakeHeadAnim, &gDonkeyStopAnim,    &gDonkeyWhinnyAnim,   &gDonkeyWalkAnim,
     &gDonkeyTrotAnim, &gDonkeyGallopAnim,    &gDonkeyJumpLowAnim, &gDonkeyJumpHighAnim,
 };
 
