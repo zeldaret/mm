@@ -59,7 +59,7 @@ void __osInitialize_common(void) {
     osClockRate = (u64)((osClockRate * 3LL) / 4ULL);
 
     if (osResetType == COLD_RESET) {
-        bzero(osAppNmiBuffer, 64);
+        bzero(osAppNMIBuffer, OS_APP_NMI_BUFSIZE);
     }
 
     if (osTvType == OS_TV_PAL) {

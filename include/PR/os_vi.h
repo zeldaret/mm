@@ -113,9 +113,6 @@ typedef struct {
 #define OS_VI_FPAL_HPN2     54
 #define OS_VI_FPAL_HPF2     55
 
-#define OS_TV_PAL           0
-#define OS_TV_NTSC          1
-#define OS_TV_MPAL          2
 #define OS_VI_UNK28         28
 
 
