@@ -202,7 +202,7 @@ extern OSPifRam __osContPifRam;
 extern u8 __osContLastPoll;
 extern u8 __osMaxControllers;
 extern OSMesgQueue __osEepromTimerQ;
-extern OSMesg __osEepromTimerMsg;
+extern OSMesg __osEepromTimerMsg[];
 extern OSPifRam __osPfsPifRam;
 
 #endif

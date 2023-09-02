@@ -60,8 +60,8 @@ typedef struct {
     /* 0x14 */ OSPiHandle* piHandle;
 } OSIoMesg; // size = 0x88
 
-typedef struct {
-    /* 0x00 */ s32 active; // u32 maybe? need to check
+typedef struct OSDevMgr {
+    /* 0x00 */ s32 active;
     /* 0x04 */ OSThread* thread;
     /* 0x08 */ OSMesgQueue* cmdQueue;
     /* 0x0C */ OSMesgQueue* evtQueue;

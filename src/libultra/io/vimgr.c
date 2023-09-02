@@ -9,7 +9,7 @@ OSMesgQueue viEventQueue;
 OSMesg viEventBuf[6];
 OSIoMesg viRetraceMsg;
 OSIoMesg viCounterMsg;
-OSMgrArgs __osViDevMgr = { 0 };
+OSDevMgr __osViDevMgr = { 0 };
 u32 __additional_scanline = 0;
 
 void viMgrMain(void*);
@@ -19,7 +19,7 @@ void osCreateViManager(OSPri pri) {
     OSPri newPri;
     OSPri currentPri;
 
-    if (!__osViDevMgr.initialized) {
+    if (!__osViDevMgr.active) {
         __osTimerServicesInit();
         __additional_scanline = 0;
         osCreateMesgQueue(&viEventQueue, viEventBuf, ARRAY_COUNT(viEventBuf) - 1);
@@ -39,11 +39,11 @@ void osCreateViManager(OSPri pri) {
         }
 
         prevInt = __osDisableInt();
-        __osViDevMgr.initialized = true;
-        __osViDevMgr.mgrThread = &viThread;
+        __osViDevMgr.active = true;
+        __osViDevMgr.thread = &viThread;
         __osViDevMgr.cmdQueue = &viEventQueue;
-        __osViDevMgr.eventQueue = &viEventQueue;
-        __osViDevMgr.accessQueue = NULL;
+        __osViDevMgr.evtQueue = &viEventQueue;
+        __osViDevMgr.acsQueue = NULL;
         __osViDevMgr.piDmaCallback = NULL;
         __osViDevMgr.epiDmaCallback = NULL;
 
@@ -58,7 +58,7 @@ void osCreateViManager(OSPri pri) {
 }
 
 void viMgrMain(void* vargs) {
-    OSMgrArgs* args;
+    OSDevMgr* args;
     static u16 viRetrace;
     u32 addTime;
     OSIoMesg* mesg;
@@ -70,10 +70,10 @@ void viMgrMain(void* vargs) {
         viRetrace = 1;
     }
 
-    args = (OSMgrArgs*)vargs;
+    args = (OSDevMgr*)vargs;
 
     while (true) {
-        osRecvMesg(args->eventQueue, (OSMesg*)&mesg, OS_MESG_BLOCK);
+        osRecvMesg(args->evtQueue, (OSMesg*)&mesg, OS_MESG_BLOCK);
         switch (mesg->hdr.type) {
             case OS_MESG_TYPE_VRETRACE:
                 __osViSwapContext();

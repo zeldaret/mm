@@ -8,7 +8,7 @@ char udigs[] = "0123456789ABCDEF";
 
 void _Litob(_Pft* args, u8 type) {
     u8 buff[BUFF_LEN];
-    const u8* numMap;
+    const char* numMap;
     s32 base;
     s32 idx;
     u64 num;
