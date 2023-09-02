@@ -1,6 +1,6 @@
 #include "global.h"
 
-OSPiHandle CartRomHandle;
+OSPiHandle __CartRomHandle;
 
 OSPiHandle* osCartRomInit(void) {
     register u32 initialConfig;
@@ -17,15 +17,15 @@ OSPiHandle* osCartRomInit(void) {
 
     if (!sCartRomNeedsInit) {
         __osPiRelAccess();
-        return &CartRomHandle;
+        return &__CartRomHandle;
     }
 
     sCartRomNeedsInit = false;
-    CartRomHandle.type = DEVICE_TYPE_CART;
-    CartRomHandle.baseAddress = 0xB0000000;
-    CartRomHandle.domain = 0;
-    CartRomHandle.speed = 0;
-    bzero(&CartRomHandle.transferInfo, sizeof(__OSTranxInfo));
+    __CartRomHandle.type = DEVICE_TYPE_CART;
+    __CartRomHandle.baseAddress = 0xB0000000;
+    __CartRomHandle.domain = 0;
+    __CartRomHandle.speed = 0;
+    bzero(&__CartRomHandle.transferInfo, sizeof(__OSTranxInfo));
 
     /* Uses `status & PI_STATUS_ERROR` in OoT */
     while (status = HW_REG(PI_STATUS_REG, u32), status & (PI_STATUS_BUSY | PI_STATUS_IOBUSY)) {
@@ -42,11 +42,11 @@ OSPiHandle* osCartRomInit(void) {
     HW_REG(PI_BSD_DOM1_RLS_REG, u32) = 3;
     HW_REG(PI_BSD_DOM1_PWD_REG, u32) = 0xFF;
 
-    initialConfig = HW_REG(CartRomHandle.baseAddress, u32);
-    CartRomHandle.latency = initialConfig & 0xFF;
-    CartRomHandle.pageSize = (initialConfig >> 0x10) & 0xF;
-    CartRomHandle.relDuration = (initialConfig >> 0x14) & 0xF;
-    CartRomHandle.pulse = (initialConfig >> 8) & 0xFF;
+    initialConfig = HW_REG(__CartRomHandle.baseAddress, u32);
+    __CartRomHandle.latency = initialConfig & 0xFF;
+    __CartRomHandle.pageSize = (initialConfig >> 0x10) & 0xF;
+    __CartRomHandle.relDuration = (initialConfig >> 0x14) & 0xF;
+    __CartRomHandle.pulse = (initialConfig >> 8) & 0xFF;
 
     HW_REG(PI_BSD_DOM1_LAT_REG, u32) = lastLatency;
     HW_REG(PI_BSD_DOM1_PGS_REG, u32) = lastPageSize;
@@ -54,10 +54,10 @@ OSPiHandle* osCartRomInit(void) {
     HW_REG(PI_BSD_DOM1_PWD_REG, u32) = lastPulse;
 
     prevInt = __osDisableInt();
-    CartRomHandle.next = __osPiTable;
-    __osPiTable = &CartRomHandle;
+    __CartRomHandle.next = __osPiTable;
+    __osPiTable = &__CartRomHandle;
     __osRestoreInt(prevInt);
     __osPiRelAccess();
 
-    return &CartRomHandle;
+    return &__CartRomHandle;
 }

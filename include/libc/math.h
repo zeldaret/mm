@@ -10,21 +10,6 @@
 #define SHT_MAX 32767.0f
 #define SHT_MINV (1.0f / SHT_MAX)
 
-typedef union {
-    f64 d;
-    struct {
-        u32 hi;
-        u32 lo;
-    } word;
-} du;
-
-typedef union {
-    u32 i;
-    f32 f;
-} fu;
-
-extern f32 __libm_qnan_f;
-
 float fabsf(float f);
 #pragma intrinsic(fabsf)
 #ifdef __GNUC__

@@ -1,8 +1,8 @@
 #include "global.h"
 #include "stack.h"
 
-OSPiHandle D_8009D130;
-OSPiHandle D_8009D1A8;
+OSPiHandle __Dom1SpeedParam;
+OSPiHandle __Dom2SpeedParam;
 OSThread sPiMgrThread;
 STACK(sPiMgrStack, 0x1000);
 OSMesgQueue D_8009E3D0;

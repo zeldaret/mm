@@ -44,4 +44,10 @@ extern u32 __osShutdown;
 
 extern OSTimer* __osTimerList;
 
+extern OSTimer __osBaseTimer;
+extern OSTime __osCurrentTime;
+extern u32 __osBaseCounter;
+extern u32 __osViIntrCount;
+extern u32 __osTimerCounter;
+
 #endif

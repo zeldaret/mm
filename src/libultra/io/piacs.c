@@ -2,12 +2,12 @@
 
 u32 __osPiAccessQueueEnabled = 0;
 
-OSMesg D_8009E3F0[1];
+OSMesg piAccessBuf[1];
 OSMesgQueue __osPiAccessQueue;
 
 void __osPiCreateAccessQueue(void) {
     __osPiAccessQueueEnabled = 1;
-    osCreateMesgQueue(&__osPiAccessQueue, D_8009E3F0, ARRAY_COUNT(D_8009E3F0));
+    osCreateMesgQueue(&__osPiAccessQueue, piAccessBuf, ARRAY_COUNT(piAccessBuf));
     osSendMesg(&__osPiAccessQueue, NULL, OS_MESG_NOBLOCK);
 }
 

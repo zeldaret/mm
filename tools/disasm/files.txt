@@ -336,6 +336,7 @@
             0x8009E410 : "contpfs",
             0x8009E510 : "seteventmesg",
             0x8009E590 : "timerintr",
+            0x8009E5D0 : "pfsisplug",
             0x8009E610 : "cartrominit",
             0x8009E690 : "vimgr",
         },

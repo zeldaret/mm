@@ -19,17 +19,17 @@ u32 __OSGlobalIntMask = OS_IM_ALL;
 UNK_TYPE4 D_8009CF70;
 
 void __createSpeedParam(void) {
-    D_8009D130.type = DEVICE_TYPE_INIT;
-    D_8009D130.latency = HW_REG(PI_BSD_DOM1_LAT_REG, u32);
-    D_8009D130.pulse = HW_REG(PI_BSD_DOM1_PWD_REG, u32);
-    D_8009D130.pageSize = HW_REG(PI_BSD_DOM1_PGS_REG, u32);
-    D_8009D130.relDuration = HW_REG(PI_BSD_DOM1_RLS_REG, u32);
+    __Dom1SpeedParam.type = DEVICE_TYPE_INIT;
+    __Dom1SpeedParam.latency = HW_REG(PI_BSD_DOM1_LAT_REG, u32);
+    __Dom1SpeedParam.pulse = HW_REG(PI_BSD_DOM1_PWD_REG, u32);
+    __Dom1SpeedParam.pageSize = HW_REG(PI_BSD_DOM1_PGS_REG, u32);
+    __Dom1SpeedParam.relDuration = HW_REG(PI_BSD_DOM1_RLS_REG, u32);
 
-    D_8009D1A8.type = DEVICE_TYPE_INIT;
-    D_8009D1A8.latency = HW_REG(PI_BSD_DOM2_LAT_REG, u32);
-    D_8009D1A8.pulse = HW_REG(PI_BSD_DOM2_PWD_REG, u32);
-    D_8009D1A8.pageSize = HW_REG(PI_BSD_DOM2_PGS_REG, u32);
-    D_8009D1A8.relDuration = HW_REG(PI_BSD_DOM2_RLS_REG, u32);
+    __Dom2SpeedParam.type = DEVICE_TYPE_INIT;
+    __Dom2SpeedParam.latency = HW_REG(PI_BSD_DOM2_LAT_REG, u32);
+    __Dom2SpeedParam.pulse = HW_REG(PI_BSD_DOM2_PWD_REG, u32);
+    __Dom2SpeedParam.pageSize = HW_REG(PI_BSD_DOM2_PGS_REG, u32);
+    __Dom2SpeedParam.relDuration = HW_REG(PI_BSD_DOM2_RLS_REG, u32);
 }
 
 void __osInitialize_common(void) {

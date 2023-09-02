@@ -55,28 +55,7 @@ extern f32 D_80099100;
 extern f32 D_80099104;
 extern f32 D_80099108;
 extern f32 D_8009910C;
-extern u16 D_800991A0[64];
 
-extern f64 D_800992C0;
-extern f64 D_800992F0;
-extern f64 D_800992F8;
-extern char D_80099300[];
-extern char D_80099304[];
-extern unsigned int D_8009930C[6];
-extern f32 D_80099400;
-extern f64 D_80099428;
-extern f64 D_80099430;
-extern f64 D_80099438;
-// extern UNK_TYPE4 D_80099440;
-extern f32 __libm_qnan_f;
-extern f64 D_80099460[9];
-extern char D_800994A8[];
-extern char D_800994AC[];
-extern char D_800994B0[];
-// extern UNK_TYPE1 D_800994B1;
-extern f64 D_800994B8;
-extern f64 D_800994C0;
-extern f64 D_800994C8;
 extern char gBuildTeam[];
 extern char gBuildDate[];
 extern char gBuildMakeOption[];
@@ -94,25 +73,6 @@ extern void* gYaz0DecompressDstEnd;
 // extern UNK_TYPE4 D_8009CD10;
 extern u32 sRandFloat;
 // extern UNK_TYPE4 sArenaLockMsg;
-extern OSTask tmp_task;
-
-extern OSMesg siAccessBuf[1];
-extern OSMesgQueue __osSiAccessQueue;
-
-extern OSThread __osThreadSave;
-extern OSPiHandle D_8009D130;
-extern OSPiHandle D_8009D1A8;
-
-extern OSMesg D_8009E3F0[1];
-extern OSMesgQueue __osPiAccessQueue;
-extern __OSInode __osPfsInodeCache;
-extern OSTimer D_8009E590;
-extern OSTime __osCurrentTime;
-extern u32 __osBaseCounter;
-extern u32 __osViIntrCount;
-extern u32 __osTimerCounter;
-extern OSPifRam __osPfsPifRam;
-extern OSPiHandle CartRomHandle;
 
 extern DmaEntry dmadata[1568];
 // extern UNK_TYPE1 D_80186028;

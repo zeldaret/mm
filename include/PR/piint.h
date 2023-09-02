@@ -87,6 +87,10 @@ extern OSDevMgr __osPiDevMgr;
 extern OSPiHandle* __osCurrentHandle[];
 extern u32 __osPiAccessQueueEnabled;
 
+extern OSPiHandle __Dom1SpeedParam;
+extern OSPiHandle __Dom2SpeedParam;
+
+extern OSMesgQueue __osPiAccessQueue;
 
 void __osDevMgrMain(void* arg);
 void __osPiCreateAccessQueue(void);
