@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Bombf/z_en_bombf.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_4 | ACTOR_FLAG_1)
+#define FLAGS (ACTOR_FLAG_400 | ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnAm*)thisx)
 
@@ -209,7 +209,7 @@ void EnAm_RemoveEnemyTexture(EnAm* this, PlayState* play) {
         this->textureBlend -= 10;
     } else {
         this->textureBlend = 0;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unkFlag = 0;
     }
 }
@@ -230,7 +230,7 @@ void EnAm_ApplyEnemyTexture(EnAm* this, PlayState* play) {
 
     if (this->textureBlend + 20 >= 255) {
         this->textureBlend = 255;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->enemyCollider.info.bumper.dmgFlags = 0x81C2C788;
         this->interactCollider.info.bumper.dmgFlags = 0x760D3877;
         this->enemyCollider.base.atFlags |= AT_ON;

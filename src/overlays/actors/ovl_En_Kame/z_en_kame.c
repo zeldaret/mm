@@ -7,7 +7,7 @@
 #include "z_en_kame.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnKame*)thisx)
 
@@ -555,7 +555,7 @@ void func_80AD8148(EnKame* this, PlayState* play) {
         }
     }
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->unk_29E = 0;

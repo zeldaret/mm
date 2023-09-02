@@ -1907,20 +1907,6 @@ extern u8 gSampleBankTable[];
 
 // bss
 // extern UNK_TYPE1 D_801ED894;
-extern CollisionPoly* D_801ED8B0;
-extern s32 D_801ED8B4;
-// extern UNK_TYPE1 D_801ED8B8;
-// extern UNK_TYPE1 D_801ED8BC;
-// extern UNK_TYPE1 D_801ED8C0;
-// extern UNK_TYPE1 D_801ED8C4;
-extern f32 D_801ED8C8;
-extern f32 sBgmEnemyDistSq;
-extern f32 D_801ED8D0;
-// extern UNK_TYPE1 D_801ED8D4;
-// extern UNK_TYPE1 D_801ED8D8;
-// extern UNK_TYPE1 D_801ED8DC;
-extern Mtx D_801ED8E0;
-extern Actor* D_801ED920;
 
 extern Vec3f D_801EDE00;
 extern Vec3f D_801EDE10;

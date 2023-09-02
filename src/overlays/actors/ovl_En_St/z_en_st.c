@@ -9,7 +9,9 @@
 #include "objects/object_st/object_st.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | ACTOR_FLAG_1000000)
+#define FLAGS                                                                                          \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_4000 | \
+     ACTOR_FLAG_1000000)
 
 #define THIS ((EnSt*)thisx)
 
@@ -621,7 +623,7 @@ s32 func_808A6580(EnSt* this, PlayState* play) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALTU_DEAD);
             Enemy_StartFinishingBlow(play, &this->actor);
 
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
             switch (this->actor.colChkInfo.damageEffect) {
                 case 4:

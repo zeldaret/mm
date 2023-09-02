@@ -518,7 +518,7 @@ s32 func_80123448(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     return (player->stateFlags1 & PLAYER_STATE1_400000) &&
-           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->targetedActor == NULL));
+           (player->transformation != PLAYER_FORM_HUMAN || (!func_80123434(player) && player->lockOnActor == NULL));
 }
 
 // TODO: Player_IsGoronOrDeku is a temporary name until we have more info on this function.
@@ -1315,9 +1315,8 @@ void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, Pla
     player->itemAction = itemAction;
 }
 
-// Player_Untarget / Player_StopTargeting?
-void func_80123DA4(Player* player) {
-    player->targetedActor = NULL;
+void Player_Untarget(Player* player) {
+    player->lockOnActor = NULL;
     player->stateFlags2 &= ~PLAYER_STATE2_2000;
 }
 
@@ -1335,14 +1334,14 @@ void func_80123DC0(Player* player) {
             ~(PLAYER_STATE1_8000 | PLAYER_STATE1_10000 | PLAYER_STATE1_20000 | PLAYER_STATE1_40000000);
     }
 
-    func_80123DA4(player);
+    Player_Untarget(player);
 }
 
 void func_80123E90(PlayState* play, Actor* actor) {
     Player* player = GET_PLAYER(play);
 
     func_80123DC0(player);
-    player->targetedActor = actor;
+    player->lockOnActor = actor;
     player->unk_A78 = actor;
     player->stateFlags1 |= PLAYER_STATE1_10000;
     Camera_SetViewParam(Play_GetCamera(play, CAM_ID_MAIN), CAM_VIEW_TARGET, actor);

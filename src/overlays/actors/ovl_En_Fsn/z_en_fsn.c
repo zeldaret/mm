@@ -7,7 +7,7 @@
 #include "z_en_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -1424,7 +1424,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
@@ -1479,7 +1479,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
 
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
@@ -1491,8 +1491,8 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
-        this->actor.flags |= ACTOR_FLAG_1;
-        this->actor.targetMode = 0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.targetMode = TARGET_MODE_0;
         this->animIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;
