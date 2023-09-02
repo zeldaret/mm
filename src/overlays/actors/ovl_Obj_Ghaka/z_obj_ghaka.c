@@ -7,7 +7,7 @@
 #include "z_obj_ghaka.h"
 #include "objects/object_ghaka/object_ghaka.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjGhaka*)thisx)
 
@@ -39,7 +39,7 @@ ActorInit Obj_Ghaka_InitVars = {
 static Vec3f D_80B3C960 = { 0.0f, 0.0f, 0.0f };
 
 static InitChainEntry D_80B3C96C[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -70,12 +70,12 @@ void func_80B3C2C4(ObjGhaka* this, PlayState* play) {
 
 void func_80B3C39C(ObjGhaka* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    s16 distDiff = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
+    s16 yaw = this->dyna.actor.yawTowardsPlayer - this->dyna.actor.shape.rot.y;
 
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         func_80B3C29C(this);
-    } else if (this->dyna.actor.xzDistToPlayer < 100.0f || this->dyna.actor.isTargeted) {
-        if (distDiff <= -0x5556 || distDiff >= 0x5556) {
+    } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) || this->dyna.actor.isLockedOn) {
+        if ((yaw <= -0x5556) || (yaw >= 0x5556)) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->dyna.actor.textId = 0xCF3;
@@ -85,8 +85,8 @@ void func_80B3C39C(ObjGhaka* this, PlayState* play) {
         }
     }
 
-    if (this->dyna.pushForce < 0.0f && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20) &&
-        player->transformation == PLAYER_FORM_GORON) {
+    if ((this->dyna.pushForce < 0.0f) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20) &&
+        (player->transformation == PLAYER_FORM_GORON)) {
         func_80B3C2B0(this);
     } else {
         player->stateFlags2 &= ~PLAYER_STATE2_10;
@@ -158,7 +158,7 @@ void ObjGhaka_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&object_ghaka_Colheader_003CD0, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
-    if (this->dyna.actor.floorPoly == 0) {
+    if (this->dyna.actor.floorPoly == NULL) {
         Actor_Kill(&this->dyna.actor);
     }
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_20_20)) {

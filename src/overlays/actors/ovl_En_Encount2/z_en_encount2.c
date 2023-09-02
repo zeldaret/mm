@@ -112,7 +112,7 @@ void EnEncount2_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Collider_InitAndSetJntSph(play, &this->collider, &this->dyna.actor, &sJntSphInit, &this->colElement);
 
-    this->dyna.actor.targetMode = 6;
+    this->dyna.actor.targetMode = TARGET_MODE_6;
     this->dyna.actor.colChkInfo.health = 1;
     this->scale = 0.1f;
     this->switchFlag = ENCOUNT2_GET_SWITCH_FLAG(&this->dyna.actor);

@@ -6,7 +6,7 @@
 
 #include "z_obj_mu_pict.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ObjMuPict*)thisx)
 
@@ -46,7 +46,7 @@ void ObjMuPict_Init(Actor* thisx, PlayState* play) {
 
     func_80C06D90(this, play);
     this->unk14A = OBJMUPICT_GET_F000(&this->actor);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     this->unk148 = 0;

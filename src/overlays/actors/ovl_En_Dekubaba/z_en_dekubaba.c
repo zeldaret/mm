@@ -9,7 +9,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnDekubaba*)thisx)
 
@@ -222,7 +222,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 4;
         // Big Deku Baba hint does not exist in MM
         this->actor.hintId = TATL_HINT_ID_BIO_DEKU_BABA;
-        this->actor.targetMode = 2;
+        this->actor.targetMode = TARGET_MODE_2;
     } else {
         this->size = 1.0f;
 
@@ -230,7 +230,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
             this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
         }
         this->actor.hintId = TATL_HINT_ID_DEKU_BABA;
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
     }
 
     EnDekubaba_SetupWait(this);
@@ -301,8 +301,8 @@ void EnDekubaba_SpawnIceEffects(EnDekubaba* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 4,
-                              this->size * 0.3f, this->size * 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DEKUBABA_BODYPART_MAX, 4, this->size * 0.3f,
+                              this->size * 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -343,7 +343,7 @@ void EnDekubaba_Wait(EnDekubaba* this, PlayState* play) {
     this->actor.world.pos.z = this->actor.home.pos.z;
     this->actor.world.pos.y = this->actor.home.pos.y + 14.0f * this->size;
 
-    if ((this->timer == 0) && (this->actor.xzDistToPlayer < 200.0f * this->size) &&
+    if ((this->timer == 0) && (this->actor.xzDistToPlayer < (200.0f * this->size)) &&
         (fabsf(this->actor.playerHeightRel) < 30.0f * this->size)) {
         EnDekubaba_SetupGrow(this);
     }
@@ -430,7 +430,7 @@ void EnDekubaba_Grow(EnDekubaba* this, PlayState* play) {
                              1, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
     if (this->timer == 0) {
-        if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < 240.0f * this->size) {
+        if (Math_Vec3f_DistXZ(&this->actor.home.pos, &player->actor.world.pos) < (240.0f * this->size)) {
             EnDekubaba_SetupPrepareLunge(this);
         } else {
             EnDekubaba_SetupRetract(this);
@@ -868,7 +868,7 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
             this->actor.scale.y = 0.0f;
             this->actor.scale.x = 0.0f;
             this->actor.speed = 0.0f;
-            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
             EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, this->size * 3.0f, 0, (s32)(this->size * 12.0f),
                                      (s32)(this->size * 5.0f), 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         }
@@ -942,7 +942,7 @@ void EnDekubaba_SetupStunnedVertical(EnDekubaba* this) {
     if (this->timer == 1) {
         Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 4.0f, 0.0f,
                          Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
-        this->timer = 0x28;
+        this->timer = 40;
     } else {
         Animation_Change(&this->skelAnime, &gDekuBabaFastChompAnim, 0.0f, 0.0f,
                          Animation_GetLastFrame(&gDekuBabaFastChompAnim), ANIMMODE_LOOP, -3.0f);
@@ -1237,7 +1237,7 @@ void EnDekubaba_DrawStemRetracted(EnDekubaba* this, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemTopDL);
 
-    for (i = 1; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+    for (i = DEKUBABA_BODYPART_1; i < DEKUBABA_BODYPART_MAX; i++) {
         Matrix_MultZero(&this->bodyPartsPos[i]);
     }
 
@@ -1293,7 +1293,7 @@ void EnDekubaba_DrawStemExtended(EnDekubaba* this, PlayState* play) {
             }
         }
 
-        Matrix_MultZero(&this->bodyPartsPos[i + 1]);
+        Matrix_MultZero(&this->bodyPartsPos[DEKUBABA_BODYPART_1 + i]);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -1309,7 +1309,7 @@ void EnDekubaba_DrawStemBasePruned(EnDekubaba* this, PlayState* play) {
     Collider_UpdateSpheres(55, &this->collider);
     Collider_UpdateSpheres(56, &this->collider);
 
-    Matrix_MultZero(&this->bodyPartsPos[3]);
+    Matrix_MultZero(&this->bodyPartsPos[DEKUBABA_BODYPART_3]);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1349,7 +1349,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
-    Math_Vec3f_Copy(&this->bodyPartsPos[0], &this->actor.world.pos);
+    Math_Vec3f_Copy(&this->bodyPartsPos[DEKUBABA_BODYPART_0], &this->actor.world.pos);
 
     if (this->actionFunc != EnDekubaba_DeadStickDrop) {
         SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, EnDekubaba_PostLimbDraw,
@@ -1382,7 +1382,7 @@ void EnDekubaba_Draw(Actor* thisx, PlayState* play) {
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, DEKUBABA_BODYPART_MAX,
                             this->drawDmgEffScale * this->size, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
                             this->drawDmgEffType);
 }

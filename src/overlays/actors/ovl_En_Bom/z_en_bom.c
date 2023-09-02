@@ -152,17 +152,17 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
 
     if (!this->isPowderKeg) {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, this->collider2Elements);
         this->collider1.dim.radius = 6;
         this->collider1.dim.height = 11;
     } else {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
         this->collider1.dim.radius = 20;
         this->collider1.dim.height = 36;
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider3.info.toucher.damage += ENBOM_GETZ_FF00(thisx);
+    this->collider2Elements[0].info.toucher.damage += ENBOM_GETZ_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
     if (ENBOM_GETZ_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;

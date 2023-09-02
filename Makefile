@@ -23,6 +23,8 @@ FULL_DISASM ?= 0
 RUN_CC_CHECK ?= 1
 # Dump build object files
 OBJDUMP_BUILD ?= 0
+# Force asm processor to run on every file
+ASM_PROC_FORCE ?= 0
 # Number of threads to disassmble, extract, and compress with
 N_THREADS ?= $(shell nproc)
 
@@ -91,6 +93,10 @@ OBJDUMP    := $(MIPS_BINUTILS_PREFIX)objdump
 ASM_PROC   := python3 tools/asm-processor/build.py
 
 ASM_PROC_FLAGS := --input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
+
+ifneq ($(ASM_PROC_FORCE), 0)
+	ASM_PROC_FLAGS += --force
+endif
 
 IINC       := -Iinclude -Isrc -Iassets -Ibuild -I.
 

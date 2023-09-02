@@ -8,7 +8,7 @@
 #include "z_en_shn.h"
 #include "z64snap.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnShn*)thisx)
 
@@ -127,7 +127,7 @@ void func_80AE626C(EnShn* this) {
     this->unk_2BC = CLAMP(this->unk_2BC, -0x1FFE, 0x1FFE);
     Math_Vec3f_Copy(&shnPos, &this->actor.focus.pos);
     if (this->shnPlayerRef->actor.id == ACTOR_PLAYER) {
-        playerPos.y = this->shnPlayerRef->bodyPartsPos[7].y + 3.0f;
+        playerPos.y = this->shnPlayerRef->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&playerPos, &this->shnPlayerRef->actor.focus.pos);
     }
@@ -354,7 +354,7 @@ void EnShn_Init(Actor* thisx, PlayState* play) {
     } else {
         func_80AE615C(this, 2);
     }
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_2E0 = 0;
     this->unk_2D8 = 0;

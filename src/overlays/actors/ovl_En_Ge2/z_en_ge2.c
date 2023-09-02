@@ -6,7 +6,7 @@
 
 #include "z_en_ge2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe2*)thisx)
 
@@ -97,7 +97,7 @@ void EnGe2_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.world.rot.x = this->picto.actor.shape.rot.x = 0;
     this->picto.actor.world.rot.z = this->picto.actor.shape.rot.z = 0;
 
-    this->picto.actor.targetMode = 6;
+    this->picto.actor.targetMode = TARGET_MODE_6;
     this->stateFlags = 0;
     this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
     this->cueId = -1;
@@ -185,7 +185,8 @@ s32 EnGe2_LookForPlayer(PlayState* play, Actor* actor, Vec3f* pos, s16 yaw, s16 
         return false;
     }
 
-    if (BgCheck_AnyLineTest1(&play->colCtx, pos, &player->bodyPartsPos[7], &posResult, &outPoly, false)) {
+    if (BgCheck_AnyLineTest1(&play->colCtx, pos, &player->bodyPartsPos[PLAYER_BODYPART_HEAD], &posResult, &outPoly,
+                             false)) {
         return false;
     } else {
         return true;
@@ -463,7 +464,7 @@ void EnGe2_KnockedOut(EnGe2* this, PlayState* play) {
         this->detectedStatus = GERUDO_PURPLE_DETECTION_UNDETECTED;
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
         this->stateFlags &= ~GERUDO_PURPLE_STATE_KO;
-        this->picto.actor.flags |= ACTOR_FLAG_1;
+        this->picto.actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 }
 
@@ -514,7 +515,7 @@ void EnGe2_PatrolDuties(EnGe2* this, PlayState* play) {
             this->picto.actor.speed = 0.0f;
             this->actionFunc = EnGe2_KnockedOut;
             Actor_PlaySfx(&this->picto.actor, NA_SE_EN_PIRATE_DEAD);
-            this->picto.actor.flags &= ~ACTOR_FLAG_1;
+            this->picto.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->stateFlags |= GERUDO_PURPLE_STATE_KO;
         }
     } else if (this->picto.actor.home.rot.x == 0) {

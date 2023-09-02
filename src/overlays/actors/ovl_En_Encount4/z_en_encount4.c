@@ -53,7 +53,7 @@ void EnEncount4_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_809C3FD8;
 }
 

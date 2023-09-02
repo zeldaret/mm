@@ -445,7 +445,6 @@ beginseg
     include "build/src/code/flg_set.o"
     include "build/src/code/z_DLF.o"
     include "build/src/code/z_actor.o"
-    include "build/data/code/z_actor.bss.o"
     include "build/src/code/z_actor_dlftbls.o"
     include "build/src/code/z_bgcheck.o"
     include "build/src/code/z_bg_collect.o"
@@ -555,7 +554,6 @@ beginseg
     include "build/src/code/audio_thread_manager.o"
     include "build/src/code/title_setup.o"
     include "build/src/code/game.o"
-    include "build/data/code/game.bss.o"
     include "build/src/code/gamealloc.o"
     include "build/src/code/graph.o"
     include "build/src/code/graphalloc.o"
@@ -2810,8 +2808,7 @@ beginseg
     name "ovl_En_Bal"
     compress
     include "build/src/overlays/actors/ovl_En_Bal/z_en_bal.o"
-    include "build/data/ovl_En_Bal/ovl_En_Bal.data.o"
-    include "build/data/ovl_En_Bal/ovl_En_Bal.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Bal/ovl_En_Bal_reloc.o"
 endseg
 
 beginseg

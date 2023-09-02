@@ -32,7 +32,7 @@ ActorInit En_Bh_InitVars = {
 void EnBh_Init(Actor* thisx, PlayState* play) {
     EnBh* this = THIS;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBhSkel, &gBhFlyingAnim, this->jointTable, this->morphTable,
                        OBJECT_BH_LIMB_MAX);

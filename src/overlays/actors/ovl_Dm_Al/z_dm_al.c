@@ -6,7 +6,7 @@
 
 #include "z_dm_al.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAl*)thisx)
 
@@ -84,7 +84,7 @@ void DmAl_Init(Actor* thisx, PlayState* play) {
                        MADAME_AROMA_LIMB_MAX);
     this->animIndex = MADAME_AROMA_ANIM_NONE;
     DmAl_ChangeAnim(this, MADAME_AROMA_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmAl_HandleCutscene;
 }

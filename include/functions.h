@@ -477,7 +477,7 @@ void func_800B4AEC(PlayState* play, Actor* actor, f32 y);
 void func_800B4B50(Actor* actor, Lights* mapper, PlayState* play);
 void Actor_GetProjectedPos(PlayState* play, Vec3f* worldPos, Vec3f* projectedPos, f32* invW);
 
-void Actor_DrawZTarget(TargetContext* targetCtx, PlayState* play);
+void Target_Draw(TargetContext* targetCtx, PlayState* play);
 
 s32 Flags_GetSwitch(PlayState* play, s32 flag);
 void Flags_SetSwitch(PlayState* play, s32 flag);
@@ -558,7 +558,7 @@ PosRot* Actor_GetFocus(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorld(PosRot* dest, Actor* actor);
 PosRot* Actor_GetWorldPosShapeRot(PosRot* dest, Actor* actor);
 
-s32 func_800B83F8(Actor* actor, Player* player, s32 flag);
+s32 Target_OutsideLeashRange(Actor* actor, Player* player, s32 ignoreLeash);
 s32 Actor_ProcessTalkRequest(Actor* actor, GameState* gameState);
 s32 Actor_OfferTalkExchange(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, PlayerItemAction exchangeItemAction);
 s32 Actor_OfferTalkExchangeEquiCylinder(Actor* actor, PlayState* play, f32 radius, PlayerItemAction exchangeItemAction);
@@ -657,8 +657,8 @@ void func_800BE504(Actor* actor, ColliderCylinder* collider);
 void func_800BE568(Actor* actor, ColliderSphere* collider);
 void func_800BE5CC(Actor* actor, ColliderJntSph* collider, s32 colliderIndex);
 s32 Actor_IsSmallChest(struct EnBox* chest);
-void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s16 limbPosCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
-void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f limbPos[], s32 limbPosCount, s32 effectsPerLimb, f32 scale, f32 scaleRange);
+void Actor_DrawDamageEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s16 bodyPartsCount, f32 effectScale, f32 frozenSteamScale, f32 effectAlpha, u8 type);
+void Actor_SpawnIceEffects(PlayState* play, Actor* actor, Vec3f bodyPartsPos[], s32 bodyPartsCount, s32 effectsPerBodyPart, f32 scale, f32 scaleRange);
 
 void ActorOverlayTable_FaultClient(void* arg0, void* arg1);
 uintptr_t ActorOverlayTable_FaultAddrConv(uintptr_t address, void* param);
@@ -1119,7 +1119,7 @@ void Player_SetModelGroup(Player* player, PlayerModelGroup modelGroup);
 void func_80123C58(Player* player);
 void Player_SetEquipmentData(PlayState* play, Player* player);
 void Player_UpdateBottleHeld(PlayState* play, Player* player, ItemId itemId, PlayerItemAction itemAction);
-void func_80123DA4(Player* player);
+void Player_Untarget(Player* player);
 void func_80123DC0(Player* player);
 void func_80123E90(PlayState* play, Actor* actor);
 s32 func_80123F2C(PlayState* play, s32 ammo);
@@ -1457,13 +1457,6 @@ void Sched_SendGfxCancelMsg(SchedContext* sched);
 void Sched_FaultClient(void* param1, void* param2);
 void Sched_ThreadEntry(void* arg);
 void Sched_Init(SchedContext* sched, void* stack, OSPri pri, u8 viModeType, UNK_TYPE arg4, IrqMgr* irqMgr);
-// void func_80177390(void);
-void func_801773A0(void* arg0);
-void func_801773C4(void* arg0);
-void SpeedMeter_DrawTimeEntries(void* displayList, GraphicsContext* gfxCtx);
-// void func_80177A84(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE2 param_5, UNK_TYPE4 param_6, UNK_TYPE4 param_7, UNK_TYPE4 param_8, UNK_TYPE4 param_9);
-//void func_80177AC8(void);
-void SpeedMeter_DrawAllocEntries(void* displayList, GraphicsContext* gfxCtx, GameState* gameState);
 
 void Mtx_SetTranslateScaleMtx(Mtx* mtx, f32 scaleX, f32 scaleY, f32 scaleZ, f32 translateX, f32 translateY, f32 translateZ);
 void Mtx_SetRotationMtx(Mtx* mtx, s32 angle, f32 axisX, f32 axisY, f32 axisZ);

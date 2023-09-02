@@ -9,7 +9,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnKarebaba*)thisx)
 
@@ -138,7 +138,7 @@ static DamageTable sDamageTable = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 void EnKarebaba_Init(Actor* thisx, PlayState* play) {
@@ -177,18 +177,18 @@ void EnKarebaba_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnKarebaba_SpawnIceEffects(EnKarebaba* this, PlayState* play) {
-    s32 limbPosCount;
+    s32 bodyPartsCount;
 
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
 
         if (this->actor.params == KAREBABA_MINI) {
-            limbPosCount = 1;
+            bodyPartsCount = 1;
         } else {
-            limbPosCount = 4;
+            bodyPartsCount = KAREBABA_BODYPART_MAX;
         }
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, limbPosCount, 4, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, bodyPartsCount, 4, 0.3f, 0.2f);
     }
 }
 
@@ -420,7 +420,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
                 this->actor.scale.y = 0.0f;
                 this->actor.scale.x = 0.0f;
                 this->actor.speed = 0.0f;
-                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
                 EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, 3.0f, 0, 12, 5, 15, HAHEN_OBJECT_DEFAULT, 10,
                                          NULL);
             }
@@ -452,7 +452,7 @@ void EnKarebaba_Dying(EnKarebaba* this, PlayState* play) {
 void EnKarebaba_SetupShrinkDie(EnKarebaba* this) {
     Actor_PlaySfx(&this->actor, NA_SE_EN_DEKU_JR_DEAD);
     this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->timer = 3;
     }
@@ -551,7 +551,7 @@ void EnKarebaba_Regrow(EnKarebaba* this, PlayState* play) {
 
     if (this->timer == 20) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         if (this->actor.params == ENKAREBABA_1) {
             func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_ENEMY);
         }
@@ -654,7 +654,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
     EnKarebaba* this = THIS;
     s32 i;
     s32 stemSections;
-    s16 limbCount;
+    s16 bodyPartsCount;
     f32 scale = 0.01f;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -694,7 +694,7 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, sStemDLists[i]);
 
-            Matrix_MultZero(&this->bodyPartsPos[1 + i]);
+            Matrix_MultZero(&this->bodyPartsPos[KAREBABA_BODYPART_1 + i]);
             if ((i == 0) && (this->actionFunc == EnKarebaba_Dying)) {
                 Matrix_MultZero(&this->actor.focus.pos);
             }
@@ -720,18 +720,18 @@ void EnKarebaba_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gDekuBabaStemBaseDL);
 
-        Matrix_MultZero(&this->bodyPartsPos[3]);
+        Matrix_MultZero(&this->bodyPartsPos[KAREBABA_BODYPART_3]);
     }
 
     func_800AE5A0(play);
 
     if (this->actor.params == KAREBABA_MINI) {
-        limbCount = 1;
+        bodyPartsCount = 1;
     } else {
-        limbCount = ARRAY_COUNT(this->bodyPartsPos);
+        bodyPartsCount = KAREBABA_BODYPART_MAX;
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, limbCount, this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, bodyPartsCount, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->boundFloor != 0) {

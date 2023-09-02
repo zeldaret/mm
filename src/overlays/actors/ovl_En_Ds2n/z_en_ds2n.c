@@ -9,7 +9,7 @@
 
 #include "z_en_ds2n.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDs2n*)thisx)
 
@@ -32,14 +32,19 @@ ActorInit En_Ds2n_InitVars = {
     /**/ EnDs2n_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ ENDS2N_ANIM_IDLE,
+    /* 1 */ ENDS2N_ANIM_MAX
+} EnDs2nAnimation;
+
+static AnimationInfo sAnimationInfo[ENDS2N_ANIM_MAX] = {
+    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENDS2N_ANIM_IDLE
 };
 
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
     this->blinkState = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENDS2N_ANIM_IDLE);
     this->actionFunc = EnDs2n_Idle;
 }
 

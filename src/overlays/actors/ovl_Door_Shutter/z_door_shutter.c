@@ -307,7 +307,7 @@ s32 func_808A0E28(DoorShutter* this, PlayState* play) {
             }
         }
     }
-    return false;
+    return 0;
 }
 
 void func_808A0F88(DoorShutter* this, PlayState* play) {
@@ -328,7 +328,7 @@ void func_808A0F88(DoorShutter* this, PlayState* play) {
         } else {
             CutsceneManager_Queue(this->csId);
         }
-    } else if (func_808A0E28(this, play)) {
+    } else if (func_808A0E28(this, play) != 0) {
         Player* player = GET_PLAYER(play);
 
         player->doorType = PLAYER_DOORTYPE_TALKING;
@@ -483,7 +483,7 @@ void func_808A1548(DoorShutter* this, PlayState* play) {
             } else {
                 CutsceneManager_Queue(this->csId);
             }
-        } else if (func_808A0E28(this, play)) {
+        } else if (func_808A0E28(this, play) != 0) {
             Player* player = GET_PLAYER(play);
 
             player->doorType = PLAYER_DOORTYPE_TALKING;

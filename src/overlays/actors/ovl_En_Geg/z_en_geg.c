@@ -12,7 +12,7 @@
 #include "objects/object_hakugin_demo/object_hakugin_demo.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGeg*)thisx)
 
@@ -420,7 +420,7 @@ void func_80BB217C(EnGeg* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         func_80BB1C1C(this);
         this->actionFunc = func_80BB221C;
-        this->actor.targetMode = 3;
+        this->actor.targetMode = TARGET_MODE_3;
     }
 }
 
@@ -459,7 +459,7 @@ void func_80BB221C(EnGeg* this, PlayState* play) {
                 Message_StartTextbox(play, this->unk_496, &this->actor);
                 this->unk_230 &= ~8;
                 this->actionFunc = func_80BB27D4;
-            } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
+            } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isLockedOn) {
                 Actor_OfferTalk(&this->actor, play, 300.0f);
                 this->unk_230 |= 8;
             }

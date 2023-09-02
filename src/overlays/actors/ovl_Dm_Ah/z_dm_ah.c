@@ -6,7 +6,7 @@
 
 #include "z_dm_ah.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmAh*)thisx)
 
@@ -76,7 +76,7 @@ s32 func_80C1D4D0(DmAh* this, PlayState* play) {
     this->unk_290 = CLAMP(this->unk_290, -0x1C70, 0x1C70);
 
     if (this->unk_280->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_280)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_280)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_280->focus.pos);
     }
@@ -168,7 +168,7 @@ void DmAh_Init(Actor* thisx, PlayState* play) {
                        OBJECT_AH_LIMB_MAX);
     this->animIndex = DMAH_ANIM_NONE;
     DmAh_ChangeAnim(this, DMAH_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->unk_27C |= 1;
     if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {

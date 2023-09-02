@@ -8,7 +8,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_skb/object_skb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnHintSkb*)thisx)
 
@@ -586,8 +586,8 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
         (this->actionFunc == func_80C1FE80)) {
         if (this->actionFunc != func_80C2077C) {
             if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-                this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 this->actor.hintId = TATL_HINT_ID_NONE;
                 this->actor.textId = 0;
                 if (this->actionFunc == func_80C1FE80) {
@@ -596,8 +596,8 @@ void func_80C20D64(EnHintSkb* this, PlayState* play) {
                 func_80C2075C(this);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
-            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-            this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+            this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
             this->actor.hintId = TATL_HINT_ID_STALCHILD;
             this->actor.textId = 0;
             if (this->skelAnime.animation == &object_skb_Anim_00697C) {
@@ -783,26 +783,26 @@ void func_80C21468(EnHintSkb* this, PlayState* play) {
     static Color_RGBA8 D_80C21E48 = { 200, 200, 255, 255 };
     static Vec3f D_80C21E4C = { 0.0f, -1.0f, 0.0f };
     Vec3f sp84;
-    s32 phi_s4;
+    s32 bodyPartsCount;
     s16 temp_s1;
     s32 i;
 
     if (this->unk_3E8 & 2) {
-        phi_s4 = ARRAY_COUNT(this->limbPos) - 1;
+        bodyPartsCount = ENHINTSKB_BODYPART_MAX - 1;
     } else {
-        phi_s4 = ARRAY_COUNT(this->limbPos);
+        bodyPartsCount = ENHINTSKB_BODYPART_MAX;
     }
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 30, NA_SE_EV_ICE_BROKEN);
 
-    for (i = 0; i < phi_s4; i++) {
-        temp_s1 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->limbPos[i]);
+    for (i = 0; i < bodyPartsCount; i++) {
+        temp_s1 = Math_Vec3f_Yaw(&this->actor.world.pos, &this->bodyPartsPos[i]);
 
         sp84.x = Math_SinS(temp_s1) * 3.0f;
         sp84.z = Math_CosS(temp_s1) * 3.0f;
         sp84.y = (Rand_ZeroOne() * 4.0f) + 4.0f;
 
-        EffectSsEnIce_Spawn(play, &this->limbPos[i], 0.6f, &sp84, &D_80C21E4C, &D_80C21E44, &D_80C21E48, 30);
+        EffectSsEnIce_Spawn(play, &this->bodyPartsPos[i], 0.6f, &sp84, &D_80C21E4C, &D_80C21E44, &D_80C21E48, 30);
     }
 }
 
@@ -891,11 +891,11 @@ void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
             if ((limbIndex == 2) || (limbIndex == 4) || (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) ||
                 (limbIndex == 8) || (limbIndex == 9) || (limbIndex == 13) || (limbIndex == 14) || (limbIndex == 15) ||
                 (limbIndex == 16) || (limbIndex == 17) || (limbIndex == 18)) {
-                Matrix_MultZero(&this->limbPos[this->limbCount]);
-                this->limbCount++;
+                Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsCount]);
+                this->bodyPartsCount++;
             } else if ((limbIndex == 11) && !(this->unk_3E8 & 2)) {
-                Matrix_MultVec3f(&D_80C21E70, &this->limbPos[this->limbCount]);
-                this->limbCount++;
+                Matrix_MultVec3f(&D_80C21E70, &this->bodyPartsPos[this->bodyPartsCount]);
+                this->bodyPartsCount++;
             }
         }
     }
@@ -904,13 +904,13 @@ void EnHintSkb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnHintSkb_Draw(Actor* thisx, PlayState* play) {
     EnHintSkb* this = THIS;
 
-    this->limbCount = 0;
+    this->bodyPartsCount = 0;
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, EnHintSkb_OverrideLimbDraw,
                       EnHintSkb_PostLimbDraw, &this->actor);
     if (this->drawDmgEffTimer > 0) {
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, this->limbCount, this->drawDmgEffScale, 0.5f,
-                                this->drawDmgEffAlpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, this->bodyPartsCount, this->drawDmgEffScale,
+                                0.5f, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 
     if (this->unk_3E8 & 4) {

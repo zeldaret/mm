@@ -1768,7 +1768,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
 
     if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->tatlMessageTimer++;
         if (this->tatlMessageTimer > 800) {
             this->tatlMessageTimer = 0;
@@ -1793,7 +1793,7 @@ void DmStk_ClockTower_IdleWithOcarina(DmStk* this, PlayState* play) {
 void DmStk_ClockTower_Idle(DmStk* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
         DmStk_ClockTower_AdjustHeightAndRotation(this, play);
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
         if (this->animIndex == SK_ANIM_CALL_DOWN_MOON_LOOP) {
             this->actor.targetArrowOffset = 3100.0f;

@@ -8,7 +8,7 @@
 #include "z64snap.h"
 #include "objects/object_tsn/object_tsn.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnTsn*)thisx)
 
@@ -83,7 +83,7 @@ void func_80ADFCEC(EnTsn* this, PlayState* play) {
     this->actor.update = func_80AE0F84;
     this->actor.destroy = NULL;
     this->actor.draw = NULL;
-    this->actor.targetMode = 7;
+    this->actor.targetMode = TARGET_MODE_7;
 
     switch (ENTSN_GET_F(&this->actor)) {
         case ENTSN_F_0:
@@ -536,7 +536,7 @@ void func_80AE0C88(EnTsn* this, PlayState* play) {
             this->unk_220 |= 4;
             ENTSN_SET_Z(&this->unk_1D8->actor, true);
         }
-    } else if (this->actor.isTargeted) {
+    } else if (this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
@@ -553,7 +553,7 @@ void func_80AE0D78(EnTsn* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80AE0D10;
         this->unk_220 |= 4;
-    } else if (this->actor.isTargeted) {
+    } else if (this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }

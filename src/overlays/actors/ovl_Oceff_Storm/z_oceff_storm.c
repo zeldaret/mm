@@ -81,8 +81,8 @@ void OceffStorm_Init(Actor* thisx, PlayState* play) {
         this->actor.draw = OceffStorm_Draw2;
     } else {
         this->actor.world.pos.y = player->actor.world.pos.y;
-        this->actor.world.pos.x = player->bodyPartsPos[0].x;
-        this->actor.world.pos.z = player->bodyPartsPos[0].z;
+        this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+        this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
         gSaveContext.jinxTimer = 0;
         if ((play->interfaceCtx.restrictions.songOfStorms == 0) && !func_8098176C(play)) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_EN_OKARINA_EFFECT, this->actor.world.pos.x,

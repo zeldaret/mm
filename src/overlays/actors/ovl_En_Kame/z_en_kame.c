@@ -7,7 +7,7 @@
 #include "z_en_kame.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnKame*)thisx)
 
@@ -177,7 +177,7 @@ void func_80AD7018(EnKame* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 10, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, SNAPPER_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -555,7 +555,7 @@ void func_80AD8148(EnKame* this, PlayState* play) {
         }
     }
     this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PAMET_DEAD);
     this->unk_29E = 0;
@@ -764,16 +764,35 @@ s32 func_80AD8A48(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return false;
 }
 
+static Vec3f D_80AD8E68[] = {
+    { 1500.0f, 0.0f, -2000.0f }, // SNAPPER_BODYPART_5
+    { 1500.0f, 0.0f, 2000.0f },  // SNAPPER_BODYPART_6
+    { 1500.0f, 2000.0f, 0.0f },  // SNAPPER_BODYPART_7
+    { 1500.0f, -2000.0f, 0.0f }, // SNAPPER_BODYPART_8
+    { 2500.0f, 0.0f, 0.0f },     // SNAPPER_BODYPART_9
+};
+
+static s8 sLimbToBodyParts[SNAPPER_LIMB_MAX] = {
+    BODYPART_NONE,                     // SNAPPER_LIMB_NONE
+    BODYPART_NONE,                     // SNAPPER_LIMB_BODY
+    BODYPART_NONE,                     // SNAPPER_LIMB_HEAD
+    SNAPPER_BODYPART_JAW,              // SNAPPER_LIMB_JAW
+    BODYPART_NONE,                     // SNAPPER_LIMB_EYES
+    BODYPART_NONE,                     // SNAPPER_LIMB_FRONT_LEFT_LEG
+    SNAPPER_BODYPART_FRONT_LEFT_FOOT,  // SNAPPER_LIMB_FRONT_LEFT_FOOT
+    BODYPART_NONE,                     // SNAPPER_LIMB_FRONT_RIGHT_LEG
+    SNAPPER_BODYPART_FRONT_RIGHT_FOOT, // SNAPPER_LIMB_FRONT_RIGHT_FOOT
+    BODYPART_NONE,                     // SNAPPER_LIMB_BACK_LEFT_LEG
+    SNAPPER_BODYPART_BACK_LEFT_FOOT,   // SNAPPER_LIMB_BACK_LEFT_FOOT
+    BODYPART_NONE,                     // SNAPPER_LIMB_BACK_RIGHT_LEG
+    SNAPPER_BODYPART_BACK_RIGHT_FOOT,  // SNAPPER_LIMB_BACK_RIGHT_FOOT
+};
+
 void func_80AD8AF8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_80AD8E68[] = {
-        { 1500.0f, 0.0f, -2000.0f }, { 1500.0f, 0.0f, 2000.0f }, { 1500.0f, 2000.0f, 0.0f },
-        { 1500.0f, -2000.0f, 0.0f }, { 2500.0f, 0.0f, 0.0f },
-    };
-    static s8 D_80AD8EA4[] = { -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, 3, -1, 4 };
     EnKame* this = THIS;
 
-    if (D_80AD8EA4[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_80AD8EA4[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == SNAPPER_LIMB_BODY) {
@@ -786,7 +805,7 @@ void func_80AD8AF8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
         }
 
         ptr2 = D_80AD8E68;
-        ptr = &this->limbPos[5];
+        ptr = &this->bodyPartsPos[SNAPPER_BODYPART_5];
         for (i = 0; i < ARRAY_COUNT(D_80AD8E68); i++) {
             Matrix_MultVec3f(ptr2, ptr);
             ptr2++;
@@ -811,7 +830,7 @@ void EnKame_Draw(Actor* thisx, PlayState* play) {
 
     SkelAnime_DrawFlexOpa(play, this->snapperSkelAnime.skeleton, this->snapperSkelAnime.jointTable,
                           this->snapperSkelAnime.dListCount, func_80AD8A48, func_80AD8AF8, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, SNAPPER_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     if (this->actor.shape.shadowDraw == NULL) {

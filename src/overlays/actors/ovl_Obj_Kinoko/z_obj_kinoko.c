@@ -42,11 +42,11 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
     if (player->currentMask != PLAYER_MASK_SCENTS) {
         thisx->draw = NULL;
         thisx->hintId = TATL_HINT_ID_NONE;
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         thisx->draw = ObjKinoko_Draw;
         thisx->hintId = TATL_HINT_ID_MUSHROOM;
-        thisx->flags |= ACTOR_FLAG_1;
+        thisx->flags |= ACTOR_FLAG_TARGETABLE;
         if (Actor_HasParent(thisx, play)) {
             Flags_SetCollectible(play, OBJ_KINOKO_GET_FLAG(thisx));
             Actor_Kill(thisx);

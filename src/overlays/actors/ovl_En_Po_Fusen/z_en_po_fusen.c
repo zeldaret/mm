@@ -102,7 +102,7 @@ void EnPoFusen_Init(Actor* thisx, PlayState* play) {
     f32 flyingHeightMin;
 
     this->actor.scale.x = this->actor.scale.y = this->actor.scale.z = 0.007f;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     Collider_InitSphere(play, &this->collider);

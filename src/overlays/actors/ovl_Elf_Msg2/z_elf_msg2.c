@@ -83,7 +83,7 @@ void ElfMsg2_Init(Actor* thisx, PlayState* play) {
             ElfMsg2_SetupAction(this, func_8096EFD0);
         } else {
             ElfMsg2_SetupAction(this, func_8096EF98);
-            this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_1);
+            this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_TARGETABLE);
             this->actor.textId = func_8096EE50(this);
         }
         this->actor.shape.rot.z = 0;
@@ -137,7 +137,7 @@ void func_8096EFD0(ElfMsg2* this, PlayState* play) {
     if ((this->actor.home.rot.y < 0) && (this->actor.home.rot.y >= -0x80) &&
         (Flags_GetSwitch(play, -this->actor.home.rot.y - 1))) {
         ElfMsg2_SetupAction(this, func_8096EF98);
-        this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_1);
+        this->actor.flags |= (ACTOR_FLAG_40000 | ACTOR_FLAG_TARGETABLE);
         this->actor.textId = func_8096EE50(this);
     }
 }

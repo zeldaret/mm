@@ -7,7 +7,7 @@
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -390,7 +390,7 @@ void func_8089ACEC(EnDinofos* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->colliderJntSph.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 12, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -439,7 +439,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-        this->actor.isTargeted && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
+        this->actor.isLockedOn && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
         Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
@@ -1048,9 +1048,9 @@ void func_8089CB10(EnDinofos* this, PlayState* play) {
 
     for (i = 6; i < ARRAY_COUNT(this->colliderJntSphElement); i++) {
         worldSphere = &this->colliderJntSph.elements[i].dim.worldSphere;
-        worldSphere->center.x = this->limbPos[10].x;
-        worldSphere->center.y = this->limbPos[10].y;
-        worldSphere->center.z = this->limbPos[10].z;
+        worldSphere->center.x = this->bodyPartsPos[DINOFOS_BODYPART_JAW].x;
+        worldSphere->center.y = this->bodyPartsPos[DINOFOS_BODYPART_JAW].y;
+        worldSphere->center.z = this->bodyPartsPos[DINOFOS_BODYPART_JAW].z;
     }
 
     if (play->sceneId == SCENE_MITURIN) {
@@ -1086,7 +1086,8 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
     sp7C.y = Rand_CenteredFloat(0.6f) + 1.4f;
     sp7C.z = 0.9f * temp_f22;
     Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_DODO_J_FIRE - SFX_FLAG);
-    EffectSsDFire_Spawn(play, &this->limbPos[10], &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20, 3, 8);
+    EffectSsDFire_Spawn(play, &this->bodyPartsPos[DINOFOS_BODYPART_JAW], &sp88, &sp7C, 30, 22, 255 - (temp_s0 * 20), 20,
+                        3, 8);
 
     for (end = 6, i = 3; i > 0; i--) {
         if (this->unk_290 < (20 + -(i * 2))) {
@@ -1099,9 +1100,11 @@ void func_8089CBEC(EnDinofos* this, PlayState* play) {
         dim = &this->colliderJntSph.elements[i].dim;
         temp_s3 = (s32)(Math_CosF((this->unk_290 + ((i - 5) << 1)) * (M_PI / 20)) * 0x2C00) + this->actor.shape.rot.y;
 
-        dim->worldSphere.center.x = (s32)this->limbPos[10].x + (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z);
-        dim->worldSphere.center.y = (s32)this->limbPos[10].y + (s32)dim->modelSphere.center.y;
-        dim->worldSphere.center.z = (s32)this->limbPos[10].z + (s32)(Math_CosS(temp_s3) * dim->modelSphere.center.z);
+        dim->worldSphere.center.x =
+            (s32)this->bodyPartsPos[DINOFOS_BODYPART_JAW].x + (s32)(Math_SinS(temp_s3) * dim->modelSphere.center.z);
+        dim->worldSphere.center.y = (s32)this->bodyPartsPos[DINOFOS_BODYPART_JAW].y + (s32)dim->modelSphere.center.y;
+        dim->worldSphere.center.z =
+            (s32)this->bodyPartsPos[DINOFOS_BODYPART_JAW].z + (s32)(Math_CosS(temp_s3) * dim->modelSphere.center.z);
     }
 
     if (this->unk_290 != 0) {
@@ -1128,7 +1131,7 @@ void func_8089CF70(EnDinofos* this, PlayState* play) {
 
 void func_8089CFAC(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosDieAnim);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1345,7 +1348,7 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnDinofos* this = THIS;
     s32 pad;
-    Vec3f sp30;
+    Vec3f bodyPartPos;
 
     if (this->actionFunc != func_8089C7B8) {
         func_8089A900(this);
@@ -1362,10 +1365,11 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
                                 UPDBGCHECKINFO_FLAG_10 | UPDBGCHECKINFO_FLAG_40);
     if (this->actionFunc != func_8089C7B8) {
         if ((this->actor.depthInWater > 0.0f) && (this->actor.depthInWater < 10.0f)) {
-            if (!((play->gameplayFrames % 4) & 1)) {
-                Math_Vec3f_Copy(&sp30, &this->limbPos[1 + (play->gameplayFrames % 4)]);
-                sp30.y = this->actor.world.pos.y + this->actor.depthInWater;
-                EffectSsGRipple_Spawn(play, &sp30, 100, 320, 0);
+            if (((play->gameplayFrames % 4) & 1) == 0) {
+                Math_Vec3f_Copy(&bodyPartPos,
+                                &this->bodyPartsPos[DINOFOS_BODYPART_LEFT_CLAWS + (play->gameplayFrames % 4)]);
+                bodyPartPos.y = this->actor.world.pos.y + this->actor.depthInWater;
+                EffectSsGRipple_Spawn(play, &bodyPartPos, 100, 320, 0);
             }
         }
         if (this->actionFunc != func_8089D018) {
@@ -1377,7 +1381,7 @@ void EnDinofos_Update(Actor* thisx, PlayState* play2) {
         Math_ScaledStepToS(&this->unk_28E, 0, 2000);
     }
 
-    Math_Vec3f_Copy(&this->actor.focus.pos, &this->limbPos[4]);
+    Math_Vec3f_Copy(&this->actor.focus.pos, &this->bodyPartsPos[DINOFOS_BODYPART_UPPER_BODY]);
     this->actor.focus.rot.y = this->actor.shape.rot.y + this->unk_28E;
     if (this->colliderJntSph.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->colliderJntSph.base);
@@ -1413,13 +1417,35 @@ s32 func_8089DC4C(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s
     return 0;
 }
 
+static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
+static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
+static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };
+
+static s8 sLimbToBodyParts[DINOLFOS_LIMB_MAX] = {
+    BODYPART_NONE,                    // DINOLFOS_LIMB_NONE
+    BODYPART_NONE,                    // DINOLFOS_LIMB_LOWER_BODY
+    DINOFOS_BODYPART_LEFT_UPPER_LEG,  // DINOLFOS_LIMB_LEFT_UPPER_LEG
+    BODYPART_NONE,                    // DINOLFOS_LIMB_LEFT_LOWER_LEG
+    DINOFOS_BODYPART_LEFT_CLAWS,      // DINOLFOS_LIMB_LEFT_CLAWS
+    DINOFOS_BODYPART_RIGHT_UPPER_LEG, // DINOLFOS_LIMB_RIGHT_UPPER_LEG
+    BODYPART_NONE,                    // DINOLFOS_LIMB_RIGHT_LOWER_LEG
+    DINOFOS_BODYPART_RIGHT_CLAWS,     // DINOLFOS_LIMB_RIGHT_CLAWS
+    DINOFOS_BODYPART_UPPER_BODY,      // DINOLFOS_LIMB_UPPER_BODY
+    BODYPART_NONE,                    // DINOLFOS_LIMB_LEFT_UPPER_ARM
+    DINOFOS_BODYPART_LEFT_FOREARM,    // DINOLFOS_LIMB_LEFT_FOREARM
+    DINOFOS_BODYPART_LEFT_HAND,       // DINOLFOS_LIMB_LEFT_HAND
+    BODYPART_NONE,                    // DINOLFOS_LIMB_RIGHT_UPPER_ARM
+    DINOFOS_BODYPART_RIGHT_FOREARM,   // DINOLFOS_LIMB_RIGHT_FOREARM
+    DINOFOS_BODYPART_RIGHT_HAND,      // DINOLFOS_LIMB_RIGHT_HAND
+    BODYPART_NONE,                    // DINOLFOS_LIMB_NECK
+    DINOFOS_BODYPART_HEAD,            // DINOLFOS_LIMB_HEAD
+    DINOFOS_BODYPART_JAW,             // DINOLFOS_LIMB_JAW
+    BODYPART_NONE,                    // DINOLFOS_LIMB_UPPER_TAIL
+    DINOFOS_BODYPART_LOWER_TAIL,      // DINOLFOS_LIMB_LOWER_TAIL
+    BODYPART_NONE,                    // DINOLFOS_LIMB_KNIFE
+};
+
 void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
-    static Vec3f D_8089E38C = { 400.0f, -3600.0f, 0.0f };
-    static Vec3f D_8089E398 = { 300.0f, 500.0f, 0.0f };
-    static Vec3f D_8089E3A4 = { 700.0f, 400.0f, 0.0f };
-    static s8 D_8089E3B0[] = {
-        -1, -1, 0, -1, 1, 2, -1, 3, 4, -1, 5, 6, -1, 7, 8, -1, 9, 10, -1, 11, -1,
-    };
     EnDinofos* this = THIS;
     Vec3f sp80;
     Vec3f sp74;
@@ -1430,8 +1456,8 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     MtxF* sp48;
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
-    if (D_8089E3B0[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_8089E3B0[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if ((limbIndex == DINOLFOS_LIMB_RIGHT_HAND) && (this->unk_292 != this->unk_290) &&
@@ -1463,7 +1489,8 @@ void func_8089DC84(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
             sp4C.x -= sp48->mf[3][0];
             sp4C.y -= sp48->mf[3][1];
             sp4C.z -= sp48->mf[3][2];
-            EffectSsDFire_Spawn(play, &this->limbPos[10], &sp4C, &gZeroVec3f, 30, 22, 255 - (sp58 * 20), 20, 3, 8);
+            EffectSsDFire_Spawn(play, &this->bodyPartsPos[DINOFOS_BODYPART_JAW], &sp4C, &gZeroVec3f, 30, 22,
+                                255 - (sp58 * 20), 20, 3, 8);
             this->unk_292 = this->unk_290;
         }
     }
@@ -1498,7 +1525,7 @@ void EnDinofos_Draw(Actor* thisx, PlayState* play) {
                                func_8089DC4C, func_8089DC84, &this->actor, POLY_XLU_DISP);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, DINOFOS_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);

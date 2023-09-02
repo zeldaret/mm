@@ -7,7 +7,7 @@
 #include "z_en_warp_uzu.h"
 #include "objects/object_warp_uzu/object_warp_uzu.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnWarpUzu*)thisx)
 
@@ -65,7 +65,7 @@ void EnWarpUzu_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
-    thisx->targetMode = 0;
+    thisx->targetMode = TARGET_MODE_0;
     func_80A66208(this, play);
 }
 

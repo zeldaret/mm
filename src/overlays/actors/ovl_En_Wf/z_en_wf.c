@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Ice_Poly/z_obj_ice_poly.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWf*)thisx)
 
@@ -377,7 +377,7 @@ void func_80990854(EnWf* this, PlayState* play) {
         this->collider2.base.colType = COLTYPE_HIT5;
         this->collider3.base.colType = COLTYPE_HIT5;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 10, 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -527,7 +527,7 @@ void func_80990F0C(EnWf* this) {
     this->collider2.base.acFlags &= ~AC_ON;
     this->actor.shape.shadowScale = 0.0f;
     this->actor.scale.y = 0.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_2A0 = 60;
     this->actionFunc = func_80990F50;
 }
@@ -553,7 +553,7 @@ void func_80990F50(EnWf* this, PlayState* play) {
 void func_80990FC8(EnWf* this) {
     Animation_Change(&this->skelAnime, &gWolfosRearUpFallOverAnim, 0.5f, 0.0f, 7.0f, ANIMMODE_ONCE_INTERP, 0.0f);
     this->unk_2A0 = 5;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80991040;
 }
 
@@ -1164,7 +1164,7 @@ void func_80992D6C(EnWf* this) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actor.speed = -6.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_2A0 = 25;
     Actor_PlaySfx(&this->actor, NA_SE_EN_WOLFOS_DEAD);
     this->actionFunc = func_80992E0C;
@@ -1549,17 +1549,39 @@ s32 EnWf_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     return false;
 }
 
+static s8 sLimbToBodyParts[WOLFOS_NORMAL_LIMB_MAX] = {
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_NONE
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_ROOT
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_THIGH
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_SHIN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PASTERN
+    WOLFOS_BODYPART_BACK_LEFT_PAW,         // WOLFOS_NORMAL_LIMB_BACK_LEFT_PAW
+    WOLFOS_BODYPART_TAIL,                  // WOLFOS_NORMAL_LIMB_TAIL
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_ABDOMEN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_THIGH
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_SHIN
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PASTERN
+    WOLFOS_BODYPART_BACK_RIGHT_PAW,        // WOLFOS_NORMAL_LIMB_BACK_RIGHT_PAW
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_THORAX
+    WOLFOS_BODYPART_FRONT_RIGHT_UPPER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_UPPER_LEG
+    WOLFOS_BODYPART_FRONT_RIGHT_LOWER_LEG, // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_LOWER_LEG
+    WOLFOS_BODYPART_FRONT_RIGHT_CLAW,      // WOLFOS_NORMAL_LIMB_FRONT_RIGHT_CLAW
+    WOLFOS_BODYPART_HEAD_ROOT,             // WOLFOS_NORMAL_LIMB_HEAD_ROOT
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_HEAD
+    BODYPART_NONE,                         // WOLFOS_NORMAL_LIMB_EYES
+    WOLFOS_BODYPART_FRONT_LEFT_UPPER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_UPPER_LEG
+    WOLFOS_BODYPART_FRONT_LEFT_LOWER_LEG,  // WOLFOS_NORMAL_LIMB_FRONT_LEFT_LOWER_LEG
+    WOLFOS_BODYPART_FRONT_LEFT_CLAW,       // WOLFOS_NORMAL_LIMB_FRONT_LEFT_CLAW
+};
+
 void EnWf_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_809942FC[] = {
-        -1, -1, -1, -1, -1, 0, 1, -1, -1, -1, -1, 2, -1, 3, 4, 5, 6, -1, -1, 7, 8, 9,
-    };
     EnWf* this = THIS;
     Vec3f sp20;
 
     Collider_UpdateSpheres(limbIndex, &this->collider1);
 
-    if (D_809942FC[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_809942FC[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WOLFOS_NORMAL_LIMB_TAIL) {
@@ -1588,7 +1610,7 @@ void EnWf_Draw(Actor* thisx, PlayState* play) {
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                               EnWf_OverrideLimbDraw, EnWf_PostLimbDraw, &this->actor);
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, WOLFOS_BODYPART_MAX, this->drawDmgEffScale,
                                 this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
     }
 }

@@ -227,7 +227,7 @@ void BgCraceMovebg_Update(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc(this, play);
-    Math_Vec3f_Copy(&this->prevPlayerPos, &player->bodyPartsPos[0]);
+    Math_Vec3f_Copy(&this->prevPlayerPos, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 }
 
 /**
