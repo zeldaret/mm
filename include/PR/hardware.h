@@ -12,9 +12,6 @@
 #define KSEG0 0x80000000 // 0x80000000 - 0x9FFFFFFF  Physical memory, cached, unmapped
 #define RDRAM_CACHED KSEG0
 
-// Volatile access wrapper, enforcing uncached memory
-#define HW_REG(reg, type) *(volatile type*)((reg) | KSEG1)
-
 #define AI_DRAM_ADDR_REG   0x04500000
 #define AI_LEN_REG         0x04500004
 #define AI_CONTROL_REG     0x04500008
