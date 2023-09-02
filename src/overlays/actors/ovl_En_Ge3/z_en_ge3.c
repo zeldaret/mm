@@ -21,7 +21,7 @@ void EnGe3_Idle(EnGe3* this, PlayState* play);
 void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play);
 s32 EnGe3_ValidatePictograph(PlayState* play, Actor* thisx);
 
-typedef enum {
+typedef enum GerudoAveilAnimation {
     /* -1 */ GERUDO_AVEIL_ANIM_NONE = -1,
     /*  0 */ GERUDO_AVEIL_ANIM_STAND,
     /*  1 */ GERUDO_AVEIL_ANIM_WALK,
@@ -31,7 +31,8 @@ typedef enum {
     /*  5 */ GERUDO_AVEIL_ANIM_DEMAND,
     /*  6 */ GERUDO_AVEIL_ANIM_DISMISS,
     /*  7 */ GERUDO_AVEIL_ANIM_BEG,
-    /*  8 */ GERUDO_AVEIL_ANIM_RUN_AWAY
+    /*  8 */ GERUDO_AVEIL_ANIM_RUN_AWAY,
+    /*  9 */ GERUDO_AVEIL_ANIM_MAX
 } GerudoAveilAnimation;
 
 ActorInit En_Ge3_InitVars = {
@@ -79,7 +80,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->picto.actor, 0.01f);
 
     this->animIndex = GERUDO_AVEIL_ANIM_NONE;
-    this->csAction = GERUDO_AVEIL_CSACTION_NONE;
+    this->cueId = GERUDO_AVEIL_CUEID_NONE;
     this->picto.validationFunc = EnGe3_ValidatePictograph;
     EnGe3_SetupPath(this, play);
 
@@ -87,7 +88,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_AveilsChamberIdle;
 
-        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) { // Knocked beehive down
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) {
             Actor_Kill(&this->picto.actor);
             return;
         }
@@ -111,16 +112,16 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGe3_ChangeAnim(EnGe3* this, s16 index, u8 mode, f32 morphFrames) {
-    static AnimationHeader* sAnimations[] = {
-        &gGerudoRedStandAnim,         /* GERUDO_AVEIL_ANIM_STAND */
-        &gGerudoRedWalkingAnim,       /* GERUDO_AVEIL_ANIM_WALK */
-        &gGerudoRedHandOnHipWaitAnim, /* GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT */
-        &gGerudoRedTurnHeadAnim,      /* GERUDO_AVEIL_ANIM_TURN_HEAD */
-        &gGerudoRedWaitAnim,          /* GERUDO_AVEIL_ANIM_WAIT */
-        &gGerudoRedDemandingAnim,     /* GERUDO_AVEIL_ANIM_DEMAND */
-        &gGerudoRedDismissAnim,       /* GERUDO_AVEIL_ANIM_DISMISS */
-        &gGerudoRedBeggingAnim,       /* GERUDO_AVEIL_ANIM_BEG */
-        &gGerudoRedRunningAwayAnim,   /* GERUDO_AVEIL_ANIM_RUN_AWAY */
+    static AnimationHeader* sAnimations[GERUDO_AVEIL_ANIM_MAX] = {
+        &gGerudoRedStandAnim,         // GERUDO_AVEIL_ANIM_STAND
+        &gGerudoRedWalkingAnim,       // GERUDO_AVEIL_ANIM_WALK
+        &gGerudoRedHandOnHipWaitAnim, // GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT
+        &gGerudoRedTurnHeadAnim,      // GERUDO_AVEIL_ANIM_TURN_HEAD
+        &gGerudoRedWaitAnim,          // GERUDO_AVEIL_ANIM_WAIT
+        &gGerudoRedDemandingAnim,     // GERUDO_AVEIL_ANIM_DEMAND
+        &gGerudoRedDismissAnim,       // GERUDO_AVEIL_ANIM_DISMISS
+        &gGerudoRedBeggingAnim,       // GERUDO_AVEIL_ANIM_BEG
+        &gGerudoRedRunningAwayAnim,   // GERUDO_AVEIL_ANIM_RUN_AWAY
     };
 
     Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[index]), mode,
@@ -144,7 +145,7 @@ void EnGe3_LookAtPlayer(EnGe3* this, PlayState* play) {
 void EnGe3_SetupPath(EnGe3* this, PlayState* play) {
     this->curPointIndex = 0;
 
-    if (GERUDO_AVEIL_GET_PATH(&this->picto.actor) != GERUDO_AVEIL_PATH_NONE) {
+    if (GERUDO_AVEIL_GET_PATH(&this->picto.actor) != GERUDO_AVEIL_PATH_INDEX_NONE) {
         this->path = &play->setupPathList[GERUDO_AVEIL_GET_PATH(&this->picto.actor)];
     } else {
         this->path = NULL;
@@ -155,12 +156,10 @@ void EnGe3_SetupPath(EnGe3* this, PlayState* play) {
  * @return true if no path or reached end of path
  */
 s32 EnGe3_FollowPath(EnGe3* this) {
-    Path* path;
+    Path* path = this->path;
     Vec3s* curPoint;
     f32 diffX;
     f32 diffZ;
-
-    path = this->path;
 
     if (path == NULL) {
         return true;
@@ -205,67 +204,68 @@ void EnGe3_ThrowPlayerOut(EnGe3* this, PlayState* play) {
 
     if (this->actionTimer > 0) {
         this->actionTimer--;
-    } else {
-        if (play->nextEntrance != play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)]) {
-            play->nextEntrance = play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)];
-            play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_38;
-            CLEAR_WEEKEVENTREG(WEEKEVENTREG_80_08);
-        }
+    } else if (play->nextEntrance != play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)]) {
+        play->nextEntrance = play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)];
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_38;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_80_08);
     }
 }
 
 void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
-    if (SkelAnime_Update(&this->skelAnime) && (this->csAction == GERUDO_AVEIL_CSACTION_INSTRUCT)) {
+    if (SkelAnime_Update(&this->skelAnime) && (this->cueId == GERUDO_AVEIL_CUEID_INSTRUCT)) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_WAIT, ANIMMODE_ONCE, 0.0f);
     }
 
-    if (Cutscene_IsCueInChannel(play, 108)) {
-        s16 csAction = play->csCtx.actorCues[Cutscene_GetCueChannel(play, 108)]->id;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_108)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_108)]->id;
 
-        if (this->csAction != GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY) {
-            Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetCueChannel(play, 108));
+        if (this->cueId != GERUDO_AVEIL_CUEID_BEEHIVE_RUN_AWAY) {
+            Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_108));
         }
 
-        if (this->csAction != csAction) {
-            this->csAction = csAction;
-            switch (this->csAction) {
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 // Both cutscenes
-                case GERUDO_AVEIL_CSACTION_WAIT:
+                case GERUDO_AVEIL_CUEID_WAIT:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 // Instructing expedition leader cutscene
-                case GERUDO_AVEIL_CSACTION_PAUSE:
+                case GERUDO_AVEIL_CUEID_PAUSE:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_TURN_HEAD, ANIMMODE_ONCE, 0.0f);
                     this->skelAnime.playSpeed = 0.0f;
                     break;
 
-                case GERUDO_AVEIL_CSACTION_INSTRUCT:
+                case GERUDO_AVEIL_CUEID_INSTRUCT:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_TURN_HEAD, ANIMMODE_ONCE, 0.0f);
                     break;
 
-                case GERUDO_AVEIL_CSACTION_DEMAND:
+                case GERUDO_AVEIL_CUEID_DEMAND:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_DEMAND, ANIMMODE_LOOP, 0.0f);
                     break;
 
-                case GERUDO_AVEIL_CSACTION_DISMISS:
+                case GERUDO_AVEIL_CUEID_DISMISS:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_DISMISS, ANIMMODE_ONCE, 0.0f);
                     break;
 
-                case GERUDO_AVEIL_CSACTION_BEG:
+                case GERUDO_AVEIL_CUEID_BEG:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_BEG, ANIMMODE_LOOP, 0.0f);
                     break;
 
                 // Fleeing from bees cutscene
-                case GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY:
+                case GERUDO_AVEIL_CUEID_BEEHIVE_RUN_AWAY:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_RUN_AWAY, ANIMMODE_LOOP, 0.0f);
                     this->picto.actor.speed = 5.0f;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
-                case GERUDO_AVEIL_CSACTION_BEEHIVE_VANISH:
+                case GERUDO_AVEIL_CUEID_BEEHIVE_VANISH:
                     Actor_Kill(&this->picto.actor);
+                    break;
+
+                default:
                     break;
             }
 
@@ -273,7 +273,7 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
         }
     } else if ((this->picto.actor.xzDistToPlayer < 700.0f) && (fabsf(this->picto.actor.playerHeightRel) < 100.0f) &&
                !Play_InCsMode(play)) {
-        func_800B7298(play, &this->picto.actor, 0x1A);
+        func_800B7298(play, &this->picto.actor, PLAYER_CSMODE_26);
         Lib_PlaySfx(NA_SE_SY_FOUND);
 
         if (Player_GetMask(play) == PLAYER_MASK_STONE) { // Not fooled by Stone Mask
@@ -284,10 +284,10 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
 
         this->actionFunc = EnGe3_ThrowPlayerOut;
         this->actionTimer = 50;
-        SET_WEEKEVENTREG(WEEKEVENTREG_80_08); // Aveil discovered Player
+        SET_WEEKEVENTREG(WEEKEVENTREG_80_08);
     }
 
-    if (this->csAction == GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY) {
+    if (this->cueId == GERUDO_AVEIL_CUEID_BEEHIVE_RUN_AWAY) {
         this->picto.actor.speed = 5.0f;
         EnGe3_FollowPath(this);
 
@@ -311,7 +311,7 @@ void EnGe3_UpdateColliderAndMove(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     Actor_MoveWithGravity(&this->picto.actor);
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 40.0f, 25.0f, 40.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnGe3_Blink(EnGe3* this, PlayState* play) {
@@ -377,6 +377,7 @@ s32 EnGe3_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                     gDPSetEnvColor(POLY_OPA_DISP++, 140, 170, 230, 255);
                     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
                     break;
+
                 default:
                     gDPPipeSync(POLY_OPA_DISP++);
                     gDPSetEnvColor(POLY_OPA_DISP++, 140, 0, 0, 255);
