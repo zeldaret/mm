@@ -63,6 +63,8 @@ typedef struct {
     /* 0x24 */ __OSViScale y;
 } __OSViContext; // size = 0x30
 
+extern OSDevMgr __osViDevMgr;
+
 void __osViSwapContext(void);
 extern __OSViContext* __osViCurr;
 extern __OSViContext* __osViNext;

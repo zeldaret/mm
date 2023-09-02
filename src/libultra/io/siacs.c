@@ -13,6 +13,7 @@ void __osSiCreateAccessQueue() {
 
 void __osSiGetAccess(void) {
     OSMesg dummyMesg;
+
     if (!__osSiAccessQueueEnabled) {
         __osSiCreateAccessQueue();
     }

@@ -4,6 +4,7 @@
 
 #include "PR/controller_voice.h"
 #include "PR/controller.h"
+#include "PR/voiceinternal.h"
 #include "functions.h"
 #include "variables.h"
 

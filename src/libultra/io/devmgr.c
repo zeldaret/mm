@@ -34,8 +34,8 @@ void __osDevMgrMain(void* arg) {
             }
 
             osRecvMesg(devMgr->acsQueue, &sp6C, OS_MESG_BLOCK);
-            __osResetGlobalIntMask(0x00100401);
-            __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x80000000);
+            __osResetGlobalIntMask(OS_IM_PI);
+            __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | 0x80000000);
 
         label:
             osRecvMesg(devMgr->evtQueue, &sp70, OS_MESG_BLOCK);
@@ -44,15 +44,15 @@ void __osDevMgrMain(void* arg) {
             if (block->errStatus == 0x1D) {
                 u32 status;
 
-                __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x10000000);
-                __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow);
-                __osEPiRawReadIo(ioMesg->piHandle, 0x05000508, &status);
-                if (status & 0x02000000) {
-                    __osEPiRawWriteIo(ioMesg->piHandle, 0x05000510, transfer->bmCtlShadow | 0x1000000);
+                __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | LEO_BM_CTL_RESET);
+                __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow);
+                __osEPiRawReadIo(ioMesg->piHandle, LEO_STATUS, &status);
+                if (status & LEO_STATUS_MECHANIC_INTERRUPT) {
+                    __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | LEO_BM_CTL_CLR_MECHANIC_INTR);
                 }
                 block->errStatus = 4;
                 HW_REG(PI_STATUS_REG, u32) = PI_STATUS_CLEAR_INTR;
-                __osSetGlobalIntMask(0x00100C01);
+                __osSetGlobalIntMask(OS_IM_PI | SR_IBIT4);
             }
             osSendMesg(ioMesg->hdr.retQueue, (OSMesg)ioMesg, OS_MESG_NOBLOCK);
 

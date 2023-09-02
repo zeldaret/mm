@@ -1,4 +1,5 @@
 #include "global.h"
+#include "PR/voiceinternal.h"
 
 #define BLOCKSIZE 32
 

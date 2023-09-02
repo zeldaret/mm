@@ -25,6 +25,11 @@ extern s32 osVersion;
 extern u32 osMemSize;
 extern s32 osAppNMIBuffer[];
 
+extern u64 osClockRate;
+
+extern s32 osViClock;
+
+extern u32 __OSGlobalIntMask;
 
 u32 osGetMemSize(void);
 s32 osAfterPreNMI(void);

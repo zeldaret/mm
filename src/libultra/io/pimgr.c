@@ -8,6 +8,8 @@ STACK(sPiMgrStack, 0x1000);
 OSMesgQueue D_8009E3D0;
 OSMesg D_8009E3E8[1];
 
+// TODO: migrate data
+
 void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) {
     u32 savedMask;
     OSPri oldPri;

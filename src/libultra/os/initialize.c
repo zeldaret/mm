@@ -13,8 +13,8 @@ extern struct_exceptionPreamble __osExceptionPreamble;
 
 u64 osClockRate = OS_CLOCK_RATE;
 s32 osViClock = VI_NTSC_CLOCK;
-UNK_TYPE4 __osShutdown = 0;
-UNK_TYPE4 __OSGlobalIntMask = 0x003FFF01;
+u32 __osShutdown = 0;
+u32 __OSGlobalIntMask = OS_IM_ALL;
 
 UNK_TYPE4 D_8009CF70;
 

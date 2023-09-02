@@ -94,6 +94,9 @@ typedef struct {
 #define OS_MESG_PRI_HIGH      1
 
 
+extern OSPiHandle* __osPiTable;
+
+
 void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt);
 
 OSPiHandle* osCartRomInit(void);

@@ -1,6 +1,6 @@
 #include "global.h"
 
-UNK_TYPE4 __osPiAccessQueueEnabled = 0;
+u32 __osPiAccessQueueEnabled = 0;
 
 OSMesg D_8009E3F0[1];
 OSMesgQueue __osPiAccessQueue;
@@ -13,6 +13,7 @@ void __osPiCreateAccessQueue(void) {
 
 void __osPiGetAccess(void) {
     OSMesg dummyMesg;
+
     if (!__osPiAccessQueueEnabled) {
         __osPiCreateAccessQueue();
     }
