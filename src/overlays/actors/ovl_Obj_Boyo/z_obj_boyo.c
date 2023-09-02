@@ -1,5 +1,7 @@
 #include "z_obj_boyo.h"
 
+#define ACTOR_COLLISION_HANDLING_CASES 4
+
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBoyo*)thisx)
@@ -12,7 +14,7 @@ void ObjBoyo_Draw(ObjBoyo* thisx, PlayState* play);
 void ObjBoyo_PushPlayer(Actor* thisx, Actor* player);
 void func_809A5DE0(Actor* actor, Actor* thisx);
 void func_809A5E14(Actor* arg0, Actor* this);
-Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index);
+Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index);
 
 f32 D_809A61D0 = 0.03f;
 f32 D_809A61D4 = 0.01f;
@@ -46,7 +48,7 @@ const ActorInit Obj_Boyo_InitVars = {
 
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Init.s")
 // D_809A6170
-static ColliderCylinderInit sColliderCylinderInit = {
+ColliderCylinderInit gColliderCylinderInit = {
     {
         /* ColliderInit base */
         0xA,  /* u8 coltype */
@@ -82,15 +84,19 @@ static ColliderCylinderInit sColliderCylinderInit = {
 };
 
 // D_809A619C
-static InitChainEntry sInitChainEntry[5] = { 0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064,
-                                             0x00000000 }; /* unable to generate initializer */
+InitChainEntry gInitChainEntry[5] = { 0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064,
+                                      0x00000000 }; /* unable to generate initializer */
 
-typedef void (*ObjBoyo_CollisionHandler)(ObjBoyo* this, Actor* actor);
-ObjBoyo_CollisionHandler D_809A61B0[] = { ObjBoyo_PushPlayer };
+typedef void (*ObjBoyoCollisionHandler)(Actor* actor_a, Actor* actor_b);
 
-extern s16 D_809A61B4[0xE];
-//     0x021D0000, func_809A5DE0, 0x00090000, func_809A5E14, 0x0, 0x0, 0x0, 0x0
-// }; /* unable to generate initializer */
+typedef struct ObjBoyoUnkStruct {
+    /* 0x0 */ ObjBoyoCollisionHandler colHandler;
+    /* 0x4 */ s16 id;
+} ObjBoyoUnkStruct; // size = 0x8
+
+ObjBoyoUnkStruct gCollisionHandling[] = {
+    { ObjBoyo_PushPlayer, 0x021D0000 }, { func_809A5DE0, 0x00090000 }, { func_809A5E14, 0x0 }, { NULL, 0x0 }
+};
 
 /********************** INIT **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Init.s")
@@ -98,11 +104,11 @@ extern s16 D_809A61B4[0xE];
 void ObjBoyo_Init(ObjBoyo* this, PlayState* play) {
     ColliderCylinder* temp_a1;
 
-    Actor_ProcessInitChain(&this->actor, sInitChainEntry);
+    Actor_ProcessInitChain(&this->actor, gInitChainEntry);
     temp_a1 = &this->collider;
     // sp20 = temp_a1;
     Collider_InitCylinder(play, temp_a1);
-    Collider_SetCylinder(play, temp_a1, &this->actor, &sColliderCylinderInit);
+    Collider_SetCylinder(play, temp_a1, &this->actor, &gColliderCylinderInit);
     Collider_UpdateCylinder(&this->actor, temp_a1);
     this->actor.colChkInfo.mass = 0xFF;
     this->animatedMaterial = Lib_SegmentedToVirtual((void*)&D_06000E88);
@@ -143,9 +149,9 @@ void func_809A5E14(Actor* arg0, Actor* thisx) {
  * arg2 is the index of the address into D_809A61B4.
  */
 // MATCHING
-Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index) {
+Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index) {
     Actor* collidedActor;
-    s16* data;
+    ObjBoyoUnkStruct* data;
     u32 counter;
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
@@ -154,11 +160,11 @@ Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index) {
         // In short it gets the player's Actor*.
         return (s32)play->actorCtx.actorLists[2].first;
     }
-    data = D_809A61B4;
+    data = gCollisionHandling;
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         collidedActor = this->collider.base.oc;
         for (counter = 1; counter != 3; ++counter) {
-            if (collidedActor->id == *data) {
+            if (collidedActor->id == (*data).id) {
                 *index = counter;
                 return collidedActor;
             }
@@ -170,41 +176,40 @@ Actor* func_809A5E24(ObjBoyo* this, PlayState* play, u32* index) {
 
 /********************** UPDATE **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Update.s")
-void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
+void ObjBoyo_Update(Actor* thisx, PlayState* play) {
+    ObjBoyo* this = THIS;
     CollisionCheckContext* tempCollisionChkCxt;
     ColliderCylinder* tempCollider;
-    f32 temp_fv1;
-    s16 temp_v0_2;
-    Actor* dataPtr;
-    PlayState* play = play2;
-    ObjBoyo* this = THIS;
     u32 index;
-
-    dataPtr = func_809A5E24(this, play, &index);
+    Actor* dataPtr = ObjBoyo_FindCollidedActor(this, play, &index);
+    
     if (dataPtr != 0) {
-        D_809A61B0[index](this, dataPtr);
+        gCollisionHandling[index].colHandler(&(this->actor), dataPtr);
         // TODO: find out what all of these are.
+        this->unk19C = D_809A61D0;
         this->unk194 = 0x64;
-        this->unk196 = 3;
+        this->unk196 = 3;     
+        this->unk1A0 = D_809A61D0;
         this->unk1A4 = 0x3F40;
         this->unk1A6 = 0x7D0;
         this->unk1A8 = 0;
         this->unk1AA = 0x2DF7;
         this->unk1AC = 0x258;
-        this->unk19C = D_809A61D0;
-        this->unk1A0 = D_809A61D0;
         this->unk198 = D_809A61D4;
     }
-    temp_v0_2 = this->unk194;
-    if (temp_v0_2 > 0) { /* compute new scaling */
+
+    if (this->unk194 > 0) { /* compute new scaling */
         // this computation might help finding what those values are.
+        
+        
+        this->unk194 -= this->unk196;
         this->unk1AA += this->unk1AC;
         this->unk1A8 += this->unk1AA;
-        this->unk194 = temp_v0_2 - this->unk196;
-        temp_fv1 =
-            (Math_CosS((s16)(this->unk1A8 + this->unk1A4)) * (f32)this->unk194 * this->unk19C * this->unk198) + 0.1f;
-        this->actor.scale.z = temp_fv1;
-        this->actor.scale.x = temp_fv1;
+        
+        this->actor.scale.z = (( this->unk19C * this->unk198 * (f32)this->unk194) * Math_CosS((s16)(this->unk1A8 + this->unk1A4))) + 0.1f;
+        
+        this->actor.scale.x = this->actor.scale.z;
+        
         this->actor.scale.y =
             (Math_CosS((s16)(this->unk1A8 + this->unk1A6)) * (f32)this->unk194 * this->unk1A0 * this->unk198) + 0.1f;
     } else {
@@ -220,7 +225,7 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
             this->unk1A8 = 0;
             this->unk1AA = 0x3A98;
             this->unk1AC = 0x640;
-            this->unk1A0 = 0.006f;
+            this->unk1A0 = *D_809A61E8;
         }
     }
     this->collider.base.acFlags &= 0xFFFD;
