@@ -87,7 +87,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_AveilsChamberIdle;
 
-        if (gSaveContext.save.saveInfo.weekEventReg[83] & 2) { // Knocked beehive down
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_83_02)) { // Knocked beehive down
             Actor_Kill(&this->picto.actor);
             return;
         }
@@ -101,7 +101,7 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.targetMode = 6;
     this->picto.actor.terminalVelocity = -4.0f;
     this->picto.actor.gravity = -1.0f;
-    gSaveContext.save.saveInfo.weekEventReg[80] &= (u8)~8;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_80_08);
 }
 
 void EnGe3_Destroy(Actor* thisx, PlayState* play) {
@@ -210,7 +210,7 @@ void EnGe3_ThrowPlayerOut(EnGe3* this, PlayState* play) {
             play->nextEntrance = play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)];
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_38;
-            gSaveContext.save.saveInfo.weekEventReg[80] &= (u8)~8;
+            CLEAR_WEEKEVENTREG(WEEKEVENTREG_80_08);
         }
     }
 }
@@ -284,7 +284,7 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
 
         this->actionFunc = EnGe3_ThrowPlayerOut;
         this->actionTimer = 50;
-        gSaveContext.save.saveInfo.weekEventReg[80] |= 8; // Aveil discovered Player
+        SET_WEEKEVENTREG(WEEKEVENTREG_80_08); // Aveil discovered Player
     }
 
     if (this->csAction == GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY) {
