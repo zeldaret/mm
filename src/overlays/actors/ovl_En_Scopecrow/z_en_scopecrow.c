@@ -18,7 +18,7 @@ void EnScopecrow_Draw(Actor* thisx, PlayState* play);
 void func_80BCD590(EnScopecrow* this, PlayState* play);
 void func_80BCD640(EnScopecrow* this, PlayState* play);
 
-const ActorInit En_Scopecrow_InitVars = {
+ActorInit En_Scopecrow_InitVars = {
     ACTOR_EN_SCOPECROW,
     ACTORCAT_NPC,
     FLAGS,
@@ -69,40 +69,46 @@ void func_80BCD000(EnScopecrow* this, PlayState* play) {
 s32 func_80BCD09C(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (gSaveContext.save.weekEventReg[53] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 1:
-            if (gSaveContext.save.weekEventReg[53] & 0x80) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 2:
-            if (gSaveContext.save.weekEventReg[54] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 3:
-            if (gSaveContext.save.weekEventReg[54] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 4:
-            if (gSaveContext.save.weekEventReg[54] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         case 5:
-            if (gSaveContext.save.weekEventReg[54] & 8) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
     }
 
     return false;
@@ -111,43 +117,43 @@ s32 func_80BCD09C(s16 arg0) {
 s32 func_80BCD1AC(s16 arg0) {
     switch (arg0) {
         case 0:
-            if (!(gSaveContext.save.weekEventReg[53] & 4)) {
-                gSaveContext.save.weekEventReg[53] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_04);
                 return true;
             }
             break;
 
         case 1:
-            if (!(gSaveContext.save.weekEventReg[53] & 0x80)) {
-                gSaveContext.save.weekEventReg[53] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_53_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_53_80);
                 return true;
             }
             break;
 
         case 2:
-            if (!(gSaveContext.save.weekEventReg[54] & 1)) {
-                gSaveContext.save.weekEventReg[54] |= 1;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_01)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_01);
                 return true;
             }
             break;
 
         case 3:
-            if (!(gSaveContext.save.weekEventReg[54] & 2)) {
-                gSaveContext.save.weekEventReg[54] |= 2;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_02)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_02);
                 return true;
             }
             break;
 
         case 4:
-            if (!(gSaveContext.save.weekEventReg[54] & 4)) {
-                gSaveContext.save.weekEventReg[54] |= 4;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_04)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_04);
                 return true;
             }
             break;
 
         case 5:
-            if (!(gSaveContext.save.weekEventReg[54] & 8)) {
-                gSaveContext.save.weekEventReg[54] |= 8;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_54_08)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_54_08);
                 return true;
             }
             break;
@@ -160,7 +166,7 @@ void func_80BCD2BC(EnScopecrow* this, PlayState* play) {
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_SC_RUPPE, this->actor.world.pos.x,
                                   this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                   this->actor.shape.rot.y, this->actor.shape.rot.z, this->actor.params,
-                                  this->actor.cutscene, this->actor.unk20, NULL);
+                                  this->actor.csId, this->actor.halfDaysBits, NULL);
 }
 
 s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
@@ -186,7 +192,7 @@ s32 func_80BCD334(EnScopecrow* this, Path* path, s32 pointIndex) {
         phi_fa1 = points[index + 1].z - points[index - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_fa0, phi_fa1)), &sp3C.z, &sp3C.y, &sp3C.x);
 
     if (((this->actor.world.pos.x * sp3C.z) + (sp3C.y * this->actor.world.pos.z) + sp3C.x) > 0.0f) {
         ret = true;
@@ -230,7 +236,7 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
 
     if (this->path != NULL) {
         func_80BCD4D0(this->path, this->unk_1FC, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             sp30.y = this->actor.wallYaw;
         }
 
@@ -244,14 +250,14 @@ void func_80BCD640(EnScopecrow* this, PlayState* play) {
             }
 
             if (this->unk_1FC >= (this->path->count - 1)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             } else {
                 this->unk_1FC++;
             }
         }
     }
 
-    Math_ApproachF(&this->actor.speedXZ, 6.0f, 0.2f, 1.0f);
+    Math_ApproachF(&this->actor.speed, 6.0f, 0.2f, 1.0f);
     Actor_MoveWithoutGravity(&this->actor);
     this->unk_264 += 0x1000;
     this->actor.shape.yOffset = Math_SinS(this->unk_264) * 500.0f;
@@ -270,7 +276,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
     }
 
     if (func_80BCD09C(this->unk_260)) {
-        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH_INDEX(&this->actor), ENSCOPECROW_PATH_INDEX_NONE);
         this->unk_262 = ENSCOPECROW_GET_3E0(&this->actor);
 
         if (this->path != NULL) {
@@ -288,15 +294,15 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
             this->actor.world.pos = sp3C;
             this->actor.world.pos.y = BgCheck_EntityRaycastFloor1(&play->colCtx, &sp4C, &sp3C);
             if (this->actor.world.pos.y == BGCHECK_Y_MIN) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
 
             func_80BCD2BC(this, play);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -310,7 +316,7 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
         this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
 
         Actor_SetScale(&this->actor, 0.03f);
-        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENSCOPECROW_GET_PATH_INDEX(&this->actor), ENSCOPECROW_PATH_INDEX_NONE);
         this->unk_262 = ENSCOPECROW_GET_3E0(&this->actor);
 
         if (this->path != NULL) {
@@ -323,11 +329,11 @@ void EnScopecrow_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void EnScopecrow_Destroy(Actor* thisx, PlayState* play) {
@@ -348,7 +354,7 @@ void EnScopecrow_Update(Actor* thisx, PlayState* play) {
 void EnScopecrow_Draw(Actor* thisx, PlayState* play) {
     EnScopecrow* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           NULL, &this->actor);
 }

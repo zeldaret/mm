@@ -18,7 +18,7 @@ void EnCha_Draw(Actor* thisx, PlayState* play);
 
 void EnCha_Idle(EnCha* this, PlayState* play);
 
-const ActorInit En_Cha_InitVars = {
+ActorInit En_Cha_InitVars = {
     ACTOR_EN_CHA,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,7 +61,7 @@ void EnCha_Init(Actor* thisx, PlayState* play) {
     this->actor.home.rot.z = 0;
     this->actionFunc = EnCha_Idle;
     this->actor.home.rot.x = this->actor.home.rot.z;
-    gSaveContext.save.weekEventReg[60] &= (u8)~4;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_60_04);
 }
 
 void EnCha_Destroy(Actor* thisx, PlayState* play) {
@@ -72,27 +72,27 @@ void EnCha_Destroy(Actor* thisx, PlayState* play) {
 
 void EnCha_Ring(EnCha* this, PlayState* play) {
     EnCha_Idle(this, play);
-    if (this->actor.cutscene == -1) {
+    if (this->actor.csId == CS_ID_NONE) {
         this->actionFunc = EnCha_Idle;
-    } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    } else if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->actionFunc = EnCha_Idle;
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
 void EnCha_Idle(EnCha* this, PlayState* play) {
-    if (gSaveContext.save.weekEventReg[60] & 4) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
-        gSaveContext.save.weekEventReg[60] &= (u8)~4;
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_60_04)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DOOR_BELL);
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_60_04);
         this->actor.home.rot.z = 0x7D0;
     }
     if (this->collider.base.acFlags & AC_HIT) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DOOR_BELL);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DOOR_BELL);
         this->actor.home.rot.z = 0x7D0;
-        if (!(gSaveContext.save.weekEventReg[51] & 4)) {
-            gSaveContext.save.weekEventReg[51] |= 4;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_51_04)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_51_04);
             this->actionFunc = EnCha_Ring;
         }
     }

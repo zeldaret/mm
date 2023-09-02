@@ -12,6 +12,4 @@ typedef struct {
     /* 0x28 */ s16 scale;
 } EffectSsSibukiInitParams; // size = 0x2C
 
-extern const EffectSsInit Effect_Ss_Sibuki_InitVars;
-
 #endif

@@ -122,7 +122,7 @@ Floats usually need an `f` on the end to match, or IDO will use doubles. Our flo
   bar();
   ```
 
-**Exception**: After `Actor_MarkForDeath` or sometimes setting the action function, if it makes sense to do so (this expresses the finality a bit better).
+**Exception**: After `Actor_Kill` or sometimes setting the action function, if it makes sense to do so (this expresses the finality a bit better).
 
 ## Macros and enums
 
@@ -140,7 +140,7 @@ Damage flag enums are not being used at present: we want to wait until we have a
 
 Pre-C99, commas at the end of the last item in an enum will cause a compiler warning, so leave them off.
 
-All compound flag lists (e.g. `ACTOR_FLAG_4 | ACTOR_FLAG_8`) should be listed in *ascending* order
+All compound flag lists (e.g. `ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_FRIENDLY`) should be listed in *ascending* order
 
 ## Arrays
 

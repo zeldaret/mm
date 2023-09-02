@@ -1,12 +1,13 @@
 #include "prevent_bss_reordering.h"
 #include "global.h"
+#include "fault.h"
 
 u8 sYaz0DataBuffer[0x400];
 u8* sYaz0CurDataEnd;
 uintptr_t sYaz0CurRomStart;
 u32 sYaz0CurSize;
 u8* sYaz0MaxPtr;
-u8* D_8009BE20;
+void* gYaz0DecompressDstEnd;
 
 void* Yaz0_FirstDMA() {
     u32 pad0;
@@ -58,11 +59,11 @@ void* Yaz0_NextDMA(void* curSrcPos) {
 }
 
 typedef struct {
-    /* 0x00 */ u32 magic; // Yaz0
-    /* 0x04 */ u32 decSize;
-    /* 0x08 */ u32 compInfoOffset;   // only used in mio0
-    /* 0x0C */ u32 uncompDataOffset; // only used in mio0
-} Yaz0Header;                        // size = 0x10
+    /* 0x0 */ u32 magic; // Yaz0
+    /* 0x4 */ u32 decSize;
+    /* 0x8 */ u32 compInfoOffset;   // only used in mio0
+    /* 0xC */ u32 uncompDataOffset; // only used in mio0
+} Yaz0Header;                       // size = 0x10
 
 #define YAZ0_MAGIC 0x59617A30 // "Yaz0"
 
@@ -118,7 +119,7 @@ s32 Yaz0_DecompressImpl(u8* src, u8* dst) {
         bitIdx--;
     } while (dst != dstEnd);
 
-    D_8009BE20 = dstEnd;
+    gYaz0DecompressDstEnd = dstEnd;
 
     return 0;
 }

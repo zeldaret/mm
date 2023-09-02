@@ -6,12 +6,18 @@
 #include "z64cutscene.h"
 #include "unk.h"
 
+struct GameState;
+struct PlayState;
+
 #define SPAWN_ROT_FLAGS(rotation, flags) (((rotation) << 7) | (flags))
 
 typedef struct {
     /* 0x0 */ uintptr_t vromStart;
     /* 0x4 */ uintptr_t vromEnd;
 } RomFile; // size = 0x8
+
+#define ROOM_DRAW_OPA (1 << 0)
+#define ROOM_DRAW_XLU (1 << 1)
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -67,7 +73,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  cUpElfMsgNum;
+    /* 0x1 */ u8  naviQuestHintFileId;
     /* 0x4 */ u32 subKeepIndex;
 } SCmdSpecialFiles; // size = 0x8
 
@@ -119,7 +125,7 @@ typedef struct {
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  hour;
     /* 0x5 */ u8  min;
-    /* 0x6 */ u8  unk6;
+    /* 0x6 */ u8  timeSpeed;
 } SCmdTimeSettings; // size = 0x7
 
 typedef struct {
@@ -127,8 +133,8 @@ typedef struct {
     /* 0x1 */ u8  data1;
     /* 0x2 */ UNK_TYPE1 pad2[2];
     /* 0x4 */ u8  skyboxId;
-    /* 0x5 */ u8  unk5;
-    /* 0x6 */ u8  unk6;
+    /* 0x5 */ u8  skyboxConfig;
+    /* 0x6 */ u8  envLightMode;
 } SCmdSkyboxSettings; // size = 0x7
 
 typedef struct {
@@ -174,9 +180,9 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ u8  code;
-    /* 0x1 */ u8  sceneCsCount;
+    /* 0x1 */ u8  scriptListCount;
     /* 0x4 */ void* segment;
-} SCmdCutsceneList; // size = 0x8
+} SCmdCsScriptList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -199,7 +205,7 @@ typedef struct {
     /* 0x0 */ u8  code;
     /* 0x1 */ u8  num;
     /* 0x4 */ void* segment;
-} SCmdCutsceneActorList; // size = 0x8
+} SCmdCutsceneList; // size = 0x8
 
 typedef struct {
     /* 0x0 */ u8  code;
@@ -213,58 +219,132 @@ typedef struct {
     /* 0x4 */ void* segment;
 } SCmdMinimapChests; // size = 0x8
 
-typedef struct {
-    /* 0x0 */ Gfx* opaqueDl;
-    /* 0x4 */ Gfx* translucentDl;
-} RoomMeshType0Params; // size = 0x8
-
-// Fields TODO
-typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x1 */ u8 format; // 1 = single, 2 = multi
-} RoomMeshType1; // size = 0x2
-
-// Size TODO
-typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x10];
-} RoomMeshType1Params; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ UNK_TYPE1 pad0[0x10];
-} RoomMeshType2Params; // size = 0x10
+typedef enum {
+    /* 0 */ ROOM_SHAPE_TYPE_NORMAL,
+    /* 1 */ ROOM_SHAPE_TYPE_IMAGE,
+    /* 2 */ ROOM_SHAPE_TYPE_CULLABLE,
+    /* 3 */ ROOM_SHAPE_TYPE_NONE,
+    /* 4 */ ROOM_SHAPE_TYPE_MAX
+} RoomShapeType;
 
 typedef struct {
     /* 0x0 */ u8 type;
-    /* 0x1 */ u8 count;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ RoomMeshType0Params* paramsStart;
-    /* 0x8 */ RoomMeshType0Params* paramsEnd;
-} RoomMeshType0; // size = 0xC
+} RoomShapeBase; // size = 0x1
 
 typedef struct {
-    /* 0x0 */ u8 type;
-    /* 0x1 */ u8 count;
-    /* 0x2 */ UNK_TYPE1 pad2[0x2];
-    /* 0x4 */ RoomMeshType2Params* paramsStart;
-    /* 0x8 */ RoomMeshType2Params* paramsEnd;
-} RoomMeshType2; // size = 0xC
+    /* 0x0 */ Gfx* opa;
+    /* 0x4 */ Gfx* xlu;
+} RoomShapeDListsEntry; // size = 0x8
+
+typedef struct {
+    /* 0x0 */ RoomShapeBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ RoomShapeDListsEntry* entries;
+    /* 0x8 */ RoomShapeDListsEntry* entriesEnd;
+} RoomShapeNormal; // size = 0xC
+
+typedef enum {
+    /* 1 */ ROOM_SHAPE_IMAGE_AMOUNT_SINGLE = 1,
+    /* 2 */ ROOM_SHAPE_IMAGE_AMOUNT_MULTI
+} RoomShapeImageAmountType;
+
+typedef struct {
+    /* 0x0 */ RoomShapeBase base;
+    /* 0x1 */ u8 amountType; // uses `RoomShapeImageAmountType`
+    /* 0x4 */ RoomShapeDListsEntry* entry;
+} RoomShapeImageBase; // size = 0x8
+
+typedef struct {
+    /* 0x00 */ RoomShapeImageBase base;
+    /* 0x08 */ void* source;
+    /* 0x0C */ u32 unk_0C;
+    /* 0x10 */ void* tlut;
+    /* 0x14 */ u16 width;
+    /* 0x16 */ u16 height;
+    /* 0x18 */ u8 fmt;
+    /* 0x19 */ u8 siz;
+    /* 0x1A */ u16 tlutMode;
+    /* 0x1C */ u16 tlutCount;
+} RoomShapeImageSingle; // size = 0x20
+
+typedef struct {
+    /* 0x00 */ u16 unk_00;
+    /* 0x02 */ u8 bgCamIndex; // the bg cam index this entry is for
+    /* 0x04 */ void* source;
+    /* 0x08 */ u32 unk_0C;
+    /* 0x0C */ void* tlut;
+    /* 0x10 */ u16 width;
+    /* 0x12 */ u16 height;
+    /* 0x14 */ u8 fmt;
+    /* 0x15 */ u8 siz;
+    /* 0x16 */ u16 tlutMode;
+    /* 0x18 */ u16 tlutCount;
+} RoomShapeImageMultiBgEntry; // size = 0x1C
+
+typedef struct {
+    /* 0x0 */ RoomShapeImageBase base;
+    /* 0x8 */ u8 numBackgrounds;
+    /* 0xC */ RoomShapeImageMultiBgEntry* backgrounds;
+} RoomShapeImageMulti; // size = 0x10
+
+typedef struct {
+    /* 0x0 */ Vec3s boundsSphereCenter;
+    /* 0x6 */ s16 boundsSphereRadius;
+    /* 0x8 */ Gfx* opa;
+    /* 0xC */ Gfx* xlu;
+} RoomShapeCullableEntry; // size = 0x10
+
+typedef struct {
+    /* 0x0 */ RoomShapeBase base;
+    /* 0x1 */ u8 numEntries;
+    /* 0x4 */ RoomShapeCullableEntry* entries;
+    /* 0x8 */ RoomShapeCullableEntry* entriesEnd;
+} RoomShapeCullable; // size = 0xC
 
 typedef union {
-    RoomMeshType0 type0;
-    RoomMeshType1 type1;
-    RoomMeshType2 type2;
-} RoomMesh; // size = 0xC
+    RoomShapeBase base;
+    RoomShapeNormal normal;
+    union {
+        RoomShapeImageBase base;
+        RoomShapeImageSingle single;
+        RoomShapeImageMulti multi;
+    } image;
+    RoomShapeCullable cullable;
+} RoomShape; // "Ground Shape"
+
+// TODO: update ZAPD
+#define SCENE_CMD_MESH SCENE_CMD_ROOM_SHAPE
+
+// TODO: Check which ones don't exist
+typedef enum {
+    /* 0 */ ROOM_BEHAVIOR_TYPE1_0,
+    /* 1 */ ROOM_BEHAVIOR_TYPE1_1,
+    /* 2 */ ROOM_BEHAVIOR_TYPE1_2,
+    /* 3 */ ROOM_BEHAVIOR_TYPE1_3, // unused
+    /* 4 */ ROOM_BEHAVIOR_TYPE1_4,
+    /* 5 */ ROOM_BEHAVIOR_TYPE1_5
+} RoomBehaviorType1;
+
+typedef enum {
+    /* 0 */ ROOM_BEHAVIOR_TYPE2_0,
+    /* 1 */ ROOM_BEHAVIOR_TYPE2_1,
+    /* 2 */ ROOM_BEHAVIOR_TYPE2_2,
+    /* 3 */ ROOM_BEHAVIOR_TYPE2_HOT,
+    /* 4 */ ROOM_BEHAVIOR_TYPE2_4,
+    /* 5 */ ROOM_BEHAVIOR_TYPE2_5,
+    /* 6 */ ROOM_BEHAVIOR_TYPE2_6
+} RoomBehaviorType2;
 
 typedef struct {
     /* 0x00 */ s8 num;
     /* 0x01 */ u8 unk1;
-    /* 0x02 */ u8 unk2; // 3: Room is hot
-    /* 0x03 */ u8 unk3;
+    /* 0x02 */ u8 behaviorType2;
+    /* 0x03 */ u8 behaviorType1;
     /* 0x04 */ s8 echo;
-    /* 0x05 */ u8 unk5;
+    /* 0x05 */ u8 lensMode;
     /* 0x06 */ u8 enablePosLights;
     /* 0x07 */ UNK_TYPE1 pad7[0x1];
-    /* 0x08 */ RoomMesh* mesh;
+    /* 0x08 */ RoomShape* roomShape;
     /* 0x0C */ void* segment;
     /* 0x10 */ UNK_TYPE1 pad10[0x4];
 } Room; // size = 0x14
@@ -274,7 +354,7 @@ typedef struct {
     /* 0x14 */ Room prevRoom;
     /* 0x28 */ void* roomMemPages[2]; // In a scene with transitions, roomMemory is split between two pages that toggle each transition. This is one continuous range, as the second page allocates from the end
     /* 0x30 */ u8 activeMemPage; // 0 - First page in memory, 1 - Second page
-    /* 0x31 */ s8 unk31;
+    /* 0x31 */ s8 status;
     /* 0x32 */ UNK_TYPE1 pad32[0x2];
     /* 0x34 */ void* activeRoomVram;
     /* 0x38 */ DmaRequest dmaRequest;
@@ -286,15 +366,17 @@ typedef struct {
     /* 0x7A */ UNK_TYPE2 unk7A[3];
 } RoomContext; // size = 0x80
 
-typedef struct {
+typedef void(*RoomDrawHandler)(struct PlayState* play, Room* room, u32 flags);
+
+typedef struct TransitionActorEntry {
     struct {
         s8 room;    // Room to switch to
-        s8 bgCamDataId; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
+        s8 bgCamIndex; // How the camera reacts during the transition. -2 for spiral staircase. -1 for generic door. 0+ will index scene CamData
     } /* 0x0 */ sides[2]; // 0 = front, 1 = back
-    /* 0x4 */ s16   id;
+    /* 0x4 */ s16 id;
     /* 0x6 */ Vec3s pos;
-    /* 0xC */ s16   rotY;
-    /* 0xE */ u16   params;
+    /* 0xC */ s16 rotY;
+    /* 0xE */ u16 params;
 } TransitionActorEntry; // size = 0x10
 
 typedef struct {
@@ -341,6 +423,7 @@ typedef struct {
     /* 0xA */ u8 unk_A;
     /* 0xB */ u8 drawConfig;
     /* 0xC */ u8 unk_C;
+    /* 0xD */ u8 unk_D;
 } SceneTableEntry; // size = 0x10
 
 typedef struct {
@@ -380,6 +463,16 @@ typedef struct {
 } AnimatedMatTexCycleParams; // size = 0xC
 
 typedef struct {
+    /* 0x0 */ s8 segment;
+    /* 0x2 */ s16 type;
+    /* 0x4 */ void* params;
+} AnimatedMaterial; // size = 0x8
+
+// TODO: ZAPD
+typedef RoomShapeCullableEntry PolygonDlist2;
+typedef RoomShapeCullable PolygonType2;
+
+typedef struct {
     /* 0x000 */ void* spaceStart;
     /* 0x004 */ void* spaceEnd;
     /* 0x008 */ u8 num;
@@ -389,81 +482,13 @@ typedef struct {
     /* 0x00C */ ObjectStatus status[OBJECT_EXCHANGE_BANK_MAX];
 } ObjectContext; // size = 0x958
 
-typedef struct {
-    /* 0x0 */ u8 headerType;
-} MeshHeaderBase; // size = 0x1
+#define PATH_INDEX_NONE -1
+#define ADDITIONAL_PATH_INDEX_NONE (u8)-1
 
 typedef struct {
-    /* 0x0 */ MeshHeaderBase base;
-    /* 0x1 */ u8 numEntries;
-    /* 0x4 */ u32 dListStart;
-    /* 0x8 */ u32 dListEnd;
-} MeshHeader0; // size = 0xC
-
-typedef struct {
-    /* 0x0 */ u32 opaqueDList;
-    /* 0x4 */ u32 translucentDList;
-} MeshEntry0; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ MeshHeaderBase base;
-    /* 0x1 */ u8 format;
-    /* 0x4 */ u32 entryRecord;
-} MeshHeader1Base; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ MeshHeader1Base base;
-    /* 0x08 */ u32 imagePtr;
-    /* 0x0C */ u32 unknown;
-    /* 0x10 */ u32 unknown2;
-    /* 0x14 */ u16 bgWidth;
-    /* 0x16 */ u16 bgHeight;
-    /* 0x18 */ u8 imageFormat;
-    /* 0x19 */ u8 imageSize;
-    /* 0x1A */ u16 imagePal;
-    /* 0x1C */ u16 imageFlip;
-} MeshHeader1Single; // size = 0x20
-
-typedef struct {
-    /* 0x0 */ MeshHeader1Base base;
-    /* 0x8 */ u8 bgCnt;
-    /* 0xC */ u32 bgRecordPtr;
-} MeshHeader1Multi; // size = 0x10
-
-typedef struct {
-    /* 0x00 */ u16 unknown;
-    /* 0x02 */ s8 bgID;
-    /* 0x04 */ u32 imagePtr;
-    /* 0x08 */ u32 unknown2;
-    /* 0x0C */ u32 unknown3;
-    /* 0x10 */ u16 bgWidth;
-    /* 0x12 */ u16 bgHeight;
-    /* 0x14 */ u8 imageFmt;
-    /* 0x15 */ u8 imageSize;
-    /* 0x16 */ u16 imagePal;
-    /* 0x18 */ u16 imageFlip;
-} BackgroundRecord; // size = 0x1C
-
-typedef struct {
-    /* 0x0 */ s16 playerXMax; 
-    /* 0x2 */ s16 playerZMax;
-    /* 0x4 */ s16 playerXMin; 
-    /* 0x6 */ s16 playerZMin;
-    /* 0x8 */ u32 opaqueDList;
-    /* 0xC */ u32 translucentDList;
-} MeshEntry2; // size = 0x10
-
-typedef struct {
-    /* 0x0 */ MeshHeaderBase base;
-    /* 0x1 */ u8 numEntries;
-    /* 0x4 */ u32 dListStart;
-    /* 0x8 */ u32 dListEnd;
-} MeshHeader2; // size = 0xC 
-
-typedef struct {
-    /* 0x0 */ u8 count; // number of points in the path
-    /* 0x1 */ u8 unk1;
-    /* 0x2 */ s16 unk2;
+    /* 0x0 */ u8 count; // Number of points in the path
+    /* 0x1 */ u8 additionalPathIndex;
+    /* 0x2 */ s16 customValue; // Path specific to help distinguish different paths
     /* 0x4 */ Vec3s* points; // Segment Address to the array of points
 } Path; // size = 0x8
 
@@ -477,7 +502,7 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ MinimapEntry* entry;
-    /* 0x4 */ UNK_TYPE unk4;
+    /* 0x4 */ s16 unk4;
 } MinimapList; // size  = 0x8
 
 typedef struct {
@@ -522,11 +547,11 @@ typedef union {
     /* Command: 0x14 */ SCmdEndMarker         endMarker;
     /* Command: 0x15 */ SCmdSoundSettings     soundSettings;
     /* Command: 0x16 */ SCmdEchoSettings      echoSettings;
-    /* Command: 0x17 */ SCmdCutsceneList      cutsceneList;
+    /* Command: 0x17 */ SCmdCsScriptList      scriptList;
     /* Command: 0x18 */ SCmdAltHeaders        altHeaders;
     /* Command: 0x19 */ SCmdRegionVisited     regionVisited;
     /* Command: 0x1A */ SCmdTextureAnimations textureAnimations;
-    /* Command: 0x1B */ SCmdCutsceneActorList cutsceneActorList;
+    /* Command: 0x1B */ SCmdCutsceneList      cutsceneList;
     /* Command: 0x1C */ SCmdMinimapSettings   minimapSettings;
     /* Command: 0x1D */ // Unused
     /* Command: 0x1E */ SCmdMinimapChests     minimapChests;
@@ -534,6 +559,7 @@ typedef union {
 
 // Sets cursor point options on the world map
 typedef enum {
+    /*  -1 */ REGION_NONE = -1,
     /* 0x0 */ REGION_GREAT_BAY,
     /* 0x1 */ REGION_ZORA_HALL,
     /* 0x2 */ REGION_ROMANI_RANCH,
@@ -575,122 +601,16 @@ typedef enum {
     /* 6 */ TINGLE_MAP_MAX
 } TingleMapId;
 
-typedef enum {
-    /* 0x00 */ SCENE_20SICHITAI2, // Southern Swamp (Clear)
-    /* 0x01 */ SCENE_UNSET_1,
-    /* 0x02 */ SCENE_UNSET_2,
-    /* 0x03 */ SCENE_UNSET_3,
-    /* 0x04 */ SCENE_UNSET_4,
-    /* 0x05 */ SCENE_UNSET_5,
-    /* 0x06 */ SCENE_UNSET_6,
-    /* 0x07 */ SCENE_KAKUSIANA, // Lone Peak Shrine & Grottos
-    /* 0x08 */ SCENE_SPOT00, // Cutscene Scene
-    /* 0x09 */ SCENE_UNSET_9,
-    /* 0x0A */ SCENE_WITCH_SHOP, // Magic Hags' Potion Shop
-    /* 0x0B */ SCENE_LAST_BS, // Majora's Lair
-    /* 0x0C */ SCENE_HAKASHITA, // Beneath the Graveyard
-    /* 0x0D */ SCENE_AYASHIISHOP, // Curiosity Shop
-    /* 0x0E */ SCENE_UNSET_E,
-    /* 0x0F */ SCENE_UNSET_F,
-    /* 0x10 */ SCENE_OMOYA, // Mama's House (Ranch House in PAL) & Barn
-    /* 0x11 */ SCENE_BOWLING, // Honey & Darling's Shop
-    /* 0x12 */ SCENE_SONCHONOIE, // The Mayor's Residence
-    /* 0x13 */ SCENE_IKANA, // Ikana Canyon
-    /* 0x14 */ SCENE_KAIZOKU, // Pirates' Fortress
-    /* 0x15 */ SCENE_MILK_BAR, // Milk Bar
-    /* 0x16 */ SCENE_INISIE_N, // Stone Tower Temple
-    /* 0x17 */ SCENE_TAKARAYA, // Treasure Chest Shop
-    /* 0x18 */ SCENE_INISIE_R, // Inverted Stone Tower Temple
-    /* 0x19 */ SCENE_OKUJOU, // Clock Tower Rooftop
-    /* 0x1A */ SCENE_OPENINGDAN, // Before Clock Town
-    /* 0x1B */ SCENE_MITURIN, // Woodfall Temple
-    /* 0x1C */ SCENE_13HUBUKINOMITI, // Path to Mountain Village
-    /* 0x1D */ SCENE_CASTLE, // Ancient Castle of Ikana
-    /* 0x1E */ SCENE_DEKUTES, // Deku Scrub Playground
-    /* 0x1F */ SCENE_MITURIN_BS, // Odolwa's Lair
-    /* 0x20 */ SCENE_SYATEKI_MIZU, // Town Shooting Gallery
-    /* 0x21 */ SCENE_HAKUGIN, // Snowhead Temple
-    /* 0x22 */ SCENE_ROMANYMAE, // Milk Road
-    /* 0x23 */ SCENE_PIRATE, // Pirates' Fortress Interior
-    /* 0x24 */ SCENE_SYATEKI_MORI, // Swamp Shooting Gallery
-    /* 0x25 */ SCENE_SINKAI, // Pinnacle Rock
-    /* 0x26 */ SCENE_YOUSEI_IZUMI, // Fairy's Fountain
-    /* 0x27 */ SCENE_KINSTA1, // Swamp Spider House
-    /* 0x28 */ SCENE_KINDAN2, // Oceanside Spider House
-    /* 0x29 */ SCENE_TENMON_DAI, // Astral Observatory
-    /* 0x2A */ SCENE_LAST_DEKU, // Moon Deku Trial
-    /* 0x2B */ SCENE_22DEKUCITY, // Deku Palace
-    /* 0x2C */ SCENE_KAJIYA, // Mountain Smithy
-    /* 0x2D */ SCENE_00KEIKOKU, // Termina Field
-    /* 0x2E */ SCENE_POSTHOUSE, // Post Office
-    /* 0x2F */ SCENE_LABO, // Marine Research Lab
-    /* 0x30 */ SCENE_DANPEI2TEST, // Beneath the Graveyard (Day 3) and Dampe's House
-    /* 0x31 */ SCENE_UNSET_31,
-    /* 0x32 */ SCENE_16GORON_HOUSE, // Goron Shrine
-    /* 0x33 */ SCENE_33ZORACITY, // Zora Hall
-    /* 0x34 */ SCENE_8ITEMSHOP, // Trading Post
-    /* 0x35 */ SCENE_F01, // Romani Ranch
-    /* 0x36 */ SCENE_INISIE_BS, // Twinmold's Lair
-    /* 0x37 */ SCENE_30GYOSON, // Great Bay Coast
-    /* 0x38 */ SCENE_31MISAKI, // Zora Cape
-    /* 0x39 */ SCENE_TAKARAKUJI, // Lottery Shop
-    /* 0x3A */ SCENE_UNSET_3A,
-    /* 0x3B */ SCENE_TORIDE, // Pirates' Fortress Moat
-    /* 0x3C */ SCENE_FISHERMAN, // Fisherman's Hut
-    /* 0x3D */ SCENE_GORONSHOP, // Goron Shop
-    /* 0x3E */ SCENE_DEKU_KING, // Deku King's Chamber
-    /* 0x3F */ SCENE_LAST_GORON, // Moon Goron Trial
-    /* 0x40 */ SCENE_24KEMONOMITI, // Road to Southern Swamp
-    /* 0x41 */ SCENE_F01_B, // Doggy Racetrack
-    /* 0x42 */ SCENE_F01C, // Cucco Shack
-    /* 0x43 */ SCENE_BOTI, // Ikana Graveyard
-    /* 0x44 */ SCENE_HAKUGIN_BS, // Goht's Lair
-    /* 0x45 */ SCENE_20SICHITAI, // Southern Swamp (poison)
-    /* 0x46 */ SCENE_21MITURINMAE, // Woodfall
-    /* 0x47 */ SCENE_LAST_ZORA, // Moon Zora Trial
-    /* 0x48 */ SCENE_11GORONNOSATO2, // Goron Village (spring)
-    /* 0x49 */ SCENE_SEA, // Great Bay Temple
-    /* 0x4A */ SCENE_35TAKI, // Waterfall Rapids
-    /* 0x4B */ SCENE_REDEAD, // Beneath the Well
-    /* 0x4C */ SCENE_BANDROOM, // Zora Hall Rooms
-    /* 0x4D */ SCENE_11GORONNOSATO, // Goron Village (winter)
-    /* 0x4E */ SCENE_GORON_HAKA, // Goron Graveyard
-    /* 0x4F */ SCENE_SECOM, // Sakon's Hideout
-    /* 0x50 */ SCENE_10YUKIYAMANOMURA, // Mountain Village (winter)
-    /* 0x51 */ SCENE_TOUGITES, // Ghost Hut
-    /* 0x52 */ SCENE_DANPEI, // Deku Shrine
-    /* 0x53 */ SCENE_IKANAMAE, // Road to Ikana
-    /* 0x54 */ SCENE_DOUJOU, // Swordsman's School
-    /* 0x55 */ SCENE_MUSICHOUSE, // Music Box House
-    /* 0x56 */ SCENE_IKNINSIDE, // Igos du Ikana's Lair
-    /* 0x57 */ SCENE_MAP_SHOP, // Tourist Information
-    /* 0x58 */ SCENE_F40, // Stone Tower
-    /* 0x59 */ SCENE_F41, // Inverted Stone Tower
-    /* 0x5A */ SCENE_10YUKIYAMANOMURA2, // Mountain Village (spring)
-    /* 0x5B */ SCENE_14YUKIDAMANOMITI, // Path to Snowhead
-    /* 0x5C */ SCENE_12HAKUGINMAE, // Snowhead
-    /* 0x5D */ SCENE_17SETUGEN, // Path to Goron Village (winter)
-    /* 0x5E */ SCENE_17SETUGEN2, // Path to Goron Village (spring)
-    /* 0x5F */ SCENE_SEA_BS, // Gyorg's Lair
-    /* 0x60 */ SCENE_RANDOM, // Secret Shrine
-    /* 0x61 */ SCENE_YADOYA, // Stock Pot Inn
-    /* 0x62 */ SCENE_KONPEKI_ENT, // Great Bay Cutscene
-    /* 0x63 */ SCENE_INSIDETOWER, // Clock Tower Interior
-    /* 0x64 */ SCENE_26SARUNOMORI, // Woods of Mystery
-    /* 0x65 */ SCENE_LOST_WOODS, // Lost Woods (Intro)
-    /* 0x66 */ SCENE_LAST_LINK, // Moon Link Trial
-    /* 0x67 */ SCENE_SOUGEN, // The Moon
-    /* 0x68 */ SCENE_BOMYA, // Bomb Shop
-    /* 0x69 */ SCENE_KYOJINNOMA, // Giants' Chamber
-    /* 0x6A */ SCENE_KOEPONARACE, // Gorman Track
-    /* 0x6B */ SCENE_GORONRACE, // Goron Racetrack
-    /* 0x6C */ SCENE_TOWN, // East Clock Town
-    /* 0x6D */ SCENE_ICHIBA, // West Clock Town
-    /* 0x6E */ SCENE_BACKTOWN, // North Clock Town
-    /* 0x6F */ SCENE_CLOCKTOWER, // South Clock Town
-    /* 0x70 */ SCENE_ALLEY, // Laundry Pool
+#define DEFINE_SCENE(_name, enumValue, _textId, _drawConfig, _restrictionFlags, _persistentCycleFlags) enumValue,
+#define DEFINE_SCENE_UNSET(enumValue) enumValue,
+
+typedef enum SceneId {
+    #include "tables/scene_table.h"
     /* 0x71 */ SCENE_MAX
 } SceneId;
+
+#undef DEFINE_SCENE
+#undef DEFINE_SCENE_UNSET
 
 typedef enum {
     /* 0x00 */ ENTR_SCENE_MAYORS_RESIDENCE,
@@ -813,6 +733,17 @@ typedef enum {
 */
 #define ENTRANCE(scene, spawn) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4))
 
+#define ENTR_LOAD_OPENING -1
+
+/*
+* Entrances used in cutscene destination. Includes scene layer that's immediately applied to `nextCutsceneIndex` and removed.
+* See `CutsceneScriptEntry.nextEntrance`
+* 0xFE00:  Index into sSceneEntranceTable (Scene)
+* 0x01F0:  Index into the scenes specific entrance table (Spawn)
+* 0x000F:  Index into the specific entrance table (Layer)
+*/
+#define CS_ENTRANCE(scene, spawn, layer) ((((ENTR_SCENE_##scene) & 0x7F) << 9) | (((spawn) & 0x1F) << 4) | ((layer) & 0xF))
+
 // SceneTableEntry draw configs
 typedef enum {
     /* 0 */ SCENE_DRAW_CFG_DEFAULT,
@@ -824,6 +755,14 @@ typedef enum {
     /* 6 */ SCENE_DRAW_CFG_GREAT_BAY_TEMPLE,
     /* 7 */ SCENE_DRAW_CFG_MAT_ANIM_MANUAL_STEP
 } SceneDrawConfigIds;
+
+// TODO: make ZAPD use this enum for `SCENE_CMD_SPECIAL_FILES`
+// Leftover from OoT
+typedef enum {
+    /* 0 */ NAVI_QUEST_HINTS_NONE,
+    /* 1 */ NAVI_QUEST_HINTS_OVERWORLD,
+    /* 2 */ NAVI_QUEST_HINTS_DUNGEON
+} NaviQuestHintFileId;
 
 // SceneTableEntry commands
 typedef enum {
@@ -837,7 +776,7 @@ typedef enum {
     /* 0x07 */ SCENE_CMD_ID_SPECIAL_FILES,
     /* 0x08 */ SCENE_CMD_ID_ROOM_BEHAVIOR,
     /* 0x09 */ SCENE_CMD_ID_UNK_09,
-    /* 0x0A */ SCENE_CMD_ID_MESH,
+    /* 0x0A */ SCENE_CMD_ID_ROOM_SHAPE,
     /* 0x0B */ SCENE_CMD_ID_OBJECT_LIST,
     /* 0x0C */ SCENE_CMD_ID_LIGHT_LIST,
     /* 0x0D */ SCENE_CMD_ID_PATH_LIST,
@@ -850,7 +789,7 @@ typedef enum {
     /* 0x14 */ SCENE_CMD_ID_END,
     /* 0x15 */ SCENE_CMD_ID_SOUND_SETTINGS,
     /* 0x16 */ SCENE_CMD_ID_ECHO_SETTINGS,
-    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_LIST,
+    /* 0x17 */ SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST,
     /* 0x18 */ SCENE_CMD_ID_ALTERNATE_HEADER_LIST,
     /* 0x19 */ SCENE_CMD_ID_SET_REGION_VISITED,
     /* 0x1A */ SCENE_CMD_ID_ANIMATED_MATERIAL_LIST,
@@ -882,8 +821,8 @@ typedef enum {
 #define SCENE_CMD_ENTRANCE_LIST(entranceList) \
     { SCENE_CMD_ID_ENTRANCE_LIST, 0, CMD_PTR(entranceList) }
 
-#define SCENE_CMD_SPECIAL_FILES(elfMessageFile, keepObjectId) \
-    { SCENE_CMD_ID_SPECIAL_FILES, elfMessageFile, CMD_W(keepObjectId) }
+#define SCENE_CMD_SPECIAL_FILES(naviQuestHintFileId, keepObjectId) \
+    { SCENE_CMD_ID_SPECIAL_FILES, naviQuestHintFileId, CMD_W(keepObjectId) }
 
 #define SCENE_CMD_ROOM_BEHAVIOR(curRoomUnk3, curRoomUnk2, curRoomUnk5, msgCtxunk12044, enablePosLights,  \
                                 kankyoContextUnkE2)                                                         \
@@ -896,8 +835,8 @@ typedef enum {
 #define SCENE_CMD_UNK_09() \
     { SCENE_CMD_ID_UNK_09, 0, CMD_W(0) }
 
-#define SCENE_CMD_MESH(meshHeader) \
-    { SCENE_CMD_ID_MESH, 0, CMD_PTR(meshHeader) }
+#define SCENE_CMD_ROOM_SHAPE(roomShape) \
+    { SCENE_CMD_ID_ROOM_SHAPE, 0, CMD_PTR(roomShape) }
 
 #define SCENE_CMD_OBJECT_LIST(numObjects, objectList) \
     { SCENE_CMD_ID_OBJECT_LIST, numObjects, CMD_PTR(objectList) }
@@ -935,26 +874,114 @@ typedef enum {
 #define SCENE_CMD_ECHO_SETTINGS(echo) \
     { SCENE_CMD_ID_ECHO_SETTINGS, 0, CMD_BBBB(0, 0, 0, echo) }
 
-#define SCENE_CMD_CUTSCENE_LIST(numCutscene, cutsceneList) \
-    { SCENE_CMD_ID_CUTSCENE_LIST, numCutscene, CMD_PTR(cutsceneList) }
+#define SCENE_CMD_CUTSCENE_SCRIPT_LIST(numEntries, scriptList) \
+    { SCENE_CMD_ID_CUTSCENE_SCRIPT_LIST, numEntries, CMD_PTR(scriptList) }
 
 #define SCENE_CMD_ALTERNATE_HEADER_LIST(alternateHeaderList) \
     { SCENE_CMD_ID_ALTERNATE_HEADER_LIST, 0, CMD_PTR(alternateHeaderList) }
 
-#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED // TODO: ZAPD Capatability
 #define SCENE_CMD_SET_REGION_VISITED() \
     { SCENE_CMD_ID_SET_REGION_VISITED, 0, CMD_W(0) }
 
 #define SCENE_CMD_ANIMATED_MATERIAL_LIST(matAnimList) \
     { SCENE_CMD_ID_ANIMATED_MATERIAL_LIST, 0, CMD_PTR(matAnimList) }
 
-#define SCENE_CMD_ACTOR_CUTSCENE_LIST(actorCutsceneCount, actorCutsceneList) \
-    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, actorCutsceneCount, CMD_PTR(actorCutsceneList) }
+#define SCENE_CMD_ACTOR_CUTSCENE_LIST(numEntries, actorCutsceneList) \
+    { SCENE_CMD_ID_ACTOR_CUTSCENE_LIST, numEntries, CMD_PTR(actorCutsceneList) }
 
 #define SCENE_CMD_MINIMAP_INFO(minimapInfo) \
     { SCENE_CMD_ID_MINIMAP_INFO, 0, CMD_PTR(minimapInfo) }
 
 #define SCENE_CMD_MINIMAP_COMPASS_ICON_INFO(compassIconCount, compassIconInfo) \
     { SCENE_CMD_ID_MINIMAP_COMPASS_ICON_INFO, compassIconCount, CMD_PTR(compassIconInfo) }
+
+ // TODO: ZAPD Capatability
+#define SCENE_CMD_MISC_SETTINGS SCENE_CMD_SET_REGION_VISITED
+#define SCENE_CMD_CUTSCENE_LIST SCENE_CMD_CUTSCENE_SCRIPT_LIST
+
+s32 Object_Spawn(ObjectContext* objectCtx, s16 id);
+void Object_InitBank(struct GameState* gameState, ObjectContext* objectCtx);
+void Object_UpdateBank(ObjectContext* objectCtx);
+s32 Object_GetIndex(ObjectContext* objectCtx, s16 objectId);
+s32 Object_IsLoaded(ObjectContext* objectCtx, s32 index);
+void Object_LoadAll(ObjectContext* objectCtx);
+void* func_8012F73C(ObjectContext* objectCtx, s32 iParm2, s16 id);
+void Scene_CommandSpawnList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandActorList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandActorCutsceneCamList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandCollisionHeader(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandRoomList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandEntranceList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandSpecialFiles(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandRoomBehavior(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMesh(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandObjectList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandLightList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandPathList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandTransiActorList(struct PlayState* play, SceneCmd* cmd);
+void Door_InitContext(struct GameState* gameState, DoorContext* doorCtx);
+void Scene_CommandEnvLightSettings(struct PlayState* play, SceneCmd* cmd);
+void Scene_LoadAreaTextures(struct PlayState* play, s32 fileIndex);
+void Scene_CommandSkyboxSettings(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandSkyboxDisables(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandTimeSettings(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandWindSettings(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandExitList(struct PlayState* play, SceneCmd* cmd);
+void Scene_Command09(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandSoundSettings(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandEchoSetting(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandAltHeaderList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandCutsceneScriptList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandCutsceneList(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMiniMap(struct PlayState* play, SceneCmd* cmd);
+void Scene_Command1D(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandMiniMapCompassInfo(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandSetRegionVisitedFlag(struct PlayState* play, SceneCmd* cmd);
+void Scene_CommandAnimatedMaterials(struct PlayState* play, SceneCmd* cmd);
+void Scene_SetExitFade(struct PlayState* play);
+s32 Scene_ExecuteCommands(struct PlayState* play, SceneCmd* sceneCmd);
+u16 Entrance_Create(s32 scene, s32 spawn, s32 layer);
+u16 Entrance_CreateFromSpawn(s32 spawn);
+void Scene_Draw(struct PlayState* play);
+void Scene_DrawConfigDefault(struct PlayState* play);
+Gfx* AnimatedMat_TexScroll(struct PlayState* play, AnimatedMatTexScrollParams* params);
+void AnimatedMat_DrawTexScroll(struct PlayState* play, s32 segment, void* params);
+Gfx* AnimatedMat_TwoLayerTexScroll(struct PlayState* play, AnimatedMatTexScrollParams* params);
+void AnimatedMat_DrawTwoTexScroll(struct PlayState* play, s32 segment, void* params);
+void AnimatedMat_SetColor(struct PlayState* play, s32 segment, F3DPrimColor* primColorResult, F3DEnvColor* envColor);
+void AnimatedMat_DrawColor(struct PlayState* play, s32 segment, void* params);
+s32 AnimatedMat_Lerp(s32 min, s32 max, f32 norm);
+void AnimatedMat_DrawColorLerp(struct PlayState* play, s32 segment, void* params);
+f32 Scene_LagrangeInterp(s32 n, f32 x[], f32 fx[], f32 xp);
+u8 Scene_LagrangeInterpColor(s32 n, f32 x[], f32 fx[], f32 xp);
+void AnimatedMat_DrawColorNonLinearInterp(struct PlayState* play, s32 segment, void* params);
+void AnimatedMat_DrawTexCycle(struct PlayState* play, s32 segment, void* params);
+void AnimatedMat_DrawMain(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step, u32 flags);
+void AnimatedMat_Draw(struct PlayState* play, AnimatedMaterial* matAnim);
+void AnimatedMat_DrawOpa(struct PlayState* play, AnimatedMaterial* matAnim);
+void AnimatedMat_DrawXlu(struct PlayState* play, AnimatedMaterial* matAnim);
+void AnimatedMat_DrawAlpha(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
+void AnimatedMat_DrawAlphaOpa(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
+void AnimatedMat_DrawAlphaXlu(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio);
+void AnimatedMat_DrawStep(struct PlayState* play, AnimatedMaterial* matAnim, u32 step);
+void AnimatedMat_DrawStepOpa(struct PlayState* play, AnimatedMaterial* matAnim, u32 step);
+void AnimatedMat_DrawStepXlu(struct PlayState* play, AnimatedMaterial* matAnim, u32 step);
+void AnimatedMat_DrawAlphaStep(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
+void AnimatedMat_DrawAlphaStepOpa(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
+void AnimatedMat_DrawAlphaStepXlu(struct PlayState* play, AnimatedMaterial* matAnim, f32 alphaRatio, u32 step);
+void Scene_DrawConfigMatAnim(struct PlayState* play);
+void Scene_DrawConfig3(struct PlayState* play);
+void Scene_DrawConfig4(struct PlayState* play);
+void Scene_DrawConfigDoNothing(struct PlayState* play);
+void Scene_SetRenderModeXlu(struct PlayState* play, s32 index, u32 flags);
+void Scene_SetCullFlag(struct PlayState* play, s32 index, u32 flags);
+void Scene_DrawConfig5(struct PlayState* play);
+void Scene_DrawConfigMatAnimManualStep(struct PlayState* play);
+void Scene_DrawConfigGreatBayTemple(struct PlayState* play);
+EntranceTableEntry* Entrance_GetTableEntry(u16 entrance);
+s32 Entrance_GetSceneId(u16 entrance);
+s32 Entrance_GetSceneIdAbsolute(u16 entrance);
+s32 Entrance_GetSpawnNum(u16 entrance);
+s32 Entrance_GetTransitionFlags(u16 entrance);
 
 #endif

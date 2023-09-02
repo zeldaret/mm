@@ -8,9 +8,8 @@
  */
 
 #include "z_en_dnp.h"
-#include "objects/object_dnq/object_dnq.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnDnp*)thisx)
 
@@ -25,7 +24,15 @@ void func_80B3D338(EnDnp* this, PlayState* play);
 void func_80B3D3F8(EnDnp* this, PlayState* play);
 void func_80B3D558(EnDnp* this, PlayState* play);
 
-const ActorInit En_Dnp_InitVars = {
+typedef enum {
+    /* 0 */ DEKU_PRINCESS_EYE_OPEN,
+    /* 1 */ DEKU_PRINCESS_EYE_HALF,
+    /* 2 */ DEKU_PRINCESS_EYE_CLOSED,
+    /* 3 */ DEKU_PRINCESS_EYE_ANGRY,
+    /* 4 */ DEKU_PRINCESS_EYE_MAX
+} EnDnpEyeIndex;
+
+ActorInit En_Dnp_InitVars = {
     ACTOR_EN_DNP,
     ACTORCAT_NPC,
     FLAGS,
@@ -59,33 +66,64 @@ static ColliderCylinderInit sCylinderInit = {
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &object_dnq_Anim_0007D8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnq_Anim_0021DC, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_0026B8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_004D08, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_0071F4, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_007960, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_008588, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_00A900, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00AEB8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00B754, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_00674C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00BAD8, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_006B74, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_012428, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnq_Anim_00B324, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_0115B8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_dnq_Anim_00923C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_009AA0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_00125C, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
-    { &object_dnq_Anim_0017F8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_001C1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_dnq_Anim_0057AC, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_dnq_Anim_00625C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+typedef enum {
+    /* -1 */ DEKU_PRINCESS_ANIM_NONE = -1,
+    /*  0 */ DEKU_PRINCESS_ANIM_JUMP_KICK, // Can be triggered by a cutscene, but no cutscene in the final game does so
+    /*  1 */ DEKU_PRINCESS_ANIM_HURRY,
+    /*  2 */ DEKU_PRINCESS_ANIM_CUTSCENE_HURRY,
+    /*  3 */ DEKU_PRINCESS_ANIM_HURRY_END,
+    /*  4 */ DEKU_PRINCESS_ANIM_SCOLD, // Unused
+    /*  5 */ DEKU_PRINCESS_ANIM_LAUGH_START,
+    /*  6 */ DEKU_PRINCESS_ANIM_LAUGH_LOOP,
+    /*  7 */ DEKU_PRINCESS_ANIM_TURN_AROUND,
+    /*  8 */ DEKU_PRINCESS_ANIM_BOW,
+    /*  9 */ DEKU_PRINCESS_ANIM_RUN, // Unused
+    /* 10 */ DEKU_PRINCESS_ANIM_THINK_START,
+    /* 11 */ DEKU_PRINCESS_ANIM_THINK_LOOP,
+    /* 12 */ DEKU_PRINCESS_ANIM_ARMS_TOGETHER_START,
+    /* 13 */ DEKU_PRINCESS_ANIM_ARMS_TOGETHER_LOOP,
+    /* 14 */ DEKU_PRINCESS_ANIM_GREETING,
+    /* 15 */ DEKU_PRINCESS_ANIM_IDLE,
+    /* 16 */ DEKU_PRINCESS_ANIM_CUTSCENE_IDLE,
+    /* 17 */ DEKU_PRINCESS_ANIM_UNUSED_WALK, // Unused
+    /* 18 */ DEKU_PRINCESS_ANIM_WALK, // Can be triggered by a cutscene, but no cutscene in the final game does so
+    /* 19 */ DEKU_PRINCESS_ANIM_ANGRY_START,
+    /* 20 */ DEKU_PRINCESS_ANIM_ANGRY_LOOP,
+    /* 21 */ DEKU_PRINCESS_ANIM_JUMP,
+    /* 22 */ DEKU_PRINCESS_ANIM_BOUNCE_START,
+    /* 23 */ DEKU_PRINCESS_ANIM_BOUNCE_LOOP,
+    /* 24 */ DEKU_PRINCESS_ANIM_GLARE_START,
+    /* 25 */ DEKU_PRINCESS_ANIM_GLARE_LOOP,
+    /* 26 */ DEKU_PRINCESS_ANIM_MAX
+} DekuPrincessAnimation;
+
+static AnimationInfoS sAnimationInfo[DEKU_PRINCESS_ANIM_MAX] = {
+    { &gDekuPrincessJumpKickAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // DEKU_PRINCESS_ANIM_JUMP_KICK
+    { &gDekuPrincessHurryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },              // DEKU_PRINCESS_ANIM_HURRY
+    { &gDekuPrincessHurryAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },             // DEKU_PRINCESS_ANIM_CUTSCENE_HURRY
+    { &gDekuPrincessHurryEndAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },          // DEKU_PRINCESS_ANIM_HURRY_END
+    { &gDekuPrincessScoldAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },             // DEKU_PRINCESS_ANIM_SCOLD
+    { &gDekuPrincessLaughStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_PRINCESS_ANIM_LAUGH_START
+    { &gDekuPrincessLaughLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_LAUGH_LOOP
+    { &gDekuPrincessTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // DEKU_PRINCESS_ANIM_TURN_AROUND
+    { &gDekuPrincessBowAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },               // DEKU_PRINCESS_ANIM_BOW
+    { &gDekuPrincessRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },               // DEKU_PRINCESS_ANIM_RUN
+    { &gDekuPrincessThinkStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_PRINCESS_ANIM_THINK_START
+    { &gDekuPrincessThinkLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_THINK_LOOP
+    { &gDekuPrincessArmsTogetherStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 }, // DEKU_PRINCESS_ANIM_ARMS_TOGETHER_START
+    { &gDekuPrincessArmsTogetherLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },  // DEKU_PRINCESS_ANIM_ARMS_TOGETHER_LOOP
+    { &gDekuPrincessGreetingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },          // DEKU_PRINCESS_ANIM_GREETING
+    { &gDekuPrincessIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // DEKU_PRINCESS_ANIM_IDLE
+    { &gDekuPrincessIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },              // DEKU_PRINCESS_ANIM_CUTSCENE_IDLE
+    { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },              // DEKU_PRINCESS_ANIM_UNUSED_WALK
+    { &gDekuPrincessWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },               // DEKU_PRINCESS_ANIM_WALK
+    { &gDekuPrincessAngryStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },        // DEKU_PRINCESS_ANIM_ANGRY_START
+    { &gDekuPrincessAngryLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_ANGRY_LOOP
+    { &gDekuPrincessJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },              // DEKU_PRINCESS_ANIM_JUMP
+    { &gDekuPrincessBounceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        // DEKU_PRINCESS_ANIM_BOUNCE_START
+    { &gDekuPrincessBounceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },        // DEKU_PRINCESS_ANIM_BOUNCE_LOOP
+    { &gDekuPrincessGlareStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // DEKU_PRINCESS_ANIM_GLARE_START
+    { &gDekuPrincessGlareLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },         // DEKU_PRINCESS_ANIM_GLARE_LOOP
 };
 
 static s32 D_80B3DE58[] = {
@@ -93,55 +131,57 @@ static s32 D_80B3DE58[] = {
 };
 
 s32 func_80B3CA20(EnDnp* this) {
-    if ((this->unk_340 == 2) || (this->unk_340 == 9)) {
+    if ((this->animIndex == DEKU_PRINCESS_ANIM_CUTSCENE_HURRY) || (this->animIndex == DEKU_PRINCESS_ANIM_RUN)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 9.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
-    } else if ((this->unk_340 == 24) || (this->unk_340 == 7)) {
+    } else if ((this->animIndex == DEKU_PRINCESS_ANIM_GLARE_START) ||
+               (this->animIndex == DEKU_PRINCESS_ANIM_TURN_AROUND)) {
         if (Animation_OnFrame(&this->skelAnime, 1.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_TURN);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_TURN);
         }
-    } else if (this->unk_340 == 14) {
+    } else if (this->animIndex == DEKU_PRINCESS_ANIM_GREETING) {
         if (Animation_OnFrame(&this->skelAnime, 7.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
-    } else if (this->unk_340 == 8) {
+    } else if (this->animIndex == DEKU_PRINCESS_ANIM_BOW) {
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET);
         }
         if (Animation_OnFrame(&this->skelAnime, 18.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_GREET2);
         }
-    } else if ((this->unk_340 == 17) && (this->unk_340 == 18)) {
+    } else if ((this->animIndex == DEKU_PRINCESS_ANIM_UNUSED_WALK) && (this->animIndex == DEKU_PRINCESS_ANIM_WALK)) {
+        //! @bug: Impossible to reach, && should be an ||
         if (Animation_OnFrame(&this->skelAnime, 7.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
-    } else if (this->unk_340 == 21) {
+    } else if (this->animIndex == DEKU_PRINCESS_ANIM_JUMP) {
         if (Animation_OnFrame(&this->skelAnime, 17.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
-    } else if (this->unk_340 == 23) {
+    } else if (this->animIndex == DEKU_PRINCESS_ANIM_BOUNCE_LOOP) {
         if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_DEKUHIME_WALK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_DEKUHIME_WALK);
         }
     }
 
     return 0;
 }
 
-s32 func_80B3CC38(EnDnp* this, s32 arg1) {
-    s32 ret = false;
+s32 EnDnp_ChangeAnim(EnDnp* this, s32 animIndex) {
+    s32 didAnimChange = false;
 
-    if (arg1 != this->unk_340) {
-        this->unk_340 = arg1;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, arg1);
+    if (this->animIndex != animIndex) {
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 void func_80B3CC80(EnDnp* this, PlayState* play) {
@@ -154,11 +194,11 @@ void func_80B3CC80(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3CD1C(EnDnp* this) {
-    if ((this->unk_322 & 0x80) && (DECR(this->unk_334) == 0)) {
-        this->unk_336++;
-        if (this->unk_336 >= 4) {
-            this->unk_334 = Rand_S16Offset(30, 30);
-            this->unk_336 = 0;
+    if ((this->unk_322 & 0x80) && (DECR(this->blinkTimer) == 0)) {
+        this->eyeIndex++;
+        if (this->eyeIndex >= DEKU_PRINCESS_EYE_MAX) {
+            this->blinkTimer = Rand_S16Offset(30, 30);
+            this->eyeIndex = DEKU_PRINCESS_EYE_OPEN;
         }
     }
 }
@@ -174,11 +214,14 @@ s32 func_80B3CDA4(EnDnp* this, PlayState* play) {
 
     Math_SmoothStepToS(&this->unk_332, temp_s0, 3, 0x2AA8, 0x1);
     sp30 = player->actor.world.pos;
-    sp30.y = player->bodyPartsPos[7].y + 3.0f;
+    sp30.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     sp3C = this->actor.world.pos;
     sp3C.y += 10.0f;
     pitch = Math_Vec3f_Pitch(&sp3C, &sp30);
-    if (1) {};
+
+    //! FAKE
+    if (1) {}
+
     Math_SmoothStepToS(&this->unk_330, pitch, 3, 0x2AA8, 0x1);
 
     return 1;
@@ -204,13 +247,14 @@ s32 func_80B3CEC0(EnDnp* this, PlayState* play) {
 s32 func_80B3CF60(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_322 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_322, 0, 7);
+    if (((this->unk_322 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_322 |= 8;
         this->actionFunc = func_80B3D3F8;
         ret = true;
-    } else if (!(gSaveContext.save.weekEventReg[23] & 0x20) && Actor_HasParent(&this->actor, play)) {
-        SubS_UpdateFlags(&this->unk_322, 0, 7);
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20) && Actor_HasParent(&this->actor, play)) {
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~0x500;
         this->actor.parent = NULL;
         this->unk_32E = 0;
@@ -224,18 +268,18 @@ s32 func_80B3CF60(EnDnp* this, PlayState* play) {
 s32 func_80B3D044(EnDnp* this, PlayState* play) {
     s32 ret = false;
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         if (!(this->unk_322 & 0x200)) {
             this->unk_322 |= (0x200 | 0x10);
-            this->actor.flags &= ~ACTOR_FLAG_1;
-            this->unk_324 = 0xFF;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->cueId = 255;
         }
-        SubS_UpdateFlags(&this->unk_322, 0, 7);
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80B3D11C;
         ret = true;
     } else if (this->unk_322 & 0x200) {
-        this->actor.flags |= ACTOR_FLAG_1;
-        SubS_UpdateFlags(&this->unk_322, 3, 7);
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~(0x200 | 0x10);
         this->actionFunc = func_80B3D2D4;
     }
@@ -244,47 +288,54 @@ s32 func_80B3D044(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D11C(EnDnp* this, PlayState* play) {
-    static s32 D_80B3DE74[] = {
-        0, 16, 14, 10, 18, 12, 5, 7, 2, 19, 21, 22, 24, 8,
+    static s32 sCsAnimIndex[] = {
+        DEKU_PRINCESS_ANIM_JUMP_KICK,   DEKU_PRINCESS_ANIM_CUTSCENE_IDLE, DEKU_PRINCESS_ANIM_GREETING,
+        DEKU_PRINCESS_ANIM_THINK_START, DEKU_PRINCESS_ANIM_WALK,          DEKU_PRINCESS_ANIM_ARMS_TOGETHER_START,
+        DEKU_PRINCESS_ANIM_LAUGH_START, DEKU_PRINCESS_ANIM_TURN_AROUND,   DEKU_PRINCESS_ANIM_CUTSCENE_HURRY,
+        DEKU_PRINCESS_ANIM_ANGRY_START, DEKU_PRINCESS_ANIM_JUMP,          DEKU_PRINCESS_ANIM_BOUNCE_START,
+        DEKU_PRINCESS_ANIM_GLARE_START, DEKU_PRINCESS_ANIM_BOW,
     };
-    s32 temp_v0;
-    s32 val;
+    s32 cueChannel;
+    s32 cueId;
 
-    if (!(gSaveContext.save.weekEventReg[29] & 0x40) && (play->sceneId == SCENE_MITURIN) &&
-        (play->csCtx.currentCsIndex == 0)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40) && (play->sceneId == SCENE_MITURIN) && (play->csCtx.scriptIndex == 0)) {
         this->unk_322 |= 0x20;
-        gSaveContext.save.weekEventReg[29] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_29_40);
     }
 
-    if (Cutscene_CheckActorAction(play, 101)) {
-        temp_v0 = Cutscene_GetActorActionIndex(play, 101);
-        val = play->csCtx.actorActions[temp_v0]->action;
-        if (this->unk_324 != (u8)val) {
-            func_80B3CC38(this, D_80B3DE74[val]);
-            if (this->unk_340 == 16) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_101)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_101);
+        cueId = play->csCtx.actorCues[cueChannel]->id;
+        if (this->cueId != (u8)cueId) {
+            EnDnp_ChangeAnim(this, sCsAnimIndex[cueId]);
+            if (this->animIndex == DEKU_PRINCESS_ANIM_CUTSCENE_IDLE) {
                 this->unk_322 |= 8;
             } else {
                 this->unk_322 &= ~8;
             }
 
-            if (this->unk_340 == 19) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_DHVO04);
+            if (this->animIndex == DEKU_PRINCESS_ANIM_ANGRY_START) {
+                Actor_PlaySfx(&this->actor, NA_SE_VO_DHVO04);
             }
 
-            if (this->unk_340 == 24) {
+            if (this->animIndex == DEKU_PRINCESS_ANIM_GLARE_START) {
                 this->unk_322 &= ~0x80;
-                this->unk_336 = 3;
-                this->unk_334 = 0;
+                this->eyeIndex = DEKU_PRINCESS_EYE_ANGRY;
+                this->blinkTimer = 0;
             }
         }
 
-        this->unk_324 = val;
-        if (((this->unk_340 == 10) || (this->unk_340 == 12) || (this->unk_340 == 5) || (this->unk_340 == 19) ||
-             (this->unk_340 == 22) || (this->unk_340 == 24)) &&
+        this->cueId = cueId;
+        if (((this->animIndex == DEKU_PRINCESS_ANIM_THINK_START) ||
+             (this->animIndex == DEKU_PRINCESS_ANIM_ARMS_TOGETHER_START) ||
+             (this->animIndex == DEKU_PRINCESS_ANIM_LAUGH_START) ||
+             (this->animIndex == DEKU_PRINCESS_ANIM_ANGRY_START) ||
+             (this->animIndex == DEKU_PRINCESS_ANIM_BOUNCE_START) ||
+             (this->animIndex == DEKU_PRINCESS_ANIM_GLARE_START)) &&
             Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-            func_80B3CC38(this, this->unk_340 + 1);
+            EnDnp_ChangeAnim(this, this->animIndex + 1);
         }
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 }
 
@@ -300,21 +351,24 @@ void func_80B3D338(EnDnp* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if ((this->unk_32E != 0) && (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING)) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->unk_32E == 0) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_32E == 0) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->unk_32E = 1;
         } else {
             this->actor.textId = 0x971;
             player->actor.textId = this->actor.textId;
-            func_800B8500(&this->actor, play, 9999.9f, 9999.9f, PLAYER_AP_MINUS1);
+            Actor_OfferTalkExchange(&this->actor, play, 9999.9f, 9999.9f, PLAYER_IA_MINUS1);
         }
     }
 }
 
 void func_80B3D3F8(EnDnp* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, D_80B3DE58, NULL, &this->unk_328)) {
-        SubS_UpdateFlags(&this->unk_322, 3, 7);
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 &= ~8;
         this->actionFunc = func_80B3D2D4;
     } else {
@@ -323,11 +377,11 @@ void func_80B3D3F8(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D47C(EnDnp* this, PlayState* play) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_SmoothStepToF(&this->actor.scale.x, 0.0085f, 0.1f, 0.01f, 0.001f);
         if ((s32)(this->actor.scale.x * 10000.0f) >= 85) {
-            this->actor.flags |= ACTOR_FLAG_1;
-            SubS_UpdateFlags(&this->unk_322, 3, 7);
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+            SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
             this->unk_322 &= ~0x10;
             this->unk_322 |= 0x400;
             this->actor.scale.x = 0.0085f;
@@ -338,11 +392,11 @@ void func_80B3D47C(EnDnp* this, PlayState* play) {
 }
 
 void func_80B3D558(EnDnp* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
-        gSaveContext.save.weekEventReg[23] |= 0x20;
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_23_20);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -350,36 +404,38 @@ void EnDnp_Init(Actor* thisx, PlayState* play) {
     EnDnp* this = THIS;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 16.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_dnq_Skel_010D60, NULL, this->jointTable, this->morphTable, 26);
-    this->unk_340 = -1;
-    func_80B3CC38(this, 15);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gDekuPrincessSkel, NULL, this->jointTable, this->morphTable,
+                       DEKU_PRINCESS_LIMB_MAX);
+    this->animIndex = DEKU_PRINCESS_ANIM_NONE;
+    EnDnp_ChangeAnim(this, DEKU_PRINCESS_ANIM_IDLE);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     this->unk_322 = 0;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_322 |= (0x100 | 0x80 | 0x10);
     this->actor.gravity = -1.0f;
-    if (ENDNP_GET_7(&this->actor) == ENDNP_GET_7_1) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        Actor_SetScale(&this->actor, 0.00085000007f);
-        SubS_UpdateFlags(&this->unk_322, 0, 7);
+    if (DEKU_PRINCESS_GET_TYPE(&this->actor) == DEKU_PRINCESS_TYPE_RELEASED_FROM_BOTTLE) {
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        Actor_SetScale(&this->actor, 0.85f * 0.001f);
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actor.shape.rot.x = 0;
         this->actor.world.rot.x = this->actor.shape.rot.x;
-        this->actor.cutscene = 0x10;
+        this->actor.csId = 16;
         this->actionFunc = func_80B3D47C;
-    } else if (((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_0) && !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) &&
-                !(gSaveContext.save.weekEventReg[23] & 0x20)) ||
-               ((ENDNP_GET_7(&this->actor) == ENDNP_GET_7_2) && (gSaveContext.save.weekEventReg[23] & 0x20))) {
+    } else if (((DEKU_PRINCESS_GET_TYPE(&this->actor) == DEKU_PRINCESS_TYPE_WOODFALL_TEMPLE) &&
+                !Inventory_HasItemInBottle(ITEM_DEKU_PRINCESS) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) ||
+               ((DEKU_PRINCESS_GET_TYPE(&this->actor) == DEKU_PRINCESS_TYPE_DEKU_KINGS_CHAMBER) &&
+                CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20))) {
         Actor_SetScale(&this->actor, 0.0085f);
-        SubS_UpdateFlags(&this->unk_322, 3, 7);
+        SubS_SetOfferMode(&this->unk_322, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_322 |= 0x400;
-        if ((play->sceneId == SCENE_MITURIN) && (gSaveContext.save.weekEventReg[29] & 0x40)) {
+        if ((play->sceneId == SCENE_MITURIN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_29_40)) {
             this->unk_322 |= 0x20;
-            func_80B3CC38(this, 1);
+            EnDnp_ChangeAnim(this, DEKU_PRINCESS_ANIM_HURRY);
         }
         this->actionFunc = func_80B3D2D4;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -406,13 +462,13 @@ void EnDnp_Update(Actor* thisx, PlayState* play) {
         func_80B3CD1C(this);
         func_80B3CEC0(this, play);
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         sp2C = this->collider.dim.radius + 50;
         sp28 = this->collider.dim.height + 30;
-        if ((this->unk_322 & 0x400) && !(gSaveContext.save.weekEventReg[23] & 0x20)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, sp2C, sp28);
+        if ((this->unk_322 & 0x400) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_23_20)) {
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, sp2C, sp28);
         }
-        func_8013C964(&this->actor, play, sp2C, sp28, PLAYER_AP_NONE, this->unk_322 & 7);
+        SubS_Offer(&this->actor, play, sp2C, sp28, PLAYER_IA_NONE, this->unk_322 & SUBS_OFFER_MODE_MASK);
         Actor_SetFocus(&this->actor, 30.0f);
         func_80B3CC80(this, play);
     }
@@ -467,7 +523,7 @@ void EnDnp_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
         }
     }
 
-    if (limbIndex == 12) {
+    if (limbIndex == DEKU_PRINCESS_LIMB_HEAD) {
         func_80B3D974(this->unk_330 + 0x4000, this->unk_332 + this->actor.shape.rot.y + 0x4000, &this->unk_1D8,
                       &this->unk_1E4, phi_v1, phi_v0);
         Matrix_Pop();
@@ -481,20 +537,20 @@ void EnDnp_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnDnp_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80B3DEAC[] = {
-        object_dnq_Tex_0103D0,
-        object_dnq_Tex_0105D0,
-        object_dnq_Tex_0107D0,
-        object_dnq_Tex_0109D0,
+    static TexturePtr sEyeTextures[] = {
+        gDekuPrincessEyeOpenTex,
+        gDekuPrincessEyeHalfTex,
+        gDekuPrincessEyeClosedTex,
+        gDekuPrincessEyeAngryTex,
     };
     EnDnp* this = THIS;
 
     if (this->unk_322 & 0x100) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B3DEAC[this->unk_336]));
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
 
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, NULL, EnDnp_PostLimbDraw, EnDnp_TransformLimbDraw,

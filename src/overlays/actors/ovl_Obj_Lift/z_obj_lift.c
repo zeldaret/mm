@@ -27,7 +27,7 @@ void func_8093DB70(ObjLift* this);
 void func_8093DB90(ObjLift* this, PlayState* play);
 void func_8093DC90(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Lift_InitVars = {
+ActorInit Obj_Lift_InitVars = {
     ACTOR_OBJ_LIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -100,16 +100,17 @@ void ObjLift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.shape.rot.z = 0;
     this->unk_178 = this->dyna.actor.home.rot.z;
     this->dyna.actor.home.rot.z = this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     if ((this->unk_178 <= 0) && (Flags_GetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor)))) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
-        this->unk_160 = Rand_Next() >> 0x10;
-        this->unk_162 = Rand_Next() >> 0x10;
-        this->unk_164 = Rand_Next() >> 0x10;
-        func_8093D760(this);
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gDampeGraveBrownElevatorCol);
+    this->unk_160 = Rand_Next() >> 0x10;
+    this->unk_162 = Rand_Next() >> 0x10;
+    this->unk_164 = Rand_Next() >> 0x10;
+    func_8093D760(this);
 }
 
 void ObjLift_Destroy(Actor* thisx, PlayState* play) {
@@ -128,15 +129,15 @@ void func_8093D7A0(ObjLift* this, PlayState* play) {
     s32 pad;
     s16 quakeIndex;
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if (this->timer <= 0) {
             if (OBJLIFT_GET_7(&this->dyna.actor) == 7) {
                 func_8093D9C0(this);
             } else {
-                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_1);
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_1);
                 Quake_SetSpeed(quakeIndex, 10000);
-                Quake_SetQuakeValues(quakeIndex, 2, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 20);
+                Quake_SetPerturbations(quakeIndex, 2, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 20);
 
                 func_8093D88C(this);
             }
@@ -193,10 +194,10 @@ void func_8093DA48(ObjLift* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 20, NA_SE_EV_BOX_BREAK);
         if (this->unk_178 > 0) {
             func_8093DB70(this);
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         } else {
             Flags_SetSwitch(play, OBJLIFT_GET_7F(&this->dyna.actor));
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     }
 }
@@ -211,7 +212,7 @@ void func_8093DB90(ObjLift* this, PlayState* play) {
     if (this->timer <= 0) {
         Math_Vec3f_Copy(&this->dyna.actor.world.pos, &this->dyna.actor.home.pos);
         this->dyna.actor.world.rot = this->dyna.actor.shape.rot = this->dyna.actor.home.rot;
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         func_8093D760(this);
     }
 }

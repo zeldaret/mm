@@ -6,7 +6,7 @@
 
 #include "z_en_hs2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnHs2*)thisx)
 
@@ -17,7 +17,7 @@ void EnHs2_Draw(Actor* thisx, PlayState* play);
 
 void EnHs2_DoNothing(EnHs2* this, PlayState* play);
 
-const ActorInit En_Hs2_InitVars = {
+ActorInit En_Hs2_InitVars = {
     ACTOR_EN_HS2,
     ACTORCAT_NPC,
     FLAGS,

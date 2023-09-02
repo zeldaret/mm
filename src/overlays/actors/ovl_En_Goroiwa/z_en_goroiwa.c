@@ -33,7 +33,7 @@ void func_80941FA4(EnGoroiwa* this, PlayState* play);
 void func_80942084(EnGoroiwa* this);
 void func_809420F0(EnGoroiwa* this, PlayState* play);
 
-const ActorInit En_Goroiwa_InitVars = {
+ActorInit En_Goroiwa_InitVars = {
     ACTOR_EN_GOROIWA,
     ACTORCAT_PROP,
     FLAGS,
@@ -358,7 +358,7 @@ s32 func_8093F34C(EnGoroiwa* this) {
     f32 x;
     f32 z;
 
-    Math_StepToF(&this->actor.speedXZ, D_80942DFC[this->unk_1E4], 0.3f);
+    Math_StepToF(&this->actor.speed, D_80942DFC[this->unk_1E4], 0.3f);
     Actor_UpdateVelocityWithGravity(&this->actor);
     temp_v0 = &this->unk_1D0[this->unk_1D8];
     this->actor.velocity.y *= 0.97f;
@@ -368,7 +368,7 @@ s32 func_8093F34C(EnGoroiwa* this) {
     tempX = x - this->actor.world.pos.x;
     tempZ = z - this->actor.world.pos.z;
 
-    if (SQ(this->actor.speedXZ + 1.0f) < (SQ(tempX) + SQ(tempZ))) {
+    if (SQ(this->actor.speed + 1.0f) < (SQ(tempX) + SQ(tempZ))) {
         this->actor.world.pos.x += this->actor.velocity.x;
         this->actor.world.pos.y += this->actor.velocity.y;
         this->actor.world.pos.z += this->actor.velocity.z;
@@ -393,12 +393,12 @@ s32 func_8093F498(EnGoroiwa* this) {
     sp2C.y = temp_v0->y;
     sp2C.z = temp_v0->z;
 
-    Math_StepToF(&this->actor.speedXZ, D_80942DFC[this->unk_1E4], 0.3f);
+    Math_StepToF(&this->actor.speed, D_80942DFC[this->unk_1E4], 0.3f);
     Math_Vec3f_Diff(&sp2C, &this->actor.world.pos, &this->actor.velocity);
 
     temp_f0 = Math3D_Vec3fMagnitude(&this->actor.velocity);
-    if ((this->actor.speedXZ + 1.0f) < temp_f0) {
-        Math_Vec3f_Scale(&this->actor.velocity, this->actor.speedXZ / temp_f0);
+    if ((this->actor.speed + 1.0f) < temp_f0) {
+        Math_Vec3f_Scale(&this->actor.velocity, this->actor.speed / temp_f0);
         this->actor.world.pos.x += this->actor.velocity.x;
         this->actor.world.pos.y += this->actor.velocity.y;
         this->actor.world.pos.z += this->actor.velocity.z;
@@ -451,11 +451,11 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
     if ((this->actor.velocity.y < 0.0f) && (this->actor.world.pos.y <= sp7C)) {
         if (this->unk_1CA == 0) {
             if (this->actor.xzDistToPlayer < 400.0f) {
-                s16 quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
                 Quake_SetSpeed(quakeIndex, 17232);
-                Quake_SetQuakeValues(quakeIndex, 3, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 7);
+                Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 7);
             }
 
             this->unk_1C4 = 0.0f;
@@ -483,7 +483,7 @@ s32 func_8093F6F8(EnGoroiwa* this, PlayState* play) {
                         func_8093EF54(play, &sp48, &D_80942E30[ENGOROIWA_GET_C000(&this->actor)],
                                       &D_80942E3C[ENGOROIWA_GET_C000(&this->actor)], this->actor.scale.x);
                     }
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_BIGBALL_BOUND);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_BIGBALL_BOUND);
                 }
             }
         }
@@ -894,7 +894,7 @@ void func_80940E38(EnGoroiwa* this, PlayState* play) {
 
     if (this->actor.flags & ACTOR_FLAG_40) {
         if (this->actor.xzDistToPlayer < 1000.0f) {
-            sp5C = (1000.0f - this->actor.xzDistToPlayer) * 0.0012f * (this->actor.speedXZ * 0.1f);
+            sp5C = (1000.0f - this->actor.xzDistToPlayer) * 0.0012f * (this->actor.speed * 0.1f);
             if (Rand_ZeroOne() < sp5C) {
                 this->unk_1CE += 20000;
                 sp46 = (s32)Rand_ZeroFloat(20000.0f) + this->unk_1CE;
@@ -965,12 +965,12 @@ void EnGoroiwa_Init(Actor* thisx, PlayState* play) {
     func_8093E9B0(this, play);
 
     if (sp28 == 0x7F8) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
     if (sp2C->count < 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1049,7 +1049,7 @@ s32 func_8094156C(EnGoroiwa* this, PlayState* play) {
                 temp2 = Math_SinS(ptr->unk_1E);
                 temp3 = Math_SinS(this->actor.world.rot.y);
 
-                ptr->unk_0C = ((1.0f / D_80942DFC[this->unk_1E4]) * (temp3 * 14.0f * this->actor.speedXZ)) +
+                ptr->unk_0C = ((1.0f / D_80942DFC[this->unk_1E4]) * (temp3 * 14.0f * this->actor.speed)) +
                               (temp2 * (temp + 5.0f));
 
                 ptr->unk_10 = (Rand_ZeroOne() * 11.0f) + 20.0f;
@@ -1057,7 +1057,7 @@ s32 func_8094156C(EnGoroiwa* this, PlayState* play) {
                 temp = Rand_ZeroOne();
                 temp2 = Math_CosS(ptr->unk_1E);
                 temp3 = Math_CosS(this->actor.world.rot.y);
-                ptr->unk_14 = ((1.0f / D_80942DFC[this->unk_1E4]) * ((temp3 * 14.0f) * this->actor.speedXZ)) +
+                ptr->unk_14 = ((1.0f / D_80942DFC[this->unk_1E4]) * ((temp3 * 14.0f) * this->actor.speed)) +
                               (temp2 * (temp + 5.0f));
 
                 ptr->unk_1C = 0;
@@ -1134,7 +1134,7 @@ void func_80941A10(EnGoroiwa* this, PlayState* play) {
     s32 pad2;
 
     if (!func_8094156C(this, play)) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             s32 sp34 = this->actor.home.rot.z & 3;
 
             if (sp34 == 2) {
@@ -1168,7 +1168,7 @@ void func_80941A10(EnGoroiwa* this, PlayState* play) {
                 func_80941DB4(this);
             }
 
-            func_800B8E58(player, NA_SE_PL_BODY_HIT);
+            Player_PlaySfx(player, NA_SE_PL_BODY_HIT);
 
             if ((sp34 == 1) || (sp34 == 2)) {
                 this->unk_1CC = 50;
@@ -1207,8 +1207,8 @@ void func_80941A10(EnGoroiwa* this, PlayState* play) {
             }
         }
 
-        if (this->actor.bgCheckFlags & 1) {
-            Actor_PlaySfxAtPos(&this->actor, D_80942E9C[this->unk_1E4][this->actor.home.rot.x & 1]);
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            Actor_PlaySfx(&this->actor, D_80942E9C[this->unk_1E4][this->actor.home.rot.x & 1]);
         }
     }
 }
@@ -1218,14 +1218,14 @@ void func_80941DB4(EnGoroiwa* this) {
     func_8093EAB0(this, 6);
     this->actor.gravity = -0.86f;
     this->actor.terminalVelocity = -15.0f;
-    this->actor.speedXZ *= 0.15f;
+    this->actor.speed *= 0.15f;
     this->actor.velocity.y = 5.0f;
     this->unk_1C4 = 1.0f;
 }
 
 void func_80941E28(EnGoroiwa* this, PlayState* play) {
     func_8093F34C(this);
-    if ((this->actor.bgCheckFlags & 1) && (this->actor.velocity.y < 0.0f)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && (this->actor.velocity.y < 0.0f)) {
         if ((this->unk_1E5 & 8) && ((this->actor.home.rot.z & 3) == 1)) {
             func_8093EDB0(this);
         }
@@ -1237,7 +1237,7 @@ void func_80941EB4(EnGoroiwa* this) {
     static s16 D_80942EAC[] = { 20, 6, 20 };
 
     this->actionFunc = func_80941F10;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     func_8093EAB0(this, 6);
     this->unk_1C8 = D_80942EAC[this->actor.home.rot.z & 3];
     this->unk_1C4 = 0.0f;
@@ -1257,23 +1257,23 @@ void func_80941F54(EnGoroiwa* this) {
     this->actionFunc = func_80941FA4;
     func_8093EAB0(this, 7);
     this->unk_1C4 = 0.0f;
-    this->actor.velocity.y = fabsf(this->actor.speedXZ) * 0.1f;
+    this->actor.velocity.y = fabsf(this->actor.speed) * 0.1f;
 }
 
 void func_80941FA4(EnGoroiwa* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (func_8094156C(this, play) == 0) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
-            func_800B8E58(player, NA_SE_PL_BODY_HIT);
+            Player_PlaySfx(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
             }
         } else if (func_8093F5EC(this)) {
             func_8093FC00(this);
             func_809419D0(this);
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     }
 }
@@ -1283,7 +1283,7 @@ void func_80942084(EnGoroiwa* this) {
     func_8093EAB0(this, 7);
     this->unk_1C4 = 0.3f;
     this->unk_1CA = 0;
-    this->actor.velocity.y = fabsf(this->actor.speedXZ) * -0.3f;
+    this->actor.velocity.y = fabsf(this->actor.speed) * -0.3f;
     this->unk_1E5 |= 0x10;
     this->unk_1E5 &= ~0x20;
 }
@@ -1292,9 +1292,9 @@ void func_809420F0(EnGoroiwa* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (func_8094156C(this, play) == 0) {
-        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & 0x80000)) {
+        if ((this->collider.base.atFlags & AT_HIT) && !(player->stateFlags3 & PLAYER_STATE3_80000)) {
             func_800B8D50(play, &this->actor, 2.0f, this->actor.yawTowardsPlayer, 0.0f, 0);
-            func_800B8E58(player, NA_SE_PL_BODY_HIT);
+            Player_PlaySfx(player, NA_SE_PL_BODY_HIT);
             if (((this->actor.home.rot.z & 3) == 1) || ((this->actor.home.rot.z & 3) == 2)) {
                 this->unk_1CC = 50;
             }
@@ -1302,7 +1302,7 @@ void func_809420F0(EnGoroiwa* this, PlayState* play) {
             func_8093FC00(this);
             func_809419D0(this);
             this->unk_1E5 &= ~0x10;
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
         }
     }
 }
@@ -1418,7 +1418,7 @@ void func_80942604(EnGoroiwa* this, PlayState* play) {
     if (this->unk_1C8 > 0) {
         this->unk_1C8--;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1431,16 +1431,17 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
     Vec3f sp50;
     f32 sp4C;
     s32 sp48 = true;
-    u32 temp_v0_2;
+    FloorType floorType;
     CollisionPoly* tmp;
 
-    if (!(player->stateFlags1 & (0x30000000 | 0x80 | 0x40))) {
+    if (!(player->stateFlags1 &
+          (PLAYER_STATE1_40 | PLAYER_STATE1_80 | PLAYER_STATE1_10000000 | PLAYER_STATE1_20000000))) {
         if (this->unk_1CC > 0) {
             this->unk_1CC--;
         }
 
-        if ((ENGOROIWA_GET_3000(&this->actor) == ENGOROIWA_3000_2) && (this->actor.bgCheckFlags & 1) &&
-            (this->actionFunc == func_80941A10) && (this->actor.speedXZ > 2.0f)) {
+        if ((ENGOROIWA_GET_3000(&this->actor) == ENGOROIWA_3000_2) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
+            (this->actionFunc == func_80941A10) && (this->actor.speed > 2.0f)) {
             Math_StepToF(&this->actor.scale.x, 0.16f,
                          (this->actor.xzDistToPlayer < 400.0f) ? this->unk_1E0 * 1.4f : this->unk_1E0);
 
@@ -1452,9 +1453,9 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
             if (this->actor.flags & ACTOR_FLAG_40) {
                 tmp = this->actor.floorPoly;
                 if (tmp != NULL) {
-                    temp_v0_2 = func_800C99D4(&play->colCtx, tmp, this->actor.floorBgId);
+                    floorType = SurfaceType_GetFloorType(&play->colCtx, tmp, this->actor.floorBgId);
 
-                    if ((temp_v0_2 == 14) || (temp_v0_2 == 15)) {
+                    if ((floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                         if (!(this->unk_1E5 & 0x40)) {
                             sp50.x = this->actor.world.pos.x;
                             sp50.y = this->actor.floorHeight;
@@ -1484,7 +1485,8 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
 
             switch (ENGOROIWA_GET_400(&this->actor)) {
                 case ENGOROIWA_400_1:
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x1C);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f,
+                                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
                     break;
 
                 case ENGOROIWA_400_0:
@@ -1496,12 +1498,12 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                     if (this->actor.floorHeight > BGCHECK_Y_MIN) {
                         this->actor.floorBgId = bgId;
                         if (this->actor.world.pos.y <= (this->actor.floorHeight + 2.0f)) {
-                            this->actor.bgCheckFlags |= 1;
+                            this->actor.bgCheckFlags |= BGCHECKFLAG_GROUND;
                         } else {
-                            this->actor.bgCheckFlags &= ~1;
+                            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                         }
                     } else {
-                        this->actor.bgCheckFlags &= ~1;
+                        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
                         this->actor.floorBgId = 50;
                     }
                     break;
@@ -1515,7 +1517,7 @@ void EnGoroiwa_Update(Actor* thisx, PlayState* play) {
                 func_8093E938(this);
 
                 if ((this->unk_1E5 & 1) && (this->unk_1CC <= 0) &&
-                    (!(player->stateFlags3 & 0x2000000) || (player->transformation != PLAYER_FORM_GORON) ||
+                    (!(player->stateFlags3 & PLAYER_STATE3_2000000) || (player->transformation != PLAYER_FORM_GORON) ||
                      ((params != ENGOROIWA_C000_1) && (params != ENGOROIWA_C000_2)))) {
                     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
                 } else {
@@ -1573,7 +1575,7 @@ void func_80942B1C(EnGoroiwa* this, PlayState* play) {
             if ((ptr->unk_28 != 0) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(play->state.gfxCtx);
+                Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);

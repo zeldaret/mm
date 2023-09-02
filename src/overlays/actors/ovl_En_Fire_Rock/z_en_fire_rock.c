@@ -15,7 +15,7 @@ void EnFireRock_Destroy(Actor* thisx, PlayState* play);
 void EnFireRock_Update(Actor* thisx, PlayState* play);
 void EnFireRock_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_Fire_Rock_InitVars = {
+ActorInit En_Fire_Rock_InitVars = {
     ACTOR_EN_FIRE_ROCK,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -29,9 +29,12 @@ const ActorInit En_Fire_Rock_InitVars = {
 
 void EnFireRock_Init(Actor* thisx, PlayState* play) {
 }
+
 void EnFireRock_Destroy(Actor* thisx, PlayState* play) {
 }
+
 void EnFireRock_Update(Actor* thisx, PlayState* play) {
 }
+
 void EnFireRock_Draw(Actor* thisx, PlayState* play) {
 }

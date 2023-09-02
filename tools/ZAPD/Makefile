@@ -15,7 +15,7 @@ else
   CXX := g++
 endif
 
-INC := -I ZAPD -I lib/elfio -I lib/libgfxd -I lib/tinyxml2 -I ZAPDUtils
+INC := -I ZAPD -I lib/libgfxd -I lib/tinyxml2 -I ZAPDUtils
 CXXFLAGS := -fpic -std=c++17 -Wall -Wextra -fno-omit-frame-pointer
 OPTFLAGS :=
 
@@ -106,7 +106,7 @@ clean:
 rebuild: clean all
 
 format:
-	clang-format-11 -i $(ZAPD_CPP_FILES) $(ZAPD_H_FILES)
+	clang-format-14 -i $(ZAPD_CPP_FILES) $(ZAPD_H_FILES)
 	$(MAKE) -C ZAPDUtils format
 	$(MAKE) -C ExporterTest format
 

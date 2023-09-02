@@ -9,6 +9,8 @@ typedef void (*EnPmActionFunc)(struct EnPm*, PlayState*);
 typedef s32 (*EnPmFunc)(struct EnPm*, PlayState*);
 typedef s32 (*EnPmFunc2)(struct EnPm*, PlayState*);
 
+#define ENPM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+
 typedef struct EnPm {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -57,7 +59,5 @@ typedef struct EnPm {
     /* 0x398 */ s32 unk_398;
     /* 0x39C */ UNK_TYPE1 unk_39C[0x4];
 } EnPm; // size = 0x3A0
-
-extern const ActorInit En_Pm_InitVars;
 
 #endif // Z_EN_PM_H

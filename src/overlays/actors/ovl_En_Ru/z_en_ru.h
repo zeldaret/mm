@@ -4,13 +4,32 @@
 #include "global.h"
 #include "objects/object_ru2/object_ru2.h"
 
-#define RU_GET_PATH(thisx) ((thisx->params & 0x7E00) >> 9)
+#define RU_GET_PATH_INDEX(thisx) ((thisx->params & 0x7E00) >> 9)
+
+#define RU_PATH_INDEX_NONE 0x3F
 
 struct EnRu;
 
 typedef void (*EnRuActionFunc)(struct EnRu*, PlayState*);
 
-#define RU_BODYPARTSPOS_COUNT 15
+typedef enum EnRuBodyPart {
+    /*  0 */ RU_BODYPART_0,
+    /*  1 */ RU_BODYPART_1,
+    /*  2 */ RU_BODYPART_2,
+    /*  3 */ RU_BODYPART_3,
+    /*  4 */ RU_BODYPART_4,
+    /*  5 */ RU_BODYPART_5,
+    /*  6 */ RU_BODYPART_6,
+    /*  7 */ RU_BODYPART_7,
+    /*  8 */ RU_BODYPART_8,
+    /*  9 */ RU_BODYPART_9,
+    /* 10 */ RU_BODYPART_10,
+    /* 11 */ RU_BODYPART_11,
+    /* 12 */ RU_BODYPART_12,
+    /* 13 */ RU_BODYPART_13,
+    /* 14 */ RU_BODYPART_14,
+    /* 15 */ RU_BODYPART_MAX
+} EnruBodyPart;
 
 typedef struct EnRu {
     /* 0x000 */ Actor actor;
@@ -30,14 +49,12 @@ typedef struct EnRu {
     /* 0x318 */ Vec3s headRot;
     /* 0x31E */ Vec3s torsoRot;
     /* 0x324 */ UNK_TYPE1 pad324[0x12];
-    /* 0x336 */ s16 limbRotTableY[RU2_LIMB_MAX];
-    /* 0x364 */ s16 limbRotTableZ[RU2_LIMB_MAX];
-    /* 0x394 */ Vec3f bodyPartsPos[RU_BODYPARTSPOS_COUNT];
+    /* 0x336 */ s16 fidgetTableY[RU2_LIMB_MAX];
+    /* 0x364 */ s16 fidgetTableZ[RU2_LIMB_MAX];
+    /* 0x394 */ Vec3f bodyPartsPos[RU_BODYPART_MAX];
     /* 0x348 */ UNK_TYPE1 padUNK[6];
     /* 0x44E */ s16 eyeState;
     /* 0x450 */ s16 blinkTimer;
 } EnRu; // size = 0x454
-
-extern const ActorInit En_Ru_InitVars;
 
 #endif // Z_EN_RU_H

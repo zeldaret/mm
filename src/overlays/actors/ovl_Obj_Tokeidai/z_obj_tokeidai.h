@@ -16,7 +16,7 @@ typedef enum {
     /*  8 */ OBJ_TOKEIDAI_TYPE_TOWER_WALLS_TERMINA_FIELD = 8,
     /*  9 */ OBJ_TOKEIDAI_TYPE_WALL_CLOCK,
     /* 10 */ OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK,
-    /* 11 */ OBJ_TOKEIDAI_TYPE_STAIRCASE_TO_ROOFTOP,
+    /* 11 */ OBJ_TOKEIDAI_TYPE_STAIRCASE_TO_ROOFTOP
 } ObjTokeidaiType;
 
 struct ObjTokeidai;
@@ -61,7 +61,5 @@ typedef struct ObjTokeidai {
     /* 0x170 */ u16 clockTime; // can differ from the actual time, e.g., in cutscenes
     /* 0x174 */ ObjTokeidaiActionFunc actionFunc;
 } ObjTokeidai; // size = 0x178
-
-extern const ActorInit Obj_Tokeidai_InitVars;
 
 #endif // Z_OBJ_TOKEIDAI_H

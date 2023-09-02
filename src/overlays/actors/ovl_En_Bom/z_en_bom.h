@@ -11,16 +11,22 @@ typedef void (*EnBomActionFunc)(struct EnBom*, PlayState*);
 #define ENBOM_GETZ_80(thisx) ((thisx)->shape.rot.z & 0x80)
 #define ENBOM_GETZ_FF00(thisx) (((thisx)->shape.rot.z & 0xFF00) >> 8)
 
-enum {
-    /* 0 */ ENBOM_0,
-    /* 1 */ ENBOM_1,
-};
+typedef enum BombType {
+    /* 0 */ BOMB_TYPE_BODY,
+    /* 1 */ BOMB_TYPE_EXPLOSION
+} BombType;
+
+// Passed via x rotation
+typedef enum BombExplosiveType {
+    /* 0 */ BOMB_EXPLOSIVE_TYPE_BOMB,
+    /* 1 */ BOMB_EXPLOSIVE_TYPE_POWDER_KEG
+} BombExplosiveType;
 
 typedef struct EnBom {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider1;
     /* 0x190 */ ColliderJntSph collider2;
-    /* 0x1B0 */ ColliderJntSphElement collider3;
+    /* 0x1B0 */ ColliderJntSphElement collider2Elements[1];
     /* 0x1F0 */ s16 timer;
     /* 0x1F2 */ s16 flashSpeedScale;
     /* 0x1F4 */ f32 unk_1F4;
@@ -30,7 +36,5 @@ typedef struct EnBom {
     /* 0x1FC */ u8 unk_1FC;
     /* 0x200 */ EnBomActionFunc actionFunc;
 } EnBom; // size = 0x204
-
-extern const ActorInit En_Bom_InitVars;
 
 #endif // Z_EN_BOM_H

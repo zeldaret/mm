@@ -4,10 +4,12 @@
  * Description: Grass / Bush
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_kusa.h"
 #include "objects/object_kusa/object_kusa.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -57,7 +59,7 @@ s16 D_80936CDC;
 s16 D_80936CDE;
 s16 D_80936CE0;
 
-const ActorInit En_Kusa_InitVars = {
+ActorInit En_Kusa_InitVars = {
     ACTOR_EN_KUSA,
     ACTORCAT_PROP,
     FLAGS,
@@ -244,14 +246,14 @@ void EnKusa_DropCollectible(EnKusa* this, PlayState* play) {
     s32 collectableParams;
 
     if ((KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_GRASS) || (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH)) {
-        if (!KUSA_GET_PARAMS_0C(&this->actor)) {
+        if (!KUSA_GET_PARAM_0C(&this->actor)) {
             Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos,
                                        KUSA_GET_RAND_COLLECTIBLE_ID(&this->actor) * 0x10);
         }
     } else if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_REGROWING_GRASS) {
         Item_DropCollectible(play, &this->actor.world.pos, 3);
-    } else {
-        collectible = func_800A8150(KUSA_GET_PARAMS_3F(&this->actor));
+    } else { // ENKUSA_TYPE_GRASS_2
+        collectible = func_800A8150(KUSA_GET_PARAM_FC(&this->actor));
         if (collectible >= 0) {
             collectableParams = KUSA_GET_COLLECTIBLE_ID(&this->actor);
             Item_DropCollectible(play, &this->actor.world.pos, (collectableParams << 8) | collectible);
@@ -326,9 +328,9 @@ void EnKusa_SpawnBugs(EnKusa* this, PlayState* play) {
     u32 numBugs;
 
     for (numBugs = 0; numBugs < 3; numBugs++) {
-        Actor* bug = Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
-                                                   this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                                   this->actor.cutscene, this->actor.unk20, 0);
+        Actor* bug = Actor_SpawnAsChildAndCutscene(
+            &play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x, this->actor.world.pos.y,
+            this->actor.world.pos.z, 0, 0, 0, ENINSECT_PARAMS(true), this->actor.csId, this->actor.halfDaysBits, 0);
 
         if (bug == NULL) {
             break;
@@ -365,7 +367,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
     EnKusa_InitCollider(&this->actor, play);
@@ -385,7 +387,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
     if (!EnKusa_SnapToFloor(this, play, 0.0f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (EnKusa_GetWaterBox(this, play)) {
@@ -394,7 +396,7 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
 
     this->objIndex = Object_GetIndex(&play->objectCtx, objectIds[(KUSA_GET_TYPE(&this->actor))]);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -470,12 +472,12 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
             }
         }
         if (KUSA_GET_TYPE(&this->actor) == ENKUSA_TYPE_BUSH) {
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            EnKusa_SetupCut(this);
-            this->isCut = true;
+            Actor_Kill(&this->actor);
+            return;
         }
 
+        EnKusa_SetupCut(this);
+        this->isCut = true;
     } else {
         if (!(this->collider.base.ocFlags1 & OC1_TYPE_PLAYER) && (this->actor.xzDistToPlayer > 12.0f)) {
             this->collider.base.ocFlags1 |= OC1_TYPE_PLAYER;
@@ -489,7 +491,7 @@ void EnKusa_WaitForInteract(EnKusa* this, PlayState* play) {
                 CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
                 if (this->actor.xzDistToPlayer < 100.0f) {
                     if (KUSA_GET_TYPE(&this->actor) != ENKUSA_TYPE_GRASS_2) {
-                        Actor_LiftActor(&this->actor, play);
+                        Actor_OfferCarry(&this->actor, play);
                     }
                 }
             }
@@ -511,14 +513,16 @@ void EnKusa_LiftedUp(EnKusa* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->actor.room = play->roomCtx.curRoom.num;
         EnKusa_SetupFall(this);
-        this->actor.velocity.x = this->actor.speedXZ * Math_SinS(this->actor.world.rot.y);
-        this->actor.velocity.z = this->actor.speedXZ * Math_CosS(this->actor.world.rot.y);
+        this->actor.velocity.x = this->actor.speed * Math_SinS(this->actor.world.rot.y);
+        this->actor.velocity.z = this->actor.speed * Math_CosS(this->actor.world.rot.y);
         this->actor.colChkInfo.mass = 80;
         this->actor.gravity = -0.1f;
         EnKusa_UpdateVelY(this);
         EnKusa_RandScaleVecToZero(&this->actor.velocity, 0.005f);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         this->actor.gravity = -3.2f;
     } else {
         pos.x = this->actor.world.pos.x;
@@ -551,8 +555,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         this->collider.base.atFlags &= ~AT_HIT;
     }
     this->timer++;
-    if ((this->actor.bgCheckFlags & 0xB) || wasHit || (this->timer >= 100)) {
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || wasHit ||
+        (this->timer >= 100)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
         EnKusa_SpawnFragments(this, play);
@@ -560,7 +565,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         switch (KUSA_GET_TYPE(&this->actor)) {
             case ENKUSA_TYPE_BUSH:
             case ENKUSA_TYPE_GRASS:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case ENKUSA_TYPE_REGROWING_GRASS:
@@ -570,7 +575,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         }
 
     } else {
-        if (this->actor.bgCheckFlags & 0x40) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
             contactPos.y = this->actor.world.pos.y + this->actor.depthInWater;
             for (angleOffset = 0, i = 0; i < 4; i++, angleOffset += 0x4000) {
                 contactPos.x =
@@ -592,7 +597,7 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
             rotSpeedXtarget >>= 1;
             rotSpeedY >>= 1;
             rotSpeedYtarget >>= 1;
-            this->actor.bgCheckFlags &= ~0x40;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
         }
         EnKusa_UpdateVelY(this);
@@ -602,7 +607,9 @@ void EnKusa_Fall(EnKusa* this, PlayState* play) {
         this->actor.shape.rot.y += rotSpeedY;
         EnKusa_RandScaleVecToZero(&this->actor.velocity, 0.05f);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
         Collider_UpdateCylinder(&this->actor, &this->collider);
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -682,7 +689,8 @@ void EnKusa_Update(Actor* thisx, PlayState* play2) {
     } else {
         this->actor.shape.yOffset = 0.0f;
     }
-    if ((kusaGameplayFrames != play->gameplayFrames) && (play->roomCtx.curRoom.unk3 == 0)) {
+    if ((kusaGameplayFrames != play->gameplayFrames) &&
+        (play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0)) {
         EnKusa_Sway();
         kusaGameplayFrames = play->gameplayFrames;
     }
@@ -694,12 +702,13 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
 
     if ((this->actor.projectedPos.z <= 1200.0f) || ((this->isInWater & 1) && (this->actor.projectedPos.z < 1300.0f))) {
 
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract) &&
-            (this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
+            (this->actionFunc == EnKusa_WaitForInteract) && (this->actor.projectedPos.z > -150.0f) &&
+            (this->actor.projectedPos.z < 400.0f)) {
             EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
         }
 
-        Gfx_DrawDListOpa(play, gKusaBushType1);
+        Gfx_DrawDListOpa(play, gKusaBushType1DL);
 
     } else if (this->actor.projectedPos.z < 1300.0f) {
         s32 alpha;
@@ -707,11 +716,11 @@ void EnKusa_DrawBush(Actor* thisx, PlayState* play2) {
         OPEN_DISPS(play->state.gfxCtx);
 
         alpha = (1300.0f - this->actor.projectedPos.z) * 2.55f;
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, alpha);
-        gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2);
+        gSPDisplayList(POLY_XLU_DISP++, gKusaBushType2DL);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -723,7 +732,8 @@ void EnKusa_DrawGrass(Actor* thisx, PlayState* play) {
     if (this->isCut) {
         Gfx_DrawDListOpa(play, gKusaStump);
     } else {
-        if ((play->roomCtx.curRoom.unk3 == 0) && (this->actionFunc == EnKusa_WaitForInteract)) {
+        if ((play->roomCtx.curRoom.behaviorType1 == ROOM_BEHAVIOR_TYPE1_0) &&
+            (this->actionFunc == EnKusa_WaitForInteract)) {
             if ((this->actor.projectedPos.z > -150.0f) && (this->actor.projectedPos.z < 400.0f)) {
                 EnKusa_ApplySway(&D_80936AD8[this->kusaMtxIdx]);
             }

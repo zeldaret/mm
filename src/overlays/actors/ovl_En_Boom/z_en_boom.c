@@ -19,7 +19,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play);
 void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc);
 void func_808A2918(EnBoom* this, PlayState* play);
 
-const ActorInit En_Boom_InitVars = {
+ActorInit En_Boom_InitVars = {
     ACTOR_EN_BOOM,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,7 +52,7 @@ static ColliderQuadInit sQuadInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_S8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_VEC3S(shape.rot, 0, ICHAIN_STOP),
 };
 
@@ -63,22 +63,23 @@ void EnBoom_SetupAction(EnBoom* this, EnBoomActionFunc actionFunc) {
 void func_808A24DC(EnBoom* this, PlayState* play) {
     WaterBox* sp54;
     f32 sp50 = this->actor.world.pos.y;
-    u16 sp4E = this->actor.bgCheckFlags & 0x20;
+    u16 sp4E = this->actor.bgCheckFlags & BGCHECKFLAG_WATER;
 
     if (WaterBox_GetSurface1(play, &play->colCtx, this->actor.world.pos.x, this->actor.world.pos.z, &sp50, &sp54) &&
         (this->actor.world.pos.y < sp50)) {
         Vec3f sp40;
 
-        this->actor.bgCheckFlags |= 0x20;
+        this->actor.bgCheckFlags |= BGCHECKFLAG_WATER;
         sp40.x = this->actor.world.pos.x;
         sp40.y = this->actor.world.pos.y - 20.0f;
         sp40.z = this->actor.world.pos.z;
         EffectSsBubble_Spawn(play, &sp40, 20.0f, 10.0f, 20.0f, 0.13f);
     } else {
-        this->actor.bgCheckFlags &= ~0x20;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER;
     }
 
-    if ((this->actor.bgCheckFlags & 0x40) && ((this->actor.bgCheckFlags & 0x20) != sp4E)) {
+    if ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) &&
+        ((this->actor.bgCheckFlags & BGCHECKFLAG_WATER) != sp4E)) {
         Vec3f sp34;
 
         Math_Vec3f_Diff(&this->actor.world.pos, &this->actor.prevPos, &sp34);
@@ -95,14 +96,14 @@ void func_808A24DC(EnBoom* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp34, NULL, NULL, 0, 300);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_DIVE_INTO_WATER_L);
 
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 0);
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 4);
         EffectSsGRipple_Spawn(play, &sp34, 100, 500, 8);
     }
 
-    this->actor.bgCheckFlags |= 0x40;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_WATER_TOUCH;
 }
 
 void EnBoom_Init(Actor* thisx, PlayState* play) {
@@ -155,15 +156,15 @@ void EnBoom_Destroy(Actor* thisx, PlayState* play) {
                 temp->child = NULL;
             } else {
                 player->boomerangActor = NULL;
-                player->stateFlags1 &= ~0x2000000;
+                player->stateFlags1 &= ~PLAYER_STATE1_2000000;
             }
         }
-        player->stateFlags3 |= 0x800000;
+        player->stateFlags3 |= PLAYER_STATE3_800000;
     }
 }
 
 void func_808A2918(EnBoom* this, PlayState* play) {
-    Actor* sp7C;
+    Actor* targetActor;
     Player* player = GET_PLAYER(play);
     s32 sp74;
     s16 sp72;
@@ -174,25 +175,26 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     f32 sp64;
     f32 distXYZ;
 
-    sp7C = this->player;
+    targetActor = this->moveTo;
 
-    if (sp7C != NULL) {
-        sp72 = Actor_YawToPoint(&this->actor, &sp7C->focus.pos);
+    if (targetActor != NULL) {
+        sp72 = Actor_WorldYawTowardPoint(&this->actor, &targetActor->focus.pos);
         sp70 = this->actor.world.rot.y - sp72;
-        sp6E = Actor_PitchToPoint(&this->actor, &sp7C->focus.pos);
+        sp6E = Actor_WorldPitchTowardPoint(&this->actor, &targetActor->focus.pos);
         sp6C = this->actor.world.rot.x - sp6E;
 
-        sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &sp7C->focus.pos)) * 0.005f;
+        sp64 = (200.0f - Math_Vec3f_DistXYZ(&this->actor.world.pos, &targetActor->focus.pos)) * 0.005f;
         if (sp64 < 0.12f) {
             sp64 = 0.12f;
         }
 
-        if ((&player->actor != sp7C) && ((sp7C->update == NULL) || ((this->unk_1CF < 0) && (ABS_ALT(sp70) > 0x4000)))) {
-            this->player = NULL;
+        if ((&player->actor != targetActor) &&
+            ((targetActor->update == NULL) || ((this->unk_1CF < 0) && (ABS_ALT(sp70) > 0x4000)))) {
+            this->moveTo = NULL;
         } else {
             if (this->unk_1CE != 0) {
                 this->unk_1CE--;
-                this->actor.world.rot.y += (this->actor.params == 0) ? 0x190 : -0x190;
+                this->actor.world.rot.y += (this->actor.params == ZORA_BOOMERANG_LEFT) ? 0x190 : -0x190;
             } else {
                 if (this->unk_1CF > 0) {
                     this->unk_1CF--;
@@ -201,7 +203,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
                 }
 
                 Math_ScaledStepToS(&this->actor.world.rot.y, sp72,
-                                   (this->unk_1CF > 0) ? 1000 : (s16)(((sp70 < 0) ? -sp70 : sp70) * sp64));
+                                   (this->unk_1CF > 0) ? 1000 : (s16)(ABS_ALT(sp70) * sp64));
             }
 
             Math_ScaledStepToS(&this->actor.world.rot.x, sp6E, ABS_ALT(sp6C) * sp64);
@@ -211,7 +213,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     Actor_SetSpeeds(&this->actor, 12.0f);
     Actor_MoveWithGravity(&this->actor);
     func_808A24DC(this, play);
-    func_800B9010(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_IT_BOOMERANG_FLY - SFX_FLAG);
 
     if ((this->collider.base.atFlags & AT_HIT) && (((this->collider.base.at->id == ACTOR_EN_ITEM00) &&
                                                     (this->collider.base.at->params != ITEM00_HEART_CONTAINER) &&
@@ -241,7 +243,7 @@ void func_808A2918(EnBoom* this, PlayState* play) {
         if (sp74 != 0) {
             this->actor.world.rot.x = -this->actor.world.rot.x;
             this->actor.world.rot.y += 0x8000;
-            this->player = &player->actor;
+            this->moveTo = &player->actor;
             this->unk_1CC = 0;
         }
     }
@@ -249,34 +251,34 @@ void func_808A2918(EnBoom* this, PlayState* play) {
     if (this->unk_1CC <= 16) {
         distXYZ = Math_Vec3f_DistXYZ(&this->actor.world.pos, &player->actor.focus.pos);
 
-        if (&player->actor != this->player) {
-            if (this->player == 0) {
+        if (&player->actor != this->moveTo) {
+            if (this->moveTo == 0) {
                 this->unk_1CE = 8;
             }
-            this->player = &player->actor;
+            this->moveTo = &player->actor;
         }
 
         if (distXYZ < 40.0f) {
-            sp7C = this->unk_1C8;
-            if (sp7C != NULL) {
-                Math_Vec3f_Copy(&sp7C->world.pos, &player->actor.world.pos);
-                if (sp7C->id == ACTOR_EN_ITEM00) {
-                    sp7C->gravity = -0.9f;
-                    sp7C->bgCheckFlags &= ~3;
+            targetActor = this->unk_1C8;
+            if (targetActor != NULL) {
+                Math_Vec3f_Copy(&targetActor->world.pos, &player->actor.world.pos);
+                if (targetActor->id == ACTOR_EN_ITEM00) {
+                    targetActor->gravity = -0.9f;
+                    targetActor->bgCheckFlags &= ~(BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH);
                 } else {
-                    sp7C->flags &= ~ACTOR_FLAG_2000;
+                    targetActor->flags &= ~ACTOR_FLAG_2000;
                 }
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
-    sp7C = this->unk_1C8;
-    if (sp7C != NULL) {
-        if (sp7C->update == NULL) {
+    targetActor = this->unk_1C8;
+    if (targetActor != NULL) {
+        if (targetActor->update == NULL) {
             this->unk_1C8 = NULL;
         } else {
-            Math_Vec3f_Copy(&sp7C->world.pos, &this->actor.world.pos);
+            Math_Vec3f_Copy(&targetActor->world.pos, &this->actor.world.pos);
         }
     }
 }
@@ -286,7 +288,7 @@ void EnBoom_Update(Actor* thisx, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Actor* actor;
 
-    if (!(player->stateFlags1 & 0x20000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_20000000)) {
         this->actionFunc(this, play);
 
         if (((actor = this->actor.child) != NULL) || ((actor = this->actor.parent) != NULL)) {
@@ -297,7 +299,7 @@ void EnBoom_Update(Actor* thisx, PlayState* play) {
             Actor_SetFocus(&this->actor, 0.0f);
         }
 
-        if (this->actor.params != 0) {
+        if (this->actor.params != ZORA_BOOMERANG_LEFT) {
             this->unk_1CD--;
         } else {
             this->unk_1CD++;
@@ -309,7 +311,7 @@ typedef struct {
     /* 0x00 */ Gfx* unk_00;
     /* 0x04 */ Vec3f unk_04;
     /* 0x10 */ Vec3f unk_10;
-} EnBoomStruct;
+} EnBoomStruct; // size = 0x1C
 
 EnBoomStruct D_808A3078[] = {
     { gameplay_keep_DL_06FE20, { -960.0f, 0.0f, 0.0f }, { 960.0f, 0.0f, 0.0f } },
@@ -325,7 +327,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     Matrix_RotateYS(this->actor.world.rot.y, MTXMODE_APPLY);
-    Matrix_RotateZS((this->actor.params != 0) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
+    Matrix_RotateZS((this->actor.params != ZORA_BOOMERANG_LEFT) ? 0x1F40 : -0x1F40, MTXMODE_APPLY);
     Matrix_RotateXS(this->actor.world.rot.x, MTXMODE_APPLY);
     Matrix_MultVec3f(&sp58->unk_04, &sp4C);
     Matrix_MultVec3f(&sp58->unk_10, &sp40);
@@ -334,7 +336,7 @@ void EnBoom_Draw(Actor* thisx, PlayState* play) {
         EffectBlure_AddVertex(Effect_GetByIndex(this->effectIndex), &sp4C, &sp40);
     }
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_RotateYS(this->unk_1CD * 0x2EE0, MTXMODE_APPLY);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

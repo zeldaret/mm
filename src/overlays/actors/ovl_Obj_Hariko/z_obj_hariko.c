@@ -23,7 +23,7 @@ void ObjHariko_SetupBobHead(ObjHariko* this);
 void ObjHariko_BobHead(ObjHariko* this, PlayState* play);
 void ObjHariko_CheckForQuakes(ObjHariko* this);
 
-const ActorInit Obj_Hariko_InitVars = {
+ActorInit Obj_Hariko_InitVars = {
     ACTOR_OBJ_HARIKO,
     ACTORCAT_PROP,
     FLAGS,
@@ -74,7 +74,7 @@ void ObjHariko_BobHead(ObjHariko* this, PlayState* play) {
 }
 
 void ObjHariko_CheckForQuakes(ObjHariko* this) {
-    if (Quake_NumActiveQuakes() != 0) {
+    if (Quake_GetNumActiveQuakes() != 0) {
         ObjHariko_SetupBobHead(this);
     }
 }
@@ -90,7 +90,8 @@ void ObjHariko_Draw(Actor* thisx, PlayState* play) {
     ObjHariko* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Push();
     Matrix_RotateXS(this->headRotation.x, MTXMODE_APPLY);
@@ -101,5 +102,6 @@ void ObjHariko_Draw(Actor* thisx, PlayState* play) {
     gSPDisplayList(POLY_OPA_DISP++, gHarikoFaceDL);
 
     Matrix_Pop();
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

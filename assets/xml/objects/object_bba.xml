@@ -18,10 +18,10 @@
         <DList Name="gBbaFeetDL" Offset="0x4180" />
 
         <!-- Animations -->
-        <Animation Name="gBbaSwayAnim" Offset="0x4910" />
-        <Animation Name="gBbaKnockedOverAnim" Offset="0x5154" />
-        <Animation Name="gBbaLyingDownAnim" Offset="0x58B8" />
-        <Animation Name="gBbaIdleHoldingBagAnim" Offset="0x5DC4" />
+        <Animation Name="gBbaSwayAnim" Offset="0x4910" /> <!-- Original name is "sb_ending" -->
+        <Animation Name="gBbaKnockedOverAnim" Offset="0x5154" /> <!-- Original name is "sb_taore" ("to fall (over, down); to collapse; to take a fall") -->
+        <Animation Name="gBbaLyingDownAnim" Offset="0x58B8" /> <!-- Original name is "sb_taorewait" -->
+        <Animation Name="gBbaIdleHoldingBagAnim" Offset="0x5DC4" /> <!-- Original name is "sb_wait01" -->
 
         <!-- Skeleton -->
         <Limb Name="gBbaUpperLegsLimb" Type="Standard" EnumName="BBA_LIMB_UPPER_LEGS" Offset="0x5DE0" />
@@ -44,26 +44,26 @@
         <Skeleton Name="gBbaSkel" Type="Flex" LimbType="Standard" LimbNone="BBA_LIMB_NONE" LimbMax="BBA_LIMB_MAX" EnumName="BbaLimb" Offset="0x5EF0" />
 
          <!-- Animations -->
-        <Animation Name="gBbaIdleAnim" Offset="0x6550" />
-        <Animation Name="gBbaWalkingHoldingBagAnim" Offset="0x6B10" />
+        <Animation Name="gBbaIdleAnim" Offset="0x6550" /> <!-- Original name is "sb_wait02" -->
+        <Animation Name="gBbaWalkingHoldingBagAnim" Offset="0x6B10" /> <!-- Original name is "sb_walk01" -->
 
         <!-- TLUT -->
         <Texture Name="gBbaTLUT" OutName="bba_tlut" Format="rgba16" Width="16" Height="16" Offset="0x6B20" />
 
         <!-- Unused Textures -->
         <!-- These are just exact copies of the used textures -->
-        <Texture Name="gBbaUnusedHairSkinTex" OutName="bba_unused_hair_skin" Format="ci8" Width="32" Height="32" Offset="0x6D20" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedEarTex" OutName="bba_unused_ear" Format="ci8" Width="8" Height="8" Offset="0x7120" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedNostrilTex" OutName="bba_unused_nostril" Format="ci8" Width="8" Height="8" Offset="0x7160" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedEyeTex" OutName="bba_unused_eye" Format="rgba16" Width="32" Height="32" Offset="0x71A0"/>
-        <Texture Name="gBbaUnusedWrinklesTex" OutName="bba_unused_wrinkles" Format="ci8" Width="32" Height="32" Offset="0x79A0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedCheekTex" OutName="bba_unused_cheek" Format="ci8" Width="16" Height="16" Offset="0x7DA0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedSkinTex" OutName="bba_unused_skin" Format="ci8" Width="8" Height="8" Offset="0x7EA0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedForeheadTex" OutName="bba_unused_forehead" Format="ci8" Width="32" Height="32" Offset="0x7EE0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedFingersTex" OutName="bba_unused_fingers" Format="ci8" Width="16" Height="16" Offset="0x82E0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedShirtTex" OutName="bba_unused_shirt" Format="ci8" Width="16" Height="16" Offset="0x83E0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedBagTex" OutName="bba_unused_bag" Format="ci8" Width="16" Height="16" Offset="0x84E0" TlutOffset="0x6B20" />
-        <Texture Name="gBbaUnusedSkirtTex" OutName="bba_unused_skirt" Format="ci8" Width="16" Height="16" Offset="0x85E0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaHairSkin2Tex" OutName="bba_hair_skin_2" Format="ci8" Width="32" Height="32" Offset="0x6D20" TlutOffset="0x6B20" />
+        <Texture Name="gBbaEar2Tex" OutName="bba_ear_2" Format="ci8" Width="8" Height="8" Offset="0x7120" TlutOffset="0x6B20" />
+        <Texture Name="gBbaNostril2Tex" OutName="bba_nostril_2" Format="ci8" Width="8" Height="8" Offset="0x7160" TlutOffset="0x6B20" />
+        <Texture Name="gBbaEye2Tex" OutName="bba_eye_2" Format="rgba16" Width="32" Height="32" Offset="0x71A0"/>
+        <Texture Name="gBbaWrinkles2Tex" OutName="bba_wrinkles_2" Format="ci8" Width="32" Height="32" Offset="0x79A0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaCheek2Tex" OutName="bba_cheek_2" Format="ci8" Width="16" Height="16" Offset="0x7DA0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaSkin2Tex" OutName="bba_skin_2" Format="ci8" Width="8" Height="8" Offset="0x7EA0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaForehead2Tex" OutName="bba_forehead_2" Format="ci8" Width="32" Height="32" Offset="0x7EE0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaFingers2Tex" OutName="bba_fingers_2" Format="ci8" Width="16" Height="16" Offset="0x82E0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaShirt2Tex" OutName="bba_shirt_2" Format="ci8" Width="16" Height="16" Offset="0x83E0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaBag2Tex" OutName="bba_bag_2" Format="ci8" Width="16" Height="16" Offset="0x84E0" TlutOffset="0x6B20" />
+        <Texture Name="gBbaSkirt2Tex" OutName="bba_skirt_2" Format="ci8" Width="16" Height="16" Offset="0x85E0" TlutOffset="0x6B20" />
 
         <!-- Textures -->
         <Texture Name="gBbaSkinTex" OutName="bba_skin" Format="ci8" Width="8" Height="8" Offset="0x86E0" />

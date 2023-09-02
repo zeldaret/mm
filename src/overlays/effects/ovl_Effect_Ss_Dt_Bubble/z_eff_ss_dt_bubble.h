@@ -23,6 +23,4 @@ typedef struct {
     /* 0x34 */ u8 customColor;
 } EffectSsDtBubbleInitParams; // size = 0x3C
 
-extern const EffectSsInit Effect_Ss_Dt_Bubble_InitVars;
-
 #endif

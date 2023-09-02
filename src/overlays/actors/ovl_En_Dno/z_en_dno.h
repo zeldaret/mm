@@ -13,8 +13,8 @@ typedef void (*EnDnoActionFunc)(struct EnDno*, PlayState*);
 #define EN_DNO_GET_C000(thisx) (((thisx)->params >> 0xE) & 0x3)
 
 typedef enum {
-    /* 0x0 */ EN_DNO_GET_C000_0,
-    /* 0x1 */ EN_DNO_GET_C000_1,
+    /* 0 */ EN_DNO_GET_C000_0,
+    /* 1 */ EN_DNO_GET_C000_1
 } EnDnoUnkC000;
 
 typedef struct EnDno {
@@ -47,9 +47,7 @@ typedef struct EnDno {
     /* 0x460 */ Actor* unk_460;
     /* 0x464 */ u16 textId;
     /* 0x466 */ s16 unk_466;
-    /* 0x468 */ u8 unk_468;
+    /* 0x468 */ u8 cueId;
 } EnDno; // size = 0x46C
-
-extern const ActorInit En_Dno_InitVars;
 
 #endif // Z_EN_DNO_H

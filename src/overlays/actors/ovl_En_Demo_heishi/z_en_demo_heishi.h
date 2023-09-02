@@ -22,12 +22,10 @@ typedef struct EnDemoheishi {
     /* 0x262 */ s16 headRotZTarget;
     /* 0x264 */ s32 animIndex;
     /* 0x268 */ s16 timer;
-    /* 0x26C */ f32 frameCount;
+    /* 0x26C */ f32 animEndFrame;
     /* 0x270 */ s16 isTalking;
     /* 0x272 */ s16 textIdIndex;
     /* 0x274 */ ColliderCylinder colliderCylinder;
-} EnDemoheishi; //size = 0x2C0
-
-extern const ActorInit En_Demo_heishi_InitVars;
+} EnDemoheishi; // size = 0x2C0
 
 #endif // Z_EN_DEMO_HEISHI_H

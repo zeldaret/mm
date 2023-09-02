@@ -23,7 +23,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play);
 void func_80B70498(BgKin2Shelf* this);
 void func_80B704B4(BgKin2Shelf* this, PlayState* play);
 
-const ActorInit Bg_Kin2_Shelf_InitVars = {
+ActorInit Bg_Kin2_Shelf_InitVars = {
     ACTOR_BG_KIN2_SHELF,
     ACTORCAT_BG,
     FLAGS,
@@ -207,7 +207,7 @@ void BgKin2Shelf_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.flags |= ACTOR_FLAG_10000000;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, D_80B70780[sp24]);
     func_80B700A8(this);
 }
@@ -260,7 +260,7 @@ void func_80B700C0(BgKin2Shelf* this, PlayState* play) {
         } else {
             Player* player = GET_PLAYER(play);
 
-            player->stateFlags2 &= ~0x10;
+            player->stateFlags2 &= ~PLAYER_STATE2_10;
             this->dyna.pushForce = 0.0f;
         }
     } else {
@@ -292,7 +292,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         this->unk_160 = 1.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (this->unk_164 & 8) {
@@ -307,7 +307,7 @@ void func_80B70230(BgKin2Shelf* this, PlayState* play) {
         this->dyna.actor.world.pos.z = ((Math_CosS(sp36) * phi_f20) * D_80B70750[sp40]) + this->dyna.actor.home.pos.z;
 
         if (this->unk_166 != 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         func_80B700A8(this);
     } else {
@@ -339,7 +339,7 @@ void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
         Player* player = GET_PLAYER(play);
 
         this->unk_160 = 1.0f;
-        player->stateFlags2 &= ~0x10;
+        player->stateFlags2 &= ~PLAYER_STATE2_10;
         this->dyna.pushForce = 0.0f;
 
         if (this->unk_164 & 4) {
@@ -353,7 +353,7 @@ void func_80B704B4(BgKin2Shelf* this, PlayState* play) {
         this->dyna.actor.world.pos.z = ((Math_CosS(sp36) * temp_f20) * D_80B70758[sp40]) + this->dyna.actor.home.pos.z;
 
         if (this->unk_167 != 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
         }
         func_80B700A8(this);
     } else {

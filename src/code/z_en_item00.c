@@ -1,6 +1,7 @@
 #include "global.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_gi_hearts/object_gi_hearts.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "overlays/actors/ovl_En_Elforg/z_en_elforg.h"
 
 #define FLAGS 0x00000000
@@ -23,7 +24,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play);
 void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play);
 
-const ActorInit En_Item00_InitVars = {
+ActorInit En_Item00_InitVars = {
     ACTOR_EN_ITEM00,
     ACTORCAT_MISC,
     FLAGS,
@@ -59,6 +60,8 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
 
+static s32 sBssPad;
+
 void EnItem00_SetObject(EnItem00* this, PlayState* play, f32* shadowOffset, f32* shadowScale) {
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.5f);
@@ -74,43 +77,43 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     f32 shadowOffset = 980.0f;
     f32 shadowScale = 6.0f;
     s32 getItemId = GI_NONE;
-    s32 sp30 = ENITEM00_GET_8000(&this->actor) ? 1 : 0;
+    s32 sp30 = ENITEM00_GET_8000(thisx) ? 1 : 0;
 
-    this->collectibleFlag = ENITEM00_GET_7F00(&this->actor);
+    this->collectibleFlag = ENITEM00_GET_7F00(thisx);
 
-    thisx->params &= 0xFF; // Has to be thisx to match
+    thisx->params &= 0xFF;
 
     if (Flags_GetCollectible(play, this->collectibleFlag)) {
-        if (this->actor.params == ITEM00_HEART_PIECE) {
+        if (thisx->params == ITEM00_HEART_PIECE) {
             sp30 = 0;
             this->collectibleFlag = 0;
-            this->actor.params = ITEM00_RECOVERY_HEART;
+            thisx->params = ITEM00_RECOVERY_HEART;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(thisx);
             return;
         }
     }
-    if (this->actor.params == ITEM00_3_HEARTS) {
-        this->actor.params = ITEM00_RECOVERY_HEART;
+    if (thisx->params == ITEM00_3_HEARTS) {
+        thisx->params = ITEM00_RECOVERY_HEART;
     }
 
-    Actor_ProcessInitChain(&this->actor, sInitChain);
-    Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Actor_ProcessInitChain(thisx, sInitChain);
+    Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
 
     this->unk150 = 1;
 
-    switch (this->actor.params) {
+    switch (thisx->params) {
         case ITEM00_RUPEE_GREEN:
         case ITEM00_RUPEE_BLUE:
         case ITEM00_RUPEE_RED:
-            Actor_SetScale(&this->actor, 0.015f);
+            Actor_SetScale(thisx, 0.015f);
             this->unk154 = 0.015f;
             shadowOffset = 750.0f;
             break;
 
         case ITEM00_SMALL_KEY:
             this->unk150 = 0;
-            Actor_SetScale(&this->actor, 0.03f);
+            Actor_SetScale(thisx, 0.03f);
             this->unk154 = 0.03f;
             shadowOffset = 350.0f;
             break;
@@ -118,18 +121,18 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_HEART_PIECE:
         case ITEM00_HEART_CONTAINER:
             this->unk150 = 0;
-            Actor_SetScale(&this->actor, 0.02f);
+            Actor_SetScale(thisx, 0.02f);
             this->unk154 = 0.02f;
             shadowOffset = 650.0f;
-            if (this->actor.params == ITEM00_HEART_CONTAINER) {
+            if (thisx->params == ITEM00_HEART_CONTAINER) {
                 sp30 = -1;
             }
             break;
 
         case ITEM00_RECOVERY_HEART:
-            this->actor.home.rot.z = randPlusMinusPoint5Scaled(0xFFFF);
+            thisx->home.rot.z = Rand_CenteredFloat(0xFFFF);
             shadowOffset = 430.0f;
-            Actor_SetScale(&this->actor, 0.02f);
+            Actor_SetScale(thisx, 0.02f);
             this->unk154 = 0.02f;
             break;
 
@@ -137,37 +140,37 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_ARROWS_30:
         case ITEM00_ARROWS_40:
         case ITEM00_ARROWS_50:
-            Actor_SetScale(&this->actor, 0.035f);
+            Actor_SetScale(thisx, 0.035f);
             this->unk154 = 0.035f;
             shadowOffset = 250.0f;
             break;
 
         case ITEM00_BOMBS_A:
         case ITEM00_BOMBS_B:
-        case ITEM00_NUTS_1:
-        case ITEM00_STICK:
-        case ITEM00_MAGIC_SMALL:
-        case ITEM00_NUTS_10:
+        case ITEM00_DEKU_NUTS_1:
+        case ITEM00_DEKU_STICK:
+        case ITEM00_MAGIC_JAR_SMALL:
+        case ITEM00_DEKU_NUTS_10:
         case ITEM00_BOMBS_0:
-            Actor_SetScale(&this->actor, 0.03f);
+            Actor_SetScale(thisx, 0.03f);
             this->unk154 = 0.03f;
             shadowOffset = 320.0f;
             break;
 
-        case ITEM00_MAGIC_LARGE:
-            Actor_SetScale(&this->actor, 4.5f * 0.01f);
+        case ITEM00_MAGIC_JAR_BIG:
+            Actor_SetScale(thisx, 4.5f * 0.01f);
             this->unk154 = 4.5f * 0.01f;
             shadowOffset = 320.0f;
             break;
 
         case ITEM00_RUPEE_HUGE:
-            Actor_SetScale(&this->actor, 4.5f * 0.01f);
+            Actor_SetScale(thisx, 4.5f * 0.01f);
             this->unk154 = 4.5f * 0.01f;
             shadowOffset = 750.0f;
             break;
 
         case ITEM00_RUPEE_PURPLE:
-            Actor_SetScale(&this->actor, 0.03f);
+            Actor_SetScale(thisx, 0.03f);
             this->unk154 = 0.03f;
             shadowOffset = 750.0f;
             break;
@@ -175,22 +178,22 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
         case ITEM00_FLEXIBLE:
         case ITEM00_BIG_FAIRY:
             shadowOffset = 500.0f;
-            Actor_SetScale(&this->actor, 0.01f);
+            Actor_SetScale(thisx, 0.01f);
             this->unk154 = 0.01f;
             break;
 
         case ITEM00_SHIELD_HERO:
-            this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_SHIELD_2);
+            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_SHIELD_2);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_MAP:
-            this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_MAP);
+            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_MAP);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
         case ITEM00_COMPASS:
-            this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_COMPASS);
+            thisx->objBankIndex = Object_GetIndex(&play->objectCtx, OBJECT_GI_COMPASS);
             EnItem00_SetObject(this, play, &shadowOffset, &shadowScale);
             break;
 
@@ -199,9 +202,9 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     }
 
     this->unk14E = 0;
-    ActorShape_Init(&this->actor.shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
-    this->actor.shape.shadowAlpha = 180;
-    this->actor.focus.pos = this->actor.world.pos;
+    ActorShape_Init(&thisx->shape, shadowOffset, ActorShadow_DrawCircle, shadowScale);
+    thisx->shape.shadowAlpha = 180;
+    thisx->focus.pos = thisx->world.pos;
     this->getItemId = GI_NONE;
 
     if (sp30 < 0) {
@@ -219,11 +222,11 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
 
-    this->actor.speedXZ = 0.0f;
-    this->actor.velocity.y = 0.0f;
-    this->actor.gravity = 0.0f;
+    thisx->speed = 0.0f;
+    thisx->velocity.y = 0.0f;
+    thisx->gravity = 0.0f;
 
-    switch (this->actor.params) {
+    switch (thisx->params) {
         case ITEM00_RUPEE_GREEN:
             Item_Give(play, ITEM_RUPEE_GREEN);
             break;
@@ -274,32 +277,32 @@ void EnItem00_Init(Actor* thisx, PlayState* play) {
             Item_Give(play, ITEM_ARROWS_50);
             break;
 
-        case ITEM00_MAGIC_LARGE:
-            Item_Give(play, ITEM_MAGIC_LARGE);
+        case ITEM00_MAGIC_JAR_BIG:
+            Item_Give(play, ITEM_MAGIC_JAR_BIG);
             break;
 
-        case ITEM00_MAGIC_SMALL:
-            Item_Give(play, ITEM_MAGIC_SMALL);
+        case ITEM00_MAGIC_JAR_SMALL:
+            Item_Give(play, ITEM_MAGIC_JAR_SMALL);
             break;
 
         case ITEM00_SMALL_KEY:
             Item_Give(play, ITEM_KEY_SMALL);
             break;
 
-        case ITEM00_NUTS_1:
-            getItemId = GI_NUTS_1;
+        case ITEM00_DEKU_NUTS_1:
+            getItemId = GI_DEKU_NUTS_1;
             break;
 
-        case ITEM00_NUTS_10:
-            getItemId = GI_NUTS_10;
+        case ITEM00_DEKU_NUTS_10:
+            getItemId = GI_DEKU_NUTS_10;
             break;
 
         default:
             break;
     }
 
-    if ((getItemId != GI_NONE) && !Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+    if ((getItemId != GI_NONE) && !Actor_HasParent(thisx, play)) {
+        Actor_OfferGetItem(thisx, play, getItemId, 50.0f, 20.0f);
     }
 
     this->actionFunc = func_800A6A40;
@@ -326,7 +329,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         ((this->actor.params == ITEM00_RECOVERY_HEART) && (this->unk152 < 0)) ||
         (this->actor.params == ITEM00_HEART_PIECE) || (this->actor.params == ITEM00_HEART_CONTAINER)) {
         this->actor.shape.rot.y = this->actor.shape.rot.y + 960;
-    } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) &&
+    } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_DEKU_NUTS_10) &&
                (this->actor.params < ITEM00_BOMBS_0)) {
         if (this->unk152 == -1) {
             if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->actor.world.rot.x - 0x4000, 2, 3000, 1500)) {
@@ -346,7 +349,7 @@ void func_800A640C(EnItem00* this, PlayState* play) {
         this->actor.shape.yOffset = (Math_SinS(this->actor.shape.rot.y) * 150.0f) + 850.0f;
     }
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 1.0f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 0.5f, 0.0f);
 
     if (this->unk14C == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) &&
@@ -358,11 +361,11 @@ void func_800A640C(EnItem00* this, PlayState* play) {
     if (this->unk152 == 0) {
         if ((this->actor.params != ITEM00_SMALL_KEY) && (this->actor.params != ITEM00_HEART_PIECE) &&
             (this->actor.params != ITEM00_HEART_CONTAINER)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 
-    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & 1)) {
+    if ((this->actor.gravity != 0.0f) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->actionFunc = func_800A6650;
     }
 }
@@ -373,7 +376,7 @@ static Vec3f sEffectVelocity = { 0.0f, 0.1f, 0.0f };
 static Vec3f sEffectAccel = { 0.0f, 0.01f, 0.0f };
 
 void func_800A6650(EnItem00* this, PlayState* play) {
-    u32 pad;
+    s32 pad;
     Vec3f pos;
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
@@ -381,18 +384,18 @@ void func_800A6650(EnItem00* this, PlayState* play) {
     }
 
     if ((play->gameplayFrames & 1) != 0) {
-        pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(10.0f);
-        pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(10.0f);
-        pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(10.0f);
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(10.0f);
+        pos.y = this->actor.world.pos.y + Rand_CenteredFloat(10.0f);
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(10.0f);
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         if (this->actor.velocity.y > -2.0f) {
             this->actionFunc = func_800A640C;
         } else {
             this->actor.velocity.y = this->actor.velocity.y * -0.8f;
-            this->actor.bgCheckFlags &= ~1;
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         }
     }
 }
@@ -406,7 +409,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
 
     if (this->actor.params == ITEM00_RECOVERY_HEART) {
         if (this->actor.velocity.y < 0.0f) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.gravity = -0.4f;
             if (this->actor.velocity.y < -1.5f) {
                 this->actor.velocity.y = -1.5f;
@@ -421,7 +424,7 @@ void func_800A6780(EnItem00* this, PlayState* play) {
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
         this->actor.shape.rot.y += 0x3C0;
-    } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_NUTS_10) &&
+    } else if ((this->actor.params >= ITEM00_SHIELD_HERO) && (this->actor.params != ITEM00_DEKU_NUTS_10) &&
                (this->actor.params != ITEM00_BOMBS_0)) {
         this->actor.world.rot.x -= 0x2BC;
         this->actor.shape.rot.y += 0x190;
@@ -444,10 +447,10 @@ void func_800A6780(EnItem00* this, PlayState* play) {
         EffectSsKirakira_SpawnSmall(play, &pos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor, &sEffectEnvColor);
     }
 
-    if (this->actor.bgCheckFlags & 3) {
+    if (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH)) {
         this->actionFunc = func_800A640C;
         this->actor.shape.rot.z = 0;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -456,7 +459,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
 
     if (this->getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, this->getItemId, 50.0f, 80.0f);
+            Actor_OfferGetItem(&this->actor, play, this->getItemId, 50.0f, 80.0f);
             this->unk152++;
         } else {
             this->getItemId = GI_NONE;
@@ -464,7 +467,7 @@ void func_800A6A40(EnItem00* this, PlayState* play) {
     }
 
     if (this->unk152 == 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -487,7 +490,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     EnItem00* this = THIS;
     s32 pad;
     Player* player = GET_PLAYER(play);
-    s32 sp38 = player->stateFlags3 & 0x1000;
+    s32 sp38 = player->stateFlags3 & PLAYER_STATE3_1000;
     s32 getItemId = GI_NONE;
     s32 params;
 
@@ -507,10 +510,12 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (this->actor.gravity != 0.0f) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 15.0f, 15.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
 
         if (this->actor.floorHeight <= BGCHECK_Y_MIN) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -566,16 +571,16 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
             Item_Give(play, ITEM_RUPEE_HUGE);
             break;
 
-        case ITEM00_STICK:
-            getItemId = GI_STICKS_1;
+        case ITEM00_DEKU_STICK:
+            getItemId = GI_DEKU_STICKS_1;
             break;
 
-        case ITEM00_NUTS_1:
-            getItemId = GI_NUTS_1;
+        case ITEM00_DEKU_NUTS_1:
+            getItemId = GI_DEKU_NUTS_1;
             break;
 
-        case ITEM00_NUTS_10:
-            getItemId = GI_NUTS_10;
+        case ITEM00_DEKU_NUTS_10:
+            getItemId = GI_DEKU_NUTS_10;
             break;
 
         case ITEM00_RECOVERY_HEART:
@@ -620,12 +625,12 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
             getItemId = GI_HEART_CONTAINER;
             break;
 
-        case ITEM00_MAGIC_LARGE:
-            Item_Give(play, ITEM_MAGIC_LARGE);
+        case ITEM00_MAGIC_JAR_BIG:
+            Item_Give(play, ITEM_MAGIC_JAR_BIG);
             break;
 
-        case ITEM00_MAGIC_SMALL:
-            Item_Give(play, ITEM_MAGIC_SMALL);
+        case ITEM00_MAGIC_JAR_SMALL:
+            Item_Give(play, ITEM_MAGIC_JAR_SMALL);
             break;
 
         case ITEM00_SHIELD_HERO:
@@ -646,7 +651,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
 
     if (getItemId != GI_NONE) {
         if (!Actor_HasParent(&this->actor, play)) {
-            Actor_PickUp(&this->actor, play, getItemId, 50.0f, 20.0f);
+            Actor_OfferGetItem(&this->actor, play, getItemId, 50.0f, 20.0f);
         }
     }
 
@@ -659,7 +664,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
         case ITEM00_COMPASS:
             if (Actor_HasParent(&this->actor, play)) {
                 Flags_SetCollectible(play, this->collectibleFlag);
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
             return;
 
@@ -668,15 +673,15 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->actor.params <= ITEM00_RUPEE_RED) || (this->actor.params == ITEM00_RUPEE_HUGE)) {
-        play_sound(NA_SE_SY_GET_RUPY);
+        Audio_PlaySfx(NA_SE_SY_GET_RUPY);
     } else if (getItemId != GI_NONE) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, this->collectibleFlag);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
         return;
     } else {
-        play_sound(NA_SE_SY_GET_ITEM);
+        Audio_PlaySfx(NA_SE_SY_GET_ITEM);
     }
 
     Flags_SetCollectible(play, this->collectibleFlag);
@@ -684,7 +689,7 @@ void EnItem00_Update(Actor* thisx, PlayState* play) {
     this->unk152 = 15;
     this->unk14C = 35;
     this->actor.shape.rot.z = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     this->actor.gravity = 0.0f;
 
@@ -739,12 +744,12 @@ void EnItem00_Draw(Actor* thisx, PlayState* play) {
             case ITEM00_ARROWS_40:
             case ITEM00_ARROWS_50:
             case ITEM00_BOMBS_B:
-            case ITEM00_NUTS_1:
-            case ITEM00_STICK:
-            case ITEM00_MAGIC_LARGE:
-            case ITEM00_MAGIC_SMALL:
+            case ITEM00_DEKU_NUTS_1:
+            case ITEM00_DEKU_STICK:
+            case ITEM00_MAGIC_JAR_BIG:
+            case ITEM00_MAGIC_JAR_SMALL:
             case ITEM00_SMALL_KEY:
-            case ITEM00_NUTS_10:
+            case ITEM00_DEKU_NUTS_10:
             case ITEM00_BOMBS_0:
                 EnItem00_DrawSprite(this, play);
                 break;
@@ -781,7 +786,7 @@ void EnItem00_DrawRupee(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
 
     if (this->actor.params <= ITEM00_RUPEE_RED) {
@@ -819,9 +824,9 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
-    if (this->actor.params == ITEM00_NUTS_10) {
+    if (this->actor.params == ITEM00_DEKU_NUTS_10) {
         texIndex = 6;
     } else if (this->actor.params == ITEM00_BOMBS_0) {
         texIndex = 1;
@@ -832,7 +837,7 @@ void EnItem00_DrawSprite(EnItem00* this, PlayState* play) {
         }
     }
 
-    POLY_OPA_DISP = func_8012C724(POLY_OPA_DISP);
+    POLY_OPA_DISP = Gfx_SetupDL66(POLY_OPA_DISP);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sItemDropTextures[texIndex]));
 
@@ -849,7 +854,7 @@ void EnItem00_DrawHeartContainer(EnItem00* this, PlayState* play) {
     if (Object_GetIndex(&play->objectCtx, OBJECT_GI_HEARTS) == this->actor.objBankIndex) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(20.0f, 20.0f, 20.0f, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -866,7 +871,7 @@ void EnItem00_DrawHeartPiece(EnItem00* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -882,13 +887,14 @@ s16 func_800A7650(s16 dropId) {
         (((dropId == ITEM00_ARROWS_10) || (dropId == ITEM00_ARROWS_30) || (dropId == ITEM00_ARROWS_40) ||
           (dropId == ITEM00_ARROWS_50)) &&
          (INV_CONTENT(ITEM_BOW) == ITEM_NONE)) ||
-        (((dropId == ITEM00_MAGIC_LARGE) || (dropId == ITEM00_MAGIC_SMALL)) &&
-         (gSaveContext.save.playerData.magicLevel == 0))) {
+        (((dropId == ITEM00_MAGIC_JAR_BIG) || (dropId == ITEM00_MAGIC_JAR_SMALL)) &&
+         (gSaveContext.save.saveInfo.playerData.magicLevel == 0))) {
         return ITEM00_NO_DROP;
     }
 
     if (dropId == ITEM00_RECOVERY_HEART) {
-        if (((void)0, gSaveContext.save.playerData.healthCapacity) == ((void)0, gSaveContext.save.playerData.health)) {
+        if (((void)0, gSaveContext.save.saveInfo.playerData.healthCapacity) ==
+            ((void)0, gSaveContext.save.saveInfo.playerData.health)) {
             return ITEM00_RUPEE_GREEN;
         }
     }
@@ -924,7 +930,7 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
         newParamFF = params & 0xFF;
         if (newParamFF == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
             if (!Flags_GetCollectible(play, (param7F00 >> 8) & 0x7F)) {
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
             }
@@ -951,9 +957,9 @@ Actor* Item_DropCollectible(PlayState* play, Vec3f* spawnPos, u32 params) {
                 } else {
                     spawnedActor->velocity.y = -2.0f;
                 }
-                spawnedActor->speedXZ = 2.0f;
+                spawnedActor->speed = 2.0f;
                 spawnedActor->gravity = -0.9f;
-                spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
                 Actor_SetScale(spawnedActor, 0.0f);
                 ((EnItem00*)spawnedActor)->actionFunc = func_800A6780;
                 ((EnItem00*)spawnedActor)->unk152 = 0xDC;
@@ -985,7 +991,7 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
     if ((((params & 0xFF) == ITEM00_FLEXIBLE) || ((params & 0xFF) == ITEM00_BIG_FAIRY)) && (param10000 == 0)) {
         if ((params & 0xFF) == ITEM00_FLEXIBLE) {
             spawnedActor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f,
-                                       spawnPos->z, 0, 0, 0, ((((param7F00 >> 8) & 0x7F) << 9) & 0xFE00) | 0x102);
+                                       spawnPos->z, 0, 0, 0, FAIRY_PARAMS(FAIRY_TYPE_2, true, param7F00 >> 8));
         } else {
             spawnedActor =
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0,
@@ -1002,13 +1008,13 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
             if (spawnedActor != NULL) {
                 if (param8000 == 0) {
                     spawnedActor->velocity.y = 0.0f;
-                    spawnedActor->speedXZ = 0.0f;
+                    spawnedActor->speed = 0.0f;
                     if (param10000 != 0) {
                         spawnedActor->gravity = 0.0f;
                     } else {
                         spawnedActor->gravity = -0.9f;
                     }
-                    spawnedActor->world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+                    spawnedActor->world.rot.y = Rand_CenteredFloat(0x10000);
                     spawnedActor->flags |= 0x10;
                 }
             }
@@ -1019,61 +1025,278 @@ Actor* Item_DropCollectible2(PlayState* play, Vec3f* spawnPos, s32 params) {
 }
 
 u8 sDropTable[DROP_TABLE_SIZE * DROP_TABLE_NUMBER] = {
-    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_BLUE,     ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_BOMBS_A,
-    ITEM00_MAGIC_SMALL,    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART,
-    ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_MAGIC_SMALL,    ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_GREEN,    ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_BOMBS_A,        ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,
-    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_NO_DROP,
-    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_RED,      ITEM00_NO_DROP,        ITEM00_MASK,           ITEM00_MASK,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_BOMBS_A,        ITEM00_MAGIC_SMALL,    ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_MASK,
-    ITEM00_MASK,           ITEM00_MASK,           ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,       ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_GREEN,
-    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_RUPEE_BLUE,
-    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,
-    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,
-    ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,      ITEM00_RUPEE_RED,
-    ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,
-    ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,
-    ITEM00_ARROWS_30,      ITEM00_ARROWS_30,      ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,
-    ITEM00_MAGIC_LARGE,    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,
-    ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_BOMBS_A,
-    ITEM00_BOMBS_A,        ITEM00_BOMBS_A,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,
-    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_MAGIC_LARGE,    ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NUTS_1,         ITEM00_NUTS_1,
-    ITEM00_NO_DROP,        ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_STICK,
-    ITEM00_STICK,          ITEM00_NO_DROP,        ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_FLEXIBLE,
-    ITEM00_RUPEE_GREEN,    ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_BLUE,     ITEM00_RUPEE_RED,      ITEM00_NO_DROP,
-    ITEM00_ARROWS_10,      ITEM00_ARROWS_10,      ITEM00_ARROWS_30,      ITEM00_BOMBS_A,        ITEM00_NO_DROP,
-    ITEM00_STICK,          ITEM00_MAGIC_SMALL,    ITEM00_MAGIC_LARGE,    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART,
-    ITEM00_FLEXIBLE,       ITEM00_RUPEE_GREEN,    ITEM00_RECOVERY_HEART, ITEM00_RECOVERY_HEART, ITEM00_MAGIC_SMALL,
-    ITEM00_MASK,           ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,        ITEM00_NO_DROP,
-    ITEM00_NO_DROP,        ITEM00_NO_DROP,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_BOMBS_A,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_NO_DROP,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_BOMBS_A,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_NO_DROP,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_RED,
+    ITEM00_NO_DROP,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_BOMBS_A,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_MASK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,
+    ITEM00_RUPEE_RED,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_30,
+    ITEM00_ARROWS_30,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_BOMBS_A,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_DEKU_NUTS_1,
+    ITEM00_DEKU_NUTS_1,
+    ITEM00_NO_DROP,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_DEKU_STICK,
+    ITEM00_DEKU_STICK,
+    ITEM00_NO_DROP,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_BLUE,
+    ITEM00_RUPEE_RED,
+    ITEM00_NO_DROP,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_10,
+    ITEM00_ARROWS_30,
+    ITEM00_BOMBS_A,
+    ITEM00_NO_DROP,
+    ITEM00_DEKU_STICK,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_BIG,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_FLEXIBLE,
+    ITEM00_RUPEE_GREEN,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_RECOVERY_HEART,
+    ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MASK,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
+    ITEM00_NO_DROP,
 };
 
 u8 sDropTableAmounts[DROP_TABLE_SIZE * DROP_TABLE_NUMBER] = {
@@ -1109,16 +1332,19 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
         dropQuantity = sDropTableAmounts[params + dropTableIndex];
 
         if (dropId == ITEM00_MASK) {
-            switch (gSaveContext.save.playerForm) {
+            switch (GET_PLAYER_FORM) {
                 case PLAYER_FORM_HUMAN:
                     dropId = ITEM00_ARROWS_10;
                     break;
+
                 case PLAYER_FORM_ZORA:
                     dropId = ITEM00_RECOVERY_HEART;
                     break;
+
                 case PLAYER_FORM_GORON:
-                    dropId = ITEM00_MAGIC_SMALL;
+                    dropId = ITEM00_MAGIC_JAR_SMALL;
                     break;
+
                 default:
                     dropId = ITEM00_RUPEE_GREEN;
                     break;
@@ -1128,16 +1354,17 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 
         if (fromActor != NULL) {
             dropFlag = fromActor->dropFlag;
-            if (dropFlag != 0) {
-                if (fromActor->dropFlag & 1) {
+
+            if (dropFlag != DROPFLAG_NONE) {
+                if (fromActor->dropFlag & DROPFLAG_1) {
                     params = 0x10;
                     dropId = ITEM00_ARROWS_30;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 2) {
+                } else if (fromActor->dropFlag & DROPFLAG_2) {
                     params = 0x10;
                     dropId = ITEM00_RECOVERY_HEART;
                     dropQuantity = 1;
-                } else if (fromActor->dropFlag & 0x20) {
+                } else if (fromActor->dropFlag & DROPFLAG_20) {
                     dropId = ITEM00_RUPEE_PURPLE;
                     dropQuantity = 1;
                 }
@@ -1145,29 +1372,31 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
         }
 
         if (dropId == ITEM00_FLEXIBLE) {
-            if (gSaveContext.save.playerData.health <= 0x10) {
+            if (gSaveContext.save.saveInfo.playerData.health <= 0x10) {
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, spawnPos->x, spawnPos->y + 40.0f, spawnPos->z, 0, 0, 0,
-                            2);
+                            FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
                 SoundSource_PlaySfxAtFixedWorldPos(play, spawnPos, 40, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                 return;
             }
 
-            if (gSaveContext.save.playerData.health <= 0x30) {
+            if (gSaveContext.save.saveInfo.playerData.health <= 0x30) {
                 params = 0x10;
                 dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 3;
-            } else if (gSaveContext.save.playerData.health <= 0x50) {
+            } else if (gSaveContext.save.saveInfo.playerData.health <= 0x50) {
                 params = 0x10;
                 dropId = ITEM00_RECOVERY_HEART;
                 dropQuantity = 1;
-            } else if ((gSaveContext.save.playerData.magicLevel != 0) && (gSaveContext.save.playerData.magic == 0)) {
+            } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) &&
+                       (gSaveContext.save.saveInfo.playerData.magic == 0)) {
                 params = 0xD0;
-                dropId = ITEM00_MAGIC_LARGE;
+                dropId = ITEM00_MAGIC_JAR_BIG;
                 dropQuantity = 1;
-            } else if ((gSaveContext.save.playerData.magicLevel != 0) &&
-                       ((gSaveContext.save.playerData.magicLevel >> 1) >= gSaveContext.save.playerData.magic)) {
+            } else if ((gSaveContext.save.saveInfo.playerData.magicLevel != 0) &&
+                       ((gSaveContext.save.saveInfo.playerData.magicLevel >> 1) >=
+                        gSaveContext.save.saveInfo.playerData.magic)) {
                 params = 0xD0;
-                dropId = ITEM00_MAGIC_LARGE;
+                dropId = ITEM00_MAGIC_JAR_BIG;
                 dropQuantity = 1;
             } else if (AMMO(ITEM_BOW) < 6) {
                 params = 0xA0;
@@ -1177,7 +1406,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                 params = 0xB0;
                 dropId = ITEM00_BOMBS_A;
                 dropQuantity = 1;
-            } else if (gSaveContext.save.playerData.rupees < 11) {
+            } else if (gSaveContext.save.saveInfo.playerData.rupees < 11) {
                 params = 0xA0;
                 dropId = ITEM00_RUPEE_RED;
                 dropQuantity = 1;
@@ -1195,7 +1424,7 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
                                                               spawnPos->y, spawnPos->z, 0, 0, 0, dropId);
                         if ((spawnedActor != 0) && (dropId != (u8)ITEM00_NO_DROP)) {
                             spawnedActor->actor.velocity.y = 8.0f;
-                            spawnedActor->actor.speedXZ = 2.0f;
+                            spawnedActor->actor.speed = 2.0f;
                             spawnedActor->actor.gravity = -0.9f;
                             spawnedActor->actor.world.rot.y = Rand_ZeroOne() * 40000.0f;
                             Actor_SetScale(&spawnedActor->actor, 0.0f);
@@ -1222,10 +1451,10 @@ void Item_DropCollectibleRandom(PlayState* play, Actor* fromActor, Vec3f* spawnP
 s32 D_801AE194[32] = {
     ITEM00_NO_DROP,        ITEM00_RUPEE_GREEN, ITEM00_RUPEE_BLUE,  ITEM00_NO_DROP,         ITEM00_RUPEE_RED,
     ITEM00_RUPEE_PURPLE,   ITEM00_NO_DROP,     ITEM00_RUPEE_HUGE,  ITEM00_COMPASS,         ITEM00_MUSHROOM_CLOUD,
-    ITEM00_RECOVERY_HEART, ITEM00_3_HEARTS,    ITEM00_HEART_PIECE, ITEM00_HEART_CONTAINER, ITEM00_MAGIC_SMALL,
-    ITEM00_MAGIC_LARGE,    ITEM00_FLEXIBLE,    ITEM00_BIG_FAIRY,   ITEM00_NO_DROP,         ITEM00_NUTS_10,
+    ITEM00_RECOVERY_HEART, ITEM00_3_HEARTS,    ITEM00_HEART_PIECE, ITEM00_HEART_CONTAINER, ITEM00_MAGIC_JAR_SMALL,
+    ITEM00_MAGIC_JAR_BIG,  ITEM00_FLEXIBLE,    ITEM00_BIG_FAIRY,   ITEM00_NO_DROP,         ITEM00_DEKU_NUTS_10,
     ITEM00_NO_DROP,        ITEM00_BOMBS_A,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
-    ITEM00_STICK,          ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
+    ITEM00_DEKU_STICK,     ITEM00_NO_DROP,     ITEM00_NO_DROP,     ITEM00_NO_DROP,         ITEM00_NO_DROP,
     ITEM00_ARROWS_10,      ITEM00_ARROWS_30,
 };
 

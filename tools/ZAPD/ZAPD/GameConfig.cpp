@@ -94,6 +94,26 @@ void GameConfig::ConfigFunc_ObjectList(const tinyxml2::XMLElement& element)
 		objectList.emplace_back(std::move(line));
 }
 
+void GameConfig::ConfigFunc_EntranceList(const tinyxml2::XMLElement& element)
+{
+	std::string fileName = element.Attribute("File");
+	std::vector<std::string> lines =
+		File::ReadAllLines(Path::GetDirectoryName(configFilePath) / fileName);
+
+	for (auto& line : lines)
+		entranceList.emplace_back(std::move(line));
+}
+
+void GameConfig::ConfigFunc_specialEntranceList(const tinyxml2::XMLElement& element)
+{
+	std::string fileName = element.Attribute("File");
+	std::vector<std::string> lines =
+		File::ReadAllLines(Path::GetDirectoryName(configFilePath) / fileName);
+
+	for (auto& line : lines)
+		specialEntranceList.emplace_back(std::move(line));
+}
+
 void GameConfig::ConfigFunc_TexturePool(const tinyxml2::XMLElement& element)
 {
 	std::string fileName = element.Attribute("File");
@@ -104,6 +124,7 @@ void GameConfig::ConfigFunc_BGConfig(const tinyxml2::XMLElement& element)
 {
 	bgScreenWidth = element.IntAttribute("ScreenWidth", 320);
 	bgScreenHeight = element.IntAttribute("ScreenHeight", 240);
+	useScreenWidthHeightConstants = element.BoolAttribute("UseScreenWidthHeightConstants", true);
 }
 
 void GameConfig::ConfigFunc_ExternalXMLFolder(const tinyxml2::XMLElement& element)
@@ -145,10 +166,12 @@ void GameConfig::ConfigFunc_ExternalFile(const tinyxml2::XMLElement& element)
 
 void GameConfig::ReadConfigFile(const fs::path& argConfigFilePath)
 {
-	static const std::map<std::string, ConfigFunc> ConfigFuncDictionary = {
+	static const std::unordered_map<std::string, ConfigFunc> ConfigFuncDictionary = {
 		{"SymbolMap", &GameConfig::ConfigFunc_SymbolMap},
 		{"ActorList", &GameConfig::ConfigFunc_ActorList},
 		{"ObjectList", &GameConfig::ConfigFunc_ObjectList},
+		{"EntranceList", &GameConfig::ConfigFunc_EntranceList},
+		{"SpecialEntranceList", &GameConfig::ConfigFunc_specialEntranceList},
 		{"TexturePool", &GameConfig::ConfigFunc_TexturePool},
 		{"BGConfig", &GameConfig::ConfigFunc_BGConfig},
 		{"ExternalXMLFolder", &GameConfig::ConfigFunc_ExternalXMLFolder},

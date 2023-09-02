@@ -6,7 +6,7 @@
 
 #include "z_en_kbt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKbt*)thisx)
 
@@ -22,7 +22,7 @@ Actor* func_80B3403C(PlayState* play);
 void func_80B34314(EnKbt* this, PlayState* play);
 void func_80B34598(EnKbt* this, PlayState* play);
 
-const ActorInit En_Kbt_InitVars = {
+ActorInit En_Kbt_InitVars = {
     ACTOR_EN_KBT,
     ACTORCAT_NPC,
     FLAGS,
@@ -64,19 +64,19 @@ void EnKbt_Init(Actor* thisx, PlayState* play) {
         this->unk_282 = 0;
         this->actionFunc = func_80B34598;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnKbt_Destroy(Actor* thisx, PlayState* play) {
 }
 
 s32 func_80B33E64(PlayState* play) {
-    return gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 1;
+    return gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 1;
 }
 
 s32 func_80B33E8C(PlayState* play) {
     if ((CURRENT_DAY == 3) ||
-        ((CURRENT_DAY == 2) && (gSaveContext.save.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
+        ((CURRENT_DAY == 2) && (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 & 2))) {
         return true;
     }
     return false;
@@ -235,8 +235,6 @@ void func_80B3415C(EnKbt* this) {
 }
 
 void func_80B34314(EnKbt* this, PlayState* play) {
-    s32 playerForm;
-
     func_80B34078(this);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -250,10 +248,9 @@ void func_80B34314(EnKbt* this, PlayState* play) {
     } else if (this->actor.xzDistToPlayer < 250.0f) {
         if ((this->unk_278 != NULL) && (this->unk_278->xzDistToPlayer < 250.0f)) {
             if (this->unk_27C & 4) {
-                playerForm = gSaveContext.save.playerForm;
-                if (((playerForm ^ 0) != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
-                                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
-                                                                (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
+                if ((GET_PLAYER_FORM != PLAYER_FORM_HUMAN) || ((CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_KOKIRI) &&
+                                                               (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_RAZOR) &&
+                                                               (CUR_FORM_EQUIP(EQUIP_SLOT_B) != ITEM_SWORD_GILDED))) {
                     this->actor.textId = 0xC38;
                 } else if (CURRENT_DAY == 3) {
                     this->actor.textId = 0xC39;
@@ -264,19 +261,29 @@ void func_80B34314(EnKbt* this, PlayState* play) {
                 }
             }
 
-            if (this->actor.textId != 0xC37) {
-                if (((this->actor.textId == 0xC4E) || (this->actor.textId == 0xC4F) || (this->actor.textId == 0xC50)) &&
-                    (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN)) {
-                    this->actor.textId = 0xC37;
-                }
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
-                if (func_80B33E8C(play)) {
-                    this->actor.textId = 0xC50;
-                } else {
-                    this->actor.textId = 0xC4E;
-                }
+            switch (this->actor.textId) {
+                case 0xC4E:
+                case 0xC4F:
+                case 0xC50:
+                    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
+                        this->actor.textId = 0xC37;
+                    }
+                    break;
+
+                case 0xC37:
+                    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
+                        if (func_80B33E8C(play)) {
+                            this->actor.textId = 0xC50;
+                        } else {
+                            this->actor.textId = 0xC4E;
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
-            func_800B8614(&this->actor, play, 260.0f);
+            Actor_OfferTalk(&this->actor, play, 260.0f);
         }
     }
     func_80B3415C(this);
@@ -557,7 +564,7 @@ void EnKbt_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gfx = POLY_OPA_DISP;
 

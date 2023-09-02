@@ -17,7 +17,7 @@ void ObjChikuwa_Destroy(Actor* thisx, PlayState* play);
 void ObjChikuwa_Update(Actor* thisx, PlayState* play);
 void ObjChikuwa_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Chikuwa_InitVars = {
+ActorInit Obj_Chikuwa_InitVars = {
     ACTOR_OBJ_CHIKUWA,
     ACTORCAT_BG,
     FLAGS,
@@ -49,7 +49,7 @@ void func_809B1550(Actor* thisx, PlayState* play) {
         thisx->world.pos.x = (Math_SinS(thisx->shape.rot.y) * sp18) + thisx->home.pos.x;
         thisx->world.pos.z = (Math_CosS(thisx->shape.rot.y) * sp18) + thisx->home.pos.z;
     } else {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
@@ -174,7 +174,7 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
             func_809B17D0(play, this, &temp->unk_00);
             temp_fs0 = Math3D_Vec3fDistSq(&temp->unk_00, &GET_PLAYER(play)->actor.world.pos);
             if (temp_fs0 < SQ(240.0f)) {
-                quakeIndex = Quake_Add(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
                 if (temp_fs0 < SQ(120.0f)) {
                     quakeVerticalMag = 4;
                 } else {
@@ -182,8 +182,8 @@ void ObjChikuwa_Update(Actor* thisx, PlayState* play) {
                 }
 
                 Quake_SetSpeed(quakeIndex, 17232);
-                Quake_SetQuakeValues(quakeIndex, quakeVerticalMag, 0, 0, 0);
-                Quake_SetCountdown(quakeIndex, 7);
+                Quake_SetPerturbations(quakeIndex, quakeVerticalMag, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 7);
             }
         }
     }
@@ -199,7 +199,7 @@ void ObjChikuwa_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_2A0 < this->unk_29C) {
         for (i = 0; i < this->unk_29C; i++) {

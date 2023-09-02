@@ -12,7 +12,7 @@ typedef enum {
     /* 0x00 */ ENMTHUNDER_TYPE_KOKIRI_SWORD,
     /* 0x01 */ ENMTHUNDER_TYPE_RAZOR_SWORD,
     /* 0x02 */ ENMTHUNDER_TYPE_GILDED_SWORD,
-    /* 0x03 */ ENMTHUNDER_TYPE_GREAT_FAIRY_SWORD,
+    /* 0x03 */ ENMTHUNDER_TYPE_GREAT_FAIRYS_SWORD,
     /* 0x80 */ ENMTHUNDER_TYPE_UNK = 0x80
 } EnMThunderType;
 
@@ -36,7 +36,5 @@ typedef struct EnMThunder {
     /* 0x1C1 */ u8 scaleTarget;
     /* 0x1C2 */ u8 isCharging;
 } EnMThunder; // size = 0x1C4
-
-extern const ActorInit En_M_Thunder_InitVars;
 
 #endif // Z_EN_M_THUNDER_H

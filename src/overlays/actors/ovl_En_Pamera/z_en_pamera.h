@@ -9,6 +9,8 @@ struct EnPamera;
 typedef void (*EnPameraActionFunc)(struct EnPamera*, PlayState*);
 typedef void (*EnPameraSetupFunc)(struct EnPamera*, PlayState*);
 
+#define ENPAMERA_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFF0) >> 4)
+
 typedef struct EnPamera {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderCylinder collider;
@@ -16,9 +18,9 @@ typedef struct EnPamera {
     /* 0x1D4 */ EnPameraActionFunc actionFunc;
     /* 0x1D8 */ EnPameraSetupFunc setupFunc;
     /* 0x1DC */ Vec3s* pathPoints;
-    /* 0x1E0 */ s32 pathIndex;
-    /* 0x1E4 */ s32 pathPointsCount;
-    /* 0x1E8 */ s32 pathId; 
+    /* 0x1E0 */ s32 waypointIndex;
+    /* 0x1E4 */ s32 pathCount;
+    /* 0x1E8 */ s32 additionalPathIndex; 
     /* 0x1EC */ s32 unk_1EC;
     /* 0x1F0 */ Vec3s jointTable[PAMELA_LIMB_MAX];
     /* 0x27A */ Vec3s morphTable[PAMELA_LIMB_MAX];
@@ -28,15 +30,13 @@ typedef struct EnPamera {
     /* 0x312 */ s16 unk_312;
     /* 0x314 */ s16 unk_314;
     /* 0x316 */ s16 unk_316;
-    /* 0x318 */ s16 cutscenes[2];
+    /* 0x318 */ s16 csIdList[2];
     /* 0x31C */ s16 hideInisdeTimer;
     /* 0x31E */ s16 unk_31E;
     /* 0x320 */ UNK_TYPE1 unk_320[0x2];
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ u16 unk_324;
-    /* 0x326 */ u16 unk_326;
+    /* 0x326 */ u16 cueId;
 } EnPamera; // size = 0x328
-
-extern const ActorInit En_Pamera_InitVars;
 
 #endif // Z_EN_PAMERA_H

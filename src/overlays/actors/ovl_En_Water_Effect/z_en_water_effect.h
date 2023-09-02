@@ -24,7 +24,7 @@ typedef enum {
     /* 0x309 */ ENWATEREFFECT_TYPE_GYORG_RIPPLES = 0x309, // Ripples on the surface when Gyrog enters/leaves the water
     /* 0x30A */ ENWATEREFFECT_TYPE_GYORG_PRIMARY_SPRAY, // Large "funnel" of water that forms when Gyorg enters/leaves the water
     /* 0x30B */ ENWATEREFFECT_TYPE_GYORG_SECONDARY_SPRAY, // Secondary "funnel" in the middle of the larger "funnel"
-    /* 0x30C */ ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE, // Shockwave on the surface when Gyorg rams into the central platform
+    /* 0x30C */ ENWATEREFFECT_TYPE_GYORG_SHOCKWAVE // Shockwave on the surface when Gyorg rams into the central platform
 } EnWaterEffectType;
 
 typedef struct EnWaterEffect {
@@ -42,7 +42,5 @@ typedef struct EnWaterEffect {
     /* 0xE34 */ f32 unk_E34;
     /* 0xE38 */ f32 unk_E38;
 } EnWaterEffect; // size = 0xE3C
-
-extern const ActorInit En_Water_Effect_InitVars;
 
 #endif // Z_EN_WATER_EFFECT_H

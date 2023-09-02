@@ -19,7 +19,7 @@ typedef enum {
     /*  9 */ EN_FALL_TYPE_CLOCK_TOWER_MOON,
     /* 10 */ EN_FALL_TYPE_STOPPED_MOON_OPEN_MOUTH,
     /* 11 */ EN_FALL_TYPE_CRASH_FIRE_RING,
-    /* 12 */ EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER,
+    /* 12 */ EN_FALL_TYPE_LODMOON_INVERTED_STONE_TOWER
 } EnFallType;
 
 struct EnFall;
@@ -49,7 +49,5 @@ typedef struct EnFall {
     /* 0x15E */ s16 fireballYTexScroll2;
     /* 0x160 */ EnFallActionFunc actionFunc;
 } EnFall; // size = 0x164
-
-extern const ActorInit En_Fall_InitVars;
 
 #endif // Z_EN_FALL_H

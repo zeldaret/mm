@@ -19,7 +19,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 void func_80A61334(EnDyExtra* this, PlayState* play);
 void func_80A613C8(EnDyExtra* this, PlayState* play);
 
-const ActorInit En_Dy_Extra_InitVars = {
+ActorInit En_Dy_Extra_InitVars = {
     ACTOR_EN_DY_EXTRA,
     ACTORCAT_PROP,
     FLAGS,
@@ -55,7 +55,7 @@ void func_80A61334(EnDyExtra* this, PlayState* play) {
         this->actor.velocity.y = 0.0f;
     }
 
-    if (this->unk14C == 0 && this->unk14A != 0) {
+    if ((this->unk14C == 0) && (this->unk14A != 0)) {
         this->unk14C = 0x32;
         this->actionFunc = func_80A613C8;
     }
@@ -64,8 +64,8 @@ void func_80A61334(EnDyExtra* this, PlayState* play) {
 void func_80A613C8(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
-    if (this->unk14C == 0 || this->unk150 < 0.02f) {
-        Actor_MarkForDeath(&this->actor);
+    if ((this->unk14C == 0) || (this->unk150 < 0.02f)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -80,21 +80,25 @@ void EnDyExtra_Update(Actor* thisx, PlayState* play) {
     EnDyExtra* this = THIS;
 
     DECR(this->unk14C);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
 }
 
+static Color_RGBA8 D_80A61740[] = {
+    { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 },
+    { 170, 255, 255, 255 }, { 255, 255, 170, 255 },
+};
+
+static Color_RGBA8 D_80A61754[] = {
+    { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 }
+};
+
+static u8 D_80A61768[] = {
+    2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0, 0,
+};
+
 void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
-    static Color_RGBA8 D_80A61740[] = {
-        { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 },
-        { 170, 255, 255, 255 }, { 255, 255, 170, 255 },
-    };
-    static Color_RGBA8 D_80A61754[] = {
-        { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 }
-    };
-    static u8 D_80A61768[] = { 0x02, 0x01, 0x01, 0x02, 0x00, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01,
-                               0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x01, 0x02, 0x00, 0x00 };
     EnDyExtra* this = THIS;
     s32 pad;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
@@ -114,7 +118,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 2, 0, 0x20, 0x40, 1, play->state.frames,
                                 play->state.frames * -8, 0x10, 0x10));

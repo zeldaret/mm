@@ -23,13 +23,11 @@ typedef struct EnBombal {
     /* 0x144 */ EnBombalActionFunc actionFunc;
     /* 0x148 */ s16 timer;
     /* 0x14A */ s16 isPopped;
-    /* 0x14C */ s16 cutscene;
+    /* 0x14C */ s16 csId;
     /* 0x150 */ f32 scale;
     /* 0x154 */ f32 oscillationAngle;
     /* 0x158 */ ColliderCylinder collider;
     /* 0x1A4 */ EnBombalEffect effects[200];
 } EnBombal; // size = 0x2A44
-
-extern const ActorInit En_Bombal_InitVars;
 
 #endif // Z_EN_BOMBAL_H

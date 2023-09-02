@@ -4,18 +4,26 @@
 #include "global.h"
 #include "objects/object_crow/object_crow.h"
 
-#define EN_SYATEKI_CROW_GET_WAIT_MOD(thisx) ((thisx)->params & 0xF)
-#define EN_SYATEKI_CROW_GET_SPEED_MOD(thisx) (((thisx)->params & 0xF0) >> 4)
-#define EN_SYATEKI_CROW_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
-#define EN_SYATEKI_CROW_PARAMS(index, speedMod, waitMod) (((index << 8) & 0xFF00) | ((speedMod << 4) & 0xF0) | (waitMod & 0xF))
+#define SG_GUAY_GET_WAIT_MOD(thisx) ((thisx)->params & 0xF)
+#define SG_GUAY_GET_SPEED_MOD(thisx) (((thisx)->params & 0xF0) >> 4)
+#define SG_GUAY_GET_INDEX(thisx) (((thisx)->params & 0xFF00) >> 8)
+#define SG_GUAY_PARAMS(index, speedMod, waitMod) (((index << 8) & 0xFF00) | ((speedMod << 4) & 0xF0) | (waitMod & 0xF))
 
 struct EnSyatekiCrow;
 
 typedef void (*EnSyatekiCrowActionFunc)(struct EnSyatekiCrow*, PlayState*);
 
+typedef enum EnSyatekiCrowBodyPart {
+    /* 0 */ SG_GUAY_BODYPART_BODY,
+    /* 1 */ SG_GUAY_BODYPART_RIGHT_WING_TIP,
+    /* 2 */ SG_GUAY_BODYPART_LEFT_WING_TIP,
+    /* 3 */ SG_GUAY_BODYPART_TAIL,
+    /* 4 */ SG_GUAY_BODYPART_MAX
+} EnSyatekiCrowBodyPart;
+
 typedef struct EnSyatekiCrow {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ Vec3f bodyPartsPos[4];
+    /* 0x144 */ Vec3f bodyPartsPos[SG_GUAY_BODYPART_MAX];
     /* 0x174 */ SkelAnime skelAnime;
     /* 0x1B8 */ EnSyatekiCrowActionFunc actionFunc;
     /* 0x1BC */ s16 waitTimer;
@@ -31,7 +39,5 @@ typedef struct EnSyatekiCrow {
     /* 0x23C */ ColliderJntSph collider;
     /* 0x25C */ ColliderJntSphElement colliderElements[1];
 } EnSyatekiCrow; // size = 0x29C
-
-extern const ActorInit En_Syateki_Crow_InitVars;
 
 #endif // Z_EN_SYATEKI_CROW_H

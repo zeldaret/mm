@@ -7,7 +7,7 @@
 #include "z_en_trt2.h"
 #include "objects/object_trt/object_trt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnTrt2*)thisx)
 
@@ -52,7 +52,7 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gKotakeFlyAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
 };
 
-const ActorInit En_Trt2_InitVars = {
+ActorInit En_Trt2_InitVars = {
     ACTOR_EN_TRT2,
     ACTORCAT_NPC,
     FLAGS,
@@ -144,13 +144,14 @@ void func_80AD341C(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD349C(EnTrt2* this) {
-    if ((gSaveContext.save.weekEventReg[85] & 0x10) && !(gSaveContext.save.weekEventReg[84] & 0x40)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS) &&
+        !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
         this->unk_3A8 = 0x88F;
     } else if (this->unk_3A8 == 0) {
         this->unk_3A8 = 0x84B;
-    } else if (gSaveContext.save.weekEventReg[16] & 0x10) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_INJURED)) {
         this->unk_3A8 = 0x838;
-    } else if (gSaveContext.save.weekEventReg[17] & 1) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_TALKED_KOUME_KIOSK_EMPTY)) {
         this->unk_3A8 = 0x84D;
     } else {
         this->unk_3A8 = 0x849;
@@ -164,7 +165,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
     if (this->path != NULL) {
         phi_a1 = func_80AD48F8(this->path, this->unk_1E4, &this->actor.world.pos, &sp30);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             phi_a1 = this->actor.wallYaw;
         }
         Math_SmoothStepToS(&this->actor.world.rot.y, phi_a1, 4, 1000, 1);
@@ -176,7 +177,7 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
                 this->unk_1E4++;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 1.5f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 1.5f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -189,18 +190,18 @@ void func_80AD3530(EnTrt2* this, PlayState* play) {
 }
 
 void func_80AD3664(EnTrt2* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         if (this->unk_3D9 == 0) {
             this->unk_3B2 = 1;
         } else {
             this->unk_3B2 = 2;
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_3DA);
+        CutsceneManager_Queue(this->csId);
         return;
     }
-    func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
 }
 
 void func_80AD36EC(EnTrt2* this, PlayState* play) {
@@ -216,10 +217,10 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
                 this->unk_1E4 = 0;
                 this->unk_3D9 = 1;
                 this->actor.velocity.y = 0.0f;
-                this->path = SubS_GetPathByIndex(play, this->path->unk1, -1);
-                ActorCutscene_Stop(this->unk_3DA);
-                this->unk_3DA = ActorCutscene_GetAdditionalCutscene(this->unk_3DA);
-                ActorCutscene_SetIntentToPlay(this->unk_3DA);
+                this->path = SubS_GetPathByIndex(play, this->path->additionalPathIndex, PATH_INDEX_NONE);
+                CutsceneManager_Stop(this->csId);
+                this->csId = CutsceneManager_GetAdditionalCsId(this->csId);
+                CutsceneManager_Queue(this->csId);
                 this->unk_3B2 = 0;
             } else {
                 this->unk_1E4++;
@@ -227,9 +228,9 @@ void func_80AD36EC(EnTrt2* this, PlayState* play) {
         }
     }
     Actor_MoveWithGravity(&this->actor);
-    func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -239,11 +240,11 @@ void func_80AD381C(EnTrt2* this, PlayState* play) {
             this->actor.world.pos.y -= 50.0f;
             this->unk_3D9 = 0;
             this->unk_3B2 = 0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= ACTOR_FLAG_10;
         }
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -251,7 +252,7 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
     Vec3s sp30;
 
     if (this->unk_3D9 == 2) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     if (this->path != NULL) {
@@ -262,32 +263,32 @@ void func_80AD38B8(EnTrt2* this, PlayState* play) {
         this->actor.world.rot.x = -this->actor.shape.rot.x;
         if (func_80AD475C(this, this->path, this->unk_1E4)) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_3DA);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
             } else {
                 this->unk_1E4++;
             }
         }
 
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             if (this->unk_1E4 >= (this->path->count - 1)) {
-                ActorCutscene_Stop(this->unk_3DA);
+                CutsceneManager_Stop(this->csId);
                 this->unk_3D9 = 2;
             } else {
                 sp30.y = this->actor.wallYaw;
             }
         }
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.2f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.2f, 1.0f);
     }
 
     Actor_MoveWithoutGravity(&this->actor);
-    func_800B9010(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KOTAKE_FLY - SFX_FLAG);
 }
 
 void func_80AD3A24(EnTrt2* this, PlayState* play) {
     func_80AD46F8(this);
-    if (this->actor.speedXZ > 0.05f) {
-        Math_ApproachF(&this->actor.speedXZ, 0.0f, 0.2f, 1.0f);
+    if (this->actor.speed > 0.05f) {
+        Math_ApproachF(&this->actor.speed, 0.0f, 0.2f, 1.0f);
     } else if (DECR(this->unk_3AE) == 0) {
         this->unk_3AE = Rand_S16Offset(100, 50);
         EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
@@ -332,7 +333,7 @@ void func_80AD3BE4(EnTrt2* this, PlayState* play) {
 void func_80AD3C94(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, play);
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             this->unk_3B2 = 0xF;
         }
     }
@@ -378,7 +379,7 @@ void func_80AD3E34(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             this->unk_3B2 = 12;
         } else {
-            gSaveContext.save.weekEventReg[85] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS);
             this->unk_3A8 = 0x88E;
             Message_StartTextbox(play, this->unk_3A8, &this->actor);
             this->unk_3B2 = 10;
@@ -391,11 +392,11 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
     if (talkState == TEXT_STATE_DONE) {
         if (Message_ShouldAdvance(play)) {
-            if ((Inventory_HasEmptyBottle() && !(gSaveContext.save.weekEventReg[84] & 0x40)) ||
-                !(gSaveContext.save.weekEventReg[12] & 0x10)) {
+            if ((Inventory_HasEmptyBottle() && !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) ||
+                !CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
                 this->unk_3B2 = 12;
             } else {
-                gSaveContext.save.weekEventReg[85] |= 0x10;
+                SET_WEEKEVENTREG(WEEKEVENTREG_FAILED_RECEIVED_RED_POTION_FOR_KOUME_WOODS);
                 this->unk_3A8 = 0x88E;
                 Message_StartTextbox(play, this->unk_3A8, &this->actor);
                 this->unk_3B2 = 10;
@@ -410,22 +411,22 @@ void func_80AD3EF0(EnTrt2* this, PlayState* play) {
 
 void func_80AD3FF4(EnTrt2* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[12] & 0x10)) {
-            gSaveContext.save.weekEventReg[12] |= 0x10;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE);
         }
-        gSaveContext.save.weekEventReg[84] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME);
         this->actor.parent = NULL;
         this->unk_3B2 = 14;
-    } else if (gSaveContext.save.weekEventReg[12] & 0x10) {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_KOTAKE_BOTTLE)) {
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED, 300.0f, 300.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POTION_RED_BOTTLE, 300.0f, 300.0f);
     }
 }
 
 void func_80AD40AC(EnTrt2* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
         this->unk_3B2 = 13;
     }
 }
@@ -433,10 +434,10 @@ void func_80AD40AC(EnTrt2* this, PlayState* play) {
 void func_80AD4110(EnTrt2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->unk_3A8 = 0x84C;
-        func_80151938(play, this->unk_3A8);
+        Message_ContinueTextbox(play, this->unk_3A8);
         this->unk_3B2 = 10;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -450,7 +451,7 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
             play->msgCtx.stateTimer = 4;
             if (this->unk_3A8 == 0x84C) {
                 EnTrt2_ChangeAnim(&this->skelAnime, sAnimationInfo, TRT2_ANIM_HOVER);
-                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+                this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
                 this->unk_3B2 = 18;
             } else if (this->unk_3A8 == 0x88F) {
                 this->unk_3A8 = 0x88E;
@@ -466,23 +467,23 @@ void func_80AD417C(EnTrt2* this, PlayState* play) {
 void func_80AD4298(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_3DA)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_3DA, &this->actor);
-        player->stateFlags1 |= 0x20;
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
+        player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_3B2 = 6;
     } else {
-        if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        ActorCutscene_SetIntentToPlay(this->unk_3DA);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void func_80AD431C(EnTrt2* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    player->stateFlags1 &= ~0x20;
-    Actor_MarkForDeath(&this->actor);
+    player->stateFlags1 &= ~PLAYER_STATE1_20;
+    Actor_Kill(&this->actor);
 }
 
 void func_80AD434C(EnTrt2* this, PlayState* play) {
@@ -492,20 +493,20 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     if (this->actor.world.pos.y > 200.0f) {
         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             this->unk_3B2 = 0x13;
-            ActorCutscene_Stop(this->unk_3DA);
+            CutsceneManager_Stop(this->csId);
         } else {
             s32 i;
             Vec3f sp68;
             Vec3f sp5C = { 0.0f, 0.5f, 0.0f };
 
             for (i = (s32)this->skelAnime.animLength - (s32)this->skelAnime.curFrame; i >= 0; i -= 2) {
-                sp68.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                sp68.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
-                sp68.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                sp68.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                sp68.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
+                sp68.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &sp68, &sp5C, &sp5C, 100, 0, 3);
             }
 
-            func_800B9010(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_COMMON_EXTINCT_LEV - SFX_FLAG);
         }
     } else if (this->actor.world.pos.y < 5.0f) {
         func_80AD4A78(this, play);
@@ -514,7 +515,7 @@ void func_80AD434C(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if ((this->actor.shape.rot.y >= 0x2800) && (this->actor.shape.rot.y < 0x3800)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KOTAKE_ROLL);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KOTAKE_ROLL);
     }
 }
 
@@ -592,7 +593,7 @@ s32 func_80AD475C(EnTrt2* this, Path* path, s32 arg2) {
         phi_f14 = points[arg + 1].z - points[arg - 1].z;
     }
 
-    func_8017B7F8(&sp30, RADF_TO_BINANG(func_80086B30(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
+    func_8017B7F8(&sp30, RAD_TO_BINANG(Math_FAtan2F(phi_f12, phi_f14)), &sp44, &sp40, &sp3C);
 
     if (((this->actor.world.pos.x * sp44) + (sp40 * this->actor.world.pos.z) + sp3C) > 0.0f) {
         ret = true;
@@ -615,7 +616,7 @@ s16 func_80AD48F8(Path* path, s32 arg1, Vec3f* arg2, f32* arg3) {
         phi_f12 = 0.0f;
     }
     *arg3 = SQ(phi_f14) + SQ(phi_f12);
-    return RADF_TO_BINANG(Math_Acot2F(phi_f12, phi_f14));
+    return RAD_TO_BINANG(Math_Atan2F_XY(phi_f12, phi_f14));
 }
 
 f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
@@ -639,9 +640,9 @@ f32 func_80AD49B8(Path* path, s32 arg1, Vec3f* arg2, Vec3s* arg3) {
 void func_80AD4A78(EnTrt2* this, PlayState* play) {
     Vec3f sp34;
 
-    sp34.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+    sp34.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
     sp34.y = this->actor.world.pos.y;
-    sp34.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+    sp34.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
     Actor_SpawnFloorDustRing(play, &this->actor, &sp34, 50.0f, 0, 2.0f, 0, 0, 0);
 }
 
@@ -663,10 +664,10 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         sp24 = true;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80AD349C(this);
         this->unk_3B4 = this->unk_3B2;
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             if ((player->transformation != PLAYER_FORM_HUMAN) && (player->transformation != PLAYER_FORM_FIERCE_DEITY)) {
                 this->unk_3A8 = 0x84F;
             }
@@ -686,7 +687,7 @@ s32 func_80AD4B4C(EnTrt2* this, PlayState* play) {
 }
 
 s32 func_80AD4C4C(EnTrt2* this) {
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (this->actor.xzDistToPlayer < 100.0f) {
             return true;
         }
@@ -700,16 +701,17 @@ s32 func_80AD4CCC(EnTrt2* this, PlayState* play) {
     s16 sp1E = this->actor.yawTowardsPlayer - this->actor.shape.rot.y;
     Player* player = GET_PLAYER(play);
 
-    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isTargeted && !(this->actor.bgCheckFlags & 1) &&
+    if (((this->unk_3B2 == 4) || (this->unk_3B2 == 5)) && this->actor.isLockedOn &&
+        !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
         ((player->transformation == PLAYER_FORM_HUMAN) || (player->transformation == PLAYER_FORM_FIERCE_DEITY))) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         this->actor.velocity.y = 1.5f;
         this->unk_3B2 = 16;
         return true;
     }
 
-    if (func_80AD4C4C(this) && this->actor.isTargeted && (sp1E < 0x4000) && (sp1E > -0x4000)) {
-        func_800B863C(&this->actor, play);
+    if (func_80AD4C4C(this) && this->actor.isLockedOn && (sp1E < 0x4000) && (sp1E > -0x4000)) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 
     return true;
@@ -721,7 +723,7 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
     this->actor.flags &= ~ACTOR_FLAG_10;
     Actor_SetObjectDependency(play, &this->actor);
     Actor_SetScale(&this->actor, 0.008f);
-    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_FC00(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENTRT2_GET_PATH_INDEX(&this->actor), ENTRT2_PATH_INDEX_NONE);
     this->unk_3AE = Rand_S16Offset(100, 50);
     this->unk_3B0 = 10;
     this->unk_3A8 = 0;
@@ -737,39 +739,39 @@ void func_80AD4DB4(EnTrt2* this, PlayState* play) {
 
     this->unk_3C0 = 0;
     this->unk_3D8 = false;
-    this->unk_3DA = this->actor.cutscene;
+    this->csId = this->actor.csId;
     this->unk_3B6 = 20;
     this->unk_3B8 = 0;
     this->unk_3BC = func_80AD4608;
 
-    if (gSaveContext.save.weekEventReg[12] & 8) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_SAVED_KOUME)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (gSaveContext.save.weekEventReg[84] & 0x40) {
-        Actor_MarkForDeath(&this->actor);
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_RED_POTION_FOR_KOUME)) {
+        Actor_Kill(&this->actor);
         return;
     }
 
     if ((play->sceneId == SCENE_20SICHITAI) || (play->sceneId == SCENE_20SICHITAI2)) {
         if (gSaveContext.save.day == 2) {
-            if (!(gSaveContext.save.weekEventReg[15] & 0x80)) {
-                gSaveContext.save.weekEventReg[15] |= 0x80;
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
+                SET_WEEKEVENTREG(WEEKEVENTREG_15_80);
                 this->unk_3B2 = 3;
             } else {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (gSaveContext.save.day == 2) {
-        if (gSaveContext.save.weekEventReg[15] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_15_80)) {
             this->unk_3B2 = 4;
         } else {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     } else if (gSaveContext.save.day == 3) {
@@ -791,7 +793,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
 
     if (play->sceneId != SCENE_20SICHITAI) {
-        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
     }
 
     Actor_SetFocus(&this->actor, 90.0f);
@@ -799,7 +801,7 @@ void func_80AD4FE4(EnTrt2* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 3, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_3, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 
@@ -850,9 +852,9 @@ void func_80AD5234(EnTrt2* this, PlayState* play) {
     sp40 = player->actor.world.pos;
 
     if (this->unk_3B2 == 8) {
-        sp40.y = player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
-        sp40.y = player->bodyPartsPos[7].y + 45.0f;
+        sp40.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 45.0f;
     }
 
     sp34 = this->actor.world.pos;
@@ -940,7 +942,7 @@ void func_80AD56E8(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80AD5978[this->unk_3B8]));

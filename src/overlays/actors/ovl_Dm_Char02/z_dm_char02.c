@@ -16,9 +16,9 @@ void DmChar02_Destroy(Actor* thisx, PlayState* play);
 void DmChar02_Update(Actor* thisx, PlayState* play);
 void DmChar02_Draw(Actor* thisx, PlayState* play);
 
-void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play);
+void DmChar02_HandleCutscene(DmChar02* this, PlayState* play);
 
-const ActorInit Dm_Char02_InitVars = {
+ActorInit Dm_Char02_InitVars = {
     ACTOR_DM_CHAR02,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -36,46 +36,47 @@ typedef enum {
     /* 1 */ DMCHAR02_ANIM_TURN_AROUND,
     /* 2 */ DMCHAR02_ANIM_JUGGLE,
     /* 3 */ DMCHAR02_ANIM_FALL,
+    /* 4 */ DMCHAR02_ANIM_MAX
 } DmChar02Animation;
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gClockTowerOcarinaOfTimeHitGroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gClockTowerOcarinaOfTimeTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
-    { &gClockTowerOcarinaOfTimeJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gClockTowerOcarinaOfTimeFallAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },
+static AnimationInfo sAnimationInfo[DMCHAR02_ANIM_MAX] = {
+    { &gClockTowerOcarinaOfTimeHitGroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },  // DMCHAR02_ANIM_HIT_GROUND
+    { &gClockTowerOcarinaOfTimeTurnAroundAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f }, // DMCHAR02_ANIM_TURN_AROUND
+    { &gClockTowerOcarinaOfTimeJuggleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },     // DMCHAR02_ANIM_JUGGLE
+    { &gClockTowerOcarinaOfTimeFallAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, 0.0f },       // DMCHAR02_ANIM_FALL
 };
 
-void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animationInfo, u16 animIndex) {
-    f32 frameCount;
+void DmChar02_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
+    animInfo += animIndex;
 
-    if (animationInfo->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed, animationInfo->startFrame,
-                     frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmChar02_PlaySfxForDroppingOcarinaCutscene(DmChar02* this, PlayState* play) {
-    switch (play->csCtx.frames) {
+    switch (play->csCtx.curFrame) {
         case 95:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_0);
             break;
 
         case 101:
         case 105:
         case 112:
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_OCARINA_BOUND_1);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_OCARINA_BOUND_1);
             break;
     }
 }
 
 void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
-    if ((play->csCtx.state != 0) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.currentCsIndex == 1)) {
+    if ((play->csCtx.state != CS_STATE_IDLE) && (play->sceneId == SCENE_OKUJOU) && (play->csCtx.scriptIndex == 1)) {
         DmChar02_PlaySfxForDroppingOcarinaCutscene(this, play);
     }
 }
@@ -83,30 +84,30 @@ void DmChar02_PlaySfxForCutscenes(DmChar02* this, PlayState* play) {
 void DmChar02_Init(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
 
-    if (gSaveContext.save.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
+    if (gSaveContext.save.saveInfo.inventory.items[SLOT_OCARINA] == ITEM_NONE) {
         this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
         this->actor.targetArrowOffset = 3000.0f;
         ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
         SkelAnime_InitFlex(play, &this->skelAnime, &gClockTowerOcarinaOfTimeSkel, NULL, NULL, NULL, 0);
-        DmChar02_ChangeAnim(&this->skelAnime, sAnimationInfo, 0);
+        DmChar02_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMCHAR02_ANIM_HIT_GROUND], 0);
         Actor_SetScale(&this->actor, 0.01f);
-        this->actionFunc = DmChar02_PerformCutsceneActions;
+        this->actionFunc = DmChar02_HandleCutscene;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
 void DmChar02_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
+void DmChar02_HandleCutscene(DmChar02* this, PlayState* play) {
     u8 shouldChangeAnimation = true;
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 0x83)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 0x83);
-        if (play->csCtx.frames == play->csCtx.actorActions[actionIndex]->startFrame) {
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_131)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_131);
+        if (play->csCtx.curFrame == play->csCtx.actorCues[cueChannel]->startFrame) {
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 default:
                     this->animIndex = DMCHAR02_ANIM_HIT_GROUND;
                     shouldChangeAnimation = false;
@@ -130,7 +131,7 @@ void DmChar02_PerformCutsceneActions(DmChar02* this, PlayState* play) {
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
     }
 
     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
@@ -148,10 +149,10 @@ void DmChar02_Update(Actor* thisx, PlayState* play) {
     this->unk_2F0 = this->unk_2F0;
     this->actionFunc(this, play);
     if (!Actor_HasParent(&this->actor, play)) {
-        Actor_PickUp(&this->actor, play, GI_OCARINA, 30.0f, 80.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_OCARINA_OF_TIME, 30.0f, 80.0f);
     } else {
         gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
     DmChar02_PlaySfxForCutscenes(this, play);
@@ -172,10 +173,10 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     DmChar02* this = THIS;
     s32 shouldDraw = false;
 
-    if ((play->csCtx.state == 0) && (this->actor.world.pos.y < 100.0f)) {
+    if ((play->csCtx.state == CS_STATE_IDLE) && (this->actor.world.pos.y < 100.0f)) {
         shouldDraw = true;
-    } else if (Cutscene_CheckActorAction(play, 0x6B)) {
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x6B)]->action) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_107)) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_107)]->id) {
             case 0x17:
             case 0x1C:
             case 0x26:
@@ -185,7 +186,7 @@ void DmChar02_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (shouldDraw) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                        this->skelAnime.dListCount, DmChar02_OverrideLimbDraw, DmChar02_PostLimbDraw,
                                        DmChar02_TransformLimbDraw, &this->actor);

@@ -2,6 +2,7 @@
 #define Z_EN_DAI_H
 
 #include "global.h"
+#include "objects/object_dai/object_dai.h"
 
 struct EnDai;
 
@@ -26,7 +27,7 @@ typedef struct EnDai {
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnDaiActionFunc actionFunc;
     /* 0x18C */ MtxF unk_18C;
-    /* 0x1CC */ u8 unk_1CC;
+    /* 0x1CC */ u8 cueId;
     /* 0x1CD */ u8 unk_1CD;
     /* 0x1CE */ u16 unk_1CE;
     /* 0x1D0 */ s32 unk_1D0;
@@ -39,13 +40,11 @@ typedef struct EnDai {
     /* 0x1E4 */ Vec3f unk_1E4;
     /* 0x1F0 */ Vec3f unk_1F0;
     /* 0x1FC */ Vec3f unk_1FC;
-    /* 0x208 */ Vec3s jointTable[19];
-    /* 0x27A */ Vec3s morphTable[19];
+    /* 0x208 */ Vec3s jointTable[OBJECT_DAI_LIMB_MAX];
+    /* 0x27A */ Vec3s morphTable[OBJECT_DAI_LIMB_MAX];
     /* 0x2EC */ EnDaiEffect effects[EN_DAI_EFFECT_COUNT];
     /* 0xA6C */ s32 unk_A6C;
-    /* 0xA70 */ s32 unk_A70;
+    /* 0xA70 */ s32 animIndex;
 } EnDai; // size = 0xA74
-
-extern const ActorInit En_Dai_InitVars;
 
 #endif // Z_EN_DAI_H

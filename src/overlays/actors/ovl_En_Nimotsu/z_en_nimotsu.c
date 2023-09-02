@@ -18,7 +18,7 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play);
 
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play);
 
-const ActorInit En_Nimotsu_InitVars = {
+ActorInit En_Nimotsu_InitVars = {
     ACTOR_EN_NIMOTSU,
     ACTORCAT_PROP,
     FLAGS,
@@ -53,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnNimotsu_UpdateCollision(EnNimotsu* this, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 32.0f, 30.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void EnNimotsu_Init(Actor* thisx, PlayState* play) {
@@ -81,15 +81,15 @@ void EnNimotsu_Update(Actor* thisx, PlayState* play) {
 
     Actor_MoveWithGravity(&this->actor);
 
-    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & 1)) {
+    if (!(this->dustDone & 1) && (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         if (DECR(this->timer) == 0) {
             this->dustDone |= 1;
         }
 
         if ((play->state.frames % 3) == 0) {
-            dustPosition.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+            dustPosition.x = this->actor.world.pos.x + Rand_CenteredFloat(15.0f);
             dustPosition.y = this->actor.world.pos.y;
-            dustPosition.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+            dustPosition.z = this->actor.world.pos.z + Rand_CenteredFloat(15.0f);
             Actor_SpawnFloorDustRing(play, &this->actor, &dustPosition, 20.0f, 0, 2.0f, 0, 0, 0);
         }
     }
@@ -104,10 +104,11 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
     Vec3f scale;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, &gBombShopBagDL);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     position.x = this->actor.world.pos.x + 7.0f;
     position.y = this->actor.world.pos.y;
@@ -118,5 +119,6 @@ void EnNimotsu_Draw(Actor* thisx, PlayState* play) {
     scale.z = 0.2f;
 
     func_800BC620(&position, &scale, 255, play);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

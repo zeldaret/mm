@@ -10,6 +10,20 @@ typedef void (*EnWfActionFunc)(struct EnWf*, PlayState*);
 
 #define ENWF_GET_80(thisx) ((thisx)->params & 0x80)
 
+typedef enum WolfosBodyPart {
+    /*  0 */ WOLFOS_BODYPART_BACK_LEFT_PAW,
+    /*  1 */ WOLFOS_BODYPART_TAIL,
+    /*  2 */ WOLFOS_BODYPART_BACK_RIGHT_PAW,
+    /*  3 */ WOLFOS_BODYPART_FRONT_RIGHT_UPPER_LEG,
+    /*  4 */ WOLFOS_BODYPART_FRONT_RIGHT_LOWER_LEG,
+    /*  5 */ WOLFOS_BODYPART_FRONT_RIGHT_CLAW,
+    /*  6 */ WOLFOS_BODYPART_HEAD_ROOT,
+    /*  7 */ WOLFOS_BODYPART_FRONT_LEFT_UPPER_LEG,
+    /*  8 */ WOLFOS_BODYPART_FRONT_LEFT_LOWER_LEG,
+    /*  9 */ WOLFOS_BODYPART_FRONT_LEFT_CLAW,
+    /* 10 */ WOLFOS_BODYPART_MAX
+} WolfosBodyPart;
+
 typedef struct EnWf {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -30,13 +44,11 @@ typedef struct EnWf {
     /* 0x2AC */ f32 drawDmgEffAlpha;
     /* 0x2B0 */ f32 drawDmgEffScale;
     /* 0x2B4 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2B8 */ Vec3f limbPos[10];
+    /* 0x2B8 */ Vec3f bodyPartsPos[WOLFOS_BODYPART_MAX];
     /* 0x330 */ ColliderJntSph collider1;
     /* 0x350 */ ColliderJntSphElement collider1Elements[4];
     /* 0x450 */ ColliderCylinder collider2;
     /* 0x49C */ ColliderCylinder collider3;
 } EnWf; // size = 0x4E8
-
-extern const ActorInit En_Wf_InitVars;
 
 #endif // Z_EN_WF_H

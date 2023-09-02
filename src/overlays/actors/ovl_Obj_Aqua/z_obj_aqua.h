@@ -3,8 +3,14 @@
 
 #include "global.h"
 
-#define AQUA_HOT(thisx) ((thisx)->params & 1)
-#define OBJAQUA_1 1
+#define AQUA_GET_TYPE(thisx) ((thisx)->params & 1)
+
+#define AQUA_PARAMS(type) ((type) & 1)
+
+typedef enum {
+    /* 0 */ AQUA_TYPE_COLD,
+    /* 1 */ AQUA_TYPE_HOT
+} AquaType;
 
 struct ObjAqua;
 
@@ -18,7 +24,5 @@ typedef struct ObjAqua {
     /* 0x196 */ u8 alpha;
     /* 0x198 */ s16 unk_198;
 } ObjAqua; // size = 0x19C
-
-extern const ActorInit Obj_Aqua_InitVars;
 
 #endif // Z_OBJ_AQUA_H

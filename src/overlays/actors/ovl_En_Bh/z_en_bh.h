@@ -10,7 +10,7 @@ typedef void (*EnBhActionFunc)(struct EnBh*, PlayState*);
 
 typedef struct EnBh {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime skelanime;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[OBJECT_BH_LIMB_MAX];
     /* 0x1AC */ Vec3s morphTable[OBJECT_BH_LIMB_MAX];
     /* 0x1D0 */ Vec3f pos;
@@ -21,7 +21,5 @@ typedef struct EnBh {
     /* 0x1E4 */ s16 unk1E4;
     /* 0x1E8 */ EnBhActionFunc actionFunc;
 } EnBh; // size = 0x1EC
-
-extern const ActorInit En_Bh_InitVars;
 
 #endif // Z_EN_BH_H

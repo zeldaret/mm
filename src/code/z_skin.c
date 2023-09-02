@@ -1,10 +1,11 @@
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64skin.h"
 
 // 60 is an arbitrary number which specifies the max amount of limbs per skeleton this system supports
 MtxF gSkinLimbMatrices[60];
 
-static s32 sUnused;
+static s32 sBssPad;
 
 void Skin_UpdateVertices(MtxF* mtx, SkinVertex* skinVertices, SkinLimbModif* modifEntry, Vtx* vtxBuf, Vec3f* pos) {
     SkinVertex* vertexEntry;

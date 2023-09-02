@@ -21,7 +21,7 @@ void ObjHsStump_Idle(ObjHsStump* this, PlayState* play);
 void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play);
 void ObjHsStump_Appear(ObjHsStump* this, PlayState* play);
 
-const ActorInit Obj_HsStump_InitVars = {
+ActorInit Obj_HsStump_InitVars = {
     ACTOR_OBJ_HSSTUMP,
     ACTORCAT_BG,
     FLAGS,
@@ -45,7 +45,7 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     this->isHidden = OBJHSSTUMP_GET_ISHIDDEN(thisx);
     this->switchFlag = OBJHSSTUMP_GET_SWITCHFLAG(thisx);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hsstump_Colheader_0011B0);
     switch (this->isHidden) {
         case true:
@@ -54,10 +54,15 @@ void ObjHsStump_Init(Actor* thisx, PlayState* play) {
             } else {
                 this->dyna.actor.draw = NULL;
                 Actor_SetScale(&this->dyna.actor, 0.0f);
-                func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             }
+            // fallthrough
         case false:
             ObjHsStump_SetupIdle(this, play);
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -76,7 +81,7 @@ void ObjHsStump_SetupAppear(ObjHsStump* this, PlayState* play) {
     this->framesAppeared = 0;
     this->rotAngle = 0;
     this->rotFactor = 3640.0f;
-    func_8019F128(NA_SE_EN_NPC_APPEAR);
+    Audio_PlaySfx_2(NA_SE_EN_NPC_APPEAR);
     this->actionFunc = ObjHsStump_Appear;
 }
 
@@ -89,14 +94,14 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
     }
     if (this->framesAppeared <= 10) {
         if (this->framesAppeared == 0) {
+            s32 pad;
             s32 i;
-            f32 angleDeg;
             s16 numDirections = 4;
             Vec3f iceSmokePosOffset;
             Vec3f iceSmokeVelOffset;
-            s16 offsetAngle;
+            s16 iceSmokeAngle;
             Vec3f iceSmokeVel;
-            f32 angleBrad;
+            f32 baseAngle;
             Vec3f iceSmokePos;
 
             iceSmokePosOffset.x = 1.0f;
@@ -107,14 +112,13 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
             iceSmokeVelOffset.y = 0.5f;
             iceSmokeVelOffset.z = 0.0f;
 
-            angleDeg = (360.0f / numDirections);
-            angleBrad = (s32)(angleDeg * (0x10000 / 360.0f));
+            baseAngle = (s32)DEG_TO_BINANG_ALT3(360.0f / numDirections);
 
             for (i = 0; i < numDirections; i++) {
-                offsetAngle = i * angleBrad;
-                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, offsetAngle, &iceSmokePosOffset,
+                iceSmokeAngle = i * baseAngle;
+                Lib_Vec3f_TranslateAndRotateY(&this->dyna.actor.world.pos, iceSmokeAngle, &iceSmokePosOffset,
                                               &iceSmokePos);
-                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, offsetAngle, &iceSmokeVelOffset, &iceSmokeVel);
+                Lib_Vec3f_TranslateAndRotateY(&gZeroVec3f, iceSmokeAngle, &iceSmokeVelOffset, &iceSmokeVel);
                 EffectSsIceSmoke_Spawn(play, &iceSmokePos, &iceSmokeVel, &sIceSmokeAccel, 100);
             }
         }
@@ -123,9 +127,9 @@ void ObjHsStump_Appear(ObjHsStump* this, PlayState* play) {
         Math_SmoothStepToF(&this->dyna.actor.scale.x, 18.0f * 0.01f, 1.0f, 0.01f, 0.001f);
         Actor_SetScale(&this->dyna.actor, this->dyna.actor.scale.x);
     }
-    if (this->dyna.actor.scale.x == 18.0f * 0.01f) {
+    if (this->dyna.actor.scale.x == (18.0f * 0.01f)) {
         this->isHidden = false;
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         ObjHsStump_SetupIdle(this, play);
     }
     this->framesAppeared++;

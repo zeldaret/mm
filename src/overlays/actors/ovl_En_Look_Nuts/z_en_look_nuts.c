@@ -24,7 +24,7 @@ void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play);
 void EnLookNuts_SetupSendPlayerToSpawn(EnLookNuts* this);
 void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play);
 
-const ActorInit En_Look_Nuts_InitVars = {
+ActorInit En_Look_Nuts_InitVars = {
     ACTOR_EN_LOOK_NUTS,
     ACTORCAT_NPC,
     FLAGS,
@@ -109,10 +109,10 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.flags |= ACTOR_FLAG_8000000;
-    this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
@@ -120,11 +120,11 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         this->switchFlag = -1;
     }
     if ((this->switchFlag >= 0) && (Flags_GetSwitch(play, this->switchFlag))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
-    if (this->pathLocation == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+    if (this->pathIndex == LOOKNUTS_PATH_INDEX_NONE) {
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -151,31 +151,31 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
 
     SkelAnime_Update(&this->skelAnime);
     if (Play_InCsMode(play)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         return;
     }
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     if (D_80A6862C != 0) {
-        Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
+        Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathLocation, 0x1F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, LOOKNUTS_PATH_INDEX_NONE);
     if (this->path != NULL) {
-        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
+        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->waypointIndex, &this->actor.world.pos, &sp30);
     }
 
     //! @bug sp30 is uninitialised if path == NULL. Fix by enclosing everything in the path NULL check.
     if (sp30 < 10.0f) {
         if (this->path != NULL) {
-            this->currentPathIndex++;
-            if (this->currentPathIndex >= this->path->count) {
-                this->currentPathIndex = 0;
+            this->waypointIndex++;
+            if (this->waypointIndex >= this->path->count) {
+                this->waypointIndex = 0;
             }
             if (Rand_ZeroOne() < 0.6f) {
                 EnLookNuts_SetupStandAndWait(this);
@@ -207,7 +207,7 @@ void EnLookNuts_StandAndWait(EnLookNuts* this, PlayState* play) {
     s16 randOffset;
 
     SkelAnime_Update(&this->skelAnime);
-    Math_ApproachZeroF(&this->actor.speedXZ, 0.3f, 1.0f);
+    Math_ApproachZeroF(&this->actor.speed, 0.3f, 1.0f);
     if (!Play_InCsMode(play) && (D_80A6862C == 0) && (this->eventTimer == 0)) {
         this->eventTimer = 10;
         switch (this->waitTimer) {
@@ -273,13 +273,13 @@ void EnLookNuts_DetectedPlayer(EnLookNuts* this, PlayState* play) {
 void EnLookNuts_RunToPlayer(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((this->actor.xzDistToPlayer < 70.0f) || (this->eventTimer == 0)) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         EnLookNuts_SetupSendPlayerToSpawn(this);
     }
 }
@@ -295,12 +295,12 @@ void EnLookNuts_SendPlayerToSpawn(EnLookNuts* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 1, 0xBB8, 0);
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         play->nextEntrance = Entrance_CreateFromSpawn(this->spawnIndex);
         gSaveContext.nextCutsceneIndex = 0;
         Scene_SetExitFade(play);
         play->transitionTrigger = TRANS_TRIGGER_START;
-        gSaveContext.save.weekEventReg[17] |= 4;
+        SET_WEEKEVENTREG(WEEKEVENTREG_17_04);
     }
 }
 
@@ -355,13 +355,13 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
             if ((this->isPlayerDetected == true) || (this->actor.xzDistToPlayer < 20.0f)) {
                 Player* player = GET_PLAYER(play);
 
-                if (!(player->stateFlags3 & 0x100) && !Play_InCsMode(play)) {
+                if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
-                    play_sound(NA_SE_SY_FOUND);
-                    func_800B7298(play, &this->actor, 0x1A);
+                    Audio_PlaySfx(NA_SE_SY_FOUND);
+                    func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {
@@ -389,7 +389,7 @@ void EnLookNuts_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 

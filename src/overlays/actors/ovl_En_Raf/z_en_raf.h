@@ -23,7 +23,7 @@ typedef struct {
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f accel;
-    /* 0x28 */ Vec3s rotation;
+    /* 0x28 */ Vec3s rot;
     /* 0x30 */ f32 scale;
     /* 0x34 */ s16 timer;
 } EnRafEffect; // size = 0x38
@@ -63,7 +63,5 @@ typedef struct EnRaf {
     /* 0x3D0 */ ColliderCylinder collider;
     /* 0x41C */ EnRafEffect effects[EN_RAF_EFFECT_COUNT];
 } EnRaf; // size = 0xAE4
-
-extern const ActorInit En_Raf_InitVars;
 
 #endif // Z_EN_RAF_H

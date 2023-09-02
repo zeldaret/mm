@@ -26,7 +26,7 @@ void BgIkanaMirror_Wait(BgIkanaMirror* this, PlayState* play);
 void BgIkanaMirror_SetupEmitLight(BgIkanaMirror* this);
 void BgIkanaMirror_EmitLight(BgIkanaMirror* this, PlayState* play);
 
-const ActorInit Bg_Ikana_Mirror_InitVars = {
+ActorInit Bg_Ikana_Mirror_InitVars = {
     ACTOR_BG_IKANA_MIRROR,
     ACTORCAT_PROP,
     FLAGS,
@@ -257,8 +257,8 @@ void BgIkanaMirror_Init(Actor* thisx, PlayState* play2) {
     }
 
     BgIkanaMirror_SetQuadVertices(this);
-    this->lightAbsorptionTexScroll = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightAbsorptionTexAnim);
-    this->lightEmissionTexScroll = Lib_SegmentedToVirtual(&gStoneTowerTempleMirrorLightEmissionTexAnim);
+    this->lightAbsorptionTexScroll = Lib_SegmentedToVirtual(gStoneTowerTempleMirrorLightAbsorptionTexAnim);
+    this->lightEmissionTexScroll = Lib_SegmentedToVirtual(gStoneTowerTempleMirrorLightEmissionTexAnim);
     BgIkanaMirror_SetupWait(this);
 }
 
@@ -380,8 +380,9 @@ void BgIkanaMirror_Draw(Actor* thisx, PlayState* play) {
     BgIkanaMirror* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gStoneTowerTempleMirrorDL);
 

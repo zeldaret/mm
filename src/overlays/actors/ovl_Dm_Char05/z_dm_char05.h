@@ -9,7 +9,7 @@ typedef void (*DmChar05ActionFunc)(struct DmChar05*, PlayState*);
 
 #define DMCHAR05_GET(thisx) ((thisx)->params)
 
-enum {
+typedef enum {
     /* 0 */ DMCHAR05_0,
     /* 1 */ DMCHAR05_1,
     /* 2 */ DMCHAR05_2,
@@ -22,14 +22,14 @@ enum {
     /* 9 */ DMCHAR05_9,
     /* 10 */ DMCHAR05_10,
     /* 11 */ DMCHAR05_11,
-    /* 12 */ DMCHAR05_12,
-};
+    /* 12 */ DMCHAR05_12
+} DmChar05Param;
 
 typedef struct DmChar05 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ DmChar05ActionFunc actionFunc;
-    /* 0x18C */ s16 unk_18C;
+    /* 0x18C */ s16 animIndex;
     /* 0x18E */ u8 unk_18E;
     /* 0x18F */ u8 unk_18F;
     /* 0x190 */ Vec3f unk_190;
@@ -41,7 +41,5 @@ typedef struct DmChar05 {
     /* 0x1B0 */ s32 unk_1B0;
     /* 0x1B4 */ u8 unk_1B4;
 } DmChar05; // size = 0x1B8
-
-extern const ActorInit Dm_Char05_InitVars;
 
 #endif // Z_DM_CHAR05_H

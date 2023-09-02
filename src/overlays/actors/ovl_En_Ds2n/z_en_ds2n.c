@@ -9,7 +9,7 @@
 
 #include "z_en_ds2n.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnDs2n*)thisx)
 
@@ -20,7 +20,7 @@ void EnDs2n_Draw(Actor* thisx, PlayState* play);
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play);
 
-const ActorInit En_Ds2n_InitVars = {
+ActorInit En_Ds2n_InitVars = {
     ACTOR_EN_DS2N,
     ACTORCAT_NPC,
     FLAGS,
@@ -32,23 +32,24 @@ const ActorInit En_Ds2n_InitVars = {
     (ActorFunc)EnDs2n_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ ENDS2N_ANIM_IDLE,
+    /* 1 */ ENDS2N_ANIM_MAX
+} EnDs2nAnimation;
+
+static AnimationInfo sAnimationInfo[ENDS2N_ANIM_MAX] = {
+    { &gDs2nIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENDS2N_ANIM_IDLE
 };
-
-static Vec3f sZeroVec = { 0, 0, 0 };
-
-static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeClosedTex };
 
 void EnDs2n_SetupIdle(EnDs2n* this) {
     this->blinkTimer = 20;
     this->blinkState = 0;
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, ENDS2N_ANIM_IDLE);
     this->actionFunc = EnDs2n_Idle;
 }
 
 void EnDs2n_Idle(EnDs2n* this, PlayState* play) {
-    SubS_FillLimbRotTables(play, this->limbRotTableY, this->limbRotTableZ, DS2N_LIMB_MAX);
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, DS2N_LIMB_MAX);
 }
 
 void EnDs2n_UpdateEyes(EnDs2n* this) {
@@ -103,12 +104,12 @@ s32 EnDs2n_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 
 void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnDs2n* this = THIS;
-    Vec3f focusOffset = sZeroVec;
+    Vec3f focusOffset = { 0.0f, 0.0f, 0.0f };
 
     if ((limbIndex == DS2N_LIMB_HIPS) || (limbIndex == DS2N_LIMB_LEFT_UPPER_ARM) ||
         (limbIndex == DS2N_LIMB_RIGHT_UPPER_ARM)) {
-        rot->y += (s16)Math_SinS(this->limbRotTableY[limbIndex]) * 0xC8;
-        rot->z += (s16)Math_CosS(this->limbRotTableZ[limbIndex]) * 0xC8;
+        rot->y += (s16)Math_SinS(this->fidgetTableY[limbIndex]) * 200;
+        rot->z += (s16)Math_CosS(this->fidgetTableZ[limbIndex]) * 200;
     }
 
     if (limbIndex == DS2N_LIMB_HEAD) {
@@ -116,12 +117,14 @@ void EnDs2n_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
     }
 }
 
+static TexturePtr sEyeTextures[] = { gDs2nEyeOpenTex, gDs2nEyeHalfTex, gDs2nEyeClosedTex };
+
 void EnDs2n_Draw(Actor* thisx, PlayState* play) {
     EnDs2n* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->blinkState]));
 
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyeTextures[this->blinkState]));

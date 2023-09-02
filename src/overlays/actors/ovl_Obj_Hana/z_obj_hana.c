@@ -16,7 +16,7 @@ void ObjHana_Destroy(Actor* thisx, PlayState* play);
 void ObjHana_Update(Actor* thisx, PlayState* play);
 void ObjHana_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Hana_InitVars = {
+ActorInit Obj_Hana_InitVars = {
     ACTOR_OBJ_HANA,
     ACTORCAT_PROP,
     FLAGS,
@@ -48,5 +48,5 @@ void ObjHana_Update(Actor* thisx, PlayState* play) {
 }
 
 void ObjHana_Draw(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_hana_DL_000500);
+    Gfx_DrawDListOpa(play, gGraveyardFlowersDL);
 }

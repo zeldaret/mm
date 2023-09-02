@@ -65,11 +65,11 @@
         <Skeleton Name="gWolfosWhiteSkel" Type="Flex" LimbType="Standard" LimbNone="WOLFOS_WHITE_LIMB_NONE" LimbMax="WOLFOS_WHITE_LIMB_MAX" EnumName="WolfosWhiteLimb" Offset="0x3BC0" />
 
         <!-- Wolfos/White Wolfos Animations -->
-        <Animation Name="gWolfosSlashingAnim" Offset="0x4638" /> <!-- Original name is "wolfman_attack" -->
-        <Animation Name="gWolfosBackflippingAnim" Offset="0x4A90" /> <!-- Original name is "wolfman_back_jump" -->
-        <Animation Name="gWolfosBlockingAnim" Offset="0x4C44" /> <!-- Original name is "wolfman_defense" -->
-        <Animation Name="gWolfosRearingUpFallingOverAnim" Offset="0x53D0" /> <!-- Original name is "wolfman_down" -->
-        <Animation Name="gWolfosRunningAnim" Offset="0x5700" /> <!-- Original name is "wolfman_run" -->
+        <Animation Name="gWolfosSlashAnim" Offset="0x4638" /> <!-- Original name is "wolfman_attack" -->
+        <Animation Name="gWolfosBackflipAnim" Offset="0x4A90" /> <!-- Original name is "wolfman_back_jump" -->
+        <Animation Name="gWolfosBlockAnim" Offset="0x4C44" /> <!-- Original name is "wolfman_defense" -->
+        <Animation Name="gWolfosRearUpFallOverAnim" Offset="0x53D0" /> <!-- Original name is "wolfman_down" -->
+        <Animation Name="gWolfosRunAnim" Offset="0x5700" /> <!-- Original name is "wolfman_run" -->
 
         <!-- Wolfos Limb DisplayLists -->
         <DList Name="gWolfosNormalAbdomenDL" Offset="0x6D10" />
@@ -135,8 +135,8 @@
         <Skeleton Name="gWolfosNormalSkel" Type="Flex" LimbType="Standard" LimbNone="WOLFOS_NORMAL_LIMB_NONE" LimbMax="WOLFOS_NORMAL_LIMB_MAX" EnumName="WolfosNormalLimb" Offset="0x95D0" />
 
         <!-- Wolfos/White Wolfos Animations -->
-        <Animation Name="gWolfosSidesteppingAnim" Offset="0x9808" /> <!-- Original name is "wolfman_side_walk" -->
+        <Animation Name="gWolfosSidestepAnim" Offset="0x9808" /> <!-- Original name is "wolfman_side_walk" -->
         <Animation Name="gWolfosDamagedAnim" Offset="0x9A50" /> <!-- Originla name is "wolfman_tail_hit" -->
-        <Animation Name="gWolfosWaitingAnim" Offset="0xA3CC" /> <!-- Original name is "wolfman_wait" -->
+        <Animation Name="gWolfosWaitAnim" Offset="0xA3CC" /> <!-- Original name is "wolfman_wait" -->
     </File>
 </Root>

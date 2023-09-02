@@ -32,7 +32,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play);
 void func_80A6B078(EnMushi2* this);
 void func_80A6B0D8(EnMushi2* this, PlayState* play);
 
-const ActorInit En_Mushi2_InitVars = {
+ActorInit En_Mushi2_InitVars = {
     ACTOR_EN_MUSHI2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -103,7 +103,11 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneDownward, 20, ICHAIN_STOP),
 };
 
-static f32 D_80A6BA14[] = { 0.06f, 0.1f, 0.13f };
+f32 D_80A6BA14[] = {
+    0.06f, // ENMUSHI2_0
+    0.1f,  // ENMUSHI2_1
+    0.13f, // ENMUSHI2_2
+};
 
 void func_80A687A0(EnMushi2* this) {
     MtxF* matrix = Matrix_GetCurrent();
@@ -178,7 +182,7 @@ void func_80A68A78(EnMushi2* this, PlayState* play) {
         Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_MUSHI2, this->actor.world.pos.x,
                                       this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                       this->actor.shape.rot.y + (D_80A6B998 + i)->unk_02, this->actor.shape.rot.z,
-                                      (D_80A6B998 + i)->unk_00, this->actor.cutscene, this->actor.unk20, NULL);
+                                      (D_80A6B998 + i)->unk_00, this->actor.csId, this->actor.halfDaysBits, NULL);
     }
 }
 
@@ -204,7 +208,7 @@ void func_80A68BC8(EnMushi2* this) {
     if (this->unk_36C > 0) {
         this->unk_36C--;
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_MUSI_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_MUSI_WALK);
 
         this->unk_36C = 3.0f / CLAMP_MIN(this->skelAnime.playSpeed, 0.12f);
         if (this->unk_36C < 2) {
@@ -275,9 +279,9 @@ s32 func_80A68DD4(EnMushi2* this, PlayState* play) {
 }
 
 void func_80A68ED8(EnMushi2* this) {
-    this->actor.velocity.x = this->actor.speedXZ * this->unk_328.x;
-    this->actor.velocity.y = this->actor.speedXZ * this->unk_328.y;
-    this->actor.velocity.z = this->actor.speedXZ * this->unk_328.z;
+    this->actor.velocity.x = this->actor.speed * this->unk_328.x;
+    this->actor.velocity.y = this->actor.speed * this->unk_328.y;
+    this->actor.velocity.z = this->actor.speed * this->unk_328.z;
     Actor_UpdatePos(&this->actor);
 }
 
@@ -439,7 +443,8 @@ void func_80A69388(EnMushi2* this) {
 }
 
 void func_80A69424(EnMushi2* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 9.0f, 0.0f, 0x45);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 8.0f, 9.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
 }
 
 s32 func_80A69468(EnMushi2* this, PlayState* play) {
@@ -658,7 +663,7 @@ void func_80A69D3C(EnMushi2* this) {
         sp38 = Math3D_XZLengthSquared(sp40, sp3C);
 
         if (fabsf(sp38) > 0.010000001f) {
-            s16 temp_v0 = Math_FAtan2F(sp3C, sp40);
+            s16 temp_v0 = Math_Atan2S_XY(sp3C, sp40);
             temp_v0 = CLAMP(temp_v0, -3000, 3000);
             func_80A68F9C(this, temp_v0);
         }
@@ -742,10 +747,10 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     s32 sp3C;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    if (!ENMUSHI2_GET_3(&this->actor)) {
+    if (ENMUSHI2_GET_3(&this->actor) == ENMUSHI2_0) {
         func_80A68A78(this, play);
     }
-    this->actor.shape.rot.y += Rand_S16Offset(-2000, 4000);
+    this->actor.shape.rot.y += Rand_S16Offset(-0x7D0, 0xFA0);
     this->actor.home.rot.y = this->actor.shape.rot.y;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     func_80A68F24(this);
@@ -758,7 +763,8 @@ void EnMushi2_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.mass = 30;
     sp3C = func_80A69EE4(this, play);
 
-    if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) && !ENMUSHI2_GET_3(&this->actor)) {
+    if ((sp3C == 0) && func_80A68860(this, play) && func_80A68910(this, play) &&
+        (ENMUSHI2_GET_3(&this->actor) == ENMUSHI2_0)) {
         func_80A6A024(this);
     }
 
@@ -797,7 +803,7 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
     s32 pad;
     s32 sp20 = false;
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
     this->actor.velocity.y -= this->actor.velocity.y * D_80A6BA14[ENMUSHI2_GET_3(&this->actor)];
     Actor_MoveWithGravity(&this->actor);
     func_80A69424(this, play);
@@ -816,11 +822,14 @@ void func_80A6A36C(EnMushi2* this, PlayState* play) {
     }
 
     if (sp20 && (this->unk_36A <= 0)) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (this->actor.bgCheckFlags & 0x20) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
         func_80A6AAA4(this);
-    } else if (this->actor.bgCheckFlags & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GERUDOFT_WALK);
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_GERUDOFT_WALK);
         func_80A68F24(this);
         func_80A691EC(this, this->actor.floorPoly, -1.0f);
         func_80A69388(this);
@@ -847,14 +856,14 @@ void func_80A6A508(Actor* thisx) {
 }
 
 void func_80A6A5C0(EnMushi2* this, PlayState* play) {
-    EnMushi2* this2 = this;
+    Actor* thisx = &this->actor;
 
     func_80A69D3C(this);
-    Math_SmoothStepToF(&this->actor.speedXZ, this->unk_35C, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, this->unk_35C, 0.1f, 0.5f, 0.0f);
     if (this->unk_354 < SQ(40.0f)) {
         f32 temp = 1.0f - ((SQ(40.0f) - this->unk_354) * (1.0f / (10.0f * SQ(40.0f))));
 
-        this->actor.speedXZ *= temp;
+        thisx->speed *= temp;
     }
 
     func_80A68ED8(this);
@@ -863,8 +872,8 @@ void func_80A6A5C0(EnMushi2* this, PlayState* play) {
         func_80A69388(this);
     }
 
-    this->skelAnime.playSpeed = this->actor.speedXZ * 1.6f;
-    this2->skelAnime.playSpeed = CLAMP(this2->skelAnime.playSpeed, 0.1f, 1.9f);
+    this->skelAnime.playSpeed = thisx->speed * 1.6f;
+    this->skelAnime.playSpeed = CLAMP(this->skelAnime.playSpeed, 0.1f, 1.9f);
 
     if ((this->unk_36A <= 0) || func_80A68BA0(this)) {
         func_80A6B078(this);
@@ -891,9 +900,9 @@ void func_80A6A794(EnMushi2* this) {
 }
 
 void func_80A6A824(EnMushi2* this, PlayState* play) {
-    EnMushi2* this2 = this;
+    Actor* thisx = &this->actor;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, this->unk_35C, 0.1f, 0.5f, 0.0f);
+    Math_SmoothStepToF(&thisx->speed, this->unk_35C, 0.1f, 0.5f, 0.0f);
     func_80A68ED8(this);
     func_80A697C4(this, play);
 
@@ -901,8 +910,8 @@ void func_80A6A824(EnMushi2* this, PlayState* play) {
         func_80A69388(this);
     }
 
-    this->skelAnime.playSpeed = (Rand_ZeroOne() * 0.8f) + (this->actor.speedXZ * 1.2f);
-    this2->skelAnime.playSpeed = CLAMP(this2->skelAnime.playSpeed, 0.0f, 1.9f);
+    this->skelAnime.playSpeed = (Rand_ZeroOne() * 0.8f) + (thisx->speed * 1.2f);
+    this->skelAnime.playSpeed = CLAMP(this->skelAnime.playSpeed, 0.0f, 1.9f);
 
     if ((this->unk_36A <= 0) || func_80A68BA0(this)) {
         func_80A6B078(this);
@@ -960,9 +969,9 @@ void func_80A6AB08(EnMushi2* this, PlayState* play) {
     s16 temp;
 
     if (this->unk_368 > 80) {
-        Math_StepToF(&this->actor.speedXZ, 0.6f, 0.08f);
+        Math_StepToF(&this->actor.speed, 0.6f, 0.08f);
     } else {
-        Math_StepToF(&this->actor.speedXZ, 0.0f, 0.02f);
+        Math_StepToF(&this->actor.speed, 0.0f, 0.02f);
     }
 
     Actor_MoveWithGravity(&this->actor);
@@ -1002,7 +1011,7 @@ void func_80A6AB08(EnMushi2* this, PlayState* play) {
         func_80A6A094(this);
         func_80A6A0D8(this);
         func_80A6AE14(this);
-    } else if (!(this->actor.bgCheckFlags & 0x20)) {
+    } else if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
         func_80A6A794(this);
     }
 }
@@ -1022,8 +1031,8 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
 
     this->actor.shape.rot.x -= 0x1F4;
     this->actor.shape.rot.y += 0xC8;
-    this->actor.speedXZ += (Rand_ZeroOne() - 0.5f) * 0.16f;
-    this->actor.speedXZ *= 0.9f;
+    this->actor.speed += (Rand_ZeroOne() - 0.5f) * 0.16f;
+    this->actor.speed *= 0.9f;
     this->actor.world.rot.y += (s16)((Rand_ZeroOne() - 0.5f) * 2000.0f);
     this->actor.gravity = -0.04f - (Rand_ZeroOne() * 0.02f);
     this->actor.velocity.y *= 0.95f;
@@ -1038,7 +1047,7 @@ void func_80A6AE7C(EnMushi2* this, PlayState* play) {
     }
 
     if (this->unk_368 <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1046,7 +1055,7 @@ void func_80A6B078(EnMushi2* this) {
     this->unk_30C &= ~1;
     this->unk_368 = 50;
     this->skelAnime.playSpeed = 1.9f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALTURA_BOUND);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_STALTURA_BOUND);
     func_80A68B6C(this);
     this->actionFunc = func_80A6B0D8;
 }
@@ -1055,7 +1064,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
     s32 pad[2];
     f32 temp_f2;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 0.0f, 0.4f, 1.2f, 0.0f);
+    Math_SmoothStepToF(&this->actor.speed, 0.0f, 0.4f, 1.2f, 0.0f);
     temp_f2 = this->actor.scale.x - 0.0002f;
     Actor_SetScale(&this->actor, CLAMP_MIN(temp_f2, 0.001f));
 
@@ -1074,19 +1083,20 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
     }
 
     this->actor.velocity.x =
-        (this->actor.speedXZ * this->unk_328.x) + (-0.01f * this->unk_31C.x) + (this->unk_310.x * temp_f2);
+        (this->actor.speed * this->unk_328.x) + (-0.01f * this->unk_31C.x) + (this->unk_310.x * temp_f2);
     this->actor.velocity.y =
-        (this->actor.speedXZ * this->unk_328.y) + (-0.01f * this->unk_31C.y) + (this->unk_310.y * temp_f2);
+        (this->actor.speed * this->unk_328.y) + (-0.01f * this->unk_31C.y) + (this->unk_310.y * temp_f2);
     this->actor.velocity.z =
-        (this->actor.speedXZ * this->unk_328.z) + (-0.01f * this->unk_31C.z) + (this->unk_310.z * temp_f2);
+        (this->actor.speed * this->unk_328.z) + (-0.01f * this->unk_31C.z) + (this->unk_310.z * temp_f2);
 
     if ((this->actor.flags & ACTOR_FLAG_40) && (this->unk_368 > 20) && (Rand_ZeroOne() < 0.15f)) {
         Vec3f sp48;
         s32 sp44 = 0;
 
         if (this->poly != NULL) {
-            u32 temp_v0 = func_800C99D4(&play->colCtx, this->poly, this->polyBgId);
-            if ((temp_v0 == 5) || (temp_v0 == 14) || (temp_v0 == 15)) {
+            FloorType floorType = SurfaceType_GetFloorType(&play->colCtx, this->poly, this->polyBgId);
+
+            if ((floorType == FLOOR_TYPE_5) || (floorType == FLOOR_TYPE_14) || (floorType == FLOOR_TYPE_15)) {
                 sp44 = 1;
             }
         }
@@ -1105,7 +1115,7 @@ void func_80A6B0D8(EnMushi2* this, PlayState* play) {
             func_80A6A094(this);
             func_80A6A0D8(this);
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -1123,7 +1133,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         func_80A6A094(this);
         func_80A6A0D8(this);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -1156,7 +1166,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
     if ((temp != BGCHECK_SCENE) &&
         ((this->actionFunc == func_80A6A5C0) || (this->actionFunc == func_80A6A824) ||
          (this->actionFunc == func_80A6A9E4) || (this->actionFunc == func_80A6B0D8)) &&
-        BgCheck2_UpdateActorAttachedToMesh(&play->colCtx, temp, &this->actor)) {
+        DynaPolyActor_TransformCarriedActor(&play->colCtx, temp, &this->actor)) {
         func_80A68F24(this);
     }
 
@@ -1222,7 +1232,7 @@ void EnMushi2_Update(Actor* thisx, PlayState* play) {
         }
 
         if ((this->unk_30C & 1) && func_80A68DD4(this, play)) {
-            Actor_PickUp(&this->actor, play, GI_MAX, 60.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 60.0f, 30.0f);
         }
     }
 }
@@ -1231,6 +1241,6 @@ void EnMushi2_Draw(Actor* thisx, PlayState* play) {
     EnMushi2* this = THIS;
 
     func_80A687A0(this);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
 }

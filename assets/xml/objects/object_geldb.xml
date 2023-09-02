@@ -1,14 +1,14 @@
 ﻿<Root>
     <!-- Assets for Gerudo wearing red, i.e. Aveil -->
     <File Name="object_geldb" Segment="6">
-        <Animation Name="gGerudoRedBeggingAnim" Offset="0x734" /><!-- begging? Original name: "ga_asonde" "idle"? -->
-        <Animation Name="gGerudoRedDismissAnim" Offset="0xCB0" /><!-- Original name: "ga_hayaku" "hurry" -->
-        <Animation Name="gGerudoRedTurnHeadAnim" Offset="0xEE0" /><!-- Original name: "ga_matu" "wait" -->
-        <Animation Name="gGerudoRedWaitAnim" Offset="0x14CC" /><!-- Original name: "ga_matu_loop" "wait_loop" -->
-        <Animation Name="gGerudoRedDemandingAnim" Offset="0x1AC8" /><!-- hands on hips leaning forward (demanding?) Original name: "ga_naniyatte" "what on earth?" -->
-        <Animation Name="gGerudoRedRunningAwayAnim" Offset="0x1DFC" /><!-- running away from the bees Original name: "ga_nigedasu" "run away" -->
-        <Animation Name="gGerudoRedHandOnHipWaitAnim" Offset="0x1EFC" /><!-- Single frame pose with hand on hip Original name: "gelb_wait" -->
-        <Animation Name="gGerudoRedWalkingAnim" Offset="0x28A0" /><!-- Walking Original name: "gelb_walk" -->
+        <Animation Name="gGerudoRedBeggingAnim" Offset="0x734" /> <!-- begging?. Original name is "ga_asonde" "idle"? -->
+        <Animation Name="gGerudoRedDismissAnim" Offset="0xCB0" /> <!-- Original name is "ga_hayaku" "hurry" -->
+        <Animation Name="gGerudoRedTurnHeadAnim" Offset="0xEE0" /> <!-- Original name is "ga_matu" "wait" -->
+        <Animation Name="gGerudoRedWaitAnim" Offset="0x14CC" /> <!-- Original name is "ga_matu_loop" "wait_loop" -->
+        <Animation Name="gGerudoRedDemandingAnim" Offset="0x1AC8" /> <!-- hands on hips leaning forward (demanding?). Original name is "ga_naniyatte" -->
+        <Animation Name="gGerudoRedRunningAwayAnim" Offset="0x1DFC" /> <!-- unning away from the bees. Original name is "ga_nigedasu" -->
+        <Animation Name="gGerudoRedHandOnHipWaitAnim" Offset="0x1EFC" /> <!-- Single frame pose with hand on hip. Original name is "gelb_wait" -->
+        <Animation Name="gGerudoRedWalkingAnim" Offset="0x28A0" /> <!-- Walking. Original name is "gelb_walk" -->
 
         <!-- Model, same as OoT object_geldb 0x2500-0xA470 -->
         <Texture Name="gGerudoRed1TLUT" OutName="gerudo_red_1_tlut" Format="rgba16" Width="16" Height="16" Offset="0x28B0" />
@@ -51,6 +51,7 @@
         <DList Name="gGerudoRedVeilDL" Offset="0x9D58" />
         <DList Name="gGerudoRedPonytailDL" Offset="0x9E10" />
         <DList Name="gGerudoRedHeadDL" Offset="0x9F00" />
+
         <Limb Name="gGerudoRedRootLimb" Type="Standard" EnumName="GERUDO_RED_LIMB_ROOT" Offset="0xA698" />
         <Limb Name="gGerudoRedTorsoLimb" Type="Standard" EnumName="GERUDO_RED_LIMB_TORSO" Offset="0xA6A4" />
         <Limb Name="gGerudoRedNeckLimb" Type="Standard" EnumName="GERUDO_RED_LIMB_NECK" Offset="0xA6B0" />
@@ -77,7 +78,7 @@
         <Skeleton Name="gGerudoRedSkel" Type="Flex" LimbType="Standard" LimbNone="GERUDO_RED_LIMB_NONE" LimbMax="GERUDO_RED_LIMB_MAX" EnumName="GerudoRedLimb" Offset="0xA808" />
 
         <!-- Same as OoT object_geldb 0xAE10-end -->
-        <Animation Name="gGerudoRedStandAnim" Offset="0xAA8C" /><!-- Original name: "geldB_talk" -->
-        <Animation Name="gGerudoRedNeutralAnim" Offset="0xB0E4" /><!-- Original name: "geldB_wait" -->
+        <Animation Name="gGerudoRedStandAnim" Offset="0xAA8C" /> <!-- Original name is "geldB_talk" -->
+        <Animation Name="gGerudoRedNeutralAnim" Offset="0xB0E4" /> <!-- Original name is "geldB_wait" -->
     </File>
 </Root>

@@ -3,11 +3,11 @@
 #define COLD_RESET 0
 
 typedef struct {
-    /* 0x0 */ u32 ins_00; // lui     k0, 0x8000
-    /* 0x4 */ u32 ins_04; // addiu   k0, k0, 0x39E0
-    /* 0x8 */ u32 ins_08; // jr      k0 ; __osException
-    /* 0xC */ u32 ins_0C; // nop
-} struct_exceptionPreamble;
+    /* 0x0 */ u32 ins_00;   // lui     k0, 0x8000
+    /* 0x4 */ u32 ins_04;   // addiu   k0, k0, 0x39E0
+    /* 0x8 */ u32 ins_08;   // jr      k0 ; __osException
+    /* 0xC */ u32 ins_0C;   // nop
+} struct_exceptionPreamble; // size = 0x10
 
 u64 osClockRate = OS_CLOCK_RATE;
 s32 osViClock = VI_NTSC_CLOCK;
@@ -39,12 +39,9 @@ void osInitialize(void) {
     __osSetFpcCsr(0x01000800);
     __osSetWatchLo(0x04900000);
 
-    while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {
-        ;
-    }
-    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {
-        ;
-    }
+    while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {}
+
+    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {}
 
     *(struct_exceptionPreamble*)0x80000000 = *((struct_exceptionPreamble*)__osExceptionPreamble);
     *(struct_exceptionPreamble*)0x80000080 = *((struct_exceptionPreamble*)__osExceptionPreamble);
@@ -72,9 +69,7 @@ void osInitialize(void) {
     }
 
     if (__osGetCause() & 0x1000) {
-        while (1) {
-            ;
-        }
+        while (true) {}
     }
 
     HW_REG(AI_CONTROL_REG, u32) = 1;

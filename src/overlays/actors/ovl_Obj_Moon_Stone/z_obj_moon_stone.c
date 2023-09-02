@@ -25,7 +25,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play);
 void func_80C0685C(ObjMoonStone* this);
 void func_80C06870(ObjMoonStone* this, PlayState* play);
 
-const ActorInit Obj_Moon_Stone_InitVars = {
+ActorInit Obj_Moon_Stone_InitVars = {
     ACTOR_OBJ_MOON_STONE,
     ACTORCAT_PROP,
     FLAGS,
@@ -42,22 +42,22 @@ void ObjMoonStone_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.3f);
     this->unk194 = (this->actor.params & 0xF000) >> 0xC;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.shape.yOffset = 25.0f;
     this->actor.focus.pos.y += 10.0f;
     if (this->unk194 == 0) {
         this->actor.colChkInfo.health = 0;
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         func_80C0662C(this);
-    } else if (!(gSaveContext.save.weekEventReg[74] & 0x40)) {
-        if ((gSaveContext.save.weekEventReg[74] & 0x80)) {
+    } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_40)) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,
                         this->actor.world.pos.z, 0, 0, 0, -1);
         }
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_80C0673C(this);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -80,7 +80,7 @@ void func_80C06640(ObjMoonStone* this, PlayState* play) {
     } else {
         s32 phi_v0 = ABS_ALT(sp1A);
         if (phi_v0 < 0x1555) {
-            func_800B8614(&this->actor, play, 80.0f);
+            Actor_OfferTalk(&this->actor, play, 80.0f);
         }
     }
 }
@@ -97,14 +97,14 @@ void func_80C0670C(ObjMoonStone* this, PlayState* play) {
 }
 
 void func_80C0673C(ObjMoonStone* this) {
-    if (!(gSaveContext.save.weekEventReg[74] & 0x80)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
         this->actor.draw = NULL;
     }
     this->actionFunc = func_80C06768;
 }
 
 void func_80C06768(ObjMoonStone* this, PlayState* play) {
-    if ((gSaveContext.save.weekEventReg[74] & 0x80)) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_74_80)) {
         if (this->actor.draw == NULL) {
             this->actor.draw = ObjMoonStone_Draw;
             Actor_Spawn(&play->actorCtx, play, 1, this->actor.world.pos.x, this->actor.world.pos.y,
@@ -117,7 +117,7 @@ void func_80C06768(ObjMoonStone* this, PlayState* play) {
             this->actor.draw = NULL;
             func_80C0685C(this);
         } else if (this->actor.xzDistToPlayer < 25.0f) {
-            Actor_PickUp(&this->actor, play, GI_MOON_TEAR, 100.0f, 30.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MOONS_TEAR, 100.0f, 30.0f);
         }
     }
 }
@@ -128,8 +128,8 @@ void func_80C0685C(ObjMoonStone* this) {
 
 void func_80C06870(ObjMoonStone* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) && Message_ShouldAdvance(play)) {
-        gSaveContext.save.weekEventReg[74] |= 0x40;
-        Actor_MarkForDeath(&this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_74_40);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -137,7 +137,7 @@ void ObjMoonStone_Update(Actor* thisx, PlayState* play) {
     ObjMoonStone* this = THIS;
     Player* player = GET_PLAYER(play);
 
-    if (!(player->stateFlags1 & 0x10000282)) {
+    if (!(player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_80 | PLAYER_STATE1_200 | PLAYER_STATE1_10000000))) {
         this->actionFunc(this, play);
     }
 }
@@ -146,13 +146,15 @@ void ObjMoonStone_Draw(Actor* thisx, PlayState* play) {
     GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gGiMoonsTearTexAnim));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gGiMoonsTearItemDL);
     Matrix_ReplaceRotation(&play->billboardMtxF);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, gGiMoonsTearGlowDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

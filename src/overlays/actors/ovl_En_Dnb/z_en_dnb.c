@@ -8,7 +8,7 @@
 #include "objects/object_hanareyama_obj/object_hanareyama_obj.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_80)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_REACT_TO_LENS)
 
 #define THIS ((EnDnb*)thisx)
 
@@ -21,7 +21,7 @@ s32 func_80A507C0(EnDnbUnkStruct* arg0, Vec3f arg1, Vec3f arg2, u8 arg3, f32 arg
 s32 func_80A5086C(EnDnbUnkStruct* arg0);
 s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2);
 
-const ActorInit En_Dnb_InitVars = {
+ActorInit En_Dnb_InitVars = {
     ACTOR_EN_DNB,
     ACTORCAT_BG,
     FLAGS,
@@ -104,7 +104,7 @@ void EnDnb_Init(Actor* thisx, PlayState* play) {
     s32 i;
     s16* alloc;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_hanareyama_obj_Colheader_004D8C);
 
     alloc = Lib_SegmentedToVirtual(object_hanareyama_obj_Vec_004710);
@@ -156,7 +156,7 @@ void func_80A50510(EnDnb* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
         Matrix_Push();
@@ -180,7 +180,7 @@ void func_80A5063C(EnDnb* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(this->effects); i++) {
         Matrix_Push();
@@ -263,35 +263,36 @@ s32 func_80A50950(EnDnbUnkStruct* arg0, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < 256; i++, arg0++) {
-        if (arg0->isEnabled == 1) {
-            if (!isGfxSetup) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
-                gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000000);
-                gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
-                isGfxSetup = true;
-            }
-            Matrix_Push();
-
-            if (1) {};
-            arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
-
-            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);
-
-            Matrix_Translate(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
-            Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            idx = (arg0->unk_01 / (f32)arg0->unk_02) * 8.0f;
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[idx]));
-            gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
-
-            Matrix_Pop();
-            sp5C += 1;
+        if (arg0->isEnabled != 1) {
+            continue;
         }
+
+        if (!isGfxSetup) {
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
+            gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000000);
+            gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 0);
+            isGfxSetup = true;
+        }
+        Matrix_Push();
+
+        arg0->unk_24 = (arg0->unk_01 / (f32)arg0->unk_02) * 255.0f;
+
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, (u8)arg0->unk_24);
+
+        Matrix_Translate(arg0->unk_0C.x, arg0->unk_0C.y, arg0->unk_0C.z, MTXMODE_NEW);
+        Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        idx = (arg0->unk_01 / (f32)arg0->unk_02) * 8.0f;
+        gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(sDustTextures[idx]));
+        gSPDisplayList(POLY_XLU_DISP++, object_hanareyama_obj_DL_000020);
+
+        Matrix_Pop();
+        sp5C += 1;
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

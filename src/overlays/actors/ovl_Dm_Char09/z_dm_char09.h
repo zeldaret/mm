@@ -4,7 +4,7 @@
 #include "global.h"
 #include "objects/object_bee/object_bee.h"
 
-#define DMCHAR09_GET_PATH(thisx) (((thisx)->params >> 4) & 0xF)
+#define DMCHAR09_GET_PATH_INDEX(thisx) (((thisx)->params >> 4) & 0xF)
 #define DMCHAR09_GET_100(thisx) ((thisx)->params & 0x100)
 #define DMCHAR09_GET_F(thisx) ((thisx)->params & 0xF)
 
@@ -31,9 +31,7 @@ typedef struct DmChar09 {
     /* 0x22A */ s16 unk_22A;
     /* 0x22C */ UNK_TYPE1 pad22C[2];
     /* 0x22E */ u8 unk_22E;
-    /* 0x22F */ u8 unk_22F;
+    /* 0x22F */ u8 cueId;
 } DmChar09; // size = 0x230
-
-extern const ActorInit Dm_Char09_InitVars;
 
 #endif // Z_DM_CHAR09_H

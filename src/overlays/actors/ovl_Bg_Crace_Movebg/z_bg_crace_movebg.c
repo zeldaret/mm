@@ -41,7 +41,7 @@ typedef enum {
 
 u8 sIsLoaded[32];
 
-const ActorInit Bg_Crace_Movebg_InitVars = {
+ActorInit Bg_Crace_Movebg_InitVars = {
     ACTOR_BG_CRACE_MOVEBG,
     ACTORCAT_BG,
     FLAGS,
@@ -75,7 +75,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
         sHasInitializedIsLoaded = true;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gDekuShrineSlidingDoorCol);
 
     this->index = BG_CRACE_MOVEBG_GET_INDEX(&this->dyna.actor);
@@ -92,7 +92,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
             for (j = 0; j < sLoadedDoorCount; j++) {
                 if (sIsLoaded[j] == this->index) {
                     this->stateFlags |= BG_CRACE_MOVEBG_FLAG_ALREADY_LOADED;
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                     return;
                 }
             }
@@ -125,7 +125,7 @@ void BgCraceMovebg_Init(Actor* thisx, PlayState* play) {
             break;
 
         default:
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             break;
     }
 }
@@ -171,7 +171,7 @@ void BgCraceMovebg_OpeningDoor_SetupOpen(BgCraceMovebg* this, PlayState* play) {
  * Silde open, then do nothing.
  */
 void BgCraceMovebg_OpeningDoor_Open(BgCraceMovebg* this, PlayState* play) {
-    func_800B9010(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_STONEDOOR_OPEN_S - SFX_FLAG);
     Math_SmoothStepToF(&this->doorHeight, this->targetDoorHeight, 2.0f, this->openSpeed, 0.01f);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + this->doorHeight;
     if (this->doorHeight == this->targetDoorHeight) {
@@ -227,7 +227,7 @@ void BgCraceMovebg_Update(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc(this, play);
-    Math_Vec3f_Copy(&this->prevPlayerPos, &player->bodyPartsPos[0]);
+    Math_Vec3f_Copy(&this->prevPlayerPos, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 }
 
 /**
@@ -243,9 +243,9 @@ void BgCraceMovebg_ClosingDoor_CheckIfPlayerIsBeyondDoor(BgCraceMovebg* this, Pl
 
     if ((BG_CRACE_MOVEBG_GET_TYPE(&this->dyna.actor) != BG_CRACE_MOVEBG_TYPE_UNUSED_CLOSING) &&
         SubS_LineSegVsPlane(&this->dyna.actor.home.pos, &this->dyna.actor.home.rot, &sUnitVecZ, &this->prevPlayerPos,
-                            &player->bodyPartsPos[0], &intersect)) {
+                            &player->bodyPartsPos[PLAYER_BODYPART_WAIST], &intersect)) {
         Matrix_RotateYS(-this->dyna.actor.home.rot.y, MTXMODE_NEW);
-        Math_Vec3f_Diff(&player->bodyPartsPos[0], &this->dyna.actor.home.pos, &posDiff);
+        Math_Vec3f_Diff(&player->bodyPartsPos[PLAYER_BODYPART_WAIST], &this->dyna.actor.home.pos, &posDiff);
         Matrix_MultVec3f(&posDiff, &this->intersectionOffsetFromHome);
 
         if (fabsf(this->intersectionOffsetFromHome.x) < 100.0f && this->intersectionOffsetFromHome.y >= -10.0f &&
@@ -328,14 +328,14 @@ void BgCraceMovebg_ClosingDoor_Close(BgCraceMovebg* this, PlayState* play) {
     if (Math_StepToF(&this->doorHeight, 0.0f, 1.0f)) {
         if (!(this->stateFlags & BG_CRACE_MOVEBG_FLAG_PLAYER_IS_BEYOND_DOOR) &&
             !Flags_GetSwitch(play, BG_CRACE_MOVEBG_GET_SWITCH_FLAG(&this->dyna.actor) + 1)) {
-            play->unk_18845 = 1;
+            play->haltAllActors = true;
             func_80169FDC(&play->state);
-            play_sound(NA_SE_OC_ABYSS);
+            Audio_PlaySfx(NA_SE_OC_ABYSS);
         }
 
         BgCraceMovebg_ClosingDoor_SetupDoNothing(this, play);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_STONEDOOR_CLOSE_S - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_STONEDOOR_CLOSE_S - SFX_FLAG);
     }
 }
 
@@ -343,7 +343,7 @@ void BgCraceMovebg_ClosingDoor_SetupDoNothing(BgCraceMovebg* this, PlayState* pl
     this->targetDoorHeight = 0.0f;
     this->doorHeight = 0.0f;
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
     this->actionFunc = BgCraceMovebg_ClosingDoor_DoNothing;
 }
 

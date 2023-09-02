@@ -18,6 +18,21 @@ typedef struct {
     /* 0x22 */ s16 unk_22;
 } EnThiefbirdUnkStruct; // size = 0x24
 
+typedef enum EnThiefbirdBodyPart {
+    /*  0 */ EN_THIEFBIRD_BODYPART_0,
+    /*  1 */ EN_THIEFBIRD_BODYPART_1,
+    /*  2 */ EN_THIEFBIRD_BODYPART_2,
+    /*  3 */ EN_THIEFBIRD_BODYPART_3,
+    /*  4 */ EN_THIEFBIRD_BODYPART_4,
+    /*  5 */ EN_THIEFBIRD_BODYPART_5,
+    /*  6 */ EN_THIEFBIRD_BODYPART_6,
+    /*  7 */ EN_THIEFBIRD_BODYPART_7,
+    /*  8 */ EN_THIEFBIRD_BODYPART_8,
+    /*  9 */ EN_THIEFBIRD_BODYPART_9,
+    /* 10 */ EN_THIEFBIRD_BODYPART_10,
+    /* 11 */ EN_THIEFBIRD_BODYPART_MAX
+} EnThiefbirdBodyPart;
+
 typedef struct EnThiefbird {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -32,7 +47,7 @@ typedef struct EnThiefbird {
     /* 0x208 */ Vec3s morphTable[TAKKURI_LIMB_MAX];
     /* 0x270 */ ColliderJntSph collider;
     /* 0x290 */ ColliderJntSphElement colliderElements[3];
-    /* 0x350 */ Vec3f limbPos[11];
+    /* 0x350 */ Vec3f bodyPartsPos[EN_THIEFBIRD_BODYPART_MAX];
     /* 0x3D4 */ f32 drawDmgEffAlpha;
     /* 0x3D8 */ f32 drawDmgEffScale;
     /* 0x3DC */ f32 drawDmgEffFrozenSteamScale;
@@ -42,7 +57,5 @@ typedef struct EnThiefbird {
     /* 0x3EC */ EnItem00* unk_3EC;
     /* 0x3F0 */ EnThiefbirdUnkStruct unk_3F0[40];
 } EnThiefbird; // size = 0x990
-
-extern const ActorInit En_Thiefbird_InitVars;
 
 #endif // Z_EN_THIEFBIRD_H

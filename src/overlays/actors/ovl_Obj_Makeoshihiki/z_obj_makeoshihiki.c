@@ -13,7 +13,7 @@
 void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play);
 void ObjMakeoshihiki_Update(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Makeoshihiki_InitVars = {
+ActorInit Obj_Makeoshihiki_InitVars = {
     ACTOR_OBJ_MAKEOSHIHIKI,
     ACTORCAT_PROP,
     FLAGS,
@@ -61,14 +61,14 @@ void ObjMakeoshihiki_Init(Actor* thisx, PlayState* play) {
     Path* path;
     s32 childPointIndex;
 
-    path = &play->setupPathList[OBJMAKEOSHIHIKI_GET_PATHLISTINDEX(&this->actor)];
+    path = &play->setupPathList[OBJMAKEOSHIHIKI_GET_PATH_INDEX(&this->actor)];
     this->pathPoints = Lib_SegmentedToVirtual(path->points);
     this->pathCount = path->count;
     childPointIndex = ObjMakeoshihiki_GetChildSpawnPointIndex(this, play);
     childPoint = &this->pathPoints[childPointIndex];
     if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_OBJ_OSHIHIKI, childPoint->x, childPoint->y,
                            childPoint->z, 0, 0, 0, 0xFFF1) == NULL) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

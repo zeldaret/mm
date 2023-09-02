@@ -17,13 +17,11 @@ typedef struct ObjHakaisi {
     /* 0x184 */ Vec3f unk_184;
     /* 0x190 */ s32 switchFlag;
     /* 0x194 */ s16 unk_194;
-    /* 0x196 */ s16 unk_196;
+    /* 0x196 */ s16 csId;
     /* 0x198 */ s16 unk_198;
     /* 0x19A */ s16 unk_19A;
     /* 0x19C */ s16 unk_19C;
     /* 0x19E */ u8 unk_19E;
 } ObjHakaisi; // size = 0x1A0
-
-extern const ActorInit Obj_Hakaisi_InitVars;
 
 #endif // Z_OBJ_HAKAISI_H

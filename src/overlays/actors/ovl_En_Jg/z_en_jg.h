@@ -5,7 +5,9 @@
 #include "objects/object_jg/object_jg.h"
 
 #define EN_JG_IS_IN_GORON_SHRINE(thisx) ((thisx)->params & 0x1)
-#define EN_JG_GET_PATH(thisx) (((thisx)->params & 0xFC00) >> 10)
+#define EN_JG_GET_PATH_INDEX(thisx) (((thisx)->params & 0xFC00) >> 10)
+
+#define EN_JG_PATH_INDEX_NONE 0x3F
 
 struct EnJg;
 
@@ -32,14 +34,12 @@ typedef struct EnJg {
     /* 0x3A4 */ Vec3f breathPos;
     /* 0x3B0 */ Vec3f breathVelocity;
     /* 0x3BC */ Vec3f breathAccel;
-    /* 0x3C8 */ s16 cutscene;
+    /* 0x3C8 */ s16 csId;
     /* 0x3CA */ u8 cutsceneAnimIndex;
-    /* 0x3CB */ u8 csAction;
+    /* 0x3CB */ u8 cueId;
     /* 0x3CC */ u16 flags;
     /* 0x3CE */ u16 textId;
     /* 0x3D0 */ u8 focusedShrineGoronParam;
 } EnJg; // size = 0x3D4
-
-extern const ActorInit En_Jg_InitVars;
 
 #endif // Z_EN_JG_H

@@ -7,7 +7,7 @@
         <!-- Textures and DisplayLists for the cross and circle indicators that appear when you shoot an Octorok -->
         <Texture Name="gShootingGalleryOctorokCrossTex" OutName="shooting_gallery_octorok_cross" Format="ia16" Width="16" Height="16" Offset="0x1658"/>
         <Texture Name="gShootingGalleryOctorokCircleTex" OutName="shooting_gallery_octorok_circle" Format="ia16" Width="16" Height="16" Offset="0x1858"/>
-        <DList Name="gShootingGalleryOctorokCrossDL" Offset="0x1A98"/>
-        <DList Name="gShootingGalleryOctorokCircleDL" Offset="0x1B18"/>
+        <DList Name="gShootingGalleryOctorokCrossDL" Offset="0x1A98"/> <!-- Original name is "okuta_peke_model" ("peke" = "x (mark); cross") -->
+        <DList Name="gShootingGalleryOctorokCircleDL" Offset="0x1B18"/> <!-- Original name is "okuta_maru_model" ("maru" = "circle") -->
     </File>
 </Root>

@@ -8,7 +8,7 @@
 #include "z64snap.h"
 #include "objects/object_zo/object_zo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnZot*)thisx)
 
@@ -32,7 +32,7 @@ void func_80B990A4(EnZot* this, PlayState* play);
 void func_80B992C0(EnZot* this, PlayState* play);
 void func_80B99384(EnZot* this, PlayState* play);
 
-const ActorInit En_Zot_InitVars = {
+ActorInit En_Zot_InitVars = {
     ACTOR_EN_ZOT,
     ACTORCAT_NPC,
     FLAGS,
@@ -96,7 +96,7 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
     this->unk_2F4 = 0;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.world.rot.z = this->actor.shape.rot.z = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.terminalVelocity = -4.0f;
     this->actor.gravity = -4.0f;
 
@@ -111,8 +111,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             for (i = 0; i < ARRAY_COUNT(this->unk_2D8); i++) {
                 this->unk_2D8[i] = NULL;
             }
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
                 this->unk_2D4 = 0;
                 func_80B965D0(this, play);
             } else {
@@ -124,8 +124,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 3:
         case 4:
             this->actionFunc = func_80B97B5C;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -134,8 +134,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 5:
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97FD0;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -167,8 +167,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
         case 10:
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -185,15 +185,15 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             func_80B96BEC(this, 2, ANIMMODE_LOOP);
             this->actor.colChkInfo.cylRadius = 0;
             this->actor.shape.yOffset = -1400.0f;
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
+                Actor_Kill(&this->actor);
             }
             break;
 
         case 18:
             this->actionFunc = func_80B99384;
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
-                Actor_MarkForDeath(&this->actor);
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
+                Actor_Kill(&this->actor);
             }
             break;
 
@@ -211,8 +211,8 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
 
         case 22:
             this->actionFunc = func_80B980FC;
-            if (ENZOT_GET_FC00(&this->actor) != 0x3F) {
-                this->path = &play->setupPathList[ENZOT_GET_FC00(&this->actor)];
+            if (ENZOT_GET_PATH_INDEX(&this->actor) != ENZOT_PATH_INDEX_NONE) {
+                this->path = &play->setupPathList[ENZOT_GET_PATH_INDEX(&this->actor)];
             } else {
                 this->path = NULL;
             }
@@ -220,8 +220,9 @@ void EnZot_Init(Actor* thisx, PlayState* play2) {
             break;
     }
 
-    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) && (gSaveContext.save.weekEventReg[55] & 0x80)) {
-        Actor_MarkForDeath(&this->actor);
+    if ((ENZOT_GET_1F(thisx) >= 2) && (ENZOT_GET_1F(thisx) < 11) &&
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -230,7 +231,7 @@ void EnZot_Destroy(Actor* thisx, PlayState* play) {
 
     Collider_DestroyCylinder(play, &this->collider);
     if (ENZOT_GET_1F(&this->actor) == 8) {
-        gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_41_20);
     }
 }
 
@@ -299,7 +300,7 @@ s32 func_80B96E5C(EnZot* this) {
     temp_f14 = points->z - this->actor.world.pos.z;
     this->actor.world.rot.y = Math_Atan2S(temp_f12, temp_f14);
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.world.rot.y, 2, 2000, 200);
-    phi_f2 = SQ(this->actor.speedXZ) * SQ(3.0f);
+    phi_f2 = SQ(this->actor.speed) * SQ(3.0f);
 
     if (this->unk_2D4 == 0) {
         phi_f2 = SQ(20.0f);
@@ -360,19 +361,19 @@ void func_80B97100(EnZot* this, PlayState* play) {
 void func_80B97110(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         textId = 0x125F;
-        if (gSaveContext.save.weekEventReg[28] & 0x80) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_28_80)) {
             textId = 0x1261;
         } else {
-            gSaveContext.save.weekEventReg[28] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_28_80);
         }
     } else {
         textId = 0x125C;
-        if (gSaveContext.save.weekEventReg[28] & 0x40) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_28_40)) {
             textId = 0x125E;
         } else {
-            gSaveContext.save.weekEventReg[28] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_28_40);
         }
     }
     Message_StartTextbox(play, textId, &this->actor);
@@ -383,14 +384,14 @@ void func_80B97194(EnZot* this, PlayState* play) {
         switch (play->msgCtx.currentTextId) {
             case 0x125C:
             case 0x125F:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x125D:
             case 0x125E:
             case 0x1260:
             case 0x1261:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97240;
                 break;
         }
@@ -403,42 +404,42 @@ void func_80B97240(EnZot* this, PlayState* play) {
         func_80B97110(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
 void func_80B972E8(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.weekEventReg[29] & 0x10) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_10)) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             textId = 0x126A;
-            if (gSaveContext.save.weekEventReg[29] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_01)) {
                 textId = 0x126D;
             } else {
-                gSaveContext.save.weekEventReg[29] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_29_01);
             }
         } else {
             textId = 0x1267;
-            if (gSaveContext.save.weekEventReg[29] & 2) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_02)) {
                 textId = 0x1269;
             } else {
-                gSaveContext.save.weekEventReg[29] |= 2;
+                SET_WEEKEVENTREG(WEEKEVENTREG_29_02);
             }
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         textId = 0x1265;
-        if (gSaveContext.save.weekEventReg[29] & 4) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_04)) {
             textId = 0x1266;
         } else {
-            gSaveContext.save.weekEventReg[29] |= 4;
+            SET_WEEKEVENTREG(WEEKEVENTREG_29_04);
         }
     } else {
         textId = 0x1262;
-        if (gSaveContext.save.weekEventReg[29] & 8) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_29_08)) {
             textId = 0x1264;
         } else {
-            gSaveContext.save.weekEventReg[29] |= 8;
+            SET_WEEKEVENTREG(WEEKEVENTREG_29_08);
         }
     }
     Message_StartTextbox(play, textId, &this->actor);
@@ -454,42 +455,42 @@ void func_80B973BC(EnZot* this, PlayState* play) {
             case 0x1270:
             case 0x1273:
             case 0x1274:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1272:
-                func_80151938(play, 0x126F);
+                Message_ContinueTextbox(play, 0x126F);
                 break;
 
             case 0x126F:
                 Rupees_ChangeBy(90);
-                func_80151938(play, 0x1270);
+                Message_ContinueTextbox(play, 0x1270);
                 break;
 
             case 0x1275:
-                if (gSaveContext.save.playerData.rupees < 10) {
-                    func_80151938(play, 0x1277);
+                if (gSaveContext.save.saveInfo.playerData.rupees < 10) {
+                    Message_ContinueTextbox(play, 0x1277);
                 } else {
-                    func_80151938(play, 0x1278);
+                    Message_ContinueTextbox(play, 0x1278);
                     Rupees_ChangeBy(-10);
                 }
                 break;
 
             case 0x1276:
-                func_80151938(play, 0x1275);
+                Message_ContinueTextbox(play, 0x1275);
                 break;
 
             case 0x1271:
             case 0x1277:
             case 0x1278:
             case 0x1279:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80B965D0(this, play);
                 this->actor.flags &= ~ACTOR_FLAG_10000;
                 this->actor.textId = 0;
                 this->actionFunc = func_80B97708;
-                if ((this->actor.cutscene != -1) && !(this->unk_2F2 & 1)) {
-                    ActorCutscene_Stop(this->actor.cutscene);
+                if ((this->actor.csId != CS_ID_NONE) && !(this->unk_2F2 & 1)) {
+                    CutsceneManager_Stop(this->actor.csId);
                 }
                 this->unk_2F2 &= ~1;
                 break;
@@ -497,16 +498,16 @@ void func_80B973BC(EnZot* this, PlayState* play) {
     }
 
     if (this->unk_2F2 & 1) {
-        if (this->actor.cutscene == -1) {
+        if (this->actor.csId == CS_ID_NONE) {
             this->unk_2F2 &= ~1;
-        } else if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-        } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        } else if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->actor.csId);
+        } else if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
             this->unk_2F2 &= ~1;
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 }
@@ -516,7 +517,7 @@ void func_80B975F8(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B973BC;
     } else {
-        func_800B8500(&this->actor, play, 10000.0f, 1000.0f, PLAYER_AP_NONE);
+        Actor_OfferTalkExchange(&this->actor, play, 10000.0f, 1000.0f, PLAYER_IA_NONE);
     }
 }
 
@@ -530,10 +531,11 @@ void func_80B9765C(EnZot* this, PlayState* play) {
             case 0x1267:
             case 0x126A:
             case 0x126B:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
+
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97708;
                 break;
         }
@@ -553,22 +555,22 @@ void func_80B97708(EnZot* this, PlayState* play) {
         return;
     }
 
-    if (!(player->stateFlags1 & 0x2000000)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_2000000)) {
         phi_v1 = func_80B96CE4(this);
     } else {
         phi_v1 = 0;
     }
 
     if (phi_v1 != 0) {
-        gSaveContext.save.weekEventReg[29] |= 0x10;
+        SET_WEEKEVENTREG(WEEKEVENTREG_29_10);
         this->actor.flags |= ACTOR_FLAG_10000;
         if (phi_v1 == 5) {
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 this->actor.textId = 0x126E;
             } else {
                 this->actor.textId = 0x1272;
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.textId = 0x1273;
         } else {
             this->actor.textId = 0x1276;
@@ -577,7 +579,7 @@ void func_80B97708(EnZot* this, PlayState* play) {
         func_80B975F8(this, play);
         this->actionFunc = func_80B975F8;
     } else if (func_80B96DF0(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -585,61 +587,61 @@ void func_80B9787C(EnZot* this, PlayState* play) {
     u16 textId;
 
     if (this->actor.textId == 0) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             switch (ENZOT_GET_1F(&this->actor)) {
                 case 2:
-                    if (gSaveContext.save.weekEventReg[37] & 0x40) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_37_40)) {
                         textId = 0x127E;
                     } else {
                         textId = 0x127C;
-                        gSaveContext.save.weekEventReg[37] |= 0x40;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_37_40);
                     }
                     break;
 
                 case 3:
-                    if (gSaveContext.save.weekEventReg[38] & 1) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_01)) {
                         textId = 0x1284;
                     } else {
                         textId = 0x1282;
-                        gSaveContext.save.weekEventReg[38] |= 1;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_38_01);
                     }
                     break;
 
                 default:
-                    if (gSaveContext.save.weekEventReg[38] & 4) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_04)) {
                         textId = 0x128A;
                     } else {
                         textId = 0x1288;
-                        gSaveContext.save.weekEventReg[38] |= 4;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_38_04);
                     }
                     break;
             }
         } else {
             switch (ENZOT_GET_1F(&this->actor)) {
                 case 2:
-                    if (gSaveContext.save.weekEventReg[37] & 0x20) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_37_20)) {
                         textId = 0x127B;
                     } else {
                         textId = 0x1279;
-                        gSaveContext.save.weekEventReg[37] |= 0x20;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_37_20);
                     }
                     break;
 
                 case 3:
-                    if (gSaveContext.save.weekEventReg[37] & 0x80) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_37_80)) {
                         textId = 0x1281;
                     } else {
                         textId = 0x127F;
-                        gSaveContext.save.weekEventReg[37] |= 0x80;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_37_80);
                     }
                     break;
 
                 default:
-                    if (gSaveContext.save.weekEventReg[38] & 2) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_02)) {
                         textId = 0x1287;
                     } else {
                         textId = 0x1285;
-                        gSaveContext.save.weekEventReg[38] |= 2;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_38_02);
                     }
                     break;
             }
@@ -652,9 +654,9 @@ void func_80B979DC(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97B5C;
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
     }
 }
 
@@ -667,7 +669,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
             case 0x1282:
             case 0x1285:
             case 0x1288:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x127D:
@@ -676,7 +678,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
             case 0x1284:
             case 0x1289:
             case 0x128A:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 if (!(this->unk_2F2 & 2)) {
                     this->unk_2F2 |= 2;
                     this->actionFunc = func_80B979DC;
@@ -687,7 +689,7 @@ void func_80B97A44(EnZot* this, PlayState* play) {
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B97B5C;
                 break;
         }
@@ -701,14 +703,14 @@ void func_80B97B5C(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B97A44;
         func_80B9787C(this, play);
     } else if (func_80B96DF0(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
 void func_80B97BF8(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         textId = 0x128C;
     } else {
         textId = 0x128B;
@@ -720,7 +722,7 @@ void func_80B97C40(EnZot* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         this->actionFunc = func_80B97CC8;
     }
 }
@@ -730,21 +732,21 @@ void func_80B97CC8(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B97C40;
         Message_StartTextbox(play, 0x128B, &this->actor);
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
 void func_80B97D6C(EnZot* this, PlayState* play) {
     if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97CC8;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     } else {
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
     }
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_ZORA_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_ZORA_WALK);
     }
 }
 
@@ -756,8 +758,6 @@ void func_80B97E0C(EnZot* this, PlayState* play) {
 }
 
 void func_80B97E4C(EnZot* this, PlayState* play) {
-    if (1) {}
-
     if (this->unk_2F2 & 0x40) {
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     }
@@ -767,33 +767,38 @@ void func_80B97E4C(EnZot* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.shape.rot.y;
     }
 
-    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        switch (play->msgCtx.currentTextId) {
-            case 0x128C:
-                this->unk_2F2 &= ~4;
-                func_80B96BEC(this, 6, ANIMMODE_ONCE);
-                func_80151938(play, play->msgCtx.currentTextId + 1);
-                break;
+    if ((Message_GetState(&play->msgCtx) != TEXT_STATE_5) || !Message_ShouldAdvance(play)) {
+        return;
+    }
 
-            case 0x128D:
-            case 0x128E:
-            case 0x128F:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
-                break;
+    switch (play->msgCtx.currentTextId) {
+        case 0x128C:
+            this->unk_2F2 &= ~4;
+            func_80B96BEC(this, 6, ANIMMODE_ONCE);
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x1290:
-                func_801477B4(play);
-                this->actionFunc = func_80B97D6C;
-                this->unk_2F2 |= 4;
-                func_80B96BEC(this, 3, ANIMMODE_LOOP);
-                gSaveContext.save.weekEventReg[38] |= 8;
-                break;
+        case 0x128D:
+        case 0x128E:
+        case 0x128F:
+            Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
+            break;
 
-            case 0x128B:
-                func_801477B4(play);
-                this->actionFunc = func_80B97FD0;
-                break;
-        }
+        case 0x1290:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97D6C;
+            this->unk_2F2 |= 4;
+            func_80B96BEC(this, 3, ANIMMODE_LOOP);
+            SET_WEEKEVENTREG(WEEKEVENTREG_38_08);
+            break;
+
+        case 0x128B:
+            Message_CloseTextbox(play);
+            this->actionFunc = func_80B97FD0;
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -803,14 +808,14 @@ void func_80B97FD0(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B97E4C;
         func_80B97BF8(this, play);
-    } else if (gSaveContext.save.weekEventReg[38] & 8) {
-        if ((this->actor.xzDistToPlayer < 120.0f) && (gSaveContext.save.playerForm == PLAYER_FORM_ZORA)) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_08)) {
+        if ((this->actor.xzDistToPlayer < 120.0f) && (GET_PLAYER_FORM == PLAYER_FORM_ZORA)) {
             this->unk_2F2 |= 4;
             this->actionFunc = func_80B97E0C;
             func_80B96BEC(this, 6, ANIMMODE_ONCE);
         }
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -819,9 +824,9 @@ void func_80B980FC(EnZot* this, PlayState* play) {
         this->actor.home.rot.x--;
     } else if (func_80B96E5C(this)) {
         this->actionFunc = func_80B97100;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     } else {
-        this->actor.speedXZ = 8.0f;
+        this->actor.speed = 8.0f;
         if (this->unk_2F0 != 3) {
             func_80B96BEC(this, 3, ANIMMODE_LOOP);
         }
@@ -834,38 +839,38 @@ void func_80B98178(EnZot* this, PlayState* play) {
 
     switch (ENZOT_GET_1F(&this->actor)) {
         case 6:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 if (CURRENT_DAY == 3) {
                     textId = 0x129D;
-                } else if (gSaveContext.save.weekEventReg[39] & 1) {
+                } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_01)) {
                     textId = 0x129C;
                 } else {
                     textId = 0x129B;
-                    gSaveContext.save.weekEventReg[39] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_39_01);
                 }
-            } else if (gSaveContext.save.weekEventReg[38] & 0x80) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_38_80)) {
                 textId = 0x1293;
             } else {
                 textId = 0x1291;
-                gSaveContext.save.weekEventReg[38] |= 0x80;
+                SET_WEEKEVENTREG(WEEKEVENTREG_38_80);
             }
             break;
 
         case 7:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-                if (gSaveContext.save.weekEventReg[39] & 4) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_04)) {
                     textId = 0x12AA;
                 } else {
                     textId = 0x12A6;
-                    gSaveContext.save.weekEventReg[39] |= 4;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_39_04);
                 }
             } else if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
                 textId = 0x12A0;
-            } else if (gSaveContext.save.weekEventReg[39] & 2) {
+            } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_02)) {
                 textId = 0x12A5;
             } else {
                 textId = 0x12A2;
-                gSaveContext.save.weekEventReg[39] |= 2;
+                SET_WEEKEVENTREG(WEEKEVENTREG_39_02);
             }
             break;
 
@@ -877,18 +882,18 @@ void func_80B98178(EnZot* this, PlayState* play) {
         case 16:
         case 17:
             phi_v0 = (ENZOT_GET_1F(&this->actor) * 4) - 44;
-            if (gSaveContext.save.weekEventReg[79] & 1) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
                 phi_v0 += 2;
             }
 
-            if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
                 phi_v0++;
             }
             textId = phi_v0 + 0x1302;
             break;
 
         default:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
                 textId = 0x129F;
             } else {
                 textId = 0x1295;
@@ -931,7 +936,7 @@ void func_80B9849C(EnZot* this, PlayState* play) {
         }
         this->actionFunc = func_80B98728;
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -941,24 +946,25 @@ void func_80B9854C(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B9849C;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_AP_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
-        Actor_PickUp(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, this->unk_2D4, 10000.0f, 50.0f);
     }
 }
 
 void func_80B985EC(EnZot* this, PlayState* play) {
-    s32 itemActionParam;
+    PlayerItemAction itemAction;
     Player* player = GET_PLAYER(play);
 
     func_80B98348(this, play);
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_16) {
-        itemActionParam = func_80123810(play);
-        if (itemActionParam > PLAYER_AP_NONE) {
-            func_801477B4(play);
-            if ((itemActionParam == PLAYER_AP_PICTO_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
-                Snap_CheckFlag(PICTOGRAPH_LULU_HEAD)) {
-                if (Snap_CheckFlag(PICTOGRAPH_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTOGRAPH_LULU_LEFT_ARM)) {
+        itemAction = func_80123810(play);
+
+        if (itemAction > PLAYER_IA_NONE) {
+            Message_CloseTextbox(play);
+            if ((itemAction == PLAYER_IA_PICTOGRAPH_BOX) && CHECK_QUEST_ITEM(QUEST_PICTOGRAPH) &&
+                Snap_CheckFlag(PICTO_VALID_LULU_HEAD)) {
+                if (Snap_CheckFlag(PICTO_VALID_LULU_RIGHT_ARM) && Snap_CheckFlag(PICTO_VALID_LULU_LEFT_ARM)) {
                     player->actor.textId = 0x12AE;
                 } else {
                     player->actor.textId = 0x12AC;
@@ -968,8 +974,8 @@ void func_80B985EC(EnZot* this, PlayState* play) {
                 player->actor.textId = 0x12AB;
             }
             this->actionFunc = func_80B98728;
-        } else if (itemActionParam < PLAYER_AP_NONE) {
-            func_80151938(play, 0x12AB);
+        } else if (itemAction <= PLAYER_IA_MINUS1) {
+            Message_ContinueTextbox(play, 0x12AB);
             this->actionFunc = func_80B98728;
         }
     }
@@ -983,13 +989,13 @@ void func_80B98728(EnZot* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1293)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
-                        func_80151938(play, 0x1294);
+                        Audio_PlaySfx_MessageDecide();
+                        Message_ContinueTextbox(play, 0x1294);
                         break;
 
                     case 1:
-                        func_8019F230();
-                        func_80151938(play, 0x1298);
+                        Audio_PlaySfx_MessageCancel();
+                        Message_ContinueTextbox(play, 0x1298);
                         break;
                 }
             }
@@ -1014,44 +1020,44 @@ void func_80B98728(EnZot* this, PlayState* play) {
                     case 0x12A7:
                     case 0x12A8:
                     case 0x12AE:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
 
                     case 0x12A9:
                     case 0x12AA:
-                        func_80151938(play, 0xFF);
+                        Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80B985EC;
                         break;
 
                     case 0x1294:
                         if (CURRENT_DAY == 3) {
-                            func_80151938(play, 0x1296);
+                            Message_ContinueTextbox(play, 0x1296);
                         } else {
-                            func_80151938(play, 0x1295);
+                            Message_ContinueTextbox(play, 0x1295);
                         }
                         break;
 
                     case 0x12AB:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B98998;
                         break;
 
                     case 0x12AC:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->unk_2D4 = 2;
                         this->actionFunc = func_80B9854C;
                         func_80B9854C(this, play);
                         break;
 
                     case 0x12AF:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->unk_2D4 = 4;
                         this->actionFunc = func_80B9854C;
                         func_80B9854C(this, play);
                         break;
 
                     default:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80B98998;
                         this->actor.flags &= ~ACTOR_FLAG_10000;
                         break;
@@ -1068,25 +1074,25 @@ void func_80B98998(EnZot* this, PlayState* play) {
         func_80B98178(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                Actor_IsFacingPlayer(&this->actor, 0x7000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
 void func_80B98A4C(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[39] & 0x80) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_80)) {
             textId = 0x12B6;
         } else {
             textId = 0x12B4;
-            gSaveContext.save.weekEventReg[39] |= 0x80;
+            SET_WEEKEVENTREG(WEEKEVENTREG_39_80);
         }
-    } else if (gSaveContext.save.weekEventReg[39] & 0x40) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_39_40)) {
         textId = 0x12B3;
     } else {
         textId = 0x12B1;
-        gSaveContext.save.weekEventReg[39] |= 0x40;
+        SET_WEEKEVENTREG(WEEKEVENTREG_39_40);
     }
     Message_StartTextbox(play, textId, &this->actor);
 }
@@ -1098,25 +1104,25 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
             case 0x12B4:
             case 0x12B7:
             case 0x12B9:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x12B8:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98CA8;
-                gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_41_20);
                 AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             case 0x12BA:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98CA8;
-                gSaveContext.save.weekEventReg[41] |= 0x20;
+                SET_WEEKEVENTREG(WEEKEVENTREG_41_20);
                 AudioOcarina_SetInstrument(OCARINA_INSTRUMENT_OFF);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98CA8;
                 break;
         }
@@ -1126,7 +1132,7 @@ void func_80B98AD0(EnZot* this, PlayState* play) {
 void func_80B98BF4(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        if (gSaveContext.save.weekEventReg[41] & 0x20) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_41_20)) {
             Message_StartTextbox(play, 0x12B7, &this->actor);
             this->actionFunc = func_80B98AD0;
         } else {
@@ -1134,7 +1140,7 @@ void func_80B98BF4(EnZot* this, PlayState* play) {
             this->actionFunc = func_80B98AD0;
         }
     } else {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -1144,41 +1150,41 @@ void func_80B98CA8(EnZot* this, PlayState* play) {
         AudioOcarina_StartDefault(0xFFFF);
         this->actionFunc = func_80B98BF4;
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B98AD0;
         func_80B98A4C(this, play);
     } else {
         if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-            func_800B8614(&this->actor, play, 120.0f);
+            Actor_OfferTalk(&this->actor, play, 120.0f);
         }
 
-        if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
+        if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (this->actor.xzDistToPlayer < 100.0f)) {
             func_800B874C(&this->actor, play, 120.0, 100.0f);
         }
     }
 
     if (this->actor.xzDistToPlayer > 100.0f) {
-        gSaveContext.save.weekEventReg[41] &= (u8)~0x20;
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_41_20);
     }
 }
 
 void func_80B98E10(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
-            if (gSaveContext.save.weekEventReg[40] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_04)) {
                 textId = 0x12C5;
             } else {
                 textId = 0x12C3;
-                gSaveContext.save.weekEventReg[40] |= 4;
+                SET_WEEKEVENTREG(WEEKEVENTREG_40_04);
             }
-        } else if (gSaveContext.save.weekEventReg[40] & 2) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_02)) {
             textId = 0x12C2;
         } else {
             textId = 0x12C0;
-            gSaveContext.save.weekEventReg[40] |= 2;
+            SET_WEEKEVENTREG(WEEKEVENTREG_40_02);
         }
     } else {
         if (Flags_GetSwitch(play, this->actor.home.rot.z & 0x7F)) {
@@ -1188,10 +1194,10 @@ void func_80B98E10(EnZot* this, PlayState* play) {
                 textId = 0x12BE;
                 this->unk_2F2 |= 0x10;
             }
-        } else if (gSaveContext.save.weekEventReg[40] & 1) {
+        } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_01)) {
             textId = 0x12BC;
         } else {
-            gSaveContext.save.weekEventReg[40] |= 1;
+            SET_WEEKEVENTREG(WEEKEVENTREG_40_01);
             this->unk_2F2 |= 4;
             textId = 0x12BB;
         }
@@ -1204,7 +1210,7 @@ void func_80B98F30(EnZot* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actionFunc = func_80B990A4;
     } else {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_BLUE, 10000.0f, 50.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_BLUE, 10000.0f, 50.0f);
     }
 }
 
@@ -1222,17 +1228,17 @@ void func_80B98F94(EnZot* this, PlayState* play) {
             case 0x12BC:
             case 0x12C0:
             case 0x12C3:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x12BE:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B98F30;
                 func_80B98F30(this, play);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80B990A4;
                 break;
         }
@@ -1246,32 +1252,31 @@ void func_80B990A4(EnZot* this, PlayState* play) {
         this->actionFunc = func_80B98F94;
         func_80B98E10(this, play);
     } else if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
 void func_80B99160(EnZot* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[40] & 0x10) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_10)) {
             textId = 0x12CD;
         } else {
             textId = 0x12CA;
-            gSaveContext.save.weekEventReg[40] |= 0x10;
+            SET_WEEKEVENTREG(WEEKEVENTREG_40_10);
         }
-    } else if (gSaveContext.save.weekEventReg[40] & 8) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_40_08)) {
         textId = 0x12C9;
     } else {
         textId = 0x12C6;
-        gSaveContext.save.weekEventReg[40] |= 8;
+        SET_WEEKEVENTREG(WEEKEVENTREG_40_08);
     }
     Message_StartTextbox(play, textId, &this->actor);
 }
 
 void func_80B991E4(EnZot* this, PlayState* play) {
-    if (1) {
-        do { } while (0); }
+    if (1) {}
 
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 2, 0x800, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1281,9 +1286,9 @@ void func_80B991E4(EnZot* this, PlayState* play) {
 
         if ((temp == 0x12C6) || (temp == 0x12C7) || (temp == 0x12CA) || (temp == 0x12CB)) {
             temp2 = temp;
-            func_80151938(play, temp2 + 1);
+            Message_ContinueTextbox(play, temp2 + 1);
         } else {
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80B992C0;
             func_80B96BEC(this, 1, ANIMMODE_LOOP);
         }
@@ -1294,13 +1299,13 @@ void func_80B992C0(EnZot* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         this->actionFunc = func_80B991E4;
         func_80B99160(this, play);
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_80B96BEC(this, 0, ANIMMODE_LOOP);
     } else {
         if (Player_IsFacingActor(&this->actor, 0x3000, play) && (this->actor.xzDistToPlayer < 100.0f)) {
-            func_800B8614(&this->actor, play, 120.0f);
+            Actor_OfferTalk(&this->actor, play, 120.0f);
         }
-        this->actor.speedXZ = 1.5f;
+        this->actor.speed = 1.5f;
         func_80B96FB0(this);
     }
 }
@@ -1315,7 +1320,7 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->actor);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 15.0f, 30.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_2F2 &= ~0x40;
     if (SkelAnime_Update(&this->skelAnime) && (this->unk_2F0 != 0)) {
@@ -1345,11 +1350,12 @@ void EnZot_Update(Actor* thisx, PlayState* play) {
 }
 
 Gfx* func_80B99580(GraphicsContext* gfxCtx) {
-    Gfx* dList = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    gSPEndDisplayList(dList);
+    gSPEndDisplayList(gfx++);
 
-    return dList;
+    return gfxHead;
 }
 
 s32 EnZot_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
@@ -1395,7 +1401,7 @@ void EnZot_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sp4C[this->unk_2EC]));

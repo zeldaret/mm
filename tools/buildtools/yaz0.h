@@ -1,10 +1,8 @@
-#ifndef _YAZ0_H_
-#define _YAZ0_H_
-
-int yaz0_encode2(uint8_t *src, uint8_t *dest, int uncompressedSize);
+#ifndef YAZ0_H
+#define YAZ0_H
 
 void yaz0_decode(uint8_t* src, uint8_t* dst, int uncompressedSize);
 
-int yaz0_encode(uint8_t *src, uint8_t *dest, int srcSize);
+int yaz0_encode(uint8_t* src, uint8_t* dest, int srcSize);
 
-#endif  // _YAZ0_H_
+#endif // YAZ0_H

@@ -6,7 +6,7 @@
 
 #include "z_item_inbox.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ItemInbox*)thisx)
 
@@ -17,7 +17,7 @@ void ItemInbox_Draw(Actor* thisx, PlayState* play);
 
 void ItemInbox_Idle(ItemInbox* this, PlayState* play);
 
-const ActorInit Item_Inbox_InitVars = {
+ActorInit Item_Inbox_InitVars = {
     ACTOR_ITEM_INBOX,
     ACTORCAT_NPC,
     FLAGS,
@@ -41,7 +41,7 @@ void ItemInbox_Destroy(Actor* thisx, PlayState* play) {
 
 void ItemInbox_Idle(ItemInbox* this, PlayState* play) {
     if (Flags_GetTreasure(play, (this->actor.params >> 8) & 0x1F)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 

@@ -2,6 +2,9 @@
 #define Z_EN_DNK_H
 
 #include "global.h"
+#include "objects/object_dnk/object_dnk.h"
+#include "objects/object_hintnuts/object_hintnuts.h"
+#include "objects/object_dekunuts/object_dekunuts.h"
 
 struct EnDnk;
 
@@ -10,13 +13,15 @@ typedef void (*EnDnkActionFunc)(struct EnDnk*, PlayState*);
 #define ENDNK_GET_3(thisx) ((thisx)->params & 0x3)
 #define ENDNK_GET_3C(thisx) ((thisx)->params & 0x3C)
 
-enum {
-    /* 0x0 */ ENDNK_GET_3_0,
-    /* 0x1 */ ENDNK_GET_3_1,
-    /* 0x2 */ ENDNK_GET_3_2,
-    /* 0x3 */ ENDNK_GET_3_3,
-    /* 0x4 */ ENDNK_GET_3_4,
-};
+typedef enum {
+    /* 0 */ ENDNK_GET_3_0,
+    /* 1 */ ENDNK_GET_3_1,
+    /* 2 */ ENDNK_GET_3_2,
+    /* 3 */ ENDNK_GET_3_3,
+    /* 4 */ ENDNK_GET_3_4
+} EnDnkParam;
+
+#define DNK_LIMB_MAX MAX(MAX((s32)DEKU_PALACE_GUARD_LIMB_MAX, (s32)OBJECT_HINTNUTS_LIMB_MAX), (s32)DEKU_SCRUB_LIMB_MAX)
 
 typedef struct EnDnk {
     /* 0x000 */ Actor actor;
@@ -24,9 +29,9 @@ typedef struct EnDnk {
     /* 0x188 */ EnDnkActionFunc actionFunc;
     /* 0x18C */ UNK_TYPE1 unk_18C[0x4];
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ Vec3s jointTable[11];
-    /* 0x21E */ Vec3s morphTable[11];
-    /* 0x260 */ Gfx* unk_260[11];
+    /* 0x1DC */ Vec3s jointTable[DNK_LIMB_MAX];
+    /* 0x21E */ Vec3s morphTable[DNK_LIMB_MAX];
+    /* 0x260 */ Gfx* unk_260[DEKU_PALACE_GUARD_LIMB_MAX];
     /* 0x28C */ u16 unk_28C;
     /* 0x28E */ s8 unk_28E;
     /* 0x290 */ s16 unk_290;
@@ -39,7 +44,5 @@ typedef struct EnDnk {
     /* 0x2A0 */ s16 unk_2A0;
     /* 0x2A2 */ s16 unk_2A2;
 } EnDnk; // size = 0x2A4
-
-extern const ActorInit En_Dnk_InitVars;
 
 #endif // Z_EN_DNK_H

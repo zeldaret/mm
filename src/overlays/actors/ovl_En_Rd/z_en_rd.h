@@ -27,8 +27,27 @@ typedef enum {
     /*  4 */ EN_RD_TYPE_FROZEN, // Unused in the final game
     /*  5 */ EN_RD_TYPE_SQUATTING_DANCE,
     /*  6 */ EN_RD_TYPE_CLAPPING_DANCE,
-    /*  7 */ EN_RD_TYPE_PIROUETTE,
+    /*  7 */ EN_RD_TYPE_PIROUETTE
 } EnRdType;
+
+typedef enum EnRdBodyPart {
+    /*  0 */ EN_RD_BODYPART_0,
+    /*  1 */ EN_RD_BODYPART_1,
+    /*  2 */ EN_RD_BODYPART_2,
+    /*  3 */ EN_RD_BODYPART_3,
+    /*  4 */ EN_RD_BODYPART_4,
+    /*  5 */ EN_RD_BODYPART_5,
+    /*  6 */ EN_RD_BODYPART_6,
+    /*  7 */ EN_RD_BODYPART_7,
+    /*  8 */ EN_RD_BODYPART_8,
+    /*  9 */ EN_RD_BODYPART_9,
+    /* 10 */ EN_RD_BODYPART_10,
+    /* 11 */ EN_RD_BODYPART_11,
+    /* 12 */ EN_RD_BODYPART_12,
+    /* 13 */ EN_RD_BODYPART_13,
+    /* 14 */ EN_RD_BODYPART_14,
+    /* 15 */ EN_RD_BODYPART_MAX
+} EnRdBodyPart;
 
 typedef struct EnRd {
     /* 0x000 */ Actor actor;
@@ -36,8 +55,8 @@ typedef struct EnRd {
     /* 0x188 */ EnRdActionFunc actionFunc;
     /* 0x18C */ EnRdSetupDanceFunc setupDanceFunc;
     /* 0x190 */ ColliderCylinder collider;
-    /* 0x1DC */ Vec3f limbPos[15];
-    /* 0x290 */ s32 limbIndex;
+    /* 0x1DC */ Vec3f bodyPartsPos[EN_RD_BODYPART_MAX];
+    /* 0x290 */ s32 bodyPartIndex;
     /* 0x294 */ f32 drawDmgEffAlpha;
     /* 0x298 */ f32 drawDmgEffScale;
     /* 0x29C */ Vec3s jointTable[REDEAD_LIMB_MAX];
@@ -71,7 +90,5 @@ typedef struct EnRd {
     /* 0x3F0 */ u8 damageEffect;
     /* 0x3F1 */ s8 unk_3F1; // related to player->unk_ADD
 } EnRd; // size = 0x3F4
-
-extern const ActorInit En_Rd_InitVars;
 
 #endif // Z_EN_RD_H

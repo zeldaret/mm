@@ -127,13 +127,15 @@ s16 Math_Atan2S(f32 y, f32 x) {
 }
 
 f32 Math_Atan2F(f32 y, f32 x) {
-    return Math_Atan2S(y, x) * (M_PI / 0x8000);
+    return BINANG_TO_RAD(Math_Atan2S(y, x));
 }
 
-s16 Math_FAtan2F(f32 adjacent, f32 opposite) {
-    return Math_Atan2S(opposite, adjacent);
+// Match the OoT implementation of Math_Atan2S
+s16 Math_Atan2S_XY(f32 x, f32 y) {
+    return Math_Atan2S(y, x);
 }
 
-f32 Math_Acot2F(f32 adjacent, f32 opposite) {
-    return Math_Atan2F(opposite, adjacent);
+// Match the OoT implementation of Math_Atan2F
+f32 Math_Atan2F_XY(f32 x, f32 y) {
+    return Math_Atan2F(y, x);
 }

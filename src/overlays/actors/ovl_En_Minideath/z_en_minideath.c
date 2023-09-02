@@ -6,7 +6,7 @@
 
 #include "z_en_minideath.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMinideath*)thisx)
 
@@ -29,7 +29,7 @@ void func_808CB6D4(EnMinideath* this, PlayState* play);
 void func_808CB7CC(EnMinideath* this, PlayState* play);
 
 #if 0
-const ActorInit En_Minideath_InitVars = {
+ActorInit En_Minideath_InitVars = {
     ACTOR_EN_MINIDEATH,
     ACTORCAT_ENEMY,
     FLAGS,

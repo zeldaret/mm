@@ -27,7 +27,7 @@ void func_80A3D0E8(ObjVspinyroll* this);
 void func_80A3D0FC(ObjVspinyroll* this, PlayState* play);
 void func_80A3D2C0(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Vspinyroll_InitVars = {
+ActorInit Obj_Vspinyroll_InitVars = {
     ACTOR_OBJ_VSPINYROLL,
     ACTORCAT_PROP,
     FLAGS,
@@ -123,14 +123,14 @@ s32 func_80A3C700(ObjVspinyroll* this) {
     s32 sp30 = this->unk_398 ^ 1;
     Vec3f sp24;
 
-    Math_StepToF(&this->dyna.actor.speedXZ, this->unk_394, this->unk_394 * 0.2f);
+    Math_StepToF(&this->dyna.actor.speed, this->unk_394, this->unk_394 * 0.2f);
 
-    this->dyna.actor.world.pos.x += this->dyna.actor.speedXZ * this->unk_3B4.x;
-    this->dyna.actor.world.pos.y += this->dyna.actor.speedXZ * this->unk_3B4.y;
-    this->dyna.actor.world.pos.z += this->dyna.actor.speedXZ * this->unk_3B4.z;
+    this->dyna.actor.world.pos.x += this->dyna.actor.speed * this->unk_3B4.x;
+    this->dyna.actor.world.pos.y += this->dyna.actor.speed * this->unk_3B4.y;
+    this->dyna.actor.world.pos.z += this->dyna.actor.speed * this->unk_3B4.z;
 
     Math_Vec3f_Diff(&this->unk_39C[sp30], &this->dyna.actor.world.pos, &sp24);
-    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speedXZ) + 0.05f);
+    return Math3D_LengthSquared(&sp24) < (SQ(this->dyna.actor.speed) + 0.05f);
 }
 
 void func_80A3C7E8(ObjVspinyroll* this) {
@@ -208,7 +208,7 @@ s32 func_80A3C8D8(ObjVspinyroll* this, PlayState* play, Vec3f* arg2, s32 arg3) {
                 spB4.z += this->dyna.actor.world.pos.z;
 
                 EffectSsHitmark_SpawnFixedScale(play, 3, &spB4);
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_SHIELD_REFLECT_SW);
             }
 
             temp_f0 = Math3D_Vec3fDistSq(&spD8, &spC0);
@@ -322,7 +322,7 @@ void ObjVspinyroll_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80A3CEC4(ObjVspinyroll* this) {
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
     this->actionFunc = func_80A3CEE0;
 }
 
@@ -336,7 +336,7 @@ void func_80A3CEE0(ObjVspinyroll* this, PlayState* play) {
 void func_80A3CF10(ObjVspinyroll* this) {
     this->actionFunc = func_80A3CF4C;
     this->unk_3C8 = D_80A3D478[OBJVSPINYROLL_GET_1C00(&this->dyna.actor)];
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_80A3CF4C(ObjVspinyroll* this, PlayState* play) {
@@ -351,7 +351,7 @@ void func_80A3CF4C(ObjVspinyroll* this, PlayState* play) {
 void func_80A3CFAC(ObjVspinyroll* this) {
     this->actionFunc = func_80A3CFE0;
     this->unk_3C2 = D_80A3D4DC[this->unk_398];
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_80A3CFE0(ObjVspinyroll* this, PlayState* play) {
@@ -435,7 +435,7 @@ void func_80A3D2C0(Actor* thisx, PlayState* play) {
     sp3C.y = this->dyna.actor.shape.rot.y;
     sp3C.z = this->dyna.actor.shape.rot.z + 0x4000;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Translate(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y + 60.0f, this->dyna.actor.world.pos.z,
                      MTXMODE_NEW);
     Matrix_RotateYS(sp3C.y, MTXMODE_APPLY);

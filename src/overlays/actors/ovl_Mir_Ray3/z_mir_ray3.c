@@ -16,7 +16,7 @@ void MirRay3_Destroy(Actor* thisx, PlayState* play);
 void MirRay3_Update(Actor* thisx, PlayState* play);
 void MirRay3_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Mir_Ray3_InitVars = {
+ActorInit Mir_Ray3_InitVars = {
     ACTOR_MIR_RAY3,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -139,7 +139,7 @@ void MirRay3_Update(Actor* thisx, PlayState* play) {
     }
 
     if (this->unk_214 > 0.1f) {
-        func_800B8F98(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered1(&player->actor, NA_SE_IT_SHIELD_BEAM - SFX_FLAG);
     }
 
     Math_ApproachZeroF(&this->unk_214, 1.0f, 0.1f);
@@ -213,7 +213,6 @@ void func_80B9E7D0(MirRay3Struct* ptr) {
     }
 }
 
-#ifdef NON_MATCHING
 void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr) {
     Player* player = GET_PLAYER(play);
     s32 i;
@@ -231,7 +230,6 @@ void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr) {
     f32 temp_f2;
     Vec3f spD4;
     Vec3f spC8;
-    CollisionPoly* spC4;
 
     spF8[0] = -(shieldMf->mf[2][0] * this->unk_260) * this->unk_214 * 400.0f;
     spF8[1] = -(shieldMf->mf[2][1] * this->unk_260) * this->unk_214 * 400.0f;
@@ -321,28 +319,28 @@ void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr) {
     sp134.y = (spF8[1] * temp_f2) + sp140.y;
     sp134.z = (spF8[2] * temp_f2) + sp140.z;
 
-    if (!BgCheck_AnyLineTest1(&play->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
-        Math_Vec3f_Copy(&sp128, &sp134);
+    {
+        CollisionPoly* spC4;
+
+        if (!BgCheck_AnyLineTest1(&play->colCtx, &sp140, &sp134, &sp128, &spC4, 1)) {
+            Math_Vec3f_Copy(&sp128, &sp134);
+        }
+
+        sp128.x += spF8[0] * 5.0f;
+        sp128.y += spF8[1] * 5.0f;
+        sp128.z += spF8[2] * 5.0f;
+
+        spD4.x = (shieldMf->mf[0][0] * 300.0f) + sp140.x;
+        spD4.y = (shieldMf->mf[0][1] * 300.0f) + sp140.y;
+        spD4.z = (shieldMf->mf[0][2] * 300.0f) + sp140.z;
+
+        spC8.x = (shieldMf->mf[0][0] * 300.0f) + sp128.x;
+        spC8.y = (shieldMf->mf[0][1] * 300.0f) + sp128.y;
+        spC8.z = (shieldMf->mf[0][2] * 300.0f) + sp128.z;
+
+        Collider_SetQuadVertices(&this->colliderQuad, &spD4, &sp140, &spC8, &sp128);
     }
-
-    sp128.x += spF8[0] * 5.0f;
-    sp128.y += spF8[1] * 5.0f;
-    sp128.z += spF8[2] * 5.0f;
-
-    spD4.x = (shieldMf->mf[0][0] * 300.0f) + sp140.x;
-    spD4.y = (shieldMf->mf[0][1] * 300.0f) + sp140.y;
-    spD4.z = (shieldMf->mf[0][2] * 300.0f) + sp140.z;
-
-    spC8.x = (shieldMf->mf[0][0] * 300.0f) + sp128.x;
-    spC8.y = (shieldMf->mf[0][1] * 300.0f) + sp128.y;
-    spC8.z = (shieldMf->mf[0][2] * 300.0f) + sp128.z;
-
-    Collider_SetQuadVertices(&this->colliderQuad, &spD4, &sp140, &spC8, &sp128);
 }
-#else
-void func_80B9E8D4(MirRay3* this, PlayState* play, MirRay3Struct* ptr);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Mir_Ray3/func_80B9E8D4.s")
-#endif
 
 void MirRay3_Draw(Actor* thisx, PlayState* play) {
     s32 pad[2];
@@ -363,7 +361,7 @@ void MirRay3_Draw(Actor* thisx, PlayState* play) {
 
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Scale(1.0f, 1.0f, this->unk_214, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

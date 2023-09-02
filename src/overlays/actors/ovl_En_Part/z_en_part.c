@@ -19,7 +19,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play);
 void func_80865390(EnPart* this, PlayState* play);
 void func_808654C4(EnPart* this, PlayState* play);
 
-const ActorInit En_Part_InitVars = {
+ActorInit En_Part_InitVars = {
     ACTOR_EN_PART,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,7 +52,7 @@ void func_80865390(EnPart* this, PlayState* play) {
             this->actor.world.rot.y = this->actor.parent->shape.rot.y + 0x8000;
             this->unk146 = 100;
             this->actor.velocity.y = 7.0f;
-            this->actor.speedXZ = 2.0f;
+            this->actor.speed = 2.0f;
             this->actor.gravity = -1.0f;
             break;
     }
@@ -79,7 +79,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
             pos.y = this->actor.floorHeight;
             func_800B3030(play, &pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.y * 1400.0f, 7, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 10, NA_SE_EN_EXTINCT);
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     } else if (this->unk146 <= 0) {
         switch (this->actor.params) {
@@ -90,10 +90,10 @@ void func_808654C4(EnPart* this, PlayState* play) {
                 break;
             case ENPART_TYPE_4:
                 for (i = 7; i >= 0; i--) {
-                    effectPos.x = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.x;
-                    effectPos.y = randPlusMinusPoint5Scaled(50.0f) +
+                    effectPos.x = Rand_CenteredFloat(60.0f) + this->actor.world.pos.x;
+                    effectPos.y = Rand_CenteredFloat(50.0f) +
                                   (this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y));
-                    effectPos.z = randPlusMinusPoint5Scaled(60.0f) + this->actor.world.pos.z;
+                    effectPos.z = Rand_CenteredFloat(60.0f) + this->actor.world.pos.z;
                     effectVelocity.y = Rand_ZeroOne() + 1.0f;
                     effectScale = Rand_S16Offset(80, 100);
                     EffectSsDtBubble_SpawnColorProfile(play, &effectPos, &effectVelocity, &gZeroVec3f, effectScale, 25,
@@ -101,7 +101,7 @@ void func_808654C4(EnPart* this, PlayState* play) {
                 }
                 break;
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     } else {
         this->unk146--;
         this->zRot += this->unk14C;
@@ -125,7 +125,7 @@ void EnPart_Draw(Actor* thisx, PlayState* play) {
     if (this->actor.params > ENPART_TYPE_0) {
         Matrix_RotateZF(this->zRot, MTXMODE_APPLY);
     }
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     func_800B8050(&this->actor, play, 0);
     if (this->actor.params == ENPART_TYPE_15) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, gEmptyDL);

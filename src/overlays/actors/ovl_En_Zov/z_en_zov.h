@@ -30,12 +30,10 @@ typedef struct EnZov {
     /* 0x320 */ u16 unk_320;
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ s16 unk_324;
-    /* 0x326 */ s16 unk_326;
-    /* 0x328 */ s16 unk_328[2];
-    /* 0x32C */ s16 unk_32C;
+    /* 0x326 */ s16 cueId;
+    /* 0x328 */ s16 csIdList[2];
+    /* 0x32C */ s16 csIdIndex;
     /* 0x330 */ EnZovActionFunc actionFunc;
 } EnZov; // size = 0x334
-
-extern const ActorInit En_Zov_InitVars;
 
 #endif // Z_EN_ZOV_H

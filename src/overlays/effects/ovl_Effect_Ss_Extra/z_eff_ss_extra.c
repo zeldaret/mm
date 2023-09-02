@@ -14,9 +14,9 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this);
 
-static s16 sScores[] = { 30, 60, 100 };
+static s16 sScores[] = { EXTRA_SCORE_30, EXTRA_SCORE_60, EXTRA_SCORE_100 };
 
-const EffectSsInit Effect_Ss_Extra_InitVars = {
+EffectSsInit Effect_Ss_Extra_InitVars = {
     EFFECT_SS_EXTRA,
     EffectSsExtra_Init,
 };
@@ -45,7 +45,7 @@ u32 EffectSsExtra_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
         this->draw = EffectSsExtra_Draw;
         this->update = EffectSsExtra_Update;
         this->life = 50;
-        this->rScoreIndex = params->scoreIdx;
+        this->rScoreIndex = params->scoreIndex;
         this->rScale = params->scale;
         this->rTimer = 5;
         this->rObjId = objIndex;
@@ -72,7 +72,7 @@ void EffectSsExtra_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_ReplaceRotation(&play->billboardMtxF);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -92,6 +92,6 @@ void EffectSsExtra_Update(PlayState* play, u32 index, EffectSs* this) {
     }
 
     if (this->rTimer == 1) {
-        play->interfaceCtx.unk_25C = sScores[this->rScoreIndex];
+        play->interfaceCtx.minigamePoints = sScores[this->rScoreIndex];
     }
 }

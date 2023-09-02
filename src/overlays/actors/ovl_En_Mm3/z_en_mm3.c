@@ -7,7 +7,7 @@
 #include "z_en_mm3.h"
 #include "objects/object_mm/object_mm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMm3*)thisx)
 
@@ -29,7 +29,7 @@ void func_80A6FEEC(EnMm3* this, PlayState* play);
 s32 func_80A6FFAC(EnMm3* this, PlayState* play);
 void func_80A70084(EnMm3* this, PlayState* play);
 
-const ActorInit En_Mm3_InitVars = {
+ActorInit En_Mm3_InitVars = {
     ACTOR_EN_MM3,
     ACTORCAT_NPC,
     FLAGS,
@@ -92,9 +92,9 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->actor.parent = NULL;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->unk_1DC = 1;
     this->unk_2B4 = 0;
     this->unk_2AE = 0;
@@ -106,7 +106,7 @@ void EnMm3_Init(Actor* thisx, PlayState* play) {
 void EnMm3_Destroy(Actor* thisx, PlayState* play) {
     EnMm3* this = THIS;
 
-    gSaveContext.save.weekEventReg[63] &= (u8)~1;
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
     Collider_DestroyCylinder(play, &this->collider);
 }
 
@@ -133,7 +133,7 @@ void func_80A6F2C8(EnMm3* this, PlayState* play) {
         this->unk_2B4 = 0x278A;
         func_80A6F9C8(this);
     } else if (func_80A6F22C(this)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 
     Math_SmoothStepToS(&this->unk_2A0.x, 0, 5, 0x1000, 0x100);
@@ -148,48 +148,48 @@ void func_80A6F3B4(EnMm3* this, PlayState* play) {
             case 0x278E:
                 if (play->msgCtx.choiceIndex == 0) {
                     if (this->unk_2B2 & 0x20) {
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-                            func_8019F208();
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
+                            Audio_PlaySfx_MessageDecide();
                             Message_StartTextbox(play, 0x2790, &this->actor);
                             this->unk_2B4 = 0x2790;
                             Rupees_ChangeBy(-play->msgCtx.unk1206C);
                         } else {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             Message_StartTextbox(play, 0x279C, &this->actor);
                             this->unk_2B4 = 0x279C;
-                            func_80151BB4(play, 0xB);
+                            Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                         }
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_StartTextbox(play, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;
                     }
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     Message_StartTextbox(play, 0x278F, &this->actor);
                     this->unk_2B4 = 0x278F;
-                    func_80151BB4(play, 0xB);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                 }
                 break;
 
             case 0x279A:
                 if (play->msgCtx.choiceIndex == 0) {
-                    if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
-                        func_8019F208();
+                    if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
+                        Audio_PlaySfx_MessageDecide();
                         Message_StartTextbox(play, 0x2790, &this->actor);
                         this->unk_2B4 = 0x2790;
                         Rupees_ChangeBy(-play->msgCtx.unk1206C);
                     } else {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         Message_StartTextbox(play, 0x279C, &this->actor);
                         this->unk_2B4 = 0x279C;
-                        func_80151BB4(play, 0xB);
+                        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                     }
                 } else {
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
-                    func_80151BB4(play, 0xB);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                 }
                 break;
         }
@@ -271,7 +271,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
                 break;
 
             case 0x2793:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 func_80A6FE1C(this);
                 func_80A6FE30(this, play);
                 break;
@@ -279,10 +279,10 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
             case 0x2795:
             case 0x2796:
             case 0x2797:
-                if (gSaveContext.save.weekEventReg[63] & 2) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED)) {
                     Message_StartTextbox(play, 0x279B, &this->actor);
                     this->unk_2B4 = 0x279B;
-                    func_80151BB4(play, 0xB);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
                 } else {
                     Message_StartTextbox(play, 0x2798, &this->actor);
                     this->unk_2B4 = 0x2798;
@@ -305,7 +305,7 @@ void func_80A6F5E4(EnMm3* this, PlayState* play) {
             if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] == SECONDS_TO_TIMER(10)) {
                 Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
             } else {
-                play_sound(NA_SE_SY_ERROR);
+                Audio_PlaySfx(NA_SE_SY_ERROR);
             }
         }
     }
@@ -341,18 +341,18 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
                 if (this->unk_2B4 == 0x2790) {
                     Player* player = GET_PLAYER(play);
 
-                    player->stateFlags1 |= 0x20;
+                    player->stateFlags1 |= PLAYER_STATE1_20;
                     if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                         Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_ON);
                     } else {
                         Interface_StartPostmanTimer(0, POSTMAN_MINIGAME_BUNNY_HOOD_OFF);
                     }
-                    func_801477B4(play);
-                    play_sound(NA_SE_SY_START_SHOT);
+                    Message_CloseTextbox(play);
+                    Audio_PlaySfx(NA_SE_SY_START_SHOT);
                     func_80A6FBA0(this);
                 } else {
-                    gSaveContext.save.weekEventReg[63] &= (u8)~1;
-                    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
                     func_80A6F270(this);
                 }
             }
@@ -365,7 +365,7 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 
     if (((this->unk_2B4 == 0x279D) || (this->unk_2B4 == 0x27A0) || (this->unk_2B4 == 0x278B)) &&
         Animation_OnFrame(&this->skelAnime, 8.0f) && (this->unk_2AE == 0)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_LIE_DOWN_ON_BED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_LIE_DOWN_ON_BED);
         this->unk_2AE = 1;
     }
 }
@@ -373,9 +373,9 @@ void func_80A6F9DC(EnMm3* this, PlayState* play) {
 void func_80A6FBA0(EnMm3* this) {
     AudioSfx_MuteBanks((1 << BANK_PLAYER) | (1 << BANK_ITEM) | (1 << BANK_ENV) | (1 << BANK_ENEMY) |
                        (1 << BANK_OCARINA) | (1 << BANK_VOICE));
-    func_801A0238(0, 5);
-    gSaveContext.save.weekEventReg[63] |= 1;
-    gSaveContext.save.weekEventReg[63] &= (u8)~2;
+    Audio_SetMainBgmVolume(0, 5);
+    SET_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+    CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_TIME_PASSED);
     this->actionFunc = func_80A6FBFC;
 }
 
@@ -383,7 +383,7 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (gSaveContext.timerStates[TIMER_ID_POSTMAN] == TIMER_STATE_POSTMAN_END) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         this->actor.flags |= ACTOR_FLAG_10000;
         if (gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] > SECONDS_TO_TIMER(15)) {
             gSaveContext.timerCurTimes[TIMER_ID_POSTMAN] = SECONDS_TO_TIMER(15);
@@ -400,21 +400,21 @@ void func_80A6FBFC(EnMm3* this, PlayState* play) {
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         AudioSfx_MuteBanks(0);
-        func_801A0238(0x7F, 5);
+        Audio_SetMainBgmVolume(0x7F, 5);
         Message_StartTextbox(play, 0x2791, &this->actor);
         this->unk_2B4 = 0x2791;
         this->unk_2AC = 7;
         gSaveContext.timerStates[TIMER_ID_POSTMAN] = TIMER_STATE_OFF;
         this->actor.flags &= ~ACTOR_FLAG_10000;
-        play_sound(NA_SE_SY_START_SHOT);
+        Audio_PlaySfx(NA_SE_SY_START_SHOT);
         func_80A6F9C8(this);
     } else {
-        func_800B8614(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
+        Actor_OfferTalk(&this->actor, play, this->actor.xzDistToPlayer + 10.0f);
         func_80123E90(play, &this->actor);
         if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
-            play_sound(NA_SE_SY_STOPWATCH_TIMER_INF - SFX_FLAG);
+            Audio_PlaySfx(NA_SE_SY_STOPWATCH_TIMER_INF - SFX_FLAG);
         } else {
-            play_sound(NA_SE_SY_STOPWATCH_TIMER_3 - SFX_FLAG);
+            Audio_PlaySfx(NA_SE_SY_STOPWATCH_TIMER_3 - SFX_FLAG);
         }
     }
 }
@@ -425,15 +425,15 @@ void func_80A6FE1C(EnMm3* this) {
 
 void func_80A6FE30(EnMm3* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        if (!(gSaveContext.save.weekEventReg[77] & 1)) {
-            gSaveContext.save.weekEventReg[77] |= 1;
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
+            SET_WEEKEVENTREG(WEEKEVENTREG_77_01);
         }
         this->actor.parent = NULL;
         func_80A6FED8(this);
-    } else if (gSaveContext.save.weekEventReg[77] & 1) {
-        Actor_PickUp(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_01)) {
+        Actor_OfferGetItem(&this->actor, play, GI_RUPEE_PURPLE, 500.0f, 100.0f);
     } else {
-        Actor_PickUp(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_PIECE, 500.0f, 100.0f);
     }
 }
 
@@ -445,21 +445,21 @@ void func_80A6FEEC(EnMm3* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        player->stateFlags1 &= ~0x20;
+        player->stateFlags1 &= ~PLAYER_STATE1_20;
         Message_StartTextbox(play, 0x2794, &this->actor);
         this->unk_2B4 = 0x2794;
-        func_80151BB4(play, 0xB);
-        func_80151BB4(play, 0x2B);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_POSTMAN);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_POSTMAN_HP);
         this->actor.flags &= ~ACTOR_FLAG_10000;
         func_80A6F9C8(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, -1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
 s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
-        case 4:
+    switch (GET_PLAYER_FORM) {
+        case PLAYER_FORM_HUMAN:
             if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                 if (this->unk_2B2 & 0x10) {
                     return true;
@@ -469,22 +469,25 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             if (this->unk_2B2 & 2) {
                 return true;
             }
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             if (this->unk_2B2 & 4) {
                 return true;
             }
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             if (this->unk_2B2 & 8) {
                 return true;
             }
+            break;
+
+        default:
             break;
     }
 
@@ -492,8 +495,8 @@ s32 func_80A6FFAC(EnMm3* this, PlayState* play) {
 }
 
 void func_80A70084(EnMm3* this, PlayState* play) {
-    switch (gSaveContext.save.playerForm) {
-        case 4:
+    switch (GET_PLAYER_FORM) {
+        case PLAYER_FORM_HUMAN:
             if (Player_GetMask(play) == PLAYER_MASK_BUNNY) {
                 this->unk_2B2 |= 0x10;
                 this->unk_2B2 |= 1;
@@ -502,16 +505,19 @@ void func_80A70084(EnMm3* this, PlayState* play) {
             }
             break;
 
-        case 3:
+        case PLAYER_FORM_DEKU:
             this->unk_2B2 |= 2;
             break;
 
-        case 2:
+        case PLAYER_FORM_ZORA:
             this->unk_2B2 |= 4;
             break;
 
-        case 1:
+        case PLAYER_FORM_GORON:
             this->unk_2B2 |= 8;
+            break;
+
+        default:
             break;
     }
 }
@@ -561,7 +567,7 @@ void EnMm3_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80A704FC[this->unk_1DC]));
     gSPSegment(POLY_OPA_DISP++, 0x0C, sEnMm3DL);

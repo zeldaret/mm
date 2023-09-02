@@ -21,7 +21,7 @@
  */
 typedef enum {
     /* 0 */ EN_RAT_TYPE_DUNGEON,
-    /* 1 */ EN_RAT_TYPE_OVERWORLD,
+    /* 1 */ EN_RAT_TYPE_OVERWORLD
 } EnRatType;
 
 struct EnRat;
@@ -54,7 +54,5 @@ typedef struct EnRat {
     /* 0x264 */ s32 blure2Index;
     /* 0x268 */ ColliderSphere collider;
 } EnRat; // size = 0x2C0
-
-extern const ActorInit En_Rat_InitVars;
 
 #endif // Z_EN_RAT_H

@@ -6,7 +6,7 @@
 
 #include "z_en_wdhand.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnWdhand*)thisx)
 
@@ -16,7 +16,7 @@ void EnWdhand_Update(Actor* thisx, PlayState* play);
 void EnWdhand_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Wdhand_InitVars = {
+ActorInit En_Wdhand_InitVars = {
     ACTOR_EN_WDHAND,
     ACTORCAT_ENEMY,
     FLAGS,

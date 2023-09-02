@@ -14,19 +14,21 @@ void KaleidoScope_UpdatePrompt(PlayState* play) {
     static s16 sPromptAlphaTimer = 10;
     PauseContext* pauseCtx = &play->pauseCtx;
     Input* input = CONTROLLER1(&play->state);
-    s8 relStickX = input->rel.stick_x;
+    s8 stickAdjX = input->rel.stick_x;
     s16 alphaStep;
 
-    if (((pauseCtx->state == 7) && (pauseCtx->unk_208 == 1)) || (pauseCtx->state == 0xE) || (pauseCtx->state == 0x11)) {
+    if (((pauseCtx->state == PAUSE_STATE_SAVEPROMPT) && (pauseCtx->savePromptState == PAUSE_SAVEPROMPT_STATE_1)) ||
+        (pauseCtx->state == PAUSE_STATE_GAMEOVER_SAVE_PROMPT) ||
+        (pauseCtx->state == PAUSE_STATE_GAMEOVER_CONTINUE_PROMPT)) {
 
         // Move the prompt
-        if ((pauseCtx->promptChoice == PAUSE_PROMPT_YES) && (relStickX >= 30)) {
+        if ((pauseCtx->promptChoice == PAUSE_PROMPT_YES) && (stickAdjX >= 30)) {
             // Move right to the no prompt
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
             pauseCtx->promptChoice = PAUSE_PROMPT_NO;
-        } else if ((pauseCtx->promptChoice != PAUSE_PROMPT_YES) && (relStickX <= -30)) {
+        } else if ((pauseCtx->promptChoice != PAUSE_PROMPT_YES) && (stickAdjX <= -30)) {
             // Move left to the yes prompt
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
             pauseCtx->promptChoice = PAUSE_PROMPT_YES;
         }
 

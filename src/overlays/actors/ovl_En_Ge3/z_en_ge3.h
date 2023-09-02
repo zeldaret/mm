@@ -53,6 +53,4 @@ typedef struct EnGe3 {
     /* 0x31C */ EnGe3ActionFunc actionFunc;
 } EnGe3; // size = 0x320
 
-extern const ActorInit En_Ge3_InitVars;
-
 #endif // Z_EN_GE3_H

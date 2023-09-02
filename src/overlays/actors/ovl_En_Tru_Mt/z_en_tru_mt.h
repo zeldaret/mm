@@ -11,6 +11,8 @@ typedef void (*EnTruMtActionFunc)(struct EnTruMt*, PlayState*);
 #define ENTRUMT_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENTRUMT_GET_FC00(thisx) (((thisx)->params & 0xFC00) >> 0xA)
 
+#define ENTRUMT_PATH_INDEX_NONE 0x3F
+
 typedef struct EnTruMt {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnTruMtActionFunc actionFunc;
@@ -40,7 +42,5 @@ typedef struct EnTruMt {
     /* 0x398 */ Vec3f unk_398;
     /* 0x3A4 */ u8 unk_3A4;
 } EnTruMt; // size = 0x3A8
-
-extern const ActorInit En_Tru_Mt_InitVars;
 
 #endif // Z_EN_TRU_MT_H

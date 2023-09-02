@@ -6,7 +6,9 @@
 #include "objects/object_ge1/object_ge1.h"
 
 #define GERUDO_WHITE_GET_TYPE(thisx) (((thisx)->params) & 0xF)
-#define GERUDO_WHITE_GET_PATH(thisx) ((((thisx)->params) & 0xFC00) >> 10)
+#define GERUDO_WHITE_GET_PATH_INDEX(thisx) ((((thisx)->params) & 0xFC00) >> 10)
+
+#define GERUDO_WHITE_PATH_INDEX_NONE 0x3F
 
 //! Only the first type is used
 typedef enum {
@@ -29,17 +31,15 @@ typedef struct EnGe1 {
     /* 0x2A4 */ Vec3s headRot;
     /* 0x2AA */ Vec3s torsoRot;
     /* 0x2B0 */ Path* path;
-    /* 0x2B4 */ s32 curPoint;
+    /* 0x2B4 */ s32 curPointIndex;
     /* 0x2B8 */ s16 eyeIndex;
     /* 0x2BA */ s16 blinkTimer;
     /* 0x2BC */ u16 stateFlags;
     /* 0x2BE */ s16 animIndex;
-    /* 0x2C0 */ s16 csAction;
+    /* 0x2C0 */ s16 cueId;
     /* 0x2C2 */ s16 screamTimer;
     /* 0x2C4 */ u8 hairstyle;
     /* 0x2C8 */ EnGe1ActionFunc actionFunc;
 } EnGe1; // size = 0x2CC
-
-extern const ActorInit En_Ge1_InitVars;
 
 #endif // Z_EN_GE1_H

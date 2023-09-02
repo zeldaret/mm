@@ -24,7 +24,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play);
 void func_80B9C174(ObjTaru* this, PlayState* play);
 void func_80B9C1A0(ObjTaru* this, PlayState* play);
 
-const ActorInit Obj_Taru_InitVars = {
+ActorInit Obj_Taru_InitVars = {
     ACTOR_OBJ_TARU,
     ACTORCAT_BG,
     FLAGS,
@@ -141,10 +141,10 @@ void func_80B9B9C8(ObjTaru* this, PlayState* play) {
 
     for (i = 0; i < 4; i++) {
         for (j = phi_fp; j < phi_s5; j++) {
-            temp_fs0 = randPlusMinusPoint5Scaled(10.0f) + -105.0f + (j * 30.0f);
-            temp_fs1 = randPlusMinusPoint5Scaled(4.0f);
+            temp_fs0 = Rand_CenteredFloat(10.0f) + -105.0f + (j * 30.0f);
+            temp_fs1 = Rand_CenteredFloat(4.0f);
             spD8.x = temp_fs0 * cos;
-            spD8.y = randPlusMinusPoint5Scaled(10.0f) + 15.0f + (i * 30.0f);
+            spD8.y = Rand_CenteredFloat(10.0f) + 15.0f + (i * 30.0f);
             spD8.z = temp_fs0 * sin;
             spCC.x = (spD8.x * 0.05f) + (temp_fs1 * sin);
             spCC.y = Rand_ZeroFloat(5.0f) + 2.0f;
@@ -181,7 +181,7 @@ void func_80B9BCBC(ObjTaru* this, PlayState* play) {
         if (spawnedActor != NULL) {
             spawnedActor->parent = &this->dyna.actor;
             spawnedActor->velocity.y = 12.0f;
-            spawnedActor->speedXZ = 2.0f;
+            spawnedActor->speed = 2.0f;
         }
     }
 }
@@ -204,7 +204,7 @@ void ObjTaru_Init(Actor* thisx, PlayState* play) {
 
     if (OBJ_TARU_GET_80(thisx)) {
         if (Flags_GetSwitch(play, OBJ_TARU_GET_7F(thisx))) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         } else {
             DynaPolyActor_LoadMesh(play, &this->dyna, &object_taru_Colheader_001CB0);
         }
@@ -279,7 +279,7 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
             this->actionFunc = func_80B9C1A0;
         } else {
             this->dyna.actor.flags |= ACTOR_FLAG_10;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
             this->dyna.actor.draw = NULL;
             this->actionFunc = func_80B9C174;
         }
@@ -292,17 +292,18 @@ void func_80B9C07C(ObjTaru* this, PlayState* play) {
 
 void func_80B9C174(ObjTaru* this, PlayState* play) {
     func_80B9BD84(this, play);
-    Actor_MarkForDeath(&this->dyna.actor);
+    Actor_Kill(&this->dyna.actor);
 }
 
 void func_80B9C1A0(ObjTaru* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, OBJ_TARU_GET_7F(&this->dyna.actor));
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void ObjTaru_Update(Actor* thisx, PlayState* play) {
@@ -315,7 +316,7 @@ void ObjTaru_Update(Actor* thisx, PlayState* play) {
         if (this->unk_1AD >= 0) {
             switch (this->unk_1AD) {
                 case 0:
-                    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
+                    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_STALGOLD_ROLL);
                     if (Rand_ZeroOne() < 0.1f) {
                         this->unk_1AD = Rand_S16Offset(40, 80);
                     } else {

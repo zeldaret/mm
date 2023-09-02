@@ -73,7 +73,7 @@ static TexturePtr sTextures[] = {
     gEffHitmarkWhiteMetal8Tex,
 };
 
-const EffectSsInit Effect_Ss_Hitmark_InitVars = {
+EffectSsInit Effect_Ss_Hitmark_InitVars = {
     EFFECT_SS_HITMARK,
     EffectSsHitmark_Init,
 };
@@ -134,7 +134,7 @@ void EffectSsHitmark_Draw(PlayState* play, u32 index, EffectSs* this) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         tex = sTextures[(this->rType * 8) + (this->rTexIndex)];
         gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(tex));
-        func_8012C9BC(gfxCtx);
+        Gfx_SetupDL61_Xlu(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, 255);
         gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, 0);
         gSPDisplayList(POLY_XLU_DISP++, this->gfx);

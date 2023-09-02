@@ -7,7 +7,7 @@ typedef enum {
     /* 0 */ EN_WIZ_BROCK_PLATFORM_TYPE_INACTIVE,
     /* 1 */ EN_WIZ_BROCK_PLATFORM_TYPE_FIRE,
     /* 2 */ EN_WIZ_BROCK_PLATFORM_TYPE_ICE,
-    /* 3 */ EN_WIZ_BROCK_PLATFORM_TYPE_MAX,
+    /* 3 */ EN_WIZ_BROCK_PLATFORM_TYPE_MAX
 } EnWizBrockPlatformType;
 
 struct EnWizBrock;
@@ -24,7 +24,5 @@ typedef struct EnWizBrock {
     /* 0x1AA */ s16 platformType; // Determines element type for platform (ice/fire)
     /* 0x1AC */ f32 alpha;
 } EnWizBrock; // size = 0x1B0
-
-extern const ActorInit En_Wiz_Brock_InitVars;
 
 #endif // Z_EN_WIZ_BROCK_H

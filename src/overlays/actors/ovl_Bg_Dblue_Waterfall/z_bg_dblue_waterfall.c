@@ -25,7 +25,7 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play);
 void func_80B84EF0(BgDblueWaterfall* this, PlayState* play);
 void func_80B84F20(BgDblueWaterfall* this, PlayState* play);
 
-const ActorInit Bg_Dblue_Waterfall_InitVars = {
+ActorInit Bg_Dblue_Waterfall_InitVars = {
     ACTOR_BG_DBLUE_WATERFALL,
     ACTORCAT_PROP,
     FLAGS,
@@ -223,7 +223,7 @@ void func_80B841A0(BgDblueWaterfall* this, PlayState* play) {
             EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 0, 250);
         }
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_WATER);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_WATER);
     }
 }
 
@@ -320,9 +320,10 @@ void func_80B84610(BgDblueWaterfall* this, PlayState* play) {
 
     player->actor.world.pos.x += sp34.x;
     player->actor.world.pos.z += sp34.z;
+    //! FAKE:
     if (this && this && this) {}
-    player->unk_B80 = 8.0f;
-    player->unk_B84 = this->actor.yawTowardsPlayer;
+    player->pushedSpeed = 8.0f;
+    player->pushedYaw = this->actor.yawTowardsPlayer;
 }
 
 static InitChainEntry sInitChain[] = {
@@ -423,13 +424,13 @@ void func_80B84928(BgDblueWaterfall* this, PlayState* play) {
             if (sp30 != 0) {
                 func_80B83EA4(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x800) {
-                    this->unk_1A4 = this->actor.cutscene;
+                    this->csId = this->actor.csId;
                     func_80B84AD4(this, play);
                 }
             } else {
                 func_80B841A0(this, play);
                 if (this->collider.info.acHitInfo->toucher.dmgFlags & 0x1000) {
-                    this->unk_1A4 = ActorCutscene_GetAdditionalCutscene(this->actor.cutscene);
+                    this->csId = CutsceneManager_GetAdditionalCsId(this->actor.csId);
                     func_80B84AD4(this, play);
                 }
             }
@@ -448,9 +449,9 @@ void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
     s32 pad;
     s32 sp20;
 
-    if (ActorCutscene_GetCanPlayNext(this->unk_1A4)) {
+    if (CutsceneManager_IsNext(this->csId)) {
         sp20 = func_80B83D04(this, play);
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_1A4, &this->actor);
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
         this->unk_1A3 = true;
         if (sp20) {
             func_80B83D94(this, play);
@@ -460,7 +461,7 @@ void func_80B84AEC(BgDblueWaterfall* this, PlayState* play) {
             func_80B84B9C(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_1A4);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
@@ -530,10 +531,10 @@ void func_80B84BCC(BgDblueWaterfall* this, PlayState* play) {
             }
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
-            ActorCutscene_Stop(this->unk_1A4);
+            CutsceneManager_Stop(this->csId);
         }
         func_80B8484C(this, play);
     }
@@ -569,10 +570,10 @@ void func_80B84F20(BgDblueWaterfall* this, PlayState* play) {
             this->unk_19F = 0;
         }
 
-        func_800B9010(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_MELT_LEVEL - SFX_FLAG);
     } else {
         if (this->unk_1A3) {
-            ActorCutscene_Stop(this->unk_1A4);
+            CutsceneManager_Stop(this->csId);
         }
         func_80B8484C(this, play);
     }
@@ -590,7 +591,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -609,7 +610,7 @@ void BgDblueWaterfall_Draw(Actor* thisx, PlayState* play) {
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x9B, 255, 255, 255, this->unk_19F);
             gSPDisplayList(POLY_XLU_DISP++, gGreatBayTempleObjectIceStalactiteDL);
         } else {
-            func_8012C28C(play->state.gfxCtx);
+            Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
             gSPSegment(POLY_OPA_DISP++, 0x09, D_801AEFA0);
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x9B, 255, 255, 255, 255);
