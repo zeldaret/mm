@@ -30,7 +30,7 @@ typedef enum {
     /*  5 */ GERUDO_AVEIL_CSACTION_DISMISS,
     /*  6 */ GERUDO_AVEIL_CSACTION_BEG,
     /*  7 */ GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY,
-    /*  8 */ GERUDO_AVEIL_CSACTION_BEEHIVE_VANISH,
+    /*  8 */ GERUDO_AVEIL_CSACTION_BEEHIVE_VANISH
 } GerudoAveilCsAction;
 
 typedef struct EnGe3 {

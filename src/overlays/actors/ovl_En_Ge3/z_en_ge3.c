@@ -31,7 +31,7 @@ typedef enum {
     /*  5 */ GERUDO_AVEIL_ANIM_DEMAND,
     /*  6 */ GERUDO_AVEIL_ANIM_DISMISS,
     /*  7 */ GERUDO_AVEIL_ANIM_BEG,
-    /*  8 */ GERUDO_AVEIL_ANIM_RUN_AWAY,
+    /*  8 */ GERUDO_AVEIL_ANIM_RUN_AWAY
 } GerudoAveilAnimation;
 
 ActorInit En_Ge3_InitVars = {
@@ -87,21 +87,21 @@ void EnGe3_Init(Actor* thisx, PlayState* play) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_AveilsChamberIdle;
 
-        if (gSaveContext.save.weekEventReg[83] & 2) { // Knocked beehive down
-            Actor_MarkForDeath(&this->picto.actor);
+        if (gSaveContext.save.saveInfo.weekEventReg[83] & 2) { // Knocked beehive down
+            Actor_Kill(&this->picto.actor);
             return;
         }
     } else {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_WALK, ANIMMODE_LOOP, 0.0f);
         this->actionFunc = EnGe3_Idle;
-        this->picto.actor.speedXZ = 1.5f;
+        this->picto.actor.speed = 1.5f;
     }
 
     this->stateFlags = 0;
     this->picto.actor.targetMode = 6;
     this->picto.actor.terminalVelocity = -4.0f;
     this->picto.actor.gravity = -1.0f;
-    gSaveContext.save.weekEventReg[80] &= (u8)~8;
+    gSaveContext.save.saveInfo.weekEventReg[80] &= (u8)~8;
 }
 
 void EnGe3_Destroy(Actor* thisx, PlayState* play) {
@@ -184,9 +184,9 @@ s32 EnGe3_FollowPath(EnGe3* this) {
 
 void EnGe3_Scream(EnGe3* this) {
     if ((s32)Rand_ZeroFloat(2.0f) == 0) {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO00);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO00);
     } else {
-        Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_VO_FPVO01);
+        Actor_PlaySfx(&this->picto.actor, NA_SE_VO_FPVO01);
     }
 }
 
@@ -210,7 +210,7 @@ void EnGe3_ThrowPlayerOut(EnGe3* this, PlayState* play) {
             play->nextEntrance = play->setupExitList[GERUDO_AVEIL_GET_EXIT(&this->picto.actor)];
             play->transitionTrigger = TRANS_TRIGGER_START;
             play->transitionType = TRANS_TYPE_38;
-            gSaveContext.save.weekEventReg[80] &= (u8)~8;
+            gSaveContext.save.saveInfo.weekEventReg[80] &= (u8)~8;
         }
     }
 }
@@ -220,11 +220,11 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
         EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_WAIT, ANIMMODE_ONCE, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 108)) {
-        s16 csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 108)]->action;
+    if (Cutscene_IsCueInChannel(play, 108)) {
+        s16 csAction = play->csCtx.actorCues[Cutscene_GetCueChannel(play, 108)]->id;
 
         if (this->csAction != GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY) {
-            Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 108));
+            Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetCueChannel(play, 108));
         }
 
         if (this->csAction != csAction) {
@@ -260,12 +260,12 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
                 // Fleeing from bees cutscene
                 case GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY:
                     EnGe3_ChangeAnim(this, GERUDO_AVEIL_ANIM_RUN_AWAY, ANIMMODE_LOOP, 0.0f);
-                    this->picto.actor.speedXZ = 5.0f;
+                    this->picto.actor.speed = 5.0f;
                     this->screamTimer = (s32)(Rand_ZeroFloat(10.0f) + 20.0f);
                     break;
 
                 case GERUDO_AVEIL_CSACTION_BEEHIVE_VANISH:
-                    Actor_MarkForDeath(&this->picto.actor);
+                    Actor_Kill(&this->picto.actor);
                     break;
             }
 
@@ -274,7 +274,7 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
     } else if ((this->picto.actor.xzDistToPlayer < 700.0f) && (fabsf(this->picto.actor.playerHeightRel) < 100.0f) &&
                !Play_InCsMode(play)) {
         func_800B7298(play, &this->picto.actor, 0x1A);
-        func_801000A4(NA_SE_SY_FOUND);
+        Lib_PlaySfx(NA_SE_SY_FOUND);
 
         if (Player_GetMask(play) == PLAYER_MASK_STONE) { // Not fooled by Stone Mask
             Message_StartTextbox(play, 0x11AF, &this->picto.actor);
@@ -284,15 +284,15 @@ void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play) {
 
         this->actionFunc = EnGe3_ThrowPlayerOut;
         this->actionTimer = 50;
-        gSaveContext.save.weekEventReg[80] |= 8; // Aveil discovered Player
+        gSaveContext.save.saveInfo.weekEventReg[80] |= 8; // Aveil discovered Player
     }
 
     if (this->csAction == GERUDO_AVEIL_CSACTION_BEEHIVE_RUN_AWAY) {
-        this->picto.actor.speedXZ = 5.0f;
+        this->picto.actor.speed = 5.0f;
         EnGe3_FollowPath(this);
 
         if (Animation_OnFrame(&this->skelAnime, 2.0f) || Animation_OnFrame(&this->skelAnime, 6.0f)) {
-            Actor_PlaySfxAtPos(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
+            Actor_PlaySfx(&this->picto.actor, NA_SE_EV_PIRATE_WALK);
         }
 
         if (this->screamTimer > 0) {
@@ -335,10 +335,10 @@ void EnGe3_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnGe3_ValidatePictograph(PlayState* play, Actor* thisx) {
-    s32 ret = Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+    s32 ret = Snap_ValidatePictograph(play, thisx, PICTO_VALID_PIRATE_GOOD, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                       400.0f, -1);
 
-    ret |= Snap_ValidatePictograph(play, thisx, PICTOGRAPH_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
+    ret |= Snap_ValidatePictograph(play, thisx, PICTO_VALID_PIRATE_TOO_FAR, &thisx->focus.pos, &thisx->shape.rot, 10.0f,
                                    1200.0f, -1);
 
     return ret;
@@ -421,7 +421,7 @@ void EnGe3_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     func_800B8050(&this->picto.actor, play, 0);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
