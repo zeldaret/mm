@@ -44,6 +44,7 @@
 #include "fault.h"
 #include "global.h"
 #include "vt.h"
+#include "PR/osint.h"
 #include "stackcheck.h"
 #include "z64thread.h"
 

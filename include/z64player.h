@@ -2,7 +2,7 @@
 #define Z64PLAYER_H
 
 #include "alignment.h"
-#include "os.h"
+#include "PR/os.h"
 #include "z64actor.h"
 
 struct Player;
