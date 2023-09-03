@@ -40,8 +40,8 @@ OSIntMask osSetIntMask(OSIntMask im);
 
 
 // Internal
-void __osSetHWIntrRoutine(OSHWIntr idx, OSMesgQueue* queue, OSMesg msg);
-void __osGetHWIntrRoutine(OSHWIntr idx, OSMesgQueue** outQueue, OSMesg* outMsg);
+void __osSetHWIntrRoutine(OSHWIntr interrupt, s32 (*handler)(void), void* stackEnd);
+void __osGetHWIntrRoutine(OSHWIntr interrupt, s32 (**handler)(void), void** stackEnd);
 void __osSetGlobalIntMask(OSHWIntr mask);
 void __osResetGlobalIntMask(OSHWIntr mask);
 
