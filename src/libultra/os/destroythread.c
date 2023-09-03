@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 void osDestroyThread(OSThread* t) {
     register u32 saveMask;
@@ -9,7 +9,7 @@ void osDestroyThread(OSThread* t) {
 
     if (t == NULL) {
         t = __osRunningThread;
-    } else if (t->state != 1) {
+    } else if (t->state != OS_STATE_STOPPED) {
         __osDequeueThread(t->queue, t);
     }
 
