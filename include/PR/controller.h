@@ -4,6 +4,7 @@
 #include "ultratypes.h"
 #include "os_cont.h"
 #include "os_pfs.h"
+#include "rcp.h"
 
 #define CHNL_ERR(format) (((format).rxsize & CHNL_ERR_MASK) >> 4)
 
@@ -152,7 +153,7 @@ typedef struct {
     /* 0x05 */ u8 typel;
     /* 0x06 */ u8 status;
     /* 0x07 */ u8 align1;
-} __OSContRequestHeader; // size = 0x8
+} __OSContRequesFormat; // size = 0x8
 
 typedef struct {
     /* 0x00 */ u8 txsize;

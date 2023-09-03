@@ -1,4 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
+#include "libc/stdbool.h"
 
 #define COLD_RESET 0
 
@@ -41,9 +42,9 @@ void __osInitialize_common(void) {
     __osSetFpcCsr(FPCSR_FS | FPCSR_EV);
     __osSetWatchLo(0x04900000);
 
-    while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {}
+    while (__osSiRawReadIo(PIF_RAM_END - 3, &pifdata)) {}
 
-    while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {}
+    while (__osSiRawWriteIo(PIF_RAM_END - 3, pifdata | 8)) {}
 
     *(__osExceptionVector*)UT_VEC = __osExceptionPreamble;
     *(__osExceptionVector*)XUT_VEC = __osExceptionPreamble;

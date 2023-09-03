@@ -2,10 +2,10 @@
 #include "ultra64.h"
 #include "global.h"
 
-u32 __osFlashID[4] ALIGNED8;
-OSIoMesg __osFlashMsg ALIGNED8;
-OSMesgQueue __osFlashMessageQ ALIGNED8;
-OSPiHandle __osFlashHandler ALIGNED8;
+u32 __osFlashID[4] ALIGNED(8);
+OSIoMesg __osFlashMsg ALIGNED(8);
+OSMesgQueue __osFlashMessageQ ALIGNED(8);
+OSPiHandle __osFlashHandler ALIGNED(8);
 OSMesg __osFlashMsgBuf[1];
 s32 __osFlashVersion;
 UNK_TYPE1 D_801FD0FC[0x14];

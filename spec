@@ -48,7 +48,7 @@ beginseg
     include "build/asm/boot/setcause.text.o"
     include "build/src/libultra/os/sendmesg.o"
     include "build/src/libultra/io/pfsfreeblocks.o"
-    include "build/src/libultra/os/viextend.o"
+    include "build/src/libultra/io/viextendvstart.o"
     include "build/src/libultra/os/stopthread.o"
     include "build/src/libultra/os/recvmesg.o"
     include "build/asm/boot/setintmask.text.o"
