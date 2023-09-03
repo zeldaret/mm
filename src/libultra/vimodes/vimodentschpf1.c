@@ -1,11 +1,13 @@
-#include "global.h"
+#include "PR/os.h"
+#include "PR/rcp.h"
 #include "PR/viint.h"
 
 OSViMode osViModeNtscHpf1 = {
     OS_VI_NTSC_HPF1, // type
     {
         // comRegs
-        0x324E,               // ctrl
+        VI_CTRL_TYPE_16 | VI_CTRL_GAMMA_DITHER_ON | VI_CTRL_GAMMA_ON | VI_CTRL_SERRATE_ON | VI_CTRL_ANTIALIAS_MODE_2 |
+            VI_CTRL_PIXEL_ADV_3, // ctrl
         WIDTH(640),           // width
         BURST(57, 34, 5, 62), // 0x3E52239, // burst
         VSYNC(524),           // vSync

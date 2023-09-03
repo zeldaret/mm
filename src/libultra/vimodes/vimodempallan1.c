@@ -1,11 +1,13 @@
-#include "global.h"
+#include "PR/os.h"
+#include "PR/rcp.h"
 #include "PR/viint.h"
 
 OSViMode osViModeMpalLan1 = {
     OS_VI_MPAL_LAN1, // type
     {
         // comRegs
-        0x311E,               // ctrl
+        VI_CTRL_TYPE_16 | VI_CTRL_GAMMA_DITHER_ON | VI_CTRL_GAMMA_ON | VI_CTRL_DIVOT_ON | VI_CTRL_ANTIALIAS_MODE_1 |
+            VI_CTRL_PIXEL_ADV_3, // ctrl
         WIDTH(320),           // width
         BURST(57, 30, 5, 70), // burst
         VSYNC(525),           // vSync

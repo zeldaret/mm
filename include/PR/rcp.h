@@ -16,6 +16,25 @@
 #define PIF_RAM_START   0x1FC007C0
 #define PIF_RAM_END     0x1FC007FF
 
+/*
+ * Patterns to interpret VI_CONTROL_REG
+ */
+#define VI_CTRL_TYPE_16             0x00002 /* [1:0] pixel size: 16 bit */
+#define VI_CTRL_TYPE_32             0x00003 /* [1:0] pixel size: 32 bit */
+#define VI_CTRL_GAMMA_DITHER_ON     0x00004 /* 2: default = on */
+#define VI_CTRL_GAMMA_ON            0x00008 /* 3: default = on */
+#define VI_CTRL_DIVOT_ON            0x00010 /* 4: default = on */
+#define VI_CTRL_SERRATE_ON          0x00040 /* 6: on if interlaced */
+#define VI_CTRL_ANTIALIAS_MASK      0x00300 /* [9:8] anti-alias mode */
+#define VI_CTRL_ANTIALIAS_MODE_1    0x00100 /* Bit [9:8] anti-alias mode */
+#define VI_CTRL_ANTIALIAS_MODE_2    0x00200 /* Bit [9:8] anti-alias mode */
+#define VI_CTRL_ANTIALIAS_MODE_3    0x00300 /* Bit [9:8] anti-alias mode */
+#define VI_CTRL_PIXEL_ADV_MASK      0x01000 /* [15:12] pixel advance mode? */
+#define VI_CTRL_PIXEL_ADV_1         0x01000 /* Bit [15:12] pixel advance mode? */
+#define VI_CTRL_PIXEL_ADV_2         0x02000 /* Bit [15:12] pixel advance mode? */
+#define VI_CTRL_PIXEL_ADV_3         0x03000 /* Bit [15:12] pixel advance mode? */
+#define VI_CTRL_DITHER_FILTER_ON    0x10000 /* 16: dither-filter mode */
+
 
 #define VI_NTSC_CLOCK       48681812        /* Hz = 48.681812 MHz */
 #define VI_PAL_CLOCK        49656530        /* Hz = 49.656530 MHz */
