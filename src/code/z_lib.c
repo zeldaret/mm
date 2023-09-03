@@ -732,6 +732,6 @@ void* Lib_PhysicalToVirtual(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
-        return (void*)PHYSICAL_TO_VIRTUAL(ptr);
+        return OS_PHYSICAL_TO_K0(ptr);
     }
 }

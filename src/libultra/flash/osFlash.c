@@ -22,7 +22,7 @@ u32 osFlashGetAddr(u32 pageNum) {
 }
 
 OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32 start) {
-    __osFlashHandler.baseAddress = RDRAM_UNCACHED | start;
+    __osFlashHandler.baseAddress = PHYS_TO_K1(start);
     __osFlashHandler.type++;
     __osFlashHandler.latency = latency;
     __osFlashHandler.pulse = pulse;
@@ -34,7 +34,7 @@ OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32
 }
 
 void osFlashChange(u32 flashNum) {
-    __osFlashHandler.baseAddress = RDRAM_UNCACHED | (FRAM_STATUS_REGISTER + (flashNum << 17));
+    __osFlashHandler.baseAddress = PHYS_TO_K1(FRAM_STATUS_REGISTER + (flashNum << 17));
     __osFlashHandler.type = 8 + flashNum;
 
     return;
@@ -46,12 +46,12 @@ OSPiHandle* osFlashInit(void) {
 
     osCreateMesgQueue(&__osFlashMessageQ, &__osFlashMsgBuf, 1);
 
-    if (__osFlashHandler.baseAddress == (RDRAM_UNCACHED | FRAM_BASE_ADDRESS)) {
+    if (__osFlashHandler.baseAddress == PHYS_TO_K1(FRAM_BASE_ADDRESS)) {
         return &__osFlashHandler;
     }
 
     __osFlashHandler.type = 8;
-    __osFlashHandler.baseAddress = (RDRAM_UNCACHED | FRAM_BASE_ADDRESS);
+    __osFlashHandler.baseAddress = PHYS_TO_K1(FRAM_BASE_ADDRESS);
     __osFlashHandler.latency = 5;
     __osFlashHandler.pulse = 12;
     __osFlashHandler.pageSize = 15;
