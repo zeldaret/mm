@@ -419,7 +419,7 @@ asm/non_matchings/boot/pfsisplug/__osPfsRequestData.s,__osPfsRequestData,0x80092
 asm/non_matchings/boot/pfsisplug/__osPfsGetInitData.s,__osPfsGetInitData,0x80092680,0x2C
 asm/non_matchings/boot/voicegetstatus/__osVoiceGetStatus.s,__osVoiceGetStatus,0x80092730,0x7C
 asm/non_matchings/boot/cartrominit/osCartRomInit.s,osCartRomInit,0x80092920,0x58
-asm/non_matchings/boot/guS2DInitBg/guS2DInitBg.s,guS2DInitBg,0x80092A80,0x60
+asm/non_matchings/boot/us2dex/guS2DInitBg.s,guS2DInitBg,0x80092A80,0x60
 asm/non_matchings/boot/pfsselectbank/__osPfsSelectBank.s,__osPfsSelectBank,0x80092C00,0x20
 asm/non_matchings/boot/contsetch/osContSetCh.s,osContSetCh,0x80092C80,0x18
 asm/non_matchings/boot/setfpccsr/__osSetFpcCsr.s,__osSetFpcCsr,0x80092CE0,0x4

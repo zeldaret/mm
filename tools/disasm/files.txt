@@ -192,7 +192,7 @@
             0x80092440 : "pfsisplug",
             0x80092730 : "voicegetstatus",
             0x80092920 : "cartrominit",
-            0x80092A80 : "guS2DInitBg",
+            0x80092A80 : "us2dex",
             0x80092C00 : "pfsselectbank",
             0x80092C80 : "contsetch",
             0x80092CE0 : "setfpccsr",
