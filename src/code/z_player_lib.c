@@ -2584,7 +2584,7 @@ void Player_DrawGetItemImpl(PlayState* play, Player* player, Vec3f* refPos, s32 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(player->giObjectSegment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(player->giObjectSegment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, player->giObjectSegment);
     gSPSegment(POLY_XLU_DISP++, 0x06, player->giObjectSegment);
@@ -2846,7 +2846,7 @@ void func_80127488(PlayState* play, Player* player, u8 alpha) {
 }
 
 void Player_DrawCouplesMask(PlayState* play, Player* player) {
-    gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
+    gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
     AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_meoto_Matanimheader_001CD8));
 }
 
@@ -2878,7 +2878,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, VIRTUAL_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
+            gSPSegment(&gfx[1], 0x08, OS_K0_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gEffBubbleDL);
@@ -2934,7 +2934,7 @@ void Player_DrawBlastMask(PlayState* play, Player* player) {
     if (player->blastMaskTimer != 0) {
         s32 alpha;
 
-        gSegments[0xA] = VIRTUAL_TO_PHYSICAL(player->maskObjectSegment);
+        gSegments[0xA] = OS_K0_TO_PHYSICAL(player->maskObjectSegment);
 
         AnimatedMat_DrawOpa(play, Lib_SegmentedToVirtual(&object_mask_bakuretu_Matanimheader_0011F8));
 

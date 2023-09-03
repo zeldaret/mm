@@ -52,7 +52,7 @@ void Object_InitBank(GameState* gameState, ObjectContext* objectCtx) {
     objectCtx->spaceEnd = (void*)((u32)objectCtx->spaceStart + spaceSize);
     objectCtx->mainKeepIndex = Object_Spawn(objectCtx, GAMEPLAY_KEEP);
 
-    gSegments[0x04] = VIRTUAL_TO_PHYSICAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
+    gSegments[0x04] = OS_K0_TO_PHYSICAL(objectCtx->status[objectCtx->mainKeepIndex].segment);
 }
 
 void Object_UpdateBank(ObjectContext* objectCtx) {
@@ -227,7 +227,7 @@ void Scene_CommandSpecialFiles(PlayState* play, SceneCmd* cmd) {
     if (cmd->specialFiles.subKeepIndex != 0) {
         play->objectCtx.subKeepIndex = Object_Spawn(&play->objectCtx, cmd->specialFiles.subKeepIndex);
         // TODO: Segment number enum?
-        gSegments[0x05] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
+        gSegments[0x05] = OS_K0_TO_PHYSICAL(play->objectCtx.status[play->objectCtx.subKeepIndex].segment);
     }
 
     if (cmd->specialFiles.naviQuestHintFileId != NAVI_QUEST_HINTS_NONE) {

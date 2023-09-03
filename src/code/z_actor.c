@@ -1097,7 +1097,7 @@ void Actor_SetScale(Actor* actor, f32 scale) {
 }
 
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
-    gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
+    gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
 }
 
 void Actor_Init(Actor* actor, PlayState* play) {

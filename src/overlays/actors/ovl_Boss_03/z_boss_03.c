@@ -2156,7 +2156,7 @@ void Boss03_SetObject(PlayState* play, s16 objectId) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
 
     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);
     gSPSegment(POLY_XLU_DISP++, 0x06, play->objectCtx.status[objectIndex].segment);

@@ -81,9 +81,9 @@ s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     }
 
     if (objectIndex2 >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         isAnimFinished = SkelAnime_Update(&this->skelAnime);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
 
     return isAnimFinished;
@@ -101,10 +101,10 @@ s32 DmGm_ChangeAnim(DmGm* this, PlayState* play, s32 animIndex) {
     }
 
     if ((objectIndex2 >= 0) && (this->animIndex != animIndex)) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
         this->animIndex = animIndex;
         didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
 
     return didAnimChange;

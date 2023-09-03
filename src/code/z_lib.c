@@ -719,7 +719,7 @@ void* Lib_VirtualToPhysical(void* ptr) {
     if (ptr == NULL) {
         return NULL;
     } else {
-        return (void*)VIRTUAL_TO_PHYSICAL(ptr);
+        return (void*)OS_K0_TO_PHYSICAL(ptr);
     }
 }
 

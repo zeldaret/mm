@@ -2857,7 +2857,7 @@ void KaleidoScope_Update(PlayState* play) {
             size0 = SEGMENT_ROM_SIZE(icon_item_static_syms);
             CmpDma_LoadAllFiles((uintptr_t)SEGMENT_ROM_START(icon_item_static_yar), pauseCtx->iconItemSegment, size0);
 
-            gSegments[0x08] = VIRTUAL_TO_PHYSICAL(pauseCtx->iconItemSegment);
+            gSegments[0x08] = OS_K0_TO_PHYSICAL(pauseCtx->iconItemSegment);
 
             for (itemId = 0; itemId <= ITEM_BOW_FIRE; itemId++) {
                 if (!gPlayerFormItemRestrictions[GET_PLAYER_FORM][(s32)itemId]) {

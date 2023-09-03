@@ -265,8 +265,8 @@ s32 EnBba01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f*
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->enHy.headObjIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelLowerObjIndex].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
@@ -304,7 +304,7 @@ void EnBba01_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
-        gSegments[0x06] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
+        gSegments[0x06] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->enHy.skelUpperObjIndex].segment);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }

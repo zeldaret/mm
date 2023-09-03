@@ -320,7 +320,7 @@ void DmStk_LoadObjectForAnimation(DmStk* this, PlayState* play) {
     }
 
     if (objectIndex >= 0) {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
 }
 
@@ -1968,13 +1968,13 @@ void DmStk_PostLimbDraw2(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot
                     (this->objectStk2ObjectIndex >= 0)) {
                     Matrix_Push();
                     Matrix_Scale(2.0f, 2.0f, 2.0f, MTXMODE_APPLY);
-                    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->objectStk2ObjectIndex].segment);
+                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectStk2ObjectIndex].segment);
 
                     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(gSkullKidMajorasMaskCurseOverlayTexAnim));
                     Gfx_DrawDListOpa(play, gSkullKidMajorasMaskCurseOverlayDL);
-                    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
+                    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
 
                     gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectStkObjectIndex].segment);
 
@@ -2095,7 +2095,7 @@ void DmStk_Draw(Actor* thisx, PlayState* play) {
             return;
         }
 
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
+        gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->objectStkObjectIndex].segment);
 
         OPEN_DISPS(play->state.gfxCtx);
 

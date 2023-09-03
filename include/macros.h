@@ -21,10 +21,7 @@
 
 #define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
 
-// TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
-#define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + K0BASE)
-#define VIRTUAL_TO_PHYSICAL(addr) OS_K0_TO_PHYSICAL(addr)
-#define SEGMENTED_TO_VIRTUAL(addr) (void*)((uintptr_t)PHYSICAL_TO_VIRTUAL(gSegments[SEGMENT_NUMBER(addr)]) + SEGMENT_OFFSET(addr))
+#define SEGMENTED_TO_VIRTUAL(addr) (void*)(((uintptr_t)(gSegments[SEGMENT_NUMBER(addr)]) + K0BASE) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 

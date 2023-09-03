@@ -373,12 +373,12 @@ s32 func_80BB1D64(EnGeg* this, PlayState* play) {
 }
 
 void func_80BB1FCC(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
     SkelAnime_Update(&this->skelAnime);
 }
 
 void func_80BB2020(EnGeg* this, PlayState* play) {
-    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
+    gSegments[6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[this->unk_248].segment);
     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->unk_4AC);
 }
 
