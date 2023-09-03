@@ -1,6 +1,7 @@
 #include "prevent_bss_reordering.h"
 #include "ultra64.h"
 #include "global.h"
+#include "PR/os_internal_flash.h"
 
 s32 framDeviceInfo[4];
 OSIoMesg framDeviceInfoQuery;

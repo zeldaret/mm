@@ -4,6 +4,15 @@
 #include "ultratypes.h"
 #include "os_pi.h"
 
+#define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
+#define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
+
+#define FLASH_VERSION_MX_PROTO_A 0x00C20000
+#define FLASH_VERSION_MX_A       0x00C20001
+#define FLASH_VERSION_MX_C       0x00C2001E
+#define FLASH_VERSION_MX_B_AND_D 0x00C2001D
+#define FLASH_VERSION_MEI        0x003200F1
+
 
 OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32 start);
 OSPiHandle* osFlashInit(void);

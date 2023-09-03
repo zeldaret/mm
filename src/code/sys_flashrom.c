@@ -5,6 +5,8 @@
 #include "stackcheck.h"
 #include "system_malloc.h"
 #include "z64thread.h"
+#include "sys_flashrom.h"
+#include "PR/os_internal_flash.h"
 
 OSMesgQueue sFlashromMesgQueue;
 OSMesg sFlashromMesg[1];
