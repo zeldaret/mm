@@ -2,11 +2,11 @@
 #include "ultra64.h"
 #include "global.h"
 
-s32 framDeviceInfo[4];
-OSIoMesg framDeviceInfoQuery;
-OSMesgQueue __osFlashMessageQ;
-OSPiHandle __osFlashHandler;
-OSMesg __osFlashMsgBuf;
+u32 __osFlashID[4] ALIGNED8;
+OSIoMesg __osFlashMsg ALIGNED8;
+OSMesgQueue __osFlashMessageQ ALIGNED8;
+OSPiHandle __osFlashHandler ALIGNED8;
+OSMesg __osFlashMsgBuf[1];
 s32 __osFlashVersion;
 UNK_TYPE1 D_801FD0FC[0x14];
 
@@ -44,7 +44,7 @@ OSPiHandle* osFlashInit(void) {
     u32 flashType;
     u32 flashVendor;
 
-    osCreateMesgQueue(&__osFlashMessageQ, &__osFlashMsgBuf, 1);
+    osCreateMesgQueue(&__osFlashMessageQ, __osFlashMsgBuf, ARRAY_COUNT(__osFlashMsgBuf));
 
     if (__osFlashHandler.baseAddress == PHYS_TO_K1(FRAM_BASE_ADDRESS)) {
         return &__osFlashHandler;
@@ -99,18 +99,18 @@ void osFlashReadId(u32* flashType, u32* flashVendor) {
                  FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS);
 
     // read silicon id using DMA
-    framDeviceInfoQuery.hdr.pri = 0;
-    framDeviceInfoQuery.hdr.retQueue = &__osFlashMessageQ;
-    framDeviceInfoQuery.dramAddr = framDeviceInfo;
-    framDeviceInfoQuery.devAddr = 0;
-    framDeviceInfoQuery.size = 8;
+    __osFlashMsg.hdr.pri = 0;
+    __osFlashMsg.hdr.retQueue = &__osFlashMessageQ;
+    __osFlashMsg.dramAddr = __osFlashID;
+    __osFlashMsg.devAddr = 0;
+    __osFlashMsg.size = 2 * sizeof(u32);
 
-    osInvalDCache(framDeviceInfo, sizeof(framDeviceInfo));
-    osEPiStartDma(&__osFlashHandler, &framDeviceInfoQuery, OS_READ);
+    osInvalDCache(__osFlashID, sizeof(__osFlashID));
+    osEPiStartDma(&__osFlashHandler, &__osFlashMsg, OS_READ);
     osRecvMesg(&__osFlashMessageQ, NULL, OS_MESG_BLOCK);
 
-    *flashType = framDeviceInfo[0];
-    *flashVendor = framDeviceInfo[1];
+    *flashType = __osFlashID[0];
+    *flashVendor = __osFlashID[1];
 
     return;
 }
