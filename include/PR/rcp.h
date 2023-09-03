@@ -108,6 +108,73 @@
 #define SP_IMEM_START   0x04001000
 #define SP_IMEM_END     0x04001FFF
 
+/**
+ * SP_STATUS_REG: write bits
+ */
+#define SP_CLR_HALT        (1 <<  0)
+#define SP_SET_HALT        (1 <<  1)
+#define SP_CLR_BROKE       (1 <<  2)
+#define SP_CLR_INTR        (1 <<  3)
+#define SP_SET_INTR        (1 <<  4)
+#define SP_CLR_SSTEP       (1 <<  5)
+#define SP_SET_SSTEP       (1 <<  6)
+#define SP_CLR_INTR_BREAK  (1 <<  7)
+#define SP_SET_INTR_BREAK  (1 <<  8)
+#define SP_CLR_SIG0        (1 <<  9)
+#define SP_SET_SIG0        (1 << 10)
+#define SP_CLR_SIG1        (1 << 11)
+#define SP_SET_SIG1        (1 << 12)
+#define SP_CLR_SIG2        (1 << 13)
+#define SP_SET_SIG2        (1 << 14)
+#define SP_CLR_SIG3        (1 << 15)
+#define SP_SET_SIG3        (1 << 16)
+#define SP_CLR_SIG4        (1 << 17)
+#define SP_SET_SIG4        (1 << 18)
+#define SP_CLR_SIG5        (1 << 19)
+#define SP_SET_SIG5        (1 << 20)
+#define SP_CLR_SIG6        (1 << 21)
+#define SP_SET_SIG6        (1 << 22)
+#define SP_CLR_SIG7        (1 << 23)
+#define SP_SET_SIG7        (1 << 24)
+
+/*
+ * SP_STATUS_REG: read bits
+ */
+#define SP_STATUS_HALT          (1 <<  0)
+#define SP_STATUS_BROKE         (1 <<  1)
+#define SP_STATUS_DMA_BUSY      (1 <<  2)
+#define SP_STATUS_DMA_FULL      (1 <<  3)
+#define SP_STATUS_IO_FULL       (1 <<  4)
+#define SP_STATUS_SSTEP         (1 <<  5)
+#define SP_STATUS_INTR_BREAK    (1 <<  6)
+#define SP_STATUS_SIG0          (1 <<  7)
+#define SP_STATUS_SIG1          (1 <<  8)
+#define SP_STATUS_SIG2          (1 <<  9)
+#define SP_STATUS_SIG3          (1 << 10)
+#define SP_STATUS_SIG4          (1 << 11)
+#define SP_STATUS_SIG5          (1 << 12)
+#define SP_STATUS_SIG6          (1 << 13)
+#define SP_STATUS_SIG7          (1 << 14)
+
+/**
+ * SP_STATUS_REG: use of SIG bits
+ */
+#define SP_CLR_YIELD            SP_CLR_SIG0
+#define SP_SET_YIELD            SP_SET_SIG0
+#define SP_STATUS_YIELD         SP_STATUS_SIG0
+#define SP_CLR_YIELDED          SP_CLR_SIG1
+#define SP_SET_YIELDED          SP_SET_SIG1
+#define SP_STATUS_YIELDED       SP_STATUS_SIG1
+#define SP_CLR_TASKDONE         SP_CLR_SIG2
+#define SP_SET_TASKDONE         SP_SET_SIG2
+#define SP_STATUS_TASKDONE      SP_STATUS_SIG2
+#define SP_CLR_RSPSIGNAL        SP_CLR_SIG3
+#define SP_SET_RSPSIGNAL        SP_SET_SIG3
+#define SP_STATUS_RSPSIGNAL     SP_STATUS_SIG3
+#define SP_CLR_CPUSIGNAL        SP_CLR_SIG4
+#define SP_SET_CPUSIGNAL        SP_SET_SIG4
+#define SP_STATUS_CPUSIGNAL     SP_STATUS_SIG4
+
 #define CHNL_ERR_NORESP     0x80    /* Bit 7 (Rx): No response error */
 #define CHNL_ERR_OVERRUN    0x40    /* Bit 6 (Rx): Overrun error */
 #define CHNL_ERR_FRAME      0x80    /* Bit 7 (Tx): Frame error */

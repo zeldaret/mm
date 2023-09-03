@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 void __osViSwapContext(void) {
     register OSViMode* viMode;

@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 void osViSetYScale(f32 value) {
     register u32 saveMask;
@@ -7,7 +7,7 @@ void osViSetYScale(f32 value) {
 
     __osViNext->y.factor = value;
 
-    __osViNext->state |= 0x4;
+    __osViNext->state |= VI_STATE_YSCALE_UPDATED;
 
     __osRestoreInt(saveMask);
 }

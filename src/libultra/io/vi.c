@@ -1,6 +1,7 @@
-#include "global.h"
+#include "ultra64.h"
+#include "alignment.h"
 
-__OSViContext vi[2] = { 0 };
+__OSViContext vi[2] ALIGNED(8) = { 0 };
 __OSViContext* __osViCurr = &vi[0];
 __OSViContext* __osViNext = &vi[1];
 

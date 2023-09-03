@@ -1,14 +1,16 @@
-#include "global.h"
+#include "ultra64.h"
 #include "PR/osint.h"
 #include "stack.h"
 #include "PR/osint.h"
+#include "libc/stdbool.h"
+#include "macros.h"
 
 OSThread viThread;
-STACK(sViStack, 0x1000);
-OSMesgQueue viEventQueue;
-OSMesg viEventBuf[6];
-OSIoMesg viRetraceMsg;
-OSIoMesg viCounterMsg;
+STACK(sViStack, OS_VIM_STACKSIZE) ALIGNED(16);
+OSMesgQueue viEventQueue ALIGNED(8);
+OSMesg viEventBuf[6] ALIGNED(8);
+OSIoMesg viRetraceMsg ALIGNED(8);
+OSIoMesg viCounterMsg ALIGNED(8);
 OSDevMgr __osViDevMgr = { 0 };
 u32 __additional_scanline = 0;
 
