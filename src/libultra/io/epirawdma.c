@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, uintptr_t cartAddr, void* dramAddr, size_t size) {
     s32 status;

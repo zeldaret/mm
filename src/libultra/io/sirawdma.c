@@ -1,4 +1,5 @@
-#include "global.h"
+#include "ultra64.h"
+#include "alignment.h"
 
 s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
     if (IO_READ(SI_STATUS_REG) & (SI_STATUS_DMA_BUSY | SI_STATUS_IO_READ_BUSY)) {
@@ -6,7 +7,7 @@ s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
     }
 
     if (direction == OS_WRITE) {
-        osWritebackDCache(dramAddr, PIF_RAM_SIZE);
+        osWritebackDCache(dramAddr, ALIGN16(PIF_RAM_END - PIF_RAM_START));
     }
 
     IO_WRITE(SI_DRAM_ADDR_REG, osVirtualToPhysical(dramAddr));
@@ -18,7 +19,7 @@ s32 __osSiRawStartDma(s32 direction, void* dramAddr) {
     }
 
     if (direction == OS_READ) {
-        osInvalDCache(dramAddr, PIF_RAM_SIZE);
+        osInvalDCache(dramAddr, ALIGN16(PIF_RAM_END - PIF_RAM_START));
     }
     return 0;
 }

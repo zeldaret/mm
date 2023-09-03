@@ -1,5 +1,7 @@
-#include "global.h"
+#include "ultra64.h"
+#include "alignment.h"
 #include "stack.h"
+#include "macros.h"
 
 OSPiHandle __Dom1SpeedParam ALIGNED(8);
 OSPiHandle __Dom2SpeedParam ALIGNED(8);

@@ -1,4 +1,4 @@
-#include "global.h"
+#include "ultra64.h"
 
 s32 __osPiRawStartDma(s32 direction, uintptr_t devAddr, void* dramAddr, size_t size) {
     register int status = IO_READ(PI_STATUS_REG);
