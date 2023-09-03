@@ -108,7 +108,6 @@ beginseg
     include "build/src/libultra/os/stoptimer.o"
     include "build/asm/boot/probetlb.text.o"
     include "build/src/libultra/io/pimgr.o"
-    include "build/data/boot/pimgr.data.o"
     include "build/src/libultra/io/piacs.o"
     pad_text
     include "build/src/libultra/io/devmgr.o"
@@ -185,7 +184,7 @@ beginseg
     include "build/src/libultra/voice/voicegetstatus.o"
     include "build/src/libultra/io/cartrominit.o"
     include "build/src/libultra/gu/guS2DInitBg.o"
-    include "build/data/boot/guS2DInitBg.data.o"
+    include "build/data/boot/vimodefpallan1.data.o"
     include "build/src/libultra/io/pfsselectbank.o"
     include "build/src/libultra/io/contsetch.o"
     include "build/asm/boot/setfpccsr.text.o"

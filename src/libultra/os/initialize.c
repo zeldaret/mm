@@ -7,16 +7,16 @@ typedef struct {
     /* 0x4 */ u32 ins_04;   // addiu   k0, k0, 0x39E0
     /* 0x8 */ u32 ins_08;   // jr      k0 ; __osException
     /* 0xC */ u32 ins_0C;   // nop
-} struct_exceptionPreamble; // size = 0x10
+} __osExceptionVector; // size = 0x10
 
-extern struct_exceptionPreamble __osExceptionPreamble;
+extern __osExceptionVector __osExceptionPreamble;
 
 u64 osClockRate = OS_CLOCK_RATE;
 s32 osViClock = VI_NTSC_CLOCK;
 u32 __osShutdown = 0;
 u32 __OSGlobalIntMask = OS_IM_ALL;
 
-UNK_TYPE4 D_8009CF70;
+u32 __osFinalrom;
 
 void __createSpeedParam(void) {
     __Dom1SpeedParam.type = DEVICE_TYPE_INIT;
@@ -35,28 +35,28 @@ void __createSpeedParam(void) {
 void __osInitialize_common(void) {
     u32 pifdata;
 
-    D_8009CF70 = 1;
+    __osFinalrom = 1;
 
-    __osSetSR(__osGetSR() | 0x20000000);
-    __osSetFpcCsr(0x01000800);
+    __osSetSR(__osGetSR() | SR_CU1);
+    __osSetFpcCsr(FPCSR_FS | FPCSR_EV);
     __osSetWatchLo(0x04900000);
 
     while (__osSiRawReadIo(0x1FC007FC, &pifdata)) {}
 
     while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {}
 
-    *(struct_exceptionPreamble*)0x80000000 = __osExceptionPreamble;
-    *(struct_exceptionPreamble*)0x80000080 = __osExceptionPreamble;
-    *(struct_exceptionPreamble*)0x80000100 = __osExceptionPreamble;
-    *(struct_exceptionPreamble*)0x80000180 = __osExceptionPreamble;
+    *(__osExceptionVector*)UT_VEC = __osExceptionPreamble;
+    *(__osExceptionVector*)XUT_VEC = __osExceptionPreamble;
+    *(__osExceptionVector*)ECC_VEC = __osExceptionPreamble;
+    *(__osExceptionVector*)E_VEC = __osExceptionPreamble;
 
-    osWritebackDCache(0x80000000, 400);
-    osInvalICache(0x80000000, 400);
+    osWritebackDCache((void*)UT_VEC, E_VEC - UT_VEC + sizeof(__osExceptionVector));
+    osInvalICache((void*)UT_VEC, E_VEC - UT_VEC + sizeof(__osExceptionVector));
     __createSpeedParam();
     osUnmapTLBAll();
     osMapTLBRdb();
 
-    osClockRate = (u64)((osClockRate * 3LL) / 4ULL);
+    osClockRate = osClockRate * 3 / 4;
 
     if (osResetType == COLD_RESET) {
         bzero(osAppNMIBuffer, OS_APP_NMI_BUFSIZE);
@@ -70,13 +70,13 @@ void __osInitialize_common(void) {
         osViClock = VI_NTSC_CLOCK;
     }
 
-    if (__osGetCause() & 0x1000) {
+    if (__osGetCause() & CAUSE_IP5) {
         while (true) {}
     }
 
     IO_WRITE(AI_CONTROL_REG, AI_CONTROL_DMA_ON);
-    IO_WRITE(AI_DACRATE_REG, 0x3FFF);
-    IO_WRITE(AI_BITRATE_REG, 0xF);
+    IO_WRITE(AI_DACRATE_REG, AI_MAX_DAC_RATE - 1);
+    IO_WRITE(AI_BITRATE_REG, AI_MAX_BIT_RATE - 1);
 }
 
 void __osInitialize_autodetect(void) {

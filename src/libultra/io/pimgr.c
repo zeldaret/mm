@@ -1,14 +1,16 @@
 #include "global.h"
 #include "stack.h"
 
-OSPiHandle __Dom1SpeedParam;
-OSPiHandle __Dom2SpeedParam;
+OSPiHandle __Dom1SpeedParam ALIGNED8;
+OSPiHandle __Dom2SpeedParam ALIGNED8;
 OSThread sPiMgrThread;
 STACK(sPiMgrStack, 0x1000);
-OSMesgQueue D_8009E3D0;
-OSMesg D_8009E3E8[1];
+OSMesgQueue piEventQueue ALIGNED8;
+OSMesg piEventBuf[1];
 
-// TODO: migrate data
+OSDevMgr __osPiDevMgr = { 0 };
+OSPiHandle* __osPiTable = NULL;
+OSPiHandle* __osCurrentHandle[2] ALIGNED8 = { &__Dom1SpeedParam, &__Dom2SpeedParam };
 
 void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) {
     u32 savedMask;
@@ -17,11 +19,11 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
 
     if (!__osPiDevMgr.active) {
         osCreateMesgQueue(cmdQ, cmdBuf, cmdMsgCnt);
-        osCreateMesgQueue(&D_8009E3D0, D_8009E3E8, ARRAY_COUNT(D_8009E3E8));
+        osCreateMesgQueue(&piEventQueue, piEventBuf, ARRAY_COUNT(piEventBuf));
         if (!__osPiAccessQueueEnabled) {
             __osPiCreateAccessQueue();
         }
-        osSetEventMesg(OS_EVENT_PI, &D_8009E3D0, (OSMesg)0x22222222);
+        osSetEventMesg(OS_EVENT_PI, &piEventQueue, (OSMesg)0x22222222);
         oldPri = -1;
         myPri = osGetThreadPri(NULL);
         if (myPri < pri) {
@@ -32,7 +34,7 @@ void osCreatePiManager(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgC
         __osPiDevMgr.active = 1;
         __osPiDevMgr.thread = &sPiMgrThread;
         __osPiDevMgr.cmdQueue = cmdQ;
-        __osPiDevMgr.evtQueue = &D_8009E3D0;
+        __osPiDevMgr.evtQueue = &piEventQueue;
         __osPiDevMgr.acsQueue = &__osPiAccessQueue;
         __osPiDevMgr.piDmaCallback = __osPiRawStartDma;
         __osPiDevMgr.epiDmaCallback = __osEPiRawStartDma;
