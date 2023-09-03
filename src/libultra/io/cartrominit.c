@@ -30,7 +30,7 @@ OSPiHandle* osCartRomInit(void) {
     bzero(&__CartRomHandle.transferInfo, sizeof(__OSTranxInfo));
 
     /* Uses `status & PI_STATUS_ERROR` in OoT */
-    while (status = IO_READ(PI_STATUS_REG), status & (PI_STATUS_BUSY | PI_STATUS_IOBUSY)) {
+    while (status = IO_READ(PI_STATUS_REG), status & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) {
         ;
     }
 

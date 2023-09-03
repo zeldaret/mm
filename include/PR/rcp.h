@@ -94,6 +94,13 @@
 #define AI_MAX_BIT_RATE 16      /* 4-bit+1 */
 #define AI_MIN_BIT_RATE 2
 
+#define CHNL_ERR_NORESP     0x80    /* Bit 7 (Rx): No response error */
+#define CHNL_ERR_OVERRUN    0x40    /* Bit 6 (Rx): Overrun error */
+#define CHNL_ERR_FRAME      0x80    /* Bit 7 (Tx): Frame error */
+#define CHNL_ERR_COLLISION  0x40    /* Bit 6 (Tx): Collision error */
+
+#define CHNL_ERR_MASK       0xC0    /* Bit 6-7: channel errors */
+
 #define DEVICE_TYPE_CART    0   /* ROM cartridge */
 #define DEVICE_TYPE_BULK    1   /* ROM bulk */
 #define DEVICE_TYPE_64DD    2   /* 64 Disk Drive */
@@ -107,6 +114,15 @@
 #define SP_DMEM_END     0x04000FFF
 #define SP_IMEM_START   0x04001000
 #define SP_IMEM_END     0x04001FFF
+
+#define SP_MEM_ADDR_REG   0x04040000
+#define SP_DRAM_ADDR_REG  0x04040004
+#define SP_RD_LEN_REG     0x04040008
+#define SP_WR_LEN_REG     0x0404000C
+#define SP_STATUS_REG     0x04040010
+#define SP_DMA_FULL_REG   0x04040014
+#define SP_DMA_BUSY_REG   0x04040018
+#define SP_PC_REG         0x04080000
 
 /**
  * SP_STATUS_REG: write bits
@@ -175,18 +191,81 @@
 #define SP_SET_CPUSIGNAL        SP_SET_SIG4
 #define SP_STATUS_CPUSIGNAL     SP_STATUS_SIG4
 
-#define CHNL_ERR_NORESP     0x80    /* Bit 7 (Rx): No response error */
-#define CHNL_ERR_OVERRUN    0x40    /* Bit 6 (Rx): Overrun error */
-#define CHNL_ERR_FRAME      0x80    /* Bit 7 (Tx): Frame error */
-#define CHNL_ERR_COLLISION  0x40    /* Bit 6 (Tx): Collision error */
+#define VI_STATUS_REG          0x04400000
+#define VI_CONTROL_REG         0x04400000
+#define VI_ORIGIN_REG          0x04400004
+#define VI_DRAM_ADDR_REG       0x04400004
+#define VI_WIDTH_REG           0x04400008
+#define VI_H_WIDTH_REG         0x04400008
+#define VI_INTR_REG            0x0440000C
+#define VI_V_INTER_REG         0x0440000C
+#define VI_CURRENT_REG         0x04400010
+#define VI_V_CURRENT_LINE_REG  0x04400010
+#define VI_BURST_REG           0x04400014
+#define VI_TIMING_REG          0x04400014
+#define VI_V_SYNC_REG          0x04400018 //VI vertical sync
+#define VI_H_SYNC_REG          0x0440001C //VI horizontal sync
+#define VI_LEAP_REG            0x04400020 //VI horizontal sync leap
+#define VI_H_SYNC_LEAP_REG     0x04400020
+#define VI_H_START_REG         0x04400024 //VI horizontal video
+#define VI_H_VIDEO_REG         0x04400024
+#define VI_V_START_REG         0x04400028 //VI vertical video
+#define VI_V_VIDEO_REG         0x04400028
+#define VI_V_BURST_REG         0x0440002C //VI vertical burst
+#define VI_X_SCALE_REG         0x04400030 //VI x-scale
+#define VI_Y_SCALE_REG         0x04400034 //VI y-scale
 
-#define CHNL_ERR_MASK       0xC0    /* Bit 6-7: channel errors */
+#define PI_DRAM_ADDR_REG     0x04600000 //PI DRAM address
+#define PI_CART_ADDR_REG     0x04600004 //PI pbus (cartridge) address
+#define PI_RD_LEN_REG        0x04600008 //PI read length
+#define PI_WR_LEN_REG        0x0460000C //PI write length
+#define PI_STATUS_REG        0x04600010 //PI status
+#define PI_BSD_DOM1_LAT_REG  0x04600014 //PI dom1 latency
+#define PI_DOMAIN1_REG       0x04600014
+#define PI_BSD_DOM1_PWD_REG  0x04600018 //PI dom1 pulse width
+#define PI_BSD_DOM1_PGS_REG  0x0460001C //PI dom1 page size
+#define PI_BSD_DOM1_RLS_REG  0x04600020 //PI dom1 release
+#define PI_BSD_DOM2_LAT_REG  0x04600024 //PI dom2 latency
+#define PI_DOMAIN2_REG       0x04600024
+#define PI_BSD_DOM2_PWD_REG  0x04600028 //PI dom2 pulse width
+#define PI_BSD_DOM2_PGS_REG  0x0460002C //PI dom2 page size
+#define PI_BSD_DOM2_RLS_REG  0x04600030 //PI dom2 release
+
+#define PI_STATUS_DMA_BUSY (1 << 0)
+#define PI_STATUS_IO_BUSY  (1 << 1)
+#define PI_STATUS_ERROR    (1 << 2)
+
+/*
+ * PI_STATUS_REG: write bits
+ */
+#define PI_STATUS_RESET     (1 << 0)
+#define PI_SET_RESET        PI_STATUS_RESET
+
+#define PI_STATUS_CLR_INTR  (1 << 1)
+#define PI_CLR_INTR         PI_STATUS_CLR_INTR
+
+#define PI_DMA_BUFFER_SIZE  128
 
 #define PI_DOM1_ADDR1   0x06000000  /* to 0x07FFFFFF */
 #define PI_DOM1_ADDR2   0x10000000  /* to 0x1FBFFFFF */
 #define PI_DOM1_ADDR3   0x1FD00000  /* to 0x7FFFFFFF */
 #define PI_DOM2_ADDR1   0x05000000  /* to 0x05FFFFFF */
 #define PI_DOM2_ADDR2   0x08000000  /* to 0x0FFFFFFF */
+
+/**
+ * Serial Interface (SI) Registers
+ */
+#define SI_BASE_REG             0x04800000
+
+#define SI_DRAM_ADDR_REG        (SI_BASE_REG + 0x00)
+#define SI_PIF_ADDR_RD64B_REG   (SI_BASE_REG + 0x04)
+#define SI_PIF_ADDR_WR64B_REG   (SI_BASE_REG + 0x10)
+#define SI_STATUS_REG           (SI_BASE_REG + 0x18)
+
+#define SI_STATUS_DMA_BUSY      (1 << 0)
+#define SI_STATUS_IO_READ_BUSY  (1 << 1)
+#define SI_STATUS_DMA_ERROR     (1 << 3)
+#define SI_STATUS_INTERRUPT     (1 << 12)
 
 #define IO_READ(addr)       (*(vu32*)PHYS_TO_K1(addr))
 #define IO_WRITE(addr,data) (*(vu32*)PHYS_TO_K1(addr)=(u32)(data))

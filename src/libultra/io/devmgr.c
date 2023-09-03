@@ -52,7 +52,7 @@ void __osDevMgrMain(void* arg) {
                     __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | LEO_BM_CTL_CLR_MECHANIC_INTR);
                 }
                 block->errStatus = 4;
-                IO_WRITE(PI_STATUS_REG, PI_STATUS_CLEAR_INTR);
+                IO_WRITE(PI_STATUS_REG, PI_CLR_INTR);
                 __osSetGlobalIntMask(OS_IM_PI | SR_IBIT4);
             }
             osSendMesg(ioMesg->hdr.retQueue, (OSMesg)ioMesg, OS_MESG_NOBLOCK);

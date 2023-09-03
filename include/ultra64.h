@@ -7,7 +7,6 @@
 #include "PR/gu.h"
 #include "PR/guint.h"
 #include "PR/controller_voice.h"
-#include "PR/hardware.h"
 #include "PR/os.h"
 #include "PR/osint.h"
 #include "PR/piint.h"
