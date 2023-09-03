@@ -115,6 +115,12 @@
 
 #define CHNL_ERR_MASK       0xC0    /* Bit 6-7: channel errors */
 
+#define PI_DOM1_ADDR1   0x06000000  /* to 0x07FFFFFF */
+#define PI_DOM1_ADDR2   0x10000000  /* to 0x1FBFFFFF */
+#define PI_DOM1_ADDR3   0x1FD00000  /* to 0x7FFFFFFF */
+#define PI_DOM2_ADDR1   0x05000000  /* to 0x05FFFFFF */
+#define PI_DOM2_ADDR2   0x08000000  /* to 0x0FFFFFFF */
+
 #define IO_READ(addr)       (*(vu32*)PHYS_TO_K1(addr))
 #define IO_WRITE(addr,data) (*(vu32*)PHYS_TO_K1(addr)=(u32)(data))
 

@@ -270,6 +270,7 @@
             0x80097E70 : "pimgr",
             0x80097EA0 : "piacs",
             0x80097EB0 : "contpfs",
+            0x80097EB0 : "vimodentschpn1",
             0x80097F10 : "seteventmesg",
             0x80097F20 : "xprintf",
             0x80097F70 : "timerintr",

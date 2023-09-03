@@ -112,6 +112,7 @@ beginseg
     pad_text
     include "build/src/libultra/io/devmgr.o"
     include "build/src/libultra/io/pirawdma.o"
+    include "build/src/libultra/vimodes/vimodentschpn1.o"
     include "build/src/libultra/io/contpfs.o"
     include "build/asm/boot/getcount.text.o"
     pad_text

@@ -1,4 +1,6 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
+#include "macros.h"
 
 void __osPackReadData(void);
 

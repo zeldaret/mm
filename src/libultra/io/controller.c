@@ -1,13 +1,16 @@
-#include "global.h"
+#include "ultra64.h"
+#include "PR/controller.h"
+#include "alignment.h"
+#include "macros.h"
 
 s32 __osContinitialized = 0;
 
-OSPifRam __osContPifRam;
+OSPifRam __osContPifRam ALIGNED(16);
 u8 __osContLastPoll;
 u8 __osMaxControllers;
 
 OSTimer __osEepromTimer;
-OSMesgQueue __osEepromTimerQ;
+OSMesgQueue __osEepromTimerQ ALIGNED(8);
 OSMesg __osEepromTimerMsg[1];
 
 s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
@@ -24,15 +27,15 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     __osContinitialized = 1;
 
     t = osGetTime();
-    if (t < 0x165A0BC) {
+    if (t < OS_USEC_TO_CYCLES(500000)) {
         osCreateMesgQueue(&timerMesgQueue, &dummy, 1);
-        osSetTimer(&mytimer, 0x165A0BC - t, 0, &timerMesgQueue, &dummy);
+        osSetTimer(&mytimer, OS_USEC_TO_CYCLES(500000) - t, 0, &timerMesgQueue, &dummy);
         osRecvMesg(&timerMesgQueue, &dummy, OS_MESG_BLOCK);
     }
 
     __osMaxControllers = 4;
 
-    __osPackRequestData(0);
+    __osPackRequestData(CONT_CMD_REQUEST_STATUS);
 
     ret = __osSiRawStartDma(OS_WRITE, &__osContPifRam);
     osRecvMesg(mq, &dummy, OS_MESG_BLOCK);

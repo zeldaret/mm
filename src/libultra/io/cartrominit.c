@@ -1,6 +1,8 @@
-#include "global.h"
+#include "ultra64.h"
+#include "libc/stdbool.h"
+#include "alignment.h"
 
-OSPiHandle __CartRomHandle;
+OSPiHandle __CartRomHandle ALIGNED(8);
 
 OSPiHandle* osCartRomInit(void) {
     register u32 initialConfig;
@@ -22,8 +24,8 @@ OSPiHandle* osCartRomInit(void) {
 
     sCartRomNeedsInit = false;
     __CartRomHandle.type = DEVICE_TYPE_CART;
-    __CartRomHandle.baseAddress = 0xB0000000;
-    __CartRomHandle.domain = 0;
+    __CartRomHandle.baseAddress = PHYS_TO_K1(PI_DOM1_ADDR2);
+    __CartRomHandle.domain = PI_DOMAIN1;
     __CartRomHandle.speed = 0;
     bzero(&__CartRomHandle.transferInfo, sizeof(__OSTranxInfo));
 
