@@ -344,7 +344,7 @@
     0x8009D3D0:("sPiMgrStack","u8","[4096]",0x1000),
     0x8009E3D0:("D_8009E3D0","OSMesgQueue","",0x18),
     0x8009E3E8:("D_8009E3E8","OSMesg","[1]",0x4),
-    0x8009E3F0:("D_8009E3F0","OSMesg","[1]",0x4),
+    0x8009E3F0:("piAccessBuf","OSMesg","[1]",0x4),
     0x8009E3F8:("__osPiAccessQueue","OSMesgQueue","",0x18),
     0x8009E410:("__osPfsInodeCache","__OSInode","",0x100),
     0x8009E510:("__osEventStateTab","__OSEventState","[16]",0x80),

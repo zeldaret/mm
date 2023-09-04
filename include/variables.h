@@ -31,11 +31,6 @@ extern s16 sintable[0x400];
 extern u32 __osSiAccessQueueEnabled;
 extern UNK_TYPE4 D_80097E40;
 
-extern OSDevMgr __osPiDevMgr;
-
-extern OSPiHandle* __osCurrentHandle[];
-extern UNK_TYPE4 __osPiAccessQueueEnabled;
-
 extern s32 __osPfsInodeCacheChannel;
 extern u8 __osPfsInodeCacheBank;
 extern UNK_TYPE4 D_80097F10;
@@ -133,12 +128,6 @@ extern OSTask tmp_task;
 extern OSMesg siAccessBuf[1];
 extern OSMesgQueue __osSiAccessQueue;
 
-extern OSThread __osThreadSave;
-extern OSPiHandle __Dom1SpeedParam;
-extern OSPiHandle __Dom2SpeedParam;
-
-extern OSMesg D_8009E3F0[1];
-extern OSMesgQueue __osPiAccessQueue;
 extern __OSInode __osPfsInodeCache;
 
 extern OSPiHandle CartRomHandle;
