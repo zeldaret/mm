@@ -3,8 +3,7 @@
  * Description:
  */
 
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "z64actor.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
