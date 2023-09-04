@@ -209,9 +209,8 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
 
         // this->actor.scale.z = (( this->unk19C * this->unk198 * (f32)this->unk194) * Math_CosS((s16)(this->unk1A8 +
         // this->unk1A4))) + 0.1f;
-        this->actor.scale.z =
-            0.1f + (((f32)this->unk194 * this->unk19C * this->unk198) * Math_CosS((s16)(this->unk1A8 + this->unk1A4)));
-        this->actor.scale.x = this->actor.scale.z;
+        this->actor.scale.x = this->actor.scale.z =
+            (Math_CosS((s16)(this->unk1A8 + this->unk1A4)) * (f32)this->unk194 * this->unk19C * this->unk198) + 0.1f;
 
         this->actor.scale.y =
             (Math_CosS((s16)(this->unk1A8 + this->unk1A6)) * (f32)this->unk194 * this->unk1A0 * this->unk198) + 0.1f;
@@ -240,7 +239,6 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
-
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Draw.s")
 // MATCHING
 extern Gfx D_06000300;
