@@ -65,7 +65,7 @@
     0x80097EB0:("osViModeNtscHpn1","OSViMode","",0x50),
     0x80097F00:("__osPfsInodeCacheChannel","s32","",0x4),
     0x80097F04:("__osPfsInodeCacheBank","u8","",0x1),
-    0x80097F10:("D_80097F10","UNK_TYPE4","",0x4),
+    0x80097F10:("__osPreNMI","UNK_TYPE4","",0x4),
     0x80097F20:("spaces","char","[]",0x21),
     0x80097F44:("zeroes","char","[]",0x24),
     0x80097F70:("__osTimerList","OSTimer*","",0x4),

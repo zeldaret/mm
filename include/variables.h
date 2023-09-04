@@ -28,16 +28,10 @@ extern s16 sintable[0x400];
 // extern UNK_TYPE1 D_80097DE4;
 // extern UNK_TYPE4 D_80097E08;
 
-extern u32 __osSiAccessQueueEnabled;
 extern UNK_TYPE4 D_80097E40;
 
-extern s32 __osPfsInodeCacheChannel;
-extern u8 __osPfsInodeCacheBank;
-extern UNK_TYPE4 D_80097F10;
 extern char spaces[];
 extern char zeroes[];
-
-extern s32 __osPfsLastChannel;
 
 // extern __OSViContext D_80098060[2];
 
@@ -45,7 +39,6 @@ extern s32 __osPfsLastChannel;
 
 // extern u8 ldigs[];
 // extern u8 udigs[];
-// extern OSDevMgr __osViDevMgr;
 
 extern char bootThreadName[];
 extern char idleThreadName[];
