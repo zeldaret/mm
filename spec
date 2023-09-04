@@ -36,7 +36,7 @@ beginseg
     include "build/src/boot/O2/debug.o"
     include "build/src/boot/O2/system_heap.o"
     include "build/src/boot/O2/padsetup.o"
-    include "build/src/boot/O2/boot_80086760.o"
+    include "build/src/boot/O2/math64.o"
     include "build/asm/boot/fp.text.o"
     include "build/data/boot/fp.data.o"
     include "build/src/boot/O2/system_malloc.o"
