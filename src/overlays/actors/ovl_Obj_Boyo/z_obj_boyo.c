@@ -176,66 +176,68 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index) {
 
 /********************** UPDATE **********************/
 // #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Boyo/ObjBoyo_Update.s")
-void ObjBoyo_Update(Actor* thisx, PlayState* play) {
+void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
     ObjBoyo* this = THIS;
-    CollisionCheckContext* tempCollisionChkCxt;
-    ColliderCylinder* tempCollider;
+    Actor* dataPtr;
     u32 index;
-    Actor* dataPtr = ObjBoyo_FindCollidedActor(this, play, &index);
-    
+
+    dataPtr = ObjBoyo_FindCollidedActor(this, play, &index);
+
     if (dataPtr != 0) {
         gCollisionHandling[index].colHandler(&(this->actor), dataPtr);
         // TODO: find out what all of these are.
-        this->unk19C = D_809A61D0;
+
         this->unk194 = 0x64;
-        this->unk196 = 3;     
-        this->unk1A0 = D_809A61D0;
+        this->unk196 = 3;
+        this->unk198 = 0.01f;
+        this->unk19C = 0.03f;
         this->unk1A4 = 0x3F40;
         this->unk1A6 = 0x7D0;
         this->unk1A8 = 0;
+        this->unk1A0 = 0.03f;
         this->unk1AA = 0x2DF7;
         this->unk1AC = 0x258;
-        this->unk198 = D_809A61D4;
     }
 
     if (this->unk194 > 0) { /* compute new scaling */
         // this computation might help finding what those values are.
-        
-        
+
         this->unk194 -= this->unk196;
         this->unk1AA += this->unk1AC;
         this->unk1A8 += this->unk1AA;
-        
-        this->actor.scale.z = (( this->unk19C * this->unk198 * (f32)this->unk194) * Math_CosS((s16)(this->unk1A8 + this->unk1A4))) + 0.1f;
-        
+
+        // this->actor.scale.z = (( this->unk19C * this->unk198 * (f32)this->unk194) * Math_CosS((s16)(this->unk1A8 +
+        // this->unk1A4))) + 0.1f;
+        this->actor.scale.z =
+            0.1f + (((f32)this->unk194 * this->unk19C * this->unk198) * Math_CosS((s16)(this->unk1A8 + this->unk1A4)));
         this->actor.scale.x = this->actor.scale.z;
-        
+
         this->actor.scale.y =
             (Math_CosS((s16)(this->unk1A8 + this->unk1A6)) * (f32)this->unk194 * this->unk1A0 * this->unk198) + 0.1f;
     } else {
         Actor_SetScale(&this->actor, 0.1f);
         if (this->collider.base.acFlags & AC_HIT) {
             // TODO: find out what all of these are.
+
             this->unk194 = 0x1E;
             this->unk196 = 2;
             this->unk198 = 0.033333335f;
             this->unk19C = 0.012f;
+            this->unk1A0 = 0.006f;
             this->unk1A4 = 0x3F40;
             this->unk1A6 = 0x7D0;
             this->unk1A8 = 0;
             this->unk1AA = 0x3A98;
             this->unk1AC = 0x640;
-            this->unk1A0 = *D_809A61E8;
         }
     }
     this->collider.base.acFlags &= 0xFFFD;
     this->collider.base.ocFlags1 &= 0xFFFD;
     this->collider.base.ocFlags2 &= 0xFFFE;
-    tempCollisionChkCxt = &play->colChkCtx;
-    tempCollider = &this->collider;
-    CollisionCheck_SetOC(play, tempCollisionChkCxt, &tempCollider->base);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->actor.xzDistToPlayer < 2000.0f) {
-        CollisionCheck_SetAC(play, tempCollisionChkCxt, &tempCollider->base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
 
