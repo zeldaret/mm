@@ -14,7 +14,7 @@ extern struct_exceptionPreamble __osExceptionPreamble;
 u64 osClockRate = OS_CLOCK_RATE;
 s32 osViClock = VI_NTSC_CLOCK;
 UNK_TYPE4 __osShutdown = 0;
-UNK_TYPE4 __OSGlobalIntMask = 0x003FFF01;
+u32 __OSGlobalIntMask = 0x003FFF01;
 
 UNK_TYPE4 D_8009CF70;
 
@@ -59,7 +59,7 @@ void __osInitialize_common(void) {
     osClockRate = (u64)((osClockRate * 3LL) / 4ULL);
 
     if (osResetType == COLD_RESET) {
-        bzero(osAppNmiBuffer, 64);
+        bzero(osAppNMIBuffer, 64);
     }
 
     if (osTvType == OS_TV_PAL) {

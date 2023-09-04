@@ -6,14 +6,6 @@
 #include "macros.h"
 
 // pre-boot variables
-extern u32 osTvType;
-extern u32 osRomType;
-extern uintptr_t osRomBase;
-extern u32 osResetType;
-extern u32 osCicId;
-extern u32 osVersion;
-extern size_t osMemSize;
-extern s32 osAppNmiBuffer[0x10];
 extern u16 gFramebuffer1[SCREEN_HEIGHT][SCREEN_WIDTH]; // at 0x80000500
 extern u8 D_80025D00[];
 
@@ -43,10 +35,9 @@ extern OSThread* __osRunningThread;
 extern OSThread* __osFaultedThread;
 extern u32 __osSiAccessQueueEnabled;
 extern UNK_TYPE4 D_80097E40;
-extern u64 osClockRate;
-extern s32 osViClock;
+
 extern UNK_TYPE4 __osShutdown;
-extern UNK_TYPE4 __OSGlobalIntMask;
+
 extern OSDevMgr __osPiDevMgr;
 extern OSPiHandle* __osPiTable;
 extern OSPiHandle* __osCurrentHandle[];
