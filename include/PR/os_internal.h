@@ -4,7 +4,7 @@
 #include "ultratypes.h"
 #include "os_message.h"
 #include "os_pi.h"
-
+#include "os_internal_rsp.h"
 
 typedef struct {
     /* 0x00 */ OSMesgQueue* queue;

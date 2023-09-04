@@ -48,11 +48,4 @@
 #define SP_CLR_SIG7        (1 << 23)
 #define SP_SET_SIG7        (1 << 24)
 
-
-u32 __osSpGetStatus(void);
-void __osSpSetStatus(u32 data);
-s32 __osSpSetPc(void* pc);
-s32 __osSpRawStartDma(s32 direction, void* devAddr, void* dramAddr, size_t size);
-
-
 #endif
