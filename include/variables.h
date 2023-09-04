@@ -23,8 +23,7 @@ extern s32 sIrqMgrRetraceCount;
 // extern UNK_TYPE1 sGfxPrintFontData;
 // extern UNK_TYPE4 D_80097524;
 // extern u32 sRandInt;
-extern OSViMode osViModeNtscHpf1;
-extern OSViMode osViModePalLan1;
+
 extern s16 sintable[0x400];
 // extern UNK_TYPE1 D_80097DE4;
 // extern UNK_TYPE4 D_80097E08;
@@ -39,10 +38,10 @@ extern UNK_TYPE4 D_80097E40;
 extern UNK_TYPE4 __osShutdown;
 
 extern OSDevMgr __osPiDevMgr;
-extern OSPiHandle* __osPiTable;
+
 extern OSPiHandle* __osCurrentHandle[];
 extern UNK_TYPE4 __osPiAccessQueueEnabled;
-extern OSViMode osViModeNtscHpn1;
+
 extern s32 __osPfsInodeCacheChannel;
 extern u8 __osPfsInodeCacheBank;
 extern UNK_TYPE4 D_80097F10;
@@ -50,12 +49,11 @@ extern char spaces[];
 extern char zeroes[];
 extern OSTimer* __osTimerList;
 extern s32 __osPfsLastChannel;
-extern OSViMode osViModeNtscLan1;
-extern OSViMode osViModeMpalLan1;
+
 // extern __OSViContext D_80098060[2];
 
 // extern UNK_TYPE4 sCartRomNeedsInit;
-extern OSViMode osViModeFpalLan1;
+
 // extern u8 ldigs[];
 // extern u8 udigs[];
 // extern OSDevMgr __osViDevMgr;
@@ -153,7 +151,7 @@ extern OSTime __osCurrentTime;
 extern u32 __osBaseCounter;
 extern u32 __osViIntrCount;
 extern u32 __osTimerCounter;
-extern OSPifRam __osPfsPifRam;
+
 extern OSPiHandle CartRomHandle;
 
 extern DmaEntry dmadata[1568];
