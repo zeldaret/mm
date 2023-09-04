@@ -3,11 +3,11 @@
 #define COLD_RESET 0
 
 typedef struct {
-    /* 0x0 */ u32 ins_00;   // lui     k0, 0x8000
-    /* 0x4 */ u32 ins_04;   // addiu   k0, k0, 0x39E0
-    /* 0x8 */ u32 ins_08;   // jr      k0 ; __osException
-    /* 0xC */ u32 ins_0C;   // nop
-} __osExceptionVector; // size = 0x10
+    /* 0x0 */ u32 ins_00; // lui     k0, 0x8000
+    /* 0x4 */ u32 ins_04; // addiu   k0, k0, 0x39E0
+    /* 0x8 */ u32 ins_08; // jr      k0 ; __osException
+    /* 0xC */ u32 ins_0C; // nop
+} __osExceptionVector;    // size = 0x10
 
 extern __osExceptionVector __osExceptionPreamble;
 
