@@ -1,6 +1,6 @@
 #include "global.h"
 
-UNK_TYPE4 D_80097E40 = 0;
+s32 __osContinitialized = 0;
 
 OSPifRam __osContPifRam;
 u8 __osContLastPoll;
@@ -17,11 +17,11 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     OSTimer mytimer;
     OSMesgQueue timerMesgQueue;
 
-    if (D_80097E40 != 0) {
+    if (__osContinitialized != 0) {
         return 0;
     }
 
-    D_80097E40 = 1;
+    __osContinitialized = 1;
 
     t = osGetTime();
     if (t < 0x165A0BC) {
