@@ -2,14 +2,14 @@
     <!-- Assets for cuttable signs-->
     <File Name="object_kanban" Segment="6">
         <DList Name="gSignMaterialDL" Offset="0xC30" />
-        <DList Name="gSignUpperLeftModelDL" Offset="0xCB0" />
-        <DList Name="gSignLeftUpperModelDL" Offset="0xDB8" />
-        <DList Name="gSignLeftLowerModelDL" Offset="0xE78" />
-        <DList Name="gSignRightUpperModelDL" Offset="0xF38" />
-        <DList Name="gSignRightLowerModelDL" Offset="0xFF8" />
-        <DList Name="gSignLowerLeftModelDL" Offset="0x10B8" />
-        <DList Name="gSignUpperRightModelDL" Offset="0x11C0" />
-        <DList Name="gSignLowerRightModelDL" Offset="0x12C8" />
+        <DList Name="gSignUpperSideLeftModelDL" Offset="0xCB0" />
+        <DList Name="gSignLeftSideUpperModelDL" Offset="0xDB8" />
+        <DList Name="gSignLeftSideLowerModelDL" Offset="0xE78" />
+        <DList Name="gSignRightSideUpperModelDL" Offset="0xF38" />
+        <DList Name="gSignRightSideLowerModelDL" Offset="0xFF8" />
+        <DList Name="gSignLowerSideLeftModelDL" Offset="0x10B8" />
+        <DList Name="gSignUpperSideRightModelDL" Offset="0x11C0" />
+        <DList Name="gSignLowerSideRightModelDL" Offset="0x12C8" />
         <DList Name="gSignPostUpperModelDL" Offset="0x13D0" />
         <DList Name="gSignPostLowerModelDL" Offset="0x1488" />
         <DList Name="gSignPostStandModelDL" Offset="0x1540" />
