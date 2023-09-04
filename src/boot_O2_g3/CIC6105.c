@@ -1,13 +1,9 @@
-#include "prevent_bss_reordering.h"
 #include "CIC6105.h"
-#include "ultra64.h"
 #include "build.h"
-#include "global.h"
-#include "unk.h"
 #include "fault.h"
 
-UNK_TYPE4 D_8009BE30;
-UNK_TYPE4 D_8009BE34;
+s32 D_8009BE30;
+s32 D_8009BE34;
 FaultClient sRomInfoFaultClient;
 
 void CIC6105_Nop80081820(void) {
