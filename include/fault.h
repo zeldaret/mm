@@ -103,7 +103,7 @@ typedef struct FaultMgr {
     /* 0x844 */ void* fb;
 } FaultMgr; // size = 0x848
 
-// Commented out to try to avoid bss reorder in fault.c
+// TODO: Commented out to try to avoid bss reorder in fault.c
 // extern FaultMgr gFaultMgr;
 
 #endif
