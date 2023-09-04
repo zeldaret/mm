@@ -119,7 +119,7 @@ extern f64 D_80099428;
 extern f64 D_80099430;
 extern f64 D_80099438;
 // extern UNK_TYPE4 D_80099440;
-extern f32 __libm_qnan_f;
+
 extern f64 D_80099460[9];
 extern char D_800994A8[];
 extern char D_800994AC[];
