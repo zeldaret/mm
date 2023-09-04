@@ -7,7 +7,7 @@
 #include "z_en_guard_nuts.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGuardNuts*)thisx)
 
@@ -84,7 +84,7 @@ typedef enum {
     /* 0 */ WAIT_HEAD_TILT_ANIM,
     /* 1 */ WALK_ANIM,
     /* 2 */ DIG_ANIM,
-    /* 3 */ WALK_ANIM_2,
+    /* 3 */ WALK_ANIM_2
 } EnGuardNutsAnim;
 
 typedef enum {
@@ -101,7 +101,7 @@ void EnGuardNuts_Init(Actor* thisx, PlayState* play) {
     SkelAnime_Init(play, &this->skelAnime, &gDekuPalaceGuardSkel, &gDekuPalaceGuardWaitAnim, this->jointTable,
                    this->morphTable, DEKU_PALACE_GUARD_LIMB_MAX);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Actor_SetScale(&this->actor, 0.015f);
     Math_Vec3f_Copy(&this->guardPos, &this->actor.world.pos);
@@ -195,7 +195,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
             this->targetHeadPos.y = -this->targetHeadPos.y;
         }
     }
-    func_800B8614(&this->actor, play, 70.0f);
+    Actor_OfferTalk(&this->actor, play, 70.0f);
 }
 
 void func_80ABB540(EnGuardNuts* this) {
@@ -328,7 +328,7 @@ void EnGuardNuts_Update(Actor* thisx, PlayState* play) {
         }
     }
     if ((this->animIndex == WALK_ANIM) &&
-        ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 5.0f)))) {
+        (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 5.0f))) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
@@ -370,7 +370,7 @@ void EnGuardNuts_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 

@@ -12,13 +12,13 @@ typedef void (*DemoSyotenActionFunc)(struct DemoSyoten*, PlayState*);
 
 #define DEMOSYOTEN_7E00_3F 0x3F
 
-enum {
+typedef enum {
     /* 0 */ DEMOSYOTEN_F_0,
     /* 1 */ DEMOSYOTEN_F_1,
     /* 2 */ DEMOSYOTEN_F_2,
     /* 3 */ DEMOSYOTEN_F_3,
     /* 4 */ DEMOSYOTEN_F_4
-};
+} DemoSyotenParam;
 
 typedef struct DemoSyoten {
     /* 0x000 */ Actor actor;

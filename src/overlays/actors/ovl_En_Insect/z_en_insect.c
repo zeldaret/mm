@@ -506,7 +506,7 @@ void EnInsect_Update(Actor* thisx, PlayState* play) {
 void EnInsect_Draw(Actor* thisx, PlayState* play) {
     EnInsect* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, NULL);
     D_8091BD60 = 0;
 }

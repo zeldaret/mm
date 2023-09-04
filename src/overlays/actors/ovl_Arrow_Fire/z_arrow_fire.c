@@ -19,7 +19,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play);
 void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play);
 void FireArrow_Fly(ArrowFire* this, PlayState* play);
 
-#include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
+#include "overlays/ovl_Arrow_Fire/ovl_Arrow_Fire.c"
 
 ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
@@ -57,7 +57,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-s32 sUnused;
+static s32 sBssPad;
 
 void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -100,7 +100,7 @@ void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play) {
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
 
-    func_800B9010(&this->actor, NA_SE_PL_ARROW_CHARGE_FIRE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_ARROW_CHARGE_FIRE - SFX_FLAG);
 
     // if arrow has no parent, player has fired the arrow
     if (arrow->actor.parent == NULL) {
@@ -249,6 +249,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
         Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);
@@ -256,7 +257,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
 
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->screenFillIntensity > 0.0f) {
-            POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
+            POLY_XLU_DISP = Gfx_SetupDL57(POLY_XLU_DISP);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->screenFillIntensity * 40.0f) & 0xFF, 0, 0,
                             (s32)(150.0f * this->screenFillIntensity) & 0xFF);
@@ -266,7 +267,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
 
             gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);

@@ -44,8 +44,8 @@ ActorInit Obj_Ocarinalift_InitVars = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),         ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -74,7 +74,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
         this->unk16C = 1;
         this->unk170 = Lib_SegmentedToVirtual(path->points);
         func_80AC94C0(this, this->unk168);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) &&
             (Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor)))) {
             func_80AC96B4(this);
         } else {
@@ -112,7 +112,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
     s32 sp34;
     Vec3s* temp_v1_2;
 
-    func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     Math_Vec3s_ToVec3f(&sp48, this->unk170 + this->unk168 + this->unk16C);
     Math_Vec3f_Diff(&sp48, &thisx->world.pos, &thisx->velocity);
     magnitude = Math3D_Vec3fMagnitude(&thisx->velocity);
@@ -137,7 +137,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         this->unk168 += this->unk16C;
         thisx->speed *= 0.4f;
         if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
-            if (paramsC == OBJOCARINALIFT_PARAMSC_0) {
+            if (paramsC == OBJOCARINALIFT_PARAM_0) {
                 this->unk16C = -this->unk16C;
                 this->timer = 10;
                 func_80AC9A68(this);
@@ -155,11 +155,11 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                     func_80AC99C0(this);
                     DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;
-                } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+                } else if ((paramsC == OBJOCARINALIFT_PARAM_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
                     func_80AC9AB8(this);
                 }
             }
-        } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+        } else if ((paramsC == OBJOCARINALIFT_PARAM_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
             func_80AC9AB8(this);
         }
         if (sp34) {
@@ -176,7 +176,7 @@ void func_80AC99D4(ObjOcarinalift* this, PlayState* play) {
     if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80AC94C0(this, this->unk168);
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAMSC_1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAM_1) &&
             (this->unk168 == OBJOCARINALIFT_GET_1F(&this->dyna.actor))) {
             func_80AC9AB8(this);
         } else {
@@ -197,7 +197,7 @@ void func_80AC9A7C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9AB8(ObjOcarinalift* this) {
-    this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
+    this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
     this->actionFunc = func_80AC9AE0;
 }
 
@@ -218,7 +218,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
     if (func_800B886C(&this->dyna.actor, play)) {
         if (play->msgCtx.ocarinaMode == 4) {
             if (play->msgCtx.lastPlayedSong == 0) {
-                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) {
+                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) {
                     Flags_SetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor));
                 }
                 CutsceneManager_Queue(this->dyna.actor.csId);
@@ -234,7 +234,7 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9C20(ObjOcarinalift* this) {
-    this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
+    this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
     this->actionFunc = func_80AC9C48;
 }
 

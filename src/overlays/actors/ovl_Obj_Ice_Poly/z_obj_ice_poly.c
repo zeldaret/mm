@@ -156,9 +156,9 @@ void func_80931828(ObjIcePoly* this, PlayState* play) {
     temp = spA0.y - sp90;
 
     for (i = 0; i < 30; i++) {
-        sp94.x = randPlusMinusPoint5Scaled(12.0f);
+        sp94.x = Rand_CenteredFloat(12.0f);
         sp94.y = Rand_ZeroFloat(15.0f);
-        sp94.z = randPlusMinusPoint5Scaled(12.0f);
+        sp94.z = Rand_CenteredFloat(12.0f);
 
         spA0.x = (this->colliders1[0].dim.radius * (sp94.x * (1.0f / 12))) + this->actor.world.pos.x;
         spA0.z = (this->colliders1[0].dim.radius * (sp94.z * (1.0f / 12))) + this->actor.world.pos.z;
@@ -193,13 +193,13 @@ void func_80931A38(ObjIcePoly* this, PlayState* play) {
           ((this->colliders2[0].base.ac->id != ACTOR_OBJ_AQUA) &&
            (this->colliders2[0].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[0].base.ac->id == ACTOR_OBJ_AQUA) &&
-           (this->colliders2[0].base.ac->params == OBJAQUA_1)))) ||
+           (this->colliders2[0].base.ac->params == AQUA_TYPE_HOT)))) ||
         ((this->colliders2[1].base.acFlags & AC_HIT) &&
          ((this->colliders2[1].base.ac == NULL) ||
           ((this->colliders2[1].base.ac->id != ACTOR_OBJ_AQUA) &&
            (this->colliders2[1].info.acHitInfo->toucher.dmgFlags == 0x800)) ||
           ((this->colliders2[1].base.ac->id == ACTOR_OBJ_AQUA) &&
-           (this->colliders2[1].base.ac->params == OBJAQUA_1))))) {
+           (this->colliders2[1].base.ac->params == AQUA_TYPE_HOT))))) {
         CutsceneManager_Queue(this->actor.csId);
         this->unk_14A = 0;
         this->actionFunc = func_80931E58;
@@ -347,7 +347,7 @@ void ObjIcePoly_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     func_800B8118(&this->actor, play, 0);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

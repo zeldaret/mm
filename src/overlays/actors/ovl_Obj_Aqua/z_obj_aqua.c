@@ -199,7 +199,7 @@ void func_80ACBD34(ObjAqua* this) {
 }
 
 void func_80ACBD48(ObjAqua* this, PlayState* play) {
-    if ((AQUA_HOT(&this->actor) == 1) && (this->alpha > 90)) {
+    if ((AQUA_GET_TYPE(&this->actor) == AQUA_TYPE_HOT) && (this->alpha > 90)) {
         func_80ACB940(this, play);
     }
     if (this->alpha > 5) {
@@ -228,7 +228,7 @@ void func_80ACBDFC(ObjAqua* this, PlayState* play) {
     this->alpha = (s32)(temp * 3.25f) + 10;
     this->actor.shape.shadowAlpha = this->alpha;
     this->unk_198 += 1000;
-    if (AQUA_HOT(&this->actor) == 1) {
+    if (AQUA_GET_TYPE(&this->actor) == AQUA_TYPE_HOT) {
         f32 temp_f2 = this->actor.scale.x * 10000.0f;
 
         EffectSsBubble_Spawn(play, &this->actor.world.pos, temp_f2 * -0.5f, temp_f2, temp_f2,
@@ -274,7 +274,8 @@ void ObjAqua_Draw(Actor* thisx, PlayState* play) {
     s32 actionFuncTemp = this->actionFunc == func_80ACBDFC;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     framesTemp = ((play->gameplayFrames & 0x7FFFFFFF) * -0xA) & 0x1FF;
     if (actionFuncTemp) {
         framesTemp >>= 1;

@@ -77,7 +77,7 @@ static InitChainEntry sInitChain[] = {
 
 /**
  * Spawns another wooden flower instance that handles the opened flower's collision.
- * Returns true if this wooden flower instance was succesfully spawned.
+ * Returns true if this wooden flower instance was successfully spawned.
  */
 s32 BgNumaHana_SpawnOpenFlowerCollisionChild(BgNumaHana* this, PlayState* play) {
     Actor* child;
@@ -252,7 +252,7 @@ void BgNumaHana_UnfoldInnerPetals(BgNumaHana* this, PlayState* play) {
             this->transitionTimer++;
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
     }
 
     BgNumaHana_UpdateSettleRotation(&this->settleZRotation, &this->settleAngle, &this->settleScale, 20.0f);
@@ -284,7 +284,7 @@ void BgNumaHana_UnfoldOuterPetals(BgNumaHana* this, PlayState* play) {
             this->transitionTimer++;
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWERPETAL_MOVE - SFX_FLAG);
     }
 
     BgNumaHana_UpdateSettleRotation(&this->settleZRotation, &this->settleAngle, &this->settleScale, 7.0f);
@@ -332,7 +332,7 @@ void BgNumaHana_RaiseFlower(BgNumaHana* this, PlayState* play) {
     }
 
     BgNumaHana_UpdatePetalPosRots(this);
-    func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
 
 void BgNumaHana_SetupOpenedIdle(BgNumaHana* this) {
@@ -346,7 +346,7 @@ void BgNumaHana_OpenedIdle(BgNumaHana* this, PlayState* play) {
     this->dyna.actor.shape.rot.y += this->flowerRotationalVelocity;
     this->petalZRotation = this->innerPetalZRotation + this->settleZRotation;
     BgNumaHana_UpdatePetalPosRots(this);
-    func_800B9010(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_FLOWER_ROLLING - SFX_FLAG);
 }
 
 void BgNumaHana_Update(Actor* thisx, PlayState* play) {
@@ -383,7 +383,7 @@ void BgNumaHana_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gWoodenFlowerStalkDL);
 

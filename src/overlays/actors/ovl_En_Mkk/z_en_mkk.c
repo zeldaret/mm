@@ -7,7 +7,7 @@
 #include "z_en_mkk.h"
 #include "objects/object_mkk/object_mkk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnMkk*)thisx)
 
@@ -128,8 +128,8 @@ static Color_RGBA8 sEffPrimColors[] = { { 50, 50, 50, 255 }, { 255, 255, 255, 25
 static Color_RGBA8 sEffEnvColors[] = { { 200, 200, 200, 255 }, { 255, 255, 255, 255 } };
 
 static EnMkkDlists sBoeDLists[] = {
-    { object_mkk_DL_000030, object_mkk_DL_0000B0, object_mkk_DL_0000C8, object_mkk_DL_000140 },
-    { object_mkk_DL_0001F0, object_mkk_DL_000278, object_mkk_DL_000290, object_mkk_DL_000310 },
+    { gBlackBoeBodyMaterialDL, gBlackBoeBodyModelDL, gBlackBoeEndDL, gBlackBoeEyesDL },
+    { gWhiteBoeBodyMaterialDL, gWhiteBoeBodyModelDL, gWhiteBoeEndDL, gWhiteBoeEyesDL },
 };
 
 static Color_RGBA8 D_80A4F7C4[] = {
@@ -195,7 +195,7 @@ void EnMkk_Destroy(Actor* thisx, PlayState* play) {
 void func_80A4E0CC(EnMkk* this) {
     this->alpha = 0;
     this->unk_14B |= 3;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_80A4E100;
 }
 
@@ -211,7 +211,7 @@ void func_80A4E100(EnMkk* this, PlayState* play) {
         this->primColorSelect = 3;
         this->collider.base.acFlags |= AC_ON;
         this->alpha = 255;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
         this->unk_14B &= ~4;
         func_80A4E190(this);
@@ -274,8 +274,8 @@ void func_80A4E2E8(EnMkk* this, PlayState* play) {
         Math_ScaledStepToS(&this->unk_150, this->actor.yawTowardsPlayer, 0x400);
     }
     this->actor.shape.rot.y =
-        (s32)(sin_rad(this->unk_14E * ((2 * M_PI) / 15)) * (614.4f * this->actor.speed)) + this->unk_150;
-    func_800B9010(&this->actor, NA_SE_EN_KUROSUKE_MOVE - SFX_FLAG);
+        (s32)(Math_SinF(this->unk_14E * ((2 * M_PI) / 15)) * (614.4f * this->actor.speed)) + this->unk_150;
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_KUROSUKE_MOVE - SFX_FLAG);
     if (sp20) {
         this->unk_14B &= ~2;
         func_80A4E190(this);
@@ -310,7 +310,7 @@ void func_80A4E60C(EnMkk* this, PlayState* play) {
 
 void func_80A4E67C(EnMkk* this) {
     this->unk_14B |= 1;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->collider.base.acFlags &= ~AC_ON;
     this->actor.flags |= ACTOR_FLAG_10;
     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DEAD);
@@ -379,16 +379,16 @@ void func_80A4E84C(EnMkk* this) {
         this->unk_154.y = this->actor.world.pos.y;
         this->unk_154.x = this->actor.world.pos.x -
                           10.0f * Math_SinS(this->actor.shape.rot.y +
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
         this->unk_154.z = this->actor.world.pos.z -
                           10.0f * Math_CosS(this->actor.shape.rot.y +
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
         this->unk_160.x = this->unk_154.x -
                           12.0f * Math_SinS(this->actor.shape.rot.y -
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
         this->unk_160.z = this->unk_154.z -
                           12.0f * Math_CosS(this->actor.shape.rot.y -
-                                            (s32)(1228.8f * this->actor.speed * sin_rad(this->unk_14E * (M_PI / 5))));
+                                            (s32)(1228.8f * this->actor.speed * Math_SinF(this->unk_14E * (M_PI / 5))));
     }
 }
 
@@ -433,7 +433,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
     if (this->collider.base.atFlags & AT_ON) {
         CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
     }
-    if (this->collider.base.acFlags & AT_ON) {
+    if (this->collider.base.acFlags & AC_ON) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
@@ -442,7 +442,7 @@ void EnMkk_Update(Actor* thisx, PlayState* play) {
 void func_80A4EDF0(EnMkk* this) {
     this->alpha = 0;
     this->unk_14B |= 3;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.draw = NULL;
     this->actor.update = func_80A4F16C;
     this->actor.gravity = -0.5f;
@@ -524,7 +524,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
         if (this->alpha == 255) {
             primColors = &D_80A4F7C4[this->primColorSelect];
             gfx = POLY_OPA_DISP;
-            gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+            gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
             gDPSetPrimColor(&gfx[1], 0, 0xFF, primColors->r, primColors->g, primColors->b, primColors->a);
             gSPSegment(&gfx[2], 0x08, D_801AEFA0);
             gSPMatrix(&gfx[3], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -532,7 +532,7 @@ void EnMkk_Draw(Actor* thisx, PlayState* play) {
             POLY_OPA_DISP = &gfx[5];
         }
         gfx = POLY_XLU_DISP;
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
         gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
         gSPDisplayList(&gfx[2], dLists->unk0);
         Matrix_ReplaceRotation(&play->billboardMtxF);
@@ -576,7 +576,7 @@ void func_80A4F4C8(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gDPSetEnvColor(&gfx[1], 255, 255, 255, this->alpha);
     gSPDisplayList(&gfx[2], dLists->unk0);
     Matrix_ReplaceRotation(&play->billboardMtxF);

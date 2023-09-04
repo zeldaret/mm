@@ -15,11 +15,8 @@ void EnFall2_Destroy(Actor* thisx, PlayState* play);
 void EnFall2_Update(Actor* thisx, PlayState* play);
 void EnFall2_Draw(Actor* thisx, PlayState* play);
 
-void func_80C1B724(f32 arg0);
 void EnFall2_DoNothing(EnFall2* this, PlayState* play);
-void func_80C1B9D4(EnFall2* this, PlayState* play);
-void func_80C1B8F0(EnFall2* this);
-void func_80C1B9D4(EnFall2* this, PlayState* play);
+void EnFall2_HandleCutscene(EnFall2* this, PlayState* play);
 
 ActorInit En_Fall2_InitVars = {
     ACTOR_EN_FALL2,
@@ -43,7 +40,7 @@ void EnFall2_Init(Actor* thisx, PlayState* play) {
     func_801835EC(&this->skeletonInfo, object_fall2_Blob_005EF4);
     this->unk2DC = Lib_SegmentedToVirtual(object_fall2_Matanimheader_008840);
     Actor_SetScale(&this->actor, 0.02f);
-    this->actionFunc = func_80C1B9D4;
+    this->actionFunc = EnFall2_HandleCutscene;
     this->cueType = CS_CMD_ACTOR_CUE_561;
     this->alphaLevel = 0.0f;
 }
@@ -54,7 +51,7 @@ void EnFall2_Destroy(Actor* thisx, PlayState* play) {
     func_8018349C(&this->skeletonInfo);
 }
 
-u8 sAlphaTableIndices[] = {
+static u8 sAlphaTableIndices[] = {
     0, 2, 0, 0, 4, 0, 4, 4, 2, 0, 0, 0, 0, 0, 0, 2, 4, 4, 4, 2, 0, 4, 2, 2, 0, 4, 4, 4, 4, 0, 2, 2, 4, 0, 2,
     0, 4, 4, 2, 0, 2, 4, 4, 4, 2, 0, 4, 4, 4, 2, 2, 0, 4, 4, 2, 4, 0, 2, 0, 0, 2, 4, 4, 2, 0, 2, 4, 4, 4, 2,
     0, 4, 4, 4, 4, 4, 2, 2, 0, 2, 4, 0, 2, 0, 0, 2, 4, 4, 2, 0, 2, 4, 4, 4, 2, 0, 0, 2, 2, 4, 4, 4, 4, 4, 4,
@@ -106,6 +103,7 @@ void func_80C1B8F0(EnFall2* this) {
                 this->alphaLevel = 1.0f;
             }
             break;
+
         case 2:
             if (this->alphaLevel > 0.0f) {
                 this->alphaLevel -= 0.1f;
@@ -120,10 +118,13 @@ void func_80C1B8F0(EnFall2* this) {
                 }
                 this->actor.scale.z = this->actor.scale.x;
             }
+
+        default:
+            break;
     }
 }
 
-void func_80C1B9D4(EnFall2* this, PlayState* play) {
+void EnFall2_HandleCutscene(EnFall2* this, PlayState* play) {
     func_80183DE0(&this->skeletonInfo);
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
@@ -133,7 +134,7 @@ void func_80C1B9D4(EnFall2* this, PlayState* play) {
         }
         func_80C1B8F0(this);
         if (this->alphaLevel > 0.0f) {
-            func_800B9010(&this->actor, NA_SE_EV_MOON_LIGHT_PILLAR - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_MOON_LIGHT_PILLAR - SFX_FLAG);
         }
     } else {
         this->actor.draw = NULL;
@@ -153,13 +154,13 @@ void EnFall2_Draw(Actor* thisx, PlayState* play) {
     Mtx* mtx;
 
     if (!(this->alphaLevel <= 0.0f)) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_fall2_Matanimheader_008840));
 
         mtx = GRAPH_ALLOC(play->state.gfxCtx, this->skeletonInfo.unk_18->unk_1 * sizeof(Mtx));
 
         if (mtx != NULL) {
-            func_8012C2DC(play->state.gfxCtx);
+            Gfx_SetupDL25_Xlu(play->state.gfxCtx);
             Matrix_RotateYS((s16)(Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
             func_8018450C(play, &this->skeletonInfo, mtx, NULL, NULL, &this->actor);
         }

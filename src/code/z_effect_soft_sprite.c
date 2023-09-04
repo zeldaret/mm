@@ -1,5 +1,5 @@
 #include "global.h"
-#include "z64load.h"
+#include "loadfragment.h"
 
 EffectSsInfo sEffectSsInfo = { NULL, 0, 0 };
 
@@ -164,7 +164,7 @@ void EffectSS_Copy(PlayState* play, EffectSs* effectsSs) {
 void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     s32 index;
     u32 overlaySize;
-    EffectSsOverlay* entry = &gParticleOverlayTable[type];
+    EffectSsOverlay* overlayEntry = &gParticleOverlayTable[type];
     EffectSsInit* initInfo;
 
     if (EffectSS_FindFreeSpace(priority, &index) != 0) {
@@ -173,24 +173,27 @@ void EffectSs_Spawn(PlayState* play, s32 type, s32 priority, void* initData) {
     }
 
     sEffectSsInfo.searchIndex = index + 1;
-    overlaySize = VRAM_PTR_SIZE(entry);
+    overlaySize = (uintptr_t)overlayEntry->vramEnd - (uintptr_t)overlayEntry->vramStart;
 
-    if (entry->vramStart == NULL) {
-        initInfo = entry->initInfo;
+    if (overlayEntry->vramStart == NULL) {
+        initInfo = overlayEntry->initInfo;
     } else {
-        if (entry->loadedRamAddr == NULL) {
-            entry->loadedRamAddr = ZeldaArena_MallocR(overlaySize);
+        if (overlayEntry->loadedRamAddr == NULL) {
+            overlayEntry->loadedRamAddr = ZeldaArena_MallocR(overlaySize);
 
-            if (entry->loadedRamAddr == NULL) {
+            if (overlayEntry->loadedRamAddr == NULL) {
                 return;
             }
 
-            Load2_LoadOverlay(entry->vromStart, entry->vromEnd, entry->vramStart, entry->vramEnd, entry->loadedRamAddr);
+            Overlay_Load(overlayEntry->vromStart, overlayEntry->vromEnd, overlayEntry->vramStart, overlayEntry->vramEnd,
+                         overlayEntry->loadedRamAddr);
         }
 
-        initInfo = (uintptr_t)((entry->initInfo != NULL)
-                                   ? (void*)((uintptr_t)entry->initInfo - (intptr_t)OVERLAY_RELOCATION_OFFSET(entry))
-                                   : NULL);
+        initInfo = (void*)(uintptr_t)((overlayEntry->initInfo != NULL)
+                                          ? (void*)((uintptr_t)overlayEntry->initInfo -
+                                                    (intptr_t)((uintptr_t)overlayEntry->vramStart -
+                                                               (uintptr_t)overlayEntry->loadedRamAddr))
+                                          : NULL);
     }
 
     if (initInfo->init != NULL) {
@@ -273,6 +276,7 @@ void EffectSS_DrawAllParticles(PlayState* play) {
 
 s16 func_800B096C(s16 arg0, s16 arg1, s32 arg2) {
     s16 ret = (arg2 == 0) ? arg1 : arg0 + (s32)((arg1 - arg0) / (f32)arg2);
+
     return ret;
 }
 

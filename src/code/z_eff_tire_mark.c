@@ -80,7 +80,8 @@ void func_800AE930(CollisionContext* colCtx, EffectTireMark* this, Vec3f* pos, f
                 spAC->flags |= 1;
             }
 
-            if (spA8) {} // Necessary to match
+            //! FAKE:
+            if (spA8) {}
 
             spA8 = &this->elements[this->numElements];
             spA8->flags = 0;
@@ -231,7 +232,7 @@ void EffectTireMark_Draw(void* thisx, GraphicsContext* gfxCtx) {
         if (vtx != NULL) {
             gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP++, 0x2C);
+            POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP++, SETUPDL_44);
             gDPSetRenderMode(POLY_OPA_DISP++, G_RM_PASS, G_RM_ZB_CLD_SURF2);
 
             gDPLoadTextureBlock(POLY_OPA_DISP++, gameplay_keep_Tex_014570, G_IM_FMT_I, G_IM_SIZ_8b, 64, 32, 0,

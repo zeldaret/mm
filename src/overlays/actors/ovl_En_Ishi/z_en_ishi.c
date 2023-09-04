@@ -10,6 +10,7 @@
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ishi/object_ishi.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
@@ -180,7 +181,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
     if (!ENISHI_GET_8(&this->actor)) {
         phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
-        phi_s4 = object_ishi_DL_0009B0;
+        phi_s4 = gSmallRockDL;
     }
 
     temp = D_8095F6E8[ENISHI_GET_8(&this->actor)];
@@ -353,8 +354,9 @@ void func_8095E204(EnIshi* this, PlayState* play) {
 
     for (i = 0; i < 3; i++) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                          this->actor.csId, this->actor.halfDaysBits, NULL) == NULL) {
+                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                          ENINSECT_PARAMS(true), this->actor.csId, this->actor.halfDaysBits,
+                                          NULL) == NULL) {
             break;
         }
     }
@@ -685,7 +687,7 @@ void func_8095F180(EnIshi* this) {
 }
 
 void func_8095F194(EnIshi* this, PlayState* play) {
-    if (this->actor.csId < 0) {
+    if (this->actor.csId <= CS_ID_NONE) {
         Actor_Kill(&this->actor);
     } else if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
         Actor_Kill(&this->actor);
@@ -710,7 +712,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
     if (this->actor.projectedPos.z < 1300.0f) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
 
@@ -730,7 +732,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
     if ((this->actor.projectedPos.z <= 2150.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 2250.0f))) {
         this->actor.shape.shadowAlpha = 160;
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -741,7 +743,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 
         this->actor.shape.shadowAlpha = sp20 * 0.627451f;
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -761,5 +763,5 @@ void func_8095F61C(Actor* thisx, PlayState* play) {
 }
 
 void func_8095F654(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_ishi_DL_0009B0);
+    Gfx_DrawDListOpa(play, gSmallRockDL);
 }

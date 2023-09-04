@@ -6,7 +6,7 @@
 
 #include "z_en_ma_yts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnMaYts*)thisx)
 
@@ -123,7 +123,7 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s16 trackingMode = (this->unk_32C == 2) ? NPC_TRACKING_NONE : NPC_TRACKING_PLAYER_AUTO_TURN;
 
-    if (this->unk_32C == 0 || this->actor.parent == NULL) {
+    if ((this->unk_32C == 0) || (this->actor.parent == NULL)) {
         this->interactInfo.trackPos = player->actor.world.pos;
         this->interactInfo.trackPos.y -= -10.0f;
     } else {
@@ -137,14 +137,14 @@ void func_80B8D12C(EnMaYts* this, PlayState* play) {
 void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
     switch (this->type) {
         case MA_YTS_TYPE_BARN:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
         case MA_YTS_TYPE_SITTING:
-            this->actor.targetMode = 6;
+            this->actor.targetMode = TARGET_MODE_6;
             // Day 1 or "Winning" the alien invasion
-            if (CURRENT_DAY == 1 || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 EnMaYts_ChangeAnim(this, 14);
             } else {
                 EnMaYts_ChangeAnim(this, 18);
@@ -152,13 +152,13 @@ void EnMaYts_InitAnimation(EnMaYts* this, PlayState* play) {
             break;
 
         case MA_YTS_TYPE_SLEEPING:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             this->actor.draw = EnMaYts_DrawSleeping;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
             EnMaYts_ChangeAnim(this, 0);
             break;
 
@@ -177,37 +177,43 @@ s32 EnMaYts_CheckValidSpawn(EnMaYts* this, PlayState* play) {
 
                 case 2:
                     // Failing the alien invasion
-                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                         return false;
                     }
                     break;
 
                 case 3:
                     // "Winning" the alien invasion
-                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+                    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                         return false;
                     }
+                    break;
+
+                default:
                     break;
             }
             break;
 
         case MA_YTS_TYPE_BARN:
             // Failing the alien invasion
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
-            } else if (gSaveContext.save.time >= CLOCK_TIME(20, 0) && CURRENT_DAY == 3) {
+            } else if ((gSaveContext.save.time >= CLOCK_TIME(20, 0)) && (CURRENT_DAY == 3)) {
                 return false;
             }
             break;
 
         case MA_YTS_TYPE_SLEEPING:
             // "Winning" the alien invasion
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
                 return false;
             }
             break;
 
         case MA_YTS_TYPE_ENDCREDITS:
+            break;
+
+        default:
             break;
     }
 
@@ -248,7 +254,7 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->hasBow = false;
     }
 
-    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if ((CURRENT_DAY == 1) || CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         this->overrideEyeTexIndex = 0;
         this->eyeTexIndex = 0;
         this->mouthTexIndex = 0;
@@ -266,7 +272,8 @@ void EnMaYts_Init(Actor* thisx, PlayState* play) {
         this->mouthTexIndex = 0;
         this->unk_32C = 2;
         EnMaYts_SetupEndCreditsHandler(this);
-    } else if (CURRENT_DAY == 2 && gSaveContext.save.isNight == 1 && CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    } else if ((CURRENT_DAY == 2) && (gSaveContext.save.isNight == 1) &&
+               CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         EnMaYts_SetupStartDialogue(this);
     } else {
         EnMaYts_SetupDoNothing(this);
@@ -295,7 +302,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
     s16 sp26 = this->actor.shape.rot.y - this->actor.yawTowardsPlayer;
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (!(gSaveContext.save.playerForm == PLAYER_FORM_HUMAN)) {
+        if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_80)) {
                 // Saying to non-human Link: "Cremia went to town."
                 SET_WEEKEVENTREG(WEEKEVENTREG_65_80);
@@ -307,7 +314,7 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 Message_StartTextbox(play, 0x3362, &this->actor);
                 this->textId = 0x3362;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
         } else if (Player_GetMask(play) != PLAYER_MASK_NONE) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_65_40)) {
@@ -319,9 +326,9 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 2);
                 Message_StartTextbox(play, 0x3366, &this->actor);
                 this->textId = 0x3366;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
-        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_21_20)) {
+        } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_TO_HELP_WITH_THEM)) {
             EnMaYts_SetFaceExpression(this, 0, 0);
             Message_StartTextbox(play, 0x3367, &this->actor);
             this->textId = 0x3367;
@@ -337,12 +344,12 @@ void EnMaYts_StartDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 0, 0);
                 Message_StartTextbox(play, 0x336C, &this->actor);
                 this->textId = 0x336C;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
             }
         }
         EnMaYts_SetupDialogueHandler(this);
     } else if (ABS_ALT(sp26) < 0x4000) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -406,6 +413,9 @@ void EnMaYts_EndCreditsHandler(EnMaYts* this, PlayState* play) {
                         this->hasBow = true;
                         EnMaYts_ChangeAnim(this, 20);
                         break;
+
+                    default:
+                        break;
                 }
             }
         }
@@ -436,7 +446,7 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 Message_StartTextbox(play, 0x3361, &this->actor);
                 this->textId = 0x3361;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3363:
@@ -449,14 +459,14 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 4, 2);
                 Message_StartTextbox(play, 0x3365, &this->actor);
                 this->textId = 0x3365;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3367:
                 EnMaYts_SetFaceExpression(this, 4, 3);
                 Message_StartTextbox(play, 0x3368, &this->actor);
                 this->textId = 0x3368;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             case 0x3369:
@@ -469,7 +479,7 @@ void EnMaYts_ChooseNextDialogue(EnMaYts* this, PlayState* play) {
                 EnMaYts_SetFaceExpression(this, 3, 3);
                 Message_StartTextbox(play, 0x336B, &this->actor);
                 this->textId = 0x336B;
-                func_80151BB4(play, 5);
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_ROMANI);
                 break;
 
             default:
@@ -526,7 +536,9 @@ void EnMaYts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* ro
     } else if (limbIndex == ROMANI_LIMB_LEFT_HAND) {
         if (this->hasBow == true) {
             OPEN_DISPS(play->state.gfxCtx);
+
             gSPDisplayList(POLY_OPA_DISP++, gRomaniBowDL);
+
             CLOSE_DISPS(play->state.gfxCtx);
         }
     }
@@ -536,7 +548,8 @@ void EnMaYts_Draw(Actor* thisx, PlayState* play) {
     EnMaYts* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x09, SEGMENTED_TO_VIRTUAL(sMouthTextures[this->mouthTexIndex]));
     gSPSegment(POLY_OPA_DISP++, 0x08, SEGMENTED_TO_VIRTUAL(sEyeTextures[this->eyeTexIndex]));
@@ -550,7 +563,8 @@ void EnMaYts_Draw(Actor* thisx, PlayState* play) {
 // Alternative draw function
 void EnMaYts_DrawSleeping(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gRomaniSleepingDL);

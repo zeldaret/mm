@@ -29,6 +29,8 @@ typedef void (*EnAob01ActionFunc)(struct EnAob01*, PlayState*);
 #define ENAOB01_FLAG_SURPRISE (1 << 7)
 #define ENAOB01_FLAG_PLAYER_CAN_TALK (1 << 8)
 
+#define ENAOB01_PATH_INDEX_NONE 0x3F
+
 typedef struct EnAob01 {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnAob01ActionFunc actionFunc;
@@ -45,8 +47,8 @@ typedef struct EnAob01 {
     /* 0x2E6 */ Vec3s prevTrackTarget;
     /* 0x2EC */ Vec3s prevHeadRot;
     /* 0x2F2 */ Vec3s prevTorsoRot;
-    /* 0x2F8 */ s16 limbRotTableY[MAMAMU_YAN_LIMB_MAX];
-    /* 0x318 */ s16 limbRotTableZ[MAMAMU_YAN_LIMB_MAX];
+    /* 0x2F8 */ s16 fidgetTableY[MAMAMU_YAN_LIMB_MAX];
+    /* 0x318 */ s16 fidgetTableZ[MAMAMU_YAN_LIMB_MAX];
     /* 0x338 */ UNK_TYPE1 unk338[0xB6];
     /* 0x3EE */ s16 eyeIndex;
     /* 0x3F0 */ s16 blinkTimer;

@@ -6,7 +6,7 @@
 
 #include "z_en_mk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnMk*)thisx)
 
@@ -95,7 +95,7 @@ void EnMk_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = func_80959E18;
     this->unk_27A = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
 
     if (func_80959524(play) < 7) {
         this->unk_27A |= 2;
@@ -135,6 +135,9 @@ void func_8095954C(EnMk* this, PlayState* play) {
             case 5:
                 func_809592E0(this, play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_127)]->id - 1);
                 break;
+
+            default:
+                break;
         }
     } else {
         func_809592E0(this, 0);
@@ -144,7 +147,7 @@ void func_8095954C(EnMk* this, PlayState* play) {
 void func_80959624(EnMk* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (this->unk_27A & 4) {
             textId = 0xFB9;
         } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -191,7 +194,7 @@ void func_80959774(EnMk* this, PlayState* play) {
         func_80959624(this, play);
         this->actionFunc = func_809596A0;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 130.0f);
+        Actor_OfferTalk(&this->actor, play, 130.0f);
     }
 
     func_8095954C(this, play);
@@ -209,7 +212,7 @@ void func_80959844(EnMk* this, PlayState* play) {
     } else if (func_80959524(play) >= 7) {
         textId = 0xFB3;
     } else {
-        switch (gSaveContext.save.playerForm) {
+        switch (GET_PLAYER_FORM) {
             case PLAYER_FORM_DEKU:
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_19_10)) {
                     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
@@ -365,7 +368,7 @@ void func_80959C94(EnMk* this, PlayState* play) {
         Message_StartTextbox(play, 0xFB3, &this->actor);
     } else {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8500(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 350.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -411,7 +414,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
     if (func_800B8718(&this->actor, &play->state)) {
         play->msgCtx.ocarinaMode = 4;
         this->actionFunc = func_80959D28;
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             this->actor.csId = this->csIdList[0];
             SET_WEEKEVENTREG(WEEKEVENTREG_20_40);
             Item_Give(play, ITEM_SONG_NOVA);
@@ -427,7 +430,7 @@ void func_80959E18(EnMk* this, PlayState* play) {
         this->actionFunc = func_80959C94;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && (ABS_ALT(sp22) <= 0x4300)) {
         this->unk_27A |= 1;
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
         if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_20_40) && CHECK_WEEKEVENTREG(WEEKEVENTREG_19_40)) {
             func_800B874C(&this->actor, play, 200.0f, 100.0f);
         }
@@ -480,7 +483,7 @@ void EnMk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 void EnMk_Draw(Actor* thisx, PlayState* play) {
     EnMk* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnMk_OverrideLimbDraw, EnMk_PostLimbDraw, &this->actor);
 }

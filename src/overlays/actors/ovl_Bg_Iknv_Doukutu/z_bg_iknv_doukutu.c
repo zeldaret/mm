@@ -131,7 +131,7 @@ void func_80BD7250(BgIknvDoukutu* this, PlayState* play) {
         this->dyna.actor.world.pos.y = temp_fv0;
         this->actionFunc = func_80BD73D0;
     }
-    func_8019F128(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_2(NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80BD72BC(BgIknvDoukutu* this, PlayState* play) {
@@ -172,8 +172,8 @@ void BgIknvDoukutu_Draw(Actor* thisx, PlayState* play) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPDisplayList(POLY_OPA_DISP++, object_iknv_obj_DL_00DDD8);
@@ -205,9 +205,9 @@ void func_80BD7538(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C304(POLY_XLU_DISP++);
+    Gfx_SetupDL72(POLY_XLU_DISP++);
     Scene_SetRenderModeXlu(play, 1, 2);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, (s32)(255.0f * sp54));
     gSPDisplayList(POLY_XLU_DISP++, object_iknv_obj_DL_00DDD8);
@@ -226,7 +226,7 @@ void func_80BD7768(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 255);
     gSPDisplayList(POLY_OPA_DISP++, object_iknv_obj_DL_010D98);
@@ -243,7 +243,7 @@ void func_80BD7820(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPDisplayList(POLY_XLU_DISP++, object_iknv_obj_DL_012700);
 
@@ -261,7 +261,7 @@ void func_80BD78C4(Actor* thisx, PlayState* play) {
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, (s32)(140.0f * sp30));
 

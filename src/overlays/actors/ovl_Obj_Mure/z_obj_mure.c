@@ -5,6 +5,10 @@
  */
 
 #include "z_obj_mure.h"
+#include "overlays/actors/ovl_En_Butte/z_en_butte.h"
+#include "overlays/actors/ovl_En_Fish/z_en_fish.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
+#include "overlays/actors/ovl_En_Kusa/z_en_kusa.h"
 
 #define FLAGS 0x00000000
 
@@ -32,8 +36,12 @@ ActorInit Obj_Mure_InitVars = {
     (ActorFunc)NULL,
 };
 
-static f32 sZClip[] = {
-    1600.0f, 1600.0f, 1000.0f, 1000.0f, 1000.0f,
+static f32 sZClip[OBJMURE_TYPE_MAX] = {
+    1600.0f, // OBJMURE_TYPE_GRASS
+    1600.0f, // OBJMURE_TYPE_UNDEFINED
+    1000.0f, // OBJMURE_TYPE_FISH
+    1000.0f, // OBJMURE_TYPE_BUGS
+    1000.0f, // OBJMURE_TYPE_BUTTERFLY
 };
 
 static s32 sMaxChildSpawns[] = {
@@ -43,12 +51,20 @@ static s32 sMaxChildSpawns[] = {
     0,
 };
 
-static s16 sSpawnActorIds[] = {
-    ACTOR_EN_KUSA, 0, ACTOR_EN_FISH, ACTOR_EN_INSECT, ACTOR_EN_BUTTE,
+static s16 sSpawnActorIds[OBJMURE_TYPE_MAX] = {
+    ACTOR_EN_KUSA,   // OBJMURE_TYPE_GRASS
+    ACTOR_PLAYER,    // OBJMURE_TYPE_UNDEFINED
+    ACTOR_EN_FISH,   // OBJMURE_TYPE_FISH
+    ACTOR_EN_INSECT, // OBJMURE_TYPE_BUGS
+    ACTOR_EN_BUTTE,  // OBJMURE_TYPE_BUTTERFLY
 };
 
-static s16 sSpawnParams[] = {
-    0, 2, -1, 0, -1,
+static s16 sSpawnParams[OBJMURE_TYPE_MAX] = {
+    KUSA_BUSH_PARAMS(false, 0, false),   // OBJMURE_TYPE_GRASS
+    PLAYER_PARAMS(2, PLAYER_INITMODE_0), // OBJMURE_TYPE_UNDEFINED
+    FISH_PARAMS(ENFISH_MINUS1),          // OBJMURE_TYPE_FISH
+    ENINSECT_PARAMS(false),              // OBJMURE_TYPE_BUGS
+    BUTTERFLY_PARAMS(BUTTERFLY_MINUS1),  // OBJMURE_TYPE_BUTTERFLY
 };
 
 static InitChainEntry sInitChain[] = {
@@ -58,22 +74,14 @@ static InitChainEntry sInitChain[] = {
 };
 
 typedef enum {
-    /* 0 */ OBJMURE_TYPE_GRASS,
-    /* 1 */ OBJMURE_TYPE_UNDEFINED,
-    /* 2 */ OBJMURE_TYPE_FISH,
-    /* 3 */ OBJMURE_TYPE_BUGS,
-    /* 4 */ OBJMURE_TYPE_BUTTERFLY,
-    /* 5 */ OBJMURE_TYPE_MAX
-} ObjMureType;
-
-typedef enum {
     /* 0 */ OBJMURE_CHILD_STATE_0,
     /* 1 */ OBJMURE_CHILD_STATE_DEAD,
     /* 2 */ OBJMURE_CHILD_STATE_2
 } ObjMureChildState;
 
 s32 func_808D78D0(ObjMure* this, PlayState* play) {
-    if (this->type == OBJMURE_TYPE_FISH || this->type == OBJMURE_TYPE_BUGS || this->type == OBJMURE_TYPE_BUTTERFLY) {
+    if ((this->type == OBJMURE_TYPE_FISH) || (this->type == OBJMURE_TYPE_BUGS) ||
+        (this->type == OBJMURE_TYPE_BUTTERFLY)) {
         Actor_ProcessInitChain(&this->actor, sInitChain);
     } else {
         return false;
@@ -135,6 +143,7 @@ void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
         switch (this->childrenStates[i]) {
             case OBJMURE_CHILD_STATE_DEAD:
                 break;
+
             case OBJMURE_CHILD_STATE_2:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
@@ -148,6 +157,7 @@ void ObjMure_SpawnActors0(Actor* thisx, PlayState* play) {
                     this->children[i]->room = this->actor.room;
                 }
                 break;
+
             default:
                 ObjMure_GetSpawnPos(&pos, &this->actor.world.pos, this->ptn, i);
                 this->children[i] = Actor_SpawnAsChildAndCutscene(
@@ -190,8 +200,12 @@ void ObjMure_SpawnActors(ObjMure* this, PlayState* play) {
         case 0:
             ObjMure_SpawnActors0(&this->actor, play);
             break;
+
         case 1:
             ObjMure_SpawnActors1(this, play);
+            break;
+
+        default:
             break;
     }
 }
@@ -205,12 +219,14 @@ void ObjMure_KillActorsImpl(ObjMure* this, PlayState* play) {
             case OBJMURE_CHILD_STATE_DEAD:
                 this->children[i] = NULL;
                 break;
+
             case OBJMURE_CHILD_STATE_2:
                 if (this->children[i] != NULL) {
                     Actor_Kill(this->children[i]);
                     this->children[i] = NULL;
                 }
                 break;
+
             default:
                 if (this->children[i] != NULL) {
                     if (Actor_HasParent(this->children[i], play)) {
@@ -244,7 +260,7 @@ void ObjMure_CheckChildren(ObjMure* this, PlayState* play) {
                     this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
                     this->children[i] = NULL;
                 }
-            } else if (this->childrenStates[i] == OBJMURE_CHILD_STATE_2 && this->children[i]->update == NULL) {
+            } else if ((this->childrenStates[i] == OBJMURE_CHILD_STATE_2) && (this->children[i]->update == NULL)) {
                 this->childrenStates[i] = OBJMURE_CHILD_STATE_DEAD;
                 this->children[i] = NULL;
             }
@@ -367,7 +383,7 @@ void ObjMure_GroupBehavior1(ObjMure* this, PlayState* play) {
     maxChildren = ObjMure_GetMaxChildSpawns(this);
     for (i = 0; i < maxChildren; i++) {
         if (this->children[i] != NULL) {
-            if (this->children[i]->child != NULL && this->children[i]->child->update == NULL) {
+            if ((this->children[i]->child != NULL) && (this->children[i]->child->update == NULL)) {
                 this->children[i]->child = NULL;
             }
         }
@@ -380,7 +396,7 @@ static ObjMureActionFunc sTypeGroupBehaviorFunc[] = {
 
 void ObjMure_ActiveState(ObjMure* this, PlayState* play) {
     ObjMure_CheckChildren(this, play);
-    if (sZClip[this->type] + 40.0f <= fabsf(this->actor.projectedPos.z)) {
+    if ((sZClip[this->type] + 40.0f) <= fabsf(this->actor.projectedPos.z)) {
         this->actionFunc = ObjMure_CulledState;
         this->actor.flags &= ~ACTOR_FLAG_10;
         ObjMure_KillActors(this, play);

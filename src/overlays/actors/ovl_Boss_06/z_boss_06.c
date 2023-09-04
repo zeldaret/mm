@@ -11,7 +11,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_knight/object_knight.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss06*)thisx)
 
@@ -152,7 +152,7 @@ void Boss06_Init(Actor* thisx, PlayState* play) {
         this->unk_200[i] = temp_v0[i];
     }
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void Boss06_Destroy(Actor* thisx, PlayState* play) {
@@ -164,7 +164,7 @@ void func_809F23CC(Boss06* this) {
         if ((this->unk_1C9 == 0) && (D_809F4970->unk_68A == 0)) {
             if (this->actor.colChkInfo.damageEffect == 2) {
                 func_809F24A8(this);
-                play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+                Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
 
                 this->unk_1B0 = -(this->actor.world.pos.x - this->collider.info.bumper.hitPos.x);
                 this->unk_1BC = this->unk_1B0 * 0.35f;
@@ -230,7 +230,7 @@ void func_809F24C8(Boss06* this, PlayState* play) {
             }
 
             if (this->unk_1CA >= 30) {
-                play_sound(NA_SE_EV_S_STONE_FLASH);
+                Audio_PlaySfx(NA_SE_EV_S_STONE_FLASH);
             }
 
             if (this->unk_1CA >= 60) {
@@ -377,7 +377,7 @@ void func_809F2C44(Boss06* this, PlayState* play) {
         }
 
         if ((this->unk_1E4 > 0.1f) && ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-            play_sound(NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
+            Audio_PlaySfx(NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
         }
     }
 
@@ -454,7 +454,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
     }
 
     if ((this->unk_1C8 != 0) && (this->unk_1C8 != 0)) {
-        play_sound(NA_SE_EV_FIRE_PLATE - SFX_FLAG);
+        Audio_PlaySfx(NA_SE_EV_FIRE_PLATE - SFX_FLAG);
         this->unk_1CC += 0.6f;
         this->unk_1D0 += 0.1f;
         this->unk_1D4 += 0.0200000014156f;
@@ -516,8 +516,8 @@ void Boss06_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     temp_v0 = gSaveContext.save.time;
     if (temp_v0 > CLOCK_TIME(12, 0)) {

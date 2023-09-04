@@ -41,7 +41,7 @@ ActorInit Bg_Iknin_Susceil_InitVars = {
     (ActorFunc)BgIkninSusceil_Draw,
 };
 
-static s32 unused = 0;
+static s32 sPad = 0;
 static f32 D_80C0B0E4 = 960.0f;
 static Vec2f D_80C0B0E8 = { -320.0f, 0.0f };
 static s8 D_80C0B0F0[] = { 0x00, 0x00, 0x07, 0x0A, 0x0A, 0x0B, 0x0B, 0x00 };
@@ -93,7 +93,10 @@ s32 func_80C0A95C(BgIkninSusceil* this, PlayState* play) {
     f32 new_var;
     Player* player = GET_PLAYER(play);
     Vec3f offset;
-    f32 temp1, temp2, temp3, temp4;
+    f32 temp1;
+    f32 temp2;
+    f32 temp3;
+    f32 temp4;
 
     Actor_OffsetOfPointInActorCoords(&this->dyna.actor, &offset, &player->actor.world.pos);
     for (i = 0; i < 7; i++) {
@@ -160,7 +163,7 @@ void func_80C0ABA8(BgIkninSusceil* this, PlayState* play) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BIGWALL_BOUND);
         func_80C0AC74(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
 }
 
@@ -202,7 +205,7 @@ void func_80C0AD64(BgIkninSusceil* this, PlayState* play) {
         CutsceneManager_Stop(this->dyna.actor.csId);
         func_80C0AB14(this);
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
 }
 

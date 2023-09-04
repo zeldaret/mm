@@ -11,7 +11,7 @@ typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, PlayState*);
 #define ENHORSEGAMECHECK_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENHORSEGAMECHECK_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
 
-enum {
+typedef enum {
     /*  0 */ ENHORSEGAMECHECK_FF_0,
     /*  1 */ ENHORSEGAMECHECK_FF_1,
     /*  2 */ ENHORSEGAMECHECK_FF_2,
@@ -22,8 +22,8 @@ enum {
     /*  7 */ ENHORSEGAMECHECK_FF_7,
     /*  8 */ ENHORSEGAMECHECK_FF_8,
     /*  9 */ ENHORSEGAMECHECK_FF_9,
-    /* 10 */ ENHORSEGAMECHECK_FF_MAX,
-};
+    /* 10 */ ENHORSEGAMECHECK_FF_MAX
+} EnHorseGameCheckParam;
 
 typedef struct EnHorseGameCheck {
     /* 0x000 */ DynaPolyActor dyna;

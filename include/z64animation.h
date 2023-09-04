@@ -12,11 +12,16 @@ struct SkelAnime;
 struct PlayerAnimationFrame;
 
 #define LIMB_DONE 0xFF
+#define BODYPART_NONE -1
 
 #define ANIM_FLAG_1         (1 << 0)
-#define ANIM_FLAG_UPDATEY   (1 << 1)
+#define ANIM_FLAG_UPDATE_Y  (1 << 1)
 #define ANIM_FLAG_4         (1 << 2)
+#define ANIM_FLAG_8         (1 << 3)
 #define ANIM_FLAG_NOMOVE    (1 << 4)
+#define ANIM_FLAG_80        (1 << 7)
+#define ANIM_FLAG_100       (1 << 8)
+#define ANIM_FLAG_200       (1 << 9)
 
 typedef enum AnimationMode {
     /* 0 */ ANIMMODE_LOOP,
@@ -300,7 +305,7 @@ typedef struct SkeletonInfo {
 typedef s32 (*OverrideKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeletonInfo, s32 limbIndex, Gfx** dList,
                                           u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
 
-typedef void (*PostKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** dList,
+typedef s32 (*PostKeyframeDrawScaled)(struct PlayState* play, SkeletonInfo* skeleton, s32 limbIndex, Gfx** dList,
                                        u8* flags, struct Actor* actor, Vec3f* scale, Vec3s* rot, Vec3f* pos);
 
 void SkelAnime_DrawLod(struct PlayState* play, void** skeleton, Vec3s* jointTable, OverrideLimbDrawOpa overrideLimbDraw, PostLimbDrawOpa postLimbDraw, struct Actor* actor, s32 lod);
@@ -326,6 +331,7 @@ void AnimationContext_Update(struct PlayState* play, AnimationContext* animation
 void SkelAnime_InitPlayer(struct PlayState* play, SkelAnime* skelAnime, FlexSkeletonHeader* skeletonHeaderSeg, PlayerAnimationHeader* animation, s32 flags, void* jointTableBuffer, void* morphTableBuffer, s32 limbBufCount);
 void PlayerAnimation_SetUpdateFunction(SkelAnime* skelAnime);
 s32 PlayerAnimation_Update(struct PlayState* play, SkelAnime* skelAnime);
+void PlayerAnimation_AnimateFrame(struct PlayState* play, SkelAnime* skelAnime);
 void Animation_SetMorph(struct PlayState* play, SkelAnime* skelAnime, f32 morphFrames);
 void PlayerAnimation_Change(struct PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation, f32 playSpeed, f32 startFrame, f32 endFrame, u8 mode, f32 morphFrames);
 void PlayerAnimation_PlayOnce(struct PlayState* play, SkelAnime* skelAnime, PlayerAnimationHeader* animation);

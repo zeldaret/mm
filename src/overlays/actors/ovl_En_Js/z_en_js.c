@@ -6,7 +6,7 @@
 
 #include "z_en_js.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJs*)thisx)
 
@@ -194,7 +194,7 @@ s32 func_80968B8C(EnJs* this, PlayState* play) {
     f32 sp18 = 0.0f;
     Vec3s* points;
 
-    if (pathIndex != 0x3F) {
+    if (pathIndex != ENJS_PATH_INDEX_NONE) {
         this->path = &play->setupPathList[pathIndex];
         if (this->path != NULL) {
             path = this->path;
@@ -377,7 +377,7 @@ void EnJs_TakeMask(s32 itemActions, s32 childType) {
     s32 temp = 0;
 
     if ((childType >= 0) && (childType < 9)) {
-        itemActions -= PLAYER_IA_MASK_TRUTH;
+        itemActions -= PLAYER_IA_MASK_MIN;
         childType *= 3;
         if (itemActions < 8) {
             masksGivenOnMoon[childType] |= 1 << itemActions;
@@ -543,7 +543,7 @@ void func_80969748(EnJs* this, PlayState* play) {
         }
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+            if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction < PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
                 EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -551,7 +551,7 @@ void func_80969748(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2213;
                 }
-            } else if ((itemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemAction <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemAction >= PLAYER_IA_MASK_TRANSFORMATION_MIN) && (itemAction <= PLAYER_IA_MASK_MAX)) {
                 player->actor.textId = 0x2211;
             } else {
                 player->actor.textId = 0x2210;
@@ -576,11 +576,11 @@ void func_80969898(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x2215)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x2217);
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x2216);
                         break;
                 }
@@ -608,7 +608,7 @@ void func_80969898(EnJs* this, PlayState* play) {
                     case 0x2210:
                     case 0x2211:
                     case 0x2212:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969748;
                         break;
@@ -631,7 +631,7 @@ void func_80969898(EnJs* this, PlayState* play) {
 void func_80969AA0(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else {
         textId = 0x2215;
@@ -671,7 +671,7 @@ void func_80969B5C(EnJs* this, PlayState* play) {
         this->unk_2B4 = 0.0f;
         func_80969AA0(this, play);
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
     func_80968CB8(this);
 }
@@ -692,7 +692,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
 
         if (itemAction > PLAYER_IA_NONE) {
             Message_CloseTextbox(play);
-            if ((itemAction >= PLAYER_IA_MASK_TRUTH) && (itemAction <= PLAYER_IA_MASK_GIANT)) {
+            if ((itemAction >= PLAYER_IA_MASK_MIN) && (itemAction < PLAYER_IA_MASK_TRANSFORMATION_MIN)) {
                 EnJs_TakeMask(itemAction, ENJS_GET_TYPE(&this->actor));
                 Inventory_UnequipItem(itemAction - 4);
                 if (!func_809692A8(ENJS_GET_TYPE(&this->actor))) {
@@ -700,7 +700,7 @@ void func_80969C54(EnJs* this, PlayState* play) {
                 } else {
                     player->actor.textId = 0x2222;
                 }
-            } else if ((itemAction >= PLAYER_IA_MASK_FIERCE_DEITY) && (itemAction <= PLAYER_IA_MASK_DEKU)) {
+            } else if ((itemAction >= PLAYER_IA_MASK_TRANSFORMATION_MIN) && (itemAction <= PLAYER_IA_MASK_MAX)) {
                 player->actor.textId = 0x2220;
             } else {
                 player->actor.textId = 0x221D;
@@ -726,14 +726,14 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                 ((play->msgCtx.currentTextId == 0x2219) || (play->msgCtx.currentTextId == 0x221E))) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         if (!func_809695FC(this, play)) {
                             func_809694E8(this, play);
                             break;
                         }
                         break;
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                 }
@@ -765,7 +765,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                         }
                         break;
                     case 0x2222:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x2223:
@@ -791,7 +791,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
                     case 0x221D:
                     case 0x2220:
                     case 0x2221:
-                        player->exchangeItemId = PLAYER_IA_NONE;
+                        player->exchangeItemAction = PLAYER_IA_NONE;
                         Message_ContinueTextbox(play, 0xFF);
                         this->actionFunc = func_80969C54;
                         break;
@@ -807,7 +807,7 @@ void func_80969DA4(EnJs* this, PlayState* play) {
 void func_8096A080(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x2218;
     } else {
         textId = 0x221B;
@@ -830,14 +830,14 @@ void func_8096A104(EnJs* this, PlayState* play) {
         this->actionFunc = func_80969DA4;
         func_8096A080(this, play);
     } else if (func_80968DD0(this, play)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
 void func_8096A184(EnJs* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_HUMAN) {
         textId = 0x220B;
     } else if (func_80968E38(0) >= 20) {
         textId = 0x2202;
@@ -858,7 +858,7 @@ void func_8096A1E8(EnJs* this, PlayState* play) {
         SET_WEEKEVENTREG(WEEKEVENTREG_84_20);
         func_809696EC(this, 0);
     } else {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -870,7 +870,7 @@ void func_8096A2C0(EnJs* this, PlayState* play) {
         this->actor.parent = NULL;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->actionFunc = func_8096A1E8;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         Actor_OfferGetItem(&this->actor, play, GI_MASK_FIERCE_DEITY, 10000.0f, 1000.0f);
     }
@@ -886,11 +886,11 @@ void func_8096A38C(EnJs* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         break;
                 }
 
@@ -1003,7 +1003,7 @@ void func_8096A6F4(EnJs* this, PlayState* play) {
     }
     if (!(this->unk_2B8 & 8) && (this->actor.xzDistToPlayer < 100.0f) &&
         Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x1000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -1058,7 +1058,7 @@ void func_8096A9F4(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
 void EnJs_Draw(Actor* thisx, PlayState* play) {
     EnJs* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           func_8096A9F4, &this->actor);
 }

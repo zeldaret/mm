@@ -109,10 +109,10 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->pathLocation = LOOKNUTS_GET_PATROL_LOCATION(&this->actor);
+    this->pathIndex = LOOKNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = LOOKNUTS_GET_SCENE_FLAG(&this->actor);
     this->spawnIndex = LOOKNUTS_GET_SPAWN_INDEX(&this->actor);
 
@@ -123,7 +123,7 @@ void EnLookNuts_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if (this->pathLocation == 0x1F) {
+    if (this->pathIndex == LOOKNUTS_PATH_INDEX_NONE) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -165,17 +165,17 @@ void EnLookNuts_Patrol(EnLookNuts* this, PlayState* play) {
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->pathLocation, 0x1F);
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, LOOKNUTS_PATH_INDEX_NONE);
     if (this->path != NULL) {
-        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->currentPathIndex, &this->actor.world.pos, &sp30);
+        sp34 = SubS_GetDistSqAndOrientPath(this->path, this->waypointIndex, &this->actor.world.pos, &sp30);
     }
 
     //! @bug sp30 is uninitialised if path == NULL. Fix by enclosing everything in the path NULL check.
     if (sp30 < 10.0f) {
         if (this->path != NULL) {
-            this->currentPathIndex++;
-            if (this->currentPathIndex >= this->path->count) {
-                this->currentPathIndex = 0;
+            this->waypointIndex++;
+            if (this->waypointIndex >= this->path->count) {
+                this->waypointIndex = 0;
             }
             if (Rand_ZeroOne() < 0.6f) {
                 EnLookNuts_SetupStandAndWait(this);
@@ -358,10 +358,10 @@ void EnLookNuts_Update(Actor* thisx, PlayState* play) {
                 if (!(player->stateFlags3 & PLAYER_STATE3_100) && !Play_InCsMode(play)) {
                     Math_Vec3f_Copy(&this->headRotTarget, &gZeroVec3f);
                     this->state = PALACE_GUARD_RUNNING_TO_PLAYER;
-                    play_sound(NA_SE_SY_FOUND);
+                    Audio_PlaySfx(NA_SE_SY_FOUND);
                     func_800B7298(play, &this->actor, PLAYER_CSMODE_26);
                     D_80A6862C = 1;
-                    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_10);
+                    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
                     this->actor.gravity = 0.0f;
                     EnLookNuts_DetectedPlayer(this, play);
                 } else {
@@ -389,7 +389,7 @@ void EnLookNuts_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 

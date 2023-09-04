@@ -82,7 +82,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 
     ConsoleLogo_RenderView(this, 0.0f, 150.0f, 300.0f);
-    func_8012C28C(this->state.gfxCtx);
+    Gfx_SetupDL25_Opa(this->state.gfxCtx);
     Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
     Matrix_RotateZYX(0, sTitleRotation, 0, MTXMODE_APPLY);
@@ -90,7 +90,7 @@ void ConsoleLogo_Draw(GameState* thisx) {
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
 
-    func_8012C628(this->state.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
@@ -157,7 +157,7 @@ void ConsoleLogo_Init(GameState* thisx) {
     this->staticSegment = THA_AllocTailAlign16(&this->state.heap, segmentSize);
     DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);
@@ -172,7 +172,7 @@ void ConsoleLogo_Init(GameState* thisx) {
         gSaveContext.fileNum = 0xFF;
     }
 
-    gSaveContext.unk_3F3F = true;
+    gSaveContext.flashSaveAvailable = true;
     Sram_Alloc(thisx, &this->sramCtx);
     this->ult = 0;
     this->timer = 20;

@@ -42,11 +42,11 @@ void ObjKinoko_Update(Actor* thisx, PlayState* play) {
     if (player->currentMask != PLAYER_MASK_SCENTS) {
         thisx->draw = NULL;
         thisx->hintId = TATL_HINT_ID_NONE;
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
         thisx->draw = ObjKinoko_Draw;
         thisx->hintId = TATL_HINT_ID_MUSHROOM;
-        thisx->flags |= ACTOR_FLAG_1;
+        thisx->flags |= ACTOR_FLAG_TARGETABLE;
         if (Actor_HasParent(thisx, play)) {
             Flags_SetCollectible(play, OBJ_KINOKO_GET_FLAG(thisx));
             Actor_Kill(thisx);
@@ -73,7 +73,7 @@ void ObjKinoko_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gfx = POLY_XLU_DISP;
     gDPSetPrimColor(&gfx[0], 0, 0, 169, 63, 186, (u8)thisx->speed);

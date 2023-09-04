@@ -19,7 +19,7 @@ typedef struct BgIknvObj {
 typedef enum {
     /* 0 */ IKNV_OBJ_WATERWHEEL,
     /* 1 */ IKNV_OBJ_RAISED_DOOR, // defunct door covering entrance to Stone Tower
-    /* 2 */ IKNV_OBJ_SAKON_DOOR,  // door to Sakon's Hideout
+    /* 2 */ IKNV_OBJ_SAKON_DOOR   // door to Sakon's Hideout
 } BgIknvObjType;
 
 #endif // Z_BG_IKNV_OBJ_H

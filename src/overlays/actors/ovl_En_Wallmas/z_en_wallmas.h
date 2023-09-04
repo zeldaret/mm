@@ -27,14 +27,29 @@
  * the timer to 130 frames if the player strays too far from the Wallmaster's current position.
  */
 typedef enum {
-    /* 0x0 */ WALLMASTER_TYPE_TIMER_ONLY,
-    /* 0x1 */ WALLMASTER_TYPE_PROXIMITY,
-    /* 0x2 */ WALLMASTER_TYPE_FLAG
+    /* 0 */ WALLMASTER_TYPE_TIMER_ONLY,
+    /* 1 */ WALLMASTER_TYPE_PROXIMITY,
+    /* 2 */ WALLMASTER_TYPE_FLAG
 } WallmasterType;
 
 struct EnWallmas;
 
 typedef void (*EnWallmasActionFunc)(struct EnWallmas*, PlayState*);
+
+typedef enum WallmasterBodyPart {
+    /*  0 */ WALLMASTER_BODYPART_0,
+    /*  1 */ WALLMASTER_BODYPART_1,
+    /*  2 */ WALLMASTER_BODYPART_2,
+    /*  3 */ WALLMASTER_BODYPART_3,
+    /*  4 */ WALLMASTER_BODYPART_4,
+    /*  5 */ WALLMASTER_BODYPART_5,
+    /*  6 */ WALLMASTER_BODYPART_6,
+    /*  7 */ WALLMASTER_BODYPART_7,
+    /*  8 */ WALLMASTER_BODYPART_8,
+    /*  9 */ WALLMASTER_BODYPART_9,
+    /* 10 */ WALLMASTER_BODYPART_10,
+    /* 11 */ WALLMASTER_BODYPART_MAX
+} WallmasterBodyPart;
 
 typedef struct EnWallmas {
     /* 0x000 */ Actor actor;
@@ -50,7 +65,7 @@ typedef struct EnWallmas {
     /* 0x2C8 */ f32 drawDmgEffAlpha;
     /* 0x2CC */ f32 drawDmgEffScale;
     /* 0x2D0 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x2D4 */ Vec3f limbPos[11];
+    /* 0x2D4 */ Vec3f bodyPartsPos[WALLMASTER_BODYPART_MAX];
     /* 0x358 */ ColliderCylinder collider;
 } EnWallmas; // size = 0x3A4
 

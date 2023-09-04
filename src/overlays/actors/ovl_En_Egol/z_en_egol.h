@@ -8,10 +8,12 @@ struct EnEgol;
 
 typedef void (*EnEgolActionFunc)(struct EnEgol*, PlayState*);
 
-#define EYEGORE_GET_PATH(thisx) ((thisx)->params & 0x3F)
+#define EYEGORE_GET_PATH_INDEX(thisx) ((thisx)->params & 0x3F)
 #define EYEGORE_GET_SWITCH(thisx) (((thisx)->params >> 6) & 0x7F)
 
-#define EYEGORE_PARAMS(switch, path) ((((switch) & 0x7F) << 6) | ((path) & 0x3F))
+#define EYEGORE_PATH_INDEX_NONE 0x3F
+
+#define EYEGORE_PARAMS(switch, pathIndex) ((((switch) & 0x7F) << 6) | ((pathIndex) & 0x3F))
 
 #define EYEGORE_EFFECT_COUNT 100
 
@@ -27,6 +29,22 @@ typedef struct {
     /* 0x38 */ f32 scale;
 } EnEgolEffect; // size = 0x3C
 
+typedef enum EyegoreBodyPart {
+    /*  0 */ EYEGORE_BODYPART_0,
+    /*  1 */ EYEGORE_BODYPART_1,
+    /*  2 */ EYEGORE_BODYPART_2,
+    /*  3 */ EYEGORE_BODYPART_3,
+    /*  4 */ EYEGORE_BODYPART_4,
+    /*  5 */ EYEGORE_BODYPART_5,
+    /*  6 */ EYEGORE_BODYPART_6,
+    /*  7 */ EYEGORE_BODYPART_7,
+    /*  8 */ EYEGORE_BODYPART_8,
+    /*  9 */ EYEGORE_BODYPART_9,
+    /* 10 */ EYEGORE_BODYPART_10,
+    /* 11 */ EYEGORE_BODYPART_11,
+    /* 12 */ EYEGORE_BODYPART_MAX
+} EyegoreBodyPart;
+
 typedef struct EnEgol {
     /* 0x0000 */ Actor actor;
     /* 0x0144 */ SkelAnime skelAnime;
@@ -41,10 +59,10 @@ typedef struct EnEgol {
     /* 0x02B4 */ s16 headRot;
     /* 0x02BA */ s16 switchFlag;
     /* 0x02BC */ s16 dmgEffectTimer;
-    /* 0x02C0 */ Vec3f limbPos[12];
-    /* 0x0350 */ s16 limbPosIndex;
+    /* 0x02C0 */ Vec3f bodyPartsPos[EYEGORE_BODYPART_MAX];
+    /* 0x0350 */ s16 bodyPartIndex;
     /* 0x0352 */ s16 pathIndex;
-    /* 0x0354 */ s32 animation;
+    /* 0x0354 */ s32 animIndex;
     /* 0x0358 */ u8 isRetreating;
     /* 0x035C */ f32 animEndFrame;
     /* 0x0360 */ f32 wakeupRange;

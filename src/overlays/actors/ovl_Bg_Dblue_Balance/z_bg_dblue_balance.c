@@ -4,7 +4,6 @@
  * Description: Great Bay Temple - Seesaw and Waterwheel w/ Platforms
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_balance.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 
@@ -476,7 +475,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
         phi_f2 = 1.0f;
     }
 
-    func_8019FAD8(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG, phi_f2 + 1.0f);
+    Audio_PlaySfx_AtPosWithFreq(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG, phi_f2 + 1.0f);
     actor->shape.rot.z += this->unk_178;
 
     if (this->dyna.actor.shape.rot.z > 0x1C71) {
@@ -663,7 +662,7 @@ void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
 
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(gfx++, 0, 0, 0, this->unk_183);
         gSPDisplayList(gfx++, gGreatBayTempleObjectSeesawSplashDL);
@@ -691,7 +690,8 @@ void func_80B83758(Actor* thisx, PlayState* play) {
             temp_f0 = this->unk_178 * 0.002f;
             temp_f0 = CLAMP(temp_f0, 0.0f, 1.0f);
         }
-        func_8019FB0C(&this->dyna.actor.projectedPos, NA_SE_EV_SMALL_WATER_WHEEL - SFX_FLAG, temp_f0, 0x20);
+        Audio_PlaySfx_AtPosWithFreqAndChannelIO(&this->dyna.actor.projectedPos, NA_SE_EV_SMALL_WATER_WHEEL - SFX_FLAG,
+                                                temp_f0, 0x20);
     }
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
@@ -705,7 +705,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
 
             gfx = POLY_XLU_DISP;
 
-            gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+            gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
 
             for (i = 0, ptr = &this->unk_188[0]; i < ARRAY_COUNT(this->unk_188); i++, ptr++) {
                 if (ptr->unk_0E != 0) {

@@ -4,7 +4,6 @@
  * Description: Sakon's Hideout Objects (Sun's Mask, doors, etc)
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_obj_nozoki.h"
 #include "objects/object_secom_obj/object_secom_obj.h"
 
@@ -47,7 +46,7 @@ ActorInit Obj_Nozoki_InitVars = {
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F(scale, 1, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 0, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_STOP),
 };
 
 s16 D_80BA34B8[] = { OBJECT_SECOM_OBJ, OBJECT_GI_MSSA, OBJECT_SECOM_OBJ, OBJECT_SECOM_OBJ };
@@ -130,7 +129,7 @@ void func_80BA2514(ObjNozoki* this, PlayState* play) {
 }
 
 s32 func_80BA26A8(ObjNozoki* this) {
-    if (this->csId < 0) {
+    if (this->csId <= CS_ID_NONE) {
         return true;
     }
 
@@ -184,7 +183,7 @@ void func_80BA27C4(ObjNozoki* this, PlayState* play) {
             func_80BA2790(this);
             if (D_80BA36B0 == 0) {
                 this->unk_15E = 25;
-                play_sound(NA_SE_SY_SECOM_WARNING);
+                Audio_PlaySfx(NA_SE_SY_SECOM_WARNING);
             } else {
                 this->unk_15E = CutsceneManager_GetLength(this->csId);
                 if (this->unk_15E < 0) {
@@ -363,7 +362,7 @@ void func_80BA2C94(ObjNozoki* this, PlayState* play) {
 
     play->roomCtx.unk7A[0] = this->dyna.actor.velocity.x;
 
-    func_8019FAD8(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speed);
+    Audio_PlaySfx_AtPosWithFreq(&gSfxDefaultPos, NA_SE_EV_SECOM_CONVEYOR - SFX_FLAG, this->dyna.actor.speed);
 }
 
 void func_80BA3044(ObjNozoki* this, PlayState* play) {
@@ -414,10 +413,10 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
 
         if ((test3 != NULL) && (test3->draw != NULL)) {
             if ((play->curSpawn == 3) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
-                this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10000);
+                this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10000);
                 this->dyna.actor.textId = 0x297A;
             } else {
-                this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
                 if (CHECK_WEEKEVENTREG(WEEKEVENTREG_64_40)) {
                     this->dyna.actor.textId = 0;
                 } else {
@@ -428,7 +427,7 @@ void func_80BA3230(ObjNozoki* this, PlayState* play) {
             if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
                 ObjNozoki_SetupAction(this, func_80BA3344);
             } else {
-                func_800B8614(&this->dyna.actor, play, 50.0f);
+                Actor_OfferTalk(&this->dyna.actor, play, 50.0f);
             }
         }
     }

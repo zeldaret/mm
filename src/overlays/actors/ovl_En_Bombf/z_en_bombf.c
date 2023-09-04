@@ -6,9 +6,10 @@
 
 #include "z_en_bombf.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_bombf/object_bombf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10)
 
 #define THIS ((EnBombf*)thisx)
 
@@ -109,7 +110,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
     thisx->focus.pos = thisx->world.pos;
     thisx->colChkInfo.cylRadius = 10;
     thisx->colChkInfo.cylHeight = 10;
-    thisx->targetMode = 0;
+    thisx->targetMode = TARGET_MODE_0;
 
     if (ENBOMBF_GET(thisx) == ENBOMBF_0) {
         this->timer = 140;
@@ -117,7 +118,7 @@ void EnBombf_Init(Actor* thisx, PlayState* play2) {
         thisx->gravity = -1.5f;
         func_800BC154(play, &play->actorCtx, thisx, 3);
         thisx->colChkInfo.mass = 200;
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
         EnBombf_SetupAction(this, func_808AEE3C);
     } else {
         thisx->colChkInfo.mass = MASS_IMMOVABLE;
@@ -157,7 +158,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 this->timer = 180;
                 this->unk_204 = 0.0f;
                 Actor_PlaySfx(&this->actor, NA_SE_PL_PULL_UP_ROCK);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             } else {
                 player->actor.child = NULL;
                 player->heldActor = NULL;
@@ -177,7 +178,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                     bombf->unk_1F8 = 1;
                     bombf->timer = 0;
                     this->timer = 180;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     this->unk_204 = 0.0f;
                 }
             }
@@ -188,7 +189,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
                 if (bombf != NULL) {
                     bombf->timer = 100;
                     this->timer = 180;
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                     this->unk_204 = 0.0f;
                 }
             } else {
@@ -208,7 +209,7 @@ void func_808AEAE0(EnBombf* this, PlayState* play) {
         if (this->timer == 0) {
             this->unk_204 += 0.05f;
             if (this->unk_204 >= 1.0f) {
-                this->actor.flags |= ACTOR_FLAG_1;
+                this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             }
         }
 
@@ -239,7 +240,7 @@ void func_808AEE3C(EnBombf* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->actor.speed, 0.0f, 1.0f, 1.5f, 0.0f);
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
-        func_800B8EF4(play, &this->actor);
+        Actor_PlaySfx_SurfaceBomb(play, &this->actor);
         if (this->actor.velocity.y < -6.0f) {
             this->actor.velocity.y *= -0.3f;
             this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
@@ -313,7 +314,7 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
     Vec3f sp8C = { 0.0f, 0.0f, 0.0f };
     Vec3f sp80 = { 0.0f, 0.1f, 0.0f };
     Vec3f sp74 = { 0.0f, 0.0f, 0.0f };
-    Vec3f sp68;
+    Vec3f effPos;
     Vec3f sp5C = { 0.0f, 0.6f, 0.0f };
     Color_RGBA8 sp58 = { 255, 255, 255, 255 };
     EnBombf* this = THIS;
@@ -375,16 +376,16 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
 
         if (this->unk_1F8 != 0) {
             sp5C.y = 0.2f;
-            sp68 = this->actor.world.pos;
-            sp68.y += 25.0f;
+            effPos = this->actor.world.pos;
+            effPos.y += 25.0f;
 
             if (this->timer < 127) {
                 if ((play->gameplayFrames % 2) == 0) {
-                    EffectSsGSpk_SpawnFuse(play, &this->actor, &sp68, &sp8C, &sp74);
+                    EffectSsGSpk_SpawnFuse(play, &this->actor, &effPos, &sp8C, &sp74);
                 }
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
-                sp68.y += 3.0f;
-                func_800B0DE0(play, &sp68, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
+                effPos.y += 3.0f;
+                func_800B0DE0(play, &effPos, &sp8C, &sp5C, &sp58, &sp58, 0x32, 5);
             }
 
             if ((this->timer == 3) || (this->timer == 30) || (this->timer == 50) || (this->timer == 70)) {
@@ -402,15 +403,15 @@ void EnBombf_Update(Actor* thisx, PlayState* play) {
             }
 
             if (this->timer == 0) {
-                sp68 = this->actor.world.pos;
-                sp68.y += 10.0f;
+                effPos = this->actor.world.pos;
+                effPos.y += 10.0f;
 
                 if (Actor_HasParent(&this->actor, play)) {
-                    sp68.y += 30.0f;
+                    effPos.y += 30.0f;
                 }
 
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp68.x, sp68.y, sp68.z, 0, 0, 0,
-                            CLEAR_TAG_SMALL_EXPLOSION);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 0, 0, 0,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
                 Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
 
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
@@ -473,12 +474,12 @@ void EnBombf_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (ENBOMBF_GET(&this->actor) <= ENBOMBF_0) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         if (ENBOMBF_GET(&this->actor) != ENBOMBF_0) {
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000340);
-            gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000530);
+            gSPDisplayList(POLY_OPA_DISP++, gBombFlowerLeavesDL);
+            gSPDisplayList(POLY_OPA_DISP++, gBombFlowerBaseLeavesDL);
 
             Matrix_Translate(0.0f, 1000.0f, 0.0f, MTXMODE_APPLY);
             Matrix_Scale(this->unk_204, this->unk_204, this->unk_204, MTXMODE_APPLY);
@@ -495,7 +496,7 @@ void EnBombf_Draw(Actor* thisx, PlayState* play) {
             gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gfx));
         }
 
-        gSPDisplayList(POLY_OPA_DISP++, object_bombf_DL_000408);
+        gSPDisplayList(POLY_OPA_DISP++, gBombFlowerBombAndSparkDL);
     } else {
         Collider_UpdateSpheres(0, &this->colliderJntSph);
     }

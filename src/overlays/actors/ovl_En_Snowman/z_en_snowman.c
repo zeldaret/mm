@@ -5,8 +5,9 @@
  */
 
 #include "z_en_snowman.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSnowman*)thisx)
 
@@ -58,7 +59,7 @@ typedef enum {
     // Indicates that either this Eeno is shrinking having been absorbed by another Eeno, or that
     // this Eeno is a fully-combined large Eeno and is done trying to combine with other split
     // Eenos. In both cases, this Eeno cannot be absorbed by any other Eeno.
-    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE,
+    /* 3 */ EN_SNOWMAN_COMBINE_STATE_BEING_ABSORBED_OR_DONE
 } EnSnowmanCombineState;
 
 ActorInit En_Snowman_InitVars = {
@@ -119,7 +120,7 @@ typedef enum {
     /* 0x2 */ EN_SNOWMAN_DMGEFF_MELT,
     /* 0x4 */ EN_SNOWMAN_DMGEFF_LIGHT_ORB = 0x4,
     /* 0x5 */ EN_SNOWMAN_DMGEFF_ELECTRIC_STUN,
-    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF, // Damages small Eenos, pulls the player towards large Eenos
+    /* 0xF */ EN_SNOWMAN_DMGEFF_HOOKSHOT = 0xF // Damages small Eenos, pulls the player towards large Eenos
 } EnTalkGibudDamageEffect;
 
 static DamageTable sDamageTable = {
@@ -240,7 +241,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
     } else {
         Player* player = GET_PLAYER(play);
 
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sSnowballCylinderInit);
         thisx->world.rot.y = Actor_WorldYawTowardActor(thisx, &player->actor);
         thisx->velocity.y = (Actor_WorldDistXZToActor(thisx, &player->actor) * 0.035f) + -5.0f;
@@ -356,9 +357,9 @@ void EnSnowman_MoveSnowPile(EnSnowman* this, PlayState* play) {
 
     SkelAnime_Update(&this->snowPileSkelAnime);
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
-        func_800B9010(&this->actor, NA_SE_EN_YMAJIN_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YMAJIN_MOVE - SFX_FLAG);
     } else {
-        func_800B9010(&this->actor, NA_SE_EN_YMAJIN_MINI_MOVE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_YMAJIN_MINI_MOVE - SFX_FLAG);
     }
 
     if (this->work.timer > 0) {
@@ -475,18 +476,18 @@ void EnSnowman_ReadySnowball(EnSnowman* this, PlayState* play) {
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x1000);
     if ((EN_SNOWMAN_GET_TYPE(&this->actor) != EN_SNOWMAN_TYPE_LARGE) && this->isHoldingSnowball &&
         ((play->gameplayFrames % 2) != 0)) {
-        pos.x = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.x;
-        pos.y = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.y;
-        pos.z = randPlusMinusPoint5Scaled(10.0f) + this->snowballPos.z;
+        pos.x = Rand_CenteredFloat(10.0f) + this->snowballPos.x;
+        pos.y = Rand_CenteredFloat(10.0f) + this->snowballPos.y;
+        pos.z = Rand_CenteredFloat(10.0f) + this->snowballPos.z;
         func_800B0DE0(play, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 500, 30);
     } else if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
         if ((this->skelAnime.curFrame > 3.0f) && (this->skelAnime.curFrame < 14.0f) &&
             ((play->gameplayFrames % 2) != 0)) {
-            pos.x = (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) +
-                    randPlusMinusPoint5Scaled(40.0f);
-            pos.y = this->actor.world.pos.y + randPlusMinusPoint5Scaled(20.0f);
-            pos.z = (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) +
-                    randPlusMinusPoint5Scaled(40.0f);
+            pos.x =
+                (this->actor.world.pos.x + (70.0f * Math_SinS(this->actor.shape.rot.y))) + Rand_CenteredFloat(40.0f);
+            pos.y = this->actor.world.pos.y + Rand_CenteredFloat(20.0f);
+            pos.z =
+                (this->actor.world.pos.z + (70.0f * Math_CosS(this->actor.shape.rot.y))) + Rand_CenteredFloat(40.0f);
             func_800B0DE0(play, &pos, &sDustVelocity, &gZeroVec3f, &sDustPrimColor, &sDustEnvColor, 1000, 150);
         }
     }
@@ -602,7 +603,7 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 50);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speed = 0.0f;
@@ -619,8 +620,8 @@ void EnSnowman_Melt(EnSnowman* this, PlayState* play) {
     this->work.timer--;
     if ((this->work.timer >= 38) && (!(this->work.timer & 1))) {
         smokeVelocity.y = (this->work.timer - 38) * (1.0f / 12.0f);
-        smokeVelocity.x = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
-        smokeVelocity.z = randPlusMinusPoint5Scaled(1.5f) * smokeVelocity.y;
+        smokeVelocity.x = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
+        smokeVelocity.z = Rand_CenteredFloat(1.5f) * smokeVelocity.y;
         smokeVelocity.y += 0.8f;
         smokePos.x = ((smokeVelocity.x >= 0.0f ? 1.0f : -1.0f) * Rand_ZeroFloat(20.0f) * this->eenoScale) +
                      this->actor.world.pos.x;
@@ -786,7 +787,7 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
     if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
         if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
             EnSnowman_SetupKill((EnSnowman*)this->actor.parent);
@@ -821,7 +822,7 @@ void EnSnowman_Kill(EnSnowman* this, PlayState* play) {
  * Creates a small split Eeno with a certain Y-rotation and at a certain offset from basePos.
  */
 void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = yRot;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1009,7 +1010,7 @@ void EnSnowman_UpdateDamage(EnSnowman* this, PlayState* play) {
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                             this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                            CLEAR_TAG_LARGE_LIGHT_RAYS);
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
             }
         }
     }
@@ -1124,11 +1125,21 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos array. An index of -1 indicates that the limb is
- * not part of the bodyPartsPos array.
+ * in the bodyPartsPos array.
  */
-static s8 sLimbIndexToBodyPartsPosIndex[] = {
-    -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
+static s8 sLimbToBodyParts[EENO_LIMB_MAX] = {
+    BODYPART_NONE,         // EENO_LIMB_NONE
+    BODYPART_NONE,         // EENO_LIMB_ROOT
+    BODYPART_NONE,         // EENO_LIMB_BODY_TOP
+    BODYPART_NONE,         // EENO_LIMB_LEFT_EYE
+    BODYPART_NONE,         // EENO_LIMB_RIGHT_EYE
+    BODYPART_NONE,         // EENO_LIMB_LEFT_UPPER_ARM
+    EN_SNOWMAN_BODYPART_0, // EENO_LIMB_LEFT_FOREARM
+    EN_SNOWMAN_BODYPART_1, // EENO_LIMB_LEFT_HAND
+    BODYPART_NONE,         // EENO_LIMB_RIGHT_UPPER_ARM
+    EN_SNOWMAN_BODYPART_2, // EENO_LIMB_RIGHT_FOREARM
+    EN_SNOWMAN_BODYPART_3, // EENO_LIMB_RIGHT_HAND
+    EN_SNOWMAN_BODYPART_4, // EENO_LIMB_BODY_BOTTOM
 };
 
 /**
@@ -1136,8 +1147,11 @@ static s8 sLimbIndexToBodyPartsPosIndex[] = {
  * bottom limb, each offset by a certain certain amount.
  */
 static Vec3f sBodyBottomBodyPartOffsets[] = {
-    { 2000.0f, 3000.0f, 0.0f }, { 2000.0f, -2000.0f, 0.0f }, { 3000.0f, 0.0f, 0.0f },
-    { 1000.0f, 0.0f, 3000.0f }, { 1000.0f, 0.0f, -3000.0f },
+    { 2000.0f, 3000.0f, 0.0f },  // EN_SNOWMAN_BODYPART_4
+    { 2000.0f, -2000.0f, 0.0f }, // EN_SNOWMAN_BODYPART_5
+    { 3000.0f, 0.0f, 0.0f },     // EN_SNOWMAN_BODYPART_6
+    { 1000.0f, 0.0f, 3000.0f },  // EN_SNOWMAN_BODYPART_7
+    { 1000.0f, 0.0f, -3000.0f }, // EN_SNOWMAN_BODYPART_8
 };
 
 void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1146,13 +1160,13 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     Gfx* gfx;
     s32 i;
 
-    if (sLimbIndexToBodyPartsPosIndex[limbIndex] != -1) {
-        if (sLimbIndexToBodyPartsPosIndex[limbIndex] == 4) {
-            for (i = 0; i < 5; i++) {
-                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[i + 4]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        if (sLimbToBodyParts[limbIndex] == EN_SNOWMAN_BODYPART_4) {
+            for (i = 0; i < ARRAY_COUNT(sBodyBottomBodyPartOffsets); i++) {
+                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[EN_SNOWMAN_BODYPART_4 + i]);
             }
         } else {
-            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsPosIndex[limbIndex]]);
+            Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
         }
     }
 
@@ -1182,17 +1196,17 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
 void EnSnowman_Draw(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnSnowman_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_SNOWMAN_BODYPART_MAX,
                             this->drawDmgEffScale * this->eenoScale, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }
 
 void EnSnowman_DrawSnowPile(Actor* thisx, PlayState* play) {
     EnSnowman* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->snowPileSkelAnime.skeleton, this->snowPileSkelAnime.jointTable,
                           this->snowPileSkelAnime.dListCount, NULL, NULL, &this->actor);
 }

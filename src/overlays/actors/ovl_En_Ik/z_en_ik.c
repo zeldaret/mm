@@ -6,8 +6,9 @@
 
 #include "z_en_ik.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnIk*)thisx)
 
@@ -53,14 +54,14 @@ typedef struct {
     /* 0x4 */ s16 unk04;
 } EnIkUnkStruct; // size = 0x8
 
-EnIkUnkStruct sIronKnuckleArmorMarkings[] = {
-    { gIronKnuckleHelmetMarkingDL, 0x0000 },
-    { gIronKnuckleFrontTorsoArmorMarkingDL, 0x0000 },
-    { gIronKnuckleRearTorsoArmorMarkingDL, 0x7FFF },
-    { gIronKnuckleRivetsMarking2DL, 0x4000 },
-    { gIronKnuckleRivetsMarking1DL, 0xC000 },
-    { NULL, 0x4000 },
-    { NULL, 0xC000 },
+EnIkUnkStruct sIronKnuckleArmorMarkings[IRON_KNUCKLE_ARMOR_BODYPART_MAX] = {
+    { gIronKnuckleHelmetMarkingDL, 0x0000 },          // IRON_KNUCKLE_ARMOR_BODYPART_HELMET
+    { gIronKnuckleFrontTorsoArmorMarkingDL, 0x0000 }, // IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT
+    { gIronKnuckleRearTorsoArmorMarkingDL, 0x7FFF },  // IRON_KNUCKLE_ARMOR_BODYPART_CHEST_BACK
+    { gIronKnuckleRivetsMarking2DL, 0x4000 },         // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_LEFT_PAULDRON
+    { gIronKnuckleRivetsMarking1DL, -0x4000 },        // IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON
+    { NULL, 0x4000 },                                 // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_LEFT_PAULDRON
+    { NULL, -0x4000 },                                // IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON
 };
 
 // sIronKnuckleArmorType[PARAM_VALUE][ARMOR_SECTIONS]
@@ -169,8 +170,7 @@ typedef enum {
     /* 0x4 */ DMG_EFF_FIRE = 0x2,
     /* 0x0 */ DMG_EFF_ICE,
     /* 0x4 */ DMG_EFF_LIGHT_SPARKS,
-    /* 0xF */ DMG_EFF_IMMUNE = 0xF,
-
+    /* 0xF */ DMG_EFF_IMMUNE = 0xF
 } EnIkDmgEff;
 
 static DamageTable sDamageTableArmor = {
@@ -266,7 +266,7 @@ void EnIk_Init(Actor* thisx, PlayState* play) {
                        this->morphTable, IRON_KNUCKLE_LIMB_MAX);
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->colliderCylinder);
-    Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->shieldColliderItems);
+    Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->shieldColliderElements);
     Collider_InitAndSetQuad(play, &this->colliderQuad, &this->actor, &sQuadInit);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTableArmor, &sColChkInfoInit);
     this->actor.params = IK_GET_ARMOR_TYPE(&this->actor);
@@ -307,7 +307,7 @@ void EnIk_Thaw(EnIk* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2, 0.3f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, IRON_KNUCKLE_BODYPART_MAX, 2, 0.3f, 0.2f);
         this->actor.flags |= ACTOR_FLAG_400;
     }
 }
@@ -318,7 +318,7 @@ void EnIk_HitArmor(EnIk* this, PlayState* play) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->colliderCylinder.info.bumper.hitPos.x,
                 this->colliderCylinder.info.bumper.hitPos.y, this->colliderCylinder.info.bumper.hitPos.z, 0, 0, 0,
-                CLEAR_TAG_LARGE_LIGHT_RAYS);
+                CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
 }
 
 s32 EnIk_IsChangingAction(EnIk* this, PlayState* play) {
@@ -356,7 +356,7 @@ s32 EnIk_ChooseAttack(EnIk* this) {
 
 void EnIk_CheckActions(EnIk* this, PlayState* play) {
     if (!EnIk_IsChangingAction(this, play) && !EnIk_ChooseAttack(this)) {
-        if (this->drawArmorFlags) {
+        if (this->drawArmorFlags != 0) {
             EnIk_SetupRun(this);
         } else {
             EnIk_SetupWalk(this);
@@ -367,7 +367,7 @@ void EnIk_CheckActions(EnIk* this, PlayState* play) {
 void EnIk_SetupIdle(EnIk* this) {
     f32 frameCount = Animation_GetLastFrame(&gIronKnuckleHorizontalAttackAnim);
 
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         this->timer = 10;
     } else {
         this->timer = 0;
@@ -455,7 +455,7 @@ void EnIk_SetupVerticalAttack(EnIk* this) {
     f32 playbackSpeed;
 
     this->actor.speed = 0.0f;
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         playbackSpeed = 1.5f;
     } else {
         playbackSpeed = 1.2f;
@@ -487,8 +487,8 @@ void EnIk_VerticalAttack(EnIk* this, PlayState* play) {
 
         if ((this->skelAnime.curFrame > 13.0f) && (this->skelAnime.curFrame < 23.0f)) {
             this->colliderQuad.base.atFlags |= AT_ON;
-            if (this->drawArmorFlags) {
-                this->actor.speed = sin_rad((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
+            if (this->drawArmorFlags != 0) {
+                this->actor.speed = Math_SinF((this->skelAnime.curFrame - 13.0f) * (M_PI / 20)) * 10.0f;
             }
         } else {
             this->colliderQuad.base.atFlags &= ~AT_ON;
@@ -538,12 +538,12 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
     f32 phi_f2;
 
     this->timer++;
-    if ((Animation_OnFrame(&this->skelAnime, 1.0f)) || (Animation_OnFrame(&this->skelAnime, 13.0f))) {
+    if (Animation_OnFrame(&this->skelAnime, 1.0f) || Animation_OnFrame(&this->skelAnime, 13.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_SWING_AXE);
     }
     if (((this->skelAnime.curFrame > 1.0f) && (this->skelAnime.curFrame < 9.0f)) ||
         ((this->skelAnime.curFrame > 12.0f) && (this->skelAnime.curFrame < 20.0f))) {
-        if (this->drawArmorFlags) {
+        if (this->drawArmorFlags != 0) {
             Math_ScaledStepToS(&this->actor.shape.rot.y, this->actor.yawTowardsPlayer, 0x5DC);
             this->actor.world.rot.y = this->actor.shape.rot.y;
             if (this->skelAnime.curFrame > 12.0f) {
@@ -551,7 +551,7 @@ void EnIk_HorizontalDoubleAttack(EnIk* this, PlayState* play) {
             } else {
                 phi_f2 = this->skelAnime.curFrame - 1.0f;
             }
-            this->actor.speed = sin_rad((M_PI / 8) * phi_f2) * 4.5f;
+            this->actor.speed = Math_SinF((M_PI / 8) * phi_f2) * 4.5f;
         }
         this->colliderQuad.base.atFlags |= AT_ON;
     } else {
@@ -567,7 +567,7 @@ void EnIk_SetupSingleHorizontalAttack(EnIk* this) {
     f32 playSpeed;
 
     this->actor.speed = 0.0f;
-    if (this->drawArmorFlags) {
+    if (this->drawArmorFlags != 0) {
         this->actor.world.rot.z = 0x1000;
         playSpeed = 1.3f;
     } else {
@@ -686,9 +686,9 @@ void EnIk_Die(EnIk* this, PlayState* play) {
         if (this->timer != 0) {
             this->timer--;
             for (i = 6 - (this->timer >> 2); i >= 0; i--) {
-                effectPos.x = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.x;
-                effectPos.z = randPlusMinusPoint5Scaled(80.0f) + this->actor.world.pos.z;
-                effectPos.y = randPlusMinusPoint5Scaled(50.0f) + (this->actor.world.pos.y + 20.0f);
+                effectPos.x = Rand_CenteredFloat(80.0f) + this->actor.world.pos.x;
+                effectPos.z = Rand_CenteredFloat(80.0f) + this->actor.world.pos.z;
+                effectPos.y = Rand_CenteredFloat(50.0f) + (this->actor.world.pos.y + 20.0f);
                 func_800B3030(play, &effectPos, &sEffectVelAndAccel, &sEffectVelAndAccel, 100, 0, 2);
             }
             if (this->timer == 0) {
@@ -795,7 +795,7 @@ void EnIk_UpdateDamage(EnIk* this, PlayState* play) {
                 this->actor.colChkInfo.damageTable = &sDamageTableNoArmor;
                 Actor_PlaySfx(&this->actor, NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO);
                 EnIk_SetupCutscene(this);
-            } else if (this->drawArmorFlags) {
+            } else if (this->drawArmorFlags != 0) {
                 if (this->actor.colChkInfo.damageEffect == DMG_EFF_ICE) {
                     EnIk_Freeze(this);
                     EnIk_SetupFrozen(this);
@@ -846,9 +846,9 @@ void EnIk_UpdateArmor(EnIk* this, PlayState* play) {
                 ikEffect->pos.y = this->actor.floorHeight;
 
                 for (i = 0; i < 4; i++) {
-                    effectPos.x = randPlusMinusPoint5Scaled(20.0f) + ikEffect->pos.x;
+                    effectPos.x = Rand_CenteredFloat(20.0f) + ikEffect->pos.x;
                     effectPos.y = Rand_ZeroFloat(20.0f) + ikEffect->pos.y;
-                    effectPos.z = randPlusMinusPoint5Scaled(20.0f) + ikEffect->pos.z;
+                    effectPos.z = Rand_CenteredFloat(20.0f) + ikEffect->pos.z;
                     func_800B3030(play, &effectPos, &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
                 }
 
@@ -922,38 +922,95 @@ void EnIk_Update(Actor* thisx, PlayState* play2) {
                 this->drawDmgEffScale = this->drawDmgEffScale;
             }
         } else if (!Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.65f, 0.01625f)) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
     EnIk_UpdateArmor(this, play);
 }
 
-s8 D_8092C1A8[] = {
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, 3,  5,  4,  6,  1,  2,  -1, -1, 0,  0,
+static s8 sLimbToArmorBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_NONE
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TASSET_CENTER
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TASSET_RIGHT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_LEG
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_FOOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TASSET_LEFT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_LEG
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_FOOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_UNK_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_HEAD_ROOT
+    IRON_KNUCKLE_ARMOR_BODYPART_HELMET,               // IRON_KNUCKLE_LIMB_HELMET_ARMOR
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_HEAD
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_AXE_ROOT
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_AXE
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_RIGHT_HAND
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_FOREARM
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_LEFT_HAND
+    IRON_KNUCKLE_ARMOR_BODYPART_UPPER_LEFT_PAULDRON,  // IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_LOWER_LEFT_PAULDRON,  // IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_UPPER_RIGHT_PAULDRON, // IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_LOWER_RIGHT_PAULDRON, // IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON
+    IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT,          // IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT
+    IRON_KNUCKLE_ARMOR_BODYPART_CHEST_BACK,           // IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_TORSO
+    BODYPART_NONE,                                    // IRON_KNUCKLE_LIMB_WAIST
 };
 
 s32 EnIk_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
 
-    if (this->drawArmorFlags) {
-        if (D_8092C1A8[limbIndex] > 0) {
+    if (this->drawArmorFlags != 0) {
+        if (sLimbToArmorBodyParts[limbIndex] >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
             *dList = NULL;
         }
     }
     return false;
 }
 
-void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Vec3f D_8092C1C8 = { 2000.0f, -200.0f, -5200.0f };
-    static Vec3f D_8092C1D4 = { 300.0f, -200.0f, 0.0f };
-    static s8 limbPosIndex[] = {
-        -1, -1, -1, 0,  1, 2,  3,  4,  5,  -1, -1, -1, 6,  -1, -1, 7,
-        -1, -1, 8,  -1, 9, 10, -1, 11, -1, 12, -1, -1, -1, -1, 0,  0,
-    };
+static Vec3f D_8092C1C8 = { 2000.0f, -200.0f, -5200.0f };
+static Vec3f D_8092C1D4 = { 300.0f, -200.0f, 0.0f };
 
+static s8 sLimbToBodyParts[IRON_KNUCKLE_LIMB_MAX] = {
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_NONE
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_TASSET_CENTER
+    IRON_KNUCKLE_BODYPART_TASSET_RIGHT,         // IRON_KNUCKLE_LIMB_TASSET_RIGHT
+    IRON_KNUCKLE_BODYPART_RIGHT_LEG,            // IRON_KNUCKLE_LIMB_RIGHT_LEG
+    IRON_KNUCKLE_BODYPART_RIGHT_FOOT,           // IRON_KNUCKLE_LIMB_RIGHT_FOOT
+    IRON_KNUCKLE_BODYPART_TASSET_LEFT,          // IRON_KNUCKLE_LIMB_TASSET_LEFT
+    IRON_KNUCKLE_BODYPART_LEFT_LEG,             // IRON_KNUCKLE_LIMB_LEFT_LEG
+    IRON_KNUCKLE_BODYPART_LEFT_FOOT,            // IRON_KNUCKLE_LIMB_LEFT_FOOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UPPER_BODY_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UNK_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_HEAD_ROOT
+    IRON_KNUCKLE_BODYPART_HELMET_ARMOR,         // IRON_KNUCKLE_LIMB_HELMET_ARMOR
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_HEAD
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_RIGHT_UPPER_ARM
+    IRON_KNUCKLE_BODYPART_RIGHT_FOREARM,        // IRON_KNUCKLE_LIMB_RIGHT_FOREARM
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_AXE_ROOT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_AXE
+    IRON_KNUCKLE_BODYPART_RIGHT_HAND,           // IRON_KNUCKLE_LIMB_RIGHT_HAND
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_LEFT_UPPER_ARM
+    IRON_KNUCKLE_BODYPART_LEFT_FOREARM,         // IRON_KNUCKLE_LIMB_LEFT_FOREARM
+    IRON_KNUCKLE_BODYPART_LEFT_HAND,            // IRON_KNUCKLE_LIMB_LEFT_HAND
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UPPER_LEFT_PAULDRON
+    IRON_KNUCKLE_BODYPART_LOWER_LEFT_PAULDRON,  // IRON_KNUCKLE_LIMB_LOWER_LEFT_PAULDRON
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_UPPER_RIGHT_PAULDRON
+    IRON_KNUCKLE_BODYPART_LOWER_RIGHT_PAULDRON, // IRON_KNUCKLE_LIMB_LOWER_RIGHT_PAULDRON
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_CHEST_ARMOR_FRONT
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_CHEST_ARMOR_BACK
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_TORSO
+    BODYPART_NONE,                              // IRON_KNUCKLE_LIMB_WAIST
+};
+
+void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnIk* this = THIS;
-    s32 index = D_8092C1A8[limbIndex];
+    s32 armorBodyPart = sLimbToArmorBodyParts[limbIndex];
     Gfx* xlu;
     IronKnuckleEffect* ikEffect;
     s16 sp76;
@@ -964,15 +1021,16 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     MtxF* mf;
 
     if (this->drawArmorFlags == 0x1) {
-        if (index > 0) {
-            ikEffect = &this->effects[index];
+        if (armorBodyPart >= IRON_KNUCKLE_ARMOR_BODYPART_CHEST_FRONT) {
+            ikEffect = &this->effects[armorBodyPart];
             mf = Matrix_GetCurrent();
             ikEffect->pos.x = mf->mf[3][0];
             ikEffect->pos.y = mf->mf[3][1];
             ikEffect->pos.z = mf->mf[3][2];
             Matrix_MtxFToYXZRot(mf, &ikEffect->rot, false);
             ikEffect->enabled = true;
-            sp76 = sIronKnuckleArmorMarkings[index].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
+            sp76 =
+                sIronKnuckleArmorMarkings[armorBodyPart].unk04 + (((s32)Rand_Next() >> 0x13) + this->actor.shape.rot.y);
             ikEffect->vel.x = Math_SinS(sp76) * 5.0f;
             ikEffect->vel.y = 6.0f;
             ikEffect->vel.z = Math_CosS(sp76) * 5.0f;
@@ -1004,18 +1062,19 @@ void EnIk_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         this->blurEffectSpawnLock = this->timer;
     }
 
-    if (limbPosIndex[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[limbPosIndex[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
-    if ((index == 0) ||
-        ((index != -1) && (this->drawArmorFlags == 0) && (sIronKnuckleArmorMarkings[index].unk00 != 0))) {
+    if ((armorBodyPart == IRON_KNUCKLE_ARMOR_BODYPART_HELMET) ||
+        ((armorBodyPart != BODYPART_NONE) && (this->drawArmorFlags == 0) &&
+         (sIronKnuckleArmorMarkings[armorBodyPart].unk00 != NULL))) {
         OPEN_DISPS(play->state.gfxCtx);
 
         xlu = POLY_XLU_DISP;
 
         gSPMatrix(&xlu[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[index].unk00);
+        gSPDisplayList(&xlu[1], sIronKnuckleArmorMarkings[armorBodyPart].unk00);
         POLY_XLU_DISP = &xlu[2];
 
         CLOSE_DISPS(play->state.gfxCtx);
@@ -1033,6 +1092,7 @@ void EnIk_UpdateArmorDraw(EnIk* this, PlayState* play) {
         sp54 = 0;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         gfxOpa = POLY_OPA_DISP;
         gfxXlu = POLY_XLU_DISP;
 
@@ -1077,10 +1137,10 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);
     gfx = POLY_XLU_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     POLY_XLU_DISP = &gfx[1];
     gfx = POLY_OPA_DISP;
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
     gfxArmorType = sIronKnuckleArmorType[this->actor.params];
     gSPSegment(&gfx[1], 0x08, gfxArmorType[0]);
     gSPSegment(&gfx[2], 0x09, gfxArmorType[1]);
@@ -1094,7 +1154,7 @@ void EnIk_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
     func_800BC620(&this->actor.focus.pos, &sScale, 255, play);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, IRON_KNUCKLE_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);

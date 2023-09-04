@@ -4,9 +4,12 @@
  * Description: Initializes the game into the title screen
  */
 
+#include "global.h"
 #include "z_opening.h"
+#include "z64save.h"
 #include "z64shrink_window.h"
 #include "z64view.h"
+#include "regs.h"
 
 void TitleSetup_SetupTitleScreen(TitleSetupState* this) {
     static s32 sOpeningEntrances[] = { ENTRANCE(CUTSCENE, 0), ENTRANCE(CUTSCENE, 1) };
@@ -49,7 +52,7 @@ void TitleSetup_Destroy(GameState* thisx) {
 void TitleSetup_Init(GameState* thisx) {
     TitleSetupState* this = (TitleSetupState*)thisx;
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     Matrix_Init(&this->state);
     ShrinkWindow_Init();
     View_Init(&this->view, this->state.gfxCtx);

@@ -61,7 +61,7 @@ typedef enum FireState {
     /* 0 */ FIRE_STATE_GROWING,
     /* 1 */ FIRE_STATE_SHRINKING,
     /* 2 */ FIRE_STATE_FULLY_LIT,
-    /* 3 */ FIRE_STATE_NOT_LIT,
+    /* 3 */ FIRE_STATE_NOT_LIT
 } FireState;
 
 #define FIRE_FLAG_WATER_EXTINGUISHABLE (1 << 0)

@@ -7,7 +7,7 @@
 #include "z_en_stop_heishi.h"
 #include "z64quake.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnStopheishi*)thisx)
 
@@ -31,7 +31,7 @@ typedef enum {
     /* 5 */ SOLDIER_ANIM_5,
     /* 6 */ SOLDIER_ANIM_6,
     /* 7 */ SOLDIER_ANIM_STAND_HAND_ON_CHEST,
-    /* 8 */ SOLDIER_ANIM_MAX,
+    /* 8 */ SOLDIER_ANIM_MAX
 } SoldierAnimation;
 
 ActorInit En_Stop_heishi_InitVars = {
@@ -114,7 +114,7 @@ void EnStopheishi_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->rotYTarget = this->actor.world.rot.y;
@@ -500,12 +500,12 @@ void func_80AE7F34(EnStopheishi* this, PlayState* play) {
         this->skelAnime.playSpeed = 1.0f;
         func_80AE854C(this, play);
     } else if (yawDiffAbs < 0x4BB9) {
-        func_800B8614(&this->actor, play, 70.0f);
+        Actor_OfferTalk(&this->actor, play, 70.0f);
     }
 }
 
 void func_80AE854C(EnStopheishi* this, PlayState* play) {
-    if (((this->unk_265 != 0) || (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20))) &&
+    if (((this->unk_265 != 0) || CHECK_WEEKEVENTREG(WEEKEVENTREG_12_20)) &&
         (this->currentAnim != SOLDIER_ANIM_STAND_HAND_ON_HIP)) {
         EnStopHeishi_ChangeAnim(this, SOLDIER_ANIM_STAND_HAND_ON_HIP);
     }
@@ -579,7 +579,7 @@ void EnStopheishi_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 void EnStopheishi_Draw(Actor* thisx, PlayState* play) {
     EnStopheishi* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnStopheishi_OverrideLimbDraw, EnStopheishi_PostLimbDraw, &this->actor);
 }

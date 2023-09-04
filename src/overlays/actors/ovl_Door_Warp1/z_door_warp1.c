@@ -360,14 +360,14 @@ void func_808B93A0(DoorWarp1* this, PlayState* play) {
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
         Message_CloseTextbox(play);
         if (play->msgCtx.choiceIndex == 0) {
-            func_8019F208();
+            Audio_PlaySfx_MessageDecide();
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_9);
             player->unk_3A0.x = this->dyna.actor.world.pos.x;
             player->unk_3A0.z = this->dyna.actor.world.pos.z;
             this->unk_1CA = 1;
             DoorWarp1_SetupAction(this, func_808B9524);
         } else {
-            func_8019F230();
+            Audio_PlaySfx_MessageCancel();
             func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_END);
             DoorWarp1_SetupAction(this, func_808B94A4);
         }
@@ -571,6 +571,9 @@ void func_808B9CE8(DoorWarp1* this, PlayState* play) {
         case SCENE_SEA_BS:
             gSaveContext.save.saveInfo.unk_EA8[0] = (((void)0, gSaveContext.save.saveInfo.unk_EA8[0]) & 0x00FFFFFF) |
                                                     ((((u8)gSaveContext.save.saveInfo.unk_EA8[1]) & 0xFF) << 0x18);
+            break;
+
+        default:
             break;
     }
 
@@ -810,6 +813,9 @@ void func_808BA550(DoorWarp1* this, PlayState* play) {
             case PLAYER_FORM_HUMAN:
                 temp_f0 = -25.0f;
                 break;
+
+            default:
+                break;
         }
 
         temp_f2 = this->dyna.actor.world.pos.y + (this->dyna.actor.shape.yOffset * 0.1f) + temp_f0;
@@ -931,7 +937,7 @@ void func_808BACCC(DoorWarp1* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0xFF, 0xFF, 200, 255, 255, (u8)this->unk_1B8);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 100, 255, (u8)this->unk_1B8);
@@ -969,7 +975,7 @@ void func_808BAE9C(DoorWarp1* this, PlayState* play) {
 
     sp84 = 1.0f - ((2.0f - this->unk_1A4) / 1.7f);
     this->unk_1AC += sp84 * 15.0f;
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255.0f * sp84, 255, 255, (u8)this->unk_1B4);
     gDPSetEnvColor(POLY_XLU_DISP++, 0, 255.0f * sp84, 255, 255);
@@ -1059,7 +1065,7 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, 255);
@@ -1076,7 +1082,7 @@ void func_808BB4F4(DoorWarp1* this, PlayState* play2) {
     Matrix_RotateYS(this->dyna.actor.world.rot.y, MTXMODE_APPLY);
     Matrix_Scale(1.0f, 0.0f, 1.0f, MTXMODE_APPLY);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_XLU_DISP++, sp64[sp60].r, sp64[sp60].g, sp64[sp60].b, 255);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->unk_203);

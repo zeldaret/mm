@@ -5,16 +5,17 @@
  */
 
 #include "z_obj_um.h"
+#include "z64horse.h"
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjUm*)thisx)
 
 /**
  * weekEventReg flags checked by this actor:
- * - WEEKEVENTREG_22_01: Aliens defeated
+ * - WEEKEVENTREG_DEFENDED_AGAINST_THEM: Aliens defeated
  *     If false: The actor doesn't spawn
  * - WEEKEVENTREG_31_40
  *     If true: Cremia doesn't explain again she'll deliever milk to town
@@ -22,7 +23,7 @@
  *     If true: Triggers cutscene on Romani's Ranch
  * - WEEKEVENTREG_34_80
  *     If true: Doesn't spawn on Romani's Ranch
- * - WEEKEVENTREG_52_01
+ * - WEEKEVENTREG_ESCORTED_CREMIA
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
  * - WEEKEVENTREG_52_02
  *     If true: Doesn't spawn on Romani's Ranch or Milk Road
@@ -36,7 +37,7 @@
  *     Player accepts the ride and is with Cremia during the Milk Run
  * - WEEKEVENTREG_34_80: Cremia does Milk Run alone
  *     Player didn't interact or didn't accept the ride
- * - WEEKEVENTREG_52_01: Won Milk Run minigame
+ * - WEEKEVENTREG_ESCORTED_CREMIA: Won Milk Run minigame
  *     At least one pot is safe. Turns off the "Lose Milk Run minigame"
  * - WEEKEVENTREG_52_02: Lose Milk Run minigame
  *     Every pot was broken by bandits. Turns off the "Win Milk Run minigame"
@@ -46,7 +47,7 @@
  * weekEventReg flags unset by this actor:
  * - WEEKEVENTREG_31_80
  *     Turned off when the Milk Run finishes
- * - WEEKEVENTREG_52_01
+ * - WEEKEVENTREG_ESCORTED_CREMIA
  *     Turned off if Player lose the Milk Run
  * - WEEKEVENTREG_52_02
  *     Turned off if Player wins the Milk Run
@@ -303,7 +304,7 @@ s32 func_80B781DC(ObjUm* this, EnHorse* bandit1, EnHorse* bandit2, PlayState* pl
         if (bandit1->unk_550 == D_80B7C164[i].unk_00) {
             if (bandit2->unk_550 != D_80B7C164[i].unk_04) {
                 if (D_80B7C164[i].unk_00 != 3) {
-                    if (D_80B7C164[i].unk_04 != 3 ||
+                    if ((D_80B7C164[i].unk_04 != 3) ||
                         ((mask = Player_GetMask(play)), PLAYER_MASK_CIRCUS_LEADER != mask)) {
                         phi_s3 = D_80B7C164[i].unk_04;
                         phi_s4 = D_80B7C164[i].unk_08;
@@ -454,13 +455,13 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
             }
 
             if (this->potsLife[1] != 1) {
-                if ((potIndex == -1) || (potIndex == 0 && Rand_ZeroOne() < 0.3f)) {
+                if ((potIndex == -1) || ((potIndex == 0) && (Rand_ZeroOne() < 0.3f))) {
                     potIndex = 1;
                 }
             }
 
             if (this->potsLife[2] != 1) {
-                if ((potIndex == -1) || (potIndex != -1 && Rand_ZeroOne() < 0.3f)) {
+                if ((potIndex == -1) || ((potIndex != -1) && (Rand_ZeroOne() < 0.3f))) {
                     potIndex = 2;
                 }
             }
@@ -468,9 +469,9 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
             if (this->potsLife[potIndex] != 1) {
                 this->wasPotHit[potIndex] = true;
                 if (this->potsLife[potIndex] == 2) {
-                    Audio_PlaySfxAtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
+                    Audio_PlaySfx_AtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_BROKEN);
                 } else {
-                    Audio_PlaySfxAtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
+                    Audio_PlaySfx_AtPos(&this->potPos[potIndex], NA_SE_EV_MILK_POT_DAMAGE);
                 }
 
                 this->potsLife[potIndex]--;
@@ -496,8 +497,6 @@ s32 func_80B78764(ObjUm* this, PlayState* play, EnHorse* bandit1, EnHorse* bandi
         phi_v1_5 = Math_Vec3f_Yaw(&bandit1->actor.prevPos, &bandit1->actor.world.pos);
     }
 
-    if (1) {}
-
     phi_v1_5 -= bandit1->actor.shape.rot.y;
     if (phi_v1_5 > 0x190) {
         bandit1->actor.shape.rot.y += 0x190;
@@ -518,7 +517,7 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
                 Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &arg3->actor.world.pos) - this->dyna.actor.shape.rot.y;
 
             this->banditsCollisions[arg2].base.acFlags &= ~AC_HIT;
-            Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
+            Audio_PlaySfx_AtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
             arg3->unk_54C = 0xF;
 
             if (Math_SinS(sp36) > 0.0f) {
@@ -542,7 +541,7 @@ s32 func_80B78A54(ObjUm* this, PlayState* play, s32 arg2, EnHorse* arg3, EnHorse
                 arg3->rider->actor.colorFilterTimer = 20;
                 Actor_SetColorFilter(&arg3->rider->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
             }
-            Audio_PlaySfxAtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
+            Audio_PlaySfx_AtPos(&arg3->actor.projectedPos, NA_SE_EN_CUTBODY);
         }
     }
 
@@ -683,7 +682,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
     this->initialPathIndex = OBJ_UM_GET_PATH_INDEX(thisx);
 
     // if (!AliensDefeated)
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_22_01)) {
+    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
@@ -703,18 +702,18 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
             // Waiting for player
 
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_34_80) || (gSaveContext.save.time >= CLOCK_TIME(19, 0)) ||
-                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) ||
+                (gSaveContext.save.time <= CLOCK_TIME(6, 0)) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) ||
                 CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 Actor_Kill(&this->dyna.actor);
                 return;
             }
 
-            this->dyna.actor.targetMode = 6;
+            this->dyna.actor.targetMode = TARGET_MODE_6;
             this->unk_2B4 = 0;
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
     } else if (this->type == OBJ_UM_TYPE_PRE_MILK_RUN) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_31_80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
             Actor_Kill(&this->dyna.actor);
             return;
         }
@@ -740,7 +739,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
         this->unk_354 = 0;
         ObjUm_RotatePlayer(this, play, 0);
     } else if (this->type == OBJ_UM_TYPE_POST_MILK_RUN) {
-        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) || CHECK_WEEKEVENTREG(WEEKEVENTREG_59_02)) {
             Actor_Kill(&this->dyna.actor);
             return;
         }
@@ -831,11 +830,11 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
             SET_WEEKEVENTREG(WEEKEVENTREG_31_40);
             if (play->msgCtx.choiceIndex == 0) {
                 player = GET_PLAYER(play);
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 SET_WEEKEVENTREG(WEEKEVENTREG_31_80);
                 play->nextEntrance = ENTRANCE(ROMANI_RANCH, 11);
                 if (player->stateFlags1 & PLAYER_STATE1_800000) {
-                    D_801BDAA0 = 1;
+                    D_801BDAA0 = true;
                 }
                 play->transitionType = TRANS_TYPE_64;
                 gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
@@ -843,8 +842,8 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
                 phi_v1 = true;
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33B5);
-                func_8019F230();
-                func_80151BB4(play, 6);
+                Audio_PlaySfx_MessageCancel();
+                Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_CREMIA);
                 phi_v1 = false;
             }
             break;
@@ -865,10 +864,10 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
         case 0x33BD:
             if (play->msgCtx.choiceIndex == 0) {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33BE);
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
             } else {
                 Actor_ContinueText(play, &this->dyna.actor, 0x33BF);
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
             }
             phi_v1 = false;
             break;
@@ -877,6 +876,9 @@ s32 func_80B795A0(PlayState* play, ObjUm* this, s32 arg2) {
         case 0x33BE:
             Actor_ContinueText(play, &this->dyna.actor, 0x33BC);
             phi_v1 = false;
+            break;
+
+        default:
             break;
     }
 
@@ -899,6 +901,9 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
                 ret = true;
             }
             break;
+
+        default:
+            break;
     }
     return ret;
 }
@@ -906,7 +911,7 @@ s32 func_80B79734(PlayState* play, ObjUm* this, s32 arg2) {
 u16 ObjUm_RanchGetDialogue(PlayState* play, ObjUm* this, s32 arg2) {
     u16 textId = 0;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_31_40)) {
             // "Want a ride?"
             textId = 0x33CF;
@@ -960,15 +965,15 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isTargeted) {
+    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isLockedOn) {
         return 0;
     }
 
     if (this->dyna.actor.xyzDistToPlayerSq <= SQ(50.0f)) {
-        if (func_800B8614(&this->dyna.actor, play, 50.0f)) {
+        if (Actor_OfferTalk(&this->dyna.actor, play, 50.0f)) {
             this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
         }
-    } else if (func_800B863C(&this->dyna.actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->dyna.actor, play)) {
         this->dyna.actor.textId = ObjUm_RanchGetDialogue(play, this, arg2);
     }
 
@@ -990,7 +995,7 @@ s32 func_80B79A24(s32 arg0) {
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->dyna.actor.flags |= ACTOR_FLAG_1;
+    this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;
@@ -1030,7 +1035,7 @@ typedef enum ObjUmPathState {
     /* 1 */ OBJUM_PATH_STATE_1,
     /* 2 */ OBJUM_PATH_STATE_FINISH,
     /* 3 */ OBJUM_PATH_STATE_3,
-    /* 4 */ OBJUM_PATH_STATE_4,
+    /* 4 */ OBJUM_PATH_STATE_4
 } ObjUmPathState;
 
 ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
@@ -1093,9 +1098,7 @@ ObjUmPathState ObjUm_UpdatePath(ObjUm* this, PlayState* play) {
 
     if (this->donkey != NULL) {
         this->dyna.actor.world.rot.y = Math_Vec3f_Yaw(&this->dyna.actor.world.pos, &sp50);
-        func_800F415C(&this->donkey->actor, &sp50, 0x190);
-
-        if (1) {}
+        Horse_RotateToPoint(&this->donkey->actor, &sp50, 0x190);
 
         yawDiff = this->donkey->actor.shape.rot.y - this->dyna.actor.shape.rot.y;
         if (fabsf(yawDiff) < 2730.0f) {
@@ -1299,13 +1302,13 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_31_80);
             gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
 
-            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_52_01) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_52_02)) {
                 if (!this->areAllPotsBroken) {
                     play->nextEntrance = ENTRANCE(MILK_ROAD, 6);
                     play->transitionType = TRANS_TYPE_64;
                     gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    SET_WEEKEVENTREG(WEEKEVENTREG_52_01);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA);
                     CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_02);
                 } else {
                     play->nextEntrance = ENTRANCE(ROMANI_RANCH, 8);
@@ -1313,7 +1316,7 @@ void ObjUm_RunMinigame(ObjUm* this, PlayState* play) {
                     gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
                     play->transitionTrigger = TRANS_TRIGGER_START;
                     SET_WEEKEVENTREG(WEEKEVENTREG_52_02);
-                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_52_01);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA);
                 }
             }
             break;
@@ -1335,7 +1338,7 @@ void func_80B7A614(ObjUm* this, PlayState* play) {
     this->flags |= OBJ_UM_FLAG_PLAYING_MINIGAME;
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_GALLOP);
 
-    if (ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3 && this->unk_4DC == 0) {
+    if ((ObjUm_UpdatePath(this, play) == OBJUM_PATH_STATE_3) && (this->unk_4DC == 0)) {
         this->unk_4DC = 1;
     } else if (this->unk_4DC > 0) {
         if (this->unk_4DC == 1) {
@@ -1470,7 +1473,7 @@ void func_80B7A860(ObjUm* this, PlayState* play) {
 
         case 0x33BF:
             this->unk_4D8++;
-            if ((fabsf(this->skelAnime.morphWeight) < 0.008f) && this->unk_4D8 >= 6) {
+            if ((fabsf(this->skelAnime.morphWeight) < 0.008f) && (this->unk_4D8 >= 6)) {
                 this->unk_4CC = 0;
                 this->mouthTexIndex = 0;
             } else {
@@ -1631,9 +1634,9 @@ void ObjUm_DefaultAnim(ObjUm* this, PlayState* play) {
 }
 
 typedef struct {
-    /* 0x00 */ AnimationHeader* anim;
-    /* 0x04 */ s32 doesMove; // `true` if the animation is intended to be used while the actor is moving
-} struct_80B7C25C;           // size = 0x08
+    /* 0x0 */ AnimationHeader* anim;
+    /* 0x4 */ s32 doesMove; // `true` if the animation is intended to be used while the actor is moving
+} struct_80B7C25C;          // size = 0x8
 
 struct_80B7C25C sUmAnims[] = {
     { &gUmTrotAnim, true },      // OBJ_UM_ANIM_TROT
@@ -1700,7 +1703,7 @@ void ObjUm_ChangeAnim(ObjUm* this, PlayState* play, ObjUmAnimation animIndex) {
         }
     }
 
-    if (this->wheelRot / 0x199A != this->unk_420) {
+    if ((this->wheelRot / 0x199A) != this->unk_420) {
         this->unk_420 = this->wheelRot / 0x199A;
         //! FAKE
         if (sUmAnims[0].doesMove) {}
@@ -1767,18 +1770,23 @@ void ObjUm_Update(Actor* thisx, PlayState* play) {
         case 1:
             this->eyeTexIndex = 3;
             break;
+
         case 2:
             this->eyeTexIndex = 4;
             break;
+
         case 3:
             this->eyeTexIndex = 5;
             break;
+
         case 4:
             this->eyeTexIndex = 2;
             break;
+
         case 5:
             this->eyeTexIndex = 0;
             break;
+
         default:
             this->unk_4CC = 0;
             this->eyeTexIndex = 0;
@@ -1912,6 +1920,7 @@ void ObjUm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
         sp80.x = 0;
         sp80.z = 0;
         sp88.x = 6800.0f;
+
         OPEN_DISPS(gfxCtx);
 
         for (i = 0; i < ARRAY_COUNT(this->potsLife); i++) {
@@ -1997,7 +2006,7 @@ void func_80B7BEA4(Vec3f* cartBedPos, s16 arg1, Vec3f* arg2, u8 alpha, PlayState
         OPEN_DISPS(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        POLY_OPA_DISP = Gfx_CallSetupDL(POLY_OPA_DISP, 0x2C);
+        POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_44);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, alpha);
         gSPMatrix(POLY_OPA_DISP++, sp100, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gSquareShadowDL);

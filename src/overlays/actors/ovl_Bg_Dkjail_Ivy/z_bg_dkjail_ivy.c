@@ -123,7 +123,7 @@ void BgDkjailIvy_Init(Actor* thisx, PlayState* play) {
     if (Flags_GetSwitch(play, BG_DKJAIL_GET_SWITCH(thisx))) {
         Actor_Kill(&this->dyna.actor);
     } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_dkjail_obj_Colheader_0011A8);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gDkjailCol);
         Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
         Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
         this->alpha = 255;
@@ -200,7 +200,7 @@ void BgDkjailIvy_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0xFF, 255, 255, 255, this->alpha);
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

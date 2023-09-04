@@ -3,11 +3,13 @@
 #define COLD_RESET 0
 
 typedef struct {
-    /* 0x0 */ u32 ins_00; // lui     k0, 0x8000
-    /* 0x4 */ u32 ins_04; // addiu   k0, k0, 0x39E0
-    /* 0x8 */ u32 ins_08; // jr      k0 ; __osException
-    /* 0xC */ u32 ins_0C; // nop
-} struct_exceptionPreamble;
+    /* 0x0 */ u32 ins_00;   // lui     k0, 0x8000
+    /* 0x4 */ u32 ins_04;   // addiu   k0, k0, 0x39E0
+    /* 0x8 */ u32 ins_08;   // jr      k0 ; __osException
+    /* 0xC */ u32 ins_0C;   // nop
+} struct_exceptionPreamble; // size = 0x10
+
+extern struct_exceptionPreamble __osExceptionPreamble;
 
 u64 osClockRate = OS_CLOCK_RATE;
 s32 osViClock = VI_NTSC_CLOCK;
@@ -30,7 +32,7 @@ void __createSpeedParam(void) {
     D_8009D1A8.relDuration = HW_REG(PI_BSD_DOM2_RLS_REG, u32);
 }
 
-void osInitialize(void) {
+void __osInitialize_common(void) {
     u32 pifdata;
 
     D_8009CF70 = 1;
@@ -43,10 +45,10 @@ void osInitialize(void) {
 
     while (__osSiRawWriteIo(0x1FC007FC, pifdata | 8)) {}
 
-    *(struct_exceptionPreamble*)0x80000000 = *((struct_exceptionPreamble*)__osExceptionPreamble);
-    *(struct_exceptionPreamble*)0x80000080 = *((struct_exceptionPreamble*)__osExceptionPreamble);
-    *(struct_exceptionPreamble*)0x80000100 = *((struct_exceptionPreamble*)__osExceptionPreamble);
-    *(struct_exceptionPreamble*)0x80000180 = *((struct_exceptionPreamble*)__osExceptionPreamble);
+    *(struct_exceptionPreamble*)0x80000000 = __osExceptionPreamble;
+    *(struct_exceptionPreamble*)0x80000080 = __osExceptionPreamble;
+    *(struct_exceptionPreamble*)0x80000100 = __osExceptionPreamble;
+    *(struct_exceptionPreamble*)0x80000180 = __osExceptionPreamble;
 
     osWritebackDCache(0x80000000, 400);
     osInvalICache(0x80000000, 400);

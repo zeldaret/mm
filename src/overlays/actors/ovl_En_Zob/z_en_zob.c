@@ -7,7 +7,7 @@
 #include "z_en_zob.h"
 #include "objects/object_zob/object_zob.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZob*)thisx)
 
@@ -210,7 +210,7 @@ void func_80B9FA3C(EnZob* this, PlayState* play) {
 
     this->unk_2F4 |= 1;
 
-    if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_30_02)) {
             textId = 0x11F9;
         } else {
@@ -371,14 +371,14 @@ void func_80BA00BC(EnZob* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1212)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 1:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x1209);
                         this->unk_304 = 1;
                         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
                         break;
 
                     case 0:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1213);
                         break;
                 }
@@ -456,13 +456,13 @@ void func_80BA0374(EnZob* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1205)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         Message_ContinueTextbox(play, 0x1207);
                         func_80B9F7E4(this, 2, ANIMMODE_ONCE);
                         break;
 
                     case 1:
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Message_ContinueTextbox(play, 0x1206);
                         break;
                 }
@@ -543,7 +543,7 @@ void func_80BA0610(EnZob* this, PlayState* play) {
         func_80B9FC70(this, 0);
         this->actionFunc = func_80BA00BC;
     } else {
-        func_800B8614(&this->actor, play, 500.0f);
+        Actor_OfferTalk(&this->actor, play, 500.0f);
     }
 }
 
@@ -563,7 +563,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
     func_80B9F86C(this);
 
     if (func_800B8718(&this->actor, &play->state)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             Message_StartTextbox(play, 0x1208, NULL);
             SET_WEEKEVENTREG(WEEKEVENTREG_30_08);
         } else {
@@ -581,7 +581,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
         this->actionFunc = func_80BA06BC;
     } else if ((this->actor.xzDistToPlayer < 180.0f) && (this->actor.xzDistToPlayer > 60.0f) &&
                Player_IsFacingActor(&this->actor, 0x3000, play) && Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 150.0f);
+        Actor_OfferTalk(&this->actor, play, 150.0f);
         func_800B874C(&this->actor, play, 200.0f, 150.0f);
     }
 
@@ -594,7 +594,7 @@ void func_80BA0728(EnZob* this, PlayState* play) {
 void func_80BA08E8(EnZob* this, PlayState* play) {
     s32 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1257;
             this->unk_304 = 3;
@@ -658,7 +658,7 @@ void func_80BA0AD8(EnZob* this, PlayState* play) {
         func_80BA08E8(this, play);
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                Actor_IsFacingPlayer(&this->actor, 0x3000)) {
-        func_800B8614(&this->actor, play, 120.0f);
+        Actor_OfferTalk(&this->actor, play, 120.0f);
     }
 }
 
@@ -759,7 +759,7 @@ void EnZob_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_2F4 & 0x20) {
         POLY_OPA_DISP = Gfx_SetFog(POLY_OPA_DISP, 0, 0, 0, 0, this->unk_312, 1000);

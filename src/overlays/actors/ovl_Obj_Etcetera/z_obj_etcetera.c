@@ -284,6 +284,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                                this->jointTable, this->morphTable, GOLD_DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
                 break;
+
+            default:
+                break;
         }
 
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
@@ -295,7 +298,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = 3;
+                this->dyna.actor.targetMode = TARGET_MODE_3;
                 break;
 
             case DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE:
@@ -308,7 +311,10 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 this->oscillationTimer = 30;
                 this->bounceOscillationScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = 3;
+                this->dyna.actor.targetMode = TARGET_MODE_3;
+                break;
+
+            default:
                 break;
         }
     }
@@ -321,7 +327,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
 
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
-        if (floorPoly != NULL && this->burrowFlag & 1) {
+        if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
             func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }
@@ -341,7 +347,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->dList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -355,6 +361,6 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play) {
     ObjEtcetera* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
 }

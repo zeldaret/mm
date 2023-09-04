@@ -1,8 +1,9 @@
 #include "global.h"
+#include "PR/osint.h"
 
 UNK_TYPE4 D_80097F10 = 0;
 
-__OSEventState __osEventStateTab[16];
+__OSEventState __osEventStateTab[OS_NUM_EVENTS];
 
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m) {
     register u32 saveMask;
@@ -16,7 +17,7 @@ void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m) {
     es->message = m;
 
     if (e == 14) {
-        if (__osShutdown != 0 && D_80097F10 == 0) {
+        if ((__osShutdown != 0) && (D_80097F10 == 0)) {
             osSendMesg(mq, m, OS_MESG_NOBLOCK);
         }
         D_80097F10 = 1;

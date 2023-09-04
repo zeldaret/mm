@@ -10,12 +10,28 @@
 typedef enum {
     /* 0 */ EN_WIZ_TYPE_FIRE,
     /* 1 */ EN_WIZ_TYPE_ICE,
-    /* 2 */ EN_WIZ_TYPE_FIRE_NO_BGM, // does not request the mini-boss BGM
+    /* 2 */ EN_WIZ_TYPE_FIRE_NO_BGM // does not request the mini-boss BGM
 } EnWizType;
 
 struct EnWiz;
 
 typedef void (*EnWizActionFunc)(struct EnWiz*, PlayState*);
+
+typedef enum EnWizBodyPart {
+    /*  0 */ EN_WIZ_BODYPART_0,
+    /*  1 */ EN_WIZ_BODYPART_1,
+    /*  2 */ EN_WIZ_BODYPART_2,
+    /*  3 */ EN_WIZ_BODYPART_3,
+    /*  4 */ EN_WIZ_BODYPART_4,
+    /*  5 */ EN_WIZ_BODYPART_5,
+    /*  6 */ EN_WIZ_BODYPART_6,
+    /*  7 */ EN_WIZ_BODYPART_7,
+    /*  8 */ EN_WIZ_BODYPART_8,
+    /*  9 */ EN_WIZ_BODYPART_9,
+    /* 10 */ EN_WIZ_BODYPART_10,
+    /* 11 */ EN_WIZ_BODYPART_11,
+    /* 12 */ EN_WIZ_BODYPART_MAX
+} EnWizBodyPart;
 
 typedef struct EnWiz {
     /* 0x000 */ Actor actor;
@@ -68,8 +84,8 @@ typedef struct EnWiz {
     /* 0x754 */ s16 drawDmgEffType;
     /* 0x758 */ f32 drawDmgEffScale;
     /* 0x75C */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x760 */ Vec3f bodyPartsPos[12];
-    /* 0x7F0 */ s16 bodyPartsPosIndex;
+    /* 0x760 */ Vec3f bodyPartsPos[EN_WIZ_BODYPART_MAX];
+    /* 0x7F0 */ s16 bodyPartIndex;
     /* 0x7F2 */ s16 ghostAlpha[10];
     /* 0x806 */ s16 ghostNextPlatformIndex[10];
     /* 0x81C */ Vec3f ghostPos[10];

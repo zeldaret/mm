@@ -373,7 +373,7 @@ s32 func_80ACF04C(EnFuMato* this, PlayState* play) {
         Actor_PlaySfx(&this->dyna.actor, NA_SE_SY_TRE_BOX_APPEAR);
 
         fu->unk_548++;
-        if ((fu->unk_542 == 2) || (gSaveContext.save.playerForm == PLAYER_FORM_DEKU)) {
+        if ((fu->unk_542 == 2) || (GET_PLAYER_FORM == PLAYER_FORM_DEKU)) {
             fu->unk_546 = 1;
             func_80ACE680(this);
         } else {
@@ -406,7 +406,7 @@ void func_80ACF1F4(EnFuMato* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < 2; i++) {
         Matrix_Push();
@@ -449,7 +449,7 @@ void func_80ACF3F4(EnFuMato* this, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     for (i = 0; i < ARRAY_COUNT(D_80ACF63C); i++, ptr++) {
         Matrix_Push();
@@ -471,7 +471,7 @@ void EnFuMato_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 

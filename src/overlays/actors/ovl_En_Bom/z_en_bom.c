@@ -6,6 +6,7 @@
 
 #include "z_en_bom.h"
 #include "z64rumble.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_20)
@@ -151,17 +152,17 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider1, &this->actor, &sCylinderInit);
 
     if (!this->isPowderKeg) {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit1, this->collider2Elements);
         this->collider1.dim.radius = 6;
         this->collider1.dim.height = 11;
     } else {
-        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, &this->collider3);
+        Collider_SetJntSph(play, &this->collider2, &this->actor, &sJntSphInit2, this->collider2Elements);
         this->collider1.dim.radius = 20;
         this->collider1.dim.height = 36;
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider3.info.toucher.damage += ENBOM_GETZ_FF00(thisx);
+    this->collider2Elements[0].info.toucher.damage += ENBOM_GETZ_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
     if (ENBOM_GETZ_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
@@ -348,7 +349,7 @@ void EnBom_Explode(EnBom* this, PlayState* play) {
 
     this->collider2.elements->dim.worldSphere.radius = D_80872E8C[this->isPowderKeg];
     if (this->timer == 7) {
-        this->collider2.base.atFlags &= ~OC1_TYPE_1;
+        this->collider2.base.atFlags &= ~AT_TYPE_ENEMY;
     }
 
     if (this->actor.params == BOMB_TYPE_EXPLOSION) {
@@ -493,10 +494,10 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 EffectSsGSpk_SpawnFuse(play, thisx, &effPos, &effVelocity, &effAccel);
             }
             if (this->isPowderKeg) {
-                func_801A0810(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG,
-                              (this->flashSpeedScale == 7)   ? 0
-                              : (this->flashSpeedScale == 3) ? 1
-                                                             : 2);
+                Audio_PlaySfx_AtPosWithChannelIO(&thisx->projectedPos, NA_SE_IT_BIG_BOMB_IGNIT - SFX_FLAG,
+                                                 (this->flashSpeedScale == 7)   ? 0
+                                                 : (this->flashSpeedScale == 3) ? 1
+                                                                                : 2);
             } else {
                 Actor_PlaySfx(thisx, NA_SE_IT_BOMB_IGNIT - SFX_FLAG);
             }
@@ -543,8 +544,10 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
                 if (Actor_HasParent(thisx, play)) {
                     effPos.y += 30.0f;
                 }
+                //! @note Assumes `isPowderKeg` values aligns with clearTag params.
+                //! Here, 0/1 are small/large explosions respectively.
                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y - 10.0f, effPos.z, 0, 0, 0,
-                            this->isPowderKeg);
+                            CLEAR_TAG_PARAMS(this->isPowderKeg));
                 Actor_RequestQuakeAndRumble(thisx, play, sQuakeY[this->isPowderKeg],
                                             sQuakeDurations[this->isPowderKeg]);
                 play->envCtx.lightSettings.diffuseColor1[0] = play->envCtx.lightSettings.diffuseColor1[1] =
@@ -579,16 +582,17 @@ void EnBom_Update(Actor* thisx, PlayState* play) {
 
         if ((enBomScales[this->isPowderKeg] <= thisx->scale.x) && (thisx->params != BOMB_TYPE_EXPLOSION)) {
             if (thisx->depthInWater >= 20.0f) {
-                Vec3f sp54;
+                Vec3f effPos;
 
-                sp54.x = thisx->world.pos.x;
-                sp54.y = thisx->world.pos.y + thisx->depthInWater;
-                sp54.z = thisx->world.pos.z;
-                EffectSsGRipple_Spawn(play, &sp54, 70, 500, 0);
-                EffectSsGRipple_Spawn(play, &sp54, 70, 500, 10);
-                sp54.y += 10.0f;
-                EffectSsGSplash_Spawn(play, &sp54, NULL, NULL, 1, 500);
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, sp54.x, sp54.y, sp54.z, 0, 0, 1, 200);
+                effPos.x = thisx->world.pos.x;
+                effPos.y = thisx->world.pos.y + thisx->depthInWater;
+                effPos.z = thisx->world.pos.z;
+                EffectSsGRipple_Spawn(play, &effPos, 70, 500, 0);
+                EffectSsGRipple_Spawn(play, &effPos, 70, 500, 10);
+                effPos.y += 10.0f;
+                EffectSsGSplash_Spawn(play, &effPos, NULL, NULL, 1, 500);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, effPos.x, effPos.y, effPos.z, 0, 0, 1,
+                            CLEAR_TAG_PARAMS(CLEAR_TAG_SMOKE));
                 SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 30, NA_SE_IT_BOMB_UNEXPLOSION);
                 this->unk_1F4 = 0.0f;
                 thisx->velocity.y = (KREG(83) * 0.1f) + -2.0f;
@@ -616,7 +620,7 @@ void EnBom_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->actor.params == BOMB_TYPE_BODY) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         Collider_UpdateSpheres(0, &this->collider2);
 

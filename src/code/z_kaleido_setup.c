@@ -110,11 +110,11 @@ void KaleidoSetup_Update(PlayState* play) {
                                 }
 
                                 if (pauseCtx->state == PAUSE_STATE_OPENING_0) {
-                                    Game_SetFramerateDivisor(&play->state, 2);
+                                    GameState_SetFramerateDivisor(&play->state, 2);
                                     if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                         ShrinkWindow_Letterbox_SetSizeTarget(0);
                                     }
-                                    func_801A3AEC(1);
+                                    Audio_PlaySfx_PauseMenuOpenOrClose(SFX_PAUSE_MENU_OPEN);
                                 }
                             }
                         }
@@ -145,7 +145,7 @@ void KaleidoSetup_Init(PlayState* play) {
     pauseCtx->cursorPoint[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);
 
     pauseCtx->cursorSpecialPos = PAUSE_CURSOR_PAGE_RIGHT;
-    pauseCtx->pageSwitchTimer = 0;
+    pauseCtx->pageSwitchInputTimer = 0;
 
     pauseCtx->cursorItem[PAUSE_ITEM] = PAUSE_ITEM_NONE;
     pauseCtx->cursorItem[PAUSE_MAP] = R_REVERSE_FLOOR_INDEX + (DUNGEON_FLOOR_INDEX_4 - 1);

@@ -7,7 +7,7 @@
 #include "z_en_gb2.h"
 #include "objects/object_ps/object_ps.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnGb2*)thisx)
 
@@ -380,8 +380,8 @@ void func_80B0FEBC(EnGb2* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B0FFA8;
-    } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+    } else if ((this->actor.xzDistToPlayer < 300.0f) || this->actor.isLockedOn) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
 }
 
@@ -408,19 +408,19 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
                     if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
-                        play_sound(NA_SE_SY_ERROR);
+                        Audio_PlaySfx(NA_SE_SY_ERROR);
                         this->unk_26E = 0x14D7;
                         this->unk_26C |= 2;
                         Message_StartTextbox(play, this->unk_26E, &this->actor);
                     } else {
-                        func_8019F208();
+                        Audio_PlaySfx_MessageDecide();
                         this->unk_26E = 0x14D8;
                         Message_StartTextbox(play, this->unk_26E, &this->actor);
                     }
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_26E = 0x14D6;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -429,7 +429,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
         } else if (this->unk_26E == 0x14DA) {
             switch (play->msgCtx.choiceIndex) {
                 case 0:
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
@@ -438,7 +438,7 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     break;
 
                 case 1:
-                    func_8019F230();
+                    Audio_PlaySfx_MessageCancel();
                     this->unk_26E = 0x14DB;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -543,7 +543,7 @@ void func_80B10584(EnGb2* this, PlayState* play) {
         this->actionFunc = func_80B10634;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 300.0f);
+        Actor_OfferTalk(&this->actor, play, 300.0f);
     }
 }
 
@@ -576,12 +576,12 @@ void func_80B10634(EnGb2* this, PlayState* play) {
         switch (play->msgCtx.choiceIndex) {
             case 0:
                 if (gSaveContext.save.saveInfo.playerData.rupees < this->unk_288) {
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     this->unk_26E = 0x14D7;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                 } else {
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     Rupees_ChangeBy(-this->unk_288);
                     play->msgCtx.msgMode = 0x43;
                     play->msgCtx.stateTimer = 4;
@@ -591,7 +591,7 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 break;
 
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->unk_26E = 0x14E3;
                 this->unk_26C |= 2;
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
@@ -615,24 +615,24 @@ void func_80B10868(EnGb2* this, PlayState* play) {
 }
 
 void func_80B10924(EnGb2* this, PlayState* play) {
-    s32 sp24;
+    s32 getItemId;
 
     if (CHECK_WEEKEVENTREG(WEEKEVENTREG_54_40)) {
-        sp24 = 5;
+        getItemId = GI_RUPEE_PURPLE;
     } else {
-        sp24 = 12;
+        getItemId = GI_HEART_PIECE;
     }
 
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.parent = NULL;
-        if (sp24 == 12) {
+        if (getItemId == GI_HEART_PIECE) {
             SET_WEEKEVENTREG(WEEKEVENTREG_54_40);
         } else {
             Rupees_ChangeBy(50);
         }
         this->actionFunc = func_80B109DC;
     } else {
-        Actor_OfferGetItem(&this->actor, play, sp24, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, getItemId, 300.0f, 300.0f);
     }
 }
 
@@ -641,7 +641,7 @@ void func_80B109DC(EnGb2* this, PlayState* play) {
         Message_StartTextbox(play, this->unk_26E, &this->actor);
         this->actionFunc = func_80B10634;
     } else {
-        func_800B85E0(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 300.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -670,7 +670,7 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
 
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actionFunc = func_80B111AC;
                 break;
         }
@@ -697,9 +697,9 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             this->csIdIndex = 1;
             this->unk_26C &= ~0x40;
             this->actionFunc = func_80B10DAC;
-        } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 300.0f) && this->actor.isLockedOn) {
             this->unk_26C |= 0x40;
-            func_800B8614(&this->actor, play, 300.0f);
+            Actor_OfferTalk(&this->actor, play, 300.0f);
         }
     } else {
         this->unk_26C &= ~0x40;
@@ -719,7 +719,7 @@ void func_80B10B5C(EnGb2* this, PlayState* play) {
             if (!(this->unk_26C & 0x80)) {
                 this->actor.flags |= ACTOR_FLAG_10000;
                 this->unk_26C |= 0x20;
-                func_800B8614(&this->actor, play, 300.0f);
+                Actor_OfferTalk(&this->actor, play, 300.0f);
             }
         }
     }
@@ -786,7 +786,7 @@ void func_80B11048(EnGb2* this, PlayState* play) {
         this->actionFunc = func_80B10DAC;
     } else if (this->actor.xzDistToPlayer < 300.0f) {
         this->actor.flags |= ACTOR_FLAG_10000;
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
 
@@ -844,7 +844,7 @@ void func_80B11268(EnGb2* this, PlayState* play) {
         if (Flags_GetClear(play, 2) && Flags_GetClear(play, 3) && Flags_GetClear(play, 4) && Flags_GetClear(play, 5)) {
             this->unk_28A = 0xFF;
             this->unk_26C &= ~0x100;
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.draw = EnGb2_Draw;
             this->unk_26E = 0x14F9;
             this->actionFunc = func_80B11048;
@@ -861,7 +861,7 @@ void func_80B11344(EnGb2* this, PlayState* play) {
 }
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 4, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_4, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2200, ICHAIN_STOP),
 };
 
@@ -943,7 +943,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
             if (CHECK_WEEKEVENTREG(WEEKEVENTREG_76_80)) {
                 this->actor.draw = NULL;
                 this->unk_26C |= 0x100;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actionFunc = func_80B111AC;
             } else {
                 this->unk_28A = 255;
@@ -1007,7 +1007,7 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     if (this->unk_28A == 255) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
 
@@ -1016,7 +1016,7 @@ void EnGb2_Draw(Actor* thisx, PlayState* play) {
             SkelAnime_DrawFlex(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                                EnGb2_OverrideLimbDraw, EnGb2_PostLimbDraw, &this->actor, POLY_OPA_DISP);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, this->unk_28A);
 

@@ -7,7 +7,7 @@
 #include "z_en_jgame_tsn.h"
 #include "overlays/actors/ovl_Obj_Jgame_Light/z_obj_jgame_light.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnJgameTsn*)thisx)
 
@@ -90,7 +90,7 @@ void EnJgameTsn_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->actor.velocity.y = 0.0f;
 
@@ -119,7 +119,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
         this->unk_1D8[i].points = Lib_SegmentedToVirtual(path->points);
         this->unk_1D8[i].count = path->count;
 
-        path = &play->setupPathList[path->unk1];
+        path = &play->setupPathList[path->additionalPathIndex];
         if (path == NULL) {
             Actor_Kill(&this->actor);
         }
@@ -128,7 +128,7 @@ void func_80C13A2C(EnJgameTsn* this, PlayState* play) {
     this->unk_1F8.points = Lib_SegmentedToVirtual(path->points);
     this->unk_1F8.count = path->count;
 
-    path = &play->setupPathList[path->unk1];
+    path = &play->setupPathList[path->additionalPathIndex];
     if (path == NULL) {
         Actor_Kill(&this->actor);
     }
@@ -184,14 +184,13 @@ void func_80C13BB8(EnJgameTsn* this, PlayState* play) {
         }
         func_80C14030(this);
     } else if (this->actor.flags & ACTOR_FLAG_10000) {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     } else {
-        func_800B8614(&this->actor, play, 80.0f);
+        Actor_OfferTalk(&this->actor, play, 80.0f);
     }
 
     if ((player->actor.bgCheckFlags & BGCHECKFLAG_GROUND) && !(player->stateFlags1 & PLAYER_STATE1_2000) &&
-        (this->unk_2FE == 0) && (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) &&
-        func_80C149B0(play, &this->unk_1F8)) {
+        (this->unk_2FE == 0) && (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) && func_80C149B0(play, &this->unk_1F8)) {
         this->unk_2FE = 1;
         func_80C13E6C(this);
     } else if (!(player->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
@@ -222,7 +221,7 @@ void func_80C13E90(EnJgameTsn* this, PlayState* play) {
         }
         func_80C14030(this);
     } else {
-        func_800B8614(&this->actor, play, 1000.0f);
+        Actor_OfferTalk(&this->actor, play, 1000.0f);
     }
 }
 
@@ -402,7 +401,7 @@ void func_80C14610(EnJgameTsn* this, PlayState* play) {
         this->unk_300 = 0x10A4;
         func_80C14030(this);
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -636,7 +635,7 @@ void EnJgameTsn_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C150A4[this->unk_21C]));

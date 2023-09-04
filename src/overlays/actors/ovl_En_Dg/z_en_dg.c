@@ -7,7 +7,7 @@
 #include "z_en_dg.h"
 #include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnDg*)thisx)
 
@@ -62,7 +62,7 @@ ActorInit En_Dg_InitVars = {
 typedef enum {
     /* 0 */ DOG_GRAB_STATE_NONE,
     /* 1 */ DOG_GRAB_STATE_HELD,
-    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW,
+    /* 2 */ DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW
 } DogGrabState;
 
 typedef enum {
@@ -74,7 +74,7 @@ typedef enum {
     /* 5 */ DOG_BEHAVIOR_ZORA_WAIT,
     /* 6 */ DOG_BEHAVIOR_DEKU,
     /* 7 */ DOG_BEHAVIOR_DEKU_WAIT,
-    /* 8 */ DOG_BEHAVIOR_DEFAULT,
+    /* 8 */ DOG_BEHAVIOR_DEFAULT
 } DogBehavior;
 
 static u8 sIsAnyDogHeld = false;
@@ -85,10 +85,10 @@ static s16 sBremenMaskFollowerIndex = ENDG_INDEX_NO_BREMEN_MASK_FOLLOWER;
  * Stores the state for the dogs milling about at the Doggy Racetrack.
  */
 typedef struct {
-    s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;  // The dog's index within sDogInfo
-    s16 textId; // The ID of the text to display when the dog is picked up
-} RacetrackDogInfo;
+    /* 0x0 */ s16 color;  // The dog's color, which is used as an index into sBaseSpeeds
+    /* 0x2 */ s16 index;  // The dog's index within sDogInfo
+    /* 0x4 */ s16 textId; // The ID of the text to display when the dog is picked up
+} RacetrackDogInfo;       // size = 0x6
 
 /**
  * A table of RacetrackDogInfo for every dog at the Doggy Racetrack. Note that the textId values
@@ -185,33 +185,41 @@ typedef enum {
     /* 16 */ DOG_ANIM_MAX
 } DogAnimation;
 
-static AnimationInfoS sAnimationInfo[] = {
-    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },        { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },        { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },
-    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },  { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },
-    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },  { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },
-    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 }, { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },
-    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },        { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },  { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },
+static AnimationInfoS sAnimationInfo[DOG_ANIM_MAX] = {
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },           // DOG_ANIM_WALK_AFTER_TALKING
+    { &gDogWalkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },          // DOG_ANIM_WALK
+    { &gDogRunAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },            // DOG_ANIM_RUN
+    { &gDogBarkAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 },          // DOG_ANIM_BARK
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },           // DOG_ANIM_SIT_DOWN_ONCE
+    { &gDogSitAnim, 1.0f, 0, -1, ANIMMODE_LOOP_PARTIAL, -6 },   // DOG_ANIM_SIT_DOWN
+    { &gDogLyingDownAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -6 },     // DOG_ANIM_LYING_DOWN_START_1
+    { &gDogLyingDownLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -6 }, // DOG_ANIM_LYING_DOWN_LOOP
+    { &gDogLyingDownAnim, 1.0f, 0, 27, ANIMMODE_ONCE, -6 },     // DOG_ANIM_LYING_DOWN_START_2
+    { &gDogLyingDownAnim, 1.0f, 28, -1, ANIMMODE_ONCE, -6 },    // DOG_ANIM_LYING_DOWN_START_3
+    { &gDogLyingDownAnim, 1.0f, 54, 54, ANIMMODE_ONCE, -6 },    // DOG_ANIM_LYING_DOWN_START_4
+    { &gDogWalkAnim, -1.5f, -1, 0, ANIMMODE_LOOP, -6 },         // DOG_ANIM_WALK_BACKWARDS
+    { &gDogJumpAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // DOG_ANIM_JUMP
+    { &gDogLongJumpAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },       // DOG_ANIM_LONG_JUMP
+    { &gDogJumpAttackAnim, 1.2f, 0, -1, ANIMMODE_ONCE, 0 },     // DOG_ANIM_JUMP_ATTACK
+    { &gDogWalkAnim, 0.5f, 0, -1, ANIMMODE_LOOP, 0 },           // DOG_ANIM_SWIM
 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 1000, ICHAIN_STOP),
 };
 
-void EnDg_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animationInfo, s32 animIndex) {
-    f32 frameCount;
+void EnDg_ChangeAnim(SkelAnime* skelAnime, AnimationInfoS* animInfo, s32 animIndex) {
+    f32 endFrame;
 
-    animationInfo += animIndex;
-    if (animationInfo->frameCount < 0) {
-        frameCount = Animation_GetLastFrame(animationInfo->animation);
+    animInfo += animIndex;
+    if (animInfo->frameCount < 0) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frameCount = animationInfo->frameCount;
+        endFrame = animInfo->frameCount;
     }
 
-    Animation_Change(skelAnime, animationInfo->animation, animationInfo->playSpeed + (BREG(88) * 0.1f),
-                     animationInfo->startFrame, frameCount, animationInfo->mode, animationInfo->morphFrames);
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed + (BREG(88) * 0.1f), animInfo->startFrame,
+                     endFrame, animInfo->mode, animInfo->morphFrames);
 }
 
 void EnDg_UpdateCollision(EnDg* this, PlayState* play) {
@@ -280,7 +288,7 @@ s32 EnDg_HasReachedPoint(EnDg* this, Path* path, s32 pointIndex) {
         diffZ = points[currentPoint + 1].z - points[currentPoint - 1].z;
     }
 
-    func_8017B7F8(&point, RAD_TO_BINANG(func_80086B30(diffX, diffZ)), &px, &pz, &d);
+    func_8017B7F8(&point, RAD_TO_BINANG(Math_FAtan2F(diffX, diffZ)), &px, &pz, &d);
 
     if (((this->actor.world.pos.x * px) + (pz * this->actor.world.pos.z) + d) > 0.0f) {
         reached = true;
@@ -358,9 +366,9 @@ void EnDg_SpawnFloorDustRing(EnDg* this, PlayState* play) {
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
-        pos.x = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.x;
+        pos.x = Rand_CenteredFloat(15.0f) + this->actor.world.pos.x;
         pos.y = this->actor.world.pos.y;
-        pos.z = randPlusMinusPoint5Scaled(15.0f) + this->actor.world.pos.z;
+        pos.z = Rand_CenteredFloat(15.0f) + this->actor.world.pos.z;
         Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
@@ -483,11 +491,11 @@ void EnDg_TryPickUp(EnDg* this, PlayState* play) {
         }
 
         EnDg_ChangeAnim(&this->skelAnime, sAnimationInfo, DOG_ANIM_SIT_DOWN);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.speed = 0.0f;
         if (Player_GetMask(play) == PLAYER_MASK_TRUTH) {
             this->actor.flags |= ACTOR_FLAG_10000;
-            func_800B8614(&this->actor, play, 100.0f);
+            Actor_OfferTalk(&this->actor, play, 100.0f);
             this->actionFunc = EnDg_SetupTalk;
         } else {
             this->actionFunc = EnDg_Held;
@@ -508,7 +516,7 @@ s32 EnDg_FindFollowerForBremenMask(PlayState* play) {
 
     while (enemy != NULL) {
         if (enemy->id == ACTOR_EN_DG) {
-            if (enemy->isTargeted) {
+            if (enemy->isLockedOn) {
                 sBremenMaskFollowerIndex = ((EnDg*)enemy)->index;
                 return true;
             }
@@ -900,14 +908,14 @@ void EnDg_JumpAttack(EnDg* this, PlayState* play) {
 
     if (curFrame < 9) {
         if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
-            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+            sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = Rand_CenteredFloat(1.0f) + 3.0f;
         }
 
         EnDg_SpawnFloorDustRing(this, play);
     } else {
         this->dogFlags |= DOG_FLAG_JUMP_ATTACKING;
         if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
-            f32 rand = randPlusMinusPoint5Scaled(1.5f);
+            f32 rand = Rand_CenteredFloat(1.5f);
 
             sAnimationInfo[DOG_ANIM_JUMP_ATTACK].playSpeed = 1.2f;
             this->actor.velocity.y = 2.0f * rand + 3.0f;
@@ -1233,7 +1241,7 @@ void EnDg_JumpOutOfWater(EnDg* this, PlayState* play) {
 void EnDg_Held(EnDg* this, PlayState* play) {
     if (Actor_HasNoParent(&this->actor, play)) {
         this->grabState = DOG_GRAB_STATE_THROWN_OR_SITTING_AFTER_THROW;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if (sIsAnyDogHeld) {
             this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
             sIsAnyDogHeld = false;
@@ -1280,7 +1288,7 @@ void EnDg_SetupTalk(EnDg* this, PlayState* play) {
         EnDg_StartTextBox(this, play);
         this->actionFunc = EnDg_Talk;
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -1302,9 +1310,9 @@ void EnDg_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
-    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENDG_GET_PATH_INDEX(&this->actor), ENDG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.gravity = -3.0f;
     this->timer = Rand_S16Offset(60, 60);
     this->dogFlags = DOG_FLAG_NONE;
@@ -1379,7 +1387,7 @@ void EnDg_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 

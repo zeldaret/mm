@@ -86,7 +86,7 @@ void ObjRaillift_Init(Actor* thisx, PlayState* play) {
     if (this->speed < 0.01f) {
         this->actionFunc = ObjRaillift_DoNothing;
     } else {
-        path = &play->setupPathList[OBJRAILLIFT_GET_PATH(thisx)];
+        path = &play->setupPathList[OBJRAILLIFT_GET_PATH_INDEX(thisx)];
         this->curPoint = OBJRAILLIFT_GET_STARTING_POINT(thisx);
         this->endPoint = path->count - 1;
         this->direction = 1;
@@ -126,7 +126,7 @@ void ObjRaillift_Move(ObjRaillift* this, PlayState* play) {
         }
 
         if (OBJRAILLIFT_GET_TYPE(thisx) == DEKU_FLOWER_PLATFORM) {
-            func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+            Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
         }
     }
 
@@ -215,8 +215,6 @@ void ObjRaillift_StartCutscene(ObjRaillift* this, PlayState* play) {
 
 void ObjRaillift_Update(Actor* thisx, PlayState* play) {
     ObjRaillift* this = THIS;
-    f32 target;
-    f32 step;
 
     this->actionFunc(this, play);
     Actor_SetFocus(thisx, 10.0f);
@@ -227,7 +225,8 @@ void ObjRaillift_Update(Actor* thisx, PlayState* play) {
         }
     }
     if (OBJRAILLIFT_REACT_TO_PLAYER_ON_TOP(thisx)) {
-        s32 requiredScopeTemp;
+        f32 target;
+        f32 step;
 
         this->isPlayerOnTopPrev = this->isPlayerOnTop;
         this->isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna) ? true : false;
@@ -259,12 +258,14 @@ void ObjRaillift_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_TwoTexScrollEnvColor(play->state.gfxCtx, 0, play->gameplayFrames, 0, 32, 32, 1, 0, 0, 32, 32, 0, 0,
                                         0, 160));
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, object_raillift_DL_004BF0);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }
 

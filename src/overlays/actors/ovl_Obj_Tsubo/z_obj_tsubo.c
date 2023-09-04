@@ -20,11 +20,11 @@ void ObjTsubo_Update(Actor* thisx, PlayState* play);
 void ObjTsubo_Draw(Actor* thisx, PlayState* play2);
 
 void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play);
-void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play);
+void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play);
 void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2);
-void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2);
 void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2);
-void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2);
+void ObjTsubo_MagicPotBreak3(ObjTsubo* this, PlayState* play2);
 void func_80928914(ObjTsubo* this);
 void func_80928928(ObjTsubo* this, PlayState* play);
 void func_809289B4(ObjTsubo* this);
@@ -63,16 +63,14 @@ typedef struct {
     /* 0x14 */ ObjTsuboUnkFunc breakPot1;
     /* 0x18 */ ObjTsuboUnkFunc breakPot2;
     /* 0x1C */ ObjTsuboUnkFunc breakPot3;
-
-} ObjTsuboData;
+} ObjTsuboData; // size = 0x20
 
 ObjTsuboData sPotTypeData[4] = {
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
-    { OBJECT_RACETSUBO, 0.29549998f, object_racetsubo_DL_000278, object_racetsubo_DL_001610, 18, 45,
-      ObjTsubo_RacePotBreak1, ObjTsubo_RacePotBreak2, ObjTsubo_RacePotBreak3 },
-    { OBJECT_TSUBO, 0.197f, object_tsubo_DL_0017C0, object_tsubo_DL_001960, 12, 32, ObjTsubo_PotBreak1,
-      ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
+    { OBJECT_RACETSUBO, 0.29549998f, gMagicPotDL, gMagicPotShardDL, 18, 45, ObjTsubo_MagicPotBreak1,
+      ObjTsubo_MagicPotBreak2, ObjTsubo_MagicPotBreak3 },
+    { OBJECT_TSUBO, 0.197f, gPotDL, gPotShardDL, 12, 32, ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
     { GAMEPLAY_DANGEON_KEEP, 0.197f, gameplay_dangeon_keep_DL_017EA0, gameplay_dangeon_keep_DL_018090, 12, 32,
       ObjTsubo_PotBreak1, ObjTsubo_PotBreak2, ObjTsubo_PotBreak3 },
 };
@@ -254,7 +252,7 @@ void ObjTsubo_PotBreak1(ObjTsubo* this, PlayState* play) {
     func_800BBFB0(play, &this->actor.world.pos, 30.0f, 2, 10, 80, true);
 }
 
-void ObjTsubo_RacePotBreak1(ObjTsubo* this, PlayState* play) {
+void ObjTsubo_MagicPotBreak1(ObjTsubo* this, PlayState* play) {
     s16 rot;
     s32 phi_s0;
     s32 i;
@@ -337,7 +335,7 @@ void ObjTsubo_PotBreak2(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_RacePotBreak2(ObjTsubo* this, PlayState* play2) {
+void ObjTsubo_MagicPotBreak2(ObjTsubo* this, PlayState* play2) {
     PlayState* play = (PlayState*)play2;
     s32 pad;
     s16 rot;
@@ -422,7 +420,7 @@ void ObjTsubo_PotBreak3(ObjTsubo* this, PlayState* play2) {
     }
 }
 
-void ObjTsubo_RacePotBreak3(ObjTsubo* this, PlayState* play2) {
+void ObjTsubo_MagicPotBreak3(ObjTsubo* this, PlayState* play2) {
 }
 
 void func_80928914(ObjTsubo* this) {

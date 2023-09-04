@@ -56,7 +56,7 @@ void EnTimeTag_Init(Actor* thisx, PlayState* play) {
 
     switch (TIMETAG_GET_TYPE(&this->actor)) {
         case TIMETAG_KICKOUT_FINAL_HOURS:
-            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_40) || (CURRENT_DAY != 3)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLOCK_TOWER_OPENED) || (CURRENT_DAY != 3)) {
                 Actor_Kill(&this->actor);
                 return;
             }
@@ -114,12 +114,12 @@ void EnTimeTag_RooftopOath_Cutscene(EnTimeTag* this, PlayState* play) {
 }
 
 void EnTimeTag_RooftopOath_Wait(EnTimeTag* this, PlayState* play) {
-    EnTimeTag* this2 = this;
+    Actor* thisx = &this->actor;
 
     if ((play->msgCtx.ocarinaMode == 3) && (play->msgCtx.lastPlayedSong == OCARINA_SONG_OATH)) {
-        if (this->actor.csId != CS_ID_NONE) {
+        if (thisx->csId != CS_ID_NONE) {
             this->actionFunc = EnTimeTag_RooftopOath_Cutscene;
-            CutsceneManager_Queue(this2->actor.csId);
+            CutsceneManager_Queue(thisx->csId);
             gSaveContext.timerStates[TIMER_ID_MOON_CRASH] = TIMER_STATE_OFF;
         }
         play->msgCtx.ocarinaMode = 4;
@@ -163,8 +163,8 @@ void EnTimeTag_SoaringEngraving_Wait(EnTimeTag* this, PlayState* play) {
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play) &&
                (Flags_GetSwitch(play, TIMETAG_SOARING_GET_SWITCHFLAG(&this->actor)) ||
                 CHECK_QUEST_ITEM(QUEST_SONG_SOARING))) {
-        this->actor.flags |= ACTOR_FLAG_1;
-        func_800B8614(&this->actor, play, 110.0f);
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
@@ -256,7 +256,7 @@ void EnTimeTag_Diary_Cutscene(EnTimeTag* this, PlayState* play) {
 
 void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
             if (TIMETAG_DIARY_GET_TYPE(&this->actor) == TIMETAG_DIARY_LULU) {
                 Message_StartTextbox(play, 0x101C, &this->actor);
             } else {
@@ -277,7 +277,7 @@ void EnTimeTag_Diary_Wait(EnTimeTag* this, PlayState* play) {
         }
         this->actionFunc = EnTimeTag_Diary_Cutscene;
     } else if ((this->actor.xzDistToPlayer < 100.0f) && Player_IsFacingActor(&this->actor, 0x3000, play)) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
