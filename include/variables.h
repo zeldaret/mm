@@ -27,15 +27,9 @@ extern s32 sIrqMgrRetraceCount;
 extern s16 sintable[0x400];
 // extern UNK_TYPE1 D_80097DE4;
 // extern UNK_TYPE4 D_80097E08;
-extern OSThread* __osThreadTail;
-extern OSThread* __osRunQueue;
-extern OSThread* __osActiveQueue;
-extern OSThread* __osRunningThread;
-extern OSThread* __osFaultedThread;
+
 extern u32 __osSiAccessQueueEnabled;
 extern UNK_TYPE4 D_80097E40;
-
-extern UNK_TYPE4 __osShutdown;
 
 extern OSDevMgr __osPiDevMgr;
 
@@ -47,7 +41,7 @@ extern u8 __osPfsInodeCacheBank;
 extern UNK_TYPE4 D_80097F10;
 extern char spaces[];
 extern char zeroes[];
-extern OSTimer* __osTimerList;
+
 extern s32 __osPfsLastChannel;
 
 // extern __OSViContext D_80098060[2];
@@ -140,17 +134,12 @@ extern OSMesg siAccessBuf[1];
 extern OSMesgQueue __osSiAccessQueue;
 
 extern OSThread __osThreadSave;
-extern OSPiHandle D_8009D130;
-extern OSPiHandle D_8009D1A8;
+extern OSPiHandle __Dom1SpeedParam;
+extern OSPiHandle __Dom2SpeedParam;
 
 extern OSMesg D_8009E3F0[1];
 extern OSMesgQueue __osPiAccessQueue;
 extern __OSInode __osPfsInodeCache;
-extern OSTimer D_8009E590;
-extern OSTime __osCurrentTime;
-extern u32 __osBaseCounter;
-extern u32 __osViIntrCount;
-extern u32 __osTimerCounter;
 
 extern OSPiHandle CartRomHandle;
 
