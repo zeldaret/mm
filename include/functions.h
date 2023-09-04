@@ -40,7 +40,7 @@ void CIC6105_PrintRomInfo(void);
 void CIC6105_AddRomInfoFaultPage(void);
 void CIC6105_RemoveRomInfoFaultPage(void);
 void func_800818F4(void);
-void __osSyncVPrintf(const char* fmt, ...);
+void osSyncPrintfUnused(const char* fmt, ...);
 void rmonPrintf(const char* fmt, ...);
 
 void RcpUtils_PrintRegisterStatus(void);

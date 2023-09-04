@@ -43,7 +43,7 @@ asm/non_matchings/boot/CIC6105/CIC6105_PrintRomInfo.s,CIC6105_PrintRomInfo,0x800
 asm/non_matchings/boot/CIC6105/CIC6105_AddRomInfoFaultPage.s,CIC6105_AddRomInfoFaultPage,0x8008189C,0xD
 asm/non_matchings/boot/CIC6105/CIC6105_RemoveRomInfoFaultPage.s,CIC6105_RemoveRomInfoFaultPage,0x800818D0,0x9
 asm/non_matchings/boot/CIC6105/func_800818F4.s,func_800818F4,0x800818F4,0xB
-asm/non_matchings/boot/syncprintf/__osSyncVPrintf.s,__osSyncVPrintf,0x80081920,0x7
+asm/non_matchings/boot/syncprintf/osSyncPrintfUnused.s,osSyncPrintfUnused,0x80081920,0x7
 asm/non_matchings/boot/syncprintf/osSyncPrintf.s,osSyncPrintf,0x8008193C,0x7
 asm/non_matchings/boot/syncprintf/rmonPrintf.s,rmonPrintf,0x80081958,0xA
 asm/non_matchings/boot/fault/Fault_SleepImpl.s,Fault_SleepImpl,0x80081980,0x1C
