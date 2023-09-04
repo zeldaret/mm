@@ -25,7 +25,7 @@ beginseg
     include "build/src/boot/syncprintf.o"
     include "build/src/boot/fault.o"
     include "build/src/boot/fault_drawer.o"
-    include "build/src/boot/O2/boot_80084940.o"
+    include "build/src/boot/O2/rcp_utils.o"
     include "build/src/boot/O2/loadfragment.o"
     include "build/src/boot/O2/loadfragment2.o"
     include "build/src/boot/O2/padutils.o"

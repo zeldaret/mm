@@ -43,8 +43,8 @@ void func_800818F4(void);
 void __osSyncVPrintf(const char* fmt, ...);
 void rmonPrintf(const char* fmt, ...);
 
-void func_80084940(void);
-void func_80084968(void);
+void RcpUtils_PrintRegisterStatus(void);
+void RcpUtils_Reset(void);
 
 void PadUtils_Init(Input* input);
 void func_80085150(void);

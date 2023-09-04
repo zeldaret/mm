@@ -104,8 +104,8 @@ asm/non_matchings/boot/fault_drawer/FaultDrawer_DrawText.s,FaultDrawer_DrawText,
 asm/non_matchings/boot/fault_drawer/FaultDrawer_SetDrawerFrameBuffer.s,FaultDrawer_SetDrawerFrameBuffer,0x8008486C,0xE
 asm/non_matchings/boot/fault_drawer/FaultDrawer_SetInputCallback.s,FaultDrawer_SetInputCallback,0x800848A4,0x5
 asm/non_matchings/boot/fault_drawer/FaultDrawer_Init.s,FaultDrawer_Init,0x800848B8,0x22
-asm/non_matchings/boot/boot_80084940/func_80084940.s,func_80084940,0x80084940,0xA
-asm/non_matchings/boot/boot_80084940/func_80084968.s,func_80084968,0x80084968,0xE
+asm/non_matchings/boot/rcp_utils/RcpUtils_PrintRegisterStatus.s,RcpUtils_PrintRegisterStatus,0x80084940,0xA
+asm/non_matchings/boot/rcp_utils/RcpUtils_Reset.s,RcpUtils_Reset,0x80084968,0xE
 asm/non_matchings/boot/loadfragment/Fragment_Relocate.s,Fragment_Relocate,0x800849A0,0x9B
 asm/non_matchings/boot/loadfragment/Fragment_Load.s,Fragment_Load,0x80084C0C,0x31
 asm/non_matchings/boot/loadfragment/Fragment_AllocateAndLoad.s,Fragment_AllocateAndLoad,0x80084CD0,0x38
