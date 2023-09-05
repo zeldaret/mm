@@ -68,12 +68,13 @@ The build process has the following package requirements:
 * python3
 * pip3
 * libpng-dev
+* python3-venv
 
 Under Debian / Ubuntu (which we recommend using), you can install them with the following commands:
 
 ```bash
 sudo apt update
-sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev
+sudo apt install make git build-essential binutils-mips-linux-gnu python3 python3-pip libpng-dev python3-venv
 ```
 
 #### 2. Clone the repository
@@ -94,11 +95,26 @@ cd mm
 
 The build process has a few python packages required that are located in `requirements.txt`.
 
-To install them simply run in a terminal:
+It is recommend to setup a virtual environment for python to localize all dependencies. To create a virtual environment:
 
 ```bash
-python3 -m pip install -r requirements.txt
+python3 -m venv .mm-env
 ```
+
+To activate or deactivate the virtual environment run either:
+```bash
+# Activates the mm-env virtual environment
+source .mm-env/bin/activate 
+# Deactivates the active virtual environment
+deactivate
+```
+
+Once activated you can install the required dependencies:
+```bash
+pip install -r requirements.txt  # or python3 -m pip if you want
+```
+
+**Important:** This virtual environment will need to be activated everytime you enter the repo.
 
 #### 4. Prepare a base ROM
 
