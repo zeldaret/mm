@@ -116,12 +116,9 @@ static InitChainEntry sAlienInitChain[] = {
 };
 
 static InitChainEntry sRomaniInitChain[] = {
-    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),
-    ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
-    ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
+    ICHAIN_F32(uncullZoneForward, 20000, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneScale, 100, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 100, ICHAIN_CONTINUE),  ICHAIN_F32(targetArrowOffset, 1500, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE), ICHAIN_VEC3F_DIV1000(scale, 10, ICHAIN_STOP),
 };
 
 static InitChainEntry sCowInitChain[] = {
