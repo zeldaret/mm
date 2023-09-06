@@ -5,7 +5,7 @@
 #include "unk.h"
 #include "libc/stdarg.h"
 #include "libc/stdint.h"
-#include "io/controller.h"
+#include "PR/controller.h"
 #include "padmgr.h"
 #include "stack.h"
 

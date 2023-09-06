@@ -5,7 +5,7 @@
  */
 
 #include "z_en_door.h"
-#include "objects/object_mkk/object_mkk.h"
+#include "objects/object_kinsta2_obj/object_kinsta2_obj.h"
 #include "objects/object_dor01/object_dor01.h"
 #include "objects/object_dor02/object_dor02.h"
 #include "objects/object_dor03/object_dor03.h"
@@ -347,7 +347,7 @@ static EnDoorInfo sObjInfo[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.x, 0, ICHAIN_CONTINUE),
     ICHAIN_U16(shape.rot.z, 0, ICHAIN_STOP),
@@ -400,17 +400,17 @@ static u8 sAnimCloseFrames[2 * PLAYER_FORM_MAX] = {
 static Gfx* D_808679A4[14][2] = {
     { gDoorLeftDL, gDoorRightDL },
     { gWoodfallDoorDL, gWoodfallDoorDL },
-    { object_dor01_DL_000448, object_dor01_DL_000448 },
+    { gObservatoryLabDoorDL, gObservatoryLabDoorDL },
     { gZoraHallDoorDL, gZoraHallDoorDL },
     { gSwampDoorDL, gSwampDoorDL },
     { gMagicHagPotionShopDoorDL, gMagicHagPotionShopDoorDL },
-    { object_wdor01_DL_000548, object_wdor01_DL_000548 }, // Lottery Shop / Curiosity Shop / Mayor's House Door
-    { object_wdor02_DL_000548, object_wdor02_DL_000548 }, // Trading Post / Post Office Door
-    { object_wdor03_DL_000548, object_wdor03_DL_000548 }, // Stockpot Inn & Swordsman's School Door
+    { gLotteryCuriosityShopMayorHouseDoorDL, gLotteryCuriosityShopMayorHouseDoorDL },
+    { gPostOfficeTradingPostDoorDL, gPostOfficeTradingPostDoorDL },
+    { gInnSchoolDoorDL, gInnSchoolDoorDL },
     { gMilkBarDoorDL, gMilkBarDoorDL },
     { gMusicBoxHouseDoorDL, gMusicBoxHouseDoorDL },
     { gPiratesFortressDoorDL, gPiratesFortressDoorDL },
-    { gWhiteBoeEyesDL, gWhiteBoeEyesDL },
+    { gOceansideSpiderHouseDoorDL, gOceansideSpiderHouseDoorDL },
     { gFieldWoodDoorLeftDL, gFieldWoodDoorRightDL },
 };
 

@@ -8,7 +8,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_tab/object_tab.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTab*)thisx)
 
@@ -372,7 +372,7 @@ s32 func_80BE0F04(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
         Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1AF0);
         Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1AFC);
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
         SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_2FC |= (0x40 | 0x20);
         this->unk_30C = 30;
@@ -389,7 +389,7 @@ s32 func_80BE0FC4(EnTab* this, PlayState* play, ScheduleOutput* scheduleOutput) 
     Math_Vec3f_Copy(&this->actor.world.pos, &D_80BE1B04);
     Math_Vec3s_Copy(&this->actor.world.rot, &D_80BE1B10);
     Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     SubS_SetOfferMode(&this->unk_2FC, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
     this->unk_2FC |= (0x40 | 0x20);
     this->unk_30C = 0x50;
@@ -476,11 +476,11 @@ void func_80BE127C(EnTab* this, PlayState* play) {
     if (!Schedule_RunScript(play, D_80BE18D0, &sp18) ||
         ((this->unk_1D8 != sp18.result) && !func_80BE1060(this, play, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_1D8 = sp18.result;
     func_80BE1224(this, play);

@@ -33,7 +33,7 @@ typedef struct EnRuppecrow {
     /* 0x24C */ Path* path;
     /* 0x250 */ s32 currentPoint;
     /* 0x254 */ ColliderJntSph collider;
-    /* 0x274 */ ColliderJntSphElement colliderElement;
+    /* 0x274 */ ColliderJntSphElement colliderElements[1];
     /* 0x2B4 */ u16 isGoingCounterClockwise;
     /* 0x2B8 */ f32 speedModifier;
     /* 0x2BC */ s16 rupeeIndex;

@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnBaguo*)thisx)
 
@@ -133,7 +133,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 2;
+    this->actor.targetMode = TARGET_MODE_2;
 
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements[0].dim.modelSphere.radius = 30;
@@ -146,7 +146,7 @@ void EnBaguo_Init(Actor* thisx, PlayState* play) {
     this->actor.gravity = -3.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->collider.base.acFlags |= AC_HARD;
     this->actionFunc = EnBaguo_UndergroundIdle;
 }
@@ -165,7 +165,7 @@ void EnBaguo_UndergroundIdle(EnBaguo* this, PlayState* play) {
         this->actor.world.rot.z = 0;
         this->actor.world.rot.x = this->actor.world.rot.z;
         this->actor.flags &= ~ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actionFunc = EnBaguo_EmergeFromUnderground;
     }
     this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -293,7 +293,7 @@ void EnBaguo_RetreatUnderground(EnBaguo* this, PlayState* play) {
         Math_Vec3f_Copy(&this->actor.world.pos, &this->actor.home.pos);
         Actor_PlaySfx(&this->actor, NA_SE_EN_BAKUO_APPEAR);
         this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = EnBaguo_UndergroundIdle;
     }
 }
@@ -354,7 +354,7 @@ void EnBaguo_CheckForDetonation(EnBaguo* this, PlayState* play) {
 
                 this->timer = 30;
                 this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 Actor_SetScale(&this->actor, 0.0f);
                 this->collider.elements->dim.scale = 3.0f;
                 this->collider.elements->info.toucher.damage = 8;

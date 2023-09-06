@@ -152,8 +152,8 @@ asm/non_matchings/boot/gfxprint/GfxPrint_VPrintf.s,GfxPrint_VPrintf,0x800860B8,0
 asm/non_matchings/boot/gfxprint/GfxPrint_Printf.s,GfxPrint_Printf,0x800860D8,0xE
 asm/non_matchings/boot/mtxuty-cvt/MtxConv_F2L.s,MtxConv_F2L,0x80086110,0x52
 asm/non_matchings/boot/mtxuty-cvt/MtxConv_L2F.s,MtxConv_L2F,0x80086258,0xA
-asm/non_matchings/boot/assert/__assert.s,__assert,0x80086280,0xD
-asm/non_matchings/boot/assert/func_800862B4.s,func_800862B4,0x800862B4,0xB
+asm/non_matchings/boot/assert/_dbg_hungup.s,_dbg_hungup,0x80086280,0xD
+asm/non_matchings/boot/assert/Reset.s,Reset,0x800862B4,0xB
 asm/non_matchings/boot/boot_800862E0/SystemHeap_Malloc.s,SystemHeap_Malloc,0x800862E0,0xC
 asm/non_matchings/boot/boot_800862E0/SystemArena_Free.s,SystemArena_Free,0x80086310,0xB
 asm/non_matchings/boot/boot_800862E0/SystemHeap_RunBlockFunc.s,SystemHeap_RunBlockFunc,0x8008633C,0x1C
@@ -296,7 +296,7 @@ asm/non_matchings/boot/getsr/__osGetSR.s,__osGetSR,0x8008A5C0,0x4
 asm/non_matchings/boot/setsr/__osSetSR.s,__osSetSR,0x8008A5D0,0x4
 asm/non_matchings/boot/writebackdcache/osWritebackDCache.s,osWritebackDCache,0x8008A5E0,0x20
 asm/non_matchings/boot/initialize/__createSpeedParam.s,__createSpeedParam,0x8008A660,0x27
-asm/non_matchings/boot/initialize/osInitialize.s,osInitialize,0x8008A6FC,0xAB
+asm/non_matchings/boot/initialize/__osInitialize_common.s,__osInitialize_common,0x8008A6FC,0xAB
 asm/non_matchings/boot/initialize/__osInitialize_autodetect.s,__osInitialize_autodetect,0x8008A9A8,0x2
 asm/non_matchings/boot/vigetnextframebuf/osViGetNextFramebuffer.s,osViGetNextFramebuffer,0x8008AA10,0x10
 asm/non_matchings/boot/perspective/guPerspectiveF.s,guPerspectiveF,0x8008AA50,0x8C

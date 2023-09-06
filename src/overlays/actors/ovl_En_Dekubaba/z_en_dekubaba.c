@@ -9,7 +9,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnDekubaba*)thisx)
 
@@ -222,7 +222,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
         this->actor.colChkInfo.health = 4;
         // Big Deku Baba hint does not exist in MM
         this->actor.hintId = TATL_HINT_ID_BIO_DEKU_BABA;
-        this->actor.targetMode = 2;
+        this->actor.targetMode = TARGET_MODE_2;
     } else {
         this->size = 1.0f;
 
@@ -230,7 +230,7 @@ void EnDekubaba_Init(Actor* thisx, PlayState* play) {
             this->collider.elements[i].dim.worldSphere.radius = this->collider.elements[i].dim.modelSphere.radius;
         }
         this->actor.hintId = TATL_HINT_ID_DEKU_BABA;
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
     }
 
     EnDekubaba_SetupWait(this);
@@ -868,7 +868,7 @@ void EnDekubaba_PrunedSomersaultDie(EnDekubaba* this, PlayState* play) {
             this->actor.scale.y = 0.0f;
             this->actor.scale.x = 0.0f;
             this->actor.speed = 0.0f;
-            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
             EffectSsHahen_SpawnBurst(play, &this->actor.world.pos, this->size * 3.0f, 0, (s32)(this->size * 12.0f),
                                      (s32)(this->size * 5.0f), 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
         }

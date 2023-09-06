@@ -32,8 +32,8 @@
  */
 
 #include "global.h"
-#include "io/controller.h"
-#include "ultra64/motor.h"
+#include "PR/controller.h"
+#include "PR/os_motor.h"
 #include "fault.h"
 
 #define PADMGR_RETRACE_MSG (1 << 0)
