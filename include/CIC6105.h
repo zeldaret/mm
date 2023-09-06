@@ -8,14 +8,14 @@
 #define CIC_ADDRESS_2 0x002FE1C0
 
 
-void CIC6105_Nop80081820(void);
-void CIC6105_Nop80081828(void);
+void CIC6105_Noop1(void);
+void CIC6105_Noop2(void);
 void CIC6105_PrintRomInfo(void);
 void CIC6105_AddRomInfoFaultPage(void);
 void CIC6105_Destroy(void);
 void CIC6105_Init(void);
 
-extern s32 D_8009BE30;
-extern s32 D_8009BE34;
+extern s32 gCICAddr1Val;
+extern s32 gCICAddr2Val;
 
 #endif

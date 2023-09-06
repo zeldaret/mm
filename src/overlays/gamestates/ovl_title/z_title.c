@@ -147,7 +147,7 @@ void ConsoleLogo_Destroy(GameState* thisx) {
 
     Sram_InitSram(&this->state, &this->sramCtx);
     ShrinkWindow_Destroy();
-    CIC6105_Nop80081828();
+    CIC6105_Noop2();
 }
 
 void ConsoleLogo_Init(GameState* thisx) {

@@ -2,14 +2,14 @@
 #include "build.h"
 #include "fault.h"
 
-s32 D_8009BE30;
-s32 D_8009BE34;
+s32 gCICAddr1Val;
+s32 gCICAddr2Val;
 FaultClient sRomInfoFaultClient;
 
-void CIC6105_Nop80081820(void) {
+void CIC6105_Noop1(void) {
 }
 
-void CIC6105_Nop80081828(void) {
+void CIC6105_Noop2(void) {
 }
 
 void CIC6105_PrintRomInfo(void) {
@@ -27,6 +27,6 @@ void CIC6105_Destroy(void) {
 }
 
 void CIC6105_Init(void) {
-    D_8009BE30 = IO_READ(CIC_ADDRESS_1);
-    D_8009BE34 = IO_READ(CIC_ADDRESS_2);
+    gCICAddr1Val = IO_READ(CIC_ADDRESS_1);
+    gCICAddr2Val = IO_READ(CIC_ADDRESS_2);
 }
