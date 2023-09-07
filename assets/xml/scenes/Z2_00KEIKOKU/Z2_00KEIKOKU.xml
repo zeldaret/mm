@@ -14,8 +14,8 @@
         <Cutscene Name="gTerminaFieldIntroFromEastClockTownCs" Offset="0x4A68"/> <!-- Original name is "sc1st01_001valley2" -->
         <Cutscene Name="gTerminaFieldIntroFromSouthClockTownCs" Offset="0x4C78"/> <!-- Original name is "sc1st01_001valley3" -->
         <Cutscene Name="gTerminaFieldGiantsGatherToStopMoonCs" Offset="0xDE2C"/> <!-- Original name is "k_s_start" ("k" is probably short for "kyojin", meaning "giant") -->
-        <Cutscene Name="gTerminaFieldGiantsFailToStopMoonCs" Offset="0xFA3C"/> <!-- Original name is "k_s_sippai" ("failure") -->
-        <Cutscene Name="gTerminaFieldGiantsStopMoonCs" Offset="0x1040C"/> <!-- Original name is "k_s_seikou" ("success") -->
+        <Cutscene Name="gTerminaFieldGiantsStopMoonFailureCs" Offset="0xFA3C"/> <!-- Original name is "k_s_sippai" ("failure") -->
+        <Cutscene Name="gTerminaFieldGiantsStopMoonSuccessCs" Offset="0x1040C"/> <!-- Original name is "k_s_seikou" ("success") -->
         <Cutscene Name="gTerminaFieldFirstCycleClockTowerOpeningCs" Offset="0x11414"/> <!-- Original name is "clock_t_change"; exact duplicate of gTerminaFieldClockTowerOpeningCs -->
         <Cutscene Name="gTerminaFieldSkullKidFlashbackRainCs" Offset="0x11E80"/> <!-- Original name is "memory" -->
         <Cutscene Name="gTerminaFieldSkullKidFlashbackDrawingWithFairiesCs" Offset="0x133B0"/> <!-- Original name is "rakugaki" -->
