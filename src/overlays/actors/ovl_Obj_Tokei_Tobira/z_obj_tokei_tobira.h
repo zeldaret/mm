@@ -2,6 +2,7 @@
 #define Z_OBJ_TOKEI_TOBIRA_H
 
 #include "global.h"
+
 #define OBJTOKEITOBIRA_GET_TYPE(thisx) ((thisx)->params & 1)
 #define OBJTOKEITOBIRA_PARAMS(type) (type)
 
