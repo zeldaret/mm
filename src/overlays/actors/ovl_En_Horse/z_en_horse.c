@@ -122,8 +122,8 @@ static AnimationHeader* sEponaAnimations[] = {
 };
 
 static AnimationHeader* sHniAnimations[] = {
-    &gDonkeyIdleAnim, &gDonkeyShakeHeadAnim, &gDonkeyStopAnim,    &gDonkeyWhinnyAnim,   &gDonkeyWalkAnim,
-    &gDonkeyTrotAnim, &gDonkeyGallopAnim,    &gDonkeyJumpLowAnim, &gDonkeyJumpHighAnim,
+    &gHorseIdleAnim, &gHorseShakeHeadAnim, &gHorseStopAnim,    &gHorseWhinnyAnim,   &gHorseWalkAnim,
+    &gHorseTrotAnim, &gHorseGallopAnim,    &gHorseJumpLowAnim, &gHorseJumpHighAnim,
 };
 
 static AnimationHeader** sAnimationHeaders[] = {
@@ -930,11 +930,11 @@ void func_8087D540(Actor* thisx, PlayState* play) {
         this->actor.update = EnHorse_Update;
         if (this->unk_1EC & 1) {
             if (this->type == HORSE_TYPE_BANDIT) {
-                SkelAnime_InitFlex(play, &this->skin.skelAnime, &gDonkeyBanditSkel, NULL, this->jointTable,
-                                   this->morphTable, DONKEY_BANDIT_LIMB_MAX);
+                SkelAnime_InitFlex(play, &this->skin.skelAnime, &gHorseBanditSkel, NULL, this->jointTable,
+                                   this->morphTable, HORSE_BANDIT_LIMB_MAX);
             } else {
-                SkelAnime_InitFlex(play, &this->skin.skelAnime, &gDonkeyCremiaSkel, NULL, this->jointTable,
-                                   this->morphTable, DONKEY_CREMIA_LIMB_MAX);
+                SkelAnime_InitFlex(play, &this->skin.skelAnime, &gDonkeySkel, NULL, this->jointTable,
+                                   this->morphTable, DONKEY_LIMB_MAX);
             }
         } else {
             Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
