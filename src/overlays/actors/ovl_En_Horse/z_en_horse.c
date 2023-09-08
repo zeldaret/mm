@@ -933,8 +933,8 @@ void func_8087D540(Actor* thisx, PlayState* play) {
                 SkelAnime_InitFlex(play, &this->skin.skelAnime, &gHorseBanditSkel, NULL, this->jointTable,
                                    this->morphTable, HORSE_BANDIT_LIMB_MAX);
             } else {
-                SkelAnime_InitFlex(play, &this->skin.skelAnime, &gDonkeySkel, NULL, this->jointTable,
-                                   this->morphTable, DONKEY_LIMB_MAX);
+                SkelAnime_InitFlex(play, &this->skin.skelAnime, &gDonkeySkel, NULL, this->jointTable, this->morphTable,
+                                   DONKEY_LIMB_MAX);
             }
         } else {
             Skin_Init(&play->state, &this->skin, sSkeletonHeaders[this->type], sAnimationHeaders[this->type][0]);
