@@ -44,7 +44,7 @@ void OceffWipe3_Destroy(Actor* thisx, PlayState* play) {
     OceffWipe3* this = THIS;
 
     Magic_Reset(play);
-    play->msgCtx.unk120B0 = 0;
+    play->msgCtx.ocarinaSongEffectActive = 0;
 }
 
 void OceffWipe3_Update(Actor* thisx, PlayState* play) {

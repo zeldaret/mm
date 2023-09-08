@@ -274,8 +274,9 @@ void func_8096FAAC(EnKakasi* this, PlayState* play) {
  * goes off every frame of song teach, but... doing what?
  */
 void func_8096FBB8(EnKakasi* this, PlayState* play) {
-    if ((play->msgCtx.unk12048 == 0) || (play->msgCtx.unk12048 == 1) || (play->msgCtx.unk12048 == 2) ||
-        (play->msgCtx.unk12048 == 3) || (play->msgCtx.unk12048 == 4)) {
+    if ((play->msgCtx.lastOcarinaButtonIndex == 0) || (play->msgCtx.lastOcarinaButtonIndex == 1) ||
+        (play->msgCtx.lastOcarinaButtonIndex == 2) || (play->msgCtx.lastOcarinaButtonIndex == 3) ||
+        (play->msgCtx.lastOcarinaButtonIndex == 4)) {
         // why not 0 < x < 4? fewer branches
         this->unk190++;
     }
