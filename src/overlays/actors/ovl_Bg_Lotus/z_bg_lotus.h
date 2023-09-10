@@ -5,9 +5,11 @@
 
 struct BgLotus;
 
+typedef void (*BgLotusActionFunc)(struct BgLotus*, PlayState*);
+
 typedef struct BgLotus {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ s32 unk15C;
+    /* 0x15C */ BgLotusActionFunc actionFunc;
     /* 0x160 */ f32 unk160;
     /* 0x164 */ u8 unk164;
     /* 0x166 */ s16 unk166;

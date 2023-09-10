@@ -9,9 +9,10 @@ void BgLotus_Init(Actor* thisx, PlayState* play);
 void BgLotus_Destroy(Actor* thisx, PlayState* play);
 void BgLotus_Update(Actor* thisx, PlayState* play);
 void BgLotus_Draw(Actor* thisx, PlayState* play);
-void func_80AD68DC(BgLotus* thisx, PlayState* play);
-void func_80AD6A88(Actor* thisx, PlayState* play);
-void func_80AD6B68(Actor* thisx, PlayState* play);
+
+void func_80AD68DC(BgLotus* this, PlayState* play);
+void func_80AD6A88(BgLotus* this, PlayState* play);
+void func_80AD6B68(BgLotus* this, PlayState* play);
 
 ActorInit Bg_Lotus_InitVars = {
     ACTOR_BG_LOTUS,
@@ -34,13 +35,13 @@ void BgLotus_Init(Actor* thisx, PlayState* play) {
     s32 sp2C;
 
     Actor_ProcessInitChain(&this->dyna.actor, (InitChainEntry*)D_80AD6D10);
-    DynaPolyActor_Init((DynaPolyActor*)this, 1);
-    DynaPolyActor_LoadMesh(play, (DynaPolyActor*)this, &gLilyPadCol);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
+    DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->unk168 = 0x60;
     this->dyna.actor.world.rot.y = ((s32)Rand_Next() >> 0x10);
-    this->unk15C = &func_80AD68DC;
+    this->actionFunc = func_80AD68DC;
 }
 
 void BgLotus_Destroy(Actor* thisx, PlayState* play) {
@@ -60,77 +61,71 @@ void func_80AD6830(Actor* thisx) {
     }
 }
 
-void func_80AD68DC(BgLotus* thisx, PlayState* play) {
+void func_80AD68DC(BgLotus* this, PlayState* play) {
     f32 sp34;
 
-    thisx->unk168 = (thisx->unk168 - 1);
-    sp34 = Math_SinF(thisx->unk168 * 0.06544985f) * 6.0f;
-    if (thisx->dyna.actor.params == 0) {
-        thisx->dyna.actor.world.pos.x =
-            (Math_SinS(thisx->dyna.actor.world.rot.y) * sp34) + thisx->dyna.actor.home.pos.x;
-        thisx->dyna.actor.world.pos.z =
-            (Math_CosS(thisx->dyna.actor.world.rot.y) * sp34) + thisx->dyna.actor.home.pos.z;
-        if (thisx->unk168 == 0) {
-            thisx->unk168 = 0x60;
-            thisx->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
+    this->unk168 = (this->unk168 - 1);
+    sp34 = Math_SinF(this->unk168 * 0.06544985f) * 6.0f;
+    if (this->dyna.actor.params == 0) {
+        this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;
+        this->dyna.actor.world.pos.z = (Math_CosS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.z;
+        if (this->unk168 == 0) {
+            this->unk168 = 0x60;
+            this->dyna.actor.world.rot.y += (s16)((s32)Rand_Next() >> 0x12);
         }
     }
-    if (thisx->unk160 < thisx->dyna.actor.floorHeight) {
-        thisx->dyna.actor.world.pos.y = thisx->dyna.actor.floorHeight;
+    if (this->unk160 < this->dyna.actor.floorHeight) {
+        this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         goto block_12;
     }
-    thisx->dyna.actor.world.pos.y = thisx->unk160;
-    if (DynaPolyActor_IsPlayerOnTop((DynaPolyActor*)thisx) != 0) {
-        if (thisx->unk164 == 0) {
-            EffectSsGRipple_Spawn(play, &thisx->dyna.actor.world.pos, 0x3E8, 0x578, 0);
-            EffectSsGRipple_Spawn(play, &thisx->dyna.actor.world.pos, 0x3E8, 0x578, 8);
-            thisx->unk166 = 0x28;
+    this->dyna.actor.world.pos.y = this->unk160;
+    if (DynaPolyActor_IsPlayerOnTop((DynaPolyActor*)this) != 0) {
+        if (this->unk164 == 0) {
+            EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 0x3E8, 0x578, 0);
+            EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 0x3E8, 0x578, 8);
+            this->unk166 = 0x28;
         }
         if (gSaveContext.save.playerForm != 3) {
-            thisx->unk166 = 0x28;
-            thisx->dyna.actor.flags |= 0x10;
-            thisx->unk15C = func_80AD6A88;
+            this->unk166 = 0x28;
+            this->dyna.actor.flags |= 0x10;
+            this->actionFunc = func_80AD6A88;
             return;
         }
-        thisx->unk164 = 1U;
+        this->unk164 = 1U;
         goto block_12;
     }
-    thisx->unk164 = 0U;
+    this->unk164 = 0U;
 block_12:
-    if (thisx->unk166 > 0) {
-        thisx->unk166 = (thisx->unk166 - 1);
+    if (this->unk166 > 0) {
+        this->unk166 = (this->unk166 - 1);
     }
-    func_80AD6830(&thisx->dyna.actor);
+    func_80AD6830(&this->dyna.actor);
 }
 
-void func_80AD6A88(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
-
-    if (this->unk160 < thisx->world.pos.y) {
-        thisx->world.pos.y = this->unk160;
+void func_80AD6A88(BgLotus* this, PlayState* play) {
+    if (this->unk160 < this->dyna.actor.world.pos.y) {
+        this->dyna.actor.world.pos.y = this->unk160;
     }
-    thisx->world.pos.y -= 1.0f;
-    if (thisx->world.pos.y <= thisx->floorHeight) {
-        thisx->world.pos.y = thisx->floorHeight;
+    this->dyna.actor.world.pos.y -= 1.0f;
+    if (this->dyna.actor.world.pos.y <= this->dyna.actor.floorHeight) {
+        this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         this->unk166 = 0;
     }
     if (this->unk166 > 0) {
         this->unk166 = (this->unk166 - 1);
-        func_80AD6830(thisx);
+        func_80AD6830(&this->dyna.actor);
         return;
     }
-    if (Math_StepToF(&thisx->scale.x, 0.0f, 0.0050000004f) != 0) {
-        thisx->draw = (void*)0;
+    if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 0.0050000004f) != 0) {
+        this->dyna.actor.draw = NULL;
         this->unk166 = 0x64;
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        this->unk15C = func_80AD6B68;
+        this->actionFunc = func_80AD6B68;
     }
-    thisx->scale.z = thisx->scale.x;
+    this->dyna.actor.scale.z = this->dyna.actor.scale.x;
 }
 
-void func_80AD6B68(Actor* thisx, PlayState* play) {
-    BgLotus* this = THIS;
-
+void func_80AD6B68(BgLotus* this, PlayState* play) {
     f32 temp_fv0;
     f32 temp_fv1;
 
@@ -138,22 +133,22 @@ void func_80AD6B68(Actor* thisx, PlayState* play) {
         this->unk166--;
         return;
     }
-    if ((thisx->xzDistToPlayer > 100.0f) && (thisx->projectedPos.z < 0.0f)) {
-        thisx->draw = BgLotus_Draw;
+    if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
+        this->dyna.actor.draw = BgLotus_Draw;
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        Actor_SetScale(thisx, 0.1f);
+        Actor_SetScale(&this->dyna.actor, 0.1f);
         temp_fv0 = this->unk160;
-        temp_fv1 = thisx->floorHeight;
+        temp_fv1 = this->dyna.actor.floorHeight;
         if (temp_fv0 < temp_fv1) {
-            thisx->world.pos.y = temp_fv1;
+            this->dyna.actor.world.pos.y = temp_fv1;
         } else {
-            thisx->world.pos.y = temp_fv0;
+            this->dyna.actor.world.pos.y = temp_fv0;
         }
-        thisx->flags &= ~ACTOR_FLAG_10;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         this->unk168 = 0x60;
-        this->unk15C = &func_80AD68DC;
-        thisx->world.pos.x = thisx->home.pos.x;
-        thisx->world.pos.z = thisx->home.pos.z;
+        this->actionFunc = func_80AD68DC;
+        this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x;
+        this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z;
     }
 }
 
@@ -165,11 +160,10 @@ void BgLotus_Update(Actor* thisx, PlayState* play) {
 
     WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
                            &this->unk160, &sp2C);
-    ((UNK_TYPE(*)(BgLotus*, PlayState*))(this->unk15C))(this, play);
+    this->actionFunc(this, play);
 }
 
 void BgLotus_Draw(Actor* thisx, PlayState* play) {
-
     BgLotus* this = THIS;
     Gfx_DrawDListOpa(play, gLilyPadDL);
 }
