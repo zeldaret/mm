@@ -47,7 +47,7 @@ typedef struct ObjTokeidai {
     /* 0x158 */ s32 sunMoonPanelRotation;
     /* 0x15C */ union {
                     s16 sunMoonPanelAngularVelocity;
-                    s16 fallingclockFaceAngularVelocity;
+                    s16 fallingClockFaceAngularVelocity;
                 };
     /* 0x15E */ s16 yTranslation;
     /* 0x160 */ s16 xRotation;

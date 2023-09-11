@@ -561,7 +561,7 @@ void EnPp_Idle(EnPp* this, PlayState* play) {
                 Math_ApproachF(&this->actor.speed, 1.0f, 0.3f, 1.0f);
             }
 
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, (this->maskBounceAngularVelocity + 0x258),
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, this->maskBounceAngularVelocity + 0x258,
                                0);
             Math_SmoothStepToS(&this->maskBounceAngularVelocity, 0, 1, 0x1F4, 0);
         }
@@ -602,7 +602,7 @@ void EnPp_Charge(EnPp* this, PlayState* play) {
             this->targetPos.z += distanceFromWorldPos.z;
         }
 
-        Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, (this->maskBounceAngularVelocity + 0x7D0), 0);
+        Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRotY, 1, this->maskBounceAngularVelocity + 0x7D0, 0);
     }
 
     Math_SmoothStepToS(&this->maskBounceAngularVelocity, 0, 1, 0x1F4, 0);

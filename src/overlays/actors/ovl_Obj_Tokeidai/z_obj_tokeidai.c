@@ -347,9 +347,9 @@ void ObjTokeidai_ExteriorGear_OpenedIdle(ObjTokeidai* this, PlayState* play) {
  * tower's clock slide off the tower and spin through the air when the moon crashes.
  */
 void ObjTokeidai_TowerClock_Fall(ObjTokeidai* this, PlayState* play) {
-    this->actor.shape.rot.x += this->fallingclockFaceAngularVelocity;
-    if (this->fallingclockFaceAngularVelocity > 0xA0) {
-        this->fallingclockFaceAngularVelocity -= 5;
+    this->actor.shape.rot.x += this->fallingClockFaceAngularVelocity;
+    if (this->fallingClockFaceAngularVelocity > 0xA0) {
+        this->fallingClockFaceAngularVelocity -= 5;
     }
 
     this->actor.world.pos.z += 4.0f;
@@ -377,15 +377,15 @@ void ObjTokeidai_TowerClock_SlideOff(ObjTokeidai* this, PlayState* play) {
 
     if (this->aerialClockFaceSpeed < 0x80) {
         thisx->shape.rot.x = this->slidingClockFaceAngle - 0x4000;
-        this->fallingclockFaceAngularVelocity = 0x28;
+        this->fallingClockFaceAngularVelocity = 0x28;
     } else {
         if (thisx->shape.rot.x < -0x1000) {
-            thisx->shape.rot.x += this->fallingclockFaceAngularVelocity;
-            if (this->fallingclockFaceAngularVelocity < 0x1E0) {
-                this->fallingclockFaceAngularVelocity += 0xA;
+            thisx->shape.rot.x += this->fallingClockFaceAngularVelocity;
+            if (this->fallingClockFaceAngularVelocity < 0x1E0) {
+                this->fallingClockFaceAngularVelocity += 0xA;
             }
         } else {
-            thisx->shape.rot.x += this->fallingclockFaceAngularVelocity;
+            thisx->shape.rot.x += this->fallingClockFaceAngularVelocity;
             this->actionFunc = ObjTokeidai_TowerClock_Fall;
             thisx->terminalVelocity = -7.5f;
             thisx->gravity = -0.75f;
