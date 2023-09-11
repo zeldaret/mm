@@ -63,8 +63,9 @@ void func_80AD6830(BgLotus* this) {
 void func_80AD68DC(BgLotus* this, PlayState* play) {
     f32 sp34;
 
-    this->unk168 = (this->unk168 - 1);
+    this->unk168--;
     sp34 = Math_SinF(this->unk168 * 0.06544985f) * 6.0f;
+
     if (this->dyna.actor.params == 0) {
         this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = (Math_CosS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.z;
@@ -75,28 +76,27 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
     }
     if (this->unk160 < this->dyna.actor.floorHeight) {
         this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
-        goto block_12;
-    }
-    this->dyna.actor.world.pos.y = this->unk160;
-    if (DynaPolyActor_IsPlayerOnTop((DynaPolyActor*)this) != 0) {
-        if (this->unk164 == 0) {
-            EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 0x3E8, 0x578, 0);
-            EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 0x3E8, 0x578, 8);
-            this->unk166 = 0x28;
+    } else {
+        this->dyna.actor.world.pos.y = this->unk160;
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
+            if (!this->unk164) {
+                EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 0x3E8, 0x578, 0);
+                EffectSsGRipple_Spawn(play, &this->dyna.actor.world.pos, 0x3E8, 0x578, 8);
+                this->unk166 = 40;
+            }
+            if (gSaveContext.save.playerForm != PLAYER_FORM_DEKU) {
+                this->unk166 = 40;
+                this->dyna.actor.flags |= ACTOR_FLAG_10;
+                this->actionFunc = func_80AD6A88;
+                return;
+            }
+            this->unk164 = true;
+        } else {
+            this->unk164 = false;
         }
-        if (gSaveContext.save.playerForm != 3) {
-            this->unk166 = 0x28;
-            this->dyna.actor.flags |= 0x10;
-            this->actionFunc = func_80AD6A88;
-            return;
-        }
-        this->unk164 = 1U;
-        goto block_12;
     }
-    this->unk164 = 0U;
-block_12:
     if (this->unk166 > 0) {
-        this->unk166 = (this->unk166 - 1);
+        this->unk166--;
     }
     func_80AD6830(this);
 }
