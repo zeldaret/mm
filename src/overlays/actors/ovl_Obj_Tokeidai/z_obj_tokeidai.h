@@ -28,13 +28,13 @@ typedef struct ObjTokeidai {
     /* 0x144 */ Gfx* opaDList;
     /* 0x148 */ Gfx* xluDList;
     /* 0x14C */ s16 minuteRingOrExteriorGearRotation;
-    /* 0x14E */ s16 minuteRingOrExteriorGearRotationalVelocity;
+    /* 0x14E */ s16 minuteRingOrExteriorGearAngularVelocity;
     /* 0x150 */ s16 minuteRingOrExteriorGearRotationTimer;
     /* 0x152 */ s16 clockFaceRotation;
     /* 0x154 */ union {
-                    s16 clockFaceRotationalVelocity;
+                    s16 clockFaceAngularVelocity;
                     s16 settleTimer;
-                    s16 counterweightRotationalVelocity;
+                    s16 counterweightAngularVelocity;
                     s16 openingWaitTimer;
                     s16 slidingClockFaceAngle;
                 };
@@ -46,8 +46,8 @@ typedef struct ObjTokeidai {
                 };
     /* 0x158 */ s32 sunMoonPanelRotation;
     /* 0x15C */ union {
-                    s16 sunMoonPanelRotationalVelocity;
-                    s16 fallingClockFaceRotationalVelocity;
+                    s16 sunMoonPanelAngularVelocity;
+                    s16 fallingclockFaceAngularVelocity;
                 };
     /* 0x15E */ s16 yTranslation;
     /* 0x160 */ s16 xRotation;
