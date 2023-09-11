@@ -26,38 +26,37 @@ ActorInit Bg_Lotus_InitVars = {
     (ActorFunc)BgLotus_Draw,
 };
 
-s32 D_80AD6D10[] = { 0x48580064 };
-
+static InitChainEntry sInitChain[] = {
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 void BgLotus_Init(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
-
     s32 pad;
     s32 sp2C;
 
-    Actor_ProcessInitChain(&this->dyna.actor, (InitChainEntry*)D_80AD6D10);
+    Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
     DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gLilyPadCol);
     this->dyna.actor.floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &this->dyna.actor.floorPoly, &sp2C,
                                                                &this->dyna.actor, &this->dyna.actor.world.pos);
     this->unk168 = 0x60;
-    this->dyna.actor.world.rot.y = ((s32)Rand_Next() >> 0x10);
+    this->dyna.actor.world.rot.y = (s32)Rand_Next() >> 0x10;
     this->actionFunc = func_80AD68DC;
 }
 
 void BgLotus_Destroy(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
+
     DynaPoly_DeleteBgActor(play, &play->colCtx.dyna, this->dyna.bgId);
 }
 
-void func_80AD6830(Actor* thisx) {
-    BgLotus* this = THIS;
-
+void func_80AD6830(BgLotus* this) {
     f32 temp_fv1;
 
-    if (thisx->params == 0) {
+    if (this->dyna.actor.params == 0) {
         temp_fv1 = Math_SinF(this->unk166 * (M_PI / 4)) * ((0.014f * (this->unk166 / (80.0f * 0.1f))) + 0.01f);
-        thisx->scale.x = ((1.0f + temp_fv1) * 0.1f);
-        thisx->scale.z = ((1.0f - temp_fv1) * 0.1f);
+        this->dyna.actor.scale.x = ((1.0f + temp_fv1) * 0.1f);
+        this->dyna.actor.scale.z = ((1.0f - temp_fv1) * 0.1f);
     }
 }
 
@@ -99,7 +98,7 @@ block_12:
     if (this->unk166 > 0) {
         this->unk166 = (this->unk166 - 1);
     }
-    func_80AD6830(&this->dyna.actor);
+    func_80AD6830(this);
 }
 
 void func_80AD6A88(BgLotus* this, PlayState* play) {
@@ -112,11 +111,11 @@ void func_80AD6A88(BgLotus* this, PlayState* play) {
         this->unk166 = 0;
     }
     if (this->unk166 > 0) {
-        this->unk166 = (this->unk166 - 1);
-        func_80AD6830(&this->dyna.actor);
+        this->unk166--;
+        func_80AD6830(this);
         return;
     }
-    if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 0.0050000004f) != 0) {
+    if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 5.0f * 0.001f)) {
         this->dyna.actor.draw = NULL;
         this->unk166 = 0x64;
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
@@ -126,9 +125,6 @@ void func_80AD6A88(BgLotus* this, PlayState* play) {
 }
 
 void func_80AD6B68(BgLotus* this, PlayState* play) {
-    f32 temp_fv0;
-    f32 temp_fv1;
-
     if (this->unk166 > 0) {
         this->unk166--;
         return;
@@ -137,12 +133,10 @@ void func_80AD6B68(BgLotus* this, PlayState* play) {
         this->dyna.actor.draw = BgLotus_Draw;
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
-        temp_fv0 = this->unk160;
-        temp_fv1 = this->dyna.actor.floorHeight;
-        if (temp_fv0 < temp_fv1) {
-            this->dyna.actor.world.pos.y = temp_fv1;
+        if (this->unk160 < this->dyna.actor.floorHeight) {
+            this->dyna.actor.world.pos.y = this->dyna.actor.floorHeight;
         } else {
-            this->dyna.actor.world.pos.y = temp_fv0;
+            this->dyna.actor.world.pos.y = this->unk160;
         }
         this->dyna.actor.flags &= ~ACTOR_FLAG_10;
         this->unk168 = 0x60;
@@ -154,7 +148,6 @@ void func_80AD6B68(BgLotus* this, PlayState* play) {
 
 void BgLotus_Update(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
-
     s32 pad;
     WaterBox* sp2C;
 
@@ -165,5 +158,6 @@ void BgLotus_Update(Actor* thisx, PlayState* play) {
 
 void BgLotus_Draw(Actor* thisx, PlayState* play) {
     BgLotus* this = THIS;
+
     Gfx_DrawDListOpa(play, gLilyPadDL);
 }
