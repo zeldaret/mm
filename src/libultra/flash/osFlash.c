@@ -60,8 +60,8 @@ OSPiHandle* osFlashInit(void) {
     osEPiLinkHandle(&__osFlashHandler);
     osFlashReadId(&flashType, &flashVendor);
 
-    if (flashVendor == FLASH_VERSION_MX_C || flashVendor == FLASH_VERSION_MX_A ||
-        flashVendor == FLASH_VERSION_MX_PROTO_A) {
+    if ((flashVendor == FLASH_VERSION_MX_C) || (flashVendor == FLASH_VERSION_MX_A) ||
+        (flashVendor == FLASH_VERSION_MX_PROTO_A)) {
         __osFlashVersion = OLD_FLASH;
     } else {
         __osFlashVersion = NEW_FLASH;
@@ -162,7 +162,7 @@ s32 osFlashCheckEraseEnd(void) {
     // check if erase operation is completed
     osFlashReadStatus(&status);
     if ((status & FLASH_STATUS_ERASE_BUSY) == FLASH_STATUS_ERASE_BUSY) {
-        return FLASH_STATUS_ERASE_BUSY; // busy
+        return FLASH_STATUS_ERASE_BUSY;
     } else {
         // check erase operation status, clear status
         osFlashReadStatus(&status);
