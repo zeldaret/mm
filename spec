@@ -2442,7 +2442,7 @@ beginseg
     name "ovl_Dm_Hina"
     compress
     include "build/src/overlays/actors/ovl_Dm_Hina/z_dm_hina.o"
-    include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.data.o"
+    //include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.data.o"
     include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.reloc.o"
 endseg
 
