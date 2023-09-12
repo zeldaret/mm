@@ -14,6 +14,6 @@ typedef struct BgLotus {
     /* 0x164 */ u8 unk164;
     /* 0x166 */ s16 unk166;
     /* 0x168 */ s16 unk168;
-} BgLotus; /* size = 0x16C */
+} BgLotus; // size = 0x16C
 
 #endif // Z_BG_LOTUS_H

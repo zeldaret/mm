@@ -64,7 +64,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
     f32 sp34;
 
     this->unk168--;
-    sp34 = Math_SinF(this->unk168 * 0.06544985f) * 6.0f;
+    sp34 = Math_SinF(this->unk168 * (M_PI / 48)) * 6.0f;
 
     if (this->dyna.actor.params == 0) {
         this->dyna.actor.world.pos.x = (Math_SinS(this->dyna.actor.world.rot.y) * sp34) + this->dyna.actor.home.pos.x;
@@ -102,7 +102,7 @@ void func_80AD68DC(BgLotus* this, PlayState* play) {
 }
 
 void func_80AD6A88(BgLotus* this, PlayState* play) {
-    if (this->unk160 < this->dyna.actor.world.pos.y) {
+    if (this->dyna.actor.world.pos.y > this->unk160) {
         this->dyna.actor.world.pos.y = this->unk160;
     }
     this->dyna.actor.world.pos.y -= 1.0f;
@@ -117,7 +117,7 @@ void func_80AD6A88(BgLotus* this, PlayState* play) {
     }
     if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 5.0f * 0.001f)) {
         this->dyna.actor.draw = NULL;
-        this->unk166 = 0x64;
+        this->unk166 = 100;
         DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         this->actionFunc = func_80AD6B68;
     }
