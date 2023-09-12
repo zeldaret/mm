@@ -56,41 +56,41 @@ void EnInvadepohDemo_Ufo_Draw(EnInvadepohDemo* this, PlayState* play);
 void EnInvadepohDemo_CowTail_Draw(EnInvadepohDemo* this, PlayState* play);
 
 #define DRAW_FLAG_SHOULD_DRAW 1
-#define EN_INVADEPOH_DEMO_CUE_ID_NONE -1
+#define EN_INVADEPOH_DEMO_CUEID_NONE -1
 
 typedef enum {
-    /* 0 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_DO_NOTHING,
-    /* 1 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_IDLE,
-    /* 2 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_1,
-    /* 3 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_2,
-    /* 4 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_3,
-    /* 5 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_4,
-    /* 6 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_5, // Doesn't seem to be actually used in the final game
-    /* 7 */ EN_INVADEPOH_DEMO_ALIEN_CUE_ID_MAX
+    /* 0 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_DO_NOTHING,
+    /* 1 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_IDLE,
+    /* 2 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_1,
+    /* 3 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_2,
+    /* 4 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_3,
+    /* 5 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_4,
+    /* 6 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_5, // Doesn't seem to be actually used in the final game
+    /* 7 */ EN_INVADEPOH_DEMO_ALIEN_CUEID_MAX
 } EnInvadepohDemoAlienCueId;
 
 typedef enum {
-    /* 0 */ EN_INVADEPOH_DEMO_ROMANI_CUE_ID_DO_NOTHING,
-    /* 1 */ EN_INVADEPOH_DEMO_ROMANI_CUE_ID_IDLE,
-    /* 2 */ EN_INVADEPOH_DEMO_ROMANI_CUE_ID_FOLLOW_PATH,
-    /* 3 */ EN_INVADEPOH_DEMO_ROMANI_CUE_ID_MAX
+    /* 0 */ EN_INVADEPOH_DEMO_ROMANI_CUEID_DO_NOTHING,
+    /* 1 */ EN_INVADEPOH_DEMO_ROMANI_CUEID_IDLE,
+    /* 2 */ EN_INVADEPOH_DEMO_ROMANI_CUEID_FOLLOW_PATH,
+    /* 3 */ EN_INVADEPOH_DEMO_ROMANI_CUEID_MAX
 } EnInvadepohDemoRomaniCueId;
 
 typedef enum {
-    /* 0 */ EN_INVADEPOH_DEMO_COW_CUE_ID_DO_NOTHING,
-    /* 1 */ EN_INVADEPOH_DEMO_COW_CUE_ID_IDLE,
-    /* 2 */ EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_1,
-    /* 3 */ EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_2,
-    /* 4 */ EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_3,
-    /* 5 */ EN_INVADEPOH_DEMO_COW_CUE_ID_MAX
+    /* 0 */ EN_INVADEPOH_DEMO_COW_CUEID_DO_NOTHING,
+    /* 1 */ EN_INVADEPOH_DEMO_COW_CUEID_IDLE,
+    /* 2 */ EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_1,
+    /* 3 */ EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_2,
+    /* 4 */ EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_3,
+    /* 5 */ EN_INVADEPOH_DEMO_COW_CUEID_MAX
 } EnInvadepohDemoCowCueId;
 
 typedef enum {
-    /* 0 */ EN_INVADEPOH_DEMO_UFO_CUE_ID_DO_NOTHING,
-    /* 1 */ EN_INVADEPOH_DEMO_UFO_CUE_ID_IDLE_1,
-    /* 2 */ EN_INVADEPOH_DEMO_UFO_CUE_ID_FOLLOW_PATH,
-    /* 3 */ EN_INVADEPOH_DEMO_UFO_CUE_ID_IDLE_2, // Doesn't seem to be actually used in the final game
-    /* 4 */ EN_INVADEPOH_DEMO_UFO_CUE_ID_MAX
+    /* 0 */ EN_INVADEPOH_DEMO_UFO_CUEID_DO_NOTHING,
+    /* 1 */ EN_INVADEPOH_DEMO_UFO_CUEID_IDLE_1,
+    /* 2 */ EN_INVADEPOH_DEMO_UFO_CUEID_FOLLOW_PATH,
+    /* 3 */ EN_INVADEPOH_DEMO_UFO_CUEID_IDLE_2, // Doesn't seem to be actually used in the final game
+    /* 4 */ EN_INVADEPOH_DEMO_UFO_CUEID_MAX
 } EnInvadepohDemoUfoCueId;
 
 ActorInit En_Invadepoh_Demo_InitVars = {
@@ -106,7 +106,11 @@ ActorInit En_Invadepoh_Demo_InitVars = {
 };
 
 static s32 sCueTypes[EN_INVADEPOH_DEMO_TYPE_MAX] = {
-    CS_CMD_ACTOR_CUE_553, CS_CMD_ACTOR_CUE_554, CS_CMD_ACTOR_CUE_563, CS_CMD_ACTOR_CUE_555, CS_CAM_STOP,
+    CS_CMD_ACTOR_CUE_553, // EN_INVADEPOH_DEMO_TYPE_ALIEN
+    CS_CMD_ACTOR_CUE_554, // EN_INVADEPOH_DEMO_TYPE_ROMANI
+    CS_CMD_ACTOR_CUE_563, // EN_INVADEPOH_DEMO_TYPE_COW
+    CS_CMD_ACTOR_CUE_555, // EN_INVADEPOH_DEMO_TYPE_UFO
+    CS_CAM_STOP,          // EN_INVADEPOH_DEMO_TYPE_COW_TAIL
 };
 
 static InitChainEntry sAlienInitChain[] = {
@@ -157,35 +161,35 @@ static EnInvadepohDemoFunc sDestroyFuncs[EN_INVADEPOH_DEMO_TYPE_MAX] = {
     EnInvadepohDemo_CowTail_Destroy, // EN_INVADEPOH_DEMO_TYPE_COW_TAIL
 };
 
-static EnInvadepohDemoFunc sAlienCueActions[EN_INVADEPOH_DEMO_ALIEN_CUE_ID_MAX] = {
-    EnInvadepohDemo_DoNothing,        // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_DO_NOTHING
-    EnInvadepohDemo_Alien_Idle,       // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_IDLE
-    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_1
-    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_2
-    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_3
-    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_4
-    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_5
+static EnInvadepohDemoFunc sAlienCueActionCsFuncs[EN_INVADEPOH_DEMO_ALIEN_CUEID_MAX] = {
+    EnInvadepohDemo_DoNothing,        // EN_INVADEPOH_DEMO_ALIEN_CUEID_DO_NOTHING
+    EnInvadepohDemo_Alien_Idle,       // EN_INVADEPOH_DEMO_ALIEN_CUEID_IDLE
+    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_1
+    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_2
+    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_3
+    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_4
+    EnInvadepohDemo_Alien_FollowPath, // EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_5
 };
 
-static EnInvadepohDemoFunc sRomaniCueActions[EN_INVADEPOH_DEMO_ROMANI_CUE_ID_MAX] = {
-    EnInvadepohDemo_DoNothing,         // EN_INVADEPOH_DEMO_ROMANI_CUE_ID_DO_NOTHING
-    EnInvadepohDemo_Romani_Idle,       // EN_INVADEPOH_DEMO_ROMANI_CUE_ID_IDLE
-    EnInvadepohDemo_Romani_FollowPath, // EN_INVADEPOH_DEMO_ROMANI_CUE_ID_FOLLOW_PATH
+static EnInvadepohDemoFunc sRomaniCueActionCsFuncs[EN_INVADEPOH_DEMO_ROMANI_CUEID_MAX] = {
+    EnInvadepohDemo_DoNothing,         // EN_INVADEPOH_DEMO_ROMANI_CUEID_DO_NOTHING
+    EnInvadepohDemo_Romani_Idle,       // EN_INVADEPOH_DEMO_ROMANI_CUEID_IDLE
+    EnInvadepohDemo_Romani_FollowPath, // EN_INVADEPOH_DEMO_ROMANI_CUEID_FOLLOW_PATH
 };
 
-static EnInvadepohDemoFunc sCowCueActions[EN_INVADEPOH_DEMO_COW_CUE_ID_MAX] = {
-    EnInvadepohDemo_DoNothing,      // EN_INVADEPOH_DEMO_COW_CUE_ID_DO_NOTHING
-    EnInvadepohDemo_Cow_Idle,       // EN_INVADEPOH_DEMO_COW_CUE_ID_IDLE
-    EnInvadepohDemo_Cow_FollowPath, // EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_1
-    EnInvadepohDemo_Cow_FollowPath, // EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_2
-    EnInvadepohDemo_Cow_FollowPath, // EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_3
+static EnInvadepohDemoFunc sCowCueActionCsFuncs[EN_INVADEPOH_DEMO_COW_CUEID_MAX] = {
+    EnInvadepohDemo_DoNothing,      // EN_INVADEPOH_DEMO_COW_CUEID_DO_NOTHING
+    EnInvadepohDemo_Cow_Idle,       // EN_INVADEPOH_DEMO_COW_CUEID_IDLE
+    EnInvadepohDemo_Cow_FollowPath, // EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_1
+    EnInvadepohDemo_Cow_FollowPath, // EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_2
+    EnInvadepohDemo_Cow_FollowPath, // EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_3
 };
 
-static EnInvadepohDemoFunc sUfoCueActions[EN_INVADEPOH_DEMO_UFO_CUE_ID_MAX] = {
-    EnInvadepohDemo_DoNothing,      // EN_INVADEPOH_DEMO_UFO_CUE_ID_DO_NOTHING
-    EnInvadepohDemo_Ufo_Idle,       // EN_INVADEPOH_DEMO_UFO_CUE_ID_IDLE_1
-    EnInvadepohDemo_Ufo_FollowPath, // EN_INVADEPOH_DEMO_UFO_CUE_ID_FOLLOW_PATH
-    EnInvadepohDemo_Ufo_Idle,       // EN_INVADEPOH_DEMO_UFO_CUE_ID_IDLE_2
+static EnInvadepohDemoFunc sUfoCueActionCsFuncs[EN_INVADEPOH_DEMO_UFO_CUEID_MAX] = {
+    EnInvadepohDemo_DoNothing,      // EN_INVADEPOH_DEMO_UFO_CUEID_DO_NOTHING
+    EnInvadepohDemo_Ufo_Idle,       // EN_INVADEPOH_DEMO_UFO_CUEID_IDLE_1
+    EnInvadepohDemo_Ufo_FollowPath, // EN_INVADEPOH_DEMO_UFO_CUEID_FOLLOW_PATH
+    EnInvadepohDemo_Ufo_Idle,       // EN_INVADEPOH_DEMO_UFO_CUEID_IDLE_2
 };
 
 static EnInvadepohDemoFunc sDrawFuncs[EN_INVADEPOH_DEMO_TYPE_MAX] = {
@@ -282,10 +286,10 @@ void EnInvadepohDemo_Alien_FollowPath(EnInvadepohDemo* this, PlayState* play) {
     Vec3f point;
 
     if (pathCount != 0) {
-        Math_Vec3s_ToVec3f(&point, &points[this->currentPointIndex]);
+        Math_Vec3s_ToVec3f(&point, &points[this->pointIndex]);
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &point, this->speed) < this->speed) {
-            this->currentPointIndex++;
-            if (this->currentPointIndex >= pathCount) {
+            this->pointIndex++;
+            if (this->pointIndex >= pathCount) {
                 Actor_Kill(&this->actor);
             }
         } else {
@@ -305,10 +309,10 @@ void EnInvadepohDemo_Romani_FollowPath(EnInvadepohDemo* this, PlayState* play) {
     Vec3f point;
 
     if (pathCount != 0) {
-        Math_Vec3s_ToVec3f(&point, &points[this->currentPointIndex]);
+        Math_Vec3s_ToVec3f(&point, &points[this->pointIndex]);
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &point, this->speed) < this->speed) {
-            this->currentPointIndex++;
-            if (this->currentPointIndex >= pathCount) {
+            this->pointIndex++;
+            if (this->pointIndex >= pathCount) {
                 Actor_Kill(&this->actor);
             }
         } else {
@@ -352,16 +356,16 @@ void EnInvadepohDemo_Cow_FollowPath(EnInvadepohDemo* this, PlayState* play) {
     Vec3f point;
 
     if (pathCount != 0) {
-        if (((this->cueId == EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_1) && (play->csCtx.curFrame == 343)) ||
-            ((this->cueId == EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_2) && (play->csCtx.curFrame == 421)) ||
-            ((this->cueId == EN_INVADEPOH_DEMO_COW_CUE_ID_FOLLOW_PATH_3) && (play->csCtx.curFrame == 521))) {
+        if (((this->cueId == EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_1) && (play->csCtx.curFrame == 343)) ||
+            ((this->cueId == EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_2) && (play->csCtx.curFrame == 421)) ||
+            ((this->cueId == EN_INVADEPOH_DEMO_COW_CUEID_FOLLOW_PATH_3) && (play->csCtx.curFrame == 521))) {
             Actor_PlaySfx(&this->actor, NA_SE_EV_COW_CRY);
         }
 
-        Math_Vec3s_ToVec3f(&point, &points[this->currentPointIndex]);
+        Math_Vec3s_ToVec3f(&point, &points[this->pointIndex]);
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &point, this->speed) < this->speed) {
-            this->currentPointIndex++;
-            if (this->currentPointIndex >= pathCount) {
+            this->pointIndex++;
+            if (this->pointIndex >= pathCount) {
                 Actor_Kill(&this->actor);
             }
         } else {
@@ -383,10 +387,10 @@ void EnInvadepohDemo_Ufo_FollowPath(EnInvadepohDemo* this, PlayState* play) {
 
     if (pathCount != 0) {
         this->ufoRotZ += 0x258;
-        Math_Vec3s_ToVec3f(&point, &points[this->currentPointIndex]);
+        Math_Vec3s_ToVec3f(&point, &points[this->pointIndex]);
         if (Math_Vec3f_StepTo(&this->actor.world.pos, &point, this->speed) < this->speed) {
-            this->currentPointIndex++;
-            if (this->currentPointIndex >= pathCount) {
+            this->pointIndex++;
+            if (this->pointIndex >= pathCount) {
                 Actor_Kill(&this->actor);
             }
         }
@@ -420,7 +424,7 @@ void EnInvadepohDemo_SelectCueAction(EnInvadepohDemo* this, PlayState* play) {
         switch (this->type) {
             case EN_INVADEPOH_DEMO_TYPE_UFO:
                 if (this->cueId != cue->id) {
-                    if (cue->id == EN_INVADEPOH_DEMO_UFO_CUE_ID_FOLLOW_PATH) {
+                    if (cue->id == EN_INVADEPOH_DEMO_UFO_CUEID_FOLLOW_PATH) {
                         Actor_PlaySfx(&this->actor, NA_SE_EV_UFO_DASH);
                     }
 
@@ -435,8 +439,8 @@ void EnInvadepohDemo_SelectCueAction(EnInvadepohDemo* this, PlayState* play) {
                 break;
 
             case EN_INVADEPOH_DEMO_TYPE_ALIEN:
-                if (cue->id > EN_INVADEPOH_DEMO_ALIEN_CUE_ID_IDLE) {
-                    cueIdOffset = cue->id - EN_INVADEPOH_DEMO_ALIEN_CUE_ID_FOLLOW_PATH_1;
+                if (cue->id > EN_INVADEPOH_DEMO_ALIEN_CUEID_IDLE) {
+                    cueIdOffset = cue->id - EN_INVADEPOH_DEMO_ALIEN_CUEID_FOLLOW_PATH_1;
                     if (this->cueIdOffset != cueIdOffset) {
                         break;
                     }
@@ -448,8 +452,8 @@ void EnInvadepohDemo_SelectCueAction(EnInvadepohDemo* this, PlayState* play) {
                 break;
 
             case EN_INVADEPOH_DEMO_TYPE_COW:
-                if (cue->id > EN_INVADEPOH_DEMO_COW_CUE_ID_IDLE) {
-                    cueIdOffset = cue->id - EN_INVADEPOH_DEMO_COW_CUE_ID_IDLE;
+                if (cue->id > EN_INVADEPOH_DEMO_COW_CUEID_IDLE) {
+                    cueIdOffset = cue->id - EN_INVADEPOH_DEMO_COW_CUEID_IDLE;
                     if (this->cueIdOffset != cueIdOffset) {
                         break;
                     }
@@ -466,19 +470,19 @@ void EnInvadepohDemo_SelectCueAction(EnInvadepohDemo* this, PlayState* play) {
 
         switch (this->type) {
             case EN_INVADEPOH_DEMO_TYPE_UFO:
-                sUfoCueActions[this->cueId](this, play);
+                sUfoCueActionCsFuncs[this->cueId](this, play);
                 break;
 
             case EN_INVADEPOH_DEMO_TYPE_ALIEN:
-                sAlienCueActions[this->cueId](this, play);
+                sAlienCueActionCsFuncs[this->cueId](this, play);
                 break;
 
             case EN_INVADEPOH_DEMO_TYPE_ROMANI:
-                sRomaniCueActions[this->cueId](this, play);
+                sRomaniCueActionCsFuncs[this->cueId](this, play);
                 break;
 
             case EN_INVADEPOH_DEMO_TYPE_COW:
-                sCowCueActions[this->cueId](this, play);
+                sCowCueActionCsFuncs[this->cueId](this, play);
                 break;
 
             default:
@@ -760,7 +764,7 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnInvadepohDemo* this = THIS;
 
-    this->cueIdOffset = EN_INVADEPOH_DEMO_GET_CUE_ID_OFFSET(&this->actor);
+    this->cueIdOffset = EN_INVADEPOH_DEMO_GET_CUEID_OFFSET(&this->actor);
     this->type = EN_INVADEPOH_DEMO_GET_TYPE(&this->actor);
     if ((this->type < EN_INVADEPOH_DEMO_TYPE_ALIEN) || (this->type > EN_INVADEPOH_DEMO_TYPE_COW_TAIL)) {
         Actor_Kill(&this->actor);
@@ -769,19 +773,19 @@ void EnInvadepohDemo_Init(Actor* thisx, PlayState* play) {
 
     if (this->type == EN_INVADEPOH_DEMO_TYPE_UFO) {
         this->actor.world.rot.z = 0;
-        this->speed = EN_INVADEPOH_DEMO_GETZ_SPEED(&this->actor);
+        this->speed = EN_INVADEPOH_DEMO_GET_SPEED(&this->actor);
         this->actor.shape.rot.z = this->actor.world.rot.z;
     } else {
         this->actor.world.rot.z = 0;
-        this->speed = EN_INVADEPOH_DEMO_GETZ_SPEED(&this->actor) / 10.0f;
+        this->speed = EN_INVADEPOH_DEMO_GET_SPEED(&this->actor) / 10.0f;
         this->actor.shape.rot.z = this->actor.world.rot.z;
     }
 
     this->drawFlags = 0;
-    this->cueId = EN_INVADEPOH_DEMO_CUE_ID_NONE;
+    this->cueId = EN_INVADEPOH_DEMO_CUEID_NONE;
     this->ufoRotZ = 0;
     this->pathIndex = EN_INVADEPOH_DEMO_GET_PATH_INDEX(&this->actor);
-    this->currentPointIndex = 0;
+    this->pointIndex = 0;
     this->objectIndex = -1;
     sInitFuncs[this->type](this, play);
 }
@@ -804,7 +808,7 @@ void EnInvadepohDemo_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     EnInvadepohDemo* this = THIS;
 
-    if ((this->cueId != EN_INVADEPOH_DEMO_CUE_ID_NONE) && (this->drawFlags & DRAW_FLAG_SHOULD_DRAW)) {
+    if ((this->cueId != EN_INVADEPOH_DEMO_CUEID_NONE) && (this->drawFlags & DRAW_FLAG_SHOULD_DRAW)) {
         sDrawFuncs[this->type](this, play);
     }
 }

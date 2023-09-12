@@ -17,9 +17,9 @@ typedef enum {
 } EnInvadepohDemoType;
 
 #define EN_INVADEPOH_DEMO_GET_TYPE(thisx) ((thisx)->params & 0xF)
-#define EN_INVADEPOH_DEMO_GET_CUE_ID_OFFSET(thisx) (((thisx)->params >> 11) & 0x7)
+#define EN_INVADEPOH_DEMO_GET_CUEID_OFFSET(thisx) (((thisx)->params >> 11) & 0x7)
 #define EN_INVADEPOH_DEMO_GET_PATH_INDEX(thisx) (((thisx)->params >> 4) & 0x7F)
-#define EN_INVADEPOH_DEMO_GETZ_SPEED(thisx) ((thisx)->shape.rot.z)
+#define EN_INVADEPOH_DEMO_GET_SPEED(thisx) ((thisx)->shape.rot.z)
 
 struct EnInvadepohDemo;
 
@@ -42,7 +42,7 @@ typedef struct EnInvadepohDemo {
     /* 0x150 */ s32 cueChannel;
     /* 0x154 */ s32 cueId; // "demo_mode"
     /* 0x158 */ s32 pathIndex;
-    /* 0x15C */ s32 currentPointIndex;
+    /* 0x15C */ s32 pointIndex;
     /* 0x160 */ s32 objectIndex;
     /* 0x164 */ s32 drawFlags; // Only has one flag to control whether or not to draw
     /* 0x168 */ s32 cueIdOffset;
