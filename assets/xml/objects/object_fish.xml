@@ -22,9 +22,9 @@
         <DList Name="gFishingBassJawDL" Offset="0x13A0" />
 
         <!-- Bass Textures -->
-        <Texture Name="gFishingBassTailFinTex" OutName="fishing_bass_caudal_fin" Format="rgba16" Width="16" Height="16" Offset="0x14D0" />
-        <Texture Name="gFishingBassTopScalesTex" OutName="fishing_bass_dorsal_scales" Format="rgba16" Width="16" Height="16" Offset="0x16D0" />
-        <Texture Name="gFishingBassBottomScalesTex" OutName="fishing_bass_belly_scales" Format="rgba16" Width="16" Height="16" Offset="0x18D0" />
+        <Texture Name="gFishingBassTailFinTex" OutName="fishing_bass_tail_fin" Format="rgba16" Width="16" Height="16" Offset="0x14D0" />
+        <Texture Name="gFishingBassTopScalesTex" OutName="fishing_bass_top_scales" Format="rgba16" Width="16" Height="16" Offset="0x16D0" />
+        <Texture Name="gFishingBassBottomScalesTex" OutName="fishing_bass_bottom_scales" Format="rgba16" Width="16" Height="16" Offset="0x18D0" />
         <Texture Name="gFishingBassHeadTex" OutName="fishing_bass_head" Format="rgba16" Width="32" Height="32" Offset="0x1AD0" />
         <Texture Name="gFishingBassFinTex" OutName="fishing_bass_fin" Format="rgba16" Width="16" Height="16" Offset="0x22D0" />
         <Texture Name="gFishingBassUnusedFinTex" OutName="fishing_bass_unused_fin" Format="rgba16" Width="16" Height="16" Offset="0x24D0" />
