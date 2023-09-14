@@ -424,6 +424,10 @@ typedef enum {
 #define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)
 #define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
 
+#define YEARS_CHILD 5
+#define YEARS_ADULT 17
+#define LINK_AGE_IN_YEARS (!LINK_IS_ADULT ? YEARS_CHILD : YEARS_ADULT)
+
 #define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
 
 // The day begins at CLOCK_TIME(6, 0) so it must be offset.
