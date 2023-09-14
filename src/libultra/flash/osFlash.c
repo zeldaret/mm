@@ -12,7 +12,8 @@ s32 __osFlashVersion;
 static s32 sBssPad[5];
 
 u32 osFlashGetAddr(u32 pageNum) {
-    u32 addr = (__osFlashVersion == OLD_FLASH) ? pageNum * 64 : pageNum * 128;
+    // Account for hadware bug in old flash where the address bits are shifted 1-off where they should be
+    u32 addr = (__osFlashVersion == OLD_FLASH) ? pageNum * (FLASH_BLOCK_SIZE >> 1) : pageNum * FLASH_BLOCK_SIZE;
 
     return addr;
 }
