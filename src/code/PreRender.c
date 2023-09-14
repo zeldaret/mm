@@ -8,7 +8,11 @@
 
 #include "z64prerender.h"
 #include "global.h"
+#include "PR/gs2dex.h"
 #include "libc/alloca.h"
+#include "libc/stdbool.h"
+#include "color.h"
+#include "macros.h"
 #include "slowly.h"
 #include "stack.h"
 #include "stackcheck.h"
@@ -108,8 +112,8 @@ void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 en
     *gfxp = gfx;
 }
 
-void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave) {
-    func_8016FF90(this, gfxp, fbuf, fbufSave, 255, 255, 255, 255);
+void func_80170200(PreRender* this, Gfx** gfxp, void* buf, void* bufSave) {
+    func_8016FF90(this, gfxp, buf, bufSave, 255, 255, 255, 255);
 }
 
 /**
@@ -590,6 +594,7 @@ u32 PreRender_Get5bMedian9(u8* px1, u8* px2, u8* px3) {
     return pxMed;
 }
 
+// Despite the name, this function doesn't seem like an hardware-accurate divot filter
 void PreRender_DivotFilter(PreRender* this) {
     u32 width = this->width;
     u32 height = this->height;

@@ -2,6 +2,7 @@
 #define Z64_PRERENDER_H
 
 #include "ultra64.h"
+#include "unk.h"
 
 #define BG2D_FLAGS_1 (1 << 0)
 #define BG2D_FLAGS_2 (1 << 1)
@@ -53,7 +54,7 @@ void PreRender_Destroy(PreRender* this);
 void PreRender_CopyImage(PreRender* this, Gfx** gfxp, void* img, void* imgDst, u32 useThresholdAlphaCompare);
 void PreRender_RestoreBuffer(PreRender* this, Gfx** gfxp, void* buf, void* bufSave);
 void func_8016FF90(PreRender* this, Gfx** gfxp, void* buf, void* bufSave, s32 envR, s32 envG, s32 envB, s32 envA);
-void func_80170200(PreRender* this, Gfx** gfxp, void* fbuf, void* fbufSave);
+void func_80170200(PreRender* this, Gfx** gfxp, void* buf, void* bufSave);
 void PreRender_CoverageRgba16ToI8(PreRender* this, Gfx** gfxp, void* img, void* cvgDst);
 void PreRender_SaveZBuffer(PreRender* this, Gfx** gfxp);
 void PreRender_SaveFramebuffer(PreRender* this, Gfx** gfxp);
