@@ -519,7 +519,8 @@ void Message_DecodeCredits(PlayState* play) {
                     if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
                         value &= 0x7F;
                     } else {
-                        value = (s16)((HIGH_SCORE((u8)font->msgBuf.schar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
+                        value =
+                            (s16)((HIGH_SCORE((u8)font->msgBuf.schar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
                     }
                     value = SQ((f32)value) * 0.0036f + 0.5f;
                 }
