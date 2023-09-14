@@ -35,11 +35,12 @@ void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
 void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
 
-void __osSyncVPrintf(const char* fmt, ...);
+void osSyncPrintfUnused(const char* fmt, ...);
+
 void rmonPrintf(const char* fmt, ...);
 
-void func_80084940(void);
-void func_80084968(void);
+void RcpUtils_PrintRegisterStatus(void);
+void RcpUtils_Reset(void);
 
 void PadUtils_Init(Input* input);
 void func_80085150(void);

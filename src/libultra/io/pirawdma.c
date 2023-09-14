@@ -3,7 +3,7 @@
 s32 __osPiRawStartDma(s32 direction, uintptr_t devAddr, void* dramAddr, size_t size) {
     register int status = HW_REG(PI_STATUS_REG, u32);
 
-    while (status & (PI_STATUS_IOBUSY | PI_STATUS_BUSY)) {
+    while (status & (PI_STATUS_IO_BUSY | PI_STATUS_DMA_BUSY)) {
         status = HW_REG(PI_STATUS_REG, u32);
     }
 
