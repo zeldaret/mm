@@ -154,6 +154,17 @@ typedef enum {
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
 
+typedef enum HighScore {
+    /* 0 */ HS_BANK_RUPEES,
+    /* 1 */ HS_UNK_1,
+    /* 2 */ HS_FISHING, // Fishing flags
+    /* 3 */ HS_BOAT_ARCHERY,
+    /* 4 */ HS_HOSRE_BACK_BALLOON,
+    /* 5 */ HS_LOTTERY_GUESS, // Lottery code chosen by player (only uses lower three hex digits)
+    /* 6 */ HS_SHOOTING_GALLERY, // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
+    /* 7 */ HS_MAX
+} HighScore;
+
 #define PICTO_PHOTO_WIDTH 160
 #define PICTO_PHOTO_HEIGHT 112
 
@@ -278,7 +289,7 @@ typedef struct SaveInfo {
     /* 0xEA8 */ u32 unk_EA8[2];                        // Related to blue warps
     /* 0xEB0 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
     /* 0xEB4 */ u32 unk_EB4;
-    /* 0xEB8 */ u32 highScores[7];
+    /* 0xEB8 */ u32 highScores[HS_MAX];
     /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
     /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
@@ -507,16 +518,6 @@ typedef enum {
     (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
 #define SET_STOLEN_ITEM_2(itemId) \
     (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
-
-typedef enum HighScore {
-    /* 0 */ HS_BANK_RUPEES,
-    /* 1 */ HS_UNK_1,
-    /* 2 */ HS_FISHING, // Fishing flags
-    /* 3 */ HS_BOAT_ARCHERY,
-    /* 4 */ HS_HOSRE_BACK_BALLOON,
-    /* 5 */ HS_LOTTERY_GUESS, // Lottery code chosen by player (only uses lower three hex digits)
-    /* 6 */ HS_SHOOTING_GALLERY // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
-} HighScore;
 
 #define HIGH_SCORE(type) (gSaveContext.save.saveInfo.highScores[(type)])
 

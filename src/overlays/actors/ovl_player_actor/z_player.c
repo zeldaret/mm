@@ -16320,8 +16320,8 @@ void func_80851D30(PlayState* play, Player* this) {
             var_s0++;
         }
     } else if (play->msgCtx.ocarinaMode == 1) {
-        if (play->msgCtx.lastOcarinaButtonIndex != OCARINA_BTN_INVALID) {
-            var_s0[play->msgCtx.lastOcarinaButtonIndex] = 1.2f;
+        if (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID) {
+            var_s0[play->msgCtx.ocarinaButtonIndex] = 1.2f;
             func_8082DB90(play, this, D_8085D190[this->transformation]);
         } else {
             s32 i;
@@ -16345,11 +16345,11 @@ struct_8085D714 D_8085D714[] = {
 };
 
 void func_80851EC8(PlayState* play, Player* this) {
-    struct_8085D714* temp3 = &D_8085D714[play->msgCtx.lastOcarinaButtonIndex];
-    f32* temp2 = &this->unk_B10[play->msgCtx.lastOcarinaButtonIndex];
+    struct_8085D714* temp3 = &D_8085D714[play->msgCtx.ocarinaButtonIndex];
+    f32* temp2 = &this->unk_B10[play->msgCtx.ocarinaButtonIndex];
     s16* temp_a3 = &this->unk_B86[temp3->unk_0];
 
-    temp_a3[0] = play->msgCtx.lastOcarinaButtonIndex;
+    temp_a3[0] = play->msgCtx.ocarinaButtonIndex;
     temp2[0] = 3.0f;
 }
 
@@ -16405,7 +16405,7 @@ void func_808521E0(PlayState* play, Player* this) {
 
         func_80124618(D_801C0490, this->skelAnime.curFrame, &this->unk_AF0[1]);
     } else if (play->msgCtx.ocarinaMode == 1) {
-        if (play->msgCtx.lastOcarinaButtonIndex != OCARINA_BTN_INVALID) {
+        if (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID) {
             func_80851EC8(play, this);
         }
 
@@ -16426,7 +16426,7 @@ void func_80852290(PlayState* play, Player* this) {
         s16 var_a1_3;
         s16 sp38;
 
-        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.lastOcarinaButtonIndex != OCARINA_BTN_INVALID)) {
+        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.ocarinaButtonIndex != OCARINA_BTN_INVALID)) {
             if ((this->unk_A90 != NULL) && (this->unk_A94 < 0.0f)) {
                 this->unk_A90->flags |= ACTOR_FLAG_20000000;
                 this->unk_A94 = 0.0f;

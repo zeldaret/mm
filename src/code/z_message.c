@@ -67,11 +67,11 @@ void func_80147520(void) {
 void func_80147564(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    msgCtx->ocarinaButtonsPosY[0] = 0xBD;
-    msgCtx->ocarinaButtonsPosY[1] = 0xB8;
-    msgCtx->ocarinaButtonsPosY[2] = 0xB3;
-    msgCtx->ocarinaButtonsPosY[3] = 0xAE;
-    msgCtx->ocarinaButtonsPosY[4] = 0xA9;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_A] = 189;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_DOWN] = 184;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_RIGHT] = 179;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_LEFT] = 174;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_UP] = 169;
     func_80147520();
     D_801F6B0C = 0x50;
     D_801F6B10 = 0x96;
