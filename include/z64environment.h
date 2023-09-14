@@ -2,9 +2,9 @@
 #define Z64ENVIRONMENT_H
 
 #include "PR/ultratypes.h"
+#include "PR/os_message.h"
 #include "z64math.h"
 #include "z64dma.h"
-#include "ultra64/message.h"
 
 struct GameOverContext;
 struct LightContext;

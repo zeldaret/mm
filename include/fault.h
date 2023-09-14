@@ -103,7 +103,7 @@ typedef struct FaultMgr {
     /* 0x844 */ void* fb;
 } FaultMgr; // size = 0x848
 
-extern FaultMgr gFaultMgr;
+// extern FaultMgr gFaultMgr;
 
 
 #endif
