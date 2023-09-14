@@ -16320,7 +16320,7 @@ void func_80851D30(PlayState* play, Player* this) {
             var_s0++;
         }
     } else if (play->msgCtx.ocarinaMode == 1) {
-        if (play->msgCtx.lastOcarinaButtonIndex != 0xFF) {
+        if (play->msgCtx.lastOcarinaButtonIndex != OCARINA_BTN_INVALID) {
             var_s0[play->msgCtx.lastOcarinaButtonIndex] = 1.2f;
             func_8082DB90(play, this, D_8085D190[this->transformation]);
         } else {
@@ -16405,7 +16405,7 @@ void func_808521E0(PlayState* play, Player* this) {
 
         func_80124618(D_801C0490, this->skelAnime.curFrame, &this->unk_AF0[1]);
     } else if (play->msgCtx.ocarinaMode == 1) {
-        if (play->msgCtx.lastOcarinaButtonIndex != 0xFF) {
+        if (play->msgCtx.lastOcarinaButtonIndex != OCARINA_BTN_INVALID) {
             func_80851EC8(play, this);
         }
 
@@ -16426,7 +16426,7 @@ void func_80852290(PlayState* play, Player* this) {
         s16 var_a1_3;
         s16 sp38;
 
-        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.lastOcarinaButtonIndex != 0xFF)) {
+        if ((play->msgCtx.ocarinaMode == 1) && (play->msgCtx.lastOcarinaButtonIndex != OCARINA_BTN_INVALID)) {
             if ((this->unk_A90 != NULL) && (this->unk_A94 < 0.0f)) {
                 this->unk_A90->flags |= ACTOR_FLAG_20000000;
                 this->unk_A94 = 0.0f;

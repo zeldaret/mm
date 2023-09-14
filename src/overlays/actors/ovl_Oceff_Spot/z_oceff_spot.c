@@ -80,7 +80,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
         this->unk16C -= 0.05f;
     } else {
         Actor_Kill(&this->actor);
-        if ((R_TIME_SPEED != 400) && (play->msgCtx.blockSunsSong == 0)) {
+        if ((R_TIME_SPEED != 400) && !play->msgCtx.blockSunsSong) {
             if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;
             }

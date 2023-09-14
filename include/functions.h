@@ -1027,7 +1027,7 @@ void func_8014D304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80150A84(PlayState* play);
 void func_80150D08(PlayState* play, u32 uParm2);
 void func_801514B0(PlayState* play, u16 arg1, u8 arg2);
-void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor);
+void Message_StartTextbox(PlayState* play, u16 textId, Actor* actor);
 void Message_ContinueTextbox(PlayState* play, u16 textId);
 void func_80151A68(PlayState* play, u16 textId);
 void Message_BombersNotebookQueueEvent(PlayState* play, u8 event);

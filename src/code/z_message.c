@@ -110,7 +110,7 @@ s32 Message_ShouldAdvanceSilent(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Input* controller = CONTROLLER1(&play->state);
 
-    if (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10 || msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11) {
+    if ((msgCtx->textboxEndType == TEXTBOX_ENDTYPE_10) || (msgCtx->textboxEndType == TEXTBOX_ENDTYPE_11)) {
         return CHECK_BTN_ALL(controller->press.button, BTN_A);
     } else {
         return CHECK_BTN_ALL(controller->press.button, BTN_A) || CHECK_BTN_ALL(controller->press.button, BTN_B) ||
@@ -317,12 +317,12 @@ void func_8014D62C(PlayState* play, s32* arg1, f32* arg2, s16* arg3) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_801514B0.s")
 
-void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
+void Message_StartTextbox(PlayState* play, u16 textId, Actor* actor) {
     MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->ocarinaAction = 0xFFFF;
     func_80150D08(play, textId);
-    msgCtx->talkActor = Actor;
+    msgCtx->talkActor = actor;
     msgCtx->msgMode = 1;
     msgCtx->stateTimer = 0;
     msgCtx->textDelayTimer = 0;
@@ -432,12 +432,12 @@ u32 func_80151C9C(PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80151DA4.s")
 
 void func_80152434(PlayState* play, u16 arg2) {
-    play->msgCtx.blockSunsSong = 0;
+    play->msgCtx.blockSunsSong = false;
     func_80151DA4(play, arg2);
 }
 
 void func_80152464(PlayState* play, u16 arg1) {
-    play->msgCtx.blockSunsSong = 1;
+    play->msgCtx.blockSunsSong = true;
     func_80151DA4(play, arg1);
 }
 
@@ -527,7 +527,7 @@ void func_80152EC0(PlayState* play) {
     if (1) {}
     if ((msgCtx->songPlayed < 0x17) && (msgCtx->songPlayed != 0xE) &&
         ((msgCtx->ocarinaAction < 0x43) || (msgCtx->ocarinaAction >= 0x47))) {
-        msgCtx->ocarinaSongEffectActive = 1;
+        msgCtx->ocarinaSongEffectActive = true;
         if (msgCtx->songPlayed != 0x16) {
             Actor_Spawn(&play->actorCtx, play, D_801D02D8[msgCtx->songPlayed], player->actor.world.pos.x,
                         player->actor.world.pos.y, player->actor.world.pos.z, 0, 0, 0, D_801D02F8[msgCtx->songPlayed]);
@@ -543,15 +543,13 @@ void func_80152EC0(PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80153750.s")
 
 void func_80153E7C(PlayState* play, Gfx** gfxP) {
-    if ((gSaveContext.options.language == 0) && (play->msgCtx.textIsCredits == 0)) {
+    if ((gSaveContext.options.language == 0) && !play->msgCtx.textIsCredits) {
         func_8014ADBC(play, gfxP);
-        return;
-    }
-    if (play->msgCtx.textIsCredits) {
+    } else if (play->msgCtx.textIsCredits) {
         Message_DrawTextCredits(play, gfxP);
-        return;
+    } else {
+        func_8015966C(play, gfxP, 0);
     }
-    func_8015966C(play, gfxP, 0);
 }
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80153EF0.s")
@@ -603,13 +601,13 @@ void Message_Init(PlayState* play) {
     font = &play->msgCtx.font;
     Font_LoadOrderedFont(&play->msgCtx.font);
     font->unk_11D88 = 0;
-    msgCtx->textIsCredits = msgCtx->messageHasSetSfx = 0;
+    msgCtx->textIsCredits = msgCtx->messageHasSetSfx = false;
     msgCtx->textboxSkipped = 0;
     msgCtx->textFade = 0;
     msgCtx->ocarinaAvailableSongs = 0;
     msgCtx->textboxX = 0x34;
     msgCtx->textboxY = 0x24;
-    msgCtx->ocarinaSongEffectActive = 0;
+    msgCtx->ocarinaSongEffectActive = false;
     msgCtx->unk120BE = 0;
     msgCtx->unk120C0 = 0;
     msgCtx->unk120C2 = 0;

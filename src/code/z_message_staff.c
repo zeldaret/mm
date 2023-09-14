@@ -428,9 +428,9 @@ void Message_DecodeCredits(PlayState* play) {
         } else if ((curChar == 0x16) || (curChar == 0x17)) {
             digits[0] = digits[1] = digits[2] = 0;
             if (curChar == 0x17) {
-                digits[3] = gSaveContext.timerCurTimes[4];
+                digits[3] = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
             } else {
-                digits[3] = gSaveContext.timerCurTimes[6];
+                digits[3] = gSaveContext.timerCurTimes[TIMER_ID_GORON_RACE_UNUSED];
             }
 
             while (digits[3] >= 60) {
