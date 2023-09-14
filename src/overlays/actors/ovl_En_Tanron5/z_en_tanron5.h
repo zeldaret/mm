@@ -50,10 +50,10 @@ typedef struct EnTanron5 {
     /* 0x148 */ Gfx* dList;
     /* 0x14C */ ColliderCylinder collider;
     /* 0x198 */ union {
-                    s16 fragmentRotationalVelocityX;
+                    s16 fragmentAngularVelocityX;
                     s16 itemDropRotZ;
                 };
-    /* 0x19A */ s16 fragmentRotationalVelocityY;
+    /* 0x19A */ s16 fragmentAngularVelocityY;
     /* 0x19C */ f32 baseScale;
     /* 0x1A0 */ union {
                     u8 hitCount;     // used by destructible ruins

@@ -7,7 +7,7 @@
 #include "z_en_fsn.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnFsn*)thisx)
 
@@ -52,6 +52,18 @@ typedef enum {
     /* 2 */ ENFSN_CUTSCENESTATE_PLAYING
 } EnFsnCutsceneState;
 
+ActorInit En_Fsn_InitVars = {
+    ACTOR_EN_FSN,
+    ACTORCAT_NPC,
+    FLAGS,
+    OBJECT_FSN,
+    sizeof(EnFsn),
+    (ActorFunc)EnFsn_Init,
+    (ActorFunc)EnFsn_Destroy,
+    (ActorFunc)EnFsn_Update,
+    (ActorFunc)EnFsn_Draw,
+};
+
 typedef enum {
     /*  0 */ FSN_ANIM_IDLE,
     /*  1 */ FSN_ANIM_SCRATCH_BACK,
@@ -69,32 +81,20 @@ typedef enum {
     /* 13 */ FSN_ANIM_MAX
 } FsnAnimation;
 
-ActorInit En_Fsn_InitVars = {
-    ACTOR_EN_FSN,
-    ACTORCAT_NPC,
-    FLAGS,
-    OBJECT_FSN,
-    sizeof(EnFsn),
-    (ActorFunc)EnFsn_Init,
-    (ActorFunc)EnFsn_Destroy,
-    (ActorFunc)EnFsn_Update,
-    (ActorFunc)EnFsn_Draw,
-};
-
-static AnimationInfoS sAnimationInfo[] = {
-    { &gFsnIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFsnScratchBackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFsnTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gFsnTurnAroundAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gFsnHandsOnCounterStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gFsnHandsOnCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFsnHandOnFaceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gFsnHandOnFaceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFsnLeanForwardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gFsnLeanForwardLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFsnSlamCounterStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &gFsnSlamCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &gFsnMakeOfferAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
+static AnimationInfoS sAnimationInfo[FSN_ANIM_MAX] = {
+    { &gFsnIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },                // FSN_ANIM_IDLE
+    { &gFsnScratchBackAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },         // FSN_ANIM_SCRATCH_BACK
+    { &gFsnTurnAroundAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },          // FSN_ANIM_TURN_AROUND_FORWARD
+    { &gFsnTurnAroundAnim, -1.0f, 0, -1, ANIMMODE_ONCE, 0 },         // FSN_ANIM_TURN_AROUND_REVERSE
+    { &gFsnHandsOnCounterStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 }, // FSN_ANIM_HANDS_ON_COUNTER_START
+    { &gFsnHandsOnCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // FSN_ANIM_HANDS_ON_COUNTER_LOOP
+    { &gFsnHandOnFaceStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },     // FSN_ANIM_HAND_ON_FACE_START
+    { &gFsnHandOnFaceLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },      // FSN_ANIM_HAND_ON_FACE_LOOP
+    { &gFsnLeanForwardStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // FSN_ANIM_LEAN_FORWARD_START
+    { &gFsnLeanForwardLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // FSN_ANIM_LEAN_FORWARD_LOOP
+    { &gFsnSlamCounterStartAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },    // FSN_ANIM_SLAM_COUNTER_START
+    { &gFsnSlamCounterLoopAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },     // FSN_ANIM_SLAM_COUNTER_LOOP
+    { &gFsnMakeOfferAnim, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },           // FSN_ANIM_MAKE_OFFER
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -745,8 +745,9 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
 
     if (this->animIndex == FSN_ANIM_HANDS_ON_COUNTER_START) {
         s16 curFrame = this->skelAnime.curFrame;
-        s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
-        if (curFrame == frameCount) {
+        s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+
+        if (curFrame == endFrame) {
             this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
@@ -781,7 +782,7 @@ void EnFsn_Idle(EnFsn* this, PlayState* play) {
 
 void EnFsn_Haggle(EnFsn* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 frameCount = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
+    s16 endFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->flags & ENFSN_ANGRY) {
         this->flags &= ~ENFSN_ANGRY;
@@ -801,7 +802,7 @@ void EnFsn_Haggle(EnFsn* this, PlayState* play) {
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         } else {
             if (this->animIndex == FSN_ANIM_MAKE_OFFER) {
-                if (curFrame == frameCount) {
+                if (curFrame == endFrame) {
                     this->animIndex = FSN_ANIM_HANDS_ON_COUNTER_LOOP;
                     SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
                 } else {
@@ -1423,7 +1424,7 @@ void EnFsn_IdleBackroom(EnFsn* this, PlayState* play) {
         this->textId = 0;
         EnFsn_HandleConversationBackroom(this, play);
         this->actionFunc = EnFsn_ConverseBackroom;
-    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isTargeted) {
+    } else if (this->actor.xzDistToPlayer < 100.0f || this->actor.isLockedOn) {
         Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
@@ -1478,7 +1479,7 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
 
     if (ENFSN_IS_SHOP(&this->actor)) {
         this->actor.shape.rot.y = BINANG_ROT180(this->actor.shape.rot.y);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         EnFsn_GetCutscenes(this);
         EnFsn_InitShop(this, play);
     } else {
@@ -1490,8 +1491,8 @@ void EnFsn_Init(Actor* thisx, PlayState* play) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         this->blinkTimer = 20;
         this->eyeTexIndex = 0;
-        this->actor.flags |= ACTOR_FLAG_1;
-        this->actor.targetMode = 0;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+        this->actor.targetMode = TARGET_MODE_0;
         this->animIndex = FSN_ANIM_IDLE;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         this->actionFunc = EnFsn_IdleBackroom;

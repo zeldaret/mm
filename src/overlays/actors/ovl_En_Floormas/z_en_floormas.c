@@ -7,7 +7,7 @@
 #include "z_en_floormas.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnFloormas*)thisx)
 
@@ -135,20 +135,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32_DIV1000(gravity, -1000, ICHAIN_STOP),
 };
 
-static Vec3f D_808D3900[PLAYER_FORM_MAX] = {
-    { 25.0f, 45.0f, -7.0f },  // PLAYER_FORM_FIERCE_DEITY
-    { 25.0f, 40.0f, -12.0f }, // PLAYER_FORM_GORON
-    { 25.0f, 35.0f, -2.0f },  // PLAYER_FORM_ZORA
-    { 10.0f, 20.0f, -4.0f },  // PLAYER_FORM_DEKU
-    { 15.0f, 25.0f, -2.0f },  // PLAYER_FORM_HUMAN
-};
-
-static s8 D_808D393C[] = {
-    -1, -1, -1, -1, 0, -1, -1, 1, -1, 2, -1, -1, 3, -1, 4, -1, -1, 5, -1, -1, -1, 6, 7, -1, 8,
-};
-
-static Color_RGBA8 D_808D3958 = { 0, 255, 0, 0 };
-
 void EnFloormas_Init(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     EnFloormas* this = THIS;
@@ -173,7 +159,7 @@ void EnFloormas_Init(Actor* thisx, PlayState* play2) {
 
     if (this->actor.params == ENFLOORMAS_GET_7FFF_10) {
         this->actor.draw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = func_808D2AA8;
         return;
     }
@@ -251,7 +237,7 @@ void func_808D0A48(EnFloormas* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT0;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 2,
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX, 2,
                               this->actor.scale.x * 30.000002f, this->actor.scale.x * 20.0f);
         if (this->actor.scale.x > 0.009f) {
             this->actor.flags |= ACTOR_FLAG_400;
@@ -310,15 +296,15 @@ void func_808D0CE4(EnFloormas* this) {
 }
 
 void func_808D0D70(EnFloormas* this, PlayState* play) {
-    s32 temp_v0;
+    s32 onAnimFirstFrame;
 
     SkelAnime_Update(&this->skelAnime);
-    temp_v0 = Animation_OnFrame(&this->skelAnime, 0.0f);
-    if ((temp_v0 != 0) && (this->unk_18E != 0)) {
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
+    if (onAnimFirstFrame && (this->unk_18E != 0)) {
         this->unk_18E--;
     }
 
-    if ((temp_v0 != 0) || Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 24.0f) ||
+    if (onAnimFirstFrame || Animation_OnFrame(&this->skelAnime, 12.0f) || Animation_OnFrame(&this->skelAnime, 24.0f) ||
         Animation_OnFrame(&this->skelAnime, 36.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_WALK);
     }
@@ -393,7 +379,7 @@ void func_808D108C(EnFloormas* this) {
 }
 
 void func_808D11BC(EnFloormas* this, PlayState* play) {
-    f32 frame;
+    f32 curFrame;
     f32 sp30;
     f32 sp2C;
 
@@ -410,8 +396,8 @@ void func_808D11BC(EnFloormas* this, PlayState* play) {
         }
     }
 
-    frame = this->skelAnime.curFrame;
-    if ((frame >= 7.0f) && (frame < 22.0f)) {
+    curFrame = this->skelAnime.curFrame;
+    if ((curFrame >= 7.0f) && (curFrame < 22.0f)) {
         sp30 = Math_SinS(this->actor.shape.rot.y + 0x4268);
         sp2C = Math_CosS(this->actor.shape.rot.y + 0x4268);
         this->actor.shape.rot.y += this->unk_190;
@@ -587,7 +573,7 @@ void func_808D19D4(EnFloormas* this) {
 void func_808D1B44(EnFloormas* this, PlayState* play) {
     if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         if (SkelAnime_Update(&this->skelAnime)) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->unk_194 = 50;
             func_808D0C14(this);
         }
@@ -715,11 +701,19 @@ void func_808D2040(EnFloormas* this, PlayState* play) {
     }
 }
 
+static Vec3f D_808D3900[PLAYER_FORM_MAX] = {
+    { 25.0f, 45.0f, -7.0f },  // PLAYER_FORM_FIERCE_DEITY
+    { 25.0f, 40.0f, -12.0f }, // PLAYER_FORM_GORON
+    { 25.0f, 35.0f, -2.0f },  // PLAYER_FORM_ZORA
+    { 10.0f, 20.0f, -4.0f },  // PLAYER_FORM_DEKU
+    { 15.0f, 25.0f, -2.0f },  // PLAYER_FORM_HUMAN
+};
+
 void func_808D217C(EnFloormas* this, Player* player) {
     Vec3f* ptr;
 
     Animation_Change(&this->skelAnime, &gWallmasterJumpAnim, 1.0f, 36.0f, 45.0f, ANIMMODE_ONCE, -3.0f);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     this->actor.velocity.y = 0.0f;
     func_808D08D0(this);
@@ -762,7 +756,7 @@ void func_808D22C8(EnFloormas* this, PlayState* play) {
 
         this->actor.shape.rot.x = 0;
         this->actor.velocity.y = 6.0f;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.speed = -3.0f;
         func_808D1740(this);
     } else if ((this->unk_190 % 20) == 0) {
@@ -905,7 +899,7 @@ void func_808D2A20(EnFloormas* this) {
         Actor_Kill(&this->actor);
     } else {
         this->actor.draw = NULL;
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
         this->actionFunc = func_808D2AA8;
     }
 }
@@ -1031,7 +1025,7 @@ void func_808D2E34(EnFloormas* this, PlayState* play) {
                         Actor_PlaySfx(&this->actor, NA_SE_EN_FLOORMASTER_SM_DEAD);
                     }
                     Enemy_StartFinishingBlow(play, &this->actor);
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 } else if (this->actor.colChkInfo.damage != 0) {
                     Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_DAMAGE);
                 }
@@ -1163,16 +1157,44 @@ s32 EnFloormas_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
+static s8 sLimbToBodyParts[WALLMASTER_LIMB_MAX] = {
+    BODYPART_NONE,         // WALLMASTER_LIMB_NONE
+    BODYPART_NONE,         // WALLMASTER_LIMB_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_HAND
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_ROOT
+    ENFLOORMAS_BODYPART_0, // WALLMASTER_LIMB_INDEX_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_INDEX_FINGER_MIDDLE
+    ENFLOORMAS_BODYPART_1, // WALLMASTER_LIMB_INDEX_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_ROOT
+    ENFLOORMAS_BODYPART_2, // WALLMASTER_LIMB_RING_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_RING_FINGER_MIDDLE
+    ENFLOORMAS_BODYPART_3, // WALLMASTER_LIMB_RING_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_ROOT
+    ENFLOORMAS_BODYPART_4, // WALLMASTER_LIMB_MIDDLE_FINGER_PROXIMAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_MIDDLE_FINGER_MIDDLE
+    ENFLOORMAS_BODYPART_5, // WALLMASTER_LIMB_MIDDLE_FINGER_DISTAL
+    BODYPART_NONE,         // WALLMASTER_LIMB_WRIST_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_WRIST
+    BODYPART_NONE,         // WALLMASTER_LIMB_THUMB_ROOT
+    ENFLOORMAS_BODYPART_6, // WALLMASTER_LIMB_THUMB_PROXIMAL
+    ENFLOORMAS_BODYPART_7, // WALLMASTER_LIMB_THUMB_DISTAL_ROOT
+    BODYPART_NONE,         // WALLMASTER_LIMB_THUMB_MIDDLE
+    ENFLOORMAS_BODYPART_8, // WALLMASTER_LIMB_THUMB_DISTAL
+};
+
 void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx, Gfx** gfx) {
     EnFloormas* this = THIS;
 
-    if (D_808D393C[limbIndex] != -1) {
-        Matrix_MultZero(&this->limbPos[D_808D393C[limbIndex]]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
     }
 
     if (limbIndex == WALLMASTER_LIMB_WRIST) {
-        Matrix_MultVecX(1000.0f, &this->limbPos[9]);
-        Matrix_MultVecX(-1000.0f, &this->limbPos[10]);
+        Matrix_MultVecX(1000.0f, &this->bodyPartsPos[ENFLOORMAS_BODYPART_9]);
+        Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[ENFLOORMAS_BODYPART_10]);
     } else if (limbIndex == WALLMASTER_LIMB_HAND) {
         Matrix_Push();
         Matrix_Translate(1600.0f, -700.0f, -1700.0f, MTXMODE_APPLY);
@@ -1186,6 +1208,8 @@ void EnFloormas_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s*
         Matrix_Pop();
     }
 }
+
+static Color_RGBA8 D_808D3958 = { 0, 255, 0, 0 };
 
 void EnFloormas_Draw(Actor* thisx, PlayState* play) {
     EnFloormas* this = THIS;
@@ -1206,7 +1230,7 @@ void EnFloormas_Draw(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX,
                             100.0f * (this->drawDmgEffScale * this->actor.scale.x),
                             100.0f * (this->drawDmgEffFrozenSteamScale * this->actor.scale.x), this->drawDmgEffAlpha,
                             this->drawDmgEffType);
@@ -1231,7 +1255,7 @@ void func_808D3754(Actor* thisx, PlayState* play) {
 
     CLOSE_DISPS(play->state.gfxCtx);
 
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENFLOORMAS_BODYPART_MAX,
                             this->drawDmgEffScale * this->actor.scale.x * 100.0f,
                             this->drawDmgEffFrozenSteamScale * this->actor.scale.x * 100.0f, this->drawDmgEffAlpha,
                             this->drawDmgEffType);

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/string.h"
 
 #define ATOI(i, a)                           \
     for (i = 0; *a >= '0' && *a <= '9'; a++) \
@@ -27,6 +28,8 @@
 
 char spaces[] = "                                ";
 char zeroes[] = "00000000000000000000000000000000";
+
+void _Putfld(_Pft* px, va_list* pap, unsigned char code, unsigned char* ac);
 
 int _Printf(PrintCallback pfn, void* arg, const char* fmt, va_list ap) {
     _Pft x;

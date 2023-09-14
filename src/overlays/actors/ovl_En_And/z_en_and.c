@@ -6,7 +6,7 @@
 
 #include "z_en_and.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnAnd*)thisx)
 
@@ -124,7 +124,7 @@ void EnAnd_Init(Actor* thisx, PlayState* play) {
     this->animIndex = ENAND_ANIM_NONE;
     EnAnd_ChangeAnim(this, ENAND_ANIM_0);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->flags |= 8;
     this->actionFunc = EnAnd_HandleCutscene;
 }

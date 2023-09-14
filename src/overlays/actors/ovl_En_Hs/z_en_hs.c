@@ -6,7 +6,7 @@
 
 #include "z_en_hs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnHs*)thisx)
 
@@ -87,7 +87,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     }
 
     this->stateFlags = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     func_80952C50(this, play);
 }
 

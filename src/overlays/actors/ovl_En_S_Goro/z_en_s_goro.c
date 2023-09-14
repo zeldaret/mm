@@ -36,7 +36,7 @@ Week Event Flags:
 #include "overlays/actors/ovl_En_Jg/z_en_jg.h" // Goron Elder
 #include "objects/object_taisou/object_taisou.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 #define THIS ((EnSGoro*)thisx)
 
 #define EN_S_GORO_ROLLEDUP_YOFFSET 14.0f
@@ -1048,7 +1048,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
 
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
             case EN_S_GORO_TYPE_SHRINE_WINTER_A:
@@ -1113,7 +1113,7 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_WinterShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1144,7 +1144,7 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isTargeted)) {
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isLockedOn)) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1185,7 +1185,7 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_ShopGoron_Talk;
         }
-    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
+    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
@@ -1279,7 +1279,7 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
-    } else if (this->actor.isTargeted) {
+    } else if (this->actor.isLockedOn) {
         Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     EnSGoro_UpdateSleeping(this, play);

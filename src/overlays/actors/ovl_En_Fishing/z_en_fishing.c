@@ -791,7 +791,7 @@ FishingFishInit sFishInits[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
@@ -831,7 +831,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         thisx->focus.pos = thisx->world.pos;
         thisx->focus.pos.y += 75.0f;
-        thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
 
         if (sLinkAge != 1) {
             // HIGH_SCORE(HS_FISHING) from OoT
@@ -948,8 +948,8 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
     thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_800; // Added in MM
 
     if ((thisx->params < 115) || (thisx->params == 200)) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, NULL, NULL, 0);
-        Animation_MorphToLoop(&this->skelAnime, &gFishingFishAnim, 0.0f);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingBassSkel, &gFishingBassAnim, NULL, NULL, 0);
+        Animation_MorphToLoop(&this->skelAnime, &gFishingBassAnim, 0.0f);
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingLoachSkel, &gFishingLoachAnim, NULL, NULL, 0);
         Animation_MorphToLoop(&this->skelAnime, &gFishingLoachAnim, 0.0f);
@@ -960,8 +960,8 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
     if (thisx->params == 200) {
         this->unk_150 = 100;
         func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
-        thisx->targetMode = 0;
-        thisx->flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        thisx->targetMode = TARGET_MODE_0;
+        thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     } else {
         this->unk_150 = 10;
@@ -2611,6 +2611,9 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             sReelLinePos[LINE_SEG_COUNT - 1].z = sLurePos.z;
             D_809101C4 = 2.0f;
             break;
+
+        default:
+            break;
     }
 }
 
@@ -2816,7 +2819,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
 
     if (this->unk_1CB == 0) {
         if (this->unk_1CC == 0) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
             if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                 D_8090CCF8 = D_809171CC;
@@ -2826,7 +2829,7 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
             }
         } else {
             this->unk_1CC--;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     } else if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->unk_1CB = 0;
@@ -2879,9 +2882,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
     if ((D_80917200 != 0) || (sSubCamId != SUB_CAM_ID_DONE) ||
         ((player->actor.world.pos.z > 1150.0f) && (this->unk_150 != 100))) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if (D_8090CD14 != 0) {
             if (D_80917202 == 0) {
                 this->actor.focus.pos = sLurePos;
@@ -3091,7 +3094,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             if (D_80917206 == 2) {
                 func_809038A4(this, input);
             } else {
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
             break;
 
@@ -3128,7 +3131,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 if (D_80917206 == 2) {
                     func_809038A4(this, input);
                 } else {
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 }
             }
             break;
@@ -3171,7 +3174,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_1AC.z = Rand_ZeroFloat(50.0f);
             }
 
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             break;
 
         case -2:
@@ -3209,7 +3212,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 }
 
                 Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
             break;
 
@@ -3892,6 +3895,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                             }
                         }
                         break;
+
                     case 1:
                         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
                             Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
@@ -3909,6 +3913,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                             }
                         }
                         break;
+
+                    default:
+                        break;
                 }
             }
 
@@ -3924,8 +3931,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     SkelAnime_Free(&this->skelAnime, play);
 
                     if (this->unk_148 == 0) {
-                        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, 0, 0, 0);
-                        Animation_MorphToLoop(&this->skelAnime, &gFishingFishAnim, 0.0f);
+                        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingBassSkel, &gFishingBassAnim, 0, 0, 0);
+                        Animation_MorphToLoop(&this->skelAnime, &gFishingBassAnim, 0.0f);
                     } else {
                         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingLoachSkel, &gFishingLoachAnim, 0, 0, 0);
                         Animation_MorphToLoop(&this->skelAnime, &gFishingLoachAnim, 0.0f);
@@ -4169,32 +4176,33 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     }
 }
 
-s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnFishing_BassOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 13) {
+    if (limbIndex == FISHING_BASS_LIMB_JAW) {
         rot->z -= this->unk_168 - 11000;
-    } else if ((limbIndex == 2) || (limbIndex == 3)) {
+    } else if ((limbIndex == FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT) ||
+               (limbIndex == FISHING_BASS_LIMB_BACK_SEGMENT_ROOT)) {
         rot->y += this->unk_164;
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == FISHING_BASS_LIMB_END_ROOT) {
         rot->y += this->unk_16E;
-    } else if (limbIndex == 0xE) {
+    } else if (limbIndex == FISHING_BASS_LIMB_RIGHT_PECTORAL_FIN) {
         rot->y -= this->unk_16A;
-    } else if (limbIndex == 0xF) {
+    } else if (limbIndex == FISHING_BASS_LIMB_LEFT_PECTORAL_FIN) {
         rot->y += this->unk_16A;
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == FISHING_BASS_LIMB_TOP_REAR_FIN) {
         rot->y += this->unk_16C;
-    } else if (limbIndex == 9) {
+    } else if (limbIndex == FISHING_BASS_LIMB_BOTTOM_REAR_FIN) {
         rot->y -= this->unk_16C;
     }
 
     return false;
 }
 
-void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnFishing_BassPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 13) {
+    if (limbIndex == FISHING_BASS_LIMB_JAW) {
         Matrix_MultVec3f(&sFishMouthOffset, &this->fishMouthPos);
     }
 }
@@ -4202,11 +4210,11 @@ void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 s32 EnFishing_LoachOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 3) {
+    if (limbIndex == FISHING_LOACH_LIMB_MIDDLE_SEGMENT) {
         rot->y += this->unk_1C4[0];
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == FISHING_LOACH_LIMB_LOWER_BACK_FIN) {
         rot->y += this->unk_1C4[1];
-    } else if (limbIndex == 5) {
+    } else if (limbIndex == FISHING_LOACH_LIMB_TAIL_FIN) {
         rot->y += this->unk_1C4[2];
     }
 
@@ -4217,7 +4225,7 @@ void EnFishing_LoachPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     static Vec3f sLoachMouthOffset = { 500.0f, 500.0f, 0.0f };
     EnFishing* this = THIS;
 
-    if (limbIndex == 11) {
+    if (limbIndex == FISHING_LOACH_LIMB_JAW) {
         Matrix_MultVec3f(&sLoachMouthOffset, &this->fishMouthPos);
     }
 }
@@ -4238,7 +4246,7 @@ void EnFishing_DrawFish(Actor* thisx, PlayState* play) {
         Matrix_Translate(0.0f, 0.0f, this->unk_164 * 10.0f * 0.01f, MTXMODE_APPLY);
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              EnFishing_FishOverrideLimbDraw, EnFishing_FishPostLimbDraw, &this->actor);
+                              EnFishing_BassOverrideLimbDraw, EnFishing_BassPostLimbDraw, &this->actor);
     } else {
         Matrix_Translate(0.0f, 0.0f, 3000.0f, MTXMODE_APPLY);
         Matrix_RotateYF(BINANG_TO_RAD(this->unk_164), MTXMODE_APPLY);
@@ -4735,9 +4743,13 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                             this->unk_154 = 3;
                         }
                         break;
+
                     case 1:
                         Message_ContinueTextbox(play, 0x2D);
                         this->unk_154 = 3;
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -4771,8 +4783,12 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                         Message_ContinueTextbox(play, 0x4080);
                         this->unk_154 = 5;
                         break;
+
                     case 1:
                         Message_ContinueTextbox(play, 0x407F);
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -4806,8 +4822,12 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                             D_8090CD0C = 0;
                             this->unk_154 = 20;
                             break;
+
                         case 1:
                             this->unk_154 = 0;
+                            break;
+
+                        default:
                             break;
                     }
                 }
@@ -4839,6 +4859,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                             }
                             Message_ContinueTextbox(play, this->actor.textId);
                             break;
+
                         case 1:
                             if (D_8090CD00 > 36000) {
                                 D_8090CD00 = 30000;
@@ -4870,6 +4891,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                             }
                             this->unk_154 = 0;
                             break;
+
                         case 2:
                             if (D_809171D8 == 0) {
                                 Message_ContinueTextbox(play, 0x4085);
@@ -4877,6 +4899,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                                 Message_ContinueTextbox(play, 0x4092);
                             }
                             this->unk_154 = 22;
+                            break;
+
+                        default:
                             break;
                     }
                 }
@@ -4975,6 +5000,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     case 0:
                         this->unk_154 = 0;
                         break;
+
                     case 1:
                         if (D_809171D8 == 0) {
                             Message_ContinueTextbox(play, 0x4085);
@@ -4982,6 +5008,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                             Message_ContinueTextbox(play, 0x4092);
                         }
                         this->unk_154 = 22;
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -5018,6 +5047,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     this->unk_154 = 20;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -5061,9 +5093,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_20);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_20);
     }
 
     if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
@@ -5582,7 +5614,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 8) { // Head
+    if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         rot->x -= this->unk_15C;
     }
 
@@ -5590,7 +5622,7 @@ s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
 }
 
 void EnFishing_OwnerPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 8) { // Head
+    if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_MultVec3f(&sZeroVec, &sOwnerHeadPos);

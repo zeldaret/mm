@@ -865,7 +865,7 @@ s32 SubS_Offer(Actor* actor, PlayState* play, f32 xzRange, f32 yRange, s32 itemI
         case SUBS_OFFER_MODE_AUTO_TARGETED:
             //! @bug: Both x and y conditionals are always true, || should be an &&
             if (((x >= 0) || (x < SCREEN_WIDTH)) && ((y >= 0) || (y < SCREEN_HEIGHT)) &&
-                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isTargeted) {
+                (fabsf(actor->playerHeightRel) <= yRange) && (actor->xzDistToPlayer <= xzRange) && actor->isLockedOn) {
                 actor->flags |= ACTOR_FLAG_10000;
                 canAccept = Actor_OfferTalkExchange(actor, play, xzRange, yRange, itemId);
             }
@@ -974,7 +974,7 @@ void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween
     s32 startRow;
 
     for (i = 0; i < bodyPartsNum; i++) {
-        if (parentBodyParts[i] >= 0) {
+        if (parentBodyParts[i] > BODYPART_NONE) {
             parentBodyPart = parentBodyParts[i];
             bodyPartPos = &bodyPartsPos[i];
 

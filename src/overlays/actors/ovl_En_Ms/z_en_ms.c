@@ -7,7 +7,7 @@
 #include "z_en_ms.h"
 #include "objects/object_ms/object_ms.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnMs*)thisx)
 
@@ -53,7 +53,7 @@ static ColliderCylinderInitType1 sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 500, ICHAIN_STOP),
 };
 

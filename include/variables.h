@@ -34,7 +34,6 @@ extern s32 sIrqMgrRetraceCount;
 extern OSViMode osViModeNtscHpf1;
 extern OSViMode osViModePalLan1;
 extern s16 sintable[0x400];
-extern __osHwInt __osHwIntTable[];
 // extern UNK_TYPE1 D_80097DE4;
 // extern UNK_TYPE4 D_80097E08;
 extern OSThread* __osThreadTail;
@@ -63,14 +62,12 @@ extern s32 __osPfsLastChannel;
 extern OSViMode osViModeNtscLan1;
 extern OSViMode osViModeMpalLan1;
 // extern __OSViContext D_80098060[2];
-extern __OSViContext* __osViCurr;
-extern __OSViContext* __osViNext;
+
 // extern UNK_TYPE4 sCartRomNeedsInit;
 extern OSViMode osViModeFpalLan1;
 // extern u8 ldigs[];
 // extern u8 udigs[];
 // extern OSDevMgr __osViDevMgr;
-extern u32 __additional_scanline;
 
 extern char bootThreadName[];
 extern char idleThreadName[];
@@ -160,7 +157,6 @@ extern OSPiHandle D_8009D1A8;
 extern OSMesg D_8009E3F0[1];
 extern OSMesgQueue __osPiAccessQueue;
 extern __OSInode __osPfsInodeCache;
-extern __OSEventState __osEventStateTab[16];
 extern OSTimer D_8009E590;
 extern OSTime __osCurrentTime;
 extern u32 __osBaseCounter;
@@ -225,9 +221,6 @@ extern ActorOverlay gActorOverlayTable[ACTOR_ID_MAX];
 extern ActorId gMaxActorId;
 extern BgCheckSceneSubdivisionEntry sSceneSubdivisionList[];
 extern BgSpecialSceneMaxObjects sCustomDynapolyMem[];
-
-extern GameStateOverlay gGameStateOverlayTable[];
-extern s32 gGraphNumGameStates;
 
 // extern UNK_TYPE4 D_801BDAC0;
 // extern UNK_TYPE4 D_801BDAC4;
@@ -356,10 +349,6 @@ extern SceneTableEntry gSceneTable[SCENE_MAX];
 extern UNK_PTR D_801C5C50;
 // extern UNK_TYPE1 D_801C5C9C;
 extern UNK_PTR D_801C5CB0;
-// extern UNK_TYPE1 D_801C5DD0;
-// extern UNK_TYPE1 D_801C5DE0;
-// extern UNK_TYPE1 D_801C5DF0;
-// extern UNK_TYPE1 D_801C5E00;
 
 // extern UNK_TYPE1 D_801C6A70;
 // extern UNK_TYPE2 D_801C6A74;
@@ -1913,20 +1902,6 @@ extern u8 gSampleBankTable[];
 
 // bss
 // extern UNK_TYPE1 D_801ED894;
-extern CollisionPoly* D_801ED8B0;
-extern s32 D_801ED8B4;
-// extern UNK_TYPE1 D_801ED8B8;
-// extern UNK_TYPE1 D_801ED8BC;
-// extern UNK_TYPE1 D_801ED8C0;
-// extern UNK_TYPE1 D_801ED8C4;
-extern f32 D_801ED8C8;
-extern f32 sBgmEnemyDistSq;
-extern f32 D_801ED8D0;
-// extern UNK_TYPE1 D_801ED8D4;
-// extern UNK_TYPE1 D_801ED8D8;
-// extern UNK_TYPE1 D_801ED8DC;
-extern Mtx D_801ED8E0;
-extern Actor* D_801ED920;
 
 extern Vec3f D_801EDE00;
 extern Vec3f D_801EDE10;
@@ -2050,23 +2025,8 @@ extern s16 D_801F4E7A;
 extern void (*sKaleidoScopeUpdateFunc)(PlayState* play);
 extern void (*sKaleidoScopeDrawFunc)(PlayState* play);
 
-extern s16 sTransitionFillTimer;
-extern Input D_801F6C18;
-extern TransitionTile sTransitionTile;
 extern s32 gTransitionTileState;
-extern VisMono sVisMono;
 extern Color_RGBA8_u32 gVisMonoColor;
-extern Struct_80140E80 D_801F6D38;
-extern Struct_80140E80* D_801F6D4C;
-extern BombersNotebook sBombersNotebook;
-extern u8 sBombersNotebookOpen;
-extern u8 sMotionBlurStatus;
-
-extern UNK_TYPE1 D_801F7FF0;
-extern struct_801F8010 D_801F8010;
-extern VisZbuf sVisZbuf;
-extern VisMono sMonoColors;
-extern ViMode D_801F8048;
 
 extern GfxMasterList* gGfxMasterDL;
 
@@ -2075,39 +2035,16 @@ extern u32 gAudioSPDataSize;
 
 extern volatile OSTime D_801FBAE0;
 extern volatile OSTime D_801FBAE8;
-extern volatile OSTime D_801FBAF0;
+extern volatile OSTime gRDPTimeTotal;
 extern volatile OSTime lastRenderFrameDuration;
 extern volatile OSTime gRSPAudioTotalTime;
 extern volatile OSTime sRSPGFXTotalTime;
 extern volatile OSTime sRSPOtherTotalTime;
 // extern UNK_TYPE1 D_801FBB18;
-extern volatile OSTime gRDPTotalTime;
-// extern UNK_TYPE1 D_801FBB28;
 
-extern OSViMode sNotebookViMode;
-extern void* gFramebuffers[2];
-extern OSViMode* gActiveViMode;
-extern u16* gZBufferPtr;
-extern void* gWorkBuffer;
-extern u64* gGfxSPTaskOutputBufferPtr;
-extern void* gGfxSPTaskOutputBufferEnd;
-extern void* sCfbLoRes1;
-extern void* sCfbLoRes0;
-extern u16 (*gZBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
-extern u16 (*gWorkBufferLoRes)[SCREEN_WIDTH * SCREEN_HEIGHT];
-extern u64 (*gGfxSPTaskOutputBufferLoRes)[0x3000];
-extern void* gGfxSPTaskOutputBufferEndLoRes;
-extern void* sCfbHiRes1;
-extern void* sCfbHiRes0;
-extern u16 (*gZBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
-extern u16 (*gWorkBufferHiRes)[HIRES_BUFFER_WIDTH * HIRES_BUFFER_HEIGHT];
-extern u64 (*gGfxSPTaskOutputBufferHiRes)[0x3000];
-extern void* gGfxSPTaskOutputBufferEndHiRes;
-extern s16 gCfbWidth;
-extern s16 gCfbHeight;
-extern s16 gCfbLeftAdjust;
-extern s16 gCfbUpperAdjust;
-extern u8 gSysCfbHiResEnabled;
+// Accumulator for `gRDPTimeTotal`
+extern volatile OSTime gRDPTimeAcc;
+// extern UNK_TYPE1 D_801FBB28;
 
 extern Vec3f D_801FBBF0;
 extern LineSegment Math3D_ColSphereTri_line;

@@ -106,7 +106,7 @@ typedef struct EnBigslime {
                     Vec3f frozenPos;
                     Vec3f subCamDistToFrog; // Used to zoom into frogs as Gekko despawns/Frog spawns
                 };
-    /* 0x02F8 */ Vec3f limbPos[12];
+    /* 0x02F8 */ Vec3f gekkoBodyPartsPos[GEKKO_BODYPART_MAX];
     /* 0x0388 */ f32 gekkoDrawDmgEffAlpha;
     /* 0x038C */ f32 gekkoDrawDmgEffScale;
     /* 0x0390 */ f32 gekkoDrawDmgEffFrozenSteamScale;

@@ -7,7 +7,7 @@
 #include "z_en_guruguru.h"
 #include "objects/object_fu/object_fu.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGuruguru*)thisx)
 
@@ -75,7 +75,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 19.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGuruGuruSkel, &gGuruGuruPlayStillAnim, this->jointTable,
                        this->morphTable, 16);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     if (this->actor.params != 2) {
         Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     }
@@ -85,7 +85,7 @@ void EnGuruguru_Init(Actor* thisx, PlayState* play) {
         } else if (this->actor.params == 2) {
             this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
             this->actor.draw = NULL;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnGuruguru_DoNothing;
         } else {
             Actor_Kill(&this->actor);

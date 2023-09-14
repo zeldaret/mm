@@ -8,7 +8,7 @@
 #include "objects/object_sek/object_sek.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((ObjWarpstone*)thisx)
 
@@ -55,7 +55,7 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 static Gfx* sOwlStatueDLs[] = { gOwlStatueClosedDL, gOwlStatueOpenedDL };

@@ -1,5 +1,5 @@
-#ifndef STDDEF_H
-#define STDDEF_H
+#ifndef LIBC_STDDEF_H
+#define LIBC_STDDEF_H
 
 #include "PR/ultratypes.h"
 

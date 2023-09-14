@@ -7,7 +7,7 @@
 #include "z_en_toto.h"
 #include "objects/object_zm/object_zm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnToto*)thisx)
 
@@ -89,7 +89,7 @@ static EnTotoActionFunc D_80BA501C[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 1, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_1, ICHAIN_STOP),
 };
 
 static EnTotoText D_80BA502C[] = {

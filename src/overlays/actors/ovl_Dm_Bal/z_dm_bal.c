@@ -6,7 +6,7 @@
 
 #include "z_dm_bal.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmBal*)thisx)
 
@@ -30,51 +30,52 @@ ActorInit Dm_Bal_InitVars = {
     (ActorFunc)DmBal_Draw,
 };
 
+// These animations are the same and in the same order as in the main NPC actor EnBal
 typedef enum {
-    /*  -1 */ DMBAL_ANIM_NONE = -1,
-    /* 0x0 */ DMBAL_ANIM_0,
-    /* 0x1 */ DMBAL_ANIM_1,
-    /* 0x2 */ DMBAL_ANIM_2,
-    /* 0x3 */ DMBAL_ANIM_3,
-    /* 0x4 */ DMBAL_ANIM_4,
-    /* 0x5 */ DMBAL_ANIM_5,
-    /* 0x6 */ DMBAL_ANIM_6,
-    /* 0x7 */ DMBAL_ANIM_7,
-    /* 0x8 */ DMBAL_ANIM_8,
-    /* 0x9 */ DMBAL_ANIM_9,
-    /* 0xA */ DMBAL_ANIM_10,
-    /* 0xB */ DMBAL_ANIM_11,
-    /* 0xC */ DMBAL_ANIM_12,
-    /* 0xD */ DMBAL_ANIM_13,
-    /* 0xE */ DMBAL_ANIM_MAX
-} DmBalAnimation;
+    /*  -1 */ TINGLE_CS_ANIM_NONE = -1,
+    /* 0x0 */ TINGLE_CS_ANIM_FLOAT_IDLE,
+    /* 0x1 */ TINGLE_CS_ANIM_FALL_LOOP,
+    /* 0x2 */ TINGLE_CS_ANIM_FALL_ONCE,
+    /* 0x3 */ TINGLE_CS_ANIM_LAND,
+    /* 0x4 */ TINGLE_CS_ANIM_TWIST,
+    /* 0x5 */ TINGLE_CS_ANIM_TALK,
+    /* 0x6 */ TINGLE_CS_ANIM_MAGIC,
+    /* 0x7 */ TINGLE_CS_ANIM_HAPPY_DANCE_LOOP,
+    /* 0x8 */ TINGLE_CS_ANIM_HAPPY_DANCE_ONCE,
+    /* 0x9 */ TINGLE_CS_ANIM_MAGIC_REVERSE,
+    /* 0xA */ TINGLE_CS_ANIM_IDLE,
+    /* 0xB */ TINGLE_CS_ANIM_SPIN,
+    /* 0xC */ TINGLE_CS_ANIM_HIDE_FACE,
+    /* 0xD */ TINGLE_CS_ANIM_CONFETTI,
+    /* 0xE */ TINGLE_CS_ANIM_MAX
+} TingleCsAnimation;
 
-static AnimationInfo sAnimationInfo[DMBAL_ANIM_MAX] = {
-    { &object_bal_Anim_0005FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_0
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_1
-    { &object_bal_Anim_000840, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_2
-    { &object_bal_Anim_00A7DC, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },  // DMBAL_ANIM_3
-    { &object_bal_Anim_00B1E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_4
-    { &object_bal_Anim_00B604, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_5
-    { &object_bal_Anim_00C498, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_6
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_7
-    { &object_bal_Anim_00C8D8, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },  // DMBAL_ANIM_8
-    { &object_bal_Anim_00C498, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f }, // DMBAL_ANIM_9
-    { &object_bal_Anim_00D530, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },  // DMBAL_ANIM_10
-    { &object_bal_Anim_000C78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_11
-    { &object_bal_Anim_00CB78, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_12
-    { &object_bal_Anim_001804, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },  // DMBAL_ANIM_13
+static AnimationInfo sAnimationInfo[TINGLE_CS_ANIM_MAX] = {
+    { &gTingleFloatIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },          // TINGLE_CS_ANIM_FLOAT_IDLE
+    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_CS_ANIM_FALL_LOOP
+    { &gTingleFallAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },               // TINGLE_CS_ANIM_FALL_ONCE
+    { &gTingleLandAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },               // TINGLE_CS_ANIM_LAND
+    { &gTingleTwistAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },              // TINGLE_CS_ANIM_TWIST
+    { &gTingleTalkAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_CS_ANIM_TALK
+    { &gTingleThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },      // TINGLE_CS_ANIM_MAGIC
+    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },         // TINGLE_CS_ANIM_HAPPY_DANCE_LOOP
+    { &gTingleHappyDanceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -8.0f },         // TINGLE_CS_ANIM_HAPPY_DANCE_ONCE
+    { &gTingleThrowConfettiAnim, 1.0f, 23.0f, 0.0f, ANIMMODE_ONCE, -8.0f },     // TINGLE_CS_ANIM_MAGIC_REVERSE
+    { &gTingleIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -8.0f },               // TINGLE_CS_ANIM_IDLE
+    { &gTingleSpinAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },               // TINGLE_CS_ANIM_SPIN
+    { &gTingleFloatHideFaceAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f },      // TINGLE_CS_ANIM_HIDE_FACE
+    { &gTingleFloatThrowConfettiAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -2.0f }, // TINGLE_CS_ANIM_CONFETTI
 };
 
 void DmBal_Init(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_bal_Skel_00A6D0, &object_bal_Anim_0005FC, this->jointTable,
-                       this->morphTable, OBJECT_BAL_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTingleSkel, &gTingleFloatIdleAnim, this->jointTable, this->morphTable,
+                       TINGLE_LIMB_MAX);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     this->timer = 60;
     this->eyeIndex = 0;
@@ -105,16 +106,16 @@ void DmBal_HandleCutscene(DmBal* this, PlayState* play) {
                 case 1:
                     this->keepEyesShut = false;
                     this->eyeIndex = 0;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_CS_ANIM_FLOAT_IDLE);
                     break;
 
                 case 2:
                     this->keepEyesShut = true;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_12);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_CS_ANIM_HIDE_FACE);
                     break;
 
                 case 3:
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, DMBAL_ANIM_13);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, TINGLE_CS_ANIM_CONFETTI);
                     break;
 
                 default:
@@ -176,7 +177,7 @@ void DmBal_Update(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
     // Throw confetti
-    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &object_bal_Anim_001804)) {
+    if (Animation_OnFrame(&this->skelAnime, 29.0f) && (this->skelAnime.animation == &gTingleFloatThrowConfettiAnim)) {
         Vec3f pos = this->actor.world.pos;
         Vec3f vel = { 0.0f, 9.0f, 0.0f };
 
@@ -199,7 +200,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
     DmBal* this = THIS;
     Vec3s rots;
 
-    if (limbIndex == OBJECT_BAL_LIMB_06) {
+    if (limbIndex == TINGLE_LIMB_BALLOON) {
         rots.x = Math_SinS(this->unk_33A) * (0x10000 / 18);
         rots.z = Math_CosS(this->unk_33A) * (0x10000 / 18);
         Matrix_RotateZYX(rots.x, 0, rots.z, MTXMODE_APPLY);
@@ -213,7 +214,7 @@ s32 DmBal_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void DmBal_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
 }
 
-static TexturePtr sEyeTextures[] = { object_bal_Tex_006050, object_bal_Tex_0094D0 };
+static TexturePtr sEyeTextures[] = { gTingleEyeOpenTex, gTingleEyeClosedTex };
 
 void DmBal_Draw(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;

@@ -7,7 +7,7 @@
 #include "z_en_dragon.h"
 #include "overlays/actors/ovl_En_Ot/z_en_ot.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnDragon*)thisx)
 
@@ -24,13 +24,6 @@ void EnDragon_Grab(EnDragon* this, PlayState* play);
 void EnDragon_SetupAttack(EnDragon* this);
 void EnDragon_Attack(EnDragon* this, PlayState* play);
 void EnDragon_Dead(EnDragon* this, PlayState* play);
-
-typedef enum {
-    /* 0 */ DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY,
-    /* 1 */ DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY,
-    /* 2 */ DEEP_PYTHON_ANIM_VERTICAL_SWAY,
-    /* 3 */ DEEP_PYTHON_ANIM_IDLE
-} DeepPythonAnimation;
 
 typedef enum {
     /* 0 */ DEEP_PYTHON_EXTEND_STATE_NOT_FULLY_EXTENDED,
@@ -215,7 +208,7 @@ void EnDragon_Init(Actor* thisx, PlayState* play) {
 
     this->actor.colChkInfo.health = 4;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 0xA;
+    this->actor.targetMode = TARGET_MODE_10;
     Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
 
     this->collider.elements[0].dim.scale = this->collider.elements[1].dim.scale = this->collider.elements[2].dim.scale =
@@ -256,26 +249,39 @@ void EnDragon_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->collider);
 }
 
-static AnimationHeader* sAnimations[] = {
-    &gDeepPythonSmallSideSwayAnim,
-    &gDeepPythonLargeSideSwayAnim,
-    &gDeepPythonVerticalSwayAnim,
-    &gDeepPythonSmallSideSwayAnim,
+typedef enum {
+    /* 0 */ DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY,
+    /* 1 */ DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY,
+    /* 2 */ DEEP_PYTHON_ANIM_VERTICAL_SWAY,
+    /* 3 */ DEEP_PYTHON_ANIM_IDLE,
+    /* 4 */ DEEP_PYTHON_ANIM_MAX
+} DeepPythonAnimation;
+
+static AnimationHeader* sAnimations[DEEP_PYTHON_ANIM_MAX] = {
+    &gDeepPythonSmallSideSwayAnim, // DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY
+    &gDeepPythonLargeSideSwayAnim, // DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY
+    &gDeepPythonVerticalSwayAnim,  // DEEP_PYTHON_ANIM_VERTICAL_SWAY
+    &gDeepPythonSmallSideSwayAnim, // DEEP_PYTHON_ANIM_IDLE
 };
 
-static u8 sAnimationModes[] = { ANIMMODE_LOOP, ANIMMODE_LOOP, ANIMMODE_ONCE, ANIMMODE_ONCE };
+static u8 sAnimationModes[DEEP_PYTHON_ANIM_MAX] = {
+    ANIMMODE_LOOP, // DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY
+    ANIMMODE_LOOP, // DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY
+    ANIMMODE_ONCE, // DEEP_PYTHON_ANIM_VERTICAL_SWAY
+    ANIMMODE_ONCE, // DEEP_PYTHON_ANIM_IDLE
+};
 
 void EnDragon_ChangeAnim(EnDragon* this, s32 animIndex) {
     f32 startFrame;
 
     this->animIndex = animIndex;
-    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[animIndex]);
     startFrame = 0.0f;
     if (this->animIndex == DEEP_PYTHON_ANIM_IDLE) {
-        startFrame = this->endFrame;
+        startFrame = this->animEndFrame;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, startFrame, this->endFrame,
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, startFrame, this->animEndFrame,
                      sAnimationModes[this->animIndex], -4.0f);
 }
 
@@ -370,7 +376,7 @@ void EnDragon_SetupExtend(EnDragon* this) {
 
 void EnDragon_Extend(EnDragon* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     s16 yaw;
 
     EnDragon_SpawnBubbles(this, play, this->jawPos);
@@ -410,7 +416,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
         Math_SmoothStepToS(&this->jawZRotation, 0, 5, 0xBB8, 0x14);
         SkelAnime_Update(&this->skelAnime);
         if (this->state == DEEP_PYTHON_EXTEND_STATE_FULLY_EXTENDED) {
-            if (currentFrame < this->endFrame) {
+            if (curFrame < this->animEndFrame) {
                 return;
             }
 
@@ -420,7 +426,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
         yaw = ABS_ALT(BINANG_SUB(Math_Vec3f_Yaw(&this->jawPos, &player->actor.world.pos), this->actor.shape.rot.y));
         if (yaw < 0x5000) {
             // Player is in front of the jaw
-            if ((this->endFrame <= currentFrame) && (this->largeSwayWaitTimer == 0)) {
+            if ((curFrame >= this->animEndFrame) && (this->largeSwayWaitTimer == 0)) {
                 if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
                     EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
                 }
@@ -433,7 +439,7 @@ void EnDragon_Extend(EnDragon* this, PlayState* play) {
             // Player is in behind the jaw
             if (this->state == DEEP_PYTHON_EXTEND_STATE_REPEAT_LARGE_SWAY) {
                 EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_SMALL_SIDE_SWAY);
-                this->largeSwayWaitTimer = Rand_ZeroFloat(20.0f) + this->endFrame;
+                this->largeSwayWaitTimer = Rand_ZeroFloat(20.0f) + this->animEndFrame;
                 this->state = DEEP_PYTHON_EXTEND_STATE_REPEAT_SMALL_SWAY;
             }
 
@@ -562,7 +568,7 @@ void EnDragon_SetupAttack(EnDragon* this) {
 
 void EnDragon_Attack(EnDragon* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
-    f32 currentFrame = this->skelAnime.curFrame;
+    f32 curFrame = this->skelAnime.curFrame;
     Vec3f pos; // used as both the extended position and the camera eye
     Vec3f subCamAt;
 
@@ -603,7 +609,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
     Math_ApproachF(&this->actor.world.pos.y, pos.y, 0.3f, 200.0f);
     Math_ApproachF(&this->actor.world.pos.z, pos.z, 0.3f, 200.0f);
 
-    if ((this->state <= DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
+    if ((this->state <= DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_BITE);
         if (this->animIndex != DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY) {
             EnDragon_ChangeAnim(this, DEEP_PYTHON_ANIM_LARGE_SIDE_SWAY);
@@ -612,7 +618,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
         this->state++;
     }
 
-    if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) ||
+    if (((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) ||
         (!(player->stateFlags2 & PLAYER_STATE2_80)) || ((this->collider.elements[0].info.bumperFlags & BUMP_HIT)) ||
         (this->collider.elements[1].info.bumperFlags & BUMP_HIT) ||
         (this->collider.elements[2].info.bumperFlags & BUMP_HIT)) {
@@ -625,7 +631,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
 
-        if ((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (this->endFrame <= currentFrame)) {
+        if ((this->state != DEEP_PYTHON_ATTACK_STATE_START) && (curFrame >= this->animEndFrame)) {
             this->timer = 3;
             this->actionFunc = EnDragon_RetreatOnceTimerEnds;
         } else {
@@ -639,7 +645,7 @@ void EnDragon_SetupDead(EnDragon* this, PlayState* play) {
         CutsceneManager_Queue(this->deathCsId);
     } else {
         CutsceneManager_StartWithPlayerCs(this->deathCsId, &this->actor);
-        this->endFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
+        this->animEndFrame = Animation_GetLastFrame(&gDeepPythonSmallSideSwayAnim);
         Animation_Change(&this->skelAnime, &gDeepPythonSmallSideSwayAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f);
         this->timer = 20;
         this->actionFunc = EnDragon_Dead;
@@ -745,7 +751,7 @@ void EnDragon_UpdateDamage(EnDragon* this, PlayState* play) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_DEAD);
                 this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actor.flags |= ACTOR_FLAG_100000;
                 this->action = DEEP_PYTHON_ACTION_SETUP_DEAD;
                 this->actionFunc = EnDragon_SetupDead;

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_In/z_en_in.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((ObjUm*)thisx)
 
@@ -708,7 +708,7 @@ void ObjUm_Init(Actor* thisx, PlayState* play) {
                 return;
             }
 
-            this->dyna.actor.targetMode = 6;
+            this->dyna.actor.targetMode = TARGET_MODE_6;
             this->unk_2B4 = 0;
             ObjUm_SetupAction(this, ObjUm_RanchWait);
         }
@@ -965,7 +965,7 @@ s32 func_80B7984C(PlayState* play, ObjUm* this, s32 arg2, s32* arg3) {
         return 0;
     }
 
-    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isTargeted) {
+    if ((this->dyna.actor.xyzDistToPlayerSq > SQ(100.0f)) && !this->dyna.actor.isLockedOn) {
         return 0;
     }
 
@@ -995,7 +995,7 @@ s32 func_80B79A24(s32 arg0) {
 void ObjUm_RanchWait(ObjUm* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->dyna.actor.flags |= ACTOR_FLAG_1;
+    this->dyna.actor.flags |= ACTOR_FLAG_TARGETABLE;
     SkelAnime_Update(&this->skelAnime);
     ObjUm_ChangeAnim(this, play, OBJ_UM_ANIM_IDLE);
     this->flags |= OBJ_UM_FLAG_WAITING;

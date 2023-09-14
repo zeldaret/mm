@@ -67,7 +67,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
     this->unk_148 = 0;
     this->unk_14A = 0;
     this->actor.focus.pos.y += 40.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (this->unk_147) {
         case ENELFGRP_1:
@@ -119,6 +119,9 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                             this->unk_14A |= 0x10;
                         }
                         break;
+
+                    default:
+                        break;
                 }
             } else if (func_80A39BD0(play, this->unk_147)) {
                 this->actionFunc = func_80A3A7FC;
@@ -169,7 +172,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
                 } else {
                     this->actor.textId = 0x578;
                 }
-                this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+                this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
             }
             break;
     }
@@ -408,6 +411,9 @@ void func_80A3A274(EnElfgrp* this, PlayState* play) {
                 func_80A39F50(play);
                 this->actionFunc = func_80A3A210;
                 this->unk_144 = 90;
+                break;
+
+            default:
                 break;
         }
     }

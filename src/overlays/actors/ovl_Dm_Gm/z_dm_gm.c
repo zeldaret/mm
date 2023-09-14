@@ -8,7 +8,7 @@
 #include "objects/object_an4/object_an4.h"
 #include "objects/object_msmo/object_msmo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmGm*)thisx)
 
@@ -137,7 +137,7 @@ s32 func_80C2457C(DmGm* this, PlayState* play) {
     this->unk_2C4 = CLAMP(this->unk_2C4, -0x1C70, 0x1C70);
 
     if (this->unk_2B4->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_2B4->focus.pos);
     }
@@ -199,7 +199,7 @@ void func_80C248A8(DmGm* this, PlayState* play) {
 
         this->animIndex = DMGM_ANIM_NONE;
         DmGm_ChangeAnim(this, play, DMGM_ANIM_0);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
         this->actor.draw = func_80C25000;

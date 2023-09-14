@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_200)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_200)
 
 #define THIS ((EnBb*)thisx)
 
@@ -119,22 +119,6 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 10, ICHAIN_STOP),
 };
 
-/**
- * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos/Velocity arrays. An index of -1 indicates that the
- * limb is not part of the bodyParts arrays.
- */
-static s8 sLimbIndexToBodyPartsIndex[BUBBLE_LIMB_MAX] = {
-    -1, -1, -1, -1, 0, -1, -1, -1, 1, -1, -1, -1, -1, 2, -1, 3,
-};
-
-/**
- * The last element of the bodyParts arrays is a duplicate of the cranium
- * limb, which is then offset by a certain amount. There is no display list
- * associated with this, so it is only used for effects.
- */
-static Vec3f sDuplicateCraniumBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
-
 void EnBb_Init(Actor* thisx, PlayState* play) {
     EnBb* this = THIS;
 
@@ -197,7 +181,7 @@ void EnBb_Thaw(EnBb* this, PlayState* play) {
     if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), 2, 0.2f, 0.15f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, BUBBLE_BODYPART_MAX, 2, 0.2f, 0.15f);
         this->actor.flags |= ACTOR_FLAG_200;
     }
 }
@@ -373,7 +357,7 @@ void EnBb_SetupDead(EnBb* this, PlayState* play) {
     this->actor.gravity = -1.5f;
 
     bodyPartVelocity = &this->bodyPartsVelocity[0];
-    for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++, bodyPartVelocity++) {
+    for (i = 0; i < BUBBLE_BODYPART_MAX; i++, bodyPartVelocity++) {
         Math_Vec3f_Diff(&this->bodyPartsPos[i], &this->actor.world.pos, &posDiff);
         magnitude = Math3D_Vec3fMagnitude(&posDiff);
         if (magnitude > 1.0f) {
@@ -386,7 +370,7 @@ void EnBb_SetupDead(EnBb* this, PlayState* play) {
     }
 
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnBb_Dead;
 }
 
@@ -397,14 +381,14 @@ void EnBb_Dead(EnBb* this, PlayState* play) {
     Math_SmoothStepToS(&this->actor.world.rot.z, 0x4000, 4, 0x1000, 0x400);
 
     if (this->timer == 0) {
-        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        for (i = 0; i < BUBBLE_BODYPART_MAX; i++) {
             func_800B3030(play, &this->bodyPartsPos[i], &gZeroVec3f, &gZeroVec3f, 40, 7, 2);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->bodyPartsPos[i], 11, NA_SE_EN_EXTINCT);
         }
 
         EnBb_SetupWaitForRevive(this);
     } else {
-        for (i = 0; i < ARRAY_COUNT(this->bodyPartsPos); i++) {
+        for (i = 0; i < BUBBLE_BODYPART_MAX; i++) {
             Math_Vec3f_Sum(&this->bodyPartsPos[i], &this->bodyPartsVelocity[i], &this->bodyPartsPos[i]);
             this->bodyPartsVelocity[i].y += this->actor.gravity;
         }
@@ -504,7 +488,7 @@ void EnBb_Revive(EnBb* this, PlayState* play) {
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.0005f)) {
         this->actor.flags &= ~ACTOR_FLAG_10;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->collider.base.acFlags |= AC_ON;
         this->collider.base.atFlags |= AT_ON;
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -631,38 +615,68 @@ s32 EnBb_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     return false;
 }
 
+/**
+ * This maps a given limb based on its limbIndex to its appropriate index
+ * in the bodyPartsPos/Velocity arrays.
+ */
+static s8 sLimbToBodyParts[BUBBLE_LIMB_MAX] = {
+    BODYPART_NONE,     // BUBBLE_LIMB_NONE
+    BODYPART_NONE,     // BUBBLE_LIMB_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_CRANIUM_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_JAW_ROOT
+    BUBBLE_BODYPART_0, // BUBBLE_LIMB_JAW
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WRAPPER
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_WEBBING_ROOT
+    BUBBLE_BODYPART_1, // BUBBLE_LIMB_LEFT_WING_WEBBING
+    BODYPART_NONE,     // BUBBLE_LIMB_LEFT_WING_BONE
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_ROOT
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WRAPPER
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_WEBBING_ROOT
+    BUBBLE_BODYPART_2, // BUBBLE_LIMB_RIGHT_WING_WEBBING
+    BODYPART_NONE,     // BUBBLE_LIMB_RIGHT_WING_BONE
+    BUBBLE_BODYPART_3, // BUBBLE_LIMB_CRANIUM
+};
+
+/**
+ * The last element of the bodyParts arrays is a duplicate of the cranium
+ * limb, which is then offset by a certain amount. There is no display list
+ * associated with this, so it is only used for effects.
+ */
+static Vec3f sEffectsBodyPartOffset = { 1000.0f, -700.0f, 0.0f };
+
 void EnBb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     s32 pad;
     EnBb* this = THIS;
     MtxF* currentMatrixState;
 
     if (this->bodyPartDrawStatus == BB_BODY_PART_DRAW_STATUS_ALIVE) {
-        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
-            if (sLimbIndexToBodyPartsIndex[limbIndex] == 0) {
-                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[0]);
-            } else if (sLimbIndexToBodyPartsIndex[limbIndex] == 3) {
-                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[3]);
-                Matrix_MultVec3f(&sDuplicateCraniumBodyPartOffset, &this->bodyPartsPos[4]);
+        if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+            if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_0) {
+                Matrix_MultVecX(1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_0]);
+            } else if (sLimbToBodyParts[limbIndex] == BUBBLE_BODYPART_3) {
+                Matrix_MultVecX(-1000.0f, &this->bodyPartsPos[BUBBLE_BODYPART_3]);
+                Matrix_MultVec3f(&sEffectsBodyPartOffset, &this->bodyPartsPos[BUBBLE_BODYPART_EFFECTS]);
             } else {
-                Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
+                Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
             }
         }
     } else if (this->bodyPartDrawStatus > BB_BODY_PART_DRAW_STATUS_ALIVE) {
-        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
-            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]]);
+        if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+            Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
         }
 
         if (limbIndex == BUBBLE_LIMB_CRANIUM) {
             this->bodyPartDrawStatus = BB_BODY_PART_DRAW_STATUS_BROKEN;
         }
     } else {
-        if (sLimbIndexToBodyPartsIndex[limbIndex] != -1) {
+        if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
             OPEN_DISPS(play->state.gfxCtx);
 
             currentMatrixState = Matrix_GetCurrent();
-            currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].x;
-            currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].y;
-            currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbIndexToBodyPartsIndex[limbIndex]].z;
+            currentMatrixState->mf[3][0] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].x;
+            currentMatrixState->mf[3][1] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].y;
+            currentMatrixState->mf[3][2] = this->bodyPartsPos[sLimbToBodyParts[limbIndex]].z;
             Matrix_RotateZS(thisx->world.rot.z, MTXMODE_APPLY);
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, this->limbDList);
@@ -702,9 +716,8 @@ void EnBb_Draw(Actor* thisx, PlayState* play) {
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
 
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                            this->drawDmgEffScale, this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha,
-                            this->drawDmgEffType);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, BUBBLE_BODYPART_MAX, this->drawDmgEffScale,
+                            this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
