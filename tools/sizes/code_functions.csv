@@ -1229,7 +1229,7 @@ asm/non_matchings/code/z_kankyo/func_800F5B10.s,func_800F5B10,0x800F5B10,0x70
 asm/non_matchings/code/z_kankyo/Environment_UpdateSkybox.s,Environment_UpdateSkybox,0x800F5CD0,0x2D9
 asm/non_matchings/code/z_kankyo/func_800F6834.s,func_800F6834,0x800F6834,0x46
 asm/non_matchings/code/z_kankyo/func_800F694C.s,func_800F694C,0x800F694C,0x2E
-asm/non_matchings/code/z_kankyo/func_800F6A04.s,func_800F6A04,0x800F6A04,0xF
+asm/non_matchings/code/z_kankyo/Environment_WipeRumbleRequests.s,Environment_WipeRumbleRequests,0x800F6A04,0xF
 asm/non_matchings/code/z_kankyo/func_800F6A40.s,func_800F6A40,0x800F6A40,0x1E
 asm/non_matchings/code/z_kankyo/func_800F6AB8.s,func_800F6AB8,0x800F6AB8,0x23
 asm/non_matchings/code/z_kankyo/func_800F6B44.s,func_800F6B44,0x800F6B44,0x6A

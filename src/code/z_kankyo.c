@@ -512,11 +512,112 @@ s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_SmoothStepToU8.s")
+u8 Environment_SmoothStepToU8(u8* pvalue, u8 target, u8 scale, u8 step, u8 minStep) {
+    s16 stepSize = 0;
+    s16 diff = target - *pvalue;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpWeight.s")
+    if (target != *pvalue) {
+        stepSize = diff / scale;
+        if ((stepSize >= (s16)minStep) || ((s16)-minStep >= stepSize)) {
+            if ((s16)step < stepSize) {
+                stepSize = step;
+            }
+            if ((s16)-step > stepSize) {
+                stepSize = -step;
+            }
+            *pvalue += (u8)stepSize;
+        } else {
+            if (stepSize < (s16)minStep) {
+                stepSize = minStep;
+                *pvalue += (u8)stepSize;
+                if (target < *pvalue) {
+                    *pvalue = target;
+                }
+            }
+            if ((s16)-minStep < stepSize) {
+                stepSize = -minStep;
+                *pvalue += (u8)stepSize;
+                if (*pvalue < target) {
+                    *pvalue = target;
+                }
+            }
+        }
+    }
+    return diff;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpWeightAccelDecel.s")
+f32 Environment_LerpWeight(u16 max, u16 min, u16 val) {
+    f32 diff = max - min;
+
+    if (diff != 0.0f) {
+        f32 ret = 1.0f - (max - val) / diff;
+
+        if (!(ret >= 1.0f)) {
+            return ret;
+        }
+    }
+
+    return 1.0f;
+}
+
+f32 Environment_LerpWeightAccelDecel(u16 endFrame, u16 startFrame, u16 curFrame, u16 accelDuration, u16 decelDuration) {
+    f32 endFrameF;
+    f32 startFrameF;
+    f32 curFrameF;
+    f32 accelDurationF;
+    f32 decelDurationF;
+    f32 totalFrames;
+    f32 temp;
+    f32 framesElapsed;
+    f32 ret;
+
+    if (curFrame <= startFrame) {
+        return 0.0f;
+    }
+
+    if (curFrame >= endFrame) {
+        return 1.0f;
+    }
+
+    endFrameF = (s32)endFrame;
+    startFrameF = (s32)startFrame;
+    curFrameF = (s32)curFrame;
+    totalFrames = endFrameF - startFrameF;
+    framesElapsed = curFrameF - startFrameF;
+    accelDurationF = (s32)accelDuration;
+    decelDurationF = (s32)decelDuration;
+
+    if ((startFrameF >= endFrameF) || (accelDurationF + decelDurationF > totalFrames)) {
+        return 0.0f;
+    }
+
+    temp = 1.0f / ((totalFrames * 2.0f) - accelDurationF - decelDurationF);
+
+    if (accelDurationF != 0.0f) {
+        if (framesElapsed <= accelDurationF) {
+            return temp * framesElapsed * framesElapsed / accelDurationF;
+        }
+        ret = temp * accelDurationF;
+    } else {
+        ret = 0.0f;
+    }
+
+    if (framesElapsed <= totalFrames - decelDurationF) {
+        ret += 2.0f * temp * (framesElapsed - accelDurationF);
+        return ret;
+    }
+
+    ret += 2.0f * temp * (totalFrames - accelDurationF - decelDurationF);
+
+    if (decelDurationF != 0.0f) {
+        ret += temp * decelDurationF;
+        if (framesElapsed < totalFrames) {
+            ret -= temp * (totalFrames - framesElapsed) * (totalFrames - framesElapsed) / decelDurationF;
+        }
+    }
+
+    return ret;
+}
 
 Color_RGBA8 sSkyboxPrimColors[] = {
     { 181, 100, 72, 0 },  { 255, 255, 255, 0 }, { 255, 164, 63, 0 },  { 70, 90, 100, 0 },   { 180, 110, 70, 0 },
@@ -572,7 +673,11 @@ Color_RGBA8 sSkyboxEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DisableUnderwaterLights.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F6A04.s")
+void Environment_WipeRumbleRequests(void) {
+    if ((gSaveContext.gameMode != GAMEMODE_NORMAL) && (gSaveContext.gameMode != GAMEMODE_END_CREDITS)) {
+        Rumble_StateWipeRequests();
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateSkyboxRotY.s")
 
@@ -584,7 +689,14 @@ Color_RGBA8 sSkyboxEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800F6EA4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_IsSceneUpsideDown.s")
+s32 Environment_IsSceneUpsideDown(PlayState* play) {
+    s32 ret = false;
+
+    if ((play->sceneId == SCENE_F41) || (play->sceneId == SCENE_INISIE_R)) {
+        ret = true;
+    }
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_UpdateLights.s")
 
@@ -698,21 +810,49 @@ u8 sSandstormEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_AdjustLights.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpRGB8.s")
+// Get ((to - from) * lerp)
+void Environment_LerpRGB8(u8* from, Color_RGB8* to, f32 lerp, s16* dst) {
+    Color_RGB8 result;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpAmbientColor.s")
+    Lib_LerpRGB((Color_RGB8*)from, to, lerp, &result);
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpDiffuseColor.s")
+    dst[0] = result.r - from[0];
+    dst[1] = result.g - from[1];
+    dst[2] = result.b - from[2];
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpFogColor.s")
+void Environment_LerpAmbientColor(PlayState* play, Color_RGB8* to, f32 lerp) {
+    Environment_LerpRGB8(play->envCtx.lightSettings.ambientColor, to, lerp, play->envCtx.adjLightSettings.ambientColor);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_LerpFog.s")
+void Environment_LerpDiffuseColor(PlayState* play, Color_RGB8* to, f32 lerp) {
+    Environment_LerpRGB8(play->envCtx.lightSettings.light1Color, to, lerp, play->envCtx.adjLightSettings.light1Color);
+    Environment_LerpRGB8(play->envCtx.lightSettings.light2Color, to, lerp, play->envCtx.adjLightSettings.light2Color);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_GetBgsDayCount.s")
+void Environment_LerpFogColor(PlayState* play, Color_RGB8* to, f32 lerp) {
+    Environment_LerpRGB8(play->envCtx.lightSettings.fogColor, to, lerp, play->envCtx.adjLightSettings.fogColor);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_ClearBgsDayCount.s")
+void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f32 lerp) {
+    play->envCtx.adjLightSettings.fogNear = (fogNearTarget - play->envCtx.lightSettings.fogNear) * lerp;
+    play->envCtx.adjLightSettings.zFar = (fogFarTarget - play->envCtx.lightSettings.zFar) * lerp;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_GetTotalDays.s")
+// Repurposed from OoT to be more general
+u32 Environment_GetBgsDayCount(void) {
+    return gSaveContext.save.daysElapsed;
+}
+
+// Repurposed from OoT to be more general
+void Environment_ClearBgsDayCount(void) {
+    gSaveContext.save.daysElapsed = 0;
+}
+
+// Repurposed from OoT to be more general
+u32 Environment_GetTotalDays(void) {
+    return gSaveContext.save.day;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_ForcePlaySequence.s")
 
@@ -722,7 +862,15 @@ u8 sSandstormEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StopStormNatureAmbience.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_WarpSongLeave.s")
+void Environment_WarpSongLeave(PlayState* play) {
+    gWeatherMode = WEATHER_MODE_CLEAR;
+    gSaveContext.save.cutsceneIndex = 0;
+    gSaveContext.respawnFlag = -3;
+    play->nextEntrance = gSaveContext.respawn[RESPAWN_MODE_RETURN].entrance;
+    play->transitionTrigger = TRANS_TRIGGER_START;
+    play->transitionType = TRANS_TYPE_FADE_WHITE;
+    gSaveContext.nextTransitionType = TRANS_TYPE_FADE_WHITE;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_SetupSkyboxStars.s")
 
@@ -734,23 +882,90 @@ u8 sSandstormEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_DrawSkyboxStars.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StopTime.s")
+void Environment_StopTime(void) {
+    sEnvIsTimeStopped = true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_StartTime.s")
+void Environment_StartTime(void) {
+    sEnvIsTimeStopped = false;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_IsTimeStopped.s")
+u8 Environment_IsTimeStopped(void) {
+    return sEnvIsTimeStopped;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_GetStormState.s")
+u32 Environment_GetStormState(PlayState* play) {
+    u32 stormState = play->envCtx.stormState;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_IsFinalHours.s")
+    if ((play->sceneId == SCENE_OMOYA) && (play->roomCtx.curRoom.num == 0)) {
+        stormState = ((gSaveContext.save.day >= 2) && !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM))
+                         ? STORM_STATE_ON
+                         : STORM_STATE_OFF;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE5D0.s")
+    switch (play->sceneId) {
+        case SCENE_13HUBUKINOMITI:
+        case SCENE_11GORONNOSATO:
+        case SCENE_10YUKIYAMANOMURA:
+        case SCENE_14YUKIDAMANOMITI:
+        case SCENE_12HAKUGINMAE:
+        case SCENE_17SETUGEN:
+        case SCENE_GORONRACE:
+            if (gSaveContext.sceneLayer == 0) {
+                stormState = STORM_STATE_OFF;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE610.s")
+        case SCENE_10YUKIYAMANOMURA2:
+            if (gSaveContext.sceneLayer == 1) {
+                stormState = STORM_STATE_OFF;
+            }
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_GetTimeSpeed.s")
+        default:
+            break;
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_SetTimeJump.s")
+    return stormState;
+}
+
+u8 Environment_IsFinalHours(PlayState* play) {
+    u8 ret = false;
+
+    if ((gSaveContext.save.day == 3) && (gSaveContext.save.time < CLOCK_TIME(6, 0))) {
+        ret = true;
+    }
+
+    return ret;
+}
+
+u8 func_800FE5D0(PlayState* play) {
+    u8 ret = false;
+
+    if (Entrance_GetSceneId(((void)0, gSaveContext.save.entrance)) < 0) {
+        ret = true;
+    }
+
+    return ret;
+}
+
+u32 func_800FE610(PlayState* play) {
+    return 0;
+}
+
+u16 Environment_GetTimeSpeed(PlayState* play) {
+    u16 timeSpeed = 0;
+
+    if (R_TIME_SPEED != 0) {
+        timeSpeed = R_TIME_SPEED + (u16)((void)0, gSaveContext.save.timeSpeedOffset);
+    }
+
+    return timeSpeed;
+}
+
+void Environment_SetTimeJump(f32 minutes) {
+    sTimeJump = CLOCK_TIME_F(0, minutes);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FE6F8.s")
 
@@ -768,6 +983,11 @@ u8 sSandstormEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FEAB0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_JumpForwardInTime.s")
+void Environment_JumpForwardInTime(void) {
+    if (sTimeJump != 0) {
+        gSaveContext.save.time = ((void)0, gSaveContext.save.time) + sTimeJump;
+        sTimeJump = 0;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/func_800FEAF4.s")

@@ -1715,7 +1715,7 @@
     0x800F5CD0:("Environment_UpdateSkybox",),
     0x800F6834:("Environment_EnableUnderwaterLights",),
     0x800F694C:("Environment_DisableUnderwaterLights",),
-    0x800F6A04:("func_800F6A04",),
+    0x800F6A04:("Environment_WipeRumbleRequests",),
     0x800F6A40:("Environment_UpdateSkyboxRotY",),
     0x800F6AB8:("Environment_UpdateNextDayTime",),
     0x800F6B44:("Environment_UpdateTime",),
