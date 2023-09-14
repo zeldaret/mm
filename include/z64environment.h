@@ -5,8 +5,10 @@
 #include "PR/os_message.h"
 #include "z64math.h"
 #include "z64dma.h"
+#include "unk.h"
 
 struct GameOverContext;
+struct GraphicsContext;
 struct LightContext;
 struct MessageContext;
 struct PauseContext;
@@ -258,10 +260,10 @@ void Environment_EnableUnderwaterLights(struct PlayState* play, s32 waterLightsI
 void Environment_DisableUnderwaterLights(struct PlayState* play);
 void Environment_Update(struct PlayState* play, EnvironmentContext* envCtx, struct LightContext* lightCtx,
                         struct PauseContext* pauseCtx, struct MessageContext* msgCtx, struct GameOverContext* gameOverCtx,
-                        GraphicsContext* gfxCtx);
-void Environment_DrawSunLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f vec);
-void Environment_DrawLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, GraphicsContext* gfxCtx, Vec3f pos, f32 scale, f32 colorIntensity, s16 glareStrength, u8 isSun);
-void Environment_DrawRain(struct PlayState* play, struct View* view, GraphicsContext* gfxCtx);
+                        struct GraphicsContext* gfxCtx);
+void Environment_DrawSunLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, struct GraphicsContext* gfxCtx, Vec3f vec);
+void Environment_DrawLensFlare(struct PlayState* play, EnvironmentContext* envCtx, struct View* view, struct GraphicsContext* gfxCtx, Vec3f pos, f32 scale, f32 colorIntensity, s16 glareStrength, u8 isSun);
+void Environment_DrawRain(struct PlayState* play, struct View* view, struct GraphicsContext* gfxCtx);
 void Environment_ChangeLightSetting(struct PlayState* play, u8 lightSetting);
 void Environment_AddLightningBolts(struct PlayState* play, u8 num);
 void Environment_PlaySceneSequence(struct PlayState* play);
@@ -269,7 +271,7 @@ void Environment_DrawCustomLensFlare(struct PlayState* play);
 void Environment_InitGameOverLights(struct PlayState* play);
 void Environment_FadeInGameOverLights(struct PlayState* play);
 void Environment_FadeOutGameOverLights(struct PlayState* play);
-void Environment_FillScreen(GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, u8 alpha, u8 drawFlags);
+void Environment_FillScreen(struct GraphicsContext* gfxCtx, u8 red, u8 green, u8 blue, u8 alpha, u8 drawFlags);
 void Environment_DrawSandstorm(struct PlayState* play, u8 sandstormState);
 s32 Environment_AdjustLights(struct PlayState* play, f32 arg1, f32 arg2, f32 arg3, f32 arg4);
 void Environment_LerpAmbientColor(struct PlayState* play, Color_RGB8* to, f32 lerp);
