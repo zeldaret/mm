@@ -1,6 +1,6 @@
 #include "global.h"
 
-__OSViContext vi[2] = { 0 };
+static __OSViContext vi[2] = { 0 };
 __OSViContext* __osViCurr = &vi[0];
 __OSViContext* __osViNext = &vi[1];
 
