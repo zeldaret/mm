@@ -692,11 +692,11 @@ void EnSnowman_SetupDamaged(EnSnowman* this) {
  * Otherwise, it will either submerge underground (if it has health remaining) or die.
  */
 void EnSnowman_Damaged(EnSnowman* this, PlayState* play) {
-    s32 rotationalVelocityScale;
+    s32 angularVelocityScale;
 
     SkelAnime_Update(&this->skelAnime);
-    rotationalVelocityScale = CLAMP_MAX(this->work.timer, 10);
-    this->actor.shape.rot.y += rotationalVelocityScale * 0x300;
+    angularVelocityScale = CLAMP_MAX(this->work.timer, 10);
+    this->actor.shape.rot.y += angularVelocityScale * 0x300;
     Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
