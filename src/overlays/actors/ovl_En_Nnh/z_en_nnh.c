@@ -7,7 +7,7 @@
 #include "z_en_nnh.h"
 #include "objects/object_nnh/object_nnh.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnNnh*)thisx)
 
@@ -59,7 +59,7 @@ void EnNnh_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
     EnNnh_SetupWaitForDialogue(this);
@@ -104,10 +104,11 @@ void EnNnh_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnNnh_Draw(Actor* thisx, PlayState* play) {
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    s32 pad;
+    OPEN_DISPS(play->state.gfxCtx);
 
-    Gfx_SetupDL25_Opa(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, gButlerSonMainBodyDL);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gButlerSonMainBodyDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }

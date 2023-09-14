@@ -8,7 +8,7 @@
 #include "objects/object_ssh/object_ssh.h"
 #include "objects/object_st/object_st.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSsh*)thisx)
 
@@ -326,9 +326,9 @@ void EnSsh_Stunned(EnSsh* this, PlayState* play) {
 
     if (this->stunTimer < 30) {
         if (this->stunTimer & 1) {
-            this->actor.shape.rot.y += 2000;
+            this->actor.shape.rot.y += 0x7D0;
         } else {
-            this->actor.shape.rot.y -= 2000;
+            this->actor.shape.rot.y -= 0x7D0;
         }
     }
 }

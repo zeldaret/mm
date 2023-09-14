@@ -1084,7 +1084,7 @@ void MapSelect_Init(GameState* thisx) {
         this->pageDownIndex = dREG(82);
     }
 
-    Game_SetFramerateDivisor(&this->state, 1);
+    GameState_SetFramerateDivisor(&this->state, 1);
     gSaveContext.save.cutsceneIndex = 0;
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.save.linkAge = 0;

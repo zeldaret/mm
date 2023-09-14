@@ -1,34 +1,34 @@
 ﻿<Root>
     <!-- This is the object for the Iron Knuckle Enemy -->
     <File Name="object_ik" Segment="6">
-        <Animation Name="gIronKnuckleVerticalAttackAnim" Offset="0xCE8" />
-        <Animation Name="gIronKnuckleRecoverVerticalAttackAnim" Offset="0x15F8" />
-        <Animation Name="gIronKnuckleEndVerticalAttackAnim" Offset="0x1ABC" />
-        <Animation Name="gIronKnuckleHorizontalAttackAnim" Offset="0x2484" />
-        <Animation Name="gIronKnuckleEndHorizontalAttackAnim" Offset="0x2E7C" />
-        <Animation Name="gIronKnuckleBackHitAnim" Offset="0x367C" />
-        <Animation Name="gIronKnuckleBlockAnim" Offset="0x391C" />
-        <Animation Name="gIronKnuckleDeathAnim" Offset="0x4A04" />
-        <Animation Name="gIronKnuckleFrontHitAnim" Offset="0x5254" />
-        <Animation Name="gIronKnuckleRunAnim" Offset="0x57F4" />
-        <Animation Name="gIronKnuckleWalkAnim" Offset="0x6294" />
+        <Animation Name="gIronKnuckleVerticalAttackAnim" Offset="0xCE8" /> <!-- Original name is "ironknack_attackA" -->
+        <Animation Name="gIronKnuckleRecoverVerticalAttackAnim" Offset="0x15F8" /> <!-- Original name is "ironknack_attackA_end" -->
+        <Animation Name="gIronKnuckleEndVerticalAttackAnim" Offset="0x1ABC" /> <!-- Original name is "ironknack_attackA_hit" -->
+        <Animation Name="gIronKnuckleHorizontalAttackAnim" Offset="0x2484" /> <!-- Original name is "ironknack_attackB" -->
+        <Animation Name="gIronKnuckleEndHorizontalAttackAnim" Offset="0x2E7C" /> <!-- Original name is "ironknack_attackB_end" -->
+        <Animation Name="gIronKnuckleBackHitAnim" Offset="0x367C" /> <!-- Original name is "ironknack_back_hit" -->
+        <Animation Name="gIronKnuckleBlockAnim" Offset="0x391C" /> <!-- Original name is "ironknack_defense" -->
+        <Animation Name="gIronKnuckleDeathAnim" Offset="0x4A04" /> <!-- Original name is "ironknack_down" -->
+        <Animation Name="gIronKnuckleFrontHitAnim" Offset="0x5254" /> <!-- Original name is "ironknack_front_hit" -->
+        <Animation Name="gIronKnuckleRunAnim" Offset="0x57F4" /> <!-- Original name is "ironknack_run" -->
+        <Animation Name="gIronKnuckleWalkAnim" Offset="0x6294" /> <!-- Original name is "ironknack_walk" -->
         <Array Name="gObjectIkVtx_009740" Count="566" Offset="0x6730">
             <Vtx/>
         </Array>
-        <DList Name="gIronKnuckleArmorFrontDL" Offset="0x9A40" />
-        <DList Name="gIronKnuckleArmorBackDL" Offset="0x9BC8" />
+        <DList Name="gIronKnuckleArmorFrontDL" Offset="0x9A40" /> <!-- Original name is "ironknack_front_armer" -->
+        <DList Name="gIronKnuckleArmorBackDL" Offset="0x9BC8" /> <!-- Original name is "ironknack_back_armer" -->
         <DList Name="gIronKnuckleAxeDL" Offset="0x9D20" />
         <DList Name="gIronKnuckleRightHandDL" Offset="0x9FD8" />
-        <DList Name="gIronKnuckleLowerRightPauldronDL" Offset="0xA130" />
+        <DList Name="gIronKnuckleLowerRightPauldronDL" Offset="0xA130" /> <!-- Original name is "ironknack_Rshoulder_b" -->
         <DList Name="gIronKnuckleLeftHandDL" Offset="0xA1F0" />
-        <DList Name="gIronKnuckleLowerLeftPauldronDL" Offset="0xA348" />
-        <DList Name="gIronKnuckleUpperRightPauldronDL" Offset="0xA408" />
-        <DList Name="gIronKnuckleUpperLeftPauldronDL" Offset="0xA4F0" />
+        <DList Name="gIronKnuckleLowerLeftPauldronDL" Offset="0xA348" /> <!-- Original name is "ironknack_Lshoulder_b" -->
+        <DList Name="gIronKnuckleUpperRightPauldronDL" Offset="0xA408" /> <!-- Original name is "ironknack_Rshoulder" -->
+        <DList Name="gIronKnuckleUpperLeftPauldronDL" Offset="0xA4F0" /> <!-- Original name is "ironknack_Lshoulder" -->
         <DList Name="gIronKnuckleFrontTorsoArmorMarkingDL" Offset="0xA5D8" />
         <DList Name="gIronKnuckleRearTorsoArmorMarkingDL" Offset="0xA6D0" />
         <DList Name="gIronKnuckleRivetsMarking1DL" Offset="0xA780" />
         <DList Name="gIronKnuckleRivetsMarking2DL" Offset="0xA820" />
-        <DList Name="gIronKnuckleBasMarkingDL" Offset="0xBF80" />
+        <DList Name="gIronKnuckleBasMarkingDL" Offset="0xBF80" /> <!-- Original name is "ironknack_head" -->
         <DList Name="gIronKnuckleGerudoHeadDL" Offset="0xC200" />
         <DList Name="gIronKnuckleHelmetMarkingDL" Offset="0xCF08" />
         <DList Name="gIronKnuckleTanArmorMaterialDL" Offset="0xD038" />

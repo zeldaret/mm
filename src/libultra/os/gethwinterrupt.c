@@ -1,7 +1,8 @@
 #include "global.h"
-#include "os_internal.h"
+#include "PR/os_internal.h"
+#include "PR/osint.h"
 
-void __osGetHWIntrRoutine(s32 idx, OSMesgQueue** outQueue, OSMesg* outMsg) {
+void __osGetHWIntrRoutine(OSHWIntr idx, OSMesgQueue** outQueue, OSMesg* outMsg) {
     *outQueue = __osHwIntTable[idx].queue;
     *outMsg = __osHwIntTable[idx].msg;
 }

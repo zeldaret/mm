@@ -2,7 +2,7 @@
 #define Z64PLAYER_H
 
 #include "alignment.h"
-#include "os.h"
+#include "PR/os.h"
 #include "z64actor.h"
 
 struct Player;
@@ -1168,7 +1168,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* targetedActor; // Z/L-Targeted actor
+    /* 0x730 */ Actor* lockOnActor; // Z/L-Targeted actor
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];

@@ -9,7 +9,7 @@
 #include "z_en_kujiya.h"
 #include "objects/object_kujiya/object_kujiya.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnKujiya*)thisx)
 
@@ -59,8 +59,8 @@ void EnKujiya_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.1f);
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actor.targetMode = 6;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_6;
 
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;

@@ -29,7 +29,7 @@ typedef struct EnDnq {
     /* 0x38C */ s16 unk_38C;
     /* 0x390 */ f32 unk_390;
     /* 0x394 */ f32 unk_394;
-    /* 0x398 */ s32 unk_398;
+    /* 0x398 */ s32 animIndex;
     /* 0x39C */ s32 unk_39C;
     /* 0x3A0 */ UNK_TYPE1 unk_3A0[0x4];
     /* 0x3A4 */ s32 unk_3A4;

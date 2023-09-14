@@ -1,5 +1,5 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef LIBC_MATH_H
+#define LIBC_MATH_H
 
 #include "PR/ultratypes.h"
 
@@ -27,8 +27,10 @@ extern f32 __libm_qnan_f;
 
 float fabsf(float f);
 #pragma intrinsic(fabsf)
-float sqrtf(float f);
-#pragma intrinsic(sqrtf)
+#ifdef __GNUC__
+#define fabsf(f) __builtin_fabsf((float)(f))
+#endif
+
 double sqrt(double d);
 #pragma intrinsic(sqrt)
 

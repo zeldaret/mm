@@ -7,7 +7,7 @@
 #include "z_en_cne_01.h"
 #include "objects/object_cne/object_cne.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnCne01*)thisx)
 
@@ -148,7 +148,7 @@ s32 func_809CB4A0(EnCne01* this, PlayState* play) {
 
 void EnCne01_FinishInit(EnHy* this, PlayState* play) {
     if (EnHy_Init(this, play, &gCneSkel, ENHY_ANIM_OS_ANIME_11)) {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.draw = EnCne01_Draw;
         this->waitingOnInit = false;
         if (ENCNE01_GET_PATH_INDEX(&this->actor) == ENCNE01_PATH_INDEX_NONE) {
@@ -195,6 +195,9 @@ void EnCne01_Talk(EnHy* this, PlayState* play) {
             this->actionFunc = this->prevActionFunc;
             this->prevActionFunc = NULL;
             break;
+
+        default:
+            break;
     }
 }
 
@@ -215,7 +218,7 @@ void EnCne01_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->enHy.collider);
     Collider_SetCylinder(play, &this->enHy.collider, &this->enHy.actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->enHy.actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->enHy.actor.flags &= ~ACTOR_FLAG_1;
+    this->enHy.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->enHy.path = SubS_GetPathByIndex(play, ENCNE01_GET_PATH_INDEX(&this->enHy.actor), ENCNE01_PATH_INDEX_NONE);
     this->enHy.waitingOnInit = true;
     Actor_SetScale(&this->enHy.actor, 0.01f);
@@ -240,12 +243,12 @@ void EnCne01_Update(Actor* thisx, PlayState* play) {
 
 s32 EnCne01_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnCne01* this = THIS;
-    s8 bodyPart;
+    s8 bodyPartIndex;
     Vec3f zeroVec = { 0.0f, 0.0f, 0.0f };
 
-    bodyPart = gEnHyBodyParts[limbIndex];
-    if (bodyPart >= 0) {
-        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPart]);
+    bodyPartIndex = gEnHyLimbToBodyParts[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        Matrix_MultVec3f(&zeroVec, &this->enHy.bodyPartsPos[bodyPartIndex]);
     }
 
     if (limbIndex == CNE_LIMB_HEAD) {
@@ -327,8 +330,8 @@ void EnCne01_Draw(Actor* thisx, PlayState* play) {
         *shadowTexIter++ = 0;
     }
     for (i = 0; i < 5; i++) {
-        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f,
-                          ARRAY_COUNT(this->enHy.bodyPartsPos), gEnHyShadowSizes, gEnHyParentBodyParts);
+        SubS_GenShadowTex(this->enHy.bodyPartsPos, &this->enHy.actor.world.pos, shadowTex, i / 5.0f, ENHY_BODYPART_MAX,
+                          gEnHyShadowSizes, gEnHyParentShadowBodyParts);
     }
     SubS_DrawShadowTex(&this->enHy.actor, &play->state, shadowTex);
 

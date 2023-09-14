@@ -29,9 +29,12 @@ ActorInit En_Fire_Rock_InitVars = {
 
 void EnFireRock_Init(Actor* thisx, PlayState* play) {
 }
+
 void EnFireRock_Destroy(Actor* thisx, PlayState* play) {
 }
+
 void EnFireRock_Update(Actor* thisx, PlayState* play) {
 }
+
 void EnFireRock_Draw(Actor* thisx, PlayState* play) {
 }

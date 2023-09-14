@@ -6,10 +6,11 @@
 
 #include "z_en_gs.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -147,7 +148,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_216 = 0;
     this->unk_218 = 0;
     this->unk_200 = 1.0f;
@@ -282,7 +283,8 @@ void func_8099807C(EnGs* this, PlayState* play) {
                 case OCARINA_SONG_EPONAS:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
-                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 2);
+                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0,
+                                    FAIRY_PARAMS(FAIRY_TYPE_2, false, 0));
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
@@ -291,7 +293,8 @@ void func_8099807C(EnGs* this, PlayState* play) {
                 case OCARINA_SONG_STORMS:
                     if (!Flags_GetSwitch(play, this->unk_196)) {
                         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELF, this->actor.world.pos.x,
-                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0, 7);
+                                    this->actor.world.pos.y + 40.0f, this->actor.world.pos.z, 0, 0, 0,
+                                    FAIRY_PARAMS(FAIRY_TYPE_7, false, 0));
                         Actor_PlaySfx(&this->actor, NA_SE_EV_BUTTERFRY_TO_FAIRY);
                         Flags_SetSwitch(play, this->unk_196);
                     }
@@ -924,7 +927,7 @@ void func_80999BC8(Actor* thisx, PlayState* play2) {
     EnGs* this = THIS;
     s32 pad;
 
-    if (this->actor.isTargeted && !func_801A5100()) {
+    if (this->actor.isLockedOn && !func_801A5100()) {
         this->unk_19D = 0;
         this->unk_19A |= 1;
         func_80999AC0(this);

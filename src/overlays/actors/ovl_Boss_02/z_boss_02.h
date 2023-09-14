@@ -87,8 +87,8 @@ typedef struct Boss02 {
     /* 0x1C28 */ ColliderJntSph colliderSphere2;
     /* 0x1C48 */ ColliderJntSphElement colliderSphere2Elements[2];
     /* 0x1CC8 */ ColliderCylinder colliderCylinder;
-    /* 0x1D14 */ u32 unk_1D14;
-    /* 0x1D18 */ s16 unk_1D18;
+    /* 0x1D14 */ u32 giantsMaskCsTimer;
+    /* 0x1D18 */ s16 giantsMaskCsState;
     /* 0x1D1A */ s16 unk_1D1A;
     /* 0x1D1C */ u32 unk_1D1C;
     /* 0x1D20 */ s16 unk_1D20;
@@ -97,17 +97,17 @@ typedef struct Boss02 {
     /* 0x1D30 */ Vec3f subCamAt;
     /* 0x1D3C */ Vec3f subCamUp;
     /* 0x1D48 */ Vec3f subCamAtNext;
-    /* 0x1D54 */ f32 unk_1D54;
-    /* 0x1D58 */ f32 unk_1D58;
+    /* 0x1D54 */ f32 subCamUpRotZ;
+    /* 0x1D58 */ f32 subCamUpRotZScale;
     /* 0x1D5C */ f32 subCamAtVel;
     /* 0x1D60 */ UNK_TYPE1 unk1D60[0x4];
-    /* 0x1D64 */ f32 unk_1D64;
-    /* 0x1D68 */ f32 unk_1D68;
-    /* 0x1D6C */ f32 unk_1D6C;
-    /* 0x1D70 */ f32 unk_1D70;
-    /* 0x1D74 */ f32 unk_1D74;
-    /* 0x1D78 */ u8 unk_1D78;
-    /* 0x1D7A */ s16 unk_1D7A;
+    /* 0x1D64 */ f32 subCamDistZFromPlayer;
+    /* 0x1D68 */ f32 subCamEyeOffsetY;
+    /* 0x1D6C */ f32 subCamAtOffsetY;
+    /* 0x1D70 */ f32 playerScale;
+    /* 0x1D74 */ f32 fogNear;
+    /* 0x1D78 */ u8 giantsMaskCsFlashState;
+    /* 0x1D7A */ s16 giantsMaskCsFlashAlpha;
     /* 0x1D7C */ s16 unk_1D7C;
     /* 0x1D7E */ s16 unk_1D7E;
 } Boss02; // size = 0x1D80

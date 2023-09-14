@@ -6,7 +6,7 @@
 
 #include "z_dm_nb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmNb*)thisx)
 
@@ -83,7 +83,7 @@ void DmNb_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gNbSkel, NULL, this->jointTable, this->morphTable, NB_LIMB_MAX);
     this->animIndex = DMNB_ANIM_NONE;
     DmNb_ChangeAnim(this, DMNB_ANIM_0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmNb_HandleCutscene;
 }

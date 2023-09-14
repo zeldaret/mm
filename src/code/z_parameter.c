@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"
 #include "archives/icon_item_static/icon_item_static_yar.h"
@@ -6399,7 +6400,7 @@ void Interface_Draw(PlayState* play) {
         Minimap_Draw(play);
 
         if ((R_PAUSE_BG_PRERENDER_STATE != 2) && (R_PAUSE_BG_PRERENDER_STATE != 3)) {
-            Actor_DrawZTarget(&play->actorCtx.targetContext, play);
+            Target_Draw(&play->actorCtx.targetCtx, play);
         }
 
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);

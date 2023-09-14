@@ -7,7 +7,7 @@
 #include "z_en_snowman.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSnowman*)thisx)
 
@@ -241,7 +241,7 @@ void EnSnowman_Init(Actor* thisx, PlayState* play) {
     } else {
         Player* player = GET_PLAYER(play);
 
-        thisx->flags &= ~ACTOR_FLAG_1;
+        thisx->flags &= ~ACTOR_FLAG_TARGETABLE;
         Collider_InitAndSetCylinder(play, &this->collider, thisx, &sSnowballCylinderInit);
         thisx->world.rot.y = Actor_WorldYawTowardActor(thisx, &player->actor);
         thisx->velocity.y = (Actor_WorldDistXZToActor(thisx, &player->actor) * 0.035f) + -5.0f;
@@ -603,7 +603,7 @@ void EnSnowman_SetupMelt(EnSnowman* this) {
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 50);
     this->collider.base.acFlags &= ~AC_ON;
     this->work.timer = 50;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.scale.y = this->actor.scale.x;
     this->actor.speed = 0.0f;
@@ -692,11 +692,11 @@ void EnSnowman_SetupDamaged(EnSnowman* this) {
  * Otherwise, it will either submerge underground (if it has health remaining) or die.
  */
 void EnSnowman_Damaged(EnSnowman* this, PlayState* play) {
-    s32 rotationalVelocityScale;
+    s32 angularVelocityScale;
 
     SkelAnime_Update(&this->skelAnime);
-    rotationalVelocityScale = CLAMP_MAX(this->work.timer, 10);
-    this->actor.shape.rot.y += rotationalVelocityScale * 0x300;
+    angularVelocityScale = CLAMP_MAX(this->work.timer, 10);
+    this->actor.shape.rot.y += angularVelocityScale * 0x300;
     Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
 
     if (EN_SNOWMAN_GET_TYPE(&this->actor) == EN_SNOWMAN_TYPE_LARGE) {
@@ -787,7 +787,7 @@ void EnSnowman_SetupSplitDoNothing(EnSnowman* this) {
         this->combineState = EN_SNOWMAN_COMBINE_STATE_NO_ABSORPTION;
     }
 
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_10);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_10);
     if ((this->actor.parent != NULL) && (((EnSnowman*)this->actor.parent)->actionFunc == EnSnowman_SplitDoNothing)) {
         if ((this->actor.child != NULL) && (((EnSnowman*)this->actor.child)->actionFunc == EnSnowman_SplitDoNothing)) {
             EnSnowman_SetupKill((EnSnowman*)this->actor.parent);
@@ -822,7 +822,7 @@ void EnSnowman_Kill(EnSnowman* this, PlayState* play) {
  * Creates a small split Eeno with a certain Y-rotation and at a certain offset from basePos.
  */
 void EnSnowman_CreateSplitEeno(EnSnowman* this, Vec3f* basePos, s32 yRot) {
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.shape.rot.y = yRot;
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1125,11 +1125,21 @@ void EnSnowman_UpdateSnowball(Actor* thisx, PlayState* play) {
 
 /**
  * This maps a given limb based on its limbIndex to its appropriate index
- * in the bodyPartsPos array. An index of -1 indicates that the limb is
- * not part of the bodyPartsPos array.
+ * in the bodyPartsPos array.
  */
-static s8 sLimbIndexToBodyPartsPosIndex[] = {
-    -1, -1, -1, -1, -1, -1, 0, 1, -1, 2, 3, 4,
+static s8 sLimbToBodyParts[EENO_LIMB_MAX] = {
+    BODYPART_NONE,         // EENO_LIMB_NONE
+    BODYPART_NONE,         // EENO_LIMB_ROOT
+    BODYPART_NONE,         // EENO_LIMB_BODY_TOP
+    BODYPART_NONE,         // EENO_LIMB_LEFT_EYE
+    BODYPART_NONE,         // EENO_LIMB_RIGHT_EYE
+    BODYPART_NONE,         // EENO_LIMB_LEFT_UPPER_ARM
+    EN_SNOWMAN_BODYPART_0, // EENO_LIMB_LEFT_FOREARM
+    EN_SNOWMAN_BODYPART_1, // EENO_LIMB_LEFT_HAND
+    BODYPART_NONE,         // EENO_LIMB_RIGHT_UPPER_ARM
+    EN_SNOWMAN_BODYPART_2, // EENO_LIMB_RIGHT_FOREARM
+    EN_SNOWMAN_BODYPART_3, // EENO_LIMB_RIGHT_HAND
+    EN_SNOWMAN_BODYPART_4, // EENO_LIMB_BODY_BOTTOM
 };
 
 /**
@@ -1137,8 +1147,11 @@ static s8 sLimbIndexToBodyPartsPosIndex[] = {
  * bottom limb, each offset by a certain certain amount.
  */
 static Vec3f sBodyBottomBodyPartOffsets[] = {
-    { 2000.0f, 3000.0f, 0.0f }, { 2000.0f, -2000.0f, 0.0f }, { 3000.0f, 0.0f, 0.0f },
-    { 1000.0f, 0.0f, 3000.0f }, { 1000.0f, 0.0f, -3000.0f },
+    { 2000.0f, 3000.0f, 0.0f },  // EN_SNOWMAN_BODYPART_4
+    { 2000.0f, -2000.0f, 0.0f }, // EN_SNOWMAN_BODYPART_5
+    { 3000.0f, 0.0f, 0.0f },     // EN_SNOWMAN_BODYPART_6
+    { 1000.0f, 0.0f, 3000.0f },  // EN_SNOWMAN_BODYPART_7
+    { 1000.0f, 0.0f, -3000.0f }, // EN_SNOWMAN_BODYPART_8
 };
 
 void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -1147,13 +1160,13 @@ void EnSnowman_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* 
     Gfx* gfx;
     s32 i;
 
-    if (sLimbIndexToBodyPartsPosIndex[limbIndex] != -1) {
-        if (sLimbIndexToBodyPartsPosIndex[limbIndex] == 4) {
-            for (i = 0; i < 5; i++) {
-                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[i + 4]);
+    if (sLimbToBodyParts[limbIndex] != BODYPART_NONE) {
+        if (sLimbToBodyParts[limbIndex] == EN_SNOWMAN_BODYPART_4) {
+            for (i = 0; i < ARRAY_COUNT(sBodyBottomBodyPartOffsets); i++) {
+                Matrix_MultVec3f(&sBodyBottomBodyPartOffsets[i], &this->bodyPartsPos[EN_SNOWMAN_BODYPART_4 + i]);
             }
         } else {
-            Matrix_MultZero(&this->bodyPartsPos[sLimbIndexToBodyPartsPosIndex[limbIndex]]);
+            Matrix_MultZero(&this->bodyPartsPos[sLimbToBodyParts[limbIndex]]);
         }
     }
 
@@ -1186,7 +1199,7 @@ void EnSnowman_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
                           EnSnowman_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, EN_SNOWMAN_BODYPART_MAX,
                             this->drawDmgEffScale * this->eenoScale, 0.0f, this->drawDmgEffAlpha, this->drawDmgEffType);
 }
 

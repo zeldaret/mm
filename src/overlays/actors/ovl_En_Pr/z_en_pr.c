@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Prz/z_en_prz.h"
 #include "objects/object_pr/object_pr.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPr*)thisx)
 
@@ -134,7 +134,7 @@ void EnPr_Init(Actor* thisx, PlayState* play2) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_2B8 = this->actor.world.pos.y;
     this->actor.shape.yOffset = 1500.0f;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -589,10 +589,10 @@ void EnPr_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     if ((limbIndex == 0) || (limbIndex == 1) || (limbIndex == 2) || (limbIndex == 3) || (limbIndex == 4) ||
         (limbIndex == 5) || (limbIndex == 6) || (limbIndex == 7) || (limbIndex == 8) || (limbIndex == 9)) {
-        Matrix_MultZero(&this->limbPos[this->unk_228]);
-        this->unk_228++;
-        if (this->unk_228 >= ARRAY_COUNT(this->limbPos)) {
-            this->unk_228 = 0;
+        Matrix_MultZero(&this->bodyPartsPos[this->bodyPartsCount]);
+        this->bodyPartsCount++;
+        if (this->bodyPartsCount >= ENPR_BODYPART_MAX) {
+            this->bodyPartsCount = 0;
         }
     }
 }
@@ -627,8 +627,8 @@ void EnPr_Draw(Actor* thisx, PlayState* play) {
 
         this->unk_238 = 0.8f;
         this->unk_234 = 0.8f;
-        Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), 0.8f, 0.8f,
-                                drawDmgEffAlpha, this->drawDmgEffType);
+        Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENPR_BODYPART_MAX, 0.8f, 0.8f, drawDmgEffAlpha,
+                                this->drawDmgEffType);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

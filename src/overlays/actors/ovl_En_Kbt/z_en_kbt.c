@@ -6,7 +6,7 @@
 
 #include "z_en_kbt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKbt*)thisx)
 
@@ -64,7 +64,7 @@ void EnKbt_Init(Actor* thisx, PlayState* play) {
         this->unk_282 = 0;
         this->actionFunc = func_80B34598;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void EnKbt_Destroy(Actor* thisx, PlayState* play) {

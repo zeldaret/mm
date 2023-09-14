@@ -6,7 +6,7 @@
 
 #include "z_en_tanron6.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnTanron6*)thisx)
 
@@ -72,7 +72,7 @@ void EnTanron6_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0, ActorShadow_DrawCircle, 19.0f);
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     EnTanron6_DoNothing(this);
 }
 

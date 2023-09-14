@@ -104,6 +104,7 @@ wordReplace = {
 
     "func_800B78B8": "Actor_UpdateBgCheckInfo",
     "func_80123D50": "Player_UpdateBottleHeld",
+    "func_80123DA4": "Player_Untarget",
     "func_8012403C": "Player_GetMask",
     "func_8012404c": "Player_RemoveMask",
     "func_80123AA4": "Player_SetModels",
@@ -175,7 +176,7 @@ wordReplace = {
     "func_800B648C": "Actor_SetPlayerImpact",
     "func_800B64FC": "Actor_GetPlayerImpact",
     "func_800B8500": "Actor_OfferTalkExchange",
-    "func_800B85E0": "Actor_OfferTalkExchangeRadius",
+    "func_800B85E0": "Actor_OfferTalkExchangeEquiCylinder",
     "func_800B8614": "Actor_OfferTalk",
     "func_800B863C": "Actor_OfferTalkNearColChkInfoCylinder",
     "Audio_PlaySoundAtPosition": "SoundSource_PlaySfxAtFixedWorldPos",
@@ -349,7 +350,7 @@ wordReplace = {
     "func_800B8C50": "Actor_SetClosestSecretDistance",
     "func_800BBDAC": "Actor_SpawnFloorDustRing",
     "func_800B8708": "Player_GetExchangeItemAction",
-    "Player_GetExchangeItemId": "Player_GetExchangeItemAction"
+    "Player_GetExchangeItemId": "Player_GetExchangeItemAction",
     "func_801233E4": "Player_InCsMode",
     "func_800BC4EC": "Actor_TestFloorInDirection",
     "func_800BC5B8": "Actor_IsTargeted",
@@ -724,7 +725,7 @@ wordReplace = {
     "SubS_StartActorCutscene": "SubS_StartCutscene",
     "func_8013E3B8": "SubS_FillCutscenesList",
     "func_8013AED4": "SubS_SetOfferMode",
-    "SubS_UpdateFlags": "SubS_SetOfferMode"
+    "SubS_UpdateFlags": "SubS_SetOfferMode",
     "func_8013D8DC": "SubS_IsObjectLoaded",
     "func_8013D924": "SubS_GetObjectIndex",
     "func_8013D5E8": "SubS_AngleDiffLessEqual",
@@ -894,6 +895,8 @@ wordReplace = {
     "func_8012CA0C": "Gfx_SetupDL56_Ptr",
     "func_8012CA38": "Gfx_SetupDL59_Opa",
 
+    "Game_SetFramerateDivisor": "GameState_SetFramerateDivisor",
+
     # Structs
     "ActorAnimationEntry": "AnimationInfo",
     "ActorAnimationEntryS": "AnimationInfoS",
@@ -927,6 +930,8 @@ wordReplace = {
     "actor.yDistToPlayer": "actor.playerHeightRel",
     "actor.cutscene": "actor.csId",
     "actor.speedXZ": "actor.speed",
+    "actor.isTargeted": "actor.isLockedOn",
+    "actor->isTargeted": "actor->isLockedOn",
     "thisx->speedXZ": "thisx->speed",
 
     "gSaveContext.unk_3F1E": "gSaveContext.hudVisibilityForceButtonAlphasByStatus",
@@ -1047,7 +1052,8 @@ wordReplace = {
     "player->unk_B84": "player->pushedYaw",
     "player->targetActor": "player->talkActor",
     "player->targetActorDistance": "player->talkActorDistance",
-    "player->unk_730": "player->targetedActor",
+    "player->unk_730": "player->lockOnActor",
+    "player->targetedActor": "player->lockOnActor",
 
     "ageProperties->unk_04": "ageProperties->shadowScale",
     "ageProperties->unk_92": "ageProperties->voiceSfxOffset",
@@ -1094,6 +1100,15 @@ wordReplace = {
     "play->msgCtx.unk11F04": "play->msgCtx.currentTextId",
     "play->actorCtx.unk3": "play->actorCtx.lensActive",
     "play->actorCtx.unk4": "play->actorCtx.lensMaskSize",
+    "play->actorCtx.targetContext": "play->actorCtx.targetCtx",
+    "play->actorCtx.targetCtx.unk0": "play->actorCtx.targetCtx.fairyPos",
+    "play->actorCtx.targetCtx.unk40": "play->actorCtx.targetCtx.fairyMoveProgressFactor",
+    "play->actorCtx.targetCtx.unk44": "play->actorCtx.targetCtx.lockOnRadius",
+    "play->actorCtx.targetCtx.unk48": "play->actorCtx.targetCtx.lockOnAlpha",
+    "play->actorCtx.targetCtx.unk4B": "play->actorCtx.targetCtx.rotation",
+    "play->actorCtx.targetCtx.unk4C": "play->actorCtx.targetCtx.lockOnIndex",
+    "play->actorCtx.targetCtx.unk50": "play->actorCtx.targetCtx.lockOnTriangleSets",
+    "play->actorCtx.targetCtx.unk8C": "play->actorCtx.targetCtx.nextTarget",
     "play->nextEntranceIndex": "play->nextEntrance",
     "play->sceneNum": "play->sceneId",
     "play->pauseCtx.unk_1F0": "play->pauseCtx.bombersNotebookOpen",
@@ -1155,6 +1170,9 @@ wordReplace = {
 
     "ACTORCTX_FLAG_2": "ACTORCTX_FLAG_PICTO_BOX_ON",
 
+    "ACTOR_FLAG_1": "ACTOR_FLAG_TARGETABLE",
+    "ACTOR_FLAG_4": "ACTOR_FLAG_UNFRIENDLY",
+    "ACTOR_FLAG_8": "ACTOR_FLAG_FRIENDLY",
     "ACTOR_FLAG_100": "ACTOR_FLAG_TALK_REQUESTED",
     "ACTOR_FLAG_8000000": "ACTOR_FLAG_CANT_LOCK_ON",
 
