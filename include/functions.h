@@ -1180,10 +1180,6 @@ void Graph_ThreadEntry(void* arg);
 Gfx* Graph_GfxPlusOne(Gfx* gfx);
 Gfx* Graph_BranchDlist(Gfx* gfx, Gfx* dst);
 void* Graph_DlistAlloc(Gfx** gfx, size_t size);
-ListAlloc* ListAlloc_Init(ListAlloc* this);
-// void ListAlloc_Alloc(void);
-// void ListAlloc_Free(void);
-void ListAlloc_FreeAll(ListAlloc* this);
 
 void Sched_SwapFramebuffer(CfbInfo* cfbInfo);
 void Sched_RetraceUpdateFramebuffer(SchedContext* sched, CfbInfo* cfbInfo);

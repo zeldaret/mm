@@ -2,6 +2,7 @@
 #define Z64_PRERENDER_H
 
 #include "ultra64.h"
+#include "listalloc.h"
 #include "unk.h"
 
 #define BG2D_FLAGS_1 (1 << 0)
@@ -10,16 +11,11 @@
 #define BG2D_FLAGS_LOAD_S2DEX2 (1 << 3)
 #define BG2D_FLAGS_COPY (1 << 4)
 
-typedef enum {
+typedef enum PrerenderFilterState {
     /* 0 */ PRERENDER_FILTER_STATE_NONE,
     /* 1 */ PRERENDER_FILTER_STATE_PROCESS,
     /* 2 */ PRERENDER_FILTER_STATE_DONE
 } PrerenderFilterState;
-
-typedef struct ListAlloc {
-    /* 0x0 */ struct ListAlloc* prev;
-    /* 0x4 */ struct ListAlloc* next;
-} ListAlloc; // size = 0x8
 
 typedef struct PreRender {
     /* 0x00 */ u16 width;
