@@ -302,7 +302,7 @@ extern u8 gLightConfigAfterUnderwater;
 extern u8 gInterruptSongOfStorms;
 extern u8 gSceneSeqState;
 
-//! @TODO: actual extern'd bss
+// Bss
 extern u8 D_801F4E30;
 
 extern u8 gCustomLensFlare1On;
