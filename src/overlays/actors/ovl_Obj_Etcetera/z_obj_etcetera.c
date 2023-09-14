@@ -328,7 +328,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
         if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
-            func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
+            Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }
 

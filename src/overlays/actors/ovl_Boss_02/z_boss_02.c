@@ -1828,7 +1828,7 @@ void Boss02_HandleGiantsMaskCutscene(Boss02* this, PlayState* play) {
         Actor_SetScale(&player->actor, this->playerScale);
     }
 
-    play->envCtx.lightSettings.fogNear = this->fogNear;
+    play->envCtx.adjLightSettings.fogNear = this->fogNear;
 
     // Switches from the "normal" variation of the arena to the "giant" variation (or vice versa)
     // at the appropriate point in the Giant's Mask cutscene.

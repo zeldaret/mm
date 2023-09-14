@@ -4,6 +4,7 @@
  * Description: Player
  */
 
+#include "prevent_bss_reordering.h"
 #include "global.h"
 #include "z64horse.h"
 #include "z64quake.h"
@@ -522,7 +523,7 @@ FloorEffect sPlayerFloorEffect;
 Input* sPlayerControlInput;
 s32 D_80862B48;
 s32 D_80862B4C;
-EnvLightSettings D_80862B50; // backup of play->envCtx.lightSettings
+AdjLightSettings D_80862B50; // backup of play->envCtx.adjLightSettings
 s32 D_80862B6C;              // this->skelAnime.moveFlags // sPlayerSkelMoveFlags?
 
 s32 func_8082DA90(PlayState* play) {
@@ -5969,7 +5970,7 @@ s32 func_80835DF8(PlayState* play, Player* this, CollisionPoly** outPoly, s32* o
     f32 yIntersect = func_80835CD8(play, this, &D_8085D100, &pos, outPoly, outBgId);
 
     if ((*outBgId == BGCHECK_SCENE) && (fabsf(this->actor.world.pos.y - yIntersect) < 10.0f)) {
-        func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, *outPoly, *outBgId));
+        Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, *outPoly, *outBgId));
         return true;
     }
     return false;
@@ -7008,7 +7009,7 @@ void func_808388B8(PlayState* play, Player* this, PlayerTransformation playerFor
     gSaveContext.save.playerForm = playerForm;
     this->stateFlags1 |= PLAYER_STATE1_2;
 
-    D_80862B50 = play->envCtx.lightSettings;
+    D_80862B50 = play->envCtx.adjLightSettings;
     this->actor.velocity.y = 0.0f;
     Actor_DeactivateLens(play);
 }
@@ -10928,7 +10929,7 @@ void Player_ProcessSceneCollision(PlayState* play, Player* this) {
             func_801A3CF4(SurfaceType_GetEcho(&play->colCtx, floorPoly, this->actor.floorBgId));
 
             if (this->actor.floorBgId == BGCHECK_SCENE) {
-                func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
+                Environment_ChangeLightSetting(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, this->actor.floorBgId));
             } else {
                 DynaPoly_SetPlayerAbove(&play->colCtx, this->actor.floorBgId);
             }
@@ -11523,9 +11524,9 @@ void func_80844784(PlayState* play, Player* this) {
             }
 
             if (play->envCtx.windSpeed >= 50.0f) {
-                temp_fa0 = play->envCtx.windDir.x;
-                temp_fa1 = play->envCtx.windDir.y;
-                temp_ft4 = play->envCtx.windDir.z;
+                temp_fa0 = play->envCtx.windDirection.x;
+                temp_fa1 = play->envCtx.windDirection.y;
+                temp_ft4 = play->envCtx.windDirection.z;
 
                 temp_fv0_2 = sqrtf(SQ(temp_fa0) + SQ(temp_fa1) + SQ(temp_ft4));
                 if (temp_fv0_2 != 0.0f) {
@@ -17496,14 +17497,14 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
     u8* new_var;
     s32 pad[4];
 
-    new_var = play->envCtx.unk_C4.diffuseColor1;
-    sp70.fogNear = play->envCtx.unk_C4.fogNear;
-    sp70.fogColor[0] = play->envCtx.unk_C4.fogColor[0];
-    sp70.fogColor[1] = play->envCtx.unk_C4.fogColor[1];
-    sp70.fogColor[2] = play->envCtx.unk_C4.fogColor[2];
-    sp70.ambientColor[0] = play->envCtx.unk_C4.ambientColor[0];
-    sp70.ambientColor[1] = play->envCtx.unk_C4.ambientColor[1];
-    sp70.ambientColor[2] = play->envCtx.unk_C4.ambientColor[2];
+    new_var = play->envCtx.lightSettings.light1Color;
+    sp70.fogNear = play->envCtx.lightSettings.fogNear;
+    sp70.fogColor[0] = play->envCtx.lightSettings.fogColor[0];
+    sp70.fogColor[1] = play->envCtx.lightSettings.fogColor[1];
+    sp70.fogColor[2] = play->envCtx.lightSettings.fogColor[2];
+    sp70.ambientColor[0] = play->envCtx.lightSettings.ambientColor[0];
+    sp70.ambientColor[1] = play->envCtx.lightSettings.ambientColor[1];
+    sp70.ambientColor[2] = play->envCtx.lightSettings.ambientColor[2];
 
     if (arg1 <= 1.0f) {
         arg1 -= 0.0f;
@@ -17534,13 +17535,13 @@ void func_80854EFC(PlayState* play, f32 arg1, struct_8085D848_unk_00* arg2) {
         var_t4 = D_8085D844;
     }
 
-    play->envCtx.lightSettings.fogNear =
-        ((s16)((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) - play->envCtx.unk_C4.fogNear;
+    play->envCtx.adjLightSettings.fogNear =
+        ((s16)((var_v1->fogNear - var_t0->fogNear) * arg1) + var_t0->fogNear) - play->envCtx.lightSettings.fogNear;
 
-    func_80854CD0(arg1, play->envCtx.lightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
-                  play->envCtx.unk_C4.fogColor, play->envCtx.lightSettings.ambientColor, var_v1->ambientColor,
-                  var_t0->ambientColor, play->envCtx.unk_C4.ambientColor, play->envCtx.lightSettings.diffuseColor1,
-                  var_t3, var_t4, new_var);
+    func_80854CD0(arg1, play->envCtx.adjLightSettings.fogColor, var_v1->fogColor, var_t0->fogColor,
+                  play->envCtx.lightSettings.fogColor, play->envCtx.adjLightSettings.ambientColor, var_v1->ambientColor,
+                  var_t0->ambientColor, play->envCtx.lightSettings.ambientColor,
+                  play->envCtx.adjLightSettings.light1Color, var_t3, var_t4, new_var);
 }
 
 struct_8085D848 D_8085D848[] = {
@@ -17766,7 +17767,7 @@ void Player_Action_87(Player* this, PlayState* play) {
                 this->prevMask = this->currentMask;
                 this->csId = play->playerCsIds[PLAYER_CS_ID_MASK_TRANSFORMATION];
                 Player_StopCutscene(this);
-                play->envCtx.lightSettings = D_80862B50;
+                play->envCtx.adjLightSettings = D_80862B50;
                 func_8085B384(this, play);
                 return;
             }

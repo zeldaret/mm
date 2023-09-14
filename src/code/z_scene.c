@@ -242,7 +242,7 @@ void Scene_CommandRoomBehavior(PlayState* play, SceneCmd* cmd) {
     play->roomCtx.curRoom.lensMode = (cmd->roomBehavior.gpFlag2 >> 8) & 1;
     play->msgCtx.unk12044 = (cmd->roomBehavior.gpFlag2 >> 0xA) & 1;
     play->roomCtx.curRoom.enablePosLights = (cmd->roomBehavior.gpFlag2 >> 0xB) & 1;
-    play->envCtx.unk_E2 = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
+    play->envCtx.stormState = (cmd->roomBehavior.gpFlag2 >> 0xC) & 1;
 }
 
 // SceneTableEntry Header Command 0x0A: Mesh Header
@@ -373,7 +373,7 @@ void Scene_CommandSkyboxSettings(PlayState* play, SceneCmd* cmd) {
 // SceneTableEntry Header Command 0x12: Skybox Disables
 void Scene_CommandSkyboxDisables(PlayState* play, SceneCmd* cmd) {
     play->envCtx.skyboxDisabled = cmd->skyboxDisables.unk4;
-    play->envCtx.sunMoonDisabled = cmd->skyboxDisables.unk5;
+    play->envCtx.sunDisabled = cmd->skyboxDisables.unk5;
 }
 
 // SceneTableEntry Header Command 0x10: Time Settings
@@ -423,9 +423,9 @@ void Scene_CommandWindSettings(PlayState* play, SceneCmd* cmd) {
     s8 temp2 = cmd->windSettings.vertical;
     s8 temp3 = cmd->windSettings.south;
 
-    play->envCtx.windDir.x = temp1;
-    play->envCtx.windDir.y = temp2;
-    play->envCtx.windDir.z = temp3;
+    play->envCtx.windDirection.x = temp1;
+    play->envCtx.windDirection.y = temp2;
+    play->envCtx.windDirection.z = temp3;
     play->envCtx.windSpeed = cmd->windSettings.clothIntensity;
 }
 

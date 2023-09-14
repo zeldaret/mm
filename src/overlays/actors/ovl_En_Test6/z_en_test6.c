@@ -375,24 +375,24 @@ void EnTest6_Destroy(Actor* thisx, PlayState* play2) {
     EnTest6* this = THIS;
     s32 i;
 
-    play->envCtx.lightSettings.ambientColor[0] = 0;
-    play->envCtx.lightSettings.ambientColor[1] = 0;
-    play->envCtx.lightSettings.ambientColor[2] = 0;
+    play->envCtx.adjLightSettings.ambientColor[0] = 0;
+    play->envCtx.adjLightSettings.ambientColor[1] = 0;
+    play->envCtx.adjLightSettings.ambientColor[2] = 0;
 
-    play->envCtx.lightSettings.diffuseColor1[0] = 0;
-    play->envCtx.lightSettings.diffuseColor1[1] = 0;
-    play->envCtx.lightSettings.diffuseColor1[2] = 0;
+    play->envCtx.adjLightSettings.light1Color[0] = 0;
+    play->envCtx.adjLightSettings.light1Color[1] = 0;
+    play->envCtx.adjLightSettings.light1Color[2] = 0;
 
-    play->envCtx.lightSettings.diffuseColor2[0] = 0;
-    play->envCtx.lightSettings.diffuseColor2[1] = 0;
-    play->envCtx.lightSettings.diffuseColor2[2] = 0;
+    play->envCtx.adjLightSettings.light2Color[0] = 0;
+    play->envCtx.adjLightSettings.light2Color[1] = 0;
+    play->envCtx.adjLightSettings.light2Color[2] = 0;
 
-    play->envCtx.lightSettings.fogColor[0] = 0;
-    play->envCtx.lightSettings.fogColor[1] = 0;
-    play->envCtx.lightSettings.fogColor[2] = 0;
+    play->envCtx.adjLightSettings.fogColor[0] = 0;
+    play->envCtx.adjLightSettings.fogColor[1] = 0;
+    play->envCtx.adjLightSettings.fogColor[2] = 0;
 
-    play->envCtx.lightSettings.fogNear = 0;
-    play->envCtx.lightSettings.zFar = 0;
+    play->envCtx.adjLightSettings.fogNear = 0;
+    play->envCtx.adjLightSettings.zFar = 0;
 
     play->envCtx.fillScreen = false;
 
