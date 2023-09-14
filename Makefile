@@ -207,8 +207,7 @@ DEP_FILES := $(O_FILES:.o=.asmproc.d) $(OVL_RELOC_FILES:.o=.d)
 $(shell mkdir -p build/baserom $(foreach dir,$(SRC_DIRS) $(ASM_DIRS) $(ASSET_BIN_DIRS),build/$(dir)))
 
 # directory flags
-build/src/boot_O2/%.o: OPTFLAGS := -O2
-build/src/boot_O2_g3/%.o: OPTFLAGS := -O2 -g3
+build/src/boot/O2/%.o: OPTFLAGS := -O2
 
 build/src/libultra/os/%.o: OPTFLAGS := -O1
 build/src/libultra/voice/%.o: OPTFLAGS := -O2
@@ -225,8 +224,8 @@ build/assets/%.o: OPTFLAGS := -O1
 build/assets/%.o: ASM_PROC_FLAGS := 
 
 # file flags
-build/src/boot_O2_g3/fault.o: CFLAGS += -trapuv
-build/src/boot_O2_g3/fault_drawer.o: CFLAGS += -trapuv
+build/src/boot/fault.o: CFLAGS += -trapuv
+build/src/boot/fault_drawer.o: CFLAGS += -trapuv
 
 build/src/code/jpegutils.o: OPTFLAGS := -O2
 build/src/code/jpegdecoder.o: OPTFLAGS := -O2
@@ -239,8 +238,8 @@ build/src/libultra/libc/llcvt.o: OPTFLAGS := -O1
 build/src/libultra/libc/llcvt.o: MIPS_VERSION := -mips3 -32
 
 # cc & asm-processor
-build/src/boot_O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
-build/src/boot_O2_g3/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
+build/src/boot/O2/%.o: CC := $(ASM_PROC) $(ASM_PROC_FLAGS) $(CC) -- $(AS) $(ASFLAGS) --
 
 build/src/libultra/%.o: CC := $(CC_OLD)
 # Needed at least until voice is decompiled

@@ -6,7 +6,7 @@
 #include "os_pi.h"
 #include "os_internal_rsp.h"
 
-typedef struct {
+typedef struct __osHwInt {
     /* 0x00 */ OSMesgQueue* queue;
     /* 0x04 */ OSMesg msg;
 } __osHwInt; // size = 0x08

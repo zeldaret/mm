@@ -4,7 +4,10 @@
 #include <string>
 #include <vector>
 
-#if __has_include(<filesystem>)
+#ifdef USE_BOOST_FS
+#include <boost/filesystem.hpp>
+namespace fs = boost::filesystem;
+#elif __has_include(<filesystem>)
 #include <filesystem>
 namespace fs = std::filesystem;
 #else
@@ -17,7 +20,11 @@ namespace fs = std::experimental::filesystem;
 class Directory
 {
 public:
+#ifdef USE_BOOST_FS
+	static std::string GetCurrentDirectory() { return fs::current_path().string(); }
+#else
 	static std::string GetCurrentDirectory() { return fs::current_path().u8string(); }
+#endif
 
 	static bool Exists(const fs::path& path) { return fs::exists(path); }
 
