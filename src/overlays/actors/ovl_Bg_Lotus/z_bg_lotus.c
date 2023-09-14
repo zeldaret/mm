@@ -55,8 +55,8 @@ void func_80AD6830(BgLotus* this) {
 
     if (this->dyna.actor.params == 0) {
         temp_fv1 = Math_SinF(this->unk166 * (M_PI / 4)) * ((0.014f * (this->unk166 / (80.0f * 0.1f))) + 0.01f);
-        this->dyna.actor.scale.x = ((1.0f + temp_fv1) * 0.1f);
-        this->dyna.actor.scale.z = ((1.0f - temp_fv1) * 0.1f);
+        this->dyna.actor.scale.x = (1.0f + temp_fv1) * 0.1f;
+        this->dyna.actor.scale.z = (1.0f - temp_fv1) * 0.1f;
     }
 }
 
