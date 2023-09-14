@@ -7,7 +7,7 @@
 #include "z_en_dinofos.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_400)
 
 #define THIS ((EnDinofos*)thisx)
 
@@ -439,7 +439,7 @@ s32 func_8089AE00(EnDinofos* this, PlayState* play) {
     }
 
     if ((this->actor.xzDistToPlayer < 100.0f) && (player->meleeWeaponState != PLAYER_MELEE_WEAPON_STATE_0) &&
-        this->actor.isTargeted && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
+        this->actor.isLockedOn && (Rand_ZeroOne() < 0.5f) && func_8089A968(this) &&
         Player_IsFacingActor(&this->actor, 0x2000, play)) {
         if (Rand_ZeroOne() < 0.5f) {
             func_8089C024(this, 2);
@@ -1131,7 +1131,7 @@ void func_8089CF70(EnDinofos* this, PlayState* play) {
 
 void func_8089CFAC(EnDinofos* this) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosDieAnim);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_RIZA_DEAD);
     this->actor.speed = 0.0f;
     this->actor.world.rot.y = this->actor.shape.rot.y;

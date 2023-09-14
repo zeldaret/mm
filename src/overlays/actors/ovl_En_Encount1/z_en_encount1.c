@@ -71,7 +71,7 @@ void EnEncount1_Init(Actor* thisx, PlayState* play) {
         this->spawnTotalMax = -1;
         this->spawnDistanceMax = -1.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnEncount1_SpawnActor;
 }
 

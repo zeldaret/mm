@@ -10,7 +10,7 @@
 #include "objects/object_gs/object_gs.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnGs*)thisx)
 
@@ -148,7 +148,7 @@ void EnGs_Init(Actor* thisx, PlayState* play) {
     this->actor.world.rot.z = 0;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->unk_216 = 0;
     this->unk_218 = 0;
     this->unk_200 = 1.0f;
@@ -927,7 +927,7 @@ void func_80999BC8(Actor* thisx, PlayState* play2) {
     EnGs* this = THIS;
     s32 pad;
 
-    if (this->actor.isTargeted && !func_801A5100()) {
+    if (this->actor.isLockedOn && !func_801A5100()) {
         this->unk_19D = 0;
         this->unk_19A |= 1;
         func_80999AC0(this);

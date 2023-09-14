@@ -34,7 +34,6 @@ extern s32 sIrqMgrRetraceCount;
 extern OSViMode osViModeNtscHpf1;
 extern OSViMode osViModePalLan1;
 extern s16 sintable[0x400];
-extern __osHwInt __osHwIntTable[];
 // extern UNK_TYPE1 D_80097DE4;
 // extern UNK_TYPE4 D_80097E08;
 extern OSThread* __osThreadTail;
@@ -63,14 +62,12 @@ extern s32 __osPfsLastChannel;
 extern OSViMode osViModeNtscLan1;
 extern OSViMode osViModeMpalLan1;
 // extern __OSViContext D_80098060[2];
-extern __OSViContext* __osViCurr;
-extern __OSViContext* __osViNext;
+
 // extern UNK_TYPE4 sCartRomNeedsInit;
 extern OSViMode osViModeFpalLan1;
 // extern u8 ldigs[];
 // extern u8 udigs[];
 // extern OSDevMgr __osViDevMgr;
-extern u32 __additional_scanline;
 
 extern char bootThreadName[];
 extern char idleThreadName[];
@@ -160,7 +157,6 @@ extern OSPiHandle D_8009D1A8;
 extern OSMesg D_8009E3F0[1];
 extern OSMesgQueue __osPiAccessQueue;
 extern __OSInode __osPfsInodeCache;
-extern __OSEventState __osEventStateTab[16];
 extern OSTimer D_8009E590;
 extern OSTime __osCurrentTime;
 extern u32 __osBaseCounter;
@@ -1878,20 +1874,6 @@ extern u8 gSampleBankTable[];
 
 // bss
 // extern UNK_TYPE1 D_801ED894;
-extern CollisionPoly* D_801ED8B0;
-extern s32 D_801ED8B4;
-// extern UNK_TYPE1 D_801ED8B8;
-// extern UNK_TYPE1 D_801ED8BC;
-// extern UNK_TYPE1 D_801ED8C0;
-// extern UNK_TYPE1 D_801ED8C4;
-extern f32 D_801ED8C8;
-extern f32 sBgmEnemyDistSq;
-extern f32 D_801ED8D0;
-// extern UNK_TYPE1 D_801ED8D4;
-// extern UNK_TYPE1 D_801ED8D8;
-// extern UNK_TYPE1 D_801ED8DC;
-extern Mtx D_801ED8E0;
-extern Actor* D_801ED920;
 
 extern Vec3f D_801EDE00;
 extern Vec3f D_801EDE10;

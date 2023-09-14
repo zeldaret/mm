@@ -32,6 +32,7 @@ u8 sMotionBlurStatus;
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "overlays/gamestates/ovl_file_choose/z_file_select.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "debug.h"
 
 s32 gDbgCamEnabled = false;
 u8 D_801D0D54 = false;
@@ -335,11 +336,11 @@ void Play_SetupTransition(PlayState* this, s32 transitionType) {
 
             default:
                 fbdemoType = -1;
-                __assert("../z_play.c", 1420);
+                _dbg_hungup("../z_play.c", 1420);
         }
     } else {
         fbdemoType = -1;
-        __assert("../z_play.c", 1423);
+        _dbg_hungup("../z_play.c", 1423);
     }
 
     transitionCtx->transitionType = transitionType;

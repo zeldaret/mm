@@ -1,21 +1,22 @@
-#ifndef _ULTRA64_H_
-#define _ULTRA64_H_
+#ifndef ULTRA64_H
+#define ULTRA64_H
 
 #include "PR/ultratypes.h"
 #include "PR/gbi.h"
 
-#include "unk.h"
-
-#include "ultra64/controller_voice.h"
-#include "ultra64/hardware.h"
-#include "ultra64/message.h"
-#include "ultra64/sptask.h"
-#include "ultra64/thread.h"
-#include "ultra64/rcp.h"
-#include "ultra64/rdp.h"
-#include "ultra64/rsp.h"
-#include "ultra64/r4300.h"
-#include "ultra64/ucode.h"
-#include "ultra64/vi.h"
+#include "PR/gu.h"
+#include "PR/controller_voice.h"
+#include "PR/hardware.h"
+#include "PR/os.h"
+#include "PR/osint.h"
+#include "PR/piint.h"
+#include "PR/siint.h"
+#include "PR/sptask.h"
+#include "PR/rcp.h"
+#include "PR/rdp.h"
+#include "PR/r4300.h"
+#include "PR/ucode.h"
+#include "PR/viint.h"
+#include "PR/xstdio.h"
 
 #endif

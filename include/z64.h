@@ -9,14 +9,10 @@
 #include "libc/stdlib.h"
 
 #include "ultra64.h"
-#include "ultra64/gs2dex.h"
-#include "io/controller.h"
-#include "osint.h"
-#include "os.h"
+
 #include "irqmgr.h"
 #include "padmgr.h"
 #include "scheduler.h"
-#include "xstdio.h"
 
 #include "color.h"
 #include "ichain.h"
@@ -27,6 +23,7 @@
 
 #include "gfx.h"
 #include "gfxprint.h"
+#include "padutils.h"
 #include "sys_matrix.h"
 #include "tha.h"
 #include "thga.h"

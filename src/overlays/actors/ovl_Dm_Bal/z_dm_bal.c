@@ -6,7 +6,7 @@
 
 #include "z_dm_bal.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((DmBal*)thisx)
 
@@ -70,7 +70,7 @@ static AnimationInfo sAnimationInfo[TINGLE_CS_ANIM_MAX] = {
 void DmBal_Init(Actor* thisx, PlayState* play) {
     DmBal* this = THIS;
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.uncullZoneForward = 3000.0f;
     Actor_SetScale(&this->actor, 0.02f);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);

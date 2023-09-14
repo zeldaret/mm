@@ -61,7 +61,7 @@ void EnWeatherTag_Init(Actor* thisx, PlayState* play) {
     s32 pathID;
 
     // flag: is targetable. Should do nothing as not set by default above
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     switch (WEATHER_TAG_TYPE(&this->actor)) {
         case WEATHERTAG_TYPE_UNK0:

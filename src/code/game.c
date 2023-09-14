@@ -11,6 +11,7 @@
 #include "z64vismono.h"
 #include "z64viszbuf.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
+#include "debug.h"
 
 s32 gFramerateDivisor = 1;
 f32 gFramerateDivisorF = 1.0f;
@@ -168,7 +169,7 @@ void GameState_InitArena(GameState* gameState, size_t size) {
     }
 
     THA_Init(&gameState->heap, NULL, 0);
-    __assert("../game.c", 1035);
+    _dbg_hungup("../game.c", 1035);
 }
 
 void GameState_Realloc(GameState* gameState, size_t size) {
@@ -192,7 +193,7 @@ void GameState_Realloc(GameState* gameState, size_t size) {
         THA_Init(&gameState->heap, gameArena, size);
     } else {
         THA_Init(&gameState->heap, NULL, 0);
-        __assert("../game.c", 1074);
+        _dbg_hungup("../game.c", 1074);
     }
 }
 

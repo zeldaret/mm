@@ -7,7 +7,7 @@
 #include "z_en_ginko_man.h"
 #include "objects/object_boj/object_boj.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGinkoMan*)thisx)
 
@@ -61,7 +61,7 @@ static AnimationInfo sAnimationInfo[] = {
 void EnGinkoMan_Init(Actor* thisx, PlayState* play) {
     EnGinkoMan* this = THIS;
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.uncullZoneForward = 400.0f;
     Actor_SetScale(&this->actor, 0.01f);
     this->actor.colChkInfo.cylRadius = 100;
@@ -79,7 +79,7 @@ void EnGinkoMan_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGinkoMan_SetupIdle(EnGinkoMan* this) {
-    this->actor.flags |= ACTOR_FLAG_1; // targetable
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, GINKO_ANIM_SITTING);
     this->actionFunc = EnGinkoMan_Idle;
 }
