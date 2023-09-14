@@ -155,7 +155,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
         case CS_MISC_RAIN:
             if (isFirstFrame) {
                 Environment_PlayStormNatureAmbience(play);
-                play->envCtx.precipitation[0] = 60;
+                play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
             }
             break;
 
@@ -163,7 +163,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
             if (isFirstFrame) {
                 Audio_SetAmbienceChannelIO(AMBIENCE_CHANNEL_LIGHTNING, CHANNEL_IO_PORT_0, 0);
                 Environment_AddLightningBolts(play, 3);
-                gLightningStrike.state = 1;
+                gLightningStrike.state = LIGHTNING_STRIKE_START;
             }
             break;
 
@@ -175,7 +175,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_CLOUDY_SKY:
             if (isFirstFrame) {
-                play->envCtx.changeSkyboxState = 1;
+                play->envCtx.changeSkyboxState = CHANGE_SKYBOX_REQUESTED;
                 play->envCtx.skyboxConfig = 1;
                 play->envCtx.changeSkyboxNextConfig = 0;
                 play->envCtx.changeSkyboxTimer = 60;
@@ -262,7 +262,7 @@ void CutsceneCmd_Misc(PlayState* play, CutsceneContext* csCtx, CsCmdMisc* cmd) {
 
         case CS_MISC_SANDSTORM_FILL:
             if (isFirstFrame) {
-                play->envCtx.sandstormState = 1;
+                play->envCtx.sandstormState = SANDSTORM_FILL;
             }
             Audio_PlaySfx_2(NA_SE_EV_SAND_STORM - SFX_FLAG);
             break;
@@ -409,7 +409,7 @@ void CutsceneCmd_SetLightSetting(PlayState* play, CutsceneContext* csCtx, CsCmdL
             play->envCtx.lightSettingOverride = cmd->settingPlusOne - 1;
             play->envCtx.lightBlend = 1.0f;
         } else {
-            play->envCtx.lightSettingOverride = 0xFF;
+            play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         }
     }
 }

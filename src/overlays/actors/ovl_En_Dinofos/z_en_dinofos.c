@@ -563,7 +563,7 @@ void func_8089B580(EnDinofos* this, PlayState* play) {
     }
 
     if ((play->sceneId == SCENE_MITURIN) && Animation_OnFrame(&this->skelAnime, 55.0f)) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 
     if (SkelAnime_Update(&this->skelAnime)) {
@@ -1118,7 +1118,7 @@ void func_8089CF00(EnDinofos* this, PlayState* play) {
     Animation_PlayOnce(&this->skelAnime, &gDinolfosFireEndAnim);
     this->colliderJntSph.base.atFlags &= ~AT_ON;
     if (play->sceneId == SCENE_MITURIN) {
-        play->envCtx.lightSettingOverride = 255;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
     this->actionFunc = func_8089CF70;
 }
@@ -1289,7 +1289,7 @@ s32 func_8089D60C(EnDinofos* this, PlayState* play) {
         func_8089ACEC(this, play);
         func_8089AD70(this);
         if (play->sceneId == SCENE_MITURIN) {
-            play->envCtx.lightSettingOverride = 255;
+            play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         }
 
         this->colliderQuad.base.atFlags &= ~(AT_ON | AT_BOUNCED);

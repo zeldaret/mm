@@ -5476,9 +5476,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         if (sSubCamEye.y <= (WATER_SURFACE_Y(play) + 1.0f)) {
             Environment_EnableUnderwaterLights(play, 1);
             if (D_809171CA != 0) {
-                play->envCtx.adjLightSettings.fogNear = -0xB2;
+                play->envCtx.adjLightSettings.fogNear = -178;
             } else {
-                play->envCtx.adjLightSettings.fogNear = -0x2E;
+                play->envCtx.adjLightSettings.fogNear = -46;
             }
         } else {
             Environment_EnableUnderwaterLights(play, 0);
@@ -5532,10 +5532,10 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         if (Rand_ZeroOne() < 0.5f) {
             D_8090CCD4 = Rand_ZeroFloat(10.0f) + 5.0f;
-            play->envCtx.stormRequest = 1;
+            play->envCtx.stormRequest = STORM_REQUEST_START;
         } else {
             D_8090CCD4 = 0;
-            play->envCtx.stormRequest = 2;
+            play->envCtx.stormRequest = STORM_REQUEST_STOP;
         }
     }
 

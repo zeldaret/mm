@@ -60,7 +60,7 @@ void func_80A41D70(EnTest4* this, PlayState* play) {
         }
 
         Interface_NewDay(play, CURRENT_DAY);
-        gSceneSeqState = 0xFE;
+        gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
         func_800FEAF4(&play->envCtx);
         this->actionFunc = func_80A42AB8;
@@ -97,7 +97,7 @@ void func_80A41FA4(EnTest4* this, PlayState* play) {
         gSaveContext.save.time = CLOCK_TIME(6, 0);
         Interface_NewDay(play, CURRENT_DAY);
         func_80151A68(play, sDayMessages2[CURRENT_DAY - 1]);
-        gSceneSeqState = 0xFE;
+        gSceneSeqState = SCENESEQ_MORNING;
         Environment_PlaySceneSequence(play);
         func_800FEAF4(&play->envCtx);
         this->actionFunc = func_80A42AB8;
@@ -517,38 +517,38 @@ void func_80A42F20(EnTest4* this, PlayState* play) {
 
 void func_80A430C8(EnTest4* this, PlayState* play) {
     if ((CURRENT_DAY == 2) && (gSaveContext.save.time >= CLOCK_TIME(7, 0)) &&
-        (gSaveContext.save.time < CLOCK_TIME(17, 30)) && (play->envCtx.precipitation[2] == 0)) {
+        (gSaveContext.save.time < CLOCK_TIME(17, 30)) && (play->envCtx.precipitation[PRECIP_SNOW_CUR] == 0)) {
         // rain?
 
-        gWeatherMode = 1;
+        gWeatherMode = WEATHER_MODE_1;
         Environment_PlayStormNatureAmbience(play);
-        play->envCtx.lightningState = 1;
-        play->envCtx.precipitation[0] = 0x3C;
+        play->envCtx.lightningState = LIGHTNING_ON;
+        play->envCtx.precipitation[PRECIP_RAIN_MAX] = 60;
     } else {
-        if (play->envCtx.precipitation[0] != 0) {
+        if (play->envCtx.precipitation[PRECIP_RAIN_MAX] != 0) {
             if ((play->state.frames % 4) == 0) {
-                play->envCtx.precipitation[0]--;
-                if ((play->envCtx.precipitation[0]) == 8) {
+                play->envCtx.precipitation[PRECIP_RAIN_MAX]--;
+                if ((play->envCtx.precipitation[PRECIP_RAIN_MAX]) == 8) {
                     Environment_StopStormNatureAmbience(play);
                 }
             }
         }
     }
 
-    if (gWeatherMode == 1) {
+    if (gWeatherMode == WEATHER_MODE_1) {
         this->state = TEST4_STATE_1;
     }
 }
 
 void func_80A431C8(EnTest4* this, PlayState* play) {
     if (((gSaveContext.save.time >= CLOCK_TIME(17, 30)) && (gSaveContext.save.time < CLOCK_TIME(23, 0)) &&
-         (play->envCtx.precipitation[0] != 0)) ||
-        (play->envCtx.precipitation[2] != 0)) {
-        gWeatherMode = 0;
-        play->envCtx.lightningState = 2;
+         (play->envCtx.precipitation[PRECIP_RAIN_MAX] != 0)) ||
+        (play->envCtx.precipitation[PRECIP_SNOW_CUR] != 0)) {
+        gWeatherMode = WEATHER_MODE_CLEAR;
+        play->envCtx.lightningState = LIGHTNING_LAST;
     }
 
-    if (gWeatherMode == 0) {
+    if (gWeatherMode == WEATHER_MODE_CLEAR) {
         this->state = TEST4_STATE_0;
     }
 }
@@ -568,7 +568,7 @@ void EnTest4_Update(Actor* thisx, PlayState* play) {
     if (!(player->stateFlags1 & PLAYER_STATE1_2)) {
         this->actionFunc(this, play);
 
-        if (Environment_GetStormState(play) != 0) {
+        if (Environment_GetStormState(play) != STORM_STATE_OFF) {
             switch (this->state) {
                 case TEST4_STATE_0:
                     func_80A430C8(this, play);

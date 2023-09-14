@@ -431,7 +431,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_1E4 > 0.0f) {
         if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-            gCustomLensFlare1On = 1;
+            gCustomLensFlare1On = true;
             gCustomLensFlare1Pos.x = this->actor.world.pos.x + this->unk_1B0;
             gCustomLensFlare1Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
             gCustomLensFlare1Pos.z = this->actor.world.pos.z;
@@ -439,7 +439,7 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
             D_801F4E48 = 10.0f;
             D_801F4E4C = 0;
         } else {
-            gCustomLensFlare2On = 1;
+            gCustomLensFlare2On = true;
             gCustomLensFlare2Pos.x = this->actor.world.pos.x + this->unk_1B0;
             gCustomLensFlare2Pos.y = this->actor.world.pos.y + 80.0f + this->unk_1B4 + this->unk_1AC;
             gCustomLensFlare2Pos.z = this->actor.world.pos.z;
@@ -448,9 +448,9 @@ void Boss06_Update(Actor* thisx, PlayState* play) {
             D_801F4E64 = 0;
         }
     } else if (ENBOSS06_GET_PARAMS(&this->actor) == 0) {
-        gCustomLensFlare1On = 0;
+        gCustomLensFlare1On = false;
     } else {
-        gCustomLensFlare2On = 0;
+        gCustomLensFlare2On = false;
     }
 
     if ((this->unk_1C8 != 0) && (this->unk_1C8 != 0)) {

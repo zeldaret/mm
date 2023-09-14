@@ -1009,7 +1009,7 @@ void EnBigslime_CallMinislime(EnBigslime* this, PlayState* play) {
         EnBigslime_UpdateCameraIntroCs(this, play, 25);
         Audio_PlayBgm_StorePrevBgm(NA_BGM_MINI_BOSS);
         EnBigslime_InitFallMinislime(this);
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
         this->callTimer = 35;
         func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
     }
@@ -1989,7 +1989,7 @@ void EnBigslime_Melt(EnBigslime* this, PlayState* play) {
     if (this->meltCounter == 100) {
         EnBigslime_SetTargetVtxFromPreFrozen(this);
     } else if (this->meltCounter == 50) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 }
 
@@ -2777,7 +2777,7 @@ void EnBigslime_UpdateBigslime(Actor* thisx, PlayState* play) {
     Vec3f vtxMin;
 
     if (play->envCtx.lightSettingOverride == 3) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 
     Audio_SetSfxUnderwaterReverb(true);
@@ -2822,7 +2822,7 @@ void EnBigslime_UpdateGekko(Actor* thisx, PlayState* play) {
     s32 pad;
 
     if (play->envCtx.lightSettingOverride == 3) {
-        play->envCtx.lightSettingOverride = 0xFF;
+        play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
     }
 
     Audio_SetSfxUnderwaterReverb(false);

@@ -580,11 +580,11 @@ s32 Room_HandleLoadCallbacks(PlayState* play, RoomContext* roomCtx) {
             Actor_SpawnTransitionActors(play, &play->actorCtx);
 
             if (((play->sceneId != SCENE_IKANA) || (roomCtx->curRoom.num != 1)) && (play->sceneId != SCENE_IKNINSIDE)) {
-                play->envCtx.lightSettingOverride = 0xFF;
-                play->envCtx.lightBlendOverride = 0;
+                play->envCtx.lightSettingOverride = LIGHT_SETTING_OVERRIDE_NONE;
+                play->envCtx.lightBlendOverride = LIGHT_BLEND_OVERRIDE_NONE;
             }
             func_800FEAB0();
-            if (!Environment_GetStormState(play)) {
+            if (Environment_GetStormState(play) == STORM_STATE_OFF) {
                 Environment_StopStormNatureAmbience(play);
             }
         } else {

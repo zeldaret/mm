@@ -41,7 +41,7 @@ void EnOkarinaEffect_Destroy(Actor* thisx, PlayState* play) {
 void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
     EnOkarinaEffect* this = THIS;
 
-    if (play->envCtx.precipitation[1]) {
+    if (play->envCtx.precipitation[PRECIP_RAIN_CUR] != 0) {
         Actor_Kill(&this->actor);
     }
     EnOkarinaEffect_SetupAction(this, func_8096B104);
@@ -49,9 +49,9 @@ void EnOkarinaEffect_Init(Actor* thisx, PlayState* play) {
 
 void func_8096B104(EnOkarinaEffect* this, PlayState* play) {
     this->unk144 = 0x50;
-    play->envCtx.precipitation[4] = 0x3C;
+    play->envCtx.precipitation[PRECIP_SOS_MAX] = 60;
     gLightningStrike.delayTimer = 501.0f;
-    play->envCtx.lightningState = 2;
+    play->envCtx.lightningState = LIGHTNING_LAST;
     Environment_PlayStormNatureAmbience(play);
     EnOkarinaEffect_SetupAction(this, func_8096B174);
 }
@@ -65,10 +65,10 @@ void func_8096B174(EnOkarinaEffect* this, PlayState* play) {
 }
 
 void func_8096B1FC(EnOkarinaEffect* this, PlayState* play) {
-    if (play->envCtx.precipitation[4]) {
+    if (play->envCtx.precipitation[PRECIP_SOS_MAX] != 0) {
         if ((play->state.frames & 3) == 0) {
-            play->envCtx.precipitation[4]--;
-            if (play->envCtx.precipitation[4] == 8) {
+            play->envCtx.precipitation[PRECIP_SOS_MAX]--;
+            if (play->envCtx.precipitation[PRECIP_SOS_MAX] == 8) {
                 Environment_StopStormNatureAmbience(play);
             }
         }

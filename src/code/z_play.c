@@ -360,8 +360,8 @@ void Play_ClearTransition(PlayState* this) {
 Gfx* Play_SetFog(PlayState* this, Gfx* gfx) {
     s32 fogFar = this->lightCtx.zFar * (5.0f / 64.0f);
 
-    return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor[0], this->lightCtx.fogColor[1], this->lightCtx.fogColor[2], 0,
-                              this->lightCtx.fogNear, ((fogFar <= 1000) ? 1000 : fogFar));
+    return Gfx_SetFogWithSync(gfx, this->lightCtx.fogColor[0], this->lightCtx.fogColor[1], this->lightCtx.fogColor[2],
+                              0, this->lightCtx.fogNear, ((fogFar <= 1000) ? 1000 : fogFar));
 }
 
 void Play_Destroy(GameState* thisx) {
@@ -824,10 +824,10 @@ void Play_UpdateTransition(PlayState* this) {
 
         case TRANS_MODE_SANDSTORM_INIT:
             if (this->transitionTrigger != TRANS_TRIGGER_END) {
-                this->envCtx.sandstormState = 1;
+                this->envCtx.sandstormState = SANDSTORM_FILL;
                 this->transitionMode = TRANS_MODE_SANDSTORM;
             } else {
-                this->envCtx.sandstormState = 2;
+                this->envCtx.sandstormState = SANDSTORM_UNFILL;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
                 this->transitionMode = TRANS_MODE_SANDSTORM;
@@ -856,7 +856,7 @@ void Play_UpdateTransition(PlayState* this) {
 
         case TRANS_MODE_SANDSTORM_END_INIT:
             if (this->transitionTrigger == TRANS_TRIGGER_END) {
-                this->envCtx.sandstormState = 4;
+                this->envCtx.sandstormState = SANDSTORM_DISSIPATE;
                 this->envCtx.sandstormPrimA = 255;
                 this->envCtx.sandstormEnvA = 255;
 
@@ -1366,7 +1366,7 @@ void Play_DrawMain(PlayState* this) {
             }
 
             if (1) {
-                if (this->envCtx.sandstormState != 0) {
+                if (this->envCtx.sandstormState != SANDSTORM_OFF) {
                     Environment_DrawSandstorm(this, this->envCtx.sandstormState);
                 }
             }
@@ -2216,7 +2216,7 @@ void Play_Init(GameState* thisx) {
         gSaveContext.save.cutsceneIndex = 0;
     }
 
-    if (gSaveContext.nextDayTime != 0xFFFF) {
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
         gSaveContext.save.time = gSaveContext.nextDayTime;
         gSaveContext.skyboxTime = gSaveContext.nextDayTime;
     }
@@ -2249,14 +2249,14 @@ void Play_Init(GameState* thisx) {
     KaleidoScopeCall_Init(this);
     Interface_Init(this);
 
-    if (gSaveContext.nextDayTime != 0xFFFF) {
-        if (gSaveContext.nextDayTime == 0x8000) {
+    if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
+        if (gSaveContext.nextDayTime == NEXT_TIME_DAY) {
             gSaveContext.save.day++;
             gSaveContext.save.daysElapsed++;
             gSaveContext.dogIsLost = true;
-            gSaveContext.nextDayTime = -2;
+            gSaveContext.nextDayTime = NEXT_TIME_DAY_SET;
         } else {
-            gSaveContext.nextDayTime = -3;
+            gSaveContext.nextDayTime = NEXT_TIME_NIGHT_SET;
         }
     }
 

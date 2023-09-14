@@ -518,7 +518,8 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
                 fogNear = 968.0f;
             }
 
-            play->envCtx.adjLightSettings.fogNear = (fogNear - (s16)play->envCtx.lightSettings.fogNear) * this->blendScaleFrac;
+            play->envCtx.adjLightSettings.fogNear =
+                (fogNear - (s16)play->envCtx.lightSettings.fogNear) * this->blendScaleFrac;
 
             play->envCtx.adjLightSettings.ambientColor[0] =
                 ((f32)lightSettingsColors[index].r - play->envCtx.lightSettings.ambientColor[0]) * this->blendScaleFrac;

@@ -2197,7 +2197,7 @@ void FileSelect_LoadGame(GameState* thisx) {
     gSaveContext.nextTransitionType = TRANS_NEXT_TYPE_DEFAULT;
     gSaveContext.cutsceneTrigger = 0;
     gSaveContext.chamberCutsceneNum = 0;
-    gSaveContext.nextDayTime = 0xFFFF;
+    gSaveContext.nextDayTime = NEXT_TIME_NONE;
     gSaveContext.retainWeatherMode = false;
 
     gSaveContext.buttonStatus[EQUIP_SLOT_B] = BTN_ENABLED;
@@ -2489,7 +2489,7 @@ void FileSelect_InitContext(GameState* thisx) {
     Skybox_Init(&this->state, &this->skyboxCtx, 1);
     R_TIME_SPEED = 10;
 
-    envCtx->changeSkyboxState = 0;
+    envCtx->changeSkyboxState = CHANGE_SKYBOX_INACTIVE;
     envCtx->changeSkyboxTimer = 0;
     envCtx->changeLightEnabled = false;
     envCtx->changeLightTimer = 0;

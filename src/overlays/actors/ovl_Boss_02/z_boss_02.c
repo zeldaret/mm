@@ -1320,7 +1320,7 @@ void Boss02_Static_Update(Actor* thisx, PlayState* play) {
     Boss02* this = THIS;
 
     this->giantModeScaleFactor = sGiantModeScaleFactor;
-    play->envCtx.sandstormState = 0xD;
+    play->envCtx.sandstormState = SANDSTORM_D;
 
     if (sBlueWarp != NULL) {
         this->fogNear = KREG(23) + -15.0f;
