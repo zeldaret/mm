@@ -46,13 +46,13 @@ ActorInit En_Kujiya_InitVars = {
     (ActorFunc)EnKujiya_Draw,
 };
 
-#define CHECK_LOTTERY_NUMBERS                                                              \
-    (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) ==       \
-      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF00) >> 8)) && \
-     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) ==       \
-      ((((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF0) >> 4)) &&  \
-     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2]) ==       \
-      (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess & 0xFFFF) & 0xF)))
+#define CHECK_LOTTERY_NUMBERS                                                        \
+    (((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][0]) == \
+      ((HS_GET_LOTTERY_CODE_GUESS() & 0xF00) >> 8)) &&                               \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1]) == \
+      ((HS_GET_LOTTERY_CODE_GUESS() & 0xF0) >> 4)) &&                                \
+     ((u32)((void)0, gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2]) == \
+      (HS_GET_LOTTERY_CODE_GUESS() & 0xF)))
 
 void EnKujiya_Init(Actor* thisx, PlayState* play) {
     EnKujiya* this = THIS;

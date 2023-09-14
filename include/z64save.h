@@ -278,13 +278,7 @@ typedef struct SaveInfo {
     /* 0xEA8 */ u32 unk_EA8[2];                        // Related to blue warps
     /* 0xEB0 */ u32 stolenItems;                       // Items stolen by Takkuri and given to Curiosity Shop Man
     /* 0xEB4 */ u32 unk_EB4;
-    /* 0xEB8 */ u32 bankRupees;
-    /* 0xEBC */ u32 unk_EBC;
-    /* 0xEC0 */ u32 unk_EC0;                           // Fishing flags
-    /* 0xEC4 */ u32 unk_EC4;
-    /* 0xEC8 */ u32 horseBackBalloonHighScore;
-    /* 0xECC */ u32 lotteryCodeGuess;                  // Lottery code chosen by player (only uses lower three hex digits)
-    /* 0xED0 */ u32 shootingGalleryHighScores;         // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
+    /* 0xEB8 */ u32 highScores[7];
     /* 0xED4 */ u8 weekEventReg[100];                  // "week_event_reg"
     /* 0xF38 */ u32 regionsVisited;                    // "area_arrival"
     /* 0xF3C */ u32 worldMapCloudVisibility;           // "cloud_clear"
@@ -510,10 +504,36 @@ typedef enum {
 #define SET_STOLEN_ITEM_2(itemId) \
     (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
 
-#define GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF))
-#define GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF0000) >> 0x10))
-#define SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.saveInfo.shootingGalleryHighScores = (gSaveContext.save.saveInfo.shootingGalleryHighScores & 0xFFFF0000) | ((u16)(score)))
-#define SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (gSaveContext.save.saveInfo.shootingGalleryHighScores = ((gSaveContext.save.saveInfo.shootingGalleryHighScores) & 0xFFFF) | ((u16)(score) << 0x10))
+typedef enum HighScore {
+    /* 0 */ HS_BANK_RUPPEES,
+    /* 1 */ HS_UNK_1,
+    /* 2 */ HS_FISHING,
+    /* 3 */ HS_BOAT_ARCHERY,
+    /* 4 */ HS_HOSRE_BACK_BALLOON,
+    /* 5 */ HS_LOTTERY_GUESS,
+    /* 6 */ HS_SHOOTING_GALLERY
+} HighScore;
+
+#define HIGH_SCORE(type) (gSaveContext.save.saveInfo.highScores[(type)])
+
+#define HS_GET_BANK_RUPPEES() (HIGH_SCORE(HS_BANK_RUPPEES) & 0xFFFF)
+#define HS_SET_BANK_RUPPEES(ruppees) (HIGH_SCORE(HS_BANK_RUPPEES) = ((HIGH_SCORE(HS_BANK_RUPPEES) & 0xFFFF0000) | (ruppees)))
+
+#define HS_GET_HIGH_SCORE_3_LOWER() (HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF)
+#define HS_SET_HIGH_SCORE_3_LOWER(score) (HIGH_SCORE(HS_BOAT_ARCHERY) = ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF0000) | (score)))
+#define HS_GET_BOAT_ARCHERY_HIGH_SCORE() ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF0000) >> 0x10)
+#define HS_SET_BOAT_ARCHERY_HIGH_SCORE(score) (HIGH_SCORE(HS_BOAT_ARCHERY) = ((HIGH_SCORE(HS_BOAT_ARCHERY) & 0xFFFF) | ((u16)(score) << 0x10)))
+
+#define HS_GET_HORSE_BACK_BALLOON_TIME() ((s32)HIGH_SCORE(HS_HOSRE_BACK_BALLOON))
+#define HS_SET_HORSE_BACK_BALLOON_TIME(time) (HIGH_SCORE(HS_HOSRE_BACK_BALLOON) = (time))
+
+#define HS_GET_LOTTERY_CODE_GUESS() (HIGH_SCORE(HS_LOTTERY_GUESS) & 0xFFFF)
+#define HS_SET_LOTTERY_CODE_GUESS(guess) (HIGH_SCORE(HS_LOTTERY_GUESS) = ((HIGH_SCORE(HS_LOTTERY_GUESS) & 0xFFFF0000) | ((guess) & 0xFFFF)))
+
+#define HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() ((s32)(HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF))
+#define HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) | ((u16)(score)))
+#define HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() ((s32)((HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF0000) >> 0x10))
+#define HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(score) (HIGH_SCORE(HS_SHOOTING_GALLERY) = (HIGH_SCORE(HS_SHOOTING_GALLERY) & 0xFFFF) | ((u16)(score) << 0x10))
 
 /**
  * gSaveContext.save.saveInfo.weekEventReg

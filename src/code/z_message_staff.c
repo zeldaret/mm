@@ -517,15 +517,12 @@ void Message_DecodeCredits(PlayState* play) {
                 //! TODO: `bankRupees` was originally part of a u32 array, along with surrounding struct members in
                 //! `SaveInfo`. This is likely accessing many components of that array with a single line. Need to
                 //! figure out what's expected to be accessed here.
-                value = (&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[++msgCtx->msgBufPos]];
-                if ((font->msgBuf.schar[msgCtx->msgBufPos] & 0xFF) == 2) {
+                value = HIGH_SCORE((u32)font->msgBuf.schar[++msgCtx->msgBufPos]);
+                if ((font->msgBuf.schar[msgCtx->msgBufPos] & 0xFF) == HS_FISHING) {
                     if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
                         value &= 0x7F;
                     } else {
-                        value = (s16)(((&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] &
-                                       0xFF000000) >>
-                                      0x18) &
-                                0x7F;
+                        value = (s16)((HIGH_SCORE((u32)font->msgBuf.schar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
                     }
                     value = SQ((f32)value) * 0.0036f + 0.5f;
                 }
