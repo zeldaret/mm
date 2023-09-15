@@ -1,14 +1,14 @@
 #include "global.h"
 
-UNK_TYPE4 D_80097E40 = 0;
+s32 __osContinitialized = false;
 
 OSPifRam __osContPifRam;
 u8 __osContLastPoll;
 u8 __osMaxControllers;
 
 OSTimer __osEepromTimer;
-OSMesgQueue D_8009CF38;
-OSMesg D_8009CF50[1];
+OSMesgQueue __osEepromTimerQ;
+OSMesg __osEepromTimerMsg[1];
 
 s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     OSMesg dummy;
@@ -17,11 +17,11 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     OSTimer mytimer;
     OSMesgQueue timerMesgQueue;
 
-    if (D_80097E40 != 0) {
+    if (__osContinitialized) {
         return 0;
     }
 
-    D_80097E40 = 1;
+    __osContinitialized = true;
 
     t = osGetTime();
     if (t < 0x165A0BC) {
@@ -43,7 +43,7 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     __osContGetInitData(bitpattern, data);
     __osContLastPoll = 0;
     __osSiCreateAccessQueue();
-    osCreateMesgQueue(&D_8009CF38, D_8009CF50, ARRAY_COUNT(D_8009CF50));
+    osCreateMesgQueue(&__osEepromTimerQ, __osEepromTimerMsg, ARRAY_COUNT(__osEepromTimerMsg));
 
     return ret;
 }

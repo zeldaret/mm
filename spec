@@ -3097,8 +3097,7 @@ beginseg
     name "ovl_Obj_Tokei_Tobira"
     compress
     include "build/src/overlays/actors/ovl_Obj_Tokei_Tobira/z_obj_tokei_tobira.o"
-    include "build/data/ovl_Obj_Tokei_Tobira/ovl_Obj_Tokei_Tobira.data.o"
-    include "build/data/ovl_Obj_Tokei_Tobira/ovl_Obj_Tokei_Tobira.reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Tokei_Tobira/ovl_Obj_Tokei_Tobira_reloc.o"
 endseg
 
 beginseg

@@ -11830,7 +11830,7 @@
     0x80ABCF0C:("BgHakuginBombwall_Draw",),
     0x80ABD1D0:("ObjTokeiTobira_Init",),
     0x80ABD37C:("ObjTokeiTobira_Destroy",),
-    0x80ABD3B0:("func_80ABD3B0",),
+    0x80ABD3B0:("ObjTokeiTobira_StartCutscene",),
     0x80ABD424:("ObjTokeiTobira_Update",),
     0x80ABD6F0:("ObjTokeiTobira_Draw",),
     0x80ABD830:("BgHakuginElvpole_Init",),
