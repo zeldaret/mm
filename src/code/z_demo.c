@@ -13,6 +13,7 @@ s16 gDungeonBossWarpSceneId;
 
 #include "prevent_bss_reordering.h"
 #include "prevent_bss_reordering2.h"
+// clang-format off
 // Partial structs taken from "prevent_bss_reordering.h"
 struct Dummy200 { int x; };
 struct Dummy201 { int x; };
@@ -30,6 +31,7 @@ struct Dummy212 { int x; };
 struct Dummy213 { int x; };
 struct Dummy214 { int x; };
 struct Dummy215 { int x; };
+// clang-format on
 
 #include "global.h"
 #include "z64quake.h"
