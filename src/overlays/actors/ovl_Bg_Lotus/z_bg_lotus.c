@@ -113,23 +113,21 @@ void func_80AD6A88(BgLotus* this, PlayState* play) {
     if (this->unk166 > 0) {
         this->unk166--;
         func_80AD6830(this);
-        return;
+    } else {
+        if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 5.0f * 0.001f)) {
+            this->dyna.actor.draw = NULL;
+            this->unk166 = 100;
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
+            this->actionFunc = func_80AD6B68;
+        }
+        this->dyna.actor.scale.z = this->dyna.actor.scale.x;
     }
-    if (Math_StepToF(&this->dyna.actor.scale.x, 0.0f, 5.0f * 0.001f)) {
-        this->dyna.actor.draw = NULL;
-        this->unk166 = 100;
-        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
-        this->actionFunc = func_80AD6B68;
-    }
-    this->dyna.actor.scale.z = this->dyna.actor.scale.x;
 }
 
 void func_80AD6B68(BgLotus* this, PlayState* play) {
     if (this->unk166 > 0) {
         this->unk166--;
-        return;
-    }
-    if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
+    } else if ((this->dyna.actor.xzDistToPlayer > 100.0f) && (this->dyna.actor.projectedPos.z < 0.0f)) {
         this->dyna.actor.draw = BgLotus_Draw;
         DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         Actor_SetScale(&this->dyna.actor, 0.1f);
