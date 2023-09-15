@@ -482,9 +482,9 @@ void Environment_GraphCallback(GraphicsContext* gfxCtx, void* arg) {
 }
 
 typedef struct {
-    /* 0x00 */ s32 mantissaShift; // shift applied to the mantissa of the z buffer value
-    /* 0x04 */ s32 base;          // 15.3 fixed-point base value for the exponent
-} ZBufValConversionEntry;         // size = 0x8
+    /* 0x0 */ s32 mantissaShift; // shift applied to the mantissa of the z buffer value
+    /* 0x4 */ s32 base;          // 15.3 fixed-point base value for the exponent
+} ZBufValConversionEntry;        // size = 0x8
 
 ZBufValConversionEntry sZBufValConversionTable[1 << 3] = {
     { 6, 0x00000 }, { 5, 0x20000 }, { 4, 0x30000 }, { 3, 0x38000 },
