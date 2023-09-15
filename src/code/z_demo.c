@@ -1,6 +1,4 @@
 #include "PR/ultratypes.h"
-#include "prevent_bss_reordering.h"
-#include "prevent_bss_reordering2.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 struct CutsceneCamera;
@@ -12,6 +10,26 @@ u8 D_801F4DDC;
 static s16 sBssPad;
 u8 gDisablePlayerCsModeStartPos;
 s16 gDungeonBossWarpSceneId;
+
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
+// Partial structs taken from "prevent_bss_reordering.h"
+struct Dummy200 { int x; };
+struct Dummy201 { int x; };
+struct Dummy202 { int x; };
+struct Dummy203 { int x; };
+struct Dummy204 { int x; };
+struct Dummy205 { int x; };
+struct Dummy206 { int x; };
+struct Dummy207 { int x; };
+struct Dummy208 { int x; };
+struct Dummy209 { int x; };
+struct Dummy210 { int x; };
+struct Dummy211 { int x; };
+struct Dummy212 { int x; };
+struct Dummy213 { int x; };
+struct Dummy214 { int x; };
+struct Dummy215 { int x; };
 
 #include "global.h"
 #include "z64quake.h"
