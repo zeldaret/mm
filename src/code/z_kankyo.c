@@ -810,7 +810,6 @@ u8 sSandstormEnvColors[] = {
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_kankyo/Environment_AdjustLights.s")
 
-// Get ((to - from) * lerp)
 void Environment_LerpRGB8(u8* from, Color_RGB8* to, f32 lerp, s16* dst) {
     Color_RGB8 result;
 
