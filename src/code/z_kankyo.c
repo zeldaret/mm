@@ -839,13 +839,13 @@ void Environment_LerpFog(PlayState* play, s16 fogNearTarget, s16 fogFarTarget, f
 }
 
 // Repurposed from OoT to be more general
-u32 Environment_GetBgsDayCount(void) {
-    return gSaveContext.save.daysElapsed;
+u32 Environment_GetEventDayCount(void) {
+    return gSaveContext.save.eventDayCount;
 }
 
 // Repurposed from OoT to be more general
-void Environment_ClearBgsDayCount(void) {
-    gSaveContext.save.daysElapsed = 0;
+void Environment_ClearEventDayCount(void) {
+    gSaveContext.save.eventDayCount = 0;
 }
 
 // Repurposed from OoT to be more general

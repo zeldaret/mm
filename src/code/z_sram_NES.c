@@ -429,7 +429,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
     u8 item;
 
     gSaveContext.save.timeSpeedOffset = 0;
-    gSaveContext.save.daysElapsed = 0;
+    gSaveContext.save.eventDayCount = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
 
@@ -649,7 +649,7 @@ void Sram_SaveEndOfCycle(PlayState* play) {
 void Sram_IncrementDay(void) {
     if (CURRENT_DAY <= 3) {
         gSaveContext.save.day++;
-        gSaveContext.save.daysElapsed++;
+        gSaveContext.save.eventDayCount++;
     }
 
     gSaveContext.save.saveInfo.bombersCaughtNum = 0;
@@ -917,7 +917,7 @@ u16 sSaveDefaultChecksum = 0;
  */
 void Sram_InitNewSave(void) {
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
-    gSaveContext.save.daysElapsed = 0;
+    gSaveContext.save.eventDayCount = 0;
     gSaveContext.save.day = 0;
     gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
     Sram_ResetSave();

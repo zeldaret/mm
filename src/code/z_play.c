@@ -2252,7 +2252,7 @@ void Play_Init(GameState* thisx) {
     if (gSaveContext.nextDayTime != NEXT_TIME_NONE) {
         if (gSaveContext.nextDayTime == NEXT_TIME_DAY) {
             gSaveContext.save.day++;
-            gSaveContext.save.daysElapsed++;
+            gSaveContext.save.eventDayCount++;
             gSaveContext.dogIsLost = true;
             gSaveContext.nextDayTime = NEXT_TIME_DAY_SET;
         } else {

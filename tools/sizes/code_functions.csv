@@ -1269,8 +1269,8 @@ asm/non_matchings/code/z_kankyo/Environment_LerpAmbientColor.s,Environment_LerpA
 asm/non_matchings/code/z_kankyo/Environment_LerpDiffuseColor.s,Environment_LerpDiffuseColor,0x800FD5E0,0x1D
 asm/non_matchings/code/z_kankyo/Environment_LerpFogColor.s,Environment_LerpFogColor,0x800FD654,0x11
 asm/non_matchings/code/z_kankyo/Environment_LerpFog.s,Environment_LerpFog,0x800FD698,0x22
-asm/non_matchings/code/z_kankyo/Environment_GetBgsDayCount.s,Environment_GetBgsDayCount,0x800FD720,0x4
-asm/non_matchings/code/z_kankyo/Environment_ClearBgsDayCount.s,Environment_ClearBgsDayCount,0x800FD730,0x4
+asm/non_matchings/code/z_kankyo/Environment_GetEventDayCount.s,Environment_GetEventDayCount,0x800FD720,0x4
+asm/non_matchings/code/z_kankyo/Environment_ClearEventDayCount.s,Environment_ClearEventDayCount,0x800FD730,0x4
 asm/non_matchings/code/z_kankyo/Environment_GetTotalDays.s,Environment_GetTotalDays,0x800FD740,0x4
 asm/non_matchings/code/z_kankyo/Environment_ForcePlaySequence.s,Environment_ForcePlaySequence,0x800FD750,0x6
 asm/non_matchings/code/z_kankyo/Environment_IsForcedSequenceDisabled.s,Environment_IsForcedSequenceDisabled,0x800FD768,0x9

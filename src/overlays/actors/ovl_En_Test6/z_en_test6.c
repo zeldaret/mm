@@ -425,7 +425,7 @@ void EnTest6_StartCutscene(EnTest6* this, PlayState* play) {
             break;
 
         default:
-            gSaveContext.save.daysElapsed = 0;
+            gSaveContext.save.eventDayCount = 0;
             gSaveContext.save.day = 0;
             gSaveContext.save.time = CLOCK_TIME(6, 0) - 1;
             EnTest6_SetupAction(this, EnTest6_SharedSoTCutscene);

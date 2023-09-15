@@ -324,7 +324,7 @@ void EnTest4_Init(Actor* thisx, PlayState* play) {
             } else {
                 gSaveContext.save.day = 1;
                 dayTemp = gSaveContext.save.day;
-                gSaveContext.save.daysElapsed = dayTemp;
+                gSaveContext.save.eventDayCount = dayTemp;
                 this->csIdIndex = 1;
                 this->unk_146 = gSaveContext.save.time;
                 this->actionFunc = func_80A42AB8;

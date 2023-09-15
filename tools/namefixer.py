@@ -690,8 +690,8 @@ wordReplace = {
     "func_800FB9B4": "Environment_UpdateTimeBasedSequence",
     "func_800FC3DC": "Environment_UpdateRain",
     "func_800FD538": "Environment_LerpRGB8",
-    "get_days_elapsed": "Environment_GetBgsDayCount",
-    "reset_days_elapsed": "Environment_ClearBgsDayCount",
+    "get_days_elapsed": "Environment_GetEventDayCount",
+    "reset_days_elapsed": "Environment_ClearEventDayCount",
     "get_current_day": "Environment_GetTotalDays",
     "func_800FD768": "Environment_IsForcedSequenceDisabled",
     "func_800FD928": "Environment_WarpSongLeave",
@@ -1076,6 +1076,8 @@ wordReplace = {
     "gSaveContext.save.bomberCode": "gSaveContext.save.saveInfo.bomberCode",
     "gSaveContext.save.horseData": "gSaveContext.save.saveInfo.horseData",
     "gSaveContext.save.checksum": "gSaveContext.save.saveInfo.checksum",
+
+    "gSaveContext.save.daysElapsed": "gSaveContext.save.eventDayCount",
 
     "player->unk_A87": "player->exchangeItemAction",
     "player->exchangeItemId": "player->exchangeItemAction",
