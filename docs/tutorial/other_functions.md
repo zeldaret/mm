@@ -135,7 +135,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
         return;
     }
     if (Actor_IsFacingPlayer((Actor *) this, 0x2000) != 0) {
-        Actor_OfferTalk((Actor *) this, play, 60.0f);
+        func_800B8614((Actor *) this, play, 60.0f);
         if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
             return;
@@ -190,7 +190,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
         return;
     }
     if (Actor_IsFacingPlayer(&this->actor, 0x2000) != 0) {
-        Actor_OfferTalk(&this->actor, play, 60.0f);
+        func_800B8614(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
             return;
@@ -226,7 +226,7 @@ void func_80C1019C(EnRecepgirl* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
         func_80C10290(this);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2000)) {
-        Actor_OfferTalk(&this->actor, play, 60.0f);
+        func_800B8614(&this->actor, play, 60.0f);
         if (Player_GetMask(play) == 2) {
             this->actor.textId = 0x2367;
         } else if (Flags_GetSwitch(play, this->actor.params)) {

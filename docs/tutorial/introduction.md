@@ -16,7 +16,7 @@ glabel func_809529AC
 /* 0003B0 809529D0 8C860098 */  lw          $a2, 0x98($a0)
 /* 0003B4 809529D4 8C87009C */  lw          $a3, 0x9c($a0)
 /* 0003B8 809529D8 AFA40020 */  sw          $a0, 0x20($sp)
-/* 0003BC 809529DC 0C02E140 */  jal         Actor_OfferTalkExchange
+/* 0003BC 809529DC 0C02E140 */  jal         func_800B8500
 /* 0003C0 809529E0 AFA00010 */   sw         $zero, 0x10($sp)
 /* 0003C4 809529E4 8FA40020 */  lw          $a0, 0x20($sp)
 /* 0003C8 809529E8 3C0E8095 */  lui         $t6, %hi(func_80952A1C)
@@ -43,7 +43,7 @@ and turn it into compilable C code:
 void func_809529AC(EnMs* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
         this->actor.textId = 0;
-        Actor_OfferTalkExchange(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
+        func_800B8500(&this->actor, play, this->actor.xzDistToPlayer, this->actor.playerHeightRel, 0);
         this->actionFunc = func_80952A1C;
     } else {
         Actor_OfferGetItem(&this->actor, play, 0x35, this->actor.xzDistToPlayer, this->actor.playerHeightRel);
