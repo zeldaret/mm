@@ -1,4 +1,5 @@
 #include "global.h"
+#include "PR/gs2dex.h"
 #include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"

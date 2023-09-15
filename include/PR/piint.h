@@ -6,6 +6,15 @@
 #include "libc/stdint.h"
 
 
+extern OSDevMgr __osPiDevMgr;
+extern OSPiHandle* __osCurrentHandle[];
+extern u32 __osPiAccessQueueEnabled;
+
+extern OSPiHandle __Dom1SpeedParam;
+extern OSPiHandle __Dom2SpeedParam;
+
+extern OSMesgQueue __osPiAccessQueue;
+
 void __osDevMgrMain(void* arg);
 void __osPiCreateAccessQueue(void);
 void __osPiRelAccess(void);
@@ -15,6 +24,5 @@ s32 __osEPiRawWriteIo(OSPiHandle* handle, uintptr_t devAddr, u32 data);
 s32 __osEPiRawReadIo(OSPiHandle* handle, uintptr_t devAddr, u32* data);
 s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, uintptr_t cartAddr, void* dramAddr, size_t size);
 OSMesgQueue* osPiGetCmdQueue(void);
-
 
 #endif

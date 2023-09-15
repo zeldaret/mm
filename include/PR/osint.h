@@ -34,5 +34,20 @@ void __osTimerServicesInit(void);
 extern __osHwInt __osHwIntTable[];
 extern __OSEventState __osEventStateTab[OS_NUM_EVENTS];
 
+extern __OSThreadTail __osThreadTail;
+extern OSThread* __osRunQueue;
+extern OSThread* __osActiveQueue;
+extern OSThread* __osRunningThread;
+extern OSThread* __osFaultedThread;
+
+extern u32 __osShutdown;
+
+extern OSTimer* __osTimerList;
+
+extern OSTimer __osBaseTimer;
+extern OSTime __osCurrentTime;
+extern u32 __osBaseCounter;
+extern u32 __osViIntrCount;
+extern u32 __osTimerCounter;
 
 #endif

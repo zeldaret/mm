@@ -14,7 +14,7 @@ osResetType    = 0x8000030C;
 osCicId        = 0x80000310;
 osVersion      = 0x80000314;
 osMemSize      = 0x80000318;
-osAppNmiBuffer = 0x8000031C;
+osAppNMIBuffer = 0x8000031C;
 
 /// OS hardware registers
 
