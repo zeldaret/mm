@@ -64,16 +64,6 @@
 #include "regs.h"
 
 typedef struct {
-    /* 0x00 */ s32 requestType;
-    /* 0x04 */ s32 response;
-    /* 0x08 */ void* addr;
-    /* 0x0C */ s32 pageNum;
-    /* 0x10 */ s32 pageCount;
-    /* 0x14 */ OSMesgQueue messageQueue;
-} FlashromRequest; // size = 0x2C
-
-
-typedef struct {
     /* 0x000 */ View view;
     /* 0x168 */ u8* iconItemSegment;
     /* 0x16C */ u8* iconItem24Segment;
@@ -393,57 +383,5 @@ typedef struct {
     /* 0x0C */ Color_RGBA8_u32 primColor;
     /* 0x10 */ Color_RGBA8_u32 envColor;
 } Struct_80140E80; // size = 0x14
-
-// TODO: Dedicated Header?
-#define FRAM_BASE_ADDRESS 0x08000000           // FRAM Base Address in Cart Memory
-#define FRAM_STATUS_REGISTER FRAM_BASE_ADDRESS // FRAM Base Address in Cart Memory
-#define FRAM_COMMAND_REGISTER 0x10000          // Located at 0x08010000 on the Cart
-
-#define FLASH_VERSION_MX_PROTO_A 0x00C20000
-#define FLASH_VERSION_MX_A       0x00C20001
-#define FLASH_VERSION_MX_C       0x00C2001E
-#define FLASH_VERSION_MX_B_AND_D 0x00C2001D
-#define FLASH_VERSION_MEI        0x003200F1
-
-#define FLASH_TYPE_MAGIC 0x11118001
-
-#define FLASH_PAGE_SIZE 128
-
-#define FLASHROM_REQUEST_WRITE 1
-#define FLASHROM_REQUEST_READ 2
-
-typedef enum FramCommand {
-    /* Does nothing for FRAM_COMMAND_SET_MODE_READ_AND_STATUS, FRAM_MODE_NOP, FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS
-       Initializes fram to 0xFF in FRAM_MODE_ERASE
-       Writes Contents in FLASHRAM_MODE_WRITE
-       After execution, sets FRAM_MODE to FRAM_MODE_NOP */
-    FRAM_COMMAND_EXECUTE = 0xD2000000,
-    /* flashram->erase_offset = (command & 0xFFFF) * 128; */
-    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET = 0x4B000000,
-    /* flashram->mode = FLASHRAM_MODE_ERASE;
-       flashram->status = 0x1111800800C20000LL; */
-    FRAM_COMMAND_SET_MODE_ERASE_AND_STATUS = 0x78000000,
-    /* flashram->erase_offset = (command & 0xFFFF) * 128;
-       flashram->status = 0x1111800400C20000LL; */
-    FRAM_COMMAND_SET_ERASE_SECTOR_OFFSET_AND_STATUS = 0xA5000000,
-    /* flashram->mode = FLASHRAM_MODE_WRITE; */
-    FRAM_COMMAND_SET_MODE_WRITE = 0xB4000000,
-    /* flashram->mode = FLASHRAM_MODE_STATUS;
-       flashram->status = 0x1111800100C20000LL; */
-    FRAM_COMMAND_SET_MODE_STATUS_AND_STATUS = 0xE1000000,
-    /* flashram->mode = FLASHRAM_MODE_READ;
-       flashram->status = 0x11118004F0000000LL; */
-    FRAM_COMMAND_SET_MODE_READ_AND_STATUS = 0xF0000000,
-    /* unk */
-    FRAM_COMMAND_UNK_ERASE_OPERATION = 0x3C000000
-} FramCommand;
-
-typedef enum FramMode {
-    /* 0 */ FRAM_MODE_NOP,
-    /* 1 */ FRAM_MODE_ERASE,
-    /* 2 */ FRAM_MODE_WRITE,
-    /* 3 */ FRAM_MODE_READ,
-    /* 4 */ FRAM_MODE_STATUS
-} FramMode;
 
 #endif
