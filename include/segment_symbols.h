@@ -33,7 +33,7 @@
 #define SEGMENT_BSS_SIZE(segment) ((uintptr_t)SEGMENT_BSS_END(segment) - (uintptr_t)SEGMENT_BSS_START(segment))
 
 #define ROM_FILE(name) \
-    { (uintptr_t)_##name##SegmentRomStart, (uintptr_t)_##name##SegmentRomEnd }
+    { (uintptr_t)SEGMENT_ROM_START(name), (uintptr_t)SEGMENT_ROM_END(name) }
 #define ROM_FILE_UNSET \
     { 0 }
 
