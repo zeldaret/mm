@@ -32,7 +32,6 @@ ActorInit Dm_Hina_InitVars = {
     (ActorFunc)DmHina_Draw,
 };
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/DmHina_Init.s")
 void DmHina_Init(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
@@ -46,12 +45,10 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
     this->actor.focus.pos.z = this->actor.world.pos.z;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/DmHina_Destroy.s")
 void DmHina_Destroy(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/func_80A1F470.s")
 void func_80A1F470(DmHina* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
@@ -65,7 +62,6 @@ void func_80A1F470(DmHina* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/func_80A1F56C.s")
 void func_80A1F56C(DmHina* this, PlayState* play) {
     if (Message_GetState(&play->msgCtx) == (u8)2) {
         this->unk17C = 2;
@@ -73,7 +69,6 @@ void func_80A1F56C(DmHina* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/func_80A1F5AC.s")
 void func_80A1F5AC(DmHina* this, PlayState* play) {
     this->unk17C--;
     if (this->unk17C == 0) {
@@ -86,7 +81,6 @@ void func_80A1F5AC(DmHina* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/func_80A1F63C.s")
 void func_80A1F63C(DmHina* this, PlayState* play) {
     this->unk160 = this->actor.world.pos.x + 100.0f;
     this->unk164 = this->unk_158 + 260.0f;
@@ -103,10 +97,29 @@ void func_80A1F63C(DmHina* this, PlayState* play) {
     Actor_PlaySfx(&this->actor, 0x219BU);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/func_80A1F75C.s")
+void func_80A1F75C(DmHina* this, PlayState* play) {
+    s32 var_a0;
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/DmHina_Update.s")
-void func_80A1F75C(DmHina* this, PlayState* play); /* extern */
+    switch (this->unk17E) {
+        case 0:
+            this->unk17F = 0;
+            this->unk14C = 0.0f;
+            break;
+        case 1:
+            Math_SmoothStepToF(&this->unk14C, 1.0f, 0.4f, 0.05f, 0.001f);
+            this->unk17F = this->unk14C * 255.0f;
+            this->unk150 = Math_SinS(play->state.frames * 0x1F40);
+            for (var_a0 = 0; var_a0 < 3; var_a0++) {
+                play->envCtx.lightSettings.ambientColor[var_a0] = play->envCtx.lightSettings.fogColor[var_a0] =
+                    play->envCtx.lightSettings.diffuseColor1[var_a0] = -255.0f * this->unk14C;
+            }
+            play->envCtx.lightSettings.fogNear = -500.0f * this->unk14C;
+            if (play->envCtx.lightSettings.fogNear < -300) {
+                play->roomCtx.curRoom.segment = NULL;
+            }
+            break;
+    }
+}
 
 void DmHina_Update(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
@@ -115,13 +128,11 @@ void DmHina_Update(Actor* thisx, PlayState* play) {
     func_80A1F75C(this, play);
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/func_80A1F9AC.s")
 extern UNK_TYPE D_04023348;
 extern UNK_TYPE D_04023428;
 
 void func_80A1F9AC(DmHina* this, PlayState* play) {
-    GraphicsContext* gfxCtx;
-    gfxCtx = play->state.gfxCtx;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
 
     if (this->unk17E != 0) {
         OPEN_DISPS(gfxCtx);
@@ -146,7 +157,6 @@ void func_80A1F9AC(DmHina* this, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Hina/DmHina_Draw.s")
 void DmHina_Draw(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 

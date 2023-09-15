@@ -28,7 +28,6 @@ typedef struct DmHina {
     /* 0x17E */ u8 unk17E;
     /* 0x17F */ u8 unk17F;
     /* 0x180 */ s8 unk180;
-    /* 0x181 */ char pad181[3];
 } DmHina; // size = 0x184
 
 #endif // Z_DM_HINA_H
