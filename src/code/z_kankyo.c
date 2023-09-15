@@ -482,9 +482,9 @@ void Environment_GraphCallback(GraphicsContext* gfxCtx, void* arg) {
 }
 
 typedef struct {
-    /* 0x0 */ s32 mantissa;
-    /* 0x4 */ s32 exponent;
-} ZBufValConversionEntry; // size = 0x8
+    /* 0x00 */ s32 mantissaShift; // shift applied to the mantissa of the z buffer value
+    /* 0x04 */ s32 base;          // 15.3 fixed-point base value for the exponent
+} ZBufValConversionEntry;         // size = 0x8
 
 ZBufValConversionEntry sZBufValConversionTable[1 << 3] = {
     { 6, 0x00000 }, { 5, 0x20000 }, { 4, 0x30000 }, { 3, 0x38000 },
@@ -504,8 +504,8 @@ ZBufValConversionEntry sZBufValConversionTable[1 << 3] = {
  */
 s32 Environment_ZBufValToFixedPoint(s32 zBufferVal) {
     // base[exp] + mantissa << shift[exp]
-    s32 ret = (ZBUFVAL_MANTISSA(zBufferVal) << sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].mantissa) +
-              sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].exponent;
+    s32 ret = (ZBUFVAL_MANTISSA(zBufferVal) << sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].mantissaShift) +
+              sZBufValConversionTable[ZBUFVAL_EXPONENT(zBufferVal)].base;
 
     return ret;
 }
