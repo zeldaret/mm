@@ -506,7 +506,7 @@ void PreRender_AntiAliasFilterPixel(PreRender* this, s32 x, s32 y) {
     }
 
     // The background color is determined by averaging the penultimate minimum and maximum pixels, and subtracting the
-    // ForeGround color:
+    // Foreground color:
     //      BackGround = (pMax + pMin) - (ForeGround) * 2
 
     // OutputColor = cvg * ForeGround + (1.0 - cvg) * BackGround
