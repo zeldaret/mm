@@ -813,7 +813,7 @@ u8 sSandstormEnvColors[] = {
 void Environment_LerpRGB8(u8* from, Color_RGB8* to, f32 lerp, s16* dst) {
     Color_RGB8 result;
 
-    Lib_LerpRGB((Color_RGB8*)from, to, lerp, &result);
+    Color_RGB8_Lerp((Color_RGB8*)from, to, lerp, &result);
 
     dst[0] = result.r - from[0];
     dst[1] = result.g - from[1];
