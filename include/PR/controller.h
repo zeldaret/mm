@@ -4,6 +4,7 @@
 #include "ultratypes.h"
 #include "os_cont.h"
 #include "os_pfs.h"
+#include "rcp.h"
 
 #define CHNL_ERR(format) (((format).rxsize & CHNL_ERR_MASK) >> 4)
 
@@ -199,10 +200,10 @@ s32 __osPfsGetStatus(OSMesgQueue* queue, s32 channel);
 s32 __osContChannelReset(OSMesgQueue* mq, s32 channel);
 
 extern OSPifRam __osContPifRam;
-// extern UNK_TYPE1 D_8009CF0C;
 extern u8 __osContLastPoll;
 extern u8 __osMaxControllers;
-// extern OSMesgQueue D_8009CF38;
-// extern OSMesg D_8009CF50;
+extern OSMesgQueue __osEepromTimerQ;
+extern OSMesg __osEepromTimerMsg[];
+extern OSPifRam __osPfsPifRam;
 
 #endif
