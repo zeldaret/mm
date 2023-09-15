@@ -4851,9 +4851,7 @@ beginseg
     name "ovl_En_Invadepoh_Demo"
     compress
     include "build/src/overlays/actors/ovl_En_Invadepoh_Demo/z_en_invadepoh_demo.o"
-    include "build/data/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo.data.o"
-    include "build/data/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo.bss.o"
-    include "build/data/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Invadepoh_Demo/ovl_En_Invadepoh_Demo_reloc.o"
 endseg
 
 beginseg
