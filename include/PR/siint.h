@@ -3,6 +3,7 @@
 
 #include "ultratypes.h"
 
+extern u8 __osPfsInodeCacheBank;
 
 void __osSiGetAccess(void);
 void __osSiRelAccess(void);

@@ -6,6 +6,7 @@
 #include "z64dma.h"
 #include "z64math.h"
 
+struct GameState;
 struct PlayState;
 struct Actor;
 struct SkelAnime;
