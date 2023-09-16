@@ -195,7 +195,7 @@ void func_808FA11C(EnRr* this) {
     this->collider1.info.elemType = ELEMTYPE_UNK0;
     this->unk_1EE = 80;
     this->drawDmgEffScale = 0.85f;
-    this->drawDmgEffFrozenSteamScale = 1.2750001f;
+    this->drawDmgEffFrozenSteamScale = 1275.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
