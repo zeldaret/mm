@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Object for Stone Tower Smoke -->
     <File Name="object_funen" Segment="6">
         <DList Name="gStoneTowerSmokeDL" Offset="0xD0" /> <!-- Original name is "obj_smork_modelT" -->
         <Texture Name="gStoneTowerSmokeTex" OutName="tex_0001C0" Format="ia8" Width="32" Height="32" Offset="0x1C0" />
