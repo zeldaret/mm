@@ -52,6 +52,7 @@
 #include "z64object.h"
 #include "z64ocarina.h"
 #include "z64player.h"
+#include "z64prerender.h"
 #include "z64save.h"
 #include "z64scene.h"
 #include "z64schedule.h"
@@ -221,53 +222,6 @@ typedef struct {
     /* 0xF2 */ u8 unk_F2[8]; // [3] is used by both DemoKankyo and ObjectKankyo effect count
     /* 0xFA */ u8 unk_FA[4];
 } EnvironmentContext; // size = 0x100
-
-typedef struct ListAlloc {
-    /* 0x0 */ struct ListAlloc* prev;
-    /* 0x4 */ struct ListAlloc* next;
-} ListAlloc; // size = 0x8
-
-typedef struct {
-    /* 0x00 */ u16 width;
-    /* 0x02 */ u16 height;
-    /* 0x04 */ u16 widthSave;
-    /* 0x06 */ u16 heightSave;
-    /* 0x08 */ char unk_8[8];
-    /* 0x10 */ u16* fbuf;
-    /* 0x14 */ u16* fbufSave;
-    /* 0x18 */ u8* cvgSave;
-    /* 0x1C */ u16* zbuf;
-    /* 0x20 */ u16* zbufSave;
-    /* 0x24 */ u16 ulxSave;
-    /* 0x26 */ u16 ulySave;
-    /* 0x28 */ u16 lrxSave;
-    /* 0x2A */ u16 lrySave;
-    /* 0x2C */ u16 ulx;
-    /* 0x2E */ u16 uly;
-    /* 0x30 */ u16 lrx;
-    /* 0x32 */ u16 lry;
-    /* 0x34 */ char unk_34[16];
-    /* 0x44 */ ListAlloc alloc;
-    /* 0x4C */ u8 unk_4C;
-    /* 0x4D */ u8 unk_4D;
-    /* 0x4E */ char unk_4E[2];
-} PreRender; // size = 0x50
-
-typedef struct {
-    /* 0x00 */ void* timg;
-    /* 0x04 */ void* tlut;
-    /* 0x08 */ u16 width;
-    /* 0x0A */ u16 height;
-    /* 0x0C */ u8 fmt;
-    /* 0x0D */ u8 siz;
-    /* 0x0E */ u16 tt;
-    /* 0x10 */ u16 unk_10;
-    /* 0x14 */ f32 x;
-    /* 0x18 */ f32 y;
-    /* 0x1C */ f32 xScale;
-    /* 0x20 */ f32 yScale;
-    /* 0x24 */ u32 flags;
-} PreRenderParams; // size = 0x28
 
 struct PlayState;
 
