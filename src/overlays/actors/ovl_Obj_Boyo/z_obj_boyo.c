@@ -6,14 +6,14 @@
 
 #define THIS ((ObjBoyo*)thisx)
 
-void ObjBoyo_Init(ObjBoyo* thisx, PlayState* play);
+void ObjBoyo_Init(ObjBoyo* this, PlayState* play);
 void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
-void ObjBoyo_Draw(ObjBoyo* thisx, PlayState* play);
+void ObjBoyo_Draw(ObjBoyo* this, PlayState* play);
 
 void ObjBoyo_PushPlayer(Actor* thisx, Actor* player);
 void func_809A5DE0(Actor* actor, Actor* thisx);
-void func_809A5E14(Actor* arg0, Actor* this);
+void func_809A5E14(Actor* arg0, Actor* thisx);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index);
 
 const ActorInit Obj_Boyo_InitVars = { ACTOR_OBJ_BOYO,
