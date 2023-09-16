@@ -547,7 +547,6 @@ beginseg
     include "build/src/code/z_play.o"
     include "build/src/code/z_play_hireso.o"
     include "build/src/code/PreRender.o"
-    include "build/data/code/PreRender.bss.o"
     include "build/src/code/TwoHeadGfxArena.o"
     include "build/src/code/TwoHeadArena.o"
     include "build/src/code/audio_stop_all_sfx.o"
