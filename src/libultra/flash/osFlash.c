@@ -1,5 +1,4 @@
 #include "ultra64.h"
-#include "global.h"
 #include "PR/os_internal_flash.h"
 #include "alignment.h"
 
