@@ -49,7 +49,8 @@ void __osDevMgrMain(void* arg) {
                 __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow);
                 __osEPiRawReadIo(ioMesg->piHandle, LEO_STATUS, &status);
                 if (status & LEO_STATUS_MECHANIC_INTERRUPT) {
-                    __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | LEO_BM_CTL_CLR_MECHANIC_INTR);
+                    __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL,
+                                      transfer->bmCtlShadow | LEO_BM_CTL_CLR_MECHANIC_INTR);
                 }
                 block->errStatus = 4;
                 IO_WRITE(PI_STATUS_REG, PI_CLR_INTR);

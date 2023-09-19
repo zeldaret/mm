@@ -55,7 +55,6 @@
 FaultMgr* sFaultInstance;
 f32 sFaultTimeTotal; // read but not set anywhere
 
-
 // data
 const char* sCpuExceptions[] = {
     "Interrupt",
