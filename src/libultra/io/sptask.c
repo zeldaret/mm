@@ -36,6 +36,7 @@ void osSpTaskLoad(OSTask* intp) {
             tp->t.ucode = IO_READ((uintptr_t)intp->t.yieldDataPtr + OS_YIELD_DATA_SIZE - 4);
         }
     }
+
     osWritebackDCache(tp, sizeof(OSTask));
     __osSpSetStatus(SP_CLR_SIG0 | SP_CLR_SIG1 | SP_CLR_SIG2 | SP_SET_INTR_BREAK);
 
