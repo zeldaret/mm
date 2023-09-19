@@ -3,7 +3,7 @@
 #include "alignment.h"
 #include "macros.h"
 
-s32 __osContinitialized = 0;
+s32 __osContinitialized = false;
 
 OSPifRam __osContPifRam ALIGNED(16);
 u8 __osContLastPoll;
@@ -20,11 +20,11 @@ s32 osContInit(OSMesgQueue* mq, u8* bitpattern, OSContStatus* data) {
     OSTimer mytimer;
     OSMesgQueue timerMesgQueue;
 
-    if (__osContinitialized != 0) {
+    if (__osContinitialized) {
         return 0;
     }
 
-    __osContinitialized = 1;
+    __osContinitialized = true;
 
     t = osGetTime();
     if (t < OS_USEC_TO_CYCLES(500000)) {

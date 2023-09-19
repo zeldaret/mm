@@ -4,6 +4,7 @@
 #include "PR/osint.h"
 #include "libc/stdbool.h"
 #include "macros.h"
+#include "alignment.h"
 
 OSThread viThread;
 STACK(sViStack, OS_VIM_STACKSIZE) ALIGNED(16);

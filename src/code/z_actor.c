@@ -3,8 +3,7 @@
  * Description:
  */
 
-#include "prevent_bss_reordering.h"
-#include "global.h"
+#include "z64actor.h"
 #include "fault.h"
 #include "sys_cfb.h"
 #include "loadfragment.h"
@@ -2893,7 +2892,7 @@ void Actor_DrawLensActors(PlayState* play, s32 numLensActors, Actor** lensActors
                              play->pauseBgPreRender.fbuf);
 
             gfxTemp = gfx;
-            func_8016FDB8(&play->pauseBgPreRender, &gfxTemp, spA4, zbuffer, 1);
+            PreRender_CopyImage(&play->pauseBgPreRender, &gfxTemp, spA4, zbuffer, true);
             gfx = gfxTemp;
         }
 

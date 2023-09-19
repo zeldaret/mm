@@ -24,38 +24,6 @@ extern s32 sIrqMgrRetraceCount;
 // extern UNK_TYPE4 D_80097524;
 // extern u32 sRandInt;
 
-extern char bootThreadName[];
-extern char idleThreadName[];
-extern char irqmgrThreadName[];
-extern char mainThreadName[];
-extern f32 D_800981B0;
-extern char D_800981C0[];
-extern const char dmamgrString800981C4[];
-extern const char dmamgrString800981D4[];
-extern const char dmamgrString800981E4[];
-extern const char dmamgrString800981F4[];
-extern const char dmamgrThreadName[];
-extern char D_80098210[];
-extern char yaz0String80098220[];
-extern char yaz0String8009823C[];
-extern char D_80098280[];
-extern char D_80098290[];
-extern char D_800982A4[];
-
-extern char D_800990B0[];
-extern f32 D_800990C0[9];
-extern f32 D_800990E4;
-extern f32 D_800990E8;
-extern f32 D_800990EC;
-extern f32 D_800990F0;
-extern f32 D_800990F4;
-extern f32 D_800990F8;
-extern f32 D_800990FC;
-extern f32 D_80099100;
-extern f32 D_80099104;
-extern f32 D_80099108;
-extern f32 D_8009910C;
-
 extern char gBuildTeam[];
 extern char gBuildDate[];
 extern char gBuildMakeOption[];

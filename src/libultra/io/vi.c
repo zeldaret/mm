@@ -1,7 +1,7 @@
 #include "ultra64.h"
 #include "alignment.h"
 
-__OSViContext vi[2] ALIGNED(8) = { 0 };
+static __OSViContext vi[2] ALIGNED(8) = { 0 };
 __OSViContext* __osViCurr = &vi[0];
 __OSViContext* __osViNext = &vi[1];
 

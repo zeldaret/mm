@@ -139,7 +139,7 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
     this->actor.colChkInfo.cylHeight = 10;
 
     this->flashSpeedScale = 7;
-    this->isPowderKeg = ENBOM_GETX_1(&this->actor);
+    this->isPowderKeg = ENBOM_GET_1(&this->actor);
     if (this->isPowderKeg) {
         play->actorCtx.flags |= ACTORCTX_FLAG_0;
         this->timer = gSaveContext.powderKegTimer;
@@ -162,9 +162,9 @@ void EnBom_Init(Actor* thisx, PlayState* play) {
         func_80872648(play, &this->actor.world.pos);
     }
 
-    this->collider2Elements[0].info.toucher.damage += ENBOM_GETZ_FF00(thisx);
+    this->collider2Elements[0].info.toucher.damage += ENBOM_GET_FF00(thisx);
     this->actor.shape.rot.z &= 0xFF;
-    if (ENBOM_GETZ_80(&this->actor)) {
+    if (ENBOM_GET_80(&this->actor)) {
         this->actor.shape.rot.z |= 0xFF00;
     }
 
