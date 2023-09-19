@@ -1,4 +1,3 @@
-
 #ifndef PR_OS_INTERNAL_RSP_H
 #define PR_OS_INTERNAL_RSP_H
 
