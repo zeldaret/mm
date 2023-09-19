@@ -12,7 +12,7 @@ s32 __osFlashVersion;
 static s32 sBssPad[5];
 
 uintptr_t osFlashGetAddr(u32 pageNum) {
-    // Account for hadware bug in old flash where the address bits are shifted 1-off where they should be
+    // Account for hardware bug in old flash where the address bits are shifted 1-off where they should be
     uintptr_t addr = (__osFlashVersion == OLD_FLASH) ? pageNum * (FLASH_BLOCK_SIZE >> 1) : pageNum * FLASH_BLOCK_SIZE;
 
     return addr;
@@ -31,7 +31,7 @@ OSPiHandle* osFlashReInit(u8 latency, u8 pulse, u8 pageSize, u8 relDuration, u32
 }
 
 void osFlashChange(u32 flashNum) {
-    __osFlashHandler.baseAddress = PHYS_TO_K1(FRAM_STATUS_REGISTER + (flashNum * FLASH_SIZE));
+    __osFlashHandler.baseAddress = PHYS_TO_K1(FLASH_START_ADDR + (flashNum * FLASH_SIZE));
     __osFlashHandler.type = DEVICE_TYPE_FLASH + flashNum;
 
     return;
