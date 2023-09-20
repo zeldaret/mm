@@ -63,7 +63,7 @@ void func_80A1F470(DmHina* this, PlayState* play) {
 }
 
 void func_80A1F56C(DmHina* this, PlayState* play) {
-    if (Message_GetState(&play->msgCtx) == (u8)2) {
+    if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         this->unk17C = 2;
         this->actionFunc = func_80A1F5AC;
     }
