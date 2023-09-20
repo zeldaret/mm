@@ -308,7 +308,7 @@
             0x800992F0 : "lookathil",
             0x80099300 : "xprintf",
             0x80099400 : "cosf",
-            0x80099450 : "__libm_qnan_f",
+            0x80099450 : "__libm_vals",
             0x80099460 : "xldtob",
             0x800994C0 : "llcvt",
             0x800994D0 : "build",

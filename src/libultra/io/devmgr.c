@@ -38,7 +38,7 @@ void __osDevMgrMain(void* arg) {
             __osResetGlobalIntMask(OS_IM_PI);
             __osEPiRawWriteIo(ioMesg->piHandle, LEO_BM_CTL, transfer->bmCtlShadow | 0x80000000);
 
-        label:
+        readblock1:
             osRecvMesg(devMgr->evtQueue, &sp70, OS_MESG_BLOCK);
             transfer = &ioMesg->piHandle->transferInfo;
             block = &transfer->block[transfer->blockNum];
@@ -60,7 +60,7 @@ void __osDevMgrMain(void* arg) {
 
             if ((msgVar == 1) && (ioMesg->piHandle->transferInfo.block[0].errStatus == 0)) {
                 msgVar = 0;
-                goto label;
+                goto readblock1;
             }
 
             osSendMesg(devMgr->acsQueue, NULL, OS_MESG_NOBLOCK);

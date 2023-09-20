@@ -133,7 +133,7 @@ void* osViGetCurrentFramebuffer(void);
 void* osViGetNextFramebuffer(void);
 void osViSetXScale(f32 value);
 void osViSetYScale(f32 value);
-void osViExtendVStart(u32 a0);
+void osViExtendVStart(u32 value);
 void osViSetSpecialFeatures(u32 func);
 void osViSetMode(OSViMode* modep);
 void osViSetEvent(OSMesgQueue* mq, OSMesg m, u32 retraceCount);

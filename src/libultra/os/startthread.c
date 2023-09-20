@@ -1,9 +1,7 @@
 #include "ultra64.h"
 
 void osStartThread(OSThread* t) {
-    register u32 saveMask;
-
-    saveMask = __osDisableInt();
+    register u32 saveMask = __osDisableInt();
 
     switch (t->state) {
         case OS_STATE_WAITING:

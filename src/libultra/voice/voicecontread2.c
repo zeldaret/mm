@@ -2,12 +2,11 @@
  * File: voicecontread2.c
  */
 
+#include "ultra64.h"
 #include "PR/controller_voice.h"
 #include "PR/voiceinternal.h"
 #include "PR/controller.h"
-#include "PR/voiceinternal.h"
-#include "functions.h"
-#include "variables.h"
+#include "macros.h"
 
 #define READ2FORMAT(ptr) ((__OSVoiceRead2Format*)(ptr))
 

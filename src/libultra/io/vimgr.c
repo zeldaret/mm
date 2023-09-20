@@ -60,8 +60,8 @@ void osCreateViManager(OSPri pri) {
     }
 }
 
-void viMgrMain(void* vargs) {
-    OSDevMgr* args;
+void viMgrMain(void* arg) {
+    OSDevMgr* dmArgs;
     static u16 viRetrace;
     u32 addTime;
     OSIoMesg* mesg;
@@ -73,10 +73,10 @@ void viMgrMain(void* vargs) {
         viRetrace = 1;
     }
 
-    args = (OSDevMgr*)vargs;
+    dmArgs = (OSDevMgr*)arg;
 
     while (true) {
-        osRecvMesg(args->evtQueue, (OSMesg*)&mesg, OS_MESG_BLOCK);
+        osRecvMesg(dmArgs->evtQueue, (OSMesg*)&mesg, OS_MESG_BLOCK);
         switch (mesg->hdr.type) {
             case OS_MESG_TYPE_VRETRACE:
                 __osViSwapContext();

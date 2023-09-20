@@ -203,7 +203,7 @@ beginseg
     include "build/src/libultra/io/contramwrite.o"
     include "build/src/libultra/io/epirawwrite.o"
     include "build/src/libultra/os/settimer.o"
-    include "build/data/boot/__libm_qnan_f.rodata.o"
+    include "build/data/boot/__libm_vals.rodata.o"
     include "build/src/libultra/libc/xldtob.o"
     include "build/src/libultra/libc/ldiv.o"
     include "build/src/libultra/libc/xlitob.o"
