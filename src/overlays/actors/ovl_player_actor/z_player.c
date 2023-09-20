@@ -501,10 +501,10 @@ typedef struct struct_8085D200 {
     /* 0x9 */ u8 unk_9;
 } struct_8085D200; // size = 0xC
 
-f32 sPlayerControlStickMagnitude; // distance of the analog stick to its center
-s16 sPlayerControlStickAngle;     // analog stick angle/yaw
-s16 D_80862B02;                   // analog stick yaw + camera yaw
-s32 D_80862B04;                   // boolean, set to the return value of func_8083216C
+f32 sPlayerControlStickMagnitude;
+s16 sPlayerControlStickAngle;
+s16 D_80862B02; // analog stick yaw + camera yaw
+s32 D_80862B04; // boolean, set to the return value of func_8083216C
 FloorType sPlayerFloorType;
 u32 sPlayerTouchedWallFlags;
 ConveyorSpeed sPlayerConveyorSpeedIndex;
