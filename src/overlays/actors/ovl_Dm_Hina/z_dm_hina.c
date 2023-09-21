@@ -39,10 +39,10 @@ void DmHina_Init(Actor* thisx, PlayState* play) {
     this->unk180 = 1;
     this->actionFunc = func_80A1F470;
     this->unk158 = this->actor.world.pos.y;
-    this->actor.focus.pos.y = this->actor.world.pos.y;
     this->unk148 = 0.0f;
     this->unk15C = 1.0f;
     this->actor.focus.pos.x = this->actor.world.pos.x;
+    this->actor.focus.pos.y = this->actor.world.pos.y;
     this->actor.focus.pos.z = this->actor.world.pos.z;
 }
 
@@ -86,8 +86,8 @@ void func_80A1F63C(DmHina* this, PlayState* play) {
     this->unk160.y = this->unk158 + 260.0f;
     this->unk160.z = this->actor.world.pos.z + 100.0f;
     this->unk16C.x = this->actor.world.pos.x;
-    this->unk16C.z = this->actor.world.pos.z;
     this->unk16C.y = this->actor.world.pos.y + this->unk154 * this->unk15C + 40.0f * this->unk15C;
+    this->unk16C.z = this->actor.world.pos.z;
     Play_SetCameraAtEye(play, this->unk17A, &this->unk16C, &this->unk160);
     Math_SmoothStepToF(&this->actor.world.pos.y, this->unk158 + 300.0f, 0.5f, 2.0f, 0.1f);
     if (((this->unk158 + 240.0f) < this->actor.world.pos.y) && (this->unk17E != 1)) {
