@@ -3,7 +3,8 @@
 
 #include "global.h"
 
-#define SNOWWD_GET_PARAM_F80(thisx) (((thisx)->params & 0xF80) >> 7)
+#define SNOWWD_GET_DROP_TABLE(thisx) (((thisx)->params & 0xF80) >> 7)
+#define SNOWWD_DROPPED_COLLECTIBLE(thisx) ((thisx)->home.rot.z)
 
 struct EnSnowwd;
 
