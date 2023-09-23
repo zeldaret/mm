@@ -2,6 +2,7 @@
 #define Z_BOSS_05_H
 
 #include "global.h"
+#include "assets/objects/object_boss05/object_boss05.h"
 
 struct Boss05;
 
@@ -41,9 +42,9 @@ typedef struct Boss05 {
     /* 0x19E */ Vec3s unk19E[7];
     /* 0x1C8 */ ColliderJntSph collider2;
     /* 0x1E8 */ ColliderJntSphElement colliderElements2[2];
-    /* 0x268 */ SkelAnime skelAnime10;
-    /* 0x2AC */ Vec3s jointTable10[10];
-    /* 0x2E8 */ Vec3s morphTable10[10];
+    /* 0x268 */ SkelAnime lilyPadSkelAnime;
+    /* 0x2AC */ Vec3s lilyPadJointTable[BIODEKUBABALILYPAD_LIMB_MAX];
+    /* 0x2E8 */ Vec3s lilyPadMorphTable[BIODEKUBABALILYPAD_LIMB_MAX];
     /* 0x324 */ Vec3f unk324; // pos used for spawning and drawing
     /* 0x330 */ Vec3s unk330; // rotation used for spawning and drawing
     /* 0x338 */ f32 unk338;
@@ -56,9 +57,9 @@ typedef struct Boss05 {
     /* 0x364 */ f32 unk364;
     /* 0x368 */ ColliderJntSph collider1;
     /* 0x388 */ ColliderJntSphElement colliderElements1[1];
-    /* 0x3C8 */ SkelAnime skelAnime20;
-    /* 0x40C */ Vec3s jointTable20[20];
-    /* 0x484 */ Vec3s morphTable20[20];
+    /* 0x3C8 */ SkelAnime bodySkelAnime;
+    /* 0x40C */ Vec3s bodyJointTable[BIODEKUBABABODY_LIMB_MAX];
+    /* 0x484 */ Vec3s bodyMorphTable[BIODEKUBABABODY_LIMB_MAX];
     /* 0x4FC */ f32 lastAnimFrame;
     /* 0x500 */ Vec3s unk500;
 } Boss05; // size = 0x508
