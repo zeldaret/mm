@@ -27,7 +27,7 @@ Both approaches have their advantages and disadvantages.
 
 ## Data first
 
-This way is good for smaller actors with little data. The OoT tutorial [covers this in plenty of detail](https://github.com/zeldaret/oot/blob/master/docs/tutorial/data.md), and the process in MM is essentially identical, so we won't go over it here.
+This way is good for smaller actors with little data. The OoT tutorial [covers this in plenty of detail](https://github.com/zeldaret/oot/blob/main/docs/tutorial/data.md), and the process in MM is essentially identical, so we won't go over it here.
 
 ## Extern and data last
 
@@ -43,7 +43,7 @@ Once we have decompiled enough things to know what the data is, we can import it
 
 ```C
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -99,7 +99,7 @@ endseg
 Next remove all the externs, and uncomment their corresponding commented data:
 
 ```C
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -139,7 +139,7 @@ As we'd expect, of course: we didn't fulfil our promise that they were defined e
 For actors which have yet to be decompiled, this is mitigated by use of the file `undefined_syms.txt`, which feeds the linker the raw addresses to use as the symbol definitions. However, we want to replace these segmented addresses with proper object symbols whenever possible. In `En_Recepgirl_InitVars`, we can see that this actor uses the object `OBJECT_BG`:
 
 ```c
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,

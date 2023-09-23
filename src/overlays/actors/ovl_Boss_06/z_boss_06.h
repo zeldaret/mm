@@ -42,14 +42,12 @@ typedef struct Boss06 {
     /* 0x1FE */ u8 unk_1FE;
     /* 0x1FF */ u8 unk_1FF;
     /* 0x200 */ u8 unk_200[0x800];
-    /* 0xA00 */ s16 unk_A00;
-    /* 0xA04 */ Vec3f unk_A04;
-    /* 0xA10 */ Vec3f unk_A10;
+    /* 0xA00 */ s16 subCamId;
+    /* 0xA04 */ Vec3f subCamEye;
+    /* 0xA10 */ Vec3f subCamAt;
     /* 0xA1C */ Vec3f unk_A1C;
     /* 0xA28 */ f32 unk_A28;
     /* 0xA2C */ f32 unk_A2C;
 } Boss06; // size = 0xA30
-
-extern const ActorInit Boss_06_InitVars;
 
 #endif // Z_BOSS_06_H

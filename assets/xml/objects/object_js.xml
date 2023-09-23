@@ -1,10 +1,10 @@
 ﻿<Root>
     <File Name="object_js" Segment="6">
-        <Animation Name="object_js_Anim_00016C" Offset="0x16C" />
-        <Animation Name="object_js_Anim_0003DC" Offset="0x3DC" />
-        <Animation Name="object_js_Anim_000AD4" Offset="0xAD4" />
-        <Animation Name="object_js_Anim_000C7C" Offset="0xC7C" />
-        <Animation Name="object_js_Anim_000F4C" Offset="0xF4C" />
+        <Animation Name="object_js_Anim_00016C" Offset="0x16C" /> <!-- Original name is "js_chigau" -->
+        <Animation Name="object_js_Anim_0003DC" Offset="0x3DC" /> <!-- Original name is "js_chigau2wait" -->
+        <Animation Name="object_js_Anim_000AD4" Offset="0xAD4" /> <!-- Original name is "js_furueru" -->
+        <Animation Name="object_js_Anim_000C7C" Offset="0xC7C" /> <!-- Original name is "js_maido" -->
+        <Animation Name="object_js_Anim_000F4C" Offset="0xF4C" /> <!-- Original name is "js_matsu" -->
         <DList Name="object_js_DL_003F30" Offset="0x3F30" />
         <DList Name="object_js_DL_004510" Offset="0x4510" />
         <DList Name="object_js_DL_004688" Offset="0x4688" />
@@ -39,7 +39,7 @@
         <Limb Name="object_js_Standardlimb_00693C" Type="Standard" EnumName="OBJECT_JS_LIMB_0A" Offset="0x693C" />
         <Limb Name="object_js_Standardlimb_006948" Type="Standard" EnumName="OBJECT_JS_LIMB_0B" Offset="0x6948" />
         <Limb Name="object_js_Standardlimb_006954" Type="Standard" EnumName="OBJECT_JS_LIMB_0C" Offset="0x6954" />
-        <Skeleton Name="object_js_Skel_006990" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JS_LIMB_NONE" LimbMax="OBJECT_JS_LIMB_MAX" EnumName="object_js_Limbs" Offset="0x6990" />
-        <Collision Name="object_js_Colheader_0069E8" Offset="0x69E8" />
+        <Skeleton Name="object_js_Skel_006990" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JS_LIMB_NONE" LimbMax="OBJECT_JS_LIMB_MAX" EnumName="ObjectJsLimb" Offset="0x6990" />
+        <Collision Name="object_js_Colheader_0069E8" Offset="0x69E8" /> <!-- Original name is "test_floor_bgdatainfo" -->
     </File>
 </Root>

@@ -2,12 +2,11 @@
 #define Z64_TITLE_H
 
 #include "global.h"
-
-void Title_Init(GameState* thisx);
-void Title_Destroy(GameState* thisx);
+#include "z64game.h"
+#include "z64view.h"
 
 typedef struct {
-    /* 0x000 */ GameState gameState;
+    /* 0x000 */ GameState state;
     /* 0x0A4 */ u8* staticSegment;
     /* 0x0A8 */ View view;
     /* 0x210 */ SramContext sramCtx;
@@ -18,6 +17,9 @@ typedef struct {
     /* 0x240 */ s16 ult;
     /* 0x242 */ s16 uls;
     /* 0x244 */ u8 exit;
-} TitleContext; // size = 0x248
+} ConsoleLogoState; // size = 0x248
+
+void ConsoleLogo_Init(GameState* thisx);
+void ConsoleLogo_Destroy(GameState* thisx);
 
 #endif

@@ -5,6 +5,18 @@
 
 struct EnClearTag;
 
+#define CLEAR_TAG_PARAMS(type) (type)
+
+typedef enum {
+    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
+    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
+    /* 0x02 */ CLEAR_TAG_POP,
+    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
+    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
+    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
+    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
+} ClearTagType;
+
 typedef struct EnClearTagEffect {
     /* 0x00 */ u8 type;
     /* 0x01 */ u8 actionTimer;
@@ -40,7 +52,5 @@ typedef struct EnClearTag {
     /* 0x2E6C */ Vec3f subCamEye;
     /* 0x2E78 */ Vec3f subCamAt;
 } EnClearTag; // size = 0x2E84
-
-extern const ActorInit En_Clear_Tag_InitVars;
 
 #endif // Z_EN_CLEAR_TAG_H

@@ -62,7 +62,7 @@ You'll want to name everything that exists in the XML, but it helps to break it 
 
 You'll notice that we didn't mention vertices in this list. This is because, for the most part, vertices are not used outside the object itself, and so are not required to have names. However, some actors have code that manipulates or otherwise interacts with vertices; in these cases, the vertices should be added to the XML and named.
 
-Current naming practice is to name each item in the xml using camelCase as usual, with the `g` prefix (for "global"), and the type of data last (`Skel`, `Anim`, `DL`, `Tex`, `TLUT`, `Vtx`, `TexAnim`, etc.), while output texture files are named in `snake_case`. TLUTs (texture look-up tables) should always have their output file end in `tlut`. For more info on which suffixes to use, check out the [ZAPD documentation on extraction XML](https://github.com/zeldaret/mm/blob/master/tools/ZAPD/docs/zapd_extraction_xml_reference.md).
+Current naming practice is to name each item in the xml using camelCase as usual, with the `g` prefix (for "global"), and the type of data last (`Skel`, `Anim`, `DL`, `Tex`, `TLUT`, `Vtx`, `TexAnim`, etc.), while output texture files are named in `snake_case`. TLUTs (texture look-up tables) should always have their output file end in `tlut`. For more info on which suffixes to use, check out the [ZAPD documentation on extraction XML](https://github.com/zeldaret/mm/blob/main/tools/ZAPD/docs/zapd_extraction_xml_reference.md).
 
 ### Textures
 
@@ -111,7 +111,7 @@ If in doubt, look at completed objects in the repo, and if still in doubt, ask.
 
 We are very fortunate that several nice tools have been written recently that are excellent for documenting asset files:
 
-- [Z64Utils](https://github.com/Random06457/Z64Utils/releases), for looking at displaylists, textures they reference, the skeleton, animations, etc.
+- [Z64Utils](https://github.com/zeldaret/Z64Utils/releases), for looking at displaylists, textures they reference, the skeleton, animations, etc.
 - [Texture64](https://github.com/queueRAM/Texture64/releases), for looking at textures in all the common N64 formats (needed since Z64Utils cannot interpret textures not explicitly referenced in displaylists currently)
 
 ## Building and investigative modding
@@ -156,6 +156,6 @@ The reason this happens is because ZAPD couldn't determine the TLUT for the text
 
 ### Understanding texture animations
 
-Texture animations are new to Majora's Mask, and they can be pretty tricky to understand. Luckily, there's some extensive documentation on how they're structured [here](https://github.com/zeldaret/mm/blob/master/tools/ZAPD/ZAPD/ZTextureAnimation.cpp). One useful thing to remember is that empty texture animations take the form of `00 00 00 06 00 00 00 00`. The process that automatically generated all the object XMLs sometimes failed to recognize this as an empty texture animation, so it puts it in various blobs or fails to account for it at all.
+Texture animations are new to Majora's Mask, and they can be pretty tricky to understand. Luckily, there's some extensive documentation on how they're structured [here](https://github.com/zeldaret/mm/blob/main/tools/ZAPD/ZAPD/ZTextureAnimation.cpp). One useful thing to remember is that empty texture animations take the form of `00 00 00 06 00 00 00 00`. The process that automatically generated all the object XMLs sometimes failed to recognize this as an empty texture animation, so it puts it in various blobs or fails to account for it at all.
 
 Next: [The merging process](merging.md)

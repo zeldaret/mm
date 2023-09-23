@@ -23,7 +23,7 @@ void BgGoronOyu_UpdateWaterBoxInfo(BgGoronOyu* this, PlayState* play);
 void BgGoronOyu_SpawnEffects(BgGoronOyu* this, PlayState* play);
 void func_80B40160(BgGoronOyu* this, PlayState* play);
 
-const ActorInit Bg_Goron_Oyu_InitVars = {
+ActorInit Bg_Goron_Oyu_InitVars = {
     ACTOR_BG_GORON_OYU,
     ACTORCAT_BG,
     FLAGS,
@@ -42,7 +42,7 @@ void func_80B40080(BgGoronOyu* this) {
 
 void func_80B4009C(BgGoronOyu* this) {
     this->unk_17E = 0;
-    this->initialActorCutscene = this->dyna.actor.cutscene;
+    this->initCsId = this->dyna.actor.csId;
     this->actionFunc = func_80B40100;
     this->unk_164 = 20.0f;
 }
@@ -53,11 +53,11 @@ void func_80B400C8(BgGoronOyu* this, PlayState* play) {
 }
 
 void func_80B40100(BgGoronOyu* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->initialActorCutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->initialActorCutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->initCsId)) {
+        CutsceneManager_StartWithPlayerCs(this->initCsId, &this->dyna.actor);
         this->actionFunc = func_80B40160;
     } else {
-        ActorCutscene_SetIntentToPlay(this->initialActorCutscene);
+        CutsceneManager_Queue(this->initCsId);
     }
 }
 
@@ -69,12 +69,12 @@ void func_80B40160(BgGoronOyu* this, PlayState* play) {
     BgGoronOyu_UpdateWaterBoxInfo(this, play);
 
     if (this->unk_164 <= 0.0f) {
-        ActorCutscene_Stop(this->initialActorCutscene);
+        CutsceneManager_Stop(this->initCsId);
         this->unk_164 = 0.0f;
         func_80B40080(this);
     }
 
-    Audio_PlaySfxAtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
+    Audio_PlaySfx_AtPos(&D_80B40780, NA_SE_EV_WATER_LEVEL_DOWN - SFX_FLAG);
 }
 
 void func_80B401F8(BgGoronOyu* this, PlayState* play) {
@@ -91,8 +91,8 @@ void func_80B401F8(BgGoronOyu* this, PlayState* play) {
 
     if (dist.x >= 0.0f && dist.x <= this->waterBoxXLength && dist.z >= 0.0f && dist.z <= this->waterBoxZLength &&
         fabsf(dist.y) < 100.0f && player->actor.depthInWater > 12.0f) {
-        Actor_PickUp(&this->dyna.actor, play, GI_MAX, this->dyna.actor.xzDistToPlayer,
-                     fabsf(this->dyna.actor.playerHeightRel));
+        Actor_OfferGetItem(&this->dyna.actor, play, GI_MAX, this->dyna.actor.xzDistToPlayer,
+                           fabsf(this->dyna.actor.playerHeightRel));
     }
 }
 
@@ -152,7 +152,7 @@ void BgGoronOyu_Init(Actor* thisx, PlayState* play) {
     CollisionHeader* colHeader = NULL;
 
     Actor_SetScale(&this->dyna.actor, 0.1f);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_oyu_Colheader_000988, &colHeader);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
@@ -183,10 +183,12 @@ void BgGoronOyu_Update(Actor* thisx, PlayState* play) {
 
 void BgGoronOyu_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_oyu_Matanimheader_000968));
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000158);
     gSPDisplayList(POLY_XLU_DISP++, &object_oyu_DL_000080);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

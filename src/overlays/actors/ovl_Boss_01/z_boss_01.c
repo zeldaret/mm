@@ -6,8 +6,9 @@
 
 #include "z_boss_01.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss01*)thisx)
 
@@ -233,7 +234,7 @@ static ColliderCylinderInit D_809D7CA0 = {
     { 8, 15, 10, { 0, 0, 0 } },
 };
 
-const ActorInit Boss_01_InitVars = {
+ActorInit Boss_01_InitVars = {
     ACTOR_BOSS_01,
     ACTORCAT_BOSS,
     FLAGS,

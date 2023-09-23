@@ -9,7 +9,9 @@ typedef void (*EnGmActionFunc)(struct EnGm*, PlayState*);
 typedef s32 (*EnGmUnkFunc)(struct EnGm*, PlayState*);
 typedef void (*EnGmUnkFunc2)(struct EnGm*, PlayState*);
 
-#define ENGM_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENGM_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
+
+#define ENGM_FIDGET_TABLE_LEN 3
 
 typedef struct EnGm {
     /* 0x000 */ Actor actor;
@@ -26,14 +28,14 @@ typedef struct EnGm {
     /* 0x250 */ s32 timePathWaypoint;
     /* 0x254 */ s32 timePathElapsedTime;
     /* 0x258 */ u8 unk_258;
-    /* 0x259 */ u8 unk_259;
+    /* 0x259 */ u8 cueId;
     /* 0x25C */ s32 unk_25C;
     /* 0x260 */ s8 unk_260;
     /* 0x261 */ s8 unk_261;
     /* 0x262 */ s8 unk_262;
     /* 0x264 */ s32* unk_264;
     /* 0x268 */ Actor* unk_268;
-    /* 0x26C */ UNK_TYPE1 unk26C[0xC];
+    /* 0x26C */ UNK_TYPE1 unk_26C[0xC];
     /* 0x278 */ Vec3f unk_278;
     /* 0x284 */ Vec3f unk_284;
     /* 0x290 */ Vec3f unk_290;
@@ -61,21 +63,19 @@ typedef struct EnGm {
     /* 0x3CC */ s16 unk_3CC;
     /* 0x3CE */ s16 unk_3CE;
     /* 0x3D0 */ s16 unk_3D0;
-    /* 0x3D2 */ s16 unk_3D2[3];
-    /* 0x3D8 */ s16 unk_3D8[3];
+    /* 0x3D2 */ s16 fidgetTableZ[ENGM_FIDGET_TABLE_LEN];
+    /* 0x3D8 */ s16 fidgetTableY[ENGM_FIDGET_TABLE_LEN];
     /* 0x3DE */ s16 unk_3DE;
     /* 0x3E0 */ s16 unk_3E0;
     /* 0x3E2 */ s16 unk_3E2;
     /* 0x3E4 */ EnGmUnkFunc unk_3E4;
     /* 0x3E8 */ s32 unk_3E8;
     /* 0x3EC */ UNK_TYPE1 unk3EC[0x4];
-    /* 0x3F0 */ s32 unk_3F0;
+    /* 0x3F0 */ s32 prevTalkState;
     /* 0x3F4 */ s32 unk_3F4;
     /* 0x3F8 */ s32 unk_3F8;
     /* 0x3FC */ s32 unk_3FC;
     /* 0x400 */ s32 unk_400;
 } EnGm; // size = 0x404
-
-extern const ActorInit En_Gm_InitVars;
 
 #endif // Z_EN_GM_H

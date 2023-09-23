@@ -21,13 +21,13 @@ typedef enum {
     /* 0x8 */ MINISLIME_DEFEAT_MELT,
     /* 0x9 */ MINISLIME_DESPAWN,
     /* 0xA */ MINISLIME_SETUP_GEKKO_THROW,
-    /* 0xB */ MINISLIME_GEKKO_THROW,
+    /* 0xB */ MINISLIME_GEKKO_THROW
 } EnMinislimeState;
 
 typedef enum {
-    /* 0x0 */ MINISLIME_INACTIVE_STATE,
-    /* 0x1 */ MINISLIME_ACTIVE_CONTINUE_STATE,
-    /* 0x2 */ MINISLIME_ACTIVE_INIT_STATE,
+    /* 0 */ MINISLIME_INACTIVE_STATE,
+    /* 1 */ MINISLIME_ACTIVE_CONTINUE_STATE,
+    /* 2 */ MINISLIME_ACTIVE_INIT_STATE
 } EnMinislimeActiveState;
 
 typedef struct EnMinislime {
@@ -49,7 +49,5 @@ typedef struct EnMinislime {
     /* 0x154 */ Vec3f shakeRefPos;
     /* 0x160 */ ColliderCylinder collider;
 } EnMinislime; // size = 0x1AC
-
-extern const ActorInit En_Minislime_InitVars;
 
 #endif // Z_EN_MINISLIME_H

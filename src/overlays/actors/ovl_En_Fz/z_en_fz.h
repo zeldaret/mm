@@ -13,12 +13,12 @@ typedef void (*EnFzUnkFunc)(struct EnFz*);
 #define ENFZ_GET_4000(thisx) ((thisx)->params & 0x4000)
 #define ENFZ_GET_8000(thisx) ((thisx)->params & 0x8000)
 
-enum {
+typedef enum {
     /* 0 */ ENFZ_F_0,
     /* 1 */ ENFZ_F_1,
     /* 2 */ ENFZ_F_2,
-    /* 3 */ ENFZ_F_3,
-};
+    /* 3 */ ENFZ_F_3
+} EnFzParam;
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
@@ -69,7 +69,5 @@ typedef struct EnFz {
     /* 0xBD8 */ u8 unk_BD8;
     /* 0xBD9 */ u8 unk_BD9;
 } EnFz; /* size = 0xBDC */
-
-extern const ActorInit En_Fz_InitVars;
 
 #endif // Z_EN_FZ_H

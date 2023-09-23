@@ -1,4 +1,5 @@
 #include "global.h"
+#include "libc/string.h"
 
 #define BUFF_LEN 0x20
 
@@ -9,13 +10,13 @@ const f64 digs[] = { 10e0L, 10e1L, 10e3L, 10e7L, 10e15L, 10e31L, 10e63L, 10e127L
 
 /* float properties */
 #define _D0 0
-#define _DBIAS 0x3ff
+#define _DBIAS 0x3FF
 #define _DLONG 1
 #define _DOFF 4
-#define _FBIAS 0x7e
+#define _FBIAS 0x7E
 #define _FOFF 7
 #define _FRND 1
-#define _LBIAS 0x3ffe
+#define _LBIAS 0x3FFE
 #define _LOFF 15
 /* integer properties */
 #define _C2 1
@@ -26,7 +27,7 @@ const f64 digs[] = { 10e0L, 10e1L, 10e3L, 10e7L, 10e15L, 10e31L, 10e63L, 10e127L
 #define INF 1
 #define FINITE -1
 #define _DFRAC ((1 << _DOFF) - 1)
-#define _DMASK (0x7fff & ~_DFRAC)
+#define _DMASK (0x7FFF & ~_DFRAC)
 #define _DMAX ((1 << (15 - _DOFF)) - 1)
 #define _DNAN (0x8000 | _DMAX << _DOFF | 1 << (_DOFF - 1))
 #define _DSIGN 0x8000
@@ -61,7 +62,7 @@ void _Ldtob(_Pft* args, u8 type) {
 
     if (args->prec < 0) {
         args->prec = 6;
-    } else if (args->prec == 0 && (type == 'g' || type == 'G')) {
+    } else if ((args->prec == 0) && ((type == 'g') || (type == 'G'))) {
         args->prec = 1;
     }
     err = _Ldunscale(&exp, (_Pft*)args);
@@ -101,13 +102,13 @@ void _Ldtob(_Pft* args, u8 type) {
             gen = 0x13;
         }
         *ptr++ = '0';
-        while (gen > 0 && 0 < val) {
+        while ((gen > 0) && (0 < val)) {
             lo = val;
             if ((gen -= 8) > 0) {
                 val = (val - lo) * 1.0e8;
             }
             ptr = ptr + 8;
-            for (j = 8; lo > 0 && --j >= 0;) {
+            for (j = 8; (lo > 0) && (--j >= 0);) {
                 qr = ldiv(lo, 10);
                 *--ptr = qr.rem + '0';
                 lo = qr.quot;
@@ -124,12 +125,12 @@ void _Ldtob(_Pft* args, u8 type) {
             --gen, --exp;
         }
 
-        nsig = ((type == 'f') ? exp + 1 : ((type == 'e' || type == 'E') ? 1 : 0)) + args->prec;
+        nsig = ((type == 'f') ? exp + 1 : (((type == 'e') || (type == 'E')) ? 1 : 0)) + args->prec;
         if (gen < nsig) {
             nsig = gen;
         }
         if (nsig > 0) {
-            if (nsig < gen && ptr[nsig] > '4') {
+            if ((nsig < gen) && (ptr[nsig] > '4')) {
                 drop = '9';
             } else {
                 drop = '0';
@@ -178,7 +179,7 @@ void _Genld(_Pft* px, u8 code, u8* p, s16 nsig, s16 xexp) {
         p = (u8*)"0";
     }
 
-    if (code == 'f' || ((code == 'g' || code == 'G') && (-4 <= xexp) && (xexp < px->prec))) { /* 'f' format */
+    if ((code == 'f') || (((code == 'g') || (code == 'G')) && (-4 <= xexp) && (xexp < px->prec))) { /* 'f' format */
         ++xexp;            /* change to leading digit count */
         if (code != 'f') { /* fixup for 'g' */
             if (!(px->flags & FLAGS_HASH) && nsig < px->prec) {
@@ -225,8 +226,8 @@ void _Genld(_Pft* px, u8 code, u8* p, s16 nsig, s16 xexp) {
             px->n1 += nsig;
             px->nz1 = px->prec - nsig;
         }
-    } else {                              /* 'e' format */
-        if (code == 'g' || code == 'G') { /* fixup for 'g' */
+    } else {                                  /* 'e' format */
+        if ((code == 'g') || (code == 'G')) { /* fixup for 'g' */
             if (nsig < px->prec) {
                 px->prec = nsig;
             }

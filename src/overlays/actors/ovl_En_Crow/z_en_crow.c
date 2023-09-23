@@ -5,8 +5,9 @@
  */
 
 #include "z_en_crow.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_1000 | ACTOR_FLAG_4000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_IGNORE_QUAKE | ACTOR_FLAG_4000)
 
 #define THIS ((EnCrow*)thisx)
 
@@ -27,7 +28,7 @@ void EnCrow_SetupRespawn(EnCrow* this);
 void EnCrow_TurnAway(EnCrow* this, PlayState* play);
 void EnCrow_Respawn(EnCrow* this, PlayState* play);
 
-const ActorInit En_Crow_InitVars = {
+ActorInit En_Crow_InitVars = {
     ACTOR_EN_CROW,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -68,46 +69,57 @@ static ColliderJntSphInit sJntSphInit = {
 
 static CollisionCheckInfoInit sColChkInfoInit = { 1, 15, 30, 30 };
 
+typedef enum {
+    /* 0 */ GUAY_DMGEFF_NONE,
+    /* 1 */ GUAY_DMGEFF_STUN,
+    /* 2 */ GUAY_DMGEFF_FIRE,
+    /* 3 */ GUAY_DMGEFF_ICE,
+    /* 4 */ GUAY_DMGEFF_LIGHT,
+    /* 5 */ GUAY_DMGEFF_ELECTRIC
+} GuayDamageEffect;
+
 static DamageTable sDamageTable = {
-    /* Deku Nut       */ DMG_ENTRY(0, 0x1),
-    /* Deku Stick     */ DMG_ENTRY(1, 0x0),
-    /* Horse trample  */ DMG_ENTRY(1, 0x0),
-    /* Explosives     */ DMG_ENTRY(1, 0x0),
-    /* Zora boomerang */ DMG_ENTRY(1, 0x0),
-    /* Normal arrow   */ DMG_ENTRY(1, 0x0),
-    /* UNK_DMG_0x06   */ DMG_ENTRY(0, 0x0),
-    /* Hookshot       */ DMG_ENTRY(1, 0x0),
-    /* Goron punch    */ DMG_ENTRY(1, 0x0),
-    /* Sword          */ DMG_ENTRY(1, 0x0),
-    /* Goron pound    */ DMG_ENTRY(1, 0x0),
-    /* Fire arrow     */ DMG_ENTRY(2, 0x2),
-    /* Ice arrow      */ DMG_ENTRY(2, 0x3),
-    /* Light arrow    */ DMG_ENTRY(2, 0x4),
-    /* Goron spikes   */ DMG_ENTRY(1, 0x0),
-    /* Deku spin      */ DMG_ENTRY(1, 0x0),
-    /* Deku bubble    */ DMG_ENTRY(1, 0x0),
-    /* Deku launch    */ DMG_ENTRY(2, 0x0),
-    /* UNK_DMG_0x12   */ DMG_ENTRY(0, 0x1),
-    /* Zora barrier   */ DMG_ENTRY(0, 0x5),
-    /* Normal shield  */ DMG_ENTRY(0, 0x0),
-    /* Light ray      */ DMG_ENTRY(0, 0x0),
-    /* Thrown object  */ DMG_ENTRY(1, 0x0),
-    /* Zora punch     */ DMG_ENTRY(1, 0x0),
-    /* Spin attack    */ DMG_ENTRY(1, 0x0),
-    /* Sword beam     */ DMG_ENTRY(0, 0x0),
-    /* Normal Roll    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, 0x0),
-    /* Unblockable    */ DMG_ENTRY(0, 0x0),
-    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, 0x0),
-    /* Powder Keg     */ DMG_ENTRY(1, 0x0),
+    /* Deku Nut       */ DMG_ENTRY(0, GUAY_DMGEFF_STUN),
+    /* Deku Stick     */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Horse trample  */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Explosives     */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Zora boomerang */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Normal arrow   */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* UNK_DMG_0x06   */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* Hookshot       */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Goron punch    */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Sword          */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Goron pound    */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Fire arrow     */ DMG_ENTRY(2, GUAY_DMGEFF_FIRE),
+    /* Ice arrow      */ DMG_ENTRY(2, GUAY_DMGEFF_ICE),
+    /* Light arrow    */ DMG_ENTRY(2, GUAY_DMGEFF_LIGHT),
+    /* Goron spikes   */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Deku spin      */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Deku bubble    */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Deku launch    */ DMG_ENTRY(2, GUAY_DMGEFF_NONE),
+    /* UNK_DMG_0x12   */ DMG_ENTRY(0, GUAY_DMGEFF_STUN),
+    /* Zora barrier   */ DMG_ENTRY(0, GUAY_DMGEFF_ELECTRIC),
+    /* Normal shield  */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* Light ray      */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* Thrown object  */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Zora punch     */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Spin attack    */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
+    /* Sword beam     */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* Normal Roll    */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* UNK_DMG_0x1B   */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* UNK_DMG_0x1C   */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* Unblockable    */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* UNK_DMG_0x1E   */ DMG_ENTRY(0, GUAY_DMGEFF_NONE),
+    /* Powder Keg     */ DMG_ENTRY(1, GUAY_DMGEFF_NONE),
 };
 
-static s32 D_8099C0CC = 0;
+#define GUAY_NUMBER_OF_DEAD_TO_SPAWN_MEGAGUAY 10
+
+static s32 sDeadCount = 0;
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 3000, ICHAIN_CONTINUE),
-    ICHAIN_S8(hintId, 88, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_GUAY, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -500, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 2000, ICHAIN_STOP),
 };
@@ -118,13 +130,15 @@ void EnCrow_Init(Actor* thisx, PlayState* play) {
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &gGuaySkel, &gGuayFlyAnim, this->jointTable, this->morphTable,
                        OBJECT_CROW_LIMB_MAX);
-    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderItems);
+    Collider_InitAndSetJntSph(play, &this->collider, &this->actor, &sJntSphInit, this->colliderElements);
     this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements[0].dim.modelSphere.radius;
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
     ActorShape_Init(&this->actor.shape, 2000.0f, ActorShadow_DrawCircle, 20.0f);
-    D_8099C0CC = 0;
+
+    sDeadCount = 0;
+
     if (this->actor.parent != NULL) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     }
     EnCrow_SetupFlyIdle(this);
 }
@@ -145,60 +159,60 @@ void EnCrow_SetupFlyIdle(EnCrow* this) {
 void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 dist;
-    s32 onInitialAnimFrame;
+    s32 onAnimFirstFrame;
     s16 yaw;
 
     SkelAnime_Update(&this->skelAnime);
-    onInitialAnimFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
-    this->actor.speedXZ = (Rand_ZeroOne() * 1.5f) + 3.0f;
+    onAnimFirstFrame = Animation_OnFrame(&this->skelAnime, 0.0f);
+    this->actor.speed = (Rand_ZeroOne() * 1.5f) + 3.0f;
 
     if ((this->actor.parent != NULL) && (this->actor.parent->home.rot.z == 0)) {
         this->actor.home.pos.x = this->actor.parent->world.pos.x;
         this->actor.home.pos.z = this->actor.parent->world.pos.z;
-        dist = Actor_XZDistanceToPoint(&this->actor, &this->actor.parent->world.pos);
+        dist = Actor_WorldDistXZToPoint(&this->actor, &this->actor.parent->world.pos);
     } else {
         dist = 450.0f;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
-    if (this->actor.bgCheckFlags & 8) {
-        this->aimRotY = this->actor.wallYaw;
-    } else if (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
-        this->aimRotY = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+        this->yawTarget = this->actor.wallYaw;
+    } else if (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) > 300.0f) {
+        this->yawTarget = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 5, 0x300, 0x10) == 0) && onInitialAnimFrame &&
+    if ((Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 5, 0x300, 0x10) == 0) && onAnimFirstFrame &&
         (Rand_ZeroOne() < 0.1f)) {
 
-        yaw = (Actor_YawToPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
+        yaw = (Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos) - this->actor.shape.rot.y);
         if (yaw > 0) {
-            this->aimRotY += Rand_S16Offset(0x1000, 0x1000);
+            this->yawTarget += Rand_S16Offset(0x1000, 0x1000);
         } else {
-            this->aimRotY -= Rand_S16Offset(0x1000, 0x1000);
+            this->yawTarget -= Rand_S16Offset(0x1000, 0x1000);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_CRY);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_CRY);
     }
 
-    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & 1)) {
-        this->aimRotX = -0x1000;
+    if ((this->actor.depthInWater > -40.0f) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
+        this->pitchTarget = -0x1000;
     } else if (this->actor.world.pos.y < (this->actor.home.pos.y - 50.0f)) {
-        this->aimRotX = -Rand_S16Offset(0x800, 0x800);
+        this->pitchTarget = -Rand_S16Offset(0x800, 0x800);
     } else if (this->actor.world.pos.y > (this->actor.home.pos.y + 50.0f)) {
-        this->aimRotX = Rand_S16Offset(0x800, 0x800);
+        this->pitchTarget = Rand_S16Offset(0x800, 0x800);
     }
 
-    if ((Math_SmoothStepToS(&this->actor.shape.rot.x, this->aimRotX, 0xA, 0x100, 8) == 0) && onInitialAnimFrame &&
+    if (!Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 0xA, 0x100, 8) && onAnimFirstFrame &&
         (Rand_ZeroOne() < 0.1f)) {
         if (this->actor.home.pos.y < this->actor.world.pos.y) {
-            this->aimRotX -= Rand_S16Offset(0x400, 0x400);
+            this->pitchTarget -= Rand_S16Offset(0x400, 0x400);
         } else {
-            this->aimRotX += Rand_S16Offset(0x400, 0x400);
+            this->pitchTarget += Rand_S16Offset(0x400, 0x400);
         }
 
-        this->aimRotX = CLAMP(this->aimRotX, -0x1000, 0x1000);
+        this->pitchTarget = CLAMP(this->pitchTarget, -0x1000, 0x1000);
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         Math_ScaledStepToS(&this->actor.shape.rot.x, -0x100, 0x400);
     }
 
@@ -206,7 +220,7 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
         this->timer--;
     }
     if ((this->timer == 0) &&
-        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & 0x800000)) || (dist < 300.0f)) &&
+        (((this->actor.xzDistToPlayer < 300.0f) && !(player->stateFlags1 & PLAYER_STATE1_800000)) || (dist < 300.0f)) &&
         (this->actor.depthInWater < -40.0f) && (Player_GetMask(play) != PLAYER_MASK_STONE)) {
         if (dist < this->actor.xzDistToPlayer) {
             this->actor.child = this->actor.parent;
@@ -220,16 +234,14 @@ void EnCrow_FlyIdle(EnCrow* this, PlayState* play) {
 void EnCrow_SetupDiveAttack(EnCrow* this) {
     this->timer = 300;
     this->actionFunc = EnCrow_DiveAttack;
-    this->actor.speedXZ = 4.0f;
+    this->actor.speed = 4.0f;
     this->skelAnime.playSpeed = 2.0f;
 }
 
 void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 isFacingActor;
-    Vec3f pos;
-    s16 pitch;
-    s16 pitchTarget;
+    Vec3f targetPos;
 
     SkelAnime_Update(&this->skelAnime);
     if (this->timer != 0) {
@@ -238,80 +250,84 @@ void EnCrow_DiveAttack(EnCrow* this, PlayState* play) {
     isFacingActor = Actor_ActorAIsFacingActorB(&this->actor, this->actor.child, 0x2800);
 
     if (isFacingActor) {
+        s16 pitchTarget;
+
         if (&player->actor == this->actor.child) {
-            pos.y = this->actor.child->world.pos.y + 20.0f;
+            targetPos.y = this->actor.child->world.pos.y + 20.0f;
         } else {
-            pos.y = this->actor.child->world.pos.y + 40.0f;
+            targetPos.y = this->actor.child->world.pos.y + 40.0f;
         }
-        pos.x = this->actor.child->world.pos.x;
-        pos.z = this->actor.child->world.pos.z;
-        pitch = Actor_PitchToPoint(&this->actor, &pos);
-        pitchTarget = CLAMP(pitch, -0x3000, 0x3000);
-        Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 64);
+        targetPos.x = this->actor.child->world.pos.x;
+        targetPos.z = this->actor.child->world.pos.z;
+        pitchTarget = Actor_WorldPitchTowardPoint(&this->actor, &targetPos);
+        pitchTarget = CLAMP(pitchTarget, -0x3000, 0x3000);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, pitchTarget, 2, 0x400, 0x40);
     } else {
-        Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 2, 0x100, 16);
+        Math_SmoothStepToS(&this->actor.shape.rot.x, -0x800, 2, 0x100, 0x10);
     }
 
-    if (isFacingActor || (Actor_XZDistanceBetweenActors(&this->actor, this->actor.child) > 80.0f)) {
-        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_YawBetweenActors(&this->actor, this->actor.child), 4, 0xC00,
-                           0xC0);
+    if (isFacingActor || (Actor_WorldDistXZToActor(&this->actor, this->actor.child) > 80.0f)) {
+        Math_SmoothStepToS(&this->actor.shape.rot.y, Actor_WorldYawTowardActor(&this->actor, this->actor.child), 4,
+                           0xC00, 0xC0);
     }
+
     if (((this->timer == 0) || ((&player->actor != this->actor.child) && (this->actor.child->home.rot.z != 0)) ||
          ((&player->actor == this->actor.child) &&
-          ((Player_GetMask(play) == PLAYER_MASK_STONE) || (player->stateFlags1 & 0x800000))) ||
-         ((this->collider.base.atFlags & AT_HIT) || (this->actor.bgCheckFlags & 9))) ||
+          ((Player_GetMask(play) == PLAYER_MASK_STONE) || (player->stateFlags1 & PLAYER_STATE1_800000))) ||
+         ((this->collider.base.atFlags & AT_HIT) ||
+          (this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)))) ||
         (this->actor.depthInWater > -40.0f)) {
 
         if (this->collider.base.atFlags & AT_HIT) {
             this->collider.base.atFlags &= ~AT_HIT;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_ATTACK);
         }
         EnCrow_SetupFlyIdle(this);
     }
 }
 
 void EnCrow_CheckIfFrozen(EnCrow* this, PlayState* play) {
-    if (this->deathMode == 10) {
-        this->deathMode = 0;
-        this->effectAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 4, 2, 0.2f, 0.2f);
+    if (this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 0.0f;
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, GUAY_BODYPART_MAX, 2, 0.2f, 0.2f);
     }
 }
 
 void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
     f32 scale;
 
-    this->actor.speedXZ *= Math_CosS(this->actor.world.rot.x);
+    this->actor.speed *= Math_CosS(this->actor.world.rot.x);
     this->actor.velocity.y = 0.0f;
     Animation_Change(&this->skelAnime, &gGuayFlyAnim, 0.4f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -3.0f);
     this->actor.shape.yOffset = 0.0f;
     this->actor.targetArrowOffset = 0.0f;
-    this->actor.bgCheckFlags &= ~1;
+    this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
     scale = (this->actor.scale.x * 100.0f);
     this->actor.world.pos.y += 20.0f * scale;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_DEAD);
 
-    if (this->actor.colChkInfo.damageEffect == 3) {
-        this->deathMode = 10; // Ice arrows
-        this->effectAlpha = 1.0f;
-        this->effectScale = 0.75f;
-        this->steamScale = 0.5f;
-    } else if (this->actor.colChkInfo.damageEffect == 4) {
-        this->deathMode = 20; // Light Arrows
-        this->effectAlpha = 4.0f;
-        this->steamScale = 0.5f;
+    if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_ICE) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
+        this->drawDmgEffAlpha = 1.0f;
+        this->drawDmgEffScale = 0.75f;
+        this->drawDmgEffFrozenSteamScale = 0.5f;
+    } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_LIGHT) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
+        this->drawDmgEffAlpha = 4.0f;
+        this->drawDmgEffFrozenSteamScale = 0.5f;
         Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.elements->info.bumper.hitPos.x,
                     this->collider.elements->info.bumper.hitPos.y, this->collider.elements->info.bumper.hitPos.z, 0, 0,
-                    0, CLEAR_TAG_SMALL_LIGHT_RAYS);
-    } else if (this->actor.colChkInfo.damageEffect == 2) {
-        this->deathMode = 0; // Fire arrows
-        this->effectAlpha = 4.0f;
-        this->steamScale = 0.5f;
+                    0, CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
+    } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_FIRE) {
+        this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
+        this->drawDmgEffAlpha = 4.0f;
+        this->drawDmgEffFrozenSteamScale = 0.5f;
     }
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 40);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 40);
     if (this->actor.flags & ACTOR_FLAG_8000) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 
     this->collider.base.acFlags &= ~AC_ON;
@@ -321,21 +337,21 @@ void EnCrow_SetupDamaged(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_Damaged(EnCrow* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.5f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.5f);
     this->actor.colorFilterTimer = 40;
 
     if (!(this->actor.flags & ACTOR_FLAG_8000)) {
-        if (this->deathMode != 10) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
             Math_ScaledStepToS(&this->actor.shape.rot.x, 0x4000, 0x200);
             this->actor.shape.rot.z += 0x1780;
         }
-        if ((this->actor.bgCheckFlags & 1) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
+        if ((this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) || (this->actor.floorHeight == BGCHECK_Y_MIN)) {
             EnCrow_CheckIfFrozen(this, play);
             func_800B3030(play, &this->actor.world.pos, &gZeroVec3f, &gZeroVec3f, this->actor.scale.x * 10000.0f, 0, 0);
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 11, NA_SE_EN_EXTINCT);
 
             if (this->actor.parent != NULL) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 return;
             }
             EnCrow_SetupDie(this);
@@ -351,14 +367,14 @@ void EnCrow_SetupDie(EnCrow* this) {
 void EnCrow_Die(EnCrow* this, PlayState* play) {
     f32 stepScale;
 
-    if (this->actor.params != 0) {
+    if (this->actor.params != GUAY_TYPE_NORMAL) {
         stepScale = 0.006f;
     } else {
         stepScale = 0.002f;
     }
-    if (Math_StepToF(&this->actor.scale.x, 0.0f, stepScale) != 0) {
-        if (this->actor.params == 0) {
-            D_8099C0CC++;
+    if (Math_StepToF(&this->actor.scale.x, 0.0f, stepScale)) {
+        if (this->actor.params == GUAY_TYPE_NORMAL) {
+            sDeadCount++;
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x80);
         } else {
             Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x90);
@@ -370,30 +386,30 @@ void EnCrow_Die(EnCrow* this, PlayState* play) {
 
 void EnCrow_SetupTurnAway(EnCrow* this) {
     this->timer = 100;
-    this->aimRotX = -0x1000;
-    this->actor.speedXZ = 3.5f;
-    this->aimRotY = this->actor.yawTowardsPlayer + 0x8000;
+    this->pitchTarget = -0x1000;
+    this->actor.speed = 3.5f;
+    this->yawTarget = this->actor.yawTowardsPlayer + 0x8000;
     this->skelAnime.playSpeed = 2.0f;
-    if (this->actor.colChkInfo.damageEffect == 1) {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+    if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
     } else {
-        Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
+        Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
     }
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = EnCrow_TurnAway;
 }
 
 void EnCrow_TurnAway(EnCrow* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
-    if (this->actor.bgCheckFlags & 8) {
-        this->aimRotY = this->actor.wallYaw;
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
+        this->yawTarget = this->actor.wallYaw;
     } else {
-        this->aimRotY = this->actor.yawTowardsPlayer + 0x8000;
+        this->yawTarget = this->actor.yawTowardsPlayer + 0x8000;
     }
 
-    Math_SmoothStepToS(&this->actor.shape.rot.y, this->aimRotY, 3, 0xC00, 0xC0);
-    Math_SmoothStepToS(&this->actor.shape.rot.x, this->aimRotX, 5, 0x100, 0x10);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->yawTarget, 3, 0xC00, 0xC0);
+    Math_SmoothStepToS(&this->actor.shape.rot.x, this->pitchTarget, 5, 0x100, 0x10);
 
     if (this->timer != 0) {
         this->timer--;
@@ -405,12 +421,12 @@ void EnCrow_TurnAway(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_SetupRespawn(EnCrow* this) {
-    if (D_8099C0CC == 10) {
-        this->actor.params = 1;
-        D_8099C0CC = 0;
+    if (sDeadCount == GUAY_NUMBER_OF_DEAD_TO_SPAWN_MEGAGUAY) {
+        this->actor.params = GUAY_TYPE_MEGA;
+        sDeadCount = 0;
         this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius * 0.03f * 100.0f;
     } else {
-        this->actor.params = 0;
+        this->actor.params = GUAY_TYPE_NORMAL;
         this->collider.elements->dim.worldSphere.radius = sJntSphInit.elements->dim.modelSphere.radius;
     }
     Animation_PlayLoop(&this->skelAnime, &gGuayFlyAnim);
@@ -421,12 +437,12 @@ void EnCrow_SetupRespawn(EnCrow* this) {
     this->actor.draw = NULL;
     this->actor.shape.yOffset = 2000.0f;
     this->actor.targetArrowOffset = 2000.0;
-    this->effectAlpha = 0.0f;
+    this->drawDmgEffAlpha = 0.0f;
     this->actionFunc = EnCrow_Respawn;
 }
 
 void EnCrow_Respawn(EnCrow* this, PlayState* play) {
-    f32 target;
+    f32 scaleTarget;
 
     if (this->timer != 0) {
         this->timer--;
@@ -434,13 +450,13 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
     if (this->timer == 0) {
         SkelAnime_Update(&this->skelAnime);
         this->actor.draw = EnCrow_Draw;
-        if (this->actor.params != 0) {
-            target = 0.03f;
+        if (this->actor.params != GUAY_TYPE_NORMAL) {
+            scaleTarget = 0.03f;
         } else {
-            target = 0.01f;
+            scaleTarget = 0.01f;
         }
-        if (Math_StepToF(&this->actor.scale.x, target, target * 0.1f)) {
-            this->actor.flags |= ACTOR_FLAG_1;
+        if (Math_StepToF(&this->actor.scale.x, scaleTarget, scaleTarget * 0.1f)) {
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
             this->actor.flags &= ~ACTOR_FLAG_10;
             this->actor.colChkInfo.health = 1;
             EnCrow_SetupFlyIdle(this);
@@ -450,23 +466,22 @@ void EnCrow_Respawn(EnCrow* this, PlayState* play) {
 }
 
 void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
-
-    if (this->collider.base.acFlags & AT_HIT) {
-        this->collider.base.acFlags &= ~AT_HIT;
+    if (this->collider.base.acFlags & AC_HIT) {
+        this->collider.base.acFlags &= ~AC_HIT;
         Actor_SetDropFlag(&this->actor, &this->collider.elements->info);
 
-        if (this->actor.colChkInfo.damageEffect == 1) {
+        if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_STUN) {
             EnCrow_SetupTurnAway(this);
 
-        } else if (this->actor.colChkInfo.damageEffect == 5) {
-            this->deathMode = 31; // Stunned via deku nuts or zora barrier
-            this->effectAlpha = 2.0f;
-            this->steamScale = 0.5f;
+        } else if (this->actor.colChkInfo.damageEffect == GUAY_DMGEFF_ELECTRIC) {
+            this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_MEDIUM;
+            this->drawDmgEffAlpha = 2.0f;
+            this->drawDmgEffFrozenSteamScale = 0.5f;
             EnCrow_SetupTurnAway(this);
 
         } else {
             this->actor.colChkInfo.health = 0;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             Enemy_StartFinishingBlow(play, &this->actor);
             EnCrow_SetupDamaged(this, play);
         }
@@ -475,7 +490,7 @@ void EnCrow_UpdateDamage(EnCrow* this, PlayState* play) {
 
 void EnCrow_Update(Actor* thisx, PlayState* play) {
     f32 pad;
-    EnCrow* this = (EnCrow*)thisx;
+    EnCrow* this = THIS;
     f32 height;
     f32 scale;
 
@@ -493,7 +508,8 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
             height = 0.0f;
             Actor_MoveWithGravity(&this->actor);
         }
-        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f * scale, 25.0f * scale, 50.0f * scale, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 12.0f * scale, 25.0f * scale, 50.0f * scale,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
     } else {
         height = 0.0f;
     }
@@ -514,57 +530,55 @@ void EnCrow_Update(Actor* thisx, PlayState* play) {
 
     Actor_SetFocus(&this->actor, height);
 
-    if ((this->actor.colChkInfo.health != 0) && (Animation_OnFrame(&this->skelAnime, 3.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
+    if ((this->actor.colChkInfo.health != 0) && Animation_OnFrame(&this->skelAnime, 3.0f)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EN_KAICHO_FLUTTER);
     }
-    if (this->effectAlpha > 0.0f) {
-        if (this->deathMode != 10) {
-            Math_StepToF(&this->effectAlpha, 0.0f, 0.05f);
-            this->steamScale = (this->effectAlpha + 1.0f) * 0.25f;
-            if (this->steamScale > 0.5f) {
-                this->steamScale = 0.5f;
+    if (this->drawDmgEffAlpha > 0.0f) {
+        if (this->drawDmgEffType != ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) {
+            Math_StepToF(&this->drawDmgEffAlpha, 0.0f, 0.05f);
+            this->drawDmgEffFrozenSteamScale = (this->drawDmgEffAlpha + 1.0f) * 0.25f;
+            if (this->drawDmgEffFrozenSteamScale > 0.5f) {
+                this->drawDmgEffFrozenSteamScale = 0.5f;
             } else {
-                this->steamScale = this->steamScale;
+                this->drawDmgEffFrozenSteamScale = this->drawDmgEffFrozenSteamScale;
             }
-        } else if (Math_StepToF(&this->effectScale, 0.5f, 0.0125f) == 0) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+        } else if (!Math_StepToF(&this->drawDmgEffScale, 0.5f, 0.5f * 0.025f)) {
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
 
 s32 EnCrow_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
-    EnCrow* this = (EnCrow*)thisx;
+    EnCrow* this = THIS;
 
     if (this->actor.colChkInfo.health != 0) {
         if (limbIndex == OBJECT_CROW_LIMB_UPPER_TAIL) {
-            rot->y += (s16)(0xC00 * sin_rad(this->skelAnime.curFrame * (M_PI / 4)));
+            rot->y += (s16)(0xC00 * Math_SinF(this->skelAnime.curFrame * (M_PI / 4)));
         } else if (limbIndex == OBJECT_CROW_LIMB_TAIL) {
-            rot->y += (s16)(0x1400 * sin_rad((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
+            rot->y += (s16)(0x1400 * Math_SinF((this->skelAnime.curFrame + 2.5f) * (M_PI / 4)));
         }
     }
     return false;
 }
 
 void EnCrow_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    EnCrow* this = (EnCrow*)thisx;
+    EnCrow* this = THIS;
 
     if (limbIndex == OBJECT_CROW_LIMB_BODY) {
-        Matrix_MultVecX(2500.0f, this->bodyPartsPos);
-        return;
-    }
-    if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
-        (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
+        Matrix_MultVecX(2500.0f, &this->bodyPartsPos[GUAY_BODYPART_BODY]);
+    } else if ((limbIndex == OBJECT_CROW_LIMB_RIGHT_WING_TIP) || (limbIndex == OBJECT_CROW_LIMB_LEFT_WING_TIP) ||
+               (limbIndex == OBJECT_CROW_LIMB_TAIL)) {
         Matrix_MultZero(&this->bodyPartsPos[(limbIndex >> 1) - 1]);
     }
 }
 
 void EnCrow_Draw(Actor* thisx, PlayState* play) {
-    EnCrow* this = (EnCrow*)thisx;
+    EnCrow* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnCrow_OverrideLimbDraw, EnCrow_PostLimbDraw, &this->actor);
-    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos),
-                            this->actor.scale.x * 100.0f * this->steamScale, this->effectScale, this->effectAlpha,
-                            this->deathMode);
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, GUAY_BODYPART_MAX,
+                            this->actor.scale.x * 100.0f * this->drawDmgEffFrozenSteamScale, this->drawDmgEffScale,
+                            this->drawDmgEffAlpha, this->drawDmgEffType);
 }

@@ -5,13 +5,8 @@
  */
 
 #include "z_en_ending_hero6.h"
-#include "objects/object_dt/object_dt.h"
-#include "objects/object_daiku/object_daiku.h"
-#include "objects/object_bai/object_bai.h"
-#include "objects/object_toryo/object_toryo.h"
-#include "objects/object_sdn/object_sdn.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnEndingHero6*)thisx)
 
@@ -20,11 +15,10 @@ void EnEndingHero6_Destroy(Actor* thisx, PlayState* play);
 void EnEndingHero6_Update(Actor* thisx, PlayState* play);
 void EnEndingHero6_Draw(Actor* thisx, PlayState* play);
 
-void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex);
 void EnEndingHero6_SetupIdle(EnEndingHero6* this);
 void EnEndingHero6_Idle(EnEndingHero6* this, PlayState* play);
 
-const ActorInit En_Ending_Hero6_InitVars = {
+ActorInit En_Ending_Hero6_InitVars = {
     ACTOR_EN_ENDING_HERO6,
     ACTORCAT_NPC,
     FLAGS,
@@ -36,29 +30,64 @@ const ActorInit En_Ending_Hero6_InitVars = {
     (ActorFunc)EnEndingHero6_Draw,
 };
 
-static FlexSkeletonHeader* sSkeletons[] = {
-    &object_dt_Skel_00B0CC,    &object_bai_Skel_007908,   &object_toryo_Skel_007150,
-    &gSoldierSkeleton,         &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
-    &object_daiku_Skel_00A850, &object_daiku_Skel_00A850, &object_daiku_Skel_00A850,
+typedef enum {
+    /* 0 */ ENDING_HERO6_TYPE_DT,
+    /* 1 */ ENDING_HERO6_TYPE_BAI,
+    /* 2 */ ENDING_HERO6_TYPE_TORYO,
+    /* 3 */ ENDING_HERO6_TYPE_SOLDIER,
+    /* 4 */ ENDING_HERO6_TYPE_DAIKU_RED,
+    /* 5 */ ENDING_HERO6_TYPE_DAIKU_BLUE,
+    /* 6 */ ENDING_HERO6_TYPE_DAIKU_GREEN,
+    /* 7 */ ENDING_HERO6_TYPE_DAIKU_PURPLE,
+    /* 8 */ ENDING_HERO6_TYPE_DAIKU_ORANGE,
+    /* 9 */ ENDING_HERO6_TYPE_MAX
+} EndingHero6Type;
+
+static FlexSkeletonHeader* sSkeletons[ENDING_HERO6_TYPE_MAX] = {
+    &object_dt_Skel_00B0CC,    // ENDING_HERO6_TYPE_DT
+    &object_bai_Skel_007908,   // ENDING_HERO6_TYPE_BAI
+    &object_toryo_Skel_007150, // ENDING_HERO6_TYPE_TORYO
+    &gSoldierSkel,             // ENDING_HERO6_TYPE_SOLDIER
+    &object_daiku_Skel_00A850, // ENDING_HERO6_TYPE_DAIKU_RED
+    &object_daiku_Skel_00A850, // ENDING_HERO6_TYPE_DAIKU_BLUE
+    &object_daiku_Skel_00A850, // ENDING_HERO6_TYPE_DAIKU_GREEN
+    &object_daiku_Skel_00A850, // ENDING_HERO6_TYPE_DAIKU_PURPLE
+    &object_daiku_Skel_00A850, // ENDING_HERO6_TYPE_DAIKU_ORANGE
 };
 
-static AnimationHeader* sAnimations[] = {
-    &object_dt_Anim_000BE0,    &object_bai_Anim_0011C0,   &object_toryo_Anim_000E50,
-    &gSoldierCheerWithSpear,   &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0,
-    &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0, &object_daiku_Anim_002FA0,
+static AnimationHeader* sAnimations[ENDING_HERO6_TYPE_MAX] = {
+    &object_dt_Anim_000BE0,    // ENDING_HERO6_TYPE_DT
+    &object_bai_Anim_0011C0,   // ENDING_HERO6_TYPE_BAI
+    &object_toryo_Anim_000E50, // ENDING_HERO6_TYPE_TORYO
+    &gSoldierCheerWithSpear,   // ENDING_HERO6_TYPE_SOLDIER
+    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_RED
+    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_BLUE
+    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_GREEN
+    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_PURPLE
+    &object_daiku_Anim_002FA0, // ENDING_HERO6_TYPE_DAIKU_ORANGE
 };
 
-static s32 sLimbCounts[] = { 15, 20, 17, 17, 17, 17, 17, 17, 17 };
+static s32 sLimbCounts[ENDING_HERO6_TYPE_MAX] = {
+    OBJECT_DT_LIMB_MAX,    // ENDING_HERO6_TYPE_DT
+    OBJECT_BAI_LIMB_MAX,   // ENDING_HERO6_TYPE_BAI
+    OBJECT_TORYO_LIMB_MAX, // ENDING_HERO6_TYPE_TORYO
+    SOLDIER_LIMB_MAX,      // ENDING_HERO6_TYPE_SOLDIER
+    OBJECT_DAIKU_LIMB_MAX, // ENDING_HERO6_TYPE_DAIKU_RED
+    OBJECT_DAIKU_LIMB_MAX, // ENDING_HERO6_TYPE_DAIKU_BLUE
+    OBJECT_DAIKU_LIMB_MAX, // ENDING_HERO6_TYPE_DAIKU_GREEN
+    OBJECT_DAIKU_LIMB_MAX, // ENDING_HERO6_TYPE_DAIKU_PURPLE
+    OBJECT_DAIKU_LIMB_MAX, // ENDING_HERO6_TYPE_DAIKU_ORANGE
+};
 
 void EnEndingHero6_Init(Actor* thisx, PlayState* play) {
     EnEndingHero6* this = THIS;
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
-    SkelAnime_InitFlex(play, &this->skelAnime, sSkeletons[this->npcIndex], sAnimations[this->npcIndex],
-                       this->jointTable, this->morphTable, sLimbCounts[this->npcIndex]);
+    SkelAnime_InitFlex(play, &this->skelAnime, sSkeletons[this->type], sAnimations[this->type], this->jointTable,
+                       this->morphTable, sLimbCounts[this->type]);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 25.0f);
     EnEndingHero6_SetupIdle(this);
 }
@@ -66,15 +95,16 @@ void EnEndingHero6_Init(Actor* thisx, PlayState* play) {
 void EnEndingHero6_Destroy(Actor* thisx, PlayState* play) {
 }
 
-void EnEndingHero6_InitSkelAnime(EnEndingHero6* this, s32 npcIndex) {
-    this->animIndex = npcIndex;
-    this->frameCount = Animation_GetLastFrame(sAnimations[npcIndex]);
-    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->frameCount, ANIMMODE_LOOP, 0.0f);
+void EnEndingHero6_ChangeAnim(EnEndingHero6* this, s32 type) {
+    this->animIndex = type;
+    this->animEndFrame = Animation_GetLastFrame(sAnimations[type]);
+    Animation_Change(&this->skelAnime, sAnimations[this->animIndex], 1.0f, 0.f, this->animEndFrame, ANIMMODE_LOOP,
+                     0.0f);
 }
 
 void EnEndingHero6_SetupIdle(EnEndingHero6* this) {
-    EnEndingHero6_InitSkelAnime(this, this->npcIndex);
-    this->isIdle = 1;
+    EnEndingHero6_ChangeAnim(this, this->type);
+    this->isIdle = true;
     this->actionFunc = EnEndingHero6_Idle;
 }
 
@@ -101,68 +131,82 @@ void EnEndingHero6_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 50.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 }
 
 void EnEndingHero6_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static Gfx* D_80C2426C[] = { object_daiku_DL_0070C0, object_daiku_DL_006FB0, object_daiku_DL_006E80,
-                                 object_daiku_DL_006D70, object_daiku_DL_00A390 };
+    static Gfx* D_80C2426C[] = {
+        object_daiku_DL_0070C0, // ENDING_HERO6_TYPE_DAIKU_RED
+        object_daiku_DL_006FB0, // ENDING_HERO6_TYPE_DAIKU_BLUE
+        object_daiku_DL_006E80, // ENDING_HERO6_TYPE_DAIKU_GREEN
+        object_daiku_DL_006D70, // ENDING_HERO6_TYPE_DAIKU_PURPLE
+        object_daiku_DL_00A390, // ENDING_HERO6_TYPE_DAIKU_ORANGE
+    };
     EnEndingHero6* this = THIS;
-    s32 index;
+    s32 daikuIndex;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    if (this->npcIndex >= 4 && limbIndex == 15) {
-        index = this->npcIndex - 4;
-        gSPDisplayList(POLY_OPA_DISP++, D_80C2426C[index]);
+    if ((this->type >= ENDING_HERO6_TYPE_DAIKU_RED) && (limbIndex == OBJECT_DAIKU_LIMB_0F)) {
+        daikuIndex = this->type - ENDING_HERO6_TYPE_DAIKU_RED;
+        gSPDisplayList(POLY_OPA_DISP++, D_80C2426C[daikuIndex]);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
 void EnEndingHero6_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80C24280[] = { object_dt_Tex_007350, object_dt_Tex_009590, object_dt_Tex_009F90,
-                                       object_dt_Tex_00A790, object_dt_Tex_00AB90 };
-    static TexturePtr D_80C24294[] = { object_dt_Tex_007750, object_dt_Tex_00A390, object_dt_Tex_00A490 };
+    static TexturePtr sEyeTextures[] = { gDotourEyeShockTex, gDotourEyeOpenTex, gDotourEyeClosedTex,
+                                         gDotourEyeLookDownTex, gDotourEyeSquintTex };
+    static TexturePtr sEyebrowTextures[] = { gDotourEyebrowHighTex, gDotourEyebrowMidTex, gDotourEyebrowLowTex };
     s32 pad;
     EnEndingHero6* this = THIS;
     s32 index = 0;
 
-    if (this->isIdle == 1) {
+    if (this->isIdle == true) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        if (this->objectIndex >= 0 && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
+        if ((this->objectIndex >= 0) && Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
             gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[this->objectIndex].segment);
 
-            switch (this->npcIndex) {
-                case 4:
+            switch (this->type) {
+                case ENDING_HERO6_TYPE_DAIKU_RED:
                     gDPSetEnvColor(POLY_OPA_DISP++, 170, 10, 70, 255);
                     break;
-                case 5:
+
+                case ENDING_HERO6_TYPE_DAIKU_BLUE:
                     gDPSetEnvColor(POLY_OPA_DISP++, 170, 200, 255, 255);
                     break;
-                case 6:
+
+                case ENDING_HERO6_TYPE_DAIKU_GREEN:
                     gDPSetEnvColor(POLY_OPA_DISP++, 0, 230, 70, 255);
                     break;
-                case 7:
+
+                case ENDING_HERO6_TYPE_DAIKU_PURPLE:
                     gDPSetEnvColor(POLY_OPA_DISP++, 200, 0, 150, 255);
                     break;
-                case 8:
+
+                case ENDING_HERO6_TYPE_DAIKU_ORANGE:
                     gDPSetEnvColor(POLY_OPA_DISP++, 245, 155, 0, 255);
+                    break;
+
+                default:
                     break;
             }
 
-            if (this->npcIndex == 0) {
-                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C24280[this->eyeState]));
+            if (this->type == ENDING_HERO6_TYPE_DT) {
+                gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeState]));
 
                 if (this->eyeState < 3) {
                     index = this->eyeState;
                 }
 
-                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C24294[index]));
+                gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(sEyebrowTextures[index]));
             }
 
             SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

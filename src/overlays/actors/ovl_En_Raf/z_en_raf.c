@@ -5,8 +5,9 @@
  */
 
 #include "z_en_raf.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnRaf*)thisx)
 
@@ -35,13 +36,13 @@ void EnRaf_UpdateEffects(EnRaf* this, PlayState* play);
 void EnRaf_DrawEffects(EnRaf* this, PlayState* play);
 
 typedef enum {
-    /* 0 */ EN_RAF_ANIMATION_IDLE,
-    /* 1 */ EN_RAF_ANIMATION_CLOSE,
-    /* 2 */ EN_RAF_ANIMATION_CHEW,
-    /* 3 */ EN_RAF_ANIMATION_SPIT,
-    /* 4 */ EN_RAF_ANIMATION_CONVULSE,
-    /* 5 */ EN_RAF_ANIMATION_DEATH,
-} EnRafAnimationIndex;
+    /* 0 */ EN_RAF_ANIM_IDLE,
+    /* 1 */ EN_RAF_ANIM_CLOSE,
+    /* 2 */ EN_RAF_ANIM_CHEW,
+    /* 3 */ EN_RAF_ANIM_SPIT,
+    /* 4 */ EN_RAF_ANIM_CONVULSE,
+    /* 5 */ EN_RAF_ANIM_DEATH
+} EnRafAnimation;
 
 typedef enum {
     /* 0 */ EN_RAF_ACTION_IDLE,
@@ -51,7 +52,7 @@ typedef enum {
     /* 4 */ EN_RAF_ACTION_EXPLODE,
     /* 5 */ EN_RAF_ACTION_CONVULSE,
     /* 6 */ EN_RAF_ACTION_DISSOLVE,
-    /* 7 */ EN_RAF_ACTION_DORMANT,
+    /* 7 */ EN_RAF_ACTION_DORMANT
 } EnRafAction;
 
 typedef enum {
@@ -67,7 +68,7 @@ typedef enum {
     /* 3 */ EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW
 } EnRafPetalScaleType;
 
-const ActorInit En_Raf_InitVars = {
+ActorInit En_Raf_InitVars = {
     ACTOR_EN_RAF,
     ACTORCAT_PROP,
     FLAGS,
@@ -209,7 +210,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->dyna.actor.targetMode = 3;
+    this->dyna.actor.targetMode = TARGET_MODE_3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
                        this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
@@ -235,8 +236,8 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     }
 
     if (((this->switchFlag >= 0) || (this->mainType == EN_RAF_TYPE_DORMANT) ||
-         (gSaveContext.save.weekEventReg[12] & 1)) &&
-        ((Flags_GetSwitch(play, this->switchFlag)) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
+         CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) &&
+        (Flags_GetSwitch(play, this->switchFlag) || (this->mainType == EN_RAF_TYPE_DORMANT))) {
         s32 i;
 
         for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT;
@@ -260,7 +261,7 @@ void EnRaf_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
+void EnRaf_ChangeAnim(EnRaf* this, s32 animIndex) {
     static AnimationHeader* sAnimations[] = {
         &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadCloseAnim,    &gCarnivorousLilyPadChewAnim,
         &gCarnivorousLilyPadSpitAnim, &gCarnivorousLilyPadConvulseAnim, &gCarnivorousLilyPadDeathAnim,
@@ -271,22 +272,22 @@ void EnRaf_ChangeAnimation(EnRaf* this, s32 index) {
     f32 startFrame = 0.0f;
     f32 playSpeed = 1.0f;
 
-    this->endFrame = Animation_GetLastFrame(sAnimations[index]);
-    if (index == EN_RAF_ANIMATION_IDLE) {
+    this->endFrame = Animation_GetLastFrame(sAnimations[animIndex]);
+    if (animIndex == EN_RAF_ANIM_IDLE) {
         startFrame = this->endFrame;
-    } else if (index == EN_RAF_ANIMATION_CLOSE) {
+    } else if (animIndex == EN_RAF_ANIM_CLOSE) {
         playSpeed = 2.0f;
     }
 
-    Animation_Change(&this->skelAnime, sAnimations[index], playSpeed, startFrame, this->endFrame,
-                     sAnimationModes[index], -4.0f);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], playSpeed, startFrame, this->endFrame,
+                     sAnimationModes[animIndex], -4.0f);
 }
 
 void EnRaf_SetupIdle(EnRaf* this) {
     Vec3f targetLimbScale = { 1.0f, 1.0f, 1.0f };
     s32 i;
 
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_IDLE);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_IDLE);
 
     for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT; i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
         Math_Vec3f_Copy(&this->targetLimbScale[i], &targetLimbScale);
@@ -310,7 +311,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
     if (this->timer == 0) {
         if ((player->transformation != PLAYER_FORM_DEKU) &&
             (this->dyna.actor.xzDistToPlayer < (BREG(48) + 80.0f) && (player->invincibilityTimer == 0) &&
-             DynaPolyActor_IsInRidingMovingState(&this->dyna) && !(player->stateFlags1 & 0x8000000) &&
+             DynaPolyActor_IsPlayerOnTop(&this->dyna) && !(player->stateFlags1 & PLAYER_STATE1_8000000) &&
              play->grabPlayer(play, player))) {
             player->actor.parent = &this->dyna.actor;
             this->grabTarget = EN_RAF_GRAB_TARGET_PLAYER;
@@ -343,7 +344,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             zDiff = explosive->world.pos.z - this->dyna.actor.world.pos.z;
             if ((fabsf(xDiff) < 80.0f) && (fabsf(yDiff) < 30.0f) && (fabsf(zDiff) < 80.0f) &&
                 (explosive->update != NULL) && (explosive->velocity.y != 0.0f)) {
-                Actor_MarkForDeath(explosive);
+                Actor_Kill(explosive);
                 this->grabTarget = EN_RAF_GRAB_TARGET_EXPLOSIVE;
                 this->collider.dim.radius = 30;
                 this->collider.dim.height = 90;
@@ -358,9 +359,9 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupGrab(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CLOSE);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CLOSE);
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_GRAB;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DRINK);
     this->action = EN_RAF_ACTION_GRAB;
     this->actionFunc = EnRaf_Grab;
 }
@@ -372,7 +373,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 curFrame = this->skelAnime.curFrame;
 
-    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & 0x80) &&
+    if ((this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) && (player->stateFlags2 & PLAYER_STATE2_80) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -387,7 +388,7 @@ void EnRaf_Grab(EnRaf* this, PlayState* play) {
 void EnRaf_SetupChew(EnRaf* this) {
     s32 i;
 
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CHEW);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CHEW);
     this->chewCount = 0;
     for (i = 0; i < ARRAY_COUNT(this->chewLimbRot); i++) {
         this->chewLimbRot[i].x = Rand_S16Offset(8, 8) << 8;
@@ -414,7 +415,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
     targetChewScale = (BREG(51) / 100.0f) + 0.2f;
     Math_ApproachF(&this->chewScale, targetChewScale, 0.2f, 0.03f);
 
-    if ((player->stateFlags2 & 0x80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
+    if ((player->stateFlags2 & PLAYER_STATE2_80) && (this->grabTarget != EN_RAF_GRAB_TARGET_EXPLOSIVE) &&
         (&this->dyna.actor == player->actor.parent)) {
         Math_ApproachF(&player->actor.world.pos.x, this->dyna.actor.world.pos.x, 0.3f, 10.0f);
         Math_ApproachF(&player->actor.world.pos.y, this->dyna.actor.world.pos.y, 0.3f, 10.0f);
@@ -426,13 +427,17 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             this->chewCount++;
         }
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_EAT);
         switch (this->grabTarget) {
             case EN_RAF_GRAB_TARGET_PLAYER:
                 play->damagePlayer(play, -2);
-                func_800B8E58((Player*)this, player->ageProperties->unk_92 + NA_SE_VO_LI_DAMAGE_S);
+
+                //! @bug: This function should only pass Player*: it uses *(this + 0x153), which is meant to be
+                //! player->currentMask, but in this case is padding in `DynaPolyActor`
+                Player_PlaySfx((Player*)&this->dyna.actor,
+                               player->ageProperties->voiceSfxIdOffset + NA_SE_VO_LI_DAMAGE_S);
                 CollisionCheck_GreenBlood(play, NULL, &player->actor.world.pos);
-                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & 0x80)) {
+                if ((this->chewCount > (BREG(53) + 5)) || !(player->stateFlags2 & PLAYER_STATE2_80)) {
                     player->actor.freezeTimer = 10;
                     EnRaf_SetupThrow(this, play);
                     return;
@@ -461,7 +466,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
 void EnRaf_SetupThrow(EnRaf* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_SPIT);
     player->actor.freezeTimer = 10;
     this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_IDLE_OR_THROW;
     this->action = EN_RAF_ACTION_THROW;
@@ -478,7 +483,7 @@ void EnRaf_Throw(EnRaf* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 10.0f)) {
         player->actor.freezeTimer = 0;
         player->actor.parent = NULL;
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_THROW);
         func_800B8D50(play, &this->dyna.actor, BREG(55) + 3.0f, this->playerRotYWhenGrabbed + 0x8000, BREG(56) + 10.0f,
                       0);
     } else if (curFrame < 10.0f) {
@@ -507,9 +512,9 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     Math_Vec3f_Copy(&explosionPos, &this->dyna.actor.world.pos);
     explosionPos.y += 10.0f;
     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, explosionPos.x, explosionPos.y, explosionPos.z, 0, 0, 0,
-                CLEAR_TAG_SMALL_EXPLOSION);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
+                CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_EXPLOSION));
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_IT_BOMB_EXPLOSION);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_SUISEN_DEAD);
     if (this->switchFlag >= 0) {
         Flags_SetSwitch(play, this->switchFlag);
     }
@@ -533,7 +538,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     this->timer = 5;
     if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 5);
-        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     }
 
     this->actionFunc = EnRaf_PostDetonation;
@@ -547,7 +552,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 6);
-        this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;
@@ -557,7 +562,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupConvulse(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_CONVULSE);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_CONVULSE);
     this->chewCount = 0;
     this->action = EN_RAF_ACTION_CONVULSE;
     this->actionFunc = EnRaf_Convulse;
@@ -584,7 +589,7 @@ void EnRaf_Convulse(EnRaf* this, PlayState* play) {
 }
 
 void EnRaf_SetupDissolve(EnRaf* this) {
-    EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_DEATH);
+    EnRaf_ChangeAnim(this, EN_RAF_ANIM_DEATH);
     this->action = EN_RAF_ACTION_DISSOLVE;
     this->dissolveTimer = 0;
     this->actionFunc = EnRaf_Dissolve;
@@ -671,7 +676,7 @@ void EnRaf_Dormant(EnRaf* this, PlayState* play) {
         DECR(this->reviveTimer);
 
         if (this->reviveTimer == 0) {
-            EnRaf_ChangeAnimation(this, EN_RAF_ANIMATION_SPIT);
+            EnRaf_ChangeAnim(this, EN_RAF_ANIM_SPIT);
 
             for (i = CARNIVOROUS_LILY_PAD_LIMB_TRAP_1_LOWER_SEGMENT;
                  i <= CARNIVOROUS_LILY_PAD_LIMB_TRAP_3_UPPER_SEGMENT; i++) {
@@ -700,17 +705,17 @@ void EnRaf_Update(Actor* thisx, PlayState* play) {
     DECR(this->timer);
     this->actionFunc(this, play);
 
-    if ((this->action == EN_RAF_ACTION_IDLE) && (gSaveContext.save.weekEventReg[12] & 1)) {
+    if ((this->action == EN_RAF_ACTION_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
         this->petalScaleType = EN_RAF_PETAL_SCALE_TYPE_DEAD;
         EnRaf_SetupConvulse(this);
         return;
     }
 
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         if ((this->heightDiffFromPlayer > -0.1f) && !this->isCurrentlyInRidingMovingState) {
             this->heightDiffFromPlayer = -20.0f;
             this->isCurrentlyInRidingMovingState = true;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_COMMON_WATER_MID);
         }
     } else {
         this->isCurrentlyInRidingMovingState = false;
@@ -869,8 +874,8 @@ void EnRaf_TransformLimbDraw(PlayState* play2, s32 limbIndex, Actor* thisx) {
 void EnRaf_Draw(Actor* thisx, PlayState* play) {
     EnRaf* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
                                    this->skelAnime.dListCount, NULL, NULL, EnRaf_TransformLimbDraw, &this->dyna.actor);
 
@@ -891,9 +896,9 @@ void EnRaf_InitializeEffect(EnRaf* this, Vec3f* pos, Vec3f* velocity, Vec3f* acc
             effect->accel = *accel;
             effect->scale = scale;
             effect->timer = timer;
-            effect->rotation.x = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.y = randPlusMinusPoint5Scaled(30000.0f);
-            effect->rotation.z = randPlusMinusPoint5Scaled(30000.0f);
+            effect->rot.x = Rand_CenteredFloat(30000.0f);
+            effect->rot.y = Rand_CenteredFloat(30000.0f);
+            effect->rot.z = Rand_CenteredFloat(30000.0f);
             return;
         }
     }
@@ -908,9 +913,9 @@ void EnRaf_UpdateEffects(EnRaf* this, PlayState* play) {
             effect->pos.x += effect->velocity.x;
             effect->pos.y += effect->velocity.y;
             effect->pos.z += effect->velocity.z;
-            effect->rotation.x += 0xBB8;
-            effect->rotation.y += 0xBB8;
-            effect->rotation.z += 0xBB8;
+            effect->rot.x += 0xBB8;
+            effect->rot.y += 0xBB8;
+            effect->rot.z += 0xBB8;
             effect->velocity.x += effect->accel.x;
             effect->velocity.y += effect->accel.y;
             effect->velocity.z += effect->accel.z;
@@ -944,14 +949,14 @@ void EnRaf_DrawEffects(EnRaf* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(this->effects); i++, effect++) {
         if (effect->isEnabled) {
             Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
             Matrix_Scale(effect->scale, effect->scale, effect->scale, MTXMODE_APPLY);
-            Matrix_RotateXS(effect->rotation.x, MTXMODE_APPLY);
-            Matrix_RotateYS(effect->rotation.y, MTXMODE_APPLY);
-            Matrix_RotateZS(effect->rotation.z, MTXMODE_APPLY);
+            Matrix_RotateXS(effect->rot.x, MTXMODE_APPLY);
+            Matrix_RotateYS(effect->rot.y, MTXMODE_APPLY);
+            Matrix_RotateZS(effect->rot.z, MTXMODE_APPLY);
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(POLY_OPA_DISP++, gCarnivorousLilyPadParticleDL);

@@ -3,8 +3,8 @@
 
 #include "global.h"
 
-#define GET_BGLADDER_SIZE(actor) ((actor)->params & 0xFF)
-#define GET_BGLADDER_SWITCHFLAG(actor) (((actor)->params >> 8) & 0xFF)
+#define BGLADDER_GET_SIZE(thisx) ((thisx)->params & 0xFF)
+#define BGLADDER_GET_SWITCHFLAG(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct BgLadder;
 
@@ -18,12 +18,10 @@ typedef struct BgLadder {
 } BgLadder; // size = 0x164
 
 typedef enum {
-    LADDER_SIZE_12RUNG,
-    LADDER_SIZE_16RUNG,
-    LADDER_SIZE_20RUNG,
-    LADDER_SIZE_24RUNG,
+    /* 0 */ LADDER_SIZE_12RUNG,
+    /* 1 */ LADDER_SIZE_16RUNG,
+    /* 2 */ LADDER_SIZE_20RUNG,
+    /* 3 */ LADDER_SIZE_24RUNG
 } BgLadderSize;
-
-extern const ActorInit Bg_Ladder_InitVars;
 
 #endif // Z_BG_LADDER_H

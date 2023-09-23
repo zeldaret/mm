@@ -79,11 +79,11 @@
         <Texture Name="gSwampGuideMouthTex" OutName="swamp_guide_mouth" Format="ci8" Width="16" Height="32" Offset="0xCA98" />
 
         <!-- Burly Guy Animations -->
-        <Animation Name="gSwampShootingGalleryManHeadScratchEndAnim" Offset="0xD2F8" /> <!-- Original name is "shn_w02TOw01" ("wait02 to wait01"?) -->
+        <Animation Name="gBurlyGuyHeadScratchEndAnim" Offset="0xD2F8" /> <!-- Original name is "shn_w02TOw01" ("wait02 to wait01"?) -->
         <Animation Name="gBurlyGuyEmptyAnim" Offset="0xD3AC" /> <!-- Original name is "shn_wait". Unused and one frame long -->
         <Animation Name="gBurlyGuyHandsOnTableAnim" Offset="0xD9D0" /> <!-- Original name is "shn_wait01" -->
-        <Animation Name="gSwampShootingGalleryManHeadScratchLoopAnim" Offset="0xDFEC" /> <!-- Original name is "shn_wait02" -->
-        <Animation Name="gSwampGuideChinScratchAnim" Offset="0xE6C4" /><!-- Original name is "shn_wait03" -->
+        <Animation Name="gBurlyGuyHeadScratchLoopAnim" Offset="0xDFEC" /> <!-- Original name is "shn_wait02" -->
+        <Animation Name="gBurlyGuyChinScratchAnim" Offset="0xE6C4" /><!-- Original name is "shn_wait03" -->
 
         <!-- Burly Guy Limbs -->
         <Limb Name="gBurlyGuyWaistLimb" Type="Standard" EnumName="BURLY_GUY_LIMB_WAIST" Offset="0xE6E0" />
@@ -103,7 +103,7 @@
         <Limb Name="gBurlyGuyHeadLimb" Type="Standard" EnumName="BURLY_GUY_LIMB_HEAD" Offset="0xE788" />
 
         <!-- Burly Guy Skeleton -->
-        <Skeleton Name="gBurlyGuySkel" Type="Flex" LimbType="Standard" LimbNone="BURLY_GUY_LIMB_NONE" LimbMax="BURLY_GUY_LIMB_MAX" EnumName="BurlyGuyLimbs" Offset="0xE7D0" />
+        <Skeleton Name="gBurlyGuySkel" Type="Flex" LimbType="Standard" LimbNone="BURLY_GUY_LIMB_NONE" LimbMax="BURLY_GUY_LIMB_MAX" EnumName="BurlyGuyLimb" Offset="0xE7D0" />
 
         <!-- DisplayList for the Town Shooting Gallery Man's Head -->
         <DList Name="gTownShootingGalleryManHeadDL" Offset="0xF2D0" />

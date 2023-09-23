@@ -41,10 +41,8 @@ typedef struct EnTab {
     /* 0x328 */ EnTabUnkFunc unk_328;
     /* 0x32C */ s32 unk_32C;
     /* 0x330 */ UNK_TYPE1 unk330[4];
-    /* 0x334 */ s32 unk_334;
+    /* 0x334 */ s32 prevTalkState;
     /* 0x338 */ s32 unk_338;
 } EnTab; // size = 0x33C
-
-extern const ActorInit En_Tab_InitVars;
 
 #endif // Z_EN_TAB_H

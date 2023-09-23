@@ -62,6 +62,4 @@ typedef struct BgDyYoseizo {
     /* 0x0304 */ BgDyYoseizoEffect effects[BG_DY_YOSEIZO_EFFECT_COUNT];
 } BgDyYoseizo; // size = 0x3504
 
-extern const ActorInit Bg_Dy_Yoseizo_InitVars;
-
 #endif // Z_BG_DY_YOSEIZO_H

@@ -18,7 +18,7 @@ void DemoGetitem_Wait(DemoGetitem* this, PlayState* play);
 void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play);
 void DemoGetitem_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Demo_Getitem_InitVars = {
+ActorInit Demo_Getitem_InitVars = {
     ACTOR_DEMO_GETITEM,
     ACTORCAT_BG,
     FLAGS,
@@ -34,9 +34,9 @@ static s16 sObjectBankIndices[] = { OBJECT_GI_MASK14, OBJECT_GI_SWORD_4 };
 
 static s16 sGetItemDraws[] = { GID_MASK_GREAT_FAIRY, GID_SWORD_GREAT_FAIRY };
 
-static u16 sCsActorIds[] = { 0x6E, 0x236 };
+static u16 sCueTypes[] = { CS_CMD_ACTOR_CUE_110, CS_CMD_ACTOR_CUE_566 };
 
-typedef enum {
+typedef enum GreatFairyRewardItem {
     /* 0 */ DEMOGETITEM_ITEM_MASK_GREAT_FAIRY,
     /* 1 */ DEMOGETITEM_ITEM_SWORD_GREAT_FAIRY,
 } GreatFairyRewardItem;
@@ -55,14 +55,15 @@ void DemoGetitem_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.25f);
     this->actionFunc = DemoGetitem_Wait;
     this->getItemDrawId = sGetItemDraws[itemIndex];
-    this->csActorId = sCsActorIds[itemIndex];
+    this->cueType = sCueTypes[itemIndex];
 
     objectIndex = Object_GetIndex(&play->objectCtx, sObjectBankIndices[itemIndex]);
     if (objectIndex < 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        this->objectIndex = objectIndex;
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    this->objectIndex = objectIndex;
 }
 
 void DemoGetitem_Destroy(Actor* thisx, PlayState* play) {
@@ -80,25 +81,25 @@ void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play) {
     s32 pad;
     u16 bobPhase = (play->gameplayFrames * 1000) & 0xFFFF;
 
-    if (Cutscene_CheckActorAction(play, this->csActorId)) {
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActorId)]->action != 4) {
+    if (Cutscene_IsCueInChannel(play, this->cueType)) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id != 4) {
             this->actor.shape.yOffset = 0.0f;
         }
 
-        switch (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, this->csActorId)]->action) {
+        switch (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id) {
             case 2:
                 this->actor.draw = DemoGetitem_Draw;
-                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActorId));
+                Cutscene_ActorTranslate(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
                 this->actor.shape.rot.y += 0x3E8;
                 break;
 
             case 3:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
 
             case 4:
                 this->actor.draw = DemoGetitem_Draw;
-                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, this->csActorId));
+                Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, this->cueType));
                 this->actor.shape.yOffset = Math_SinS(bobPhase) * 15.0f;
                 break;
 

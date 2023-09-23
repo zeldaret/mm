@@ -5,7 +5,6 @@
  */
 
 #include "z_en_elforg.h"
-#include "objects/gameplay_keep/gameplay_keep.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -23,7 +22,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play);
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play);
 void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play);
 
-const ActorInit En_Elforg_InitVars = {
+ActorInit En_Elforg_InitVars = {
     ACTOR_EN_ELFORG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -56,10 +55,10 @@ static ColliderCylinderInit sCylinderInit = {
 };
 
 void EnElforg_InitializeParams(EnElforg* this) {
-    this->actor.speedXZ = 1.0f;
+    this->actor.speed = 1.0f;
     this->targetSpeedXZ = 1.0f;
     this->actor.velocity.y = 0.0f;
-    this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x10000);
+    this->actor.world.rot.y = Rand_CenteredFloat(0x10000);
     this->timer = 0;
     this->secondaryTimer = Rand_ZeroFloat(100.0f);
     this->actor.shape.yOffset = 0.0f;
@@ -70,33 +69,26 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnElforg* this = THIS;
 
-    Actor_SetScale(&this->actor, 0.01f);
-    this->stateFlags = 0;
+    Actor_SetScale(thisx, 0.01f);
+    this->strayFairyFlags = 0;
     this->direction = 0;
     SkelAnime_InitFlex(play, &this->skelAnime, &gStrayFairySkel, &gStrayFairyFlyingAnim, this->jointTable,
                        this->jointTable, STRAY_FAIRY_LIMB_MAX);
     this->skelAnime.playSpeed = 1.0f;
-    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
-    this->actor.shape.shadowAlpha = 255;
+    ActorShape_Init(&thisx->shape, 0.0f, NULL, 0.0f);
+    thisx->shape.shadowAlpha = 255;
 
-    switch (STRAY_FAIRY_TYPE(&this->actor)) {
+    switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_CLOCK_TOWN:
-            if (gSaveContext.save.weekEventReg[8] & 0x80) {
-                Actor_MarkForDeath(&this->actor);
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_08_80)) {
+                Actor_Kill(thisx);
                 return;
             }
             break;
 
         case STRAY_FAIRY_TYPE_COLLECTIBLE:
-            if (Flags_GetCollectible(play, STRAY_FAIRY_FLAG(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
-                return;
-            }
-            break;
-
-        default:
-            if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(&this->actor))) {
-                Actor_MarkForDeath(&this->actor);
+            if (Flags_GetCollectible(play, STRAY_FAIRY_FLAG(thisx))) {
+                Actor_Kill(thisx);
                 return;
             }
             break;
@@ -106,16 +98,22 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
         case STRAY_FAIRY_TYPE_CHEST:
         case STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN:
             break;
+
+        default:
+            if (Flags_GetSwitch(play, STRAY_FAIRY_FLAG(thisx))) {
+                Actor_Kill(thisx);
+                return;
+            }
+            break;
     }
 
     if (Map_IsInDungeonOrBossArea(play)) {
         this->area = gSaveContext.dungeonIndex + STRAY_FAIRY_AREA_WOODFALL;
     } else {
-        // Needs to be thisx in order to match
         this->area = STRAY_FAIRY_GET_NON_DUNGEON_AREA(thisx);
     }
 
-    switch (STRAY_FAIRY_TYPE(&this->actor)) {
+    switch (STRAY_FAIRY_TYPE(thisx)) {
         case STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN:
             EnElforg_InitializeParams(this);
             this->actionFunc = EnElforg_FreeFloatingFairyFountain;
@@ -137,14 +135,14 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
         case STRAY_FAIRY_TYPE_ENEMY:
             this->actionFunc = EnElforg_SetupTrappedByEnemy;
             EnElforg_SetupTrappedByEnemy(this, play);
-            this->actor.draw = NULL;
+            thisx->draw = NULL;
             break;
 
         case STRAY_FAIRY_TYPE_COLLIDER:
             this->actionFunc = EnElforg_HiddenByCollider;
-            this->actor.draw = NULL;
-            Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-            Collider_UpdateCylinder(&this->actor, &this->collider);
+            thisx->draw = NULL;
+            Collider_InitAndSetCylinder(play, &this->collider, thisx, &sCylinderInit);
+            Collider_UpdateCylinder(thisx, &this->collider);
             break;
 
         default:
@@ -153,7 +151,7 @@ void EnElforg_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    this->actor.shape.rot.y = 0;
+    thisx->shape.rot.y = 0;
 }
 
 void EnElforg_Destroy(Actor* thisx, PlayState* play) {
@@ -166,7 +164,7 @@ void EnElforg_Destroy(Actor* thisx, PlayState* play) {
 
 void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     static Vec3f sVelocity = { 0.0f, -0.05f, 0.0f };
-    static Vec3f sAcceleration = { 0.0f, -0.025f, 0.0f };
+    static Vec3f sAccel = { 0.0f, -0.025f, 0.0f };
     static Color_RGBA8 sPrimColors[] = {
         { 255, 235, 220, 255 }, { 255, 220, 220, 255 }, { 220, 255, 220, 255 },
         { 220, 220, 255, 255 }, { 255, 255, 200, 255 },
@@ -178,35 +176,35 @@ void EnElforg_SpawnSparkles(EnElforg* this, PlayState* play, s32 life) {
     s32 pad;
     s32 index;
 
-    pos.x = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.x;
+    pos.x = Rand_CenteredFloat(6.0f) + this->actor.world.pos.x;
     pos.y = (Rand_ZeroOne() * 6.0f) + this->actor.world.pos.y + (this->actor.shape.yOffset * this->actor.scale.y);
-    pos.z = randPlusMinusPoint5Scaled(6.0f) + this->actor.world.pos.z;
-    index = ((this->area < STRAY_FAIRY_AREA_CLOCK_TOWN) || (this->area >= STRAY_FAIRY_AREA_MAX))
+    pos.z = Rand_CenteredFloat(6.0f) + this->actor.world.pos.z;
+    index = (this->area < STRAY_FAIRY_AREA_CLOCK_TOWN || this->area >= STRAY_FAIRY_AREA_MAX)
                 ? STRAY_FAIRY_AREA_CLOCK_TOWN
                 : this->area;
-    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAcceleration, &sPrimColors[index], &sEnvColors[index],
-                                    1000, life);
+    EffectSsKirakira_SpawnDispersed(play, &pos, &sVelocity, &sAccel, &sPrimColors[index], &sEnvColors[index], 1000,
+                                    life);
 }
 
 void EnElforg_ApproachTargetYPosition(EnElforg* this, Vec3f* targetPos) {
     f32 yDifference = targetPos->y - this->actor.world.pos.y;
 
-    if (fabsf(yDifference) < this->actor.speedXZ) {
+    if (fabsf(yDifference) < this->actor.speed) {
         this->actor.world.pos.y = targetPos->y;
     } else if (yDifference > 0.0f) {
-        this->actor.world.pos.y += this->actor.speedXZ;
+        this->actor.world.pos.y += this->actor.speed;
     } else {
-        this->actor.world.pos.y -= this->actor.speedXZ;
+        this->actor.world.pos.y -= this->actor.speed;
     }
 }
 
 void EnElforg_ApproachTargetSpeedXZ(EnElforg* this) {
-    if (this->actor.speedXZ > this->targetSpeedXZ) {
-        this->actor.speedXZ *= 0.9f;
-    } else if (this->actor.speedXZ < (this->targetSpeedXZ - 0.1f)) {
-        this->actor.speedXZ += 0.1f;
+    if (this->actor.speed > this->targetSpeedXZ) {
+        this->actor.speed *= 0.9f;
+    } else if (this->actor.speed < (this->targetSpeedXZ - 0.1f)) {
+        this->actor.speed += 0.1f;
     } else {
-        this->actor.speedXZ = this->targetSpeedXZ;
+        this->actor.speed = this->targetSpeedXZ;
     }
 }
 
@@ -222,7 +220,7 @@ void EnElforg_MoveToTargetFairyFountain(EnElforg* this, Vec3f* homePos) {
     EnElforg_ApproachTargetYPosition(this, homePos);
     xDifference = this->actor.world.pos.x - homePos->x;
     zDifference = this->actor.world.pos.z - homePos->z;
-    targetAngle = Math_FAtan2F(-zDifference, -xDifference);
+    targetAngle = Math_Atan2S_XY(-zDifference, -xDifference);
     xzDistance = sqrtf(SQ(xDifference) + SQ(zDifference));
 
     if ((this->targetDistanceFromHome + 10.0f) < xzDistance) {
@@ -249,7 +247,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
 
     this->actor.shape.yOffset += 100.0f * Math_SinS(this->timer * 0x200);
     EnElforg_ApproachTargetYPosition(this, targetPos);
-    targetAngle = Math_FAtan2F(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
+    targetAngle = Math_Atan2S_XY(-(this->actor.world.pos.z - targetPos->z), -(this->actor.world.pos.x - targetPos->x));
 
     if (this->targetSpeedXZ > 2.0f) {
         Math_SmoothStepToS(&this->actor.world.rot.y, targetAngle, 2, 0x400, 0x100);
@@ -265,7 +263,7 @@ void EnElforg_MoveToTarget(EnElforg* this, Vec3f* targetPos) {
 }
 
 void func_80ACCBB8(EnElforg* this, PlayState* play) {
-    play->actorCtx.unk5 |= 8;
+    play->actorCtx.flags |= ACTORCTX_FLAG_3;
 }
 
 void EnElforg_TrappedByBubble(EnElforg* this, PlayState* play) {
@@ -294,8 +292,8 @@ void EnElforg_TurnInFairy(EnElforg* this, PlayState* play) {
     // flying towards the fountain's center.
     SkelAnime_Update(&this->skelAnime);
     this->actor.shape.yOffset *= 0.9f;
-    this->actor.speedXZ = 5.0f;
-    EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[0]);
+    this->actor.speed = 5.0f;
+    EnElforg_ApproachTargetYPosition(this, &player->bodyPartsPos[PLAYER_BODYPART_WAIST]);
 
     xzDistToPlayer = this->actor.xzDistToPlayer;
     if (xzDistToPlayer < 0.0f) {
@@ -319,7 +317,7 @@ void EnElforg_TurnInFairy(EnElforg* this, PlayState* play) {
         this->targetSpeedXZ = 3.0f;
         this->targetDistanceFromHome = 50.0f;
         this->actionFunc = EnElforg_FreeFloatingFairyFountain;
-        this->stateFlags &= ~STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
+        this->strayFairyFlags &= ~STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN;
     }
 }
 
@@ -330,19 +328,21 @@ void EnElforg_QuicklyCircleFairyFountain(EnElforg* this, PlayState* play) {
     if (this->secondaryTimer <= 30) {
         this->actionFunc = EnElforg_TurnInFairy;
     }
+
     this->secondaryTimer--;
 }
 
 void EnElforg_FreeFloatingFairyFountain(EnElforg* this, PlayState* play) {
     s32 pad;
 
-    if (this->stateFlags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME) {
+    if (this->strayFairyFlags & STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME) {
         // This happens when "turning in" the last batch of Stray Fairies to
         // a Fairy Fountain. The ones being "turned in" will fly very
         // quickly to the center of the fountain.
         if (this->targetSpeedXZ < 8.0f) {
             this->targetSpeedXZ += 0.1f;
         }
+
         if (this->targetDistanceFromHome > 0.0f) {
             this->targetDistanceFromHome -= 2.0f;
         }
@@ -352,19 +352,20 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, PlayState* play) {
         } else {
             this->targetSpeedXZ = Rand_ZeroFloat(2.0f) + 1.0f;
         }
+
         this->targetDistanceFromHome = Rand_ZeroFloat(100.0f) + 50.0f;
     }
 
     SkelAnime_Update(&this->skelAnime);
     EnElforg_MoveToTargetFairyFountain(this, &this->actor.home.pos);
 
-    if (this->stateFlags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN) {
+    if (this->strayFairyFlags & STRAY_FAIRY_FLAG_CIRCLES_QUICKLY_IN_FOUNTAIN) {
         // A small number of fairies will do this when the player walks into
         // the center of the fountain to be healed.
         this->actionFunc = EnElforg_QuicklyCircleFairyFountain;
     }
 
-    if (this->stateFlags & STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS) {
+    if (this->strayFairyFlags & STRAY_FAIRY_FLAG_SPARKLES_AND_SHRINKS) {
         // This happens right before the Great Fairy appears once all
         // Stray Fairies are saved.
         if (STRAY_FAIRY_SPARKLE_COUNT(&this->actor) > 0) {
@@ -374,7 +375,7 @@ void EnElforg_FreeFloatingFairyFountain(EnElforg* this, PlayState* play) {
 
         Actor_SetScale(&this->actor, this->actor.scale.x * 0.9f);
         if (this->actor.scale.x < 0.001f) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -385,15 +386,15 @@ void EnElforg_CirclePlayer(EnElforg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 orbitRadius;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_GORON) {
         orbitRadius = 40.0f;
     } else {
         orbitRadius = 20.0f;
     }
 
-    this->actor.world.pos.x = playerActor->world.pos.x + (Math_SinS(this->timer * 0x1000) * orbitRadius);
-    this->actor.world.pos.z = playerActor->world.pos.z + (Math_CosS(this->timer * 0x1000) * orbitRadius);
-    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.x = (Math_SinS(this->timer * 0x1000) * orbitRadius) + playerActor->world.pos.x;
+    this->actor.world.pos.z = (Math_CosS(this->timer * 0x1000) * orbitRadius) + playerActor->world.pos.z;
+    this->actor.world.pos.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
 
     EnElforg_SpawnSparkles(this, play, 16);
 }
@@ -402,11 +403,11 @@ void EnElforg_FairyCollected(EnElforg* this, PlayState* play) {
     EnElforg_CirclePlayer(this, play);
 
     if (this->timer > 80) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
 }
 
 void EnElforg_SetupFairyCollected(EnElforg* this, PlayState* play) {
@@ -414,7 +415,7 @@ void EnElforg_SetupFairyCollected(EnElforg* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
     this->actor.world.pos.x = playerActor->world.pos.x;
-    this->actor.world.pos.y = player->bodyPartsPos[0].y;
+    this->actor.world.pos.y = player->bodyPartsPos[PLAYER_BODYPART_WAIST].y;
     this->actor.world.pos.z = playerActor->world.pos.z;
     this->actionFunc = EnElforg_FairyCollected;
     this->timer = 0;
@@ -433,18 +434,18 @@ void EnElforg_ClockTownFairyCollected(EnElforg* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
         player->actor.freezeTimer = 0;
         player->stateFlags1 &= ~PLAYER_STATE1_20000000;
-        Actor_MarkForDeath(&this->actor);
-        gSaveContext.save.weekEventReg[8] |= 0x80;
-        ActorCutscene_Stop(0x7C);
-    } else {
-        func_800B9010(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+        Actor_Kill(&this->actor);
+        SET_WEEKEVENTREG(WEEKEVENTREG_08_80);
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        return;
+    }
 
-        if (ActorCutscene_GetCurrentIndex() != 0x7C) {
-            if (ActorCutscene_GetCanPlayNext(0x7C)) {
-                ActorCutscene_Start(0x7C, &this->actor);
-            } else {
-                ActorCutscene_SetIntentToPlay(0x7C);
-            }
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_CHIBI_FAIRY_HEAL - SFX_FLAG);
+    if (CutsceneManager_GetCurrentCsId() != CS_ID_GLOBAL_TALK) {
+        if (CutsceneManager_IsNext(CS_ID_GLOBAL_TALK)) {
+            CutsceneManager_Start(CS_ID_GLOBAL_TALK, &this->actor);
+        } else {
+            CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         }
     }
 }
@@ -457,7 +458,7 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     if (Player_GetMask(play) == PLAYER_MASK_GREAT_FAIRY) {
-        pos = player->bodyPartsPos[0];
+        pos = player->bodyPartsPos[PLAYER_BODYPART_WAIST];
         this->targetSpeedXZ = 5.0f;
         EnElforg_MoveToTarget(this, &pos);
     } else {
@@ -489,33 +490,35 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
             if (STRAY_FAIRY_TYPE(&this->actor) == STRAY_FAIRY_TYPE_CLOCK_TOWN) {
                 player->actor.freezeTimer = 100;
                 player->stateFlags1 |= PLAYER_STATE1_20000000;
+                // Bring me back to North Clock Town!
                 Message_StartTextbox(play, 0x579, NULL);
                 this->actionFunc = EnElforg_ClockTownFairyCollected;
-                ActorCutscene_SetIntentToPlay(0x7C);
+                CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
                 return;
             }
 
             if (Map_IsInDungeonOrBossArea(play)) {
-                gSaveContext.save.inventory.strayFairies[gSaveContext.dungeonIndex]++;
+                gSaveContext.save.saveInfo.inventory.strayFairies[gSaveContext.dungeonIndex]++;
+                // You found a Stray Fairy!
                 Message_StartTextbox(play, 0x11, NULL);
-
-                if (gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >=
-                    STRAY_FAIRY_SCATTERED_TOTAL) {
-                    func_801A3098(NA_BGM_GET_ITEM | 0x900);
+                if (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >= STRAY_FAIRY_SCATTERED_TOTAL) {
+                    Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 }
             }
         }
 
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f, 7);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 20.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
         func_80ACCBB8(this, play);
 
         if (Player_GetMask(play) == PLAYER_MASK_GREAT_FAIRY) {
-            if (!(this->stateFlags & STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED)) {
-                play_sound(NA_SE_SY_FAIRY_MASK_SUCCESS);
+            if (!(this->strayFairyFlags & STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED)) {
+                Audio_PlaySfx(NA_SE_SY_FAIRY_MASK_SUCCESS);
             }
-            this->stateFlags |= STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;
+
+            this->strayFairyFlags |= STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;
         } else {
-            this->stateFlags &= ~STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;
+            this->strayFairyFlags &= ~STRAY_FAIRY_FLAG_GREAT_FAIRYS_MASK_EQUIPPED;
         }
     }
 }
@@ -546,7 +549,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, PlayState* play) {
         EnElforg_InitializeParams(this);
         this->actionFunc = EnElforg_FreeFloating;
         this->actor.draw = EnElforg_Draw;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
     } else {
         // The enemy is still alive, so have the Stray Fairy
         // track the enemy in case it's moving around.
@@ -567,7 +570,7 @@ void EnElforg_TrappedByEnemy(EnElforg* this, PlayState* play) {
 void EnElforg_SetupTrappedByEnemy(EnElforg* this, PlayState* play) {
     Actor* enemy = EnElforg_GetHoldingEnemy(this, play);
 
-    if (enemy != NULL && enemy->update != NULL) {
+    if ((enemy != NULL) && (enemy->update != NULL)) {
         this->actionFunc = EnElforg_TrappedByEnemy;
         this->enemy = enemy;
     }
@@ -580,7 +583,7 @@ void EnElforg_HiddenByCollider(EnElforg* this, PlayState* play) {
         this->actor.draw = EnElforg_Draw;
         this->actor.world.pos.y += 40.0f;
         this->actor.home.pos.y += 40.0f;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_CHIBI_FAIRY_SAVED);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
@@ -593,7 +596,7 @@ void EnElforg_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if (this->timer == 0 && this->secondaryTimer > 0) {
+    if ((this->timer == 0) && (this->secondaryTimer > 0)) {
         this->secondaryTimer--;
     } else {
         this->timer++;
@@ -632,7 +635,7 @@ void EnElforg_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     switch (this->area) {
         case STRAY_FAIRY_AREA_WOODFALL:

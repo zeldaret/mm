@@ -7,7 +7,11 @@ struct EnRg;
 
 typedef void (*EnRgActionFunc)(struct EnRg*, PlayState*);
 
-#define ENRG_GET_7F80(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+#define ENRG_GET_PATH_INDEX(thisx) ((((thisx)->params & 0x7F80) >> 7) & 0xFF)
+
+#define ENRG_PATH_INDEX_NONE 0xFF
+
+#define ENRG_FIDGET_TABLE_LEN 3
 
 typedef struct {
     /* 0x00 */ u8 unk_00;
@@ -41,8 +45,8 @@ typedef struct EnRg {
     /* 0x322 */ s16 unk_322;
     /* 0x324 */ s16 unk_324;
     /* 0x326 */ s16 unk_326;
-    /* 0x328 */ s16 unk_328[3];
-    /* 0x32E */ s16 unk_32E[3];
+    /* 0x328 */ s16 fidgetTableZ[ENRG_FIDGET_TABLE_LEN];
+    /* 0x32E */ s16 fidgetTableY[ENRG_FIDGET_TABLE_LEN];
     /* 0x334 */ s32 unk_334;
     /* 0x338 */ UNK_TYPE1 unk338[4];
     /* 0x33C */ s32 unk_33C;
@@ -51,7 +55,5 @@ typedef struct EnRg {
     /* 0x348 */ s32 numCheckpointsAheadOfPlayer;
     /* 0x34C */ EnRgStruct unk_34C[32];
 } EnRg; // size = 0xACC
-
-extern const ActorInit En_Rg_InitVars;
 
 #endif // Z_EN_RG_H

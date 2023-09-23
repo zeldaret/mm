@@ -38,16 +38,14 @@ typedef struct DemoKankyo {
 typedef enum {
     /* 0 */ DEMO_KANKYO_TYPE_LOSTWOODS,
     /* 1 */ DEMO_KANKYO_TYPE_GIANTS,
-    /* 2 */ DEMO_KANKYO_TYPE_MOON,
+    /* 2 */ DEMO_KANKYO_TYPE_MOON
 } DemoKankyoType;
 
 typedef enum {
     /* 0 */ DEMO_KANKYO_STATE_INIT,
     /* 1 */ DEMO_KANKYO_STATE_SINGLE,
     /* 2 */ DEMO_KANKYO_STATE_SKYFISH,
-    /* 3 */ DEMO_KANKYO_STATE_DISABLED,
+    /* 3 */ DEMO_KANKYO_STATE_DISABLED
 } DemoKankyoStateType;
-
-extern const ActorInit Demo_Kankyo_InitVars;
 
 #endif // Z_DEMO_KANKYO_H

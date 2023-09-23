@@ -2,17 +2,24 @@
 #define MACROS_H
 
 #include "libc/stdint.h"
-#include "ultra64/convert.h"
-#include "z64.h"
+#include "PR/os_convert.h"
+#include "main.h"
 
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH_HIRES 640
+#define SCREEN_HEIGHT_HIRES 480
 
-#define SCREEN_WIDTH_HIGH_RES  576
-#define SCREEN_HEIGHT_HIGH_RES 454
+#define HIRES_BUFFER_WIDTH  576
+#define HIRES_BUFFER_HEIGHT 454
+
+#define PROJECTED_TO_SCREEN_X(projectedPos, invW) ((projectedPos).x * (invW) * (SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 2))
+#define PROJECTED_TO_SCREEN_Y(projectedPos, invW) ((projectedPos).y * (invW) * (-SCREEN_HEIGHT / 2) + (SCREEN_HEIGHT / 2))
 
 #define ARRAY_COUNT(arr) (s32)(sizeof(arr) / sizeof(arr[0]))
 #define ARRAY_COUNTU(arr) (u32)(sizeof(arr) / sizeof(arr[0]))
+
+#define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
 
 // TODO: After uintptr_t cast change should have an AVOID_UB target that just toggles the KSEG0 bit in the address rather than add/sub 0x80000000
 #define PHYSICAL_TO_VIRTUAL(addr) ((uintptr_t)(addr) + RDRAM_CACHED)
@@ -21,134 +28,46 @@
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
-#define SET_NEXT_GAMESTATE(curState, newInit, newStruct)    \
-    (curState)->nextGameStateInit = (GameStateFunc)newInit; \
-    (curState)->nextGameStateSize = sizeof(newStruct)
-
-#define SET_FULLSCREEN_VIEWPORT(view)      \
-    {                                      \
-        Viewport viewport;                 \
-        viewport.bottomY = SCREEN_HEIGHT;  \
-        viewport.rightX = SCREEN_WIDTH;    \
-        viewport.topY = 0;                 \
-        viewport.leftX = 0;                \
-        View_SetViewport(view, &viewport); \
-    }                                      \
-    (void)0
-
 #define GET_PLAYER(play) ((Player*)(play)->actorCtx.actorLists[ACTORCAT_PLAYER].first)
 
 #define GET_FIRST_ENEMY(play) ((Actor*)(play)->actorCtx.actorLists[ACTORCAT_ENEMY].first)
 
-// linkAge still exists in MM, but is always set to 0 (always adult)
-// There are remnants of these macros from OOT, but they are essentially useless
-#define LINK_IS_CHILD (gSaveContext.save.linkAge == 1)
-#define LINK_IS_ADULT (gSaveContext.save.linkAge == 0)
-
-#define CURRENT_DAY (((void)0, gSaveContext.save.day) % 5)
-
 #define CLOCK_TIME(hr, min) (s32)(((hr) * 60 + (min)) * 0x10000 / (24 * 60))
 #define CLOCK_TIME_MINUTE  (CLOCK_TIME(0, 1))
+#define CLOCK_TIME_HOUR (CLOCK_TIME(1, 0))
 #define DAY_LENGTH (CLOCK_TIME(24, 0))
 
+#define TIME_TO_HOURS_F(time) ((time) * (24.0f / 0x10000))
 #define TIME_TO_MINUTES_F(time) ((time) * ((24.0f * 60.0f) / 0x10000)) // 0.021972656f
-#define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
-
 #define TIME_TO_MINUTES_ALT_F(time) ((time) / (0x10000 / (24.0f * 60.0f)))
+#define TIME_TO_SECONDS_F(time) ((time) * ((24.0f * 60.0f * 60.0f) / 0x10000))
+
+#define CLOCK_TIME_F(hr, min) (((hr) * 60.0f + (min)) * (0x10000 / (24.0f * 60.0f)))
 #define CLOCK_TIME_ALT_F(hr, min) (((hr) * 60.0f + (min)) / (24.0f * 60.0f / 0x10000))
-
-#define SLOT(item) gItemSlots[item]
-#define AMMO(item) gSaveContext.save.inventory.ammo[SLOT(item)]
-#define INV_CONTENT(item) gSaveContext.save.inventory.items[SLOT(item)]
-#define GET_INV_CONTENT(item) ((void)0, gSaveContext.save.inventory.items)[SLOT(item)]
-
-#define CUR_FORM ((gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) ? 0 : gSaveContext.save.playerForm)
-
-#define GET_SAVE_EQUIPS_EQUIPMENT ((void)0, gSaveContext.save.equips.equipment)
-#define GET_SAVE_INVENTORY_UPGRADES ((void)0, gSaveContext.save.inventory.upgrades)
-#define GET_SAVE_INVENTORY_QUEST_ITEMS ((void)0, gSaveContext.save.inventory.questItems)
-
-#define GET_CUR_EQUIP_VALUE(equip) ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipMasks[equip]) >> gEquipShifts[equip])
-
-#define CUR_UPG_VALUE(upg) ((gSaveContext.save.inventory.upgrades & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
-#define GET_CUR_UPG_VALUE(upg) ((GET_SAVE_INVENTORY_UPGRADES & gUpgradeMasks[upg]) >> gUpgradeShifts[upg])
-
-#define SET_EQUIP_VALUE(equip, value) (gSaveContext.save.equips.equipment = ((GET_SAVE_EQUIPS_EQUIPMENT & gEquipNegMasks[equip]) | (u16)((u16)(value) << gEquipShifts[equip])))
-
-#define BUTTON_ITEM_EQUIP(form, button) (gSaveContext.save.equips.buttonItems[form][button])
-#define CUR_FORM_EQUIP(button) BUTTON_ITEM_EQUIP(CUR_FORM, button)
-
-#define C_SLOT_EQUIP(form, button) (gSaveContext.save.equips.cButtonSlots[form][button])
-#define CHECK_QUEST_ITEM(item) (GET_SAVE_INVENTORY_QUEST_ITEMS & gBitFlags[item])
-#define SET_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS | gBitFlags[item]))
-#define REMOVE_QUEST_ITEM(item) (gSaveContext.save.inventory.questItems = (GET_SAVE_INVENTORY_QUEST_ITEMS & (-1 - gBitFlags[item])))
-
-#define CHECK_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] & gBitFlags[item])
-#define SET_DUNGEON_ITEM(item, dungeonIndex) (gSaveContext.save.inventory.dungeonItems[(void)0, dungeonIndex] |= (u8)gBitFlags[item])
-#define DUNGEON_KEY_COUNT(dungeonIndex) (gSaveContext.save.inventory.dungeonKeys[(void)0, dungeonIndex])
-
-#define GET_CUR_FORM_BTN_ITEM(btn) ((u8)((btn) == EQUIP_SLOT_B ? BUTTON_ITEM_EQUIP(CUR_FORM, btn) : BUTTON_ITEM_EQUIP(0, btn)))
-#define GET_CUR_FORM_BTN_SLOT(btn) ((u8)((btn) == EQUIP_SLOT_B ? C_SLOT_EQUIP(CUR_FORM, btn) : C_SLOT_EQUIP(0, btn)))
-
-
-#define SET_CUR_FORM_BTN_ITEM(btn, item)             \
-    if ((btn) == EQUIP_SLOT_B) {                     \
-        BUTTON_ITEM_EQUIP(CUR_FORM, (btn)) = (item); \
-    } else {                                         \
-        BUTTON_ITEM_EQUIP(0, (btn)) = (item);        \
-    }                                                \
-    (void)0
-
-#define SET_CUR_FORM_BTN_SLOT(btn, item)        \
-    if ((btn) == EQUIP_SLOT_B) {                \
-        C_SLOT_EQUIP(CUR_FORM, (btn)) = (item); \
-    } else {                                    \
-        C_SLOT_EQUIP(0, (btn)) = (item);        \
-    }                                           \
-    (void)0
-
-#define STOLEN_ITEM_NONE (0)
-
-#define STOLEN_ITEM_1 ((gSaveContext.save.stolenItems & 0xFF000000) >> 0x18)
-#define STOLEN_ITEM_2 ((gSaveContext.save.stolenItems & 0x00FF0000) >> 0x10)
-
-#define SET_STOLEN_ITEM_1(itemId) \
-    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0xFF000000) | ((itemId & 0xFF) << 0x18))
-#define SET_STOLEN_ITEM_2(itemId) \
-    (gSaveContext.save.stolenItems = (gSaveContext.save.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
+#define CLOCK_TIME_ALT2_F(hr, min) ((((hr) + (min) / 60.0f) * 60.0f) / (24.0f * 60.0f / 0x10000))
+#define CLOCK_TIME_HOUR_F (CLOCK_TIME_F(1, 0))
 
 #define CAPACITY(upg, value) gUpgradeCapacities[upg][value]
 #define CUR_CAPACITY(upg) CAPACITY(upg, CUR_UPG_VALUE(upg))
 
-#define CONTROLLER1(gameState) (&(gameState)->input[0])
-#define CONTROLLER2(gameState) (&(gameState)->input[1])
-#define CONTROLLER3(gameState) (&(gameState)->input[2])
-#define CONTROLLER4(gameState) (&(gameState)->input[3])
+// To be used with `Magic_Add`, but ensures enough magic is added to fill the magic bar to capacity
+#define MAGIC_FILL_TO_CAPACITY (((void)0, gSaveContext.magicFillTarget) + (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired + 1) * MAGIC_NORMAL_METER)
 
 #define CHECK_BTN_ALL(state, combo) (~((state) | ~(combo)) == 0)
 #define CHECK_BTN_ANY(state, combo) (((state) & (combo)) != 0)
 
 #define CHECK_FLAG_ALL(flags, mask) (((flags) & (mask)) == (mask))
 
-extern GraphicsContext* __gfxCtx;
-
-#define WORK_DISP __gfxCtx->work.p
-#define POLY_OPA_DISP __gfxCtx->polyOpa.p
-#define POLY_XLU_DISP __gfxCtx->polyXlu.p
-#define OVERLAY_DISP __gfxCtx->overlay.p
-#define DEBUG_DISP __gfxCtx->debug.p
-
-// __gfxCtx shouldn't be used directly.
-// Use the DISP macros defined above when writing to display buffers.
-#define OPEN_DISPS(gfxCtx)                  \
-    {                                       \
-        GraphicsContext* __gfxCtx = gfxCtx; \
-        s32 __dispPad
-
-#define CLOSE_DISPS(gfxCtx) \
-    (void)0;                \
-    }                       \
-    (void)0
+#define BIT_FLAG_TO_SHIFT(flag) \
+    ((flag & 0x80) ? 7 : \
+    (flag & 0x40) ? 6 : \
+    (flag & 0x20) ? 5 : \
+    (flag & 0x10) ? 4 : \
+    (flag & 0x8) ? 3 : \
+    (flag & 0x4) ? 2 : \
+    (flag & 0x2) ? 1 : \
+    (flag & 0x1) ? 0 : \
+    0)
 
 /**
  * `x` vertex x
@@ -167,28 +86,6 @@ extern GraphicsContext* __gfxCtx;
 #define VTX_T(x, y, z, s, t, cr, cg, cb, a) \
     { { x, y, z }, 0, { s, t }, { cr, cg, cb, a }, }
 
-#define GRAPH_ALLOC(gfxCtx, size) ((void*)((gfxCtx)->polyOpa.d = (Gfx*)((u8*)(gfxCtx)->polyOpa.d - (size))))
-
-// Custom gbi macro
-#define gDPSetTileCustom(pkt, fmt, siz, width, height, pal, cms, cmt, masks, maskt, shifts, shiftt)                    \
-    {                                                                                                                  \
-        gDPPipeSync(pkt);                                                                                              \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_LOADTILE, 0, cmt, maskt, shiftt, cms, \
-                   masks, shifts);                                                                                     \
-        gDPTileSync(pkt);                                                                                              \
-        gDPSetTile(pkt, fmt, siz, (((width)*siz##_TILE_BYTES) + 7) >> 3, 0, G_TX_RENDERTILE, pal, cmt, maskt, shiftt,  \
-                   cms, masks, shifts);                                                                                \
-        gDPSetTileSize(pkt, G_TX_RENDERTILE, 0, 0, ((width)-1) << G_TEXTURE_IMAGE_FRAC,                                \
-                       ((height)-1) << G_TEXTURE_IMAGE_FRAC);                                                          \
-    }                                                                                                                  \
-    (void)0
-
-#define ALIGN8(val) (((val) + 7) & ~7)
-#define ALIGN16(val) (((val) + 0xF) & ~0xF)
-#define ALIGN64(val) (((val) + 0x3F) & ~0x3F)
-#define ALIGN256(val) (((val) + 0xFF) & ~0xFF)
-
 #define SQ(x) ((x) * (x))
 #define ABS(x) ((x) >= 0 ? (x) : -(x))
 #define ABS_ALT(x) ((x) < 0 ? -(x) : (x))
@@ -198,22 +95,12 @@ extern GraphicsContext* __gfxCtx;
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
 
-#define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
-
-#define SWAP(type, a, b)  \
-    {                     \
-        type _temp = (a); \
-        (a) = (b);        \
-        (b) = _temp;      \
-    }
-
-#define OVERLAY_RELOCATION_OFFSET(overlayEntry) ((uintptr_t)((overlayEntry)->vramStart) - (uintptr_t)((overlayEntry)->loadedRamAddr))
-#define VRAM_PTR_SIZE(entry) ((uintptr_t)((entry)->vramEnd) - (uintptr_t)((entry)->vramStart))
-
-#ifdef __GNUC__
-#define ALIGNED8 __attribute__ ((aligned (8)))
-#else
-#define ALIGNED8
-#endif
+#define SWAP(type, a, b)    \
+    {                       \
+        type _temp = (a);   \
+        (a) = (b);          \
+        (b) = _temp;        \
+    }                       \
+    (void)0
 
 #endif // MACROS_H

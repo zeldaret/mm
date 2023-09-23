@@ -10,9 +10,7 @@ typedef void (*BgHakaTombActionFunc)(struct BgHakaTomb*, PlayState*);
 typedef struct BgHakaTomb {
     /* 0x000 */ DynaPolyActor dyna;
     /* 0x15C */ BgHakaTombActionFunc actionFunc;
-    /* 0x160 */ s16 cutscenes[1];
+    /* 0x160 */ s16 csIdList[1];
 } BgHakaTomb; // size = 0x164
-
-extern const ActorInit Bg_Haka_Tomb_InitVars;
 
 #endif // Z_BG_HAKA_TOMB_H

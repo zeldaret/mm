@@ -6,7 +6,7 @@
 
 #include "z_en_hs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnHs*)thisx)
 
@@ -23,7 +23,7 @@ void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play);
 void func_80953354(EnHs* this, PlayState* play);
 void func_8095345C(EnHs* this, PlayState* play);
 
-const ActorInit En_Hs_InitVars = {
+ActorInit En_Hs_InitVars = {
     ACTOR_EN_HS,
     ACTORCAT_NPC,
     FLAGS,
@@ -87,7 +87,7 @@ void EnHs_Init(Actor* thisx, PlayState* play) {
     }
 
     this->stateFlags = 0;
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     func_80952C50(this, play);
 }
 
@@ -99,9 +99,9 @@ void EnHs_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80952DFC(PlayState* play) {
     if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-        func_80151BB4(play, 0x2E);
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_BUNNY_HOOD);
     }
-    func_80151BB4(play, 0x10);
+    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GROG);
 }
 
 void EnHs_UpdateChickPos(Vec3f* dst, Vec3f src, f32 offset) {
@@ -150,7 +150,7 @@ void func_80952FE0(EnHs* this, PlayState* play) {
     } else {
         this->actionFunc = func_80953180;
         this->stateFlags &= ~4;
-        func_80151938(play, 0x33F6);
+        Message_ContinueTextbox(play, 0x33F6);
         func_80952DFC(play);
     }
     this->stateTimer++;
@@ -162,41 +162,41 @@ void func_80953098(EnHs* this, PlayState* play) {
         this->actionFunc = func_8095345C;
         this->actor.flags |= ACTOR_FLAG_10000;
         this->stateFlags |= 0x10;
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
     } else {
         this->stateFlags |= 8;
         if (INV_CONTENT(ITEM_MASK_BUNNY) == ITEM_MASK_BUNNY) {
-            Actor_PickUp(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_RUPEE_RED, 10000.0f, 50.0f);
         } else {
-            Actor_PickUp(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MASK_BUNNY, 10000.0f, 50.0f);
         }
     }
 }
 
 void func_80953180(EnHs* this, PlayState* play) {
-    if ((Message_GetState(&play->msgCtx) == 5) && Message_ShouldAdvance(play)) {
+    if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.currentTextId) {
             case 0x33F4: // text: laughing that they are all roosters (!)
             case 0x33F6: // text: Grog regrets not being able to see his chicks reach adult hood
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
             case 0x33F7: // text: notice his chicks are grown up, happy, wants to give you bunny hood
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80953098;
                 func_80953098(this, play);
                 break;
 
             case 0x33F9: // text: laughing that they are all roosters (.)
                 this->actor.flags &= ~ACTOR_FLAG_10000;
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
 
             case 0x33F5: // He heard from his gramps (?) the moon is going to fall
-                play->msgCtx.unk11F10 = 0;
+                play->msgCtx.msgLength = 0;
                 this->actionFunc = func_80952FE0;
                 this->stateTimer = 0;
                 this->headRot.z = 0;
@@ -204,7 +204,7 @@ void func_80953180(EnHs* this, PlayState* play) {
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_8095345C;
                 break;
         }
@@ -216,16 +216,16 @@ void EnHs_DoNothing(EnHs* this, PlayState* play) {
 
 void EnHs_SceneTransitToBunnyHoodDialogue(EnHs* this, PlayState* play) {
     if (DECR(this->stateTimer) == 0) {
-        play->nextEntranceIndex = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
-        play->sceneLoadFlag = 0x14;
-        gSaveContext.save.weekEventReg[25] |= 8;
+        play->nextEntrance = play->setupExitList[HS_GET_EXIT_INDEX(&this->actor)];
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        SET_WEEKEVENTREG(WEEKEVENTREG_25_08);
         this->actionFunc = EnHs_DoNothing;
     }
 }
 
 void func_80953354(EnHs* this, PlayState* play) {
     if (!Play_InCsMode(play)) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         this->actionFunc = EnHs_SceneTransitToBunnyHoodDialogue;
     }
 }
@@ -239,7 +239,7 @@ void func_809533A0(EnHs* this, PlayState* play) {
     } else if (this->stateFlags & 0x10) {
         sp1E = 0x33F9;
         this->stateFlags &= ~0x10;
-    } else if (gSaveContext.save.weekEventReg[25] & 8) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_25_08)) {
         sp1E = 0x33F4;
     } else {
         sp1E = 0x33F5;
@@ -264,10 +264,10 @@ void func_8095345C(EnHs* this, PlayState* play) {
         this->actionFunc = func_80953354;
         this->stateTimer = 40;
     } else if (CHECK_FLAG_ALL(this->actor.flags, ACTOR_FLAG_10000)) {
-        func_800B8500(&this->actor, play, 1000.0f, 1000.0f, -1);
+        Actor_OfferTalkExchange(&this->actor, play, 1000.0f, 1000.0f, PLAYER_IA_MINUS1);
         this->stateFlags |= 1;
     } else if ((this->actor.xzDistToPlayer < 120.0f) && Player_IsFacingActor(&this->actor, 0x2000, play)) {
-        func_800B8614(&this->actor, play, 130.0f);
+        Actor_OfferTalk(&this->actor, play, 130.0f);
         this->stateFlags |= 1;
     } else {
         this->stateFlags &= ~1;
@@ -282,7 +282,7 @@ void EnHs_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (SkelAnime_Update(&this->skelAnime)) {
         this->skelAnime.curFrame = 0.0f;
@@ -356,7 +356,7 @@ void EnHs_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 void EnHs_Draw(Actor* thisx, PlayState* play) {
     EnHs* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHs_OverrideLimbDraw, EnHs_PostLimbDraw, &this->actor);
 }

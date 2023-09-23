@@ -7,7 +7,7 @@
 #include "z_en_sb.h"
 #include "objects/object_sb/object_sb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSb*)thisx)
 
@@ -25,7 +25,7 @@ void EnSb_Lunge(EnSb* this, PlayState* play);
 void EnSb_Bounce(EnSb* this, PlayState* play);
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play);
 
-const ActorInit En_Sb_InitVars = {
+ActorInit En_Sb_InitVars = {
     ACTOR_EN_SB,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -92,8 +92,8 @@ static DamageTable sDamageTable = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_S8(hintId, 39, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_S8(hintId, TATL_HINT_ID_SHELLBLADE, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -118,7 +118,7 @@ void EnSb_Init(Actor* thisx, PlayState* play) {
     this->isDead = false;
     this->actor.colChkInfo.mass = 90;
     this->actor.shape.rot.y = 0;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     this->actor.gravity = -0.35f;
     this->fireCount = 0;
     this->unk_252 = 0;
@@ -155,7 +155,7 @@ void EnSb_SetupOpen(EnSb* this) {
                      ANIMMODE_ONCE, 0.0f);
     this->state = SHELLBLADE_OPEN;
     this->actionFunc = EnSb_Open;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupWaitOpen(EnSb* this) {
@@ -172,7 +172,7 @@ void EnSb_SetupLunge(EnSb* this) {
     Animation_Change(&this->skelAnime, &object_sb_Anim_000124, playbackSpeed, 0.0f, frameCount, ANIMMODE_ONCE, 0);
     this->state = SHELLBLADE_LUNGE;
     this->actionFunc = EnSb_Lunge;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_KUSAMUSHI_VIBE);
 }
 
 void EnSb_SetupBounce(EnSb* this) {
@@ -191,12 +191,12 @@ void EnSb_SetupIdle(EnSb* this, s32 changeSpeed) {
     this->state = SHELLBLADE_WAIT_CLOSED;
     if (changeSpeed) {
         if (this->actor.depthInWater > 0.0f) {
-            this->actor.speedXZ = -5.0f;
+            this->actor.speed = -5.0f;
             if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 2.1f;
             }
         } else {
-            this->actor.speedXZ = -6.0f;
+            this->actor.speed = -6.0f;
             if (this->actor.velocity.y < 0.0f) {
                 this->actor.velocity.y = 1.4f;
             }
@@ -253,11 +253,11 @@ void EnSb_TurnAround(EnSb* this, PlayState* play) {
         this->actor.world.rot.y = this->yawAngle;
         if (this->actor.depthInWater > 0.0f) {
             this->actor.velocity.y = 3.0f;
-            this->actor.speedXZ = 5.0f;
+            this->actor.speed = 5.0f;
             this->actor.gravity = -0.35f;
         } else {
             this->actor.velocity.y = 2.0f;
-            this->actor.speedXZ = 6.0f;
+            this->actor.speed = 6.0f;
             this->actor.gravity = -2.0f;
         }
         EnSb_SpawnBubbles(play, this);
@@ -267,12 +267,12 @@ void EnSb_TurnAround(EnSb* this, PlayState* play) {
 }
 
 void EnSb_Lunge(EnSb* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
-    if (this->actor.velocity.y <= -0.1f || this->actor.bgCheckFlags & 2) {
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
+    if ((this->actor.velocity.y <= -0.1f) || (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH)) {
         if (!(this->actor.depthInWater > 0.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_EYEGOLE_ATTACK);
         }
-        this->actor.bgCheckFlags &= ~2;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND_TOUCH;
         EnSb_SetupBounce(this);
     }
 }
@@ -282,25 +282,25 @@ void EnSb_Bounce(EnSb* this, PlayState* play) {
     f32 currentFrame = currentFrame = this->skelAnime.curFrame;
     f32 frameCount = frameCount = Animation_GetLastFrame(&object_sb_Anim_0000B4);
 
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 0.2f);
+    Math_StepToF(&this->actor.speed, 0.0f, 0.2f);
     if (currentFrame == frameCount) {
         if (this->bounceCounter != 0) {
             this->bounceCounter--;
             this->attackTimer = 1;
             if (this->actor.depthInWater > 0.0f) {
                 this->actor.velocity.y = 3.0f;
-                this->actor.speedXZ = 5.0f;
+                this->actor.speed = 5.0f;
                 this->actor.gravity = -0.35f;
             } else {
                 this->actor.velocity.y = 2.0f;
-                this->actor.speedXZ = 6.0f;
+                this->actor.speed = 6.0f;
                 this->actor.gravity = -2.0f;
             }
             EnSb_SpawnBubbles(play, this);
             EnSb_SetupLunge(this);
-        } else if (this->actor.bgCheckFlags & 1) {
-            this->actor.bgCheckFlags &= ~2;
-            this->actor.speedXZ = 0.0f;
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND_TOUCH;
+            this->actor.speed = 0.0f;
             this->attackTimer = 1;
             EnSb_SetupWaitClosed(this);
         }
@@ -310,14 +310,14 @@ void EnSb_Bounce(EnSb* this, PlayState* play) {
 void EnSb_ReturnToIdle(EnSb* this, PlayState* play) {
     if (this->attackTimer != 0) {
         this->attackTimer--;
-        if (this->actor.bgCheckFlags & 1) {
-            this->actor.bgCheckFlags &= ~1;
-            this->actor.speedXZ = 0.0f;
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+            this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
+            this->actor.speed = 0.0f;
         }
-    } else if (this->actor.bgCheckFlags & 1) {
-        this->actor.bgCheckFlags &= ~1;
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_GROUND;
         this->actionFunc = EnSb_Idle;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
     }
 }
 
@@ -331,13 +331,13 @@ void EnSb_UpdateDamage(EnSb* this, PlayState* play) {
             hitPlayer = 0;
             if (this->vulnerableTimer != 0) {
                 Actor_ApplyDamage(&this->actor);
-                Actor_SetColorFilter(&this->actor, 0x4000, 0xFF, 0x2000, 80);
+                Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_XLU, 80);
                 hitPlayer = 1;
             }
         }
         if (hitPlayer) {
             this->unk_252 = 0;
-            if ((this->actor.draw != NULL) && (this->isDrawn == false)) {
+            if ((this->actor.draw != NULL) && !this->isDrawn) {
                 this->isDrawn = true;
             }
             this->isDead = true;
@@ -368,22 +368,23 @@ void EnSb_Update(Actor* thisx, PlayState* play) {
             this->actor.params = 1;
         }
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0x80);
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        Actor_SetFocus(&this->actor, 20.0f);
-        Actor_MoveWithGravity(&this->actor);
-        this->actionFunc(this, play);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, 5);
-        EnSb_UpdateDamage(this, play);
-        if (player->stateFlags1 & 0x8000000) {
-            Collider_UpdateCylinder(&this->actor, &this->collider);
-            if (this->vulnerableTimer == 0) {
-                CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
-            }
-            CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
-        }
-        SkelAnime_Update(&this->skelAnime);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    Actor_SetFocus(&this->actor, 20.0f);
+    Actor_MoveWithGravity(&this->actor);
+    this->actionFunc(this, play);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 25.0f, 20.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+    EnSb_UpdateDamage(this, play);
+    if (player->stateFlags1 & PLAYER_STATE1_8000000) {
+        Collider_UpdateCylinder(&this->actor, &this->collider);
+        if (this->vulnerableTimer == 0) {
+            CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
+        }
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
+    }
+    SkelAnime_Update(&this->skelAnime);
 }
 
 void EnSb_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
@@ -416,9 +417,9 @@ void EnSb_Draw(Actor* thisx, PlayState* play) {
         fireDecr = this->fireCount - 1;
         if (!(fireDecr & 1)) {
             offset = &sFlamePosOffsets[fireDecr & 3];
-            flamePos.x = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.x + offset->x);
-            flamePos.y = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.y + offset->y);
-            flamePos.z = randPlusMinusPoint5Scaled(5.0f) + (this->actor.world.pos.z + offset->z);
+            flamePos.x = Rand_CenteredFloat(5.0f) + (this->actor.world.pos.x + offset->x);
+            flamePos.y = Rand_CenteredFloat(5.0f) + (this->actor.world.pos.y + offset->y);
+            flamePos.z = Rand_CenteredFloat(5.0f) + (this->actor.world.pos.z + offset->z);
             EffectSsEnFire_SpawnVec3f(play, &this->actor, &flamePos, 100, 0, 0, -1);
         }
     }

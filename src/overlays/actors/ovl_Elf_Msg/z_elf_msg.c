@@ -18,7 +18,7 @@ void ElfMsg_Update(Actor* thisx, PlayState* play);
 void ElfMsg_SetupAction(ElfMsg* this, ElfMsgActionFunc actionFunc);
 void func_8092E284(ElfMsg* this, PlayState* play);
 
-const ActorInit Elf_Msg_InitVars = {
+ActorInit Elf_Msg_InitVars = {
     ACTOR_ELF_MSG,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -46,7 +46,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
         if (ELFMSG_GET_SWITCHFLAG(&this->actor) != 0x7F) {
             Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor));
         }
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     if (this->actor.home.rot.y == 0x81) {
@@ -54,7 +54,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
             if (ELFMSG_GET_SWITCHFLAG(&this->actor) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor));
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return true;
         }
     }
@@ -63,7 +63,7 @@ s32 func_8092DF9C(ElfMsg* this, PlayState* play) {
     }
     if (Flags_GetSwitch(play, ELFMSG_GET_SWITCHFLAG(&this->actor))) {
         (void)"共倒れ"; // "Collapse together"
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return true;
     }
     return false;
@@ -111,21 +111,21 @@ void func_8092E284(ElfMsg* this, PlayState* play) {
 
     if ((player->tatlActor != NULL) && ((func_8092E1FC(this)))) {
         player->tatlTextId = func_8092E1D0(this);
-        ActorCutscene_SetIntentToPlay(0x7C);
+        CutsceneManager_Queue(CS_ID_GLOBAL_TALK);
         tatl->elfMsg = &this->actor;
-        if (this->actor.cutscene == -1) {
-            this->actor.cutscene = 0x7C;
+        if (this->actor.csId == CS_ID_NONE) {
+            this->actor.csId = CS_ID_GLOBAL_TALK;
         }
         if ((player->tatlTextId < 0) && (this->actor.home.rot.x < 0)) {
-            if (ActorCutscene_GetCurrentIndex() == 0x7D) {
-                ActorCutscene_Stop(0x7D);
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
-            } else if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+            if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_DOOR) {
+                CutsceneManager_Stop(CS_ID_GLOBAL_DOOR);
+                CutsceneManager_Queue(this->actor.csId);
+            } else if (CutsceneManager_IsNext(this->actor.csId)) {
                 this->actor.home.rot.x = 0;
-                ActorCutscene_Start(this->actor.cutscene, &this->actor);
+                CutsceneManager_Start(this->actor.csId, &this->actor);
                 func_800E0348(play->cameraPtrs[CAM_ID_MAIN]);
             } else {
-                ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                CutsceneManager_Queue(this->actor.csId);
             }
         }
     }
@@ -139,9 +139,12 @@ void ElfMsg_Update(Actor* thisx, PlayState* play) {
             if (ELFMSG_GET_SWITCHFLAG(thisx) != 0x7F) {
                 Flags_SetSwitch(play, ELFMSG_GET_SWITCHFLAG(thisx));
             }
-            Actor_MarkForDeath(&this->actor);
-        } else if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
-                   (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+
+        if ((this->actor.home.rot.y >= 0) || (this->actor.home.rot.y < -0x80) ||
+            (Flags_GetSwitch(play, -1 - this->actor.home.rot.y))) {
             this->actionFunc(this, play);
         }
     }

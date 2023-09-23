@@ -24,7 +24,7 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play);
 void func_80AE9258(ObjBigicicle* this, PlayState* play);
 void func_80AE939C(ObjBigicicle* this, PlayState* play);
 
-const ActorInit Obj_Bigicicle_InitVars = {
+ActorInit Obj_Bigicicle_InitVars = {
     ACTOR_OBJ_BIGICICLE,
     ACTORCAT_PROP,
     FLAGS,
@@ -126,7 +126,7 @@ void ObjBigicicle_Init(Actor* thisx, PlayState* play) {
     this->collider2.dim.yShift = this->collider2.dim.yShift * sp30;
 
     if (Flags_GetSwitch(play, this->actor.params)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -159,13 +159,13 @@ void func_80AE8DE4(ObjBigicicle* this, PlayState* play) {
     f32 temp_f20 = this->actor.scale.x * (50.0f / 3.0f);
 
     for (i = 0; i < 10; i++) {
-        sp98.x = (randPlusMinusPoint5Scaled(4.0f) * temp_f20) + this->actor.world.pos.x;
+        sp98.x = (Rand_CenteredFloat(4.0f) * temp_f20) + this->actor.world.pos.x;
         sp98.y = ((Rand_ZeroFloat(20.0f) - 35.0f) * temp_f20) + this->actor.world.pos.y;
-        sp98.z = (randPlusMinusPoint5Scaled(4.0f) * temp_f20) + this->actor.world.pos.z;
+        sp98.z = (Rand_CenteredFloat(4.0f) * temp_f20) + this->actor.world.pos.z;
 
-        sp8C.x = randPlusMinusPoint5Scaled(13.0f);
+        sp8C.x = Rand_CenteredFloat(13.0f);
         sp8C.y = Rand_ZeroFloat(2.0f);
-        sp8C.z = randPlusMinusPoint5Scaled(13.0f);
+        sp8C.z = Rand_CenteredFloat(13.0f);
 
         EffectSsHahen_Spawn(play, &sp98, &sp8C, &D_80AE987C, HAHEN_XLU, (Rand_ZeroFloat(20.0f) + 30.0f) * temp_f20,
                             OBJECT_BIGICICLE, 40, object_bigicicle_DL_0009B0);
@@ -182,7 +182,7 @@ void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
     if ((this->collider1.base.acFlags & AC_HIT) ||
         ((this->collider2.base.acFlags & AC_HIT) && (this->collider2.info.acHitInfo->toucher.dmgFlags & 0x3820))) {
         if ((this->unk_148 == 0) || (this->unk_149 == 1)) {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
             this->actionFunc = func_80AE9090;
             return;
         }
@@ -195,8 +195,8 @@ void func_80AE8FD4(ObjBigicicle* this, PlayState* play) {
 }
 
 void func_80AE9090(ObjBigicicle* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         this->unk_149++;
         func_80AE8DE4(this, play);
         if (this->unk_149 == 2) {
@@ -213,7 +213,7 @@ void func_80AE9090(ObjBigicicle* this, PlayState* play) {
             this->actionFunc = func_80AE9180;
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -222,12 +222,12 @@ void func_80AE9180(ObjBigicicle* this, PlayState* play) {
 
     if (this->unk_14A > 0) {
         this->unk_14A--;
-        this->actor.shape.rot.x = BINANG_ADD((s32)(randPlusMinusPoint5Scaled(1408.0f) * 0.02f * this->unk_14A), 0x4000);
-        this->actor.shape.rot.z = randPlusMinusPoint5Scaled(1408.0f) * 0.02f * this->unk_14A;
+        this->actor.shape.rot.x = BINANG_ADD((s32)(Rand_CenteredFloat(0x580) * 0.02f * this->unk_14A), 0x4000);
+        this->actor.shape.rot.z = Rand_CenteredFloat(0x580) * 0.02f * this->unk_14A;
     } else {
         this->actor.shape.rot.x = 0x4000;
         this->actor.shape.rot.z = 0;
-        ActorCutscene_Stop(this->actor.cutscene);
+        CutsceneManager_Stop(this->actor.csId);
         this->actionFunc = func_80AE8FD4;
     }
 }
@@ -238,7 +238,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
     ObjIcePoly* icePoly;
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     itemAction = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
@@ -247,7 +247,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
             icePoly = (ObjIcePoly*)itemAction;
             temp_f0 = this->actor.world.pos.y - icePoly->actor.world.pos.y;
             if ((temp_f0 < icePoly->colliders1[0].dim.height) && (temp_f0 > 0.0f) &&
-                (Actor_XZDistanceBetweenActors(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
+                (Actor_WorldDistXZToActor(&this->actor, &icePoly->actor) < icePoly->colliders1[0].dim.radius)) {
                 Flags_SetSwitch(play, this->actor.params);
                 this->actionFunc = func_80AE939C;
                 return;
@@ -256,7 +256,7 @@ void func_80AE9258(ObjBigicicle* this, PlayState* play) {
         itemAction = itemAction->next;
     }
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         this->actionFunc = func_80AE939C;
     } else {
         Collider_UpdateCylinder(&this->actor, &this->collider1);
@@ -271,9 +271,9 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
     f32 temp_f20 = this->actor.scale.x * (50.0f / 3.0f);
 
     for (i = 0; i < 20; i++) {
-        sp8C.x = randPlusMinusPoint5Scaled(15.0f);
+        sp8C.x = Rand_CenteredFloat(15.0f);
         sp8C.y = Rand_ZeroFloat(7.0f) + 3.0f;
-        sp8C.z = randPlusMinusPoint5Scaled(15.0f);
+        sp8C.z = Rand_CenteredFloat(15.0f);
 
         sp98.x = this->actor.world.pos.x + (sp8C.x * 5.0f * temp_f20);
         sp98.y = this->actor.world.pos.y + (sp8C.y * 7.0f * temp_f20);
@@ -284,8 +284,8 @@ void func_80AE939C(ObjBigicicle* this, PlayState* play) {
     }
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_GLASSBROKEN_IMPACT);
-    ActorCutscene_Stop(this->actor.cutscene);
-    Actor_MarkForDeath(&this->actor);
+    CutsceneManager_Stop(this->actor.csId);
+    Actor_Kill(&this->actor);
 }
 
 void ObjBigicicle_Update(Actor* thisx, PlayState* play) {

@@ -3,6 +3,11 @@
 
 #include "global.h"
 
+typedef enum {
+    /* 0 */ DEADDD_TYPE_0,
+    /* 1 */ DEADDD_TYPE_1 // Unused
+} DeadDDType;
+
 typedef struct {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3f velocity;
@@ -17,7 +22,5 @@ typedef struct {
     /* 0x3C */ s32 randIter;
     /* 0x40 */ u8 type;
 } EffectSsDeadDdInitParams; // size = 0x44
-
-extern const EffectSsInit Effect_Ss_Dead_Dd_InitVars;
 
 #endif

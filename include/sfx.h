@@ -1,7 +1,24 @@
 #ifndef SFX_H
 #define SFX_H
 
+#include "z64math.h"
+
+/**
+ * With `SFX_FLAG` on, play the entire sfx audio clip.
+ * Requesting the sfx while playing will restart the sfx from the beginning.
+ * i.e. sfx only needs to be requested once.
+ * 
+ * With `SFX_FLAG` off, play the sfx for only one frame.
+ * Requesting the sfx while playing will allow the sfx to continue to the next frame.
+ * i.e. sfx needs to be requested every frame.
+ * 
+ * By default, `SFX_FLAG` is on.
+ * Use `- SFX_FLAG` to turn `SFX_FLAG` off.
+ */
+#define SFX_FLAG_MASK 0xC00
 #define SFX_FLAG 0x800
+
+#define NA_SE_NONE 0
 
 // ------------ PLAYER ------------
 
@@ -469,28 +486,6 @@
 #define NA_SE_PL_BOUND_METAL 0x9CD
 #define NA_SE_PL_WALK_WALL 0x9CE
 #define NA_SE_PL_WALK_WALL_DEKU 0x9CF
-#define NA_SE_PL_WALK_WALL_ZORA 0x9D0
-#define NA_SE_PL_WALK_WALL_GORON 0x9D1
-#define NA_SE_PL_DEKU_IDOLING1 0x9D2
-#define NA_SE_PL_GOLON_IDOLING1 0x9D3
-#define NA_SE_PL_ZORA_IDOLING1 0x9D4
-#define NA_SE_PL_WALK_WALL2_METAL 0x9D5
-#define NA_SE_PL_WALK_WALL2_DEKU 0x9D6
-#define NA_SE_PL_WALK_WALL2_ZORA 0x9D7
-#define NA_SE_PL_WALK_WALL2_GORON 0x9D8
-#define NA_SE_PL_WALK_WEED 0x9D9
-#define NA_SE_PL_WALK_WOOD 0x9DA
-#define NA_SE_PL_JUMP_WOOD 0x9DB
-#define NA_SE_PL_LAND_WOOD 0x9DC
-#define NA_SE_PL_GIANT_SWING 0x9DD
-#define NA_SE_PL_GIANT_SWING2 0x9DE
-#define NA_SE_PL_GIANT_SWING_FINISH 0x9DF
-#define NA_SE_PL_GIANT_GUARD 0x9E0
-#define NA_SE_PL_GIANT_GUARD_OFF 0x9E1
-#define NA_SE_PL_GORON_GAKKI_START 0x9E2
-#define NA_SE_PL_KEIREI 0x9E3
-#define NA_SE_PL_GIANT_LINK_FOOT 0x9E4
-#define NA_SE_PL_DUMMY485 0x9E5
 
 // ------------ ITEM ------------
 
@@ -605,6 +600,7 @@
 #define NA_SE_IT_FISHING_WORM_BOUND 0x186C
 #define NA_SE_IT_DUMMY_109 0x186D
 #define NA_SE_IT_DUMMY_110 0x186E
+#define NA_SE_IT_DUMMY_111 0x186F
 
 // ------------ ENVIRONMENT ------------
 
@@ -1072,72 +1068,6 @@
 #define NA_SE_EV_DEMO_KID_SAGURU 0x29CD
 #define NA_SE_EV_WATER_WALL3 0x29CE
 #define NA_SE_EV_BOMBERS_TAORE 0x29CF
-#define NA_SE_EV_RIVER_STREAM_TOWER 0x29D0
-#define NA_SE_EV_MONKEY_ROPE 0x29D1
-#define NA_SE_EV_MONKEY_FOOT_PAN 0x29D2
-#define NA_SE_EV_BODYFALL_SAND1 0x29D3
-#define NA_SE_EV_SCOOP_SAND1 0x29D4
-#define NA_SE_EV_CHICKEN_CRY_M_0600 0x29D5
-#define NA_SE_EV_WATER_WALL_BIG2 0x29D6
-#define NA_SE_EV_WATER_VOLTEX 0x29D7
-#define NA_SE_EV_WATER_WALL_IKANA 0x29D8
-#define NA_SE_EV_DOOR_OPEN_GATYA 0x29D9
-#define NA_SE_EV_CLAP_1SHOT 0x29DA
-#define NA_SE_EV_TRR_APPEAR 0x29DB
-#define NA_SE_EV_ICE_MELT_SHORT 0x29DC
-#define NA_SE_EV_DEMO37_CLOTH1 0x29DD
-#define NA_SE_EV_DEMO37_CLOTH2 0x29DE
-#define NA_SE_EV_DEMO37_CLOTH3 0x29DF
-#define NA_SE_EV_DEMO37_CLOTH4 0x29E0
-#define NA_SE_EV_WHITE_FAIRY_DASH_SHORT 0x29E1
-#define NA_SE_EV_WHITE_FAIRY_DASH_SHORT2 0x29E2
-#define NA_SE_EV_DEMO27_BODYFALL 0x29E3
-#define NA_SE_EV_DEMO30_LINK_RIDE 0x29E4
-#define NA_SE_EV_DEMO16_WHITEOUT 0x29E5
-#define NA_SE_EV_DEMO16_MIKAU_FADE 0x29E6
-#define NA_SE_EV_DEMO27_WHITEOUT 0x29E7
-#define NA_SE_SC_ZHOP_WAVE 0x29E8
-#define NA_SE_EV_DEMO02_ME1 0x29E9
-#define NA_SE_EV_DEMO02_WHOOSH 0x29EA
-#define NA_SE_EV_DEMO02_ME2 0x29EB
-#define NA_SE_EV_DEMO25_ME1 0x29EC
-#define NA_SE_EV_DEMO25_HEAD_HIT 0x29ED
-#define NA_SE_EV_TENTI_GYAKUTEN 0x29EE
-#define NA_SE_EV_IKANA_JYOUKA 0x29EF
-#define NA_SE_EV_IKANA_SHARP 0x29F0
-#define NA_SE_EV_IKANA_JYOUKA_FLASH 0x29F1
-#define NA_SE_EV_IKACASTLE_SLIDE1 0x29F2
-#define NA_SE_EV_OKUJYOU_WIND 0x29F3
-#define NA_SE_EV_CAM_WHOOSH 0x29F4
-#define NA_SE_EV_DESK_HIT 0x29F5
-#define NA_SE_EV_DEMO08_FIRE 0x29F6
-#define NA_SE_EV_DEMO08_ME1 0x29F7
-#define NA_SE_EV_OCARINA_FALL 0x29F8
-#define NA_SE_EV_LINK_WARP_LV 0x29F9
-#define NA_SE_EV_DEMO_ATATAME 0x29FA
-#define NA_SE_EV_DEMO12_KIRAKIRA 0x29FB
-#define NA_SE_EV_DEMO32_FIRE_SIPPAI 0x29FC
-#define NA_SE_EV_KYOJIN_DOWN 0x29FD
-#define NA_SE_EV_FACE_BREAKDOWN_OFF 0x29FE
-#define NA_SE_EV_DEMO_MOON_IN 0x29FF
-#define NA_SE_EV_1ST_MODORU_ME 0x2A00
-#define NA_SE_EV_WATER_WALL_BIG_SILENT2 0x2A01
-#define NA_SE_EV_MOONFALL_WIND1 0x2A02
-#define NA_SE_EV_MOONFALL_WIND2 0x2A03
-#define NA_SE_EV_MOONFALL_WIND3 0x2A04
-#define NA_SE_EV_MOONFALL_WIND4 0x2A05
-#define NA_SE_EV_TOKEITOU_EXPLO1 0x2A06
-#define NA_SE_EV_TOKEITOU_EXPLO2 0x2A07
-#define NA_SE_EV_MOONFALL_WIND5 0x2A08
-#define NA_SE_EV_MOONFALL_WIND6 0x2A09
-#define NA_SE_EV_MOONFALL_WIND7 0x2A0A
-#define NA_SE_EV_GIANT_DOWN 0x2A0B
-#define NA_SE_SC_DEMO_SPLASH1 0x2A0C
-#define NA_SE_EV_TURI_SPLASH 0x2A0D
-#define NA_SE_EV_DUMMY_525 0x2A0E
-#define NA_SE_EV_WAVE_S_TURIBORI 0x2A0F
-#define NA_SE_EN_LAST_DAMAGE_3DOFF 0x2A10
-#define NA_SE_EV_DUMMY_529 0x2A11
 
 // ------------ ENEMY ------------
 
@@ -1877,41 +1807,6 @@
 #define NA_SE_EN_KITA_SNORE 0x3ADD
 #define NA_SE_EN_IRONNACK_DASH 0x3ADE
 #define NA_SE_EN_TUBOOCK_FLY 0x3ADF
-#define NA_SE_EN_MIMICK_BREATH 0x3AE0
-#define NA_SE_EN_FANTOM_DEAD 0x3AE1
-#define NA_SE_EN_KAICHO_PIYORI 0x3AE2
-#define NA_SE_EN_READED_WALK 0x3AE3
-#define NA_SE_EN_LEADED_WHITE 0x3AE4
-#define NA_SE_EN_MIBOSS_APPEAR_B_OLD 0x3AE5
-#define NA_SE_EN_MIBOSS_KICK_OLD 0x3AE6
-#define NA_SE_EN_MIBOSS_HEADDOWN_OLD 0x3AE7
-#define NA_SE_EN_MIBOSS_LEGDOWN_OLD 0x3AE8
-#define NA_SE_EN_MIBOSS_WEAKWAIT_OLD 0x3AE9
-#define NA_SE_EN_MIBOSS_THRUST1_OLD 0x3AEA
-#define NA_SE_EN_MIBOSS_JUMP3_OLD 0x3AEB
-#define NA_SE_EN_MIBOSS_SWORD_ROLL_OLD 0x3AEC
-#define NA_SE_EN_MIBOSS_DANCE_THRUST_OLD 0x3AED
-#define NA_SE_EN_MIBOSS_DANCE_FIRE_OLD 0x3AEE
-#define NA_SE_EN_B_PAMET_ROCK 0x3AEF
-#define NA_SE_EN_DUMMY753 0x3AF0
-#define NA_SE_EN_DUMMY_754 0x3AF1
-#define NA_SE_EN_FANTOM_FLOAT 0x3AF2
-#define NA_SE_EN_KONB_SUIKOMI 0x3AF3
-#define NA_SE_EN_KONB_LANDING_OLD 0x3AF4
-#define NA_SE_EN_KONB_SIBUKI_OLD 0x3AF5
-#define NA_SE_EN_KONB_PIYORI_OLD 0x3AF6
-#define NA_SE_EN_KOUME_UBAITORU 0x3AF7
-#define NA_SE_EN_STALKIDS_PSYCHO2 0x3AF8
-#define NA_SE_EN_RIZA_ATTACK3 0x3AF9
-#define NA_SE_EN_YASE_LAUGH_K_HOLD 0x3AFA
-#define NA_SE_EN_WIZ_DEAD_NEW 0x3AFB
-#define NA_SE_EN_HIPLOOP_BURN 0x3AFC
-#define NA_SE_EN_EYEGOLE_HATAKI 0x3AFD
-#define NA_SE_EN_DEKNUTS_DANCE_FADE 0x3AFE
-#define NA_SE_EN_NUTS_FURUERU 0x3AFF
-#define NA_SE_EN_PO_APPEAR_IDO 0x3B00
-#define NA_SE_EN_FOLLOWERS_TO_KABE 0x3B01
-#define NA_SE_EN_MUJURA_LAST_UP 0x3B02
 
 // ------------ SYSTEM ------------
 
@@ -2011,31 +1906,6 @@
 #define NA_SE_SY_TIME_CONTROL_SLOW 0x485D
 #define NA_SE_SY_TIME_CONTROL_NORMAL 0x485E
 #define NA_SE_SY_SECOM_WARNING 0x485F
-#define NA_SE_SY_WIN_CHANGE 0x4860
-#define NA_SE_SY_TOUCH1 0x4861
-#define NA_SE_SY_MENU_CHAT_MOVE 0x4862
-#define NA_SE_SY_YUBI_MOVE 0x4863
-#define NA_SE_SY_CHAT_ALLERT_IN 0x4864
-#define NA_SE_SY_CHAT_ALLERT 0x4865
-#define NA_SE_SY_CHAT_ALLERT_OUT 0x4866
-#define NA_SE_SY_TOUCH2 0x4867
-#define NA_SE_SY_TOUCH2_OUT 0x4868
-#define NA_SE_SY_TOUCH3 0x4869
-#define NA_SE_SY_TOUCH4 0x486A
-#define NA_SE_SY_YUBI_CURSOL_KEY 0x486B
-#define NA_SE_SY_EVENT_INFO 0x486C
-#define NA_SE_SY_CLEAR1 0x486D
-#define NA_SE_SY_ALARM_MOVE 0x486E
-#define NA_SE_SY_QUEST_NEW 0x486F
-#define NA_SE_SY_EVENT_FAIL 0x4870
-#define NA_SE_SY_QUEST_CLEAR 0x4871
-#define NA_SE_SY_CHAT_ALARM_OFF 0x4872
-#define NA_SE_SY_CHAT_ALARM_INFO 0x4873
-#define NA_SE_SY_ICON_MOVE 0x4874
-#define NA_SE_SY_ICON_MOVE_SET 0x4875
-#define NA_SE_SY_DIAMOND_SWITCH 0x4876
-#define NA_SE_SY_PREDEMO_EVIL 0x4877
-#define NA_SE_SY_PREDEMO_OMEN 0x4878
 
 // ------------ OCARINA ------------
 
@@ -2055,10 +1925,6 @@
 #define NA_SE_OC_13 0x580D
 #define NA_SE_OC_14 0x580E
 #define NA_SE_OC_15 0x580F
-#define NA_SE_OC_HINT_MOVIE 0x5810
-#define NA_SE_OC_HINT_MOVIE2_WHITE 0x5811
-#define NA_SE_OC_HINT_MOVIE_ZOOMIN 0x5812
-#define NA_SE_OC_HIBIKI_ISHI 0x5813
 
 // ------------ VOICE ------------
 
@@ -2458,205 +2324,76 @@
 #define NA_SE_VO_DEMO_388 0x6989
 #define NA_SE_VO_DEMO_389 0x698A
 #define NA_SE_VO_DEMO_390 0x698B
+#define NA_SE_VO_DEMO_391 0x698C
+#define NA_SE_VO_DEMO_392 0x698D
+#define NA_SE_VO_DEMO_393 0x698E
+#define NA_SE_VO_DEMO_394 0x698F
 
-// ------------ UNKNOWN ------------
+// ------------ Sfx Table ------------
+// TODO: Extract via table after 100% decompilation
 
 /*
-#define NA_BGM_DEMO_SE_SEQ 0x7800
-#define NA_BGM_DEMO_SE_SEQ_1 0x7801
-#define NA_BGM_DEMO_SE_SEQ_2 0x7802
-#define NA_BGM_DEMO_SE_SEQ_3 0x7803
-#define NA_BGM_DEMO_SE_SEQ_4 0x7804
-#define NA_BGM_DEMO_SE_SEQ_5 0x7805
-#define NA_BGM_DEMO_SE_SEQ_6 0x7806
-#define NA_BGM_DEMO_SE_SEQ_7 0x7807
-#define NA_BGM_DEMO_SE_SEQ_8 0x7808
-#define NA_BGM_DEMO_SE_SEQ_9 0x7809
-#define NA_BGM_DEMO_SE_SEQ_A 0x780A
-#define NA_BGM_DEMO_SE_SEQ_B 0x780B
-#define NA_BGM_DEMO_SE_SEQ_C 0x780C
-#define NA_BGM_DEMO_SE_SEQ_D 0x780D
-#define NA_BGM_DEMO_SE_SEQ_E 0x780E
-#define NA_BGM_DEMO_SE_SEQ_F 0x780F
-#define NA_SE_EN_MIBOSS_FALL 0x7810
-#define NA_SE_EN_MIBOSS_DAMAGE 0x7811
-#define NA_SE_EN_MIBOSS_DASH 0x7812
-#define NA_SE_EN_MIBOSS_DEAD 0x7813
-#define NA_SE_EN_MIBOSS_GND1 0x7814
-#define NA_SE_EN_MIBOSS_GND2 0x7815
-#define NA_SE_EN_MIBOSS_UNARI 0x7816
-#define NA_SE_EN_MIBOSS_RHYTHM 0x7817
-#define NA_SE_EN_MIBOSS_SWORD 0x7818
-#define NA_SE_EN_MIBOSS_JUMP1_NOTUSE 0x7819
-#define NA_SE_EN_MIBOSS_JUMP2_NOTUSE 0x781A
-#define NA_SE_EN_MIBOSS_VOICE1 0x781B
-#define NA_SE_EN_MIBOSS_VOICE2 0x781C
-#define NA_SE_EN_MIBOSS_VOICE3 0x781D
-#define NA_SE_EN_MIBOSS_FAINT 0x781E
-#define NA_SE_EN_MIBOSS_ROLLING 0x781F
-#define NA_SE_EN_MIBOSS_FREEZE 0x7820
-#define NA_SE_EN_MIBOSS_APPEAR_B 0x7821
-#define NA_SE_EN_MIBOSS_KICK 0x7822
-#define NA_SE_EN_MIBOSS_HEADDOWN 0x7823
-#define NA_SE_EN_MIBOSS_LEGDOWN 0x7824
-#define NA_SE_EN_MIBOSS_WEAKWAIT 0x7825
-#define NA_SE_EN_MIBOSS_THRUST1 0x7826
-#define NA_SE_EN_MIBOSS_JUMP3 0x7827
-#define NA_SE_EN_MIBOSS_SWORD_ROLL 0x7828
-#define NA_SE_EN_MIBOSS_DANCE_THRUST 0x7829
-#define NA_SE_EN_MIBOSS_DANCE_FIRE 0x782A
-#define NA_SE_EN_ICEB_FOOTSTEP 0x782B
-#define NA_SE_EN_ICEB_CRY 0x782C
-#define NA_SE_EN_ICEB_STEAM_LONG 0x782D
-#define NA_SE_EN_ICEB_STEAMS_DEMO 0x782E
-#define NA_SE_EN_ICEB_STEAM_DEMO_UP 0x782F
-#define NA_SE_EN_ICEB_DEAD 0x7830
-#define NA_SE_EN_ICEB_DAMAGE 0x7831
-#define NA_SE_EN_ICEB_SLIDING 0x7832
-#define NA_SE_EN_ICEB_BACK_ATTACK2 0x7833
-#define NA_SE_EN_KONB_BITE 0x7834
-#define NA_SE_EN_KONB_BOUND 0x7835
-#define NA_SE_EN_KONB_BOUND2 0x7836
-#define NA_SE_EN_KONB_DAMAGE 0x7837
-#define NA_SE_EN_KONB_DEAD 0x7838
-#define NA_SE_EN_KONB_DEAD2 0x7839
-#define NA_SE_EN_KONB_DEAD_JUMP 0x783A
-#define NA_SE_EN_KONB_DEAD_JUMP2 0x783B
-#define NA_SE_EN_KONB_DEMO_MOVE 0x783C
-#define NA_SE_EN_KONB_INIT 0x783D
-#define NA_SE_EN_KONB_JUMP 0x783E
-#define NA_SE_EN_KONB_JUMP_LEV 0x783F
-#define NA_SE_EN_KONB_LANDING 0x7840
-#define NA_SE_EN_KONB_MINI_APPEAR_NOTUSE 0x7841
-#define NA_SE_EN_KONB_PIYORI 0x7842
-#define NA_SE_EN_KONB_PREATTACK 0x7843
-#define NA_SE_EN_KONB_SIBUKI 0x7844
-#define NA_SE_EN_KONB_SINK 0x7845
-#define NA_SE_EN_KONB_WAIT 0x7846
-#define NA_SE_EN_KONB_DODAI_FALL 0x7847
-#define NA_SE_EN_KONB_SUIKOMU 0x7848
-#define NA_SE_EN_KONB_TABERU 0x7849
-#define NA_SE_EN_KONB_TOBIDASU 0x784A
-#define NA_SE_EN_KONB_TOSSIN1_KAMAE 0x784B
-#define NA_SE_EN_KONB_TOSSIN1_DASH 0x784C
-#define NA_SE_EN_KONB_TOSSIN1_TYAKUSUI 0x784D
-#define NA_SE_EN_KONB_BOMB1_INSIDE 0x784E
-#define NA_SE_EN_KONB_BOMB1_OUTSIDE 0x784F
-#define NA_SE_EN_KONB_MEDAMA_APPEAR 0x7850
-#define NA_SE_EN_KONB_BOMB_CHAIN 0x7851
-#define NA_SE_EN_KONB_CHIAN_SLASH 0x7852
-#define NA_SE_EN_KONB_INFO_SAKEBI 0x7853
-#define NA_SE_EN_KONB_INFO_SAKEBI_LONG 0x7854
-#define NA_SE_EN_KONB_DODAI_ATTACK1 0x7855
-#define NA_SE_EN_KONB_DODAI_ATTACK2 0x7856
-#define NA_SE_EN_KONB_TAORE 0x7857
-#define NA_SE_EN_INBOSS_SAND 0x7858
-#define NA_SE_EN_INBOSS_ROAR 0x7859
-#define NA_SE_EN_INBOSS_DAMAGE 0x785A
-#define NA_SE_EN_INBOSS_DEAD_PRE2 0x785B
-#define NA_SE_EN_INBOSS_DEAD 0x785C
-#define NA_SE_EN_INBOSS_DOWN_PRE 0x785D
-#define NA_SE_EN_INBOSS_BRESS_PRE 0x785E
-#define NA_SE_EN_INBOSS_SANRAN 0x785F
-#define NA_SE_EN_INBOSS_CHIBI_WALK 0x7860
-#define NA_SE_EN_INBOSS_CHIBI_DAMAGE 0x7861
-#define NA_SE_EN_INBOSS_CHIBI_DEAD 0x7862
-#define NA_SE_EN_INBOSS_CHIBI_RUN 0x7863
-#define NA_SE_EN_INBOSS_JIMEN_MORI 0x7864
-#define NA_SE_EN_INBOSS_JIMEN_DERU 0x7865
-#define NA_SE_EN_INBOSS_UNDER_MOVE 0x7866
-#define NA_SE_EN_INBOSS_BREATH 0x7867
-#define NA_SE_EN_INBOSS_DAMAGE_MOVE 0x7868
-#define NA_SE_EN_INBOSS_MEDAMA_DERU 0x7869
-#define NA_SE_EN_INBOSS_FIREBALL_FLY 0x786A
-#define NA_SE_EN_INBOSS_SANRAN_SHORT 0x786B
-#define NA_SE_EN_INBOSS_DOWN 0x786C
-#define NA_SE_EN_INBOSS_DEAD_RED 0x786D
-#define NA_SE_EN_INBOSS_TAME 0x786E
-#define NA_SE_EN_LAST1_ATTACK 0x786F
-#define NA_SE_EN_LAST1_ATTACK_2ND 0x7870
-#define NA_SE_EN_LAST1_BEAM 0x7871
-#define NA_SE_EN_LAST1_BEAM2 0x7872
-#define NA_SE_EN_LAST1_BLOW 0x7873
-#define NA_SE_EN_LAST1_DAMAGE1 0x7874
-#define NA_SE_EN_LAST1_DAMAGE2 0x7875
-#define NA_SE_EN_LAST1_DEAD 0x7876
-#define NA_SE_EN_LAST1_DEMO_BREAK_NOUSE 0x7877
-#define NA_SE_EN_LAST1_DEMO_WALL_NOUSE 0x7878
-#define NA_SE_EN_LAST1_FALL 0x7879
-#define NA_SE_EN_LAST1_FLOAT 0x787A
-#define NA_SE_EN_LAST1_GROW_HEAD_NOTUSE 0x787B
-#define NA_SE_EN_LAST1_ROLLING 0x787C
-#define NA_SE_EN_LAST1_TRANSFORM_NOTUSE 0x787D
-#define NA_SE_EN_LAST2_BALLET 0x787E
-#define NA_SE_EN_LAST2_BIRD 0x787F
-#define NA_SE_EN_LAST2_BIRD2 0x7880
-#define NA_SE_EN_LAST2_DAMAGE 0x7881
-#define NA_SE_EN_LAST2_DAMAGE2 0x7882
-#define NA_SE_EN_LAST2_DEAD 0x7883
-#define NA_SE_EN_LAST2_FIRE 0x7884
-#define NA_SE_EN_LAST2_GROW_HEAD 0x7885
-#define NA_SE_EN_LAST2_VOICE_UAUOO2 0x7886
-#define NA_SE_EN_LAST2_GYM_B 0x7887
-#define NA_SE_EN_LAST2_HEARTBEAT 0x7888
-#define NA_SE_EN_LAST2_JUMP 0x7889
-#define NA_SE_EN_LAST2_VOICE_UAUOO1 0x788A
-#define NA_SE_EN_LAST2_MOONWALK 0x788B
-#define NA_SE_EN_LAST2_PUMP_UP 0x788C
-#define NA_SE_EN_LAST2_SHOUT_NOTUSE 0x788D
-#define NA_SE_EN_LAST2_VOICE_SURPRISED 0x788E
-#define NA_SE_EN_LAST2_UAUOO 0x788F
-#define NA_SE_EN_LAST2_WAIT 0x7890
-#define NA_SE_EN_LAST2_WALK 0x7891
-#define NA_SE_EN_LAST2_WALK2 0x7892
-#define NA_SE_EN_LAST3_COIL_ATTACK 0x7893
-#define NA_SE_EN_LAST3_VOICE_DAMAGE 0x7894
-#define NA_SE_EN_LAST3_VOICE_DAMAGE2 0x7895
-#define NA_SE_EN_LAST3_VOICE_DEAD 0x7896
-#define NA_SE_EN_LAST3_DEAD_DEAD1 0x7897
-#define NA_SE_EN_LAST3_DEAD_DEAD2 0x7898
-#define NA_SE_EN_LAST3_DEAD_FLOAT_NOTUSE 0x7899
-#define NA_SE_EN_LAST3_DEAD_LIGHTS 0x789A
-#define NA_SE_EN_LAST3_DEAD_ROD_NOTUSE 0x789B
-#define NA_SE_EN_LAST3_DEAD_WIND1 0x789C
-#define NA_SE_EN_LAST3_DEAD_WIND2 0x789D
-#define NA_SE_EN_LAST3_DEAD_WIND3 0x789E
-#define NA_SE_EN_LAST3_GET_LINK 0x789F
-#define NA_SE_EN_LAST3_VOICE_KICK 0x78A0
-#define NA_SE_EN_LAST3_KOMA 0x78A1
-#define NA_SE_EN_LAST3_ROD_DANCE 0x78A2
-#define NA_SE_EN_LAST3_ROD_MID 0x78A3
-#define NA_SE_EN_LAST3_ROD_FLOOR 0x78A4
-#define NA_SE_EN_LAST3_ROD_HOP 0x78A5
-#define NA_SE_EN_LAST3_ROD_HOP2 0x78A6
-#define NA_SE_EN_LAST3_ROD_WIND 0x78A7
-#define NA_SE_EN_LAST3_VOICE_KOMA 0x78A8
-#define NA_SE_EN_LAST3_VOICE_ROD 0x78A9
-#define NA_SE_EN_LAST3_VOICE_THROW 0x78AA
-#define NA_SE_EN_LAST3_VOICE_LAUGH 0x78AB
-#define NA_SE_EN_LAST1_SIZZLE 0x78AC
-#define NA_SE_EN_LAST1_LAND2 0x78AD
-#define NA_SE_EN_LAST3_WHIP1 0x78AE
-#define NA_SE_EV_LAVA_HIT 0x78AF
-#define NA_SE_EV_LAVA_WHOOSH 0x78B0
-#define Wind_seq1 0x78B1
-#define Bird_seqs 0x78B2
-#define Rain_seq0 0x78B3
-#define Thun_seq0 0x78B4
-#define NA_BGM_OCA_EPONA_SEQ 0x78B5
-#define NA_BGM_OCA_TIME_SEQ 0x78B6
-#define NA_BGM_OCA_STORM_SEQ 0x78B7
-#define NA_BGM_OCA_BIGWING_SEQ 0x78B8
-#define NA_BGM_OCA_TIME_SPEED_SEQ 0x78B9
-#define NA_BGM_OCA_TIME_JUMP_SEQ 0x78BA
-#define NA_BGM_OCA_AWAKING_SEQ 0x78BB
-#define NA_BGM_OCA_CURE_SEQ 0x78BC
-#define NA_BGM_OCA_LULLABY_HALF_SEQ 0x78BD
-#define NA_BGM_OCA_LULLABY_SEQ 0x78BE
-#define NA_BGM_OCA_PLEDGE_SEQ 0x78BF
-#define NA_BGM_OCA_TIDE_SEQ 0x78C0
-#define NA_BGM_OCA_SHELL_SEQ 0x78C1
-#define NA_BGM_GERO_SEQ 0x78C2
+#define DEFINE_SFX(enum, _1, _2, _3, _4, _5) enum,
+
+typedef enum {
+    NA_SE_PL_BASE = 0x7FF,
+    #include "tables/sfx/playerbank_table.h"
+    NA_SE_IT_BASE = 0x17FF,
+    #include "tables/sfx/itembank_table.h"
+    NA_SE_EV_BASE = 0x27FF,
+    #include "tables/sfx/environmentbank_table.h"
+    NA_SE_EN_BASE = 0x37FF,
+    #include "tables/sfx/enemybank_table.h"
+    NA_SE_SY_BASE = 0x47FF,
+    #include "tables/sfx/systembank_table.h"
+    NA_SE_OC_BASE = 0x57FF,
+    #include "tables/sfx/ocarinabank_table.h"
+    NA_SE_VO_BASE = 0x67FF,
+    #include "tables/sfx/voicebank_table.h"
+    NA_SE_MAX
+} SfxId;
+
+#undef DEFINE_SFX
 */
+
+typedef enum SfxPauseMenu {
+    /* 0 */ SFX_PAUSE_MENU_CLOSE,
+    /* 1 */ SFX_PAUSE_MENU_OPEN
+} SfxPauseMenu;
+
+// Various wrappers to AudioSfx_PlaySfx
+void Audio_PlaySfx(u16 sfxId);
+void Audio_PlaySfx_2(u16 sfxId);
+void Audio_PlaySfx_AtPosWithPresetLowFreqAndHighReverb(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPos(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_MessageDecide(void);
+void Audio_PlaySfx_MessageCancel(void);
+void Audio_PlaySfx_Underwater(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_WithSfxSettingsReverb(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(Vec3f* pos, u16 sfxId, f32 freqVolParam);
+void Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(Vec3f* pos, u16 sfxId, f32 freqVolParam);
+void Audio_PlaySfx_GiantsMask(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_Randomized(Vec3f* pos, u16 baseSfxId, u8 randLim);
+void Audio_PlaySfx_SwordCharge(Vec3f* pos, u8 chargeLevel);
+void Audio_PlaySfx_AtPosWithFreq(Vec3f* pos, u16 sfxId, f32 freqScale);
+void Audio_PlaySfx_AtPosWithFreqAndChannelIO(Vec3f* pos, u16 sfxId, f32 freqScale, u8 arg3);
+void Audio_PlaySfx_WaterWheel(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPosWithTimer(Vec3f* pos, u16 sfxId, f32 timerShiftedLerp);
+void Audio_PlaySfx_AtPosWithReverb(Vec3f* pos, u16 sfxId, s8 reverbAdd);
+void Audio_PlaySfx_AtPosWithVolume(Vec3f* pos, u16 sfxId, f32 volume);
+void Audio_PlaySfx_River(Vec3f* pos, f32 freqScale);
+void Audio_PlaySfx_BigBells(Vec3f* pos, u8 volumeIndex);
+void Audio_PlaySfx_AtPosWithChannelIO(Vec3f* pos, u16 sfxId, u8 ioData);
+void Audio_PlaySfx_AtPosWithAllChannelsIO(Vec3f* pos, u16 sfxId, u8 ioData);
+void Audio_PlaySfx_PauseMenuOpenOrClose(u8 pauseMenuOpenOrClose);
+void Audio_PlaySfx_IfNotInCutscene(u16 sfxId);
+void Audio_PlaySfx_AtFixedPos(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPosWithVolumeTransition(Vec3f* pos, u16 sfxId, u16 duration);
+
+// Sfx helper functions
+void Audio_SetSfxUnderwaterReverb(s8 isUnderwaterReverbActivated);
+void Audio_SetSfxTimerLerpInterval(s8 timerLerpRange1, s8 timerLerpRange2);
+void Audio_SetSfxVolumeTransition(f32* volume, f32 volumeTarget, u16 duration);
+void Audio_SetSfxReverbIndexExceptOcarinaBank(u8 reverbIndex);
 
 #endif

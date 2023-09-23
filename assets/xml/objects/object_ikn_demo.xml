@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_ikn_demo" Segment="6">
         <!-- <Blob Name="object_ikn_demo_Blob_000000" Size="0x10" Offset="0x0" /> -->
-        <Animation Name="object_ikn_demo_Anim_0000B8" Offset="0xB8" />
+        <Animation Name="object_ikn_demo_Anim_0000B8" Offset="0xB8" /> <!-- Original name is "osk_default" -->
         <DList Name="object_ikn_demo_DL_001D20" Offset="0x1D20" />
         <DList Name="object_ikn_demo_DL_002128" Offset="0x2128" />
         <DList Name="object_ikn_demo_DL_002208" Offset="0x2208" />
@@ -43,14 +43,14 @@
         <Limb Name="object_ikn_demo_Standardlimb_00388C" Type="Standard" EnumName="OBJECT_IKN_DEMO_1_LIMB_0E" Offset="0x388C" />
         <Limb Name="object_ikn_demo_Standardlimb_003898" Type="Standard" EnumName="OBJECT_IKN_DEMO_1_LIMB_0F" Offset="0x3898" />
         <Limb Name="object_ikn_demo_Standardlimb_0038A4" Type="Standard" EnumName="OBJECT_IKN_DEMO_1_LIMB_10" Offset="0x38A4" />
-        <Skeleton Name="object_ikn_demo_Skel_0038F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_1_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_1_LIMB_MAX" EnumName="object_ikn_demo_1_Limbs" Offset="0x38F0" />
-        <Animation Name="object_ikn_demo_Anim_003CAC" Offset="0x3CAC" />
-        <Animation Name="object_ikn_demo_Anim_004208" Offset="0x4208" />
-        <Animation Name="object_ikn_demo_Anim_004514" Offset="0x4514" />
-        <Animation Name="object_ikn_demo_Anim_004A58" Offset="0x4A58" />
-        <Animation Name="object_ikn_demo_Anim_0065D8" Offset="0x65D8" />
-        <Animation Name="object_ikn_demo_Anim_0067B8" Offset="0x67B8" />
-        <Animation Name="object_ikn_demo_Anim_006808" Offset="0x6808" />
+        <Skeleton Name="object_ikn_demo_Skel_0038F0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_1_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_1_LIMB_MAX" EnumName="ObjectIknDemo1Limb" Offset="0x38F0" />
+        <Animation Name="object_ikn_demo_Anim_003CAC" Offset="0x3CAC" /> <!-- Original name is "osk_hanasu_loop" -->
+        <Animation Name="object_ikn_demo_Anim_004208" Offset="0x4208" /> <!-- Original name is "osk_hanasu_wait" -->
+        <Animation Name="object_ikn_demo_Anim_004514" Offset="0x4514" /> <!-- Original name is "osk_okoru_loop" -->
+        <Animation Name="object_ikn_demo_Anim_004A58" Offset="0x4A58" /> <!-- Original name is "osk_okoru_wait" -->
+        <Animation Name="object_ikn_demo_Anim_0065D8" Offset="0x65D8" /> <!-- Original name is "osk_utau_loop" -->
+        <Animation Name="object_ikn_demo_Anim_0067B8" Offset="0x67B8" /> <!-- Original name is "sk1_bibiru_loop" -->
+        <Animation Name="object_ikn_demo_Anim_006808" Offset="0x6808" /> <!-- Original name is "sk1_default" -->
         <DList Name="object_ikn_demo_DL_0072F0" Offset="0x72F0" />
         <DList Name="object_ikn_demo_DL_007680" Offset="0x7680" />
         <DList Name="object_ikn_demo_DL_0077B0" Offset="0x77B0" />
@@ -63,20 +63,20 @@
         <Limb Name="object_ikn_demo_Standardlimb_007B0C" Type="Standard" EnumName="OBJECT_IKN_DEMO_2_LIMB_04" Offset="0x7B0C" />
         <Limb Name="object_ikn_demo_Standardlimb_007B18" Type="Standard" EnumName="OBJECT_IKN_DEMO_2_LIMB_05" Offset="0x7B18" />
         <Limb Name="object_ikn_demo_Standardlimb_007B24" Type="Standard" EnumName="OBJECT_IKN_DEMO_2_LIMB_06" Offset="0x7B24" />
-        <Skeleton Name="object_ikn_demo_Skel_007B48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_2_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_2_LIMB_MAX" EnumName="object_ikn_demo_2_Limbs" Offset="0x7B48" />
-        <Animation Name="object_ikn_demo_Anim_0081A8" Offset="0x81A8" />
-        <Animation Name="object_ikn_demo_Anim_0083F4" Offset="0x83F4" />
-        <Animation Name="object_ikn_demo_Anim_008724" Offset="0x8724" />
-        <Animation Name="object_ikn_demo_Anim_008AF4" Offset="0x8AF4" />
-        <Animation Name="object_ikn_demo_Anim_008CEC" Offset="0x8CEC" />
-        <Animation Name="object_ikn_demo_Anim_008F1C" Offset="0x8F1C" />
-        <Animation Name="object_ikn_demo_Anim_009044" Offset="0x9044" />
-        <Animation Name="object_ikn_demo_Anim_009254" Offset="0x9254" />
-        <Animation Name="object_ikn_demo_Anim_0098E4" Offset="0x98E4" />
-        <Animation Name="object_ikn_demo_Anim_009A44" Offset="0x9A44" />
-        <Animation Name="object_ikn_demo_Anim_009CC8" Offset="0x9CC8" />
-        <Animation Name="object_ikn_demo_Anim_009EA8" Offset="0x9EA8" />
-        <Animation Name="object_ikn_demo_Anim_009F00" Offset="0x9F00" />
+        <Skeleton Name="object_ikn_demo_Skel_007B48" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_2_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_2_LIMB_MAX" EnumName="ObjectIknDemo2Limb" Offset="0x7B48" />
+        <Animation Name="object_ikn_demo_Anim_0081A8" Offset="0x81A8" /> <!-- Original name is "sk1_hajikareru" -->
+        <Animation Name="object_ikn_demo_Anim_0083F4" Offset="0x83F4" /> <!-- Original name is "sk1_hajikareru_loop" -->
+        <Animation Name="object_ikn_demo_Anim_008724" Offset="0x8724" /> <!-- Original name is "sk1_hebo" -->
+        <Animation Name="object_ikn_demo_Anim_008AF4" Offset="0x8AF4" /> <!-- Original name is "sk1_hebo_loop" -->
+        <Animation Name="object_ikn_demo_Anim_008CEC" Offset="0x8CEC" /> <!-- Original name is "sk1_odoroku" -->
+        <Animation Name="object_ikn_demo_Anim_008F1C" Offset="0x8F1C" /> <!-- Original name is "sk1_odoroku_loop" -->
+        <Animation Name="object_ikn_demo_Anim_009044" Offset="0x9044" /> <!-- Original name is "sk1_sagaru" -->
+        <Animation Name="object_ikn_demo_Anim_009254" Offset="0x9254" /> <!-- Original name is "sk1_sagaru_loop" -->
+        <Animation Name="object_ikn_demo_Anim_0098E4" Offset="0x98E4" /> <!-- Original name is "sk1_syutugen_loop" -->
+        <Animation Name="object_ikn_demo_Anim_009A44" Offset="0x9A44" /> <!-- Original name is "sk1_warau" -->
+        <Animation Name="object_ikn_demo_Anim_009CC8" Offset="0x9CC8" /> <!-- Original name is "sk1_warau_loop" -->
+        <Animation Name="object_ikn_demo_Anim_009EA8" Offset="0x9EA8" /> <!-- Original name is "sk2_bibiru_loop" -->
+        <Animation Name="object_ikn_demo_Anim_009F00" Offset="0x9F00" /> <!-- Original name is "sk2_default" -->
         <DList Name="object_ikn_demo_DL_00AB80" Offset="0xAB80" />
         <DList Name="object_ikn_demo_DL_00AEA0" Offset="0xAEA0" />
         <DList Name="object_ikn_demo_DL_00B028" Offset="0xB028" />
@@ -89,19 +89,19 @@
         <Limb Name="object_ikn_demo_Standardlimb_00B454" Type="Standard" EnumName="OBJECT_IKN_DEMO_3_LIMB_04" Offset="0xB454" />
         <Limb Name="object_ikn_demo_Standardlimb_00B460" Type="Standard" EnumName="OBJECT_IKN_DEMO_3_LIMB_05" Offset="0xB460" />
         <Limb Name="object_ikn_demo_Standardlimb_00B46C" Type="Standard" EnumName="OBJECT_IKN_DEMO_3_LIMB_06" Offset="0xB46C" />
-        <Skeleton Name="object_ikn_demo_Skel_00B490" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_3_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_3_LIMB_MAX" EnumName="object_ikn_demo_3_Limbs" Offset="0xB490" />
-        <Animation Name="object_ikn_demo_Anim_00B704" Offset="0xB704" />
-        <Animation Name="object_ikn_demo_Anim_00B8C0" Offset="0xB8C0" />
-        <Animation Name="object_ikn_demo_Anim_00B9E4" Offset="0xB9E4" />
-        <Animation Name="object_ikn_demo_Anim_00BDB4" Offset="0xBDB4" />
-        <Animation Name="object_ikn_demo_Anim_00BF04" Offset="0xBF04" />
-        <Animation Name="object_ikn_demo_Anim_00C154" Offset="0xC154" />
-        <Animation Name="object_ikn_demo_Anim_00C2C4" Offset="0xC2C4" />
-        <Animation Name="object_ikn_demo_Anim_00C59C" Offset="0xC59C" />
-        <Animation Name="object_ikn_demo_Anim_00C804" Offset="0xC804" />
-        <Animation Name="object_ikn_demo_Anim_00CA74" Offset="0xCA74" />
-        <Animation Name="object_ikn_demo_Anim_00CD28" Offset="0xCD28" />
-        <Animation Name="object_ikn_demo_Anim_00D044" Offset="0xD044" />
+        <Skeleton Name="object_ikn_demo_Skel_00B490" Type="Flex" LimbType="Standard" LimbNone="OBJECT_IKN_DEMO_3_LIMB_NONE" LimbMax="OBJECT_IKN_DEMO_3_LIMB_MAX" EnumName="ObjectIknDemo3Limb" Offset="0xB490" />
+        <Animation Name="object_ikn_demo_Anim_00B704" Offset="0xB704" /> <!-- Original name is "sk2_hajiku" -->
+        <Animation Name="object_ikn_demo_Anim_00B8C0" Offset="0xB8C0" /> <!-- Original name is "sk2_hajiku_loop" -->
+        <Animation Name="object_ikn_demo_Anim_00B9E4" Offset="0xB9E4" /> <!-- Original name is "sk2_hiku" -->
+        <Animation Name="object_ikn_demo_Anim_00BDB4" Offset="0xBDB4" /> <!-- Original name is "sk2_hiku_loop" -->
+        <Animation Name="object_ikn_demo_Anim_00BF04" Offset="0xBF04" /> <!-- Original name is "sk2_maee" -->
+        <Animation Name="object_ikn_demo_Anim_00C154" Offset="0xC154" /> <!-- Original name is "sk2_maee_loop" -->
+        <Animation Name="object_ikn_demo_Anim_00C2C4" Offset="0xC2C4" /> <!-- Original name is "sk2_muu" -->
+        <Animation Name="object_ikn_demo_Anim_00C59C" Offset="0xC59C" /> <!-- Original name is "sk2_muu_loop" -->
+        <Animation Name="object_ikn_demo_Anim_00C804" Offset="0xC804" /> <!-- Original name is "sk2_nani" -->
+        <Animation Name="object_ikn_demo_Anim_00CA74" Offset="0xCA74" /> <!-- Original name is "sk2_nani_loop" -->
+        <Animation Name="object_ikn_demo_Anim_00CD28" Offset="0xCD28" /> <!-- Original name is "sk2_odoroku" -->
+        <Animation Name="object_ikn_demo_Anim_00D044" Offset="0xD044" /> <!-- Original name is "sk2_odoroku_loop' "-->
         <Texture Name="object_ikn_demo_Tex_00D060" OutName="tex_00D060" Format="rgba16" Width="8" Height="8" Offset="0xD060" />
         <!-- <Blob Name="object_ikn_demo_Blob_00D0E0" Size="0x100" Offset="0xD0E0" /> -->
         <Texture Name="object_ikn_demo_Tex_00D1E0" OutName="tex_00D1E0" Format="rgba16" Width="16" Height="16" Offset="0xD1E0" />

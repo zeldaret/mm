@@ -67,7 +67,7 @@
         <Limb Name="object_kgy_Standardlimb_00F894" Type="Standard" EnumName="OBJECT_KGY_LIMB_14" Offset="0xF894" />
         <Limb Name="object_kgy_Standardlimb_00F8A0" Type="Standard" EnumName="OBJECT_KGY_LIMB_15" Offset="0xF8A0" />
         <Limb Name="object_kgy_Standardlimb_00F8AC" Type="Standard" EnumName="OBJECT_KGY_LIMB_16" Offset="0xF8AC" />
-        <Skeleton Name="object_kgy_Skel_00F910" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KGY_LIMB_NONE" LimbMax="OBJECT_KGY_LIMB_MAX" EnumName="object_kgy_Limbs" Offset="0xF910" />
+        <Skeleton Name="object_kgy_Skel_00F910" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KGY_LIMB_NONE" LimbMax="OBJECT_KGY_LIMB_MAX" EnumName="ObjectKgyLimb" Offset="0xF910" />
         <Animation Name="object_kgy_Anim_0101F0" Offset="0x101F0" />
         <Animation Name="object_kgy_Anim_010B84" Offset="0x10B84" />
     </File>

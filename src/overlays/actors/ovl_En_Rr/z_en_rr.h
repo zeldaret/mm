@@ -7,12 +7,36 @@ struct EnRr;
 
 typedef void (*EnRrActionFunc)(struct EnRr*, PlayState*);
 
-enum {
-    /* 0 */ ENRR_0,
-    /* 1 */ ENRR_1,
-    /* 2 */ ENRR_2,
-    /* 3 */ ENRR_3,
-};
+typedef enum {
+    /* 0 */ LIKE_LIKE_PARAM_0,
+    /* 1 */ LIKE_LIKE_PARAM_1,
+    /* 2 */ LIKE_LIKE_PARAM_2,
+    /* 3 */ LIKE_LIKE_PARAM_3
+} LikeLikeParam;
+
+typedef enum LikeLikeBodyPart {
+    /*  0 */ LIKE_LIKE_BODYPART_0,
+    /*  1 */ LIKE_LIKE_BODYPART_1,
+    /*  2 */ LIKE_LIKE_BODYPART_2,
+    /*  3 */ LIKE_LIKE_BODYPART_3,
+    /*  4 */ LIKE_LIKE_BODYPART_4,
+    /*  5 */ LIKE_LIKE_BODYPART_5,
+    /*  6 */ LIKE_LIKE_BODYPART_6,
+    /*  7 */ LIKE_LIKE_BODYPART_7,
+    /*  8 */ LIKE_LIKE_BODYPART_8,
+    /*  9 */ LIKE_LIKE_BODYPART_9,
+    /* 10 */ LIKE_LIKE_BODYPART_10,
+    /* 11 */ LIKE_LIKE_BODYPART_11,
+    /* 12 */ LIKE_LIKE_BODYPART_12,
+    /* 13 */ LIKE_LIKE_BODYPART_13,
+    /* 14 */ LIKE_LIKE_BODYPART_14,
+    /* 15 */ LIKE_LIKE_BODYPART_15,
+    /* 16 */ LIKE_LIKE_BODYPART_16,
+    /* 17 */ LIKE_LIKE_BODYPART_17,
+    /* 18 */ LIKE_LIKE_BODYPART_18,
+    /* 19 */ LIKE_LIKE_BODYPART_19,
+    /* 20 */ LIKE_LIKE_BODYPART_MAX
+} LikeLikeBodyPart;
 
 typedef struct {
     /* 0x00 */ f32 unk_00;
@@ -58,10 +82,8 @@ typedef struct EnRr {
     /* 0x220 */ f32 drawDmgEffScale;
     /* 0x224 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x228 */ Vec3f unk_228;
-    /* 0x234 */ Vec3f limbPos[20];
+    /* 0x234 */ Vec3f bodyPartsPos[LIKE_LIKE_BODYPART_MAX];
     /* 0x324 */ EnRrStruct unk_324[5];
 } EnRr; // size = 0x3C4
-
-extern const ActorInit En_Rr_InitVars;
 
 #endif // Z_EN_RR_H

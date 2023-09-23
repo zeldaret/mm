@@ -1,6 +1,7 @@
 #include "global.h"
+#include "PR/osint.h"
 
-void __osSetHWIntrRoutine(s32 idx, OSMesgQueue* queue, OSMesg msg) {
+void __osSetHWIntrRoutine(OSHWIntr idx, OSMesgQueue* queue, OSMesg msg) {
     register s32 prevInt = __osDisableInt();
 
     __osHwIntTable[idx].queue = queue;

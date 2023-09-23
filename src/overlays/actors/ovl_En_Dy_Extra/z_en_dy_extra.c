@@ -19,7 +19,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play);
 void EnDyExtra_WaitForTrigger(EnDyExtra* this, PlayState* play);
 void EnDyExtra_Fall(EnDyExtra* this, PlayState* play);
 
-const ActorInit En_Dy_Extra_InitVars = {
+ActorInit En_Dy_Extra_InitVars = {
     ACTOR_EN_DY_EXTRA,
     ACTORCAT_PROP,
     FLAGS,
@@ -65,7 +65,7 @@ void EnDyExtra_Fall(EnDyExtra* this, PlayState* play) {
     Math_ApproachF(&this->actor.gravity, 0.0f, 0.1f, 0.005f);
 
     if ((this->timer == 0) || (this->alphaScale < 0.02f)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -79,26 +79,26 @@ void EnDyExtra_Fall(EnDyExtra* this, PlayState* play) {
 void EnDyExtra_Update(Actor* thisx, PlayState* play) {
     EnDyExtra* this = THIS;
 
-    if (this->timer != 0) {
-        this->timer--;
-    }
-
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
+    DECR(this->timer);
+    Actor_PlaySfx(&this->actor, NA_SE_PL_SPIRAL_HEAL_BEAM - SFX_FLAG);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
 }
 
+static Color_RGBA8 sPrimColors[] = {
+    { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 },
+    { 170, 255, 255, 255 }, { 255, 255, 170, 255 },
+};
+
+static Color_RGBA8 sEnvColors[] = {
+    { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 }
+};
+
+static u8 sAlphaTypeIndices[] = {
+    2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0, 0,
+};
+
 void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
-    static Color_RGBA8 sPrimColors[] = {
-        { 255, 255, 170, 255 }, { 255, 170, 255, 255 }, { 255, 255, 170, 255 },
-        { 170, 255, 255, 255 }, { 255, 255, 170, 255 },
-    };
-    static Color_RGBA8 sEnvColors[] = {
-        { 255, 100, 0, 255 }, { 255, 0, 100, 255 }, { 100, 255, 0, 255 }, { 0, 100, 255, 255 }, { 255, 230, 0, 255 },
-    };
-    static u8 sAlphaTypeIndices[] = {
-        2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0,
-    };
     s32 pad;
     EnDyExtra* this = THIS;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
@@ -118,7 +118,7 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, play->state.frames * 2, 0, 0x20, 0x40, 1, play->state.frames,
                                 play->state.frames * -8, 0x10, 0x10));

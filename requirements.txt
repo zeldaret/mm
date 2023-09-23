@@ -5,8 +5,14 @@ colorama>=0.4.3
 # disasm
 rabbitizer>=1.0.0,<2.0.0
 
+# Compression
+pyelftools>=0.26
+
 # diff
 watchdog>=0.10.2
 argcomplete
 python-Levenshtein
 cxxfilt
+
+# map parsing
+mapfile-parser>=1.2.1,<2.0.0

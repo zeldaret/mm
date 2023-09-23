@@ -13,6 +13,8 @@
 #define ENFSN_ANGRY (1 << 8)
 #define ENFSN_CALM_DOWN (1 << 9)
 
+#define ENFSN_LIMB_MAX FSN_LIMB_MAX + 1 // Note: adding 1 to FSN_LIMB_MAX due to bug in the skeleton, see bug in object_fsn.xml
+
 struct EnFsn;
 
 typedef void (*EnFsnActionFunc)(struct EnFsn*, PlayState*);
@@ -24,24 +26,24 @@ typedef struct EnFsn {
     /* 0x1D4 */ EnFsnActionFunc actionFunc;
     /* 0x1D8 */ EnFsnActionFunc prevActionFunc; // Used to return to correct browsing function
     /* 0x1DC */ ColliderCylinder collider;
-    /* 0x228 */ s16 limbRotYTable[19];
-    /* 0x24E */ s16 limbRotZTable[19];
+    /* 0x228 */ s16 fidgetTableY[ENFSN_LIMB_MAX];
+    /* 0x24E */ s16 fidgetTableZ[ENFSN_LIMB_MAX];
     /* 0x274 */ Vec3s headRot;
     /* 0x27A */ Vec3s unk27A; // Set but never used
-    /* 0x280 */ Vec3s jointTable[FSN_LIMB_MAX + 1]; // Note: adding 1 to FSN_LIMB_MAX due to bug in object_fsn, see bug in object_fsn.xml
-    /* 0x2F2 */ Vec3s morphTable[FSN_LIMB_MAX + 1];
-    /* 0x364 */ s16 eyeTextureIdx;
+    /* 0x280 */ Vec3s jointTable[ENFSN_LIMB_MAX];
+    /* 0x2F2 */ Vec3s morphTable[ENFSN_LIMB_MAX];
+    /* 0x364 */ s16 eyeTexIndex;
     /* 0x366 */ s16 blinkTimer;
     /* 0x368 */ s16 cutsceneState;
-    /* 0x36A */ s16 cutscene;
-    /* 0x36C */ s16 lookToShopkeeperCutscene;
-    /* 0x36E */ s16 lookToShelfCutscene;
-    /* 0x370 */ s16 lookToShopkeeperFromShelfCutscene;
-    /* 0x372 */ s16 lookToShopkeeperBuyingCutscene;
+    /* 0x36A */ s16 csId;
+    /* 0x36C */ s16 lookToShopkeeperCsId;
+    /* 0x36E */ s16 lookToShelfCsId;
+    /* 0x370 */ s16 lookToShopkeeperFromShelfCsId;
+    /* 0x372 */ s16 lookToShopkeeperBuyingCsId;
     /* 0x374 */ s16 price;
     /* 0x376 */ u16 textId;
     /* 0x378 */ u8 isSelling;
-    /* 0x379 */ u8 cursorIdx;
+    /* 0x379 */ u8 cursorIndex;
     /* 0x37C */ s32 getItemId;
     /* 0x380 */ s16 stolenItem1;
     /* 0x382 */ s16 stolenItem2;
@@ -64,10 +66,8 @@ typedef struct EnFsn {
     /* 0x444 */ u8 arrowAnimState;
     /* 0x445 */ u8 stickAnimState;
     /* 0x448 */ f32 shopItemSelectedTween;
-    /* 0x44C */ s16 animationIndex;
+    /* 0x44C */ s16 animIndex;
     /* 0x44E */ u16 flags;
 } EnFsn; // size = 0x450
-
-extern const ActorInit En_Fsn_InitVars;
 
 #endif // Z_EN_FSN_H

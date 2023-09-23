@@ -1,5 +1,11 @@
 ﻿<Root>
+    <!-- Dependencies -->
+    <ExternalFile XmlPath="objects/gameplay_keep.xml" OutPath="assets/objects/gameplay_keep/"/>
+
+    <!-- Get Item Draw: Bombchu -->
     <File Name="object_gi_bomb_2" Segment="6">
-        <DList Name="object_gi_bomb_2_DL_0004B0" Offset="0x4B0" />
+
+        <!-- Bombchu Display Lists -->
+        <DList Name="gGiBombchuDL" Offset="0x4B0" />
     </File>
 </Root>

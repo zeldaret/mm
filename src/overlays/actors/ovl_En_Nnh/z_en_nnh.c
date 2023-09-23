@@ -7,7 +7,7 @@
 #include "z_en_nnh.h"
 #include "objects/object_nnh/object_nnh.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnNnh*)thisx)
 
@@ -16,12 +16,12 @@ void EnNnh_Destroy(Actor* thisx, PlayState* play);
 void EnNnh_Update(Actor* thisx, PlayState* play);
 void EnNnh_Draw(Actor* thisx, PlayState* play);
 
-void func_80C08828(EnNnh* this);
-void func_80C0883C(EnNnh* this, PlayState* play);
-void func_80C088A4(EnNnh* this);
-void func_80C088B8(EnNnh* this, PlayState* play);
+void EnNnh_SetupWaitForDialogue(EnNnh* this);
+void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play);
+void EnNnh_SetupDialogue(EnNnh* this);
+void EnNnh_Dialogue(EnNnh* this, PlayState* play);
 
-const ActorInit En_Nnh_InitVars = {
+ActorInit En_Nnh_InitVars = {
     ACTOR_EN_NNH,
     ACTORCAT_PROP,
     FLAGS,
@@ -59,10 +59,10 @@ void EnNnh_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actor.focus.pos = this->actor.world.pos;
     this->actor.focus.pos.y += 30.0f;
-    func_80C08828(this);
+    EnNnh_SetupWaitForDialogue(this);
 }
 
 void EnNnh_Destroy(Actor* thisx, PlayState* play) {
@@ -71,26 +71,26 @@ void EnNnh_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void func_80C08828(EnNnh* this) {
-    this->actionFunc = func_80C0883C;
+void EnNnh_SetupWaitForDialogue(EnNnh* this) {
+    this->actionFunc = EnNnh_WaitForDialogue;
 }
 
-void func_80C0883C(EnNnh* this, PlayState* play) {
+void EnNnh_WaitForDialogue(EnNnh* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x228, &this->actor);
-        func_80C088A4(this);
-        return;
+        EnNnh_SetupDialogue(this);
+    } else {
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
-    func_800B8614(&this->actor, play, 100.0f);
 }
 
-void func_80C088A4(EnNnh* this) {
-    this->actionFunc = func_80C088B8;
+void EnNnh_SetupDialogue(EnNnh* this) {
+    this->actionFunc = EnNnh_Dialogue;
 }
 
-void func_80C088B8(EnNnh* this, PlayState* play) {
+void EnNnh_Dialogue(EnNnh* this, PlayState* play) {
     if (Actor_TextboxIsClosing(&this->actor, play)) {
-        func_80C08828(this);
+        EnNnh_SetupWaitForDialogue(this);
     }
 }
 
@@ -104,10 +104,11 @@ void EnNnh_Update(Actor* thisx, PlayState* play) {
 }
 
 void EnNnh_Draw(Actor* thisx, PlayState* play) {
-    GraphicsContext* gfxCtx = play->state.gfxCtx;
-    s32 pad;
+    OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(gfxCtx);
-    gSPMatrix(gfxCtx->polyOpa.p++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfxCtx->polyOpa.p++, object_nnh_DL_001510);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gButlerSonMainBodyDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
 }

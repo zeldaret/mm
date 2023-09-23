@@ -60,7 +60,7 @@
         <Limb Name="gOctorokSnoutLimb" Type="Standard" EnumName="OCTOROK_LIMB_SNOUT" Offset="0x3388" />
 
         <!-- Octorok Skeleton -->
-        <Skeleton Name="gOctorokSkel" Type="Normal" LimbType="Standard" LimbNone="OCTOROK_LIMB_NONE" LimbMax="OCTOROK_LIMB_MAX" EnumName="OctorokLimbs" Offset="0x33D0" />
+        <Skeleton Name="gOctorokSkel" Type="Normal" LimbType="Standard" LimbNone="OCTOROK_LIMB_NONE" LimbMax="OCTOROK_LIMB_MAX" EnumName="OctorokLimb" Offset="0x33D0" />
 
         <!-- Octorok Animations -->
         <Animation Name="gOctorokDieAnim" Offset="0x3958" /> <!-- Original name is "oc_dead" -->

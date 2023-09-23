@@ -1,14 +1,14 @@
 /*
  * File: z_dm_gm.c
  * Overlay: ovl_Dm_Gm
- * Description: Anju (cutscene) (duplicate of Dm_An?)
+ * Description: Complete duplicate of Dm_An
  */
 
 #include "z_dm_gm.h"
 #include "objects/object_an4/object_an4.h"
 #include "objects/object_msmo/object_msmo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((DmGm*)thisx)
 
@@ -17,11 +17,11 @@ void DmGm_Destroy(Actor* thisx, PlayState* play);
 void DmGm_Update(Actor* thisx, PlayState* play);
 
 void func_80C248A8(DmGm* this, PlayState* play);
-void func_80C24A00(DmGm* this, PlayState* play);
-void func_80C24BD0(DmGm* this, PlayState* play);
+void DmGm_HandleCutscene(DmGm* this, PlayState* play);
+void DmGm_DoNothing(DmGm* this, PlayState* play);
 void func_80C25000(Actor* thisx, PlayState* play);
 
-const ActorInit Dm_Gm_InitVars = {
+ActorInit Dm_Gm_InitVars = {
     ACTOR_DM_GM,
     ACTORCAT_NPC,
     FLAGS,
@@ -33,29 +33,48 @@ const ActorInit Dm_Gm_InitVars = {
     (ActorFunc)NULL,
 };
 
-static AnimationInfoS sAnimations[] = {
-    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },
-    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+typedef enum {
+    /*  -1 */ DMGM_ANIM_NONE = -1,
+    /* 0x0 */ DMGM_ANIM_0,
+    /* 0x1 */ DMGM_ANIM_1,
+    /* 0x2 */ DMGM_ANIM_2,
+    /* 0x3 */ DMGM_ANIM_3,
+    /* 0x4 */ DMGM_ANIM_4,
+    /* 0x5 */ DMGM_ANIM_5,
+    /* 0x6 */ DMGM_ANIM_6,
+    /* 0x7 */ DMGM_ANIM_7,
+    /* 0x8 */ DMGM_ANIM_8,
+    /* 0x9 */ DMGM_ANIM_9,
+    /* 0xA */ DMGM_ANIM_10,
+    /* 0xB */ DMGM_ANIM_11,
+    /* 0xC */ DMGM_ANIM_12,
+    /* 0xD */ DMGM_ANIM_13,
+    /* 0xE */ DMGM_ANIM_MAX
+} DmGmAnimation;
+
+static AnimationInfoS sAnimationInfo[DMGM_ANIM_MAX] = {
+    { &object_an1_Anim_007E08, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_0
+    { &object_an1_Anim_0071E8, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_1
+    { &object_an4_Anim_006CC0, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_2
+    { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // DMGM_ANIM_3
+    { &object_an4_Anim_007E3C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_4
+    { &object_an4_Anim_0088C0, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_5
+    { &object_an4_Anim_0013C8, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_6
+    { &object_an4_Anim_002550, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_7
+    { &object_an4_Anim_00353C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_8
+    { &object_an4_Anim_004498, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_9
+    { &object_an4_Anim_0060B4, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_10
+    { &object_an4_Anim_00041C, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_11
+    { &object_an4_Anim_004A78, 1.0f, 0, -1, ANIMMODE_ONCE, 0 },  // DMGM_ANIM_12
+    { &object_an4_Anim_00506C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // DMGM_ANIM_13
 };
 
-s32 func_80C24360(DmGm* this, PlayState* play) {
+s32 DmGm_UpdateSkelAnime(DmGm* this, PlayState* play) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
-    s32 ret = false;
+    s32 isAnimFinished = false;
 
-    if (this->unk_2C8 < 2) {
+    if (this->animIndex <= DMGM_ANIM_1) {
         objectIndex2 = this->actor.objBankIndex;
     } else {
         objectIndex2 = this->unk_2AC;
@@ -63,30 +82,32 @@ s32 func_80C24360(DmGm* this, PlayState* play) {
 
     if (objectIndex2 >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        ret = SkelAnime_Update(&this->skelAnime);
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
-    return ret;
+
+    return isAnimFinished;
 }
 
-s32 func_80C24428(DmGm* this, PlayState* play, s32 arg2) {
+s32 DmGm_ChangeAnim(DmGm* this, PlayState* play, s32 animIndex) {
     s8 objectIndex = this->actor.objBankIndex;
     s8 objectIndex2;
-    s32 ret = false;
+    s32 didAnimChange = false;
 
-    if (arg2 < 2) {
+    if (animIndex <= DMGM_ANIM_1) {
         objectIndex2 = this->actor.objBankIndex;
     } else {
         objectIndex2 = this->unk_2AC;
     }
 
-    if ((objectIndex2 >= 0) && (arg2 != this->unk_2C8)) {
+    if ((objectIndex2 >= 0) && (this->animIndex != animIndex)) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex2].segment);
-        this->unk_2C8 = arg2;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimations, arg2);
+        this->animIndex = animIndex;
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objectIndex].segment);
     }
-    return ret;
+
+    return didAnimChange;
 }
 
 void func_80C24504(DmGm* this) {
@@ -116,7 +137,7 @@ s32 func_80C2457C(DmGm* this, PlayState* play) {
     this->unk_2C4 = CLAMP(this->unk_2C4, -0x1C70, 0x1C70);
 
     if (this->unk_2B4->id == ACTOR_PLAYER) {
-        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[7].y + 3.0f;
+        sp40.y = ((Player*)this->unk_2B4)->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_2B4->focus.pos);
     }
@@ -160,7 +181,7 @@ Actor* func_80C24838(PlayState* play) {
         }
 
         tempActor = foundActor->next;
-        if (tempActor == NULL || false) {
+        if ((tempActor == NULL) || false) {
             foundActor = NULL;
             break;
         }
@@ -176,70 +197,77 @@ void func_80C248A8(DmGm* this, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable,
                            OBJECT_AN1_LIMB_MAX);
 
-        this->unk_2C8 = -1;
-        func_80C24428(this, play, 0);
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->animIndex = DMGM_ANIM_NONE;
+        DmGm_ChangeAnim(this, play, DMGM_ANIM_0);
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         Actor_SetScale(&this->actor, 0.01f);
         this->unk_2AE |= 1;
         this->actor.draw = func_80C25000;
 
-        if ((play->sceneNum == SCENE_YADOYA) && (play->curSpawn == 4)) {
+        if ((play->sceneId == SCENE_YADOYA) && (play->curSpawn == 4)) {
             this->unk_2B4 = func_80C24838(play);
-            func_80C24428(this, play, 1);
-            this->actionFunc = func_80C24BD0;
+            DmGm_ChangeAnim(this, play, DMGM_ANIM_1);
+            this->actionFunc = DmGm_DoNothing;
         } else {
-            this->actionFunc = func_80C24A00;
+            this->actionFunc = DmGm_HandleCutscene;
         }
     }
 }
 
-void func_80C24A00(DmGm* this, PlayState* play) {
-    s32 sp28[] = { 0, 0, 12, 2, 4, 6, 8, 10, 11, 3 };
-    u16 action;
-    s32 sp20;
+void DmGm_HandleCutscene(DmGm* this, PlayState* play) {
+    s32 csAnimIndex[] = {
+        DMGM_ANIM_0, DMGM_ANIM_0, DMGM_ANIM_12, DMGM_ANIM_2,  DMGM_ANIM_4,
+        DMGM_ANIM_6, DMGM_ANIM_8, DMGM_ANIM_10, DMGM_ANIM_11, DMGM_ANIM_3,
+    };
+    u16 cueId;
+    s32 cueChannel;
 
-    if (play->csCtx.state != 0) {
-        if (this->unk_2D0 == 0) {
-            this->unk_2B0 = 255;
-            this->unk_2D0 = 1;
-            this->unk_2D4 = 0;
-            this->unk_2CC = this->unk_2C8;
+    if (play->csCtx.state != CS_STATE_IDLE) {
+        if (!this->isCutscenePlaying) {
+            this->cueId = 255;
+            this->isCutscenePlaying = true;
+            this->didAnimChangeInCs = false;
+            this->prevAnimIndex = this->animIndex;
         }
 
-        if (Cutscene_CheckActorAction(play, 0x22D)) {
-            sp20 = Cutscene_GetActorActionIndex(play, 0x22D);
-            action = play->csCtx.actorActions[sp20]->action;
+        if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_557)) {
+            cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_557);
+            cueId = play->csCtx.actorCues[cueChannel]->id;
 
-            if (this->unk_2B0 != (action & 0xFF)) {
-                this->unk_2B0 = action;
-                this->unk_2D4 = 1;
-                func_80C24428(this, play, sp28[action]);
+            if (this->cueId != (u8)cueId) {
+                this->cueId = cueId;
+                this->didAnimChangeInCs = true;
+                DmGm_ChangeAnim(this, play, csAnimIndex[cueId]);
             }
 
-            switch (this->unk_2B0) {
+            switch (this->cueId) {
                 case 2:
                 case 4:
                 case 5:
                 case 6:
                 case 7:
                 case 8:
-                    if ((this->unk_2C8 == 12) || (this->unk_2C8 == 4) || (this->unk_2C8 == 6) || (this->unk_2C8 == 8)) {
+                    if ((this->animIndex == DMGM_ANIM_12) || (this->animIndex == DMGM_ANIM_4) ||
+                        (this->animIndex == DMGM_ANIM_6) || (this->animIndex == DMGM_ANIM_8)) {
                         if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                            func_80C24428(this, play, this->unk_2C8 + 1);
+                            DmGm_ChangeAnim(this, play, this->animIndex + 1);
                         }
                     }
                     break;
+
+                default:
+                    break;
             }
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, sp20);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         }
-    } else if (this->unk_2D0 != 0) {
-        this->unk_2D0 = 0;
-        this->unk_2D4 = 0;
-        func_80C24428(this, play, this->unk_2CC);
+    } else if (this->isCutscenePlaying) {
+        this->isCutscenePlaying = false;
+        this->didAnimChangeInCs = false;
+        DmGm_ChangeAnim(this, play, this->prevAnimIndex);
     }
 }
 
-void func_80C24BD0(DmGm* this, PlayState* play) {
+void DmGm_DoNothing(DmGm* this, PlayState* play) {
 }
 
 void DmGm_Init(Actor* thisx, PlayState* play) {
@@ -261,10 +289,10 @@ void DmGm_Update(Actor* thisx, PlayState* play) {
     func_80C2478C(this, play);
 
     if (this->actor.draw != NULL) {
-        func_80C24360(this, play);
+        DmGm_UpdateSkelAnime(this, play);
         func_80C24504(this);
     }
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 Vec3f D_80C25218 = { 450.0f, 700.0f, -760.0f };
@@ -277,7 +305,7 @@ void DmGm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     s8 sp2B = this->actor.objBankIndex;
     s8 sp2A = this->unk_2AD;
 
-    if ((limbIndex == OBJECT_AN1_LIMB_05) && (this->unk_2D4 != 0)) {
+    if ((limbIndex == OBJECT_AN1_LIMB_05) && this->didAnimChangeInCs) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_Push();
@@ -356,7 +384,7 @@ void func_80C25000(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80C25244[this->unk_2B8]));
     gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80C25238[0]));

@@ -6,6 +6,7 @@
 
 #include "prevent_bss_reordering.h"
 #include "z_bg_hakugin_post.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/object_hakugin_obj/object_hakugin_obj.h"
 
@@ -27,9 +28,9 @@ void func_80A9CE00(BgHakuginPost* this);
 void func_80A9CE1C(BgHakuginPost* this, PlayState* play);
 void func_80A9D0A0(BgHakuginPost* this);
 void func_80A9D0B4(BgHakuginPost* this, PlayState* play);
-void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4);
+void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csLength, s16 csId);
 void func_80A9D260(BgHakuginPost* this, PlayState* play);
-void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4);
+void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csId, s16 additionalCsId);
 void func_80A9D360(BgHakuginPost* this, PlayState* play);
 void func_80A9D3E4(BgHakuginPost* this);
 void func_80A9D434(BgHakuginPost* this, PlayState* play);
@@ -38,7 +39,7 @@ void func_80A9D61C(Actor* thisx, PlayState* play);
 BgHakuginPostColliders D_80A9DDC0;
 BgHakuginPostUnkStruct D_80A9E028;
 
-const ActorInit Bg_Hakugin_Post_InitVars = {
+ActorInit Bg_Hakugin_Post_InitVars = {
     ACTOR_BG_HAKUGIN_POST,
     ACTORCAT_BG,
     FLAGS,
@@ -51,9 +52,9 @@ const ActorInit Bg_Hakugin_Post_InitVars = {
 };
 
 typedef struct {
-    f32 unk_00;
-    u8 unk_04;
-} BgHakuginPostUnkStruct3;
+    /* 0x0 */ f32 unk_00;
+    /* 0x4 */ u8 unk_04;
+} BgHakuginPostUnkStruct3; // size = 0x8
 
 static BgHakuginPostUnkStruct3 D_80A9D880[] = {
     { 1200.0f, false }, { 600.0f, false }, { 900.0f, false }, { 870.0f, false },
@@ -161,12 +162,12 @@ void func_80A9AFB4(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
             } else {
                 unkStruct->unk_0000[i].unk_34 = 1;
             }
-            unkStruct->unk_0000[i].unk_2A = this->dyna.actor.cutscene;
-            unkStruct->unk_0000[i].unk_2C = ActorCutscene_GetAdditionalCutscene(unkStruct->unk_0000[i].unk_2A);
+            unkStruct->unk_0000[i].csId = this->dyna.actor.csId;
+            unkStruct->unk_0000[i].additionalCsId = CutsceneManager_GetAdditionalCsId(unkStruct->unk_0000[i].csId);
         } else {
             unkStruct->unk_0000[i].unk_34 = 1;
-            unkStruct->unk_0000[i].unk_2A = -1;
-            unkStruct->unk_0000[i].unk_2C = -1;
+            unkStruct->unk_0000[i].csId = CS_ID_NONE;
+            unkStruct->unk_0000[i].additionalCsId = CS_ID_NONE;
         }
 
         unkStruct->unk_0000[i].unk_2F = 1;
@@ -491,7 +492,7 @@ void func_80A9BD24(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
         } else if (unkStruct->unk_0000[i].unk_34 == 3) {
             if (Math3D_XZLengthSquared(unkStruct->unk_0000[i].unk_14.x, unkStruct->unk_0000[i].unk_14.z) > 278784.03f) {
                 func_80A9B554(this, play, unkStruct, &unkStruct->unk_0000[i]);
-                func_8019F128(NA_SE_EV_GLASSBROKEN_IMPACT);
+                Audio_PlaySfx_2(NA_SE_EV_GLASSBROKEN_IMPACT);
                 unkStruct->unk_0000[i].unk_34 = 4;
                 unkStruct->unk_0000[i].unk_30 = 30;
             }
@@ -509,7 +510,7 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
     s32 pad;
     Vec3f sp44;
     s32 pad2[2];
-    s16 quake;
+    s16 quakeIndex;
 
     if (this->unk_170 == 0) {
         for (i = 0; i < unkStruct->count; i++) {
@@ -520,12 +521,14 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
                 sp44.y = this->unk_16C + unkStruct1->unk_14.y;
                 sp44.z = this->dyna.actor.home.pos.z + unkStruct1->unk_14.z;
                 Rumble_Request(Math3D_Vec3fDistSq(&sp44, &GET_PLAYER(play)->actor.world.pos), 255, 20, 150);
-                quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
-                Quake_SetSpeed(quake, 20000);
-                Quake_SetQuakeValues(quake, 7, 0, 0, 0);
-                Quake_SetCountdown(quake, 12);
+
+                quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
+                Quake_SetSpeed(quakeIndex, 20000);
+                Quake_SetPerturbations(quakeIndex, 7, 0, 0, 0);
+                Quake_SetDuration(quakeIndex, 12);
+
                 if (this->unk_179 <= 0) {
-                    func_8019F128(NA_SE_EV_STONEDOOR_STOP);
+                    Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
                     this->unk_179 = 40;
                 }
                 break;
@@ -534,19 +537,20 @@ void func_80A9C058(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct*
     }
 }
 
-void func_80A9C18C(BgHakuginPost* this, PlayState* play) {
+void BgHakuginPost_RequestQuakeAndRumble(BgHakuginPost* this, PlayState* play) {
     s32 pad;
     Player* player = GET_PLAYER(play);
     Camera* activeCam = GET_ACTIVE_CAM(play);
-    s16 quake;
+    s16 quakeIndex;
 
     Rumble_Request(Math3D_XZDistanceSquared(player->actor.world.pos.x, player->actor.world.pos.z,
                                             this->dyna.actor.home.pos.x, this->dyna.actor.home.pos.z),
                    255, 20, 150);
-    quake = Quake_Add(activeCam, 3);
-    Quake_SetSpeed(quake, 17232);
-    Quake_SetQuakeValues(quake, 6, 0, 0, 0);
-    Quake_SetCountdown(quake, 20);
+
+    quakeIndex = Quake_Request(activeCam, QUAKE_TYPE_3);
+    Quake_SetSpeed(quakeIndex, 17232);
+    Quake_SetPerturbations(quakeIndex, 6, 0, 0, 0);
+    Quake_SetDuration(quakeIndex, 20);
 }
 
 void func_80A9C228(BgHakuginPost* this, PlayState* play, BgHakuginPostUnkStruct* unkStruct) {
@@ -699,13 +703,13 @@ void BgHakuginPost_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.world.rot.z = 0;
         this->dyna.actor.shape.rot.x = 0;
         this->dyna.actor.shape.rot.z = 0;
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         DynaPolyActor_LoadMesh(play, &this->dyna, &object_hakugin_obj_Colheader_00D3B0);
         func_80A9B3BC(this, play);
         func_80A9CA94(this);
     } else {
         func_80A9AFB4(this, play, &D_80A9E028);
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -779,7 +783,7 @@ void func_80A9CC84(BgHakuginPost* this) {
 void func_80A9CCA0(BgHakuginPost* this, PlayState* play) {
     if (this->unk_174 != 0) {
         func_80A9D1E0(this, func_80A9CD00, (this->unk_164 - this->dyna.actor.home.pos.y) + 100.0f, 60,
-                      this->dyna.actor.cutscene);
+                      this->dyna.actor.csId);
     }
 }
 
@@ -794,11 +798,11 @@ void func_80A9CD14(BgHakuginPost* this, PlayState* play) {
     temp_f12 = CLAMP_MAX(temp_f12, 40.0f);
     this->unk_16C += temp_f12;
     if (this->unk_168 <= this->unk_16C) {
-        func_80A9C18C(this, play);
-        func_8019F128(NA_SE_EV_STONEDOOR_STOP);
+        BgHakuginPost_RequestQuakeAndRumble(this, play);
+        Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CE00(this);
     } else {
-        func_800B8FE8(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_RISING - SFX_FLAG);
     }
 }
 
@@ -819,13 +823,13 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
 
     if (this->unk_170 != 0) {
         func_80A9D1E0(this, func_80A9D0A0, (this->unk_164 - this->dyna.actor.home.pos.y) + 100.0f, 0x3C,
-                      ActorCutscene_GetAdditionalCutscene(this->dyna.actor.cutscene));
+                      CutsceneManager_GetAdditionalCsId(this->dyna.actor.csId));
         return;
     }
 
     for (i = 0; i < D_80A9E028.count; i++) {
         collider = D_80A9E028.unk_0000[i].collider;
-        if ((collider != NULL) && (collider->base.acFlags & AT_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
+        if ((collider != NULL) && (collider->base.acFlags & AC_HIT) && (D_80A9E028.unk_0000[i].unk_34 == 1)) {
             temp_f2 = this->unk_16C;
             yDiff = ABS_ALT(BINANG_SUB(this->dyna.actor.yawTowardsPlayer, player->actor.shape.rot.y));
             temp_f0 = temp_f2 + D_80A9E028.unk_0000[i].unk_14.y;
@@ -835,12 +839,12 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
                 temp = (s16)(this->dyna.actor.yawTowardsPlayer + 0x58F0);
                 D_80A9E028.unk_0000[i].unk_28 = ((s16)(player->actor.shape.rot.y - temp) / 3) + temp;
                 D_80A9E028.unk_0000[i].unk_34 = 2;
-                func_800B8E58(player, NA_SE_IT_HAMMER_HIT);
-                func_8019F128(NA_SE_EV_SLIDE_DOOR_OPEN);
+                Player_PlaySfx(player, NA_SE_IT_HAMMER_HIT);
+                Audio_PlaySfx_2(NA_SE_EV_SLIDE_DOOR_OPEN);
                 Flags_SetSwitch(play, D_80A9E028.unk_0000[i].unk_2E);
                 this->unk_178 = 20;
-                func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f,
-                              D_80A9E028.unk_0000[i].unk_2A, D_80A9E028.unk_0000[i].unk_2C);
+                func_80A9D2C4(this, func_80A9CE00, D_80A9E028.unk_0000[i].unk_14.y + 50.0f, D_80A9E028.unk_0000[i].csId,
+                              D_80A9E028.unk_0000[i].additionalCsId);
                 break;
             }
         }
@@ -849,7 +853,7 @@ void func_80A9CE1C(BgHakuginPost* this, PlayState* play) {
     for (i = 0; i < D_80A9E028.count; i++) {
         collider = D_80A9E028.unk_0000[i].collider;
         if (collider != NULL) {
-            collider->base.acFlags &= ~AT_HIT;
+            collider->base.acFlags &= ~AC_HIT;
         }
     }
 
@@ -872,20 +876,20 @@ void func_80A9D0B4(BgHakuginPost* this, PlayState* play) {
         func_80A9C634(this, play);
         func_80A9B160(&D_80A9E028, play);
         this->unk_16C = this->unk_164;
-        func_80A9C18C(this, play);
-        func_8019F128(NA_SE_EV_STONEDOOR_STOP);
+        BgHakuginPost_RequestQuakeAndRumble(this, play);
+        Audio_PlaySfx_2(NA_SE_EV_STONEDOOR_STOP);
         func_80A9CC84(this);
     } else {
-        func_800B8FE8(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
+        Actor_PlaySfx_FlaggedCentered3(&this->dyna.actor, NA_SE_EV_ICE_PILLAR_FALL - SFX_FLAG);
     }
 }
 
-void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4) {
+void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csLength, s16 csId) {
     this->unkFunc = unkFunc;
-    this->unk_184 = arg4;
-    this->unk_180 = ActorCutscene_GetLength(arg4);
-    if (this->unk_180 < 0) {
-        this->unk_180 = arg3;
+    this->csId = csId;
+    this->csLength = CutsceneManager_GetLength(csId);
+    if (this->csLength < 0) {
+        this->csLength = csLength;
     }
     this->dyna.actor.focus.pos.x = this->dyna.actor.home.pos.x;
     this->dyna.actor.focus.pos.y = this->unk_16C + arg2;
@@ -894,22 +898,22 @@ void func_80A9D1E0(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 }
 
 void func_80A9D260(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_184)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_184, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         this->unkFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_184);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
-void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 arg3, s16 arg4) {
+void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16 csId, s16 additionalCsId) {
     this->unkFunc = unkFunc;
-    this->unk_184 = arg3;
-    this->unk_186 = arg4;
-    this->unk_180 = -1;
-    this->unk_180 = ActorCutscene_GetLength(arg3);
-    if (this->unk_180 < 0) {
-        this->unk_180 = 15;
+    this->csId = csId;
+    this->additionalCsId = additionalCsId;
+    this->csLength = -1;
+    this->csLength = CutsceneManager_GetLength(csId);
+    if (this->csLength < 0) {
+        this->csLength = 15;
     }
     this->dyna.actor.focus.pos.x = this->dyna.actor.home.pos.x;
     this->dyna.actor.focus.pos.y = this->unk_16C + arg2;
@@ -918,32 +922,32 @@ void func_80A9D2C4(BgHakuginPost* this, BgHakuginPostFunc unkFunc, f32 arg2, s16
 }
 
 void func_80A9D360(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_184)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_184, &this->dyna.actor);
-        if (this->unk_186 >= 0) {
+    if (CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
+        if (this->additionalCsId >= 0) {
             func_80A9D3E4(this);
         } else {
             this->unkFunc(this);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_184);
+        CutsceneManager_Queue(this->csId);
     }
 }
 
 void func_80A9D3E4(BgHakuginPost* this) {
-    this->unk_182 = ActorCutscene_GetLength(this->unk_186);
-    if (this->unk_182 < 0) {
-        this->unk_182 = 30;
+    this->additionalCsLength = CutsceneManager_GetLength(this->additionalCsId);
+    if (this->additionalCsLength < 0) {
+        this->additionalCsLength = 30;
     }
     this->actionFunc = func_80A9D434;
 }
 
 void func_80A9D434(BgHakuginPost* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->unk_186) != 0) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->unk_186, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->additionalCsId)) {
+        CutsceneManager_StartWithPlayerCs(this->additionalCsId, &this->dyna.actor);
         this->unkFunc(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->unk_186);
+        CutsceneManager_Queue(this->additionalCsId);
     }
 }
 
@@ -952,17 +956,17 @@ void BgHakuginPost_Update(Actor* thisx, PlayState* play) {
     f32 temp;
 
     func_80A9B46C(this, play);
-    if ((this->unk_180 >= 0) && ((this->actionFunc != func_80A9D260) || (this->actionFunc != func_80A9D360))) {
-        this->unk_180--;
-        if (this->unk_180 < 0) {
-            ActorCutscene_Stop(this->unk_184);
+    if ((this->csLength >= 0) && ((this->actionFunc != func_80A9D260) || (this->actionFunc != func_80A9D360))) {
+        this->csLength--;
+        if (this->csLength < 0) {
+            CutsceneManager_Stop(this->csId);
         }
     }
 
-    if ((this->unk_182 >= 0) && (this->actionFunc != func_80A9D434)) {
-        this->unk_182--;
-        if (this->unk_182 < 0) {
-            ActorCutscene_Stop(this->unk_186);
+    if ((this->additionalCsLength >= 0) && (this->actionFunc != func_80A9D434)) {
+        this->additionalCsLength--;
+        if (this->additionalCsLength < 0) {
+            CutsceneManager_Stop(this->additionalCsId);
         }
     }
 
@@ -1008,14 +1012,14 @@ void func_80A9D61C(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_SetTranslateRotateYXZ(this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.y,
                                  this->dyna.actor.world.pos.z, &this->dyna.actor.shape.rot);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
 
     for (i = 0; i < D_80A9E028.count; i++) {
         unkStruct1 = &D_80A9E028.unk_0000[i];
-        if (unkStruct1->unk_34 != 5 && unkStruct1->unk_34 != 4) {
+        if ((unkStruct1->unk_34 != 5) && (unkStruct1->unk_34 != 4)) {
             sp68.x = unkStruct1->unk_14.x + this->dyna.actor.home.pos.x;
             sp68.y = unkStruct1->unk_14.y + this->unk_16C;
             sp68.z = unkStruct1->unk_14.z + this->dyna.actor.home.pos.z;

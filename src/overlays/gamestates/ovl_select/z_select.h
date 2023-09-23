@@ -1,22 +1,20 @@
-#ifndef _Z64_SELECT_H_
-#define _Z64_SELECT_H_
+#ifndef Z64_SELECT_H
+#define Z64_SELECT_H
 
-#include "global.h"
+#include "z64game.h"
+#include "z64view.h"
 
-struct SelectContext;
+struct MapSelectState;
 
-void Select_Init(GameState* thisx);
-void Select_Destroy(GameState* thisx);
-
-typedef void (*Select_LoadFunc)(struct SelectContext*, u32, s32);
+typedef void (*SelectLoadFunc)(struct MapSelectState*, u32, s32);
 
 typedef struct {
-    /* 0x00 */ char* name;
-    /* 0x04 */ Select_LoadFunc loadFunc;
-    /* 0x08 */ s32 entranceIndex;
+    /* 0x0 */ char* name;
+    /* 0x4 */ SelectLoadFunc loadFunc;
+    /* 0x8 */ s32 entrance;
 } SceneSelectEntry; // size = 0xC
 
-typedef struct SelectContext {
+typedef struct MapSelectState {
     /* 0x000 */ GameState state;
     /* 0x0A8 */ View view;
     /* 0x210 */ s32 count;
@@ -36,6 +34,9 @@ typedef struct SelectContext {
     /* 0x270 */ s32 lockDown;
     /* 0x274 */ s32 unk_274; // unused
     /* 0x278 */ UNK_TYPE1 unk_278[0x08];
-} SelectContext; // size = 0x280
+} MapSelectState; // size = 0x280
+
+void MapSelect_Init(GameState* thisx);
+void MapSelect_Destroy(GameState* thisx);
 
 #endif

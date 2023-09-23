@@ -20,7 +20,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play);
 void DoorAna_WaitOpen(DoorAna* this, PlayState* play);
 void DoorAna_GrabLink(DoorAna* this, PlayState* play);
 
-const ActorInit Door_Ana_InitVars = {
+ActorInit Door_Ana_InitVars = {
     ACTOR_DOOR_ANA,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -52,9 +52,10 @@ static ColliderCylinderInit sCylinderInit = {
     { 50, 10, 0, { 0, 0, 0 } },
 };
 
-static u16 sEntranceIndexes[] = {
-    0x1A00, 0x1400, 0x1410, 0x1420, 0x1430, 0x1440, 0x1450, 0x1460,
-    0x1470, 0x1480, 0x1490, 0x14A0, 0x14B0, 0x14C0, 0x14D0,
+static u16 sEntrances[] = {
+    ENTRANCE(UNSET_0D, 0), ENTRANCE(GROTTOS, 0),  ENTRANCE(GROTTOS, 1),  ENTRANCE(GROTTOS, 2),  ENTRANCE(GROTTOS, 3),
+    ENTRANCE(GROTTOS, 4),  ENTRANCE(GROTTOS, 5),  ENTRANCE(GROTTOS, 6),  ENTRANCE(GROTTOS, 7),  ENTRANCE(GROTTOS, 8),
+    ENTRANCE(GROTTOS, 9),  ENTRANCE(GROTTOS, 10), ENTRANCE(GROTTOS, 11), ENTRANCE(GROTTOS, 12), ENTRANCE(GROTTOS, 13),
 };
 
 void DoorAna_SetupAction(DoorAna* this, DoorAnaActionFunc actionFunction) {
@@ -81,7 +82,7 @@ void DoorAna_Init(Actor* thisx, PlayState* play) {
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
     }
 
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
 }
 
 void DoorAna_Destroy(Actor* thisx, PlayState* play) {
@@ -99,7 +100,7 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
 
     if (grottoType == DOORANA_TYPE_HIDDEN_STORMS) {
         //! @bug Implementation from OoT is not updated for MM, grotto does not open on Song of Storms
-        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && EnvFlags_Get(play, 5)) {
+        if (this->actor.xyzDistToPlayerSq < SQ(200.0f) && CutsceneFlags_Get(play, 5)) {
             grottoIsOpen = true;
             this->actor.flags &= ~ACTOR_FLAG_10; // always update OFF
         }
@@ -118,10 +119,10 @@ void DoorAna_WaitClosed(DoorAna* this, PlayState* play) {
     if (grottoIsOpen) {
         DOORANA_SET_TYPE(&this->actor, DOORANA_TYPE_VISIBLE);
         DoorAna_SetupAction(this, DoorAna_WaitOpen);
-        play_sound(NA_SE_SY_CORRECT_CHIME);
+        Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
     }
 
-    func_800B8C50(&this->actor, play);
+    Actor_SetClosestSecretDistance(&this->actor, play);
 }
 
 void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
@@ -129,17 +130,18 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
     s32 grottoType = DOORANA_GET_TYPE(&this->actor);
 
     if (Math_StepToF(&this->actor.scale.x, 0.01f, 0.001f)) {
-        if (this->actor.targetMode != 0 && play->sceneLoadFlag == 0 && play->unk_18B4A == 0 &&
-            (player->stateFlags1 & 0x80000000) && player->unk_AE7 == 0) {
+        if ((this->actor.targetMode != TARGET_MODE_0) && (play->transitionTrigger == TRANS_TRIGGER_OFF) &&
+            (play->transitionMode == TRANS_MODE_OFF) && (player->stateFlags1 & PLAYER_STATE1_80000000) &&
+            (player->unk_AE7 == 0)) {
 
             if (grottoType == DOORANA_TYPE_VISIBLE_SCENE_EXIT) {
                 s32 exitIndex = DOORANA_GET_EXIT_INDEX(&this->actor);
 
-                play->nextEntranceIndex = play->setupExitList[exitIndex];
+                play->nextEntrance = play->setupExitList[exitIndex];
             } else {
                 s32 destinationIdx = DOORANA_GET_ENTRANCE(&this->actor);
 
-                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, 0x4FF);
+                Play_SetupRespawnPoint(&play->state, RESPAWN_MODE_UNK_3, PLAYER_PARAMS(0xFF, PLAYER_INITMODE_4));
 
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].pos.y = this->actor.world.pos.y;
                 gSaveContext.respawn[RESPAWN_MODE_UNK_3].yaw = this->actor.home.rot.y;
@@ -151,19 +153,19 @@ void DoorAna_WaitOpen(DoorAna* this, PlayState* play) {
                     destinationIdx = DOORANA_GET_EX_ENTRANCE(&this->actor);
                 }
 
-                play->nextEntranceIndex = sEntranceIndexes[destinationIdx];
+                play->nextEntrance = sEntrances[destinationIdx];
             }
 
             DoorAna_SetupAction(this, DoorAna_GrabLink);
 
-        } else if (!Play_InCsMode(play) && !(player->stateFlags1 & 0x08800000) &&
+        } else if (!Play_InCsMode(play) && !(player->stateFlags1 & (PLAYER_STATE1_8000000 | PLAYER_STATE1_800000)) &&
                    (this->actor.xzDistToPlayer <= 20.0f) && (this->actor.playerHeightRel >= -50.0f) &&
                    (this->actor.playerHeightRel <= 15.0f)) {
-            player->stateFlags1 |= 0x80000000;
-            this->actor.targetMode = 1;
+            player->stateFlags1 |= PLAYER_STATE1_80000000;
+            this->actor.targetMode = TARGET_MODE_1;
 
         } else {
-            this->actor.targetMode = 0;
+            this->actor.targetMode = TARGET_MODE_0;
         }
     }
 
@@ -174,11 +176,11 @@ void DoorAna_GrabLink(DoorAna* this, PlayState* play) {
     Player* player;
     s8 pad[2];
 
-    if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
+        if (CutsceneManager_IsNext(this->actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+            CutsceneManager_Queue(this->actor.csId);
         }
     }
 

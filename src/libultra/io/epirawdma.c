@@ -1,10 +1,10 @@
 #include "global.h"
 
-s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, u32 cartAddr, void* dramAddr, size_t size) {
+s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, uintptr_t cartAddr, void* dramAddr, size_t size) {
     s32 status;
     OSPiHandle* curHandle;
 
-    while (status = HW_REG(PI_STATUS_REG, u32), status & (PI_STATUS_BUSY | PI_STATUS_IOBUSY)) {
+    while (status = HW_REG(PI_STATUS_REG, u32), status & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) {
         ;
     }
 
@@ -53,7 +53,7 @@ s32 __osEPiRawStartDma(OSPiHandle* handle, s32 direction, u32 cartAddr, void* dr
     }
 
     HW_REG(PI_DRAM_ADDR_REG, void*) = (void*)osVirtualToPhysical(dramAddr);
-    HW_REG(PI_CART_ADDR_REG, void*) = (void*)((handle->baseAddress | cartAddr) & 0x1fffffff);
+    HW_REG(PI_CART_ADDR_REG, void*) = (void*)((handle->baseAddress | cartAddr) & 0x1FFFFFFF);
 
     switch (direction) {
         case OS_READ:

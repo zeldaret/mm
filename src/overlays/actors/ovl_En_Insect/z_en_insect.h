@@ -9,6 +9,8 @@ typedef void (*EnInsectActionFunc)(struct EnInsect*, PlayState*);
 
 #define ENINSECT_GET_1(thisx) ((thisx)->params & 1)
 
+#define ENINSECT_PARAMS(param) (param)
+
 typedef struct EnInsect {
     /* 0x000 */ Actor actor;
     /* 0x144 */ ColliderJntSph collider;
@@ -24,7 +26,5 @@ typedef struct EnInsect {
     /* 0x314 */ s16 unk_314;
     /* 0x316 */ s16 unk_316;
 } EnInsect; // size = 0x318
-
-extern const ActorInit En_Insect_InitVars;
 
 #endif // Z_EN_INSECT_H

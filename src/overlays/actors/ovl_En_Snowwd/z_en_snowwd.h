@@ -3,16 +3,17 @@
 
 #include "global.h"
 
+#define SNOWWD_GET_PARAM_F80(thisx) (((thisx)->params & 0xF80) >> 7)
+
 struct EnSnowwd;
 
 typedef void (*EnSnowwdActionFunc)(struct EnSnowwd*, PlayState*);
 
 typedef struct EnSnowwd {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x50];
+    /* 0x144 */ ColliderCylinder collider;
+    /* 0x190 */ s16 unk190;
     /* 0x194 */ EnSnowwdActionFunc actionFunc;
 } EnSnowwd; // size = 0x198
-
-extern const ActorInit En_Snowwd_InitVars;
 
 #endif // Z_EN_SNOWWD_H

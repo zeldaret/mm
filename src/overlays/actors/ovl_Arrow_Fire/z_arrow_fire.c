@@ -19,9 +19,9 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play);
 void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play);
 void FireArrow_Fly(ArrowFire* this, PlayState* play);
 
-#include "overlays/ovl_Arrow_fire/ovl_Arrow_Fire.c"
+#include "overlays/ovl_Arrow_Fire/ovl_Arrow_Fire.c"
 
-const ActorInit Arrow_Fire_InitVars = {
+ActorInit Arrow_Fire_InitVars = {
     ACTOR_ARROW_FIRE,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -57,7 +57,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_STOP),
 };
 
-s32 sUnused;
+static s32 sBssPad;
 
 void ArrowFire_SetupAction(ArrowFire* this, ArrowFireActionFunc actionFunc) {
     this->actionFunc = actionFunc;
@@ -81,7 +81,7 @@ void ArrowFire_Init(Actor* thisx, PlayState* play) {
 void ArrowFire_Destroy(Actor* thisx, PlayState* play) {
     ArrowFire* this = THIS;
 
-    func_80115D5C(&play->state);
+    Magic_Reset(play);
     Collider_DestroyQuad(play, &this->collider1);
     Collider_DestroyQuad(play, &this->collider2);
 }
@@ -90,7 +90,7 @@ void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play) {
     EnArrow* arrow = (EnArrow*)this->actor.parent;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->radius < 10) {
@@ -100,7 +100,7 @@ void FireArrow_ChargeAndWait(ArrowFire* this, PlayState* play) {
     this->actor.world.pos = arrow->actor.world.pos;
     this->actor.shape.rot = arrow->actor.shape.rot;
 
-    func_800B9010(&this->actor, NA_SE_PL_ARROW_CHARGE_FIRE - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_PL_ARROW_CHARGE_FIRE - SFX_FLAG);
 
     // if arrow has no parent, player has fired the arrow
     if (arrow->actor.parent == NULL) {
@@ -156,7 +156,7 @@ void FireArrow_Hit(ArrowFire* this, PlayState* play) {
     }
     if (this->timer == 0) {
         this->timer = 255;
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     if (this->timer >= 13) {
@@ -171,7 +171,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
     s32 pad2;
 
     if ((arrow == NULL) || (arrow->actor.update == NULL)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -186,7 +186,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
 
     FireArrow_Lerp(&this->firedPos, &this->actor.world.pos, 0.05f);
     if (arrow->unk_261 & 1) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
+        Actor_PlaySfx(&this->actor, NA_SE_IT_EXPLOSION_FRAME);
         ArrowFire_SetupAction(this, FireArrow_Hit);
         this->timer = 32;
         this->alpha = 255;
@@ -194,7 +194,7 @@ void FireArrow_Fly(ArrowFire* this, PlayState* play) {
     }
     if (arrow->unk_260 < 34) {
         if (this->alpha < 35) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
         this->alpha -= 25;
@@ -205,7 +205,7 @@ void ArrowFire_Update(Actor* thisx, PlayState* play) {
     ArrowFire* this = (ArrowFire*)thisx;
 
     if ((play->msgCtx.msgMode == 0xE) || (play->msgCtx.msgMode == 0x12)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc(this, play);
@@ -249,6 +249,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
         Actor* transform = (arrow->unk_261 & 2) ? &this->actor : &arrow->actor;
 
         OPEN_DISPS(play->state.gfxCtx);
+
         Matrix_Translate(transform->world.pos.x, transform->world.pos.y, transform->world.pos.z, MTXMODE_NEW);
         Matrix_RotateYS(transform->shape.rot.y, MTXMODE_APPLY);
         Matrix_RotateXS(transform->shape.rot.x, MTXMODE_APPLY);
@@ -256,7 +257,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
 
         Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
         if (this->screenFillIntensity > 0.0f) {
-            POLY_XLU_DISP = func_8012BFC4(POLY_XLU_DISP);
+            POLY_XLU_DISP = Gfx_SetupDL57(POLY_XLU_DISP);
 
             gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, (s32)(this->screenFillIntensity * 40.0f) & 0xFF, 0, 0,
                             (s32)(150.0f * this->screenFillIntensity) & 0xFF);
@@ -266,7 +267,7 @@ void ArrowFire_Draw(Actor* thisx, PlayState* play) {
 
             gSPDisplayList(POLY_XLU_DISP++, D_0E000000.fillRect);
         }
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0x80, 0x80, 255, 200, 0, this->alpha);
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 0, 0, 128);

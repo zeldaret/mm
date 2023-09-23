@@ -63,19 +63,17 @@ typedef struct Boss04 {
     /* 0x700 */ f32 unk_700;
     /* 0x704 */ u32 unk_704;
     /* 0x708 */ s16 unk_708;
-    /* 0x70A */ s16 unk_70A;
-    /* 0x70C */ Vec3f unk_70C;
-    /* 0x718 */ Vec3f unk_718;
+    /* 0x70A */ s16 subCamId;
+    /* 0x70C */ Vec3f subCamEye;
+    /* 0x718 */ Vec3f subCamAt;
     /* 0x724 */ UNK_TYPE1 unk_724[4];
     /* 0x728 */ f32 unk_728;
     /* 0x72C */ UNK_TYPE1 unk_72C[0x10];
     /* 0x73C */ f32 unk_73C;
     /* 0x740 */ UNK_TYPE1 unk_740[4];
-    /* 0x744 */ f32 unk_744;
-    /* 0x748 */ s16 unk_748;
+    /* 0x744 */ f32 subCamFov;
+    /* 0x748 */ s16 subCamAtOscillator;
     /* 0x74A */ u8 unk_74A;
 } Boss04; // size = 0x74C
-
-extern const ActorInit Boss_04_InitVars;
 
 #endif // Z_BOSS_04_H

@@ -31,7 +31,7 @@ typedef enum {
     /* 1 */ GYORG_EFFECT_BUBBLE,
     /* 2 */ GYORG_EFFECT_DROPLET,
     /* 3 */ GYORG_EFFECT_SPLASH,
-    /* 4 */ GYORG_EFFECT_WET_SPOT,
+    /* 4 */ GYORG_EFFECT_WET_SPOT
 } GyorgEffectType;
 
 typedef struct Boss03 {
@@ -92,16 +92,16 @@ typedef struct Boss03 {
     /* 0x52C */ f32 floppingAnimLastFrame;
     /* 0x530 */ u32 csTimer;
     /* 0x534 */ s16 csState;
-    /* 0x536 */ s16 csCamId;
-    /* 0x538 */ Vec3f csCamEye;
-    /* 0x544 */ Vec3f csCamAt;
-    /* 0x550 */ Vec3f csCamTargetEye;
-    /* 0x55C */ Vec3f csCamTargetAt;
+    /* 0x536 */ s16 subCamId;
+    /* 0x538 */ Vec3f subCamEye;
+    /* 0x544 */ Vec3f subCamAt;
+    /* 0x550 */ Vec3f subCamEyeNext;
+    /* 0x55C */ Vec3f subCamAtNext;
     /* 0x568 */ f32 unk_568;
     /* 0x56C */ f32 unk_56C;
     /* 0x570 */ f32 unk_570; // set but not used
     /* 0x574 */ UNK_TYPE1 unk_574[0x04];
-    /* 0x578 */ f32 cameraFov;
+    /* 0x578 */ f32 subCamFov;
 } Boss03; // size = 0x57C
  
 #define GYORG_PARAM_DEFAULT (0)

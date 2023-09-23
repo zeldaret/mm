@@ -20,7 +20,7 @@ void func_809200F8(ItemEtcetera* this, PlayState* play);
 void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play);
 void ItemEtcetera_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Item_Etcetera_InitVars = {
+ActorInit Item_Etcetera_InitVars = {
     ACTOR_ITEM_ETCETERA,
     ACTORCAT_PROP,
     FLAGS,
@@ -37,14 +37,14 @@ static s16 sObjectIds[] = {
     OBJECT_GI_BOTTLE, OBJECT_GI_KEY,    OBJECT_GI_M_ARROW, OBJECT_GI_RUPY,   OBJECT_GI_RUPY,
     OBJECT_GI_RUPY,   OBJECT_GI_RUPY,   OBJECT_GI_HEARTS,  OBJECT_GI_KEY,
 };
-static s16 sDrawItemIndices[] = {
-    GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_BOTTLE, GID_01,
-    GID_47,     GID_4F,     GID_50,     GID_51,     GID_53,     GID_13,     GID_01,
+static s16 sGetItemDrawIds[] = {
+    GID_BOTTLE,     GID_BOTTLE,      GID_BOTTLE,     GID_BOTTLE,    GID_BOTTLE,       GID_BOTTLE,      GID_KEY_SMALL,
+    GID_ARROW_FIRE, GID_RUPEE_GREEN, GID_RUPEE_BLUE, GID_RUPEE_RED, GID_RUPEE_PURPLE, GID_HEART_PIECE, GID_KEY_SMALL,
 };
 
 static s16 sGetItemIds[] = {
-    GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_KEY_SMALL,
-    GI_25,     GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,
+    GI_BOTTLE,     GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_BOTTLE, GI_KEY_SMALL,
+    GI_ARROW_FIRE, GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,   GI_NONE,
 };
 
 void ItemEtcetera_SetupAction(ItemEtcetera* this, ItemEtceteraActionFunc actionFunc) {
@@ -62,8 +62,8 @@ void ItemEtcetera_Init(Actor* thisx, PlayState* play) {
     } else {
         this->objIndex = objBankIndex;
     }
-    this->giDrawId = sDrawItemIndices[type];
-    this->itemID = sGetItemIds[type];
+    this->getItemDrawId = sGetItemDrawIds[type];
+    this->getItemId = sGetItemIds[type];
     this->futureActionFunc = func_8092009C;
     this->drawFunc = ItemEtcetera_Draw;
     Actor_SetScale(&this->actor, 0.25f);
@@ -102,15 +102,16 @@ void ItemEtcetera_WaitForObject(ItemEtcetera* this, PlayState* play) {
 
 void func_8092009C(ItemEtcetera* this, PlayState* play) {
     if (Actor_HasParent(&this->actor, play)) {
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        Actor_PickUp(&this->actor, play, this->itemID, 30.0f, 50.0f);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    Actor_OfferGetItem(&this->actor, play, this->getItemId, 30.0f, 50.0f);
 }
 
 void func_809200F8(ItemEtcetera* this, PlayState* play) {
     if (Flags_GetTreasure(play, ITEMETCETERA_GET_TREASUREFLAG(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -123,10 +124,10 @@ void ItemEtcetera_Update(Actor* thisx, PlayState* play) {
 void ItemEtcetera_DrawThroughLens(Actor* thisx, PlayState* play) {
     ItemEtcetera* this = THIS;
 
-    if (play->actorCtx.unk4 == 100) {
+    if (play->actorCtx.lensMaskSize == LENS_MASK_ACTIVE_SIZE) {
         func_800B8050(&this->actor, play, 0);
         func_800B8118(&this->actor, play, 0);
-        GetItem_Draw(play, this->giDrawId);
+        GetItem_Draw(play, this->getItemDrawId);
     }
 }
 
@@ -135,5 +136,5 @@ void ItemEtcetera_Draw(Actor* thisx, PlayState* play) {
 
     func_800B8050(&this->actor, play, 0);
     func_800B8118(&this->actor, play, 0);
-    GetItem_Draw(play, this->giDrawId);
+    GetItem_Draw(play, this->getItemDrawId);
 }

@@ -5,7 +5,7 @@ We encourage all contributors to participate in code review: this is your codeba
 Every review submitted helps us keep code quality high and code merged in more quickly.
 
 This document is meant to be a set of tips and guidelines for reviewers of pull requests to the project.
-For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/master/README.md).
+For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/main/README.md).
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
@@ -30,7 +30,7 @@ You should first famiiarise yourself with our [Contributing guide](CONTRIBUTING.
 
 - [ ] Jenkins build is successful.
   - [ ] `make` builds a matching ROM.
-  - [ ] `format.sh` was run.
+  - [ ] `format.py` was run.
   - [ ] `spec` contains correct relocation files.
   - [ ] Any new compiler warnings that were added are required for matching. Ensure there is good reason if the warnings files have changed.
 - [ ] Files with `NON_MATCHING` functions have equivalent behaviour.

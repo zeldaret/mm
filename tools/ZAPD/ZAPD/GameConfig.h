@@ -31,10 +31,14 @@ public:
 	std::map<uint32_t, std::string> symbolMap;
 	std::vector<std::string> actorList;
 	std::vector<std::string> objectList;
+	std::vector<std::string> entranceList;
+	std::vector<std::string> specialEntranceList;
 	std::map<uint32_t, TexturePoolEntry> texturePool;  // Key = CRC
 
 	// ZBackground
 	uint32_t bgScreenWidth = 320, bgScreenHeight = 240;
+	bool useScreenWidthHeightConstants = true;  // If true, ZBackground's will be declared with
+	                                            // SCREEN_WIDTH * SCREEN_HEIGHT in the C file
 
 	// ExternalFile
 	fs::path externalXmlFolder;
@@ -49,6 +53,8 @@ public:
 	void ConfigFunc_SymbolMap(const tinyxml2::XMLElement& element);
 	void ConfigFunc_ActorList(const tinyxml2::XMLElement& element);
 	void ConfigFunc_ObjectList(const tinyxml2::XMLElement& element);
+	void ConfigFunc_EntranceList(const tinyxml2::XMLElement& element);
+	void ConfigFunc_specialEntranceList(const tinyxml2::XMLElement& element);
 	void ConfigFunc_TexturePool(const tinyxml2::XMLElement& element);
 	void ConfigFunc_BGConfig(const tinyxml2::XMLElement& element);
 	void ConfigFunc_ExternalXMLFolder(const tinyxml2::XMLElement& element);

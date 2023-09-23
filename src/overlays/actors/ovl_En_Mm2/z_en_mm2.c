@@ -18,7 +18,7 @@ void EnMm2_Draw(Actor* thisx, PlayState* play);
 void EnMm2_Reading(EnMm2* this, PlayState* play);
 void EnMm2_WaitForRead(EnMm2* this, PlayState* play);
 
-const ActorInit En_Mm2_InitVars = {
+ActorInit En_Mm2_InitVars = {
     ACTOR_EN_MM2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -46,15 +46,17 @@ void EnMm2_Destroy(Actor* thisx, PlayState* play) {
  * Action function whilst Link is reading the letter.
  */
 void EnMm2_Reading(EnMm2* this, PlayState* play) {
-    u8 talkState = Message_GetState(&play->msgCtx);
+    switch (Message_GetState(&play->msgCtx)) {
+        case TEXT_STATE_5:
+            if (Message_ShouldAdvance(play)) {
+                Message_CloseTextbox(play);
+                this->actionFunc = EnMm2_WaitForRead;
+            }
+            break;
 
-    if (talkState != 2) {
-        if (talkState == 5 && Message_ShouldAdvance(play)) {
-            func_801477B4(play);
+        case TEXT_STATE_CLOSING:
             this->actionFunc = EnMm2_WaitForRead;
-        }
-    } else {
-        this->actionFunc = EnMm2_WaitForRead;
+            break;
     }
 }
 
@@ -67,7 +69,7 @@ void EnMm2_WaitForRead(EnMm2* this, PlayState* play) {
         Message_StartTextbox(play, 0x277B, &this->actor);
         this->actionFunc = EnMm2_Reading;
     } else if ((this->actor.xzDistToPlayer < 60.0f) && (Player_IsFacingActor(&this->actor, 0x3000, play))) {
-        func_800B8614(&this->actor, play, 110.0f);
+        Actor_OfferTalk(&this->actor, play, 110.0f);
     }
 }
 
@@ -80,7 +82,7 @@ void EnMm2_Update(Actor* thisx, PlayState* play) {
 void EnMm2_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sEnMm2DL);
 

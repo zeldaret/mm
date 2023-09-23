@@ -6,7 +6,7 @@
 
 #include "z_en_jso.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJso*)thisx)
 
@@ -69,7 +69,7 @@ static DamageTable D_809B0F48 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Jso_InitVars = {
+ActorInit En_Jso_InitVars = {
     ACTOR_EN_JSO,
     ACTORCAT_ENEMY,
     FLAGS,

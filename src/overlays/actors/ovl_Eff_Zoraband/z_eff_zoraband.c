@@ -18,7 +18,7 @@ void EffZoraband_Draw(Actor* thisx, PlayState* play2);
 
 void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play);
 
-const ActorInit Eff_Zoraband_InitVars = {
+ActorInit Eff_Zoraband_InitVars = {
     ACTOR_EFF_ZORABAND,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -43,19 +43,19 @@ void EffZoraband_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EffZoraband_MikauFadeOut(EffZoraband* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 0x20F)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_527)) {
         if ((EFFZORABAND_GET_F(&this->actor) + 2) ==
-            play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x20F)]->action) {
+            play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_527)]->id) {
             this->stateFlags |= 2;
         }
-        if (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 0x20F)]->action == 7) {
+        if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_527)]->id == 7) {
             this->actor.draw = NULL;
         } else {
             this->actor.draw = EffZoraband_Draw;
         }
     }
     if ((this->actor.home.rot.z != 0) && (this->actor.draw != NULL)) {
-        func_800B9010(&this->actor, NA_SE_EV_UFO_LIGHT_BEAM - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_UFO_LIGHT_BEAM - SFX_FLAG);
     }
     if (this->stateFlags & 2) {
         if (this->alpha < 240) {
@@ -79,7 +79,7 @@ void EffZoraband_Draw(Actor* thisx, PlayState* play2) {
     if (this->alpha != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_RotateYS((Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000), MTXMODE_APPLY);
         AnimatedMat_DrawXlu(play, Lib_SegmentedToVirtual(object_zoraband_Matanimheader_000F38));
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

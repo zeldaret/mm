@@ -20,7 +20,7 @@ u32 EffectSsKFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPar
 void EffectSsKFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_K_Fire_InitVars = {
+EffectSsInit Effect_Ss_K_Fire_InitVars = {
     EFFECT_SS_K_FIRE,
     EffectSsKFire_Init,
 };
@@ -55,7 +55,7 @@ void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this) {
 
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(xzScale, yScale, xzScale, MTXMODE_APPLY);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gSPSegment(POLY_XLU_DISP++, 0x08,
                Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0, play->state.frames * this->rScroll, 0x20,
                                 0x80));
@@ -76,7 +76,7 @@ void EffectSsKFire_Draw(PlayState* play, u32 index, EffectSs* this) {
     }
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(POLY_XLU_DISP++, gGameplayKeepDrawFlameDL);
+    gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
 
     CLOSE_DISPS(gfxCtx);
 }

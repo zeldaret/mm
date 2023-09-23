@@ -57,7 +57,7 @@
         <Limb Name="object_tab_Standardlimb_007F08" Type="Standard" EnumName="OBJECT_TAB_LIMB_11" Offset="0x7F08" />
         <Limb Name="object_tab_Standardlimb_007F14" Type="Standard" EnumName="OBJECT_TAB_LIMB_12" Offset="0x7F14" />
         <Limb Name="object_tab_Standardlimb_007F20" Type="Standard" EnumName="OBJECT_TAB_LIMB_13" Offset="0x7F20" />
-        <Skeleton Name="object_tab_Skel_007F78" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TAB_LIMB_NONE" LimbMax="OBJECT_TAB_LIMB_MAX" EnumName="object_tab_Limbs" Offset="0x7F78" />
+        <Skeleton Name="object_tab_Skel_007F78" Type="Flex" LimbType="Standard" LimbNone="OBJECT_TAB_LIMB_NONE" LimbMax="OBJECT_TAB_LIMB_MAX" EnumName="ObjectTabLimb" Offset="0x7F78" />
         <Animation Name="object_tab_Anim_0086AC" Offset="0x86AC" />
     </File>
 </Root>

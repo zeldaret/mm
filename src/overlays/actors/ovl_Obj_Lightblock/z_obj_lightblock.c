@@ -23,7 +23,7 @@ void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play);
 void ObjLightblock_SetupFadeAway(ObjLightblock* this);
 void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play);
 
-const ActorInit Obj_Lightblock_InitVars = {
+ActorInit Obj_Lightblock_InitVars = {
     ACTOR_OBJ_LIGHTBLOCK,
     ACTORCAT_BG,
     FLAGS,
@@ -55,12 +55,12 @@ static ColliderCylinderInit sCylinderInit = {
     { 84, 120, 0, { 0, 0, 0 } },
 };
 
-typedef struct {
-    /* 0x00 */ f32 scale;
-    /* 0x04 */ s16 radius;
-    /* 0x06 */ s16 height;
-    /* 0x08 */ s16 yShift;
-    /* 0x0C */ s32 effectParams;
+typedef struct LightblockTypeVars {
+    /* 0x0 */ f32 scale;
+    /* 0x4 */ s16 radius;
+    /* 0x6 */ s16 height;
+    /* 0x8 */ s16 yShift;
+    /* 0xC */ s32 effectParams;
 } LightblockTypeVars; // size = 0x10
 
 static LightblockTypeVars sLightblockTypeVars[] = {
@@ -94,17 +94,18 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
     DynaPolyActor_Init(&this->dyna, 0);
     Collider_InitCylinder(play, &this->collider);
     if (Flags_GetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else {
-        DynaPolyActor_LoadMesh(play, &this->dyna, &object_lightblock_Colheader_000B80);
-        Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-        Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
-        this->collider.dim.radius = typeVars->radius;
-        this->collider.dim.height = typeVars->height;
-        this->collider.dim.yShift = typeVars->yShift;
-        this->alpha = 255;
-        ObjLightblock_SetupWait(this);
+        Actor_Kill(&this->dyna.actor);
+        return;
     }
+
+    DynaPolyActor_LoadMesh(play, &this->dyna, &object_lightblock_Colheader_000B80);
+    Collider_SetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->dyna.actor, &this->collider);
+    this->collider.dim.radius = typeVars->radius;
+    this->collider.dim.height = typeVars->height;
+    this->collider.dim.yShift = typeVars->yShift;
+    this->alpha = 255;
+    func_80AF3AC8(this);
 }
 
 void ObjLightblock_Destroy(Actor* thisx, PlayState* play) {
@@ -137,7 +138,7 @@ void ObjLightblock_Wait(ObjLightblock* this, PlayState* play) {
     }
 
     if (this->collisionCounter >= 8) {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
         ObjLightblock_SetupPlayCutscene(this);
     } else {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
@@ -149,13 +150,13 @@ void ObjLightblock_SetupPlayCutscene(ObjLightblock* this) {
 }
 
 void ObjLightblock_PlayCutscene(ObjLightblock* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         Flags_SetSwitch(play, LIGHTBLOCK_DESTROYED(&this->dyna.actor));
         ObjLightblock_SpawnEffect(this, play);
         ObjLightblock_SetupFadeAway(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -167,15 +168,18 @@ void ObjLightblock_SetupFadeAway(ObjLightblock* this) {
 void ObjLightblock_FadeAway(ObjLightblock* this, PlayState* play) {
     this->timer--;
     if (this->timer <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
-    } else if (this->timer <= 60) {
+        CutsceneManager_Stop(this->dyna.actor.csId);
+        Actor_Kill(&this->dyna.actor);
+        return;
+    }
+
+    if (this->timer <= 60) {
         if (this->alpha > 40) {
             this->alpha -= 40;
         } else {
             this->alpha = 0;
             this->dyna.actor.draw = NULL;
-            func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+            DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
         }
     }
 }
@@ -190,18 +194,20 @@ void ObjLightblock_Draw(Actor* thisx, PlayState* play) {
     ObjLightblock* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (this->alpha < 255) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0x80, 255, 255, 255, this->alpha);
         gSPDisplayList(POLY_XLU_DISP++, object_lightblock_DL_000178);
     } else {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0x80, 255, 255, 255, 255);
         gSPDisplayList(POLY_OPA_DISP++, object_lightblock_DL_000178);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

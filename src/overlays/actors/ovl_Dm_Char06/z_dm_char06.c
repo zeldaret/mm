@@ -15,12 +15,10 @@ void DmChar06_Destroy(Actor* thisx, PlayState* play);
 void DmChar06_Update(Actor* thisx, PlayState* play);
 void DmChar06_Draw(Actor* thisx, PlayState* play);
 
-void func_80AAE6F0(DmChar06* this, PlayState* play);
-
 void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc);
+void DmChar06_HandleCutscene(DmChar06* this, PlayState* play);
 
-#if 0
-const ActorInit Dm_Char06_InitVars = {
+ActorInit Dm_Char06_InitVars = {
     ACTOR_DM_CHAR06,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -32,18 +30,60 @@ const ActorInit Dm_Char06_InitVars = {
     (ActorFunc)DmChar06_Draw,
 };
 
-#endif
+void DmChar06_SetupAction(DmChar06* this, DmChar06ActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
+}
 
-extern UNK_TYPE D_06006868;
+void DmChar06_Init(Actor* thisx, PlayState* play) {
+    DmChar06* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_SetupAction.s")
+    SET_WEEKEVENTREG(WEEKEVENTREG_CLEARED_SNOWHEAD_TEMPLE);
+    Actor_SetScale(&this->actor, 1.0f);
+    this->alpha = 255;
+    DmChar06_SetupAction(this, DmChar06_HandleCutscene);
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Init.s")
+void DmChar06_Destroy(Actor* thisx, PlayState* play) {
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Destroy.s")
+void DmChar06_HandleCutscene(DmChar06* this, PlayState* play) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_463)) {
+        s32 cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_463);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/func_80AAE6F0.s")
+        if ((play->csCtx.curFrame >= play->csCtx.actorCues[cueChannel]->startFrame) &&
+            (play->csCtx.actorCues[cueChannel]->endFrame >= play->csCtx.curFrame)) {
+            if (play->csCtx.actorCues[cueChannel]->id == 1) {
+                this->alpha = 255;
+            } else if (play->csCtx.actorCues[cueChannel]->id == 2) {
+                f32 lerp =
+                    1.0f - Environment_LerpWeight(play->csCtx.actorCues[cueChannel]->endFrame,
+                                                  play->csCtx.actorCues[cueChannel]->startFrame, play->csCtx.curFrame);
+                this->alpha = 255 * lerp;
+            }
+        }
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Update.s")
+void DmChar06_Update(Actor* thisx, PlayState* play) {
+    DmChar06* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Dm_Char06/DmChar06_Draw.s")
+    this->actionFunc(this, play);
+}
+
+void DmChar06_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    DmChar06* this = THIS;
+
+    AnimatedMat_Draw(play, Lib_SegmentedToVirtual(object_yukiyama_Matanimheader_006868));
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Scene_SetRenderModeXlu(play, 1, 2);
+    gDPPipeSync(POLY_XLU_DISP++);
+    gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 0, this->alpha);
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_XLU_DISP++, object_yukiyama_DL_0013A8);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

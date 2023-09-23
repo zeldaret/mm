@@ -3,4 +3,6 @@
 elf2rom
 makeromfs
 mkldscript
+reloc_prereq
 yaz0
+makeyar

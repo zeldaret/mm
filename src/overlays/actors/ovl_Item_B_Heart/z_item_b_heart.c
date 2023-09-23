@@ -16,7 +16,7 @@ void ItemBHeart_Destroy(Actor* thisx, PlayState* play);
 void ItemBHeart_Update(Actor* thisx, PlayState* play);
 void ItemBHeart_Draw(Actor* thisx, PlayState* play);
 
-void func_808BCF54(ItemBHeart* this, PlayState* play);
+void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play);
 
 const ActorInit Item_B_Heart_InitVars = {
     ACTOR_ITEM_B_HEART,
@@ -41,73 +41,79 @@ void ItemBHeart_Init(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
 
     if (Flags_GetCollectible(play, 0x1F)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
-
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.8f);
-
-    if (this->actor.params == 0x23) {
-        this->unk_168 = 0.1f;
+    if (this->actor.params == BHEART_PARAM_SMALL) {
+        this->baseScale = BHEART_SCALE_SMALL;
     } else {
-        this->unk_168 = 1.0f;
+        this->baseScale = BHEART_SCALE_NORMAL;
     }
-
-    this->actor.world.pos.y += (20.0f * this->unk_168);
+    this->actor.world.pos.y += 20.0f * this->baseScale;
 }
 
 void ItemBHeart_Destroy(Actor* thisx, PlayState* play) {
 }
 
+/**
+ * Adjusts size and handles collection (if of proper baseScale)
+ */
 void ItemBHeart_Update(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
 
-    func_808BCF54(this, play);
+    ItemBHeart_UpdateModel(this, play);
 
-    if (!(this->unk_168 < 0.5f)) {
+    if (!(this->baseScale < BHEART_SCALE_MIN_COLLECTIBLE)) {
         if (Actor_HasParent(&this->actor, play)) {
             Flags_SetCollectible(play, 0x1F);
-            Actor_MarkForDeath(&this->actor);
-        } else {
-            Actor_PickUp(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
+            Actor_Kill(&this->actor);
+            return;
         }
+        Actor_OfferGetItem(&this->actor, play, GI_HEART_CONTAINER, 30.0f, 80.0f);
     }
 }
 
-void func_808BCF54(ItemBHeart* this, PlayState* play) {
+/**
+ * Rotate continuously while approaching 40% of object's unit scale.
+ */
+void ItemBHeart_UpdateModel(ItemBHeart* this, PlayState* play) {
     this->actor.shape.rot.y += 0x400;
-    Math_ApproachF(&this->unk_164, 0.4f, 0.1f, 0.01f);
-    Actor_SetScale(&this->actor, this->unk_164 * this->unk_168);
+    Math_ApproachF(&this->variableScale, 0.4f, 0.1f, 0.01f);
+    Actor_SetScale(&this->actor, this->variableScale * this->baseScale);
 }
 
+/**
+ * Draw translucently when in front of a boss warp portal
+ */
 void ItemBHeart_Draw(Actor* thisx, PlayState* play) {
     ItemBHeart* this = THIS;
-    Actor* blueWarpActor;
-    u8 flag = false;
+    Actor* actorIt;
+    u8 drawTranslucent = false;
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    blueWarpActor = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
+    actorIt = play->actorCtx.actorLists[ACTORCAT_ITEMACTION].first;
 
-    while (blueWarpActor != NULL) {
-        if ((blueWarpActor->id == ACTOR_DOOR_WARP1) && (blueWarpActor->projectedPos.z > this->actor.projectedPos.z)) {
-            flag = true;
+    while (actorIt != NULL) {
+        if ((actorIt->id == ACTOR_DOOR_WARP1) && (actorIt->projectedPos.z > this->actor.projectedPos.z)) {
+            drawTranslucent = true;
             break;
         }
-        blueWarpActor = blueWarpActor->next;
+        actorIt = actorIt->next;
     }
 
-    if (flag || thisx->world.rot.y != 0) {
-        func_8012C2DC(play->state.gfxCtx);
+    if (drawTranslucent || (this->actor.world.rot.y != 0)) {
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001290);
-        gSPDisplayList(POLY_XLU_DISP++, object_gi_hearts_DL_001470);
+        gSPDisplayList(POLY_XLU_DISP++, &gGiHeartBorderDL);
+        gSPDisplayList(POLY_XLU_DISP++, &gGiHeartContainerDL);
     } else {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_OPA_DISP++, object_gi_hearts_DL_001290);
-        gSPDisplayList(POLY_OPA_DISP++, object_gi_hearts_DL_001470);
+        gSPDisplayList(POLY_OPA_DISP++, &gGiHeartBorderDL);
+        gSPDisplayList(POLY_OPA_DISP++, &gGiHeartContainerDL);
     }
 
     CLOSE_DISPS(play->state.gfxCtx);

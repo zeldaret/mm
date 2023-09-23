@@ -1,17 +1,17 @@
 ﻿<Root>
     <File Name="object_death" Segment="6">
-        <Animation Name="object_death_Anim_000E64" Offset="0xE64" />
-        <Animation Name="object_death_Anim_0015B4" Offset="0x15B4" />
-        <Animation Name="object_death_Anim_001834" Offset="0x1834" />
-        <Animation Name="object_death_Anim_001F80" Offset="0x1F80" />
-        <Animation Name="object_death_Anim_002DE8" Offset="0x2DE8" />
-        <Animation Name="object_death_Anim_00352C" Offset="0x352C" />
-        <Animation Name="object_death_Anim_003CAC" Offset="0x3CAC" />
+        <Animation Name="object_death_Anim_000E64" Offset="0xE64" /> <!-- Original name is "d13_atack" -->
+        <Animation Name="object_death_Anim_0015B4" Offset="0x15B4" /> <!-- Original name is "d13_callenemy" -->
+        <Animation Name="object_death_Anim_001834" Offset="0x1834" /> <!-- Original name is "d13_callingenemy" -->
+        <Animation Name="object_death_Anim_001F80" Offset="0x1F80" /> <!-- Original name is "d13_damage" -->
+        <Animation Name="object_death_Anim_002DE8" Offset="0x2DE8" /> <!-- Original name is "d13_deadhit" -->
+        <Animation Name="object_death_Anim_00352C" Offset="0x352C" /> <!-- Original name is "d13_deadwait" -->
+        <Animation Name="object_death_Anim_003CAC" Offset="0x3CAC" /> <!-- Original name is "d13_fly" -->
         <DList Name="object_death_DL_006B80" Offset="0x6B80" />
         <DList Name="object_death_DL_006D18" Offset="0x6D18" />
         <DList Name="object_death_DL_006E08" Offset="0x6E08" />
-        <DList Name="object_death_DL_006F88" Offset="0x6F88" />
-        <DList Name="object_death_DL_0073D0" Offset="0x73D0" />
+        <DList Name="object_death_DL_006F88" Offset="0x6F88" /> <!-- Original name is "d13_kama_model" ("sickle​") -->
+        <DList Name="object_death_DL_0073D0" Offset="0x73D0" /> <!-- Original name is "d13_kamahaA_model" -->
         <DList Name="object_death_DL_0074B8" Offset="0x74B8" />
         <DList Name="object_death_DL_007560" Offset="0x7560" />
         <DList Name="object_death_DL_007638" Offset="0x7638" />
@@ -41,7 +41,7 @@
         <Texture Name="object_death_Tex_009808" OutName="tex_009808" Format="i4" Width="16" Height="16" Offset="0x9808" />
         <DList Name="object_death_DL_009988" Offset="0x9988" />
         <Texture Name="object_death_Tex_009AA0" OutName="tex_009AA0" Format="i4" Width="16" Height="16" Offset="0x9AA0" />
-        <DList Name="object_death_DL_009BA0" Offset="0x9BA0" />
+        <DList Name="object_death_DL_009BA0" Offset="0x9BA0" /> <!-- Original name is "d13_cover_model" -->
         <Texture Name="object_death_Tex_009C40" OutName="tex_009C40" Format="rgba16" Width="16" Height="16" Offset="0x9C40" />
         <DList Name="object_death_DL_009F10" Offset="0x9F10" />
         <DList Name="object_death_DL_009F88" Offset="0x9F88" />
@@ -75,10 +75,10 @@
         <Limb Name="object_death_Standardlimb_00AC90" Type="Standard" EnumName="OBJECT_DEATH_LIMB_13" Offset="0xAC90" />
         <Limb Name="object_death_Standardlimb_00AC9C" Type="Standard" EnumName="OBJECT_DEATH_LIMB_14" Offset="0xAC9C" />
         <Limb Name="object_death_Standardlimb_00ACA8" Type="Standard" EnumName="OBJECT_DEATH_LIMB_15" Offset="0xACA8" />
-        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="object_death_Limbs" Offset="0xAD08" />
-        <Animation Name="object_death_Anim_00B284" Offset="0xB284" />
-        <Animation Name="object_death_Anim_00B508" Offset="0xB508" />
-        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" />
+        <Skeleton Name="object_death_Skel_00AD08" Type="Flex" LimbType="Standard" LimbNone="OBJECT_DEATH_LIMB_NONE" LimbMax="OBJECT_DEATH_LIMB_MAX" EnumName="ObjectDeathLimb" Offset="0xAD08" />
+        <Animation Name="object_death_Anim_00B284" Offset="0xB284" /> <!-- Original name is "d13_gahaha" -->
+        <Animation Name="object_death_Anim_00B508" Offset="0xB508" /> <!-- Original name is "d13_guard" -->
+        <Animation Name="object_death_Anim_00CB2C" Offset="0xCB2C" /> <!-- Original name is "d13_jakin" -->
         <TextureAnimation Name="object_death_Matanimheader_00CB84" Offset="0xCB84" />
         <TextureAnimation Name="object_death_Matanimheader_00CBC0" Offset="0xCBC0" />
     </File>

@@ -1,8 +1,8 @@
 ﻿<Root>
     <File Name="object_bg" Segment="6">
-        <Animation Name="object_bg_Anim_000968" Offset="0x968" />
-        <Animation Name="object_bg_Anim_000A00" Offset="0xA00" />
-        <Animation Name="object_bg_Anim_001384" Offset="0x1384" />
+        <Animation Name="object_bg_Anim_000968" Offset="0x968" /> <!-- Original name is "bg_asking" -->
+        <Animation Name="object_bg_Anim_000A00" Offset="0xA00" /> <!-- Original name is "bg_getup" -->
+        <Animation Name="object_bg_Anim_001384" Offset="0x1384" /> <!-- Original name is "bg_kunekune" ("wiggling; waving; swaying; twisting and turning​") -->
         <DList Name="object_bg_DL_003F50" Offset="0x3F50" />
         <DList Name="object_bg_DL_004558" Offset="0x4558" />
         <DList Name="object_bg_DL_004768" Offset="0x4768" />
@@ -51,12 +51,12 @@
         <Limb Name="object_bg_Standardlimb_008F48" Type="Standard" EnumName="OBJECT_BG_1_LIMB_15" Offset="0x8F48" />
         <Limb Name="object_bg_Standardlimb_008F54" Type="Standard" EnumName="OBJECT_BG_1_LIMB_16" Offset="0x8F54" />
         <Limb Name="object_bg_Standardlimb_008F60" Type="Standard" EnumName="OBJECT_BG_1_LIMB_17" Offset="0x8F60" />
-        <Skeleton Name="object_bg_Skel_008FC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_1_LIMB_NONE" LimbMax="OBJECT_BG_1_LIMB_MAX" EnumName="object_bg_1_Limbs" Offset="0x8FC8" />
-        <Animation Name="object_bg_Anim_009890" Offset="0x9890" />
-        <Animation Name="object_bg_Anim_009F20" Offset="0x9F20" />
-        <Animation Name="object_bg_Anim_00A280" Offset="0xA280" />
-        <Animation Name="object_bg_Anim_00AD98" Offset="0xAD98" />
-        <Animation Name="object_bg_Anim_00B19C" Offset="0xB19C" />
+        <Skeleton Name="object_bg_Skel_008FC8" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_1_LIMB_NONE" LimbMax="OBJECT_BG_1_LIMB_MAX" EnumName="ObjectBg1Limb" Offset="0x8FC8" />
+        <Animation Name="object_bg_Anim_009890" Offset="0x9890" /> <!-- Original name is "bg_newwait" -->
+        <Animation Name="object_bg_Anim_009F20" Offset="0x9F20" /> <!-- Original name is "bg_sleeping" -->
+        <Animation Name="object_bg_Anim_00A280" Offset="0xA280" /> <!-- Original name is "bg_tokune" (probably the English word "to" and "kunekune") -->
+        <Animation Name="object_bg_Anim_00AD98" Offset="0xAD98" /> <!-- Original name is "bg_up" -->
+        <Animation Name="object_bg_Anim_00B19C" Offset="0xB19C" /> <!-- Original name is "bg_wait" -->
         <DList Name="object_bg_DL_00D5E0" Offset="0xD5E0" />
         <DList Name="object_bg_DL_00D780" Offset="0xD780" />
         <DList Name="object_bg_DL_00DB38" Offset="0xDB38" />
@@ -107,6 +107,6 @@
         <Limb Name="object_bg_Standardlimb_011AE0" Type="Standard" EnumName="OBJECT_BG_2_LIMB_15" Offset="0x11AE0" />
         <Limb Name="object_bg_Standardlimb_011AEC" Type="Standard" EnumName="OBJECT_BG_2_LIMB_16" Offset="0x11AEC" />
         <Limb Name="object_bg_Standardlimb_011AF8" Type="Standard" EnumName="OBJECT_BG_2_LIMB_17" Offset="0x11AF8" />
-        <Skeleton Name="object_bg_Skel_011B60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_2_LIMB_NONE" LimbMax="OBJECT_BG_2_LIMB_MAX" EnumName="object_bg_2_Limbs" Offset="0x11B60" />
+        <Skeleton Name="object_bg_Skel_011B60" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BG_2_LIMB_NONE" LimbMax="OBJECT_BG_2_LIMB_MAX" EnumName="ObjectBg2Limb" Offset="0x11B60" />
     </File>
 </Root>

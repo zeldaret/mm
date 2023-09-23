@@ -12,17 +12,18 @@
 
 void EnViewer_Init(Actor* thisx, PlayState* play);
 void EnViewer_Destroy(Actor* thisx, PlayState* play);
-void EnViewer_Update(Actor* thisx, PlayState* play);
+void EnViewer_Update(Actor* thisx, PlayState* play2);
 void EnViewer_Draw(Actor* thisx, PlayState* play);
 
 void func_8089F17C(EnViewer* this, PlayState* play);
 void func_8089F218(EnViewer* this, PlayState* play);
 void func_8089F2C4(EnViewer* this, PlayState* play);
 
-void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc);
+static u8 D_8089F3E0 = 0;
 
-#if 0
-const ActorInit En_Viewer_InitVars = {
+static u8 D_8089F3E4 = 0;
+
+ActorInit En_Viewer_InitVars = {
     ACTOR_EN_VIEWER,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -34,24 +35,124 @@ const ActorInit En_Viewer_InitVars = {
     (ActorFunc)EnViewer_Draw,
 };
 
-#endif
+u32 D_8089F4D0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_SetupAction.s")
+void EnViewer_SetupAction(EnViewer* this, EnViewerActionFunc actionFunc) {
+    this->actionFunc = actionFunc;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Init.s")
+void EnViewer_Init(Actor* thisx, PlayState* play) {
+    EnViewer* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Destroy.s")
+    this->unk_154 = D_8089F3E0;
+    D_8089F3E0++;
+    switch (ENVIEWER_GET_3(&this->actor)) {
+        case ENVIEWER_PARAM_0:
+            this->unk_148 = ENVIEWER_GET_8000(&this->actor) * 40.0f;
+            this->unk_150 = (u8)ENVIEWER_GET_1FC(&this->actor) * 40.0f;
+            EnViewer_SetupAction(this, func_8089F17C);
+            break;
+        case ENVIEWER_PARAM_1:
+            this->unk_148 = (u16)ENVIEWER_GET_FE00(&this->actor) * 40.0f;
+            this->unk_150 = (u8)ENVIEWER_GET_1FC(&this->actor) * 40.0f;
+            this->unk_14C = (u16)(this->actor.world.rot.y) * 40.0f;
+            EnViewer_SetupAction(this, func_8089F218);
+            break;
+        case ENVIEWER_PARAM_2:
+            this->unk_148 = (u16)ENVIEWER_GET_FE00(&this->actor) * 40.0f;
+            this->unk_14C = (u8)ENVIEWER_GET_1FC(&this->actor) * 40.0f;
+            EnViewer_SetupAction(this, func_8089F2C4);
+            break;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F014.s")
+void EnViewer_Destroy(Actor* thisx, PlayState* play) {
+    D_8089F3E0--;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F0A0.s")
+void func_8089F014(EnViewer* this, PlayState* play, f32 arg2) {
+    if (arg2 > 1.0f) {
+        arg2 = 1.0f;
+    } else if (arg2 < 0.0f) {
+        arg2 = 0.0f;
+    }
+    play->envCtx.lightSettingOverride = 0;
+    play->envCtx.unk_E0 = 2;
+    play->envCtx.lightSetting = this->actor.world.rot.x;
+    play->envCtx.prevLightSetting = this->actor.world.rot.z;
+    play->envCtx.lightBlend = arg2;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F17C.s")
+void func_8089F0A0(EnViewer* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F218.s")
+    D_8089F3E4++;
+    if ((D_8089F3E4 == D_8089F3E0) && (play->envCtx.lightSettingOverride != 255)) {
+        play->envCtx.lightSettingOverride = 255;
+        play->envCtx.unk_E0 = 0;
+        play->envCtx.lightBlend = 1.0f;
+        func_800FAAB4(
+            play, SurfaceType_GetLightSettingIndex(&play->colCtx, player->actor.floorPoly, player->actor.floorBgId));
+        play->envCtx.lightBlend = 1.0f;
+        play->envCtx.prevLightSetting = play->envCtx.lightSetting;
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/func_8089F2C4.s")
+void func_8089F17C(EnViewer* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    f32 xzDist = fabsf(this->actor.xzDistToPlayer);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Update.s")
+    if ((((play->roomCtx.curRoom.num == this->actor.room) && (xzDist <= this->unk_148)) &&
+         (this->actor.playerHeightRel <= this->unk_150)) &&
+        (this->actor.world.pos.y <= player->actor.world.pos.y)) {
+        xzDist = this->actor.playerHeightRel / this->unk_150;
+        func_8089F014(this, play, xzDist);
+    } else {
+        func_8089F0A0(this, play);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Viewer/EnViewer_Draw.s")
+void func_8089F218(EnViewer* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    f32 xzDist = fabsf(this->actor.xzDistToPlayer);
+    f32 temp;
+
+    if ((play->roomCtx.curRoom.num == this->actor.room) && (xzDist <= this->unk_148) &&
+        (this->actor.playerHeightRel <= this->unk_150) && (this->actor.world.pos.y <= player->actor.world.pos.y)) {
+        temp = (xzDist - this->unk_14C) / (this->unk_148 - this->unk_14C);
+        func_8089F014(this, play, temp);
+    } else {
+        func_8089F0A0(this, play);
+    }
+}
+
+void func_8089F2C4(EnViewer* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    Vec3f sp20;
+    f32 temp;
+
+    Actor_OffsetOfPointInActorCoords(&this->actor, &sp20, &player->actor.world.pos);
+    if (this->unk_14C == 0.0f) {
+        this->unk_14C = 0.1f;
+    }
+    if ((play->roomCtx.curRoom.num == this->actor.room) && (sp20.x < fabsf(this->unk_148))) {
+        temp = sp20.z / this->unk_14C;
+        func_8089F014(this, play, temp);
+    } else {
+        func_8089F0A0(this, play);
+    }
+}
+
+void EnViewer_Update(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    EnViewer* this = THIS;
+
+    if (D_8089F4D0 != play->state.frames) {
+        D_8089F4D0 = play->state.frames;
+        D_8089F3E4 = 0;
+    }
+    this->actionFunc(this, play);
+}
+
+void EnViewer_Draw(Actor* thisx, PlayState* play) {
+}

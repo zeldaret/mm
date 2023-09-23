@@ -18,7 +18,7 @@ void func_80973CD8(ObjRoomtimer* this, PlayState* play);
 void func_80973D3C(ObjRoomtimer* this, PlayState* play);
 void func_80973DE0(ObjRoomtimer* this, PlayState* play);
 
-const ActorInit Obj_Roomtimer_InitVars = {
+ActorInit Obj_Roomtimer_InitVars = {
     ACTOR_OBJ_ROOMTIMER,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -45,14 +45,14 @@ void ObjRoomtimer_Init(Actor* thisx, PlayState* play) {
 void ObjRoomtimer_Destroy(Actor* thisx, PlayState* play) {
     ObjRoomtimer* this = THIS;
 
-    if (this->actor.params != 0x1FF && gSaveContext.unk_3DD0[4] > 0) {
-        gSaveContext.unk_3DD0[4] = 5;
+    if ((this->actor.params != 0x1FF) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] >= TIMER_STATE_START)) {
+        gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
     }
 }
 
 void func_80973CD8(ObjRoomtimer* this, PlayState* play) {
     if (this->actor.params != 0x1FF) {
-        func_8010E9F0(4, this->actor.params);
+        Interface_StartTimer(TIMER_ID_MINIGAME_2, this->actor.params);
     }
 
     func_800BC154(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
@@ -62,28 +62,29 @@ void func_80973CD8(ObjRoomtimer* this, PlayState* play) {
 void func_80973D3C(ObjRoomtimer* this, PlayState* play) {
     if (Flags_GetClearTemp(play, this->actor.room)) {
         if (this->actor.params != 0x1FF) {
-            gSaveContext.unk_3DD0[4] = 5;
+            gSaveContext.timerStates[TIMER_ID_MINIGAME_2] = TIMER_STATE_STOP;
         }
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
         this->actionFunc = func_80973DE0;
-    } else if (this->actor.params != 0x1FF && gSaveContext.unk_3DD0[4] == 0) {
-        play_sound(NA_SE_OC_ABYSS);
+    } else if ((this->actor.params != 0x1FF) && (gSaveContext.timerStates[TIMER_ID_MINIGAME_2] == TIMER_STATE_OFF)) {
+        Audio_PlaySfx(NA_SE_OC_ABYSS);
         func_80169EFC(&play->state);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
 void func_80973DE0(ObjRoomtimer* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
+    if (CutsceneManager_IsNext(this->actor.csId)) {
         Flags_SetClear(play, this->actor.room);
         Flags_SetSwitch(play, this->switchFlag);
-        if (ActorCutscene_GetLength(this->actor.cutscene) != -1) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+        if (CutsceneManager_GetLength(this->actor.csId) != -1) {
+            CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         }
-        Actor_MarkForDeath(&this->actor);
-    } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        Actor_Kill(&this->actor);
+        return;
     }
+
+    CutsceneManager_Queue(this->actor.csId);
 }
 
 void ObjRoomtimer_Update(Actor* thisx, PlayState* play) {

@@ -4,7 +4,8 @@
 #include "color.h"
 #include "PR/gbi.h"
 #include "PR/ultratypes.h"
-#include "xstdio.h"
+#include "PR/xstdio.h"
+#include "unk.h"
 
 #define GFXP_UNUSED "\x8E"
 #define GFXP_UNUSED_CHAR 0x8E
@@ -29,21 +30,21 @@ typedef struct GfxPrint {
     /* 0x14 */ UNK_TYPE1 unk_14[0x1C]; // unused
 } GfxPrint; // size = 0x30
 
-void GfxPrint_Setup(GfxPrint* printer);
-void GfxPrint_SetColor(GfxPrint* printer, u32 r, u32 g, u32 b, u32 a);
-void GfxPrint_SetPosPx(GfxPrint* printer, s32 x, s32 y);
-void GfxPrint_SetPos(GfxPrint* printer, s32 x, s32 y);
-void GfxPrint_SetBasePosPx(GfxPrint* printer, s32 x, s32 y);
-void GfxPrint_PrintCharImpl(GfxPrint* printer, u8 c);
-void GfxPrint_PrintChar(GfxPrint* printer, u8 c);
-void GfxPrint_PrintStringWithSize(GfxPrint* printer, const void* buffer, size_t charSize, size_t charCount);
-void GfxPrint_PrintString(GfxPrint* printer, const char* str);
+void GfxPrint_Setup(GfxPrint* this);
+void GfxPrint_SetColor(GfxPrint* this, u32 r, u32 g, u32 b, u32 a);
+void GfxPrint_SetPosPx(GfxPrint* this, s32 x, s32 y);
+void GfxPrint_SetPos(GfxPrint* this, s32 x, s32 y);
+void GfxPrint_SetBasePosPx(GfxPrint* this, s32 x, s32 y);
+void GfxPrint_PrintCharImpl(GfxPrint* this, u8 c);
+void GfxPrint_PrintChar(GfxPrint* this, u8 c);
+void GfxPrint_PrintStringWithSize(GfxPrint* this, const void* buffer, size_t charSize, size_t charCount);
+void GfxPrint_PrintString(GfxPrint* this, const char* str);
 void* GfxPrint_Callback(void* arg, const char* str, size_t size);
-void GfxPrint_Init(GfxPrint* printer);
+void GfxPrint_Init(GfxPrint* this);
 void GfxPrint_Destroy(GfxPrint* printer);
-void GfxPrint_Open(GfxPrint* printer, Gfx* dList);
-Gfx* GfxPrint_Close(GfxPrint* printer);
-s32 GfxPrint_VPrintf(GfxPrint* printer, const char* fmt, va_list args);
-s32 GfxPrint_Printf(GfxPrint* printer, const char* fmt, ...);
+void GfxPrint_Open(GfxPrint* this, Gfx* dList);
+Gfx* GfxPrint_Close(GfxPrint* this);
+s32 GfxPrint_VPrintf(GfxPrint* this, const char* fmt, va_list args);
+s32 GfxPrint_Printf(GfxPrint* this, const char* fmt, ...);
 
 #endif

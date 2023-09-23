@@ -10,9 +10,9 @@
 #define EN_COW_FLAG_WONT_GIVE_MILK (1 << 2)
 
 typedef enum {
-    /*  0 */ EN_COW_TYPE_DEFAULT,
-    /*  1 */ EN_COW_TYPE_TAIL,
-    /*  2 */ EN_COW_TYPE_ABDUCTED,
+    /* 0 */ EN_COW_TYPE_DEFAULT,
+    /* 1 */ EN_COW_TYPE_TAIL,
+    /* 2 */ EN_COW_TYPE_ABDUCTED
 } EnCowType;
 
 struct EnCow;
@@ -27,11 +27,9 @@ typedef struct EnCow {
     /* 0x0244 */ Vec3s morphTable[COW_LIMB_MAX];
     /* 0x0268 */ Vec3s headTilt;
     /* 0x026E */ u16 flags;
-    /* 0x0270 */ u16 animationTimer;
-    /* 0x0272 */ u16 animationCycle;
+    /* 0x0270 */ u16 animTimer;
+    /* 0x0272 */ u16 animCycle;
     /* 0x0274 */ EnCowActionFunc actionFunc;
 } EnCow; // size = 0x278
-
-extern const ActorInit En_Cow_InitVars;
 
 #endif // Z_EN_COW_H

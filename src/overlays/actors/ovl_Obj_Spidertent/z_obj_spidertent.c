@@ -23,7 +23,7 @@ void func_80B30A4C(ObjSpidertent* this, PlayState* play);
 void func_80B30AD4(ObjSpidertent* this);
 void func_80B30AF8(ObjSpidertent* this, PlayState* play);
 
-const ActorInit Obj_Spidertent_InitVars = {
+ActorInit Obj_Spidertent_InitVars = {
     ACTOR_OBJ_SPIDERTENT,
     ACTORCAT_BG,
     FLAGS,
@@ -234,7 +234,7 @@ typedef struct {
     /* 0x1C */ f32 unk_1C;
     /* 0x20 */ f32 unk_20;
     /* 0x24 */ f32 unk_24;
-} ObjSpidertentStruct;
+} ObjSpidertentStruct; // size = 0x28
 
 ObjSpidertentStruct D_80B31350[] = {
     {
@@ -272,7 +272,7 @@ typedef struct {
     /* 0x0F */ s8 unk_0F;
     /* 0x10 */ Color_RGBA8 unk_10;
     /* 0x14 */ Color_RGBA8 unk_14;
-} ObjSpidertentStruct2;
+} ObjSpidertentStruct2; // size = 0x18
 
 ObjSpidertentStruct2 D_80B313A0[] = {
     {
@@ -529,7 +529,7 @@ s32 func_80B30480(ObjSpidertent* this, PlayState* play, Vec3f* arg2) {
     Vec3f sp58;
     f32 sp54;
 
-    if (player->itemActionParam == 7) {
+    if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
         if (player->unk_B28 > 0) {
             for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
                 triNorm = &this->collider.elements[i].dim;
@@ -565,7 +565,7 @@ void ObjSpidertent_Init(Actor* thisx, PlayState* play) {
     Collider_InitTris(play, &this->collider);
 
     if (Flags_GetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor))) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
         return;
     }
 
@@ -676,15 +676,15 @@ void func_80B30A2C(ObjSpidertent* this) {
 }
 
 void func_80B30A4C(ObjSpidertent* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
-        if (this->dyna.actor.cutscene >= 0) {
-            func_800B7298(play, &this->dyna.actor, 1);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
+        if (this->dyna.actor.csId >= 0) {
+            func_800B7298(play, &this->dyna.actor, PLAYER_CSMODE_1);
         }
         Flags_SetSwitch(play, OBJSPIDERTENT_GET_7F00(&this->dyna.actor));
         func_80B30AD4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -695,15 +695,11 @@ void func_80B30AD4(ObjSpidertent* this) {
     this->actionFunc = func_80B30AF8;
 }
 
-#ifdef NON_MATCHING
 void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
     ObjSpidertentStruct* temp_s0 = &D_80B31350[OBJSPIDERTENT_GET_1(&this->dyna.actor)];
-    TriNorm* triNorm;
     s32 i;
     s32 j;
     s32 pad;
-    Vec3f sp60;
-    f32 sp5C;
 
     this->unk_3C6++;
 
@@ -759,14 +755,14 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
 
     this->unk_3C1--;
     if (this->unk_3C1 == 40) {
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 
-    if (this->unk_3C1 >= 0x20) {
+    if (this->unk_3C1 >= 32) {
         if (this->unk_3C7 > 0) {
             this->unk_3C7--;
-        } else if (this->unk_3C1 >= 0x33) {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_EXTINCT);
+        } else if (this->unk_3C1 > 50) {
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_EXTINCT);
             this->unk_3C7 = Rand_S16Offset(2, 2);
         } else {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 11, NA_SE_EN_EXTINCT);
@@ -781,23 +777,24 @@ void func_80B30AF8(ObjSpidertent* this, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(this->colliderElements); i++) {
-            triNorm = &this->collider.elements[i].dim;
+            TriNorm* triNorm = &this->collider.elements[i].dim;
+            Vec3f sp60;
+            f32 sp5C;
 
             for (j = 0; j < ARRAY_COUNT(this->unk_3B0); j++) {
-                if (!(this->unk_3B0[j] < 5.0f) && !(this->unk_3C0 & (1 << j)) &&
-                    func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
+                if ((this->unk_3B0[j] < 5.0f) || (this->unk_3C0 & (1 << j))) {
+                    continue;
+                }
+                if (func_80B2FB94(&this->unk_3A4, this->unk_3B0[j], triNorm, &sp60, &sp5C)) {
                     func_80B300F4(this, play, triNorm, &sp60, sp5C, j);
                 }
             }
         }
     } else if (this->unk_3C1 <= 0) {
-        ActorCutscene_Stop(this->dyna.actor.cutscene);
-        Actor_MarkForDeath(&this->dyna.actor);
+        CutsceneManager_Stop(this->dyna.actor.csId);
+        Actor_Kill(&this->dyna.actor);
     }
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Obj_Spidertent/func_80B30AF8.s")
-#endif
 
 void ObjSpidertent_Update(Actor* thisx, PlayState* play) {
     ObjSpidertent* this = THIS;
@@ -815,7 +812,7 @@ void ObjSpidertent_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_XLU_DISP;
 
-    gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+    gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
     gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gDPSetPrimColor(gfx++, 0, 0xFF, this->unk_3C2, this->unk_3C3, this->unk_3C4, temp_f18);
     gSPDisplayList(gfx++, D_80B31350[params].unk_00);

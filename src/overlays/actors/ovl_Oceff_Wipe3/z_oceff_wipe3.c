@@ -16,8 +16,7 @@ void OceffWipe3_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe3_Update(Actor* thisx, PlayState* play);
 void OceffWipe3_Draw(Actor* thisx, PlayState* play);
 
-#if 0
-const ActorInit Oceff_Wipe3_InitVars = {
+ActorInit Oceff_Wipe3_InitVars = {
     ACTOR_OCEFF_WIPE3,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -29,12 +28,82 @@ const ActorInit Oceff_Wipe3_InitVars = {
     (ActorFunc)OceffWipe3_Draw,
 };
 
-#endif
+#include "assets/overlays/ovl_Oceff_Wipe3/ovl_Oceff_Wipe3.c"
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe3/OceffWipe3_Init.s")
+s32 D_80989130;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe3/OceffWipe3_Destroy.s")
+void OceffWipe3_Init(Actor* thisx, PlayState* play) {
+    OceffWipe3* this = THIS;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe3/OceffWipe3_Update.s")
+    Actor_SetScale(&this->actor, 0.1f);
+    this->counter = 0;
+    this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Oceff_Wipe3/OceffWipe3_Draw.s")
+void OceffWipe3_Destroy(Actor* thisx, PlayState* play) {
+    OceffWipe3* this = THIS;
+
+    Magic_Reset(play);
+    play->msgCtx.unk120B0 = 0;
+}
+
+void OceffWipe3_Update(Actor* thisx, PlayState* play) {
+    OceffWipe3* this = THIS;
+
+    this->actor.world.pos = GET_ACTIVE_CAM(play)->eye;
+    if (this->counter < 100) {
+        this->counter++;
+    } else {
+        Actor_Kill(&this->actor);
+    }
+}
+
+void OceffWipe3_Draw(Actor* thisx, PlayState* play) {
+    u32 scroll = play->state.frames & 0xFFF;
+    OceffWipe3* this = THIS;
+    f32 z;
+    u8 alpha;
+    s32 pad[2];
+    Vec3f eye = GET_ACTIVE_CAM(play)->eye;
+    Vtx* vtxPtr;
+    Vec3f quakeOffset;
+
+    Camera_GetQuakeOffset(&quakeOffset, GET_ACTIVE_CAM(play));
+
+    vtxPtr = sSariaSongFrustumVtx;
+
+    if (this->counter < 32) {
+        z = Math_SinS(this->counter * 512) * 1220.0f;
+    } else {
+        z = 1220.0f;
+    }
+
+    if (this->counter >= 80) {
+        alpha = 12 * (100 - this->counter);
+    } else {
+        alpha = 255;
+    }
+
+    vtxPtr[1].v.cn[3] = vtxPtr[3].v.cn[3] = vtxPtr[5].v.cn[3] = vtxPtr[7].v.cn[3] = vtxPtr[9].v.cn[3] =
+        vtxPtr[11].v.cn[3] = vtxPtr[13].v.cn[3] = vtxPtr[15].v.cn[3] = vtxPtr[17].v.cn[3] = vtxPtr[19].v.cn[3] =
+            vtxPtr[21].v.cn[3] = alpha;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+    Matrix_Translate(eye.x + quakeOffset.x, eye.y + quakeOffset.y, eye.z + quakeOffset.z, MTXMODE_NEW);
+    Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&play->billboardMtxF);
+    Matrix_RotateXS(0x708, MTXMODE_APPLY);
+    Matrix_Translate(0.0f, 0.0f, -z, MTXMODE_APPLY);
+
+    gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 170, 255);
+    gDPSetEnvColor(POLY_XLU_DISP++, 100, 200, 0, 128);
+    gSPDisplayList(POLY_XLU_DISP++, &sSariaSongFrustrumMaterialDL);
+    gSPDisplayList(POLY_XLU_DISP++, Gfx_TwoTexScroll(play->state.gfxCtx, 0, scroll * 12, scroll * -12, 64, 64, 1,
+                                                     scroll * 8, scroll * -8, 64, 64));
+    gSPDisplayList(POLY_XLU_DISP++, &sSariaSongFrustumModelDL);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}

@@ -8,7 +8,7 @@
 #include "objects/object_pr/object_pr.h"
 #include "overlays/actors/ovl_En_Pr/z_en_pr.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPrz*)thisx)
 
@@ -60,7 +60,13 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-f32 D_80A771E0[] = { 40.0f, 40.0f, 40.0f, 30.0f, 30.0f };
+f32 D_80A771E0[PLAYER_FORM_MAX] = {
+    40.0f, // PLAYER_FORM_FIERCE_DEITY
+    40.0f, // PLAYER_FORM_GORON
+    40.0f, // PLAYER_FORM_ZORA
+    30.0f, // PLAYER_FORM_DEKU
+    30.0f, // PLAYER_FORM_HUMAN
+};
 
 static ColliderCylinderInit sCylinderInit = {
     {
@@ -82,7 +88,7 @@ static ColliderCylinderInit sCylinderInit = {
     { 10, 10, 0, { 0, 0, 0 } },
 };
 
-const ActorInit En_Prz_InitVars = {
+ActorInit En_Prz_InitVars = {
     ACTOR_EN_PRZ,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -108,9 +114,9 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     Actor_SetScale(&this->actor, 0.01f);
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->unk_1E8 = 255;
-    this->actor.hintId = 0x5B;
+    this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->actor.colChkInfo.damageTable = &sDamageTable;
     this->actor.colChkInfo.health = 1;
 
@@ -119,15 +125,15 @@ void EnPrz_Init(Actor* thisx, PlayState* play) {
 
     this->unk_1E6 = ENPRZ_GET(&this->actor);
     this->actor.shape.yOffset = 500.0f;
-    this->actor.flags |= ACTOR_FLAG_8000000;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Math_Vec3f_Copy(&this->unk_1D8, &this->actor.world.pos);
 
     this->unk_220 = &this->actor;
     this->unk_1EC = 255;
-    this->unk_202 = randPlusMinusPoint5Scaled((this->unk_1E6 * 100.0f) + 1000.0f);
+    this->unk_202 = Rand_CenteredFloat((this->unk_1E6 * 100.0f) + 1000.0f);
 
     func_80A76388(this);
 }
@@ -176,7 +182,7 @@ void func_80A76070(EnPrz* this, s16 arg1, PlayState* play) {
         temp_s0 = -100;
     }
 
-    if (fabsf(this->actor.world.rot.y - (f32)arg1) < (randPlusMinusPoint5Scaled(20.0f) + 100.0f)) {
+    if (fabsf(this->actor.world.rot.y - (f32)arg1) < (Rand_CenteredFloat(20.0f) + 100.0f)) {
         Math_ApproachZeroF(&this->unk_218, 0.5f, 20.0f);
     } else {
         Math_ApproachF(&this->unk_218, temp_s0, 0.5f, 5.0f);
@@ -218,7 +224,7 @@ s32 func_80A762C0(EnPrz* this, PlayState* play) {
 }
 
 void func_80A76388(EnPrz* this) {
-    this->actor.speedXZ = randPlusMinusPoint5Scaled(1.0f) + 4.0f;
+    this->actor.speed = Rand_CenteredFloat(1.0f) + 4.0f;
     func_80A75F18(this, 0);
     this->unk_1EA = 1;
     this->actionFunc = func_80A763E8;
@@ -234,7 +240,7 @@ void func_80A763E8(EnPrz* this, PlayState* play) {
         return;
     }
 
-    if ((player->stateFlags1 & 0x8000000) && (this->unk_1F2 == 0)) {
+    if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (this->unk_1F2 == 0)) {
         func_80A76748(this);
         return;
     }
@@ -251,11 +257,11 @@ void func_80A763E8(EnPrz* this, PlayState* play) {
     if ((this->unk_1EE == 0) && (this->unk_1F2 == 0)) {
         s16 rot;
 
-        this->unk_214 = randPlusMinusPoint5Scaled(40.0f);
+        this->unk_214 = Rand_CenteredFloat(40.0f);
 
         rot = BINANG_ROT180(this->unk_220->world.rot.y);
         this->unk_1D8.x += Math_SinS(rot) * this->unk_214;
-        this->unk_1D8.y = randPlusMinusPoint5Scaled(40.0f) + (this->unk_220->world.pos.y + 40.0f);
+        this->unk_1D8.y = Rand_CenteredFloat(40.0f) + (this->unk_220->world.pos.y + 40.0f);
         rot = BINANG_ROT180(this->unk_220->world.rot.y);
         this->unk_1D8.z += Math_CosS(rot) * this->unk_214;
 
@@ -291,7 +297,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
         if (func_80A762C0(this, play) != 0) {
             this->unk_1E4 += 0x1500;
             this->unk_1E4 += (s16)Rand_ZeroFloat(5000.0f);
-        } else if ((player->stateFlags1 & 0x8000000) && (player->actor.floorHeight < 30.0f)) {
+        } else if ((player->stateFlags1 & PLAYER_STATE1_8000000) && (player->actor.floorHeight < 30.0f)) {
             this->actionFunc = func_80A763E8;
         } else {
             this->unk_1EE = 10;
@@ -302,7 +308,7 @@ void func_80A76634(EnPrz* this, PlayState* play) {
 }
 
 void func_80A76748(EnPrz* this) {
-    this->actor.speedXZ = randPlusMinusPoint5Scaled(1.0f) + 3.0f;
+    this->actor.speed = Rand_CenteredFloat(1.0f) + 3.0f;
     this->unk_1EE = 0;
     this->unk_1EA = 3;
     this->skelAnime.playSpeed = 2.0f;
@@ -317,7 +323,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
 
     if (func_80A762C0(this, play)) {
         func_80A75F18(this, 0);
-        this->actor.speedXZ = randPlusMinusPoint5Scaled(1.0f) + 4.0f;
+        this->actor.speed = Rand_CenteredFloat(1.0f) + 4.0f;
         func_80A76604(this, play);
         return;
     }
@@ -325,7 +331,7 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
     distXZ = sqrtf(SQ(player->actor.world.pos.x - this->actor.parent->home.pos.x) +
                    SQ(player->actor.world.pos.z - this->actor.parent->home.pos.z));
 
-    if (!(player->stateFlags1 & 0x8000000) || (pr->unk_2C8 < distXZ)) {
+    if (!(player->stateFlags1 & PLAYER_STATE1_8000000) || (pr->unk_2C8 < distXZ)) {
         this->unk_1F2 = 100;
         this->skelAnime.playSpeed = 1.0f;
         func_80A76388(this);
@@ -353,17 +359,17 @@ void func_80A767A8(EnPrz* this, PlayState* play) {
         this->unk_1C8 = 1;
     }
 
-    this->unk_1D8.y = (player->actor.world.pos.y + D_80A771E0[((void)0, gSaveContext.save.playerForm)]) +
-                      randPlusMinusPoint5Scaled((2.0f * this->unk_1E6) + 1.0f);
+    this->unk_1D8.y =
+        (player->actor.world.pos.y + D_80A771E0[GET_PLAYER_FORM]) + Rand_CenteredFloat((2.0f * this->unk_1E6) + 1.0f);
     func_80A76070(this, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_1D8), play);
 }
 
 void func_80A76A1C(EnPrz* this) {
     this->unk_1E8 = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BUBLEWALK_DEAD);
 
     this->unk_1EE = Rand_S16Offset(100, 30);
     this->unk_1FC = 0x4000;
@@ -373,10 +379,10 @@ void func_80A76A1C(EnPrz* this) {
     }
 
     this->unk_1FE = this->actor.world.rot.y;
-    this->actor.speedXZ = Rand_ZeroFloat(0.5f);
-    this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
+    this->actor.speed = Rand_ZeroFloat(0.5f);
+    this->actor.world.rot.y = Rand_CenteredFloat(0x8000);
 
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 30);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 30);
     this->unk_1EE = 50;
     func_80A75F18(this, 0);
     this->unk_1EA = 7;
@@ -409,13 +415,13 @@ void func_80A76B14(EnPrz* this, PlayState* play) {
             for (i = 0; i < 10; i++) {
                 Math_Vec3f_Copy(&sp6C, &this->actor.world.pos);
 
-                sp6C.x += randPlusMinusPoint5Scaled(20.0f);
-                sp6C.y += randPlusMinusPoint5Scaled(5.0f);
-                sp6C.z += randPlusMinusPoint5Scaled(20.0f);
+                sp6C.x += Rand_CenteredFloat(20.0f);
+                sp6C.y += Rand_CenteredFloat(5.0f);
+                sp6C.z += Rand_CenteredFloat(20.0f);
 
                 EffectSsBubble_Spawn(play, &sp6C, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);
             }
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
 }
@@ -441,7 +447,9 @@ void EnPrz_Update(Actor* thisx, PlayState* play) {
     }
 
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 10.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 10.0f, 10.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
     if (this->unk_1EA != 7) {
         Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
@@ -471,9 +479,9 @@ void EnPrz_Update(Actor* thisx, PlayState* play) {
             Math_Vec3f_Copy(&sp38, &this->unk_1CC);
             this->unk_1C8 = 0;
 
-            sp38.x += randPlusMinusPoint5Scaled(20.0f);
-            sp38.y += randPlusMinusPoint5Scaled(5.0f);
-            sp38.z += randPlusMinusPoint5Scaled(20.0f);
+            sp38.x += Rand_CenteredFloat(20.0f);
+            sp38.y += Rand_CenteredFloat(5.0f);
+            sp38.z += Rand_CenteredFloat(20.0f);
 
             EffectSsBubble_Spawn(play, &sp38, 0.0f, 5.0f, 5.0f, Rand_ZeroFloat(0.03f) + 0.07f);
         }
@@ -504,7 +512,7 @@ void EnPrz_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_1EC == 255) {
         gDPPipeSync(POLY_OPA_DISP++);

@@ -12,7 +12,7 @@ typedef void (*EnElfgrpActionFunc)(struct EnElfgrp*, PlayState*);
 #define ENELFGRP_GET_SWITCHFLAG_PARAMS(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define ENELFGRP_GET_SWITCHFLAG_ROT(thisx) ((thisx)->home.rot.z)
 
-typedef enum {
+typedef enum ElfgrpType {
     /* 0 */ ENELFGRP_TYPE_MAGIC = GREAT_FAIRY_TYPE_MAGIC,
     /* 1 */ ENELFGRP_TYPE_POWER = GREAT_FAIRY_TYPE_POWER,
     /* 2 */ ENELFGRP_TYPE_WISDOM = GREAT_FAIRY_TYPE_WISDOM,
@@ -30,7 +30,5 @@ typedef struct EnElfgrp {
     /* 0x14A */ u16 stateFlags;
     /* 0x14C */ EnElfgrpActionFunc actionFunc;
 } EnElfgrp; // size = 0x150
-
-extern const ActorInit En_Elfgrp_InitVars;
 
 #endif // Z_EN_ELFGRP_H

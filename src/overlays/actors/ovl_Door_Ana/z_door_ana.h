@@ -13,8 +13,6 @@ typedef struct DoorAna {
     /* 0x190 */ DoorAnaActionFunc actionFunc;
 } DoorAna; // size = 0x194
 
-extern const ActorInit Door_Ana_InitVars;
-
 #define DOORANA_TYPE_BITMASK            0x300
 #define DOORANA_TYPE_VISIBLE            0x000
 #define DOORANA_TYPE_HIDDEN_STORMS      0x100 // Incomplete, leftover from OoT 

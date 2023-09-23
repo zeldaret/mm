@@ -3,16 +3,27 @@
 
 #include "global.h"
 
+#define EFFLASTDAY_GET_F(thisx) ((thisx)->params & 0xF)
+
 struct EffLastday;
 
 typedef void (*EffLastdayActionFunc)(struct EffLastday*, PlayState*);
 
 typedef struct EffLastday {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x10];
+    /* 0x144 */ Gfx* dList;
+    /* 0x148 */ AnimatedMaterial* matAnim;
+    /* 0x14C */ s16 step;
+    /* 0x14E */ s16 alpha;
+    /* 0x150 */ s16 cueType;
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
 
-extern const ActorInit Eff_Lastday_InitVars;
+typedef enum EffLastDayParam {
+    /* 0 */ EFFLASTDAY_PARAM_0,
+    /* 1 */ EFFLASTDAY_PARAM_1,
+    /* 2 */ EFFLASTDAY_PARAM_2,
+    /* 3 */ EFFLASTDAY_PARAM_3
+} EffLastDayParam;
 
 #endif // Z_EFF_LASTDAY_H

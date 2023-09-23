@@ -3,6 +3,11 @@
 
 #include "global.h"
 
+typedef enum EffectSsGSpkUpdatemode {
+    /* 0 */ GSPK_UPDATEMODE_NORMAL,
+    /* 1 */ GSPK_UPDATEMODE_NO_ACCEL
+} EffectSsGSpkUpdatemode;
+
 typedef struct {
     /* 0x00 */ Actor* actor;
     /* 0x04 */ Vec3f pos;
@@ -14,7 +19,5 @@ typedef struct {
     /* 0x32 */ s16 scaleStep;
     /* 0x34 */ u8 updateMode;
 } EffectSsGSpkInitParams; // size = 0x38
-
-extern const EffectSsInit Effect_Ss_G_Spk_InitVars;
 
 #endif
