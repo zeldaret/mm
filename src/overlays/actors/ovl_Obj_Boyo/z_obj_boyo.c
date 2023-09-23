@@ -75,13 +75,10 @@ static ObjBoyoUnkStruct gCollisionHandling[] = {
 };
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play) {
-    ColliderCylinder* temp_a1;
-
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    temp_a1 = &this->collider;
-    Collider_InitCylinder(play, temp_a1);
-    Collider_SetCylinder(play, temp_a1, &this->actor, &sCylinderInit);
-    Collider_UpdateCylinder(&this->actor, temp_a1);
+    Collider_InitCylinder(play, &this->collider);
+    Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
+    Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = 0xFF;
     this->animatedMaterial = Lib_SegmentedToVirtual((void*)&D_06000E88);
 }
