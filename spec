@@ -2119,7 +2119,7 @@ beginseg
     name "ovl_Obj_Boyo"
     compress
     include "build/src/overlays/actors/ovl_Obj_Boyo/z_obj_boyo.o"
-    include "build/data/ovl_Obj_Boyo/ovl_Obj_Boyo_reloc.o"
+    include "build/src/overlays/actors/ovl_Obj_Boyo/ovl_Obj_Boyo_reloc.o"
 endseg
 
 beginseg
