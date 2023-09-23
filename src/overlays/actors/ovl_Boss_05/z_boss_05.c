@@ -246,8 +246,8 @@ void func_809EE4E0(Boss05* this, PlayState* play) {
 
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->limbPos[0], 30, NA_SE_EV_ICE_BROKEN);
     for (i = 0; i < 8; i++) {
-        iceVelocity.x = randPlusMinusPoint5Scaled(7.0f);
-        iceVelocity.z = randPlusMinusPoint5Scaled(7.0f);
+        iceVelocity.x = Rand_CenteredFloat(7.0f);
+        iceVelocity.z = Rand_CenteredFloat(7.0f);
         iceVelocity.y = Rand_ZeroFloat(6.0f) + 4.0f;
         icePos.x = this->limbPos[0].x + iceVelocity.x;
         icePos.y = this->limbPos[0].y + iceVelocity.y;
@@ -271,7 +271,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
     Boss05* this = THIS;
     CollisionHeader* colHeader = NULL;
 
-    this->dyna.actor.targetMode = 3;
+    this->dyna.actor.targetMode = TARGET_MODE_3;
     this->dyna.actor.colChkInfo.mass = MASS_HEAVY;
     this->dyna.actor.colChkInfo.health = 2;
     this->unk160 = (s32)Rand_ZeroFloat(1000.0f);
@@ -304,10 +304,10 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         Collider_InitAndSetJntSph(play, &this->collider2, &this->dyna.actor, &D_809F1B74, this->colliderElements2);
         Collider_InitAndSetJntSph(play, &this->collider1, &this->dyna.actor, &D_809F1BA8, this->colliderElements1);
 
-        if (Flags_GetClear(play, play->roomCtx.currRoom.num)) {
+        if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
             this->dyna.actor.params = BIO_DEKU_BABA_TYPE_2;
             this->actionFunc = func_809EF9BC;
-            this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+            this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         }
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_2) {
@@ -318,7 +318,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         SkelAnime_InitFlex(play, &this->skelAnime10, &D_060024E0, &D_06000ABC, this->jointTable10, this->morphTable10,
                            10);
-        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_3) {
         this->actionFunc = func_809EFAB4;
@@ -353,14 +353,14 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
 
         this->dyna.actor.gravity = 0.0f;
         this->dyna.actor.world.rot.y = (s32)Rand_ZeroFloat(0x8000);
-        this->dyna.actor.speedXZ = Rand_ZeroFloat(3.0f) + 3.0f;
+        this->dyna.actor.speed = Rand_ZeroFloat(3.0f) + 3.0f;
         this->dyna.actor.velocity.y = Rand_ZeroFloat(1.5f) + 1.5f;
 
-        this->unk500.x = (s32)randPlusMinusPoint5Scaled(700.0f);
-        this->unk500.y = (s32)randPlusMinusPoint5Scaled(1500.0f);
+        this->unk500.x = (s32)Rand_CenteredFloat(700.0f);
+        this->unk500.y = (s32)Rand_CenteredFloat(1500.0f);
         this->unk162[0] = (s32)(Rand_ZeroFloat(30.0f) + 50.0f);
 
-        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actionFunc = func_809F0B0C;
     }
 }
@@ -401,7 +401,7 @@ s32 func_809EECBC(Boss05* this, PlayState* play) {
                         Enemy_StartFinishingBlow(play, &this->dyna.actor);
                         return 2;
                     } else {
-                        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
+                        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
                         this->unk16C = 15;
                         this->unk15C = 0;
                         this->unk162[0] = 30;
@@ -562,7 +562,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             this->unk174 = 0;
             this->skelAnime20.playSpeed = 1.0f;
             if (spA4 < 0.0f) {
-                if (sp108->actor.speedXZ > 10.0f) {
+                if (sp108->actor.speed > 10.0f) {
                     var_fv1 = 220.0f;
                 } else {
                     var_fv1 = 150.0f;
@@ -580,20 +580,20 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                     if (this->unk15E > 30) {
                         this->unk15C = 10;
                         this->unk162[0] = 30;
-                        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
+                        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
                     }
                 } else {
                     this->unk15E = 0;
                 }
             }
             if (!(this->unk160 & 3) && (Rand_ZeroOne() < 0.5f)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
             break;
 
         case 10:
             if (!(this->unk160 & 1)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
             this->unk19C = (this->unk162[0] & 1) * 0x200;
             this->unk174 = 3;
@@ -609,7 +609,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                 Math_Vec3f_Copy(&sp94, &this->dyna.actor.world.pos);
                 sp94.y += 40.0f;
                 EffectSsGSplash_Spawn(play, &sp94, NULL, NULL, 1, 2000);
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_OUT_OF_WATER);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_OUT_OF_WATER);
             }
             break;
 
@@ -621,13 +621,13 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
             if (this->unk162[0] == 0) {
                 this->unk15C = 2;
                 this->unk162[0] = 20;
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_ATTACK);
             }
             break;
 
         case 2:
             if (!(this->unk160 & 1)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
             }
             this->unk19C = (this->unk162[0] & 1) * 0x200;
             this->skelAnime20.playSpeed = 4.0f;
@@ -646,7 +646,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
 
         this->dyna.actor.params = BIO_DEKU_BABA_TYPE_2;
         this->actionFunc = func_809EF9BC;
-        this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+        this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, ACTORCAT_BG);
         if (this->unk168 != 0) {
             var_s4_2 = 10;
@@ -657,11 +657,12 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                 this->dyna.actor.world.pos.y, this->dyna.actor.world.pos.z, this->dyna.actor.shape.rot.x,
                 this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, BIO_DEKU_BABA_TYPE_3);
             if (temp_v0_6 != NULL) {
-                Player* temp_v1 = GET_PLAYER(play);
-                if (temp_v1->unk_730 == &this->dyna.actor) {
-                    temp_v1->unk_730 = &temp_v0_6->dyna.actor;
-                    play->actorCtx.targetContext.arrowPointedActor = &temp_v0_6->dyna.actor;
-                    play->actorCtx.targetContext.targetedActor = &temp_v0_6->dyna.actor;
+                Player* player = GET_PLAYER(play);
+
+                if (player->lockOnActor == &this->dyna.actor) {
+                    player->lockOnActor = &temp_v0_6->dyna.actor;
+                    play->actorCtx.targetCtx.fairyActor = &temp_v0_6->dyna.actor;
+                    play->actorCtx.targetCtx.lockOnActor = &temp_v0_6->dyna.actor;
                 }
 
                 for (i = 0; i < 10; i++) {
@@ -672,7 +673,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                     temp_v0_6->skelAnime20.jointTable[i] = this->skelAnime20.jointTable[i];
                 }
 
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_DAMAGE);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_DAMAGE);
                 if (var_s4_2 > 10) {
                     temp_v0_6->drawDmgEffState = var_s4_2 - 10;
                 }
@@ -691,7 +692,7 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
                     temp_v0_6->unk162[0] = (s32)(Rand_ZeroFloat(20.0f) + 20.0f);
                 }
             }
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA_DEAD);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA_DEAD);
         }
     }
 
@@ -759,9 +760,9 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
 
     if (this->unk162[2] != 0) {
         for (i = 0; i < 3; i++) {
-            bubblePos.x = randPlusMinusPoint5Scaled(40.0f) + this->dyna.actor.world.pos.x;
-            bubblePos.y = randPlusMinusPoint5Scaled(40.0f) + this->dyna.actor.world.pos.y;
-            bubblePos.z = randPlusMinusPoint5Scaled(40.0f) + this->dyna.actor.world.pos.z;
+            bubblePos.x = Rand_CenteredFloat(40.0f) + this->dyna.actor.world.pos.x;
+            bubblePos.y = Rand_CenteredFloat(40.0f) + this->dyna.actor.world.pos.y;
+            bubblePos.z = Rand_CenteredFloat(40.0f) + this->dyna.actor.world.pos.z;
             EffectSsBubble_Spawn(play, &bubblePos, 20.0f, 10.0f, 20.0f, 0.13f);
         }
     }
@@ -780,19 +781,19 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
 
             if (temp_v0 != NULL) {
                 player = GET_PLAYER(play);
-                if (player->unk_730 == &this->dyna.actor) {
-                    player->unk_730 = &temp_v0->dyna.actor;
-                    play->actorCtx.targetContext.arrowPointedActor = &temp_v0->dyna.actor;
-                    play->actorCtx.targetContext.targetedActor = &temp_v0->dyna.actor;
+                if (player->lockOnActor == &this->dyna.actor) {
+                    player->lockOnActor = &temp_v0->dyna.actor;
+                    play->actorCtx.targetCtx.fairyActor = &temp_v0->dyna.actor;
+                    play->actorCtx.targetCtx.lockOnActor = &temp_v0->dyna.actor;
                 }
 
                 for (i = 0; i < 20; i++) {
                     temp_v0->skelAnime20.jointTable[i] = this->skelAnime20.jointTable[i];
                 }
 
-                Actor_PlaySfxAtPos(&temp_v0->dyna.actor, NA_SE_EN_MIZUBABA_TRANSFORM);
+                Actor_PlaySfx(&temp_v0->dyna.actor, NA_SE_EN_MIZUBABA_TRANSFORM);
             }
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     }
 }
@@ -814,11 +815,11 @@ void func_809EFE50(Actor* thisx, PlayState* play2) {
         }
 
         this->unk16A = 10;
-        this->dyna.actor.speedXZ = 0.0f;
+        this->dyna.actor.speed = 0.0f;
         this->unk338 = -20.0f;
         this->unk348 = this->dyna.actor.yawTowardsPlayer;
 
-        Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
+        Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
 
         switch (this->dyna.actor.colChkInfo.damageEffect) {
             case 1:
@@ -904,12 +905,12 @@ void func_809F01CC(Boss05* this, PlayState* play) {
     this->actionFunc = func_809F0244;
     Animation_MorphToLoop(&this->skelAnime20, &D_06007488, -10.0f);
     this->unk162[0] = (s32)(Rand_ZeroFloat(25.0f) + 25.0f);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA1_MOUTH);
 }
 
 void func_809F0244(Boss05* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime20);
-    Math_ApproachZeroF(&this->dyna.actor.speedXZ, 1.0f, 2.5f);
+    Math_ApproachZeroF(&this->dyna.actor.speed, 1.0f, 2.5f);
     Math_ApproachS(&this->dyna.actor.shape.rot.x, 0, 2, 0x400);
     Math_ApproachS(&this->dyna.actor.shape.rot.z, 0, 2, 0x400);
 
@@ -924,8 +925,8 @@ void func_809F02D0(Boss05* this, PlayState* play) {
     this->actionFunc = func_809F0374;
     Animation_MorphToLoop(&this->skelAnime20, &D_06007908, 0.0f);
     this->unk162[0] = (s32)(Rand_ZeroFloat(80.0f) + 60.0f);
-    this->unk34C.x = randPlusMinusPoint5Scaled(400.0f) + this->dyna.actor.world.pos.x;
-    this->unk34C.z = randPlusMinusPoint5Scaled(400.0f) + this->dyna.actor.world.pos.z;
+    this->unk34C.x = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.x;
+    this->unk34C.z = Rand_CenteredFloat(400.0f) + this->dyna.actor.world.pos.z;
     this->unk358 = 0.0f;
 }
 
@@ -933,9 +934,9 @@ void func_809F0374(Boss05* this, PlayState* play) {
     f32 deltaX;
     f32 deltaZ;
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_WALK - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_WALK - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime20);
-    Math_ApproachF(&this->dyna.actor.speedXZ, 5.0f, 1.0f, 2.0f);
+    Math_ApproachF(&this->dyna.actor.speed, 5.0f, 1.0f, 2.0f);
     deltaX = this->unk34C.x - this->dyna.actor.world.pos.x;
     deltaZ = this->unk34C.z - this->dyna.actor.world.pos.z;
     Math_ApproachS(&this->dyna.actor.world.rot.y, Math_Atan2S(deltaX, deltaZ), 5, (s32)this->unk358);
@@ -956,8 +957,8 @@ void func_809F0474(Boss05* this, PlayState* play) {
 
 void func_809F04C0(Boss05* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime20);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
-    Math_ApproachZeroF(&this->dyna.actor.speedXZ, 1.0f, 2.5f);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
+    Math_ApproachZeroF(&this->dyna.actor.speed, 1.0f, 2.5f);
     Math_ApproachS(&this->dyna.actor.world.rot.y, this->dyna.actor.yawTowardsPlayer, 5, 0x1000);
     if (this->unk162[0] == 0) {
         func_809F0538(this, play);
@@ -972,9 +973,9 @@ void func_809F0538(Boss05* this, PlayState* arg1) {
 }
 
 void func_809F0590(Boss05* this, PlayState* play) {
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_VOICE - SFX_FLAG);
     SkelAnime_Update(&this->skelAnime20);
-    Math_ApproachF(&this->dyna.actor.speedXZ, 8.0f, 1.0f, 4.0f);
+    Math_ApproachF(&this->dyna.actor.speed, 8.0f, 1.0f, 4.0f);
     Math_ApproachS(&this->dyna.actor.world.rot.y, this->dyna.actor.yawTowardsPlayer, 5, (s32)this->unk358);
     Math_ApproachF(&this->unk358, 4000.0f, 1.0f, 400.0f);
 
@@ -987,7 +988,7 @@ void func_809F0650(Boss05* this, PlayState* arg1) {
     this->actionFunc = func_809F06B8;
     Animation_MorphToPlayOnce(&this->skelAnime20, &D_060006A4, 0.0f);
     this->lastAnimFrame = Animation_GetLastFrame(&D_060006A4);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_ATTACK);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_ATTACK);
 }
 
 void func_809F06B8(Boss05* this, PlayState* play) {
@@ -1027,14 +1028,14 @@ void func_809F0780(Boss05* this, PlayState* play) {
             }
 
             for (i = 0; i < 20; i++) {
-                bubblePos.x = randPlusMinusPoint5Scaled(40.0f) + this->dyna.actor.world.pos.x;
-                bubblePos.y = randPlusMinusPoint5Scaled(40.0f) + this->dyna.actor.world.pos.y;
-                bubblePos.z = randPlusMinusPoint5Scaled(40.0f) + this->dyna.actor.world.pos.z;
+                bubblePos.x = Rand_CenteredFloat(40.0f) + this->dyna.actor.world.pos.x;
+                bubblePos.y = Rand_CenteredFloat(40.0f) + this->dyna.actor.world.pos.y;
+                bubblePos.z = Rand_CenteredFloat(40.0f) + this->dyna.actor.world.pos.z;
                 EffectSsBubble_Spawn(play, &bubblePos, 20.0f, 10.0f, 20.0f, 0.13f);
             }
 
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->dyna.actor.world.pos, 40, NA_SE_EN_MIZUBABA_DEAD);
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
             Item_DropCollectibleRandom(play, NULL, &this->dyna.actor.world.pos, 0xE0);
         }
     } else if (Animation_OnFrame(&this->skelAnime20, this->lastAnimFrame)) {
@@ -1044,20 +1045,20 @@ void func_809F0780(Boss05* this, PlayState* play) {
 
 void func_809F0A0C(Boss05* this, PlayState* play) {
     this->actionFunc = func_809F0ABC;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
     this->unk162[0] = 40;
     Actor_SetColorFilter(&this->dyna.actor, 0, 120, 0, 40);
 }
 
 void func_809F0A64(Boss05* this, PlayState* play) {
     this->actionFunc = func_809F0ABC;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EN_MIZUBABA2_DAMAGE);
     this->unk162[0] = 80;
     Actor_SetColorFilter(&this->dyna.actor, 0, 120, 0, 80);
 }
 
 void func_809F0ABC(Boss05* this, PlayState* play) {
-    Math_ApproachZeroF(&this->dyna.actor.speedXZ, 1.0f, 2.5f);
+    Math_ApproachZeroF(&this->dyna.actor.speed, 1.0f, 2.5f);
     if (this->unk162[0] == 0) {
         func_809F01CC(this, play);
     }
@@ -1077,18 +1078,18 @@ void func_809F0B0C(Boss05* this, PlayState* play) {
 
     if (this->unk15C == 1) {
         Math_ApproachF(&this->dyna.actor.velocity.y, 1.0f, 1.0f, 0.1f);
-        Math_ApproachZeroF(&this->dyna.actor.speedXZ, 0.5f, 0.5f);
+        Math_ApproachZeroF(&this->dyna.actor.speed, 0.5f, 0.5f);
         this->dyna.actor.shape.rot.x += this->unk500.x;
         this->dyna.actor.shape.rot.y += this->unk500.y;
 
         if (this->unk162[0] == 0) {
-            Actor_MarkForDeath(&this->dyna.actor);
+            Actor_Kill(&this->dyna.actor);
         }
     } else {
         switch (this->unk15C) {
             case 2:
                 this->dyna.actor.velocity.y = Rand_ZeroFloat(3.0f) + 3.0f;
-                this->dyna.actor.speedXZ = randPlusMinusPoint5Scaled(5.0f) + 5.0f;
+                this->dyna.actor.speed = Rand_CenteredFloat(5.0f) + 5.0f;
                 this->dyna.actor.world.rot.y = (s32)Rand_ZeroFloat(0x10000);
                 this->dyna.actor.gravity = -1.0f;
                 this->unk15C = 3;
@@ -1098,7 +1099,7 @@ void func_809F0B0C(Boss05* this, PlayState* play) {
                 Actor_MoveWithGravity(&this->dyna.actor);
 
                 if (this->unk324.y < (this->dyna.actor.floorHeight - 30.0f)) {
-                    Actor_MarkForDeath(&this->dyna.actor);
+                    Actor_Kill(&this->dyna.actor);
                 }
                 break;
 
@@ -1386,7 +1387,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->actionFunc == func_809EEDE8) {
         SkelAnime_DrawFlexOpa(play, this->skelAnime10.skeleton, this->skelAnime10.jointTable,
@@ -1461,7 +1462,7 @@ void Boss05_Draw(Actor* thisx, PlayState* play) {
                               this->skelAnime20.dListCount, func_809F14AC, func_809F1550, &this->dyna.actor);
     }
 
-    POLY_OPA_DISP = func_801660B8(play, POLY_OPA_DISP);
+    POLY_OPA_DISP = Play_SetFog(play, POLY_OPA_DISP);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }

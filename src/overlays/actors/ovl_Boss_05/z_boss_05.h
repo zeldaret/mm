@@ -7,13 +7,13 @@ struct Boss05;
 
 typedef void (*Boss05ActionFunc)(struct Boss05*, PlayState*);
 
-typedef enum {
-    /* 0 */ BIO_DEKU_BABA_TYPE_0,
-    /* 0 */ BIO_DEKU_BABA_TYPE_1,
-    /* 0 */ BIO_DEKU_BABA_TYPE_2,
-    /* 0 */ BIO_DEKU_BABA_TYPE_3,
-    /* 0 */ BIO_DEKU_BABA_TYPE_4,
-    /* 0 */ BIO_DEKU_BABA_TYPE_10 = 10, // Fragments?
+typedef enum BioDekuBabaType {
+    /*  0 */ BIO_DEKU_BABA_TYPE_0,
+    /*  1 */ BIO_DEKU_BABA_TYPE_1,
+    /*  2 */ BIO_DEKU_BABA_TYPE_2,
+    /*  3 */ BIO_DEKU_BABA_TYPE_3,
+    /*  4 */ BIO_DEKU_BABA_TYPE_4,
+    /* 10 */ BIO_DEKU_BABA_TYPE_10 = 10 // Fragments?
 } BioDekuBabaType;
 
 typedef struct Boss05 {
