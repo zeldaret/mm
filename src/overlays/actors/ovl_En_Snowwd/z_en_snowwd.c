@@ -53,7 +53,7 @@ static ColliderCylinderInit sCylinderInit = {
 void EnSnowwd_Init(Actor* thisx, PlayState* play) {
     EnSnowwd* this = THIS;
 
-    SNOWWD_DROPPED_COLLECTIBLE(thisx) = 0;
+    SNOWWD_DROPPED_COLLECTIBLE(thisx) = false;
     this->actor.home.rot.y = 0;
     this->timer = 0;
     this->actor.uncullZoneForward = 4000.0f;
@@ -87,13 +87,13 @@ void EnSnowwd_Idle(EnSnowwd* this, PlayState* play) {
     if (thisx->home.rot.y != 0) {
         this->timer = 21;
         thisx->home.rot.y = 0;
-        if (SNOWWD_DROPPED_COLLECTIBLE(&this->actor) == 0) {
-            if (SNOWWD_GET_DROP_TABLE(&this->actor) < DROP_TABLE_SIZE) {
+        if (!SNOWWD_DROPPED_COLLECTIBLE(&this->actor)) {
+            if (SNOWWD_GET_DROP_TABLE(&this->actor) < 16) {
                 pos = thisx->world.pos;
                 pos.y += 200.0f;
                 Item_DropCollectibleRandom(play, NULL, &pos, SNOWWD_GET_DROP_TABLE(&this->actor) * DROP_TABLE_SIZE);
             }
-            SNOWWD_DROPPED_COLLECTIBLE(&this->actor) = 1;
+            SNOWWD_DROPPED_COLLECTIBLE(&this->actor) = true;
         }
     }
     if (thisx->xzDistToPlayer < 600.0f) {
