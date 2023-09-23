@@ -501,8 +501,8 @@ typedef struct struct_8085D200 {
     /* 0x9 */ u8 unk_9;
 } struct_8085D200; // size = 0xC
 
-f32 D_80862AFC; // distance of the analog stick to its center
-s16 D_80862B00; // analog stick angle/yaw
+f32 sPlayerControlStickMagnitude;
+s16 sPlayerControlStickAngle;
 s16 D_80862B02; // analog stick yaw + camera yaw
 s32 D_80862B04; // boolean, set to the return value of func_8083216C
 FloorType sPlayerFloorType;
@@ -645,9 +645,11 @@ void func_8082DE50(PlayState* play, Player* this) {
 }
 
 s32 func_8082DE88(Player* this, s32 arg1, s32 arg2) {
-    s16 temp_v0 = this->unk_D64 - D_80862B00;
+    s16 controlStickAngleDiff = this->prevControlStickAngle - sPlayerControlStickAngle;
 
-    this->unk_AE8 += arg1 + (s16)(ABS_ALT(temp_v0) * fabsf(D_80862AFC) * (1.0f / 0x600F0));
+    this->unk_AE8 +=
+        arg1 + TRUNCF_BINANG(ABS_ALT(controlStickAngleDiff) * fabsf(sPlayerControlStickMagnitude) * (1.0f / 0x600F0));
+
     if (CHECK_BTN_ANY(sPlayerControlInput->press.button, BTN_B | BTN_A)) {
         this->unk_AE8 += 5;
     }
@@ -2018,27 +2020,31 @@ void func_8082EB18(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
     func_8082EAF0(play, this, anim, ANIM_FLAG_4 | ANIM_FLAG_8 | ANIM_FLAG_NOMOVE);
 }
 
-void func_8082EB38(PlayState* play, Player* this) {
+void Player_ProcessControlStick(PlayState* play, Player* this) {
     s8 var_v0;
     s8 var_v1;
 
-    this->unk_D60 = D_80862AFC;
-    this->unk_D64 = D_80862B00;
-    func_800FF3A0(&D_80862AFC, &D_80862B00, sPlayerControlInput);
+    this->prevControlStickMagnitude = sPlayerControlStickMagnitude;
+    this->prevControlStickAngle = sPlayerControlStickAngle;
 
-    if (D_80862AFC < 8.0f) {
-        D_80862AFC = 0.0f;
+    Lib_GetControlStickData(&sPlayerControlStickMagnitude, &sPlayerControlStickAngle, sPlayerControlInput);
+
+    if (sPlayerControlStickMagnitude < 8.0f) {
+        sPlayerControlStickMagnitude = 0.0f;
     }
 
-    D_80862B02 = Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]) + D_80862B00;
+    D_80862B02 = Camera_GetInputDirYaw(GET_ACTIVE_CAM(play)) + sPlayerControlStickAngle;
+
     this->unk_ADE = (this->unk_ADE + 1) % ARRAY_COUNT(this->unk_ADF);
-    if (D_80862AFC < 55.0f) {
+
+    if (sPlayerControlStickMagnitude < 55.0f) {
         var_v0 = -1;
         var_v1 = -1;
     } else {
-        var_v1 = ((u16)(D_80862B00 + 0x2000)) >> 9;
+        var_v1 = ((u16)(sPlayerControlStickAngle + 0x2000)) >> 9;
         var_v0 = ((u16)(BINANG_SUB(D_80862B02, this->actor.shape.rot.y) + 0x2000)) >> 14;
     }
+
     this->unk_ADF[this->unk_ADE] = var_v1;
     this->unk_AE3[this->unk_ADE] = var_v0;
 }
@@ -4690,45 +4696,87 @@ void func_80832888(Player* this, PlayState* play) {
     }
 }
 
-s32 func_80832CAC(PlayState* play, Player* this, f32* arg2, s16* outYaw, f32 arg4) {
-    f32 temp_fv1_2;
+/**
+ * These defines exist to simplify the variable used to toggle the different speed modes.
+ * While the `speedMode` variable is a float and can contain a non-boolean value,
+ * `Player_CalcSpeedAndYawFromControlStick` never actually uses the value for anything.
+ * It simply checks if the value is non-zero to toggle the "curved" mode.
+ * In practice, 0.0f or 0.018f are the only values passed to this function.
+ *
+ * It's clear that this value was intended to mean something in the curved mode calculation at
+ * some point in development, but was either never implemented or removed.
+ *
+ * To see the difference between linear and curved mode, with interactive toggles for
+ * speed cap and floor pitch, see the following desmos graph: https://www.desmos.com/calculator/hri7dcws4c
+ */
+
+// Linear mode is a straight line, increasing target speed at a steady rate relative to the control stick magnitude
+#define SPEED_MODE_LINEAR 0.0f
+
+// Curved mode drops any input below 20 units of magnitude, resulting in zero for target speed.
+// Beyond 20 units, a gradual curve slowly moves up until around the 40 unit mark
+// when target speed ramps up very quickly.
+#define SPEED_MODE_CURVED 0.018f
+
+/**
+ * Calculates target speed and yaw based on input from the control stick.
+ * See `Player_GetMovementSpeedAndYaw` for detailed argument descriptions.
+ *
+ * @return true if the control stick has any magnitude, false otherwise.
+ */
+s32 Player_CalcSpeedAndYawFromControlStick(PlayState* play, Player* this, f32* outSpeedTarget, s16* outYawTarget,
+                                           f32 speedMode) {
+    f32 temp;
 
     if ((this->unk_AA5 != PLAYER_UNKAA5_0) || func_8082DA90(play) || (this->stateFlags1 & PLAYER_STATE1_1)) {
-        *arg2 = 0.0f;
-        *outYaw = this->actor.shape.rot.y;
+        *outSpeedTarget = 0.0f;
+        *outYawTarget = this->actor.shape.rot.y;
     } else {
-        *arg2 = D_80862AFC;
-        *outYaw = D_80862B00;
-        if (arg4 != 0.0f) {
-            *arg2 -= 20.0f;
-            if (*arg2 < 0.0f) {
-                *arg2 = 0.0f;
+        *outSpeedTarget = sPlayerControlStickMagnitude;
+        *outYawTarget = sPlayerControlStickAngle;
+
+        // The value of `speedMode` is never actually used. It only toggles this condition.
+        // See the definition of `SPEED_MODE_LINEAR` and `SPEED_MODE_CURVED` for more information.
+        if (speedMode != SPEED_MODE_LINEAR) {
+            *outSpeedTarget -= 20.0f;
+
+            if (*outSpeedTarget < 0.0f) {
+                // If control stick magnitude is below 20, return zero speed.
+                *outSpeedTarget = 0.0f;
             } else {
-                temp_fv1_2 = 1.0f - Math_CosS(*arg2 * 450.0f);
-                *arg2 = (SQ(temp_fv1_2) * 30.0f) + 7.0f;
+                // Cosine of the control stick magnitude isn't exactly meaningful, but
+                // it happens to give a desirable curve for grounded movement speed relative
+                // to control stick magnitude.
+                temp = 1.0f - Math_CosS(*outSpeedTarget * 450.0f);
+                *outSpeedTarget = (SQ(temp) * 30.0f) + 7.0f;
             }
         } else {
-            *arg2 *= 0.8f;
+            // Speed increases linearly relative to control stick magnitude
+            *outSpeedTarget *= 0.8f;
         }
 
         if (this->transformation == PLAYER_FORM_FIERCE_DEITY) {
-            *arg2 *= 1.5f;
+            *outSpeedTarget *= 1.5f;
         }
 
-        if (D_80862AFC != 0.0f) {
-            f32 temp_fv0 = Math_SinS(this->floorPitch);
-            f32 var_fa0 = this->unk_B50;
+        if (sPlayerControlStickMagnitude != 0.0f) {
+            f32 floorPitchInfluence = Math_SinS(this->floorPitch);
+            f32 speedCap = this->unk_B50;
             f32 var_fa1;
 
             if (this->unk_AB8 != 0.0f) {
                 var_fa1 = (this->lockOnActor != NULL) ? 0.002f : 0.008f;
 
-                var_fa0 -= this->unk_AB8 * var_fa1;
-                var_fa0 = CLAMP_MIN(var_fa0, 2.0f);
+                speedCap -= this->unk_AB8 * var_fa1;
+                speedCap = CLAMP_MIN(speedCap, 2.0f);
             }
-            *arg2 = (*arg2 * 0.14f) - (8.0f * temp_fv0 * temp_fv0);
-            *arg2 = CLAMP(*arg2, 0.0f, var_fa0);
-            if (temp_fv0) {} //! FAKE
+
+            *outSpeedTarget = (*outSpeedTarget * 0.14f) - (8.0f * floorPitchInfluence * floorPitchInfluence);
+            *outSpeedTarget = CLAMP(*outSpeedTarget, 0.0f, speedCap);
+
+            //! FAKE
+            if (floorPitchInfluence) {}
+
             return true;
         }
     }
@@ -4740,22 +4788,36 @@ s32 func_80832F24(Player* this) {
     return Math_StepToF(&this->linearVelocity, 0.0f, REG(43) / 100.0f);
 }
 
-s32 func_80832F78(Player* this, f32* arg1, s16* outYaw, f32 arg3, PlayState* play) {
-    if (!func_80832CAC(play, this, arg1, outYaw, arg3)) {
-        *outYaw = this->actor.shape.rot.y;
+/**
+ * Gets target speed and yaw values for movement based on control stick input.
+ * Control stick magnitude and angle are processed in `Player_CalcSpeedAndYawFromControlStick` to get target values.
+ * Additionally, this function does extra processing on the target yaw value if the control stick is neutral.
+ *
+ * @param outSpeedTarget  a pointer to the variable that will hold the resulting target speed value
+ * @param outYawTarget    a pointer to the variable that will hold the resulting target yaw value
+ * @param speedMode       toggles between a linear and curved mode for the speed value
+ *
+ * @see Player_CalcSpeedAndYawFromControlStick for more information on the linear vs curved speed mode.
+ *
+ * @return true if the control stick has any magnitude, false otherwise.
+ */
+s32 Player_GetMovementSpeedAndYaw(Player* this, f32* outSpeedTarget, s16* outYawTarget, f32 speedMode,
+                                  PlayState* play) {
+    if (!Player_CalcSpeedAndYawFromControlStick(play, this, outSpeedTarget, outYawTarget, speedMode)) {
+        *outYawTarget = this->actor.shape.rot.y;
 
         if (this->lockOnActor != NULL) {
             if ((play->actorCtx.targetCtx.rotZTick != 0) && !(this->stateFlags2 & PLAYER_STATE2_40)) {
-                *outYaw = Math_Vec3f_Yaw(&this->actor.world.pos, &this->lockOnActor->focus.pos);
+                *outYawTarget = Math_Vec3f_Yaw(&this->actor.world.pos, &this->lockOnActor->focus.pos);
             }
         } else if (func_80123434(this)) {
-            *outYaw = this->targetYaw;
+            *outYawTarget = this->targetYaw;
         }
 
         return false;
     }
 
-    *outYaw += Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]);
+    *outYawTarget += Camera_GetInputDirYaw(play->cameraPtrs[play->activeCamId]);
     return true;
 }
 
@@ -4822,14 +4884,14 @@ s32 func_80833058(PlayState* play, Player* this, s8* arg2, s32 arg3) {
 
 s32 func_808331FC(PlayState* play, Player* this, SkelAnime* skelAnime, f32 frame) {
     if ((skelAnime->endFrame - frame) <= skelAnime->curFrame) {
-        f32 sp24;
-        s16 sp22;
+        f32 speedTarget;
+        s16 yawTarget;
 
         if (func_80833058(play, this, D_8085D01C, 1)) {
             return 0;
         }
 
-        if (D_80862B04 || func_80832F78(this, &sp24, &sp22, 0.018f, play)) {
+        if (D_80862B04 || Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play)) {
             return 1;
         }
     }
@@ -11877,7 +11939,7 @@ void Player_UpdateCommon(Player* this, PlayState* play, Input* input) {
                                PLAYER_STATE3_1000 | PLAYER_STATE3_100000 | PLAYER_STATE3_2000000 |
                                PLAYER_STATE3_4000000 | PLAYER_STATE3_8000000 | PLAYER_STATE3_10000000);
         func_808425B4(this);
-        func_8082EB38(play, this);
+        Player_ProcessControlStick(play, this);
 
         D_8085C3E4 = (this->stateFlags1 & PLAYER_STATE1_8000000) ? 0.5f : 1.0f;
         D_8085C3E8 = 1.0f / D_8085C3E4;
@@ -12806,11 +12868,11 @@ s32 func_80848094(PlayState* play, Player* this, f32* arg2, s16* arg3) {
 }
 
 void func_808481CC(PlayState* play, Player* this, f32 arg2) {
-    f32 sp2C;
-    s16 sp2A;
+    f32 speedTarget;
+    s16 yawTarget;
 
-    func_80832F78(this, &sp2C, &sp2A, 0.0f, play);
-    func_8084748C(this, &this->linearVelocity, sp2C / 2.0f, sp2A);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+    func_8084748C(this, &this->linearVelocity, speedTarget / 2.0f, yawTarget);
     func_8084748C(this, &this->actor.velocity.y, arg2, this->currentYaw);
 }
 
@@ -13419,8 +13481,8 @@ void Player_Action_1(Player* this, PlayState* play) {
 }
 
 void Player_Action_2(Player* this, PlayState* play) {
-    f32 sp44;
-    s16 sp42;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 temp_v0;
 
     if (this->unk_AE8 != 0) {
@@ -13445,43 +13507,43 @@ void Player_Action_2(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp44, &sp42, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-    temp_v0 = func_8083E404(this, sp44, sp42);
+    temp_v0 = func_8083E404(this, speedTarget, yawTarget);
     if (temp_v0 > 0) {
-        func_8083A844(this, play, sp42);
+        func_8083A844(this, play, yawTarget);
     } else if (temp_v0 < 0) {
-        func_8083AF8C(this, sp42, play);
-    } else if (sp44 > 4.0f) {
+        func_8083AF8C(this, yawTarget, play);
+    } else if (speedTarget > 4.0f) {
         func_8083B030(this, play);
     } else {
         u32 temp_v0_2;
 
         func_8083EA44(this, this->linearVelocity * 0.3f + 1.0f);
-        func_8083E8E0(this, sp44, sp42);
+        func_8083E8E0(this, speedTarget, yawTarget);
 
         temp_v0_2 = this->unk_B38;
         if ((temp_v0_2 < 6) || ((temp_v0_2 - 0xE) < 6)) {
             Math_StepToF(&this->linearVelocity, 0.0f, 1.5f);
         } else {
-            s16 temp_v0_3 = sp42 - this->currentYaw;
+            s16 temp_v0_3 = yawTarget - this->currentYaw;
             s32 var_v1 = ABS_ALT(temp_v0_3);
 
             if (var_v1 > 0x4000) {
                 if (Math_StepToF(&this->linearVelocity, 0.0f, 1.5f)) {
-                    this->currentYaw = sp42;
+                    this->currentYaw = yawTarget;
                 }
             } else {
-                Math_AsymStepToF(&this->linearVelocity, sp44 * 0.3f, 2.0f, 1.5f);
-                Math_ScaledStepToS(&this->currentYaw, sp42, var_v1 * 0.1f);
+                Math_AsymStepToF(&this->linearVelocity, speedTarget * 0.3f, 2.0f, 1.5f);
+                Math_ScaledStepToS(&this->currentYaw, yawTarget, var_v1 * 0.1f);
             }
         }
     }
 }
 
 void Player_Action_3(Player* this, PlayState* play) {
-    f32 sp3C;
-    s16 sp3A;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 temp_v0;
 
     if (PlayerAnimation_Update(play, &this->skelAnime)) {
@@ -13509,23 +13571,23 @@ void Player_Action_3(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp3C, &sp3A, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-    temp_v0 = func_8083E514(this, &sp3C, &sp3A, play);
+    temp_v0 = func_8083E514(this, &speedTarget, &yawTarget, play);
     if (temp_v0 > 0) {
-        func_8083A844(this, play, sp3A);
+        func_8083A844(this, play, yawTarget);
     } else if (temp_v0 < 0) {
-        func_8083AECC(this, sp3A, play);
-    } else if (sp3C > 4.9f) {
+        func_8083AECC(this, yawTarget, play);
+    } else if (speedTarget > 4.9f) {
         func_8083B030(this, play);
         func_8082FC60(this);
-    } else if (sp3C != 0.0f) {
+    } else if (speedTarget != 0.0f) {
         func_8083AF30(this, play);
     } else {
-        s16 temp_v0_2 = sp3A - this->actor.shape.rot.y;
+        s16 temp_v0_2 = yawTarget - this->actor.shape.rot.y;
 
         if (ABS_ALT(temp_v0_2) > 0x320) {
-            func_8083B0E4(play, this, sp3A);
+            func_8083B0E4(play, this, yawTarget);
         }
     }
 }
@@ -13533,8 +13595,8 @@ void Player_Action_3(Player* this, PlayState* play) {
 void Player_Action_4(Player* this, PlayState* play) {
     s32 temp_v0 = func_8082ED94(this);
     s32 animFinished = PlayerAnimation_Update(play, &this->skelAnime);
-    f32 sp3C;
-    s16 sp3A;
+    f32 speedTarget;
+    s16 yawTarget;
     s16 temp_v1_2;
 
     func_8083C85C(this);
@@ -13569,17 +13631,19 @@ void Player_Action_4(Player* this, PlayState* play) {
             func_8083692C(this, play);
             return;
         }
-        func_80832F78(this, &sp3C, &sp3A, 0.018f, play);
-        if (sp3C != 0.0f) {
-            func_8083A844(this, play, sp3A);
+
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+
+        if (speedTarget != 0.0f) {
+            func_8083A844(this, play, yawTarget);
             return;
         }
-        temp_v1_2 = sp3A - this->actor.shape.rot.y;
+        temp_v1_2 = yawTarget - this->actor.shape.rot.y;
 
         if (ABS_ALT(temp_v1_2) > 0x320) {
-            func_8083B0E4(play, this, sp3A);
+            func_8083B0E4(play, this, yawTarget);
         } else {
-            Math_ScaledStepToS(&this->actor.shape.rot.y, sp3A, 0x4B0);
+            Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, 0x4B0);
             this->currentYaw = this->actor.shape.rot.y;
             if (func_8082ED20(this) == this->skelAnime.animation) {
                 func_8083C6E8(this, play);
@@ -13591,8 +13655,8 @@ void Player_Action_4(Player* this, PlayState* play) {
 void Player_Action_5(Player* this, PlayState* play) {
     f32 var_fv0;
     s16 temp_v0_3;
-    f32 sp44;
-    s16 sp42;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 var_v0;
     s32 temp_v0_2;
     s32 var_v1;
@@ -13637,42 +13701,43 @@ void Player_Action_5(Player* this, PlayState* play) {
         func_8085B384(this, play);
         return;
     }
-    func_80832F78(this, &sp44, &sp42, 0.0f, play);
 
-    temp_v0_2 = func_8083E514(this, &sp44, &sp42, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
+    temp_v0_2 = func_8083E514(this, &speedTarget, &yawTarget, play);
     if (temp_v0_2 > 0) {
-        func_8083A844(this, play, sp42);
+        func_8083A844(this, play, yawTarget);
         return;
     }
     if (temp_v0_2 < 0) {
-        func_8083AECC(this, sp42, play);
+        func_8083AECC(this, yawTarget, play);
         return;
     }
-    if (sp44 > 4.9f) {
+    if (speedTarget > 4.9f) {
         func_8083B030(this, play);
         func_8082FC60(this);
         return;
     }
-    if ((sp44 == 0.0f) && (this->linearVelocity == 0.0f)) {
+    if ((speedTarget == 0.0f) && (this->linearVelocity == 0.0f)) {
         func_8083692C(this, play);
         return;
     }
 
-    temp_v0_3 = sp42 - this->currentYaw;
+    temp_v0_3 = yawTarget - this->currentYaw;
     var_v1 = ABS_ALT(temp_v0_3);
     if (var_v1 > 0x4000) {
         if (Math_StepToF(&this->linearVelocity, 0.0f, 1.5f)) {
-            this->currentYaw = sp42;
+            this->currentYaw = yawTarget;
         }
     } else {
-        Math_AsymStepToF(&this->linearVelocity, sp44 * 0.4f, 1.5f, 1.5f);
-        Math_ScaledStepToS(&this->currentYaw, sp42, var_v1 * 0.1f);
+        Math_AsymStepToF(&this->linearVelocity, speedTarget * 0.4f, 1.5f, 1.5f);
+        Math_ScaledStepToS(&this->currentYaw, yawTarget, var_v1 * 0.1f);
     }
 }
 
 void Player_Action_6(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 sp32;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 sp2C;
 
     func_8083EE60(this, play);
@@ -13685,25 +13750,25 @@ void Player_Action_6(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp34, &sp32, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-    sp2C = func_8083E514(this, &sp34, &sp32, play);
+    sp2C = func_8083E514(this, &speedTarget, &yawTarget, play);
     if (sp2C >= 0) {
-        if (!func_8083F190(this, &sp34, &sp32, play)) {
+        if (!func_8083F190(this, &speedTarget, &yawTarget, play)) {
             if (sp2C != 0) {
                 func_8083A794(this, play);
-            } else if (sp34 > 4.9f) {
+            } else if (speedTarget > 4.9f) {
                 func_8083B030(this, play);
             } else {
                 func_8083AF30(this, play);
             }
         }
     } else {
-        s16 sp2A = sp32 - this->currentYaw;
+        s16 sp2A = yawTarget - this->currentYaw;
 
-        Math_AsymStepToF(&this->linearVelocity, sp34 * 1.5f, 1.5f, 2.0f);
-        Math_ScaledStepToS(&this->currentYaw, sp32, sp2A * 0.1f);
-        if ((sp34 == 0.0f) && (this->linearVelocity == 0.0f)) {
+        Math_AsymStepToF(&this->linearVelocity, speedTarget * 1.5f, 1.5f, 2.0f);
+        Math_ScaledStepToS(&this->currentYaw, yawTarget, sp2A * 0.1f);
+        if ((speedTarget == 0.0f) && (this->linearVelocity == 0.0f)) {
             func_8083692C(this, play);
         }
     }
@@ -13711,8 +13776,8 @@ void Player_Action_6(Player* this, PlayState* play) {
 
 void Player_Action_7(Player* this, PlayState* play) {
     s32 animFinished = PlayerAnimation_Update(play, &this->skelAnime);
-    f32 sp30;
-    s16 sp2E;
+    f32 speedTarget;
+    s16 yawTarget;
 
     func_80832F24(this);
 
@@ -13720,15 +13785,16 @@ void Player_Action_7(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp30, &sp2E, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
     if (this->linearVelocity != 0.0f) {
         return;
     }
 
     this->currentYaw = this->actor.shape.rot.y;
-    if (func_8083E514(this, &sp30, &sp2E, play) > 0) {
+    if (func_8083E514(this, &speedTarget, &yawTarget, play) > 0) {
         func_8083A794(this, play);
-    } else if ((sp30 != 0.0f) || animFinished) {
+    } else if ((speedTarget != 0.0f) || animFinished) {
         func_8083F230(this, play);
     }
 }
@@ -13746,8 +13812,8 @@ void Player_Action_8(Player* this, PlayState* play) {
 }
 
 void Player_Action_9(Player* this, PlayState* play) {
-    f32 sp3C;
-    s16 sp3A;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 var_v0;
 
     func_8083F27C(play, this);
@@ -13760,22 +13826,23 @@ void Player_Action_9(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp3C, &sp3A, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
     if (func_80123434(this)) {
-        var_v0 = func_8083E514(this, &sp3C, &sp3A, play);
+        var_v0 = func_8083E514(this, &speedTarget, &yawTarget, play);
     } else {
-        var_v0 = func_8083E404(this, sp3C, sp3A);
+        var_v0 = func_8083E404(this, speedTarget, yawTarget);
     }
 
     if (var_v0 > 0) {
         func_8083A794(this, play);
     } else if (var_v0 < 0) {
         if (func_80123434(this)) {
-            func_8083AECC(this, sp3A, play);
+            func_8083AECC(this, yawTarget, play);
         } else {
-            func_8083AF8C(this, sp3A, play);
+            func_8083AF8C(this, yawTarget, play);
         }
-    } else if ((this->linearVelocity < 3.6f) && (sp3C < 4.0f)) {
+    } else if ((this->linearVelocity < 3.6f) && (speedTarget < 4.0f)) {
         if (!func_80123420(this) && func_80123434(this)) {
             func_8083AF30(this, play);
         } else {
@@ -13786,25 +13853,25 @@ void Player_Action_9(Player* this, PlayState* play) {
         s32 var_v1;
         s32 pad;
 
-        func_8083E8E0(this, sp3C, sp3A);
+        func_8083E8E0(this, speedTarget, yawTarget);
 
-        temp_v0 = sp3A - this->currentYaw;
+        temp_v0 = yawTarget - this->currentYaw;
         var_v1 = ABS_ALT(temp_v0);
         if (var_v1 > 0x4000) {
             if (Math_StepToF(&this->linearVelocity, 0.0f, 3.0f)) {
-                this->currentYaw = sp3A;
+                this->currentYaw = yawTarget;
             }
         } else {
-            sp3C = sp3C * 0.9f;
-            Math_AsymStepToF(&this->linearVelocity, sp3C, 2.0f, 3.0f);
-            Math_ScaledStepToS(&this->currentYaw, sp3A, var_v1 * 0.1f);
+            speedTarget *= 0.9f;
+            Math_AsymStepToF(&this->linearVelocity, speedTarget, 2.0f, 3.0f);
+            Math_ScaledStepToS(&this->currentYaw, yawTarget, var_v1 * 0.1f);
         }
     }
 }
 
 void Player_Action_10(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 sp32;
+    f32 speedTarget;
+    s16 yawTarget;
 
     PlayerAnimation_Update(play, &this->skelAnime);
     if (Player_IsHoldingTwoHandedWeapon(this)) {
@@ -13814,19 +13881,20 @@ void Player_Action_10(Player* this, PlayState* play) {
                                      this->skelAnime.morphTable, D_8085B9F0);
     }
 
-    func_80832F78(this, &sp34, &sp32, 0.018f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+
     if ((this != GET_PLAYER(play)) && (this->lockOnActor == NULL)) {
-        sp32 = this->actor.home.rot.y;
+        yawTarget = this->actor.home.rot.y;
     }
 
     if (func_80833058(play, this, D_8085D018, 1)) {
         return;
     }
 
-    if (sp34 != 0.0f) {
-        this->actor.shape.rot.y = sp32;
+    if (speedTarget != 0.0f) {
+        this->actor.shape.rot.y = yawTarget;
         func_8083A794(this, play);
-    } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, sp32, this->unk_B4E)) {
+    } else if (Math_ScaledStepToS(&this->actor.shape.rot.y, yawTarget, this->unk_B4E)) {
         func_80839E74(this, play);
     }
     this->currentYaw = this->actor.shape.rot.y;
@@ -13844,10 +13912,10 @@ void Player_Action_11(Player* this, PlayState* play) {
 
     if (!func_80847880(play, this) &&
         (!func_80833058(play, this, D_8085D01C, 1) || (Player_Action_11 == this->actionFunc))) {
-        f32 sp3C;
+        f32 speedTarget;
         f32 temp_fv0;
         f32 temp_fv1;
-        s16 sp32;
+        s16 yawTarget;
         s16 sp30;
 
         if (!CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_B)) {
@@ -13856,13 +13924,13 @@ void Player_Action_11(Player* this, PlayState* play) {
         }
 
         this->linearVelocity = this->unk_B48;
-        func_80832F78(this, &sp3C, &sp32, 0.018f, play);
-        sp30 = sp32;
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+        sp30 = yawTarget;
 
-        if (!func_8083A4A4(this, &sp3C, &sp32, REG(43) / 100.0f)) {
-            func_8083CB04(this, sp3C, sp32, REG(19) / 100.0f, 1.5f, 0x3E8);
+        if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+            func_8083CB04(this, speedTarget, yawTarget, REG(19) / 100.0f, 1.5f, 0x3E8);
             func_8083C8E8(this, play);
-            if ((this->linearVelocity == 0.0f) && (sp3C == 0.0f)) {
+            if ((this->linearVelocity == 0.0f) && (speedTarget == 0.0f)) {
                 this->currentYaw = sp30;
                 this->actor.shape.rot.y = this->currentYaw;
             }
@@ -13892,8 +13960,8 @@ void Player_Action_12(Player* this, PlayState* play) {
 }
 
 void Player_Action_13(Player* this, PlayState* play) {
-    f32 sp2C; // player speed?
-    s16 sp2A;
+    f32 speedTarget;
+    s16 yawTarget;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
     func_8083F57C(this, play);
@@ -13906,23 +13974,24 @@ void Player_Action_13(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp2C, &sp2A, 0.018f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+
     if (this->currentMask == PLAYER_MASK_BUNNY) {
-        sp2C *= 1.5f;
+        speedTarget *= 1.5f;
     }
 
-    if (!func_8083A4A4(this, &sp2C, &sp2A, REG(43) / 100.0f)) {
-        func_8083CB58(this, sp2C, sp2A);
+    if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+        func_8083CB58(this, speedTarget, yawTarget);
         func_8083C8E8(this, play);
-        if ((this->linearVelocity == 0.0f) && (sp2C == 0.0f)) {
+        if ((this->linearVelocity == 0.0f) && (speedTarget == 0.0f)) {
             func_80839E3C(this, play);
         }
     }
 }
 
 void Player_Action_14(Player* this, PlayState* play) {
-    f32 sp2C;
-    s16 sp2A;
+    f32 speedTarget;
+    s16 yawTarget;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
 
@@ -13936,15 +14005,16 @@ void Player_Action_14(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp2C, &sp2A, 0.0f, play);
-    if (!func_8083A4A4(this, &sp2C, &sp2A, REG(43) / 100.0f)) {
-        if ((func_80123434(this) && (sp2C != 0) && (func_8083E514(this, &sp2C, &sp2A, play) <= 0)) ||
-            (!func_80123434(this) && (func_8083E404(this, sp2C, sp2A) <= 0))) {
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
+    if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+        if ((func_80123434(this) && (speedTarget != 0) && (func_8083E514(this, &speedTarget, &yawTarget, play) <= 0)) ||
+            (!func_80123434(this) && (func_8083E404(this, speedTarget, yawTarget) <= 0))) {
             func_80836988(this, play);
         } else {
-            func_8083CB58(this, sp2C, sp2A);
+            func_8083CB58(this, speedTarget, yawTarget);
             func_8083C8E8(this, play);
-            if ((this->linearVelocity == 0.0f) && (sp2C == 0.0f)) {
+            if ((this->linearVelocity == 0.0f) && (speedTarget == 0.0f)) {
                 func_80836988(this, play);
             }
         }
@@ -13953,8 +14023,8 @@ void Player_Action_14(Player* this, PlayState* play) {
 
 void Player_Action_15(Player* this, PlayState* play) {
     s32 animFinished = PlayerAnimation_Update(play, &this->skelAnime);
-    f32 sp30;
-    s16 sp2E;
+    f32 speedTarget;
+    s16 yawTarget;
 
     if (func_80833058(play, this, D_8085D00C, 1)) {
         return;
@@ -13965,11 +14035,12 @@ void Player_Action_15(Player* this, PlayState* play) {
         return;
     }
 
-    func_80832F78(this, &sp30, &sp2E, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
     if ((this->skelAnime.morphWeight == 0.0f) && (this->skelAnime.curFrame > 5.0f)) {
         func_80832F24(this);
-        if ((this->skelAnime.curFrame > 10.0f) && (func_8083E404(this, sp30, sp2E) < 0)) {
-            func_8083AF8C(this, sp2E, play);
+        if ((this->skelAnime.curFrame > 10.0f) && (func_8083E404(this, speedTarget, yawTarget) < 0)) {
+            func_8083AF8C(this, yawTarget, play);
         } else if (animFinished) {
             func_8083B090(this, play);
         }
@@ -13978,20 +14049,21 @@ void Player_Action_15(Player* this, PlayState* play) {
 
 void Player_Action_16(Player* this, PlayState* play) {
     s32 animFinished = PlayerAnimation_Update(play, &this->skelAnime);
-    f32 sp30;
-    s16 sp2E;
+    f32 speedTarget;
+    s16 yawTarget;
 
     func_80832F24(this);
     if (func_80833058(play, this, D_8085D044, 1)) {
         return;
     }
 
-    func_80832F78(this, &sp30, &sp2E, 0.0f, play);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
     if (this->linearVelocity == 0.0f) {
         this->currentYaw = this->actor.shape.rot.y;
-        if (func_8083E404(this, sp30, sp2E) > 0) {
+        if (func_8083E404(this, speedTarget, yawTarget) > 0) {
             func_8083A794(this, play);
-        } else if ((sp30 != 0.0f) || animFinished) {
+        } else if ((speedTarget != 0.0f) || animFinished) {
             func_80836988(this, play);
         }
     }
@@ -14291,8 +14363,8 @@ s32 func_8084C124(PlayState* play, Player* this) {
 }
 
 void Player_Action_25(Player* this, PlayState* play) {
-    f32 sp44;
-    s16 sp42;
+    f32 speedTarget;
+    s16 yawTarget;
     Actor* heldActor;
 
     if (func_80123420(this)) {
@@ -14300,7 +14372,8 @@ void Player_Action_25(Player* this, PlayState* play) {
     }
 
     if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-        func_80832F78(this, &sp44, &sp42, 0.0f, play);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
         if (this->stateFlags1 & PLAYER_STATE1_800) {
             heldActor = this->heldActor;
             if (!func_808313A8(play, this, heldActor) && (heldActor->id == ACTOR_EN_NIW) &&
@@ -14319,7 +14392,7 @@ void Player_Action_25(Player* this, PlayState* play) {
             s16 prevYaw = this->currentYaw;
 
             func_808378FC(play, this);
-            func_8083CBC4(this, sp44 * 0.5f, sp42, 2.0f, 0.2f, 0.1f, 0x190);
+            func_8083CBC4(this, speedTarget * 0.5f, yawTarget, 2.0f, 0.2f, 0.1f, 0x190);
 
             if (this->skelAnime.animation == &gPlayerAnim_pn_attack) {
                 this->stateFlags2 |= (PLAYER_STATE2_20 | PLAYER_STATE2_40);
@@ -14329,7 +14402,7 @@ void Player_Action_25(Player* this, PlayState* play) {
                 Math_StepToF(&this->unk_B10[1], 0.0f, this->unk_B10[0]);
             }
         } else {
-            func_8083CBC4(this, sp44, sp42, 1.0f, 0.05f, 0.1f, 0xC8);
+            func_8083CBC4(this, speedTarget, yawTarget, 1.0f, 0.05f, 0.1f, 0xC8);
         }
 
         func_8083216C(this, play);
@@ -14437,20 +14510,21 @@ void Player_Action_26(Player* this, PlayState* play) {
         }
     } else if (!func_80840A30(play, this, &this->linearVelocity, 6.0f)) {
         if ((this->skelAnime.curFrame < 15.0f) || !func_80848570(this, play)) {
-            f32 sp3C;
-            s16 yaw;
+            f32 speedTarget;
+            s16 yawTarget;
 
             if (this->skelAnime.curFrame >= 20.0f) {
                 func_80836A5C(this, play);
                 return;
             }
 
-            func_80832F78(this, &sp3C, &yaw, 0.018f, play);
-            sp3C *= 1.5f;
-            if ((sp3C < 3.0f) || (this->unk_AE3[this->unk_ADE] != 0)) {
-                sp3C = 3.0f;
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+            speedTarget *= 1.5f;
+
+            if ((speedTarget < 3.0f) || (this->unk_AE3[this->unk_ADE] != 0)) {
+                speedTarget = 3.0f;
             }
-            func_8083CB58(this, sp3C, this->actor.shape.rot.y);
+            func_8083CB58(this, speedTarget, this->actor.shape.rot.y);
 
             if (func_8083FBC4(play, this)) {
                 Actor_PlaySfx_FlaggedCentered1(&this->actor, (this->floorSfxOffset == NA_SE_PL_WALK_SNOW - SFX_FLAG)
@@ -14507,8 +14581,8 @@ void Player_Action_28(Player* this, PlayState* play) {
 
 void Player_Action_29(Player* this, PlayState* play) {
     AttackAnimInfo* attackInfoEntry = &sMeleeAttackAnimInfo[this->meleeWeaponAnimation];
-    f32 sp38;
-    s16 sp36;
+    f32 speedTarget;
+    s16 yawTarget;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
 
@@ -14523,8 +14597,8 @@ void Player_Action_29(Player* this, PlayState* play) {
     if (!func_808401F4(play, this)) {
         func_8083FCF0(play, this, 6.0f, attackInfoEntry->unk_C, attackInfoEntry->unk_D);
         if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
-            func_80832F78(this, &sp38, &sp36, 0.0f, play);
-            func_8083CBC4(this, sp38, this->currentYaw, 1.0f, 0.05f, 0.1f, 200);
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+            func_8083CBC4(this, speedTarget, this->currentYaw, 1.0f, 0.05f, 0.1f, 200);
         } else if (func_80836F10(play, this) >= 0) { // Player didn't die because of this fall
             this->meleeWeaponAnimation += 3;
             func_80833864(play, this, this->meleeWeaponAnimation);
@@ -14536,8 +14610,8 @@ void Player_Action_29(Player* this, PlayState* play) {
 }
 
 void Player_Action_30(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 sp32;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 temp_v0;
 
     this->stateFlags1 |= PLAYER_STATE1_1000;
@@ -14560,8 +14634,8 @@ void Player_Action_30(Player* this, PlayState* play) {
                 func_80840E5C(this, play);
             }
         } else if (!func_80840CD4(this, play)) {
-            func_80832F78(this, &sp34, &sp32, 0.0f, play);
-            temp_v0 = func_8083E7F8(this, &sp34, &sp32, play);
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+            temp_v0 = func_8083E7F8(this, &speedTarget, &yawTarget, play);
             if (temp_v0 > 0) {
                 func_80840DEC(this, play);
             } else if (temp_v0 < 0) {
@@ -14576,8 +14650,8 @@ void Player_Action_31(Player* this, PlayState* play) {
     s32 temp_v0_2;
     f32 temp_ft4;
     f32 var_fa0;
-    f32 sp54;
-    s16 sp52;
+    f32 speedTarget;
+    s16 yawTarget;
     s16 temp_v0;
     f32 temp_fv1;
     s32 pad;
@@ -14603,28 +14677,28 @@ void Player_Action_31(Player* this, PlayState* play) {
                                  this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
         func_80840F34(this);
-        func_80832F78(this, &sp54, &sp52, 0.0f, play);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-        temp_v0_2 = func_8083E7F8(this, &sp54, &sp52, play);
+        temp_v0_2 = func_8083E7F8(this, &speedTarget, &yawTarget, play);
         if (temp_v0_2 < 0) {
             func_80840E24(this, play);
             return;
         }
 
         if (temp_v0_2 == 0) {
-            sp54 = 0.0f;
-            sp52 = this->currentYaw;
+            speedTarget = 0.0f;
+            yawTarget = this->currentYaw;
         }
 
-        sp44 = ABS_ALT(BINANG_SUB(sp52, this->currentYaw));
+        sp44 = ABS_ALT(BINANG_SUB(yawTarget, this->currentYaw));
         if (sp44 > 0x4000) {
             if (Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
-                this->currentYaw = sp52;
+                this->currentYaw = yawTarget;
             }
         } else {
-            Math_AsymStepToF(&this->linearVelocity, sp54 * 0.2f, 1.0f, 0.5f);
-            Math_ScaledStepToS(&this->currentYaw, sp52, sp44 * 0.1f);
-            if ((sp54 == 0.0f) && (this->linearVelocity == 0.0f)) {
+            Math_AsymStepToF(&this->linearVelocity, speedTarget * 0.2f, 1.0f, 0.5f);
+            Math_ScaledStepToS(&this->currentYaw, yawTarget, sp44 * 0.1f);
+            if ((speedTarget == 0.0f) && (this->linearVelocity == 0.0f)) {
                 func_80840EC0(this, play);
             }
         }
@@ -14656,34 +14730,34 @@ void Player_Action_32(Player* this, PlayState* play) {
                                  D_8085CF78[Player_IsHoldingTwoHandedWeapon(this)], this->unk_B38 * 0.7241379f, var_fa0,
                                  this->blendTableBuffer);
     if (!func_8083FE38(this, play) && !func_80840CD4(this, play)) {
-        f32 sp54;
-        s16 sp52;
+        f32 speedTarget;
+        s16 yawTarget;
         s32 temp_v0;
         s16 temp_v0_2;
         s32 var_v1;
 
         func_80840F34(this);
-        func_80832F78(this, &sp54, &sp52, 0.0f, play);
-        temp_v0 = func_8083E7F8(this, &sp54, &sp52, play);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+        temp_v0 = func_8083E7F8(this, &speedTarget, &yawTarget, play);
         if (temp_v0 > 0) {
             func_80840DEC(this, play);
             return;
         }
 
         if (temp_v0 == 0) {
-            sp54 = 0.0f;
-            sp52 = this->currentYaw;
+            speedTarget = 0.0f;
+            yawTarget = this->currentYaw;
         }
 
-        var_v1 = ABS_ALT(BINANG_SUB(sp52, this->currentYaw));
+        var_v1 = ABS_ALT(BINANG_SUB(yawTarget, this->currentYaw));
         if (var_v1 > 0x4000) {
             if (Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
-                this->currentYaw = sp52;
+                this->currentYaw = yawTarget;
             }
         } else {
-            Math_AsymStepToF(&this->linearVelocity, sp54 * 0.2f, 1.0f, 0.5f);
-            Math_ScaledStepToS(&this->currentYaw, sp52, var_v1 * 0.1f);
-            if ((sp54 == 0.0f) && (this->linearVelocity == 0.0f) && (sp5C == 0.0f)) {
+            Math_AsymStepToF(&this->linearVelocity, speedTarget * 0.2f, 1.0f, 0.5f);
+            Math_ScaledStepToS(&this->currentYaw, yawTarget, var_v1 * 0.1f);
+            if ((speedTarget == 0.0f) && (this->linearVelocity == 0.0f) && (sp5C == 0.0f)) {
                 func_80840EC0(this, play);
             }
         }
@@ -15090,13 +15164,14 @@ void Player_Action_41(Player* this, PlayState* play) {
 
 // Player_Action_Throwing
 void Player_Action_42(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 yaw;
+    f32 speedTarget;
+    s16 yawTarget;
 
     func_80832F24(this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime) ||
-        ((this->skelAnime.curFrame >= 8.0f) && func_80832F78(this, &sp34, &yaw, 0.018f, play))) {
+        ((this->skelAnime.curFrame >= 8.0f) &&
+         Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play))) {
         func_80836988(this, play);
     } else if (PlayerAnimation_OnFrame(&this->skelAnime, 3.0f)) {
         func_808409A8(play, this, this->linearVelocity + 8.0f, 12.0f);
@@ -15227,16 +15302,16 @@ void Player_Action_44(Player* this, PlayState* play) {
 }
 
 void Player_Action_45(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 sp32;
+    f32 speedTarget;
+    s16 yawTarget;
     s32 temp_v0;
 
     this->stateFlags2 |= (PLAYER_STATE2_1 | PLAYER_STATE2_40 | PLAYER_STATE2_100);
     func_8083DEE4(play, this);
 
     if (PlayerAnimation_Update(play, &this->skelAnime) && !func_8083E14C(play, this)) {
-        func_80832F78(this, &sp34, &sp32, 0.0f, play);
-        temp_v0 = func_8083E758(this, &sp34, &sp32);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+        temp_v0 = func_8083E758(this, &speedTarget, &yawTarget);
         if (temp_v0 > 0) {
             func_8083E234(this, play);
         } else if (temp_v0 < 0) {
@@ -15263,12 +15338,12 @@ void Player_Action_46(Player* this, PlayState* play) {
     func_8083DEE4(play, this);
 
     if (!func_8083E14C(play, this)) {
-        f32 sp34;
-        s16 sp32;
+        f32 speedTarget;
+        s16 yawTarget;
         s32 temp_v0;
 
-        func_80832F78(this, &sp34, &sp32, 0.0f, play);
-        temp_v0 = func_8083E758(this, &sp34, &sp32);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+        temp_v0 = func_8083E758(this, &speedTarget, &yawTarget);
         if (temp_v0 < 0) {
             func_8083E28C(this, play);
         } else if (temp_v0 == 0) {
@@ -15311,13 +15386,13 @@ void Player_Action_47(Player* this, PlayState* play) {
 
     func_8083DEE4(play, this);
     if (!func_8083E14C(play, this)) {
-        f32 sp78;
-        s16 sp76;
+        f32 speedTarget;
+        s16 yawTarget;
         s32 temp_v0;
 
-        func_80832F78(this, &sp78, &sp76, 0.0f, play);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-        temp_v0 = func_8083E758(this, &sp78, &sp76);
+        temp_v0 = func_8083E758(this, &speedTarget, &yawTarget);
         if (temp_v0 > 0) {
             func_8083E234(this, play);
         } else if (temp_v0 == 0) {
@@ -15350,8 +15425,8 @@ void Player_Action_47(Player* this, PlayState* play) {
 }
 
 void Player_Action_48(Player* this, PlayState* play) {
-    f32 sp3C;
-    s16 sp3A;
+    f32 speedTarget;
+    s16 yawTarget;
 
     this->stateFlags2 |= PLAYER_STATE2_40;
 
@@ -15380,7 +15455,7 @@ void Player_Action_48(Player* this, PlayState* play) {
 
     Math_ScaledStepToS(&this->actor.shape.rot.y, this->currentYaw, 0x800);
     if (this->unk_AE7 != 0) {
-        func_80832F78(this, &sp3C, &sp3A, 0.0f, play);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
         if (this->unk_ADF[this->unk_ADE] >= 0) {
             func_808381A0(this,
                           (this->unk_AE7 > 0) ? D_8085BE84[PLAYER_ANIMGROUP_37][this->modelAnimType]
@@ -15905,7 +15980,7 @@ s32 func_80850734(PlayState* play, Player* this) {
 
 s32 func_80850854(PlayState* play, Player* this) {
     if ((this->transformation == PLAYER_FORM_DEKU) && (this->remainingHopsCounter != 0) &&
-        (gSaveContext.save.saveInfo.playerData.health != 0) && (D_80862AFC != 0.0f)) {
+        (gSaveContext.save.saveInfo.playerData.health != 0) && (sPlayerControlStickMagnitude != 0.0f)) {
         func_808373F8(play, this, 0);
         return true;
     }
@@ -15913,8 +15988,8 @@ s32 func_80850854(PlayState* play, Player* this) {
 }
 
 void Player_Action_54(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 sp32;
+    f32 speedTarget;
+    s16 yawTarget;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
 
@@ -15933,8 +16008,8 @@ void Player_Action_54(Player* this, PlayState* play) {
 
     if (!func_8082DAFC(play) && !func_80833058(play, this, D_8085D048, 1) &&
         !func_8083B3B4(play, this, sPlayerControlInput) && ((this->unk_AE8 != 0) || !func_80850734(play, this))) {
-        sp34 = 0.0f;
-        sp32 = this->actor.shape.rot.y;
+        speedTarget = 0.0f;
+        yawTarget = this->actor.shape.rot.y;
 
         if (this->unk_AA5 > PLAYER_UNKAA5_2) {
             this->unk_AA5 = PLAYER_UNKAA5_0;
@@ -15946,10 +16021,10 @@ void Player_Action_54(Player* this, PlayState* play) {
                 Player_AnimSfx_PlayFloorLand(this);
             }
         } else if (!func_80850854(play, this)) {
-            func_80832F78(this, &sp34, &sp32, 0.0f, play);
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-            if (sp34 != 0.0f) {
-                if ((ABS_ALT(BINANG_SUB(this->actor.shape.rot.y, sp32)) > 0x6000) &&
+            if (speedTarget != 0.0f) {
+                if ((ABS_ALT(BINANG_SUB(this->actor.shape.rot.y, yawTarget)) > 0x6000) &&
                     !Math_StepToF(&this->linearVelocity, 0.0f, 1.0f)) {
                     return;
                 }
@@ -15957,12 +16032,12 @@ void Player_Action_54(Player* this, PlayState* play) {
                 if (func_8082FC24(this) || func_80847ED4(this)) {
                     func_80848048(play, this);
                 } else {
-                    func_8083B73C(play, this, sp32);
+                    func_8083B73C(play, this, yawTarget);
                 }
             }
         }
 
-        func_8084748C(this, &this->linearVelocity, sp34, sp32);
+        func_8084748C(this, &this->linearVelocity, speedTarget, yawTarget);
         func_80847F1C(this);
     }
 }
@@ -16002,9 +16077,9 @@ void func_80850D20(PlayState* play, Player* this) {
 }
 
 void Player_Action_56(Player* this, PlayState* play) {
-    f32 sp44;
+    f32 speedTarget;
     s16 sp42;
-    s16 sp40;
+    s16 yawTarget;
     s16 sp3E;
     s16 sp3C;
     s16 sp3A;
@@ -16026,7 +16101,7 @@ void Player_Action_56(Player* this, PlayState* play) {
         return;
     }
 
-    sp44 = 0.0f;
+    speedTarget = 0.0f;
 
     if (this->unk_AE8 != 0) {
         if ((!func_8082DA90(play) && !CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A)) ||
@@ -16042,18 +16117,18 @@ void Player_Action_56(Player* this, PlayState* play) {
                 func_8082DB60(play, this, &gPlayerAnim_pz_fishswim);
             }
         } else {
-            func_80832F78(this, &sp44, &sp40, 0.0f, play);
-            Math_ScaledStepToS(&this->currentYaw, sp40, 0x640);
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+            Math_ScaledStepToS(&this->currentYaw, yawTarget, 0x640);
 
             if (this->skelAnime.curFrame >= 13.0f) {
-                sp44 = 12.0f;
+                speedTarget = 12.0f;
 
                 if (PlayerAnimation_OnFrame(&this->skelAnime, 13.0f)) {
                     this->unk_B48 = 16.0f;
                 }
                 this->stateFlags3 |= PLAYER_STATE3_8000;
             } else {
-                sp44 = 0.0f;
+                speedTarget = 0.0f;
             }
         }
 
@@ -16068,7 +16143,7 @@ void Player_Action_56(Player* this, PlayState* play) {
             func_8082DB90(play, this, &gPlayerAnim_pz_swimtowait);
             this->unk_B86[0] = 1;
         } else {
-            sp44 = 9.0f;
+            speedTarget = 9.0f;
             Actor_PlaySfx_FlaggedCentered1(&this->actor, NA_SE_PL_ZORA_SWIM_LV - SFX_FLAG);
         }
 
@@ -16128,13 +16203,13 @@ void Player_Action_56(Player* this, PlayState* play) {
         Player_PlaySfx(this, NA_SE_PL_BODY_BOUND);
     }
 
-    func_80850BF8(this, sp44);
+    func_80850BF8(this, speedTarget);
     func_80850BA8(this);
 }
 
 void Player_Action_57(Player* this, PlayState* play) {
-    f32 sp34;
-    s16 sp32;
+    f32 speedTarget;
+    s16 yawTarget;
     s16 sp30;
     s16 var_v0;
 
@@ -16145,46 +16220,46 @@ void Player_Action_57(Player* this, PlayState* play) {
         !func_80850854(play, this)) {
         func_808477D0(play, this, sPlayerControlInput, this->linearVelocity);
         if (func_8082DA90(play)) {
-            sp34 = this->linearVelocity;
-            sp32 = this->actor.shape.rot.y;
+            speedTarget = this->linearVelocity;
+            yawTarget = this->actor.shape.rot.y;
         } else {
-            func_80832F78(this, &sp34, &sp32, 0.0f, play);
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
         }
-        sp30 = this->actor.shape.rot.y - sp32;
+        sp30 = this->actor.shape.rot.y - yawTarget;
         if (!func_80850734(play, this)) {
             if (func_8082FC24(this) || func_80847ED4(this)) {
                 func_80848048(play, this);
             } else {
-                if ((sp34 == 0.0f) || (ABS_ALT(sp30) > 0x6000) ||
+                if ((speedTarget == 0.0f) || (ABS_ALT(sp30) > 0x6000) ||
                     (this->currentBoots >= PLAYER_BOOTS_ZORA_UNDERWATER)) {
                     func_808353DC(play, this);
                 }
             }
-            func_80847FF8(this, &this->linearVelocity, sp34, sp32);
+            func_80847FF8(this, &this->linearVelocity, speedTarget, yawTarget);
         }
     }
 }
 
 void Player_Action_58(Player* this, PlayState* play) {
-    f32 sp2C;
-    s16 sp2A;
+    f32 speedTarget;
+    s16 yawTarget;
 
     func_808477D0(play, this, sPlayerControlInput, this->linearVelocity);
     func_808475B4(this);
     func_8082F164(this, BTN_R);
 
     if (!func_80833058(play, this, D_8085D048, 1) && !func_8083B3B4(play, this, sPlayerControlInput)) {
-        func_80832F78(this, &sp2C, &sp2A, 0.0f, play);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
 
-        if (sp2C == 0.0f) {
+        if (speedTarget == 0.0f) {
             func_808353DC(play, this);
         } else if (!func_8082FC24(this) && !func_80847ED4(this)) {
-            func_8083B73C(play, this, sp2A);
+            func_8083B73C(play, this, yawTarget);
         } else {
-            func_80848094(play, this, &sp2C, &sp2A);
+            func_80848094(play, this, &speedTarget, &yawTarget);
         }
 
-        func_80847FF8(this, &this->linearVelocity, sp2C, sp2A);
+        func_80847FF8(this, &this->linearVelocity, speedTarget, yawTarget);
     }
 }
 
@@ -16436,7 +16511,7 @@ void func_80852290(PlayState* play, Player* this) {
         }
 
         sPlayerControlInput = play->state.input;
-        func_800FF3A0(&sp3C, &sp38, sPlayerControlInput);
+        Lib_GetControlStickData(&sp3C, &sp38, sPlayerControlInput);
 
         if (BINANG_ADD(sp38, 0x4000) < 0) {
             sp38 -= 0x8000;
@@ -17759,7 +17834,7 @@ void Player_Action_87(Player* this, PlayState* play) {
         f32 dist;
         s16 angle;
 
-        func_800FF3A0(&dist, &angle, play->state.input);
+        Lib_GetControlStickData(&dist, &angle, play->state.input);
         if (PlayerAnimation_Update(play, &this->skelAnime) || ((this->unk_AE7 > 10) && (dist != 0.0f))) {
             if (R_PLAY_FILL_SCREEN_ON == 0) {
                 this->stateFlags1 &= ~PLAYER_STATE1_2;
@@ -17898,12 +17973,12 @@ void Player_Action_92(Player* this, PlayState* play) {
 }
 
 void func_80855F9C(PlayState* play, Player* this) {
-    f32 sp24;
-    s16 sp22;
+    f32 speedTarget;
+    s16 yawTarget;
 
     this->stateFlags2 |= PLAYER_STATE2_20;
-    func_80832F78(this, &sp24, &sp22, 0.018f, play);
-    Math_ScaledStepToS(&this->currentYaw, sp22, 0x258);
+    Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+    Math_ScaledStepToS(&this->currentYaw, yawTarget, 0x258);
 }
 
 s32 func_80856000(PlayState* play, Player* this) {
@@ -18182,9 +18257,9 @@ void Player_Action_94(Player* this, PlayState* play) {
         s16 sp76;
         s16 var_v1;
         s16 var_a1;
-        f32 sp6C;
+        f32 speedTarget;
         f32 sp68;
-        s16 sp66;
+        s16 yawTarget;
         s16 temp_ft0;
         s32 temp;
         s16 var_v1_4;
@@ -18287,33 +18362,34 @@ void Player_Action_94(Player* this, PlayState* play) {
         }
 
         this->fallStartHeight = this->actor.world.pos.y;
-        func_80832F78(this, &sp6C, &sp66, 0.0f, play);
-        if (sp6C == 0.0f) {
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+
+        if (speedTarget == 0.0f) {
             sp68 = 0.1f;
         } else {
-            s16 temp_v0_6 = this->currentYaw - sp66;
+            s16 temp_v0_6 = this->currentYaw - yawTarget;
 
             if (ABS_ALT(temp_v0_6) > 0x4000) {
-                sp6C = -sp6C;
-                sp66 += 0x8000;
+                speedTarget = -speedTarget;
+                yawTarget += 0x8000;
             }
             sp68 = 0.25f;
         }
 
-        Math_SmoothStepToS(&this->unk_B8C, sp6C * 600.0f, 8, 0xFA0, 0x64);
-        Math_ScaledStepToS(&this->currentYaw, sp66, 0xFA);
+        Math_SmoothStepToS(&this->unk_B8C, speedTarget * 600.0f, 8, 0xFA0, 0x64);
+        Math_ScaledStepToS(&this->currentYaw, yawTarget, 0xFA);
 
-        temp_ft0 = BINANG_SUB(sp66, this->currentYaw) * -2.0f;
+        temp_ft0 = BINANG_SUB(yawTarget, this->currentYaw) * -2.0f;
         temp_ft0 = CLAMP(temp_ft0, -0x1F40, 0x1F40);
         Math_SmoothStepToS(&this->unk_B8E, temp_ft0, 0x14, 0x320, 0x14);
-        sp6C = (sp6C * (this->unk_B86[1] * 0.0004f)) * fabsf(Math_SinS(this->unk_B8C));
-        func_80856888(&this->linearVelocity, sp6C, sp68);
+        speedTarget = (speedTarget * (this->unk_B86[1] * 0.0004f)) * fabsf(Math_SinS(this->unk_B8C));
+        func_80856888(&this->linearVelocity, speedTarget, sp68);
 
-        sp6C = sqrtf(SQ(this->linearVelocity) + SQ(this->actor.velocity.y));
-        if (sp6C > 8.0f) {
-            sp6C = 8.0f / sp6C;
-            this->linearVelocity *= sp6C;
-            this->actor.velocity.y *= sp6C;
+        speedTarget = sqrtf(SQ(this->linearVelocity) + SQ(this->actor.velocity.y));
+        if (speedTarget > 8.0f) {
+            speedTarget = 8.0f / speedTarget;
+            this->linearVelocity *= speedTarget;
+            this->actor.velocity.y *= speedTarget;
         }
     }
 
@@ -18329,13 +18405,14 @@ void Player_Action_95(Player* this, PlayState* play) {
 
     if (!func_80838A90(this, play)) {
         s16 prevYaw = this->currentYaw;
-        f32 sp40;
-        s16 sp3E;
+        f32 speedTarget;
+        s16 yawTarget;
 
-        func_80832F78(this, &sp40, &sp3E, 0.018f, play);
-        sp40 *= 1.0f - (0.9f * ((11100.0f - this->unk_B10[0]) / 11100.0f));
-        if (!func_8083A4A4(this, &sp40, &sp3E, REG(43) / 100.0f)) {
-            func_8083CB58(this, sp40, sp3E);
+        Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_CURVED, play);
+        speedTarget *= 1.0f - (0.9f * ((11100.0f - this->unk_B10[0]) / 11100.0f));
+
+        if (!func_8083A4A4(this, &speedTarget, &yawTarget, REG(43) / 100.0f)) {
+            func_8083CB58(this, speedTarget, yawTarget);
         }
 
         this->unk_B10[0] += -800.0f;
@@ -18488,8 +18565,8 @@ void Player_Action_96(Player* this, PlayState* play) {
     func_808577E0(this);
 
     if (!func_80857950(play, this)) {
-        f32 spE4 = 0.0f;
-        s16 spE2 = this->currentYaw;
+        f32 speedTarget = 0.0f;
+        s16 yawTarget = this->currentYaw;
         u16 spE0;
         s32 spDC;
         s32 spD8;
@@ -18525,17 +18602,17 @@ void Player_Action_96(Player* this, PlayState* play) {
         if (this->unk_B8E != 0) {
             this->unk_B8E--;
         } else {
-            func_80832F78(this, &spE4, &spE2, 0.0f, play);
-            spE4 *= 2.6f;
+            Player_GetMovementSpeedAndYaw(this, &speedTarget, &yawTarget, SPEED_MODE_LINEAR, play);
+            speedTarget *= 2.6f;
         }
 
         if (this->unk_B8C != 0) {
             this->unk_B8C--;
-            spE2 = this->currentYaw;
+            yawTarget = this->currentYaw;
         }
 
         if (this->unk_B86[1] != 0) {
-            spE4 = 18.0f;
+            speedTarget = 18.0f;
             Math_StepToC(&this->unk_AE7, 4, 1);
 
             if ((this->stateFlags3 & PLAYER_STATE3_80000) && (!CHECK_BTN_ALL(sPlayerControlInput->cur.button, BTN_A) ||
@@ -18555,7 +18632,7 @@ void Player_Action_96(Player* this, PlayState* play) {
             }
         }
 
-        spDC = spE4 * 900.0f;
+        spDC = speedTarget * 900.0f;
 
         Math_AsymStepToF(&this->unk_B10[0], (this->unk_B8A != 0) ? 1.0f : 0.0f, 0.8f, 0.05f);
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
@@ -18605,7 +18682,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                 }
 
                 spBC = (1.0f - this->unk_B0C) * this->unk_B08 * sp88;
-                if ((spBC < 0.0f) || ((spE4 == 0.0f) && (ABS_ALT(sp8E) > 0xFA0))) {
+                if ((spBC < 0.0f) || ((speedTarget == 0.0f) && (ABS_ALT(sp8E) > 0xFA0))) {
                     spBC = 0.0f;
                 }
 
@@ -18613,7 +18690,7 @@ void Player_Action_96(Player* this, PlayState* play) {
                 var_a0 = spBC * 500.0f;
                 var_a0 = CLAMP_MIN(var_a0, 0);
 
-                spC0 = (s32)(spE4 * 400.0f) - var_a0;
+                spC0 = (s32)(speedTarget * 400.0f) - var_a0;
                 spC0 = CLAMP_MIN(spC0, 0);
 
                 spDC = CLAMP_MIN(spDC, var_a0);
@@ -18627,8 +18704,8 @@ void Player_Action_96(Player* this, PlayState* play) {
                 spA0 = spB0 - spA8;
                 this->linearVelocity = spBC;
                 this->currentYaw = this->actor.home.rot.y;
-                spCC = spE4;
-                spCA = spE2;
+                spCC = speedTarget;
+                spCA = yawTarget;
 
                 if (func_8083A4A4(this, &spCC, &spCA, (this->unk_AE7 >= 5) ? 0.0f : 1.0f)) {
                     if (this->unk_B86[1] == 0) {
@@ -18665,20 +18742,20 @@ void Player_Action_96(Player* this, PlayState* play) {
                         }
                     }
 
-                    if (spE4 != spCC) {
-                        this->currentYaw = spE2;
+                    if (speedTarget != spCC) {
+                        this->currentYaw = yawTarget;
                     }
 
                     sp84 = CLAMP_MIN(sp84, 0.0f);
                     sp80 = CLAMP_MIN(sp80, 0.0f);
 
-                    Math_AsymStepToF(&this->linearVelocity, spE4, sp84, sp80);
+                    Math_AsymStepToF(&this->linearVelocity, speedTarget, sp84, sp80);
                     spC8 = (s16)(fabsf(this->actor.speed) * 20.0f) + 300;
                     spC8 = CLAMP_MIN(spC8, 100);
 
-                    sp7C = (s32)(BINANG_SUB(spE2, this->currentYaw) * -0.5f);
+                    sp7C = (s32)(BINANG_SUB(yawTarget, this->currentYaw) * -0.5f);
                     this->unk_B0C += (f32)(SQ(sp7C)) * 8e-9f;
-                    Math_ScaledStepToS(&this->currentYaw, spE2, spC8);
+                    Math_ScaledStepToS(&this->currentYaw, yawTarget, spC8);
                     sp6C = func_80835D2C(play, this, &D_8085D978, &sp70);
 
                     var_fa1 = func_80835D2C(play, this, &D_8085D984, &sp70) - sp6C;
@@ -18786,7 +18863,7 @@ void Player_Action_96(Player* this, PlayState* play) {
             this->unk_B86[0] = 0;
             if (this->unk_B86[1] != 0) {
                 this->actor.gravity = -1.0f;
-                Math_ScaledStepToS(&this->actor.home.rot.y, spE2, 0x190);
+                Math_ScaledStepToS(&this->actor.home.rot.y, yawTarget, 0x190);
 
                 this->unk_B08 = sqrtf(SQ(this->linearVelocity) + SQ(this->actor.velocity.y)) *
                                 ((this->linearVelocity >= 0.0f) ? 1.0f : -1.0f);
