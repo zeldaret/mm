@@ -1,4 +1,6 @@
 #include "z_obj_boyo.h"
+#include "overlays/actors/ovl_En_Kaizoku/z_en_kaizoku.h"
+#include "overlays/actors/ovl_En_Bom/z_en_bom.h"
 #include "objects/object_boyo/object_boyo.h"
 
 #define FLAGS (ACTOR_FLAG_10)
@@ -98,12 +100,16 @@ void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
 }
 
 void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor) {
-    this->pushedSpeed = 30.0f;                                                // push speed
-    this->yawTowardsActor = Actor_WorldYawTowardActor(actor, &(this->actor)); // push direction
+    EnKaizoku* kaizoku = (EnKaizoku*)actor;
+
+    kaizoku->unk_2F0 = 30.0f;
+    kaizoku->unk_2F4 = Actor_WorldYawTowardActor(&this->actor, &kaizoku->picto.actor);
 }
 
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor) {
-    this->unk1F0 = 0;
+    EnBom* bom = (EnBom*)actor;
+
+    bom->timer = 0;
 }
 
 /*
