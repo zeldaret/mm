@@ -14,6 +14,9 @@ void EnAn_Init(Actor* thisx, PlayState* play);
 void EnAn_Destroy(Actor* thisx, PlayState* play);
 void EnAn_Update(Actor* thisx, PlayState* play);
 
+void EnAn_Draw(Actor* this, PlayState* play);
+
+// Action funcs
 void func_80B577F0(EnAn* this, PlayState* play);
 void func_80B578F8(EnAn* this, PlayState* play);
 void func_80B57A44(EnAn* this, PlayState* play);
@@ -30,6 +33,8 @@ void func_80B554E8(EnAn* this);
 UNK_RET func_80B55914(EnAn* this, PlayState* play);
 void func_80B57B48(EnAn* this, PlayState* play);
 
+
+extern AnimationInfoS D_80B58BF4[];
 
 #if 0
 ActorInit En_An_InitVars = {
@@ -60,7 +65,7 @@ extern ColliderCylinderInit D_80B58BBC;
 extern CollisionCheckInfoInit2 D_80B58BE8;
 
 extern UNK_TYPE D_060111E8;
-extern UNK_TYPE D_06012618;
+extern FlexSkeletonHeader D_06012618;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53840.s")
 
@@ -97,7 +102,65 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53BA8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53CE8.s")
+s32 func_80B53CE8(EnAn* this, PlayState* play, s32 arg2) {
+    s8 temp_t1 = this->actor.objBankIndex;
+    s8 var_v1 = -1;
+    s32 var_t0 = 0;
+    s32 var_t2 = 0;
+
+    if ((arg2 >= 0x19) && (this->unk_20B >= 0)) {
+        var_v1 = this->unk_20B;
+    } else if ((arg2 >= 0x15) && (this->unk_209 >= 0)) {
+        var_v1 = this->unk_209;
+    } else if ((arg2 >= 0x11) && (this->unk_208 >= 0)) {
+        var_v1 = this->unk_208;
+    } else if (arg2 < 0x11) {
+        var_v1 = temp_t1;
+    }
+
+    if (var_v1 < 0) {
+        return 0;
+    }
+
+    switch (arg2) {
+        case 0x1:
+        case 0x2:
+            if ((this->unk_39C != 1) && (this->unk_39C != 2)) {
+                var_t0 = 1;
+            }
+            break;
+
+        case 0x7:
+        case 0x8:
+            if ((this->unk_39C != 7) && (this->unk_39C != 8)) {
+                var_t0 = 1;
+            }
+            break;
+
+        case 0x9:
+        case 0xA:
+            if ((this->unk_39C != 9) && (this->unk_39C != 0xA)) {
+                var_t0 = 1;
+            }
+            break;
+
+        default:
+            if (arg2 != this->unk_39C) {
+                var_t0 = 1;
+            }
+            break;
+    }
+
+    if ((var_t0 != 0) && (var_v1 >= 0)) {
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[var_v1].segment);
+        this->unk_39C = arg2;
+        var_t2 = SubS_ChangeAnimationByInfoS(&this->unk_144, D_80B58BF4, arg2);
+        this->unk_368 = this->unk_144.playSpeed;
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[temp_t1].segment);
+    }
+
+    return var_t2;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53ED4.s")
 
@@ -189,7 +252,27 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57718.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B577F0.s")
+void func_80B577F0(EnAn* this, PlayState* play) {
+    ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
+    SkelAnime_InitFlex(play, &this->unk_144, &D_06012618, NULL, this->unk_264, this->unk_2E2, 0x15);
+
+    this->unk_39C = -1;
+    func_80B53CE8(this, play, 1);
+    Collider_InitAndSetCylinder(play, &this->unk_190, &this->actor, &D_80B58BBC);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &D_80B58BE8);
+
+    if (this->actor.params & 0x8000) {
+        this->unk_3C0 = 1;
+    }
+
+    this->actor.draw = EnAn_Draw;
+    Actor_SetScale(&this->actor, 0.01f);
+    this->unk_360 = 0;
+    this->unk_200 = 0;
+
+    this->actionFunc = func_80B578F8;
+    this->actionFunc(this, play);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B578F8.s")
 
@@ -268,10 +351,28 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/EnAn_Update.s")
-
+void func_80B57EE8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57EE8.s")
 
+void func_80B57FC4(PlayState* play, s32 limbIndex, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57FC4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B580C0.s")
+extern UNK_PTR D_80B58EEC[];
+extern UNK_PTR D_80B58EE0[];
+
+void EnAn_Draw(Actor* thisx, PlayState* play) {
+    EnAn* this = (EnAn* ) thisx;
+
+    if ((this->unk_200 != 0) || (this->unk_3B0 != 0)) {
+        OPEN_DISPS(play->state.gfxCtx);
+
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
+        gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B58EEC[this->unk_390]));
+        gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B58EE0[this->unk_392]));
+
+        SkelAnime_DrawTransformFlexOpa(play, this->unk_144.skeleton, this->unk_144.jointTable, this->unk_144.dListCount, NULL, func_80B57EE8, func_80B57FC4, this);
+
+        CLOSE_DISPS(play->state.gfxCtx);
+    }
+}

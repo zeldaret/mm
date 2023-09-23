@@ -14067,7 +14067,7 @@
     0x80B57D9C:("EnAn_Update",),
     0x80B57EE8:("func_80B57EE8",),
     0x80B57FC4:("func_80B57FC4",),
-    0x80B580C0:("func_80B580C0",),
+    0x80B580C0:("EnAn_Draw",),
     0x80B5A720:("EnBee_Init",),
     0x80B5A828:("EnBee_Destroy",),
     0x80B5A854:("func_80B5A854",),
