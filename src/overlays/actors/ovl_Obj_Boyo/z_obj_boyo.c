@@ -6,7 +6,7 @@
 #define THIS ((ObjBoyo*)thisx)
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play);
-void ObjBoyo_Destroy(Actor* thisx, PlayState* play);
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play2);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
@@ -86,8 +86,11 @@ void ObjBoyo_Init(Actor* thisx, PlayState* play) {
     this->animatedMaterial = Lib_SegmentedToVirtual((void*)&D_06000E88);
 }
 
-void ObjBoyo_Destroy(Actor* thisx, PlayState* play) {
-    Collider_DestroyCylinder(play, &THIS->collider);
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
+    PlayState* play = play2;
+    ObjBoyo* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->collider);
 }
 
 void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
@@ -193,7 +196,7 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
-static Gfx* D_06000300;
+static Gfx* D_06000300 = object_boyo_DL_000300;
 void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
     AnimatedMat_Draw(play, this->animatedMaterial);
     Gfx_DrawDListOpa(play, D_06000300);
