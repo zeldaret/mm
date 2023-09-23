@@ -1,4 +1,5 @@
 ﻿<Root>
+    <!-- Assets for the Marine Researcher -->
     <File Name="object_mk" Segment="6">
         <Animation Name="gMarineResearcherHeadWaggleAnim" Offset="0x438" />
         <Animation Name="gMarineResearcherYellingAnim" Offset="0x7D8" />
