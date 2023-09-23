@@ -3294,8 +3294,7 @@ beginseg
     name "ovl_Bg_Lotus"
     compress
     include "build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o"
-    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.data.o"
-    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Lotus/ovl_Bg_Lotus_reloc.o"
 endseg
 
 beginseg
