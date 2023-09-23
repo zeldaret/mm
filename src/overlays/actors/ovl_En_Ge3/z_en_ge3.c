@@ -111,26 +111,26 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->collider);
 }
 
-void EnGe3_ChangeAnim(EnGe3* this, s16 index, u8 mode, f32 morphFrames) {
+void EnGe3_ChangeAnim(EnGe3* this, s16 animIndex, u8 mode, f32 morphFrames) {
     static AnimationHeader* sAnimations[GERUDO_AVEIL_ANIM_MAX] = {
         &gGerudoRedStandAnim,         // GERUDO_AVEIL_ANIM_STAND
-        &gGerudoRedWalkingAnim,       // GERUDO_AVEIL_ANIM_WALK
+        &gGerudoRedWalkAnim,       // GERUDO_AVEIL_ANIM_WALK
         &gGerudoRedHandOnHipWaitAnim, // GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT
         &gGerudoRedTurnHeadAnim,      // GERUDO_AVEIL_ANIM_TURN_HEAD
         &gGerudoRedWaitAnim,          // GERUDO_AVEIL_ANIM_WAIT
-        &gGerudoRedDemandingAnim,     // GERUDO_AVEIL_ANIM_DEMAND
+        &gGerudoRedDemandAnim,     // GERUDO_AVEIL_ANIM_DEMAND
         &gGerudoRedDismissAnim,       // GERUDO_AVEIL_ANIM_DISMISS
-        &gGerudoRedBeggingAnim,       // GERUDO_AVEIL_ANIM_BEG
-        &gGerudoRedRunningAwayAnim,   // GERUDO_AVEIL_ANIM_RUN_AWAY
+        &gGerudoRedBegAnim,       // GERUDO_AVEIL_ANIM_BEG
+        &gGerudoRedRunAwayAnim,   // GERUDO_AVEIL_ANIM_RUN_AWAY
     };
 
-    Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[index]), mode,
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[animIndex]), mode,
                      morphFrames);
-    this->animIndex = index;
+    this->animIndex = animIndex;
 }
 
 void EnGe3_LookAtPlayer(EnGe3* this, PlayState* play) {
-    s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y; // temp not required
+    s16 yawDiff = this->picto.actor.yawTowardsPlayer - this->picto.actor.shape.rot.y;
 
     if ((ABS_ALT(yawDiff) <= 0x2300) && (this->picto.actor.xzDistToPlayer < 100.0f)) {
         Actor_TrackPlayer(play, &this->picto.actor, &this->headRot, &this->torsoRot, this->picto.actor.focus.pos);
