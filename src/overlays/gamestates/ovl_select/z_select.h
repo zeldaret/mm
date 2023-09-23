@@ -1,16 +1,17 @@
-#ifndef _Z64_SELECT_H_
-#define _Z64_SELECT_H_
+#ifndef Z64_SELECT_H
+#define Z64_SELECT_H
 
-#include "global.h"
+#include "z64game.h"
+#include "z64view.h"
 
 struct MapSelectState;
 
-typedef void (*Select_LoadFunc)(struct MapSelectState*, u32, s32);
+typedef void (*SelectLoadFunc)(struct MapSelectState*, u32, s32);
 
 typedef struct {
-    /* 0x00 */ char* name;
-    /* 0x04 */ Select_LoadFunc loadFunc;
-    /* 0x08 */ s32 entrance;
+    /* 0x0 */ char* name;
+    /* 0x4 */ SelectLoadFunc loadFunc;
+    /* 0x8 */ s32 entrance;
 } SceneSelectEntry; // size = 0xC
 
 typedef struct MapSelectState {

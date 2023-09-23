@@ -23,7 +23,7 @@
     - [`tools/warnings_count/check_new_warnings.sh`](#toolswarnings_countcheck_new_warningssh)
     - [`tools/warnings_count/update_current_warnings.sh`](#toolswarnings_countupdate_current_warningssh)
     - [`fixle.sh`](#fixlesh)
-    - [`format.sh`](#formatsh)
+    - [`format.py`](#formatpy)
   - [External tools](#external-tools)
     - [mips_to_c](#mips_to_c)
     - [Permuter](#permuter)
@@ -127,7 +127,7 @@ Gives the progress output that the website uses. Run for that warm glow.
 
 ### `tools/regconvert.py`
 
-Convert `mips2c`'s `gGameInfo->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
+Convert `mips2c`'s `gRegEditor->data[n]` output (or a raw offset) into the appropriate variable in the REG pages. Can also be run on a file to mass-convert them: run with `-h` for details.
 
 ### `tools/rename_global_asm.py`
 
@@ -196,9 +196,29 @@ If you have to add new warnings, **and have permission from the leads**, run thi
 
 Fixes line endings in the repo to Linux style (LF), which is required for the build process to work. (You may be better off creating a new clone directly in Linux/WSL, though)
 
-### `format.sh`
+### `format.py`
 
-Formats all C files in the repo using `clang-format-11` (instructions on how to install this version are pinned in Discord if you can't get it from your package manager in the usual way). This will touch all files in the repo, so the next `make` will take longer.
+Formats all C files in the repo using `clang-format-14`, `clang-tidy`, and `clang-apply-replacements` (when multiprocessing). This will touch all files in the repo, so the next `make` will take longer.
+
+You can specify how many threads you would like this to run with by adding the `-jN` flag. Where N is the number of threads. By default this will run using 1 thread (i.e. `-j1`).
+
+`clang-14` is available in many native package managers, but if not try:
+
+Linux:
+Download llvm's setup script, run it, than install normally
+```bash
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh 14
+rm llvm.sh
+sudo apt install clang-format-14 clang-tidy-14 clang-apply-replacements-14
+```
+
+Mac:
+Brew does not have clang-format-14, but MacPorts does.
+
+(Have been unable to confirm actual commands with somone that has a Mac)
+
 
 ## External tools
 
@@ -251,7 +271,7 @@ Probably the best of the Nintendo 64 texture viewing programs. It is quite simpl
 
 ### Z64Utils
 
-Basically essential for convenient analysis of object files. Can analyse and display DisplayLists, some textures, skeletons, animations, and a few other resources. Download from <https://github.com/Random06457/Z64Utils>.
+Basically essential for convenient analysis of object files. Can analyse and display DisplayLists, some textures, skeletons, animations, and a few other resources. Download from <https://github.com/zeldaret/Z64Utils>.
 
 ## Retired tools
 

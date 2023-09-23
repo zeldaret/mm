@@ -36,7 +36,7 @@ Week Event Flags:
 #include "overlays/actors/ovl_En_Jg/z_en_jg.h" // Goron Elder
 #include "objects/object_taisou/object_taisou.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 #define THIS ((EnSGoro*)thisx)
 
 #define EN_S_GORO_ROLLEDUP_YOFFSET 14.0f
@@ -94,7 +94,7 @@ typedef enum EnSGoroAnimation {
     /* 0xF */ EN_S_GORO_ANIM_IDLE_STAND
 } EnSGoroAnimation;
 
-const ActorInit En_S_Goro_InitVars = {
+ActorInit En_S_Goro_InitVars = {
     ACTOR_EN_S_GORO,
     ACTORCAT_NPC,
     FLAGS,
@@ -171,12 +171,12 @@ static AnimationInfoS sAnimationInfo[] = {
     { &gGoronUnrollAnim, -2.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gGoronShiverAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
-    { &object_taisou_Anim_004DD4, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_taisou_Anim_00283C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_taisou_Anim_007764, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_taisou_Anim_005790, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsDoubleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsShakeLimbsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsSingleArmSideBendAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
+    { &gGoronAthleticsHamstringStretchStandingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
     { &gGoronCoverEarsAnim, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },
-    { &object_taisou_Anim_002C48, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
+    { &gGoronAthleticsCheerAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gGoronStandingHandTappingAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -4 },
     { &gGoronSleepyAnim, 1.0f, 0, -1, ANIMMODE_ONCE, -4 },
     { &gGoronStandingIdleAnim, 1.0f, 0, -1, ANIMMODE_LOOP, -8 },
@@ -235,16 +235,16 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
     switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
         case EN_S_GORO_TYPE_SHRINE_WINTER_A:
-            if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(gSaveContext.save.weekEventReg[36] & 2)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_02)) {
                         switch (this->textId) {
                             case 0xCFB:
                                 return 0xCFC;
                             case 0xCFC:
                                 return 0xCFD;
                             case 0xCFD:
-                                gSaveContext.save.weekEventReg[36] |= 2;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_36_02);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xCFE;
                             default:
@@ -255,8 +255,8 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xCFE;
                     }
                 } else {
-                    if (!(gSaveContext.save.weekEventReg[36] & 1)) {
-                        gSaveContext.save.weekEventReg[36] |= 1;
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_01)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_36_01);
                         return 0xCF9;
                     }
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
@@ -266,9 +266,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                 // Scene flag - Checks whether the chandelier has been lit
                 if (!Flags_GetSwitch(play, EN_S_GORO_SCENEFLAG_INDEX(&this->actor))) {
                     if (player->transformation == PLAYER_FORM_GORON) {
-                        if (!(gSaveContext.save.weekEventReg[36] & 8)) {
+                        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_08)) {
                             if (this->textId == 0xD02) {
-                                gSaveContext.save.weekEventReg[36] |= 8;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_36_08);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD03;
                             }
@@ -277,10 +277,10 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD04;
                     }
-                    if (!(gSaveContext.save.weekEventReg[36] & 4)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_04)) {
                         if (this->textId == 0xCFF) {
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                            gSaveContext.save.weekEventReg[36] |= 4;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_36_04);
                             return 0xD00;
                         }
                         return 0xCFF;
@@ -288,9 +288,9 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD01;
                 }
-                if (!(gSaveContext.save.weekEventReg[36] & 0x10)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_10)) {
                     if (this->textId == 0xD05) {
-                        gSaveContext.save.weekEventReg[36] |= 0x10;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_36_10);
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xD06;
                     }
@@ -302,14 +302,14 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_B:
-            if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(gSaveContext.save.weekEventReg[36] & 0x40)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_40)) {
                         switch (this->textId) {
                             case 0xD15:
                                 return 0xD16;
                             case 0xD16:
-                                gSaveContext.save.weekEventReg[36] |= 0x40;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_36_40);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD17;
                             default:
@@ -320,20 +320,20 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         return 0xD17;
                     }
                 } else {
-                    if (!(gSaveContext.save.weekEventReg[36] & 0x20)) {
-                        gSaveContext.save.weekEventReg[36] |= 0x20;
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_20)) {
+                        SET_WEEKEVENTREG(WEEKEVENTREG_36_20);
                         return 0xD13;
                     }
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     return 0xD14;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!(gSaveContext.save.weekEventReg[37] & 1)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_01)) {
                     switch (this->textId) {
                         case 0xD1E:
                             return 0xD1F;
                         case 0xD1F:
-                            gSaveContext.save.weekEventReg[37] |= 1;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_37_01);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD20;
                         default:
@@ -344,7 +344,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD21;
                 }
             } else {
-                if (!(gSaveContext.save.weekEventReg[36] & 0x80)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_36_80)) {
                     switch (this->textId) {
                         case 0xD18:
                             return 0xD19;
@@ -353,7 +353,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                         case 0xD1A:
                             return 0xD1B;
                         case 0xD1B:
-                            gSaveContext.save.weekEventReg[36] |= 0x80;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_36_80);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD1C;
                         default:
@@ -367,16 +367,16 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
             break;
 
         case EN_S_GORO_TYPE_SHRINE_WINTER_C:
-            if (!(gSaveContext.save.weekEventReg[22] & 4)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 if (player->transformation == PLAYER_FORM_GORON) {
-                    if (!(gSaveContext.save.weekEventReg[37] & 2)) {
+                    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_02)) {
                         switch (this->textId) {
                             case 0xD09:
                                 return 0xD0A;
                             case 0xD0A:
                                 return 0xD0B;
                             case 0xD0B:
-                                gSaveContext.save.weekEventReg[37] |= 2;
+                                SET_WEEKEVENTREG(WEEKEVENTREG_37_02);
                                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                                 return 0xD0C;
                             default:
@@ -391,12 +391,12 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
                     return 0xD08;
                 }
             } else if (player->transformation == PLAYER_FORM_GORON) {
-                if (!(gSaveContext.save.weekEventReg[37] & 4)) {
+                if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_37_04)) {
                     switch (this->textId) {
                         case 0xD0E:
                             return 0xD0F;
                         case 0xD0F:
-                            gSaveContext.save.weekEventReg[37] |= 4;
+                            SET_WEEKEVENTREG(WEEKEVENTREG_37_04);
                             this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                             return 0xD10;
                         default:
@@ -414,7 +414,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_A:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDE3) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDE4;
@@ -429,7 +429,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_B:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDE7) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDE8;
@@ -444,7 +444,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_C:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDEB) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDEC;
@@ -459,7 +459,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_D:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDF1) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDF2;
@@ -482,7 +482,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_E:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     if (this->textId == 0xDF6) {
                         this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                         return 0xDF7;
@@ -500,7 +500,7 @@ u16 EnSGoro_ShrineGoron_NextTextId(EnSGoro* this, PlayState* play) {
 
         case EN_S_GORO_TYPE_SHRINE_SPRING_F:
             if (player->transformation == PLAYER_FORM_GORON) {
-                if (gSaveContext.save.weekEventReg[77] & 0x80) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_77_80)) {
                     switch (this->textId) {
                         case 0xDFB:
                             return 0xDFC;
@@ -697,23 +697,23 @@ u16 EnSGoro_BombshopGoron_NextTextId(EnSGoro* this, PlayState* play) {
             if (this->bombbuyFlags & EN_S_GORO_BOMBBUYFLAG_YESBUY) {
                 if (AMMO(ITEM_POWDER_KEG) != 0) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return 0x673;
                 }
                 this->powderKegPrice = play->msgCtx.unk1206C;
-                if (gSaveContext.save.playerData.rupees < this->powderKegPrice) {
+                if (gSaveContext.save.saveInfo.playerData.rupees < this->powderKegPrice) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_TIRED;
-                    play_sound(NA_SE_SY_ERROR);
+                    Audio_PlaySfx(NA_SE_SY_ERROR);
                     return 0x674;
                 }
                 if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
                     this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                    func_8019F208();
+                    Audio_PlaySfx_MessageDecide();
                     return 0x676;
                 }
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_LASTMESSAGE;
-                func_8019F208();
+                Audio_PlaySfx_MessageDecide();
                 return 0x675;
             }
             if ((gSaveContext.save.day == 3) && gSaveContext.save.isNight) {
@@ -765,13 +765,13 @@ void EnSGoro_UpdateSleeping(EnSGoro* this, PlayState* play) {
         if (this->snorePhase == 0) {
             if (this->actionFlags & EN_S_GORO_ACTIONFLAG_SNOREPHASE) {
                 this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_SNOREPHASE;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE2);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE2);
             } else {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_SNOREPHASE;
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_GOLON_SNORE1);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SNORE1);
             }
         }
-    } else if (gSaveContext.save.weekEventReg[22] & 4) {
+    } else if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
         this->actionFlags &= ~EN_S_GORO_ACTIONFLAG_SUPPRESS_SNORE;
     }
 
@@ -788,7 +788,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
         if (((EnJg*)this->otherGoron)->flags & 1) {
             this->loadedObjIndex = Object_GetIndex(&play->objectCtx, OBJECT_TAISOU);
             if (this->loadedObjIndex >= 0) {
-                gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->loadedObjIndex].segment);
+                gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
                 this->animInfoIndex = EN_S_GORO_ANIM_TAISOU_CHEER;
                 SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
                 return true;
@@ -797,7 +797,7 @@ s32 EnSGoro_UpdateCheerAnimation(EnSGoro* this, PlayState* play) {
     } else if ((this->animInfoIndex == EN_S_GORO_ANIM_TAISOU_CHEER) && !(((EnJg*)this->otherGoron)->flags & 1)) {
         this->loadedObjIndex = Object_GetIndex(&play->objectCtx, OBJECT_OF1D_MAP);
         if (this->loadedObjIndex >= 0) {
-            gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->loadedObjIndex].segment);
+            gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
             this->animInfoIndex = EN_S_GORO_ANIM_IDLE_STAND;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animInfoIndex);
             this->skelAnime.curFrame = this->skelAnime.endFrame;
@@ -842,7 +842,7 @@ s32 EnSGoro_CheckGKBehavior(EnSGoro* this, PlayState* play) {
         return false;
     }
     if ((!(this->actionFlags & EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED)) &&
-        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || (gSaveContext.save.weekEventReg[22] & 4))) {
+        ((((EnGk*)this->otherGoron)->unk_1E4 & 0x80) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON))) {
 
         this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
         this->animInfoIndex = EN_S_GORO_ANIM_ROLLUP;
@@ -963,7 +963,7 @@ s32 EnSGoro_UpdateRotationToPlayer(EnSGoro* this, PlayState* play) {
     this->bodyRotY = CLAMP(this->bodyRotY, -0x1C70, 0x1C70);
 
     playerPos = player->actor.world.pos;
-    playerPos.y = player->bodyPartsPos[7].y + 3.0f;
+    playerPos.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     thisPos = this->actor.world.pos;
     thisPos.y += 70.0f;
 
@@ -1026,7 +1026,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->loadedObjIndex)) {
         this->actionFlags = 0;
         if (EN_S_GORO_OFTYPE_WSHRINE) {
-            if (gSaveContext.save.weekEventReg[22] & 4) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CALMED_GORON_ELDERS_SON)) {
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_GKQUIET_ACKNOWLEDGED;
                 this->actionFlags |= EN_S_GORO_ACTIONFLAG_EYESOPEN;
                 this->animInfoIndex = EN_S_GORO_ANIM_SHIVER_A;
@@ -1048,7 +1048,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
         this->actor.gravity = -1.0f;
         this->actor.flags |= ACTOR_FLAG_10;
         this->actor.flags |= ACTOR_FLAG_2000000;
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
 
         switch (EN_S_GORO_GET_MAIN_TYPE(&this->actor)) {
             case EN_S_GORO_TYPE_SHRINE_WINTER_A:
@@ -1096,7 +1096,7 @@ void EnSGoro_SetupAction(EnSGoro* this, PlayState* play) {
                 this->actor.shape.yOffset = EN_S_GORO_ROLLEDUP_YOFFSET;
                 break;
             default:
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
                 break;
         }
     }
@@ -1113,8 +1113,8 @@ void EnSGoro_WinterShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_WinterShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-            func_800B863C(&this->actor, play);
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1144,8 +1144,8 @@ void EnSGoro_SpringShrineGoron_Idle(EnSGoro* this, PlayState* play) {
             this->textId = EnSGoro_ShrineGoron_NextTextId(this, play);
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_SpringShrineGoron_Talk;
-        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isTargeted)) {
-            func_800B863C(&this->actor, play);
+        } else if ((this->actor.xzDistToPlayer < 250.0f) || (this->actor.isLockedOn)) {
+            Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
         Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
         this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1185,8 +1185,8 @@ void EnSGoro_ShopGoron_Idle(EnSGoro* this, PlayState* play) {
             Message_StartTextbox(play, this->textId, &this->actor);
             this->actionFunc = EnSGoro_ShopGoron_Talk;
         }
-    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+    } else if ((this->actor.xzDistToPlayer < 250.0f) || this->actor.isLockedOn) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     Math_SmoothStepToS(&this->actor.shape.rot.y, this->actor.home.rot.y, 5, 0x1000, 0x100);
     this->actor.world.rot.y = this->actor.shape.rot.y;
@@ -1236,7 +1236,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
                 this->bombbuyFlags |= EN_S_GORO_BOMBBUYFLAG_YESBUY;
                 break;
             case 1:
-                func_8019F230();
+                Audio_PlaySfx_MessageCancel();
                 this->bombbuyFlags &= ~EN_S_GORO_BOMBBUYFLAG_YESBUY;
                 break;
         }
@@ -1245,7 +1245,7 @@ void EnSGoro_ShopGoron_Talk(EnSGoro* this, PlayState* play) {
         if ((this->textId == 0x675) || (this->textId == 0x676)) {
             play->msgCtx.msgMode = 0x43;
             play->msgCtx.stateTimer = 4;
-            Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
             this->actionFunc = EnSGoro_ShopGoron_TakePayment;
         } else {
             Message_StartTextbox(play, this->textId, &this->actor);
@@ -1262,7 +1262,7 @@ void EnSGoro_ShopGoron_TakePayment(EnSGoro* this, PlayState* play) {
         Rupees_ChangeBy(-this->powderKegPrice);
         this->actionFunc = EnSGoro_ShopGoron_FinishTransaction;
     } else {
-        Actor_PickUp(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_POWDER_KEG, 300.0f, 300.0f);
     }
 }
 
@@ -1271,7 +1271,7 @@ void EnSGoro_ShopGoron_FinishTransaction(EnSGoro* this, PlayState* play) {
         Message_StartTextbox(play, this->textId, &this->actor);
         this->actionFunc = EnSGoro_ShopGoron_Talk;
     } else {
-        func_800B85E0(&this->actor, play, 400.0f, -1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 400.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -1279,8 +1279,8 @@ void EnSGoro_Sleep(EnSGoro* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         Message_StartTextbox(play, 0x23A, &this->actor);
         this->actionFunc = EnSGoro_SleepTalk;
-    } else if (this->actor.isTargeted) {
-        func_800B863C(&this->actor, play);
+    } else if (this->actor.isLockedOn) {
+        Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
     }
     EnSGoro_UpdateSleeping(this, play);
 }
@@ -1311,7 +1311,7 @@ void EnSGoro_Init(Actor* thisx, PlayState* play) {
 
         this->loadedObjIndex = objIndex;
         if (objIndex < 0) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
         }
     }
     this->actor.draw = EnSGoro_Draw;
@@ -1328,8 +1328,8 @@ void EnSGoro_Update(Actor* thisx, PlayState* play) {
     EnSGoro* this = (EnSGoro*)thisx;
 
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 5);
-    gSegments[6] = PHYSICAL_TO_VIRTUAL(play->objectCtx.status[this->loadedObjIndex].segment);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
+    gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[this->loadedObjIndex].segment);
     SkelAnime_Update(&this->skelAnime);
     if (this->animInfoIndex != EN_S_GORO_ANIM_SLEEPY) {
         EnSGoro_UpdateAttentionTarget(this, play);
@@ -1350,7 +1350,7 @@ s32 EnSGoro_UpdateLimb(s16 newRotZ, s16 newRotY, Vec3f* pos, Vec3s* rot, s32 ste
 
     Matrix_MultVec3f(&zeroVec, &newPos);
     Matrix_Get(&curState);
-    Matrix_MtxFToYXZRot(&curState, &newRot, MTXMODE_NEW);
+    Matrix_MtxFToYXZRot(&curState, &newRot, false);
 
     *pos = newPos;
 
@@ -1435,9 +1435,10 @@ void EnSGoro_DrawUnrolled(EnSGoro* this, PlayState* play) {
     s32 pad;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
 
-    gSPSegment(POLY_OPA_DISP++, 0x8, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
+    gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
     gDPPipeSync(POLY_OPA_DISP++);
 
     SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
@@ -1449,7 +1450,8 @@ void EnSGoro_DrawUnrolled(EnSGoro* this, PlayState* play) {
 
 void EnSGoro_DrawRolledUp(EnSGoro* this, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y + this->actor.shape.yOffset,
                      this->actor.world.pos.z, MTXMODE_NEW);

@@ -20,7 +20,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play);
 void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play);
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Etcetera_InitVars = {
+ActorInit Obj_Etcetera_InitVars = {
     ACTOR_OBJ_ETCETERA,
     ACTORCAT_BG,
     FLAGS,
@@ -135,7 +135,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
     s16 minOscillationTimer;
     Player* player = GET_PLAYER(play);
 
-    if ((player->stateFlags3 & 0x200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
+    if ((player->stateFlags3 & PLAYER_STATE3_200) && (this->dyna.actor.xzDistToPlayer < 20.0f)) {
         // Player is launching out of the Deku Flower
         Animation_Change(&this->skelAnime, &gDekuFlowerBounceAnim, 1.0f, 0.0f,
                          Animation_GetLastFrame(&gDekuFlowerBounceAnim), ANIMMODE_ONCE, 0.0f);
@@ -146,7 +146,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
         this->bounceOscillationScale = 0.003f;
         this->oscillationTimer = 30;
         this->burrowFlag &= ~1;
-    } else if ((player->stateFlags3 & 0x2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
+    } else if ((player->stateFlags3 & PLAYER_STATE3_2000) && (this->dyna.actor.xzDistToPlayer < 30.0f) &&
                (this->dyna.actor.playerHeightRel > 0.0f)) {
         // Player is hovering above the Deku Flower
         minOscillationTimer = 10 - (s32)(this->dyna.actor.playerHeightRel * 0.05f);
@@ -154,12 +154,13 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
             this->oscillationTimer = minOscillationTimer;
         }
     } else {
-        if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+        if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
             if (!(this->burrowFlag & 1)) {
                 // Player is walking onto the Deku Flower, or falling on it from a height
                 this->oscillationTimer = 10;
                 ObjEtcetera_StartRustleAnimation(this);
-            } else if ((player->actor.speedXZ > 0.1f) || ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & 0x100))) {
+            } else if ((player->actor.speed > 0.1f) ||
+                       ((player->unk_ABC < 0.0f) && !(player->stateFlags3 & PLAYER_STATE3_100))) {
                 // Player is walking on top of the Deku Flower, is at the very start of burrowing, or is at the very
                 // start of launching
                 this->oscillationTimer = 10;
@@ -186,7 +187,7 @@ void ObjEtcetera_Idle(ObjEtcetera* this, PlayState* play) {
 }
 
 void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
-    if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -208,11 +209,11 @@ void ObjEtcetera_PlayRustleAnimation(ObjEtcetera* this, PlayState* play) {
 void ObjEtcetera_DoBounceOscillation(ObjEtcetera* this, PlayState* play) {
     // In order to match, we are seemingly required to access scale.x at one point
     // without using this. We can create a thisx or dyna pointer to achieve that, but
-    // it's more likely they used dyna given that DynaPolyActor_IsInRidingMovingState takes a DynaPolyActor.
+    // it's more likely they used dyna given that DynaPolyActor_IsPlayerOnTop takes a DynaPolyActor.
     DynaPolyActor* dyna = &this->dyna;
     f32 scaleTemp;
 
-    if (DynaPolyActor_IsInRidingMovingState(dyna)) {
+    if (DynaPolyActor_IsPlayerOnTop(dyna)) {
         this->burrowFlag |= 1;
     } else {
         this->burrowFlag &= ~1;
@@ -259,7 +260,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->dyna.actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->dyna.actor);
-        DynaPolyActor_Init(&this->dyna, 1);
+        DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
         thisCollisionHeader = collisionHeaders[type];
         if (thisCollisionHeader != NULL) {
             CollisionHeader_GetVirtual(thisCollisionHeader, &colHeader);
@@ -283,6 +284,9 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                                this->jointTable, this->morphTable, GOLD_DEKU_FLOWER_LIMB_MAX);
                 this->collider.dim.height = 20;
                 break;
+
+            default:
+                break;
         }
 
         type = DEKU_FLOWER_TYPE(&this->dyna.actor);
@@ -294,7 +298,7 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 Actor_SetScale(&this->dyna.actor, 0.01f);
                 this->dyna.actor.scale.y = 0.02f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = 3;
+                this->dyna.actor.targetMode = TARGET_MODE_3;
                 break;
 
             case DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE:
@@ -307,7 +311,10 @@ void ObjEtcetera_Setup(ObjEtcetera* this, PlayState* play) {
                 this->oscillationTimer = 30;
                 this->bounceOscillationScale = 0.0f;
                 this->dyna.actor.focus.pos.y = this->dyna.actor.home.pos.y + 10.0f;
-                this->dyna.actor.targetMode = 3;
+                this->dyna.actor.targetMode = TARGET_MODE_3;
+                break;
+
+            default:
                 break;
         }
     }
@@ -320,7 +327,7 @@ void ObjEtcetera_Update(Actor* thisx, PlayState* play) {
 
     if (floorBgId == BGCHECK_SCENE) {
         floorPoly = this->dyna.actor.floorPoly;
-        if (floorPoly != NULL && this->burrowFlag & 1) {
+        if ((floorPoly != NULL) && (this->burrowFlag & 1)) {
             func_800FAAB4(play, SurfaceType_GetLightSettingIndex(&play->colCtx, floorPoly, floorBgId));
         }
     }
@@ -340,7 +347,7 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->dList);
 
     CLOSE_DISPS(play->state.gfxCtx);
@@ -354,6 +361,6 @@ void ObjEtcetera_DrawIdle(Actor* thisx, PlayState* play) {
 void ObjEtcetera_DrawAnimated(Actor* thisx, PlayState* play) {
     ObjEtcetera* this = THIS;
 
-    func_8012C5B0(play->state.gfxCtx);
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->dyna.actor);
 }

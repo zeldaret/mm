@@ -6,7 +6,7 @@
 
 #include "z_en_takaraya.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnTakaraya*)thisx)
 
@@ -16,7 +16,7 @@ void EnTakaraya_Update(Actor* thisx, PlayState* play);
 void EnTakaraya_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Takaraya_InitVars = {
+ActorInit En_Takaraya_InitVars = {
     ACTOR_EN_TAKARAYA,
     ACTORCAT_NPC,
     FLAGS,
@@ -30,7 +30,7 @@ const ActorInit En_Takaraya_InitVars = {
 
 // static InitChainEntry sInitChain[] = {
 static InitChainEntry D_80ADFB20[] = {
-    ICHAIN_U8(targetMode, 6, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_6, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 1000, ICHAIN_STOP),
 };
 

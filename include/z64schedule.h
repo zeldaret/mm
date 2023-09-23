@@ -28,7 +28,7 @@
  */
 
 // Macro to convert the time format used in the save struct into the format used in Schedule
-#define SCHEDULE_CONVERT_TIME(time) ((time) - 0x10000 / 360 * 90)
+#define SCHEDULE_CONVERT_TIME(time) ((u16)((time) - 0x10000 / 360 * 90))
 #define SCHEDULE_TIME_NOW SCHEDULE_CONVERT_TIME(gSaveContext.save.time)
 
 typedef enum {
@@ -42,21 +42,21 @@ typedef enum {
     /* 0x07 */ SCHEDULE_CMD_ID_NOP,                  // No-Op
     /* 0x08 */ SCHEDULE_CMD_ID_CHECK_MISC_S,         // Special check based on items or masks and branches if check passes, short range branch
     /* 0x09 */ SCHEDULE_CMD_ID_RET_VAL_S,            // Ends script and returns byte value
-    /* 0x0A */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneNum and branches if so, short range branch
-    /* 0x0B */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneNum and branches if so, long range branch
+    /* 0x0A */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_S, // Checks if the current scene is not SceneId and branches if so, short range branch
+    /* 0x0B */ SCHEDULE_CMD_ID_CHECK_NOT_IN_SCENE_L, // Checks if the current scene is not SceneId and branches if so, long range branch
     /* 0x0C */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_S,   // Checks if the current day is not Day and branches if so, short range branch
     /* 0x0D */ SCHEDULE_CMD_ID_CHECK_NOT_IN_DAY_L,   // Checks if the current day is not Day and branches if so, long range branch
     /* 0x0E */ SCHEDULE_CMD_ID_RET_TIME,             // Returns 2 time values
     /* 0x0F */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_S,  // Branches if the current time is less than the command time, short range branch
     /* 0x10 */ SCHEDULE_CMD_ID_CHECK_BEFORE_TIME_L,  // Branches if the current time is less than the command time, long range branch
     /* 0x11 */ SCHEDULE_CMD_ID_BRANCH_S,             // Always branch, short range branch
-    /* 0x12 */ SCHEDULE_CMD_ID_BRANCH_L,             // Always branch, long range branch
+    /* 0x12 */ SCHEDULE_CMD_ID_BRANCH_L              // Always branch, long range branch
 } ScheduleCommandId;
 
 typedef enum {
     /* 0 */ SCHEDULE_CHECK_MISC_ROOM_KEY,
     /* 1 */ SCHEDULE_CHECK_MISC_LETTER_TO_KAFEI,
-    /* 2 */ SCHEDULE_CHECK_MISC_MASK_ROMANI,
+    /* 2 */ SCHEDULE_CHECK_MISC_MASK_ROMANI
 } ScheduleCheckMisc;
 
 typedef struct {
@@ -130,15 +130,15 @@ typedef struct {
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ s8 offset;
 } ScheduleCmdCheckNotInSceneS; // size = 0x4
 
 typedef struct {
     /* 0x0 */ ScheduleCmdBase base;
-    /* 0x1 */ u8 sceneH;
-    /* 0x2 */ u8 sceneL;
+    /* 0x1 */ u8 sceneIdH;
+    /* 0x2 */ u8 sceneIdL;
     /* 0x3 */ u8 offsetH;
     /* 0x4 */ u8 offsetL;
 } ScheduleCmdCheckNotInSceneL; // size = 0x5
@@ -196,11 +196,11 @@ typedef struct {
 #define SCHEDULE_PACK_S16(val) \
     ((val) >> 8) & 0xFF, (val) & 0xFF
 
-#define SCHEDULE_CMD_CHECK_FLAG_S(index, mask, offset) \
-    SCHEDULE_CMD_ID_CHECK_FLAG_S, (index), (mask), (offset)
+#define SCHEDULE_CMD_CHECK_FLAG_S(flag, offset) \
+    SCHEDULE_CMD_ID_CHECK_FLAG_S, SCHEDULE_PACK_S16(flag), (offset)
 
-#define SCHEDULE_CMD_CHECK_FLAG_L(index, mask, offset) \
-    SCHEDULE_CMD_ID_CHECK_FLAG_L, (index), (mask), SCHEDULE_PACK_S16(offset)
+#define SCHEDULE_CMD_CHECK_FLAG_L(flag, offset) \
+    SCHEDULE_CMD_ID_CHECK_FLAG_L, SCHEDULE_PACK_S16(flag), SCHEDULE_PACK_S16(offset)
 
 #define SCHEDULE_CMD_CHECK_TIME_RANGE_S(startHr, startMin, endHr, endMin, offset) \
     SCHEDULE_CMD_ID_CHECK_TIME_RANGE_S, (startHr), (startMin), (endHr), (endMin), (offset)

@@ -1,7 +1,7 @@
 ﻿<Root>
     <File Name="object_bai" Segment="6">
-        <Animation Name="object_bai_Anim_0008B4" Offset="0x8B4" />
-        <Animation Name="object_bai_Anim_0011C0" Offset="0x11C0" />
+        <Animation Name="object_bai_Anim_0008B4" Offset="0x8B4" /> <!-- Original name is "bai_talk01" -->
+        <Animation Name="object_bai_Anim_0011C0" Offset="0x11C0" /> <!-- Original name is "bai_wait01" -->
         <DList Name="object_bai_DL_0049C0" Offset="0x49C0" />
         <DList Name="object_bai_DL_004BA8" Offset="0x4BA8" />
         <DList Name="object_bai_DL_004EC0" Offset="0x4EC0" />
@@ -48,6 +48,6 @@
         <Limb Name="object_bai_Standardlimb_0078A4" Type="Standard" EnumName="OBJECT_BAI_LIMB_12" Offset="0x78A4" />
         <Limb Name="object_bai_Standardlimb_0078B0" Type="Standard" EnumName="OBJECT_BAI_LIMB_13" Offset="0x78B0" />
         <Skeleton Name="object_bai_Skel_007908" Type="Flex" LimbType="Standard" LimbNone="OBJECT_BAI_LIMB_NONE" LimbMax="OBJECT_BAI_LIMB_MAX" EnumName="ObjectBaiLimb" Offset="0x7908" />
-        <Animation Name="object_bai_Anim_008198" Offset="0x8198" />
+        <Animation Name="object_bai_Anim_008198" Offset="0x8198" /> <!-- Original name is "bai_wait02" -->
     </File>
 </Root>

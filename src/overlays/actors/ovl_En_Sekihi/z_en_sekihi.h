@@ -2,6 +2,8 @@
 #define Z_EN_SEKIHI_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Si/z_en_si.h"
+
 
 #define ENSIKIHI_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
@@ -25,7 +27,5 @@ typedef enum SekihiType {
     /* 0x4 */ SEKIHI_TYPE_4,
     /* 0x5 */ SEKIHI_TYPE_MAX
 } SekihiType;
-
-extern const ActorInit En_Sekihi_InitVars;
 
 #endif // Z_EN_SEKIHI_H

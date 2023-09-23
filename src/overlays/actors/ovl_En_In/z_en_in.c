@@ -5,10 +5,10 @@
  */
 
 #include "z_en_in.h"
-#include "objects/object_in/object_in.h"
+#include "z64horse.h"
 #include "overlays/actors/ovl_En_Horse_Game_Check/z_en_horse_game_check.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnIn*)thisx)
 
@@ -22,7 +22,7 @@ void func_808F3690(EnIn* this, PlayState* play);
 void func_808F5A34(EnIn* this, PlayState* play);
 s32 func_808F5994(EnIn* this, PlayState* play, Vec3f* arg2, s16 arg3);
 
-const ActorInit En_In_InitVars = {
+ActorInit En_In_InitVars = {
     ACTOR_EN_IN,
     ACTORCAT_NPC,
     FLAGS,
@@ -150,7 +150,7 @@ s32 EnIn_ChangeAnim(SkelAnime* skelAnime, s16 animIndex) {
     s16 frameCount;
     s32 ret = false;
 
-    if (animIndex >= 0 && animIndex < 18) {
+    if ((animIndex >= 0) && (animIndex < 18)) {
         ret = true;
         frameCount = sAnimationInfo[animIndex].frameCount;
         if (frameCount < 0) {
@@ -169,12 +169,12 @@ s32 func_808F3178(EnIn* this, PlayState* play) {
     u8 tmp;
 
     this->unk260 = tmp = SubS_IsFloorAbove(play, &this->unk248, -6.0f);
-    if (this->unk260 != 0 && prevUnk260 == 0 && tmp) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+    if ((this->unk260 != 0) && (prevUnk260 == 0) && tmp) {
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_STONE);
     }
     this->unk261 = tmp = SubS_IsFloorAbove(play, &this->unk254, -6.0f);
-    if (this->unk261 != 0 && prevUnk261 == 0 && tmp) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_WALK_CONCRETE);
+    if ((this->unk261 != 0) && (prevUnk261 == 0) && tmp) {
+        Actor_PlaySfx(&this->actor, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_STONE);
     }
 
     return 0;
@@ -214,7 +214,7 @@ s32 func_808F3334(EnIn* this, PlayState* play) {
         if (this->colliderJntSph.base.atFlags & AT_BOUNCED) {
             return 0;
         }
-        Actor_PlaySfxAtPos(&player->actor, NA_SE_PL_BODY_HIT);
+        Actor_PlaySfx(&player->actor, NA_SE_PL_BODY_HIT);
         func_800B8D98(play, &this->actor, 3.0f, this->actor.yawTowardsPlayer, 6.0f);
     }
     return 1;
@@ -224,7 +224,7 @@ s32 func_808F33B8(void) {
     s32 ret = (((gSaveContext.save.day == 1) &&
                 ((gSaveContext.save.time >= CLOCK_TIME(5, 30)) && (gSaveContext.save.time <= CLOCK_TIME(6, 0)))) ||
                (gSaveContext.save.day >= 2)) &&
-              !(gSaveContext.save.weekEventReg[22] & 1);
+              !CHECK_WEEKEVENTREG(WEEKEVENTREG_DEFENDED_AGAINST_THEM);
 
     return ret;
 }
@@ -238,7 +238,7 @@ void func_808F3414(EnIn* this, PlayState* play) {
     }
     if (SubS_AngleDiffLessEqual(this->actor.shape.rot.y, 0x2710, this->actor.yawTowardsPlayer)) {
         point.x = player->actor.world.pos.x;
-        point.y = player->bodyPartsPos[7].y + 3.0f;
+        point.y = player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
         point.z = player->actor.world.pos.z;
         SubS_TrackPoint(&point, &this->actor.focus.pos, &this->actor.shape.rot, &this->trackTarget, &this->headRot,
                         &this->torsoRot, &sTrackOptions);
@@ -252,7 +252,7 @@ void func_808F3414(EnIn* this, PlayState* play) {
     }
     func_808F322C(this, 3);
     func_808F3178(this, play);
-    SubS_FillLimbRotTables(play, this->unk376, this->unk39E, ARRAY_COUNT(this->unk376));
+    SubS_UpdateFidgetTables(play, this->fidgetTableY, this->fidgetTableZ, OBJECT_IN_LIMB_MAX);
 }
 
 void func_808F35AC(EnIn* this, PlayState* play) {
@@ -273,10 +273,10 @@ void EnIn_DoNothing(EnIn* this, PlayState* play) {
 }
 
 void func_808F3618(EnIn* this, PlayState* play) {
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_9);
     }
-    if (ENIN_GET_PATH(&this->actor) != 0x3F) {
+    if (ENIN_GET_PATH_INDEX(&this->actor) != ENIN_PATH_INDEX_NONE) {
         this->actionFunc = func_808F3690;
     } else {
         this->actionFunc = EnIn_DoNothing;
@@ -287,8 +287,8 @@ void func_808F3690(EnIn* this, PlayState* play) {
     s16 sp36;
     Vec3f sp28;
 
-    Math_SmoothStepToF(&this->actor.speedXZ, 1.0f, 0.4f, 1000.0f, 0.0f);
-    sp36 = this->actor.speedXZ * 400.0f;
+    Math_SmoothStepToF(&this->actor.speed, 1.0f, 0.4f, 1000.0f, 0.0f);
+    sp36 = this->actor.speed * 400.0f;
     if (SubS_CopyPointFromPath(this->path, this->unk244, &sp28) && SubS_MoveActorToPoint(&this->actor, &sp28, sp36)) {
         this->unk244++;
         if (this->unk244 >= this->path->count) {
@@ -305,15 +305,15 @@ void func_808F374C(EnIn* this, PlayState* play) {
 
     if (this->skelAnime.animation == &object_in_Anim_016484 || this->skelAnime.animation == &object_in_Anim_0170DC) {
         if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
-            func_8019F88C(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
+            Audio_PlaySfx_Randomized(&this->actor.projectedPos, NA_SE_VO_IN_LASH_0, 2);
             if (Rand_ZeroOne() < 0.3f) {
-                Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
+                Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_INGO_HORSE_NEIGH);
             }
-            Audio_PlaySfxAtPos(&this->actor.projectedPos, NA_SE_IT_LASH);
+            Audio_PlaySfx_AtPos(&this->actor.projectedPos, NA_SE_IT_LASH);
         }
     }
     if (this->skelAnime.animation == &object_in_Anim_0198A8 && Animation_OnFrame(&this->skelAnime, 20.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_CRY_0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_CRY_0);
     }
     if (SkelAnime_Update(&this->skelAnime)) {
         this->unk488 %= ARRAY_COUNT(sAnimations);
@@ -328,7 +328,7 @@ void func_808F38F8(EnIn* this, PlayState* play) {
     while (true) {
         //! @bug: Infinite loop if there is only one ACTOR_EN_IN
         this->unk4A4 = (EnIn*)SubS_FindActor(play, &this->unk4A4->actor, ACTORCAT_NPC, ACTOR_EN_IN);
-        if (this->unk4A4 != NULL && this->unk4A4 != this) {
+        if ((this->unk4A4 != NULL) && (this->unk4A4 != this)) {
             break;
         }
         this->unk4A4 = (EnIn*)this->unk4A4->actor.next;
@@ -336,7 +336,7 @@ void func_808F38F8(EnIn* this, PlayState* play) {
 }
 
 void func_808F395C(EnIn* this, PlayState* play) {
-    if (this->unk4B0 == RACE_FLAG_END) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5A94;
     }
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -344,7 +344,7 @@ void func_808F395C(EnIn* this, PlayState* play) {
         this->actionFunc = func_808F5A34;
         this->unk48C = 1;
     } else {
-        func_800B8614(&this->actor, play, 200.0f);
+        Actor_OfferTalk(&this->actor, play, 200.0f);
     }
 }
 
@@ -352,33 +352,41 @@ void func_808F39DC(EnIn* this, PlayState* play) {
     u16 textId = 0;
 
     if (gSaveContext.save.day != 3) {
-        switch (GET_RACE_FLAGS) {
-            case RACE_FLAG_2:
+        switch (GET_WEEKEVENTREG_HORSE_RACE_STATE) {
+            case WEEKEVENTREG_HORSE_RACE_STATE_2:
                 textId = 0x347A;
                 break;
-            case RACE_FLAG_3:
+
+            case WEEKEVENTREG_HORSE_RACE_STATE_3:
                 textId = 0x3476;
                 break;
+
+            default:
+                break;
         }
-        SET_RACE_FLAGS(RACE_FLAG_END);
+        SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     } else {
-        switch (GET_RACE_FLAGS) {
-            case RACE_FLAG_2:
+        switch (GET_WEEKEVENTREG_HORSE_RACE_STATE) {
+            case WEEKEVENTREG_HORSE_RACE_STATE_2:
                 textId = 0x349D;
                 break;
-            case RACE_FLAG_3:
+
+            case WEEKEVENTREG_HORSE_RACE_STATE_3:
                 textId = 0x3499;
                 break;
+
+            default:
+                break;
         }
-        SET_RACE_FLAGS(RACE_FLAG_END);
+        SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     }
     this->actor.flags |= ACTOR_FLAG_10000;
     this->actor.textId = textId;
     this->actionFunc = func_808F395C;
-    if (this->unk4B0 == RACE_FLAG_2) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
     } else {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
     }
 }
 
@@ -388,7 +396,7 @@ void func_808F3AD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -402,7 +410,7 @@ void func_808F3B40(EnIn* this, PlayState* play) {
         textId = gSaveContext.save.day != 3 ? 0x3481 : 0x34A4;
         this->actor.textId = textId;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
     }
 }
 
@@ -412,7 +420,7 @@ void func_808F3BD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -426,7 +434,7 @@ void func_808F3C40(EnIn* this, PlayState* play) {
         textId = gSaveContext.save.day != 3 ? 0x346A : 0x3492;
         this->actor.textId = textId;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
     }
 }
 
@@ -436,7 +444,7 @@ void func_808F3CD4(EnIn* this, PlayState* play) {
         this->unk48C = 1;
         this->actionFunc = func_808F5A94;
     } else {
-        func_800B85E0(&this->actor, play, 200.0f, PLAYER_AP_MINUS1);
+        Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 200.0f, PLAYER_IA_MINUS1);
     }
 }
 
@@ -450,7 +458,7 @@ void func_808F3D40(EnIn* this, PlayState* play) {
         this->actor.textId = textId;
         this->actor.flags |= ACTOR_FLAG_10000;
     } else {
-        Actor_PickUp(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
     }
 }
 
@@ -458,7 +466,7 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
     u16 textId = 0;
 
     if (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER) {
-        if (!(gSaveContext.save.weekEventReg[63] & 0x40)) {
+        if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) {
             textId = 0x34A9;
         } else if (this->unk4AC & 8) {
             textId = 0x34B1;
@@ -470,67 +478,73 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
 
     switch (arg2) {
         case 0:
-            if ((gSaveContext.save.playerForm == PLAYER_FORM_ZORA) ||
-                (gSaveContext.save.playerForm == PLAYER_FORM_GORON)) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x345C;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3460;
-            } else if (!(gSaveContext.save.weekEventReg[15] & 8)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_08)) {
                 textId = 0x3458;
             } else {
                 textId = 0x345B;
             }
             break;
+
         case 1:
-            if (!(gSaveContext.save.weekEventReg[15] & 0x10)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_15_10)) {
                 textId = 0x3463;
             } else {
                 textId = 0x346B;
             }
             break;
+
         case 3:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x3485;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x3484;
-            } else if (!(gSaveContext.save.weekEventReg[56] & 4)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_56_04)) {
                 textId = 0x346D;
             } else {
                 textId = 0x3482;
             }
             break;
+
         case 4:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA || gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+            if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x348A;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            } else if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x348B;
-            } else if (!(gSaveContext.save.weekEventReg[16] & 1)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_01)) {
                 textId = 0x3486;
             } else {
                 textId = 0x3489;
             }
             break;
+
         case 5:
             if (func_808F33B8()) {
                 textId = 0x34B3;
-            } else if (!(gSaveContext.save.weekEventReg[16] & 2)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_02)) {
                 textId = 0x348E;
             } else {
                 textId = 0x3493;
             }
             break;
+
         case 7:
-            if (gSaveContext.save.playerForm == PLAYER_FORM_DEKU) {
+            if (GET_PLAYER_FORM == PLAYER_FORM_DEKU) {
                 textId = 0x34A8;
-            } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA ||
-                       gSaveContext.save.playerForm == PLAYER_FORM_GORON) {
+            } else if ((GET_PLAYER_FORM == PLAYER_FORM_ZORA) || (GET_PLAYER_FORM == PLAYER_FORM_GORON)) {
                 textId = 0x34A7;
-            } else if (!(gSaveContext.save.weekEventReg[16] & 4)) {
+            } else if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_16_04)) {
                 textId = 0x3495;
             } else {
                 textId = 0x34A5;
             }
+            break;
+
+        default:
+            break;
     }
     if (textId == 0) {
         textId = 1;
@@ -539,12 +553,12 @@ u16 func_808F3DD4(PlayState* play, EnIn* this, u32 arg2) {
 }
 
 void func_808F4054(PlayState* play, EnIn* this, s32 arg2, u16 textId) {
-    s32 unused;
+    s32 pad;
 
-    if (textId == 0x34AE || textId == 0x34B0 || textId == 0x34B2) {
-        unused = textId;
-        func_80151BB4(play, 0x11);
+    if ((textId == 0x34AE) || (textId == 0x34B0) || (textId == 0x34B2)) {
+        Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
     }
+
     switch (arg2) {
         case 1:
         case 5:
@@ -553,12 +567,15 @@ void func_808F4054(PlayState* play, EnIn* this, s32 arg2, u16 textId) {
                 func_808F35D8(this, play);
             }
             break;
+
         case 2:
             if (textId == 0x3473) {
                 func_808F35D8(this, play);
             }
             break;
+
         case 0:
+        default:
             break;
     }
 }
@@ -572,39 +589,39 @@ void func_808F4108(EnIn* this, PlayState* play, u16 textId) {
 }
 
 s32 func_808F4150(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx) {
-    EnIn* this2 = this;
+    Actor* thisx = &this->actor;
 
     if (msgCtx->choiceIndex == 0) {
-        func_8019F208();
-        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+        Audio_PlaySfx_MessageDecide();
+        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
             Rupees_ChangeBy(-play->msgCtx.unk1206C);
-            if (!(gSaveContext.save.weekEventReg[57] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
                 func_808F4108(this, play, 0x3474);
             } else if (this->unk4AC & 8) {
                 func_808F4108(this, play, 0x3475);
             } else {
-                Actor_ContinueText(play, &this->actor, 0x3475);
+                Actor_ContinueText(play, thisx, 0x3475);
             }
         } else {
-            play_sound(NA_SE_SY_ERROR);
-            Actor_ContinueText(play, &this->actor, 0x3473);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
+            Actor_ContinueText(play, thisx, 0x3473);
         }
     } else {
-        func_8019F230();
-        Actor_ContinueText(play, &this->actor, 0x3472);
+        Audio_PlaySfx_MessageCancel();
+        Actor_ContinueText(play, thisx, 0x3472);
     }
     return 0;
 }
 
 s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx, s32 arg4) {
     s32 pad;
-    s32 fee = play->msgCtx.unk1206C != 0xFFFF ? play->msgCtx.unk1206C : 10;
+    s32 fee = (play->msgCtx.unk1206C != 0xFFFF) ? play->msgCtx.unk1206C : 10;
 
     if (msgCtx->choiceIndex == 0) {
-        func_8019F208();
-        if (gSaveContext.save.playerData.rupees >= fee) {
+        Audio_PlaySfx_MessageDecide();
+        if (gSaveContext.save.saveInfo.playerData.rupees >= fee) {
             Rupees_ChangeBy(-fee);
-            if (!(gSaveContext.save.weekEventReg[57] & 1)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_57_01)) {
                 if (arg4 != 0) {
                     Actor_ContinueText(play, &this->actor, 0x3474);
                 } else {
@@ -618,7 +635,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
                 }
             }
         } else {
-            play_sound(NA_SE_SY_ERROR);
+            Audio_PlaySfx(NA_SE_SY_ERROR);
             if (arg4 != 0) {
                 Actor_ContinueText(play, &this->actor, 0x3473);
             } else {
@@ -626,7 +643,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
             }
         }
     } else {
-        func_8019F230();
+        Audio_PlaySfx_MessageCancel();
         Actor_ContinueText(play, &this->actor, 0x3472);
     }
     return 0;
@@ -635,7 +652,7 @@ s32 func_808F4270(PlayState* play, EnIn* this, s32 arg2, MessageContext* msgCtx,
 s32 func_808F43E0(EnIn* this) {
     this->unk48C = 0;
     this->actor.textId = 0;
-    SET_RACE_FLAGS(RACE_FLAG_END);
+    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_END);
     return 0;
 }
 
@@ -650,31 +667,38 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
             Actor_ContinueText(play, &this->actor, 0x34B0);
             ret = false;
             break;
+
         case 0x34A9:
             func_808F4108(this, play, 0x34AA);
-            gSaveContext.save.weekEventReg[63] |= 0x40;
+            SET_WEEKEVENTREG(WEEKEVENTREG_63_40);
             ret = false;
             break;
+
         case 0x34AA:
             func_808F4108(this, play, 0x34AB);
             ret = false;
             break;
+
         case 0x34AB:
             func_808F4108(this, play, 0x34AC);
             ret = false;
             break;
+
         case 0x34AC:
             func_808F4108(this, play, 0x34AD);
             ret = false;
             break;
+
         case 0x34AD:
             Actor_ContinueText(play, &this->actor, 0x34AE);
             ret = false;
             break;
+
         case 0x34B1:
             Actor_ContinueText(play, &this->actor, 0x34B2);
             ret = false;
             break;
+
         default:
             break;
     }
@@ -683,74 +707,91 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
         case 0:
             switch (textId) {
                 case 0x3458:
-                    gSaveContext.save.weekEventReg[15] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_15_08);
                     Actor_ContinueText(play, &this->actor, 0x3459);
                     ret = false;
                     break;
+
                 case 0x3459:
                     Actor_ContinueText(play, &this->actor, 0x345A);
                     ret = false;
                     break;
+
                 case 0x345A:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x345B:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x345C:
                     Actor_ContinueText(play, &this->actor, 0x345D);
                     ret = false;
                     break;
+
                 case 0x345D:
                     Actor_ContinueText(play, &this->actor, 0x345E);
                     ret = false;
                     break;
+
                 case 0x345E:
                     Actor_ContinueText(play, &this->actor, 0x345F);
                     ret = false;
                     break;
+
                 case 0x345F:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3460:
                     Actor_ContinueText(play, &this->actor, 0x3461);
                     ret = false;
                     break;
+
                 case 0x3461:
                     Actor_ContinueText(play, &this->actor, 0x3462);
                     ret = false;
                     break;
+
                 case 0x3462:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 1:
             switch (textId) {
                 case 0x3463:
-                    gSaveContext.save.weekEventReg[15] |= 0x10;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_15_10);
                     Actor_ContinueText(play, &this->actor, 0x3464);
                     ret = false;
                     break;
+
                 case 0x3464:
                     Actor_ContinueText(play, &this->actor, 0x3465);
                     ret = false;
                     break;
+
                 case 0x3465:
                     Actor_ContinueText(play, &this->actor, 0x3466);
                     ret = false;
                     break;
+
                 case 0x3466:
                     if (msgCtx->choiceIndex == 0) {
-                        func_8019F208();
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                        Audio_PlaySfx_MessageDecide();
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
-                                Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                                Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                                 Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -758,128 +799,153 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                                 ret = false;
                             }
                         } else {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             Actor_ContinueText(play, &this->actor, 0x3468);
                             ret = false;
                         }
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Actor_ContinueText(play, &this->actor, 0x3467);
                         ret = false;
                     }
                     break;
+
                 case 0x3467:
                 case 0x3468:
                 case 0x3469:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x346B:
                     Actor_ContinueText(play, &this->actor, 0x346C);
                     ret = false;
                     break;
+
                 case 0x346C:
                     Actor_ContinueText(play, &this->actor, 0x3466);
                     ret = false;
                     break;
+
                 case 0x346A:
                     this->actionFunc = func_808F5A94;
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
             }
             break;
+
         case 2:
             switch (textId) {
                 case 0x346E:
                     func_808F4108(this, play, 0x346F);
                     ret = false;
                     break;
+
                 case 0x3470:
                     Actor_ContinueText(play, &this->actor, 0x3471);
                     ret = false;
                     break;
+
                 case 0x3483:
                     Actor_ContinueText(play, &this->actor, 0x3471);
                     ret = false;
                     break;
+
                 case 0x3471:
                     func_808F4150(play, this, arg2, msgCtx);
                     ret = false;
                     break;
+
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
-                    func_80151BB4(play, 0x11);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3473:
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
-                    func_80151BB4(play, 0x11);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3475:
-                    SET_RACE_FLAGS(RACE_FLAG_START);
+                    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
-                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    gSaveContext.save.weekEventReg[57] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_57_01);
                     break;
+
                 case 0x3478:
                     if (msgCtx->choiceIndex == 0) {
                         func_808F4150(play, this, arg2, msgCtx);
                         ret = false;
                     } else {
-                        func_8019F230();
-                        gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                        Audio_PlaySfx_MessageCancel();
+                        CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                         func_808F4108(this, play, 0x3479);
                         ret = false;
                     }
                     break;
+
                 case 0x347B:
                     func_808F4108(this, play, 0x347C);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 3:
             switch (textId) {
                 case 0x346D:
                     func_808F4108(this, play, 0x346E);
-                    gSaveContext.save.weekEventReg[56] |= 4;
-                    gSaveContext.save.weekEventReg[56] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_56_04);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x346F:
                     func_808F4108(this, play, 0x3470);
                     ret = false;
                     break;
+
                 case 0x3482:
                     func_808F4108(this, play, 0x3483);
-                    gSaveContext.save.weekEventReg[56] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x3484:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3485:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3474:
                     func_808F4108(this, play, 0x3475);
                     ret = false;
                     break;
+
                 case 0x3476:
                     Actor_ContinueText(play, &this->actor, 0x3477);
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     ret = false;
                     break;
+
                 case 0x3477:
-                    gSaveContext.save.weekEventReg[56] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     func_808F4108(this, play, 0x3478);
                     ret = false;
                     break;
+
                 case 0x347A:
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
@@ -887,7 +953,7 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         Actor_ContinueText(play, &this->actor, 0x347E);
                         ret = false;
                     } else {
-                        gSaveContext.save.weekEventReg[56] |= 8;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                         func_808F4108(this, play, 0x347B);
                         ret = false;
                     }
@@ -896,113 +962,138 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                     func_808F35D8(this, play);
                     if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
-                        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         Actor_ContinueText(play, &this->actor, 0x347F);
                         ret = false;
                     }
                     break;
+
                 case 0x347F:
                     Actor_ContinueText(play, &this->actor, 0x3480);
                     ret = false;
                     break;
+
                 case 0x3480:
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3479:
                     func_808F43E0(this);
                     func_808F35D8(this, play);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x347C:
                     this->actionFunc = func_808F3D40;
-                    Actor_PickUp(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
+                    Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, play);
                     ret = true;
                     break;
+
                 case 0x3481:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x347D:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
-                    func_80151BB4(play, 0x2F);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 4:
             switch (textId) {
                 case 0x3486:
                     Actor_ContinueText(play, &this->actor, 0x3487);
-                    gSaveContext.save.weekEventReg[16] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_16_01);
                     ret = false;
                     break;
+
                 case 0x3487:
                     Actor_ContinueText(play, &this->actor, 0x3488);
                     ret = false;
                     break;
+
                 case 0x3488:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3489:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x348A:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x348B:
                     Actor_ContinueText(play, &this->actor, 0x348C);
                     ret = false;
                     break;
+
                 case 0x348C:
                     Actor_ContinueText(play, &this->actor, 0x348D);
                     ret = false;
                     break;
+
                 case 0x348D:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 5:
             switch (textId) {
                 case 0x3468:
                 case 0x3469:
                 case 0x3491:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x348E:
                 case 0x34B3:
                     Actor_ContinueText(play, &this->actor, 0x348F);
-                    gSaveContext.save.weekEventReg[16] |= 2;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_16_02);
                     ret = false;
                     break;
+
                 case 0x3493:
                     Actor_ContinueText(play, &this->actor, 0x3494);
                     ret = false;
                     break;
+
                 case 0x348F:
                 case 0x3494:
                     Actor_ContinueText(play, &this->actor, 0x3490);
                     ret = false;
                     break;
+
                 case 0x3490:
                     if (msgCtx->choiceIndex == 0) {
-                        func_8019F208();
-                        if (gSaveContext.save.playerData.rupees >= play->msgCtx.unk1206C) {
+                        Audio_PlaySfx_MessageDecide();
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= play->msgCtx.unk1206C) {
                             if (Inventory_HasEmptyBottle()) {
                                 this->actionFunc = func_808F3C40;
-                                Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                                Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                                 Rupees_ChangeBy(-play->msgCtx.unk1206C);
                                 ret = true;
                             } else {
@@ -1010,67 +1101,78 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                                 ret = false;
                             }
                         } else {
-                            play_sound(NA_SE_SY_ERROR);
+                            Audio_PlaySfx(NA_SE_SY_ERROR);
                             Actor_ContinueText(play, &this->actor, 0x3468);
                             ret = false;
                         }
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Actor_ContinueText(play, &this->actor, 0x3491);
                         ret = false;
                     }
                     break;
+
                 case 0x3492:
                     this->actionFunc = func_808F5A94;
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
             }
             break;
+
         case 7:
             switch (textId) {
                 case 0x34A8:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x34A7:
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3495:
                     func_808F4108(this, play, 0x3496);
-                    gSaveContext.save.weekEventReg[16] |= 4;
-                    gSaveContext.save.weekEventReg[56] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_16_04);
+                    SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x3497:
                     func_808F4108(this, play, 0x3498);
                     ret = false;
                     break;
+
                 case 0x34A4:
                     this->actionFunc = func_808F5A34;
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x34A5:
                     func_808F4108(this, play, 0x34A6);
-                    gSaveContext.save.weekEventReg[56] |= 8;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
                 case 0x3473:
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
-                    func_80151BB4(play, 0x11);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     break;
+
                 case 0x3474:
                     Actor_ContinueText(play, &this->actor, 0x3475);
                     ret = false;
                     break;
+
                 case 0x3475:
-                    SET_RACE_FLAGS(RACE_FLAG_START);
+                    SET_WEEKEVENTREG_HORSE_RACE_STATE(WEEKEVENTREG_HORSE_RACE_STATE_START);
                     func_800FD750(NA_BGM_HORSE);
                     play->nextEntrance = ENTRANCE(GORMAN_TRACK, 5);
-                    play->transitionType = TRANS_TYPE_05;
+                    play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                     play->transitionTrigger = TRANS_TRIGGER_START;
-                    gSaveContext.save.weekEventReg[57] |= 1;
+                    SET_WEEKEVENTREG(WEEKEVENTREG_57_01);
                     break;
+
                 case 0x349D:
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
@@ -1078,99 +1180,122 @@ s32 func_808F4414(PlayState* play, EnIn* this, s32 arg2) {
                         Actor_ContinueText(play, &this->actor, 0x34A1);
                         ret = false;
                     } else {
-                        gSaveContext.save.weekEventReg[56] |= 8;
+                        SET_WEEKEVENTREG(WEEKEVENTREG_56_08);
                         func_808F4108(this, play, 0x349E);
                         ret = false;
                     }
                     break;
+
                 case 0x349F:
                     this->actionFunc = func_808F3D40;
-                    Actor_PickUp(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
+                    Actor_OfferGetItem(&this->actor, play, GI_MASK_GARO, 500.0f, 100.0f);
                     func_808F35D8(this, play);
                     ret = true;
                     break;
+
                 case 0x34A0:
                     this->actionFunc = func_808F5A34;
-                    func_80151BB4(play, 0x11);
-                    func_80151BB4(play, 0x2F);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_RECEIVED_GAROS_MASK);
                     func_808F43E0(this);
                     ret = true;
                     break;
+
                 case 0x34A1:
                     func_808F35D8(this, play);
                     if (Inventory_HasEmptyBottle()) {
                         this->actionFunc = func_808F3B40;
-                        Actor_PickUp(&this->actor, play, GI_MILK, 500.0f, 100.0f);
+                        Actor_OfferGetItem(&this->actor, play, GI_MILK, 500.0f, 100.0f);
                         ret = true;
                     } else {
                         Actor_ContinueText(play, &this->actor, 0x34A2);
                         ret = false;
                     }
                     break;
+
                 case 0x34A2:
                     Actor_ContinueText(play, &this->actor, 0x34A3);
                     ret = false;
                     break;
+
                 case 0x34A3:
                     func_808F43E0(this);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x3499:
                     Actor_ContinueText(play, &this->actor, 0x349A);
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_1);
                     EnIn_ChangeAnim(&this->unk4A4->skelAnime, ENIN_ANIM_7);
                     ret = false;
                     break;
+
                 case 0x349A:
                     Actor_ContinueText(play, &this->actor, 0x349B);
                     ret = false;
                     break;
+
                 case 0x349B:
                     if (msgCtx->choiceIndex == 0) {
                         func_808F4270(play, this, arg2, msgCtx, 1);
                         ret = false;
                     } else {
-                        func_8019F230();
+                        Audio_PlaySfx_MessageCancel();
                         Actor_ContinueText(play, &this->actor, 0x349C);
                         ret = false;
                     }
                     break;
+
                 case 0x349C:
                     func_808F43E0(this);
                     func_808F35D8(this, play);
-                    func_80151BB4(play, 0x11);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
+                    break;
+
+                default:
                     break;
             }
             break;
+
         case 6:
             switch (textId) {
                 case 0x3496:
                     func_808F4108(this, play, 0x3497);
                     ret = false;
                     break;
+
                 case 0x3498:
                 case 0x34A6:
                     Actor_ContinueText(play, &this->actor, 0x3471);
                     ret = false;
                     break;
+
                 case 0x3471:
                     func_808F4270(play, this, arg2, msgCtx, 0);
                     ret = false;
                     break;
+
                 case 0x3472:
                     func_808F43E0(this);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
-                    func_80151BB4(play, 0x11);
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
+                    Message_BombersNotebookQueueEvent(play, BOMBERS_NOTEBOOK_EVENT_MET_GORMAN_BROTHERS);
                     ret = true;
                     break;
+
                 case 0x349E:
                     func_808F4108(this, play, 0x349F);
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     ret = false;
                     break;
+
+                default:
+                    break;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -1185,12 +1310,16 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
             func_808F4054(play, this, arg2, this->actor.textId);
             ret = true;
             break;
+
         case TEXT_STATE_CHOICE:
         case TEXT_STATE_5:
             if (Message_ShouldAdvance(play) && func_808F4414(play, this, arg2)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 ret = true;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -1199,7 +1328,6 @@ s32 func_808F5674(PlayState* play, EnIn* this, s32 arg2) {
 s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     s16 rotDiff;
     s16 yawDiff;
-    Player* player;
 
     if (*arg3 == 4) {
         return 0;
@@ -1210,7 +1338,7 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 0;
     }
     if (*arg3 == 3) {
-        func_80151938(play, this->actor.textId);
+        Message_ContinueTextbox(play, this->actor.textId);
         *arg3 = 1;
         return 0;
     }
@@ -1219,9 +1347,8 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
         return 1;
     }
     if (*arg3 == 1) {
-        s32 requiredScopeTemp;
+        Player* player = GET_PLAYER(play);
 
-        player = GET_PLAYER(play);
         func_808F5994(this, play, &player->actor.world.pos, 0xC80);
     } else {
         rotDiff = this->actor.home.rot.y - this->actor.world.rot.y;
@@ -1247,14 +1374,14 @@ s32 func_808F5728(PlayState* play, EnIn* this, s32 arg2, s32* arg3) {
     if (yawDiff >= 0x4300) {
         return 0;
     }
-    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isTargeted) {
+    if (this->actor.xyzDistToPlayerSq > SQ(160.0f) && !this->actor.isLockedOn) {
         return 0;
     }
     if (this->actor.xyzDistToPlayerSq <= SQ(80.0f)) {
-        if (func_800B8614(&this->actor, play, 80.0f)) {
+        if (Actor_OfferTalk(&this->actor, play, 80.0f)) {
             this->actor.textId = func_808F3DD4(play, this, arg2);
         }
-    } else if (func_800B863C(&this->actor, play)) {
+    } else if (Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play)) {
         this->actor.textId = func_808F3DD4(play, this, arg2);
     }
     return 0;
@@ -1286,7 +1413,7 @@ void func_808F5A34(EnIn* this, PlayState* play) {
 }
 
 void func_808F5A94(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
+    if (Horse_IsActive(play, &play->actorCtx)) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 7, &this->unk48C);
         } else {
@@ -1302,9 +1429,9 @@ void func_808F5A94(EnIn* this, PlayState* play) {
 }
 
 void func_808F5B58(EnIn* this, PlayState* play) {
-    if (func_800F41E4(play, &play->actorCtx)) {
-        if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.save.weekEventReg[63] & 0x40) ||
-            gSaveContext.save.weekEventReg[56] & 8) {
+    if (Horse_IsActive(play, &play->actorCtx)) {
+        if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
+            CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
             if (gSaveContext.save.day == 3) {
                 func_808F5728(play, this, 6, &this->unk48C);
             } else {
@@ -1312,7 +1439,7 @@ void func_808F5B58(EnIn* this, PlayState* play) {
             }
         }
     } else if (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER ||
-               (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.save.weekEventReg[63] & 0x40)) {
+               (Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40))) {
         if (gSaveContext.save.day == 3) {
             func_808F5728(play, this, 4, &this->unk48C);
         } else {
@@ -1322,11 +1449,11 @@ void func_808F5B58(EnIn* this, PlayState* play) {
 }
 
 void func_808F5C98(EnIn* this, PlayState* play) {
-    if (this->unk4B0 == RACE_FLAG_END) {
+    if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_END) {
         this->actionFunc = func_808F5B58;
     }
-    if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && gSaveContext.save.weekEventReg[63] & 0x40) ||
-        gSaveContext.save.weekEventReg[56] & 8) {
+    if ((Player_GetMask(play) == PLAYER_MASK_CIRCUS_LEADER && CHECK_WEEKEVENTREG(WEEKEVENTREG_63_40)) ||
+        CHECK_WEEKEVENTREG(WEEKEVENTREG_56_08)) {
         if (gSaveContext.save.day != 3) {
             func_808F5728(play, this, 2, &this->unk48C);
         } else {
@@ -1334,10 +1461,10 @@ void func_808F5C98(EnIn* this, PlayState* play) {
         }
     }
     if (this->unk4A8 == 2) {
-        if (this->unk4B0 == RACE_FLAG_2) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_LOST);
+        if (this->unk4B0 == WEEKEVENTREG_HORSE_RACE_STATE_2) {
+            Actor_PlaySfx(&this->actor, NA_SE_VO_IN_LOST);
         } else {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_IN_JOY0);
+            Actor_PlaySfx(&this->actor, NA_SE_VO_IN_JOY0);
         }
         this->unk4A8 = 3;
     } else if (this->unk4A8 < 3) {
@@ -1366,11 +1493,11 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
     this->unk48C = 0;
     this->unk4AC = 0;
     type = ENIN_GET_TYPE(thisx);
-    this->unk4B0 = GET_RACE_FLAGS;
-    if (type == ENIN_HORSE_RIDER_BLUE_SHIRT || type == ENIN_BLUE_SHIRT) {
+    this->unk4B0 = GET_WEEKEVENTREG_HORSE_RACE_STATE;
+    if ((type == ENIN_HORSE_RIDER_BLUE_SHIRT) || (type == ENIN_BLUE_SHIRT)) {
         this->unk4AC |= 8;
     }
-    if (type == ENIN_HORSE_RIDER_YELLOW_SHIRT || type == ENIN_HORSE_RIDER_BLUE_SHIRT) {
+    if ((type == ENIN_HORSE_RIDER_YELLOW_SHIRT) || (type == ENIN_HORSE_RIDER_BLUE_SHIRT)) {
         ActorShape_Init(&this->actor.shape, 0.0f, NULL, 0.0f);
         this->unk488 = 1;
         Animation_Change(&this->skelAnime, &object_in_Anim_016A60, 1.0f, 0.0f,
@@ -1384,22 +1511,24 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
         Collider_SetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, &this->colliderJntSphElement);
         Actor_SetScale(&this->actor, 0.01f);
         this->actor.gravity = -4.0f;
-        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH(&this->actor), 0x3F);
+        this->path = SubS_GetPathByIndex(play, ENIN_GET_PATH_INDEX(&this->actor), ENIN_PATH_INDEX_NONE);
         this->unk23D = 0;
-        if (type == ENIN_YELLOW_SHIRT || type == ENIN_BLUE_SHIRT) {
-            if (GET_RACE_FLAGS == RACE_FLAG_2 || GET_RACE_FLAGS == RACE_FLAG_3) {
-                gSaveContext.save.weekEventReg[56] &= (u8)~8;
+        if ((type == ENIN_YELLOW_SHIRT) || (type == ENIN_BLUE_SHIRT)) {
+            if ((GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) ||
+                (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3)) {
+                CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                 this->unk4A8 = 0;
                 this->unk4AC |= 2;
                 func_808F35AC(this, play);
                 this->unk23C = 0;
-                D_801BDAA0 = 0;
-                if (GET_RACE_FLAGS == RACE_FLAG_2) {
+                D_801BDAA0 = false;
+
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_6);
                 } else {
                     EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_4);
                 }
-                if (GET_RACE_FLAGS == RACE_FLAG_2) {
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_2) {
                     this->skelAnime.curFrame = ((Rand_ZeroOne() * 0.6f) + 0.2f) * this->skelAnime.endFrame;
                 }
                 if (this->unk4AC & 8) {
@@ -1408,8 +1537,8 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                     this->actionFunc = func_808F5C98;
                 }
             } else {
-                if (GET_RACE_FLAGS != RACE_FLAG_START) {
-                    gSaveContext.save.weekEventReg[56] &= (u8)~8;
+                if (GET_WEEKEVENTREG_HORSE_RACE_STATE != WEEKEVENTREG_HORSE_RACE_STATE_START) {
+                    CLEAR_WEEKEVENTREG(WEEKEVENTREG_56_08);
                     this->unk23C = 0;
                     this->unk4AC |= 2;
                     if (type == ENIN_BLUE_SHIRT) {
@@ -1417,26 +1546,26 @@ void EnIn_Init(Actor* thisx, PlayState* play) {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                             this->actionFunc = func_808F5A94;
                         } else {
-                            if (gSaveContext.save.weekEventReg[52] & 1) {
+                            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
                                 Actor_Spawn(&play->actorCtx, play, ACTOR_EN_KANBAN, this->actor.world.pos.x,
                                             this->actor.world.pos.y, this->actor.world.pos.z, this->actor.shape.rot.x,
                                             this->actor.shape.rot.y, this->actor.shape.rot.z, 0xF);
-                                Actor_MarkForDeath(&this->actor);
+                                Actor_Kill(&this->actor);
                             } else {
                                 EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_0);
                                 this->actionFunc = func_808F5A94;
                             }
                         }
                     } else {
-                        if (gSaveContext.save.weekEventReg[52] & 1) {
-                            Actor_MarkForDeath(&this->actor);
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_ESCORTED_CREMIA)) {
+                            Actor_Kill(&this->actor);
                         } else {
                             EnIn_ChangeAnim(&this->skelAnime, ENIN_ANIM_7);
                             this->actionFunc = func_808F5B58;
                         }
                     }
                 } else {
-                    Actor_MarkForDeath(&this->actor);
+                    Actor_Kill(&this->actor);
                 }
             }
         } else {
@@ -1466,7 +1595,7 @@ void EnIn_Update(Actor* thisx, PlayState* play) {
         this->unk4AC &= ~0x40;
     }
     this->actionFunc(this, play);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 0x4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
     func_808F3414(this, play);
     func_808F32A0(this, play);
 }
@@ -1475,15 +1604,15 @@ void func_808F6334(EnIn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 talkState = Message_GetState(&play->msgCtx);
 
-    this->unk4C4 += this->unk4C0 != 0.0f ? 40.0f : -40.0f;
+    this->unk4C4 += (this->unk4C0 != 0.0f) ? 40.0f : -40.0f;
     this->unk4C4 = CLAMP(this->unk4C4, 0.0f, 80.0f);
 
     Matrix_Translate(this->unk4C4, 0.0f, 0.0f, MTXMODE_APPLY);
-    if ((&this->actor == player->targetActor) &&
-        !((play->msgCtx.currentTextId >= 0xFF) && (play->msgCtx.currentTextId <= 0x200)) &&
-        (talkState == TEXT_STATE_3) && (this->prevTalkState == TEXT_STATE_3)) {
+    if ((&this->actor == player->talkActor) &&
+        ((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
+        (this->prevTalkState == TEXT_STATE_3)) {
         if (!(play->state.frames & 1)) {
-            this->unk4C0 = this->unk4C0 != 0.0f ? 0.0f : 1.0f;
+            this->unk4C0 = (this->unk4C0 != 0.0f) ? 0.0f : 1.0f;
         }
     } else {
         this->unk4C0 = 0.0f;
@@ -1517,16 +1646,17 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         object_in_DL_013440,
     };
 
-    if (this->unk23C != 0 && limbIndex != 16) {
+    if ((this->unk23C != 0) && (limbIndex != 16)) {
         if (sp50[limbIndex] != NULL) {
             *dList = sp50[limbIndex];
         }
     }
-    if (this->unk4AC & 4 && limbIndex == 16) {
+    if ((this->unk4AC & 4) && (limbIndex == 16)) {
         *dList = object_in_DL_01C528;
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     if (limbIndex == 16) {
         TexturePtr sp38[] = { object_in_Tex_0035E0, object_in_Tex_004820, object_in_Tex_004C20, object_in_Tex_0043E0 };
 
@@ -1535,6 +1665,7 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     } else {
         AnimatedMat_DrawStep(play, Lib_SegmentedToVirtual(object_in_Matanimheader_001C30), this->unk4AC & 8 ? 1 : 0);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 
     if (limbIndex == 16) {
@@ -1548,9 +1679,9 @@ s32 EnIn_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
         Matrix_RotateYS(this->torsoRot.y, MTXMODE_APPLY);
         Matrix_RotateXS(this->torsoRot.x, MTXMODE_APPLY);
     }
-    if (limbIndex == 9 || limbIndex == 10 || limbIndex == 13) {
-        rot->y += (s16)(Math_SinS(this->unk376[limbIndex]) * 200.0f);
-        rot->z += (s16)(Math_CosS(this->unk39E[limbIndex]) * 200.0f);
+    if ((limbIndex == 9) || (limbIndex == 10) || (limbIndex == 13)) {
+        rot->y += (s16)(Math_SinS(this->fidgetTableY[limbIndex]) * 200.0f);
+        rot->z += (s16)(Math_CosS(this->fidgetTableZ[limbIndex]) * 200.0f);
     }
     if (this->unk4AC & 0x40) {
         if (limbIndex == 18) {
@@ -1590,21 +1721,25 @@ void EnIn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
         if (this->unk23C == 0) {
             if (!(this->unk4AC & 8)) {
                 OPEN_DISPS(play->state.gfxCtx);
+
                 if (limbIndex == 12) {
                     gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007A70);
                 }
                 if (limbIndex == 15) {
                     gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007C48);
                 }
+
                 CLOSE_DISPS(play->state.gfxCtx);
             }
         }
     }
     if (this->unk4AC & 0x20) {
         OPEN_DISPS(play->state.gfxCtx);
+
         if (limbIndex == 12) {
             gSPDisplayList(POLY_OPA_DISP++, object_in_DL_007C48);
         }
+
         CLOSE_DISPS(play->state.gfxCtx);
     }
 }
@@ -1613,9 +1748,11 @@ void EnIn_Draw(Actor* thisx, PlayState* play) {
     EnIn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gDPPipeSync(POLY_OPA_DISP++);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnIn_OverrideLimbDraw, EnIn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

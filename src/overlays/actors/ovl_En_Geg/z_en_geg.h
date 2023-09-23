@@ -7,6 +7,8 @@ struct EnGeg;
 
 typedef void (*EnGegActionFunc)(struct EnGeg*, PlayState*);
 
+#define ENGEG_FIDGET_TABLE_LEN 3
+
 typedef struct EnGeg {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -14,8 +16,8 @@ typedef struct EnGeg {
     /* 0x18C */ ColliderCylinder colliderCylinder;
     /* 0x1D8 */ ColliderSphere colliderSphere;
     /* 0x230 */ u16 unk_230;
-    /* 0x232 */ s16 unk_232[3];
-    /* 0x238 */ s16 unk_238[3];
+    /* 0x232 */ s16 fidgetTableZ[ENGEG_FIDGET_TABLE_LEN];
+    /* 0x238 */ s16 fidgetTableY[ENGEG_FIDGET_TABLE_LEN];
     /* 0x23E */ s16 unk_23E;
     /* 0x240 */ s16 unk_240;
     /* 0x242 */ s16 unk_242;
@@ -33,9 +35,9 @@ typedef struct EnGeg {
     /* 0x484 */ Vec3f unk_484;
     /* 0x490 */ Vec3s unk_490;
     /* 0x496 */ u16 unk_496;
-    /* 0x498 */ s16 unk_498;
-    /* 0x49A */ s16 unk_49A;
-    /* 0x49C */ s16 unk_49C[8];
+    /* 0x498 */ s16 csId;
+    /* 0x49A */ s16 nextCsId;
+    /* 0x49C */ s16 csIdList[8];
     /* 0x4AC */ s32 unk_4AC;
     /* 0x4B0 */ s16 unk_4B0;
     /* 0x4B4 */ Vec3f unk_4B4;
@@ -45,7 +47,5 @@ typedef struct EnGeg {
     /* 0x4E0 */ s16 unk_4E0;
     /* 0x4E4 */ Vec3f unk_4E4;
 } EnGeg; // size = 0x4F0
-
-extern const ActorInit En_Geg_InitVars;
 
 #endif // Z_EN_GEG_H

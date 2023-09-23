@@ -1,15 +1,15 @@
 ﻿<Root>
     <File Name="object_dodongo" Segment="6">
-        <Animation Name="object_dodongo_Anim_0013C4" Offset="0x13C4" />
+        <Animation Name="object_dodongo_Anim_0013C4" Offset="0x13C4" /> <!-- Original name is "da_die" -->
         <Animation Name="object_dodongo_Anim_0015F4" Offset="0x15F4" />
-        <Animation Name="object_dodongo_Anim_001A44" Offset="0x1A44" />
-        <Animation Name="object_dodongo_Anim_001F44" Offset="0x1F44" />
-        <Animation Name="object_dodongo_Anim_0028F0" Offset="0x28F0" />
-        <Animation Name="object_dodongo_Anim_003088" Offset="0x3088" />
+        <Animation Name="object_dodongo_Anim_001A44" Offset="0x1A44" /> <!-- Original name is "da_dmg" -->
+        <Animation Name="object_dodongo_Anim_001F44" Offset="0x1F44" /> <!-- Original name is "da_dmg_wait" -->
+        <Animation Name="object_dodongo_Anim_0028F0" Offset="0x28F0" /> <!-- Original name is "da_fire" -->
+        <Animation Name="object_dodongo_Anim_003088" Offset="0x3088" /> <!-- Original name is "da_fire_wait" -->
         <Animation Name="object_dodongo_Anim_003368" Offset="0x3368" />
-        <Animation Name="object_dodongo_Anim_003B14" Offset="0x3B14" />
-        <Animation Name="object_dodongo_Anim_0042C4" Offset="0x42C4" />
-        <Animation Name="object_dodongo_Anim_004C20" Offset="0x4C20" />
+        <Animation Name="object_dodongo_Anim_003B14" Offset="0x3B14" /> <!-- Original name is "da_right" -->
+        <Animation Name="object_dodongo_Anim_0042C4" Offset="0x42C4" /> <!-- Original name is "da_left" -->
+        <Animation Name="object_dodongo_Anim_004C20" Offset="0x4C20" /> <!-- Original name is "da_wait" -->
         <DList Name="object_dodongo_DL_006640" Offset="0x6640" />
         <DList Name="object_dodongo_DL_006750" Offset="0x6750" />
         <DList Name="object_dodongo_DL_006860" Offset="0x6860" />
@@ -59,10 +59,16 @@
         <Limb Name="object_dodongo_Standardlimb_008288" Type="Standard" EnumName="OBJECT_DODONGO_LIMB_1D" Offset="0x8288" />
         <Limb Name="object_dodongo_Standardlimb_008294" Type="Standard" EnumName="OBJECT_DODONGO_LIMB_1E" Offset="0x8294" />
         <Skeleton Name="object_dodongo_Skel_008318" Type="Normal" LimbType="Standard" LimbNone="OBJECT_DODONGO_LIMB_NONE" LimbMax="OBJECT_DODONGO_LIMB_MAX" EnumName="ObjectDodongoLimb" Offset="0x8318" />
-        <Animation Name="object_dodongo_Anim_008B1C" Offset="0x8B1C" />
-        <Animation Name="object_dodongo_Anim_008DE0" Offset="0x8DE0" />
-        <Animation Name="object_dodongo_Anim_009088" Offset="0x9088" />
-        <!-- <Blob Name="object_dodongo_Blob_009098" Size="0x808" Offset="0x9098" /> -->
-        <DList Name="object_dodongo_DL_0098A0" Offset="0x98A0" />
+        <Animation Name="object_dodongo_Anim_008B1C" Offset="0x8B1C" /> <!-- Original name is "da_walk" -->
+        <Animation Name="object_dodongo_Anim_008DE0" Offset="0x8DE0" /> <!-- Original name is "da_walk_start" -->
+        <Animation Name="object_dodongo_Anim_009088" Offset="0x9088" /> <!-- Original name is "da_walk_end" -->
+        
+        <!-- Fire Effect Textures -->
+        <Texture Name="gDodongoFire0Tex" OutName="dodongo_fire_0" Format="i4" Width="32" Height="32" Offset="0x90A0"/>
+        <Texture Name="gDodongoFire1Tex" OutName="dodongo_fire_1" Format="i4" Width="32" Height="32" Offset="0x92A0"/>
+        <Texture Name="gDodongoFire2Tex" OutName="dodongo_fire_2" Format="i4" Width="32" Height="32" Offset="0x94A0"/>
+        <Texture Name="gDodongoFire3Tex" OutName="dodongo_fire_3" Format="i4" Width="32" Height="32" Offset="0x96A0"/>
+
+        <DList Name="gDodongoFireDL" Offset="0x98A0" />
     </File>
 </Root>

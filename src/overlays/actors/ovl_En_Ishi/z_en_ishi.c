@@ -5,17 +5,19 @@
  */
 
 #include "z_en_ishi.h"
+#include "z64quake.h"
 #include "z64rumble.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_ishi/object_ishi.h"
+#include "overlays/actors/ovl_En_Insect/z_en_insect.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_800000)
 
 #define THIS ((EnIshi*)thisx)
 
 void EnIshi_Init(Actor* thisx, PlayState* play);
-void EnIshi_Destroy(Actor* thisx, PlayState* play);
+void EnIshi_Destroy(Actor* thisx, PlayState* play2);
 void EnIshi_Update(Actor* thisx, PlayState* play);
 
 void func_8095D804(Actor* thisx, PlayState* play);
@@ -43,7 +45,7 @@ static s16 D_8095F690 = 0;
 
 static s16 D_8095F694 = 0;
 
-const ActorInit En_Ishi_InitVars = {
+ActorInit En_Ishi_InitVars = {
     ACTOR_EN_ISHI,
     ACTORCAT_PROP,
     FLAGS,
@@ -179,7 +181,7 @@ void func_8095D804(Actor* thisx, PlayState* play) {
     if (!ENISHI_GET_8(&this->actor)) {
         phi_s4 = gameplay_field_keep_DL_0066B0;
     } else {
-        phi_s4 = object_ishi_DL_0009B0;
+        phi_s4 = gSmallRockDL;
     }
 
     temp = D_8095F6E8[ENISHI_GET_8(&this->actor)];
@@ -190,11 +192,11 @@ void func_8095D804(Actor* thisx, PlayState* play) {
         spB8.z = ((Rand_ZeroOne() - 0.5f) * 8.0f) + this->actor.world.pos.z;
         Math_Vec3f_Copy(&spC4, &this->actor.velocity);
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             spC4.x *= 0.6f;
             spC4.y *= -0.3f;
             spC4.z *= 0.6f;
-        } else if (this->actor.bgCheckFlags & 8) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             spC4.x *= -0.5f;
             spC4.y *= 0.5f;
             spC4.z *= -0.5f;
@@ -229,11 +231,11 @@ void func_8095DABC(Actor* thisx, PlayState* play) {
 
         Math_Vec3f_Copy(&spD8, &this->actor.velocity);
 
-        if (this->actor.bgCheckFlags & 1) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             spD8.x *= 0.9f;
             spD8.y *= -0.8f;
             spD8.z *= 0.9f;
-        } else if (this->actor.bgCheckFlags & 8) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             spD8.x *= -0.9f;
             spD8.y *= 0.8f;
             spD8.z *= -0.9f;
@@ -264,11 +266,11 @@ void func_8095DDA8(EnIshi* this, PlayState* play) {
     Vec3f sp2C;
 
     Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         sp2C.x += 2.0f * this->actor.velocity.x;
         sp2C.y -= 2.0f * this->actor.velocity.y;
         sp2C.z += 2.0f * this->actor.velocity.z;
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         sp2C.x -= 2.0f * this->actor.velocity.x;
         sp2C.y += 2.0f * this->actor.velocity.y;
         sp2C.z -= 2.0f * this->actor.velocity.z;
@@ -280,11 +282,11 @@ void func_8095DE9C(EnIshi* this, PlayState* play) {
     Vec3f sp2C;
 
     Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         sp2C.x += 2.0f * this->actor.velocity.x;
         sp2C.y -= 2.0f * this->actor.velocity.y;
         sp2C.z += 2.0f * this->actor.velocity.z;
-    } else if (this->actor.bgCheckFlags & 8) {
+    } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
         sp2C.x -= 2.0f * this->actor.velocity.x;
         sp2C.y += 2.0f * this->actor.velocity.y;
         sp2C.z -= 2.0f * this->actor.velocity.z;
@@ -317,7 +319,7 @@ void func_8095DFF0(EnIshi* this, PlayState* play) {
             Matrix_MultVecY(1.0f, &sp30);
             sp2C = Math3D_Parallel(&sp30, &D_8095F778);
             if (sp2C < 0.707f) {
-                temp_v1_2 = Math_FAtan2F(sp30.z, sp30.x) - sp3C->world.rot.y;
+                temp_v1_2 = Math_Atan2S_XY(sp30.z, sp30.x) - sp3C->world.rot.y;
                 if (ABS_ALT(temp_v1_2) > 0x4000) {
                     sp3C->world.rot.y = BINANG_ROT180(sp3C->world.rot.y);
                 }
@@ -352,8 +354,9 @@ void func_8095E204(EnIshi* this, PlayState* play) {
 
     for (i = 0; i < 3; i++) {
         if (Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ACTOR_EN_INSECT, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 1,
-                                          this->actor.cutscene, this->actor.unk20, NULL) == NULL) {
+                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0,
+                                          ENINSECT_PARAMS(true), this->actor.csId, this->actor.halfDaysBits,
+                                          NULL) == NULL) {
             break;
         }
     }
@@ -385,7 +388,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain[sp34]);
 
-    if (play->csCtx.state != 0) {
+    if (play->csCtx.state != CS_STATE_IDLE) {
         this->actor.uncullZoneForward += 1000.0f;
     }
 
@@ -397,7 +400,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     func_8095D6E0(&this->actor, play);
 
     if ((sp34 == 1) && Flags_GetSwitch(play, ENISHI_GET_FE00(&this->actor))) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -414,7 +417,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
     this->actor.shape.yOffset = D_8095F6C0[sp34];
 
     if ((sp30 == 0) && !func_8095D758(this, play, 0)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -424,7 +427,7 @@ void EnIshi_Init(Actor* thisx, PlayState* play) {
 
     this->unk_196 = Object_GetIndex(&play->objectCtx, D_8095F6E8[ENISHI_GET_8(&this->actor)]);
     if (this->unk_196 < 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -489,7 +492,7 @@ void func_8095E660(EnIshi* this, PlayState* play) {
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp38], D_8095F6D0[sp38]);
         D_8095F6D8[sp38](&this->actor, play);
         D_8095F6E0[sp38](this, play);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
@@ -512,9 +515,9 @@ void func_8095E660(EnIshi* this, PlayState* play) {
 
         if ((this->actor.xzDistToPlayer < 90.0f) && (sp30 == 0)) {
             if (sp38 == 1) {
-                Actor_PickUp(&this->actor, play, GI_NONE, 80.0f, 20.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_NONE, 80.0f, 20.0f);
             } else {
-                Actor_PickUp(&this->actor, play, GI_NONE, 50.0f, 10.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 10.0f);
             }
         }
     }
@@ -532,7 +535,7 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
     s32 sp2C;
 
     if (Actor_HasNoParent(&this->actor, play)) {
-        this->actor.room = play->roomCtx.currRoom.num;
+        this->actor.room = play->roomCtx.curRoom.num;
         if (ENISHI_GET_1(&this->actor) == 1) {
             Flags_SetSwitch(play, ENISHI_GET_FE00(&this->actor));
         }
@@ -540,7 +543,9 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
         func_8095E14C(this);
         func_8095E180(&this->actor.velocity, D_8095F6C8[ENISHI_GET_1(&this->actor)]);
         Actor_UpdatePos(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                    UPDBGCHECKINFO_FLAG_80);
     } else {
         sp30.x = this->actor.world.pos.x;
         sp30.y = this->actor.world.pos.y + 20.0f;
@@ -553,8 +558,8 @@ void func_8095E95C(EnIshi* this, PlayState* play) {
 void func_8095EA70(EnIshi* this) {
     f32 sp24;
 
-    this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-    this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+    this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+    this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
     if (!ENISHI_GET_1(&this->actor)) {
         sp24 = Rand_ZeroOne() - 0.9f;
         D_8095F690 = sp24 * 11000.0f;
@@ -584,29 +589,30 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 
     this->unk_194--;
 
-    if ((this->actor.bgCheckFlags & 9) || temp_v0 || (this->unk_194 <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_WALL)) || temp_v0 || (this->unk_194 <= 0)) {
         func_8095DF90(this, play);
         D_8095F6D8[sp70](&this->actor, play);
 
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp70], D_8095F6D0[sp70]);
             D_8095F6E0[sp70](this, play);
         }
 
         if (sp70 == 1) {
-            s16 quake = Quake_Add(GET_ACTIVE_CAM(play), 3);
+            s16 quakeIndex = Quake_Request(GET_ACTIVE_CAM(play), QUAKE_TYPE_3);
 
-            Quake_SetSpeed(quake, 0x4350);
-            Quake_SetQuakeValues(quake, 3, 0, 0, 0);
-            Quake_SetCountdown(quake, 7);
+            Quake_SetSpeed(quakeIndex, 17232);
+            Quake_SetPerturbations(quakeIndex, 3, 0, 0, 0);
+            Quake_SetDuration(quakeIndex, 7);
+
             Rumble_Request(this->actor.xyzDistToPlayerSq, 255, 20, 150);
         }
 
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         if (sp70 == 0) {
             sp58.x = this->actor.world.pos.x;
             sp58.y = this->actor.world.pos.y + this->actor.depthInWater;
@@ -637,7 +643,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
         D_8095F694 >>= 2;
 
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
-        this->actor.bgCheckFlags &= ~0x40;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
     }
 
     Math_StepToF(&this->actor.shape.yOffset, 0.0f, 2.0f);
@@ -646,7 +652,9 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
     Actor_UpdatePos(&this->actor);
     this->actor.shape.rot.x += D_8095F690;
     this->actor.shape.rot.y += D_8095F694;
-    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                UPDBGCHECKINFO_FLAG_80);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider.base);
@@ -654,7 +662,7 @@ void func_8095EBDC(EnIshi* this, PlayState* play) {
 
 void func_8095F060(EnIshi* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_8095F0A4;
 }
 
@@ -662,15 +670,15 @@ void func_8095F0A4(EnIshi* this, PlayState* play) {
     s32 pad;
     s32 sp28 = ENISHI_GET_1(&this->actor);
 
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, D_8095F6D4[sp28], D_8095F6D0[sp28]);
         D_8095F6D8[sp28](&this->actor, play);
         D_8095F6E0[sp28](this, play);
         this->actor.draw = NULL;
         func_8095F180(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -679,10 +687,10 @@ void func_8095F180(EnIshi* this) {
 }
 
 void func_8095F194(EnIshi* this, PlayState* play) {
-    if (this->actor.cutscene < 0) {
-        Actor_MarkForDeath(&this->actor);
-    } else if (ActorCutscene_GetCurrentIndex() != this->actor.cutscene) {
-        Actor_MarkForDeath(&this->actor);
+    if (this->actor.csId <= CS_ID_NONE) {
+        Actor_Kill(&this->actor);
+    } else if (CutsceneManager_GetCurrentCsId() != this->actor.csId) {
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -704,7 +712,7 @@ void func_8095F210(EnIshi* this, PlayState* play) {
     if (this->actor.projectedPos.z < 1300.0f) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         sp28 = (1300.0f - this->actor.projectedPos.z) * 2.55f;
 
@@ -724,7 +732,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
     if ((this->actor.projectedPos.z <= 2150.0f) || ((this->unk_197 & 1) && (this->actor.projectedPos.z < 2250.0f))) {
         this->actor.shape.shadowAlpha = 160;
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08, D_801AEFA0);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -735,7 +743,7 @@ void func_8095F36C(EnIshi* this, PlayState* play) {
 
         this->actor.shape.shadowAlpha = sp20 * 0.627451f;
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
         gSPSegment(POLY_XLU_DISP++, 0x08, D_801AEF88);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -755,5 +763,5 @@ void func_8095F61C(Actor* thisx, PlayState* play) {
 }
 
 void func_8095F654(Actor* thisx, PlayState* play) {
-    Gfx_DrawDListOpa(play, object_ishi_DL_0009B0);
+    Gfx_DrawDListOpa(play, gSmallRockDL);
 }

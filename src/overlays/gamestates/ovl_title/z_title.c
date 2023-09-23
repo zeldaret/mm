@@ -5,10 +5,12 @@
  */
 
 #include "z_title.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "overlays/gamestates/ovl_opening/z_opening.h"
 #include "misc/nintendo_rogo_static/nintendo_rogo_static.h"
 
-void Title_UpdateCounters(TitleContext* this) {
+void ConsoleLogo_UpdateCounters(ConsoleLogoState* this) {
     if ((this->coverAlpha == 0) && (this->visibleDuration != 0)) {
         this->timer--;
         this->visibleDuration--;
@@ -32,7 +34,7 @@ void Title_UpdateCounters(TitleContext* this) {
     this->ult++;
 }
 
-void Title_RenderView(TitleContext* this, f32 x, f32 y, f32 z) {
+void ConsoleLogo_RenderView(ConsoleLogoState* this, f32 x, f32 y, f32 z) {
     View* view = &this->view;
     Vec3f eye;
     Vec3f at;
@@ -44,15 +46,15 @@ void Title_RenderView(TitleContext* this, f32 x, f32 y, f32 z) {
     up.x = up.z = 0.0f;
     at.x = at.y = at.z = 0.0f;
     up.y = 1.0f;
-    func_8013F0D0(view, 30.0f, 10.0f, 12800.0f);
-    View_SetViewOrientation(view, &eye, &at, &up);
-    View_RenderView(view, 0xF);
+    View_SetPerspective(view, 30.0f, 10.0f, 12800.0f);
+    View_LookAt(view, &eye, &at, &up);
+    View_Apply(view, VIEW_ALL);
 }
 
-void Title_Draw(GameState* thisx) {
-    static s16 titleRotation = 0;
+void ConsoleLogo_Draw(GameState* thisx) {
+    static s16 sTitleRotation = 0;
     static Lights1 sTitleLights = gdSPDefLights1(100, 100, 100, 255, 255, 255, 69, 69, 69);
-    TitleContext* this = (TitleContext*)thisx;
+    ConsoleLogoState* this = (ConsoleLogoState*)thisx;
     u16 y;
     u16 idx;
     Vec3f lightDir;
@@ -60,7 +62,7 @@ void Title_Draw(GameState* thisx) {
     Vec3f eye;
     s32 pad[2];
 
-    OPEN_DISPS(this->gameState.gfxCtx);
+    OPEN_DISPS(this->state.gfxCtx);
 
     lightDir.x = 69.0f;
     lightDir.y = 69.0f;
@@ -74,20 +76,20 @@ void Title_Draw(GameState* thisx) {
     eye.y = 4002.5417f;
     eye.z = 1119.0837f;
 
-    Hilite_DrawOpa(&object, &eye, &lightDir, this->gameState.gfxCtx);
+    Hilite_DrawOpa(&object, &eye, &lightDir, this->state.gfxCtx);
 
     gSPSetLights1(POLY_OPA_DISP++, sTitleLights);
 
-    Title_RenderView(this, 0.0f, 150.0f, 300.0f);
-    func_8012C28C(this->gameState.gfxCtx);
+    ConsoleLogo_RenderView(this, 0.0f, 150.0f, 300.0f);
+    Gfx_SetupDL25_Opa(this->state.gfxCtx);
     Matrix_Translate(-53.0f, -5.0f, 0.0f, MTXMODE_NEW);
     Matrix_Scale(1.0f, 1.0f, 1.0f, MTXMODE_APPLY);
-    Matrix_RotateZYX(0, titleRotation, 0, MTXMODE_APPLY);
+    Matrix_RotateZYX(0, sTitleRotation, 0, MTXMODE_APPLY);
 
-    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->gameState.gfxCtx), G_MTX_LOAD);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(this->state.gfxCtx), G_MTX_LOAD);
     gSPDisplayList(POLY_OPA_DISP++, gNintendo64LogoNDL);
 
-    func_8012C628(this->gameState.gfxCtx);
+    Gfx_SetupDL39_Opa(this->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetCycleType(POLY_OPA_DISP++, G_CYC_2CYCLE);
@@ -109,71 +111,67 @@ void Title_Draw(GameState* thisx) {
                             1 << 10, 1 << 10);
     }
 
-    func_800FC444(this->gameState.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
+    Environment_FillScreen(this->state.gfxCtx, 0, 0, 0, this->coverAlpha, 2);
 
-    titleRotation += 300;
+    sTitleRotation += 300;
 
-    CLOSE_DISPS(this->gameState.gfxCtx);
+    CLOSE_DISPS(this->state.gfxCtx);
 }
 
-void Title_Main(GameState* thisx) {
-    TitleContext* this = (TitleContext*)thisx;
+void ConsoleLogo_Main(GameState* thisx) {
+    ConsoleLogoState* this = (ConsoleLogoState*)thisx;
 
-    func_8012CF0C(this->gameState.gfxCtx, true, true, 0, 0, 0);
+    func_8012CF0C(this->state.gfxCtx, true, true, 0, 0, 0);
 
-    OPEN_DISPS(this->gameState.gfxCtx);
+    OPEN_DISPS(this->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x01, this->staticSegment);
 
-    Title_UpdateCounters(this);
-    Title_Draw(&this->gameState);
+    ConsoleLogo_UpdateCounters(this);
+    ConsoleLogo_Draw(&this->state);
     if (this->exit) {
-        gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-        gSaveContext.nightSeqIndex = 0xFF;
-        gSaveContext.gameMode = 1;
+        gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+        gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
+        gSaveContext.gameMode = GAMEMODE_TITLE_SCREEN;
 
-        {
-            GameState* gameState = &this->gameState;
-            gameState->running = false;
-        }
-        SET_NEXT_GAMESTATE(&this->gameState, Opening_Init, OpeningContext);
+        STOP_GAMESTATE(&this->state);
+        SET_NEXT_GAMESTATE(&this->state, TitleSetup_Init, sizeof(TitleSetupState));
     }
 
-    CLOSE_DISPS(this->gameState.gfxCtx);
+    CLOSE_DISPS(this->state.gfxCtx);
 }
 
-void Title_Destroy(GameState* thisx) {
-    TitleContext* this = (TitleContext*)thisx;
+void ConsoleLogo_Destroy(GameState* thisx) {
+    ConsoleLogoState* this = (ConsoleLogoState*)thisx;
 
-    Sram_InitSram(&this->gameState, &this->sramCtx);
+    Sram_InitSram(&this->state, &this->sramCtx);
     ShrinkWindow_Destroy();
     CIC6105_Nop80081828();
 }
 
-void Title_Init(GameState* thisx) {
-    TitleContext* this = (TitleContext*)thisx;
-    uintptr_t segmentSize =
-        (uintptr_t)_nintendo_rogo_staticSegmentRomEnd - (uintptr_t)_nintendo_rogo_staticSegmentRomStart;
+void ConsoleLogo_Init(GameState* thisx) {
+    ConsoleLogoState* this = (ConsoleLogoState*)thisx;
+    uintptr_t segmentSize = SEGMENT_ROM_SIZE(nintendo_rogo_static);
 
-    this->staticSegment = THA_AllocEndAlign16(&this->gameState.heap, segmentSize);
-    DmaMgr_SendRequest0(this->staticSegment, (uintptr_t)_nintendo_rogo_staticSegmentRomStart, segmentSize);
+    this->staticSegment = THA_AllocTailAlign16(&this->state.heap, segmentSize);
+    DmaMgr_SendRequest0(this->staticSegment, SEGMENT_ROM_START(nintendo_rogo_static), segmentSize);
 
-    Game_SetFramerateDivisor(thisx, 1);
-    Matrix_Init(thisx);
+    GameState_SetFramerateDivisor(&this->state, 1);
+    Matrix_Init(&this->state);
     ShrinkWindow_Init();
-    View_Init(&this->view, thisx->gfxCtx);
+    View_Init(&this->view, this->state.gfxCtx);
 
-    thisx->main = Title_Main;
-    thisx->destroy = Title_Destroy;
+    this->state.main = ConsoleLogo_Main;
+    this->state.destroy = ConsoleLogo_Destroy;
     this->exit = false;
 
-    if (!(Padmgr_GetControllerBitmask() & 1)) {
+    if (!(PadMgr_GetValidControllersMask() & 1)) {
         gSaveContext.fileNum = 0xFEDC;
     } else {
         gSaveContext.fileNum = 0xFF;
     }
 
-    gSaveContext.unk_3F3F = true;
+    gSaveContext.flashSaveAvailable = true;
     Sram_Alloc(thisx, &this->sramCtx);
     this->ult = 0;
     this->timer = 20;

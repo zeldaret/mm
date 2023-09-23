@@ -3,8 +3,8 @@
 
 #include "global.h"
 
-#define OBJMURE3_PARAMS_7F(thisx) ((thisx)->params & 0x7F)
-#define OBJMURE3_PARAMS_RUPEEINDEX(thisx) (((thisx)->params >> 13) & 7)
+#define OBJMURE3_PARAM_7F(thisx) ((thisx)->params & 0x7F)
+#define OBJMURE3_PARAM_RUPEEINDEX(thisx) (((thisx)->params >> 13) & 7)
 
 struct ObjMure3;
 
@@ -18,7 +18,5 @@ typedef struct ObjMure3 {
     /* 0x160 */ Actor* unk160;
     /* 0x164 */ u16 unk164;
 } ObjMure3; // size = 0x168
-
-extern const ActorInit Obj_Mure3_InitVars;
 
 #endif // Z_OBJ_MURE3_H

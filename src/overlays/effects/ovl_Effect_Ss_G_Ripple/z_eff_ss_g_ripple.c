@@ -27,7 +27,7 @@ u32 EffectSsGRipple_Init(PlayState* play, u32 index, EffectSs* this, void* initP
 void EffectSsGRipple_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsGRipple_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_G_Ripple_InitVars = {
+EffectSsInit Effect_Ss_G_Ripple_InitVars = {
     EFFECT_SS_G_RIPPLE,
     EffectSsGRipple_Init,
 };
@@ -93,7 +93,7 @@ void EffectSsGRipple_DrawRipple(PlayState* play2, EffectSs* this, TexturePtr tex
 
     if (mtx != NULL) {
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C974(gfxCtx);
+        Gfx_SetupDL60_XluNoCD(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB,
                         this->rPrimColorA);
         gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rEnvColorA);

@@ -2,6 +2,8 @@
 #define Z_EN_SSH_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Si/z_en_si.h"
+#include "overlays/actors/ovl_En_Sth/z_en_sth.h"
 
 struct EnSsh;
 
@@ -55,7 +57,5 @@ typedef struct EnSsh {
     /* 0x5C6 */ s16 blinkState;
     /* 0x5C8 */ s16 blinkTimer;
 } EnSsh; // size = 0x5CC
-
-extern const ActorInit En_Ssh_InitVars;
 
 #endif // Z_EN_SSH_H

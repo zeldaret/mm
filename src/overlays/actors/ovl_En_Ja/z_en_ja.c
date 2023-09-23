@@ -7,7 +7,7 @@
 #include "z_en_ja.h"
 #include "objects/object_boj/object_boj.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnJa*)thisx)
 
@@ -50,7 +50,7 @@ s32 D_80BC366C[] = {
     0x0E29440C, 0x170E2945, 0x0C180E29, 0x460C170E, 0x29470C09, 0x0000180E, 0x293B0C09, 0x00001000,
 };
 
-const ActorInit En_Ja_InitVars = {
+ActorInit En_Ja_InitVars = {
     ACTOR_EN_JA,
     ACTORCAT_NPC,
     FLAGS,
@@ -123,8 +123,9 @@ void func_80BC1984(EnJa* this, PlayState* play) {
 s32 func_80BC19FC(EnJa* this, PlayState* play) {
     s32 ret = false;
 
-    if ((this->unk_340 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-        SubS_UpdateFlags(&this->unk_340, 0, 7);
+    if (((this->unk_340 & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
         this->actionFunc = func_80BC22F4;
         ret = true;
     }
@@ -177,7 +178,7 @@ s32 func_80BC1B60(EnJa* this, PlayState* play) {
     this->unk_35A = CLAMP(this->unk_35A, -0x1C70, 0x1C70);
 
     if (this->unk_1D8.player->actor.id == ACTOR_PLAYER) {
-        sp40.y = this->unk_1D8.player->bodyPartsPos[7].y + 3.0f;
+        sp40.y = this->unk_1D8.player->bodyPartsPos[PLAYER_BODYPART_HEAD].y + 3.0f;
     } else {
         Math_Vec3f_Copy(&sp40, &this->unk_1D8.player->actor.focus.pos);
     }
@@ -220,7 +221,7 @@ void func_80BC1E40(EnJa* this, PlayState* play) {
     f32 phi_f0;
 
     if (((play->msgCtx.currentTextId < 0xFF) || (play->msgCtx.currentTextId > 0x200)) && (talkState == TEXT_STATE_3) &&
-        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->targetActor)) {
+        (this->prevTalkState == TEXT_STATE_3) && (&this->actor == player->talkActor)) {
         if ((play->state.frames % 2) == 0) {
             if (this->unk_348 != 0.0f) {
                 this->unk_348 = 0.0f;
@@ -243,7 +244,7 @@ s32 func_80BC1FC8(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
 
     if (func_80BC1AE0(this, play)) {
-        SubS_UpdateFlags(&this->unk_340, 3, 7);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_340 |= 0x10;
         func_80BC192C(this, 5);
         func_80BC2EA4(this);
@@ -261,7 +262,7 @@ s32 func_80BC203C(EnJa* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         } else {
             func_80BC192C(this, 4);
         }
-        SubS_UpdateFlags(&this->unk_340, 3, 7);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->actor.shape.shadowDraw = NULL;
         this->unk_340 |= 0x50;
         ret = true;
@@ -301,15 +302,15 @@ void func_80BC2150(EnJa* this, PlayState* play) {
 void func_80BC21A8(EnJa* this, PlayState* play) {
     ScheduleOutput sp18;
 
-    this->unk_35C = REG(15) + ((void)0, gSaveContext.save.daySpeed);
+    this->unk_35C = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
     if (!Schedule_RunScript(play, D_80BC35F0, &sp18) ||
         ((this->unk_1D8.unk_00 != sp18.result) && !func_80BC20D0(this, play, &sp18))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp18.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
     this->unk_1D8.unk_00 = sp18.result;
     func_80BC2150(this, play);
@@ -335,7 +336,7 @@ s32* func_80BC2274(EnJa* this, PlayState* play) {
 void func_80BC22F4(EnJa* this, PlayState* play) {
     if (func_8010BF58(&this->actor, play, func_80BC2274(this, play), this->unk_368, &this->unk_1D8.unk_04)) {
         this->unk_340 &= ~8;
-        SubS_UpdateFlags(&this->unk_340, 3, 7);
+        SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
         this->unk_1D8.unk_04 = 0;
         this->unk_340 |= 0x10;
         this->actor.shape.rot.y = this->actor.world.rot.y;
@@ -353,10 +354,10 @@ void EnJa_Init(Actor* thisx, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, DamageTable_Get(0x16), &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
     this->actor.uncullZoneForward = 800.0f;
     this->actor.gravity = 0.0f;
-    SubS_UpdateFlags(&this->unk_340, 0, 7);
+    SubS_SetOfferMode(&this->unk_340, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
     this->unk_340 |= 0x10;
     this->unk_1D8.unk_00 = 0;
     this->unk_368 = NULL;
@@ -385,11 +386,11 @@ void EnJa_Update(Actor* thisx, PlayState* play) {
 
         radius = this->collider.dim.radius + 30;
         height = this->collider.dim.height + 10;
-        func_8013C964(&this->actor, play, radius, height, PLAYER_AP_NONE, this->unk_340 & 7);
+        SubS_Offer(&this->actor, play, radius, height, PLAYER_IA_NONE, this->unk_340 & SUBS_OFFER_MODE_MASK);
 
         if (this->unk_1D8.unk_00 != 2) {
             Actor_MoveWithGravity(&this->actor);
-            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
         }
         func_80BC1984(this, play);
     }
@@ -594,7 +595,7 @@ void EnJa_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_1D8.unk_00 != 0) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPSegment(POLY_OPA_DISP++, 0x08,
                    Gfx_EnvColor(play->state.gfxCtx, D_80BC37AC[phi_t2].r, D_80BC37AC[phi_t2].g, D_80BC37AC[phi_t2].b,

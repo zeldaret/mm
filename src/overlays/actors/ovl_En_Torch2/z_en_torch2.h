@@ -18,7 +18,7 @@ typedef enum {
     /* 1 */ TORCH2_PARAM_GORON,
     /* 2 */ TORCH2_PARAM_ZORA,
     /* 3 */ TORCH2_PARAM_DEKU,
-    /* 4 */ TORCH2_PARAM_FIERCE_DEITY,
+    /* 4 */ TORCH2_PARAM_FIERCE_DEITY
 } EnTorch2Param;
 
 typedef enum {
@@ -26,9 +26,7 @@ typedef enum {
     /* 1 */ TORCH2_STATE_FADING_IN,
     /* 2 */ TORCH2_STATE_SOLID,
     /* 3 */ TORCH2_STATE_IDLE,
-    /* 4 */ TORCH2_STATE_DYING,
+    /* 4 */ TORCH2_STATE_DYING
 } EnTorch2State;
-
-extern const ActorInit En_Torch2_InitVars;
 
 #endif // Z_EN_TORCH2_H

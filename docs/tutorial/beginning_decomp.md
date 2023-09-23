@@ -27,7 +27,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play);
 
 // --------------- 4 ---------------
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -122,8 +122,6 @@ typedef struct EnRecepgirl {
     /* 0x02AC */ char unk_2AC[0x8];
 } EnRecepgirl; // size = 0x2B4
 
-extern const ActorInit En_Recepgirl_InitVars;
-
 #endif // Z_EN_RECEPGIRL_H
 ```
 
@@ -177,7 +175,7 @@ The Init function sets up the various components of the actor when it is first l
 
 The first stage of decompilation is done by a program called mips_to_c, often referred to as mips2c, which constructs a C interpretation of the assembly code based on reading it very literally. This means that considerable cleanup will be required to turn it into something that firstly compiles at all, and secondly looks like a human wrote it, let alone a Zelda developer from the late '90s.
 
-The web version of mips2c can be found [here](https://simonsoftware.se/other/mips_to_c.py). This was [covered in the OoT tutorial](https://github.com/zeldaret/oot/blob/master/docs/tutorial/beginning_decomp.md). We shall instead use the repository. Clone [the mips_to_c repository](https://github.com/matt-kempster/mips_to_c) into a separate directory (we will assume on the same level as the `mm/` directory). Since it's Python, we don't have to do any compilation or anything in the mips_to_c directory.
+The web version of mips2c can be found [here](https://simonsoftware.se/other/mips_to_c.py). This was [covered in the OoT tutorial](https://github.com/zeldaret/oot/blob/main/docs/tutorial/beginning_decomp.md). We shall instead use the repository. Clone [the mips_to_c repository](https://github.com/matt-kempster/mips_to_c) into a separate directory (we will assume on the same level as the `mm/` directory). Since it's Python, we don't have to do any compilation or anything in the mips_to_c directory.
 
 Since the actor depends on the rest of the codebase, we can't expect to get much intelligible out of mips2c without giving it some context. We make this using a Python script in the `tools` directory called `m2ctx.py`, so run
 
@@ -337,7 +335,7 @@ For now, we do not want to consider the data that mips2c has kindly imported for
 
 ```C
 #if 0
-const ActorInit En_Recepgirl_InitVars = {
+ActorInit En_Recepgirl_InitVars = {
     ACTOR_EN_RECEPGIRL,
     ACTORCAT_NPC,
     FLAGS,
@@ -688,7 +686,7 @@ as our first guess. This doesn't look unreasonable... the question is, does it m
 
 Once preliminary cleanup and struct filling is done, most time spent matching functions is done by comparing the original code with the code you have compiled. This is aided by a program called `diff.py`.
 
-In order to use `diff.py` with the symbol names, we need a copy of the code to compare against. In MM this is done as part of `make init`, and you can regenerate the `expected` directory (which is simply a known-good copy of `build` directory) by running `make diff-init`, which will check for an OK ROM and copy the build directory over. (Of course you need an OK ROM to do this; worst-case, you can checkout master and do a complete rebuild to get it). (You need to remake `expected` if you want to diff a function you have renamed: `diff.py` looks in the mapfiles for the function name, which won't work if the name has changed!)
+In order to use `diff.py` with the symbol names, we need a copy of the code to compare against. In MM this is done as part of `make init`, and you can regenerate the `expected` directory (which is simply a known-good copy of `build` directory) by running `make diff-init`, which will check for an OK ROM and copy the build directory over. (Of course you need an OK ROM to do this; worst-case, you can checkout main and do a complete rebuild to get it). (You need to remake `expected` if you want to diff a function you have renamed: `diff.py` looks in the mapfiles for the function name, which won't work if the name has changed!)
 
 Now, we run diff on the function name: in the main directory,
 

@@ -11,7 +11,7 @@ typedef s32 (*EnHorseGameCheckUnkFunc)(struct EnHorseGameCheck*, PlayState*);
 #define ENHORSEGAMECHECK_GET_FF(thisx) ((thisx)->params & 0xFF)
 #define ENHORSEGAMECHECK_GET_FF00(thisx) (((thisx)->params & 0xFF00) >> 8)
 
-enum {
+typedef enum {
     /*  0 */ ENHORSEGAMECHECK_FF_0,
     /*  1 */ ENHORSEGAMECHECK_FF_1,
     /*  2 */ ENHORSEGAMECHECK_FF_2,
@@ -22,24 +22,8 @@ enum {
     /*  7 */ ENHORSEGAMECHECK_FF_7,
     /*  8 */ ENHORSEGAMECHECK_FF_8,
     /*  9 */ ENHORSEGAMECHECK_FF_9,
-    /* 10 */ ENHORSEGAMECHECK_FF_MAX,
-};
-
-#define RACE_FLAG_END 0
-#define RACE_FLAG_START 1
-#define RACE_FLAG_2 2
-#define RACE_FLAG_3 3
-#define RACE_FLAG_4 4
-#define RACE_FLAGS 7
-
-#define GET_RACE_FLAGS (gSaveContext.save.weekEventReg[92] & RACE_FLAGS)
-
-#define SET_RACE_FLAGS(flag)                                                                                        \
-    {                                                                                                               \
-        gSaveContext.save.weekEventReg[92] &= (u8)~RACE_FLAGS;                                                      \
-        gSaveContext.save.weekEventReg[92] =                                                                        \
-            gSaveContext.save.weekEventReg[92] | (u8)((gSaveContext.save.weekEventReg[92] & ~RACE_FLAGS) | (flag)); \
-    } (void)0
+    /* 10 */ ENHORSEGAMECHECK_FF_MAX
+} EnHorseGameCheckParam;
 
 typedef struct EnHorseGameCheck {
     /* 0x000 */ DynaPolyActor dyna;
@@ -54,7 +38,5 @@ typedef struct EnHorseGameCheck {
     /* 0x17C */ s32 unk_17C;
     /* 0x180 */ UNK_TYPE1 pad180[0x38];
 } EnHorseGameCheck; // size = 0x1B8
-
-extern const ActorInit En_Horse_Game_Check_InitVars;
 
 #endif // Z_EN_HORSE_GAME_CHECK_H

@@ -15,7 +15,7 @@ void OceffWipe2_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe2_Update(Actor* thisx, PlayState* play);
 void OceffWipe2_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Oceff_Wipe2_InitVars = {
+ActorInit Oceff_Wipe2_InitVars = {
     ACTOR_OCEFF_WIPE2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -53,7 +53,7 @@ void OceffWipe2_Update(Actor* thisx, PlayState* play) {
     if (this->timer < 100) {
         this->timer++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -72,7 +72,7 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
     vtxPtr = sEponaSongFrustumVtx;
 
     if (this->timer < 32) {
-        z = Math_SinS(this->timer << 9) * 1220.0f;
+        z = Math_SinS(this->timer * 0x200) * 1220.0f;
     } else {
         z = 1220.0f;
     }
@@ -89,7 +89,7 @@ void OceffWipe2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     Matrix_Translate(eye.x + quakeOffset.x, eye.y + quakeOffset.y, eye.z + quakeOffset.z, MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);

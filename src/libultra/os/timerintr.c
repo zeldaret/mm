@@ -1,6 +1,6 @@
 #include "global.h"
 
-OSTimer D_8009E590;
+OSTimer __osBaseTimer;
 OSTime __osCurrentTime;
 u32 __osBaseCounter;
 u32 __osViIntrCount;
@@ -8,7 +8,7 @@ u32 __osTimerCounter;
 s32 D_8009E5C8[2]; // dummy bss padding required
 OSPifRam __osPfsPifRam;
 
-OSTimer* __osTimerList = &D_8009E590;
+OSTimer* __osTimerList = &__osBaseTimer;
 
 void __osTimerServicesInit(void) {
     __osCurrentTime = 0;
@@ -29,7 +29,7 @@ void __osTimerInterrupt(void) {
     if (__osTimerList->next == __osTimerList) {
         return;
     }
-    while (1) {
+    while (true) {
         t = __osTimerList->next;
         if (t == __osTimerList) {
             __osSetCompare(0);
@@ -84,9 +84,8 @@ OSTime __osInsertTimer(OSTimer* t) {
     savedMask = __osDisableInt();
 
     for (timep = __osTimerList->next, tim = t->value; timep != __osTimerList && tim > timep->value;
-         tim -= timep->value, timep = timep->next) {
-        ;
-    }
+         tim -= timep->value, timep = timep->next) {}
+
     t->value = tim;
     if (timep != __osTimerList) {
         timep->value -= tim;

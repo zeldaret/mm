@@ -21,7 +21,7 @@ typedef struct EnGgStruct {
     /* 0x40 */ s32 unk_40;
     /* 0x44 */ s32 unk_44;
     /* 0x48 */ u8 unk_48;
-} EnGgStruct; // size == 0x4C
+} EnGgStruct; // size = 0x4C
 
 typedef struct EnGg {
     /* 0x000 */ Actor actor;
@@ -34,8 +34,8 @@ typedef struct EnGg {
     /* 0x25C */ Vec3s morphTable[20];
     /* 0x2D4 */ UNK_TYPE1 unk_2D4[0x6];
     /* 0x2DA */ u8 unk_2DA;
-    /* 0x2DB */ u8 unk_2DB;
-    /* 0x2DC */ s16 unk_2DC;
+    /* 0x2DB */ u8 cueId;
+    /* 0x2DC */ s16 csId;
     /* 0x2DE */ UNK_TYPE1 unk2DE[4];
     /* 0x2E2 */ s16 unk_2E2;
     /* 0x2E4 */ s16 unk_2E4;
@@ -56,7 +56,5 @@ typedef struct EnGg {
     /* 0x338 */ Vec3f unk_338;
     /* 0x344 */ EnGgStruct unk_344;
 } EnGg; // size = 0x390
-
-extern const ActorInit En_Gg_InitVars;
 
 #endif // Z_EN_GG_H

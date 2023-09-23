@@ -1,20 +1,20 @@
 #include "global.h"
 
-void osSetThreadPri(OSThread* t, OSPri p) {
+void osSetThreadPri(OSThread* thread, OSPri p) {
     register u32 saveMask;
 
     saveMask = __osDisableInt();
 
-    if (t == NULL) {
-        t = __osRunningThread;
+    if (thread == NULL) {
+        thread = __osRunningThread;
     }
 
-    if (t->priority != p) {
-        t->priority = p;
+    if (thread->priority != p) {
+        thread->priority = p;
 
-        if (t != __osRunningThread && t->state != 1) {
-            __osDequeueThread(t->queue, t);
-            __osEnqueueThread(t->queue, t);
+        if (thread != __osRunningThread && thread->state != 1) {
+            __osDequeueThread(thread->queue, thread);
+            __osEnqueueThread(thread->queue, thread);
         }
 
         if (__osRunningThread->priority < __osRunQueue->priority) {

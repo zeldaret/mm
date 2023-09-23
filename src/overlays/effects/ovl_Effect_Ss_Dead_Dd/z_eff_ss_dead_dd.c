@@ -25,7 +25,7 @@ u32 EffectSsDeadDd_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
+EffectSsInit Effect_Ss_Dead_Dd_InitVars = {
     EFFECT_SS_DEAD_DD,
     EffectSsDeadDd_Init,
 };
@@ -109,21 +109,20 @@ void EffectSsDeadDd_Draw(PlayState* play, u32 index, EffectSs* this) {
     mtx = SkinMatrix_MtxFToNewMtx(gfxCtx, &mfResult);
 
     if (mtx != NULL) {
-        func_8012C974(gfxCtx);
+        Gfx_SetupDL60_XluNoCD(gfxCtx);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, this->rPrimColorR, this->rPrimColorG, this->rPrimColorB, this->rAlpha);
         gDPSetEnvColor(POLY_XLU_DISP++, this->rEnvColorR, this->rEnvColorG, this->rEnvColorB, this->rAlpha);
         gSPMatrix(POLY_XLU_DISP++, mtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
         gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, PRIMITIVE, TEXEL0, 0,
                           PRIMITIVE, 0);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054940);
+        gSPDisplayList(POLY_XLU_DISP++, gLensFlareCircleDL);
     }
 
     CLOSE_DISPS(gfxCtx);
 }
 
 void EffectSsDeadDd_Update(PlayState* play, u32 index, EffectSs* this) {
-
     this->rScale += this->rScaleStep;
 
     if (this->rScale < 0) {

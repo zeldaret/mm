@@ -5,10 +5,11 @@
  */
 
 #include "z_en_dekunuts.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/actors/ovl_Obj_Etcetera/z_obj_etcetera.h"
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnDekunuts*)thisx)
 
@@ -39,7 +40,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play);
 void func_808BE680(EnDekunuts* this);
 void func_808BE6C4(EnDekunuts* this, PlayState* play);
 
-const ActorInit En_Dekunuts_InitVars = {
+ActorInit En_Dekunuts_InitVars = {
     ACTOR_EN_DEKUNUTS,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -130,11 +131,11 @@ void EnDekunuts_Init(Actor* thisx, PlayState* play) {
     }
 
     if (this->actor.params == ENDEKUNUTS_GET_FF00_1) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->collider.base.colType = COLTYPE_NONE;
         this->collider.info.bumperFlags |= (BUMP_NO_HITMARK | BUMP_NO_SWORD_SFX | BUMP_NO_DAMAGE | BUMP_NO_AT_INFO);
     } else if (this->actor.params == ENDEKUNUTS_GET_FF00_2) {
-        this->actor.targetMode = 0;
+        this->actor.targetMode = TARGET_MODE_0;
     }
 
     func_808BD428(this);
@@ -153,7 +154,7 @@ void func_808BD348(EnDekunuts* this) {
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = COLTYPE_HIT3;
     this->unk_190 = 80;
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 80);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
 }
 
 void func_808BD3B4(EnDekunuts* this, PlayState* play) {
@@ -161,7 +162,7 @@ void func_808BD3B4(EnDekunuts* this, PlayState* play) {
         this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FIRE;
         this->collider.base.colType = COLTYPE_HIT6;
         this->drawDmgEffAlpha = 0.0f;
-        Actor_SpawnIceEffects(play, &this->actor, this->limbPos, 8, 2, 0.2f, 0.2f);
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, ENDEKUNUTS_BODYPART_MAX, 2, 0.2f, 0.2f);
     }
 }
 
@@ -188,7 +189,7 @@ void func_808BD49C(EnDekunuts* this, PlayState* play) {
     if (Animation_OnFrame(&this->skelAnime, 9.0f)) {
         this->collider.base.acFlags |= AC_ON;
     } else if (Animation_OnFrame(&this->skelAnime, 8.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     }
 
     this->collider.dim.height = (s32)((CLAMP(this->skelAnime.curFrame, 9.0f, 12.0f) - 9.0f) * 9.0f) + 5;
@@ -299,7 +300,7 @@ void func_808BDA4C(EnDekunuts* this, PlayState* play) {
         sp58.x = player->actor.world.pos.x;
         sp58.z = player->actor.world.pos.z;
         sp58.y = player->actor.world.pos.y + 40.0f;
-        pitch = Actor_PitchToPoint(&this->actor, &sp58);
+        pitch = Actor_WorldPitchTowardPoint(&this->actor, &sp58);
         pitch = CLAMP(pitch, -0x3800, -0x2000);
         if (this->skelAnime.curFrame < 7.0f) {
             Math_ScaledStepToS(&this->actor.world.rot.x, pitch, 0x800);
@@ -320,7 +321,7 @@ void func_808BDA4C(EnDekunuts* this, PlayState* play) {
 
         if (Actor_Spawn(&play->actorCtx, play, ACTOR_EN_NUTSBALL, pos.x, pos.y, pos.z, this->actor.world.rot.x,
                         this->actor.shape.rot.y, 0, params) != NULL) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_THROW);
+            Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_THROW);
         }
     } else if ((this->unk_190 >= 2) && Animation_OnFrame(&this->skelAnime, 12.0f)) {
         Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubSpitAnim, -3.0f);
@@ -333,7 +334,7 @@ void func_808BDA4C(EnDekunuts* this, PlayState* play) {
 void func_808BDC9C(EnDekunuts* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubBurrowAnim, -5.0f);
     this->unk_190 = 0;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
 
@@ -341,7 +342,7 @@ void func_808BDCF0(EnDekunuts* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubBurrowAnim, -5.0f);
     this->collider.base.acFlags &= ~AC_ON;
     this->unk_190 = 80;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
     this->actionFunc = func_808BDD54;
 }
 
@@ -369,7 +370,7 @@ void func_808BDE7C(EnDekunuts* this) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubUnburrowAnim, -3.0f);
     this->collider.dim.height = 37;
     this->actor.colChkInfo.mass = 50;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
     this->actor.world.rot.x = 0;
     this->actor.flags |= ACTOR_FLAG_20;
     this->collider.base.acFlags &= ~AC_ON;
@@ -405,20 +406,20 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
     }
 
     if (this->unk_18C != 0) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
         this->unk_18C = 0;
     } else {
         this->unk_18C = 1;
     }
 
-    Math_StepToF(&this->actor.speedXZ, 7.5f, 1.0f);
+    Math_StepToF(&this->actor.speed, 7.5f, 1.0f);
     if (!Math_SmoothStepToS(&this->actor.world.rot.y, this->unk_192, 1, 0xE38, 0xB6)) {
-        if (this->actor.bgCheckFlags & 0x20) {
-            this->unk_192 = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
-        } else if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER) {
+            this->unk_192 = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             this->unk_192 = this->actor.wallYaw;
         } else if (this->unk_18D == 0) {
-            yaw = Actor_YawToPoint(&this->actor, &this->actor.home.pos);
+            yaw = Actor_WorldYawTowardPoint(&this->actor, &this->actor.home.pos);
             yaw2 = yaw - this->actor.yawTowardsPlayer;
             if (ABS_ALT(yaw2) > 0x2000) {
                 this->unk_192 = yaw;
@@ -431,11 +432,11 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
     }
 
     this->actor.shape.rot.y = BINANG_ROT180(this->actor.world.rot.y);
-    if ((this->unk_18D == 0) && (Actor_XZDistanceToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
+    if ((this->unk_18D == 0) && (Actor_WorldDistXZToPoint(&this->actor, &this->actor.home.pos) < 20.0f) &&
         (fabsf(this->actor.world.pos.y - this->actor.home.pos.y) < 2.0f)) {
         this->actor.colChkInfo.mass = MASS_IMMOVABLE;
         this->actor.flags &= ~ACTOR_FLAG_20;
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         func_808BDC9C(this);
     } else if (this->unk_190 == 0) {
         func_808BE1CC(this);
@@ -445,7 +446,7 @@ void func_808BDFB8(EnDekunuts* this, PlayState* play) {
 void func_808BE1CC(EnDekunuts* this) {
     Animation_PlayLoop(&this->skelAnime, &gDekuScrubPantingAnim);
     this->unk_190 = 3;
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->unk_18D != 0) {
         this->unk_18D--;
     }
@@ -468,7 +469,7 @@ void func_808BE22C(EnDekunuts* this, PlayState* play) {
 void func_808BE294(EnDekunuts* this, s32 arg1) {
     Animation_MorphToPlayOnce(&this->skelAnime, &gDekuScrubDamageAnim, -3.0f);
     if (this->actor.params == ENDEKUNUTS_GET_FF00_0) {
-        this->actor.speedXZ = 10.0f;
+        this->actor.speed = 10.0f;
         if (arg1 != 0) {
             func_800BE504(&this->actor, &this->collider);
         }
@@ -477,20 +478,21 @@ void func_808BE294(EnDekunuts* this, s32 arg1) {
     this->actor.world.rot.x = 0;
     this->collider.base.acFlags &= ~AC_ON;
     this->actionFunc = func_808BE358;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DAMAGE);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_CUTBODY);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, Animation_GetLastFrame(&gDekuScrubDamageAnim));
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DAMAGE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_CUTBODY);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA,
+                         Animation_GetLastFrame(&gDekuScrubDamageAnim));
 }
 
 void func_808BE358(EnDekunuts* this, PlayState* play) {
-    Math_StepToF(&this->actor.speedXZ, 0.0f, 1.0f);
+    Math_StepToF(&this->actor.speed, 0.0f, 1.0f);
     if (SkelAnime_Update(&this->skelAnime)) {
         func_808BE484(this);
     }
 }
 
 void func_808BE3A8(EnDekunuts* this) {
-    this->actor.speedXZ = 0.0f;
+    this->actor.speed = 0.0f;
     if (this->actor.velocity.y > 0.0f) {
         this->actor.velocity.y = 0.0f;
     }
@@ -520,8 +522,8 @@ void func_808BE3FC(EnDekunuts* this, PlayState* play) {
 void func_808BE484(EnDekunuts* this) {
     Animation_PlayOnce(&this->skelAnime, &gDekuScrubDieAnim);
     this->actionFunc = func_808BE4D4;
-    this->actor.speedXZ = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
+    this->actor.speed = 0.0f;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
 }
 
 void func_808BE4D4(EnDekunuts* this, PlayState* play) {
@@ -544,7 +546,7 @@ void func_808BE4D4(EnDekunuts* this, PlayState* play) {
                     DEKU_FLOWER_PARAMS(DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE));
         EffectSsHahen_SpawnBurst(play, &this->actor.home.pos, 6.0f, 0, 6, 2, 15, OBJECT_DEKUNUTS, 10,
                                  gDekuScrubFlowerFragmentDL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -593,8 +595,8 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
 
                 if (this->actor.colChkInfo.damageEffect == 1) {
                     this->unk_190 = 40;
-                    Actor_SetColorFilter(&this->actor, 0, 255, 0, 40);
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+                    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_BLUE, 255, COLORFILTER_BUFFLAG_OPA, 40);
+                    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
                     func_808BE3A8(this);
                     return;
                 }
@@ -609,7 +611,7 @@ void func_808BE73C(EnDekunuts* this, PlayState* play) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
                     Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, this->collider.info.bumper.hitPos.x,
                                 this->collider.info.bumper.hitPos.y, this->collider.info.bumper.hitPos.z, 0, 0, 0,
-                                CLEAR_TAG_SMALL_LIGHT_RAYS);
+                                CLEAR_TAG_PARAMS(CLEAR_TAG_SMALL_LIGHT_RAYS));
                 } else if (this->actor.colChkInfo.damageEffect == 5) {
                     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_ELECTRIC_SPARKS_LARGE;
                     this->drawDmgEffAlpha = 4.0f;
@@ -642,7 +644,9 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
     func_808BE73C(this, play);
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, this->collider.dim.radius, this->collider.dim.height,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
     Collider_UpdateCylinder(&this->actor, &this->collider);
 
     if (this->collider.base.acFlags & AC_ON) {
@@ -657,30 +661,32 @@ void EnDekunuts_Update(Actor* thisx, PlayState* play) {
             this->drawDmgEffScale = CLAMP_MAX(this->drawDmgEffScale, 0.55f);
         } else if ((this->drawDmgEffType == ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX) &&
                    !Math_StepToF(&this->drawDmgEffFrozenSteamScale, 0.55f, (33.0f / 1600.0f))) {
-            func_800B9010(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
+            Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_ICE_FREEZE - SFX_FLAG);
         }
     }
 }
 
 s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnDekunuts* this = THIS;
-    f32 arg1, arg2, arg3;
-    f32 currentFrame;
+    f32 arg1;
+    f32 arg2;
+    f32 arg3;
+    f32 curFrame;
 
     if (this->actionFunc == func_808BDA4C) {
         if (limbIndex == DEKU_SCRUB_LIMB_SNOUT) {
-            currentFrame = this->skelAnime.curFrame;
-            if (currentFrame <= 6.0f) {
-                arg2 = 1.0f - (currentFrame * 0.0833f);
-                arg1 = (currentFrame * 0.1167f) + 1.0f;
-                arg3 = (currentFrame * 0.1167f) + 1.0f;
-            } else if (currentFrame <= 7.0f) {
-                currentFrame -= 6.0f;
-                arg2 = 0.5f + currentFrame;
-                arg1 = 1.7f - (currentFrame * 0.7f);
-                arg3 = 1.7f - (currentFrame * 0.7f);
-            } else if (currentFrame <= 10.0f) {
-                arg2 = 1.5f - ((currentFrame - 7.0f) * 0.1667f);
+            curFrame = this->skelAnime.curFrame;
+            if (curFrame <= 6.0f) {
+                arg2 = 1.0f - (curFrame * 0.0833f);
+                arg1 = (curFrame * 0.1167f) + 1.0f;
+                arg3 = (curFrame * 0.1167f) + 1.0f;
+            } else if (curFrame <= 7.0f) {
+                curFrame -= 6.0f;
+                arg2 = 0.5f + curFrame;
+                arg1 = 1.7f - (curFrame * 0.7f);
+                arg3 = 1.7f - (curFrame * 0.7f);
+            } else if (curFrame <= 10.0f) {
+                arg2 = 1.5f - ((curFrame - 7.0f) * 0.1667f);
                 arg1 = 1.0f;
                 arg3 = 1.0f;
             } else {
@@ -694,28 +700,42 @@ s32 EnDekunuts_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
     return false;
 }
 
+static s8 sLimbToBodyParts[DEKU_SCRUB_LIMB_MAX] = {
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_NONE
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_BODY
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_HEAD
+    ENDEKUNUTS_BODYPART_3, // DEKU_SCRUB_LIMB_HEADDRESS
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_CREST
+    ENDEKUNUTS_BODYPART_0, // DEKU_SCRUB_LIMB_SNOUT
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_LEFT_LEG
+    ENDEKUNUTS_BODYPART_1, // DEKU_SCRUB_LIMB_LEFT_FOOT
+    BODYPART_NONE,         // DEKU_SCRUB_LIMB_RIGHT_LEG
+    ENDEKUNUTS_BODYPART_2, // DEKU_SCRUB_LIMB_RIGHT_FOOT
+};
+
+static Vec3f D_808BEFA4[] = {
+    { -1500.0f, 0.0f, -1700.0f }, // ENDEKUNUTS_BODYPART_4
+    { -1500.0f, 0.0f, 1700.0f },  // ENDEKUNUTS_BODYPART_5
+    { -2500.0f, -2000.0f, 0.0f }, // ENDEKUNUTS_BODYPART_6
+    { -1000.0f, 1000.0f, 0.0f },  // ENDEKUNUTS_BODYPART_7
+};
+
 void EnDekunuts_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    static s8 D_808BEF98[] = {
-        -1, -1, -1, 3, -1, 0, -1, 1, -1, 2, 0, 0,
-    };
-    static Vec3f D_808BEFA4[] = {
-        { -1500.0f, 0.0f, -1700.0f }, { -1500.0f, 0.0f, 1700.0f }, { -2500.0f, -2000.0f, 0.0f },
-        { -1000.0f, 1000.0f, 0.0f },  { 0.0f, 0.0f, 0.0f },
-    };
     EnDekunuts* this = THIS;
     s32 i;
     Vec3f* ptr1;
     Vec3f* ptr2;
-    s32 value = D_808BEF98[limbIndex];
+    s32 bodyPartIndex = sLimbToBodyParts[limbIndex];
 
-    if (value != -1) {
-        if (value < 3) {
-            Matrix_MultVecX(1000.0f, &this->limbPos[value]);
+    if (bodyPartIndex != BODYPART_NONE) {
+        if (bodyPartIndex <= ENDEKUNUTS_BODYPART_2) {
+            Matrix_MultVecX(1000.0f, &this->bodyPartsPos[bodyPartIndex]);
         } else {
-            Matrix_MultZero(&this->limbPos[value]);
+            // ENDEKUNUTS_BODYPART_3
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
             ptr1 = &D_808BEFA4[0];
-            ptr2 = &this->limbPos[value + 1];
-            for (i = value + 1; i < ARRAY_COUNT(this->limbPos); i++) {
+            ptr2 = &this->bodyPartsPos[bodyPartIndex + 1];
+            for (i = bodyPartIndex + 1; i < ENDEKUNUTS_BODYPART_MAX; i++) {
                 Matrix_MultVec3f(ptr1, ptr2);
                 ptr1++, ptr2++;
             }
@@ -739,6 +759,6 @@ void EnDekunuts_Draw(Actor* thisx, PlayState* play) {
         func_800AE5A0(play);
     }
     Gfx_DrawDListOpa(play, gDekuScrubFlowerDL);
-    Actor_DrawDamageEffects(play, &this->actor, this->limbPos, ARRAY_COUNT(this->limbPos), this->drawDmgEffScale,
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ENDEKUNUTS_BODYPART_MAX, this->drawDmgEffScale,
                             this->drawDmgEffFrozenSteamScale, this->drawDmgEffAlpha, this->drawDmgEffType);
 }

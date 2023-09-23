@@ -3,16 +3,16 @@
     <File Name="object_ge1" Segment="6">
         <!-- White-clothed Gerudo Animations -->
         <Animation Name="gGerudoWhiteStandingHeadBowedAnim" Offset="0x594" /><!-- Original name may be "gb_ie" ("home")? -->
-        <Animation Name="gGerudoWhiteSaluteAnim" Offset="0xABC" /><!-- Original name: "gb_keirei" ("salute/bow") -->
-        <Animation Name="gGerudoWhiteStiffeningAnim" Offset="0xCF8" /><!-- Original name: "gb_kochoku" ("stiffening/rigidity") -->
-        <Animation Name="gGerudoWhiteStiffShiveringAnim" Offset="0x13CC" /><!-- Original name: "gb_kochoku_loop" ("stiffening loop") -->
-        <Animation Name="gGerudoWhiteTrudgingOffAnim" Offset="0x202C" /><!-- Original name: "gb_tobotobo" ("totteringly/trudgingly") -->
-        <Animation Name="gGerudoWhiteGreatBayCutsceneAnim" Offset="0x2148" /><!-- one frame used for each part of Great Bay Temple first entry cutscene. Original name: "gb_twister" -->
-        <Animation Name="gGerudoWhiteExcitedClappingAnim" Offset="0x2954" /><!-- Original name: "gb_wakuwaku", ("excited") -->
-        <Animation Name="gGerudoWhiteUnfoldingArmsAnim" Offset="0x2AD8" /><!-- Original name: "ge1_hanasi" ("talk") -->
+        <Animation Name="gGerudoWhiteSaluteAnim" Offset="0xABC" /><!-- Original name is "gb_keirei" ("salute/bow") -->
+        <Animation Name="gGerudoWhiteStiffeningAnim" Offset="0xCF8" /><!-- Original name is "gb_kochoku" ("stiffening/rigidity") -->
+        <Animation Name="gGerudoWhiteStiffShiveringAnim" Offset="0x13CC" /><!-- Original name is "gb_kochoku_loop" ("stiffening loop") -->
+        <Animation Name="gGerudoWhiteTrudgingOffAnim" Offset="0x202C" /><!-- Original name is "gb_tobotobo" ("totteringly/trudgingly") -->
+        <Animation Name="gGerudoWhiteGreatBayCutsceneAnim" Offset="0x2148" /><!-- one frame used for each part of Great Bay Temple first entry cutscene. Original name is "gb_twister" -->
+        <Animation Name="gGerudoWhiteExcitedClappingAnim" Offset="0x2954" /><!-- Original name is "gb_wakuwaku", ("excited") -->
+        <Animation Name="gGerudoWhiteUnfoldingArmsAnim" Offset="0x2AD8" /><!-- Original name is "ge1_hanasi" ("talk") -->
 
         <!-- From here to the end this file is identical to OoT's object_ge1, offset 0x0-0x9860 -->
-        <Animation Name="gGerudoWhiteArmsFoldedAnim" Offset="0x2B98" /><!-- Original name: "ge1_matsu" ("waiting") -->
+        <Animation Name="gGerudoWhiteArmsFoldedAnim" Offset="0x2B98" /><!-- Original name is "ge1_matsu" ("waiting") -->
 
         <!-- White-clothed Gerudo Limbs -->
         <Limb Name="gGerudoWhiteWaistLimb" Type="Standard" EnumName="GERUDO_WHITE_LIMB_WAIST" Offset="0x2BB0" />
@@ -38,7 +38,7 @@
         <Texture Name="gGerudoWhiteSkinGradientTex" OutName="gerudo_white_skin_gradient" Format="ci8" Width="8" Height="8" Offset="0x2EB8" TlutOffset="0x2CB8" />
         <Texture Name="gGerudoWhiteWhiteFabricLipsTex" OutName="gerudo_white_white_fabric_lips" Format="ci8" Width="16" Height="16" Offset="0x2EF8" TlutOffset="0x2CB8" />
         <Texture Name="gGerudoWhiteEarTex" OutName="gerudo_white_ear" Format="ci8" Width="8" Height="16" Offset="0x2FF8" TlutOffset="0x2CB8" />
-        
+
         <!-- White-clothed Gerudo Eye Textures -->
         <Texture Name="gGerudoWhiteEyeOpenTex" OutName="gerudo_white_eye_open" Format="rgba16" Width="32" Height="32" Offset="0x3078"/>
         <Texture Name="gGerudoWhiteEyeHalfTex" OutName="gerudo_white_eye_half" Format="rgba16" Width="32" Height="32" Offset="0x3878"/>

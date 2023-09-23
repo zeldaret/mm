@@ -22,11 +22,9 @@ typedef struct EnViewer {
 } EnViewer; // size = 0x158
 
 typedef enum {
-    /* 0x0 */ ENVIEWER_PARAMS_0,
-    /* 0x1 */ ENVIEWER_PARAMS_1,
-    /* 0x2 */ ENVIEWER_PARAMS_2
-} EnViewerParams;
-
-extern const ActorInit En_Viewer_InitVars;
+    /* 0x0 */ ENVIEWER_PARAM_0,
+    /* 0x1 */ ENVIEWER_PARAM_1,
+    /* 0x2 */ ENVIEWER_PARAM_2
+} EnViewerParam;
 
 #endif // Z_EN_VIEWER_H

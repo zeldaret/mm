@@ -6,7 +6,7 @@
 
 #include "z_en_okarina_tag.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnOkarinaTag*)thisx)
 
@@ -17,7 +17,7 @@ void EnOkarinaTag_Update(Actor* thisx, PlayState* play);
 void func_8093E518(EnOkarinaTag* this, PlayState* play);
 void func_8093E68C(EnOkarinaTag* this, PlayState* play);
 
-const ActorInit En_Okarina_Tag_InitVars = {
+ActorInit En_Okarina_Tag_InitVars = {
     ACTOR_EN_OKARINA_TAG,
     ACTORCAT_SWITCH,
     FLAGS,
@@ -37,7 +37,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     f32 zRot = 0.0f;
     s32 i = 0;
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk148 = ENOKARINATAG_GET_F800(thisx);
     this->unk14A = ENOKARINATAG_GET_780(thisx);
     this->switchFlags = ENOKARINATAG_GET_SWITCHFLAGS(thisx);
@@ -56,7 +56,7 @@ void EnOkarinaTag_Init(Actor* thisx, PlayState* play) {
     if (this->unk14A == 0xF) {
         this->unk14A = -1;
     }
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     this->actionFunc = func_8093E518;
 }
 
@@ -81,7 +81,7 @@ void func_8093E518(EnOkarinaTag* this, PlayState* play) {
     var_v1 = this->unk14A;
     if (var_v1 == 6) {
         var_v1 = 0xA;
-        if (gSaveContext.save.unk_F65 == 0) {
+        if (gSaveContext.save.saveInfo.unk_F41 == 0) {
             return;
         }
     }
@@ -137,7 +137,7 @@ void func_8093E68C(EnOkarinaTag* this, PlayState* play) {
                 }
             }
             play->msgCtx.ocarinaMode = 4;
-            play_sound(NA_SE_SY_CORRECT_CHIME);
+            Audio_PlaySfx(NA_SE_SY_CORRECT_CHIME);
             this->actionFunc = func_8093E518;
         }
     }

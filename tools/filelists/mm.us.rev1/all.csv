@@ -6,8 +6,8 @@
 5,Audiotable
 6,kanji
 7,link_animetion
-8,icon_item_static_old
-9,icon_item_24_static_old
+8,icon_item_static_syms
+9,icon_item_24_static_syms
 10,icon_item_field_static
 11,icon_item_dungeon_static
 12,icon_item_gameover_static
@@ -17,10 +17,10 @@
 16,map_grand_static
 17,item_name_static
 18,map_name_static
-19,icon_item_static_test
-20,icon_item_24_static_test
-21,schedule_dma_static_old
-22,schedule_dma_static_test
+19,icon_item_static_yar
+20,icon_item_24_static_yar
+21,schedule_dma_static_syms
+22,schedule_dma_static_yar
 23,schedule_static
 24,story_static
 25,do_action_static
@@ -883,7 +883,7 @@
 882,object_fall
 883,object_hanareyama_obj
 884,object_crace_object
-885,object_dnq
+885,object_dno
 886,object_obj_tokeidai
 887,object_eg
 888,object_tru
@@ -954,7 +954,7 @@
 953,object_maruta
 954,object_ghaka
 955,object_oyu
-956,object_dnp
+956,object_dnq
 957,object_dai
 958,object_kgy
 959,object_fb
@@ -975,7 +975,7 @@
 974,object_gi_seahorse
 975,object_bigpo
 976,object_hariko
-977,object_dno
+977,object_dnj
 978,object_sinkai_kabe
 979,object_kin2_obj
 980,object_ishi

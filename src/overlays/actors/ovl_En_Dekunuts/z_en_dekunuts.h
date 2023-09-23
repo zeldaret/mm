@@ -8,14 +8,26 @@ struct EnDekunuts;
 
 typedef void (*EnDekunutsActionFunc)(struct EnDekunuts*, PlayState*);
 
-#define ENDEKUNUTS_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF);
+#define ENDEKUNUTS_GET_FF00(thisx) (((thisx)->params >> 8) & 0xFF)
 
-enum {
-    /* 0x0 */ ENDEKUNUTS_GET_FF00_0,
-    /* 0x1 */ ENDEKUNUTS_GET_FF00_1,
-    /* 0x2 */ ENDEKUNUTS_GET_FF00_2,
-    /* 0xFF*/ ENDEKUNUTS_GET_FF00_FF = 0xFF,
-};
+typedef enum {
+    /* 0x00 */ ENDEKUNUTS_GET_FF00_0,
+    /* 0x01 */ ENDEKUNUTS_GET_FF00_1,
+    /* 0x02 */ ENDEKUNUTS_GET_FF00_2,
+    /* 0xFF */ ENDEKUNUTS_GET_FF00_FF = 0xFF
+} EnDekunutsParam;
+
+typedef enum DekunutsBodyPart {
+    /* 0 */ ENDEKUNUTS_BODYPART_0,
+    /* 1 */ ENDEKUNUTS_BODYPART_1,
+    /* 2 */ ENDEKUNUTS_BODYPART_2,
+    /* 3 */ ENDEKUNUTS_BODYPART_3,
+    /* 4 */ ENDEKUNUTS_BODYPART_4,
+    /* 5 */ ENDEKUNUTS_BODYPART_5,
+    /* 6 */ ENDEKUNUTS_BODYPART_6,
+    /* 7 */ ENDEKUNUTS_BODYPART_7,
+    /* 8 */ ENDEKUNUTS_BODYPART_MAX
+} DekunutsBodyPart;
 
 typedef struct EnDekunuts {
     /* 0x000 */ Actor actor;
@@ -32,10 +44,8 @@ typedef struct EnDekunuts {
     /* 0x210 */ f32 drawDmgEffAlpha;
     /* 0x214 */ f32 drawDmgEffScale;
     /* 0x218 */ f32 drawDmgEffFrozenSteamScale;
-    /* 0x21C */ Vec3f limbPos[8];
+    /* 0x21C */ Vec3f bodyPartsPos[ENDEKUNUTS_BODYPART_MAX];
     /* 0x27C */ ColliderCylinder collider;
 } EnDekunuts; // size = 0x2C8
-
-extern const ActorInit En_Dekunuts_InitVars;
 
 #endif // Z_EN_DEKUNUTS_H

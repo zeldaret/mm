@@ -7,6 +7,20 @@ struct EnPoh;
 
 typedef void (*EnPohActionFunc)(struct EnPoh*, PlayState*);
 
+typedef enum EnPohBodyPart {
+    /*  0 */ ENPOH_BODYPART_0,
+    /*  1 */ ENPOH_BODYPART_1,
+    /*  2 */ ENPOH_BODYPART_2,
+    /*  3 */ ENPOH_BODYPART_3,
+    /*  4 */ ENPOH_BODYPART_4,
+    /*  5 */ ENPOH_BODYPART_5,
+    /*  6 */ ENPOH_BODYPART_6,
+    /*  7 */ ENPOH_BODYPART_7,
+    /*  8 */ ENPOH_BODYPART_8,
+    /*  9 */ ENPOH_BODYPART_9,
+    /* 10 */ ENPOH_BODYPART_MAX
+} EnPohBodyPart;
+
 typedef struct EnPoh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -28,7 +42,7 @@ typedef struct EnPoh {
     /* 0x21A */ Vec3s morphTable[21];
     /* 0x298 */ f32 drawDmgEffAlpha;
     /* 0x29C */ f32 drawDmgEffScale;
-    /* 0x2A0 */ Vec3f limbPos[10];
+    /* 0x2A0 */ Vec3f bodyPartsPos[ENPOH_BODYPART_MAX];
     /* 0x318 */ LightNode* lightNode;
     /* 0x31C */ LightInfo lightInfo;
     /* 0x32C */ ColliderCylinder colliderCylinder;
@@ -36,7 +50,5 @@ typedef struct EnPoh {
     /* 0x398 */ ColliderJntSphElement colliderSphElements[1];
     /* 0x3D8 */ MtxF unk_3D8;
 } EnPoh; // size = 0x418
-
-extern const ActorInit En_Poh_InitVars;
 
 #endif // Z_EN_POH_H

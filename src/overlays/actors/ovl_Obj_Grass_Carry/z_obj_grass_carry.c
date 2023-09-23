@@ -29,7 +29,7 @@ void func_809AB6FC(ObjGrassCarry* this);
 void func_809AB77C(ObjGrassCarry* this, PlayState* play);
 void func_809ABB7C(Actor* this, PlayState* play);
 
-const ActorInit Obj_Grass_Carry_InitVars = {
+ActorInit Obj_Grass_Carry_InitVars = {
     ACTOR_OBJ_GRASS_CARRY,
     ACTORCAT_PROP,
     FLAGS,
@@ -103,7 +103,9 @@ void func_809AAF18(ObjGrassCarry* this) {
 }
 
 void func_809AAF58(ObjGrassCarry* this, PlayState* play) {
-    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f, 0xC5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 7.5f, 35.0f, 0.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40 |
+                                UPDBGCHECKINFO_FLAG_80);
 }
 
 void func_809AAF9C(Vec3f* arg0, s16 arg1, PlayState* play) {
@@ -206,32 +208,32 @@ void func_809AB474(ObjGrassCarry* this) {
 }
 
 void func_809AB4A8(ObjGrassCarry* this, PlayState* play) {
-    ObjGrassCarry* this2 = this;
+    Actor* thisx = &this->actor;
 
-    if (Actor_HasParent(&this->actor, play)) {
+    if (Actor_HasParent(thisx, play)) {
         func_809AB5FC(this);
         if (this->unk_194 != NULL) {
             this->unk_194->unk_0F |= 4;
         }
-        this->actor.draw = func_809ABB7C;
-        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.shape.shadowAlpha = 60;
-        this->actor.shape.shadowScale = 1.0f;
+        thisx->draw = func_809ABB7C;
+        thisx->shape.shadowDraw = ActorShadow_DrawCircle;
+        thisx->shape.shadowAlpha = 60;
+        thisx->shape.shadowScale = 1.0f;
         this->unk_190->unk_3292 ^= 1;
-        this->actor.room = -1;
-        SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
+        thisx->room = -1;
+        SoundSource_PlaySfxAtFixedWorldPos(play, &thisx->world.pos, 20, NA_SE_PL_PULL_UP_PLANT);
     } else if (this->unk_190->unk_3294 != NULL) {
         Player* player = GET_PLAYER(play);
 
         this->unk_194 = this->unk_190->unk_3294;
-        Math_Vec3f_Copy(&this->actor.world.pos, &this->unk_194->unk_00);
-        this->actor.shape.rot.y = this->actor.world.rot.y = this->unk_194->unk_0C;
-        this->unk_198 = this2->unk_194->unk_0E;
-        this->actor.xzDistToPlayer = Actor_XZDistanceBetweenActors(&this->actor, &player->actor);
-        this->actor.playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
-        this->actor.xyzDistToPlayerSq = SQ(this->actor.xzDistToPlayer) + SQ(this->actor.playerHeightRel);
-        this->actor.yawTowardsPlayer = Actor_YawBetweenActors(&this->actor, &player->actor);
-        Actor_LiftActor(&this->actor, play);
+        Math_Vec3f_Copy(&thisx->world.pos, &this->unk_194->unk_00);
+        thisx->shape.rot.y = thisx->world.rot.y = this->unk_194->unk_0C;
+        this->unk_198 = this->unk_194->unk_0E;
+        thisx->xzDistToPlayer = Actor_WorldDistXZToActor(&this->actor, &player->actor);
+        thisx->playerHeightRel = Actor_HeightDiff(&this->actor, &player->actor);
+        thisx->xyzDistToPlayerSq = SQ(thisx->xzDistToPlayer) + SQ(thisx->playerHeightRel);
+        thisx->yawTowardsPlayer = Actor_WorldYawTowardActor(&this->actor, &player->actor);
+        Actor_OfferCarry(&this->actor, play);
     }
 }
 
@@ -246,8 +248,8 @@ void func_809AB610(ObjGrassCarry* this, PlayState* play) {
 
     if (Actor_HasNoParent(&this->actor, play)) {
         func_809AB6FC(this);
-        this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speedXZ;
-        this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speedXZ;
+        this->actor.velocity.x = Math_SinS(this->actor.world.rot.y) * this->actor.speed;
+        this->actor.velocity.z = Math_CosS(this->actor.world.rot.y) * this->actor.speed;
         this->actor.gravity = -0.1f;
         this->actor.terminalVelocity = -17.0f;
         func_809AAF18(this);
@@ -283,7 +285,8 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play) {
 
     this->unk_19A--;
 
-    if ((this->actor.bgCheckFlags & (1 | 2 | 8)) || temp_v0 || (this->unk_19A <= 0)) {
+    if ((this->actor.bgCheckFlags & (BGCHECKFLAG_GROUND | BGCHECKFLAG_GROUND_TOUCH | BGCHECKFLAG_WALL)) || temp_v0 ||
+        (this->unk_19A <= 0)) {
         func_809AAFE8(&this->actor.world.pos, play);
         func_809AAF9C(&this->actor.world.pos, this->unk_198, play);
 
@@ -294,14 +297,14 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play) {
             this->actor.room = this->unk_190->actor.room;
         }
 
-        if (!(this->actor.bgCheckFlags & 0x20)) {
+        if (!(this->actor.bgCheckFlags & BGCHECKFLAG_WATER)) {
             SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 20, NA_SE_EV_PLANT_BROKEN);
         }
         func_809AB428(this);
         return;
     }
 
-    if (this->actor.bgCheckFlags & 0x40) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_WATER_TOUCH) {
         sp5C.y = this->actor.world.pos.y + this->actor.depthInWater;
 
         for (phi_s0 = 0, i = 0; i < 4; i++, phi_s0 += 0x4000) {
@@ -326,7 +329,7 @@ void func_809AB77C(ObjGrassCarry* this, PlayState* play) {
         D_809ABBFC = D_809ABBFC >> 1;
         D_809ABC08 = D_809ABC08 >> 1;
         D_809ABC04 = D_809ABC04 >> 1;
-        this->actor.bgCheckFlags &= ~0x40;
+        this->actor.bgCheckFlags &= ~BGCHECKFLAG_WATER_TOUCH;
         SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EV_DIVE_INTO_WATER_L);
     }
 
@@ -347,7 +350,7 @@ void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_190 == NULL) {
         if ((this->actionFunc != func_809AB610) && (this->actionFunc != func_809AB77C)) {
-            Actor_MarkForDeath(&this->actor);
+            Actor_Kill(&this->actor);
             return;
         }
     }
@@ -356,5 +359,5 @@ void ObjGrassCarry_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_809ABB7C(Actor* this, PlayState* play) {
-    Gfx_DrawDListOpa(play, gKusaBushType1);
+    Gfx_DrawDListOpa(play, gKusaBushType1DL);
 }

@@ -6,7 +6,7 @@
 
 #include "z_en_okuta.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnOkuta*)thisx)
 
@@ -28,7 +28,7 @@ void func_8086F57C(EnOkuta* this, PlayState* play);
 void func_8086F694(EnOkuta* this, PlayState* play);
 
 #if 0
-const ActorInit En_Okuta_InitVars = {
+ActorInit En_Okuta_InitVars = {
     ACTOR_EN_OKUTA,
     ACTORCAT_ENEMY,
     FLAGS,

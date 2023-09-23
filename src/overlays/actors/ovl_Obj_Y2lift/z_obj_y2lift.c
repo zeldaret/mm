@@ -16,7 +16,7 @@ void ObjY2lift_Destroy(Actor* thisx, PlayState* play);
 void ObjY2lift_Update(Actor* thisx, PlayState* play);
 void ObjY2lift_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Obj_Y2lift_InitVars = {
+ActorInit Obj_Y2lift_InitVars = {
     ACTOR_OBJ_Y2LIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -39,7 +39,7 @@ void ObjY2lift_Init(Actor* thisx, PlayState* play) {
     ObjY2lift* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &gPirateLiftPlatformCol);
 }
 
@@ -53,13 +53,13 @@ void ObjY2lift_Update(Actor* thisx, PlayState* play) {
     ObjY2lift* this = THIS;
     f32 temp_fv0 = this->dyna.actor.world.pos.y;
     f32 targetVelocityY = 0.0f;
-    s32 temp_v0 = DynaPolyActor_IsInRidingMovingState(&this->dyna);
+    s32 isPlayerOnTop = DynaPolyActor_IsPlayerOnTop(&this->dyna);
 
-    if (temp_v0 || DynaPolyActor_IsInRidingFallingState(&this->dyna)) {
+    if (isPlayerOnTop || DynaPolyActor_IsActorOnTop(&this->dyna)) {
         if (!this->unk15D) {
             this->unk15D = true;
             this->unk15F = 12;
-        } else if (this->unk15F == 0 && temp_v0) {
+        } else if ((this->unk15F == 0) && isPlayerOnTop) {
             this->unk15C = 16;
         }
     } else {
@@ -68,7 +68,7 @@ void ObjY2lift_Update(Actor* thisx, PlayState* play) {
     if (DECR(this->unk15C) != 0) {
         temp_fv0 = this->dyna.actor.home.pos.y + 180.0f;
         targetVelocityY = 2.0f;
-    } else if (!temp_v0 && this->dyna.actor.velocity.y <= 0.0f) {
+    } else if (!isPlayerOnTop && (this->dyna.actor.velocity.y <= 0.0f)) {
         temp_fv0 = this->dyna.actor.home.pos.y;
         targetVelocityY = -2.0f;
     }
@@ -83,7 +83,7 @@ void ObjY2lift_Update(Actor* thisx, PlayState* play) {
         }
     } else {
         this->unk15E = false;
-        func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     }
     if (DECR(this->unk15F) != 0) {
         this->dyna.actor.shape.yOffset = (2.0f * (this->unk15F & 1)) * this->unk15F;

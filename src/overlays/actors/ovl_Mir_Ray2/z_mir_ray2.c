@@ -15,7 +15,7 @@ void MirRay2_Destroy(Actor* thisx, PlayState* play);
 void MirRay2_Update(Actor* thisx, PlayState* play);
 void MirRay2_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Mir_Ray2_InitVars = {
+ActorInit Mir_Ray2_InitVars = {
     ACTOR_MIR_RAY2,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -115,7 +115,7 @@ void MirRay2_Update(Actor* thisx, PlayState* play) {
     } else {
         func_80AF3FE0(this, play);
         if (MIRRAY2_GET_F(thisx) != 1) {
-            Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, 4);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
             this->actor.shape.shadowAlpha = 0x50;
         } else {
             func_80AF3F70(this);

@@ -7,7 +7,7 @@
 #include "z_en_death.h"
 #include "z64rumble.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_1000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_IGNORE_QUAKE)
 
 #define THIS ((EnDeath*)thisx)
 
@@ -38,7 +38,7 @@ void func_808C7D34(EnDeath* this, PlayState* play);
 void func_808C7DCC(EnDeath* this, PlayState* play);
 
 #if 0
-const ActorInit En_Death_InitVars = {
+ActorInit En_Death_InitVars = {
     ACTOR_EN_DEATH,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -133,7 +133,7 @@ static InitChainEntry D_808C9A60[] = {
     ICHAIN_VEC3F(scale, 0, ICHAIN_CONTINUE),
     ICHAIN_S8(hintId, TATL_HINT_ID_GOMESS, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 6000, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 5, ICHAIN_STOP),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_STOP),
 };
 
 #endif

@@ -8,7 +8,7 @@
 #include "overlays/effects/ovl_Effect_Ss_Hahen/z_eff_ss_hahen.h"
 #include "objects/object_hintnuts/object_hintnuts.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHiddenNuts*)thisx)
 
@@ -31,7 +31,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play);
 void func_80BDBE70(EnHiddenNuts* this, PlayState* play);
 void func_80BDBED4(EnHiddenNuts* this, PlayState* play);
 
-const ActorInit En_Hidden_Nuts_InitVars = {
+ActorInit En_Hidden_Nuts_InitVars = {
     ACTOR_EN_HIDDEN_NUTS,
     ACTORCAT_PROP,
     FLAGS,
@@ -83,11 +83,11 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     Actor_SetScale(&this->actor, 0.01f);
 
     this->actor.colChkInfo.mass = MASS_IMMOVABLE;
-    this->actor.targetMode = 0;
+    this->actor.targetMode = TARGET_MODE_0;
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    this->unk_21E = ENHIDDENNUTS_GET_F80(&this->actor);
+    this->pathIndex = ENHIDDENNUTS_GET_PATH_INDEX(&this->actor);
     this->switchFlag = ENHIDDENNUTS_GET_SWITCHFLAG(&this->actor);
 
     if (this->switchFlag == 0x7F) {
@@ -95,17 +95,17 @@ void EnHiddenNuts_Init(Actor* thisx, PlayState* play) {
     }
 
     if ((this->switchFlag >= 0) && Flags_GetSwitch(play, this->switchFlag)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    if (this->unk_21E == 0x1F) {
-        Actor_MarkForDeath(&this->actor);
+    if (this->pathIndex == ENHIDDENNUTS_PATH_INDEX_NONE) {
+        Actor_Kill(&this->actor);
         return;
     }
 
-    this->path = SubS_GetPathByIndex(play, this->unk_21E, 0x3F);
-    this->unk_226 = this->actor.cutscene;
+    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENHIDDENNUTS_PATH_INDEX_NONE_ALT);
+    this->csId = this->actor.csId;
     func_801A5080(2);
     func_80BDB268(this);
 }
@@ -145,18 +145,18 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 i;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
-    if (player->stateFlags2 & 0x8000000) {
+    if (player->stateFlags2 & PLAYER_STATE2_8000000) {
         if (this->unk_20A == 0) {
-            play_sound(NA_SE_SY_TRE_BOX_APPEAR);
+            Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
             this->unk_20A = 1;
         }
     } else {
         this->unk_20A = 0;
     }
 
-    if (Actor_ProcessTalkRequest(&this->actor, &play->state) != 0) {
+    if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
         func_80BDB580(this);
         return;
     }
@@ -173,10 +173,11 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp74, &this->actor.world.pos);
 
-            sp74.x += randPlusMinusPoint5Scaled(15.0f);
-            sp74.z += randPlusMinusPoint5Scaled(15.0f);
+            sp74.x += Rand_CenteredFloat(15.0f);
+            sp74.z += Rand_CenteredFloat(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30, 1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp74, &sp94, &sp88, &sp84, &sp80, Rand_S16Offset(120, 90), 30,
+                                              true);
         }
         this->unk_218 = 30;
     }
@@ -188,7 +189,7 @@ void func_80BDB2B8(EnHiddenNuts* this, PlayState* play) {
         } else if (func_801A5100() == 2) {
             func_80BDB788(this);
         } else {
-            func_800B8614(&this->actor, play, BREG(13) + 100.0f);
+            Actor_OfferTalk(&this->actor, play, BREG(13) + 100.0f);
         }
     }
 }
@@ -201,7 +202,7 @@ void func_80BDB580(EnHiddenNuts* this) {
 void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
     s32 i;
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NEMURI_SLEEP - SFX_FLAG);
 
     if (this->unk_218 == 0) {
         Vec3f sp98 = { 0.0f, 0.0f, 0.0f };
@@ -215,25 +216,26 @@ void func_80BDB59C(EnHiddenNuts* this, PlayState* play) {
 
             Math_Vec3f_Copy(&sp78, &this->actor.world.pos);
 
-            sp78.x += randPlusMinusPoint5Scaled(15.0f);
-            sp78.z += randPlusMinusPoint5Scaled(15.0f);
+            sp78.x += Rand_CenteredFloat(15.0f);
+            sp78.z += Rand_CenteredFloat(15.0f);
 
-            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30, 1);
+            EffectSsDtBubble_SpawnCustomColor(play, &sp78, &sp98, &sp8C, &sp88, &sp84, Rand_S16Offset(120, 90), 30,
+                                              true);
         }
         this->unk_218 = 30;
     }
 
     if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-        func_801477B4(play);
+        Message_CloseTextbox(play);
         func_80BDB268(this);
     }
 }
 
 void func_80BDB788(EnHiddenNuts* this) {
     this->actor.flags |= ACTOR_FLAG_10;
-    this->actor.flags |= ACTOR_FLAG_8000000;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DEAD);
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DEAD);
     this->unk_21A = 2;
     this->actionFunc = func_80BDB7E8;
 }
@@ -241,18 +243,18 @@ void func_80BDB788(EnHiddenNuts* this) {
 void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
     Vec3f sp3C;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(this->unk_226);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    if (!ActorCutscene_GetCanPlayNext(this->unk_226)) {
-        ActorCutscene_SetIntentToPlay(this->unk_226);
+    if (!CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Queue(this->csId);
         return;
     }
 
-    ActorCutscene_StartAndSetUnkLinkFields(this->unk_226, &this->actor);
+    CutsceneManager_StartWithPlayerCs(this->csId, &this->actor);
     this->unk_228 = -1200.0f;
 
     Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
@@ -260,7 +262,7 @@ void func_80BDB7E8(EnHiddenNuts* this, PlayState* play) {
 
     EffectSsHahen_SpawnBurst(play, &sp3C, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     func_80BDB1B4(this, 7);
     this->actionFunc = func_80BDB8F4;
 }
@@ -285,7 +287,7 @@ void func_80BDB978(EnHiddenNuts* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 8.0f) ||
         Animation_OnFrame(&this->skelAnime, 18.0f)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUT_FAINT);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUT_FAINT);
     }
 
     if (this->unk_22C <= curFrame) {
@@ -307,14 +309,14 @@ void func_80BDBA28(EnHiddenNuts* this, PlayState* play) {
 
     EffectSsHahen_SpawnBurst(play, &sp44, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_UP);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_UP);
     this->unk_208 = 1;
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 
-    this->actor.speedXZ = 2.0f;
+    this->actor.speed = 2.0f;
     this->actor.gravity = -2.0f;
     this->actor.velocity.y = 4.0f;
     this->actor.world.rot.y = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_20C);
@@ -343,14 +345,14 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
             Animation_OnFrame(&this->skelAnime, 10.0f)) {
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WALK_WATER);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WALK_WATER);
             sp4E = 1;
         }
     }
 
     if ((sp4E != 0) && (Animation_OnFrame(&this->skelAnime, 0.0f) || Animation_OnFrame(&this->skelAnime, 5.0f) ||
                         Animation_OnFrame(&this->skelAnime, 10.0f))) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_WALK);
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_20C), 1, 0x1388, 0);
@@ -358,7 +360,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
 
     if (this->unk_220 == 2) {
         if (this->unk_22C <= sp58) {
-            this->actor.speedXZ = 0.0f;
+            this->actor.speed = 0.0f;
             this->actor.velocity.y = 0.0f;
             func_80BDB1B4(this, 6);
         }
@@ -375,7 +377,7 @@ void func_80BDBB48(EnHiddenNuts* this, PlayState* play) {
             if (this->unk_208 >= this->path->count) {
                 func_80BDBE70(this, play);
             } else if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_208, &this->unk_20C)) {
-                Actor_MarkForDeath(&this->actor);
+                Actor_Kill(&this->actor);
             }
         }
     }
@@ -398,9 +400,9 @@ void func_80BDBED4(EnHiddenNuts* this, PlayState* play) {
         Math_Vec3f_Copy(&sp38, &this->actor.world.pos);
         sp38.y = this->actor.floorHeight;
 
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_NUTS_DOWN);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_NUTS_DOWN);
         EffectSsHahen_SpawnBurst(play, &sp38, 4.0f, 0, 10, 3, 15, HAHEN_OBJECT_DEFAULT, 10, NULL);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -421,7 +423,9 @@ void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
 
     if (this->unk_21A >= 4) {
         Actor_MoveWithGravity(&this->actor);
-        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 40.0f, 0x1D);
+        Actor_UpdateBgCheckInfo(play, &this->actor, 20.0f, 20.0f, 40.0f,
+                                UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                    UPDBGCHECKINFO_FLAG_10);
     }
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
@@ -431,6 +435,6 @@ void EnHiddenNuts_Update(Actor* thisx, PlayState* play) {
 void EnHiddenNuts_Draw(Actor* thisx, PlayState* play) {
     EnHiddenNuts* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     SkelAnime_DrawOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, NULL, NULL, &this->actor);
 }

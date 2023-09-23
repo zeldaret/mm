@@ -6,7 +6,7 @@
 
 #include "z_en_ge3.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
 
 #define THIS ((EnGe3*)thisx)
 
@@ -16,7 +16,7 @@ void EnGe3_Update(Actor* thisx, PlayState* play);
 void EnGe3_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Ge3_InitVars = {
+ActorInit En_Ge3_InitVars = {
     ACTOR_EN_GE3,
     ACTORCAT_NPC,
     FLAGS,

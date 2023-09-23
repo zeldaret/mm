@@ -25,7 +25,7 @@ typedef struct ObjRotliftModelInfo {
     /* 0x8 */ CollisionHeader* colHeader;
 } ObjRotliftModelInfo; // size = 0xC
 
-const ActorInit Obj_Rotlift_InitVars = {
+ActorInit Obj_Rotlift_InitVars = {
     ACTOR_OBJ_ROTLIFT,
     ACTORCAT_BG,
     FLAGS,
@@ -111,7 +111,7 @@ void ObjRotlift_Init(Actor* thisx, PlayState* play2) {
         ObjRotlift_MoveDekuFlowers(this);
     }
 
-    DynaPolyActor_Init(&this->dyna, 3);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS | DYNA_TRANSFORM_ROT_Y);
 
     modelInfo = &sModelInfo[type];
     DynaPolyActor_LoadMesh(play, &this->dyna, modelInfo->colHeader);

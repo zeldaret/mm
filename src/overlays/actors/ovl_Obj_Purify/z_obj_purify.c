@@ -41,7 +41,7 @@ typedef struct ObjPurifyInfo {
     /* 0x24 */ s32 isDekuCity;
 } ObjPurifyInfo; // size = 0x28
 
-const ActorInit Obj_Purify_InitVars = {
+ActorInit Obj_Purify_InitVars = {
     ACTOR_OBJ_PURIFY,
     ACTORCAT_BG,
     FLAGS,
@@ -109,14 +109,11 @@ s32 ObjPurify_IsPurified(ObjPurify* this) {
     ObjPurifyInfo* info = &sObjPurifyInfo[OBJPURIFY_GET_INFO_INDEX(&this->dyna.actor)];
 
     if (!info->isDekuCity) {
-        // woodfall temple wood flower unraveled
-        if (gSaveContext.save.weekEventReg[12] & 1) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_12_01)) {
             return true;
         }
-    }
-    // woodfall temple purification cutscene watched
-    else {
-        if (gSaveContext.save.weekEventReg[20] & 2) {
+    } else {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_WOODFALL_TEMPLE)) {
             return true;
         }
     }
@@ -135,11 +132,11 @@ void ObjPurify_Init(Actor* thisx, PlayState* play) {
     }
     this->objIndex = Object_GetIndex(&play->objectCtx, info->objectId);
     if (this->objIndex < 0) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else if (sp20 == 0) {
         func_80A84EAC(this);
     } else if (ObjPurify_IsPurified(this)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     } else {
         func_80A84EAC(this);
     }
@@ -183,7 +180,7 @@ void func_80A84FA0(ObjPurify* this) {
 
 void func_80A84FB4(ObjPurify* this, PlayState* play) {
     if (ObjPurify_IsPurified(this)) {
-        Actor_MarkForDeath(&this->dyna.actor);
+        Actor_Kill(&this->dyna.actor);
     }
 }
 
@@ -258,12 +255,12 @@ void func_80A851C8(Actor* thisx, PlayState* play) {
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(animMat));
     }
     if (opaDList != NULL) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, opaDList);
     }
     if (xluDList != NULL) {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, xluDList);
     }
@@ -288,7 +285,8 @@ void func_80A85304(Actor* thisx, PlayState* play) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     for (i = 0; i < ARRAY_COUNT(sp6C); i++) {
         index = sp6C[i];
         AnimatedMat_Draw(play, Lib_SegmentedToVirtual(info->animMat[index]));
@@ -296,5 +294,6 @@ void func_80A85304(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, info->xluDLists[index]);
     };
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -6,7 +6,7 @@
 
 #include "z_en_po_composer.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnPoComposer*)thisx)
 
@@ -28,7 +28,7 @@ void func_80BC5830(EnPoComposer* this, PlayState* play);
 void func_80BC58E0(EnPoComposer* this, PlayState* play);
 
 #if 0
-const ActorInit En_Po_Composer_InitVars = {
+ActorInit En_Po_Composer_InitVars = {
     ACTOR_EN_PO_COMPOSER,
     ACTORCAT_ITEMACTION,
     FLAGS,

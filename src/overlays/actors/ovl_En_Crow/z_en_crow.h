@@ -13,6 +13,14 @@ struct EnCrow;
 
 typedef void (*EnCrowActionFunc)(struct EnCrow*, PlayState*);
 
+typedef enum GuayBodyPart {
+    /* 0 */ GUAY_BODYPART_BODY,
+    /* 1 */ GUAY_BODYPART_RIGHT_WING_TIP,
+    /* 2 */ GUAY_BODYPART_LEFT_WING_TIP,
+    /* 3 */ GUAY_BODYPART_TAIL,
+    /* 4 */ GUAY_BODYPART_MAX
+} GuayBodyPart;
+
 typedef struct EnCrow {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
@@ -24,13 +32,11 @@ typedef struct EnCrow {
     /* 0x194 */ Vec3s jointTable[OBJECT_CROW_LIMB_MAX];
     /* 0x1CA */ Vec3s morphTable[OBJECT_CROW_LIMB_MAX];
     /* 0x200 */ ColliderJntSph collider;
-    /* 0x220 */ ColliderJntSphElement colliderItems[1];
-    /* 0x260 */ Vec3f bodyPartsPos[4];
+    /* 0x220 */ ColliderJntSphElement colliderElements[1];
+    /* 0x260 */ Vec3f bodyPartsPos[GUAY_BODYPART_MAX];
     /* 0x290 */ f32 drawDmgEffAlpha;
     /* 0x294 */ f32 drawDmgEffFrozenSteamScale;
     /* 0x298 */ f32 drawDmgEffScale;
 } EnCrow; // size = 0x29C
-
-extern const ActorInit En_Crow_InitVars;
 
 #endif // Z_EN_CROW_H

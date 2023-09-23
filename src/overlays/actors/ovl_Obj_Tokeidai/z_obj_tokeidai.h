@@ -16,7 +16,7 @@ typedef enum {
     /*  8 */ OBJ_TOKEIDAI_TYPE_TOWER_WALLS_TERMINA_FIELD = 8,
     /*  9 */ OBJ_TOKEIDAI_TYPE_WALL_CLOCK,
     /* 10 */ OBJ_TOKEIDAI_TYPE_SMALL_WALL_CLOCK,
-    /* 11 */ OBJ_TOKEIDAI_TYPE_STAIRCASE_TO_ROOFTOP,
+    /* 11 */ OBJ_TOKEIDAI_TYPE_STAIRCASE_TO_ROOFTOP
 } ObjTokeidaiType;
 
 struct ObjTokeidai;
@@ -28,13 +28,13 @@ typedef struct ObjTokeidai {
     /* 0x144 */ Gfx* opaDList;
     /* 0x148 */ Gfx* xluDList;
     /* 0x14C */ s16 minuteRingOrExteriorGearRotation;
-    /* 0x14E */ s16 minuteRingOrExteriorGearRotationalVelocity;
+    /* 0x14E */ s16 minuteRingOrExteriorGearAngularVelocity;
     /* 0x150 */ s16 minuteRingOrExteriorGearRotationTimer;
     /* 0x152 */ s16 clockFaceRotation;
     /* 0x154 */ union {
-                    s16 clockFaceRotationalVelocity;
+                    s16 clockFaceAngularVelocity;
                     s16 settleTimer;
-                    s16 counterweightRotationalVelocity;
+                    s16 counterweightAngularVelocity;
                     s16 openingWaitTimer;
                     s16 slidingClockFaceAngle;
                 };
@@ -46,8 +46,8 @@ typedef struct ObjTokeidai {
                 };
     /* 0x158 */ s32 sunMoonPanelRotation;
     /* 0x15C */ union {
-                    s16 sunMoonPanelRotationalVelocity;
-                    s16 fallingClockFaceRotationalVelocity;
+                    s16 sunMoonPanelAngularVelocity;
+                    s16 fallingClockFaceAngularVelocity;
                 };
     /* 0x15E */ s16 yTranslation;
     /* 0x160 */ s16 xRotation;
@@ -61,7 +61,5 @@ typedef struct ObjTokeidai {
     /* 0x170 */ u16 clockTime; // can differ from the actual time, e.g., in cutscenes
     /* 0x174 */ ObjTokeidaiActionFunc actionFunc;
 } ObjTokeidai; // size = 0x178
-
-extern const ActorInit Obj_Tokeidai_InitVars;
 
 #endif // Z_OBJ_TOKEIDAI_H

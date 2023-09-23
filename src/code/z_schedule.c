@@ -8,9 +8,9 @@
 
 s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagS* cmd = (ScheduleCmdCheckFlagS*)*script;
-    u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
+    u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
 
-    if (gSaveContext.save.weekEventReg[flag >> 8] & (flag & 0xFF)) {
+    if (CHECK_WEEKEVENTREG(flag)) {
         *script += cmd->offset;
     }
 
@@ -19,9 +19,9 @@ s32 Schedule_CheckFlagS(PlayState* play, u8** script, ScheduleOutput* output) {
 
 s32 Schedule_CheckFlagL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckFlagL* cmd = (ScheduleCmdCheckFlagL*)*script;
-    u16 flag = (cmd->flagByte << 8) | cmd->flagMask;
+    u16 flag = PACK_WEEKEVENTREG_FLAG(cmd->flagByte, cmd->flagMask);
 
-    if (gSaveContext.save.weekEventReg[flag >> 8] & (flag & 0xFF)) {
+    if (CHECK_WEEKEVENTREG(flag)) {
         *script += (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 
@@ -130,9 +130,9 @@ s32 Schedule_ReturnValueS(PlayState* play, u8** script, ScheduleOutput* output) 
 
 s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneS* cmd = (ScheduleCmdCheckNotInSceneS*)*script;
-    s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
+    s16 sceneId = (cmd->sceneIdH << 8) | cmd->sceneIdL;
 
-    if (scene != play->sceneNum) {
+    if (sceneId != play->sceneId) {
         *script += cmd->offset;
     }
 
@@ -141,9 +141,9 @@ s32 Schedule_CheckNotInSceneS(PlayState* play, u8** script, ScheduleOutput* outp
 
 s32 Schedule_CheckNotInSceneL(PlayState* play, u8** script, ScheduleOutput* output) {
     ScheduleCmdCheckNotInSceneL* cmd = (ScheduleCmdCheckNotInSceneL*)*script;
-    s16 scene = (cmd->sceneH << 8) | cmd->sceneL;
+    s16 sceneId = (cmd->sceneIdH << 8) | cmd->sceneIdL;
 
-    if (scene != play->sceneNum) {
+    if (sceneId != play->sceneId) {
         *script = *script + (s16)((cmd->offsetH << 8) | cmd->offsetL);
     }
 

@@ -2,17 +2,22 @@
 #define Z_DEMO_MOONEND_H
 
 #include "global.h"
+#include "objects/object_moonend/object_moonend.h"
 
 struct DemoMoonend;
 
 typedef void (*DemoMoonendActionFunc)(struct DemoMoonend*, PlayState*);
 
+#define DEMOMOONEND_GET_PARAM_F(thisx) (((thisx)->params) & 0xF)
+
 typedef struct DemoMoonend {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ char unk_144[0x19C];
+    /* 0x144 */ SkeletonInfo skeletonInfo;
+    /* 0x174 */ Vec3s jointTable[30];
+    /* 0x228 */ Vec3s morphTable[30];
+    /* 0x2DC */ u16 cueType;
+    /* 0x2DE */ u16 cueId;
     /* 0x2E0 */ DemoMoonendActionFunc actionFunc;
 } DemoMoonend; // size = 0x2E4
-
-extern const ActorInit Demo_Moonend_InitVars;
 
 #endif // Z_DEMO_MOONEND_H

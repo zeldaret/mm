@@ -9,7 +9,7 @@
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "objects/object_vm/object_vm.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnVm*)thisx)
 
@@ -29,7 +29,7 @@ void func_808CCB08(EnVm* this);
 void func_808CCB50(EnVm* this, PlayState* play);
 void func_808CCCF0(EnVm* this, PlayState* play);
 
-const ActorInit En_Vm_InitVars = {
+ActorInit En_Vm_InitVars = {
     ACTOR_EN_VM,
     ACTORCAT_ENEMY,
     FLAGS,
@@ -144,8 +144,8 @@ static DamageTable sDamageTable = {
 static CollisionCheckInfoInit sColChkInfoInit = { 2, 25, 100, MASS_IMMOVABLE };
 
 TexturePtr D_808CD58C[] = {
-    gameplay_keep_Tex_03F300, gameplay_keep_Tex_03FB00, gameplay_keep_Tex_040300, gameplay_keep_Tex_040B00,
-    gameplay_keep_Tex_041300, gameplay_keep_Tex_041B00, gameplay_keep_Tex_042300, gameplay_keep_Tex_042B00,
+    gEffEnemyDeathFlame1Tex, gEffEnemyDeathFlame2Tex, gEffEnemyDeathFlame3Tex, gEffEnemyDeathFlame4Tex,
+    gEffEnemyDeathFlame5Tex, gEffEnemyDeathFlame6Tex, gEffEnemyDeathFlame7Tex, gEffEnemyDeathFlame8Tex,
 };
 
 static InitChainEntry sInitChain[] = {
@@ -167,8 +167,7 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
-    SkelAnime_Init(play, &this->skelAnime, &object_vm_Skel_003F60, &object_vm_Anim_000068, this->jointTable,
-                   this->morphTable, 11);
+    SkelAnime_Init(play, &this->skelAnime, &gBeamosSkel, &gBeamosAnim, this->jointTable, this->morphTable, 11);
     Collider_InitAndSetTris(play, &this->colliderTris, &this->actor, &sTrisInit, this->colliderTrisElements);
     Collider_InitAndSetJntSph(play, &this->colliderJntSph, &this->actor, &sJntSphInit, this->colliderJntSphElements);
     CollisionCheck_SetInfo(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
@@ -180,7 +179,7 @@ void EnVm_Init(Actor* thisx, PlayState* play) {
 
     this->unk_21C = params * 40.0f;
     thisx->params &= 0xFF;
-    this->actor.bgCheckFlags |= 0x400;
+    this->actor.bgCheckFlags |= BGCHECKFLAG_PLAYER_400;
 
     if (!D_808CD5B8) {
         for (i = 0; i < ARRAY_COUNT(D_808CD58C); i++) {
@@ -199,9 +198,9 @@ void EnVm_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_808CC420(EnVm* this) {
-    f32 lastFrame = Animation_GetLastFrame(&object_vm_Anim_000068);
+    f32 lastFrame = Animation_GetLastFrame(&gBeamosAnim);
 
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
     this->actionFunc = func_808CC490;
 }
 
@@ -212,7 +211,7 @@ void func_808CC490(EnVm* this, PlayState* play) {
 
     Math_ApproachS(&this->unk_216, 0, 0xA, 0x5DC);
     this->unk_218 -= 0x1F4;
-    func_800B9010(&this->actor, NA_SE_EN_BIMOS_ROLL_HEAD - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BIMOS_ROLL_HEAD - SFX_FLAG);
 
     if (this->actor.xzDistToPlayer <= this->unk_21C) {
         if ((this->actor.playerHeightRel <= 80.0f) && (this->actor.playerHeightRel >= -160.0f)) {
@@ -231,7 +230,7 @@ void func_808CC490(EnVm* this, PlayState* play) {
 }
 
 void func_808CC5C4(EnVm* this) {
-    Animation_PlayLoopSetSpeed(&this->skelAnime, &object_vm_Anim_000068, 2.0f);
+    Animation_PlayLoopSetSpeed(&this->skelAnime, &gBeamosAnim, 2.0f);
     this->unk_214 = 10;
     this->actionFunc = func_808CC610;
 }
@@ -265,8 +264,8 @@ void func_808CC610(EnVm* this, PlayState* play) {
 }
 
 void func_808CC788(EnVm* this) {
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BIMOS_AIM);
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, 3.0f, 3.0f, 7.0f, ANIMMODE_ONCE, 0.0f);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_BIMOS_AIM);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, 3.0f, 3.0f, 7.0f, ANIMMODE_ONCE, 0.0f);
     this->unk_214 = 305;
     this->unk_220 = 0.06f;
     this->colliderTris.base.atFlags &= ~AT_HIT;
@@ -322,13 +321,13 @@ void func_808CC820(EnVm* this, PlayState* play) {
 }
 
 void func_808CCA10(EnVm* this) {
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
-                     0.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, -1.0f, Animation_GetLastFrame(&gBeamosAnim), 0.0f, ANIMMODE_ONCE,
+                     0.0f);
     this->unk_214 = 100;
     this->unk_210 = 0;
     this->unk_224 = 0.0f;
     this->unk_220 = 0.0f;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_COMMON_FREEZE);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_COMMON_FREEZE);
     this->actionFunc = func_808CCAA4;
 }
 
@@ -343,7 +342,7 @@ void func_808CCAA4(EnVm* this, PlayState* play) {
 }
 
 void func_808CCB08(EnVm* this) {
-    Animation_PlayOnce(&this->skelAnime, &object_vm_Anim_000068);
+    Animation_PlayOnce(&this->skelAnime, &gBeamosAnim);
     this->unk_214 = -1;
     this->actionFunc = func_808CCB50;
 }
@@ -365,10 +364,10 @@ void func_808CCB50(EnVm* this, PlayState* play) {
 }
 
 void func_808CCBE4(EnVm* this, PlayState* play) {
-    Animation_Change(&this->skelAnime, &object_vm_Anim_000068, -1.0f, Animation_GetLastFrame(&object_vm_Anim_000068),
-                     0.0f, ANIMMODE_ONCE, 0.0f);
+    Animation_Change(&this->skelAnime, &gBeamosAnim, -1.0f, Animation_GetLastFrame(&gBeamosAnim), 0.0f, ANIMMODE_ONCE,
+                     0.0f);
     Enemy_StartFinishingBlow(play, &this->actor);
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 33);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 33);
     this->unk_214 = 33;
     this->unk_220 = 0.0f;
     this->unk_224 = 0.0f;
@@ -376,7 +375,7 @@ void func_808CCBE4(EnVm* this, PlayState* play) {
     this->actor.world.pos.y = this->actor.focus.pos.y;
     this->actor.velocity.y = 8.0f;
     this->actor.gravity = -0.5f;
-    this->actor.speedXZ = Rand_ZeroOne() + 1.0f;
+    this->actor.speed = Rand_ZeroOne() + 1.0f;
     this->unk_210 = 0;
     this->actor.flags |= ACTOR_FLAG_10;
     this->actionFunc = func_808CCCF0;
@@ -386,19 +385,21 @@ void func_808CCCF0(EnVm* this, PlayState* play) {
     this->unk_216 += 0x5DC;
     this->unk_218 += 0x9C4;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 40.0f, 7);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 40.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4);
 
     this->unk_214--;
     if (this->unk_214 == 1) {
-        EnBom* bomb = (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x,
-                                          this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0x6FF, 0);
+        EnBom* bomb =
+            (EnBom*)Actor_Spawn(&play->actorCtx, play, ACTOR_EN_BOM, this->actor.world.pos.x, this->actor.world.pos.y,
+                                this->actor.world.pos.z, BOMB_EXPLOSIVE_TYPE_BOMB, 0, 0x6FF, BOMB_TYPE_BODY);
 
         if (bomb != NULL) {
             bomb->timer = 0;
         }
     } else if (this->unk_214 == 0) {
         Item_DropCollectibleRandom(play, &this->actor, &this->actor.world.pos, 0xB0);
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -440,11 +441,11 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
         if ((play->gameplayFrames % 2) != 0) {
             func_800BBFB0(play, &this->unk_234, 6.0f, 1, 120, 20, 1);
         }
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_BIMOS_LAZER_GND - SFX_FLAG);
+        Actor_PlaySfx(&this->actor, NA_SE_EN_BIMOS_LAZER_GND - SFX_FLAG);
     }
 
     if (this->unk_224 > 0.0f) {
-        func_800B9010(&this->actor, NA_SE_EN_BIMOS_LAZER - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->actor, NA_SE_EN_BIMOS_LAZER - SFX_FLAG);
     }
 
     this->actionFunc(this, play);
@@ -460,10 +461,10 @@ void EnVm_Update(Actor* thisx, PlayState* play) {
 s32 EnVm_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnVm* this = THIS;
 
-    if (limbIndex == OBJECT_VM_LIMB_02) {
+    if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         rot->x += this->unk_216;
         rot->y += this->unk_218;
-    } else if ((limbIndex == OBJECT_VM_LIMB_0A) && (this->actionFunc == func_808CCCF0)) {
+    } else if ((limbIndex == BEAMOS_LIMB_BODY) && (this->actionFunc == func_808CCCF0)) {
         *dList = NULL;
     }
     return false;
@@ -479,7 +480,7 @@ void EnVm_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
 
     Collider_UpdateSpheres(limbIndex, &this->colliderJntSph);
 
-    if (limbIndex == OBJECT_VM_LIMB_02) {
+    if (limbIndex == BEAMOS_LIMB_HEAD_ROOT) {
         sp4C = NULL;
 
         Matrix_MultZero(&this->actor.focus.pos);
@@ -512,7 +513,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
 
     gfx = POLY_OPA_DISP;
 
-    gSPDisplayList(&gfx[0], &sSetupDL[6 * 25]);
+    gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_25]);
 
     POLY_OPA_DISP = &gfx[1];
 
@@ -522,7 +523,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
     if (this->unk_210 == 2) {
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(&gfx[0], &sSetupDL[6 * 60]);
+        gSPDisplayList(&gfx[0], gSetupDLs[SETUPDL_60]);
         gDPSetColorDither(&gfx[1], G_CD_DISABLE);
 
         Matrix_Translate(this->unk_234.x, this->unk_234.y + 10.0f, this->unk_234.z, MTXMODE_NEW);
@@ -532,7 +533,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
         gDPSetPrimColor(&gfx[3], 0, 0, 255, 255, 255, 168);
         gDPSetEnvColor(&gfx[4], 0, 0, 255, 0);
         gSPSegment(&gfx[5], 0x08, D_808CD58C[play->gameplayFrames & 7]);
-        gSPDisplayList(&gfx[6], gameplay_keep_DL_044300);
+        gSPDisplayList(&gfx[6], gEffEnemyDeathFlameDL);
 
         POLY_XLU_DISP = &gfx[7];
     }
@@ -547,7 +548,7 @@ void EnVm_Draw(Actor* thisx, PlayState* play) {
         Matrix_Scale(this->unk_220, this->unk_220, this->unk_224 * 0.0015f, MTXMODE_APPLY);
 
         gSPMatrix(&gfx[1], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(&gfx[2], object_vm_DL_002728);
+        gSPDisplayList(&gfx[2], gBeamosLaserDL);
 
         POLY_OPA_DISP = &gfx[3];
     }

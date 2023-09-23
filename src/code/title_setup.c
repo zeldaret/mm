@@ -1,18 +1,19 @@
-#include "global.h"
+#include "z_title_setup.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void TitleSetup_GameStateResetContext(void) {
+void Setup_SetRegs(void) {
     XREG(2) = 0;
     XREG(10) = 0x1A;
     XREG(11) = 0x14;
     XREG(12) = 0xE;
     XREG(13) = 0;
-    XREG(31) = 0;
+    R_A_BTN_Y_OFFSET = 0;
     R_MAGIC_CONSUME_TIMER_GIANTS_MASK = 80;
-    XREG(43) = 0xFC54;
 
-    XREG(44) = 0xD7;
-    XREG(45) = 0xDA;
+    R_THREE_DAY_CLOCK_Y_POS = 64596;
+    R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF = 215;
+    R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF = 218;
+
     XREG(68) = 0x61;
     XREG(69) = 0x93;
     XREG(70) = 0x28;
@@ -23,45 +24,44 @@ void TitleSetup_GameStateResetContext(void) {
     XREG(77) = 0x3C;
     XREG(78) = 0x2F;
     XREG(79) = 0x62;
-    XREG(87) = 0;
+    R_PAUSE_OWLWARP_ALPHA = 0;
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
-    XREG(91) = 0;
-    XREG(94) = 0;
-    XREG(95) = 0;
 
-    YREG(32) = 0x50;
-    YREG(33) = 0x3C;
-    YREG(34) = 0xDC;
-    YREG(35) = 0x3C;
-    YREG(36) = 0x50;
-    YREG(37) = 0xA0;
-    YREG(38) = 0xDC;
-    YREG(39) = 0xA0;
-    YREG(40) = 0x8E;
-    YREG(41) = 0x6C;
-    YREG(42) = 0xCC;
-    YREG(43) = 0xB1;
+    R_STORY_FILL_SCREEN_ALPHA = 0;
+    R_REVERSE_FLOOR_INDEX = 0;
+    R_MINIMAP_DISABLED = false;
+
+    R_PICTO_FOCUS_BORDER_TOPLEFT_X = 80;
+    R_PICTO_FOCUS_BORDER_TOPLEFT_Y = 60;
+    R_PICTO_FOCUS_BORDER_TOPRIGHT_X = 220;
+    R_PICTO_FOCUS_BORDER_TOPRIGHT_Y = 60;
+    R_PICTO_FOCUS_BORDER_BOTTOMLEFT_X = 80;
+    R_PICTO_FOCUS_BORDER_BOTTOMLEFT_Y = 160;
+    R_PICTO_FOCUS_BORDER_BOTTOMRIGHT_X = 220;
+    R_PICTO_FOCUS_BORDER_BOTTOMRIGHT_Y = 160;
+    R_PICTO_FOCUS_ICON_X = 142;
+    R_PICTO_FOCUS_ICON_Y = 108;
+    R_PICTO_FOCUS_TEXT_X = 204;
+    R_PICTO_FOCUS_TEXT_Y = 177;
 }
 
-void TitleSetup_InitImpl(GameState* gameState) {
-    func_80185908();
+void Setup_InitImpl(SetupState* this) {
+    SysFlashrom_InitFlash();
     SaveContext_Init();
-    TitleSetup_GameStateResetContext();
+    Setup_SetRegs();
 
-    gameState->running = 0;
-
-setNextGamestate
-    :; // This label is probably a leftover of a debug ifdef, it's essential to not have gameState->running reordered!
-    SET_NEXT_GAMESTATE(gameState, Title_Init, TitleContext);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
-void TitleSetup_Destroy(GameState* gameState) {
-    ;
+void Setup_Destroy(GameState* thisx) {
 }
 
-void TitleSetup_Init(GameState* gameState) {
-    gameState->destroy = TitleSetup_Destroy;
-    TitleSetup_InitImpl(gameState);
+void Setup_Init(GameState* thisx) {
+    SetupState* this = (SetupState*)thisx;
+
+    this->state.destroy = Setup_Destroy;
+    Setup_InitImpl(this);
 }

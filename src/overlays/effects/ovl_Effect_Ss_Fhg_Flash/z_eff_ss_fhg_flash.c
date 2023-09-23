@@ -19,7 +19,7 @@ u32 EffectSsFhgFlash_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
+EffectSsInit Effect_Ss_Fhg_Flash_InitVars = {
     EFFECT_SS_FHG_FLASH,
     EffectSsFhgFlash_Init,
 };
@@ -62,11 +62,11 @@ void EffectSsFhgFlash_Draw(PlayState* play, u32 index, EffectSs* this) {
     Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
     if (this->rParams != FHGFLASH_SHOCK_NO_ACTOR) {
-        func_8012C448(play->state.gfxCtx);
+        Gfx_SetupDL44_Xlu(play->state.gfxCtx);
         Matrix_RotateXS(this->rXZRot, MTXMODE_APPLY);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_DECAL2);
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_ReplaceRotation(&play->billboardMtxF);
         gDPSetRenderMode(POLY_XLU_DISP++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     }
@@ -89,25 +89,25 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
     if (this->rParams == FHGFLASH_SHOCK_PLAYER) {
         Player* player = GET_PLAYER(play);
 
-        randBodyPart = Rand_ZeroFloat(18 - 0.1f);
-        this->pos.x = player->bodyPartsPos[randBodyPart].x + randPlusMinusPoint5Scaled(10.0f);
-        this->pos.y = player->bodyPartsPos[randBodyPart].y + randPlusMinusPoint5Scaled(15.0f);
-        this->pos.z = player->bodyPartsPos[randBodyPart].z + randPlusMinusPoint5Scaled(10.0f);
+        randBodyPart = Rand_ZeroFloat(PLAYER_BODYPART_MAX - 0.1f);
+        this->pos.x = player->bodyPartsPos[randBodyPart].x + Rand_CenteredFloat(10.0f);
+        this->pos.y = player->bodyPartsPos[randBodyPart].y + Rand_CenteredFloat(15.0f);
+        this->pos.z = player->bodyPartsPos[randBodyPart].z + Rand_CenteredFloat(10.0f);
     } else if ((this->rParams >= FHGFLASH_SHOCK_GOHT_2) && (this->rParams <= FHGFLASH_SHOCK_GOHT_6)) {
         s32 pad;
         Vec3f* bodyPartPos;
         BossHakugin* goht = (BossHakugin*)this->actor;
-        s32 index = goht->unk_191 - 3;
+        s32 gohtIndex = goht->unk_191 - 3;
 
-        if (index < 0) {
+        if (gohtIndex < 0) {
             bodyPartPos = &goht->unk_2F00[this->rParams][12].unk_00;
         } else {
-            bodyPartPos = &goht->unk_2F00[this->rParams][index].unk_00;
+            bodyPartPos = &goht->unk_2F00[this->rParams][gohtIndex].unk_00;
         }
 
-        this->pos.x = randPlusMinusPoint5Scaled(70.0f) + bodyPartPos->x;
-        this->pos.y = randPlusMinusPoint5Scaled(70.0f) + bodyPartPos->y;
-        this->pos.z = randPlusMinusPoint5Scaled(70.0f) + bodyPartPos->z;
+        this->pos.x = Rand_CenteredFloat(70.0f) + bodyPartPos->x;
+        this->pos.y = Rand_CenteredFloat(70.0f) + bodyPartPos->y;
+        this->pos.z = Rand_CenteredFloat(70.0f) + bodyPartPos->z;
     }
     if (this->life < 100) {
         this->rAlpha -= 50;

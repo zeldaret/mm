@@ -27,7 +27,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2);
 
 static f32 D_808DE5B0;
 
-const ActorInit Object_Kankyo_InitVars = {
+ActorInit Object_Kankyo_InitVars = {
     ACTOR_OBJECT_KANKYO,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -125,7 +125,7 @@ void ObjectKankyo_Init(Actor* thisx, PlayState* play) {
 void ObjectKankyo_Destroy(Actor* thisx, PlayState* play) {
     ObjectKankyo* this = THIS;
 
-    Actor_MarkForDeath(&this->actor);
+    Actor_Kill(&this->actor);
 }
 
 void func_808DC18C(ObjectKankyo* this, PlayState* play) {
@@ -517,6 +517,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
     }
 
     OPEN_DISPS(play->state.gfxCtx);
+
     spB4 = false;
 
     if (this->actor.params == 3) {
@@ -550,11 +551,11 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
                 gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
                 gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
                 gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
+                gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             }
 
             Matrix_Translate(worldPos.x, worldPos.y, worldPos.z, MTXMODE_NEW);
@@ -569,7 +570,7 @@ void func_808DD3C8(Actor* thisx, PlayState* play2) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
@@ -588,7 +589,7 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
     ObjectKankyo* this = THIS;
     f32 tempA;
 
-    if (play->sceneNum == SCENE_KYOJINNOMA) {
+    if (play->sceneId == SCENE_KYOJINNOMA) {
         phi_f26 = 1.0f;
     } else {
         tempA = Camera_GetWaterYPos(GET_ACTIVE_CAM(play));
@@ -629,14 +630,14 @@ void func_808DD970(Actor* thisx, PlayState* play2) {
             Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gDust5Tex));
+            gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gEffDust5Tex));
             gSPClearGeometryMode(POLY_XLU_DISP++, G_LIGHTING);
 
-            POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0);
+            POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_0);
 
             gDPSetRenderMode(POLY_XLU_DISP++, G_RM_FOG_SHADE_A, G_RM_ZB_CLD_SURF2);
             gSPSetGeometryMode(POLY_XLU_DISP++, G_FOG);
-            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_023130);
+            gSPDisplayList(POLY_XLU_DISP++, gEffDustDL);
         }
     }
 
@@ -647,8 +648,6 @@ f32 func_808DDE74(void) {
     return Rand_ZeroOne() - 0.5f;
 }
 
-#ifdef NON_MATCHING
-// s2/s3 swapped
 void func_808DDE9C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjectKankyo* this = THIS;
@@ -666,7 +665,7 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
     if (end) {
         gDPPipeSync(POLY_XLU_DISP++);
         gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 150, 255, 255, 25);
-        POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+        POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
     }
 
     for (i = 0; i < end; i++) {
@@ -674,32 +673,30 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
         temp_f22 = this->unk_14C[0].unk_04 + ((Rand_ZeroOne() - 0.7f) * this->unk_144);
         temp_f2 = this->unk_14C[0].unk_08 + ((Rand_ZeroOne() - 0.7f) * this->unk_144);
 
-        if ((temp_f20 < -252.0f) && (temp_f20 > -500.0f) && (temp_f2 > 3820.0f) && (temp_f2 < 4150.0f)) {
-            continue;
+        if (!((temp_f20 < -252.0f) && (temp_f20 > -500.0f) && (temp_f2 > 3820.0f) && (temp_f2 < 4150.0f))) {
+            Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+
+            gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+
+            Matrix_RotateYS((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
+            Matrix_RotateXS((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
+
+            if (this->unk_114C == 0) {
+                Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
+            } else {
+                Matrix_Scale(2.0f, 4.0f, 2.0f, MTXMODE_APPLY);
+            }
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0706E0);
         }
-
-        Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
-
-        gSPMatrix(POLY_XLU_DISP++, &D_01000000, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_MODELVIEW);
-
-        Matrix_RotateYS((s16)this->unk_14C[2].unk_04 + (s16)(i << 5), MTXMODE_APPLY);
-        Matrix_RotateXS((s16)this->unk_14C[2].unk_00 + (s16)(i << 5), MTXMODE_APPLY);
-
-        if (this->unk_114C == 0) {
-            Matrix_Scale(0.5f, 1.0f, 0.5f, MTXMODE_APPLY);
-        } else {
-            Matrix_Scale(2.0f, 4.0f, 2.0f, MTXMODE_APPLY);
-        }
-
-        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_0706E0);
     }
 
     phi_s5 = false;
     if (player->actor.floorHeight < play->view.eye.y) {
         for (i = 0; i < end; i++) {
             if (!phi_s5) {
-                func_8012C2DC(play->state.gfxCtx);
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
                 gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, 255);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 100);
@@ -710,21 +707,17 @@ void func_808DDE9C(Actor* thisx, PlayState* play2) {
             temp_f22 = player->actor.floorHeight + 2.0f;
             temp_f2 = this->unk_14C[1].unk_08 + (func_808DDE74() * 220.0f);
 
-            if ((temp_f20 < -252.0f) && (temp_f20 > -500.0f) && (temp_f2 > 3820.0f) && (temp_f2 < 4150.0f)) {
-                continue;
+            if (!((temp_f20 < -252.0f) && (temp_f20 > -500.0f) && (temp_f2 > 3820.0f) && (temp_f2 < 4150.0f))) {
+                Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
+                temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
+                Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
+
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
             }
-
-            Matrix_Translate(temp_f20, temp_f22, temp_f2, MTXMODE_NEW);
-            temp_f12 = (Rand_ZeroOne() * 0.05f) + 0.05f;
-            Matrix_Scale(temp_f12, temp_f12, temp_f12, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gEffShockwaveDL);
         }
     }
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Object_Kankyo/func_808DDE9C.s")
-#endif

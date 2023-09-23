@@ -15,7 +15,7 @@ void OceffWipe6_Destroy(Actor* thisx, PlayState* play);
 void OceffWipe6_Update(Actor* thisx, PlayState* play);
 void OceffWipe6_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit Oceff_Wipe6_InitVars = {
+ActorInit Oceff_Wipe6_InitVars = {
     ACTOR_OCEFF_WIPE6,
     ACTORCAT_ITEMACTION,
     FLAGS,
@@ -49,7 +49,7 @@ void OceffWipe6_Update(Actor* thisx, PlayState* play) {
     if (this->counter < 100) {
         this->counter++;
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
     }
 }
 
@@ -86,7 +86,7 @@ void OceffWipe6_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     Matrix_Translate(activeCamEye.x + quakeOffset.x, activeCamEye.y + quakeOffset.y, activeCamEye.z + quakeOffset.z,
                      MTXMODE_NEW);
     Matrix_Scale(0.1f, 0.1f, 0.1f, MTXMODE_APPLY);

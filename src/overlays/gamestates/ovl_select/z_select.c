@@ -5,16 +5,14 @@
  */
 
 #include "z_select.h"
+#include "z64shrink_window.h"
+#include "z64view.h"
 #include "libc/alloca.h"
 #include "overlays/gamestates/ovl_title/z_title.h"
 
-void MapSelect_LoadTitle(MapSelectState* this) {
-    {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    }
-
-    SET_NEXT_GAMESTATE(&this->state, Title_Init, TitleContext);
+void MapSelect_LoadConsoleLogo(MapSelectState* this) {
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, ConsoleLogo_Init, sizeof(ConsoleLogoState));
 }
 
 void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
@@ -27,17 +25,17 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.buttonStatus[EQUIP_SLOT_C_DOWN] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_C_RIGHT] = BTN_ENABLED;
     gSaveContext.buttonStatus[EQUIP_SLOT_A] = BTN_ENABLED;
-    gSaveContext.unk_3F1E = 0;
-    gSaveContext.unk_3F20 = 0;
-    gSaveContext.unk_3F22 = 0;
-    gSaveContext.unk_3F24 = 0;
+    gSaveContext.hudVisibilityForceButtonAlphasByStatus = false;
+    gSaveContext.nextHudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibility = HUD_VISIBILITY_IDLE;
+    gSaveContext.hudVisibilityTimer = 0;
 
-    Audio_QueueSeqCmd(NA_BGM_STOP);
+    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0);
     gSaveContext.save.entrance = entrance;
 
     if (spawn != 0) {
         gSaveContext.save.entrance =
-            Entrance_Create((s32)gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
+            Entrance_Create(gSaveContext.save.entrance >> 9, spawn, gSaveContext.save.entrance & 0xF);
     }
     if (gSaveContext.save.entrance == ENTRANCE(CLOCK_TOWER_INTERIOR, 0)) {
         gSaveContext.save.day = 0;
@@ -45,8 +43,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     }
 
     gSaveContext.respawn[RESPAWN_MODE_DOWN].entrance = 0xFFFF;
-    gSaveContext.seqIndex = (u8)NA_BGM_DISABLED;
-    gSaveContext.nightSeqIndex = 0xFF;
+    gSaveContext.seqId = (u8)NA_BGM_DISABLED;
+    gSaveContext.ambienceId = AMBIENCE_ID_DISABLED;
     gSaveContext.showTitleCard = true;
     gSaveContext.respawnFlag = 0;
     gSaveContext.respawn[RESPAWN_MODE_GORON].entrance = 0xFF;
@@ -55,11 +53,8 @@ void MapSelect_LoadGame(MapSelectState* this, u32 entrance, s32 spawn) {
     gSaveContext.respawn[RESPAWN_MODE_HUMAN].entrance = 0xFF;
     gWeatherMode = 0;
 
-    do {
-        GameState* gameState = &this->state;
-        gameState->running = false;
-    } while (0);
-    SET_NEXT_GAMESTATE(&this->state, Play_Init, PlayState);
+    STOP_GAMESTATE(&this->state);
+    SET_NEXT_GAMESTATE(&this->state, Play_Init, sizeof(PlayState));
 }
 
 // "Translation" (Actual name)
@@ -501,7 +496,7 @@ static SceneSelectEntry sScenes[] = {
     { "X 1:SPOT00", MapSelect_LoadGame, ENTRANCE(CUTSCENE, 0) },
 
     // "Title" (Title Screen)
-    { "title", (void*)MapSelect_LoadTitle, 0 },
+    { "title", (void*)MapSelect_LoadConsoleLogo, 0 },
 };
 
 void MapSelect_UpdateMenu(MapSelectState* this) {
@@ -514,15 +509,15 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
 
     if (this->verticalInputAccumulator == 0) {
         if (CHECK_BTN_ALL(controller1->press.button, BTN_A) || CHECK_BTN_ALL(controller1->press.button, BTN_START)) {
-            for (i = 0; i < ARRAY_COUNT(gSaveContext.unk_3EC0); i++) {
-                gSaveContext.unk_3DD0[i] = 0;
-                gSaveContext.unk_3DE0[i] = 0;
-                gSaveContext.unk_3E18[i] = 0;
-                gSaveContext.unk_3E50[i] = 0;
-                gSaveContext.unk_3E88[i] = 0;
-                gSaveContext.unk_3EC0[i] = 0;
+            for (i = 0; i < TIMER_ID_MAX; i++) {
+                gSaveContext.timerStates[i] = TIMER_STATE_OFF;
+                gSaveContext.timerCurTimes[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerTimeLimits[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerStartOsTimes[i] = 0;
+                gSaveContext.timerStopTimes[i] = SECONDS_TO_TIMER(0);
+                gSaveContext.timerPausedOsTimes[i] = 0;
             }
-            gSaveContext.minigameState = 0;
+            gSaveContext.minigameStatus = MINIGAME_STATUS_INACTIVE;
 
             if (this->scenes[this->currentScene].loadFunc != NULL) {
                 this->scenes[this->currentScene].loadFunc(this, this->scenes[this->currentScene].entrance, this->opt);
@@ -530,7 +525,7 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_B)) {
-            playerForm = gSaveContext.save.playerForm - 1;
+            playerForm = GET_PLAYER_FORM - 1;
             if (playerForm < PLAYER_FORM_FIERCE_DEITY) {
                 playerForm = PLAYER_FORM_HUMAN;
             }
@@ -538,69 +533,69 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
         }
 
         if (CHECK_BTN_ALL(controller1->press.button, BTN_Z)) {
-            if (gSaveContext.save.cutscene == 0x8000) {
-                gSaveContext.save.cutscene = 0;
-            } else if (gSaveContext.save.cutscene == 0) {
-                gSaveContext.save.cutscene = 0x8800;
-            } else if (gSaveContext.save.cutscene == 0x8800) {
-                gSaveContext.save.cutscene = 0xFFF0;
-            } else if (gSaveContext.save.cutscene == 0xFFF0) {
-                gSaveContext.save.cutscene = 0xFFF1;
-            } else if (gSaveContext.save.cutscene == 0xFFF1) {
-                gSaveContext.save.cutscene = 0xFFF2;
-            } else if (gSaveContext.save.cutscene == 0xFFF2) {
-                gSaveContext.save.cutscene = 0xFFF3;
-            } else if (gSaveContext.save.cutscene == 0xFFF3) {
-                gSaveContext.save.cutscene = 0xFFF4;
-            } else if (gSaveContext.save.cutscene == 0xFFF4) {
-                gSaveContext.save.cutscene = 0xFFF5;
-            } else if (gSaveContext.save.cutscene == 0xFFF5) {
-                gSaveContext.save.cutscene = 0xFFF6;
-            } else if (gSaveContext.save.cutscene == 0xFFF6) {
-                gSaveContext.save.cutscene = 0xFFF7;
-            } else if (gSaveContext.save.cutscene == 0xFFF7) {
-                gSaveContext.save.cutscene = 0xFFF8;
-            } else if (gSaveContext.save.cutscene == 0xFFF8) {
-                gSaveContext.save.cutscene = 0xFFF9;
-            } else if (gSaveContext.save.cutscene == 0xFFF9) {
-                gSaveContext.save.cutscene = 0xFFFA;
-            } else if (gSaveContext.save.cutscene == 0xFFFA) {
-                gSaveContext.save.cutscene = 0x8000;
+            if (gSaveContext.save.cutsceneIndex == 0x8000) {
+                gSaveContext.save.cutsceneIndex = 0;
+            } else if (gSaveContext.save.cutsceneIndex == 0) {
+                gSaveContext.save.cutsceneIndex = 0x8800;
+            } else if (gSaveContext.save.cutsceneIndex == 0x8800) {
+                gSaveContext.save.cutsceneIndex = 0xFFF0;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF0) {
+                gSaveContext.save.cutsceneIndex = 0xFFF1;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF1) {
+                gSaveContext.save.cutsceneIndex = 0xFFF2;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF2) {
+                gSaveContext.save.cutsceneIndex = 0xFFF3;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF3) {
+                gSaveContext.save.cutsceneIndex = 0xFFF4;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF4) {
+                gSaveContext.save.cutsceneIndex = 0xFFF5;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF5) {
+                gSaveContext.save.cutsceneIndex = 0xFFF6;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF6) {
+                gSaveContext.save.cutsceneIndex = 0xFFF7;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF7) {
+                gSaveContext.save.cutsceneIndex = 0xFFF8;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF8) {
+                gSaveContext.save.cutsceneIndex = 0xFFF9;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF9) {
+                gSaveContext.save.cutsceneIndex = 0xFFFA;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFFA) {
+                gSaveContext.save.cutsceneIndex = 0x8000;
             }
         } else if (CHECK_BTN_ALL(controller1->press.button, BTN_R)) {
-            if (gSaveContext.save.cutscene == 0x8000) {
-                gSaveContext.save.cutscene = 0xFFFA;
-            } else if (gSaveContext.save.cutscene == 0) {
-                gSaveContext.save.cutscene = 0x8000;
-            } else if (gSaveContext.save.cutscene == 0x8800) {
-                gSaveContext.save.cutscene = 0;
-            } else if (gSaveContext.save.cutscene == 0xFFF0) {
-                gSaveContext.save.cutscene = 0x8800;
-            } else if (gSaveContext.save.cutscene == 0xFFF1) {
-                gSaveContext.save.cutscene = 0xFFF0;
-            } else if (gSaveContext.save.cutscene == 0xFFF2) {
-                gSaveContext.save.cutscene = 0xFFF1;
-            } else if (gSaveContext.save.cutscene == 0xFFF3) {
-                gSaveContext.save.cutscene = 0xFFF2;
-            } else if (gSaveContext.save.cutscene == 0xFFF4) {
-                gSaveContext.save.cutscene = 0xFFF3;
-            } else if (gSaveContext.save.cutscene == 0xFFF5) {
-                gSaveContext.save.cutscene = 0xFFF4;
-            } else if (gSaveContext.save.cutscene == 0xFFF6) {
-                gSaveContext.save.cutscene = 0xFFF5;
-            } else if (gSaveContext.save.cutscene == 0xFFF7) {
-                gSaveContext.save.cutscene = 0xFFF6;
-            } else if (gSaveContext.save.cutscene == 0xFFF8) {
-                gSaveContext.save.cutscene = 0xFFF7;
-            } else if (gSaveContext.save.cutscene == 0xFFF9) {
-                gSaveContext.save.cutscene = 0xFFF8;
-            } else if (gSaveContext.save.cutscene == 0xFFFA) {
-                gSaveContext.save.cutscene = 0xFFF9;
+            if (gSaveContext.save.cutsceneIndex == 0x8000) {
+                gSaveContext.save.cutsceneIndex = 0xFFFA;
+            } else if (gSaveContext.save.cutsceneIndex == 0) {
+                gSaveContext.save.cutsceneIndex = 0x8000;
+            } else if (gSaveContext.save.cutsceneIndex == 0x8800) {
+                gSaveContext.save.cutsceneIndex = 0;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF0) {
+                gSaveContext.save.cutsceneIndex = 0x8800;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF1) {
+                gSaveContext.save.cutsceneIndex = 0xFFF0;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF2) {
+                gSaveContext.save.cutsceneIndex = 0xFFF1;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF3) {
+                gSaveContext.save.cutsceneIndex = 0xFFF2;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF4) {
+                gSaveContext.save.cutsceneIndex = 0xFFF3;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF5) {
+                gSaveContext.save.cutsceneIndex = 0xFFF4;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF6) {
+                gSaveContext.save.cutsceneIndex = 0xFFF5;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF7) {
+                gSaveContext.save.cutsceneIndex = 0xFFF6;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF8) {
+                gSaveContext.save.cutsceneIndex = 0xFFF7;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFF9) {
+                gSaveContext.save.cutsceneIndex = 0xFFF8;
+            } else if (gSaveContext.save.cutsceneIndex == 0xFFFA) {
+                gSaveContext.save.cutsceneIndex = 0xFFF9;
             }
         }
 
         gSaveContext.save.isNight = false;
-        if (gSaveContext.save.cutscene == 0x8800) {
+        if (gSaveContext.save.cutsceneIndex == 0x8800) {
             gSaveContext.save.isNight = true;
         }
 
@@ -636,13 +631,13 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                     this->timerUp = 20;
                     this->lockUp = true;
 
-                    play_sound(NA_SE_IT_SWORD_IMPACT);
+                    Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                     this->verticalInput = updateRate;
                 }
             }
 
             if (CHECK_BTN_ALL(controller1->cur.button, BTN_DUP) && (this->timerUp == 0)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = updateRate * 3;
             }
 
@@ -653,24 +648,24 @@ void MapSelect_UpdateMenu(MapSelectState* this) {
                 if (this->timerDown == 0) {
                     this->timerDown = 20;
                     this->lockDown = true;
-                    play_sound(NA_SE_IT_SWORD_IMPACT);
+                    Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                     this->verticalInput = -updateRate;
                 }
             }
             if (CHECK_BTN_ALL(controller1->cur.button, BTN_DDOWN) && (this->timerDown == 0)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = -updateRate * 3;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DLEFT) ||
                 CHECK_BTN_ALL(controller1->cur.button, BTN_DLEFT)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = updateRate;
             }
 
             if (CHECK_BTN_ALL(controller1->press.button, BTN_DRIGHT) ||
                 CHECK_BTN_ALL(controller1->cur.button, BTN_DRIGHT)) {
-                play_sound(NA_SE_IT_SWORD_IMPACT);
+                Audio_PlaySfx(NA_SE_IT_SWORD_IMPACT);
                 this->verticalInput = -updateRate;
             }
         }
@@ -992,15 +987,15 @@ void MapSelect_DrawMenu(MapSelectState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C4C0(gfxCtx);
+    Gfx_SetupDL28_Opa(gfxCtx);
 
     printer = alloca(sizeof(GfxPrint));
     GfxPrint_Init(printer);
     GfxPrint_Open(printer, POLY_OPA_DISP);
 
     MapSelect_PrintMenu(this, printer);
-    MapSelect_PrintAgeSetting(this, printer, ((void)0, gSaveContext.save.playerForm));
-    MapSelect_PrintCutsceneSetting(this, printer, ((void)0, gSaveContext.save.cutscene));
+    MapSelect_PrintAgeSetting(this, printer, GET_PLAYER_FORM);
+    MapSelect_PrintCutsceneSetting(this, printer, ((void)0, gSaveContext.save.cutsceneIndex));
 
     POLY_OPA_DISP = GfxPrint_Close(printer);
     GfxPrint_Destroy(printer);
@@ -1014,7 +1009,7 @@ void MapSelect_DrawLoadingScreen(MapSelectState* this) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C4C0(gfxCtx);
+    Gfx_SetupDL28_Opa(gfxCtx);
 
     GfxPrint_Init(&printer);
     GfxPrint_Open(&printer, POLY_OPA_DISP);
@@ -1033,7 +1028,7 @@ void MapSelect_Draw(MapSelectState* this) {
     func_8012CF0C(gfxCtx, true, true, 0, 0, 0);
 
     SET_FULLSCREEN_VIEWPORT(&this->view);
-    View_RenderView(&this->view, 0xF);
+    View_Apply(&this->view, VIEW_ALL);
     if (!this->state.running) {
         MapSelect_DrawLoadingScreen(this);
     } else {
@@ -1089,8 +1084,8 @@ void MapSelect_Init(GameState* thisx) {
         this->pageDownIndex = dREG(82);
     }
 
-    Game_SetFramerateDivisor(&this->state, 1);
-    gSaveContext.save.cutscene = 0;
+    GameState_SetFramerateDivisor(&this->state, 1);
+    gSaveContext.save.cutsceneIndex = 0;
     gSaveContext.save.playerForm = PLAYER_FORM_HUMAN;
     gSaveContext.save.linkAge = 0;
 }

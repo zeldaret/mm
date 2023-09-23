@@ -9,7 +9,7 @@ typedef void (*EnIgActionFunc)(struct EnIg*, PlayState*);
 typedef s32 (*EnIgUnkFunc)(struct EnIg*, PlayState*);
 typedef void (*EnIgUnkFunc2)(struct EnIg*, PlayState*);
 
-#define ENIG_GET_FF(thisx) ((thisx)->params & 0xFF)
+#define ENIG_GET_PATH_INDEX(thisx) ((thisx)->params & 0xFF)
 
 typedef struct EnIg {
     /* 0x000 */ Actor actor;
@@ -61,7 +61,5 @@ typedef struct EnIg {
     /* 0x400 */ UNK_TYPE1 unk400[0x8];
     /* 0x408 */ s32 unk_408;
 } EnIg; // size = 0x40C
-
-extern const ActorInit En_Ig_InitVars;
 
 #endif // Z_EN_IG_H

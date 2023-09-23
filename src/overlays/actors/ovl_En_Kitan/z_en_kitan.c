@@ -6,7 +6,7 @@
 
 #include "z_en_kitan.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnKitan*)thisx)
 
@@ -15,7 +15,7 @@ void EnKitan_Destroy(Actor* thisx, PlayState* play);
 void EnKitan_Update(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Kitan_InitVars = {
+ActorInit En_Kitan_InitVars = {
     ACTOR_EN_KITAN,
     ACTORCAT_NPC,
     FLAGS,

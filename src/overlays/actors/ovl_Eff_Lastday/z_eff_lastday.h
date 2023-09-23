@@ -15,17 +15,15 @@ typedef struct EffLastday {
     /* 0x148 */ AnimatedMaterial* matAnim;
     /* 0x14C */ s16 step;
     /* 0x14E */ s16 alpha;
-    /* 0x150 */ s16 csActionCmd;
+    /* 0x150 */ s16 cueType;
     /* 0x154 */ EffLastdayActionFunc actionFunc;
 } EffLastday; // size = 0x158
 
-typedef enum EffLastDayParams {
-    /* 0x0 */ EFFLASTDAY_PARAMS_0,
-    /* 0x1 */ EFFLASTDAY_PARAMS_1,
-    /* 0x2 */ EFFLASTDAY_PARAMS_2,
-    /* 0x3 */ EFFLASTDAY_PARAMS_3
-} EffLastDayParams;
-
-extern const ActorInit Eff_Lastday_InitVars;
+typedef enum EffLastDayParam {
+    /* 0 */ EFFLASTDAY_PARAM_0,
+    /* 1 */ EFFLASTDAY_PARAM_1,
+    /* 2 */ EFFLASTDAY_PARAM_2,
+    /* 3 */ EFFLASTDAY_PARAM_3
+} EffLastDayParam;
 
 #endif // Z_EFF_LASTDAY_H

@@ -5,7 +5,7 @@ s16 sMinimapInitPosX = 0;
 s16 sMinimapInitPosZ = 0;
 s16 sMinimapInitDir = 0;
 
-s32 sDungeonAndBossScenes[] = {
+s32 sDungeonAndBossSceneIds[] = {
     SCENE_MITURIN,    SCENE_HAKUGIN,    SCENE_SEA,    SCENE_INISIE_N,  SCENE_INISIE_R,
     SCENE_MITURIN_BS, SCENE_HAKUGIN_BS, SCENE_SEA_BS, SCENE_INISIE_BS,
 };
@@ -17,8 +17,8 @@ s32 sDungeonAndBossScenes[] = {
 s32 Map_GetDungeonOrBossAreaIndex(PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sDungeonAndBossScenes); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == sDungeonAndBossScenes[i]) {
+    for (i = 0; i < ARRAY_COUNT(sDungeonAndBossSceneIds); i++) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sDungeonAndBossSceneIds[i]) {
             return i;
         }
     }
@@ -45,7 +45,7 @@ s32 func_8010A0A4(PlayState* play) {
     return true;
 }
 
-s32 sDungeonScenes[] = {
+s32 sDungeonSceneIds[] = {
     SCENE_MITURIN, SCENE_HAKUGIN, SCENE_SEA, SCENE_INISIE_N, SCENE_INISIE_R,
 };
 
@@ -56,8 +56,8 @@ s32 sDungeonScenes[] = {
 s32 Map_GetDungeonAreaIndex(PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sDungeonScenes); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == sDungeonScenes[i]) {
+    for (i = 0; i < ARRAY_COUNT(sDungeonSceneIds); i++) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sDungeonSceneIds[i]) {
             return i;
         }
     }
@@ -76,7 +76,7 @@ s32 Map_IsInDungeonArea(PlayState* play) {
     return true;
 }
 
-s32 sBossScenes[] = {
+s32 sBossSceneIds[] = {
     SCENE_MITURIN_BS, // DUNGEON_INDEX_WOODFALL_TEMPLE
     SCENE_HAKUGIN_BS, // DUNGEON_INDEX_SNOWHEAD_TEMPLE
     SCENE_SEA_BS,     // DUNGEON_INDEX_GREAT_BAY_TEMPLE
@@ -90,8 +90,8 @@ s32 sBossScenes[] = {
 s32 Map_GetBossAreaIndex(PlayState* play) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sBossScenes); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == sBossScenes[i]) {
+    for (i = 0; i < ARRAY_COUNT(sBossSceneIds); i++) {
+        if (Play_GetOriginalSceneId(play->sceneId) == sBossSceneIds[i]) {
             return i;
         }
     }
@@ -120,7 +120,7 @@ s32 func_8010A238(PlayState* play) {
     s32 i;
 
     for (i = 0; i < ARRAY_COUNT(D_801BF5A4); i++) {
-        if (Play_GetOriginalSceneNumber(play->sceneNum) == D_801BF5A4[i]) {
+        if (Play_GetOriginalSceneId(play->sceneId) == D_801BF5A4[i]) {
             return i;
         }
     }
@@ -156,7 +156,8 @@ void Map_InitRoomData(PlayState* play, s16 room) {
 
     if (room >= 0) {
         if (Map_IsInDungeonOrBossArea(play)) {
-            gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].rooms |= gBitFlags[room];
+            gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].rooms |=
+                gBitFlags[room];
             interfaceCtx->mapRoomNum = room;
             interfaceCtx->dungeonOrBossAreaMapIndex = mapIndex;
         }
@@ -169,18 +170,18 @@ void Map_InitRoomData(PlayState* play, s16 room) {
     }
 }
 
-void Map_Destroy(void) {
-    func_80105A40();
+void Map_Destroy(PlayState* play) {
+    func_80105A40(play);
 }
 
 void Map_Init(PlayState* play) {
     InterfaceContext* interfaceCtx = &play->interfaceCtx;
     s32 dungeonIndex;
 
-    func_80105C40(play->roomCtx.currRoom.num);
+    func_80105C40(play->roomCtx.curRoom.num);
     interfaceCtx->unk_278 = -1;
     interfaceCtx->dungeonOrBossAreaMapIndex = -1;
-    interfaceCtx->mapSegment = THA_AllocEndAlign16(&play->state.heap, 0x1000);
+    interfaceCtx->mapSegment = THA_AllocTailAlign16(&play->state.heap, 0x1000);
     if (func_8010A2AC(play)) {
         gSaveContext.mapIndex = func_8010A238(play);
         return;
@@ -189,7 +190,7 @@ void Map_Init(PlayState* play) {
     if (Map_IsInDungeonOrBossArea(play)) {
         dungeonIndex = Map_GetDungeonOrBossAreaIndex(play);
         gSaveContext.mapIndex = dungeonIndex;
-        switch (play->sceneNum) {
+        switch (play->sceneId) {
             case SCENE_MITURIN_BS:
                 dungeonIndex = DUNGEON_INDEX_WOODFALL_TEMPLE;
                 break;
@@ -208,7 +209,7 @@ void Map_Init(PlayState* play) {
         }
 
         gSaveContext.dungeonIndex = dungeonIndex;
-        Map_InitRoomData(play, play->roomCtx.currRoom.num);
+        Map_InitRoomData(play, play->roomCtx.curRoom.num);
     }
 }
 
@@ -226,12 +227,12 @@ void Map_Update(PlayState* play) {
     s16 floor;
     s32 pad2;
 
-    if ((play->pauseCtx.state < 4) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) && (!Play_InCsMode(play)) &&
-        (!func_80106530(play))) {
+    if ((play->pauseCtx.state <= PAUSE_STATE_OPENING_2) && (CHECK_BTN_ALL(controller->press.button, BTN_L)) &&
+        !Play_InCsMode(play) && !func_80106530(play)) {
         if (!R_MINIMAP_DISABLED) {
-            play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
+            Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);
         } else {
-            play_sound(NA_SE_SY_CAMERA_ZOOM_DOWN);
+            Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_DOWN);
         }
 
         R_MINIMAP_DISABLED ^= 1;
@@ -239,20 +240,20 @@ void Map_Update(PlayState* play) {
 
     func_80105B34(play);
 
-    if ((play->pauseCtx.state == 0) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
+    if ((play->pauseCtx.state == PAUSE_STATE_OFF) && (play->pauseCtx.debugEditor == DEBUG_EDITOR_NONE)) {
         if (Map_IsInDungeonArea(play)) {
             floor = func_80109124(player->actor.world.pos.y);
             if (floor != -1) {
-                gSaveContext.save.permanentSceneFlags[Play_GetOriginalSceneNumber(play->sceneNum)].unk_14 |=
+                gSaveContext.save.saveInfo.permanentSceneFlags[Play_GetOriginalSceneId(play->sceneId)].unk_14 |=
                     gBitFlags[FLOOR_INDEX_MAX - floor];
-                XREG(94) = FLOOR_INDEX_MAX - floor;
+                R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - floor;
                 if (interfaceCtx->mapRoomNum != sLastRoomNum) {
                     sLastRoomNum = interfaceCtx->mapRoomNum;
                 }
             }
         } else if (Map_IsInBossArea(play)) {
             func_80105294();
-            XREG(94) = FLOOR_INDEX_MAX - func_80105318();
+            R_REVERSE_FLOOR_INDEX = FLOOR_INDEX_MAX - func_80105318();
         }
     }
 }

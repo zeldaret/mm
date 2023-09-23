@@ -38,12 +38,12 @@
         <DList Name="gCneLeftForearmDL" Offset="0x19A8"/>
         <DList Name="gCneLeftUpperArmDL" Offset="0x1AC8"/>
         <DList Name="gCneTorsoDL" Offset="0x1B88"/>
-        <DList Name="gCneRightFootDL" Offset="0x1E50"/>
-        <DList Name="gCneRightShinDL" Offset="0x1F18"/>
-        <DList Name="gCneRightThighDL" Offset="0x1FE0"/>
-        <DList Name="gCneLeftFootDL" Offset="0x20A8"/>
-        <DList Name="gCneLeftShinDL" Offset="0x2170"/>
-        <DList Name="gCneLeftThighDL" Offset="0x2238"/>
+        <DList Name="gCneRightFootDL" Offset="0x1E50"/> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCneRightShinDL" Offset="0x1F18"/> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCneRightThighDL" Offset="0x1FE0"/> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCneLeftFootDL" Offset="0x20A8"/> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCneLeftShinDL" Offset="0x2170"/> <!-- Renders a single triangle instead of a normal-looking limb -->
+        <DList Name="gCneLeftThighDL" Offset="0x2238"/> <!-- Renders a single triangle instead of a normal-looking limb -->
         <DList Name="gCnePelvisDL" Offset="0x2300"/>
 
         <Texture Name="gCneOrangeHairFaceTex" OutName="cne_orange_hair_face" Format="rgba16" Width="8" Height="16" Offset="0x23D0"/>

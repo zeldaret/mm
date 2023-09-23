@@ -6,7 +6,7 @@
 
 #include "z_en_sth2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnSth2*)thisx)
 
@@ -18,7 +18,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2);
 void EnSth2_UpdateSkelAnime(EnSth2* this, PlayState* play);
 void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play);
 
-const ActorInit En_Sth2_InitVars = {
+ActorInit En_Sth2_InitVars = {
     ACTOR_EN_STH2,
     ACTORCAT_NPC,
     FLAGS,
@@ -40,10 +40,10 @@ void EnSth2_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 36.0f);
     this->unused = 0;
 
-    if (play->actorCtx.unk5 & 2) {
+    if (play->actorCtx.flags & ACTORCTX_FLAG_1) {
         this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
     } else {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
     this->actionFunc = EnSth2_UpdateSkelAnime;
@@ -63,8 +63,8 @@ void EnSth2_Update(Actor* thisx, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, this->objIndex)) {
         this->actor.objBankIndex = this->objIndex;
         Actor_SetObjectDependency(play, &this->actor);
-        SkelAnime_InitFlex(play, &this->skelAnime, &object_sth_Skel_0031F8, &gEnSth2WavingHandAnim, this->jointTable,
-                           this->morphTable, OBJECT_STH_LIMB_MAX);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gSthSkel, &gEnSth2WavingHandAnim, this->jointTable,
+                           this->morphTable, STH_LIMB_MAX);
         Animation_PlayLoop(&this->skelAnime, &gEnSth2WavingHandAnim);
         this->actor.update = EnSth2_UpdateActionFunc;
         this->actor.draw = EnSth2_Draw;
@@ -80,10 +80,11 @@ void EnSth2_UpdateActionFunc(Actor* thisx, PlayState* play) {
 s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     s32 pad;
 
-    if (limbIndex == OBJECT_STH_LIMB_0F) {
+    if (limbIndex == STH_LIMB_HEAD) {
         *dList = gEnSth2HeadDL;
     }
-    if ((limbIndex == OBJECT_STH_LIMB_08) || (limbIndex == OBJECT_STH_LIMB_0A) || (limbIndex == OBJECT_STH_LIMB_0D)) {
+    if ((limbIndex == STH_LIMB_CHEST) || (limbIndex == STH_LIMB_LEFT_FOREARM) ||
+        (limbIndex == STH_LIMB_RIGHT_FOREARM)) {
         rot->y += (s16)(Math_SinS((play->state.frames * ((limbIndex * 50) + 0x814))) * 200.0f);
         rot->z += (s16)(Math_CosS((play->state.frames * ((limbIndex * 50) + 0x940))) * 200.0f);
     }
@@ -93,7 +94,7 @@ s32 EnSth2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* 
 void EnSth2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     static Vec3f focusOffset = { 700.0f, 400.0f, 0.0f };
 
-    if (limbIndex == OBJECT_STH_LIMB_0F) {
+    if (limbIndex == STH_LIMB_HEAD) {
         Matrix_MultVec3f(&focusOffset, &thisx->focus.pos);
 
         OPEN_DISPS(play->state.gfxCtx);
@@ -113,7 +114,7 @@ void EnSth2_Draw(Actor* thisx, PlayState* play2) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08,
                Gfx_EnvColor(play->state.gfxCtx, sEnvColors[1].r, sEnvColors[1].g, sEnvColors[1].b, 255));
     gSPSegment(POLY_OPA_DISP++, 0x09, Gfx_EnvColor(play->state.gfxCtx, 90, 110, 130, 255));

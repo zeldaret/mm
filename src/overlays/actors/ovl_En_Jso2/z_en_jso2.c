@@ -6,7 +6,9 @@
 
 #include "z_en_jso2.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | ACTOR_FLAG_80000000)
+#define FLAGS                                                                                            \
+    (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20 | ACTOR_FLAG_100000 | \
+     ACTOR_FLAG_80000000)
 
 #define THIS ((EnJso2*)thisx)
 
@@ -71,7 +73,7 @@ static DamageTable D_80A7B4F0 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-const ActorInit En_Jso2_InitVars = {
+ActorInit En_Jso2_InitVars = {
     ACTOR_EN_JSO2,
     ACTORCAT_ENEMY,
     FLAGS,

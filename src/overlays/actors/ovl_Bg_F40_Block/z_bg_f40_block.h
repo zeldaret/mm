@@ -7,8 +7,10 @@ struct BgF40Block;
 
 typedef void (*BgF40BlockActionFunc)(struct BgF40Block*, PlayState*);
 
-#define BGF40BLOCK_GET_PATH(thisx) (((thisx)->params & 0x1FC) >> 2)
+#define BGF40BLOCK_GET_PATH_INDEX(thisx) (((thisx)->params & 0x1FC) >> 2)
 #define BGF40BLOCK_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
+
+#define BGF40BLOCK_PATH_INDEX_NONE 0x3F
 
 typedef struct BgF40Block {
     /* 0x000 */ DynaPolyActor dyna;
@@ -18,7 +20,5 @@ typedef struct BgF40Block {
     /* 0x168 */ s32 unk_168;
     /* 0x16C */ BgF40BlockActionFunc actionFunc;
 } BgF40Block; // size = 0x170
-
-extern const ActorInit Bg_F40_Block_InitVars;
 
 #endif // Z_BG_F40_BLOCK_H

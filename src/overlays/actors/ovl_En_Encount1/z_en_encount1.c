@@ -5,17 +5,20 @@
  */
 
 #include "z_en_encount1.h"
+#include "overlays/actors/ovl_En_Grasshopper/z_en_grasshopper.h"
+#include "overlays/actors/ovl_En_Wallmas/z_en_wallmas.h"
+#include "overlays/actors/ovl_En_Pr2/z_en_pr2.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_8000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_100000 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnEncount1*)thisx)
 
 void EnEncount1_Init(Actor* thisx, PlayState* play);
 void EnEncount1_Update(Actor* thisx, PlayState* play);
 
-void func_808E0954(EnEncount1* this, PlayState* play);
+void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play);
 
-const ActorInit En_Encount1_InitVars = {
+ActorInit En_Encount1_InitVars = {
     ACTOR_EN_ENCOUNT1,
     ACTORCAT_PROP,
     FLAGS,
@@ -27,86 +30,94 @@ const ActorInit En_Encount1_InitVars = {
     (ActorFunc)NULL,
 };
 
-static s16 sActorList[] = {
-    ACTOR_EN_GRASSHOPPER,
-    ACTOR_EN_WALLMAS,
-    ACTOR_EN_PR2,
-    ACTOR_EN_PR2,
+static s16 sActorIds[] = {
+    ACTOR_EN_GRASSHOPPER, // EN_ENCOUNT1_GRASSHOPPER
+    ACTOR_EN_WALLMAS,     // EN_ENCOUNT1_WALLMASTER
+    ACTOR_EN_PR2,         // EN_ENCOUNT1_SKULLFISH
+    ACTOR_EN_PR2,         // EN_ENCOUNT1_SKULLFISH_2
 };
 
-static s16 sActorParams[] = { 1, 0, 1, 3 };
+static s16 sActorParams[] = {
+    DRAGONFLY_PARAMS(DRAGONFLY_TYPE_GROWS_WHEN_SPAWNED),     // EN_ENCOUNT1_GRASSHOPPER
+    WALLMASTER_PARAMS(WALLMASTER_TYPE_TIMER_ONLY, 0, false), // EN_ENCOUNT1_WALLMASTER
+    ENPR2_PARAMS(1, 0),                                      // EN_ENCOUNT1_SKULLFISH
+    ENPR2_PARAMS(3, 0)                                       // EN_ENCOUNT1_SKULLFISH_2
+};
 
 void EnEncount1_Init(Actor* thisx, PlayState* play) {
     EnEncount1* this = THIS;
 
     if (this->actor.params <= 0) {
-        Actor_MarkForDeath(&this->actor);
+        Actor_Kill(&this->actor);
         return;
     }
 
-    this->actorType = ENENCOUNT1_GET_TYPE(&this->actor);
-    this->unk_14C = ENENCOUNT1_GET_7C0(&this->actor);
-    this->unk_154 = ENENCOUNT1_GET_PATH(&this->actor);
-    this->unk_158 = this->actor.world.rot.x;
-    this->unk_15C = this->actor.world.rot.y;
-    this->unk_160 = (this->actor.world.rot.z * 40.0f) + 120.0f;
+    this->type = ENENCOUNT1_GET_TYPE(&this->actor);
+    this->spawnActiveMax = ENENCOUNT1_GET_SPAWN_ACTIVE_MAX(&this->actor);
+    this->spawnTotalMax = ENENCOUNT1_GET_SPAWN_TOTAL_MAX(&this->actor);
+    this->spawnTimeMin = ENENCOUNT1_GET_SPAWN_TIME_MIN(&this->actor);
+    this->spawnUnusedProp = ENENCOUNT1_GET_SPAWN_UNUSED_PROP(&this->actor);
+    this->spawnDistanceMax = (ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(&this->actor) * 40.0f) + 120.0f;
 
-    if (this->unk_154 >= 0x3F) {
-        this->unk_154 = -1;
+    if (this->spawnTotalMax >= ENENCOUNT1_SPAWNS_TOTAL_MAX_INFINITE) {
+        this->spawnTotalMax = -1;
     }
-    if (this->actor.world.rot.z < 0) {
-        this->unk_160 = -1.0f;
+    if (ENENCOUNT1_GET_SPAWN_DISTANCE_MAX(&this->actor) < 0) {
+        this->spawnDistanceMax = -1.0f;
     }
-    if (this->actorType == EN_ENCOUNT1_SKULLFISH_2) {
-        this->unk_15A = ENENCOUNT1_GET_PATH(&this->actor);
-        this->path = SubS_GetPathByIndex(play, this->unk_15A, 0x3F);
-        this->unk_154 = -1;
-        this->unk_160 = -1.0f;
+    if (this->type == EN_ENCOUNT1_SKULLFISH_2) {
+        this->pathIndex = ENENCOUNT1_GET_PATH_INDEX(&this->actor);
+        this->path = SubS_GetPathByIndex(play, this->pathIndex, ENENCOUNT1_PATH_INDEX_NONE);
+        this->spawnTotalMax = -1;
+        this->spawnDistanceMax = -1.0f;
     }
-    this->actor.flags &= ~ACTOR_FLAG_1;
-    this->actionFunc = func_808E0954;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    this->actionFunc = EnEncount1_SpawnActor;
 }
 
-void func_808E0954(EnEncount1* this, PlayState* play) {
+void EnEncount1_SpawnActor(EnEncount1* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f spawnPos;
-    f32 sp64;
-    f32 temp_fv0_2;
-    s16 sp5E;
-    s16 actorList;
+    f32 scale;
+    f32 floorHeight;
+    s16 rotY;
+    s16 actorId;
     s32 actorParams;
-    CollisionPoly* sp54;
-    s32 sp50;
+    CollisionPoly* floorPoly;
+    s32 bgId;
 
-    if (((this->unk_14E >= this->unk_14C) || ((this->unk_160 > 0.0f) && (this->unk_160 < this->actor.xzDistToPlayer)) ||
-         ((this->unk_154 > 0) && (this->unk_154 <= this->unk_152)))) {
+    if (((this->spawnActiveCount >= this->spawnActiveMax) ||
+         ((this->spawnDistanceMax > 0.0f) && (this->spawnDistanceMax < this->actor.xzDistToPlayer)) ||
+         ((this->spawnTotalMax > 0) && (this->spawnTotalMax <= this->spawnTotalCount)))) {
         return;
-    } else if (this->unk_156 != 0) {
-        this->unk_156++;
-        if (this->unk_156 < this->unk_158) {
+    }
+
+    if (this->timer != 0) {
+        this->timer++;
+        if (this->timer < this->spawnTimeMin) {
             return;
         }
     }
 
-    this->unk_156 = 0;
-    switch (this->actorType) {
+    this->timer = 0;
+    switch (this->type) {
         case EN_ENCOUNT1_GRASSHOPPER:
-            sp64 = randPlusMinusPoint5Scaled(40.0f) + 200.0f;
-            sp5E = player->actor.shape.rot.y;
-            if (this->unk_14E & 1) {
-                sp5E = -sp5E;
-                sp64 = randPlusMinusPoint5Scaled(20.0f) + 100.0f;
+            scale = Rand_CenteredFloat(40.0f) + 200.0f;
+            rotY = player->actor.shape.rot.y;
+            if (this->spawnActiveCount & 1) {
+                rotY = -rotY;
+                scale = Rand_CenteredFloat(20.0f) + 100.0f;
             }
-            spawnPos.x = player->actor.world.pos.x + (Math_SinS(sp5E) * sp64) + randPlusMinusPoint5Scaled(40.0f);
+            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + Rand_CenteredFloat(40.0f);
             spawnPos.y = player->actor.floorHeight + 120.0f;
-            spawnPos.z = player->actor.world.pos.z + (Math_CosS(sp5E) * sp64) + randPlusMinusPoint5Scaled(40.0f);
-            temp_fv0_2 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp54, &sp50, &this->actor, &spawnPos);
-            if ((temp_fv0_2 <= BGCHECK_Y_MIN) ||
+            spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + Rand_CenteredFloat(40.0f);
+            floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &floorPoly, &bgId, &this->actor, &spawnPos);
+            if ((floorHeight <= BGCHECK_Y_MIN) ||
                 ((player->actor.depthInWater != BGCHECK_Y_MIN) &&
-                 (temp_fv0_2 < (player->actor.world.pos.y - player->actor.depthInWater)))) {
+                 (floorHeight < (player->actor.world.pos.y - player->actor.depthInWater)))) {
                 return;
             }
-            spawnPos.y = temp_fv0_2;
+            spawnPos.y = floorHeight;
             break;
 
         case EN_ENCOUNT1_WALLMASTER:
@@ -114,36 +125,39 @@ void func_808E0954(EnEncount1* this, PlayState* play) {
             break;
 
         case EN_ENCOUNT1_SKULLFISH:
-            sp64 = randPlusMinusPoint5Scaled(250.0f) + 500.0f;
-            sp5E = player->actor.shape.rot.y;
-            spawnPos.x = player->actor.world.pos.x + Math_SinS(sp5E) * sp64 + randPlusMinusPoint5Scaled(40.0f);
+            scale = Rand_CenteredFloat(250.0f) + 500.0f;
+            rotY = player->actor.shape.rot.y;
+            spawnPos.x = player->actor.world.pos.x + (Math_SinS(rotY) * scale) + Rand_CenteredFloat(40.0f);
             spawnPos.y = player->actor.world.pos.y - Rand_ZeroFloat(20.0f);
-            spawnPos.z = player->actor.world.pos.z + (Math_CosS(sp5E) * sp64) + randPlusMinusPoint5Scaled(40.0f);
-            temp_fv0_2 = BgCheck_EntityRaycastFloor5(&play->colCtx, &sp54, &sp50, &this->actor, &spawnPos);
-            if ((!(player->stateFlags1 & 0x8000000) || (temp_fv0_2 <= (BGCHECK_Y_MIN)) ||
-                 (player->actor.depthInWater < temp_fv0_2))) {
+            spawnPos.z = player->actor.world.pos.z + (Math_CosS(rotY) * scale) + Rand_CenteredFloat(40.0f);
+            floorHeight = BgCheck_EntityRaycastFloor5(&play->colCtx, &floorPoly, &bgId, &this->actor, &spawnPos);
+            if (!(player->stateFlags1 & PLAYER_STATE1_8000000) || (floorHeight <= BGCHECK_Y_MIN) ||
+                (player->actor.depthInWater < floorHeight)) {
                 return;
             }
             break;
 
         case EN_ENCOUNT1_SKULLFISH_2:
-            if ((this->path != NULL) && (!SubS_CopyPointFromPath(this->path, 0, &spawnPos))) {
-                Actor_MarkForDeath(&this->actor);
+            if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, 0, &spawnPos)) {
+                Actor_Kill(&this->actor);
             }
+            break;
+
+        default:
             break;
     }
 
-    actorList = sActorList[this->actorType];
-    actorParams = sActorParams[this->actorType];
-    if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, actorList, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
+    actorId = sActorIds[this->type];
+    actorParams = sActorParams[this->type];
+    if (Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, actorId, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
                            actorParams) != NULL) {
-        this->unk_14E++;
-        if (this->unk_154 > 0) {
-            this->unk_152++;
+        this->spawnActiveCount++;
+        if (this->spawnTotalMax > 0) {
+            this->spawnTotalCount++;
         }
 
-        if ((this->unk_14E >= this->unk_14C) && (this->unk_158 != 0)) {
-            this->unk_156 = 1;
+        if ((this->spawnActiveCount >= this->spawnActiveMax) && (this->spawnTimeMin != 0)) {
+            this->timer = 1;
         }
     }
 }

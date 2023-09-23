@@ -7,7 +7,7 @@
 #include "z_en_rsn.h"
 #include "objects/object_rs/object_rs.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnRsn*)thisx)
 
@@ -18,7 +18,7 @@ void EnRsn_Draw(Actor* thisx, PlayState* play);
 
 void func_80C25D84(EnRsn* this, PlayState* play);
 
-const ActorInit En_Rsn_InitVars = {
+ActorInit En_Rsn_InitVars = {
     ACTOR_EN_RSN,
     ACTORCAT_NPC,
     FLAGS,
@@ -45,7 +45,7 @@ void EnRsn_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 20.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gBombShopkeeperSkel, &gBombShopkeeperWalkAnim, NULL, NULL, 0);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_80C25D40(this);
 }
 
@@ -86,9 +86,11 @@ void EnRsn_Draw(Actor* thisx, PlayState* play) {
     EnRsn* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C5B0(play->state.gfxCtx);
+
+    Gfx_SetupDL37_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(gBombShopkeeperEyeTex));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnRsn_OverrideLimbDraw, EnRsn_PostLimbDraw, &this->actor);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -2,8 +2,8 @@
 
 [![Build Status][jenkins-badge]][jenkins] [![Decompilation Progress][progress-badge]][progress] [![Contributors][contributors-badge]][contributors] [![Discord Channel][discord-badge]][discord]
 
-[jenkins]: https://jenkins.deco.mp/job/MM/job/master
-[jenkins-badge]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.deco.mp%2Fjob%2FMM%2Fjob%2Fmaster
+[jenkins]: https://jenkins.deco.mp/job/MM/job/main
+[jenkins-badge]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.deco.mp%2Fjob%2FMM%2Fjob%2Fmain
 
 [progress]: https://zelda64.dev/games/mm
 [progress-badge]: https://img.shields.io/endpoint?url=https://zelda64.dev/assets/csv/progress-mm-shield.json
@@ -23,7 +23,7 @@ please be aware that the codebase could drastically change at any time. Also not
 parts of the ROM may not be 'shiftable' yet, so modifying them could currently be difficult.
 ```
 
-This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not, and will not, produce a PC port.** For frequently asked questions, you can visit [our website](https://zelda64.dev/mm), and for more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
+This is a WIP **decompilation** of ***The Legend of Zelda: Majora's Mask***. The purpose of the project is to recreate a source code base for the game from scratch, using information found inside the game along with static and/or dynamic analysis. **It is not, and will not, produce a PC port.** For frequently asked questions, you can visit [our website](https://zelda64.dev/games/mm), and for more information you can get in touch with the team on our [Discord server](https://discord.zelda64.dev).
 
 The only version currently supported is N64 US, but we intend to eventually support every retail version of the original game (i.e. not versions of MM3D, which is a totally different game).
 

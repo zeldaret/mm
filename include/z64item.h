@@ -1,5 +1,5 @@
-#ifndef _Z64ITEM_H_
-#define _Z64ITEM_H_
+#ifndef Z64ITEM_H
+#define Z64ITEM_H
 
 #define DROP_TABLE_SIZE 16
 #define DROP_TABLE_NUMBER 17
@@ -9,7 +9,8 @@
 typedef enum {
     /* 0 */ EQUIP_TYPE_SWORD,
     /* 1 */ EQUIP_TYPE_SHIELD,
-    /* 2 */ EQUIP_TYPE_MAX
+    /* 2 */ EQUIP_TYPE_TUNIC, // Remnant of OoT
+    /* 3 */ EQUIP_TYPE_MAX
 } EquipmentType;
 
 typedef enum {
@@ -18,7 +19,7 @@ typedef enum {
     /* 2 */ EQUIP_VALUE_SWORD_RAZOR,
     /* 3 */ EQUIP_VALUE_SWORD_GILDED,
     /* 4 */ EQUIP_VALUE_SWORD_DIETY,
-    /* 5 */ EQUIP_VALUE_SWORD_MAX,
+    /* 5 */ EQUIP_VALUE_SWORD_MAX
 } EquipValueSword;
 
 typedef enum {
@@ -29,18 +30,26 @@ typedef enum {
 } EquipValueShield;
 
 typedef enum {
+    /* 0 */ EQUIP_VALUE_TUNIC_NONE,
+    /* 1 */ EQUIP_VALUE_TUNIC_KOKIRI,
+    /* 2 */ EQUIP_VALUE_TUNIC_GORON,
+    /* 3 */ EQUIP_VALUE_TUNIC_ZORA,
+    /* 4 */ EQUIP_VALUE_TUNIC_MAX
+} EquipValueTunic; // Remnant of OoT
+
+typedef enum {
     /* 0 */ UPG_QUIVER,
     /* 1 */ UPG_BOMB_BAG,
     /* 2 */ UPG_STRENGTH,
     /* 3 */ UPG_SCALE,
     /* 4 */ UPG_WALLET,
     /* 5 */ UPG_BULLET_BAG,
-    /* 6 */ UPG_STICKS,
-    /* 7 */ UPG_NUTS
+    /* 6 */ UPG_DEKU_STICKS,
+    /* 7 */ UPG_DEKU_NUTS
 } UpgradeType;
 
 typedef enum {
-    /* 0x00 */ QUEST_REMAINS_ODOWLA,
+    /* 0x00 */ QUEST_REMAINS_ODOLWA,
     /* 0x01 */ QUEST_REMAINS_GOHT,
     /* 0x02 */ QUEST_REMAINS_GYORG,
     /* 0x03 */ QUEST_REMAINS_TWINMOLD,
@@ -59,11 +68,28 @@ typedef enum {
     /* 0x10 */ QUEST_SONG_STORMS,
     /* 0x11 */ QUEST_SONG_SUN,
     /* 0x12 */ QUEST_BOMBERS_NOTEBOOK, // Obtained Bombers Notebook
-    /* 0x13 */ QUEST_SKULL_TOKEN,
-    /* 0x18 */ QUEST_SONG_LULLABY_INTRO = 0x18,
+    /* 0x13 */ QUEST_QUIVER,
+    /* 0x14 */ QUEST_BOMB_BAG,
+    /* 0x15 */ QUEST_SKULL_TOKEN,
+    /* 0x16 */ QUEST_HEART_PIECE,  // for `pauseCtx->cursorPoint[PAUSE_QUEST]`
+    /* 0x17 */ QUEST_17, // Used in a conditional for quest cursors
+    /* 0x18 */ QUEST_SONG_LULLABY_INTRO,
     /* 0x19 */ QUEST_PICTOGRAPH, // A photo from the pictograph box is saved
     /* 0x1C */ QUEST_HEART_PIECE_COUNT = 0x1C
 } QuestItem;
+
+typedef enum {
+    /* -1 */ DUNGEON_NONE = -1,
+    /*  0 */ DUNGEON_BOSS_KEY,
+    /*  1 */ DUNGEON_COMPASS,
+    /*  2 */ DUNGEON_MAP,
+    /*  3 */ DUNGEON_STRAY_FAIRIES,
+    /*  4 */ DUNGEON_FLOOR_INDEX_4, // Top Floor
+    /*  5 */ DUNGEON_FLOOR_INDEX_3,
+    /*  6 */ DUNGEON_FLOOR_INDEX_2,
+    /*  7 */ DUNGEON_FLOOR_INDEX_1,
+    /*  8 */ DUNGEON_FLOOR_INDEX_0 // Bottom Floor
+} DungeonItem;
 
 typedef enum {
     /* 0x00 */ SLOT_OCARINA,
@@ -74,13 +100,13 @@ typedef enum {
     /* 0x05 */ SLOT_TRADE_DEED,
     /* 0x06 */ SLOT_BOMB,
     /* 0x07 */ SLOT_BOMBCHU,
-    /* 0x08 */ SLOT_STICK,
-    /* 0x09 */ SLOT_NUT,
+    /* 0x08 */ SLOT_DEKU_STICK,
+    /* 0x09 */ SLOT_DEKU_NUT,
     /* 0x0A */ SLOT_MAGIC_BEANS,
     /* 0x0B */ SLOT_TRADE_KEY_MAMA,
     /* 0x0C */ SLOT_POWDER_KEG,
-    /* 0x0D */ SLOT_PICTO_BOX,
-    /* 0x0E */ SLOT_LENS,
+    /* 0x0D */ SLOT_PICTOGRAPH_BOX,
+    /* 0x0E */ SLOT_LENS_OF_TRUTH,
     /* 0x0F */ SLOT_HOOKSHOT,
     /* 0x10 */ SLOT_SWORD_GREAT_FAIRY,
     /* 0x11 */ SLOT_TRADE_COUPLE,
@@ -117,8 +143,8 @@ typedef enum {
     /* 0xFF */ SLOT_NONE = 0xFF
 } InventorySlot;
 
-typedef enum {
-    /* 0x00 */ ITEM_OCARINA,
+typedef enum ItemId {
+    /* 0x00 */ ITEM_OCARINA_OF_TIME,
     /* 0x01 */ ITEM_BOW,
     /* 0x02 */ ITEM_ARROW_FIRE,
     /* 0x03 */ ITEM_ARROW_ICE,
@@ -126,13 +152,13 @@ typedef enum {
     /* 0x05 */ ITEM_OCARINA_FAIRY,
     /* 0x06 */ ITEM_BOMB,
     /* 0x07 */ ITEM_BOMBCHU,
-    /* 0x08 */ ITEM_STICK,
-    /* 0x09 */ ITEM_NUT,
+    /* 0x08 */ ITEM_DEKU_STICK,
+    /* 0x09 */ ITEM_DEKU_NUT,
     /* 0x0A */ ITEM_MAGIC_BEANS,
     /* 0x0B */ ITEM_SLINGSHOT,
     /* 0x0C */ ITEM_POWDER_KEG,
-    /* 0x0D */ ITEM_PICTO_BOX,
-    /* 0x0E */ ITEM_LENS,
+    /* 0x0D */ ITEM_PICTOGRAPH_BOX,
+    /* 0x0E */ ITEM_LENS_OF_TRUTH,
     /* 0x0F */ ITEM_HOOKSHOT,
     /* 0x10 */ ITEM_SWORD_GREAT_FAIRY,
     /* 0x11 */ ITEM_LONGSHOT, // OoT Leftover
@@ -158,7 +184,7 @@ typedef enum {
     /* 0x25 */ ITEM_CHATEAU,
     /* 0x26 */ ITEM_HYLIAN_LOACH,
     /* 0x27 */ ITEM_OBABA_DRINK,
-    /* 0x28 */ ITEM_MOON_TEAR,
+    /* 0x28 */ ITEM_MOONS_TEAR,
     /* 0x29 */ ITEM_DEED_LAND,
     /* 0x2A */ ITEM_DEED_SWAMP,
     /* 0x2B */ ITEM_DEED_MOUNTAIN,
@@ -192,9 +218,9 @@ typedef enum {
     /* 0x47 */ ITEM_MASK_BLAST,
     /* 0x48 */ ITEM_MASK_SCENTS,
     /* 0x49 */ ITEM_MASK_GIANT,
-    /* 0x4A */ ITEM_BOW_ARROW_FIRE,
-    /* 0x4B */ ITEM_BOW_ARROW_ICE,
-    /* 0x4C */ ITEM_BOW_ARROW_LIGHT,
+    /* 0x4A */ ITEM_BOW_FIRE,
+    /* 0x4B */ ITEM_BOW_ICE,
+    /* 0x4C */ ITEM_BOW_LIGHT,
     /* 0x4D */ ITEM_SWORD_KOKIRI,
     /* 0x4E */ ITEM_SWORD_RAZOR,
     /* 0x4F */ ITEM_SWORD_GILDED,
@@ -231,14 +257,16 @@ typedef enum {
     /* 0x6E */ ITEM_SKULL_TOKEN,
     /* 0x6F */ ITEM_HEART_CONTAINER,
     /* 0x70 */ ITEM_HEART_PIECE,
-    /* 0x73 */ ITEM_SONG_LULLABY_INTRO = 0x73,
+    /* 0x71 */ ITEM_71,
+    /* 0x72 */ ITEM_72,
+    /* 0x73 */ ITEM_SONG_LULLABY_INTRO,
     /* 0x74 */ ITEM_KEY_BOSS,
     /* 0x75 */ ITEM_COMPASS,
     /* 0x76 */ ITEM_DUNGEON_MAP,
     /* 0x77 */ ITEM_STRAY_FAIRIES,
     /* 0x78 */ ITEM_KEY_SMALL,
-    /* 0x79 */ ITEM_MAGIC_SMALL,
-    /* 0x7A */ ITEM_MAGIC_LARGE,
+    /* 0x79 */ ITEM_MAGIC_JAR_SMALL,
+    /* 0x7A */ ITEM_MAGIC_JAR_BIG,
     /* 0x7B */ ITEM_HEART_PIECE_2,
     /* 0x7C */ ITEM_INVALID_1,
     /* 0x7D */ ITEM_INVALID_2,
@@ -255,10 +283,10 @@ typedef enum {
     /* 0x88 */ ITEM_RUPEE_PURPLE,
     /* 0x89 */ ITEM_RUPEE_SILVER,
     /* 0x8A */ ITEM_RUPEE_HUGE,
-    /* 0x8B */ ITEM_STICKS_5,
-    /* 0x8C */ ITEM_STICKS_10,
-    /* 0x8D */ ITEM_NUTS_5,
-    /* 0x8E */ ITEM_NUTS_10,
+    /* 0x8B */ ITEM_DEKU_STICKS_5,
+    /* 0x8C */ ITEM_DEKU_STICKS_10,
+    /* 0x8D */ ITEM_DEKU_NUTS_5,
+    /* 0x8E */ ITEM_DEKU_NUTS_10,
     /* 0x8F */ ITEM_BOMBS_5,
     /* 0x90 */ ITEM_BOMBS_10,
     /* 0x91 */ ITEM_BOMBS_20,
@@ -271,26 +299,46 @@ typedef enum {
     /* 0x98 */ ITEM_BOMBCHUS_10,
     /* 0x99 */ ITEM_BOMBCHUS_1,
     /* 0x9A */ ITEM_BOMBCHUS_5,
-    /* 0x9B */ ITEM_STICK_UPGRADE_20,
-    /* 0x9C */ ITEM_STICK_UPGRADE_30,
-    /* 0x9D */ ITEM_NUT_UPGRADE_30,
-    /* 0x9E */ ITEM_NUT_UPGRADE_40,
+    /* 0x9B */ ITEM_DEKU_STICK_UPGRADE_20,
+    /* 0x9C */ ITEM_DEKU_STICK_UPGRADE_30,
+    /* 0x9D */ ITEM_DEKU_NUT_UPGRADE_30,
+    /* 0x9E */ ITEM_DEKU_NUT_UPGRADE_40,
     /* 0x9F */ ITEM_CHATEAU_2,
     /* 0xA0 */ ITEM_MILK,
     /* 0xA1 */ ITEM_GOLD_DUST_2,
     /* 0xA2 */ ITEM_HYLIAN_LOACH_2,
     /* 0xA3 */ ITEM_SEAHORSE_CAUGHT,
-    /* 0xF0 */ ITEM_F0 = 0xF0,
-    /* 0xF1 */ ITEM_F1,
-    /* 0xF2 */ ITEM_F2,
-    /* 0xFD */ ITEM_FD = 0xFD,
+    // First entries of `MAP_POINT` must be continguous with `RegionId`
+    /* 0xA4 */ ITEM_MAP_POINT_GREAT_BAY,
+    /* 0xA5 */ ITEM_MAP_POINT_ZORA_HALL,
+    /* 0xA6 */ ITEM_MAP_POINT_ROMANI_RANCH,
+    /* 0xA7 */ ITEM_MAP_POINT_DEKU_PALACE,
+    /* 0xA8 */ ITEM_MAP_POINT_WOODFALL,
+    /* 0xA9 */ ITEM_MAP_POINT_CLOCK_TOWN,
+    /* 0xAA */ ITEM_MAP_POINT_SNOWHEAD,
+    /* 0xAB */ ITEM_MAP_POINT_IKANA_GRAVEYARD,
+    /* 0xAC */ ITEM_MAP_POINT_IKANA_CANYON,
+    /* 0xAD */ ITEM_MAP_POINT_GORON_VILLAGE,
+    /* 0xAE */ ITEM_MAP_POINT_STONE_TOWER,
+    // Remaining map points are unique to owl warps
+    /* 0xAF */ ITEM_MAP_POINT_GREAT_BAY_COAST,
+    /* 0xBO */ ITEM_MAP_POINT_SOUTHERN_SWAMP,
+    /* 0xB1 */ ITEM_MAP_POINT_MOUNTAIN_VILLAGE,
+    /* 0xB2 */ ITEM_MAP_POINT_MILK_ROAD,
+    /* 0xB3 */ ITEM_MAP_POINT_ZORA_CAPE,
+    /* 0xF0 */ ITEM_F0 = 0xF0, // PLAYER_MASK_BLAST
+    /* 0xF1 */ ITEM_F1, // PLAYER_MASK_BREMEN
+    /* 0xF2 */ ITEM_F2, // PLAYER_MASK_KAMARO
+    /* 0xFC */ ITEM_FC = 0xFC,
+    /* 0xFD */ ITEM_FD,
+    /* 0xFE */ ITEM_FE,
     /* 0xFF */ ITEM_NONE = 0xFF
-} ItemID;
+} ItemId;
 
 #define BOTTLE_FIRST 0
 #define BOTTLE_MAX 6
 
-typedef enum {
+typedef enum GetItemId {
     /* 0x00 */ GI_NONE,
     /* 0x01 */ GI_RUPEE_GREEN,
     /* 0x02 */ GI_RUPEE_BLUE,
@@ -302,17 +350,21 @@ typedef enum {
     /* 0x08 */ GI_WALLET_ADULT,
     /* 0x09 */ GI_WALLET_GIANT,
     /* 0x0A */ GI_RECOVERY_HEART,
-    /* 0x0C */ GI_HEART_PIECE = 0x0C,
+    /* 0x0B */ GI_0B,
+    /* 0x0C */ GI_HEART_PIECE,
     /* 0x0D */ GI_HEART_CONTAINER,
-    /* 0x0E */ GI_MAGIC_SMALL,
-    /* 0x0F */ GI_MAGIC_LARGE,
-    /* 0x11 */ GI_STRAY_FAIRY = 0x11,
-    /* 0x14 */ GI_BOMBS_1 = 0x14,
+    /* 0x0E */ GI_MAGIC_JAR_SMALL,
+    /* 0x0F */ GI_MAGIC_JAR_BIG,
+    /* 0x10 */ GI_10,
+    /* 0x11 */ GI_STRAY_FAIRY,
+    /* 0x12 */ GI_12,
+    /* 0x13 */ GI_13,
+    /* 0x14 */ GI_BOMBS_1,
     /* 0x15 */ GI_BOMBS_5,
     /* 0x16 */ GI_BOMBS_10,
     /* 0x17 */ GI_BOMBS_20,
     /* 0x18 */ GI_BOMBS_30,
-    /* 0x19 */ GI_STICKS_1,
+    /* 0x19 */ GI_DEKU_STICKS_1,
     /* 0x1A */ GI_BOMBCHUS_10,
     /* 0x1B */ GI_BOMB_BAG_20,
     /* 0x1C */ GI_BOMB_BAG_30,
@@ -327,11 +379,17 @@ typedef enum {
     /* 0x25 */ GI_ARROW_FIRE,
     /* 0x26 */ GI_ARROW_ICE,
     /* 0x27 */ GI_ARROW_LIGHT,
-    /* 0x28 */ GI_NUTS_1,
-    /* 0x29 */ GI_NUTS_5,
-    /* 0x2A */ GI_NUTS_10,
-    /* 0x2E */ GI_BOMBCHUS_20 = 0x2E,
-    /* 0x32 */ GI_SHIELD_HERO = 0x32,
+    /* 0x28 */ GI_DEKU_NUTS_1,
+    /* 0x29 */ GI_DEKU_NUTS_5,
+    /* 0x2A */ GI_DEKU_NUTS_10,
+    /* 0x2B */ GI_2B,
+    /* 0x2C */ GI_2C,
+    /* 0x2D */ GI_2D,
+    /* 0x2E */ GI_BOMBCHUS_20,
+    /* 0x2F */ GI_2F,
+    /* 0x30 */ GI_30,
+    /* 0x31 */ GI_31,
+    /* 0x32 */ GI_SHIELD_HERO,
     /* 0x33 */ GI_SHIELD_MIRROR,
     /* 0x34 */ GI_POWDER_KEG,
     /* 0x35 */ GI_MAGIC_BEANS,
@@ -345,13 +403,28 @@ typedef enum {
     /* 0x3D */ GI_KEY_BOSS,
     /* 0x3E */ GI_MAP,
     /* 0x3F */ GI_COMPASS,
-    /* 0x41 */ GI_HOOKSHOT = 0x41,
-    /* 0x42 */ GI_LENS,
-    /* 0x43 */ GI_PICTO_BOX,
-    /* 0x4C */ GI_OCARINA = 0x4C,
-    /* 0x50 */ GI_BOMBERS_NOTEBOOK = 0x50,
-    /* 0x52 */ GI_SKULL_TOKEN = 0x52,
-    /* 0x55 */ GI_REMAINS_ODOLWA = 0x55,
+    /* 0x40 */ GI_40,
+    /* 0x41 */ GI_HOOKSHOT,
+    /* 0x42 */ GI_LENS_OF_TRUTH,
+    /* 0x43 */ GI_PICTOGRAPH_BOX,
+    /* 0x44 */ GI_44,
+    /* 0x45 */ GI_45,
+    /* 0x46 */ GI_46,
+    /* 0x47 */ GI_47,
+    /* 0x48 */ GI_48,
+    /* 0x49 */ GI_49,
+    /* 0x4A */ GI_4A,
+    /* 0x4B */ GI_4B,
+    /* 0x4C */ GI_OCARINA_OF_TIME,
+    /* 0x4D */ GI_4D,
+    /* 0x4E */ GI_4E,
+    /* 0x4F */ GI_4F,
+    /* 0x50 */ GI_BOMBERS_NOTEBOOK,
+    /* 0x51 */ GI_51,
+    /* 0x52 */ GI_SKULL_TOKEN,
+    /* 0x53 */ GI_53,
+    /* 0x54 */ GI_54,
+    /* 0x55 */ GI_REMAINS_ODOLWA,
     /* 0x56 */ GI_REMAINS_GOHT,
     /* 0x57 */ GI_REMAINS_GYORG,
     /* 0x58 */ GI_REMAINS_TWINMOLD,
@@ -374,10 +447,19 @@ typedef enum {
     /* 0x69 */ GI_ZORA_EGG,
     /* 0x6A */ GI_GOLD_DUST,
     /* 0x6B */ GI_MUSHROOM,
-    /* 0x6E */ GI_SEAHORSE = 0x6E,
+    /* 0x6C */ GI_6C,
+    /* 0x6D */ GI_6D,
+    /* 0x6E */ GI_SEAHORSE,
     /* 0x6F */ GI_CHATEAU_BOTTLE,
-    /* 0x76 */ GI_ICE_TRAP = 0x76,
-    /* 0x78 */ GI_MASK_DEKU = 0x78,
+    /* 0x70 */ GI_HYLIAN_LOACH,
+    /* 0x71 */ GI_71,
+    /* 0x72 */ GI_72,
+    /* 0x73 */ GI_73,
+    /* 0x74 */ GI_74,
+    /* 0x75 */ GI_75,
+    /* 0x76 */ GI_ICE_TRAP,
+    /* 0x77 */ GI_77,
+    /* 0x78 */ GI_MASK_DEKU,
     /* 0x79 */ GI_MASK_GORON,
     /* 0x7A */ GI_MASK_ZORA,
     /* 0x7B */ GI_MASK_FIERCE_DEITY,
@@ -401,12 +483,13 @@ typedef enum {
     /* 0x8D */ GI_MASK_BLAST,
     /* 0x8E */ GI_MASK_SCENTS,
     /* 0x8F */ GI_MASK_KAFEIS_MASK,
-    /* 0x91 */ GI_CHATEAU = 0x91,
+    /* 0x90 */ GI_90,
+    /* 0x91 */ GI_CHATEAU,
     /* 0x92 */ GI_MILK,
     /* 0x93 */ GI_GOLD_DUST_2,
-    /* 0x94 */ GI_HYLIAN_LOACH, // Unused bottled eel
+    /* 0x94 */ GI_HYLIAN_LOACH_2, // Unused bottled eel
     /* 0x95 */ GI_SEAHORSE_CAUGHT,
-    /* 0x96 */ GI_MOON_TEAR,
+    /* 0x96 */ GI_MOONS_TEAR,
     /* 0x97 */ GI_DEED_LAND,
     /* 0x98 */ GI_DEED_SWAMP,
     /* 0x99 */ GI_DEED_MOUNTAIN,
@@ -418,19 +501,35 @@ typedef enum {
     /* 0x9F */ GI_SHIELD_HERO_STOLEN, // Code that treats this as hero's shield is unused, implied as intended to be stolen
     /* 0xA0 */ GI_ROOM_KEY,
     /* 0xA1 */ GI_LETTER_TO_MAMA,
-    /* 0xA9 */ GI_BOTTLE_STOLEN = 0xA9, // buy back stolen bottle
+    /* 0xA2 */ GI_A2,
+    /* 0xA3 */ GI_A3,
+    /* 0xA4 */ GI_A4,
+    /* 0xA5 */ GI_A5,
+    /* 0xA6 */ GI_A6,
+    /* 0xA7 */ GI_A7,
+    /* 0xA8 */ GI_A8,
+    /* 0xA9 */ GI_BOTTLE_STOLEN, // buy back stolen bottle
     /* 0xAA */ GI_LETTER_TO_KAFEI,
     /* 0xAB */ GI_PENDANT_OF_MEMORIES,
-    /* 0xB4 */ GI_TINGLE_MAP_CLOCK_TOWN = 0xB4,
+    /* 0xAC */ GI_AC,
+    /* 0xAD */ GI_AD,
+    /* 0xAE */ GI_AE,
+    /* 0xAF */ GI_AF,
+    /* 0xB0 */ GI_B0,
+    /* 0xB1 */ GI_B1,
+    /* 0xB2 */ GI_B2,
+    /* 0xB3 */ GI_B3,
+    /* 0xB4 */ GI_TINGLE_MAP_CLOCK_TOWN,
     /* 0xB5 */ GI_TINGLE_MAP_WOODFALL,
     /* 0xB6 */ GI_TINGLE_MAP_SNOWHEAD,
     /* 0xB7 */ GI_TINGLE_MAP_ROMANI_RANCH,
     /* 0xB8 */ GI_TINGLE_MAP_GREAT_BAY,
     /* 0xB9 */ GI_TINGLE_MAP_STONE_TOWER,
     /* 0xBA */ GI_MAX
-} GetItemID;
+} GetItemId;
 
-typedef enum {
+typedef enum GetItemDrawId {
+    /*   -1 */ GID_NONE = -1,
     /* 0x00 */ GID_BOTTLE,
     /* 0x01 */ GID_KEY_SMALL,
     /* 0x02 */ GID_MASK_KAMARO,
@@ -448,7 +547,7 @@ typedef enum {
     /* 0x0E */ GID_MASK_CIRCUS_LEADER,
     /* 0x0F */ GID_MASK_BREMEN,
     /* 0x10 */ GID_MASK_ALL_NIGHT,
-    /* 0x11 */ GID_NUTS,
+    /* 0x11 */ GID_DEKU_NUTS,
     /* 0x12 */ GID_HEART_CONTAINER,
     /* 0x13 */ GID_HEART_PIECE,
     /* 0x14 */ GID_QUIVER_30,
@@ -457,10 +556,10 @@ typedef enum {
     /* 0x17 */ GID_BOMB_BAG_20,
     /* 0x18 */ GID_BOMB_BAG_30,
     /* 0x19 */ GID_BOMB_BAG_40,
-    /* 0x1A */ GID_STICK,
+    /* 0x1A */ GID_DEKU_STICK,
     /* 0x1B */ GID_DUNGEON_MAP,
-    /* 0x1C */ GID_MAGIC_SMALL,
-    /* 0x1D */ GID_MAGIC_LARGE,
+    /* 0x1C */ GID_MAGIC_JAR_SMALL,
+    /* 0x1D */ GID_MAGIC_JAR_BIG,
     /* 0x1E */ GID_BOMB,
     /* 0x1F */ GID_STONE_OF_AGONY,
     /* 0x20 */ GID_WALLET_ADULT,
@@ -520,7 +619,7 @@ typedef enum {
     /* 0x56 */ GID_SKULL_TOKEN_2,
     /* 0x57 */ GID_57,
     /* 0x58 */ GID_ZORA_EGG,
-    /* 0x59 */ GID_MOON_TEAR,
+    /* 0x59 */ GID_MOONS_TEAR,
     /* 0x5A */ GID_DEED_LAND,
     /* 0x5B */ GID_MASK_DEKU,
     /* 0x5C */ GID_REMAINS_ODOLWA,
@@ -547,9 +646,9 @@ typedef enum {
     /* 0x71 */ GID_MASK_POSTMAN,
     /* 0x72 */ GID_MASK_GIANT,
     /* 0x73 */ GID_CHATEAU,
-    /* 0x74 */ GID_PICTO_BOX,
+    /* 0x74 */ GID_PICTOGRAPH_BOX,
     /* 0x75 */ GID_MASK_FIERCE_DEITY,
     /* 0x76 */ GID_MAX
-} GetItemDrawID;
+} GetItemDrawId;
 
 #endif

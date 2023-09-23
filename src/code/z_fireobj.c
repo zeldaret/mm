@@ -1,13 +1,6 @@
-#include "global.h"
+#include "z_fireobj.h"
 #include "overlays/actors/ovl_En_Arrow/z_en_arrow.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
-
-typedef enum {
-    FIRE_STATE_0,
-    FIRE_STATE_1,
-    FIRE_STATE_2,
-    FIRE_STATE_3,
-} FireState;
 
 ColliderCylinderInit sFireObjCollisionInit = {
     {
@@ -48,17 +41,17 @@ void FireObj_InitWithParams(PlayState* play, FireObj* fire, FireObjInitParams* i
     fire->xScale = 0.0f;
     fire->yScale = 0.0f;
     fire->dynamicSize = 0.0f;
-    fire->unk26 = Rand_ZeroOne() * 20.0f;
+    fire->timer = Rand_ZeroOne() * 20.0f;
     fire->ignitionDelay = -1;
 }
 
 void FireObj_SetState(FireObj* fire, f32 dynamicSizeStep, u8 newState) {
     fire->state = newState;
-    if (fire->state == FIRE_STATE_3) {
+    if (fire->state == FIRE_STATE_NOT_LIT) {
         fire->yScale = 0.0f;
         fire->xScale = 0.0f;
         fire->dynamicSize = 0.0f;
-    } else if (fire->state == FIRE_STATE_2) {
+    } else if (fire->state == FIRE_STATE_FULLY_LIT) {
         fire->xScale = fire->yScale = fire->size;
         fire->dynamicSize = 1.0f;
     }
@@ -70,15 +63,15 @@ void FireObj_SetPosition(FireObj* fire, Vec3f* pos) {
 }
 
 void FireObj_StepSize(FireObj* fire) {
-    if (fire->state == FIRE_STATE_0) {
-        if (Math_StepToF(&fire->dynamicSize, 1.0f, fire->dynamicSizeStep) != 0) {
-            FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_2);
+    if (fire->state == FIRE_STATE_GROWING) {
+        if (Math_StepToF(&fire->dynamicSize, 1.0f, fire->dynamicSizeStep)) {
+            FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_FULLY_LIT);
         }
-    } else if ((fire->state == FIRE_STATE_1) && (Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep) != 0)) {
-        FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
+    } else if ((fire->state == FIRE_STATE_SHRINKING) && Math_StepToF(&fire->dynamicSize, 0.0f, fire->dynamicSizeStep)) {
+        FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
     if (fire->sizeGrowsCos2 == 1) {
-        if ((fire->state == FIRE_STATE_0) || (fire->state == FIRE_STATE_1)) {
+        if ((fire->state == FIRE_STATE_GROWING) || (fire->state == FIRE_STATE_SHRINKING)) {
             fire->xScale = (1.0f - Math_CosS(SQ(fire->dynamicSize) * 0x4000)) * fire->size;
             fire->yScale = fire->dynamicSize * fire->size;
         } else {
@@ -101,39 +94,41 @@ void FireObj_UpdateStateTransitions(PlayState* play, FireObj* fire) {
     Vec3f dist;
 
     FireObj_StepSize(fire);
-    fire->unk26++;
+    fire->timer++;
     if (fire->ignitionDelay > 0) {
         fire->ignitionDelay--;
     } else if (fire->ignitionDelay == 0) {
         fire->ignitionDelay = -1;
-        if ((fire->state == FIRE_STATE_3) || (fire->state == FIRE_STATE_1)) {
-            nextState = FIRE_STATE_0;
+        if ((fire->state == FIRE_STATE_NOT_LIT) || (fire->state == FIRE_STATE_SHRINKING)) {
+            nextState = FIRE_STATE_GROWING;
         } else {
-            nextState = FIRE_STATE_1;
+            nextState = FIRE_STATE_SHRINKING;
         }
         FireObj_SetState(fire, fire->dynamicSizeStep, nextState);
     }
-    if ((fire->flags & 1) && (fire->state != FIRE_STATE_3) &&
+
+    if ((fire->flags & FIRE_FLAG_WATER_EXTINGUISHABLE) && (fire->state != FIRE_STATE_NOT_LIT) &&
         WaterBox_GetSurface1_2(play, &play->colCtx, fire->position.x, fire->position.z, &waterY, &waterBox) &&
         (waterY - fire->position.y > 6500.0f * fire->yScale)) {
-        FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_3);
+        FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_NOT_LIT);
     }
-    if ((fire->flags & 2) && (player->itemActionParam == PLAYER_AP_STICK)) {
+    if ((fire->flags & FIRE_FLAG_INTERACT_STICK) && (player->heldItemAction == PLAYER_IA_DEKU_STICK)) {
         Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &fire->position, &dist);
-        if (Math3D_LengthSquared(&dist) < 400.0f) {
+        if (Math3D_LengthSquared(&dist) < SQ(20.0f)) {
             sp40 = true;
         }
     }
+
     if (sp40) {
-        if (fire->state == FIRE_STATE_3) {
+        if (fire->state == FIRE_STATE_NOT_LIT) {
             if (player->unk_B28 > 0) {
-                FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_0);
+                FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
             }
         } else if (player->unk_B28 == 0) {
-            player->unk_B28 = 0xD2;
+            player->unk_B28 = 210;
             SoundSource_PlaySfxAtFixedWorldPos(play, &fire->position, 20, NA_SE_EV_FLAME_IGNITION);
-        } else if (player->unk_B28 < 0xC8) {
-            player->unk_B28 = 0xC8;
+        } else if (player->unk_B28 < 200) {
+            player->unk_B28 = 200;
         }
     }
 }
@@ -142,13 +137,14 @@ void FireObj_Draw(PlayState* play, FireObj* fire) {
     s32 pad;
     FireObjColors* fireColors = &sFireObjColors[fire->colorsIndex];
 
-    if (fire->state != FIRE_STATE_3) {
+    if (fire->state != FIRE_STATE_NOT_LIT) {
         Vec3s vec;
 
         OPEN_DISPS(play->state.gfxCtx);
-        func_8012C2DC(play->state.gfxCtx);
+
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
-                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (fire->unk26 * -20) & 511, 32, 128));
+                   Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 32, 64, 1, 0, (fire->timer * -20) % 512U, 32, 128));
 
         gDPSetPrimColor(POLY_XLU_DISP++, 0, fireColors->lod, fireColors->primColor.r, fireColors->primColor.g,
                         fireColors->primColor.b, fireColors->primColor.a);
@@ -185,7 +181,7 @@ void FireObj_UpdateLight(PlayState* play, FireObjLight* light, FireObj* fire) {
     FireObjLightParams* lightParams = &sFireObjLightParams[light->lightParamsIndex];
     s16 radius;
 
-    if (fire->state == FIRE_STATE_3) {
+    if (fire->state == FIRE_STATE_NOT_LIT) {
         Lights_PointSetColorAndRadius(&light->lightInfo, 0, 0, 0, -1);
     } else {
         radius = (fire->yScale * 140.0f * fire->sizeInv) + 60.0f;
@@ -225,14 +221,15 @@ void FireObj_Update(PlayState* play, FireObj* fire, Actor* actor) {
     EnArrow* arrow = (EnArrow*)fire->collision.base.ac;
 
     FireObj_UpdateStateTransitions(play, fire);
-    if (fire->state == FIRE_STATE_3) {
-        if ((fire->collision.base.acFlags & AC_HIT) && (fire->collision.info.acHitInfo->toucher.dmgFlags & 0x800)) {
-            FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_0);
+    if (fire->state == FIRE_STATE_NOT_LIT) {
+        if ((fire->collision.base.acFlags & AC_HIT) &&
+            (fire->collision.info.acHitInfo->toucher.dmgFlags & DMG_FIRE_ARROW)) {
+            FireObj_SetState(fire, fire->dynamicSizeStep, FIRE_STATE_GROWING);
         }
     } else if ((fire->collision.base.acFlags & AC_HIT) && (arrow->actor.update != NULL) &&
                (arrow->actor.id == ACTOR_EN_ARROW)) {
         arrow->actor.params = 0;
-        arrow->collider.info.toucher.dmgFlags = 0x800;
+        arrow->collider.info.toucher.dmgFlags = DMG_FIRE_ARROW;
     }
     fire->collision.dim.pos.x = fire->position.x;
     fire->collision.dim.pos.y = fire->position.y;

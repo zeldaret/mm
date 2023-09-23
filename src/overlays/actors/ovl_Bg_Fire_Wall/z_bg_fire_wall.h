@@ -7,6 +7,11 @@ struct BgFireWall;
 
 typedef void (*BgFireWallActionFunc)(struct BgFireWall*, PlayState*);
 
+typedef enum {
+    /* 0 */ BGFIREWALL_PARAM_0,
+    /* 1 */ BGFIREWALL_PARAM_1
+} BgFireWallParam;
+
 typedef struct BgFireWall {
     /* 0x000 */ Actor actor;
     /* 0x144 */ BgFireWallActionFunc actionFunc;
@@ -20,7 +25,5 @@ typedef struct BgFireWall {
     /* 0x160 */ f32 unk_160;
     /* 0x164 */ ColliderCylinder collider;
 } BgFireWall; // size = 0x1B0
-
-extern const ActorInit Bg_Fire_Wall_InitVars;
 
 #endif // Z_BG_FIRE_WALL_H

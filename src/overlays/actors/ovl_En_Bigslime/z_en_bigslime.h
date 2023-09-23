@@ -57,7 +57,7 @@ typedef struct EnBigslime {
     /* 0x0220 */ Vec3s morphTable[GEKKO_LIMB_MAX];
     /* 0x02B0 */ u8 minislimeState;
     /* 0x02B1 */ u8 dynamicVtxState; // Toggles between two states of dynamic Vtx
-    /* 0x02B2 */ u8 isAnimUpdate;
+    /* 0x02B2 */ u8 isAnimFinished;
     /* 0x02B3 */ union {
                     u8 formBigslimeTimer; // Bigslime will start forming when timer reaches 0
                     u8 minislimeCounter;
@@ -66,7 +66,7 @@ typedef struct EnBigslime {
     /* 0x02B4 */ u8 shockwaveAlpha;
     /* 0x02B5 */ u8 gekkoDrawDmgEffType;
     /* 0x02B6 */ s16 gekkoYaw;
-    /* 0x02B8 */ s16 cutscene;
+    /* 0x02B8 */ s16 csId;
     /* 0x02BA */ union { // multi-use timer
                     s16 idleTimer;
                     s16 noticeTimer;
@@ -87,7 +87,7 @@ typedef struct EnBigslime {
                     s16 isDespawned;
                     s16 isInitJump;
                 };
-    /* 0x02BC */ s16 wavySurfaceTimer; // decrements from 24, used in sin_rad for currData2
+    /* 0x02BC */ s16 wavySurfaceTimer; // decrements from 24, used in Math_SinF for currData2
     /* 0x02BE */ s16 stunTimer;
     /* 0x02C0 */ union {
                     s16 freezeTimer;
@@ -106,7 +106,7 @@ typedef struct EnBigslime {
                     Vec3f frozenPos;
                     Vec3f subCamDistToFrog; // Used to zoom into frogs as Gekko despawns/Frog spawns
                 };
-    /* 0x02F8 */ Vec3f limbPos[12];
+    /* 0x02F8 */ Vec3f gekkoBodyPartsPos[GEKKO_BODYPART_MAX];
     /* 0x0388 */ f32 gekkoDrawDmgEffAlpha;
     /* 0x038C */ f32 gekkoDrawDmgEffScale;
     /* 0x0390 */ f32 gekkoDrawDmgEffFrozenSteamScale;
@@ -124,7 +124,5 @@ typedef struct EnBigslime {
     /* 0x0A50 */ AnimatedMaterial* iceShardTexAnim;
     /* 0x0A54 */ EnBigslimeIceShardEffect iceShardEffect[BIGSLIME_NUM_ICE_SHARD]; // 312 = 162 (bigslime) + 10 * 15 (minislime)
 } EnBigslime; // size = 0x3634
-
-extern const ActorInit En_Bigslime_InitVars;
 
 #endif // Z_EN_BIGSLIME_H

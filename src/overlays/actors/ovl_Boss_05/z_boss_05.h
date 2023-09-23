@@ -63,7 +63,4 @@ typedef struct Boss05 {
     /* 0x500 */ Vec3s unk500;
 } Boss05; // size = 0x508
 
-
-extern const ActorInit Boss_05_InitVars;
-
 #endif // Z_BOSS_05_H

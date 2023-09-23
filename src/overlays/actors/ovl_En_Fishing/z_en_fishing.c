@@ -4,8 +4,10 @@
  * Description: Fishing Pond Elements (Owner, Fish, Props, Effects...)
  */
 
+#include "prevent_bss_reordering.h"
 #include "z_en_fishing.h"
 #include "z64rumble.h"
+#include "z64shrink_window.h"
 #include "objects/object_fish/object_fish.h"
 #include "overlays/actors/ovl_En_Kanban/z_en_kanban.h"
 
@@ -15,33 +17,33 @@
 
 #define WATER_SURFACE_Y(play) play->colCtx.colHeader->waterBoxes->minPos.y
 
-void EnFishing_Init(Actor* thisx, PlayState* play);
-void EnFishing_Destroy(Actor* thisx, PlayState* play);
-void EnFishing_UpdateFish(Actor* thisx, PlayState* play);
+void EnFishing_Init(Actor* thisx, PlayState* play2);
+void EnFishing_Destroy(Actor* thisx, PlayState* play2);
+void EnFishing_UpdateFish(Actor* thisx, PlayState* play2);
 void EnFishing_DrawFish(Actor* thisx, PlayState* play);
 
-void EnFishing_UpdateOwner(Actor* thisx, PlayState* play);
+void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2);
 void EnFishing_DrawOwner(Actor* thisx, PlayState* play);
 
 typedef struct {
-    /* 0x00 */ u8 unk_00;
-    /* 0x02 */ Vec3s pos;
-    /* 0x08 */ u8 unk_08;
-    /* 0x0C */ f32 unk_0C;
+    /* 0x0 */ u8 unk_00;
+    /* 0x2 */ Vec3s pos;
+    /* 0x8 */ u8 unk_08;
+    /* 0xC */ f32 unk_0C;
 } FishingFishInit; // size = 0x10
 
 #define EFFECT_COUNT 130
 
 typedef enum {
-    /* 0x00 */ FS_EFF_NONE,
-    /* 0x01 */ FS_EFF_RIPPLE,
-    /* 0x02 */ FS_EFF_DUST_SPLASH,
-    /* 0x03 */ FS_EFF_WATER_DUST,
-    /* 0x04 */ FS_EFF_BUBBLE,
-    /* 0x05 */ FS_EFF_RAIN_DROP,
-    /* 0x06 */ FS_EFF_OWNER_HAT,
-    /* 0x07 */ FS_EFF_RAIN_RIPPLE,
-    /* 0x08 */ FS_EFF_RAIN_SPLASH
+    /* 0 */ FS_EFF_NONE,
+    /* 1 */ FS_EFF_RIPPLE,
+    /* 2 */ FS_EFF_DUST_SPLASH,
+    /* 3 */ FS_EFF_WATER_DUST,
+    /* 4 */ FS_EFF_BUBBLE,
+    /* 5 */ FS_EFF_RAIN_DROP,
+    /* 6 */ FS_EFF_OWNER_HAT,
+    /* 7 */ FS_EFF_RAIN_RIPPLE,
+    /* 8 */ FS_EFF_RAIN_SPLASH
 } FishingEffectType;
 
 typedef struct {
@@ -72,9 +74,9 @@ typedef enum {
 } FishingPropType;
 
 typedef struct {
-    /* 0x00 */ u8 type;
-    /* 0x02 */ Vec3s pos;
-} FishingPropInit; // size = 0x08
+    /* 0x0 */ u8 type;
+    /* 0x2 */ Vec3s pos;
+} FishingPropInit; // size = 0x8
 
 typedef struct {
     /* 0x00 */ Vec3f pos;
@@ -92,8 +94,8 @@ typedef struct {
 } FishingProp; // size = 0x3C
 
 typedef enum {
-    /* 0x00 */ FS_GROUP_FISH_NONE,
-    /* 0x01 */ FS_GROUP_FISH_NORMAL
+    /* 0 */ FS_GROUP_FISH_NONE,
+    /* 1 */ FS_GROUP_FISH_NORMAL
 } FishingGroupFishType;
 
 #define GROUP_FISH_COUNT 60
@@ -200,7 +202,7 @@ s16 D_80917272;
 u8 D_80917274;
 Vec3f D_80917278;
 
-const ActorInit En_Fishing_InitVars = {
+ActorInit En_Fishing_InitVars = {
     ACTOR_EN_FISHING,
     ACTORCAT_NPC,
     FLAGS,
@@ -790,7 +792,7 @@ FishingFishInit sFishInits[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 5, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_5, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 0, ICHAIN_STOP),
 };
 
@@ -830,11 +832,11 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         thisx->focus.pos = thisx->world.pos;
         thisx->focus.pos.y += 75.0f;
-        thisx->flags |= 9;
+        thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
 
         if (sLinkAge != 1) {
             // HIGH_SCORE(HS_FISHING) from OoT
-            if (gSaveContext.save.unk_EE4 & 0x1000) {
+            if (gSaveContext.save.saveInfo.unk_EC0 & 0x1000) {
                 D_8090CD08 = 0;
             } else {
                 D_8090CD08 = 1;
@@ -845,25 +847,25 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
 
         D_8090CD04 = 20;
         play->specialEffects = sFishingEffects;
-        REG(15) = 1; // gTimeIncrement in OoT
+        R_TIME_SPEED = 1;
         D_809171FC = 0;
         D_809171F6 = 10;
 
-        Audio_QueueSeqCmd(0x100100FF);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
 
         if (sLinkAge == 1) {
-            if (gSaveContext.save.unk_EE4 & 0x7F) {
-                D_809171CC = gSaveContext.save.unk_EE4 & 0x7F;
+            if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F) {
+                D_809171CC = gSaveContext.save.saveInfo.unk_EC0 & 0x7F;
             } else {
                 D_809171CC = 40.0f;
             }
-        } else if (gSaveContext.save.unk_EE4 & 0x7F000000) {
-            D_809171CC = (gSaveContext.save.unk_EE4 & 0x7F000000) >> 0x18;
+        } else if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) {
+            D_809171CC = (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) >> 0x18;
         } else {
             D_809171CC = 45.0f;
         }
 
-        D_809171D1 = (gSaveContext.save.unk_EE4 & 0xFF0000) >> 0x10;
+        D_809171D1 = (gSaveContext.save.saveInfo.unk_EC0 & 0xFF0000) >> 0x10;
         if ((D_809171D1 & 7) == 7) {
             play->roomCtx.unk7A[0] = 90;
             D_809171CA = 1;
@@ -944,11 +946,11 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    thisx->bgCheckFlags |= 0x800; // Added in MM
+    thisx->bgCheckFlags |= BGCHECKFLAG_PLAYER_800; // Added in MM
 
     if ((thisx->params < 115) || (thisx->params == 200)) {
-        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, NULL, NULL, 0);
-        Animation_MorphToLoop(&this->skelAnime, &gFishingFishAnim, 0.0f);
+        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingBassSkel, &gFishingBassAnim, NULL, NULL, 0);
+        Animation_MorphToLoop(&this->skelAnime, &gFishingBassAnim, 0.0f);
     } else {
         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingLoachSkel, &gFishingLoachAnim, NULL, NULL, 0);
         Animation_MorphToLoop(&this->skelAnime, &gFishingLoachAnim, 0.0f);
@@ -959,8 +961,8 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
     if (thisx->params == 200) {
         this->unk_150 = 100;
         func_800BC154(play, &play->actorCtx, thisx, ACTORCAT_PROP);
-        thisx->targetMode = 0;
-        thisx->flags |= 9;
+        thisx->targetMode = TARGET_MODE_0;
+        thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     } else {
         this->unk_150 = 10;
@@ -1129,7 +1131,7 @@ void EnFishing_UpdateEffects(FishingEffect* effect, PlayState* play) {
 
                 if ((effect->unk_2C >= 100) && (Message_GetState(&play->msgCtx) == TEXT_STATE_5)) {
                     if (Message_ShouldAdvance(play) || (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE)) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         Rupees_ChangeBy(-50);
                         effect->unk_2C = -1;
                     }
@@ -1157,7 +1159,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     for (i = 0; i < 100; i++) {
         if (effect->type == FS_EFF_RIPPLE) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingRippleSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingRippleMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
                 flag++;
             }
@@ -1169,7 +1171,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, gFishingRippleVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingRippleModelDL);
         }
         effect++;
     }
@@ -1179,7 +1181,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     for (i = 0; i < 100; i++) {
         if (effect->type == FS_EFF_DUST_SPLASH) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingDustSplashSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingDustSplashMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 200, 200, 200, 0);
                 flag++;
             }
@@ -1192,7 +1194,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, gFishingDustSplashVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingDustSplashModelDL);
         }
         effect++;
     }
@@ -1202,7 +1204,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     for (i = 0; i < 100; i++) {
         if (effect->type == FS_EFF_WATER_DUST) {
             if (flag == 0) {
-                gSPDisplayList(POLY_OPA_DISP++, gFishingWaterDustSetupDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingWaterDustMaterialDL);
                 gDPSetEnvColor(POLY_OPA_DISP++, 40, 90, 80, 128);
                 flag++;
             }
@@ -1219,7 +1221,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_OPA_DISP++, gFishingWaterDustVtxDL);
+            gSPDisplayList(POLY_OPA_DISP++, gFishingWaterDustModelDL);
         }
         effect++;
     }
@@ -1229,7 +1231,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     for (i = 0; i < 100; i++) {
         if (effect->type == FS_EFF_BUBBLE) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingBubbleSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingBubbleMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 150, 150, 150, 0);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
                 flag++;
@@ -1241,7 +1243,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, gFishingBubbleVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingBubbleModelDL);
         }
         effect++;
     }
@@ -1251,7 +1253,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     for (i = 30; i < EFFECT_COUNT; i++) {
         if (effect->type == FS_EFF_RAIN_DROP) {
             if (flag == 0) {
-                POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
+                POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
                 gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 150, 255, 255, 30);
                 flag++;
@@ -1265,19 +1267,19 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, gFishingRainDropVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingRainDropModelDL);
         }
         effect++;
     }
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     effect = firstEffect + 30;
     flag = 0;
     for (i = 30; i < EFFECT_COUNT; i++) {
         if (effect->type == FS_EFF_RAIN_RIPPLE) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingRippleSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingRippleMaterialDL);
                 gDPSetEnvColor(POLY_XLU_DISP++, 155, 155, 155, 0);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 130);
                 flag++;
@@ -1288,7 +1290,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, gFishingRippleVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingRippleModelDL);
         }
         effect++;
     }
@@ -1298,7 +1300,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     for (i = 30; i < EFFECT_COUNT; i++) {
         if (effect->type == FS_EFF_RAIN_SPLASH) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingRainSplashSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingRainSplashMaterialDL);
                 gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, KREG(19) + 80);
                 flag++;
             }
@@ -1316,7 +1318,7 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-            gSPDisplayList(POLY_XLU_DISP++, gFishingRainSplashVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingRainSplashModelDL);
         }
         effect++;
     }
@@ -1324,9 +1326,9 @@ void EnFishing_DrawEffects(FishingEffect* effect, PlayState* play) {
     effect = firstEffect;
     if (effect->type == FS_EFF_OWNER_HAT) {
         Matrix_Translate(effect->pos.x, effect->pos.y, effect->pos.z, MTXMODE_NEW);
-        Matrix_RotateYF((sEffOwnerHatRot.y * M_PI) / 32768, MTXMODE_APPLY);
-        Matrix_RotateXFApply((sEffOwnerHatRot.x * M_PI) / 32768);
-        Matrix_RotateZF((sEffOwnerHatRot.z * M_PI) / 32768, MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD_ALT2(sEffOwnerHatRot.y), MTXMODE_APPLY);
+        Matrix_RotateXFApply(BINANG_TO_RAD_ALT2(sEffOwnerHatRot.x));
+        Matrix_RotateZF(BINANG_TO_RAD_ALT2(sEffOwnerHatRot.z), MTXMODE_APPLY);
         Matrix_Scale(effect->unk_30, effect->unk_30, effect->unk_30, MTXMODE_APPLY);
         Matrix_Translate(-1250.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXFApply(M_PI / 2);
@@ -1480,9 +1482,9 @@ void EnFishing_UpdateLine(PlayState* play, Vec3f* basePos, Vec3f* pos, Vec3f* ro
         dy = spD8 - (pos + i - 1)->y;
         dz = (pos + i)->z - (pos + i - 1)->z;
 
-        ry = Math_Acot2F(dz, dx);
+        ry = Math_Atan2F_XY(dz, dx);
         dist = sqrtf(SQ(dx) + SQ(dz));
-        rx = -Math_Acot2F(dist, dy);
+        rx = -Math_Atan2F_XY(dist, dy);
 
         (rot + i - 1)->y = ry;
         (rot + i - 1)->x = rx;
@@ -1516,9 +1518,9 @@ void EnFishing_UpdateLinePos(Vec3f* pos) {
         dy = (pos + i)->y - (pos + i + 1)->y;
         dz = (pos + i)->z - (pos + i + 1)->z;
 
-        ry = Math_Acot2F(dz, dx);
+        ry = Math_Atan2F_XY(dz, dx);
         dist = sqrtf(SQ(dx) + SQ(dz));
-        rx = -Math_Acot2F(dist, dy);
+        rx = -Math_Atan2F_XY(dist, dy);
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
         Matrix_RotateXFApply(rx);
@@ -1558,9 +1560,9 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
     dy = refPos->y - pos->y + offsetY;
     dz = refPos->z - pos->z;
 
-    ry = Math_Acot2F(dz, dx);
+    ry = Math_Atan2F_XY(dz, dx);
     dist = sqrtf(SQ(dx) + SQ(dz));
-    rx = -Math_Acot2F(dist, dy);
+    rx = -Math_Atan2F_XY(dist, dy);
 
     Matrix_RotateYF(ry, MTXMODE_NEW);
     Matrix_RotateXFApply(rx);
@@ -1572,7 +1574,7 @@ void EnFishing_DrawLureHook(PlayState* play, Vec3f* pos, Vec3f* refPos, u8 hookI
 
     Matrix_Translate(pos->x, pos->y, pos->z, MTXMODE_NEW);
 
-    if ((player->actor.speedXZ == 0.0f) && (D_809101B4 == 0.0f)) {
+    if ((player->actor.speed == 0.0f) && (D_809101B4 == 0.0f)) {
         Math_ApproachF(&sLureHookRotY[hookIndex], ry, 0.1f, 0.3f);
     } else {
         sLureHookRotY[hookIndex] = ry;
@@ -1658,7 +1660,7 @@ void EnFishing_UpdateSinkingLure(PlayState* play) {
     }
 
     if (D_8090CD14 == 5) {
-        Matrix_RotateYF(player->actor.shape.rot.y * (M_PI / 32768), MTXMODE_NEW);
+        Matrix_RotateYF(BINANG_TO_RAD(player->actor.shape.rot.y), MTXMODE_NEW);
         sp94.x = 5.0f;
         sp94.y = 0.0f;
         sp94.z = 3.0f;
@@ -1679,9 +1681,9 @@ void EnFishing_UpdateSinkingLure(PlayState* play) {
         dy = (pos + i)->y - (pos + i - 1)->y + offsetY;
         dz = (pos + i)->z - (pos + i - 1)->z + offsetZ;
 
-        ry = Math_Acot2F(dz, dx);
+        ry = Math_Atan2F_XY(dz, dx);
         dist = sqrtf(SQ(dx) + SQ(dz));
-        rx = -Math_Acot2F(dist, dy);
+        rx = -Math_Atan2F_XY(dist, dy);
 
         Matrix_RotateYF(ry, MTXMODE_NEW);
         Matrix_RotateXFApply(rx);
@@ -1707,9 +1709,9 @@ void EnFishing_DrawSinkingLure(PlayState* play) {
     EnFishing_UpdateSinkingLure(play);
 
     if (sLurePos.y < WATER_SURFACE_Y(play)) {
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
-        gSPDisplayList(POLY_OPA_DISP++, gFishingSinkingLureSegmentSetupDL);
+        gSPDisplayList(POLY_OPA_DISP++, gFishingSinkingLureSegmentMaterialDL);
 
         for (i = SINKING_LURE_SEG_COUNT - 1; i >= 0; i--) {
             if ((i + D_80911F20) < SINKING_LURE_SEG_COUNT) {
@@ -1720,13 +1722,13 @@ void EnFishing_DrawSinkingLure(PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, gFishingSinkingLureSegmentVtxDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingSinkingLureSegmentModelDL);
             }
         }
     } else {
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-        gSPDisplayList(POLY_XLU_DISP++, gFishingSinkingLureSegmentSetupDL);
+        gSPDisplayList(POLY_XLU_DISP++, gFishingSinkingLureSegmentMaterialDL);
 
         for (i = SINKING_LURE_SEG_COUNT - 1; i >= 0; i--) {
             if ((i + D_80911F20) < SINKING_LURE_SEG_COUNT) {
@@ -1737,7 +1739,7 @@ void EnFishing_DrawSinkingLure(PlayState* play) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gFishingSinkingLureSegmentVtxDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingSinkingLureSegmentModelDL);
             }
         }
     }
@@ -1756,7 +1758,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     Matrix_Push();
 
     if (D_8090CD54 != 0) {
@@ -1771,7 +1773,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         sLurePos = sFishingHookedFish->fishMouthPos;
 
         if ((D_8090CD14 == 5) && (D_80917206 == 2)) {
-            Matrix_RotateYF(player->actor.shape.rot.y * (M_PI / 32768), MTXMODE_NEW);
+            Matrix_RotateYF(BINANG_TO_RAD(player->actor.shape.rot.y), MTXMODE_NEW);
             posSrc.x = 2.0f;
             posSrc.y = 0.0f;
             posSrc.z = 0.0f;
@@ -1783,7 +1785,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         sLurePos = sReelLinePos[LINE_SEG_COUNT - 1];
         sLureRot.x = sReelLineRot[LINE_SEG_COUNT - 2].x + M_PI;
 
-        if ((player->actor.speedXZ == 0.0f) && (D_80917200 == 0)) {
+        if ((player->actor.speed == 0.0f) && (D_80917200 == 0)) {
             Math_ApproachF(&sLureRot.y, sReelLineRot[LINE_SEG_COUNT - 2].y, 0.1f, 0.2f);
         } else {
             sLureRot.y = sReelLineRot[LINE_SEG_COUNT - 2].y;
@@ -1799,7 +1801,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         Matrix_RotateZF(M_PI / 2, MTXMODE_APPLY);
         Matrix_RotateYF(M_PI / 2, MTXMODE_APPLY);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_OPA_DISP++, gFishingLureFloatDL);
@@ -1820,7 +1822,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         EnFishing_DrawLureHook(play, &hookPos[1], &sLureHookRefPos[1], 1);
     }
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 0x14);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
     gDPSetCombineMode(POLY_XLU_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
     gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 55);
@@ -1837,9 +1839,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         dy = sLurePos.y - sRodTipPos.y;
         dz = sLurePos.z - sRodTipPos.z;
 
-        ry = func_80086B30(dx, dz);
+        ry = Math_FAtan2F(dx, dz);
         dist = sqrtf(SQ(dx) + SQ(dz));
-        rx = -func_80086B30(dy, dist);
+        rx = -Math_FAtan2F(dy, dist);
 
         dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
@@ -1849,7 +1851,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
         Matrix_Scale(D_809101C8, 1.0f, dist, MTXMODE_APPLY);
 
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        gSPDisplayList(POLY_XLU_DISP++, gFishingLineVtxDL);
+        gSPDisplayList(POLY_XLU_DISP++, gFishingLineModelDL);
     } else {
         for (i = spB4; i < LINE_SEG_COUNT - 1; i++) {
             if ((i == LINE_SEG_COUNT - 3) && (D_80917206 == 0) && (D_8090CD14 == 3)) {
@@ -1864,9 +1866,9 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
                 dy = D_80917218.y - (linePos + i)->y;
                 dz = D_80917218.z - (linePos + i)->z;
 
-                ry = func_80086B30(dx, dz);
+                ry = Math_FAtan2F(dx, dz);
                 dist = sqrtf(SQ(dx) + SQ(dz));
-                rx = -func_80086B30(dy, dist);
+                rx = -Math_FAtan2F(dy, dist);
 
                 dist = sqrtf(SQ(dx) + SQ(dy) + SQ(dz)) * 0.001f;
 
@@ -1877,7 +1879,7 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gFishingLineVtxDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingLineModelDL);
                 break;
             }
 
@@ -1887,12 +1889,12 @@ void EnFishing_DrawLureAndLine(PlayState* play, Vec3f* linePos, Vec3f* lineRot) 
             Matrix_Scale(D_809101C8, 1.0f, 0.005f, MTXMODE_APPLY);
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPDisplayList(POLY_XLU_DISP++, gFishingLineVtxDL);
+            gSPDisplayList(POLY_XLU_DISP++, gFishingLineModelDL);
         }
     }
 
     Matrix_Pop();
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     CLOSE_DISPS(play->state.gfxCtx);
 }
@@ -1948,25 +1950,25 @@ void EnFishing_DrawRod(PlayState* play) {
             D_8090CD34 = 0.0f;
         }
 
-        spC8 = player->unk_B08[1];
-        Math_SmoothStepToF(&player->unk_B08[1], input->rel.stick_y * 0.02f, 0.3f, 5.0f, 0.0f);
-        spC8 = player->unk_B08[1] - spC8;
+        spC8 = player->unk_B0C;
+        Math_SmoothStepToF(&player->unk_B0C, input->rel.stick_y * 0.02f, 0.3f, 5.0f, 0.0f);
+        spC8 = player->unk_B0C - spC8;
 
-        spC4 = player->unk_B08[0];
-        Math_SmoothStepToF(&player->unk_B08[0], input->rel.stick_x * 0.02f, 0.3f, 5.0f, 0.0f);
-        spC4 = player->unk_B08[0] - spC4;
+        spC4 = player->unk_B08;
+        Math_SmoothStepToF(&player->unk_B08, input->rel.stick_x * 0.02f, 0.3f, 5.0f, 0.0f);
+        spC4 = player->unk_B08 - spC4;
 
-        if (player->unk_B08[0] > 1.0f) {
-            player->unk_B08[0] = 1.0f;
+        if (player->unk_B08 > 1.0f) {
+            player->unk_B08 = 1.0f;
         }
-        if (player->unk_B08[1] > 1.0f) {
-            player->unk_B08[1] = 1.0f;
+        if (player->unk_B0C > 1.0f) {
+            player->unk_B0C = 1.0f;
         }
-        if (player->unk_B08[0] < -1.0f) {
-            player->unk_B08[0] = -1.0f;
+        if (player->unk_B08 < -1.0f) {
+            player->unk_B08 = -1.0f;
         }
-        if (player->unk_B08[1] < -1.0f) {
-            player->unk_B08[1] = -1.0f;
+        if (player->unk_B0C < -1.0f) {
+            player->unk_B0C = -1.0f;
         }
 
         Math_ApproachF(&D_8090CD28, spC4 * 70.0f * -0.01f, 1.0f, D_8090CD30);
@@ -1975,8 +1977,8 @@ void EnFishing_DrawRod(PlayState* play) {
         Math_ApproachF(&D_8090CD34, 1.0f, 1.0f, 0.1f);
         Math_ApproachZeroF(&D_8090CD38, 1.0f, 0.05f);
     } else {
-        Math_ApproachZeroF(&player->unk_B08[1], 1.0f, 0.1f);
-        Math_ApproachZeroF(&player->unk_B08[0], 1.0f, 0.1f);
+        Math_ApproachZeroF(&player->unk_B0C, 1.0f, 0.1f);
+        Math_ApproachZeroF(&player->unk_B08, 1.0f, 0.1f);
         Math_ApproachF(&D_8090CD2C, (Math_SinS(D_809171FE * 3000) * 0.025f) + -0.03f, 1.0f, 0.05f);
         Math_ApproachZeroF(&D_8090CD28, 1.0f, 0.05f);
 
@@ -1987,13 +1989,13 @@ void EnFishing_DrawRod(PlayState* play) {
         }
     }
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPDisplayList(POLY_OPA_DISP++, gFishingRodSetupDL);
 
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 155, 0, 255);
 
-    Matrix_Mult(&player->mf_CC4, MTXMODE_NEW);
+    Matrix_Mult(&player->leftHandMf, MTXMODE_NEW);
 
     if (sLinkAge != 1) {
         Matrix_Translate(0.0f, 400.0f, 0.0f, MTXMODE_APPLY);
@@ -2008,11 +2010,11 @@ void EnFishing_DrawRod(PlayState* play) {
     }
 
     Matrix_RotateXFApply(-0.6283185f);
-    Matrix_RotateZF((player->unk_B08[0] * 0.5f) + 0.4712389f, MTXMODE_APPLY);
+    Matrix_RotateZF((player->unk_B08 * 0.5f) + 0.4712389f, MTXMODE_APPLY);
     Matrix_RotateXFApply((D_8090CD40 + 20.0f) * 0.01f * M_PI);
     Matrix_Scale(0.70000005f, 0.70000005f, 0.70000005f, MTXMODE_APPLY);
 
-    spC0 = (D_8090CD3C * (((player->unk_B08[1] - 1.0f) * -0.25f) + 0.5f)) + (D_8090CD2C + D_8090CD38);
+    spC0 = (D_8090CD3C * (((player->unk_B0C - 1.0f) * -0.25f) + 0.5f)) + (D_8090CD2C + D_8090CD38);
 
     Matrix_Translate(0.0f, 0.0f, -1300.0f, MTXMODE_APPLY);
 
@@ -2150,7 +2152,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
             Math_ApproachF(&D_809101C0, 195.0f, 1.0f, 1.0f);
 
-            if (player->stateFlags1 & 0x8000000) {
+            if (player->stateFlags1 & PLAYER_STATE1_8000000) {
                 D_80917204 = 0;
                 player->unk_B28 = 0;
             }
@@ -2158,7 +2160,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             if (D_80917204 == 0) {
                 if ((D_80917200 == 0) && (player->unk_B28 == 1)) {
                     D_80917204 = 37;
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
                 }
             } else {
                 sLureRot.x = sReelLineRot[LINE_SEG_COUNT - 2].x + M_PI;
@@ -2167,7 +2169,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                 if (D_80917204 == 18) {
                     D_8090CD14 = 1;
                     sLurePos = sRodTipPos;
-                    Matrix_RotateYF(BINANG_TO_RAD(player->actor.shape.rot.y), MTXMODE_NEW);
+                    Matrix_RotateYF(BINANG_TO_RAD_ALT(player->actor.shape.rot.y), MTXMODE_NEW);
                     sp90.x = 0.0f;
                     sp90.y = 0.0f;
                     sp90.z = 25.0f;
@@ -2180,7 +2182,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     D_8091726C = 0.5f;
                     D_80917268 = Rand_ZeroFloat(1.9f);
                     sFishMouthOffset.y = 500.0f;
-                    Audio_PlaySfxAtPos(&D_8090D614, NA_SE_IT_SWORD_SWING_HARD);
+                    Audio_PlaySfx_AtPos(&D_8090D614, NA_SE_IT_SWORD_SWING_HARD);
                 }
             }
             break;
@@ -2200,7 +2202,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                 D_80917238.x *= 0.9f;
                 D_80917238.z *= 0.9f;
                 if (D_8090CD0C == 0) {
-                    play_sound(NA_SE_IT_FISHING_REEL_HIGH - SFX_FLAG);
+                    Audio_PlaySfx(NA_SE_IT_FISHING_REEL_HIGH - SFX_FLAG);
                 }
             }
 
@@ -2213,7 +2215,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                 sLureRot.y = sReelLineRot[LINE_SEG_COUNT - 2].y;
             } else {
                 sLureRot.x = 0.0f;
-                sLureRot.y = Math_Acot2F(spD0, spD8) + M_PI;
+                sLureRot.y = Math_Atan2F_XY(spD0, spD8) + M_PI;
             }
 
             phi_f16 = sqrtf(SQ(spD8) + SQ(spD4) + SQ(spD0));
@@ -2229,13 +2231,14 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     Vec3f sp80 = this->actor.world.pos;
 
                     this->actor.prevPos = this->actor.world.pos = sLurePos;
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f, 0x43);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f,
+                                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_40);
                     this->actor.world.pos = sp80;
 
-                    if (this->actor.bgCheckFlags & 0x10) {
+                    if (this->actor.bgCheckFlags & BGCHECKFLAG_CEILING) {
                         D_80917238.y = -0.5f;
                     }
-                    if (this->actor.bgCheckFlags & 8) {
+                    if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                         if (D_80917238.y > 0.0f) {
                             D_80917238.y = 0.0f;
                         }
@@ -2256,8 +2259,8 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     D_809101D0 = 0.0;
                 } else {
                     Math_ApproachF(&D_809101C4, 0.0f, 1.0f, 0.05f);
-                    Audio_PlaySfxAtPos(&D_8090D614,
-                                       NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
+                    Audio_PlaySfx_AtPos(&D_8090D614,
+                                        NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
                 }
             } else {
                 f32 sp7C = WATER_SURFACE_Y(play);
@@ -2276,7 +2279,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
                     if ((sLurePos.y <= sp7C) && (sp7C < spE0) && (sp7C == WATER_SURFACE_Y(play))) {
                         D_80917264 = 10;
-                        Audio_PlaySfxAtPos(&D_8090D614, NA_SE_EV_BOMB_DROP_WATER);
+                        Audio_PlaySfx_AtPos(&D_8090D614, NA_SE_EV_BOMB_DROP_WATER);
                         D_80917248.y = 0.0f;
                         D_80917238.y *= 0.2f;
 
@@ -2302,8 +2305,8 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     }
                 } else {
                     Math_ApproachZeroF(&D_809101C4, 1.0f, 0.05f);
-                    Audio_PlaySfxAtPos(&D_8090D614,
-                                       NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
+                    Audio_PlaySfx_AtPos(&D_8090D614,
+                                        NA_SE_EN_WIZ_UNARI - SFX_FLAG); // changed from NA_SE_EN_FANTOM_FLOAT in OoT
                 }
             }
 
@@ -2398,7 +2401,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
                         sp90.x = player->actor.world.pos.x - sLurePos.x;
                         sp90.z = player->actor.world.pos.z - sLurePos.z;
-                        sp90.y = Math_Acot2F(sp90.z, sp90.x);
+                        sp90.y = Math_Atan2F_XY(sp90.z, sp90.x);
 
                         D_809101B0 = (sp70 * D_809101BC) + sp90.y;
                         D_809101BC *= -1.0f;
@@ -2407,7 +2410,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                         D_8091725C = 0.5f;
                         D_809101C0 += (fabsf(sp70) * 7.5f);
 
-                        func_8019FAD8(&D_8090D614, NA_SE_EV_LURE_MOVE_W, (sp70 * 1.999f * 0.25f) + 0.75f);
+                        Audio_PlaySfx_AtPosWithFreq(&D_8090D614, NA_SE_EV_LURE_MOVE_W, (sp70 * 1.999f * 0.25f) + 0.75f);
 
                         if (D_80917206 == 2) {
                             D_80917278.y = 5.0f * sp70;
@@ -2443,7 +2446,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                     sLureRot.x = 0.0f;
                     if (CHECK_BTN_ALL(input->press.button, BTN_B)) {
                         D_809101C0 += 6.0f;
-                        Audio_PlaySfxAtPos(&D_8090D614, NA_SE_PL_WALK_SAND);
+                        Audio_PlaySfx_AtPos(&D_8090D614, NA_SE_PL_WALK_GROUND + SURFACE_SFX_OFFSET_SAND);
                     }
                 } else {
                     if (D_809101C0 > 150.0f) {
@@ -2455,9 +2458,9 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             }
 
             Math_ApproachZeroF(&D_809101B4, 1.0f, 0.3f);
-            Math_ApproachS(&D_809101B8, (D_809101B0 * 32768.0f) / M_PI, 3, spDC);
+            Math_ApproachS(&D_809101B8, RAD_TO_BINANG_ALT2(D_809101B0), 3, spDC);
 
-            sLureRot.y = (D_809101B8 / 32768.0f) * M_PI;
+            sLureRot.y = BINANG_TO_RAD_ALT(D_809101B8);
 
             sp90.x = 0.0f;
             sp90.y = 0.0f;
@@ -2493,7 +2496,8 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
 
                     sp58 = this->actor.world.pos;
                     this->actor.prevPos = this->actor.world.pos = sLurePos;
-                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f, 0x44);
+                    Actor_UpdateBgCheckInfo(play, &this->actor, 15.0f, 30.0f, 30.0f,
+                                            UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
                     this->actor.world.pos = sp58;
 
                     D_80917278.y += -0.5f;
@@ -2528,11 +2532,11 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             if (CHECK_BTN_ALL(input->cur.button, BTN_A)) {
                 if (CHECK_BTN_ALL(input->cur.button, BTN_R)) {
                     D_809101C0 += 1.5f;
-                    play_sound(NA_SE_IT_FISHING_REEL_HIGH - SFX_FLAG);
+                    Audio_PlaySfx(NA_SE_IT_FISHING_REEL_HIGH - SFX_FLAG);
                     Math_ApproachF(&D_809101D0, 1000.0f, 1.0f, 2.0f);
                 } else {
                     D_809101C0 += D_8091726C;
-                    play_sound(NA_SE_IT_FISHING_REEL_SLOW - SFX_FLAG);
+                    Audio_PlaySfx(NA_SE_IT_FISHING_REEL_SLOW - SFX_FLAG);
                     Math_ApproachF(&D_809101D0, 1000.0f, 1.0f, 0.2f);
                 }
 
@@ -2589,7 +2593,7 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
                 } else {
                     D_809101C0 += D_8091726C;
                 }
-                play_sound(NA_SE_IT_FISHING_REEL_SLOW - SFX_FLAG);
+                Audio_PlaySfx(NA_SE_IT_FISHING_REEL_SLOW - SFX_FLAG);
             }
 
             if ((D_809171FE & 0x1F) == 0) {
@@ -2607,6 +2611,9 @@ void EnFishing_UpdateLure(EnFishing* this, PlayState* play) {
             sReelLinePos[LINE_SEG_COUNT - 1].y = sLurePos.y;
             sReelLinePos[LINE_SEG_COUNT - 1].z = sLurePos.z;
             D_809101C4 = 2.0f;
+            break;
+
+        default:
             break;
     }
 }
@@ -2712,7 +2719,7 @@ void func_809038A4(EnFishing* this, Input* input) {
     sp24 = SQ(sp34.x) + SQ(sp34.y) + SQ(sp34.z);
 
     if ((D_8090CD14 == 3) && (this->unk_19A == 0) && (D_8090CD0C == 0)) {
-        Matrix_RotateYF((-this->actor.shape.rot.y / 32768.0f) * M_PI, MTXMODE_NEW);
+        Matrix_RotateYF(BINANG_TO_RAD_ALT(-this->actor.shape.rot.y), MTXMODE_NEW);
         Matrix_MultVec3f(&sp34, &sp28);
 
         if ((sp28.z > 0.0f) || (this->unk_1A4 < 40.0f)) {
@@ -2787,13 +2794,13 @@ void func_80903C60(EnFishing* this, u8 arg1) {
         }
     }
 
-    Actor_PlaySfxAtPos(&this->actor, sfxId);
+    Actor_PlaySfx(&this->actor, sfxId);
 }
 
 void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
     if (sLinkAge == 1) {
-        if (gSaveContext.save.unk_EE4 & 0x7F) {
-            if (gSaveContext.save.unk_EE4 & 0x80) {
+        if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F) {
+            if (gSaveContext.save.saveInfo.unk_EC0 & 0x80) {
                 this->actor.textId = 0x40B1;
             } else {
                 this->actor.textId = 0x4089;
@@ -2801,8 +2808,8 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
         } else {
             this->actor.textId = 0x40AE;
         }
-    } else if (gSaveContext.save.unk_EE4 & 0x7F000000) {
-        if (gSaveContext.save.unk_EE4 & 0x80000000) {
+    } else if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) {
+        if (gSaveContext.save.saveInfo.unk_EC0 & 0x80000000) {
             this->actor.textId = 0x40B1;
         } else {
             this->actor.textId = 0x4089;
@@ -2813,17 +2820,17 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
 
     if (this->unk_1CB == 0) {
         if (this->unk_1CC == 0) {
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 
             if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
                 D_8090CCF8 = D_809171CC;
                 this->unk_1CB = 1;
             } else {
-                func_800B863C(&this->actor, play);
+                Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             }
         } else {
             this->unk_1CC--;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
     } else if (Actor_TextboxIsClosing(&this->actor, play)) {
         this->unk_1CB = 0;
@@ -2869,16 +2876,16 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     this->actor.uncullZoneScale = 50.0f;
 
     if (this->unk_148 == 0) {
-        sp118 = (player->actor.speedXZ * 0.15f) + 0.25f;
+        sp118 = (player->actor.speed * 0.15f) + 0.25f;
     } else {
-        sp118 = (player->actor.speedXZ * 0.3f) + 0.25f;
+        sp118 = (player->actor.speed * 0.3f) + 0.25f;
     }
 
     if ((D_80917200 != 0) || (sSubCamId != SUB_CAM_ID_DONE) ||
         ((player->actor.world.pos.z > 1150.0f) && (this->unk_150 != 100))) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         if (D_8090CD14 != 0) {
             if (D_80917202 == 0) {
                 this->actor.focus.pos = sLurePos;
@@ -2962,10 +2969,10 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
     sp12C = this->unk_1AC.y - this->actor.world.pos.y;
     sp128 = this->unk_1AC.z - this->actor.world.pos.z;
 
-    spFC = Math_FAtan2F(sp128, sp130);
+    spFC = Math_Atan2S_XY(sp128, sp130);
     sp124 = sqrtf(SQ(sp130) + SQ(sp128));
 
-    spFE = Math_FAtan2F(sp124, sp12C);
+    spFE = Math_Atan2S_XY(sp124, sp12C);
     sp124 = sqrtf(SQ(sp130) + SQ(sp128) + SQ(sp12C));
 
     if ((this->unk_198 != 0) && (this->unk_150 != 2) && (this->unk_150 != 3) && (this->unk_150 != 4)) {
@@ -3000,9 +3007,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->actor.shape.rot.y = -0x8000;
 
             if ((this->actor.projectedPos.z < 200.0f) && (this->actor.projectedPos.z > 0.0f)) {
-                spC4.x = randPlusMinusPoint5Scaled(5.0f) + 130.0f;
+                spC4.x = Rand_CenteredFloat(5.0f) + 130.0f;
                 spC4.y = 40.0f;
-                spC4.z = randPlusMinusPoint5Scaled(5.0f) + 1280.0f;
+                spC4.z = Rand_CenteredFloat(5.0f) + 1280.0f;
                 EnFishing_SpawnBubble(NULL, play->specialEffects, &spC4, Rand_ZeroFloat(0.02f) + 0.03f, 1);
             }
 
@@ -3016,7 +3023,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case 10:
             this->unk_1AC = this->actor.home.pos;
 
-            Math_ApproachF(&this->actor.speedXZ, 2.0f, 1.0f, 0.5f);
+            Math_ApproachF(&this->actor.speed, 2.0f, 1.0f, 0.5f);
             Math_ApproachF(&this->unk_1A8, 4096.0f, 1.0f, 256.0f);
 
             if (sp124 < 40.0f) {
@@ -3038,7 +3045,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case 11:
             this->unk_1AC = this->actor.home.pos;
 
-            Math_ApproachF(&this->actor.speedXZ, 0.0f, 1.0f, 0.05f);
+            Math_ApproachF(&this->actor.speed, 0.0f, 1.0f, 0.05f);
             Math_ApproachF(&this->unk_1A8, 0.0f, 1.0f, 256.0f);
 
             if (sp124 >= 40.0f) {
@@ -3068,7 +3075,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             break;
 
         case 0:
-            Math_ApproachF(&this->actor.speedXZ, 1.0f, 1.0f, 0.05f);
+            Math_ApproachF(&this->actor.speed, 1.0f, 1.0f, 0.05f);
             Math_ApproachF(&this->unk_1A8, 0.0f, 1.0f, 256.0f);
 
             if (this->unk_172[0] == 0) {
@@ -3077,9 +3084,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 } else {
                     this->unk_150 = 1;
                     this->unk_172[0] = Rand_ZeroFloat(30.0f) + 10.0f;
-                    this->unk_1AC.x = randPlusMinusPoint5Scaled(300.0f);
+                    this->unk_1AC.x = Rand_CenteredFloat(300.0f);
                     this->unk_1AC.y = (WATER_SURFACE_Y(play) - 50.0f) - Rand_ZeroFloat(50.0f);
-                    this->unk_1AC.z = randPlusMinusPoint5Scaled(300.0f);
+                    this->unk_1AC.z = Rand_CenteredFloat(300.0f);
                     this->unk_188 = 1.0f;
                     this->unk_18C = 2000.0f;
                 }
@@ -3088,7 +3095,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             if (D_80917206 == 2) {
                 func_809038A4(this, input);
             } else {
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
             break;
 
@@ -3105,14 +3112,14 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 if ((this->actor.xzDistToPlayer < (250.0f * sp118)) || (this->unk_172[1] != 0)) {
                     Math_ApproachF(&this->unk_1A8, 8192.0f, 1.0f, 768.0f);
-                    Math_ApproachF(&this->actor.speedXZ, 4.2f, 1.0f, 0.75);
+                    Math_ApproachF(&this->actor.speed, 4.2f, 1.0f, 0.75);
                     this->unk_188 = 1.2f;
                     this->unk_18C = 4000.0f;
                     this->unk_172[0] = 20;
                 } else {
                     this->unk_188 = 1.0f;
                     this->unk_18C = 2000.0f;
-                    Math_ApproachF(&this->actor.speedXZ, 1.5f, 1.0f, 0.1f);
+                    Math_ApproachF(&this->actor.speed, 1.5f, 1.0f, 0.1f);
                 }
 
                 if ((this->unk_172[0] == 0) || (sp124 < 50.0f)) {
@@ -3125,7 +3132,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 if (D_80917206 == 2) {
                     func_809038A4(this, input);
                 } else {
-                    this->actor.flags &= ~ACTOR_FLAG_1;
+                    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 }
             }
             break;
@@ -3134,26 +3141,26 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             Math_ApproachS(&this->unk_15E, 0, 0x14, 0x20);
 
             if ((this->actor.xzDistToPlayer < (250.0f * sp118)) || (this->unk_172[1] != 0)) {
-                Math_ApproachF(&this->actor.speedXZ, 3.0f, 1.0f, 0.75);
+                Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.75);
                 this->unk_188 = 1.0f;
                 this->unk_172[0] = 20;
                 this->unk_18C = 4000.0f;
                 Math_ApproachF(&this->unk_1A8, 4096.0f, 1.0f, 256.0f);
 
                 if ((play->gameplayFrames % 32) == 0) {
-                    this->unk_1AC.x = randPlusMinusPoint5Scaled(600.0f);
-                    this->unk_1AC.z = randPlusMinusPoint5Scaled(600.0f);
+                    this->unk_1AC.x = Rand_CenteredFloat(600.0f);
+                    this->unk_1AC.z = Rand_CenteredFloat(600.0f);
                     this->unk_1AC.y = -120.0f;
                 }
             } else if (sp124 > 50.0f) {
                 this->unk_188 = 0.8f;
                 this->unk_18C = 1500.0f;
-                Math_ApproachF(&this->actor.speedXZ, 1.0f, 1.0f, 0.1f);
+                Math_ApproachF(&this->actor.speed, 1.0f, 1.0f, 0.1f);
                 Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
             } else {
                 this->unk_188 = 0.4f;
                 this->unk_18C = 500.0f;
-                Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.02f);
+                Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.02f);
                 Math_ApproachF(&this->unk_1A8, 0.0f, 1.0f, 256.0f);
             }
 
@@ -3168,7 +3175,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_1AC.z = Rand_ZeroFloat(50.0f);
             }
 
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             break;
 
         case -2:
@@ -3182,11 +3189,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 Math_ApproachS(&this->unk_15E, -0x1000, 0x14, 0x100);
 
                 if (this->actor.world.pos.y < (WATER_SURFACE_Y(play) - 20.0f)) {
-                    Math_ApproachF(&this->actor.speedXZ, 0.5f, 1.0f, 0.1f);
+                    Math_ApproachF(&this->actor.speed, 0.5f, 1.0f, 0.1f);
                 } else {
-                    Math_ApproachZeroF(&this->actor.speedXZ, 1.0f, 0.01f);
+                    Math_ApproachZeroF(&this->actor.speed, 1.0f, 0.01f);
 
-                    if ((this->actor.speedXZ == 0.0f) || (this->actor.world.pos.y > (WATER_SURFACE_Y(play) - 5.0f))) {
+                    if ((this->actor.speed == 0.0f) || (this->actor.world.pos.y > (WATER_SURFACE_Y(play) - 5.0f))) {
                         this->unk_1AC.x = Rand_ZeroFloat(300.0f);
                         this->unk_1AC.z = Rand_ZeroFloat(300.0f);
                         this->unk_1AC.y = this->actor.floorHeight + 10.0f;
@@ -3200,13 +3207,13 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         EnFishing_SpawnRipple(&this->actor.projectedPos, play->specialEffects, &spB8, 30.0f, 400.0f,
                                               150, 90);
 
-                        Actor_PlaySfxAtPos(&this->actor, NA_SE_PL_CATCH_BOOMERANG);
+                        Actor_PlaySfx(&this->actor, NA_SE_PL_CATCH_BOOMERANG);
                         break;
                     }
                 }
 
                 Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             }
             break;
 
@@ -3220,7 +3227,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 if (sp124 > 40.0f) {
                     this->unk_188 = 0.7f;
                     this->unk_18C = 1200.0f;
-                    Math_ApproachF(&this->actor.speedXZ, 0.5f, 1.0f, 0.01f);
+                    Math_ApproachF(&this->actor.speed, 0.5f, 1.0f, 0.01f);
                     Math_ApproachF(&this->unk_1A8, 2048.0f, 1.0f, 128.0f);
                 } else {
                     this->unk_150 = -1;
@@ -3283,7 +3290,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->unk_18C = 500.0f;
                     this->unk_172[0] = Rand_ZeroFloat(10.0f) + 2.0f;
                 }
-                Math_ApproachF(&this->actor.speedXZ, -0.2f, 1.0f, 0.1f);
+                Math_ApproachF(&this->actor.speed, -0.2f, 1.0f, 0.1f);
                 this->unk_156 = 1;
             } else {
                 if (this->unk_156 != 0) {
@@ -3291,7 +3298,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->unk_1A8 = 0.0f;
                     this->unk_18C = 3000.0f;
                 }
-                Math_ApproachF(&this->actor.speedXZ, 3.0f, 1.0f, 0.15f);
+                Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.15f);
                 this->unk_156 = 0;
             }
 
@@ -3375,7 +3382,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->unk_1AC.z = sLurePos.z + sp100.z;
             this->unk_1AC.y = sLurePos.y - 10.0f;
             this->unk_1A8 = 4096.0f;
-            Math_ApproachF(&this->actor.speedXZ, this->unk_180 * 0.8f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, this->unk_180 * 0.8f, 1.0f, 1.0f);
 
             if ((D_8090CD14 != 3) || (sLurePos.y > (WATER_SURFACE_Y(play) + 5.0f)) ||
                 (sqrtf(SQ(sLurePos.x) + SQ(sLurePos.z)) > 800.0f)) {
@@ -3400,7 +3407,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->unk_149 = 50;
             sp134 = 2;
             this->unk_1AC = sLurePos;
-            Math_ApproachF(&this->actor.speedXZ, this->unk_180, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, this->unk_180, 1.0f, 1.0f);
 
             if ((D_8090CD14 != 3) || (this->unk_172[0] == 0) || (sLurePos.y > (WATER_SURFACE_Y(play) + 5.0f)) ||
                 (sqrtf(SQ(sLurePos.x) + SQ(sLurePos.z)) > 800.0f)) {
@@ -3465,7 +3472,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         case -3:
             this->unk_149 = 50;
             this->unk_1AC = sLurePos;
-            Math_ApproachF(&this->actor.speedXZ, 2.0f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 2.0f, 1.0f, 1.0f);
 
             if ((D_8090CD14 != 3) || (this->unk_172[0] == 0) || (sLurePos.y > (WATER_SURFACE_Y(play) + 5.0f)) ||
                 (sqrtf(SQ(sLurePos.x) + SQ(sLurePos.z)) > 800.0f)) {
@@ -3476,8 +3483,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 this->unk_18C = 2000.0f;
             } else if (sp124 < 10.0f) {
                 if (sLurePos.y > (WATER_SURFACE_Y(play) - 10.0f)) {
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
-                    play_sound(NA_SE_PL_CATCH_BOOMERANG);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_JUMP_OUT_WATER);
+                    Audio_PlaySfx(NA_SE_PL_CATCH_BOOMERANG);
                 }
 
                 func_809033F0(this, play, false);
@@ -3538,7 +3545,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     this->unk_190 = 1.7f;
                     this->unk_194 = 7000.0f;
                     D_80917274 = 1;
-                    Audio_QueueSeqCmd(0x881A); // Changed from 0x81A in OoT
+                    SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_ENEMY | 0x800 | SEQ_FLAG_ASYNC);
                     D_809171F6 = 0;
 
                     if (this->unk_148 == 1) {
@@ -3553,7 +3560,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     Rumble_Override(0.0f, temp2, 120, 5);
                     D_809171F4 = 40;
                     D_80911E28 = 10;
-                    play_sound(NA_SE_IT_FISHING_HIT);
+                    Audio_PlaySfx(NA_SE_IT_FISHING_HIT);
                 }
             }
 
@@ -3597,8 +3604,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                         for (spA2 = 0; spA2 < 100; spA2++) {
 
-                            Matrix_RotateYF(randPlusMinusPoint5Scaled(2.3561945f) +
-                                                (((this->actor.yawTowardsPlayer + 0x8000) / 32768.0f) * M_PI),
+                            Matrix_RotateYF(Rand_CenteredFloat(0.75f * M_PI) +
+                                                BINANG_TO_RAD_ALT(this->actor.yawTowardsPlayer + 0x8000),
                                             MTXMODE_NEW);
                             Matrix_MultVec3f(&sp10C, &sp100);
 
@@ -3639,17 +3646,17 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         D_8091726C = 0.0f;
                         this->unk_188 = 1.6f;
                         this->unk_18C = 6000.0f;
-                        Math_ApproachF(&this->actor.speedXZ, 7.5f, 1.0f, 1.0f);
+                        Math_ApproachF(&this->actor.speed, 7.5f, 1.0f, 1.0f);
                         Math_ApproachS(&this->unk_168, 0x4E20, 2, 0xFA0);
                     } else {
                         if ((D_80917274 == 0) && (D_80917206 == 2)) {
                             this->unk_188 = 1.0f;
                             this->unk_18C = 2000.0f;
-                            Math_ApproachF(&this->actor.speedXZ, 3.0f, 1.0f, 0.2f);
+                            Math_ApproachF(&this->actor.speed, 3.0f, 1.0f, 0.2f);
                         } else {
                             this->unk_188 = 1.4f;
                             this->unk_18C = 5000.0f;
-                            Math_ApproachF(&this->actor.speedXZ, 5.0f, 1.0f, 0.5f);
+                            Math_ApproachF(&this->actor.speed, 5.0f, 1.0f, 0.5f);
                         }
 
                         if (this->unk_148 == 0) {
@@ -3674,7 +3681,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         D_8091726C = 1.3f - (this->unk_1A4 * 0.00899f * 1.4f);
                     }
 
-                    Math_ApproachF(&this->actor.speedXZ, 2.0f, 1.0f, 0.5f);
+                    Math_ApproachF(&this->actor.speed, 2.0f, 1.0f, 0.5f);
 
                     if (this->unk_172[1] == 0) {
                         this->unk_14A = 0;
@@ -3695,7 +3702,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (D_80917274 || (D_80917206 != 2)) {
-                if (this->actor.speedXZ < 3.0f) {
+                if (this->actor.speed < 3.0f) {
                     if (D_809171FE & 8) {
                         sp100.x = -0.8f;
                     } else {
@@ -3718,11 +3725,11 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
             if ((SQ(sp10C.x) + SQ(sp10C.y) + SQ(sp10C.z)) > SQ(20.0f)) {
                 Math_ApproachF(&this->actor.world.pos.x, sReelLinePos[LINE_SEG_COUNT - 2].x, 0.2f,
-                               2.0f * (this->actor.speedXZ * 1.5f));
+                               2.0f * (this->actor.speed * 1.5f));
                 Math_ApproachF(&this->actor.world.pos.y, sReelLinePos[LINE_SEG_COUNT - 2].y, 0.2f,
-                               2.0f * (this->actor.speedXZ * 1.5f) * 5.0f * 0.1f);
+                               2.0f * (this->actor.speed * 1.5f) * 5.0f * 0.1f);
                 Math_ApproachF(&this->actor.world.pos.z, sReelLinePos[LINE_SEG_COUNT - 2].z, 0.2f,
-                               2.0f * (this->actor.speedXZ * 1.5f));
+                               2.0f * (this->actor.speed * 1.5f));
             }
 
             if (CHECK_BTN_ALL(input->cur.button, BTN_A) || (input->rel.stick_y < -30)) {
@@ -3742,14 +3749,14 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 if ((D_80917272 == 0) && (D_80917274 == 0)) {
                     // Assignment of OoT's D_80B7E086 here removed in MM
-                    if (((sLinkAge == 1) && (gSaveContext.save.unk_EE4 & 0x400)) ||
-                        ((sLinkAge != 1) && (gSaveContext.save.unk_EE4 & 0x800))) {
+                    if (((sLinkAge == 1) && (gSaveContext.save.saveInfo.unk_EC0 & 0x400)) ||
+                        ((sLinkAge != 1) && (gSaveContext.save.saveInfo.unk_EC0 & 0x800))) {
                         // Assignment of OoT's D_80B7A67C here removed in MM, this is now an empty branch
                     }
                 } else {
                     // Assignment of OoT's D_80B7E086 here removed in MM
                     Rumble_Override(0.0f, 1, 3, 1);
-                    Audio_QueueSeqCmd(0x100A00FF);
+                    SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
                 }
 
                 this->unk_150 = this->unk_152 = 0;
@@ -3773,7 +3780,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 player->unk_B28 = 3;
                 Rumble_Override(0.0f, 1, 3, 1);
                 D_809171D8++;
-                Cutscene_Start(play, &play->csCtx);
+                Cutscene_StartManual(play, &play->csCtx);
                 D_8090CD4C = 100;
                 D_80911F48 = 45.0f;
                 D_8090CD14 = 5;
@@ -3802,7 +3809,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 sp10C.y = 10.0f;
                 sp10C.z = 50.0f;
             }
-            Matrix_RotateYF((player->actor.shape.rot.y / 32768.0f) * M_PI, MTXMODE_NEW);
+            Matrix_RotateYF(BINANG_TO_RAD_ALT(player->actor.shape.rot.y), MTXMODE_NEW);
             Matrix_MultVec3f(&sp10C, &sSubCamEye);
 
             sSubCamEye.x += player->actor.world.pos.x;
@@ -3817,7 +3824,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             }
 
             if (this->unk_172[0] == 90) {
-                Audio_QueueSeqCmd(0x8924); // changed from 0x924 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GET_HEART | 0x900 | SEQ_FLAG_ASYNC);
                 D_8090CCFC = 40;
 
                 if (this->unk_148 == 0) {
@@ -3846,9 +3853,12 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             sp10C.y = -10.0f;
             sp10C.z = 5.0f;
             Matrix_MultVec3f(&sp10C, &sp100);
-            Math_ApproachF(&this->actor.world.pos.x, player->bodyPartsPos[15].x + sp100.x, 1.0f, 6.0f);
-            Math_ApproachF(&this->actor.world.pos.y, player->bodyPartsPos[15].y + sp100.y, 1.0f, 6.0f);
-            Math_ApproachF(&this->actor.world.pos.z, player->bodyPartsPos[15].z + sp100.z, 1.0f, 6.0f);
+            Math_ApproachF(&this->actor.world.pos.x, player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].x + sp100.x, 1.0f,
+                           6.0f);
+            Math_ApproachF(&this->actor.world.pos.y, player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].y + sp100.y, 1.0f,
+                           6.0f);
+            Math_ApproachF(&this->actor.world.pos.z, player->bodyPartsPos[PLAYER_BODYPART_RIGHT_HAND].z + sp100.z, 1.0f,
+                           6.0f);
 
             D_809101C0 = 188.0f;
 
@@ -3858,13 +3868,13 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
                             Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
-                                func_801477B4(play);
+                                Message_CloseTextbox(play);
                                 if (play->msgCtx.choiceIndex == 0) {
                                     if (D_8090CCF0 == 0.0f) {
                                         D_8090CCF0 = this->unk_1A4;
                                         D_809171D0 = this->unk_148;
                                         D_809171D2 = D_80917206;
-                                        Actor_MarkForDeath(&this->actor);
+                                        Actor_Kill(&this->actor);
                                     } else if ((this->unk_148 == 0) && (D_809171D0 == 0) &&
                                                ((s16)this->unk_1A4 < (s16)D_8090CCF0)) {
                                         this->unk_1CD = 1;
@@ -3886,11 +3896,12 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                             }
                         }
                         break;
+
                     case 1:
                         if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) ||
                             Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                             if (Message_ShouldAdvance(play)) {
-                                func_801477B4(play);
+                                Message_CloseTextbox(play);
                                 if (play->msgCtx.choiceIndex != 0) {
                                     f32 temp1 = D_8090CCF0;
                                     s16 temp2 = D_809171D0;
@@ -3902,6 +3913,9 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                                 D_8090CD14 = 0;
                             }
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -3918,8 +3932,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     SkelAnime_Free(&this->skelAnime, play);
 
                     if (this->unk_148 == 0) {
-                        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingFishSkel, &gFishingFishAnim, 0, 0, 0);
-                        Animation_MorphToLoop(&this->skelAnime, &gFishingFishAnim, 0.0f);
+                        SkelAnime_InitFlex(play, &this->skelAnime, &gFishingBassSkel, &gFishingBassAnim, 0, 0, 0);
+                        Animation_MorphToLoop(&this->skelAnime, &gFishingBassAnim, 0.0f);
                     } else {
                         SkelAnime_InitFlex(play, &this->skelAnime, &gFishingLoachSkel, &gFishingLoachAnim, 0, 0, 0);
                         Animation_MorphToLoop(&this->skelAnime, &gFishingLoachAnim, 0.0f);
@@ -3928,7 +3942,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 D_809101C4 = 520.0f;
                 D_809101C0 = 195.0f;
-                Audio_QueueSeqCmd(0x100A00FF);
+                SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 10);
                 D_809171F6 = 20;
                 D_8090CD4C = 3;
             }
@@ -3950,7 +3964,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 D_8090CF18 = 3;
             }
 
-            Math_ApproachF(&this->actor.speedXZ, 5.0f, 1.0f, 1.0f);
+            Math_ApproachF(&this->actor.speed, 5.0f, 1.0f, 1.0f);
 
             if (sp124 < 20.0f) {
                 Math_ApproachS(&this->unk_168, 0x4E20, 2, 0xFA0);
@@ -4009,7 +4023,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 spF6 = -0x1F40;
             }
 
-            if (this->actor.speedXZ >= 3.2f) {
+            if (this->actor.speed >= 3.2f) {
                 Math_ApproachS(&this->unk_166, spF6, 2, 0x4E20);
             } else {
                 Math_ApproachS(&this->unk_166, spF6, 3, 0xBB8);
@@ -4045,7 +4059,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         Math_ApproachS(&this->unk_15A, this->unk_160, spF0, spEE);
         Math_ApproachS(&this->unk_15C, this->unk_162, spFA, 0x2000);
 
-        if (this->actor.speedXZ <= 0.5f) {
+        if (this->actor.speed <= 0.5f) {
             Math_ApproachS(&this->actor.shape.rot.x, 0, 10, this->unk_170);
             Math_ApproachS(&this->unk_170, 0x500, 1, 0x20);
         } else {
@@ -4061,7 +4075,7 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                 func_80903C60(this, 1);
                 this->unk_17C = this->actor.velocity.y;
                 this->actor.velocity.y = 0.0f;
-                this->unk_162 = randPlusMinusPoint5Scaled(32768.0f);
+                this->unk_162 = (s16)(s32)Rand_CenteredFloat(0x8000);
             } else if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
                        (this->actor.prevPos.y >= WATER_SURFACE_Y(play))) {
                 if (this->unk_17C < -5.0f) {
@@ -4076,14 +4090,14 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
         if ((this->actor.world.pos.y < WATER_SURFACE_Y(play)) &&
             (this->actor.world.pos.y > (WATER_SURFACE_Y(play) - 10.0f)) && !(this->unk_154 & 1) &&
-            (this->actor.speedXZ > 0.0f)) {
+            (this->actor.speed > 0.0f)) {
             Vec3f pos = this->actor.world.pos;
 
             pos.y = WATER_SURFACE_Y(play);
             EnFishing_SpawnRipple(&this->actor.projectedPos, play->specialEffects, &pos, 80.0f, 500.0f, 150, 90);
         }
 
-        if ((this->actor.speedXZ > 0.0f) || (this->unk_150 == 5)) {
+        if ((this->actor.speed > 0.0f) || (this->unk_150 == 5)) {
             f32 velocityY = this->actor.velocity.y;
 
             spD8 = this->unk_1A4 * 0.1f;
@@ -4092,24 +4106,25 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
             this->actor.prevPos.y -= spD8;
             this->actor.velocity.y = -1.0f;
             if (KREG(90) == 0) { // Check added in MM
-                Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f, 0x45);
+                Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 30.0f, 100.0f,
+                                        UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
             }
             this->actor.world.pos.y += spD8;
             this->actor.prevPos.y += spD8;
 
             this->actor.velocity.y = velocityY;
 
-            if (this->actor.bgCheckFlags & 8) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
                 this->unk_198 = 20;
             }
 
-            if (this->actor.bgCheckFlags & 1) {
+            if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
                 if (this->actor.world.pos.y > WATER_SURFACE_Y(play)) {
                     this->unk_17C = Rand_ZeroFloat(3.0f) + 3.0f;
                     this->actor.velocity.x = this->actor.world.pos.x * -0.003f;
                     this->actor.velocity.z = this->actor.world.pos.z * -0.003f;
 
-                    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_FISH_LEAP);
+                    Actor_PlaySfx(&this->actor, NA_SE_EV_FISH_LEAP);
                     func_809036BC(this, play);
 
                     if (Rand_ZeroOne() < 0.5f) {
@@ -4121,10 +4136,10 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if (Rand_ZeroOne() < 0.5f) {
                         this->unk_15E = 0;
                     } else {
-                        this->unk_15E = (s16)randPlusMinusPoint5Scaled(32.0f) + 0x8000;
+                        this->unk_15E = (s16)(s32)Rand_CenteredFloat(0x20) + 0x8000;
                     }
 
-                    this->unk_160 = (s16)randPlusMinusPoint5Scaled(16384.0f);
+                    this->unk_160 = (s16)(s32)Rand_CenteredFloat(0x4000);
                     this->unk_188 = 1.0f;
                     this->unk_18C = 5000.0f;
                     this->unk_194 = 5000.0f;
@@ -4134,8 +4149,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
                     if ((this->unk_150 == 5) && !(this->unk_154 & 1)) {
                         Vec3f pos;
 
-                        pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
-                        pos.z = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.z;
+                        pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
+                        pos.z = Rand_CenteredFloat(10.0f) + this->actor.world.pos.z;
                         pos.y = this->actor.floorHeight + 5.0f;
                         EnFishing_SpawnWaterDust(&this->actor.projectedPos, play->specialEffects, &pos,
                                                  (this->unk_1A4 * 0.005f) + 0.15f);
@@ -4153,41 +4168,42 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
         this->unk_1CA--;
 
         for (i = 0; i < 2; i++) {
-            pos.x = randPlusMinusPoint5Scaled(range) + this->actor.world.pos.x;
-            pos.y = randPlusMinusPoint5Scaled(range) + this->actor.world.pos.y;
-            pos.z = randPlusMinusPoint5Scaled(range) + this->actor.world.pos.z;
+            pos.x = Rand_CenteredFloat(range) + this->actor.world.pos.x;
+            pos.y = Rand_CenteredFloat(range) + this->actor.world.pos.y;
+            pos.z = Rand_CenteredFloat(range) + this->actor.world.pos.z;
             EnFishing_SpawnBubble(&this->actor.projectedPos, play->specialEffects, &pos, Rand_ZeroFloat(0.035f) + 0.04f,
                                   0);
         }
     }
 }
 
-s32 EnFishing_FishOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+s32 EnFishing_BassOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 13) {
+    if (limbIndex == FISHING_BASS_LIMB_JAW) {
         rot->z -= this->unk_168 - 11000;
-    } else if ((limbIndex == 2) || (limbIndex == 3)) {
+    } else if ((limbIndex == FISHING_BASS_LIMB_MIDDLE_SEGMENT_ROOT) ||
+               (limbIndex == FISHING_BASS_LIMB_BACK_SEGMENT_ROOT)) {
         rot->y += this->unk_164;
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == FISHING_BASS_LIMB_END_ROOT) {
         rot->y += this->unk_16E;
-    } else if (limbIndex == 0xE) {
+    } else if (limbIndex == FISHING_BASS_LIMB_RIGHT_PECTORAL_FIN) {
         rot->y -= this->unk_16A;
-    } else if (limbIndex == 0xF) {
+    } else if (limbIndex == FISHING_BASS_LIMB_LEFT_PECTORAL_FIN) {
         rot->y += this->unk_16A;
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == FISHING_BASS_LIMB_TOP_REAR_FIN) {
         rot->y += this->unk_16C;
-    } else if (limbIndex == 9) {
+    } else if (limbIndex == FISHING_BASS_LIMB_BOTTOM_REAR_FIN) {
         rot->y -= this->unk_16C;
     }
 
     return false;
 }
 
-void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnFishing_BassPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 13) {
+    if (limbIndex == FISHING_BASS_LIMB_JAW) {
         Matrix_MultVec3f(&sFishMouthOffset, &this->fishMouthPos);
     }
 }
@@ -4195,11 +4211,11 @@ void EnFishing_FishPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec
 s32 EnFishing_LoachOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 3) {
+    if (limbIndex == FISHING_LOACH_LIMB_MIDDLE_SEGMENT) {
         rot->y += this->unk_1C4[0];
-    } else if (limbIndex == 4) {
+    } else if (limbIndex == FISHING_LOACH_LIMB_LOWER_BACK_FIN) {
         rot->y += this->unk_1C4[1];
-    } else if (limbIndex == 5) {
+    } else if (limbIndex == FISHING_LOACH_LIMB_TAIL_FIN) {
         rot->y += this->unk_1C4[2];
     }
 
@@ -4210,7 +4226,7 @@ void EnFishing_LoachPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     static Vec3f sLoachMouthOffset = { 500.0f, 500.0f, 0.0f };
     EnFishing* this = THIS;
 
-    if (limbIndex == 11) {
+    if (limbIndex == FISHING_LOACH_LIMB_JAW) {
         Matrix_MultVec3f(&sLoachMouthOffset, &this->fishMouthPos);
     }
 }
@@ -4218,23 +4234,23 @@ void EnFishing_LoachPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
 void EnFishing_DrawFish(Actor* thisx, PlayState* play) {
     EnFishing* this = THIS;
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     Matrix_Translate(this->actor.world.pos.x, this->actor.world.pos.y, this->actor.world.pos.z, MTXMODE_NEW);
-    Matrix_RotateYF(((this->unk_15A + this->actor.shape.rot.y) / 32768.0f) * M_PI, MTXMODE_APPLY);
-    Matrix_RotateXFApply(((this->unk_158 + this->actor.shape.rot.x) / 32768.0f) * M_PI);
-    Matrix_RotateZF(((this->unk_15C + this->actor.shape.rot.z) / 32768.0f) * M_PI, MTXMODE_APPLY);
+    Matrix_RotateYF(BINANG_TO_RAD_ALT(this->unk_15A + this->actor.shape.rot.y), MTXMODE_APPLY);
+    Matrix_RotateXFApply(BINANG_TO_RAD_ALT(this->unk_158 + this->actor.shape.rot.x));
+    Matrix_RotateZF(BINANG_TO_RAD_ALT(this->unk_15C + this->actor.shape.rot.z), MTXMODE_APPLY);
     Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
 
     if (this->unk_148 == 0) {
-        Matrix_RotateYF((this->unk_164 * (M_PI / 32768)) - (M_PI / 2), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD(this->unk_164) - (M_PI / 2), MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, this->unk_164 * 10.0f * 0.01f, MTXMODE_APPLY);
 
         SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                              EnFishing_FishOverrideLimbDraw, EnFishing_FishPostLimbDraw, &this->actor);
+                              EnFishing_BassOverrideLimbDraw, EnFishing_BassPostLimbDraw, &this->actor);
     } else {
         Matrix_Translate(0.0f, 0.0f, 3000.0f, MTXMODE_APPLY);
-        Matrix_RotateYF(this->unk_164 * (M_PI / 32768), MTXMODE_APPLY);
+        Matrix_RotateYF(BINANG_TO_RAD(this->unk_164), MTXMODE_APPLY);
         Matrix_Translate(0.0f, 0.0f, -3000.0f, MTXMODE_APPLY);
         Matrix_RotateYF(-(M_PI / 2), MTXMODE_APPLY);
 
@@ -4249,7 +4265,7 @@ void EnFishing_HandleReedContact(FishingProp* prop, Vec3f* entityPos) {
     f32 distXZ = sqrtf(SQ(dx) + SQ(dz));
 
     if (distXZ <= 20.0f) {
-        prop->rotY = Math_Acot2F(dz, dx);
+        prop->rotY = Math_Atan2F_XY(dz, dx);
 
         Math_ApproachF(&prop->rotX, (20.0f - distXZ) * 0.03f, 0.2f, 0.2f);
     }
@@ -4261,7 +4277,7 @@ void EnFishing_HandleLilyPadContact(FishingProp* prop, Vec3f* entityPos, u8 fish
     f32 distXZ = sqrtf(SQ(dx) + SQ(dz));
 
     if (distXZ <= 40.0f) {
-        Math_ApproachS(&prop->lilyPadAngle, Math_FAtan2F(dz, dx), 10, 0x300);
+        Math_ApproachS(&prop->lilyPadAngle, Math_Atan2S_XY(dz, dx), 10, 0x300);
     }
 
     if (fishTimer && (distXZ <= 60.0f)) {
@@ -4299,7 +4315,7 @@ void EnFishing_UpdatePondProps(PlayState* play) {
 
                     actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
                     while (actor != NULL) {
-                        if (!((actor->id == ACTOR_EN_FISHING) && (actor->params >= 100))) {
+                        if ((actor->id != ACTOR_EN_FISHING) || (actor->params < 100)) {
                             actor = actor->next;
                         } else {
                             EnFishing_HandleReedContact(prop, &actor->world.pos);
@@ -4313,7 +4329,7 @@ void EnFishing_UpdatePondProps(PlayState* play) {
 
                     actor = play->actorCtx.actorLists[ACTORCAT_NPC].first;
                     while (actor != NULL) {
-                        if (!((actor->id == ACTOR_EN_FISHING) && (actor->params >= 100))) {
+                        if ((actor->id != ACTOR_EN_FISHING) || (actor->params < 100)) {
                             actor = actor->next;
                         } else {
                             EnFishing_HandleLilyPadContact(prop, &actor->world.pos, ((EnFishing*)actor)->unk_149);
@@ -4350,7 +4366,7 @@ void EnFishing_DrawPondProps(PlayState* play) {
     for (i = 0; i < POND_PROP_COUNT; i++) {
         if (prop->type == FS_PROP_REED) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingReedSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingReedMaterialDL);
                 flag++;
             }
 
@@ -4363,7 +4379,7 @@ void EnFishing_DrawPondProps(PlayState* play) {
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gFishingReedVtxDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingReedModelDL);
             }
         }
 
@@ -4375,7 +4391,7 @@ void EnFishing_DrawPondProps(PlayState* play) {
     for (i = 0; i < POND_PROP_COUNT; i++) {
         if (prop->type == FS_PROP_WOOD_POST) {
             if (flag == 0) {
-                gSPDisplayList(POLY_OPA_DISP++, gFishingWoodPostSetupDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingWoodPostMaterialDL);
                 flag++;
             }
 
@@ -4385,7 +4401,7 @@ void EnFishing_DrawPondProps(PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, gFishingWoodPostVtxDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingWoodPostModelDL);
             }
         }
 
@@ -4397,20 +4413,20 @@ void EnFishing_DrawPondProps(PlayState* play) {
     for (i = 0; i < POND_PROP_COUNT; i++) {
         if (prop->type == FS_PROP_LILY_PAD) {
             if (flag == 0) {
-                gSPDisplayList(POLY_XLU_DISP++, gFishingLilyPadSetupDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingLilyPadMaterialDL);
                 flag++;
             }
 
             if (prop->shouldDraw) {
                 Matrix_Translate(prop->pos.x, prop->pos.y, prop->pos.z, MTXMODE_NEW);
                 Matrix_Scale(prop->scale, 1.0f, prop->scale, MTXMODE_APPLY);
-                Matrix_RotateYF(prop->lilyPadAngle * (M_PI / 32768), MTXMODE_APPLY);
+                Matrix_RotateYF(BINANG_TO_RAD(prop->lilyPadAngle), MTXMODE_APPLY);
                 Matrix_Translate(0.0f, 0.0f, 20.0f, MTXMODE_APPLY);
                 Matrix_RotateYF(prop->rotY, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_XLU_DISP++, gFishingLilyPadVtxDL);
+                gSPDisplayList(POLY_XLU_DISP++, gFishingLilyPadModelDL);
             }
         }
 
@@ -4422,7 +4438,7 @@ void EnFishing_DrawPondProps(PlayState* play) {
     for (i = 0; i < POND_PROP_COUNT; i++) {
         if (prop->type == FS_PROP_ROCK) {
             if (flag == 0) {
-                gSPDisplayList(POLY_OPA_DISP++, gFishingRockSetupDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingRockMaterialDL);
                 flag++;
             }
 
@@ -4433,7 +4449,7 @@ void EnFishing_DrawPondProps(PlayState* play) {
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, gFishingRockVtxDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingRockModelDL);
             }
         }
 
@@ -4556,19 +4572,19 @@ void EnFishing_UpdateGroupFishes(PlayState* play) {
             dx = fish->unk_10.x - fish->pos.x;
             dy = fish->unk_10.y - fish->pos.y;
             dz = fish->unk_10.z - fish->pos.z;
-            spD4 = Math_FAtan2F(dz, dx);
+            spD4 = Math_Atan2S_XY(dz, dx);
             dist = sqrtf(SQ(dx) + SQ(dz));
-            spD6 = Math_FAtan2F(dist, dy);
+            spD6 = Math_Atan2S_XY(dist, dy);
 
             if ((dist < 10.0f) || (((fish->timer % 32) == 0) && (Rand_ZeroOne() > 0.5f))) {
-                fish->unk_10.y = basePos[groupIndex].y + randPlusMinusPoint5Scaled(10.0f);
+                fish->unk_10.y = basePos[groupIndex].y + Rand_CenteredFloat(10.0f);
 
                 if (D_8090CF18 != 0) {
-                    fish->unk_10.x = basePos[groupIndex].x + randPlusMinusPoint5Scaled(200.0f);
-                    fish->unk_10.z = basePos[groupIndex].z + randPlusMinusPoint5Scaled(200.0f);
+                    fish->unk_10.x = basePos[groupIndex].x + Rand_CenteredFloat(200.0f);
+                    fish->unk_10.z = basePos[groupIndex].z + Rand_CenteredFloat(200.0f);
                 } else {
-                    fish->unk_10.x = basePos[groupIndex].x + randPlusMinusPoint5Scaled(100.0f);
-                    fish->unk_10.z = basePos[groupIndex].z + randPlusMinusPoint5Scaled(100.0f);
+                    fish->unk_10.x = basePos[groupIndex].x + Rand_CenteredFloat(100.0f);
+                    fish->unk_10.z = basePos[groupIndex].z + Rand_CenteredFloat(100.0f);
                 }
 
                 ripplePos = fish->pos;
@@ -4649,20 +4665,20 @@ void EnFishing_DrawGroupFishes(PlayState* play) {
     for (i = 0; i < GROUP_FISH_COUNT; i++) {
         if (fish->type != FS_GROUP_FISH_NONE) {
             if (flag == 0) {
-                gSPDisplayList(POLY_OPA_DISP++, gFishingGroupFishSetupDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingGroupFishMaterialDL);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 155, 155, 155, 255);
                 flag++;
             }
 
             if (fish->shouldDraw) {
                 Matrix_Translate(fish->pos.x, fish->pos.y, fish->pos.z, MTXMODE_NEW);
-                Matrix_RotateYF(((f32)fish->unk_3E * M_PI) / 32768.0f, MTXMODE_APPLY);
-                Matrix_RotateXFApply((-(f32)fish->unk_3C * M_PI) / 32768.0f);
+                Matrix_RotateYF(BINANG_TO_RAD_ALT2(fish->unk_3E), MTXMODE_APPLY);
+                Matrix_RotateXFApply(BINANG_TO_RAD_ALT2(-(f32)fish->unk_3C));
                 Matrix_Scale(fish->unk_2C * scale, scale, scale, MTXMODE_APPLY);
 
                 gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                           G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, gFishingGroupFishVtxDL);
+                gSPDisplayList(POLY_OPA_DISP++, gFishingGroupFishModelDL);
             }
         }
         fish++;
@@ -4678,7 +4694,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
         case 0:
             if (D_809171FC == 0) {
                 if (sLinkAge != 1) {
-                    if ((gSaveContext.save.unk_EE4 & 0x100) && !(gSaveContext.save.unk_EE4 & 0x200)) {
+                    if ((gSaveContext.save.saveInfo.unk_EC0 & 0x100) && !(gSaveContext.save.saveInfo.unk_EC0 & 0x200)) {
                         this->actor.textId = 0x4093;
                     } else {
                         this->actor.textId = 0x407B;
@@ -4696,41 +4712,45 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 if (D_809171FC == 0) {
                     this->unk_154 = 1;
                     if (sLinkAge != 1) {
-                        gSaveContext.save.unk_EE4 |= 0x200;
+                        gSaveContext.save.saveInfo.unk_EC0 |= 0x200;
                     } else {
-                        gSaveContext.save.unk_EE4 |= 0x100;
+                        gSaveContext.save.saveInfo.unk_EC0 |= 0x100;
                     }
                 } else {
                     this->unk_154 = 10;
                 }
             } else {
-                func_800B8614(&this->actor, play, 100.0f);
+                Actor_OfferTalk(&this->actor, play, 100.0f);
             }
             break;
 
         case 1:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
 
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        if (gSaveContext.save.playerData.rupees >= 20) {
+                        if (gSaveContext.save.saveInfo.playerData.rupees >= 20) {
                             Rupees_ChangeBy(-20);
                             if (!Rumble_ControllerOneHasRumblePak()) {
                                 this->actor.textId = 0x407C;
                             } else {
                                 this->actor.textId = 0x407D;
                             }
-                            func_80151938(play, this->actor.textId);
+                            Message_ContinueTextbox(play, this->actor.textId);
                             this->unk_154 = 2;
                         } else {
-                            func_80151938(play, 0x407E);
+                            Message_ContinueTextbox(play, 0x407E);
                             this->unk_154 = 3;
                         }
                         break;
+
                     case 1:
-                        func_80151938(play, 0x2D);
+                        Message_ContinueTextbox(play, 0x2D);
                         this->unk_154 = 3;
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -4738,15 +4758,15 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
 
         case 2:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
-                func_80151938(play, 0x407F);
+                Message_CloseTextbox(play);
+                Message_ContinueTextbox(play, 0x407F);
                 this->unk_154 = 4;
             }
             break;
 
         case 3:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->unk_154 = 0;
             }
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_DONE) {
@@ -4756,16 +4776,20 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
 
         case 4:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
 
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         D_8090CCF8 = D_809171CC;
-                        func_80151938(play, 0x4080);
+                        Message_ContinueTextbox(play, 0x4080);
                         this->unk_154 = 5;
                         break;
+
                     case 1:
-                        func_80151938(play, 0x407F);
+                        Message_ContinueTextbox(play, 0x407F);
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -4773,7 +4797,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
 
         case 5:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
 
                 play->interfaceCtx.unk_27E = 1;
                 play->startPlayerFishing(play);
@@ -4781,8 +4805,8 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 D_8090CD04 = 20;
                 this->unk_154 = 0;
 
-                if ((gSaveContext.save.unk_EE4 & 0xFF0000) < 0xFF0000) {
-                    gSaveContext.save.unk_EE4 += 0x10000;
+                if ((gSaveContext.save.saveInfo.unk_EC0 & 0xFF0000) < 0xFF0000) {
+                    gSaveContext.save.saveInfo.unk_EC0 += 0x10000;
                 }
             }
             break;
@@ -4790,23 +4814,27 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
         case 10:
             if (D_8090CD0C != 0) {
                 if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
 
                     switch (play->msgCtx.choiceIndex) {
                         case 0:
-                            func_80151938(play, 0x40B2);
+                            Message_ContinueTextbox(play, 0x40B2);
                             D_8090CD08 = 1;
                             D_8090CD0C = 0;
                             this->unk_154 = 20;
                             break;
+
                         case 1:
                             this->unk_154 = 0;
+                            break;
+
+                        default:
                             break;
                     }
                 }
             } else {
                 if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-                    func_801477B4(play);
+                    Message_CloseTextbox(play);
 
                     switch (play->msgCtx.choiceIndex) {
                         case 0:
@@ -4830,12 +4858,13 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                                 this->actor.textId = 0x409B;
                                 this->unk_154 = 11;
                             }
-                            func_80151938(play, this->actor.textId);
+                            Message_ContinueTextbox(play, this->actor.textId);
                             break;
+
                         case 1:
                             if (D_8090CD00 > 36000) {
                                 D_8090CD00 = 30000;
-                                func_80151938(play, 0x4088);
+                                Message_ContinueTextbox(play, 0x4088);
                             } else {
                                 if (D_809171CA == 0) {
                                     if (D_809171D6 == 0) {
@@ -4844,9 +4873,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                                 }
 
                                 if ((D_80917206 == 2) && (D_8090D638[D_809171D6] == 0x408D)) {
-                                    func_80151938(play, 0x40AF);
+                                    Message_ContinueTextbox(play, 0x40AF);
                                 } else {
-                                    func_80151938(play, D_8090D638[D_809171D6]);
+                                    Message_ContinueTextbox(play, D_8090D638[D_809171D6]);
                                 }
 
                                 D_809171D6++;
@@ -4863,13 +4892,17 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                             }
                             this->unk_154 = 0;
                             break;
+
                         case 2:
                             if (D_809171D8 == 0) {
-                                func_80151938(play, 0x4085);
+                                Message_ContinueTextbox(play, 0x4085);
                             } else if (sLinkAge == 1) {
-                                func_80151938(play, 0x4092);
+                                Message_ContinueTextbox(play, 0x4092);
                             }
                             this->unk_154 = 22;
+                            break;
+
+                        default:
                             break;
                     }
                 }
@@ -4882,7 +4915,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 Message_ShouldAdvance(play)) {
                 s32 getItemId;
 
-                func_801477B4(play);
+                Message_CloseTextbox(play);
 
                 if (D_809171D0 == 0) {
                     D_809171CC = D_8090CCF0;
@@ -4891,29 +4924,29 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     if (sLinkAge == 1) {
                         f32 temp;
 
-                        gSaveContext.save.unk_EE4 &= 0xFFFFFF00;
-                        gSaveContext.save.unk_EE4 |= ((s16)D_809171CC & 0x7F);
-                        temp = (gSaveContext.save.unk_EE4 & 0x7F000000) >> 0x18;
+                        gSaveContext.save.saveInfo.unk_EC0 &= 0xFFFFFF00;
+                        gSaveContext.save.saveInfo.unk_EC0 |= ((s16)D_809171CC & 0x7F);
+                        temp = (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) >> 0x18;
                         if (temp < D_809171CC) {
-                            gSaveContext.save.unk_EE4 &= 0xFFFFFF;
-                            gSaveContext.save.unk_EE4 |= ((s16)D_809171CC & 0x7F) << 0x18;
+                            gSaveContext.save.saveInfo.unk_EC0 &= 0xFFFFFF;
+                            gSaveContext.save.saveInfo.unk_EC0 |= ((s16)D_809171CC & 0x7F) << 0x18;
 
                             if (D_809171D2 == 2) {
-                                gSaveContext.save.unk_EE4 |= 0x80000000;
+                                gSaveContext.save.saveInfo.unk_EC0 |= 0x80000000;
                             }
                         }
 
                         if (D_809171D2 == 2) {
-                            gSaveContext.save.unk_EE4 |= 0x80;
+                            gSaveContext.save.saveInfo.unk_EC0 |= 0x80;
                             this->unk_154 = 0;
                             break;
                         }
                     } else {
-                        gSaveContext.save.unk_EE4 &= 0xFFFFFF;
-                        gSaveContext.save.unk_EE4 |= ((s16)D_809171CC & 0x7F) << 0x18;
+                        gSaveContext.save.saveInfo.unk_EC0 &= 0xFFFFFF;
+                        gSaveContext.save.saveInfo.unk_EC0 |= ((s16)D_809171CC & 0x7F) << 0x18;
 
                         if (D_809171D2 == 2) {
-                            gSaveContext.save.unk_EE4 |= 0x80000000;
+                            gSaveContext.save.saveInfo.unk_EC0 |= 0x80000000;
                             this->unk_154 = 0;
                             break;
                         }
@@ -4930,14 +4963,14 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     }
 
                     if (sLinkAge == 1) {
-                        if ((D_809171CC >= 50.0f) && !(gSaveContext.save.unk_EE4 & 0x400)) {
-                            gSaveContext.save.unk_EE4 |= 0x400;
+                        if ((D_809171CC >= 50.0f) && !(gSaveContext.save.saveInfo.unk_EC0 & 0x400)) {
+                            gSaveContext.save.saveInfo.unk_EC0 |= 0x400;
                             getItemId = GI_HEART_PIECE;
                             sSinkingLureLocation = Rand_ZeroFloat(3.999f) + 1.0f;
                         }
                     } else {
-                        if ((D_809171CC >= 60.0f) && !(gSaveContext.save.unk_EE4 & 0x800)) {
-                            gSaveContext.save.unk_EE4 |= 0x800;
+                        if ((D_809171CC >= 60.0f) && !(gSaveContext.save.saveInfo.unk_EC0 & 0x800)) {
+                            gSaveContext.save.saveInfo.unk_EC0 |= 0x800;
                             getItemId = GI_SKULL_TOKEN;
                             sSinkingLureLocation = Rand_ZeroFloat(3.999f) + 1.0f;
                         }
@@ -4948,33 +4981,37 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 }
 
                 this->actor.parent = NULL;
-                Actor_PickUp(&this->actor, play, getItemId, 2000.0f, 1000.0f);
+                Actor_OfferGetItem(&this->actor, play, getItemId, 2000.0f, 1000.0f);
                 this->unk_154 = 23;
             }
             break;
 
         case 20:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_5) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->unk_154 = 0;
             }
             break;
 
         case 21:
             if ((Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE) && Message_ShouldAdvance(play)) {
-                func_801477B4(play);
+                Message_CloseTextbox(play);
 
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
                         this->unk_154 = 0;
                         break;
+
                     case 1:
                         if (D_809171D8 == 0) {
-                            func_80151938(play, 0x4085);
+                            Message_ContinueTextbox(play, 0x4085);
                         } else if (sLinkAge == 1) {
-                            func_80151938(play, 0x4092);
+                            Message_ContinueTextbox(play, 0x4092);
                         }
                         this->unk_154 = 22;
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -4997,7 +5034,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
             if (Actor_HasParent(&this->actor, play)) {
                 this->unk_154 = 24;
             } else {
-                Actor_PickUp(&this->actor, play, GI_SKULL_TOKEN, 2000.0f, 1000.0f);
+                Actor_OfferGetItem(&this->actor, play, GI_SKULL_TOKEN, 2000.0f, 1000.0f);
             }
             break;
 
@@ -5011,6 +5048,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     this->unk_154 = 20;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -5054,9 +5094,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     SkelAnime_Update(&this->skelAnime);
 
     if ((D_8090CD04 != 0) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     } else {
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_20);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_20);
     }
 
     if ((this->actor.xzDistToPlayer < 120.0f) || Message_GetState(&play->msgCtx) != TEXT_STATE_NONE) {
@@ -5100,9 +5140,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     }
 
     if (D_8090CD08 == 0) {
-        gSaveContext.save.unk_EE4 |= 0x1000;
+        gSaveContext.save.saveInfo.unk_EC0 |= 0x1000;
     } else if (D_8090CD08 == 1) {
-        gSaveContext.save.unk_EE4 &= ~0x1000;
+        gSaveContext.save.saveInfo.unk_EC0 &= ~0x1000;
     }
 
     if (D_8090CCFC != 0) {
@@ -5128,7 +5168,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     if ((D_809171FC != 0) && (D_8090CD4C == 0) && (player->actor.world.pos.z > 1360.0f) &&
         (fabsf(player->actor.world.pos.x) < 25.0f)) {
         player->actor.world.pos.z = 1360.0f;
-        player->actor.speedXZ = 0.0f;
+        player->actor.speed = 0.0f;
 
         if (D_8090CD50 == 0) {
             D_8090CD4C = 10;
@@ -5142,8 +5182,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         sSinkingLureLocation = 0;
         D_8090CD4C = 20;
         Rumble_Override(0.0f, 150, 10, 10);
-        play_sound(NA_SE_SY_TRE_BOX_APPEAR);
-        Audio_QueueSeqCmd(0x101400FF);
+        Audio_PlaySfx(NA_SE_SY_TRE_BOX_APPEAR);
+        SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
     }
 
     if (D_8090CD50 != 0) {
@@ -5166,16 +5206,16 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             sSubCamAt.y = mainCam->at.y;
             sSubCamAt.z = mainCam->at.z;
             D_8090CD4C = 2;
-            Interface_ChangeAlpha(12);
+            Interface_SetHudVisibility(HUD_VISIBILITY_A_B_MINIMAP);
             sSubCamVelFactor = 0.0f;
             // fallthrough
         case 2:
-            ShrinkWindow_SetLetterboxTarget(27);
+            ShrinkWindow_Letterbox_SetSizeTarget(27);
 
             spFC.x = sLurePos.x - player->actor.world.pos.x;
             spFC.z = sLurePos.z - player->actor.world.pos.z;
             lureDistXZ = sqrtf(SQXZ(spFC));
-            Matrix_RotateYF(Math_Acot2F(spFC.z, spFC.x), MTXMODE_NEW);
+            Matrix_RotateYF(Math_Atan2F_XY(spFC.z, spFC.x), MTXMODE_NEW);
 
             sp114.x = 0.0f;
             sp114.y = 0.0f;
@@ -5216,9 +5256,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                     }
 
                     if ((D_809171DC == 0) || (D_809171DC == 3)) {
-                        play_sound(NA_SE_SY_CAMERA_ZOOM_DOWN);
+                        Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_DOWN);
                     } else {
-                        play_sound(NA_SE_SY_CAMERA_ZOOM_UP);
+                        Audio_PlaySfx(NA_SE_SY_CAMERA_ZOOM_UP);
                     }
                 }
             }
@@ -5271,7 +5311,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             mainCam->at = sSubCamAt;
         }
             func_80169AFC(play, sSubCamId, 0);
-            Cutscene_End(play, &play->csCtx);
+            Cutscene_StopManual(play, &play->csCtx);
             D_8090CD4C = 0;
             sSubCamId = SUB_CAM_ID_DONE;
             func_800F6834(play, 0);
@@ -5281,11 +5321,11 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             break;
 
         case 10:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             sSubCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
-            func_800B7298(play, &this->actor, 4);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
 
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
@@ -5301,7 +5341,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             // fallthrough
         case 11:
             player->actor.world.pos.z = 1360.0f;
-            player->actor.speedXZ = 0.0f;
+            player->actor.speed = 0.0f;
 
             if (Message_GetState(&play->msgCtx) == TEXT_STATE_NONE) {
                 Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
@@ -5311,8 +5351,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                 mainCam->at = sSubCamAt;
 
                 func_80169AFC(play, sSubCamId, 0);
-                Cutscene_End(play, &play->csCtx);
-                func_800B7298(play, &this->actor, 6);
+                Cutscene_StopManual(play, &play->csCtx);
+                func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                 D_8090CD4C = 0;
                 sSubCamId = SUB_CAM_ID_DONE;
                 D_8090CD50 = 30;
@@ -5322,11 +5362,11 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
             break;
 
         case 20:
-            Cutscene_Start(play, &play->csCtx);
+            Cutscene_StartManual(play, &play->csCtx);
             sSubCamId = Play_CreateSubCamera(play);
             Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
             Play_ChangeCameraStatus(play, sSubCamId, CAM_STATUS_ACTIVE);
-            func_800B7298(play, &this->actor, 4);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_4);
 
             mainCam = Play_GetCamera(play, CAM_ID_MAIN);
             sSubCamEye.x = mainCam->eye.x;
@@ -5351,13 +5391,13 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
         case 22:
             if (D_8090CD50 == 30) {
-                Audio_QueueSeqCmd(0x8922); // changed from 0x922 to 0x8922 in MM
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_GET_ITEM | 0x900 | SEQ_FLAG_ASYNC);
             }
 
             D_8090CD54 = 1;
 
             Math_ApproachF(&D_80911F64, 71.0f, 0.5f, 3.0f);
-            Matrix_RotateYF(BINANG_TO_RAD(player->actor.shape.rot.y), MTXMODE_NEW);
+            Matrix_RotateYF(BINANG_TO_RAD_ALT(player->actor.shape.rot.y), MTXMODE_NEW);
 
             sp114.x = Math_SinS(play->gameplayFrames * 0x1000);
             sp114.y = D_80911F64;
@@ -5402,7 +5442,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                     if (Message_ShouldAdvance(play)) {
                         Camera* mainCam = Play_GetCamera(play, CAM_ID_MAIN);
 
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         if (play->msgCtx.choiceIndex == 0) {
                             D_80917206 = 2;
                             D_809171D6 = 0;
@@ -5412,8 +5452,8 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
                         mainCam->eyeNext = sSubCamEye;
                         mainCam->at = sSubCamAt;
                         func_80169AFC(play, sSubCamId, 0);
-                        Cutscene_End(play, &play->csCtx);
-                        func_800B7298(play, &this->actor, 6); // arg2 changed from 7 to 6 in MM
+                        Cutscene_StopManual(play, &play->csCtx);
+                        func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
                         D_8090CD4C = 0;
                         sSubCamId = SUB_CAM_ID_DONE;
                         player->unk_B28 = -5;
@@ -5449,18 +5489,18 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     }
 
     if ((player->actor.floorHeight < (WATER_SURFACE_Y(play) - 3.0f)) &&
-        (player->actor.world.pos.y < (player->actor.floorHeight + 3.0f)) && (player->actor.speedXZ > 1.0f) &&
+        (player->actor.world.pos.y < (player->actor.floorHeight + 3.0f)) && (player->actor.speed > 1.0f) &&
         ((play->gameplayFrames % 2) == 0)) {
         Vec3f pos;
 
-        pos.x = randPlusMinusPoint5Scaled(20.0f) + player->actor.world.pos.x;
-        pos.z = randPlusMinusPoint5Scaled(20.0f) + player->actor.world.pos.z;
+        pos.x = Rand_CenteredFloat(20.0f) + player->actor.world.pos.x;
+        pos.z = Rand_CenteredFloat(20.0f) + player->actor.world.pos.z;
         pos.y = player->actor.floorHeight + 5.0f;
         EnFishing_SpawnWaterDust(NULL, play->specialEffects, &pos, 0.5f);
     }
 
     if ((player->actor.floorHeight < WATER_SURFACE_Y(play)) &&
-        (player->actor.floorHeight > (WATER_SURFACE_Y(play) - 10.0f)) && (player->actor.speedXZ >= 4.0f) &&
+        (player->actor.floorHeight > (WATER_SURFACE_Y(play) - 10.0f)) && (player->actor.speed >= 4.0f) &&
         ((play->gameplayFrames % 4) == 0)) {
         s16 i;
 
@@ -5519,7 +5559,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     Math_ApproachF(&D_8090CCDC.z, target, 1.0f, 5.0f);
 
     if (D_8090CCDC.z < 1500.0f) {
-        func_8019FAD8(&D_8090CCDC, NA_SE_EV_RAIN - SFX_FLAG, D_8090CCE8);
+        Audio_PlaySfx_AtPosWithFreq(&D_8090CCDC, NA_SE_EV_RAIN - SFX_FLAG, D_8090CCE8);
     }
 
     if (D_8090CCD4 != 0) {
@@ -5545,9 +5585,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
         rot.z = (Camera_GetInputDirYaw(mainCam) * -(M_PI / 0x8000)) + rot.y;
 
         for (i = 0; i < (u8)D_8090CCD0; i++) {
-            pos.x = randPlusMinusPoint5Scaled(700.0f) + play->view.eye.x;
+            pos.x = Rand_CenteredFloat(700.0f) + play->view.eye.x;
             pos.y = (Rand_ZeroFloat(100.0f) + 150.0f) - 170.0f;
-            pos.z = randPlusMinusPoint5Scaled(700.0f) + play->view.eye.z;
+            pos.z = Rand_CenteredFloat(700.0f) + play->view.eye.z;
 
             if (pos.z < 1160.0f) {
                 SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &pos, &projectedPos, &sProjectedW);
@@ -5563,7 +5603,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &sStreamSoundPos, &sStreamSoundProjectedPos, &sProjectedW);
 
-    Audio_PlaySfxAtPos(&sStreamSoundProjectedPos, NA_SE_EV_WATER_WALL - SFX_FLAG);
+    Audio_PlaySfx_AtPos(&sStreamSoundProjectedPos, NA_SE_EV_WATER_WALL - SFX_FLAG);
 
     if (gSaveContext.options.language == 0) { // Added in MM
         gSaveContext.minigameScore = D_8090CCF8;
@@ -5575,7 +5615,7 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
 s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnFishing* this = THIS;
 
-    if (limbIndex == 8) { // Head
+    if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         rot->x -= this->unk_15C;
     }
 
@@ -5583,7 +5623,7 @@ s32 EnFishing_OwnerOverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList,
 }
 
 void EnFishing_OwnerPostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
-    if (limbIndex == 8) { // Head
+    if (limbIndex == FISHING_OWNER_LIMB_HEAD) {
         OPEN_DISPS(play->state.gfxCtx);
 
         Matrix_MultVec3f(&sZeroVec, &sOwnerHeadPos);
@@ -5611,8 +5651,8 @@ void EnFishing_DrawOwner(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     if ((this->actor.projectedPos.z < 1500.0f) &&
         (fabsf(this->actor.projectedPos.x) < (100.0f + this->actor.projectedPos.z))) {
@@ -5632,15 +5672,15 @@ void EnFishing_DrawOwner(Actor* thisx, PlayState* play) {
 
         if (D_809171F6 == 0) {
             if (sLinkAge != 1) {
-                Audio_QueueSeqCmd(0x8019); // Changed from 0x19 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_EVENT | SEQ_FLAG_ASYNC);
             } else {
-                Audio_QueueSeqCmd(0x8027); // Changed from 0x27 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MUSIC_BOX_HOUSE | SEQ_FLAG_ASYNC);
             }
 
             if (sLinkAge != 1) {
-                Audio_QueueSeqCmd(0x8019); // Changed from 0x19 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_CLEAR_EVENT | SEQ_FLAG_ASYNC);
             } else {
-                Audio_QueueSeqCmd(0x8027); // Changed from 0x27 in OoT
+                SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_MUSIC_BOX_HOUSE | SEQ_FLAG_ASYNC);
             }
         }
     }

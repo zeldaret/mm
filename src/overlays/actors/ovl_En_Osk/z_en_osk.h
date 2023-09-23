@@ -18,12 +18,10 @@ typedef struct EnOsk {
     /* 0x188 */ Vec3s jointTable[17];
     /* 0x1EE */ Vec3s morphTable[17];
     /* 0x254 */ s16 unk_254;
-    /* 0x256 */ s16 unk_256;
-    /* 0x258 */ u16 unk_258;
+    /* 0x256 */ s16 cueId;
+    /* 0x258 */ u16 cueType;
     /* 0x25C */ f32 unk_25C;
     /* 0x260 */ EnOskActionFunc actionFunc;
 } EnOsk; // size = 0x264
-
-extern const ActorInit En_Osk_InitVars;
 
 #endif // Z_EN_OSK_H

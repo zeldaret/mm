@@ -24,7 +24,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 void EffectSsEnFire_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_Ss_En_Fire_InitVars = {
+EffectSsInit Effect_Ss_En_Fire_InitVars = {
     EFFECT_SS_EN_FIRE,
     EffectSsEnFire_Init,
 };
@@ -43,7 +43,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
     this->update = EffectSsEnFire_Update;
     this->rUnused = -15;
 
-    if (initParams->bodyPart < 0) {
+    if (initParams->bodyPart <= BODYPART_NONE) {
         this->rYaw = Math_Vec3f_Yaw(&initParams->actor->world.pos, &initParams->pos) - initParams->actor->shape.rot.y;
         this->rPitch =
             Math_Vec3f_Pitch(&initParams->actor->world.pos, &initParams->pos) - initParams->actor->shape.rot.x;
@@ -52,7 +52,7 @@ u32 EffectSsEnFire_Init(PlayState* play, u32 index, EffectSs* this, void* initPa
 
     this->rScaleMax = initParams->scale;
 
-    if (initParams->params & ENFIRE_PARAMS_USE_SCALE) {
+    if (initParams->params & ENFIRE_PARAM_USE_SCALE) {
         this->rScale = initParams->scale;
     } else {
         this->rScale = 0;
@@ -88,7 +88,7 @@ void EffectSsEnFire_Draw(PlayState* play, u32 index, EffectSs* this) {
         redGreen = 0;
     }
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
     gDPSetEnvColor(POLY_XLU_DISP++, redGreen * 12.7f, 0, 0, 0);
     gDPSetPrimColor(POLY_XLU_DISP++, 0x0, 0x80, redGreen * 12.7f, redGreen * 12.7f, 0, 255);
     gSPSegment(
@@ -124,7 +124,7 @@ void EffectSsEnFire_Update(PlayState* play, u32 index, EffectSs* this) {
         if (this->actor->update != NULL) {
             Math_SmoothStepToS(&this->rScale, this->rScaleMax, 1, this->rScaleMax >> 3, 0);
 
-            if (this->rBodyPart < 0) {
+            if (this->rBodyPart <= BODYPART_NONE) {
                 Matrix_Translate(this->actor->world.pos.x, this->actor->world.pos.y, this->actor->world.pos.z,
                                  MTXMODE_NEW);
                 Matrix_RotateYS(this->rYaw + this->actor->shape.rot.y, MTXMODE_APPLY);

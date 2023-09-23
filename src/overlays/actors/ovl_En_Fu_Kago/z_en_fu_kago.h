@@ -27,6 +27,4 @@ typedef struct EnFuKago {
     /* 0x33C */ s16 unk_33C;
 } EnFuKago; // size = 0x340
 
-extern const ActorInit En_Fu_Kago_InitVars;
-
 #endif // Z_EN_FU_KAGO_H

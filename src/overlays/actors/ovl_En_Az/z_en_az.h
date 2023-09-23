@@ -2,6 +2,7 @@
 #define Z_EN_AZ_H
 
 #include "global.h"
+#include "objects/object_az/object_az.h"
 
 struct EnAz;
 
@@ -15,8 +16,8 @@ typedef struct EnAz {
     /* 0x144 */ EnAzActionFunc actionFunc;
     /* 0x148 */ SkelAnime skelAnime;
     /* 0x18C */ ColliderCylinder collider;
-    /* 0x1D8 */ Vec3s jointTable[24];
-    /* 0x268 */ Vec3s morphTable[24];
+    /* 0x1D8 */ Vec3s jointTable[BEAVER_OLDER_BROTHER_LIMB_MAX]; // Also BEAVER_YOUNGER_BROTHER_LIMB_MAX
+    /* 0x268 */ Vec3s morphTable[BEAVER_OLDER_BROTHER_LIMB_MAX]; // Also BEAVER_YOUNGER_BROTHER_LIMB_MAX
     /* 0x2F8 */ s16 unk_2F8;
     /* 0x2FA */ s16 unk_2FA; // cutscene state?
     /* 0x2FC */ s32 animIndex;
@@ -45,12 +46,10 @@ typedef struct EnAz {
     /* 0x3C4 */ s16 unk_3C4;
     /* 0x3C6 */ UNK_TYPE1 unk3C6[6];
     /* 0x3CC */ s32 getItemId;
-    /* 0x3D0 */ s16 unk_3D0[1];
+    /* 0x3D0 */ s16 csIdList[1];
     /* 0x3D2 */ u16 unk_3D2;
     /* 0x3D4 */ s16 unk_3D4;
     /* 0x3D6 */ s16 unk_3D6;
 } EnAz; // size = 0x3D8
-
-extern const ActorInit En_Az_InitVars;
 
 #endif // Z_EN_AZ_H

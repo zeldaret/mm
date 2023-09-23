@@ -6,7 +6,7 @@
 
 #include "z_en_dt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDt*)thisx)
 
@@ -16,7 +16,7 @@ void EnDt_Update(Actor* thisx, PlayState* play);
 void EnDt_Draw(Actor* thisx, PlayState* play);
 
 #if 0
-const ActorInit En_Dt_InitVars = {
+ActorInit En_Dt_InitVars = {
     ACTOR_EN_DT,
     ACTORCAT_NPC,
     FLAGS,

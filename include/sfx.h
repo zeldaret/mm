@@ -1,6 +1,8 @@
 #ifndef SFX_H
 #define SFX_H
 
+#include "z64math.h"
+
 /**
  * With `SFX_FLAG` on, play the entire sfx audio clip.
  * Requesting the sfx while playing will restart the sfx from the beginning.
@@ -15,6 +17,8 @@
  */
 #define SFX_FLAG_MASK 0xC00
 #define SFX_FLAG 0x800
+
+#define NA_SE_NONE 0
 
 // ------------ PLAYER ------------
 
@@ -2351,5 +2355,45 @@ typedef enum {
 
 #undef DEFINE_SFX
 */
+
+typedef enum SfxPauseMenu {
+    /* 0 */ SFX_PAUSE_MENU_CLOSE,
+    /* 1 */ SFX_PAUSE_MENU_OPEN
+} SfxPauseMenu;
+
+// Various wrappers to AudioSfx_PlaySfx
+void Audio_PlaySfx(u16 sfxId);
+void Audio_PlaySfx_2(u16 sfxId);
+void Audio_PlaySfx_AtPosWithPresetLowFreqAndHighReverb(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPos(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_MessageDecide(void);
+void Audio_PlaySfx_MessageCancel(void);
+void Audio_PlaySfx_Underwater(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_WithSfxSettingsReverb(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPosForMetalEffectsWithSyncedFreqAndVolume(Vec3f* pos, u16 sfxId, f32 freqVolParam);
+void Audio_PlaySfx_AtPosWithSyncedFreqAndVolume(Vec3f* pos, u16 sfxId, f32 freqVolParam);
+void Audio_PlaySfx_GiantsMask(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_Randomized(Vec3f* pos, u16 baseSfxId, u8 randLim);
+void Audio_PlaySfx_SwordCharge(Vec3f* pos, u8 chargeLevel);
+void Audio_PlaySfx_AtPosWithFreq(Vec3f* pos, u16 sfxId, f32 freqScale);
+void Audio_PlaySfx_AtPosWithFreqAndChannelIO(Vec3f* pos, u16 sfxId, f32 freqScale, u8 arg3);
+void Audio_PlaySfx_WaterWheel(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPosWithTimer(Vec3f* pos, u16 sfxId, f32 timerShiftedLerp);
+void Audio_PlaySfx_AtPosWithReverb(Vec3f* pos, u16 sfxId, s8 reverbAdd);
+void Audio_PlaySfx_AtPosWithVolume(Vec3f* pos, u16 sfxId, f32 volume);
+void Audio_PlaySfx_River(Vec3f* pos, f32 freqScale);
+void Audio_PlaySfx_BigBells(Vec3f* pos, u8 volumeIndex);
+void Audio_PlaySfx_AtPosWithChannelIO(Vec3f* pos, u16 sfxId, u8 ioData);
+void Audio_PlaySfx_AtPosWithAllChannelsIO(Vec3f* pos, u16 sfxId, u8 ioData);
+void Audio_PlaySfx_PauseMenuOpenOrClose(u8 pauseMenuOpenOrClose);
+void Audio_PlaySfx_IfNotInCutscene(u16 sfxId);
+void Audio_PlaySfx_AtFixedPos(Vec3f* pos, u16 sfxId);
+void Audio_PlaySfx_AtPosWithVolumeTransition(Vec3f* pos, u16 sfxId, u16 duration);
+
+// Sfx helper functions
+void Audio_SetSfxUnderwaterReverb(s8 isUnderwaterReverbActivated);
+void Audio_SetSfxTimerLerpInterval(s8 timerLerpRange1, s8 timerLerpRange2);
+void Audio_SetSfxVolumeTransition(f32* volume, f32 volumeTarget, u16 duration);
+void Audio_SetSfxReverbIndexExceptOcarinaBank(u8 reverbIndex);
 
 #endif
