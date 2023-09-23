@@ -4,10 +4,10 @@
 
 #define THIS ((ObjBoyo*)thisx)
 
-void ObjBoyo_Init(ObjBoyo* this, PlayState* play);
-void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play);
+void ObjBoyo_Init(Actor* thisx, PlayState* play);
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
-void ObjBoyo_Draw(ObjBoyo* this, PlayState* play);
+void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
 void ObjBoyo_PushPlayer(Actor* thisx, Actor* player);
 void func_809A5DE0(Actor* actor, Actor* thisx);
@@ -62,7 +62,7 @@ static objBoyoUnkStruct gCollisionHandling[] = {
     { ObjBoyo_PushPlayer, 0x021D0000 }, { func_809A5DE0, 0x00090000 }, { func_809A5E14, 0x0 }, { NULL, 0x0 }
 };
 
-void ObjBoyo_Init(ObjBoyo* this, PlayState* play) {
+void ObjBoyo_Init(Actor* thisx, PlayState* play) {
     ColliderCylinder* temp_a1;
 
     Actor_ProcessInitChain(&this->actor, gInitChainEntry);
@@ -74,7 +74,7 @@ void ObjBoyo_Init(ObjBoyo* this, PlayState* play) {
     this->animatedMaterial = Lib_SegmentedToVirtual((void*)&D_06000E88);
 }
 
-void ObjBoyo_Destroy(ObjBoyo* thisx, PlayState* play) {
+void ObjBoyo_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &THIS->collider);
 }
 
@@ -183,7 +183,7 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     }
 }
 static Gfx* D_06000300;
-void ObjBoyo_Draw(ObjBoyo* this, PlayState* play) {
+void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
     AnimatedMat_Draw(play, this->animatedMaterial);
     Gfx_DrawDListOpa(play, D_06000300);
 }
