@@ -70,10 +70,10 @@ void __osPfsRequestData(u8 poll) {
     req.align1 = CONT_CMD_NOP;
 
     for (i = 0; i < __osMaxControllers; i++) {
-        *((__OSContRequesFormat*)bufPtr) = req;
+        *(__OSContRequesFormat*)bufPtr = req;
         bufPtr += sizeof(__OSContRequesFormat);
     }
-    *((u8*)bufPtr) = CONT_CMD_END;
+    *bufPtr = CONT_CMD_END;
 }
 
 void __osPfsGetInitData(u8* pattern, OSContStatus* contData) {
@@ -85,7 +85,7 @@ void __osPfsGetInitData(u8* pattern, OSContStatus* contData) {
     bufptr = (u8*)&__osPfsPifRam;
 
     for (i = 0; i < __osMaxControllers; i++, bufptr += sizeof(req), contData++) {
-        req = *((__OSContRequesFormat*)bufptr);
+        req = *(__OSContRequesFormat*)bufptr;
         contData->errno = CHNL_ERR(req);
 
         if (contData->errno) {

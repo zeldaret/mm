@@ -21,7 +21,7 @@
 
 #define ARRAY_COUNT_2D(arr) (ARRAY_COUNT(arr) * ARRAY_COUNT(arr[0]))
 
-#define SEGMENTED_TO_VIRTUAL(addr) (void*)(((uintptr_t)(gSegments[SEGMENT_NUMBER(addr)]) + K0BASE) + SEGMENT_OFFSET(addr))
+#define SEGMENTED_TO_VIRTUAL(addr) (void*)((gSegments[SEGMENT_NUMBER(addr)] + K0BASE) + SEGMENT_OFFSET(addr))
 
 #define GET_ACTIVE_CAM(play) ((play)->cameraPtrs[(play)->activeCamId])
 
