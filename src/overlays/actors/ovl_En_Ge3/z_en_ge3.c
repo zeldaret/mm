@@ -15,7 +15,7 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play);
 void EnGe3_Update(Actor* thisx, PlayState* play);
 void EnGe3_Draw(Actor* thisx, PlayState* play);
 
-void EnGe3_ChangeAnim(EnGe3* this, s16 index, u8 mode, f32 morphFrames);
+void EnGe3_ChangeAnim(EnGe3* this, s16 animIndex, u8 mode, f32 morphFrames);
 void EnGe3_SetupPath(EnGe3* this, PlayState* play);
 void EnGe3_Idle(EnGe3* this, PlayState* play);
 void EnGe3_AveilsChamberIdle(EnGe3* this, PlayState* play);
@@ -114,18 +114,18 @@ void EnGe3_Destroy(Actor* thisx, PlayState* play) {
 void EnGe3_ChangeAnim(EnGe3* this, s16 animIndex, u8 mode, f32 morphFrames) {
     static AnimationHeader* sAnimations[GERUDO_AVEIL_ANIM_MAX] = {
         &gGerudoRedStandAnim,         // GERUDO_AVEIL_ANIM_STAND
-        &gGerudoRedWalkAnim,       // GERUDO_AVEIL_ANIM_WALK
+        &gGerudoRedWalkAnim,          // GERUDO_AVEIL_ANIM_WALK
         &gGerudoRedHandOnHipWaitAnim, // GERUDO_AVEIL_ANIM_HAND_ON_HIP_WAIT
         &gGerudoRedTurnHeadAnim,      // GERUDO_AVEIL_ANIM_TURN_HEAD
         &gGerudoRedWaitAnim,          // GERUDO_AVEIL_ANIM_WAIT
-        &gGerudoRedDemandAnim,     // GERUDO_AVEIL_ANIM_DEMAND
+        &gGerudoRedDemandAnim,        // GERUDO_AVEIL_ANIM_DEMAND
         &gGerudoRedDismissAnim,       // GERUDO_AVEIL_ANIM_DISMISS
-        &gGerudoRedBegAnim,       // GERUDO_AVEIL_ANIM_BEG
-        &gGerudoRedRunAwayAnim,   // GERUDO_AVEIL_ANIM_RUN_AWAY
+        &gGerudoRedBegAnim,           // GERUDO_AVEIL_ANIM_BEG
+        &gGerudoRedRunAwayAnim,       // GERUDO_AVEIL_ANIM_RUN_AWAY
     };
 
-    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f, Animation_GetLastFrame(sAnimations[animIndex]), mode,
-                     morphFrames);
+    Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
+                     Animation_GetLastFrame(sAnimations[animIndex]), mode, morphFrames);
     this->animIndex = animIndex;
 }
 
