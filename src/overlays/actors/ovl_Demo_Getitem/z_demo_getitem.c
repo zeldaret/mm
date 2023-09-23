@@ -38,7 +38,7 @@ static u16 sCueTypes[] = { CS_CMD_ACTOR_CUE_110, CS_CMD_ACTOR_CUE_566 };
 
 typedef enum GreatFairyRewardItem {
     /* 0 */ DEMOGETITEM_ITEM_MASK_GREAT_FAIRY,
-    /* 1 */ DEMOGETITEM_ITEM_SWORD_GREAT_FAIRY,
+    /* 1 */ DEMOGETITEM_ITEM_SWORD_GREAT_FAIRY
 } GreatFairyRewardItem;
 
 void DemoGetitem_Init(Actor* thisx, PlayState* play) {
