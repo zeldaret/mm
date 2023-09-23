@@ -95,7 +95,7 @@ static Color_RGBA8 sEnvColors[] = {
 };
 
 static u8 sAlphaTypeIndices[] = {
-    2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0, 0,
+    2, 1, 1, 2, 0, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 2, 1, 0, 1, 2, 0,
 };
 
 void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
@@ -107,8 +107,8 @@ void EnDyExtra_Draw(Actor* thisx, PlayState* play) {
     u8 alphas[3];
 
     alphas[0] = 0.0f;
-    alphas[1] = (s8)(this->alphaScale * 240.0f);
-    alphas[2] = (s8)(this->alphaScale * 255.0f);
+    alphas[1] = (s32)(this->alphaScale * 240.0f);
+    alphas[2] = (s32)(this->alphaScale * 255.0f);
 
     for (i = 0; i < ARRAY_COUNT(sAlphaTypeIndices); i++) {
         if (sAlphaTypeIndices[i]) {

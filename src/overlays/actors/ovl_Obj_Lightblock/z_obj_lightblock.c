@@ -105,7 +105,7 @@ void ObjLightblock_Init(Actor* thisx, PlayState* play) {
     this->collider.dim.height = typeVars->height;
     this->collider.dim.yShift = typeVars->yShift;
     this->alpha = 255;
-    func_80AF3AC8(this);
+    ObjLightblock_SetupWait(this);
 }
 
 void ObjLightblock_Destroy(Actor* thisx, PlayState* play) {

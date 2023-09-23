@@ -186,7 +186,7 @@ void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 trajectoryType, s32 count) 
                     life = 50;
                     effectType = GREAT_FAIRY_EFFECT_TRAJECTORY_CONVERGE_ON_PLAYER;
 
-                    pos.x = randPlusMinusPoint5Scaled(10.0f) + this->actor.world.pos.x;
+                    pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
                     pos.y = this->actor.world.pos.y + spawnHeightVariation + 50.0f +
                             (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.1f);
                     pos.z = this->actor.world.pos.z + 30.0f;
@@ -237,7 +237,7 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
                         this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0,
                         DEMO_EFFECT_TYPE_LIGHT_DARK_YELLOW);
         }
-        play_sound(NA_SE_SY_WHITE_OUT_T);
+        Audio_PlaySfx(NA_SE_SY_WHITE_OUT_T);
     } else {
         Math_ApproachF(&this->actor.world.pos.y, heightTarget, this->unk2F0, 100.0f);
         Math_ApproachZeroF(&scale, this->unk2F4, 0.005f);
@@ -258,8 +258,8 @@ void func_80A0AFDC(BgDyYoseizo* this) {
     Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN], 0.0f, 46.0f,
                      Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN]), ANIMMODE_ONCE, 0.0f);
     this->actionFunc = func_80A0AE1C;
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_VANISH);
+    Actor_PlaySfx(&this->actor, NA_SE_VO_FR_LAUGH_0);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_GREAT_FAIRY_VANISH);
     this->unk2F8 = 0;
     this->actor.velocity.y = 0.0f;
     this->unk2F0 = 0.0f;
@@ -271,13 +271,13 @@ void func_80A0B078(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 7)) {
         Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN], 1.0f, 0.0f,
                          Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]), ANIMMODE_LOOP, 0.0f);
         this->actionFunc = func_80A0B184;
-    } else if (Cutscene_CheckActorAction(play, 103) &&
-               (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+               (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 6)) {
         func_80A0AFDC(this);
     }
 }
@@ -286,13 +286,13 @@ void func_80A0B184(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 8)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 8)) {
         Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_SHOWING_ITEM], 1.0f, 0.0f,
                          Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_SHOWING_ITEM]), ANIMMODE_LOOP, 0.0f);
         this->actionFunc = func_80A0B078;
-    } else if (Cutscene_CheckActorAction(play, 103) &&
-               (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
+    } else if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+               (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 6)) {
         func_80A0AFDC(this);
     }
 }
@@ -301,8 +301,8 @@ void func_80A0B290(BgDyYoseizo* this, PlayState* play) {
     BgDyYoseizo_Bob(this, play);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 7)) {
         Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN], 1.0f, 0.0f,
                          Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]), ANIMMODE_LOOP, -10.0f);
         this->actionFunc = func_80A0B184;
@@ -318,40 +318,39 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
         if (!Flags_GetSwitch(play, GREAT_FAIRY_GET_SWITCHFLAG(&this->actor))) {
             switch (GREAT_FAIRY_GET_TYPE(&this->actor)) {
                 case GREAT_FAIRY_TYPE_MAGIC:
-                    if (gSaveContext.save.playerData.magicAcquired != 1) {
-                        gSaveContext.save.playerData.magicAcquired = 1;
-                        gSaveContext.unk_3F30 = 0x30;
+                    if (gSaveContext.save.saveInfo.playerData.isMagicAcquired != true) {
+                        gSaveContext.save.saveInfo.playerData.isMagicAcquired = true;
+                        gSaveContext.magicFillTarget = MAGIC_NORMAL_METER;
                     }
                     break;
 
                 case GREAT_FAIRY_TYPE_WISDOM:
-                    if (gSaveContext.save.playerData.doubleMagic != 1) {
-                        gSaveContext.save.playerData.doubleMagic = 1;
-                        gSaveContext.unk_3F30 = 0x60;
-                        gSaveContext.save.playerData.magicLevel = 0;
+                    if (gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired != true) {
+                        gSaveContext.save.saveInfo.playerData.isDoubleMagicAcquired = true;
+                        gSaveContext.magicFillTarget = MAGIC_DOUBLE_METER;
+                        gSaveContext.save.saveInfo.playerData.magicLevel = 0;
                     }
                     break;
 
                 case GREAT_FAIRY_TYPE_COURAGE:
-                    if (gSaveContext.save.playerData.doubleDefense != 1) {
-                        gSaveContext.save.playerData.doubleDefense = 1;
+                    if (gSaveContext.save.saveInfo.playerData.doubleDefense != true) {
+                        gSaveContext.save.saveInfo.playerData.doubleDefense = true;
                     }
                     break;
             }
         }
-        Interface_ChangeAlpha(9);
+        Interface_SetHudVisibility(9);
     }
 
     if ((this->timer < 50) && (GREAT_FAIRY_GET_TYPE(&this->actor) == GREAT_FAIRY_TYPE_COURAGE)) {
-        if (gSaveContext.save.inventory.defenseHearts < 20) {
-            gSaveContext.save.inventory.defenseHearts++;
+        if (gSaveContext.save.saveInfo.inventory.defenseHearts < 20) {
+            gSaveContext.save.saveInfo.inventory.defenseHearts++;
         }
     }
 
     if (this->timer == 50) {
         gSaveContext.healthAccumulator = 0x140;
-        Parameter_AddMagic(play,
-                           ((void)0, gSaveContext.unk_3F30) + ((gSaveContext.save.playerData.doubleMagic + 1) * 0x30));
+        Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
     if (this->timer == 0) {
@@ -388,19 +387,19 @@ void func_80A0B5F0(BgDyYoseizo* this, PlayState* play) {
                          Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]), ANIMMODE_LOOP, 0.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 5)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 5)) {
         Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_START_GIVING_UPGRADE], 1.0f, 0.0f,
                          Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_START_GIVING_UPGRADE]), ANIMMODE_ONCE,
                          -5.0f);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_FR_SMILE_0);
         this->mouthIndex = 1;
         this->eyeIndex = 0;
         this->actionFunc = func_80A0B500;
     }
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 6)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 6)) {
         func_80A0AFDC(this);
     }
 
@@ -411,13 +410,13 @@ void func_80A0B75C(BgDyYoseizo* this, PlayState* play) {
     func_80A0AD50(this);
     SkelAnime_Update(&this->skelAnime);
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 4)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 4)) {
         this->actor.shape.rot.y = 0;
         this->actionFunc = func_80A0B5F0;
         Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAY_DOWN_TRANSITION], 1.0f, 2.0f,
                          Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_LAY_DOWN_TRANSITION]), ANIMMODE_ONCE, 0.0f);
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_SMILE_0);
+        Actor_PlaySfx(&this->actor, NA_SE_VO_FR_SMILE_0);
         this->unk2F8 = 0;
     }
 }
@@ -426,8 +425,8 @@ void func_80A0B834(BgDyYoseizo* this) {
     this->actor.draw = BgDyYoseizo_Draw;
     Animation_Change(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN], 1.0f, 0.0f,
                      Animation_GetLastFrame(sAnimations[GREATFAIRY_ANIM_SPIN_LAY_DOWN]), ANIMMODE_ONCE, 0.0f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_FR_LAUGH_0);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_GREAT_FAIRY_APPEAR);
+    Actor_PlaySfx(&this->actor, NA_SE_VO_FR_LAUGH_0);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_GREAT_FAIRY_APPEAR);
     BgDyYoseizo_SpawnEffects(this, GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT, 30);
 }
 
@@ -439,9 +438,9 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
 
     csAction = 0;
-    if (Cutscene_CheckActorAction(play, 103)) {
-        csAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action;
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetActorActionIndex(play, 103));
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103)) {
+        csAction = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id;
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103));
     } else {
         if (this->actor.home.rot.z != 0) {
             this->actor.home.pos.x = player->actor.world.pos.x;
@@ -454,20 +453,20 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
 
         if (this->unk302 & 1) {
             if (this->timer == 0) {
-                if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-                    ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+                if (CutsceneManager_IsNext(this->actor.csId)) {
+                    CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
                     this->unk302 &= ~1;
                 } else {
-                    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+                    CutsceneManager_Queue(this->actor.csId);
                 }
             }
         } else if (!(this->unk302 & 2) && (player->meleeWeaponState != 0)) {
             if (player->meleeWeaponAnimation >= PLAYER_MWA_SPIN_ATTACK_1H) {
-                if (player->unk_B08[0] >= 0.85f) {
+                if (player->unk_B08 >= 0.85f) {
                     this->unk302 |= 1;
                     this->unk302 |= 2;
                     if (play->msgCtx.currentTextId == 0x59A) {
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                     }
                     this->timer = 20;
                     return;
@@ -499,14 +498,14 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
 
 // Choose behaviour?
 void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 2)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 2)) {
         func_80A0B834(this);
         this->actionFunc = func_80A0B75C;
     }
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 7)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 7)) {
         this->actor.draw = BgDyYoseizo_Draw;
         Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_LAYING_DOWN]);
         this->actionFunc = func_80A0B184;
@@ -516,8 +515,8 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
         this->unk2F8 = 0;
     }
 
-    if (Cutscene_CheckActorAction(play, 103) &&
-        (play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 103)]->action == 9)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103) &&
+        (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 9)) {
         Actor_SetScale(&this->actor, 0.01f);
         Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
         this->csAction = 9;
@@ -532,9 +531,7 @@ void BgDyYoseizo_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
     Actor_MoveWithGravity(&this->actor);
 
-    if (this->timer != 0) {
-        this->timer--;
-    }
+    DECR(this->timer);
 
     BgDyYoseizo_UpdateEffects(this, play);
 }
@@ -554,13 +551,13 @@ s32 BgDyYoseizo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     return false;
 }
 
-//! Colour and shape of eyebrows, hair colour.
-typedef enum {
-    /* 0 */ GREAT_FAIRY_APPEARANCE_MAGIC,   //!< Orange
-    /* 1 */ GREAT_FAIRY_APPEARANCE_WISDOM,  //!< Green
-    /* 2 */ GREAT_FAIRY_APPEARANCE_POWER,   //!< Pink
-    /* 3 */ GREAT_FAIRY_APPEARANCE_COURAGE, //!< Purple
-    /* 4 */ GREAT_FAIRY_APPEARANCE_KINDNESS //!< Yellow
+// Colour and shape of eyebrows, hair colour.
+typedef enum GreatFairyAppearance {
+    /* 0 */ GREAT_FAIRY_APPEARANCE_MAGIC,   // Orange
+    /* 1 */ GREAT_FAIRY_APPEARANCE_WISDOM,  // Green
+    /* 2 */ GREAT_FAIRY_APPEARANCE_POWER,   // Pink
+    /* 3 */ GREAT_FAIRY_APPEARANCE_COURAGE, // Purple
+    /* 4 */ GREAT_FAIRY_APPEARANCE_KINDNESS // Yellow
 } GreatFairyAppearance;
 
 void BgDyYoseizo_Draw(Actor* thisx, PlayState* play) {
@@ -592,7 +589,7 @@ void BgDyYoseizo_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     // Set eyes and hair colour, not actually animated.
     AnimatedMat_DrawStepOpa(play, Lib_SegmentedToVirtual(gGreatFairyAppearenceTexAnim), appearance);
@@ -635,7 +632,7 @@ void BgDyYoseizo_SpawnEffect(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVeloc
             effect->timer = life;
             effect->type = type;
             effect->pitch = 0;
-            effect->yaw = (s32)randPlusMinusPoint5Scaled(30000.0f);
+            effect->yaw = (s32)Rand_CenteredFloat(30000.0f);
             effect->roll = 0;
             return;
         }
@@ -665,7 +662,7 @@ void BgDyYoseizo_UpdateEffects(BgDyYoseizo* this, PlayState* play) {
                 effect->velocity.y += effect->accel.y;
                 effect->velocity.z += effect->accel.z;
             } else {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_HEALING - SFX_FLAG);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_HEALING - SFX_FLAG);
 
                 sp94 = player->actor.world.pos;
                 sp94.y = player->actor.world.pos.y - 150.0f;
@@ -727,7 +724,7 @@ void BgDyYoseizo_DrawEffects(BgDyYoseizo* this, PlayState* play) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     for (i = 0; i < BG_DY_YOSEIZO_EFFECT_COUNT; i++, effect++) {
         if (effect->alive == true) {
