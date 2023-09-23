@@ -1,7 +1,5 @@
 #include "z_obj_boyo.h"
 
-#define ACTOR_COLLISION_HANDLING_CASES 4
-
 #define FLAGS (ACTOR_FLAG_10)
 
 #define THIS ((ObjBoyo*)thisx)
