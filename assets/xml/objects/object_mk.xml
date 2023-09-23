@@ -1,22 +1,22 @@
 ﻿<Root>
     <File Name="object_mk" Segment="6">
-        <Animation Name="object_mk_Anim_000438" Offset="0x438" />
-        <Animation Name="object_mk_Anim_0007D8" Offset="0x7D8" />
-        <Animation Name="object_mk_Anim_0010F4" Offset="0x10F4" />
-        <Animation Name="object_mk_Anim_001964" Offset="0x1964" />
-        <Animation Name="object_mk_Anim_001C38" Offset="0x1C38" />
-        <DList Name="object_mk_DL_004320" Offset="0x4320" />
-        <DList Name="object_mk_DL_004610" Offset="0x4610" />
-        <DList Name="object_mk_DL_004960" Offset="0x4960" />
-        <DList Name="object_mk_DL_004A78" Offset="0x4A78" />
-        <DList Name="object_mk_DL_005180" Offset="0x5180" />
-        <DList Name="object_mk_DL_005500" Offset="0x5500" />
-        <DList Name="object_mk_DL_005630" Offset="0x5630" />
-        <DList Name="object_mk_DL_005760" Offset="0x5760" />
-        <DList Name="object_mk_DL_0058B0" Offset="0x58B0" />
-        <DList Name="object_mk_DL_0059E0" Offset="0x59E0" />
-        <DList Name="object_mk_DL_005B10" Offset="0x5B10" />
-        <DList Name="object_mk_DL_005C60" Offset="0x5C60" />
+        <Animation Name="gMarineResearcherHeadWaggleAnim" Offset="0x438" />
+        <Animation Name="gMarineResearcherYellingAnim" Offset="0x7D8" />
+        <Animation Name="gMarineResearcherShakingInFearAnim" Offset="0x10F4" />
+        <Animation Name="gMarineResearcherStrokingChinAnim" Offset="0x1964" />
+        <Animation Name="gMarineResearcherIdleAnim" Offset="0x1C38" />
+        <DList Name="gMarineResearcherMidTorsoDL" Offset="0x4320" />
+        <DList Name="gMarineResearcherUpperTorsoDL" Offset="0x4610" />
+        <DList Name="gMarineResearcherNeckDL" Offset="0x4960" />
+        <DList Name="gMarineResearcherHeadDL" Offset="0x4A78" />
+        <DList Name="gMarineResearcherMouthDL" Offset="0x5180" />
+        <DList Name="gMarineResearcherRightShoulderDL" Offset="0x5500" />
+        <DList Name="gMarineResearcherRightArmDL" Offset="0x5630" />
+        <DList Name="gMarineResearcherRightHandDL" Offset="0x5760" />
+        <DList Name="gMarineResearcherLeftShoulderDL" Offset="0x58B0" />
+        <DList Name="gMarineResearcherLeftArmDL" Offset="0x59E0" />
+        <DList Name="gMarineResearcherLeftHandDL" Offset="0x5B10" />
+        <DList Name="gMarineResearcherLowerTorsoDL" Offset="0x5C60" />
         <Texture Name="object_mk_TLUT_005DE0" OutName="tlut_005DE0" Format="rgba16" Width="16" Height="16" Offset="0x5DE0" />
         <Texture Name="object_mk_Tex_005FE0" OutName="tex_005FE0" Format="ci8" Width="8" Height="8" Offset="0x5FE0" />
         <Texture Name="object_mk_Tex_006020" OutName="tex_006020" Format="ci8" Width="16" Height="16" Offset="0x6020" />
@@ -28,18 +28,18 @@
         <Texture Name="object_mk_Tex_006A60" OutName="tex_006A60" Format="ci8" Width="8" Height="8" Offset="0x6A60" />
         <Texture Name="object_mk_Tex_006AA0" OutName="tex_006AA0" Format="ci8" Width="8" Height="8" Offset="0x6AA0" />
         <Texture Name="object_mk_Tex_006AE0" OutName="tex_006AE0" Format="ci8" Width="16" Height="16" Offset="0x6AE0" />
-        <Limb Name="object_mk_Standardlimb_006BE0" Type="Standard" EnumName="OBJECT_MK_LIMB_01" Offset="0x6BE0" />
-        <Limb Name="object_mk_Standardlimb_006BEC" Type="Standard" EnumName="OBJECT_MK_LIMB_02" Offset="0x6BEC" />
-        <Limb Name="object_mk_Standardlimb_006BF8" Type="Standard" EnumName="OBJECT_MK_LIMB_03" Offset="0x6BF8" />
-        <Limb Name="object_mk_Standardlimb_006C04" Type="Standard" EnumName="OBJECT_MK_LIMB_04" Offset="0x6C04" />
-        <Limb Name="object_mk_Standardlimb_006C10" Type="Standard" EnumName="OBJECT_MK_LIMB_05" Offset="0x6C10" />
-        <Limb Name="object_mk_Standardlimb_006C1C" Type="Standard" EnumName="OBJECT_MK_LIMB_06" Offset="0x6C1C" />
-        <Limb Name="object_mk_Standardlimb_006C28" Type="Standard" EnumName="OBJECT_MK_LIMB_07" Offset="0x6C28" />
-        <Limb Name="object_mk_Standardlimb_006C34" Type="Standard" EnumName="OBJECT_MK_LIMB_08" Offset="0x6C34" />
-        <Limb Name="object_mk_Standardlimb_006C40" Type="Standard" EnumName="OBJECT_MK_LIMB_09" Offset="0x6C40" />
-        <Limb Name="object_mk_Standardlimb_006C4C" Type="Standard" EnumName="OBJECT_MK_LIMB_0A" Offset="0x6C4C" />
-        <Limb Name="object_mk_Standardlimb_006C58" Type="Standard" EnumName="OBJECT_MK_LIMB_0B" Offset="0x6C58" />
-        <Limb Name="object_mk_Standardlimb_006C64" Type="Standard" EnumName="OBJECT_MK_LIMB_0C" Offset="0x6C64" />
-        <Skeleton Name="object_mk_Skel_006CA0" Type="Flex" LimbType="Standard" LimbNone="OBJECT_MK_LIMB_NONE" LimbMax="OBJECT_MK_LIMB_MAX" EnumName="ObjectMkLimb" Offset="0x6CA0" />
+        <Limb Name="gMarineResearcherLowerTorsoLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_LOWER_TORSO" Offset="0x6BE0" />
+        <Limb Name="gMarineResearcherMidTorsoLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_MID_TORSO" Offset="0x6BEC" />
+        <Limb Name="gMarineResearcherLeftShoulderLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_LEFT_SHOULDER" Offset="0x6BF8" />
+        <Limb Name="gMarineResearcherLeftArmLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_LEFT_ARM" Offset="0x6C04" />
+        <Limb Name="gMarineResearcherLeftHandLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_LEFT_HAND" Offset="0x6C10" />
+        <Limb Name="gMarineResearcherRightShoulderLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_RIGHT_SHOULDER" Offset="0x6C1C" />
+        <Limb Name="gMarineResearcherRightArmLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_RIGHT_ARM" Offset="0x6C28" />
+        <Limb Name="gMarineResearcherRightHandLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_RIGHT_HAND" Offset="0x6C34" />
+        <Limb Name="gMarineResearcherUpperTorsoLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_UPPER_TORSO" Offset="0x6C40" />
+        <Limb Name="gMarineResearcherNeckLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_NECK" Offset="0x6C4C" />
+        <Limb Name="gMarineResearcherHeadLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_HEAD" Offset="0x6C58" />
+        <Limb Name="gMarineResearcherMouthLimb" Type="Standard" EnumName="MARINE_RESEARCHER_LIMB_MOUTH" Offset="0x6C64" />
+        <Skeleton Name="gMarineResearcherSkel" Type="Flex" LimbType="Standard" LimbNone="MARINE_RESEARCHER_LIMB_NONE" LimbMax="MARINE_RESEARCHER_LIMB_MAX" EnumName="MarineResearcherLimb" Offset="0x6CA0" />
     </File>
 </Root>
