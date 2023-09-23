@@ -5,7 +5,7 @@ We encourage all contributors to participate in code review: this is your codeba
 Every review submitted helps us keep code quality high and code merged in more quickly.
 
 This document is meant to be a set of tips and guidelines for reviewers of pull requests to the project.
-For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/master/README.md).
+For general information about the project, see [our readme](https://github.com/zeldaret/mm/blob/main/README.md).
 
 Most discussions happen on our [Discord Server](https://discord.zelda64.dev) where you are welcome to ask if you need help getting started, or if you have any questions regarding this project and other decompilation projects.
 
