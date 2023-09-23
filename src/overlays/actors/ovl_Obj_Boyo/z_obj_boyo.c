@@ -9,9 +9,9 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play);
 void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
-void ObjBoyo_PushPlayer(Actor* thisx, Actor* player);
-void func_809A5DE0(Actor* actor, Actor* thisx);
-void func_809A5E14(Actor* arg0, Actor* thisx);
+void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor);
+void func_809A5DE0(ObjBoyo* this, Actor* actor);
+void func_809A5E14(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index);
 
 const ActorInit Obj_Boyo_InitVars = { ACTOR_OBJ_BOYO,
@@ -78,17 +78,17 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &THIS->collider);
 }
 
-void ObjBoyo_PushPlayer(Actor* thisx, Actor* player) {
-    ((Player*)player)->pushedSpeed = 30.0f;
-    ((Player*)player)->pushedYaw = (s16)THIS->actor.yawTowardsPlayer;
+void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
+    ((Player*)actor)->pushedSpeed = 30.0f;
+    ((Player*)actor)->pushedYaw = (s16)THIS->actor.yawTowardsPlayer;
 }
 
-void func_809A5DE0(Actor* actor, Actor* thisx) {
+void func_809A5DE0(ObjBoyo* this, Actor* actor) {
     THIS->pushedSpeed = 30.0f;                                       // push speed
     THIS->yawTowardsActor = Actor_WorldYawTowardActor(actor, thisx); // push direction
 }
 
-void func_809A5E14(Actor* arg0, Actor* thisx) {
+void func_809A5E14(ObjBoyo* this, Actor* actor) {
     // some kind of reset ?
     THIS->unk1F0 = 0;
 }
