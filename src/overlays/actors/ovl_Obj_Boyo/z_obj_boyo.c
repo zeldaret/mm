@@ -26,7 +26,7 @@ const ActorInit Obj_Boyo_InitVars = {
     (ActorFunc)ObjBoyo_Draw,
 };
 
-typedef void (*ObjBoyoCollisionHandler)(Actor* actor_a, Actor* actor_b);
+typedef void (*ObjBoyoCollisionHandler)(ObjBoyo* this, Actor* actor);
 
 typedef struct ObjBoyoUnkStruct {
     /* 0x0 */ ObjBoyoCollisionHandler colHandler;
