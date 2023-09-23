@@ -11,8 +11,8 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2);
 void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 
 void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor);
-void func_809A5DE0(ObjBoyo* this, Actor* actor);
-void func_809A5E14(ObjBoyo* this, Actor* actor);
+void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor);
+void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
 const ActorInit Obj_Boyo_InitVars = {
@@ -30,8 +30,8 @@ const ActorInit Obj_Boyo_InitVars = {
 typedef void (*ObjBoyoCollisionHandler)(ObjBoyo* this, Actor* actor);
 
 typedef struct ObjBoyoUnkStruct {
-    /* 0x0 */ ObjBoyoCollisionHandler colHandler;
-    /* 0x4 */ s16 id;
+    /* 0x0 */ s16 id;
+    /* 0x4 */ ObjBoyoCollisionHandler colHandler;
 } ObjBoyoUnkStruct; // size = 0x8
 
 static AnimatedMaterial* D_06000E88 = object_boyo_Matanimheader_000E88;
@@ -68,8 +68,10 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static objBoyoUnkStruct gCollisionHandling[] = {
-    { ObjBoyo_PushPlayer, 0x021D0000 }, { func_809A5DE0, 0x00090000 }, { func_809A5E14, 0x0 }, { NULL, 0x0 }
+static ObjBoyoUnkStruct gCollisionHandling[] = {
+    { ACTOR_PLAYER, ObjBoyo_PushPlayer },
+    { ACTOR_EN_KAIZOKU, ObjBoyo_PushPirate },
+    { ACTOR_EN_BOM, ObjBoyo_ExplodeBomb },
 };
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play) {
@@ -90,17 +92,16 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play) {
 
 void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
     ((Player*)actor)->pushedSpeed = 30.0f;
-    ((Player*)actor)->pushedYaw = (s16)THIS->actor.yawTowardsPlayer;
+    ((Player*)actor)->pushedYaw = (s16)this->actor.yawTowardsPlayer;
 }
 
-void func_809A5DE0(ObjBoyo* this, Actor* actor) {
-    THIS->pushedSpeed = 30.0f;                                       // push speed
-    THIS->yawTowardsActor = Actor_WorldYawTowardActor(actor, thisx); // push direction
+void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor) {
+    this->pushedSpeed = 30.0f;                                       // push speed
+    this->yawTowardsActor = Actor_WorldYawTowardActor(actor, thisx); // push direction
 }
 
-void func_809A5E14(ObjBoyo* this, Actor* actor) {
-    // some kind of reset ?
-    THIS->unk1F0 = 0;
+void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor) {
+    this->unk1F0 = 0;
 }
 
 /*
