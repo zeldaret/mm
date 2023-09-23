@@ -12,7 +12,7 @@ void ObjBoyo_Draw(Actor* thisx, PlayState* play);
 void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor);
 void func_809A5DE0(ObjBoyo* this, Actor* actor);
 void func_809A5E14(ObjBoyo* this, Actor* actor);
-Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index);
+Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
 const ActorInit Obj_Boyo_InitVars = { ACTOR_OBJ_BOYO,
                                       ACTORCAT_PROP,
@@ -96,10 +96,10 @@ void func_809A5E14(ObjBoyo* this, Actor* actor) {
 /*
  * Find the Actor we collided with.
  */
-Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, u32* index) {
+Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
     Actor* collidedActor;
     ObjBoyoUnkStruct* data;
-    u32 counter;
+    s32 counter;
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *index = 0;
