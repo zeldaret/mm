@@ -29,10 +29,15 @@ typedef struct EnAn {
     /* 0x214 */ s8 unk_214;
     /* 0x215 */ char pad_215[3];                    /* maybe part of unk_214[4]? */
     /* 0x218 */ Actor* unk_218;                     /* inferred */
-    /* 0x21C */ char pad_21C[0x48];                 /* maybe part of unk_218[0x13]? */
+    /* 0x21C */ UNK_TYPE1 unk_21C[0x24];                 /* maybe part of unk_218[0x13]? */
+    /* 0x240 */ Vec3f unk_240;
+    /* 0x24C */ UNK_TYPE1 unk_24C[0xC];
+    /* 0x258 */ Vec3s unk_258;
+    /* 0x25E */ UNK_TYPE1 unk_25E[0x2];
+    /* 0x260 */ UNK_TYPE1 unk_260[0x4];
     /* 0x264 */ Vec3s unk_264[0x15];
     /* 0x2E2 */ Vec3s unk_2E2[0x15];
-    /* 0x360 */ u16 unk_360;                        /* inferred */
+    /* 0x360 */ u16 unk_360; // flags?
     /* 0x362 */ char pad_362[2];                    /* inferred */
     /* 0x364 */ s8 unk_364;                         /* inferred */
     /* 0x365 */ char pad_365[3];                    /* maybe part of unk_364[4]? */

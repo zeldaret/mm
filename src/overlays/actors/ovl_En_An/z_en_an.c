@@ -166,6 +166,7 @@ s32 func_80B53CE8(EnAn* this, PlayState* play, s32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53F84.s")
 
+void func_80B54124(EnAn* this, PlayState* play, u32 arg2);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54124.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54678.s")
@@ -351,17 +352,59 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80B57EE8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57EE8.s")
+extern Vec3f D_80B58ED4;
 
-void func_80B57FC4(PlayState* play, s32 limbIndex, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57FC4.s")
+void func_80B57EE8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    EnAn* this = THIS;
+
+    if (limbIndex == 9) {
+        Matrix_MultVec3f(&D_80B58ED4, &this->actor.focus.pos);
+        Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
+        func_80B54124(this, play, 1U);
+    } else if (limbIndex == 8) {
+        func_80B54124(this, play, 0U);
+        func_80B54124(this, play, 4U);
+        func_80B54124(this, play, 2U);
+        func_80B54124(this, play, 3U);
+    } else if (limbIndex == 5) {
+        func_80B54124(this, play, 5U);
+    }
+}
+
+void func_80B57FC4(PlayState* play, s32 limbIndex, Actor* thisx) {
+    EnAn* this = THIS;
+    s32 stepRot;
+    s32 overrideRot;
+
+    if (!(this->unk_360 & 0x200)) {
+        if (this->unk_360 & 0x80) {
+            overrideRot = true;
+        } else {
+            overrideRot = false;
+        }
+        stepRot = true;
+    } else {
+        overrideRot = false;
+        stepRot = false;
+    }
+
+    if (limbIndex == 9) {
+        SubS_UpdateLimb((s16) (this->unk_37C + 0x4000), (s16) (this->unk_37E + this->actor.shape.rot.y + 0x4000), &this->unk_240, &this->unk_258, stepRot, overrideRot);
+        Matrix_Pop();
+        Matrix_Translate(this->unk_240.x, this->unk_240.y, this->unk_240.z, MTXMODE_NEW);
+        Matrix_Scale(this->actor.scale.x, this->actor.scale.y, this->actor.scale.z, MTXMODE_APPLY);
+        Matrix_RotateYS(this->unk_258.y, MTXMODE_APPLY);
+        Matrix_RotateXS(this->unk_258.x, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_258.z, MTXMODE_APPLY);
+        Matrix_Push();
+    }
+}
 
 extern UNK_PTR D_80B58EEC[];
 extern UNK_PTR D_80B58EE0[];
 
 void EnAn_Draw(Actor* thisx, PlayState* play) {
-    EnAn* this = (EnAn* ) thisx;
+    EnAn* this = THIS;
 
     if ((this->unk_200 != 0) || (this->unk_3B0 != 0)) {
         OPEN_DISPS(play->state.gfxCtx);
@@ -371,7 +414,7 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B58EEC[this->unk_390]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B58EE0[this->unk_392]));
 
-        SkelAnime_DrawTransformFlexOpa(play, this->unk_144.skeleton, this->unk_144.jointTable, this->unk_144.dListCount, NULL, func_80B57EE8, func_80B57FC4, this);
+        SkelAnime_DrawTransformFlexOpa(play, this->unk_144.skeleton, this->unk_144.jointTable, this->unk_144.dListCount, NULL, func_80B57EE8, func_80B57FC4, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
