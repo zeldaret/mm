@@ -36,26 +36,29 @@ typedef struct ObjBoyoUnkStruct {
 
 static AnimatedMaterial* D_06000E88 = object_boyo_Matanimheader_000E88;
 
-static ColliderCylinderInit gColliderCylinderInit = {
+static ColliderCylinderInit sCylinderInit = {
     {
-        /* ColliderInit base */
-        COLTYPE_NONE,                                       /* u8 coltype */
-        AT_NONE,                                            /* u8 atFlags */
-        AC_TYPE_PLAYER | AC_HARD | AC_ON,                   /* u8 acFlags */
-        OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER | OC1_ON, /* u8 ocFlags1 */
-        OC2_TYPE_2,                                         /* u8 ocFlags2 */
-        COLSHAPE_CYLINDER                                   /* u8 shape */
+        COLTYPE_NONE,
+        AT_NONE,
+        AC_TYPE_PLAYER | AC_HARD | AC_ON,
+        OC1_TYPE_2 | OC1_TYPE_1 | OC1_TYPE_PLAYER | OC1_ON,
+        OC2_TYPE_2,
+        COLSHAPE_CYLINDER,
     },
     {
-        /* ColliderInfoInit info */
-        ELEMTYPE_UNK0, /* u8 elemType */
-        { 0x00000000 /* u32 dmgFlags */, 0x00 /* u8 effect */, 0x00 /* u8 defense */ },
-        { 0x01CBFFBE /* u32 dmgFlags */, 0x00 /* u8 effect */, 0x00 /* u8 defense */ },
-        TOUCH_NONE, /* u8 toucherFlags */
-        BUMP_ON,    /* u8 bumperFlags */
-        OCELEM_ON   /* u8 ocElemFlags */
+        ELEMTYPE_UNK0,
+        { 0x00000000, 0x00, 0x00 },
+        { 0x01CBFFBE, 0x00, 0x00 },
+        TOUCH_NONE,
+        BUMP_ON,
+        OCELEM_ON,
     },
-    { 60 /* s16 radius */, 140 /* s16 height */, 0 /* yShift */, { 0 /* s16 x */, 0 /* s16 y */, 0 /*s16 z */ } },
+    {
+        60,
+        140,
+        0,
+        { 0, 0, 0 },
+    },
 };
 
 static InitChainEntry gInitChainEntry[5] = { 0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064,
