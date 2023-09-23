@@ -132,7 +132,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
 
                 switch (this->type) {
                     case ENELFGRP_TYPE_POWER:
-                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_23_02)) {
+                        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK)) {
                             EnElfgrp_SetCutscene(this, 1);
                         } else {
                             this->stateFlags |= ELFGRP_STATE_2;
@@ -487,7 +487,7 @@ void func_80A3A398(EnElfgrp* this, PlayState* play) {
         }
 
         if (this->stateFlags & ELFGRP_STATE_2) {
-            SET_WEEKEVENTREG(WEEKEVENTREG_23_02);
+            SET_WEEKEVENTREG(WEEKEVENTREG_OBTAINED_GREAT_SPIN_ATTACK);
         }
 
         if (this->stateFlags & ELFGRP_STATE_4) {
