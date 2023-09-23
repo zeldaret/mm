@@ -1,5 +1,5 @@
 #include "z_obj_boyo.h"
-#include "assets/objects/object_boyo.h"
+#include "objects/object_boyo/object_boyo.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -75,6 +75,8 @@ static ObjBoyoUnkStruct gCollisionHandling[] = {
 };
 
 void ObjBoyo_Init(Actor* thisx, PlayState* play) {
+    ObjBoyo* this = THIS;
+
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
@@ -96,8 +98,8 @@ void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
 }
 
 void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor) {
-    this->pushedSpeed = 30.0f;                                       // push speed
-    this->yawTowardsActor = Actor_WorldYawTowardActor(actor, thisx); // push direction
+    this->pushedSpeed = 30.0f;                                                // push speed
+    this->yawTowardsActor = Actor_WorldYawTowardActor(actor, &(this->actor)); // push direction
 }
 
 void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor) {
@@ -126,7 +128,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
                 *index = counter;
                 return collidedActor;
             }
-            data += 4;
+            data += 1;
         }
     }
     return 0;
@@ -135,13 +137,13 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
 void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     ObjBoyo* this = THIS;
-    Actor* dataPtr;
-    u32 index;
+    Actor* collidedActor;
+    s32 index;
 
-    dataPtr = ObjBoyo_FindCollidedActor(this, play, &index);
+    collidedActor = ObjBoyo_FindCollidedActor(this, play, &index);
 
-    if (dataPtr != 0) {
-        gCollisionHandling[index].colHandler(&(this->actor), dataPtr);
+    if (collidedActor != 0) {
+        gCollisionHandling[index].colHandler(this, collidedActor);
         // TODO: find out what all of these are.
 
         this->unk194 = 0x64;
@@ -193,8 +195,11 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
     }
 }
+
 static Gfx* D_06000300 = object_boyo_DL_000300;
 void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
+    ObjBoyo* this = THIS;
+
     AnimatedMat_Draw(play, this->animatedMaterial);
     Gfx_DrawDListOpa(play, D_06000300);
 }
