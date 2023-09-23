@@ -501,7 +501,8 @@ void EnElforg_FreeFloating(EnElforg* this, PlayState* play) {
                 gSaveContext.save.saveInfo.inventory.strayFairies[gSaveContext.dungeonIndex]++;
                 // You found a Stray Fairy!
                 Message_StartTextbox(play, 0x11, NULL);
-                if (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >= STRAY_FAIRY_SCATTERED_TOTAL) {
+                if (gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex] >=
+                    STRAY_FAIRY_SCATTERED_TOTAL) {
                     Audio_PlayFanfare(NA_BGM_GET_ITEM | 0x900);
                 }
             }

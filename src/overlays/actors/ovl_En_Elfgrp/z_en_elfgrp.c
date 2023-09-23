@@ -242,7 +242,8 @@ s32 EnElfgrp_GetHeldFairiesCount(PlayState* play, s32 type) {
 
     // Number in fountain originally + total number collected - number currently in fountain
     return (STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL) +
-           ((void)0, gSaveContext.save.saveInfo.inventory.strayFairies[type - 1]) - EnElfgrp_GetFountainFairiesCount(play, type);
+           ((void)0, gSaveContext.save.saveInfo.inventory.strayFairies[type - 1]) -
+           EnElfgrp_GetFountainFairiesCount(play, type);
 }
 
 // Number of Stray Fairies in currently in Fountain?
@@ -261,7 +262,8 @@ s32 EnElfgrp_GetFountainFairiesCount(PlayState* play, s32 type) {
         }
     }
 
-    numberInFountain = (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 >> (((type - 1) * 5) + 1)) & 0x1F;
+    numberInFountain =
+        (gSaveContext.save.saveInfo.permanentSceneFlags[play->sceneId].unk_14 >> (((type - 1) * 5) + 1)) & 0x1F;
     if (numberInFountain < STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL) {
         numberInFountain = STRAY_FAIRY_TOTAL - STRAY_FAIRY_SCATTERED_TOTAL;
     } else if (numberInFountain > STRAY_FAIRY_TOTAL) {
@@ -312,9 +314,9 @@ void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 
     }
 
     for (i = 0; i < count; i++) {
-        strayFairy = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG,
-                                 Rand_CenteredFloat(20.0f) + spawnCentrePos.x, spawnCentrePos.y,
-                                 Rand_CenteredFloat(20.0f) + spawnCentrePos.z, 0, 0, 0, strayFairyParams);
+        strayFairy =
+            Actor_Spawn(&play->actorCtx, play, ACTOR_EN_ELFORG, Rand_CenteredFloat(20.0f) + spawnCentrePos.x,
+                        spawnCentrePos.y, Rand_CenteredFloat(20.0f) + spawnCentrePos.z, 0, 0, 0, strayFairyParams);
 
         if (strayFairy == NULL) {
             continue;
