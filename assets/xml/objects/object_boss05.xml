@@ -80,7 +80,7 @@
         <Limb Name="object_boss05_Standardlimb_006308" Type="Standard" EnumName="BIODEKUBABABODY_LIMB_11" Offset="0x6308" />
         <Limb Name="object_boss05_Standardlimb_006314" Type="Standard" EnumName="BIODEKUBABABODY_LIMB_12" Offset="0x6314" />
         <Limb Name="object_boss05_Standardlimb_006320" Type="Standard" EnumName="BIODEKUBABABODY_LIMB_13" Offset="0x6320" />
-        <Skeleton Name="gBioDekuBabaBodySkel" Type="Flex" LimbType="Standard" LimbNone="BIODEKUBABABODY_LIMB_NONE" LimbMax="BIODEKUBABABODY_LIMB_MAX" EnumName="ObjectBoss052Limb" Offset="0x6378" />
+        <Skeleton Name="gBioDekuBabaBodySkel" Type="Flex" LimbType="Standard" LimbNone="BIODEKUBABABODY_LIMB_NONE" LimbMax="BIODEKUBABABODY_LIMB_MAX" EnumName="BioDekuBabaBodyLimb" Offset="0x6378" />
 
         <Animation Name="object_boss05_Anim_006484" Offset="0x6484" /> <!-- Original name is "wdb_pakupaku" ("repeatedly opening and closing (one's mouth)") -->
         <Animation Name="object_boss05_Anim_006E50" Offset="0x6E50" /> <!-- Original name is "wdb_startH" -->

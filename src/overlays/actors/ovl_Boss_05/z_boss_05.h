@@ -14,14 +14,27 @@ typedef enum BioDekuBabaType {
     /*  2 */ BIO_DEKU_BABA_TYPE_2,
     /*  3 */ BIO_DEKU_BABA_TYPE_3,
     /*  4 */ BIO_DEKU_BABA_TYPE_4,
-    /* 10 */ BIO_DEKU_BABA_TYPE_10 = 10 // Fragments?
+    /* 10 */ BIO_DEKU_BABA_TYPE_10 = 10, // Fragments?
+    /* 11 */ BIO_DEKU_BABA_TYPE_11,
+    /* 12 */ BIO_DEKU_BABA_TYPE_12,
+    /* 13 */ BIO_DEKU_BABA_TYPE_13,
+    /* 14 */ BIO_DEKU_BABA_TYPE_14,
+    /* 15 */ BIO_DEKU_BABA_TYPE_15,
+    /* 16 */ BIO_DEKU_BABA_TYPE_16,
+    /* 17 */ BIO_DEKU_BABA_TYPE_17,
+    /* 18 */ BIO_DEKU_BABA_TYPE_18,
+    /* 19 */ BIO_DEKU_BABA_TYPE_19,
+    /* 20 */ BIO_DEKU_BABA_TYPE_20,
+    /* 21 */ BIO_DEKU_BABA_TYPE_21,
+    /* 22 */ BIO_DEKU_BABA_TYPE_22,
+    /* 23 */ BIO_DEKU_BABA_TYPE_23
 } BioDekuBabaType;
 
 typedef struct Boss05 {
     /* 0x000 */ DynaPolyActor dyna;
-    /* 0x15C */ u8 unk15C;                          /* inferred */
-    /* 0x15E */ s16 unk15E;                         /* inferred */
-    /* 0x160 */ s16 unk160;                         /* inferred */
+    /* 0x15C */ u8 unk15C;
+    /* 0x15E */ s16 unk15E;
+    /* 0x160 */ s16 unk160;
     /* 0x162 */ s16 unk162[3]; // timers
     /* 0x168 */ s16 unk168; // timer
     /* 0x16A */ s16 unk16A; // timer
