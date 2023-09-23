@@ -14,15 +14,17 @@ void func_809A5DE0(ObjBoyo* this, Actor* actor);
 void func_809A5E14(ObjBoyo* this, Actor* actor);
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index);
 
-const ActorInit Obj_Boyo_InitVars = { ACTOR_OBJ_BOYO,
-                                      ACTORCAT_PROP,
-                                      FLAGS,
-                                      OBJECT_BOYO,
-                                      sizeof(ObjBoyo),
-                                      (ActorFunc)ObjBoyo_Init,
-                                      (ActorFunc)ObjBoyo_Destroy,
-                                      (ActorFunc)ObjBoyo_Update,
-                                      (ActorFunc)ObjBoyo_Draw };
+const ActorInit Obj_Boyo_InitVars = {
+    ACTOR_OBJ_BOYO,
+    ACTORCAT_PROP,
+    FLAGS,
+    OBJECT_BOYO,
+    sizeof(ObjBoyo),
+    (ActorFunc)ObjBoyo_Init,
+    (ActorFunc)ObjBoyo_Destroy,
+    (ActorFunc)ObjBoyo_Update,
+    (ActorFunc)ObjBoyo_Draw,
+};
 
 typedef void (*ObjBoyoCollisionHandler)(Actor* actor_a, Actor* actor_b);
 
