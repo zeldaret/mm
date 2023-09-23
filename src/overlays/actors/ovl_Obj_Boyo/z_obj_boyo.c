@@ -1,4 +1,5 @@
 #include "z_obj_boyo.h"
+#include "assets/objects/object_boyo.h"
 
 #define FLAGS (ACTOR_FLAG_10)
 
@@ -33,7 +34,7 @@ typedef struct ObjBoyoUnkStruct {
     /* 0x4 */ s16 id;
 } ObjBoyoUnkStruct; // size = 0x8
 
-static AnimatedMaterial* D_06000E88;
+static AnimatedMaterial* D_06000E88 = object_boyo_Matanimheader_000E88;
 
 static ColliderCylinderInit gColliderCylinderInit = {
     {
