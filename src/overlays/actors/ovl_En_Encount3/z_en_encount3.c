@@ -19,7 +19,6 @@ void func_809AD084(EnEncount3* this, PlayState* play);
 void func_809AD194(EnEncount3* this, PlayState* play);
 void func_809AD1EC(EnEncount3* this, PlayState* play);
 
-#if 0
 ActorInit En_Encount3_InitVars = {
     ACTOR_EN_ENCOUNT3,
     ACTORCAT_ENEMY,
@@ -32,7 +31,7 @@ ActorInit En_Encount3_InitVars = {
     (ActorFunc)EnEncount3_Draw,
 };
 
-#endif
+UNK_TYPE D_809AD810 = { 0 };
 
 extern UNK_TYPE D_060009A0;
 
