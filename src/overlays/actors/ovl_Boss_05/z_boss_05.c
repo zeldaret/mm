@@ -40,8 +40,7 @@ void func_809F0B0C(Boss05* this, PlayState* play);
 
 #include "overlays/ovl_Boss_05/ovl_Boss_05.c"
 
-// static ColliderJntSphElementInit sJntSphElementsInit[2] = {
-ColliderJntSphElementInit D_809F1B2C[2] = {
+static ColliderJntSphElementInit sLilyPadJntSphElementsInit[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -66,8 +65,7 @@ ColliderJntSphElementInit D_809F1B2C[2] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-ColliderJntSphInit D_809F1B74 = {
+static ColliderJntSphInit sLilyPadJntSphInit = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -76,12 +74,11 @@ ColliderJntSphInit D_809F1B74 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(D_809F1B2C),
-    D_809F1B2C, // sJntSphElementsInit,
+    ARRAY_COUNT(sLilyPadJntSphElementsInit),
+    sLilyPadJntSphElementsInit,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-ColliderJntSphElementInit D_809F1B84[1] = {
+static ColliderJntSphElementInit sBodyJntSphElementsInit1[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -95,8 +92,7 @@ ColliderJntSphElementInit D_809F1B84[1] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-ColliderJntSphInit D_809F1BA8 = {
+static ColliderJntSphInit sBodyJntSphInit1 = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -105,12 +101,11 @@ ColliderJntSphInit D_809F1BA8 = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(D_809F1B84),
-    D_809F1B84, // sJntSphElementsInit,
+    ARRAY_COUNT(sBodyJntSphElementsInit1),
+    sBodyJntSphElementsInit1,
 };
 
-// static ColliderJntSphElementInit sJntSphElementsInit[1] = {
-ColliderJntSphElementInit D_809F1BB8[1] = {
+static ColliderJntSphElementInit sBodyJntSphElementsInit2[] = {
     {
         {
             ELEMTYPE_UNK3,
@@ -124,8 +119,7 @@ ColliderJntSphElementInit D_809F1BB8[1] = {
     },
 };
 
-// static ColliderJntSphInit sJntSphInit = {
-ColliderJntSphInit D_809F1BDC = {
+static ColliderJntSphInit sBodyJntSphInit2 = {
     {
         COLTYPE_HIT3,
         AT_ON | AT_TYPE_ENEMY,
@@ -134,16 +128,15 @@ ColliderJntSphInit D_809F1BDC = {
         OC2_TYPE_1,
         COLSHAPE_JNTSPH,
     },
-    ARRAY_COUNT(D_809F1BB8),
-    D_809F1BB8, // sJntSphElementsInit,
+    ARRAY_COUNT(sBodyJntSphElementsInit2),
+    sBodyJntSphElementsInit2, // sJntSphElementsInit,
 };
 
 Color_RGBA8 D_809F1BEC = { 170, 255, 255, 255 };
 Color_RGBA8 D_809F1BF0 = { 200, 200, 255, 255 };
 Vec3f D_809F1BF4 = { 0.0f, -1.0f, 0.0f };
 
-// static DamageTable sDamageTable = {
-DamageTable D_809F1C00 = {
+static DamageTable sDamageTable1 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x0),
     /* Deku Stick     */ DMG_ENTRY(1, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -178,8 +171,7 @@ DamageTable D_809F1C00 = {
     /* Powder Keg     */ DMG_ENTRY(1, 0xF),
 };
 
-// static DamageTable sDamageTable = {
-DamageTable D_809F1C20 = {
+static DamageTable sDamageTable2 = {
     /* Deku Nut       */ DMG_ENTRY(0, 0x1),
     /* Deku Stick     */ DMG_ENTRY(3, 0xF),
     /* Horse trample  */ DMG_ENTRY(0, 0x0),
@@ -275,7 +267,7 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         this->dyna.actor.shape.rot.z = 0;
         this->unk168 = this->dyna.actor.world.rot.z;
         this->dyna.actor.world.rot.z = this->dyna.actor.shape.rot.z;
-        this->dyna.actor.colChkInfo.damageTable = &D_809F1C00;
+        this->dyna.actor.colChkInfo.damageTable = &sDamageTable1;
 
         DynaPolyActor_Init(&this->dyna, 0);
         CollisionHeader_GetVirtual(&sBioBabaLilypadCol, &colHeader);
@@ -288,8 +280,8 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                            BIODEKUBABABODY_LIMB_MAX);
         this->lastAnimFrame = Animation_GetLastFrame(&object_boss05_Anim_006484);
 
-        Collider_InitAndSetJntSph(play, &this->collider2, &this->dyna.actor, &D_809F1B74, this->colliderElements2);
-        Collider_InitAndSetJntSph(play, &this->collider1, &this->dyna.actor, &D_809F1BA8, this->colliderElements1);
+        Collider_InitAndSetJntSph(play, &this->lilyPadCollider, &this->dyna.actor, &sLilyPadJntSphInit, this->lilyPadColliderElements);
+        Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->dyna.actor, &sBodyJntSphInit1, this->bodyColliderElements);
 
         if (Flags_GetClear(play, play->roomCtx.curRoom.num)) {
             this->dyna.actor.params = BIO_DEKU_BABA_TYPE_2;
@@ -317,11 +309,11 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
                            BIODEKUBABABODY_LIMB_MAX);
         this->lastAnimFrame = Animation_GetLastFrame(&object_boss05_Anim_006484);
 
-        Collider_InitAndSetJntSph(play, &this->collider2, &this->dyna.actor, &D_809F1B74, this->colliderElements2);
-        Collider_InitAndSetJntSph(play, &this->collider1, &this->dyna.actor, &D_809F1BA8, this->colliderElements1);
+        Collider_InitAndSetJntSph(play, &this->lilyPadCollider, &this->dyna.actor, &sLilyPadJntSphInit, this->lilyPadColliderElements);
+        Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->dyna.actor, &sBodyJntSphInit1, this->bodyColliderElements);
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-        this->dyna.actor.colChkInfo.damageTable = &D_809F1C00;
+        this->dyna.actor.colChkInfo.damageTable = &sDamageTable1;
     } else if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_4) {
         func_809F00CC(this, play);
         this->dyna.actor.colChkInfo.mass = 90;
@@ -329,10 +321,10 @@ void Boss05_Init(Actor* thisx, PlayState* play) {
         SkelAnime_InitFlex(play, &this->bodySkelAnime, &gBioDekuBabaBodySkel, &object_boss05_Anim_006484, this->bodyJointTable, this->bodyMorphTable,
                            BIODEKUBABABODY_LIMB_MAX);
 
-        Collider_InitAndSetJntSph(play, &this->collider1, &this->dyna.actor, &D_809F1BDC, this->colliderElements1);
+        Collider_InitAndSetJntSph(play, &this->bodyCollider, &this->dyna.actor, &sBodyJntSphInit2, this->bodyColliderElements);
 
         ActorShape_Init(&this->dyna.actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-        this->dyna.actor.colChkInfo.damageTable = &D_809F1C20;
+        this->dyna.actor.colChkInfo.damageTable = &sDamageTable2;
         this->dyna.actor.flags |= ACTOR_FLAG_10 | ACTOR_FLAG_20;
     } else if (this->dyna.actor.params >= BIO_DEKU_BABA_TYPE_10) {
         SkelAnime_InitFlex(play, &this->bodySkelAnime, &gBioDekuBabaBodySkel, &object_boss05_Anim_006484, this->bodyJointTable, this->bodyMorphTable,
@@ -366,7 +358,7 @@ s32 func_809EECBC(Boss05* this, PlayState* play) {
         s32 i = 0;
 
         while (true) {
-            if (this->collider2.elements[i].info.bumperFlags & BUMP_HIT) {
+            if (this->lilyPadCollider.elements[i].info.bumperFlags & BUMP_HIT) {
                 switch (this->dyna.actor.colChkInfo.damageEffect) {
                     case 2:
                         return 11;
@@ -381,7 +373,7 @@ s32 func_809EECBC(Boss05* this, PlayState* play) {
 
             i++;
             if (i == 2) {
-                if (this->collider1.elements[0].info.bumperFlags & BUMP_HIT) {
+                if (this->bodyCollider.elements[0].info.bumperFlags & BUMP_HIT) {
                     u8 damage = this->dyna.actor.colChkInfo.damage;
                     this->dyna.actor.colChkInfo.health -= damage;
                     if ((s8)this->dyna.actor.colChkInfo.health <= 0) {
@@ -684,12 +676,12 @@ void func_809EEDE8(Boss05* this, PlayState* play) {
     }
 
     if (sp103 == 0) {
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider2.base);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider1.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->lilyPadCollider.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->bodyCollider.base);
     }
 
-    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
-    CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->lilyPadCollider.base);
+    CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
 }
 
 void func_809EF9BC(Boss05* this, PlayState* play) {
@@ -772,7 +764,7 @@ void func_809EFAB4(Boss05* this, PlayState* play) {
                     play->actorCtx.targetCtx.lockOnActor = &temp_v0->dyna.actor;
                 }
 
-                for (i = 0; i < 20; i++) {
+                for (i = 0; i < BIODEKUBABABODY_LIMB_MAX; i++) {
                     temp_v0->bodySkelAnime.jointTable[i] = this->bodySkelAnime.jointTable[i];
                 }
 
@@ -789,9 +781,9 @@ void func_809EFE50(Actor* thisx, PlayState* play2) {
     u8 takeDamage = false;
     ColliderInfo* hitInfo;
 
-    if ((this->unk16A == 0) && (this->collider1.elements[0].info.bumperFlags & BUMP_HIT)) {
-        this->collider1.elements[0].info.bumperFlags &= ~BUMP_HIT;
-        hitInfo = this->collider1.elements[0].info.acHitInfo;
+    if ((this->unk16A == 0) && (this->bodyCollider.elements[0].info.bumperFlags & BUMP_HIT)) {
+        this->bodyCollider.elements[0].info.bumperFlags &= ~BUMP_HIT;
+        hitInfo = this->bodyCollider.elements[0].info.acHitInfo;
         if (hitInfo->toucher.dmgFlags & 0x300000) { // (DMG_NORMAL_SHIELD | DMG_LIGHT_RAY)
             this->unk338 = -12.0f;
             this->unk348 = this->dyna.actor.yawTowardsPlayer;
@@ -1006,7 +998,7 @@ void func_809F0780(Boss05* this, PlayState* play) {
                     this->dyna.actor.shape.rot.y, this->dyna.actor.shape.rot.z, i + BIO_DEKU_BABA_TYPE_10);
 
                 if (temp_v0 != NULL) {
-                    for (j = 0; j < 20; j++) {
+                    for (j = 0; j < BIODEKUBABABODY_LIMB_MAX; j++) {
                         temp_v0->bodySkelAnime.jointTable[j] = this->bodySkelAnime.jointTable[j];
                     }
                 }
@@ -1121,9 +1113,9 @@ void Boss05_Update(Actor* thisx, PlayState* play) {
         Math_ApproachZeroF(&this->unk338, 1.0f, 1.0f);
         Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 50.0f, 40.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_40);
         func_809EFE50(&this->dyna.actor, play);
-        CollisionCheck_SetAT(play, &play->colChkCtx, &this->collider1.base);
-        CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
-        CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider1.base);
+        CollisionCheck_SetAT(play, &play->colChkCtx, &this->bodyCollider.base);
+        CollisionCheck_SetAC(play, &play->colChkCtx, &this->bodyCollider.base);
+        CollisionCheck_SetOC(play, &play->colChkCtx, &this->bodyCollider.base);
         this->dyna.actor.shape.rot.y = this->dyna.actor.world.rot.y;
     }
 
@@ -1261,12 +1253,12 @@ void Boss05_PostLimbDraw_LilyPad1(PlayState* play, s32 limbIndex, Gfx** dList, V
 
     if (limbIndex == BIODEKUBABALILYPAD_LIMB_02) {
         Matrix_MultZero(&spherePos0);
-        func_809EE668(0, &this->collider2, &spherePos0);
+        func_809EE668(0, &this->lilyPadCollider, &spherePos0);
     }
 
     if (limbIndex == BIODEKUBABALILYPAD_LIMB_03) {
         Matrix_MultVecY(-500.0f, &spherePos1);
-        func_809EE668(1, &this->collider2, &spherePos1);
+        func_809EE668(1, &this->lilyPadCollider, &spherePos1);
 
         if (this->actionFunc == func_809EEDE8) {
             Matrix_MultVecY(1500.0f, &this->dyna.actor.focus.pos);
@@ -1288,7 +1280,7 @@ void Boss05_PostLimbDraw_Body1(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
 
     if (limbIndex == BIODEKUBABABODY_LIMB_01) {
         Matrix_MultVec3f(&D_809F1CD0, &D_809F2110);
-        func_809EE668(0, &this->collider1, &D_809F2110);
+        func_809EE668(0, &this->bodyCollider, &D_809F2110);
 
         if (this->dyna.actor.params == BIO_DEKU_BABA_TYPE_4) {
             Matrix_MultVec3f(&D_809F1CDC, &thisx->focus.pos);

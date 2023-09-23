@@ -53,8 +53,8 @@ typedef struct Boss05 {
     /* 0x198 */ f32 unk198;
     /* 0x19C */ s16 unk19C;
     /* 0x19E */ Vec3s unk19E[7];
-    /* 0x1C8 */ ColliderJntSph collider2;
-    /* 0x1E8 */ ColliderJntSphElement colliderElements2[2];
+    /* 0x1C8 */ ColliderJntSph lilyPadCollider;
+    /* 0x1E8 */ ColliderJntSphElement lilyPadColliderElements[2];
     /* 0x268 */ SkelAnime lilyPadSkelAnime;
     /* 0x2AC */ Vec3s lilyPadJointTable[BIODEKUBABALILYPAD_LIMB_MAX];
     /* 0x2E8 */ Vec3s lilyPadMorphTable[BIODEKUBABALILYPAD_LIMB_MAX];
@@ -68,8 +68,8 @@ typedef struct Boss05 {
     /* 0x35C */ f32 unk35C;
     /* 0x360 */ f32 unk360;
     /* 0x364 */ f32 unk364;
-    /* 0x368 */ ColliderJntSph collider1;
-    /* 0x388 */ ColliderJntSphElement colliderElements1[1];
+    /* 0x368 */ ColliderJntSph bodyCollider;
+    /* 0x388 */ ColliderJntSphElement bodyColliderElements[1];
     /* 0x3C8 */ SkelAnime bodySkelAnime;
     /* 0x40C */ Vec3s bodyJointTable[BIODEKUBABABODY_LIMB_MAX];
     /* 0x484 */ Vec3s bodyMorphTable[BIODEKUBABABODY_LIMB_MAX];
