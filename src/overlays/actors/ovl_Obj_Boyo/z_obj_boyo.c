@@ -61,8 +61,12 @@ static ColliderCylinderInit sCylinderInit = {
     },
 };
 
-static InitChainEntry gInitChainEntry[5] = { 0xB0FC0FA0, 0xB100012C, 0xB104012C, 0x48580064,
-                                             0x00000000 }; /* unable to generate initializer */
+static InitChainEntry sInitChain[] = {
+    ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 300, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
+};
 
 static objBoyoUnkStruct gCollisionHandling[] = {
     { ObjBoyo_PushPlayer, 0x021D0000 }, { func_809A5DE0, 0x00090000 }, { func_809A5E14, 0x0 }, { NULL, 0x0 }
