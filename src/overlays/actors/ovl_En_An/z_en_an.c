@@ -18,6 +18,19 @@ void func_80B577F0(EnAn* this, PlayState* play);
 void func_80B578F8(EnAn* this, PlayState* play);
 void func_80B57A44(EnAn* this, PlayState* play);
 
+
+
+s32 func_80B53840(EnAn* this, PlayState* play);
+s32 func_80B53BA8(EnAn* this, PlayState* play);
+void func_80B53ED4(EnAn* this, PlayState* play);
+void func_80B53F84(EnAn* this);
+s32 func_80B55180(EnAn* this, PlayState* play);
+s32 func_80B552E4(EnAn* this, PlayState* play);
+void func_80B554E8(EnAn* this);
+UNK_RET func_80B55914(EnAn* this, PlayState* play);
+void func_80B57B48(EnAn* this, PlayState* play);
+
+
 #if 0
 ActorInit En_An_InitVars = {
     ACTOR_EN_AN,
@@ -79,8 +92,6 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
 
     return foundActor;
 }
-
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53A7C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53B3C.s")
 
@@ -216,6 +227,7 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     if (temp_v1 == 0) {
         this->actor.room = -1;
     }
+
     this->actionFunc = func_80B577F0;
 }
 
@@ -225,7 +237,38 @@ void EnAn_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyCylinder(play, &this->unk_190);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/EnAn_Update.s")
+void EnAn_Update(Actor* thisx, PlayState* play) {
+    EnAn* this = (EnAn* ) thisx;
+
+    if (func_80B53840(this, play) != 0) {
+        return;
+    }
+
+    if ((this->actionFunc != func_80B577F0) && (func_80B55180(this, play) == 0) && (func_80B552E4(this, play) != 0)) {
+        func_80B57B48(this, play);
+        func_80B53BA8(this, play);
+        func_80B53F84(this);
+        return;
+    }
+
+    this->actionFunc(this, play);
+    if (this->unk_200 != 0) {
+        func_80B55914(this, play);
+        func_80B53BA8(this, play);
+        func_80B53F84(this);
+        func_80B554E8(this);
+        SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->unk_360 & 7);
+
+        if (!(this->unk_360 & 0x40)) {
+            Actor_MoveWithGravity(&this->actor);
+            Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 12.0f, 0.0f, 4U);
+        }
+
+        func_80B53ED4(this, play);
+    }
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/EnAn_Update.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57EE8.s")
 
