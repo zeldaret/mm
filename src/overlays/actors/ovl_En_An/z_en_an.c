@@ -53,7 +53,34 @@ extern UNK_TYPE D_06012618;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B539CC.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53A7C.s")
+Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* foundActor = NULL;
+
+    while (true) {
+        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+
+        if (foundActor == NULL) {
+            break;
+        }
+
+        if ((this != (EnAn*)foundActor)) {
+            if ((foundActor->update != NULL) && !(foundActor->params & 0x8000)) {
+                break;
+            }
+        }
+
+        if (foundActor->next == NULL) {
+            foundActor = NULL;
+            break;
+        }
+
+        foundActor = foundActor->next;
+    }
+
+    return foundActor;
+}
+
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53A7C.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53B3C.s")
 
@@ -159,9 +186,44 @@ extern UNK_TYPE D_06012618;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57B48.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/EnAn_Init.s")
+void EnAn_Init(Actor* thisx, PlayState* play) {
+    s32 pad;
+    EnAn* this = THIS;
+    s32 temp_v1; // sp1C
+    s32 temp_v0;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/EnAn_Destroy.s")
+    if (play->sceneId != SCENE_YADOYA) {
+        this->actor.params &= (s16)~0x8000;
+    }
+
+    temp_v1 = ENAN_GET_8000(&this->actor);
+    temp_v0 = gSaveContext.save.saveInfo.weekEventReg[0x33] & 0x40;
+
+    if (((temp_v0 == 0) && (temp_v1 == 1)) || ((temp_v0 != 0) && (temp_v1 == 0))) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (temp_v1 == 0) {
+        if (func_80B53A7C(this, play, ACTORCAT_NPC, ACTOR_EN_AN) != NULL) {
+            Actor_Kill(&this->actor);
+            return;
+        }
+    }
+
+    this->unk_214 = -0x80;
+    this->unk_3B8 = 0;
+    if (temp_v1 == 0) {
+        this->actor.room = -1;
+    }
+    this->actionFunc = func_80B577F0;
+}
+
+void EnAn_Destroy(Actor* thisx, PlayState* play) {
+    EnAn* this = THIS;
+
+    Collider_DestroyCylinder(play, &this->unk_190);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/EnAn_Update.s")
 
