@@ -12,7 +12,7 @@ typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, PlayState*);
 #define GREAT_FAIRY_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define GREAT_FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
 
-typedef enum {
+typedef enum GreatFairyType {
     /* 0 */ GREAT_FAIRY_TYPE_MAGIC,
     /* 1 */ GREAT_FAIRY_TYPE_POWER,
     /* 2 */ GREAT_FAIRY_TYPE_WISDOM,
@@ -22,7 +22,7 @@ typedef enum {
 
 #define BG_DY_YOSEIZO_EFFECT_COUNT 200
 
-typedef struct {
+typedef struct BgDyYoseizoEffect {
     /* 0x00 */ u8 alive; // drawn if 1, respawn if 0
     /* 0x04 */ Vec3f pos;
     /* 0x10 */ Vec3f velocity;

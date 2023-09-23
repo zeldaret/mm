@@ -10,7 +10,7 @@
 #define STRAY_FAIRY_FLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define STRAY_FAIRY_SPARKLE_COUNT(thisx) ((thisx)->home.rot.x)
 
-//! @note `area` does not always use the enum
+//! @note `nonDungeonArea` does not always use the enum
 #define STRAY_FAIRY_PARAMS(flag, nonDungeonArea, type) ((((flag) & 0x7F) << 9) | (((nonDungeonArea) & 7) << 6) | ((type) & 0xF))
 
 #define STRAY_FAIRY_FLAG_MOVES_QUICKLY_TO_HOME (1 << 0)
@@ -30,7 +30,7 @@ typedef enum StrayFairyType {
     /* 8 */ STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN // The ones you "turn in" by walking into a Fairy Fountain
 } StrayFairyType;
 
-//! Correspond to the Great Fairy types
+// Correspond to the Great Fairy types
 typedef enum StrayFairyArea {
     /* 0 */ STRAY_FAIRY_AREA_CLOCK_TOWN = GREAT_FAIRY_TYPE_MAGIC,
     /* 1 */ STRAY_FAIRY_AREA_WOODFALL = GREAT_FAIRY_TYPE_POWER,

@@ -47,18 +47,9 @@ void EnElfgrp_Update(Actor* thisx, PlayState* play);
 s32 EnElfgrp_GetHeldFairiesCount(PlayState* play, s32 type);
 s32 EnElfgrp_GetFountainFairiesCount(PlayState* play, s32 type);
 void EnElfgrp_SpawnStrayFairies(EnElfgrp* this, PlayState* play, s32 count, s32 fairyType);
-// void func_80A3A0AC(EnElfgrp* this, PlayState* play);
-// void func_80A3A0F4(EnElfgrp* this, PlayState* play);
-// void func_80A3A210(EnElfgrp* this, PlayState* play);
-// void func_80A3A274(EnElfgrp* this, PlayState* play);
 void func_80A3A398(EnElfgrp* this, PlayState* play);
-// void func_80A3A484(EnElfgrp* this, PlayState* play);
-// void func_80A3A4AC(EnElfgrp* this, PlayState* play);
 void func_80A3A520(EnElfgrp* this, PlayState* play);
 void EnElfgrp_DoNothing(EnElfgrp* this, PlayState* play);
-// void EnElfgrp_HealPlayer(EnElfgrp* this, PlayState* play);
-// void func_80A3A6F4(EnElfgrp* this, PlayState* play);
-// void func_80A3A77C(EnElfgrp* this, PlayState* play);
 void func_80A3A7FC(EnElfgrp* this, PlayState* play);
 void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 
@@ -69,8 +60,8 @@ void func_80A3A8F8(EnElfgrp* this, PlayState* play);
 #define ELFGRP_STATE_3 (1 << 3)
 #define ELFGRP_STATE_4 (1 << 4)
 
-// Used for the type in EnElfgrp_SpawnStrayFairies()
-typedef enum {
+// Used for the type in EnElfgrp_SpawnStrayFairies
+typedef enum ElfgrpSpawnedFairyTypes {
     /* 0 */ SPAWNED_STRAY_FAIRY_TYPE_PRESENT,  // STRAY_FAIRY_TYPE_FAIRY_FOUNTAIN
     /* 1 */ SPAWNED_STRAY_FAIRY_TYPE_RETURNING // STRAY_FAIRY_TYPE_RETURNING_TO_FOUNTAIN
 } ElfgrpSpawnedFairyTypes;

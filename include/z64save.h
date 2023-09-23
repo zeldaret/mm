@@ -1598,8 +1598,8 @@ typedef enum {
     /* 3 */ DUNGEON_INDEX_STONE_TOWER_TEMPLE // Also applies to Inverted Stone Tower Temple
 } DungeonIndex;
 
-#define STRAY_FAIRY_TOTAL 25 //!< total number of stray fairies, including those already in the Great Fairy Fountain
-#define STRAY_FAIRY_SCATTERED_TOTAL 15 //!< original number of stray fairies in one dungeon area
+#define STRAY_FAIRY_TOTAL 25 // total number of stray fairies, including those already in the Great Fairy Fountain
+#define STRAY_FAIRY_SCATTERED_TOTAL 15 // original number of stray fairies in one dungeon area
 
 void Sram_ActivateOwl(u8 owlId);
 void Sram_ClearFlagsAtDawnOfTheFirstDay(void);

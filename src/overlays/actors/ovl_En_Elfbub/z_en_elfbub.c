@@ -76,7 +76,7 @@ void EnElfbub_Init(Actor* thisx, PlayState* play) {
     childActor = Actor_SpawnAsChild(
         &play->actorCtx, &this->actor, play, ACTOR_EN_ELFORG, this->actor.world.pos.x, this->actor.world.pos.y + 12.0f,
         this->actor.world.pos.z, this->actor.world.rot.x, this->actor.world.rot.y, this->actor.world.rot.z,
-        STRAY_FAIRY_PARAMS(ENELFBUB_GET_SWITCHFLAG(&this->actor), 0, STRAY_FAIRY_TYPE_BUBBLE));
+        STRAY_FAIRY_PARAMS(ENELFBUB_GET_SWITCHFLAG(&this->actor), STRAY_FAIRY_AREA_CLOCK_TOWN, STRAY_FAIRY_TYPE_BUBBLE));
     if (childActor != NULL) {
         childActor->parent = &this->actor;
     }

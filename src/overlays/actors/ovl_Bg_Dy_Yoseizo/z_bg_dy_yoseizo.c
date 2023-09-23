@@ -102,10 +102,10 @@ void BgDyYoseizo_Bob(BgDyYoseizo* this, PlayState* play) {
     this->actor.shape.yOffset = Math_SinS(play->gameplayFrames * 1000) * 15.0f;
 }
 
-typedef enum {
-    /* 0 */ GREAT_FAIRY_EFFECT_TRAJECTORY_RADIANT, //!< Dispersing particles, in the Great Fairy's signature colour.
-    /* 2 */ GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT = 2,      //!< As above, but initially move 10 times faster.
-    /* 5 */ GREAT_FAIRY_EFFECT_TRAJECTORY_CONVERGE_ON_PLAYER = 5 //!< Similar to OoT's healing effect, fixed colour.
+typedef enum GreatFairyEffectTrajectory {
+    /* 0 */ GREAT_FAIRY_EFFECT_TRAJECTORY_RADIANT, // Dispersing particles, in the Great Fairy's signature colour.
+    /* 2 */ GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT = 2,      // As above, but initially move 10 times faster.
+    /* 5 */ GREAT_FAIRY_EFFECT_TRAJECTORY_CONVERGE_ON_PLAYER = 5 // Similar to OoT's healing effect, fixed colour.
 } GreatFairyEffectTrajectory;
 
 /**
@@ -142,66 +142,69 @@ void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 trajectoryType, s32 count) 
     s32 life;
     s32 i;
 
-    if (!(this->actor.scale.y < 0.01f)) {
-        spawnHeightVariation = this->actor.scale.y * 3500.0f;
-        accel.x = Rand_ZeroOne() - 0.5f;
-        accel.y = Rand_ZeroOne() - 0.5f;
-        accel.z = Rand_ZeroOne() - 0.5f;
-        vel.x = accel.x * 10.0f;
-        vel.y = accel.y * 10.0f;
-        vel.z = accel.z * 10.0f;
+    if (this->actor.scale.y < 0.01f) {
+        return;
+    }
 
-        for (i = 0; i < count; i++) {
-            switch (trajectoryType) {
-                case GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT:
-                    scale = 1.0f;
-                    life = 90;
+    spawnHeightVariation = this->actor.scale.y * 3500.0f;
+    accel.x = Rand_ZeroOne() - 0.5f;
+    accel.y = Rand_ZeroOne() - 0.5f;
+    accel.z = Rand_ZeroOne() - 0.5f;
+    vel.x = accel.x * 10.0f;
+    vel.y = accel.y * 10.0f;
+    vel.z = accel.z * 10.0f;
 
-                    vel.x = accel.x * 100.0f;
-                    vel.y = accel.y * 100.0f;
-                    vel.z = accel.z * 100.0f;
+    for (i = 0; i < count; i++) {
+        switch (trajectoryType) {
+            case GREAT_FAIRY_EFFECT_TRAJECTORY_FAST_RADIANT:
+                scale = 1.0f;
+                life = 90;
 
-                    effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
+                vel.x = accel.x * 100.0f;
+                vel.y = accel.y * 100.0f;
+                vel.z = accel.z * 100.0f;
 
-                    pos.x = this->actor.world.pos.x;
-                    pos.y = this->actor.world.pos.y + spawnHeightVariation +
-                            (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.5f);
-                    pos.z = this->actor.world.pos.z + 30.0f;
-                    break;
+                effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
 
-                case GREAT_FAIRY_EFFECT_TRAJECTORY_RADIANT:
-                    scale = 1.0f;
-                    life = 90;
+                pos.x = this->actor.world.pos.x;
+                pos.y = this->actor.world.pos.y + spawnHeightVariation +
+                        (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.5f);
+                pos.z = this->actor.world.pos.z + 30.0f;
+                break;
 
-                    effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
+            case GREAT_FAIRY_EFFECT_TRAJECTORY_RADIANT:
+                scale = 1.0f;
+                life = 90;
 
-                    pos.x = this->actor.world.pos.x;
-                    pos.y = this->actor.world.pos.y + spawnHeightVariation +
-                            (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.5f);
-                    pos.z = this->actor.world.pos.z + 30.0f;
-                    break;
+                effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
 
-                default: // all become convergent type
-                    scale = 0.2f;
-                    life = 50;
-                    effectType = GREAT_FAIRY_EFFECT_TRAJECTORY_CONVERGE_ON_PLAYER;
+                pos.x = this->actor.world.pos.x;
+                pos.y = this->actor.world.pos.y + spawnHeightVariation +
+                        (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.5f);
+                pos.z = this->actor.world.pos.z + 30.0f;
+                break;
 
-                    pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
-                    pos.y = this->actor.world.pos.y + spawnHeightVariation + 50.0f +
-                            (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.1f);
-                    pos.z = this->actor.world.pos.z + 30.0f;
-                    break;
-            }
+            default: // all become convergent type
+                scale = 0.2f;
+                life = 50;
 
-            primColor.r = sEffectPrimColors[effectType].r;
-            primColor.g = sEffectPrimColors[effectType].g;
-            primColor.b = sEffectPrimColors[effectType].b;
-            envColor.r = sEffectEnvColors[effectType].r;
-            envColor.g = sEffectEnvColors[effectType].g;
-            envColor.b = sEffectEnvColors[effectType].b;
+                effectType = GREAT_FAIRY_EFFECT_TRAJECTORY_CONVERGE_ON_PLAYER;
 
-            BgDyYoseizo_SpawnEffect(this, &pos, &vel, &accel, &primColor, &envColor, scale, life, effectType);
+                pos.x = Rand_CenteredFloat(10.0f) + this->actor.world.pos.x;
+                pos.y = this->actor.world.pos.y + spawnHeightVariation + 50.0f +
+                        (Rand_ZeroOne() - 0.5f) * (spawnHeightVariation * 0.1f);
+                pos.z = this->actor.world.pos.z + 30.0f;
+                break;
         }
+
+        primColor.r = sEffectPrimColors[effectType].r;
+        primColor.g = sEffectPrimColors[effectType].g;
+        primColor.b = sEffectPrimColors[effectType].b;
+        envColor.r = sEffectEnvColors[effectType].r;
+        envColor.g = sEffectEnvColors[effectType].g;
+        envColor.b = sEffectEnvColors[effectType].b;
+
+        BgDyYoseizo_SpawnEffect(this, &pos, &vel, &accel, &primColor, &envColor, scale, life, effectType);
     }
 }
 
@@ -228,7 +231,7 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
         this->unk2F4 = 0.0f;
         this->unk2F8 = 0;
 
-        if ((GREAT_FAIRY_GET_TYPE(&this->actor)) < 4) {
+        if (GREAT_FAIRY_GET_TYPE(&this->actor) < 4) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0,
                         (GREAT_FAIRY_GET_TYPE(&this->actor)) + DEMO_EFFECT_TYPE_LIGHT_BASE);
@@ -349,7 +352,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
     }
 
     if (this->timer == 50) {
-        gSaveContext.healthAccumulator = 0x140;
+        gSaveContext.healthAccumulator = 20 * 0x10;
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
@@ -485,13 +488,16 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
             case 9:
                 Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
                 break;
+
             case 10:
                 Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_CLAPPING]);
                 break;
+
             case 11:
                 Animation_PlayOnce(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_TEACH_SPIN_ATTACK]);
                 break;
         }
+
         this->csAction = csAction;
     }
 }
@@ -566,7 +572,7 @@ void BgDyYoseizo_Draw(Actor* thisx, PlayState* play) {
         gGreatFairyMouthOpenTex,
     };
     BgDyYoseizo* this = THIS;
-    u32 appearance = GREAT_FAIRY_APPEARANCE_MAGIC;
+    GreatFairyAppearance appearance = GREAT_FAIRY_APPEARANCE_MAGIC;
 
     // The differing eyes and hair colours
     switch (GREAT_FAIRY_GET_TYPE(&this->actor)) {
@@ -632,7 +638,7 @@ void BgDyYoseizo_SpawnEffect(BgDyYoseizo* this, Vec3f* initPos, Vec3f* initVeloc
             effect->timer = life;
             effect->type = type;
             effect->pitch = 0;
-            effect->yaw = (s32)Rand_CenteredFloat(30000.0f);
+            effect->yaw = TRUNCF_BINANG(Rand_CenteredFloat(30000.0f));
             effect->roll = 0;
             return;
         }
