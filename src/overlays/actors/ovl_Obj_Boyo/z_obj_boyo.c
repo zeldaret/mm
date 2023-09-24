@@ -124,7 +124,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
         // In short it gets the player's Actor*.
         return (s32)play->actorCtx.actorLists[2].first;
     }
-    data = gCollisionHandling;
+    data = gCollisionHandling + 1;
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         collidedActor = this->collider.base.oc;
         for (counter = 1; counter != 3; ++counter) {

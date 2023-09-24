@@ -18,19 +18,8 @@ typedef struct ObjBoyo {
     /* 0x1A8 */ s16 unk1A8;
     /* 0x1AA */ s16 unk1AA;
     /* 0x1AC */ s16 unk1AC;
-    /* 0x1AE */ s16 unk1F0;
-    /* 0x1B0 */ s16 unk1F4;
-    /* 0x1F6 */ s16 unk1F6;
-    /* 0x1F8 */ f32 unk1F8;
-    /* 0x1FC */ f32 unk1FC;
-    /* 0x200 */ f32 unk200;
-    /* 0x204 */ s16 unk204;
-    /* 0x206 */ s16 unk206;
-    /* 0x208 */ s16 unk208;
-    /* 0x20A */ s16 unk20A;
-    /* 0x20C */ s16 unk20C;
-    /* 0x2F0 */ f32 pushedSpeed;
-    /* 0x2F0 */ s16 yawTowardsActor;
+    /* 0x1AE */ s16 unk1AE;
+    /* 0x1B0 */ s16 unk1B0;
 } ObjBoyo; // size = 0x1B0
 
 #endif // Z_OBJ_BOYO_H
