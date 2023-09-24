@@ -8,10 +8,8 @@ u32 __osPreNMI = false;
 __OSEventState __osEventStateTab[OS_NUM_EVENTS] ALIGNED(8);
 
 void osSetEventMesg(OSEvent e, OSMesgQueue* mq, OSMesg m) {
-    register u32 saveMask;
+    register u32 saveMask = __osDisableInt();
     __OSEventState* es;
-
-    saveMask = __osDisableInt();
 
     es = &__osEventStateTab[e];
 

@@ -2,9 +2,7 @@
 
 void osViSetXScale(f32 value) {
     register u32 nomValue;
-    register u32 saveMask;
-
-    saveMask = __osDisableInt();
+    register u32 saveMask = __osDisableInt();
 
     __osViNext->x.factor = value;
 

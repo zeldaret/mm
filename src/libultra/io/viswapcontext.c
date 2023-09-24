@@ -8,14 +8,12 @@ void __osViSwapContext(void) {
     u32 vstart;
     u32 sp34;
     u32 field;
-    register u32 s2;
 
     field = 0;
     viNext = __osViNext;
     viMode = viNext->modep;
     field = IO_READ(VI_V_CURRENT_LINE_REG) & 1;
-    s2 = osVirtualToPhysical(viNext->buffer);
-    origin = (viMode->fldRegs[field].origin) + s2;
+    origin = osVirtualToPhysical(viNext->buffer) + viMode->fldRegs[field].origin;
     if (viNext->state & VI_STATE_XSCALE_UPDATED) {
         viNext->x.scale |= viMode->comRegs.xScale & ~0xFFF;
     } else {

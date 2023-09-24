@@ -1,10 +1,8 @@
 #include "ultra64.h"
 
 s32 osSendMesg(OSMesgQueue* mq, OSMesg msg, s32 flags) {
-    register u32 saveMask;
+    register u32 saveMask = __osDisableInt();
     register s32 last;
-
-    saveMask = __osDisableInt();
 
     while (MQ_IS_FULL(mq)) {
         if (flags == OS_MESG_BLOCK) {
