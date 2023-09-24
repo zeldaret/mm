@@ -1,7 +1,7 @@
 /*
  * File: z_en_po_composer.c
  * Overlay: ovl_En_Po_Composer
- * Description: Poe Composers
+ * Description: Poe Composers Flat and Sharp
  */
 
 #include "z_en_po_composer.h"
@@ -129,49 +129,50 @@ static DamageTable sDamageTable = {
 };
 
 typedef enum {
-    PO_COMPOSER_ANIM_IDLE_STILL,
-    PO_COMPOSER_ANIM_APPEAR_DISAPPEAR,
-    PO_COMPOSER_ANIM_IDLE,
-    PO_COMPOSER_ANIM_RAISE_ARMS,
-    PO_COMPOSER_ANIM_ARMS_RAISED,
-    PO_COMPOSER_ANIM_LOWER_ARMS,
-    PO_COMPOSER_ANIM_IDLE_FACING_DOWN,
-    PO_COMPOSER_ANIM_BEGIN_PLAYING_CURSE,
-    PO_COMPOSER_ANIM_PLAYING_CURSE,
-    PO_COMPOSER_ANIM_BEGIN_ROLLING,
-    PO_COMPOSER_ANIM_ROLLING,
-    PO_COMPOSER_ANIM_FLEE,
-    PO_COMPOSER_ANIM_ATTACK,
-    PO_COMPOSER_ANIM_MAX,
+    /*  0 */ PO_COMPOSER_ANIM_IDLE_STILL,
+    /*  1 */ PO_COMPOSER_ANIM_APPEAR_DISAPPEAR,
+    /*  2 */ PO_COMPOSER_ANIM_IDLE,
+    /*  3 */ PO_COMPOSER_ANIM_RAISE_ARMS,
+    /*  4 */ PO_COMPOSER_ANIM_ARMS_RAISED,
+    /*  5 */ PO_COMPOSER_ANIM_LOWER_ARMS,
+    /*  6 */ PO_COMPOSER_ANIM_IDLE_FACING_DOWN,
+    /*  7 */ PO_COMPOSER_ANIM_BEGIN_PLAYING_CURSE,
+    /*  8 */ PO_COMPOSER_ANIM_PLAYING_CURSE,
+    /*  9 */ PO_COMPOSER_ANIM_BEGIN_ROLLING,
+    /* 10 */ PO_COMPOSER_ANIM_ROLLING,
+    /* 11 */ PO_COMPOSER_ANIM_FLEE,
+    /* 12 */ PO_COMPOSER_ANIM_ATTACK,
+
+    /* 13 */ PO_COMPOSER_ANIM_MAX
 } EnPoComposerAnim;
 
 static AnimationInfo sAnimationInfo[PO_COMPOSER_ANIM_MAX] = {
-    /*  0 */ { &object_po_composer_Anim_003DB0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  1 */ { &object_po_composer_Anim_003954, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    /*  2 */ { &object_po_composer_Anim_00188C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  3 */ { &object_po_composer_Anim_000570, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  4 */ { &object_po_composer_Anim_001F44, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  5 */ { &object_po_composer_Anim_0023E8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  6 */ { &object_po_composer_Anim_002AE0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  7 */ { &object_po_composer_Anim_000A58, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  8 */ { &object_po_composer_Anim_001420, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /*  9 */ { &object_po_composer_Anim_003024, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /* 10 */ { &object_po_composer_Anim_00334C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /* 11 */ { &object_po_composer_Anim_0015B8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    /* 12 */ { &object_po_composer_Anim_00020C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+    /*  0 */ { &gPoeComposerIdleStillAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  1 */ { &gPoeComposerAppearDisappearAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
+    /*  2 */ { &gPoeComposerIdleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  3 */ { &gPoeComposerRaiseArmsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  4 */ { &gPoeComposerArmsRaisedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  5 */ { &gPoeComposerLowerArmsAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  6 */ { &gPoeComposerIdleLookingDownAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  7 */ { &gPoeComposerBeginPlayingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  8 */ { &gPoeComposerPlayingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /*  9 */ { &gPoeComposerBeginRollingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /* 10 */ { &gPoeComposerRollingAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /* 11 */ { &gPoeComposerFleeAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+    /* 12 */ { &gPoeComposerAttackAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
 };
 
 static Color_RGBA8 sLightColorInit = { 255, 255, 210, 0 };
 
 static Color_RGBA8 sEnvColorInit = { 0, 0, 0, 255 };
 
-Color_RGBA8 D_80BC6948 = { 75, 20, 25, 255 };
+static Color_RGBA8 sSharpClothingColor1 = { 75, 20, 25, 255 };
 
-Color_RGBA8 D_80BC694C = { 80, 110, 90, 255 };
+static Color_RGBA8 sFlatClothingColor1 = { 80, 110, 90, 255 };
 
-Color_RGBA8 D_80BC6950 = { 90, 85, 50, 255 };
+static Color_RGBA8 sSharpClothingColor2 = { 90, 85, 50, 255 };
 
-Color_RGBA8 D_80BC6954 = { 100, 90, 100, 255 };
+static Color_RGBA8 sFlatClothingColor2 = { 100, 90, 100, 255 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_F32(targetArrowOffset, 3200, ICHAIN_STOP),
@@ -184,8 +185,8 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 30.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_po_composer_Skel_009930, &object_po_composer_Anim_00188C,
-                       this->jointTable, this->morphTable, OBJECT_PO_COMPOSER_LIMB_MAX);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gPoeComposerSkel, &gPoeComposerIdleAnim,
+                       this->jointTable, this->morphTable, PO_COMPOSER_LIMB_MAX);
     Collider_InitJntSph(play, &this->lanternCollider);
     Collider_SetJntSph(play, &this->lanternCollider, &this->actor, &sJntSphInit, this->lanternColliderElements);
     Collider_InitCylinder(play, &this->bodyCollider);
@@ -194,21 +195,21 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
     this->lightNode = LightContext_InsertLight(play, &play->lightCtx, &this->lightInfo);
     Lights_PointGlowSetInfo(&this->lightInfo, this->actor.home.pos.x, this->actor.home.pos.y, this->actor.home.pos.z,
                             255, 255, 255, 0);
-    this->actor.flags &= ~1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->lightColor = sLightColorInit;
     this->envColor = sEnvColorInit;
     this->lastCsAction = COMPOSER_CS_ACTION_NONE;
 
     if (PO_COMPOSER_IS_FLAT(&this->actor)) {
-        this->unk290 = 0;
-        this->unk330 = true;
+        this->sharpCsNum = 0;
+        this->inCutscene = true;
         EnPoComposer_SetupStartedCutscene(this);
     } else if (this->actor.params & 0x4000) {
         if (gSaveContext.save.entrance != 0x20A0) {
             Actor_Kill(&this->actor);
         } else {
-            this->unk290 = 0;
-            this->unk330 = true;
+            this->sharpCsNum = SHARP_CS_ENCOUNTER_FIRST;
+            this->inCutscene = true;
             EnPoComposer_SetupStartedCutscene(this);
         }
     } else {
@@ -221,7 +222,7 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
         }
 
         for (i = 0; i < ARRAY_COUNT(this->csIndices); i++) {
-            if (csIndex == -1) {
+            if (csIndex == CS_ID_NONE) {
                 break;
             }
             this->csIndices[i] = csIndex;
@@ -229,11 +230,11 @@ void EnPoComposer_Init(Actor* thisx, PlayState* play) {
         }
 
         if (gSaveContext.save.saveInfo.weekEventReg[14] & 2) {
-            this->unk290 = 1;
+            this->sharpCsNum = SHARP_CS_ENCOUNTER_OTHER;
         } else {
-            this->unk290 = 0;
+            this->sharpCsNum = SHARP_CS_ENCOUNTER_FIRST;
         }
-        this->unk330 = false;
+        this->inCutscene = false;
         EnPoComposer_SetupAwaitPlayer(this);
     }
 }
@@ -258,19 +259,19 @@ void EnPoComposer_AwaitPlayer(EnPoComposer* this, PlayState* play) {
 }
 
 void EnPoComposer_SetupStartCutscene(EnPoComposer* this) {
-    this->unk330 = true;
+    this->inCutscene = true;
     this->actionFunc = EnPoComposer_StartCutscene;
 }
 
 void EnPoComposer_StartCutscene(EnPoComposer* this, PlayState* play) {
-    if (CutsceneManager_IsNext(this->csIndices[this->unk290])) {
-        CutsceneManager_Start(this->csIndices[this->unk290], &this->actor);
+    if (CutsceneManager_IsNext(this->csIndices[this->sharpCsNum])) {
+        CutsceneManager_Start(this->csIndices[this->sharpCsNum], &this->actor);
         EnPoComposer_SetupStartedCutscene(this);
     } else {
-        if (CutsceneManager_GetCurrentCsId() == 0x7C) {
-            CutsceneManager_Stop(0x7C);
+        if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
         }
-        CutsceneManager_Queue(this->csIndices[this->unk290]);
+        CutsceneManager_Queue(this->csIndices[this->sharpCsNum]);
     }
 }
 
@@ -314,18 +315,19 @@ void EnPoComposer_PlayCurse(EnPoComposer* this, PlayState* play) {
     if (play->msgCtx.ocarinaMode == 3) {
         switch (play->msgCtx.lastPlayedSong) {
             case OCARINA_SONG_STORMS:
-                this->unk290 = 3;
+                this->sharpCsNum = SHARP_CS_SONG_STORMS;
                 EnPoComposer_SetupStartCutscene(this);
                 break;
+
             case OCARINA_SONG_HEALING:
-                this->unk290 = 2;
+                this->sharpCsNum = SHARP_CS_SONG_HEALING;
                 EnPoComposer_SetupStartCutscene(this);
                 break;
         }
     }
 
     // Play sharp's curse bgm
-    func_801A1FB4(3, &this->actor.projectedPos, NA_BGM_SHARPS_CURSE, 2000.0f);
+    func_801A1FB4(SEQ_PLAYER_BGM_SUB, &this->actor.projectedPos, NA_BGM_SHARPS_CURSE, 2000.0f);
 }
 
 void EnPoComposer_SetupIdleStill(EnPoComposer* this) {
@@ -430,48 +432,59 @@ void EnPoComposer_SharpCutsceneDone(EnPoComposer* this) {
 }
 
 s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
-    u16 actorAction = PO_COMPOSER_IS_FLAT(&this->actor) ? 0x1E2 : 0x1E1;
-    s32 actorActionIdx;
+    u16 cueType = PO_COMPOSER_IS_FLAT(&this->actor) ? 0x1E2 : 0x1E1;
+    s32 cueChannel;
 
-    if (!this->unk330) {
+    if (!this->inCutscene) {
         return false;
     }
 
-    if (Cutscene_IsCueInChannel(play, actorAction)) {
-        actorActionIdx = Cutscene_GetCueChannel(play, actorAction);
-        if (this->lastCsAction != play->csCtx.actorCues[actorActionIdx]->id) {
-            this->lastCsAction = play->csCtx.actorCues[actorActionIdx]->id;
-            switch (play->csCtx.actorCues[actorActionIdx]->id) {
+    if (Cutscene_IsCueInChannel(play, cueType)) {
+        cueChannel = Cutscene_GetCueChannel(play, cueType);
+
+        if (this->lastCsAction != play->csCtx.actorCues[cueChannel]->id) {
+            this->lastCsAction = play->csCtx.actorCues[cueChannel]->id;
+
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case COMPOSER_CS_ACTION_IDLE: // loop idle
                     EnPoComposer_SetupIdleStill(this);
                     break;
+
                 case COMPOSER_CS_ACTION_APPEAR_SPIN: // appear/disappear -> loop idle
                     EnPoComposer_SetupAppear(this);
                     break;
+
                 case COMPOSER_CS_ACTION_IDLE2: // loop sharp idle
                     EnPoComposer_SetupIdle(this);
                     break;
+
                 case COMPOSER_CS_ACTION_RAISE_ARMS: // raise arms -> loop arms raised
                     EnPoComposer_SetupRaiseArms(this);
                     break;
+
                 case COMPOSER_CS_ACTION_LOWER_ARMS: // lower arms -> loop idle
                     EnPoComposer_SetupLowerArms(this);
                     break;
+
                 case COMPOSER_CS_ACTION_PLAY_CURSE: // begin playing -> loop playing
                     EnPoComposer_SetupCutscenePlayCurse(this);
                     break;
+
                 case COMPOSER_CS_ACTION_ROLL: // begin rolling -> loop rolling
                     EnPoComposer_SetupRoll(this);
                     break;
+
                 case COMPOSER_CS_ACTION_APPEAR: // appear
                     this->visible = true;
                     break;
+
                 case COMPOSER_CS_ACTION_DISAPPEAR: // disappear
                     this->visible = false;
                     Actor_PlaySfx(&this->actor, NA_SE_EN_PO_DISAPPEAR);
                     break;
+
                 case COMPOSER_CS_ACTION_DONE:
-                    if (actorAction == 0x1E1) {
+                    if (cueType == 0x1E1) {
                         EnPoComposer_SharpCutsceneDone(this);
                     } else {
                         Actor_Kill(&this->actor);
@@ -479,15 +492,16 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
                     break;
             }
         }
+
         if (this->actionFunc != EnPoComposer_Appear) {
-            Cutscene_ActorTranslateAndYaw(&this->actor, play, actorActionIdx);
+            Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         } else {
-            Cutscene_ActorTranslate(&this->actor, play, actorActionIdx);
+            Cutscene_ActorTranslate(&this->actor, play, cueChannel);
         }
 
         EnPoComposer_StepLightAlpha(this);
 
-        if (this->unk290 == 3 && play->csCtx.curFrame == 204) {
+        if (this->sharpCsNum == SHARP_CS_SONG_STORMS && play->csCtx.curFrame == 204) {
             Audio_PlaySfx(NA_SE_SY_DIZZY_EFFECT);
         }
 
@@ -498,14 +512,16 @@ s32 EnPoComposer_UpdateAction(EnPoComposer* this, PlayState* play) {
     }
 
     if (this->actionFunc != EnPoComposer_StartedCutscene && this->actionFunc != EnPoComposer_StartCutscene &&
-        this->actionFunc != EnPoComposer_PlayCurse && play->csCtx.state == 0) {
+        this->actionFunc != EnPoComposer_PlayCurse && play->csCtx.state == CS_STATE_IDLE) {
+
         if (PO_COMPOSER_IS_FLAT(&this->actor)) {
             EnPoComposer_SetupStartedCutscene(this);
         } else if (this->actor.params & 0x4000) {
             EnPoComposer_SetupStartedCutscene(this);
         } else {
-            this->unk330 = false;
-            if (this->unk290 < 3) {
+            this->inCutscene = false;
+
+            if (this->sharpCsNum < SHARP_CS_SONG_STORMS) {
                 if (!(gSaveContext.save.saveInfo.weekEventReg[14] & 2)) {
                     gSaveContext.save.saveInfo.weekEventReg[14] |= 2;
                 }
@@ -555,20 +571,14 @@ void EnPoComposer_StepLightColor(EnPoComposer* this) {
 }
 
 void EnPoComposer_UpdateEnvColor(EnPoComposer* this) {
-    f32 temp_fv0;
-    u32 temp_v0;
-
     if (this->actionFunc == EnPoComposer_Appear && this->skelAnime.curFrame < 12.0f) {
-        temp_v0 = 55.0f + this->skelAnime.curFrame * 16.66f;
-        this->envColor.b = temp_v0;
-        this->envColor.g = temp_v0;
-        this->envColor.r = temp_v0;
+        this->envColor.r = this->envColor.g = this->envColor.b = 55.0f + this->skelAnime.curFrame * 16.66f;
         this->envColor.a = this->skelAnime.curFrame * 16.666666f;
     } else {
-        temp_fv0 = Rand_ZeroOne();
-        this->envColor.r = 225 + (s32)(temp_fv0 * 30.0f);
-        this->envColor.g = 155 + (s32)(temp_fv0 * 100.0f);
-        this->envColor.b = 95 + (s32)(temp_fv0 * 160.0f);
+        f32 rand = Rand_ZeroOne();
+        this->envColor.r = 225 + (s32)(rand * 30.0f);
+        this->envColor.g = 155 + (s32)(rand * 100.0f);
+        this->envColor.b = 95 + (s32)(rand * 160.0f);
         this->envColor.a = 200;
     }
     if (this->lightColor.a == 0) {
@@ -600,10 +610,10 @@ s32 EnPoComposer_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, V
                                   Gfx** gfx) {
     EnPoComposer* this = THIS;
 
-    if (this->lightColor.a == 0 || limbIndex == OBJECT_PO_COMPOSER_LIMB_09) { // lantern
+    if (this->lightColor.a == 0 || limbIndex == PO_COMPOSER_LIMB_LANTERN) { // lantern
         *dList = NULL;
-    } else if (PO_COMPOSER_IS_FLAT(&this->actor) && limbIndex == OBJECT_PO_COMPOSER_LIMB_0A) { // head
-        *dList = object_po_composer_DL_006FD8;                                                 // flat head
+    } else if (PO_COMPOSER_IS_FLAT(&this->actor) && limbIndex == PO_COMPOSER_LIMB_HEAD) { // head
+        *dList = gPoeComposerFlatHeadDL;                                                 // flat head
     }
 
     if (limbIndex == 19) {
@@ -619,7 +629,7 @@ void EnPoComposer_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3
     EnPoComposer* this = THIS;
 
     Collider_UpdateSpheres(limbIndex, &this->lanternCollider);
-    if (limbIndex == OBJECT_PO_COMPOSER_LIMB_09) {
+    if (limbIndex == PO_COMPOSER_LIMB_LANTERN) {
         Matrix_Get(&this->lanternMtxF);
     }
 }
@@ -630,7 +640,7 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     Gfx* dl;
     Color_RGBA8* clothingColor;
     Color_RGBA8* var_t0;
-    Vec3f sp88;
+    Vec3f lightOffset;
     Vec3s lightPos;
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -640,11 +650,11 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     // Select colors
 
     if (PO_COMPOSER_IS_FLAT(&this->actor)) {
-        clothingColor = &D_80BC694C;
-        var_t0 = &D_80BC6954;
+        clothingColor = &sFlatClothingColor1;
+        var_t0 = &sFlatClothingColor2;
     } else {
-        clothingColor = &D_80BC6948;
-        var_t0 = &D_80BC6950;
+        clothingColor = &sSharpClothingColor1;
+        var_t0 = &sSharpClothingColor2;
     }
 
     // Draw skeleton
@@ -701,12 +711,12 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
         Matrix_Put(&this->lanternMtxF);
         gSPMatrix(&dl[2], Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-        gSPDisplayList(&dl[3], object_po_composer_DL_006E08); // lantern base
-        gSPDisplayList(&dl[4], object_po_composer_DL_006F38); // lantern enclosure
+        gSPDisplayList(&dl[3], gPoeComposerLanternBaseDL);
+        gSPDisplayList(&dl[4], gPoeComposerLanternGlassDL);
 
         gDPPipeSync(&dl[5]);
         gDPSetEnvColor(&dl[6], clothingColor->r, clothingColor->g, clothingColor->b, this->lightColor.a);
-        gSPDisplayList(&dl[7], object_po_composer_DL_006EA8); // lantern top
+        gSPDisplayList(&dl[7], gPoeComposerLanternTopDL);
 
         if (this->lightColor.a == 255) {
             POLY_OPA_DISP = &dl[8];
@@ -716,11 +726,11 @@ void EnPoComposer_Draw(Actor* thisx, PlayState* play) {
     }
 
     Matrix_Put(&play->billboardMtxF);
-    Matrix_MultVecZ(15.0f, &sp88);
+    Matrix_MultVecZ(15.0f, &lightOffset);
     lightPos = this->lanternCollider.elements[0].dim.worldSphere.center;
-    lightPos.x += (s16)sp88.x;
-    lightPos.y += (s16)sp88.y;
-    lightPos.z += (s16)sp88.z;
+    lightPos.x += (s16)lightOffset.x;
+    lightPos.y += (s16)lightOffset.y;
+    lightPos.z += (s16)lightOffset.z;
 
     Lights_PointGlowSetInfo(&this->lightInfo, lightPos.x, lightPos.y, lightPos.z, this->envColor.r, this->envColor.g,
                             this->envColor.b, this->envColor.a * 0.78431374f);
