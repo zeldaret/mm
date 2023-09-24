@@ -21,7 +21,7 @@
         <Animation Name="gTurtleCoughAnim" Offset="0x47B8" /> <!-- Original name is "kam_laughlong" -->
         <Animation Name="gTurtleIdleAnim" Offset="0x48B0" /> <!-- Original name is "kam_mezame" -->
 
-        <DList Name="gTurtleAsleepDL" Offset="0x4E70" /> <!-- Original name is "kam_sima_3_model". When asleep, the turtle looks like a giant rock -->
+        <DList Name="gTurtleAsleepDL" Offset="0x4E70" /> <!-- When asleep, the turtle looks like a giant rock. Original name is "kam_sima_3_model" -->
 
         <Texture Name="gTurtleAsleepTLUT" OutName="turtle_asleep_tlut" Format="rgba16" Width="16" Height="16" Offset="0x5248" />
         <Texture Name="gTurtleAsleepGrassTex" OutName="turtle_asleep_grass" Format="ci8" Width="32" Height="32" Offset="0x5448" />
