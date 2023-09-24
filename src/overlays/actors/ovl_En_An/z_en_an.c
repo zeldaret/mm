@@ -139,8 +139,42 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
     return foundActor;
 }
 
-EnDoor* func_80B53B3C(PlayState* play, s32 arg1);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53B3C.s")
+EnDoor* func_80B53B3C(PlayState* play, s32 scheduleOutputResult) {
+    s32 switchFlag;
+
+    switch (scheduleOutputResult) {
+        case 0x1A:
+        case 0x1B:
+            switchFlag = 0xD;
+            break;
+
+        case 0x21:
+        case 0x22:
+        case 0x25:
+        case 0x26:
+            switchFlag = 0xB;
+            break;
+
+        case 0x24:
+            switchFlag = 0x10;
+            break;
+
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x1F:
+        case 0x20:
+        case 0x23:
+        case 0x27:
+            switchFlag = 0xE;
+            break;
+
+        default:
+            return NULL;
+    }
+
+    return SubS_FindDoor(play, switchFlag);
+}
 
 s32 func_80B53BA8(EnAn* this, PlayState* play) {
     s8 temp_a3 = this->actor.objBankIndex;
@@ -1577,20 +1611,186 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return var_v1;
 }
 
-s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56744.s")
+s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    u8 pathIndex = this->actor.params & 0xFF;
+    Vec3f sp40;
+    Vec3f sp34;
+    Vec3s* temp_v0_2;
+    s32 limit;
+    s32 ret = false;
 
-s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56880.s")
+    this->unk_1DC = NULL;
 
-s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56B00.s")
+    limit = D_80B58618[scheduleOutput->result];
+    if (limit >= 0) {
+        this->unk_1DC = SubS_GetAdditionalPath(play, pathIndex, limit);
+    }
 
-s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56BC0.s")
+    if ((this->unk_1DC != NULL) && (this->unk_1DC->count >= 2)) {
+        temp_v0_2 = Lib_SegmentedToVirtual(this->unk_1DC->points);
+        Math_Vec3s_ToVec3f(&sp40, &temp_v0_2[0]);
+        Math_Vec3s_ToVec3f(&sp34, &temp_v0_2[1]);
 
-s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56CAC.s")
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
+        Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
+        Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
+        Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
+        if (scheduleOutput->result == 0x16) {
+            func_80B53CE8(this, play, 0x17);
+            SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+
+            this->unk_360 |= 0x300;
+            this->unk_360 |= 0x2000;
+        }
+        ret = true;
+    }
+
+    return ret;
+}
+
+s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    u8 pathIndex = this->actor.params & 0xFF;
+    Vec3f sp40;
+    Vec3f sp34;
+    Vec3s* temp_v0_2; // sp30
+    s32 limit;
+    s32 ret = false;
+
+    this->unk_1DC = NULL;
+    limit = D_80B58618[scheduleOutput->result];
+    if (limit >= 0) {
+        this->unk_1DC = SubS_GetAdditionalPath(play, pathIndex, limit);
+    }
+
+    if ((this->unk_1DC != NULL) && (this->unk_1DC->count >= 2)) {
+        temp_v0_2 = Lib_SegmentedToVirtual(this->unk_1DC->points);
+        Math_Vec3s_ToVec3f(&sp40, &temp_v0_2[this->unk_1DC->count-1]);
+        Math_Vec3s_ToVec3f(&sp34, &temp_v0_2[this->unk_1DC->count-2]);
+
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&sp34, &sp40);
+
+        Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
+        Math_Vec3s_Copy(&this->actor.home.rot, &this->actor.world.rot);
+        Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
+        Math_Vec3f_Copy(&this->actor.prevPos, &sp40);
+
+        switch (scheduleOutput->result) {
+            case 0x13:
+                this->actor.world.rot.y += 0x7FF8;
+                /* fallthrough */
+            case 0x12:
+            case 0x17:
+                func_80B53CE8(this, play, 1);
+                SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+                this->unk_37A = 0;
+                this->unk_360 |= 0x300;
+                if (scheduleOutput->result == 0x12) {
+                    this->unk_374 = 70.0f;
+                }
+                break;
+
+            case 0x3:
+                this->unk_360 |= 0x300;
+                this->unk_360 |= 0x1000;
+
+                if (gSaveContext.save.saveInfo.weekEventReg[0x37] & 0x20) {
+                    func_80B53CE8(this, play, 0x14);
+                    this->unk_360 |= 0x40;
+                    this->actor.world.rot.y += 0x7FF8;
+                    this->actor.shape.rot.y = this->actor.world.rot.y;
+                    this->unk_37A = 4;
+                } else {
+                    func_80B53CE8(this, play, 0x12);
+                    this->unk_37A = 0;
+                }
+
+                this->unk_38A = 2;
+                this->unk_38C = 2;
+                this->unk_38E = 8;
+                break;
+            case 0xE:
+                func_80B53CE8(this, play, 0xC);
+                SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+
+                this->unk_360 |= 0x300;
+                this->unk_360 |= 0x8000;
+                break;
+        }
+        ret = true;
+    }
+
+    return ret;
+}
+
+extern Vec3f D_80B58E7C;
+extern Vec3s D_80B58E88;
+
+s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 pad;
+
+    Math_Vec3f_Copy(&this->actor.world.pos, &D_80B58E7C);
+    Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58E88);
+    Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
+
+    if (scheduleOutput->result == 0xC) {
+        func_80B53CE8(this, play, 0xB);
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+
+        this->unk_360 |= 0x300;
+        this->unk_360 |= 0x40;
+
+        this->unk_38A = 5;
+        this->unk_38C = 5;
+        this->unk_38E = 8;
+    }
+
+    return true;
+}
+
+extern Vec3f D_80B58E90;
+extern Vec3s D_80B58E9C;
+
+s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 pad;
+
+    Math_Vec3f_Copy(&this->actor.world.pos, &D_80B58E90);
+    Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58E9C);
+    Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
+
+    switch (scheduleOutput->result) {
+        case 0x1:
+            SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+            func_80B53CE8(this, play, 9);
+            break;
+
+        case 0x18:
+            func_80B53CE8(this, play, 0xB);
+            this->unk_38A = 5;
+            this->unk_38C = 5;
+            this->unk_38E = 8;
+            break;
+    }
+
+    this->unk_360 |= 0x300;
+    this->unk_360 |= 0x40;
+
+    this->actor.gravity = 0.0f;
+    return true;
+}
+
+extern Vec3s D_80B58EA4;
+
+s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 pad;
+
+    Math_Vec3s_Copy(&this->actor.shape.rot, &D_80B58EA4);
+    Math_Vec3s_Copy(&this->actor.world.rot, &this->actor.shape.rot);
+    func_80B53CE8(this, play, 0);
+    SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+    this->unk_360 |= 0x300;
+
+    return 1;
+}
 
 s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret;
@@ -1691,9 +1891,6 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     return ret;
 }
-
-//s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56D28.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56E44.s")
 
