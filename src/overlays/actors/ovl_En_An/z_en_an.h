@@ -9,6 +9,8 @@ typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
 typedef void (*EnAnUnkFunc)(struct EnAn*, PlayState*);
 typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
+// path index : 0xFF
+
 #define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
 typedef struct EnAn {
@@ -17,7 +19,12 @@ typedef struct EnAn {
     /* 0x188 */ EnAnActionFunc actionFunc;
     /* 0x18C */ EnAnUnkFunc unk_18C;
     /* 0x190 */ ColliderCylinder unk_190;
-    /* 0x1DC */ char unk_1DC[0x24];                 /* inferred */
+    /* 0x1DC */ Path* unk_1DC;
+    /* 0x1E0 */ char unk_1E0[0x10];                 /* maybe part of unk_1DC[5]? */
+    /* 0x1F0 */ s32 unk_1F0;                        /* inferred */
+    /* 0x1F4 */ s32 unk_1F4;                        /* inferred */
+    /* 0x1F8 */ s32 unk_1F8;                        /* inferred */
+    /* 0x1FC */ s32 unk_1FC;                        /* inferred */
     /* 0x200 */ u8 unk_200; // enum?
     /* 0x201 */ char unk_201[3];                    /* maybe part of unk_200[4]? */
     /* 0x204 */ s32* msgEventScript;
@@ -29,9 +36,12 @@ typedef struct EnAn {
     /* 0x20D */ char unk_20D[3];                    /* maybe part of unk_20C[4]? */
     /* 0x210 */ s32 msgScriptResumePos;
     /* 0x214 */ s8 unk_214; // curRoom.num
-    /* 0x215 */ char unk_215[3];                    /* maybe part of unk_214[4]? */
+    /* 0x215 */ s8 unk_215;
+    /* 0x216 */ UNK_TYPE1 unk_216[0x2];
     /* 0x218 */ Actor* unk_218;                     /* inferred */
-    /* 0x21C */ UNK_TYPE1 unk_21C[0x24];                 /* maybe part of unk_218[0x13]? */
+    /* 0x21C */ UNK_TYPE1 unk_21C[0xC];                 /* maybe part of unk_218[0x13]? */
+    /* 0x228 */ Vec3f unk_228;
+    /* 0x234 */ Vec3f unk_234;
     /* 0x240 */ Vec3f unk_240;
     /* 0x24C */ UNK_TYPE1 unk_24C[0xC];
     /* 0x258 */ Vec3s unk_258;
@@ -46,7 +56,8 @@ typedef struct EnAn {
     /* 0x368 */ f32 unk_368;                        /* inferred */
     /* 0x36C */ char unk_36C[8];                    /* maybe part of unk_368[3]? */
     /* 0x374 */ f32 unk_374;                        /* inferred */
-    /* 0x378 */ char unk_378[4];                    /* inferred */
+    /* 0x378 */ u16 unk_378; // schedule time diff
+    /* 0x37A */ u16 unk_37A;
     /* 0x37C */ s16 unk_37C;                        /* inferred */
     /* 0x37E */ s16 unk_37E;                        /* inferred */
     /* 0x380 */ char unk_380[4];                    /* maybe part of unk_37E[3]? */

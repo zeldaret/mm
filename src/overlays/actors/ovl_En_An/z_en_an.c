@@ -5,6 +5,7 @@
  */
 
 #include "z_en_an.h"
+#include "overlays/actors/ovl_En_Door/z_en_door.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -138,6 +139,7 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
     return foundActor;
 }
 
+EnDoor* func_80B53B3C(PlayState* play, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53B3C.s")
 
 s32 func_80B53BA8(EnAn* this, PlayState* play) {
@@ -1270,7 +1272,7 @@ Actor* func_80B55D20(EnAn* this, PlayState* play) {
 
     switch (this->unk_200) {
         default:
-            actor = GET_PLAYER(play);
+            actor = &GET_PLAYER(play)->actor;
             break;
 
         case 0x15:
@@ -1289,40 +1291,305 @@ Actor* func_80B55D20(EnAn* this, PlayState* play) {
     return actor;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55D98.s")
+extern s32 D_80B58618[];
+
+s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
+    u8 sp4F = this->actor.params & 0xFF;
+    Vec3s* temp_v0_3;
+    Vec3f sp3C;
+    Vec3f sp30;
+    Actor* var_v1;
+    s32 pad;
+    s32 ret = false;
+
+    var_v1 = func_80B539CC(this, play, actorCategory, actorId);
+    this->unk_1DC = NULL;
+
+    if (D_80B58618[scheduleOutput->result] >= 0) {
+        this->unk_1DC = SubS_GetAdditionalPath(play, sp4F, D_80B58618[scheduleOutput->result]);
+    }
+
+    if ((var_v1 != NULL) && (var_v1->update != NULL)) {
+        if (this->unk_1DC != NULL) {
+            temp_v0_3 = Lib_SegmentedToVirtual(this->unk_1DC->points);
+            Math_Vec3s_ToVec3f(&sp3C, &temp_v0_3[this->unk_1DC->count-2]);
+            Math_Vec3s_ToVec3f(&sp30, &temp_v0_3[this->unk_1DC->count-1]);
+            this->actor.shape.shadowDraw = NULL;
+            this->actor.world.rot.y = Math_Vec3f_Yaw(&sp3C, &sp30);
+            Math_Vec3f_Copy(&this->actor.world.pos, &sp30);
+            ret = true;
+        }
+    }
+
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55ECC.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55F8C.s")
 
-s32 func_80B5600C(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5600C.s")
+s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 ret = false;
 
-s32 func_80B56094(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56094.s")
+    if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_PM) != 0) {
+        func_80B53CE8(this, play, 1);
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+        ret = true;
 
-s32 func_80B5611C(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5611C.s")
+        this->unk_360 |= 0x120;
+        this->unk_360 |= 0x200;
+    }
 
-s32 func_80B561A4(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B561A4.s")
+    return ret;
+}
 
-s32 func_80B56418(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56418.s")
+s32 func_80B56094(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 ret = false;
 
-s32 func_80B56744(EnAn* this, PlayState* play);
+    if (func_80B55D98(this, play, scheduleOutput, ACTORCAT_NPC, ACTOR_EN_IG) != 0) {
+        func_80B53CE8(this, play, 1);
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+        ret = true;
+
+        this->unk_360 |= 0x120;
+        this->unk_360 |= 0x200;
+    }
+
+    return ret;
+}
+
+s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 ret = false;
+
+    if (func_80B55D98(this, play, scheduleOutput, 4, 0x243) != 0) {
+        func_80B53CE8(this, play, 0xF);
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+        ret = true;
+
+        this->unk_360 |= 0x120;
+        this->unk_360 |= 0xA00;
+    }
+
+    return ret;
+}
+
+extern s32 D_80B58618[];
+
+s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    u16 sp56 = SCHEDULE_TIME_NOW;
+    u8 pathIndex = this->actor.params & 0xFF;
+    EnDoor* sp50;
+    Vec3s* temp_v0_2;
+    Vec3f sp40;
+    Vec3f sp34;
+    s32 limit;
+    s32 ret = false;
+
+    this->unk_1DC = NULL;
+    sp50 = func_80B53B3C(play, scheduleOutput->result);
+
+    limit = D_80B58618[scheduleOutput->result];
+    if (limit >= 0) {
+        this->unk_1DC = SubS_GetAdditionalPath(play, pathIndex, limit);
+    }
+
+    if ((sp50 != NULL) && (sp50->knobDoor.dyna.actor.update != NULL)) {
+        if (this->unk_1DC != NULL) {
+            temp_v0_2 = Lib_SegmentedToVirtual(this->unk_1DC->points);
+            Math_Vec3s_ToVec3f(&sp40, &temp_v0_2[0]);
+            Math_Vec3s_ToVec3f(&sp34, &temp_v0_2[1]);
+            Math_Vec3f_Copy(&this->unk_228, &sp40);
+            Math_Vec3f_Copy(&this->unk_234, &sp34);
+            this->actor.world.rot.y = Math_Vec3f_Yaw(&sp40, &sp34);
+            Math_Vec3f_Copy(&this->actor.world.pos, &sp40);
+
+            if (ABS_ALT(BINANG_SUB(this->actor.world.rot.y, sp50->knobDoor.dyna.actor.shape.rot.y)) <= 0x4000) {
+                this->unk_215 = -0x4B;
+            } else {
+                this->unk_215 = 0x4B;
+            }
+
+            this->unk_378 = scheduleOutput->time1 - scheduleOutput->time0;
+            this->unk_37A = sp56 - scheduleOutput->time0;
+
+            switch (scheduleOutput->result) {                    /* switch 1 */
+                case 0x1B:                          /* switch 1 */
+                case 0x1C:                          /* switch 1 */
+                case 0x20:                          /* switch 1 */
+                case 0x21:                          /* switch 1 */
+                case 0x22:                          /* switch 1 */
+                case 0x23:                          /* switch 1 */
+                case 0x25:                          /* switch 1 */
+                case 0x26:                          /* switch 1 */
+                    this->unk_38A = 2;
+                    this->unk_38C = 2;
+                    this->unk_38E = 8;
+                    break;
+            }
+
+            switch (scheduleOutput->result) {       /* switch 2 */
+                case 0x1A:                          /* switch 2 */
+                case 0x1B:                          /* switch 2 */
+                case 0x1C:                          /* switch 2 */
+                    this->unk_360 |= 0x900;
+                    func_80B53CE8(this, play, 0x10);
+                    break;
+                case 0x24:                          /* switch 2 */
+                case 0x27:                          /* switch 2 */
+                    this->unk_360 |= 0x2100;
+                    func_80B53CE8(this, play, 0x16);
+                    break;
+                default:                            /* switch 2 */
+                    this->unk_360 |= 0x100;
+                    func_80B53CE8(this, play, 7);
+                    break;
+            }
+
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+            this->unk_360 |= 0x200;
+            this->actor.gravity = 0.0f;
+            ret = true;
+        }
+    }
+
+    return ret;
+}
+
+s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    u16 temp_t0 = (gSaveContext.save.time - 0x3FFC);
+    u16 var_v1_2;
+    u8 sp2B = this->actor.params & 0xFF;
+    s32 pad;
+    s32 var_v1 = 0;
+    s32 temp_a3;
+
+    this->unk_1DC = NULL;
+    temp_a3 = D_80B58618[scheduleOutput->result];
+
+    if (temp_a3 >= 0) {
+        this->unk_1DC = SubS_GetAdditionalPath(play, sp2B, temp_a3);
+    }
+
+    if ((this->unk_1DC != NULL) && (this->unk_1DC->count < 3)) {
+        this->unk_1DC = NULL;
+    }
+
+    if (this->unk_1DC != NULL) {
+        if ((this->unk_200 < 0x28) && (this->unk_200 != 0) && (this->unk_384 >= 0)) {
+            var_v1_2 = temp_t0;
+        } else {
+            var_v1_2 = scheduleOutput->time0;
+        }
+
+        if (scheduleOutput->time1 <  var_v1_2) {
+            this->unk_1F0 = (var_v1_2 - scheduleOutput->time1) + 0xFFFF;
+        } else {
+            this->unk_1F0 = scheduleOutput->time1 - var_v1_2;
+        }
+
+        this->unk_1FC = temp_t0 - var_v1_2;
+        var_v1_2 = (this->unk_1DC->count - 2);
+        this->unk_1F4 = this->unk_1F0 / var_v1_2;
+
+        this->unk_1F8 = (this->unk_1FC / this->unk_1F4) + 2;
+        this->unk_360 &= ~8;
+        this->unk_360 &= ~0x10;
+
+        switch (scheduleOutput->result) {                           /* switch 1 */
+            case 0x2C:                              /* switch 1 */
+            case 0x2D:                              /* switch 1 */
+            case 0x32:                              /* switch 1 */
+            case 0x33:                              /* switch 1 */
+            case 0x36:                              /* switch 1 */
+            case 0x37:                              /* switch 1 */
+            case 0x38:                              /* switch 1 */
+            case 0x39:                              /* switch 1 */
+            case 0x3A:                              /* switch 1 */
+            case 0x3B:                              /* switch 1 */
+            case 0x3C:                              /* switch 1 */
+            case 0x3D:                              /* switch 1 */
+            case 0x3E:                              /* switch 1 */
+            case 0x3F:                              /* switch 1 */
+                this->unk_38A = 2;
+                this->unk_38C = 2;
+                this->unk_38E = 8;
+                break;
+        }
+
+        switch (scheduleOutput->result) {                           /* switch 2 */
+            case 0x2A:                              /* switch 2 */
+            case 0x2B:                              /* switch 2 */
+                SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+                /* fallthrough */
+            case 0x2C:                              /* switch 2 */
+            case 0x2D:                              /* switch 2 */
+                func_80B53CE8(this, play, 0x10);
+                this->unk_360 |= 0x300;
+                this->unk_360 |= 0x800;
+                break;
+
+            case 0x34:                              /* switch 2 */
+            case 0x35:                              /* switch 2 */
+                func_80B53CE8(this, play, 0x16);
+                SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+
+                this->unk_360 |= 0x300;
+                this->unk_360 |= 0x2000;
+                break;
+
+            case 0x32:                              /* switch 2 */
+            case 0x33:                              /* switch 2 */
+                func_80B53CE8(this, play, 7);
+                this->unk_360 |= 0x300;
+                break;
+
+            case 0x36:                              /* switch 2 */
+            case 0x37:                              /* switch 2 */
+            case 0x38:                              /* switch 2 */
+            case 0x39:                              /* switch 2 */
+            case 0x3A:                              /* switch 2 */
+            case 0x3B:                              /* switch 2 */
+            case 0x3C:                              /* switch 2 */
+            case 0x3D:                              /* switch 2 */
+            case 0x3E:                              /* switch 2 */
+            case 0x3F:                              /* switch 2 */
+                func_80B53CE8(this, play, 0x12);
+                this->unk_360 |= 0x300;
+                this->unk_360 |= 0x1000;
+                break;
+
+            case 0x28:                              /* switch 2 */
+            case 0x2F:                              /* switch 2 */
+            case 0x30:                              /* switch 2 */
+            case 0x31:                              /* switch 2 */
+                SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+                this->unk_360 |= 0x300;
+                /* fallthrough */
+            default:                                /* switch 2 */
+                func_80B53CE8(this, play, 7);
+                break;
+        }
+
+        var_v1 = 1;
+        this->actor.gravity = -1.0f;
+    }
+
+    return var_v1;
+}
+
+s32 func_80B56744(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56744.s")
 
-s32 func_80B56880(EnAn* this, PlayState* play);
+s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56880.s")
 
-s32 func_80B56B00(EnAn* this, PlayState* play);
+s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56B00.s")
 
-s32 func_80B56BC0(EnAn* this, PlayState* play);
+s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56BC0.s")
 
-s32 func_80B56CAC(EnAn* this, PlayState* play);
+s32 func_80B56CAC(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56CAC.s")
 
 s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
@@ -1338,24 +1605,24 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
     switch (scheduleOutput->result) {
         case 0x10:
-            ret = func_80B5600C(this, play);
+            ret = func_80B5600C(this, play, scheduleOutput);
             break;
 
         case 0x11:
-            ret = func_80B56094(this, play);
+            ret = func_80B56094(this, play, scheduleOutput);
             break;
 
         case 0x15:
-            ret = func_80B5611C(this, play);
+            ret = func_80B5611C(this, play, scheduleOutput);
             break;
 
         case 0xC:
-            ret = func_80B56B00(this, play);
+            ret = func_80B56B00(this, play, scheduleOutput);
             break;
 
         case 0x1:
         case 0x18:
-            ret = func_80B56BC0(this, play);
+            ret = func_80B56BC0(this, play, scheduleOutput);
             break;
 
         case 0x3:
@@ -1363,15 +1630,15 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         case 0x12:
         case 0x13:
         case 0x17:
-            ret = func_80B56880(this, play);
+            ret = func_80B56880(this, play, scheduleOutput);
             break;
 
         case 0x16:
-            ret = func_80B56744(this, play);
+            ret = func_80B56744(this, play, scheduleOutput);
             break;
 
         case 0x19:
-            ret = func_80B56CAC(this, play);
+            ret = func_80B56CAC(this, play, scheduleOutput);
             break;
 
         case 0x1A:
@@ -1388,7 +1655,7 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         case 0x25:
         case 0x26:
         case 0x27:
-            ret = func_80B561A4(this, play);
+            ret = func_80B561A4(this, play, scheduleOutput);
             break;
 
         case 0x28:
@@ -1414,7 +1681,7 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         case 0x3D:
         case 0x3E:
         case 0x3F:
-            ret = func_80B56418(this, play);
+            ret = func_80B56418(this, play, scheduleOutput);
             break;
 
         default:
