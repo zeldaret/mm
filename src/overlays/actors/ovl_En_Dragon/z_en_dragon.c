@@ -548,7 +548,7 @@ void EnDragon_Grab(EnDragon* this, PlayState* play) {
 
         play->unk_18770(play, player);
         player->actor.parent = &this->actor;
-        player->unk_AE8 = 50;
+        player->actionVar2 = 50;
         this->action = DEEP_PYTHON_ACTION_GRAB;
         Actor_PlaySfx(&this->actor, NA_SE_EN_UTSUBO_EAT);
         EnDragon_SetupAttack(this);
@@ -626,7 +626,7 @@ void EnDragon_Attack(EnDragon* this, PlayState* play) {
         this->grabWaitTimer = 30;
         CutsceneManager_Stop(this->grabCsId);
         if (player->stateFlags2 & PLAYER_STATE2_80) {
-            player->unk_AE8 = 100;
+            player->actionVar2 = 100;
         }
 
         this->actor.flags &= ~ACTOR_FLAG_100000;
