@@ -12250,7 +12250,7 @@
     0x80AD73A8:("EnKame_SetupRetreatIntoShell",),
     0x80AD7424:("EnKame_RetreatIntoShell",),
     0x80AD7568:("EnKame_SetAttackSpeed",),
-    0x80AD75A8:("EnKame_PlayAttackEffects",),
+    0x80AD75A8:("EnKame_ProcessAttackEffects",),
     0x80AD76CC:("EnKame_SetupPrepareToAttack",),
     0x80AD7798:("EnKame_PrepareToAttack",),
     0x80AD792C:("EnKame_SetupAttack",),

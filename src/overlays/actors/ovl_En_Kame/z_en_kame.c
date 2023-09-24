@@ -339,7 +339,7 @@ void EnKame_SetAttackSpeed(EnKame* this) {
  * dust on even-numbered frames. Additionally, this function is also responsible for playing the Snapper's spinning
  * sound effect if its angular velocity is large enough.
  */
-void EnKame_PlayAttackEffects(EnKame* this, PlayState* play) {
+void EnKame_ProcessAttackEffects(EnKame* this, PlayState* play) {
     static Color_RGBA8 sSnowPrimColor = { 250, 250, 250, 255 };
     static Color_RGBA8 sSnowEnvColor = { 180, 180, 180, 255 };
     static Vec3f sVelocity = { 0.0f, 0.75f, 0.0f };
@@ -437,7 +437,7 @@ void EnKame_PrepareToAttack(EnKame* this, PlayState* play) {
         EnKame_SetAttackSpeed(this);
     }
 
-    EnKame_PlayAttackEffects(this, play);
+    EnKame_ProcessAttackEffects(this, play);
 }
 
 void EnKame_SetupAttack(EnKame* this) {
@@ -453,7 +453,7 @@ void EnKame_SetupAttack(EnKame* this) {
  */
 void EnKame_Attack(EnKame* this, PlayState* play) {
     this->actor.shape.rot.y += this->angularVelocityY;
-    EnKame_PlayAttackEffects(this, play);
+    EnKame_ProcessAttackEffects(this, play);
 
     if (this->targetAngularVelocityY == -1) {
         s32 absYawToTarget;
