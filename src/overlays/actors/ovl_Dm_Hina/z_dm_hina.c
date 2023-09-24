@@ -162,7 +162,7 @@ void DmHina_Draw(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
     f32 scale;
 
-    if (this->isDrawn != 0) {
+    if (this->isDrawn) {
         Matrix_Translate(this->actor.world.pos.x,
                          this->actor.world.pos.y + (this->unk154 * this->unk15C) + (40.0f * this->unk15C),
                          this->actor.world.pos.z, MTXMODE_NEW);
