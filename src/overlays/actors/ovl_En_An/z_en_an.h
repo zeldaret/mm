@@ -2,6 +2,7 @@
 #define Z_EN_AN_H
 
 #include "global.h"
+#include "assets/objects/object_an1/object_an1.h"
 
 struct EnAn;
 
@@ -13,9 +14,53 @@ typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
+typedef enum EnAnAnimation {
+    /* -1 */ ENAN_ANIM_NONE = -1,
+    /*  0 */ ENAN_ANIM_0,
+    /*  1 */ ENAN_ANIM_1,
+    /*  2 */ ENAN_ANIM_2,
+    /*  3 */ ENAN_ANIM_3,
+    /*  4 */ ENAN_ANIM_4,
+    /*  5 */ ENAN_ANIM_5,
+    /*  6 */ ENAN_ANIM_6,
+    /*  7 */ ENAN_ANIM_7,
+    /*  8 */ ENAN_ANIM_8,
+    /*  9 */ ENAN_ANIM_9,
+    /* 10 */ ENAN_ANIM_10,
+    /* 11 */ ENAN_ANIM_11,
+    /* 12 */ ENAN_ANIM_12,
+    /* 13 */ ENAN_ANIM_13,
+    /* 14 */ ENAN_ANIM_14,
+    /* 15 */ ENAN_ANIM_15,
+    /* 16 */ ENAN_ANIM_16,
+
+    /* 17 */ ENAN_ANIM_17,
+    /* 18 */ ENAN_ANIM_18,
+    /* 19 */ ENAN_ANIM_19,
+    /* 20 */ ENAN_ANIM_20,
+
+    /* 21 */ ENAN_ANIM_21,
+    /* 22 */ ENAN_ANIM_22,
+    /* 23 */ ENAN_ANIM_23,
+    /* 24 */ ENAN_ANIM_24,
+
+    /* 25 */ ENAN_ANIM_25,
+    /* 26 */ ENAN_ANIM_26,
+    /* 27 */ ENAN_ANIM_27,
+    /* 28 */ ENAN_ANIM_28,
+    /* 29 */ ENAN_ANIM_29,
+    /* 30 */ ENAN_ANIM_30,
+    /* 31 */ ENAN_ANIM_31,
+    /* 32 */ ENAN_ANIM_32,
+    /* 33 */ ENAN_ANIM_33,
+    /* 34 */ ENAN_ANIM_34,
+    /* 35 */ ENAN_ANIM_35,
+    /* 36 */ ENAN_ANIM_MAX
+} EnAnAnimation;
+
 typedef struct EnAn {
     /* 0x000 */ Actor actor;
-    /* 0x144 */ SkelAnime unk_144;
+    /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ EnAnActionFunc actionFunc;
     /* 0x18C */ EnAnUnkFunc unk_18C;
     /* 0x190 */ ColliderCylinder unk_190;
@@ -29,11 +74,11 @@ typedef struct EnAn {
     /* 0x200 */ u8 unk_200; // enum? // schedule result
     /* 0x201 */ char unk_201[3];                    /* maybe part of unk_200[4]? */
     /* 0x204 */ s32* msgEventScript;
-    /* 0x208 */ s8 unk_208;
-    /* 0x209 */ s8 unk_209;
-    /* 0x20A */ s8 unk_20A;
-    /* 0x20B */ s8 unk_20B;
-    /* 0x20C */ s8 unk_20C;
+    /* 0x208 */ s8 an2ObjIndex;
+    /* 0x209 */ s8 an3ObjIndex;
+    /* 0x20A */ s8 maskKerfayObjIndex;
+    /* 0x20B */ s8 an4ObjIndex;
+    /* 0x20C */ s8 msmoObjIndex;
     /* 0x20D */ char unk_20D[3];                    /* maybe part of unk_20C[4]? */
     /* 0x210 */ s32 msgScriptResumePos;
     /* 0x214 */ s8 unk_214; // curRoom.num
@@ -68,13 +113,13 @@ typedef struct EnAn {
     /* 0x38A */ s16 unk_38A;                        /* inferred */
     /* 0x38C */ s16 unk_38C;                        /* inferred */
     /* 0x38E */ s16 unk_38E;                        /* inferred */
-    /* 0x390 */ s16 unk_390;                        /* inferred */
-    /* 0x392 */ s16 unk_392;                        /* inferred */
+    /* 0x390 */ s16 eyeTexIndex;
+    /* 0x392 */ s16 mouthTexIndex;                        /* inferred */
     /* 0x394 */ s16 unk_394;
     /* 0x396 */ s16 unk_396;
     /* 0x398 */ MsgEventFunc msgEventFunc;
-    /* 0x39C */ s32 unk_39C;                        /* inferred */
-    /* 0x3A0 */ char unk_3A0[8];                    /* maybe part of unk_39C[3]? */
+    /* 0x39C */ EnAnAnimation animIndex;
+    /* 0x3A0 */ UNK_TYPE1 unk_3A0[8];
     /* 0x3A8 */ u32 unk_3A8;                        /* inferred */
     /* 0x3AC */ u32 unk_3AC;                        /* inferred */
     /* 0x3B0 */ s32 unk_3B0;                        /* inferred */

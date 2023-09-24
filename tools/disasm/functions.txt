@@ -14012,7 +14012,7 @@
     0x80B53A7C:("func_80B53A7C",),
     0x80B53B3C:("func_80B53B3C",),
     0x80B53BA8:("func_80B53BA8",),
-    0x80B53CE8:("func_80B53CE8",),
+    0x80B53CE8:("EnAn_ChangeAnim",),
     0x80B53ED4:("func_80B53ED4",),
     0x80B53F84:("func_80B53F84",),
     0x80B54124:("func_80B54124",),
