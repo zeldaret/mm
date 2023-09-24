@@ -24,7 +24,12 @@ typedef struct EnAn {
     /* 0x215 */ s8 unk_215;                         /* inferred */
     /* 0x216 */ char pad_216[2];                    /* maybe part of unk_215[3]? */
     /* 0x218 */ Actor* unk_218;
-    /* 0x21C */ char pad_21C[0x48];                 /* maybe part of unk_218[0x13]? */
+    /* 0x21C */ s8 unk_21C[0x24];
+    /* 0x240 */ Vec3f unk_240;
+    /* 0x24C */ s8 unk_24C[0xC];
+    /* 0x258 */ Vec3s unk_258;
+    /* 0x25E */ s8 unk_25E[2];
+    /* 0x260 */ s8 unk_260[4];
     /* 0x264 */ Vec3s unk_264[0x15];
     /* 0x2E2 */ Vec3s unk_2E2[0x15];
     /* 0x360 */ u16 unk_360;
@@ -51,7 +56,9 @@ typedef struct EnAn {
     /* 0x396 */ s16 unk_396;                        /* inferred */
     /* 0x398 */ void* unk_398;
     /* 0x39C */ s32 unk_39C;
-    /* 0x3A0 */ char pad_3A0[0x10];                 /* maybe part of unk_39C[5]? */
+    /* 0x3A0 */ char pad_3A0[8];                    /* maybe part of unk_39C[3]? */
+    /* 0x3A8 */ u32 unk_3A8;
+    /* 0x3AC */ u32 unk_3AC;
     /* 0x3B0 */ s32 unk_3B0;
     /* 0x3B4 */ s32 unk_3B4;
     /* 0x3B8 */ s32 unk_3B8;
@@ -62,7 +69,6 @@ typedef struct EnAn {
 
 Actor* func_80B539CC(EnAn* arg0, PlayState* arg1, u8 arg2, s16 arg3); /* static */
 struct EnDoor* func_80B53B3C(PlayState* arg0, u8 arg1); /* static */
-void func_80B54124(Actor* arg0, GraphicsContext** arg1, u32 arg2); /* static */
 s32 func_80B54678(Actor* arg0, s16 arg1, s32);      /* static */
 s16 func_80B546F4(Actor* arg0, s32 arg1);           /* static */
 s16 func_80B54750(Actor* arg0, s32 arg1);           /* static */
@@ -101,11 +107,6 @@ s32 func_80B56D28(EnAn* arg0, u8* arg2, u8*);       /* static */
 ? func_80B575BC(Actor* arg0, ? arg1);               /* static */
 ? func_80B57674(EnAn* arg0, ? arg1);                /* static */
 void func_80B57718(EnAn* arg0, PlayState*);         /* static */
-extern ? D_06000308;
-extern ? D_06000378;
-extern ? D_06000E70;
-extern ? D_06012478;
-extern ? D_0A000D40;
 extern u8 D_80B581D0;
 extern ? D_80B58618;
 extern ? D_80B58718;
@@ -136,17 +137,12 @@ extern ? D_80B58B88;
 extern ? D_80B58B90;
 extern Vec3f D_80B58E34;
 extern ? D_80B58E40;
-extern Vec3f D_80B58E54;
-extern Vec3s D_80B58E60;
-extern Vec3f D_80B58E68;
-extern Vec3s D_80B58E74;
 extern Vec3f D_80B58E7C;
 extern Vec3s D_80B58E88;
 extern Vec3f D_80B58E90;
 extern Vec3s D_80B58E9C;
 extern Vec3s D_80B58EA4;
 extern ? D_80B58EAC;
-extern Vec3f D_80B58ED4;
 
 void EnAn_Destroy(Actor* thisx, PlayState* play) {
     EnAn* this = (EnAn* ) thisx;
@@ -552,7 +548,7 @@ void func_80B53F84(EnAn* this) {
     this->unk_392 = *(&D_80B58E40 + (this->unk_38C * 2));
 }
 
-void func_80B54124(EnAn* this, GraphicsContext** gfxCtx, u32 arg2) {
+void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
     s8 sp53;
     s8 sp52;
     GraphicsContext* sp4C;
@@ -582,105 +578,105 @@ void func_80B54124(EnAn* this, GraphicsContext** gfxCtx, u32 arg2) {
     s8 temp_a2_3;
     s8 temp_a2_4;
 
-    sp53 = arg0->objBankIndex;
-    temp_t0 = *arg1;
+    sp53 = this->actor.objBankIndex;
+    temp_t0 = play->state.gfxCtx;
     sp4C = temp_t0;
     Matrix_Push();
     switch (arg2) {
         case 0x0:
-            if ((arg0->unk_360 & 0x800) && (arg0->unk_3B0 == 0)) {
-                arg0->unk_3A8 = (u32) (arg0->unk_3A8 + 1);
-                arg0->unk_3AC = (u32) (arg0->unk_3AC - 2);
+            if ((this->unk_360 & 0x800) && (this->unk_3B0 == 0)) {
+                this->unk_3A8 += 1;
+                this->unk_3AC -= 2;
                 sp4C = temp_t0;
-                Gfx_SetupDL25_Xlu(*arg1);
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
                 temp_v0 = temp_t0->polyXlu.p;
                 temp_t0->polyXlu.p = temp_v0 + 8;
                 temp_v0->words.w0 = 0xDA380003;
                 sp4C = temp_t0;
                 sp44 = temp_v0;
-                sp44->words.w1 = Matrix_NewMtx(*arg1);
+                sp44->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
                 temp_v0_2 = temp_t0->polyXlu.p;
                 temp_t0->polyXlu.p = temp_v0_2 + 8;
                 temp_v0_2->words.w0 = 0xDB060020;
                 sp4C = temp_t0;
                 sp40 = temp_v0_2;
-                sp40->words.w1 = Gfx_TwoTexScroll(*arg1, 0, arg0->unk_3A8, 0U, 0x10, 0x10, 1, 0U, arg0->unk_3AC, 0x10, 0x10);
+                sp40->words.w1 = Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0U, 0x10, 0x10, 1, 0U, this->unk_3AC, 0x10, 0x10);
                 temp_v0_3 = temp_t0->polyXlu.p;
                 temp_t0->polyXlu.p = temp_v0_3 + 8;
                 temp_v0_3->words.w0 = 0xDE000000;
-                temp_v0_3->words.w1 = (u32) &D_060111E8;
-                Gfx_SetupDL25_Opa(*arg1);
+                temp_v0_3->words.w1 = (u32) D_060111E8;
+                Gfx_SetupDL25_Opa(play->state.gfxCtx);
             }
             break;
         case 0x1:
-            temp_a2 = arg0->unk_20A;
-            if ((arg0->unk_360 & 0x4000) && (arg0->unk_3B0 == 0) && (temp_a2 >= 0)) {
+            temp_a2 = this->unk_20A;
+            if ((this->unk_360 & 0x4000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
                 temp_v0_4 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_4 + 8;
                 temp_v0_4->words.w0 = 0xDB060028;
-                temp_v0_4->words.w1 = (arg1 + (temp_a2 * 0x44))->unk_17D98;
+                temp_v0_4->words.w1 = (u32) play->objectCtx.status[temp_a2].segment;
                 sp4C = temp_t0;
                 Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
                 temp_v0_5 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_5 + 8;
                 temp_v0_5->words.w0 = 0xDA380003;
                 sp4C = temp_t0;
-                temp_v0_5->words.w1 = Matrix_NewMtx(*arg1);
+                temp_v0_5->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
                 temp_v0_6 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_6 + 8;
                 temp_v0_6->words.w0 = 0xDE000000;
-                temp_v0_6->words.w1 = (u32) &D_0A000D40;
+                temp_v0_6->words.w1 = (u32) D_0A000D40;
                 temp_v0_7 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_7 + 8;
                 temp_v0_7->words.w0 = 0xDB060018;
-                temp_v0_7->words.w1 = (arg1 + (sp53 * 0x44))->unk_17D98;
+                temp_v0_7->words.w1 = (u32) play->objectCtx.status[sp53].segment;
             }
             break;
         case 0x2:
-            temp_a2_2 = arg0->unk_208;
-            if ((arg0->unk_360 & 0x1000) && (arg0->unk_3B0 == 0) && (temp_a2_2 >= 0)) {
+            temp_a2_2 = this->unk_208;
+            if ((this->unk_360 & 0x1000) && (this->unk_3B0 == 0) && (temp_a2_2 >= 0)) {
                 temp_v0_8 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_8 + 8;
                 temp_v0_8->words.w0 = 0xDB060018;
-                temp_v0_8->words.w1 = (arg1 + (temp_a2_2 * 0x44))->unk_17D98;
+                temp_v0_8->words.w1 = (u32) play->objectCtx.status[temp_a2_2].segment;
                 temp_v0_9 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_9 + 8;
-                temp_v0_9->words.w1 = (u32) &D_06000378;
+                temp_v0_9->words.w1 = (u32) D_06000378;
                 temp_v0_9->words.w0 = 0xDE000000;
                 temp_v0_10 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_10 + 8;
                 temp_v0_10->words.w0 = 0xDB060018;
-                temp_v0_10->words.w1 = (arg1 + (sp53 * 0x44))->unk_17D98;
+                temp_v0_10->words.w1 = (u32) play->objectCtx.status[sp53].segment;
             }
             break;
         case 0x3:
-            temp_a2_3 = arg0->unk_209;
-            if ((arg0->unk_360 & 0x2000) && (arg0->unk_3B0 == 0) && (temp_a2_3 >= 0)) {
+            temp_a2_3 = this->unk_209;
+            if ((this->unk_360 & 0x2000) && (this->unk_3B0 == 0) && (temp_a2_3 >= 0)) {
                 temp_v0_11 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_11 + 8;
                 temp_v0_11->words.w0 = 0xDB060018;
-                temp_v0_11->words.w1 = (arg1 + (temp_a2_3 * 0x44))->unk_17D98;
+                temp_v0_11->words.w1 = (u32) play->objectCtx.status[temp_a2_3].segment;
                 temp_v0_12 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_12 + 8;
-                temp_v0_12->words.w1 = (u32) &D_06000308;
+                temp_v0_12->words.w1 = (u32) D_06000308;
                 temp_v0_12->words.w0 = 0xDE000000;
                 temp_v0_13 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_13 + 8;
                 temp_v0_13->words.w0 = 0xDB060018;
-                temp_v0_13->words.w1 = (arg1 + (sp53 * 0x44))->unk_17D98;
+                temp_v0_13->words.w1 = (u32) play->objectCtx.status[sp53].segment;
             }
             break;
         case 0x4:
-            if ((arg0->unk_360 & 0x8000) && (arg0->unk_3B0 == 0)) {
+            if ((this->unk_360 & 0x8000) && (this->unk_3B0 == 0)) {
                 temp_v0_14 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_14 + 8;
-                temp_v0_14->words.w1 = (u32) &D_06012478;
+                temp_v0_14->words.w1 = (u32) D_06012478;
                 temp_v0_14->words.w0 = 0xDE000000;
             }
             break;
         case 0x5:
-            temp_a2_4 = arg0->unk_20C;
-            if ((arg0->unk_3B4 != 0) && (temp_a2_4 >= 0)) {
+            temp_a2_4 = this->unk_20C;
+            if ((this->unk_3B4 != 0) && (temp_a2_4 >= 0)) {
                 sp52 = temp_a2_4;
                 sp4C = temp_t0;
                 Matrix_TranslateRotateZYX(&D_80B58E68, &D_80B58E74);
@@ -689,19 +685,19 @@ void func_80B54124(EnAn* this, GraphicsContext** gfxCtx, u32 arg2) {
                 temp_v0_15->words.w0 = 0xDA380003;
                 sp4C = temp_t0;
                 sp52 = temp_a2_4;
-                temp_v0_15->words.w1 = Matrix_NewMtx(*arg1);
+                temp_v0_15->words.w1 = Matrix_NewMtx(play->state.gfxCtx);
                 temp_v0_16 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_16 + 8;
                 temp_v0_16->words.w0 = 0xDB060018;
-                temp_v0_16->words.w1 = (arg1 + (temp_a2_4 * 0x44))->unk_17D98;
+                temp_v0_16->words.w1 = (u32) play->objectCtx.status[temp_a2_4].segment;
                 temp_v0_17 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_17 + 8;
-                temp_v0_17->words.w1 = (u32) &D_06000E70;
+                temp_v0_17->words.w1 = (u32) D_06000E70;
                 temp_v0_17->words.w0 = 0xDE000000;
                 temp_v0_18 = temp_t0->polyOpa.p;
                 temp_t0->polyOpa.p = temp_v0_18 + 8;
                 temp_v0_18->words.w0 = 0xDB060018;
-                temp_v0_18->words.w1 = (arg1 + (sp53 * 0x44))->unk_17D98;
+                temp_v0_18->words.w1 = (u32) play->objectCtx.status[sp53].segment;
             }
             break;
     }
@@ -2757,18 +2753,18 @@ void func_80B57EE8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Acto
     if (limbIndex == 9) {
         Matrix_MultVec3f(&D_80B58ED4, &thisx->focus.pos);
         Math_Vec3s_Copy(&thisx->focus.rot, &thisx->world.rot);
-        func_80B54124(thisx, &play->state.gfxCtx, 1U);
+        func_80B54124((EnAn* ) thisx, play, 1U);
         return;
     }
     if (limbIndex == 8) {
-        func_80B54124(thisx, &play->state.gfxCtx, 0U);
-        func_80B54124(thisx, &play->state.gfxCtx, 4U);
-        func_80B54124(thisx, &play->state.gfxCtx, 2U);
-        func_80B54124(thisx, &play->state.gfxCtx, 3U);
+        func_80B54124((EnAn* ) thisx, play, 0U);
+        func_80B54124((EnAn* ) thisx, play, 4U);
+        func_80B54124((EnAn* ) thisx, play, 2U);
+        func_80B54124((EnAn* ) thisx, play, 3U);
         return;
     }
     if (limbIndex == 5) {
-        func_80B54124(thisx, &play->state.gfxCtx, 5U);
+        func_80B54124((EnAn* ) thisx, play, 5U);
     }
 }
 

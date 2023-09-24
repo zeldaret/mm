@@ -69,6 +69,7 @@ extern FlexSkeletonHeader D_06012618;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53840.s")
 
+Actor* func_80B539CC(EnAn* this, PlayState* play, u8 arg2, s16 arg3);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B539CC.s")
 
 Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
@@ -276,11 +277,62 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54D18.s")
 
+UNK_PTR func_80B54DF4(EnAn* this, PlayState* play);
+
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54DF4.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55180.s")
+s32 func_80B55180(EnAn* this, PlayState* play) {
+    s32 ret = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B552E4.s")
+    if ((this->unk_360 & 7) && Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        SubS_SetOfferMode(&this->unk_360, 0U, 7U);
+        this->unk_3C4 = 0;
+        this->unk_394 = 0;
+        this->unk_398 = NULL;
+        this->actor.child = this->unk_218;
+        this->unk_204 = func_80B54DF4(this, play);
+
+        if ((this->unk_200 == 1) || (this->unk_200 == 3) || (this->unk_200 == 0x12) || (this->unk_200 == 0x13) || (this->unk_200 == 0x17) || (this->unk_200 == 0x16) || (this->unk_200 == 0x28) || (this->unk_200 == 0x2A) || (this->unk_200 == 0x2B) || (this->unk_200 == 0x2C) || (this->unk_200 == 0x2D) || (this->unk_200 == 0x2F) || (this->unk_200 == 0x30) || (this->unk_200 == 0x31) || (this->unk_200 == 0x34) || (this->unk_200 == 0x35)) {
+            this->unk_360 |= 0x20;
+        }
+
+        if ((this->unk_200 == 3) && (gSaveContext.save.saveInfo.weekEventReg[0x37] & 0x20)) {
+            this->unk_360 &= ~0x20;
+        }
+
+        this->actionFunc = func_80B57A44;
+        ret = true;
+    }
+
+    return ret;
+}
+
+s32 func_80B552E4(EnAn* this, PlayState* play) {
+    u16 temp_v0 = play->csCtx.scriptIndex;
+    s32 ret = false;
+
+    if ((play->csCtx.state != 0) && (play->sceneId == 0x61) && (gSaveContext.sceneLayer == 0) && ((temp_v0 == 0) || (temp_v0 == 1))) {
+        if (this->unk_3B0 == 0) {
+            this->unk_38A = 0;
+            this->unk_38C = 0;
+            this->unk_360 |= 0x300;
+            this->unk_38E = 8;
+            this->unk_364 = -1;
+            this->unk_3B0 = 1;
+            this->unk_3B4 = 0;
+        }
+
+        ret = true;
+    } else if (this->unk_3B0 != 0) {
+        this->unk_3B0 = 0;
+        this->unk_3B4 = 0;
+        this->unk_3C0 = 1;
+        this->actor.room = play->roomCtx.curRoom.num;
+        this->actionFunc = func_80B578F8;
+    }
+
+    return ret;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B553AC.s")
 
@@ -296,6 +348,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55914.s")
 
+Actor* func_80B55D20(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55D20.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55D98.s")
@@ -324,6 +377,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56CAC.s")
 
+s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56D28.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56E44.s")
@@ -340,6 +394,7 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57674.s")
 
+void func_80B57718(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57718.s")
 
 void func_80B577F0(EnAn* this, PlayState* play) {
@@ -364,7 +419,36 @@ void func_80B577F0(EnAn* this, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B578F8.s")
+extern u8 D_80B581D0[];
+
+void func_80B578F8(EnAn* this, PlayState* play) {
+    ScheduleOutput sp20;
+
+    this->unk_384 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
+
+    if (!(this->actor.params & 0x8000) && (this->unk_3C0 == 0) && (gSaveContext.save.saveInfo.weekEventReg[0x33] & 0x40)) {
+        Actor_Kill(&this->actor);
+        return;
+    }
+
+    if (this->unk_3C0 != 0) {
+        sp20.result = 0x19;
+        if (this->unk_200 != 0x19) {
+            func_80B56D28(this, play, &sp20);
+        }
+    } else if ((Schedule_RunScript(play, D_80B581D0, &sp20) == 0) || ((this->unk_200 != sp20.result) && (func_80B56D28(this, play, &sp20) == 0))) {
+        this->actor.shape.shadowDraw = NULL;
+        this->actor.flags &= ~1;
+        sp20.result = 0;
+    } else {
+        this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
+        this->actor.flags |= 1;
+    }
+
+    this->unk_200 = sp20.result;
+    this->unk_218 = func_80B55D20(this, play);
+    func_80B57718(this, play);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57A44.s")
 
@@ -373,7 +457,7 @@ void func_80B577F0(EnAn* this, PlayState* play) {
 void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 pad;
     EnAn* this = THIS;
-    s32 temp_v1; // sp1C
+    s32 temp_v1;
     s32 temp_v0;
 
     if (play->sceneId != SCENE_YADOYA) {
@@ -417,7 +501,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if ((this->actionFunc != func_80B577F0) && (func_80B55180(this, play) == 0) && (func_80B552E4(this, play) != 0)) {
+    if ((this->actionFunc != func_80B577F0) && !func_80B55180(this, play) && (func_80B552E4(this, play) != 0)) {
         func_80B57B48(this, play);
         func_80B53BA8(this, play);
         func_80B53F84(this);
