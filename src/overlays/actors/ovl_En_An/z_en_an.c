@@ -926,19 +926,368 @@ void func_80B554E8(EnAn* this) {
     }
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B555C8.s")
+s32 func_80B555C8(EnAn* this, PlayState* play) {
+    switch (this->unk_200) {
+        case 0x10:
+        case 0x11:
+        case 0x12:
+        case 0x13:
+        case 0x17:
+            func_80B53CE8(this, play, 1);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B556F8.s")
+        case 0x16:
+            func_80B53CE8(this, play, 0x17);
+            this->unk_360 |= 0x2000;
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B557AC.s")
+        case 0xE:
+            func_80B53CE8(this, play, 0xC);
+            break;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55860.s")
+        case 0x15:
+            func_80B53CE8(this, play, 0xF);
+            break;
 
-UNK_RET func_80B55914(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55914.s")
+        case 0x2F:
+        case 0x31:
+            func_80B53CE8(this, play, 7);
+            break;
 
-Actor* func_80B55D20(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55D20.s")
+        case 0x34:
+        case 0x35:
+            func_80B53CE8(this, play, 0x16);
+            this->unk_360 |= 0x2000;
+            break;
+
+        default:
+            if (this->unk_39C == 0xF) {
+                func_80B53CE8(this, play, 0x10);
+            }
+            if (this->unk_39C == 0x11) {
+                func_80B53CE8(this, play, 0x12);
+            }
+            if ((this->unk_39C == 1) || (this->unk_39C == 2)) {
+                func_80B53CE8(this, play, 8);
+            }
+            break;
+    }
+
+    return 0;
+}
+
+void func_80B556F8(EnAn* this, PlayState* play) {
+    if (this->unk_396 == 0) {
+        func_80B53CE8(this, play, 6);
+        this->unk_360 &= 0xFFDF;
+        this->unk_360 |= 0x200;
+        this->unk_396++;
+    } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->unk_144, this->unk_144.endFrame)) {
+        func_80B53CE8(this, play, 2);
+        this->unk_360 &= 0xFDFF;
+        this->unk_360 |= 0x20;
+        this->unk_396++;
+    }
+}
+
+void func_80B557AC(EnAn* this, PlayState* play) {
+    if (this->unk_396 == 0) {
+        func_80B53CE8(this, play, 3);
+        this->unk_360 &= 0xFFDF;
+        this->unk_360 |= 0x200;
+        this->unk_396++;
+    } else if ((this->unk_396 == 1) && Animation_OnFrame(&this->unk_144, this->unk_144.endFrame)) {
+        func_80B53CE8(this, play, 2);
+        this->unk_360 &= 0xFDFF;
+        this->unk_360 |= 0x20;
+        this->unk_396++;
+    }
+}
+
+void func_80B55860(EnAn* this, PlayState* play) {
+    if (this->unk_396 == 0) {
+        func_80B53CE8(this, play, 4);
+        this->unk_360 |= 0x200;
+        this->unk_360 &= 0xFFDF;
+        this->unk_396++;
+    } else if ((this->unk_396 == 1) && (Animation_OnFrame(&this->unk_144, this->unk_144.endFrame) != 0)) {
+        func_80B53CE8(this, play, 2);
+        this->unk_360 &= 0xFDFF;
+        this->unk_360 |= 0x20;
+        this->unk_396++;
+    }
+}
+
+s32 func_80B55914(EnAn* this, PlayState* play) {
+    Player* player;
+    u16 sp22;
+
+    player = GET_PLAYER(play);
+    sp22 = play->msgCtx.currentTextId;
+    if (player->stateFlags1 & PLAYER_STATE1_40) {
+        this->unk_360 |= 0x400;
+        if (this->unk_362 != sp22) {
+            switch (sp22) {                         /* switch 3; irregular */
+                case 0x28E5:                        /* switch 3 */
+                    func_80B53CE8(this, play, 5);
+                    this->unk_360 &= 0xDFFF;
+                    break;
+                case 0x28BA:                        /* switch 3 */
+                case 0x28D1:                        /* switch 3 */
+                    func_80B53CE8(this, play, 5);
+                    break;
+                case 0x28AF:                        /* switch 3 */
+                case 0x28C1:                        /* switch 3 */
+                    func_80B53CE8(this, play, 1);
+                    break;
+                case 0x28BC:                        /* switch 3 */
+                    func_80B53CE8(this, play, 2);
+                    break;
+                case 0x28C6:                        /* switch 3 */
+                    func_80B53CE8(this, play, 0xF);
+                    break;
+                case 0x28F5:                        /* switch 3 */
+                    func_80B53CE8(this, play, 0xA);
+                    break;
+                case 0x28F7:                        /* switch 3 */
+                case 0x28F8:                        /* switch 3 */
+                    func_80B53CE8(this, play, 0x15);
+                    break;
+                case 0x28EB:                        /* switch 3 */
+                    if (this->unk_39C != 0x14) {
+                        this->unk_360 &= 0xBFDF;
+                        this->unk_360 |= 0x200;
+                        func_80B53CE8(this, play, 0x14);
+                    }
+                    break;
+                case 0x28A4:                        /* switch 3 */
+                case 0x28A9:                        /* switch 3 */
+                case 0x28BE:                        /* switch 3 */
+                case 0x28C0:                        /* switch 3 */
+                case 0x295E:
+                    this->unk_18C = func_80B556F8;
+                    this->unk_396 = 0;
+                    break;
+                case 0x28E6:                        /* switch 3 */
+                    this->unk_360 &= 0xDFFF;
+                    this->unk_18C = func_80B55860;
+                    this->unk_396 = 0;
+                    break;
+                case 0x1885:                        /* switch 3 */
+                case 0x28A0:                        /* switch 3 */
+                case 0x28A3:                        /* switch 3 */
+                case 0x28A5:                        /* switch 3 */
+                case 0x28B1:                        /* switch 3 */
+                case 0x28D2:                        /* switch 3 */
+                case 0x28D9:                        /* switch 3 */
+                case 0x28DC:                        /* switch 3 */
+                case 0x28DE:                        /* switch 3 */
+                    this->unk_18C = func_80B557AC;
+                    this->unk_396 = 0;
+                    break;
+                case 0x28A1:                        /* switch 3 */
+                case 0x28A2:                        /* switch 3 */
+                case 0x28A6:                        /* switch 3 */
+                case 0x28A7:                        /* switch 3 */
+                case 0x28A8:                        /* switch 3 */
+                case 0x28AA:                        /* switch 3 */
+                case 0x28AB:                        /* switch 3 */
+                case 0x28AC:                        /* switch 3 */
+                case 0x28AD:                        /* switch 3 */
+                case 0x28AE:                        /* switch 3 */
+                case 0x28B0:                        /* switch 3 */
+                case 0x28B2:                        /* switch 3 */
+                case 0x28B3:                        /* switch 3 */
+                case 0x28B4:                        /* switch 3 */
+                case 0x28B5:                        /* switch 3 */
+                case 0x28B6:                        /* switch 3 */
+                case 0x28B7:                        /* switch 3 */
+                case 0x28B8:                        /* switch 3 */
+                case 0x28B9:                        /* switch 3 */
+                case 0x28BB:                        /* switch 3 */
+                case 0x28BD:                        /* switch 3 */
+                case 0x28BF:                        /* switch 3 */
+                case 0x28C2:                        /* switch 3 */
+                case 0x28C3:                        /* switch 3 */
+                case 0x28C4:                        /* switch 3 */
+                case 0x28C5:                        /* switch 3 */
+                case 0x28C7:                        /* switch 3 */
+                case 0x28C8:                        /* switch 3 */
+                case 0x28C9:                        /* switch 3 */
+                case 0x28CA:                        /* switch 3 */
+                case 0x28CB:                        /* switch 3 */
+                case 0x28CC:                        /* switch 3 */
+                case 0x28CD:                        /* switch 3 */
+                case 0x28CE:                        /* switch 3 */
+                case 0x28CF:                        /* switch 3 */
+                case 0x28D0:                        /* switch 3 */
+                case 0x28D3:                        /* switch 3 */
+                case 0x28D4:                        /* switch 3 */
+                case 0x28D5:                        /* switch 3 */
+                case 0x28D6:                        /* switch 3 */
+                case 0x28D7:                        /* switch 3 */
+                case 0x28D8:                        /* switch 3 */
+                case 0x28DA:                        /* switch 3 */
+                case 0x28DB:                        /* switch 3 */
+                case 0x28DD:                        /* switch 3 */
+                case 0x28DF:                        /* switch 3 */
+                case 0x28E0:                        /* switch 3 */
+                case 0x28E1:                        /* switch 3 */
+                case 0x28E2:                        /* switch 3 */
+                case 0x28E3:                        /* switch 3 */
+                case 0x28E4:                        /* switch 3 */
+                case 0x28E7:                        /* switch 3 */
+                case 0x28E8:                        /* switch 3 */
+                case 0x28E9:                        /* switch 3 */
+                case 0x28EA:                        /* switch 3 */
+                case 0x28EC:                        /* switch 3 */
+                case 0x28ED:                        /* switch 3 */
+                case 0x28EE:                        /* switch 3 */
+                case 0x28EF:                        /* switch 3 */
+                case 0x28F0:                        /* switch 3 */
+                case 0x28F1:                        /* switch 3 */
+                case 0x28F2:                        /* switch 3 */
+                case 0x28F3:                        /* switch 3 */
+                case 0x28F4:                        /* switch 3 */
+                case 0x28F6:                        /* switch 3 */
+                default: // idk
+                    if (this->unk_39C == 0x10) {
+                        func_80B53CE8(this, play, 0xF);
+                    }
+                    if (this->unk_39C == 0x12) {
+                        func_80B53CE8(this, play, 0x11);
+                    }
+                    if ((this->unk_39C == 0x16) || (this->unk_39C == 0x17)) {
+                        func_80B53CE8(this, play, 0x15);
+                    }
+                    if ((this->unk_39C == 7) || (this->unk_39C == 8)) {
+                        func_80B53CE8(this, play, 2);
+                    }
+                    break;
+            }
+
+            switch (sp22) {                         /* switch 4; irregular */
+                case 0x28F5:                        /* switch 4 */
+                    this->unk_38A = 0;
+                    /* fallthrough */
+                case 0x28A5:                        /* switch 4 */
+                case 0x28AA:                        /* switch 4 */
+                case 0x28F8:                        /* switch 4 */
+                    this->unk_38C = 0;
+                    this->unk_38E = 8;
+                    break;
+                case 0x1885:                        /* switch 4 */
+                case 0x28A0:                        /* switch 4 */
+                case 0x28A6:                        /* switch 4 */
+                case 0x28AF:                        /* switch 4 */
+                case 0x28C1:                        /* switch 4 */
+                    this->unk_38C = 3;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28A2:                        /* switch 4 */
+                case 0x28B3:                        /* switch 4 */
+                case 0x28B6:                        /* switch 4 */
+                case 0x28BA:                        /* switch 4 */
+                case 0x28BE:                        /* switch 4 */
+                case 0x28CE:                        /* switch 4 */
+                case 0x28D0:                        /* switch 4 */
+                case 0x28D6:                        /* switch 4 */
+                case 0x28E5:                        /* switch 4 */
+                case 0x28E7:                        /* switch 4 */
+                case 0x28ED:                        /* switch 4 */
+                    this->unk_38C = 1;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28AD:                        /* switch 4 */
+                    this->unk_38C = 8;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28C0:                        /* switch 4 */
+                case 0x28D7:                        /* switch 4 */
+                case 0x28DE:                        /* switch 4 */
+                    this->unk_38C = 2;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28E6:                        /* switch 4 */
+                case 0x28F7:                        /* switch 4 */
+                    this->unk_38C = 6;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28A3:                        /* switch 4 */
+                case 0x28B1:                        /* switch 4 */
+                case 0x28B8:                        /* switch 4 */
+                case 0x28C6:                        /* switch 4 */
+                case 0x28CA:                        /* switch 4 */
+                case 0x28CC:                        /* switch 4 */
+                case 0x28D5:                        /* switch 4 */
+                case 0x28E2:                        /* switch 4 */
+                case 0x28E3:                        /* switch 4 */
+                case 0x28E4:                        /* switch 4 */
+                    this->unk_38C = 4;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28EC:                        /* switch 4 */
+                    this->unk_38A = 5;
+                    /* fallthrough */
+                case 0x28DC:                        /* switch 4 */
+                case 0x28EB:                        /* switch 4 */
+                case 0x28F2:                        /* switch 4 */
+                case 0x28F9:                        /* switch 4 */
+                    this->unk_38C = 5;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28F6:                        /* switch 4 */
+                    this->unk_38C = 9;
+                    this->unk_38E = 8;
+                    break;
+                case 0x28A4:                        /* switch 4 */
+                case 0x28A9:                        /* switch 4 */
+                    this->unk_38C = 7;
+                    this->unk_38E = 8;
+                    break;
+            }
+        }
+
+        this->unk_362 = sp22;
+    } else if (this->unk_360 & 0x400) {
+        this->unk_18C = NULL;
+        this->unk_362 = 0;
+        this->unk_360 &= ~0x400;
+        this->unk_38C = this->unk_38A;
+        this->unk_38E = 4;
+        func_80B555C8(this, play);
+    }
+
+    if (this->unk_18C != NULL) {
+        this->unk_18C(this, play);
+    }
+
+    return 0;
+}
+
+Actor* func_80B55D20(EnAn* this, PlayState* play) {
+    Actor* actor;
+
+    switch (this->unk_200) {
+        default:
+            actor = GET_PLAYER(play);
+            break;
+
+        case 0x15:
+            actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_NB);
+            break;
+
+        case 0x10:
+            actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_PM);
+            break;
+
+        case 0x11:
+            actor = func_80B539CC(this, play, ACTORCAT_NPC, ACTOR_EN_IG);
+            break;
+    }
+
+    return actor;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55D98.s")
 
@@ -946,28 +1295,138 @@ Actor* func_80B55D20(EnAn* this, PlayState* play);
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55F8C.s")
 
+s32 func_80B5600C(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5600C.s")
 
+s32 func_80B56094(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56094.s")
 
+s32 func_80B5611C(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5611C.s")
 
+s32 func_80B561A4(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B561A4.s")
 
+s32 func_80B56418(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56418.s")
 
+s32 func_80B56744(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56744.s")
 
+s32 func_80B56880(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56880.s")
 
+s32 func_80B56B00(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56B00.s")
 
+s32 func_80B56BC0(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56BC0.s")
 
+s32 func_80B56CAC(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56CAC.s")
 
-s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56D28.s")
+s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
+    s32 ret;
+
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
+    this->actor.targetMode = TARGET_MODE_6;
+    this->unk_360 = 0;
+    this->unk_38A = 0;
+    this->unk_38C = 0;
+    this->unk_38E = 8;
+    this->unk_374 = 40.0f;
+
+    switch (scheduleOutput->result) {
+        case 0x10:
+            ret = func_80B5600C(this, play);
+            break;
+
+        case 0x11:
+            ret = func_80B56094(this, play);
+            break;
+
+        case 0x15:
+            ret = func_80B5611C(this, play);
+            break;
+
+        case 0xC:
+            ret = func_80B56B00(this, play);
+            break;
+
+        case 0x1:
+        case 0x18:
+            ret = func_80B56BC0(this, play);
+            break;
+
+        case 0x3:
+        case 0xE:
+        case 0x12:
+        case 0x13:
+        case 0x17:
+            ret = func_80B56880(this, play);
+            break;
+
+        case 0x16:
+            ret = func_80B56744(this, play);
+            break;
+
+        case 0x19:
+            ret = func_80B56CAC(this, play);
+            break;
+
+        case 0x1A:
+        case 0x1B:
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x1F:
+        case 0x20:
+        case 0x21:
+        case 0x22:
+        case 0x23:
+        case 0x24:
+        case 0x25:
+        case 0x26:
+        case 0x27:
+            ret = func_80B561A4(this, play);
+            break;
+
+        case 0x28:
+        case 0x2A:
+        case 0x2B:
+        case 0x2C:
+        case 0x2D:
+        case 0x2E:
+        case 0x2F:
+        case 0x30:
+        case 0x31:
+        case 0x32:
+        case 0x33:
+        case 0x34:
+        case 0x35:
+        case 0x36:
+        case 0x37:
+        case 0x38:
+        case 0x39:
+        case 0x3A:
+        case 0x3B:
+        case 0x3C:
+        case 0x3D:
+        case 0x3E:
+        case 0x3F:
+            ret = func_80B56418(this, play);
+            break;
+
+        default:
+            ret = 0;
+            break;
+    }
+
+    return ret;
+}
+
+//s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput);
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56D28.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56E44.s")
 
@@ -1027,11 +1486,11 @@ void func_80B578F8(EnAn* this, PlayState* play) {
         }
     } else if ((Schedule_RunScript(play, D_80B581D0, &sp20) == 0) || ((this->unk_200 != sp20.result) && (func_80B56D28(this, play, &sp20) == 0))) {
         this->actor.shape.shadowDraw = NULL;
-        this->actor.flags &= ~1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         sp20.result = 0;
     } else {
         this->actor.shape.shadowDraw = ActorShadow_DrawCircle;
-        this->actor.flags |= 1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     this->unk_200 = sp20.result;

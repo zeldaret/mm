@@ -6,6 +6,7 @@
 struct EnAn;
 
 typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
+typedef void (*EnAnUnkFunc)(struct EnAn*, PlayState*);
 typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
@@ -14,7 +15,7 @@ typedef struct EnAn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime unk_144;
     /* 0x188 */ EnAnActionFunc actionFunc;
-    /* 0x18C */ UNK_TYPE1 unk_18C[0x4];
+    /* 0x18C */ EnAnUnkFunc unk_18C;
     /* 0x190 */ ColliderCylinder unk_190;
     /* 0x1DC */ char unk_1DC[0x24];                 /* inferred */
     /* 0x200 */ u8 unk_200; // enum?
@@ -39,7 +40,7 @@ typedef struct EnAn {
     /* 0x264 */ Vec3s unk_264[0x15];
     /* 0x2E2 */ Vec3s unk_2E2[0x15];
     /* 0x360 */ u16 unk_360; // flags?
-    /* 0x362 */ char unk_362[2];                    /* inferred */
+    /* 0x362 */ u16 unk_362;                        /* inferred */
     /* 0x364 */ u8 unk_364;
     /* 0x365 */ char unk_365[3];                    /* maybe part of unk_364[4]? */
     /* 0x368 */ f32 unk_368;                        /* inferred */
@@ -58,7 +59,7 @@ typedef struct EnAn {
     /* 0x390 */ s16 unk_390;                        /* inferred */
     /* 0x392 */ s16 unk_392;                        /* inferred */
     /* 0x394 */ s16 unk_394;
-    /* 0x396 */ UNK_TYPE1 unk_396[0x2];
+    /* 0x396 */ s16 unk_396;
     /* 0x398 */ MsgEventFunc msgEventFunc;
     /* 0x39C */ s32 unk_39C;                        /* inferred */
     /* 0x3A0 */ char unk_3A0[8];                    /* maybe part of unk_39C[3]? */
