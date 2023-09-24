@@ -19,7 +19,6 @@ typedef struct ObjBoyo {
     /* 0x1AA */ s16 unk1AA;
     /* 0x1AC */ s16 unk1AC;
     /* 0x1AE */ s16 unk1AE;
-    /* 0x1B0 */ s16 unk1B0;
 } ObjBoyo; // size = 0x1B0
 
 #endif // Z_OBJ_BOYO_H
