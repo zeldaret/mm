@@ -23,9 +23,6 @@ void func_80B57A44(EnAn* this, PlayState* play);
 
 
 
-s32 func_80B53840(EnAn* this, PlayState* play);
-s32 func_80B53BA8(EnAn* this, PlayState* play);
-void func_80B53ED4(EnAn* this, PlayState* play);
 void func_80B53F84(EnAn* this);
 s32 func_80B55180(EnAn* this, PlayState* play);
 s32 func_80B552E4(EnAn* this, PlayState* play);
@@ -67,10 +64,59 @@ extern CollisionCheckInfoInit2 D_80B58BE8;
 extern Gfx D_060111E8[];
 extern FlexSkeletonHeader D_06012618;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53840.s")
+s32 func_80B53840(EnAn* this, PlayState* play) {
+    s32 ret = 0;
 
-Actor* func_80B539CC(EnAn* this, PlayState* play, u8 arg2, s16 arg3);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B539CC.s")
+    if ((this->unk_214 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && (this->unk_3B8 == 0)) {
+        this->unk_20C = SubS_GetObjectIndex(OBJECT_MSMO, play);
+        this->unk_20B = SubS_GetObjectIndex(OBJECT_AN4, play);
+        this->unk_20A = SubS_GetObjectIndex(OBJECT_MASK_KERFAY, play);
+        this->unk_209 = SubS_GetObjectIndex(OBJECT_AN3, play);
+        this->unk_208 = SubS_GetObjectIndex(OBJECT_AN2, play);
+        this->actor.draw = NULL;
+        this->unk_214 = play->roomCtx.curRoom.num;
+        this->unk_3B8 = 1;
+    }
+
+    if (this->unk_3B8 == 0) {
+        return 0;
+    }
+
+    if (((this->unk_208 >= 0) && (SubS_IsObjectLoaded(this->unk_208, play) == 0)) || ((this->unk_209 >= 0) && (SubS_IsObjectLoaded(this->unk_209, play) == 0)) || ((this->unk_20A >= 0) && (SubS_IsObjectLoaded(this->unk_20A, play) == 0)) || ((this->unk_20B >= 0) && (SubS_IsObjectLoaded(this->unk_20B, play) == 0)) || ((this->unk_20C >= 0) && (SubS_IsObjectLoaded(this->unk_20C, play) == 0))) {
+        ret = 1;
+    } else {
+        this->actor.draw = EnAn_Draw;
+        this->unk_3B8 = 0;
+    }
+
+    return ret;
+}
+
+
+Actor* func_80B539CC(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
+    Actor* foundActor = NULL;
+
+    while (true) {
+        foundActor = SubS_FindActor(play, foundActor, actorCategory, actorId);
+
+        if (foundActor == NULL) {
+            break;
+        }
+
+        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
+            break;
+        }
+
+        if (foundActor->next == NULL) {
+            foundActor = NULL;
+            break;
+        }
+
+        foundActor = foundActor->next;
+    }
+
+    return foundActor;
+}
 
 Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId) {
     Actor* foundActor = NULL;
@@ -82,8 +128,8 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
             break;
         }
 
-        if ((this != (EnAn*)foundActor)) {
-            if ((foundActor->update != NULL) && !(foundActor->params & 0x8000)) {
+        if ((this != (EnAn*)foundActor) && (foundActor->update != NULL)) {
+            if (!(foundActor->params & 0x8000)) {
                 break;
             }
         }
@@ -101,7 +147,34 @@ Actor* func_80B53A7C(EnAn* this, PlayState* play, u8 actorCategory, s16 actorId)
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53B3C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53BA8.s")
+s32 func_80B53BA8(EnAn* this, PlayState* play) {
+    s8 temp_a3 = this->actor.objBankIndex;
+    s8 var_v1 = -1;
+    s32 ret = 0;
+
+    if ((this->unk_39C >= 0x19) && (this->unk_20B >= 0)) {
+        var_v1 = this->unk_20B;
+    } else if ((this->unk_39C >= 0x15) && (this->unk_209 >= 0)) {
+        var_v1 = this->unk_209;
+    } else if ((this->unk_39C >= 0x11) && (this->unk_208 >= 0)) {
+        var_v1 = this->unk_208;
+    } else if (this->unk_39C < 0x11) {
+        var_v1 = temp_a3;
+    }
+
+    if (var_v1 < 0) {
+        return 0;
+    }
+
+    if (var_v1 >= 0) {
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[var_v1].segment);
+        this->unk_144.playSpeed = this->unk_368;
+        ret = SkelAnime_Update(&this->unk_144);
+        gSegments[0x6] = OS_K0_TO_PHYSICAL(play->objectCtx.status[temp_a3].segment);
+    }
+
+    return ret;
+}
 
 s32 func_80B53CE8(EnAn* this, PlayState* play, s32 arg2) {
     s8 temp_t1 = this->actor.objBankIndex;
@@ -163,9 +236,85 @@ s32 func_80B53CE8(EnAn* this, PlayState* play, s32 arg2) {
     return var_t2;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53ED4.s")
+extern Vec3f D_80B58E34;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53F84.s")
+void func_80B53ED4(EnAn* this, PlayState* play) {
+    f32 temp;
+    s32 pad;
+    Vec3f sp24;
+
+    if (this->unk_200 == 0x19) {
+        Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &D_80B58E34, &sp24);
+        this->unk_190.dim.radius = 20;
+        Math_Vec3f_ToVec3s(&this->unk_190.dim.pos, &sp24);
+    } else {
+        Collider_UpdateCylinder(&this->actor, &this->unk_190);
+    }
+
+    temp = this->actor.focus.pos.y - this->actor.world.pos.y;
+    this->unk_190.dim.height = TRUNCF_BINANG(temp);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_190.base);
+}
+
+extern s16 D_80B58E40[];
+
+void func_80B53F84(EnAn* this) {
+    s32 var_a1 = 0;
+
+    if (this->unk_360 & 0x100) {
+        if (DECR(this->unk_38E) == 0) {
+            // default case doesn't match
+            switch (this->unk_38C) {
+                case 0x2:
+                case 0x4:
+                case 0x6:
+                    if ((this->unk_390 == 5) || (this->unk_390 == 2)) {
+                        var_a1 = 1;
+                        this->unk_390 = 5;
+                    }
+                    break;
+
+                case 0x5:
+                case 0x7:
+                    if ((this->unk_390 == 6) || (this->unk_390 == 1)) {
+                        var_a1 = 1;
+                        this->unk_390 = 6;
+                    }
+                    break;
+
+                case 0x8:
+                    if ((this->unk_390 == 4) || (this->unk_390 == 2)) {
+                        var_a1 = 1;
+                        this->unk_390 = 4;
+                    }
+                    break;
+            }
+
+            if (var_a1 == 0) {
+                if ((this->unk_390 == 4) || (this->unk_390 == 5)) {
+                    this->unk_390 = 0;
+                } else if (this->unk_390 == 6) {
+                    this->unk_390 = 1;
+                }
+            }
+
+            if (var_a1 == 0) {
+                this->unk_390++;
+
+                if (this->unk_390 >= 4) {
+                    if ((this->unk_38C == 0) || (this->unk_38C == 1) || (this->unk_38C == 3)) {
+                        this->unk_38E = Rand_S16Offset(0x1E, 0x1E);
+                    } else {
+                        this->unk_38E = 8;
+                    }
+                    this->unk_390 = 0;
+                }
+            }
+        }
+    }
+
+    this->unk_392 = D_80B58E40[this->unk_38C];
+}
 
 extern Vec3f D_80B58E54;
 extern Vec3s D_80B58E60;
@@ -265,21 +414,197 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54750.s")
 
+s32 func_80B547C8(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B547C8.s")
 
+s32 func_80B5492C(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5492C.s")
 
+s32 func_80B54A94(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54A94.s")
 
+s32 func_80B54BC4(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54BC4.s")
 
+s32 func_80B54C5C(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54C5C.s")
 
+s32 func_80B54D18(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54D18.s")
 
-UNK_PTR func_80B54DF4(EnAn* this, PlayState* play);
+extern s32 D_80B58718[];
+extern s32 D_80B58784[];
+extern s32 D_80B58808[];
+extern s32 D_80B5885C[];
+extern s32 D_80B58938[];
+extern s32 D_80B58944[];
+extern s32 D_80B5894C[];
+extern s32 D_80B58954[];
+extern s32 D_80B58980[];
+extern s32 D_80B58988[];
+extern s32 D_80B58994[];
+extern s32 D_80B5899C[];
+extern s32 D_80B589AC[];
+extern s32 D_80B589FC[];
+extern s32 D_80B58A04[];
+extern s32 D_80B58A24[];
+extern s32 D_80B58A3C[];
+extern s32 D_80B58A44[];
+extern s32 D_80B58ABC[];
+extern s32 D_80B58AC4[];
+extern s32 D_80B58AE8[];
+extern s32 D_80B58AF4[];
+extern s32 D_80B58B3C[];
+extern s32 D_80B58B7C[];
+extern s32 D_80B58B88[];
+extern s32 D_80B58B90[];
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54DF4.s")
+s32* func_80B54DF4(EnAn* this, PlayState* play) {
+    Player* player = GET_PLAYER(play);
+
+    switch (this->unk_200) {
+        case 0x15:
+            this->msgEventFunc = func_80B54A94;
+            return D_80B58808;
+
+        case 0x10:
+            this->msgEventFunc = func_80B547C8;
+            return D_80B58718;
+
+        case 0x11:
+            this->msgEventFunc = func_80B5492C;
+            return D_80B58784;
+
+        case 0xE:
+            this->msgEventFunc = func_80B54C5C;
+            return D_80B58954;
+
+        case 0xC:
+            return D_80B5899C;
+
+        case 0x19:
+            return D_80B58B90;
+
+        default:
+            if (player->transformation == PLAYER_FORM_DEKU) {
+                switch (this->unk_200) {
+                    case 0x1:
+                        return D_80B58AE8;
+
+                    case 0x28:
+                    case 0x2A:
+                    case 0x2B:
+                    case 0x2C:
+                    case 0x2D:
+                    case 0x2F:
+                        return D_80B58B7C;
+
+                    case 0x3:
+                        return D_80B58A24;
+
+                    case 0x31:
+                        return D_80B589FC;
+
+                    default:
+                        return D_80B58A04;
+                }
+            } else {
+                if (Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) {
+                    if (this->unk_200 == 0x31) {
+                        return D_80B58B88;
+                    }
+
+                    if (this->unk_200 == 0x17) {
+                        this->msgEventFunc = func_80B54BC4;
+                        return D_80B589AC;
+                    }
+
+                    if (this->unk_200 == 3) {
+                        this->msgEventFunc = func_80B54D18;
+                        return D_80B58B3C;
+                    }
+
+                    if (gSaveContext.save.day >= 2) {
+                        return D_80B58A44;
+                    }
+
+                    //if ((gSaveContext.save.time - 0x3FFC) < 0x5883) {
+                    if ((gSaveContext.save.time - (CLOCK_TIME(6, 0)-4)) < (CLOCK_TIME(8, 18)-5)) {
+                        return D_80B58ABC;
+                    }
+                    return D_80B58AC4;
+                }
+
+                if ((player->transformation == PLAYER_FORM_HUMAN) && (gSaveContext.save.saveInfo.weekEventReg[0x32] & 8)) {
+                    if (this->unk_200 == 0x17) {
+                        this->msgEventFunc = func_80B54BC4;
+                        return D_80B589AC;
+                    }
+                    if (this->unk_200 == 3) {
+                        this->msgEventFunc = func_80B54D18;
+                        return D_80B58AF4;
+                    }
+                    if (gSaveContext.save.day >= 2) {
+                        return D_80B58A44;
+                    }
+                }
+
+                switch (this->unk_200) {
+                    case 0x1:
+                        return D_80B58AE8;
+
+                    case 0x28:
+                        return D_80B5894C;
+
+                    case 0x2A:
+                    case 0x2B:
+                    case 0x2C:
+                    case 0x2D:
+                        return D_80B58980;
+
+                    case 0x3:
+                        this->msgEventFunc = func_80B54D18;
+                        return D_80B58AF4;
+
+                    case 0x12:
+                        if (gSaveContext.save.day >= 2) {
+                            return D_80B58A3C;
+                        }
+                        return D_80B5885C;
+
+                    case 0x13:
+                    case 0x2F:
+                        return D_80B58938;
+
+                    case 0x16:
+                        return D_80B58988;
+
+                    case 0x17:
+                        return D_80B589FC;
+
+                    case 0x30:
+                        return D_80B58944;
+
+                    case 0x31:
+                        if (player->transformation == PLAYER_FORM_HUMAN) {
+                            return D_80B58B88;
+                        }
+                        return D_80B589FC;
+
+                    case 0x34:
+                    case 0x35:
+                        return D_80B58994;
+
+                    default:
+                        break;
+                }
+            }
+            break;
+    }
+
+    return NULL;
+}
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54DF4.s")
 
 s32 func_80B55180(EnAn* this, PlayState* play) {
     s32 ret = false;
@@ -288,9 +613,9 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
         SubS_SetOfferMode(&this->unk_360, 0U, 7U);
         this->unk_3C4 = 0;
         this->unk_394 = 0;
-        this->unk_398 = NULL;
+        this->msgEventFunc = NULL;
         this->actor.child = this->unk_218;
-        this->unk_204 = func_80B54DF4(this, play);
+        this->msgEventScript = func_80B54DF4(this, play);
 
         if ((this->unk_200 == 1) || (this->unk_200 == 3) || (this->unk_200 == 0x12) || (this->unk_200 == 0x13) || (this->unk_200 == 0x17) || (this->unk_200 == 0x16) || (this->unk_200 == 0x28) || (this->unk_200 == 0x2A) || (this->unk_200 == 0x2B) || (this->unk_200 == 0x2C) || (this->unk_200 == 0x2D) || (this->unk_200 == 0x2F) || (this->unk_200 == 0x30) || (this->unk_200 == 0x31) || (this->unk_200 == 0x34) || (this->unk_200 == 0x35)) {
             this->unk_360 |= 0x20;
@@ -450,7 +775,30 @@ void func_80B578F8(EnAn* this, PlayState* play) {
     func_80B57718(this, play);
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57A44.s")
+
+void func_80B57A44(EnAn* this, PlayState* play) {
+    if (func_8010BF58(&this->actor, play, this->msgEventScript, this->msgEventFunc, &this->msgScriptResumePos) != 0) {
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+
+        this->unk_360 &= ~0x20;
+        this->unk_360 |= 0x200;
+        this->unk_388 = 0x14;
+        this->msgScriptResumePos = 0;
+        this->actionFunc = func_80B578F8;
+    } else if ((this->unk_200 != 1) && (this->unk_200 != 3) && (this->unk_200 != 0xC) && (this->unk_200 != 0xE) && (this->unk_200 != 0x19)) {
+        if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
+            s32 temp;
+            Vec3f sp38;
+            Vec3f sp2C;
+
+            Math_Vec3f_Copy(&sp38, &this->unk_218->world.pos);
+            Math_Vec3f_Copy(&sp2C, &this->actor.world.pos);
+            temp = Math_Vec3f_Yaw(&sp2C, &sp38);
+
+            Math_ApproachS(&this->actor.shape.rot.y, temp, 4, 0x2AA8);
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57B48.s")
 

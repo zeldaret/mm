@@ -6,6 +6,7 @@
 struct EnAn;
 
 typedef void (*EnAnActionFunc)(struct EnAn*, PlayState*);
+typedef s32 (*MsgEventFunc)(Actor*, PlayState*);
 
 #define ENAN_GET_8000(thisx) (((thisx)->params & 0x8000) >> 0xF)
 
@@ -16,17 +17,17 @@ typedef struct EnAn {
     /* 0x18C */ UNK_TYPE1 unk_18C[0x4];
     /* 0x190 */ ColliderCylinder unk_190;
     /* 0x1DC */ char unk_1DC[0x24];                 /* inferred */
-    /* 0x200 */ u8 unk_200;                         /* inferred */
+    /* 0x200 */ u8 unk_200; // enum?
     /* 0x201 */ char unk_201[3];                    /* maybe part of unk_200[4]? */
-    /* 0x204 */ void* unk_204;                      /* inferred */
-    /* 0x208 */ s8 unk_208;                         /* inferred */
-    /* 0x209 */ s8 unk_209;                         /* inferred */
-    /* 0x20A */ s8 unk_20A;                         /* inferred */
-    /* 0x20B */ s8 unk_20B;                         /* inferred */
-    /* 0x20C */ s8 unk_20C;                         /* inferred */
+    /* 0x204 */ s32* msgEventScript;
+    /* 0x208 */ s8 unk_208;
+    /* 0x209 */ s8 unk_209;
+    /* 0x20A */ s8 unk_20A;
+    /* 0x20B */ s8 unk_20B;
+    /* 0x20C */ s8 unk_20C;
     /* 0x20D */ char unk_20D[3];                    /* maybe part of unk_20C[4]? */
-    /* 0x210 */ s32 unk_210;                        /* inferred */
-    /* 0x214 */ s8 unk_214;
+    /* 0x210 */ s32 msgScriptResumePos;
+    /* 0x214 */ s8 unk_214; // curRoom.num
     /* 0x215 */ char unk_215[3];                    /* maybe part of unk_214[4]? */
     /* 0x218 */ Actor* unk_218;                     /* inferred */
     /* 0x21C */ UNK_TYPE1 unk_21C[0x24];                 /* maybe part of unk_218[0x13]? */
@@ -58,7 +59,7 @@ typedef struct EnAn {
     /* 0x392 */ s16 unk_392;                        /* inferred */
     /* 0x394 */ u16 unk_394;
     /* 0x396 */ UNK_TYPE1 unk_396[0x2];
-    /* 0x398 */ void* unk_398;                      /* inferred */
+    /* 0x398 */ MsgEventFunc msgEventFunc;
     /* 0x39C */ s32 unk_39C;                        /* inferred */
     /* 0x3A0 */ char unk_3A0[8];                    /* maybe part of unk_39C[3]? */
     /* 0x3A8 */ u32 unk_3A8;                        /* inferred */
