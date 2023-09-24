@@ -2057,8 +2057,7 @@ beginseg
     name "ovl_En_Ge3"
     compress
     include "build/src/overlays/actors/ovl_En_Ge3/z_en_ge3.o"
-    include "build/data/ovl_En_Ge3/ovl_En_Ge3.data.o"
-    include "build/data/ovl_En_Ge3/ovl_En_Ge3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ge3/ovl_En_Ge3_reloc.o"
 endseg
 
 beginseg
