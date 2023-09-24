@@ -36,8 +36,6 @@ typedef struct ObjBoyoUnkStruct {
     /* 0x4 */ ObjBoyoCollisionHandler colHandler;
 } ObjBoyoUnkStruct; // size = 0x8
 
-static AnimatedMaterial* D_06000E88 = object_boyo_Matanimheader_000E88;
-
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
@@ -84,7 +82,7 @@ void ObjBoyo_Init(Actor* thisx, PlayState* play) {
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
     this->actor.colChkInfo.mass = 0xFF;
-    this->animatedMaterial = Lib_SegmentedToVirtual((void*)&D_06000E88);
+    this->animatedMaterial = Lib_SegmentedToVirtual(&object_boyo_Matanimheader_000E88);
 }
 
 void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
@@ -202,10 +200,9 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
     }
 }
 
-static Gfx* D_06000300 = object_boyo_DL_000300;
 void ObjBoyo_Draw(Actor* thisx, PlayState* play) {
     ObjBoyo* this = THIS;
 
     AnimatedMat_Draw(play, this->animatedMaterial);
-    Gfx_DrawDListOpa(play, D_06000300);
+    Gfx_DrawDListOpa(play, object_boyo_DL_000300);
 }
