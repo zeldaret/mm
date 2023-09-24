@@ -652,20 +652,6 @@ Vec3s D_80B58E88 = { 0, 0, 0 };
 Vec3f D_80B58E90 = { -508.0f, 210.0f, -162.0f };
 Vec3s D_80B58E9C = { 0, 0x3FFC, 0 };
 Vec3s D_80B58EA4 = { 0, -0x2AAD, 0 };
-s32 D_80B58EAC[0xA] = { 0, 0xB, 0x22, 0x19, 0x1A, 0x1C, 0x1E, 0x20, 0x21, 0 };
-Vec3f D_80B58ED4 = { 1000.0f, 0.0f, 0.0f };
-void* D_80B58EE0[3] = { (void* )0x0600E6E0, (void* )0x0600F7A0, (void* )0x060101A0 };
-void* D_80B58EEC[9] = {
-    (void* )0x0600E1E0,
-    (void* )0x0600EFA0,
-    (void* )0x0600F3A0,
-    (void* )0x0600EFA0,
-    (void* )0x0600FDA0,
-    (void* )0x0600F9A0,
-    (void* )0x060103A0,
-    NULL,
-    NULL,
-};
 
 extern ColliderCylinderInit D_80B58BBC;
 extern CollisionCheckInfoInit2 D_80B58BE8;
@@ -2899,19 +2885,15 @@ void func_80B57A44(EnAn* this, PlayState* play) {
     }
 }
 
-extern s32 D_80B58EAC[];
-#if 0
-
+#ifdef NON_EQUIVALENT
 void func_80B57B48(EnAn* this, PlayState* play) {
-    s32 sp30[0xA];
+    s32 sp30[] = { 0, 0xB, 0x22, 0x19, 0x1A, 0x1C, 0x1E, 0x20, 0x21, 0 };
     s32 temp_v0; // sp28
     u16 temp_v1;
     u8 var_v0;
 
-    //M2C_MEMCPY_ALIGNED(&sp30, &D_80B58EAC, 0x28);
     if (Cutscene_IsCueInChannel(play, 0x22DU) != 0) {
         temp_v0 = Cutscene_GetCueChannel(play, 0x22DU);
-
         temp_v1 = play->csCtx.actorCues[temp_v0]->id;
         var_v0 = temp_v1 & 0xFF;
         if ((temp_v1 & 0xFF) != this->unk_364) {
@@ -2921,25 +2903,39 @@ void func_80B57B48(EnAn* this, PlayState* play) {
                 var_v0 = this->unk_364;
                 this->unk_3B4 = 1;
             }
-
             if (var_v0 == 9) {
                 this->unk_3B4 = 0;
             }
-
             func_80B53CE8(this, play, sp30[temp_v1]);
         }
 
-        if (((this->unk_39C == 0x1A) || (this->unk_39C == 0x1C) || (this->unk_39C == 0x1E) || (this->unk_39C == 0x22)) && Animation_OnFrame(&this->unk_144, this->unk_144.endFrame)) {
-            func_80B53CE8(this, play, this->unk_39C + 1);
+        if ((this->unk_39C == 0x1A) || (this->unk_39C == 0x1C) || (this->unk_39C == 0x1E) || (this->unk_39C == 0x22)) {
+            if (Animation_OnFrame(&this->unk_144, this->unk_144.endFrame) != 0) {
+                func_80B53CE8(this, play, this->unk_39C + 1);
+            }
         }
-
         Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
     }
 }
 #else
+s32 D_80B58EAC[0xA] = { 0, 0xB, 0x22, 0x19, 0x1A, 0x1C, 0x1E, 0x20, 0x21, 0 };
 void func_80B57B48(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57B48.s")
 #endif
+
+Vec3f D_80B58ED4 = { 1000.0f, 0.0f, 0.0f };
+void* D_80B58EE0[3] = { (void* )0x0600E6E0, (void* )0x0600F7A0, (void* )0x060101A0 };
+void* D_80B58EEC[9] = {
+    (void* )0x0600E1E0,
+    (void* )0x0600EFA0,
+    (void* )0x0600F3A0,
+    (void* )0x0600EFA0,
+    (void* )0x0600FDA0,
+    (void* )0x0600F9A0,
+    (void* )0x060103A0,
+    NULL,
+    NULL,
+};
 
 void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 pad;

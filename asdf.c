@@ -107,7 +107,7 @@ s32 func_80B56D28(EnAn* arg0, u8* arg2, u8*);       /* static */
 ? func_80B575BC(Actor* arg0, ? arg1);               /* static */
 ? func_80B57674(EnAn* arg0, ? arg1);                /* static */
 void func_80B57718(EnAn* arg0, PlayState*);         /* static */
-extern u8 D_80B581D0;
+extern u8 sScheduleScript;
 extern ? D_80B58618;
 extern ? D_80B58718;
 extern ? D_80B58784;
@@ -2674,7 +2674,7 @@ void func_80B578F8(EnAn* this, PlayState* play) {
         if (this->unk_200 != 0x19) {
             func_80B56D28(this, (u8* ) play, &sp20);
         }
-    } else if ((Schedule_RunScript(play, &D_80B581D0, (ScheduleOutput* ) &sp20) == 0) || ((sp20 != this->unk_200) && (func_80B56D28(this, (u8* ) play, &sp20) == 0))) {
+    } else if ((Schedule_RunScript(play, &sScheduleScript, (ScheduleOutput* ) &sp20) == 0) || ((sp20 != this->unk_200) && (func_80B56D28(this, (u8* ) play, &sp20) == 0))) {
         this->actor.shape.shadowDraw = NULL;
         this->actor.flags &= ~1;
         sp20 = 0;
