@@ -16,14 +16,14 @@ typedef struct DmHina {
     /* 0x154 */ f32 unk154;
     /* 0x158 */ f32 unk158;
     /* 0x15C */ f32 unk15C;
-    /* 0x160 */ Vec3f unk160;
-    /* 0x16C */ Vec3f unk16C;
+    /* 0x160 */ Vec3f subCamEye;
+    /* 0x16C */ Vec3f subCamAt;
     /* 0x178 */ UNK_TYPE1 pad178[2];
-    /* 0x17A */ s16 unk17A;
+    /* 0x17A */ s16 subCamId;
     /* 0x17C */ s16 unk17C;
     /* 0x17E */ u8 unk17E;
     /* 0x17F */ u8 unk17F;
-    /* 0x180 */ u8 unk180;
+    /* 0x180 */ u8 isDrawn;
 } DmHina; // size = 0x184
 
 #endif // Z_DM_HINA_H

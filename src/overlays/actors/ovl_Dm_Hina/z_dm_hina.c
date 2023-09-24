@@ -36,7 +36,7 @@ ActorInit Dm_Hina_InitVars = {
 void DmHina_Init(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
 
-    this->unk180 = 1;
+    this->isDrawn = true;
     this->actionFunc = func_80A1F470;
     this->unk158 = this->actor.world.pos.y;
     this->unk148 = 0.0f;
@@ -54,8 +54,8 @@ void func_80A1F470(DmHina* this, PlayState* play) {
 
     Math_SmoothStepToF(&this->unk148, 0.6f, 0.5f, 0.05f, 0.001f);
     this->unk154 = Math_SinS(play->gameplayFrames * 0x708) * 8.0f;
-    if ((player->stateFlags1 & 0x400) && (this->actor.xzDistToPlayer < 80.0f)) {
-        this->unk180 = 0;
+    if ((player->stateFlags1 & PLAYER_STATE1_400) && (this->actor.xzDistToPlayer < 80.0f)) {
+        this->isDrawn = false;
         this->unk154 = 0.0f;
         this->actor.world.pos.y += 40.0f;
         this->actionFunc = func_80A1F56C;
@@ -72,23 +72,23 @@ void func_80A1F56C(DmHina* this, PlayState* play) {
 void func_80A1F5AC(DmHina* this, PlayState* play) {
     this->unk17C--;
     if (this->unk17C == 0) {
-        this->unk180 = 1;
+        this->isDrawn = true;
         Cutscene_StartManual(play, &play->csCtx);
-        this->unk17A = Play_CreateSubCamera(play);
+        this->subCamId = Play_CreateSubCamera(play);
         Play_ChangeCameraStatus(play, CAM_ID_MAIN, CAM_STATUS_WAIT);
-        Play_ChangeCameraStatus(play, this->unk17A, CAM_STATUS_ACTIVE);
+        Play_ChangeCameraStatus(play, this->subCamId, CAM_STATUS_ACTIVE);
         this->actionFunc = func_80A1F63C;
     }
 }
 
 void func_80A1F63C(DmHina* this, PlayState* play) {
-    this->unk160.x = this->actor.world.pos.x + 100.0f;
-    this->unk160.y = this->unk158 + 260.0f;
-    this->unk160.z = this->actor.world.pos.z + 100.0f;
-    this->unk16C.x = this->actor.world.pos.x;
-    this->unk16C.y = this->actor.world.pos.y + this->unk154 * this->unk15C + 40.0f * this->unk15C;
-    this->unk16C.z = this->actor.world.pos.z;
-    Play_SetCameraAtEye(play, this->unk17A, &this->unk16C, &this->unk160);
+    this->subCamEye.x = this->actor.world.pos.x + 100.0f;
+    this->subCamEye.y = this->unk158 + 260.0f;
+    this->subCamEye.z = this->actor.world.pos.z + 100.0f;
+    this->subCamAt.x = this->actor.world.pos.x;
+    this->subCamAt.y = this->actor.world.pos.y + this->unk154 * this->unk15C + 40.0f * this->unk15C;
+    this->subCamAt.z = this->actor.world.pos.z;
+    Play_SetCameraAtEye(play, this->subCamId, &this->subCamAt, &this->subCamEye);
     Math_SmoothStepToF(&this->actor.world.pos.y, this->unk158 + 300.0f, 0.5f, 2.0f, 0.1f);
     if (((this->unk158 + 240.0f) < this->actor.world.pos.y) && (this->unk17E != 1)) {
         this->unk17E = 1;
@@ -118,6 +118,9 @@ void func_80A1F75C(DmHina* this, PlayState* play) {
             if (play->envCtx.lightSettings.fogNear < -300) {
                 play->roomCtx.curRoom.segment = NULL;
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -157,15 +160,15 @@ void func_80A1F9AC(DmHina* this, PlayState* play) {
 
 void DmHina_Draw(Actor* thisx, PlayState* play) {
     DmHina* this = THIS;
+    f32 scale;
 
-    if (this->unk180 != 0) {
+    if (this->isDrawn != 0) {
         Matrix_Translate(this->actor.world.pos.x,
                          this->actor.world.pos.y + (this->unk154 * this->unk15C) + (40.0f * this->unk15C),
                          this->actor.world.pos.z, MTXMODE_NEW);
         Matrix_RotateZYX(0, play->gameplayFrames * 0x3E8, 0, MTXMODE_APPLY);
-        Matrix_Scale((this->unk148 * (1.0f - this->unk14C) * this->unk15C),
-                     (this->unk148 * (1.0f - this->unk14C) * this->unk15C),
-                     (this->unk148 * (1.0f - this->unk14C) * this->unk15C), MTXMODE_APPLY);
+        scale = this->unk148 * (1.0f - this->unk14C) * this->unk15C;
+        Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         switch (this->actor.params) {
             case 0:
                 GetItem_Draw(play, GID_REMAINS_ODOLWA);
@@ -181,6 +184,9 @@ void DmHina_Draw(Actor* thisx, PlayState* play) {
 
             case 3:
                 GetItem_Draw(play, GID_REMAINS_TWINMOLD);
+                break;
+
+            default:
                 break;
         }
         func_80A1F9AC(this, play);
