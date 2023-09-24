@@ -59,7 +59,9 @@ typedef struct EnAn {
     /* 0x394 */ char pad_394[4];                    /* maybe part of unk_392[3]? */
     /* 0x398 */ void* unk_398;                      /* inferred */
     /* 0x39C */ s32 unk_39C;                        /* inferred */
-    /* 0x3A0 */ char pad_3A0[0x10];                 /* maybe part of unk_39C[5]? */
+    /* 0x3A0 */ char pad_3A0[8];                    /* maybe part of unk_39C[3]? */
+    /* 0x3A8 */ u32 unk_3A8;                        /* inferred */
+    /* 0x3AC */ u32 unk_3AC;                        /* inferred */
     /* 0x3B0 */ s32 unk_3B0;                        /* inferred */
     /* 0x3B4 */ s32 unk_3B4;                        /* inferred */
     /* 0x3B8 */ s32 unk_3B8;

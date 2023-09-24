@@ -64,7 +64,7 @@ static CollisionCheckInfoInit2 D_80B58BE8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 extern ColliderCylinderInit D_80B58BBC;
 extern CollisionCheckInfoInit2 D_80B58BE8;
 
-extern UNK_TYPE D_060111E8;
+extern Gfx D_060111E8[];
 extern FlexSkeletonHeader D_06012618;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53840.s")
@@ -166,8 +166,97 @@ s32 func_80B53CE8(EnAn* this, PlayState* play, s32 arg2) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B53F84.s")
 
-void func_80B54124(EnAn* this, PlayState* play, u32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54124.s")
+extern Vec3f D_80B58E54;
+extern Vec3s D_80B58E60;
+
+extern Gfx D_0A000D40[];
+
+extern Gfx D_06000378[];
+extern Gfx D_06000308[];
+extern Gfx D_06012478[];
+extern Gfx D_06000E70[];
+
+extern Vec3f D_80B58E68;
+extern Vec3s D_80B58E74;
+
+
+void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
+    s32 pad;
+    s8 sp53 = this->actor.objBankIndex;
+    s8 temp_a2;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Matrix_Push();
+
+    switch (arg2) {
+        case 0x0:
+            if ((this->unk_360 & 0x800) && (this->unk_3B0 == 0)) {
+                this->unk_3A8 += 1;
+                this->unk_3AC -= 2;
+                Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPSegment(POLY_XLU_DISP++, 0x08,  Gfx_TwoTexScroll(play->state.gfxCtx, 0, this->unk_3A8, 0U, 0x10, 0x10, 1, 0U, this->unk_3AC, 0x10, 0x10));
+                gSPDisplayList(POLY_XLU_DISP++, D_060111E8);
+
+                Gfx_SetupDL25_Opa(play->state.gfxCtx);
+            }
+            break;
+
+        case 0x1:
+            temp_a2 = this->unk_20A;
+            if ((this->unk_360 & 0x4000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
+                gSPSegment(POLY_OPA_DISP++, 0x0A, play->objectCtx.status[temp_a2].segment);
+
+                Matrix_TranslateRotateZYX(&D_80B58E54, &D_80B58E60);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(POLY_OPA_DISP++, D_0A000D40);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+            }
+            break;
+        case 0x2:
+            temp_a2 = this->unk_208;
+            if ((this->unk_360 & 0x1000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp_a2].segment);
+                gSPDisplayList(POLY_OPA_DISP++, D_06000378);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+            }
+            break;
+
+        case 0x3:
+            temp_a2 = this->unk_209;
+            if ((this->unk_360 & 0x2000) && (this->unk_3B0 == 0) && (temp_a2 >= 0)) {
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp_a2].segment);
+                gSPDisplayList(POLY_OPA_DISP++, D_06000308);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+            }
+            break;
+
+        case 0x4:
+            if ((this->unk_360 & 0x8000) && (this->unk_3B0 == 0)) {
+                gSPDisplayList(POLY_OPA_DISP++, D_06012478);
+            }
+            break;
+
+        case 0x5:
+            temp_a2 = this->unk_20C;
+            if ((this->unk_3B4 != 0) && (temp_a2 >= 0)) {
+                Matrix_TranslateRotateZYX(&D_80B58E68, &D_80B58E74);
+
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[temp_a2].segment);
+                gSPDisplayList(POLY_OPA_DISP++, D_06000E70);
+                gSPSegment(POLY_OPA_DISP++, 0x06, play->objectCtx.status[sp53].segment);
+            }
+            break;
+    }
+
+    Matrix_Pop();
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54678.s")
 
