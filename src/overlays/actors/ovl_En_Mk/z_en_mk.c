@@ -57,8 +57,8 @@ static ColliderCylinderInit sCylinderInit = {
 
 s32 func_809592E0(EnMk* this, s16 index) {
     AnimationHeader* sAnimations[] = {
-        &gMarineResearcherIdleAnim,          &gMarineResearcherHeadWaggleAnim,   &gMarineResearcherYellingAnim,
-        &gMarineResearcherShakingInFearAnim, &gMarineResearcherStrokingChinAnim,
+        &gMarineResearcherIdleAnim,          &gMarineResearcherHeadWaggleAnim,   &gMarineResearcherYellAnim,
+        &gMarineResearcherShakeInFearAnim, &gMarineResearcherStrokeChinAnim,
     };
 
     if (index == this->unk_27C) {
