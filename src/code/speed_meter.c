@@ -84,8 +84,8 @@ SpeedMeterTimeEntry sSpeedMeterTimeEntryArray[] = {
     }                                      \
     (void)0
 
-void SpeedMeter_InitImpl(SpeedMeter* this, s32 arg1, s32 y) {
-    this->unk_18 = arg1;
+void SpeedMeter_InitImpl(SpeedMeter* this, s32 x, s32 y) {
+    this->x = x;
     this->y = y;
 }
 
@@ -210,7 +210,7 @@ void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, Gam
     u32 ulx = 30;
     u32 lrx = 290;
     SpeedMeterAllocEntry entry;
-    u32 pad2;
+    s32 pad2;
     s32 y;
     TwoHeadGfxArena* thga;
     u32 zeldaFreeMax;
