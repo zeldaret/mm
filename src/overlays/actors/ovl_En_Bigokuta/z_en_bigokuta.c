@@ -492,7 +492,7 @@ void EnBigokuta_CheckOneHitKill(EnBigokuta* this, PlayState* play) {
             if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x1000) { // Ice Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
                 this->drawDmgEffScale = 1.2f;
-                this->drawDmgEffFrozenSteamScale = 1.8000001f;
+                this->drawDmgEffFrozenSteamScale = 1800.0f * 0.001f;
                 this->drawDmgEffAlpha = 1.0f;
             } else if (this->bodyCollider.info.acHitInfo->toucher.dmgFlags & 0x2000) { // Light Arrow
                 this->drawDmgEffType = ACTOR_DRAW_DMGEFF_LIGHT_ORBS;
