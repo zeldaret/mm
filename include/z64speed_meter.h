@@ -28,4 +28,14 @@ void SpeedMeter_Destroy(SpeedMeter* this);
 void SpeedMeter_DrawTimeEntries(SpeedMeter* this, struct GraphicsContext* gfxCtx);
 void SpeedMeter_DrawAllocEntries(SpeedMeter* this, struct GraphicsContext* gfxCtx, struct GameState* state);
 
+extern volatile OSTime gRSPAudioTimeTotal;
+extern volatile OSTime gRSPGfxTimeTotal;
+extern volatile OSTime gRDPTimeTotal;
+extern volatile OSTime gGraphUpdatePeriod;
+extern volatile OSTime gRSPAudioTimeAcc;
+extern volatile OSTime gRSPGfxTimeAcc;
+extern volatile OSTime gRSPOtherTimeAcc;
+extern volatile OSTime D_801FBB18;
+extern volatile OSTime gRDPTimeAcc;
+
 #endif

@@ -1902,19 +1902,6 @@ extern GfxMasterList* gGfxMasterDL;
 extern u64* gAudioSPDataPtr;
 extern u32 gAudioSPDataSize;
 
-extern volatile OSTime D_801FBAE0;
-extern volatile OSTime D_801FBAE8;
-extern volatile OSTime gRDPTimeTotal;
-extern volatile OSTime lastRenderFrameDuration;
-extern volatile OSTime gRSPAudioTotalTime;
-extern volatile OSTime sRSPGFXTotalTime;
-extern volatile OSTime sRSPOtherTotalTime;
-// extern UNK_TYPE1 D_801FBB18;
-
-// Accumulator for `gRDPTimeTotal`
-extern volatile OSTime gRDPTimeAcc;
-// extern UNK_TYPE1 sSpeedMeterTimeEntryPtr;
-
 extern Vec3f D_801FBBF0;
 extern LineSegment Math3D_ColSphereTri_line;
 extern Vec3f Math3D_ColSphereTri_point;

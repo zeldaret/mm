@@ -4,6 +4,41 @@
 #include "z64view.h"
 #include "system_malloc.h"
 
+/**
+ * How much time the RSP ran audio tasks for over the course of `gGraphUpdatePeriod`.
+ */
+volatile OSTime gRSPAudioTimeTotal;
+
+/**
+ * How much time the RSP ran graphics tasks for over the course of `gGraphUpdatePeriod`.
+ * Typically the RSP runs 1 graphics task per `Graph_Update` cycle, but may run 0 (see `Graph_Update`).
+ */
+volatile OSTime gRSPGfxTimeTotal;
+
+/**
+ * How much time the RDP ran for over the course of `gGraphUpdatePeriod`.
+ */
+volatile OSTime gRDPTimeTotal;
+
+/**
+ * How much time elapsed between the last two `Graph_Update` ending.
+ * This is expected to be at least the duration of a single frame, since it includes the time spent waiting on the
+ * graphics task to be done.
+ */
+volatile OSTime gGraphUpdatePeriod;
+
+// Accumulator for `gRSPAudioTimeTotal`
+volatile OSTime gRSPAudioTimeAcc;
+
+// Accumulator for `gRSPGfxTimeTotal`.
+volatile OSTime gRSPGfxTimeAcc;
+
+volatile OSTime gRSPOtherTimeAcc;
+volatile OSTime D_801FBB18;
+
+// Accumulator for `gRDPTimeTotal`
+volatile OSTime gRDPTimeAcc;
+
 typedef struct {
     /* 0x0 */ volatile OSTime* time;
     /* 0x4 */ u16 x;
@@ -11,9 +46,14 @@ typedef struct {
     /* 0x6 */ u16 color;
 } SpeedMeterTimeEntry; // size = 0x8
 
-extern SpeedMeterTimeEntry* sSpeedMeterTimeEntryPtr;
+SpeedMeterTimeEntry* sSpeedMeterTimeEntryPtr;
 
-extern SpeedMeterTimeEntry sSpeedMeterTimeEntryArray[4];
+SpeedMeterTimeEntry sSpeedMeterTimeEntryArray[] = {
+    { &gRSPAudioTimeTotal, 0, 6, GPACK_RGBA5551(0, 0, 255, 1) },
+    { &gRSPGfxTimeTotal, 0, 8, GPACK_RGBA5551(255, 128, 128, 1) },
+    { &gRDPTimeTotal, 0, 10, GPACK_RGBA5551(0, 255, 0, 1) },
+    { &gGraphUpdatePeriod, 0, 12, GPACK_RGBA5551(255, 0, 255, 1) },
+};
 
 //! FAKE: if(1) in macro
 
@@ -134,37 +174,35 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
     View view;
     Gfx* gfx;
 
-    if (this->maxval == 0) {
-        return;
+    if (this->maxval != 0) {
+        OPEN_DISPS(gfxCtx);
+
+        View_Init(&view, gfxCtx);
+        view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
+
+        SET_FULLSCREEN_VIEWPORT_ALT(&view);
+
+        gfx = OVERLAY_DISP;
+        View_ApplyTo(&view, &gfx);
+
+        gDPPipeSync(gfx++);
+        gDPSetOtherMode(gfx++,
+                        G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
+                            G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
+                        G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
+
+        usedOff = ((this->lrx - this->ulx) * this->val) / this->maxval + this->ulx;
+        gDrawRect(gfx++, this->backColor, usedOff, this->uly, this->lrx, this->lry);
+        gDrawRect(gfx++, this->foreColor, this->ulx, this->uly, usedOff, this->lry);
+
+        gDPPipeSync(gfx++);
+
+        //! FAKE:
+        if (this && this && this) {}
+
+        OVERLAY_DISP = gfx;
+        CLOSE_DISPS(gfxCtx);
     }
-
-    OPEN_DISPS(gfxCtx);
-
-    View_Init(&view, gfxCtx);
-    view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
-
-    SET_FULLSCREEN_VIEWPORT_ALT(&view);
-
-    gfx = OVERLAY_DISP;
-    View_ApplyTo(&view, &gfx);
-
-    gDPPipeSync(gfx++);
-    gDPSetOtherMode(gfx++,
-                    G_AD_PATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_CONV | G_TF_POINT | G_TT_NONE | G_TL_TILE |
-                        G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
-                    G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
-
-    usedOff = ((this->lrx - this->ulx) * this->val) / this->maxval + this->ulx;
-    gDrawRect(gfx++, this->backColor, usedOff, this->uly, this->lrx, this->lry);
-    gDrawRect(gfx++, this->foreColor, this->ulx, this->uly, usedOff, this->lry);
-
-    gDPPipeSync(gfx++);
-
-    //! FAKE:
-    if (this && this && this) {}
-
-    OVERLAY_DISP = gfx;
-    CLOSE_DISPS(gfxCtx);
 }
 
 void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, GameState* state) {
