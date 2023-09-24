@@ -46,10 +46,11 @@ typedef enum GreatFairyAnimation {
     /* 5 */ GREATFAIRY_ANIM_SHOWING_ITEM,
     /* 6 */ GREATFAIRY_ANIM_ARMS_FOLDED,
     /* 7 */ GREATFAIRY_ANIM_CLAPPING,
-    /* 8 */ GREATFAIRY_ANIM_TEACH_SPIN_ATTACK
+    /* 8 */ GREATFAIRY_ANIM_TEACH_SPIN_ATTACK,
+    /* 9 */ GREATFAIRY_ANIM_MAX
 } GreatFairyAnimation;
 
-static AnimationHeader* sAnimations[] = {
+static AnimationHeader* sAnimations[GREATFAIRY_ANIM_MAX] = {
     &gGreatFairyStartGivingUpgradeAnim, // GREATFAIRY_ANIM_START_GIVING_UPGRADE
     &gGreatFairyGivingUpgradeAnim,      // GREATFAIRY_ANIM_GIVING_UPGRADE
     &gGreatFairySpinLayDownAnim,        // GREATFAIRY_ANIM_SPIN_LAY_DOWN
@@ -131,7 +132,7 @@ void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 trajectoryType, s32 count) 
         { 255, 255, 0 },   // Kindness
         { 255, 100, 255 }, // GREAT_FAIRY_EFFECT_TRAJECTORY_CONVERGE_ON_PLAYER
     };
-    Vec3f vel;
+    Vec3f velocity;
     Vec3f accel;
     Vec3f pos;
     Color_RGB8 primColor;
@@ -150,9 +151,9 @@ void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 trajectoryType, s32 count) 
     accel.x = Rand_ZeroOne() - 0.5f;
     accel.y = Rand_ZeroOne() - 0.5f;
     accel.z = Rand_ZeroOne() - 0.5f;
-    vel.x = accel.x * 10.0f;
-    vel.y = accel.y * 10.0f;
-    vel.z = accel.z * 10.0f;
+    velocity.x = accel.x * 10.0f;
+    velocity.y = accel.y * 10.0f;
+    velocity.z = accel.z * 10.0f;
 
     for (i = 0; i < count; i++) {
         switch (trajectoryType) {
@@ -160,9 +161,9 @@ void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 trajectoryType, s32 count) 
                 scale = 1.0f;
                 life = 90;
 
-                vel.x = accel.x * 100.0f;
-                vel.y = accel.y * 100.0f;
-                vel.z = accel.z * 100.0f;
+                velocity.x = accel.x * 100.0f;
+                velocity.y = accel.y * 100.0f;
+                velocity.z = accel.z * 100.0f;
 
                 effectType = GREAT_FAIRY_GET_TYPE(&this->actor);
 
@@ -204,7 +205,7 @@ void BgDyYoseizo_SpawnEffects(BgDyYoseizo* this, s16 trajectoryType, s32 count) 
         envColor.g = sEffectEnvColors[effectType].g;
         envColor.b = sEffectEnvColors[effectType].b;
 
-        BgDyYoseizo_SpawnEffect(this, &pos, &vel, &accel, &primColor, &envColor, scale, life, effectType);
+        BgDyYoseizo_SpawnEffect(this, &pos, &velocity, &accel, &primColor, &envColor, scale, life, effectType);
     }
 }
 
@@ -340,6 +341,9 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
                         gSaveContext.save.saveInfo.playerData.doubleDefense = true;
                     }
                     break;
+
+                default:
+                    break;
             }
         }
         Interface_SetHudVisibility(9);
@@ -434,15 +438,15 @@ void func_80A0B834(BgDyYoseizo* this) {
 }
 
 void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
-    s16 csAction;
+    s16 csId;
     s32 pad;
     Player* player = GET_PLAYER(play);
 
     SkelAnime_Update(&this->skelAnime);
 
-    csAction = 0;
+    csId = 0;
     if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_103)) {
-        csAction = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id;
+        csId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id;
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103));
     } else {
         if (this->actor.home.rot.z != 0) {
@@ -483,8 +487,8 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
         }
     }
 
-    if (csAction != this->csAction) {
-        switch (csAction) {
+    if (csId != this->csId) {
+        switch (csId) {
             case 9:
                 Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
                 break;
@@ -496,9 +500,12 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
             case 11:
                 Animation_PlayOnce(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_TEACH_SPIN_ATTACK]);
                 break;
+
+            default:
+                break;
         }
 
-        this->csAction = csAction;
+        this->csId = csId;
     }
 }
 
@@ -525,7 +532,7 @@ void func_80A0BB08(BgDyYoseizo* this, PlayState* play) {
         (play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id == 9)) {
         Actor_SetScale(&this->actor, 0.01f);
         Animation_PlayLoop(&this->skelAnime, sAnimations[GREATFAIRY_ANIM_ARMS_FOLDED]);
-        this->csAction = 9;
+        this->csId = 9;
         this->actionFunc = BgDyYoseizo_TrainPlayer;
         this->actor.draw = BgDyYoseizo_Draw;
     }
@@ -557,7 +564,7 @@ s32 BgDyYoseizo_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Ve
     return false;
 }
 
-// Colour and shape of eyebrows, hair colour.
+/* Colour and shape of eyebrows, hair colour. */
 typedef enum GreatFairyAppearance {
     /* 0 */ GREAT_FAIRY_APPEARANCE_MAGIC,   // Orange
     /* 1 */ GREAT_FAIRY_APPEARANCE_WISDOM,  // Green

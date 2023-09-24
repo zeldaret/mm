@@ -52,7 +52,7 @@ typedef struct BgDyYoseizo {
     /* 0x02F4 */ f32 unk2F4;
     /* 0x02F8 */ union {
         s16 unk2F8;
-        s16 csAction; // used on BgDyYoseizo_TrainPlayer
+        s16 csId; // used on BgDyYoseizo_TrainPlayer
     };
     /* 0x02FA */ s16 eyeIndex;
     /* 0x02FC */ s16 mouthIndex;

@@ -79,7 +79,7 @@ void DemoGetitem_Wait(DemoGetitem* this, PlayState* play) {
 
 void DemoGetitem_PerformCutsceneActions(DemoGetitem* this, PlayState* play) {
     s32 pad;
-    u16 bobPhase = (play->gameplayFrames * 1000) & 0xFFFF;
+    u16 bobPhase = (play->gameplayFrames * 1000) % 0x10000;
 
     if (Cutscene_IsCueInChannel(play, this->cueType)) {
         if (play->csCtx.actorCues[Cutscene_GetCueChannel(play, this->cueType)]->id != 4) {

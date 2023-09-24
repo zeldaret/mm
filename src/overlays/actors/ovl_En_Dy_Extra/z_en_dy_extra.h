@@ -15,7 +15,7 @@ typedef struct EnDyExtra {
     /* 0x14C */ s16 timer;
     /* 0x150 */ f32 alphaScale;
     /* 0x154 */ Vec3f scale; // not used, leftover from OoT
-    /* 0x160 */ Vec3f initialPos; // set and not used
+    /* 0x160 */ Vec3f initPos; // set and not used
 } EnDyExtra; // size = 0x16C
 
 #endif // Z_EN_DY_EXTRA_H

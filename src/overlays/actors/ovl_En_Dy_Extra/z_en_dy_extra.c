@@ -41,7 +41,7 @@ void EnDyExtra_Init(Actor* thisx, PlayState* play) {
     this->actor.scale.x = 0.025f;
     this->actor.scale.y = 0.039f;
     this->actor.scale.z = 0.025f;
-    this->initialPos = this->actor.world.pos;
+    this->initPos = this->actor.world.pos;
     this->actor.gravity = -0.2f;
     this->alphaScale = 1.0f;
     this->timer = 60;
