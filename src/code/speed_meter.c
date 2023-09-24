@@ -55,6 +55,17 @@ SpeedMeterTimeEntry sSpeedMeterTimeEntryArray[] = {
     { &gGraphUpdatePeriod, 0, 12, GPACK_RGBA5551(255, 0, 255, 1) },
 };
 
+typedef struct {
+    /* 0x00 */ s32 maxval;
+    /* 0x04 */ s32 val;
+    /* 0x08 */ u16 backColor;
+    /* 0x0A */ u16 foreColor;
+    /* 0x0C */ s32 ulx;
+    /* 0x10 */ s32 lrx;
+    /* 0x14 */ s32 uly;
+    /* 0x18 */ s32 lry;
+} SpeedMeterAllocEntry; // size = 0x1C
+
 //! FAKE: if(1) in macro
 
 #define gDrawRect(gfx, color, ulx, uly, lrx, lry)                      \
@@ -206,11 +217,11 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
 }
 
 void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, GameState* state) {
-    s32 pad1[2];
+    s32 pad[2];
     u32 ulx = 30;
     u32 lrx = 290;
     SpeedMeterAllocEntry entry;
-    s32 pad2;
+    TwoHeadArena* tha;
     s32 y;
     TwoHeadGfxArena* thga;
     u32 zeldaFreeMax;
@@ -240,10 +251,9 @@ void SpeedMeter_DrawAllocEntries(SpeedMeter* meter, GraphicsContext* gfxCtx, Gam
         y++;
     }
 
-    thga = (TwoHeadGfxArena*)&state->tha;
-    //! @bug THA_GetRemaining call should be THGA_GetRemaining like the others below, harmless as-is
-    SpeedMeter_InitAllocEntry(&entry, thga->size, thga->size - THA_GetRemaining(&thga->tha),
-                              GPACK_RGBA5551(0, 0, 255, 1), GPACK_RGBA5551(0, 255, 0, 1), ulx, lrx, y, y);
+    tha = &state->tha;
+    SpeedMeter_InitAllocEntry(&entry, tha->size, tha->size - THA_GetRemaining(tha), GPACK_RGBA5551(0, 0, 255, 1),
+                              GPACK_RGBA5551(0, 255, 0, 1), ulx, lrx, y, y);
     SpeedMeter_DrawAllocEntry(&entry, gfxCtx);
     y++;
 

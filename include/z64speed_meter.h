@@ -12,17 +12,6 @@ typedef struct SpeedMeter {
     /* 0x1C */ s32 y;
 } SpeedMeter; // size = 0x20
 
-typedef struct {
-    /* 0x00 */ s32 maxval;
-    /* 0x04 */ s32 val;
-    /* 0x08 */ u16 backColor;
-    /* 0x0A */ u16 foreColor;
-    /* 0x0C */ s32 ulx;
-    /* 0x10 */ s32 lrx;
-    /* 0x14 */ s32 uly;
-    /* 0x18 */ s32 lry;
-} SpeedMeterAllocEntry; // size = 0x1C
-
 void SpeedMeter_Init(SpeedMeter* this);
 void SpeedMeter_Destroy(SpeedMeter* this);
 void SpeedMeter_DrawTimeEntries(SpeedMeter* this, struct GraphicsContext* gfxCtx);
