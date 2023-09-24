@@ -6870,7 +6870,7 @@ void Interface_Update(PlayState* play) {
                 interfaceCtx->aButtonRoll = -15700.0f;
                 interfaceCtx->aButtonState = A_BTN_STATE_2;
 
-                if ((msgCtx->msgMode != 0) && (msgCtx->unk12006 == 0x26)) {
+                if ((msgCtx->msgMode != 0) && (msgCtx->textboxYTarget == 0x26)) {
                     R_A_BTN_Y_OFFSET = -14;
                 } else {
                     R_A_BTN_Y_OFFSET = 0;

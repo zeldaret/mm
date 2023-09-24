@@ -835,8 +835,7 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         thisx->flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
 
         if (sLinkAge != 1) {
-            // HIGH_SCORE(HS_FISHING) from OoT
-            if (gSaveContext.save.saveInfo.unk_EC0 & 0x1000) {
+            if (HIGH_SCORE(HS_FISHING) & 0x1000) {
                 D_8090CD08 = 0;
             } else {
                 D_8090CD08 = 1;
@@ -854,18 +853,18 @@ void EnFishing_Init(Actor* thisx, PlayState* play2) {
         SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 1);
 
         if (sLinkAge == 1) {
-            if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F) {
-                D_809171CC = gSaveContext.save.saveInfo.unk_EC0 & 0x7F;
+            if (HIGH_SCORE(HS_FISHING) & 0x7F) {
+                D_809171CC = HIGH_SCORE(HS_FISHING) & 0x7F;
             } else {
                 D_809171CC = 40.0f;
             }
-        } else if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) {
-            D_809171CC = (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) >> 0x18;
+        } else if (HIGH_SCORE(HS_FISHING) & 0x7F000000) {
+            D_809171CC = (HIGH_SCORE(HS_FISHING) & 0x7F000000) >> 0x18;
         } else {
             D_809171CC = 45.0f;
         }
 
-        D_809171D1 = (gSaveContext.save.saveInfo.unk_EC0 & 0xFF0000) >> 0x10;
+        D_809171D1 = (HIGH_SCORE(HS_FISHING) & 0xFF0000) >> 0x10;
         if ((D_809171D1 & 7) == 7) {
             play->roomCtx.unk7A[0] = 90;
             D_809171CA = 1;
@@ -2799,8 +2798,8 @@ void func_80903C60(EnFishing* this, u8 arg1) {
 
 void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
     if (sLinkAge == 1) {
-        if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F) {
-            if (gSaveContext.save.saveInfo.unk_EC0 & 0x80) {
+        if (HIGH_SCORE(HS_FISHING) & 0x7F) {
+            if (HIGH_SCORE(HS_FISHING) & 0x80) {
                 this->actor.textId = 0x40B1;
             } else {
                 this->actor.textId = 0x4089;
@@ -2808,8 +2807,8 @@ void EnFishing_HandleAquariumDialog(EnFishing* this, PlayState* play) {
         } else {
             this->actor.textId = 0x40AE;
         }
-    } else if (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) {
-        if (gSaveContext.save.saveInfo.unk_EC0 & 0x80000000) {
+    } else if (HIGH_SCORE(HS_FISHING) & 0x7F000000) {
+        if (HIGH_SCORE(HS_FISHING) & 0x80000000) {
             this->actor.textId = 0x40B1;
         } else {
             this->actor.textId = 0x4089;
@@ -3749,8 +3748,8 @@ void EnFishing_UpdateFish(Actor* thisx, PlayState* play2) {
 
                 if ((D_80917272 == 0) && (D_80917274 == 0)) {
                     // Assignment of OoT's D_80B7E086 here removed in MM
-                    if (((sLinkAge == 1) && (gSaveContext.save.saveInfo.unk_EC0 & 0x400)) ||
-                        ((sLinkAge != 1) && (gSaveContext.save.saveInfo.unk_EC0 & 0x800))) {
+                    if (((sLinkAge == 1) && (HIGH_SCORE(HS_FISHING) & 0x400)) ||
+                        ((sLinkAge != 1) && (HIGH_SCORE(HS_FISHING) & 0x800))) {
                         // Assignment of OoT's D_80B7A67C here removed in MM, this is now an empty branch
                     }
                 } else {
@@ -4694,7 +4693,7 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
         case 0:
             if (D_809171FC == 0) {
                 if (sLinkAge != 1) {
-                    if ((gSaveContext.save.saveInfo.unk_EC0 & 0x100) && !(gSaveContext.save.saveInfo.unk_EC0 & 0x200)) {
+                    if ((HIGH_SCORE(HS_FISHING) & 0x100) && !(HIGH_SCORE(HS_FISHING) & 0x200)) {
                         this->actor.textId = 0x4093;
                     } else {
                         this->actor.textId = 0x407B;
@@ -4712,9 +4711,9 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 if (D_809171FC == 0) {
                     this->unk_154 = 1;
                     if (sLinkAge != 1) {
-                        gSaveContext.save.saveInfo.unk_EC0 |= 0x200;
+                        HIGH_SCORE(HS_FISHING) |= 0x200;
                     } else {
-                        gSaveContext.save.saveInfo.unk_EC0 |= 0x100;
+                        HIGH_SCORE(HS_FISHING) |= 0x100;
                     }
                 } else {
                     this->unk_154 = 10;
@@ -4805,8 +4804,8 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                 D_8090CD04 = 20;
                 this->unk_154 = 0;
 
-                if ((gSaveContext.save.saveInfo.unk_EC0 & 0xFF0000) < 0xFF0000) {
-                    gSaveContext.save.saveInfo.unk_EC0 += 0x10000;
+                if ((HIGH_SCORE(HS_FISHING) & 0xFF0000) < 0xFF0000) {
+                    HIGH_SCORE(HS_FISHING) += 0x10000;
                 }
             }
             break;
@@ -4924,29 +4923,29 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     if (sLinkAge == 1) {
                         f32 temp;
 
-                        gSaveContext.save.saveInfo.unk_EC0 &= 0xFFFFFF00;
-                        gSaveContext.save.saveInfo.unk_EC0 |= ((s16)D_809171CC & 0x7F);
-                        temp = (gSaveContext.save.saveInfo.unk_EC0 & 0x7F000000) >> 0x18;
+                        HIGH_SCORE(HS_FISHING) &= 0xFFFFFF00;
+                        HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F);
+                        temp = (HIGH_SCORE(HS_FISHING) & 0x7F000000) >> 0x18;
                         if (temp < D_809171CC) {
-                            gSaveContext.save.saveInfo.unk_EC0 &= 0xFFFFFF;
-                            gSaveContext.save.saveInfo.unk_EC0 |= ((s16)D_809171CC & 0x7F) << 0x18;
+                            HIGH_SCORE(HS_FISHING) &= 0xFFFFFF;
+                            HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F) << 0x18;
 
                             if (D_809171D2 == 2) {
-                                gSaveContext.save.saveInfo.unk_EC0 |= 0x80000000;
+                                HIGH_SCORE(HS_FISHING) |= 0x80000000;
                             }
                         }
 
                         if (D_809171D2 == 2) {
-                            gSaveContext.save.saveInfo.unk_EC0 |= 0x80;
+                            HIGH_SCORE(HS_FISHING) |= 0x80;
                             this->unk_154 = 0;
                             break;
                         }
                     } else {
-                        gSaveContext.save.saveInfo.unk_EC0 &= 0xFFFFFF;
-                        gSaveContext.save.saveInfo.unk_EC0 |= ((s16)D_809171CC & 0x7F) << 0x18;
+                        HIGH_SCORE(HS_FISHING) &= 0xFFFFFF;
+                        HIGH_SCORE(HS_FISHING) |= ((s16)D_809171CC & 0x7F) << 0x18;
 
                         if (D_809171D2 == 2) {
-                            gSaveContext.save.saveInfo.unk_EC0 |= 0x80000000;
+                            HIGH_SCORE(HS_FISHING) |= 0x80000000;
                             this->unk_154 = 0;
                             break;
                         }
@@ -4963,14 +4962,14 @@ void EnFishing_HandleOwnerDialog(EnFishing* this, PlayState* play) {
                     }
 
                     if (sLinkAge == 1) {
-                        if ((D_809171CC >= 50.0f) && !(gSaveContext.save.saveInfo.unk_EC0 & 0x400)) {
-                            gSaveContext.save.saveInfo.unk_EC0 |= 0x400;
+                        if ((D_809171CC >= 50.0f) && !(HIGH_SCORE(HS_FISHING) & 0x400)) {
+                            HIGH_SCORE(HS_FISHING) |= 0x400;
                             getItemId = GI_HEART_PIECE;
                             sSinkingLureLocation = Rand_ZeroFloat(3.999f) + 1.0f;
                         }
                     } else {
-                        if ((D_809171CC >= 60.0f) && !(gSaveContext.save.saveInfo.unk_EC0 & 0x800)) {
-                            gSaveContext.save.saveInfo.unk_EC0 |= 0x800;
+                        if ((D_809171CC >= 60.0f) && !(HIGH_SCORE(HS_FISHING) & 0x800)) {
+                            HIGH_SCORE(HS_FISHING) |= 0x800;
                             getItemId = GI_SKULL_TOKEN;
                             sSinkingLureLocation = Rand_ZeroFloat(3.999f) + 1.0f;
                         }
@@ -5140,9 +5139,9 @@ void EnFishing_UpdateOwner(Actor* thisx, PlayState* play2) {
     }
 
     if (D_8090CD08 == 0) {
-        gSaveContext.save.saveInfo.unk_EC0 |= 0x1000;
+        HIGH_SCORE(HS_FISHING) |= 0x1000;
     } else if (D_8090CD08 == 1) {
-        gSaveContext.save.saveInfo.unk_EC0 &= ~0x1000;
+        HIGH_SCORE(HS_FISHING) &= ~0x1000;
     }
 
     if (D_8090CCFC != 0) {

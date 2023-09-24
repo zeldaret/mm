@@ -274,8 +274,10 @@ void func_8096FAAC(EnKakasi* this, PlayState* play) {
  * goes off every frame of song teach, but... doing what?
  */
 void func_8096FBB8(EnKakasi* this, PlayState* play) {
-    if ((play->msgCtx.unk12048 == 0) || (play->msgCtx.unk12048 == 1) || (play->msgCtx.unk12048 == 2) ||
-        (play->msgCtx.unk12048 == 3) || (play->msgCtx.unk12048 == 4)) {
+    if ((play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_A) || (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_DOWN) ||
+        (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_RIGHT) ||
+        (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_LEFT) ||
+        (play->msgCtx.ocarinaButtonIndex == OCARINA_BTN_C_UP)) {
         // why not 0 < x < 4? fewer branches
         this->unk190++;
     }
