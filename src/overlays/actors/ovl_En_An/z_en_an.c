@@ -1358,9 +1358,33 @@ s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55ECC.s")
+s32 func_80B55ECC(EnAn* this) {
+    s32 ret = false;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B55F8C.s")
+    if (Actor_IsFacingAndNearPlayer(&this->actor, (this->unk_3BC != 0) ? 150.0f : 100.0f, 0x2800)) {
+        ret = true;
+    }
+
+    if (DECR(this->unk_386) == 0) {
+        this->unk_3BC ^= 1;
+        this->unk_386 = Rand_S16Offset(0x3C, 0x3C);
+    }
+
+    return ret;
+}
+
+s32 func_80B55F8C(PlayState* play) {
+    Player* player = GET_PLAYER(play);
+    s32 var_v1 = false;
+
+    if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) && (gSaveContext.save.saveInfo.weekEventReg[0x32] & 8)) {
+        var_v1 = true;
+    } else if ((player->transformation == PLAYER_FORM_HUMAN) && (gSaveContext.save.saveInfo.weekEventReg[0x32] & 8)) {
+        var_v1 = true;
+    }
+
+    return var_v1;
+}
 
 s32 func_80B5600C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     s32 ret = false;
@@ -1892,22 +1916,295 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56E44.s")
+s32 func_80B56E44(EnAn* this, PlayState* play) {
+    Vec3f sp2C;
+    Vec3f sp20;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B56EB4.s")
+    if ((this->unk_218 != NULL) && (this->unk_218->update != NULL)) {
+        Math_Vec3f_Copy(&sp2C, &this->unk_218->world.pos);
+        Math_Vec3f_Copy(&sp20, &this->actor.world.pos);
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&sp20, &sp2C);
+    }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5702C.s")
+    return true;
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B572D4.s")
+s32 func_80B56EB4(EnAn* this, PlayState* play) {
+    EnDoor* sp44 = func_80B53B3C(play, this->unk_200);
+    Vec3f sp38;
+    f32 temp_fv0;
+    s32 pad;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B573F4.s")
+    if (!SubS_InCsMode(play) && (this->unk_384 != 0)) {
+        if ((sp44 != NULL) && (sp44->knobDoor.dyna.actor.update != NULL)) {
+            if ((this->unk_37A / (f32) this->unk_378) <= 0.9f) {
+                sp44->unk_1A7 = this->unk_215;
+            } else {
+                sp44->unk_1A7 = 0;
+            }
+        }
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B575BC.s")
+        this->unk_37A = CLAMP(this->unk_37A, 0, this->unk_378);
+        temp_fv0 = Math_Vec3f_DistXZ(&this->unk_228, &this->unk_234) / this->unk_378;
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57674.s")
+        sp38.x = 0.0f;
+        sp38.y = 0.0f;
+        sp38.z = this->unk_37A * temp_fv0;
 
-void func_80B57718(EnAn* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57718.s")
+        Lib_Vec3f_TranslateAndRotateY(&this->unk_228, this->actor.world.rot.y, &sp38, &this->actor.world.pos);
+
+        this->unk_37A += this->unk_384;
+        if (Animation_OnFrame(&this->unk_144, 3.0f) || Animation_OnFrame(&this->unk_144, 15.0f)) {
+            Actor_PlaySfx(&this->actor, 0x2971);
+        }
+    }
+    return 0;
+}
+
+s32 func_80B5702C(EnAn* this, PlayState* play) {
+    f32 sp7C[265];
+    Vec3f sp70;
+    Vec3f sp64;
+    Vec3f sp58;
+    s32 sp54;
+    s32 sp50 = 0;
+    s32 pad;
+
+    sp54 = 0;
+    SubS_TimePathing_FillKnots(sp7C, 3, this->unk_1DC->count + 3);
+
+    if (!(this->unk_360 & 8)) {
+        sp58 = gZeroVec3f;
+        SubS_TimePathing_Update(this->unk_1DC, &this->unk_1EC, &this->unk_1FC, this->unk_1F4, this->unk_1F0, &this->unk_1F8, sp7C, &sp58, this->unk_384);
+        SubS_TimePathing_ComputeInitialY(play, this->unk_1DC, this->unk_1F8, &sp58);
+        this->actor.world.pos.y = sp58.y;
+        this->unk_360 |= 8;
+    } else {
+        sp58 = this->unk_1E0;
+    }
+
+    this->actor.world.pos.x = sp58.x;
+    this->actor.world.pos.z = sp58.z;
+
+    if (SubS_InCsMode(play) != 0) {
+        sp54 = this->unk_1FC;
+        sp50 = this->unk_1F8;
+        sp58 = this->actor.world.pos;
+    }
+    this->unk_1E0 = gZeroVec3f;
+
+    if (SubS_TimePathing_Update(this->unk_1DC, &this->unk_1EC, &this->unk_1FC, this->unk_1F4, this->unk_1F0, &this->unk_1F8, sp7C, &this->unk_1E0, this->unk_384)) {
+        this->unk_360 |= 0x10;
+    } else {
+        sp70 = this->actor.world.pos;
+        sp64 = this->unk_1E0;
+        this->actor.world.rot.y = Math_Vec3f_Yaw(&sp70, &sp64);
+    }
+
+    if (SubS_InCsMode(play) != 0) {
+        this->unk_1FC = sp54;
+        this->unk_1F8 = sp50;
+        this->unk_1E0 = sp58;
+    } else if (Animation_OnFrame(&this->unk_144, 3.0f) || Animation_OnFrame(&this->unk_144, 15.0f)) {
+        Actor_PlaySfx(&this->actor, 0x2971);
+    }
+
+    return 0;
+}
+
+s32 func_80B572D4(EnAn* this, PlayState* play) {
+    switch (this->unk_200) {
+        case 0x17:
+            if ((func_80B55F8C(play) != 0) && (func_80B55ECC(this) != 0)) {
+                this->unk_360 |= 0x20;
+            } else {
+                this->unk_360 &= ~0x20;
+            }
+            break;
+
+        case 0x1:
+            if (func_80B55ECC(this) != 0) {
+                this->unk_360 |= 0x20;
+            } else {
+                this->unk_360 &= ~0x20;
+            }
+            break;
+
+        case 0x12:
+        case 0x13:
+            if (func_80B55ECC(this) != 0) {
+                this->unk_360 |= 0x20;
+            } else {
+                this->unk_360 &= ~0x20;
+            }
+            break;
+
+        case 0x16:
+            if (Animation_OnFrame(&this->unk_144, 6.0f) && (this->unk_39C == 0x17)) {
+                Actor_PlaySfx(&this->actor, 0x2899);
+            }
+            break;
+    }
+
+    return 0;
+}
+
+s32 func_80B573F4(EnAn* this, PlayState* play) {
+    s16 temp1;
+    s16 temp2;
+
+    switch (this->unk_37A) {
+        case 0x0:
+            this->actor.world.rot.y += 0x7FF8;
+            this->unk_37A++;
+            break;
+
+        case 0x1:
+            temp1 = (this->actor.world.rot.y / 0xB6) * 0xB6;
+            temp2 = (this->actor.shape.rot.y / 0xB6) * 0xB6;
+            if (temp1 == temp2) {
+                Math_Vec3s_Copy(&this->actor.shape.rot, &this->actor.world.rot);
+                func_80B53CE8(this, play, 0x13);
+                this->unk_360 |= 0x40;
+                this->unk_37A++;
+            }
+            break;
+
+        case 0x2:
+            if (Animation_OnFrame(&this->unk_144, this->unk_144.endFrame)) {
+                this->unk_37A++;
+            }
+            break;
+
+        case 0x3:
+            if (ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, this->actor.shape.rot.y)) < 0x3000) {
+                SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+            } else {
+                SubS_SetOfferMode(&this->unk_360, 0U, 7U);
+            }
+            break;
+
+        case 0x4:
+            SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+            this->unk_37A++;
+            break;
+    }
+
+    return 0;
+}
+
+s32 func_80B575BC(EnAn* this, PlayState* play) {
+    s32 temp = this->actor.shape.rot.y;
+    s16 temp_v1 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, temp));
+
+    if (temp_v1 < 0x4000) {
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+    } else {
+        SubS_SetOfferMode(&this->unk_360, 0U, 7U);
+    }
+
+    if (func_80B55ECC(this) != 0) {
+        this->unk_360 |= 0x20;
+    } else {
+        this->unk_360 &= ~0x20;
+    }
+
+    return 1;
+}
+
+s32 func_80B57674(EnAn* this, PlayState* play) {
+    s16 temp = BINANG_ADD(this->actor.shape.rot.y, 0x3000);
+    s16 temp_v1 = ABS_ALT(BINANG_SUB(this->actor.yawTowardsPlayer, temp));
+
+    if (temp_v1 < 0x3000) {
+        SubS_SetOfferMode(&this->unk_360, 3U, 7U);
+    } else {
+        SubS_SetOfferMode(&this->unk_360, 0U, 7U);
+    }
+
+    this->unk_360 &= ~0x20;
+    return 1;
+}
+
+void func_80B57718(EnAn* this, PlayState* play) {
+    switch (this->unk_200) {
+        case 0x10:
+        case 0x11:
+        case 0x15:
+            func_80B56E44(this, play);
+            break;
+
+        case 0x3:
+            func_80B573F4(this, play);
+            break;
+
+        case 0x1:
+            func_80B575BC(this, play);
+            break;
+
+        case 0x19:
+            func_80B57674(this, play);
+            break;
+
+        case 0xC:
+        case 0xE:
+        case 0x12:
+        case 0x13:
+        case 0x16:
+        case 0x18:
+            func_80B572D4(this, play);
+            break;
+
+        case 0x17:
+            func_80B572D4(this, play);
+            break;
+
+        case 0x1A:
+        case 0x1B:
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x1F:
+        case 0x20:
+        case 0x21:
+        case 0x22:
+        case 0x23:
+        case 0x24:
+        case 0x25:
+        case 0x26:
+        case 0x27:
+            func_80B56EB4(this, play);
+            break;
+
+        case 0x28:
+        case 0x2A:
+        case 0x2B:
+        case 0x2C:
+        case 0x2D:
+        case 0x2E:
+        case 0x2F:
+        case 0x30:
+        case 0x31:
+        case 0x32:
+        case 0x33:
+        case 0x34:
+        case 0x35:
+        case 0x36:
+        case 0x37:
+        case 0x38:
+        case 0x39:
+        case 0x3A:
+        case 0x3B:
+        case 0x3C:
+        case 0x3D:
+        case 0x3E:
+        case 0x3F:
+            func_80B5702C(this, play);
+            break;
+    }
+
+    Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
+}
 
 void func_80B577F0(EnAn* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
@@ -1987,8 +2284,47 @@ void func_80B57A44(EnAn* this, PlayState* play) {
     }
 }
 
+#if 0
+//extern s32 D_80B58EAC[0xA];
+
+void func_80B57B48(EnAn* this, PlayState* play) {
+    s32 sp30[0xA];
+    s32 temp_v0; // sp28
+    u16 temp_v1;
+    u8 var_v0;
+
+    //M2C_MEMCPY_ALIGNED(&sp30, &D_80B58EAC, 0x28);
+    if (Cutscene_IsCueInChannel(play, 0x22DU) != 0) {
+        temp_v0 = Cutscene_GetCueChannel(play, 0x22DU);
+
+        temp_v1 = play->csCtx.actorCues[temp_v0]->id;
+        var_v0 = temp_v1 & 0xFF;
+        if ((temp_v1 & 0xFF) != this->unk_364) {
+            this->unk_364 = (u8) temp_v1;
+            if (var_v0 == 3) {
+                gSaveContext.save.saveInfo.weekEventReg[0x57] |= 2;
+                var_v0 = this->unk_364;
+                this->unk_3B4 = 1;
+            }
+
+            if (var_v0 == 9) {
+                this->unk_3B4 = 0;
+            }
+
+            func_80B53CE8(this, play, sp30[temp_v1]);
+        }
+
+        if (((this->unk_39C == 0x1A) || (this->unk_39C == 0x1C) || (this->unk_39C == 0x1E) || (this->unk_39C == 0x22)) && Animation_OnFrame(&this->unk_144, this->unk_144.endFrame)) {
+            func_80B53CE8(this, play, this->unk_39C + 1);
+        }
+
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, temp_v0);
+    }
+}
+#else
 void func_80B57B48(EnAn* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B57B48.s")
+#endif
 
 void EnAn_Init(Actor* thisx, PlayState* play) {
     s32 pad;

@@ -20,12 +20,13 @@ typedef struct EnAn {
     /* 0x18C */ EnAnUnkFunc unk_18C;
     /* 0x190 */ ColliderCylinder unk_190;
     /* 0x1DC */ Path* unk_1DC;
-    /* 0x1E0 */ char unk_1E0[0x10];                 /* maybe part of unk_1DC[5]? */
+    /* 0x1E0 */ Vec3f unk_1E0;                 /* maybe part of unk_1DC[5]? */
+    /* 0x1EC */ f32 unk_1EC;
     /* 0x1F0 */ s32 unk_1F0;                        /* inferred */
     /* 0x1F4 */ s32 unk_1F4;                        /* inferred */
     /* 0x1F8 */ s32 unk_1F8;                        /* inferred */
     /* 0x1FC */ s32 unk_1FC;                        /* inferred */
-    /* 0x200 */ u8 unk_200; // enum?
+    /* 0x200 */ u8 unk_200; // enum? // schedule result
     /* 0x201 */ char unk_201[3];                    /* maybe part of unk_200[4]? */
     /* 0x204 */ s32* msgEventScript;
     /* 0x208 */ s8 unk_208;
@@ -56,13 +57,13 @@ typedef struct EnAn {
     /* 0x368 */ f32 unk_368;                        /* inferred */
     /* 0x36C */ char unk_36C[8];                    /* maybe part of unk_368[3]? */
     /* 0x374 */ f32 unk_374;                        /* inferred */
-    /* 0x378 */ u16 unk_378; // schedule time diff
-    /* 0x37A */ u16 unk_37A;
+    /* 0x378 */ s16 unk_378; // schedule time diff
+    /* 0x37A */ s16 unk_37A;
     /* 0x37C */ s16 unk_37C;                        /* inferred */
     /* 0x37E */ s16 unk_37E;                        /* inferred */
     /* 0x380 */ char unk_380[4];                    /* maybe part of unk_37E[3]? */
     /* 0x384 */ s16 unk_384;                        /* inferred */
-    /* 0x386 */ char unk_386[2];                    /* inferred */
+    /* 0x386 */ s16 unk_386;
     /* 0x388 */ s16 unk_388;                        /* inferred */
     /* 0x38A */ s16 unk_38A;                        /* inferred */
     /* 0x38C */ s16 unk_38C;                        /* inferred */
@@ -79,7 +80,7 @@ typedef struct EnAn {
     /* 0x3B0 */ s32 unk_3B0;                        /* inferred */
     /* 0x3B4 */ s32 unk_3B4;                        /* inferred */
     /* 0x3B8 */ s32 unk_3B8;
-    /* 0x3BC */ char unk_3BC[4];                    /* inferred */
+    /* 0x3BC */ s32 unk_3BC;
     /* 0x3C0 */ s32 unk_3C0;                        /* inferred */
     /* 0x3C4 */ s32 unk_3C4;
 } EnAn; // size = 0x3C8
