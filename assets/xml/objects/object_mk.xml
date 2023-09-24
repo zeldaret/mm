@@ -2,9 +2,9 @@
     <!-- Assets for the Marine Researcher -->
     <File Name="object_mk" Segment="6">
         <Animation Name="gMarineResearcherHeadWaggleAnim" Offset="0x438" />
-        <Animation Name="gMarineResearcherYellingAnim" Offset="0x7D8" />
-        <Animation Name="gMarineResearcherShakingInFearAnim" Offset="0x10F4" />
-        <Animation Name="gMarineResearcherStrokingChinAnim" Offset="0x1964" />
+        <Animation Name="gMarineResearcherYellAnim" Offset="0x7D8" />
+        <Animation Name="gMarineResearcherShakeInFearAnim" Offset="0x10F4" />
+        <Animation Name="gMarineResearcherStrokeChinAnim" Offset="0x1964" />
         <Animation Name="gMarineResearcherIdleAnim" Offset="0x1C38" />
         <DList Name="gMarineResearcherMidTorsoDL" Offset="0x4320" />
         <DList Name="gMarineResearcherUpperTorsoDL" Offset="0x4610" />
