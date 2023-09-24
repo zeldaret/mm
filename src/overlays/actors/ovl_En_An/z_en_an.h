@@ -57,7 +57,7 @@ typedef struct EnAn {
     /* 0x38E */ s16 unk_38E;                        /* inferred */
     /* 0x390 */ s16 unk_390;                        /* inferred */
     /* 0x392 */ s16 unk_392;                        /* inferred */
-    /* 0x394 */ u16 unk_394;
+    /* 0x394 */ s16 unk_394;
     /* 0x396 */ UNK_TYPE1 unk_396[0x2];
     /* 0x398 */ MsgEventFunc msgEventFunc;
     /* 0x39C */ s32 unk_39C;                        /* inferred */

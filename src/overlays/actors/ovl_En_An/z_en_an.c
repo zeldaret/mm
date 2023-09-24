@@ -408,14 +408,61 @@ void func_80B54124(EnAn* this, PlayState* play, u32 arg2) {
     CLOSE_DISPS(play->state.gfxCtx);
 }
 
+s32 func_80B54678(EnAn *this, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54678.s")
 
+s16 func_80B546F4(EnAn *this, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B546F4.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54750.s")
 
-s32 func_80B547C8(Actor* thisx, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B547C8.s")
+s32 func_80B547C8(Actor* thisx, PlayState* play) {
+    EnAn *this = THIS;
+    s16 temp_a1 = func_80B546F4(this, 0);
+    s32 ret = 0;
+
+    switch (this->unk_394) {
+        case 0x0:
+            ret = 0;
+            if (func_80B54678(this, temp_a1) != 0) {
+                goto label;
+            }
+            break;
+
+        case 0x2:
+        case 0x4:
+        case 0x6:
+        label:
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(temp_a1)), &this->actor);
+            ret = 1;
+            this->unk_394++;
+            break;
+
+        case 0x1:
+        case 0x3:
+        case 0x5:
+            if ((gSaveContext.save.saveInfo.weekEventReg[0x56] & 8) && (this->unk_394 == 3)) {
+                CutsceneManager_Stop(temp_a1);
+            } else {
+                Actor* temp_v0 = this->actor.child;
+
+                if ((temp_v0 != NULL) && (temp_v0->update != NULL)) {
+                    Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(temp_a1)), this->actor.child);
+                }
+            }
+            this->unk_394++;
+            ret = 1;
+            break;
+
+        case 0x7:
+            CutsceneManager_Stop(temp_a1);
+            ret = 1;
+            this->unk_394++;
+            break;
+    }
+
+    return ret;
+}
 
 s32 func_80B5492C(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5492C.s")
@@ -458,6 +505,9 @@ extern s32 D_80B58B3C[];
 extern s32 D_80B58B7C[];
 extern s32 D_80B58B88[];
 extern s32 D_80B58B90[];
+
+// TODO: figure out what to do with this
+#define SCHEDULE_CALC_TIME_ALT(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
 
 s32* func_80B54DF4(EnAn* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
@@ -529,7 +579,8 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
                     }
 
                     //if ((gSaveContext.save.time - 0x3FFC) < 0x5883) {
-                    if ((gSaveContext.save.time - (CLOCK_TIME(6, 0)-4)) < (CLOCK_TIME(8, 18)-5)) {
+                    //if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CONVERT_TIME_ALT(CLOCK_TIME(14, 18))) {
+                    if (SCHEDULE_CONVERT_TIME_ALT(gSaveContext.save.time) < SCHEDULE_CALC_TIME_ALT(14, 18)) {
                         return D_80B58ABC;
                     }
                     return D_80B58AC4;
@@ -604,7 +655,6 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
 
     return NULL;
 }
-//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54DF4.s")
 
 s32 func_80B55180(EnAn* this, PlayState* play) {
     s32 ret = false;
