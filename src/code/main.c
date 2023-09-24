@@ -4,6 +4,7 @@
 #include "irqmgr.h"
 #include "padmgr.h"
 #include "scheduler.h"
+#include "CIC6105.h"
 #include "stack.h"
 #include "stackcheck.h"
 

@@ -34,13 +34,9 @@ void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr);
 void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
 void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
-void CIC6105_Nop80081820(void);
-void CIC6105_Nop80081828(void);
-void CIC6105_PrintRomInfo(void);
-void CIC6105_AddRomInfoFaultPage(void);
-void CIC6105_RemoveRomInfoFaultPage(void);
-void func_800818F4(void);
+
 void osSyncPrintfUnused(const char* fmt, ...);
+
 void rmonPrintf(const char* fmt, ...);
 
 void RcpUtils_PrintRegisterStatus(void);
