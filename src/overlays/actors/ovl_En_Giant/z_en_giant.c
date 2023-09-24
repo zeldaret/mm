@@ -29,28 +29,6 @@ void EnGiant_PerformCutsceneActions(EnGiant* this, PlayState* play);
     (type >= GIANT_TYPE_MOUNTAIN_CLOCK_TOWER_FAILURE && type <= GIANT_TYPE_OCEAN_CLOCK_TOWER_FAILURE)
 
 /**
- * These values are used to index into sAnimations to pick the appropriate animation.
- */
-typedef enum {
-    /*  0 */ GIANT_ANIM_LOOK_UP_START,
-    /*  1 */ GIANT_ANIM_LOOK_UP_LOOP,
-    /*  2 */ GIANT_ANIM_FALLING_OVER,
-    /*  3 */ GIANT_ANIM_RAISED_ARMS_START,
-    /*  4 */ GIANT_ANIM_RAISED_ARMS_LOOP,
-    /*  5 */ GIANT_ANIM_STRUGGLE_START,
-    /*  6 */ GIANT_ANIM_STRUGGLE_LOOP,
-    /*  7 */ GIANT_ANIM_IDLE_LOOP,
-    /*  8 */ GIANT_ANIM_WALKING_LOOP,
-    /*  9 */ GIANT_ANIM_BIG_CALL_START,
-    /* 10 */ GIANT_ANIM_BIG_CALL_LOOP,
-    /* 11 */ GIANT_ANIM_BIG_CALL_END,
-    /* 12 */ GIANT_ANIM_SMALL_CALL_START,
-    /* 13 */ GIANT_ANIM_SMALL_CALL_LOOP,
-    /* 14 */ GIANT_ANIM_SMALL_CALL_END,
-    /* 15 */ GIANT_ANIM_MAX
-} GiantAnimation;
-
-/**
  * Used as values for cueId. The UNKNOWN ones are never used in-game.
  */
 typedef enum {
@@ -84,15 +62,49 @@ ActorInit En_Giant_InitVars = {
     (ActorFunc)EnGiant_Draw,
 };
 
-static AnimationHeader* sAnimations[] = {
-    &gGiantLookUpStartAnim,    &gGiantLookUpLoopAnim,    &gGiantFallingOverAnim,  &gGiantRaisedArmsStartAnim,
-    &gGiantRaisedArmsLoopAnim, &gGiantStruggleStartAnim, &gGiantStruggleLoopAnim, &gGiantIdleAnim,
-    &gGiantWalkingAnim,        &gGiantBigCallStartAnim,  &gGiantBigCallLoopAnim,  &gGiantBigCallEndAnim,
-    &gGiantSmallCallStartAnim, &gGiantSmallCallLoopAnim, &gGiantSmallCallEndAnim,
+/**
+ * These values are used to index into sAnimations to pick the appropriate animation.
+ */
+typedef enum {
+    /* -1 */ GIANT_ANIM_NONE = -1,
+    /*  0 */ GIANT_ANIM_LOOK_UP_START,
+    /*  1 */ GIANT_ANIM_LOOK_UP_LOOP,
+    /*  2 */ GIANT_ANIM_FALLING_OVER,
+    /*  3 */ GIANT_ANIM_RAISED_ARMS_START,
+    /*  4 */ GIANT_ANIM_RAISED_ARMS_LOOP,
+    /*  5 */ GIANT_ANIM_STRUGGLE_START,
+    /*  6 */ GIANT_ANIM_STRUGGLE_LOOP,
+    /*  7 */ GIANT_ANIM_IDLE_LOOP,
+    /*  8 */ GIANT_ANIM_WALKING_LOOP,
+    /*  9 */ GIANT_ANIM_BIG_CALL_START,
+    /* 10 */ GIANT_ANIM_BIG_CALL_LOOP,
+    /* 11 */ GIANT_ANIM_BIG_CALL_END,
+    /* 12 */ GIANT_ANIM_SMALL_CALL_START,
+    /* 13 */ GIANT_ANIM_SMALL_CALL_LOOP,
+    /* 14 */ GIANT_ANIM_SMALL_CALL_END,
+    /* 15 */ GIANT_ANIM_MAX
+} GiantAnimation;
+
+static AnimationHeader* sAnimations[GIANT_ANIM_MAX] = {
+    &gGiantLookUpStartAnim,     // GIANT_ANIM_LOOK_UP_START
+    &gGiantLookUpLoopAnim,      // GIANT_ANIM_LOOK_UP_LOOP
+    &gGiantFallingOverAnim,     // GIANT_ANIM_FALLING_OVER
+    &gGiantRaisedArmsStartAnim, // GIANT_ANIM_RAISED_ARMS_START
+    &gGiantRaisedArmsLoopAnim,  // GIANT_ANIM_RAISED_ARMS_LOOP
+    &gGiantStruggleStartAnim,   // GIANT_ANIM_STRUGGLE_START
+    &gGiantStruggleLoopAnim,    // GIANT_ANIM_STRUGGLE_LOOP
+    &gGiantIdleAnim,            // GIANT_ANIM_IDLE_LOOP
+    &gGiantWalkingAnim,         // GIANT_ANIM_WALKING_LOOP
+    &gGiantBigCallStartAnim,    // GIANT_ANIM_BIG_CALL_START
+    &gGiantBigCallLoopAnim,     // GIANT_ANIM_BIG_CALL_LOOP
+    &gGiantBigCallEndAnim,      // GIANT_ANIM_BIG_CALL_END
+    &gGiantSmallCallStartAnim,  // GIANT_ANIM_SMALL_CALL_START
+    &gGiantSmallCallLoopAnim,   // GIANT_ANIM_SMALL_CALL_LOOP
+    &gGiantSmallCallEndAnim,    // GIANT_ANIM_SMALL_CALL_END
 };
 
 void EnGiant_ChangeAnim(EnGiant* this, s16 animIndex) {
-    if (animIndex >= GIANT_ANIM_LOOK_UP_START && animIndex < GIANT_ANIM_MAX) {
+    if ((animIndex >= GIANT_ANIM_LOOK_UP_START) && (animIndex < GIANT_ANIM_MAX)) {
         if (((this->animIndex == GIANT_ANIM_WALKING_LOOP) && (animIndex != GIANT_ANIM_WALKING_LOOP)) ||
             ((animIndex == GIANT_ANIM_WALKING_LOOP) && (this->animIndex != GIANT_ANIM_WALKING_LOOP))) {
             Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
@@ -344,9 +356,11 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
                 this->alpha -= 12;
             }
             break;
+
         case GIANT_CUE_ID_UNKNOWN_14:
             this->alpha -= 12;
             break;
+
         default:
             if (this->alpha < 255) {
                 this->alpha += 8;

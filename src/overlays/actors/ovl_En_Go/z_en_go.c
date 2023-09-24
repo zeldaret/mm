@@ -982,17 +982,17 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
     s8 extraObjIndex = -1;
     s32 ret = false;
 
-    if ((this->curAnimIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
+    if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
         extraObjIndex = this->hakuginDemoObjIndex;
-    } else if ((this->curAnimIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
+    } else if ((this->animIndex >= ENGO_ANIM_ATHLETICS_MIN) && (this->taisouObjIndex >= 0)) {
         extraObjIndex = this->taisouObjIndex;
-    } else if (this->curAnimIndex < ENGO_ANIM_ATHLETICS_MIN) {
+    } else if (this->animIndex < ENGO_ANIM_ATHLETICS_MIN) {
         extraObjIndex = this->actor.objBankIndex;
     }
 
     if (extraObjIndex >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
-        this->skelAnime.playSpeed = this->curAnimPlaySpeed;
+        this->skelAnime.playSpeed = this->animPlaySpeed;
         ret = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
@@ -1005,7 +1005,7 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
  */
 s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
     if (play->csCtx.state == CS_STATE_IDLE) {
-        if (this->curAnimIndex == ENGO_ANIM_ROLL) {
+        if (this->animIndex == ENGO_ANIM_ROLL) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE);
             }
@@ -1013,7 +1013,7 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
             if (Animation_OnFrame(&this->skelAnime, 22.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_SIT_IMT);
             }
-        } else if ((this->curAnimIndex == ENGO_ANIM_UNROLL) || (this->curAnimIndex == ENGO_ANIM_UNROLL_IMM)) {
+        } else if ((this->animIndex == ENGO_ANIM_UNROLL) || (this->animIndex == ENGO_ANIM_UNROLL_IMM)) {
             if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_GOLON_CIRCLE_OFF);
             }
@@ -1052,9 +1052,9 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
 
     if (extraObjIndex >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
-        this->curAnimIndex = animIndex;
+        this->animIndex = animIndex;
         ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
-        this->curAnimPlaySpeed = this->skelAnime.playSpeed;
+        this->animPlaySpeed = this->skelAnime.playSpeed;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
 
@@ -1651,7 +1651,7 @@ void EnGo_ChangeToStretchingAnimation(EnGo* this, PlayState* play) {
     EnGo_ChangeAnim(this, play, sSubtypeToAnimIndex[subtypeLookup]);
 
     // Move the sitting Goron forward, since their spawn location is the same as their standing counterpart.
-    if (this->curAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
+    if (this->animIndex == ENGO_ANIM_SITTING_STRETCH) {
 
         Lib_Vec3f_TranslateAndRotateY(&this->actor.world.pos, this->actor.shape.rot.y, &sStretchingGoronOffset,
                                       &newSittingStretcherPos);
@@ -1701,7 +1701,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
 void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInitFrozen);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->curAnimIndex = -1;
+    this->animIndex = -1;
     EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     this->sleepState = ENGO_AWAKE;
     this->iceBlockScale = (this->scaleFactor / 0.01f) * 0.9f;
@@ -1899,7 +1899,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->curAnimIndex = ENGO_ANIM_INVALID;
+        this->animIndex = ENGO_ANIM_INVALID;
         EnGo_ChangeAnim(this, play, ENGO_ANIM_UNROLL);
         this->actor.draw = EnGo_Draw;
 
@@ -2168,14 +2168,14 @@ void EnGo_HandleSpringArrivalCutscene(EnGo* this, PlayState* play) {
             switch (this->springArrivalCueId) {
                 case 3:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->curAnimIndex == ENGO_ANIM_LOOK_AROUND)) {
+                        (this->animIndex == ENGO_ANIM_LOOK_AROUND)) {
                         EnGo_ChangeAnim(this, play, ENGO_ANIM_LOOK_AROUND_LOOPED);
                     }
                     break;
 
                 case 4:
                     if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) &&
-                        (this->curAnimIndex == ENGO_ANIM_SHOW)) {
+                        (this->animIndex == ENGO_ANIM_SHOW)) {
                         EnGo_ChangeAnim(this, play, ENGO_ANIM_SHOW_LOOPED);
                     }
                     break;
@@ -2599,7 +2599,7 @@ void EnGo_Draw(Actor* thisx, PlayState* play) {
 
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeTexIndex]));
 
-        if (this->curAnimIndex == ENGO_ANIM_SITTING_STRETCH) {
+        if (this->animIndex == ENGO_ANIM_SITTING_STRETCH) {
             Matrix_Translate(0.0f, 0.0f, -4000.0f, MTXMODE_APPLY);
         }
         SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,

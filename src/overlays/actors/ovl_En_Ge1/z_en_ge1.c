@@ -69,7 +69,8 @@ typedef enum {
     /*  6 */ GERUDO_WHITE_ANIM_EXCITED_CLAPPING,
     /*  7 */ GERUDO_WHITE_ANIM_SALUTE,
     /*  8 */ GERUDO_WHITE_ANIM_LEADING_BOAT,
-    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY
+    /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY,
+    /* 10 */ GERUDO_WHITE_ANIM_MAX,
 } GerudoWhiteAnimation;
 
 void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
@@ -128,7 +129,7 @@ void EnGe1_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames) {
-    static AnimationHeader* sAnimations[] = {
+    static AnimationHeader* sAnimations[GERUDO_WHITE_ANIM_MAX] = {
         &gGerudoWhiteArmsFoldedAnim,        // GERUDO_WHITE_ANIM_ARMS_FOLDED,
         &gGerudoWhiteUnfoldingArmsAnim,     // GERUDO_WHITE_ANIM_UNFOLDING_ARMS
         &gGerudoWhiteStandingHeadBowedAnim, // GERUDO_WHITE_ANIM_STANDING_HEAD_BOWED,

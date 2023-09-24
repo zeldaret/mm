@@ -52,7 +52,7 @@ typedef struct EnRailgibud {
     /* 0x3EE */ s16 shouldWalkForwardNextFrame; // Only used by the "main" Gibdo
     /* 0x3F0 */ union {
                     s16 grabState;
-                    s16 cutsceneAnimIndex;
+                    s16 csAnimIndex;
                 };
     /* 0x3F2 */ union {
                     s16 playerStunWaitTimer; // Cannot stun the player if this is non-zero

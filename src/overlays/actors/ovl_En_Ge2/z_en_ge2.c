@@ -343,18 +343,18 @@ s32 EnGe2_FollowPathWithoutGravity(EnGe2* this) {
 /* Action and helper functions */
 
 void EnGe2_SpawnEffects(EnGe2* this, PlayState* play) {
-    static Vec3f effectVelocity = { 0.0f, -0.05f, 0.0f };
-    static Vec3f effectAccel = { 0.0f, -0.025f, 0.0f };
-    static Color_RGBA8 effectPrimColor = { 255, 255, 255, 0 };
-    static Color_RGBA8 effectEnvColor = { 255, 150, 0, 0 };
+    static Vec3f sEffectVelocity = { 0.0f, -0.05f, 0.0f };
+    static Vec3f sEffectAccel = { 0.0f, -0.025f, 0.0f };
+    static Color_RGBA8 sEffectPrimColor = { 255, 255, 255, 0 };
+    static Color_RGBA8 sEffectEnvColor = { 255, 150, 0, 0 };
     s16 effectAngle = play->state.frames * 0x2800;
     Vec3f effectPos;
 
     effectPos.x = (Math_CosS(effectAngle) * 5.0f) + this->picto.actor.focus.pos.x;
     effectPos.y = this->picto.actor.focus.pos.y + 10.0f;
     effectPos.z = (Math_SinS(effectAngle) * 5.0f) + this->picto.actor.focus.pos.z;
-    EffectSsKirakira_SpawnDispersed(play, &effectPos, &effectVelocity, &effectAccel, &effectPrimColor, &effectEnvColor,
-                                    1000, 16);
+    EffectSsKirakira_SpawnDispersed(play, &effectPos, &sEffectVelocity, &sEffectAccel, &sEffectPrimColor,
+                                    &sEffectEnvColor, 1000, 16);
 }
 
 void EnGe2_Scream(EnGe2* this) {

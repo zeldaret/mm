@@ -631,7 +631,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
 
             switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
+                    this->csAnimIndex = EN_JG_ANIM_CUTSCENE_IDLE;
                     if (this->drum != NULL) {
                         Actor_Kill(this->drum);
                         this->drum = NULL;
@@ -639,50 +639,49 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
                     break;
 
                 case 2:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_TAKING_OUT_DRUM;
+                    this->csAnimIndex = EN_JG_ANIM_TAKING_OUT_DRUM;
                     break;
 
                 case 3:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_DRUM_IDLE;
+                    this->csAnimIndex = EN_JG_ANIM_DRUM_IDLE;
                     break;
 
                 case 4:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_PLAYING_DRUM;
+                    this->csAnimIndex = EN_JG_ANIM_PLAYING_DRUM;
                     break;
 
                 case 5:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_THINKING;
+                    this->csAnimIndex = EN_JG_ANIM_THINKING;
                     break;
 
                 case 6:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_REMEMBERING;
+                    this->csAnimIndex = EN_JG_ANIM_REMEMBERING;
                     break;
 
                 case 7:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_STRONG_REMEMBERING;
+                    this->csAnimIndex = EN_JG_ANIM_STRONG_REMEMBERING;
                     break;
 
                 case 8:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_DEPRESSED;
+                    this->csAnimIndex = EN_JG_ANIM_DEPRESSED;
                     break;
 
                 case 9:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_CRADLE;
+                    this->csAnimIndex = EN_JG_ANIM_CRADLE;
                     break;
 
                 default:
-                    this->cutsceneAnimIndex = EN_JG_ANIM_IDLE;
+                    this->csAnimIndex = EN_JG_ANIM_IDLE;
                     break;
             }
 
-            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->cutsceneAnimIndex);
+            SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->csAnimIndex);
         }
 
         if (!(this->flags & FLAG_DRUM_SPAWNED) &&
-            (((this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) && Animation_OnFrame(&this->skelAnime, 14.0f) &&
+            (((this->csAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) && Animation_OnFrame(&this->skelAnime, 14.0f) &&
               (this->action != EN_JG_ACTION_LULLABY_INTRO_CS)) ||
-             (((this->cutsceneAnimIndex == EN_JG_ANIM_DRUM_IDLE) ||
-               (this->cutsceneAnimIndex == EN_JG_ANIM_PLAYING_DRUM)) &&
+             (((this->csAnimIndex == EN_JG_ANIM_DRUM_IDLE) || (this->csAnimIndex == EN_JG_ANIM_PLAYING_DRUM)) &&
               (this->action == EN_JG_ACTION_LULLABY_INTRO_CS)))) {
             this->flags |= FLAG_DRUM_SPAWNED;
             this->drum = Actor_SpawnAsChildAndCutscene(
@@ -691,7 +690,7 @@ void EnJg_LullabyIntroCutsceneAction(EnJg* this, PlayState* play) {
                 this->actor.params, this->actor.csId, this->actor.halfDaysBits, NULL);
         }
 
-        if (this->cutsceneAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {
+        if (this->csAnimIndex == EN_JG_ANIM_TAKING_OUT_DRUM) {
             if (Animation_OnFrame(&this->skelAnime, 23.0f)) {
                 Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_WOOD_BOUND_S);
             } else if (Animation_OnFrame(&this->skelAnime, 38.0f)) {
