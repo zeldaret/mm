@@ -45,7 +45,15 @@ extern UNK_TYPE D_0600AD98;
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Init.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Destroy.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/EnTakaraya_Destroy.s") 0xBF 0x40
+void EnTakaraya_Destroy(Actor* thisx, PlayState* play) {
+    EnTakaraya* this = THIS;
+    Flags_UnsetSwitch(play, 5);
+    if (!this->unk2AD) {
+        CLEAR_WEEKEVENTREG(WEEKEVENTREG_KICKOUT_WAIT);
+        gSaveContext.timerStates[4] = 5;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_Takaraya/func_80ADED8C.s")
 
