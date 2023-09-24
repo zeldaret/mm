@@ -414,6 +414,7 @@ s32 func_80B54678(EnAn *this, s32 arg1);
 s16 func_80B546F4(EnAn *this, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B546F4.s")
 
+s16 func_80B54750(EnAn* this, s32 arg1);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54750.s")
 
 s32 func_80B547C8(Actor* thisx, PlayState* play) {
@@ -443,12 +444,8 @@ s32 func_80B547C8(Actor* thisx, PlayState* play) {
         case 0x5:
             if ((gSaveContext.save.saveInfo.weekEventReg[0x56] & 8) && (this->unk_394 == 3)) {
                 CutsceneManager_Stop(temp_a1);
-            } else {
-                Actor* temp_v0 = this->actor.child;
-
-                if ((temp_v0 != NULL) && (temp_v0->update != NULL)) {
-                    Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(temp_a1)), this->actor.child);
-                }
+            } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(temp_a1)), this->actor.child);
             }
             this->unk_394++;
             ret = 1;
@@ -463,18 +460,137 @@ s32 func_80B547C8(Actor* thisx, PlayState* play) {
 
     return ret;
 }
+s32 func_80B5492C(Actor* thisx, PlayState* play) {
+    EnAn *this = THIS;
+    s16 csId = func_80B546F4(this, 0);
+    s32 var_a2 = 0;
 
-s32 func_80B5492C(Actor* thisx, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B5492C.s")
+    switch (this->unk_394) {
+        case 0x0:
+            var_a2 = 0;
+            if (func_80B54678(this,  csId) != 0) {
+                goto label;
+            }
+            break;
 
-s32 func_80B54A94(Actor* thisx, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54A94.s")
+        case 0x2:
+        case 0x4:
+        label:
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), &this->actor);
+            var_a2 = 1;
+            this->unk_394++;
+            break;
 
-s32 func_80B54BC4(Actor* thisx, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54BC4.s")
+
+        case 0x1:
+        case 0x3:
+            if (!(gSaveContext.save.saveInfo.weekEventReg[0x4B] & 0x10) && (this->unk_394 == 3)) {
+                CutsceneManager_Stop(csId);
+                this->unk_394 = 5;
+            } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), this->actor.child);
+            }
+            this->unk_394++;
+            var_a2 = 1;
+            break;
+
+        case 0x5:
+            CutsceneManager_Stop(csId);
+            var_a2 = 1;
+            this->unk_394++;
+            break;
+    }
+    return var_a2;
+}
+
+s32 func_80B54A94(Actor* thisx, PlayState* play) {
+    EnAn *this = THIS;
+    s16 temp_a1 = func_80B54750(this, 0);
+    s32 ret = 0;
+
+    switch (this->unk_394) {
+        case 0x0:
+            ret = 0;
+            if (func_80B54678(this, (s32) temp_a1) != 0) {
+                goto label;
+            }
+            break;
+
+        case 0x2:
+        case 0x4:
+        case 0x6:
+        case 0x8:
+        label:
+            if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(temp_a1)), this->actor.child);
+            }
+            ret = 1;
+            this->unk_394 += 1;
+            break;
+
+        case 0x1:
+        case 0x3:
+        case 0x5:
+        case 0x7:
+            Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(temp_a1)), &this->actor);
+            ret = 1;
+            this->unk_394 += 1;
+            break;
+
+        case 0x9:
+            CutsceneManager_Stop(temp_a1);
+            ret = 1;
+            this->unk_394 += 1;
+            break;
+    }
+
+    return ret;
+}
+
+s32 func_80B54BC4(Actor* thisx, PlayState* play) {
+    EnAn *this = THIS;
+
+    if (this->unk_394 == 0) {
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
+        play->nextEntrance = ENTRANCE(STOCK_POT_INN, 3);
+        gSaveContext.nextCutsceneIndex = 0;
+        play->transitionTrigger = TRANS_TRIGGER_START;
+        play->transitionType = TRANS_TYPE_FADE_BLACK;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
+        this->unk_394++;
+    }
+    return 0;
+}
+
+s32 func_80B54C5C(Actor* thisx, PlayState* play) {
+    EnAn *this = THIS;
+    s32 sp20 = false;
+
+    switch (this->unk_394) {
+        case 0x0:
+            func_80B53CE8(this, play, 0xD);
+            this->unk_394++;
+            break;
+
+        case 0x1:
+        case 0x3:
+            if (Animation_OnFrame(&this->unk_144, this->unk_144.endFrame)) {
+                this->unk_394++;
+                sp20 = true;
+            }
+            break;
+
+        case 0x2:
+            func_80B53CE8(this, play, 0xE);
+            this->unk_394++;
+            break;
+    }
+
+    return sp20;
+}
 
 s32 func_80B54C5C(Actor* thisx, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54C5C.s")
+//#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54C5C.s")
 
 s32 func_80B54D18(Actor* thisx, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_En_An/func_80B54D18.s")
