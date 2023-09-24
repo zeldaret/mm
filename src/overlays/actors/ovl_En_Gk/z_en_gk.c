@@ -7,7 +7,7 @@
 #include "z_en_gk.h"
 #include "objects/object_gk/object_gk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnGk*)thisx)
 
@@ -646,7 +646,7 @@ void func_80B51760(EnGk* this, PlayState* play) {
                 this->unk_2E4 = 0;
                 this->unk_1E4 |= 2;
             }
-        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) &&
+        } else if (((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) &&
                    (gSaveContext.save.entrance != ENTRANCE(GORON_RACETRACK, 1))) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
         }
@@ -851,7 +851,7 @@ void func_80B5202C(EnGk* this, PlayState* play) {
         if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             SET_WEEKEVENTREG(WEEKEVENTREG_24_80);
             this->actionFunc = func_80B51698;
-        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isTargeted) {
+        } else if ((this->actor.xzDistToPlayer < 100.0f) || this->actor.isLockedOn) {
             Actor_OfferTalkNearColChkInfoCylinder(&this->actor, play);
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->actor.textId = 0xE74;
@@ -1049,7 +1049,7 @@ void EnGk_Init(Actor* thisx, PlayState* play) {
             this->actionFunc = func_80B51FD0;
             this->actor.draw = NULL;
             this->actor.flags |= ACTOR_FLAG_10;
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         } else {
             Actor_Kill(&this->actor);
         }

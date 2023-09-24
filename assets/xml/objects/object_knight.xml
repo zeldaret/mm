@@ -1,49 +1,57 @@
 ﻿<Root>
+    <!--
+        Assets for Igos du Ikana and his aides.
+        A note about the original animation names; in MM3D, they split them up into two into two nearly-identical but
+        incompatible sets of animations. For example, there is an animation named "nsk_king_front_damage" for the king,
+        and an animation named "nsk_zako_front_damage" for the aides. In the original game, the animations are used
+        for *both* the king and his aides, so for the animation names, I just removed "king" or "zako" from the name
+        under the assumption that Grezzo were probably the ones who added the qualifier to the names.
+    -->
     <File Name="object_knight" Segment="6">
-        <Animation Name="object_knight_Anim_0005A8" Offset="0x5A8" />
-        <Animation Name="object_knight_Anim_0009E0" Offset="0x9E0" />
-        <Animation Name="object_knight_Anim_000D9C" Offset="0xD9C" />
-        <Animation Name="object_knight_Anim_001CDC" Offset="0x1CDC" />
-        <Animation Name="object_knight_Anim_002174" Offset="0x2174" />
-        <Animation Name="object_knight_Anim_003008" Offset="0x3008" />
-        <Animation Name="object_knight_Anim_0031F0" Offset="0x31F0" />
-        <Animation Name="object_knight_Anim_003650" Offset="0x3650" />
-        <Animation Name="object_knight_Anim_0040E0" Offset="0x40E0" />
-        <Animation Name="object_knight_Anim_004620" Offset="0x4620" />
-        <Animation Name="object_knight_Anim_004974" Offset="0x4974" />
-        <Animation Name="object_knight_Anim_005D30" Offset="0x5D30" />
-        <Animation Name="object_knight_Anim_005E78" Offset="0x5E78" />
-        <Animation Name="object_knight_Anim_006754" Offset="0x6754" />
-        <Animation Name="object_knight_Anim_006EF8" Offset="0x6EF8" />
-        <Animation Name="object_knight_Anim_0079D4" Offset="0x79D4" />
-        <Animation Name="object_knight_Anim_008390" Offset="0x8390" />
-        <Animation Name="object_knight_Anim_008524" Offset="0x8524" />
-        <Animation Name="object_knight_Anim_0089E4" Offset="0x89E4" />
-        <Animation Name="object_knight_Anim_008D80" Offset="0x8D80" />
-        <Animation Name="object_knight_Anim_009538" Offset="0x9538" />
-        <Animation Name="object_knight_Anim_009D8C" Offset="0x9D8C" />
-        <Animation Name="object_knight_Anim_00A530" Offset="0xA530" />
-        <Animation Name="object_knight_Anim_00A88C" Offset="0xA88C" />
-        <Animation Name="object_knight_Anim_00AB68" Offset="0xAB68" />
-        <Animation Name="object_knight_Anim_00AFAC" Offset="0xAFAC" />
-        <Animation Name="object_knight_Anim_00B5D4" Offset="0xB5D4" />
-        <Animation Name="object_knight_Anim_00BCF4" Offset="0xBCF4" />
-        <Animation Name="object_knight_Anim_00C384" Offset="0xC384" />
-        <Animation Name="object_knight_Anim_00C7F0" Offset="0xC7F0" />
-        <Animation Name="object_knight_Anim_00CDE0" Offset="0xCDE0" />
-        <Animation Name="object_knight_Anim_00D870" Offset="0xD870" />
-        <Animation Name="object_knight_Anim_00DDCC" Offset="0xDDCC" />
-        <Animation Name="object_knight_Anim_00E15C" Offset="0xE15C" />
-        <Animation Name="object_knight_Anim_00E45C" Offset="0xE45C" />
-        <Animation Name="object_knight_Anim_00E7F4" Offset="0xE7F4" />
-        <Animation Name="object_knight_Anim_00EA90" Offset="0xEA90" />
-        <Animation Name="object_knight_Anim_00EF44" Offset="0xEF44" />
-        <Animation Name="object_knight_Anim_00F90C" Offset="0xF90C" />
-        <Animation Name="object_knight_Anim_00FC78" Offset="0xFC78" />
-        <Animation Name="object_knight_Anim_01024C" Offset="0x1024C" />
-        <Animation Name="object_knight_Anim_010E98" Offset="0x10E98" />
-        <Animation Name="object_knight_Anim_011298" Offset="0x11298" />
-        <Animation Name="object_knight_Anim_011AAC" Offset="0x11AAC" />
+        <Animation Name="object_knight_Anim_0005A8" Offset="0x5A8" /> <!-- Original name is probably "nsk_aramaD" -->
+        <Animation Name="object_knight_Anim_0009E0" Offset="0x9E0" /> <!-- Original name is probably "nsk_araraD" -->
+        <Animation Name="object_knight_Anim_000D9C" Offset="0xD9C" /> <!-- Original name is probably "nsk_back_damage" -->
+        <Animation Name="object_knight_Anim_001CDC" Offset="0x1CDC" /> <!-- Original name is probably "nsk_back_down" -->
+        <Animation Name="object_knight_Anim_002174" Offset="0x2174" /> <!-- Original name is probably "nsk_back_jump" -->
+        <Animation Name="object_knight_Anim_003008" Offset="0x3008" /> <!-- Original name is probably "nsk_bunri" -->
+        <Animation Name="object_knight_Anim_0031F0" Offset="0x31F0" /> <!-- Original name is probably "nsk_defend" -->
+        <Animation Name="object_knight_Anim_003650" Offset="0x3650" /> <!-- Original name is probably "nsk_fighting_run" -->
+        <Animation Name="object_knight_Anim_0040E0" Offset="0x40E0" /> <!-- Original name is probably "nsk_fighting_wait" -->
+        <Animation Name="object_knight_Anim_004620" Offset="0x4620" /> <!-- Original name is probably "nsk_fighting_walk" -->
+        <Animation Name="object_knight_Anim_004974" Offset="0x4974" /> <!-- Original name is probably "nsk_front_damage" -->
+        <Animation Name="object_knight_Anim_005D30" Offset="0x5D30" /> <!-- Original name is probably "nsk_front_down" -->
+        <Animation Name="object_knight_Anim_005E78" Offset="0x5E78" /> <!-- Original name is probably "nsk_furufuruD" -->
+        <Animation Name="object_knight_Anim_006754" Offset="0x6754" /> <!-- Original name is probably "nsk_gabaBD" -->
+        <Animation Name="object_knight_Anim_006EF8" Offset="0x6EF8" /> <!-- Original name is probably "nsk_gabaD" -->
+        <Animation Name="object_knight_Anim_0079D4" Offset="0x79D4" /> <!-- Original name is probably "nsk_gattai" -->
+        <Animation Name="object_knight_Anim_008390" Offset="0x8390" /> <!-- Original name is probably "nsk_goD" -->
+        <Animation Name="object_knight_Anim_008524" Offset="0x8524" /> <!-- Original name is probably "nsk_guardA" -->
+        <Animation Name="object_knight_Anim_0089E4" Offset="0x89E4" /> <!-- Original name is probably "nsk_guardB" -->
+        <Animation Name="object_knight_Anim_008D80" Offset="0x8D80" /> <!-- Original name is probably "nsk_haiteru" -->
+        <Animation Name="object_knight_Anim_009538" Offset="0x9538" /> <!-- Original name is probably "nsk_haku" -->
+        <Animation Name="object_knight_Anim_009D8C" Offset="0x9D8C" /> <!-- Original name is probably "nsk_jakinD" -->
+        <Animation Name="object_knight_Anim_00A530" Offset="0xA530" /> <!-- Original name is probably "nsk_jakinTOsekiD" -->
+        <Animation Name="object_knight_Anim_00A88C" Offset="0xA88C" /> <!-- Original name is probably "nsk_jidandaD" -->
+        <Animation Name="object_knight_Anim_00AB68" Offset="0xAB68" /> <!-- Original name is probably "nsk_jump" -->
+        <Animation Name="object_knight_Anim_00AFAC" Offset="0xAFAC" /> <!-- Original name is probably "nsk_jump_kiru" -->
+        <Animation Name="object_knight_Anim_00B5D4" Offset="0xB5D4" /> <!-- Original name is probably "nsk_jump_kiru_end" -->
+        <Animation Name="object_knight_Anim_00BCF4" Offset="0xBCF4" /> <!-- Original name is probably "nsk_koteL" -->
+        <Animation Name="object_knight_Anim_00C384" Offset="0xC384" /> <!-- Original name is probably "nsk_koteR" -->
+        <Animation Name="object_knight_Anim_00C7F0" Offset="0xC7F0" /> <!-- Original name is probably "nsk_kunekuneaD" -->
+        <Animation Name="object_knight_Anim_00CDE0" Offset="0xCDE0" /> <!-- Original name is probably "nsk_laugh" -->
+        <Animation Name="object_knight_Anim_00D870" Offset="0xD870" /> <!-- Original name is probably "nsk_laughD" -->
+        <Animation Name="object_knight_Anim_00DDCC" Offset="0xDDCC" /> <!-- Original name is probably "nsk_march" -->
+        <Animation Name="object_knight_Anim_00E15C" Offset="0xE15C" /> <!-- Original name is probably "nsk_modoru" -->
+        <Animation Name="object_knight_Anim_00E45C" Offset="0xE45C" /> <!-- Original name is probably "nsk_muzumuzuwalk" -->
+        <Animation Name="object_knight_Anim_00E7F4" Offset="0xE7F4" /> <!-- Original name is probably "nsk_nunuBD" -->
+        <Animation Name="object_knight_Anim_00EA90" Offset="0xEA90" /> <!-- Original name is probably "nsk_nunuD" -->
+        <Animation Name="object_knight_Anim_00EF44" Offset="0xEF44" /> <!-- Original name is probably "nsk_side_walk" -->
+        <Animation Name="object_knight_Anim_00F90C" Offset="0xF90C" /> <!-- Original name is probably "nsk_sonicgiri" -->
+        <Animation Name="object_knight_Anim_00FC78" Offset="0xFC78" /> <!-- Original name is probably "nsk_suwariwaitD" -->
+        <Animation Name="object_knight_Anim_01024C" Offset="0x1024C" /> <!-- Original name is probably "nsk_suwaru02D" -->
+        <Animation Name="object_knight_Anim_010E98" Offset="0x10E98" /> <!-- Original name is probably "nsk_suwaruD" -->
+        <Animation Name="object_knight_Anim_011298" Offset="0x11298" /> <!-- Original name is probably "nsk_tategiri" -->
+        <Animation Name="object_knight_Anim_011AAC" Offset="0x11AAC" /> <!-- Original name is probably "nsk_tategiri_kaburu" -->
         <DList Name="object_knight_DL_012400" Offset="0x12400" />
         <Texture Name="object_knight_Tex_012760" OutName="tex_012760" Format="rgba16" Width="16" Height="16" Offset="0x12760" />
         <Texture Name="object_knight_Tex_012960" OutName="tex_012960" Format="rgba16" Width="16" Height="16" Offset="0x12960" />
@@ -101,14 +109,14 @@
         <Array Name="object_knight_Vtx_018BD0" Count="18" Offset="0x18BD0">
             <Vtx/>
         </Array>
-        <DList Name="object_knight_DL_018CF0" Offset="0x18CF0" />
-        <DList Name="object_knight_DL_018DE0" Offset="0x18DE0" />
+        <DList Name="object_knight_DL_018CF0" Offset="0x18CF0" /> <!-- Original name is "w2_hikari_naname_modelT" -->
+        <DList Name="object_knight_DL_018DE0" Offset="0x18DE0" /> <!-- Original name is "w2_hikari_naname2_modelT" -->
         <DList Name="object_knight_DL_018E50" Offset="0x18E50" />
         <Texture Name="object_knight_Tex_018E58" OutName="tex_018E58" Format="ia8" Width="16" Height="16" Offset="0x18E58" />
         <Texture Name="object_knight_Tex_018F58" OutName="tex_018F58" Format="ia16" Width="16" Height="32" Offset="0x18F58" />
         <TextureAnimation Name="object_knight_Matanimheader_019360" Offset="0x19360" />
         <DList Name="object_knight_DL_0193A8" Offset="0x193A8" />
-        <DList Name="object_knight_DL_0193B0" Offset="0x193B0" />
+        <DList Name="object_knight_DL_0193B0" Offset="0x193B0" /> <!-- Original name is "w2_ikn_katen_model" -->
         <Texture Name="object_knight_Tex_019470" OutName="tex_019470" Format="rgba16" Width="4" Height="4" Offset="0x19470" />
         <Texture Name="object_knight_Tex_019490" OutName="tex_019490" Format="i8" Width="32" Height="64" Offset="0x19490" />
         <DList Name="object_knight_DL_01D380" Offset="0x1D380" />
@@ -201,11 +209,11 @@
         <Limb Name="object_knight_Standardlimb_0202EC" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_1B" Offset="0x202EC" />
         <Limb Name="object_knight_Standardlimb_0202F8" Type="Standard" EnumName="OBJECT_KNIGHT_2_LIMB_1C" Offset="0x202F8" />
         <Skeleton Name="object_knight_Skel_020374" Type="Flex" LimbType="Standard" LimbNone="OBJECT_KNIGHT_2_LIMB_NONE" LimbMax="OBJECT_KNIGHT_2_LIMB_MAX" EnumName="ObjectKnight2Limb" Offset="0x20374" />
-        <Animation Name="object_knight_Anim_020950" Offset="0x20950" />
-        <Animation Name="object_knight_Anim_02105C" Offset="0x2105C" />
-        <Animation Name="object_knight_Anim_021B10" Offset="0x21B10" />
-        <Animation Name="object_knight_Anim_021E34" Offset="0x21E34" />
-        <Animation Name="object_knight_Anim_022728" Offset="0x22728" />
-        <Animation Name="object_knight_Anim_022CAC" Offset="0x22CAC" />
+        <Animation Name="object_knight_Anim_020950" Offset="0x20950" /> <!-- Original name is probably "nsk_tategiri_tame" -->
+        <Animation Name="object_knight_Anim_02105C" Offset="0x2105C" /> <!-- Original name is probably "nsk_towaitBD" -->
+        <Animation Name="object_knight_Anim_021B10" Offset="0x21B10" /> <!-- Original name is probably "nsk_walkD" -->
+        <Animation Name="object_knight_Anim_021E34" Offset="0x21E34" /> <!-- Original name is probably "nsk_whyD" -->
+        <Animation Name="object_knight_Anim_022728" Offset="0x22728" /> <!-- Original name is probably "nsk_yokogiri" -->
+        <Animation Name="object_knight_Anim_022CAC" Offset="0x22CAC" /> <!-- Original name is probably "nsk_yokogiri_kime" -->
     </File>
 </Root>

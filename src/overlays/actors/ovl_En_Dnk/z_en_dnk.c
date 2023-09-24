@@ -6,7 +6,7 @@
 
 #include "z_en_dnk.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnDnk*)thisx)
 
@@ -239,12 +239,12 @@ void func_80A51648(EnDnk* this, PlayState* play) {
         Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
         if (ENDNK_GET_3C(&this->actor) == 4) {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actor.flags |= (ACTOR_FLAG_10 | ACTOR_FLAG_20);
             this->actionFunc = EnDnk_HandleCutscene;
             Actor_SetScale(&this->actor, 0.1f);
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             this->actionFunc = EnDnk_DoNothing;
             Actor_SetScale(&this->actor, 0.01f);
         }

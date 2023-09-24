@@ -1,4 +1,5 @@
 #include "global.h"
+#include "PR/gs2dex.h"
 
 void guS2DInitBg(uObjBg* bg) {
     u32 size;

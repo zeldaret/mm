@@ -1677,9 +1677,9 @@ void Message_DecodeNES(PlayState* play) {
                 digits[1] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1];
                 digits[2] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2];
             } else {
-                digits[0] = (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF00) >> 8;
-                digits[1] = (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF0) >> 4;
-                digits[2] = ((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF;
+                digits[0] = (HS_GET_LOTTERY_CODE_GUESS() & 0xF00) >> 8;
+                digits[1] = (HS_GET_LOTTERY_CODE_GUESS() & 0xF0) >> 4;
+                digits[2] = HS_GET_LOTTERY_CODE_GUESS() & 0xF;
             }
 
             for (i = 0; i < 3; i++) {
@@ -1784,19 +1784,17 @@ void Message_DecodeNES(PlayState* play) {
 
         } else if ((curChar == 0xF0) || (curChar == 0xF1) || (curChar == 0xF2) || (curChar == 0xF8)) {
             if (curChar == 0xF8) {
-                value = (s32)gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF;
+                value = (s32)HS_GET_HIGH_SCORE_3_LOWER();
             } else {
-                value = (&gSaveContext.save.saveInfo.bankRupees)[curChar - 0xF0];
+                value = HIGH_SCORE(curChar - 0x300);
             }
             if (curChar == 0xF2) {
-                if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
-                    value &= 0x7F;
-                } else {
-                    value = (s16)(((&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] &
-                                   0xFF000000) >>
-                                  0x18) &
-                            0x7F;
-                }
+                    if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
+                        value &= 0x7F;
+                    } else {
+                        value =
+                            (s16)((HIGH_SCORE((u8)font->msgBuf.schar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
+                    }
             }
             digits[3] = value;
             digits[0] = digits[1] = digits[2] = 0;
@@ -1832,9 +1830,9 @@ void Message_DecodeNES(PlayState* play) {
                    (curChar == 0xFC)) {
             var_fs0 = 8.0f;
             if (curChar == 0xF7) {
-                Message_GetTimerDigitsNES(((void)0, gSaveContext.save.saveInfo.unk_EBC), spA8);
+                Message_GetTimerDigitsNES(HIGH_SCORE(HS_UNK_1), spA8);
             } else if (curChar == 0xF9) {
-                Message_GetTimerDigitsNES(((void)0, gSaveContext.save.saveInfo.horseBackBalloonHighScore), spA8);
+                Message_GetTimerDigitsNES((u32)HS_GET_HORSE_BACK_BALLOON_TIME(), spA8);
             } else {
                 Message_GetTimerDigitsNES(
                     ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0xFA]), spA8);
@@ -1857,7 +1855,7 @@ void Message_DecodeNES(PlayState* play) {
             spA4 += var_fs0 * (16.0f * msgCtx->textCharScale);
             decodedBufPos--;
         } else if ((curChar == 0xF3) || (curChar == 0xF4) || (curChar == 0xF5)) {
-            value = (&gSaveContext.save.saveInfo.unk_EC4)[curChar - 0xF3];
+            value = HIGH_SCORE(curChar - 0xF3 + HS_BOAT_ARCHERY);
             digits[0] = digits[1] = digits[2] = 0;
             digits[3] = value;
 
@@ -1893,7 +1891,7 @@ void Message_DecodeNES(PlayState* play) {
             spA4 += 4.0f * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xF6) {
             digits[0] = digits[1] = digits[2] = 0;
-            digits[3] = GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
+            digits[3] = HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
 
             while (digits[3] >= 1000) {
                 digits[0]++;
@@ -1948,7 +1946,7 @@ void Message_DecodeNES(PlayState* play) {
             spA4 += playerNameLen * (16.0f * msgCtx->textCharScale);
         } else if (curChar == 0xB) {
             digits[0] = digits[1] = digits[2] = 0;
-            digits[3] = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) >> 0x10;
+            digits[3] = HS_GET_BOAT_ARCHERY_HIGH_SCORE();
 
             while (digits[3] >= 1000) {
                 digits[0]++;

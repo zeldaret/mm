@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Encount4/z_en_encount4.h"
 #include "objects/object_skb/object_skb.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY)
 
 #define THIS ((EnSkb*)thisx)
 
@@ -288,7 +288,7 @@ void func_80994DA8(EnSkb* this, PlayState* play) {
 
 void func_80994E2C(EnSkb* this) {
     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Actor_PlaySfx(&this->actor, NA_SE_EN_STALKID_APPEAR);
     this->unk_3D0 = 0;
     this->unk_3DE = 0;
@@ -300,7 +300,7 @@ void func_80994E94(EnSkb* this, PlayState* play) {
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
     } else {
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     }
 
     Math_ApproachZeroF(&this->actor.shape.yOffset, 1.0f, 800.0f);
@@ -351,8 +351,8 @@ void func_80995068(EnSkb* this, PlayState* play) {
         this->actionFunc = func_80995190;
         this->actor.speed = 0.0f;
     } else if (Player_GetMask(play) != PLAYER_MASK_CAPTAIN) {
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->actor.hintId = TATL_HINT_ID_STALCHILD;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         func_80995A30(this);
@@ -388,8 +388,8 @@ void func_80995190(EnSkb* this, PlayState* play) {
 }
 
 void func_80995244(EnSkb* this, PlayState* play) {
-    this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
-    this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+    this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
+    this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     this->unk_3E2 = 0;
 
     switch (this->unk_3DE) {
@@ -423,8 +423,8 @@ void func_809952D8(EnSkb* this) {
 
 void func_8099533C(EnSkb* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         func_80994F7C(this, play);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = TATL_HINT_ID_STALCHILD;
@@ -445,8 +445,8 @@ void func_809953E8(EnSkb* this) {
 
 void func_8099544C(EnSkb* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         func_80994F7C(this, play);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f)) {
         this->actor.hintId = TATL_HINT_ID_STALCHILD;
@@ -482,8 +482,8 @@ void func_8099556C(EnSkb* this, PlayState* play) {
 
     this->actor.shape.rot.x = Math_SinS(this->unk_3D4 * sp26) * 20000.0f;
     if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         func_80994F7C(this, play);
     } else if (Actor_IsFacingPlayer(&this->actor, 0x2AAA) && (this->actor.xzDistToPlayer < 200.0f) &&
                (this->skelAnime.curFrame > 24.0f) && (this->skelAnime.curFrame < 28.0f)) {
@@ -538,7 +538,7 @@ void func_809958F4(EnSkb* this) {
     Animation_Change(&this->skelAnime, &object_skb_Anim_003584, -1.0f, Animation_GetLastFrame(&object_skb_Anim_003584),
                      0.0f, ANIMMODE_ONCE, -4.0f);
     this->unk_3E4 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.speed = 0.0f;
     Actor_PlaySfx(&this->actor, NA_SE_EN_AKINDONUTS_HIDE);
     this->unk_3DE = 1;
@@ -569,8 +569,8 @@ void func_80995A30(EnSkb* this) {
 
 void func_80995A8C(EnSkb* this, PlayState* play) {
     if (Player_GetMask(play) == PLAYER_MASK_CAPTAIN) {
-        this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
-        this->actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_8);
+        this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
+        this->actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         this->actor.hintId = TATL_HINT_ID_NONE;
         this->actor.colChkInfo.mass = MASS_HEAVY;
         Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 12);
@@ -735,7 +735,7 @@ void func_809961E4(EnSkb* this, PlayState* play) {
         this->actor.speed = -6.0f;
     }
     this->unk_3E4 = 0;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     SoundSource_PlaySfxAtFixedWorldPos(play, &this->actor.world.pos, 40, NA_SE_EN_STALKID_DEAD);
     this->unk_3DE = 7;
     this->actionFunc = func_80996284;
@@ -795,7 +795,7 @@ void func_809963D8(EnSkb* this, PlayState* play) {
 void func_80996474(EnSkb* this) {
     this->unk_3D0 = 0;
     this->actor.draw = NULL;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = func_809964A0;
 }
 

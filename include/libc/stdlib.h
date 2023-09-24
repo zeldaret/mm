@@ -1,5 +1,5 @@
-#ifndef STDLIB_H
-#define STDLIB_H
+#ifndef LIBC_STDLIB_H
+#define LIBC_STDLIB_H
 
 #include "libc/stddef.h"
 
@@ -21,5 +21,8 @@ typedef struct {
 typedef int ssize_t;
 
 typedef long wchar_t;
+
+ldiv_t ldiv(long numer, long denom);
+lldiv_t lldiv(long long numer, long long denom);
 
 #endif /* STDLIB_H */

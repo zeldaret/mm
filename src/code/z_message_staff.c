@@ -23,154 +23,17 @@ void Message_FindCreditsMessage(PlayState* play, u16 textId) {
     }
 }
 
-// clang-format off
 f32 sCreditsFontWidths[144] = {
-    8.0f,
-    8.0f,
-    6.0f,
-    9.0f,
-    9.0f,
-    14.0f,
-    12.0f,
-    3.0f,
-    7.0f,
-    7.0f,
-    7.0f,
-    9.0f,
-    4.0f,
-    6.0f,
-    4.0f,
-    9.0f,
-    10.0f,
-    5.0f,
-    9.0f,
-    9.0f,
-    10.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    6.0f,
-    6.0f,
-    9.0f,
-    11.0f,
-    9.0f,
-    11.0f,
-    13.0f,
-    12.0f,
-    9.0f,
-    11.0f,
-    11.0f,
-    8.0f,
-    8.0f,
-    12.0f,
-    10.0f,
-    4.0f,
-    8.0f,
-    10.0f,
-    8.0f,
-    13.0f,
-    11.0f,
-    13.0f,
-    9.0f,
-    13.0f,
-    10.0f,
-    10.0f,
-    9.0f,
-    10.0f,
-    11.0f,
-    15.0f,
-    11.0f,
-    10.0f,
-    10.0f,
-    7.0f,
-    10.0f,
-    7.0f,
-    10.0f,
-    9.0f,
-    5.0f,
-    8.0f,
-    9.0f,
-    8.0f,
-    9.0f,
-    9.0f,
-    6.0f,
-    9.0f,
-    8.0f,
-    4.0f,
-    6.0f,
-    8.0f,
-    4.0f,
-    12.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    7.0f,
-    8.0f,
-    7.0f,
-    8.0f,
-    9.0f,
-    12.0f,
-    8.0f,
-    9.0f,
-    8.0f,
-    7.0f,
-    5.0f,
-    7.0f,
-    10.0f,
-    10.0f,
-    12.0f,
-    12.0f,
-    12.0f,
-    12.0f,
-    11.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    6.0f,
-    6.0f,
-    13.0f,
-    13.0f,
-    10.0f,
-    10.0f,
-    10.0f,
-    9.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    6.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
+    8.0f,  8.0f,  6.0f,  9.0f,  9.0f,  14.0f, 12.0f, 3.0f,  7.0f,  7.0f,  7.0f,  9.0f,  4.0f,  6.0f,  4.0f,  9.0f,
+    10.0f, 5.0f,  9.0f,  9.0f,  10.0f, 9.0f,  9.0f,  9.0f,  9.0f,  9.0f,  6.0f,  6.0f,  9.0f,  11.0f, 9.0f,  11.0f,
+    13.0f, 12.0f, 9.0f,  11.0f, 11.0f, 8.0f,  8.0f,  12.0f, 10.0f, 4.0f,  8.0f,  10.0f, 8.0f,  13.0f, 11.0f, 13.0f,
+    9.0f,  13.0f, 10.0f, 10.0f, 9.0f,  10.0f, 11.0f, 15.0f, 11.0f, 10.0f, 10.0f, 7.0f,  10.0f, 7.0f,  10.0f, 9.0f,
+    5.0f,  8.0f,  9.0f,  8.0f,  9.0f,  9.0f,  6.0f,  9.0f,  8.0f,  4.0f,  6.0f,  8.0f,  4.0f,  12.0f, 9.0f,  9.0f,
+    9.0f,  9.0f,  7.0f,  8.0f,  7.0f,  8.0f,  9.0f,  12.0f, 8.0f,  9.0f,  8.0f,  7.0f,  5.0f,  7.0f,  10.0f, 10.0f,
+    12.0f, 12.0f, 12.0f, 12.0f, 11.0f, 8.0f,  8.0f,  8.0f,  6.0f,  6.0f,  13.0f, 13.0f, 10.0f, 10.0f, 10.0f, 9.0f,
+    8.0f,  8.0f,  8.0f,  8.0f,  8.0f,  9.0f,  9.0f,  9.0f,  9.0f,  6.0f,  9.0f,  9.0f,  9.0f,  9.0f,  9.0f,  14.0f,
+    14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f,
 };
-// clang-format on
 
 #ifdef NON_MATCHING
 // https://decomp.me/scratch/yc8Or
@@ -565,9 +428,9 @@ void Message_DecodeCredits(PlayState* play) {
         } else if ((curChar == 0x16) || (curChar == 0x17)) {
             digits[0] = digits[1] = digits[2] = 0;
             if (curChar == 0x17) {
-                digits[3] = gSaveContext.timerCurTimes[4];
+                digits[3] = gSaveContext.timerCurTimes[TIMER_ID_MINIGAME_2];
             } else {
-                digits[3] = gSaveContext.timerCurTimes[6];
+                digits[3] = gSaveContext.timerCurTimes[TIMER_ID_GORON_RACE_UNUSED];
             }
 
             while (digits[3] >= 60) {
@@ -651,18 +514,13 @@ void Message_DecodeCredits(PlayState* play) {
                 }
                 decodedBufPos--;
             } else if (curChar == 0x1E) {
-                //! TODO: `bankRupees` was originally part of a u32 array, along with surrounding struct members in
-                //! `SaveInfo`. This is likely accessing many components of that array with a single line. Need to
-                //! figure out what's expected to be accessed here.
-                value = (&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[++msgCtx->msgBufPos]];
-                if ((font->msgBuf.schar[msgCtx->msgBufPos] & 0xFF) == 2) {
-                    if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
+                value = HIGH_SCORE((u8)font->msgBuf.schar[++msgCtx->msgBufPos]);
+                if ((font->msgBuf.schar[msgCtx->msgBufPos] & 0xFF) == HS_FISHING) {
+                    if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
                         value &= 0x7F;
                     } else {
-                        value = (s16)(((&gSaveContext.save.saveInfo.bankRupees)[font->msgBuf.schar[msgCtx->msgBufPos]] &
-                                       0xFF000000) >>
-                                      0x18) &
-                                0x7F;
+                        value =
+                            (s16)((HIGH_SCORE((u8)font->msgBuf.schar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
                     }
                     value = SQ((f32)value) * 0.0036f + 0.5f;
                 }

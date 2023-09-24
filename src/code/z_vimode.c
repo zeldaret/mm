@@ -1,6 +1,7 @@
 #include "global.h"
+#include "debug.h"
 #include "z64vimode.h"
-#include "ultra64/viint.h"
+#include "PR/viint.h"
 
 typedef struct {
     /* 0x00 */ u32 burst;
@@ -143,7 +144,7 @@ void ViMode_Configure(OSViMode* viMode, s32 type, s32 tvType, s32 loRes, s32 ant
         viMode->fldRegs[0].vBurst = ptr->vBurst;
         viMode->fldRegs[1].vBurst = ptr->vBurst;
     } else {
-        __assert("../z_vimode.c", 216);
+        _dbg_hungup("../z_vimode.c", 216);
     }
 
     viMode->comRegs.hStart += (leftAdjust << 16) + (s16)rightAdjust;

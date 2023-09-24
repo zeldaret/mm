@@ -2,7 +2,7 @@
 #define MACROS_H
 
 #include "libc/stdint.h"
-#include "ultra64/convert.h"
+#include "PR/os_convert.h"
 #include "main.h"
 
 #define SCREEN_WIDTH  320
@@ -95,8 +95,6 @@
 #define CLAMP(x, min, max) ((x) < (min) ? (min) : (x) > (max) ? (max) : (x))
 #define CLAMP_MAX(x, max) ((x) > (max) ? (max) : (x))
 #define CLAMP_MIN(x, min) ((x) < (min) ? (min) : (x))
-
-#define ROUND(x) (s32)(((x) >= 0.0) ? ((x) + 0.5) : ((x) - 0.5))
 
 #define SWAP(type, a, b)    \
     {                       \

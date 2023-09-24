@@ -109,11 +109,11 @@ void Message_ResetOcarinaButtonAlphas(void) {
 void Message_ResetOcarinaButtonState(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
 
-    msgCtx->ocarinaButtonsPosY[0] = 189;
-    msgCtx->ocarinaButtonsPosY[1] = 184;
-    msgCtx->ocarinaButtonsPosY[2] = 179;
-    msgCtx->ocarinaButtonsPosY[3] = 174;
-    msgCtx->ocarinaButtonsPosY[4] = 169;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_A] = 189;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_DOWN] = 184;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_RIGHT] = 179;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_LEFT] = 174;
+    msgCtx->ocarinaButtonsPosY[OCARINA_BTN_C_UP] = 169;
 
     Message_ResetOcarinaButtonAlphas();
 
@@ -2602,9 +2602,9 @@ void Message_Decode(PlayState* play) {
                     digits[1] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][1];
                     digits[2] = gSaveContext.save.saveInfo.lotteryCodes[CURRENT_DAY - 1][2];
                 } else {
-                    digits[0] = (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF00) >> 8;
-                    digits[1] = (((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF0) >> 4;
-                    digits[2] = ((void)0, gSaveContext.save.saveInfo.lotteryCodeGuess) & 0xF;
+                    digits[0] = (HS_GET_LOTTERY_CODE_GUESS() & 0xF00) >> 8;
+                    digits[1] = (HS_GET_LOTTERY_CODE_GUESS() & 0xF0) >> 4;
+                    digits[2] = HS_GET_LOTTERY_CODE_GUESS() & 0xF;
                 }
                 for (i = 0; i < 3; i++) {
                     Font_LoadChar(play, digits[i] + 0x824F, charTexIdx);
@@ -2698,19 +2698,16 @@ void Message_Decode(PlayState* play) {
                 Message_LoadTime(play, curChar, &charTexIdx, &spC0, &decodedBufPos);
             } else if ((curChar == 0x300) || (curChar == 0x301) || (curChar == 0x302) || (curChar == 0x308)) {
                 if (curChar == 0x308) {
-                    value = ((s32)gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF);
+                    value = (s32)HS_GET_HIGH_SCORE_3_LOWER();
                 } else {
-                    value = (&gSaveContext.save.saveInfo.bankRupees)[curChar - 0x300];
+                    value = HIGH_SCORE(curChar - 0x300);
                 }
                 if (curChar == 0x302) {
-                    if (((gSaveContext.save.linkAge != 0) ? 5 : 17) == 5) {
-                        value = value & 0x7F;
+                    if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
+                        value &= 0x7F;
                     } else {
-                        value = (s16)((u32)((&gSaveContext.save.saveInfo
-                                                  .bankRupees)[font->msgBuf.wchar[msgCtx->msgBufPos]] &
-                                            0xFF000000) >>
-                                      0x18) &
-                                0x7F;
+                        value =
+                            (s16)((HIGH_SCORE(font->msgBuf.wchar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
                     }
                 }
                 digits[3] = value;
@@ -2747,9 +2744,9 @@ void Message_Decode(PlayState* play) {
                        (curChar == 0x30C)) {
                 var_fs0 = 8.0f;
                 if (curChar == 0x307) {
-                    Message_GetTimerDigits(((void)0, gSaveContext.save.saveInfo.unk_EBC), spAC);
+                    Message_GetTimerDigits(HIGH_SCORE(HS_UNK_1), spAC);
                 } else if (curChar == 0x309) {
-                    Message_GetTimerDigits(((void)0, gSaveContext.save.saveInfo.horseBackBalloonHighScore), spAC);
+                    Message_GetTimerDigits((u32)HS_GET_HORSE_BACK_BALLOON_TIME(), spAC);
                 } else {
                     Message_GetTimerDigits(
                         ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0x30A]), spAC);
@@ -2772,7 +2769,7 @@ void Message_Decode(PlayState* play) {
                 spC0 += var_fs0 * (16.0f * msgCtx->textCharScale);
                 decodedBufPos--;
             } else if ((curChar == 0x303) || (curChar == 0x304) || (curChar == 0x305)) {
-                temp2 = (&gSaveContext.save.saveInfo.unk_EC4)[curChar - 0x303];
+                temp2 = HIGH_SCORE(curChar - 0x303 + HS_BOAT_ARCHERY);
                 digits[0] = digits[1] = digits[2] = 0;
                 digits[3] = temp2;
 
@@ -2808,7 +2805,7 @@ void Message_Decode(PlayState* play) {
                 spC0 += 4.0f * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x306) {
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
+                digits[3] = HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE();
 
                 while (digits[3] >= 1000) {
                     digits[0]++;
@@ -2866,7 +2863,7 @@ void Message_Decode(PlayState* play) {
                 spC0 += playerNameLen * (16.0f * msgCtx->textCharScale);
             } else if (curChar == 0x310) {
                 digits[0] = digits[1] = digits[2] = 0;
-                digits[3] = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) >> 0x10;
+                digits[3] = HS_GET_BOAT_ARCHERY_HIGH_SCORE();
 
                 while (digits[3] >= 1000) {
                     digits[0]++;
@@ -3232,12 +3229,12 @@ void func_801514B0(PlayState* play, u16 arg1, u8 arg2) {
     msgCtx->unk120CE = msgCtx->unk120D0 = msgCtx->unk120D2;
 }
 
-void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor) {
+void Message_StartTextbox(PlayState* play, u16 textId, Actor* actor) {
     MessageContext* msgCtx = &play->msgCtx;
 
     msgCtx->ocarinaAction = 0xFFFF;
     Message_OpenText(play, textId);
-    msgCtx->talkActor = Actor;
+    msgCtx->talkActor = actor;
     msgCtx->msgMode = MSGMODE_TEXT_START;
     msgCtx->stateTimer = 0;
     msgCtx->textDelayTimer = 0;
@@ -3399,7 +3396,7 @@ void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
 
     sLastPlayedSong = 0xFF;
     msgCtx->lastPlayedSong = 0xFF;
-    msgCtx->lastOcarinaButtonIndex = OCARINA_BTN_INVALID;
+    msgCtx->ocarinaButtonIndex = OCARINA_BTN_INVALID;
     noStop = false;
     msgCtx->ocarinaAction = ocarinaAction;
 
@@ -4241,7 +4238,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     }
 
                     if (sOcarinaButtonIndexBufPos == (msgCtx->ocarinaStaff->pos - 1)) {
-                        msgCtx->lastOcarinaButtonIndex = sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos - 1] =
+                        msgCtx->ocarinaButtonIndex = sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos - 1] =
                             msgCtx->ocarinaStaff->buttonIndex;
                         sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos] = OCARINA_BTN_INVALID;
                         sOcarinaButtonIndexBufPos++;
@@ -4561,7 +4558,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 
                     if (((u32)msgCtx->ocarinaStaff->pos != 0) &&
                         (sOcarinaButtonIndexBufPos == (msgCtx->ocarinaStaff->pos - 1))) {
-                        msgCtx->lastOcarinaButtonIndex = sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos - 1] =
+                        msgCtx->ocarinaButtonIndex = sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos - 1] =
                             msgCtx->ocarinaStaff->buttonIndex;
                         sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos] = OCARINA_BTN_INVALID;
                         sOcarinaButtonIndexBufPos++;
@@ -4578,7 +4575,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
 
                 if (((u32)msgCtx->ocarinaStaff->pos != 0) &&
                     (sOcarinaButtonIndexBufPos == (msgCtx->ocarinaStaff->pos - 1))) {
-                    msgCtx->lastOcarinaButtonIndex = sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos - 1] =
+                    msgCtx->ocarinaButtonIndex = sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos - 1] =
                         msgCtx->ocarinaStaff->buttonIndex;
                     sOcarinaButtonIndexBuf[msgCtx->ocarinaStaff->pos] = OCARINA_BTN_INVALID;
                     sOcarinaButtonIndexBufPos++;
@@ -4661,7 +4658,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                         sOcarinaButtonIndexBufLen--;
                     }
 
-                    msgCtx->lastOcarinaButtonIndex = sOcarinaButtonIndexBuf[sOcarinaButtonIndexBufLen] =
+                    msgCtx->ocarinaButtonIndex = sOcarinaButtonIndexBuf[sOcarinaButtonIndexBufLen] =
                         msgCtx->ocarinaStaff->buttonIndex;
                     sOcarinaButtonIndexBufLen++;
                     sOcarinaButtonIndexBuf[sOcarinaButtonIndexBufLen] = OCARINA_BTN_INVALID;
@@ -4717,7 +4714,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 msgCtx->ocarinaStaff = AudioOcarina_GetRecordingStaff();
                 if ((u32)msgCtx->ocarinaStaff->pos != 0) {
                     if (sOcarinaButtonIndexBufPos == (msgCtx->ocarinaStaff->pos - 1)) {
-                        msgCtx->lastOcarinaButtonIndex = sOcarinaButtonIndexBuf[sOcarinaButtonIndexBufPos] =
+                        msgCtx->ocarinaButtonIndex = sOcarinaButtonIndexBuf[sOcarinaButtonIndexBufPos] =
                             msgCtx->ocarinaStaff->buttonIndex;
                         sOcarinaButtonIndexBufPos++;
                         sOcarinaButtonIndexBuf[sOcarinaButtonIndexBufPos] = OCARINA_BTN_INVALID;
@@ -4764,7 +4761,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                 msgCtx->ocarinaStaff = AudioOcarina_GetPlayingStaff();
                 if (((u32)msgCtx->ocarinaStaff->pos != 0) &&
                     (sOcarinaButtonIndexBufPos == (msgCtx->ocarinaStaff->pos - 1))) {
-                    msgCtx->lastOcarinaButtonIndex = msgCtx->ocarinaStaff->buttonIndex;
+                    msgCtx->ocarinaButtonIndex = msgCtx->ocarinaStaff->buttonIndex;
                     msgCtx->ocarinaStaff->pos = 0;
                     sOcarinaButtonIndexBufPos = 0;
                     Message_ResetOcarinaButtonState(play);
@@ -5514,7 +5511,7 @@ void Message_Update(PlayState* play) {
                             play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                             gSaveContext.prevHudVisibility = HUD_VISIBILITY_A_B;
                             func_80115844(play, DO_ACTION_STOP);
-                            Game_SetFramerateDivisor(&play->state, 2);
+                            GameState_SetFramerateDivisor(&play->state, 2);
                             if (ShrinkWindow_Letterbox_GetSizeTarget() != 0) {
                                 ShrinkWindow_Letterbox_SetSizeTarget(0);
                             }
@@ -5659,7 +5656,7 @@ void Message_Update(PlayState* play) {
                 play->msgCtx.ocarinaMode = OCARINA_MODE_END;
                 Message_CloseTextbox(play);
             } else {
-                msgCtx->lastOcarinaButtonIndex = OCARINA_BTN_INVALID;
+                msgCtx->ocarinaButtonIndex = OCARINA_BTN_INVALID;
             }
             break;
 
@@ -5679,7 +5676,7 @@ void Message_Update(PlayState* play) {
                 Message_CloseTextbox(play);
                 msgCtx->msgMode = MSGMODE_SCARECROW_SPAWN_RECORDING_FAILED;
             } else {
-                msgCtx->lastOcarinaButtonIndex = OCARINA_BTN_INVALID;
+                msgCtx->ocarinaButtonIndex = OCARINA_BTN_INVALID;
             }
             break;
 
@@ -5813,7 +5810,7 @@ void Message_Update(PlayState* play) {
             break;
 
         default:
-            msgCtx->lastOcarinaButtonIndex = OCARINA_BTN_INVALID;
+            msgCtx->ocarinaButtonIndex = OCARINA_BTN_INVALID;
             break;
     }
 }

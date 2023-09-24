@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/object_rr/object_rr.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_400)
 
 #define THIS ((EnRr*)thisx)
 
@@ -120,7 +120,7 @@ static CollisionCheckInfoInit sColChkInfoInit = { 3, 45, 60, 250 };
 
 static InitChainEntry sInitChain[] = {
     ICHAIN_S8(hintId, TATL_HINT_ID_LIKE_LIKE, ICHAIN_CONTINUE),
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE),
     ICHAIN_F32_DIV1000(gravity, -400, ICHAIN_CONTINUE),
     ICHAIN_F32(uncullZoneForward, 2000, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
@@ -195,7 +195,7 @@ void func_808FA11C(EnRr* this) {
     this->collider1.info.elemType = ELEMTYPE_UNK0;
     this->unk_1EE = 80;
     this->drawDmgEffScale = 0.85f;
-    this->drawDmgEffFrozenSteamScale = 1.2750001f;
+    this->drawDmgEffFrozenSteamScale = 1275.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->actor.flags &= ~ACTOR_FLAG_400;
     Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 80);
@@ -269,7 +269,7 @@ void func_808FA3F8(EnRr* this, Player* player) {
     this->unk_1EA = 100;
     this->unk_1FC = 20;
     this->collider1.base.ocFlags1 &= ~OC1_TYPE_PLAYER;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_1F0 = 8;
     this->unk_1E1 = 0;
     this->actor.speed = 0.0f;
@@ -300,7 +300,7 @@ void func_808FA4F4(EnRr* this, PlayState* play) {
     if (player->stateFlags2 & PLAYER_STATE2_80) {
         player->actor.parent = NULL;
         player->unk_AE8 = 100;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->unk_1F0 = 110;
         this->unk_1F6 = 2500;
         this->unk_210 = 0.0f;
@@ -417,7 +417,7 @@ void func_808FA910(EnRr* this) {
 
     this->actionFunc = func_808FB42C;
     Actor_PlaySfx(&this->actor, NA_SE_EN_LIKE_DEAD);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void func_808FA9CC(EnRr* this) {

@@ -9,7 +9,7 @@
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_400)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_400)
 
 #define THIS ((EnWallmas*)thisx)
 
@@ -198,7 +198,7 @@ void EnWallmas_Destroy(Actor* thisx, PlayState* play) {
 void EnWallmas_Freeze(EnWallmas* this) {
     this->drawDmgEffType = ACTOR_DRAW_DMGEFF_FROZEN_NO_SFX;
     this->drawDmgEffScale = 0.55f;
-    this->drawDmgEffFrozenSteamScale = 0.82500005f;
+    this->drawDmgEffFrozenSteamScale = 825.0f * 0.001f;
     this->drawDmgEffAlpha = 1.0f;
     this->collider.base.colType = 3;
     this->timer = 80;
@@ -219,7 +219,7 @@ void EnWallmas_ThawIfFrozen(EnWallmas* this, PlayState* play) {
 void EnWallmas_TimerInit(EnWallmas* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actor.flags |= ACTOR_FLAG_20;
     this->timer = 130;
     this->actor.velocity.y = 0.0f;
@@ -270,7 +270,7 @@ void EnWallmas_SetupDrop(EnWallmas* this, PlayState* play) {
     this->actor.shape.rot.y = player->actor.shape.rot.y + 0x8000;
     this->actor.world.rot.y = this->actor.shape.rot.y;
     this->actor.floorHeight = player->actor.floorHeight;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.flags &= ~ACTOR_FLAG_20;
     this->actionFunc = EnWallmas_Drop;
 }
@@ -504,7 +504,7 @@ void EnWallmas_TakePlayer(EnWallmas* this, PlayState* play) {
 void EnWallmas_ProximityOrSwitchInit(EnWallmas* this) {
     this->timer = 0;
     this->actor.draw = NULL;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (WALLMASTER_GET_TYPE(&this->actor) == WALLMASTER_TYPE_PROXIMITY) {
         this->actionFunc = EnWallmas_WaitForProximity;
     } else {
@@ -563,7 +563,7 @@ void EnWallmas_UpdateDamage(EnWallmas* this, PlayState* play) {
             if (Actor_ApplyDamage(&this->actor) == 0) {
                 Enemy_StartFinishingBlow(play, &this->actor);
                 Actor_PlaySfx(&this->actor, NA_SE_EN_DAIOCTA_REVERSE);
-                this->actor.flags &= ~ACTOR_FLAG_1;
+                this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
             } else if (this->actor.colChkInfo.damage != 0) {
                 Actor_PlaySfx(&this->actor, NA_SE_EN_FALL_DAMAGE);
             }

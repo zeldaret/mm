@@ -7,7 +7,7 @@
 #include "z_en_sellnuts.h"
 #include "objects/object_dnt/object_dnt.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((EnSellnuts*)thisx)
 
@@ -107,7 +107,7 @@ static AnimationInfoS sAnimationInfo[] = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 0, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_0, ICHAIN_CONTINUE),
     ICHAIN_F32(targetArrowOffset, 30, ICHAIN_STOP),
 };
 
@@ -381,7 +381,7 @@ void func_80ADB544(EnSellnuts* this, PlayState* play) {
         }
     } else if (((this->actor.xzDistToPlayer < 80.0f) &&
                 (((this->actor.playerHeightRel < 50.0f) && (this->actor.playerHeightRel > -50.0f)) ? true : false)) ||
-               this->actor.isTargeted) {
+               this->actor.isLockedOn) {
         Actor_OfferTalkExchangeEquiCylinder(&this->actor, play, 80.0f, PLAYER_IA_MOONS_TEAR);
         if (player->transformation == PLAYER_FORM_DEKU) {
             if (gSaveContext.save.day == 3) {
@@ -519,7 +519,7 @@ void func_80ADBD64(EnSellnuts* this, PlayState* play) {
         play->msgCtx.msgMode = MSGMODE_TEXT_CLOSING;
         play->msgCtx.stateTimer = 4;
         this->unk_338 &= ~2;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_34C = 8;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, 8);
         this->actionFunc = func_80ADBE80;
@@ -876,7 +876,7 @@ void func_80ADCD3C(EnSellnuts* this, PlayState* play) {
         this->unk_338 |= 2;
         this->unk_338 |= 1;
         this->unk_340 = 0x626;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = -1.0f;
         this->actor.draw = EnSellnuts_Draw;
         this->unk_34A = 50;
@@ -1003,7 +1003,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->unk_34C = 20;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_35C = 1.0f;
         this->unk_358 = 1.0f;
         this->unk_354 = 1.0f;
@@ -1013,7 +1013,7 @@ void EnSellnuts_Init(Actor* thisx, PlayState* play) {
     } else {
         this->unk_338 |= 2;
         this->unk_338 &= ~1;
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->actor.gravity = 0.0f;
         this->actor.draw = NULL;
         this->unk_34C = 4;

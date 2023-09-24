@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnGrasshopper*)thisx)
 
@@ -264,7 +264,7 @@ void EnGrasshopper_Init(Actor* thisx, PlayState* play) {
     s32 i;
 
     this->actor.hintId = TATL_HINT_ID_DRAGONFLY;
-    this->actor.targetMode = 4;
+    this->actor.targetMode = TARGET_MODE_4;
     this->actor.colChkInfo.mass = 60;
     this->actor.colChkInfo.health = 2;
 
@@ -473,12 +473,12 @@ void EnGrasshopper_Fly(EnGrasshopper* this, PlayState* play) {
             this->targetRot.z = (this->actor.world.rot.y - this->targetRot.y) * 0.2f;
             targetSpeed = (this->index * 0.1f) + 4.0f;
             Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.7f);
-            Math_ApproachF(&this->rotationalVelocity, 2000.0f, 1.0f, 50.0f);
-            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
+            Math_ApproachF(&this->angularVelocity, 2000.0f, 1.0f, 50.0f);
+            Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->angularVelocity, 5);
             if (this->timer == 0) {
                 if (Rand_ZeroFloat(1.0f) < 0.3f) {
                     this->waitTimer = Rand_S16Offset(10, 10);
-                    this->rotationalVelocity = 0.0f;
+                    this->angularVelocity = 0.0f;
                 }
 
                 this->targetRot.y = Math_Atan2S(diffX, diffZ);
@@ -606,7 +606,7 @@ void EnGrasshopper_Bounced(EnGrasshopper* this, PlayState* play) {
     Math_ApproachF(&this->actor.speed, targetSpeed, 0.4f, 0.8f);
     Math_SmoothStepToS(&this->actor.world.rot.z, this->targetRot.z, 5, 0x3E8, 5);
     this->targetRot.z *= 0.8f;
-    Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->rotationalVelocity, 5);
+    Math_SmoothStepToS(&this->actor.world.rot.y, this->targetRot.y, 5, this->angularVelocity, 5);
     if (this->timer == 0) {
         this->collider.elements[0].info.toucherFlags |= (TOUCH_ON | TOUCH_SFX_WOOD);
         this->timer = 0;
@@ -770,7 +770,7 @@ void EnGrasshopper_SetupDamaged(EnGrasshopper* this, PlayState* play) {
 
     EnGrasshopper_ChangeAnim(this, DRAGONFLY_ANIM_DAMAGE);
     this->actor.speed = 0.0f;
-    this->actor.flags |= ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->approachSpeed = 0.0f;
     this->collider.elements[1].info.toucherFlags &= ~(TOUCH_ON | TOUCH_SFX_WOOD);
     Matrix_RotateYS(this->actor.yawTowardsPlayer, MTXMODE_NEW);

@@ -224,10 +224,10 @@ void EnTanron5_Init(Actor* thisx, PlayState* play) {
             return;
         }
 
-        // fragmentRotationalVelocityX is in a union with itemDropRotZ, so for item drops, this code
+        // fragmentAngularVelocityX is in a union with itemDropRotZ, so for item drops, this code
         // will initialize its z-rotation to a random value.
-        this->fragmentRotationalVelocityX = Rand_CenteredFloat(0x2000);
-        this->fragmentRotationalVelocityY = Rand_CenteredFloat(0x2000);
+        this->fragmentAngularVelocityX = Rand_CenteredFloat(0x2000);
+        this->fragmentAngularVelocityY = Rand_CenteredFloat(0x2000);
 
         if (TWINMOLD_PROP_GET_TYPE(&this->actor) <= TWINMOLD_PROP_TYPE_FRAGMENT_LARGE_7) {
             Actor_SetScale(&this->actor, (Rand_ZeroFloat(0.025f) + 0.085f) * sGiantModeScaleFactor);
@@ -538,8 +538,8 @@ void EnTanron5_RuinFragmentItemDrop_Update(Actor* thisx, PlayState* play2) {
     }
 
     if (TWINMOLD_PROP_GET_TYPE(&this->actor) < TWINMOLD_PROP_TYPE_ITEM_DROP_1) {
-        this->actor.shape.rot.x += this->fragmentRotationalVelocityX;
-        this->actor.shape.rot.y += this->fragmentRotationalVelocityY;
+        this->actor.shape.rot.x += this->fragmentAngularVelocityX;
+        this->actor.shape.rot.y += this->fragmentAngularVelocityY;
         interactionDistSq = SQ(35.0f);
 
         if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {

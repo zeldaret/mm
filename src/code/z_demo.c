@@ -1,5 +1,6 @@
-#include "prevent_bss_reordering.h"
 #include "PR/ultratypes.h"
+#include "prevent_bss_reordering.h"
+#include "prevent_bss_reordering2.h"
 
 // Variables are put before most headers as a hacky way to bypass bss reordering
 struct CutsceneCamera;

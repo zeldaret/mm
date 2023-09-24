@@ -10,24 +10,24 @@ struct MessageTableEntry;
 struct OcarinaStaff;
 struct PlayState;
 
-typedef enum {
-    /* 0x0 */ TEXTBOX_TYPE_0,
-    /* 0x1 */ TEXTBOX_TYPE_1,
-    /* 0x2 */ TEXTBOX_TYPE_2,
-    /* 0x3 */ TEXTBOX_TYPE_3,
-    /* 0x4 */ TEXTBOX_TYPE_4,
-    /* 0x5 */ TEXTBOX_TYPE_5,
-    /* 0x6 */ TEXTBOX_TYPE_6,
-    /* 0x7 */ TEXTBOX_TYPE_7,
-    /* 0x8 */ TEXTBOX_TYPE_8,
-    /* 0x9 */ TEXTBOX_TYPE_9,
-    /* 0xA */ TEXTBOX_TYPE_A,
-    /* 0xB */ TEXTBOX_TYPE_B,
-    /* 0xC */ TEXTBOX_TYPE_C,
-    /* 0xD */ TEXTBOX_TYPE_D,
-    /* 0xE */ TEXTBOX_TYPE_E,
-    /* 0xF */ TEXTBOX_TYPE_F,
-    /* 0x10*/ TEXTBOX_TYPE_MAX
+typedef enum TextBoxType {
+    /* 0x00 */ TEXTBOX_TYPE_0,
+    /* 0x01 */ TEXTBOX_TYPE_1,
+    /* 0x02 */ TEXTBOX_TYPE_2,
+    /* 0x03 */ TEXTBOX_TYPE_3,
+    /* 0x04 */ TEXTBOX_TYPE_4,
+    /* 0x05 */ TEXTBOX_TYPE_5,
+    /* 0x06 */ TEXTBOX_TYPE_6,
+    /* 0x07 */ TEXTBOX_TYPE_7,
+    /* 0x08 */ TEXTBOX_TYPE_8,
+    /* 0x09 */ TEXTBOX_TYPE_9,
+    /* 0x0A */ TEXTBOX_TYPE_A,
+    /* 0x0B */ TEXTBOX_TYPE_B,
+    /* 0x0C */ TEXTBOX_TYPE_C,
+    /* 0x0D */ TEXTBOX_TYPE_D,
+    /* 0x0E */ TEXTBOX_TYPE_E,
+    /* 0x0F */ TEXTBOX_TYPE_F,
+    /* 0x10 */ TEXTBOX_TYPE_MAX
 } TextBoxType;
 
 #define TEXTBOX_ENDTYPE_00    0x00
@@ -273,8 +273,8 @@ typedef struct MessageContext {
     /* 0x12040 */ struct Actor* talkActor;
     /* 0x12044 */ s16 unk12044;
     /* 0x12046 */ s16 blockSunsSong;
-    /* 0x12048 */ u8 lastOcarinaButtonIndex;
-    /* 0x1204A */ s16 ocarinaButtonsPosY[0x5];
+    /* 0x12048 */ u8 ocarinaButtonIndex;
+    /* 0x1204A */ s16 ocarinaButtonsPosY[5];
     /* 0x12054 */ s16 unk12054[6]; // First, second and third digits in lottery code guess
     /* 0x1205A */ UNK_TYPE1 unk12060[0x8];
     /* 0x12068 */ s16 textboxX;

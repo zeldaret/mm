@@ -1,5 +1,5 @@
 #include "global.h"
-#include "ultra64/viint.h"
+#include "PR/viint.h"
 
 OSViMode osViModeMpalLan1 = {
     OS_VI_MPAL_LAN1, // type

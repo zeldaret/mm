@@ -47,7 +47,7 @@ void DmOpstage_Init(Actor* thisx, PlayState* play) {
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) == DMOPSTAGE_TYPE_GROUND) {
         DynaPolyActor_Init(&this->dyna, 0);
-        DynaPolyActor_LoadMesh(play, &this->dyna, &gKeikokuDemoFloorColliderHeader);
+        DynaPolyActor_LoadMesh(play, &this->dyna, &gKeikokuDemoFloorCol);
     }
 
     if (DMOPSTAGE_GET_TYPE(&this->dyna.actor) > DMOPSTAGE_TYPE_GROUND) {
