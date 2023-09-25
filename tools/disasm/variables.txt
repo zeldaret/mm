@@ -4066,7 +4066,7 @@
     0x801FBB00:("gRSPAudioTimeAcc","volatile OSTime","",0x8),
     0x801FBB08:("gRSPGfxTimeAcc","volatile OSTime","",0x8),
     0x801FBB10:("gRSPOtherTimeAcc","volatile OSTime","",0x8),
-    0x801FBB18:("D_801FBB18","volatile OSTime","",0x8),
+    0x801FBB18:("gUnkTimeAcc","volatile OSTime","",0x8),
     0x801FBB20:("gRDPTimeAcc","volatile OSTime","",0x8),
     0x801FBB28:("sSpeedMeterTimeEntryPtr","UNK_TYPE1","",0x1),
     0x801FBB30:("sNotebookViMode","OSViMode","",0x50),

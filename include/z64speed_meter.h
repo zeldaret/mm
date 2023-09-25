@@ -24,7 +24,7 @@ extern volatile OSTime gGraphUpdatePeriod;
 extern volatile OSTime gRSPAudioTimeAcc;
 extern volatile OSTime gRSPGfxTimeAcc;
 extern volatile OSTime gRSPOtherTimeAcc;
-extern volatile OSTime D_801FBB18;
+extern volatile OSTime gUnkTimeAcc;
 extern volatile OSTime gRDPTimeAcc;
 
 #endif

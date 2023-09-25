@@ -34,7 +34,7 @@ volatile OSTime gRSPAudioTimeAcc;
 volatile OSTime gRSPGfxTimeAcc;
 
 volatile OSTime gRSPOtherTimeAcc;
-volatile OSTime D_801FBB18;
+volatile OSTime gUnkTimeAcc;
 
 // Accumulator for `gRDPTimeTotal`
 volatile OSTime gRDPTimeAcc;
