@@ -1206,6 +1206,9 @@ s32 EnRailgibud_PerformCutsceneActions(EnRailgibud* this, PlayState* play) {
                     this->csAnimIndex = EN_RAILGIBUD_ANIM_WALK;
                     Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, EN_RAILGIBUD_ANIM_WALK);
                     break;
+
+                default:
+                    break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             if (this->csAnimIndex == EN_RAILGIBUD_ANIM_SLUMP_START) {
