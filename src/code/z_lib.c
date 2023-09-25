@@ -240,20 +240,20 @@ s32 Math_AsymStepToF(f32* pValue, f32 target, f32 incrStep, f32 decrStep) {
     return false;
 }
 
-void func_800FF3A0(f32* distOut, s16* angleOut, Input* input) {
+void Lib_GetControlStickData(f32* outMagnitude, s16* outAngle, Input* input) {
     f32 x = input->rel.stick_x;
     f32 y = input->rel.stick_y;
-    f32 dist;
+    f32 magnitude;
 
-    dist = sqrtf(SQ(x) + SQ(y));
-    *distOut = (60.0f < dist) ? 60.0f : dist;
+    magnitude = sqrtf(SQ(x) + SQ(y));
+    *outMagnitude = (60.0f < magnitude) ? 60.0f : magnitude;
 
-    if (dist > 0.0f) {
+    if (magnitude > 0.0f) {
         x = input->cur.stick_x;
         y = input->cur.stick_y;
-        *angleOut = Math_Atan2S_XY(y, -x);
+        *outAngle = Math_Atan2S_XY(y, -x);
     } else {
-        *angleOut = 0;
+        *outAngle = 0;
     }
 }
 

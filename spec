@@ -2055,8 +2055,7 @@ beginseg
     name "ovl_En_Ge3"
     compress
     include "build/src/overlays/actors/ovl_En_Ge3/z_en_ge3.o"
-    include "build/data/ovl_En_Ge3/ovl_En_Ge3.data.o"
-    include "build/data/ovl_En_Ge3/ovl_En_Ge3.reloc.o"
+    include "build/src/overlays/actors/ovl_En_Ge3/ovl_En_Ge3_reloc.o"
 endseg
 
 beginseg
@@ -2439,8 +2438,7 @@ beginseg
     name "ovl_Dm_Hina"
     compress
     include "build/src/overlays/actors/ovl_Dm_Hina/z_dm_hina.o"
-    include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.data.o"
-    include "build/data/ovl_Dm_Hina/ovl_Dm_Hina.reloc.o"
+    include "build/src/overlays/actors/ovl_Dm_Hina/ovl_Dm_Hina_reloc.o"
 endseg
 
 beginseg
@@ -3292,8 +3290,7 @@ beginseg
     name "ovl_Bg_Lotus"
     compress
     include "build/src/overlays/actors/ovl_Bg_Lotus/z_bg_lotus.o"
-    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.data.o"
-    include "build/data/ovl_Bg_Lotus/ovl_Bg_Lotus.reloc.o"
+    include "build/src/overlays/actors/ovl_Bg_Lotus/ovl_Bg_Lotus_reloc.o"
 endseg
 
 beginseg

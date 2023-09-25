@@ -34,13 +34,9 @@ void IrqMgr_HandlePRENMI500(IrqMgr* irqmgr);
 void IrqMgr_HandleRetrace(IrqMgr* irqmgr);
 void IrqMgr_ThreadEntry(IrqMgr* irqmgr);
 void IrqMgr_Init(IrqMgr* irqmgr, void* stack, OSPri pri, u8 retraceCount);
-void CIC6105_Nop80081820(void);
-void CIC6105_Nop80081828(void);
-void CIC6105_PrintRomInfo(void);
-void CIC6105_AddRomInfoFaultPage(void);
-void CIC6105_RemoveRomInfoFaultPage(void);
-void func_800818F4(void);
+
 void osSyncPrintfUnused(const char* fmt, ...);
+
 void rmonPrintf(const char* fmt, ...);
 
 void RcpUtils_PrintRegisterStatus(void);
@@ -534,7 +530,7 @@ void Font_LoadOrderedFont(Font* font);
 
 void* Lib_MemCpy(void* dest, void* src, size_t size);
 void* Lib_MemSet(void* buffer, s32 value, size_t size);
-void func_800FF3A0(f32* distOut, s16* angleOut, Input* input);
+void Lib_GetControlStickData(f32* outMagnitude, s16* outAngle, Input* input);
 void Actor_ProcessInitChain(Actor* actor, InitChainEntry* ichain);
 void Color_RGBA8_Copy(Color_RGBA8* dst, Color_RGBA8* src);
 void Lib_PlaySfx(u16 sfxId);
@@ -927,13 +923,13 @@ void func_80148B98(PlayState* play, u8 arg1);
 // void func_801491DC(void);
 // void func_80149454(void);
 // void func_801496C8(void);
-// void func_8014995C(void);
+void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP);
 void func_80149C18(PlayState* play);
 // void Message_FindMessage(void);
 void func_80149F74(PlayState* play, u32** ppuParm2);
-// void func_8014AAD0(void);
+void Message_HandleOcarina(PlayState* play);
 void func_8014ADBC(PlayState* play, UNK_PTR puParm2);
-// void func_8014C70C(void);
+void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2);
 void Message_LoadChar(PlayState* play, u16 codePointIndex, s32* offset, f32* arg3, s16 decodedBufPos);
 // void func_8014CCB4(void);
 // void func_8014CDF0(void);
@@ -944,7 +940,7 @@ void func_8014D304(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_
 void func_80150A84(PlayState* play);
 void func_80150D08(PlayState* play, u32 uParm2);
 void func_801514B0(PlayState* play, u16 arg1, u8 arg2);
-void Message_StartTextbox(PlayState* play, u16 textId, Actor* Actor);
+void Message_StartTextbox(PlayState* play, u16 textId, Actor* actor);
 void Message_ContinueTextbox(PlayState* play, u16 textId);
 void func_80151A68(PlayState* play, u16 textId);
 void Message_BombersNotebookQueueEvent(PlayState* play, u8 event);
@@ -978,7 +974,7 @@ void func_8015966C(PlayState* play, UNK_PTR puParm2, UNK_TYPE arg3);
 // void func_8015A144(void);
 void func_8015B198(PlayState* play);
 void Message_FindCreditsMessage(PlayState* play, u16 textId);
-void func_8015E7EC(PlayState* play, UNK_PTR puParm2);
+void Message_DrawTextCredits(PlayState* play, Gfx** gfxP);
 // void func_8015F8A8(UNK_TYPE4 ctxt);
 
 uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
