@@ -377,8 +377,9 @@ void EnGiant_UpdateAlpha(EnGiant* this) {
  */
 void EnGiant_PlayAndUpdateAnimation(EnGiant* this) {
     if (SkelAnime_Update(&this->skelAnime) &&
-        (this->animIndex != GIANT_ANIM_FALLING_OVER || this->cueId != GIANT_CUEID_FALLING_OVER)) {
+        ((this->animIndex != GIANT_ANIM_FALLING_OVER) || (this->cueId != GIANT_CUEID_FALLING_OVER))) {
         EnGiant_ChangeAnim(this, this->animIndex);
+
         switch (this->cueId) {
             case GIANT_CUEID_LOOKING_UP:
                 EnGiant_ChangeToStartOrLoopAnimation(this, GIANT_ANIM_LOOK_UP_START);
