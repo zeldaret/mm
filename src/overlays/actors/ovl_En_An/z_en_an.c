@@ -20,19 +20,12 @@
 void EnAn_Init(Actor* thisx, PlayState* play);
 void EnAn_Destroy(Actor* thisx, PlayState* play);
 void EnAn_Update(Actor* thisx, PlayState* play);
-
 void EnAn_Draw(Actor* this, PlayState* play);
 
 // Action funcs
 void func_80B577F0(EnAn* this, PlayState* play);
 void func_80B578F8(EnAn* this, PlayState* play);
 void func_80B57A44(EnAn* this, PlayState* play);
-
-
-
-
-extern AnimationInfoS D_80B58BF4[];
-
 
 static u8 sScheduleScript[] = {
     /* 0x000 */ SCHEDULE_CMD_CHECK_NOT_IN_DAY_L(1, 0x151 - 0x005),
@@ -609,7 +602,7 @@ static ColliderCylinderInit D_80B58BBC = {
 static CollisionCheckInfoInit2 D_80B58BE8 = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 s32 func_80B53840(EnAn* this, PlayState* play) {
-    s32 ret = 0;
+    s32 ret = false;
 
     if ((this->unk_214 != play->roomCtx.curRoom.num) && (play->roomCtx.status == 0) && (this->unk_3B8 == 0)) {
         this->msmoObjIndex = SubS_GetObjectIndex(OBJECT_MSMO, play);
@@ -623,11 +616,11 @@ s32 func_80B53840(EnAn* this, PlayState* play) {
     }
 
     if (this->unk_3B8 == 0) {
-        return 0;
+        return false;
     }
 
     if (((this->an2ObjIndex >= 0) && (SubS_IsObjectLoaded(this->an2ObjIndex, play) == 0)) || ((this->an3ObjIndex >= 0) && (SubS_IsObjectLoaded(this->an3ObjIndex, play) == 0)) || ((this->maskKerfayObjIndex >= 0) && (SubS_IsObjectLoaded(this->maskKerfayObjIndex, play) == 0)) || ((this->an4ObjIndex >= 0) && (SubS_IsObjectLoaded(this->an4ObjIndex, play) == 0)) || ((this->msmoObjIndex >= 0) && (SubS_IsObjectLoaded(this->msmoObjIndex, play) == 0))) {
-        ret = 1;
+        ret = true;
     } else {
         this->actor.draw = EnAn_Draw;
         this->unk_3B8 = 0;
@@ -755,6 +748,50 @@ s32 func_80B53BA8(EnAn* this, PlayState* play) {
     return ret;
 }
 
+typedef enum EnAnAnimation {
+    /* -1 */ ENAN_ANIM_NONE = -1,
+    /*  0 */ ENAN_ANIM_0,
+    /*  1 */ ENAN_ANIM_1,
+    /*  2 */ ENAN_ANIM_2,
+    /*  3 */ ENAN_ANIM_3,
+    /*  4 */ ENAN_ANIM_4,
+    /*  5 */ ENAN_ANIM_5,
+    /*  6 */ ENAN_ANIM_6,
+    /*  7 */ ENAN_ANIM_7,
+    /*  8 */ ENAN_ANIM_8,
+    /*  9 */ ENAN_ANIM_9,
+    /* 10 */ ENAN_ANIM_10,
+    /* 11 */ ENAN_ANIM_11,
+    /* 12 */ ENAN_ANIM_12,
+    /* 13 */ ENAN_ANIM_13,
+    /* 14 */ ENAN_ANIM_14,
+    /* 15 */ ENAN_ANIM_15,
+    /* 16 */ ENAN_ANIM_16,
+
+    /* 17 */ ENAN_ANIM_17,
+    /* 18 */ ENAN_ANIM_18,
+    /* 19 */ ENAN_ANIM_19,
+    /* 20 */ ENAN_ANIM_20,
+
+    /* 21 */ ENAN_ANIM_21,
+    /* 22 */ ENAN_ANIM_22,
+    /* 23 */ ENAN_ANIM_23,
+    /* 24 */ ENAN_ANIM_24,
+
+    /* 25 */ ENAN_ANIM_25,
+    /* 26 */ ENAN_ANIM_26,
+    /* 27 */ ENAN_ANIM_27,
+    /* 28 */ ENAN_ANIM_28,
+    /* 29 */ ENAN_ANIM_29,
+    /* 30 */ ENAN_ANIM_30,
+    /* 31 */ ENAN_ANIM_31,
+    /* 32 */ ENAN_ANIM_32,
+    /* 33 */ ENAN_ANIM_33,
+    /* 34 */ ENAN_ANIM_34,
+    /* 35 */ ENAN_ANIM_35,
+    /* 36 */ ENAN_ANIM_MAX
+} EnAnAnimation;
+
 // sAnimationInfo
 AnimationInfoS D_80B58BF4[ENAN_ANIM_MAX] = {
     { &object_an1_Anim_013E1C, 1.0f, 0, -1, ANIMMODE_LOOP, 0 }, // ENAN_ANIM_0
@@ -879,64 +916,107 @@ void func_80B53ED4(EnAn* this, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->unk_190.base);
 }
 
-s16 D_80B58E40[0xA] = { 0, 2, 0, 1, 2, 0, 1, 2, 1, 1 };
+typedef enum EnAnEyes {
+    /* 0 */ ENAN_EYES_0,
+    /* 1 */ ENAN_EYES_1,
+    /* 2 */ ENAN_EYES_2,
+    /* 3 */ ENAN_EYES_3,
+    /* 4 */ ENAN_EYES_4,
+    /* 5 */ ENAN_EYES_5,
+    /* 6 */ ENAN_EYES_6,
+    /* 7 */ ENAN_EYES_MAX
+} EnAnEyes;
 
-void func_80B53F84(EnAn* this) {
-    s32 var_a1 = 0;
+typedef enum EnAnMouth {
+    /* 0 */ ENAN_MOUTH_0,
+    /* 1 */ ENAN_MOUTH_1,
+    /* 2 */ ENAN_MOUTH_2,
+    /* 3 */ ENAN_MOUTH_MAX
+} EnAnMouth;
+
+typedef enum EnAnFace {
+    /*  0 */ ENAN_FACE_0,
+    /*  1 */ ENAN_FACE_1,
+    /*  2 */ ENAN_FACE_2,
+    /*  3 */ ENAN_FACE_3,
+    /*  4 */ ENAN_FACE_4,
+    /*  5 */ ENAN_FACE_5,
+    /*  6 */ ENAN_FACE_6,
+    /*  7 */ ENAN_FACE_7,
+    /*  8 */ ENAN_FACE_8,
+    /*  9 */ ENAN_FACE_9,
+    /* 10 */ ENAN_FACE_MAX
+} EnAnFace;
+
+s16 D_80B58E40[ENAN_FACE_MAX] = {
+    ENAN_MOUTH_0, // ENAN_FACE_0
+    ENAN_MOUTH_2, // ENAN_FACE_1
+    ENAN_MOUTH_0, // ENAN_FACE_2
+    ENAN_MOUTH_1, // ENAN_FACE_3
+    ENAN_MOUTH_2, // ENAN_FACE_4
+    ENAN_MOUTH_0, // ENAN_FACE_5
+    ENAN_MOUTH_1, // ENAN_FACE_6
+    ENAN_MOUTH_2, // ENAN_FACE_7
+    ENAN_MOUTH_1, // ENAN_FACE_8
+    ENAN_MOUTH_1, // ENAN_FACE_9
+};
+
+void EnAn_UpdateFace(EnAn* this) {
+    s32 var_a1 = false;
 
     if (this->unk_360 & 0x100) {
         if (DECR(this->unk_38E) == 0) {
             // default case doesn't match
-            switch (this->unk_38C) {
-                case 0x2:
-                case 0x4:
-                case 0x6:
-                    if ((this->eyeTexIndex == 5) || (this->eyeTexIndex == 2)) {
-                        var_a1 = 1;
-                        this->eyeTexIndex = 5;
+            switch (this->faceIndex) {
+                case ENAN_FACE_2:
+                case ENAN_FACE_4:
+                case ENAN_FACE_6:
+                    if ((this->eyeTexIndex == ENAN_EYES_5) || (this->eyeTexIndex == ENAN_EYES_2)) {
+                        var_a1 = true;
+                        this->eyeTexIndex = ENAN_EYES_5;
                     }
                     break;
 
-                case 0x5:
-                case 0x7:
-                    if ((this->eyeTexIndex == 6) || (this->eyeTexIndex == 1)) {
-                        var_a1 = 1;
-                        this->eyeTexIndex = 6;
+                case ENAN_FACE_5:
+                case ENAN_FACE_7:
+                    if ((this->eyeTexIndex == ENAN_EYES_6) || (this->eyeTexIndex == ENAN_EYES_1)) {
+                        var_a1 = true;
+                        this->eyeTexIndex = ENAN_EYES_6;
                     }
                     break;
 
-                case 0x8:
-                    if ((this->eyeTexIndex == 4) || (this->eyeTexIndex == 2)) {
-                        var_a1 = 1;
-                        this->eyeTexIndex = 4;
+                case ENAN_FACE_8:
+                    if ((this->eyeTexIndex == ENAN_EYES_4) || (this->eyeTexIndex == ENAN_EYES_2)) {
+                        var_a1 = true;
+                        this->eyeTexIndex = ENAN_EYES_4;
                     }
                     break;
             }
 
-            if (var_a1 == 0) {
-                if ((this->eyeTexIndex == 4) || (this->eyeTexIndex == 5)) {
-                    this->eyeTexIndex = 0;
-                } else if (this->eyeTexIndex == 6) {
-                    this->eyeTexIndex = 1;
+            if (!var_a1) {
+                if ((this->eyeTexIndex == ENAN_EYES_4) || (this->eyeTexIndex == ENAN_EYES_5)) {
+                    this->eyeTexIndex = ENAN_EYES_0;
+                } else if (this->eyeTexIndex == ENAN_EYES_6) {
+                    this->eyeTexIndex = ENAN_EYES_1;
                 }
             }
 
-            if (var_a1 == 0) {
+            if (!var_a1) {
                 this->eyeTexIndex++;
 
-                if (this->eyeTexIndex >= 4) {
-                    if ((this->unk_38C == 0) || (this->unk_38C == 1) || (this->unk_38C == 3)) {
+                if (this->eyeTexIndex >= ENAN_EYES_4) {
+                    if ((this->faceIndex == ENAN_FACE_0) || (this->faceIndex == ENAN_FACE_1) || (this->faceIndex == ENAN_FACE_3)) {
                         this->unk_38E = Rand_S16Offset(0x1E, 0x1E);
                     } else {
                         this->unk_38E = 8;
                     }
-                    this->eyeTexIndex = 0;
+                    this->eyeTexIndex = ENAN_EYES_0;
                 }
             }
         }
     }
 
-    this->mouthTexIndex = D_80B58E40[this->unk_38C];
+    this->mouthTexIndex = D_80B58E40[this->faceIndex];
 }
 
 Vec3f D_80B58E54 = { 190.0f, -130.0f, 0.0f };
@@ -1091,7 +1171,7 @@ s32 func_80B547C8(Actor* thisx, PlayState* play) {
         case 0x1:
         case 0x3:
         case 0x5:
-            if ((gSaveContext.save.saveInfo.weekEventReg[0x56] & 8) && (this->unk_394 == 3)) {
+            if ((CHECK_WEEKEVENTREG(WEEKEVENTREG_86_08)) && (this->unk_394 == 3)) {
                 CutsceneManager_Stop(csId);
             } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
                 Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), this->actor.child);
@@ -1133,7 +1213,7 @@ s32 func_80B5492C(Actor* thisx, PlayState* play) {
 
         case 0x1:
         case 0x3:
-            if (!(gSaveContext.save.saveInfo.weekEventReg[0x4B] & 0x10) && (this->unk_394 == 3)) {
+            if (!(CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_ROOM_KEY)) && (this->unk_394 == 3)) {
                 CutsceneManager_Stop(csId);
                 this->unk_394 = 5;
             } else if ((this->actor.child != NULL) && (this->actor.child->update != NULL)) {
@@ -1244,7 +1324,7 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
 
     switch (this->unk_394) {
         case 0x0:
-            if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) || (gSaveContext.save.saveInfo.weekEventReg[0x37] & 0x20)) {
+            if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) || CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
                 this->unk_394++;
                 goto label;
             } else {
@@ -1266,33 +1346,6 @@ s32 func_80B54D18(Actor* thisx, PlayState* play) {
 
     return ret;
 }
-
-extern s32 D_80B58718[];
-extern s32 D_80B58784[];
-extern s32 D_80B58808[];
-extern s32 D_80B5885C[];
-extern s32 D_80B58938[];
-extern s32 D_80B58944[];
-extern s32 D_80B5894C[];
-extern s32 D_80B58954[];
-extern s32 D_80B58980[];
-extern s32 D_80B58988[];
-extern s32 D_80B58994[];
-extern s32 D_80B5899C[];
-extern s32 D_80B589AC[];
-extern s32 D_80B589FC[];
-extern s32 D_80B58A04[];
-extern s32 D_80B58A24[];
-extern s32 D_80B58A3C[];
-extern s32 D_80B58A44[];
-extern s32 D_80B58ABC[];
-extern s32 D_80B58AC4[];
-extern s32 D_80B58AE8[];
-extern s32 D_80B58AF4[];
-extern s32 D_80B58B3C[];
-extern s32 D_80B58B7C[];
-extern s32 D_80B58B88[];
-extern s32 D_80B58B90[];
 
 // TODO: figure out what to do with this
 #define SCHEDULE_CALC_TIME_ALT(hour, minute) SCHEDULE_CONVERT_TIME((((hour)*60.0f) + (minute)) * (0x10000 / 60 / 24.0f))
@@ -1374,7 +1427,7 @@ s32* func_80B54DF4(EnAn* this, PlayState* play) {
                     return D_80B58AC4;
                 }
 
-                if ((player->transformation == PLAYER_FORM_HUMAN) && (gSaveContext.save.saveInfo.weekEventReg[0x32] & 8)) {
+                if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
                     if (this->unk_200 == 0x17) {
                         this->msgEventFunc = func_80B54BC4;
                         return D_80B589AC;
@@ -1459,7 +1512,7 @@ s32 func_80B55180(EnAn* this, PlayState* play) {
             this->unk_360 |= 0x20;
         }
 
-        if ((this->unk_200 == 3) && (gSaveContext.save.saveInfo.weekEventReg[0x37] & 0x20)) {
+        if ((this->unk_200 == 3) && CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
             this->unk_360 &= ~0x20;
         }
 
@@ -1476,8 +1529,8 @@ s32 func_80B552E4(EnAn* this, PlayState* play) {
 
     if ((play->csCtx.state != 0) && (play->sceneId == 0x61) && (gSaveContext.sceneLayer == 0) && ((temp_v0 == 0) || (temp_v0 == 1))) {
         if (this->unk_3B0 == 0) {
-            this->unk_38A = 0;
-            this->unk_38C = 0;
+            this->unk_38A = ENAN_FACE_0;
+            this->faceIndex = ENAN_FACE_0;
             this->unk_360 |= 0x300;
             this->unk_38E = 8;
             this->unk_364 = -1;
@@ -1790,12 +1843,12 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
 
             switch (sp22) {                         /* switch 4; irregular */
                 case 0x28F5:                        /* switch 4 */
-                    this->unk_38A = 0;
+                    this->unk_38A = ENAN_FACE_0;
                     /* fallthrough */
                 case 0x28A5:                        /* switch 4 */
                 case 0x28AA:                        /* switch 4 */
                 case 0x28F8:                        /* switch 4 */
-                    this->unk_38C = 0;
+                    this->faceIndex = ENAN_FACE_0;
                     this->unk_38E = 8;
                     break;
                 case 0x1885:                        /* switch 4 */
@@ -1803,7 +1856,7 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                 case 0x28A6:                        /* switch 4 */
                 case 0x28AF:                        /* switch 4 */
                 case 0x28C1:                        /* switch 4 */
-                    this->unk_38C = 3;
+                    this->faceIndex = ENAN_FACE_3;
                     this->unk_38E = 8;
                     break;
                 case 0x28A2:                        /* switch 4 */
@@ -1817,22 +1870,22 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                 case 0x28E5:                        /* switch 4 */
                 case 0x28E7:                        /* switch 4 */
                 case 0x28ED:                        /* switch 4 */
-                    this->unk_38C = 1;
+                    this->faceIndex = ENAN_FACE_1;
                     this->unk_38E = 8;
                     break;
                 case 0x28AD:                        /* switch 4 */
-                    this->unk_38C = 8;
+                    this->faceIndex = ENAN_FACE_8;
                     this->unk_38E = 8;
                     break;
                 case 0x28C0:                        /* switch 4 */
                 case 0x28D7:                        /* switch 4 */
                 case 0x28DE:                        /* switch 4 */
-                    this->unk_38C = 2;
+                    this->faceIndex = ENAN_FACE_2;
                     this->unk_38E = 8;
                     break;
                 case 0x28E6:                        /* switch 4 */
                 case 0x28F7:                        /* switch 4 */
-                    this->unk_38C = 6;
+                    this->faceIndex = ENAN_FACE_6;
                     this->unk_38E = 8;
                     break;
                 case 0x28A3:                        /* switch 4 */
@@ -1845,26 +1898,26 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
                 case 0x28E2:                        /* switch 4 */
                 case 0x28E3:                        /* switch 4 */
                 case 0x28E4:                        /* switch 4 */
-                    this->unk_38C = 4;
+                    this->faceIndex = ENAN_FACE_4;
                     this->unk_38E = 8;
                     break;
                 case 0x28EC:                        /* switch 4 */
-                    this->unk_38A = 5;
+                    this->unk_38A = ENAN_FACE_5;
                     /* fallthrough */
                 case 0x28DC:                        /* switch 4 */
                 case 0x28EB:                        /* switch 4 */
                 case 0x28F2:                        /* switch 4 */
                 case 0x28F9:                        /* switch 4 */
-                    this->unk_38C = 5;
+                    this->faceIndex = ENAN_FACE_5;
                     this->unk_38E = 8;
                     break;
                 case 0x28F6:                        /* switch 4 */
-                    this->unk_38C = 9;
+                    this->faceIndex = ENAN_FACE_9;
                     this->unk_38E = 8;
                     break;
                 case 0x28A4:                        /* switch 4 */
                 case 0x28A9:                        /* switch 4 */
-                    this->unk_38C = 7;
+                    this->faceIndex = ENAN_FACE_7;
                     this->unk_38E = 8;
                     break;
             }
@@ -1875,7 +1928,7 @@ s32 func_80B55914(EnAn* this, PlayState* play) {
         this->unk_18C = NULL;
         this->unk_362 = 0;
         this->unk_360 &= ~0x400;
-        this->unk_38C = this->unk_38A;
+        this->faceIndex = this->unk_38A;
         this->unk_38E = 4;
         func_80B555C8(this, play);
     }
@@ -1910,8 +1963,6 @@ Actor* func_80B55D20(EnAn* this, PlayState* play) {
 
     return actor;
 }
-
-extern s32 D_80B58618[];
 
 s32 func_80B55D98(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput, u8 actorCategory, s16 actorId) {
     u8 sp4F = this->actor.params & 0xFF;
@@ -1963,9 +2014,9 @@ s32 func_80B55F8C(PlayState* play) {
     Player* player = GET_PLAYER(play);
     s32 var_v1 = false;
 
-    if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) && (gSaveContext.save.saveInfo.weekEventReg[0x32] & 8)) {
+    if ((Player_GetMask(play) == PLAYER_MASK_KAFEIS_MASK) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
         var_v1 = true;
-    } else if ((player->transformation == PLAYER_FORM_HUMAN) && (gSaveContext.save.saveInfo.weekEventReg[0x32] & 8)) {
+    } else if ((player->transformation == PLAYER_FORM_HUMAN) && CHECK_WEEKEVENTREG(WEEKEVENTREG_PROMISED_MIDNIGHT_MEETING)) {
         var_v1 = true;
     }
 
@@ -2017,8 +2068,6 @@ s32 func_80B5611C(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     return ret;
 }
 
-extern s32 D_80B58618[];
-
 s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     u16 sp56 = SCHEDULE_TIME_NOW;
     u8 pathIndex = this->actor.params & 0xFF;
@@ -2065,8 +2114,8 @@ s32 func_80B561A4(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 case 0x23:                          /* switch 1 */
                 case 0x25:                          /* switch 1 */
                 case 0x26:                          /* switch 1 */
-                    this->unk_38A = 2;
-                    this->unk_38C = 2;
+                    this->unk_38A = ENAN_FACE_2;
+                    this->faceIndex = ENAN_FACE_2;
                     this->unk_38E = 8;
                     break;
             }
@@ -2154,8 +2203,8 @@ s32 func_80B56418(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
             case 0x3D:                              /* switch 1 */
             case 0x3E:                              /* switch 1 */
             case 0x3F:                              /* switch 1 */
-                this->unk_38A = 2;
-                this->unk_38C = 2;
+                this->unk_38A = ENAN_FACE_2;
+                this->faceIndex = ENAN_FACE_2;
                 this->unk_38E = 8;
                 break;
         }
@@ -2303,7 +2352,7 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                 this->unk_360 |= 0x300;
                 this->unk_360 |= 0x1000;
 
-                if (gSaveContext.save.saveInfo.weekEventReg[0x37] & 0x20) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_55_20)) {
                     EnAn_ChangeAnim(this, play, ENAN_ANIM_20);
                     this->unk_360 |= 0x40;
                     this->actor.world.rot.y += 0x7FF8;
@@ -2314,8 +2363,8 @@ s32 func_80B56880(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
                     this->unk_37A = 0;
                 }
 
-                this->unk_38A = 2;
-                this->unk_38C = 2;
+                this->unk_38A = ENAN_FACE_2;
+                this->faceIndex = ENAN_FACE_2;
                 this->unk_38E = 8;
                 break;
             case 0xE:
@@ -2350,8 +2399,8 @@ s32 func_80B56B00(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
         this->unk_360 |= 0x300;
         this->unk_360 |= 0x40;
 
-        this->unk_38A = 5;
-        this->unk_38C = 5;
+        this->unk_38A = ENAN_FACE_5;
+        this->faceIndex = ENAN_FACE_5;
         this->unk_38E = 8;
     }
 
@@ -2376,8 +2425,8 @@ s32 func_80B56BC0(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
 
         case 0x18:
             EnAn_ChangeAnim(this, play, ENAN_ANIM_11);
-            this->unk_38A = 5;
-            this->unk_38C = 5;
+            this->unk_38A = ENAN_FACE_5;
+            this->faceIndex = ENAN_FACE_5;
             this->unk_38E = 8;
             break;
     }
@@ -2409,8 +2458,8 @@ s32 func_80B56D28(EnAn* this, PlayState* play, ScheduleOutput* scheduleOutput) {
     this->actor.flags |= ACTOR_FLAG_TARGETABLE;
     this->actor.targetMode = TARGET_MODE_6;
     this->unk_360 = 0;
-    this->unk_38A = 0;
-    this->unk_38C = 0;
+    this->unk_38A = ENAN_FACE_0;
+    this->faceIndex = ENAN_FACE_0;
     this->unk_38E = 8;
     this->unk_374 = 40.0f;
 
@@ -2542,7 +2591,7 @@ s32 func_80B56EB4(EnAn* this, PlayState* play) {
 
         this->unk_37A += this->unk_384;
         if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-            Actor_PlaySfx(&this->actor, 0x2971);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
         }
     }
     return 0;
@@ -2593,7 +2642,7 @@ s32 func_80B5702C(EnAn* this, PlayState* play) {
         this->unk_1F8 = sp50;
         this->unk_1E0 = sp58;
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f) || Animation_OnFrame(&this->skelAnime, 15.0f)) {
-        Actor_PlaySfx(&this->actor, 0x2971);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_PIRATE_WALK);
     }
 
     return 0;
@@ -2628,7 +2677,7 @@ s32 func_80B572D4(EnAn* this, PlayState* play) {
 
         case 0x16:
             if (Animation_OnFrame(&this->skelAnime, 6.0f) && (this->animIndex == ENAN_ANIM_23)) {
-                Actor_PlaySfx(&this->actor, 0x2899);
+                Actor_PlaySfx(&this->actor, NA_SE_EV_SWEEP);
             }
             break;
     }
@@ -2795,7 +2844,7 @@ void func_80B57718(EnAn* this, PlayState* play) {
 
 void func_80B577F0(EnAn* this, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, NULL, 14.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->unk_264, this->unk_2E2, 0x15);
+    SkelAnime_InitFlex(play, &this->skelAnime, &object_an1_Skel_012618, NULL, this->jointTable, this->morphTable, OBJECT_AN1_LIMB_MAX);
 
     this->animIndex = ENAN_ANIM_NONE;
     EnAn_ChangeAnim(this, play, ENAN_ANIM_1);
@@ -2815,14 +2864,12 @@ void func_80B577F0(EnAn* this, PlayState* play) {
     this->actionFunc(this, play);
 }
 
-extern u8 sScheduleScript[];
-
 void func_80B578F8(EnAn* this, PlayState* play) {
     ScheduleOutput sp20;
 
     this->unk_384 = R_TIME_SPEED + ((void)0, gSaveContext.save.timeSpeedOffset);
 
-    if (!(this->actor.params & 0x8000) && (this->unk_3C0 == 0) && (gSaveContext.save.saveInfo.weekEventReg[0x33] & 0x40)) {
+    if (!(this->actor.params & 0x8000) && (this->unk_3C0 == 0) && CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -2885,7 +2932,7 @@ void func_80B57B48(EnAn* this, PlayState* play) {
         if ((temp_v1 & 0xFF) != this->unk_364) {
             this->unk_364 = (u8) temp_v1;
             if (var_v0 == 3) {
-                gSaveContext.save.saveInfo.weekEventReg[0x57] |= 2;
+                SET_WEEKEVENTREG(WEEKEVENTREG_87_02);
                 var_v0 = this->unk_364;
                 this->unk_3B4 = 1;
             }
@@ -2920,7 +2967,7 @@ void EnAn_Init(Actor* thisx, PlayState* play) {
     }
 
     temp_v1 = ENAN_GET_8000(&this->actor);
-    temp_v0 = gSaveContext.save.saveInfo.weekEventReg[0x33] & 0x40;
+    temp_v0 = CHECK_WEEKEVENTREG(WEEKEVENTREG_51_40);
 
     if (((temp_v0 == 0) && (temp_v1 == 1)) || ((temp_v0 != 0) && (temp_v1 == 0))) {
         Actor_Kill(&this->actor);
@@ -2950,16 +2997,16 @@ void EnAn_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnAn_Update(Actor* thisx, PlayState* play) {
-    EnAn* this = (EnAn* ) thisx;
+    EnAn* this = THIS;
 
-    if (func_80B53840(this, play) != 0) {
+    if (func_80B53840(this, play)) {
         return;
     }
 
     if ((this->actionFunc != func_80B577F0) && !func_80B55180(this, play) && (func_80B552E4(this, play) != 0)) {
         func_80B57B48(this, play);
         func_80B53BA8(this, play);
-        func_80B53F84(this);
+        EnAn_UpdateFace(this);
         return;
     }
 
@@ -2967,7 +3014,7 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
     if (this->unk_200 != 0) {
         func_80B55914(this, play);
         func_80B53BA8(this, play);
-        func_80B53F84(this);
+        EnAn_UpdateFace(this);
         func_80B554E8(this);
         SubS_Offer(&this->actor, play, this->unk_374, 30.0f, 0, this->unk_360 & 7);
 
@@ -2982,24 +3029,24 @@ void EnAn_Update(Actor* thisx, PlayState* play) {
 
 Vec3f D_80B58ED4 = { 1000.0f, 0.0f, 0.0f };
 
-void func_80B57EE8(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+void EnAn_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnAn* this = THIS;
 
-    if (limbIndex == 9) {
+    if (limbIndex == OBJECT_AN1_LIMB_09) {
         Matrix_MultVec3f(&D_80B58ED4, &this->actor.focus.pos);
         Math_Vec3s_Copy(&this->actor.focus.rot, &this->actor.world.rot);
         func_80B54124(this, play, 1U);
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == OBJECT_AN1_LIMB_08) {
         func_80B54124(this, play, 0U);
         func_80B54124(this, play, 4U);
         func_80B54124(this, play, 2U);
         func_80B54124(this, play, 3U);
-    } else if (limbIndex == 5) {
+    } else if (limbIndex == OBJECT_AN1_LIMB_05) {
         func_80B54124(this, play, 5U);
     }
 }
 
-void func_80B57FC4(PlayState* play, s32 limbIndex, Actor* thisx) {
+void EnAn_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
     EnAn* this = THIS;
     s32 stepRot;
     s32 overrideRot;
@@ -3016,7 +3063,7 @@ void func_80B57FC4(PlayState* play, s32 limbIndex, Actor* thisx) {
         stepRot = false;
     }
 
-    if (limbIndex == 9) {
+    if (limbIndex == OBJECT_AN1_LIMB_09) {
         SubS_UpdateLimb(this->unk_37C + 0x4000, this->unk_37E + this->actor.shape.rot.y + 0x4000, &this->unk_240, &this->unk_258, stepRot, overrideRot);
         Matrix_Pop();
         Matrix_Translate(this->unk_240.x, this->unk_240.y, this->unk_240.z, MTXMODE_NEW);
@@ -3029,21 +3076,21 @@ void func_80B57FC4(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 // mouth textures
-TexturePtr D_80B58EE0[] = {
-    object_an1_Tex_00E6E0,
-    object_an1_Tex_00F7A0,
-    object_an1_Tex_0101A0,
+TexturePtr D_80B58EE0[ENAN_MOUTH_MAX] = {
+    object_an1_Tex_00E6E0, // ENAN_MOUTH_0
+    object_an1_Tex_00F7A0, // ENAN_MOUTH_1
+    object_an1_Tex_0101A0, // ENAN_MOUTH_2
 };
 
 // eye textures
-TexturePtr D_80B58EEC[] = {
-    object_an1_Tex_00E1E0,
-    object_an1_Tex_00EFA0,
-    object_an1_Tex_00F3A0,
-    object_an1_Tex_00EFA0,
-    object_an1_Tex_00FDA0,
-    object_an1_Tex_00F9A0,
-    object_an1_Tex_0103A0,
+TexturePtr D_80B58EEC[ENAN_EYES_MAX] = {
+    object_an1_Tex_00E1E0, // ENAN_EYES_0
+    object_an1_Tex_00EFA0, // ENAN_EYES_1
+    object_an1_Tex_00F3A0, // ENAN_EYES_2
+    object_an1_Tex_00EFA0, // ENAN_EYES_3
+    object_an1_Tex_00FDA0, // ENAN_EYES_4
+    object_an1_Tex_00F9A0, // ENAN_EYES_5
+    object_an1_Tex_0103A0, // ENAN_EYES_6
 };
 
 void EnAn_Draw(Actor* thisx, PlayState* play) {
@@ -3057,7 +3104,7 @@ void EnAn_Draw(Actor* thisx, PlayState* play) {
         gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(D_80B58EEC[this->eyeTexIndex]));
         gSPSegment(POLY_OPA_DISP++, 0x09, Lib_SegmentedToVirtual(D_80B58EE0[this->mouthTexIndex]));
 
-        SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL, func_80B57EE8, func_80B57FC4, &this->actor);
+        SkelAnime_DrawTransformFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL, EnAn_PostLimbDraw, EnAn_TransformLimbDraw, &this->actor);
 
         CLOSE_DISPS(play->state.gfxCtx);
     }
