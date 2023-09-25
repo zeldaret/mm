@@ -1095,7 +1095,7 @@ u8 D_801D0900[] = {
     sizeof("GREEN") - 1,
 };
 
-#ifdef NON_EQUIVALENT
+#ifdef NON_MATCHING
 void Message_DecodeNES(PlayState* play) {
     f32 var_fs0;
     MessageContext* msgCtx = &play->msgCtx;
@@ -1118,8 +1118,8 @@ void Message_DecodeNES(PlayState* play) {
     s16 var_v1_3;
     u8 curChar; // sp78
     s8 charOffset;
-    u8 temp_s2_2;
-    u8 var_s2_9;
+    s16 temp_s2_2;
+    s16 var_s2_9;
 
     player = GET_PLAYER(play);
     decodedBufPos = 0;
