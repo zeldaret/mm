@@ -3,7 +3,7 @@
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
 // fontWidth
-f32 D_801D0470[160] = {
+f32 sNESFontWidths[160] = {
     8.0f,  8.0f,  6.0f,  9.0f,  9.0f,  14.0f, 12.0f, 3.0f,  7.0f,  7.0f,  7.0f,  9.0f,  4.0f,  6.0f,  4.0f,  9.0f,
     10.0f, 5.0f,  9.0f,  9.0f,  10.0f, 9.0f,  9.0f,  9.0f,  9.0f,  9.0f,  6.0f,  6.0f,  9.0f,  11.0f, 9.0f,  11.0f,
     13.0f, 12.0f, 9.0f,  11.0f, 11.0f, 8.0f,  8.0f,  12.0f, 10.0f, 4.0f,  8.0f,  10.0f, 8.0f,  13.0f, 11.0f, 13.0f,
@@ -95,16 +95,14 @@ void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offse
     *arg3 = f;
 }
 
-// rupeesTextLocalization
-char D_801D06F0[LANGUAGE_MAX - 1][8] = {
+char sRupeesTextLocalization[LANGUAGE_MAX - 1][8] = {
     { "Rupee(s)" }, // EN
     { "Rubin(e)" }, // DE
     { "Rubis" },    // FR
     { "Rupia(s)" }, // SPA
 };
 
-// rupeesTextLength
-u8 D_801D0710[LANGUAGE_MAX - 1] = {
+u8 sRupeesTextLength[LANGUAGE_MAX - 1] = {
     sizeof("Rupee(s)") - 1,
     sizeof("Rubin(e)") - 1,
     sizeof("Rubis") - 1,
@@ -121,15 +119,15 @@ void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* of
     msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
 
-    for (j = 0; j < D_801D0710[gSaveContext.options.language - 1]; j++) {
-        Font_LoadCharNES(play, D_801D06F0[gSaveContext.options.language - 1][j], o);
-        msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.options.language - 1][j];
+    for (j = 0; j < sRupeesTextLength[gSaveContext.options.language - 1]; j++) {
+        Font_LoadCharNES(play, sRupeesTextLocalization[gSaveContext.options.language - 1][j], o);
+        msgCtx->decodedBuffer.schar[p] = sRupeesTextLocalization[gSaveContext.options.language - 1][j];
         o += FONT_CHAR_TEX_SIZE;
         p++;
     }
 
     p--;
-    f += 16.0f * msgCtx->textCharScale * (D_801D0710[gSaveContext.options.language - 1] + 1);
+    f += 16.0f * msgCtx->textCharScale * (sRupeesTextLength[gSaveContext.options.language - 1] + 1);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -282,7 +280,7 @@ void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* de
         }
         currentChar = msgCtx->decodedBuffer.schar[p];
         p++;
-        f += (D_801D0470[currentChar - ' '] * msgCtx->textCharScale);
+        f += (sNESFontWidths[currentChar - ' '] * msgCtx->textCharScale);
     }
 
     p--;
@@ -892,7 +890,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                              ((msgCtx->unk120C0 + 1) >= i))) {
                             msgCtx->textPosX += (s32)(16.0f * msgCtx->textCharScale);
                         } else {
-                            msgCtx->textPosX += (s32)(D_801D0470[character - ' '] * msgCtx->textCharScale);
+                            msgCtx->textPosX += (s32)(sNESFontWidths[character - ' '] * msgCtx->textCharScale);
                         }
                         break;
                 }
@@ -929,14 +927,14 @@ u8 D_801D08E4[] = {
     0x02,
 };
 
-char D_801D08E8[][6] = {
+char sMaskCodeTextENG[][6] = {
     "RED",
     "BLUE",
     "YELLOW",
     "GREEN",
 };
 
-u8 D_801D0900[] = {
+u8 sMaskCodeTextLengthENG[] = {
     sizeof("RED") - 1,
     sizeof("BLUE") - 1,
     sizeof("YELLOW") - 1,
@@ -1582,13 +1580,13 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar >= 0xE1) && (curChar < 0xE7)) {
             msgCtx->decodedBuffer.schar[decodedBufPos] =
                 D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
-            temp_s2_2 = D_801D0900[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
+            temp_s2_2 = sMaskCodeTextLengthENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
             decodedBufPos++;
 
             for (i = 0; i < temp_s2_2; i++) {
                 Message_LoadCharNES(
                     play,
-                    D_801D08E8[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])][i],
+                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])][i],
                     &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
@@ -1863,7 +1861,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar != 0x20) && (curChar >= 9)) {
             Font_LoadCharNES(play, curChar, charTexIdx);
             charTexIdx += FONT_CHAR_TEX_SIZE;
-            spA4 += D_801D0470[curChar - ' '] * msgCtx->textCharScale;
+            spA4 += sNESFontWidths[curChar - ' '] * msgCtx->textCharScale;
         } else if (curChar == 0x20) {
             spA4 += 6.0f;
         }
