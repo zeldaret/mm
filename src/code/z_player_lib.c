@@ -369,13 +369,13 @@ void func_80122F28(Player* player) {
 s32 func_80122F9C(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->unk_AE7 == 2);
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && (player->actionVar1 == 2);
 }
 
 s32 func_80122FCC(PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->unk_AE7 == 1) || (player->unk_AE7 == 3));
+    return (player->stateFlags2 & PLAYER_STATE2_80000) && ((player->actionVar1 == 1) || (player->actionVar1 == 3));
 }
 
 void func_8012300C(PlayState* play, s32 arg1) {
@@ -389,15 +389,15 @@ void func_8012301C(Actor* thisx, PlayState* play2) {
     PlayState* play = play2;
     Player* this = (Player*)thisx;
 
-    this->unk_AE7++;
+    this->actionVar1++;
 
-    if (this->unk_AE7 == 2) {
+    if (this->actionVar1 == 2) {
         s16 objectId = gPlayerFormObjectIndices[GET_PLAYER_FORM];
 
         gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId = objectId;
         func_8012F73C(&play->objectCtx, this->actor.objBankIndex, objectId);
         this->actor.objBankIndex = Object_GetIndex(&play->objectCtx, GAMEPLAY_KEEP);
-    } else if (this->unk_AE7 >= 3) {
+    } else if (this->actionVar1 >= 3) {
         s32 objBankIndex = Object_GetIndex(&play->objectCtx, gActorOverlayTable[ACTOR_PLAYER].initInfo->objectId);
 
         if (Object_IsLoaded(&play->objectCtx, objBankIndex)) {
@@ -3744,7 +3744,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
         }
 
-        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->unk_AE8 != 0)) {
+        if ((player->stateFlags1 & (PLAYER_STATE1_2 | PLAYER_STATE1_100)) && (player->actionVar2 != 0)) {
             static Vec3f D_801C0E40[PLAYER_FORM_MAX] = {
                 { 0.0f, 0.0f, 0.0f },        // PLAYER_FORM_FIERCE_DEITY
                 { -578.3f, -1100.9f, 0.0f }, // PLAYER_FORM_GORON
@@ -3764,7 +3764,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
             }
 
             gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->unk_AE8);
+            gDPSetEnvColor(POLY_XLU_DISP++, 0, 0, 255, (u8)player->actionVar2);
             gSPDisplayList(POLY_XLU_DISP++, gameplay_keep_DL_054C90);
 
             Matrix_Pop();

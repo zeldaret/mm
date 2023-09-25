@@ -168,7 +168,7 @@ void EnBigokuta_ShootPlayer(EnBigokuta* this, PlayState* play) {
 
     if (&this->picto.actor == player->actor.parent) {
         player->actor.parent = NULL;
-        player->unk_AE8 = 100;
+        player->actionVar2 = 100;
         player->actor.velocity.y = 0.0f;
         player->actor.world.pos.x += 20.0f * Math_SinS(this->picto.actor.home.rot.y);
         player->actor.world.pos.z += 20.0f * Math_CosS(this->picto.actor.home.rot.y);
@@ -309,7 +309,7 @@ void EnBigokuta_SuckInPlayer(EnBigokuta* this, PlayState* play) {
         this->timer++;
     }
 
-    player->unk_AE8 = 0;
+    player->actionVar2 = 0;
     Math_Vec3f_Copy(&player->actor.world.pos, &this->playerPos);
     if (Math_Vec3f_StepTo(&player->actor.world.pos, &this->playerHoldPos, sqrtf(this->timer) * 5.0f) < 0.1f) {
         s16 rotY = this->picto.actor.shape.rot.y;
