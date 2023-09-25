@@ -60,22 +60,22 @@ typedef enum {
 } EnGg2Animation;
 
 static AnimationInfo sAnimationInfo[ENGG2_ANIM_MAX] = {
-    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, // ENGG2_ANIM_0
-    { &object_gg_Anim_00D528, 1.0f, 0.0f, 0.0f, 2, -10.0f }, // ENGG2_ANIM_1
-    { &object_gg_Anim_00D174, 1.0f, 0.0f, 0.0f, 2, -10.0f }, // ENGG2_ANIM_2
-    { &object_gg_Anim_00ECC0, 1.0f, 0.0f, 0.0f, 2, -10.0f }, // ENGG2_ANIM_3
-    { &object_gg_Anim_00BAF0, 1.0f, 0.0f, 0.0f, 0, -10.0f }, // ENGG2_ANIM_4
-    { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, 0, -10.0f }, // ENGG2_ANIM_5
-    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, // ENGG2_ANIM_6
-    { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, 0, -10.0f }, // ENGG2_ANIM_7
-    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, 0, -10.0f }, // ENGG2_ANIM_8
-    { &object_gg_Anim_0100C8, 1.0f, 0.0f, 0.0f, 0, 0.0f },   // ENGG2_ANIM_9
-    { &object_gg_Anim_00CDA0, 1.0f, 0.0f, 0.0f, 0, 0.0f },   // ENGG2_ANIM_10
-    { &object_gg_Anim_00B560, 1.0f, 0.0f, 0.0f, 0, 0.0f },   // ENGG2_ANIM_11
-    { &object_gg_Anim_00A4B4, 1.0f, 0.0f, 0.0f, 2, 0.0f },   // ENGG2_ANIM_12
-    { &object_gg_Anim_00E86C, 1.0f, 0.0f, 0.0f, 2, 0.0f },   // ENGG2_ANIM_13
-    { &object_gg_Anim_00D99C, 1.0f, 0.0f, 0.0f, 2, 0.0f },   // ENGG2_ANIM_14
-    { &object_gg_Anim_00E2A4, 1.0f, 0.0f, 0.0f, 0, 0.0f },   // ENGG2_ANIM_15
+    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_0
+    { &object_gg_Anim_00D528, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -10.0f }, // ENGG2_ANIM_1
+    { &object_gg_Anim_00D174, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -10.0f }, // ENGG2_ANIM_2
+    { &object_gg_Anim_00ECC0, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -10.0f }, // ENGG2_ANIM_3
+    { &object_gg_Anim_00BAF0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_4
+    { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_5
+    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_6
+    { &object_gg_Anim_00AF40, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_7
+    { &object_gg_Anim_00F578, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -10.0f }, // ENGG2_ANIM_8
+    { &object_gg_Anim_0100C8, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_9
+    { &object_gg_Anim_00CDA0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_10
+    { &object_gg_Anim_00B560, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_11
+    { &object_gg_Anim_00A4B4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },   // ENGG2_ANIM_12
+    { &object_gg_Anim_00E86C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },   // ENGG2_ANIM_13
+    { &object_gg_Anim_00D99C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },   // ENGG2_ANIM_14
+    { &object_gg_Anim_00E2A4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // ENGG2_ANIM_15
 };
 
 Color_RGBA8 D_80B3C080 = { 255, 255, 255, 255 };

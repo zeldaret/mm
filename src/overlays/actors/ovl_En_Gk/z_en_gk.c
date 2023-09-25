@@ -120,19 +120,19 @@ typedef enum {
 } EnGkAnimation;
 
 static AnimationInfo sAnimationInfo[ENGK_ANIM_MAX] = {
-    { &object_gk_Anim_00787C, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_0
-    { &object_gk_Anim_007DC4, 1.0f, 0.0f, 0.0f, 2, 0.0f }, // ENGK_ANIM_1
-    { &object_gk_Anim_0092C0, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_2
-    { &object_gk_Anim_005EDC, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_3
-    { &object_gk_Anim_009638, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_4
-    { &object_gk_Anim_008774, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_5
-    { &object_gk_Anim_00AE34, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_6
-    { &object_gk_Anim_00BD90, 1.0f, 0.0f, 0.0f, 2, 0.0f }, // ENGK_ANIM_7
-    { &object_gk_Anim_00C308, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_8
-    { &object_gk_Anim_009858, 1.0f, 0.0f, 0.0f, 2, 0.0f }, // ENGK_ANIM_9
-    { &object_gk_Anim_009D88, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_10
-    { &object_gk_Anim_00A21C, 1.0f, 0.0f, 0.0f, 2, 0.0f }, // ENGK_ANIM_11
-    { &object_gk_Anim_00AAEC, 1.0f, 0.0f, 0.0f, 0, 0.0f }, // ENGK_ANIM_12
+    { &object_gk_Anim_00787C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_0
+    { &object_gk_Anim_007DC4, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // ENGK_ANIM_1
+    { &object_gk_Anim_0092C0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_2
+    { &object_gk_Anim_005EDC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_3
+    { &object_gk_Anim_009638, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_4
+    { &object_gk_Anim_008774, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_5
+    { &object_gk_Anim_00AE34, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_6
+    { &object_gk_Anim_00BD90, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // ENGK_ANIM_7
+    { &object_gk_Anim_00C308, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_8
+    { &object_gk_Anim_009858, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // ENGK_ANIM_9
+    { &object_gk_Anim_009D88, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_10
+    { &object_gk_Anim_00A21C, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // ENGK_ANIM_11
+    { &object_gk_Anim_00AAEC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f }, // ENGK_ANIM_12
 };
 
 Color_RGBA8 D_80B533A0 = { 255, 255, 255, 255 };
