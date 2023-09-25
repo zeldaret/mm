@@ -154,6 +154,16 @@ typedef enum {
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
 
+// Based on D_801D06F0
+typedef enum Language {
+    /* 0 */ LANGUAGE_JPN,
+    /* 1 */ LANGUAGE_ENG,
+    /* 2 */ LANGUAGE_GER,
+    /* 3 */ LANGUAGE_FRE,
+    /* 4 */ LANGUAGE_SPA,
+    /* 5 */ LANGUAGE_MAX
+} Language;
+
 typedef enum HighScore {
     /* 0 */ HS_BANK_RUPEES,
     /* 1 */ HS_UNK_1,
