@@ -359,6 +359,7 @@ u8 D_801D08CC[] = {
 };
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/vCXqB
 void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     MessageContext* msgCtx = &play->msgCtx;
     u16 i;
@@ -942,6 +943,7 @@ u8 sMaskCodeTextLengthENG[] = {
 };
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/w2ckG
 void Message_DecodeNES(PlayState* play) {
     f32 var_fs0;
     MessageContext* msgCtx = &play->msgCtx;
@@ -1580,13 +1582,15 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar >= 0xE1) && (curChar < 0xE7)) {
             msgCtx->decodedBuffer.schar[decodedBufPos] =
                 D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
-            temp_s2_2 = sMaskCodeTextLengthENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
+            temp_s2_2 = sMaskCodeTextLengthENG[(
+                (void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
             decodedBufPos++;
 
             for (i = 0; i < temp_s2_2; i++) {
                 Message_LoadCharNES(
                     play,
-                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])][i],
+                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])]
+                                    [i],
                     &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
