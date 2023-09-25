@@ -1636,7 +1636,7 @@ void Message_DecodeNES(PlayState* play) {
             if (curChar == 0xF8) {
                 value = (s32)HS_GET_HIGH_SCORE_3_LOWER();
             } else {
-                value = HIGH_SCORE(curChar - 0x300);
+                value = HIGH_SCORE(curChar - 0xF0);
             }
             if (curChar == 0xF2) {
                 if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
@@ -1679,9 +1679,9 @@ void Message_DecodeNES(PlayState* play) {
                    (curChar == 0xFC)) {
             var_fs0 = 8.0f;
             if (curChar == 0xF7) {
-                Message_GetTimerDigitsNES(HIGH_SCORE(HS_UNK_1), spA8);
+                Message_GetTimerDigitsNES(GET_HIGH_SCORE(HS_UNK_1), spA8);
             } else if (curChar == 0xF9) {
-                Message_GetTimerDigitsNES((u32)HS_GET_HORSE_BACK_BALLOON_TIME(), spA8);
+                Message_GetTimerDigitsNES(GET_HIGH_SCORE(HS_HORSE_BACK_BALLOON), spA8);
             } else {
                 Message_GetTimerDigitsNES(
                     ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0xFA]), spA8);
