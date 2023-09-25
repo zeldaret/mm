@@ -169,7 +169,7 @@ typedef enum HighScore {
     /* 1 */ HS_UNK_1,
     /* 2 */ HS_FISHING, // Fishing flags
     /* 3 */ HS_BOAT_ARCHERY,
-    /* 4 */ HS_HOSRE_BACK_BALLOON,
+    /* 4 */ HS_HORSE_BACK_BALLOON,
     /* 5 */ HS_LOTTERY_GUESS, // Lottery code chosen by player (only uses lower three hex digits)
     /* 6 */ HS_SHOOTING_GALLERY, // High scores for both shooting galleries. Town uses lower 16 bits, Swamp uses higher 16 bits.
     /* 7 */ HS_MAX
@@ -530,6 +530,7 @@ typedef enum {
     (gSaveContext.save.saveInfo.stolenItems = (gSaveContext.save.saveInfo.stolenItems & ~0x00FF0000) | ((itemId & 0xFF) << 0x10))
 
 #define HIGH_SCORE(type) (gSaveContext.save.saveInfo.highScores[(type)])
+#define GET_HIGH_SCORE(type) ((void)0, gSaveContext.save.saveInfo.highScores[(type)])
 
 #define HS_GET_BANK_RUPEES() (HIGH_SCORE(HS_BANK_RUPEES) & 0xFFFF)
 #define HS_SET_BANK_RUPEES(rupees) (HIGH_SCORE(HS_BANK_RUPEES) = ((HIGH_SCORE(HS_BANK_RUPEES) & 0xFFFF0000) | (rupees)))

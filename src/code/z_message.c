@@ -2706,8 +2706,7 @@ void Message_Decode(PlayState* play) {
                     if (LINK_AGE_IN_YEARS == YEARS_CHILD) {
                         value &= 0x7F;
                     } else {
-                        value =
-                            (s16)((HIGH_SCORE(font->msgBuf.wchar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
+                        value = (s16)((HIGH_SCORE(font->msgBuf.wchar[msgCtx->msgBufPos]) & 0xFF000000) >> 0x18) & 0x7F;
                     }
                 }
                 digits[3] = value;
@@ -2744,9 +2743,9 @@ void Message_Decode(PlayState* play) {
                        (curChar == 0x30C)) {
                 var_fs0 = 8.0f;
                 if (curChar == 0x307) {
-                    Message_GetTimerDigits(HIGH_SCORE(HS_UNK_1), spAC);
+                    Message_GetTimerDigits(GET_HIGH_SCORE(HS_UNK_1), spAC);
                 } else if (curChar == 0x309) {
-                    Message_GetTimerDigits((u32)HS_GET_HORSE_BACK_BALLOON_TIME(), spAC);
+                    Message_GetTimerDigits(GET_HIGH_SCORE(HS_HORSE_BACK_BALLOON), spAC);
                 } else {
                     Message_GetTimerDigits(
                         ((void)0, gSaveContext.save.saveInfo.dekuPlaygroundHighScores[curChar - 0x30A]), spAC);
