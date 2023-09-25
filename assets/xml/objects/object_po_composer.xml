@@ -18,7 +18,7 @@
         <Animation Name="gPoeComposerIdleStillAnim" Offset="0x3DB0" />
 
         <!-- Texture -->
-        <Texture Name="gPoeComposerSoulTex" OutName="tex_003DC0" Format="i8" Width="32" Height="64" Offset="0x3DC0" />
+        <Texture Name="gPoeComposerSoulTex" OutName="composer_soul" Format="i8" Width="32" Height="64" Offset="0x3DC0" />
 
         <!-- Display Lists -->
         <DList Name="object_po_composer_DL_004600" Offset="0x4600" />

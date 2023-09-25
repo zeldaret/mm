@@ -5,20 +5,20 @@
 #include "objects/object_po_composer/object_po_composer.h"
 
 #define PO_COMPOSER_IS_FLAT(actor) ((actor)->params & 0x8000)
+#define PO_COMPOSER_4000(actor)    ((actor)->params & 0x4000)
 
 typedef enum {
-    /*  1 */ COMPOSER_CS_ACTION_IDLE = 1,
-    /*  2 */ COMPOSER_CS_ACTION_APPEAR_SPIN,
-    /*  3 */ COMPOSER_CS_ACTION_IDLE2,
-    /*  4 */ COMPOSER_CS_ACTION_RAISE_ARMS,
-    /*  5 */ COMPOSER_CS_ACTION_LOWER_ARMS,
-    /*  6 */ COMPOSER_CS_ACTION_PLAY_CURSE,
-    /*  7 */ COMPOSER_CS_ACTION_ROLL,
-    /*  8 */ COMPOSER_CS_ACTION_APPEAR,
-    /*  9 */ COMPOSER_CS_ACTION_DISAPPEAR,
-    /* 10 */ COMPOSER_CS_ACTION_DONE,
-
-    /* 99 */ COMPOSER_CS_ACTION_NONE = 99
+    /*  1 */ COMPOSER_CUEID_IDLE = 1,
+    /*  2 */ COMPOSER_CUEID_APPEAR_SPIN,
+    /*  3 */ COMPOSER_CUEID_IDLE2,
+    /*  4 */ COMPOSER_CUEID_RAISE_ARMS,
+    /*  5 */ COMPOSER_CUEID_LOWER_ARMS,
+    /*  6 */ COMPOSER_CUEID_PLAY_CURSE,
+    /*  7 */ COMPOSER_CUEID_ROLL,
+    /*  8 */ COMPOSER_CUEID_APPEAR,
+    /*  9 */ COMPOSER_CUEID_DISAPPEAR,
+    /* 10 */ COMPOSER_CUEID_DONE,
+    /* 99 */ COMPOSER_CUEID_NONE = 99
 } EnPoComposerCutsceneAction;
 
 typedef enum {
@@ -42,11 +42,11 @@ typedef struct EnPoComposer {
     /* 0x238 */ MtxF lanternMtxF;
     /* 0x278 */ LightNode* lightNode;
     /* 0x27C */ LightInfo lightInfo;
-    /* 0x28A */ char unk_28A[0x6];
+    /* 0x28A */ UNK_TYPE1 unk_28A[0x6];
     /* 0x290 */ s32 sharpCsNum;
     /* 0x294 */ Vec3s jointTable[PO_COMPOSER_LIMB_MAX];
     /* 0x2DC */ Vec3s morphTable[PO_COMPOSER_LIMB_MAX];
-    /* 0x324 */ s16 csIndices[4];
+    /* 0x324 */ s16 csIds[4];
     /* 0x32C */ s16 actionTimer;
     /* 0x32E */ s16 csActionTimer;
     /* 0x330 */ s16 inCutscene;
