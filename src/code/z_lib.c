@@ -699,14 +699,14 @@ void Lib_Nop801004FC(void) {
 }
 
 void* Lib_SegmentedToVirtual(void* ptr) {
-    return SEGMENTED_TO_K0(ptr);
+    return SEGMENTED_TO_VIRTUAL(ptr);
 }
 
 void* Lib_SegmentedToVirtualNull(void* ptr) {
     if (((uintptr_t)ptr >> 28) == 0) {
         return ptr;
     } else {
-        return SEGMENTED_TO_K0(ptr);
+        return SEGMENTED_TO_VIRTUAL(ptr);
     }
 }
 
