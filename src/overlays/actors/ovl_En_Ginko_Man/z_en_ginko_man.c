@@ -172,7 +172,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_40);
                 Message_StartTextbox(play, 0x45B, &this->actor);
                 this->curTextId = 0x45B;
-            } else if ((HS_GET_BANK_RUPEES() >= 1000) && ((this->previousBankValue) < 1000) &&
+            } else if ((HS_GET_BANK_RUPEES() >= 1000) && (this->previousBankValue < 1000) &&
                        !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_80);
                 Message_StartTextbox(play, 0x45C, &this->actor);

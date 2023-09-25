@@ -503,6 +503,9 @@ s32 func_8094E52C(EnGm* this, PlayState* play) {
             this->unk_3E0++;
             ret = true;
             break;
+
+        default:
+            break;
     }
 
     return ret;
@@ -575,6 +578,7 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
             this->unk_3E2 = 0;
             this->unk_3E0++;
             break;
+
         case 9:
             sp48 = this->actor.world.rot.y;
             this->unk_3E2++;
@@ -588,6 +592,9 @@ s32 func_8094E69C(EnGm* this, PlayState* play) {
                 this->unk_3E2 = 0;
                 ret = true;
             }
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -957,6 +964,9 @@ s32 func_8094F53C(EnGm* this, PlayState* play) {
                     if ((toto != NULL) && (toto->update != NULL)) {
                         this->unk_268 = toto;
                     }
+                    break;
+
+                default:
                     break;
             }
 
@@ -1451,6 +1461,7 @@ s32 func_80950690(EnGm* this, PlayState* play) {
             break;
 
         case 8:
+        default:
             break;
     }
 
@@ -1592,6 +1603,9 @@ void func_80950C24(EnGm* this, PlayState* play) {
         case 30:
             func_8095097C(this, play);
             break;
+
+        default:
+            break;
     }
 
     Math_ApproachS(&this->actor.shape.rot.y, this->actor.world.rot.y, 3, 0x2AA8);
@@ -1647,7 +1661,7 @@ void func_80950DB8(EnGm* this, PlayState* play) {
 }
 
 void func_80950F2C(EnGm* this, PlayState* play) {
-    s32 sp50[] = { ENGM_ANIM_0, ENGM_ANIM_0, ENGM_ANIM_3, ENGM_ANIM_2 };
+    s32 csAnimIndex[] = { ENGM_ANIM_0, ENGM_ANIM_0, ENGM_ANIM_3, ENGM_ANIM_2 };
     Player* player = GET_PLAYER(play);
     s32 pad;
     Vec3f sp3C;
@@ -1662,7 +1676,7 @@ void func_80950F2C(EnGm* this, PlayState* play) {
                 Actor_PlaySfx(&this->actor, NA_SE_EV_CHAIR_ROLL);
             }
             this->cueId = cueId;
-            EnGm_ChangeAnim(this, play, sp50[cueId]);
+            EnGm_ChangeAnim(this, play, csAnimIndex[cueId]);
         }
 
         if ((this->cueId == 3) && (this->unk_268 != NULL) && (this->unk_268->update != NULL)) {
@@ -1843,8 +1857,10 @@ void EnGm_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 void EnGm_Draw(Actor* thisx, PlayState* play) {
-    static TexturePtr D_80951E30[] = { object_in2_Tex_0054A8, object_in2_Tex_005028, object_in2_Tex_006828,
-                                       object_in2_Tex_005028, object_in2_Tex_005CE8, object_in2_Tex_006C68 };
+    static TexturePtr D_80951E30[] = {
+        object_in2_Tex_0054A8, object_in2_Tex_005028, object_in2_Tex_006828,
+        object_in2_Tex_005028, object_in2_Tex_005CE8, object_in2_Tex_006C68,
+    };
     EnGm* this = THIS;
 
     if ((this->unk_258 != 0) && (this->unk_262 >= 0)) {

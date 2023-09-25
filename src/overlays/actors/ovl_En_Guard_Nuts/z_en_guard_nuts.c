@@ -61,7 +61,7 @@ s32 sGuardCount = 0;
 
 s32 D_80ABBE20 = 0;
 
-static u16 sTextIDs[] = { 0x0824, 0x0825, 0x0826, 0x082D, 0x0827, 0x0828, 0x0829, 0x082A, 0x082B, 0x082C };
+static u16 sTextIds[] = { 0x0824, 0x0825, 0x0826, 0x082D, 0x0827, 0x0828, 0x0829, 0x082A, 0x082B, 0x082C };
 
 s16 D_80ABBE38[] = { 0x0000, 0x0000, 0x0002, 0x0001, 0x0000, 0x0000, 0x0002, 0x0000, 0x0000, 0x0002 };
 
@@ -176,7 +176,7 @@ void EnGuardNuts_Wait(EnGuardNuts* this, PlayState* play) {
         // No place for an outsider
         this->guardTextIndex = 3;
     }
-    this->actor.textId = sTextIDs[this->guardTextIndex];
+    this->actor.textId = sTextIds[this->guardTextIndex];
     phi_a1 = this->actor.world.rot.y;
     if (D_80ABBE20 == 2) {
         EnGuardNuts_Burrow(this, play);
@@ -245,7 +245,7 @@ void func_80ABB590(EnGuardNuts* this, PlayState* play) {
                     EnGuardNuts_Burrow(this, play);
                 } else {
                     this->guardTextIndex++;
-                    Message_StartTextbox(play, sTextIDs[this->guardTextIndex], &this->actor);
+                    Message_StartTextbox(play, sTextIds[this->guardTextIndex], &this->actor);
                     if (D_80ABBE38[this->guardTextIndex] == 2) {
                         D_80ABBE20 = 1;
                     }

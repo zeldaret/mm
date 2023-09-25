@@ -318,31 +318,31 @@ void func_80B35634(EnGg* this, PlayState* play) {
                     break;
 
                 case 4:
-                    do {
-                        this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_11;
-                    } while (0);
+                    this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_11;
+                    //! FAKE:
+                    if (1) {}
                     this->animIndex = ENGG_ANIM_11;
                     func_80B364D4(&this->unk_344, play);
                     break;
 
                 case 5:
-                    do {
-                        this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_12;
-                    } while (0);
+                    this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_12;
+                    //! FAKE:
+                    if (1) {}
                     this->animIndex = ENGG_ANIM_12;
                     break;
 
                 case 6:
-                    do {
-                        this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_13;
-                    } while (0);
+                    this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_13;
+                    //! FAKE:
+                    if (1) {}
                     this->animIndex = ENGG_ANIM_13;
                     break;
 
                 case 7:
-                    do {
-                        this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_14;
-                    } while (0);
+                    this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_14;
+                    //! FAKE:
+                    if (1) {}
                     this->animIndex = ENGG_ANIM_14;
                     func_80B364D4(&this->unk_344, play);
                     break;
@@ -553,6 +553,7 @@ void func_80B35C84(EnGgStruct* ptr, PlayState* play) {
         temp_f26 = ptr->unk_00.z + (ptr->unk_18.z * temp_f20) + (0.5f * ptr->unk_24.z * temp_f20 * temp_f20);
         temp_f20 = Rand_ZeroOne() * 0.003f;
 
+        //! FAKE:
         if (1) {}
 
         Matrix_Translate(temp_f22, temp_f24, temp_f26, MTXMODE_NEW);

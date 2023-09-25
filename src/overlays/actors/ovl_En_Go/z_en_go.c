@@ -95,20 +95,20 @@ typedef enum EnGoAnimationIndex {
     /*  7 */ ENGO_ANIM_DROPKEG,
     /*  8 */ ENGO_ANIM_COVEREARS,
     /*  9 */ ENGO_ANIM_SHIVERINGSURPRISED,
-    /*  10 */ ENGO_ANIM_ATHLETICS_MIN,
-    /*  10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = ENGO_ANIM_ATHLETICS_MIN,
-    /*  11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
-    /*  12 */ ENGO_ANIM_SHAKE_LIMBS,
-    /*  13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
-    /*  14 */ ENGO_ANIM_SITTING_STRETCH,
-    /*  15 */ ENGO_ANIM_CHEER,
-    /*  16 */ ENGO_ANIM_SHOUT,
-    /*  17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
-    /*  18 */ ENGO_ANIM_SPRING_MIN,
-    /*  18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
-    /*  19 */ ENGO_ANIM_SHOW_LOOPED,
-    /*  20 */ ENGO_ANIM_LOOK_AROUND,
-    /*  21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
+    /* 10 */ ENGO_ANIM_ATHLETICS_MIN,
+    /* 10 */ ENGO_ANIM_DOUBLE_ARM_SIDEBEND = ENGO_ANIM_ATHLETICS_MIN,
+    /* 11 */ ENGO_ANIM_SQUAT_SIDE_TO_SIDE,
+    /* 12 */ ENGO_ANIM_SHAKE_LIMBS,
+    /* 13 */ ENGO_ANIM_SINGLE_ARM_SIDEBEND,
+    /* 14 */ ENGO_ANIM_SITTING_STRETCH,
+    /* 15 */ ENGO_ANIM_CHEER,
+    /* 16 */ ENGO_ANIM_SHOUT,
+    /* 17 */ ENGO_ANIM_HELP_SITTING_STRETCH,
+    /* 18 */ ENGO_ANIM_SPRING_MIN,
+    /* 18 */ ENGO_ANIM_SHOW = ENGO_ANIM_SPRING_MIN,
+    /* 19 */ ENGO_ANIM_SHOW_LOOPED,
+    /* 20 */ ENGO_ANIM_LOOK_AROUND,
+    /* 21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
 } EnGoAnimationIndex;
 
 void EnGo_Idle(EnGo* this, PlayState* play);
@@ -530,7 +530,7 @@ void EnGo_DrawDust(EnGoEffect effect[ENGO_EFFECT_COUNT], PlayState* play2) {
  * @param pos Position around which the effects appear
  */
 void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
-    static u8 effectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
+    static u8 sEffectIndexToSnowEffectTable[ENGO_SNOW_EFFECT_COUNT] = {
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
         ENGO_EFFECT_SNOW3, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW1, ENGO_EFFECT_SNOW2,
@@ -570,7 +570,7 @@ void EnGo_InitSnow(EnGoEffect effect[ENGO_SNOW_EFFECT_COUNT], Vec3f pos) {
         effect->alphaDenom = effect->alphaNumer = 1;
 
         // Assign a snow effect value of 'ENGO_EFFECT_SNOW1'/'2'/'3'
-        effect->type = effectIndexToSnowEffectTable[i];
+        effect->type = sEffectIndexToSnowEffectTable[i];
 
         // Initialize the parameters for the paired element
         randRelativeToWorldPos.x = ((Rand_ZeroOne() - 0.5f) * 80.0f) + effect->pos.x;

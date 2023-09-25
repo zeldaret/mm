@@ -581,6 +581,9 @@ void EnGrasshopper_Bank(EnGrasshopper* this, PlayState* play) {
                 this->actionFunc = EnGrasshopper_RoamInCircles;
             }
             break;
+
+        default:
+            break;
     }
 }
 

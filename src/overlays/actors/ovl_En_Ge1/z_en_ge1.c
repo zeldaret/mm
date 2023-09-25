@@ -70,7 +70,7 @@ typedef enum {
     /*  7 */ GERUDO_WHITE_ANIM_SALUTE,
     /*  8 */ GERUDO_WHITE_ANIM_LEADING_BOAT,
     /*  9 */ GERUDO_WHITE_ANIM_BLOWN_AWAY,
-    /* 10 */ GERUDO_WHITE_ANIM_MAX,
+    /* 10 */ GERUDO_WHITE_ANIM_MAX
 } GerudoWhiteAnimation;
 
 void EnGe1_ChangeAnim(EnGe1* this, s16 animIndex, u8 mode, f32 morphFrames);
