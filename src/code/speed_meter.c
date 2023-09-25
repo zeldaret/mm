@@ -56,7 +56,7 @@ SpeedMeterTimeEntry sSpeedMeterTimeEntryArray[] = {
 };
 
 typedef struct {
-    /* 0x00 */ s32 maxval;
+    /* 0x00 */ s32 maxVal;
     /* 0x04 */ s32 val;
     /* 0x08 */ u16 backColor;
     /* 0x0A */ u16 foreColor;
@@ -168,9 +168,9 @@ void SpeedMeter_DrawTimeEntries(SpeedMeter* this, GraphicsContext* gfxCtx) {
     CLOSE_DISPS(gfxCtx);
 }
 
-void SpeedMeter_InitAllocEntry(SpeedMeterAllocEntry* this, u32 maxval, u32 val, u16 backColor, u16 foreColor, u32 ulx,
+void SpeedMeter_InitAllocEntry(SpeedMeterAllocEntry* this, u32 maxVal, u32 val, u16 backColor, u16 foreColor, u32 ulx,
                                u32 lrx, u32 uly, u32 lry) {
-    this->maxval = maxval;
+    this->maxVal = maxVal;
     this->val = val;
     this->backColor = backColor;
     this->foreColor = foreColor;
@@ -185,7 +185,7 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
     View view;
     Gfx* gfx;
 
-    if (this->maxval != 0) {
+    if (this->maxVal != 0) {
         OPEN_DISPS(gfxCtx);
 
         View_Init(&view, gfxCtx);
@@ -202,7 +202,7 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
                             G_TD_CLAMP | G_TP_NONE | G_CYC_FILL | G_PM_NPRIMITIVE,
                         G_AC_NONE | G_ZS_PIXEL | G_RM_NOOP | G_RM_NOOP2);
 
-        usedOff = ((this->lrx - this->ulx) * this->val) / this->maxval + this->ulx;
+        usedOff = ((this->lrx - this->ulx) * this->val) / this->maxVal + this->ulx;
         gDrawRect(gfx++, this->backColor, usedOff, this->uly, this->lrx, this->lry);
         gDrawRect(gfx++, this->foreColor, this->ulx, this->uly, usedOff, this->lry);
 
