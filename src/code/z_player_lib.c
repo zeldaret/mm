@@ -2878,7 +2878,7 @@ void Player_DrawCircusLeadersMask(PlayState* play, Player* player) {
             Matrix_Scale(scaleXZ, scaleY, scaleXZ, MTXMODE_APPLY);
 
             gSPMatrix(&gfx[0], Matrix_NewMtx(play->state.gfxCtx), G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-            gSPSegment(&gfx[1], 0x08, OS_K0_TO_PHYSICAL(SEGMENTED_TO_VIRTUAL(gEffBubble1Tex)));
+            gSPSegment(&gfx[1], 0x08, OS_K0_TO_PHYSICAL(SEGMENTED_TO_K0(gEffBubble1Tex)));
             gDPSetPrimColor(&gfx[2], 0, 0, 255, 255, 255, 255);
             gDPSetEnvColor(&gfx[3], 150, 150, 150, 0);
             gSPDisplayList(&gfx[4], gEffBubbleDL);
