@@ -977,10 +977,10 @@ s32 EnGo_UpdateSpringArrivalCutscene(EnGo* this, PlayState* play) {
  *
  * @return True if non-repeating animation has finished
  */
-s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
+s32 EnGo_UpdateSkelAnime(EnGo* this, PlayState* play) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 isAnimFinished = false;
 
     if ((this->animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
         extraObjIndex = this->hakuginDemoObjIndex;
@@ -993,11 +993,11 @@ s32 EnGo_UpdateAnimationToCurrent(EnGo* this, PlayState* play) {
     if (extraObjIndex >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
         this->skelAnime.playSpeed = this->animPlaySpeed;
-        ret = SkelAnime_Update(&this->skelAnime);
+        isAnimFinished = SkelAnime_Update(&this->skelAnime);
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
 
-    return ret;
+    return isAnimFinished;
 }
 
 /**
@@ -1040,7 +1040,7 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
 s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
-    s32 ret = false;
+    s32 didAnimChange = false;
 
     if ((animIndex >= ENGO_ANIM_SPRING_MIN) && (this->hakuginDemoObjIndex >= 0)) {
         extraObjIndex = this->hakuginDemoObjIndex;
@@ -1053,12 +1053,12 @@ s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
     if (extraObjIndex >= 0) {
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[extraObjIndex].segment);
         this->animIndex = animIndex;
-        ret = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
+        didAnimChange = SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, animIndex);
         this->animPlaySpeed = this->skelAnime.playSpeed;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[objIndex].segment);
     }
 
-    return ret;
+    return didAnimChange;
 }
 
 /**
@@ -2439,7 +2439,7 @@ void EnGo_Update(Actor* thisx, PlayState* play) {
 
     if (!(this->actionFlags & ENGO_FLAG_FROZEN)) {
         EnGo_UpdateEyes(this);
-        EnGo_UpdateAnimationToCurrent(this, play);
+        EnGo_UpdateSkelAnime(this, play);
         EnGo_UpdateAttentionTargetAndReactions(this, play);
         EnGo_UpdateSfx(this, play);
     }

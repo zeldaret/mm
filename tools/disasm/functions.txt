@@ -9696,7 +9696,7 @@
     0x80A12774:("EnGo_UpdateTalking",),
     0x80A12868:("EnGo_DetectCollisions",),
     0x80A12954:("EnGo_UpdateSpringArrivalCutscene",),
-    0x80A12A64:("EnGo_UpdateAnimationToCurrent",),
+    0x80A12A64:("EnGo_UpdateSkelAnime",),
     0x80A12B78:("EnGo_UpdateSfx",),
     0x80A12C48:("EnGo_ChangeAnim",),
     0x80A12D6C:("EnGo_UpdateEyes",),
