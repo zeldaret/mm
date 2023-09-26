@@ -14133,7 +14133,7 @@
     0x80B3A9E4:("D_80B3A9E4","f32","",0x4),
     0x80B3A9E8:("D_80B3A9E8","f32","",0x4),
     0x80B3BEE0:("En_Gg2_InitVars","UNK_TYPE1","",0x1),
-    0x80B3BF00:("D_80B3BF00","UNK_TYPE4","",0x4),
+    0x80B3BF00:("sAnimationInfo","UNK_TYPE4","",0x4),
     0x80B3C080:("D_80B3C080","UNK_TYPE4","",0x4),
     0x80B3C084:("D_80B3C084","UNK_TYPE4","",0x4),
     0x80B3C088:("D_80B3C088","UNK_TYPE1","",0x1),

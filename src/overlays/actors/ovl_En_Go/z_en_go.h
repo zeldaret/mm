@@ -106,7 +106,7 @@ typedef struct EnGo {
     /* 0x390 */ u16 actionFlags;
     /* 0x392 */ u16 lastTextId;
     /* 0x394 */ u8 springArrivalCueId;
-    /* 0x398 */ f32 curAnimPlaySpeed;
+    /* 0x398 */ f32 animPlaySpeed;
     /* 0x39C */ f32 iceBlockScale;
     /* 0x3A0 */ f32 iceBlockAlpha;
     /* 0x3A4 */ f32 scaleFactor;
@@ -132,7 +132,7 @@ typedef struct EnGo {
     /* 0x3CE */ s16 fidgetTableY[ENGO_FIDGET_TABLE_LEN];
     /* 0x3D4 */ s16 surprisePhase;
     /* 0x3D8 */ MsgEventFunc msgEventFunc;
-    /* 0x3DC */ s32 curAnimIndex;
+    /* 0x3DC */ s32 animIndex;
     /* 0x3E0 */ UNK_TYPE1 unk3E0[0x4];
     /* 0x3E4 */ s32 indexPathPoint;
     /* 0x3E8 */ s32 indexEffect;

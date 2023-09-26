@@ -35,7 +35,7 @@ typedef struct EnJg {
     /* 0x3B0 */ Vec3f breathVelocity;
     /* 0x3BC */ Vec3f breathAccel;
     /* 0x3C8 */ s16 csId;
-    /* 0x3CA */ u8 cutsceneAnimIndex;
+    /* 0x3CA */ u8 csAnimIndex;
     /* 0x3CB */ u8 cueId;
     /* 0x3CC */ u16 flags;
     /* 0x3CE */ u16 textId;

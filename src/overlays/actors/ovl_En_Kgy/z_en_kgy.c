@@ -17,7 +17,7 @@ void EnKgy_Destroy(Actor* thisx, PlayState* play);
 void EnKgy_Update(Actor* thisx, PlayState* play);
 void EnKgy_Draw(Actor* thisx, PlayState* play);
 
-void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 morphFrames);
+void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 animMode, f32 morphFrames);
 EnKbt* EnKgy_FindZubora(PlayState* play);
 ObjIcePoly* EnKgy_FindIceBlock(PlayState* play);
 void func_80B40D30(PlayState* play);
@@ -109,7 +109,7 @@ void EnKgy_Destroy(Actor* thisx, PlayState* play) {
     LightContext_RemoveLight(play, &play->lightCtx, this->lightNode);
 }
 
-void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 morphFrames) {
+void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 animMode, f32 morphFrames) {
     static AnimationHeader* sAnimations[] = {
         &object_kgy_Anim_004B98, &object_kgy_Anim_0008FC, &object_kgy_Anim_00292C, &object_kgy_Anim_0042E4,
         &object_kgy_Anim_0101F0, &object_kgy_Anim_001764, &object_kgy_Anim_003334, &object_kgy_Anim_010B84,
@@ -117,7 +117,7 @@ void EnKgy_ChangeAnim(EnKgy* this, s16 animIndex, u8 mode, f32 morphFrames) {
     };
 
     Animation_Change(&this->skelAnime, sAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(sAnimations[animIndex]), mode, morphFrames);
+                     Animation_GetLastFrame(sAnimations[animIndex]), animMode, morphFrames);
     this->unk_2D2 = animIndex;
 }
 
