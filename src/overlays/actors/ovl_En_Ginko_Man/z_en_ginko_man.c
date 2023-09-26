@@ -45,8 +45,8 @@ typedef enum {
     /* 0 */ GINKO_ANIM_LEGSMACKING,
     /* 1 */ GINKO_ANIM_SITTING,
     /* 2 */ GINKO_ANIM_REACHING,
-    /* 3 */ GINKO_ANIM_AMAZED, // looking around for customers
-    /* 4 */ GINKO_ANIM_ADVERTISING,
+    /* 3 */ GINKO_ANIM_AMAZED,
+    /* 4 */ GINKO_ANIM_ADVERTISING, // looking around for customers
     /* 5 */ GINKO_ANIM_MAX
 } GinkoAnimation;
 

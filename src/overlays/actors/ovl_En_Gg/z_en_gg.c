@@ -319,8 +319,6 @@ void func_80B35634(EnGg* this, PlayState* play) {
 
                 case 4:
                     this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_11;
-                    //! FAKE:
-                    if (1) {}
                     this->animIndex = ENGG_ANIM_11;
                     func_80B364D4(&this->unk_344, play);
                     break;
@@ -341,8 +339,6 @@ void func_80B35634(EnGg* this, PlayState* play) {
 
                 case 7:
                     this->unk_344.animIndex = this->csAnimIndex = ENGG_ANIM_14;
-                    //! FAKE:
-                    if (1) {}
                     this->animIndex = ENGG_ANIM_14;
                     func_80B364D4(&this->unk_344, play);
                     break;

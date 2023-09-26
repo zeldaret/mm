@@ -209,7 +209,7 @@ static ColliderSphereInit sSphereInit = {
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
 typedef enum {
-    /*   -1 */ ENGM_ANIM_NONE = -1,
+    /*  -1 */ ENGM_ANIM_NONE = -1,
     /* 0x0 */ ENGM_ANIM_0,
     /* 0x1 */ ENGM_ANIM_1,
     /* 0x2 */ ENGM_ANIM_2,

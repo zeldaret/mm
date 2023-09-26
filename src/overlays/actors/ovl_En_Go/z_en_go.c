@@ -82,8 +82,8 @@ typedef enum EnGoEffectType {
     /* 7 */ ENGO_EFFECT_STEAM = ENGO_EFFECT_STEAM_MIN
 } EnGoEffectType;
 
-typedef enum EnGoAnimationIndex {
-    /* -1 */ ENGO_ANIM_INVALID = -1,
+typedef enum EnGoAnimation {
+    /* -1 */ ENGO_ANIM_NONE = -1,
     /*  0 */ ENGO_ANIM_GORON_MIN,
     /*  0 */ ENGO_ANIM_LYINGDOWNIDLE = ENGO_ANIM_GORON_MIN,
     /*  1 */ ENGO_ANIM_LYINGDOWNIDLE_IMM,
@@ -109,7 +109,7 @@ typedef enum EnGoAnimationIndex {
     /* 19 */ ENGO_ANIM_SHOW_LOOPED,
     /* 20 */ ENGO_ANIM_LOOK_AROUND,
     /* 21 */ ENGO_ANIM_LOOK_AROUND_LOOPED
-} EnGoAnimationIndex;
+} EnGoAnimation;
 
 void EnGo_Idle(EnGo* this, PlayState* play);
 void EnGo_Sleep(EnGo* this, PlayState* play);
@@ -309,7 +309,7 @@ static DamageTable sDamageTable = {
 /**
  * Animations used in the actor.
  *
- * @see EnGoAnimationIndex
+ * @see EnGoAnimation
  */
 static AnimationInfoS sAnimationInfo[] = {
 
@@ -1037,7 +1037,7 @@ s32 EnGo_UpdateSfx(EnGo* this, PlayState* play) {
  *
  * @return True if animation was changed
  */
-s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimationIndex animIndex) {
+s32 EnGo_ChangeAnim(EnGo* this, PlayState* play, EnGoAnimation animIndex) {
     s8 objIndex = this->actor.objBankIndex;
     s8 extraObjIndex = -1;
     s32 didAnimChange = false;
@@ -1701,7 +1701,7 @@ void EnGo_ChangeToSpectatingAnimation(EnGo* this, PlayState* play) {
 void EnGo_ChangeToFrozenAnimation(EnGo* this, PlayState* play) {
     Collider_InitAndSetCylinder(play, &this->colliderCylinder, &this->actor, &sCylinderInitFrozen);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
-    this->animIndex = -1;
+    this->animIndex = ENGO_ANIM_NONE;
     EnGo_ChangeAnim(this, play, ENGO_ANIM_SHIVER);
     this->sleepState = ENGO_AWAKE;
     this->iceBlockScale = (this->scaleFactor / 0.01f) * 0.9f;
@@ -1899,7 +1899,7 @@ void EnGo_SetupInitialAction(EnGo* this, PlayState* play) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gGoronSkel, NULL, this->jointTable, this->morphTable,
                            GORON_LIMB_MAX);
 
-        this->animIndex = ENGO_ANIM_INVALID;
+        this->animIndex = ENGO_ANIM_NONE;
         EnGo_ChangeAnim(this, play, ENGO_ANIM_UNROLL);
         this->actor.draw = EnGo_Draw;
 
