@@ -2,7 +2,6 @@
 #define Z_OBJ_BOYO_H
 
 #include "global.h"
-#include "../ovl_En_Torch2/z_en_torch2.h"
 
 typedef struct ObjBoyo {
     /* 0x000 */ Actor actor;
