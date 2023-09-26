@@ -5,7 +5,6 @@
  */
 
 #include "z_en_gb2.h"
-#include "objects/object_ps/object_ps.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
@@ -163,7 +162,7 @@ u16 func_80B0F7FC(EnGb2* this) {
                 return 0x14E4;
             }
 
-            if (gSaveContext.save.saveInfo.playerData.health > 48) {
+            if (gSaveContext.save.saveInfo.playerData.health > 0x30) {
                 return 0x14D2;
             }
 
@@ -171,7 +170,7 @@ u16 func_80B0F7FC(EnGb2* this) {
             return 0x14D3;
 
         case 0x14E4:
-            if (gSaveContext.save.saveInfo.playerData.health > 48) {
+            if (gSaveContext.save.saveInfo.playerData.health > 0x30) {
                 return 0x14D2;
             }
 
@@ -193,8 +192,10 @@ u16 func_80B0F7FC(EnGb2* this) {
 
         case 0x14D9:
             return 0x14DA;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 u16 func_80B0F8F8(EnGb2* this) {
@@ -213,8 +214,10 @@ u16 func_80B0F8F8(EnGb2* this) {
 
         case 0x14E1:
             return 0x14E2;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 u16 func_80B0F97C(EnGb2* this) {
@@ -236,8 +239,10 @@ u16 func_80B0F97C(EnGb2* this) {
         case 0x14FA:
             this->unk_26C |= 2;
             return 0x14FB;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 void func_80B0FA04(EnGb2* this) {
@@ -262,17 +267,19 @@ s32 func_80B0FA48(EnGb2* this, PlayState* play) {
             if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_40)) {
                 this->unk_26E = 0x14EB;
                 return false;
+            } else {
+                this->unk_26E = 0x14EE;
+                return true;
             }
-            this->unk_26E = 0x14EE;
-            return true;
-    }
 
-    if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20)) {
-        this->unk_26E = 0x14EF;
-        return false;
-    } else {
-        this->unk_26E = 0x14F4;
-        return true;
+        default:
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_80_20)) {
+                this->unk_26E = 0x14EF;
+                return false;
+            } else {
+                this->unk_26E = 0x14F4;
+                return true;
+            }
     }
 }
 
@@ -314,12 +321,14 @@ u16 func_80B0FB24(EnGb2* this) {
         case 0x14F2:
             this->unk_26C |= 2;
             return 0x14F3;
+
+        default:
+            return 0;
     }
-    return 0;
 }
 
 void func_80B0FBF0(EnGb2* this, PlayState* play) {
-    Vec3f sp90[4] = {
+    Vec3f sp90[] = {
         { 120.0f, 0.0f, 800.0f },
         { -120.0f, 0.0f, 750.0f },
         { 60.0f, 0.0f, 750.0f },
@@ -425,6 +434,9 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
                     break;
+
+                default:
+                    break;
             }
         } else if (this->unk_26E == 0x14DA) {
             switch (play->msgCtx.choiceIndex) {
@@ -442,6 +454,9 @@ void func_80B0FFA8(EnGb2* this, PlayState* play) {
                     this->unk_26E = 0x14DB;
                     this->unk_26C |= 2;
                     Message_StartTextbox(play, this->unk_26E, &this->actor);
+                    break;
+
+                default:
                     break;
             }
         }
@@ -505,7 +520,7 @@ void func_80B10344(EnGb2* this, PlayState* play) {
         }
     }
 
-    if (gSaveContext.save.saveInfo.playerData.health < 49) {
+    if (gSaveContext.save.saveInfo.playerData.health <= 0x30) {
         gSaveContext.timerStates[TIMER_ID_MINIGAME_1] = TIMER_STATE_STOP;
         SET_EVENTINF(EVENTINF_46);
         SET_EVENTINF(EVENTINF_45);
@@ -596,6 +611,9 @@ void func_80B10634(EnGb2* this, PlayState* play) {
                 this->unk_26C |= 2;
                 Message_StartTextbox(play, this->unk_26E, &this->actor);
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -672,6 +690,9 @@ void func_80B10A48(EnGb2* this, PlayState* play) {
                 this->unk_26C |= 0x100;
                 this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
                 this->actionFunc = func_80B111AC;
+                break;
+
+            default:
                 break;
         }
     }
@@ -877,7 +898,7 @@ void EnGb2_Init(Actor* thisx, PlayState* play) {
     this->actor.room = -1;
     Actor_ProcessInitChain(&this->actor, sInitChain);
     SkelAnime_InitFlex(play, &this->skelAnime, &object_ps_Skel_007230, &object_ps_Anim_00049C, this->jointTable,
-                       this->morphTable, 12);
+                       this->morphTable, OBJECT_PS_LIMB_MAX);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 35.0f);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinderType1(play, &this->collider, &this->actor, &sCylinderInit);
@@ -981,11 +1002,11 @@ s32 EnGb2_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
                            Gfx** gfx) {
     EnGb2* this = THIS;
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_PS_LIMB_07) {
         Matrix_RotateYS(this->unk_270.y, MTXMODE_APPLY);
     }
 
-    if (limbIndex == 1) {
+    if (limbIndex == OBJECT_PS_LIMB_01) {
         *dList = NULL;
     }
 
@@ -996,7 +1017,7 @@ void EnGb2_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot,
     EnGb2* this = THIS;
     Vec3f sp18 = { 2400.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 7) {
+    if (limbIndex == OBJECT_PS_LIMB_07) {
         Matrix_MultVec3f(&sp18, &this->actor.focus.pos);
     }
 }
