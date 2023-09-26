@@ -81,7 +81,7 @@ void ObjBoyo_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     Collider_UpdateCylinder(&this->actor, &this->collider);
-    this->actor.colChkInfo.mass = 0xFF;
+    this->actor.colChkInfo.mass = MASS_IMMOVABLE;
     this->animatedMaterial = Lib_SegmentedToVirtual(&object_boyo_Matanimheader_000E88);
 }
 
