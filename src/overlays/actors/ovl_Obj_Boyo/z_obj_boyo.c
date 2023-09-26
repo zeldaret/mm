@@ -146,7 +146,7 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
 
     collidedActor = ObjBoyo_FindCollidedActor(this, play, &index);
 
-    if (collidedActor != 0) {
+    if (collidedActor != NULL) {
         sCollisionHandlers[index].colHandler(this, collidedActor);
         // TODO: find out what all of these are.
 
