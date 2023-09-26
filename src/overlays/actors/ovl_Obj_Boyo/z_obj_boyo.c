@@ -128,7 +128,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         collidedActor = this->collider.base.oc;
         for (counter = 1; counter != 3; ++counter) {
-            if (collidedActor->id == (*data).id) {
+            if (collidedActor->id == data->id) {
                 *index = counter;
                 return collidedActor;
             }
