@@ -744,7 +744,7 @@ void func_8088E0F0(EnElf* this, PlayState* play) {
             if (this->unk_250 < 2.0f) {
                 this->unk_250 += 0.1f;
             } else {
-                gSaveContext.healthAccumulator = 10 * 0x10;
+                gSaveContext.healthAccumulator = 0xA0;
                 this->unk_246++;
             }
             break;

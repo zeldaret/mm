@@ -11,6 +11,7 @@ typedef void (*BgDyYoseizoActionFunc)(struct BgDyYoseizo*, PlayState*);
 
 #define GREAT_FAIRY_GET_SWITCHFLAG(thisx) (((thisx)->params & 0xFE00) >> 9)
 #define GREAT_FAIRY_GET_TYPE(thisx) ((thisx)->params & 0xF)
+#define GREAT_FAIRY_ROTZ(thisx) ((thisx)->home.rot.z)
 
 typedef enum GreatFairyType {
     /* 0 */ GREAT_FAIRY_TYPE_MAGIC,

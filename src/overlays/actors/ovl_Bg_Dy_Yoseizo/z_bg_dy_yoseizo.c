@@ -77,7 +77,7 @@ void BgDyYoseizo_Init(Actor* thisx, PlayState* play) {
     this->mouthIndex = 0;
     this->blinkTimer = 0;
     this->unk2F8 = 0;
-    this->actor.home.rot.z = 1;
+    GREAT_FAIRY_ROTZ(&this->actor) = 1;
     this->unk302 = 0;
 }
 
@@ -356,7 +356,7 @@ void func_80A0B35C(BgDyYoseizo* this, PlayState* play) {
     }
 
     if (this->timer == 50) {
-        gSaveContext.healthAccumulator = 20 * 0x10;
+        gSaveContext.healthAccumulator = 0x140;
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
     }
 
@@ -449,10 +449,10 @@ void BgDyYoseizo_TrainPlayer(BgDyYoseizo* this, PlayState* play) {
         csId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103)]->id;
         Cutscene_ActorTranslateAndYaw(&this->actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_103));
     } else {
-        if (this->actor.home.rot.z != 0) {
+        if (GREAT_FAIRY_ROTZ(&this->actor) != 0) {
             this->actor.home.pos.x = player->actor.world.pos.x;
             this->actor.home.pos.z = player->actor.world.pos.z;
-            this->actor.home.rot.z = 0;
+            GREAT_FAIRY_ROTZ(&this->actor) = 0;
         } else {
             player->actor.world.pos.x = this->actor.home.pos.x;
             player->actor.world.pos.z = this->actor.home.pos.z;
@@ -658,8 +658,8 @@ void BgDyYoseizo_UpdateEffects(BgDyYoseizo* this, PlayState* play) {
     Vec3f sp94;
     Vec3f sp88;
     s32 pad[2];
-    f32 goalPitch;
-    f32 goalYaw;
+    f32 targetPitch;
+    f32 targetYaw;
     f32 floatAngle;
     s16 i = 0;
 
@@ -681,15 +681,15 @@ void BgDyYoseizo_UpdateEffects(BgDyYoseizo* this, PlayState* play) {
                 sp94.y = player->actor.world.pos.y - 150.0f;
                 sp94.z = player->actor.world.pos.z - 50.0f;
 
-                goalPitch = Math_Vec3f_Pitch(&effect->pos, &sp94);
-                goalYaw = Math_Vec3f_Yaw(&effect->pos, &sp94);
+                targetPitch = Math_Vec3f_Pitch(&effect->pos, &sp94);
+                targetYaw = Math_Vec3f_Yaw(&effect->pos, &sp94);
 
                 floatAngle = effect->pitch;
-                Math_ApproachF(&floatAngle, goalPitch, 0.9f, 5000.0f);
+                Math_ApproachF(&floatAngle, targetPitch, 0.9f, 5000.0f);
                 effect->pitch = floatAngle;
 
                 floatAngle = effect->yaw;
-                Math_ApproachF(&floatAngle, goalYaw, 0.9f, 5000.0f);
+                Math_ApproachF(&floatAngle, targetYaw, 0.9f, 5000.0f);
                 effect->yaw = floatAngle;
 
                 Matrix_Push();

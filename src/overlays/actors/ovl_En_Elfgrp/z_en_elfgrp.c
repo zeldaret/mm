@@ -546,7 +546,7 @@ void EnElfgrp_HealPlayer(EnElfgrp* this, PlayState* play) {
 
     if (this->timer == 60) {
         Magic_Add(play, MAGIC_FILL_TO_CAPACITY);
-        gSaveContext.healthAccumulator = 320;
+        gSaveContext.healthAccumulator = 0x140;
     }
 
     if (this->timer > 0) {
