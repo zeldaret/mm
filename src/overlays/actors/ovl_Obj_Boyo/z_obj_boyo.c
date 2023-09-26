@@ -170,10 +170,10 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         this->unk1A8 += this->unk1AA;
 
         this->actor.scale.x = this->actor.scale.z =
-            (Math_CosS((s16)(this->unk1A8 + this->unk1A4)) * (f32)this->unk194 * this->unk19C * this->unk198) + 0.1f;
+            (Math_CosS(this->unk1A8 + this->unk1A4) * (f32)this->unk194 * this->unk19C * this->unk198) + 0.1f;
 
         this->actor.scale.y =
-            (Math_CosS((s16)(this->unk1A8 + this->unk1A6)) * (f32)this->unk194 * this->unk1A0 * this->unk198) + 0.1f;
+            (Math_CosS(this->unk1A8 + this->unk1A6) * (f32)this->unk194 * this->unk1A0 * this->unk198) + 0.1f;
     } else {
         Actor_SetScale(&this->actor, 0.1f);
         if (this->collider.base.acFlags & AC_HIT) {
