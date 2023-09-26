@@ -345,28 +345,27 @@ void Message_GetTimerDigitsNES(OSTime time, s16* digits) {
     digits[7] += '0';
 }
 
-// Probably color structs instead of Vec3s... whoops
-s16 D_801D07DC[][3] = {
+Color_RGB16 D_801D07DC[] = {
     { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
     { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-s16 D_801D080C[][3] = {
+Color_RGB16 D_801D080C[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-s16 D_801D083C[][3] = {
+Color_RGB16 D_801D083C[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
 };
 
-s16 D_801D086C[][3] = {
+Color_RGB16 D_801D086C[] = {
     { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-s16 D_801D089C[][3] = {
+Color_RGB16 D_801D089C[] = {
     { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
@@ -450,40 +449,40 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         }
                     }
 
-                    if (D_801D07DC[(s16)(character - 1)][0] + msgCtx->unk120D4 < 0) {
+                    if (D_801D07DC[(s16)(character - 1)].r + msgCtx->unk120D4 < 0) {
                         msgCtx->textColorR = 0;
                     } else {
-                        msgCtx->textColorR = D_801D07DC[(s16)(character - 1)][0] + msgCtx->unk120D4;
+                        msgCtx->textColorR = D_801D07DC[(s16)(character - 1)].r + msgCtx->unk120D4;
                     }
 
-                    if (D_801D07DC[(s16)(character - 1)][1] + msgCtx->unk120D4 >= 255) {
-                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)][1];
+                    if (D_801D07DC[(s16)(character - 1)].g + msgCtx->unk120D4 >= 255) {
+                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)].g;
                     } else {
-                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)][1] + msgCtx->unk120D4;
+                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)].g + msgCtx->unk120D4;
                     }
 
-                    if (D_801D07DC[(s16)(character - 1)][2] + msgCtx->unk120D4 < 0) {
+                    if (D_801D07DC[(s16)(character - 1)].b + msgCtx->unk120D4 < 0) {
                         msgCtx->textColorB = 0;
                     } else {
-                        msgCtx->textColorB = D_801D07DC[(s16)(character - 1)][2] + msgCtx->unk120D4;
+                        msgCtx->textColorB = D_801D07DC[(s16)(character - 1)].b + msgCtx->unk120D4;
                     }
 
                 } else if (play->pauseCtx.bombersNotebookOpen) {
-                    msgCtx->textColorR = D_801D089C[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D089C[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D089C[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D089C[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D089C[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D089C[(s16)(character - 1)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_1) {
-                    msgCtx->textColorR = D_801D07DC[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D07DC[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D07DC[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D07DC[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D07DC[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D07DC[(s16)(character - 1)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_D) {
-                    msgCtx->textColorR = D_801D086C[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D086C[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D086C[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D086C[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D086C[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D086C[(s16)(character - 1)].b;
                 } else {
-                    msgCtx->textColorR = D_801D080C[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D080C[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D080C[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D080C[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D080C[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D080C[(s16)(character - 1)].b;
                 }
 
                 if ((i + 1) == msgCtx->textDrawPos) {
@@ -851,9 +850,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     sp12E = msgCtx->textColorR;
                     sp12C = msgCtx->textColorG;
                     sp12A = msgCtx->textColorB;
-                    msgCtx->textColorR = D_801D083C[(s16)D_801D08CC[character - 0xB0]][0];
-                    msgCtx->textColorG = D_801D083C[(s16)D_801D08CC[character - 0xB0]][1];
-                    msgCtx->textColorB = D_801D083C[(s16)D_801D08CC[character - 0xB0]][2];
+                    msgCtx->textColorR = D_801D083C[(s16)D_801D08CC[character - 0xB0]].r;
+                    msgCtx->textColorG = D_801D083C[(s16)D_801D08CC[character - 0xB0]].g;
+                    msgCtx->textColorB = D_801D083C[(s16)D_801D08CC[character - 0xB0]].b;
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                     msgCtx->textColorR = sp12E;
                     msgCtx->textColorG = sp12C;
