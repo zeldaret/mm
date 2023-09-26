@@ -132,7 +132,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
                 *index = counter;
                 return collidedActor;
             }
-            data += 1;
+            data++;
         }
     }
     return 0;
