@@ -117,22 +117,22 @@ void ObjBoyo_ExplodeBomb(ObjBoyo* this, Actor* actor) {
  */
 Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
     Actor* collidedActor;
-    ObjBoyoUnkStruct* data;
-    s32 counter;
+    ObjBoyoUnkStruct* iter;
+    s32 i;
 
     if (this->collider.base.ocFlags2 & OC2_HIT_PLAYER) {
         *index = 0;
         return &GET_PLAYER(play)->actor;
     }
-    data = sCollisionHandlers + 1;
+    iter = sCollisionHandlers + 1;
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         collidedActor = this->collider.base.oc;
-        for (counter = 1; counter != 3; ++counter) {
-            if (collidedActor->id == data->id) {
-                *index = counter;
+        for (i = 1; i != 3; ++i) {
+            if (iter->id == collidedActor->id) {
+                *index = i;
                 return collidedActor;
             }
-            data++;
+            iter++;
         }
     }
     return NULL;
