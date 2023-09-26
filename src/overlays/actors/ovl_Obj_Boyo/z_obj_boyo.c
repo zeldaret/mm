@@ -93,8 +93,10 @@ void ObjBoyo_Destroy(Actor* thisx, PlayState* play2) {
 }
 
 void ObjBoyo_PushPlayer(ObjBoyo* this, Actor* actor) {
-    ((Player*)actor)->pushedSpeed = 30.0f;
-    ((Player*)actor)->pushedYaw = (s16)this->actor.yawTowardsPlayer;
+    Player* player = (Player*)actor;
+
+    player->pushedSpeed = 30.0f;
+    player->pushedYaw = this->actor.yawTowardsPlayer;
 }
 
 void ObjBoyo_PushPirate(ObjBoyo* this, Actor* actor) {
