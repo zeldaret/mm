@@ -84,17 +84,6 @@ typedef struct {
         }                                                              \
     } while (0)
 
-#define SET_FULLSCREEN_VIEWPORT_ALT(view)  \
-    {                                      \
-        Viewport viewport;                 \
-        viewport.bottomY = gScreenHeight;  \
-        viewport.rightX = gScreenWidth;    \
-        viewport.topY = 0;                 \
-        viewport.leftX = 0;                \
-        View_SetViewport(view, &viewport); \
-    }                                      \
-    (void)0
-
 void SpeedMeter_InitImpl(SpeedMeter* this, s32 x, s32 y) {
     this->x = x;
     this->y = y;
@@ -139,7 +128,7 @@ void SpeedMeter_DrawTimeEntries(SpeedMeter* this, GraphicsContext* gfxCtx) {
     View_Init(&view, gfxCtx);
     view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
 
-    SET_FULLSCREEN_VIEWPORT_ALT(&view);
+    SET_FULLSCREEN_VIEWPORT_HIRES(&view);
 
     gfx = OVERLAY_DISP;
     View_ApplyTo(&view, &gfx);
@@ -191,7 +180,7 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
         View_Init(&view, gfxCtx);
         view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
 
-        SET_FULLSCREEN_VIEWPORT_ALT(&view);
+        SET_FULLSCREEN_VIEWPORT_HIRES(&view);
 
         gfx = OVERLAY_DISP;
         View_ApplyTo(&view, &gfx);
