@@ -95,18 +95,23 @@ void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offse
     *arg3 = f;
 }
 
+#define RUPEES_STR_EN "Rupee(s)"
+#define RUPEES_STR_DE "Rubin(e)"
+#define RUPEES_STR_FR "Rubis"
+#define RUPEES_STR_SPA "Rupia(s)"
+
 char sRupeesTextLocalization[LANGUAGE_MAX - 1][8] = {
-    { "Rupee(s)" }, // EN
-    { "Rubin(e)" }, // DE
-    { "Rubis" },    // FR
-    { "Rupia(s)" }, // SPA
+    RUPEES_STR_EN,  // EN
+    RUPEES_STR_DE,  // DE
+    RUPEES_STR_FR,  // FR
+    RUPEES_STR_SPA, // SPA
 };
 
 u8 sRupeesTextLength[LANGUAGE_MAX - 1] = {
-    sizeof("Rupee(s)") - 1,
-    sizeof("Rubin(e)") - 1,
-    sizeof("Rubis") - 1,
-    sizeof("Rupia(s)") - 1,
+    sizeof(RUPEES_STR_EN) - 1,
+    sizeof(RUPEES_STR_DE) - 1,
+    sizeof(RUPEES_STR_FR) - 1,
+    sizeof(RUPEES_STR_SPA) - 1,
 };
 
 void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
@@ -226,32 +231,44 @@ void Message_LoadTimeNES(PlayState* play, u8 curChar, s32* offset, f32* arg3, s1
     *arg3 = f;
 }
 
+#define GREAT_BAY_COAST_STR "Great Bay Coast"
+#define ZORA_CAPE_STR "Zora Cape"
+#define SNOWHEAD_STR "Snowhead"
+#define MOUNTAIN_VILLAGE_STR "Mountain Village"
+#define CLOCK_TOWN_STR "Clock Town"
+#define MILK_ROAD_STR "Milk Road"
+#define WOODFALL_STR "Woodfall"
+#define SOUTHERN_SWAMP_STR "Southern Swamp"
+#define IKANA_CANYON_STR "Ikana Canyon"
+#define STONE_TOWER_STR "Stone Tower"
+#define ENTRANCE_STR "Entrance"
+
 char sOwlWarpTextENG[OWL_WARP_MAX][16] = {
-    "Great Bay Coast",  // OWL_WARP_GREAT_BAY_COAST
-    "Zora Cape",        // OWL_WARP_ZORA_CAPE
-    "Snowhead",         // OWL_WARP_SNOWHEAD
-    "Mountain Village", // OWL_WARP_MOUNTAIN_VILLAGE
-    "Clock Town",       // OWL_WARP_CLOCK_TOWN
-    "Milk Road",        // OWL_WARP_MILK_ROAD
-    "Woodfall",         // OWL_WARP_WOODFALL
-    "Southern Swamp",   // OWL_WARP_SOUTHERN_SWAMP
-    "Ikana Canyon",     // OWL_WARP_IKANA_CANYON
-    "Stone Tower",      // OWL_WARP_STONE_TOWER
-    "Entrance",         // OWL_WARP_ENTRANCE
+    GREAT_BAY_COAST_STR,  // OWL_WARP_GREAT_BAY_COAST
+    ZORA_CAPE_STR,        // OWL_WARP_ZORA_CAPE
+    SNOWHEAD_STR,         // OWL_WARP_SNOWHEAD
+    MOUNTAIN_VILLAGE_STR, // OWL_WARP_MOUNTAIN_VILLAGE
+    CLOCK_TOWN_STR,       // OWL_WARP_CLOCK_TOWN
+    MILK_ROAD_STR,        // OWL_WARP_MILK_ROAD
+    WOODFALL_STR,         // OWL_WARP_WOODFALL
+    SOUTHERN_SWAMP_STR,   // OWL_WARP_SOUTHERN_SWAMP
+    IKANA_CANYON_STR,     // OWL_WARP_IKANA_CANYON
+    STONE_TOWER_STR,      // OWL_WARP_STONE_TOWER
+    ENTRANCE_STR,         // OWL_WARP_ENTRANCE
 };
 
 s16 sOwlWarpTextLengthENG[OWL_WARP_MAX] = {
-    sizeof("Great Bay Coast") - 1,  // OWL_WARP_GREAT_BAY_COAST
-    sizeof("Zora Cape") - 1,        // OWL_WARP_ZORA_CAPE
-    sizeof("Snowhead") - 1,         // OWL_WARP_SNOWHEAD
-    sizeof("Mountain Village") - 1, // OWL_WARP_MOUNTAIN_VILLAGE
-    sizeof("Clock Town") - 1,       // OWL_WARP_CLOCK_TOWN
-    sizeof("Milk Road") - 1,        // OWL_WARP_MILK_ROAD
-    sizeof("Woodfall") - 1,         // OWL_WARP_WOODFALL
-    sizeof("Southern Swamp") - 1,   // OWL_WARP_SOUTHERN_SWAMP
-    sizeof("Ikana Canyon") - 1,     // OWL_WARP_IKANA_CANYON
-    sizeof("Stone Tower") - 1,      // OWL_WARP_STONE_TOWER
-    sizeof("Entrance") - 1,         // OWL_WARP_ENTRANCE
+    sizeof(GREAT_BAY_COAST_STR) - 1,  // OWL_WARP_GREAT_BAY_COAST
+    sizeof(ZORA_CAPE_STR) - 1,        // OWL_WARP_ZORA_CAPE
+    sizeof(SNOWHEAD_STR) - 1,         // OWL_WARP_SNOWHEAD
+    sizeof(MOUNTAIN_VILLAGE_STR) - 1, // OWL_WARP_MOUNTAIN_VILLAGE
+    sizeof(CLOCK_TOWN_STR) - 1,       // OWL_WARP_CLOCK_TOWN
+    sizeof(MILK_ROAD_STR) - 1,        // OWL_WARP_MILK_ROAD
+    sizeof(WOODFALL_STR) - 1,         // OWL_WARP_WOODFALL
+    sizeof(SOUTHERN_SWAMP_STR) - 1,   // OWL_WARP_SOUTHERN_SWAMP
+    sizeof(IKANA_CANYON_STR) - 1,     // OWL_WARP_IKANA_CANYON
+    sizeof(STONE_TOWER_STR) - 1,      // OWL_WARP_STONE_TOWER
+    sizeof(ENTRANCE_STR) - 1,         // OWL_WARP_ENTRANCE
 };
 
 void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
@@ -920,18 +937,23 @@ u8 D_801D08E4[] = {
     0x02,
 };
 
+#define RED_STR "RED"
+#define BLUE_STR "BLUE"
+#define YELLOW_STR "YELLOW"
+#define GREEN_STR "GREEN"
+
 char sMaskCodeTextENG[][6] = {
-    "RED",
-    "BLUE",
-    "YELLOW",
-    "GREEN",
+    RED_STR,
+    BLUE_STR,
+    YELLOW_STR,
+    GREEN_STR,
 };
 
 u8 sMaskCodeTextLengthENG[] = {
-    sizeof("RED") - 1,
-    sizeof("BLUE") - 1,
-    sizeof("YELLOW") - 1,
-    sizeof("GREEN") - 1,
+    sizeof(RED_STR) - 1,
+    sizeof(BLUE_STR) - 1,
+    sizeof(YELLOW_STR) - 1,
+    sizeof(GREEN_STR) - 1,
 };
 
 #ifdef NON_MATCHING
