@@ -34,7 +34,7 @@ CLEAR_EVENTINF = "int"
 CLEAR_EVENTINF_ALT = "int"
 "EVENTINF_.*" = "int"
 ".+REG" = "int"
-SET_FULLSCREEN_VIEWPORT_ALT = "void"
+SET_FULLSCREEN_VIEWPORT_HIRES = "void"
 gDrawRect = "void"
 
 [decompme.compilers]
