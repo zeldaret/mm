@@ -135,7 +135,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
             data++;
         }
     }
-    return 0;
+    return NULL;
 }
 
 void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
