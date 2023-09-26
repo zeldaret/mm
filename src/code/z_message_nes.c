@@ -358,8 +358,6 @@ u8 D_801D08CC[] = {
     0x02, 0x01, 0x03, 0x06, 0x06, 0x06, 0x03, 0x03, 0x03, 0x03, 0x01, 0x06,
 };
 
-#ifdef NON_MATCHING
-// https://decomp.me/scratch/vCXqB
 void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     MessageContext* msgCtx = &play->msgCtx;
     u16 i;
@@ -367,15 +365,12 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
     Font* font = &msgCtx->font;
     u16 charTexIndex;
     u16 stateTimerHi;
-    Gfx* gfx; // sp_134;
-    u16 character2;
+    Gfx* gfx = *gfxP;
+    u16 character;
     s16 sp130;
     s16 sp12E;
     s16 sp12C;
     s16 sp12A;
-    u16 character; // sp54
-
-    gfx = *gfxP;
 
     msgCtx->textPosX = msgCtx->unk11F1A[0] + msgCtx->unk11FF8;
     msgCtx->textPosY = msgCtx->unk11FFA;
@@ -424,7 +419,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case 0x7:
             case 0x8:
                 if ((msgCtx->msgMode >= MSGMODE_NEW_CYCLE_0) && (msgCtx->msgMode <= MSGMODE_OWL_SAVE_2) &&
-                    (character == 2)) {
+                    (character == 0x2)) {
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
                     if (msgCtx->unk120D6) {
                         msgCtx->unk120D4 += 25;
@@ -625,8 +620,8 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
             case 0xA:
                 i++;
-                character2 = msgCtx->decodedBuffer.schar[i];
-                switch (msgCtx->decodedBuffer.schar[i]) {
+                character = msgCtx->decodedBuffer.schar[i];
+                switch (character) {
                     case 0x0:
                     case 0x1:
                     case 0x2:
@@ -634,7 +629,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     case 0x4:
                     case 0x5:
                     case 0x6:
-                        msgCtx->textDelay = character2;
+                        msgCtx->textDelay = character - 0x0;
                         if ((i + 1) == msgCtx->textDrawPos) {
                             msgCtx->textDrawPos++;
                         }
@@ -911,9 +906,6 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
 
     *gfxP = gfx;
 }
-#else
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message_nes/Message_DrawTextNES.s")
-#endif
 
 char D_801D08D8[][4] = {
     "Fast",
