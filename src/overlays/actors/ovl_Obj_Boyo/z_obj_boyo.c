@@ -191,9 +191,9 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
             this->unk1AC = 0x640;
         }
     }
-    this->collider.base.acFlags &= 0xFFFD;
-    this->collider.base.ocFlags1 &= 0xFFFD;
-    this->collider.base.ocFlags2 &= 0xFFFE;
+    this->collider.base.acFlags &= ~AC_HIT;
+    this->collider.base.ocFlags1 &= ~OC1_HIT;
+    this->collider.base.ocFlags2 &= ~OC2_HIT_PLAYER;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
     if (this->actor.xzDistToPlayer < 2000.0f) {
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider.base);
