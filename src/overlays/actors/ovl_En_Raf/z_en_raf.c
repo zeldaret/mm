@@ -210,7 +210,7 @@ void EnRaf_Init(Actor* thisx, PlayState* play) {
     CollisionHeader_GetVirtual(&gCarnivorousLilyPadCol, &colHeader);
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
     Collider_InitAndSetCylinder(play, &this->collider, &this->dyna.actor, &sCylinderInit);
-    this->dyna.actor.targetMode = 3;
+    this->dyna.actor.targetMode = TARGET_MODE_3;
     this->dyna.actor.colChkInfo.mass = MASS_IMMOVABLE;
     SkelAnime_InitFlex(play, &this->skelAnime, &gCarnivorousLilyPadSkel, &gCarnivorousLilyPadSpitAnim, this->jointTable,
                        this->morphTable, CARNIVOROUS_LILY_PAD_LIMB_MAX);
@@ -319,7 +319,7 @@ void EnRaf_Idle(EnRaf* this, PlayState* play) {
             if (player->transformation == PLAYER_FORM_GORON) {
                 this->grabTarget = EN_RAF_GRAB_TARGET_GORON_PLAYER;
             } else {
-                player->unk_AE8 = 50;
+                player->actionVar2 = 50;
             }
 
             this->playerRotYWhenGrabbed = player->actor.world.rot.y;
@@ -455,7 +455,7 @@ void EnRaf_Chew(EnRaf* this, PlayState* play) {
             case EN_RAF_GRAB_TARGET_GORON_PLAYER:
                 if (this->chewCount > (BREG(54) + 4)) {
                     player->actor.parent = NULL;
-                    player->unk_AE8 = 1000;
+                    player->actionVar2 = 1000;
                     EnRaf_Explode(this, play);
                 }
                 break;
@@ -538,7 +538,7 @@ void EnRaf_Explode(EnRaf* this, PlayState* play) {
     this->timer = 5;
     if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 5);
-        this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
     }
 
     this->actionFunc = EnRaf_PostDetonation;
@@ -552,7 +552,7 @@ void EnRaf_PostDetonation(EnRaf* this, PlayState* play) {
         this->collider.dim.radius = 50;
         this->collider.dim.height = 10;
         func_800BC154(play, &play->actorCtx, &this->dyna.actor, 6);
-        this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_4);
+        this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY);
         EnRaf_SetupDormant(this);
     } else if (this->grabTarget == EN_RAF_GRAB_TARGET_EXPLOSIVE) {
         this->collider.dim.radius = 80;

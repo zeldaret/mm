@@ -8,7 +8,7 @@
 #include "overlays/actors/ovl_En_Wiz/z_en_wiz.h"
 #include "objects/object_wiz/object_wiz.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnWizFire*)thisx)
 
@@ -74,10 +74,10 @@ void EnWizFire_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     this->type = EN_WIZ_FIRE_GET_TYPE(&this->actor);
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->wallCheckTimer = 10;
     this->alpha = 255.0f;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 
     if (!Player_HasMirrorShieldEquipped(play)) {
         this->collider.info.toucher.dmgFlags = 0x20000000;
@@ -638,8 +638,8 @@ void EnWizFire_Update(Actor* thisx, PlayState* play2) {
         }
     }
 
-    if ((player->stateFlags2 & PLAYER_STATE2_4000) && (player->unk_AE8 < 90)) {
-        player->unk_AE8 = 90;
+    if ((player->stateFlags2 & PLAYER_STATE2_4000) && (player->actionVar2 < 90)) {
+        player->actionVar2 = 90;
     }
 
     if (!this->hitByIceArrow && !sPoolHitByIceArrow &&

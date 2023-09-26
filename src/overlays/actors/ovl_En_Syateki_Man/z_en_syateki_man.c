@@ -13,7 +13,7 @@
 #include "overlays/actors/ovl_En_Syateki_Okuta/z_en_syateki_okuta.h"
 #include "overlays/actors/ovl_En_Syateki_Wf/z_en_syateki_wf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_CANT_LOCK_ON)
 
 #define THIS ((EnSyatekiMan*)thisx)
 
@@ -205,7 +205,7 @@ void EnSyatekiMan_Init(Actor* thisx, PlayState* play) {
     Path* path = &play->setupPathList[SG_MAN_GET_PATH_INDEX(&this->actor)];
     s32 actorListLength = sSwampTargetActorListLengths[this->swampTargetActorListIndex];
 
-    this->actor.targetMode = 1;
+    this->actor.targetMode = TARGET_MODE_1;
     Actor_SetScale(&this->actor, 0.01f);
     if (play->sceneId == SCENE_SYATEKI_MORI) {
         SkelAnime_InitFlex(play, &this->skelAnime, &gBurlyGuySkel, &gBurlyGuyHeadScratchLoopAnim, this->jointTable,
@@ -1140,8 +1140,8 @@ void EnSyatekiMan_Swamp_EndGame(EnSyatekiMan* this, PlayState* play) {
         this->guayFlags = 0;
         this->wolfosFlags = 0;
         if (this->talkWaitTimer <= 0) {
-            if (GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
-                SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(this->score);
+            if (HS_GET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
+                HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(this->score);
             }
 
             this->talkWaitTimer = 15;
@@ -1409,8 +1409,8 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
         if ((this->talkWaitTimer <= 0) && !play->interfaceCtx.perfectLettersOn) {
             Flags_SetAllTreasure(play, this->score);
             this->talkWaitTimer = 15;
-            if ((GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
-                if (GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
+            if ((HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) || (this->score == 50)) {
+                if (HS_GET_TOWN_SHOOTING_GALLERY_HIGH_SCORE() < this->score) {
                     if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_RECEIVED_TOWN_SHOOTING_GALLERY_QUIVER_UPGRADE)) {
                         // You got a new record!
                         Message_StartTextbox(play, 0x407, &this->actor);
@@ -1430,7 +1430,7 @@ void EnSyatekiMan_Town_EndGame(EnSyatekiMan* this, PlayState* play) {
                     this->prevTextId = 0x406;
                 }
 
-                SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(this->score);
+                HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(this->score);
                 this->shootingGameState = SG_GAME_STATE_ENDED;
             } else {
                 if (CURRENT_DAY != 3) {

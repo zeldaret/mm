@@ -2,7 +2,7 @@
 #define Z64PLAYER_H
 
 #include "alignment.h"
-#include "os.h"
+#include "PR/os.h"
 #include "z64actor.h"
 
 struct Player;
@@ -1168,7 +1168,7 @@ typedef struct Player {
     /* 0x564 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x664 */ ColliderQuad shieldQuad;
     /* 0x6E4 */ ColliderCylinder shieldCylinder;
-    /* 0x730 */ Actor* targetedActor; // Z/L-Targeted actor
+    /* 0x730 */ Actor* lockOnActor; // Z/L-Targeted actor
     /* 0x734 */ char unk_734[4];
     /* 0x738 */ s32 unk_738;
     /* 0x73C */ s32 meleeWeaponEffectIndex[3];
@@ -1221,8 +1221,8 @@ typedef struct Player {
     /* 0xADE */ u8 unk_ADE;
     /* 0xADF */ s8 unk_ADF[4]; // Circular buffer used for testing for triggering a quickspin
     /* 0xAE3 */ s8 unk_AE3[4]; // Circular buffer used for ?
-    /* 0xAE7 */ s8 unk_AE7; // a timer, used as an index for multiple kinds of animations too, room index?, etc
-    /* 0xAE8 */ s16 unk_AE8; // multipurpose timer
+    /* 0xAE7 */ s8 actionVar1; // context dependent variable that has different meanings depending on what action is currently running
+    /* 0xAE8 */ s16 actionVar2; // context dependent variable that has different meanings depending on what action is currently running
     /* 0xAEC */ f32 unk_AEC;
     /* 0xAF0 */ union {
                     Vec3f unk_AF0[2];
@@ -1291,8 +1291,8 @@ typedef struct Player {
     /* 0xD5D */ u8 floorTypeTimer; // Unused remnant of OoT
     /* 0xD5E */ u8 floorProperty; // FloorProperty enum
     /* 0xD5F */ u8 prevFloorType; // Unused remnant of OoT
-    /* 0xD60 */ f32 unk_D60;
-    /* 0xD64 */ s16 unk_D64;
+    /* 0xD60 */ f32 prevControlStickMagnitude;
+    /* 0xD64 */ s16 prevControlStickAngle;
     /* 0xD66 */ u16 prevFloorSfxOffset;
     /* 0xD68 */ s16 unk_D68;
     /* 0xD6A */ s8 unk_D6A;

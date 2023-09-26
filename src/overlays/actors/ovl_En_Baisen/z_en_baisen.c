@@ -7,7 +7,7 @@
 #include "z_en_baisen.h"
 #include "objects/object_bai/object_bai.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnBaisen*)thisx)
 
@@ -97,7 +97,7 @@ void EnBaisen_Init(Actor* thisx, PlayState* play) {
             Actor_Kill(&this->actor);
         }
     }
-    this->actor.targetMode = 6;
+    this->actor.targetMode = TARGET_MODE_6;
     this->actor.gravity = -3.0f;
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     if (this->paramCopy == 0) {

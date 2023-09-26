@@ -1,4 +1,5 @@
 #include "global.h"
+#include "PR/gs2dex.h"
 #include "sys_cfb.h"
 #include "z64snap.h"
 #include "z64view.h"
@@ -6400,7 +6401,7 @@ void Interface_Draw(PlayState* play) {
         Minimap_Draw(play);
 
         if ((R_PAUSE_BG_PRERENDER_STATE != 2) && (R_PAUSE_BG_PRERENDER_STATE != 3)) {
-            Actor_DrawZTarget(&play->actorCtx.targetContext, play);
+            Target_Draw(&play->actorCtx.targetCtx, play);
         }
 
         Gfx_SetupDL39_Overlay(play->state.gfxCtx);
@@ -6869,7 +6870,7 @@ void Interface_Update(PlayState* play) {
                 interfaceCtx->aButtonRoll = -15700.0f;
                 interfaceCtx->aButtonState = A_BTN_STATE_2;
 
-                if ((msgCtx->msgMode != 0) && (msgCtx->unk12006 == 0x26)) {
+                if ((msgCtx->msgMode != 0) && (msgCtx->textboxYTarget == 0x26)) {
                     R_A_BTN_Y_OFFSET = -14;
                 } else {
                     R_A_BTN_Y_OFFSET = 0;

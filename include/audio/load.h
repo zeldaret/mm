@@ -5,9 +5,9 @@
 #include "PR/ultratypes.h"
 #include "libc/stddef.h"
 #include "libc/stdint.h"
-#include "ultra64/message.h"
+#include "PR/os_message.h"
 #include "unk.h"
-#include "os.h"
+#include "PR/os.h"
 
 struct Sample;
 

@@ -8,7 +8,7 @@
 #include "z64shrink_window.h"
 #include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_20)
 
 #define THIS ((Boss04*)thisx)
 
@@ -164,7 +164,7 @@ void Boss04_Init(Actor* thisx, PlayState* play2) {
 
     this->actor.params = 0x64;
     Actor_SetScale(&this->actor, 0.1f);
-    this->actor.targetMode = 5;
+    this->actor.targetMode = TARGET_MODE_5;
     this->actor.hintId = TATL_HINT_ID_WART;
     this->actor.colChkInfo.health = 20;
     this->actor.colChkInfo.damageTable = &sDamageTable;
@@ -232,7 +232,7 @@ void Boss04_Destroy(Actor* thisx, PlayState* play) {
 
 void func_809EC544(Boss04* this) {
     this->actionFunc = func_809EC568;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
 }
 
 void func_809EC568(Boss04* this, PlayState* play) {
@@ -522,7 +522,7 @@ void func_809ED224(Boss04* this) {
     this->unk_2D0 = 10000.0f;
     this->unk_2C8 = 200;
     Actor_PlaySfx(&this->actor, NA_SE_EN_ME_DEAD);
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     Audio_RestorePrevBgm();
     this->unk_1F6 = 10;
 }
@@ -543,7 +543,7 @@ void func_809ED2A0(Boss04* this, PlayState* play) {
     }
 
     if (this->unk_1F8 == 3) {
-        this->actor.flags &= ~ACTOR_FLAG_1;
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         this->unk_700 = 0.0f;
         this->unk_6FC = 0.0f;
         this->unk_6F8 = 0.0f;
@@ -749,9 +749,9 @@ void Boss04_Update(Actor* thisx, PlayState* play2) {
         func_809ED45C(this, play);
         if (this->unk_2CC > 3000.0f) {
             CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider1.base);
-            this->actor.flags |= ACTOR_FLAG_1;
+            this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         } else {
-            this->actor.flags &= ~ACTOR_FLAG_1;
+            this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         }
         CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider2.base);
         CollisionCheck_SetAC(play, &play->colChkCtx, &this->collider2.base);
