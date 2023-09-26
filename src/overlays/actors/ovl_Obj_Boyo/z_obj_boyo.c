@@ -68,7 +68,7 @@ static InitChainEntry sInitChain[] = {
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
-static ObjBoyoUnkStruct gCollisionHandling[] = {
+static ObjBoyoUnkStruct sCollisionHandlers[] = {
     { ACTOR_PLAYER, ObjBoyo_PushPlayer },
     { ACTOR_EN_KAIZOKU, ObjBoyo_PushPirate },
     { ACTOR_EN_BOM, ObjBoyo_ExplodeBomb },
@@ -124,7 +124,7 @@ Actor* ObjBoyo_FindCollidedActor(ObjBoyo* this, PlayState* play, s32* index) {
         // In short it gets the player's Actor*.
         return (s32)play->actorCtx.actorLists[2].first;
     }
-    data = gCollisionHandling + 1;
+    data = sCollisionHandlers + 1;
     if (this->collider.base.ocFlags1 & OC1_HIT) {
         collidedActor = this->collider.base.oc;
         for (counter = 1; counter != 3; ++counter) {
