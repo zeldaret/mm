@@ -2106,6 +2106,7 @@ u16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
 u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/ZTbP4
 void Message_Decode(PlayState* play) {
     MessageContext* msgCtx = &play->msgCtx;
     Font* font = &msgCtx->font; // spF0
@@ -5060,6 +5061,7 @@ s16 D_801D0464[] = {
 #ifdef NON_MATCHING
 // Down to a single compiler-managed stack variable
 // Also contains in-function data
+// https://decomp.me/scratch/QcQ0a
 void Message_Update(PlayState* play) {
     static u8 D_801D0468 = 0;
     MessageContext* msgCtx = &play->msgCtx;
