@@ -31,8 +31,8 @@ typedef struct BossHakugin {
     /* 0x0191 */ u8 unk_191;
     /* 0x018C */ char unk_0192[0x866];
     /* 0x09F8 */ BossHakuginEffect unk_9F8[BOSS_HAKUGIN_EFFECT_COUNT];
-    /* 0x2618 */ char unk_2618[0x8E8];
-    /* 0x2F00 */ BossHakuginFhgFlashUnkStruct unk_2F00[7][15];
+    /* 0x2618 */ char unk_2618[0xB40];
+    /* 0x3158 */ BossHakuginFhgFlashUnkStruct unk_3158[5][15];
     /* 0x3734 */ char unk_3734[0xDC];
 } BossHakugin; // size = 0x3810
 

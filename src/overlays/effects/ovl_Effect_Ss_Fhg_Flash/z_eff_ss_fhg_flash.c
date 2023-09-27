@@ -100,9 +100,9 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
         s32 gohtIndex = goht->unk_191 - 3;
 
         if (gohtIndex < 0) {
-            bodyPartPos = &goht->unk_2F00[this->rParams][12].unk_00;
+            bodyPartPos = &goht->unk_3158[this->rParams - FHGFLASH_SHOCK_GOHT_2][12].unk_00;
         } else {
-            bodyPartPos = &goht->unk_2F00[this->rParams][gohtIndex].unk_00;
+            bodyPartPos = &goht->unk_3158[this->rParams - FHGFLASH_SHOCK_GOHT_2][gohtIndex].unk_00;
         }
 
         this->pos.x = Rand_CenteredFloat(70.0f) + bodyPartPos->x;
