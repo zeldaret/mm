@@ -991,31 +991,6 @@ void func_8014116C(Gfx** gfxP, u16* arg1, u16* workBuffer, s32 width, s32 height
 // void func_80141678(UNK_TYPE1 param_1, UNK_TYPE1 param_2, UNK_TYPE1 param_3, UNK_TYPE1 param_4, UNK_TYPE4 param_5);
 void func_80141778(Struct_80140E80* arg0, Gfx** gfxp, void* unk_18E60, GraphicsContext* gfxCtx);
 
-s32 Message_ShouldAdvance(PlayState* play);
-void Message_CloseTextbox(PlayState* play);
-void Message_DrawTextChar(PlayState* play, TexturePtr texture, Gfx** gfxP);
-void Message_DrawItemIcon(PlayState* play, Gfx** gfxP);
-void Message_HandleOcarina(PlayState* play);
-void Message_LoadItemIcon(PlayState* play, u16 itemId, s16 arg2);
-void Message_SetupLoadItemIcon(PlayState* play);
-void func_801514B0(PlayState* play, u16 arg1, u8 arg2);
-void Message_StartTextbox(PlayState* play, u16 textId, Actor* actor);
-void Message_ContinueTextbox(PlayState* play, u16 textId);
-void Message_DisplaySceneTitleCard(PlayState* play, u16 textId);
-void Message_BombersNotebookQueueEvent(PlayState* play, u8 event);
-void Message_DisplayOcarinaStaff(PlayState* play, u16 ocarinaAction);
-void Message_DisplayOcarinaStaffBlockSunsSong(PlayState* play, u16 ocarinaAction);
-u8 Message_GetState(MessageContext* msgCtx);
-void Message_Draw(PlayState* play);
-void Message_Update(PlayState* play);
-void Message_Init(PlayState* play);
-void Message_FindMessageNES(PlayState* play, u16 textId);
-void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos);
-void Message_DecodeNES(PlayState* play);
-void Message_FindCreditsMessage(PlayState* play, u16 textId);
-void Message_DrawTextCredits(PlayState* play, Gfx** gfxP);
-void Message_DecodeCredits(PlayState* play);
-
 uintptr_t KaleidoManager_FaultAddrConv(uintptr_t address, void* param);
 void KaleidoManager_LoadOvl(KaleidoMgrOverlay* ovl);
 void KaleidoManager_ClearOvl(KaleidoMgrOverlay* ovl);
