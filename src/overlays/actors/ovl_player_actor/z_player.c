@@ -15020,7 +15020,7 @@ void Player_Action_34(Player* this, PlayState* play) {
 }
 
 void Player_Action_35(Player* this, PlayState* play) {
-    if (Player_ActionChange_13(this, play) == 0) {
+    if (!Player_ActionChange_13(this, play)) {
         if ((this->stateFlags3 & PLAYER_STATE3_10) && !(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
             func_80833AA0(this, play);
             this->stateFlags1 |= PLAYER_STATE1_20000000;
