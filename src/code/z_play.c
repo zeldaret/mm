@@ -83,7 +83,7 @@ void Play_DrawMotionBlur(PlayState* this) {
             sMotionBlurStatus = MOTION_BLUR_PROCESS;
         }
 
-        func_801705B4(&this->pauseBgPreRender, &gfx);
+        PreRender_SaveFramebuffer(&this->pauseBgPreRender, &gfx);
 
         gSPEndDisplayList(gfx++);
 
@@ -961,9 +961,9 @@ void Play_UpdateMain(PlayState* this) {
         Play_UpdateTransition(this);
         if (gTransitionTileState != TRANS_TILE_READY) {
             if ((gSaveContext.gameMode == GAMEMODE_NORMAL) &&
-                (((this->msgCtx.msgMode == 0)) ||
-                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == 0x42) &&
-                  (this->msgCtx.unk12020 == 0x41)) ||
+                (((this->msgCtx.msgMode == MSGMODE_NONE)) ||
+                 ((this->msgCtx.currentTextId == 0xFF) && (this->msgCtx.msgMode == MSGMODE_TEXT_DONE) &&
+                  (this->msgCtx.textboxEndType == TEXTBOX_ENDTYPE_41)) ||
                  ((this->msgCtx.currentTextId >= 0x100) && (this->msgCtx.currentTextId <= 0x200))) &&
                 (this->gameOverCtx.state == GAMEOVER_INACTIVE)) {
                 KaleidoSetup_Update(this);
@@ -1267,8 +1267,8 @@ void Play_DrawMain(PlayState* this) {
             if (R_PAUSE_BG_PRERENDER_STATE == PAUSE_BG_PRERENDER_READY) {
                 Gfx* sp8C = POLY_OPA_DISP;
 
-                if (this->pauseBgPreRender.unk_4D == 2) {
-                    func_80170B28(&this->pauseBgPreRender, &sp8C);
+                if (this->pauseBgPreRender.filterState == PRERENDER_FILTER_STATE_DONE) {
+                    PreRender_RestoreFramebuffer(&this->pauseBgPreRender, &sp8C);
                 } else {
                     func_80170798(&this->pauseBgPreRender, &sp8C);
                 }
@@ -1405,10 +1405,10 @@ void Play_DrawMain(PlayState* this) {
                     this->pauseBgPreRender.cvgSave = NULL;
                 }
 
-                func_801705B4(&this->pauseBgPreRender, &sp74);
+                PreRender_SaveFramebuffer(&this->pauseBgPreRender, &sp74);
 
                 if (this->pauseBgPreRender.cvgSave != NULL) {
-                    func_80170730(&this->pauseBgPreRender, &sp74);
+                    PreRender_DrawCoverage(&this->pauseBgPreRender, &sp74);
                 }
 
                 gSPEndDisplayList(sp74++);

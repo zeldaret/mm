@@ -22,6 +22,12 @@ typedef volatile s64 vs64;
 typedef float  f32;
 typedef double f64;
 
+typedef u32 size_t;
+
+#ifndef NULL
+#define NULL (void*)0
+#endif
+
 // TODO: move this somewhere else
 typedef void* TexturePtr;
 

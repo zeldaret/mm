@@ -396,11 +396,11 @@ void Sram_ActivateOwl(u8 owlId) {
 }
 
 void Sram_ClearHighscores(void) {
-    gSaveContext.save.saveInfo.unk_EC4 = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF) | 0x130000;
-    gSaveContext.save.saveInfo.unk_EC4 = (gSaveContext.save.saveInfo.unk_EC4 & 0xFFFF0000) | 0xA;
-    gSaveContext.save.saveInfo.horseBackBalloonHighScore = SECONDS_TO_TIMER(60);
-    SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
-    SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
+    HS_SET_BOAT_ARCHERY_HIGH_SCORE(19);
+    HS_SET_HIGH_SCORE_3_LOWER(10);
+    HS_SET_HORSE_BACK_BALLOON_TIME(SECONDS_TO_TIMER(60));
+    HS_SET_TOWN_SHOOTING_GALLERY_HIGH_SCORE(39);
+    HS_SET_SWAMP_SHOOTING_GALLERY_HIGH_SCORE(10);
 
     gSaveContext.save.saveInfo.dekuPlaygroundHighScores[0] = SECONDS_TO_TIMER(75);
     gSaveContext.save.saveInfo.dekuPlaygroundHighScores[1] = SECONDS_TO_TIMER(75);

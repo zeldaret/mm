@@ -147,11 +147,11 @@ TexturePtr sMonkeyFaceTextures[] = {
     object_mnk_Tex_017120, object_mnk_Tex_017920, object_mnk_Tex_018120,
 };
 
-void EnMnk_MonkeyTiedUp_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrames) {
+void EnMnk_MonkeyTiedUp_ChangeAnim(EnMnk* this, s32 animIndex, u8 animMode, f32 morphFrames) {
     Animation_Change(&this->skelAnime, sMonkeyTiedUpAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyTiedUpAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyTiedUpAnimations[animIndex]->common), animMode, morphFrames);
     Animation_Change(&this->propSkelAnime, sMonkeyTiedUpPoleAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyTiedUpPoleAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyTiedUpPoleAnimations[animIndex]->common), animMode, morphFrames);
 
     switch (animIndex) {
         case MONKEY_TIEDUP_ANIM_KICKAROUND:
@@ -184,11 +184,11 @@ void EnMnk_MonkeyTiedUp_SetNewAnim(EnMnk* this, s32 animIndex) {
     }
 }
 
-void EnMnk_MonkeyHanging_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrames) {
+void EnMnk_MonkeyHanging_ChangeAnim(EnMnk* this, s32 animIndex, u8 animMode, f32 morphFrames) {
     Animation_Change(&this->skelAnime, sMonkeyHangingAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyHangingAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyHangingAnimations[animIndex]->common), animMode, morphFrames);
     Animation_Change(&this->propSkelAnime, sMonkeyHangingRopeAnimations[animIndex], 1.0f, 0.0f,
-                     Animation_GetLastFrame(&sMonkeyHangingRopeAnimations[animIndex]->common), mode, morphFrames);
+                     Animation_GetLastFrame(&sMonkeyHangingRopeAnimations[animIndex]->common), animMode, morphFrames);
     this->animIndex = animIndex;
 }
 
@@ -196,7 +196,7 @@ void EnMnk_MonkeyHanging_SetAnim(EnMnk* this, s32 animIndex) {
     EnMnk_MonkeyHanging_ChangeAnim(this, animIndex, ANIMMODE_LOOP, -5.0f);
 }
 
-void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrames) {
+void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animIndex, u8 animMode, f32 morphFrames) {
     s32 pad;
 
     if (animIndex == 100) {
@@ -204,10 +204,10 @@ void EnMnk_Monkey_ChangeAnim(EnMnk* this, s32 animIndex, u8 mode, f32 morphFrame
     }
     if ((animIndex == 4) || (animIndex == 6)) {
         Animation_Change(&this->skelAnime, sMonkeyAnimations[animIndex], -1.0f,
-                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), 0.0f, mode, morphFrames);
+                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), 0.0f, animMode, morphFrames);
     } else {
         Animation_Change(&this->skelAnime, sMonkeyAnimations[animIndex], 1.0f, 0.0f,
-                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), mode, morphFrames);
+                         Animation_GetLastFrame(&sMonkeyAnimations[animIndex]->common), animMode, morphFrames);
     }
     this->unk_3E0 = 0;
     this->animIndex = animIndex;
