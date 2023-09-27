@@ -4998,14 +4998,14 @@ s32 (*sPlayerActionChangeFuncs[])(Player*, PlayState*) = {
  * This function processes "Action Change Lists", which run various functions that
  * check if it is appropriate to change to a new action.
  *
- * Action Change Lists are a list of indices for the `sActionChangeFuncs` array.
+ * Action Change Lists are a list of indices for the `sPlayerActionChangeFuncs` array.
  * The functions are ran in order until one of them returns true, or the end of the list is reached.
  * An Action Change index having a negative value indicates that it is the last member in the list.
  *
  * Because these lists are processed sequentially, the order of the indices in the list determines its priority.
  *
  * If the `updateUpperBody` argument is true, Player's upper body will update before the Action Change List
- * is processed. This allows for Item Action functions to run.
+ * is processed. This allows for Upper Action functions to run.
  *
  * @return true if a new action has been chosen
  *
