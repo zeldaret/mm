@@ -2005,21 +2005,45 @@ void Message_LoadTime(PlayState* play, u16 curChar, s32* offset, f32* arg3, s16*
     *arg3 = f;
 }
 
+#define GREAT_BAY_COAST_STR \
+    { 0x834F, 0x838C, 0x815B, 0x8367, 0x8378, 0x8343, 0x82CC, 0x8A43, 0x8ADD }
+#define ZORA_CAPE_STR \
+    { 0x835D, 0x815B, 0x8389, 0x82CC, 0x82DD, 0x82B3, 0x82AB }
+#define SNOWHEAD_STR \
+    { 0x8358, 0x836D, 0x815B, 0x8377, 0x8362, 0x8368 }
+#define MOUNTAIN_VILLAGE_STR \
+    { 0x8E52, 0x97A2 }
+#define CLOCK_TOWN_STR \
+    { 0x834E, 0x838D, 0x8362, 0x834E, 0x835E, 0x8345, 0x8393 }
+#define MILK_ROAD_STR \
+    { 0x837E, 0x838B, 0x834E, 0x838D, 0x815B, 0x8368 }
+#define WOODFALL_STR \
+    { 0x8345, 0x8362, 0x8368, 0x8374, 0x8348, 0x815B, 0x838B }
+#define SOUTHERN_SWAMP_STR \
+    { 0x8FC0, 0x926E }
+#define IKANA_CANYON_STR \
+    { 0x8343, 0x834A, 0x815B, 0x8369, 0x8C6B, 0x924A }
+#define STONE_TOWER_STR \
+    { 0x838D, 0x8362, 0x834E, 0x8372, 0x838B }
+#define ENTRANCE_STR \
+    { 0x93FC, 0x82E8, 0x8CFB }
+
 // Shift JIS
 u16 sOwlWarpTextJPN[OWL_WARP_MAX][9] = {
-    { 0x834F, 0x838C, 0x815B, 0x8367, 0x8378, 0x8343, 0x82CC, 0x8A43, 0x8ADD }, // OWL_WARP_GREAT_BAY_COAST
-    { 0x835D, 0x815B, 0x8389, 0x82CC, 0x82DD, 0x82B3, 0x82AB, 0, 0 },           // OWL_WARP_ZORA_CAPE
-    { 0x8358, 0x836D, 0x815B, 0x8377, 0x8362, 0x8368, 0, 0, 0 },                // OWL_WARP_SNOWHEAD
-    { 0x8E52, 0x97A2, 0, 0, 0, 0, 0, 0, 0 },                                    // OWL_WARP_MOUNTAIN_VILLAGE
-    { 0x834E, 0x838D, 0x8362, 0x834E, 0x835E, 0x8345, 0x8393, 0, 0 },           // OWL_WARP_CLOCK_TOWN
-    { 0x837E, 0x838B, 0x834E, 0x838D, 0x815B, 0x8368, 0, 0, 0 },                // OWL_WARP_MILK_ROAD
-    { 0x8345, 0x8362, 0x8368, 0x8374, 0x8348, 0x815B, 0x838B, 0, 0 },           // OWL_WARP_WOODFALL
-    { 0x8FC0, 0x926E, 0, 0, 0, 0, 0, 0, 0 },                                    // OWL_WARP_SOUTHERN_SWAMP
-    { 0x8343, 0x834A, 0x815B, 0x8369, 0x8C6B, 0x924A, 0, 0, 0 },                // OWL_WARP_IKANA_CANYON
-    { 0x838D, 0x8362, 0x834E, 0x8372, 0x838B, 0, 0, 0, 0 },                     // OWL_WARP_STONE_TOWER
-    { 0x93FC, 0x82E8, 0x8CFB, 0, 0, 0, 0, 0, 0 },                               // OWL_WARP_ENTRANCE
+    GREAT_BAY_COAST_STR,  // OWL_WARP_GREAT_BAY_COAST
+    ZORA_CAPE_STR,        // OWL_WARP_ZORA_CAPE
+    SNOWHEAD_STR,         // OWL_WARP_SNOWHEAD
+    MOUNTAIN_VILLAGE_STR, // OWL_WARP_MOUNTAIN_VILLAGE
+    CLOCK_TOWN_STR,       // OWL_WARP_CLOCK_TOWN
+    MILK_ROAD_STR,        // OWL_WARP_MILK_ROAD
+    WOODFALL_STR,         // OWL_WARP_WOODFALL
+    SOUTHERN_SWAMP_STR,   // OWL_WARP_SOUTHERN_SWAMP
+    IKANA_CANYON_STR,     // OWL_WARP_IKANA_CANYON
+    STONE_TOWER_STR,      // OWL_WARP_STONE_TOWER
+    ENTRANCE_STR,         // OWL_WARP_ENTRANCE
 };
 
+//! TODO: use sizeof when we have strings
 s16 sOwlWarpTextLengthJPN[OWL_WARP_MAX] = {
     9, // OWL_WARP_GREAT_BAY_COAST
     7, // OWL_WARP_ZORA_CAPE
@@ -2064,12 +2088,17 @@ void Message_LoadOwlWarpText(PlayState* play, s32* offset, f32* arg2, s16* decod
     *arg2 = sp3C;
 }
 
+// Counterpart to NES D_801D08D8
 u16 D_801D0268[][3] = {
     { 0x82CD, 0x82E2, 0x82A2 },
     { 0x82D3, 0x82C2, 0x82A4 },
     { 0x82A8, 0x82BB, 0x82A2 },
 };
+
+// Counterpart to NES D_801D08E4
 u16 D_801D027C[] = { 0x2001, 0x2003, 0x2004, 0x2002 };
+
+// Counterpart to NES sMaskCodeTextENG
 u16 D_801D0284[] = { 0x90D4, 0x90C2, 0x89A9, 0x97CE };
 
 #ifdef NON_MATCHING
