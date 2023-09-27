@@ -1014,15 +1014,13 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
     Font* font = &play->msgCtx.font;
     u16 i;
     u16 charTexIndex;
-    Gfx* gfx;
+    Gfx* gfx = *gfxP;
     u16 character;
     s16 sp130;
     s16 sp12E;
     s16 sp12C;
     s16 sp12A;
     u16 lookAheadCharacter;
-
-    gfx = *gfxP;
 
     play->msgCtx.textPosX = play->msgCtx.unk11F1A[0] + play->msgCtx.unk11FF8;
     play->msgCtx.textPosY = play->msgCtx.unk11FFA;
