@@ -1713,7 +1713,7 @@ asm/non_matchings/code/z_player_lib/Player_IsGoronOrDeku.s,Player_IsGoronOrDeku,
 asm/non_matchings/code/z_player_lib/func_801234D4.s,func_801234D4,0x801234D4,0x2F
 asm/non_matchings/code/z_player_lib/func_80123590.s,func_80123590,0x80123590,0x13
 asm/non_matchings/code/z_player_lib/func_801235DC.s,func_801235DC,0x801235DC,0x1C
-asm/non_matchings/code/z_player_lib/func_8012364C.s,func_8012364C,0x8012364C,0x71
+asm/non_matchings/code/z_player_lib/Player_GetItemOnButton.s,Player_GetItemOnButton,0x8012364C,0x71
 asm/non_matchings/code/z_player_lib/func_80123810.s,func_80123810,0x80123810,0x54
 asm/non_matchings/code/z_player_lib/Player_ActionToModelGroup.s,Player_ActionToModelGroup,0x80123960,0x13
 asm/non_matchings/code/z_player_lib/Player_SetModelsForHoldingShield.s,Player_SetModelsForHoldingShield,0x801239AC,0x3E

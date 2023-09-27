@@ -570,7 +570,7 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemId func_8012364C(PlayState* play, Player* player, s32 arg2) {
+ItemId Player_GetItemOnButton(PlayState* play, Player* player, s32 arg2) {
     if (arg2 >= 4) {
         return ITEM_NONE;
     }
@@ -630,7 +630,7 @@ PlayerItemAction func_80123810(PlayState* play) {
     for (i = 0; i < ARRAY_COUNT(sCItemButtons); i++) {
         if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, sCItemButtons[i])) {
             i++;
-            itemId = func_8012364C(play, player, i);
+            itemId = Player_GetItemOnButton(play, player, i);
 
             play->interfaceCtx.unk_222 = 0;
             play->interfaceCtx.unk_224 = 0;
@@ -2092,7 +2092,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                 EnArrow* bubble = NULL;
 
                 if (((player->skelAnime.animation == &gPlayerAnim_pn_drinkend)) ||
-                    (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
+                    (player->skelAnimeUpper.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((bubble = (EnArrow*)player->heldActor) != NULL))) {
                     Matrix_TranslateRotateZYX(pos, rot);
                     func_80125340();
@@ -2108,7 +2108,7 @@ s32 Player_OverrideLimbDrawGameplayCommon(PlayState* play, s32 limbIndex, Gfx** 
                     } else if (player->skelAnime.animation == &gPlayerAnim_pn_drinkend) {
                         func_80124618(D_801C03E0, player->skelAnime.curFrame, player->unk_AF0);
                     } else {
-                        func_80124618(D_801C03C0, player->unk_284.curFrame, player->unk_AF0);
+                        func_80124618(D_801C03C0, player->skelAnimeUpper.curFrame, player->unk_AF0);
                     }
 
                     Matrix_Scale(player->unk_AF0[0].x, player->unk_AF0[0].y, player->unk_AF0[0].z, MTXMODE_APPLY);
@@ -3784,7 +3784,7 @@ void Player_PostLimbDrawGameplay(PlayState* play, s32 limbIndex, Gfx** dList1, G
                 Matrix_MultVec3f(&sPlayerFocusHeadLimbModelPos, &player->actor.focus.pos);
                 Matrix_MultVec3f(&D_801C0E94, sPlayerCurBodyPartPos);
                 if ((player->skelAnime.animation == &gPlayerAnim_pn_drinkend) ||
-                    (player->unk_284.animation == &gPlayerAnim_pn_tamahaki) ||
+                    (player->skelAnimeUpper.animation == &gPlayerAnim_pn_tamahaki) ||
                     ((player->stateFlags3 & PLAYER_STATE3_40) && ((spA8 = player->heldActor) != NULL))) {
                     if (spA8 != NULL) {
                         static Vec3f D_801C0EA0 = { 1300.0f, -400.0f, 0.0f };
