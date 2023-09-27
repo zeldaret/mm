@@ -14897,7 +14897,7 @@ void Player_Action_34(Player* this, PlayState* play) {
 
     temp_v0 = Player_UpdateUpperBody(this, play);
     if (((this->stateFlags1 & PLAYER_STATE1_800) && (this->heldActor != NULL) && (this->getItemId == GI_NONE)) ||
-        (temp_v0 == 0)) {
+        !temp_v0) {
         this->unk_D58(play, this);
     }
 }
