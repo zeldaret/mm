@@ -3189,7 +3189,7 @@ void func_8082F5FC(Player* this, Actor* actor) {
     this->stateFlags1 |= PLAYER_STATE1_800;
 }
 
-typedef enum {
+typedef enum ItemChangeType {
     /*  0 */ PLAYER_ITEM_CHG_0,
     /*  1 */ PLAYER_ITEM_CHG_1,
     /*  2 */ PLAYER_ITEM_CHG_2,

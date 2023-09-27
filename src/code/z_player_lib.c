@@ -570,12 +570,12 @@ s32 func_801235DC(PlayState* play, f32 arg1, s16 arg2) {
     return false;
 }
 
-ItemId Player_GetItemOnButton(PlayState* play, Player* player, s32 arg2) {
-    if (arg2 >= 4) {
+ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
+    if (slot >= EQUIP_SLOT_A) {
         return ITEM_NONE;
     }
 
-    if (arg2 == 0) {
+    if (slot == EQUIP_SLOT_B) {
         ItemId item = Inventory_GetBtnBItem(play);
 
         if (item >= ITEM_FD) {
@@ -597,18 +597,25 @@ ItemId Player_GetItemOnButton(PlayState* play, Player* player, s32 arg2) {
         return item;
     }
 
-    if (arg2 == 1) {
+    if (slot == EQUIP_SLOT_C_LEFT) {
         return C_BTN_ITEM(EQUIP_SLOT_C_LEFT);
     }
 
-    if (arg2 == 2) {
+    if (slot == EQUIP_SLOT_C_DOWN) {
         return C_BTN_ITEM(EQUIP_SLOT_C_DOWN);
     }
+
+    // EQUIP_SLOT_C_RIGHT
 
     return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
-u16 sCItemButtons[] = { BTN_CLEFT, BTN_CDOWN, BTN_CRIGHT };
+// Must be in the order of `EquipSlot` but shifted down 1
+u16 sCItemButtons[] = {
+    BTN_CLEFT,  // EQUIP_SLOT_C_LEFT - 1
+    BTN_CDOWN,  // EQUIP_SLOT_C_DOWN - 1
+    BTN_CRIGHT, // EQUIP_SLOT_C_RIGHT - 1
+};
 
 PlayerItemAction func_80123810(PlayState* play) {
     Player* player = GET_PLAYER(play);
