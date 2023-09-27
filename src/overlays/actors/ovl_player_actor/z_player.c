@@ -3970,9 +3970,9 @@ s32 func_80830B88(PlayState* play, Player* this) {
                            (this->currentShield != PLAYER_SHIELD_NONE))) &&
                          func_8082FBE8(this))) {
                         PlayerAnimationHeader* anim = func_80830A58(play, this);
-                        f32 lastFrame = Animation_GetLastFrame(anim);
+                        f32 endFrame = Animation_GetLastFrame(anim);
 
-                        PlayerAnimation_Change(play, &this->skelAnimeUpper, anim, 3.0f / 3.0f, lastFrame, lastFrame,
+                        PlayerAnimation_Change(play, &this->skelAnimeUpper, anim, 3.0f / 3.0f, endFrame, endFrame,
                                                ANIMMODE_ONCE, 0.0f);
                         func_80830AE8(this);
                         return true;
@@ -4479,7 +4479,7 @@ void func_80831F34(PlayState* play, Player* this, PlayerAnimationHeader* anim) {
 
 s32 Player_CanUpdateItems(Player* this) {
     return (!(Player_Action_34 == this->actionFunc) ||
-            (((this->stateFlags3 & PLAYER_STATE3_START_CHANGING_HELD_ITEM)) &&
+            ((this->stateFlags3 & PLAYER_STATE3_START_CHANGING_HELD_ITEM) &&
              ((this->heldItemId == ITEM_FC) || (this->heldItemId == ITEM_NONE)))) &&
            (!(Player_UpperAction_ChangeHeldItem == this->upperActionFunc) ||
             Player_ItemToItemAction(this, this->heldItemId) == this->heldItemAction);
@@ -9420,7 +9420,7 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
     s32 animIndex;
     s32 rand;
     f32 morphFrames;
-    s16 lastFrame;
+    s16 endFrame;
 
     if (((this->actor.id != ACTOR_PLAYER) && !(healthIsCritical = (this->actor.colChkInfo.health < 0x64))) ||
         ((this->actor.id == ACTOR_PLAYER) &&
@@ -9467,7 +9467,7 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         }
     }
 
-    lastFrame = Animation_GetLastFrame(anim);
+    endFrame = Animation_GetLastFrame(anim);
     if ((this->skelAnime.animation == anim) || (this->skelAnime.animation == &gPlayerAnim_pz_attackAend) ||
         (this->skelAnime.animation == &gPlayerAnim_pz_attackBend) ||
         (this->skelAnime.animation == &gPlayerAnim_pz_attackCend)) {
@@ -9476,7 +9476,7 @@ void Player_ChooseIdleAnim(PlayState* play, Player* this) {
         morphFrames = -6.0f;
     }
 
-    PlayerAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, lastFrame, ANIMMODE_ONCE,
+    PlayerAnimation_Change(play, &this->skelAnime, anim, (2.0f / 3.0f) * D_8085C3E4, 0.0f, endFrame, ANIMMODE_ONCE,
                            morphFrames);
 }
 
@@ -13120,11 +13120,11 @@ s32 Player_UpperAction_3(Player* this, PlayState* play) {
 s32 Player_UpperAction_4(Player* this, PlayState* play) {
     if (PlayerAnimation_Update(play, &this->skelAnimeUpper)) {
         PlayerAnimationHeader* anim;
-        f32 lastFrame;
+        f32 endFrame;
 
         anim = func_80830A58(play, this);
-        lastFrame = Animation_GetLastFrame(anim);
-        PlayerAnimation_Change(play, &this->skelAnimeUpper, anim, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
+        endFrame = Animation_GetLastFrame(anim);
+        PlayerAnimation_Change(play, &this->skelAnimeUpper, anim, 1.0f, endFrame, endFrame, ANIMMODE_ONCE, 0.0f);
     }
 
     this->stateFlags1 |= PLAYER_STATE1_400000;
@@ -14261,13 +14261,13 @@ void Player_Action_19(Player* this, PlayState* play) {
         temp_v0 = func_808331FC(play, this, &this->skelAnime, 4.0f);
         if ((temp_v0 != 0) && ((temp_v0 > 0) || PlayerAnimation_Update(play, &this->skelAnime))) {
             PlayerAnimationHeader* anim;
-            f32 lastFrame;
+            f32 endFrame;
 
             Player_SetAction(play, this, Player_Action_18, 1);
             Player_SetModelsForHoldingShield(this);
             anim = D_8085BE84[PLAYER_ANIMGROUP_19][this->modelAnimType];
-            lastFrame = Animation_GetLastFrame(anim);
-            PlayerAnimation_Change(play, &this->skelAnime, anim, 1.0f, lastFrame, lastFrame, ANIMMODE_ONCE, 0.0f);
+            endFrame = Animation_GetLastFrame(anim);
+            PlayerAnimation_Change(play, &this->skelAnime, anim, 1.0f, endFrame, endFrame, ANIMMODE_ONCE, 0.0f);
         }
     }
 }
