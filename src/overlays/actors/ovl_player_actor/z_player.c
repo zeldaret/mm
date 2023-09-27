@@ -4840,7 +4840,7 @@ typedef enum ActionChangeIndex {
 } ActionChangeIndex;
 
 /**
- * The values of following arrays are used as indices for the `sSwapActionFuncs` array.
+ * The values of following arrays are used as indices for the `sPlayerActionChangeFuncs` array.
  * Each index correspond to a function which will be called sequentially until any of them return `true`.
  * Negative marks the end of the array.
  */
