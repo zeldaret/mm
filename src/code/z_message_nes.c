@@ -2,171 +2,18 @@
 #include "message_data_static.h"
 #include "overlays/kaleido_scope/ovl_kaleido_scope/z_kaleido_scope.h"
 
-// clang-format off
-// fontWidth
-f32 D_801D0470[160] = {
-    8.0f,
-    8.0f,
-    6.0f,
-    9.0f,
-    9.0f,
-    14.0f,
-    12.0f,
-    3.0f,
-    7.0f,
-    7.0f,
-    7.0f,
-    9.0f,
-    4.0f,
-    6.0f,
-    4.0f,
-    9.0f,
-    10.0f,
-    5.0f,
-    9.0f,
-    9.0f,
-    10.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    6.0f,
-    6.0f,
-    9.0f,
-    11.0f,
-    9.0f,
-    11.0f,
-    13.0f,
-    12.0f,
-    9.0f,
-    11.0f,
-    11.0f,
-    8.0f,
-    8.0f,
-    12.0f,
-    10.0f,
-    4.0f,
-    8.0f,
-    10.0f,
-    8.0f,
-    13.0f,
-    11.0f,
-    13.0f,
-    9.0f,
-    13.0f,
-    10.0f,
-    10.0f,
-    9.0f,
-    10.0f,
-    11.0f,
-    15.0f,
-    11.0f,
-    10.0f,
-    10.0f,
-    7.0f,
-    10.0f,
-    7.0f,
-    10.0f,
-    9.0f,
-    5.0f,
-    8.0f,
-    9.0f,
-    8.0f,
-    9.0f,
-    9.0f,
-    6.0f,
-    9.0f,
-    8.0f,
-    4.0f,
-    6.0f,
-    8.0f,
-    4.0f,
-    12.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    7.0f,
-    8.0f,
-    7.0f,
-    8.0f,
-    9.0f,
-    12.0f,
-    8.0f,
-    9.0f,
-    8.0f,
-    7.0f,
-    5.0f,
-    7.0f,
-    10.0f,
-    6.0f,
-    12.0f,
-    12.0f,
-    12.0f,
-    12.0f,
-    11.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    6.0f,
-    6.0f,
-    6.0f,
-    6.0f,
-    10.0f,
-    13.0f,
-    13.0f,
-    13.0f,
-    13.0f,
-    10.0f,
-    10.0f,
-    10.0f,
-    10.0f,
-    9.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    4.0f,
-    4.0f,
-    4.0f,
-    4.0f,
-    8.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    9.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    8.0f,
-    11.0f,
-    6.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
-    14.0f,
+f32 sNESFontWidths[160] = {
+    8.0f,  8.0f,  6.0f,  9.0f,  9.0f,  14.0f, 12.0f, 3.0f,  7.0f,  7.0f,  7.0f,  9.0f,  4.0f,  6.0f,  4.0f,  9.0f,
+    10.0f, 5.0f,  9.0f,  9.0f,  10.0f, 9.0f,  9.0f,  9.0f,  9.0f,  9.0f,  6.0f,  6.0f,  9.0f,  11.0f, 9.0f,  11.0f,
+    13.0f, 12.0f, 9.0f,  11.0f, 11.0f, 8.0f,  8.0f,  12.0f, 10.0f, 4.0f,  8.0f,  10.0f, 8.0f,  13.0f, 11.0f, 13.0f,
+    9.0f,  13.0f, 10.0f, 10.0f, 9.0f,  10.0f, 11.0f, 15.0f, 11.0f, 10.0f, 10.0f, 7.0f,  10.0f, 7.0f,  10.0f, 9.0f,
+    5.0f,  8.0f,  9.0f,  8.0f,  9.0f,  9.0f,  6.0f,  9.0f,  8.0f,  4.0f,  6.0f,  8.0f,  4.0f,  12.0f, 9.0f,  9.0f,
+    9.0f,  9.0f,  7.0f,  8.0f,  7.0f,  8.0f,  9.0f,  12.0f, 8.0f,  9.0f,  8.0f,  7.0f,  5.0f,  7.0f,  10.0f, 6.0f,
+    12.0f, 12.0f, 12.0f, 12.0f, 11.0f, 8.0f,  8.0f,  8.0f,  8.0f,  6.0f,  6.0f,  6.0f,  6.0f,  10.0f, 13.0f, 13.0f,
+    13.0f, 13.0f, 10.0f, 10.0f, 10.0f, 10.0f, 9.0f,  8.0f,  8.0f,  8.0f,  8.0f,  8.0f,  9.0f,  9.0f,  9.0f,  9.0f,
+    4.0f,  4.0f,  4.0f,  4.0f,  8.0f,  9.0f,  9.0f,  9.0f,  9.0f,  8.0f,  8.0f,  8.0f,  8.0f,  8.0f,  11.0f, 6.0f,
+    14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f, 14.0f,
 };
-// clang-format on
 
 void Message_FindMessageNES(PlayState* play, u16 textId) {
     MessageContext* msgCtx = &play->msgCtx;
@@ -247,20 +94,23 @@ void Message_LoadPluralRupeesNES(PlayState* play, s16* decodedBufPos, s32* offse
     *arg3 = f;
 }
 
-// rupeesTextLocalization
-char D_801D06F0[LANGUAGE_MAX - 1][8] = {
-    { "Rupee(s)" }, // EN
-    { "Rubin(e)" }, // DE
-    { "Rubis" },    // FR
-    { "Rupia(s)" }, // SPA
+#define RUPEES_STR_EN "Rupee(s)"
+#define RUPEES_STR_DE "Rubin(e)"
+#define RUPEES_STR_FR "Rubis"
+#define RUPEES_STR_SPA "Rupia(s)"
+
+char sRupeesTextLocalization[LANGUAGE_MAX - 1][8] = {
+    RUPEES_STR_EN,  // EN
+    RUPEES_STR_DE,  // DE
+    RUPEES_STR_FR,  // FR
+    RUPEES_STR_SPA, // SPA
 };
 
-// rupeesTextLength
-u8 D_801D0710[LANGUAGE_MAX - 1] = {
-    sizeof("Rupee(s)") - 1,
-    sizeof("Rubin(e)") - 1,
-    sizeof("Rubis") - 1,
-    sizeof("Rupia(s)") - 1,
+u8 sRupeesTextLength[LANGUAGE_MAX - 1] = {
+    sizeof(RUPEES_STR_EN) - 1,
+    sizeof(RUPEES_STR_DE) - 1,
+    sizeof(RUPEES_STR_FR) - 1,
+    sizeof(RUPEES_STR_SPA) - 1,
 };
 
 void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) {
@@ -273,15 +123,15 @@ void Message_LoadLocalizedRupeesNES(PlayState* play, s16* decodedBufPos, s32* of
     msgCtx->decodedBuffer.schar[p] = ' ';
     p++;
 
-    for (j = 0; j < D_801D0710[gSaveContext.options.language - 1]; j++) {
-        Font_LoadCharNES(play, D_801D06F0[gSaveContext.options.language - 1][j], o);
-        msgCtx->decodedBuffer.schar[p] = D_801D06F0[gSaveContext.options.language - 1][j];
+    for (j = 0; j < sRupeesTextLength[gSaveContext.options.language - 1]; j++) {
+        Font_LoadCharNES(play, sRupeesTextLocalization[gSaveContext.options.language - 1][j], o);
+        msgCtx->decodedBuffer.schar[p] = sRupeesTextLocalization[gSaveContext.options.language - 1][j];
         o += FONT_CHAR_TEX_SIZE;
         p++;
     }
 
     p--;
-    f += 16.0f * msgCtx->textCharScale * (D_801D0710[gSaveContext.options.language - 1] + 1);
+    f += 16.0f * msgCtx->textCharScale * (sRupeesTextLength[gSaveContext.options.language - 1] + 1);
     *decodedBufPos = p;
     *offset = o;
     *arg3 = f;
@@ -380,32 +230,44 @@ void Message_LoadTimeNES(PlayState* play, u8 curChar, s32* offset, f32* arg3, s1
     *arg3 = f;
 }
 
+#define GREAT_BAY_COAST_STR "Great Bay Coast"
+#define ZORA_CAPE_STR "Zora Cape"
+#define SNOWHEAD_STR "Snowhead"
+#define MOUNTAIN_VILLAGE_STR "Mountain Village"
+#define CLOCK_TOWN_STR "Clock Town"
+#define MILK_ROAD_STR "Milk Road"
+#define WOODFALL_STR "Woodfall"
+#define SOUTHERN_SWAMP_STR "Southern Swamp"
+#define IKANA_CANYON_STR "Ikana Canyon"
+#define STONE_TOWER_STR "Stone Tower"
+#define ENTRANCE_STR "Entrance"
+
 char sOwlWarpTextENG[OWL_WARP_MAX][16] = {
-    "Great Bay Coast",  // OWL_WARP_GREAT_BAY_COAST
-    "Zora Cape",        // OWL_WARP_ZORA_CAPE
-    "Snowhead",         // OWL_WARP_SNOWHEAD
-    "Mountain Village", // OWL_WARP_MOUNTAIN_VILLAGE
-    "Clock Town",       // OWL_WARP_CLOCK_TOWN
-    "Milk Road",        // OWL_WARP_MILK_ROAD
-    "Woodfall",         // OWL_WARP_WOODFALL
-    "Southern Swamp",   // OWL_WARP_SOUTHERN_SWAMP
-    "Ikana Canyon",     // OWL_WARP_IKANA_CANYON
-    "Stone Tower",      // OWL_WARP_STONE_TOWER
-    "Entrance",         // OWL_WARP_ENTRANCE
+    GREAT_BAY_COAST_STR,  // OWL_WARP_GREAT_BAY_COAST
+    ZORA_CAPE_STR,        // OWL_WARP_ZORA_CAPE
+    SNOWHEAD_STR,         // OWL_WARP_SNOWHEAD
+    MOUNTAIN_VILLAGE_STR, // OWL_WARP_MOUNTAIN_VILLAGE
+    CLOCK_TOWN_STR,       // OWL_WARP_CLOCK_TOWN
+    MILK_ROAD_STR,        // OWL_WARP_MILK_ROAD
+    WOODFALL_STR,         // OWL_WARP_WOODFALL
+    SOUTHERN_SWAMP_STR,   // OWL_WARP_SOUTHERN_SWAMP
+    IKANA_CANYON_STR,     // OWL_WARP_IKANA_CANYON
+    STONE_TOWER_STR,      // OWL_WARP_STONE_TOWER
+    ENTRANCE_STR,         // OWL_WARP_ENTRANCE
 };
 
 s16 sOwlWarpTextLengthENG[OWL_WARP_MAX] = {
-    sizeof("Great Bay Coast") - 1,  // OWL_WARP_GREAT_BAY_COAST
-    sizeof("Zora Cape") - 1,        // OWL_WARP_ZORA_CAPE
-    sizeof("Snowhead") - 1,         // OWL_WARP_SNOWHEAD
-    sizeof("Mountain Village") - 1, // OWL_WARP_MOUNTAIN_VILLAGE
-    sizeof("Clock Town") - 1,       // OWL_WARP_CLOCK_TOWN
-    sizeof("Milk Road") - 1,        // OWL_WARP_MILK_ROAD
-    sizeof("Woodfall") - 1,         // OWL_WARP_WOODFALL
-    sizeof("Southern Swamp") - 1,   // OWL_WARP_SOUTHERN_SWAMP
-    sizeof("Ikana Canyon") - 1,     // OWL_WARP_IKANA_CANYON
-    sizeof("Stone Tower") - 1,      // OWL_WARP_STONE_TOWER
-    sizeof("Entrance") - 1,         // OWL_WARP_ENTRANCE
+    sizeof(GREAT_BAY_COAST_STR) - 1,  // OWL_WARP_GREAT_BAY_COAST
+    sizeof(ZORA_CAPE_STR) - 1,        // OWL_WARP_ZORA_CAPE
+    sizeof(SNOWHEAD_STR) - 1,         // OWL_WARP_SNOWHEAD
+    sizeof(MOUNTAIN_VILLAGE_STR) - 1, // OWL_WARP_MOUNTAIN_VILLAGE
+    sizeof(CLOCK_TOWN_STR) - 1,       // OWL_WARP_CLOCK_TOWN
+    sizeof(MILK_ROAD_STR) - 1,        // OWL_WARP_MILK_ROAD
+    sizeof(WOODFALL_STR) - 1,         // OWL_WARP_WOODFALL
+    sizeof(SOUTHERN_SWAMP_STR) - 1,   // OWL_WARP_SOUTHERN_SWAMP
+    sizeof(IKANA_CANYON_STR) - 1,     // OWL_WARP_IKANA_CANYON
+    sizeof(STONE_TOWER_STR) - 1,      // OWL_WARP_STONE_TOWER
+    sizeof(ENTRANCE_STR) - 1,         // OWL_WARP_ENTRANCE
 };
 
 void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* decodedBufPos) {
@@ -434,7 +296,7 @@ void Message_LoadOwlWarpTextNES(PlayState* play, s32* offset, f32* arg2, s16* de
         }
         currentChar = msgCtx->decodedBuffer.schar[p];
         p++;
-        f += (D_801D0470[currentChar - ' '] * msgCtx->textCharScale);
+        f += (sNESFontWidths[currentChar - ' '] * msgCtx->textCharScale);
     }
 
     p--;
@@ -482,28 +344,27 @@ void Message_GetTimerDigitsNES(OSTime time, s16* digits) {
     digits[7] += '0';
 }
 
-// Probably color structs instead of Vec3s... whoops
-s16 D_801D07DC[][3] = {
+Color_RGB16 D_801D07DC[] = {
     { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
     { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-s16 D_801D080C[][3] = {
+Color_RGB16 D_801D080C[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-s16 D_801D083C[][3] = {
+Color_RGB16 D_801D083C[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
 };
 
-s16 D_801D086C[][3] = {
+Color_RGB16 D_801D086C[] = {
     { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
 
-s16 D_801D089C[][3] = {
+Color_RGB16 D_801D089C[] = {
     { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
@@ -573,7 +434,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
             case 0x7:
             case 0x8:
                 if ((msgCtx->msgMode >= MSGMODE_NEW_CYCLE_0) && (msgCtx->msgMode <= MSGMODE_OWL_SAVE_2) &&
-                    (character == 2)) {
+                    (character == 0x2)) {
                     msgCtx->textDrawPos = msgCtx->decodedTextLen;
                     if (msgCtx->unk120D6) {
                         msgCtx->unk120D4 += 25;
@@ -587,40 +448,40 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                         }
                     }
 
-                    if (D_801D07DC[(s16)(character - 1)][0] + msgCtx->unk120D4 < 0) {
+                    if (D_801D07DC[(s16)(character - 1)].r + msgCtx->unk120D4 < 0) {
                         msgCtx->textColorR = 0;
                     } else {
-                        msgCtx->textColorR = D_801D07DC[(s16)(character - 1)][0] + msgCtx->unk120D4;
+                        msgCtx->textColorR = D_801D07DC[(s16)(character - 1)].r + msgCtx->unk120D4;
                     }
 
-                    if (D_801D07DC[(s16)(character - 1)][1] + msgCtx->unk120D4 >= 255) {
-                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)][1];
+                    if (D_801D07DC[(s16)(character - 1)].g + msgCtx->unk120D4 >= 255) {
+                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)].g;
                     } else {
-                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)][1] + msgCtx->unk120D4;
+                        msgCtx->textColorG = D_801D07DC[(s16)(character - 1)].g + msgCtx->unk120D4;
                     }
 
-                    if (D_801D07DC[(s16)(character - 1)][2] + msgCtx->unk120D4 < 0) {
+                    if (D_801D07DC[(s16)(character - 1)].b + msgCtx->unk120D4 < 0) {
                         msgCtx->textColorB = 0;
                     } else {
-                        msgCtx->textColorB = D_801D07DC[(s16)(character - 1)][2] + msgCtx->unk120D4;
+                        msgCtx->textColorB = D_801D07DC[(s16)(character - 1)].b + msgCtx->unk120D4;
                     }
 
                 } else if (play->pauseCtx.bombersNotebookOpen) {
-                    msgCtx->textColorR = D_801D089C[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D089C[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D089C[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D089C[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D089C[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D089C[(s16)(character - 1)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_1) {
-                    msgCtx->textColorR = D_801D07DC[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D07DC[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D07DC[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D07DC[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D07DC[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D07DC[(s16)(character - 1)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_D) {
-                    msgCtx->textColorR = D_801D086C[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D086C[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D086C[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D086C[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D086C[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D086C[(s16)(character - 1)].b;
                 } else {
-                    msgCtx->textColorR = D_801D080C[(s16)(character - 1)][0];
-                    msgCtx->textColorG = D_801D080C[(s16)(character - 1)][1];
-                    msgCtx->textColorB = D_801D080C[(s16)(character - 1)][2];
+                    msgCtx->textColorR = D_801D080C[(s16)(character - 1)].r;
+                    msgCtx->textColorG = D_801D080C[(s16)(character - 1)].g;
+                    msgCtx->textColorB = D_801D080C[(s16)(character - 1)].b;
                 }
 
                 if ((i + 1) == msgCtx->textDrawPos) {
@@ -988,9 +849,9 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                     sp12E = msgCtx->textColorR;
                     sp12C = msgCtx->textColorG;
                     sp12A = msgCtx->textColorB;
-                    msgCtx->textColorR = D_801D083C[(s16)D_801D08CC[character - 0xB0]][0];
-                    msgCtx->textColorG = D_801D083C[(s16)D_801D08CC[character - 0xB0]][1];
-                    msgCtx->textColorB = D_801D083C[(s16)D_801D08CC[character - 0xB0]][2];
+                    msgCtx->textColorR = D_801D083C[(s16)D_801D08CC[character - 0xB0]].r;
+                    msgCtx->textColorG = D_801D083C[(s16)D_801D08CC[character - 0xB0]].g;
+                    msgCtx->textColorB = D_801D083C[(s16)D_801D08CC[character - 0xB0]].b;
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                     msgCtx->textColorR = sp12E;
                     msgCtx->textColorG = sp12C;
@@ -1040,7 +901,7 @@ void Message_DrawTextNES(PlayState* play, Gfx** gfxP, u16 textDrawPos) {
                              ((msgCtx->unk120C0 + 1) >= i))) {
                             msgCtx->textPosX += (s32)(16.0f * msgCtx->textCharScale);
                         } else {
-                            msgCtx->textPosX += (s32)(D_801D0470[character - ' '] * msgCtx->textCharScale);
+                            msgCtx->textPosX += (s32)(sNESFontWidths[character - ' '] * msgCtx->textCharScale);
                         }
                         break;
                 }
@@ -1074,21 +935,27 @@ u8 D_801D08E4[] = {
     0x02,
 };
 
-char D_801D08E8[][6] = {
-    "RED",
-    "BLUE",
-    "YELLOW",
-    "GREEN",
+#define RED_STR "RED"
+#define BLUE_STR "BLUE"
+#define YELLOW_STR "YELLOW"
+#define GREEN_STR "GREEN"
+
+char sMaskCodeTextENG[][6] = {
+    RED_STR,
+    BLUE_STR,
+    YELLOW_STR,
+    GREEN_STR,
 };
 
-u8 D_801D0900[] = {
-    sizeof("RED") - 1,
-    sizeof("BLUE") - 1,
-    sizeof("YELLOW") - 1,
-    sizeof("GREEN") - 1,
+u8 sMaskCodeTextLengthENG[] = {
+    sizeof(RED_STR) - 1,
+    sizeof(BLUE_STR) - 1,
+    sizeof(YELLOW_STR) - 1,
+    sizeof(GREEN_STR) - 1,
 };
 
 #ifdef NON_MATCHING
+// https://decomp.me/scratch/w2ckG
 void Message_DecodeNES(PlayState* play) {
     f32 var_fs0;
     MessageContext* msgCtx = &play->msgCtx;
@@ -1727,13 +1594,15 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar >= 0xE1) && (curChar < 0xE7)) {
             msgCtx->decodedBuffer.schar[decodedBufPos] =
                 D_801D08E4[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
-            temp_s2_2 = D_801D0900[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
+            temp_s2_2 = sMaskCodeTextLengthENG[(
+                (void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])];
             decodedBufPos++;
 
             for (i = 0; i < temp_s2_2; i++) {
                 Message_LoadCharNES(
                     play,
-                    D_801D08E8[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])][i],
+                    sMaskCodeTextENG[((void)0, gSaveContext.save.saveInfo.spiderHouseMaskOrder[(s16)(curChar - 0xE1)])]
+                                    [i],
                     &charTexIdx, &spA4, decodedBufPos);
                 decodedBufPos++;
             }
@@ -2008,7 +1877,7 @@ void Message_DecodeNES(PlayState* play) {
         } else if ((curChar != 0x20) && (curChar >= 9)) {
             Font_LoadCharNES(play, curChar, charTexIdx);
             charTexIdx += FONT_CHAR_TEX_SIZE;
-            spA4 += D_801D0470[curChar - ' '] * msgCtx->textCharScale;
+            spA4 += sNESFontWidths[curChar - ' '] * msgCtx->textCharScale;
         } else if (curChar == 0x20) {
             spA4 += 6.0f;
         }

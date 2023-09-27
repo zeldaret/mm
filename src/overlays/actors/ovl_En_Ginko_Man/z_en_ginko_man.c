@@ -5,7 +5,6 @@
  */
 
 #include "z_en_ginko_man.h"
-#include "objects/object_boj/object_boj.h"
 
 #define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
@@ -47,15 +46,16 @@ typedef enum {
     /* 1 */ GINKO_ANIM_SITTING,
     /* 2 */ GINKO_ANIM_REACHING,
     /* 3 */ GINKO_ANIM_AMAZED,
-    /* 4 */ GINKO_ANIM_ADVERTISING
+    /* 4 */ GINKO_ANIM_ADVERTISING, // looking around for customers
+    /* 5 */ GINKO_ANIM_MAX
 } GinkoAnimation;
 
-static AnimationInfo sAnimationInfo[] = {
-    { &object_boj_Anim_0008C0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_boj_Anim_0043F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &object_boj_Anim_004F40, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f },
-    { &object_boj_Anim_000AC4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // looking around for customers
-    { &object_boj_Anim_004A7C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
+static AnimationInfo sAnimationInfo[GINKO_ANIM_MAX] = {
+    { &object_boj_Anim_0008C0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // GINKO_ANIM_LEGSMACKING
+    { &object_boj_Anim_0043F0, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // GINKO_ANIM_SITTING
+    { &object_boj_Anim_004F40, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, -4.0f }, // GINKO_ANIM_REACHING
+    { &object_boj_Anim_000AC4, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // GINKO_ANIM_AMAZED
+    { &object_boj_Anim_004A7C, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f }, // GINKO_ANIM_ADVERTISING
 };
 
 void EnGinkoMan_Init(Actor* thisx, PlayState* play) {
@@ -71,7 +71,7 @@ void EnGinkoMan_Init(Actor* thisx, PlayState* play) {
     this->choiceDepositWithdrawl = GINKOMAN_CHOICE_RESET;
     this->serviceFee = 0;
     SkelAnime_InitFlex(play, &this->skelAnime, &object_boj_Skel_00C240, &object_boj_Anim_0043F0, this->jointTable,
-                       this->morphTable, 16);
+                       this->morphTable, OBJECT_BOJ_LIMB_MAX);
     EnGinkoMan_SetupIdle(this);
 }
 
@@ -172,7 +172,7 @@ void EnGinkoMan_DepositDialogue(EnGinkoMan* this, PlayState* play) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_40);
                 Message_StartTextbox(play, 0x45B, &this->actor);
                 this->curTextId = 0x45B;
-            } else if ((HS_GET_BANK_RUPEES() >= 1000) && ((this->previousBankValue) < 1000) &&
+            } else if ((HS_GET_BANK_RUPEES() >= 1000) && (this->previousBankValue < 1000) &&
                        !CHECK_WEEKEVENTREG(WEEKEVENTREG_59_80)) {
                 SET_WEEKEVENTREG(WEEKEVENTREG_59_80);
                 Message_StartTextbox(play, 0x45C, &this->actor);
@@ -664,16 +664,16 @@ void EnGinkoMan_Update(Actor* thisx, PlayState* play) {
 s32 EnGinkoMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnGinkoMan* this = THIS;
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         *dList = object_boj_DL_00B1D8;
     }
 
-    if (limbIndex == 15) {
+    if (limbIndex == OBJECT_BOJ_LIMB_0F) {
         Matrix_Translate(1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         Matrix_RotateXS(this->limb15Rot.y, MTXMODE_APPLY);
         Matrix_RotateZS(this->limb15Rot.x, MTXMODE_APPLY);
         Matrix_Translate(-1500.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    } else if (limbIndex == 8) {
+    } else if (limbIndex == OBJECT_BOJ_LIMB_08) {
         Matrix_RotateXS(-this->limb8Rot.y, MTXMODE_APPLY);
         Matrix_RotateZS(-this->limb8Rot.x, MTXMODE_APPLY);
     }

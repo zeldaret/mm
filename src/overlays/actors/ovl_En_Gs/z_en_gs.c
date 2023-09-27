@@ -250,6 +250,9 @@ void func_80997E4C(EnGs* this, PlayState* play) {
                             case ENGS_2:
                                 this->unk_210 = this->unk_195 + 0x20F7;
                                 break;
+
+                            default:
+                                break;
                         }
                         Message_ContinueTextbox(play, this->unk_210);
                         break;
@@ -259,6 +262,9 @@ void func_80997E4C(EnGs* this, PlayState* play) {
                         break;
                 }
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -329,6 +335,9 @@ void func_8099807C(EnGs* this, PlayState* play) {
                         func_809984F4(this, play);
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
 
@@ -338,6 +347,9 @@ void func_8099807C(EnGs* this, PlayState* play) {
 
         case OCARINA_MODE_APPLY_DOUBLE_SOT:
             func_80997D14(this, play);
+            break;
+
+        default:
             break;
     }
 }
@@ -444,6 +456,9 @@ void func_8099874C(EnGs* this, PlayState* play) {
         case 4:
             phi_v0 = func_809995A4(this, play);
             break;
+
+        default:
+            break;
     }
 
     if (phi_v0 == 0) {
@@ -482,6 +497,9 @@ void func_8099874C(EnGs* this, PlayState* play) {
                             this->getItemId = GI_RUPEE_SILVER;
                             SET_WEEKEVENTREG(WEEKEVENTREG_77_20);
                         }
+                        break;
+
+                    default:
                         break;
                 }
 
@@ -754,16 +772,16 @@ void func_80999584(Color_RGB8* arg0, Color_RGB8* arg1) {
 }
 
 s32 func_809995A4(EnGs* this, PlayState* play) {
-    static Color_RGB8 flashColours[] = {
+    static Color_RGB8 sFlashColours[] = {
         { 255, 50, 50 },
         { 50, 50, 255 },
         { 255, 255, 255 },
     };
-    static Vec3f dustAccel = { 0.0f, -0.3f, 0.0f };
-    static Color_RGBA8 dustPrim = { 200, 200, 200, 128 };
-    static Color_RGBA8 dustEnv = { 100, 100, 100, 0 };
-    static Vec3f bomb2Velocity = { 0.0f, 0.0f, 0.0f };
-    static Vec3f bomb2Accel = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sDustAccel = { 0.0f, -0.3f, 0.0f };
+    static Color_RGBA8 sDustPrimColor = { 200, 200, 200, 128 };
+    static Color_RGBA8 sDustEnvColor = { 100, 100, 100, 0 };
+    static Vec3f sBomb2Velocity = { 0.0f, 0.0f, 0.0f };
+    static Vec3f sBomb2Accel = { 0.0f, 0.0f, 0.0f };
     s32 sp7C = -1;
 
     if (this->unk_19D == 0) {
@@ -784,18 +802,18 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
         u8 pad;
 
         this->unk_1D4--;
-        func_80999584(&this->unk_1FA, &flashColours[2]);
+        func_80999584(&this->unk_1FA, &sFlashColours[2]);
         if (this->unk_1D4 < 80) {
             if ((this->unk_1D4 % 20) < 8) {
                 if (this->unk_1D4 < 20) {
                     if ((this->unk_1D4 % 20) == 7) {
-                        func_80999584(&this->unk_1FA, &flashColours[0]);
+                        func_80999584(&this->unk_1FA, &sFlashColours[0]);
                         this->unk_1F4 = this->unk_1FA;
                         Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_E);
                         this->unk_200 = 0.0f;
                     }
                 } else if ((this->unk_1D4 % 20) == 7) {
-                    func_80999584(&this->unk_1FA, &flashColours[1]);
+                    func_80999584(&this->unk_1FA, &sFlashColours[1]);
                     this->unk_1F4 = this->unk_1FA;
                     Audio_PlaySfx(NA_SE_SY_WARNING_COUNT_N);
                     this->unk_200 = 0.0f;
@@ -826,7 +844,8 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             sp6C.y = this->actor.world.pos.y + 7.0f;
             sp6C.z = this->actor.world.pos.z + (2.0f * sp60.z);
 
-            func_800B0EB0(play, &sp6C, &sp60, &dustAccel, &dustPrim, &dustEnv, Rand_ZeroFloat(50.0f) + 200.0f, 40, 15);
+            func_800B0EB0(play, &sp6C, &sp60, &sDustAccel, &sDustPrimColor, &sDustEnvColor,
+                          Rand_ZeroFloat(50.0f) + 200.0f, 40, 15);
         }
 
         Actor_PlaySfx_Flagged(&this->actor, NA_SE_EV_FIRE_PILLAR - SFX_FLAG);
@@ -856,7 +875,7 @@ s32 func_809995A4(EnGs* this, PlayState* play) {
             sp54.y = this->actor.world.pos.y;
             sp54.z = this->actor.world.pos.z;
             Actor_PlaySfx(&this->actor, NA_SE_IT_BOMB_EXPLOSION);
-            EffectSsBomb2_SpawnLayered(play, &sp54, &bomb2Velocity, &bomb2Accel, 100, 20);
+            EffectSsBomb2_SpawnLayered(play, &sp54, &sBomb2Velocity, &sBomb2Accel, 100, 20);
             this->unk_1D4 = 10;
             this->unk_19A |= 8;
             this->unk_216 = 0;

@@ -154,7 +154,7 @@ typedef enum HudVisibility {
     /* 52 */ HUD_VISIBILITY_NONE_INSTANT = 52
 } HudVisibility;
 
-// Based on D_801D06F0
+// Based on sRupeesTextLocalization
 typedef enum Language {
     /* 0 */ LANGUAGE_JPN,
     /* 1 */ LANGUAGE_ENG,
