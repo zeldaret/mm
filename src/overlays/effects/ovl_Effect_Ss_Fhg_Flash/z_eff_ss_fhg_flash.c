@@ -97,7 +97,7 @@ void EffectSsFhgFlash_Update(PlayState* play, u32 index, EffectSs* this) {
         s32 pad;
         Vec3f* bodyPartPos;
         BossHakugin* goht = (BossHakugin*)this->actor;
-        s32 gohtIndex = goht->unk_191 - 3;
+        s32 gohtIndex = goht->unk_0191 - 3;
 
         if (gohtIndex < 0) {
             bodyPartPos = &goht->unk_3158[this->rParams - FHGFLASH_SHOCK_GOHT_2][12].unk_00;
