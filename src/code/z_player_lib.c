@@ -610,11 +610,10 @@ ItemId Player_GetItemOnButton(PlayState* play, Player* player, EquipSlot slot) {
     return C_BTN_ITEM(EQUIP_SLOT_C_RIGHT);
 }
 
-// Must be in the order of `EquipSlot` but shifted down 1
 u16 sCItemButtons[] = {
-    BTN_CLEFT,  // EQUIP_SLOT_C_LEFT - 1
-    BTN_CDOWN,  // EQUIP_SLOT_C_DOWN - 1
-    BTN_CRIGHT, // EQUIP_SLOT_C_RIGHT - 1
+    BTN_CLEFT,
+    BTN_CDOWN,
+    BTN_CRIGHT,
 };
 
 PlayerItemAction func_80123810(PlayState* play) {
