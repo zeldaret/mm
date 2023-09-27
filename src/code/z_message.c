@@ -816,7 +816,12 @@ s16 D_801CFE04[] = { 150, 255, 100, 255, 255, 255, 255, 255, 255, 255, 255, 255 
 s16 D_801CFE1C[] = { 255, 80, 150, 160, 100, 240, 255, 255, 255, 255, 255, 255 };
 s16 D_801CFE34[] = { 100, 40, 255, 0, 255, 100, 255, 255, 255, 255, 255, 255 };
 
-TexturePtr D_801CFE4C[] = { 0x02008998, 0x02009598, 0x0200A198, 0x0200AD98 };
+TexturePtr D_801CFE4C[] = {
+    gStrayFairyWoodfallIconTex,
+    gStrayFairySnowheadIconTex,
+    gStrayFairyGreatBayIconTex,
+    gStrayFairyStoneTowerIconTex,
+};
 
 u8 D_801CFE5C[][3] = {
     { 255, 110, 160 },
@@ -980,26 +985,27 @@ void Message_HandleOcarina(PlayState* play) {
     }
 }
 
-s16 D_801CFE74[][3] = {
+Color_RGB16 D_801CFE74[] = {
     { 255, 120, 0 },  { 70, 255, 80 },   { 80, 110, 255 },  { 255, 255, 30 },
     { 90, 180, 255 }, { 210, 100, 255 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
-s16 D_801CFEA4[][3] = {
+Color_RGB16 D_801CFEA4[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
-s16 D_801CFED4[][3] = {
+Color_RGB16 D_801CFED4[] = {
     { 255, 60, 60 },  { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 180, 180, 200 }, { 255, 130, 30 },
 };
-s16 D_801CFF04[][3] = {
+Color_RGB16 D_801CFF04[] = {
     { 195, 0, 0 },    { 70, 255, 80 },   { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
-s16 D_801CFF34[][3] = {
+Color_RGB16 D_801CFF34[] = {
     { 255, 60, 60 },  { 110, 170, 255 }, { 80, 90, 255 },   { 255, 255, 50 },
     { 80, 150, 255 }, { 255, 150, 180 }, { 170, 170, 170 }, { 255, 130, 30 },
 };
+
 u8 D_801CFF64[] = { 2, 1, 3, 6, 6, 6, 3, 3, 3, 3, 1, 6 };
 
 void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
@@ -1071,37 +1077,37 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                         }
                     }
 
-                    if (D_801CFE74[(s16)(character - 0x2001)][0] + msgCtx->unk120D4 < 0) {
+                    if (D_801CFE74[(s16)(character - 0x2001)].r + msgCtx->unk120D4 < 0) {
                         msgCtx->textColorR = 0;
                     } else {
-                        msgCtx->textColorR = D_801CFE74[(s16)(character - 0x2001)][0] + msgCtx->unk120D4;
+                        msgCtx->textColorR = D_801CFE74[(s16)(character - 0x2001)].r + msgCtx->unk120D4;
                     }
-                    if (D_801CFE74[(s16)(character - 0x2001)][1] + msgCtx->unk120D4 >= 255) {
-                        msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)][1];
+                    if (D_801CFE74[(s16)(character - 0x2001)].g + msgCtx->unk120D4 >= 255) {
+                        msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)].g;
                     } else {
-                        msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)][1] + msgCtx->unk120D4;
+                        msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)].g + msgCtx->unk120D4;
                     }
-                    if (D_801CFE74[(s16)(character - 0x2001)][2] + msgCtx->unk120D4 < 0) {
+                    if (D_801CFE74[(s16)(character - 0x2001)].b + msgCtx->unk120D4 < 0) {
                         msgCtx->textColorB = 0;
                     } else {
-                        msgCtx->textColorB = D_801CFE74[(s16)(character - 0x2001)][2] + msgCtx->unk120D4;
+                        msgCtx->textColorB = D_801CFE74[(s16)(character - 0x2001)].b + msgCtx->unk120D4;
                     }
                 } else if (play->pauseCtx.bombersNotebookOpen) {
-                    msgCtx->textColorR = D_801CFF34[(s16)(character - 0x2001)][0];
-                    msgCtx->textColorG = D_801CFF34[(s16)(character - 0x2001)][1];
-                    msgCtx->textColorB = D_801CFF34[(s16)(character - 0x2001)][2];
+                    msgCtx->textColorR = D_801CFF34[(s16)(character - 0x2001)].r;
+                    msgCtx->textColorG = D_801CFF34[(s16)(character - 0x2001)].g;
+                    msgCtx->textColorB = D_801CFF34[(s16)(character - 0x2001)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_1) {
-                    msgCtx->textColorR = D_801CFE74[(s16)(character - 0x2001)][0];
-                    msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)][1];
-                    msgCtx->textColorB = D_801CFE74[(s16)(character - 0x2001)][2];
+                    msgCtx->textColorR = D_801CFE74[(s16)(character - 0x2001)].r;
+                    msgCtx->textColorG = D_801CFE74[(s16)(character - 0x2001)].g;
+                    msgCtx->textColorB = D_801CFE74[(s16)(character - 0x2001)].b;
                 } else if (msgCtx->textBoxType == TEXTBOX_TYPE_D) {
-                    msgCtx->textColorR = D_801CFF04[(s16)(character - 0x2001)][0];
-                    msgCtx->textColorG = D_801CFF04[(s16)(character - 0x2001)][1];
-                    msgCtx->textColorB = D_801CFF04[(s16)(character - 0x2001)][2];
+                    msgCtx->textColorR = D_801CFF04[(s16)(character - 0x2001)].r;
+                    msgCtx->textColorG = D_801CFF04[(s16)(character - 0x2001)].g;
+                    msgCtx->textColorB = D_801CFF04[(s16)(character - 0x2001)].b;
                 } else {
-                    msgCtx->textColorR = D_801CFEA4[(s16)(character - 0x2001)][0];
-                    msgCtx->textColorG = D_801CFEA4[(s16)(character - 0x2001)][1];
-                    msgCtx->textColorB = D_801CFEA4[(s16)(character - 0x2001)][2];
+                    msgCtx->textColorR = D_801CFEA4[(s16)(character - 0x2001)].r;
+                    msgCtx->textColorG = D_801CFEA4[(s16)(character - 0x2001)].g;
+                    msgCtx->textColorB = D_801CFEA4[(s16)(character - 0x2001)].b;
                 }
 
                 if ((i + 1) == msgCtx->textDrawPos) {
@@ -1433,9 +1439,9 @@ void Message_DrawTextDefault(PlayState* play, Gfx** gfxP) {
                     sp12E = msgCtx->textColorR;
                     sp12C = msgCtx->textColorG;
                     sp12A = msgCtx->textColorB;
-                    msgCtx->textColorR = D_801CFED4[(s16)D_801CFF64[character - 0x839F]][0];
-                    msgCtx->textColorG = D_801CFED4[(s16)D_801CFF64[character - 0x839F]][1];
-                    msgCtx->textColorB = D_801CFED4[(s16)D_801CFF64[character - 0x839F]][2];
+                    msgCtx->textColorR = D_801CFED4[(s16)D_801CFF64[character - 0x839F]].r;
+                    msgCtx->textColorG = D_801CFED4[(s16)D_801CFF64[character - 0x839F]].g;
+                    msgCtx->textColorB = D_801CFED4[(s16)D_801CFF64[character - 0x839F]].b;
                     Message_DrawTextChar(play, &font->charBuf[font->unk_11D88][charTexIndex], &gfx);
                     msgCtx->textColorR = sp12E;
                     msgCtx->textColorG = sp12C;
