@@ -35,11 +35,14 @@ typedef struct BossHakugin {
     /* 0x0188 */ BossHakuginActionFunc actionFunc;
     /* 0x018C */ char unk_018C[0x1];
     /* 0x018D */ s8 unk_018D;
-    /* 0x018E */ char unk_018E[3];
+    /* 0x018E */ char unk_018E[2];
+    /* 0x0190 */ u8 unk_0190; // boolean?
     /* 0x0191 */ u8 unk_0191;
     /* 0x0192 */ char unk_0192[0x1];
     /* 0x0193 */ u8 unk_0193;
-    /* 0x0194 */ char unk_0194[0x8];
+    /* 0x0194 */ char unk_0194[2];
+    /* 0x0196 */ u8 unk_0196;
+    /* 0x0197 */ char unk_0197[0x5];
     /* 0x019C */ s16 unk_019C;
     /* 0x019E */ s16 unk_019E;
     /* 0x01A0 */ s16 unk_01A0;
@@ -56,12 +59,15 @@ typedef struct BossHakugin {
     /* 0x01C8 */ f32 unk_01C8;
     /* 0x01CC */ char unk_01CC[0x8];
     /* 0x01D4 */ f32 unk_01D4;
-    /* 0x01D8 */ char unk_01D8[0x10];
+    /* 0x01D8 */ char unk_01D8[0x4];
+    /* 0x01DC */ f32 unk_01DC;
+    /* 0x01E0 */ f32 unk_01E0;
+    /* 0x01E4 */ f32 unk_01E4;
     /* 0x01E8 */ Vec3s jointTable[33];
     /* 0x02AE */ Vec3s morphTable[33];
     /* 0x0374 */ char unk_0374[0x6];
     /* 0x037A */ Vec3s unk_037A;
-    /* 0x0380 */ char unk_0380[0xC];
+    /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f unk_038C;
     /* 0x0398 */ Vec3f bodyPartsPos[15];
     /* 0x044C */ char unk_044C[0xC];
@@ -78,7 +84,8 @@ typedef struct BossHakugin {
     /* 0x09F8 */ BossHakuginEffect unk_09F8[BOSS_HAKUGIN_EFFECT_COUNT];
     /* 0x2618 */ BossHakuginUnkStruct_2618 unk_2618[20];
     /* 0x3158 */ BossHakuginFhgFlashUnkStruct unk_3158[5][15];
-    /* 0x3734 */ char unk_3734[0x84];
+    /* 0x3734 */ Vec3f unk_3734;
+    /* 0x3740 */ char unk_3740[0x78];
     /* 0x37B8 */ ColliderSphere unk_37B8;
 } BossHakugin; // size = 0x3810
 

@@ -93,8 +93,8 @@ void EnHakurock_Destroy(Actor* thisx, PlayState* play) {
 void func_80B21BE0(BossHakugin* parent, Vec3f* arg1, s32 arg2) {
     s32 i;
 
-    for (i = 0; i < ARRAY_COUNT(parent->unk_9F8); i++) {
-        BossHakuginEffect* gohtEffect = &parent->unk_9F8[i];
+    for (i = 0; i < ARRAY_COUNT(parent->unk_09F8); i++) {
+        BossHakuginEffect* gohtEffect = &parent->unk_09F8[i];
         if (gohtEffect->unk_18 < 0) {
             s16 sp2E;
             s16 sp2C;

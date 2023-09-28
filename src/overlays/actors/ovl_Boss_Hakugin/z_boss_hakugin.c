@@ -44,6 +44,10 @@ void func_80B09F7C(BossHakugin* this);
 void func_80B08550(BossHakugin* this, PlayState* play);
 void func_80B08848(BossHakugin* this, PlayState* play);
 
+void func_80B0E5A4(BossHakugin* this, PlayState* play);
+void func_80B0D69C(UNK_PTR arg0, BossHakugin* this);
+void func_80B0D750(UNK_PTR arg0, BossHakugin* this, PlayState* play);
+
 #if 0
 ActorInit Boss_Hakugin_InitVars = {
     ACTOR_BOSS_HAKUGIN,
@@ -467,6 +471,7 @@ void func_80B06C08(BossHakugin* this);
 void func_80B06D38(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B06D38.s")
 
+void func_80B06F48(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B06F48.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0728C.s")
@@ -915,28 +920,86 @@ void func_80B09EDC(BossHakugin* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Update.s")
 
+s32 func_80B0C000(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C000.s")
 
+void func_80B0C1BC(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C1BC.s")
 
+void func_80B0C398(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C398.s")
 
+void func_80B0C570(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C570.s")
 
+void func_80B0C7B0(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C7B0.s")
 
+void func_80B0CAF0(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0CAF0.s")
 
+void func_80B0CCD8(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0CCD8.s")
 
+void func_80B0CF24(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0CF24.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Draw.s")
+void BossHakugin_Draw(Actor* thisx, PlayState* play) {
+    s32 pad;
+    BossHakugin* this = (BossHakugin*)thisx;
+    UNK_PTR sp34 = GRAPH_ALLOC(play->state.gfxCtx, 0x1000);
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPSegment(POLY_OPA_DISP++, 0x08, D_80B0EA88);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
+                          func_80B0C000, func_80B0C1BC, &this->actor);
+
+    CLOSE_DISPS(play->state.gfxCtx);
+
+    Actor_DrawDamageEffects(play, &this->actor, this->bodyPartsPos, ARRAY_COUNT(this->bodyPartsPos), this->unk_01DC,
+                            this->unk_01E0, this->unk_01E4, this->unk_0196);
+
+    SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_0380, &this->unk_0458);
+    SkinMatrix_Vec3fMtxFMultXYZ(&play->viewProjectionMtxF, &this->unk_3734, &this->unk_0464);
+
+    if (this->unk_0190 == 0) {
+        func_80B06F48(this, play);
+    }
+    this->unk_0190 = 1;
+
+    if (this->actor.colorFilterTimer != 0) {
+        func_800AE5A0(play);
+    }
+
+    if (this->actionFunc == func_80B0A8C4) {
+        func_80B0E5A4(this, play);
+    } else {
+        func_80B0C398(this, play);
+    }
+
+    func_80B0C570(this, play);
+    func_80B0C7B0(this, play);
+    func_80B0CAF0(this, play);
+    func_80B0CCD8(this, play);
+
+    if (this->unk_0193 > 0) {
+        func_80B0CF24(this, play);
+    }
+
+    if (this->actionFunc != func_80B0A8C4) {
+        func_80B0D69C(sp34, this);
+        func_80B0D750(sp34, this, play);
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D2B8.s")
 
+void func_80B0D69C(UNK_PTR arg0, BossHakugin* this);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D69C.s")
 
+void func_80B0D750(UNK_PTR arg0, BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D750.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D9CC.s")
