@@ -46,7 +46,7 @@ void func_80B09F7C(BossHakugin* this);
 void func_80B08550(BossHakugin* this, PlayState* play);
 void func_80B08848(BossHakugin* this, PlayState* play);
 
-void func_80B0E5A4(BossHakugin* this, PlayState* play);
+void func_80B0E5A4(BossHakugin* this2, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 
@@ -1449,4 +1449,25 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0E548.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0E5A4.s")
+void func_80B0E5A4(BossHakugin* this2, PlayState* play) {
+    BossHakugin* this = this2;
+    s32 i;
+    BossHakuginEffect* effect;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+    gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
+
+    for (i = 0; i < 36; i++) {
+        effect = &this->unk_09F8[i];
+
+        Matrix_SetTranslateRotateYXZ(effect->unk_0.x, effect->unk_0.y, effect->unk_0.z, &effect->unk_1C);
+        Matrix_Scale(effect->unk_24, effect->unk_24, effect->unk_24, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
