@@ -45,8 +45,8 @@ void func_80B08550(BossHakugin* this, PlayState* play);
 void func_80B08848(BossHakugin* this, PlayState* play);
 
 void func_80B0E5A4(BossHakugin* this, PlayState* play);
-void func_80B0D69C(u8* tex, BossHakugin* this);
-void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play);
+void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
+void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 
 #if 0
 ActorInit Boss_Hakugin_InitVars = {
@@ -989,8 +989,8 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->actionFunc != func_80B0A8C4) {
-        func_80B0D69C(tex, this);
-        func_80B0D750(tex, this, play);
+        BossHakugin_GenShadowTex(tex, this);
+        BossHakugin_DrawShadowTex(tex, this, play);
     }
 }
 
@@ -999,18 +999,20 @@ s32 D_80B0EB70[6] = { 1, 2, 3, 3, 2, 1 };
 s32 D_80B0EB88[7] = { 2, 3, 4, 4, 4, 3, 2 };
 s32 D_80B0EBA4[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
 s32 D_80B0EBC4[14] = { 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2 };
-s32 D_80B0EBFC[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 0, 9, 0xA, 0, 0xC, 0xD };
+s32 D_80B0EBFC[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 0, 9, 10, 0, 12, 13 };
 u8 D_80B0EC38[15] = { 1, 2, 1, 0, 3, 3, 0, 3, 3, 0, 3, 3, 0, 3, 3 };
 #else
+// These are the different sizes wdiths
 extern s32 D_80B0EB70[];
 extern s32 D_80B0EB88[];
 extern s32 D_80B0EBA4[];
 extern s32 D_80B0EBC4[];
-extern s32 D_80B0EBFC[];
-extern u8 D_80B0EC38[];
+
+extern s32 D_80B0EBFC[]; // sParentBodyParts
+extern u8 D_80B0EC38[];  // sShadowSizes
 #endif
 
-void func_80B0D2B8(BossHakugin* this, u8* tex, f32 arg2) {
+void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
     s32 index;
     s32 i;
     s32 baseX;
@@ -1021,32 +1023,32 @@ void func_80B0D2B8(BossHakugin* this, u8* tex, f32 arg2) {
     Vec3f lerp;
     Vec3f* parentBodyPartPos;
     Vec3f* bodyPartPos;
-    Vec3f sp74;
-    Vec3f sp68;
+    Vec3f pos;
+    Vec3f startVec;
 
     for (i = 0; i < 15; i++) {
-        if ((arg2 == 0.0f) || (y = D_80B0EBFC[i]) > BODYPART_NONE) {
+        if ((weight == 0.0f) || (y = D_80B0EBFC[i]) > BODYPART_NONE) {
             bodyPartPos = &this->bodyPartsPos[i];
-            if (arg2 > 0.0f) {
+            if (weight > 0.0f) {
                 parentBodyPartPos = &this->bodyPartsPos[y];
 
-                VEC3F_LERPIMPDST(&lerp, bodyPartPos, parentBodyPartPos, arg2);
+                VEC3F_LERPIMPDST(&lerp, bodyPartPos, parentBodyPartPos, weight);
 
-                sp74.x = lerp.x - this->actor.world.pos.x;
-                sp74.y = lerp.y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
-                sp74.z = lerp.z - this->actor.world.pos.z;
+                pos.x = lerp.x - this->actor.world.pos.x;
+                pos.y = lerp.y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
+                pos.z = lerp.z - this->actor.world.pos.z;
             } else {
-                sp74.x = bodyPartPos->x - this->actor.world.pos.x;
-                sp74.y = bodyPartPos->y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
-                sp74.z = bodyPartPos->z - this->actor.world.pos.z;
+                pos.x = bodyPartPos->x - this->actor.world.pos.x;
+                pos.y = bodyPartPos->y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
+                pos.z = bodyPartPos->z - this->actor.world.pos.z;
             }
-            Matrix_MultVec3f(&sp74, &sp68);
+            Matrix_MultVec3f(&pos, &startVec);
 
-            sp68.x *= 0.7f;
-            sp68.y *= 0.7f;
+            startVec.x *= 0.7f;
+            startVec.y *= 0.7f;
 
-            baseX = (u16)(s32)(sp68.x + 32.0f);
-            baseY = (u16)((s32)sp68.y * 64);
+            baseX = (u16)(s32)(startVec.x + 32.0f);
+            baseY = (u16)((s32)startVec.y * 64);
 
             if (D_80B0EC38[i] == 2) {
                 for (y = 0, addY = -0x180; y < 14; y++, addY += 0x40) {
@@ -1089,22 +1091,22 @@ void func_80B0D2B8(BossHakugin* this, u8* tex, f32 arg2) {
     }
 }
 
-void func_80B0D69C(u8* tex, BossHakugin* this) {
+void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this) {
     s32* iter = (s32*)tex;
     s16 i;
 
-    for (i = 0; i < (sizeof(u8[64][64])) / sizeof(s32); i++, iter++) {
+    for (i = 0; i < ((sizeof(u8[64][64])) / sizeof(s32)); i++, iter++) {
         *iter = 0;
     }
 
     Matrix_RotateXFNew(1.0f);
 
-    for (i = 0; i < 6; i++) {
-        func_80B0D2B8(this, tex, i / 5.0f);
+    for (i = 0; i <= 5; i++) {
+        BossHakugin_FillShadowTex(this, tex, i / 5.0f);
     }
 }
 
-void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play) {
+void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
     s32 pad[2];
     f32 alpha;
     GraphicsContext* gfxCtx = play->state.gfxCtx;
@@ -1122,7 +1124,8 @@ void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play) {
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
     if (this->actor.floorPoly != NULL) {
-        func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, &mtx);
+        func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z,
+                      &mtx);
         Matrix_Put(&mtx);
     }
 

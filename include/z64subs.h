@@ -133,7 +133,7 @@ s32 SubS_CopyPointFromPathCheckBounds(Path* path, s32 pointIndex, Vec3f* dst);
 s32 SubS_Offer(Actor* actor, struct PlayState* play, f32 xzRange, f32 yRange, s32 itemId, SubSOfferMode mode);
 
 void SubS_FillShadowTex(s32 startCol, s32 startRow, u8* tex, s32 size);
-void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 tween, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
+void SubS_GenShadowTex(Vec3f bodyPartsPos[], Vec3f* worldPos, u8* tex, f32 weight, u8 bodyPartsNum, u8 sizes[], s8 parentBodyParts[]);
 void SubS_DrawShadowTex(Actor* actor, struct GameState* gameState, u8* tex);
 
 s16 SubS_ComputeTrackPointRot(s16* rot, s16 rotMax, s16 target, f32 slowness, f32 stepMin, f32 stepMax);
