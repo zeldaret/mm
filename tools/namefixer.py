@@ -1049,6 +1049,8 @@ wordReplace = {
     "player->unk_AA0": "player->closestSecretDistSq",
     "player->unk_AAC": "player->headLimbRot",
     "player->unk_AB2": "player->upperLimbRot",
+    "player->unk_AE7": "player->actionVar1",
+    "player->unk_AE8": "player->actionVar2",
     "player->unk_B2A": "player->getItemDrawIdPlusOne",
     "player->getItemDrawId": "player->getItemDrawIdPlusOne",
     "player->unk_B68": "player->fallStartHeight",
