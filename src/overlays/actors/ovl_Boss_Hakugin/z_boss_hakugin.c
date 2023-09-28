@@ -45,8 +45,8 @@ void func_80B08550(BossHakugin* this, PlayState* play);
 void func_80B08848(BossHakugin* this, PlayState* play);
 
 void func_80B0E5A4(BossHakugin* this, PlayState* play);
-void func_80B0D69C(UNK_PTR arg0, BossHakugin* this);
-void func_80B0D750(UNK_PTR arg0, BossHakugin* this, PlayState* play);
+void func_80B0D69C(u8* tex, BossHakugin* this);
+void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play);
 
 #if 0
 ActorInit Boss_Hakugin_InitVars = {
@@ -947,7 +947,7 @@ void func_80B0CF24(BossHakugin* this, PlayState* play);
 void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BossHakugin* this = (BossHakugin*)thisx;
-    UNK_PTR sp34 = GRAPH_ALLOC(play->state.gfxCtx, 0x1000);
+    u8* tex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -989,17 +989,30 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->actionFunc != func_80B0A8C4) {
-        func_80B0D69C(sp34, this);
-        func_80B0D750(sp34, this, play);
+        func_80B0D69C(tex, this);
+        func_80B0D750(tex, this, play);
     }
 }
 
+void func_80B0D2B8(BossHakugin* this, u8* tex, f32 tween);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D2B8.s")
 
-void func_80B0D69C(UNK_PTR arg0, BossHakugin* this);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D69C.s")
+void func_80B0D69C(u8* tex, BossHakugin* this) {
+    s32* iter = (s32*)tex;
+    s16 i;
 
-void func_80B0D750(UNK_PTR arg0, BossHakugin* this, PlayState* play);
+    for (i = 0; i < (64 * 64) / 4; i++, iter++) {
+        *iter = 0;
+    }
+
+    Matrix_RotateXFNew(1.0f);
+
+    for (i = 0; i < 6; i++) {
+        func_80B0D2B8(this, tex, i / 5.0f);
+    }
+}
+
+void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D750.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D9CC.s")
