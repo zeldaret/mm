@@ -1044,8 +1044,8 @@ void BossHakugin_FillShadowTex(BossHakugin* this, u8* tex, f32 weight) {
             }
             Matrix_MultVec3f(&pos, &startVec);
 
-            startVec.x *= 0.7f;
-            startVec.y *= 0.7f;
+            startVec.x *= 0.070000000298f;
+            startVec.y *= 0.070000000298f;
 
             baseX = (u16)(s32)(startVec.x + 32.0f);
             baseY = (u16)((s32)startVec.y * 64);
@@ -1095,7 +1095,7 @@ void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this) {
     s32* iter = (s32*)tex;
     s16 i;
 
-    for (i = 0; i < ((sizeof(u8[64][64])) / sizeof(s32)); i++, iter++) {
+    for (i = 0; i < (s32)((sizeof(u8[64][64])) / sizeof(s32)); i++, iter++) {
         *iter = 0;
     }
 
