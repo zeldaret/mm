@@ -9,6 +9,7 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Hakurock/z_en_hakurock.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
+#include "overlays/actors/ovl_En_Clear_Tag/z_en_clear_tag.h"
 #include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
@@ -249,16 +250,6 @@ extern Vec3f D_80B0EB00;
 extern Vec3f D_80B0EB0C;
 extern Vec3f D_80B0EB18;
 
-extern AnimationHeader D_06002054;    // gGohtThawAndBreakWallAnim
-extern AnimationHeader D_0600319C;    // gGohtStationaryAnim
-extern Gfx D_06010488[];              // gGohtRockMaterialDL
-extern Gfx D_06011208[];              // gGohtLightningMaterialDL
-extern Gfx D_06012ED0[];              // gGohtLightOrbMaterialDL
-extern AnimationHeader D_060134D0;    // gGohtFallDownAnim
-extern AnimationHeader D_06013828;    // gGohtRunAnim
-extern TexturePtr D_06014040;         // gGohtTitleCardTex
-extern FlexSkeletonHeader D_06013158; // gGohtSkel
-
 #ifdef NON_MATCHING
 // requires in-function static, too lazy to import all the data right now
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
@@ -270,14 +261,15 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
     s32 i;
 
     Actor_ProcessInitChain(&this->actor, D_80B0EAD8);
-    SkelAnime_InitFlex(play, &this->skelAnime, &D_06013158, &D_06013828, this->jointTable, this->morphTable, 0x21);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gGohtSkel, &gGohtRunAnim, this->jointTable, this->morphTable,
+                       GOHT_LIMB_MAX);
     if (D_80B0EAD4 == 0) {
         D_80B0EAD4 = 1;
         D_80B0EA88 = Lib_SegmentedToVirtual(D_80B0EA88);
     }
 
     Collider_InitAndSetJntSph(play, &this->unk_0484, &this->actor, &D_80B0E9AC, this->unk_04A4);
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
         Collider_InitAndSetTris(play, &this->unk_2618[i].unk_14, &this->actor, &D_80B0E9F8, &this->unk_2618[i].unk_34);
     }
 
@@ -299,18 +291,18 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         return;
     }
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_09B0); i++) {
         actorPtr = &this->unk_09B0[i];
         *actorPtr = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f, 0.0f, 0, 0,
                                        0, EN_HAKUROCK_TYPE_BOULDER);
     }
 
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_09D0); i++) {
         this->unk_09D0[i] = Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_HAKUROCK, 0.0f, 0.0f, 0.0f,
                                                0, 0, 0, EN_HAKUROCK_TYPE_UNK_2);
     }
 
-    for (i = 0; i < 180; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
         this->unk_09F8[i].unk_18 = -1;
     }
 
@@ -326,7 +318,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2) {
         this->unk_0193 = 255;
         this->unk_01D4 = 2.7f;
         func_80B058C0(this);
-        Animation_PlayOnce(&this->skelAnime, &D_06002054);
+        Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
         this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
         func_80B08124(this);
     } else {
@@ -349,7 +341,7 @@ void BossHakugin_Destroy(Actor* thisx, PlayState* play) {
     Collider_DestroyJntSph(play, &this->unk_0484);
     Collider_DestroyCylinder(play, &this->unk_0964);
 
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < ARRAY_COUNT(this->unk_2618); i++) {
         Collider_DestroyTris(play, &this->unk_2618[i].unk_14);
     }
 
@@ -628,8 +620,9 @@ void func_80B07BFC(BossHakugin* this, PlayState* play, s32 arg2) {
         this->unk_01E4 = 3.0f;
         this->unk_01DC = 2.5f;
         temp_v0_2 = &this->unk_0484.elements[arg2];
-        Actor_Spawn(&play->actorCtx, play, 0xA2, temp_v0_2->info.bumper.hitPos.x, temp_v0_2->info.bumper.hitPos.y,
-                    temp_v0_2->info.bumper.hitPos.z, 0, 0, 0, 4);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, temp_v0_2->info.bumper.hitPos.x,
+                    temp_v0_2->info.bumper.hitPos.y, temp_v0_2->info.bumper.hitPos.z, 0, 0, 0,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     } else if (this->actor.colChkInfo.damageEffect == 0x3) {
         this->unk_0196 = 0xA;
         this->unk_01DC = 2.5f;
@@ -640,8 +633,9 @@ void func_80B07BFC(BossHakugin* this, PlayState* play, s32 arg2) {
         this->unk_01DC = 2.5f;
         this->unk_01E4 = 3.0f;
         temp_v0_3 = &this->unk_0484.elements[arg2];
-        Actor_Spawn(&play->actorCtx, play, 0xA2, temp_v0_3->info.bumper.hitPos.x, temp_v0_3->info.bumper.hitPos.y,
-                    temp_v0_3->info.bumper.hitPos.z, 0, 0, 3, 4);
+        Actor_Spawn(&play->actorCtx, play, ACTOR_EN_CLEAR_TAG, temp_v0_3->info.bumper.hitPos.x,
+                    temp_v0_3->info.bumper.hitPos.y, temp_v0_3->info.bumper.hitPos.z, 0, 0, 3,
+                    CLEAR_TAG_PARAMS(CLEAR_TAG_LARGE_LIGHT_RAYS));
     }
 }
 
@@ -670,7 +664,7 @@ void func_80B07EEC(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     Vec3f sp20;
 
-    Animation_PlayOnce(&this->skelAnime, &D_06002054);
+    Animation_PlayOnce(&this->skelAnime, &gGohtThawAndBreakWallAnim);
     this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->unk_01AC = CutsceneManager_GetCurrentSubCamId(this->actor.csId);
     sp20.x = player->actor.focus.pos.x;
@@ -756,9 +750,9 @@ void func_80B082AC(BossHakugin* this, PlayState* play) {
     s32 temp_v1;
 
     this->unk_019C--;
-    if ((this->unk_019C >= 30) && (this->unk_019C % 2 != 0)) {
+    if ((this->unk_019C >= 30) && ((this->unk_019C % 2) != 0)) {
         func_80B07700(this, play, 1);
-    } else if ((this->unk_019C % 4 == 0)) {
+    } else if ((this->unk_019C % 4) == 0) {
         func_80B07700(this, play, 0);
     }
 
@@ -852,8 +846,8 @@ void func_80B0863C(BossHakugin* this, PlayState* play) {
         }
 
         if (Animation_OnFrame(&this->skelAnime, 65.0f)) {
-            TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&D_06014040), 160,
-                                   180, 128, 40);
+            TitleCard_InitBossName(&play->state, &play->actorCtx.titleCtxt, Lib_SegmentedToVirtual(&gGohtTitleCardTex),
+                                   160, 180, 128, 40);
         }
 
         if (Animation_OnFrame(&this->skelAnime, 86.0f)) {
@@ -862,7 +856,7 @@ void func_80B0863C(BossHakugin* this, PlayState* play) {
 
         if (Animation_OnFrame(&this->skelAnime, 90.0f)) {
             Actor_PlaySfx(&this->actor, NA_SE_EN_LAST1_DEMO_BREAK);
-            for (i = 6; i < 10; i++) {
+            for (i = 6; i < ARRAY_COUNT(this->unk_09D0); i++) {
                 this->unk_09D0[i]->params = 0;
             }
         }
@@ -873,7 +867,7 @@ void func_80B0863C(BossHakugin* this, PlayState* play) {
         }
     }
 
-    if (((this->unk_019C + 12) >= 0) && (this->unk_019C % 4 == 0)) {
+    if (((this->unk_019C + 12) >= 0) && ((this->unk_019C % 4) == 0)) {
         func_80B07700(this, play, 0);
     }
 }
@@ -889,7 +883,7 @@ void func_80B08848(BossHakugin* this, PlayState* play) {
     sp30.y = this->actor.world.pos.y + 100.0f;
     sp30.z = this->actor.world.pos.z;
     func_800BE33C(&this->unk_038C, &sp30, &this->unk_037A, true);
-    Animation_Change(&this->skelAnime, &D_06013828, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -3.0f);
+    Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.5f, 0.0f, 0.0f, ANIMMODE_LOOP, -3.0f);
     this->unk_019C = 0;
     this->actor.speed = 5.0f;
     func_800B7298(play, &this->actor, PLAYER_CSMODE_END);
@@ -955,7 +949,7 @@ void func_80B08960(BossHakugin* this, PlayState* play) {
 }
 
 void func_80B08C1C(BossHakugin* this) {
-    Animation_Change(&this->skelAnime, &D_06013828, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -5.0f);
+    Animation_Change(&this->skelAnime, &gGohtRunAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP_INTERP, -5.0f);
     this->unk_01A2 = 0;
     this->unk_01C8 = 0.0f;
     this->unk_019E = Rand_CenteredFloat(3072.0f);
@@ -971,22 +965,18 @@ void func_80B08C1C(BossHakugin* this) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B091D8.s")
 
 void func_80B093C0(BossHakugin* this) {
-    f32 sp24;
-
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_060134D0, -3.0f);
-    this->unk_0484.base.atFlags &= 0xFFFE;
-    this->unk_0484.base.acFlags &= 0xFFFB;
+    Animation_MorphToPlayOnce(&this->skelAnime, &gGohtFallDownAnim, -3.0f);
+    this->unk_0484.base.atFlags &= ~AT_ON;
+    this->unk_0484.base.acFlags &= ~AC_HARD;
     this->unk_01A6 = 0;
     this->unk_0195 = 0;
     this->unk_01C8 = 0.0f;
     if (this->unk_0192 == 1) {
         Math_Vec3f_Copy(&this->unk_3734[0], &this->unk_0380);
         this->unk_01B8 = this->actor.speed + 100.0f;
-        sp24 = Math_CosS(0xA00);
-        this->unk_37AC = Math_SinS(this->actor.shape.rot.y) * sp24;
+        this->unk_37AC = Math_CosS(0xA00) * Math_SinS(this->actor.shape.rot.y);
         this->unk_37B0 = Math_SinS(0xA00);
-        sp24 = Math_CosS(0xA00);
-        this->unk_37B4 = Math_CosS(this->actor.shape.rot.y) * sp24;
+        this->unk_37B4 = Math_CosS(0xA00) * Math_CosS(this->actor.shape.rot.y);
         this->unk_0192 = 2;
         this->unk_01C8 = 0.0f;
         Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_E_BALL_THR);
@@ -1002,10 +992,10 @@ void func_80B093C0(BossHakugin* this) {
 void func_80B09840(BossHakugin* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
 
-    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600319C, -10.0f);
+    Animation_MorphToPlayOnce(&this->skelAnime, &gGohtStationaryAnim, -10.0f);
     player->actor.parent = &this->actor;
-    this->unk_0484.base.atFlags &= 0xFFFE;
-    this->unk_0484.base.ocFlags1 &= 0xFFFE;
+    this->unk_0484.base.atFlags &= ~AT_ON;
+    this->unk_0484.base.ocFlags1 &= ~OC1_ON;
     this->unk_019C = 0xA;
     this->actionFunc = func_80B098BC;
 }
@@ -1022,12 +1012,12 @@ void func_80B098BC(BossHakugin* this, PlayState* play) {
     if (this->unk_019C < 10) {
         this->unk_019C--;
         if (this->unk_019C == 0) {
-            this->unk_0484.base.atFlags |= 1;
-            this->unk_0484.base.ocFlags1 |= 1;
+            this->unk_0484.base.atFlags |= AT_ON;
+            this->unk_0484.base.ocFlags1 |= OC1_ON;
             func_80B08C1C(this);
         }
     } else {
-        if (Math_ScaledStepToS(&this->unk_01A6, -0x800, 0x1C0) != 0) {
+        if (Math_ScaledStepToS(&this->unk_01A6, -0x800, 0x1C0)) {
             player->actionVar2 = 0x64;
             player->actor.parent = NULL;
             player->invincibilityTimer = 0;
