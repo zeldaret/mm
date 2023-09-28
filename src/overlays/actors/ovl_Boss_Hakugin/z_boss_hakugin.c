@@ -947,7 +947,7 @@ void func_80B0CF24(BossHakugin* this, PlayState* play);
 void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
     BossHakugin* this = (BossHakugin*)thisx;
-    u8* tex = GRAPH_ALLOC(play->state.gfxCtx, 64 * 64);
+    u8* tex = GRAPH_ALLOC(play->state.gfxCtx, sizeof(u8[64][64]));
 
     OPEN_DISPS(play->state.gfxCtx);
 
@@ -1093,7 +1093,7 @@ void func_80B0D69C(u8* tex, BossHakugin* this) {
     s32* iter = (s32*)tex;
     s16 i;
 
-    for (i = 0; i < (64 * 64) / 4; i++, iter++) {
+    for (i = 0; i < (sizeof(u8[64][64])) / sizeof(s32); i++, iter++) {
         *iter = 0;
     }
 
@@ -1104,8 +1104,37 @@ void func_80B0D69C(u8* tex, BossHakugin* this) {
     }
 }
 
-void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D750.s")
+void func_80B0D750(u8* tex, BossHakugin* this, PlayState* play) {
+    s32 pad[2];
+    f32 alpha;
+    GraphicsContext* gfxCtx = play->state.gfxCtx;
+    MtxF mtx;
+
+    OPEN_DISPS(gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
+
+    alpha = (400.0f - this->actor.world.pos.y) * 0.0025f;
+    alpha = CLAMP_MIN(alpha, 0.0f);
+    alpha = CLAMP_MAX(alpha, 1.0f);
+
+    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, (s8)(alpha * 80.0f));
+    gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
+
+    if (this->actor.floorPoly != NULL) {
+        func_800C0094(this->actor.floorPoly, this->actor.world.pos.x, this->actor.floorHeight, this->actor.world.pos.z, &mtx);
+        Matrix_Put(&mtx);
+    }
+
+    Matrix_Scale(4.25f, 1.0f, 4.25f, MTXMODE_APPLY);
+    gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowMaterialDL);
+    gDPLoadTextureBlock(POLY_OPA_DISP++, tex, G_IM_FMT_I, G_IM_SIZ_8b, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                        G_TX_NOMIRROR | G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gSPDisplayList(POLY_OPA_DISP++, gShadowModelDL);
+
+    CLOSE_DISPS(gfxCtx);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D9CC.s")
 
