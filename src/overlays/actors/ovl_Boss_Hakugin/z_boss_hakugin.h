@@ -29,7 +29,9 @@ typedef struct BossHakuginUnkStruct_2618 {
 
 typedef struct BossHakuginFhgFlashUnkStruct {
     /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ char unk_0C[0x8];
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
 } BossHakuginFhgFlashUnkStruct; // size = 0x14
 
 typedef struct BossHakugin {
@@ -62,10 +64,11 @@ typedef struct BossHakugin {
     /* 0x01B0 */ u32 unk_01B0;
     /* 0x01B4 */ s32 unk_01B4;
     /* 0x01B8 */ f32 unk_01B8;
-    /* 0x01BC */ char pad1BC[8];
+    /* 0x01BC */ char unk_01BC[8];
     /* 0x01C4 */ f32 unk_01C4;
     /* 0x01C8 */ f32 unk_01C8;
-    /* 0x01CC */ char unk_01CC[0x8];
+    /* 0x01CC */ f32 unk_01CC;
+    /* 0x01D0 */ f32 unk_01D0;
     /* 0x01D4 */ f32 unk_01D4;
     /* 0x01D8 */ char unk_01D8[0x4];
     /* 0x01DC */ f32 unk_01DC;

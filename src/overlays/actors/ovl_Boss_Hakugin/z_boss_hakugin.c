@@ -9,6 +9,7 @@
 #include "z64rumble.h"
 #include "overlays/actors/ovl_En_Hakurock/z_en_hakurock.h"
 #include "overlays/actors/ovl_Item_B_Heart/z_item_b_heart.h"
+#include "overlays/effects/ovl_Effect_Ss_Fhg_Flash/z_eff_ss_fhg_flash.h"
 
 #include "objects/gameplay_keep/gameplay_keep.h"
 
@@ -20,6 +21,7 @@ void BossHakugin_Init(Actor* thisx, PlayState* play2);
 void BossHakugin_Destroy(Actor* thisx, PlayState* play);
 void BossHakugin_Update(Actor* thisx, PlayState* play);
 void BossHakugin_Draw(Actor* thisx, PlayState* play);
+void func_80B0E5A4(Actor* thisx, PlayState* play);
 
 void func_80B08018(BossHakugin* this, PlayState* play);
 void func_80B0813C(BossHakugin* this, PlayState* play);
@@ -46,7 +48,6 @@ void func_80B09F7C(BossHakugin* this);
 void func_80B08550(BossHakugin* this, PlayState* play);
 void func_80B08848(BossHakugin* this, PlayState* play);
 
-void func_80B0E5A4(BossHakugin* this2, PlayState* play);
 void BossHakugin_GenShadowTex(u8* tex, BossHakugin* this);
 void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play);
 
@@ -474,8 +475,68 @@ void func_80B06C08(BossHakugin* this);
 void func_80B06D38(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B06D38.s")
 
-void func_80B06F48(BossHakugin* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B06F48.s")
+void func_80B06F48(BossHakugin* this, PlayState* play) {
+    BossHakuginFhgFlashUnkStruct* iter;
+    BossHakuginFhgFlashUnkStruct* iter2;
+    BossHakuginFhgFlashUnkStruct* iter3;
+    Vec3f spA0;
+    s32 sp9C;
+    s32 var_s4;
+    s32 i;
+    s32 j;
+    s32 pad;
+
+    sp9C = this->unk_0191 + 3;
+    if (sp9C >= 15) {
+        sp9C = 0;
+    }
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_3158); i++) {
+        if (((15 - (3 * i)) < this->actor.colChkInfo.health) || !((1 << (D_80B0EAB0[i] + 0x1F)) & this->unk_01B0)) {
+            break;
+        }
+
+        iter3 = &this->unk_3158[i][sp9C];
+        iter2 = &this->unk_3158[i][this->unk_0191];
+
+        Math_Vec3f_Diff(&iter3->unk_00, &iter2->unk_00, &spA0);
+
+        spA0.y -= 3.5f;
+
+        var_s4 = Math3D_Vec3fMagnitude(&spA0) / 10.0f;
+        if (var_s4 >= 2) {
+            if (var_s4 >= 4) {
+                var_s4 = 3;
+            }
+            Math_Vec3f_Scale(&spA0, 1.0f / var_s4);
+        } else {
+            var_s4 = 1;
+        }
+
+        for (j = 0; j < var_s4; j++) {
+            iter = &this->unk_3158[i][this->unk_0191 + j];
+
+            iter->unk_00.x = Rand_CenteredFloat(20.0f) + (iter2->unk_00.x + (spA0.x * j));
+            iter->unk_00.y = Rand_CenteredFloat(20.0f) + (iter2->unk_00.y + (spA0.y * j));
+            iter->unk_00.z = Rand_CenteredFloat(20.0f) + (iter2->unk_00.z + (spA0.z * j));
+            iter->unk_0C = 0.01f;
+            iter->unk_10 = 150;
+            iter->unk_12 = 5 - j;
+        }
+
+        if ((play->gameplayFrames % 2) != 0) {
+            EffectSsFhgFlash_SpawnShock(play, &this->actor, &this->unk_3158[i][this->unk_0191].unk_00, 250,
+                                        i + FHGFLASH_SHOCK_GOHT_2);
+        }
+    }
+
+    sp9C = this->unk_0191 - 3;
+    if (sp9C < 0) {
+        this->unk_0191 = 12;
+    } else {
+        this->unk_0191 = sp9C;
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0728C.s")
 
@@ -1132,14 +1193,115 @@ void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s
     }
 }
 
-void func_80B0C398(BossHakugin* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C398.s")
+void func_80B0C398(BossHakugin* this, PlayState* play) {
+    BossHakuginEffect* effect;
+    s32 i;
 
-void func_80B0C570(BossHakugin* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C570.s")
+    OPEN_DISPS(play->state.gfxCtx);
 
-void func_80B0C7B0(BossHakugin* this, PlayState* play);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C7B0.s")
+    gSPDisplayList(POLY_OPA_DISP++, gGohtRockMaterialDL);
+    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
+        effect = &this->unk_09F8[i];
+        if ((effect->unk_18 >= 0) && (effect->unk_1A == 0)) {
+            Matrix_SetTranslateRotateYXZ(effect->unk_0.x, effect->unk_0.y, effect->unk_0.z, &effect->unk_1C);
+            Matrix_Scale(effect->unk_24, effect->unk_24, effect->unk_24, MTXMODE_APPLY);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gGohtRockModelDL);
+        }
+    }
+
+    gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteMaterialDL);
+    for (i = 0; i < ARRAY_COUNT(this->unk_09F8); i++) {
+        effect = &this->unk_09F8[i];
+        if ((effect->unk_18 >= 0) && (effect->unk_1A == 1)) {
+            Matrix_SetTranslateRotateYXZ(effect->unk_0.x, effect->unk_0.y, effect->unk_0.z, &effect->unk_1C);
+            Matrix_Scale(effect->unk_24, effect->unk_24, effect->unk_24, MTXMODE_APPLY);
+            gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_OPA_DISP++, gGohtStalactiteModelDL);
+        }
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_80B0C570(BossHakugin* this, PlayState* play) {
+    BossHakuginFhgFlashUnkStruct* iter;
+    s32 i;
+    s32 j;
+    s16 camYaw;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
+    gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamMaterialDL);
+    camYaw = Camera_GetCamDirYaw(GET_ACTIVE_CAM(play)) + 0x8000;
+    gDPSetEnvColor(POLY_XLU_DISP++, 1, 1, 1, 128);
+
+    for (i = 0; i < ARRAY_COUNT(this->unk_3158); i++) {
+        for (j = 0; j < ARRAY_COUNT(this->unk_3158[0]); j++) {
+            iter = &this->unk_3158[i][j];
+            if (iter->unk_10 > 0) {
+                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 0, 0, 0, iter->unk_10);
+                gSPSegment(POLY_XLU_DISP++, 0x08,
+                           Gfx_TwoTexScroll(play->state.gfxCtx, 0, iter->unk_12 * 3, iter->unk_12 * 15, 32, 64, 1, 0, 0,
+                                            32, 32));
+                Matrix_Translate(iter->unk_00.x, iter->unk_00.y, iter->unk_00.z, MTXMODE_NEW);
+                Matrix_RotateYS(camYaw, MTXMODE_APPLY);
+                Matrix_Scale(iter->unk_0C, iter->unk_0C, 1.0f, MTXMODE_APPLY);
+                gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx),
+                          G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(POLY_XLU_DISP++, gFrozenSteamModelDL);
+            }
+        }
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
+
+void func_80B0C7B0(BossHakugin* this, PlayState* play) {
+    s32 pad;
+    s32 i;
+
+    OPEN_DISPS(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
+
+    if (this->unk_01C8 > 0.0f) {
+        gDPSetEnvColor(POLY_XLU_DISP++, D_80B0EAD0.r, D_80B0EAD0.g, D_80B0EAD0.b, 0);
+        gSPDisplayList(POLY_XLU_DISP++, gGohtLightningMaterialDL);
+        gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, 255, 255, 255, 255);
+
+        for (i = -1; i <= 1; i += 2) {
+            Matrix_SetTranslateRotateYXZ(this->unk_0380.x, this->unk_0380.y, this->unk_0380.z, &this->unk_0374);
+            Matrix_RotateYS(0x1400 * i, MTXMODE_APPLY);
+            Matrix_RotateXS(0xC00 * i, MTXMODE_APPLY);
+            Matrix_RotateZS(this->unk_0198, MTXMODE_APPLY);
+            Matrix_Scale(0.62f, 0.62f, this->unk_01D0, MTXMODE_APPLY);
+            Matrix_Translate(0.0f, 0.0f, this->unk_01CC * i, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
+
+            Matrix_RotateZS(0x4000, MTXMODE_APPLY);
+
+            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+            gSPDisplayList(POLY_XLU_DISP++, gGohtLightningModelDL);
+        }
+
+        gDPPipeSync(POLY_XLU_DISP++);
+        gDPSetEnvColor(POLY_XLU_DISP++, D_80B0EACC.r, D_80B0EACC.g, D_80B0EACC.b, 0);
+        Matrix_Translate(this->unk_0380.x, this->unk_0380.y, this->unk_0380.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        Matrix_Scale(this->unk_01C8, this->unk_01C8, this->unk_01C8, MTXMODE_APPLY);
+        Matrix_RotateZS(this->unk_0198, MTXMODE_APPLY);
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbMaterialDL);
+        gSPDisplayList(POLY_XLU_DISP++, gGohtLightOrbModelDL);
+    }
+
+    CLOSE_DISPS(play->state.gfxCtx);
+}
 
 void func_80B0CAF0(BossHakugin* this, PlayState* play) {
     BossHakuginUnkStruct_2618* iter;
@@ -1250,7 +1412,7 @@ void func_80B0CF24(BossHakugin* this, PlayState* play) {
 
 void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     s32 pad;
-    BossHakugin* this = (BossHakugin*)thisx;
+    BossHakugin* this = THIS;
     u8* tex = GRAPH_ALLOC(play->state.gfxCtx, sizeof(u8[64][64]));
 
     OPEN_DISPS(play->state.gfxCtx);
@@ -1278,7 +1440,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 
     if (this->actionFunc == func_80B0A8C4) {
-        func_80B0E5A4(this, play);
+        func_80B0E5A4(&this->actor, play);
     } else {
         func_80B0C398(this, play);
     }
@@ -1449,8 +1611,8 @@ void BossHakugin_DrawShadowTex(u8* tex, BossHakugin* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0E548.s")
 
-void func_80B0E5A4(BossHakugin* this2, PlayState* play) {
-    BossHakugin* this = this2;
+void func_80B0E5A4(Actor* thisx, PlayState* play) {
+    BossHakugin* this = THIS;
     s32 i;
     BossHakuginEffect* effect;
 
