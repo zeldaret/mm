@@ -15951,7 +15951,7 @@
     0x80BDAF24:("ObjHsStump_Draw",),
     0x80BDB040:("EnHiddenNuts_Init",),
     0x80BDB188:("EnHiddenNuts_Destroy",),
-    0x80BDB1B4:("func_80BDB1B4",),
+    0x80BDB1B4:("EnHiddenNuts_ChangeAnim",),
     0x80BDB268:("func_80BDB268",),
     0x80BDB2B8:("func_80BDB2B8",),
     0x80BDB580:("func_80BDB580",),
