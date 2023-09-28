@@ -255,6 +255,8 @@ extern AnimationHeader D_06013828;    // gGohtRunAnim
 extern TexturePtr D_06014040;         // gGohtTitleCardTex
 extern FlexSkeletonHeader D_06013158; // gGohtSkel
 
+extern s32 D_80B0EAB0[5];
+
 #ifdef NON_MATCHING
 // requires in-function static, too lazy to import all the data right now
 void BossHakugin_Init(Actor* thisx, PlayState* play2) {
@@ -920,10 +922,50 @@ void func_80B09EDC(BossHakugin* this, PlayState* play) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Update.s")
 
-s32 func_80B0C000(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, struct Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C000.s")
+#ifdef NON_MATCHING
+s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+    static s32 D_80B0EB68 = 4;
+    static s32 D_80B0EB6C = 6;
+    BossHakugin* this = THIS;
 
-void func_80B0C1BC(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, struct Actor* thisx);
+    if (this->actionFunc == func_80B0A8C4) {
+        if (limbIndex == GOHT_LIMB_ROOT) {
+            pos->y -= this->actor.shape.yOffset;
+        }
+        if (!(this->unk_01B0 & (1 << (limbIndex + 0x1F)))) {
+            *dList = NULL;
+        }
+    }
+
+    if ((this->unk_0190 == 0) && (limbIndex == D_80B0EB6C)) {
+        Matrix_MultZero(&this->unk_3158[D_80B0EB68][this->unk_0191].unk_00);
+        D_80B0EB68--;
+        if (D_80B0EB68 < 0) {
+            D_80B0EB68 = 4;
+        }
+        D_80B0EB6C = D_80B0EAB0[D_80B0EB68];
+    }
+
+    if (limbIndex == GOHT_LIMB_HEAD) {
+        rot->z += this->unk_01A6;
+        if (this->actionFunc == func_80B0A2A4) {
+            rot->z += this->unk_0378;
+            rot->y += this->unk_0376;
+        }
+    } else if (limbIndex == GOHT_LIMB_THORAX_WRAPPER) {
+        rot->z += (s16)(this->unk_01A6 * 2);
+    } else if ((limbIndex == GOHT_LIMB_FRONT_LEFT_LEG_ROOT) || (limbIndex == GOHT_LIMB_FRONT_RIGHT_LEG_ROOT)) {
+        rot->z -= (s16)(this->unk_01A6 * 3);
+    }
+
+    return false;
+}
+#else
+s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_OverrideLimbDraw.s")
+#endif
+
+void func_80B0C1BC(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C1BC.s")
 
 void func_80B0C398(BossHakugin* this, PlayState* play);
@@ -954,7 +996,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80B0EA88);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          func_80B0C000, func_80B0C1BC, &this->actor);
+                          BossHakugin_OverrideLimbDraw, func_80B0C1BC, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 

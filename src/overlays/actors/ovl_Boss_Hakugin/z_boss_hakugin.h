@@ -2,6 +2,7 @@
 #define Z_BOSS_HAKUGIN_H
 
 #include "global.h"
+#include "objects/object_boss_hakugin/object_boss_hakugin.h"
 
 struct BossHakugin;
 
@@ -63,9 +64,11 @@ typedef struct BossHakugin {
     /* 0x01DC */ f32 unk_01DC;
     /* 0x01E0 */ f32 unk_01E0;
     /* 0x01E4 */ f32 unk_01E4;
-    /* 0x01E8 */ Vec3s jointTable[33];
-    /* 0x02AE */ Vec3s morphTable[33];
-    /* 0x0374 */ char unk_0374[0x6];
+    /* 0x01E8 */ Vec3s jointTable[GOHT_LIMB_MAX];
+    /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
+    /* 0x0374 */ s16 unk_0374;
+    /* 0x0376 */ s16 unk_0376;
+    /* 0x0378 */ s16 unk_0378;
     /* 0x037A */ Vec3s unk_037A;
     /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f unk_038C;
