@@ -16,27 +16,6 @@ typedef enum {
     /* 4 */ ENIN_BLUE_SHIRT
 } EnInType;
 
-typedef enum {
-    /*  0 */ ENIN_ANIM_0,
-    /*  1 */ ENIN_ANIM_1,
-    /*  2 */ ENIN_ANIM_2,
-    /*  3 */ ENIN_ANIM_3,
-    /*  4 */ ENIN_ANIM_4,
-    /*  5 */ ENIN_ANIM_5,
-    /*  6 */ ENIN_ANIM_6,
-    /*  7 */ ENIN_ANIM_7,
-    /*  8 */ ENIN_ANIM_8,
-    /*  9 */ ENIN_ANIM_9,
-    /* 10 */ ENIN_ANIM_10,
-    /* 11 */ ENIN_ANIM_11,
-    /* 12 */ ENIN_ANIM_12,
-    /* 13 */ ENIN_ANIM_13,
-    /* 14 */ ENIN_ANIM_14,
-    /* 15 */ ENIN_ANIM_15,
-    /* 16 */ ENIN_ANIM_16,
-    /* 17 */ ENIN_ANIM_17
-} EnInAnimation;
-
 #define ENIN_GET_TYPE(thisx) ((thisx)->params & 0x1FF)
 #define ENIN_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9) // Only used with ENIN_UNK_TYPE
 
@@ -70,7 +49,7 @@ typedef struct EnIn {
     /* 0x482 */ s16 unk482;
     /* 0x484 */ s16 unk484;
     /* 0x486 */ s16 unk486;
-    /* 0x488 */ s16 unk488;
+    /* 0x488 */ s16 animIndex2;
     /* 0x48A */ u16 unk48A;
     /* 0x48C */ s32 unk48C;
     /* 0x490 */ UNK_TYPE1 unk490[0x4];
