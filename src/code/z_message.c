@@ -174,11 +174,11 @@ void Message_CloseTextbox(PlayState* play) {
 }
 
 void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
-    static s16 sIconPrimColors[][3] = {
+    static Color_RGB16 sIconPrimColors[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
     };
-    static s16 sIconEnvColors[][3] = {
+    static Color_RGB16 sIconEnvColors[] = {
         { 0, 0, 0 },
         { 0, 130, 255 },
     };
@@ -204,45 +204,45 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
     gfx = *gfxP;
 
     if (!msgCtx->textIsCredits) {
-        primR = ABS_ALT(sIconPrimR - sIconPrimColors[sIconFlashColorIndex][0]) / sIconFlashTimer;
-        primG = ABS_ALT(sIconPrimG - sIconPrimColors[sIconFlashColorIndex][1]) / sIconFlashTimer;
-        primB = ABS_ALT(sIconPrimB - sIconPrimColors[sIconFlashColorIndex][2]) / sIconFlashTimer;
+        primR = ABS_ALT(sIconPrimR - sIconPrimColors[sIconFlashColorIndex].r) / sIconFlashTimer;
+        primG = ABS_ALT(sIconPrimG - sIconPrimColors[sIconFlashColorIndex].g) / sIconFlashTimer;
+        primB = ABS_ALT(sIconPrimB - sIconPrimColors[sIconFlashColorIndex].b) / sIconFlashTimer;
 
-        if (sIconPrimR >= sIconPrimColors[sIconFlashColorIndex][0]) {
+        if (sIconPrimR >= sIconPrimColors[sIconFlashColorIndex].r) {
             sIconPrimR -= primR;
         } else {
             sIconPrimR += primR;
         }
 
-        if (sIconPrimG >= sIconPrimColors[sIconFlashColorIndex][1]) {
+        if (sIconPrimG >= sIconPrimColors[sIconFlashColorIndex].g) {
             sIconPrimG -= primG;
         } else {
             sIconPrimG += primG;
         }
 
-        if (sIconPrimB >= sIconPrimColors[sIconFlashColorIndex][2]) {
+        if (sIconPrimB >= sIconPrimColors[sIconFlashColorIndex].b) {
             sIconPrimB -= primB;
         } else {
             sIconPrimB += primB;
         }
 
-        envR = ABS_ALT(sIconEnvR - sIconEnvColors[sIconFlashColorIndex][0]) / sIconFlashTimer;
-        envG = ABS_ALT(sIconEnvG - sIconEnvColors[sIconFlashColorIndex][1]) / sIconFlashTimer;
-        envB = ABS_ALT(sIconEnvB - sIconEnvColors[sIconFlashColorIndex][2]) / sIconFlashTimer;
+        envR = ABS_ALT(sIconEnvR - sIconEnvColors[sIconFlashColorIndex].r) / sIconFlashTimer;
+        envG = ABS_ALT(sIconEnvG - sIconEnvColors[sIconFlashColorIndex].g) / sIconFlashTimer;
+        envB = ABS_ALT(sIconEnvB - sIconEnvColors[sIconFlashColorIndex].b) / sIconFlashTimer;
 
-        if (sIconEnvR >= sIconEnvColors[sIconFlashColorIndex][0]) {
+        if (sIconEnvR >= sIconEnvColors[sIconFlashColorIndex].r) {
             sIconEnvR -= envR;
         } else {
             sIconEnvR += envR;
         }
 
-        if (sIconEnvG >= sIconEnvColors[sIconFlashColorIndex][1]) {
+        if (sIconEnvG >= sIconEnvColors[sIconFlashColorIndex].g) {
             sIconEnvG -= envG;
         } else {
             sIconEnvG += envG;
         }
 
-        if (sIconEnvB >= sIconEnvColors[sIconFlashColorIndex][2]) {
+        if (sIconEnvB >= sIconEnvColors[sIconFlashColorIndex].b) {
             sIconEnvB -= envB;
         } else {
             sIconEnvB += envB;
@@ -250,12 +250,12 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
 
         sIconFlashTimer--;
         if (sIconFlashTimer == 0) {
-            sIconPrimR = sIconPrimColors[sIconFlashColorIndex][0];
-            sIconPrimG = sIconPrimColors[sIconFlashColorIndex][1];
-            sIconPrimB = sIconPrimColors[sIconFlashColorIndex][2];
-            sIconEnvR = sIconEnvColors[sIconFlashColorIndex][0];
-            sIconEnvG = sIconEnvColors[sIconFlashColorIndex][1];
-            sIconEnvB = sIconEnvColors[sIconFlashColorIndex][2];
+            sIconPrimR = sIconPrimColors[sIconFlashColorIndex].r;
+            sIconPrimG = sIconPrimColors[sIconFlashColorIndex].g;
+            sIconPrimB = sIconPrimColors[sIconFlashColorIndex].b;
+            sIconEnvR = sIconEnvColors[sIconFlashColorIndex].r;
+            sIconEnvG = sIconEnvColors[sIconFlashColorIndex].g;
+            sIconEnvB = sIconEnvColors[sIconFlashColorIndex].b;
             sIconFlashTimer = 12;
             sIconFlashColorIndex ^= 1;
         }
@@ -279,11 +279,11 @@ void Message_DrawTextboxIcon(PlayState* play, Gfx** gfxP, s16 x, s16 y) {
 }
 
 void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
-    static s16 D_801CFD10[][3] = {
+    static Color_RGB16 D_801CFD10[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
     };
-    static s16 D_801CFD1C[][3] = {
+    static Color_RGB16 D_801CFD1C[] = {
         { 0, 0, 0 },
         { 0, 130, 255 },
     };
@@ -307,45 +307,45 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     gfx = *gfxP;
 
     if (!msgCtx->textIsCredits) {
-        primR = ABS_ALT(D_801CFD28 - D_801CFD10[D_801CFD38][0]) / D_801CFD34;
-        primG = ABS_ALT(D_801CFD2C - D_801CFD10[D_801CFD38][1]) / D_801CFD34;
-        primB = ABS_ALT(D_801CFD30 - D_801CFD10[D_801CFD38][2]) / D_801CFD34;
+        primR = ABS_ALT(D_801CFD28 - D_801CFD10[D_801CFD38].r) / D_801CFD34;
+        primG = ABS_ALT(D_801CFD2C - D_801CFD10[D_801CFD38].g) / D_801CFD34;
+        primB = ABS_ALT(D_801CFD30 - D_801CFD10[D_801CFD38].b) / D_801CFD34;
 
-        if (D_801CFD28 >= D_801CFD10[D_801CFD38][0]) {
+        if (D_801CFD28 >= D_801CFD10[D_801CFD38].r) {
             D_801CFD28 -= primR;
         } else {
             D_801CFD28 += primR;
         }
 
-        if (D_801CFD2C >= D_801CFD10[D_801CFD38][1]) {
+        if (D_801CFD2C >= D_801CFD10[D_801CFD38].g) {
             D_801CFD2C -= primG;
         } else {
             D_801CFD2C += primG;
         }
 
-        if (D_801CFD30 >= D_801CFD10[D_801CFD38][2]) {
+        if (D_801CFD30 >= D_801CFD10[D_801CFD38].b) {
             D_801CFD30 -= primB;
         } else {
             D_801CFD30 += primB;
         }
 
-        envR = ABS_ALT(D_801CFD3C - D_801CFD1C[D_801CFD38][0]) / D_801CFD34;
-        envG = ABS_ALT(D_801CFD40 - D_801CFD1C[D_801CFD38][1]) / D_801CFD34;
-        envB = ABS_ALT(D_801CFD44 - D_801CFD1C[D_801CFD38][2]) / D_801CFD34;
+        envR = ABS_ALT(D_801CFD3C - D_801CFD1C[D_801CFD38].r) / D_801CFD34;
+        envG = ABS_ALT(D_801CFD40 - D_801CFD1C[D_801CFD38].g) / D_801CFD34;
+        envB = ABS_ALT(D_801CFD44 - D_801CFD1C[D_801CFD38].b) / D_801CFD34;
 
-        if (D_801CFD3C >= D_801CFD1C[D_801CFD38][0]) {
+        if (D_801CFD3C >= D_801CFD1C[D_801CFD38].r) {
             D_801CFD3C -= envR;
         } else {
             D_801CFD3C += envR;
         }
 
-        if (D_801CFD40 >= D_801CFD1C[D_801CFD38][1]) {
+        if (D_801CFD40 >= D_801CFD1C[D_801CFD38].g) {
             D_801CFD40 -= envG;
         } else {
             D_801CFD40 += envG;
         }
 
-        if (D_801CFD44 >= D_801CFD1C[D_801CFD38][2]) {
+        if (D_801CFD44 >= D_801CFD1C[D_801CFD38].b) {
             D_801CFD44 -= envB;
         } else {
             D_801CFD44 += envB;
@@ -353,12 +353,12 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
 
         D_801CFD34--;
         if (D_801CFD34 == 0) {
-            D_801CFD28 = D_801CFD10[D_801CFD38][0];
-            D_801CFD2C = D_801CFD10[D_801CFD38][1];
-            D_801CFD30 = D_801CFD10[D_801CFD38][2];
-            D_801CFD3C = D_801CFD1C[D_801CFD38][0];
-            D_801CFD40 = D_801CFD1C[D_801CFD38][1];
-            D_801CFD44 = D_801CFD1C[D_801CFD38][2];
+            D_801CFD28 = D_801CFD10[D_801CFD38].r;
+            D_801CFD2C = D_801CFD10[D_801CFD38].g;
+            D_801CFD30 = D_801CFD10[D_801CFD38].b;
+            D_801CFD3C = D_801CFD1C[D_801CFD38].r;
+            D_801CFD40 = D_801CFD1C[D_801CFD38].g;
+            D_801CFD44 = D_801CFD1C[D_801CFD38].b;
             D_801CFD34 = 12;
             D_801CFD38 ^= 1;
         }
@@ -377,11 +377,11 @@ void func_80147F18(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
 }
 
 void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
-    static s16 D_801CFD48[][3] = {
+    static Color_RGB16 D_801CFD48[] = {
         { 0, 80, 200 },
         { 50, 130, 255 },
     };
-    static s16 D_801CFD54[][3] = {
+    static Color_RGB16 D_801CFD54[] = {
         { 0, 0, 0 },
         { 0, 130, 255 },
     };
@@ -405,45 +405,45 @@ void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
     gfx = *gfxP;
 
     if (!msgCtx->textIsCredits) {
-        primR = ABS_ALT(D_801CFD60 - D_801CFD48[D_801CFD70][0]) / D_801CFD6C;
-        primG = ABS_ALT(D_801CFD64 - D_801CFD48[D_801CFD70][1]) / D_801CFD6C;
-        primB = ABS_ALT(D_801CFD68 - D_801CFD48[D_801CFD70][2]) / D_801CFD6C;
+        primR = ABS_ALT(D_801CFD60 - D_801CFD48[D_801CFD70].r) / D_801CFD6C;
+        primG = ABS_ALT(D_801CFD64 - D_801CFD48[D_801CFD70].g) / D_801CFD6C;
+        primB = ABS_ALT(D_801CFD68 - D_801CFD48[D_801CFD70].b) / D_801CFD6C;
 
-        if (D_801CFD60 >= D_801CFD48[D_801CFD70][0]) {
+        if (D_801CFD60 >= D_801CFD48[D_801CFD70].r) {
             D_801CFD60 -= primR;
         } else {
             D_801CFD60 += primR;
         }
 
-        if (D_801CFD64 >= D_801CFD48[D_801CFD70][1]) {
+        if (D_801CFD64 >= D_801CFD48[D_801CFD70].g) {
             D_801CFD64 -= primG;
         } else {
             D_801CFD64 += primG;
         }
 
-        if (D_801CFD68 >= D_801CFD48[D_801CFD70][2]) {
+        if (D_801CFD68 >= D_801CFD48[D_801CFD70].b) {
             D_801CFD68 -= primB;
         } else {
             D_801CFD68 += primB;
         }
 
-        envR = ABS_ALT(D_801CFD74 - D_801CFD54[D_801CFD70][0]) / D_801CFD6C;
-        envG = ABS_ALT(D_801CFD78 - D_801CFD54[D_801CFD70][1]) / D_801CFD6C;
-        envB = ABS_ALT(D_801CFD7C - D_801CFD54[D_801CFD70][2]) / D_801CFD6C;
+        envR = ABS_ALT(D_801CFD74 - D_801CFD54[D_801CFD70].r) / D_801CFD6C;
+        envG = ABS_ALT(D_801CFD78 - D_801CFD54[D_801CFD70].g) / D_801CFD6C;
+        envB = ABS_ALT(D_801CFD7C - D_801CFD54[D_801CFD70].b) / D_801CFD6C;
 
-        if (D_801CFD74 >= D_801CFD54[D_801CFD70][0]) {
+        if (D_801CFD74 >= D_801CFD54[D_801CFD70].r) {
             D_801CFD74 -= envR;
         } else {
             D_801CFD74 += envR;
         }
 
-        if (D_801CFD78 >= D_801CFD54[D_801CFD70][1]) {
+        if (D_801CFD78 >= D_801CFD54[D_801CFD70].g) {
             D_801CFD78 -= envG;
         } else {
             D_801CFD78 += envG;
         }
 
-        if (D_801CFD7C >= D_801CFD54[D_801CFD70][2]) {
+        if (D_801CFD7C >= D_801CFD54[D_801CFD70].b) {
             D_801CFD7C -= envB;
         } else {
             D_801CFD7C += envB;
@@ -451,12 +451,12 @@ void func_80148558(PlayState* play, Gfx** gfxP, s16 arg2, s16 arg3) {
 
         D_801CFD6C--;
         if (D_801CFD6C == 0) {
-            D_801CFD60 = D_801CFD48[D_801CFD70][0];
-            D_801CFD64 = D_801CFD48[D_801CFD70][1];
-            D_801CFD68 = D_801CFD48[D_801CFD70][2];
-            D_801CFD74 = D_801CFD54[D_801CFD70][0];
-            D_801CFD78 = D_801CFD54[D_801CFD70][1];
-            D_801CFD7C = D_801CFD54[D_801CFD70][2];
+            D_801CFD60 = D_801CFD48[D_801CFD70].r;
+            D_801CFD64 = D_801CFD48[D_801CFD70].g;
+            D_801CFD68 = D_801CFD48[D_801CFD70].b;
+            D_801CFD74 = D_801CFD54[D_801CFD70].r;
+            D_801CFD78 = D_801CFD54[D_801CFD70].g;
+            D_801CFD7C = D_801CFD54[D_801CFD70].b;
             D_801CFD6C = 12;
             D_801CFD70 ^= 1;
         }
@@ -552,9 +552,9 @@ void func_80148D64(PlayState* play) {
         sAnalogStickHeld = false;
     }
 
-    msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] * 100) - ('0' * 100);
-    msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] * 10) - ('0' * 10);
-    msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2]) - '0';
+    msgCtx->bankRupeesSelected = (msgCtx->decodedBuffer.schar[msgCtx->unk120C0] - '0') * 100;
+    msgCtx->bankRupeesSelected += (msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 1] - '0') * 10;
+    msgCtx->bankRupeesSelected += msgCtx->decodedBuffer.schar[msgCtx->unk120C0 + 2] - '0';
 }
 
 void func_80149048(PlayState* play) {
@@ -774,10 +774,9 @@ void Message_GrowTextbox(PlayState* play) {
 
     if (!play->pauseCtx.bombersNotebookOpen) {
         msgCtx->textboxX = msgCtx->textboxXTarget + ((256 - sTextboxWidth) / 2);
-        return;
+    } else {
+        msgCtx->textboxX = msgCtx->textboxXTarget + ((512 - sTextboxWidth) / 2);
     }
-
-    msgCtx->textboxX = msgCtx->textboxXTarget + ((512 - sTextboxWidth) / 2);
 }
 
 void Message_FindMessage(PlayState* play, u16 textId) {
@@ -808,13 +807,55 @@ void Message_FindMessage(PlayState* play, u16 textId) {
     font->messageEnd = nextSegment - foundSegment;
 }
 
-u8 D_801CFDEC[][3] = {
+Color_RGB8 D_801CFDEC[] = {
     { 0, 255, 0 },   { 0, 0, 255 },     { 255, 255, 255 }, { 255, 0, 0 },
     { 255, 0, 255 }, { 255, 255, 255 }, { 255, 100, 0 },   { 0, 0, 0 },
 };
-s16 D_801CFE04[] = { 150, 255, 100, 255, 255, 255, 255, 255, 255, 255, 255, 255 };
-s16 D_801CFE1C[] = { 255, 80, 150, 160, 100, 240, 255, 255, 255, 255, 255, 255 };
-s16 D_801CFE34[] = { 100, 40, 255, 0, 255, 100, 255, 255, 255, 255, 255, 255 };
+
+s16 D_801CFE04[] = {
+    150, // ITEM_SONG_SONATA
+    255, // ITEM_SONG_LULLABY
+    100, // ITEM_SONG_NOVA
+    255, // ITEM_SONG_ELEGY
+    255, // ITEM_SONG_OATH
+    255, // ITEM_SONG_SARIA
+    255, // ITEM_SONG_TIME
+    255, // ITEM_SONG_HEALING
+    255, // ITEM_SONG_EPONA
+    255, // ITEM_SONG_SOARING
+    255, // ITEM_SONG_STORMS
+    255  // ITEM_SONG_SUN
+
+};
+s16 D_801CFE1C[] = {
+    255, // ITEM_SONG_SONATA
+    80,  // ITEM_SONG_LULLABY
+    150, // ITEM_SONG_NOVA
+    160, // ITEM_SONG_ELEGY
+    100, // ITEM_SONG_OATH
+    240, // ITEM_SONG_SARIA
+    255, // ITEM_SONG_TIME
+    255, // ITEM_SONG_HEALING
+    255, // ITEM_SONG_EPONA
+    255, // ITEM_SONG_SOARING
+    255, // ITEM_SONG_STORMS
+    255  // ITEM_SONG_SUN
+
+};
+s16 D_801CFE34[] = {
+    100, // ITEM_SONG_SONATA
+    40,  // ITEM_SONG_LULLABY
+    255, // ITEM_SONG_NOVA
+    0,   // ITEM_SONG_ELEGY
+    255, // ITEM_SONG_OATH
+    100, // ITEM_SONG_SARIA
+    255, // ITEM_SONG_TIME
+    255, // ITEM_SONG_HEALING
+    255, // ITEM_SONG_EPONA
+    255, // ITEM_SONG_SOARING
+    255, // ITEM_SONG_STORMS
+    255  // ITEM_SONG_SUN
+};
 
 TexturePtr D_801CFE4C[] = {
     gStrayFairyWoodfallIconTex,
@@ -823,13 +864,14 @@ TexturePtr D_801CFE4C[] = {
     gStrayFairyStoneTowerIconTex,
 };
 
-u8 D_801CFE5C[][3] = {
+Color_RGB8 D_801CFE5C[] = {
     { 255, 110, 160 },
     { 90, 255, 100 },
     { 120, 255, 255 },
     { 245, 245, 90 },
 };
-u8 D_801CFE68[][3] = {
+
+Color_RGB8 D_801CFE68[] = {
     { 255, 255, 255 },
     { 255, 255, 255 },
     { 255, 255, 255 },
@@ -860,7 +902,7 @@ void Message_DrawItemIcon(PlayState* play, Gfx** gfxP) {
     } else if ((msgCtx->itemId >= ITEM_RUPEE_GREEN) && (msgCtx->itemId <= ITEM_RUPEE_HUGE)) {
         index = msgCtx->itemId - ITEM_RUPEE_GREEN;
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, D_801CFDEC[index][0], D_801CFDEC[index][1], D_801CFDEC[index][2],
+        gDPSetPrimColor(gfx++, 0, 0, D_801CFDEC[index].r, D_801CFDEC[index].g, D_801CFDEC[index].b,
                         msgCtx->textColorAlpha);
         gDPSetEnvColor(gfx++, 0, 80, 0, 255);
         gDPLoadTextureBlock(gfx++, gRupeeCounterIconTex, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
@@ -868,12 +910,12 @@ void Message_DrawItemIcon(PlayState* play, Gfx** gfxP) {
     } else if (msgCtx->itemId == ITEM_STRAY_FAIRIES) {
         msgCtx->unk12016 = 0x18;
         gDPPipeSync(gfx++);
-        gDPSetPrimColor(gfx++, 0, 0, D_801CFE5C[((void)0, gSaveContext.dungeonIndex)][0],
-                        D_801CFE5C[((void)0, gSaveContext.dungeonIndex)][1],
-                        D_801CFE5C[((void)0, gSaveContext.dungeonIndex)][2], msgCtx->textColorAlpha);
-        gDPSetEnvColor(gfx++, D_801CFE68[((void)0, gSaveContext.dungeonIndex)][0],
-                       D_801CFE68[((void)0, gSaveContext.dungeonIndex)][1],
-                       D_801CFE68[((void)0, gSaveContext.dungeonIndex)][2], 0);
+        gDPSetPrimColor(gfx++, 0, 0, D_801CFE5C[((void)0, gSaveContext.dungeonIndex)].r,
+                        D_801CFE5C[((void)0, gSaveContext.dungeonIndex)].g,
+                        D_801CFE5C[((void)0, gSaveContext.dungeonIndex)].b, msgCtx->textColorAlpha);
+        gDPSetEnvColor(gfx++, D_801CFE68[((void)0, gSaveContext.dungeonIndex)].r,
+                       D_801CFE68[((void)0, gSaveContext.dungeonIndex)].g,
+                       D_801CFE68[((void)0, gSaveContext.dungeonIndex)].b, 0);
         gDPLoadTextureBlock_4b(gfx++, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(gfx++, msgCtx->unk12010 << 2, msgCtx->unk12012 << 2,
@@ -3383,9 +3425,34 @@ s32 Message_BombersNotebookProcessEventQueue(PlayState* play) {
 }
 
 u16 D_801D028C[] = {
-    0x1B5A, 0x1B5B, 0x1B5C, 0x1B5D, 0x1B5E, 0x1B5F, 0x1B60, 0x1B61, 0x1B62, 0x1B63, 0x1B64, 0x1B65, 0x1B66,
-    0x1B67, 0x1B68, 0x1B69, 0x1B6A, 0,      0xDC7,  0xDC9,  0x120A, 0x120B, 0x122C, 0x122F, 0x120A, 0x120B,
+    0x1B5A, // OCARINA_ACTION_0
+    0x1B5B, //
+    0x1B5C, // OCARINA_ACTION_DEMONSTRATE_SONATA
+    0x1B5D, // OCARINA_ACTION_DEMONSTRATE_GORON_LULLABY
+    0x1B5E, // OCARINA_ACTION_DEMONSTRATE_NEW_WAVE
+    0x1B5F, // OCARINA_ACTION_DEMONSTRATE_ELEGY
+    0x1B60, // OCARINA_ACTION_DEMONSTRATE_OATH
+    0x1B61, // OCARINA_ACTION_DEMONSTRATE_SARIAS
+    0x1B62, // OCARINA_ACTION_DEMONSTRATE_TIME
+    0x1B63, // OCARINA_ACTION_DEMONSTRATE_HEALING
+    0x1B64, // OCARINA_ACTION_DEMONSTRATE_EPONAS
+    0x1B65, // OCARINA_ACTION_DEMONSTRATE_SOARING
+    0x1B66, // OCARINA_ACTION_DEMONSTRATE_STORMS
+    0x1B67, // OCARINA_ACTION_DEMONSTRATE_SUNS
+    0x1B68, // OCARINA_ACTION_DEMONSTRATE_INVERTED_TIME
+    0x1B69, // OCARINA_ACTION_DEMONSTRATE_DOUBLE_TIME
+    0x1B6A, // OCARINA_ACTION_DEMONSTRATE_GORON_LULLABY_INTRO
+    0,      // OCARINA_ACTION_11
+    0xDC7,  // OCARINA_ACTION_3B
+    0xDC9,  // OCARINA_ACTION_3C
+    0x120A, // OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_FIRST_HALF
+    0x120B, // OCARINA_ACTION_DEMONSTRATE_EVAN_PART2_FIRST_HALF
+    0x122C, // OCARINA_ACTION_DEMONSTRATE_EVAN_PART1_SECOND_HALF
+    0x122F, // OCARINA_ACTION_DEMONSTRATE_EVAN_PART2_SECOND_HALF
+    0x120A, // OCARINA_ACTION_PROMPT_EVAN_PART1_SECOND_HALF
+    0x120B, // OCARINA_ACTION_PROMPT_EVAN_PART2_SECOND_HALF
 };
+
 u16 sOcarinaSongFlagsMap[] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800 };
 
 void Message_DisplayOcarinaStaffImpl(PlayState* play, u16 ocarinaAction) {
@@ -3766,111 +3833,111 @@ void Message_SpawnSongEffect(PlayState* play) {
     }
 }
 
-s16 sOcarinaButtonAPrimColors[][3] = {
+Color_RGB16 sOcarinaButtonAPrimColors[] = {
     { 80, 150, 255 },
     { 100, 200, 255 },
 };
-s16 sOcarinaButtonAEnvColors[][3] = {
+Color_RGB16 sOcarinaButtonAEnvColors[] = {
     { 10, 10, 10 },
     { 50, 50, 255 },
 };
-s16 sOcarinaButtonCPrimColors[][3] = {
+Color_RGB16 sOcarinaButtonCPrimColors[] = {
     { 255, 255, 50 },
     { 255, 255, 180 },
 };
-s16 sOcarinaButtonCEnvColors[][3] = {
+Color_RGB16 sOcarinaButtonCEnvColors[] = {
     { 10, 10, 10 },
     { 110, 110, 50 },
 };
 
 void Message_FlashOcarinaButtons(void) {
-    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonAPrimR - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][0]) /
+    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonAPrimR - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].r) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonAPrimG - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][1]) /
+    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonAPrimG - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].g) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonAPrimB - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][2]) /
+    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonAPrimB - sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].b) /
                           sOcarinaButtonFlashTimer;
 
-    if (sOcarinaButtonAPrimR >= sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][0]) {
+    if (sOcarinaButtonAPrimR >= sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].r) {
         sOcarinaButtonAPrimR -= sOcarinaButtonStepR;
     } else {
         sOcarinaButtonAPrimR += sOcarinaButtonStepR;
     }
-    if (sOcarinaButtonAPrimG >= sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][1]) {
+    if (sOcarinaButtonAPrimG >= sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].g) {
         sOcarinaButtonAPrimG -= sOcarinaButtonStepG;
     } else {
         sOcarinaButtonAPrimG += sOcarinaButtonStepG;
     }
-    if (sOcarinaButtonAPrimB >= sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][2]) {
+    if (sOcarinaButtonAPrimB >= sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].b) {
         sOcarinaButtonAPrimB -= sOcarinaButtonStepB;
     } else {
         sOcarinaButtonAPrimB += sOcarinaButtonStepB;
     }
 
-    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonAEnvR - sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][0]) /
+    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonAEnvR - sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].r) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonAEnvG - sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][1]) /
+    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonAEnvG - sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].g) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonAEnvB - sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][2]) /
+    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonAEnvB - sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].b) /
                           sOcarinaButtonFlashTimer;
 
-    if (sOcarinaButtonCEnvR >= sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][0]) {
+    if (sOcarinaButtonCEnvR >= sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].r) {
         sOcarinaButtonAEnvR -= sOcarinaButtonStepR;
     } else {
         sOcarinaButtonAEnvR += sOcarinaButtonStepR;
     }
-    if (sOcarinaButtonCEnvG >= sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][1]) {
+    if (sOcarinaButtonCEnvG >= sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].g) {
         sOcarinaButtonAEnvG -= sOcarinaButtonStepG;
     } else {
         sOcarinaButtonAEnvG += sOcarinaButtonStepG;
     }
-    if (sOcarinaButtonCEnvB >= sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][2]) {
+    if (sOcarinaButtonCEnvB >= sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].b) {
         sOcarinaButtonAEnvB -= sOcarinaButtonStepB;
     } else {
         sOcarinaButtonAEnvB += sOcarinaButtonStepB;
     }
 
-    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonCPrimR - sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][0]) /
+    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonCPrimR - sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].r) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonCPrimG - sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][1]) /
+    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonCPrimG - sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].g) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonCPrimB - sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][2]) /
+    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonCPrimB - sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].b) /
                           sOcarinaButtonFlashTimer;
 
-    if (sOcarinaButtonCPrimR >= sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][0]) {
+    if (sOcarinaButtonCPrimR >= sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].r) {
         sOcarinaButtonCPrimR -= sOcarinaButtonStepR;
     } else {
         sOcarinaButtonCPrimR += sOcarinaButtonStepR;
     }
-    if (sOcarinaButtonCPrimG >= sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][1]) {
+    if (sOcarinaButtonCPrimG >= sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].g) {
         sOcarinaButtonCPrimG -= sOcarinaButtonStepG;
     } else {
         sOcarinaButtonCPrimG += sOcarinaButtonStepG;
     }
-    if (sOcarinaButtonCPrimB >= sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][2]) {
+    if (sOcarinaButtonCPrimB >= sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].b) {
         sOcarinaButtonCPrimB -= sOcarinaButtonStepB;
     } else {
         sOcarinaButtonCPrimB += sOcarinaButtonStepB;
     }
 
-    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonCEnvR - sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][0]) /
+    sOcarinaButtonStepR = ABS_ALT(sOcarinaButtonCEnvR - sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].r) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonCEnvG - sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][1]) /
+    sOcarinaButtonStepG = ABS_ALT(sOcarinaButtonCEnvG - sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].g) /
                           sOcarinaButtonFlashTimer;
-    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonCEnvB - sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][2]) /
+    sOcarinaButtonStepB = ABS_ALT(sOcarinaButtonCEnvB - sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].b) /
                           sOcarinaButtonFlashTimer;
 
-    if (sOcarinaButtonCEnvR >= sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][0]) {
+    if (sOcarinaButtonCEnvR >= sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].r) {
         sOcarinaButtonCEnvR -= sOcarinaButtonStepR;
     } else {
         sOcarinaButtonCEnvR += sOcarinaButtonStepR;
     }
-    if (sOcarinaButtonCEnvG >= sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][1]) {
+    if (sOcarinaButtonCEnvG >= sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].g) {
         sOcarinaButtonCEnvG -= sOcarinaButtonStepG;
     } else {
         sOcarinaButtonCEnvG += sOcarinaButtonStepG;
     }
-    if (sOcarinaButtonCEnvB >= sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][2]) {
+    if (sOcarinaButtonCEnvB >= sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].b) {
         sOcarinaButtonCEnvB -= sOcarinaButtonStepB;
     } else {
         sOcarinaButtonCEnvB += sOcarinaButtonStepB;
@@ -3878,18 +3945,18 @@ void Message_FlashOcarinaButtons(void) {
 
     sOcarinaButtonFlashTimer--;
     if (sOcarinaButtonFlashTimer == 0) {
-        sOcarinaButtonAPrimR = sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][0];
-        sOcarinaButtonAPrimG = sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][1];
-        sOcarinaButtonAPrimB = sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex][2];
-        sOcarinaButtonAEnvR = sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][0];
-        sOcarinaButtonAEnvG = sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][1];
-        sOcarinaButtonAEnvB = sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex][2];
-        sOcarinaButtonCPrimR = sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][0];
-        sOcarinaButtonCPrimG = sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][1];
-        sOcarinaButtonCPrimB = sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex][2];
-        sOcarinaButtonCEnvR = sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][0];
-        sOcarinaButtonCEnvG = sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][1];
-        sOcarinaButtonCEnvB = sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex][2];
+        sOcarinaButtonAPrimR = sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].r;
+        sOcarinaButtonAPrimG = sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].g;
+        sOcarinaButtonAPrimB = sOcarinaButtonAPrimColors[sOcarinaButtonFlashColorIndex].b;
+        sOcarinaButtonAEnvR = sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].r;
+        sOcarinaButtonAEnvG = sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].g;
+        sOcarinaButtonAEnvB = sOcarinaButtonAEnvColors[sOcarinaButtonFlashColorIndex].b;
+        sOcarinaButtonCPrimR = sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].r;
+        sOcarinaButtonCPrimG = sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].g;
+        sOcarinaButtonCPrimB = sOcarinaButtonCPrimColors[sOcarinaButtonFlashColorIndex].b;
+        sOcarinaButtonCEnvR = sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].r;
+        sOcarinaButtonCEnvG = sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].g;
+        sOcarinaButtonCEnvB = sOcarinaButtonCEnvColors[sOcarinaButtonFlashColorIndex].b;
         sOcarinaButtonFlashTimer = 3;
         sOcarinaButtonFlashColorIndex ^= 1;
     }
@@ -4184,7 +4251,7 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
             case MSGMODE_TEXT_AWAIT_INPUT:
             case MSGMODE_TEXT_AWAIT_NEXT:
                 Message_DrawText(play, &gfx);
-                Message_DrawTextboxIcon(play, &gfx, 0x9E,
+                Message_DrawTextboxIcon(play, &gfx, 158,
                                         (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                 break;
 
@@ -4991,12 +5058,12 @@ void Message_DrawMain(PlayState* play, Gfx** gfxP) {
                     case TEXTBOX_ENDTYPE_60:
                     case TEXTBOX_ENDTYPE_61:
                     default:
-                        Message_DrawTextboxIcon(play, &gfx, 0x9E,
+                        Message_DrawTextboxIcon(play, &gfx, 158,
                                                 (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                         break;
 
                     case TEXTBOX_ENDTYPE_42:
-                        Message_DrawTextboxIcon(play, &gfx, 0x9E,
+                        Message_DrawTextboxIcon(play, &gfx, 158,
                                                 (s16)(D_801D03A8[msgCtx->textBoxType] + msgCtx->textboxYTarget));
                         break;
                 }
@@ -5053,82 +5120,83 @@ void Message_Draw(PlayState* play) {
 }
 
 s16 sTextboxXPositions[TEXTBOX_TYPE_MAX] = {
-    0x22, // TEXTBOX_TYPE_0
-    0x22, // TEXTBOX_TYPE_1
-    0x22, // TEXTBOX_TYPE_2
-    0x22, // TEXTBOX_TYPE_3
-    0x22, // TEXTBOX_TYPE_4
-    0x22, // TEXTBOX_TYPE_5
-    0x22, // TEXTBOX_TYPE_6
-    0x22, // TEXTBOX_TYPE_7
-    0x22, // TEXTBOX_TYPE_8
-    0x22, // TEXTBOX_TYPE_9
-    0x22, // TEXTBOX_TYPE_A
-    0x22, // TEXTBOX_TYPE_B
-    0x22, // TEXTBOX_TYPE_C
-    0x22, // TEXTBOX_TYPE_D
-    0x22, // TEXTBOX_TYPE_E
-    0x22, // TEXTBOX_TYPE_F
+    34, // TEXTBOX_TYPE_0
+    34, // TEXTBOX_TYPE_1
+    34, // TEXTBOX_TYPE_2
+    34, // TEXTBOX_TYPE_3
+    34, // TEXTBOX_TYPE_4
+    34, // TEXTBOX_TYPE_5
+    34, // TEXTBOX_TYPE_6
+    34, // TEXTBOX_TYPE_7
+    34, // TEXTBOX_TYPE_8
+    34, // TEXTBOX_TYPE_9
+    34, // TEXTBOX_TYPE_A
+    34, // TEXTBOX_TYPE_B
+    34, // TEXTBOX_TYPE_C
+    34, // TEXTBOX_TYPE_D
+    34, // TEXTBOX_TYPE_E
+    34, // TEXTBOX_TYPE_F
 };
 
 s16 sTextboxLowerYPositions[] = {
-    0x8E, // TEXTBOX_TYPE_0
-    0x8E, // TEXTBOX_TYPE_1
-    0x8E, // TEXTBOX_TYPE_2
-    0x8E, // TEXTBOX_TYPE_3
-    0xAE, // TEXTBOX_TYPE_4
-    0x8E, // TEXTBOX_TYPE_5
-    0x8E, // TEXTBOX_TYPE_6
-    0x8E, // TEXTBOX_TYPE_7
-    0x8E, // TEXTBOX_TYPE_8
-    0x82, // TEXTBOX_TYPE_9
-    0xAE, // TEXTBOX_TYPE_A
-    0,    // TEXTBOX_TYPE_B
-    0x8E, // TEXTBOX_TYPE_C
-    0x8E, // TEXTBOX_TYPE_D
-    0x8E, // TEXTBOX_TYPE_E
-    0x8E, // TEXTBOX_TYPE_F
+    142, // TEXTBOX_TYPE_0
+    142, // TEXTBOX_TYPE_1
+    142, // TEXTBOX_TYPE_2
+    142, // TEXTBOX_TYPE_3
+    174, // TEXTBOX_TYPE_4
+    142, // TEXTBOX_TYPE_5
+    142, // TEXTBOX_TYPE_6
+    142, // TEXTBOX_TYPE_7
+    142, // TEXTBOX_TYPE_8
+    130, // TEXTBOX_TYPE_9
+    174, // TEXTBOX_TYPE_A
+    0,   // TEXTBOX_TYPE_B
+    142, // TEXTBOX_TYPE_C
+    142, // TEXTBOX_TYPE_D
+    142, // TEXTBOX_TYPE_E
+    142, // TEXTBOX_TYPE_F
 };
 
 s16 sTextboxUpperYPositions[] = {
-    0x26, // TEXTBOX_TYPE_0
-    0x26, // TEXTBOX_TYPE_1
-    0x26, // TEXTBOX_TYPE_2
-    0x26, // TEXTBOX_TYPE_3
-    0xAE, // TEXTBOX_TYPE_4
-    0x26, // TEXTBOX_TYPE_5
-    0x26, // TEXTBOX_TYPE_6
-    0x26, // TEXTBOX_TYPE_7
-    0x26, // TEXTBOX_TYPE_8
-    0x3C, // TEXTBOX_TYPE_9
-    0xAE, // TEXTBOX_TYPE_A
-    0,    // TEXTBOX_TYPE_B
-    0x26, // TEXTBOX_TYPE_C
-    0x26, // TEXTBOX_TYPE_D
-    0x26, // TEXTBOX_TYPE_E
-    0x26, // TEXTBOX_TYPE_F
+    38,  // TEXTBOX_TYPE_0
+    38,  // TEXTBOX_TYPE_1
+    38,  // TEXTBOX_TYPE_2
+    38,  // TEXTBOX_TYPE_3
+    174, // TEXTBOX_TYPE_4
+    38,  // TEXTBOX_TYPE_5
+    38,  // TEXTBOX_TYPE_6
+    38,  // TEXTBOX_TYPE_7
+    38,  // TEXTBOX_TYPE_8
+    60,  // TEXTBOX_TYPE_9
+    174, // TEXTBOX_TYPE_A
+    0,   // TEXTBOX_TYPE_B
+    38,  // TEXTBOX_TYPE_C
+    38,  // TEXTBOX_TYPE_D
+    38,  // TEXTBOX_TYPE_E
+    38,  // TEXTBOX_TYPE_F
 };
 
 s16 sTextboxMidYPositions[] = {
-    0x5A, // TEXTBOX_TYPE_0
-    0x5A, // TEXTBOX_TYPE_1
-    0x5A, // TEXTBOX_TYPE_2
-    0x5A, // TEXTBOX_TYPE_3
-    0xAE, // TEXTBOX_TYPE_4
-    0x5A, // TEXTBOX_TYPE_5
-    0x5A, // TEXTBOX_TYPE_6
-    0x5A, // TEXTBOX_TYPE_7
-    0x5A, // TEXTBOX_TYPE_8
-    0x5A, // TEXTBOX_TYPE_9
-    0xAE, // TEXTBOX_TYPE_A
-    0,    // TEXTBOX_TYPE_B
-    0x5A, // TEXTBOX_TYPE_C
-    0x5A, // TEXTBOX_TYPE_D
-    0x5A, // TEXTBOX_TYPE_E
-    0x5A, // TEXTBOX_TYPE_F
+    90,  // TEXTBOX_TYPE_0
+    90,  // TEXTBOX_TYPE_1
+    90,  // TEXTBOX_TYPE_2
+    90,  // TEXTBOX_TYPE_3
+    174, // TEXTBOX_TYPE_4
+    90,  // TEXTBOX_TYPE_5
+    90,  // TEXTBOX_TYPE_6
+    90,  // TEXTBOX_TYPE_7
+    90,  // TEXTBOX_TYPE_8
+    90,  // TEXTBOX_TYPE_9
+    174, // TEXTBOX_TYPE_A
+    0,   // TEXTBOX_TYPE_B
+    90,  // TEXTBOX_TYPE_C
+    90,  // TEXTBOX_TYPE_D
+    90,  // TEXTBOX_TYPE_E
+    90,  // TEXTBOX_TYPE_F
 };
 
 s16 D_801D0448[] = { 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25 };
+
 s16 D_801D045C[] = {
     0x1B91,
     0x1B90,
