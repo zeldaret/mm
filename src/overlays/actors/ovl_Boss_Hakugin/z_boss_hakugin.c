@@ -994,8 +994,100 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     }
 }
 
-void func_80B0D2B8(BossHakugin* this, u8* tex, f32 tween);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0D2B8.s")
+#if 0
+s32 D_80B0EB70[6] = { 1, 2, 3, 3, 2, 1 };
+s32 D_80B0EB88[7] = { 2, 3, 4, 4, 4, 3, 2 };
+s32 D_80B0EBA4[8] = { 2, 3, 4, 4, 4, 4, 3, 2 };
+s32 D_80B0EBC4[14] = { 2, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 4, 2 };
+s32 D_80B0EBFC[15] = { 1, -1, 1, 1, 3, 4, 1, 6, 7, 0, 9, 0xA, 0, 0xC, 0xD };
+u8 D_80B0EC38[15] = { 1, 2, 1, 0, 3, 3, 0, 3, 3, 0, 3, 3, 0, 3, 3 };
+#else
+extern s32 D_80B0EB70[];
+extern s32 D_80B0EB88[];
+extern s32 D_80B0EBA4[];
+extern s32 D_80B0EBC4[];
+extern s32 D_80B0EBFC[];
+extern u8 D_80B0EC38[];
+#endif
+
+void func_80B0D2B8(BossHakugin* this, u8* tex, f32 arg2) {
+    s32 index;
+    s32 i;
+    s32 baseX;
+    s32 baseY;
+    s32 addY;
+    s32 x;
+    s32 y = -1;
+    Vec3f lerp;
+    Vec3f* parentBodyPartPos;
+    Vec3f* bodyPartPos;
+    Vec3f sp74;
+    Vec3f sp68;
+
+    for (i = 0; i < 15; i++) {
+        if ((arg2 == 0.0f) || (y = D_80B0EBFC[i]) > BODYPART_NONE) {
+            bodyPartPos = &this->bodyPartsPos[i];
+            if (arg2 > 0.0f) {
+                parentBodyPartPos = &this->bodyPartsPos[y];
+
+                VEC3F_LERPIMPDST(&lerp, bodyPartPos, parentBodyPartPos, arg2);
+
+                sp74.x = lerp.x - this->actor.world.pos.x;
+                sp74.y = lerp.y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
+                sp74.z = lerp.z - this->actor.world.pos.z;
+            } else {
+                sp74.x = bodyPartPos->x - this->actor.world.pos.x;
+                sp74.y = bodyPartPos->y - this->actor.world.pos.y + 76.0f + 30.0f + 30.0f + 600.0f;
+                sp74.z = bodyPartPos->z - this->actor.world.pos.z;
+            }
+            Matrix_MultVec3f(&sp74, &sp68);
+
+            sp68.x *= 0.7f;
+            sp68.y *= 0.7f;
+
+            baseX = (u16)(s32)(sp68.x + 32.0f);
+            baseY = (u16)((s32)sp68.y * 64);
+
+            if (D_80B0EC38[i] == 2) {
+                for (y = 0, addY = -0x180; y < 14; y++, addY += 0x40) {
+                    for (x = -D_80B0EBC4[y]; x < D_80B0EBC4[y]; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < 0x1000)) {
+                            tex[index] = 255;
+                        }
+                    }
+                }
+            } else if (D_80B0EC38[i] == 1) {
+                for (y = 0, addY = -0x100; y < 8; y++, addY += 0x40) {
+                    for (x = -D_80B0EBA4[y]; x < D_80B0EBA4[y]; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < 0x1000)) {
+                            tex[index] = 255;
+                        }
+                    }
+                }
+            } else if (D_80B0EC38[i] == 0) {
+                for (y = 0, addY = -0xC0; y < 7; y++, addY += 0x40) {
+                    for (x = -D_80B0EB88[y]; x < D_80B0EB88[y]; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < 0x1000)) {
+                            tex[index] = 255;
+                        }
+                    }
+                }
+            } else {
+                for (y = 0, addY = -0x80; y < 6; y++, addY += 0x40) {
+                    for (x = -D_80B0EB70[y]; x < D_80B0EB70[y]; x++) {
+                        index = baseX + x + baseY + addY;
+                        if ((index >= 0) && (index < 0x1000)) {
+                            tex[index] = 255;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 void func_80B0D69C(u8* tex, BossHakugin* this) {
     s32* iter = (s32*)tex;
