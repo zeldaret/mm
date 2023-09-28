@@ -515,14 +515,68 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
     }
 }
 
-void func_80B07700(BossHakugin* this, PlayState* play, s32 arg2);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B07700.s")
+void func_80B07700(BossHakugin *this, PlayState *play, s32 arg2) {
+    Vec3f vel;
+    Vec3f pos;
+
+    if (arg2 != 0) {
+        vel.y = (this->unk_019C - 0x1E) * ( 1 / 70.0f );
+    } else {
+        vel.y = 0.1f;
+    }
+
+    vel.x = Rand_CenteredFloat(2.0f) * vel.y;
+    vel.z = Rand_CenteredFloat(2.0f) * vel.y;
+
+    pos.x = ((vel.x >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->unk_0964.dim.pos.x;
+    pos.z = ((vel.z >= 0.0f ? 1.0f : -1.0f) * (Rand_ZeroFloat(20.0f) + 5.0f) * 4.0f) + this->unk_0964.dim.pos.z;
+    if (arg2 != 0) {
+        pos.y = this->unk_0964.dim.pos.y + (this->unk_0964.dim.height * vel.y);
+    } else {
+        pos.y = (Rand_ZeroFloat(this->unk_0964.dim.height) * 0.8f) + this->unk_0964.dim.pos.y;
+    }
+    vel.y += 0.8f;
+    
+    EffectSsIceSmoke_Spawn(play, &pos, &vel, &gZeroVec3f, 0x258);
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0791C.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B07B88.s")
+void func_80B07B88(BossHakugin *this, PlayState *play) {
+    if (this->unk_0196 == 0xA) {
+        this->unk_0196 = 0;
+        this->unk_01E4 = 0.0f;
+        Actor_SpawnIceEffects(play, &this->actor, this->bodyPartsPos, 0xF, 3, 0.7f, 0.5f);
+    }
+}
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B07BFC.s")
+void func_80B07BFC(BossHakugin *this, PlayState *play, s32 arg2) {
+    ColliderJntSphElement *temp_v0_2;
+    ColliderJntSphElement *temp_v0_3;
+
+    if (this->actor.colChkInfo.damageEffect == 0x2) {
+        this->unk_0196 = 0;
+        this->unk_01E4 = 3.0f;
+        this->unk_01DC = 2.5f;
+    } else if (this->actor.colChkInfo.damageEffect == 0x4) {
+        this->unk_0196 = 0x14;
+        this->unk_01E4 = 3.0f;
+        this->unk_01DC = 2.5f;
+        temp_v0_2 = &this->unk_0484.elements[arg2];
+        Actor_Spawn(&play->actorCtx, play, 0xA2, temp_v0_2->info.bumper.hitPos.x, temp_v0_2->info.bumper.hitPos.y, temp_v0_2->info.bumper.hitPos.z, 0, 0, 0, 4);
+    } else if (this->actor.colChkInfo.damageEffect == 0x3) {
+        this->unk_0196 = 0xA;
+        this->unk_01DC = 2.5f;
+        this->unk_01E0 = 3.75f;
+        this->unk_01E4 = 1.0f;
+    } else if (this->actor.colChkInfo.damageEffect == 0xD) {
+        this->unk_0196 = 0x15;
+        this->unk_01DC = 2.5f;
+        this->unk_01E4 = 3.0f;
+        temp_v0_3 = &this->unk_0484.elements[arg2];
+        Actor_Spawn(&play->actorCtx, play, 0xA2, temp_v0_3->info.bumper.hitPos.x, temp_v0_3->info.bumper.hitPos.y, temp_v0_3->info.bumper.hitPos.z, 0, 0, 3, 4);
+    }
+}
 
 void func_80B07DA4(BossHakugin* this, PlayState* play, f32 arg2, s16 arg3) {
     Camera* camera = Play_GetCamera(play, this->unk_01AC);
@@ -849,13 +903,83 @@ void func_80B08C1C(BossHakugin* this) {
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B091D8.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B093C0.s")
+void func_80B093C0(BossHakugin *this) {
+    f32 sp24;
+
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_060134D0, -3.0f);
+    this->unk_0484.base.atFlags &= 0xFFFE;
+    this->unk_0484.base.acFlags &= 0xFFFB;
+    this->unk_01A6 = 0;
+    this->unk_0195 = 0;
+    this->unk_01C8 = 0.0f;
+    if (this->unk_0192 == 1) {
+        Math_Vec3f_Copy(&this->unk_3734, &this->unk_0380);
+        this->unk_01B8 = this->actor.speed + 100.0f;
+        sp24 = Math_CosS(0xA00);
+        this->unk_37AC = Math_SinS(this->actor.shape.rot.y) * sp24;
+        this->unk_37B0 = Math_SinS(0xA00);
+        sp24 = Math_CosS(0xA00);
+        this->unk_37B4 = Math_CosS(this->actor.shape.rot.y) * sp24;
+        this->unk_0192 = 2;
+        this->unk_01C8 = 0.0f;
+        Audio_PlaySfx_AtPos(&this->unk_0458, NA_SE_EN_COMMON_E_BALL_THR);
+        this->unk_37B8.base.atFlags |= 1;
+    }
+    this->unk_019C = 0x3C;
+    this->actor.speed = 20.0f;
+    this->actionFunc = func_80B094E0;
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B094E0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09840.s")
+void func_80B09840(BossHakugin *this, PlayState *play) {
+    Player* player = GET_PLAYER(play);
 
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B098BC.s")
+    Animation_MorphToPlayOnce(&this->skelAnime, &D_0600319C, -10.0f);
+    player->actor.parent = &this->actor;
+    this->unk_0484.base.atFlags &= 0xFFFE;
+    this->unk_0484.base.ocFlags1 &= 0xFFFE;
+    this->unk_019C = 0xA;
+    this->actionFunc = func_80B098BC;
+}
+
+void func_80B098BC(BossHakugin *this, PlayState *play) {
+    Player *player = GET_PLAYER(play);
+    s16 sp32;
+    f32 sp2C;
+
+    SkelAnime_Update(&this->skelAnime);
+    Math_StepToF(&this->actor.speed, 0.0f, 2.0f);
+    Math_SmoothStepToS(&this->actor.shape.rot.y, this->unk_01A0, 5, 0x800, 0x100);
+    this->actor.world.rot.y = this->actor.shape.rot.y;
+    if (this->unk_019C < 10) {
+        this->unk_019C--;
+        if (this->unk_019C == 0) {
+            this->unk_0484.base.atFlags |= 1;
+            this->unk_0484.base.ocFlags1 |= 1;
+            func_80B08C1C(this);
+        }
+    } else {
+        if (Math_ScaledStepToS(&this->unk_01A6, -0x800, 0x1C0) != 0) {
+            player->actionVar2 = 0x64;
+            player->actor.parent = NULL;
+            player->invincibilityTimer = 0;
+            player->actor.shape.rot.x = 0;
+            func_800B8D50(play, &this->actor, 10.0f, (this->actor.shape.rot.y + 0x8000), 15.0f, 0x10);
+            player->actor.world.pos.y += 30.0f;
+            this->unk_019C--;
+        } else {
+            player->actionVar2 = 0;
+            sp32 = -this->unk_0374.z + 0x1F40;
+            player->actor.shape.rot.x = -this->unk_0374.z + 0x8FC0;
+    
+            sp2C = Math_CosS(sp32);
+            player->actor.world.pos.x = this->actor.focus.pos.x - (Math_SinS(this->unk_01A0) * (20.0f * sp2C));
+            player->actor.world.pos.y = this->actor.focus.pos.y - (Math_SinS(sp32) * 20.0f);
+            player->actor.world.pos.z = this->actor.focus.pos.z - (Math_CosS(this->unk_01A0) * (20.0f * sp2C));
+        }
+    }
+}
 
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B09A94.s")
 

@@ -39,9 +39,10 @@ typedef struct BossHakugin {
     /* 0x018E */ char unk_018E[2];
     /* 0x0190 */ u8 unk_0190; // boolean?
     /* 0x0191 */ u8 unk_0191;
-    /* 0x0192 */ char unk_0192[0x1];
+    /* 0x0192 */ u8 unk_0192;
     /* 0x0193 */ u8 unk_0193;
-    /* 0x0194 */ char unk_0194[2];
+    /* 0x0194 */ u8 unk_0194;
+    /* 0x0194 */ u8 unk_0195;
     /* 0x0196 */ u8 unk_0196;
     /* 0x0197 */ char unk_0197[0x5];
     /* 0x019C */ s16 unk_019C;
@@ -55,7 +56,8 @@ typedef struct BossHakugin {
     /* 0x01AE */ char unk_01AE[0x2];
     /* 0x01B0 */ u32 unk_01B0;
     /* 0x01B4 */ s32 unk_01B4;
-    /* 0x01B8 */ char unk_01B8[0xC];
+    /* 0x01B8 */ f32 unk_01B8;
+    /* 0x01BC */ char pad1BC[8];
     /* 0x01C4 */ f32 unk_01C4;
     /* 0x01C8 */ f32 unk_01C8;
     /* 0x01CC */ char unk_01CC[0x8];
@@ -86,7 +88,10 @@ typedef struct BossHakugin {
     /* 0x2618 */ BossHakuginUnkStruct_2618 unk_2618[20];
     /* 0x3158 */ BossHakuginFhgFlashUnkStruct unk_3158[5][15];
     /* 0x3734 */ Vec3f unk_3734;
-    /* 0x3740 */ char unk_3740[0x78];
+    /* 0x3740 */ char pad3740[0x6C];
+    /* 0x37AC */ f32 unk_37AC;
+    /* 0x37B0 */ f32 unk_37B0;
+    /* 0x37B4 */ f32 unk_37B4;
     /* 0x37B8 */ ColliderSphere unk_37B8;
 } BossHakugin; // size = 0x3810
 
