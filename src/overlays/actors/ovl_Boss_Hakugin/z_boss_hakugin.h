@@ -66,9 +66,7 @@ typedef struct BossHakugin {
     /* 0x01E4 */ f32 unk_01E4;
     /* 0x01E8 */ Vec3s jointTable[GOHT_LIMB_MAX];
     /* 0x02AE */ Vec3s morphTable[GOHT_LIMB_MAX];
-    /* 0x0374 */ s16 unk_0374;
-    /* 0x0376 */ s16 unk_0376;
-    /* 0x0378 */ s16 unk_0378;
+    /* 0x0374 */ Vec3s unk_0374;
     /* 0x037A */ Vec3s unk_037A;
     /* 0x0380 */ Vec3f unk_0380;
     /* 0x038C */ Vec3f unk_038C;

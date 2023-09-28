@@ -233,10 +233,9 @@ extern ColliderCylinderInit D_80B0EA34;
 extern DamageTable D_80B0EA60;
 extern CollisionCheckInfoInit D_80B0EA80;
 extern TexturePtr D_80B0EA88;
-extern s8 D_80B0EA95;
-extern s8 D_80B0EA9A;
-extern s8 D_80B0EAA5;
+extern s8 D_80B0EA8C[]; // sLimbToBodyParts
 extern s8 D_80B0EAAC;
+extern s32 D_80B0EAB0[5];
 extern s32 D_80B0EAD4;
 extern InitChainEntry D_80B0EAD8[];
 extern Vec3f D_80B0EAE8;
@@ -254,8 +253,6 @@ extern AnimationHeader D_060134D0;    // gGohtFallDownAnim
 extern AnimationHeader D_06013828;    // gGohtRunAnim
 extern TexturePtr D_06014040;         // gGohtTitleCardTex
 extern FlexSkeletonHeader D_06013158; // gGohtSkel
-
-extern s32 D_80B0EAB0[5];
 
 #ifdef NON_MATCHING
 // requires in-function static, too lazy to import all the data right now
@@ -486,7 +483,7 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
 
     if (Animation_OnFrame(&this->skelAnime, 0.0f)) {
         Actor_PlaySfx(&this->actor, NA_SE_EN_ICEB_FOOTSTEP_OLD);
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA9A]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_FRONT_LEFT_HOOF]]);
         if (this->actor.xzDistToPlayer < 1500.0f) {
             temp = (1500.0f - this->actor.xzDistToPlayer) * 0.00066666666f;
             func_80B05A64(this, play, 17000, 6.5f * temp, 10);
@@ -494,13 +491,13 @@ void func_80B07450(BossHakugin* this, PlayState* play) {
 
         func_80B06C08(this);
     } else if (Animation_OnFrame(&this->skelAnime, 2.0f)) {
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EAAC]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_BACK_LEFT_HOOF]]);
         func_80B06B20(this, &pos);
     } else if (Animation_OnFrame(&this->skelAnime, 3.0f)) {
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA95]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_FRONT_RIGHT_HOOF]]);
         func_80B06D38(this, play);
     } else if (Animation_OnFrame(&this->skelAnime, 11.0f)) {
-        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EAA5]);
+        Math_Vec3f_Copy(&pos, &this->bodyPartsPos[D_80B0EA8C[GOHT_LIMB_BACK_RIGHT_HOOF]]);
         func_80B06B20(this, &pos);
     } else {
         return;
@@ -923,7 +920,9 @@ void func_80B09EDC(BossHakugin* this, PlayState* play) {
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_Update.s")
 
 #ifdef NON_MATCHING
-s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
+// requires in-function static, too lazy to import all the data right now
+s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot,
+                                 Actor* thisx) {
     static s32 D_80B0EB68 = 4;
     static s32 D_80B0EB6C = 6;
     BossHakugin* this = THIS;
@@ -949,8 +948,8 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
     if (limbIndex == GOHT_LIMB_HEAD) {
         rot->z += this->unk_01A6;
         if (this->actionFunc == func_80B0A2A4) {
-            rot->z += this->unk_0378;
-            rot->y += this->unk_0376;
+            rot->z += this->unk_0374.y;
+            rot->y += this->unk_0374.z;
         }
     } else if (limbIndex == GOHT_LIMB_THORAX_WRAPPER) {
         rot->z += (s16)(this->unk_01A6 * 2);
@@ -961,12 +960,47 @@ s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dL
     return false;
 }
 #else
-s32 BossHakugin_OverrideLimbDraw(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
+s32 BossHakugin_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/BossHakugin_OverrideLimbDraw.s")
 #endif
 
-void func_80B0C1BC(struct PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx);
-#pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C1BC.s")
+void BossHakugin_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
+    BossHakugin* this = THIS;
+    s8 bodyPartIndex;
+    s32 i;
+    f32 cos;
+    s16 angle;
+
+    Collider_UpdateSpheres(limbIndex, &this->unk_0484);
+    bodyPartIndex = D_80B0EA8C[limbIndex];
+    if (bodyPartIndex > BODYPART_NONE) {
+        for (i = 0; i < ARRAY_COUNT(this->unk_04A4); i++) {
+            if (this->unk_0484.elements[i].dim.limb == limbIndex) {
+                Math_Vec3s_ToVec3f(&this->bodyPartsPos[bodyPartIndex],
+                                   &this->unk_0484.elements[i].dim.worldSphere.center);
+                break;
+            }
+        }
+        if (i == ARRAY_COUNT(this->unk_04A4)) {
+            Matrix_MultZero(&this->bodyPartsPos[bodyPartIndex]);
+        }
+    }
+    if (limbIndex == GOHT_LIMB_HEAD) {
+        Matrix_MultVecX(3500.0f, &this->actor.focus.pos);
+        this->actor.focus.rot.y = this->actor.shape.rot.y;
+        if (this->actionFunc != func_80B0A2A4) {
+            Matrix_MtxFToYXZRot(Matrix_GetCurrent(), &this->unk_0374, false);
+        }
+
+        if (this->unk_01C8 > 0.0f) {
+            angle = 0x12C0 - this->unk_0374.z;
+            cos = Math_CosS(angle);
+            this->unk_0380.x = this->actor.focus.pos.x - (Math_SinS(this->actor.shape.rot.y) * (60.0f * cos));
+            this->unk_0380.y = this->actor.focus.pos.y - (Math_SinS(angle) * 60.0f);
+            this->unk_0380.z = this->actor.focus.pos.z - (Math_CosS(this->actor.shape.rot.y) * (60.0f * cos));
+        }
+    }
+}
 
 void func_80B0C398(BossHakugin* this, PlayState* play);
 #pragma GLOBAL_ASM("asm/non_matchings/overlays/ovl_Boss_Hakugin/func_80B0C398.s")
@@ -996,7 +1030,7 @@ void BossHakugin_Draw(Actor* thisx, PlayState* play) {
     Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80B0EA88);
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
-                          BossHakugin_OverrideLimbDraw, func_80B0C1BC, &this->actor);
+                          BossHakugin_OverrideLimbDraw, BossHakugin_PostLimbDraw, &this->actor);
 
     CLOSE_DISPS(play->state.gfxCtx);
 

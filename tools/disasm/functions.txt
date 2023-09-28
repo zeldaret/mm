@@ -12971,7 +12971,7 @@
     0x80B0B660:("func_80B0B660",),
     0x80B0BAE0:("BossHakugin_Update",),
     0x80B0C000:("BossHakugin_OverrideLimbDraw",),
-    0x80B0C1BC:("func_80B0C1BC",),
+    0x80B0C1BC:("BossHakugin_PostLimbDraw",),
     0x80B0C398:("func_80B0C398",),
     0x80B0C570:("func_80B0C570",),
     0x80B0C7B0:("func_80B0C7B0",),
