@@ -21,6 +21,42 @@ typedef enum {
 
 #define ENIN_PATH_INDEX_NONE 0x3F
 
+typedef enum EnInAnimation {
+    /* -1 */ ENIN_ANIM_NONE = -1,
+    /*  0 */ ENIN_ANIM_0,
+    /*  1 */ ENIN_ANIM_1,
+    /*  2 */ ENIN_ANIM_2,
+    /*  3 */ ENIN_ANIM_3,
+    /*  4 */ ENIN_ANIM_4,
+    /*  5 */ ENIN_ANIM_5,
+    /*  6 */ ENIN_ANIM_6,
+    /*  7 */ ENIN_ANIM_7,
+    /*  8 */ ENIN_ANIM_8,
+    /*  9 */ ENIN_ANIM_9,
+    /* 10 */ ENIN_ANIM_10,
+    /* 11 */ ENIN_ANIM_11,
+    /* 12 */ ENIN_ANIM_12,
+    /* 13 */ ENIN_ANIM_13,
+    /* 14 */ ENIN_ANIM_14,
+    /* 15 */ ENIN_ANIM_15,
+    /* 16 */ ENIN_ANIM_16,
+    /* 17 */ ENIN_ANIM_17,
+    /* 18 */ ENIN_ANIM_MAX
+} EnInAnimation;
+
+typedef enum EnInAnimation2 {
+    /* -1 */ ENIN_ANIM2_NONE = -1,
+    /*  0 */ ENIN_ANIM2_0,
+    /*  1 */ ENIN_ANIM2_1,
+    /*  2 */ ENIN_ANIM2_2,
+    /*  3 */ ENIN_ANIM2_3,
+    /*  4 */ ENIN_ANIM2_4,
+    /*  5 */ ENIN_ANIM2_5,
+    /*  6 */ ENIN_ANIM2_6,
+    /*  7 */ ENIN_ANIM2_7,
+    /*  8 */ ENIN_ANIM2_MAX
+} EnInAnimation2;
+
 typedef struct EnIn {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnInActionFunc actionFunc;

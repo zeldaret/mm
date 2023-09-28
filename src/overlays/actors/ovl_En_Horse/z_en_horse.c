@@ -2467,10 +2467,10 @@ void func_808819D8(EnHorse* this, PlayState* play) {
     }
 
     if (GET_WEEKEVENTREG_HORSE_RACE_STATE == WEEKEVENTREG_HORSE_RACE_STATE_3) {
-        this->rider->unk488 = 7;
+        this->rider->animIndex2 = ENIN_ANIM2_7;
     } else {
         EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
-                                 &this->rider->unk488);
+                                 &this->rider->animIndex2);
     }
 }
 
@@ -3423,10 +3423,10 @@ void func_80884E0C(EnHorse* this, PlayState* play) {
 
     this->unk_56C = Math3D_Distance(&this->actor.world.pos, &this->actor.prevPos);
     if (((this->unk_550 == 5) || (this->unk_550 == 7)) && (Player_GetMask(play) != PLAYER_MASK_CIRCUS_LEADER)) {
-        this->rider->unk488 = 7;
+        this->rider->animIndex2 = ENIN_ANIM2_7;
     } else {
         EnHorse_SetIngoAnimation(this->animIndex, this->skin.skelAnime.curFrame, this->unk_394 & 1,
-                                 &this->rider->unk488);
+                                 &this->rider->animIndex2);
     }
 
     pos = this->actor.world.pos;

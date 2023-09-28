@@ -118,29 +118,6 @@ static DamageTable sDamageTable = {
     /* Powder Keg     */ DMG_ENTRY(0, 0x0),
 };
 
-typedef enum EnInAnimation {
-    /* -1 */ ENIN_ANIM_NONE = -1,
-    /*  0 */ ENIN_ANIM_0,
-    /*  1 */ ENIN_ANIM_1,
-    /*  2 */ ENIN_ANIM_2,
-    /*  3 */ ENIN_ANIM_3,
-    /*  4 */ ENIN_ANIM_4,
-    /*  5 */ ENIN_ANIM_5,
-    /*  6 */ ENIN_ANIM_6,
-    /*  7 */ ENIN_ANIM_7,
-    /*  8 */ ENIN_ANIM_8,
-    /*  9 */ ENIN_ANIM_9,
-    /* 10 */ ENIN_ANIM_10,
-    /* 11 */ ENIN_ANIM_11,
-    /* 12 */ ENIN_ANIM_12,
-    /* 13 */ ENIN_ANIM_13,
-    /* 14 */ ENIN_ANIM_14,
-    /* 15 */ ENIN_ANIM_15,
-    /* 16 */ ENIN_ANIM_16,
-    /* 17 */ ENIN_ANIM_17,
-    /* 18 */ ENIN_ANIM_MAX
-} EnInAnimation;
-
 static AnimationInfoS sAnimationInfo[ENIN_ANIM_MAX] = {
     { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, 0 },  // ENIN_ANIM_0
     { &object_in_Anim_001D10, 1.0f, 0, -1, ANIMMODE_LOOP, -4 }, // ENIN_ANIM_1
@@ -319,19 +296,6 @@ void func_808F3690(EnIn* this, PlayState* play) {
         }
     }
 }
-
-typedef enum EnInAnimation2 {
-    /* -1 */ ENIN_ANIM2_NONE = -1,
-    /*  0 */ ENIN_ANIM2_0,
-    /*  1 */ ENIN_ANIM2_1,
-    /*  2 */ ENIN_ANIM2_2,
-    /*  3 */ ENIN_ANIM2_3,
-    /*  4 */ ENIN_ANIM2_4,
-    /*  5 */ ENIN_ANIM2_5,
-    /*  6 */ ENIN_ANIM2_6,
-    /*  7 */ ENIN_ANIM2_7,
-    /*  8 */ ENIN_ANIM2_MAX
-} EnInAnimation2;
 
 void func_808F374C(EnIn* this, PlayState* play) {
     AnimationHeader* sAnimations[ENIN_ANIM2_MAX] = {
