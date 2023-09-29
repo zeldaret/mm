@@ -48,13 +48,13 @@ ActorInit En_Jgame_Tsn_InitVars = {
     (ActorFunc)EnJgameTsn_Draw,
 };
 
-typedef enum EnJaAnimation {
+typedef enum EnJgameTsnAnimation {
     /* -1 */ ENJGAMETSN_ANIM_NONE = -1,
     /*  0 */ ENJGAMETSN_ANIM_0,
     /*  1 */ ENJGAMETSN_ANIM_1,
     /*  2 */ ENJGAMETSN_ANIM_2,
     /*  3 */ ENJGAMETSN_ANIM_MAX
-} EnJaAnimation;
+} EnJgameTsnAnimation;
 
 static AnimationInfo sAnimationInfo[ENJGAMETSN_ANIM_MAX] = {
     { &object_tsn_Anim_0092FC, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -6.0f }, // ENJGAMETSN_ANIM_0
