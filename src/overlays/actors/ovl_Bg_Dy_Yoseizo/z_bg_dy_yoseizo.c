@@ -232,7 +232,7 @@ void func_80A0AE1C(BgDyYoseizo* this, PlayState* play) {
         this->unk2F4 = 0.0f;
         this->unk2F8 = 0;
 
-        if (GREAT_FAIRY_GET_TYPE(&this->actor) < 4) {
+        if (GREAT_FAIRY_GET_TYPE(&this->actor) <= GREAT_FAIRY_TYPE_COURAGE) {
             Actor_Spawn(&play->actorCtx, play, ACTOR_DEMO_EFFECT, this->actor.world.pos.x,
                         this->actor.world.pos.y + 20.0f, this->actor.world.pos.z, 0, 0, 0,
                         GREAT_FAIRY_GET_TYPE(&this->actor) + DEMO_EFFECT_TYPE_LIGHT_BASE);
