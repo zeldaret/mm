@@ -40,7 +40,8 @@ typedef struct BossHakugin {
     /* 0x0188 */ BossHakuginActionFunc actionFunc;
     /* 0x018C */ char unk_018C[0x1];
     /* 0x018D */ s8 unk_018D;
-    /* 0x018E */ char unk_018E[2];
+    /* 0x018E */ s8 unk_018E;
+    /* 0x018F */ s8 unk_018F;
     /* 0x0190 */ u8 unk_0190; // boolean?
     /* 0x0191 */ u8 unk_0191;
     /* 0x0192 */ u8 unk_0192;
@@ -60,11 +61,12 @@ typedef struct BossHakugin {
     /* 0x01A8 */ char unk_01A8[2];
     /* 0x01AA */ s16 unk_01AA;
     /* 0x01AC */ s16 unk_01AC;
-    /* 0x01AE */ char unk_01AE[0x2];
+    /* 0x01AE */ s16 unk_01AE;
     /* 0x01B0 */ u32 unk_01B0;
     /* 0x01B4 */ s32 unk_01B4;
     /* 0x01B8 */ f32 unk_01B8;
-    /* 0x01BC */ char unk_01BC[8];
+    /* 0x01BC */ f32 unk_01BC;
+    /* 0x01C0 */ f32 unk_01C0;
     /* 0x01C4 */ f32 unk_01C4;
     /* 0x01C8 */ f32 unk_01C8;
     /* 0x01CC */ f32 unk_01CC;
