@@ -3049,7 +3049,7 @@ void func_80150A84(PlayState* play) {
 
     if (D_801CFC78[textBoxType] != 14) {
         DmaMgr_SendRequest0(msgCtx->textboxSegment,
-                            &((u8*)SEGMENT_ROM_START(message_static))[D_801CFC78[textBoxType] * 0x1000], 0x1000);
+                            &SEGMENT_ROM_START(message_static)[D_801CFC78[textBoxType] * 0x1000], 0x1000);
 
         if (!play->pauseCtx.bombersNotebookOpen) {
             if ((textBoxType == TEXTBOX_TYPE_0) || (textBoxType == TEXTBOX_TYPE_6) || (textBoxType == TEXTBOX_TYPE_A) ||
@@ -3176,16 +3176,18 @@ void Message_OpenText(PlayState* play, u16 textId) {
     if (msgCtx->textIsCredits) {
         Message_FindCreditsMessage(play, textId);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, &_staff_message_data_staticSegmentRomStart[font->messageStart],
+        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(staff_message_data_static)[font->messageStart],
                             font->messageEnd);
     } else if (gSaveContext.options.language == LANGUAGE_JPN) {
         Message_FindMessage(play, textId);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, &_message_data_staticSegmentRomStart[font->messageStart], font->messageEnd);
+        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
+                            font->messageEnd);
     } else {
         Message_FindMessageNES(play, textId);
         msgCtx->msgLength = font->messageEnd;
-        DmaMgr_SendRequest0(&font->msgBuf, &_message_data_staticSegmentRomStart[font->messageStart], font->messageEnd);
+        DmaMgr_SendRequest0(&font->msgBuf, &SEGMENT_ROM_START(message_data_static)[font->messageStart],
+                            font->messageEnd);
     }
 
     msgCtx->choiceNum = 0;
