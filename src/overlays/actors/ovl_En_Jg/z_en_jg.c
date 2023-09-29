@@ -417,11 +417,11 @@ void EnJg_GoronShrineCheer(EnJg* this, PlayState* play) {
  */
 void EnJg_AlternateTalkOrWalkInPlace(EnJg* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
-    s16 currentFrame = this->skelAnime.curFrame;
+    s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->animIndex == EN_JG_ANIM_SURPRISE_START) {
-        if (currentFrame == lastFrame) {
+        if (curFrame == lastFrame) {
             this->animIndex = EN_JG_ANIM_SURPRISE_LOOP;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
         }
@@ -472,11 +472,11 @@ void EnJg_Walk(EnJg* this, PlayState* play) {
 
 void EnJg_Talk(EnJg* this, PlayState* play) {
     u8 talkState = Message_GetState(&play->msgCtx);
-    s16 currentFrame = this->skelAnime.curFrame;
+    s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
     u16 temp;
 
-    if ((this->animIndex == EN_JG_ANIM_SURPRISE_START) && (currentFrame == lastFrame)) {
+    if ((this->animIndex == EN_JG_ANIM_SURPRISE_START) && (curFrame == lastFrame)) {
         this->animIndex = EN_JG_ANIM_SURPRISE_LOOP;
         SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
     }
@@ -542,7 +542,7 @@ void EnJg_SetupWalk(EnJg* this, PlayState* play) {
 }
 
 void EnJg_Freeze(EnJg* this, PlayState* play) {
-    s16 currentFrame = this->skelAnime.curFrame;
+    s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (this->action == EN_JG_ACTION_SPAWNING) {
@@ -557,7 +557,7 @@ void EnJg_Freeze(EnJg* this, PlayState* play) {
         this->actionFunc = EnJg_FrozenIdle;
     } else if (this->animIndex == EN_JG_ANIM_FROZEN_START) {
         this->action = EN_JG_ACTION_FROZEN_OR_NON_FIRST_THAW;
-        if (currentFrame == lastFrame) {
+        if (curFrame == lastFrame) {
             this->freezeTimer = 1000;
             this->icePoly = Actor_Spawn(&play->actorCtx, play, ACTOR_OBJ_ICE_POLY, this->actor.world.pos.x,
                                         this->actor.world.pos.y, this->actor.world.pos.z, this->actor.world.rot.x,
@@ -898,7 +898,7 @@ void EnJg_SpawnBreath(EnJg* this, PlayState* play) {
  *   handing it off to EnJg_Freeze.
  */
 void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play) {
-    s16 currentFrame = this->skelAnime.curFrame;
+    s16 curFrame = this->skelAnime.curFrame;
     s16 lastFrame = Animation_GetLastFrame(sAnimationInfo[this->animIndex].animation);
 
     if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
@@ -924,7 +924,7 @@ void EnJg_CheckIfTalkingToPlayerAndHandleFreezeTimer(EnJg* this, PlayState* play
         }
 
         this->freezeTimer--;
-        if ((this->freezeTimer <= 0) && (currentFrame == lastFrame)) {
+        if ((this->freezeTimer <= 0) && (curFrame == lastFrame)) {
             this->animIndex = EN_JG_ANIM_FROZEN_START;
             SubS_ChangeAnimationByInfoS(&this->skelAnime, sAnimationInfo, this->animIndex);
             Audio_PlaySfx_AtPos(&sSfxPos, NA_SE_EV_FREEZE_S);
