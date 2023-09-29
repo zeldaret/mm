@@ -237,7 +237,7 @@ s32 EnElfgrp_GetHeldFairiesCount(PlayState* play, s32 type) {
            EnElfgrp_GetFountainFairiesCount(play, type);
 }
 
-// Number of Stray Fairies in currently in Fountain?
+// Number of Stray Fairies in currently in Fountain
 s32 EnElfgrp_GetFountainFairiesCount(PlayState* play, s32 type) {
     s32 numberInFountain;
 
