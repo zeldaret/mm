@@ -223,7 +223,7 @@ void Message_FindMessage(PlayState* play, u16 textId) {
     font->messageEnd = nextSegment - foundSegment;
 }
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_80149F74.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_DrawItemIcon.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_HandleOcarina.s")
 
@@ -272,7 +272,7 @@ void func_8014CCB4(PlayState* play, s16* decodedBufPos, s32* offset, f32* arg3) 
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CDF0.s")
 
-#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014CFDC.s")
+#pragma GLOBAL_ASM("asm/non_matchings/code/z_message/Message_SetupLoadItemIcon.s")
 
 #pragma GLOBAL_ASM("asm/non_matchings/code/z_message/func_8014D304.s")
 
@@ -363,7 +363,7 @@ void func_80151A68(PlayState* play, u16 textId) {
     msgCtx->msgLength = 0;
     func_80150D08(play, textId);
     func_80150A84(play);
-    func_8015B198(play);
+    Message_DecodeNES(play);
     msgCtx->msgMode = 0x45;
     msgCtx->textDelayTimer = 0;
     msgCtx->textboxColorAlphaCurrent = msgCtx->textboxColorAlphaTarget = msgCtx->textColorAlpha = 0;
@@ -548,7 +548,7 @@ void func_80153E7C(PlayState* play, Gfx** gfxP) {
     } else if (play->msgCtx.textIsCredits) {
         Message_DrawTextCredits(play, gfxP);
     } else {
-        func_8015966C(play, gfxP, 0);
+        Message_DrawTextNES(play, gfxP, 0);
     }
 }
 
