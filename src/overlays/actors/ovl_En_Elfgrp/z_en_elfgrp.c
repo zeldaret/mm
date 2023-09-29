@@ -225,7 +225,7 @@ void EnElfgrp_Init(Actor* thisx, PlayState* play) {
 void EnElfgrp_Destroy(Actor* thisx, PlayState* play) {
 }
 
-// Number of Stray Fairies currently held by Player?
+// Number of Stray Fairies currently held by Player
 s32 EnElfgrp_GetHeldFairiesCount(PlayState* play, s32 type) {
     if ((type <= ENELFGRP_TYPE_MAGIC) || (type > ENELFGRP_TYPE_KINDNESS)) {
         return 0;
