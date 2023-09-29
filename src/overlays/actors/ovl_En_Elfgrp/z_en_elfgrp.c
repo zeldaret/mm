@@ -79,7 +79,7 @@ ActorInit En_Elfgrp_InitVars = {
 };
 
 /**
- * Set the actor's cutscene to a later one, or -1 if run out.
+ * Set the actor's cutscene id to a later one, or -1 if run out.
  *
  * @note This is only expected to be called in Init when this actor has the first cutscene set, but can also work for
  * later cutscenes if \p numberToSkip is set correcly.
