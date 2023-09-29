@@ -4836,7 +4836,8 @@ typedef enum ActionChangeIndex {
     /* 0xB */ PLAYER_ACTION_CHG_11,
     /* 0xC */ PLAYER_ACTION_CHG_12,
     /* 0xD */ PLAYER_ACTION_CHG_13,
-    /* 0xE */ PLAYER_ACTION_CHG_14
+    /* 0xE */ PLAYER_ACTION_CHG_14,
+    /* 0xF */ PLAYER_ACTION_CHG_MAX
 } ActionChangeIndex;
 
 /**
@@ -4976,7 +4977,7 @@ s8 sPlayerActionChangeList12[] = {
     /* 2 */ -PLAYER_ACTION_CHG_4,
 };
 
-s32 (*sPlayerActionChangeFuncs[])(Player*, PlayState*) = {
+s32 (*sPlayerActionChangeFuncs[PLAYER_ACTION_CHG_MAX])(Player*, PlayState*) = {
     Player_ActionChange_0,  // PLAYER_ACTION_CHG_0
     Player_ActionChange_1,  // PLAYER_ACTION_CHG_1
     Player_ActionChange_2,  // PLAYER_ACTION_CHG_2
