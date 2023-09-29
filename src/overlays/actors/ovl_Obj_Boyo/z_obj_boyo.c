@@ -162,7 +162,8 @@ void ObjBoyo_Update(Actor* thisx, PlayState* play2) {
         this->unk1AC = 0x258;
     }
 
-    if (this->unk194 > 0) { /* compute new scaling */
+    if (this->unk194 > 0) {
+        // compute new scaling
         // this computation might help finding what those values are.
 
         this->unk194 -= this->unk196;
