@@ -173,6 +173,9 @@ void EnKujiya_ChooseNextDialogue(EnKujiya* this, PlayState* play) {
                 EnKujiya_SetupGivePrize(this);
                 EnKujiya_GivePrize(this, play);
                 break;
+
+            default:
+                break;
         }
     }
 }
@@ -206,6 +209,9 @@ void EnKujiya_Talk(EnKujiya* this, PlayState* play) {
                 Message_StartTextbox(play, 0x2B60, &this->actor);
                 this->textId = 0x2B60; // Will announce winning numbers after 6
             }
+            break;
+
+        default:
             break;
     }
 }
@@ -251,6 +257,9 @@ s32 EnKujiya_CheckBoughtTicket(void) {
                 return true;
             }
             break;
+
+        default:
+            break;
     }
     return false;
 }
@@ -267,6 +276,9 @@ void EnKujiya_SetBoughtTicket(void) {
 
         case 3:
             SET_WEEKEVENTREG(WEEKEVENTREG_33_40);
+            break;
+
+        default:
             break;
     }
 }
@@ -286,6 +298,9 @@ void EnKujiya_UnsetBoughtTicket(void) {
 
         case 3:
             CLEAR_WEEKEVENTREG(WEEKEVENTREG_33_40);
+            break;
+
+        default:
             break;
     }
 }

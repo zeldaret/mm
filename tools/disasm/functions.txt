@@ -13493,7 +13493,7 @@
     0x80B33E54:("EnKbt_Destroy",),
     0x80B33E64:("func_80B33E64",),
     0x80B33E8C:("func_80B33E8C",),
-    0x80B33EF0:("func_80B33EF0",),
+    0x80B33EF0:("EnKbt_ChangeAnim",),
     0x80B3403C:("func_80B3403C",),
     0x80B34078:("func_80B34078",),
     0x80B3415C:("func_80B3415C",),
