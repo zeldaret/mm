@@ -128,7 +128,7 @@ void SpeedMeter_DrawTimeEntries(SpeedMeter* this, GraphicsContext* gfxCtx) {
     View_Init(&view, gfxCtx);
     view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
 
-    SET_FULLSCREEN_VIEWPORT_HIRES(&view);
+    SET_FULLSCREEN_VIEWPORT_DYNAMIC(&view);
 
     gfx = OVERLAY_DISP;
     View_ApplyTo(&view, &gfx);
@@ -180,7 +180,7 @@ void SpeedMeter_DrawAllocEntry(SpeedMeterAllocEntry* this, GraphicsContext* gfxC
         View_Init(&view, gfxCtx);
         view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
 
-        SET_FULLSCREEN_VIEWPORT_HIRES(&view);
+        SET_FULLSCREEN_VIEWPORT_DYNAMIC(&view);
 
         gfx = OVERLAY_DISP;
         View_ApplyTo(&view, &gfx);

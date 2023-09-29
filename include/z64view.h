@@ -65,15 +65,15 @@ typedef struct View {
     }                                      \
     (void)0
 
-#define SET_FULLSCREEN_VIEWPORT_HIRES(view) \
-{                                           \
-    Viewport viewport;                      \
-    viewport.bottomY = gScreenHeight;       \
-    viewport.rightX = gScreenWidth;         \
-    viewport.topY = 0;                      \
-    viewport.leftX = 0;                     \
-    View_SetViewport(view, &viewport);      \
-}                                           \
+#define SET_FULLSCREEN_VIEWPORT_DYNAMIC(view)   \
+{                                               \
+    Viewport viewport;                          \
+    viewport.bottomY = gScreenHeight;           \
+    viewport.rightX = gScreenWidth;             \
+    viewport.topY = 0;                          \
+    viewport.leftX = 0;                         \
+    View_SetViewport(view, &viewport);          \
+}                                               \
 (void)0
 
 void View_Init(View* view, struct GraphicsContext* gfxCtx);
