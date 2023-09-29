@@ -13678,7 +13678,7 @@
     0x80B40800:("EnKgy_Init",),
     0x80B40B04:("EnKgy_Destroy",),
     0x80B40B38:("func_80B40B38",),
-    0x80B40BC0:("func_80B40BC0",),
+    0x80B40BC0:("EnKgy_ChangeAnimLoopMorph",),
     0x80B40BFC:("func_80B40BFC",),
     0x80B40C38:("func_80B40C38",),
     0x80B40C74:("func_80B40C74",),
