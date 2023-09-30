@@ -34,7 +34,7 @@
         <!-- <Blob Name="object_moonend_Blob_00E658" Size="0x48" Offset="0xE658" /> -->
         <DList Name="object_moonend_DL_00EB00" Offset="0xEB00" />
         <Texture Name="object_moonend_Tex_00EC58" OutName="tex_00EC58" Format="i8" Width="64" Height="64" Offset="0xEC58" />
-        <DList Name="object_moonend_DL_010C40" Offset="0x10C40" />
+        <DList Name="object_moonend_DL_010C40" Offset="0x10C40" /> <!-- Original name is "rainbow_model" -->
         <Texture Name="object_moonend_Tex_0111E0" OutName="tex_0111E0" Format="i8" Width="64" Height="64" Offset="0x111E0" />
         <Texture Name="object_moonend_Tex_0121E0" OutName="tex_0121E0" Format="i8" Width="32" Height="64" Offset="0x121E0" />
         <TextureAnimation Name="object_moonend_Matanimheader_0129F0" Offset="0x129F0" />
