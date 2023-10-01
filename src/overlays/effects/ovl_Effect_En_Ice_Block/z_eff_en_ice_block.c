@@ -14,7 +14,7 @@ u32 EffectEnIceBlock_Init(PlayState* play, u32 index, EffectSs* this, void* init
 void EffectEnIceBlock_Update(PlayState* play, u32 index, EffectSs* this);
 void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this);
 
-const EffectSsInit Effect_En_Ice_Block_InitVars = {
+EffectSsInit Effect_En_Ice_Block_InitVars = {
     EFFECT_EN_ICE_BLOCK,
     EffectEnIceBlock_Init,
 };
@@ -65,7 +65,7 @@ void EffectEnIceBlock_Draw(PlayState* play, u32 index, EffectSs* this) {
         gSPSegment(POLY_XLU_DISP++, 0x06,
                    play->objectCtx.status[this->rObjId].segment); // object: OBJECT_ICE_BLOCK
 
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         Matrix_Translate(this->pos.x, this->pos.y, this->pos.z, MTXMODE_NEW);
         Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
         Matrix_Mult(&play->billboardMtxF, MTXMODE_APPLY);

@@ -1,5 +1,5 @@
 #include "global.h"
-#include "PR/pfs.h"
+#include "PR/os_pfs.h"
 
 s32 osPfsFreeBlocks(OSPfs* pfs, s32* leftoverBytes) {
     s32 j;

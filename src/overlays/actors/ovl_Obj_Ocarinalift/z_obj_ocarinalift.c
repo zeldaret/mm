@@ -44,8 +44,8 @@ ActorInit Obj_Ocarinalift_InitVars = {
 };
 
 static InitChainEntry sInitChain[] = {
-    ICHAIN_U8(targetMode, 2, ICHAIN_CONTINUE),         ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
-    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
+    ICHAIN_U8(targetMode, TARGET_MODE_2, ICHAIN_CONTINUE), ICHAIN_F32(uncullZoneForward, 4000, ICHAIN_CONTINUE),
+    ICHAIN_F32(uncullZoneScale, 200, ICHAIN_CONTINUE),     ICHAIN_F32(uncullZoneDownward, 300, ICHAIN_CONTINUE),
     ICHAIN_VEC3F_DIV1000(scale, 100, ICHAIN_STOP),
 };
 
@@ -62,7 +62,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.world.rot.x = 0;
     this->dyna.actor.shape.rot.z = 0;
     this->dyna.actor.world.rot.z = 0;
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_raillift_Colheader_0048D0);
     this->unk160 = thisx->home.rot.z * 0.1f;
     if (this->unk160 < 0.01f) {
@@ -74,7 +74,7 @@ void ObjOcarinalift_Init(Actor* thisx, PlayState* play) {
         this->unk16C = 1;
         this->unk170 = Lib_SegmentedToVirtual(path->points);
         func_80AC94C0(this, this->unk168);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) &&
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) &&
             (Flags_GetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor)))) {
             func_80AC96B4(this);
         } else {
@@ -99,7 +99,7 @@ void func_80AC96A4(ObjOcarinalift* this, PlayState* play) {
 
 void func_80AC96B4(ObjOcarinalift* this) {
     this->actionFunc = func_80AC96D0;
-    this->dyna.actor.speedXZ = 0.0f;
+    this->dyna.actor.speed = 0.0f;
 }
 
 void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
@@ -112,7 +112,7 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
     s32 sp34;
     Vec3s* temp_v1_2;
 
-    func_800B9010(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+    Actor_PlaySfx_Flagged(thisx, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     Math_Vec3s_ToVec3f(&sp48, this->unk170 + this->unk168 + this->unk16C);
     Math_Vec3f_Diff(&sp48, &thisx->world.pos, &thisx->velocity);
     magnitude = Math3D_Vec3fMagnitude(&thisx->velocity);
@@ -125,9 +125,9 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         phi_fa0 = this->unk160 * 0.16f;
     }
 
-    Math_StepToF(&thisx->speedXZ, phi_fv0, phi_fa0);
-    if ((thisx->speedXZ + 0.05f) < magnitude) {
-        Math_Vec3f_Scale(&thisx->velocity, thisx->speedXZ / magnitude);
+    Math_StepToF(&thisx->speed, phi_fv0, phi_fa0);
+    if ((thisx->speed + 0.05f) < magnitude) {
+        Math_Vec3f_Scale(&thisx->velocity, thisx->speed / magnitude);
         thisx->world.pos.x += thisx->velocity.x;
         thisx->world.pos.y += thisx->velocity.y;
         thisx->world.pos.z += thisx->velocity.z;
@@ -135,9 +135,9 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
         paramsC = OBJOCARINALIFT_GET_C(thisx);
         sp34 = true;
         this->unk168 += this->unk16C;
-        thisx->speedXZ *= 0.4f;
+        thisx->speed *= 0.4f;
         if (((this->unk168 >= this->unk164) && (this->unk16C > 0)) || ((this->unk168 <= 0) && (this->unk16C < 0))) {
-            if (paramsC == OBJOCARINALIFT_PARAMSC_0) {
+            if (paramsC == OBJOCARINALIFT_PARAM_0) {
                 this->unk16C = -this->unk16C;
                 this->timer = 10;
                 func_80AC9A68(this);
@@ -153,13 +153,13 @@ void func_80AC96D0(ObjOcarinalift* this, PlayState* play) {
                 if (((this->unk170->x != temp_v1_2->x) || (this->unk170->y != temp_v1_2->y)) ||
                     (this->unk170->z != temp_v1_2->z)) {
                     func_80AC99C0(this);
-                    func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+                    DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
                     sp34 = false;
-                } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+                } else if ((paramsC == OBJOCARINALIFT_PARAM_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
                     func_80AC9AB8(this);
                 }
             }
-        } else if ((paramsC == OBJOCARINALIFT_PARAMSC_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
+        } else if ((paramsC == OBJOCARINALIFT_PARAM_1) && (this->unk168 == OBJOCARINALIFT_GET_1F(thisx))) {
             func_80AC9AB8(this);
         }
         if (sp34) {
@@ -173,10 +173,10 @@ void func_80AC99C0(ObjOcarinalift* this) {
 }
 
 void func_80AC99D4(ObjOcarinalift* this, PlayState* play) {
-    if (!DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    if (!DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_80AC94C0(this, this->unk168);
-        func_800C6314(play, &play->colCtx.dyna, this->dyna.bgId);
-        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAMSC_1) &&
+        DynaPoly_EnableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
+        if ((OBJOCARINALIFT_GET_C(&this->dyna.actor) == OBJOCARINALIFT_PARAM_1) &&
             (this->unk168 == OBJOCARINALIFT_GET_1F(&this->dyna.actor))) {
             func_80AC9AB8(this);
         } else {
@@ -197,7 +197,7 @@ void func_80AC9A7C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9AB8(ObjOcarinalift* this) {
-    this->dyna.actor.flags |= (ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000);
+    this->dyna.actor.flags |= (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
     this->actionFunc = func_80AC9AE0;
 }
 
@@ -205,7 +205,7 @@ void func_80AC9AE0(ObjOcarinalift* this, PlayState* play) {
     if (func_800B8718(&this->dyna.actor, &play->state)) {
         func_80152434(play, 1);
         func_80AC9B48(this);
-    } else if (DynaPolyActor_IsInRidingMovingState(&this->dyna)) {
+    } else if (DynaPolyActor_IsPlayerOnTop(&this->dyna)) {
         func_800B8804(&this->dyna.actor, play, 40.0f);
     }
 }
@@ -218,10 +218,10 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
     if (func_800B886C(&this->dyna.actor, play)) {
         if (play->msgCtx.ocarinaMode == 4) {
             if (play->msgCtx.lastPlayedSong == 0) {
-                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAMSC_1) {
+                if (OBJOCARINALIFT_GET_C(&this->dyna.actor) != OBJOCARINALIFT_PARAM_1) {
                     Flags_SetSwitch(play, OBJOCARINALIFT_GET_SWITCH_FLAG(&this->dyna.actor));
                 }
-                ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+                CutsceneManager_Queue(this->dyna.actor.csId);
                 func_80AC9C20(this);
             }
         } else {
@@ -234,17 +234,17 @@ void func_80AC9B5C(ObjOcarinalift* this, PlayState* play) {
 }
 
 void func_80AC9C20(ObjOcarinalift* this) {
-    this->dyna.actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_2000000 | ACTOR_FLAG_8000000);
+    this->dyna.actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_2000000 | ACTOR_FLAG_CANT_LOCK_ON);
     this->actionFunc = func_80AC9C48;
 }
 
 void func_80AC9C48(ObjOcarinalift* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         this->cutsceneTimer = 50;
         func_80AC96B4(this);
     } else {
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -256,7 +256,7 @@ void ObjOcarinalift_Update(Actor* thisx, PlayState* play) {
     if (this->cutsceneTimer > 0) {
         this->cutsceneTimer--;
         if (this->cutsceneTimer == 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
         }
     }
 }

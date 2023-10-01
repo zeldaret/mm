@@ -6,7 +6,7 @@
 
 #include "z_en_hgo.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10 | ACTOR_FLAG_2000000)
 
 #define THIS ((EnHgo*)thisx)
 
@@ -38,17 +38,7 @@ typedef enum {
     /* 2 */ HGO_EYE_CLOSED
 } EyeState;
 
-typedef enum {
-    /* 0 */ HGO_ANIM_ARMS_FOLDED,
-    /* 1 */ HGO_ANIM_ASTONISHED,
-    /* 2 */ HGO_ANIM_KNEEL_DOWN_AND_HUG,
-    /* 3 */ HGO_ANIM_CONSOLE,
-    /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
-    /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
-    /* 6 */ HGO_ANIM_TOSS,
-} HgoAnimation;
-
-const ActorInit En_Hgo_InitVars = {
+ActorInit En_Hgo_InitVars = {
     ACTOR_EN_HGO,
     ACTORCAT_NPC,
     FLAGS,
@@ -60,14 +50,25 @@ const ActorInit En_Hgo_InitVars = {
     (ActorFunc)EnHgo_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gPamelasFatherArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },
-    { &gPamelasFatherAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gPamelasFatherConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
-    { &gPamelasFatherReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f },
-    { &gPamelasFatherTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },
+typedef enum {
+    /* 0 */ HGO_ANIM_ARMS_FOLDED,
+    /* 1 */ HGO_ANIM_ASTONISHED,
+    /* 2 */ HGO_ANIM_KNEEL_DOWN_AND_HUG,
+    /* 3 */ HGO_ANIM_CONSOLE,
+    /* 4 */ HGO_ANIM_CONSOLE_HEAD_UP,
+    /* 5 */ HGO_ANIM_REACH_DOWN_TO_LIFT,
+    /* 6 */ HGO_ANIM_TOSS,
+    /* 7 */ HGO_ANIM_MAX
+} HgoAnimation;
+
+static AnimationInfo sAnimationInfo[HGO_ANIM_MAX] = {
+    { &gPamelasFatherArmsFoldedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, -4.0f },     // HGO_ANIM_ARMS_FOLDED
+    { &gPamelasFatherAstonishedAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },      // HGO_ANIM_ASTONISHED
+    { &gPamelasFatherKneelDownAndHugAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // HGO_ANIM_KNEEL_DOWN_AND_HUG
+    { &gPamelasFatherConsoleAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },         // HGO_ANIM_CONSOLE
+    { &gPamelasFatherConsoleHeadUpAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },   // HGO_ANIM_CONSOLE_HEAD_UP
+    { &gPamelasFatherReachDownToLiftAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_ONCE, 0.0f }, // HGO_ANIM_REACH_DOWN_TO_LIFT
+    { &gPamelasFatherTossAnim, 1.0f, 0.0f, 0.0f, ANIMMODE_LOOP, 0.0f },            // HGO_ANIM_TOSS
 };
 
 static ColliderCylinderInit sCylinderInit = {
@@ -102,13 +103,15 @@ void EnHgo_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&thisx->colChkInfo, NULL, &sColChkInfoInit);
-    thisx->targetMode = 6;
+    thisx->targetMode = TARGET_MODE_6;
+
     this->eyeIndex = 0;
     this->blinkTimer = 0;
     this->textId = 0;
     this->talkFlags = TALK_FLAG_NONE;
     this->isInCutscene = false;
-    if ((gSaveContext.save.weekEventReg[75] & 0x20) || (gSaveContext.save.weekEventReg[52] & 0x20)) {
+
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) || CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_STONE_TOWER_TEMPLE)) {
         EnHgo_SetupTalk(this);
     } else {
         thisx->draw = NULL;
@@ -123,7 +126,7 @@ void EnHgo_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void EnHgo_SetupDoNothing(EnHgo* this) {
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     this->actionFunc = EnHgo_DoNothing;
 }
 
@@ -142,7 +145,7 @@ void EnHgo_UpdateCollision(EnHgo* this, PlayState* play) {
 }
 
 void EnHgo_SetupTalk(EnHgo* this) {
-    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_ARMS_FOLDED);
     this->actionFunc = EnHgo_Talk;
 }
 
@@ -158,7 +161,7 @@ void EnHgo_Talk(EnHgo* this, PlayState* play) {
                 Message_StartTextbox(play, 0x15A7, &this->actor);
                 this->textId = 0x15A7; // can I research that mask
             }
-        } else if (gSaveContext.save.playerForm == PLAYER_FORM_HUMAN) {
+        } else if (GET_PLAYER_FORM == PLAYER_FORM_HUMAN) {
             if (!(this->talkFlags & TALK_FLAG_HAS_SPOKEN_WITH_HUMAN)) {
                 this->talkFlags |= TALK_FLAG_HAS_SPOKEN_WITH_HUMAN;
                 Message_StartTextbox(play, 0x158F, &this->actor);
@@ -179,7 +182,7 @@ void EnHgo_Talk(EnHgo* this, PlayState* play) {
         }
         EnHgo_SetupDialogueHandler(this);
     } else {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -205,6 +208,9 @@ void EnHgo_DefaultDialogueHandler(EnHgo* this, PlayState* play) {
                 EnHgo_SetupTalk(this);
             }
             break;
+
+        default:
+            break;
     }
 
     Math_SmoothStepToS(&this->actor.world.rot.y, this->actor.yawTowardsPlayer, 0xA, 0x71C, 0xB6);
@@ -221,7 +227,7 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 break;
 
             case 0x1590:
-                if (gSaveContext.save.weekEventReg[14] & 4) {
+                if (CHECK_WEEKEVENTREG(WEEKEVENTREG_14_04)) {
                     Message_StartTextbox(play, 0x1591, &this->actor);
                     this->textId = 0x1591;
                     break;
@@ -267,81 +273,89 @@ void EnHgo_HandlePlayerChoice(EnHgo* this, PlayState* play) {
                 break;
 
             case 0x15A7:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 EnHgo_SetupTalk(this);
+                break;
+
+            default:
                 break;
         }
     }
 }
 
 s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
-    s32 actionIndex;
+    s32 cueChannel;
 
-    if (Cutscene_CheckActorAction(play, 486)) {
-        actionIndex = Cutscene_GetActorActionIndex(play, 486);
-        if (this->csAction != play->csCtx.actorActions[actionIndex]->action) {
-            this->csAction = play->csCtx.actorActions[actionIndex]->action;
-            switch (play->csCtx.actorActions[actionIndex]->action) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_486)) {
+        cueChannel = Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_486);
+        if (this->cueId != play->csCtx.actorCues[cueChannel]->id) {
+            this->cueId = play->csCtx.actorCues[cueChannel]->id;
+            switch (play->csCtx.actorCues[cueChannel]->id) {
                 case 1:
                     this->animIndex = HGO_ANIM_ARMS_FOLDED;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 0);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_ARMS_FOLDED);
                     break;
 
                 case 2:
                     this->actor.draw = EnHgo_Draw;
                     this->animIndex = HGO_ANIM_ASTONISHED;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 1);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_ASTONISHED);
                     break;
 
                 case 3:
                     this->animIndex = HGO_ANIM_KNEEL_DOWN_AND_HUG;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 2);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_KNEEL_DOWN_AND_HUG);
                     break;
 
                 case 4:
                     this->animIndex = HGO_ANIM_CONSOLE;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_CONSOLE);
                     break;
 
                 case 5:
                     this->animIndex = HGO_ANIM_CONSOLE_HEAD_UP;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 4);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_CONSOLE_HEAD_UP);
                     break;
 
                 case 6:
                     this->animIndex = HGO_ANIM_REACH_DOWN_TO_LIFT;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 5);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_REACH_DOWN_TO_LIFT);
+                    break;
+
+                default:
                     break;
             }
         } else if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
             switch (this->animIndex) {
                 case HGO_ANIM_ASTONISHED:
-                    if ((Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) &&
-                        (this->isInCutscene == false)) {
+                    if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame) && !this->isInCutscene) {
                         this->isInCutscene = true;
                         if ((gSaveContext.sceneLayer == 0) &&
-                            ((play->csCtx.currentCsIndex == 2) || (play->csCtx.currentCsIndex == 4))) {
-                            Actor_PlaySfxAtPos(&this->actor, NA_SE_VO_GBVO02);
+                            ((play->csCtx.scriptIndex == 2) || (play->csCtx.scriptIndex == 4))) {
+                            Actor_PlaySfx(&this->actor, NA_SE_VO_GBVO02);
                         }
                     }
                     break;
 
                 case HGO_ANIM_KNEEL_DOWN_AND_HUG:
                     this->animIndex = HGO_ANIM_CONSOLE;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 3);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_CONSOLE);
                     break;
 
                 case HGO_ANIM_REACH_DOWN_TO_LIFT:
                     this->animIndex = HGO_ANIM_TOSS;
-                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, 6);
+                    Actor_ChangeAnimationByInfo(&this->skelAnime, sAnimationInfo, HGO_ANIM_TOSS);
+
+                default:
+                    break;
             }
         }
 
-        Cutscene_ActorTranslateAndYaw(&this->actor, play, actionIndex);
+        Cutscene_ActorTranslateAndYaw(&this->actor, play, cueChannel);
         return true;
     }
 
-    if ((play->csCtx.state == 0) && (((gSaveContext.save.weekEventReg[75]) & 0x20)) &&
+    if ((play->csCtx.state == CS_STATE_IDLE) && CHECK_WEEKEVENTREG(WEEKEVENTREG_75_20) &&
         (this->actionFunc == EnHgo_DoNothing)) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         Actor_Spawn(&play->actorCtx, play, ACTOR_ELF_MSG2, this->actor.focus.pos.x, this->actor.focus.pos.y,
@@ -349,7 +363,7 @@ s32 EnHgo_HandleCsAction(EnHgo* this, PlayState* play) {
         EnHgo_SetupInitCollision(this);
     }
 
-    this->csAction = 0x63;
+    this->cueId = 99;
     return false;
 }
 
@@ -415,12 +429,14 @@ void EnHgo_Draw(Actor* thisx, PlayState* play) {
     EnHgo* this = THIS;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPSegment(POLY_OPA_DISP++, 0x08, Lib_SegmentedToVirtual(sEyeTextures[this->eyeIndex]));
     SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount,
                           EnHgo_OverrideLimbDraw, &EnHgo_PostLimbDraw, &this->actor);
     Matrix_Put(&this->mf);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, gPamelasFatherHumanEyebrowsDL);
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

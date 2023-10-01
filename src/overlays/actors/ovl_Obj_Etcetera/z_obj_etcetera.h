@@ -12,7 +12,7 @@ typedef enum {
     /* 1 */ DEKU_FLOWER_TYPE_PINK_WITH_INITIAL_BOUNCE,
     /* 2 */ DEKU_FLOWER_TYPE_GOLD,
     /* 3 */ DEKU_FLOWER_TYPE_GOLD_WITH_INITIAL_BOUNCE,
-    /* 4 */ DEKU_FLOWER_TYPE_MAX,
+    /* 4 */ DEKU_FLOWER_TYPE_MAX
 } DekuFlowerType;
 
 struct ObjEtcetera;

@@ -73,10 +73,10 @@ static ColliderJntSphInit sJntSphInit = {
 };
 
 typedef struct {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ ObjSnowballActionFunc unk_04;
-} ObjSnowballStruct2;
+    /* 0x0 */ s16 unk_00;
+    /* 0x2 */ s16 unk_02;
+    /* 0x4 */ ObjSnowballActionFunc unk_04;
+} ObjSnowballStruct2; // size = 0x8
 
 static ObjSnowballStruct2 D_80B04F84[] = {
     { -1, 0, func_80B02D58 },
@@ -106,7 +106,7 @@ void func_80B02CD0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  ptr->unk_02, -1, this->actor.unk20, NULL);
+                                  ptr->unk_02, CS_ID_NONE, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02D58(ObjSnowball* this, PlayState* play) {
@@ -123,8 +123,8 @@ void func_80B02DB0(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02,
-                                  ActorCutscene_GetAdditionalCutscene(this->actor.cutscene), this->actor.unk20, NULL);
+                                  this->actor.params | ptr->unk_02, CutsceneManager_GetAdditionalCsId(this->actor.csId),
+                                  this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02E54(ObjSnowball* this, PlayState* play) {
@@ -132,7 +132,7 @@ void func_80B02E54(ObjSnowball* this, PlayState* play) {
 
     Actor_SpawnAsChildAndCutscene(&play->actorCtx, play, ptr->unk_00, this->actor.home.pos.x, this->actor.home.pos.y,
                                   this->actor.home.pos.z, this->actor.home.rot.x, 0, this->actor.home.rot.z,
-                                  this->actor.params | ptr->unk_02, -1, this->actor.unk20, NULL);
+                                  this->actor.params | ptr->unk_02, CS_ID_NONE, this->actor.halfDaysBits, NULL);
 }
 
 void func_80B02EE4(ObjSnowball* this, PlayState* play) {
@@ -440,7 +440,7 @@ void func_80B03FF8(ObjSnowball* this, PlayState* play) {
         sp18->unk_04(this, play);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
+    Actor_PlaySfx(&this->actor, NA_SE_EV_SNOWBALL_BROKEN);
 
     if (rotY == 5) {
         Flags_SetSwitch(play, OBJSNOWBALL_GET_3F(&this->actor));
@@ -478,10 +478,10 @@ void ObjSnowball_Init(Actor* thisx, PlayState* play) {
 
     if (sp34) {
         this->actor.textId = 0x238;
-        this->actor.flags |= ACTOR_FLAG_1;
+        this->actor.flags |= ACTOR_FLAG_TARGETABLE;
         this->actor.targetArrowOffset = 1400.0f / 3.0f;
         Actor_SetFocus(&this->actor, 24.0f);
-        this->actor.targetMode = 3;
+        this->actor.targetMode = TARGET_MODE_3;
     }
 
     Collider_InitJntSph(play, &this->collider);
@@ -537,7 +537,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
          (0x80000000 | 0x4000 | 0x800 | 0x400 | 0x100 | 0x8))) {
         this->actor.flags |= ACTOR_FLAG_10;
         if (this->actor.home.rot.y == 1) {
-            this->actor.flags &= ~(ACTOR_FLAG_1 | ACTOR_FLAG_8);
+            this->actor.flags &= ~(ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY);
         }
 
         if (this->collider.elements->info.acHitInfo->toucher.dmgFlags & 0x4000) {
@@ -549,7 +549,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             this->unk_20A = 0;
         }
 
-        if (this->actor.cutscene < 0) {
+        if (this->actor.csId <= CS_ID_NONE) {
             func_80B03FF8(this, play);
             if (this->unk_20A == 0) {
                 func_80B04608(this, play);
@@ -571,7 +571,7 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
             } else {
                 this->unk_209 = 10;
             }
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_IT_REFLECTION_SNOW);
+            Actor_PlaySfx(&this->actor, NA_SE_IT_REFLECTION_SNOW);
         }
     }
 
@@ -584,13 +584,13 @@ void func_80B04350(ObjSnowball* this, PlayState* play) {
 }
 
 void func_80B04540(ObjSnowball* this, PlayState* play) {
-    ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+    CutsceneManager_Queue(this->actor.csId);
     this->actionFunc = func_80B0457C;
 }
 
 void func_80B0457C(ObjSnowball* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->actor.cutscene, &this->actor);
+    if (CutsceneManager_IsNext(this->actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->actor.csId, &this->actor);
         func_80B03FF8(this, play);
         this->unk_20B = 1;
         if (this->unk_20A == 0) {
@@ -599,7 +599,7 @@ void func_80B0457C(ObjSnowball* this, PlayState* play) {
             func_80B046E4(this, play);
         }
     } else {
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     }
 }
 
@@ -615,7 +615,7 @@ void func_80B04648(ObjSnowball* this, PlayState* play) {
     this->unk_208--;
     if (this->unk_208 <= 0) {
         if (this->unk_20B != 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
 
         if (this->actor.home.rot.y == 1) {
@@ -719,7 +719,7 @@ void func_80B047C0(ObjSnowball* this, PlayState* play) {
 
     if ((this->unk_208 <= 0) || ((this->unk_1A8[0].unk_2D & 1) && (this->unk_1A8[1].unk_2D & 1))) {
         if (this->unk_20B != 0) {
-            ActorCutscene_Stop(this->actor.cutscene);
+            CutsceneManager_Stop(this->actor.csId);
         }
 
         if (this->actor.home.rot.y == 1) {
@@ -763,7 +763,7 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
         } else if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
             this->actor.flags |= ACTOR_FLAG_10;
             this->unk_211 = 1;
-        } else if (this->actor.isTargeted) {
+        } else if (this->actor.isLockedOn) {
             sp24 = true;
         }
     }
@@ -771,7 +771,7 @@ void ObjSnowball_Update(Actor* thisx, PlayState* play) {
     this->actionFunc(this, play);
 
     if (sp24 && (this->actionFunc == func_80B04350)) {
-        func_800B8614(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 
     if ((this->actor.floorPoly != NULL) && (this->actor.projectedPos.z < 920.0f)) {
@@ -818,7 +818,7 @@ void func_80B04D34(Actor* thisx, PlayState* play) {
             if ((ptr->unk_28 != NULL) && (ptr->unk_2C > 0)) {
                 OPEN_DISPS(play->state.gfxCtx);
 
-                func_8012C448(play->state.gfxCtx);
+                Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
                 gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0,
                                   0, COMBINED);

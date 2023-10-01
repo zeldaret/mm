@@ -394,7 +394,7 @@ void ZLimb::DeclareDList(segptr_t dListSegmentedPtr, const std::string& prefix,
 
 	std::string dlistName;
 	bool declFound = Globals::Instance->GetSegmentedArrayIndexedName(dListSegmentedPtr, 8, parent,
-	                                                                 "Gfx", dlistName);
+	                                                                 "Gfx", dlistName, false);
 	if (declFound)
 		return;
 

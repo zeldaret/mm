@@ -15,6 +15,4 @@ typedef struct {
     /* 0x2C */ s16 flags;
 } EffectSsSolderSrchBallInitParams; // size = 0x30
 
-extern const EffectSsInit Effect_Ss_Solder_Srch_Ball_InitVars;
-
 #endif

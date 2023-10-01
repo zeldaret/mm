@@ -6,6 +6,8 @@
 
 struct Boss02;
 
+#define TWINMOLD_GET_TYPE(thisx) ((thisx)->params)
+
 typedef void (*Boss02ActionFunc)(struct Boss02*, PlayState*);
 
 typedef struct {
@@ -25,17 +27,19 @@ typedef struct {
 typedef enum {
     /* 0 */ TWINMOLD_EFFECT_NONE,
     /* 1 */ TWINMOLD_EFFECT_SAND,       // The sand kicked up when Twinmold touches the ground
-    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // Unused
+    /* 2 */ TWINMOLD_EFFECT_BLACK_DUST, // The dust that appears when either Twinmold or the player destroys a ruin
     /* 3 */ TWINMOLD_EFFECT_FRAGMENT,   // The fragments that fly off when the parts of Twinmold explode
-    /* 4 */ TWINMOLD_EFFECT_FLASH,      // The flashes of light that appear when the parts of Twinmold explode
+    /* 4 */ TWINMOLD_EFFECT_FLASH       // The flashes of light that appear when the parts of Twinmold explode
 } TwinmoldEffectType;
 
+#define TWINMOLD_EFFECT_COUNT 150
+
 typedef enum {
-    /*   0 */ TWINMOLD_RED,
-    /*  35 */ TWINMOLD_BLUE = 35,
-    /* 100 */ TWINMOLD_TAIL = 100,
-    /* 200 */ TWINMOLD_STATIC = 200,
-} TwinmoldParams;
+    /*   0 */ TWINMOLD_TYPE_RED,
+    /*  35 */ TWINMOLD_TYPE_BLUE = 35,
+    /* 100 */ TWINMOLD_TYPE_TAIL = 100,
+    /* 200 */ TWINMOLD_TYPE_STATIC = 200
+} TwinmoldType;
 
 typedef struct Boss02 {
     /* 0x0000 */ Actor actor;
@@ -66,7 +70,7 @@ typedef struct Boss02 {
     /* 0x01A0 */ f32 unk_01A0;
     /* 0x01A4 */ s16 unk_01A4;
     /* 0x01A8 */ f32 unk_01A8;
-    /* 0x01AC */ f32 unk_01AC;
+    /* 0x01AC */ f32 giantModeScaleFactor;
     /* 0x01B0 */ Vec3f unk_01B0;
     /* 0x01BC */ Vec3f unk_01BC[200];
     /* 0x0B1C */ Vec3f unk_0B1C[200];
@@ -83,8 +87,8 @@ typedef struct Boss02 {
     /* 0x1C28 */ ColliderJntSph colliderSphere2;
     /* 0x1C48 */ ColliderJntSphElement colliderSphere2Elements[2];
     /* 0x1CC8 */ ColliderCylinder colliderCylinder;
-    /* 0x1D14 */ u32 unk_1D14;
-    /* 0x1D18 */ s16 unk_1D18;
+    /* 0x1D14 */ u32 giantsMaskCsTimer;
+    /* 0x1D18 */ s16 giantsMaskCsState;
     /* 0x1D1A */ s16 unk_1D1A;
     /* 0x1D1C */ u32 unk_1D1C;
     /* 0x1D20 */ s16 unk_1D20;
@@ -93,17 +97,17 @@ typedef struct Boss02 {
     /* 0x1D30 */ Vec3f subCamAt;
     /* 0x1D3C */ Vec3f subCamUp;
     /* 0x1D48 */ Vec3f subCamAtNext;
-    /* 0x1D54 */ f32 unk_1D54;
-    /* 0x1D58 */ f32 unk_1D58;
+    /* 0x1D54 */ f32 subCamUpRotZ;
+    /* 0x1D58 */ f32 subCamUpRotZScale;
     /* 0x1D5C */ f32 subCamAtVel;
     /* 0x1D60 */ UNK_TYPE1 unk1D60[0x4];
-    /* 0x1D64 */ f32 unk_1D64;
-    /* 0x1D68 */ f32 unk_1D68;
-    /* 0x1D6C */ f32 unk_1D6C;
-    /* 0x1D70 */ f32 unk_1D70;
-    /* 0x1D74 */ f32 unk_1D74;
-    /* 0x1D78 */ u8 unk_1D78;
-    /* 0x1D7A */ s16 unk_1D7A;
+    /* 0x1D64 */ f32 subCamDistZFromPlayer;
+    /* 0x1D68 */ f32 subCamEyeOffsetY;
+    /* 0x1D6C */ f32 subCamAtOffsetY;
+    /* 0x1D70 */ f32 playerScale;
+    /* 0x1D74 */ f32 fogNear;
+    /* 0x1D78 */ u8 giantsMaskCsFlashState;
+    /* 0x1D7A */ s16 giantsMaskCsFlashAlpha;
     /* 0x1D7C */ s16 unk_1D7C;
     /* 0x1D7E */ s16 unk_1D7E;
 } Boss02; // size = 0x1D80

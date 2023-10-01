@@ -63,17 +63,14 @@ static Gfx* sShellDLists[] = {
 
 void EnTorch2_Init(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
-    s16 params;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
     Collider_InitAndSetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
-    // params: which form Link is in (e.g. human, deku, etc.)
-    params = this->actor.params;
-    if (params != TORCH2_PARAM_DEKU) {
-        this->actor.flags |= ACTOR_FLAG_4000000; // Can press switch
-        if (params == TORCH2_PARAM_GORON) {
-            this->actor.flags |= ACTOR_FLAG_20000; // Can press heavy switches
+    if (this->actor.params != TORCH2_PARAM_DEKU) {
+        this->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCH;
+        if (this->actor.params == TORCH2_PARAM_GORON) {
+            this->actor.flags |= ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH;
         }
     }
     this->framesUntilNextState = 20;
@@ -83,9 +80,9 @@ void EnTorch2_Destroy(Actor* thisx, PlayState* play) {
     EnTorch2* this = THIS;
 
     Collider_DestroyCylinder(play, &this->collider);
-    Play_SetRespawnData(&play->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0, 0xBFF,
-                        &this->actor.world.pos, this->actor.shape.rot.y);
-    play->actorCtx.unk254[this->actor.params] = 0;
+    Play_SetRespawnData(&play->state, this->actor.params + RESPAWN_MODE_GORON - 1, 0xFF, 0,
+                        PLAYER_PARAMS(0xFF, PLAYER_INITMODE_B), &this->actor.world.pos, this->actor.shape.rot.y);
+    play->actorCtx.elegyShells[this->actor.params] = NULL;
 }
 
 void EnTorch2_Update(Actor* thisx, PlayState* play) {
@@ -101,7 +98,7 @@ void EnTorch2_Update(Actor* thisx, PlayState* play) {
 
     this->actor.gravity = -1.0f;
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 70.0f, 0x05);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 30.0f, 20.0f, 70.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 
     if (this->framesUntilNextState == 0) {
         remainingFrames = 0;
@@ -163,7 +160,8 @@ void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
     Gfx* gfx = sShellDLists[this->actor.params];
 
     OPEN_DISPS(play->state.gfxCtx);
-    if (this->alpha == 0xFF) {
+
+    if (this->alpha == 255) {
         Scene_SetRenderModeXlu(play, 0, 0x01);
         gDPSetEnvColor(POLY_OPA_DISP++, 255, 255, 255, 255);
         Gfx_DrawDListOpa(play, gfx);
@@ -172,5 +170,6 @@ void EnTorch2_Draw(Actor* thisx, PlayState* play2) {
         gDPSetEnvColor(POLY_XLU_DISP++, 255, 255, 255, this->alpha);
         Gfx_DrawDListXlu(play, gfx);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

@@ -7,7 +7,7 @@
 #include "z_obj_hakaisi.h"
 #include "objects/object_hakaisi/object_hakaisi.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_20)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_20)
 
 #define THIS ((ObjHakaisi*)thisx)
 
@@ -98,7 +98,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
     }
 
     Actor_SetScale(&this->dyna.actor, 1.0f);
-    this->dyna.actor.targetMode = 0;
+    this->dyna.actor.targetMode = TARGET_MODE_0;
     this->dyna.actor.colChkInfo.health = 30;
     if (OBJHAKAISI_GET_FF(&this->dyna.actor) == 3) {
         this->dyna.actor.draw = NULL;
@@ -106,14 +106,14 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     CollisionHeader_GetVirtual(&object_hakaisi_Colheader_002FC4, &sp7C);
 
     this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, sp7C);
     this->unk_19A = 0;
     this->unk_198 = 0;
     this->switchFlag = OBJHAKAISI_GET_SWITCHFLAG(thisx);
-    this->unk_196 = this->dyna.actor.cutscene;
+    this->csId = this->dyna.actor.csId;
 
     if (this->switchFlag == 0xFF) {
         this->switchFlag = -1;
@@ -123,7 +123,7 @@ void ObjHakaisi_Init(Actor* thisx, PlayState* play) {
         Actor_Kill(&this->dyna.actor);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     if (this->dyna.actor.floorPoly == NULL) {
         Actor_Kill(&this->dyna.actor);
@@ -168,7 +168,7 @@ void func_80B14460(ObjHakaisi* this, PlayState* play) {
         func_80B14510(this);
     } else if (this->dyna.actor.textId != 0) {
         if (ABS_ALT(sp26) < 0x2000) {
-            func_800B8614(&this->dyna.actor, play, 100.0f);
+            Actor_OfferTalk(&this->dyna.actor, play, 100.0f);
         }
     }
 
@@ -192,24 +192,24 @@ void func_80B14558(ObjHakaisi* this) {
 }
 
 void func_80B1456C(ObjHakaisi* this, PlayState* play) {
-    if (this->unk_196 != -1) {
-        if (ActorCutscene_GetCanPlayNext(this->unk_196)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->unk_196, &this->dyna.actor);
+    if (this->csId != CS_ID_NONE) {
+        if (CutsceneManager_IsNext(this->csId)) {
+            CutsceneManager_StartWithPlayerCs(this->csId, &this->dyna.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_196);
+            CutsceneManager_Queue(this->csId);
         }
     }
     if (this->dyna.actor.colChkInfo.health < 30) {
         func_80B145F4(this);
-        func_800C62BC(play, &play->colCtx.dyna, this->dyna.bgId);
+        DynaPoly_DisableCollision(play, &play->colCtx.dyna, this->dyna.bgId);
     }
 }
 
 void func_80B145F4(ObjHakaisi* this) {
     this->unk_19A = 0;
-    this->dyna.actor.flags |= ACTOR_FLAG_8000000;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_1;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    this->dyna.actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
     this->actionFunc = func_80B14648;
 }
 
@@ -258,8 +258,8 @@ void func_80B149A8(ObjHakaisi* this) {
 void func_80B149C0(ObjHakaisi* this, PlayState* play) {
     if (this->unk_19A < 60) {
         this->unk_19A++;
-    } else if ((this->unk_196 != -1) && !ActorCutscene_GetCanPlayNext(this->unk_196)) {
-        ActorCutscene_Stop(this->unk_196);
+    } else if ((this->csId != CS_ID_NONE) && !CutsceneManager_IsNext(this->csId)) {
+        CutsceneManager_Stop(this->csId);
     }
 }
 
@@ -281,7 +281,7 @@ void func_80B14B6C(ObjHakaisi* this, PlayState* play, Vec3f vec, s16 arg3) {
     s16 temp_s1;
     Vec3f sp6C;
 
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_WALL_BROKEN);
 
     for (i = 0; i < 5; i++) {
         temp_s1 = Rand_Next();
@@ -349,7 +349,7 @@ void ObjHakaisi_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_194 == 0) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -375,7 +375,7 @@ void func_80B151E0(ObjHakaisi* this, PlayState* play) {
     this->dyna.actor.destroy = func_80B15254;
     Actor_SetScale(&this->dyna.actor, 0.1f);
     this->dyna.actor.shape.yOffset = 100.0f;
-    this->dyna.actor.flags &= ~ACTOR_FLAG_1;
+    this->dyna.actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     func_80B15264(this);
 }
 
@@ -403,7 +403,7 @@ void func_80B15330(ObjHakaisi* this, PlayState* play) {
     this->dyna.actor.velocity.y += this->dyna.actor.gravity;
     Actor_UpdatePos(&this->dyna.actor);
 
-    if (this->dyna.actor.bgCheckFlags & 2) {
+    if (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
         func_80B14B6C(this, play, this->dyna.actor.world.pos, 40);
         func_80B14CF8(play, this->dyna.actor.world.pos, 100, 30, 10);
         Actor_Kill(&this->dyna.actor);
@@ -423,13 +423,13 @@ void func_80B1544C(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 }
 
 void func_80B154A0(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (OBJHAKAISI_GET_FF(thisx) == 4) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

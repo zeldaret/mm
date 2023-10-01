@@ -4,17 +4,17 @@
         <!-- DisplayLists and Collision for the elevator platforms. -->
         <DList Name="gGreatBayTempleObjectElevatorEmptyDL" Offset="0x2C0" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectElevatorDL" Offset="0x2C8" /> <!-- Original name is "m2_KON_ELE_model" -->
-        <Collision Name="gGreatBayTempleObjectElevatorCol" Offset="0x5C4" />
+        <Collision Name="gGreatBayTempleObjectElevatorCol" Offset="0x5C4" /> <!-- Original name is "m2_KON_ELE_bgdatainfo" -->
 
         <!-- DisplayLists and Collision for the rotating waterwheel with two platforms. -->
         <DList Name="gGreatBayTempleObjectWaterwheelWithPlatformsEmptyDL" Offset="0x1E60" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectWaterwheelWithPlatformsDL" Offset="0x1E68" /> <!-- Original name is "m2_KON_GEAR09_model" -->
-        <Collision Name="gGreatBayTempleObjectWaterwheelWithPlatformsCol" Offset="0x2E78" />
+        <Collision Name="gGreatBayTempleObjectWaterwheelWithPlatformsCol" Offset="0x2E78" /> <!-- Original name is "m2_KON_GEAR09_bgdatainfo" -->
 
         <!-- DisplayLists and Collision for the ice stalactites that can be thawed with Fire Arrows.  -->
         <DList Name="gGreatBayTempleObjectIceStalactiteRimDL" Offset="0x3250" />
         <DList Name="gGreatBayTempleObjectIceStalactiteDL" Offset="0x3358" /> <!-- Original name is "m2_KON_ICE_model" -->
-        <Collision Name="gGreatBayTempleObjectIceStalactiteCol" Offset="0x3540" /> <!-- Unused -->
+        <Collision Name="gGreatBayTempleObjectIceStalactiteCol" Offset="0x3540" /> <!-- Unused. Original name is "m2_KON_ICE_bgdatainfo" -->
 
         <!-- DisplayLists for the frozen version of the waterfall that briefly appears when you hit it with an Ice Arrow. -->
         <DList Name="gGreatBayTempleObjectFrozenWaterfallDL" Offset="0x3770" />
@@ -25,22 +25,22 @@
         <DList Name="gGreatBayTempleObjectGearShaftWithPlatformsDL" Offset="0x4848" /> <!-- Original name is "m2_KON_Screw_model" -->
         <DList Name="gGreatBayTempleObjectGearShaftEmptyDL" Offset="0x52B0" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectGearShaftDL" Offset="0x52B8" /> <!-- Original name is "m2_KON_ScrewFor8_model" -->
-        <Collision Name="gGreatBayTempleObjectGearShaftWithPlatformsCol" Offset="0x5D28" />
+        <Collision Name="gGreatBayTempleObjectGearShaftWithPlatformsCol" Offset="0x5D28" /> <!-- Original name is "m2_KON_Screw_bgdatainfo" -->
 
         <!-- DisplayLists and Collision for the switches that can be pushed or pulled. -->
         <DList Name="gGreatBayTempleObjectOneWaySwitchEmptyDL" Offset="0x61B0" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectOneWaySwitchDL" Offset="0x61B8" /> <!-- Original name is "m2_KON_Sen_model" (perhaps "tap; faucet") -->
         <DList Name="gGreatBayTempleObjectTwoWaySwitchEmptyDL" Offset="0x69D0" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectTwoWaySwitchDL" Offset="0x69D8" /> <!-- Original name is "m2_KON_SenP2_model" -->
-        <Collision Name="gGreatBayTempleObjectTwoWaySwitchCol" Offset="0x6EA8" />
-        <Collision Name="gGreatBayTempleObjectOneWaySwitchCol" Offset="0x714C" />
+        <Collision Name="gGreatBayTempleObjectTwoWaySwitchCol" Offset="0x6EA8" /> <!-- Original name is "m2_KON_SenP2_bgdatainfo" -->
+        <Collision Name="gGreatBayTempleObjectOneWaySwitchCol" Offset="0x714C" /> <!-- Original name is "m2_KON_Sen_bgdatainfo" -->
 
         <!-- DisplayLists and Collision for the giant waterwheel near the start of the dungeon. -->
         <DList Name="gGreatBayTempleObjectWaterwheelEmptyDL" Offset="0x8770" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectWaterwheelDL" Offset="0x8778" /> <!-- Original name is "m2_KON_SuisyaFor0_model" ("waterwheel") -->
         <DList Name="gGreatBayTempleObjectWaterwheelWithFakeGearEmptyDL" Offset="0xA520" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectWaterwheelWithFakeGearDL" Offset="0xA528" /> <!-- Original name is "m2_KON_SuisyaFor8_model" -->
-        <Collision Name="gGreatBayTempleObjectWaterwheelCol" Offset="0xAED0" />
+        <Collision Name="gGreatBayTempleObjectWaterwheelCol" Offset="0xAED0" /> <!-- Original name is "m2_KON_SuisyaFor8_bgdatainfo" -->
 
         <!-- DisplayLists and TextureAnimation for the waterfalls that can be frozen with Ice Arrows. -->
         <DList Name="gGreatBayTempleObjectWaterfallDL" Offset="0xB280" /> <!-- Original name is "m2_KON_TAKI_modelT" ("waterfall​") -->
@@ -50,17 +50,17 @@
         <!-- DisplayLists and Collision for the "shaft" of the seesaw, i.e., the bar that connects the two platforms. -->
         <DList Name="gGreatBayTempleObjectSeesawShaftEmptyDL" Offset="0xB8F0" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectSeesawShaftDL" Offset="0xB8F8" /> <!-- Original name is "m2_KON_TENBIN_model" ("(balance) scales​") -->
-        <Collision Name="gGreatBayTempleObjectSeesawShaftCol" Offset="0xBC08" />
+        <Collision Name="gGreatBayTempleObjectSeesawShaftCol" Offset="0xBC08" /> <!-- Original name is "m2_KON_TENBIN_bgdatainfo" -->
 
         <!-- DisplayLists and Collision for the large seesaw platform. -->
         <DList Name="gGreatBayTempleObjectLargeSeesawPlatformEmptyDL" Offset="0xBF40" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectLargeSeesawPlatformDL" Offset="0xBF48" /> <!-- Original name is "m2_KON_TENBINstepBIG_model" -->
-        <Collision Name="gGreatBayTempleObjectLargeSeesawPlatformCol" Offset="0xC180" />
+        <Collision Name="gGreatBayTempleObjectLargeSeesawPlatformCol" Offset="0xC180" /> <!-- Original name is "m2_KON_TENBINstepBIG_bgdatainfo" -->
 
         <!-- DisplayLists and Collision for the small seesaw platform. -->
         <DList Name="gGreatBayTempleObjectSmallSeesawPlatformEmptyDL" Offset="0xC4B0" /> <!-- Probably was the transparent component for the below DL -->
         <DList Name="gGreatBayTempleObjectSmallSeesawPlatformDL" Offset="0xC4B8" /> <!-- Original name is "m2_KON_TENBINstepSML_model" -->
-        <Collision Name="gGreatBayTempleObjectSmallSeesawPlatformCol" Offset="0xC700" />
+        <Collision Name="gGreatBayTempleObjectSmallSeesawPlatformCol" Offset="0xC700" /> <!-- Original name is "m2_KON_TENBINstepSML_bgdatainfo" -->
 
         <!-- DisplayLists and TextureAnimation for the large whirlpool at the bottom of the main room. -->
         <DList Name="gGreatBayTempleObjectWhirlpoolDL" Offset="0xCAA0" /> <!-- Original name is "m2_KON_UZUdis_modelT" ("whirlpool; swirl") -->

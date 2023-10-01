@@ -107,9 +107,9 @@ void func_80B22E0C(EnHanabiStruct* arg0) {
             arg0->unk_20.y *= arg0->unk_14.x;
             arg0->unk_20.y -= 1.0f;
 
-            arg0->unk_20.x += randPlusMinusPoint5Scaled(0.8f);
-            arg0->unk_20.y += randPlusMinusPoint5Scaled(0.8f);
-            arg0->unk_20.z += randPlusMinusPoint5Scaled(0.8f);
+            arg0->unk_20.x += Rand_CenteredFloat(0.8f);
+            arg0->unk_20.y += Rand_CenteredFloat(0.8f);
+            arg0->unk_20.z += Rand_CenteredFloat(0.8f);
 
             if (arg0->unk_01 > 0) {
                 arg0->unk_01--;
@@ -141,48 +141,49 @@ void func_80B22FA8(EnHanabiStruct* arg0, PlayState* play2) {
 
     OPEN_DISPS(gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
-    POLY_XLU_DISP = Gfx_CallSetupDL(POLY_XLU_DISP, 20);
+    POLY_XLU_DISP = Gfx_SetupDL(POLY_XLU_DISP, SETUPDL_20);
 
     gSPSegment(POLY_XLU_DISP++, 0x08, Lib_SegmentedToVirtual(gSun1Tex));
     gSPDisplayList(POLY_XLU_DISP++, gSunSparkleMaterialDL);
 
     sp53 = 0xFF;
-    if (sp53) {}
 
     for (i = 0; i < 400; i++, arg0++) {
-        if (arg0->unk_00 == 1) {
-            Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
-            Matrix_ReplaceRotation(&play->billboardMtxF);
-            if (arg0->unk_01 < 40) {
-                Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
-                             MTXMODE_APPLY);
-            } else {
-                Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
-            }
-            Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
-
-            gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-
-            if (sp53 != arg0->unk_02) {
-                gDPPipeSync(POLY_XLU_DISP++);
-                gDPSetEnvColor(POLY_XLU_DISP++, D_80B23C40[arg0->unk_02], D_80B23C40[arg0->unk_02 + 1],
-                               D_80B23C40[arg0->unk_02 + 2], 255);
-
-                sp53 = arg0->unk_02;
-            }
-
-            if (arg0->unk_01 < 6) {
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
-                                D_80B23C2C[arg0->unk_02 + 2], arg0->unk_01 * 50);
-            } else {
-                gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
-                                D_80B23C2C[arg0->unk_02 + 2], 255);
-            }
-
-            gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
+        if (arg0->unk_00 != 1) {
+            continue;
         }
+
+        Matrix_Translate(arg0->unk_08.x, arg0->unk_08.y, arg0->unk_08.z, MTXMODE_NEW);
+        Matrix_ReplaceRotation(&play->billboardMtxF);
+        if (arg0->unk_01 < 40) {
+            Matrix_Scale(arg0->unk_04 * 0.025f * arg0->unk_01, arg0->unk_04 * 0.025f * arg0->unk_01, 1.0f,
+                         MTXMODE_APPLY);
+        } else {
+            Matrix_Scale(arg0->unk_04, arg0->unk_04, 1.0f, MTXMODE_APPLY);
+        }
+        Matrix_RotateZS(play->gameplayFrames * 4864, MTXMODE_APPLY);
+
+        gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+
+        if (sp53 != arg0->unk_02) {
+            gDPPipeSync(POLY_XLU_DISP++);
+            gDPSetEnvColor(POLY_XLU_DISP++, D_80B23C40[arg0->unk_02], D_80B23C40[arg0->unk_02 + 1],
+                           D_80B23C40[arg0->unk_02 + 2], 255);
+
+            sp53 = arg0->unk_02;
+        }
+
+        if (arg0->unk_01 < 6) {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
+                            D_80B23C2C[arg0->unk_02 + 2], arg0->unk_01 * 50);
+        } else {
+            gDPSetPrimColor(POLY_XLU_DISP++, 0, 0, D_80B23C2C[arg0->unk_02], D_80B23C2C[arg0->unk_02 + 1],
+                            D_80B23C2C[arg0->unk_02 + 2], 255);
+        }
+
+        gSPDisplayList(POLY_XLU_DISP++, gSunSparkleModelDL);
     }
 
     CLOSE_DISPS(gfxCtx);
@@ -193,6 +194,7 @@ void EnHanabi_Init(Actor* thisx, PlayState* play2) {
     EnHanabi* this = THIS;
     s32 i;
 
+    //! FAKE:
     if (1) {}
 
     Actor_SetScale(thisx, 1.0f);
@@ -286,10 +288,10 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
         }
 
         sp34.x += sp30 * Math_SinS(this->actor.home.rot.y);
-        sp34.y += randPlusMinusPoint5Scaled(300.0f);
+        sp34.y += Rand_CenteredFloat(300.0f);
         sp34.z += sp30 * Math_CosS(this->actor.home.rot.y);
 
-        if (this->actor.home.rot.x >= 0x259) {
+        if (this->actor.home.rot.x > 0x258) {
             sp28 = func_80B22C80(&sp34, this->unk_148, 2.0f);
         } else {
             sp28 = func_80B22C80(&sp34, this->unk_148, 1.0f);
@@ -297,7 +299,7 @@ void func_80B236C8(EnHanabi* this, PlayState* play) {
 
         this->actor.home.rot.y += (s16)((Rand_ZeroFloat(40.0f) + 80.0f) * 256.0f);
         this->unk_144 = (s32)Rand_ZeroFloat(5.0f) + 20;
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_OC_FIREWORKS);
+        Actor_PlaySfx(&this->actor, NA_SE_OC_FIREWORKS);
         func_80B235CC(this, &sp34, sp28);
     }
 }
@@ -324,15 +326,15 @@ void func_80B23910(EnHanabi* this, PlayState* play) {
 
 void func_80B23934(EnHanabi* this, PlayState* play) {
     if ((gSaveContext.save.entrance == ENTRANCE(TERMINA_FIELD, 1)) && (gSaveContext.sceneLayer == 7)) {
-        if (play->csCtx.frames > 1650) {
+        if (play->csCtx.curFrame > 1650) {
             func_80B236C8(this, play);
-            func_800B8FE8(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
+            Actor_PlaySfx_FlaggedCentered3(&this->actor, NA_SE_EV_FIREWORKS_LAUNCH - SFX_FLAG);
         }
     }
 
-    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 7) && (play->csCtx.currentCsIndex == 0) &&
-        (play->csCtx.frames == 610)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_KYOJIN_GROAN);
+    if ((play->sceneId == SCENE_00KEIKOKU) && (gSaveContext.sceneLayer == 7) && (play->csCtx.scriptIndex == 0) &&
+        (play->csCtx.curFrame == 610)) {
+        Actor_PlaySfx(&this->actor, NA_SE_EV_KYOJIN_GROAN);
     }
 }
 

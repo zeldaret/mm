@@ -7,7 +7,7 @@
 #include "z_obj_armos.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 
-#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_4000000)
+#define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_CAN_PRESS_SWITCH)
 
 #define THIS ((ObjArmos*)thisx)
 
@@ -95,20 +95,20 @@ s32 func_809A4F00(ObjArmos* this, s32 arg1) {
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_4) {
-        return arg1 == 0 || arg1 == 1;
+        return (arg1 == 0) || (arg1 == 1);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_5) {
-        return arg1 == 2 || arg1 == 3;
+        return (arg1 == 2) || (arg1 == 3);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_6) {
         if (this->unk_26E != 0) {
-            return arg1 == 0 || arg1 == 1;
+            return (arg1 == 0) || (arg1 == 1);
         }
 
         if (this->unk_270 != 0) {
-            return arg1 == 2 || arg1 == 3;
+            return (arg1 == 2) || (arg1 == 3);
         }
 
         return true;
@@ -141,22 +141,22 @@ s32 func_809A500C(ObjArmos* this, s32 arg1) {
 
     if (temp_v0 == OBJARMOS_ROT_7_4) {
         temp = D_809A5BB0[arg1] + this->unk_26E;
-        return temp <= temp_v1 && -temp_v1 <= temp;
+        return (temp <= temp_v1) && (-temp_v1 <= temp);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_5) {
         temp2 = D_809A5BB8[arg1] + this->unk_270;
-        return temp2 <= temp_v1 && -temp_v1 <= temp2;
+        return (temp2 <= temp_v1) && (-temp_v1 <= temp2);
     }
 
     if (temp_v0 == OBJARMOS_ROT_7_6) {
         if ((arg1 == 0) || (arg1 == 1)) {
             temp = D_809A5BB0[arg1] + this->unk_26E;
-            return temp <= temp_v1 && -temp_v1 <= temp;
+            return (temp <= temp_v1) && (-temp_v1 <= temp);
         }
 
         temp2 = D_809A5BB8[arg1] + this->unk_270;
-        return temp2 <= temp_v1 && -temp_v1 <= temp2;
+        return (temp2 <= temp_v1) && (-temp_v1 <= temp2);
     }
 
     return false;
@@ -227,7 +227,7 @@ void ObjArmos_Destroy(Actor* thisx, PlayState* play) {
 
 void func_809A54B4(ObjArmos* this) {
     this->actionFunc = func_809A54E0;
-    this->unk_24C = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
     this->unk_266[1] = 0;
     this->unk_266[2] = 0;
     this->unk_266[3] = 0;
@@ -260,7 +260,7 @@ void func_809A54E0(ObjArmos* this, PlayState* play) {
 
 void func_809A5610(ObjArmos* this) {
     this->actionFunc = func_809A562C;
-    this->unk_24C = 5;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A562C(ObjArmos* this, PlayState* play) {
@@ -277,14 +277,14 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
 
         if ((temp == OBJARMOS_ROT_7_4) || (temp == OBJARMOS_ROT_7_5) || (temp == OBJARMOS_ROT_7_6)) {
             if (!func_809A500C(this, this->unk_264) || func_809A4E00(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else if (func_809A500C(this, this->unk_264)) {
             if (func_809A4E00(this, play, 0x5A)) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             }
         } else {
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_BLOCK_BOUND);
             Flags_SetSwitch(play, OBJARMOS_GET_7F(&this->dyna.actor));
             sp20 = true;
         }
@@ -298,13 +298,13 @@ void func_809A562C(ObjArmos* this, PlayState* play) {
             func_809A57D8(this);
         }
     } else {
-        func_800B9010(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_ROCK_SLIDE - SFX_FLAG);
     }
 }
 
 void func_809A57D8(ObjArmos* this) {
     this->actionFunc = func_809A57F4;
-    this->unk_24C = 4;
+    this->updBgCheckInfoFlags = UPDBGCHECKINFO_FLAG_4;
 }
 
 void func_809A57F4(ObjArmos* this, PlayState* play) {
@@ -322,12 +322,12 @@ void ObjArmos_Update(Actor* thisx, PlayState* play2) {
     this->actionFunc(this, play);
     this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y;
 
-    if (this->unk_24C != 0) {
-        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->unk_24C);
+    if (this->updBgCheckInfoFlags != 0) {
+        Actor_UpdateBgCheckInfo(play, &this->dyna.actor, 20.0f, 30.0f, 0.0f, this->updBgCheckInfoFlags);
 
-        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & 1) &&
+        if ((this->actionFunc == func_809A54E0) && (this->dyna.actor.bgCheckFlags & BGCHECKFLAG_GROUND) &&
             (DynaPoly_GetActor(&play->colCtx, this->dyna.actor.floorBgId) == NULL)) {
-            this->unk_24C = 0;
+            this->updBgCheckInfoFlags = 0;
         }
 
         this->unk_250.x = (Math_SinS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.x;
@@ -350,7 +350,7 @@ void func_809A5960(ObjArmos* this, PlayState* play) {
                                  (Math_CosS(this->dyna.actor.shape.rot.y) * -9.0f) + this->dyna.actor.world.pos.z,
                                  &this->dyna.actor.shape.rot);
     Matrix_Scale(0.014f, 0.014f, 0.014f, MTXMODE_APPLY);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPSetEnvColor(POLY_OPA_DISP++, 0, 0, 0, 0);
 
@@ -366,7 +366,7 @@ void func_809A5A3C(ObjArmos* this, PlayState* play) {
     if (this->dyna.actor.floorPoly != NULL) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C448(play->state.gfxCtx);
+        Gfx_SetupDL44_Xlu(play->state.gfxCtx);
 
         gDPSetCombineLERP(POLY_XLU_DISP++, 0, 0, 0, PRIMITIVE, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                           COMBINED);

@@ -17,11 +17,15 @@ ZTexture::ZTexture(ZFile* nParent) : ZResource(nParent)
 	width = 0;
 	height = 0;
 	dWordAligned = true;
+	splitTlut = false;
 
 	RegisterRequiredAttribute("Width");
 	RegisterRequiredAttribute("Height");
 	RegisterRequiredAttribute("Format");
 	RegisterOptionalAttribute("TlutOffset");
+	RegisterOptionalAttribute("ExternalTlut");
+	RegisterOptionalAttribute("ExternalTlutOffset");
+	RegisterOptionalAttribute("SplitTlut");
 }
 
 void ZTexture::ExtractFromBinary(uint32_t nRawDataIndex, int32_t nWidth, int32_t nHeight,
@@ -56,6 +60,7 @@ void ZTexture::ParseXML(tinyxml2::XMLElement* reader)
 
 	std::string widthXml = registeredAttributes.at("Width").value;
 	std::string heightXml = registeredAttributes.at("Height").value;
+	std::string SplitTlutXml = registeredAttributes.at("SplitTlut").value;
 
 	if (!StringHelper::HasOnlyDigits(widthXml))
 	{
@@ -70,6 +75,27 @@ void ZTexture::ParseXML(tinyxml2::XMLElement* reader)
 			"value of 'Height' attribute has non-decimal digits: '%s'", heightXml.c_str());
 		HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
 		                      errorHeader, "");
+	}
+
+	if (!registeredAttributes.at("ExternalTlut").wasSet &&
+	    registeredAttributes.at("SplitTlut").wasSet)
+	{
+		std::string errorHeader =
+			StringHelper::Sprintf("SplitTlut set without using an external tlut");
+		HANDLE_WARNING_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+		                        errorHeader, "");
+	}
+
+	if (!SplitTlutXml.empty())
+	{
+		if (!tinyxml2::XMLUtil::ToBool(SplitTlutXml.c_str(), &splitTlut))
+		{
+			std::string errorHeader = StringHelper::Sprintf(
+				"Invalid value passed to SplitTlut: '%s'. Valid values are true, false, 1, 0",
+				SplitTlutXml.c_str());
+			HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
+			                      errorHeader, "");
+		}
 	}
 
 	width = StringHelper::StrToL(widthXml);
@@ -111,31 +137,31 @@ void ZTexture::ParseRawData()
 	switch (format)
 	{
 	case TextureType::RGBA16bpp:
-		PrepareBitmapRGBA16();
+		ConvertN64ToBitmap_RGBA16();
 		break;
 	case TextureType::RGBA32bpp:
-		PrepareBitmapRGBA32();
+		ConvertN64ToBitmap_RGBA32();
 		break;
 	case TextureType::Grayscale4bpp:
-		PrepareBitmapGrayscale4();
+		ConvertN64ToBitmap_Grayscale4();
 		break;
 	case TextureType::Grayscale8bpp:
-		PrepareBitmapGrayscale8();
+		ConvertN64ToBitmap_Grayscale8();
 		break;
 	case TextureType::GrayscaleAlpha4bpp:
-		PrepareBitmapGrayscaleAlpha4();
+		ConvertN64ToBitmap_GrayscaleAlpha4();
 		break;
 	case TextureType::GrayscaleAlpha8bpp:
-		PrepareBitmapGrayscaleAlpha8();
+		ConvertN64ToBitmap_GrayscaleAlpha8();
 		break;
 	case TextureType::GrayscaleAlpha16bpp:
-		PrepareBitmapGrayscaleAlpha16();
+		ConvertN64ToBitmap_GrayscaleAlpha16();
 		break;
 	case TextureType::Palette4bpp:
-		PrepareBitmapPalette4();
+		ConvertN64ToBitmap_Palette4();
 		break;
 	case TextureType::Palette8bpp:
-		PrepareBitmapPalette8();
+		ConvertN64ToBitmap_Palette8();
 		break;
 	case TextureType::Error:
 		HANDLE_ERROR_RESOURCE(WarningType::InvalidAttributeValue, parent, this, rawDataIndex,
@@ -145,10 +171,51 @@ void ZTexture::ParseRawData()
 	}
 }
 
-void ZTexture::PrepareBitmapRGBA16()
+void ZTexture::ParseRawDataLate()
+{
+	if (registeredAttributes["ExternalTlut"].wasSet)
+	{
+		const std::string externPalette = registeredAttributes["ExternalTlut"].value;
+		for (const auto& file : Globals::Instance->files)
+		{
+			if (file->GetName() == externPalette)
+			{
+				offset_t palOffset = 0;
+				if (registeredAttributes["ExternalTlutOffset"].wasSet)
+				{
+					palOffset =
+						StringHelper::StrToL(registeredAttributes["ExternalTlutOffset"].value, 16);
+				}
+				else
+				{
+					HANDLE_WARNING_RESOURCE(
+						WarningType::MissingOffsets, parent, this, rawDataIndex,
+						StringHelper::Sprintf(
+							"No ExternalTlutOffset Given. Assuming offset of 0x0"),
+						"");
+				}
+				for (const auto& res : file->resources)
+				{
+					if (res->GetRawDataIndex() == palOffset)
+					{
+						ZTexture* palette = (ZTexture*)res;
+						ZTexture tlutTemp(file);
+
+						tlut = &tlutTemp;
+						tlut->ExtractFromBinary(palOffset, palette->width, palette->height,
+						                        TextureType::RGBA16bpp, true);
+						SetTlut(tlut);
+					}
+				}
+			}
+		}
+	}
+}
+
+void ZTexture::ConvertN64ToBitmap_RGBA16()
 {
 	textureData.InitEmptyRGBImage(width, height, true);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x++)
@@ -160,15 +227,16 @@ void ZTexture::PrepareBitmapRGBA16()
 			uint8_t b = (data & 0x003E) >> 1;
 			uint8_t alpha = data & 0x01;
 
-			textureData.SetRGBPixel(y, x, r * 8, g * 8, b * 8, alpha * 255);
+			textureData.SetRGBPixel(y, x, (r << 3) | (r >> 2), (g << 3) | (g >> 2),
+			                        (b << 3) | (b >> 2), alpha * 255);
 		}
 	}
 }
 
-void ZTexture::PrepareBitmapRGBA32()
+void ZTexture::ConvertN64ToBitmap_RGBA32()
 {
 	textureData.InitEmptyRGBImage(width, height, true);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x++)
@@ -184,10 +252,10 @@ void ZTexture::PrepareBitmapRGBA32()
 	}
 }
 
-void ZTexture::PrepareBitmapGrayscale4()
+void ZTexture::ConvertN64ToBitmap_Grayscale4()
 {
 	textureData.InitEmptyRGBImage(width, height, false);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x += 2)
@@ -202,16 +270,16 @@ void ZTexture::PrepareBitmapGrayscale4()
 				else
 					grayscale = (parentRawData.at(pos) & 0x0F) << 4;
 
-				textureData.SetGrayscalePixel(y, x + i, grayscale);
+				textureData.SetGrayscalePixel(y, x + i, (grayscale << 4) | grayscale);
 			}
 		}
 	}
 }
 
-void ZTexture::PrepareBitmapGrayscale8()
+void ZTexture::ConvertN64ToBitmap_Grayscale8()
 {
 	textureData.InitEmptyRGBImage(width, height, false);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x++)
@@ -223,10 +291,10 @@ void ZTexture::PrepareBitmapGrayscale8()
 	}
 }
 
-void ZTexture::PrepareBitmapGrayscaleAlpha4()
+void ZTexture::ConvertN64ToBitmap_GrayscaleAlpha4()
 {
 	textureData.InitEmptyRGBImage(width, height, true);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x += 2)
@@ -241,8 +309,9 @@ void ZTexture::PrepareBitmapGrayscaleAlpha4()
 				else
 					data = parentRawData.at(pos) & 0x0F;
 
-				uint8_t grayscale = ((data & 0x0E) >> 1) * 32;
-				uint8_t alpha = (data & 0x01) * 255;
+				uint8_t grayscale = data & 0b1110;
+				grayscale = (grayscale << 4) | (grayscale << 1) | (grayscale >> 2);
+				uint8_t alpha = (data & 0x01) ? 255 : 0;
 
 				textureData.SetGrayscalePixel(y, x + i, grayscale, alpha);
 			}
@@ -250,27 +319,32 @@ void ZTexture::PrepareBitmapGrayscaleAlpha4()
 	}
 }
 
-void ZTexture::PrepareBitmapGrayscaleAlpha8()
+void ZTexture::ConvertN64ToBitmap_GrayscaleAlpha8()
 {
 	textureData.InitEmptyRGBImage(width, height, true);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x++)
 		{
 			size_t pos = rawDataIndex + ((y * width) + x) * 1;
-			uint8_t grayscale = parentRawData.at(pos) & 0xF0;
-			uint8_t alpha = (parentRawData.at(pos) & 0x0F) << 4;
+			uint8_t pixel = parentRawData.at(pos);
+			uint8_t data = (pixel >> 4) & 0xF;
+
+			data = (data << 4) | data;
+			uint8_t grayscale = data;
+			uint8_t alpha = (pixel & 0xF);
+			alpha = (alpha << 4) | alpha;
 
 			textureData.SetGrayscalePixel(y, x, grayscale, alpha);
 		}
 	}
 }
 
-void ZTexture::PrepareBitmapGrayscaleAlpha16()
+void ZTexture::ConvertN64ToBitmap_GrayscaleAlpha16()
 {
 	textureData.InitEmptyRGBImage(width, height, true);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x++)
@@ -284,10 +358,10 @@ void ZTexture::PrepareBitmapGrayscaleAlpha16()
 	}
 }
 
-void ZTexture::PrepareBitmapPalette4()
+void ZTexture::ConvertN64ToBitmap_Palette4()
 {
 	textureData.InitEmptyPaletteImage(width, height);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x += 2)
@@ -308,10 +382,10 @@ void ZTexture::PrepareBitmapPalette4()
 	}
 }
 
-void ZTexture::PrepareBitmapPalette8()
+void ZTexture::ConvertN64ToBitmap_Palette8()
 {
 	textureData.InitEmptyPaletteImage(width, height);
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	for (size_t y = 0; y < height; y++)
 	{
 		for (size_t x = 0; x < width; x++)
@@ -361,31 +435,31 @@ void ZTexture::PrepareRawDataFromFile(const fs::path& pngFilePath)
 	switch (format)
 	{
 	case TextureType::RGBA16bpp:
-		PrepareRawDataRGBA16();
+		ConvertBitmapToN64_RGBA16();
 		break;
 	case TextureType::RGBA32bpp:
-		PrepareRawDataRGBA32();
+		ConvertBitmapToN64_RGBA32();
 		break;
 	case TextureType::Grayscale4bpp:
-		PrepareRawDataGrayscale4();
+		ConvertBitmapToN64_Grayscale4();
 		break;
 	case TextureType::Grayscale8bpp:
-		PrepareRawDataGrayscale8();
+		ConvertBitmapToN64_Grayscale8();
 		break;
 	case TextureType::GrayscaleAlpha4bpp:
-		PrepareRawDataGrayscaleAlpha4();
+		ConvertBitmapToN64_GrayscaleAlpha4();
 		break;
 	case TextureType::GrayscaleAlpha8bpp:
-		PrepareRawDataGrayscaleAlpha8();
+		ConvertBitmapToN64_GrayscaleAlpha8();
 		break;
 	case TextureType::GrayscaleAlpha16bpp:
-		PrepareRawDataGrayscaleAlpha16();
+		ConvertBitmapToN64_GrayscaleAlpha16();
 		break;
 	case TextureType::Palette4bpp:
-		PrepareRawDataPalette4();
+		ConvertBitmapToN64_Palette4();
 		break;
 	case TextureType::Palette8bpp:
-		PrepareRawDataPalette8();
+		ConvertBitmapToN64_Palette8();
 		break;
 	case TextureType::Error:
 		HANDLE_ERROR_PROCESS(WarningType::InvalidPNG, "Input PNG file has invalid format type", "");
@@ -393,7 +467,7 @@ void ZTexture::PrepareRawDataFromFile(const fs::path& pngFilePath)
 	}
 }
 
-void ZTexture::PrepareRawDataRGBA16()
+void ZTexture::ConvertBitmapToN64_RGBA16()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -402,13 +476,13 @@ void ZTexture::PrepareRawDataRGBA16()
 			size_t pos = ((y * width) + x) * 2;
 			RGBAPixel pixel = textureData.GetPixel(y, x);
 
-			uint8_t r = pixel.r / 8;
-			uint8_t g = pixel.g / 8;
-			uint8_t b = pixel.b / 8;
+			uint8_t r = pixel.r >> 3;
+			uint8_t g = pixel.g >> 3;
+			uint8_t b = pixel.b >> 3;
 
 			uint8_t alphaBit = pixel.a != 0;
 
-			uint16_t data = (r << 11) + (g << 6) + (b << 1) + alphaBit;
+			uint16_t data = (r << 11) | (g << 6) | (b << 1) | alphaBit;
 
 			textureDataRaw[pos + 0] = (data & 0xFF00) >> 8;
 			textureDataRaw[pos + 1] = (data & 0x00FF);
@@ -416,7 +490,7 @@ void ZTexture::PrepareRawDataRGBA16()
 	}
 }
 
-void ZTexture::PrepareRawDataRGBA32()
+void ZTexture::ConvertBitmapToN64_RGBA32()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -433,7 +507,7 @@ void ZTexture::PrepareRawDataRGBA32()
 	}
 }
 
-void ZTexture::PrepareRawDataGrayscale4()
+void ZTexture::ConvertBitmapToN64_Grayscale4()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -448,7 +522,7 @@ void ZTexture::PrepareRawDataGrayscale4()
 	}
 }
 
-void ZTexture::PrepareRawDataGrayscale8()
+void ZTexture::ConvertBitmapToN64_Grayscale8()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -461,7 +535,7 @@ void ZTexture::PrepareRawDataGrayscale8()
 	}
 }
 
-void ZTexture::PrepareRawDataGrayscaleAlpha4()
+void ZTexture::ConvertBitmapToN64_GrayscaleAlpha4()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -477,9 +551,9 @@ void ZTexture::PrepareRawDataGrayscaleAlpha4()
 				uint8_t alphaBit = pixel.a != 0;
 
 				if (i == 0)
-					data |= (((cR / 32) << 1) + alphaBit) << 4;
+					data = (((cR >> 5) << 1) | alphaBit) << 4;
 				else
-					data |= ((cR / 32) << 1) + alphaBit;
+					data |= ((cR >> 5) << 1) | alphaBit;
 			}
 
 			textureDataRaw[pos] = data;
@@ -487,7 +561,7 @@ void ZTexture::PrepareRawDataGrayscaleAlpha4()
 	}
 }
 
-void ZTexture::PrepareRawDataGrayscaleAlpha8()
+void ZTexture::ConvertBitmapToN64_GrayscaleAlpha8()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -496,15 +570,15 @@ void ZTexture::PrepareRawDataGrayscaleAlpha8()
 			size_t pos = ((y * width) + x) * 1;
 			RGBAPixel pixel = textureData.GetPixel(y, x);
 
-			uint8_t r = pixel.r;
-			uint8_t a = pixel.a;
+			uint8_t r = (pixel.r >> 4) & 0xF;
+			uint8_t a = (pixel.a >> 4) & 0xF;
 
-			textureDataRaw[pos] = ((r / 16) << 4) + (a / 16);
+			textureDataRaw[pos] = (r << 4) | a;
 		}
 	}
 }
 
-void ZTexture::PrepareRawDataGrayscaleAlpha16()
+void ZTexture::ConvertBitmapToN64_GrayscaleAlpha16()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -522,7 +596,7 @@ void ZTexture::PrepareRawDataGrayscaleAlpha16()
 	}
 }
 
-void ZTexture::PrepareRawDataPalette4()
+void ZTexture::ConvertBitmapToN64_Palette4()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -538,7 +612,7 @@ void ZTexture::PrepareRawDataPalette4()
 	}
 }
 
-void ZTexture::PrepareRawDataPalette8()
+void ZTexture::ConvertBitmapToN64_Palette8()
 {
 	for (uint16_t y = 0; y < height; y++)
 	{
@@ -703,10 +777,10 @@ Declaration* ZTexture::DeclareVar(const std::string& prefix,
 	auto filepath = Globals::Instance->outputPath / fs::path(auxOutName).stem();
 
 	if (dWordAligned)
-		incStr =
-			StringHelper::Sprintf("%s.%s.inc.c", filepath.c_str(), GetExternalExtension().c_str());
+		incStr = StringHelper::Sprintf("%s.%s.inc.c", filepath.string().c_str(),
+		                               GetExternalExtension().c_str());
 	else
-		incStr = StringHelper::Sprintf("%s.u32.%s.inc.c", filepath.c_str(),
+		incStr = StringHelper::Sprintf("%s.u32.%s.inc.c", filepath.string().c_str(),
 		                               GetExternalExtension().c_str());
 
 	if (!Globals::Instance->cfg.texturePool.empty())
@@ -718,18 +792,31 @@ Declaration* ZTexture::DeclareVar(const std::string& prefix,
 		if (poolEntry != Globals::Instance->cfg.texturePool.end())
 		{
 			if (dWordAligned)
-				incStr = StringHelper::Sprintf("%s.%s.inc.c", poolEntry->second.path.c_str(),
-				                               GetExternalExtension().c_str());
+				incStr =
+					StringHelper::Sprintf("%s.%s.inc.c", poolEntry->second.path.string().c_str(),
+				                          GetExternalExtension().c_str());
 			else
-				incStr = StringHelper::Sprintf("%s.u32.%s.inc.c", poolEntry->second.path.c_str(),
+				incStr = StringHelper::Sprintf("%s.u32.%s.inc.c",
+				                               poolEntry->second.path.string().c_str(),
 				                               GetExternalExtension().c_str());
 		}
 	}
 	size_t texSizeDivisor = (dWordAligned) ? 8 : 4;
 
-	Declaration* decl = parent->AddDeclarationIncludeArray(rawDataIndex, incStr, GetRawDataSize(),
-	                                                       GetSourceTypeName(), auxName,
-	                                                       GetRawDataSize() / texSizeDivisor);
+	Declaration* decl;
+
+	if (parent->makeDefines)
+	{
+		decl = parent->AddDeclarationIncludeArray(rawDataIndex, incStr, GetRawDataSize(),
+		                                          GetSourceTypeName(), auxName, GetHeaderDefines(),
+		                                          GetRawDataSize() / texSizeDivisor);
+	}
+	else
+	{
+		decl = parent->AddDeclarationIncludeArray(rawDataIndex, incStr, GetRawDataSize(),
+		                                          GetSourceTypeName(), auxName,
+		                                          GetRawDataSize() / texSizeDivisor);
+	}
 	decl->staticConf = staticConf;
 	return decl;
 }
@@ -760,6 +847,17 @@ std::string ZTexture::GetBodySourceCode() const
 	return sourceOutput;
 }
 
+std::string ZTexture::GetHeaderDefines() const
+{
+	std::string definePrefix = StringHelper::camelCaseTo_SCREAMING_SNAKE_CASE(name.c_str(), true);
+	std::string ret = StringHelper::Sprintf("#define %s_WIDTH %d\n", definePrefix.c_str(), width);
+
+	ret += StringHelper::Sprintf("#define %s_HEIGHT %d\n", definePrefix.c_str(), height);
+	ret += StringHelper::Sprintf("#define %s_SIZE 0x%zX\n", definePrefix.c_str(), GetRawDataSize());
+
+	return ret;
+}
+
 bool ZTexture::IsExternalResource() const
 {
 	return true;
@@ -777,7 +875,7 @@ std::string ZTexture::GetSourceTypeName() const
 
 void ZTexture::CalcHash()
 {
-	auto parentRawData = parent->GetRawData();
+	const auto& parentRawData = parent->GetRawData();
 	hash = CRC32B(parentRawData.data() + rawDataIndex, GetRawDataSize());
 }
 
@@ -871,7 +969,7 @@ void ZTexture::SetTlut(ZTexture* nTlut)
 	assert(nTlut->isPalette);
 	tlut = nTlut;
 
-	textureData.SetPalette(tlut->textureData);
+	textureData.SetPalette(tlut->textureData, splitTlut ? 128 : 0);
 }
 
 bool ZTexture::HasTlut() const

@@ -4,7 +4,6 @@
  * Description: Great Bay Temple - Seesaw and Waterwheel w/ Platforms
  */
 
-#include "prevent_bss_reordering.h"
 #include "z_bg_dblue_balance.h"
 #include "objects/object_dblue_object/object_dblue_object.h"
 
@@ -317,7 +316,7 @@ void BgDblueBalance_Init(Actor* thisx, PlayState* play) {
     this->dyna.actor.update = sTypeInfo[sp2C].update;
     this->dyna.actor.draw = sTypeInfo[sp2C].draw;
 
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, sTypeInfo[sp2C].colHeader);
 
     if (sp2C == 3) {
@@ -412,17 +411,17 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
         phi_a1 = 1;
         this->unk_17D = 20;
         if (balance1 != NULL) {
-            if (balance1->unk_181 != 0) {
+            if (balance1->isHeavySwitchPressed) {
                 phi_a0 = 4;
-            } else if (balance1->unk_180 != 0) {
+            } else if (balance1->isSwitchPressed) {
                 phi_a0 = 2;
             }
         }
 
         if (balance2 != NULL) {
-            if (balance2->unk_181 != 0) {
+            if (balance2->isHeavySwitchPressed) {
                 phi_a1 = 5;
-            } else if (balance2->unk_180 != 0) {
+            } else if (balance2->isSwitchPressed) {
                 phi_a1 = 3;
             }
         }
@@ -476,7 +475,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
         phi_f2 = 1.0f;
     }
 
-    func_8019FAD8(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG, phi_f2 + 1.0f);
+    Audio_PlaySfx_AtPosWithFreq(&this->dyna.actor.projectedPos, NA_SE_EV_SEESAW_INCLINE - SFX_FLAG, phi_f2 + 1.0f);
     actor->shape.rot.z += this->unk_178;
 
     if (this->dyna.actor.shape.rot.z > 0x1C71) {
@@ -485,7 +484,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
             this->unk_178 *= -0.6f;
             this->unk_17C++;
             if (this->unk_182) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp5C = this->unk_15C;
                 Matrix_Push();
                 Matrix_RotateYS(BINANG_SUB(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
@@ -498,7 +497,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
 
                 func_80B8296C(play, &sp50, 70.0f);
             } else {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
             }
         } else {
             this->dyna.actor.shape.rot.z = 0x1C72;
@@ -510,7 +509,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
             this->unk_178 *= -0.6f;
             this->unk_17C++;
             if (this->unk_182) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_WATER_BOUND);
                 sp3C = this->unk_160;
                 Matrix_Push();
                 Matrix_RotateYS(BINANG_ADD(this->dyna.actor.shape.rot.y, 0x4000), MTXMODE_NEW);
@@ -523,7 +522,7 @@ void func_80B82DE0(BgDblueBalance* this, PlayState* play) {
 
                 func_80B8296C(play, &sp30, 47.0f);
             } else {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_SEESAW_BOUND);
             }
         } else {
             this->dyna.actor.shape.rot.z = -0x1C72;
@@ -546,8 +545,8 @@ void BgDblueBalance_Update(Actor* thisx, PlayState* play) {
 void func_80B8330C(Actor* thisx, PlayState* play) {
     BgDblueBalance* this = THIS;
 
-    this->unk_180 = DynaPolyActor_IsInSwitchPressedState(&this->dyna);
-    this->unk_181 = DynaPolyActor_IsInHeavySwitchPressedState(&this->dyna);
+    this->isSwitchPressed = DynaPolyActor_IsSwitchPressed(&this->dyna);
+    this->isHeavySwitchPressed = DynaPolyActor_IsHeavySwitchPressed(&this->dyna);
 }
 
 void func_80B83344(BgDblueBalance* this) {
@@ -627,16 +626,16 @@ void func_80B83518(Actor* thisx, PlayState* play) {
     if (this->unk_17F == 2) {
         this->unk_17E--;
         if (this->unk_17E <= 0) {
-            ActorCutscene_Stop(this->dyna.actor.cutscene);
+            CutsceneManager_Stop(this->dyna.actor.csId);
             this->unk_17F = 0;
         }
     } else if ((this->unk_17F != 0) && (this->unk_17F == 1)) {
-        if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_17F = 2;
             this->unk_17E = 0x50;
         } else {
-            ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+            CutsceneManager_Queue(this->dyna.actor.csId);
         }
     }
     this->unk_16C = this->unk_170;
@@ -663,7 +662,7 @@ void BgDblueBalance_Draw(Actor* thisx, PlayState* play) {
 
         gfx = POLY_XLU_DISP;
 
-        gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+        gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
         gSPMatrix(gfx++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gDPSetEnvColor(gfx++, 0, 0, 0, this->unk_183);
         gSPDisplayList(gfx++, gGreatBayTempleObjectSeesawSplashDL);
@@ -691,7 +690,8 @@ void func_80B83758(Actor* thisx, PlayState* play) {
             temp_f0 = this->unk_178 * 0.002f;
             temp_f0 = CLAMP(temp_f0, 0.0f, 1.0f);
         }
-        func_8019FB0C(&this->dyna.actor.projectedPos, NA_SE_EV_SMALL_WATER_WHEEL - SFX_FLAG, temp_f0, 0x20);
+        Audio_PlaySfx_AtPosWithFreqAndChannelIO(&this->dyna.actor.projectedPos, NA_SE_EV_SMALL_WATER_WHEEL - SFX_FLAG,
+                                                temp_f0, 0x20);
     }
 
     if (this->dyna.actor.flags & ACTOR_FLAG_40) {
@@ -705,7 +705,7 @@ void func_80B83758(Actor* thisx, PlayState* play) {
 
             gfx = POLY_XLU_DISP;
 
-            gSPDisplayList(gfx++, &sSetupDL[6 * 25]);
+            gSPDisplayList(gfx++, gSetupDLs[SETUPDL_25]);
 
             for (i = 0, ptr = &this->unk_188[0]; i < ARRAY_COUNT(this->unk_188); i++, ptr++) {
                 if (ptr->unk_0E != 0) {

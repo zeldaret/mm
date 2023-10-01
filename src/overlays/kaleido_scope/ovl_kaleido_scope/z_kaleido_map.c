@@ -9,14 +9,7 @@
 #include "interface/icon_item_field_static/icon_item_field_static.h"
 #include "interface/icon_item_dungeon_static/icon_item_dungeon_static.h"
 #include "interface/icon_item_jpn_static/icon_item_jpn_static.h"
-
-extern s16 D_8082B7F0[];
-extern s16 D_8082B838[];
-
-extern TexturePtr D_09007500; // gPlayerFace
-
-#define WORLD_MAP_IMAGE_TEX_WIDTH 216
-#define WORLD_MAP_IMAGE_TEX_HEIGHT 128
+#include "archives/icon_item_24_static/icon_item_24_static_yar.h"
 
 void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     s16 counterDigits[2];
@@ -35,8 +28,8 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
-        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]), 8,
-                                      16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
+        POLY_OPA_DISP = Gfx_DrawTexRectI8(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]),
+                                          8, 16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -50,7 +43,7 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
     POLY_OPA_DISP =
-        func_8010D7D0(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 16, 107, 146, 8, 16, 1 << 10, 1 << 10);
+        Gfx_DrawTexRectI8(POLY_OPA_DISP, gStrayFairyMapCounterSlashTex, 8, 16, 107, 146, 8, 16, 1 << 10, 1 << 10);
 
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -59,7 +52,7 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
                         1 << 10);
 
     // Get digits for current number of stray fairies collected
-    counterDigits[1] = gSaveContext.save.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
+    counterDigits[1] = gSaveContext.save.saveInfo.inventory.strayFairies[(void)0, gSaveContext.dungeonIndex];
     counterDigits[0] = counterDigits[1] / 10;
     counterDigits[1] -= (s16)(counterDigits[0] * 10);
 
@@ -68,8 +61,8 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 255);
 
-        POLY_OPA_DISP = func_8010D7D0(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]), 8,
-                                      16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
+        POLY_OPA_DISP = Gfx_DrawTexRectI8(POLY_OPA_DISP, (u8*)gCounterDigit0Tex + (8 * 16 * counterDigits[digitIndex]),
+                                          8, 16, rectLeft + 1, 146, 8, 16, 1 << 10, 1 << 10);
 
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, 255);
@@ -82,9 +75,9 @@ void KaleidoScope_DrawDungeonStrayFairyCount(PlayState* play) {
 }
 
 TexturePtr sDungeonItemTextures[] = {
-    0x09003600, // `gBossKeyIconTex`: DUNGEON_BOSS_KEY
-    0x09003F00, // `gCompassIconTex`: DUNGEON_COMPASS
-    0x09004800, // `gDungeonMapIconTex`: DUNGEON_MAP
+    gQuestIconBossKeyTex,    // DUNGEON_BOSS_KEY
+    gQuestIconCompassTex,    // DUNGEON_COMPASS
+    gQuestIconDungeonMapTex, // DUNGEON_MAP
 };
 
 TexturePtr sDungeonTitleTextures[] = {
@@ -142,8 +135,8 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    j = 72 + (pauseCtx->cursorSlot[PAUSE_MAP] * 4);
-    KaleidoScope_SetCursorVtx(pauseCtx, j, pauseCtx->mapPageVtx);
+    j = (QUAD_MAP_PAGE_DUNGEON_MAP + pauseCtx->cursorSlot[PAUSE_MAP]) * 4;
+    KaleidoScope_SetCursorVtxPos(pauseCtx, j, pauseCtx->mapPageVtx);
 
     pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
     if (pauseCtx->cursorSpecialPos == 0) {
@@ -153,13 +146,21 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
         pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->cursorPoint[PAUSE_MAP];
     }
 
-    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60], 16, 0);
+    // Set vertices for:
+    // QUAD_MAP_PAGE_DUNGEON_TITLE,
+    // QUAD_MAP_PAGE_DUNGEON_BOSS_KEY,
+    // QUAD_MAP_PAGE_DUNGEON_COMPASS,
+    // QUAD_MAP_PAGE_DUNGEON_MAP
+    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[QUAD_MAP_PAGE_DUNGEON_TITLE * 4], 4 * 4, 0);
+
+    // Dungeon Title
     gDPPipeSync(POLY_OPA_DISP++);
     gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
     gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA, G_CC_MODULATEIA);
 
+    // QUAD_MAP_PAGE_DUNGEON_TITLE
     POLY_OPA_DISP =
-        func_8010DC58(POLY_OPA_DISP, sDungeonTitleTextures[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
+        Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sDungeonTitleTextures[((void)0, gSaveContext.dungeonIndex)], 128, 16, 0);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -168,11 +169,11 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
     // Loop over dungeonItems (i) and vtxIndex (j)
     for (i = DUNGEON_BOSS_KEY, j = 4; i <= DUNGEON_STRAY_FAIRIES; i++, j += 4) {
         if (i == DUNGEON_STRAY_FAIRIES) {
-            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
-                // If (pauseCtx->state == 6), then the other conditions are redundant and
+            if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
+                // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and
                 // always return true
-                if ((pauseCtx->state == 6) && (pauseCtx->state != 7) &&
-                    !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+                if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
+                    !IS_PAUSE_STATE_GAMEOVER) {
                     KaleidoScope_SetView(pauseCtx, 0.0f, 0.0f, 64.0f);
 
                     if (!sStrayFairyIconAlphaScaleState) {
@@ -189,7 +190,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                         sStrayFairyIconAlphaScaleTimer = 15;
                     }
 
-                    func_8012C8AC(play->state.gfxCtx);
+                    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
                     gDPSetCombineLERP(POLY_OPA_DISP++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0,
                                       PRIMITIVE, 0, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE,
@@ -211,6 +212,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx),
                               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
+                    // QUAD_MAP_PAGE_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE
                     pauseCtx->mapPageVtx[76].v.ob[0] = pauseCtx->mapPageVtx[78].v.ob[0] = -16;
 
                     pauseCtx->mapPageVtx[77].v.ob[0] = pauseCtx->mapPageVtx[79].v.ob[0] =
@@ -221,12 +223,13 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                     pauseCtx->mapPageVtx[78].v.ob[1] = pauseCtx->mapPageVtx[79].v.ob[1] =
                         pauseCtx->mapPageVtx[76].v.ob[1] - 24;
 
-                    gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[76], 4, 0);
+                    gSPVertex(POLY_OPA_DISP++,
+                              &pauseCtx->mapPageVtx[QUAD_MAP_PAGE_DUNGEON_STRAY_FAIRY_GLOWING_CIRCLE * 4], 4, 0);
 
                     POLY_OPA_DISP =
-                        func_8010DE38(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
+                        Gfx_DrawTexQuad4b(POLY_OPA_DISP, gStrayFairyGlowingCircleIconTex, G_IM_FMT_I, 32, 24, 0);
                     KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
-                    func_8012C628(play->state.gfxCtx);
+                    Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
                     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -250,7 +253,7 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                                         sStrayFairyIconRectS[sStrayFairyIconIndex], 0, 1 << 10, 1 << 10);
 
                     KaleidoScope_DrawDungeonStrayFairyCount(play);
-                    func_8012C8AC(play->state.gfxCtx);
+                    Gfx_SetupDL42_Opa(play->state.gfxCtx);
                 }
             }
         } else if (CHECK_DUNGEON_ITEM(i, gSaveContext.dungeonIndex)) {
@@ -258,35 +261,39 @@ void KaleidoScope_DrawDungeonMap(PlayState* play) {
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
+            // QUAD_MAP_PAGE_DUNGEON_BOSS_KEY
+            // QUAD_MAP_PAGE_DUNGEON_COMPASS
+            // QUAD_MAP_PAGE_DUNGEON_MAP
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
     }
 
     func_80108AF8(play);
 
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0)) {
-        // If (pauseCtx->state == 6), then the other conditions are redundant and always return
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE)) {
+        // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other conditions are redundant and always return
         // true
-        if ((pauseCtx->state == 6) && (pauseCtx->state != 7) &&
-            !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+        if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
+            !IS_PAUSE_STATE_GAMEOVER) {
 
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
             // Draw Player's face next to the dungeon floor icon currently in.
-            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, 62,
-                                          sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP =
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, 62,
+                                      sDungeonMapFloorIconPosY[R_REVERSE_FLOOR_INDEX], 16, 16, 1 << 10, 1 << 10);
 
             if (CHECK_DUNGEON_ITEM(DUNGEON_COMPASS, gSaveContext.dungeonIndex)) {
-                POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
-                                              sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - func_80105318()], 16, 16,
-                                              1 << 10, 1 << 10);
+                POLY_OPA_DISP = Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gDungeonMapSkullTex, 16, 16, 108,
+                                                      sDungeonMapFloorIconPosY[FLOOR_INDEX_MAX - func_80105318()], 16,
+                                                      16, 1 << 10, 1 << 10);
             }
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            func_8012C8AC(play->state.gfxCtx);
+            Gfx_SetupDL42_Opa(play->state.gfxCtx);
         }
     }
 
@@ -304,14 +311,14 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
     s16 i;
     s16 oldCursorPoint;
 
-    if (pauseCtx->state == 6) {
-        if ((pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+    if (pauseCtx->state == PAUSE_STATE_MAIN) {
+        if ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) && (pauseCtx->pageIndex == PAUSE_MAP)) {
             pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
             oldCursorPoint = pauseCtx->cursorPoint[PAUSE_MAP];
             if (pauseCtx->stickAdjX > 30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
-                    func_80821A04(play);
+                    KaleidoScope_MoveCursorFromSpecialPos(play);
                     pauseCtx->cursorXIndex[PAUSE_MAP] = 0;
                     pauseCtx->cursorSlot[PAUSE_MAP] = pauseCtx->unk_256;
                     pauseCtx->cursorPoint[PAUSE_MAP] = pauseCtx->unk_256;
@@ -337,9 +344,9 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     }
                 }
             } else if (pauseCtx->stickAdjX < -30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_RIGHT) {
-                    func_80821A04(play);
+                    KaleidoScope_MoveCursorFromSpecialPos(play);
                     pauseCtx->cursorXIndex[PAUSE_MAP] = 1;
                     pauseCtx->cursorPoint[PAUSE_MAP] = DUNGEON_MAP;
                     if (!CHECK_DUNGEON_ITEM(DUNGEON_MAP, gSaveContext.dungeonIndex)) {
@@ -378,11 +385,11 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             } else if ((pauseCtx->cursorSpecialPos == 0) && (pauseCtx->stickAdjY > 30)) {
                 if (pauseCtx->cursorPoint[PAUSE_MAP] >= DUNGEON_FLOOR_INDEX_4) {
                     for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 + 1); i >= 0; i--) {
-                        if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
+                        if ((gSaveContext.save.saveInfo.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
                              gBitFlags[i]) ||
                             func_801090B0(FLOOR_INDEX_MAX - i)) {
                             pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
-                            pauseCtx->unk_298 = 4.0f;
+                            pauseCtx->cursorShrinkRate = 4.0f;
                             break;
                         }
                     }
@@ -399,11 +406,11 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
                     (pauseCtx->cursorPoint[PAUSE_MAP] <= DUNGEON_FLOOR_INDEX_1)) {
                     for (i = pauseCtx->cursorPoint[PAUSE_MAP] - (DUNGEON_FLOOR_INDEX_4 - 1); i <= DUNGEON_FLOOR_INDEX_0;
                          i++) {
-                        if ((gSaveContext.save.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
+                        if ((gSaveContext.save.saveInfo.permanentSceneFlags[(void)0, gSaveContext.dungeonIndex].unk_14 &
                              gBitFlags[i]) ||
                             func_801090B0(FLOOR_INDEX_MAX - i)) {
                             pauseCtx->cursorPoint[PAUSE_MAP] = i + DUNGEON_FLOOR_INDEX_4;
-                            pauseCtx->unk_298 = 4.0f;
+                            pauseCtx->cursorShrinkRate = 4.0f;
                             break;
                         }
                     }
@@ -457,7 +464,7 @@ void KaleidoScope_UpdateDungeonCursor(PlayState* play) {
             }
 
             if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_MAP]) {
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
             }
         }
     }
@@ -485,6 +492,7 @@ s16 sWorldMapDotPrimColors[][3] = {
     { 0, 0, 255 },
     { 255, 255, 0 },
 };
+
 s16 sWorldMapDotEnvColors[][3] = {
     { 255, 255, 0 },
     { 0, 0, 255 },
@@ -536,12 +544,12 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    KaleidoScope_SetCursorVtx(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
+    KaleidoScope_SetCursorVtxPos(pauseCtx, pauseCtx->cursorSlot[PAUSE_MAP] * 4, pauseCtx->mapPageVtx);
 
     // Draw the world map image
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == 6) &&
-        ((pauseCtx->unk_200 == 0) || (pauseCtx->unk_200 == 3)) && YREG(6) && (pauseCtx->state != 7) &&
-        !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->state == PAUSE_STATE_MAIN) &&
+        ((pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) || (pauseCtx->mainState == PAUSE_MAIN_STATE_EQUIP_ITEM)) &&
+        YREG(6) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) && !IS_PAUSE_STATE_GAMEOVER) {
 
         // Draw the world map image flat
         // Because it is flat, the texture is loaded by filling it in 8 rows at a time.
@@ -549,7 +557,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Each loaded chunk must have `size <= TMEM_SIZE / 2`
         // because the texture is color-indexed, so the TLUT uses the other half of TMEM.
 
-        func_8012C628(play->state.gfxCtx);
+        Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
         gDPSetTextureFilter(POLY_OPA_DISP++, G_TF_POINT);
         gDPLoadTLUT_pal256(POLY_OPA_DISP++, gWorldMapImageTLUT);
@@ -560,17 +568,17 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Process the 128 rows of pixels for gWorldMapImageTex, 8 rows at a time over 16 iterations
         // Loop over yPos (t), textureIndex (j)
         for (t = 62, j = 0; j < 16; j++, t += 8) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_TEX_WIDTH * 8),
-                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
+            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + j * (WORLD_MAP_IMAGE_WIDTH * 8), G_IM_FMT_CI,
+                                G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             rectLeft = 51 << 2;
-            rectRight = rectLeft + (WORLD_MAP_IMAGE_TEX_WIDTH << 2);
+            rectRight = rectLeft + (WORLD_MAP_IMAGE_WIDTH << 2);
             gSPTextureRectangle(POLY_OPA_DISP++, rectLeft, t << 2, rectRight, (t << 2) + (8 << 2), G_TX_RENDERTILE, 0,
                                 0, 1 << 10, 1 << 10);
         }
 
-        func_8012C8AC(play->state.gfxCtx);
+        Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     } else {
         // Draw the world map angled
@@ -592,41 +600,44 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         // Set the vertices for the first 8 quads attached to the world map texture.
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[204], 8 * 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[QUAD_MAP_PAGE_WORLD_IMAGE_FIRST * 4], 8 * 4, 0);
 
         // Process the first 72 rows of pixels for gWorldMapImageTex, 9 rows at a time over 8 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, k = 0, j = 0; i < 8; i++, k++, j += 4) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
-                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(
+                POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_WIDTH * WORLD_MAP_IMAGE_FRAG_HEIGHT),
+                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, WORLD_MAP_IMAGE_FRAG_HEIGHT, 0,
+                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
         // Set the vertices for the last 7 quads attached to the world map texture:
         // 6 quads with a height of 9, 1 quad with a height of 2
-        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[236], (6 + 1) * 4, 0);
+        gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_IMAGE_FIRST + 8) * 4], (6 + 1) * 4, 0);
 
         // Process the next 54 rows of pixels for gWorldMapImageTex, 9 rows at a time over 6 iterations
         // Loop over quadIndex of this loop (i), quadIndex of the entire texture (k), vtxIndex (j)
         for (i = 0, j = 0; i < 6; i++, k++, j += 4) {
-            gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9),
-                                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 9, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(
+                POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_WIDTH * WORLD_MAP_IMAGE_FRAG_HEIGHT),
+                G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, WORLD_MAP_IMAGE_FRAG_HEIGHT, 0,
+                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
             gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
         }
 
         // Process the last 2 rows of pixels for gWorldMapImageTex
-        gDPLoadTextureBlock(POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_TEX_WIDTH * 9), G_IM_FMT_CI,
-                            G_IM_SIZ_8b, WORLD_MAP_IMAGE_TEX_WIDTH, 2, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(
+            POLY_OPA_DISP++, (u8*)gWorldMapImageTex + k * (WORLD_MAP_IMAGE_WIDTH * WORLD_MAP_IMAGE_FRAG_HEIGHT),
+            G_IM_FMT_CI, G_IM_SIZ_8b, WORLD_MAP_IMAGE_WIDTH, WORLD_MAP_IMAGE_HEIGHT % WORLD_MAP_IMAGE_FRAG_HEIGHT, 0,
+            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
         gSP1Quadrangle(POLY_OPA_DISP++, j, j + 2, j + 3, j + 1, 0);
     }
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 
@@ -640,16 +651,17 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 
     // Draw clouds over the world map
     // Iterate over cloud bits (n)
-    for (n = 0; n < 15; n++) {
-        if (!(((void)0, gSaveContext.save.worldMapCloudVisibility) & gBitFlags[n])) {
+    for (n = 0; n < WORLD_MAP_NUM_CLOUDS; n++) {
+        if (!(((void)0, gSaveContext.save.saveInfo.worldMapCloudVisibility) & gBitFlags[n])) {
 
-            gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[60 + n * 4], 4, 0);
+            gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_CLOUDS_FIRST + n) * 4], 4, 0);
 
-            POLY_OPA_DISP = func_8010DC58(POLY_OPA_DISP, sCloudTextures[n], D_8082B7F0[n], D_8082B838[n], 0);
+            POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, sCloudTextures[n], gVtxPageMapWorldQuadsWidth[n],
+                                               gVtxPageMapWorldQuadsHeight[n], 0);
         }
     }
 
-    if ((pauseCtx->state >= 0x15) && (pauseCtx->state <= 0x19)) {
+    if (IS_PAUSE_STATE_OWLWARP) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetRenderMode(POLY_OPA_DISP++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_PRIMITIVE, G_CC_PRIMITIVE);
@@ -657,9 +669,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPFillRectangle(POLY_OPA_DISP++, 50, 62, 270, 190);
     }
 
-    func_8012C8AC(play->state.gfxCtx);
+    Gfx_SetupDL42_Opa(play->state.gfxCtx);
 
-    if (!((pauseCtx->state >= 0x15) && (pauseCtx->state <= 0x19))) {
+    if (!IS_PAUSE_STATE_OWLWARP) {
         // Browsing the world map regions on the pause menu
         gDPLoadTextureBlock(POLY_OPA_DISP++, gWorldMapDotTex, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 8, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -673,8 +685,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
                        sWorldMapDotEnvColors[0][2], 0);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
-            gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= (u16)~0x8000;
 
+            // QUAD_MAP_PAGE_WORLD_REGION_FIRST
             pauseCtx->mapPageVtx[120].v.ob[0] = pauseCtx->mapPageVtx[122].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
             pauseCtx->mapPageVtx[121].v.ob[0] = pauseCtx->mapPageVtx[123].v.ob[0] =
@@ -689,7 +702,7 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Loop over RegionId (i), unused vtxIndex (j), unused (k)
         for (i = 0, j = 0; i < REGION_MAX; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
-                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[120 + i * 4], 4, 0);
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_REGION_FIRST + i) * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
         }
@@ -705,8 +718,9 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
         if (R_PAUSE_DBG_MAP_CLOUD_ON) {
-            gSaveContext.save.worldMapCloudVisibility |= (u16)~0x8000;
+            gSaveContext.save.saveInfo.worldMapCloudVisibility |= (u16)~0x8000;
 
+            // QUAD_MAP_PAGE_WORLD_WARP_FIRST
             pauseCtx->mapPageVtx[164].v.ob[0] = pauseCtx->mapPageVtx[166].v.ob[0] = R_PAUSE_DBG_MAP_CLOUD_X;
 
             pauseCtx->mapPageVtx[165].v.ob[0] = pauseCtx->mapPageVtx[167].v.ob[0] =
@@ -721,17 +735,18 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Loop over OwlWarpId (i), unused vtxIndex (j), unused (k)
         for (i = 0, j = 0; i < OWL_WARP_ENTRANCE; i++, k++, j += 4) {
             if (pauseCtx->worldMapPoints[i]) {
-                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[164 + i * 4], 4, 0);
+                gSPVertex(POLY_OPA_DISP++, &pauseCtx->mapPageVtx[(QUAD_MAP_PAGE_WORLD_WARP_FIRST + i) * 4], 4, 0);
                 gSP1Quadrangle(POLY_OPA_DISP++, 0, 2, 3, 1, 0);
             }
         }
     }
 
     // Find and draw Player's face at the current region based on the current scene
-    // If (pauseCtx->state == 6), then the other pauseCtx->state conditions are redundant
+    // If (pauseCtx->state == PAUSE_STATE_MAIN), then the other pauseCtx->state conditions are redundant
     // and always return true
-    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->unk_200 == 0) && (pauseCtx->state == 6) &&
-        (pauseCtx->state != 7) && !((pauseCtx->state >= 8) && (pauseCtx->state <= 0x12))) {
+    if ((pauseCtx->pageIndex == PAUSE_MAP) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+        (pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->state != PAUSE_STATE_SAVEPROMPT) &&
+        !IS_PAUSE_STATE_GAMEOVER) {
         j = 0;
         n = 0;
 
@@ -749,8 +764,8 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
             }
         }
 
-        // Find the regionId that player is currently in
-        // Loop over regionId (n) and regionIdIndex (j)
+        // Find the region that player is currently in
+        // Loop over region (n) and regionIndex (j)
         while (true) {
             if ((gSceneIdsPerRegion[n][j] == 0xFFFF)) {
                 n++;
@@ -793,12 +808,13 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
         // Draw Player's face at the current region
         if (n != REGION_MAX) {
             KaleidoScope_SetView(pauseCtx, pauseCtx->eye.x, pauseCtx->eye.y, pauseCtx->eye.z);
-            func_8012C628(play->state.gfxCtx);
+            Gfx_SetupDL39_Opa(play->state.gfxCtx);
 
             gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 255, 255, 255, pauseCtx->alpha);
 
-            POLY_OPA_DISP = func_8010CB80(POLY_OPA_DISP, &D_09007500, 16, 16, sWorldMapCursorsRectLeft[n],
-                                          sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
+            POLY_OPA_DISP =
+                Gfx_DrawTexRectRGBA16(POLY_OPA_DISP, gQuestIconLinkHumanFaceTex, 16, 16, sWorldMapCursorsRectLeft[n],
+                                      sWorldMapCursorsRectTop[n], 16, 16, 1 << 10, 1 << 10);
         }
     }
 
@@ -808,16 +824,16 @@ void KaleidoScope_DrawWorldMap(PlayState* play) {
 }
 
 u16 sOwlWarpPauseItems[] = {
-    0xAF, // OWL_WARP_GREAT_BAY_COAST
-    0xB3, // OWL_WARP_ZORA_CAPE
-    0xAA, // OWL_WARP_SNOWHEAD
-    0xB1, // OWL_WARP_MOUNTAIN_VILLAGE
-    0xA9, // OWL_WARP_CLOCK_TOWN
-    0xB2, // OWL_WARP_MILK_ROAD
-    0xA8, // OWL_WARP_WOODFALL
-    0xB0, // OWL_WARP_SOUTHERN_SWAMP
-    0xAC, // OWL_WARP_IKANA_CANYON
-    0xAE, // OWL_WARP_STONE_TOWER
+    ITEM_MAP_POINT_GREAT_BAY_COAST,  // OWL_WARP_GREAT_BAY_COAST
+    ITEM_MAP_POINT_ZORA_CAPE,        // OWL_WARP_ZORA_CAPE
+    ITEM_MAP_POINT_SNOWHEAD,         // OWL_WARP_SNOWHEAD
+    ITEM_MAP_POINT_MOUNTAIN_VILLAGE, // OWL_WARP_MOUNTAIN_VILLAGE
+    ITEM_MAP_POINT_CLOCK_TOWN,       // OWL_WARP_CLOCK_TOWN
+    ITEM_MAP_POINT_MILK_ROAD,        // OWL_WARP_MILK_ROAD
+    ITEM_MAP_POINT_WOODFALL,         // OWL_WARP_WOODFALL
+    ITEM_MAP_POINT_SOUTHERN_SWAMP,   // OWL_WARP_SOUTHERN_SWAMP
+    ITEM_MAP_POINT_IKANA_CANYON,     // OWL_WARP_IKANA_CANYON
+    ITEM_MAP_POINT_STONE_TOWER,      // OWL_WARP_STONE_TOWER
 };
 
 void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
@@ -825,7 +841,8 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
     PauseContext* pauseCtx = &play->pauseCtx;
     s16 oldCursorPoint;
 
-    if ((pauseCtx->state == 6) && (pauseCtx->unk_200 == 0) && (pauseCtx->pageIndex == PAUSE_MAP)) {
+    if ((pauseCtx->state == PAUSE_STATE_MAIN) && (pauseCtx->mainState == PAUSE_MAIN_STATE_IDLE) &&
+        (pauseCtx->pageIndex == PAUSE_MAP)) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_WHITE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
@@ -837,7 +854,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
 
         if (pauseCtx->cursorSpecialPos == 0) {
             if (pauseCtx->stickAdjX > 30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 sStickAdjTimer = 0;
 
                 while (true) {
@@ -852,12 +869,12 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     }
                 }
             } else if (pauseCtx->stickAdjX < -30) {
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
                 sStickAdjTimer = 0;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < REGION_GREAT_BAY) {
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] <= REGION_NONE) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
@@ -879,13 +896,13 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
             if (pauseCtx->cursorSpecialPos == PAUSE_CURSOR_PAGE_LEFT) {
                 if (pauseCtx->stickAdjX > 30) {
-                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = -1;
+                    pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = REGION_NONE;
                     pauseCtx->cursorSpecialPos = 0;
-                    pauseCtx->unk_298 = 4.0f;
+                    pauseCtx->cursorShrinkRate = 4.0f;
 
                     while (true) {
                         pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
-                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] > REGION_STONE_TOWER) {
+                        if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] >= REGION_MAX) {
                             KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_RIGHT);
                             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                             break;
@@ -900,17 +917,17 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                         // Used as cursor vtxIndex
                         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                     }
-                    play_sound(NA_SE_SY_CURSOR);
+                    Audio_PlaySfx(NA_SE_SY_CURSOR);
                     sStickAdjTimer = 0;
                 }
             } else if (pauseCtx->stickAdjX < -30) {
-                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = 11;
+                pauseCtx->cursorPoint[PAUSE_WORLD_MAP] = REGION_MAX;
                 pauseCtx->cursorSpecialPos = 0;
-                pauseCtx->unk_298 = 4.0f;
+                pauseCtx->cursorShrinkRate = 4.0f;
 
                 while (true) {
                     pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
-                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] < 0) {
+                    if (pauseCtx->cursorPoint[PAUSE_WORLD_MAP] <= REGION_NONE) {
                         KaleidoScope_MoveCursorToSpecialPos(play, PAUSE_CURSOR_PAGE_LEFT);
                         pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
                         break;
@@ -925,7 +942,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                     // Used as cursor vtxIndex
                     pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
                 }
-                play_sound(NA_SE_SY_CURSOR);
+                Audio_PlaySfx(NA_SE_SY_CURSOR);
                 sStickAdjTimer = 0;
             }
         }
@@ -934,14 +951,14 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             pauseCtx->cursorItem[PAUSE_MAP] = PAUSE_ITEM_NONE;
         }
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
-    } else if (pauseCtx->state == 0x17) {
+    } else if (pauseCtx->state == PAUSE_STATE_OWLWARP_SELECT) {
         pauseCtx->cursorColorSet = PAUSE_CURSOR_COLOR_SET_BLUE;
         oldCursorPoint = pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (pauseCtx->stickAdjX > 30) {
-            pauseCtx->unk_298 = 4.0f;
+            pauseCtx->cursorShrinkRate = 4.0f;
             sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]++;
@@ -950,7 +967,7 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
                 }
             } while (!pauseCtx->worldMapPoints[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]]);
         } else if (pauseCtx->stickAdjX < -30) {
-            pauseCtx->unk_298 = 4.0f;
+            pauseCtx->cursorShrinkRate = 4.0f;
             sStickAdjTimer = 0;
             do {
                 pauseCtx->cursorPoint[PAUSE_WORLD_MAP]--;
@@ -962,13 +979,14 @@ void KaleidoScope_UpdateWorldMapCursor(PlayState* play) {
             sStickAdjTimer++;
         }
 
-        //! TODO: Is the `0xA4` here related to `0xA3` being the last recored item in the `ItemId` enum?
-        pauseCtx->cursorItem[PAUSE_MAP] = sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - 0xA4;
+        // Offset from `ITEM_MAP_POINT_GREAT_BAY` is to get the correct ordering in `map_name_static`
+        pauseCtx->cursorItem[PAUSE_MAP] =
+            sOwlWarpPauseItems[pauseCtx->cursorPoint[PAUSE_WORLD_MAP]] - ITEM_MAP_POINT_GREAT_BAY;
         // Used as cursor vtxIndex
         pauseCtx->cursorSlot[PAUSE_MAP] = 31 + pauseCtx->cursorPoint[PAUSE_WORLD_MAP];
 
         if (oldCursorPoint != pauseCtx->cursorPoint[PAUSE_WORLD_MAP]) {
-            play_sound(NA_SE_SY_CURSOR);
+            Audio_PlaySfx(NA_SE_SY_CURSOR);
         }
     }
 }

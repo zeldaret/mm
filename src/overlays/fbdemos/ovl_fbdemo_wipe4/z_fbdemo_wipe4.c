@@ -7,6 +7,7 @@
  * finished.
  */
 
+#include "global.h"
 #include "z_fbdemo_wipe4.h"
 
 #define THIS ((TransitionWipe4*)thisx)

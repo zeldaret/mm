@@ -66,7 +66,8 @@ s32 __osRepairPackId(OSPfs* pfs, __OSPackId* badid, __OSPackId* newid) {
     u8 buf[BLOCKSIZE];
     u8 comp[BLOCKSIZE];
     u8 mask = 0;
-    s32 i, j = 0;
+    s32 i = 0;
+    s32 j = 0;
     u16 index[4];
 
     newid->repaired = 0xFFFFFFFF;
@@ -264,8 +265,6 @@ s32 __osGetId(OSPfs* pfs) {
     }
 
     bcopy(id, pfs->id, BLOCKSIZE);
-
-    if (0) {}
 
     pfs->version = id->version;
 

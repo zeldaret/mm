@@ -86,7 +86,7 @@ void func_80AC4A80(BgIcefloe* this, PlayState* play) {
     this->timer = 20;
     SkinMatrix_Vec3fMtxFMultXYZW(&play->viewProjectionMtxF, &this->dyna.actor.world.pos, &this->dyna.actor.projectedPos,
                                  &this->dyna.actor.projectedW);
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_STAND_APPEAR);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_STAND_APPEAR);
     this->actionFunc = BgIcefloe_Grow;
 }
 
@@ -96,8 +96,8 @@ void BgIcefloe_Grow(BgIcefloe* this, PlayState* play) {
     Vec3f velocity;
     Vec3f position;
 
-    velocity.x = randPlusMinusPoint5Scaled(6.0f);
-    velocity.z = randPlusMinusPoint5Scaled(6.0f);
+    velocity.x = Rand_CenteredFloat(6.0f);
+    velocity.z = Rand_CenteredFloat(6.0f);
     velocity.y = Rand_ZeroFloat(4.0f) + 4.0f;
     this->dyna.actor.scale.x += (0.65f * 0.01f);
     this->dyna.actor.scale.z += (0.65f * 0.01f);
@@ -121,19 +121,19 @@ void func_80AC4C34(BgIcefloe* this, PlayState* play) {
     WaterBox* water;
 
     this->timer--;
-    if (this->timer == 0 ||
+    if ((this->timer == 0) ||
         !WaterBox_GetSurface1_2(play, &play->colCtx, this->dyna.actor.world.pos.x, this->dyna.actor.world.pos.z,
                                 &this->dyna.actor.home.pos.y, &water)) {
         func_80AC4CF0(this);
     } else {
         this->dyna.actor.world.pos.y =
-            (sin_rad(this->timer * (M_PI / 30.0f)) * 3.0f) + (this->dyna.actor.home.pos.y + 10.0f);
+            (Math_SinF(this->timer * (M_PI / 30.0f)) * 3.0f) + (this->dyna.actor.home.pos.y + 10.0f);
     }
 }
 
 void func_80AC4CF0(BgIcefloe* this) {
     this->timer = 50;
-    Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_ICE_MELT_LEVEL);
+    Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_ICE_MELT_LEVEL);
     this->actionFunc = func_80AC4D2C;
 }
 
@@ -144,8 +144,8 @@ void func_80AC4D2C(BgIcefloe* this, PlayState* play) {
         Vec3f position;
 
         velocity.y = (this->timer - 38) * (1 / 12.0f);
-        velocity.x = randPlusMinusPoint5Scaled(1.5f) * velocity.y;
-        velocity.z = randPlusMinusPoint5Scaled(1.5f) * velocity.y;
+        velocity.x = Rand_CenteredFloat(1.5f) * velocity.y;
+        velocity.z = Rand_CenteredFloat(1.5f) * velocity.y;
         velocity.y += 0.8f;
         position.x = this->dyna.actor.world.pos.x + (2.0f * velocity.x);
         position.z = this->dyna.actor.world.pos.z + (2.0f * velocity.z);

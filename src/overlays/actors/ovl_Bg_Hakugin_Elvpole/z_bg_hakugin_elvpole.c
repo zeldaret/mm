@@ -68,7 +68,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
             sp28 = true;
         } else if (this->unk_15E > 0) {
             if (this->unk_15E == 100) {
-                Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+                Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
             }
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 120.0f;
             //! FAKE:
@@ -83,7 +83,7 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
             this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - 320.0f;
             Flags_UnsetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor));
             this->unk_15E = -1;
-            Actor_PlaySfxAtPos(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
+            Actor_PlaySfx(&this->dyna.actor, NA_SE_EV_STONEDOOR_STOP);
         }
     } else if ((BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor) != 0x7F) &&
                Flags_GetSwitch(play, BGHAKUGINELVPOLE_GET_SWITCHFLAG(&this->dyna.actor))) {
@@ -99,20 +99,20 @@ void func_80ABD92C(BgHakuginElvpole* this, PlayState* play) {
         this->unk_15C++;
         this->dyna.actor.world.pos.x = (Math_SinS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.x;
         this->dyna.actor.world.pos.z = (Math_CosS(this->unk_15C * 0x2000) * var_fv1) + this->dyna.actor.home.pos.z;
-        func_800B9010(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
+        Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_PLATE_LIFT_LEVEL - SFX_FLAG);
     } else {
         this->unk_15C = 0;
     }
     if (this->unk_160) {
-        if (this->dyna.actor.cutscene == -1) {
+        if (this->dyna.actor.csId == CS_ID_NONE) {
             this->unk_160 = false;
             return;
-        } else if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-            ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+        } else if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+            CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
             this->unk_160 = false;
             return;
         }
-        ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+        CutsceneManager_Queue(this->dyna.actor.csId);
     }
 }
 
@@ -126,7 +126,7 @@ void BgHakuginElvpole_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx);
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, object_hakugin_obj_DL_00ACB8);
 
     CLOSE_DISPS(play->state.gfxCtx);

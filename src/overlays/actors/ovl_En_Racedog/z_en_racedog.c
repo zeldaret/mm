@@ -9,6 +9,7 @@
  */
 
 #include "z_en_racedog.h"
+#include "overlays/actors/ovl_En_Aob_01/z_en_aob_01.h"
 #include "overlays/actors/ovl_En_Dg/z_en_dg.h"
 
 #define FLAGS (ACTOR_FLAG_10 | ACTOR_FLAG_80000000)
@@ -61,13 +62,13 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this);
  * Stores various information for each dog in the race, mostly related to speed.
  */
 typedef struct {
-    f32 sprintSpeedMultiplier;        // Target speed is multiplied by this when the dog is in the last 1/4 of the race
-    f32 goodConditionSpeedMultiplier; // Target speed is multiplied by this if the dog is in good condition
-    s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
-    s16 index;                        // The dog's index within sDogInfo
-    s16 pointToUseSecondBaseSpeed;    // When the dog is at or after this point, the second value in sBaseSpeeds is used
-    s16 textId;                       // Used to determine the dog's condition
-} RaceDogInfo;
+    /* 0x0 */ f32 sprintSpeedMultiplier;        // Multiplies target speed when the dog is in the last 1/4 of the race
+    /* 0x4 */ f32 goodConditionSpeedMultiplier; // Multiplies target speed if the dog is in good condition
+    /* 0x8 */ s16 color;                        // The dog's color, which is used as an index into sBaseSpeeds
+    /* 0xA */ s16 index;                        // The dog's index within sDogInfo
+    /* 0xC */ s16 pointToUseSecondBaseSpeed; // When the dog is at or after this point, use the second sBaseSpeeds value
+    /* 0xE */ s16 textId;                    // Used to determine the dog's condition
+} RaceDogInfo;                               // size = 0x10
 
 ActorInit En_Racedog_InitVars = {
     ACTOR_EN_RACEDOG,
@@ -257,7 +258,7 @@ void EnRacedog_UpdateCollision(EnRacedog* this, PlayState* play) {
     this->collider.dim.pos.y = this->actor.world.pos.y;
     this->collider.dim.pos.z = this->actor.world.pos.z;
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, 5);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 26.0f, 10.0f, 0.0f, UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4);
 }
 
 /**
@@ -274,8 +275,8 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     if (path != NULL) {
         point = Lib_SegmentedToVirtual(path->points);
         point = &point[pointIndex];
-        diffXRand = (randPlusMinusPoint5Scaled(100.0f) + point->x) - pos->x;
-        diffZRand = (randPlusMinusPoint5Scaled(100.0f) + point->z) - pos->z;
+        diffXRand = (Rand_CenteredFloat(100.0f) + point->x) - pos->x;
+        diffZRand = (Rand_CenteredFloat(100.0f) + point->z) - pos->z;
         diffX = point->x - pos->x;
         diffZ = point->z - pos->z;
     } else {
@@ -286,7 +287,7 @@ s16 EnRacedog_GetYRotation(Path* path, s32 pointIndex, Vec3f* pos, f32* distSQ) 
     }
 
     *distSQ = SQ(diffX) + SQ(diffZ);
-    return RADF_TO_BINANG(Math_Acot2F(diffZRand, diffXRand));
+    return RAD_TO_BINANG(Math_Atan2F_XY(diffZRand, diffXRand));
 }
 
 void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
@@ -297,7 +298,7 @@ void EnRacedog_GetFloorRot(EnRacedog* this, Vec3f* floorRot) {
         ny = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.y);
         nz = COLPOLY_GET_NORMAL(this->actor.floorPoly->normal.z);
 
-        floorRot->x = -Math_Acot2F(1.0f, -nz * ny);
+        floorRot->x = -Math_Atan2F_XY(1.0f, -nz * ny);
     }
 }
 
@@ -312,10 +313,10 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, &sDamageTable, &sColChkInfoInit);
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
-    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH(&this->actor), 0x3F);
+    this->path = SubS_GetPathByIndex(play, ENRACEDOG_GET_PATH_INDEX(&this->actor), ENRACEDOG_PATH_INDEX_NONE);
     Actor_SetScale(&this->actor, 0.0075f);
     this->actor.gravity = -3.0f;
-    if (ENRACEDOG_GET_INDEX(&this->actor) < 14) {
+    if (ENRACEDOG_GET_INDEX(&this->actor) < RACEDOG_COUNT) {
         this->index = ENRACEDOG_GET_INDEX(&this->actor);
     } else {
         Actor_Kill(&this->actor);
@@ -351,7 +352,7 @@ void EnRacedog_Init(Actor* thisx, PlayState* play) {
     this->actor.flags |= ACTOR_FLAG_10;
     this->actor.flags |= ACTOR_FLAG_20;
 
-    sSelectedDogInfo = sDogInfo[(s16)((gSaveContext.eventInf[0] & 0xF8) >> 3)];
+    sSelectedDogInfo = sDogInfo[(s16)GET_EVENTINF_DOG_RACE_SELECTED_DOG_INDEX];
     this->selectedDogIndex = sSelectedDogInfo.index;
 
     EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_IDLE);
@@ -373,7 +374,7 @@ void EnRacedog_RaceStart(EnRacedog* this, PlayState* play) {
     if (DECR(this->raceStartTimer) == 0) {
         this->raceStartTimer = Rand_S16Offset(50, 50);
         if (this->extraTimeBeforeRaceStart == 0) {
-            play_sound(NA_SE_SY_START_SHOT);
+            Audio_PlaySfx(NA_SE_SY_START_SHOT);
         }
 
         EnRacedog_ChangeAnim(&this->skelAnime, sAnimationInfo, RACEDOG_ANIM_RUN);
@@ -391,7 +392,7 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
     this->collider.dim.radius = 15;
     if (this->path != NULL) {
         yRotation = EnRacedog_GetYRotation(this->path, this->currentPoint, &this->actor.world.pos, &distSq);
-        if (this->actor.bgCheckFlags & 8) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_WALL) {
             yRotation = this->actor.wallYaw;
         }
 
@@ -437,14 +438,8 @@ void EnRacedog_Race(EnRacedog* this, PlayState* play) {
  * or an intentional choice to introduce a bit of extra variance to the race.
  */
 void EnRacedog_UpdateTextId(EnRacedog* this) {
-    // Assuming that the weekEventRegs haven't been tampered with, then this will produce a text ID in the
-    // range of 0x3539 to 0x3546.
-    if (this->index % 2) {
-        sDogInfo[this->index].textId =
-            (((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0xF0) >> 4) + 0x3539;
-    } else {
-        sDogInfo[this->index].textId = ((gSaveContext.save.weekEventReg[42 + (this->index / 2)]) & 0x0F) + 0x3539;
-    }
+    // This will produce a text ID in the range of 0x3539 to 0x3546.
+    sDogInfo[this->index].textId = GET_WEEKEVENTREG_DOG_RACE_TEXT(this->index, 0x3539);
 
     // As a sanity check, this makes sure the text ID is something in the expected range of 0x3539 to 0x3546.
     if ((sDogInfo[this->index].textId > 0x3546) || (sDogInfo[this->index].textId < 0x3539)) {
@@ -479,9 +474,9 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                 // The dog is past the very start, but is still less than 1/4th of the way through the race track.
                 // This code will give the blue dog a higher base speed than any other dog (6.0 instead of 5.0).
                 if (sDogInfo[this->index].color == DOG_COLOR_BLUE) {
-                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][0] + Rand_CenteredFloat(1.0f);
                 } else {
-                    this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = 5.0f + Rand_CenteredFloat(1.0f);
                 }
 
                 if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
@@ -490,9 +485,9 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
             } else if (this->currentPoint < (quarterPathCount * 3)) {
                 // The dog is between 1/4th and 3/4ths of the way through the race track.
                 if (this->currentPoint < sDogInfo[this->index].pointToUseSecondBaseSpeed) {
-                    this->targetSpeed = 5.0f + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = 5.0f + Rand_CenteredFloat(1.0f);
                 } else {
-                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + randPlusMinusPoint5Scaled(1.0f);
+                    this->targetSpeed = sBaseSpeeds[sDogInfo[this->index].color][1] + Rand_CenteredFloat(1.0f);
 
                     if (DOG_IS_IN_GOOD_CONDITION(this) && (this->index != sFirstPlaceIndex)) {
                         this->targetSpeed *= sDogInfo[this->index].goodConditionSpeedMultiplier;
@@ -502,7 +497,7 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
                 // The dog is more than 3/4ths of the way through the race track.
                 EnRacedog_CalculateFinalStretchTargetSpeed(this);
             } else {
-                this->targetSpeed = randPlusMinusPoint5Scaled(1.0f) + 5.0f;
+                this->targetSpeed = Rand_CenteredFloat(1.0f) + 5.0f;
             }
         }
     }
@@ -513,16 +508,16 @@ void EnRacedog_UpdateSpeed(EnRacedog* this) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
     }
 
-    Math_ApproachF(&this->actor.speedXZ, this->targetSpeed, 0.5f, 3.0f);
+    Math_ApproachF(&this->actor.speed, this->targetSpeed, 0.5f, 3.0f);
 
     // The dog that the player has selected has a slightly higher max speed than the other dogs.
     if (this->index == this->selectedDogIndex) {
-        if (this->actor.speedXZ > 7.5f) {
-            this->actor.speedXZ = 7.5f;
+        if (this->actor.speed > 7.5f) {
+            this->actor.speed = 7.5f;
         }
     } else {
-        if (this->actor.speedXZ > 7.0f) {
-            this->actor.speedXZ = 7.0f;
+        if (this->actor.speed > 7.0f) {
+            this->actor.speed = 7.0f;
         }
     }
 }
@@ -584,13 +579,13 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
         this->raceStatus == RACEDOG_RACE_STATUS_AFTER_POINT_11) {
         sNumberOfDogsFinished++;
         if (sNumberOfDogsFinished == 1) {
-            Audio_QueueSeqCmd(NA_BGM_HORSE_GOAL | 0x8000);
-            play_sound(NA_SE_SY_START_SHOT);
+            SEQCMD_PLAY_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 0, NA_BGM_HORSE_GOAL | SEQ_FLAG_ASYNC);
+            Audio_PlaySfx(NA_SE_SY_START_SHOT);
         }
 
         this->raceStatus = RACEDOG_RACE_STATUS_FINISHED;
         if (this->index == this->selectedDogIndex) {
-            gSaveContext.eventInf[0] = (gSaveContext.eventInf[0] & 7) | (sNumberOfDogsFinished * 8);
+            SET_EVENTINF_DOG_RACE_RACE_STANDING(sNumberOfDogsFinished);
         }
     }
 }
@@ -600,7 +595,7 @@ void EnRacedog_CheckForFinish(EnRacedog* this) {
  * to normal speed otherwise.
  */
 void EnRacedog_UpdateRunAnimationPlaySpeed(EnRacedog* this) {
-    if (this->actor.speedXZ < 3.0f) {
+    if (this->actor.speed < 3.0f) {
         sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 0.9f;
     } else {
         sAnimationInfo[RACEDOG_ANIM_RUN].playSpeed = 1.0f;
@@ -633,13 +628,28 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
 
     // frontPointsCrossProduct is positive if the dog is to the left of the line formed by the front points
     // crossProductTemp is positive if the dog is above the line formed by the bottom points
+    // This is checking that the dog within the region defined by front and bottom lines like so:
+    //         |
+    //    X    | Front
+    //         |
+    // --------
+    //  Bottom
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = (((xDistToBottomFront * zDistToBottomBack) - (xDistToBottomBack * zDistToBottomFront)));
+    //! @bug If any dog is precisely (with floating-point precision) on top of the line formed by the front points,
+    //! then frontPointsCrossProduct will be zero. This will cause this multiplication (and all future multiplications)
+    //! to be zero, which will make this function think the dog has crossed the finish line. The line formed by the
+    //! front points extends throughout the entire racetrack, so a dog can trigger this when they're not even close to
+    //! the actual finish line, causing them to finish the race incredibly early.
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
         return false;
     }
 
     // crossProductTemp is positive if the dog is to the right of the line formed by the back points
+    // This is checking that the dog within the region defined by front and back lines like so:
+    //       |       |
+    //  Back |   X   | Front
+    //       |       |
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = ((xDistToBottomBack * zDistToTopBack) - (xDistToTopBack * zDistToBottomBack));
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
@@ -647,6 +657,12 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
     }
 
     // crossProductTemp is positive if the dog is below the line formed by the top points
+    // This is checking that the dog within the region defined by front and top lines like so:
+    //   Top
+    // --------
+    //         |
+    //    X    | Front
+    //         |
     frontPointsCrossProduct = ((xDistToTopFront * zDistToBottomFront) - (xDistToBottomFront * zDistToTopFront));
     crossProductTemp = ((xDistToTopBack * zDistToTopFront) - (xDistToTopFront * zDistToTopBack));
     if (frontPointsCrossProduct * crossProductTemp < 0.0f) {
@@ -658,13 +674,13 @@ s32 EnRacedog_IsOverFinishLine(EnRacedog* this, Vec2f* finishLineCoordinates) {
 
 void EnRacedog_SpawnFloorDustRing(EnRacedog* this, PlayState* play) {
     s16 curFrame = this->skelAnime.curFrame;
-    s16 mod = (this->actor.speedXZ > 6.0f) ? 2 : 3;
+    s16 mod = (this->actor.speed > 6.0f) ? 2 : 3;
     Vec3f pos;
 
     if (((this->index + curFrame) % mod) == 0) {
-        pos.x = this->actor.world.pos.x + randPlusMinusPoint5Scaled(15.0f);
+        pos.x = this->actor.world.pos.x + Rand_CenteredFloat(15.0f);
         pos.y = this->actor.world.pos.y;
-        pos.z = this->actor.world.pos.z + randPlusMinusPoint5Scaled(15.0f);
+        pos.z = this->actor.world.pos.z + Rand_CenteredFloat(15.0f);
         Actor_SpawnFloorDustRing(play, &this->actor, &pos, 10.0f, 0, 2.0f, 300, 0, true);
     }
 }
@@ -673,7 +689,7 @@ void EnRacedog_PlaySfxWalk(EnRacedog* this) {
     s16 curFrame = this->skelAnime.curFrame;
 
     if ((curFrame == 1) || (curFrame == 7)) {
-        Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_MONKEY_WALK);
+        Actor_PlaySfx(&this->actor, NA_SE_EV_MONKEY_WALK);
     }
 }
 
@@ -699,7 +715,7 @@ void EnRacedog_Update(Actor* thisx, PlayState* play) {
         }
     }
 
-    if (!(this->actor.bgCheckFlags & 1)) {
+    if (!(this->actor.bgCheckFlags & BGCHECKFLAG_GROUND)) {
         this->skelAnime.curFrame = 0.0f;
     }
 
@@ -730,7 +746,7 @@ void EnRacedog_DrawSelectionArrow(EnRacedog* this, PlayState* play) {
     if (shouldDrawSelectionArrow) {
         OPEN_DISPS(play->state.gfxCtx);
 
-        func_8012C28C(play->state.gfxCtx);
+        Gfx_SetupDL25_Opa(play->state.gfxCtx);
         EnRacedog_UpdateSelectionArrow(this);
         Matrix_SetTranslateRotateYXZ(this->actor.world.pos.x, this->actor.world.pos.y + 40.0f, this->actor.world.pos.z,
                                      &rotation);
@@ -771,7 +787,7 @@ void EnRacedog_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gDPPipeSync(POLY_OPA_DISP++);
 

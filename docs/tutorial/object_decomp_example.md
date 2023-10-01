@@ -6,11 +6,11 @@ Let's take a look at `object_dns`, which is a pretty typical NPC object. It's us
 
 ## Step 1: Naming the skeleton and limbs
 
-We already went through the steps of opening an object file in Z64Utils in the [documenting step](documenting.md#z64utils), but we'll do it in more detail here. First, search for the object file, then right-click and select "Open in Object Analyzer". It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment 6, so just click OK.
+We already went through the steps of opening an object file in Z64Utils in the [documenting step](documenting.md#z64utils), but we'll do it in more detail here. First, search for the object file, then either double-click on it or right-click it and select "Open in Object Analyzer". It will ask you to choose a segment: this is the segment that the file is put on, and allows Z64Utils to resolve the segmented addresses it references into symbols. The json already knows it should be segment 6, so just click OK.
 
 ![Opening object_dns in Z64Utils](images/z64utils_open_dns.png)
 
-In the resulting window, go to "Analysis -> Find Dlists" and press OK (the defaults are usually fine). This will only find display lists, so to find everything else in the obect, do "Analysis -> Analyze Dlists". We're looking for the skeleton, so scroll down to the SkeletonHeader, right-click it, and select "Open in Skeleton Viewer":
+In the resulting window, you'll see displaylists, textures, and other assets. We're looking for the skeleton, so scroll down to the SkeletonHeader, then either double-click on it or right-click it and select "Open in Skeleton Viewer":
 
 ![Finding object_dns's SkeletonHeader in Z64Utils](images/z64utils_dns_skeletonheader.png)
 
@@ -32,7 +32,7 @@ Now that we've gotten around the error, we can see what each limb in the skeleto
 
 Note that some limbs don't actually render anything, so sometimes clicking on a limb will not turn anything red; this may indicate a "Root" limb that has no associated display list, or it may indicate something like an eye limb that doesn't have the right textures loaded to display anything in Z64Utils. It may be useful to skip ahead to [Step #5](#step-5-naming-limb-display-lists) to learn how to check if the limb has a display list. If it doesn't have a display list, then it's a "Root" limb that will never be highlighted.
 
-We can now start naming the skeleton and individual limbs. Since we know this particular skeleton is the King's Chamber Deku Guard, we can name the skeleton `gKingsChamberDekuGuardSkel`. For the LimbNone name, we can call it something like `KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE`, and we can name the LimbMax similarly. For the EnumName, we can name it `KingsChamberDekuGuardLimbs`. For each individual limb, we can name them based on what we see in Z64Utils; just make sure to update both the Name and the EnumName. After naming everything, we have something that looks like this:
+We can now start naming the skeleton and individual limbs. Since we know this particular skeleton is the King's Chamber Deku Guard, we can name the skeleton `gKingsChamberDekuGuardSkel`. For the LimbNone name, we can call it something like `KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE`, and we can name the LimbMax similarly. For the EnumName, we can name it `KingsChamberDekuGuardLimb`. For each individual limb, we can name them based on what we see in Z64Utils; just make sure to update both the Name and the EnumName. After naming everything, we have something that looks like this:
 
 ```xml
 <Limb Name="gKingsChamberDekuGuardTorsoLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_TORSO" Offset="0x2D18" />
@@ -47,7 +47,7 @@ We can now start naming the skeleton and individual limbs. Since we know this pa
 <Limb Name="gKingsChamberDekuGuardEyesLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_EYES" Offset="0x2D84" />
 <Limb Name="gKingsChamberDekuGuardLeftFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_LEFT_FOOT" Offset="0x2D90" />
 <Limb Name="gKingsChamberDekuGuardRightFootLimb" Type="Standard" EnumName="KINGS_CHAMBER_DEKU_GUARD_LIMB_RIGHT_FOOT" Offset="0x2D9C" />
-<Skeleton Name="gKingsChamberDekuGuardSkel" Type="Normal" LimbType="Standard" LimbNone="KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE" LimbMax="KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX" EnumName="KingsChamberDekuGuardLimbs" Offset="0x2DD8" />
+<Skeleton Name="gKingsChamberDekuGuardSkel" Type="Normal" LimbType="Standard" LimbNone="KINGS_CHAMBER_DEKU_GUARD_LIMB_NONE" LimbMax="KINGS_CHAMBER_DEKU_GUARD_LIMB_MAX" EnumName="KingsChamberDekuGuardLimb" Offset="0x2DD8" />
 ```
 
 Now we can run `./extract_assets.py -s objects/object_dns` to extract the object again, this time with our new names. What can we do with this? Quite a bit actually. In `z_en_dns.h`, we can add this to the top of the file to start using these new names in our code:
@@ -186,7 +186,7 @@ For some actors, there may be a few other things left to name that are directly 
 gSPDisplayList(POLY_OPA_DISP++, &D_06002C48);
 ```
 
-In Z64Utils, scroll to find this display list, then right-click and select "Open in Dlist Viewer":
+In Z64Utils, scroll to find this display list, then either double-click it or right-click it and select "Open in Dlist Viewer":
 
 ![Opening dlist_00002C48 in Z64Utils](images/z64utils_dns_display_list.png)
 

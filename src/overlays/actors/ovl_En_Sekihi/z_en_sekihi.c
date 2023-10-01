@@ -11,7 +11,7 @@
 #include "objects/object_sekihiz/object_sekihiz.h"
 #include "objects/object_zog/object_zog.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnSekihi*)thisx)
 
@@ -39,37 +39,44 @@ ActorInit En_Sekihi_InitVars = {
 static s16 sObjectIds[] = { OBJECT_SEKIHIL, OBJECT_SEKIHIG, OBJECT_SEKIHIN, OBJECT_SEKIHIZ, OBJECT_ZOG };
 
 static Gfx* sOpaDLists[] = {
-    gGraveTriforceSymbolDL, gGraveGoronSymbolDL, gGraveKokiriSymbolDL, gTombSongOfSoaringDL, gMikauGraveDL,
+    gSunsSongGraveTriforceDL, gSunsSongGraveGoronDL, gSunsSongGraveKokiriDL, gSongOfSoaringPedestalDL, gMikauGraveDL,
 };
 
 static Gfx* sXluDLists[] = {
-    gSunSongTriforceSymbolDL, gSunSongGoronSymbolDL, gSunSongKokiriSymbolDL, gSekihizEmptyDL, gMikauGraveDirtDL,
+    gSunsSongGraveTriforceSymbolsDL,
+    gSunsSongGraveGoronSymbolsDL,
+    gSunsSongGraveKokiriSymbolsDL,
+    gSongOfSoaringPedestalEmptyDL,
+    gMikauGraveDirtDL,
 };
 
 static u16 sTextIds[] = { 0, 0, 0, 0, 0x1018 };
 
 void EnSekihi_Init(Actor* thisx, PlayState* play) {
     EnSekihi* this = THIS;
-    s32 params = ENSIKIHI_GET_TYPE(thisx);
+    s32 type = ENSIKIHI_GET_TYPE(thisx);
     s32 objectIndex;
     s32 pad;
 
-    if (((params < SEKIHI_TYPE_0) || (params >= SEKIHI_TYPE_MAX)) || sOpaDLists[params] == NULL) {
+    if (((type < SEKIHI_TYPE_0) || (type >= SEKIHI_TYPE_MAX)) || (sOpaDLists[type] == NULL)) {
         Actor_Kill(&this->dyna.actor);
         return;
     }
 
-    if ((params == SEKIHI_TYPE_4) && ((gSaveContext.save.skullTokenCount & 0xFFFF) >= 30)) {
-        gSaveContext.save.weekEventReg[13] |= 0x20;
+    if ((type == SEKIHI_TYPE_4) &&
+        ((gSaveContext.save.saveInfo.skullTokenCount & 0xFFFF) >= SPIDER_HOUSE_TOKENS_REQUIRED)) {
+        // For some reason the mikau grave sets the flag instead of something in the spider house on exit.
+        SET_WEEKEVENTREG(WEEKEVENTREG_OCEANSIDE_SPIDER_HOUSE_BUYER_MOVED_IN);
     }
-    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[params]);
+
+    objectIndex = Object_GetIndex(&play->objectCtx, sObjectIds[type]);
     if (objectIndex >= 0) {
         this->objectIndex = objectIndex;
     }
     this->actionFunc = func_80A44DE8;
-    this->opaDList = sOpaDLists[params];
-    this->xluDList = sXluDLists[params];
-    this->dyna.actor.textId = sTextIds[params];
+    this->opaDList = sOpaDLists[type];
+    this->xluDList = sXluDLists[type];
+    this->dyna.actor.textId = sTextIds[type];
     this->dyna.actor.focus.pos.y = this->dyna.actor.world.pos.y + 60.0f;
     Actor_SetScale(&this->dyna.actor, 0.1f);
 }
@@ -82,16 +89,17 @@ void EnSekihi_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80A44DE8(EnSekihi* this, PlayState* play) {
     CollisionHeader* colHeader = NULL;
-    s32 params;
+    s32 type;
     CollisionHeader* colHeaders[] = {
-        &gSekihilCol, &gSekihigCol, &gSekihinCol, &gSekihizCol, &gObjectZogCol,
+        &gSunsSongGraveTriforceCol, &gSunsSongGraveGoronCol, &gSunsSongGraveKokiriCol,
+        &gSongOfSoaringPedestalCol, &gMikauGraveCol,
     };
 
-    params = ENSIKIHI_GET_TYPE(&this->dyna.actor);
+    type = ENSIKIHI_GET_TYPE(&this->dyna.actor);
     if (Object_IsLoaded(&play->objectCtx, this->objectIndex)) {
         this->dyna.actor.objBankIndex = this->objectIndex;
         this->dyna.actor.draw = EnSekihi_Draw;
-        if (params == SEKIHI_TYPE_4) {
+        if (type == SEKIHI_TYPE_4) {
             this->actionFunc = func_80A450B0;
         } else {
             this->actionFunc = EnSekihi_DoNothing;
@@ -99,12 +107,12 @@ void func_80A44DE8(EnSekihi* this, PlayState* play) {
 
         Actor_SetObjectDependency(play, &this->dyna.actor);
         DynaPolyActor_Init(&this->dyna, 0);
-        if (colHeaders[params] != NULL) {
-            CollisionHeader_GetVirtual(colHeaders[params], &colHeader);
+        if (colHeaders[type] != NULL) {
+            CollisionHeader_GetVirtual(colHeaders[type], &colHeader);
         }
 
         this->dyna.bgId = DynaPoly_SetBgActor(play, &play->colCtx.dyna, &this->dyna.actor, colHeader);
-        if ((params == SEKIHI_TYPE_4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
+        if ((type == SEKIHI_TYPE_4) && (INV_CONTENT(ITEM_MASK_ZORA) != ITEM_MASK_ZORA)) {
             Actor_Kill(&this->dyna.actor);
         }
     }
@@ -116,16 +124,16 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
             if (Message_ShouldAdvance(play) && (play->msgCtx.currentTextId == 0x1019)) {
                 switch (play->msgCtx.choiceIndex) {
                     case 0:
-                        func_8019F208();
-                        func_80151938(play, 0x101A);
+                        Audio_PlaySfx_MessageDecide();
+                        Message_ContinueTextbox(play, 0x101A);
                         break;
                     case 1:
-                        func_8019F208();
-                        func_80151938(play, 0x101B);
+                        Audio_PlaySfx_MessageDecide();
+                        Message_ContinueTextbox(play, 0x101B);
                         break;
                     case 2:
-                        func_8019F230();
-                        func_801477B4(play);
+                        Audio_PlaySfx_MessageCancel();
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80A450B0;
                         break;
                 }
@@ -137,11 +145,11 @@ void func_80A44F40(EnSekihi* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1018:
-                        func_80151938(play, play->msgCtx.currentTextId + 1);
+                        Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                         break;
                     case 0x101A:
                     case 0x101B:
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80A450B0;
                         break;
                 }
@@ -154,7 +162,7 @@ void func_80A450B0(EnSekihi* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->dyna.actor, &play->state)) {
         this->actionFunc = func_80A44F40;
     } else if ((this->dyna.actor.xzDistToPlayer < 100.0f) && (Player_IsFacingActor(&this->dyna.actor, 0x2600, play))) {
-        func_800B8614(&this->dyna.actor, play, 120.0f);
+        Actor_OfferTalk(&this->dyna.actor, play, 120.0f);
     }
 }
 
@@ -174,12 +182,12 @@ void EnSekihi_Draw(Actor* thisx, PlayState* play) {
 
     if (this->xluDList != NULL) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPDisplayList(POLY_XLU_DISP++, this->xluDList);
     }
 
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPDisplayList(POLY_OPA_DISP++, this->opaDList);
 
     CLOSE_DISPS(play->state.gfxCtx);

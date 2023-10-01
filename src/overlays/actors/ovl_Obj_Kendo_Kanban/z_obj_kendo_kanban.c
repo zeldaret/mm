@@ -28,7 +28,7 @@
 typedef enum {
     /* -1 */ OBJKENDOKANBAN_DIR_DOWN = -1,
     /*  0 */ OBJKENDOKANBAN_DIR_UNDETERMINED,
-    /*  1 */ OBJKENDOKANBAN_DIR_UP,
+    /*  1 */ OBJKENDOKANBAN_DIR_UP
 } ObjKendoKanbanDirection;
 
 void ObjKendoKanban_Init(Actor* thisx, PlayState* play);
@@ -211,7 +211,7 @@ void ObjKendoKanban_Init(Actor* thisx, PlayState* play) {
         Collider_SetTrisVertices(&this->colliderTris, i, &vertices[0], &vertices[1], &vertices[2]);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->boardFragments = OBJKENDOKANBAN_GET_BOARD_FRAGMENTS(&this->actor);
     this->actor.gravity = -2.0f;
@@ -380,9 +380,9 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
         Matrix_Pop();
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_4);
 
-    if (this->actor.bgCheckFlags & 1) {
+    if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
         // When on the ground, apply some friction.
         this->actor.velocity.x *= 0.8f;
         this->actor.velocity.z *= 0.8f;
@@ -401,18 +401,18 @@ void ObjKendoKanban_HandlePhysics(ObjKendoKanban* this, PlayState* play) {
             return;
         }
 
-        if (this->actor.bgCheckFlags & 2) {
+        if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND_TOUCH) {
             // Upon touching the ground...
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
             this->hasNewRootCornerPos = false;
             this->actor.velocity.y *= 0.5f;
-        } else if (this->actor.bgCheckFlags & 1) {
+        } else if (this->actor.bgCheckFlags & BGCHECKFLAG_GROUND) {
             // When on the ground...
             this->numBounces++;
             this->hasNewRootCornerPos = false;
             this->actor.velocity.x *= 0.3f;
             this->actor.velocity.z *= 0.3f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
+            Actor_PlaySfx(&this->actor, NA_SE_EV_WOODPLATE_BOUND);
 
             // Adjust and (potentially) reverse rotation depending on the current
             // facing of the board and the direction in which it is rotating.
@@ -499,7 +499,7 @@ void ObjKendoKanban_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->boardFragments == OBJKENDOKANBAN_PART_FULL) {
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

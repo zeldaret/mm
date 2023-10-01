@@ -1,5 +1,7 @@
 #include "global.h"
 
+void __osPackReadData(void);
+
 s32 osContStartReadData(OSMesgQueue* mq) {
     s32 ret;
     int i;
@@ -34,20 +36,20 @@ void osContGetReadData(OSContPad* data) {
             data->stick_x = readformat.stick_x;
             data->stick_y = readformat.stick_y;
         }
-    };
+    }
 }
 
-void __osPackReadData() {
+void __osPackReadData(void) {
     u8* ptr;
     __OSContReadFormat readformat;
     int i;
 
     ptr = (u8*)__osContPifRam.ramarray;
-    for (i = 0; i < 0xF; i++) {
+    for (i = 0; i < ARRAY_COUNT(__osContPifRam.ramarray); i++) {
         __osContPifRam.ramarray[i] = 0;
     }
 
-    __osContPifRam.status = 1;
+    __osContPifRam.status = CONT_CMD_READ_BUTTON;
     readformat.dummy = 255;
     readformat.txsize = 1;
     readformat.rxsize = 4;

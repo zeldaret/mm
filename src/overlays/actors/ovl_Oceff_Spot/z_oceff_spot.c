@@ -62,8 +62,8 @@ void OceffSpot_Init(Actor* thisx, PlayState* play2) {
     this->actor.scale.y = 0.3f;
     this->unk16C = 0.0f;
     this->actor.world.pos.y = player->actor.world.pos.y;
-    this->actor.world.pos.x = player->bodyPartsPos[0].x;
-    this->actor.world.pos.z = player->bodyPartsPos[0].z;
+    this->actor.world.pos.x = player->bodyPartsPos[PLAYER_BODYPART_WAIST].x;
+    this->actor.world.pos.z = player->bodyPartsPos[PLAYER_BODYPART_WAIST].z;
 }
 
 void OceffSpot_Destroy(Actor* thisx, PlayState* play2) {
@@ -80,7 +80,7 @@ void OceffSpot_End(OceffSpot* this, PlayState* play) {
         this->unk16C -= 0.05f;
     } else {
         Actor_Kill(&this->actor);
-        if ((REG(15) != 0x190) && (play->msgCtx.unk12046 == 0)) {
+        if ((R_TIME_SPEED != 400) && !play->msgCtx.blockSunsSong) {
             if ((play->msgCtx.ocarinaAction != 0x39) || (play->msgCtx.ocarinaMode != 0xA)) {
                 gSaveContext.sunsSongState = SUNSSONG_START;
             }
@@ -117,11 +117,7 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
     temp = (1.0f - cosf(this->unk16C * M_PI)) * 0.5f;
     this->actionFunc(this, play);
 
-    switch (gSaveContext.save.playerForm) {
-        default:
-            scale = 1.0f;
-            break;
-
+    switch (GET_PLAYER_FORM) {
         case PLAYER_FORM_DEKU:
             scale = 1.3f;
             break;
@@ -132,6 +128,10 @@ void OceffSpot_Update(Actor* thisx, PlayState* play) {
 
         case PLAYER_FORM_GORON:
             scale = 2.0f;
+            break;
+
+        default:
+            scale = 1.0f;
             break;
     }
 
@@ -160,7 +160,7 @@ void OceffSpot_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C2DC(play->state.gfxCtx);
+    Gfx_SetupDL25_Xlu(play->state.gfxCtx);
 
     gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_XLU_DISP++, &sSunSongEffectCylinderMaterialDL);

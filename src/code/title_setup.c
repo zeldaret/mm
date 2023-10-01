@@ -7,12 +7,13 @@ void Setup_SetRegs(void) {
     XREG(11) = 0x14;
     XREG(12) = 0xE;
     XREG(13) = 0;
-    XREG(31) = 0;
+    R_A_BTN_Y_OFFSET = 0;
     R_MAGIC_CONSUME_TIMER_GIANTS_MASK = 80;
-    XREG(43) = 0xFC54;
 
-    XREG(44) = 0xD7;
-    XREG(45) = 0xDA;
+    R_THREE_DAY_CLOCK_Y_POS = 64596;
+    R_THREE_DAY_CLOCK_SUN_MOON_CUTOFF = 215;
+    R_THREE_DAY_CLOCK_HOUR_DIGIT_CUTOFF = 218;
+
     XREG(68) = 0x61;
     XREG(69) = 0x93;
     XREG(70) = 0x28;
@@ -27,26 +28,27 @@ void Setup_SetRegs(void) {
     XREG(88) = 0x56;
     XREG(89) = 0x258;
     XREG(90) = 0x1C2;
+
     R_STORY_FILL_SCREEN_ALPHA = 0;
     R_REVERSE_FLOOR_INDEX = 0;
     R_MINIMAP_DISABLED = false;
 
-    YREG(32) = 0x50;
-    YREG(33) = 0x3C;
-    YREG(34) = 0xDC;
-    YREG(35) = 0x3C;
-    YREG(36) = 0x50;
-    YREG(37) = 0xA0;
-    YREG(38) = 0xDC;
-    YREG(39) = 0xA0;
-    YREG(40) = 0x8E;
-    YREG(41) = 0x6C;
-    YREG(42) = 0xCC;
-    YREG(43) = 0xB1;
+    R_PICTO_FOCUS_BORDER_TOPLEFT_X = 80;
+    R_PICTO_FOCUS_BORDER_TOPLEFT_Y = 60;
+    R_PICTO_FOCUS_BORDER_TOPRIGHT_X = 220;
+    R_PICTO_FOCUS_BORDER_TOPRIGHT_Y = 60;
+    R_PICTO_FOCUS_BORDER_BOTTOMLEFT_X = 80;
+    R_PICTO_FOCUS_BORDER_BOTTOMLEFT_Y = 160;
+    R_PICTO_FOCUS_BORDER_BOTTOMRIGHT_X = 220;
+    R_PICTO_FOCUS_BORDER_BOTTOMRIGHT_Y = 160;
+    R_PICTO_FOCUS_ICON_X = 142;
+    R_PICTO_FOCUS_ICON_Y = 108;
+    R_PICTO_FOCUS_TEXT_X = 204;
+    R_PICTO_FOCUS_TEXT_Y = 177;
 }
 
 void Setup_InitImpl(SetupState* this) {
-    func_80185908();
+    SysFlashrom_InitFlash();
     SaveContext_Init();
     Setup_SetRegs();
 

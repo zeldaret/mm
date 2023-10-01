@@ -8,7 +8,7 @@
 #include "objects/object_pr/object_pr.h"
 #include "overlays/actors/ovl_En_Encount1/z_en_encount1.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_4 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_UNFRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnPr2*)thisx)
 
@@ -108,14 +108,14 @@ s16 D_80A75C3C[] = {
 void EnPr2_Init(Actor* thisx, PlayState* play) {
     EnPr2* this = THIS;
 
-    this->actor.targetMode = 3;
+    this->actor.targetMode = TARGET_MODE_3;
     this->actor.hintId = TATL_HINT_ID_SKULLFISH;
     this->unk_1EC = 255;
     this->actor.colChkInfo.health = 1;
     this->actor.colChkInfo.damageTable = &sDamageTable;
 
     SkelAnime_InitFlex(play, &this->skelAnime, &object_pr_Skel_004188, &object_pr_Anim_004340, this->jointTable,
-                       this->morphtable, 5);
+                       this->morphTable, 5);
     this->unk_1E0 = ENPR2_GET_F(&this->actor);
     this->actor.colChkInfo.mass = 10;
     Math_Vec3f_Copy(&this->unk_228, &this->actor.home.pos);
@@ -151,8 +151,8 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
                 Actor* parent = this->actor.parent;
 
                 if (parent->update != NULL) {
-                    this->unk_1C8 = ((EnEncount1*)parent)->unk_15A;
-                    this->path = SubS_GetPathByIndex(play, this->unk_1C8, 0x3F);
+                    this->pathIndex = ((EnEncount1*)parent)->pathIndex;
+                    this->path = SubS_GetPathByIndex(play, this->pathIndex, ENPR2_PATH_INDEX_NONE);
                     this->unk_208 = parent->world.rot.z * 20.0f;
                     if (this->unk_208 < 20.0f) {
                         this->unk_208 = 20.0f;
@@ -171,9 +171,11 @@ void EnPr2_Init(Actor* thisx, PlayState* play) {
         func_80A751B4(this);
     }
 
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f, 0x1D);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 20.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_4 | UPDBGCHECKINFO_FLAG_8 |
+                                UPDBGCHECKINFO_FLAG_10);
 
-    if (!(this->actor.bgCheckFlags & 0x60)) {
+    if (!(this->actor.bgCheckFlags & (BGCHECKFLAG_WATER | BGCHECKFLAG_WATER_TOUCH))) {
         Actor_Kill(&this->actor);
     }
 }
@@ -188,8 +190,8 @@ void EnPr2_Destroy(Actor* thisx, PlayState* play) {
     if (this->actor.parent != NULL) {
         EnEncount1* encount1 = (EnEncount1*)this->actor.parent;
 
-        if ((encount1->actor.update != NULL) && (encount1->unk_14E > 0)) {
-            encount1->unk_14E--;
+        if ((encount1->actor.update != NULL) && (encount1->spawnActiveCount > 0)) {
+            encount1->spawnActiveCount--;
         }
     }
 }
@@ -267,13 +269,13 @@ void func_80A745FC(EnPr2* this, PlayState* play) {
         SkelAnime_Update(&this->skelAnime);
     }
 
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
 
-    if (this->path->unk2 < this->unk_1D0) {
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+    if (this->path->customValue < this->unk_1D0) {
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
     } else {
-        Math_ApproachF(&this->actor.speedXZ, 10.0f, 0.3f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 10.0f, 0.3f, 1.0f);
     }
 
     if ((this->path != NULL) && !SubS_CopyPointFromPath(this->path, this->unk_1D0, &this->unk_21C)) {
@@ -326,7 +328,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
     Vec3f sp3C;
 
     Math_ApproachF(&this->unk_204, 0.02f, 0.1f, 0.005f);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_EXIST - SFX_FLAG);
 
     if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 200.0f) {
         sp48 = true;
@@ -334,7 +336,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
     }
 
     if (this->unk_1F4 != 255) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->unk_1F4, 0, 1, 30, 100);
         if (this->unk_1F4 < 2) {
             Actor_Kill(&this->actor);
@@ -370,7 +372,7 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                         sp4C = true;
                         this->unk_1DC = 0;
                         Math_Vec3f_Copy(&this->unk_21C, &this->unk_228);
-                        Math_ApproachF(&this->actor.speedXZ, 3.0f, 0.3f, 0.2f);
+                        Math_ApproachF(&this->actor.speed, 3.0f, 0.3f, 0.2f);
                     }
                 }
                 break;
@@ -383,22 +385,23 @@ void func_80A748E8(EnPr2* this, PlayState* play) {
                     this->unk_1D6 = true;
                 }
 
-                Math_ApproachZeroF(&this->actor.speedXZ, 0.1f, 0.2f);
+                Math_ApproachZeroF(&this->actor.speed, 0.1f, 0.2f);
 
                 if (this->unk_1DA == 1) {
                     this->unk_1D8 = Rand_S16Offset(100, 100);
                     Math_Vec3f_Copy(&sp3C, &this->unk_228);
-                    sp3C.x += randPlusMinusPoint5Scaled(300.0f);
-                    sp3C.z += randPlusMinusPoint5Scaled(300.0f);
+                    sp3C.x += Rand_CenteredFloat(300.0f);
+                    sp3C.z += Rand_CenteredFloat(300.0f);
                     Math_Vec3f_Copy(&this->unk_21C, &sp3C);
                 }
             } else {
-                Math_ApproachF(&this->actor.speedXZ, 2.0f, 0.3f, 0.2f);
+                Math_ApproachF(&this->actor.speed, 2.0f, 0.3f, 0.2f);
                 Math_Vec3f_Copy(&sp3C, &this->actor.world.pos);
                 sp3C.x += Math_SinS(this->actor.world.rot.y) * 20.0f;
                 sp3C.z += Math_CosS(this->actor.world.rot.y) * 20.0f;
                 if (fabsf(this->actor.world.rot.y - this->unk_1EE) < 100.0f) {
-                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &sp3C, 20.0f) || (this->actor.bgCheckFlags & 8)) {
+                    if (BgCheck_SphVsFirstPoly(&play->colCtx, &sp3C, 20.0f) ||
+                        (this->actor.bgCheckFlags & BGCHECKFLAG_WALL)) {
                         this->unk_1DC = 0;
                         this->unk_1F2++;
                         Math_Vec3f_Copy(&this->unk_21C, &this->unk_228);
@@ -430,7 +433,7 @@ void func_80A74DEC(EnPr2* this, PlayState* play) {
 
     this->unk_1F0 = 0;
     func_80A74510(this, 1);
-    Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
+    Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_ATTACK);
     Math_Vec3f_Copy(&this->unk_21C, &player->actor.world.pos);
 
     this->unk_1EE = Math_Vec3f_Yaw(&this->actor.world.pos, &this->unk_21C);
@@ -452,7 +455,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
     }
 
     if (this->unk_1F4 != 255) {
-        this->actor.speedXZ = 0.0f;
+        this->actor.speed = 0.0f;
         Math_SmoothStepToS(&this->unk_1F4, 0, 1, 30, 100);
         if (this->unk_1F4 < 2) {
             Actor_Kill(&this->actor);
@@ -470,7 +473,7 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
         }
 
         this->unk_21C.y = player->actor.world.pos.y + 30.0f + this->unk_20C;
-        Math_ApproachF(&this->actor.speedXZ, 5.0f, 0.3f, 1.0f);
+        Math_ApproachF(&this->actor.speed, 5.0f, 0.3f, 1.0f);
         this->unk_1F0 = 0;
 
         if (this->unk_1E0 == 2) {
@@ -514,8 +517,8 @@ void func_80A74E90(EnPr2* this, PlayState* play) {
 
 void func_80A751B4(EnPr2* this) {
     this->unk_1EC = 0;
-    this->actor.flags |= ACTOR_FLAG_8000000;
-    this->actor.flags &= ~ACTOR_FLAG_1;
+    this->actor.flags |= ACTOR_FLAG_CANT_LOCK_ON;
+    this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
     if (this->unk_1E0 < 10) {
         func_80A74510(this, 2);
     } else {
@@ -532,10 +535,10 @@ void func_80A751B4(EnPr2* this) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
         this->actor.shape.rot.z = this->actor.world.rot.z;
         this->unk_1D8 = 30;
-        this->actor.speedXZ = Rand_ZeroFloat(0.5f);
-        this->actor.world.rot.y = randPlusMinusPoint5Scaled(0x8000);
+        this->actor.speed = Rand_ZeroFloat(0.5f);
+        this->actor.world.rot.y = Rand_CenteredFloat(0x8000);
     }
-    Actor_SetColorFilter(&this->actor, 0x4000, 255, 0, 10);
+    Actor_SetColorFilter(&this->actor, COLORFILTER_COLORFLAG_RED, 255, COLORFILTER_BUFFLAG_OPA, 10);
     this->unk_1D4 = 3;
     this->actionFunc = func_80A75310;
 }
@@ -593,9 +596,9 @@ void func_80A75310(EnPr2* this, PlayState* play) {
                 for (i = 0; i < 10; i++) {
                     Math_Vec3f_Copy(&sp64, &this->actor.world.pos);
 
-                    sp64.x += randPlusMinusPoint5Scaled(20.0f);
-                    sp64.y += randPlusMinusPoint5Scaled(5.0f);
-                    sp64.z += randPlusMinusPoint5Scaled(20.0f);
+                    sp64.x += Rand_CenteredFloat(20.0f);
+                    sp64.y += Rand_CenteredFloat(5.0f);
+                    sp64.z += Rand_CenteredFloat(20.0f);
                     frame = Rand_ZeroFloat(0.03f) + 0.07f;
 
                     EffectSsBubble_Spawn(play, &sp64, 0.0f, 5.0f, 5.0f, frame);
@@ -614,8 +617,8 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
         Actor_ApplyDamage(&this->actor);
         if ((this->actor.colChkInfo.health <= 0) && (this->unk_1D4 != 3)) {
             Enemy_StartFinishingBlow(play, &this->actor);
-            this->actor.speedXZ = 0.0f;
-            Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_PIRANHA_DEAD);
+            this->actor.speed = 0.0f;
+            Actor_PlaySfx(&this->actor, NA_SE_EN_PIRANHA_DEAD);
 
             if (this->unk_218 >= 0) {
                 Item_DropCollectibleRandom(play, NULL, &this->actor.world.pos, D_80A75C3C[this->unk_218]);
@@ -627,7 +630,7 @@ void func_80A755D8(EnPr2* this, PlayState* play) {
     }
 
     if (this->collider.base.atFlags & AT_BOUNCED) {
-        this->actor.speedXZ = -10.0f;
+        this->actor.speed = -10.0f;
     }
 }
 
@@ -660,7 +663,9 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
     Actor_SetFocus(&this->actor, 10.0f);
     func_80A755D8(this, play);
     Actor_MoveWithGravity(&this->actor);
-    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f, 0x1F);
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0, 10.0f, 20.0f,
+                            UPDBGCHECKINFO_FLAG_1 | UPDBGCHECKINFO_FLAG_2 | UPDBGCHECKINFO_FLAG_4 |
+                                UPDBGCHECKINFO_FLAG_8 | UPDBGCHECKINFO_FLAG_10);
 
     if (this->unk_1D6) {
         s32 i;
@@ -670,9 +675,9 @@ void EnPr2_Update(Actor* thisx, PlayState* play) {
         Math_Vec3f_Copy(&sp58, &this->unk_270);
         this->unk_1D6 = false;
 
-        sp58.x += randPlusMinusPoint5Scaled(20.0f);
-        sp58.y += randPlusMinusPoint5Scaled(5.0f);
-        sp58.z += randPlusMinusPoint5Scaled(20.0f);
+        sp58.x += Rand_CenteredFloat(20.0f);
+        sp58.y += Rand_CenteredFloat(5.0f);
+        sp58.z += Rand_CenteredFloat(20.0f);
 
         for (i = 0; i < 2; i++) {
             rand = Rand_ZeroFloat(0.03f) + 0.07f;
@@ -736,7 +741,7 @@ void EnPr2_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->unk_1F4 == 255) {
         gDPPipeSync(POLY_OPA_DISP++);

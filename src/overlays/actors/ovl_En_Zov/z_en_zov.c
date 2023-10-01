@@ -5,10 +5,9 @@
  */
 
 #include "z_en_zov.h"
-#include "objects/object_zov/object_zov.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY)
 
 #define THIS ((EnZov*)thisx)
 
@@ -60,20 +59,20 @@ static ColliderCylinderInit sCylinderInit = {
     { 20, 40, 0, { 0, 0, 0 } },
 };
 
-static AnimationHeader* D_80BD270C[] = {
-    &object_zov_Anim_00D3EC, &object_zov_Anim_008120, &object_zov_Anim_00B4CC, &object_zov_Anim_00A888,
-    &object_zov_Anim_00C510, &object_zov_Anim_00CAA8, &object_zov_Anim_008120, &object_zov_Anim_00A888,
-    &object_zov_Anim_002B5C, &object_zov_Anim_00418C, &object_zov_Anim_005A6C, &object_zov_Anim_0066A4,
-    &object_zov_Anim_0017D4, &object_zov_Anim_0023F4,
+static AnimationHeader* sAnimations[] = {
+    &gLuluLookDownAnim,    &gLuluPutHandsDownAnim, &gLuluLookForwardAndDownAnim, &gLuluLookAroundAnim,
+    &gLuluAngleHeadAnim,   &gLuluNodAnim,          &gLuluPutHandsDownAnim,       &gLuluLookAroundAnim,
+    &gLuluSingStartAnim,   &gLuluSingLoopAnim,     &gLuluLookForwardAndLeftAnim, &gLuluLookLeftLoopAnim,
+    &gLuluTurnAndWalkAnim, &gLuluWalkLoopAnim,
 };
 
 static Vec3f D_80BD2744 = { 400.0f, 600.0f, 0.0f };
 
 static Vec3f D_80BD2750 = { 400.0f, 600.0f, 0.0f };
 
-static TexturePtr D_80BD275C[] = { object_zov_Tex_013C38, object_zov_Tex_015138, object_zov_Tex_014138 };
+static TexturePtr sEyeTextures[] = { gLuluEyeOpenTex, gLuluEyeHalfTex, gLuluEyeClosedTex };
 
-static TexturePtr D_80BD2768[] = { object_zov_Tex_0135F8, object_zov_Tex_014538 };
+static TexturePtr sMouthTextures[] = { gLuluMouthClosedTex, gLuluMouthOpenTex };
 
 static s8 D_80BD2770[] = {
     1, 2, 1, 0, 0, 1, 2, 1,
@@ -86,15 +85,15 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
     this->picto.actor.colChkInfo.mass = MASS_IMMOVABLE;
     Actor_SetScale(&this->picto.actor, 0.01f);
     Collider_InitAndSetCylinder(play, &this->collider, &this->picto.actor, &sCylinderInit);
-    SkelAnime_InitFlex(play, &this->skelAnime, &object_zov_Skel_016258, &object_zov_Anim_00D3EC, this->jontTable,
-                       this->morphTable, 23);
-    Animation_PlayLoop(&this->skelAnime, &object_zov_Anim_00D3EC);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gLuluSkel, &gLuluLookDownAnim, this->jointTable, this->morphTable,
+                       LULU_LIMB_MAX);
+    Animation_PlayLoop(&this->skelAnime, &gLuluLookDownAnim);
 
     this->unk_320 = 0;
-    this->unk_32C = -1;
-    this->unk_326 = -1;
-    this->unk_328[0] = this->picto.actor.cutscene;
-    this->unk_328[1] = 0x7C;
+    this->csIdIndex = -1;
+    this->cueId = -1;
+    this->csIdList[0] = this->picto.actor.csId;
+    this->csIdList[1] = CS_ID_GLOBAL_TALK;
     this->unk_322 = 0;
     this->actionFunc = func_80BD1C84;
     this->picto.validationFunc = EnZov_ValidatePictograph;
@@ -107,7 +106,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
         case ENZOV_F_1:
             this->actionFunc = func_80BD1F1C;
             func_80BD1570(this, 9, ANIMMODE_LOOP);
-            if (!(gSaveContext.save.weekEventReg[55] & 0x80)) {
+            if (!CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE)) {
                 Actor_Kill(&this->picto.actor);
                 return;
             }
@@ -120,7 +119,7 @@ void EnZov_Init(Actor* thisx, PlayState* play) {
 
         default:
             this->unk_320 |= 2;
-            if ((gSaveContext.save.weekEventReg[55] & 0x80) || (gSaveContext.save.weekEventReg[53] & 0x20)) {
+            if (CHECK_WEEKEVENTREG(WEEKEVENTREG_CLEARED_GREAT_BAY_TEMPLE) || CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
                 Actor_Kill(&this->picto.actor);
             }
             break;
@@ -134,23 +133,23 @@ void EnZov_Destroy(Actor* thisx, PlayState* play) {
 }
 
 void func_80BD13DC(EnZov* this) {
-    if (this->unk_32C != -1) {
-        if (ActorCutscene_GetCurrentIndex() == this->unk_328[this->unk_32C]) {
-            ActorCutscene_Stop(this->unk_328[this->unk_32C]);
+    if (this->csIdIndex != -1) {
+        if (CutsceneManager_GetCurrentCsId() == this->csIdList[this->csIdIndex]) {
+            CutsceneManager_Stop(this->csIdList[this->csIdIndex]);
         }
-        this->unk_32C = -1;
+        this->csIdIndex = -1;
     }
 }
 
 void func_80BD1440(EnZov* this, s16 arg1) {
     func_80BD13DC(this);
-    this->unk_32C = arg1;
+    this->csIdIndex = arg1;
 }
 
-void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
+void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 morphFrames) {
     f32 frame;
 
-    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(D_80BD270C))) {
+    if (((index != this->unk_322) || (mode != ANIMMODE_LOOP)) && (index >= 0) && (index < ARRAY_COUNT(sAnimations))) {
         switch (index) {
             case 6:
                 frame = 30.0f;
@@ -164,8 +163,8 @@ void func_80BD1470(EnZov* this, s16 index, u8 mode, f32 transitionRate) {
                 frame = 0.0f;
                 break;
         }
-        Animation_Change(&this->skelAnime, D_80BD270C[index], 1.0f, frame, Animation_GetLastFrame(D_80BD270C[index]),
-                         mode, transitionRate);
+        Animation_Change(&this->skelAnime, sAnimations[index], 1.0f, frame, Animation_GetLastFrame(sAnimations[index]),
+                         mode, morphFrames);
         this->unk_322 = index;
     }
 }
@@ -185,9 +184,9 @@ s32 func_80BD15A4(EnZov* this, PlayState* play) {
 void func_80BD160C(EnZov* this, PlayState* play) {
     s32 textId = 0;
 
-    if (gSaveContext.save.weekEventReg[53] & 0x20) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_53_20)) {
         this->unk_320 &= ~2;
-        if (gSaveContext.save.playerForm != PLAYER_FORM_ZORA) {
+        if (GET_PLAYER_FORM != PLAYER_FORM_ZORA) {
             textId = 0x1024;
             if ((this->unk_322 == 0) || (this->unk_322 == 4)) {
                 func_80BD1570(this, 4, ANIMMODE_ONCE);
@@ -201,7 +200,7 @@ void func_80BD160C(EnZov* this, PlayState* play) {
             this->unk_320 |= 4;
             func_80BD1570(this, 3, ANIMMODE_ONCE);
         }
-    } else if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
+    } else if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
         func_80BD1570(this, 2, ANIMMODE_ONCE);
         this->actionFunc = func_80BD19FC;
         this->unk_324 = 10;
@@ -264,14 +263,14 @@ void func_80BD187C(EnZov* this, PlayState* play) {
             if (Message_ShouldAdvance(play)) {
                 switch (play->msgCtx.currentTextId) {
                     case 0x1022:
-                        func_80151938(play, 0x1023);
+                        Message_ContinueTextbox(play, 0x1023);
                         break;
 
                     case 0x1023:
                         if ((this->unk_322 != 6) && (this->unk_322 != 1)) {
                             func_80BD1570(this, 1, ANIMMODE_ONCE);
                         }
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BD1C84;
                         break;
 
@@ -279,14 +278,14 @@ void func_80BD187C(EnZov* this, PlayState* play) {
                         if (this->unk_322 != 6) {
                             func_80BD1570(this, 0, ANIMMODE_LOOP);
                         }
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BD1C84;
                         break;
 
                     default:
                         this->unk_320 &= ~1;
                         func_80BD1570(this, 0, ANIMMODE_LOOP);
-                        func_801477B4(play);
+                        Message_CloseTextbox(play);
                         this->actionFunc = func_80BD1C84;
                         break;
                 }
@@ -294,7 +293,7 @@ void func_80BD187C(EnZov* this, PlayState* play) {
             break;
 
         case TEXT_STATE_CLOSING:
-            func_801477B4(play);
+            Message_CloseTextbox(play);
             this->actionFunc = func_80BD1C84;
             this->unk_320 &= ~1;
             func_80BD1570(this, 0, ANIMMODE_LOOP);
@@ -328,12 +327,12 @@ void func_80BD19FC(EnZov* this, PlayState* play) {
 s32 func_80BD1AE0(EnZov* this, PlayState* play) {
     func_80BD1764(this);
 
-    if (Cutscene_CheckActorAction(play, 504)) {
-        s16 action = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 504)]->action;
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
+        s16 cueId = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_504)]->id;
 
-        if (action != this->unk_326) {
-            this->unk_326 = action;
-            switch (this->unk_326) {
+        if (this->cueId != cueId) {
+            this->cueId = cueId;
+            switch (this->cueId) {
                 case 1:
                     func_80BD1570(this, 0, ANIMMODE_LOOP);
                     break;
@@ -367,7 +366,7 @@ void func_80BD1BF0(EnZov* this, PlayState* play) {
 
 void func_80BD1C38(EnZov* this, PlayState* play) {
     if (func_80BD1AE0(this, play)) {
-        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetActorActionIndex(play, 504));
+        Cutscene_ActorTranslateAndYaw(&this->picto.actor, play, Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_504));
     }
 }
 
@@ -378,10 +377,10 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
         this->actionFunc = func_80BD187C;
         func_80BD160C(this, play);
     } else if (func_80BD15A4(this, play)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 
-    if (Cutscene_CheckActorAction(play, 0x1F8)) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
         this->actionFunc = func_80BD1BF0;
         func_80BD1BF0(this, play);
     }
@@ -390,8 +389,8 @@ void func_80BD1C84(EnZov* this, PlayState* play) {
 void func_80BD1D30(EnZov* this, PlayState* play) {
     u16 textId;
 
-    if (gSaveContext.save.playerForm == PLAYER_FORM_ZORA) {
-        if (gSaveContext.save.weekEventReg[79] & 1) {
+    if (GET_PLAYER_FORM == PLAYER_FORM_ZORA) {
+        if (CHECK_WEEKEVENTREG(WEEKEVENTREG_79_01)) {
             textId = 0x1032;
         } else {
             textId = 0x1033;
@@ -419,21 +418,21 @@ void func_80BD1DB8(EnZov* this, PlayState* play) {
             case 0x1036:
             case 0x1037:
             case 0x1038:
-                func_80151938(play, play->msgCtx.currentTextId + 1);
+                Message_ContinueTextbox(play, play->msgCtx.currentTextId + 1);
                 break;
 
             case 0x1039:
                 play->nextEntrance = play->setupExitList[ENZOV_GET_FE00(&this->picto.actor)];
-                play->transitionType = TRANS_TYPE_05;
+                play->transitionType = TRANS_TYPE_FADE_WHITE_FAST;
                 play->transitionTrigger = TRANS_TRIGGER_START;
-                gSaveContext.save.weekEventReg[78] |= 1;
+                SET_WEEKEVENTREG(WEEKEVENTREG_78_01);
                 this->actionFunc = func_80BD1D94;
                 play->msgCtx.msgLength = 0;
-                Audio_QueueSeqCmd(0x101400FF);
+                SEQCMD_STOP_SEQUENCE(SEQ_PLAYER_BGM_MAIN, 20);
                 break;
 
             default:
-                func_801477B4(play);
+                Message_CloseTextbox(play);
                 this->actionFunc = func_80BD1F1C;
                 break;
         }
@@ -452,7 +451,7 @@ void func_80BD1F1C(EnZov* this, PlayState* play) {
         this->actionFunc = func_80BD1DB8;
         func_80BD1D30(this, play);
     } else if (func_80BD15A4(this, play)) {
-        func_800B8614(&this->picto.actor, play, 120.0f);
+        Actor_OfferTalk(&this->picto.actor, play, 120.0f);
     }
 }
 
@@ -460,11 +459,11 @@ s32 EnZov_ValidatePictograph(PlayState* play, Actor* thisx) {
     s32 ret;
     EnZov* this = THIS;
 
-    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_HEAD, &this->picto.actor.focus.pos,
+    ret = Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_HEAD, &this->picto.actor.focus.pos,
                                   &this->picto.actor.shape.rot, 10.0f, 300.0f, -1);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_RIGHT_ARM, &this->unk_308,
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_RIGHT_ARM, &this->unk_308,
                                    &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
-    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTOGRAPH_LULU_LEFT_ARM, &this->unk_314,
+    ret |= Snap_ValidatePictograph(play, &this->picto.actor, PICTO_VALID_LULU_LEFT_ARM, &this->unk_314,
                                    &this->picto.actor.shape.rot, 50.0f, 160.0f, 0x3000);
     return ret;
 }
@@ -476,11 +475,11 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
     Actor_MoveWithGravity(&this->picto.actor);
     Collider_UpdateCylinder(&this->picto.actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
-    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 10.0f, 10.0f, 10.0f, 4);
+    Actor_UpdateBgCheckInfo(play, &this->picto.actor, 10.0f, 10.0f, 10.0f, UPDBGCHECKINFO_FLAG_4);
 
     this->actionFunc(this, play);
 
-    if (!Cutscene_CheckActorAction(play, 0x1F8)) {
+    if (!Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_504)) {
         this->unk_320 &= ~0x10;
     }
 
@@ -506,14 +505,14 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
         this->unk_2EC = 0;
     }
 
-    if ((this->unk_32C != -1) && (ActorCutscene_GetCurrentIndex() != this->unk_328[this->unk_32C])) {
-        if ((this->unk_32C == 0) && (ActorCutscene_GetCurrentIndex() == 0x7C)) {
-            ActorCutscene_Stop(0x7C);
-            ActorCutscene_SetIntentToPlay(this->unk_328[this->unk_32C]);
-        } else if (ActorCutscene_GetCanPlayNext(this->unk_328[this->unk_32C])) {
-            ActorCutscene_Start(this->unk_328[this->unk_32C], &this->picto.actor);
+    if ((this->csIdIndex != -1) && (CutsceneManager_GetCurrentCsId() != this->csIdList[this->csIdIndex])) {
+        if ((this->csIdIndex == 0) && (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK)) {
+            CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
+        } else if (CutsceneManager_IsNext(this->csIdList[this->csIdIndex])) {
+            CutsceneManager_Start(this->csIdList[this->csIdIndex], &this->picto.actor);
         } else {
-            ActorCutscene_SetIntentToPlay(this->unk_328[this->unk_32C]);
+            CutsceneManager_Queue(this->csIdList[this->csIdIndex]);
         }
     }
 }
@@ -521,14 +520,14 @@ void EnZov_Update(Actor* thisx, PlayState* play) {
 s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, Actor* thisx) {
     EnZov* this = THIS;
 
-    if (limbIndex == 12) {
+    if (limbIndex == LULU_LIMB_HEAD) {
         rot->x += this->unk_2F0.y;
         if ((this->unk_320 & 0x10) && (this->unk_322 == 0)) {
             rot->z += this->unk_2F0.x;
         }
     }
 
-    if (limbIndex == 11) {
+    if (limbIndex == LULU_LIMB_TORSO) {
         rot->x += this->unk_2F6.y;
     }
     return false;
@@ -537,17 +536,17 @@ s32 EnZov_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* p
 void EnZov_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, Actor* thisx) {
     EnZov* this = THIS;
 
-    if (limbIndex == 12) {
+    if (limbIndex == LULU_LIMB_HEAD) {
         Matrix_MultVec3f(&D_80BD2744, &this->picto.actor.focus.pos);
         Math_Vec3f_Copy(&this->unk_2FC, &this->picto.actor.focus.pos);
         this->unk_2FC.y += 10.0f;
     }
 
-    if (limbIndex == 18) {
+    if (limbIndex == LULU_LIMB_RIGHT_UPPER_ARM) {
         Matrix_MultVec3f(&D_80BD2750, &this->unk_308);
     }
 
-    if (limbIndex == 13) {
+    if (limbIndex == LULU_LIMB_LEFT_UPPER_ARM) {
         Matrix_MultVec3f(&D_80BD2750, &this->unk_314);
     }
 }
@@ -563,7 +562,7 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     phi_a1 = 0;
     curFrame = this->skelAnime.curFrame;
     phi_v1 = this->unk_2EC;
@@ -625,8 +624,8 @@ void EnZov_Draw(Actor* thisx, PlayState* play) {
     }
 
     gfx = POLY_OPA_DISP;
-    gSPSegment(&gfx[0], 0x09, Lib_SegmentedToVirtual(D_80BD275C[phi_v1]));
-    gSPSegment(&gfx[1], 0x08, Lib_SegmentedToVirtual(D_80BD2768[phi_a1]));
+    gSPSegment(&gfx[0], 0x09, Lib_SegmentedToVirtual(sEyeTextures[phi_v1]));
+    gSPSegment(&gfx[1], 0x08, Lib_SegmentedToVirtual(sMouthTextures[phi_a1]));
     POLY_OPA_DISP = &gfx[2];
 
     CLOSE_DISPS(play->state.gfxCtx);

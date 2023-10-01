@@ -15,7 +15,7 @@ void DmTag_Destroy(Actor* thisx, PlayState* play);
 void DmTag_Update(Actor* thisx, PlayState* play);
 
 void func_80C229AC(DmTag* this, PlayState* play);
-void func_80C229EC(DmTag* this, PlayState* play);
+void DmTag_DoNothing(DmTag* this, PlayState* play);
 void func_80C229FC(DmTag* this, PlayState* play);
 
 ActorInit Dm_Tag_InitVars = {
@@ -65,37 +65,37 @@ Actor* func_80C22350(DmTag* this, PlayState* play, u8 actorCat, s16 actorId) {
     return foundActor;
 }
 
-s32 func_80C22400(DmTag* this, s16 arg1) {
+s32 func_80C22400(DmTag* this, s16 csId) {
     s32 ret = false;
 
-    if (ActorCutscene_GetCurrentIndex() == 0x7C) {
-        ActorCutscene_Stop(0x7C);
-        ActorCutscene_SetIntentToPlay(arg1);
-    } else if (ActorCutscene_GetCanPlayNext(arg1)) {
-        ActorCutscene_StartAndSetUnkLinkFields(arg1, &this->actor);
+    if (CutsceneManager_GetCurrentCsId() == CS_ID_GLOBAL_TALK) {
+        CutsceneManager_Stop(CS_ID_GLOBAL_TALK);
+        CutsceneManager_Queue(csId);
+    } else if (CutsceneManager_IsNext(csId)) {
+        CutsceneManager_StartWithPlayerCs(csId, &this->actor);
         ret = true;
     } else {
-        ActorCutscene_SetIntentToPlay(arg1);
+        CutsceneManager_Queue(csId);
     }
     return ret;
 }
 
-s16 func_80C2247C(DmTag* this, s32 arg1) {
+s16 func_80C2247C(DmTag* this, s32 numCutscenes) {
     s32 i;
-    s16 cs = this->actor.cutscene;
+    s16 csId = this->actor.csId;
 
-    for (i = 0; i < arg1; i++) {
-        cs = ActorCutscene_GetAdditionalCutscene(cs);
+    for (i = 0; i < numCutscenes; i++) {
+        csId = CutsceneManager_GetAdditionalCsId(csId);
     }
 
-    return cs;
+    return csId;
 }
 
 s32 func_80C224D8(DmTag* this, PlayState* play) {
     s32 pad;
     Actor* sp30;
     Actor* sp2C;
-    s16 sp2A = this->actor.cutscene;
+    s16 csId = this->actor.csId;
     s32 ret = false;
 
     sp30 = func_80C22350(this, play, ACTORCAT_NPC, ACTOR_EN_AN);
@@ -103,9 +103,9 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
     switch (this->unk_1A4) {
         case 0:
-            if (func_80C22400(this, sp2A)) {
+            if (func_80C22400(this, csId)) {
                 if ((sp2C != NULL) && (sp2C->update != NULL)) {
-                    Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(sp2A)), sp2C);
+                    Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(csId)), sp2C);
                 }
                 this->unk_1A4++;
                 ret = true;
@@ -114,7 +114,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
         case 1:
             if ((sp30 != NULL) && (sp30->update != NULL)) {
-                Camera_SetTargetActor(Play_GetCamera(play, ActorCutscene_GetCurrentSubCamId(func_80C2247C(this, 0))),
+                Camera_SetTargetActor(Play_GetCamera(play, CutsceneManager_GetCurrentSubCamId(func_80C2247C(this, 0))),
                                       sp30);
             }
             this->unk_1A4++;
@@ -122,7 +122,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 2:
-            ActorCutscene_Stop(func_80C2247C(this, 0));
+            CutsceneManager_Stop(func_80C2247C(this, 0));
             if (func_80C22400(this, func_80C2247C(this, 1))) {
                 this->unk_1A4++;
                 ret = true;
@@ -130,7 +130,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 3:
-            ActorCutscene_Stop(func_80C2247C(this, 1));
+            CutsceneManager_Stop(func_80C2247C(this, 1));
             if (func_80C22400(this, func_80C2247C(this, 2))) {
                 this->unk_1A4++;
                 ret = true;
@@ -138,7 +138,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 4:
-            ActorCutscene_Stop(func_80C2247C(this, 2));
+            CutsceneManager_Stop(func_80C2247C(this, 2));
             if (func_80C22400(this, func_80C2247C(this, 3))) {
                 this->unk_1A4++;
                 ret = true;
@@ -146,7 +146,7 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 5:
-            ActorCutscene_Stop(func_80C2247C(this, 3));
+            CutsceneManager_Stop(func_80C2247C(this, 3));
             if (func_80C22400(this, func_80C2247C(this, 4))) {
                 this->unk_1A4++;
                 ret = true;
@@ -154,13 +154,16 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
             break;
 
         case 6:
-            func_800B7298(play, &this->actor, 7);
+            func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
             play->nextEntrance = ENTRANCE(STOCK_POT_INN, 5);
             gSaveContext.nextCutsceneIndex = 0;
             play->transitionTrigger = TRANS_TRIGGER_START;
-            play->transitionType = TRANS_TYPE_02;
-            gSaveContext.nextTransitionType = TRANS_TYPE_06;
+            play->transitionType = TRANS_TYPE_FADE_BLACK;
+            gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
             this->unk_1A4++;
+            break;
+
+        default:
             break;
     }
     return ret;
@@ -168,12 +171,12 @@ s32 func_80C224D8(DmTag* this, PlayState* play) {
 
 s32 func_80C227E8(DmTag* this, PlayState* play) {
     if (this->unk_1A4 == 0) {
-        func_800B7298(play, &this->actor, 7);
+        func_800B7298(play, &this->actor, PLAYER_CSMODE_WAIT);
         play->nextEntrance = ENTRANCE(STOCK_POT_INN, 4);
         gSaveContext.nextCutsceneIndex = 0;
         play->transitionTrigger = TRANS_TRIGGER_START;
-        play->transitionType = TRANS_TYPE_02;
-        gSaveContext.nextTransitionType = TRANS_TYPE_06;
+        play->transitionType = TRANS_TYPE_FADE_BLACK;
+        gSaveContext.nextTransitionType = TRANS_TYPE_FADE_BLACK_SLOW;
         this->unk_1A4++;
     }
     return false;
@@ -190,9 +193,13 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
                 return D_80C22BF0;
             }
             return D_80C22C30;
+
         case 2:
             this->msgEventCallback = func_80C224D8;
             return D_80C22BFC;
+
+        default:
+            break;
     }
     return NULL;
 }
@@ -200,24 +207,23 @@ s32* func_80C22880(DmTag* this, PlayState* play) {
 s32 func_80C2291C(DmTag* this, PlayState* play) {
     s32 ret = false;
 
-    if (this->unk_18C & 7) {
-        if (Actor_ProcessTalkRequest(&this->actor, &play->state)) {
-            this->unk_18C |= 8;
-            SubS_UpdateFlags(&this->unk_18C, 0, 7);
-            this->msgEventScript = func_80C22880(this, play);
-            this->actionFunc = func_80C229FC;
-            ret = true;
-        }
+    if (((this->unk_18C & SUBS_OFFER_MODE_MASK) != SUBS_OFFER_MODE_NONE) &&
+        Actor_ProcessTalkRequest(&this->actor, &play->state)) {
+        this->unk_18C |= 8;
+        SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_NONE, SUBS_OFFER_MODE_MASK);
+        this->msgEventScript = func_80C22880(this, play);
+        this->actionFunc = func_80C229FC;
+        ret = true;
     }
     return ret;
 }
 
 void func_80C229AC(DmTag* this, PlayState* play) {
-    SubS_UpdateFlags(&this->unk_18C, 3, 7);
-    this->actor.flags |= ACTOR_FLAG_1;
+    SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_ONSCREEN, SUBS_OFFER_MODE_MASK);
+    this->actor.flags |= ACTOR_FLAG_TARGETABLE;
 }
 
-void func_80C229EC(DmTag* this, PlayState* play) {
+void DmTag_DoNothing(DmTag* this, PlayState* play) {
 }
 
 void func_80C229FC(DmTag* this, PlayState* play) {
@@ -230,7 +236,7 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
     DmTag* this = (DmTag*)thisx;
     Player* player = GET_PLAYER(play);
 
-    if (gSaveContext.save.weekEventReg[85] & 4) {
+    if (CHECK_WEEKEVENTREG(WEEKEVENTREG_85_04)) {
         Actor_Kill(&this->actor);
         return;
     }
@@ -239,13 +245,13 @@ void DmTag_Init(Actor* thisx, PlayState* play) {
         player->stateFlags1 |= PLAYER_STATE1_20;
         this->unk_18E = 2;
         this->unk_18C = 0;
-        SubS_UpdateFlags(&this->unk_18C, 4, 7);
-        this->actor.flags &= ~ACTOR_FLAG_1;
-        this->actionFunc = func_80C229EC;
+        SubS_SetOfferMode(&this->unk_18C, SUBS_OFFER_MODE_AUTO, SUBS_OFFER_MODE_MASK);
+        this->actor.flags &= ~ACTOR_FLAG_TARGETABLE;
+        this->actionFunc = DmTag_DoNothing;
     } else if (this->actor.room == 2) {
         Actor_Kill(&this->actor);
     } else {
-        this->actor.targetMode = 1;
+        this->actor.targetMode = TARGET_MODE_1;
         this->unk_18E = 1;
         this->unk_18C = 0;
         this->actionFunc = func_80C229AC;
@@ -260,6 +266,7 @@ void DmTag_Update(Actor* thisx, PlayState* play) {
 
     func_80C2291C(this, play);
     this->actionFunc(this, play);
-    func_8013C964(&this->actor, play, 40.0f, fabsf(this->actor.playerHeightRel) + 1.0f, 0, this->unk_18C & 7);
+    SubS_Offer(&this->actor, play, 40.0f, fabsf(this->actor.playerHeightRel) + 1.0f, PLAYER_IA_NONE,
+               this->unk_18C & SUBS_OFFER_MODE_MASK);
     Actor_SetFocus(&this->actor, 0.0f);
 }

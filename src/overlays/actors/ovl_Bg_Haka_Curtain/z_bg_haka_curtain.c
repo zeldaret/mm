@@ -49,7 +49,7 @@ void BgHakaCurtain_Init(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
 
     Actor_ProcessInitChain(&this->dyna.actor, sInitChain);
-    DynaPolyActor_Init(&this->dyna, 1);
+    DynaPolyActor_Init(&this->dyna, DYNA_TRANSFORM_POS);
     DynaPolyActor_LoadMesh(play, &this->dyna, &object_haka_obj_Colheader_001588);
     if (Flags_GetClear(play, this->dyna.actor.room)) {
         func_80B6DE80(this);
@@ -79,12 +79,12 @@ void func_80B6DCEC(BgHakaCurtain* this) {
 }
 
 void func_80B6DD00(BgHakaCurtain* this, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(this->dyna.actor.cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(this->dyna.actor.cutscene, &this->dyna.actor);
+    if (CutsceneManager_IsNext(this->dyna.actor.csId)) {
+        CutsceneManager_StartWithPlayerCs(this->dyna.actor.csId, &this->dyna.actor);
         func_80B6DD5C(this);
         return;
     }
-    ActorCutscene_SetIntentToPlay(this->dyna.actor.cutscene);
+    CutsceneManager_Queue(this->dyna.actor.csId);
 }
 
 void func_80B6DD5C(BgHakaCurtain* this) {
@@ -110,7 +110,7 @@ void func_80B6DD9C(BgHakaCurtain* this, PlayState* play) {
         func_80B6DE80(this);
         return;
     }
-    func_800B9010(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
+    Actor_PlaySfx_Flagged(&this->dyna.actor, NA_SE_EV_CURTAIN_DOWN - SFX_FLAG);
 }
 
 void func_80B6DE80(BgHakaCurtain* this) {
@@ -123,11 +123,11 @@ void func_80B6DEA8(BgHakaCurtain* this, PlayState* play) {
 
 void BgHakaCurtain_Update(Actor* thisx, PlayState* play) {
     BgHakaCurtain* this = THIS;
-    CsCmdActorAction* actorAction;
+    CsCmdActorCue* cue;
 
-    if (Cutscene_CheckActorAction(play, 469)) {
-        actorAction = play->csCtx.actorActions[Cutscene_GetActorActionIndex(play, 469)];
-        if (actorAction->startFrame == play->csCtx.frames && actorAction->action == 2) {
+    if (Cutscene_IsCueInChannel(play, CS_CMD_ACTOR_CUE_469)) {
+        cue = play->csCtx.actorCues[Cutscene_GetCueChannel(play, CS_CMD_ACTOR_CUE_469)];
+        if ((cue->startFrame == play->csCtx.curFrame) && (cue->id == 2)) {
             func_80B6DD80(this);
         }
     }

@@ -6,7 +6,7 @@
 
 #include "z_en_boj_05.h"
 
-#define FLAGS (ACTOR_FLAG_1 | ACTOR_FLAG_8 | ACTOR_FLAG_10)
+#define FLAGS (ACTOR_FLAG_TARGETABLE | ACTOR_FLAG_FRIENDLY | ACTOR_FLAG_10)
 
 #define THIS ((EnBoj05*)thisx)
 
@@ -29,9 +29,12 @@ ActorInit En_Boj_05_InitVars = {
 
 void EnBoj05_Init(Actor* thisx, PlayState* play) {
 }
+
 void EnBoj05_Destroy(Actor* thisx, PlayState* play) {
 }
+
 void EnBoj05_Update(Actor* thisx, PlayState* play) {
 }
+
 void EnBoj05_Draw(Actor* thisx, PlayState* play) {
 }

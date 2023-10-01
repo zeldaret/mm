@@ -8,12 +8,14 @@ struct EnDnp;
 
 typedef void (*EnDnpActionFunc)(struct EnDnp*, PlayState*);
 
-#define EN_DNP_GET_TYPE(thisx) ((thisx)->params & 7)
+#define DEKU_PRINCESS_GET_TYPE(thisx) ((thisx)->params & 7)
+
+#define DEKU_PRINCESS_PARAMS(type) ((type) & 7)
 
 typedef enum {
-    /* 0x0 */ EN_DNP_TYPE_WOODFALL_TEMPLE,
-    /* 0x1 */ EN_DNP_TYPE_RELEASED_FROM_BOTTLE,
-    /* 0x2 */ EN_DNP_TYPE_DEKU_KINGS_CHAMBER,
+    /* 0 */ DEKU_PRINCESS_TYPE_WOODFALL_TEMPLE,
+    /* 1 */ DEKU_PRINCESS_TYPE_RELEASED_FROM_BOTTLE,
+    /* 2 */ DEKU_PRINCESS_TYPE_DEKU_KINGS_CHAMBER
 } EnDnpType;
 
 typedef struct EnDnp {
@@ -26,7 +28,7 @@ typedef struct EnDnp {
     /* 0x1EA */ Vec3s jointTable[DEKU_PRINCESS_LIMB_MAX];
     /* 0x286 */ Vec3s morphTable[DEKU_PRINCESS_LIMB_MAX];
     /* 0x322 */ u16 unk_322;
-    /* 0x324 */ u8 unk_324;
+    /* 0x324 */ u8 cueId;
     /* 0x328 */ s32 unk_328;
     /* 0x32C */ UNK_TYPE1 unk_32C[0x2];
     /* 0x32E */ s16 unk_32E;

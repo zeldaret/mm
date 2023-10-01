@@ -143,16 +143,16 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
     s32 pad1;
 
     if (this->pendingAction != OBJ_SYOKUDAI_PENDING_ACTION_NONE) {
-        if (ActorCutscene_GetCurrentIndex() != thisx->cutscene) {
-            if (ActorCutscene_GetCanPlayNext(thisx->cutscene) != 0) {
-                ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
+        if (CutsceneManager_GetCurrentCsId() != thisx->csId) {
+            if (CutsceneManager_IsNext(thisx->csId)) {
+                CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
                 if (this->pendingAction >= OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH) {
                     Flags_SetSwitch(play, switchFlag);
                 }
             } else {
-                ActorCutscene_SetIntentToPlay(thisx->cutscene);
+                CutsceneManager_Queue(thisx->csId);
             }
-        } else if (func_800F22C4(thisx->cutscene, thisx) != 0) {
+        } else if (func_800F22C4(thisx->csId, thisx) != 0) {
             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_NONE;
         }
@@ -171,6 +171,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
         } else {
             s32 interaction = OBJ_SYOKUDAI_INTERACTION_NONE;
             u32 flameColliderHurtboxDmgFlags = 0;
+
             player = GET_PLAYER(play);
 
             if (OBJ_SYOKUDAI_GET_START_LIT(thisx)) {
@@ -196,7 +197,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                 if (this->flameCollider.info.acHitInfo->toucher.dmgFlags & 0x820) {
                     interaction = OBJ_SYOKUDAI_INTERACTION_ARROW_FA;
                 }
-            } else if (player->itemActionParam == PLAYER_AP_STICK) {
+            } else if (player->heldItemAction == PLAYER_IA_DEKU_STICK) {
                 Vec3f stickTipSeparationVec;
 
                 Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &thisx->world.pos, &stickTipSeparationVec);
@@ -210,7 +211,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     if (interaction <= OBJ_SYOKUDAI_INTERACTION_STICK) {
                         if (player->unk_B28 == 0) {
                             player->unk_B28 = 0xD2;
-                            Audio_PlaySfxAtPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
+                            Audio_PlaySfx_AtPos(&thisx->projectedPos, NA_SE_EV_FLAME_IGNITION);
                         } else if (player->unk_B28 < 0xC8) {
                             player->unk_B28 = 0xC8;
                         }
@@ -240,14 +241,15 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
                     if (groupSize == 0) {
                         if ((type == OBJ_SYOKUDAI_TYPE_NO_SWITCH) && (switchFlag == 0x7F)) {
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
-                        } else if (thisx->cutscene >= 0) {
+                        } else if (thisx->csId >= 0) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             Flags_SetSwitch(play, switchFlag);
                             this->snuffTimer = OBJ_SYOKUDAI_SNUFF_NEVER;
                         }
                     } else {
-                        if (++sNumLitTorchesInGroup >= groupSize) {
+                        sNumLitTorchesInGroup++;
+                        if (sNumLitTorchesInGroup >= groupSize) {
                             this->pendingAction = OBJ_SYOKUDAI_PENDING_ACTION_CUTSCENE_AND_SWITCH;
                         } else {
                             this->snuffTimer =
@@ -279,7 +281,7 @@ void ObjSyokudai_Update(Actor* thisx, PlayState* play2) {
         }
         lightIntensity = Rand_ZeroOne() * 127;
         lightIntensity += 128;
-        func_800B9010(thisx, NA_SE_EV_TORCH - SFX_FLAG);
+        Actor_PlaySfx_Flagged(thisx, NA_SE_EV_TORCH - SFX_FLAG);
     }
     Lights_PointSetColorAndRadius(&this->lightInfo, lightIntensity, lightIntensity * 0.7f, 0, lightRadius);
     this->flameTexScroll++;
@@ -292,7 +294,8 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
     f32 flameScale;
 
     OPEN_DISPS(play->state.gfxCtx);
-    func_8012C28C(play->state.gfxCtx);
+
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, sDLists[OBJ_SYOKUDAI_GET_TYPE(thisx)]);
     if (this->snuffTimer != OBJ_SYOKUDAI_SNUFF_OUT) {
@@ -306,7 +309,7 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
             flameScale = (f32)this->snuffTimer / OBJ_SYOKUDAI_SNUFF_DEFAULT;
         }
         flameScale *= 0.0027f;
-        func_8012C2DC(play->state.gfxCtx);
+        Gfx_SetupDL25_Xlu(play->state.gfxCtx);
         gSPSegment(POLY_XLU_DISP++, 0x08,
                    Gfx_TwoTexScroll(play->state.gfxCtx, 0, 0, 0, 0x20, 0x40, 1, 0,
                                     (this->flameTexScroll * -OBJ_SYOKUDAI_SNUFF_DEFAULT) & 0x1FF, 0x20, 0x80));
@@ -319,5 +322,6 @@ void ObjSyokudai_Draw(Actor* thisx, PlayState* play) {
         gSPMatrix(POLY_XLU_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPDisplayList(POLY_XLU_DISP++, gEffFire1DL);
     }
+
     CLOSE_DISPS(play->state.gfxCtx);
 }

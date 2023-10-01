@@ -87,7 +87,7 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
         Matrix_RotateXS(thisx->shape.rot.x, MTXMODE_APPLY);
         Matrix_RotateZS(thisx->shape.rot.z, MTXMODE_APPLY);
         Matrix_MultVec3f(&D_8099FE3C, &destVec);
-        rotY = Math_FAtan2F(destVec.z, destVec.x);
+        rotY = Math_Atan2S_XY(destVec.z, destVec.x);
     }
     actor = Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, thisx->world.pos.x, thisx->world.pos.y, thisx->world.pos.z,
                         0, rotY, 0, (OBJMAKEKINSUTA_GET_1F(thisx) << 2) | 0xFF01);
@@ -95,11 +95,11 @@ void func_8099FB64(Actor* thisx, PlayState* play) {
         actor->parent = thisx;
         if (rotCheck) {
             actor->velocity.y = 10.0f;
-            actor->speedXZ = 3.0f;
+            actor->speed = 3.0f;
         } else {
             speedXZ = sqrtf((destVec.x * destVec.x) + (destVec.z * destVec.z));
             actor->velocity.y = (4 * destVec.y) + 4.0f;
-            actor->speedXZ = (2 * speedXZ) + 2.0f;
+            actor->speed = (2 * speedXZ) + 2.0f;
         }
     }
 }
@@ -109,11 +109,11 @@ void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
 
     if (Flags_GetSwitch(play, OBJMAKEKINSUTA_GET_SWITCH_FLAGS(thisx))) {
         this->actor.update = func_8099FD7C;
-        ActorCutscene_SetIntentToPlay(this->actor.cutscene);
+        CutsceneManager_Queue(this->actor.csId);
     } else {
         if (this->unk144 >= 0) {
             if (this->unk144 == 0) {
-                Actor_PlaySfxAtPos(&this->actor, NA_SE_EN_STALGOLD_ROLL);
+                Actor_PlaySfx(&this->actor, NA_SE_EN_STALGOLD_ROLL);
                 if (Rand_ZeroOne() < 0.1f) {
                     this->unk144 = Rand_S16Offset(0x28, 0x50);
                 } else {
@@ -127,15 +127,15 @@ void ObjMakekinsuta_Update(Actor* thisx, PlayState* play) {
 }
 
 void func_8099FD7C(Actor* thisx, PlayState* play) {
-    if (ActorCutscene_GetCanPlayNext(thisx->cutscene)) {
-        ActorCutscene_StartAndSetUnkLinkFields(thisx->cutscene, thisx);
-        if (thisx->cutscene >= 0) {
-            func_800B7298(play, thisx, 4);
+    if (CutsceneManager_IsNext(thisx->csId)) {
+        CutsceneManager_StartWithPlayerCs(thisx->csId, thisx);
+        if (thisx->csId >= 0) {
+            func_800B7298(play, thisx, PLAYER_CSMODE_4);
         }
         func_8099FB64(thisx, play);
         thisx->update = Actor_Noop;
         thisx->flags &= ~ACTOR_FLAG_10;
     } else {
-        ActorCutscene_SetIntentToPlay(thisx->cutscene);
+        CutsceneManager_Queue(thisx->csId);
     }
 }

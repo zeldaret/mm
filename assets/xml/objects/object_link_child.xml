@@ -101,7 +101,7 @@
         <DList Name="object_link_child_DL_017270" Offset="0x17270" />
         <DList Name="gLinkHumanGildedSwordBladeDL" Offset="0x17310" />
         <DList Name="gLinkHumanRazorSwordSheathDL" Offset="0x17338" />
-        <DList Name="gLinkHumanHylianShieldDL" Offset="0x17458" />
+        <DList Name="gLinkHumanHerosShieldDL" Offset="0x17458" />
         <DList Name="gLinkHumanKokiriSwordSheathDL" Offset="0x17700" />
         <DList Name="object_link_child_DL_017818" Offset="0x17818" />
         <DList Name="gLinkHumanHookshotDL" Offset="0x17858" />
@@ -110,17 +110,17 @@
         <DList Name="object_link_child_DL_018490" Offset="0x18490" />
 
         <Texture Name="object_link_child_TLUT_018A40" OutName="tlut_018A40" Format="rgba16" Width="16" Height="16" Offset="0x18A40" />
-        <Texture Name="gLinkHumanHylianShieldFrontTLUT" OutName="hylian_shield_front_tlut" Format="rgba16" Width="16" Height="16" Offset="0x18C40" />
-        <Texture Name="gLinkHumanHylianShieldBackTLUT" OutName="hylian_shield_back_tlut" Format="rgba16" Width="16" Height="16" Offset="0x18E40" />
+        <Texture Name="gLinkHumanHerosShieldFrontTLUT" OutName="hylian_shield_front_tlut" Format="rgba16" Width="16" Height="16" Offset="0x18C40" />
+        <Texture Name="gLinkHumanHerosShieldBackTLUT" OutName="hylian_shield_back_tlut" Format="rgba16" Width="16" Height="16" Offset="0x18E40" />
         <Texture Name="gLinkHumanShieldHandleTLUT" OutName="shield_handle_tlut" Format="rgba16" Width="16" Height="16" Offset="0x19040" />
         <Texture Name="object_link_child_Tex_019240" OutName="tex_019240" Format="ci8" Width="8" Height="8" Offset="0x19240" />
-        <Texture Name="gLinkHumanHylianShieldFrontUpperTex" OutName="hylian_shield_front_upper" Format="ci8" Width="64" Height="32" Offset="0x19280" TlutOffset="0x18C40" />
+        <Texture Name="gLinkHumanHerosShieldFrontUpperTex" OutName="hylian_shield_front_upper" Format="ci8" Width="64" Height="32" Offset="0x19280" TlutOffset="0x18C40" />
         <Texture Name="object_link_child_Tex_019A80" OutName="tex_019A80" Format="ci8" Width="32" Height="64" Offset="0x19A80" />
         <Texture Name="object_link_child_Tex_01A280" OutName="tex_01A280" Format="ci8" Width="16" Height="16" Offset="0x1A280" />
         <Texture Name="object_link_child_Tex_01A380" OutName="tex_01A380" Format="rgba16" Width="64" Height="32" Offset="0x1A380" />
         <Texture Name="object_link_child_Tex_01B380" OutName="tex_01B380" Format="ci8" Width="16" Height="16" Offset="0x1B380" />
-        <Texture Name="gLinkHumanHylianShieldFrontLowerTex" OutName="hylian_shield_front_lower" Format="ci8" Width="64" Height="32" Offset="0x1B480" TlutOffset="0x18C40" />
-        <Texture Name="gLinkHumanHylianShieldBackTex" OutName="hylian_shield_back" Format="ci8" Width="16" Height="32" Offset="0x1BC80" TlutOffset="0x18E40" />
+        <Texture Name="gLinkHumanHerosShieldFrontLowerTex" OutName="hylian_shield_front_lower" Format="ci8" Width="64" Height="32" Offset="0x1B480" TlutOffset="0x18C40" />
+        <Texture Name="gLinkHumanHerosShieldBackTex" OutName="hylian_shield_back" Format="ci8" Width="16" Height="32" Offset="0x1BC80" TlutOffset="0x18E40" />
         <Texture Name="gLinkHumanShieldHandleTex" OutName="shield_handle" Format="ci8" Width="8" Height="16" Offset="0x1BE80" TlutOffset="0x19040" />
         <Texture Name="object_link_child_Tex_01BF00" OutName="tex_01BF00" Format="rgba16" Width="8" Height="8" Offset="0x1BF00" />
         <Texture Name="object_link_child_Tex_01BF80" OutName="tex_01BF80" Format="rgba16" Width="16" Height="16" Offset="0x1BF80" />
@@ -143,12 +143,12 @@
         <Mtx Name="gLinkHumanSheathedRazorSwordMtx" Offset="0x1DB00" />
         <DList Name="gLinkHumanSheathedRazorSwordDL" Offset="0x1DB40" />
         <DList Name="gLinkHumanSheathedGildedSwordDL" Offset="0x1DB60" />
-        <Mtx Name="gLinkHumanHylianShieldMtx" Offset="0x1DB88" />
-        <DList Name="gLinkHumanHylianShieldWithMtxDL" Offset="0x1DBC8" />
+        <Mtx Name="gLinkHumanHerosShieldMtx" Offset="0x1DB88" />
+        <DList Name="gLinkHumanHerosShieldWithMtxDL" Offset="0x1DBC8" />
         <Mtx Name="gLinkHumanMirrorShieldMtx" Offset="0x1DBD8" />
         <DList Name="gLinkHumanMirrorShieldWithMtxDL" Offset="0x1DC18" />
 
-        <DList Name="gLinkHumanRightHandHoldingHylianShieldDL" Offset="0x1DC28" />
+        <DList Name="gLinkHumanRightHandHoldingHerosShieldDL" Offset="0x1DC28" />
         <DList Name="object_link_child_DL_01DC38" Offset="0x1DC38" />
         <DList Name="gLinkHumanRightHandHoldingMirrorShieldDL" Offset="0x1DC48" />
         <DList Name="object_link_child_DL_01DC58" Offset="0x1DC58" />

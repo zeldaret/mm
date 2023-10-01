@@ -2,6 +2,8 @@
 #define Z_EN_SSH_H
 
 #include "global.h"
+#include "overlays/actors/ovl_En_Si/z_en_si.h"
+#include "overlays/actors/ovl_En_Sth/z_en_sth.h"
 
 struct EnSsh;
 
@@ -29,7 +31,7 @@ typedef struct EnSsh {
     /* 0x000 */ Actor actor;
     /* 0x144 */ SkelAnime skelAnime;
     /* 0x188 */ Vec3s jointTable[30];
-    /* 0x23C */ Vec3s morphtable[30];
+    /* 0x23C */ Vec3s morphTable[30];
     /* 0x2F0 */ EnSshActionFunc actionFunc;
     /* 0x2F4 */ ColliderCylinder collider1[6];
     /* 0x4BC */ ColliderJntSph collider2;

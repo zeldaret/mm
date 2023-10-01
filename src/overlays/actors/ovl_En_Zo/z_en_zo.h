@@ -8,7 +8,28 @@ struct EnZo;
 
 typedef void (*EnZoActionFunc)(struct EnZo*, PlayState*);
 
-#define ENZO_GET_PATH(thisx) (((thisx)->params & 0x7E00) >> 9)
+#define ENZO_GET_PATH_INDEX(thisx) (((thisx)->params & 0x7E00) >> 9)
+
+#define ENZO_PATH_INDEX_NONE 0x3F
+
+typedef enum EnZoBodyPart {
+    /*  0 */ ZORA_BODYPART_0,
+    /*  1 */ ZORA_BODYPART_1,
+    /*  2 */ ZORA_BODYPART_2,
+    /*  3 */ ZORA_BODYPART_3,
+    /*  4 */ ZORA_BODYPART_4,
+    /*  5 */ ZORA_BODYPART_5,
+    /*  6 */ ZORA_BODYPART_6,
+    /*  7 */ ZORA_BODYPART_7,
+    /*  8 */ ZORA_BODYPART_8,
+    /*  9 */ ZORA_BODYPART_9,
+    /* 10 */ ZORA_BODYPART_10,
+    /* 11 */ ZORA_BODYPART_11,
+    /* 12 */ ZORA_BODYPART_12,
+    /* 13 */ ZORA_BODYPART_13,
+    /* 14 */ ZORA_BODYPART_14,
+    /* 15 */ ZORA_BODYPART_MAX
+} EnZoBodyPart;
 
 typedef struct EnZo {
     /* 0x000 */ Actor actor;
@@ -28,9 +49,9 @@ typedef struct EnZo {
     /* 0x2F4 */ Vec3s headRot;
     /* 0x2FA */ Vec3s upperBodyRot;
     /* 0x300 */ UNK_TYPE1 unk_300[0x12];
-    /* 0x312 */ s16 limbRotY[20];
-    /* 0x33A */ s16 limbRotZ[20];
-    /* 0x364 */ Vec3f bodyPartsPos[15];
+    /* 0x312 */ s16 fidgetTableY[ZORA_LIMB_MAX];
+    /* 0x33A */ s16 fidgetTableZ[ZORA_LIMB_MAX];
+    /* 0x364 */ Vec3f bodyPartsPos[ZORA_BODYPART_MAX];
     /* 0x41A */ UNK_TYPE1 unk_41A[0x6];
     /* 0x41E */ s16 eyeIndex;
     /* 0x420 */ s16 blinkTimer;

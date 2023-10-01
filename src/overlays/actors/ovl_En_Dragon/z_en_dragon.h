@@ -13,7 +13,7 @@ typedef enum {
     /* 3 */ DEEP_PYTHON_ACTION_DAMAGE,
     /* 4 */ DEEP_PYTHON_ACTION_RETREAT,
     /* 5 */ DEEP_PYTHON_ACTION_SETUP_DEAD,
-    /* 6 */ DEEP_PYTHON_ACTION_DEAD,
+    /* 6 */ DEEP_PYTHON_ACTION_DEAD
 } DeepPythonAction;
 
 struct EnDragon;
@@ -47,14 +47,13 @@ typedef struct EnDragon {
     /* 0x2BA */ s16 action;
     /* 0x2BC */ UNK_TYPE1 unk_2BC[0x2];
     /* 0x2BE */ s16 state;
-    /* 0x2C0 */ s16 grabCutsceneIndex;
-    /* 0x2C2 */ s16 deathCutsceneIndex;
+    /* 0x2C0 */ s16 grabCsId;
+    /* 0x2C2 */ s16 deathCsId;
     /* 0x2C4 */ UNK_TYPE1 unk_2C4[0x4];
     /* 0x2C8 */ s16 subCamId;
     /* 0x2CA */ s16 grabTimer; // Counts up from the time a grab starts until the time the actor begins attacking
     /* 0x2CC */ s16 unk_2CC; // Initialized, but never used
-    /* 0x2CE */ UNK_TYPE1 unk_2CE[0x2];
-    /* 0x2D0 */ f32 endFrame;
+    /* 0x2D0 */ f32 animEndFrame;
     /* 0x2D4 */ f32 scale;
     /* 0x2D8 */ UNK_TYPE1 unk_2D8[0x4];
     /* 0x2DC */ ColliderJntSph collider;

@@ -29,7 +29,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 
     temp_a0 = play->state.gfxCtx;
     sp30 = temp_a0;
-    func_8012C28C(temp_a0);
+    Gfx_SetupDL25_Opa(temp_a0);
     temp_v1 = sp30->polyOpa.p;
     sp30->polyOpa.p = temp_v1 + 8;
     temp_v1->words.w0 = 0xDB060020;
@@ -105,7 +105,7 @@ void EnRecepgirl_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     gSPSegment(POLY_OPA_DISP++, 0x08, D_80C106B0[this->unk_2AC]);
 
@@ -217,7 +217,7 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
     sp34 = (s16) (s32) (f32) thisx->shape.rot.z;
     temp_a0 = play->state.gfxCtx;
     temp_s0 = temp_a0;
-    func_8012C28C(temp_a0);
+    Gfx_SetupDL25_Opa(temp_a0);
     temp_v0 = temp_s0->polyOpa.p;
     temp_s0->polyOpa.p = temp_v0 + 8;
     temp_v0->words.w0 = 0xDA380003;
@@ -309,7 +309,7 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
     
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
     gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(POLY_OPA_DISP++, D_06000680);
 
@@ -325,6 +325,6 @@ void ObjTree_Draw(Actor* thisx, PlayState* play) {
 
 TODO: find some examples for this one.
 
-For even more examples, you can consult [the OoT tutorial](https://github.com/zeldaret/oot/blob/master/docs/tutorial/draw_functions.md)
+For even more examples, you can consult [the OoT tutorial](https://github.com/zeldaret/oot/blob/main/docs/tutorial/draw_functions.md)
 
 Next: [Data](data.md)

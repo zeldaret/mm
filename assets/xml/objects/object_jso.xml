@@ -50,26 +50,26 @@
         <Limb Name="object_jso_Standardlimb_003104" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_12" Offset="0x3104" />
         <Limb Name="object_jso_Standardlimb_003110" Type="Standard" EnumName="OBJECT_JSO_1_LIMB_13" Offset="0x3110" />
         <Skeleton Name="object_jso_Skel_003168" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_1_LIMB_NONE" LimbMax="OBJECT_JSO_1_LIMB_MAX" EnumName="ObjectJso1Limb" Offset="0x3168" />
-        <Animation Name="object_jso_Anim_003238" Offset="0x3238" />
-        <Animation Name="object_jso_Anim_003530" Offset="0x3530" />
-        <Animation Name="object_jso_Anim_00378C" Offset="0x378C" />
-        <Animation Name="object_jso_Anim_0038AC" Offset="0x38AC" />
-        <Animation Name="object_jso_Anim_003D5C" Offset="0x3D5C" />
-        <Animation Name="object_jso_Anim_004018" Offset="0x4018" />
-        <Animation Name="object_jso_Anim_004384" Offset="0x4384" />
-        <Animation Name="object_jso_Anim_0044F8" Offset="0x44F8" />
-        <Animation Name="object_jso_Anim_004858" Offset="0x4858" />
-        <Animation Name="object_jso_Anim_005778" Offset="0x5778" />
-        <Animation Name="object_jso_Anim_005D5C" Offset="0x5D5C" />
-        <Animation Name="object_jso_Anim_00603C" Offset="0x603C" />
-        <Animation Name="object_jso_Anim_0063A4" Offset="0x63A4" />
-        <Animation Name="object_jso_Anim_0067F0" Offset="0x67F0" />
-        <Animation Name="object_jso_Anim_0070BC" Offset="0x70BC" />
-        <Animation Name="object_jso_Anim_0071E0" Offset="0x71E0" />
-        <Animation Name="object_jso_Anim_0072AC" Offset="0x72AC" />
-        <Animation Name="object_jso_Anim_00788C" Offset="0x788C" />
-        <Animation Name="object_jso_Anim_007B04" Offset="0x7B04" />
-        <Animation Name="object_jso_Anim_0081F4" Offset="0x81F4" />
+        <Animation Name="object_jso_Anim_003238" Offset="0x3238" /> <!-- Original name is "jsk_pose" -->
+        <Animation Name="object_jso_Anim_003530" Offset="0x3530" /> <!-- Original name is "jso_attack1" -->
+        <Animation Name="object_jso_Anim_00378C" Offset="0x378C" /> <!-- Original name is "jso_attack2" -->
+        <Animation Name="object_jso_Anim_0038AC" Offset="0x38AC" /> <!-- Original name is "jso_attack_wait" -->
+        <Animation Name="object_jso_Anim_003D5C" Offset="0x3D5C" /> <!-- Original name is "jso_back" -->
+        <Animation Name="object_jso_Anim_004018" Offset="0x4018" /> <!-- Original name is "jso_bomb" -->
+        <Animation Name="object_jso_Anim_004384" Offset="0x4384" /> <!-- Original name is "jso_chakuchiD" -->
+        <Animation Name="object_jso_Anim_0044F8" Offset="0x44F8" /> <!-- Original name is "jso_damage" -->
+        <Animation Name="object_jso_Anim_004858" Offset="0x4858" /> <!-- Original name is "jso_defense" -->
+        <Animation Name="object_jso_Anim_005778" Offset="0x5778" /> <!-- Original name is "jso_demo_start" -->
+        <Animation Name="object_jso_Anim_005D5C" Offset="0x5D5C" /> <!-- Original name is "jso_down" -->
+        <Animation Name="object_jso_Anim_00603C" Offset="0x603C" /> <!-- Original name is "jso_hajiku" -->
+        <Animation Name="object_jso_Anim_0063A4" Offset="0x63A4" /> <!-- Original name is "jso_henahena" -->
+        <Animation Name="object_jso_Anim_0067F0" Offset="0x67F0" /> <!-- Original name is "jso_hetari" -->
+        <Animation Name="object_jso_Anim_0070BC" Offset="0x70BC" /> <!-- Original name is "jso_jakin" -->
+        <Animation Name="object_jso_Anim_0071E0" Offset="0x71E0" /> <!-- Original name is "jso_jumpD" -->
+        <Animation Name="object_jso_Anim_0072AC" Offset="0x72AC" /> <!-- Original name is "jso_kaiten" -->
+        <Animation Name="object_jso_Anim_00788C" Offset="0x788C" /> <!-- Original name is "jso_kyoro" -->
+        <Animation Name="object_jso_Anim_007B04" Offset="0x7B04" /> <!-- Original name is "jso_ororo" -->
+        <Animation Name="object_jso_Anim_0081F4" Offset="0x81F4" /> <!-- Original name is "jso_start" -->
         <DList Name="object_jso_DL_008F50" Offset="0x8F50" />
         <DList Name="object_jso_DL_009008" Offset="0x9008" />
         <DList Name="object_jso_DL_0090C0" Offset="0x90C0" />
@@ -115,8 +115,8 @@
         <Limb Name="object_jso_Standardlimb_00A99C" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_12" Offset="0xA99C" />
         <Limb Name="object_jso_Standardlimb_00A9A8" Type="Standard" EnumName="OBJECT_JSO_2_LIMB_13" Offset="0xA9A8" />
         <Skeleton Name="object_jso_Skel_00AA00" Type="Flex" LimbType="Standard" LimbNone="OBJECT_JSO_2_LIMB_NONE" LimbMax="OBJECT_JSO_2_LIMB_MAX" EnumName="ObjectJso2Limb" Offset="0xAA00" />
-        <Animation Name="object_jso_Anim_00AE80" Offset="0xAE80" />
-        <Animation Name="object_jso_Anim_00B1DC" Offset="0xB1DC" />
-        <Animation Name="object_jso_Anim_00B5F0" Offset="0xB5F0" />
+        <Animation Name="object_jso_Anim_00AE80" Offset="0xAE80" /> <!-- Original name is "jso_wait" -->
+        <Animation Name="object_jso_Anim_00B1DC" Offset="0xB1DC" /> <!-- Original name is "jso_waitD" -->
+        <Animation Name="object_jso_Anim_00B5F0" Offset="0xB5F0" /> <!-- Original name is "jso_walk" -->
     </File>
 </Root>

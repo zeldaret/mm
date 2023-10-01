@@ -2,6 +2,8 @@
 #define Z64ACTOR_H
 
 #include "PR/ultratypes.h"
+#include "color.h"
+#include "padutils.h"
 #include "z64math.h"
 #include "z64animation.h"
 #include "z64collision_check.h"
@@ -19,74 +21,23 @@ struct Lights;
 struct CollisionPoly;
 
 struct EnBox;
+struct EnTorch2;
 
 typedef void(*ActorFunc)(struct Actor* this, struct PlayState* play);
+typedef u16 (*NpcGetTextIdFunc)(struct PlayState*, struct Actor*);
+typedef s16 (*NpcUpdateTalkStateFunc)(struct PlayState*, struct Actor*);
 
-typedef struct {
+typedef struct PosRot {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ Vec3s rot;
 } PosRot; // size = 0x14
-
-typedef struct {
-    /* 0x00 */ u8 attack[32];
-} DamageTable; // size = 0x20
-
-typedef struct {
-    /* 0x0 */ u8 health;
-    /* 0x2 */ s16 cylRadius;
-    /* 0x4 */ s16 cylHeight;
-    /* 0x6 */ u8 mass;
-} CollisionCheckInfoInit; // size = 0x8
-
-typedef struct {
-    /* 0x0 */ u8 health;
-    /* 0x2 */ s16 cylRadius;
-    /* 0x4 */ s16 cylHeight;
-    /* 0x6 */ s16 cylYShift;
-    /* 0x8 */ u8 mass;
-} CollisionCheckInfoInit2; // size = 0xC
-
-typedef struct {
-    /* 0x00 */ DamageTable* damageTable;
-    /* 0x04 */ Vec3f displacement;
-    /* 0x10 */ s16 cylRadius;
-    /* 0x12 */ s16 cylHeight;
-    /* 0x14 */ s16 cylYShift;
-    /* 0x16 */ u8 mass;
-    /* 0x17 */ u8 health;
-    /* 0x18 */ u8 damage;
-    /* 0x19 */ u8 damageEffect;
-    /* 0x1A */ u8 atHitEffect;
-    /* 0x1B */ u8 acHitEffect;
-} CollisionCheckInfo; // size = 0x1C
-
-typedef struct {
-    /* 0x00 */ s32 unk0;
-    /* 0x04 */ s32 unk4;
-    /* 0x08 */ f32 unk8;
-    /* 0x0C */ f32 unkC;
-    /* 0x10 */ f32 unk10;
-    /* 0x14 */ f32 unk14;
-    /* 0x18 */ f32 unk18;
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-    /* 0x24 */ f32 unk24;
-    /* 0x28 */ f32 unk28;
-    /* 0x2C */ f32 unk2C;
-    /* 0x30 */ s16 unk30;
-    /* 0x32 */ s16 unk32;
-    /* 0x34 */ s16 unk34;
-    /* 0x36 */ s16 unk36;
-    /* 0x38 */ s16 unk38;
-    /* 0x3A */ s16 unk3A;
-} ActorEnTest20C; // size = 0x3C
 
 typedef struct {
     /* 0x0 */ s16 unk_0; // frame?
     /* 0x2 */ Vec3s unk_2; // scale
 } struct_80124618; // size = 0x8
 
-typedef struct {
+typedef struct ActorInit {
     /* 0x00 */ s16 id;
     /* 0x02 */ u8 type;
     /* 0x04 */ u32 flags;
@@ -98,13 +49,13 @@ typedef struct {
     /* 0x1C */ ActorFunc draw;
 } ActorInit; // size = 0x20
 
-typedef enum {
-    ALLOCTYPE_NORMAL,
-    ALLOCTYPE_ABSOLUTE,
-    ALLOCTYPE_PERMANENT
+typedef enum AllocType {
+    /* 0 */ ALLOCTYPE_NORMAL,
+    /* 1 */ ALLOCTYPE_ABSOLUTE,
+    /* 2 */ ALLOCTYPE_PERMANENT
 } AllocType;
 
-typedef struct {
+typedef struct ActorOverlay {
     /* 0x00 */ uintptr_t vromStart;
     /* 0x04 */ uintptr_t vromEnd;
     /* 0x08 */ void* vramStart;
@@ -131,6 +82,35 @@ typedef struct {
     /* 0x18 */ Vec3f feetPos[2]; // Update by using `Actor_SetFeetPos` in PostLimbDrawOpa
 } ActorShape; // size = 0x30
 
+// Flags for bgCheckFlags
+#define BGCHECKFLAG_GROUND (1 << 0) // Standing on the ground
+#define BGCHECKFLAG_GROUND_TOUCH (1 << 1) // Has touched the ground (only active for 1 frame)
+#define BGCHECKFLAG_GROUND_LEAVE (1 << 2) // Has left the ground (only active for 1 frame)
+#define BGCHECKFLAG_WALL (1 << 3) // Touching a wall
+#define BGCHECKFLAG_CEILING (1 << 4) // Touching a ceiling
+#define BGCHECKFLAG_WATER (1 << 5) // In water
+#define BGCHECKFLAG_WATER_TOUCH (1 << 6) // Has touched water (reset when leaving water)
+#define BGCHECKFLAG_GROUND_STRICT (1 << 7) // Similar to BGCHECKFLAG_GROUND but with no velocity check and is cleared every frame
+#define BGCHECKFLAG_CRUSHED (1 << 8) // Crushed between a floor and ceiling (triggers a void for player)
+#define BGCHECKFLAG_PLAYER_WALL_INTERACT (1 << 9) // Only set/used by player, related to interacting with walls
+#define BGCHECKFLAG_PLAYER_400 (1 << 10) // 
+#define BGCHECKFLAG_PLAYER_800 (1 << 11) // 
+#define BGCHECKFLAG_PLAYER_1000 (1 << 12) // 
+
+// Flags for Actor_UpdateBgCheckInfo
+#define UPDBGCHECKINFO_FLAG_1 (1 << 0) // check wall
+#define UPDBGCHECKINFO_FLAG_2 (1 << 1) // check ceiling
+#define UPDBGCHECKINFO_FLAG_4 (1 << 2) // check floor and water
+#define UPDBGCHECKINFO_FLAG_8 (1 << 3)
+#define UPDBGCHECKINFO_FLAG_10 (1 << 4)
+#define UPDBGCHECKINFO_FLAG_20 (1 << 5) // unused
+#define UPDBGCHECKINFO_FLAG_40 (1 << 6) // disable water ripples
+#define UPDBGCHECKINFO_FLAG_80 (1 << 7)
+#define UPDBGCHECKINFO_FLAG_100 (1 << 8)
+#define UPDBGCHECKINFO_FLAG_200 (1 << 9)
+#define UPDBGCHECKINFO_FLAG_400 (1 << 10) // check water
+#define UPDBGCHECKINFO_FLAG_800 (1 << 11)
+
 typedef struct Actor {
     /* 0x000 */ s16 id; // Actor ID
     /* 0x002 */ u8 category; // Actor category. Refer to the corresponding enum for values
@@ -140,16 +120,16 @@ typedef struct Actor {
     /* 0x01C */ s16 params; // Configurable variable set by the actor's spawn data; original name: "args_data"
     /* 0x01E */ s8 objBankIndex; // Object bank index of the actor's object dependency; original name: "bank"
     /* 0x01F */ s8 targetMode; // Controls how far the actor can be targeted from and how far it can stay locked on
-    /* 0x020 */ s16 unk20;
+    /* 0x020 */ s16 halfDaysBits; // Bitmask indicating which half-days this actor is allowed to not be killed(?) (TODO: not sure how to word this). If the current halfDayBit is not part of this mask then the actor is killed when spawning the setup actors
     /* 0x024 */ PosRot world; // Position/rotation in the world
-    /* 0x038 */ s8 cutscene;
+    /* 0x038 */ s8 csId; // ActorCutscene index, see `CutsceneId`
     /* 0x039 */ u8 audioFlags; // Another set of flags? Seems related to sfx or bgm
     /* 0x03C */ PosRot focus; // Target reticle focuses on this position. For player this represents head pos and rot
     /* 0x050 */ u16 sfxId; // Id of sound effect to play. Plays when value is set, then is cleared the following update cycle
     /* 0x054 */ f32 targetArrowOffset; // Height offset of the target arrow relative to `focus` position
     /* 0x058 */ Vec3f scale; // Scale of the actor in each axis
     /* 0x064 */ Vec3f velocity; // Velocity of the actor in each axis
-    /* 0x070 */ f32 speedXZ; // How fast the actor is traveling along the XZ plane
+    /* 0x070 */ f32 speed; // Context dependent speed value. Can be used for XZ or XYZ depending on which move function is used
     /* 0x074 */ f32 gravity; // Acceleration due to gravity. Value is added to Y velocity every frame
     /* 0x078 */ f32 terminalVelocity; // Sets the lower bounds cap on velocity along the Y axis
     /* 0x07C */ struct CollisionPoly* wallPoly; // Wall polygon the actor is touching
@@ -159,7 +139,7 @@ typedef struct Actor {
     /* 0x086 */ s16 wallYaw; // Y rotation of the wall polygon the actor is touching
     /* 0x088 */ f32 floorHeight; // Y position of the floor polygon directly below the actor
     /* 0x08C */ f32 depthInWater; // Directed distance to the surface of active waterbox. Negative value means water is below.
-    /* 0x090 */ u16 bgCheckFlags; // See comments below actor struct for wip docs. TODO: macros for these flags
+    /* 0x090 */ u16 bgCheckFlags; // Flags indicating how the actor is interacting with collision
     /* 0x092 */ s16 yawTowardsPlayer; // Y rotation difference between the actor and the player
     /* 0x094 */ f32 xyzDistToPlayerSq; // Squared distance between the actor and the player in the x,y,z axis
     /* 0x098 */ f32 xzDistToPlayer; // Distance between the actor and the player in the XZ plane
@@ -172,7 +152,7 @@ typedef struct Actor {
     /* 0x100 */ f32 uncullZoneScale; // Amount to increase the uncull zone scale by (in projected space)
     /* 0x104 */ f32 uncullZoneDownward; // Amount to increase uncull zone downward by (in projected space)
     /* 0x108 */ Vec3f prevPos; // World position from the previous update cycle
-    /* 0x114 */ u8 isTargeted; // Set to true if the actor is currently being targeted by the player
+    /* 0x114 */ u8 isLockedOn; // Set to true if the actor is currently being targeted by the player
     /* 0x115 */ u8 targetPriority; // Lower values have higher priority. Resets to 0 when player stops targeting
     /* 0x116 */ u16 textId; // Text ID to pass to link/display when interacting with the actor
     /* 0x118 */ u16 freezeTimer; // Actor does not update when set. Timer decrements automatically
@@ -197,19 +177,14 @@ typedef enum {
     /* 1 */ FOOT_RIGHT
 } ActorFootIndex;
 
-/**
- * BgCheckFlags WIP documentation (logical masks):
- * 0x001 : Standing on the ground
- * 0x002 : Has touched the ground (only active for 1 frame)
- * 0x004 : Has left the ground (only active for 1 frame)
- * 0x008 : Touching a wall
- * 0x010 : Touching a ceiling
- * 0x020 : On or below water surface
- * 0x040 : Has touched water (actor is responsible for unsetting this the frame it touches the water)
- * 0x080 : Similar to & 0x1 but with no velocity check and is cleared every frame
- * 0x100 : Crushed between a floor and ceiling (triggers a void for player)
- * 0x200 : Unknown (only set/used by player so far)
- */
+#define DYNA_TRANSFORM_POS (1 << 0) // Position of the actors on top follows the dynapoly actor's movement.
+#define DYNA_TRANSFORM_ROT_Y (1 << 1) // The Y rotation of the actors on top follows the dynapoly actor's Y rotation.
+
+#define DYNA_INTERACT_ACTOR_ON_TOP (1 << 0) // There is an actor standing on the collision of the dynapoly actor
+#define DYNA_INTERACT_PLAYER_ON_TOP (1 << 1) // The player actor is standing on the collision of the dynapoly actor
+#define DYNA_INTERACT_PLAYER_ABOVE (1 << 2) // The player is directly above the collision of the dynapoly actor (any distance above)
+#define DYNA_INTERACT_ACTOR_ON_SWITCH (1 << 3) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_SWITCH
+#define DYNA_INTERACT_ACTOR_ON_HEAVY_SWITCH (1 << 4) // Like the ACTOR_ON_TOP flag but only actors with ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH
 
 typedef struct {
     /* 0x000 */ Actor actor;
@@ -217,14 +192,12 @@ typedef struct {
     /* 0x148 */ f32 pushForce;
     /* 0x14C */ f32 unk14C;
     /* 0x150 */ s16 yRotation;
-    /* 0x152 */ u16 unk152;
-    /* 0x154 */ u32 flags;
-    /* 0x158 */ u8 stateFlags;
-    /* 0x15A */ s16 pad15A;
+    /* 0x154 */ u32 transformFlags;
+    /* 0x158 */ u8 interactFlags;
 } DynaPolyActor; // size = 0x15C
 
 
-typedef enum {
+typedef enum Item00Type {
     /* 0x00 */ ITEM00_RUPEE_GREEN,
     /* 0x01 */ ITEM00_RUPEE_BLUE,
     /* 0x02 */ ITEM00_RUPEE_RED,
@@ -237,10 +210,10 @@ typedef enum {
     /* 0x09 */ ITEM00_ARROWS_40,
     /* 0x0A */ ITEM00_ARROWS_50,
     /* 0x0B */ ITEM00_BOMBS_B,
-    /* 0x0C */ ITEM00_NUTS_1,
-    /* 0x0D */ ITEM00_STICK,
-    /* 0x0E */ ITEM00_MAGIC_LARGE,
-    /* 0x0F */ ITEM00_MAGIC_SMALL,
+    /* 0x0C */ ITEM00_DEKU_NUTS_1,
+    /* 0x0D */ ITEM00_DEKU_STICK,
+    /* 0x0E */ ITEM00_MAGIC_JAR_BIG,
+    /* 0x0F */ ITEM00_MAGIC_JAR_SMALL,
     /* 0x10 */ ITEM00_MASK,
     /* 0x11 */ ITEM00_SMALL_KEY,
     /* 0x12 */ ITEM00_FLEXIBLE,
@@ -248,7 +221,7 @@ typedef enum {
     /* 0x14 */ ITEM00_RUPEE_PURPLE,
     /* 0x15 */ ITEM00_3_HEARTS,
     /* 0x16 */ ITEM00_SHIELD_HERO,
-    /* 0x17 */ ITEM00_NUTS_10,
+    /* 0x17 */ ITEM00_DEKU_NUTS_10,
     /* 0x18 */ ITEM00_NOTHING,
     /* 0x19 */ ITEM00_BOMBS_0,
     /* 0x1A */ ITEM00_BIG_FAIRY,
@@ -288,8 +261,17 @@ typedef struct EnAObj {
     /* 0x000 */ Actor actor;
     /* 0x144 */ EnAObjActionFunc actionFunc;
     /* 0x148 */ ColliderCylinder collision;
-    /* 0x194 */ UNK_TYPE1 pad194[0x14];
-} EnAObj; // size = 0x1A8
+} EnAObj; // size = 0x194
+
+typedef enum {
+    /* 0 */ AOBJ_SIGNPOST_OBLONG,
+    /* 1 */ AOBJ_SIGNPOST_ARROW
+} AObjType;
+
+#define AOBJ_GET_TEXTID(thisx) ((((thisx)->params >> 8) & 0xFF) | 0x300)
+#define AOBJ_GET_TYPE(thisx) (((thisx)->params & 0xFF) - 9)
+
+#define AOBJ_PARAMS(textId, type) ((((textId - 0x300) & 0xFF) << 8) | (type + 9))
 
 typedef enum {
     /* 0x00 */ ACTORCAT_SWITCH,
@@ -309,39 +291,53 @@ typedef enum {
 
 #define ACTORCTX_FLAG_0 (1 << 0)
 #define ACTORCTX_FLAG_1 (1 << 1)
-#define ACTORCTX_FLAG_2 (1 << 2)
+#define ACTORCTX_FLAG_PICTO_BOX_ON (1 << 2)
 #define ACTORCTX_FLAG_3 (1 << 3)
 #define ACTORCTX_FLAG_4 (1 << 4)
 #define ACTORCTX_FLAG_5 (1 << 5)
 #define ACTORCTX_FLAG_6 (1 << 6)
 #define ACTORCTX_FLAG_7 (1 << 7)
 
-
-typedef struct {
+// A set of 4 triangles which appear around an actor when the player Z-Targets it
+typedef struct LockOnTriangleSet {
     /* 0x00 */ Vec3f pos;
-    /* 0x0C */ f32 unkC;
+    /* 0x0C */ f32 radius; // distance towards the center of the locked on
     /* 0x10 */ Color_RGBA8 color;
-} TargetContextEntry; // size = 0x14
+} LockOnTriangleSet; // size = 0x14
 
 typedef struct TargetContext {
-    /* 0x00 */ Vec3f unk0;
-    /* 0x0C */ Vec3f targetCenterPos;
-    /* 0x18 */ Color_RGBAf fairyInner;
-    /* 0x28 */ Color_RGBAf fairyOuter;
-    /* 0x38 */ Actor* arrowPointedActor;
-    /* 0x3C */ Actor* targetedActor;
-    /* 0x40 */ f32 unk40;
-    /* 0x44 */ f32 unk44;
-    /* 0x48 */ s16 unk48; // alpha
-    /* 0x4A */ u8 unk4A;
-    /* 0x4B */ u8 unk4B;
-    /* 0x4C */ s8 unk4C;
-    /* 0x4D */ UNK_TYPE1 pad4D[0x3];
-    /* 0x50 */ TargetContextEntry unk50[3];
-    /* 0x8C */ Actor* unk8C;
+    /* 0x00 */ Vec3f fairyPos; // Used by Tatl to indicate a targetable actor or general hint
+    /* 0x0C */ Vec3f lockOnPos;
+    /* 0x18 */ Color_RGBAf fairyInnerColor;
+    /* 0x28 */ Color_RGBAf fairyOuterColor;
+    /* 0x38 */ Actor* fairyActor;
+    /* 0x3C */ Actor* lockOnActor;
+    /* 0x40 */ f32 fairyMoveProgressFactor; // Controls Tatl so she can smootly transition to the target actor
+    /* 0x44 */ f32 lockOnRadius; // Control the circle lock-on triangles coming in from offscreen when you first target
+    /* 0x48 */ s16 lockOnAlpha;
+    /* 0x4A */ u8 fairyActorCategory;
+    /* 0x4B */ u8 rotZTick;
+    /* 0x4C */ s8 lockOnIndex;
+    /* 0x50 */ LockOnTriangleSet lockOnTriangleSets[3];
+    /* 0x8C */ Actor* forcedTargetActor; // Never set to non-NULL
     /* 0x90 */ Actor* bgmEnemy;
-    /* 0x94 */ Actor* unk_94;
+    /* 0x94 */ Actor* arrowPointedActor;
 } TargetContext; // size = 0x98
+
+typedef enum TargetMode {
+    /*  0 */ TARGET_MODE_0,
+    /*  1 */ TARGET_MODE_1,
+    /*  2 */ TARGET_MODE_2,
+    /*  3 */ TARGET_MODE_3,
+    /*  4 */ TARGET_MODE_4,
+    /*  5 */ TARGET_MODE_5,
+    /*  6 */ TARGET_MODE_6,
+    /*  7 */ TARGET_MODE_7,
+    /*  8 */ TARGET_MODE_8,
+    /*  9 */ TARGET_MODE_9,
+    /* 10 */ TARGET_MODE_10,
+    /* 11 */ TARGET_MODE_MAX
+} TargetMode;
 
 typedef struct {
     /* 0x0 */ TexturePtr texture;
@@ -355,11 +351,24 @@ typedef struct {
     /* 0xE */ s16 intensity;
 } TitleCardContext; // size = 0x10
 
-typedef struct ActorContext_unk_20C {
+typedef enum {
+    /* 0 */ PLAYER_IMPACT_GORON_GROUND_POUND,
+    /* 1 */ PLAYER_IMPACT_ZORA_BARRIER,
+    /* 2 */ PLAYER_IMPACT_BONK // also activated by goron attack
+} PlayerImpactType;
+
+typedef struct PlayerImpact {
+    /* 0x00 */ u8 type;
+    /* 0x01 */ u8 timer;
+    /* 0x04 */ f32 dist;
+    /* 0x08 */ Vec3f pos;
+} PlayerImpact; // size = 0x14
+
+typedef struct ActorSharedMemoryEntry {
     /* 0x0 */ s16 id;
     /* 0x2 */ s8 isDynamicallyInitialised;
     /* 0x4 */ void* ptr;
-} ActorContext_unk_20C; // size = 0x8
+} ActorSharedMemoryEntry; // size = 0x8
 
 typedef struct ActorContextSceneFlags {
     /* 0x00 */ u32 switches[4]; // First 0x40 are permanent, second 0x40 are temporary
@@ -375,8 +384,30 @@ typedef struct ActorListEntry {
     /* 0x8 */ s32 unk_08;
 } ActorListEntry; // size = 0xC
 
+typedef enum {
+    /* 0 */ LENS_MODE_HIDE_ACTORS, // lens actors are visible by default, and hidden by using lens (for example, fake walls)
+    /* 1 */ LENS_MODE_SHOW_ACTORS // lens actors are invisible by default, and shown by using lens (for example, invisible enemies)
+} LensMode;
+
+#define LENS_ACTOR_MAX 32
+
 // Target size when activated
 #define LENS_MASK_ACTIVE_SIZE 100
+
+#define HALFDAYBIT_DAY0_DAWN  (1 << 9)
+#define HALFDAYBIT_DAY0_NIGHT (1 << 8)
+#define HALFDAYBIT_DAY1_DAWN  (1 << 7)
+#define HALFDAYBIT_DAY1_NIGHT (1 << 6)
+#define HALFDAYBIT_DAY2_DAWN  (1 << 5)
+#define HALFDAYBIT_DAY2_NIGHT (1 << 4)
+#define HALFDAYBIT_DAY3_DAWN  (1 << 3)
+#define HALFDAYBIT_DAY3_NIGHT (1 << 2)
+#define HALFDAYBIT_DAY4_DAWN  (1 << 1)
+#define HALFDAYBIT_DAY4_NIGHT (1 << 0)
+
+#define HALFDAYBIT_DAWNS  (HALFDAYBIT_DAY0_DAWN | HALFDAYBIT_DAY1_DAWN | HALFDAYBIT_DAY2_DAWN | HALFDAYBIT_DAY3_DAWN | HALFDAYBIT_DAY4_DAWN)
+#define HALFDAYBIT_NIGHTS (HALFDAYBIT_DAY0_NIGHT | HALFDAYBIT_DAY1_NIGHT | HALFDAYBIT_DAY2_NIGHT | HALFDAYBIT_DAY3_NIGHT | HALFDAYBIT_DAY4_NIGHT)
+#define HALFDAYBIT_ALL    (HALFDAYBIT_DAWNS | HALFDAYBIT_NIGHTS)
 
 typedef struct ActorContext {
     /* 0x000 */ u8 freezeFlashTimer;
@@ -387,24 +418,20 @@ typedef struct ActorContext {
     /* 0x005 */ u8 flags;
     /* 0x006 */ UNK_TYPE1 pad6[0x5];
     /* 0x00B */ s8 lensActorsDrawn;
-    /* 0x00C */ s16 unkC;
+    /* 0x00C */ s16 halfDaysBit; // A single bit indicating the current half-day. It is one of HALFDAYBIT_DAYX_ macro values
     /* 0x00E */ u8 totalLoadedActors;
-    /* 0x00F */ u8 undrawnActorCount;
+    /* 0x00F */ u8 numLensActors;
     /* 0x010 */ ActorListEntry actorLists[ACTORCAT_MAX];
-    /* 0x0A0 */ Actor* undrawnActors[32]; // Records the first 32 actors drawn each frame
-    /* 0x120 */ TargetContext targetContext;
+    /* 0x0A0 */ Actor* lensActors[LENS_ACTOR_MAX]; // Draws up to LENS_ACTOR_MAX number of invisible actors
+    /* 0x120 */ TargetContext targetCtx;
     /* 0x1B8 */ ActorContextSceneFlags sceneFlags;
     /* 0x1E4 */ TitleCardContext titleCtxt;
-    /* 0x1F4 */ u8 unk1F4;
-    /* 0x1F5 */ u8 unk1F5;
-    /* 0x1F6 */ UNK_TYPE1 pad1F6[0x2];
-    /* 0x1F8 */ f32 unk1F8;
-    /* 0x1FC */ Vec3f unk1FC;
+    /* 0x1F4 */ PlayerImpact playerImpact;
     /* 0x208 */ UNK_TYPE1 unk_208[0x4];
-    /* 0x20C */ ActorContext_unk_20C unk_20C[8];
+    /* 0x20C */ ActorSharedMemoryEntry actorSharedMemory[8];
     /* 0x24C */ UNK_TYPE1 unk_24C[0x4];
     /* 0x250 */ void* absoluteSpace; // Space used to allocate actor overlays of alloc type ALLOCTYPE_ABSOLUTE
-    /* 0x254 */ u32 unk254[5];
+    /* 0x254 */ struct EnTorch2* elegyShells[5]; // PLAYER_FORM_MAX
     /* 0x268 */ u8 unk268;
     /* 0x269 */ UNK_TYPE1 pad269[0x3];
     /* 0x26C */ Input unk_26C;
@@ -443,32 +470,32 @@ typedef enum {
     /* 3 */ DOORLOCK_MAX
 } DoorLockType;
 
-// Targetability / ACTOR_FLAG_TARGETABLE?
-#define ACTOR_FLAG_1             (1 << 0)
-// 
+// Allows Tatl to fly over the actor and lock-on it (using the Z-target)
+#define ACTOR_FLAG_TARGETABLE    (1 << 0)
+// Unused
 #define ACTOR_FLAG_2             (1 << 1)
-// 
-#define ACTOR_FLAG_4             (1 << 2)
-// 
-#define ACTOR_FLAG_8             (1 << 3)
+// Changes the targeting behaviour for unfriendly actors (sound effects, Player's stance, etc)
+#define ACTOR_FLAG_UNFRIENDLY    (1 << 2)
+// Opposite of the UNFRIENDLY flag. It is not checked explictly in the original game.
+#define ACTOR_FLAG_FRIENDLY      (1 << 3)
 // 
 #define ACTOR_FLAG_10            (1 << 4)
 // 
 #define ACTOR_FLAG_20            (1 << 5)
 // 
 #define ACTOR_FLAG_40            (1 << 6)
-// Invisible
-#define ACTOR_FLAG_80            (1 << 7)
-// Related to talk
-#define ACTOR_FLAG_100           (1 << 8)
+// hidden or revealed by Lens of Truth (depending on room lensMode)
+#define ACTOR_FLAG_REACT_TO_LENS (1 << 7)
+// Player has requested to talk to the actor; Player uses this flag differently than every other actor
+#define ACTOR_FLAG_TALK_REQUESTED (1 << 8)
 // 
 #define ACTOR_FLAG_200           (1 << 9)
 // 
 #define ACTOR_FLAG_400           (1 << 10)
 // 
 #define ACTOR_FLAG_800           (1 << 11)
-// 
-#define ACTOR_FLAG_1000          (1 << 12)
+// Actor will not shake when a quake occurs
+#define ACTOR_FLAG_IGNORE_QUAKE  (1 << 12)
 // 
 #define ACTOR_FLAG_2000          (1 << 13)
 // 
@@ -477,8 +504,8 @@ typedef enum {
 #define ACTOR_FLAG_8000          (1 << 15)
 // 
 #define ACTOR_FLAG_10000         (1 << 16)
-// 
-#define ACTOR_FLAG_20000         (1 << 17)
+// actor can press and hold down heavy switches
+#define ACTOR_FLAG_CAN_PRESS_HEAVY_SWITCH  (1 << 17)
 // 
 #define ACTOR_FLAG_40000         (1 << 18)
 // 
@@ -495,10 +522,10 @@ typedef enum {
 #define ACTOR_FLAG_1000000       (1 << 24)
 // 
 #define ACTOR_FLAG_2000000       (1 << 25)
-// 
-#define ACTOR_FLAG_4000000       (1 << 26)
-// 
-#define ACTOR_FLAG_8000000       (1 << 27)
+// actor can press and hold down switches
+#define ACTOR_FLAG_CAN_PRESS_SWITCH (1 << 26)
+// Prevents locking on with Z targeting an actor even if Tatl is floating over it
+#define ACTOR_FLAG_CANT_LOCK_ON  (1 << 27)
 // 
 #define ACTOR_FLAG_10000000      (1 << 28)
 // 
@@ -508,15 +535,24 @@ typedef enum {
 // 
 #define ACTOR_FLAG_80000000      (1 << 31)
 
-typedef enum {
-    /* 0x00 */ CLEAR_TAG_SMALL_EXPLOSION,
-    /* 0x01 */ CLEAR_TAG_LARGE_EXPLOSION,
-    /* 0x02 */ CLEAR_TAG_POP,
-    /* 0x03 */ CLEAR_TAG_SMALL_LIGHT_RAYS,
-    /* 0x04 */ CLEAR_TAG_LARGE_LIGHT_RAYS,
-    /* 0x23 */ CLEAR_TAG_SPLASH = 35,
-    /* 0xC8 */ CLEAR_TAG_SMOKE = 200
-} ClearTagType;
+#define DROPFLAG_NONE   (0)
+#define DROPFLAG_1      (1 << 0)
+#define DROPFLAG_2      (1 << 1)
+#define DROPFLAG_20     (1 << 5)
+
+#define COLORFILTER_GET_COLORFLAG(colorFilterParams) ((colorFilterParams) & 0xC000)
+#define COLORFILTER_GET_COLORINTENSITY(colorFilterParams) (((colorFilterParams) & 0x1F00) >> 5)
+#define COLORFILTER_GET_DURATION(colorFilterParams) ((colorFilterParams) & 0xFF)
+
+#define COLORFILTER_COLORFLAG_NONE 0xC000
+#define COLORFILTER_COLORFLAG_GRAY 0x8000
+#define COLORFILTER_COLORFLAG_RED  0x4000
+#define COLORFILTER_COLORFLAG_BLUE 0x0000
+
+#define COLORFILTER_INTENSITY_FLAG 0x8000
+
+#define COLORFILTER_BUFFLAG_XLU    0x2000
+#define COLORFILTER_BUFFLAG_OPA    0x0000
 
 typedef enum {
     /* 0x00 */ TATL_HINT_ID_DEFAULT,
@@ -622,5 +658,49 @@ typedef enum {
     /* 0x64 */ TATL_HINT_ID_MUSHROOM,
     /* 0xFF */ TATL_HINT_ID_NONE = 0xFF
 } TatlHintId;
+
+typedef struct TargetRangeParams {
+    /* 0x0 */ f32 rangeSq;
+    /* 0x4 */ f32 leashScale;
+} TargetRangeParams; // size = 0x8
+
+typedef enum NpcTalkState {
+    /* 0 */ NPC_TALK_STATE_IDLE, // NPC not currently talking to player
+    /* 1 */ NPC_TALK_STATE_TALKING, // NPC is currently talking to player
+    /* 2 */ NPC_TALK_STATE_ACTION, // An NPC-defined action triggered in the conversation
+    /* 3 */ NPC_TALK_STATE_ITEM_GIVEN // NPC finished giving an item and text box is done
+} NpcTalkState;
+
+typedef enum NpcTrackingMode {
+    /* 0 */ NPC_TRACKING_PLAYER_AUTO_TURN, // Determine tracking mode based on player position, see Npc_UpdateAutoTurn
+    /* 1 */ NPC_TRACKING_NONE, // Don't track the target (usually the player)
+    /* 2 */ NPC_TRACKING_HEAD_AND_TORSO, // Track target by turning the head and the torso
+    /* 3 */ NPC_TRACKING_HEAD, // Track target by turning the head
+    /* 4 */ NPC_TRACKING_FULL_BODY // Track target by turning the body, torso and head
+} NpcTrackingMode;
+
+typedef struct NpcInteractInfo {
+    /* 0x00 */ s16 talkState;
+    /* 0x02 */ s16 trackingMode;
+    /* 0x04 */ s16 autoTurnTimer;
+    /* 0x06 */ s16 autoTurnState;
+    /* 0x08 */ Vec3s headRot;
+    /* 0x0E */ Vec3s torsoRot;
+    /* 0x14 */ f32 yOffset; // Y position offset to add to actor position when calculating angle to target
+    /* 0x18 */ Vec3f trackPos;
+    /* 0x24 */ UNK_TYPE1 unk_24[0x4];
+} NpcInteractInfo; // size = 0x28
+
+typedef struct BlinkInfo {
+    /* 0x0 */ s16 eyeTexIndex;
+    /* 0x2 */ s16 blinkTimer;
+} BlinkInfo; // size = 0x4
+
+extern TargetRangeParams gTargetRanges[TARGET_MODE_MAX];
+extern s16 D_801AED48[8];
+extern Gfx D_801AEF88[];
+extern Gfx D_801AEFA0[];
+
+extern Actor* D_801ED920;
 
 #endif

@@ -4,7 +4,7 @@
 #include "global.h"
 
 #define DMOPSTAGE_GET_TYPE(thisx) ((thisx)->params & 0xFF)
-#define DMOPSTAGE_GET_ACTORACTION(thisx) (((thisx)->params >> 8) & 0xFF)
+#define DMOPSTAGE_GET_CUE_TYPE_OFFSET(thisx) (((thisx)->params >> 8) & 0xFF)
 
 struct DmOpstage;
 
@@ -14,7 +14,7 @@ typedef enum {
     /* 0 */ DMOPSTAGE_TYPE_GROUND,
     /* 1 */ DMOPSTAGE_TYPE_ROOT_TREE,
     /* 2 */ DMOPSTAGE_TYPE_CUT_TREE,
-    /* 3 */ DMOPSTAGE_TYPE_STRAIGHT_TREE,
+    /* 3 */ DMOPSTAGE_TYPE_STRAIGHT_TREE
 } DmOpStageTypes;
 
 typedef struct DmOpstage {

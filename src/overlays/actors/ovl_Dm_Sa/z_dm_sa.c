@@ -30,19 +30,29 @@ ActorInit Dm_Sa_InitVars = {
     (ActorFunc)DmSa_Draw,
 };
 
-static AnimationInfo sAnimationInfo[] = { { &gSkullKidTPoseAnim, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 } };
+typedef enum {
+    /* -1 */ DMSA_ANIM_NONE = -1,
+    /*  0 */ DMSA_ANIM_T_POSE,
+    /*  1 */ DMSA_ANIM_MAX
+} DmSaAnimation;
 
-void func_80A2E960(SkelAnime* arg0, AnimationInfo* animations, u16 index) {
-    f32 frameCount;
+static AnimationInfo sAnimationInfo[DMSA_ANIM_MAX] = {
+    { &gSkullKidTPoseAnim, 1.0f, 0, -1.0f, ANIMMODE_LOOP, 0 }, // DMSA_ANIM_T_POSE
+};
 
-    animations += index;
-    if (animations->frameCount < 0.0f) {
-        frameCount = Animation_GetLastFrame(animations->animation);
+void DmSa_ChangeAnim(SkelAnime* skelAnime, AnimationInfo* animInfo, u16 animIndex) {
+    f32 endFrame;
+
+    animInfo += animIndex;
+
+    if (animInfo->frameCount < 0.0f) {
+        endFrame = Animation_GetLastFrame(animInfo->animation);
     } else {
-        frameCount = animations->frameCount;
+        endFrame = animInfo->frameCount;
     }
-    Animation_Change(arg0, animations->animation, animations->playSpeed, animations->startFrame, frameCount,
-                     animations->mode, animations->morphFrames);
+
+    Animation_Change(skelAnime, animInfo->animation, animInfo->playSpeed, animInfo->startFrame, endFrame,
+                     animInfo->mode, animInfo->morphFrames);
 }
 
 void DmSa_Init(Actor* thisx, PlayState* play) {
@@ -53,7 +63,7 @@ void DmSa_Init(Actor* thisx, PlayState* play) {
     this->actor.targetArrowOffset = 3000.0f;
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gSkullKidSkel, NULL, NULL, NULL, 0);
-    func_80A2E960(&this->skelAnime, sAnimationInfo, 0);
+    DmSa_ChangeAnim(&this->skelAnime, &sAnimationInfo[DMSA_ANIM_T_POSE], 0);
     Actor_SetScale(&this->actor, 0.01f);
     this->actionFunc = DmSa_DoNothing;
 }
@@ -83,26 +93,24 @@ void DmSa_TransformLimbDraw(PlayState* play, s32 limbIndex, Actor* thisx) {
 }
 
 Gfx* func_80A2EB58(GraphicsContext* gfxCtx, u32 alpha) {
-    Gfx* dList;
-    Gfx* dListHead;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx)); //! @bug this does not allocate enough for 3 Gfx commands;
+    Gfx* gfx = gfxHead;
 
-    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2); //! @bug this does not allocate enough for 3 Gfx commands
-    gDPSetRenderMode(dListHead++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
-    gDPSetEnvColor(dListHead++, 0, 0, 0, alpha);
-    gSPEndDisplayList(dListHead++);
+    gDPSetRenderMode(gfx++, G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2);
+    gDPSetEnvColor(gfx++, 0, 0, 0, alpha);
+    gSPEndDisplayList(gfx++);
 
-    return dList;
+    return gfxHead;
 }
 
 Gfx* func_80A2EBB0(GraphicsContext* gfxCtx, u32 alpha) {
-    Gfx* dList;
-    Gfx* dListHead;
+    Gfx* gfxHead = GRAPH_ALLOC(gfxCtx, 2 * sizeof(Gfx));
+    Gfx* gfx = gfxHead;
 
-    dList = dListHead = GRAPH_ALLOC(gfxCtx, sizeof(Gfx) * 2);
-    gDPSetEnvColor(dListHead++, 0, 0, 0, alpha);
-    gSPEndDisplayList(dListHead++);
+    gDPSetEnvColor(gfx++, 0, 0, 0, alpha);
+    gSPEndDisplayList(gfx++);
 
-    return dList;
+    return gfxHead;
 }
 
 void DmSa_Draw(Actor* thisx, PlayState* play) {
@@ -110,7 +118,7 @@ void DmSa_Draw(Actor* thisx, PlayState* play) {
 
     OPEN_DISPS(play->state.gfxCtx);
 
-    func_8012C28C(play->state.gfxCtx);
+    Gfx_SetupDL25_Opa(play->state.gfxCtx);
 
     if (this->alpha < 0xFF) {
         gSPSegment(POLY_OPA_DISP++, 0x0C, func_80A2EB58(play->state.gfxCtx, this->alpha));
